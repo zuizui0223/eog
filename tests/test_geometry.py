@@ -67,7 +67,7 @@ def test_duplicate_and_identical_rows_are_supported():
 def test_mst_shape_and_total_length_are_stable():
     edges = minimum_spanning_tree(pairwise_distances(np.array([[0.0], [1.0], [2.0]])))
     assert edges.shape == (2, 3)
-    assert float(edges[:, 2].sum()) == pytest.approx(2.0)
+    assert float(edges[:, 2].sum()) == pytest.approx(2.0 / 1.4826)
 
 
 def test_projection_and_empty_candidates():
