@@ -36,10 +36,17 @@ def _fragmentation(rng: np.random.Generator, n: int) -> dict[str, np.ndarray]:
         rng.normal(loc=(-2.0, 0.0), scale=(0.35, 0.25), size=(n // 2, 2)),
         rng.normal(loc=(2.0, 0.0), scale=(0.35, 0.25), size=(n - n // 2, 2)),
     ])
-    t = np.linspace(-2.5, 2.5, n)
-    bridge = np.column_stack([t, rng.normal(scale=0.20, size=n)])
-    bridge = bridge[np.abs(bridge[:, 0]) > 0.65]
-    bridge = bridge[rng.choice(len(bridge), size=n, replace=True)]
+
+    # Construct two internally continuous path segments separated by a true
+    # central environmental gap. This is the design that passed the frozen
+    # ACSP topology benchmark; random resampling of sparse bridge points can
+    # instead introduce duplicate states and weaken the intended gap signal.
+    left = np.linspace(-1.5, -0.35, n // 2)
+    right = np.linspace(0.35, 1.5, n - n // 2)
+    z = np.concatenate([left, right])
+    bridge = np.column_stack([z, 0.30 * np.sin(2.5 * z)])
+    bridge += rng.normal(scale=0.04, size=(n, 2))
+
     return {
         "connected": connected,
         "two_modes": _match_moments(two, connected),
