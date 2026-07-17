@@ -29,3 +29,22 @@ jobs:
         run: |
           python -m pip install build
           python -m build
+
+  topology-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Run frozen topology benchmark
+        run: python benchmarks/topology_discrimination.py --repeats 100 --points 120 --seed 20260731
+      - name: Check output
+        run: test -s benchmark_results/topology_summary.json
+      - name: Upload output
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-topology-discrimination
+          path: benchmark_results/topology_summary.json
