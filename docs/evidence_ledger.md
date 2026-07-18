@@ -21,6 +21,24 @@ The final ACSP benchmark matched fragmentation scenarios to the same mean and co
 
 Interpretation: `gap_strength` detects internal fragmentation not represented by covariance breadth, while `continuity` detects path tortuosity. The MST and largest-edge concepts themselves are not claimed as novel.
 
+## Sample-size and dimensionality robustness audit
+
+The standalone predeclared audit used sample sizes 30, 60, 120, and 240, with zero, two, or six added independent noise features and 50 repeats per cell.
+
+Verified clean two-feature results:
+
+- minimum two-mode versus connected `gap_strength` AUC across sample sizes: 0.9488;
+- minimum curved versus straight `continuity` AUC across sample sizes: 1.0000;
+- connected-null median `gap_strength`: about 2.79 at n=30, 3.23 at n=60, 3.39 at n=120, and 4.57 at n=240;
+- clean connected-null median range across sample sizes: about 1.78.
+
+Verified results with six irrelevant features:
+
+- minimum gap-strength AUC: 0.2396;
+- minimum continuity AUC: 0.5360.
+
+Interpretation: the intended clean two-dimensional signals are robust over the tested sample sizes, but the absolute null distribution of `gap_strength` is sample-size dependent. A universal raw `gap_strength` cutoff is therefore unsupported. Independent irrelevant dimensions can erase or reverse discrimination, so environmental variables must be selected or reduced using a predeclared procedure. EOG must not be described as robust to arbitrary high-dimensional feature matrices.
+
 ## Direct CHELSA random-taxon confirmation
 
 The frozen confirmation cohort excluded Campanula and used occurrence coordinates sampled directly against CHELSA bio1, bio4, bio12, and bio15.
@@ -65,4 +83,6 @@ The current evidence does not establish that EOG:
 - outperforms every hypervolume, clustering, or topological method;
 - introduces the MST, single-linkage, or largest-edge statistic;
 - proves causal ecological mechanisms;
-- has universal behavior across taxa and environmental variable sets.
+- has universal behavior across taxa and environmental variable sets;
+- supports one universal raw `gap_strength` threshold across sample sizes;
+- is robust to arbitrary inclusion of irrelevant environmental variables.
