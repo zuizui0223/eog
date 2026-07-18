@@ -39,6 +39,39 @@ Verified results with six irrelevant features:
 
 Interpretation: the intended clean two-dimensional signals are robust over the tested sample sizes, but the absolute null distribution of `gap_strength` is sample-size dependent. A universal raw `gap_strength` cutoff is therefore unsupported. Independent irrelevant dimensions can erase or reverse discrimination, so environmental variables must be selected or reduced using a predeclared procedure. EOG must not be described as robust to arbitrary high-dimensional feature matrices.
 
+## Matched-null calibration and feature-selection audit
+
+The issue #3 audit compared raw gap strength with an empirical percentile obtained from connected Gaussian reference clouds matched to the observed sample size, feature dimension, mean, and covariance. It used 20 repeats and 40 null draws per observed matrix.
+
+The original predeclared gate failed:
+
+- minimum per-cell ecological-preselection calibrated AUC: 0.8025;
+- maximum per-cell connected-null median deviation from 0.50: 0.225;
+- pooled ecological-preselection AUC at n=30: 0.8563.
+
+This failure is retained as evidence that n=30 is underpowered for confirmatory fragmentation claims.
+
+After pooling scenarios that differ only in variables discarded by ecological preselection, verified results were:
+
+- pooled calibrated AUC at n=60: 0.9701;
+- pooled calibrated AUC at n=120: 0.9535;
+- pooled calibrated AUC at n=240: 0.9260;
+- minimum pooled calibrated AUC for n >= 60: 0.9260;
+- maximum pooled connected-null median deviation from 0.50 for n >= 60: 0.0500.
+
+Raw connected-cloud medians still increased strongly with sample size, from about 3.18 at n=30 to about 7.40 at n=240. The calibrated connected-null medians remained between 0.475 and 0.575.
+
+Feature-strategy interpretation:
+
+- ecological preselection is the primary analysis rule;
+- correlation filtering at |r| >= 0.80 is a secondary sensitivity analysis only;
+- PCA90 and all-variable analyses are supplementary negative controls;
+- arbitrary all-variable input is not supported;
+- confirmatory gap comparisons require at least 60 occurrence states;
+- raw and calibrated gap values must be reported together.
+
+The calibrated percentile is a sample-size-comparative diagnostic, not a posterior probability that a cloud is fragmented.
+
 ## Direct CHELSA random-taxon confirmation
 
 The frozen confirmation cohort excluded Campanula and used occurrence coordinates sampled directly against CHELSA bio1, bio4, bio12, and bio15.
@@ -85,4 +118,5 @@ The current evidence does not establish that EOG:
 - proves causal ecological mechanisms;
 - has universal behavior across taxa and environmental variable sets;
 - supports one universal raw `gap_strength` threshold across sample sizes;
-- is robust to arbitrary inclusion of irrelevant environmental variables.
+- is robust to arbitrary inclusion of irrelevant environmental variables;
+- supports confirmatory fragmentation inference with fewer than 60 occurrence states.

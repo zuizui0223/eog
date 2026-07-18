@@ -1,0 +1,44 @@
+name: Calibrated gap and feature selection
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/calibrated_gap_feature_selection.py"
+      - "docs/calibrated_gap_feature_selection_protocol.md"
+      - ".github/workflows/calibrated-gap-feature-selection.yml"
+      - "src/eog/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Run benchmark
+        run: |
+          python benchmarks/calibrated_gap_feature_selection.py \
+            --repeats 20 \
+            --null-draws 40 \
+            --seed 20260801 \
+            --output benchmark_results/calibrated_gap_feature_selection
+      - name: Check outputs
+        run: |
+          test -s benchmark_results/calibrated_gap_feature_selection/calibration_results.csv
+          test -s benchmark_results/calibrated_gap_feature_selection/calibration_summary.csv
+          test -s benchmark_results/calibrated_gap_feature_selection/calibration_gate.json
+      - name: Upload outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: calibrated-gap-feature-selection
+          path: benchmark_results/calibrated_gap_feature_selection
+          if-no-files-found: error

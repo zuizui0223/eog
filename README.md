@@ -16,9 +16,13 @@ Version `0.1.0` is the frozen extraction of the method first developed and valid
 
 ## Important analysis constraints
 
-The standalone robustness audit found that the connected-null distribution of raw `gap_strength` changes with sample size. Do not use one universal raw cutoff across datasets with different occurrence counts. Use matched resampling, a sample-size-specific null, or comparative analyses instead.
+Raw `gap_strength` changes strongly with sample size and must not be compared using one universal cutoff. The issue #3 calibration audit therefore requires raw and matched-null calibrated gap values to be reported together.
 
-EOG is also sensitive to irrelevant feature dimensions. Environmental predictors must be chosen or reduced using a procedure declared independently of the EOG outcome. Adding every available variable is not supported.
+Confirmatory fragmentation comparisons currently require at least **60 occurrence states**. Analyses with 30–59 states are exploratory.
+
+The primary feature set must be selected from ecological rationale before EOG outcomes are calculated. Correlation filtering at |r| >= 0.80 is a secondary sensitivity analysis. PCA90 and all-variable analyses are supplementary controls; adding every available environmental variable is not supported.
+
+The calibrated gap percentile compares an observed cloud with connected reference clouds matched on sample size, dimension, mean, and covariance. It is not a posterior probability that the cloud is fragmented.
 
 ## Installation
 
@@ -66,7 +70,9 @@ The initial contract supports one-dimensional matrices, duplicate states, consta
 
 - `benchmarks/topology_discrimination.py`: frozen synthetic discrimination benchmark.
 - `benchmarks/robustness_audit.py`: sample-size and irrelevant-dimension audit.
+- `benchmarks/calibrated_gap_feature_selection.py`: matched-null calibration and predeclared feature-strategy audit.
 - `docs/robustness_audit_protocol.md`: predeclared robustness design and interpretation rules.
+- `docs/calibrated_gap_feature_selection_protocol.md`: failed original gate, revised n>=60 rule, and frozen feature protocol.
 - `docs/evidence_ledger.md`: verified results and unsupported claims.
 - `docs/migration_provenance.md`: extraction checkpoints and ownership boundary.
 - `tests/test_geometry.py`: API and edge-case tests.
