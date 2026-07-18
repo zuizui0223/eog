@@ -1,0 +1,60 @@
+name: Positive-only field recovery
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/positive_only_field_recovery.py"
+      - "docs/positive_only_field_recovery_protocol.md"
+      - ".github/workflows/positive-only-field-recovery.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Create leakage-free smoke inputs
+        run: |
+          mkdir -p benchmark_inputs/positive_only
+          cat > benchmark_inputs/positive_only/zones.csv <<'CSV'
+          zone_id,island,latitude,longitude,frozen_rank,zone_radius_km
+          Z1,A,34.00,139.00,1,0.2
+          Z2,A,34.10,139.10,2,0.2
+          Z3,A,34.20,139.20,3,0.2
+          Z4,B,34.30,139.30,4,0.2
+          Z5,B,34.40,139.40,5,0.2
+          CSV
+          cat > benchmark_inputs/positive_only/discoveries.csv <<'CSV'
+          discovery_id,island,latitude,longitude
+          D1,A,34.001,139.001
+          D2,A,34.003,139.002
+          D3,A,34.099,139.101
+          D4,B,34.301,139.299
+          CSV
+      - name: Run evaluator
+        run: |
+          python benchmarks/positive_only_field_recovery.py \
+            --zones benchmark_inputs/positive_only/zones.csv \
+            --discoveries benchmark_inputs/positive_only/discoveries.csv \
+            --random-draws 99 \
+            --output benchmark_results/positive_only
+      - name: Check outputs
+        run: |
+          test -s benchmark_results/positive_only/discovery_clusters_0.5km.csv
+          test -s benchmark_results/positive_only/topk_recovery_0.5km.csv
+          test -s benchmark_results/positive_only/random_comparison.json
+          test -s benchmark_results/positive_only/positive_only_decision.json
+      - name: Upload outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: positive-only-field-recovery
+          path: benchmark_results/positive_only
+          if-no-files-found: error
