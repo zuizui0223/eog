@@ -1,0 +1,42 @@
+name: Multiaxial archetype benchmark
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/multiaxial_archetypes.py"
+      - "docs/multiaxial_methodology.md"
+      - "src/eog/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Run benchmark
+        run: |
+          python benchmarks/multiaxial_archetypes.py \
+            --repeats 40 \
+            --seed 20260718 \
+            --output benchmark_results/multiaxial_archetypes
+      - name: Check outputs
+        run: |
+          test -s benchmark_results/multiaxial_archetypes/multiaxial_archetype_results.csv
+          test -s benchmark_results/multiaxial_archetypes/multiaxial_archetype_auc.csv
+          test -s benchmark_results/multiaxial_archetypes/multiaxial_archetype_decision.json
+      - name: Upload outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: multiaxial-archetypes
+          path: benchmark_results/multiaxial_archetypes
+          if-no-files-found: error
