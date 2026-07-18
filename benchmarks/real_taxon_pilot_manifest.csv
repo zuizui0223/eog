@@ -1,0 +1,7 @@
+pair_id,kingdom,scientific_name,min_lon,min_lat,max_lon,max_lat
+plant_fagus_europe,Plantae,Fagus sylvatica,-10,35,30,65
+plant_quercus_europe,Plantae,Quercus robur,-10,35,30,65
+plant_pinus_europe,Plantae,Pinus sylvestris,-10,35,40,70
+animal_bombus_europe,Animalia,Bombus terrestris,-10,35,30,65
+animal_vanessa_europe,Animalia,Vanessa atalanta,-10,35,30,65
+animal_vulpes_europe,Animalia,Vulpes vulpes,-10,35,40,70
