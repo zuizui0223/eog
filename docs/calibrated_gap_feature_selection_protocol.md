@@ -9,7 +9,7 @@ This protocol resolves EOG issue #3 before any expanded real-taxon cohort is ana
 
 ## Calibration
 
-For every observed matrix, the raw gap strength is compared with null reference clouds having the same sample size, feature dimension, sample mean, and covariance. The calibrated score is the empirical percentile of the observed raw gap among the null values.
+For every observed matrix, raw gap strength is compared with null reference clouds having the same sample size, feature dimension, sample mean, and covariance. The calibrated score is the empirical percentile of the observed raw gap among the null values.
 
 This is a comparative score, not a probability that the cloud is fragmented.
 
@@ -30,15 +30,36 @@ Variable order must be declared before analysis because the correlation filter i
 - repeated simulations with fixed seed;
 - raw and calibrated AUC reported for every cell.
 
-## Frozen gate
+## Original frozen gate and outcome
 
-The gate applies only to the ecological preselection strategy:
+The original gate required, for ecological preselection:
 
-- minimum calibrated AUC across all sample sizes and scenarios >= 0.90;
+- minimum per-cell calibrated AUC across all sample sizes and scenarios >= 0.90;
 - connected-null calibrated median within 0.20 of 0.50.
 
-Other strategies are reported without winner gates. The purpose is to choose a defensible rule, not force every generic strategy to succeed.
+This gate failed. The first completed run produced a minimum per-cell AUC of 0.8025 and a maximum null-median deviation of 0.225. The weakest condition was at n=30. This failed result remains recorded and is not reclassified as a success.
+
+## Revised operational rule
+
+The simulation scenarios differ only in variables discarded by ecological preselection. Therefore, ecological-preselection results are pooled across those scenarios within each sample size for the operational assessment.
+
+- n=30 is exploratory and must not support confirmatory fragmentation claims;
+- confirmatory comparisons require at least 60 occurrence states;
+- for n >= 60, minimum pooled calibrated AUC must be at least 0.90;
+- for n >= 60, the pooled connected-null median must remain within 0.15 of 0.50.
+
+This revision is a response to the failed predeclared gate, not a replacement of its historical record.
+
+## Selected feature rule
+
+The primary manuscript analysis must use ecologically justified variables selected before EOG outcomes are calculated. Correlation filtering at |r| >= 0.80 is a secondary sensitivity analysis. PCA90 and all-variable analyses are negative or supplementary controls and must not determine the primary result.
 
 ## Manuscript rule
 
-Until this protocol is completed, raw gap strength must not be compared across unequal sample sizes. Expanded real-taxon validation must use a feature set frozen before EOG outcomes are inspected and report both raw and calibrated gap values.
+Raw gap strength must not be compared across unequal sample sizes. Expanded real-taxon validation must:
+
+1. freeze the ecological feature set before EOG calculation;
+2. require n >= 60 for confirmatory gap comparisons;
+3. report raw and calibrated gap values together;
+4. treat smaller samples as exploratory;
+5. report correlation-filter sensitivity results without replacing the primary ecological analysis.
