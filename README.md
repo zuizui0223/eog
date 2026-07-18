@@ -14,6 +14,12 @@ Version `0.1.0` is the frozen extraction of the method first developed and valid
 
 `component_count` and component labels are diagnostic. Candidate projection is also diagnostic and is not a suitability score.
 
+## Important analysis constraints
+
+The standalone robustness audit found that the connected-null distribution of raw `gap_strength` changes with sample size. Do not use one universal raw cutoff across datasets with different occurrence counts. Use matched resampling, a sample-size-specific null, or comparative analyses instead.
+
+EOG is also sensitive to irrelevant feature dimensions. Environmental predictors must be chosen or reduced using a procedure declared independently of the EOG outcome. Adding every available variable is not supported.
+
 ## Installation
 
 ```bash
@@ -59,6 +65,8 @@ The initial contract supports one-dimensional matrices, duplicate states, consta
 ## Validation and manuscript materials
 
 - `benchmarks/topology_discrimination.py`: frozen synthetic discrimination benchmark.
+- `benchmarks/robustness_audit.py`: sample-size and irrelevant-dimension audit.
+- `docs/robustness_audit_protocol.md`: predeclared robustness design and interpretation rules.
 - `docs/evidence_ledger.md`: verified results and unsupported claims.
 - `docs/migration_provenance.md`: extraction checkpoints and ownership boundary.
 - `tests/test_geometry.py`: API and edge-case tests.
