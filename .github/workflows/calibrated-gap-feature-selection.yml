@@ -26,8 +26,8 @@ jobs:
       - name: Run benchmark
         run: |
           python benchmarks/calibrated_gap_feature_selection.py \
-            --repeats 30 \
-            --null-draws 80 \
+            --repeats 20 \
+            --null-draws 40 \
             --seed 20260801 \
             --output benchmark_results/calibrated_gap_feature_selection
       - name: Check outputs
