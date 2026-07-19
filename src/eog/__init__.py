@@ -27,6 +27,7 @@ from .reference_policy import (
     allowed_claim_scope,
     validate_reference_declaration,
 )
+from .runner import AuditedInput, load_audited_csv, run_frozen_analysis
 from .uncertainty import ComparativeContrast, compare_geometry, reference_fingerprint
 
 __all__ = [
@@ -36,6 +37,7 @@ __all__ = [
     "ComparativeContrast",
     "AnalysisManifest",
     "ResultBundle",
+    "AuditedInput",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
@@ -45,6 +47,8 @@ __all__ = [
     "validate_manifest",
     "render_result_text",
     "build_result_bundle",
+    "load_audited_csv",
+    "run_frozen_analysis",
     "pairwise_distances",
     "minimum_spanning_tree",
     "infer_occupancy_geometry",
