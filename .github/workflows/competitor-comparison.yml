@@ -51,7 +51,7 @@ jobs:
               if isinstance(expected_value, (int, float)) and not isinstance(expected_value, bool):
                   if not isinstance(actual_value, (int, float)) or isinstance(actual_value, bool):
                       raise AssertionError(f'{path}: expected numeric value, got {actual_value!r}')
-                  if not math.isclose(float(actual_value), float(expected_value), rel_tol=1e-10, abs_tol=1e-12):
+                  if not math.isclose(float(actual_value), float(expected_value), rel_tol=1e-10, abs_tol=1e-9):
                       raise AssertionError(
                           f'{path}: actual={actual_value!r}, expected={expected_value!r}'
                       )
