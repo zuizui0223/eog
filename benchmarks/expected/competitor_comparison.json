@@ -1,0 +1,58 @@
+{
+  "curved": {
+    "energy_distance": {"median": 0.2375535219480599, "q10": 0.2244832922848355, "q90": 0.2554822898835745},
+    "eog_span": {"directional_support_rate": 1.0, "median": 0.24149150917968937, "q10": 0.23076895170847803, "q90": 0.2527956009071731},
+    "gaussian_linear": {"directional_support_rate": 1.0, "median": 1.1526465953845366, "q10": 1.1101854865036611, "q90": 1.2129503698580029},
+    "hull_linear": {"directional_support_rate": 1.0, "median": 0.8808138344995498, "q10": 0.8224789943990368, "q90": 0.9293647876802474},
+    "mean_centroid": {"directional_support_rate": 1.0, "median": 0.35802609884668435, "q10": 0.33911365978066427, "q90": 0.3774848502415721},
+    "median_centroid": {"directional_support_rate": 1.0, "median": 0.3403298913515205, "q10": 0.3135384078485657, "q90": 0.36882213802544467}
+  },
+  "dilation": {
+    "energy_distance": {"median": 0.38862667221755487, "q10": 0.33126267287008626, "q90": 0.4351106789100583},
+    "eog_span": {"directional_support_rate": 1.0, "median": 0.6875131991821818, "median_abs_error_log2": 0.05749892407713414, "q10": 0.6233495624070148, "q90": 0.7780304153873888},
+    "gaussian_linear": {"directional_support_rate": 1.0, "median": 0.6993539192422217, "median_abs_error_log2": 0.05336741772877235, "q10": 0.5965485352174256, "q90": 0.7756111424662263},
+    "hull_linear": {"directional_support_rate": 1.0, "median": 0.6917952674182152, "median_abs_error_log2": 0.07638920967259882, "q10": 0.5777099073709274, "q90": 0.7746958550998146},
+    "mean_centroid": {"directional_support_rate": 1.0, "median": 0.7261773836007908, "median_abs_error_log2": 0.06214222230183386, "q10": 0.5967008895522967, "q90": 0.7735745901033574},
+    "median_centroid": {"directional_support_rate": 1.0, "median": 0.6726485491226526, "median_abs_error_log2": 0.087234256248933, "q10": 0.5981162407217371, "q90": 0.8254382428351802}
+  },
+  "equal_null": {
+    "energy_distance": {"median": 0.05226103617132044, "q10": 0.03475254067910936, "q90": 0.10718854965806031},
+    "eog_span": {"directional_support_rate": 0.55, "median": 0.02386526804499773, "q10": -0.07968161748653353, "q90": 0.15947463938172154},
+    "gaussian_linear": {"directional_support_rate": 0.55, "median": 0.02723214043160079, "q10": -0.0955596620290055, "q90": 0.12987405951204326},
+    "hull_linear": {"directional_support_rate": 0.6, "median": 0.051002245392683554, "q10": -0.09454594832114892, "q90": 0.13911921186472426},
+    "mean_centroid": {"directional_support_rate": 0.65, "median": 0.04906223055200813, "q10": -0.10660037420187744, "q90": 0.14913192158733357},
+    "median_centroid": {"directional_support_rate": 0.65, "median": 0.08370841761180145, "q10": -0.11640491801641266, "q90": 0.18185609779178394}
+  },
+  "irrelevant": {
+    "energy_distance": {"median": 0.2667355136951528, "q10": 0.188049077622869, "q90": 0.2984417488002592},
+    "eog_span": {"directional_support_rate": 1.0, "median": 0.3542803129831793, "q10": 0.22986814098369696, "q90": 0.41029399709747266},
+    "gaussian_linear": {"directional_support_rate": 1.0, "median": 0.1660538538945343, "q10": 0.13806442838231126, "q90": 0.21735967464837022},
+    "hull_linear": {"directional_support_rate": 0.0, "median": null, "q10": null, "q90": null},
+    "mean_centroid": {"directional_support_rate": 1.0, "median": 0.28322084777853174, "q10": 0.22256337923378536, "q90": 0.3395908085262622},
+    "median_centroid": {"directional_support_rate": 1.0, "median": 0.24113523884287075, "q10": 0.1838423131189773, "q90": 0.3119936130600751}
+  },
+  "multimodal": {
+    "energy_distance": {"median": 0.20541955514433585, "q10": 0.15640282249598117, "q90": 0.2895052079112938},
+    "eog_span": {"directional_support_rate": 0.75, "median": -0.055627671079674146, "q10": -0.2097395659720442, "q90": 0.04750306769695034},
+    "gaussian_linear": {"directional_support_rate": 0.5, "median": -0.001891761162850131, "q10": -0.11368411260096661, "q90": 0.06364677534575154},
+    "hull_linear": {"directional_support_rate": 1.0, "median": -0.1900368419072856, "q10": -0.3443978100868949, "q90": -0.10616557016991483},
+    "mean_centroid": {"directional_support_rate": 0.75, "median": 0.16438741239585355, "q10": 0.009342540571880458, "q90": 0.28410774027276803},
+    "median_centroid": {"directional_support_rate": 1.0, "median": 0.2758093169562724, "q10": 0.10946507661101058, "q90": 0.49416684869401145}
+  },
+  "outlier": {
+    "energy_distance": {"median": 0.06028349647043274, "q10": 0.0462435532658295, "q90": 0.09398840313584933},
+    "eog_span": {"directional_support_rate": 1.0, "median": 0.30200903035497817, "q10": 0.19555802969126118, "q90": 0.39635354399842054},
+    "gaussian_linear": {"directional_support_rate": 1.0, "median": 0.6297484117590817, "q10": 0.4264129463619726, "q90": 0.9236064261227453},
+    "hull_linear": {"directional_support_rate": 1.0, "median": 0.9021543557611744, "q10": 0.6727476440799364, "q90": 1.2700308732735315},
+    "mean_centroid": {"directional_support_rate": 1.0, "median": 0.32219408136615635, "q10": 0.25380587492766193, "q90": 0.4621847204511373},
+    "median_centroid": {"directional_support_rate": 0.6, "median": 0.07609160010850735, "q10": -0.04224514028902974, "q90": 0.24357129061168153}
+  },
+  "unequal_null": {
+    "energy_distance": {"median": 0.10525009889471698, "q10": 0.06514411391787504, "q90": 0.14678862828523406},
+    "eog_span": {"directional_support_rate": 0.5, "median": -0.029092992177085955, "q10": -0.14995566684506872, "q90": 0.15062974018697536},
+    "gaussian_linear": {"directional_support_rate": 0.45, "median": -0.03803882658485357, "q10": -0.17376430014281857, "q90": 0.14372703123235525},
+    "hull_linear": {"directional_support_rate": 0.45, "median": -0.07495708017787242, "q10": -0.20909656416109446, "q90": 0.10347481841320084},
+    "mean_centroid": {"directional_support_rate": 0.4, "median": -0.019092619130544587, "q10": -0.17495471098007212, "q90": 0.13084770842142665},
+    "median_centroid": {"directional_support_rate": 0.35, "median": 0.0003420837530489166, "q10": -0.16407510262392172, "q90": 0.15690342580245248}
+  }
+}
