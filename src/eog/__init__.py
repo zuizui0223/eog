@@ -14,6 +14,14 @@ from .geometry import (
     project_states,
     robust_scale,
 )
+from .manifest import (
+    AnalysisManifest,
+    ResultBundle,
+    build_result_bundle,
+    manifest_fingerprint,
+    render_result_text,
+    validate_manifest,
+)
 from .reference_policy import (
     ReferenceDeclaration,
     allowed_claim_scope,
@@ -26,11 +34,17 @@ __all__ = [
     "RobustReference",
     "ReferenceDeclaration",
     "ComparativeContrast",
+    "AnalysisManifest",
+    "ResultBundle",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
     "reference_fingerprint",
     "compare_geometry",
+    "manifest_fingerprint",
+    "validate_manifest",
+    "render_result_text",
+    "build_result_bundle",
     "pairwise_distances",
     "minimum_spanning_tree",
     "infer_occupancy_geometry",
