@@ -1,122 +1,110 @@
 # Environmental occupancy geometry evidence ledger
 
-This file separates verified results from interpretation. The original development and validation history is preserved in `zuizui0223/acsp` PR #35 and its GitHub Actions artifacts; the standalone implementation was frozen from ACSP main commit `cfa24ba30fa0607e530d5cf716ce8729d54d773e` and API-contract commit `3d2017e9a342eca13f0a17f1d3c473a993c4335a`.
+This file separates verified numerical results from interpretation. The original development history is preserved in `zuizui0223/acsp` PR #35. Later standalone benchmarks narrowed several early claims.
 
-## Frozen primary quantities
+## Frozen public quantities
 
-- `continuity`: maximum pairwise distance divided by total MST length.
-- `gap_strength`: largest positive MST edge divided by the median positive MST edge.
-- `span`: supporting 0.90 quantile of positive pairwise distances by default.
+- `span`: 0.90 quantile of positive pairwise distances after the default within-cloud robust scaling;
+- `continuity`: maximum pairwise distance divided by total MST length;
+- `gap_strength`: largest positive MST edge divided by the median positive MST edge;
 - `component_count`: diagnostic only.
 
-## Synthetic topology discrimination
+The names above describe the frozen API. Their defensible interpretations are narrower than the original labels.
 
-The final ACSP benchmark matched fragmentation scenarios to the same mean and covariance. Verified summary values were:
+## Historical synthetic discrimination
 
-- PCA breadth range: 0.
-- Gaussian log-volume range: numerical zero.
-- two-mode gap strength / connected gap strength: about 2.33.
-- missing-bridge gap strength / connected gap strength: about 3.38.
+Early matched-generator benchmarks found:
+
+- two-mode gap strength / connected gap strength: about 2.33;
+- missing-bridge gap strength / connected gap strength: about 3.38;
 - curved-path continuity / straight-path continuity: about 0.49.
 
-Interpretation: `gap_strength` detects internal fragmentation not represented by covariance breadth, while `continuity` detects path tortuosity. The MST and largest-edge concepts themselves are not claimed as novel.
+These results establish discrimination inside those controlled generator families. They do not establish universal fragmentation, missing-support, or tortuosity inference.
 
-## Sample-size and dimensionality robustness audit
+## Sample-size and irrelevant-dimension audit
 
-The standalone predeclared audit used sample sizes 30, 60, 120, and 240, with zero, two, or six added independent noise features and 50 repeats per cell.
+With the intended clean two-feature generators:
 
-Verified clean two-feature results:
+- minimum two-mode versus connected `gap_strength` AUC: 0.9488;
+- minimum curved versus straight `continuity` AUC: 1.0000.
 
-- minimum two-mode versus connected `gap_strength` AUC across sample sizes: 0.9488;
-- minimum curved versus straight `continuity` AUC across sample sizes: 1.0000;
-- connected-null median `gap_strength`: about 2.79 at n=30, 3.23 at n=60, 3.39 at n=120, and 4.57 at n=240;
-- clean connected-null median range across sample sizes: about 1.78.
-
-Verified results with six irrelevant features:
+With six irrelevant features:
 
 - minimum gap-strength AUC: 0.2396;
 - minimum continuity AUC: 0.5360.
 
-Interpretation: the intended clean two-dimensional signals are robust over the tested sample sizes, but the absolute null distribution of `gap_strength` is sample-size dependent. A universal raw `gap_strength` cutoff is therefore unsupported. Independent irrelevant dimensions can erase or reverse discrimination, so environmental variables must be selected or reduced using a predeclared procedure. EOG must not be described as robust to arbitrary high-dimensional feature matrices.
+Connected-cloud median raw gap strength increased substantially with sample size. Therefore:
 
-## Matched-null calibration and feature-selection audit
+- no universal raw gap threshold is supported;
+- arbitrary all-variable matrices are unsupported;
+- ecological feature preselection and sensitivity analysis are required.
 
-The issue #3 audit compared raw gap strength with an empirical percentile obtained from connected Gaussian reference clouds matched to the observed sample size, feature dimension, mean, and covariance. It used 20 repeats and 40 null draws per observed matrix.
+## Matched-null calibration audit
 
-The original predeclared gate failed:
+Gaussian matched-null calibration performed well in some frozen Gaussian-like contrasts at n >= 60, but later null-family stress tests showed that no fitted connected family was generally satisfactory:
 
-- minimum per-cell ecological-preselection calibrated AUC: 0.8025;
-- maximum per-cell connected-null median deviation from 0.50: 0.225;
-- pooled ecological-preselection AUC at n=30: 0.8563.
+- restrictive nulls over-rejected skewed, heavy-tailed, curved, or contaminated connected clouds;
+- flexible nulls could absorb fragmented or multimodal clouds;
+- calibration therefore depends on an unverifiable connected-family assumption.
 
-This failure is retained as evidence that n=30 is underpowered for confirmatory fragmentation claims.
+Gaussian matched-null calibration is retained as audit history but is no longer recommended as a general confirmatory fragmentation procedure.
 
-After pooling scenarios that differ only in variables discarded by ecological preselection, verified results were:
+## Independent separation investigations
 
-- pooled calibrated AUC at n=60: 0.9701;
-- pooled calibrated AUC at n=120: 0.9535;
-- pooled calibrated AUC at n=240: 0.9260;
-- minimum pooled calibrated AUC for n >= 60: 0.9260;
-- maximum pooled connected-null median deviation from 0.50 for n >= 60: 0.0500.
+Subsequent frozen work found:
 
-Raw connected-cloud medians still increased strongly with sample size, from about 3.18 at n=30 to about 7.40 at n=240. The calibrated connected-null medians remained between 0.475 and 0.575.
+- persistent largest-edge evidence improved over one raw largest edge but remained near chance for narrow missing bridges;
+- the density-trimmed core-local-bridge score performed strongly for separated dense modes, including unequal modes;
+- the same core-bridge score failed as a universal support-interruption statistic;
+- K-means silhouette and core-bridge evidence answered different questions and disagreed in real-taxon clouds.
 
-Feature-strategy interpretation:
+Consequently, no single separation or fragmentation score is promoted. Raw gap strength, silhouette, and core-bridge evidence must remain separate when used.
 
-- ecological preselection is the primary analysis rule;
-- correlation filtering at |r| >= 0.80 is a secondary sensitivity analysis only;
-- PCA90 and all-variable analyses are supplementary negative controls;
-- arbitrary all-variable input is not supported;
-- confirmatory gap comparisons require at least 60 occurrence states;
-- raw and calibrated gap values must be reported together.
+## Real-taxon stability audit
 
-The calibrated percentile is a sample-size-comparative diagnostic, not a posterior probability that a cloud is fragmented.
+In the frozen six-pair CHELSA audit, all pairs completed. Silhouette was generally more stable under subsampling than the core-bridge score. The rankings of taxa differed between the diagnostics, confirming that they are not interchangeable.
 
-## Direct CHELSA random-taxon confirmation
+This audit characterizes numerical behavior. It does not prove multiple niches, fragmentation, or missing support in any taxon.
 
-The frozen confirmation cohort excluded Campanula and used occurrence coordinates sampled directly against CHELSA bio1, bio4, bio12, and bio15.
+## Multiaxial archetype benchmark
 
-- predeclared taxon-region pairs: 12.
-- technically eligible and informative pairs: 11.
-- median span relative error: about 0.079.
-- median continuity absolute error: about 0.030.
-- median gap-strength relative error: about 0.119.
-- positive nearest-state projection lift: all evaluable pairs.
-- complete success: 10 of 11 evaluable pairs.
+The first frozen multiaxial benchmark falsified the original broad four-axis interpretation:
 
-## Comparator benchmark
+- minimum broad-versus-compact `span` AUC: 0.4075;
+- minimum curved-versus-compact tree-inefficiency AUC: 0.0000;
+- minimum two-mode-versus-compact gap-strength AUC: 0.906875;
+- minimum missing-bridge-versus-curved gap-strength AUC: 0.281875.
 
-Median thinning errors in the verified cohort:
+Interpretation:
 
-- K-means silhouette: about 0.023.
-- continuity: about 0.030.
-- span: about 0.079.
-- gap strength: about 0.119.
-- PCA breadth: about 0.121.
-- Gaussian log-volume: about 0.395.
+1. Independent within-cloud robust scaling removes global dilation, so standardized `span` cannot measure absolute ecological breadth across clouds.
+2. `continuity` is affected by support dimension and point-cloud filling. It is not a generic path-tortuosity measure across arbitrary support classes.
+3. Gap strength retains useful descriptive evidence for separated modes in the tested family.
+4. Largest-edge evidence remains unreliable for universal support-interruption inference.
 
-These results do not support a universal-superiority claim. K-means silhouette was highly reproducible but measures a fixed two-cluster separation, whereas EOG directly summarizes MST path directness and strongest internal discontinuity.
+## Current supported position
 
-## Incremental-information analysis
+EOG supports an auditable report of:
 
-The real-taxon incremental analysis was exploratory because only eight pairs were evaluable.
+- standardized pairwise dispersion;
+- MST compactness under stated sampling and support assumptions;
+- separate separation diagnostics;
+- subsampling stability;
+- the exact feature transformation used.
 
-- continuity LOO Q2: about -1.69.
-- gap-strength LOO Q2: about -5.95.
-- largest absolute Spearman correlation between continuity and conventional summaries: about 0.79.
-- largest absolute Spearman correlation between gap strength and conventional summaries: about 0.48.
-
-Interpretation: conventional summaries did not reconstruct the topology metrics in this small cohort. Continuity overlaps substantially with clustering and must be described as complementary rather than independent. Gap strength is the stronger novelty candidate.
+Absolute breadth comparisons require a shared external or pooled scaling reference. Generic path-shape comparisons require matched support classes and sampling designs.
 
 ## Unsupported claims
 
 The current evidence does not establish that EOG:
 
-- replaces species distribution models;
+- replaces species-distribution or occupancy models;
 - outperforms every hypervolume, clustering, or topological method;
 - introduces the MST, single-linkage, or largest-edge statistic;
 - proves causal ecological mechanisms;
-- has universal behavior across taxa and environmental variable sets;
-- supports one universal raw `gap_strength` threshold across sample sizes;
-- is robust to arbitrary inclusion of irrelevant environmental variables;
-- supports confirmatory fragmentation inference with fewer than 60 occurrence states.
+- detects all forms of fragmentation or missing support;
+- provides a posterior fragmentation probability;
+- supports a universal raw `gap_strength` threshold;
+- is robust to arbitrary irrelevant environmental dimensions;
+- measures absolute niche breadth after independent within-cloud scaling;
+- measures generic path tortuosity across arbitrary point-cloud support classes.
