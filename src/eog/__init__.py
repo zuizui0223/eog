@@ -19,14 +19,18 @@ from .reference_policy import (
     allowed_claim_scope,
     validate_reference_declaration,
 )
+from .uncertainty import ComparativeContrast, compare_geometry, reference_fingerprint
 
 __all__ = [
     "OccupancyGeometry",
     "RobustReference",
     "ReferenceDeclaration",
+    "ComparativeContrast",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
+    "reference_fingerprint",
+    "compare_geometry",
     "pairwise_distances",
     "minimum_spanning_tree",
     "infer_occupancy_geometry",
