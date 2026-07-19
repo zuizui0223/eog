@@ -29,6 +29,7 @@ def main() -> None:
                 dilated,
                 reference,
                 n_resamples=100,
+                n_permutations=100,
                 resample_fraction=0.8,
                 random_state=repeat,
             )
@@ -39,6 +40,7 @@ def main() -> None:
                 null_b,
                 reference,
                 n_resamples=100,
+                n_permutations=100,
                 resample_fraction=0.8,
                 random_state=repeat + 100,
             )
@@ -49,8 +51,12 @@ def main() -> None:
                 "extent_low": extent.interval_low,
                 "extent_high": extent.interval_high,
                 "extent_direction_stability": extent.direction_stability,
-                "extent_ambiguous": extent.ambiguous,
+                "extent_permutation_pvalue": extent.permutation_pvalue,
+                "extent_direction_supported": extent.direction_supported,
+                "matched_resample_size": extent.matched_resample_size,
                 "null_direction_stability": null.direction_stability,
+                "null_permutation_pvalue": null.permutation_pvalue,
+                "null_direction_supported": null.direction_supported,
                 "null_ambiguous": null.ambiguous,
             })
 
@@ -61,17 +67,17 @@ def main() -> None:
 
     known = float(np.log(2.0))
     extent_errors = [abs(float(row["extent_log_ratio"]) - known) for row in rows]
-    extent_cover = [float(row["extent_low"]) <= known <= float(row["extent_high"]) for row in rows]
-    null_certainty = [float(row["null_direction_stability"]) >= 0.90 and not bool(row["null_ambiguous"]) for row in rows]
+    true_direction_support = [bool(row["extent_direction_supported"]) for row in rows]
+    null_false_support = [bool(row["null_direction_supported"]) for row in rows]
     decision = {
         "median_absolute_log_ratio_error": float(np.median(extent_errors)),
-        "known_ratio_interval_coverage": float(np.mean(extent_cover)),
-        "null_false_directional_certainty": float(np.mean(null_certainty)),
+        "known_effect_direction_support": float(np.mean(true_direction_support)),
+        "null_false_direction_support": float(np.mean(null_false_support)),
     }
     decision["passes_gate"] = bool(
         decision["median_absolute_log_ratio_error"] <= 0.20
-        and decision["known_ratio_interval_coverage"] >= 0.70
-        and decision["null_false_directional_certainty"] <= 0.10
+        and decision["known_effect_direction_support"] >= 0.80
+        and decision["null_false_direction_support"] <= 0.10
     )
     with open(args.decision, "w", encoding="utf-8") as handle:
         json.dump(decision, handle, indent=2, sort_keys=True)
