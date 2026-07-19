@@ -59,7 +59,19 @@ print(geometry.continuity)
 print(geometry.gap_strength)
 ```
 
-## Frozen public API
+For a manifest-bound two-group comparison, see [`docs/frozen_comparison_tutorial.md`](docs/frozen_comparison_tutorial.md). Its fully synthetic bundle is reproduced with:
+
+```bash
+python -m eog.runner \
+  --manifest examples/frozen_comparison/manifest.json \
+  --reference examples/frozen_comparison/reference.json \
+  --input examples/frozen_comparison/comparison.csv \
+  --output reproduced_result.json
+```
+
+## Public API
+
+Core geometry:
 
 - `OccupancyGeometry`
 - `robust_scale`
@@ -68,7 +80,22 @@ print(geometry.gap_strength)
 - `infer_occupancy_geometry`
 - `project_states`
 
-The initial contract supports one-dimensional matrices, duplicate states, constant features, all-identical rows, and empty candidate projections with matching feature dimension. Non-finite values and occurrence matrices with fewer than two rows are rejected.
+Audited comparison:
+
+- `RobustReference`
+- `ReferenceDeclaration`
+- `ComparativeContrast`
+- `AnalysisManifest`
+- `ResultBundle`
+- `fit_robust_reference`
+- `infer_comparative_geometry`
+- `compare_geometry`
+- `validate_manifest`
+- `build_result_bundle`
+- `load_audited_csv`
+- `run_frozen_analysis`
+
+The core contract supports one-dimensional matrices, duplicate states, constant features, all-identical rows, and empty candidate projections with matching feature dimension. Non-finite values and occurrence matrices with fewer than two rows are rejected.
 
 ## Validation and manuscript materials
 
@@ -79,6 +106,7 @@ The initial contract supports one-dimensional matrices, duplicate states, consta
 - `docs/multiaxial_methodology.md`: current restrained methodological position;
 - `docs/multiaxial_archetype_results.md`: negative archetype result and consequences;
 - `docs/evidence_ledger.md`: verified results and unsupported claims;
+- `docs/frozen_comparison_tutorial.md`: canonical synthetic manifest-to-result workflow;
 - `tests/test_geometry.py`: API and edge-case tests;
 - `tests/test_acsp_parity_fixture.py`: frozen numerical parity fixture.
 
