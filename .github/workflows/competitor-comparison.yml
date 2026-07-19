@@ -1,0 +1,19 @@
+name: Competitor comparison benchmark
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: pytest tests/test_comparators.py
+      - run: python benchmarks/competitor_comparison.py --output /tmp/competitor_comparison.json
+      - run: diff -u benchmarks/expected/competitor_comparison.json /tmp/competitor_comparison.json
