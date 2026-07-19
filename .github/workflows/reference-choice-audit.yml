@@ -1,0 +1,23 @@
+name: Reference choice audit
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install .
+      - run: python benchmarks/reference_choice_audit.py --output reference_choice_results.csv --decision reference_choice_decision.json
+      - run: pytest -q tests/test_reference_policy.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reference-choice-audit
+          path: |
+            reference_choice_results.csv
+            reference_choice_decision.json
