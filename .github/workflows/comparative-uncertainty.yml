@@ -1,0 +1,23 @@
+name: Comparative uncertainty audit
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install . pytest
+      - run: python benchmarks/comparative_uncertainty.py --output comparative_uncertainty_results.csv --decision comparative_uncertainty_decision.json
+      - run: pytest -q tests/test_uncertainty.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: comparative-uncertainty
+          path: |
+            comparative_uncertainty_results.csv
+            comparative_uncertainty_decision.json
