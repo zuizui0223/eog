@@ -1,0 +1,40 @@
+{
+  "allowed_claim": "held-out comparative extent in the declared frozen reference units",
+  "analysis_id": "synthetic-comparative-span-v1",
+  "feature_names": [
+    "env_axis_1",
+    "env_axis_2"
+  ],
+  "feature_rationale": "Two artificial orthogonal axes used only to demonstrate the audited comparative-geometry workflow.",
+  "frozen_before_outcomes": true,
+  "group_a": "baseline",
+  "group_b": "broader",
+  "input_fingerprints": [
+    "b709f026b0d77ae36f0361e55193c4e8b5794f381159d71efc964b8738736ac4",
+    "fc5e1ff28e45a60ac400b41f4d5a2403453a71047992c0a41755d509e2385575"
+  ],
+  "n_permutations": 100,
+  "n_resamples": 100,
+  "primary_metric": "span",
+  "prohibited_claims": [
+    "habitat suitability",
+    "occupancy probability",
+    "causal environmental effect",
+    "universal fragmentation threshold"
+  ],
+  "random_seed": 17,
+  "reference_declaration": {
+    "fitted_before_evaluation": true,
+    "includes_evaluation_groups": false,
+    "intent": "prospective",
+    "mode": "external",
+    "outcome_informed": false,
+    "source_description": "synthetic independent calibration coordinates"
+  },
+  "reference_fingerprint": "4122355b823a5eafb96954a60f49fee69a777f4fdbecfa6b43dcf3967b1d49f6",
+  "resample_fraction": 0.8,
+  "scientific_comparison": "Synthetic broader cloud versus synthetic baseline cloud",
+  "software_version": "0.1.0",
+  "supplementary_metrics": [],
+  "support_class": null
+}

@@ -1,0 +1,22 @@
+name: Frozen comparison example
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install .
+      - run: |
+          python -m eog.runner \
+            --manifest examples/frozen_comparison/manifest.json \
+            --reference examples/frozen_comparison/reference.json \
+            --input examples/frozen_comparison/comparison.csv \
+            --output reproduced_result.json
+          cmp reproduced_result.json examples/frozen_comparison/expected_result.json
