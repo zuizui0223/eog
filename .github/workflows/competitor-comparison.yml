@@ -16,6 +16,11 @@ jobs:
       - run: python -m pip install -e ".[dev]"
       - run: pytest tests/test_comparators.py
       - run: python benchmarks/competitor_comparison.py --output /tmp/competitor_comparison.json
+      - name: Upload generated benchmark result
+        uses: actions/upload-artifact@v4
+        with:
+          name: competitor-comparison-actual
+          path: /tmp/competitor_comparison.json
       - name: Compare frozen result values
         run: |
           python - <<'PY'
