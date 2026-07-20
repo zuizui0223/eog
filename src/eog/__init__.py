@@ -1,5 +1,13 @@
 """Environmental occupancy geometry public API."""
 
+from .bridge import (
+    BridgeEdge,
+    BridgeInference,
+    BridgePath,
+    BridgeWeights,
+    environmental_edge_costs,
+    infer_bridge,
+)
 from .comparative import (
     RobustReference,
     fit_robust_reference,
@@ -38,6 +46,10 @@ __all__ = [
     "AnalysisManifest",
     "ResultBundle",
     "AuditedInput",
+    "BridgeEdge",
+    "BridgeInference",
+    "BridgePath",
+    "BridgeWeights",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
@@ -56,6 +68,8 @@ __all__ = [
     "validate_reference_declaration",
     "allowed_claim_scope",
     "project_states",
+    "environmental_edge_costs",
+    "infer_bridge",
 ]
 
 __version__ = "0.1.0"
