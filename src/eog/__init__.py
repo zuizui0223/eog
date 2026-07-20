@@ -29,6 +29,13 @@ from .survey_priority import (
     SurveyPriorityWeights,
     rank_survey_candidates,
 )
+from .hypothesis_discrimination import (
+    BridgeHypothesis,
+    HypothesisDiscriminationResult,
+    HypothesisDiscriminationRow,
+    HypothesisDiscriminationWeights,
+    rank_hypothesis_discriminating_sites,
+)
 from .comparative import (
     RobustReference,
     fit_robust_reference,
@@ -82,6 +89,10 @@ __all__ = [
     "SurveyPriorityWeights",
     "SurveyPriorityRow",
     "SurveyPriorityResult",
+    "BridgeHypothesis",
+    "HypothesisDiscriminationWeights",
+    "HypothesisDiscriminationRow",
+    "HypothesisDiscriminationResult",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
@@ -106,6 +117,7 @@ __all__ = [
     "build_bridge_graph",
     "evaluate_bridge_sensitivity",
     "rank_survey_candidates",
+    "rank_hypothesis_discriminating_sites",
 ]
 
 __version__ = "0.1.0"
