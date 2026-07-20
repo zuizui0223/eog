@@ -76,7 +76,7 @@ def rank_survey_candidates(
         raise ValueError("candidate node IDs must be unique")
 
     min_support: Mapping[str, float] = sensitivity.minimum_cost_node_support
-    bottleneck_support: Mapping[str, float] = sensitivity.minimax_node_support
+    bottleneck_support: Mapping[str, float] = sensitivity.minimum_bottleneck_node_support
     rows: list[SurveyPriorityRow] = []
     max_effort = max((item.survey_effort for item in ordered), default=0.0)
     effort_scale = max(max_effort, 1.0)
