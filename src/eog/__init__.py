@@ -8,6 +8,13 @@ from .bridge import (
     environmental_edge_costs,
     infer_bridge,
 )
+from .bridge_builder import (
+    BridgeGraphDeclaration,
+    BridgeNode,
+    BuiltBridgeGraph,
+    build_bridge_graph,
+    haversine_km,
+)
 from .comparative import (
     RobustReference,
     fit_robust_reference,
@@ -50,6 +57,9 @@ __all__ = [
     "BridgeInference",
     "BridgePath",
     "BridgeWeights",
+    "BridgeNode",
+    "BridgeGraphDeclaration",
+    "BuiltBridgeGraph",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
@@ -70,6 +80,8 @@ __all__ = [
     "project_states",
     "environmental_edge_costs",
     "infer_bridge",
+    "haversine_km",
+    "build_bridge_graph",
 ]
 
 __version__ = "0.1.0"
