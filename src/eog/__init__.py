@@ -22,6 +22,13 @@ from .bridge_sensitivity import (
     BridgeSensitivityScenario,
     evaluate_bridge_sensitivity,
 )
+from .survey_priority import (
+    SurveyCandidate,
+    SurveyPriorityResult,
+    SurveyPriorityRow,
+    SurveyPriorityWeights,
+    rank_survey_candidates,
+)
 from .comparative import (
     RobustReference,
     fit_robust_reference,
@@ -71,6 +78,10 @@ __all__ = [
     "BridgeScenarioResult",
     "BridgeMetricSummary",
     "BridgeSensitivityResult",
+    "SurveyCandidate",
+    "SurveyPriorityWeights",
+    "SurveyPriorityRow",
+    "SurveyPriorityResult",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
@@ -94,6 +105,7 @@ __all__ = [
     "haversine_km",
     "build_bridge_graph",
     "evaluate_bridge_sensitivity",
+    "rank_survey_candidates",
 ]
 
 __version__ = "0.1.0"
