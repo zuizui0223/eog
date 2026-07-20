@@ -15,6 +15,13 @@ from .bridge_builder import (
     build_bridge_graph,
     haversine_km,
 )
+from .bridge_sensitivity import (
+    BridgeMetricSummary,
+    BridgeScenarioResult,
+    BridgeSensitivityResult,
+    BridgeSensitivityScenario,
+    evaluate_bridge_sensitivity,
+)
 from .comparative import (
     RobustReference,
     fit_robust_reference,
@@ -60,6 +67,10 @@ __all__ = [
     "BridgeNode",
     "BridgeGraphDeclaration",
     "BuiltBridgeGraph",
+    "BridgeSensitivityScenario",
+    "BridgeScenarioResult",
+    "BridgeMetricSummary",
+    "BridgeSensitivityResult",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
@@ -82,6 +93,7 @@ __all__ = [
     "infer_bridge",
     "haversine_km",
     "build_bridge_graph",
+    "evaluate_bridge_sensitivity",
 ]
 
 __version__ = "0.1.0"
