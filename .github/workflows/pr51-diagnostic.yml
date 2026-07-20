@@ -1,6 +1,7 @@
 name: PR51 diagnostic
 
 on:
+  pull_request:
   push:
     branches:
       - agent/issue-51-survey-priority
