@@ -1,0 +1,9 @@
+{
+  "declared_pairs": 6,
+  "status_rows": 6,
+  "eligible_pairs": 6,
+  "failed_pairs": 0,
+  "ineligible_pairs": 0,
+  "eligible_with_stability": 6,
+  "passes_completion_gate": true
+}
