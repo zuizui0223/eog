@@ -36,6 +36,12 @@ from .hypothesis_discrimination import (
     HypothesisDiscriminationWeights,
     rank_hypothesis_discriminating_sites,
 )
+from .hypothesis_adapter import (
+    HypothesisAdapterResult,
+    HypothesisFamilyDeclaration,
+    HypothesisFamilySummary,
+    build_bridge_hypotheses,
+)
 from .comparative import (
     RobustReference,
     fit_robust_reference,
@@ -93,6 +99,9 @@ __all__ = [
     "HypothesisDiscriminationWeights",
     "HypothesisDiscriminationRow",
     "HypothesisDiscriminationResult",
+    "HypothesisFamilyDeclaration",
+    "HypothesisFamilySummary",
+    "HypothesisAdapterResult",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
@@ -118,6 +127,7 @@ __all__ = [
     "evaluate_bridge_sensitivity",
     "rank_survey_candidates",
     "rank_hypothesis_discriminating_sites",
+    "build_bridge_hypotheses",
 ]
 
 __version__ = "0.1.0"
