@@ -1,4 +1,13 @@
-from benchmarks.support_topology_stress import run_benchmark
+from importlib.util import module_from_spec, spec_from_file_location
+from pathlib import Path
+
+
+BENCHMARK_PATH = Path(__file__).resolve().parents[1] / "benchmarks" / "support_topology_stress.py"
+SPEC = spec_from_file_location("support_topology_stress", BENCHMARK_PATH)
+assert SPEC is not None and SPEC.loader is not None
+MODULE = module_from_spec(SPEC)
+SPEC.loader.exec_module(MODULE)
+run_benchmark = MODULE.run_benchmark
 
 
 def test_support_topology_stress_benchmark_is_deterministic():
