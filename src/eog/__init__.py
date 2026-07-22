@@ -53,6 +53,14 @@ from .hypothesis_survey_io import (
     load_sensitivity_csv,
     run_hypothesis_survey_csv,
 )
+from .hypothesis_survey_report import (
+    HypothesisSurveyReport,
+    render_hypothesis_survey_report,
+)
+from .hypothesis_survey_verify import (
+    HypothesisSurveyVerification,
+    verify_hypothesis_survey_bundle,
+)
 from .comparative import (
     RobustReference,
     fit_robust_reference,
@@ -115,6 +123,8 @@ __all__ = [
     "HypothesisAdapterResult",
     "HypothesisSurveyPipelineResult",
     "HypothesisSurveyRunBundle",
+    "HypothesisSurveyVerification",
+    "HypothesisSurveyReport",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
@@ -146,6 +156,8 @@ __all__ = [
     "load_families_csv",
     "load_candidates_csv",
     "run_hypothesis_survey_csv",
+    "verify_hypothesis_survey_bundle",
+    "render_hypothesis_survey_report",
 ]
 
 __version__ = "0.1.0"
