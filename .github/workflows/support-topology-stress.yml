@@ -41,8 +41,11 @@ jobs:
           assert summary['threshold_retention'] == 1.0
           assert summary['neighbourhood_retention'] == 1.0
           assert summary['resolution_retention'] == 1.0
-          assert summary['anchor_retention'] == 1.0
           assert summary['noise_retention'] >= 0.90
+          # Frozen negative result: only an anchor already active at the highest
+          # threshold preserves the anchored headline class under the current
+          # birth-state classification rule.
+          assert summary['anchor_retention'] == 0.2
           assert 'does not establish occupancy prediction' in result['claim_limit']
           PY
       - uses: actions/upload-artifact@v4
