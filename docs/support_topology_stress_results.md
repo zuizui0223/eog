@@ -26,27 +26,41 @@ The benchmark varies:
 4. occurrence-anchor position within the same western land component;
 5. 50 deterministic Gaussian support perturbations with standard deviation 0.02 on available cells.
 
-For each scenario, the benchmark records the complete class count and fingerprint. The primary retention indicator asks only whether both of the following remain present:
+For each scenario, the benchmark records the complete class count and fingerprint. The primary retention indicator asks whether both of the following remain present:
 
 - `occurrence_anchored_component`;
 - `persistent_detached_component`.
 
 Transient component frequency is reported separately rather than treated as failure of the headline structure.
 
-## Frozen acceptance contract
+## Frozen results contract
 
-The workflow requires:
+The workflow freezes both positive and negative results.
+
+Expected stable dimensions:
 
 - 100% retention across threshold sequences;
 - 100% retention across neighbourhood rules;
 - 100% retention across tested grid refinements;
-- 100% retention across tested anchor locations;
 - at least 90% retention under frozen support noise.
+
+Expected negative result:
+
+- anchor-position retention is `0.2` (one of five tested positions).
+
+Under the current birth-state rule, a component is labelled occurrence anchored only when an anchor is already present in its first recorded superlevel-set snapshot. Four anchors located on lower-support cells enter the same western component only at lower thresholds, so the western component remains classified from its unanchored birth state. This exposes a genuine anchor-threshold dependence rather than a runtime error.
 
 The exact JSON output is uploaded by `.github/workflows/support-topology-stress.yml` as `support-topology-stress-results`.
 
 ## Interpretation
 
-Passing this benchmark would show that the two-island structural distinction is not an artifact of one threshold list, one neighbourhood rule, one raster refinement, one within-island anchor cell, or small support perturbations in this frozen design.
+The positive results show that the two-island structural distinction is stable to the tested threshold lists, neighbourhood rules, raster refinements, and small support perturbations in this frozen design.
 
-It would not show that the method outperforms support-only or distance-only baselines. It would not establish biological isolation, occupancy, demographic connectivity, or historical dispersal. Those require held-out empirical comparisons.
+The negative anchor result means the occurrence-anchored label is not yet robust to within-component anchor support. Before empirical use, EOG must either:
+
+1. require anchors to be active at the highest analysed threshold and audit that requirement; or
+2. revise the classification rule so later anchor entry changes the component's anchor status while preserving lineage history.
+
+No empirical claim should rely on anchor classification until that design choice is resolved and revalidated.
+
+This benchmark does not show that the method outperforms support-only or distance-only baselines. It does not establish biological isolation, occupancy, demographic connectivity, or historical dispersal. Those require held-out empirical comparisons.
