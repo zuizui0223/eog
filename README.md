@@ -69,6 +69,27 @@ python -m eog.runner \
   --output reproduced_result.json
 ```
 
+## Bridge-hypothesis survey workflow
+
+The bridge workflow converts predeclared sensitivity scenarios into hypothesis-specific path support and ranks candidate field sites by how strongly those hypotheses disagree there. The score is decision support, not occurrence probability, posterior model probability, or expected information gain.
+
+Run the complete synthetic example without writing Python:
+
+```bash
+eog-hypothesis-survey \
+  --scenarios examples/hypothesis_survey/scenarios.csv \
+  --families examples/hypothesis_survey/families.csv \
+  --candidates examples/hypothesis_survey/candidates.csv \
+  --output-dir results/hypothesis_survey
+```
+
+The command writes:
+
+- `hypothesis_survey_ranking.csv`: ranked candidate sites and score components;
+- `hypothesis_survey_manifest.json`: input SHA-256 hashes, weights, assignment audit, and all pipeline fingerprints.
+
+The canonical example must reproduce the row order in [`examples/hypothesis_survey/expected_ranking.csv`](examples/hypothesis_survey/expected_ranking.csv). Full column definitions and interpretation limits are documented in [`docs/hypothesis_survey_contract.md`](docs/hypothesis_survey_contract.md).
+
 ## Public API
 
 Core geometry:
@@ -95,6 +116,19 @@ Audited comparison:
 - `load_audited_csv`
 - `run_frozen_analysis`
 
+Bridge inference and survey decisions:
+
+- `BridgeInference`
+- `BridgeSensitivityResult`
+- `HypothesisFamilyDeclaration`
+- `HypothesisSurveyPipelineResult`
+- `HypothesisSurveyRunBundle`
+- `infer_bridge`
+- `evaluate_bridge_sensitivity`
+- `build_bridge_hypotheses`
+- `run_hypothesis_survey_pipeline`
+- `run_hypothesis_survey_csv`
+
 The core contract supports one-dimensional matrices, duplicate states, constant features, all-identical rows, and empty candidate projections with matching feature dimension. Non-finite values and occurrence matrices with fewer than two rows are rejected.
 
 ## Validation and manuscript materials
@@ -107,12 +141,13 @@ The core contract supports one-dimensional matrices, duplicate states, constant 
 - `docs/multiaxial_archetype_results.md`: negative archetype result and consequences;
 - `docs/evidence_ledger.md`: verified results and unsupported claims;
 - `docs/frozen_comparison_tutorial.md`: canonical synthetic manifest-to-result workflow;
+- `docs/hypothesis_survey_contract.md`: bridge-hypothesis CSV and output contract;
 - `tests/test_geometry.py`: API and edge-case tests;
 - `tests/test_acsp_parity_fixture.py`: frozen numerical parity fixture.
 
 ## Scientific boundary
 
-EOG currently supports an auditable description of standardized cloud dispersion, MST compactness, separation evidence, and sampling stability under explicitly stated transformations and support assumptions. It does not claim universal superiority over clustering, hypervolume, topological-data-analysis, or species-distribution methods. The MST, single-linkage, and largest-edge ideas themselves are not claimed as novel.
+EOG currently supports an auditable description of standardized cloud dispersion, MST compactness, separation evidence, bridge-path robustness, and hypothesis-discriminating survey priority under explicitly stated transformations and support assumptions. It does not claim universal superiority over clustering, hypervolume, topological-data-analysis, or species-distribution methods. The MST, single-linkage, largest-edge, and shortest-path ideas themselves are not claimed as novel.
 
 ## Provenance
 
