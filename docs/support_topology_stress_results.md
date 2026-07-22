@@ -26,41 +26,35 @@ The benchmark varies:
 4. occurrence-anchor position within the same western land component;
 5. 50 deterministic Gaussian support perturbations with standard deviation 0.02 on available cells.
 
-For each scenario, the benchmark records the complete class count and fingerprint. The primary retention indicator asks whether both of the following remain present:
+For each scenario, the benchmark records the complete class count and fingerprint. The primary retention indicator asks whether both `occurrence_anchored_component` and `persistent_detached_component` remain present. Transient component frequency is reported separately.
 
-- `occurrence_anchored_component`;
-- `persistent_detached_component`.
+## Anchor-lineage correction
 
-Transient component frequency is reported separately rather than treated as failure of the headline structure.
+The original benchmark exposed an anchor-position retention of `0.2`. The cause was a birth-state classification rule: a component born above the support value of its occurrence cell remained detached even after that occurrence entered the same lineage at a lower threshold.
+
+EOG now propagates anchor status across the full component lineage while retaining the history needed for audit:
+
+- `birth_anchor_ids` records anchors present when the component first appeared;
+- `anchor_ids` records anchors encountered anywhere in the lineage;
+- `anchor_entry_threshold` records the first threshold at which any anchor entered;
+- `component_class` uses eventual lineage-level anchor status.
+
+A component may therefore be born detached and later become occurrence anchored without erasing that sequence.
 
 ## Frozen results contract
 
-The workflow freezes both positive and negative results.
-
-Expected stable dimensions:
+The workflow now requires:
 
 - 100% retention across threshold sequences;
 - 100% retention across neighbourhood rules;
 - 100% retention across tested grid refinements;
+- 100% retention across tested anchor locations;
 - at least 90% retention under frozen support noise.
-
-Expected negative result:
-
-- anchor-position retention is `0.2` (one of five tested positions).
-
-Under the current birth-state rule, a component is labelled occurrence anchored only when an anchor is already present in its first recorded superlevel-set snapshot. Four anchors located on lower-support cells enter the same western component only at lower thresholds, so the western component remains classified from its unanchored birth state. This exposes a genuine anchor-threshold dependence rather than a runtime error.
 
 The exact JSON output is uploaded by `.github/workflows/support-topology-stress.yml` as `support-topology-stress-results`.
 
 ## Interpretation
 
-The positive results show that the two-island structural distinction is stable to the tested threshold lists, neighbourhood rules, raster refinements, and small support perturbations in this frozen design.
+Passing this benchmark shows that the two-island structural distinction is stable to the tested threshold lists, neighbourhood rules, raster refinements, within-island anchor locations, and small support perturbations in this frozen design.
 
-The negative anchor result means the occurrence-anchored label is not yet robust to within-component anchor support. Before empirical use, EOG must either:
-
-1. require anchors to be active at the highest analysed threshold and audit that requirement; or
-2. revise the classification rule so later anchor entry changes the component's anchor status while preserving lineage history.
-
-No empirical claim should rely on anchor classification until that design choice is resolved and revalidated.
-
-This benchmark does not show that the method outperforms support-only or distance-only baselines. It does not establish biological isolation, occupancy, demographic connectivity, or historical dispersal. Those require held-out empirical comparisons.
+It does not show that the method outperforms support-only or distance-only baselines. It does not establish biological isolation, occupancy, demographic connectivity, colonisation probability, or historical dispersal. Those require held-out empirical comparisons.
