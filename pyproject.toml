@@ -15,6 +15,7 @@ dependencies = ["numpy>=1.24"]
 [project.scripts]
 eog-hypothesis-survey = "eog.hypothesis_survey_cli:main"
 eog-hypothesis-survey-verify = "eog.hypothesis_survey_verify_cli:main"
+eog-hypothesis-survey-report = "eog.hypothesis_survey_report_cli:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "pandas>=2"]
