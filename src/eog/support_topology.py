@@ -46,11 +46,7 @@ class SupportGridMetadata:
 
 @dataclass(frozen=True)
 class SupportTopologyConfig:
-    """Frozen topology settings.
-
-    Thresholds are interpreted as superlevel-set cutoffs and are normalized to
-    strict descending order. ``neighbourhood`` must be 4 or 8.
-    """
+    """Frozen topology settings with explicit thresholds and adjacency."""
 
     thresholds: tuple[float, ...]
     neighbourhood: int = 4
@@ -86,7 +82,9 @@ class SupportComponent:
     last_identifiable_threshold: float
     threshold_count: int
     persistence: float
+    birth_anchor_ids: tuple[str, ...]
     anchor_ids: tuple[str, ...]
+    anchor_entry_threshold: float | None
     anchor_component_ids: tuple[str, ...]
     merge_into_anchored_threshold: float | None
     member_cell_count: int
@@ -141,13 +139,23 @@ def assign_occurrence_anchors(
 
     if len(shape) != 2 or shape[0] <= 0 or shape[1] <= 0:
         raise ValueError("shape must contain two positive dimensions")
-    mask = np.ones(shape, dtype=bool) if available_mask is None else np.asarray(available_mask, dtype=bool)
+    mask = (
+        np.ones(shape, dtype=bool)
+        if available_mask is None
+        else np.asarray(available_mask, dtype=bool)
+    )
     if mask.shape != shape:
         raise ValueError("available_mask shape must match support field")
     if isinstance(occurrence_cells, Mapping):
-        raw = [OccurrenceAnchor(str(key), int(value[0]), int(value[1])) for key, value in occurrence_cells.items()]
+        raw = [
+            OccurrenceAnchor(str(key), int(value[0]), int(value[1]))
+            for key, value in occurrence_cells.items()
+        ]
     else:
-        raw = [OccurrenceAnchor(str(item.anchor_id), int(item.row), int(item.column)) for item in occurrence_cells]
+        raw = [
+            OccurrenceAnchor(str(item.anchor_id), int(item.row), int(item.column))
+            for item in occurrence_cells
+        ]
     seen_ids: set[str] = set()
     seen_cells: set[tuple[int, int]] = set()
     anchors: list[OccurrenceAnchor] = []
@@ -176,7 +184,11 @@ def _validate_field(
     field = np.asarray(support, dtype=float)
     if field.ndim != 2 or field.size == 0:
         raise ValueError("support must be a non-empty 2D numeric array")
-    mask = np.zeros(field.shape, dtype=bool) if missing_mask is None else np.asarray(missing_mask, dtype=bool)
+    mask = (
+        np.zeros(field.shape, dtype=bool)
+        if missing_mask is None
+        else np.asarray(missing_mask, dtype=bool)
+    )
     if mask.shape != field.shape:
         raise ValueError("missing_mask shape must match support field")
     available = ~mask
@@ -224,6 +236,10 @@ def _component_id(birth_index: int, cells: frozenset[tuple[int, int]]) -> str:
     return f"SC{birth_index + 1:03d}_r{seed[0]:04d}c{seed[1]:04d}_{digest}"
 
 
+def _has_anchor(track: _Track) -> bool:
+    return any(snapshot[3] for snapshot in track.snapshots)
+
+
 def infer_support_topology(
     support: np.ndarray,
     occurrence_cells: Mapping[str, tuple[int, int]] | Iterable[OccurrenceAnchor],
@@ -232,7 +248,12 @@ def infer_support_topology(
     missing_mask: np.ndarray | None = None,
     grid: SupportGridMetadata | None = None,
 ) -> SupportTopologyResult:
-    """Infer persistent superlevel-set component lineages on a regular grid."""
+    """Infer persistent superlevel-set component lineages on a regular grid.
+
+    Anchor status is propagated across the full lineage. A component may therefore
+    be born detached and later become occurrence anchored; both states are retained
+    through ``birth_anchor_ids`` and ``anchor_entry_threshold``.
+    """
 
     field, available = _validate_field(support, missing_mask)
     thresholds = config.validated_thresholds()
@@ -245,8 +266,14 @@ def infer_support_topology(
     for threshold_index, threshold in enumerate(thresholds):
         current = _components(available & (field >= threshold), config.neighbourhood)
         for cells in current:
-            anchor_ids = tuple(sorted(anchor_by_cell[cell] for cell in cells if cell in anchor_by_cell))
-            overlapping = [track for track in tracks if not track.merged and track.birth_cells.intersection(cells)]
+            anchor_ids = tuple(
+                sorted(anchor_by_cell[cell] for cell in cells if cell in anchor_by_cell)
+            )
+            overlapping = [
+                track
+                for track in tracks
+                if not track.merged and track.birth_cells.intersection(cells)
+            ]
             if not overlapping:
                 track = _Track(
                     component_id=_component_id(len(tracks), cells),
@@ -258,19 +285,24 @@ def infer_support_topology(
                 tracks.append(track)
                 overlapping = [track]
             if len(overlapping) > 1:
-                anchored = [track for track in overlapping if any(snapshot[3] for snapshot in track.snapshots)]
-                survivor = min(anchored or overlapping, key=lambda item: (item.birth_index, item.component_id))
+                anchored = [track for track in overlapping if _has_anchor(track)]
+                survivor = min(
+                    anchored or overlapping,
+                    key=lambda item: (item.birth_index, item.component_id),
+                )
                 for track in overlapping:
                     if track is survivor:
                         continue
                     if track.merge_into_anchored_threshold is None and (
-                        anchor_ids or any(any(snapshot[3] for snapshot in other.snapshots) for other in overlapping if other is not track)
+                        anchor_ids
+                        or any(_has_anchor(other) for other in overlapping if other is not track)
                     ):
                         track.merge_into_anchored_threshold = threshold
                     track.merged = True
                 overlapping = [survivor]
-            track = overlapping[0]
-            track.snapshots.append((threshold_index, threshold, cells, anchor_ids))
+            overlapping[0].snapshots.append(
+                (threshold_index, threshold, cells, anchor_ids)
+            )
 
     components: list[SupportComponent] = []
     span = max(thresholds) - min(thresholds)
@@ -278,18 +310,28 @@ def infer_support_topology(
         snapshots = track.snapshots
         if not snapshots:
             continue
-        first_anchor_ids = snapshots[0][3]
-        all_anchor_ids = tuple(sorted({anchor for snapshot in snapshots for anchor in snapshot[3]}))
-        last_index, last_threshold, largest_cells, _ = max(
+        birth_anchor_ids = snapshots[0][3]
+        all_anchor_ids = tuple(
+            sorted({anchor for snapshot in snapshots for anchor in snapshot[3]})
+        )
+        anchor_entry_threshold = next(
+            (threshold for _, threshold, _, ids in snapshots if ids),
+            None,
+        )
+        _, _, largest_cells, _ = max(
             snapshots, key=lambda item: (len(item[2]), -item[0])
         )
         threshold_count = len(snapshots)
         persistence = (
-            1.0 if len(thresholds) == 1 else (track.birth_threshold - snapshots[-1][1]) / span if span > 0 else 1.0
+            1.0
+            if len(thresholds) == 1
+            else (track.birth_threshold - snapshots[-1][1]) / span
+            if span > 0
+            else 1.0
         )
         values = np.asarray([field[cell] for cell in largest_cells], dtype=float)
         unresolved_cutoff = config.unresolved_below
-        if first_anchor_ids:
+        if all_anchor_ids:
             component_class = "occurrence_anchored_component"
         elif unresolved_cutoff is not None and track.birth_threshold <= unresolved_cutoff:
             component_class = "low_support_or_unresolved"
@@ -301,7 +343,11 @@ def infer_support_topology(
             sorted(
                 other.component_id
                 for other in tracks
-                if other is not track and any(set(snapshot[3]).intersection(all_anchor_ids) for snapshot in other.snapshots)
+                if other is not track
+                and any(
+                    set(snapshot[3]).intersection(all_anchor_ids)
+                    for snapshot in other.snapshots
+                )
             )
         )
         components.append(
@@ -311,7 +357,9 @@ def infer_support_topology(
                 last_identifiable_threshold=snapshots[-1][1],
                 threshold_count=threshold_count,
                 persistence=float(persistence),
+                birth_anchor_ids=birth_anchor_ids,
                 anchor_ids=all_anchor_ids,
+                anchor_entry_threshold=anchor_entry_threshold,
                 anchor_component_ids=anchor_component_ids,
                 merge_into_anchored_threshold=track.merge_into_anchored_threshold,
                 member_cell_count=len(largest_cells),
@@ -352,7 +400,9 @@ def infer_support_topology(
     )
 
 
-def summarize_support_components(result: SupportTopologyResult) -> tuple[dict[str, object], ...]:
+def summarize_support_components(
+    result: SupportTopologyResult,
+) -> tuple[dict[str, object], ...]:
     """Return stable, serialization-friendly component summaries."""
 
     return tuple(asdict(component) for component in result.components)
