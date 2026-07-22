@@ -41,13 +41,16 @@ def test_persistent_detached_component_and_lower_threshold_merge():
 
 
 def test_transient_noise_component():
-    support = np.array([[0.9, 0.0, 0.81]])
+    support = np.array([[0.9, 0.0, 0.71]])
     result = infer_support_topology(
         support,
         {"known": (0, 0)},
         SupportTopologyConfig((0.8, 0.7), minimum_persistence_steps=2),
     )
-    assert "transient_detached_component" in classes(result)
+    transient = [c for c in result.components if c.component_class == "transient_detached_component"]
+    assert len(transient) == 1
+    assert transient[0].first_threshold == 0.7
+    assert transient[0].threshold_count == 1
 
 
 def test_two_occurrence_anchors_merge_across_thresholds():
