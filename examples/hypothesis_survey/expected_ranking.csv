@@ -1,0 +1,4 @@
+rank,node_id,discrimination_score,support_range,mean_pairwise_separation,most_separated_hypotheses,survey_deficit,accessibility_cost,already_surveyed
+1,south,2.9,1.0,1.0,north|south,1.0,0.1,False
+2,north,1.8,0.5,0.5,north|south,1.0,0.2,False
+3,shared,0.9,0.5,0.5,north|south,0.0,0.1,False
