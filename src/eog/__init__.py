@@ -42,6 +42,10 @@ from .hypothesis_adapter import (
     HypothesisFamilySummary,
     build_bridge_hypotheses,
 )
+from .hypothesis_survey_pipeline import (
+    HypothesisSurveyPipelineResult,
+    run_hypothesis_survey_pipeline,
+)
 from .comparative import (
     RobustReference,
     fit_robust_reference,
@@ -102,6 +106,7 @@ __all__ = [
     "HypothesisFamilyDeclaration",
     "HypothesisFamilySummary",
     "HypothesisAdapterResult",
+    "HypothesisSurveyPipelineResult",
     "robust_scale",
     "fit_robust_reference",
     "transform_with_reference",
@@ -128,6 +133,7 @@ __all__ = [
     "rank_survey_candidates",
     "rank_hypothesis_discriminating_sites",
     "build_bridge_hypotheses",
+    "run_hypothesis_survey_pipeline",
 ]
 
 __version__ = "0.1.0"
