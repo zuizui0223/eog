@@ -1,0 +1,5 @@
+hypothesis_id,scenario_id,path_mode
+north,north-1,minimum_cost
+north,north-2,minimum_cost
+south,south-1,minimum_cost
+south,south-2,minimum_cost

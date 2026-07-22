@@ -1,0 +1,4 @@
+node_id,survey_effort,accessibility_cost,already_surveyed
+north,0,0.2,false
+south,0,0.1,false
+shared,1,0.1,false
