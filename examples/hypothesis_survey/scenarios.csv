@@ -1,0 +1,5 @@
+scenario_id,connected,minimum_cost_nodes,minimum_bottleneck_nodes
+north-1,true,source|north|target,source|north|target
+north-2,false,,
+south-1,true,source|south|target,source|south|target
+south-2,true,source|south|shared|target,source|south|target
