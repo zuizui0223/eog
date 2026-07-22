@@ -1,0 +1,65 @@
+name: Support topology stress benchmark
+
+on:
+  pull_request:
+    paths:
+      - 'src/eog/support_topology.py'
+      - 'benchmarks/support_topology_stress.py'
+      - 'tests/test_support_topology_stress.py'
+      - 'docs/support_topology_stress_results.md'
+      - '.github/workflows/support-topology-stress.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/eog/support_topology.py'
+      - 'benchmarks/support_topology_stress.py'
+      - 'tests/test_support_topology_stress.py'
+      - 'docs/support_topology_stress_results.md'
+      - '.github/workflows/support-topology-stress.yml'
+
+jobs:
+  stress-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Run focused tests
+        id: focused-tests
+        run: |
+          set +e
+          pytest tests/test_support_topology_stress.py -vv 2>&1 | tee support-topology-stress-pytest.log
+          status=${PIPESTATUS[0]}
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Upload focused test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: support-topology-stress-pytest
+          path: support-topology-stress-pytest.log
+      - name: Enforce focused test result
+        run: test '${{ steps.focused-tests.outputs.exit_code }}' = '0'
+      - name: Run frozen benchmark
+        run: python benchmarks/support_topology_stress.py --output results/support_topology_stress.json
+      - name: Check benchmark contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('results/support_topology_stress.json').read_text())
+          summary = result['summary']
+          assert summary['threshold_retention'] == 1.0
+          assert summary['neighbourhood_retention'] == 1.0
+          assert summary['resolution_retention'] == 1.0
+          assert summary['noise_retention'] >= 0.90
+          assert summary['anchor_retention'] == 0.2
+          assert 'does not establish occupancy prediction' in result['claim_limit']
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: support-topology-stress-results
+          path: results/support_topology_stress.json
