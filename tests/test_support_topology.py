@@ -24,7 +24,23 @@ def test_one_occurrence_anchored_component():
     )
     anchored = [c for c in result.components if c.component_class == "occurrence_anchored_component"]
     assert len(anchored) == 1
+    assert anchored[0].birth_anchor_ids == ("known",)
     assert anchored[0].anchor_ids == ("known",)
+    assert anchored[0].anchor_entry_threshold == 0.8
+
+
+def test_anchor_entering_at_lower_threshold_updates_eventual_class():
+    support = np.array([[0.9, 0.8, 0.7]])
+    result = infer_support_topology(
+        support,
+        {"known": (0, 2)},
+        SupportTopologyConfig((0.8, 0.7), minimum_persistence_steps=2),
+    )
+    component = result.components[0]
+    assert component.birth_anchor_ids == ()
+    assert component.anchor_ids == ("known",)
+    assert component.anchor_entry_threshold == 0.7
+    assert component.component_class == "occurrence_anchored_component"
 
 
 def test_persistent_detached_component_and_lower_threshold_merge():
@@ -38,6 +54,7 @@ def test_persistent_detached_component_and_lower_threshold_merge():
     assert len(detached) == 1
     assert detached[0].merge_into_anchored_threshold == 0.4
     assert detached[0].threshold_count == 2
+    assert detached[0].anchor_entry_threshold is None
 
 
 def test_transient_noise_component():

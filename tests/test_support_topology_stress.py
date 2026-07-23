@@ -16,22 +16,19 @@ def test_support_topology_stress_benchmark_is_deterministic():
     assert first == second
 
 
-def test_headline_components_survive_most_predeclared_stress_scenarios():
+def test_headline_components_survive_predeclared_stress_scenarios():
     result = run_benchmark(seed=20260722, noise_replicates=30)
     summary = result["summary"]
     assert summary["threshold_retention"] == 1.0
     assert summary["neighbourhood_retention"] == 1.0
     assert summary["resolution_retention"] == 1.0
+    assert summary["anchor_retention"] == 1.0
     assert summary["noise_retention"] >= 0.90
 
 
-def test_anchor_perturbation_exposes_threshold_dependence():
+def test_anchor_perturbation_records_all_locations_as_anchored():
     result = run_benchmark(seed=20260722, noise_replicates=5)
-    # Only the anchor already active at the highest threshold preserves the
-    # occurrence-anchored headline class under the current birth-state rule.
-    assert result["summary"]["anchor_retention"] == 0.2
-    retained = [row for row in result["anchor_scenarios"] if row["headline_retained"]]
-    assert [row["anchor"] for row in retained] == [[2, 2]]
+    assert all(row["headline_retained"] for row in result["anchor_scenarios"])
 
 
 def test_resolution_changes_preserve_equal_area_component_area():
