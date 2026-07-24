@@ -1,0 +1,58 @@
+name: Support topology held-out comparison
+
+on:
+  pull_request:
+    paths:
+      - 'src/eog/support_topology.py'
+      - 'benchmarks/support_topology_heldout_comparison.py'
+      - 'tests/test_support_topology_heldout_comparison.py'
+      - 'docs/support_topology_heldout_comparison.md'
+      - '.github/workflows/support-topology-heldout-comparison.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/eog/support_topology.py'
+      - 'benchmarks/support_topology_heldout_comparison.py'
+      - 'tests/test_support_topology_heldout_comparison.py'
+      - 'docs/support_topology_heldout_comparison.md'
+      - '.github/workflows/support-topology-heldout-comparison.yml'
+
+jobs:
+  heldout-comparison:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Run focused tests
+        run: pytest tests/test_support_topology_heldout_comparison.py -q
+      - name: Run frozen comparison
+        run: python benchmarks/support_topology_heldout_comparison.py --output results/support_topology_heldout_comparison.json
+      - name: Check frozen contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(Path('results/support_topology_heldout_comparison.json').read_text())
+          metrics = result['metrics']
+          multi = metrics['multi_threshold_persistent']
+          assert multi['roc_auc'] == 1.0
+          assert multi['brier_score'] == 0.0
+          for method in (
+              'support_only',
+              'distance_only',
+              'support_plus_distance',
+              'single_threshold_detached',
+          ):
+              assert multi['roc_auc'] > metrics[method]['roc_auc']
+              assert multi['brier_score'] < metrics[method]['brier_score']
+          assert 'does not establish empirical predictive superiority' in result['claim_limit']
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: support-topology-heldout-comparison
+          path: results/support_topology_heldout_comparison.json
