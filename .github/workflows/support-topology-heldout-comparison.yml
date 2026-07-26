@@ -41,7 +41,7 @@ jobs:
           metrics = result['metrics']
           multi = metrics['multi_threshold_persistent']
           assert multi['roc_auc'] == 1.0
-          assert multi['brier_score'] == 0.0
+          assert multi['mean_squared_score_error'] == 0.0
           for method in (
               'support_only',
               'distance_only',
@@ -49,8 +49,9 @@ jobs:
               'single_threshold_detached',
           ):
               assert multi['roc_auc'] > metrics[method]['roc_auc']
-              assert multi['brier_score'] < metrics[method]['brier_score']
+              assert multi['mean_squared_score_error'] < metrics[method]['mean_squared_score_error']
           assert 'does not establish empirical predictive superiority' in result['claim_limit']
+          assert 'calibrated occupancy probability' in result['claim_limit']
           PY
       - uses: actions/upload-artifact@v4
         with:
