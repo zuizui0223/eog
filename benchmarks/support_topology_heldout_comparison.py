@@ -2,16 +2,8 @@
 
 This benchmark fixes one synthetic fragmented landscape, one historical anchor,
 one candidate set, and binary held-out detections. It compares five predeclared
-scoring rules without fitting to the held-out labels:
-
-1. local support;
-2. inverse distance to the historical anchor;
-3. equal-weight support plus inverse distance;
-4. detached membership at one threshold;
-5. persistent detached membership across thresholds.
-
-The benchmark is a contract and counterexample, not empirical evidence that
-support topology improves ecological prediction.
+scoring rules without fitting to held-out labels. The result is an executable
+comparison contract, not evidence of ecological transfer or superiority.
 """
 from __future__ import annotations
 
@@ -24,7 +16,12 @@ import numpy as np
 from eog import SupportTopologyConfig, infer_support_topology
 
 
-def frozen_field() -> tuple[np.ndarray, np.ndarray, dict[str, tuple[int, int]], tuple[dict[str, object], ...]]:
+def frozen_field() -> tuple[
+    np.ndarray,
+    np.ndarray,
+    dict[str, tuple[int, int]],
+    tuple[dict[str, object], ...],
+]:
     support = np.full((5, 11), 0.05, dtype=float)
     unavailable = np.ones_like(support, dtype=bool)
 
@@ -41,8 +38,8 @@ def frozen_field() -> tuple[np.ndarray, np.ndarray, dict[str, tuple[int, int]], 
     support[1:4, 0:3] = west
     support[1:4, 5:8] = east
 
-    # Two isolated patches appear at 0.70 but persist for only two of the three
-    # thresholds, so they are transient under minimum_persistence_steps=3.
+    # These patches enter at 0.70 and remain at 0.60, but fail the frozen
+    # three-snapshot persistence requirement because they are absent at 0.80.
     unavailable[1, 10] = False
     unavailable[3, 10] = False
     support[1, 10] = 0.75
@@ -85,7 +82,13 @@ def _roc_auc(labels: np.ndarray, scores: np.ndarray) -> float:
     return float(np.mean(comparisons))
 
 
-def _brier(labels: np.ndarray, scores: np.ndarray) -> float:
+def _mean_squared_score_error(labels: np.ndarray, scores: np.ndarray) -> float:
+    """Descriptive squared error for scores constrained to [0, 1].
+
+    The synthetic scores are neither fitted nor probability-calibrated. The
+    result must therefore not be interpreted as a calibrated probability score.
+    """
+
     return float(np.mean((scores - labels) ** 2))
 
 
@@ -156,10 +159,11 @@ def run_benchmark() -> dict[str, object]:
     metrics = {
         method: {
             "roc_auc": _roc_auc(labels, scores),
-            "brier_score": _brier(labels, scores),
+            "mean_squared_score_error": _mean_squared_score_error(labels, scores),
         }
         for method, scores in methods.items()
     }
+
     candidate_rows = []
     for index, candidate in enumerate(candidates):
         candidate_rows.append(
@@ -187,7 +191,7 @@ def run_benchmark() -> dict[str, object]:
         "claim_limit": (
             "This frozen synthetic comparison demonstrates a constructed failure mode for local support, "
             "distance, and a single threshold. It does not establish empirical predictive superiority, "
-            "occupancy probability, colonisation, dispersal connectivity, or transfer to real taxa."
+            "calibrated occupancy probability, colonisation, dispersal connectivity, or transfer to real taxa."
         ),
     }
 
