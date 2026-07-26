@@ -12,7 +12,6 @@ import numpy as np
 
 from .support_topology import SupportTopologyConfig, infer_support_topology
 
-
 METHOD_NAMES = (
     "support_only",
     "distance_only",
@@ -62,12 +61,14 @@ class CandidateRecord:
     row: int
     column: int
     detected: int
+    group_id: str = "all"
 
 
 @dataclass(frozen=True)
 class ValidationBundle:
     manifest: dict[str, Any]
     metrics: dict[str, dict[str, float]]
+    group_metrics: dict[str, dict[str, dict[str, float | int | None]]]
     candidates: tuple[dict[str, Any], ...]
     fingerprint: str
 
@@ -75,6 +76,7 @@ class ValidationBundle:
         return {
             "manifest": self.manifest,
             "metrics": self.metrics,
+            "group_metrics": self.group_metrics,
             "candidates": list(self.candidates),
             "fingerprint": self.fingerprint,
         }
@@ -109,20 +111,30 @@ def _load_candidates(path: Path) -> tuple[CandidateRecord, ...]:
     required = {"candidate_id", "row", "column", "detected"}
     if not rows or not required.issubset(rows[0]):
         raise ValueError("candidates CSV must contain candidate_id,row,column,detected")
+    has_group = "group_id" in rows[0]
     seen: set[str] = set()
     candidates: list[CandidateRecord] = []
     for row in rows:
         candidate_id = str(row["candidate_id"]).strip()
         detected = int(row["detected"])
+        group_id = str(row.get("group_id", "all")).strip() if has_group else "all"
         if not candidate_id or candidate_id in seen:
             raise ValueError("candidate IDs must be non-empty and unique")
+        if not group_id:
+            raise ValueError("group_id must be non-empty when provided")
         if detected not in {0, 1}:
             raise ValueError("detected must be 0 or 1")
         seen.add(candidate_id)
         candidates.append(
-            CandidateRecord(candidate_id, int(row["row"]), int(row["column"]), detected)
+            CandidateRecord(
+                candidate_id,
+                int(row["row"]),
+                int(row["column"]),
+                detected,
+                group_id,
+            )
         )
-    if not {item.detected for item in candidates} == {0, 1}:
+    if {item.detected for item in candidates} != {0, 1}:
         raise ValueError("held-out candidates must include both detections and non-detections")
     return tuple(candidates)
 
@@ -138,19 +150,43 @@ def _minmax(values: np.ndarray) -> np.ndarray:
 def _roc_auc(labels: np.ndarray, scores: np.ndarray) -> float:
     positive = scores[labels == 1]
     negative = scores[labels == 0]
-    return float(
-        np.mean(
-            [
-                1.0 if p > n else 0.5 if p == n else 0.0
-                for p in positive
-                for n in negative
-            ]
-        )
-    )
+    return float(np.mean([1.0 if p > n else 0.5 if p == n else 0.0 for p in positive for n in negative]))
 
 
-def _brier(labels: np.ndarray, scores: np.ndarray) -> float:
+def _mean_squared_score_error(labels: np.ndarray, scores: np.ndarray) -> float:
     return float(np.mean((scores - labels) ** 2))
+
+
+def _metric_pair(labels: np.ndarray, scores: np.ndarray) -> dict[str, float]:
+    return {
+        "roc_auc": _roc_auc(labels, scores),
+        "mean_squared_score_error": _mean_squared_score_error(labels, scores),
+    }
+
+
+def _grouped_metrics(
+    candidates: tuple[CandidateRecord, ...],
+    scores: dict[str, np.ndarray],
+) -> dict[str, dict[str, dict[str, float | int | None]]]:
+    result: dict[str, dict[str, dict[str, float | int | None]]] = {}
+    for group_id in sorted({item.group_id for item in candidates}):
+        indices = np.asarray([i for i, item in enumerate(candidates) if item.group_id == group_id])
+        labels = np.asarray([candidates[i].detected for i in indices], dtype=int)
+        evaluable = len(set(labels.tolist())) == 2
+        group_result: dict[str, dict[str, float | int | None]] = {}
+        for name, values in scores.items():
+            row: dict[str, float | int | None] = {
+                "candidate_count": int(len(indices)),
+                "positive_count": int(labels.sum()),
+                "negative_count": int(len(labels) - labels.sum()),
+                "roc_auc": None,
+                "mean_squared_score_error": _mean_squared_score_error(labels, values[indices]),
+            }
+            if evaluable:
+                row["roc_auc"] = _roc_auc(labels, values[indices])
+            group_result[name] = row
+        result[group_id] = group_result
+    return result
 
 
 def _birth_class_by_cell(result) -> dict[tuple[int, int], str]:
@@ -169,11 +205,8 @@ def run_heldout_validation(
     candidates_path: Path,
     declaration_path: Path,
 ) -> ValidationBundle:
-    declaration = HeldoutValidationDeclaration.from_dict(
-        json.loads(declaration_path.read_text(encoding="utf-8"))
-    )
+    declaration = HeldoutValidationDeclaration.from_dict(json.loads(declaration_path.read_text(encoding="utf-8")))
     declaration.validate()
-
     support = np.load(support_path, allow_pickle=False)
     unavailable = np.load(mask_path, allow_pickle=False)
     if support.ndim != 2 or unavailable.shape != support.shape:
@@ -181,7 +214,6 @@ def run_heldout_validation(
     unavailable = np.asarray(unavailable, dtype=bool)
     anchors = _load_anchors(anchors_path)
     candidates = _load_candidates(candidates_path)
-
     cells = [(item.row, item.column) for item in candidates]
     for item, cell in zip(candidates, cells):
         if not (0 <= cell[0] < support.shape[0] and 0 <= cell[1] < support.shape[1]):
@@ -189,7 +221,6 @@ def run_heldout_validation(
         if unavailable[cell]:
             raise ValueError(f"candidate lies on unavailable cell: {item.candidate_id}")
 
-    # Scores are computed from frozen inputs before labels are used for metrics.
     local_support = np.asarray([support[cell] for cell in cells], dtype=float)
     anchor_cells = tuple(anchors.values())
     distance = np.asarray(
@@ -225,13 +256,8 @@ def run_heldout_validation(
     )
     single_classes = _birth_class_by_cell(single)
     multi_classes = _birth_class_by_cell(multi)
-    single_score = np.asarray(
-        [float(single_classes.get(cell) == "persistent_detached_component") for cell in cells]
-    )
-    multi_score = np.asarray(
-        [float(multi_classes.get(cell) == "persistent_detached_component") for cell in cells]
-    )
-
+    single_score = np.asarray([float(single_classes.get(cell) == "persistent_detached_component") for cell in cells])
+    multi_score = np.asarray([float(multi_classes.get(cell) == "persistent_detached_component") for cell in cells])
     scores = {
         "support_only": support_score,
         "distance_only": distance_score,
@@ -240,13 +266,12 @@ def run_heldout_validation(
         "multi_threshold_persistent": multi_score,
     }
     labels = np.asarray([item.detected for item in candidates], dtype=int)
-    metrics = {
-        name: {"roc_auc": _roc_auc(labels, values), "brier_score": _brier(labels, values)}
-        for name, values in scores.items()
-    }
+    metrics = {name: _metric_pair(labels, values) for name, values in scores.items()}
+    group_metrics = _grouped_metrics(candidates, scores)
     candidate_rows = tuple(
         {
             "candidate_id": item.candidate_id,
+            "group_id": item.group_id,
             "row": item.row,
             "column": item.column,
             "detected": item.detected,
@@ -260,13 +285,11 @@ def run_heldout_validation(
     )
     inputs = {
         path.name: _sha256_file(path)
-        for path in (
-            support_path,
-            mask_path,
-            anchors_path,
-            candidates_path,
-            declaration_path,
-        )
+        for path in (support_path, mask_path, anchors_path, candidates_path, declaration_path)
+    }
+    group_counts = {
+        group_id: sum(item.group_id == group_id for item in candidates)
+        for group_id in sorted({item.group_id for item in candidates})
     }
     manifest = {
         "declaration": asdict(declaration),
@@ -274,23 +297,26 @@ def run_heldout_validation(
         "support_shape": list(support.shape),
         "candidate_count": len(candidates),
         "positive_count": int(labels.sum()),
+        "group_count": len(group_counts),
+        "group_candidate_counts": group_counts,
         "topology_fingerprint": multi.fingerprint,
         "method_names": list(METHOD_NAMES),
         "claim_limit": (
             "Scores are comparative diagnostics, not calibrated occurrence probabilities. "
-            "This bundle does not establish colonisation, dispersal connectivity, historical routes, "
-            "causal barriers, or confirmatory evidence unless the declaration and inputs were frozen independently."
+            "Candidate-level metrics may be pseudo-replicated when sites share a region; grouped metrics "
+            "must be inspected when group_id is supplied. This bundle does not establish colonisation, "
+            "dispersal connectivity, historical routes, causal barriers, or confirmatory evidence unless "
+            "the declaration and inputs were frozen independently."
         ),
     }
     payload = {
         "manifest": manifest,
         "metrics": metrics,
+        "group_metrics": group_metrics,
         "candidates": list(candidate_rows),
     }
-    fingerprint = hashlib.sha256(
-        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    ).hexdigest()
-    return ValidationBundle(manifest, metrics, candidate_rows, fingerprint)
+    fingerprint = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+    return ValidationBundle(manifest, metrics, group_metrics, candidate_rows, fingerprint)
 
 
 def write_validation_bundle(bundle: ValidationBundle, output_dir: Path) -> None:
@@ -300,14 +326,8 @@ def write_validation_bundle(bundle: ValidationBundle, output_dir: Path) -> None:
     )
     with (output_dir / "candidate_scores.csv").open("w", newline="", encoding="utf-8") as handle:
         fieldnames = [
-            "candidate_id",
-            "row",
-            "column",
-            "detected",
-            "support",
-            "distance_to_nearest_anchor",
-            "single_threshold_class",
-            "multi_threshold_class",
+            "candidate_id", "group_id", "row", "column", "detected", "support",
+            "distance_to_nearest_anchor", "single_threshold_class", "multi_threshold_class",
             *METHOD_NAMES,
         ]
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
