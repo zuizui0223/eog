@@ -35,6 +35,13 @@ from .support_topology import (
     infer_support_topology,
     summarize_support_components,
 )
+from .support_topology_validation import (
+    CandidateRecord,
+    HeldoutValidationDeclaration,
+    ValidationBundle,
+    run_heldout_validation,
+    write_validation_bundle,
+)
 from .survey_priority import (
     SurveyCandidate,
     SurveyPriorityResult,
@@ -129,6 +136,9 @@ __all__ = [
     "SupportComponent",
     "SupportTopologyResult",
     "ComponentRecovery",
+    "HeldoutValidationDeclaration",
+    "CandidateRecord",
+    "ValidationBundle",
     "SurveyCandidate",
     "SurveyPriorityWeights",
     "SurveyPriorityRow",
@@ -172,6 +182,8 @@ __all__ = [
     "summarize_support_components",
     "evaluate_component_recovery",
     "evaluate_support_topology_sensitivity",
+    "run_heldout_validation",
+    "write_validation_bundle",
     "rank_survey_candidates",
     "rank_hypothesis_discriminating_sites",
     "build_bridge_hypotheses",
