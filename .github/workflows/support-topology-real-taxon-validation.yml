@@ -1,0 +1,102 @@
+name: Support topology real-taxon validation adapter
+
+on:
+  pull_request:
+    paths:
+      - 'src/eog/support_topology.py'
+      - 'src/eog/support_topology_validation.py'
+      - 'src/eog/support_topology_validation_cli.py'
+      - 'tests/test_support_topology_validation.py'
+      - 'docs/support_topology_real_taxon_validation.md'
+      - 'pyproject.toml'
+      - '.github/workflows/support-topology-real-taxon-validation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/eog/support_topology.py'
+      - 'src/eog/support_topology_validation.py'
+      - 'src/eog/support_topology_validation_cli.py'
+      - 'tests/test_support_topology_validation.py'
+      - 'docs/support_topology_real_taxon_validation.md'
+      - 'pyproject.toml'
+      - '.github/workflows/support-topology-real-taxon-validation.yml'
+
+jobs:
+  validate-adapter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Run focused tests
+        run: pytest tests/test_support_topology_validation.py -q
+      - name: Build frozen CLI fixture
+        run: |
+          mkdir -p tmp/validation
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import numpy as np
+
+          root = Path('tmp/validation')
+          support = np.full((5, 11), 0.05)
+          mask = np.ones_like(support, dtype=bool)
+          island = np.array([[0.82, 0.84, 0.80], [0.86, 0.88, 0.83], [0.79, 0.81, 0.78]])
+          mask[1:4, 0:3] = False
+          mask[1:4, 5:8] = False
+          support[1:4, 0:3] = island
+          support[1:4, 5:8] = island
+          mask[1, 10] = False
+          support[1, 10] = 0.75
+          np.save(root / 'support.npy', support)
+          np.save(root / 'mask.npy', mask)
+          (root / 'anchors.csv').write_text('anchor_id,row,column\nwest,2,1\n')
+          (root / 'candidates.csv').write_text(
+              'candidate_id,row,column,detected\n'
+              'east_a,1,5,1\n'
+              'east_b,2,5,1\n'
+              'west_a,1,0,0\n'
+              'transient,1,10,0\n'
+          )
+          (root / 'declaration.json').write_text(json.dumps({
+              'analysis_id': 'ci_fixture',
+              'thresholds': [0.8, 0.7, 0.6],
+              'single_threshold': 0.7,
+              'neighbourhood': 4,
+              'minimum_persistence_steps': 3,
+              'support_distance_weight': 0.5,
+              'frozen_before_outcomes': True,
+          }))
+          PY
+      - name: Run CLI
+        run: |
+          eog-support-topology-validate \
+            --support tmp/validation/support.npy \
+            --mask tmp/validation/mask.npy \
+            --anchors tmp/validation/anchors.csv \
+            --candidates tmp/validation/candidates.csv \
+            --declaration tmp/validation/declaration.json \
+            --output-dir results/support_topology_validation
+      - name: Check output contract
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          root = Path('results/support_topology_validation')
+          bundle = json.loads((root / 'validation_bundle.json').read_text())
+          assert len(bundle['fingerprint']) == 64
+          assert len(bundle['manifest']['input_sha256']) == 5
+          assert bundle['metrics']['multi_threshold_persistent']['roc_auc'] == 1.0
+          with (root / 'candidate_scores.csv').open(newline='') as handle:
+              rows = list(csv.DictReader(handle))
+          assert len(rows) == 4
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: support-topology-real-taxon-validation-fixture
+          path: results/support_topology_validation
