@@ -1,0 +1,84 @@
+name: Support topology empirical runner
+
+on:
+  pull_request:
+    paths:
+      - 'src/eog/support_topology_comparison.py'
+      - 'src/eog/support_topology_comparison_cli.py'
+      - 'tests/test_support_topology_comparison.py'
+      - 'docs/support_topology_empirical_runner.md'
+      - 'pyproject.toml'
+      - '.github/workflows/support-topology-empirical-runner.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/eog/support_topology_comparison.py'
+      - 'src/eog/support_topology_comparison_cli.py'
+      - 'tests/test_support_topology_comparison.py'
+      - 'docs/support_topology_empirical_runner.md'
+      - 'pyproject.toml'
+      - '.github/workflows/support-topology-empirical-runner.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Run focused tests
+        run: pytest tests/test_support_topology_comparison.py -q
+      - name: Exercise CLI
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          import numpy as np
+
+          root = Path('results/empirical-runner-smoke')
+          root.mkdir(parents=True, exist_ok=True)
+          support = np.full((3, 7), 0.05)
+          mask = np.ones_like(support, dtype=bool)
+          mask[:, 0:2] = False
+          mask[:, 4:6] = False
+          block = np.array([[0.8, 0.85], [0.9, 0.88], [0.78, 0.82]])
+          support[:, 0:2] = block
+          support[:, 4:6] = block
+          np.save(root / 'support.npy', support)
+          np.save(root / 'mask.npy', mask)
+          with (root / 'anchors.csv').open('w', newline='') as handle:
+              writer = csv.writer(handle)
+              writer.writerow(['anchor_id', 'row', 'column'])
+              writer.writerow(['west', 1, 0])
+          with (root / 'candidates.csv').open('w', newline='') as handle:
+              writer = csv.writer(handle)
+              writer.writerow(['candidate_id', 'row', 'column', 'detected'])
+              writer.writerows([
+                  ['east_a', 0, 4, 1], ['east_b', 1, 4, 1],
+                  ['west_a', 0, 0, 0], ['west_b', 1, 0, 0],
+              ])
+          PY
+          eog-support-topology-compare \
+            --support results/empirical-runner-smoke/support.npy \
+            --mask results/empirical-runner-smoke/mask.npy \
+            --anchors results/empirical-runner-smoke/anchors.csv \
+            --candidates results/empirical-runner-smoke/candidates.csv \
+            --thresholds 0.8 0.7 \
+            --single-threshold 0.7 \
+            --minimum-persistence-steps 2 \
+            --output results/empirical-runner-smoke/result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('results/empirical-runner-smoke/result.json').read_text())
+          assert result['metrics']['support_only']['roc_auc'] == 0.5
+          assert result['metrics']['multi_threshold_persistent']['roc_auc'] == 1.0
+          assert len(result['fingerprint']) == 64
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: support-topology-empirical-runner-smoke
+          path: results/empirical-runner-smoke/result.json
