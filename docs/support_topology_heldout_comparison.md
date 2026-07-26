@@ -42,10 +42,12 @@ No score is fitted to the held-out labels.
 The workflow reports:
 
 - ROC AUC, using pairwise comparisons with half credit for ties;
-- Brier score;
+- mean squared score error for the bounded 0–1 scores;
 - candidate-level support, distance, component classes, and all five scores.
 
-The frozen contract requires the multi-threshold rule to have higher ROC AUC and lower Brier score than all four comparators in this constructed case.
+The squared-error quantity is descriptive. The scores are not probability-calibrated, so it must not be described as evidence of calibrated occupancy prediction.
+
+The frozen contract requires the multi-threshold rule to have higher ROC AUC and lower mean squared score error than all four comparators in this deliberately constructed case.
 
 ## Interpretation
 
@@ -56,4 +58,4 @@ The benchmark demonstrates a specific failure mode:
 - a single threshold confuses transient detached patches with the persistent detached component;
 - multi-threshold persistence separates those structures in this frozen design.
 
-This does **not** establish empirical predictive superiority, occupancy probability, colonisation, historical dispersal, demographic connectivity, or general transfer to real taxa. The next confirmatory step must use training-only support, predeclared anchors and thresholds, and island- or region-level held-out detections.
+This does **not** establish empirical predictive superiority, calibrated occupancy probability, colonisation, historical dispersal, demographic connectivity, or general transfer to real taxa. The next confirmatory step must use training-only support, predeclared anchors and thresholds, and island- or region-level held-out detections.
