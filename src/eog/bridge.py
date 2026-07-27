@@ -1,7 +1,7 @@
 """Population-pair bridge diagnostics on declared point or patch graphs.
 
 The module evaluates paths between a source and target under explicitly separated
-geographic, environmental and structural-barrier costs.  Outputs are transition
+geographic, environmental and structural-barrier costs. Outputs are transition
 diagnostics, not suitability, occupancy or colonisation probabilities.
 """
 from __future__ import annotations
@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import heapq
 from typing import Iterable
+import warnings
 
 import numpy as np
 
@@ -86,9 +87,42 @@ def environmental_edge_costs(
     for source, target in edges:
         if source < 0 or target < 0 or source >= n or target >= n or source == target:
             raise ValueError("declared edge contains an invalid endpoint")
-        distance = float(np.linalg.norm(transformed[source] - transformed[target]))
-        result.append((int(source), int(target), distance))
+        result.append(
+            (int(source), int(target), float(np.linalg.norm(transformed[source] - transformed[target])))
+        )
     return result
+
+
+def _audit_cost_scales(edges: list[BridgeEdge], weights: BridgeWeights) -> None:
+    """Warn when active cost dimensions have strongly incompatible numeric scales.
+
+    Bridge graphs built by :mod:`eog.bridge_builder` store geographic cost in km,
+    environmental cost in frozen-reference standardised units, and barrier cost in
+    analyst-declared units. Equal numeric weights therefore do not imply equal
+    scientific influence. The audit is diagnostic only and does not rescale costs.
+    """
+    dimensions = (
+        ("geographic", weights.geographic, [edge.geographic_cost for edge in edges]),
+        ("environmental", weights.environmental, [edge.environmental_cost for edge in edges]),
+        ("barrier", weights.barrier, [edge.barrier_cost for edge in edges]),
+    )
+    active: list[tuple[str, float]] = []
+    for name, weight, raw in dimensions:
+        positive = np.asarray([value for value in raw if value > 0], dtype=float)
+        if weight > 0 and positive.size:
+            active.append((name, float(weight * np.median(positive))))
+    if len(active) < 2:
+        return
+    smallest = min(value for _, value in active)
+    largest = max(value for _, value in active)
+    if smallest > 0 and largest / smallest > 100.0:
+        summary = ", ".join(f"{name}={value:.6g}" for name, value in active)
+        warnings.warn(
+            "bridge cost dimensions differ by more than 100-fold after weighting "
+            f"({summary}); declare weights from an explicit scaling or sensitivity policy",
+            RuntimeWarning,
+            stacklevel=3,
+        )
 
 
 def _adjacency(n_nodes: int, edges: Iterable[BridgeEdge], weights: BridgeWeights):
@@ -97,20 +131,17 @@ def _adjacency(n_nodes: int, edges: Iterable[BridgeEdge], weights: BridgeWeights
     for edge in edges:
         if edge.source >= n_nodes or edge.target >= n_nodes:
             raise ValueError("edge endpoint exceeds n_nodes")
+        key = (min(edge.source, edge.target), max(edge.source, edge.target))
+        if key in edge_map:
+            raise ValueError("duplicate undirected bridge edge")
         cost = edge.total(weights)
         graph[edge.source].append((edge.target, edge, cost))
         graph[edge.target].append((edge.source, edge, cost))
-        edge_map[(min(edge.source, edge.target), max(edge.source, edge.target))] = edge
+        edge_map[key] = edge
     return graph, edge_map
 
 
-def _reconstruct(
-    source: int,
-    target: int,
-    previous: list[int],
-    edge_map: dict[tuple[int, int], BridgeEdge],
-    weights: BridgeWeights,
-) -> BridgePath:
+def _reconstruct(source: int, target: int, previous: list[int], edge_map, weights: BridgeWeights) -> BridgePath:
     if source != target and previous[target] < 0:
         raise ValueError("source and target are disconnected")
     nodes = [target]
@@ -169,7 +200,14 @@ def _minimax_path(n_nodes: int, graph, source: int, target: int, edge_map, weigh
     return _reconstruct(source, target, previous, edge_map, weights)
 
 
-def _edge_disjoint_count(n_nodes: int, edges: list[BridgeEdge], source: int, target: int, weights: BridgeWeights, threshold: float) -> int:
+def _edge_disjoint_count(
+    n_nodes: int,
+    edges: list[BridgeEdge],
+    source: int,
+    target: int,
+    weights: BridgeWeights,
+    threshold: float,
+) -> int:
     allowed = [edge for edge in edges if edge.total(weights) <= threshold]
     residual: dict[tuple[int, int], int] = {}
     neighbours: list[set[int]] = [set() for _ in range(n_nodes)]
@@ -216,11 +254,13 @@ def infer_bridge(
 
     ``redundancy_threshold`` limits the edge costs admitted when counting
     edge-disjoint alternatives. By default it equals the bottleneck of the
-    minimum-cumulative-cost path.
+    minimum-cumulative-cost path. Mixed cost dimensions are audited for gross
+    numeric-scale imbalance but are never automatically rescaled.
     """
     if n_nodes < 2 or source < 0 or target < 0 or source >= n_nodes or target >= n_nodes or source == target:
         raise ValueError("source and target must be distinct valid node indices")
     edge_list = list(edges)
+    _audit_cost_scales(edge_list, weights)
     graph, edge_map = _adjacency(n_nodes, edge_list, weights)
     shortest = _shortest_path(n_nodes, graph, source, target, edge_map, weights)
     minimax = _minimax_path(n_nodes, graph, source, target, edge_map, weights)
@@ -237,6 +277,8 @@ def infer_bridge(
         minimum_bottleneck_path=minimax,
         direct_edge_cost=direct_cost,
         bridge_gain=gain,
-        edge_disjoint_path_count=_edge_disjoint_count(n_nodes, edge_list, source, target, weights, threshold),
+        edge_disjoint_path_count=_edge_disjoint_count(
+            n_nodes, edge_list, source, target, weights, threshold
+        ),
         redundancy_threshold=threshold,
     )
