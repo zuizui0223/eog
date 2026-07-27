@@ -1,3 +1,5 @@
+import warnings
+
 import pytest
 
 from eog import BridgeEdge, BridgeWeights, infer_bridge
@@ -18,7 +20,8 @@ def test_explicit_scaling_policy_avoids_warning():
         BridgeEdge(0, 1, geographic_cost=120.0, environmental_cost=0.2),
         BridgeEdge(1, 2, geographic_cost=110.0, environmental_cost=0.3),
     ]
-    with pytest.warns(None) as record:
+    with warnings.catch_warnings(record=True) as record:
+        warnings.simplefilter("always")
         infer_bridge(
             3,
             edges,
