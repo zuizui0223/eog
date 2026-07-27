@@ -54,6 +54,11 @@ class BridgeGraphDeclaration:
         ):
             if value is not None and (not np.isfinite(value) or value <= 0):
                 raise ValueError(f"{name} must be finite and positive")
+        if self.directed_by_time:
+            raise ValueError(
+                "directed_by_time is unsupported because bridge inference currently uses "
+                "undirected edges; refusing prevents reverse-time paths from being reported"
+            )
 
 
 @dataclass(frozen=True)
@@ -106,12 +111,6 @@ def build_bridge_graph(
                 continue
             if declaration.max_environmental_distance is not None and env > declaration.max_environmental_distance:
                 continue
-            if declaration.directed_by_time:
-                ti, tj = ordered[i].time_order, ordered[j].time_order
-                if ti is None or tj is None:
-                    raise ValueError("all nodes require time_order when directed_by_time is true")
-                if ti == tj:
-                    continue
             pair_rows.append((geo, i, j, env))
 
     selected: set[tuple[int, int]] = set()
