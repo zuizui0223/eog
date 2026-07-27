@@ -57,17 +57,6 @@ def test_k_nearest_ties_are_stable_by_node_id():
     assert first.edges == second.edges
 
 
-def test_time_directed_mode_requires_time_order_and_removes_ties():
-    ref = fit_robust_reference(np.array([[-1.0], [0.0], [1.0]]), provenance="test")
-    with pytest.raises(ValueError, match="time_order"):
-        build_bridge_graph(
-            [node("a", 0.0, [0.0]), node("b", 0.1, [0.0])],
-            ref,
-            BridgeGraphDeclaration(max_geographic_km=100.0, directed_by_time=True),
-        )
-    graph = build_bridge_graph(
-        [node("a", 0.0, [0.0], time=1), node("b", 0.1, [0.0], time=1)],
-        ref,
-        BridgeGraphDeclaration(max_geographic_km=100.0, directed_by_time=True),
-    )
-    assert graph.edges == ()
+def test_time_directed_mode_is_explicitly_rejected():
+    with pytest.raises(ValueError, match="undirected edges"):
+        BridgeGraphDeclaration(max_geographic_km=100.0, directed_by_time=True)
