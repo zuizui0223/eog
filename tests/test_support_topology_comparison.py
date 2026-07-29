@@ -71,6 +71,29 @@ def test_scores_do_not_change_when_other_heldout_rows_change():
         )
 
 
+def test_component_growth_cells_are_recovered_not_only_birth_cells():
+    support = np.array([[0.9, 0.0, 0.9, 0.75]])
+    mask = np.zeros_like(support, dtype=bool)
+    anchors = {"known": (0, 0)}
+    candidates = (
+        HeldoutCandidate("detached_growth", 0, 3, 1),
+        HeldoutCandidate("anchored", 0, 0, 0),
+    )
+    config = SupportTopologyComparisonConfig(
+        thresholds=(0.8, 0.7),
+        single_threshold=0.7,
+        minimum_persistence_steps=2,
+    )
+    result = compare_support_topology_heldout(
+        support, mask, anchors, candidates, config
+    )
+    rows = {row["candidate_id"]: row for row in result.candidates}
+    assert rows["detached_growth"]["multi_threshold_class"] == (
+        "persistent_detached_component"
+    )
+    assert rows["detached_growth"]["scores"]["multi_threshold_persistent"] == 1.0
+
+
 def test_invalid_candidates_and_anchors_are_rejected():
     support, mask, anchors, _, config = fixture_inputs()
     with pytest.raises(ValueError, match="zero or one"):
