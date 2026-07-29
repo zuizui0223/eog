@@ -53,7 +53,25 @@ def test_multiple_anchors_use_nearest_distance():
     assert rows["east_b"]["distance_to_nearest_anchor"] == 1.0
 
 
-def test_invalid_candidates_are_rejected():
+def test_scores_do_not_change_when_other_heldout_rows_change():
+    support, mask, anchors, candidates, config = fixture_inputs()
+    baseline = compare_support_topology_heldout(support, mask, anchors, candidates, config)
+    extended_candidates = candidates + (
+        HeldoutCandidate("extra_low", 2, 0, 0),
+        HeldoutCandidate("extra_far", 2, 5, 1),
+    )
+    extended = compare_support_topology_heldout(
+        support, mask, anchors, extended_candidates, config
+    )
+    baseline_rows = {row["candidate_id"]: row for row in baseline.candidates}
+    extended_rows = {row["candidate_id"]: row for row in extended.candidates}
+    for candidate in candidates:
+        assert extended_rows[candidate.candidate_id]["scores"] == pytest.approx(
+            baseline_rows[candidate.candidate_id]["scores"]
+        )
+
+
+def test_invalid_candidates_and_anchors_are_rejected():
     support, mask, anchors, _, config = fixture_inputs()
     with pytest.raises(ValueError, match="zero or one"):
         compare_support_topology_heldout(
@@ -71,9 +89,32 @@ def test_invalid_candidates_are_rejected():
             (HeldoutCandidate("masked", 0, 3, 1), HeldoutCandidate("ok", 0, 0, 0)),
             config,
         )
+    with pytest.raises(ValueError, match="anchor outside grid"):
+        compare_support_topology_heldout(
+            support,
+            mask,
+            {"bad": (99, 99)},
+            (HeldoutCandidate("yes", 0, 4, 1), HeldoutCandidate("no", 0, 0, 0)),
+            config,
+        )
+    with pytest.raises(ValueError, match="anchor lies on masked cell"):
+        compare_support_topology_heldout(
+            support,
+            mask,
+            {"bad": (0, 3)},
+            (HeldoutCandidate("yes", 0, 4, 1), HeldoutCandidate("no", 0, 0, 0)),
+            config,
+        )
+
+
+def test_nonfinite_unmasked_support_is_rejected():
+    support, mask, anchors, candidates, config = fixture_inputs()
+    support[0, 0] = np.nan
+    with pytest.raises(ValueError, match="unmasked support values must be finite"):
+        compare_support_topology_heldout(support, mask, anchors, candidates, config)
 
 
 def test_claim_limit_is_explicit():
     result = compare_support_topology_heldout(*fixture_inputs())
-    assert "does not establish occupancy probability" in result.claim_limit
+    assert "calibrated occupancy probability" in result.claim_limit
     assert "general superiority" in result.claim_limit
