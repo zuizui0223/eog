@@ -85,12 +85,52 @@ def _roc_auc(labels: np.ndarray, scores: np.ndarray) -> float:
     return float(np.mean(values))
 
 
-def _birth_class_by_cell(result) -> dict[tuple[int, int], str]:
-    classes: dict[tuple[int, int], str] = {}
+def _neighbours(
+    cell: tuple[int, int],
+    shape: tuple[int, int],
+    neighbourhood: int,
+):
+    row, column = cell
+    offsets = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    if neighbourhood == 8:
+        offsets += [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+    for dr, dc in offsets:
+        candidate = (row + dr, column + dc)
+        if 0 <= candidate[0] < shape[0] and 0 <= candidate[1] < shape[1]:
+            yield candidate
+
+
+def _member_class_by_cell(
+    result,
+    field: np.ndarray,
+    mask: np.ndarray,
+) -> dict[tuple[int, int], str]:
+    """Map cells in each component's last identifiable superlevel-set extent.
+
+    ``birth_cells`` define lineage identity, but they are not the full component
+    extent reported by ``member_cell_count`` and ``area``. Held-out scoring must
+    therefore recover cells that entered the same lineage at later thresholds.
+    """
+    assignments: dict[tuple[int, int], tuple[float, str]] = {}
     for component in result.components:
-        for cell in component.birth_cells:
-            classes[cell] = component.component_class
-    return classes
+        active = (~mask) & (field >= component.last_identifiable_threshold)
+        seeds = [cell for cell in component.birth_cells if active[cell]]
+        if not seeds:
+            continue
+        visited = {seeds[0]}
+        stack = [seeds[0]]
+        while stack:
+            cell = stack.pop()
+            for neighbour in _neighbours(cell, field.shape, result.neighbourhood):
+                if active[neighbour] and neighbour not in visited:
+                    visited.add(neighbour)
+                    stack.append(neighbour)
+        for cell in visited:
+            current = assignments.get(cell)
+            candidate = (component.first_threshold, component.component_class)
+            if current is None or candidate[0] > current[0]:
+                assignments[cell] = candidate
+    return {cell: value[1] for cell, value in assignments.items()}
 
 
 def _validate_anchors(
@@ -201,8 +241,8 @@ def compare_support_topology_heldout(
         ),
         missing_mask=mask,
     )
-    single_classes = _birth_class_by_cell(single)
-    multi_classes = _birth_class_by_cell(multi)
+    single_classes = _member_class_by_cell(single, field, mask)
+    multi_classes = _member_class_by_cell(multi, field, mask)
     single_score = np.asarray(
         [float(single_classes.get(cell) == "persistent_detached_component") for cell in cells]
     )
@@ -246,6 +286,7 @@ def compare_support_topology_heldout(
         "metrics": {key: asdict(value) for key, value in metrics.items()},
         "rows": rows,
         "score_scaling_reference": "all_unmasked_declared_grid_cells",
+        "topology_cell_reference": "last_identifiable_component_extent",
     }
     fingerprint = hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
