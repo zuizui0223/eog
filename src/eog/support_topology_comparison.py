@@ -63,12 +63,13 @@ class SupportTopologyComparisonResult:
     claim_limit: str
 
 
-def _minmax(values: np.ndarray) -> np.ndarray:
-    low = float(values.min())
-    high = float(values.max())
+def _scale_with_reference(values: np.ndarray, reference_values: np.ndarray) -> np.ndarray:
+    """Scale values using a frozen declared-domain reference, not held-out rows."""
+    low = float(reference_values.min())
+    high = float(reference_values.max())
     if high == low:
         return np.zeros_like(values, dtype=float)
-    return (values - low) / (high - low)
+    return np.clip((values - low) / (high - low), 0.0, 1.0)
 
 
 def _roc_auc(labels: np.ndarray, scores: np.ndarray) -> float:
@@ -92,6 +93,43 @@ def _birth_class_by_cell(result) -> dict[tuple[int, int], str]:
     return classes
 
 
+def _validate_anchors(
+    anchors: Mapping[str, tuple[int, int]],
+    shape: tuple[int, int],
+    mask: np.ndarray,
+) -> tuple[tuple[int, int], ...]:
+    if not anchors:
+        raise ValueError("at least one historical anchor is required")
+    cells: list[tuple[int, int]] = []
+    seen_ids: set[str] = set()
+    for anchor_id, raw_cell in anchors.items():
+        if not anchor_id or anchor_id in seen_ids:
+            raise ValueError("anchor IDs must be non-empty and unique")
+        if len(raw_cell) != 2:
+            raise ValueError(f"anchor must contain row and column: {anchor_id}")
+        cell = (int(raw_cell[0]), int(raw_cell[1]))
+        if not (0 <= cell[0] < shape[0] and 0 <= cell[1] < shape[1]):
+            raise ValueError(f"anchor outside grid: {anchor_id}")
+        if mask[cell]:
+            raise ValueError(f"anchor lies on masked cell: {anchor_id}")
+        seen_ids.add(anchor_id)
+        cells.append(cell)
+    return tuple(cells)
+
+
+def _distance_to_nearest_anchor(
+    cells: Sequence[tuple[int, int]],
+    anchor_cells: Sequence[tuple[int, int]],
+) -> np.ndarray:
+    return np.asarray(
+        [
+            min(np.hypot(cell[0] - anchor[0], cell[1] - anchor[1]) for anchor in anchor_cells)
+            for cell in cells
+        ],
+        dtype=float,
+    )
+
+
 def compare_support_topology_heldout(
     support: np.ndarray,
     missing_mask: np.ndarray,
@@ -99,14 +137,18 @@ def compare_support_topology_heldout(
     candidates: Sequence[HeldoutCandidate],
     config: SupportTopologyComparisonConfig,
 ) -> SupportTopologyComparisonResult:
-    """Compare five frozen scoring rules without fitting held-out labels."""
+    """Compare five frozen scoring rules without fitting held-out labels or rows."""
     config.validate()
     field = np.asarray(support, dtype=float)
     mask = np.asarray(missing_mask, dtype=bool)
     if field.ndim != 2 or mask.shape != field.shape:
         raise ValueError("support and missing_mask must be matching 2D arrays")
+    if not np.isfinite(field[~mask]).all():
+        raise ValueError("unmasked support values must be finite")
     if not candidates:
         raise ValueError("at least one held-out candidate is required")
+
+    anchor_cells = _validate_anchors(anchors, field.shape, mask)
 
     ids: set[str] = set()
     cells: list[tuple[int, int]] = []
@@ -127,18 +169,13 @@ def compare_support_topology_heldout(
 
     labels_array = np.asarray(labels, dtype=int)
     local_support = np.asarray([field[cell] for cell in cells], dtype=float)
-    anchor_cells = tuple(anchors.values())
-    if not anchor_cells:
-        raise ValueError("at least one historical anchor is required")
-    distance = np.asarray(
-        [
-            min(np.hypot(cell[0] - anchor[0], cell[1] - anchor[1]) for anchor in anchor_cells)
-            for cell in cells
-        ],
-        dtype=float,
-    )
-    support_score = _minmax(local_support)
-    distance_score = 1.0 - _minmax(distance)
+    distance = _distance_to_nearest_anchor(cells, anchor_cells)
+
+    available_cells = tuple(tuple(cell) for cell in np.argwhere(~mask))
+    support_reference = field[~mask]
+    distance_reference = _distance_to_nearest_anchor(available_cells, anchor_cells)
+    support_score = _scale_with_reference(local_support, support_reference)
+    distance_score = 1.0 - _scale_with_reference(distance, distance_reference)
     combined_score = (
         config.support_weight * support_score
         + (1.0 - config.support_weight) * distance_score
@@ -208,6 +245,7 @@ def compare_support_topology_heldout(
         "config": asdict(config),
         "metrics": {key: asdict(value) for key, value in metrics.items()},
         "rows": rows,
+        "score_scaling_reference": "all_unmasked_declared_grid_cells",
     }
     fingerprint = hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
@@ -219,7 +257,7 @@ def compare_support_topology_heldout(
         fingerprint=fingerprint,
         claim_limit=(
             "Held-out comparison is descriptive for the declared frozen inputs. It does not "
-            "establish occupancy probability, colonisation, dispersal connectivity, causality, "
-            "or general superiority outside the evaluated data."
+            "establish calibrated occupancy probability, colonisation, dispersal connectivity, "
+            "causality, or general superiority outside the evaluated data."
         ),
     )
