@@ -35,6 +35,7 @@ jobs:
         run: |
           python - <<'PY'
           import csv
+          import json
           from pathlib import Path
           import numpy as np
 
@@ -60,15 +61,22 @@ jobs:
                   ['east_a', 0, 4, 1], ['east_b', 1, 4, 1],
                   ['west_a', 0, 0, 0], ['west_b', 1, 0, 0],
               ])
+          (root / 'declaration.json').write_text(json.dumps({
+              'analysis_id': 'ci_empirical_runner_smoke',
+              'frozen_before_outcomes': True,
+              'thresholds': [0.8, 0.7],
+              'single_threshold': 0.7,
+              'minimum_persistence_steps': 2,
+              'neighbourhood': 4,
+              'support_weight': 0.5,
+          }))
           PY
           eog-support-topology-compare \
             --support results/empirical-runner-smoke/support.npy \
             --mask results/empirical-runner-smoke/mask.npy \
             --anchors results/empirical-runner-smoke/anchors.csv \
             --candidates results/empirical-runner-smoke/candidates.csv \
-            --thresholds 0.8 0.7 \
-            --single-threshold 0.7 \
-            --minimum-persistence-steps 2 \
+            --declaration results/empirical-runner-smoke/declaration.json \
             --output results/empirical-runner-smoke/result.json
           python - <<'PY'
           import json
@@ -77,6 +85,10 @@ jobs:
           assert result['metrics']['support_only']['roc_auc'] == 0.5
           assert result['metrics']['multi_threshold_persistent']['roc_auc'] == 1.0
           assert len(result['fingerprint']) == 64
+          assert result['manifest']['analysis_id'] == 'ci_empirical_runner_smoke'
+          assert set(result['manifest']['input_sha256']) == {
+              'support', 'mask', 'anchors', 'candidates', 'declaration'
+          }
           PY
       - uses: actions/upload-artifact@v4
         with:
