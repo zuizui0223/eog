@@ -15,7 +15,7 @@ def fixture_inputs():
     mask[:, 4:6] = False
     support[:, 0:2] = np.array([[0.8, 0.85], [0.9, 0.88], [0.78, 0.82]])
     support[:, 4:6] = support[:, 0:2]
-    anchors = {"west": (1, 0)}
+    anchors = {"west": (2, 1)}
     candidates = (
         HeldoutCandidate("east_a", 0, 4, 1),
         HeldoutCandidate("east_b", 1, 4, 1),
@@ -45,7 +45,7 @@ def test_multiple_anchors_use_nearest_distance():
     result = compare_support_topology_heldout(
         support,
         mask,
-        {"west": (1, 0), "east": (1, 5)},
+        {"west": (2, 1), "east": (1, 5)},
         candidates,
         config,
     )
@@ -72,12 +72,12 @@ def test_scores_do_not_change_when_other_heldout_rows_change():
 
 
 def test_component_growth_cells_are_recovered_not_only_birth_cells():
-    support = np.array([[0.9, 0.0, 0.9, 0.75]])
+    support = np.array([[0.9, 0.8, 0.0, 0.9, 0.75]])
     mask = np.zeros_like(support, dtype=bool)
     anchors = {"known": (0, 0)}
     candidates = (
-        HeldoutCandidate("detached_growth", 0, 3, 1),
-        HeldoutCandidate("anchored", 0, 0, 0),
+        HeldoutCandidate("detached_growth", 0, 4, 1),
+        HeldoutCandidate("anchored", 0, 1, 0),
     )
     config = SupportTopologyComparisonConfig(
         thresholds=(0.8, 0.7),
@@ -92,6 +92,26 @@ def test_component_growth_cells_are_recovered_not_only_birth_cells():
         "persistent_detached_component"
     )
     assert rows["detached_growth"]["scores"]["multi_threshold_persistent"] == 1.0
+
+
+def test_duplicate_candidate_cells_are_rejected():
+    support, mask, anchors, _, config = fixture_inputs()
+    candidates = (
+        HeldoutCandidate("first", 0, 4, 1),
+        HeldoutCandidate("second", 0, 4, 0),
+    )
+    with pytest.raises(ValueError, match="duplicate held-out candidate cell"):
+        compare_support_topology_heldout(support, mask, anchors, candidates, config)
+
+
+def test_candidate_anchor_overlap_is_rejected():
+    support, mask, anchors, _, config = fixture_inputs()
+    candidates = (
+        HeldoutCandidate("anchor_reuse", 2, 1, 1),
+        HeldoutCandidate("other", 0, 4, 0),
+    )
+    with pytest.raises(ValueError, match="overlaps historical anchor cell"):
+        compare_support_topology_heldout(support, mask, anchors, candidates, config)
 
 
 def test_invalid_candidates_and_anchors_are_rejected():

@@ -4,6 +4,8 @@
 
 Inputs are a 2D `support.npy`, a matching Boolean `mask.npy`, `anchors.csv` with `anchor_id,row,column`, `candidates.csv` with `candidate_id,row,column,detected`, and a frozen JSON declaration. The declaration records the analysis ID, thresholds, adjacency, persistence steps, support weight, and the analyst assertion that these choices were frozen before outcomes were inspected.
 
+Each held-out row must identify a unique raster cell, and held-out cells must be disjoint from historical anchor cells. Repeated visits, individuals, or records falling in one raster cell must be aggregated before this cell-level comparison rather than entered as independent candidates.
+
 Example declaration:
 
 ```json

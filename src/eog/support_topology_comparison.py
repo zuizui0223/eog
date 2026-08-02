@@ -189,8 +189,10 @@ def compare_support_topology_heldout(
         raise ValueError("at least one held-out candidate is required")
 
     anchor_cells = _validate_anchors(anchors, field.shape, mask)
+    anchor_cell_set = set(anchor_cells)
 
     ids: set[str] = set()
+    candidate_cells: set[tuple[int, int]] = set()
     cells: list[tuple[int, int]] = []
     labels: list[int] = []
     for candidate in candidates:
@@ -203,7 +205,14 @@ def compare_support_topology_heldout(
             raise ValueError(f"candidate outside grid: {candidate.candidate_id}")
         if mask[cell]:
             raise ValueError(f"candidate lies on masked cell: {candidate.candidate_id}")
+        if cell in candidate_cells:
+            raise ValueError(f"duplicate held-out candidate cell: {cell}")
+        if cell in anchor_cell_set:
+            raise ValueError(
+                f"held-out candidate overlaps historical anchor cell: {candidate.candidate_id}"
+            )
         ids.add(candidate.candidate_id)
+        candidate_cells.add(cell)
         cells.append(cell)
         labels.append(candidate.detected)
 
@@ -287,6 +296,7 @@ def compare_support_topology_heldout(
         "rows": rows,
         "score_scaling_reference": "all_unmasked_declared_grid_cells",
         "topology_cell_reference": "last_identifiable_component_extent",
+        "heldout_cell_contract": "unique_candidate_cells_disjoint_from_anchor_cells",
     }
     fingerprint = hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()

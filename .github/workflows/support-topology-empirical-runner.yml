@@ -53,7 +53,7 @@ jobs:
           with (root / 'anchors.csv').open('w', newline='') as handle:
               writer = csv.writer(handle)
               writer.writerow(['anchor_id', 'row', 'column'])
-              writer.writerow(['west', 1, 0])
+              writer.writerow(['west', 2, 1])
           with (root / 'candidates.csv').open('w', newline='') as handle:
               writer = csv.writer(handle)
               writer.writerow(['candidate_id', 'row', 'column', 'detected'])
