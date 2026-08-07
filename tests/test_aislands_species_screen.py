@@ -1,4 +1,4 @@
-from benchmarks.aislands_species_screen import summarize_species
+from eog.aislands_species_screen import summarize_species
 
 
 def test_screen_uses_unique_islands_not_repeated_lists():
