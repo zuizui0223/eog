@@ -87,7 +87,11 @@ jobs:
           assert source['island_data_sha256']
           assert source['species_data_sha256']
           assert source['reference_data_sha256']
-          assert structure['unique_island_ids'] == summary['n_surveyed_islands']
+          assert structure['unique_island_ids_with_species_rows'] == summary['n_surveyed_islands']
+          assert structure['unique_island_ids'] >= structure['unique_island_ids_with_species_rows']
+          assert len(structure['unique_island_ids_without_species_rows']) == (
+              structure['unique_island_ids'] - structure['unique_island_ids_with_species_rows']
+          )
           assert not structure['species_list_ids_missing_from_island_data']
           assert not structure['list_ids_mapping_to_multiple_islands']
           assert structure['blank_list_ids_island_data'] == 0
