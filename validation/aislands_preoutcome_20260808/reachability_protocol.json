@@ -1,0 +1,76 @@
+{
+  "protocol_id": "aislands_reachability_preoutcome_v1",
+  "status": "frozen_before_sdm_or_eog_outcomes",
+  "frozen_cohort_sha256": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+  "primary_taxa": 886,
+  "evaluation_unit": "unique surveyed island",
+  "scientific_target": "test whether existing graph reachability information adds held-out discrimination beyond an upstream pointwise environmental support score; islands are used as a fragmented-landscape test case, not as a special algorithm class",
+  "upstream_support": {
+    "response": "species presence_absence on the frozen A-Islands surveyed-island universe",
+    "predictor_family": "climate_only",
+    "excluded_predictors": [
+      "island_area",
+      "archipelago_id",
+      "latitude",
+      "longitude",
+      "distance_to_mainland",
+      "distance_to_nearest_island",
+      "bridge_or_reachability_outputs"
+    ],
+    "climate_source": {
+      "dataset": "CHELSA-bioclim",
+      "version": "2.1",
+      "baseline": "1981-2010",
+      "resolution": "30 arcsec / kilometer scale",
+      "variables": ["bio01", "bio04", "bio12", "bio15"]
+    },
+    "island_extraction": "area-weighted mean across each frozen island polygon; centroid fallback is not allowed without a separately frozen QC exception",
+    "primary_model": {
+      "family": "L2_regularized_logistic_regression",
+      "standardization": "training_fold_mean_sd_only",
+      "class_weight": "balanced",
+      "regularization_C": 1.0,
+      "solver": "lbfgs",
+      "randomness": "none"
+    }
+  },
+  "cross_validation": {
+    "primary": "deterministic_stratified_10_fold_by_island_within_taxon",
+    "seed": 20260808,
+    "rule": "each island receives exactly one out-of-fold local-support prediction; folds are assigned before any EOG comparison",
+    "required_training_classes": "both presence and absence",
+    "spatial_sensitivity": "leave_one_Arch_lvl_1_out; report evaluability explicitly and do not replace the primary result with the sensitivity result"
+  },
+  "reachability": {
+    "implementation": "existing eog.bridge and eog.bridge_builder only",
+    "node_definition": "one node per frozen surveyed island",
+    "node_coordinates": "frozen A-Islands island coordinates",
+    "environmental_state": "the same four standardized CHELSA variables used by the upstream support producer",
+    "primary_graph": {
+      "k_nearest": 5,
+      "max_geographic_km": null,
+      "max_environmental_distance": null,
+      "directed_by_time": false
+    },
+    "predeclared_graph_sensitivities": [
+      {"k_nearest": 3},
+      {"k_nearest": 8}
+    ],
+    "barrier_cost": "zero in the primary A-Islands benchmark; no island-specific barrier category is added",
+    "source_nodes": "training-fold presence islands only",
+    "held_out_labels_used_in_graph_construction": false
+  },
+  "required_comparators": [
+    "local_support_only",
+    "nearest_training_presence_geographic_distance",
+    "local_support_plus_distance",
+    "geographic_only_bridge",
+    "geographic_plus_environmental_bridge"
+  ],
+  "interpretation_limits": [
+    "bridge scores are not dispersal probabilities",
+    "paths are not inferred colonisation histories",
+    "a positive result does not establish a causal ocean barrier",
+    "a positive result supports added structural information beyond the frozen local-support producer only for the evaluated taxa and design"
+  ]
+}
