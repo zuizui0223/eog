@@ -22,6 +22,11 @@ from .bridge_sensitivity import (
     BridgeSensitivityScenario,
     evaluate_bridge_sensitivity,
 )
+from .support_model import (
+    PenalizedLogisticSupportModel,
+    SupportModelError,
+    fit_penalized_logistic_support,
+)
 from .support_topology import (
     ComponentRecovery,
     OccurrenceAnchor,
@@ -123,6 +128,8 @@ __all__ = [
     "BridgeScenarioResult",
     "BridgeMetricSummary",
     "BridgeSensitivityResult",
+    "PenalizedLogisticSupportModel",
+    "SupportModelError",
     "SupportGridMetadata",
     "SupportTopologyConfig",
     "OccurrenceAnchor",
@@ -167,6 +174,7 @@ __all__ = [
     "haversine_km",
     "build_bridge_graph",
     "evaluate_bridge_sensitivity",
+    "fit_penalized_logistic_support",
     "assign_occurrence_anchors",
     "infer_support_topology",
     "summarize_support_components",

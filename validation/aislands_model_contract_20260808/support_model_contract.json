@@ -1,0 +1,86 @@
+{
+  "status": "preoutcome_model_contract",
+  "frozen_at_utc": "2026-08-08",
+  "purpose": "Define the upstream pointwise support producer independently of EOG reachability and independently of held-out benchmark outcomes.",
+  "relationship_to_eog": {
+    "support_model_estimand": "pointwise fitted occurrence support at each model-evaluable island",
+    "eog_role": "downstream structural transformation / reachability analysis of the frozen support and training-presence anchors",
+    "not_a_claim": "This contract does not assert that EOG is a superior SDM, and the SDM is not tuned to make EOG look favorable."
+  },
+  "island_units": {
+    "source": "A-Islands version 1.0 frozen in validation/aislands_preoutcome_20260808/freeze_manifest.json",
+    "surveyed_islands": 842,
+    "coordinate_source": "A-Island_shape.dbf x_centroid/y_centroid linked by island_ID",
+    "coordinate_crs": "WGS84 geographic degrees",
+    "missing_coordinate_policy": "Primary model excludes any island lacking a finite frozen centroid and retains it in an applicability audit. No coordinate imputation is allowed after outcomes are inspected.",
+    "area_used": false,
+    "archipelago_field_used": false,
+    "reason_area_archipelago_unused": "The exact downloadable version-1.0 tables audited before model outcomes do not contain the paper-described Area or Arch_lvl_1/Arch_lvl_2 attributes."
+  },
+  "climate_source": {
+    "dataset": "CHELSA-bioclim",
+    "version": "2.1",
+    "climatology": "1981-2010",
+    "spatial_description": "global kilometer-scale",
+    "variables": [
+      {"id": "bio01", "role": "mean annual near-surface air temperature"},
+      {"id": "bio05", "role": "maximum near-surface air temperature of the warmest month"},
+      {"id": "bio06", "role": "minimum near-surface air temperature of the coldest month"},
+      {"id": "bio12", "role": "annual precipitation"},
+      {"id": "bio15", "role": "precipitation seasonality"}
+    ],
+    "variable_selection_rule": "Five generic climate axes were frozen before SDM/EOG outcomes: annual temperature, warm and cold temperature extremes, annual precipitation, and precipitation seasonality. No variable screening, stepwise selection, univariate filtering, PCA choice, or importance-based removal is allowed from benchmark outcomes.",
+    "extraction_rule": "Sample each frozen island centroid directly from each CHELSA raster. An island with any missing or non-finite primary climate value is support-model-ineligible for the primary analysis; do not search for a nearby finite cell or change the coordinate after outcomes are seen.",
+    "future_sensitivity_only": "A separately labelled nearest-finite-cell extraction may be evaluated only as a sensitivity analysis after the primary direct-centroid result is frozen and may not replace it."
+  },
+  "pointwise_support_model": {
+    "family": "L2-penalized logistic regression",
+    "implementation": "deterministic benchmark implementation; one model per species and fold",
+    "response": "island-level presence/absence from comprehensive A-Islands flora incidence",
+    "predictors": ["bio01", "bio05", "bio06", "bio12", "bio15"],
+    "standardization": "z-score each predictor using training islands only within each fold; apply the training mean and standard deviation to held-out islands",
+    "constant_predictor_policy": "If a predictor has zero or non-finite training standard deviation, the species-fold SDM is marked failed; predictors are not silently dropped.",
+    "l2_penalty_lambda": 1.0,
+    "penalize_intercept": false,
+    "class_weighting": "none",
+    "hyperparameter_tuning": "none",
+    "minimum_training_presences": 5,
+    "minimum_training_absences": 5,
+    "insufficient_training_policy": "mark the species-fold SDM as not evaluable; do not change the holdout, substitute a model, or borrow held-out labels",
+    "prediction": "logistic fitted support in [0,1] for all climate-evaluable islands",
+    "interpretation": "relative fitted occurrence support for ranking/conditioning; not assumed to be calibrated occupancy probability"
+  },
+  "evaluation_partition": {
+    "block_size_degrees": 5.0,
+    "n_folds": 5,
+    "block_origin": "global lon/lat origin used by floor((lon+180)/5), floor((lat+90)/5)",
+    "assignment": "unique blocks sorted by descending island count then block ID; greedily assigned to the currently smallest fold with ties to the lower fold ID",
+    "same_folds_for_all_species": true,
+    "species_outcomes_used_to_create_folds": false,
+    "interpretation": "evaluation partition only; these blocks are not ecological barriers, dispersal kernels, colonisation units, or connectivity estimates"
+  },
+  "leakage_boundary": {
+    "training_presence_labels": "available only on training-fold islands",
+    "training_absence_labels": "available only on training-fold islands",
+    "held_out_labels": "not available to model fitting, standardization, EOG anchoring, graph tuning, threshold choice, or scenario selection",
+    "eog_occurrence_anchors": "training presence islands only",
+    "held_out_islands_as_unlabelled_nodes": true,
+    "allowed_information_on_held_out_nodes_before_scoring": ["frozen centroid", "frozen climate predictors", "predeclared graph geometry when later frozen"],
+    "forbidden": [
+      "model-family selection from held-out performance",
+      "predictor selection from held-out performance",
+      "changing folds after species results",
+      "using held-out presences as EOG anchors",
+      "choosing EOG graph thresholds from held-out results"
+    ]
+  },
+  "failure_reporting": {
+    "retain_all_886_native_taxa": true,
+    "do_not_replace_failed_taxa": true,
+    "report_species_fold_sdm_evaluable": true,
+    "report_climate_extraction_failures_separately": true,
+    "report_insufficient_training_class_failures_separately": true,
+    "primary_structural_comparison_denominator": "predeclared later in the reachability contract; this model contract does not choose an EOG-favorable denominator"
+  },
+  "next_freeze": "Freeze the island reachability graph/scenario family and the held-out conditional comparison separately after this support contract is merged, but before any EOG reachability outcome is inspected."
+}
