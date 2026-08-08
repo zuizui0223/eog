@@ -1,9 +1,9 @@
 """Freeze direct-centroid CHELSA-bioclim values for A-Islands model units.
 
 This stage is deliberately species-outcome free. It resolves the public CHELSA V2.1
-COG objects, samples the five predeclared bioclimatic rasters at the frozen A-Islands
-centroids, and records source/object/raster metadata. No presence/absence labels, SDM
-fits, EOG outputs or outcome-dependent spatial substitutions are used.
+COG objects, reads one bounded window containing all frozen A-Islands centroids, and
+extracts the original centroid pixels. No presence/absence labels, SDM fits, EOG outputs,
+nearby-cell substitution or outcome-dependent spatial adjustment are used.
 """
 from __future__ import annotations
 
@@ -13,12 +13,12 @@ import hashlib
 import json
 import math
 from pathlib import Path
-from typing import Iterable
 import urllib.error
 import urllib.request
 
 import numpy as np
 import rasterio
+from rasterio.windows import Window, from_bounds
 
 
 VARIABLES: tuple[str, ...] = ("bio1", "bio5", "bio6", "bio12", "bio15")
@@ -125,9 +125,26 @@ def _clean_metadata_value(value: object) -> object:
     return value
 
 
+def _bounded_window(dataset: rasterio.io.DatasetReader, coordinates: list[tuple[float, float]]) -> Window:
+    xs = np.asarray([point[0] for point in coordinates], dtype=float)
+    ys = np.asarray([point[1] for point in coordinates], dtype=float)
+    # Expand by two source pixels so points on a window boundary remain unambiguous.
+    dx = abs(float(dataset.transform.a)) * 2.0
+    dy = abs(float(dataset.transform.e)) * 2.0
+    window = from_bounds(
+        float(np.min(xs) - dx),
+        float(np.min(ys) - dy),
+        float(np.max(xs) + dx),
+        float(np.max(ys) + dy),
+        dataset.transform,
+    ).round_offsets().round_lengths()
+    full = Window(0, 0, dataset.width, dataset.height)
+    return window.intersection(full)
+
+
 def _sample_variable(
     url_metadata: dict[str, object],
-    coordinates: Iterable[tuple[float, float]],
+    coordinates: list[tuple[float, float]],
 ) -> tuple[np.ndarray, dict[str, object]]:
     url = str(url_metadata["url"])
     raster_env = {
@@ -135,9 +152,10 @@ def _sample_variable(
         "GDAL_HTTP_MERGE_CONSECUTIVE_RANGES": "YES",
         "GDAL_HTTP_MAX_RETRY": "4",
         "GDAL_HTTP_RETRY_DELAY": "1",
+        "GDAL_HTTP_TIMEOUT": "60",
         "CPL_VSIL_CURL_ALLOWED_EXTENSIONS": ".tif",
         "VSI_CACHE": "TRUE",
-        "VSI_CACHE_SIZE": "50000000",
+        "VSI_CACHE_SIZE": "100000000",
     }
     with rasterio.Env(**raster_env), rasterio.open(url) as dataset:
         crs = dataset.crs.to_string() if dataset.crs else None
@@ -145,11 +163,21 @@ def _sample_variable(
             raise ValueError(f"CHELSA raster is not lon/lat WGS84-compatible: {crs}")
         if dataset.count != 1:
             raise ValueError(f"expected one-band CHELSA COG, found {dataset.count}")
-        samples = list(dataset.sample(coordinates, indexes=1, masked=True))
-        values = np.full(len(samples), np.nan, dtype=float)
+
+        window = _bounded_window(dataset, coordinates)
+        data = dataset.read(1, window=window, masked=True)
+        row_offset = int(window.row_off)
+        col_offset = int(window.col_off)
+        values = np.full(len(coordinates), np.nan, dtype=float)
         masked_count = 0
-        for index, sample in enumerate(samples):
-            scalar = sample[0]
+
+        for index, (lon, lat) in enumerate(coordinates):
+            row, col = dataset.index(lon, lat)
+            local_row = int(row) - row_offset
+            local_col = int(col) - col_offset
+            if not (0 <= local_row < data.shape[0] and 0 <= local_col < data.shape[1]):
+                raise ValueError(f"centroid unexpectedly outside bounded raster window: {(lon, lat)}")
+            scalar = data[local_row, local_col]
             if np.ma.is_masked(scalar):
                 masked_count += 1
                 continue
@@ -176,6 +204,14 @@ def _sample_variable(
             "offset": _clean_metadata_value(dataset.offsets[0] if dataset.offsets else 0.0),
             "unit": dataset.units[0] if dataset.units else None,
             "tags": dataset.tags(1),
+            "window_read": {
+                "col_off": int(window.col_off),
+                "row_off": int(window.row_off),
+                "width": int(window.width),
+                "height": int(window.height),
+                "centroid_pixel_rule": "dataset.index(lon, lat) then direct pixel lookup inside the bounded window",
+                "nearby_cell_search": false,
+            },
             "masked_or_nodata_samples": masked_count,
             "finite_samples": int(np.isfinite(values).sum()),
             "raw_min": None if not np.isfinite(values).any() else float(np.nanmin(values)),
@@ -225,7 +261,7 @@ def extract(island_audit: Path, output_csv: Path, output_manifest: Path) -> dict
         "climatology": "1981-2010",
         "file_format": "COG GeoTIFF",
         "variables": list(VARIABLES),
-        "extraction_rule": "direct sample at frozen A-Islands WGS84 centroid; no nearby-cell substitution",
+        "extraction_rule": "direct frozen-centroid pixel from one bounded COG window; no nearby-cell substitution",
         "sample_value_role": (
             "raw raster cell values are frozen. The benchmark standardizes predictors on training islands, so no outcome-dependent physical-unit transformation is needed. Raster scale/offset/unit metadata are recorded per source object."
         ),
