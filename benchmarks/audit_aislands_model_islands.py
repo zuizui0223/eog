@@ -1,8 +1,8 @@
 """Audit geospatial/model-unit completeness for the frozen A-Islands benchmark.
 
-This stage is outcome-free: it inspects only island/list metadata, the existence of
-species rows, and the frozen A-Islands shapefile. It does not fit any support model,
-calculate EOG structure, or inspect species-specific held-out performance.
+Outcome-free stage: only frozen island/list metadata, species-list linkage and the
+A-Islands shapefile are inspected. No support model, EOG result or held-out species
+performance is calculated here.
 """
 from __future__ import annotations
 
@@ -28,6 +28,23 @@ def _read(path: Path) -> tuple[list[dict[str, str]], str]:
     raise ValueError(f"unable to decode CSV: {path}")
 
 
+def _normalise(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", value.casefold())
+
+
+def _canonical_id(value: object) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    try:
+        number = float(text)
+    except ValueError:
+        return text
+    if math.isfinite(number) and number.is_integer():
+        return str(int(number))
+    return text
+
+
 def _column(rows: list[dict[str, str]], *names: str) -> str:
     if not rows:
         raise ValueError("source table is empty")
@@ -38,30 +55,21 @@ def _column(rows: list[dict[str, str]], *names: str) -> str:
     return matches[0]
 
 
-def _normalise(value: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "", value.casefold())
-
-
 def _shape_field(fields: list[str], *aliases: str, required: bool = False) -> str | None:
     wanted = {_normalise(alias) for alias in aliases}
     matches = [field for field in fields if _normalise(field) in wanted]
     if len(matches) == 1:
         return matches[0]
     if required:
-        raise ValueError(
-            f"missing or ambiguous shapefile field among {aliases}; available={fields}"
-        )
+        raise ValueError(f"missing or ambiguous shapefile field among {aliases}; available={fields}")
     return None
 
 
 def _finite(value: object) -> float | None:
-    if value is None:
-        return None
-    text = str(value).strip()
-    if not text:
+    if value is None or not str(value).strip():
         return None
     try:
-        number = float(text)
+        number = float(str(value).strip())
     except (TypeError, ValueError):
         return None
     return number if math.isfinite(number) else None
@@ -75,10 +83,11 @@ def _bbox_center(shape: shapefile.Shape) -> tuple[float | None, float | None]:
     bbox = getattr(shape, "bbox", None)
     if not bbox or len(bbox) < 4:
         return None, None
-    xmin, ymin, xmax, ymax = (_finite(value) for value in bbox[:4])
-    if None in (xmin, ymin, xmax, ymax):
+    values = [_finite(value) for value in bbox[:4]]
+    if any(value is None for value in values):
         return None, None
-    return (float(xmin) + float(xmax)) / 2.0, (float(ymin) + float(ymax)) / 2.0
+    xmin, ymin, xmax, ymax = (float(value) for value in values)
+    return (xmin + xmax) / 2.0, (ymin + ymax) / 2.0
 
 
 def audit(
@@ -89,7 +98,6 @@ def audit(
 ) -> tuple[list[dict[str, object]], dict[str, object]]:
     islands, island_encoding = _read(island_data)
     species, species_encoding = _read(species_data)
-
     list_col = _column(islands, "List_ID", "list_ID")
     island_col = _column(islands, "Island_ID", "island_ID")
     species_list_col = _column(species, "List_ID", "list_ID")
@@ -97,7 +105,7 @@ def audit(
     list_to_island: dict[str, str] = {}
     for row in islands:
         list_id = row[list_col].strip()
-        island_id = row[island_col].strip()
+        island_id = _canonical_id(row[island_col])
         if not list_id or not island_id:
             raise ValueError("blank list_ID or island_ID in island_data")
         previous = list_to_island.get(list_id)
@@ -113,29 +121,29 @@ def audit(
         if list_id not in list_to_island:
             raise ValueError(f"species_data list_ID missing from island_data: {list_id}")
         species_list_ids.add(list_id)
-    surveyed_islands = sorted({list_to_island[list_id] for list_id in species_list_ids})
+    surveyed_islands = sorted({list_to_island[list_id] for list_id in species_list_ids}, key=lambda value: int(value))
 
     reader = shapefile.Reader(str(shapefile_path), encoding="cp1252")
     fields = [field[0] for field in reader.fields[1:]]
     island_id_field = _shape_field(fields, "Island_ID", "island_ID", required=True)
     name_field = _shape_field(fields, "Island_name", "Island_Name", "Name")
-    x_field = _shape_field(fields, "X", "Longitude", "Lon")
-    y_field = _shape_field(fields, "Y", "Latitude", "Lat")
+    x_field = _shape_field(fields, "X", "Longitude", "Lon", "x_centroid", "xcentroid")
+    y_field = _shape_field(fields, "Y", "Latitude", "Lat", "y_centroid", "ycentroid")
     area_field = _shape_field(fields, "Area", "Area_km2", "Area_km_2")
     arch1_field = _shape_field(fields, "Arch_lvl_1", "Arch_level_1", "Arch1")
     arch2_field = _shape_field(fields, "Arch_lvl_2", "Arch_level_2", "Arch2")
 
     shape_by_island: dict[str, tuple[dict[str, object], shapefile.Shape]] = {}
-    duplicate_shape_islands: list[str] = []
-    blank_shape_island_ids = 0
+    duplicates: list[str] = []
+    blank_shape_ids = 0
     for shape_record in reader.iterShapeRecords():
         record = shape_record.record.as_dict()
-        island_id = _clean(record.get(island_id_field))
+        island_id = _canonical_id(record.get(island_id_field))
         if not island_id:
-            blank_shape_island_ids += 1
+            blank_shape_ids += 1
             continue
         if island_id in shape_by_island:
-            duplicate_shape_islands.append(island_id)
+            duplicates.append(island_id)
             continue
         shape_by_island[island_id] = (record, shape_record.shape)
 
@@ -143,19 +151,14 @@ def audit(
     if projection_path and projection_path.exists():
         projection_text = projection_path.read_text(encoding="utf-8", errors="replace").strip()
 
-    output: list[dict[str, object]] = []
-    missing_geometry_ids: list[str] = []
-    invalid_coordinate_ids: list[str] = []
-    missing_area_ids: list[str] = []
-    nonpositive_area_ids: list[str] = []
-    missing_arch1_ids: list[str] = []
-    missing_arch2_ids: list[str] = []
-
+    rows: list[dict[str, object]] = []
+    missing_geometry: list[str] = []
+    invalid_coordinates: list[str] = []
     for island_id in surveyed_islands:
         payload = shape_by_island.get(island_id)
         if payload is None:
-            missing_geometry_ids.append(island_id)
-            output.append({
+            missing_geometry.append(island_id)
+            rows.append({
                 "island_id": island_id,
                 "shape_present": 0,
                 "island_name": "",
@@ -175,36 +178,18 @@ def audit(
         record, shape = payload
         x = _finite(record.get(x_field)) if x_field else None
         y = _finite(record.get(y_field)) if y_field else None
-        coordinate_source = "dbf_XY" if x is not None and y is not None else ""
+        coordinate_source = "dbf_centroid" if x is not None and y is not None else ""
         if x is None or y is None:
-            bbox_x, bbox_y = _bbox_center(shape)
-            if bbox_x is not None and bbox_y is not None:
-                x, y = bbox_x, bbox_y
-                coordinate_source = "shape_bbox_center"
-
-        coordinate_valid = (
-            x is not None
-            and y is not None
-            and -180 <= x <= 180
-            and -90 <= y <= 90
-        )
+            x, y = _bbox_center(shape)
+            coordinate_source = "shape_bbox_center" if x is not None and y is not None else ""
+        coordinate_valid = x is not None and y is not None and -180 <= x <= 180 and -90 <= y <= 90
         if not coordinate_valid:
-            invalid_coordinate_ids.append(island_id)
+            invalid_coordinates.append(island_id)
 
         area = _finite(record.get(area_field)) if area_field else None
-        if area is None:
-            missing_area_ids.append(island_id)
-        elif area <= 0:
-            nonpositive_area_ids.append(island_id)
-
         arch1 = _clean(record.get(arch1_field)) if arch1_field else ""
         arch2 = _clean(record.get(arch2_field)) if arch2_field else ""
-        if not arch1:
-            missing_arch1_ids.append(island_id)
-        if not arch2:
-            missing_arch2_ids.append(island_id)
-
-        output.append({
+        rows.append({
             "island_id": island_id,
             "shape_present": 1,
             "island_name": _clean(record.get(name_field)) if name_field else "",
@@ -236,24 +221,23 @@ def audit(
             "arch_lvl_2": arch2_field,
         },
         "projection_text": projection_text,
-        "blank_shape_island_ids": blank_shape_island_ids,
-        "duplicate_shape_island_ids": sorted(set(duplicate_shape_islands)),
-        "shape_present_surveyed_islands": sum(int(row["shape_present"]) for row in output),
-        "coordinate_evaluable_islands": sum(int(row["coordinate_evaluable"]) for row in output),
-        "area_evaluable_islands": sum(int(row["area_evaluable"]) for row in output),
-        "arch1_available_islands": sum(int(row["arch1_available"]) for row in output),
-        "arch2_available_islands": sum(int(row["arch2_available"]) for row in output),
-        "missing_geometry_island_ids": missing_geometry_ids,
-        "invalid_coordinate_island_ids": invalid_coordinate_ids,
-        "missing_area_island_ids": missing_area_ids,
-        "nonpositive_area_island_ids": nonpositive_area_ids,
-        "missing_arch1_island_ids": missing_arch1_ids,
-        "missing_arch2_island_ids": missing_arch2_ids,
+        "blank_shape_island_ids": blank_shape_ids,
+        "duplicate_shape_island_ids": sorted(set(duplicates), key=lambda value: int(value)),
+        "shape_present_surveyed_islands": sum(int(row["shape_present"]) for row in rows),
+        "coordinate_evaluable_islands": sum(int(row["coordinate_evaluable"]) for row in rows),
+        "area_evaluable_islands": sum(int(row["area_evaluable"]) for row in rows),
+        "arch1_available_islands": sum(int(row["arch1_available"]) for row in rows),
+        "arch2_available_islands": sum(int(row["arch2_available"]) for row in rows),
+        "missing_geometry_island_ids": missing_geometry,
+        "invalid_coordinate_island_ids": invalid_coordinates,
+        "source_limitation": (
+            "Version 1.0 island_data contains only Ref_ID/List_ID/Island_ID/Survey_year, and the shapefile DBF contains only island_ID/x_centroid/y_centroid. Area and archipelago attributes described in the paper are not present in the frozen downloadable tables audited here."
+        ),
         "scientific_boundary": (
             "pre-model island metadata and geometry audit only; no SDM, EOG topology, reachability, or held-out performance inspected"
         ),
     }
-    return output, summary
+    return rows, summary
 
 
 def main() -> None:
@@ -266,20 +250,13 @@ def main() -> None:
     parser.add_argument("--output-summary", type=Path, required=True)
     args = parser.parse_args()
 
-    rows, summary = audit(
-        args.island_data,
-        args.species_data,
-        args.shapefile,
-        args.projection,
-    )
+    rows, summary = audit(args.island_data, args.species_data, args.shapefile, args.projection)
     args.output_csv.parent.mkdir(parents=True, exist_ok=True)
     with args.output_csv.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    args.output_summary.write_text(
-        json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    args.output_summary.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 
 
