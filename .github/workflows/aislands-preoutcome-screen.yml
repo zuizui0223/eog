@@ -1,0 +1,73 @@
+name: A-Islands pre-outcome screen
+
+on:
+  push:
+    branches:
+      - agent/freeze-aislands-preoutcome-screen
+  workflow_dispatch:
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install EOG
+        run: python -m pip install -e .
+
+      - name: Freeze A-Islands version 1.0 source
+        run: |
+          python benchmarks/fetch_aislands_zenodo.py \
+            --record-id 10775809 \
+            --output-dir results/aislands_preoutcome/source
+
+      - name: Apply pre-outcome distribution screen
+        run: |
+          python benchmarks/aislands_species_screen.py \
+            --island-data results/aislands_preoutcome/source/island_data.csv \
+            --species-data results/aislands_preoutcome/source/species_data.csv \
+            --output results/aislands_preoutcome/species_screen.csv \
+            --min-present-islands 10 \
+            --min-absent-islands 10 \
+            --min-prevalence 0 \
+            --max-prevalence 1
+
+      - name: Summarize screen without EOG outcomes
+        run: |
+          python benchmarks/summarize_aislands_screen.py \
+            --screen results/aislands_preoutcome/species_screen.csv \
+            --output results/aislands_preoutcome/screen_summary.json
+
+      - name: Audit frozen boundary
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root = Path('results/aislands_preoutcome')
+          source = json.loads((root / 'source/source_manifest.json').read_text())
+          summary = json.loads((root / 'screen_summary.json').read_text())
+          rows = list(csv.DictReader((root / 'species_screen.csv').open()))
+          assert source['record_id'] == 10775809
+          assert source['island_data_sha256']
+          assert source['species_data_sha256']
+          assert summary['screen_rule']['min_present_islands'] == 10
+          assert summary['screen_rule']['min_absent_islands'] == 10
+          assert summary['screen_rule']['prevalence_filter'] == 'none_primary_full_0_to_1'
+          assert len(rows) == summary['n_species_total']
+          assert sum(int(row['distribution_eligible']) for row in rows) == summary['n_distribution_eligible']
+          assert summary['n_distribution_eligible'] > 0
+          print(json.dumps(summary, indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aislands-preoutcome-screen
+          path: |
+            results/aislands_preoutcome/source/source_manifest.json
+            results/aislands_preoutcome/species_screen.csv
+            results/aislands_preoutcome/screen_summary.json
+          if-no-files-found: error
