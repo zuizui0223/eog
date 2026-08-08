@@ -1,0 +1,52 @@
+{
+  "status": "reviewed_preoutcome_native_incidence_freeze",
+  "frozen_at_utc": "2026-08-08",
+  "scientific_boundary": "Island-level native incidence was frozen before any A-Islands species-fold support-model performance or EOG reachability result was inspected. Cleaning rules were declared before the incidence counts were generated.",
+  "upstream_contracts": {
+    "taxon_freeze": "validation/aislands_preoutcome_20260808/freeze_manifest.json",
+    "climate_freeze": "validation/aislands_chelsa_20260808/climate_freeze_manifest.json",
+    "declared_apc_native_taxa": 886,
+    "surveyed_islands": 842,
+    "declared_taxon_cohort_sha256": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12"
+  },
+  "incidence_rule": {
+    "taxon_status": "Status_APC == native from the upstream frozen cohort",
+    "retained_source_row": "A row supports primary native incidence unless Naturalised==1 or Native==0 when those local status fields are explicitly numeric.",
+    "unknown_local_status": "Missing, NA or non-numeric local status does not erase an APC-native record.",
+    "island_presence": "1 when at least one retained source row exists for the species across any flora list for the island; otherwise 0 within the 842-island surveyed universe.",
+    "taxon_replacement": false
+  },
+  "frozen_counts": {
+    "declared_taxa": 886,
+    "surveyed_islands": 842,
+    "possible_taxon_island_cells": 746012,
+    "primary_native_presence_edges": 36295,
+    "primary_native_absence_cells": 709717,
+    "explicit_non_native_source_rows_excluded": 13,
+    "explicit_naturalised_source_rows": 13,
+    "explicit_native_zero_source_rows": 13,
+    "retained_apc_native_source_rows": 44212,
+    "retained_rows_with_unknown_local_status": 43487,
+    "taxa_with_at_least_one_island_removed_by_local_non_native_evidence": 6,
+    "maximum_removed_islands_for_one_taxon": 1,
+    "taxa_below_10_native_presence_islands_after_cleaning": 0,
+    "taxa_below_5_native_presence_islands_after_cleaning": 0
+  },
+  "frozen_hashes": {
+    "native_presence_edges_sha256": "bfae5de956cfad3eb9ed90c1a0228ef29be340734565d4415f299d35087d2217",
+    "species_incidence_audit_sha256": "63afba5680931152f0cdd8fb0dff6a02605f8d5fd7b0df7fd0fa605ff0e12314"
+  },
+  "reviewed_workflow": {
+    "workflow_run_id": 31246609494,
+    "workflow_head_sha": "c40386ed022cc5e64d3494cd5c96dd2b85350e34",
+    "artifact_id": 9018770717,
+    "artifact_name": "aislands-native-incidence-preoutcome",
+    "artifact_digest": "sha256:d33e2e98e14a25f2274dd56718a9540ba173b21ae5c81c2da713f3da04de6bf8",
+    "conclusion": "success"
+  },
+  "execution_gate": {
+    "required_presence_edge_hash": "bfae5de956cfad3eb9ed90c1a0228ef29be340734565d4415f299d35087d2217",
+    "required_species_audit_hash": "63afba5680931152f0cdd8fb0dff6a02605f8d5fd7b0df7fd0fa605ff0e12314",
+    "on_mismatch": "Fail before support-model fitting or EOG reachability evaluation. Do not update the accepted incidence hashes from benchmark outcomes."
+  }
+}
