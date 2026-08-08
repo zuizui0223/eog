@@ -1,0 +1,77 @@
+{
+  "status": "reviewed_preoutcome_reachability_contract",
+  "frozen_at_utc": "2026-08-08",
+  "scientific_boundary": "No held-out A-Islands species outcome, species-fold SDM performance, or A-Islands EOG reachability result was inspected to choose the scenario family, primary reachability quantity, conditional statistic, bin counts, or aggregation rules.",
+  "upstream_contracts": {
+    "preoutcome_taxon_freeze": "validation/aislands_preoutcome_20260808/freeze_manifest.json",
+    "model_contract": "validation/aislands_model_contract_20260808/model_contract_manifest.json",
+    "support_model_changed": false,
+    "spatial_folds_changed": false,
+    "primary_native_taxa": 886,
+    "model_islands": 842
+  },
+  "geometry_audit": {
+    "nearest_neighbor_q90_km": 19.672866772608927,
+    "nearest_neighbor_q975_km": 50.54592430423129,
+    "nearest_neighbor_q99_km": 120.83132622969183,
+    "nearest_neighbor_max_km": 234.73961110228942,
+    "frozen_geographic_radii_km": [25.0, 50.0, 125.0, 250.0],
+    "species_labels_used": false,
+    "sdm_outputs_used": false,
+    "eog_outputs_used": false
+  },
+  "scenario_family": {
+    "count": 12,
+    "geographic_radii_km": [25.0, 50.0, 125.0, 250.0],
+    "environmental_edge_filters": ["none", "training-edge q90", "training-edge q75"],
+    "equal_scenario_weighting": true,
+    "best_scenario_selection_from_outcomes": false,
+    "primary_score": "connected_frequency"
+  },
+  "primary_statistic": {
+    "name": "species-level conditional reachability concordance",
+    "support_bins": 5,
+    "distance_bins": 5,
+    "pair_score": "presence > absence reachability: 1; lower: 0; tie: 0.5",
+    "null": 0.5,
+    "species_weighting": "equal across estimable species",
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20260808,
+    "unestimable_folds": "reported explicitly and not replaced"
+  },
+  "contract": {
+    "path": "validation/aislands_reachability_contract_20260808/reachability_contract.json",
+    "sha256": "76c2b647f22f94f4b233a23b14482bcae63992623be2837a4826f03abca8523e"
+  },
+  "reviewed_contract_audit": {
+    "workflow_run_id": 31245417554,
+    "workflow_head_sha": "0793b0d700a71cf03509586e040a3e9e0ece5320",
+    "artifact_id": 9018321721,
+    "artifact_name": "aislands-reachability-contract-audit",
+    "artifact_digest": "sha256:629534c857587c7232b1d9ccd8d4e2a1b964b628db58f98e0cb661a039de5071",
+    "conclusion": "success"
+  },
+  "reviewed_package_checks": {
+    "workflow_run_id": 31245417552,
+    "workflow_head_sha": "0793b0d700a71cf03509586e040a3e9e0ece5320",
+    "python_versions": ["3.10", "3.11", "3.12"],
+    "wheel_build": "success",
+    "existing_frozen_topology_benchmark": "success",
+    "conclusion": "success"
+  },
+  "interpretation_boundary": {
+    "permitted_if_positive": "Structural island-chain reachability adds held-out incidence discrimination among islands with similar frozen pointwise support and similar nearest-training-occurrence distance.",
+    "not_permitted": [
+      "EOG is a universally better SDM",
+      "connected_frequency is a dispersal or occupancy probability",
+      "the graph reconstructs the true colonisation route",
+      "unlabelled stepping-stone islands were occupied",
+      "graph edges are realized genetic or demographic connections",
+      "spatial block cross-validation models dispersal limitation"
+    ]
+  },
+  "next_stage": {
+    "allowed": "Implement frozen CHELSA extraction and run the 886-taxon benchmark exactly under the merged contracts.",
+    "not_allowed": "Change support variables, folds, radii, environmental quantiles, scenario weighting, 5x5 conditioning, or species aggregation after any held-out reachability outcome is inspected."
+  }
+}
