@@ -94,7 +94,9 @@ def _find_table(root: Path, token: str) -> Path:
 
 def _normalise_version(value: object) -> str:
     text = str(value or "").strip().casefold()
-    return text[1:] if text.startswith("v") else text
+    text = re.sub(r"^version\s*", "", text)
+    text = re.sub(r"^v(?=\d)", "", text)
+    return text.strip()
 
 
 def _record_version(record: dict[str, object]) -> str:
@@ -116,13 +118,7 @@ def _version_records(payload: dict[str, object]) -> list[dict[str, object]]:
 
 
 def _resolve_record(requested_id: int, expected_version: str) -> tuple[dict[str, object], str, str]:
-    """Resolve a concept/version reference to one exact Zenodo record.
-
-    Zenodo identifiers used in publications may resolve to a concept or to a versioned
-    record. We accept either only after verifying the requested concept identity and the
-    exact expected version. The returned record is then re-fetched by its immutable
-    numeric record ID before file download.
-    """
+    """Resolve a concept/version reference to one exact Zenodo record."""
     requested_api = f"https://zenodo.org/api/records/{requested_id}"
     initial = _load_json(requested_api)
     initial_id = int(initial.get("id", -1))
