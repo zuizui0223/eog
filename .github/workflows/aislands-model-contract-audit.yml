@@ -38,6 +38,15 @@ jobs:
             --output-csv results/aislands_model_contract/island_model_audit.csv \
             --output-summary results/aislands_model_contract/island_model_audit_summary.json
 
+      - name: Freeze outcome-independent geographic folds
+        run: |
+          python benchmarks/freeze_aislands_spatial_folds.py \
+            --audit-csv results/aislands_model_contract/island_model_audit.csv \
+            --output-folds results/aislands_model_contract/spatial_folds.csv \
+            --output-summary results/aislands_model_contract/spatial_folds_summary.json \
+            --block-size-degrees 5 \
+            --n-folds 5
+
       - name: Enforce pre-model boundary
         run: |
           python - <<'PY'
@@ -46,18 +55,37 @@ jobs:
           root = Path('results/aislands_model_contract')
           source = json.loads((root / 'source/source_manifest.json').read_text())
           summary = json.loads((root / 'island_model_audit_summary.json').read_text())
+          folds = json.loads((root / 'spatial_folds_summary.json').read_text())
           rows = list(csv.DictReader((root / 'island_model_audit.csv').open()))
+          fold_rows = list(csv.DictReader((root / 'spatial_folds.csv').open()))
           assert source['resolved_record_id'] == 10775810
           assert source['version'] == '1.0'
           assert source['island_data_sha256'] == 'd26ae154aeae1e6eab268f22268342077f7e8e7ef000d18a1f052f65866d5bde'
           assert source['species_data_sha256'] == '43e7d2e8deb1d1d635c8db44a7fe68cfb79c2a059a2207914413a62431eb7b0c'
           assert summary['surveyed_islands_with_species_rows'] == 842
           assert len(rows) == 842
-          assert summary['shapefile_record_count'] > 0
-          assert summary['shapefile_field_mapping']['island_id']
+          assert summary['shapefile_record_count'] == 887
+          assert summary['shapefile_fields'] == ['island_ID', 'x_centroid', 'y_centroid']
+          assert summary['shapefile_field_mapping']['island_id'] == 'island_ID'
+          assert summary['shapefile_field_mapping']['x'] == 'x_centroid'
+          assert summary['shapefile_field_mapping']['y'] == 'y_centroid'
           assert not summary['duplicate_shape_island_ids']
-          assert summary['coordinate_evaluable_islands'] > 0
-          print(json.dumps(summary, indent=2))
+          assert not summary['missing_geometry_island_ids']
+          assert not summary['invalid_coordinate_island_ids']
+          assert summary['coordinate_evaluable_islands'] == 842
+          assert summary['area_evaluable_islands'] == 0
+          assert summary['arch1_available_islands'] == 0
+          assert summary['arch2_available_islands'] == 0
+          assert len(fold_rows) == 842
+          assert folds['n_coordinate_evaluable_islands'] == 842
+          assert folds['block_size_degrees'] == 5.0
+          assert folds['n_spatial_blocks'] == 29
+          assert folds['n_folds'] == 5
+          assert folds['fold_island_counts'] == {'1': 169, '2': 169, '3': 168, '4': 168, '5': 168}
+          assert folds['species_outcomes_used'] is False
+          assert folds['sdm_outputs_used'] is False
+          assert folds['eog_outputs_used'] is False
+          print(json.dumps({'islands': summary, 'folds': folds}, indent=2))
           PY
 
       - uses: actions/upload-artifact@v4
@@ -67,4 +95,6 @@ jobs:
             results/aislands_model_contract/source/source_manifest.json
             results/aislands_model_contract/island_model_audit.csv
             results/aislands_model_contract/island_model_audit_summary.json
+            results/aislands_model_contract/spatial_folds.csv
+            results/aislands_model_contract/spatial_folds_summary.json
           if-no-files-found: error
