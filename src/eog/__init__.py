@@ -22,6 +22,18 @@ from .bridge_sensitivity import (
     BridgeSensitivityScenario,
     evaluate_bridge_sensitivity,
 )
+from .island_reachability import (
+    IslandReachabilityResult,
+    IslandReachabilityScenario,
+    IslandReachabilityScenarioResult,
+    default_aislands_reachability_scenarios,
+    evaluate_island_reachability,
+    nearest_anchor_distance_km,
+)
+from .conditional_reachability import (
+    ConditionalConcordance,
+    conditional_reachability_concordance,
+)
 from .support_model import (
     PenalizedLogisticSupportModel,
     SupportModelError,
@@ -128,6 +140,10 @@ __all__ = [
     "BridgeScenarioResult",
     "BridgeMetricSummary",
     "BridgeSensitivityResult",
+    "IslandReachabilityScenario",
+    "IslandReachabilityScenarioResult",
+    "IslandReachabilityResult",
+    "ConditionalConcordance",
     "PenalizedLogisticSupportModel",
     "SupportModelError",
     "SupportGridMetadata",
@@ -174,6 +190,10 @@ __all__ = [
     "haversine_km",
     "build_bridge_graph",
     "evaluate_bridge_sensitivity",
+    "default_aislands_reachability_scenarios",
+    "evaluate_island_reachability",
+    "nearest_anchor_distance_km",
+    "conditional_reachability_concordance",
     "fit_penalized_logistic_support",
     "assign_occurrence_anchors",
     "infer_support_topology",
