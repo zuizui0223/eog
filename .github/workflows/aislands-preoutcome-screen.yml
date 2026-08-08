@@ -51,6 +51,13 @@ jobs:
             --output-csv results/aislands_preoutcome/taxon_status_audit.csv \
             --output-summary results/aislands_preoutcome/taxon_status_summary.json
 
+      - name: Freeze APC-native primary cohort
+        run: |
+          python benchmarks/freeze_aislands_native_cohort.py \
+            --status-audit results/aislands_preoutcome/taxon_status_audit.csv \
+            --output-cohort results/aislands_preoutcome/frozen_taxon_cohort.csv \
+            --output-summary results/aislands_preoutcome/frozen_taxon_cohort_summary.json
+
       - name: Audit frozen boundary
         run: |
           python - <<'PY'
@@ -60,8 +67,10 @@ jobs:
           source = json.loads((root / 'source/source_manifest.json').read_text())
           summary = json.loads((root / 'screen_summary.json').read_text())
           status = json.loads((root / 'taxon_status_summary.json').read_text())
+          cohort = json.loads((root / 'frozen_taxon_cohort_summary.json').read_text())
           rows = list(csv.DictReader((root / 'species_screen.csv').open()))
           status_rows = list(csv.DictReader((root / 'taxon_status_audit.csv').open()))
+          cohort_rows = list(csv.DictReader((root / 'frozen_taxon_cohort.csv').open()))
           assert source['requested_record_or_concept_id'] == 10775809
           assert str(source['version']).removeprefix('v') == '1.0'
           assert source['expected_version'] == '1.0'
@@ -76,7 +85,12 @@ jobs:
           assert summary['n_distribution_eligible'] > 0
           assert len(status_rows) == summary['n_distribution_eligible']
           assert status['n_distribution_eligible'] == summary['n_distribution_eligible']
-          print(json.dumps({'source': source, 'screen': summary, 'status': status}, indent=2))
+          assert len(cohort_rows) == summary['n_distribution_eligible']
+          assert cohort['distribution_eligible_taxa'] == summary['n_distribution_eligible']
+          assert cohort['primary_native_taxa'] + cohort['excluded_introduced_taxa'] == cohort['distribution_eligible_taxa']
+          assert cohort['primary_status_rule'] == 'Status_APC == native'
+          assert cohort['primary_native_taxa'] > 0
+          print(json.dumps({'source': source, 'screen': summary, 'status': status, 'cohort': cohort}, indent=2))
           PY
 
       - uses: actions/upload-artifact@v4
@@ -88,4 +102,6 @@ jobs:
             results/aislands_preoutcome/screen_summary.json
             results/aislands_preoutcome/taxon_status_audit.csv
             results/aislands_preoutcome/taxon_status_summary.json
+            results/aislands_preoutcome/frozen_taxon_cohort.csv
+            results/aislands_preoutcome/frozen_taxon_cohort_summary.json
           if-no-files-found: error
