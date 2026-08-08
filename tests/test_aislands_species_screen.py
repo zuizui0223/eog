@@ -39,8 +39,8 @@ def test_screen_reports_status_without_using_it_for_distribution_eligibility():
         {"list_ID": "L4", "island_ID": "I4"},
     ]
     species_rows = [
-        {"List_ID": "L1", "Species_update": "Alpha beta", "Native": "", "Naturalised": "1"},
-        {"List_ID": "L2", "Species_update": "Alpha beta", "Native": "1", "Naturalised": ""},
+        {"List_ID": "L1", "Species_update": "Alpha beta", "Native": "", "Naturalised": "1", "Status_APC": "native", "Family": "Alphaaceae"},
+        {"List_ID": "L2", "Species_update": "Alpha beta", "Native": "1", "Naturalised": "", "Status_APC": "native", "Family": "Alphaaceae"},
     ]
     row = summarize_species(
         island_rows,
@@ -51,6 +51,8 @@ def test_screen_reports_status_without_using_it_for_distribution_eligibility():
         max_prevalence=0.75,
     )[0]
     assert row["distribution_eligible"] == 1
+    assert row["status_apc_values"] == "native"
+    assert row["family_values"] == "Alphaaceae"
     assert row["native_status_values"] == "1"
     assert row["naturalised_status_values"] == "1"
 
@@ -69,3 +71,23 @@ def test_primary_defaults_keep_small_range_taxa():
     assert row["n_present_islands"] == 10
     assert row["n_absent_islands"] == 90
     assert row["distribution_eligible"] == 1
+
+
+def test_screen_preserves_conflicting_apc_status_for_manual_resolution():
+    island_rows = [
+        {"List_ID": "L1", "Island_ID": "I1"},
+        {"List_ID": "L2", "Island_ID": "I2"},
+        {"List_ID": "L3", "Island_ID": "I3"},
+        {"List_ID": "L4", "Island_ID": "I4"},
+    ]
+    species_rows = [
+        {"List_ID": "L1", "Species_update": "Alpha beta", "Status_APC": "native"},
+        {"List_ID": "L2", "Species_update": "Alpha beta", "Status_APC": "uncertain"},
+    ]
+    row = summarize_species(
+        island_rows,
+        species_rows,
+        min_present_islands=2,
+        min_absent_islands=2,
+    )[0]
+    assert row["status_apc_values"] == "native|uncertain"
