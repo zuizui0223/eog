@@ -1,0 +1,63 @@
+name: A-Islands model contract audit
+
+on:
+  push:
+    branches:
+      - agent/freeze-aislands-model-contract
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install EOG
+        run: python -m pip install -e .
+
+      - name: Reproduce frozen A-Islands source
+        run: |
+          python benchmarks/fetch_aislands_zenodo.py \
+            --record-id 10775809 \
+            --expected-version 1.0 \
+            --output-dir results/aislands_model_contract/source
+
+      - name: Audit model-unit metadata only
+        run: |
+          python benchmarks/audit_aislands_model_islands.py \
+            --island-data results/aislands_model_contract/source/island_data.csv \
+            --species-data results/aislands_model_contract/source/species_data.csv \
+            --output-csv results/aislands_model_contract/island_model_audit.csv \
+            --output-summary results/aislands_model_contract/island_model_audit_summary.json
+
+      - name: Enforce pre-model boundary
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root = Path('results/aislands_model_contract')
+          source = json.loads((root / 'source/source_manifest.json').read_text())
+          summary = json.loads((root / 'island_model_audit_summary.json').read_text())
+          rows = list(csv.DictReader((root / 'island_model_audit.csv').open()))
+          assert source['resolved_record_id'] == 10775810
+          assert source['version'] == '1.0'
+          assert source['island_data_sha256'] == 'd26ae154aeae1e6eab268f22268342077f7e8e7ef000d18a1f052f65866d5bde'
+          assert source['species_data_sha256'] == '43e7d2e8deb1d1d635c8db44a7fe68cfb79c2a059a2207914413a62431eb7b0c'
+          assert summary['surveyed_islands_with_species_rows'] == 842
+          assert len(rows) == 842
+          assert not summary['invalid_coordinate_island_ids']
+          print(json.dumps(summary, indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aislands-model-contract-audit
+          path: |
+            results/aislands_model_contract/source/source_manifest.json
+            results/aislands_model_contract/island_model_audit.csv
+            results/aislands_model_contract/island_model_audit_summary.json
+          if-no-files-found: error
