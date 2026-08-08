@@ -34,22 +34,25 @@ def summarize_species(
     max_prevalence: float = 0.90,
 ) -> list[dict[str, object]]:
     """Return deterministic occupancy summaries without using any EOG outcome."""
-    _require_columns(island_rows, {"island_ID"}, "island_data")
-    _require_columns(species_rows, {"island_ID", "Species_update"}, "species_data")
+    _require_columns(island_rows, {"list_ID", "island_ID"}, "island_data")
+    _require_columns(species_rows, {"List_ID", "Species_update"}, "species_data")
     if min_present_islands < 1 or min_absent_islands < 1:
         raise ValueError("minimum present and absent island counts must be positive")
     if not 0 <= min_prevalence < max_prevalence <= 1:
         raise ValueError("prevalence bounds must satisfy 0 <= min < max <= 1")
 
-    surveyed_islands: set[str] = set()
+    list_to_island: dict[str, str] = {}
     for row in island_rows:
+        list_id = row["list_ID"].strip()
         island_id = row["island_ID"].strip()
-        if not island_id:
-            raise ValueError("island_data contains blank island_ID")
-        if island_id in surveyed_islands:
-            raise ValueError(f"island_data contains duplicate island_ID: {island_id}")
-        surveyed_islands.add(island_id)
+        if not list_id or not island_id:
+            raise ValueError("island_data contains blank list_ID or island_ID")
+        previous = list_to_island.get(list_id)
+        if previous is not None and previous != island_id:
+            raise ValueError(f"list_ID maps to multiple islands: {list_id}")
+        list_to_island[list_id] = island_id
 
+    surveyed_islands = sorted(set(list_to_island.values()))
     total_islands = len(surveyed_islands)
     if total_islands < 2:
         raise ValueError("at least two surveyed islands are required")
@@ -59,14 +62,12 @@ def summarize_species(
     naturalised_values: dict[str, list[str]] = {}
     for row in species_rows:
         species = row["Species_update"].strip()
-        island_id = row["island_ID"].strip()
+        list_id = row["List_ID"].strip()
         if not species:
             continue
-        if not island_id:
-            raise ValueError("species_data contains blank island_ID")
-        if island_id not in surveyed_islands:
-            raise ValueError(f"species_data island_ID not found in island_data: {island_id}")
-        species_islands.setdefault(species, set()).add(island_id)
+        if list_id not in list_to_island:
+            raise ValueError(f"species_data List_ID not found in island_data: {list_id}")
+        species_islands.setdefault(species, set()).add(list_to_island[list_id])
         if "Native" in row and row["Native"].strip():
             native_values.setdefault(species, []).append(row["Native"].strip())
         if "Naturalised" in row and row["Naturalised"].strip():
