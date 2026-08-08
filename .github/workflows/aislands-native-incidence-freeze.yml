@@ -1,0 +1,91 @@
+name: A-Islands native incidence pre-outcome freeze
+
+on:
+  push:
+    branches:
+      - agent/freeze-aislands-native-incidence
+  workflow_dispatch:
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install EOG
+        run: python -m pip install -e .
+
+      - name: Reproduce frozen A-Islands source and taxon cohort
+        run: |
+          python benchmarks/fetch_aislands_zenodo.py \
+            --record-id 10775809 \
+            --expected-version 1.0 \
+            --output-dir results/aislands_native_incidence/source
+          python benchmarks/aislands_species_screen.py \
+            --island-data results/aislands_native_incidence/source/island_data.csv \
+            --species-data results/aislands_native_incidence/source/species_data.csv \
+            --output results/aislands_native_incidence/species_screen.csv \
+            --min-present-islands 10 \
+            --min-absent-islands 10 \
+            --min-prevalence 0 \
+            --max-prevalence 1
+          python benchmarks/audit_aislands_taxon_status.py \
+            --species-data results/aislands_native_incidence/source/species_data.csv \
+            --species-screen results/aislands_native_incidence/species_screen.csv \
+            --output-csv results/aislands_native_incidence/taxon_status_audit.csv \
+            --output-summary results/aislands_native_incidence/taxon_status_summary.json
+          python benchmarks/freeze_aislands_native_cohort.py \
+            --status-audit results/aislands_native_incidence/taxon_status_audit.csv \
+            --output-cohort results/aislands_native_incidence/frozen_taxon_cohort.csv \
+            --output-summary results/aislands_native_incidence/frozen_taxon_cohort_summary.json
+
+      - name: Freeze primary native island incidence
+        run: |
+          python benchmarks/freeze_aislands_native_incidence.py \
+            --island-data results/aislands_native_incidence/source/island_data.csv \
+            --species-data results/aislands_native_incidence/source/species_data.csv \
+            --frozen-cohort results/aislands_native_incidence/frozen_taxon_cohort.csv \
+            --output-edges results/aislands_native_incidence/native_presence_edges.csv \
+            --output-species-audit results/aislands_native_incidence/species_incidence_audit.csv \
+            --output-summary results/aislands_native_incidence/native_incidence_summary.json
+
+      - name: Audit outcome-independent incidence contract
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root = Path('results/aislands_native_incidence')
+          cohort = json.loads((root / 'frozen_taxon_cohort_summary.json').read_text())
+          summary = json.loads((root / 'native_incidence_summary.json').read_text())
+          edges = list(csv.DictReader((root / 'native_presence_edges.csv').open()))
+          audit = list(csv.DictReader((root / 'species_incidence_audit.csv').open()))
+
+          assert cohort['primary_native_taxa'] == 886
+          assert cohort['cohort_sha256'] == 'cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12'
+          assert summary['declared_taxa'] == 886
+          assert summary['surveyed_islands'] == 842
+          assert summary['possible_taxon_island_cells'] == 886 * 842
+          assert len(audit) == 886
+          assert len(edges) == summary['primary_native_presence_edges']
+          assert summary['primary_native_presence_edges'] > 0
+          assert summary['primary_native_absence_cells'] > 0
+          assert summary['taxon_replacement_after_cleaning'] is False
+          assert summary['model_or_eog_outcomes_used'] is False
+          assert summary['native_presence_edges_sha256']
+          assert summary['species_incidence_audit_sha256']
+          print(json.dumps(summary, indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aislands-native-incidence-preoutcome
+          path: |
+            results/aislands_native_incidence/frozen_taxon_cohort_summary.json
+            results/aislands_native_incidence/native_presence_edges.csv
+            results/aislands_native_incidence/species_incidence_audit.csv
+            results/aislands_native_incidence/native_incidence_summary.json
+          if-no-files-found: error
