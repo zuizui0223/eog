@@ -34,6 +34,12 @@ def summarize_species(
     The primary screen is count-based (minimum present and absent islands). Prevalence
     bounds are optional sensitivity filters and default to the full [0, 1] range so that
     genuinely small-range island taxa are not removed before validation.
+
+    An island enters the surveyed/absence universe only when at least one row in
+    ``species_data`` points to one of its flora lists. A metadata-only ``island_data``
+    row with no species rows is therefore not silently interpreted as a complete
+    zero-species flora and does not generate a universal absence for every taxon.
+    Repeated flora lists for the same island still collapse to one surveyed island.
     """
     island_list_col = _column(island_rows, "list_ID", "island_data")
     island_id_col = _column(island_rows, "island_ID", "island_data")
@@ -58,26 +64,31 @@ def summarize_species(
             raise ValueError(f"list_ID maps to multiple islands: {list_id}")
         list_to_island[list_id] = island_id
 
-    surveyed_islands = sorted(set(list_to_island.values()))
-    total_islands = len(surveyed_islands)
-    if total_islands < 2:
-        raise ValueError("at least two surveyed islands are required")
-
     species_islands: dict[str, set[str]] = {}
     native_values: dict[str, list[str]] = {}
     naturalised_values: dict[str, list[str]] = {}
+    surveyed_list_ids: set[str] = set()
     for row in species_rows:
-        species = row[species_name_col].strip()
         list_id = row[species_list_col].strip()
-        if not species:
-            continue
+        if not list_id:
+            raise ValueError("species_data contains blank list_ID")
         if list_id not in list_to_island:
             raise ValueError(f"species_data list_ID not found in island_data: {list_id}")
+        surveyed_list_ids.add(list_id)
+
+        species = row[species_name_col].strip()
+        if not species:
+            continue
         species_islands.setdefault(species, set()).add(list_to_island[list_id])
         if native_col and row[native_col].strip():
             native_values.setdefault(species, []).append(row[native_col].strip())
         if naturalised_col and row[naturalised_col].strip():
             naturalised_values.setdefault(species, []).append(row[naturalised_col].strip())
+
+    surveyed_islands = sorted({list_to_island[list_id] for list_id in surveyed_list_ids})
+    total_islands = len(surveyed_islands)
+    if total_islands < 2:
+        raise ValueError("at least two surveyed islands with species rows are required")
 
     output: list[dict[str, object]] = []
     for species in sorted(species_islands):
