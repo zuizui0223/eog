@@ -31,6 +31,7 @@ jobs:
           python benchmarks/audit_aislands_source_structure.py \
             --island-data results/aislands_preoutcome/source/island_data.csv \
             --species-data results/aislands_preoutcome/source/species_data.csv \
+            --reference-data results/aislands_preoutcome/source/reference_data.csv \
             --output results/aislands_preoutcome/source_structure_audit.json
 
       - name: Apply pre-outcome distribution screen
@@ -85,6 +86,7 @@ jobs:
           assert int(source['resolved_record_id']) > 0
           assert source['island_data_sha256']
           assert source['species_data_sha256']
+          assert source['reference_data_sha256']
           assert structure['unique_island_ids'] == summary['n_surveyed_islands']
           assert not structure['species_list_ids_missing_from_island_data']
           assert not structure['list_ids_mapping_to_multiple_islands']
