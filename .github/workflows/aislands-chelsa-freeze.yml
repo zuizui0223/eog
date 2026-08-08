@@ -1,0 +1,96 @@
+name: A-Islands CHELSA pre-outcome freeze
+
+on:
+  push:
+    branches:
+      - agent/freeze-aislands-chelsa-extraction
+  workflow_dispatch:
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install audit and COG dependencies
+        run: |
+          python -m pip install -e .
+          python -m pip install pyshp==2.3.1 rasterio==1.4.3
+
+      - name: Reproduce frozen A-Islands model units
+        run: |
+          python benchmarks/fetch_aislands_zenodo.py \
+            --record-id 10775809 \
+            --expected-version 1.0 \
+            --output-dir results/aislands_chelsa/source
+          python benchmarks/audit_aislands_model_islands.py \
+            --island-data results/aislands_chelsa/source/island_data.csv \
+            --species-data results/aislands_chelsa/source/species_data.csv \
+            --shapefile results/aislands_chelsa/source/raw/A-Island_shape.shp \
+            --projection results/aislands_chelsa/source/raw/A-Island_shape.prj \
+            --output-csv results/aislands_chelsa/island_model_audit.csv \
+            --output-summary results/aislands_chelsa/island_model_audit_summary.json
+
+      - name: Freeze direct-centroid CHELSA values
+        run: |
+          python benchmarks/extract_aislands_chelsa_climate.py \
+            --island-audit results/aislands_chelsa/island_model_audit.csv \
+            --output-csv results/aislands_chelsa/island_climate.csv \
+            --output-manifest results/aislands_chelsa/climate_manifest.json
+
+      - name: Audit reviewed pre-outcome climate contract
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+
+          root = Path('results/aislands_chelsa')
+          manifest = json.loads((root / 'climate_manifest.json').read_text())
+          reviewed = json.loads(Path('validation/aislands_chelsa_20260808/climate_freeze_manifest.json').read_text())
+          rows = list(csv.DictReader((root / 'island_climate.csv').open()))
+          accepted = reviewed['climate']['accepted_climate_csv_sha256']
+
+          assert accepted == '6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285'
+          assert manifest['climate_csv_sha256'] == accepted
+          assert manifest['dataset'] == reviewed['climate']['dataset'] == 'CHELSA-bioclim'
+          assert manifest['version'] == reviewed['climate']['version'] == '2.1'
+          assert manifest['climatology'] == reviewed['climate']['climatology'] == '1981-2010'
+          assert manifest['variables'] == reviewed['climate']['variables'] == ['bio1', 'bio5', 'bio6', 'bio12', 'bio15']
+          assert manifest['n_islands'] == reviewed['climate']['complete_islands'] == 842
+          assert manifest['complete_islands'] == 842
+          assert manifest['incomplete_islands'] == reviewed['climate']['incomplete_islands'] == 0
+          assert len(rows) == 842
+          assert len(manifest['source_objects']) == 5
+          assert manifest['species_outcomes_used'] is False
+          assert manifest['sdm_outputs_used'] is False
+          assert manifest['eog_outputs_used'] is False
+          assert manifest['fallback_or_imputation_used'] is False
+          for source in manifest['source_objects']:
+              assert source['driver'] == 'GTiff'
+              assert source['crs'] in ('EPSG:4326', 'OGC:CRS84')
+              assert source['finite_samples'] == 842
+              assert source['masked_or_nodata_samples'] == 0
+              assert source['object_name'].endswith('_1981-2010_V.2.1.tif')
+              assert source['url'].startswith('https://')
+          complete = sum(int(row['primary_climate_complete']) for row in rows)
+          assert complete == 842
+          print(json.dumps({
+              'accepted_climate_csv_sha256': accepted,
+              'complete_islands': complete,
+              'source_etags': {source['requested_variable']: source['etag'] for source in manifest['source_objects']},
+          }, indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aislands-chelsa-preoutcome
+          path: |
+            results/aislands_chelsa/island_model_audit_summary.json
+            results/aislands_chelsa/island_climate.csv
+            results/aislands_chelsa/climate_manifest.json
+          if-no-files-found: error
