@@ -58,6 +58,16 @@ The primary confirmatory comparison must therefore separate:
 
 A positive empirical result may show that frozen structural information adds discrimination beyond the upstream local-support score on the evaluated units. It must not be worded as universal EOG superiority over SDMs.
 
+## Why the primary A-Islands test is reachability, not raster topology
+
+Ocean masking would make separate islands disconnected raster components by construction. Using that fact as the primary topology benchmark would risk rewarding EOG for an island-specific triviality rather than testing the general problem of restricted movement across a fragmented landscape.
+
+The primary A-Islands structural test therefore uses the **existing** `eog.bridge` and `eog.bridge_builder` graph implementation without adding an island class or a new reachability definition. Each surveyed island is a node. Geographic separation and environmental contrast define predeclared graph scenarios, and training-fold presence islands are the source nodes. The same machinery can be used for fragmented forests, mountain patches, river networks, or other discrete habitat systems by changing nodes and edge costs rather than changing the algorithm.
+
+The frozen machine-readable contract is `validation/aislands_preoutcome_20260808/reachability_protocol.json`. Primary local support is climate-only so that area, coordinates, mainland distance, nearest-island distance, and bridge outputs cannot leak movement structure into the environmental baseline. CHELSA v2.1 `bio01`, `bio04`, `bio12`, and `bio15` are the predeclared climate axes. The primary graph is an undirected 5-nearest-neighbour graph, with 3- and 8-neighbour graphs retained as declared sensitivities. No island-specific barrier term is added in the primary graph.
+
+The required paired comparators are local support only, nearest-training-presence geographic distance, local support plus distance, geographic-only bridge, and geographic-plus-environmental bridge. Bridge scores remain hypothesis scores rather than dispersal probabilities or reconstructed colonisation histories.
+
 ## Confirmatory analysis boundary
 
 Passing the distribution and APC-native screens does not by itself validate a taxon-specific EOG result. Before model fitting, the benchmark still needs:
