@@ -26,10 +26,15 @@ def summarize_species(
     *,
     min_present_islands: int = 10,
     min_absent_islands: int = 10,
-    min_prevalence: float = 0.10,
-    max_prevalence: float = 0.90,
+    min_prevalence: float = 0.0,
+    max_prevalence: float = 1.0,
 ) -> list[dict[str, object]]:
-    """Return deterministic occupancy summaries without using any EOG outcome."""
+    """Return deterministic occupancy summaries without using any EOG outcome.
+
+    The primary screen is count-based (minimum present and absent islands). Prevalence
+    bounds are optional sensitivity filters and default to the full [0, 1] range so that
+    genuinely small-range island taxa are not removed before validation.
+    """
     island_list_col = _column(island_rows, "list_ID", "island_data")
     island_id_col = _column(island_rows, "island_ID", "island_data")
     species_list_col = _column(species_rows, "list_ID", "species_data")
@@ -39,8 +44,8 @@ def summarize_species(
 
     if min_present_islands < 1 or min_absent_islands < 1:
         raise ValueError("minimum present and absent island counts must be positive")
-    if not 0 <= min_prevalence < max_prevalence <= 1:
-        raise ValueError("prevalence bounds must satisfy 0 <= min < max <= 1")
+    if not 0 <= min_prevalence <= max_prevalence <= 1:
+        raise ValueError("prevalence bounds must satisfy 0 <= min <= max <= 1")
 
     list_to_island: dict[str, str] = {}
     for row in island_rows:
@@ -104,8 +109,8 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--min-present-islands", type=int, default=10)
     parser.add_argument("--min-absent-islands", type=int, default=10)
-    parser.add_argument("--min-prevalence", type=float, default=0.10)
-    parser.add_argument("--max-prevalence", type=float, default=0.90)
+    parser.add_argument("--min-prevalence", type=float, default=0.0)
+    parser.add_argument("--max-prevalence", type=float, default=1.0)
     args = parser.parse_args()
 
     rows = summarize_species(
