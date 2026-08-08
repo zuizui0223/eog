@@ -1,0 +1,24 @@
+{
+  "analysis_id": "aislands_median_normalized_geographic_bottleneck_secondary_v1",
+  "frozen_before_bottleneck_outcomes": true,
+  "source_contract": "PR #82",
+  "structural_quantity": "median_normalized_geographic_bottleneck",
+  "interpretation": "lower values indicate a route to a training-presence anchor whose largest geographic edge is smaller relative to the scenario radius; this is a structural bottleneck diagnostic, not a dispersal probability or realized pathway",
+  "evaluation_score": "negative_median_normalized_geographic_bottleneck",
+  "directional_hypothesis": "within frozen pointwise-support quintile x nearest-anchor-distance quintile strata, the occupied member of a held-out presence-absence pair is expected to have a smaller median normalized geographic bottleneck than the absent member",
+  "conditioning": {
+    "support_bins": 5,
+    "nearest_anchor_distance_bins": 5,
+    "binning_and_pair_rule": "identical to the frozen primary conditional concordance"
+  },
+  "aggregation": "equal mean across estimable folds within species, then equal mean across estimable species",
+  "null": 0.5,
+  "uncertainty": {
+    "species_bootstrap_replicates": 10000,
+    "species_sign_flip_replicates": 100000,
+    "seed": 20260808
+  },
+  "applicability": "non-finite bottleneck values are not imputed; a species-fold is estimable only when finite bottleneck scores permit at least one held-out presence-absence comparison within the frozen 5x5 strata",
+  "no_parameter_selection_from_outcomes": true,
+  "claim_boundary": "A positive result supports additional held-out information in a predeclared structural bottleneck diagnostic conditional on pointwise support and nearest-anchor distance; it does not identify dispersal probability, colonisation history, or a realized route."
+}
