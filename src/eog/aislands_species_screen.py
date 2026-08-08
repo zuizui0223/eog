@@ -1,9 +1,4 @@
-"""Pre-outcome species screening for an A-Islands EOG benchmark.
-
-This module does not inspect EOG performance. It only summarizes species occupancy
-across comprehensively surveyed islands and applies fixed distributional eligibility
-criteria before any topology comparison is run.
-"""
+"""Pre-outcome species screening for an A-Islands EOG benchmark."""
 from __future__ import annotations
 
 import argparse
@@ -16,12 +11,13 @@ def _read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
-def _require_columns(rows: list[dict[str, str]], required: set[str], label: str) -> None:
+def _column(rows: list[dict[str, str]], name: str, label: str) -> str:
     if not rows:
         raise ValueError(f"{label} is empty")
-    missing = required.difference(rows[0])
-    if missing:
-        raise ValueError(f"{label} missing columns: {sorted(missing)}")
+    matches = [key for key in rows[0] if key.casefold() == name.casefold()]
+    if len(matches) != 1:
+        raise ValueError(f"{label} missing or ambiguous column: {name}")
+    return matches[0]
 
 
 def summarize_species(
@@ -34,22 +30,30 @@ def summarize_species(
     max_prevalence: float = 0.90,
 ) -> list[dict[str, object]]:
     """Return deterministic occupancy summaries without using any EOG outcome."""
-    _require_columns(island_rows, {"island_ID"}, "island_data")
-    _require_columns(species_rows, {"island_ID", "Species_update"}, "species_data")
+    island_list_col = _column(island_rows, "list_ID", "island_data")
+    island_id_col = _column(island_rows, "island_ID", "island_data")
+    species_list_col = _column(species_rows, "list_ID", "species_data")
+    species_name_col = _column(species_rows, "species_update", "species_data")
+    native_col = next((k for k in species_rows[0] if k.casefold() == "native"), None)
+    naturalised_col = next((k for k in species_rows[0] if k.casefold() == "naturalised"), None)
+
     if min_present_islands < 1 or min_absent_islands < 1:
         raise ValueError("minimum present and absent island counts must be positive")
     if not 0 <= min_prevalence < max_prevalence <= 1:
         raise ValueError("prevalence bounds must satisfy 0 <= min < max <= 1")
 
-    surveyed_islands: set[str] = set()
+    list_to_island: dict[str, str] = {}
     for row in island_rows:
-        island_id = row["island_ID"].strip()
-        if not island_id:
-            raise ValueError("island_data contains blank island_ID")
-        if island_id in surveyed_islands:
-            raise ValueError(f"island_data contains duplicate island_ID: {island_id}")
-        surveyed_islands.add(island_id)
+        list_id = row[island_list_col].strip()
+        island_id = row[island_id_col].strip()
+        if not list_id or not island_id:
+            raise ValueError("island_data contains blank list_ID or island_ID")
+        previous = list_to_island.get(list_id)
+        if previous is not None and previous != island_id:
+            raise ValueError(f"list_ID maps to multiple islands: {list_id}")
+        list_to_island[list_id] = island_id
 
+    surveyed_islands = sorted(set(list_to_island.values()))
     total_islands = len(surveyed_islands)
     if total_islands < 2:
         raise ValueError("at least two surveyed islands are required")
@@ -58,44 +62,38 @@ def summarize_species(
     native_values: dict[str, list[str]] = {}
     naturalised_values: dict[str, list[str]] = {}
     for row in species_rows:
-        species = row["Species_update"].strip()
-        island_id = row["island_ID"].strip()
+        species = row[species_name_col].strip()
+        list_id = row[species_list_col].strip()
         if not species:
             continue
-        if not island_id:
-            raise ValueError("species_data contains blank island_ID")
-        if island_id not in surveyed_islands:
-            raise ValueError(f"species_data island_ID not found in island_data: {island_id}")
-        species_islands.setdefault(species, set()).add(island_id)
-        if "Native" in row and row["Native"].strip():
-            native_values.setdefault(species, []).append(row["Native"].strip())
-        if "Naturalised" in row and row["Naturalised"].strip():
-            naturalised_values.setdefault(species, []).append(row["Naturalised"].strip())
+        if list_id not in list_to_island:
+            raise ValueError(f"species_data list_ID not found in island_data: {list_id}")
+        species_islands.setdefault(species, set()).add(list_to_island[list_id])
+        if native_col and row[native_col].strip():
+            native_values.setdefault(species, []).append(row[native_col].strip())
+        if naturalised_col and row[naturalised_col].strip():
+            naturalised_values.setdefault(species, []).append(row[naturalised_col].strip())
 
     output: list[dict[str, object]] = []
     for species in sorted(species_islands):
         n_present = len(species_islands[species])
         n_absent = total_islands - n_present
         prevalence = n_present / total_islands
-        distribution_eligible = (
+        eligible = (
             n_present >= min_present_islands
             and n_absent >= min_absent_islands
             and min_prevalence <= prevalence <= max_prevalence
         )
-        native = native_values.get(species, [])
-        naturalised = naturalised_values.get(species, [])
-        output.append(
-            {
-                "species": species,
-                "n_surveyed_islands": total_islands,
-                "n_present_islands": n_present,
-                "n_absent_islands": n_absent,
-                "prevalence": round(prevalence, 8),
-                "distribution_eligible": int(distribution_eligible),
-                "native_status_values": "|".join(sorted(set(native))),
-                "naturalised_status_values": "|".join(sorted(set(naturalised))),
-            }
-        )
+        output.append({
+            "species": species,
+            "n_surveyed_islands": total_islands,
+            "n_present_islands": n_present,
+            "n_absent_islands": n_absent,
+            "prevalence": round(prevalence, 8),
+            "distribution_eligible": int(eligible),
+            "native_status_values": "|".join(sorted(set(native_values.get(species, [])))),
+            "naturalised_status_values": "|".join(sorted(set(naturalised_values.get(species, [])))),
+        })
     return output
 
 
@@ -121,8 +119,7 @@ def main() -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     fields = list(rows[0]) if rows else [
         "species", "n_surveyed_islands", "n_present_islands", "n_absent_islands",
-        "prevalence", "distribution_eligible", "native_status_values",
-        "naturalised_status_values",
+        "prevalence", "distribution_eligible", "native_status_values", "naturalised_status_values",
     ]
     with args.output.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
