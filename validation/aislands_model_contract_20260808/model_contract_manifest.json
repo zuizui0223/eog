@@ -1,0 +1,86 @@
+{
+  "status": "reviewed_preoutcome_model_contract",
+  "frozen_at_utc": "2026-08-08",
+  "scientific_boundary": "No species-fold SDM performance, EOG reachability result, support-topology result, or held-out species outcome was inspected to choose the model family, predictors, folds, or failure rules in this contract.",
+  "upstream_preoutcome_cohort": {
+    "manifest": "validation/aislands_preoutcome_20260808/freeze_manifest.json",
+    "primary_native_taxa": 886,
+    "taxon_cohort_sha256": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+    "surveyed_island_universe": 842
+  },
+  "model_units": {
+    "islands": 842,
+    "coordinate_evaluable_islands": 842,
+    "coordinate_crs": "WGS84",
+    "coordinate_fields": ["x_centroid", "y_centroid"],
+    "shapefile_record_count": 887,
+    "missing_geometry_islands": 0,
+    "invalid_coordinate_islands": 0,
+    "area_evaluable_islands": 0,
+    "archipelago_attribute_islands": 0,
+    "island_model_audit_sha256": "3a069f208e1ce7222176ccba3fc334da302c135725c9e88ce41d84f93d900fc4",
+    "source_limitation": "The exact version-1.0 downloadable CSV/DBF files contain island IDs and centroids but not the paper-described Area or Arch_lvl_1/Arch_lvl_2 fields. These absent attributes are not reconstructed or silently substituted."
+  },
+  "evaluation_partition": {
+    "block_size_degrees": 5.0,
+    "occupied_spatial_blocks": 29,
+    "folds": 5,
+    "fold_island_counts": [169, 169, 168, 168, 168],
+    "fold_assignment_sha256": "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa",
+    "interpretation": "Evaluation partition only. These spatial blocks are not dispersal barriers, connectivity estimates, colonisation units, or reachability classes."
+  },
+  "pointwise_support_contract": {
+    "contract_file": "validation/aislands_model_contract_20260808/support_model_contract.json",
+    "climate_dataset": "CHELSA-bioclim 2.1, 1981-2010",
+    "predictors": ["bio01", "bio05", "bio06", "bio12", "bio15"],
+    "model_family": "deterministic L2-penalized logistic regression",
+    "l2_penalty_lambda": 1.0,
+    "training_standardization": "z-score using training islands only",
+    "minimum_training_presences": 5,
+    "minimum_training_absences": 5,
+    "hyperparameter_tuning": "none",
+    "primary_climate_extraction": "direct frozen island centroid; no nearest-finite-cell substitution",
+    "implementation": "src/eog/support_model.py",
+    "public_api": "eog.fit_penalized_logistic_support"
+  },
+  "leakage_contract": {
+    "held_out_labels_used_for_sdm_fit": false,
+    "held_out_labels_used_for_standardization": false,
+    "held_out_labels_used_for_eog_anchors": false,
+    "held_out_labels_used_for_graph_selection": false,
+    "training_presence_islands_only_as_future_eog_anchors": true,
+    "held_out_islands_may_exist_as_unlabelled_nodes": true
+  },
+  "reviewed_audit_workflow": {
+    "workflow_run_id": 31244858581,
+    "workflow_head_sha": "41d5e947a66f9f155c1bf7d8631b8e33c35bc77f",
+    "artifact_id": 9018158372,
+    "artifact_name": "aislands-model-contract-audit",
+    "artifact_digest": "sha256:3ae247634d01ebf206ed2b8c938fe5a4b600c00bb3ea7fa2ef86d0574db0e28f",
+    "conclusion": "success"
+  },
+  "reviewed_package_checks": {
+    "workflow_run_id": 31244858582,
+    "workflow_head_sha": "41d5e947a66f9f155c1bf7d8631b8e33c35bc77f",
+    "python_versions": ["3.10", "3.11", "3.12"],
+    "wheel_build": "success",
+    "existing_frozen_topology_benchmark": "success",
+    "conclusion": "success"
+  },
+  "next_stage_boundary": {
+    "next_contract": "A-Islands reachability/graph scenario contract",
+    "must_be_frozen_before": "any held-out reachability result is inspected",
+    "must_remain_separate_from_support_model": true,
+    "required_baselines": [
+      "pointwise support only",
+      "nearest training-presence geographic distance",
+      "pointwise support plus nearest-presence distance"
+    ],
+    "forbidden": [
+      "retuning the support model from EOG reachability outcomes",
+      "calling spatial CV blocks dispersal barriers",
+      "choosing graph radii or k values from held-out occupancy results",
+      "claiming reachability scores are dispersal probabilities or reconstructed colonisation histories"
+    ]
+  }
+}
