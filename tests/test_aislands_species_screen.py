@@ -53,3 +53,19 @@ def test_screen_reports_status_without_using_it_for_distribution_eligibility():
     assert row["distribution_eligible"] == 1
     assert row["native_status_values"] == "1"
     assert row["naturalised_status_values"] == "1"
+
+
+def test_primary_defaults_keep_small_range_taxa():
+    island_rows = [
+        {"list_ID": f"L{i}", "island_ID": f"I{i}"}
+        for i in range(1, 101)
+    ]
+    species_rows = [
+        {"List_ID": f"L{i}", "Species_update": "Small range species"}
+        for i in range(1, 11)
+    ]
+    row = summarize_species(island_rows, species_rows)[0]
+    assert row["prevalence"] == 0.1
+    assert row["n_present_islands"] == 10
+    assert row["n_absent_islands"] == 90
+    assert row["distribution_eligible"] == 1
