@@ -3,14 +3,26 @@ from __future__ import annotations
 
 import argparse
 import csv
+import io
 import json
 from collections import Counter
 from pathlib import Path
 
 
+def _read_with_encoding(path: Path) -> tuple[list[dict[str, str]], str]:
+    raw = path.read_bytes()
+    for encoding in ("utf-8-sig", "cp1252", "latin-1"):
+        try:
+            text = raw.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+        return list(csv.DictReader(io.StringIO(text))), encoding
+    raise ValueError(f"unable to decode CSV: {path}")
+
+
 def _read(path: Path) -> list[dict[str, str]]:
-    with path.open(newline="", encoding="utf-8-sig") as handle:
-        return list(csv.DictReader(handle))
+    rows, _ = _read_with_encoding(path)
+    return rows
 
 
 def _col(rows: list[dict[str, str]], name: str) -> str:
@@ -30,9 +42,12 @@ def _optional_col(rows: list[dict[str, str]], name: str) -> str | None:
 
 
 def audit(island_data: Path, species_data: Path, reference_data: Path | None = None) -> dict[str, object]:
-    islands = _read(island_data)
-    species = _read(species_data)
-    references = _read(reference_data) if reference_data else []
+    islands, island_encoding = _read_with_encoding(island_data)
+    species, species_encoding = _read_with_encoding(species_data)
+    if reference_data:
+        references, reference_encoding = _read_with_encoding(reference_data)
+    else:
+        references, reference_encoding = [], None
     island_list_col = _col(islands, "List_ID")
     island_id_col = _col(islands, "Island_ID")
     species_list_col = _col(species, "List_ID")
@@ -96,6 +111,11 @@ def audit(island_data: Path, species_data: Path, reference_data: Path | None = N
         })
 
     return {
+        "csv_encodings": {
+            "island_data": island_encoding,
+            "species_data": species_encoding,
+            "reference_data": reference_encoding,
+        },
         "island_data_rows": len(islands),
         "unique_list_ids_island_data": len(island_list_set),
         "unique_island_ids": len(all_island_ids),
