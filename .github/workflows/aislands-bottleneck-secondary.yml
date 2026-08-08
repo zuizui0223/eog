@@ -1,0 +1,61 @@
+name: A-Islands frozen bottleneck secondary
+
+on:
+  push:
+    branches:
+      - agent/run-aislands-bottleneck-secondary
+  workflow_dispatch:
+
+jobs:
+  bottleneck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: |
+          python -m pip install -e .
+          python -m pip install pyshp==2.3.1 rasterio==1.4.3
+      - name: Reproduce A-Islands v1.0
+        run: python benchmarks/fetch_aislands_zenodo.py --record-id 10775809 --expected-version 1.0 --output-dir results/aislands_bottleneck/source
+      - name: Reproduce frozen cohort
+        run: |
+          python benchmarks/aislands_species_screen.py --island-data results/aislands_bottleneck/source/island_data.csv --species-data results/aislands_bottleneck/source/species_data.csv --output results/aislands_bottleneck/species_screen.csv --min-present-islands 10 --min-absent-islands 10 --min-prevalence 0 --max-prevalence 1
+          python benchmarks/audit_aislands_taxon_status.py --species-data results/aislands_bottleneck/source/species_data.csv --species-screen results/aislands_bottleneck/species_screen.csv --output-csv results/aislands_bottleneck/taxon_status_audit.csv --output-summary results/aislands_bottleneck/taxon_status_summary.json
+          python benchmarks/freeze_aislands_native_cohort.py --status-audit results/aislands_bottleneck/taxon_status_audit.csv --output-cohort results/aislands_bottleneck/frozen_taxon_cohort.csv --output-summary results/aislands_bottleneck/frozen_taxon_cohort_summary.json
+      - name: Reproduce frozen folds
+        run: |
+          python benchmarks/audit_aislands_model_islands.py --island-data results/aislands_bottleneck/source/island_data.csv --species-data results/aislands_bottleneck/source/species_data.csv --shapefile results/aislands_bottleneck/source/raw/A-Island_shape.shp --projection results/aislands_bottleneck/source/raw/A-Island_shape.prj --output-csv results/aislands_bottleneck/island_model_audit.csv --output-summary results/aislands_bottleneck/island_model_audit_summary.json
+          python benchmarks/freeze_aislands_spatial_folds.py --audit-csv results/aislands_bottleneck/island_model_audit.csv --output-folds results/aislands_bottleneck/spatial_folds.csv --output-summary results/aislands_bottleneck/spatial_folds_summary.json --block-size-degrees 5 --n-folds 5
+      - name: Reproduce frozen CHELSA
+        run: python benchmarks/extract_aislands_chelsa_climate.py --island-audit results/aislands_bottleneck/island_model_audit.csv --output-csv results/aislands_bottleneck/island_climate.csv --output-manifest results/aislands_bottleneck/climate_manifest.json
+      - name: Verify frozen hashes and contract
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root=Path('results/aislands_bottleneck')
+          expected={'frozen_taxon_cohort.csv':'cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12','spatial_folds.csv':'221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa','island_climate.csv':'6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285'}
+          for n,e in expected.items():
+              a=hashlib.sha256((root/n).read_bytes()).hexdigest(); print(n,a); assert a==e
+          c=json.loads(Path('benchmarks/aislands_bottleneck_secondary_contract.json').read_text()); assert c['frozen_before_bottleneck_outcomes'] is True; assert c['evaluation_score']=='negative_median_normalized_geographic_bottleneck'
+          PY
+      - name: Execute frozen bottleneck secondary
+        run: |
+          python benchmarks/run_aislands_bottleneck_secondary.py --island-data results/aislands_bottleneck/source/island_data.csv --species-data results/aislands_bottleneck/source/species_data.csv --cohort results/aislands_bottleneck/frozen_taxon_cohort.csv --folds results/aislands_bottleneck/spatial_folds.csv --climate results/aislands_bottleneck/island_climate.csv --fold-output results/aislands_bottleneck/bottleneck_fold_results.csv --species-output results/aislands_bottleneck/bottleneck_species_results.csv --summary-output results/aislands_bottleneck/bottleneck_summary.json
+      - name: Print result
+        run: cat results/aislands_bottleneck/bottleneck_summary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aislands-frozen-bottleneck-secondary
+          path: |
+            results/aislands_bottleneck/frozen_taxon_cohort.csv
+            results/aislands_bottleneck/spatial_folds.csv
+            results/aislands_bottleneck/island_climate.csv
+            results/aislands_bottleneck/bottleneck_fold_results.csv
+            results/aislands_bottleneck/bottleneck_species_results.csv
+            results/aislands_bottleneck/bottleneck_summary.json
+          if-no-files-found: error
