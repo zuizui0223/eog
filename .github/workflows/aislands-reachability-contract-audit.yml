@@ -1,0 +1,107 @@
+name: A-Islands reachability contract audit
+
+on:
+  push:
+    branches:
+      - agent/freeze-aislands-reachability-contract
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install EOG and audit dependency
+        run: |
+          python -m pip install -e .
+          python -m pip install pyshp==2.3.1
+
+      - name: Reproduce frozen A-Islands source
+        run: |
+          python benchmarks/fetch_aislands_zenodo.py \
+            --record-id 10775809 \
+            --expected-version 1.0 \
+            --output-dir results/aislands_reachability_contract/source
+
+      - name: Reproduce frozen model-unit audit
+        run: |
+          python benchmarks/audit_aislands_model_islands.py \
+            --island-data results/aislands_reachability_contract/source/island_data.csv \
+            --species-data results/aislands_reachability_contract/source/species_data.csv \
+            --shapefile results/aislands_reachability_contract/source/raw/A-Island_shape.shp \
+            --projection results/aislands_reachability_contract/source/raw/A-Island_shape.prj \
+            --output-csv results/aislands_reachability_contract/island_model_audit.csv \
+            --output-summary results/aislands_reachability_contract/island_model_audit_summary.json
+
+      - name: Audit unlabeled reachability geometry
+        run: |
+          python benchmarks/audit_aislands_reachability_geometry.py \
+            --island-audit results/aislands_reachability_contract/island_model_audit.csv \
+            --output results/aislands_reachability_contract/reachability_geometry.json
+
+      - name: Test frozen structural implementation
+        run: |
+          python -m pytest -q tests/test_island_reachability.py tests/test_conditional_reachability.py
+
+      - name: Enforce pre-outcome reachability contract
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          from eog import default_aislands_reachability_scenarios
+
+          root = Path('results/aislands_reachability_contract')
+          geometry = json.loads((root / 'reachability_geometry.json').read_text())
+          contract_path = Path('validation/aislands_reachability_contract_20260808/reachability_contract.json')
+          contract = json.loads(contract_path.read_text())
+          scenarios = default_aislands_reachability_scenarios()
+
+          assert geometry['n_islands'] == 842
+          nn = geometry['nearest_neighbor_distance_km']
+          assert abs(nn['q90'] - 19.67286677) < 1e-6
+          assert abs(nn['q975'] - 50.54592430) < 1e-6
+          assert abs(nn['q99'] - 120.83132623) < 1e-6
+          assert abs(nn['max'] - 234.73961110) < 1e-6
+          assert geometry['frozen_geographic_radii_km'] == [25.0, 50.0, 125.0, 250.0]
+          assert geometry['species_labels_used'] is False
+          assert geometry['sdm_outputs_used'] is False
+          assert geometry['eog_outputs_used'] is False
+
+          assert contract['scenario_ensemble']['scenario_count'] == 12
+          assert contract['scenario_ensemble']['geographic_radii_km'] == [25.0, 50.0, 125.0, 250.0]
+          assert contract['primary_reachability_quantity']['name'] == 'connected_frequency'
+          assert contract['primary_heldout_statistic']['stratification']['support_bins'] == 5
+          assert contract['primary_heldout_statistic']['stratification']['distance_bins'] == 5
+          assert contract['primary_heldout_statistic']['primary_null'] == 0.5
+          assert contract['upstream_contracts']['support_model_mutable_after_this_freeze'] is False
+          assert contract['upstream_contracts']['spatial_folds_mutable_after_this_freeze'] is False
+
+          assert len(scenarios) == 12
+          assert {scenario.max_geographic_km for scenario in scenarios} == {25.0, 50.0, 125.0, 250.0}
+          assert {scenario.environmental_edge_quantile for scenario in scenarios} == {None, 0.90, 0.75}
+          assert len({scenario.scenario_id for scenario in scenarios}) == 12
+
+          digest = hashlib.sha256(contract_path.read_bytes()).hexdigest()
+          (root / 'contract_audit.json').write_text(json.dumps({
+              'reachability_contract_sha256': digest,
+              'scenario_count': len(scenarios),
+              'heldout_species_outcomes_inspected': False,
+              'support_model_changed_from_upstream_contract': False,
+              'spatial_folds_changed_from_upstream_contract': False,
+          }, indent=2) + '\n')
+          print((root / 'contract_audit.json').read_text())
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aislands-reachability-contract-audit
+          path: |
+            results/aislands_reachability_contract/island_model_audit_summary.json
+            results/aislands_reachability_contract/reachability_geometry.json
+            results/aislands_reachability_contract/contract_audit.json
+          if-no-files-found: error
