@@ -43,6 +43,14 @@ jobs:
             --screen results/aislands_preoutcome/species_screen.csv \
             --output results/aislands_preoutcome/screen_summary.json
 
+      - name: Audit taxon status before model outcomes
+        run: |
+          python benchmarks/audit_aislands_taxon_status.py \
+            --species-data results/aislands_preoutcome/source/species_data.csv \
+            --species-screen results/aislands_preoutcome/species_screen.csv \
+            --output-csv results/aislands_preoutcome/taxon_status_audit.csv \
+            --output-summary results/aislands_preoutcome/taxon_status_summary.json
+
       - name: Audit frozen boundary
         run: |
           python - <<'PY'
@@ -51,7 +59,9 @@ jobs:
           root = Path('results/aislands_preoutcome')
           source = json.loads((root / 'source/source_manifest.json').read_text())
           summary = json.loads((root / 'screen_summary.json').read_text())
+          status = json.loads((root / 'taxon_status_summary.json').read_text())
           rows = list(csv.DictReader((root / 'species_screen.csv').open()))
+          status_rows = list(csv.DictReader((root / 'taxon_status_audit.csv').open()))
           assert source['requested_record_or_concept_id'] == 10775809
           assert str(source['version']).removeprefix('v') == '1.0'
           assert source['expected_version'] == '1.0'
@@ -64,7 +74,9 @@ jobs:
           assert len(rows) == summary['n_species_total']
           assert sum(int(row['distribution_eligible']) for row in rows) == summary['n_distribution_eligible']
           assert summary['n_distribution_eligible'] > 0
-          print(json.dumps({'source': source, 'screen': summary}, indent=2))
+          assert len(status_rows) == summary['n_distribution_eligible']
+          assert status['n_distribution_eligible'] == summary['n_distribution_eligible']
+          print(json.dumps({'source': source, 'screen': summary, 'status': status}, indent=2))
           PY
 
       - uses: actions/upload-artifact@v4
@@ -74,4 +86,6 @@ jobs:
             results/aislands_preoutcome/source/source_manifest.json
             results/aislands_preoutcome/species_screen.csv
             results/aislands_preoutcome/screen_summary.json
+            results/aislands_preoutcome/taxon_status_audit.csv
+            results/aislands_preoutcome/taxon_status_summary.json
           if-no-files-found: error
