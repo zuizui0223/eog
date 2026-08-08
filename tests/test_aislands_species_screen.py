@@ -1,19 +1,20 @@
+import pytest
+
 from eog.aislands_species_screen import summarize_species
 
 
-def test_screen_uses_unique_islands_not_repeated_lists():
+def test_screen_uses_species_island_id_and_unique_islands():
     island_rows = [
-        {"list_ID": "L1", "island_ID": "I1"},
-        {"list_ID": "L2", "island_ID": "I1"},
-        {"list_ID": "L3", "island_ID": "I2"},
-        {"list_ID": "L4", "island_ID": "I3"},
-        {"list_ID": "L5", "island_ID": "I4"},
+        {"island_ID": "I1"},
+        {"island_ID": "I2"},
+        {"island_ID": "I3"},
+        {"island_ID": "I4"},
     ]
     species_rows = [
-        {"List_ID": "L1", "Species_update": "Alpha beta", "Native": "1", "Naturalised": "0"},
-        {"List_ID": "L2", "Species_update": "Alpha beta", "Native": "1", "Naturalised": "0"},
-        {"List_ID": "L3", "Species_update": "Alpha beta", "Native": "1", "Naturalised": "0"},
-        {"List_ID": "L4", "Species_update": "Gamma delta", "Native": "1", "Naturalised": "0"},
+        {"island_ID": "I1", "list_ID": "L1", "Species_update": "Alpha beta", "Native": "1", "Naturalised": "0"},
+        {"island_ID": "I1", "list_ID": "L2", "Species_update": "Alpha beta", "Native": "1", "Naturalised": "0"},
+        {"island_ID": "I2", "list_ID": "L3", "Species_update": "Alpha beta", "Native": "1", "Naturalised": "0"},
+        {"island_ID": "I3", "list_ID": "L4", "Species_update": "Gamma delta", "Native": "1", "Naturalised": "0"},
     ]
     rows = summarize_species(
         island_rows,
@@ -33,14 +34,14 @@ def test_screen_uses_unique_islands_not_repeated_lists():
 
 def test_screen_reports_status_without_using_it_for_distribution_eligibility():
     island_rows = [
-        {"list_ID": "L1", "island_ID": "I1"},
-        {"list_ID": "L2", "island_ID": "I2"},
-        {"list_ID": "L3", "island_ID": "I3"},
-        {"list_ID": "L4", "island_ID": "I4"},
+        {"island_ID": "I1"},
+        {"island_ID": "I2"},
+        {"island_ID": "I3"},
+        {"island_ID": "I4"},
     ]
     species_rows = [
-        {"List_ID": "L1", "Species_update": "Alpha beta", "Native": "", "Naturalised": "1"},
-        {"List_ID": "L2", "Species_update": "Alpha beta", "Native": "1", "Naturalised": ""},
+        {"island_ID": "I1", "list_ID": "L1", "Species_update": "Alpha beta", "Native": "", "Naturalised": "1"},
+        {"island_ID": "I2", "list_ID": "L2", "Species_update": "Alpha beta", "Native": "1", "Naturalised": ""},
     ]
     row = summarize_species(
         island_rows,
@@ -53,3 +54,10 @@ def test_screen_reports_status_without_using_it_for_distribution_eligibility():
     assert row["distribution_eligible"] == 1
     assert row["native_status_values"] == "1"
     assert row["naturalised_status_values"] == "1"
+
+
+def test_screen_rejects_species_island_not_in_island_table():
+    island_rows = [{"island_ID": "I1"}, {"island_ID": "I2"}]
+    species_rows = [{"island_ID": "I3", "Species_update": "Alpha beta"}]
+    with pytest.raises(ValueError, match="island_ID not found"):
+        summarize_species(island_rows, species_rows)
