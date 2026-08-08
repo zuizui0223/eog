@@ -1,0 +1,128 @@
+{
+  "status": "preoutcome_reachability_contract",
+  "frozen_at_utc": "2026-08-08",
+  "scientific_question": "Conditional on the frozen pointwise support score and simple geographic distance to the nearest training presence, does occurrence-anchored island-chain structure contain additional held-out incidence information?",
+  "not_a_question": [
+    "Is EOG universally better than SDMs?",
+    "What is the probability that the species dispersed along this path?",
+    "Which historical colonisation route actually occurred?",
+    "Are graph edges demographic or genetic connections?"
+  ],
+  "upstream_contracts": {
+    "taxon_cohort": "validation/aislands_preoutcome_20260808/freeze_manifest.json",
+    "model_contract": "validation/aislands_model_contract_20260808/model_contract_manifest.json",
+    "primary_native_taxa": 886,
+    "surveyed_islands": 842,
+    "support_model_mutable_after_this_freeze": false,
+    "spatial_folds_mutable_after_this_freeze": false
+  },
+  "graph_nodes": {
+    "nodes": "all 842 species-linked surveyed islands with frozen centroids and primary climate predictors",
+    "held_out_islands_in_graph": true,
+    "held_out_role": "unlabelled structural nodes only",
+    "training_absence_islands_in_graph": true,
+    "node_label_filtering": "none",
+    "interpretation": "All islands represent potential structural stepping-stone locations. Their inclusion does not assert that they were occupied or used as an actual dispersal route."
+  },
+  "anchors": {
+    "anchor_definition": "training-fold presence islands for the focal species",
+    "held_out_presence_as_anchor": false,
+    "training_absence_as_anchor": false,
+    "minimum_training_anchors": 5,
+    "no_anchor_policy": "species-fold reachability is not evaluable; do not change the fold or borrow held-out labels"
+  },
+  "environmental_geometry": {
+    "variables": ["bio01", "bio05", "bio06", "bio12", "bio15"],
+    "source": "same frozen CHELSA-bioclim 2.1 direct-centroid predictors used by the support-model contract",
+    "scaling": "fit median/MAD robust reference on training islands only within each fold, using climate values but no species labels",
+    "held_out_values_used_to_fit_reference": false,
+    "edge_environmental_distance": "Euclidean distance in the training-fitted robust climate reference"
+  },
+  "scenario_ensemble": {
+    "scenario_count": 12,
+    "geographic_radii_km": [25.0, 50.0, 125.0, 250.0],
+    "geographic_radius_provenance": {
+      "rule": "rounded pre-outcome scales from the 842-island nearest-neighbour geometry, spanning approximately q90, q97.5, q99 and the maximum nearest-neighbour separation",
+      "observed_preoutcome_nearest_neighbor_km": {
+        "q90": 19.67286677,
+        "q975": 50.5459243,
+        "q99": 120.83132623,
+        "max": 234.7396111
+      },
+      "held_out_species_labels_used": false
+    },
+    "environmental_filters_per_radius": [
+      {"id": "env_none", "training_edge_quantile": null},
+      {"id": "env_q90", "training_edge_quantile": 0.90},
+      {"id": "env_q75", "training_edge_quantile": 0.75}
+    ],
+    "environmental_threshold_derivation": "For each fold and geographic radius, derive q90 or q75 from environmental distances of training-training island pairs whose geographic distance is within that radius. Apply that frozen fold/radius threshold to all graph edges. No species labels enter threshold derivation.",
+    "edge_rule": "undirected edge exists when geographic distance is <= the scenario radius and, when an environmental filter is active, robust climate distance is <= the training-derived environmental threshold",
+    "k_nearest_forcing": false,
+    "barrier_cost": "none in the primary A-Islands contract because the exact frozen source does not provide a validated species-independent barrier attribute; the geographic edge limit itself is an explicit structural assumption",
+    "scenario_weighting": "all 12 scenarios receive equal weight; do not select the best radius or environmental cutoff from held-out outcomes"
+  },
+  "primary_reachability_quantity": {
+    "name": "connected_frequency",
+    "range": [0.0, 1.0],
+    "definition": "fraction of the 12 predeclared scenarios in which a target island is connected by any allowed island chain to at least one training-presence anchor",
+    "direction": "higher means structurally reachable under more declared assumptions",
+    "probability_interpretation": false,
+    "secondary_quantities": [
+      "geography_only_connected_frequency across the four env_none scenarios",
+      "environmentally_constrained_connected_frequency across the eight q90/q75 scenarios",
+      "median normalized geographic bottleneck among connected scenarios"
+    ]
+  },
+  "mandatory_baselines": {
+    "pointwise_support": "frozen penalized-logistic support score",
+    "nearest_anchor_distance": "great-circle distance to the nearest training-presence island",
+    "support_plus_distance_conditioning": "primary conditional concordance strata use both pointwise support and nearest-anchor distance before reachability is compared"
+  },
+  "primary_heldout_statistic": {
+    "name": "species-level conditional reachability concordance",
+    "fold_unit": "held-out islands within one species and spatial fold",
+    "stratification": {
+      "support_bins": 5,
+      "distance_bins": 5,
+      "binning_rule": "deterministic empirical rank bins formed from held-out pointwise support and nearest-anchor distance values without consulting held-out labels; exact ties remain in the same bin"
+    },
+    "within_stratum_pairing": "compare every held-out presence with every held-out absence in the same support-by-distance stratum",
+    "pair_score": "1 when presence reachability > absence reachability, 0 when lower, 0.5 on a tie",
+    "fold_null": 0.5,
+    "fold_without_comparable_pairs": "explicitly unestimable; retain in applicability audit and do not replace or alter bins",
+    "species_summary": "unweighted mean of estimable fold concordances for that species",
+    "overall_summary": "unweighted mean of estimable species summaries so widespread species do not dominate by island-pair count",
+    "primary_null": 0.5,
+    "uncertainty": "10,000 species-level bootstrap replicates with seed 20260808 plus a species-level sign-flip test of concordance minus 0.5",
+    "coverage_reporting": "report all 886 declared taxa, species-fold support-model applicability, reachability applicability, informative-stratum counts, comparable-pair counts and the number of species with an estimable primary statistic"
+  },
+  "secondary_outcome_metrics": [
+    "held-out AUC of pointwise support alone where both classes are present",
+    "held-out AUC of connected_frequency alone where both classes are present",
+    "conditional concordance for geography-only connected frequency",
+    "conditional concordance for environmentally constrained connected frequency"
+  ],
+  "claim_boundary": {
+    "permitted_if_positive": "Among held-out islands with similar frozen pointwise support and similar distance to known training occurrences, islands that were structurally reachable under more predeclared island-chain scenarios were more often the occupied member of a presence-absence pair.",
+    "not_permitted": [
+      "EOG is a better SDM",
+      "EOG estimates dispersal probability",
+      "the graph reconstructs the true colonisation pathway",
+      "unlabelled stepping-stone islands were occupied",
+      "a graph edge is a realized demographic or genetic connection",
+      "spatial block cross-validation models dispersal limitation"
+    ]
+  },
+  "immutability_after_first_outcome": [
+    "geographic radii",
+    "environmental quantiles",
+    "scenario weighting",
+    "node universe",
+    "anchor definition",
+    "support and distance bin counts",
+    "pairwise concordance scoring",
+    "species-level aggregation",
+    "bootstrap seed and replicate count"
+  ]
+}
