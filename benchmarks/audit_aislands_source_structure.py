@@ -22,13 +22,27 @@ def _col(rows: list[dict[str, str]], name: str) -> str:
     return matches[0]
 
 
-def audit(island_data: Path, species_data: Path) -> dict[str, object]:
+def _optional_col(rows: list[dict[str, str]], name: str) -> str | None:
+    if not rows:
+        return None
+    matches = [column for column in rows[0] if column.casefold() == name.casefold()]
+    return matches[0] if len(matches) == 1 else None
+
+
+def audit(island_data: Path, species_data: Path, reference_data: Path | None = None) -> dict[str, object]:
     islands = _read(island_data)
     species = _read(species_data)
+    references = _read(reference_data) if reference_data else []
     island_list_col = _col(islands, "List_ID")
     island_id_col = _col(islands, "Island_ID")
     species_list_col = _col(species, "List_ID")
     species_name_col = _col(species, "Species_update")
+    ref_id_col = _optional_col(islands, "Ref_ID")
+
+    reference_by_id: dict[str, dict[str, str]] = {}
+    reference_id_col = _optional_col(references, "Ref_ID")
+    if references and reference_id_col:
+        reference_by_id = {row[reference_id_col].strip(): row for row in references}
 
     island_list_ids = [row[island_list_col].strip() for row in islands]
     island_ids = [row[island_id_col].strip() for row in islands]
@@ -60,20 +74,25 @@ def audit(island_data: Path, species_data: Path) -> dict[str, object]:
     for list_id in empty_list_ids:
         row = list_to_row[list_id]
         island_id = row[island_id_col].strip()
+        ref_id = row[ref_id_col].strip() if ref_id_col else ""
         sibling_lists = sorted(
             other_list
             for other_list, values in list_to_islands.items()
             if island_id in values and other_list != list_id
         )
+        reference_row = reference_by_id.get(ref_id, {})
         empty_context.append({
             "list_id": list_id,
             "island_id": island_id,
             "island_name": next((row[key].strip() for key in row if key.casefold() == "island_name"), ""),
             "survey_year": next((row[key].strip() for key in row if key.casefold() == "survey_year"), ""),
-            "ref_id": next((row[key].strip() for key in row if key.casefold() == "ref_id"), ""),
+            "ref_id": ref_id,
             "lists_for_same_island": repeated_island_ids[island_id],
             "sibling_list_ids": sibling_lists,
             "sibling_lists_with_species_rows": [value for value in sibling_lists if value in species_list_set],
+            "reference_full_ref": next((reference_row[key].strip() for key in reference_row if key.casefold() == "full_ref"), ""),
+            "reference_native_indicated": next((reference_row[key].strip() for key in reference_row if key.casefold() == "native_indicated"), ""),
+            "reference_naturalised_indicated": next((reference_row[key].strip() for key in reference_row if key.casefold() == "naturalised_indicated"), ""),
         })
 
     return {
@@ -104,9 +123,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--island-data", type=Path, required=True)
     parser.add_argument("--species-data", type=Path, required=True)
+    parser.add_argument("--reference-data", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    result = audit(args.island_data, args.species_data)
+    result = audit(args.island_data, args.species_data, args.reference_data)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2, ensure_ascii=False))
