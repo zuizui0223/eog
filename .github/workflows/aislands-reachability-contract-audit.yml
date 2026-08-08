@@ -16,10 +16,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install EOG and audit dependency
+      - name: Install EOG and audit dependencies
         run: |
           python -m pip install -e .
-          python -m pip install pyshp==2.3.1
+          python -m pip install pyshp==2.3.1 pytest
 
       - name: Reproduce frozen A-Islands source
         run: |
