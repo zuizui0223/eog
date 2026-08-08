@@ -1,7 +1,9 @@
 {
-  "protocol_id": "aislands_reachability_preoutcome_v1",
-  "status": "frozen_before_sdm_or_eog_outcomes",
+  "protocol_id": "aislands_reachability_preoutcome_v1_1",
+  "status": "corrected_before_sdm_or_eog_outcomes",
+  "correction_note": "Restores the earlier PR #83 frozen CHELSA artifact and aligns the local-support implementation with the declared class-balanced L2-logistic objective before any species-level SDM/EOG outcome is computed.",
   "frozen_cohort_sha256": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+  "frozen_climate_sha256": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285",
   "primary_taxa": 886,
   "evaluation_unit": "unique surveyed island",
   "scientific_target": "test whether existing graph reachability information adds held-out discrimination beyond an upstream pointwise environmental support score; islands are used as a fragmented-landscape test case, not as a special algorithm class",
@@ -22,22 +24,22 @@
       "version": "2.1",
       "baseline": "1981-2010",
       "resolution": "30 arcsec / kilometer scale",
-      "variables": ["bio01", "bio04", "bio12", "bio15"]
+      "variables": ["bio1", "bio5", "bio6", "bio12", "bio15"]
     },
-    "island_extraction": "area-weighted mean across each frozen island polygon; centroid fallback is not allowed without a separately frozen QC exception",
+    "island_extraction": "direct CHELSA source-raster sample at each frozen A-Islands WGS84 centroid; no nearby-cell substitution, interpolation, polygon averaging, or imputation",
     "primary_model": {
       "family": "L2_regularized_logistic_regression",
       "standardization": "training_fold_mean_sd_only",
       "class_weight": "balanced",
-      "regularization_C": 1.0,
-      "solver": "lbfgs",
+      "regularization_C_equivalent": 1.0,
+      "l2_penalty": 1.0,
+      "optimizer": "deterministic Newton updates on the frozen balanced L2-logistic objective",
       "randomness": "none"
     }
   },
   "cross_validation": {
     "primary": "deterministic_stratified_10_fold_by_island_within_taxon",
-    "seed": 20260808,
-    "rule": "each island receives exactly one out-of-fold local-support prediction; folds are assigned before any EOG comparison",
+    "rule": "each island receives exactly one out-of-fold local-support prediction; fold assignment is a deterministic function of class and island ID and is fixed before any EOG comparison",
     "required_training_classes": "both presence and absence",
     "spatial_sensitivity": "leave_one_Arch_lvl_1_out; report evaluability explicitly and do not replace the primary result with the sensitivity result"
   },
@@ -45,7 +47,7 @@
     "implementation": "existing eog.bridge and eog.bridge_builder only",
     "node_definition": "one node per frozen surveyed island",
     "node_coordinates": "frozen A-Islands island coordinates",
-    "environmental_state": "the same four standardized CHELSA variables used by the upstream support producer",
+    "environmental_state": "the same five standardized frozen CHELSA variables used by the upstream support producer",
     "primary_graph": {
       "k_nearest": 5,
       "max_geographic_km": null,
