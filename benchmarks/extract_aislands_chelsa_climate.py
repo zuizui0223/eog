@@ -210,7 +210,7 @@ def _sample_variable(
                 "width": int(window.width),
                 "height": int(window.height),
                 "centroid_pixel_rule": "dataset.index(lon, lat) then direct pixel lookup inside the bounded window",
-                "nearby_cell_search": false,
+                "nearby_cell_search": False,
             },
             "masked_or_nodata_samples": masked_count,
             "finite_samples": int(np.isfinite(values).sum()),
