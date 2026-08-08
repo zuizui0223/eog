@@ -1,0 +1,109 @@
+{
+  "status": "reviewed_preoutcome_climate_freeze",
+  "frozen_at_utc": "2026-08-08",
+  "scientific_boundary": "No A-Islands species presence/absence outcome, species-fold SDM performance, EOG reachability result, or support-topology result was used to choose the climate variables, source objects, centroid extraction rule, or accepted climate hash.",
+  "upstream_contracts": {
+    "taxon_freeze": "validation/aislands_preoutcome_20260808/freeze_manifest.json",
+    "model_contract": "validation/aislands_model_contract_20260808/model_contract_manifest.json",
+    "reachability_contract": "validation/aislands_reachability_contract_20260808/reviewed_contract_manifest.json",
+    "model_islands": 842,
+    "primary_native_taxa": 886
+  },
+  "climate": {
+    "dataset": "CHELSA-bioclim",
+    "version": "2.1",
+    "climatology": "1981-2010",
+    "variables": ["bio1", "bio5", "bio6", "bio12", "bio15"],
+    "extraction_rule": "Direct sample of the source raster pixel at each frozen A-Islands WGS84 centroid. No nearby-cell search, interpolation, imputation, or species-dependent relocation is allowed.",
+    "complete_islands": 842,
+    "incomplete_islands": 0,
+    "accepted_climate_csv_sha256": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285",
+    "value_storage": "Raw GeoTIFF cell values are frozen; raster scale/offset metadata are recorded. The downstream support model uses training-only standardization, and the reachability climate geometry uses a training-only robust reference.",
+    "fallback_or_imputation_used": false
+  },
+  "source_objects": [
+    {
+      "variable": "bio1",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_bio1_1981-2010_V.2.1.tif",
+      "etag": "\"799ffe2e872a89a949f045268d721b62\"",
+      "last_modified": "Fri, 13 Sep 2024 01:13:32 GMT",
+      "scale": 0.1,
+      "offset": -273.15,
+      "finite_samples": 842,
+      "raw_min": 2847.0,
+      "raw_max": 3010.0
+    },
+    {
+      "variable": "bio5",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_bio5_1981-2010_V.2.1.tif",
+      "etag": "\"fc479ab184ad9d324e033ee13d057cfa\"",
+      "last_modified": "Fri, 13 Sep 2024 01:13:43 GMT",
+      "scale": 0.1,
+      "offset": -273.15,
+      "finite_samples": 842,
+      "raw_min": 2890.0,
+      "raw_max": 3073.0
+    },
+    {
+      "variable": "bio6",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_bio6_1981-2010_V.2.1.tif",
+      "etag": "\"49b5338d497a844342e2f771f8e10ab6\"",
+      "last_modified": "Fri, 13 Sep 2024 01:13:43 GMT",
+      "scale": 0.1,
+      "offset": -273.15,
+      "finite_samples": 842,
+      "raw_min": 2794.0,
+      "raw_max": 2984.0
+    },
+    {
+      "variable": "bio12",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_bio12_1981-2010_V.2.1.tif",
+      "etag": "\"8d4f0130e23a16158c1a50460ce50bc7-125\"",
+      "last_modified": "Fri, 13 Sep 2024 01:13:23 GMT",
+      "scale": 0.1,
+      "offset": 0.0,
+      "finite_samples": 842,
+      "raw_min": 2110.0,
+      "raw_max": 28042.0
+    },
+    {
+      "variable": "bio15",
+      "url": "https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/bio/CHELSA_bio15_1981-2010_V.2.1.tif",
+      "etag": "\"e290d3effcf720e3b3db276f6276e64e\"",
+      "last_modified": "Fri, 13 Sep 2024 01:13:13 GMT",
+      "scale": 0.1,
+      "offset": 0.0,
+      "finite_samples": 842,
+      "raw_min": 121.0,
+      "raw_max": 1294.0
+    }
+  ],
+  "reproducibility_crosscheck": {
+    "point_sampling_run_1": {
+      "workflow_run_id": 31245695112,
+      "workflow_head_sha": "b119bf5e0bc17e48187a1ec2e629024e3dcac981",
+      "artifact_id": 9018452635,
+      "artifact_digest": "sha256:5655e67992a0fe2994ab6a56f2637b619c0e0b7b7c6d24531cc73004c41743e0",
+      "climate_csv_sha256": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285"
+    },
+    "independent_window_io_run": {
+      "workflow_run_id": 31245985199,
+      "workflow_head_sha": "247bf755348beed96152c9203b74e13cae861e00",
+      "artifact_id": 9018525510,
+      "artifact_digest": "sha256:2b48bb1027db2b83b1f65939075d524c8c0b86a54fa0dd4e723eb1c8acf42123",
+      "climate_csv_sha256": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285"
+    },
+    "point_sampling_run_2": {
+      "workflow_run_id": 31246122810,
+      "workflow_head_sha": "51c2ffcb046963b9419c52971152bc3eca3ceb1f",
+      "artifact_id": 9018581835,
+      "artifact_digest": "sha256:89852d13396d54514c2b0fc10de05bca2a1f21140de06ac5382c123701129f2c",
+      "climate_csv_sha256": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285"
+    },
+    "verdict": "Three successful pre-outcome extractions, including two direct-point runs and one independent bounded-window I/O implementation, produced byte-identical climate CSVs."
+  },
+  "execution_gate": {
+    "required_before_species_benchmark": "Regenerated climate CSV SHA-256 must equal the accepted frozen hash exactly.",
+    "on_hash_mismatch": "Fail the benchmark before reading species-level outcomes. Do not update the accepted hash from benchmark results."
+  }
+}
