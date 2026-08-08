@@ -1,6 +1,6 @@
 """Frozen local-support producer for held-out incidence benchmarks.
 
-This module deliberately contains no EOG topology or bridge logic.  It produces a
+This module deliberately contains no EOG topology or bridge logic. It produces a
 pointwise environmental-support baseline using only declared predictors and training
 rows within each fold.
 """
@@ -18,6 +18,7 @@ import numpy as np
 class LogisticSupportDeclaration:
     n_splits: int = 10
     l2_penalty: float = 1.0
+    class_weight: str = "balanced"
     max_iter: int = 100
     tolerance: float = 1e-8
 
@@ -26,6 +27,8 @@ class LogisticSupportDeclaration:
             raise ValueError("n_splits must be at least 2")
         if not np.isfinite(self.l2_penalty) or self.l2_penalty <= 0:
             raise ValueError("l2_penalty must be finite and positive")
+        if self.class_weight != "balanced":
+            raise ValueError("only the frozen class_weight='balanced' contract is supported")
         if self.max_iter < 1:
             raise ValueError("max_iter must be positive")
         if not np.isfinite(self.tolerance) or self.tolerance <= 0:
@@ -87,18 +90,30 @@ def _sigmoid(values: np.ndarray) -> np.ndarray:
     return out
 
 
+def _balanced_weights(labels: np.ndarray) -> np.ndarray:
+    y = np.asarray(labels, dtype=int)
+    counts = np.bincount(y, minlength=2).astype(float)
+    if np.any(counts == 0):
+        raise ValueError("training labels must contain both classes")
+    class_weights = len(y) / (2.0 * counts)
+    return class_weights[y]
+
+
 def fit_l2_logistic(
     features: np.ndarray,
     labels: np.ndarray,
     *,
     l2_penalty: float = 1.0,
+    class_weight: str = "balanced",
     max_iter: int = 100,
     tolerance: float = 1e-8,
 ) -> np.ndarray:
-    """Fit a binary logistic model by damped Newton updates.
+    """Fit the frozen balanced L2-logistic objective by deterministic Newton updates.
 
-    The intercept is unpenalized; all feature coefficients receive the same frozen L2
-    penalty.  The function returns ``[intercept, coefficients...]``.
+    The intercept is unpenalized. The objective is the class-balanced weighted
+    logistic loss plus ``0.5 * l2_penalty * ||beta||^2`` for feature coefficients.
+    The optimizer changes only numerical solution method, not the declared statistical
+    objective. Returns ``[intercept, coefficients...]``.
     """
     x = np.asarray(features, dtype=float)
     y = np.asarray(labels, dtype=float)
@@ -110,15 +125,19 @@ def fit_l2_logistic(
         raise ValueError("training labels must contain both classes")
     if l2_penalty <= 0 or not np.isfinite(l2_penalty):
         raise ValueError("l2_penalty must be finite and positive")
+    if class_weight != "balanced":
+        raise ValueError("only class_weight='balanced' is supported")
 
+    weights = _balanced_weights(y.astype(int))
     design = np.column_stack((np.ones(len(x)), x))
     beta = np.zeros(design.shape[1], dtype=float)
     penalty = np.diag(np.r_[0.0, np.full(x.shape[1], l2_penalty)])
 
     for _ in range(max_iter):
         probability = _sigmoid(design @ beta)
-        gradient = design.T @ (probability - y) + penalty @ beta
-        variance = np.clip(probability * (1.0 - probability), 1e-9, None)
+        residual = weights * (probability - y)
+        gradient = design.T @ residual + penalty @ beta
+        variance = weights * np.clip(probability * (1.0 - probability), 1e-9, None)
         hessian = design.T @ (design * variance[:, None]) + penalty
         step = np.linalg.solve(hessian, gradient)
         beta_next = beta - step
@@ -135,12 +154,7 @@ def cross_fitted_logistic_support(
     unit_ids: Sequence[str],
     declaration: LogisticSupportDeclaration = LogisticSupportDeclaration(),
 ) -> CrossFittedSupport:
-    """Return held-out probabilities from a deterministic stratified cross-fit.
-
-    Predictor scaling and logistic fitting are performed separately inside every
-    training fold.  No held-out predictor value contributes to centering, scaling, or
-    coefficient estimation.
-    """
+    """Return held-out probabilities from a deterministic stratified cross-fit."""
     x = np.asarray(features, dtype=float)
     y = np.asarray(labels, dtype=int)
     ids = tuple(str(value) for value in unit_ids)
@@ -159,6 +173,7 @@ def cross_fitted_logistic_support(
             train_x,
             y[train],
             l2_penalty=declaration.l2_penalty,
+            class_weight=declaration.class_weight,
             max_iter=declaration.max_iter,
             tolerance=declaration.tolerance,
         )
