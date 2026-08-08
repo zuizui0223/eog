@@ -36,8 +36,10 @@ def audit(island_data: Path, species_data: Path) -> dict[str, object]:
     species_names = [row[species_name_col].strip() for row in species if row[species_name_col].strip()]
 
     list_to_islands: dict[str, set[str]] = {}
-    for list_id, island_id in zip(island_list_ids, island_ids):
+    list_to_row: dict[str, dict[str, str]] = {}
+    for row, list_id, island_id in zip(islands, island_list_ids, island_ids):
         list_to_islands.setdefault(list_id, set()).add(island_id)
+        list_to_row[list_id] = row
     ambiguous_lists = {
         list_id: sorted(values)
         for list_id, values in list_to_islands.items()
@@ -46,18 +48,48 @@ def audit(island_data: Path, species_data: Path) -> dict[str, object]:
     island_list_set = set(island_list_ids)
     species_list_set = set(species_list_ids)
     repeated_island_ids = Counter(island_ids)
+    empty_list_ids = sorted(island_list_set - species_list_set)
+
+    species_island_ids = {
+        next(iter(list_to_islands[list_id]))
+        for list_id in species_list_set
+        if list_id in list_to_islands and len(list_to_islands[list_id]) == 1
+    }
+    all_island_ids = set(island_ids)
+    empty_context = []
+    for list_id in empty_list_ids:
+        row = list_to_row[list_id]
+        island_id = row[island_id_col].strip()
+        sibling_lists = sorted(
+            other_list
+            for other_list, values in list_to_islands.items()
+            if island_id in values and other_list != list_id
+        )
+        empty_context.append({
+            "list_id": list_id,
+            "island_id": island_id,
+            "island_name": next((row[key].strip() for key in row if key.casefold() == "island_name"), ""),
+            "survey_year": next((row[key].strip() for key in row if key.casefold() == "survey_year"), ""),
+            "ref_id": next((row[key].strip() for key in row if key.casefold() == "ref_id"), ""),
+            "lists_for_same_island": repeated_island_ids[island_id],
+            "sibling_list_ids": sibling_lists,
+            "sibling_lists_with_species_rows": [value for value in sibling_lists if value in species_list_set],
+        })
 
     return {
         "island_data_rows": len(islands),
         "unique_list_ids_island_data": len(island_list_set),
-        "unique_island_ids": len(set(island_ids)),
+        "unique_island_ids": len(all_island_ids),
+        "unique_island_ids_with_species_rows": len(species_island_ids),
+        "unique_island_ids_without_species_rows": sorted(all_island_ids - species_island_ids),
         "islands_with_multiple_lists": sum(count > 1 for count in repeated_island_ids.values()),
         "maximum_lists_per_island": max(repeated_island_ids.values()),
         "species_data_rows": len(species),
         "unique_list_ids_species_data": len(species_list_set),
         "unique_standardized_species": len(set(species_names)),
         "species_list_ids_missing_from_island_data": sorted(species_list_set - island_list_set),
-        "island_list_ids_without_species_rows": sorted(island_list_set - species_list_set),
+        "island_list_ids_without_species_rows": empty_list_ids,
+        "island_lists_without_species_rows_context": empty_context,
         "list_ids_mapping_to_multiple_islands": ambiguous_lists,
         "blank_list_ids_island_data": sum(not value for value in island_list_ids),
         "blank_island_ids": sum(not value for value in island_ids),
