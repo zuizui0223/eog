@@ -26,6 +26,13 @@ jobs:
             --expected-version 1.0 \
             --output-dir results/aislands_preoutcome/source
 
+      - name: Audit source structure before outcomes
+        run: |
+          python benchmarks/audit_aislands_source_structure.py \
+            --island-data results/aislands_preoutcome/source/island_data.csv \
+            --species-data results/aislands_preoutcome/source/species_data.csv \
+            --output results/aislands_preoutcome/source_structure_audit.json
+
       - name: Apply pre-outcome distribution screen
         run: |
           python benchmarks/aislands_species_screen.py \
@@ -65,6 +72,7 @@ jobs:
           from pathlib import Path
           root = Path('results/aislands_preoutcome')
           source = json.loads((root / 'source/source_manifest.json').read_text())
+          structure = json.loads((root / 'source_structure_audit.json').read_text())
           summary = json.loads((root / 'screen_summary.json').read_text())
           status = json.loads((root / 'taxon_status_summary.json').read_text())
           cohort = json.loads((root / 'frozen_taxon_cohort_summary.json').read_text())
@@ -77,6 +85,12 @@ jobs:
           assert int(source['resolved_record_id']) > 0
           assert source['island_data_sha256']
           assert source['species_data_sha256']
+          assert structure['unique_island_ids'] == summary['n_surveyed_islands']
+          assert not structure['species_list_ids_missing_from_island_data']
+          assert not structure['list_ids_mapping_to_multiple_islands']
+          assert structure['blank_list_ids_island_data'] == 0
+          assert structure['blank_island_ids'] == 0
+          assert structure['blank_list_ids_species_data'] == 0
           assert summary['screen_rule']['min_present_islands'] == 10
           assert summary['screen_rule']['min_absent_islands'] == 10
           assert summary['screen_rule']['prevalence_filter'] == 'none_primary_full_0_to_1'
@@ -90,7 +104,7 @@ jobs:
           assert cohort['primary_native_taxa'] + cohort['excluded_introduced_taxa'] == cohort['distribution_eligible_taxa']
           assert cohort['primary_status_rule'] == 'Status_APC == native'
           assert cohort['primary_native_taxa'] > 0
-          print(json.dumps({'source': source, 'screen': summary, 'status': status, 'cohort': cohort}, indent=2))
+          print(json.dumps({'source': source, 'structure': structure, 'screen': summary, 'status': status, 'cohort': cohort}, indent=2))
           PY
 
       - uses: actions/upload-artifact@v4
@@ -98,6 +112,7 @@ jobs:
           name: aislands-preoutcome-screen
           path: |
             results/aislands_preoutcome/source/source_manifest.json
+            results/aislands_preoutcome/source_structure_audit.json
             results/aislands_preoutcome/species_screen.csv
             results/aislands_preoutcome/screen_summary.json
             results/aislands_preoutcome/taxon_status_audit.csv
