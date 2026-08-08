@@ -23,6 +23,7 @@ jobs:
         run: |
           python benchmarks/fetch_aislands_zenodo.py \
             --record-id 10775809 \
+            --expected-version 1.0 \
             --output-dir results/aislands_preoutcome/source
 
       - name: Apply pre-outcome distribution screen
@@ -51,7 +52,10 @@ jobs:
           source = json.loads((root / 'source/source_manifest.json').read_text())
           summary = json.loads((root / 'screen_summary.json').read_text())
           rows = list(csv.DictReader((root / 'species_screen.csv').open()))
-          assert source['record_id'] == 10775809
+          assert source['requested_record_or_concept_id'] == 10775809
+          assert str(source['version']).removeprefix('v') == '1.0'
+          assert source['expected_version'] == '1.0'
+          assert int(source['resolved_record_id']) > 0
           assert source['island_data_sha256']
           assert source['species_data_sha256']
           assert summary['screen_rule']['min_present_islands'] == 10
@@ -60,7 +64,7 @@ jobs:
           assert len(rows) == summary['n_species_total']
           assert sum(int(row['distribution_eligible']) for row in rows) == summary['n_distribution_eligible']
           assert summary['n_distribution_eligible'] > 0
-          print(json.dumps(summary, indent=2))
+          print(json.dumps({'source': source, 'screen': summary}, indent=2))
           PY
 
       - uses: actions/upload-artifact@v4
