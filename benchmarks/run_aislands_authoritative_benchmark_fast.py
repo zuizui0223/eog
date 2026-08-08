@@ -1,11 +1,17 @@
 """Execute the authoritative A-Islands benchmark with fold-level graph caching.
 
 The statistical runner remains ``run_aislands_authoritative_benchmark.py``. This thin
-wrapper replaces only its repeated graph-construction call with a prepared equivalent
-whose connected-frequency and nearest-anchor-distance outputs are regression-tested
-against the full implementation.
+wrapper fixes two execution-only issues without changing the frozen analysis:
+
+1. the frozen cohort CSV is an audit table containing all 1,060 distribution-eligible
+   taxa plus ``primary_cohort_included``; only the 886 rows flagged ``1`` are primary;
+2. fold-specific graph geometry is prepared once and reused across focal taxa.
+
+Prepared/full graph equivalence for the primary fields is regression-tested.
 """
 from __future__ import annotations
+
+from pathlib import Path
 
 import numpy as np
 
@@ -17,6 +23,19 @@ from eog.prepared_island_connectivity import (
 
 
 _CACHE: dict[bytes, object] = {}
+_ORIGINAL_READ = runner._read
+
+
+def _read_primary_cohort(path: Path):
+    rows = _ORIGINAL_READ(path)
+    if rows and "primary_cohort_included" in rows[0]:
+        included = [row for row in rows if row["primary_cohort_included"].strip() == "1"]
+        if len(included) != 886:
+            raise ValueError(
+                f"frozen cohort audit must contain exactly 886 primary rows, got {len(included)}"
+            )
+        return included
+    return rows
 
 
 def _cached_evaluate(
@@ -47,6 +66,7 @@ def _cached_evaluate(
     return evaluate_prepared_connectivity(prepared, anchor_mask)
 
 
+runner._read = _read_primary_cohort
 runner.evaluate_island_reachability = _cached_evaluate
 
 
