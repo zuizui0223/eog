@@ -1,0 +1,91 @@
+{
+  "status": "reviewed_preoutcome_freeze",
+  "frozen_at_utc": "2026-08-08",
+  "scientific_boundary": "No SDM fit, EOG support-topology result, bridge/reachability result, held-out performance, or outcome-based taxon selection was inspected before this freeze.",
+  "source": {
+    "published_reference_identifier": 10775809,
+    "zenodo_identifier_role": "conceptrecid",
+    "resolved_versioned_record_id": 10775810,
+    "resolved_doi": "10.5281/zenodo.10775810",
+    "required_version": "1.0",
+    "publication_date": "2024-03-04",
+    "island_data_sha256": "d26ae154aeae1e6eab268f22268342077f7e8e7ef000d18a1f052f65866d5bde",
+    "species_data_sha256": "43e7d2e8deb1d1d635c8db44a7fe68cfb79c2a059a2207914413a62431eb7b0c",
+    "reference_data_sha256": "f53f28d784e9093cefd1ccf86212ebf3cd1d64fbba790a09976e6ffc3e7e5356",
+    "island_data_encoding": "utf-8-sig",
+    "species_data_encoding": "utf-8-sig",
+    "reference_data_encoding": "cp1252"
+  },
+  "source_structure": {
+    "island_data_rows": 1349,
+    "unique_list_ids_island_data": 1349,
+    "unique_island_ids_in_island_data": 843,
+    "unique_island_ids_with_species_rows": 842,
+    "unique_island_ids_without_species_rows": ["277"],
+    "species_data_rows": 59773,
+    "unique_list_ids_species_data": 1348,
+    "unique_standardized_species": 6291,
+    "islands_with_multiple_lists": 251,
+    "maximum_lists_per_island": 11,
+    "paper_reports_islands": 844,
+    "paper_source_discrepancy_policy": "Report the published 844-island description as literature context but use and audit the exact version-1.0 tables for computation; do not invent or impute an additional island.",
+    "metadata_only_list": {
+      "list_id": "353",
+      "island_id": "277",
+      "island_name": "",
+      "survey_year": "",
+      "ref_id": "38",
+      "reference": "Robinson, T., et al. (1996). South Australia's offshore islands. Australian Heritage Commission: Canberra.",
+      "primary_treatment": "excluded_from_surveyed_absence_universe",
+      "reason": "The island_data row has no linked species_data row, no island name, no survey year, and no sibling list. The frozen source does not establish that it is a complete zero-species flora, so it is not interpreted as universal absence."
+    }
+  },
+  "distribution_screen": {
+    "surveyed_island_universe": "unique islands linked to at least one species_data row",
+    "n_surveyed_islands": 842,
+    "min_present_islands": 10,
+    "min_absent_islands": 10,
+    "primary_prevalence_filter": "none_full_0_to_1",
+    "n_species_total": 6291,
+    "n_distribution_eligible": 1060,
+    "eligible_present_islands_min": 10,
+    "eligible_present_islands_max": 317
+  },
+  "status_screen": {
+    "primary_status_field": "Status_APC",
+    "primary_inclusion_rule": "Status_APC == native",
+    "source_list_Native_role": "audit_only_not_a_primary_exclusion_rule",
+    "family_role": "audit_only_not_a_primary_exclusion_rule",
+    "distribution_eligible_native": 886,
+    "distribution_eligible_introduced_excluded": 174,
+    "primary_native_taxa": 886,
+    "frozen_taxon_cohort_csv_sha256": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+    "canonical_primary_native_species_only_sha256": "d18a9d17c32c15bcd8e872597825ded9a1211c31eb1f7c5e252ba8e4c2cf7c9a",
+    "canonical_species_only_hash_rule": "UTF-8 CSV with header species, alphabetically sorted included species, LF line endings"
+  },
+  "workflow_provenance": {
+    "repository": "zuizui0223/eog",
+    "branch": "agent/freeze-aislands-preoutcome-screen",
+    "workflow_name": "A-Islands pre-outcome screen",
+    "workflow_run_id": 31243967503,
+    "workflow_head_sha": "ad4edf8bea7ff8992536581b0d1d88e1659fc39e",
+    "artifact_id": 9017897238,
+    "artifact_name": "aislands-preoutcome-screen",
+    "artifact_digest": "sha256:c82c7898859739b9e3e672f9c49d1dcde64511f84fc18eb038ec50c0b72ac155",
+    "conclusion": "success"
+  },
+  "next_stage_boundary": {
+    "allowed_next": [
+      "freeze pointwise support producer and predictor provenance",
+      "freeze holdout assignments and geographic domain",
+      "freeze support-topology thresholds and neighbourhood rules",
+      "freeze reachability/barrier scenario families separately from topology"
+    ],
+    "not_allowed_before_next_freeze": [
+      "choose taxa from EOG or SDM performance",
+      "retune support producer from EOG outcomes",
+      "change topology thresholds after held-out results",
+      "collapse reachability assumptions into a topology score after outcomes"
+    ]
+  }
+}
