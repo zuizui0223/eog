@@ -11,7 +11,8 @@ import numpy as np
 
 from eog.local_support import LogisticSupportDeclaration, cross_fitted_logistic_support
 
-PREDICTORS = ("bio01", "bio04", "bio12", "bio15")
+PREDICTORS = ("bio1", "bio5", "bio6", "bio12", "bio15")
+FROZEN_CLIMATE_SHA256 = "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285"
 
 
 def _read(path: Path) -> list[dict[str, str]]:
@@ -44,6 +45,13 @@ def run(
     output: Path,
     manifest: Path,
 ) -> dict[str, object]:
+    climate_sha = _sha256(climate)
+    if climate_sha != FROZEN_CLIMATE_SHA256:
+        raise ValueError(
+            "climate artifact does not match the pre-outcome frozen CHELSA CSV: "
+            f"expected {FROZEN_CLIMATE_SHA256}, got {climate_sha}"
+        )
+
     island_rows = _read(island_data)
     species_rows = _read(species_data)
     cohort_rows = _read(cohort)
@@ -54,7 +62,7 @@ def run(
     species_list_col = _col(species_rows, "List_ID", "species_data")
     species_name_col = _col(species_rows, "Species_update", "species_data")
     cohort_species_col = _col(cohort_rows, "species", "cohort")
-    climate_island_col = _col(climate_rows, "Island_ID", "climate")
+    climate_island_col = _col(climate_rows, "island_id", "climate")
     climate_predictor_cols = [_col(climate_rows, name, "climate") for name in PREDICTORS]
 
     list_to_island: dict[str, str] = {}
@@ -66,12 +74,11 @@ def run(
             raise ValueError(f"List_ID maps to multiple islands: {list_id}")
         list_to_island[list_id] = island_id
 
-    # Primary surveyed universe is species-linked islands, matching the frozen #80 contract.
     species_linked_islands = sorted({
         list_to_island[row[species_list_col].strip()]
         for row in species_rows
         if row[species_list_col].strip() in list_to_island
-    })
+    }, key=lambda value: int(value))
     if len(species_linked_islands) != 842:
         raise ValueError(f"expected frozen 842-island universe, got {len(species_linked_islands)}")
 
@@ -107,7 +114,7 @@ def run(
         presences[species].add(list_to_island[list_id])
 
     x = np.vstack([climate_by_island[island_id] for island_id in species_linked_islands])
-    declaration = LogisticSupportDeclaration(n_splits=10, l2_penalty=1.0)
+    declaration = LogisticSupportDeclaration(n_splits=10, l2_penalty=1.0, class_weight="balanced")
     output.parent.mkdir(parents=True, exist_ok=True)
     row_count = 0
     species_fingerprints: dict[str, str] = {}
@@ -138,15 +145,18 @@ def run(
         "n_islands": len(species_linked_islands),
         "n_rows": row_count,
         "predictors": list(PREDICTORS),
-        "support_producer": "training-fold-standardized L2 logistic regression",
+        "support_producer": "training-fold-standardized class-balanced L2 logistic regression",
+        "optimizer": "deterministic Newton updates",
         "n_splits": declaration.n_splits,
         "l2_penalty": declaration.l2_penalty,
+        "class_weight": declaration.class_weight,
         "input_sha256": {
             "island_data": _sha256(island_data),
             "species_data": _sha256(species_data),
             "cohort": _sha256(cohort),
-            "climate": _sha256(climate),
+            "climate": climate_sha,
         },
+        "frozen_climate_sha256": FROZEN_CLIMATE_SHA256,
         "output_sha256": _sha256(output),
         "species_support_fingerprints_sha256": hashlib.sha256(
             json.dumps(species_fingerprints, sort_keys=True, separators=(",", ":")).encode()
