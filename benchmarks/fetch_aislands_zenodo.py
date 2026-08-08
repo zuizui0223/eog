@@ -223,10 +223,13 @@ def fetch_record(
 
     island_source = _find_table(extracted_dir, "islanddata")
     species_source = _find_table(extracted_dir, "speciesdata")
+    reference_source = _find_table(extracted_dir, "referencedata")
     island_target = output_dir / "island_data.csv"
     species_target = output_dir / "species_data.csv"
+    reference_target = output_dir / "reference_data.csv"
     shutil.copy2(island_source, island_target)
     shutil.copy2(species_source, species_target)
+    shutil.copy2(reference_source, reference_target)
 
     metadata_block = metadata.get("metadata") or {}
     if not isinstance(metadata_block, dict):
@@ -245,8 +248,10 @@ def fetch_record(
         "files": inventory,
         "resolved_island_data": str(island_source.relative_to(output_dir)),
         "resolved_species_data": str(species_source.relative_to(output_dir)),
+        "resolved_reference_data": str(reference_source.relative_to(output_dir)),
         "island_data_sha256": _digest(island_target, "sha256"),
         "species_data_sha256": _digest(species_target, "sha256"),
+        "reference_data_sha256": _digest(reference_target, "sha256"),
         "scientific_boundary": (
             "pre-outcome source freeze only; no SDM, EOG, held-out outcome, or topology result inspected"
         ),
