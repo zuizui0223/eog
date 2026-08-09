@@ -1,0 +1,35 @@
+name: Tanzania source audit
+
+on:
+  push:
+    branches:
+      - agent/tanzania-source-audit
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Freeze public Dryad file inventory
+        run: |
+          python benchmarks/fetch_tanzania_dryad.py \
+            --output-dir results/tanzania_source
+      - name: Audit required input integrity metadata
+        run: |
+          python benchmarks/audit_tanzania_source.py \
+            --manifest results/tanzania_source/source_manifest.json \
+            --output results/tanzania_source/source_audit.json
+      - name: Print source audit
+        run: cat results/tanzania_source/source_audit.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-preoutcome-source-metadata
+          path: |
+            results/tanzania_source/source_manifest.json
+            results/tanzania_source/source_audit.json
+          if-no-files-found: error
