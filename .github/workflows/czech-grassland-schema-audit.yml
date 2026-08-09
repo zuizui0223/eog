@@ -1,0 +1,43 @@
+name: Czech grassland schema audit
+
+on:
+  push:
+    branches:
+      - agent/czech-grassland-schema-audit
+  workflow_dispatch:
+
+jobs:
+  audit-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install workbook dependency
+        run: python -m pip install openpyxl==3.1.5
+      - name: Verify schema-audit module imports
+        run: python -m py_compile benchmarks/audit_czech_grassland_schema.py
+      - name: Record pre-schema gate on hosted runner
+        run: |
+          python benchmarks/audit_czech_grassland_schema.py \
+            --output results/czech_grassland/schema_audit.json \
+            --blocked-reason "Dryad binary bytes are not available to this hosted runner; schema inspection remains forbidden until the frozen 75727-byte SHA-256-matching workbook is supplied."
+      - name: Assert no outcome was computed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('results/czech_grassland/schema_audit.json')
+          obj = json.loads(p.read_text())
+          assert obj['status'] == 'blocked_before_schema'
+          assert obj['expected_sha256'] == 'ddc63118750c4685ec4ab35560299de312c57a8a120a71b27f31d94193e37867'
+          forbidden = {'eog', 'concordance', 'bottleneck_score', 'retained_species', 'excluded_species'}
+          assert not forbidden.intersection(obj.keys())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: czech-grassland-preoutcome-schema-gate
+          path: results/czech_grassland/schema_audit.json
+          if-no-files-found: error
