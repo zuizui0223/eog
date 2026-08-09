@@ -1,0 +1,28 @@
+name: Czech grassland source freeze
+
+on:
+  push:
+    branches:
+      - agent/czech-grassland-source-freeze
+  workflow_dispatch:
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Freeze Dryad source metadata
+        run: |
+          python benchmarks/freeze_czech_grassland_source.py \
+            --output results/czech_grassland/source_manifest.json
+      - name: Print manifest
+        run: cat results/czech_grassland/source_manifest.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: czech-grassland-preoutcome-source-metadata
+          path: results/czech_grassland/source_manifest.json
+          if-no-files-found: error
