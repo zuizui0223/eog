@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.cookiejar
 import json
 from pathlib import Path
 import re
@@ -17,6 +18,8 @@ import urllib.request
 DOI = "10.5061/dryad.p042h0c"
 DRYAD_ROOT = "https://datadryad.org"
 API_ROOT = f"{DRYAD_ROOT}/api/v2"
+DATASET_PAGE = f"{DRYAD_ROOT}/dataset/doi%3A10.5061%2Fdryad.p042h0c"
+BROWSER_UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140 Safari/537.36"
 EXPECTED_FILES = {
     "0_usambara.R", "1_sites.R", "2_isolation_occurrence",
     "Nodes_E.csv", "Nodes_W.csv", "raster_east3.tif", "raster_west3.tif",
@@ -28,13 +31,15 @@ def _absolute(url: str) -> str:
     return urllib.parse.urljoin(DRYAD_ROOT + "/", url)
 
 
-def _request(url: str):
-    return urllib.request.Request(_absolute(url), headers={"User-Agent": "eog-nonisland-freeze/0.1", "Accept": "application/json"})
+def _opener() -> urllib.request.OpenerDirector:
+    jar = http.cookiejar.CookieJar()
+    return urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
 
 
-def _json(url: str) -> dict[str, object]:
+def _json(opener: urllib.request.OpenerDirector, url: str) -> dict[str, object]:
     absolute = _absolute(url)
-    with urllib.request.urlopen(_request(absolute), timeout=120) as response:
+    req = urllib.request.Request(absolute, headers={"User-Agent": BROWSER_UA, "Accept": "application/json"})
+    with opener.open(req, timeout=120) as response:
         value = json.load(response)
     if not isinstance(value, dict):
         raise ValueError(f"expected JSON object from {absolute}")
@@ -81,13 +86,13 @@ def _embedded_files(payload: dict[str, object]) -> list[dict[str, object]]:
     return []
 
 
-def _file_pages(url: str) -> list[dict[str, object]]:
+def _file_pages(opener: urllib.request.OpenerDirector, url: str) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     seen: set[str] = set()
     while url and url not in seen:
         url = _absolute(url)
         seen.add(url)
-        payload = _json(url)
+        payload = _json(opener, url)
         rows.extend(_embedded_files(payload))
         url = _link(payload, "next") or ""
     return rows
@@ -97,16 +102,22 @@ def fetch(output_dir: Path, doi: str = DOI) -> dict[str, object]:
     output_dir.mkdir(parents=True, exist_ok=True)
     raw = output_dir / "raw"
     raw.mkdir(exist_ok=True)
+    opener = _opener()
+
+    # Establish the same anonymous browser session used by the public dataset page.
+    page_req = urllib.request.Request(DATASET_PAGE, headers={"User-Agent": BROWSER_UA, "Accept": "text/html"})
+    with opener.open(page_req, timeout=120) as response:
+        response.read(1)
+
     encoded = urllib.parse.quote(f"doi:{doi}", safe="")
     dataset_url = f"{API_ROOT}/datasets/{encoded}"
-    dataset = _json(dataset_url)
-
+    dataset = _json(opener, dataset_url)
     version_url = _link(dataset, "stash:version", "version")
-    version = _json(version_url) if version_url else dataset
+    version = _json(opener, version_url) if version_url else dataset
     files_url = _link(version, "stash:files", "files") or _link(dataset, "stash:files", "files")
     if not files_url:
         raise ValueError("Dryad API response did not expose a files endpoint")
-    file_rows = _file_pages(files_url)
+    file_rows = _file_pages(opener, files_url)
     if not file_rows:
         raise ValueError("Dryad files endpoint returned no files")
 
@@ -118,7 +129,8 @@ def fetch(output_dir: Path, doi: str = DOI) -> dict[str, object]:
         file_id = _file_id(row)
         download = f"{DRYAD_ROOT}/downloads/file_stream/{file_id}"
         target = raw / Path(name).name
-        with urllib.request.urlopen(urllib.request.Request(download, headers={"User-Agent": "eog-nonisland-freeze/0.1"}), timeout=180) as response, target.open("wb") as handle:
+        req = urllib.request.Request(download, headers={"User-Agent": BROWSER_UA, "Referer": DATASET_PAGE, "Accept": "*/*"})
+        with opener.open(req, timeout=180) as response, target.open("wb") as handle:
             shutil.copyfileobj(response, handle)
         inventory.append({
             "id": file_id,
