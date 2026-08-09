@@ -102,18 +102,21 @@ def fetch(output_dir: Path, doi: str = DOI) -> dict[str, object]:
     inventory: list[dict[str, object]] = []
     for row in file_rows:
         name = str(row.get("path") or row.get("fileName") or row.get("name") or "").strip()
-        download = _link(row, "stash:download", "download")
-        if not name or not download:
+        file_id = row.get("id")
+        if not name or file_id in (None, ""):
             raise ValueError(f"malformed Dryad file record: {row}")
+        download = f"{DRYAD_ROOT}/downloads/file_stream/{int(file_id)}"
         target = raw / Path(name).name
-        with urllib.request.urlopen(urllib.request.Request(_absolute(download), headers={"User-Agent": "eog-nonisland-freeze/0.1"}), timeout=180) as response, target.open("wb") as handle:
+        with urllib.request.urlopen(urllib.request.Request(download, headers={"User-Agent": "eog-nonisland-freeze/0.1"}), timeout=180) as response, target.open("wb") as handle:
             shutil.copyfileobj(response, handle)
         inventory.append({
+            "id": int(file_id),
             "name": target.name,
             "size": target.stat().st_size,
             "sha256": _sha256(target),
             "declared_digest": row.get("digest"),
             "declared_digest_type": row.get("digestType"),
+            "public_download": download,
         })
 
     names = {row["name"] for row in inventory}
