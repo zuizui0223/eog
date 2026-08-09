@@ -1,0 +1,50 @@
+{
+  "status": "preoutcome_external_validation_freeze",
+  "frozen_before_eog_outcomes": true,
+  "primary_generality_dataset": {
+    "name": "Brodie-Newmark terrestrial forest fragments",
+    "dryad_doi": "10.5061/dryad.p042h0c",
+    "taxon": "birds",
+    "published_species_count": 43,
+    "purpose": "fully spatial non-island fragmentation generality benchmark"
+  },
+  "plant_specific_candidate": {
+    "name": "Belinchon-Hemrova-Munzbergova Czech dry grassland patches",
+    "dryad_doi": "10.5061/dryad.jh9w0vt8f",
+    "taxon": "vascular_plants",
+    "published_patch_count": 272,
+    "published_species_count": 95,
+    "geometry_requirement": "pairwise patch geometry or coordinates must be recoverable before graph outcomes are computed",
+    "primary_local_environment_predictors": [
+      "potential_direct_solar_irradiation_june",
+      "topographic_wetness_index",
+      "slope",
+      "relative_elevation"
+    ],
+    "excluded_from_primary_local_support": [
+      "patch_area",
+      "present_day_isolation",
+      "historical_area",
+      "historical_isolation",
+      "patch_age"
+    ]
+  },
+  "species_eligibility": {
+    "minimum_occupied_units": 10,
+    "minimum_unoccupied_units": 10,
+    "outcome_based_selection_forbidden": true
+  },
+  "primary_evaluation": {
+    "heldout_labels_used_for_model_fit": false,
+    "heldout_labels_used_for_scaling": false,
+    "heldout_labels_used_for_anchor_definition": false,
+    "conditioning_variables": [
+      "local_support",
+      "nearest_training_occurrence_distance"
+    ],
+    "endpoint": "conditional_reachability_concordance",
+    "null": 0.5,
+    "positive_direction": "higher_reachability_more_often_occupied"
+  },
+  "claim_boundary": "Additional structural information conditional on local support and simple distance; not realized dispersal path, colonisation probability, demographic connectivity, or causal barrier."
+}
