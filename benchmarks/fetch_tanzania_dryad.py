@@ -14,7 +14,8 @@ import urllib.parse
 import urllib.request
 
 DOI = "10.5061/dryad.p042h0c"
-API_ROOT = "https://datadryad.org/api/v2"
+DRYAD_ROOT = "https://datadryad.org"
+API_ROOT = f"{DRYAD_ROOT}/api/v2"
 EXPECTED_FILES = {
     "0_usambara.R", "1_sites.R", "2_isolation_occurrence",
     "Nodes_E.csv", "Nodes_W.csv", "raster_east3.tif", "raster_west3.tif",
@@ -22,15 +23,20 @@ EXPECTED_FILES = {
 }
 
 
+def _absolute(url: str) -> str:
+    return urllib.parse.urljoin(DRYAD_ROOT + "/", url)
+
+
 def _request(url: str):
-    return urllib.request.Request(url, headers={"User-Agent": "eog-nonisland-freeze/0.1", "Accept": "application/json"})
+    return urllib.request.Request(_absolute(url), headers={"User-Agent": "eog-nonisland-freeze/0.1", "Accept": "application/json"})
 
 
 def _json(url: str) -> dict[str, object]:
-    with urllib.request.urlopen(_request(url), timeout=120) as response:
+    absolute = _absolute(url)
+    with urllib.request.urlopen(_request(absolute), timeout=120) as response:
         value = json.load(response)
     if not isinstance(value, dict):
-        raise ValueError(f"expected JSON object from {url}")
+        raise ValueError(f"expected JSON object from {absolute}")
     return value
 
 
@@ -49,7 +55,7 @@ def _link(obj: dict[str, object], *names: str) -> str | None:
     for name in names:
         value = links.get(name)
         if isinstance(value, dict) and value.get("href"):
-            return str(value["href"])
+            return _absolute(str(value["href"]))
     return None
 
 
@@ -68,6 +74,7 @@ def _file_pages(url: str) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     seen: set[str] = set()
     while url and url not in seen:
+        url = _absolute(url)
         seen.add(url)
         payload = _json(url)
         rows.extend(_embedded_files(payload))
@@ -99,7 +106,7 @@ def fetch(output_dir: Path, doi: str = DOI) -> dict[str, object]:
         if not name or not download:
             raise ValueError(f"malformed Dryad file record: {row}")
         target = raw / Path(name).name
-        with urllib.request.urlopen(urllib.request.Request(download, headers={"User-Agent": "eog-nonisland-freeze/0.1"}), timeout=180) as response, target.open("wb") as handle:
+        with urllib.request.urlopen(urllib.request.Request(_absolute(download), headers={"User-Agent": "eog-nonisland-freeze/0.1"}), timeout=180) as response, target.open("wb") as handle:
             shutil.copyfileobj(response, handle)
         inventory.append({
             "name": target.name,
