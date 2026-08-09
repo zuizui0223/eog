@@ -1,0 +1,26 @@
+name: Czech PLOS S4 schema audit
+
+on:
+  push:
+    branches:
+      - agent/czech-plos-s4-audit
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run pre-outcome PLOS S4 schema audit
+        run: |
+          python benchmarks/audit_czech_plos_s4.py --output results/czech_grassland/plos_s4_schema.json
+      - name: Print structural manifest
+        run: cat results/czech_grassland/plos_s4_schema.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: czech-plos-s4-preoutcome-schema
+          path: results/czech_grassland/plos_s4_schema.json
+          if-no-files-found: error
