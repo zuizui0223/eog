@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import shutil
 import urllib.parse
 import urllib.request
@@ -59,6 +60,16 @@ def _link(obj: dict[str, object], *names: str) -> str | None:
     return None
 
 
+def _file_id(row: dict[str, object]) -> int:
+    if row.get("id") not in (None, ""):
+        return int(row["id"])
+    self_url = _link(row, "self") or ""
+    match = re.search(r"/files/(\d+)$", self_url)
+    if not match:
+        raise ValueError(f"Dryad file record has no recoverable file ID: {row}")
+    return int(match.group(1))
+
+
 def _embedded_files(payload: dict[str, object]) -> list[dict[str, object]]:
     embedded = payload.get("_embedded")
     if not isinstance(embedded, dict):
@@ -102,15 +113,15 @@ def fetch(output_dir: Path, doi: str = DOI) -> dict[str, object]:
     inventory: list[dict[str, object]] = []
     for row in file_rows:
         name = str(row.get("path") or row.get("fileName") or row.get("name") or "").strip()
-        file_id = row.get("id")
-        if not name or file_id in (None, ""):
+        if not name:
             raise ValueError(f"malformed Dryad file record: {row}")
-        download = f"{DRYAD_ROOT}/downloads/file_stream/{int(file_id)}"
+        file_id = _file_id(row)
+        download = f"{DRYAD_ROOT}/downloads/file_stream/{file_id}"
         target = raw / Path(name).name
         with urllib.request.urlopen(urllib.request.Request(download, headers={"User-Agent": "eog-nonisland-freeze/0.1"}), timeout=180) as response, target.open("wb") as handle:
             shutil.copyfileobj(response, handle)
         inventory.append({
-            "id": int(file_id),
+            "id": file_id,
             "name": target.name,
             "size": target.stat().st_size,
             "sha256": _sha256(target),
