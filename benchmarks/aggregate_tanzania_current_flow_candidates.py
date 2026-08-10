@@ -15,7 +15,99 @@ from eog.tanzania_current_flow_candidates import (
     array_sha256,
     canonical_sha256,
 )
-from eog.tanzania_current_flow_contract import enumerate_resistance_combinations
+from eog.tanzania_current_flow_contract import (
+    RESISTANCE_LEVELS,
+    enumerate_resistance_combinations,
+)
+
+RAYLEIGH_TOLERANCE = 1e-9
+
+
+def _physical_invariant_audit(
+    combinations: np.ndarray,
+    pairwise: np.ndarray,
+    primary: np.ndarray,
+    sensitivity: np.ndarray,
+) -> dict[str, Any]:
+    """Enforce label-free electrical-network invariants on the full grid."""
+    if pairwise.shape != (512, 42, 42):
+        raise ValueError("pairwise candidate library must have shape 512 x 42 x 42")
+    if primary.shape != (512, 42) or sensitivity.shape != (512, 42):
+        raise ValueError("isolation candidate libraries must have shape 512 x 42")
+    if not all(np.isfinite(values).all() for values in (pairwise, primary, sensitivity)):
+        raise ValueError("candidate library contains non-finite values")
+    if np.any(pairwise < -RAYLEIGH_TOLERANCE) or np.any(primary <= 0.0) or np.any(sensitivity <= 0.0):
+        raise ValueError("candidate library contains invalid negative or non-positive values")
+
+    symmetry_error = float(np.max(np.abs(pairwise - np.swapaxes(pairwise, 1, 2))))
+    diagonal_error = float(
+        np.max(np.abs(np.diagonal(pairwise, axis1=1, axis2=2)))
+    )
+    if symmetry_error > RAYLEIGH_TOLERANCE or diagonal_error > RAYLEIGH_TOLERANCE:
+        raise ValueError("effective-resistance matrices violate symmetry or zero diagonal")
+
+    rounded_pairwise = np.round(pairwise, decimals=FLOAT_DECIMALS).reshape(512, -1)
+    rounded_primary = np.round(primary, decimals=FLOAT_DECIMALS)
+    unique_pairwise = int(np.unique(rounded_pairwise, axis=0).shape[0])
+    unique_primary = int(np.unique(rounded_primary, axis=0).shape[0])
+    if unique_pairwise != 512 or unique_primary != 512:
+        raise ValueError("the frozen resistance grid produced duplicate candidate quantities")
+
+    levels = tuple(int(value) for value in RESISTANCE_LEVELS)
+    lookup = {tuple(int(value) for value in row): index for index, row in enumerate(combinations)}
+    if len(lookup) != 512:
+        raise ValueError("resistance combinations are not unique")
+    off_diagonal = ~np.eye(42, dtype=bool)
+    axis_names = ("eucalyptus", "tea", "other_agriculture")
+    rayleigh: dict[str, dict[str, Any]] = {}
+    for axis, axis_name in enumerate(axis_names):
+        comparisons = 0
+        violations = 0
+        minimum_increment = np.inf
+        maximum_increment = -np.inf
+        for combination, index in lookup.items():
+            level_index = levels.index(combination[axis])
+            if level_index == len(levels) - 1:
+                continue
+            higher = list(combination)
+            higher[axis] = levels[level_index + 1]
+            higher_index = lookup[tuple(higher)]
+            difference = (pairwise[higher_index] - pairwise[index])[off_diagonal]
+            minimum_increment = min(minimum_increment, float(np.min(difference)))
+            maximum_increment = max(maximum_increment, float(np.max(difference)))
+            violations += int(np.any(difference < -RAYLEIGH_TOLERANCE))
+            comparisons += 1
+        if comparisons != 448 or violations:
+            raise ValueError(
+                f"Rayleigh monotonicity failed for {axis_name}: "
+                f"{violations} violations across {comparisons} comparisons"
+            )
+        rayleigh[axis_name] = {
+            "n_adjacent_level_comparisons": comparisons,
+            "n_violations": violations,
+            "minimum_offdiagonal_increment": minimum_increment,
+            "maximum_offdiagonal_increment": maximum_increment,
+            "tolerance": RAYLEIGH_TOLERANCE,
+        }
+
+    all_one_index = lookup[(1, 1, 1)]
+    all_one_difference = pairwise - pairwise[all_one_index]
+    minimum_from_all_one = float(np.min(all_one_difference[:, off_diagonal]))
+    if minimum_from_all_one < -RAYLEIGH_TOLERANCE:
+        raise ValueError("all-one resistance candidate is not the elementwise minimum")
+
+    return {
+        "all_values_finite": True,
+        "all_pairwise_values_nonnegative": True,
+        "all_isolation_values_positive": True,
+        "maximum_symmetry_error": symmetry_error,
+        "maximum_diagonal_error": diagonal_error,
+        "n_unique_pairwise_candidates": unique_pairwise,
+        "n_unique_primary_isolation_candidates": unique_primary,
+        "all_one_candidate_elementwise_minimum": True,
+        "minimum_difference_from_all_one_candidate": minimum_from_all_one,
+        "rayleigh_monotonicity": rayleigh,
+    }
 
 
 def _load_region(input_dir: Path, region: str) -> tuple[dict[str, Any], dict[str, np.ndarray]]:
@@ -52,6 +144,12 @@ def _load_region(input_dir: Path, region: str) -> tuple[dict[str, Any], dict[str
     )
     if not np.array_equal(combined["combinations"], expected_combinations):
         raise ValueError(f"{region} resistance-grid ordering drift")
+    physical_invariants = _physical_invariant_audit(
+        combined["combinations"],
+        combined["pairwise_resistance"],
+        combined["isolation_primary"],
+        combined["isolation_sensitivity"],
+    )
     summary = {
         "region": region,
         "n_shards": len(manifests),
@@ -66,6 +164,7 @@ def _load_region(input_dir: Path, region: str) -> tuple[dict[str, Any], dict[str
         "maximum_pairwise_resistance": float(np.max(combined["pairwise_resistance"])),
         "minimum_primary_isolation": float(np.min(combined["isolation_primary"])),
         "maximum_primary_isolation": float(np.max(combined["isolation_primary"])),
+        "physical_invariants": physical_invariants,
     }
     summary["region_fingerprint"] = canonical_sha256(summary)
     return summary, combined
