@@ -120,9 +120,60 @@ def _raster_evidence(source_dir: Path) -> dict[str, object]:
     }
 
 
+def expected_projection(report: Mapping[str, Any]) -> dict[str, Any]:
+    """Return the compact committed contract derived from the full audit."""
+    released = report["released_source_audit"]
+    focal = released["focal_identity"]
+    area = released["source_area_weighting"]
+    raster = report["source"]["raster_evidence"]
+    return {
+        "status": report["status"],
+        "schema_version": report["schema_version"],
+        "audit_fingerprint": report["audit_fingerprint"],
+        "resistance_grid": {
+            "n_combinations": report["resistance_grid"]["n_combinations"],
+            "combinations_sha256": report["resistance_grid"]["combinations_sha256"],
+        },
+        "focal_identity": {
+            region: {
+                "n_identity_matches": focal[region]["n_identity_matches"],
+                "n_identity_mismatches": focal[region]["n_identity_mismatches"],
+                "row_to_patch_mapping_sha256": focal[region]["row_to_patch_mapping_sha256"],
+            }
+            for region in ("E", "W")
+        },
+        "source_area_weighting": {
+            region: {
+                "released_nonpositive_or_undefined_count": area[region][
+                    "released_nonpositive_or_undefined_count"
+                ],
+                "released_problem_patch_numbers": area[region][
+                    "released_problem_patch_numbers"
+                ],
+            }
+            for region in ("E", "W")
+        },
+        "raster_evidence": {
+            "released_east_filename": raster["released_east_filename"],
+            "verified_archive_east_filename": raster[
+                "verified_archive_east_filename"
+            ],
+            "filename_mismatch": raster["filename_mismatch"],
+            "east_landcover_classes": raster["east"]["landcover_classes"],
+            "west_landcover_classes": raster["west"]["landcover_classes"],
+        },
+        "heldout_competitor_repairs": report["heldout_competitor_repairs"],
+        "literal_released_script_admissible_for_heldout_comparison": released[
+            "literal_released_script_admissible_for_heldout_comparison"
+        ],
+        "scientific_boundary": report["scientific_boundary"],
+    }
+
+
 def _assert_expected(report: Mapping[str, Any], expected: Mapping[str, Any]) -> None:
-    if report != expected:
-        actual = json.dumps(report, sort_keys=True, indent=2)
+    actual_projection = expected_projection(report)
+    if actual_projection != expected:
+        actual = json.dumps(actual_projection, sort_keys=True, indent=2)
         target = json.dumps(expected, sort_keys=True, indent=2)
         raise ValueError(
             "Tanzania current-flow source audit drifted from the committed pre-outcome "
