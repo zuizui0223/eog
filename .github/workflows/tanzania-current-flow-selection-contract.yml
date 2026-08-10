@@ -1,0 +1,61 @@
+name: Tanzania training-only current-flow selection contract
+
+on:
+  push:
+    branches:
+      - agent/tanzania-current-flow-selection
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install package and test dependencies
+        run: python -m pip install . pytest
+      - name: Test training-only candidate selection and paired tiers
+        run: |
+          pytest -q \
+            tests/test_tanzania_current_flow_selection.py \
+            tests/test_tanzania_scoring.py
+      - name: Enforce frozen selection contract and pre-outcome boundary
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          path = Path('benchmarks/tanzania_current_flow_selection_contract.json')
+          contract = json.loads(path.read_text())
+          fingerprint = contract.pop('contract_fingerprint')
+          canonical = json.dumps(
+              contract,
+              sort_keys=True,
+              separators=(',', ':'),
+              ensure_ascii=True,
+          ).encode('utf-8')
+          assert hashlib.sha256(canonical).hexdigest() == fingerprint
+          assert fingerprint == '8efa5dba13573b4fcc0bb6860c187614e4192c5858980c8f788164b1a1be8ad0'
+          assert contract['candidate_selection']['n_candidates'] == 512
+          assert contract['candidate_selection']['training_only'] is True
+          assert contract['candidate_selection']['heldout_labels_accepted_by_api'] is False
+          assert contract['candidate_selection']['tie_breaker'] == 'lowest frozen candidate_index'
+          assert contract['heldout_probability_tiers']['current_flow_candidate_reused_unchanged'] is True
+          assert contract['heldout_probability_tiers']['candidate_addition'] == 'eog_connected_frequency'
+          assert not any(contract['scientific_boundary'].values())
+          print(json.dumps(contract, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-current-flow-selection-contract-${{ github.run_id }}
+          path: |
+            benchmarks/tanzania_current_flow_selection_contract.json
+            docs/tanzania_current_flow_selection_contract.md
+          if-no-files-found: error
