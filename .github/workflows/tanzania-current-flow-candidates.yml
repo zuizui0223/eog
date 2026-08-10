@@ -1,6 +1,7 @@
 name: Tanzania outcome-free current-flow candidates
 
 on:
+  workflow_call:
   push:
     branches:
       - agent/tanzania-current-flow-candidates
