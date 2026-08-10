@@ -10,29 +10,40 @@
     "W": "9d46af1d9cdb8d8c86f70259bbf814630abbc1025723c2c697c8d441197f20ac"
   },
   "solver_policy_id": "grounded_spd_superlu_colamd_no_dynamic_pivot_v1",
+  "fingerprint_policy": {
+    "raw_array_storage": "float64_unmodified",
+    "run_local_shard_hash_decimals": 12,
+    "cross_run_library_hash_decimals": 7,
+    "cross_run_absolute_resolution": 1e-07,
+    "scope": "diagnostic fingerprints and scalar summaries only",
+    "selection_basis": "two independent outcome-free GitHub Actions executions on the same verified source and solver contract",
+    "observed_cross_runner_max_absolute_difference": 4.5e-10,
+    "observed_cross_runner_max_relative_difference": 9.2e-13,
+    "rationale": "seven decimal places are over two orders of magnitude coarser than the largest observed runner-level LU rounding difference while preserving all 512 unique candidate matrices and isolation vectors"
+  },
   "expected_projection": {
     "schema_version": "tanzania_current_flow_candidates_v1",
-    "candidate_library_fingerprint": "0acea0e5c389a4b1f1276b37ea4588ddc9b0d5134ed5f088865532a3c8edeb3a",
+    "candidate_library_fingerprint": "79e05a47586a71cf2c981a381924b516dc091af87e3c8ae31feefddaf559380a",
     "regions": {
       "E": {
         "n_candidates": 512,
         "n_focal_patches": 42,
         "candidate_indices_sha256": "9b908ec784e8220772de71705d65128612b6c4c573292d9ed4c9375618aa183d",
         "combinations_sha256": "bd6305f1567a96fb7695fb10fe30b7427868ef497b3b981a55fb48bd685f83ff",
-        "pairwise_resistance_sha256": "10e70f0a1f29d77df9f0d3773ba5aa31ab5868ac6584e02a594332dbe4b5c6d7",
-        "isolation_primary_sha256": "853a973d40b36d6cd92b1c4057659e2e5dbc82e6d755566fa3689d26415f9604",
-        "isolation_sensitivity_sha256": "85b3759a3e9389ca50dc5eddf9ec895c56e3e66c5b50e77d66c8aedf2942c2c5",
-        "region_fingerprint": "6315b0ca2b8464f33baa4d8eafa20e629636fc26d6297fae84d41b033e860a41"
+        "pairwise_resistance_sha256": "66b97cef69d5be1be8b4cc5f7e9b0aece6fb3215e03b9ef32d38861c12ff12c9",
+        "isolation_primary_sha256": "3b5989318e1fce2e0cb359669ca8b9921ee12907e73e12a50b4310b077152591",
+        "isolation_sensitivity_sha256": "beb619aa507d7949c7978c1eeb75053ceea7726485da11357bb41490dab9fd9b",
+        "region_fingerprint": "13663f36de788f5d1d0b6961deb73ba95ddbdf65f58c2647725dc1ea9a6215b3"
       },
       "W": {
         "n_candidates": 512,
         "n_focal_patches": 42,
         "candidate_indices_sha256": "9b908ec784e8220772de71705d65128612b6c4c573292d9ed4c9375618aa183d",
         "combinations_sha256": "bd6305f1567a96fb7695fb10fe30b7427868ef497b3b981a55fb48bd685f83ff",
-        "pairwise_resistance_sha256": "62cf65f33e298025a53a75d287c4015da2021e3bef8bafbd121962c79bea328f",
-        "isolation_primary_sha256": "291624db04c76822925911896929b434bb22c52b045fdc984345740b927c7193",
-        "isolation_sensitivity_sha256": "713ca80b367c3c1a3cfea7e6c88df9a5c29a3be2022a5031c130960a8bd1f17c",
-        "region_fingerprint": "0199d2dcad4dc9e5a495f355858f61a6db0db6b661ee64ebe7cbcbc4036e3039"
+        "pairwise_resistance_sha256": "cce585d9aa85d034124be0c656481f65e4b9d9591dcf39686faa7e1c93d8467d",
+        "isolation_primary_sha256": "fbd3e55291b13606dd649623c07aee3a56b09031ec30410c30121f02624ccf48",
+        "isolation_sensitivity_sha256": "152daed8841ef32928b7be2d53e1cb69a93983142496ac2842764b895a6abb82",
+        "region_fingerprint": "605d7f5e26cc81c268b8905b8406d6ffc2cea8a193dcc9d24c7634efab599a10"
       }
     }
   }
