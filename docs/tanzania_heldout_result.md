@@ -64,4 +64,9 @@ The geometry-only spatial-block sensitivity is weaker and uncertain:
 
 This independently reproduced result does not invalidate the A-Islands conditional-reachability finding. It establishes a narrower boundary: in this 14-fragment bird dataset, a coarse occurrence-anchored geographic connected-frequency feature does not add predictive value after a species-adaptive matrix-aware current-flow quantity and nearest-known-occurrence distance are already included.
 
-It would also not establish that EOG is generally harmful, that current flow universally dominates graph methods, or that the inferred graph represents realized dispersal routes. The benchmark is deliberately small, contains only 14 surveyed fragments, and tests one frozen geography-only EOG representation against a strong matrix-aware competitor.
+The benchmark therefore separates two claims that should not be collapsed:
+
+1. graph configuration can carry information missing from pointwise environmental support and nearest-source distance, as in A-Islands;
+2. the same generic graph feature need not improve prediction after a strong, landscape-specific connectivity model has already absorbed matrix structure, as in Tanzania.
+
+It does not establish that EOG is generally harmful, that current flow universally dominates graph methods, or that the inferred graph represents realized dispersal routes. The benchmark is deliberately small, contains only 14 surveyed fragments, and tests one frozen geography-only EOG representation against a strong matrix-aware competitor. Any trait-informed, directed, shrinkage-based, or differently scaled extension must be treated as a new preregistered analysis rather than a rescue of this result.
