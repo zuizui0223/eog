@@ -1,0 +1,94 @@
+name: Tanzania current-flow source audit
+
+on:
+  push:
+    branches:
+      - agent/tanzania-current-flow-source-audit
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install package and geospatial audit dependencies
+        run: python -m pip install . pytest rasterio==1.4.3
+      - name: Test current-flow source contract
+        run: |
+          pytest -q \
+            tests/test_tanzania_current_flow_contract.py \
+            tests/test_tanzania_source_acquisition.py
+      - name: Refresh and verify official Dryad source
+        run: |
+          python benchmarks/fetch_tanzania_dryad.py \
+            --output-dir results/tanzania_current_flow/live_metadata
+          python benchmarks/fetch_tanzania_verified_package.py \
+            --contract benchmarks/tanzania_source_contract.json \
+            --live-manifest results/tanzania_current_flow/live_metadata/source_manifest.json \
+            --output-dir results/tanzania_current_flow/acquisition \
+            --timeout 60 \
+            --require-success
+      - name: Re-run source identity and semantics gates
+        run: |
+          python benchmarks/audit_tanzania_verified_bytes.py \
+            --source-dir results/tanzania_current_flow/acquisition/verified_source \
+            --manifest results/tanzania_current_flow/live_metadata/source_manifest.json \
+            --output results/tanzania_current_flow/verified_schema.json
+          python benchmarks/audit_tanzania_semantics.py \
+            --source-dir results/tanzania_current_flow/acquisition/verified_source \
+            --verified-schema results/tanzania_current_flow/verified_schema.json \
+            --semantics-mapping benchmarks/tanzania_semantics_mapping.json \
+            --output results/tanzania_current_flow/semantics_audit.json
+      - name: Audit and enforce current-flow source repairs
+        run: |
+          python benchmarks/audit_tanzania_current_flow_source.py \
+            --source-dir results/tanzania_current_flow/acquisition/verified_source \
+            --expected benchmarks/tanzania_current_flow_expected.json \
+            --output results/tanzania_current_flow/current_flow_source_audit.json
+      - name: Enforce pre-outcome boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(
+              Path('results/tanzania_current_flow/current_flow_source_audit.json').read_text()
+          )
+          assert report['audit_fingerprint'] == '3ed8ed203fec441deef5eacd9c03cb5055911a859c4b187893c0beefbc7c46da'
+          assert report['resistance_grid']['n_combinations'] == 512
+          assert report['released_source_audit']['focal_identity']['E']['n_identity_mismatches'] == 42
+          assert report['released_source_audit']['focal_identity']['W']['n_identity_mismatches'] == 42
+          assert report['released_source_audit']['source_area_weighting']['E']['released_problem_patch_numbers'] == [5, 6, 8, 9]
+          assert report['released_source_audit']['source_area_weighting']['W']['released_problem_patch_numbers'] == []
+          assert report['heldout_competitor_repairs']['focal_raster_field'] == 'patch_number'
+          assert report['heldout_competitor_repairs']['primary_source_area_weighting'] == 'inverse_log10_1p_area_ha'
+          assert report['released_source_audit']['literal_released_script_admissible_for_heldout_comparison'] is False
+          assert not any(report['scientific_boundary'].values())
+          print(json.dumps({
+              'audit_fingerprint': report['audit_fingerprint'],
+              'resistance_grid_sha256': report['resistance_grid']['combinations_sha256'],
+              'east_identity_mismatches': report['released_source_audit']['focal_identity']['E']['n_identity_mismatches'],
+              'west_identity_mismatches': report['released_source_audit']['focal_identity']['W']['n_identity_mismatches'],
+              'east_nonpositive_source_weights': report['released_source_audit']['source_area_weighting']['E']['released_problem_patch_numbers'],
+              'heldout_repairs': report['heldout_competitor_repairs'],
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-current-flow-source-audit-${{ github.run_id }}
+          path: |
+            benchmarks/tanzania_current_flow_expected.json
+            results/tanzania_current_flow/live_metadata/source_manifest.json
+            results/tanzania_current_flow/acquisition/acquisition_report.json
+            results/tanzania_current_flow/acquisition/verified_source_manifest.json
+            results/tanzania_current_flow/verified_schema.json
+            results/tanzania_current_flow/semantics_audit.json
+            results/tanzania_current_flow/current_flow_source_audit.json
+          if-no-files-found: error
