@@ -1,0 +1,27 @@
+{
+  "status": "tanzania_heldout_current_flow_eog_expected_values",
+  "results_frozen": false,
+  "scientific_boundary": "input identities and analysis contract frozen before the first aggregate Tanzania held-out result",
+  "required_inputs": {
+    "design_fingerprint": "f8b37bb30d230f92ad323870020d34e2225f898b85394124b965a2d0ecdeb324",
+    "eligible_species_sha256": "4859178d155db2594a635896d794d1af4c4d655da924489d41ff64e8fc57f135",
+    "candidate_library_fingerprint": "79e05a47586a71cf2c981a381924b516dc091af87e3c8ae31feefddaf559380a",
+    "eog_feature_rows_sha256": "ca37a9303a7bfc688db982ab68a98bac0695f9f091711ab016a1a2a96a34c0aa",
+    "eog_applicability_rows_sha256": "16dbcf05ae558b06662b15d7226f83acc7ac0467a4e0bbd4fd8a60d704e2899c",
+    "selection_contract_fingerprint": "8efa5dba13573b4fcc0bb6860c187614e4192c5858980c8f788164b1a1be8ad0"
+  },
+  "analysis": {
+    "primary_partition": "primary_loso",
+    "primary_isolation_mode": "primary",
+    "spatial_sensitivity_partition": "spatial_mst_block",
+    "area_weight_sensitivity_mode": "inverse_area_sensitivity",
+    "strict_reference": "area + training-selected current flow + area-by-current-flow + nearest training occurrence",
+    "strict_candidate": "strict reference + EOG connected frequency",
+    "difference_direction": "candidate_minus_reference; negative values favor EOG",
+    "species_bootstrap_replicates": 10000,
+    "species_sign_flip_replicates": 100000,
+    "seed": 20260810,
+    "cross_run_result_decimals": 9
+  },
+  "expected_projection": null
+}
