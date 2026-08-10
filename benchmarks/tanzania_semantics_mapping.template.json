@@ -5,7 +5,8 @@
     "patch_area": null,
     "region": null,
     "x": null,
-    "y": null
+    "y": null,
+    "crs": null
   },
   "occurrence": {
     "layout": null,
@@ -17,8 +18,8 @@
     "site_ids": []
   },
   "nodes": {
-    "east": {"x": null, "y": null},
-    "west": {"x": null, "y": null}
+    "east": {"x": null, "y": null, "crs": null},
+    "west": {"x": null, "y": null, "crs": null}
   },
   "region_values": {
     "east": null,
@@ -31,6 +32,7 @@
     "Sites.csv": null,
     "spp_occur.csv": null,
     "Nodes_E.csv": null,
-    "Nodes_W.csv": null
+    "Nodes_W.csv": null,
+    "coordinate_crs_evidence": null
   }
 }
