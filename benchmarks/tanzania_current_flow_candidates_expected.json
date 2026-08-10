@@ -1,0 +1,39 @@
+{
+  "status": "tanzania_current_flow_candidate_expected_values",
+  "fingerprints_frozen": true,
+  "scientific_boundary": "candidate quantities only; no species outcomes, resistance selection, occurrence model, predictive score, or EOG performance",
+  "source_audit_fingerprint": "3ed8ed203fec441deef5eacd9c03cb5055911a859c4b187893c0beefbc7c46da",
+  "coarsening_factor": 8,
+  "preparation_fingerprint": "869db8b2110a730bcff43570cac64daadc0ae7a23e74294375decfa1e151790f",
+  "prepared_region_fingerprints": {
+    "E": "84a9322b70868c155f2ad8556f0c6b9a4324c52a9589b17c53b8c387f7b8028b",
+    "W": "9d46af1d9cdb8d8c86f70259bbf814630abbc1025723c2c697c8d441197f20ac"
+  },
+  "solver_policy_id": "grounded_spd_superlu_colamd_no_dynamic_pivot_v1",
+  "expected_projection": {
+    "schema_version": "tanzania_current_flow_candidates_v1",
+    "candidate_library_fingerprint": "0acea0e5c389a4b1f1276b37ea4588ddc9b0d5134ed5f088865532a3c8edeb3a",
+    "regions": {
+      "E": {
+        "n_candidates": 512,
+        "n_focal_patches": 42,
+        "candidate_indices_sha256": "9b908ec784e8220772de71705d65128612b6c4c573292d9ed4c9375618aa183d",
+        "combinations_sha256": "bd6305f1567a96fb7695fb10fe30b7427868ef497b3b981a55fb48bd685f83ff",
+        "pairwise_resistance_sha256": "10e70f0a1f29d77df9f0d3773ba5aa31ab5868ac6584e02a594332dbe4b5c6d7",
+        "isolation_primary_sha256": "853a973d40b36d6cd92b1c4057659e2e5dbc82e6d755566fa3689d26415f9604",
+        "isolation_sensitivity_sha256": "85b3759a3e9389ca50dc5eddf9ec895c56e3e66c5b50e77d66c8aedf2942c2c5",
+        "region_fingerprint": "6315b0ca2b8464f33baa4d8eafa20e629636fc26d6297fae84d41b033e860a41"
+      },
+      "W": {
+        "n_candidates": 512,
+        "n_focal_patches": 42,
+        "candidate_indices_sha256": "9b908ec784e8220772de71705d65128612b6c4c573292d9ed4c9375618aa183d",
+        "combinations_sha256": "bd6305f1567a96fb7695fb10fe30b7427868ef497b3b981a55fb48bd685f83ff",
+        "pairwise_resistance_sha256": "62cf65f33e298025a53a75d287c4015da2021e3bef8bafbd121962c79bea328f",
+        "isolation_primary_sha256": "291624db04c76822925911896929b434bb22c52b045fdc984345740b927c7193",
+        "isolation_sensitivity_sha256": "713ca80b367c3c1a3cfea7e6c88df9a5c29a3be2022a5031c130960a8bd1f17c",
+        "region_fingerprint": "0199d2dcad4dc9e5a495f355858f61a6db0db6b661ee64ebe7cbcbc4036e3039"
+      }
+    }
+  }
+}

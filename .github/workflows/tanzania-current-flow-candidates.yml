@@ -1,0 +1,241 @@
+name: Tanzania outcome-free current-flow candidates
+
+on:
+  push:
+    branches:
+      - agent/tanzania-current-flow-candidates
+  workflow_dispatch:
+
+concurrency:
+  group: tanzania-current-flow-candidates-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PYTHONHASHSEED: '0'
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen numerical and geospatial dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install . pytest numpy==2.2.6 scipy==1.15.3 pandas==2.2.3 rasterio==1.4.3
+      - name: Test independent effective-resistance engine
+        run: |
+          pytest -q \
+            tests/test_tanzania_current_flow_candidates.py \
+            tests/test_tanzania_current_flow_contract.py \
+            tests/test_tanzania_source_acquisition.py
+      - name: Reacquire and verify official Dryad version bytes
+        run: |
+          python benchmarks/fetch_tanzania_dryad.py \
+            --output-dir results/tanzania_candidate_run/live_metadata
+          python benchmarks/fetch_tanzania_verified_package.py \
+            --contract benchmarks/tanzania_source_contract.json \
+            --live-manifest results/tanzania_candidate_run/live_metadata/source_manifest.json \
+            --output-dir results/tanzania_candidate_run/acquisition \
+            --timeout 60 \
+            --require-success
+          python benchmarks/audit_tanzania_verified_bytes.py \
+            --source-dir results/tanzania_candidate_run/acquisition/verified_source \
+            --manifest results/tanzania_candidate_run/live_metadata/source_manifest.json \
+            --output results/tanzania_candidate_run/verified_schema.json
+      - name: Re-enforce source repairs without species outcomes
+        run: |
+          python benchmarks/audit_tanzania_current_flow_source.py \
+            --source-dir results/tanzania_candidate_run/acquisition/verified_source \
+            --expected benchmarks/tanzania_current_flow_expected.json \
+            --output results/tanzania_candidate_run/current_flow_source_audit.json
+      - name: Prepare focal-preserving factor-8 rasters
+        run: |
+          python benchmarks/prepare_tanzania_current_flow_inputs.py \
+            --source-dir results/tanzania_candidate_run/acquisition/verified_source \
+            --source-audit results/tanzania_candidate_run/current_flow_source_audit.json \
+            --output-dir results/tanzania_candidate_run/prepared
+      - name: Enforce outcome-free preparation fingerprints
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          expected = json.loads(
+              Path('benchmarks/tanzania_current_flow_candidates_expected.json').read_text()
+          )
+          manifest = json.loads(
+              Path('results/tanzania_candidate_run/prepared/preparation_manifest.json').read_text()
+          )
+          assert manifest['source_audit_fingerprint'] == expected['source_audit_fingerprint']
+          assert manifest['coarsening_factor'] == expected['coarsening_factor'] == 8
+          assert manifest['preparation_fingerprint'] == expected['preparation_fingerprint']
+          assert manifest['regions']['E']['prepared_fingerprint'] == expected['prepared_region_fingerprints']['E']
+          assert manifest['regions']['W']['prepared_fingerprint'] == expected['prepared_region_fingerprints']['W']
+          assert manifest['regions']['E']['metadata']['focal_uniqueness_by_factor']['16']['n_unique_focal_cells'] == 40
+          assert manifest['regions']['E']['metadata']['focal_uniqueness_by_factor']['8']['n_unique_focal_cells'] == 42
+          assert manifest['regions']['W']['metadata']['focal_uniqueness_by_factor']['8']['n_unique_focal_cells'] == 42
+          assert not any(manifest['scientific_boundary'].values())
+          print(json.dumps({
+              'preparation_fingerprint': manifest['preparation_fingerprint'],
+              'prepared_region_fingerprints': {
+                  region: manifest['regions'][region]['prepared_fingerprint']
+                  for region in ('E', 'W')
+              },
+              'coarse_shapes': {
+                  region: manifest['regions'][region]['metadata']['coarsening']['coarse_shape']
+                  for region in ('E', 'W')
+              },
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-current-flow-prepared-${{ github.run_id }}
+          path: |
+            results/tanzania_candidate_run/prepared/
+            results/tanzania_candidate_run/current_flow_source_audit.json
+            results/tanzania_candidate_run/verified_schema.json
+            results/tanzania_candidate_run/acquisition/verified_source_manifest.json
+          if-no-files-found: error
+
+  candidates:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        region: [E, W]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen numerical dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install . numpy==2.2.6 scipy==1.15.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: tanzania-current-flow-prepared-${{ github.run_id }}
+          path: results/prepared_artifact
+      - name: Compute one deterministic candidate shard
+        env:
+          REGION: ${{ matrix.region }}
+          SHARD: ${{ matrix.shard }}
+        run: |
+          PREPARED="$(find results/prepared_artifact -type f -name "prepared_${REGION}.npz" -print -quit)"
+          test -n "$PREPARED"
+          python benchmarks/run_tanzania_current_flow_shard.py \
+            --prepared "$PREPARED" \
+            --shard-index "$SHARD" \
+            --n-shards 16 \
+            --output-dir results/current_flow_shard
+      - name: Enforce candidate-stage boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifests = list(Path('results/current_flow_shard').glob('*.json'))
+          assert len(manifests) == 1
+          report = json.loads(manifests[0].read_text())
+          assert report['n_shards'] == 16
+          assert report['n_candidates'] == 32
+          assert report['scientific_boundary']['current_flow_computed'] is True
+          for prohibited in (
+              'species_outcomes_inspected',
+              'resistance_selected',
+              'occurrence_model_fitted',
+              'eog_performance_inspected',
+          ):
+              assert report['scientific_boundary'][prohibited] is False
+          print(json.dumps({
+              'region': report['region'],
+              'shard_index': report['shard_index'],
+              'candidate_indices': report['candidate_indices'],
+              'shard_fingerprint': report['shard_fingerprint'],
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-current-flow-${{ matrix.region }}-shard-${{ matrix.shard }}-${{ github.run_id }}
+          path: results/current_flow_shard/
+          if-no-files-found: error
+
+  aggregate:
+    needs: candidates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install aggregation dependencies
+        run: python -m pip install . numpy==2.2.6
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tanzania-current-flow-*-shard-*-${{ github.run_id }}
+          path: results/downloaded_shards
+          merge-multiple: true
+      - name: Flatten and aggregate all 1,024 region-candidates
+        run: |
+          mkdir -p results/shards_flat
+          find results/downloaded_shards -type f \( -name '*.npz' -o -name '*.json' \) -exec cp '{}' results/shards_flat/ \;
+          python benchmarks/aggregate_tanzania_current_flow_candidates.py \
+            --input-dir results/shards_flat \
+            --output-dir results/tanzania_current_flow_candidates \
+            --expected benchmarks/tanzania_current_flow_candidates_expected.json
+      - name: Enforce library completeness and boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          expected = json.loads(
+              Path('benchmarks/tanzania_current_flow_candidates_expected.json').read_text()
+          )
+          manifest = json.loads(
+              Path('results/tanzania_current_flow_candidates/candidate_manifest.json').read_text()
+          )
+          assert set(manifest['regions']) == {'E', 'W'}
+          assert all(manifest['regions'][region]['n_candidates'] == 512 for region in ('E', 'W'))
+          assert all(manifest['regions'][region]['n_focal_patches'] == 42 for region in ('E', 'W'))
+          assert manifest['scientific_boundary']['current_flow_computed'] is True
+          for prohibited in (
+              'species_outcomes_inspected',
+              'resistance_selected',
+              'occurrence_model_fitted',
+              'performance_metric_computed',
+              'eog_performance_inspected',
+          ):
+              assert manifest['scientific_boundary'][prohibited] is False
+          if expected['fingerprints_frozen']:
+              assert manifest['expected_fingerprints_verified'] is True
+          else:
+              assert manifest['expected_fingerprints_verified'] is False
+          print(json.dumps({
+              'candidate_library_fingerprint': manifest['candidate_library_fingerprint'],
+              'expected_fingerprints_verified': manifest['expected_fingerprints_verified'],
+              'regions': manifest['regions'],
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-current-flow-candidate-library-${{ github.run_id }}
+          path: |
+            benchmarks/tanzania_current_flow_candidates_expected.json
+            results/tanzania_current_flow_candidates/
+          if-no-files-found: error
