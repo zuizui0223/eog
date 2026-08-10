@@ -12,7 +12,7 @@ For every executable species x held-out site prediction, record Bernoulli log lo
 
 Probabilities must be clipped only by one globally frozen numerical epsilon used for all methods; epsilon is a numerical-stability setting, not a tunable threshold.
 
-Primary method comparison is the paired difference in held-out log loss on the exact same executable species/site predictions. Lower is better.
+Primary method comparison is the paired difference in held-out log loss on the exact same executable species/site predictions. Differences are always `candidate - reference`, so negative values favor the candidate.
 
 ## Secondary scores
 
@@ -35,16 +35,38 @@ Every comparison must report:
 - failures by reason (single-class training fold, source-formula failure, circuit fit failure, EOG graph/support failure, numerical failure, or missing verified alignment);
 - the exact paired denominator used for each method contrast.
 
-A method may not improve its apparent score by silently dropping difficult species/folds. Pairwise contrasts use the intersection of predictions that are valid for both methods, while method-specific applicability is reported separately.
+A method may not improve its apparent score by silently dropping difficult species/folds. Pairwise contrasts use the intersection of predictions that are valid for both methods, while method-specific applicability is reported separately. Nonfinite placeholder probabilities are permitted only where that method's explicit validity mask is false; every probability marked valid must be finite and lie in `[0, 1]`.
 
-## Aggregation
+## Frozen replication unit and uncertainty
 
-Because predictions are clustered within species, the primary summary is not a naive site-level standard error. Report:
+Species, not individual held-out sites, are the biological replication unit for inference.
 
-1. mean paired held-out log-loss difference across all matched predictions;
-2. species-level mean difference distribution;
-3. a species-cluster bootstrap or equivalent species-level resampling interval, with the resampling rule frozen before outcomes;
-4. East/West study-region summaries as diagnostics after verified region mapping, not as separately tuned analyses.
+For each comparison:
+
+1. Compute candidate-minus-reference log-loss differences on the exact matched valid species-site predictions.
+2. Average those differences within each species.
+3. Use the equal-weight mean of the per-species means as the primary inferential point estimate (`macro_mean_species_difference`).
+4. Also report the observation-weighted mean across all matched predictions (`micro_mean_difference`) as a descriptive diagnostic, not as the clustered inferential estimand.
+
+This prevents species with more executable held-out folds from receiving greater inferential weight merely because they contributed more predictions.
+
+The interval is frozen as a species-cluster percentile bootstrap:
+
+- resampling unit: species;
+- bootstrap replicates: **10,000**;
+- seed: **20260810**;
+- interval: **95% percentile interval** using the 0.025 and 0.975 quantiles;
+- each selected species contributes its already-computed mean difference once per bootstrap draw;
+- sites are not independently resampled and no nested site bootstrap is used.
+
+A two-sided Monte Carlo sign-flip test of the equal-weight species mean is retained as a secondary null diagnostic:
+
+- sign-flip replicates: **100,000**;
+- seed: **20260810**;
+- statistic: absolute equal-weight mean of per-species differences;
+- p-value correction: `(extreme + 1) / (replicates + 1)`.
+
+The sign-flip test assumes symmetry of species-level effects and therefore does not replace the effect size and bootstrap interval. No resampling count, seed, weighting rule, interval type, or test direction may be changed after inspecting Tanzania outcomes.
 
 ## Model-role symmetry
 
@@ -59,6 +81,10 @@ The published full-data AIC/pseudo-R2 reproduction is an implementation sanity c
 
 ## Decision interpretation
 
-Evidence for incremental EOG value requires lower held-out log loss for `local + fold-safe current flow + EOG` than for `local + fold-safe current flow` on matched predictions, with uncertainty reported across species. A null or adverse difference is a valid boundary result.
+The strict incremental contrast is:
+
+`local + fold-safe current flow + EOG` minus `local + fold-safe current flow`.
+
+A negative species-macro log-loss difference favors EOG. The effect estimate, 95% species-cluster bootstrap interval, exact paired denominator, applicability profile, and secondary sign-flip p-value must all be reported. A null or adverse difference is a valid boundary result.
 
 No held-out Tanzania outcome is computed in this contract.
