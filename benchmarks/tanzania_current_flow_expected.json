@@ -1,0 +1,71 @@
+{
+  "status": "tanzania_current_flow_source_contract_frozen_before_outcomes",
+  "schema_version": "tanzania_current_flow_source_audit_v1",
+  "audit_fingerprint": "3ed8ed203fec441deef5eacd9c03cb5055911a859c4b187893c0beefbc7c46da",
+  "resistance_grid": {
+    "n_combinations": 512,
+    "combinations_sha256": "771ceea091a828750ae8bb1368a1157c153c7d4d47575a608b41c02559333ea9"
+  },
+  "focal_identity": {
+    "E": {
+      "n_identity_matches": 0,
+      "n_identity_mismatches": 42,
+      "row_to_patch_mapping_sha256": "980b322a299a5615a15388e324cc78246caf3b49ad1c16deef8a90816e9997ca"
+    },
+    "W": {
+      "n_identity_matches": 0,
+      "n_identity_mismatches": 42,
+      "row_to_patch_mapping_sha256": "04322b3d12746c367655b6839381d3f8be08dc46d9b74cdac2d0a012b81abb79"
+    }
+  },
+  "source_area_weighting": {
+    "E": {
+      "released_nonpositive_or_undefined_count": 4,
+      "released_problem_patch_numbers": [
+        5,
+        6,
+        8,
+        9
+      ]
+    },
+    "W": {
+      "released_nonpositive_or_undefined_count": 0,
+      "released_problem_patch_numbers": []
+    }
+  },
+  "raster_evidence": {
+    "released_east_filename": "raster_east3_new.tif",
+    "verified_archive_east_filename": "raster_east3.tif",
+    "filename_mismatch": true,
+    "east_landcover_classes": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "west_landcover_classes": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "heldout_competitor_repairs": {
+    "focal_raster_field": "patch_number",
+    "primary_source_area_weighting": "inverse_log10_1p_area_ha",
+    "sensitivity_source_area_weighting": "inverse_area_ha",
+    "primary_weight_formula": "1 / log10(1 + area_ha)",
+    "sensitivity_weight_formula": "1 / area_ha",
+    "repair_selection_basis": "source code and geometry only; chosen before current-flow, EOG, probability, loss, AUC, or species-performance calculation",
+    "rationale": "explicit patch identities preserve downstream patch_number joins; log10(1 + area_ha) is a positive monotone domain repair that preserves logarithmic compression and the declared smaller-source patch weighting direction"
+  },
+  "literal_released_script_admissible_for_heldout_comparison": false,
+  "scientific_boundary": {
+    "species_outcomes_inspected": false,
+    "circuitscape_run": false,
+    "current_flow_computed": false,
+    "resistance_selected": false,
+    "occurrence_model_fitted": false,
+    "eog_performance_inspected": false
+  }
+}
