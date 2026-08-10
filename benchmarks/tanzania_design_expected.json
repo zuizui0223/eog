@@ -1,0 +1,119 @@
+{
+  "status": "tanzania_preoutcome_design_expected_values",
+  "scientific_boundary": "frozen before any Tanzania current-flow or EOG held-out performance",
+  "source": {
+    "doi": "10.5061/dryad.p042h0c",
+    "version_id": 23134,
+    "n_sites": 14,
+    "n_species": 89,
+    "n_eligible_species": 60,
+    "eligible_species_sha256": "4859178d155db2594a635896d794d1af4c4d655da924489d41ff64e8fc57f135"
+  },
+  "cross_validation": {
+    "primary_n_folds": 14,
+    "spatial_sensitivity_n_folds": 5,
+    "spatial_blocks": {
+      "E": [
+        ["Site 10_12", "Site 13", "Site 14", "Site 7", "Site 8", "Site 9"],
+        ["Site 4", "Site 5"],
+        ["Site16.Control Sitel"]
+      ],
+      "W": [
+        ["Site 18", "Site 19", "Site 20", "Site 22 & 23"],
+        ["Site 21"]
+      ]
+    }
+  },
+  "radius_selection_audit": {
+    "scenario_count": 4,
+    "target_survey_component_counts": [4, 3, 2, 1],
+    "selection_rule": "for each target, choose the smallest distinct node-MST edge threshold at which the verified survey nodes occupy no more than that number of components",
+    "label_use": "none; verified node and survey-site geometry only",
+    "degeneracy_guard": "each successive scenario must induce a distinct survey-node partition; otherwise the design gate fails before species features or performance",
+    "reason_for_replacing_mst_quantiles": "the earlier q50/q75/q90/q100 rule placed every surveyed site in one component at the smallest radius in both regions, collapsing connected frequency to a same-region-anchor indicator before any outcome score was computed"
+  },
+  "eog_graph": {
+    "E": {
+      "n_nodes": 42,
+      "mst_edge_sha256": "c19ca7846a772bd4f090bf7c07bcafc3fee886bb96bcdca56aad4ebd2543db14",
+      "scenario_radii_km": {
+        "survey_c04": 0.5118082446726354,
+        "survey_c03": 0.9135216730301252,
+        "survey_c02": 2.6543229615390924,
+        "survey_c01": 2.678214947958609
+      },
+      "survey_component_counts": {
+        "survey_c04": 4,
+        "survey_c03": 3,
+        "survey_c02": 2,
+        "survey_c01": 1
+      },
+      "survey_component_partitions": {
+        "survey_c04": [
+          ["Site 10_12", "Site 13", "Site 14", "Site 7", "Site 8", "Site 9"],
+          ["Site 4"],
+          ["Site 5"],
+          ["Site16.Control Sitel"]
+        ],
+        "survey_c03": [
+          ["Site 10_12", "Site 13", "Site 14", "Site 7", "Site 8", "Site 9"],
+          ["Site 4", "Site 5"],
+          ["Site16.Control Sitel"]
+        ],
+        "survey_c02": [
+          ["Site 10_12", "Site 13", "Site 14", "Site 7", "Site 8", "Site 9", "Site16.Control Sitel"],
+          ["Site 4", "Site 5"]
+        ],
+        "survey_c01": [
+          ["Site 10_12", "Site 13", "Site 14", "Site 4", "Site 5", "Site 7", "Site 8", "Site 9", "Site16.Control Sitel"]
+        ]
+      }
+    },
+    "W": {
+      "n_nodes": 42,
+      "mst_edge_sha256": "06bd5e6a9e3c6f0652d0b520012b43d2a3823909a4dff4363027cde07f8ad47f",
+      "scenario_radii_km": {
+        "survey_c04": 0.41790742328787817,
+        "survey_c03": 0.854100611761295,
+        "survey_c02": 1.5855893255403877,
+        "survey_c01": 3.0380206247018147
+      },
+      "survey_component_counts": {
+        "survey_c04": 4,
+        "survey_c03": 3,
+        "survey_c02": 2,
+        "survey_c01": 1
+      },
+      "survey_component_partitions": {
+        "survey_c04": [
+          ["Site 18", "Site 19"],
+          ["Site 20"],
+          ["Site 21"],
+          ["Site 22 & 23"]
+        ],
+        "survey_c03": [
+          ["Site 18", "Site 19", "Site 20"],
+          ["Site 21"],
+          ["Site 22 & 23"]
+        ],
+        "survey_c02": [
+          ["Site 18", "Site 19", "Site 20", "Site 22 & 23"],
+          ["Site 21"]
+        ],
+        "survey_c01": [
+          ["Site 18", "Site 19", "Site 20", "Site 21", "Site 22 & 23"]
+        ]
+      }
+    }
+  },
+  "heldout_probability_models": {
+    "l2_penalty": 1.0,
+    "strict_incremental_reference": "current_flow_plus_anchor_distance",
+    "strict_incremental_candidate": "current_flow_plus_anchor_distance_plus_eog"
+  },
+  "design_fingerprint": "f8b37bb30d230f92ad323870020d34e2225f898b85394124b965a2d0ecdeb324",
+  "species_outcomes_inspected": false,
+  "model_fitted": false,
+  "current_flow_computed": false,
+  "eog_score_computed": false
+}

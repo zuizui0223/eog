@@ -1,0 +1,112 @@
+name: Tanzania geometry and formula freeze
+
+on:
+  push:
+    branches:
+      - agent/tanzania-geometry-formula-freeze
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install package and geospatial audit dependencies
+        run: python -m pip install . pytest rasterio==1.4.3
+      - name: Test deterministic Tanzania design primitives
+        run: |
+          pytest -q \
+            tests/test_tanzania_design.py \
+            tests/test_tanzania_survey_ladder.py \
+            tests/test_tanzania_source_acquisition.py
+      - name: Refresh frozen-source metadata
+        run: |
+          python benchmarks/fetch_tanzania_dryad.py \
+            --output-dir results/tanzania_design/live_metadata
+      - name: Acquire exact official Dryad version bytes
+        run: |
+          python benchmarks/fetch_tanzania_verified_package.py \
+            --contract benchmarks/tanzania_source_contract.json \
+            --live-manifest results/tanzania_design/live_metadata/source_manifest.json \
+            --output-dir results/tanzania_design/acquisition \
+            --timeout 60 \
+            --require-success
+      - name: Re-run structural and explicit semantics gates
+        run: |
+          python benchmarks/audit_tanzania_verified_bytes.py \
+            --source-dir results/tanzania_design/acquisition/verified_source \
+            --manifest results/tanzania_design/live_metadata/source_manifest.json \
+            --output results/tanzania_design/verified_schema.json
+          python benchmarks/audit_tanzania_semantics.py \
+            --source-dir results/tanzania_design/acquisition/verified_source \
+            --verified-schema results/tanzania_design/verified_schema.json \
+            --semantics-mapping benchmarks/tanzania_semantics_mapping.json \
+            --output results/tanzania_design/semantics_audit.json
+      - name: Freeze and enforce non-degenerate geometry/formula contract
+        run: |
+          python benchmarks/freeze_tanzania_survey_ladder_design.py \
+            --source-dir results/tanzania_design/acquisition/verified_source \
+            --semantics-audit results/tanzania_design/semantics_audit.json \
+            --expected-design benchmarks/tanzania_design_expected.json \
+            --output results/tanzania_design/design_contract.json
+      - name: Audit pre-outcome design boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          contract = json.loads(Path('results/tanzania_design/design_contract.json').read_text())
+          expected = json.loads(Path('benchmarks/tanzania_design_expected.json').read_text())
+          assert contract['design_fingerprint'] == expected['design_fingerprint']
+          assert contract['source']['eligible_species_sha256'] == expected['source']['eligible_species_sha256']
+          assert contract['cross_validation']['primary']['n_folds'] == expected['cross_validation']['primary_n_folds']
+          assert contract['cross_validation']['spatial_sensitivity']['n_folds'] == expected['cross_validation']['spatial_sensitivity_n_folds']
+          assert contract['cross_validation']['spatial_sensitivity']['blocks'] == expected['cross_validation']['spatial_blocks']
+          assert contract['eog_graph']['radius_selection_audit'] == expected['radius_selection_audit']
+          for region in ('E', 'W'):
+              assert contract['eog_graph']['regions'][region]['scenario_radii_km'] == expected['eog_graph'][region]['scenario_radii_km']
+              assert contract['eog_graph']['regions'][region]['survey_component_counts'] == {'survey_c04': 4, 'survey_c03': 3, 'survey_c02': 2, 'survey_c01': 1}
+              assert contract['eog_graph']['regions'][region]['survey_component_partitions'] == expected['eog_graph'][region]['survey_component_partitions']
+          assert contract['species_outcomes_inspected'] is False
+          assert contract['model_fitted'] is False
+          assert contract['eog_score_computed'] is False
+          assert contract['current_flow_computed'] is False
+          print('Tanzania pre-outcome design fingerprint:', contract['design_fingerprint'])
+          PY
+      - name: Print frozen design summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('results/tanzania_design/design_contract.json').read_text())
+          print(json.dumps({
+              'design_fingerprint': data['design_fingerprint'],
+              'n_eligible_species': data['source']['n_eligible_species'],
+              'primary_folds': data['cross_validation']['primary']['n_folds'],
+              'spatial_sensitivity_folds': data['cross_validation']['spatial_sensitivity']['n_folds'],
+              'spatial_blocks': data['cross_validation']['spatial_sensitivity']['blocks'],
+              'radii': {region: value['scenario_radii_km'] for region, value in data['eog_graph']['regions'].items()},
+              'survey_component_counts': {region: value['survey_component_counts'] for region, value in data['eog_graph']['regions'].items()},
+              'strict_reference': data['heldout_probability_models']['strict_incremental_reference'],
+              'strict_candidate': data['heldout_probability_models']['strict_incremental_candidate'],
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-preoutcome-design-${{ github.run_id }}
+          path: |
+            benchmarks/tanzania_design_expected.json
+            results/tanzania_design/live_metadata/source_manifest.json
+            results/tanzania_design/acquisition/acquisition_report.json
+            results/tanzania_design/acquisition/verified_source_manifest.json
+            results/tanzania_design/verified_schema.json
+            results/tanzania_design/semantics_audit.json
+            results/tanzania_design/design_contract.json
+          if-no-files-found: error
