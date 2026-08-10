@@ -1,0 +1,103 @@
+{
+  "status": "frozen_public_dryad_source_contract",
+  "scientific_boundary": "source identity and integrity metadata only; no species filtering, model fitting, graph construction, or EOG outcome",
+  "doi": "10.5061/dryad.p042h0c",
+  "dataset_api": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.p042h0c",
+  "version_id": 23134,
+  "version_api": "https://datadryad.org/api/v2/versions/23134",
+  "publication_date": "2020-03-12",
+  "title": "Data from: Heterogeneous matrix habitat drives species occurrences in complex, fragmented landscapes",
+  "frozen_manifest_sha256": "884a4c512ab8ec9322d2356b8bbc5db3fae0dbc7487b3f00dacbb41cd24b7595",
+  "files": [
+    {
+      "id": 80311,
+      "name": "0_usambara.R",
+      "size": 4149,
+      "digest_type": "md5",
+      "digest": "2914fdf73df35af28fbd2ae091e6dcfb",
+      "mime_type": "text/plain",
+      "api_download": "https://datadryad.org/api/v2/files/80311/download",
+      "public_stream": "https://datadryad.org/downloads/file_stream/80311"
+    },
+    {
+      "id": 80312,
+      "name": "1_sites.R",
+      "size": 2541,
+      "digest_type": "md5",
+      "digest": "dedf1b544dda4d60b4f53c8fe15e1ca9",
+      "mime_type": "text/plain",
+      "api_download": "https://datadryad.org/api/v2/files/80312/download",
+      "public_stream": "https://datadryad.org/downloads/file_stream/80312"
+    },
+    {
+      "id": 80313,
+      "name": "2_isolation_occurrence",
+      "size": 4479,
+      "digest_type": "md5",
+      "digest": "cec0e49d35a44976692b260c63efc8ef",
+      "mime_type": "application/octet-stream",
+      "api_download": "https://datadryad.org/api/v2/files/80313/download",
+      "public_stream": "https://datadryad.org/downloads/file_stream/80313"
+    },
+    {
+      "id": 80314,
+      "name": "Nodes_E.csv",
+      "size": 2432,
+      "digest_type": "md5",
+      "digest": "b0b1204001d9d95c6f4d41d388c62f4d",
+      "mime_type": "text/csv",
+      "api_download": "https://datadryad.org/api/v2/files/80314/download",
+      "public_stream": "https://datadryad.org/downloads/file_stream/80314"
+    },
+    {
+      "id": 80315,
+      "name": "Nodes_W.csv",
+      "size": 2514,
+      "digest_type": "md5",
+      "digest": "eca3e080d55d3613a19b1b6603574699",
+      "mime_type": "text/csv",
+      "api_download": "https://datadryad.org/api/v2/files/80315/download",
+      "public_stream": "https://datadryad.org/downloads/file_stream/80315"
+    },
+    {
+      "id": 80316,
+      "name": "Sites.csv",
+      "size": 1314,
+      "digest_type": "md5",
+      "digest": "a774e31df8f5b7a5e8f113dff2fefa60",
+      "mime_type": "text/csv",
+      "api_download": "https://datadryad.org/api/v2/files/80316/download",
+      "public_stream": "https://datadryad.org/downloads/file_stream/80316"
+    },
+    {
+      "id": 80317,
+      "name": "spp_occur.csv",
+      "size": 28961,
+      "digest_type": "md5",
+      "digest": "fbb3fd65aa545342e5c65908f34459e2",
+      "mime_type": "text/csv",
+      "api_download": "https://datadryad.org/api/v2/files/80317/download",
+      "public_stream": "https://datadryad.org/downloads/file_stream/80317"
+    },
+    {
+      "id": 80318,
+      "name": "raster_east3.tif",
+      "size": 3343510,
+      "digest_type": "md5",
+      "digest": "8ce86bf7593945b46851f11c7c62c60f",
+      "mime_type": "image/tiff",
+      "api_download": "https://datadryad.org/api/v2/files/80318/download",
+      "public_stream": "https://datadryad.org/downloads/file_stream/80318"
+    },
+    {
+      "id": 80319,
+      "name": "raster_west3.tif",
+      "size": 9040036,
+      "digest_type": "md5",
+      "digest": "0c5304bd74ee80c62e1ff656eddc7d64",
+      "mime_type": "image/tiff",
+      "api_download": "https://datadryad.org/api/v2/files/80319/download",
+      "public_stream": "https://datadryad.org/downloads/file_stream/80319"
+    }
+  ]
+}
