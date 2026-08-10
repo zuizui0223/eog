@@ -1,0 +1,5 @@
+EOG separates local environmental support from landscape reachability.
+Island-chain structure added information beyond support and source distance.
+EOG did not improve a strong matrix-aware forest-fragment reference.
+Positive and negative benchmarks define the method's current boundary.
+Frozen folds, failures, and result fingerprints make claims auditable.
