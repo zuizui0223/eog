@@ -1,0 +1,69 @@
+{
+  "status": "tanzania_training_only_eog_feature_expected_values",
+  "scientific_boundary": "frozen before any Tanzania occurrence probability, current-flow comparison, or EOG performance score",
+  "design_fingerprint": "f8b37bb30d230f92ad323870020d34e2225f898b85394124b965a2d0ecdeb324",
+  "eligible_species_sha256": "4859178d155db2594a635896d794d1af4c4d655da924489d41ff64e8fc57f135",
+  "n_feature_rows": 15960,
+  "n_applicability_rows": 1140,
+  "feature_rows_sha256": "ca37a9303a7bfc688db982ab68a98bac0695f9f091711ab016a1a2a96a34c0aa",
+  "applicability_rows_sha256": "16dbcf05ae558b06662b15d7226f83acc7ac0467a4e0bbd4fd8a60d704e2899c",
+  "partitions": {
+    "primary_loso": {
+      "n_rows": 11760,
+      "n_valid_rows": 11746,
+      "n_invalid_rows": 14,
+      "invalid_by_role": {"training": 14},
+      "invalid_by_reason": {
+        "no_training_presence_anchor_after_row_exclusion": 14
+      },
+      "n_heldout_rows": 840,
+      "n_valid_heldout_rows": 840,
+      "heldout_connected_frequency_distribution": {
+        "0": 107,
+        "0.25": 161,
+        "0.5": 175,
+        "0.75": 111,
+        "1": 286
+      },
+      "heldout_without_same_region_anchor": 107,
+      "n_species_fold_groups": 840,
+      "n_anchor_feature_model_estimable": 826,
+      "n_anchor_feature_model_nonestimable": 14,
+      "nonestimable_by_reason": {
+        "valid_training_structural_rows_single_class": 14
+      },
+      "nonestimable_groups_sha256": "4994979cfa5c540a1542b4ae8bb639a64fcc2ce11f297765b69502697ad61b68"
+    },
+    "spatial_mst_block": {
+      "n_rows": 4200,
+      "n_valid_rows": 4113,
+      "n_invalid_rows": 87,
+      "invalid_by_role": {"heldout": 18, "training": 69},
+      "invalid_by_reason": {
+        "no_training_presence_anchor_after_row_exclusion": 87
+      },
+      "n_heldout_rows": 840,
+      "n_valid_heldout_rows": 822,
+      "heldout_connected_frequency_distribution": {
+        "0": 186,
+        "0.25": 394,
+        "0.5": 242
+      },
+      "heldout_without_same_region_anchor": 186,
+      "n_species_fold_groups": 300,
+      "n_anchor_feature_model_estimable": 271,
+      "n_anchor_feature_model_nonestimable": 29,
+      "nonestimable_by_reason": {
+        "no_valid_heldout_structural_features": 5,
+        "valid_training_structural_rows_single_class": 24
+      },
+      "nonestimable_groups_sha256": "388990deddd3f70b151839b230e50b58f8dc511c4b5cf7fb3aa100710194912f"
+    }
+  },
+  "heldout_labels_used_in_construction": false,
+  "heldout_labels_exported": false,
+  "occurrence_model_fitted": false,
+  "current_flow_computed": false,
+  "performance_metric_computed": false,
+  "eog_performance_inspected": false
+}
