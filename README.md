@@ -22,6 +22,13 @@ SDM, environmental similarity model, or expert support surface
 
 Version `0.1.0` began as a frozen extraction of environmental-state geometry from `zuizui0223/acsp` PR #35. Subsequent validation narrowed the defensible interpretation and added bridge, sensitivity, survey, verification, and reporting layers. The spatial support-topology layer absorbs the scientifically defensible component work from `zuizui0223/odsp`; ODSP's widest-path and path-classification implementation is deliberately not duplicated because EOG already owns bridge and bottleneck inference.
 
+Empirical structural validation now includes both a positive confirmatory result and a negative external boundary result:
+
+- **A-Islands:** across 842 islands and 886 plant taxa, connected frequency retained held-out incidence information after conditioning on pointwise climatic support and nearest-training-occurrence distance. The primary conditional concordance was 0.6177466 for 845 estimable species (95% interval 0.6086806–0.6269445).
+- **Tanzania forest fragments:** across 60 bird species and 14 fragments, adding the frozen geography-only EOG connected-frequency feature to patch area, training-selected matrix-aware current flow, their interaction, and nearest-training-occurrence distance worsened leave-one-fragment-out log loss by 0.0321131 (95% interval +0.0174580 to +0.0486750). Spatial-block sensitivity was weaker and uncertain.
+
+Together these results show that structural configuration can contain information absent from pointwise support and direct source distance, but EOG is **not** a universally beneficial add-on once a strong landscape-specific connectivity model is already present. See [`docs/structural_validation_synthesis.md`](docs/structural_validation_synthesis.md).
+
 ## Layer 1: environmental-state geometry
 
 For occurrence-by-feature matrices, EOG reports:
@@ -134,21 +141,28 @@ Bridge inference and survey decisions:
 ## Validation and manuscript materials
 
 - `docs/sdm_support_topology_positioning.md`: SDM, topology, bridge, and survey distinctions;
+- `docs/structural_validation_synthesis.md`: A-Islands positive result and Tanzania negative boundary result in one evidence frame;
+- `docs/tanzania_heldout_result.md`: independently reproduced strong-competitor external benchmark;
+- `docs/aislands_authoritative_contracts.md`: authoritative A-Islands pre-outcome design;
+- `manuscript/structural_reachability_manuscript_skeleton.md`: structural-method paper organized around conditional incremental value;
 - `docs/odsp_migration_map.md`: copy/adapt/replace/retire decisions and archival plan;
 - `examples/support_topology/synthetic_islands.py`: hard-mask island demonstration;
 - `tests/test_support_topology.py`: component, persistence, masking, recovery, and determinism tests;
 - `docs/multiaxial_methodology.md`: restrained environmental-state geometry position;
-- `docs/evidence_ledger.md`: verified results and unsupported claims;
+- `docs/evidence_ledger.md`: verified positive, negative, and unsupported claims;
+- `docs/claim_matrix.md`: quantity-specific wording and evidence status;
 - `docs/frozen_comparison_tutorial.md`: canonical manifest-to-result workflow;
 - `docs/hypothesis_survey_contract.md`: bridge-hypothesis CSV and output contract.
 
 ## Scientific boundary
 
-EOG converts pointwise environmental support into occurrence-conditioned spatial components and explicit reachability hypotheses. It does not claim to replace standard, dynamic, mechanistic, or process-based SDMs. A support component does not establish occupancy, colonisation probability, historical dispersal, demographic connectivity, genetic isolation, or causal barriers without additional data.
+EOG converts pointwise environmental support into occurrence-conditioned spatial components and explicit reachability hypotheses. It does not claim to replace standard, dynamic, mechanistic, resistance, circuit-theory, or process-based models. A support component does not establish occupancy, colonisation probability, historical dispersal, demographic connectivity, genetic isolation, or causal barriers without additional data.
 
-The central manuscript question is:
+The central structural manuscript question is now:
 
-> How can pointwise species-distribution support be transformed into occurrence-conditioned spatial components and competing reachability hypotheses in fragmented landscapes?
+> Under which landscape and reference-model conditions does occurrence-anchored spatial configuration add held-out information beyond pointwise environmental support, direct occurrence proximity, and landscape-specific connectivity models?
+
+The current evidence supports a conditional answer, not universal superiority: structural reachability added information in the frozen A-Islands comparison, but the tested generic connected-frequency feature did not improve the stronger Tanzania current-flow reference.
 
 ## Provenance
 
