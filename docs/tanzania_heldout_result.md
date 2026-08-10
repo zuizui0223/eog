@@ -6,6 +6,8 @@ The first complete execution succeeded under the previously merged source, geome
 
 The numerical direction below remains **provisional until an independent full rerun reproduces the frozen result fingerprint** `df4667532ea7c7e4cfe372488d6a6cf86186cdaf19b90b6638f8a17e82dc9621`.
 
+The first independent confirmation attempt stopped before species scoring at the upstream current-flow fingerprint gate. Direct comparison with the first-run library showed only sparse-LU noise: the largest West pairwise difference was `3.430500328249764e-11`, the largest primary-isolation difference was `3.9540282159578055e-10`, and every physical invariant and all 512 candidate distinctions were preserved. A few values straddled a seven-decimal rounding boundary, so the diagnostic cross-run hash was corrected to six decimals without changing any raw float64 current-flow value, resistance selection rule, probability model, or biological result. The correction and its post-result timing are documented in `tanzania_current_flow_fingerprint_policy.md`; a fresh full confirmation run is required.
+
 ## Strict primary contrast
 
 Reference:
