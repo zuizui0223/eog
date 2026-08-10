@@ -1,0 +1,217 @@
+name: Tanzania current-flow candidate grid
+
+on:
+  push:
+    branches:
+      - agent/tanzania-circuitscape-smoke
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  NUMEXPR_NUM_THREADS: '1'
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install current-flow dependencies
+        run: python -m pip install '.[currentflow]' pytest
+      - name: Test effective-resistance engine
+        run: |
+          pytest -q \
+            tests/test_tanzania_current_flow_solver.py \
+            tests/test_tanzania_current_flow_contract.py \
+            tests/test_tanzania_source_acquisition.py
+      - name: Refresh and integrity-verify official Dryad source
+        run: |
+          python benchmarks/fetch_tanzania_dryad.py \
+            --output-dir results/tanzania_cf/live_metadata
+          python benchmarks/fetch_tanzania_verified_package.py \
+            --contract benchmarks/tanzania_source_contract.json \
+            --live-manifest results/tanzania_cf/live_metadata/source_manifest.json \
+            --output-dir results/tanzania_cf/acquisition \
+            --timeout 60 \
+            --require-success
+      - name: Re-run current-flow source audit
+        run: |
+          python benchmarks/audit_tanzania_verified_bytes.py \
+            --source-dir results/tanzania_cf/acquisition/verified_source \
+            --manifest results/tanzania_cf/live_metadata/source_manifest.json \
+            --output results/tanzania_cf/verified_schema.json
+          python benchmarks/audit_tanzania_current_flow_source.py \
+            --source-dir results/tanzania_cf/acquisition/verified_source \
+            --expected benchmarks/tanzania_current_flow_expected.json \
+            --output results/tanzania_cf/current_flow_source_audit.json
+      - name: Enforce execution contract before calculation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from eog.tanzania_current_flow_contract import enumerate_resistance_combinations
+          from eog.tanzania_current_flow_solver import (
+              FROZEN_CONNECTION_RULE,
+              FROZEN_NEIGHBOURHOOD,
+              FROZEN_PRIMARY_COARSENING_FACTOR,
+              FROZEN_SENSITIVITY_COARSENING_FACTOR,
+              canonical_sha256,
+          )
+
+          contract = json.loads(Path('benchmarks/tanzania_current_flow_execution_contract.json').read_text())
+          audit = json.loads(Path('results/tanzania_cf/current_flow_source_audit.json').read_text())
+          assert contract['source_audit_fingerprint'] == audit['audit_fingerprint']
+          assert contract['graph']['neighbourhood'] == FROZEN_NEIGHBOURHOOD == 8
+          assert contract['graph']['connection_rule'] == FROZEN_CONNECTION_RULE
+          assert contract['coarsening']['primary_factor'] == FROZEN_PRIMARY_COARSENING_FACTOR == 4
+          assert contract['coarsening']['sensitivity_factor'] == FROZEN_SENSITIVITY_COARSENING_FACTOR == 8
+          combinations = list(enumerate_resistance_combinations())
+          assert len(combinations) == 512
+          assert canonical_sha256(combinations) == contract['resistance_grid']['combinations_sha256']
+          assert not any(contract['claim_boundary'][key] for key in (
+              'species_outcomes_inspected', 'resistance_selected', 'occurrence_model_fitted',
+              'performance_metric_computed', 'eog_performance_inspected'
+          ))
+          print('Tanzania current-flow execution contract verified before outcomes')
+          PY
+      - name: Package verified source for shards
+        run: |
+          cd results/tanzania_cf/acquisition
+          zip -qr ../verified_source.zip verified_source
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-cf-prepared-${{ github.run_id }}
+          path: |
+            results/tanzania_cf/verified_source.zip
+            results/tanzania_cf/current_flow_source_audit.json
+            benchmarks/tanzania_current_flow_execution_contract.json
+          if-no-files-found: error
+
+  compute:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        region: [E, W]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install current-flow dependencies
+        run: python -m pip install '.[currentflow]'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tanzania-cf-prepared-${{ github.run_id }}
+          path: results/tanzania_cf/prepared
+      - name: Unpack verified source
+        run: |
+          mkdir -p results/tanzania_cf/source
+          unzip -q results/tanzania_cf/prepared/verified_source.zip -d results/tanzania_cf/source
+      - name: Compute current-flow shard at both frozen resolutions
+        shell: bash
+        run: |
+          start=$(( ${{ matrix.shard }} * 32 ))
+          stop=$(( start + 32 ))
+          out="results/tanzania_cf/shards/${{ matrix.region }}/${{ matrix.shard }}"
+          mkdir -p "$out"
+          python benchmarks/run_tanzania_current_flow_shard.py \
+            --source-dir results/tanzania_cf/source/verified_source \
+            --region "${{ matrix.region }}" \
+            --factor 4 \
+            --start-index "$start" \
+            --stop-index "$stop" \
+            --output "$out/${{ matrix.region }}_${{ matrix.shard }}_factor4.jsonl"
+          python benchmarks/run_tanzania_current_flow_shard.py \
+            --source-dir results/tanzania_cf/source/verified_source \
+            --region "${{ matrix.region }}" \
+            --factor 8 \
+            --start-index "$start" \
+            --stop-index "$stop" \
+            --output "$out/${{ matrix.region }}_${{ matrix.shard }}_factor8.jsonl"
+      - name: Audit shard boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('results/tanzania_cf/shards/${{ matrix.region }}/${{ matrix.shard }}')
+          rows = 0
+          for path in sorted(root.glob('*.jsonl')):
+              for line in path.read_text().splitlines():
+                  row = json.loads(line)
+                  assert row['species_outcomes_inspected'] is False
+                  assert row['resistance_selected'] is False
+                  assert row['occurrence_model_fitted'] is False
+                  assert row['performance_metric_computed'] is False
+                  assert row['eog_performance_inspected'] is False
+                  rows += 1
+          assert rows == 64
+          print(f'validated {rows} outcome-free candidate rows')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-cf-shard-${{ matrix.region }}-${{ matrix.shard }}-${{ github.run_id }}
+          path: results/tanzania_cf/shards/${{ matrix.region }}/${{ matrix.shard }}/
+          if-no-files-found: error
+
+  aggregate:
+    needs: compute
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install current-flow dependencies
+        run: python -m pip install '.[currentflow]'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tanzania-cf-shard-*-${{ github.run_id }}
+          path: results/tanzania_cf/all_shards
+          merge-multiple: true
+      - name: Aggregate and compare frozen resolutions
+        run: |
+          python benchmarks/aggregate_tanzania_current_flow.py \
+            --input-dir results/tanzania_cf/all_shards \
+            --output-dir results/tanzania_cf/aggregate \
+            --expected-contract benchmarks/tanzania_current_flow_candidates_expected.json
+      - name: Enforce complete pre-outcome grid
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('results/tanzania_cf/aggregate/candidate_manifest.json').read_text())
+          assert manifest['expected_contract_verified'] is True
+          assert manifest['n_candidate_rows'] == 2048
+          assert manifest['n_resolution_comparisons'] == 1024
+          assert manifest['primary_factor'] == 4
+          assert manifest['sensitivity_factor'] == 8
+          assert manifest['literal_30m_source_reproduction_completed'] is False
+          for key in (
+              'species_outcomes_inspected', 'resistance_selected', 'occurrence_model_fitted',
+              'performance_metric_computed', 'eog_performance_inspected'
+          ):
+              assert manifest[key] is False
+          print(json.dumps(manifest, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-current-flow-candidates-${{ github.run_id }}
+          path: |
+            results/tanzania_cf/aggregate/
+            benchmarks/tanzania_current_flow_execution_contract.json
+            benchmarks/tanzania_current_flow_candidates_expected.json
+          if-no-files-found: error
