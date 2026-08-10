@@ -21,6 +21,7 @@ eog-support-topology-compare = "eog.support_topology_comparison_cli:main"
 [project.optional-dependencies]
 dev = ["pytest>=8", "pandas>=2"]
 raster = ["pandas>=2", "rasterio>=1.3"]
+currentflow = ["scipy>=1.11", "pandas>=2", "rasterio>=1.3"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
