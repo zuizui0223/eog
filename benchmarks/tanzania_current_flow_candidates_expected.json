@@ -1,6 +1,6 @@
 {
   "status": "tanzania_current_flow_candidate_expected_values",
-  "fingerprints_frozen": true,
+  "fingerprints_frozen": false,
   "scientific_boundary": "candidate quantities only; no species outcomes, resistance selection, occurrence model, predictive score, or EOG performance",
   "source_audit_fingerprint": "3ed8ed203fec441deef5eacd9c03cb5055911a859c4b187893c0beefbc7c46da",
   "coarsening_factor": 8,
@@ -9,30 +9,6 @@
     "E": "84a9322b70868c155f2ad8556f0c6b9a4324c52a9589b17c53b8c387f7b8028b",
     "W": "9d46af1d9cdb8d8c86f70259bbf814630abbc1025723c2c697c8d441197f20ac"
   },
-  "expected_projection": {
-    "schema_version": "tanzania_current_flow_candidates_v1",
-    "candidate_library_fingerprint": "6502e1aef2b19f1e0266b3f20c7ac0b07f3e98dc9d1c3086e0bd282225b7ff3e",
-    "regions": {
-      "E": {
-        "n_candidates": 512,
-        "n_focal_patches": 42,
-        "candidate_indices_sha256": "9b908ec784e8220772de71705d65128612b6c4c573292d9ed4c9375618aa183d",
-        "combinations_sha256": "bd6305f1567a96fb7695fb10fe30b7427868ef497b3b981a55fb48bd685f83ff",
-        "pairwise_resistance_sha256": "80289bb0c04b4ea33a96e7d8c7d26f6a33aaad9f3f2a87cb934f15a7bf6c8db6",
-        "isolation_primary_sha256": "976e5cfeada3cbd4340d9057c6f8a3a55b3b0e4ddb1efd0fa8c02e2ecdd11021",
-        "isolation_sensitivity_sha256": "1b7c34b3cb490417417eccc3cae2c17172a0be8be770bcb001e62c79ac65aeec",
-        "region_fingerprint": "0491dccf75ba7e8bf99477b1b1d8f16db88bfe93a89579fbec09cdf111a934e9"
-      },
-      "W": {
-        "n_candidates": 512,
-        "n_focal_patches": 42,
-        "candidate_indices_sha256": "9b908ec784e8220772de71705d65128612b6c4c573292d9ed4c9375618aa183d",
-        "combinations_sha256": "bd6305f1567a96fb7695fb10fe30b7427868ef497b3b981a55fb48bd685f83ff",
-        "pairwise_resistance_sha256": "82fd4754b4fa5137a189ec7c7e0e56efc761f068444bb63f0f6dc99ee37998aa",
-        "isolation_primary_sha256": "04c7e66f12f55a074bbc1998b24b8da7660c13c5903bcecc8d64df30c561eb9a",
-        "isolation_sensitivity_sha256": "a124f28f27ccffdf5afbeffb66a575749423a1b3a5e90279eb5bbda0e88f871e",
-        "region_fingerprint": "075c9f95d457bc71a4b5905d11969cef99dae15225fcc44eb6fad1c9b57f9911"
-      }
-    }
-  }
+  "solver_policy_id": "grounded_spd_superlu_colamd_no_dynamic_pivot_v1",
+  "candidate_fingerprint_status": "pending first complete execution under fixed SPD solver policy"
 }
