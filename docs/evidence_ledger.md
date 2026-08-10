@@ -82,6 +82,73 @@ Interpretation:
 3. Gap strength retains useful descriptive evidence for separated modes in the tested family.
 4. Largest-edge evidence remains unreliable for universal support-interruption inference.
 
+## A-Islands confirmatory structural benchmark
+
+The authoritative benchmark froze 886 APC-native plant taxa, 842 islands, five CHELSA variables, one shared five-fold spatial partition, deterministic L2 logistic pointwise support, and 12 island-chain scenarios before species outcomes were inspected.
+
+The primary endpoint compared occupied and unoccupied held-out islands within the same 5 × 5 strata of pointwise support and nearest-training-presence distance. The frozen result was:
+
+- estimable species: 845;
+- combined conditional connected-frequency concordance: **0.6177466**;
+- species-bootstrap 95% interval: **0.6086806–0.6269445**;
+- species sign-flip diagnostic: approximately **1 × 10⁻⁵**.
+
+The predeclared decomposition retained positive structural information:
+
+- geography-only connected frequency: **0.6147456**, 95% CI **0.6059505–0.6235729**;
+- environmentally constrained connected frequency: **0.6063727**, 95% CI **0.5974871–0.6154186**.
+
+The frozen bottleneck secondary was weaker but above 0.5:
+
+- concordance approximately **0.5288**;
+- 95% CI approximately **0.5177–0.5396**;
+- estimable species: 793.
+
+Supported interpretation: among held-out islands with similar pointwise environmental support and similar distance to training occurrences, islands embedded in more robustly reachable frozen graph configurations were occupied more often.
+
+This is evidence for added structural information conditional on the declared controls. It is not evidence that connected frequency is dispersal probability, that EOG replaces SDM, or that a historical colonisation route was recovered.
+
+## Tanzania non-island external boundary benchmark
+
+The Tanzania benchmark used 60 predeclared bird species and 14 forest fragments. It tested EOG against a stronger landscape-specific reference than the A-Islands benchmark.
+
+For every species and outer fold, one of 512 matrix-resistance combinations was selected using outer-training labels only. The strict reference was:
+
+`patch area + selected matrix-aware current flow + area × current flow + nearest training occurrence`
+
+The candidate added only geography-based EOG connected frequency. The same current-flow selection and probability engine were used in both tiers.
+
+The complete source-to-result workflow was independently reproduced. For primary leave-one-fragment-out validation:
+
+- matched held-out predictions: 826;
+- species: 60;
+- species-macro candidate-minus-reference log-loss difference: **+0.0321131**;
+- species-bootstrap 95% interval: **+0.0174580 to +0.0486750**;
+- species sign-flip diagnostic: **p = 0.000030**;
+- species-macro Brier difference: **+0.0047993**;
+- Brier 95% interval: **+0.0022813 to +0.0073149**.
+
+Positive differences are worse. The present EOG connected-frequency feature therefore worsened LOSO prediction relative to the already strong current-flow-plus-distance reference. The inverse-area source-weight sensitivity retained the same direction. Geometry-only spatial-block estimates were smaller and uncertain, with intervals spanning zero.
+
+Supported interpretation: the tested generic geography-only structural feature was not a beneficial add-on once a species-adaptive matrix-aware connectivity quantity and nearest-source distance were already represented in this small forest-fragment benchmark.
+
+This does not show that EOG is generally harmful or that current flow universally dominates graph methods.
+
+## Cross-system structural conclusion
+
+The two frozen empirical results reject both of the following universal positions:
+
+1. pointwise support and direct source distance are always sufficient;
+2. adding an EOG graph feature always improves prediction.
+
+The supported position is conditional:
+
+> Occurrence-anchored landscape configuration can carry information omitted by pointwise support and direct source distance, but its incremental value must be tested against the strongest landscape-specific connectivity reference available.
+
+A-Islands supports the first half of that statement. Tanzania supplies the necessary negative boundary for the second half.
+
+The systems differ in landscape, taxonomic group, sample size, graph representation, reference model, and endpoint. Their contrast does not identify which difference caused the opposite incremental result.
+
 ## Current supported position
 
 EOG supports an auditable report of:
@@ -90,21 +157,29 @@ EOG supports an auditable report of:
 - MST compactness under stated sampling and support assumptions;
 - separate separation diagnostics;
 - subsampling stability;
-- the exact feature transformation used.
+- the exact feature transformation used;
+- spatial support-component classes under a frozen field, mask, threshold sequence, neighbourhood rule, and anchor assignment;
+- occurrence-anchored connected frequency and bottleneck diagnostics under frozen graph scenarios;
+- held-out incremental tests against pointwise support, nearest-source distance, and stronger connectivity competitors;
+- explicit positive, null, negative, ambiguous, and non-estimable outcomes.
 
-Absolute breadth comparisons require a shared external or pooled scaling reference. Generic path-shape comparisons require matched support classes and sampling designs.
+Absolute breadth comparisons require a shared external or pooled scaling reference. Generic path-shape comparisons require matched support classes and sampling designs. Structural reachability claims require frozen graph assumptions, training-only anchors, and a comparator hierarchy appropriate to the landscape.
 
 ## Unsupported claims
 
 The current evidence does not establish that EOG:
 
 - replaces species-distribution or occupancy models;
-- outperforms every hypervolume, clustering, or topological method;
-- introduces the MST, single-linkage, or largest-edge statistic;
+- outperforms every hypervolume, clustering, topological, resistance, or circuit-theory method;
+- introduces the MST, single-linkage, largest-edge, graph-connectivity, or minimax statistic;
 - proves causal ecological mechanisms;
 - detects all forms of fragmentation or missing support;
 - provides a posterior fragmentation probability;
 - supports a universal raw `gap_strength` threshold;
 - is robust to arbitrary irrelevant environmental dimensions;
 - measures absolute niche breadth after independent within-cloud scaling;
-- measures generic path tortuosity across arbitrary point-cloud support classes.
+- measures generic path tortuosity across arbitrary point-cloud support classes;
+- universally improves held-out prediction when appended to an SDM or connectivity model;
+- estimates dispersal, colonisation, demographic connectivity, or historical routes from connected frequency;
+- explains why A-Islands and Tanzania produced different incremental results;
+- permits post-outcome trait, directionality, scale, or shrinkage changes to replace the frozen Tanzania result.

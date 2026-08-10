@@ -76,7 +76,7 @@ The framework is motivated by fragmented and island landscapes because hard unav
 
 Sea, inaccessible substrate, or excluded domain cells should be represented as unavailable mask cells when they are outside the graph. Encoding them merely as low support answers a different question and may create artificial low-threshold mergers.
 
-## Evaluation
+## Evaluation hierarchy
 
 AUC alone is not the primary validation target. Minimum comparisons should include:
 
@@ -84,6 +84,31 @@ AUC alone is not the primary validation target. Minimum comparisons should inclu
 2. distance to the nearest known occurrence;
 3. support plus distance;
 4. a single-threshold component rule;
-5. multi-threshold persistent support topology.
+5. multi-threshold persistent support topology or occurrence-anchored reachability;
+6. a strong landscape-specific connectivity competitor when one is available.
 
-Useful endpoints include held-out occurrence recovery by component class, detection yield among matched-support cells, component-level calibration, stability across thresholds and neighbourhood rules, and island- or region-level complete holdout. Empirical superiority must not be claimed until topology adds information after controlling for local support and geographic distance.
+Useful endpoints include held-out occurrence recovery by component class, detection yield among matched-support cells, component-level calibration, stability across thresholds and neighbourhood rules, island- or region-level complete holdout, conditional concordance after matching support and source distance, and paired held-out loss beyond a complete reference model.
+
+## Frozen empirical evidence
+
+The empirical evidence is deliberately mixed.
+
+### A-Islands
+
+The confirmatory A-Islands benchmark used 886 plant taxa across 842 islands. Held-out occupied and unoccupied islands were compared within frozen pointwise-support × nearest-training-occurrence-distance strata. For 845 estimable species, connected frequency had a conditional concordance of **0.6177466** with a species-bootstrap 95% interval of **0.6086806–0.6269445**.
+
+This supports added structural information beyond pointwise climate support and simple source proximity under the declared island-chain scenarios.
+
+### Tanzania forest fragments
+
+The non-island external benchmark used 60 bird species across 14 forest fragments. Its reference already included patch area, a species-adaptive matrix-aware current-flow quantity selected using outer-training labels only, the area × current-flow interaction, and nearest-training-occurrence distance.
+
+Adding geography-only EOG connected frequency increased LOSO log loss by **0.0321131**, with a species-bootstrap 95% interval of **+0.0174580 to +0.0486750**. Spatial-block sensitivity was smaller and uncertain.
+
+This shows that a generic graph feature need not add predictive value after a strong landscape-specific connectivity model has already represented matrix structure.
+
+The supported cross-system conclusion is therefore conditional:
+
+> Occurrence-anchored landscape configuration can add information omitted by pointwise support and direct source distance, but empirical superiority must be tested against the strongest appropriate reference and is not guaranteed.
+
+See `docs/structural_validation_synthesis.md` for the complete comparison and claim boundary.
