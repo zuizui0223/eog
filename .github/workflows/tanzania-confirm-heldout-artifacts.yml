@@ -65,8 +65,8 @@ jobs:
           test -n "$DESIGN" && test -n "$FEATURE_MANIFEST" && test -n "$CANDIDATE_MANIFEST"
           python - <<'PY'
           import json
-          from pathlib import Path
           import os
+          from pathlib import Path
 
           source = Path('benchmarks/tanzania_heldout_expected.json')
           value = json.loads(source.read_text())
@@ -90,6 +90,7 @@ jobs:
         run: |
           python - <<'PY'
           from copy import deepcopy
+          import difflib
           import json
           import os
           from pathlib import Path
@@ -112,13 +113,12 @@ jobs:
           new_result_fp = normalized_new['expected_projection'].pop('result_fingerprint')
           assert old_result_fp == os.environ['OLD_RESULT_FINGERPRINT']
           if normalized_old != normalized_new:
-              import difflib
               left = json.dumps(normalized_old, sort_keys=True, indent=2).splitlines()
               right = json.dumps(normalized_new, sort_keys=True, indent=2).splitlines()
-              raise AssertionError('\n'.join(difflib.unified_diff(left, right, fromfile='first', tofile='independent')))
+              raise AssertionError(
+                  '\n'.join(difflib.unified_diff(left, right, fromfile='first', tofile='independent'))
+              )
 
-          # Only identity hashes may change. Every prediction, group, species,
-          # contrast, selected-candidate count and inferential value is identical.
           new['scientific_boundary'] = (
               'held-out result projection independently reproduced after all official '
               'source bytes, 1,024 current-flow candidates, 60 species, folds, selection, '
@@ -143,8 +143,8 @@ jobs:
       - name: Finalize the result document
         run: |
           python - <<'PY'
-          from pathlib import Path
           import json
+          from pathlib import Path
 
           expected = json.loads(Path('benchmarks/tanzania_heldout_expected.json').read_text())
           fingerprint = expected['expected_projection']['result_fingerprint']
@@ -152,26 +152,28 @@ jobs:
           text = path.read_text()
           start = text.index('## Verification status')
           end = text.index('\n## Strict primary contrast', start)
-          replacement = f'''## Verification status
-
-The complete benchmark was independently regenerated from the official Dryad
-version bytes through all 1,024 regional current-flow candidates, 60-species
-training-only resistance selection, held-out prediction, scoring, and
-species-cluster inference. The independent execution preserved every prediction,
-group, species, contrast, selected-candidate count, confidence interval, and
-p-value from the first run.
-
-The verified result fingerprint is:
-
-`{fingerprint}`
-
-A separate audit found harmless sparse-LU differences below `3.96e-10` in the
-upstream West current-flow library. Because a few values straddled a seven-decimal
-rounding boundary, cross-run diagnostic hashes were corrected to six decimals;
-raw float64 model inputs were never rounded or altered. The correction, its
-post-result timing, and its inability to affect the biological contrast are
-recorded in `tanzania_current_flow_fingerprint_policy.md`.
-'''
+          replacement = '\n'.join([
+              '## Verification status',
+              '',
+              'The complete benchmark was independently regenerated from the official Dryad',
+              'version bytes through all 1,024 regional current-flow candidates, 60-species',
+              'training-only resistance selection, held-out prediction, scoring, and',
+              'species-cluster inference. The independent execution preserved every prediction,',
+              'group, species, contrast, selected-candidate count, confidence interval, and',
+              'p-value from the first run.',
+              '',
+              'The verified result fingerprint is:',
+              '',
+              f'`{fingerprint}`',
+              '',
+              'A separate audit found harmless sparse-LU differences below `3.96e-10` in the',
+              'upstream West current-flow library. Because a few values straddled a seven-decimal',
+              'rounding boundary, cross-run diagnostic hashes were corrected to six decimals;',
+              'raw float64 model inputs were never rounded or altered. The correction, its',
+              'post-result timing, and its inability to affect the biological contrast are',
+              'recorded in `tanzania_current_flow_fingerprint_policy.md`.',
+              '',
+          ])
           text = text[:start] + replacement + text[end:]
           text = text.replace('### First execution', '### Independently reproduced result')
           text = text.replace(
