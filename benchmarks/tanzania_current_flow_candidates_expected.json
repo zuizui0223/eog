@@ -11,7 +11,7 @@
   },
   "expected_projection": {
     "schema_version": "tanzania_current_flow_candidates_v1",
-    "candidate_library_fingerprint": "4b5ab8affb3c745996ea97950b9396d2740b681c39777629f3a19762833613a5",
+    "candidate_library_fingerprint": "c46a566e8881be7931288ef119493ac7f5ceaf7ee5e8a5d0486d2f6c7e6524f2",
     "regions": {
       "E": {
         "n_candidates": 512,
@@ -21,7 +21,7 @@
         "pairwise_resistance_sha256": "80289bb0c04b4ea33a96e7d8c7d26f6a33aaad9f3f2a87cb934f15a7bf6c8db6",
         "isolation_primary_sha256": "976e5cfeada3cbd4340d9057c6f8a3a55b3b0e4ddb1efd0fa8c02e2ecdd11021",
         "isolation_sensitivity_sha256": "1b7c34b3cb490417417eccc3cae2c17172a0be8be770bcb001e62c79ac65aeec",
-        "region_fingerprint": "ac05e0b99fb0d9be2c7e0b7acb0d850ae40d0c39878bb31c4ac4c53ad933061c"
+        "region_fingerprint": "708d50ab44b53ac7efdbe7b147fd103941a59410f7a79d1509517b00d2343764"
       },
       "W": {
         "n_candidates": 512,
@@ -31,7 +31,7 @@
         "pairwise_resistance_sha256": "82fd4754b4fa5137a189ec7c7e0e56efc761f068444bb63f0f6dc99ee37998aa",
         "isolation_primary_sha256": "04c7e66f12f55a074bbc1998b24b8da7660c13c5903bcecc8d64df30c561eb9a",
         "isolation_sensitivity_sha256": "a124f28f27ccffdf5afbeffb66a575749423a1b3a5e90279eb5bbda0e88f871e",
-        "region_fingerprint": "1058f9d10ce330ebd9bba34d833977d56ac72f1da475f8ecf86bc9bdfff93db2"
+        "region_fingerprint": "4e8f5ecf6039eff7c158207ee8590a161e0465d24da617253db74f8025ec9513"
       }
     }
   }
