@@ -1,11 +1,11 @@
 {
   "status": "tanzania_heldout_current_flow_eog_expected_values",
   "results_frozen": true,
-  "scientific_boundary": "held-out result projection frozen after the first execution under the previously merged input, selection, scoring, and inference contracts",
+  "scientific_boundary": "held-out result projection independently reproduced after all official source bytes, 1,024 current-flow candidates, 60 species, folds, selection, prediction, scoring, and inference were regenerated",
   "required_inputs": {
     "design_fingerprint": "f8b37bb30d230f92ad323870020d34e2225f898b85394124b965a2d0ecdeb324",
     "eligible_species_sha256": "4859178d155db2594a635896d794d1af4c4d655da924489d41ff64e8fc57f135",
-    "candidate_library_fingerprint": "79e05a47586a71cf2c981a381924b516dc091af87e3c8ae31feefddaf559380a",
+    "candidate_library_fingerprint": "3cabff50f138f7ccfe77cdbe87aefe14d5ec4dd40db15f16fb7b072cd3d01026",
     "eog_feature_rows_sha256": "ca37a9303a7bfc688db982ab68a98bac0695f9f091711ab016a1a2a96a34c0aa",
     "eog_applicability_rows_sha256": "16dbcf05ae558b06662b15d7226f83acc7ac0467a4e0bbd4fd8a60d704e2899c",
     "selection_contract_fingerprint": "8efa5dba13573b4fcc0bb6860c187614e4192c5858980c8f788164b1a1be8ad0"
@@ -29,7 +29,7 @@
     "input_fingerprints": {
       "design_fingerprint": "f8b37bb30d230f92ad323870020d34e2225f898b85394124b965a2d0ecdeb324",
       "eligible_species_sha256": "4859178d155db2594a635896d794d1af4c4d655da924489d41ff64e8fc57f135",
-      "candidate_library_fingerprint": "79e05a47586a71cf2c981a381924b516dc091af87e3c8ae31feefddaf559380a",
+      "candidate_library_fingerprint": "3cabff50f138f7ccfe77cdbe87aefe14d5ec4dd40db15f16fb7b072cd3d01026",
       "eog_feature_rows_sha256": "ca37a9303a7bfc688db982ab68a98bac0695f9f091711ab016a1a2a96a34c0aa",
       "eog_applicability_rows_sha256": "16dbcf05ae558b06662b15d7226f83acc7ac0467a4e0bbd4fd8a60d704e2899c",
       "selection_contract_fingerprint": "8efa5dba13573b4fcc0bb6860c187614e4192c5858980c8f788164b1a1be8ad0"
@@ -1680,6 +1680,6 @@
         }
       }
     },
-    "result_fingerprint": "df4667532ea7c7e4cfe372488d6a6cf86186cdaf19b90b6638f8a17e82dc9621"
+    "result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
   }
 }
