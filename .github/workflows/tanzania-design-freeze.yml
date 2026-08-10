@@ -21,7 +21,11 @@ jobs:
       - name: Install package and geospatial audit dependencies
         run: python -m pip install . pytest rasterio==1.4.3
       - name: Test deterministic Tanzania design primitives
-        run: pytest -q tests/test_tanzania_design.py tests/test_tanzania_source_acquisition.py
+        run: |
+          pytest -q \
+            tests/test_tanzania_design.py \
+            tests/test_tanzania_survey_ladder.py \
+            tests/test_tanzania_source_acquisition.py
       - name: Refresh frozen-source metadata
         run: |
           python benchmarks/fetch_tanzania_dryad.py \
@@ -45,9 +49,9 @@ jobs:
             --verified-schema results/tanzania_design/verified_schema.json \
             --semantics-mapping benchmarks/tanzania_semantics_mapping.json \
             --output results/tanzania_design/semantics_audit.json
-      - name: Freeze and enforce geometry/formula design contract
+      - name: Freeze and enforce non-degenerate geometry/formula contract
         run: |
-          python benchmarks/freeze_tanzania_design.py \
+          python benchmarks/freeze_tanzania_survey_ladder_design.py \
             --source-dir results/tanzania_design/acquisition/verified_source \
             --semantics-audit results/tanzania_design/semantics_audit.json \
             --expected-design benchmarks/tanzania_design_expected.json \
@@ -65,6 +69,11 @@ jobs:
           assert contract['cross_validation']['primary']['n_folds'] == expected['cross_validation']['primary_n_folds']
           assert contract['cross_validation']['spatial_sensitivity']['n_folds'] == expected['cross_validation']['spatial_sensitivity_n_folds']
           assert contract['cross_validation']['spatial_sensitivity']['blocks'] == expected['cross_validation']['spatial_blocks']
+          assert contract['eog_graph']['radius_selection_audit'] == expected['radius_selection_audit']
+          for region in ('E', 'W'):
+              assert contract['eog_graph']['regions'][region]['scenario_radii_km'] == expected['eog_graph'][region]['scenario_radii_km']
+              assert contract['eog_graph']['regions'][region]['survey_component_counts'] == {'survey_c04': 4, 'survey_c03': 3, 'survey_c02': 2, 'survey_c01': 1}
+              assert contract['eog_graph']['regions'][region]['survey_component_partitions'] == expected['eog_graph'][region]['survey_component_partitions']
           assert contract['species_outcomes_inspected'] is False
           assert contract['model_fitted'] is False
           assert contract['eog_score_computed'] is False
@@ -84,6 +93,7 @@ jobs:
               'spatial_sensitivity_folds': data['cross_validation']['spatial_sensitivity']['n_folds'],
               'spatial_blocks': data['cross_validation']['spatial_sensitivity']['blocks'],
               'radii': {region: value['scenario_radii_km'] for region, value in data['eog_graph']['regions'].items()},
+              'survey_component_counts': {region: value['survey_component_counts'] for region, value in data['eog_graph']['regions'].items()},
               'strict_reference': data['heldout_probability_models']['strict_incremental_reference'],
               'strict_candidate': data['heldout_probability_models']['strict_incremental_candidate'],
           }, indent=2))
