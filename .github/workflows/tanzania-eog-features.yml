@@ -1,0 +1,109 @@
+name: Tanzania training-only EOG features
+
+on:
+  push:
+    branches:
+      - agent/tanzania-eog-features
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install package and geospatial audit dependencies
+        run: python -m pip install . pytest rasterio==1.4.3
+      - name: Test leakage-safe feature construction
+        run: |
+          pytest -q \
+            tests/test_tanzania_eog_features.py \
+            tests/test_tanzania_design.py \
+            tests/test_tanzania_survey_ladder.py \
+            tests/test_tanzania_source_acquisition.py
+      - name: Refresh and verify official Dryad source
+        run: |
+          python benchmarks/fetch_tanzania_dryad.py \
+            --output-dir results/tanzania_features/live_metadata
+          python benchmarks/fetch_tanzania_verified_package.py \
+            --contract benchmarks/tanzania_source_contract.json \
+            --live-manifest results/tanzania_features/live_metadata/source_manifest.json \
+            --output-dir results/tanzania_features/acquisition \
+            --timeout 60 \
+            --require-success
+      - name: Rebuild source semantics and frozen design
+        run: |
+          python benchmarks/audit_tanzania_verified_bytes.py \
+            --source-dir results/tanzania_features/acquisition/verified_source \
+            --manifest results/tanzania_features/live_metadata/source_manifest.json \
+            --output results/tanzania_features/verified_schema.json
+          python benchmarks/audit_tanzania_semantics.py \
+            --source-dir results/tanzania_features/acquisition/verified_source \
+            --verified-schema results/tanzania_features/verified_schema.json \
+            --semantics-mapping benchmarks/tanzania_semantics_mapping.json \
+            --output results/tanzania_features/semantics_audit.json
+          python benchmarks/freeze_tanzania_survey_ladder_design.py \
+            --source-dir results/tanzania_features/acquisition/verified_source \
+            --semantics-audit results/tanzania_features/semantics_audit.json \
+            --expected-design benchmarks/tanzania_design_expected.json \
+            --output results/tanzania_features/design_contract.json
+      - name: Build and enforce training-only EOG feature artifacts
+        run: |
+          python benchmarks/build_tanzania_eog_features.py \
+            --source-dir results/tanzania_features/acquisition/verified_source \
+            --design-contract results/tanzania_features/design_contract.json \
+            --expected-contract benchmarks/tanzania_eog_features_expected.json \
+            --output-dir results/tanzania_features/features
+      - name: Audit leakage and output boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('results/tanzania_features/features')
+          manifest = json.loads((root / 'feature_manifest.json').read_text())
+          assert manifest['expected_contract_verified'] is True
+          assert manifest['n_feature_rows'] == 15960
+          assert manifest['n_applicability_rows'] == 1140
+          assert manifest['heldout_labels_used_in_construction'] is False
+          assert manifest['heldout_labels_exported'] is False
+          assert manifest['occurrence_model_fitted'] is False
+          assert manifest['current_flow_computed'] is False
+          assert manifest['performance_metric_computed'] is False
+          assert manifest['eog_performance_inspected'] is False
+          assert manifest['partitions']['primary_loso']['heldout_connected_frequency_distribution'] == {
+              '0': 107, '0.25': 161, '0.5': 175, '0.75': 111, '1': 286
+          }
+          assert sum(1 for _ in (root / 'primary_features.jsonl').open()) == 11760
+          assert sum(1 for _ in (root / 'spatial_sensitivity_features.jsonl').open()) == 4200
+          assert sum(1 for _ in (root / 'applicability.jsonl').open()) == 1140
+          first = json.loads((root / 'primary_features.jsonl').open().readline())
+          assert 'observed_presence' not in first
+          assert 'occur' not in first
+          assert first['heldout_label_used_in_construction'] is False
+          print(json.dumps({
+              'feature_rows_sha256': manifest['feature_rows_sha256'],
+              'applicability_rows_sha256': manifest['applicability_rows_sha256'],
+              'primary': manifest['partitions']['primary_loso'],
+              'spatial_sensitivity': manifest['partitions']['spatial_mst_block'],
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-training-only-eog-features-${{ github.run_id }}
+          path: |
+            benchmarks/tanzania_eog_features_expected.json
+            results/tanzania_features/live_metadata/source_manifest.json
+            results/tanzania_features/acquisition/acquisition_report.json
+            results/tanzania_features/acquisition/verified_source_manifest.json
+            results/tanzania_features/verified_schema.json
+            results/tanzania_features/semantics_audit.json
+            results/tanzania_features/design_contract.json
+            results/tanzania_features/features/
+          if-no-files-found: error
