@@ -6,6 +6,10 @@ on:
       - agent/tanzania-current-flow-candidates
   workflow_dispatch:
 
+concurrency:
+  group: tanzania-current-flow-candidates-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
