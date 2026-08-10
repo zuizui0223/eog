@@ -1,0 +1,76 @@
+name: Tanzania official source acquisition
+
+on:
+  push:
+    branches:
+      - agent/tanzania-oauth-source-acquisition
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      DRYAD_CLIENT_ID: ${{ secrets.DRYAD_CLIENT_ID }}
+      DRYAD_CLIENT_SECRET: ${{ secrets.DRYAD_CLIENT_SECRET }}
+      DRYAD_API_TOKEN: ${{ secrets.DRYAD_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install package and audit dependencies
+        run: python -m pip install . pytest rasterio==1.4.3
+      - name: Run acquisition unit tests
+        run: pytest -q tests/test_tanzania_source_acquisition.py
+      - name: Refresh open Dryad metadata
+        run: |
+          python benchmarks/fetch_tanzania_dryad.py \
+            --output-dir results/tanzania_live_metadata
+      - name: Acquire and verify official Dryad bytes
+        run: |
+          extra=()
+          if [[ -n "${DRYAD_API_TOKEN:-}" || ( -n "${DRYAD_CLIENT_ID:-}" && -n "${DRYAD_CLIENT_SECRET:-}" ) ]]; then
+            extra+=(--require-success)
+          fi
+          python benchmarks/fetch_tanzania_verified_package.py \
+            --contract benchmarks/tanzania_source_contract.json \
+            --live-manifest results/tanzania_live_metadata/source_manifest.json \
+            --output-dir results/tanzania_acquisition \
+            --timeout 60 \
+            "${extra[@]}"
+      - name: Run structural schema gate when bytes are verified
+        if: always()
+        run: |
+          status=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('results/tanzania_acquisition/acquisition_report.json')
+          print(json.loads(path.read_text())['status'] if path.exists() else 'missing_report')
+          PY
+          )
+          if [[ "$status" == "verified_official_dryad_bytes" ]]; then
+            python benchmarks/audit_tanzania_verified_bytes.py \
+              --source-dir results/tanzania_acquisition/verified_source \
+              --manifest results/tanzania_live_metadata/source_manifest.json \
+              --output results/tanzania_acquisition/verified_schema.json
+          else
+            echo "Official bytes not yet verified; downstream source semantics and EOG outcomes remain blocked ($status)."
+          fi
+      - name: Print acquisition report
+        if: always()
+        run: |
+          if [[ -f results/tanzania_acquisition/acquisition_report.json ]]; then
+            cat results/tanzania_acquisition/acquisition_report.json
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tanzania-official-source-acquisition-${{ github.run_id }}
+          path: |
+            results/tanzania_live_metadata/source_manifest.json
+            results/tanzania_acquisition/
+          if-no-files-found: error
