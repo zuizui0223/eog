@@ -47,18 +47,41 @@ East and West are separate graphs. Cross-landscape edges are prohibited even if 
 
 The graph is deliberately geography-only in this benchmark. Matrix heterogeneity is represented by the strong current-flow comparator, so the EOG increment tests occurrence-anchored patch configuration without disguising another matrix-resistance model as EOG.
 
-### Geometry-only scenario radii
+### Outcome-free degeneracy audit
 
-Within each 42-node region, compute the deterministic node MST. The four edge radii are the q50, q75, q90, and q100 quantiles of that MST's edge lengths.
+The first pre-outcome proposal used the q50, q75, q90, and q100 quantiles of all 42-node MST edge lengths. Before any species score or fitted occurrence comparison was computed, a geometry-only audit showed that the smallest q50 radius already put **every surveyed fragment in one component in both regions**.
 
-This rule is fixed entirely by verified geometry:
+Under that ensemble, connected frequency could only distinguish:
 
-- no species label is used;
-- no radius is selected by held-out performance;
-- q100 is the minimum radius at which the whole regional node set is connected;
-- lower quantiles provide increasingly restrictive fragmentation scenarios.
+- a target region containing at least one training anchor; versus
+- a target region containing no training anchor.
 
-The primary EOG structural quantity is `connected_frequency`: the fraction of the four scenarios in which a candidate node is connected to at least one training-presence anchor. Median normalized geographic bottleneck is secondary.
+It could not distinguish alternative within-region patch configurations. Keeping it would therefore test a region indicator dressed up as graph reachability. The quantile ensemble was revoked before outcomes.
+
+### Frozen survey-component ladder
+
+The replacement rule still uses only verified geometry.
+
+Within each region:
+
+1. construct the deterministic MST of all 42 forest-patch nodes;
+2. consider its edge lengths in ascending order;
+3. for target component counts 4, 3, 2, and 1, choose the smallest threshold larger than the previous threshold at which the **survey nodes** occupy exactly that many components;
+4. require every successive scenario to induce a distinct survey-node partition;
+5. fail the design gate if the geometry cannot support the complete 4→3→2→1 ladder.
+
+No species occurrence, model fit, AUC, log loss, or other performance quantity enters this selection.
+
+The frozen radii are:
+
+| Region | 4 survey components | 3 components | 2 components | 1 component |
+|---|---:|---:|---:|---:|
+| East | 0.511808 km | 0.913522 km | 2.654323 km | 2.678215 km |
+| West | 0.417907 km | 0.854101 km | 1.585589 km | 3.038021 km |
+
+The exact partitions, full-precision radii, node-MST fingerprints, and design fingerprint are stored in `benchmarks/tanzania_design_expected.json`. Any future drift is a hard failure.
+
+The primary EOG structural quantity is `connected_frequency`: the fraction of the four survey-component scenarios in which a candidate node is connected to at least one training-presence anchor. Median normalized geographic bottleneck is secondary.
 
 These quantities remain assumption-dependent structural diagnostics, not colonization or dispersal probabilities.
 
