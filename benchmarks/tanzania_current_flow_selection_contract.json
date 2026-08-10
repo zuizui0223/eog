@@ -1,0 +1,38 @@
+{
+  "status": "tanzania_training_only_current_flow_selection_contract",
+  "candidate_selection": {
+    "n_candidates": 512,
+    "training_only": true,
+    "heldout_labels_accepted_by_api": false,
+    "source_model": "binomial_logit(log10_area_ha * log10_current_flow_isolation)",
+    "source_model_penalty": 0.0,
+    "max_iterations": 100,
+    "convergence_tolerance": 1e-08,
+    "validity_rule": "converged AND finite pseudo_r2 >= 0 AND pseudo_r2 < 1 AND finite AIC",
+    "aic_tie_decimals": 10,
+    "tie_breaker": "lowest frozen candidate_index",
+    "no_valid_candidate_policy": "explicit non-estimable; never substitute full-data selection"
+  },
+  "heldout_probability_tiers": {
+    "l2_penalty": 1.0,
+    "minimum_training_count_per_class": 1,
+    "standardization": "outer-training rows only",
+    "constant_predictors": "drop from that tier and record explicitly",
+    "reference_predictors": [
+      "log10_area_ha",
+      "log10_current_flow_isolation",
+      "area_by_current_flow_isolation",
+      "log10_1p_nearest_training_occurrence_km"
+    ],
+    "candidate_addition": "eog_connected_frequency",
+    "current_flow_candidate_reused_unchanged": true,
+    "heldout_label_use": "score only after selection and fitting are complete"
+  },
+  "scientific_boundary": {
+    "official_species_outcomes_executed": false,
+    "heldout_predictions_generated": false,
+    "log_loss_computed": false,
+    "eog_performance_inspected": false
+  },
+  "contract_fingerprint": "8efa5dba13573b4fcc0bb6860c187614e4192c5858980c8f788164b1a1be8ad0"
+}
