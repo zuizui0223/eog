@@ -121,7 +121,8 @@ def test_archive_path_traversal_is_hard_failure(tmp_path):
 def test_file_size_mismatch_is_hard_failure(tmp_path):
     _, contract, _ = _contract(tmp_path)
     path = tmp_path / "a.csv"
-    path.write_bytes(b"too long")
+    path.write_bytes(b"x")
+    assert path.stat().st_size != contract["files"][0]["size"]
     with pytest.raises(SourceIntegrityError, match="byte-size mismatch"):
         verify_file(path, contract["files"][0])
 
