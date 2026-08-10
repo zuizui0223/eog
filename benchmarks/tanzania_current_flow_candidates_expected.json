@@ -1,0 +1,13 @@
+{
+  "status": "tanzania_current_flow_candidate_expected_values",
+  "fingerprints_frozen": false,
+  "scientific_boundary": "candidate quantities only; no species outcomes, resistance selection, occurrence model, predictive score, or EOG performance",
+  "source_audit_fingerprint": "3ed8ed203fec441deef5eacd9c03cb5055911a859c4b187893c0beefbc7c46da",
+  "coarsening_factor": 8,
+  "preparation_fingerprint": "869db8b2110a730bcff43570cac64daadc0ae7a23e74294375decfa1e151790f",
+  "prepared_region_fingerprints": {
+    "E": "84a9322b70868c155f2ad8556f0c6b9a4324c52a9589b17c53b8c387f7b8028b",
+    "W": "9d46af1d9cdb8d8c86f70259bbf814630abbc1025723c2c697c8d441197f20ac"
+  },
+  "candidate_fingerprint_status": "pending first complete outcome-free 512-by-2 execution"
+}
