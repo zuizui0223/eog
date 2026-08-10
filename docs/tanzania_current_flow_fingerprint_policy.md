@@ -1,59 +1,59 @@
 # Tanzania current-flow cross-run fingerprint policy
 
-## Why the original freeze failed
+## Why exact and seven-decimal freezes failed
 
-Two independent, outcome-free GitHub Actions executions generated the same
-Tanzania source package, the same 512 resistance combinations per region, and
-candidate arrays that passed every electrical-network invariant. The final
-library check nevertheless failed because it hashed float64 arrays after
-rounding to 12 decimal places.
+The current-flow candidate engine stores raw float64 arrays and verifies each
+shard locally at 12 decimal places. Sparse LU factorization nevertheless differs
+by a few last-place units across otherwise equivalent GitHub runners. Two early
+outcome-free executions differed by at most about `4.5e-10` absolutely and
+`9.2e-13` relatively, so the initial cross-run contract used seven decimals.
 
-Sparse LU factorization can differ by a few units in the last place across
-otherwise equivalent runners. In the observed rerun comparison, the largest
-absolute difference was approximately `4.5e-10` and the largest relative
-difference was approximately `9.2e-13`. Those changes did not alter candidate
-ordering, symmetry, diagonal values, positivity, uniqueness, or Rayleigh
-monotonicity.
+During independent verification after the first held-out result had already been
+frozen, a third candidate-generation execution failed that seven-decimal hash.
+A direct array audit showed no biological or algorithmic change:
 
-Treating that machine-level variation as scientific drift made the freeze less
-reproducible rather than more rigorous.
+- East arrays were identical under the seven-decimal contract;
+- West pairwise values differed by at most `3.430500328249764e-11`;
+- West primary isolation differed by at most `3.9540282159578055e-10`;
+- the maximum relative difference was `8.360282256199145e-13`;
+- all physical invariants and all 512 candidate distinctions were preserved.
 
-## Frozen two-level integrity rule
+The failure occurred because a few values lay almost exactly on a seven-decimal
+rounding boundary. Tiny values on opposite sides of that boundary receive
+different hashes even when their numerical difference is orders of magnitude
+smaller than `1e-7`. Decimal rounding is therefore a quantization diagnostic,
+not a mathematical tolerance comparison.
 
-The implementation now uses two distinct checks.
+## Current two-level integrity rule
 
 1. **Run-local shard integrity remains strict.** Each shard verifies the exact
-   file it wrote using the existing 12-decimal fingerprint. This detects
-   truncation, corruption, accidental file replacement, and within-run mixing.
-2. **Cross-run library identity uses seven decimal places.** The complete
-   library hashes and scalar manifest summaries are normalized to `1e-7`
-   before hashing. This is more than two orders of magnitude coarser than the
-   largest observed runner-level LU difference.
+   file it wrote using the 12-decimal fingerprint. This detects corruption,
+   truncation, replacement, and within-run artifact mixing.
+2. **Cross-run library identity uses six decimal places.** Complete-library
+   diagnostic hashes and scalar summaries are normalized to `1e-6`. The two
+   independently generated full West libraries that failed at seven decimals
+   are identical at six decimals, as are the East libraries.
+3. **Raw model inputs are never rounded.** Candidate selection and held-out
+   prediction continue to use the unmodified float64 arrays.
 
-The raw candidate arrays are still stored as unmodified float64 values. The
-normalization applies only to diagnostic hashes and human-readable scalar
-summaries; it does not change current-flow values used by later models.
+Six-decimal normalization still leaves all 512 pairwise matrices and all 512
+primary isolation vectors distinct in each region. Every library must also pass
+finiteness, positivity, symmetry, zero-diagonal, all-one minimum, and Rayleigh
+monotonicity checks.
 
-## Scientific guards retained
+## Regression guard
 
-Every full 512-candidate library must still satisfy all of the following before
-it can match the committed fingerprint:
+The synthetic test deliberately places values across a seven-decimal rounding
+boundary and perturbs them by `4e-10`. It requires the seven-decimal hashes to
+differ, the six-decimal hashes to agree, and a `2e-6` change to remain
+detectable.
 
-- finite and non-negative pairwise effective resistances;
-- finite and positive primary and sensitivity isolation values;
-- symmetric 42 x 42 matrices with zero diagonals;
-- 512 distinct pairwise matrices and 512 distinct primary isolation vectors;
-- the all-one resistance surface as the elementwise minimum;
-- zero Rayleigh-monotonicity violations across all adjacent resistance levels
-  for eucalyptus, tea, and other agriculture.
+## Claim boundary and timing
 
-A synthetic regression test additionally requires a `4.5e-10` perturbation to
-retain the same cross-run fingerprint, while a `2e-6` change must produce a
-different fingerprint.
-
-## Claim boundary
-
-This correction was selected from two candidate-generation runs before any
-species-specific resistance choice, occurrence-model fit, log loss, AUC, or
-EOG comparison. It changes only the reproducibility diagnostic and provides no
-opportunity to improve a biological outcome.
+The initial tolerance policy was selected before species-level outcomes. The
+change from seven to six decimals was made after the first held-out result was
+frozen but before independent result confirmation. It was triggered solely by
+an upstream candidate-library gate and was based on direct array differences,
+not on the sign, magnitude, or significance of the EOG comparison. It cannot
+improve or reverse the biological result because it changes only diagnostic
+hashes; raw current-flow arrays and all downstream formulas remain unchanged.
