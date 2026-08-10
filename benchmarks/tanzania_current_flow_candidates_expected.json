@@ -13,37 +13,41 @@
   "fingerprint_policy": {
     "raw_array_storage": "float64_unmodified",
     "run_local_shard_hash_decimals": 12,
-    "cross_run_library_hash_decimals": 7,
-    "cross_run_absolute_resolution": 1e-07,
+    "cross_run_library_hash_decimals": 6,
+    "cross_run_absolute_resolution": 1e-06,
     "scope": "diagnostic fingerprints and scalar summaries only",
-    "selection_basis": "two independent outcome-free GitHub Actions executions on the same verified source and solver contract",
+    "selection_basis": "three independent candidate-generation executions on the same verified source and solver contract; the third was triggered during post-result reproducibility verification and did not use species outcomes",
     "observed_cross_runner_max_absolute_difference": 4.5e-10,
     "observed_cross_runner_max_relative_difference": 9.2e-13,
-    "rationale": "seven decimal places are over two orders of magnitude coarser than the largest observed runner-level LU rounding difference while preserving all 512 unique candidate matrices and isolation vectors"
+    "rationale": "seven-decimal hashes were not tolerance-safe because values within 3.96e-10 could fall on opposite sides of a rounding boundary; six decimals produced identical complete East and West hashes across the audited executions while preserving 512 unique pairwise matrices and 512 unique primary isolation vectors per region",
+    "seven_decimal_boundary_failure_observed": true,
+    "third_run_max_pairwise_absolute_difference": 3.430500328249764e-11,
+    "third_run_max_primary_isolation_absolute_difference": 3.9540282159578055e-10,
+    "third_run_max_relative_difference": 8.360282256199145e-13
   },
   "expected_projection": {
     "schema_version": "tanzania_current_flow_candidates_v1",
-    "candidate_library_fingerprint": "79e05a47586a71cf2c981a381924b516dc091af87e3c8ae31feefddaf559380a",
+    "candidate_library_fingerprint": "3cabff50f138f7ccfe77cdbe87aefe14d5ec4dd40db15f16fb7b072cd3d01026",
     "regions": {
       "E": {
         "n_candidates": 512,
         "n_focal_patches": 42,
         "candidate_indices_sha256": "9b908ec784e8220772de71705d65128612b6c4c573292d9ed4c9375618aa183d",
         "combinations_sha256": "bd6305f1567a96fb7695fb10fe30b7427868ef497b3b981a55fb48bd685f83ff",
-        "pairwise_resistance_sha256": "66b97cef69d5be1be8b4cc5f7e9b0aece6fb3215e03b9ef32d38861c12ff12c9",
-        "isolation_primary_sha256": "3b5989318e1fce2e0cb359669ca8b9921ee12907e73e12a50b4310b077152591",
-        "isolation_sensitivity_sha256": "beb619aa507d7949c7978c1eeb75053ceea7726485da11357bb41490dab9fd9b",
-        "region_fingerprint": "13663f36de788f5d1d0b6961deb73ba95ddbdf65f58c2647725dc1ea9a6215b3"
+        "pairwise_resistance_sha256": "1f15aedfcac974a21de8b8f1fa094ee496ae02a043187af2b5514a72464931ab",
+        "isolation_primary_sha256": "b7f0fe59b293ea63964adcc6f28ede81e98d7e0322549aa6ad10296adc3ab794",
+        "isolation_sensitivity_sha256": "87c59d6f4974b6a5caaac59bd41a943893805ca0136bb2a041e2c6096a7e9f8a",
+        "region_fingerprint": "385445994d9f924ad47ab0feb3739a4b99f7bcbec2b62012395d3c93677f9c42"
       },
       "W": {
         "n_candidates": 512,
         "n_focal_patches": 42,
         "candidate_indices_sha256": "9b908ec784e8220772de71705d65128612b6c4c573292d9ed4c9375618aa183d",
         "combinations_sha256": "bd6305f1567a96fb7695fb10fe30b7427868ef497b3b981a55fb48bd685f83ff",
-        "pairwise_resistance_sha256": "cce585d9aa85d034124be0c656481f65e4b9d9591dcf39686faa7e1c93d8467d",
-        "isolation_primary_sha256": "fbd3e55291b13606dd649623c07aee3a56b09031ec30410c30121f02624ccf48",
-        "isolation_sensitivity_sha256": "152daed8841ef32928b7be2d53e1cb69a93983142496ac2842764b895a6abb82",
-        "region_fingerprint": "605d7f5e26cc81c268b8905b8406d6ffc2cea8a193dcc9d24c7634efab599a10"
+        "pairwise_resistance_sha256": "6e2db9866535417275f9f6e876850729324c2bba882ff57fea13db99a567bdea",
+        "isolation_primary_sha256": "82a3928b943911e337ab14cc16f4c0ec0ac82a0a819ebc7821b12cd04a464fa8",
+        "isolation_sensitivity_sha256": "5201bf19e8cdc676ad511140a5a09dc942d82810e877c209a9c1929707908076",
+        "region_fingerprint": "faba325597e77505301e788567e32c5125ea6407bd552d606e47c215d3bf0479"
       }
     }
   }

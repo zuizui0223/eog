@@ -1,0 +1,275 @@
+name: Tanzania held-out current-flow versus EOG benchmark
+
+on:
+  push:
+    branches:
+      - agent/tanzania-heldout-benchmark
+  workflow_dispatch:
+
+concurrency:
+  group: tanzania-heldout-benchmark-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PYTHONHASHSEED: '0'
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+
+jobs:
+  candidate_library:
+    uses: ./.github/workflows/tanzania-current-flow-candidates.yml
+
+  benchmark_inputs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen benchmark dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install . pytest numpy==2.2.6 scipy==1.15.3 pandas==2.2.3 rasterio==1.4.3
+      - name: Test held-out execution and its frozen dependencies
+        run: |
+          pytest -q \
+            tests/test_tanzania_heldout_benchmark.py \
+            tests/test_tanzania_current_flow_selection.py \
+            tests/test_tanzania_scoring.py \
+            tests/test_tanzania_eog_features.py \
+            tests/test_tanzania_design.py \
+            tests/test_tanzania_source_acquisition.py
+      - name: Reacquire and verify official Dryad version bytes
+        run: |
+          python benchmarks/fetch_tanzania_dryad.py \
+            --output-dir results/tanzania_heldout_inputs/live_metadata
+          python benchmarks/fetch_tanzania_verified_package.py \
+            --contract benchmarks/tanzania_source_contract.json \
+            --live-manifest results/tanzania_heldout_inputs/live_metadata/source_manifest.json \
+            --output-dir results/tanzania_heldout_inputs/acquisition \
+            --timeout 60 \
+            --require-success
+      - name: Rebuild verified schema, semantics and frozen design
+        run: |
+          python benchmarks/audit_tanzania_verified_bytes.py \
+            --source-dir results/tanzania_heldout_inputs/acquisition/verified_source \
+            --manifest results/tanzania_heldout_inputs/live_metadata/source_manifest.json \
+            --output results/tanzania_heldout_inputs/verified_schema.json
+          python benchmarks/audit_tanzania_semantics.py \
+            --source-dir results/tanzania_heldout_inputs/acquisition/verified_source \
+            --verified-schema results/tanzania_heldout_inputs/verified_schema.json \
+            --semantics-mapping benchmarks/tanzania_semantics_mapping.json \
+            --output results/tanzania_heldout_inputs/semantics_audit.json
+          python benchmarks/freeze_tanzania_survey_ladder_design.py \
+            --source-dir results/tanzania_heldout_inputs/acquisition/verified_source \
+            --semantics-audit results/tanzania_heldout_inputs/semantics_audit.json \
+            --expected-design benchmarks/tanzania_design_expected.json \
+            --output results/tanzania_heldout_inputs/design_contract.json
+      - name: Rebuild leakage-safe EOG structural features
+        run: |
+          python benchmarks/build_tanzania_eog_features.py \
+            --source-dir results/tanzania_heldout_inputs/acquisition/verified_source \
+            --design-contract results/tanzania_heldout_inputs/design_contract.json \
+            --expected-contract benchmarks/tanzania_eog_features_expected.json \
+            --output-dir results/tanzania_heldout_inputs/features
+      - name: Enforce the merged input and selection contracts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          expected = json.loads(Path('benchmarks/tanzania_heldout_expected.json').read_text())
+          design = json.loads(Path('results/tanzania_heldout_inputs/design_contract.json').read_text())
+          features = json.loads(Path('results/tanzania_heldout_inputs/features/feature_manifest.json').read_text())
+          selection = json.loads(Path('benchmarks/tanzania_current_flow_selection_contract.json').read_text())
+          required = expected['required_inputs']
+          assert design['design_fingerprint'] == required['design_fingerprint']
+          assert design['source']['eligible_species_sha256'] == required['eligible_species_sha256']
+          assert features['feature_rows_sha256'] == required['eog_feature_rows_sha256']
+          assert features['applicability_rows_sha256'] == required['eog_applicability_rows_sha256']
+          assert features['expected_contract_verified'] is True
+          assert selection['contract_fingerprint'] == required['selection_contract_fingerprint']
+          assert selection['scientific_boundary'] == {
+              'official_species_outcomes_executed': False,
+              'heldout_predictions_generated': False,
+              'log_loss_computed': False,
+              'eog_performance_inspected': False,
+          }
+          print(json.dumps({
+              'design_fingerprint': design['design_fingerprint'],
+              'eligible_species_sha256': design['source']['eligible_species_sha256'],
+              'feature_rows_sha256': features['feature_rows_sha256'],
+              'selection_contract_fingerprint': selection['contract_fingerprint'],
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-heldout-inputs-${{ github.run_id }}
+          path: |
+            results/tanzania_heldout_inputs/
+            benchmarks/tanzania_heldout_expected.json
+            benchmarks/tanzania_current_flow_selection_contract.json
+          if-no-files-found: error
+
+  heldout_shards:
+    needs: [candidate_library, benchmark_inputs]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen scoring dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install . numpy==2.2.6 scipy==1.15.3
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tanzania-current-flow-candidate-library-*
+          path: results/candidate_artifact
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tanzania-heldout-inputs-*
+          path: results/input_artifact
+          merge-multiple: true
+      - name: Locate verified benchmark inputs
+        run: |
+          SOURCE_DIR="$(find results/input_artifact -type d -path '*/acquisition/verified_source' -print -quit)"
+          DESIGN="$(find results/input_artifact -type f -name design_contract.json -print -quit)"
+          FEATURE_DIR="$(find results/input_artifact -type d -path '*/features' -print -quit)"
+          CANDIDATE_DIR="$(find results/candidate_artifact -type d -path '*/tanzania_current_flow_candidates' -print -quit)"
+          test -n "$SOURCE_DIR" && test -n "$DESIGN" && test -n "$FEATURE_DIR" && test -n "$CANDIDATE_DIR"
+          echo "SOURCE_DIR=$SOURCE_DIR" >> "$GITHUB_ENV"
+          echo "DESIGN=$DESIGN" >> "$GITHUB_ENV"
+          echo "FEATURE_DIR=$FEATURE_DIR" >> "$GITHUB_ENV"
+          echo "CANDIDATE_DIR=$CANDIDATE_DIR" >> "$GITHUB_ENV"
+      - name: Run one deterministic species shard
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          python benchmarks/run_tanzania_heldout_shard.py \
+            --source-dir "$SOURCE_DIR" \
+            --design-contract "$DESIGN" \
+            --feature-dir "$FEATURE_DIR" \
+            --candidate-dir "$CANDIDATE_DIR" \
+            --shard-index "$SHARD" \
+            --n-shards 12 \
+            --output-dir results/tanzania_heldout_shard
+      - name: Audit shard completeness and leakage boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest_path = next(Path('results/tanzania_heldout_shard').glob('heldout_manifest_shard_*.json'))
+          manifest = json.loads(manifest_path.read_text())
+          assert manifest['n_shards'] == 12
+          assert manifest['n_selected_species'] == 5
+          assert manifest['n_prediction_rows'] == 280
+          assert manifest['n_group_rows'] == 190
+          assert manifest['scientific_boundary']['official_species_outcomes_executed'] is True
+          assert manifest['scientific_boundary']['heldout_predictions_generated'] is True
+          assert manifest['scientific_boundary']['per_observation_scores_computed'] is True
+          assert manifest['scientific_boundary']['aggregate_species_inference_computed'] is False
+          assert manifest['scientific_boundary']['result_direction_interpreted'] is False
+          print(json.dumps(manifest, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-heldout-shard-${{ matrix.shard }}-${{ github.run_id }}
+          path: results/tanzania_heldout_shard/
+          if-no-files-found: error
+
+  aggregate:
+    needs: heldout_shards
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install aggregation dependencies
+        run: python -m pip install . numpy==2.2.6
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tanzania-heldout-shard-*-${{ github.run_id }}
+          path: results/downloaded_shards
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tanzania-current-flow-candidate-library-*
+          path: results/candidate_artifact
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tanzania-heldout-inputs-*
+          path: results/input_artifact
+          merge-multiple: true
+      - name: Locate manifests and aggregate the frozen contrasts
+        run: |
+          mkdir -p results/shards_flat
+          find results/downloaded_shards -type f \( -name '*.json' -o -name '*.jsonl' \) -exec cp '{}' results/shards_flat/ \;
+          DESIGN="$(find results/input_artifact -type f -name design_contract.json -print -quit)"
+          FEATURE_MANIFEST="$(find results/input_artifact -type f -path '*/features/feature_manifest.json' -print -quit)"
+          CANDIDATE_MANIFEST="$(find results/candidate_artifact -type f -name candidate_manifest.json -print -quit)"
+          test -n "$DESIGN" && test -n "$FEATURE_MANIFEST" && test -n "$CANDIDATE_MANIFEST"
+          python benchmarks/aggregate_tanzania_heldout_benchmark.py \
+            --input-dir results/shards_flat \
+            --design-contract "$DESIGN" \
+            --feature-manifest "$FEATURE_MANIFEST" \
+            --candidate-manifest "$CANDIDATE_MANIFEST" \
+            --selection-contract benchmarks/tanzania_current_flow_selection_contract.json \
+            --expected benchmarks/tanzania_heldout_expected.json \
+            --output-dir results/tanzania_heldout_result
+      - name: Enforce result completeness without selecting a favorable outcome
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path('results/tanzania_heldout_result/heldout_result_manifest.json').read_text()
+          )
+          projection = result['result_projection']
+          assert result['n_species'] == 60
+          assert result['n_prediction_rows'] == 3360
+          assert result['n_group_rows'] == 2280
+          assert set(projection['contrasts']) == {
+              'primary::primary_loso',
+              'primary::spatial_mst_block',
+              'inverse_area_sensitivity::primary_loso',
+              'inverse_area_sensitivity::spatial_mst_block',
+          }
+          assert result['scientific_boundary']['primary_result_available_for_interpretation'] is True
+          assert result['scientific_boundary']['mechanistic_colonization_probability_claimed'] is False
+          expected = json.loads(Path('benchmarks/tanzania_heldout_expected.json').read_text())
+          assert result['expected_results_verified'] is expected['results_frozen']
+          print(json.dumps({
+              'result_fingerprint': projection['result_fingerprint'],
+              'expected_results_verified': result['expected_results_verified'],
+              'primary': projection['contrasts']['primary::primary_loso'],
+              'spatial_sensitivity': projection['contrasts']['primary::spatial_mst_block'],
+              'area_weight_sensitivity': projection['contrasts']['inverse_area_sensitivity::primary_loso'],
+              'selection': projection['selection'],
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tanzania-heldout-current-flow-eog-result-${{ github.run_id }}
+          path: |
+            benchmarks/tanzania_heldout_expected.json
+            results/tanzania_heldout_result/
+          if-no-files-found: error

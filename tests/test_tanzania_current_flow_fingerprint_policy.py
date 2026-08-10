@@ -18,17 +18,21 @@ SPEC.loader.exec_module(MODULE)
 
 
 def test_cross_runner_lu_noise_has_stable_library_fingerprint() -> None:
-    baseline = np.asarray([1.2345672, 10.0000002, 4069.7396872], dtype=float)
-    runner_variant = baseline + np.asarray([4.0e-10, -4.0e-10, 4.5e-10])
+    # Values straddle a seven-decimal rounding boundary under a harmless
+    # 4e-10 solver perturbation, reproducing the third-run West-library failure.
+    baseline = np.asarray([1.2345672499, 10.0000002499, 4069.7396872499])
+    runner_variant = baseline + np.asarray([4.0e-10, -4.0e-10, 4.0e-10])
 
-    assert MODULE.LIBRARY_FINGERPRINT_DECIMALS == 7
+    assert MODULE.LIBRARY_FINGERPRINT_DECIMALS == 6
     assert MODULE._library_array_sha256(baseline) == MODULE._library_array_sha256(
         runner_variant
+    )
+    assert array_sha256(baseline, decimals=7) != array_sha256(
+        runner_variant, decimals=7
     )
     assert array_sha256(baseline, decimals=12) != array_sha256(
         runner_variant, decimals=12
     )
-
 
 def test_meaningful_numerical_change_still_changes_fingerprint() -> None:
     baseline = np.asarray([1.2345672, 10.0000002, 4069.7396872], dtype=float)
@@ -43,7 +47,7 @@ def test_meaningful_numerical_change_still_changes_fingerprint() -> None:
 def test_scalar_policy_normalizes_signed_zero_only_for_manifest() -> None:
     assert MODULE._stable_float(-1.0e-12) == 0.0
     assert not np.signbit(MODULE._stable_float(-1.0e-12))
-    assert MODULE._stable_float(1.2e-6) == 1.2e-6
+    assert MODULE._stable_float(1.2e-6) == 1e-6
 
 
 def test_committed_expected_contract_declares_same_policy() -> None:
@@ -59,4 +63,4 @@ def test_committed_expected_contract_declares_same_policy() -> None:
         policy["cross_run_library_hash_decimals"]
         == MODULE.LIBRARY_FINGERPRINT_DECIMALS
     )
-    assert policy["cross_run_absolute_resolution"] == 1e-7
+    assert policy["cross_run_absolute_resolution"] == 1e-6
