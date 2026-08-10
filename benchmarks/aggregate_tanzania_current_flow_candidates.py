@@ -1,4 +1,11 @@
-"""Aggregate all outcome-free Tanzania current-flow candidate shards."""
+"""Aggregate all outcome-free Tanzania current-flow candidate shards.
+
+Shard manifests retain the stricter run-local floating-point fingerprints used
+when each NPZ is written. The cross-run library contract is intentionally
+quantized more coarsely because sparse LU implementations can differ by a few
+ULPs across otherwise equivalent GitHub runners. Raw arrays remain float64;
+only diagnostic SHA inputs and scalar summaries are normalized.
+"""
 from __future__ import annotations
 
 import argparse
@@ -21,11 +28,20 @@ from eog.tanzania_current_flow_contract import (
 )
 
 RAYLEIGH_TOLERANCE = 1e-9
+SHARD_HASH_DECIMALS = FLOAT_DECIMALS
+LIBRARY_FINGERPRINT_DECIMALS = 7
+FINGERPRINT_ABSOLUTE_RESOLUTION = 10.0 ** (-LIBRARY_FINGERPRINT_DECIMALS)
 
 
 def _stable_float(value: float) -> float:
-    """Normalize diagnostic scalars to the same precision as array hashes."""
-    return float(np.round(float(value), decimals=FLOAT_DECIMALS))
+    """Normalize diagnostic scalars for cross-run manifest fingerprints."""
+    result = float(np.round(float(value), decimals=LIBRARY_FINGERPRINT_DECIMALS))
+    return 0.0 if result == 0.0 else result
+
+
+def _library_array_sha256(values: np.ndarray) -> str:
+    """Hash a float array under the frozen cross-run precision contract."""
+    return array_sha256(values, decimals=LIBRARY_FINGERPRINT_DECIMALS)
 
 
 def _physical_invariant_audit(
@@ -62,9 +78,11 @@ def _physical_invariant_audit(
         )
 
     rounded_pairwise = np.round(
-        pairwise, decimals=FLOAT_DECIMALS
+        pairwise, decimals=LIBRARY_FINGERPRINT_DECIMALS
     ).reshape(512, -1)
-    rounded_primary = np.round(primary, decimals=FLOAT_DECIMALS)
+    rounded_primary = np.round(
+        primary, decimals=LIBRARY_FINGERPRINT_DECIMALS
+    )
     unique_pairwise = int(np.unique(rounded_pairwise, axis=0).shape[0])
     unique_primary = int(np.unique(rounded_primary, axis=0).shape[0])
     if unique_pairwise != 512 or unique_primary != 512:
@@ -176,10 +194,12 @@ def _load_region(
             payload = {
                 key: np.asarray(data[key]) for key in data.files
             }
+        # Verify the exact file produced inside this run. This remains stricter
+        # than the tolerance-aware cross-run scientific fingerprint.
         if (
             array_sha256(
                 payload["pairwise_resistance"],
-                decimals=FLOAT_DECIMALS,
+                decimals=SHARD_HASH_DECIMALS,
             )
             != manifest["pairwise_resistance_sha256"]
         ):
@@ -252,17 +272,14 @@ def _load_region(
         "combinations_sha256": array_sha256(
             combined["combinations"]
         ),
-        "pairwise_resistance_sha256": array_sha256(
-            combined["pairwise_resistance"],
-            decimals=FLOAT_DECIMALS,
+        "pairwise_resistance_sha256": _library_array_sha256(
+            combined["pairwise_resistance"]
         ),
-        "isolation_primary_sha256": array_sha256(
-            combined["isolation_primary"],
-            decimals=FLOAT_DECIMALS,
+        "isolation_primary_sha256": _library_array_sha256(
+            combined["isolation_primary"]
         ),
-        "isolation_sensitivity_sha256": array_sha256(
-            combined["isolation_sensitivity"],
-            decimals=FLOAT_DECIMALS,
+        "isolation_sensitivity_sha256": _library_array_sha256(
+            combined["isolation_sensitivity"]
         ),
         "minimum_pairwise_resistance": _stable_float(
             np.min(combined["pairwise_resistance"])
@@ -327,6 +344,13 @@ def aggregate(
         ),
         "schema_version": EXECUTION_SCHEMA_VERSION,
         "regions": regions,
+        "fingerprint_policy": {
+            "raw_array_storage": "float64_unmodified",
+            "run_local_shard_hash_decimals": SHARD_HASH_DECIMALS,
+            "cross_run_library_hash_decimals": LIBRARY_FINGERPRINT_DECIMALS,
+            "cross_run_absolute_resolution": FINGERPRINT_ABSOLUTE_RESOLUTION,
+            "scope": "diagnostic fingerprints and scalar summaries only",
+        },
         "scientific_boundary": {
             "species_outcomes_inspected": False,
             "current_flow_computed": True,
@@ -355,7 +379,7 @@ def aggregate(
             if projection != frozen:
                 raise ValueError(
                     "Tanzania current-flow candidate library drifted "
-                    "from frozen fingerprints.\nEXPECTED:\n"
+                    "from frozen tolerance-aware fingerprints.\nEXPECTED:\n"
                     + json.dumps(frozen, sort_keys=True, indent=2)
                     + "\nACTUAL:\n"
                     + json.dumps(projection, sort_keys=True, indent=2)
@@ -372,6 +396,7 @@ def aggregate(
             "candidate quantities only; frozen before species resistance "
             "selection or predictive scoring"
         ),
+        "fingerprint_policy": manifest["fingerprint_policy"],
         "expected_projection": projection,
     }
     (output_dir / "candidate_expected_suggestion.json").write_text(
