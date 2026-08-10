@@ -35,6 +35,16 @@ For every held-out fold and species:
 
 The allowed resistance candidate set is frozen from the paper as powers of two from 1 through 128 for each nonforest class, subject to exact confirmation from the official script before execution. No candidate may be added or removed because of held-out performance.
 
+## Pre-outcome source-code correction
+
+An integrity-gated audit of the verified Dryad scripts and node tables found two deterministic source problems before any Circuitscape matrix or predictive result was calculated.
+
+First, `0_usambara.R` rasterizes node coordinates without an explicit `field`. The documented default is feature index `1..n`, but both node tables are permuted relative to `patch_number`; all 42 row IDs differ from patch numbers in each region. The downstream script then interprets resistance-matrix columns as `patch_number`. Literal execution therefore aliases focal identities. The held-out benchmark must rasterize `patch_number` explicitly, while the released row-index behavior is retained only as a reproduction diagnostic.
+
+Second, the released source-patch weight is `1 / log10(area_ha)`. Four East Usambara patches are smaller than one hectare, producing negative weights; an exactly one-hectare patch would be singular. The literal formula remains documented for source reconstruction but is inadmissible as a non-negative isolation quantity in held-out prediction. Before outcomes, the primary competitor weight is frozen as `1 / log10(1 + area_ha)`, with `1 / area_ha` as a declared sensitivity analysis. Both retain the intended ordering that smaller source patches receive larger weights and remain positive for every positive area.
+
+The full source audit, row-to-patch fingerprints, raster filename reconciliation, and repair fingerprint are recorded in `tanzania_current_flow_source_audit.md` and `benchmarks/tanzania_current_flow_expected.json`.
+
 ## Other structural comparators
 
 Nearest-neighbor distance and cumulative weighted Euclidean isolation are not species-label-tuned structural metrics. Their geometry/source formulas are frozen from the official source and then reused unchanged across folds. Regression coefficients using these metrics are still trained within fold.
