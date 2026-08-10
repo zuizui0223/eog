@@ -1,0 +1,49 @@
+{
+  "source": "official_dryad_scripts_and_tables",
+  "sites": {
+    "site_id": "name",
+    "patch_area": "area_ha",
+    "region": "region",
+    "x": "centroid_long",
+    "y": "centroid_lat",
+    "crs": "EPSG:4326"
+  },
+  "occurrence": {
+    "layout": "long",
+    "species_id": "species",
+    "site_id": "name",
+    "occurrence": "occur",
+    "species_columns": [],
+    "site_columns": [],
+    "site_ids": []
+  },
+  "nodes": {
+    "east": {
+      "x": "centroid_long",
+      "y": "centroid_lat",
+      "crs": "EPSG:4326"
+    },
+    "west": {
+      "x": "centroid_long",
+      "y": "centroid_lat",
+      "crs": "EPSG:4326"
+    }
+  },
+  "region_values": {
+    "east": "E",
+    "west": "W"
+  },
+  "provenance": {
+    "source_version": "Dryad DOI 10.5061/dryad.p042h0c, version 23134; every file verified against frozen size and MD5 before inspection",
+    "0_usambara.R": "SpatialPoints(ptsE[,3:4]) and SpatialPoints(ptsW[,3:4]) use Nodes_E/W columns 3-4, whose verified headers are centroid_long and centroid_lat; points are rasterized directly onto verified EPSG:4326 rasters without reprojection",
+    "1_sites.R": "Sites.csv is joined to Nodes-derived isolation data by region, name, and patch_number; node patch size is Area_ha and the joined site table retains Sites.csv area_ha",
+    "2_isolation_occurrence": "spp_occur.csv is grouped by species, joined to site_covars by name, modeled with occur as the binary response and log10(area_ha) as patch area",
+    "Sites.csv": "verified headers: region, name, patch_number, centroid_lat, centroid_long, area_m, area_ha, perimeter_m, nearest_fragment, nearest_lg_fragment, distance1, distance2; 14 unique rows",
+    "spp_occur.csv": "verified long-form headers: species, forestDependent, understory, name, occur, abund; 1246 rows = 89 species x 14 sites; occur is binary",
+    "Nodes_E.csv": "verified columns 3-4 are centroid_long and centroid_lat; 42 unique patch nodes; all nine East study sites match node name, patch_number, and coordinates exactly",
+    "Nodes_W.csv": "verified columns 3-4 are centroid_long and centroid_lat; 42 unique patch nodes; all five West study sites match node name, patch_number, and coordinates exactly",
+    "raster_east3.tif": "verified raster CRS EPSG:4326, 30 m-equivalent angular cell size 0.0002904315425536523 degrees, all mapped East sites/nodes contained",
+    "raster_west3.tif": "verified raster CRS EPSG:4326, 30 m-equivalent angular cell size 0.00029043154255365224 degrees, all mapped West sites/nodes contained",
+    "coordinate_crs": "EPSG:4326 is supported jointly by verified raster metadata, centroid_long/centroid_lat field names, direct rasterization in 0_usambara.R, and exact site-to-node coordinate identity"
+  }
+}
