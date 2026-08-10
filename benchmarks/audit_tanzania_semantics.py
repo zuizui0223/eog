@@ -1,11 +1,11 @@
 """Validate Tanzania source semantics/alignment before any EOG outcome.
 
 This gate runs only after ``audit_tanzania_verified_bytes.py`` has verified the
-official Dryad bytes.  It deliberately refuses to infer column meanings: an
-explicit semantics mapping recovered from the official source scripts/tables is
-required.  The only species-level operation allowed here is deterministic
-eligibility counting; no occurrence model, graph score, AUC, or EOG result is
-computed.
+official Dryad bytes. It deliberately refuses to infer column meanings or
+coordinate reference systems: explicit mappings recovered from official source
+scripts/tables are required. The only species-level operation allowed here is
+deterministic eligibility counting; no occurrence model, graph score, AUC, or
+EOG result is computed.
 """
 from __future__ import annotations
 
@@ -54,6 +54,13 @@ def _binary(value: str, label: str) -> int:
     raise ValueError(f"non-binary occurrence {label}: {value!r}")
 
 
+def _mapped_crs(spec: dict[str, Any], label: str) -> str:
+    value = str(spec.get("crs") or "").strip()
+    if not value:
+        raise ValueError(f"{label} mapping must explicitly declare source CRS")
+    return value
+
+
 def _site_table(source_dir: Path, spec: dict[str, Any]) -> dict[str, Any]:
     headers, rows = _rows(source_dir / "Sites.csv")
     if len(rows) != EXPECTED_SITES:
@@ -91,6 +98,7 @@ def _site_table(source_dir: Path, spec: dict[str, Any]) -> dict[str, Any]:
         "areas": dict(zip(ids, areas)),
         "regions": dict(zip(ids, regions)),
         "coords": coords,
+        "crs": _mapped_crs(spec, "Sites.csv coordinates"),
         "region_levels": sorted(set(regions)),
     }
 
@@ -188,7 +196,27 @@ def _node_table(source_dir: Path, filename: str, spec: dict[str, Any]) -> dict[s
     coords = [(_finite(row[x_col], f"{filename} x"), _finite(row[y_col], f"{filename} y")) for row in rows]
     if not coords:
         raise ValueError(f"{filename} has no nodes")
-    return {"n_nodes": len(coords), "coords": coords, "headers": headers}
+    return {
+        "n_nodes": len(coords),
+        "coords": coords,
+        "crs": _mapped_crs(spec, f"{filename} coordinates"),
+        "headers": headers,
+    }
+
+
+def _transform_coords(coords: list[tuple[float, float]], source_crs: str, target_crs: Any) -> list[tuple[float, float]]:
+    try:
+        from rasterio.crs import CRS  # type: ignore
+        from rasterio.warp import transform  # type: ignore
+    except Exception as exc:
+        raise RuntimeError("rasterio is required for CRS-aware alignment") from exc
+    src = CRS.from_user_input(source_crs)
+    dst = CRS.from_user_input(target_crs)
+    if src == dst:
+        return list(coords)
+    xs, ys = zip(*coords)
+    tx, ty = transform(src, dst, list(xs), list(ys))
+    return [(float(x), float(y)) for x, y in zip(tx, ty)]
 
 
 def _raster_alignment(source_dir: Path, sites: dict[str, Any], nodes: dict[str, Any], mapping: dict[str, Any]) -> dict[str, Any]:
@@ -205,30 +233,40 @@ def _raster_alignment(source_dir: Path, sites: dict[str, Any], nodes: dict[str, 
     for key, raster_name in (("east", "raster_east3.tif"), ("west", "raster_west3.tif")):
         region_value = str(region_values[key])
         with rasterio.open(source_dir / raster_name) as src:
+            if not src.crs:
+                raise ValueError(f"{raster_name} has no CRS")
             bounds = src.bounds
             transform = src.transform
             pixel = [abs(float(transform.a)), abs(float(transform.e))]
             region_sites = [sid for sid, region in sites["regions"].items() if region == region_value]
             if not region_sites:
                 raise ValueError(f"no Sites.csv rows map to {key} region value {region_value!r}")
-            outside = []
-            for sid in region_sites:
-                x, y = sites["coords"][sid]
-                if not (bounds.left <= x <= bounds.right and bounds.bottom <= y <= bounds.top):
-                    outside.append(sid)
+
+            site_source = [sites["coords"][sid] for sid in region_sites]
+            site_raster = _transform_coords(site_source, str(sites["crs"]), src.crs)
+            outside = [
+                sid for sid, (x, y) in zip(region_sites, site_raster)
+                if not (bounds.left <= x <= bounds.right and bounds.bottom <= y <= bounds.top)
+            ]
             if outside:
-                raise ValueError(f"{key} site coordinates outside {raster_name} bounds: {outside}")
+                raise ValueError(f"{key} site coordinates outside {raster_name} bounds after CRS transform: {outside}")
+
+            node_raster = _transform_coords(nodes[key]["coords"], str(nodes[key]["crs"]), src.crs)
             node_outside = [
-                i for i, (x, y) in enumerate(nodes[key]["coords"])
+                i for i, (x, y) in enumerate(node_raster)
                 if not (bounds.left <= x <= bounds.right and bounds.bottom <= y <= bounds.top)
             ]
             if node_outside:
-                raise ValueError(f"{key} nodes outside raster bounds: first indices {node_outside[:10]}")
+                raise ValueError(f"{key} nodes outside raster bounds after CRS transform: first indices {node_outside[:10]}")
             out[key] = {
                 "region_value": region_value,
                 "n_sites": len(region_sites),
                 "n_nodes": nodes[key]["n_nodes"],
-                "raster_crs": str(src.crs) if src.crs else None,
+                "site_source_crs": str(sites["crs"]),
+                "node_source_crs": str(nodes[key]["crs"]),
+                "raster_crs": str(src.crs),
+                "crs_transform_applied_to_sites": str(sites["crs"]) != str(src.crs),
+                "crs_transform_applied_to_nodes": str(nodes[key]["crs"]) != str(src.crs),
                 "pixel_size": pixel,
                 "bounds": [float(bounds.left), float(bounds.bottom), float(bounds.right), float(bounds.top)],
             }
