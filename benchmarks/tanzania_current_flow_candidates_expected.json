@@ -1,0 +1,61 @@
+{
+  "status": "tanzania_current_flow_candidate_grid_complete_before_outcomes",
+  "n_candidate_rows": 2048,
+  "n_resolution_comparisons": 1024,
+  "factors": [
+    4,
+    8
+  ],
+  "regions": [
+    "E",
+    "W"
+  ],
+  "n_resistance_combinations_per_region_factor": 512,
+  "candidate_index_sha256": "f99c9fc71107f91fd593636f49216b1040d620ad83411068c00400a14cafed45",
+  "resolution_comparison_sha256": "e009f499112eb3eca7aa66a98a51163ef89e041e7c1c250e12bdd48d1d13babd",
+  "resolution_summary": {
+    "matrix_spearman": {
+      "minimum": 0.7542883637378263,
+      "q05": 0.8783891948444799,
+      "median": 0.968711839985527,
+      "mean": 0.9540816452105669
+    },
+    "matrix_pearson_log1p": {
+      "minimum": 0.8637088025705792,
+      "q05": 0.9303063214900545,
+      "median": 0.9836976270943694,
+      "mean": 0.9751243365245967
+    },
+    "primary_isolation_spearman": {
+      "minimum": 0.9370839718989173,
+      "q05": 0.9652011761998759,
+      "median": 0.987434658213045,
+      "mean": 0.9848357939447502
+    },
+    "primary_isolation_pearson_log1p": {
+      "minimum": 0.9787967256920705,
+      "q05": 0.9851000882954786,
+      "median": 0.9933206500890357,
+      "mean": 0.9927892669442017
+    },
+    "sensitivity_isolation_spearman": {
+      "minimum": 0.9419736911960144,
+      "q05": 0.966257375130528,
+      "median": 0.9871621213723904,
+      "mean": 0.9847510556358268
+    }
+  },
+  "primary_factor": 4,
+  "sensitivity_factor": 8,
+  "selection_basis": "factor 4 is the finest predeclared standard-runner resolution; factor 8 preserves all 42 focal cells and is retained as computational-resolution sensitivity. Neither choice uses species occurrence performance.",
+  "native_cell_size_m_approx": 30,
+  "primary_cell_size_m_approx": 120,
+  "sensitivity_cell_size_m_approx": 240,
+  "literal_30m_source_reproduction_completed": false,
+  "species_outcomes_inspected": false,
+  "resistance_selected": false,
+  "occurrence_model_fitted": false,
+  "performance_metric_computed": false,
+  "eog_performance_inspected": false,
+  "expected_contract_verified": true
+}
