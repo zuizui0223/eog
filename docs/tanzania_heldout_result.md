@@ -13,6 +13,10 @@ The verified result fingerprint is:
 
 `6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4`
 
+The independent artifact-confirmation workflow completed successfully in GitHub
+Actions run `31432034117`. The verified six-decimal candidate-library identity is
+`3cabff50f138f7ccfe77cdbe87aefe14d5ec4dd40db15f16fb7b072cd3d01026`.
+
 A separate audit found harmless sparse-LU differences below `3.96e-10` in the
 upstream West current-flow library. Because a few values straddled a seven-decimal
 rounding boundary, cross-run diagnostic hashes were corrected to six decimals;
