@@ -1,0 +1,36 @@
+{
+  "source": "UNRESOLVED_REPLACE_ONLY_AFTER_OFFICIAL_DRYAD_SCRIPT_TABLE_INSPECTION",
+  "sites": {
+    "site_id": null,
+    "patch_area": null,
+    "region": null,
+    "x": null,
+    "y": null
+  },
+  "occurrence": {
+    "layout": null,
+    "species_id": null,
+    "site_id": null,
+    "occurrence": null,
+    "species_columns": [],
+    "site_columns": [],
+    "site_ids": []
+  },
+  "nodes": {
+    "east": {"x": null, "y": null},
+    "west": {"x": null, "y": null}
+  },
+  "region_values": {
+    "east": null,
+    "west": null
+  },
+  "provenance": {
+    "0_usambara.R": null,
+    "1_sites.R": null,
+    "2_isolation_occurrence": null,
+    "Sites.csv": null,
+    "spp_occur.csv": null,
+    "Nodes_E.csv": null,
+    "Nodes_W.csv": null
+  }
+}
