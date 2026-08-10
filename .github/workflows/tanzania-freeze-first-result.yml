@@ -1,0 +1,65 @@
+name: Freeze first Tanzania held-out result
+
+on:
+  push:
+    branches:
+      - agent/tanzania-heldout-benchmark
+    paths:
+      - .github/workflows/tanzania-freeze-first-result.yml
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  freeze:
+    if: ${{ !contains(github.event.head_commit.message, '[freeze-result]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/tanzania-heldout-benchmark
+          fetch-depth: 0
+      - name: Download the completed first-run aggregate artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: '9077547945'
+        run: |
+          set -euo pipefail
+          curl -fL \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            -o /tmp/first-result.zip
+          rm -rf /tmp/first-result
+          mkdir -p /tmp/first-result
+          unzip -q /tmp/first-result.zip -d /tmp/first-result
+          test -f /tmp/first-result/results/tanzania_heldout_result/heldout_expected_suggestion.json
+      - name: Freeze the generated result projection unchanged
+        run: |
+          set -euo pipefail
+          cp \
+            /tmp/first-result/results/tanzania_heldout_result/heldout_expected_suggestion.json \
+            benchmarks/tanzania_heldout_expected.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('benchmarks/tanzania_heldout_expected.json')
+          value = json.loads(path.read_text())
+          assert value['results_frozen'] is True
+          assert value['expected_projection']['result_fingerprint'] == 'df4667532ea7c7e4cfe372488d6a6cf86186cdaf19b90b6638f8a17e82dc9621'
+          primary = value['expected_projection']['contrasts']['primary::primary_loso']
+          assert primary['macro_mean_species_log_loss_difference'] == 0.032113119
+          assert primary['log_loss_bootstrap_ci95'] == [0.017458, 0.048675011]
+          PY
+      - name: Commit the frozen projection and remove this one-time workflow
+        run: |
+          set -euo pipefail
+          rm .github/workflows/tanzania-freeze-first-result.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add benchmarks/tanzania_heldout_expected.json .github/workflows/tanzania-freeze-first-result.yml
+          git commit -m "Freeze first Tanzania held-out result [freeze-result]"
+          git push origin HEAD:agent/tanzania-heldout-benchmark
