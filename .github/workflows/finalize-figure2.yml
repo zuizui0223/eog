@@ -70,27 +70,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git rm -r tools/figure2_source
-          git add \
-            benchmarks/aislands_bottleneck_expected.json \
-            benchmarks/aislands_reachability_modes_expected.json \
-            benchmarks/aislands_structural_applicability_expected.csv \
-            benchmarks/aislands_structural_species_expected.csv \
-            benchmarks/aislands_structural_species_expected_provenance.json \
-            figures/figure_manifest.json \
-            figures/build_figure_2_aislands.py \
-            figures/output/figure_2_aislands.svg \
-            figures/output/figure_2_metadata.json \
-            figures/output/aislands_species_concordance.csv \
-            figures/output/aislands_mode_estimates.csv \
-            figures/output/aislands_applicability.csv \
-            figures/output/aislands_fold_coverage.csv \
-            manuscript/figure_2_caption.md \
-            manuscript/figure_2_accessibility.md \
-            manuscript/figure_data/aislands_species_concordance.csv \
-            manuscript/figure_data/aislands_mode_estimates.csv \
-            manuscript/figure_data/aislands_applicability.csv \
-            manuscript/figure_data/aislands_fold_coverage.csv \
-            tests/test_structural_figure_2.py
+          git add -A
           git diff --cached --check
           git commit -m "Build reproducible A-Islands Figure 2"
           git push origin HEAD:agent/aislands-figure2
