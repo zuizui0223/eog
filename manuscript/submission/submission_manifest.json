@@ -8,8 +8,11 @@
   "cover_letter": "manuscript/submission/cover_letter.md",
   "data_code_availability": "manuscript/submission/data_code_availability.md",
   "declarations": "manuscript/submission/declarations.md",
+  "author_metadata_template": "manuscript/submission/author_metadata.template.json",
   "environment": "manuscript/submission/environment.md",
   "live_policy_verification": "manuscript/submission/live_policy_verification_2026-08-12.md",
+  "release_readiness": "manuscript/submission/release_readiness.md",
+  "figure_qa": "manuscript/submission/figure_qa.md",
   "supplementary_materials_list": "manuscript/submission/supplementary_materials.md",
   "figure_files": [
     "figures/output/figure_1_roles.svg",
@@ -30,7 +33,8 @@
     "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
   },
   "required_pre_submission_resolutions": [
-    "replace <RELEASE_TAG>, <ARCHIVE_DOI>, and <RELEASE_COMMIT> after archival release",
+    "replace <RELEASE_TAG> and <ARCHIVE_DOI> after reserving the final archive DOI",
+    "complete author_metadata.template.json with author-approved metadata and remove placeholders in the final submission record",
     "confirm author list, affiliations, corresponding author, and contribution roles",
     "confirm funding and competing-interests statements with all authors",
     "confirm originality and simultaneous-submission statement with all authors",

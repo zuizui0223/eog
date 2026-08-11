@@ -48,6 +48,7 @@ def test_offline_submission_package_rebuilds_and_verifies_frozen_assets(tmp_path
         assert (output / relative).is_file(), relative
     generated_manifest = json.loads((output / "submission_package_manifest.json").read_text(encoding="utf-8"))
     assert generated_manifest == manifest
+    assert re.fullmatch(r"[0-9a-f]{40}|unknown", generated_manifest["source_commit"])
 
 
 def test_submission_package_is_repeatable_within_one_environment(tmp_path: Path) -> None:
@@ -98,12 +99,15 @@ def test_submission_facing_files_preserve_positive_and_negative_boundary() -> No
         assert prohibited not in cover
 
 
-def test_release_and_author_placeholders_remain_explicit_blockers() -> None:
+def test_release_and_author_placeholders_remain_explicit_blockers_without_sha_self_reference() -> None:
     availability = (ROOT / "manuscript/submission/data_code_availability.md").read_text(encoding="utf-8")
     declarations = (ROOT / "manuscript/submission/declarations.md").read_text(encoding="utf-8")
     cover = (ROOT / "manuscript/submission/cover_letter.md").read_text(encoding="utf-8")
-    for token in ("<RELEASE_TAG>", "<ARCHIVE_DOI>", "<RELEASE_COMMIT>"):
+    for token in ("<RELEASE_TAG>", "<ARCHIVE_DOI>"):
         assert token in availability
+    assert "<RELEASE_COMMIT>" not in availability
+    assert "submission_package_manifest.json" in availability
+    assert "exact source Git commit" in availability
     assert "AUTHOR CONFIRMATION REQUIRED" in declarations
     assert "<CORRESPONDING_AUTHOR_NAME>" in cover
     assert "<AFFILIATION>" in cover
