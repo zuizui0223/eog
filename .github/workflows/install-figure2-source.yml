@@ -35,24 +35,15 @@ jobs:
           import io
           import tarfile
           from pathlib import Path, PurePosixPath
-
-          parts = [
-              Path("tools/figure2_source/part00.b64"),
-              Path("tools/figure2_source/part01.b64"),
-              Path("tools/figure2_source/part03.b64"),
-          ]
-          expected_sizes = [16000, 16000, 7224]
+          parts = [Path("tools/figure2_source/part00.b64"), Path("tools/figure2_source/part01.b64"), Path("tools/figure2_source/part03.b64")]
           actual_sizes = [p.stat().st_size for p in parts]
-          if actual_sizes != expected_sizes:
+          if actual_sizes != [16000, 16000, 7224]:
               raise SystemExit(f"unexpected source chunk sizes: {actual_sizes}")
-
-          encoded = "".join(p.read_text(encoding="utf-8") for p in parts)
-          payload = base64.b64decode(encoded, validate=True)
+          payload = base64.b64decode("".join(p.read_text(encoding="utf-8") for p in parts), validate=True)
           expected_sha = "a55007cdfbdb75847139078d9fdb61e5fa3267b2ccf83e1e39c1e317a411a7d6"
           actual_sha = hashlib.sha256(payload).hexdigest()
           if actual_sha != expected_sha:
               raise SystemExit(f"source bundle SHA mismatch: expected {expected_sha}, got {actual_sha}")
-
           expected_members = {
               "benchmarks/aislands_bottleneck_expected.json",
               "benchmarks/aislands_reachability_modes_expected.json",
@@ -73,7 +64,6 @@ jobs:
                   if path.is_absolute() or ".." in path.parts or member.issym() or member.islnk():
                       raise SystemExit(f"unsafe source member: {member.name}")
               archive.extractall(".", members=members, filter="data")
-
           print(f"verified source bundle sha256={actual_sha}")
           PY
 
@@ -92,7 +82,6 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import tarfile
-
           paths = [
               "benchmarks/aislands_bottleneck_expected.json",
               "benchmarks/aislands_reachability_modes_expected.json",
@@ -124,21 +113,42 @@ jobs:
           Path("/tmp/figure2-final-paths.txt").write_text("\n".join(paths) + "\n")
           PY
 
-      - name: Publish one clean Figure 2 commit
+      - name: Reset staging checkout
+        shell: bash
+        run: |
+          git status --short
+          git reset --hard HEAD
+          git clean -fdx
+          test -f /tmp/figure2-final.tar.gz
+          test -f /tmp/figure2-final-paths.txt
+
+      - name: Switch to clean main tree
         shell: bash
         run: |
           git fetch origin main
-          git reset --hard HEAD
-          git clean -fdx
           git switch --detach origin/main
+          git status --short
+          test -z "$(git status --porcelain)"
+
+      - name: Restore and stage exact Figure 2 files
+        shell: bash
+        run: |
           tar -xzf /tmp/figure2-final.tar.gz
           while IFS= read -r path; do git add -- "$path"; done < /tmp/figure2-final-paths.txt
           git diff --cached --check
-          echo "Final Figure 2 diff:"
           git diff --cached --name-only
           changed="$(git diff --cached --name-only | wc -l)"
+          echo "changed files=$changed"
           test "$changed" -eq 20
+
+      - name: Commit clean Figure 2 diff
+        shell: bash
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Build reproducible A-Islands Figure 2"
-          git push --force origin HEAD:refs/heads/agent/aislands-figure2
+          git rev-parse HEAD
+
+      - name: Push clean Figure 2 branch
+        shell: bash
+        run: git push --force origin HEAD:refs/heads/agent/aislands-figure2
