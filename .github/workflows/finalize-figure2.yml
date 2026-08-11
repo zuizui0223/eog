@@ -94,3 +94,5 @@ jobs:
           git diff --cached --check
           git commit -m "Build reproducible A-Islands Figure 2"
           git push origin HEAD:agent/aislands-figure2
+
+# This branch finalizes frozen Figure 2 evidence; it does not refit or alter the benchmarks.
