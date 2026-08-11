@@ -27,11 +27,11 @@ The paper is **not ready to submit** until every blocking item is complete.
 - [x] Species-level inference and all non-estimable cases retained.
 - [x] SDM, block CV, current flow, and EOG roles separated.
 - [x] Existing-method competitor matrix drafted.
-- [ ] Full Introduction converted from skeleton to prose.
-- [ ] Complete Methods converted from executable contracts to prose.
+- [x] Full Introduction converted from skeleton to prose.
+- [x] Complete Methods converted from executable contracts to prose.
 - [x] Results tables generated directly from frozen artifacts.
 - [ ] Discussion written around the conditional boundary, not superiority.
-- [ ] All literature citations verified against publisher/Crossref metadata.
+- [x] All literature citations currently used in Introduction/Methods verified against publisher or primary-repository metadata; ledger: `manuscript/structural_verified_references.md`.
 
 ### Figures
 
