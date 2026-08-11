@@ -1,0 +1,57 @@
+{
+  "schema_version": "eog_structural_figure1_roles_v1",
+  "purpose": "Keep five distinct spatial quantities visually and verbally separate before the empirical benchmark figures are interpreted.",
+  "competitor_matrix_path": "docs/structural_competitor_matrix.md",
+  "competitor_matrix_sha256": "5f565005bbfaefde6e31b658dcb012d78550a527",
+  "panels": [
+    {
+      "id": "A",
+      "title": "Pointwise environmental support",
+      "question": "How locally supported is each location?",
+      "role": "A frozen support field supplies a local value for each location; it does not by itself identify occurrence-anchored configuration.",
+      "output": "local support"
+    },
+    {
+      "id": "B",
+      "title": "Spatial block cross-validation",
+      "question": "How strictly is prediction evaluated?",
+      "role": "Spatial blocks separate training and held-out records to reduce geographic leakage; they change evaluation, not the structural estimand.",
+      "output": "held-out evaluation"
+    },
+    {
+      "id": "C",
+      "title": "Direct source distance",
+      "question": "How far is a target from a training occurrence?",
+      "role": "Nearest-source distance is a direct proximity covariate. Equal distance does not imply equal intermediate configuration.",
+      "output": "source proximity"
+    },
+    {
+      "id": "D",
+      "title": "Matrix-aware current flow",
+      "question": "How does the landscape conduct between focal locations?",
+      "role": "Current flow uses a declared resistance surface to summarize multi-path landscape connectivity and is a strong structural competitor when such data are available.",
+      "output": "matrix-aware connectivity"
+    },
+    {
+      "id": "E",
+      "title": "Occurrence-anchored EOG",
+      "question": "Does target-to-anchor configuration persist across declared graph assumptions?",
+      "role": "Connected frequency is the share of predeclared graph scenarios in which a target is connected to training-presence anchors. It is an assumption-robust structural diagnostic.",
+      "output": "scenario-robust configuration"
+    }
+  ],
+  "required_panel_ids": ["A", "B", "C", "D", "E"],
+  "prohibited_implications": [
+    "movement probability",
+    "colonisation probability",
+    "dispersal probability",
+    "observed dispersal route",
+    "realised movement route"
+  ],
+  "design_constraints": {
+    "movement_arrows": false,
+    "shared_effect_axis": false,
+    "empirical_effect_sizes": false,
+    "causal_ordering": false
+  }
+}
