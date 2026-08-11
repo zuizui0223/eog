@@ -21,18 +21,46 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-      - name: Patch Python 3.10 incompatible f-string
+      - name: Normalize single-line SVG f-strings
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
+
           p = Path("figures/build_figure_2_aislands.py")
           text = p.read_text(encoding="utf-8")
+
           old = "    parts.append(f'<text class=\"small\" x=\"{cx+58}\" y=\"{cy+590}\">{cnt['not_estimable']} declared taxa had no primary species statistic and remain in Panel E.</text>')"
           new = "    not_estimable = cnt[\"not_estimable\"]\n    parts.append(f'<text class=\"small\" x=\"{cx+58}\" y=\"{cy+590}\">{not_estimable} declared taxa had no primary species statistic and remain in Panel E.</text>')"
           if text.count(old) != 1:
-              raise SystemExit("expected Figure 2 f-string target not found exactly once")
-          p.write_text(text.replace(old, new), encoding="utf-8")
+              raise SystemExit("expected Figure 2 not-estimable f-string target not found exactly once")
+          text = text.replace(old, new)
+
+          converted = 0
+          out = []
+          for line in text.splitlines(keepends=True):
+              marker = "parts.append(f'"
+              start = line.find(marker)
+              stripped = line.rstrip("\r\n")
+              if start >= 0 and stripped.endswith("')"):
+                  end = stripped.rfind("')")
+                  line_end = line[len(stripped):]
+                  rebuilt = (
+                      stripped[:start]
+                      + 'parts.append(f"""'
+                      + stripped[start + len(marker):end]
+                      + '""")'
+                      + line_end
+                  )
+                  out.append(rebuilt)
+                  converted += 1
+              else:
+                  out.append(line)
+          text = "".join(out)
+          if converted < 10:
+              raise SystemExit(f"unexpectedly few SVG f-strings converted: {converted}")
+          p.write_text(text, encoding="utf-8")
+          print(f"converted {converted} single-line SVG f-strings")
           PY
       - name: Verify under Python 3.10
         run: |
