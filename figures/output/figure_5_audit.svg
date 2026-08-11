@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="0 0 1600 930">
+<rect width="1600" height="930" fill="#f8fafc"/>
+<text x="60" y="62" font-family="Arial,Helvetica,sans-serif" font-size="29" font-weight="700" fill="#172033"><tspan x="60" dy="0">Figure 5 | Frozen evidence-to-result audit trail</tspan></text>
+<text x="60" y="96" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" fill="#5c667a"><tspan x="60" dy="0">Fingerprints make provenance inspectable; they are not ecological effect sizes or causal evidence.</tspan></text>
+<text x="60" y="145" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" fill="#334155"><tspan x="60" dy="0">Output</tspan></text>
+<text x="265" y="145" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" fill="#334155"><tspan x="265" dy="0">Frozen evidence / contract</tspan></text>
+<text x="725" y="145" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" fill="#334155"><tspan x="725" dy="0">Committed transform</tspan></text>
+<text x="1080" y="145" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" fill="#334155"><tspan x="1080" dy="0">Result fingerprint</tspan></text>
+<line x1="55" y1="160" x2="1545" y2="160" stroke="#94a3b8" stroke-width="2"/>
+<rect x="55" y="170" width="1490" height="108" rx="10" fill="#ffffff" stroke="#d7dee8"/>
+<text x="60" y="202" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#172033"><tspan x="60" dy="0">F1</tspan><tspan x="60" dy="19">Figure 1 semantic roles</tspan></text>
+<text x="265" y="197" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="265" dy="0">matrix 5f565005bbfa; contract 066b6e9e353f</tspan></text>
+<text x="725" y="197" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="725" dy="0">build_figure_1_roles.py</tspan></text>
+<text x="1080" y="192" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#334155"><tspan x="1080" dy="0">figure_1_roles.svg</tspan></text>
+<text x="1080" y="233" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" fill="#64748b"><tspan x="1080" dy="0">sha256:1c8e4cd99144f139d95b</tspan></text>
+<rect x="55" y="296" width="1490" height="108" rx="10" fill="#f1f5f9" stroke="#d7dee8"/>
+<text x="60" y="328" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#172033"><tspan x="60" dy="0">F2</tspan><tspan x="60" dy="19">Figure 2 A-Islands</tspan></text>
+<text x="265" y="323" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="265" dy="0">primary sha256:31ff22edf214; secondary</tspan><tspan x="265" dy="17">sha256:bef4cafd9956; bottleneck sha256:a2c3bf298f3b</tspan></text>
+<text x="725" y="323" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="725" dy="0">build_figure_2_aislands.py</tspan></text>
+<text x="1080" y="318" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#334155"><tspan x="1080" dy="0">figure_2_aislands.svg + sidecars</tspan></text>
+<text x="1080" y="359" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" fill="#64748b"><tspan x="1080" dy="0">sha256:e706f9b062170552da72</tspan></text>
+<rect x="55" y="422" width="1490" height="108" rx="10" fill="#ffffff" stroke="#d7dee8"/>
+<text x="60" y="454" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#172033"><tspan x="60" dy="0">F3</tspan><tspan x="60" dy="19">Figure 3 Tanzania</tspan></text>
+<text x="265" y="449" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="265" dy="0">artifact sha256:6f05cb498730; result 6b555c28d61d;</tspan><tspan x="265" dy="17">library 3cabff50f138</tspan></text>
+<text x="725" y="449" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="725" dy="0">build_figure_3_tanzania.py</tspan></text>
+<text x="1080" y="444" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#334155"><tspan x="1080" dy="0">figure_3_tanzania.svg + sidecars</tspan></text>
+<text x="1080" y="485" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" fill="#64748b"><tspan x="1080" dy="0">sha256:bdb55aa7f66d75aa3b2b</tspan></text>
+<rect x="55" y="548" width="1490" height="108" rx="10" fill="#f1f5f9" stroke="#d7dee8"/>
+<text x="60" y="580" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#172033"><tspan x="60" dy="0">F4</tspan><tspan x="60" dy="19">Figure 4 boundary matrix</tspan></text>
+<text x="265" y="575" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="265" dy="0">A 724d5a7a5bae; T 6b555c28d61d</tspan></text>
+<text x="725" y="575" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="725" dy="0">build_figure_4_boundary.py</tspan></text>
+<text x="1080" y="570" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#334155"><tspan x="1080" dy="0">figure_4_boundary.svg</tspan></text>
+<text x="1080" y="611" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" fill="#64748b"><tspan x="1080" dy="0">sha256:e8a7f87fdbadd1603009</tspan></text>
+<rect x="55" y="674" width="1490" height="108" rx="10" fill="#ffffff" stroke="#d7dee8"/>
+<text x="60" y="706" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#172033"><tspan x="60" dy="0">T3</tspan><tspan x="60" dy="19">Table 3 + Table S1</tspan></text>
+<text x="265" y="701" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="265" dy="0">A sidecar a96ec413eeb7; T 6b555c28d61d</tspan></text>
+<text x="725" y="701" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="725" dy="0">build_structural_results_tables.py</tspan></text>
+<text x="1080" y="696" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#334155"><tspan x="1080" dy="0">machine-readable manuscript tables</tspan></text>
+<text x="1080" y="737" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" fill="#64748b"><tspan x="1080" dy="0">sha256:dd8d7431cfd44e463849</tspan></text>
+<text x="60" y="850" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#334155"><tspan x="60" dy="0">Fingerprints establish provenance and reproducibility; they do not establish ecological causality, realised movement, or model superiority.</tspan></text>
+<text x="60" y="892" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#5c667a"><tspan x="60" dy="0">No new model fit, effect size, hypothesis test, movement route, or causal ordering is introduced in this figure.</tspan></text>
+</svg>

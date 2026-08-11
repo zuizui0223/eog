@@ -1,0 +1,54 @@
+{
+  "causal_arrows": false,
+  "contract_sha256": "aa54f1e6fd6cf02e8eb2e3d866d5ac67b79f456b6b06e5131443cb87c830e7ba",
+  "figure_id": "figure_5_audit",
+  "figure_manifest_sha256": "68320374730f99e5ea5e51dca9d133f24dce4611cc7e961f5a0b24252830ff57",
+  "movement_arrows": false,
+  "new_effect_sizes": false,
+  "new_hypothesis_tests": false,
+  "results_table_manifest_sha256": "7eaaa3a1c1da941f717d32f80b8ac0f5c37167790aca2d417941eb1b76c26926",
+  "rows": [
+    {
+      "id": "F1",
+      "label": "Figure 1 semantic roles",
+      "result": "figure_1_roles.svg",
+      "result_sha256": "1c8e4cd99144f139d95bd675bb37ba3e61e68d386d790de0545300f839c0d8fc",
+      "source": "matrix 5f565005bbfa; contract 066b6e9e353f",
+      "transform": "build_figure_1_roles.py"
+    },
+    {
+      "id": "F2",
+      "label": "Figure 2 A-Islands",
+      "result": "figure_2_aislands.svg + sidecars",
+      "result_sha256": "e706f9b062170552da72f99f4e4996660801c4792ebcb0d39e8b72a93a2a1382",
+      "source": "primary sha256:31ff22edf214; secondary sha256:bef4cafd9956; bottleneck sha256:a2c3bf298f3b",
+      "transform": "build_figure_2_aislands.py"
+    },
+    {
+      "id": "F3",
+      "label": "Figure 3 Tanzania",
+      "result": "figure_3_tanzania.svg + sidecars",
+      "result_sha256": "bdb55aa7f66d75aa3b2b1123483dc6775272eba8a11ecd26bffc7a3e7df4eff4",
+      "source": "artifact sha256:6f05cb498730; result 6b555c28d61d; library 3cabff50f138",
+      "transform": "build_figure_3_tanzania.py"
+    },
+    {
+      "id": "F4",
+      "label": "Figure 4 boundary matrix",
+      "result": "figure_4_boundary.svg",
+      "result_sha256": "e8a7f87fdbadd1603009e4526776ca4e040926d7fc0d8935918fa4ac377aea24",
+      "source": "A 724d5a7a5bae; T 6b555c28d61d",
+      "transform": "build_figure_4_boundary.py"
+    },
+    {
+      "id": "T3",
+      "label": "Table 3 + Table S1",
+      "result": "machine-readable manuscript tables",
+      "result_sha256": "dd8d7431cfd44e463849daa7d19fa4cc19b13fa9d4502878f34a99256e3862ba",
+      "source": "A sidecar a96ec413eeb7; T 6b555c28d61d",
+      "transform": "build_structural_results_tables.py"
+    }
+  ],
+  "schema_version": "eog_structural_figure5_audit_v1",
+  "svg_sha256": "1b2968bd49273a9968a9a166daadf55cccfcda323085152fa3e967a3085d3ac5"
+}
