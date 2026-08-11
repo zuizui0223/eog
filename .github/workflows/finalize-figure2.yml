@@ -1,0 +1,96 @@
+name: Finalize reproducible Figure 2
+
+on:
+  push:
+    branches:
+      - agent/aislands-figure2
+    paths:
+      - ".github/workflows/finalize-figure2.yml"
+      - "tools/figure2_source/**"
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/aislands-figure2
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify and extract frozen source projection
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64, hashlib, io, tarfile
+          from pathlib import Path, PurePosixPath
+          parts = [Path("tools/figure2_source/part00.b64"), Path("tools/figure2_source/part01.b64"), Path("tools/figure2_source/part03.b64")]
+          if [p.stat().st_size for p in parts] != [16000, 16000, 7224]:
+              raise SystemExit("Figure 2 source chunk size mismatch")
+          payload = base64.b64decode("".join(p.read_text() for p in parts), validate=True)
+          expected = "a55007cdfbdb75847139078d9fdb61e5fa3267b2ccf83e1e39c1e317a411a7d6"
+          actual = hashlib.sha256(payload).hexdigest()
+          if actual != expected:
+              raise SystemExit(f"Figure 2 source SHA mismatch: {actual}")
+          expected_members = {
+              "benchmarks/aislands_bottleneck_expected.json",
+              "benchmarks/aislands_reachability_modes_expected.json",
+              "benchmarks/aislands_structural_applicability_expected.csv",
+              "benchmarks/aislands_structural_species_expected.csv",
+              "benchmarks/aislands_structural_species_expected_provenance.json",
+              "figures/figure_manifest.json",
+              "figures/build_figure_2_aislands.py",
+              "tests/test_structural_figure_2.py",
+          }
+          with tarfile.open(fileobj=io.BytesIO(payload), mode="r:gz") as archive:
+              members = archive.getmembers()
+              if {m.name for m in members} != expected_members:
+                  raise SystemExit("Figure 2 source member mismatch")
+              for member in members:
+                  path = PurePosixPath(member.name)
+                  if path.is_absolute() or ".." in path.parts or member.issym() or member.islnk():
+                      raise SystemExit(f"unsafe archive member: {member.name}")
+              archive.extractall(".", members=members, filter="data")
+          print(f"verified Figure 2 source sha256={actual}")
+          PY
+      - name: Rebuild Figure 2
+        run: python figures/build_figure_2_aislands.py
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Verify Figure 2 contract
+        run: python -m pytest -q tests/test_structural_figure_2.py
+      - name: Commit generated Figure 2 assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm -r tools/figure2_source
+          git add \
+            benchmarks/aislands_bottleneck_expected.json \
+            benchmarks/aislands_reachability_modes_expected.json \
+            benchmarks/aislands_structural_applicability_expected.csv \
+            benchmarks/aislands_structural_species_expected.csv \
+            benchmarks/aislands_structural_species_expected_provenance.json \
+            figures/figure_manifest.json \
+            figures/build_figure_2_aislands.py \
+            figures/output/figure_2_aislands.svg \
+            figures/output/figure_2_metadata.json \
+            figures/output/aislands_species_concordance.csv \
+            figures/output/aislands_mode_estimates.csv \
+            figures/output/aislands_applicability.csv \
+            figures/output/aislands_fold_coverage.csv \
+            manuscript/figure_2_caption.md \
+            manuscript/figure_2_accessibility.md \
+            manuscript/figure_data/aislands_species_concordance.csv \
+            manuscript/figure_data/aislands_mode_estimates.csv \
+            manuscript/figure_data/aislands_applicability.csv \
+            manuscript/figure_data/aislands_fold_coverage.csv \
+            tests/test_structural_figure_2.py
+          git diff --cached --check
+          git commit -m "Build reproducible A-Islands Figure 2"
+          git push origin HEAD:agent/aislands-figure2
