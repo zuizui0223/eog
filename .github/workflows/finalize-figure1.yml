@@ -70,3 +70,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Build conceptual structural Figure 1"
           git push origin HEAD:agent/structural-figure1-roles
+
+# Re-run after correcting the wrapped-text contract test.
