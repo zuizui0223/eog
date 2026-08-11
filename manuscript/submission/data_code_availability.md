@@ -10,13 +10,14 @@ All EOG analysis code, pre-outcome contracts, tests, workflow definitions, froze
 python manuscript/build_structural_submission_package.py --output-dir build/structural_submission
 ```
 
-The command reconstructs the manuscript figures and result tables into a separate package directory and verifies the scientific assets against the committed frozen outputs. The submission package records the exact Git commit and the frozen Tanzania result fingerprint.
+The command reconstructs the manuscript figures and result tables into a separate package directory and verifies the scientific assets against the committed frozen outputs. The generated `submission_package_manifest.json` records the exact source Git commit automatically together with the frozen Tanzania result fingerprint, so the manuscript text does not attempt to embed the SHA of the commit that contains itself.
 
-Before submission, the final tagged repository release will be archived in a DOI-issuing repository. Replace the placeholders below only after that archive has been minted:
+Before submission, the final tagged repository release will be archived in a DOI-issuing repository. Replace the remaining placeholders only after a DOI has been reserved for the final archive:
 
 - Code release tag: `<RELEASE_TAG>`
 - Archived code/results DOI: `<ARCHIVE_DOI>`
-- Exact release commit: `<RELEASE_COMMIT>`
+
+The exact release commit is recorded by the generated submission-package manifest and by the immutable repository tag rather than hard-coded into this source file.
 
 Third-party source files should be cited and reacquired from their original providers rather than redistributed when their original terms require that route. Frozen derived benchmark projections and manuscript sidecars will be included in the archival release to the extent permitted by the source-data terms.
 
