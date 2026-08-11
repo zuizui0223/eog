@@ -1,13 +1,13 @@
 system,analysis,metric,effect_definition,n_species,n_matched,effect,ci_low,ci_high,null_value,sign_flip_p,interpretation
 A-Islands,Combined connected frequency,conditional concordance,higher than 0.5 favours added structural information,845,,0.617747,0.608681,0.626944,0.500000,0.00001000,favourable
 A-Islands,Geography-only connected frequency,conditional concordance,higher than 0.5 favours added structural information,845,,0.614746,0.605950,0.623573,0.500000,,favourable
-A-Islands,Environmentally constrained connected frequency,conditional concordance,higher than 0.5 favours added structural information,845,,0.606373,0.597487,0.615419,0.500000,,favourable
-A-Islands,Normalized geographic bottleneck,conditional concordance,higher than 0.5 favours added structural information,793,,0.528772,0.517726,0.539568,0.500000,,favourable
+A-Islands,Environment-constrained connected frequency,conditional concordance,higher than 0.5 favours added structural information,845,,0.606373,0.597487,0.615419,0.500000,,favourable
+A-Islands,Normalized geographic bottleneck secondary,conditional concordance,higher than 0.5 favours added structural information,793,,0.528772,0.517726,0.539568,0.500000,,favourable
 Tanzania,Primary weighting | LOSO,log loss difference,candidate minus current-flow reference; negative favours EOG,60,826,0.032113,0.017458,0.048675,0.000000,0.00003000,adverse
 Tanzania,Primary weighting | LOSO,Brier difference,candidate minus current-flow reference; negative favours EOG,60,826,0.004799,0.002281,0.007315,0.000000,0.00047999,adverse
-Tanzania,Inverse-area sensitivity | LOSO,log loss difference,candidate minus current-flow reference; negative favours EOG,60,826,0.030630,0.016214,0.046937,0.000000,0.00003000,adverse
-Tanzania,Inverse-area sensitivity | LOSO,Brier difference,candidate minus current-flow reference; negative favours EOG,60,826,0.004668,0.002309,0.007025,0.000000,0.00040000,adverse
+Tanzania,Inverse-area weighting | LOSO,log loss difference,candidate minus current-flow reference; negative favours EOG,60,826,0.030630,0.016214,0.046937,0.000000,0.00003000,adverse
+Tanzania,Inverse-area weighting | LOSO,Brier difference,candidate minus current-flow reference; negative favours EOG,60,826,0.004668,0.002309,0.007025,0.000000,0.00040000,adverse
 Tanzania,Primary weighting | spatial MST blocks,log loss difference,candidate minus current-flow reference; negative favours EOG,60,718,0.010954,-0.012171,0.033431,0.000000,0.35657643,uncertain
 Tanzania,Primary weighting | spatial MST blocks,Brier difference,candidate minus current-flow reference; negative favours EOG,60,718,0.000965,-0.006417,0.008239,0.000000,0.79920201,uncertain
-Tanzania,Inverse-area sensitivity | spatial MST blocks,log loss difference,candidate minus current-flow reference; negative favours EOG,60,718,0.005702,-0.015533,0.025824,0.000000,0.59587404,uncertain
-Tanzania,Inverse-area sensitivity | spatial MST blocks,Brier difference,candidate minus current-flow reference; negative favours EOG,60,718,0.001179,-0.006963,0.008866,0.000000,0.77570224,uncertain
+Tanzania,Inverse-area weighting | spatial MST blocks,log loss difference,candidate minus current-flow reference; negative favours EOG,60,718,0.005702,-0.015533,0.025824,0.000000,0.59587404,uncertain
+Tanzania,Inverse-area weighting | spatial MST blocks,Brier difference,candidate minus current-flow reference; negative favours EOG,60,718,0.001179,-0.006963,0.008866,0.000000,0.77570224,uncertain
