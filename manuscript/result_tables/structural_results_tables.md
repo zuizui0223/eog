@@ -25,12 +25,12 @@ A-Islands uses conditional concordance with null 0.5. Tanzania uses candidate-mi
 
 | system | analysis | partition | status | count |
 | --- | --- | --- | --- | --- |
+| A-Islands | bottleneck_secondary | ALL | evaluable | 2591 |
+| A-Islands | bottleneck_secondary | ALL | no_finite_comparable_pairs_within_frozen_strata | 1640 |
+| A-Islands | bottleneck_secondary | ALL | insufficient_training_classes | 199 |
 | A-Islands | primary_combined | ALL | evaluable | 3041 |
 | A-Islands | primary_combined | ALL | no_comparable_pairs_within_frozen_strata | 1190 |
 | A-Islands | primary_combined | ALL | insufficient_training_classes | 199 |
-| A-Islands | bottleneck_secondary | ALL | evaluable | 2591 |
-| A-Islands | bottleneck_secondary | ALL | no_comparable_pairs_within_frozen_strata | 1640 |
-| A-Islands | bottleneck_secondary | ALL | insufficient_training_classes | 199 |
 | Tanzania | primary::primary_loso | ALL | matched | 826 |
 | Tanzania | primary::primary_loso | ALL | invalid | 14 |
 | Tanzania | inverse_area_sensitivity::primary_loso | ALL | matched | 826 |
