@@ -1,0 +1,60 @@
+name: Clean Figure 2 branch
+
+on:
+  push:
+    branches:
+      - agent/aislands-figure2
+    paths:
+      - ".github/workflows/cleanup-figure2.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/aislands-figure2
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Remove transient generated files
+        run: |
+          git rm figures/__pycache__/build_figure_2_aislands.cpython-312.pyc
+          git rm tests/__pycache__/test_structural_figure_2.cpython-312-pytest-9.1.1.pyc
+          git rm .github/workflows/cleanup-figure2.yml
+      - name: Update structural submission checklist
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("manuscript/structural_submission_checklist.md")
+          text = p.read_text(encoding="utf-8")
+          replacements = {
+              "- [ ] Figure 2: A-Islands design and species-level conditional concordance.":
+                  "- [x] Figure 2: A-Islands design and species-level conditional concordance.",
+              "- [ ] Figure 3: Tanzania training-only current-flow benchmark and loss differences.":
+                  "- [x] Figure 3: Tanzania training-only current-flow benchmark and loss differences.",
+              "- [ ] Figure 4: cross-system reference-content and result-boundary matrix.":
+                  "- [x] Figure 4: cross-system reference-content and result-boundary matrix.",
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f"missing checklist line: {old}")
+              text = text.replace(old, new, 1)
+          p.write_text(text, encoding="utf-8")
+          PY
+      - name: Re-run Figure 2 contract
+        run: |
+          python -m pip install --disable-pip-version-check pytest
+          python -m pytest -q tests/test_structural_figure_2.py
+      - name: Commit cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add manuscript/structural_submission_checklist.md
+          git commit -m "Clean Figure 2 branch and update submission checklist"
+          git push origin HEAD:agent/aislands-figure2
