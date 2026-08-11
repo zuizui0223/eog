@@ -30,7 +30,7 @@
     "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
   },
   "required_pre_submission_resolutions": [
-    "replace <RELEASE_TAG>, <ARCHIVE_DOI>, and <RELEASE_COMMIT> after archival release",
+    "replace <RELEASE_TAG> and <ARCHIVE_DOI> after reserving the final archive DOI",
     "confirm author list, affiliations, corresponding author, and contribution roles",
     "confirm funding and competing-interests statements with all authors",
     "confirm originality and simultaneous-submission statement with all authors",
