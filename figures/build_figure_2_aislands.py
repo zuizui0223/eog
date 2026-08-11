@@ -283,13 +283,13 @@ def _svg(data: dict, species_rows: list[dict], mode_rows: list[dict], app_rows: 
         'E': (50, 705, 1500, 355),
     }
     for label, (x,y,w,h) in panels.items():
-        parts.append(f'<rect class="panel" x="{x}" y="{y}" width="{w}" height="{h}" rx="8"/>')
-        parts.append(f'<text class="sub" x="{x+14}" y="{y+27}">{label}</text>')
+        parts.append(f"""<rect class="panel" x="{x}" y="{y}" width="{w}" height="{h}" rx="8"/>""")
+        parts.append(f"""<text class="sub" x="{x+14}" y="{y+27}">{label}</text>""")
 
     exp = data['expected']
     # A: frozen design.
     ax, ay, aw, ah = panels['A']
-    parts.append(f'<text class="sub" x="{ax+52}" y="{ay+28}">Frozen confirmatory design</text>')
+    parts.append(f"""<text class="sub" x="{ax+52}" y="{ay+28}">Frozen confirmatory design</text>""")
     design = [
         (str(exp["islands"]), "islands"),
         (str(exp["declared_taxa"]), "declared taxa"),
@@ -301,41 +301,41 @@ def _svg(data: dict, species_rows: list[dict], mode_rows: list[dict], app_rows: 
     for i,(num,lab) in enumerate(design):
         col=i%2; row=i//2
         x=ax+28+col*195; y=ay+68+row*58
-        parts.append(f'<rect x="{x}" y="{y}" width="170" height="42" rx="6" class="light"/>')
-        parts.append(f'<text x="{x+12}" y="{y+20}" class="body" font-weight="700">{num}</text>')
-        parts.append(f'<text x="{x+45}" y="{y+20}" class="small">{escape(lab)}</text>')
-    parts.append(f'<text class="tiny" x="{ax+28}" y="{ay+244}">All three structural summaries share the frozen cohort, folds and climate hashes.</text>')
+        parts.append(f"""<rect x="{x}" y="{y}" width="170" height="42" rx="6" class="light"/>""")
+        parts.append(f"""<text x="{x+12}" y="{y+20}" class="body" font-weight="700">{num}</text>""")
+        parts.append(f"""<text x="{x+45}" y="{y+20}" class="small">{escape(lab)}</text>""")
+    parts.append(f"""<text class="tiny" x="{ax+28}" y="{ay+244}">All three structural summaries share the frozen cohort, folds and climate hashes.</text>""")
 
     # B: 5 x 5 strata concept.
     bx, by, bw, bh = panels['B']
-    parts.append(f'<text class="sub" x="{bx+52}" y="{by+28}">Conditional comparison</text>')
+    parts.append(f"""<text class="sub" x="{bx+52}" y="{by+28}">Conditional comparison</text>""")
     gx, gy, cell = bx+100, by+67, 27
     for r in range(exp["distance_strata"]):
         for c in range(exp["support_strata"]):
             shade = 245 - 10*(r+c)
-            parts.append(f'<rect x="{gx+c*cell}" y="{gy+r*cell}" width="{cell}" height="{cell}" fill="rgb({shade},{shade},{shade})" stroke="#fff"/>')
-    parts.append(f'<text class="small" x="{gx}" y="{gy-9}">pointwise CHELSA support →</text>')
-    parts.append(f'<text class="small" transform="translate({gx-48},{gy+130}) rotate(-90)">nearest training occurrence distance →</text>')
+            parts.append(f"""<rect x="{gx+c*cell}" y="{gy+r*cell}" width="{cell}" height="{cell}" fill="rgb({shade},{shade},{shade})" stroke="#fff"/>""")
+    parts.append(f"""<text class="small" x="{gx}" y="{gy-9}">pointwise CHELSA support →</text>""")
+    parts.append(f"""<text class="small" transform="translate({gx-48},{gy+130}) rotate(-90)">nearest training occurrence distance →</text>""")
     # same-stratum occupied/unoccupied icons.
     sx, sy = bx+300, by+100
-    parts.append(f'<rect x="{sx}" y="{sy}" width="145" height="80" rx="6" fill="#f7f7f7" stroke="#aaa"/>')
-    parts.append(f'<text class="small" x="{sx+12}" y="{sy+20}">within one frozen stratum</text>')
-    parts.append(f'<circle cx="{sx+35}" cy="{sy+48}" r="7" fill="#111"/><text class="tiny" x="{sx+48}" y="{sy+52}">occupied</text>')
-    parts.append(f'<circle cx="{sx+35}" cy="{sy+68}" r="7" fill="white" stroke="#111"/><text class="tiny" x="{sx+48}" y="{sy+72}">unoccupied</text>')
-    parts.append(f'<text class="small" x="{bx+45}" y="{by+226}">Compare structure only after local support and direct source distance are matched.</text>')
+    parts.append(f"""<rect x="{sx}" y="{sy}" width="145" height="80" rx="6" fill="#f7f7f7" stroke="#aaa"/>""")
+    parts.append(f"""<text class="small" x="{sx+12}" y="{sy+20}">within one frozen stratum</text>""")
+    parts.append(f"""<circle cx="{sx+35}" cy="{sy+48}" r="7" fill="#111"/><text class="tiny" x="{sx+48}" y="{sy+52}">occupied</text>""")
+    parts.append(f"""<circle cx="{sx+35}" cy="{sy+68}" r="7" fill="white" stroke="#111"/><text class="tiny" x="{sx+48}" y="{sy+72}">unoccupied</text>""")
+    parts.append(f"""<text class="small" x="{bx+45}" y="{by+226}">Compare structure only after local support and direct source distance are matched.</text>""")
 
     # C: all species points.
     cx, cy, cw, ch = panels['C']
-    parts.append(f'<text class="sub" x="{cx+52}" y="{cy+28}">All estimable species</text>')
+    parts.append(f"""<text class="sub" x="{cx+52}" y="{cy+28}">All estimable species</text>""")
     plot_l, plot_r = cx+60, cx+510
     plot_t, plot_b = cy+78, cy+530
     low, high = 0.15, 1.0
     refx = _x_map(0.5, plot_l, plot_r, low, high)
-    parts.append(f'<line class="ref" x1="{refx:.1f}" y1="{plot_t}" x2="{refx:.1f}" y2="{plot_b}"/>')
+    parts.append(f"""<line class="ref" x1="{refx:.1f}" y1="{plot_t}" x2="{refx:.1f}" y2="{plot_b}"/>""")
     for tick in [0.2,0.4,0.5,0.6,0.8,1.0]:
         x=_x_map(tick,plot_l,plot_r,low,high)
-        parts.append(f'<line class="grid" x1="{x:.1f}" y1="{plot_t}" x2="{x:.1f}" y2="{plot_b}"/>')
-        parts.append(f'<text class="tiny" x="{x-10:.1f}" y="{plot_b+18}">{tick:.1f}</text>')
+        parts.append(f"""<line class="grid" x1="{x:.1f}" y1="{plot_t}" x2="{x:.1f}" y2="{plot_b}"/>""")
+        parts.append(f"""<text class="tiny" x="{x-10:.1f}" y="{plot_b+18}">{tick:.1f}</text>""")
     # deterministic vertical spread, sorted ranks.
     bands=31
     for i,row in enumerate(species_rows):
@@ -343,37 +343,38 @@ def _svg(data: dict, species_rows: list[dict], mode_rows: list[dict], app_rows: 
         x=_x_map(score,plot_l,plot_r,low,high)
         band=(i*17)%bands
         y=plot_t+8+band*(plot_b-plot_t-16)/(bands-1)
-        parts.append(f'<circle class="pt" cx="{x:.2f}" cy="{y:.2f}" r="1.65"/>')
+        parts.append(f"""<circle class="pt" cx="{x:.2f}" cy="{y:.2f}" r="1.65"/>""")
     cnt=data['direction_counts']
-    parts.append(f'<text class="body" x="{cx+58}" y="{cy+565}">n = {len(species_rows)}: above 0.5 = {cnt["above"]}; equal = {cnt["equal"]}; below = {cnt["below"]}</text>')
-    parts.append(f'<text class="small" x="{cx+58}" y="{cy+590}">{cnt['not_estimable']} declared taxa had no primary species statistic and remain in Panel E.</text>')
+    parts.append(f"""<text class="body" x="{cx+58}" y="{cy+565}">n = {len(species_rows)}: above 0.5 = {cnt["above"]}; equal = {cnt["equal"]}; below = {cnt["below"]}</text>""")
+    not_estimable = cnt["not_estimable"]
+    parts.append(f"""<text class="small" x="{cx+58}" y="{cy+590}">{not_estimable} declared taxa had no primary species statistic and remain in Panel E.</text>""")
 
     # D: forest plot.
     dx, dy, dw, dh = panels['D']
-    parts.append(f'<text class="sub" x="{dx+52}" y="{dy+28}">Frozen structural quantities</text>')
+    parts.append(f"""<text class="sub" x="{dx+52}" y="{dy+28}">Frozen structural quantities</text>""")
     fl, fr = dx+390, dx+885
     ft, fb = dy+70, dy+275
     for tick in [0.5,0.55,0.60,0.65]:
         x=_x_map(tick,fl,fr,0.49,0.66)
-        parts.append(f'<line class="grid" x1="{x:.1f}" y1="{ft-18}" x2="{x:.1f}" y2="{fb+5}"/>')
-        parts.append(f'<text class="tiny" x="{x-12:.1f}" y="{fb+25}">{tick:.2f}</text>')
+        parts.append(f"""<line class="grid" x1="{x:.1f}" y1="{ft-18}" x2="{x:.1f}" y2="{fb+5}"/>""")
+        parts.append(f"""<text class="tiny" x="{x-12:.1f}" y="{fb+25}">{tick:.2f}</text>""")
     ref=_x_map(0.5,fl,fr,0.49,0.66)
-    parts.append(f'<line class="ref" x1="{ref:.1f}" y1="{ft-18}" x2="{ref:.1f}" y2="{fb+5}"/>')
+    parts.append(f"""<line class="ref" x1="{ref:.1f}" y1="{ft-18}" x2="{ref:.1f}" y2="{fb+5}"/>""")
     for i,row in enumerate(mode_rows):
         y=ft+i*51
         eff=float(row['effect']); lo=float(row['ci_low']); hi=float(row['ci_high'])
         x=_x_map(eff,fl,fr,0.49,0.66); xlo=_x_map(lo,fl,fr,0.49,0.66); xhi=_x_map(hi,fl,fr,0.49,0.66)
-        parts.append(f'<text class="small" x="{dx+35}" y="{y+5}">{escape(row["label"])}</text>')
-        parts.append(f'<text class="tiny" x="{dx+305}" y="{y+5}">n={row["n_species"]}</text>')
-        parts.append(f'<line class="ci" x1="{xlo:.1f}" y1="{y}" x2="{xhi:.1f}" y2="{y}"/>')
-        parts.append(f'<circle cx="{x:.1f}" cy="{y}" r="5" fill="#111"/>')
-        parts.append(f'<text class="tiny" x="{fr+8}" y="{y+4}">{eff:.3f} [{lo:.3f}, {hi:.3f}]</text>')
-    parts.append(f'<text class="tiny" x="{dx+35}" y="{dy+320}">Bottleneck evaluation uses -median normalized geographic bottleneck: higher concordance means smaller bottleneck aligns with occupancy.</text>')
+        parts.append(f"""<text class="small" x="{dx+35}" y="{y+5}">{escape(row["label"])}</text>""")
+        parts.append(f"""<text class="tiny" x="{dx+305}" y="{y+5}">n={row["n_species"]}</text>""")
+        parts.append(f"""<line class="ci" x1="{xlo:.1f}" y1="{y}" x2="{xhi:.1f}" y2="{y}"/>""")
+        parts.append(f"""<circle cx="{x:.1f}" cy="{y}" r="5" fill="#111"/>""")
+        parts.append(f"""<text class="tiny" x="{fr+8}" y="{y+4}">{eff:.3f} [{lo:.3f}, {hi:.3f}]</text>""")
+    parts.append(f"""<text class="tiny" x="{dx+35}" y="{dy+320}">Bottleneck evaluation uses -median normalized geographic bottleneck: higher concordance means smaller bottleneck aligns with occupancy.</text>""")
 
     # E: applicability and failures.
     ex, ey, ew, eh = panels['E']
-    parts.append(f'<text class="sub" x="{ex+52}" y="{ey+28}">Applicability is part of the result</text>')
-    parts.append(f'<text class="small" x="{ex+35}" y="{ey+57}">Declared: {exp['declared_taxa']} taxa × {exp['folds']} folds = {exp['declared_taxa'] * exp['folds']:,} species-fold evaluations. Non-estimable rows are not dropped.</text>')
+    parts.append(f"""<text class="sub" x="{ex+52}" y="{ey+28}">Applicability is part of the result</text>""")
+    parts.append(f"""<text class="small" x="{ex+35}" y="{ey+57}">Declared: {exp['declared_taxa']} taxa × {exp['folds']} folds = {exp['declared_taxa'] * exp['folds']:,} species-fold evaluations. Non-estimable rows are not dropped.</text>""")
     overall = {}
     for row in app_rows:
         overall.setdefault(row['analysis'], {})[row['status']] = row['count']
@@ -387,25 +388,25 @@ def _svg(data: dict, species_rows: list[dict], mode_rows: list[dict], app_rows: 
         evaluable=counts.get('evaluable',0)
         no_pairs=counts.get('no_comparable_pairs_within_frozen_strata',0)+counts.get('no_finite_comparable_pairs_within_frozen_strata',0)
         training=counts.get('insufficient_training_classes',0)
-        parts.append(f'<text class="small" x="{ex+35}" y="{y-14}">{labels[analysis]}</text>')
+        parts.append(f"""<text class="small" x="{ex+35}" y="{y-14}">{labels[analysis]}</text>""")
         barx=ex+350; barw=930; barh=26
         total=evaluable+no_pairs+training
         widths=[barw*evaluable/total,barw*no_pairs/total,barw*training/total]
         cur=barx
         for cls,w in zip(('dark','mid','light'),widths):
-            parts.append(f'<rect class="{cls}" x="{cur:.1f}" y="{y-29}" width="{w:.1f}" height="{barh}"/>')
+            parts.append(f"""<rect class="{cls}" x="{cur:.1f}" y="{y-29}" width="{w:.1f}" height="{barh}"/>""")
             cur+=w
-        parts.append(f'<text class="tiny" x="{barx}" y="{y+12}">evaluable {evaluable}</text>')
-        parts.append(f'<text class="tiny" x="{barx+230}" y="{y+12}">no comparable pairs {no_pairs}</text>')
-        parts.append(f'<text class="tiny" x="{barx+500}" y="{y+12}">insufficient training classes {training}</text>')
+        parts.append(f"""<text class="tiny" x="{barx}" y="{y+12}">evaluable {evaluable}</text>""")
+        parts.append(f"""<text class="tiny" x="{barx+230}" y="{y+12}">no comparable pairs {no_pairs}</text>""")
+        parts.append(f"""<text class="tiny" x="{barx+500}" y="{y+12}">insufficient training classes {training}</text>""")
     # fold compact table.
-    parts.append(f'<text class="small" x="{ex+35}" y="{ey+285}">Fold-level evaluable counts (primary / bottleneck)</text>')
+    parts.append(f"""<text class="small" x="{ex+35}" y="{ey+285}">Fold-level evaluable counts (primary / bottleneck)</text>""")
     primary_f={r['fold']:r for r in fold_rows if r['analysis']=='primary_combined'}
     bottle_f={r['fold']:r for r in fold_rows if r['analysis']=='bottleneck_secondary'}
     for fold in range(1,6):
         x=ex+330+(fold-1)*190
-        parts.append(f'<text class="tiny" x="{x}" y="{ey+285}">Fold {fold}: {primary_f[fold]["evaluable"]} / {bottle_f[fold]["evaluable"]}</text>')
-    parts.append(f'<text class="tiny" x="{ex+35}" y="{ey+326}">The primary {exp['primary_estimable_taxa']}-species distribution and {exp['bottleneck_estimable_taxa']}-species bottleneck summary therefore have different applicability; neither denominator is hidden.</text>')
+        parts.append(f"""<text class="tiny" x="{x}" y="{ey+285}">Fold {fold}: {primary_f[fold]["evaluable"]} / {bottle_f[fold]["evaluable"]}</text>""")
+    parts.append(f"""<text class="tiny" x="{ex+35}" y="{ey+326}">The primary {exp['primary_estimable_taxa']}-species distribution and {exp['bottleneck_estimable_taxa']}-species bottleneck summary therefore have different applicability; neither denominator is hidden.</text>""")
 
     parts.append('</svg>')
     return "\n".join(parts) + "\n"
