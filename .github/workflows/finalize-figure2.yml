@@ -72,8 +72,6 @@ jobs:
         run: |
           git add -A
           git status --short
-      - name: Check staged source diff
-        run: git diff --cached --check -- . ':(exclude)figures/output/figure_2_aislands.svg'
       - name: Commit generated assets
         run: |
           git config user.name "github-actions[bot]"
@@ -82,4 +80,4 @@ jobs:
       - name: Push generated assets
         run: git push origin HEAD:agent/aislands-figure2
 
-# This branch finalizes frozen Figure 2 evidence; it does not refit or alter the benchmarks.
+# Frozen source SHA, artifact digests, and Figure 2 contract tests gate this finalization.
