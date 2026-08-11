@@ -1,0 +1,33 @@
+{
+  "built_at_utc": "2026-08-11T02:30:00Z",
+  "derived": {
+    "aggregate_contrasts": 4,
+    "species_adverse": 43,
+    "species_displayed": 60,
+    "species_equal": 0,
+    "species_favourable": 17
+  },
+  "figure_id": "figure_3_tanzania",
+  "outputs": {
+    "accessibility_sha256": "7a51388cac2ec75196f4f54a3be06d1f96038735b83bb7b526956dc8518d8272",
+    "applicability_data_sha256": "8f9087307ca3f511bc64df77d43dc0d6f72adc994156538d6a98dc32f89e5a89",
+    "caption_sha256": "5d2e0569d747edccc5da79e6269561279b5be1866a3adcb56036b03a04aca834",
+    "contrasts_data_sha256": "a73031b817313d5b2a62ac9c1ae8f023c7ec58cbb13a73441b5dc2d04b5d9bbe",
+    "species_data_sha256": "7e25671f0dfca1fbcc9234540fdb78a81b848b93c8ef619e34d7e1aa9cefb1cd",
+    "svg_sha256": "bdb55aa7f66d75aa3b2b1123483dc6775272eba8a11ecd26bffc7a3e7df4eff4"
+  },
+  "schema_version": "eog_structural_figure_3_metadata_v1",
+  "software": {
+    "implementation": "CPython",
+    "python": "3.13.5"
+  },
+  "source": {
+    "artifact_digest": "sha256:6f05cb4987300b78c627bb201a2c0da31d8e4a21a7aee83a658de0758f66d4d5",
+    "frozen_result_sha256": "ae47c3875b2fe07e82d16f6ae710da81003df7ce37b41cba0c03b869cf391071",
+    "manifest_sha256": "014b8b3bc952ac1b75c7238c03b7e5f7d45d944bf56e3edfe5a0cd9eea9b549f",
+    "provenance_sha256": "c21fe966c630218d3de847de2c796e6cd52408309d9d42d1117354cdd0977ea3",
+    "result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4",
+    "species_table_sha256": "1e73890c22d1eb12ae9f1dba99cba880a93573f1d14e881038433d7b58e7a9fe",
+    "workflow_run_id": 31432646901
+  }
+}
