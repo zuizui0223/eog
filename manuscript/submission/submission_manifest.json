@@ -1,0 +1,45 @@
+{
+  "schema_version": "eog_structural_submission_manifest_v1",
+  "target_journal": "Ecological Informatics",
+  "article_type": "Original Research Paper",
+  "title": "When does landscape configuration add to pointwise distribution support? An auditable reachability framework across islands and forest fragments",
+  "main_manuscript": "manuscript/structural_reachability_manuscript.md",
+  "highlights": "manuscript/structural_highlights.txt",
+  "cover_letter": "manuscript/submission/cover_letter.md",
+  "data_code_availability": "manuscript/submission/data_code_availability.md",
+  "declarations": "manuscript/submission/declarations.md",
+  "environment": "manuscript/submission/environment.md",
+  "supplementary_materials_list": "manuscript/submission/supplementary_materials.md",
+  "figure_files": [
+    "figures/output/figure_1_roles.svg",
+    "figures/output/figure_2_aislands.svg",
+    "figures/output/figure_3_tanzania.svg",
+    "figures/output/figure_4_boundary.svg",
+    "figures/output/figure_5_audit.svg"
+  ],
+  "machine_readable_results": [
+    "manuscript/result_tables/table_3_main_sensitivity_results.csv",
+    "manuscript/result_tables/table_s1_applicability_accounting.csv"
+  ],
+  "offline_build_command": "python manuscript/build_structural_submission_package.py --output-dir build/structural_submission",
+  "frozen_evidence": {
+    "aislands_direction": "positive_added_information_conditional_on_support_and_nearest_source_distance",
+    "tanzania_primary_direction": "adverse_incremental_loso_beyond_current_flow_and_nearest_source_distance",
+    "tanzania_spatial_block_direction": "uncertain_interval_crosses_zero",
+    "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
+  },
+  "required_pre_submission_resolutions": [
+    "replace <RELEASE_TAG>, <ARCHIVE_DOI>, and <RELEASE_COMMIT> after archival release",
+    "confirm author list, affiliations, corresponding author, and contribution roles",
+    "confirm funding and competing-interests statements with all authors",
+    "confirm originality and simultaneous-submission statement with all authors",
+    "recheck the live Ecological Informatics author guide and generative-AI policy on submission day",
+    "confirm final figure file format/resolution requirements in the live submission system"
+  ],
+  "prohibited_claims": [
+    "EOG universally outperforms SDM",
+    "connected frequency is a dispersal or colonisation probability",
+    "Tanzania establishes universal superiority of current flow",
+    "the cross-system difference identifies a causal mechanism"
+  ]
+}
