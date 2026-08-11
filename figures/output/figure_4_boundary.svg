@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="0 0 1600 930">
+<rect width="1600" height="930" fill="#ffffff"/>
+<style>text{font-family:Arial,Helvetica,sans-serif}.muted{fill:#5c667a}</style>
+<text x="60" y="55" font-size="28" font-weight="700" text-anchor="start" fill="#172033"><tspan x="60" dy="0">Figure 4 | Cross-system evidence boundary</tspan></text>
+<text x="60" y="88" font-size="16" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="60" dy="0">Incompatible endpoints are shown on separate row-specific scales.</tspan></text>
+<rect x="50" y="125" width="1500" height="315" rx="18" fill="#ebf4ff" stroke="#2b6cb0" stroke-width="2"/>
+<text x="80" y="165" font-size="23" font-weight="700" text-anchor="start" fill="#2b6cb0"><tspan x="80" dy="0">A-Islands plants</tspan></text>
+<text x="80" y="194" font-size="14" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="80" dy="0">845 estimable of 886 taxa | 842 spatial units</tspan></text>
+<text x="80" y="235" font-size="14" font-weight="700" text-anchor="start" fill="#172033"><tspan x="80" dy="0">Reference already contained</tspan></text>
+<text x="80" y="268" font-size="14" font-weight="700" text-anchor="start" fill="#2b6cb0"><tspan x="80" dy="0">● Local term</tspan></text>
+<text x="80" y="290" font-size="12" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="80" dy="0">CHELSA pointwise support</tspan></text>
+<text x="340" y="268" font-size="14" font-weight="700" text-anchor="start" fill="#2b6cb0"><tspan x="340" dy="0">● Nearest-source distance</tspan></text>
+<text x="340" y="290" font-size="12" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="340" dy="0">included</tspan></text>
+<text x="600" y="268" font-size="14" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="600" dy="0">○ Matrix-aware connectivity</tspan></text>
+<text x="600" y="290" font-size="12" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="600" dy="0">no</tspan></text>
+<text x="80" y="343" font-size="13" font-weight="700" text-anchor="start" fill="#172033"><tspan x="80" dy="0">EOG addition</tspan></text>
+<text x="80" y="366" font-size="13" font-weight="400" text-anchor="start" fill="#39445a"><tspan x="80" dy="0">12-scenario connected frequency</tspan></text>
+<text x="435" y="343" font-size="13" font-weight="700" text-anchor="start" fill="#172033"><tspan x="435" dy="0">Holdout / endpoint</tspan></text>
+<text x="435" y="366" font-size="13" font-weight="400" text-anchor="start" fill="#39445a"><tspan x="435" dy="0">shared five-fold spatial partition; conditional</tspan><tspan x="435" dy="16">occupied-vs-unoccupied concordance within</tspan><tspan x="435" dy="16">support-distance strata</tspan></text>
+<text x="1040" y="230" font-size="13" font-weight="700" text-anchor="start" fill="#172033"><tspan x="1040" dy="0">conditional concordance</tspan></text>
+<line x1="1040" y1="285" x2="1485" y2="285" stroke="#a0a8b8" stroke-width="3"/>
+<line x1="1089.4" y1="267" x2="1089.4" y2="303" stroke="#39445a" stroke-width="2" stroke-dasharray="5 5"/>
+<line x1="1358.1" y1="285" x2="1403.3" y2="285" stroke="#2b6cb0" stroke-width="8" stroke-linecap="round"/>
+<circle cx="1380.5" cy="285" r="9" fill="#2b6cb0" stroke="#ffffff" stroke-width="3"/>
+<text x="1262" y="323" font-size="17" font-weight="700" text-anchor="middle" fill="#2b6cb0"><tspan x="1262" dy="0">0.618 [0.609–0.627]</tspan></text>
+<text x="1040" y="346" font-size="12" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="1040" dy="0">higher indicates added information</tspan></text>
+<text x="1040" y="379" font-size="14" font-weight="700" text-anchor="start" fill="#2b6cb0"><tspan x="1040" dy="0">Added information after pointwise support and</tspan><tspan x="1040" dy="18">nearest-source distance were controlled</tspan></text>
+<rect x="50" y="475" width="1500" height="315" rx="18" fill="#fffaf0" stroke="#b7791f" stroke-width="2"/>
+<text x="80" y="515" font-size="23" font-weight="700" text-anchor="start" fill="#b7791f"><tspan x="80" dy="0">Tanzania forest birds</tspan></text>
+<text x="80" y="544" font-size="14" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="80" dy="0">60 estimable of 60 taxa | 14 spatial units</tspan></text>
+<text x="80" y="585" font-size="14" font-weight="700" text-anchor="start" fill="#172033"><tspan x="80" dy="0">Reference already contained</tspan></text>
+<text x="80" y="618" font-size="14" font-weight="700" text-anchor="start" fill="#b7791f"><tspan x="80" dy="0">● Local term</tspan></text>
+<text x="80" y="640" font-size="12" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="80" dy="0">patch area</tspan></text>
+<text x="340" y="618" font-size="14" font-weight="700" text-anchor="start" fill="#b7791f"><tspan x="340" dy="0">● Nearest-source distance</tspan></text>
+<text x="340" y="640" font-size="12" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="340" dy="0">included</tspan></text>
+<text x="600" y="618" font-size="14" font-weight="700" text-anchor="start" fill="#b7791f"><tspan x="600" dy="0">● Matrix-aware connectivity</tspan></text>
+<text x="600" y="640" font-size="12" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="600" dy="0">training-selected</tspan><tspan x="600" dy="15">matrix-aware current flow</tspan></text>
+<text x="80" y="693" font-size="13" font-weight="700" text-anchor="start" fill="#172033"><tspan x="80" dy="0">EOG addition</tspan></text>
+<text x="80" y="716" font-size="13" font-weight="400" text-anchor="start" fill="#39445a"><tspan x="80" dy="0">four-scenario geography-only connected</tspan><tspan x="80" dy="16">frequency</tspan></text>
+<text x="435" y="693" font-size="13" font-weight="700" text-anchor="start" fill="#172033"><tspan x="435" dy="0">Holdout / endpoint</tspan></text>
+<text x="435" y="716" font-size="13" font-weight="400" text-anchor="start" fill="#39445a"><tspan x="435" dy="0">leave-one-fragment-out; candidate-minus-reference</tspan><tspan x="435" dy="16">paired held-out Bernoulli log loss</tspan></text>
+<text x="1040" y="580" font-size="13" font-weight="700" text-anchor="start" fill="#172033"><tspan x="1040" dy="0">delta log loss: EOG minus reference</tspan></text>
+<line x1="1040" y1="635" x2="1485" y2="635" stroke="#a0a8b8" stroke-width="3"/>
+<line x1="1151.2" y1="617" x2="1151.2" y2="653" stroke="#39445a" stroke-width="2" stroke-dasharray="5 5"/>
+<line x1="1248.4" y1="635" x2="1422.0" y2="635" stroke="#b7791f" stroke-width="8" stroke-linecap="round"/>
+<circle cx="1329.9" cy="635" r="9" fill="#b7791f" stroke="#ffffff" stroke-width="3"/>
+<text x="1262" y="673" font-size="17" font-weight="700" text-anchor="middle" fill="#b7791f"><tspan x="1262" dy="0">+0.032 [+0.017 to +0.049]</tspan></text>
+<text x="1040" y="696" font-size="12" font-weight="400" text-anchor="start" fill="#5c667a"><tspan x="1040" dy="0">negative favours EOG; positive is worse</tspan></text>
+<text x="1040" y="729" font-size="14" font-weight="700" text-anchor="start" fill="#b7791f"><tspan x="1040" dy="0">No incremental benefit beyond current flow and</tspan><tspan x="1040" dy="18">nearest-source distance; LOSO prediction worsened</tspan></text>
+<text x="60" y="850" font-size="17" font-weight="700" text-anchor="start" fill="#172033"><tspan x="60" dy="0">Interpretation boundary</tspan></text>
+<text x="60" y="878" font-size="14" font-weight="400" text-anchor="start" fill="#39445a"><tspan x="60" dy="0">Occurrence-anchored configuration added information beyond pointwise support and direct source distance in A-Islands, but the same generic feature was</tspan><tspan x="60" dy="19">not beneficial after a strong matrix-aware current-flow reference in Tanzania.</tspan></text>
+<text x="60" y="912" font-size="13" font-weight="700" text-anchor="start" fill="#5c667a"><tspan x="60" dy="0">The two endpoints are intentionally shown on separate scales; no cross-metric magnitude comparison is implied.</tspan></text>
+</svg>
