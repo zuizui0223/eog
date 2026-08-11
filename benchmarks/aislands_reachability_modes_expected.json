@@ -1,0 +1,49 @@
+{
+  "bootstrap_replicates": 10000,
+  "fold_output_sha256": "051f087b04f63ffcc77c14b617c77f3aa7d21e64ee10b806eb3d56254b425f5e",
+  "input_sha256": {
+    "climate": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285",
+    "cohort": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+    "folds": "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa",
+    "island_data": "d26ae154aeae1e6eab268f22268342077f7e8e7ef000d18a1f052f65866d5bde",
+    "species_data": "43e7d2e8deb1d1d635c8db44a7fe68cfb79c2a059a2207914413a62431eb7b0c"
+  },
+  "interpretation_boundary": "Predeclared secondary decomposition of structural reachability. Geography-only and environmentally constrained connected frequencies remain assumption-dependent graph summaries, not dispersal or colonisation probabilities.",
+  "modes": {
+    "combined": {
+      "bootstrap_95_ci": [
+        0.6086806094469824,
+        0.626944450492123
+      ],
+      "mean_conditional_concordance": 0.6177465917820878,
+      "n_species_estimable": 845,
+      "sign_flip_two_sided_p": 9.99990000099999e-06
+    },
+    "environmentally_constrained": {
+      "bootstrap_95_ci": [
+        0.5974870745162237,
+        0.6154186320042783
+      ],
+      "mean_conditional_concordance": 0.6063726505159072,
+      "n_species_estimable": 845,
+      "sign_flip_two_sided_p": 9.99990000099999e-06
+    },
+    "geography_only": {
+      "bootstrap_95_ci": [
+        0.6059504634323984,
+        0.6235728782102711
+      ],
+      "mean_conditional_concordance": 0.6147456389990964,
+      "n_species_estimable": 845,
+      "sign_flip_two_sided_p": 9.99990000099999e-06
+    }
+  },
+  "n_declared_taxa": 886,
+  "n_islands": 842,
+  "null": 0.5,
+  "primary_drift_guard_expected": 0.6177465917820878,
+  "primary_drift_guard_passed": true,
+  "sign_flip_replicates": 100000,
+  "species_output_sha256": "a387842cd5d7e32dc2c357e460224d86b49858d73ad4f8f9ea1a4f273b29974c",
+  "status": "predeclared_aislands_reachability_mode_secondary"
+}

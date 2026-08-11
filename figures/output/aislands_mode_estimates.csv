@@ -1,0 +1,5 @@
+quantity,label,n_species,effect,ci_low,ci_high,null_value,direction_note
+combined,Combined connected frequency,845,0.617746591782,0.608680609447,0.626944450492,0.500000000000,higher conditional concordance is favourable
+geography_only,Geography-only connected frequency,845,0.614745638999,0.605950463432,0.623572878210,0.500000000000,higher conditional concordance is favourable
+environmentally_constrained,Environment-constrained connected frequency,845,0.606372650516,0.597487074516,0.615418632004,0.500000000000,higher conditional concordance is favourable
+bottleneck_secondary,Normalized geographic bottleneck secondary,793,0.528771526183,0.517725807697,0.539567700276,0.500000000000,score is -median normalized bottleneck; higher concordance means smaller bottleneck is favourable
