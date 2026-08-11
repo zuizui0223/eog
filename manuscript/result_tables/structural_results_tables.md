@@ -11,13 +11,13 @@ These tables are generated from frozen Figure 2/3 evidence. They are not manuall
 | A-Islands | Environmentally constrained connected frequency | conditional concordance | 845 |  | 0.606373 | 0.597487 | 0.615419 | 0.500000 |  | favourable |
 | A-Islands | Normalized geographic bottleneck | conditional concordance | 793 |  | 0.528772 | 0.517726 | 0.539568 | 0.500000 |  | favourable |
 | Tanzania | Primary weighting \| LOSO | log loss difference | 60 | 826 | 0.032113 | 0.017458 | 0.048675 | 0.000000 | 0.00003000 | adverse |
-| Tanzania | Primary weighting \| LOSO | Brier difference | 60 | 826 | 0.004799 | 0.002281 | 0.007315 | 0.000000 | 0.00010999 | adverse |
-| Tanzania | Inverse-area sensitivity \| LOSO | log loss difference | 60 | 826 | 0.031624 | 0.016405 | 0.047697 | 0.000000 | 0.00002000 | adverse |
-| Tanzania | Inverse-area sensitivity \| LOSO | Brier difference | 60 | 826 | 0.004813 | 0.002344 | 0.007331 | 0.000000 | 0.00011999 | adverse |
-| Tanzania | Primary weighting \| spatial MST blocks | log loss difference | 60 | 718 | 0.007305 | -0.006971 | 0.021412 | 0.000000 | 0.30516474 | uncertain |
-| Tanzania | Primary weighting \| spatial MST blocks | Brier difference | 60 | 718 | 0.000370 | -0.001913 | 0.002598 | 0.000000 | 0.75751212 | uncertain |
-| Tanzania | Inverse-area sensitivity \| spatial MST blocks | log loss difference | 60 | 718 | 0.007913 | -0.006104 | 0.021987 | 0.000000 | 0.26880656 | uncertain |
-| Tanzania | Inverse-area sensitivity \| spatial MST blocks | Brier difference | 60 | 718 | 0.000490 | -0.001733 | 0.002711 | 0.000000 | 0.67591620 | uncertain |
+| Tanzania | Primary weighting \| LOSO | Brier difference | 60 | 826 | 0.004799 | 0.002281 | 0.007315 | 0.000000 | 0.00047999 | adverse |
+| Tanzania | Inverse-area sensitivity \| LOSO | log loss difference | 60 | 826 | 0.030630 | 0.016214 | 0.046937 | 0.000000 | 0.00003000 | adverse |
+| Tanzania | Inverse-area sensitivity \| LOSO | Brier difference | 60 | 826 | 0.004668 | 0.002309 | 0.007025 | 0.000000 | 0.00040000 | adverse |
+| Tanzania | Primary weighting \| spatial MST blocks | log loss difference | 60 | 718 | 0.010954 | -0.012171 | 0.033431 | 0.000000 | 0.35657643 | uncertain |
+| Tanzania | Primary weighting \| spatial MST blocks | Brier difference | 60 | 718 | 0.000965 | -0.006417 | 0.008239 | 0.000000 | 0.79920201 | uncertain |
+| Tanzania | Inverse-area sensitivity \| spatial MST blocks | log loss difference | 60 | 718 | 0.005702 | -0.015533 | 0.025824 | 0.000000 | 0.59587404 | uncertain |
+| Tanzania | Inverse-area sensitivity \| spatial MST blocks | Brier difference | 60 | 718 | 0.001179 | -0.006963 | 0.008866 | 0.000000 | 0.77570224 | uncertain |
 
 A-Islands uses conditional concordance with null 0.5. Tanzania uses candidate-minus-reference differences with null 0; negative values favour adding EOG to the strong current-flow reference.
 
