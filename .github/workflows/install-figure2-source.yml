@@ -36,10 +36,15 @@ jobs:
           import tarfile
           from pathlib import Path, PurePosixPath
 
-          parts = sorted(Path("tools/figure2_source").glob("part*.b64"))
-          expected_part_names = [f"part{i:02d}.b64" for i in range(4)]
-          if [p.name for p in parts] != expected_part_names:
-              raise SystemExit(f"unexpected source chunks: {[p.name for p in parts]}")
+          parts = [
+              Path("tools/figure2_source/part00.b64"),
+              Path("tools/figure2_source/part01.b64"),
+              Path("tools/figure2_source/part03.b64"),
+          ]
+          expected_sizes = [16000, 16000, 7224]
+          actual_sizes = [p.stat().st_size for p in parts]
+          if actual_sizes != expected_sizes:
+              raise SystemExit(f"unexpected source chunk sizes: {actual_sizes}")
 
           encoded = "".join(p.read_text(encoding="utf-8") for p in parts)
           payload = base64.b64decode(encoded, validate=True)
