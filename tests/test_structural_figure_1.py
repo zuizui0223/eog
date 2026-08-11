@@ -41,7 +41,8 @@ def test_svg_is_conceptual_and_contains_no_arrow_markers():
     assert "marker-start" not in svg
     for panel in contract["panels"]:
         assert panel["title"] in svg
-        assert panel["question"] in svg
+        for wrapped_line in module.wrap(panel["question"], 45):
+            assert wrapped_line in svg
     assert "No panel is a movement, dispersal, or colonisation probability." in svg
     assert "0.617" not in svg
     assert "+0.022" not in svg
