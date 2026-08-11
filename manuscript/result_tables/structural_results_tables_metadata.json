@@ -1,0 +1,12 @@
+{
+  "aislands_species_output_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488",
+  "applicability_rows": 14,
+  "outputs": {
+    "structural_results_tables.md": "3f14c0ba01f95749c281f7aa08904a544b384da229c8d32747cf10886919618b",
+    "table_3_main_sensitivity_results.csv": "dd8d7431cfd44e463849daa7d19fa4cc19b13fa9d4502878f34a99256e3862ba",
+    "table_s1_applicability_accounting.csv": "cc023245c2e7a37f1f8b95fd781e3d858c47a2a0b8a2671043924514bbc40298"
+  },
+  "schema_version": "eog_structural_results_tables_v1",
+  "table_3_rows": 12,
+  "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
+}
