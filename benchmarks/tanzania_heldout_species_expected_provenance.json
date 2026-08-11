@@ -1,0 +1,51 @@
+{
+  "derivation": {
+    "join_keys": [
+      "isolation_mode",
+      "analysis_partition",
+      "species_id"
+    ],
+    "matched_definition": "prediction_valid == true",
+    "output_rows": 240,
+    "output_sha256": "1e73890c22d1eb12ae9f1dba99cba880a93573f1d14e881038433d7b58e7a9fe",
+    "sort_order": [
+      "isolation_mode",
+      "analysis_partition",
+      "species_id"
+    ]
+  },
+  "interpretation": "Derived deterministically from the independently reproduced held-out workflow artifact for plotting; not a new analysis and not preregistration.",
+  "not_preregistration": true,
+  "source": {
+    "artifact_created_at": "2026-08-10T21:18:49Z",
+    "artifact_digest": "sha256:6f05cb4987300b78c627bb201a2c0da31d8e4a21a7aee83a658de0758f66d4d5",
+    "artifact_id": 9079948365,
+    "artifact_name": "tanzania-heldout-current-flow-eog-result-31432646901",
+    "head_sha": "fb5f2de83c08051372dfb7e94b40161085b495cb",
+    "members": {
+      "heldout_groups.jsonl": {
+        "rows": 2280,
+        "sha256": "e28dfabcf7e882de4a791dd9fc0d58f83cc56c411b2799fe0237beaac227efc7"
+      },
+      "heldout_predictions.jsonl": {
+        "rows": 3360,
+        "sha256": "4857ce80f3466f76f8544ece29841627c134014550f57b95e114dd590df3d048"
+      },
+      "heldout_result_manifest.json": {
+        "sha256": "9755da78a50ba7419ba730426b14ff6d6cfa80a427b3b2552834631f4a9b08e4"
+      },
+      "heldout_species_results.csv": {
+        "rows": 240,
+        "sha256": "f2c6335044464ed88ad00cdbd6923dbe1e1faabdb22568a928e00a0b38d6f33d"
+      },
+      "heldout_species_results.jsonl": {
+        "rows": 240,
+        "sha256": "adf254c76b945cc8425a6072569691fe0e8414fdd23e1d309352ff49f865340e"
+      }
+    },
+    "repository": "zuizui0223/eog",
+    "workflow": "Tanzania held-out current-flow versus EOG benchmark",
+    "workflow_run_id": 31432646901
+  },
+  "status": "post_outcome_tanzania_species_figure_source"
+}

@@ -2,7 +2,10 @@
   "schema_version": "eog_structural_figure_manifest_v1",
   "figure_4_boundary": {
     "purpose": "Compare the two frozen structural benchmarks without placing incompatible metrics on a common effect-size axis.",
-    "required_benchmark_ids": ["A_ISLANDS", "TANZANIA"],
+    "required_benchmark_ids": [
+      "A_ISLANDS",
+      "TANZANIA"
+    ],
     "metrics_share_axis": false,
     "expected": {
       "aislands_summary_sha256": "724d5a7a5bae346f84d229d281fdecc257feb65d2f5b4f2291f4c6edc664ee6c",
@@ -23,6 +26,40 @@
       "EOG is generally harmful",
       "the cross-system contrast identifies a causal mechanism",
       "connected frequency is a dispersal or colonisation probability"
+    ]
+  },
+  "figure_3_tanzania": {
+    "purpose": "Show the strict species-level and aggregate Tanzania incremental comparison without hiding the adverse LOSO result or spatial-block non-estimability.",
+    "metric": "candidate_minus_reference_log_loss; negative favours EOG and positive is worse",
+    "expected": {
+      "species_table_sha256": "1e73890c22d1eb12ae9f1dba99cba880a93573f1d14e881038433d7b58e7a9fe",
+      "artifact_digest": "sha256:6f05cb4987300b78c627bb201a2c0da31d8e4a21a7aee83a658de0758f66d4d5",
+      "workflow_run_id": 31432646901,
+      "artifact_id": 9079948365,
+      "result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4",
+      "candidate_library_fingerprint": "3cabff50f138f7ccfe77cdbe87aefe14d5ec4dd40db15f16fb7b072cd3d01026",
+      "prediction_rows_cross_run_sha256": "a8c7551d728de41874c795913b1fd17853c5123a7f1c9c6b037ba0028331f6c5",
+      "group_rows_cross_run_sha256": "79fd84fc9f202d1dd0d42f3cc36537791a34a082e16b094d40c119f47921a798",
+      "species_rows_cross_run_sha256": "8ff8d931759031c78235f140887d4ed051d5c8e49a7dff992cd17d94fd45c2b3",
+      "raw_prediction_rows_sha256": "4857ce80f3466f76f8544ece29841627c134014550f57b95e114dd590df3d048",
+      "raw_group_rows_sha256": "e28dfabcf7e882de4a791dd9fc0d58f83cc56c411b2799fe0237beaac227efc7",
+      "raw_species_rows_sha256": "adf254c76b945cc8425a6072569691fe0e8414fdd23e1d309352ff49f865340e",
+      "species": 60,
+      "prediction_rows": 3360,
+      "group_rows": 2280,
+      "derived_species_rows": 240,
+      "contrast_keys": [
+        "primary::primary_loso",
+        "inverse_area_sensitivity::primary_loso",
+        "primary::spatial_mst_block",
+        "inverse_area_sensitivity::spatial_mst_block"
+      ]
+    },
+    "prohibited_claims": [
+      "EOG is generally harmful",
+      "current flow universally dominates",
+      "connected frequency is a dispersal probability",
+      "the spatial-block sensitivity confirms an adverse effect"
     ]
   }
 }
