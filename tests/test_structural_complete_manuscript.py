@@ -95,7 +95,7 @@ def test_primary_and_sensitivity_values_match_frozen_table3() -> None:
             # Table 3 is a six-decimal display projection; the manuscript retains
             # more digits from the same frozen result. They must agree to rounding.
             assert abs(float(rendered) - float(row[field])) <= 5.1e-7
-            assert rendered in text
+            assert rendered in text or rendered.replace("-", "−") in text
 
 
 def test_applicability_failure_accounting_is_retained() -> None:
