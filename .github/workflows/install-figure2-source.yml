@@ -1,0 +1,134 @@
+name: Install reproducible Figure 2 source bundle
+
+on:
+  push:
+    branches:
+      - agent/aislands-figure2-stage
+    paths:
+      - ".github/workflows/install-figure2-source.yml"
+      - "tools/figure2_source/**"
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/aislands-figure2-stage
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify and extract source bundle
+        shell: bash
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+          import base64
+          import hashlib
+          import io
+          import tarfile
+          from pathlib import Path, PurePosixPath
+
+          parts = sorted(Path("tools/figure2_source").glob("part*.b64"))
+          expected_part_names = [f"part{i:02d}.b64" for i in range(4)]
+          if [p.name for p in parts] != expected_part_names:
+              raise SystemExit(f"unexpected source chunks: {[p.name for p in parts]}")
+
+          encoded = "".join(p.read_text(encoding="utf-8") for p in parts)
+          payload = base64.b64decode(encoded, validate=True)
+          expected_sha = "a55007cdfbdb75847139078d9fdb61e5fa3267b2ccf83e1e39c1e317a411a7d6"
+          actual_sha = hashlib.sha256(payload).hexdigest()
+          if actual_sha != expected_sha:
+              raise SystemExit(f"source bundle SHA mismatch: expected {expected_sha}, got {actual_sha}")
+
+          expected_members = {
+              "benchmarks/aislands_bottleneck_expected.json",
+              "benchmarks/aislands_reachability_modes_expected.json",
+              "benchmarks/aislands_structural_applicability_expected.csv",
+              "benchmarks/aislands_structural_species_expected.csv",
+              "benchmarks/aislands_structural_species_expected_provenance.json",
+              "figures/figure_manifest.json",
+              "figures/build_figure_2_aislands.py",
+              "tests/test_structural_figure_2.py",
+          }
+          with tarfile.open(fileobj=io.BytesIO(payload), mode="r:gz") as archive:
+              members = archive.getmembers()
+              names = {member.name for member in members}
+              if names != expected_members:
+                  raise SystemExit(f"unexpected source members: {sorted(names ^ expected_members)}")
+              for member in members:
+                  path = PurePosixPath(member.name)
+                  if path.is_absolute() or ".." in path.parts or member.issym() or member.islnk():
+                      raise SystemExit(f"unsafe source member: {member.name}")
+              archive.extractall(".", members=members, filter="data")
+
+          print(f"verified source bundle sha256={actual_sha}")
+          PY
+
+      - name: Rebuild Figure 2 assets
+        run: python figures/build_figure_2_aislands.py
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest
+
+      - name: Verify dedicated Figure 2 tests
+        run: python -m pytest -q tests/test_structural_figure_2.py
+
+      - name: Package exact final diff
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import tarfile
+
+          paths = [
+              "benchmarks/aislands_bottleneck_expected.json",
+              "benchmarks/aislands_reachability_modes_expected.json",
+              "benchmarks/aislands_structural_applicability_expected.csv",
+              "benchmarks/aislands_structural_species_expected.csv",
+              "benchmarks/aislands_structural_species_expected_provenance.json",
+              "figures/figure_manifest.json",
+              "figures/build_figure_2_aislands.py",
+              "figures/output/figure_2_aislands.svg",
+              "figures/output/figure_2_metadata.json",
+              "figures/output/aislands_species_concordance.csv",
+              "figures/output/aislands_mode_estimates.csv",
+              "figures/output/aislands_applicability.csv",
+              "figures/output/aislands_fold_coverage.csv",
+              "manuscript/figure_2_caption.md",
+              "manuscript/figure_2_accessibility.md",
+              "manuscript/figure_data/aislands_species_concordance.csv",
+              "manuscript/figure_data/aislands_mode_estimates.csv",
+              "manuscript/figure_data/aislands_applicability.csv",
+              "manuscript/figure_data/aislands_fold_coverage.csv",
+              "tests/test_structural_figure_2.py",
+          ]
+          missing = [p for p in paths if not Path(p).is_file()]
+          if missing:
+              raise SystemExit(f"missing final Figure 2 files: {missing}")
+          with tarfile.open("/tmp/figure2-final.tar.gz", "w:gz") as tf:
+              for path in paths:
+                  tf.add(path, arcname=path)
+          Path("/tmp/figure2-final-paths.txt").write_text("\n".join(paths) + "\n")
+          PY
+
+      - name: Publish one clean Figure 2 commit
+        shell: bash
+        run: |
+          git fetch origin main
+          git checkout -B agent/aislands-figure2 origin/main
+          tar -xzf /tmp/figure2-final.tar.gz
+          xargs -a /tmp/figure2-final-paths.txt git add --
+          git diff --cached --check
+          test "$(git diff --cached --name-only | wc -l)" -eq 20
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Build reproducible A-Islands Figure 2"
+          git push --force origin HEAD:agent/aislands-figure2
