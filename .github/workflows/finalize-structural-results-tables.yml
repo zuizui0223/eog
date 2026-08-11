@@ -39,8 +39,8 @@ jobs:
           from pathlib import Path
           p = Path("manuscript/structural_submission_checklist.md")
           text = p.read_text(encoding="utf-8")
-          old = "- [ ] Results tables are generated directly from frozen artifacts."
-          new = "- [x] Results tables are generated directly from frozen artifacts."
+          old = "- [ ] Results tables generated directly from frozen artifacts."
+          new = "- [x] Results tables generated directly from frozen artifacts."
           if text.count(old) != 1:
               raise SystemExit("results-table checklist line not found exactly once")
           p.write_text(text.replace(old, new), encoding="utf-8")
