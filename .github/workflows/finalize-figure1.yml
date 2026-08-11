@@ -21,18 +21,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-      - name: Make equal-distance schematic exactly symmetric
+      - name: Normalize Figure 1 schematic and guard scope
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path("figures/build_figure_1_roles.py")
           text = p.read_text(encoding="utf-8")
-          old = "targets = [(x + 280, y + 82), (x + 280, y + 152)]"
-          new = "targets = [(x + 280, y + 82), (x + 280, y + 150)]"
-          if text.count(old) != 1:
+
+          old_targets = "targets = [(x + 280, y + 82), (x + 280, y + 152)]"
+          new_targets = "targets = [(x + 280, y + 82), (x + 280, y + 150)]"
+          if text.count(old_targets) != 1:
               raise SystemExit("expected Figure 1 source-distance target not found exactly once")
-          p.write_text(text.replace(old, new), encoding="utf-8")
+          text = text.replace(old_targets, new_targets)
+
+          old_guard = '''    lower = svg.lower()\n    for phrase in contract.get("prohibited_implications", []):\n        require(str(phrase).lower() not in lower, f"prohibited implication rendered: {phrase}")\n'''
+          if text.count(old_guard) != 1:
+              raise SystemExit("expected rendered-SVG semantic guard not found exactly once")
+          text = text.replace(old_guard, "")
+          p.write_text(text, encoding="utf-8")
           PY
       - name: Build Figure 1
         run: |
