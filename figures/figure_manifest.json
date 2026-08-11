@@ -110,5 +110,29 @@
       "the geography-only mode is significantly superior to the environmentally constrained mode",
       "the bottleneck score identifies a realised pathway"
     ]
+  },
+  "figure_1_roles": {
+    "purpose": "Separate five distinct spatial-analysis roles without implying that they share an estimand, effect-size axis, causal sequence, or movement interpretation.",
+    "conceptual_only": true,
+    "required_panel_ids": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+    ],
+    "expected": {
+      "contract_sha256": "066b6e9e353f8d02372dce58fef2dda69df1aadf519d14d03040c8e92e860877",
+      "competitor_matrix_git_blob_sha1": "5f565005bbfaefde6e31b658dcb012d78550a527",
+      "svg_sha256": "1c8e4cd99144f139d95bd675bb37ba3e61e68d386d790de0545300f839c0d8fc",
+      "movement_arrows": false,
+      "empirical_effect_sizes": false
+    },
+    "prohibited_claims": [
+      "connected frequency is a movement probability",
+      "connected frequency is a dispersal probability",
+      "connected frequency is a colonisation probability",
+      "the five panels form a causal sequence"
+    ]
   }
 }
