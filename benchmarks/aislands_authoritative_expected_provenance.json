@@ -1,0 +1,18 @@
+{
+  "interpretation": "This provenance file records the verified workflow artifact from which benchmarks/aislands_authoritative_expected.json was copied byte-for-byte. It was archived after the biological outcome and must not be described as preregistration.",
+  "not_preregistration": true,
+  "source": {
+    "artifact_created_at": "2026-08-08T09:47:19Z",
+    "artifact_digest": "sha256:31ff22edf214b48ae99fa8a5510e0e2752b6787dbe6e22602bada0ec96398501",
+    "artifact_id": 9020090309,
+    "artifact_name": "aislands-authoritative-benchmark",
+    "head_sha": "2702934a3b1c9af680dbcf27feec0e87930c904e",
+    "member_path": "summary.json",
+    "member_sha256": "724d5a7a5bae346f84d229d281fdecc257feb65d2f5b4f2291f4c6edc664ee6c",
+    "repository": "zuizui0223/eog",
+    "workflow": "A-Islands authoritative benchmark",
+    "workflow_run_id": 31251171516,
+    "workflow_run_url": "https://github.com/zuizui0223/eog/actions/runs/31251171516"
+  },
+  "status": "post_outcome_archive_provenance"
+}
