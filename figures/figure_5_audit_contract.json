@@ -1,0 +1,57 @@
+{
+  "schema_version": "eog_structural_figure5_audit_v1",
+  "purpose": "Expose the frozen evidence-to-result chain for the structural manuscript without introducing a new ecological estimand.",
+  "figure_manifest": "figures/figure_manifest.json",
+  "results_table_manifest": "manuscript/result_tables/result_table_manifest.json",
+  "results_table_metadata": "manuscript/result_tables/structural_results_tables_metadata.json",
+  "rows": [
+    {
+      "id": "F1",
+      "label": "Figure 1 semantic roles",
+      "source": "competitor-matrix Git blob + semantic contract",
+      "transform": "build_figure_1_roles.py",
+      "result": "figure_1_roles.svg",
+      "result_path": "figures/output/figure_1_roles.svg"
+    },
+    {
+      "id": "F2",
+      "label": "Figure 2 A-Islands",
+      "source": "three frozen A-Islands artifacts",
+      "transform": "build_figure_2_aislands.py",
+      "result": "figure_2_aislands.svg + sidecars",
+      "result_path": "figures/output/figure_2_aislands.svg"
+    },
+    {
+      "id": "F3",
+      "label": "Figure 3 Tanzania",
+      "source": "frozen held-out benchmark + result fingerprint",
+      "transform": "build_figure_3_tanzania.py",
+      "result": "figure_3_tanzania.svg + sidecars",
+      "result_path": "figures/output/figure_3_tanzania.svg"
+    },
+    {
+      "id": "F4",
+      "label": "Figure 4 boundary matrix",
+      "source": "frozen A-Islands + Tanzania projections",
+      "transform": "build_figure_4_boundary.py",
+      "result": "figure_4_boundary.svg",
+      "result_path": "figures/output/figure_4_boundary.svg"
+    },
+    {
+      "id": "T3",
+      "label": "Table 3 + Table S1",
+      "source": "frozen Figure 2/3 sidecars",
+      "transform": "build_structural_results_tables.py",
+      "result": "machine-readable manuscript tables",
+      "result_path": "manuscript/result_tables/table_3_main_sensitivity_results.csv"
+    }
+  ],
+  "required_row_ids": ["F1", "F2", "F3", "F4", "T3"],
+  "claim_boundary": "Fingerprints establish provenance and reproducibility; they do not establish ecological causality, realised movement, or model superiority.",
+  "design_constraints": {
+    "new_effect_sizes": false,
+    "new_hypothesis_tests": false,
+    "movement_arrows": false,
+    "causal_arrows": false
+  }
+}
