@@ -8,6 +8,8 @@ RESULT_BUILDER = ROOT / "manuscript" / "build_structural_results_tables.py"
 RESULT_MANIFEST = ROOT / "manuscript" / "result_tables" / "result_table_manifest.json"
 TABLE3 = ROOT / "manuscript" / "result_tables" / "table_3_main_sensitivity_results.csv"
 TABLE_S1 = ROOT / "manuscript" / "result_tables" / "table_s1_applicability_accounting.csv"
+RESULT_MD = ROOT / "manuscript" / "result_tables" / "structural_results_tables.md"
+RESULT_METADATA = ROOT / "manuscript" / "result_tables" / "structural_results_tables_metadata.json"
 FIGURE5_BUILDER = ROOT / "figures" / "build_figure_5_audit.py"
 FIGURE5_CONTRACT = ROOT / "figures" / "figure_5_audit_contract.json"
 FIGURE5_SVG = ROOT / "figures" / "output" / "figure_5_audit.svg"
@@ -28,6 +30,19 @@ def test_committed_result_tables_equal_current_frozen_builder_projection() -> No
     evidence = module.validate_inputs(manifest)
     assert module.read_csv(TABLE3) == module.build_table3(manifest, evidence)
     assert module.read_csv(TABLE_S1) == module.build_applicability(manifest, evidence)
+
+
+def test_full_result_table_rebuild_is_byte_identical() -> None:
+    module = _load(RESULT_BUILDER, "eog_result_rebuild")
+    paths = (TABLE3, TABLE_S1, RESULT_MD, RESULT_METADATA)
+    before = {path: path.read_bytes() for path in paths}
+    try:
+        module.build()
+        for path in paths:
+            assert path.read_bytes() == before[path]
+    finally:
+        for path, payload in before.items():
+            path.write_bytes(payload)
 
 
 def test_all_tanzania_rows_remain_synced_to_frozen_expected_projection() -> None:
