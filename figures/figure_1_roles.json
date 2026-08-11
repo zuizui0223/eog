@@ -2,7 +2,7 @@
   "schema_version": "eog_structural_figure1_roles_v1",
   "purpose": "Keep five distinct spatial quantities visually and verbally separate before the empirical benchmark figures are interpreted.",
   "competitor_matrix_path": "docs/structural_competitor_matrix.md",
-  "competitor_matrix_sha256": "5f565005bbfaefde6e31b658dcb012d78550a527",
+  "competitor_matrix_git_blob_sha1": "5f565005bbfaefde6e31b658dcb012d78550a527",
   "panels": [
     {
       "id": "A",
