@@ -1,0 +1,56 @@
+{
+  "schema_version": "eog_structural_author_metadata_v1",
+  "manuscript_title": "When does landscape configuration add to pointwise distribution support? An auditable reachability framework across islands and forest fragments",
+  "authors": [
+    {
+      "name": "<AUTHOR_NAME>",
+      "orcid": "<ORCID_OR_EMPTY>",
+      "affiliation_ids": ["<AFFILIATION_ID>"],
+      "credit_roles": ["<AUTHOR_APPROVED_CREDIT_ROLE>"],
+      "corresponding_author": false
+    }
+  ],
+  "affiliations": [
+    {
+      "id": "<AFFILIATION_ID>",
+      "institution": "<INSTITUTION>",
+      "department": "<DEPARTMENT_OR_EMPTY>",
+      "city": "<CITY>",
+      "country": "<COUNTRY>"
+    }
+  ],
+  "corresponding_author": {
+    "name": "<CORRESPONDING_AUTHOR_NAME>",
+    "email": "<EMAIL>",
+    "postal_address": "<POSTAL_ADDRESS_IF_REQUIRED>"
+  },
+  "funding": [
+    {
+      "funder": "<FUNDER_OR_NONE>",
+      "grant_number": "<GRANT_NUMBER_OR_EMPTY>",
+      "recipient": "<AUTHOR_NAME_OR_EMPTY>"
+    }
+  ],
+  "competing_interests": {
+    "confirmed_by_all_authors": false,
+    "statement": "<AUTHOR_APPROVED_STATEMENT>"
+  },
+  "ethics_and_permits": {
+    "review_completed": false,
+    "statement": "<AUTHOR_APPROVED_STATEMENT_OR_NOT_APPLICABLE>"
+  },
+  "originality_and_submission": {
+    "approved_by_all_authors": false,
+    "not_published_previously_confirmed": false,
+    "not_under_consideration_elsewhere_confirmed": false
+  },
+  "generative_ai_disclosure": {
+    "reviewed_by_all_authors": false,
+    "live_journal_policy_checked": false,
+    "final_statement": "<FINAL_JOURNAL_COMPLIANT_DISCLOSURE>"
+  },
+  "release_metadata": {
+    "creator_order_confirmed": false,
+    "software_citation_metadata_approved": false
+  }
+}
