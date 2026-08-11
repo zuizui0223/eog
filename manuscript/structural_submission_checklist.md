@@ -29,7 +29,7 @@ The paper is **not ready to submit** until every blocking item is complete.
 - [x] Existing-method competitor matrix drafted.
 - [ ] Full Introduction converted from skeleton to prose.
 - [ ] Complete Methods converted from executable contracts to prose.
-- [ ] Results tables generated directly from frozen artifacts.
+- [x] Results tables generated directly from frozen artifacts.
 - [ ] Discussion written around the conditional boundary, not superiority.
 - [ ] All literature citations verified against publisher/Crossref metadata.
 
@@ -48,222 +48,30 @@ The paper is **not ready to submit** until every blocking item is complete.
 
 ### Reproducibility release
 
-- [ ] Create a clean tagged release after manuscript numbers and scripts are frozen.
-- [ ] Archive the release on Zenodo or another DOI-issuing repository.
-- [ ] Archive result tables, figure data, environment/lock information, and manifests.
-- [ ] Record the exact Git commit and release DOI in the manuscript.
-- [ ] Test installation and principal reproduction commands from a clean environment.
-- [ ] Ensure third-party source data are referenced rather than redistributed when licences prohibit redistribution.
-- [ ] Document how A-Islands, CHELSA, and Tanzania Dryad data are reacquired and integrity-checked.
-- [ ] Preserve the verified Tanzania result fingerprint `6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4`.
+- [ ] Tagged software release created.
+- [ ] Release commit matches manuscript code state.
+- [ ] Zenodo/archive DOI minted from the tagged release.
+- [ ] Frozen benchmark inputs and expected outputs archived.
+- [ ] Environment specification is complete and install-tested.
+- [ ] One clean-clone command path rebuilds all manuscript figures/tables.
+- [ ] Canonical fingerprints reproduced from the release tag.
+- [ ] CI badge and release DOI resolve from the archived version.
 
-## Working journal constraints
+### Manuscript package
 
-### Abstract
+- [ ] Title fixed.
+- [ ] Abstract <= 250 words after final edits.
+- [ ] 3–5 Highlights prepared within the journal character limit.
+- [ ] Keywords finalized.
+- [ ] Author list, affiliations, corresponding author, and contributions finalized.
+- [ ] Data Availability statement written.
+- [ ] Code Availability statement written.
+- [ ] Generative-AI disclosure added if required by the journal at submission time.
+- [ ] Supplementary materials list prepared.
+- [ ] Cover letter drafted.
 
-- [x] Draft is below the working 250-word ceiling.
-- [ ] Recount after every substantive edit.
-- [ ] Stand-alone: define EOG at first use.
-- [ ] No citations.
-- [ ] State both the positive A-Islands and negative Tanzania directions.
-- [ ] Include effect estimates and uncertainty, not only p-values.
-- [ ] End with a conditional conclusion.
+## Current stop/go rule
 
-Current draft length at creation: **225 words**.
+**Do not submit** while any submission-blocking checkbox above remains open.
 
-### Highlights
-
-Working Elsevier format:
-
-- separate editable file;
-- 3–5 bullets;
-- maximum 85 characters including spaces per bullet.
-
-File: `manuscript/structural_highlights.txt`
-
-- [x] Five highlights drafted.
-- [x] All five are 70–76 characters.
-- [ ] Recheck live journal requirement before upload.
-- [ ] Recount after any wording change.
-
-### Main-text length
-
-Working target:
-
-- aim for approximately 7,000 words in the main paper;
-- do not approach the journal maximum unless the live guide confirms it;
-- move extensive protocol histories, failure tables, and fingerprints to Supplementary Information while preserving the main claim boundary.
-
-Suggested allocation:
-
-| Section | Target words |
-|---|---:|
-| Abstract | ≤250 |
-| Introduction | 900–1,100 |
-| Methods | 2,200–2,700 |
-| Results | 1,100–1,400 |
-| Discussion | 1,400–1,800 |
-| Conclusions | 150–250 |
-
-### Keywords
-
-Working set, subject to the live limit:
-
-- species distribution model
-- landscape connectivity
-- spatial cross-validation
-- habitat fragmentation
-- island biogeography
-- current flow
-- reproducible ecology
-
-Avoid using only broad terms such as “ecology”, “model”, or “software”.
-
-## Required manuscript sections and files
-
-### Main manuscript
-
-- [ ] Title concise and free of an unsupported superiority claim.
-- [ ] Abstract within the live word limit.
-- [ ] Keywords within the live count limit.
-- [ ] Introduction states the precise estimand gap.
-- [ ] Related Work includes the competitor matrix in prose/table form.
-- [ ] Methods state every pre-outcome contract and every post-outcome correction.
-- [ ] Results report applicability before performance.
-- [ ] Discussion retains both empirical directions.
-- [ ] Limitations explicitly cover detection, time, sample size, graph assumptions, and non-mechanistic interpretation.
-- [ ] Data and code availability statement.
-- [ ] Author contributions using CRediT roles if requested.
-- [ ] Funding statement.
-- [ ] Competing-interests statement.
-- [ ] Acknowledgements.
-- [ ] Declaration of generative AI and AI-assisted technologies when required by the live policy.
-- [ ] References complete and internally consistent.
-
-### Separate files
-
-- [x] Highlights draft.
-- [ ] Graphical abstract if encouraged or required by the live guide.
-- [ ] Cover letter.
-- [ ] Title page if the submission system separates it.
-- [ ] Figures at publication resolution.
-- [ ] Supplementary Methods.
-- [ ] Supplementary Results and failure-accounting tables.
-- [ ] Reproducibility and software appendix.
-- [ ] Data/code repository DOI metadata.
-
-## Approved title and framing
-
-Working title:
-
-> **When does landscape configuration add to pointwise distribution support? An auditable reachability framework across islands and forest fragments**
-
-The title is acceptable only while the paper keeps both positive and negative outcomes. Avoid:
-
-- “A superior SDM for fragmented landscapes”;
-- “A dispersal-aware distribution model”;
-- “Predicting colonisation with EOG”;
-- “Universal structural correction of species distributions”.
-
-## Methods-reporting checklist
-
-### Shared principles
-
-- [ ] Define local support, direct source distance, matrix-aware connectivity, and EOG separately.
-- [ ] State that spatial blocks modify evaluation rather than creating a dispersal model.
-- [ ] State that held-out labels cannot enter anchors, scaling, graph choices, resistance selection, or failure handling.
-- [ ] Report the replication unit for inference.
-- [ ] Report exact matched-valid prediction rules.
-- [ ] Report numerical stabilisation and fingerprint tolerances separately from raw model inputs.
-
-### A-Islands
-
-- [ ] Source version and 842-island universe.
-- [ ] 886 declared taxa and 845 estimable primary species.
-- [ ] Five CHELSA variables and direct-centroid extraction.
-- [ ] Shared five-fold spatial partition.
-- [ ] Deterministic unweighted L2 logistic support.
-- [ ] Twelve graph scenarios.
-- [ ] 5 × 5 support-distance conditioning.
-- [ ] Comparable-pair and failure counts.
-- [ ] Primary, geography-only, environment-constrained, and bottleneck results.
-
-### Tanzania
-
-- [ ] Source DOI/version and all file digests.
-- [ ] 14 sites, 89 source species, and 60 eligible species.
-- [ ] 42 structural nodes per region.
-- [ ] Source-code repairs and their pre-outcome timing.
-- [ ] Factor-8 focal-preserving raster rule.
-- [ ] All 512 resistance combinations per region.
-- [ ] Training-only AIC candidate selection.
-- [ ] Common probability engine and shared selected candidate.
-- [ ] Four-scenario geography-only EOG ladder.
-- [ ] LOSO and geometry-only spatial-block partitions.
-- [ ] Primary/inverse-area sensitivities.
-- [ ] All selection, structural-feature, and probability-model failures.
-- [ ] Independent complete reproduction.
-
-## Results-reporting checklist
-
-- [ ] Start each benchmark with declared and estimable sample sizes.
-- [ ] Give point estimate, interval, and inferential diagnostic together.
-- [ ] Define effect direction before numbers.
-- [ ] Do not compare the numerical sizes of concordance and log-loss effects directly.
-- [ ] Do not call the Tanzania outcome “failure to replicate” because it tested a stronger reference and different endpoint.
-- [ ] Do not hide adverse or uncertain sensitivity results.
-- [ ] Separate predeclared secondary analyses from exploratory descriptions.
-- [ ] Keep exact fingerprints out of the narrative Results unless needed; place them in reproducibility text/table.
-
-## Claim audit before submission
-
-Every sentence in the Abstract, Highlights, Discussion, and Cover Letter should pass these questions:
-
-1. Is the claim about local support, evaluation, structural reachability, or movement process?
-2. What reference model was controlled?
-3. Was the feature or contrast frozen before the relevant outcome?
-4. Does the data observe movement, colonisation, detection, or only incidence?
-5. Does the sentence remain true for both A-Islands and Tanzania?
-6. Is a cross-system mechanism being inferred from only two heterogeneous datasets?
-
-Automatic rejection phrases:
-
-- “EOG outperforms SDM”;
-- “EOG accounts for dispersal” without a narrower definition;
-- “connected frequency estimates colonisation probability”;
-- “Tanzania shows current flow is better in general”;
-- “A-Islands proves island chains caused occupancy”;
-- “trait-informed tuning would solve the negative result”;
-- “the method is robust” without naming the tested perturbation.
-
-## Data and code availability draft
-
-> All analysis code, pre-outcome contracts, tests, workflow definitions, and machine-readable result fingerprints are maintained in the EOG repository and will be archived in a DOI-assigned release at acceptance or submission. The A-Islands, CHELSA, and Tanzania source datasets are obtained from their original providers under their respective licences; reproducible acquisition scripts verify source identities and cryptographic digests before analysis. Frozen derived benchmark tables and figure data will be included in the archival release to the extent permitted by the source licences.
-
-Replace the repository and archive placeholders with permanent identifiers before submission.
-
-## Cover-letter core message
-
-The cover letter should lead with the result boundary, not software volume:
-
-> We present an auditable framework for testing whether occurrence-anchored landscape configuration adds information beyond pointwise environmental support and established connectivity references. A confirmatory 886-taxon island benchmark was positive after controlling support and source distance, whereas an independently reproduced 60-species forest-fragment benchmark was adverse after matrix-aware current flow was included. The paired outcomes define when the structural layer is informative and prevent a universal-superiority claim.
-
-## Final live-policy verification
-
-On the day of submission, open the current journal guide and confirm:
-
-- accepted article type;
-- abstract word limit;
-- highlight requirement and character limit;
-- keyword limit;
-- manuscript word limit;
-- graphical-abstract status and dimensions;
-- data-statement requirement;
-- code/data repository policy;
-- reference style;
-- figure file types and resolution;
-- anonymisation model;
-- required declarations, including generative-AI disclosure;
-- open-access fees and institutional agreements.
-
-Record the verification date and exact guide URL in the release notes.
+The empirical result direction must not be changed by manuscript polishing. A-Islands remains the positive added-information benchmark; Tanzania remains the negative strong-competitor benchmark unless a new, independently frozen analysis explicitly supersedes one of those contracts.
