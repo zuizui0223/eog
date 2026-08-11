@@ -128,12 +128,17 @@ jobs:
         shell: bash
         run: |
           git fetch origin main
-          git checkout -B agent/aislands-figure2 origin/main
+          git reset --hard HEAD
+          git clean -fdx
+          git switch --detach origin/main
           tar -xzf /tmp/figure2-final.tar.gz
-          xargs -a /tmp/figure2-final-paths.txt git add --
+          while IFS= read -r path; do git add -- "$path"; done < /tmp/figure2-final-paths.txt
           git diff --cached --check
-          test "$(git diff --cached --name-only | wc -l)" -eq 20
+          echo "Final Figure 2 diff:"
+          git diff --cached --name-only
+          changed="$(git diff --cached --name-only | wc -l)"
+          test "$changed" -eq 20
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Build reproducible A-Islands Figure 2"
-          git push --force origin HEAD:agent/aislands-figure2
+          git push --force origin HEAD:refs/heads/agent/aislands-figure2
