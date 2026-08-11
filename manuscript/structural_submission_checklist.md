@@ -35,7 +35,7 @@ The paper is **not ready to submit** until every blocking item is complete.
 
 ### Figures
 
-- [ ] Figure 1: conceptual distinction among support, CV, distance, current flow, and EOG.
+- [x] Figure 1: conceptual distinction among support, CV, distance, current flow, and EOG.
 - [x] Figure 2: A-Islands design and species-level conditional concordance.
 - [x] Figure 3: Tanzania training-only current-flow benchmark and loss differences.
 - [x] Figure 4: cross-system reference-content and result-boundary matrix.

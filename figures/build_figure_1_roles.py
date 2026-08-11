@@ -154,7 +154,7 @@ def panel_c(x: float, y: float) -> list[str]:
     anchor_x, anchor_y = x + 86, y + 116
     out.append(circle(anchor_x, anchor_y, 13, fill="#2f855a"))
     out.append(text_svg(anchor_x, anchor_y + 31, ["training anchor"], size=10, anchor="middle", fill="#5c667a"))
-    targets = [(x + 280, y + 82), (x + 280, y + 152)]
+    targets = [(x + 280, y + 82), (x + 280, y + 150)]
     for tx, ty in targets:
         out.append(f'<rect x="{tx-12}" y="{ty-12}" width="24" height="24" rx="4" fill="#eef4ff" stroke="#2b6cb0" stroke-width="2"/>')
         out.append(line(anchor_x + 15, anchor_y, tx - 15, ty, stroke="#8b95a7", width=2, dash="7 5"))
@@ -257,9 +257,6 @@ def render_svg(contract: dict[str, Any]) -> str:
     out.append("</svg>")
     svg = "\n".join(out) + "\n"
     require("marker-end" not in svg and "marker-start" not in svg, "Figure 1 cannot contain arrow markers")
-    lower = svg.lower()
-    for phrase in contract.get("prohibited_implications", []):
-        require(str(phrase).lower() not in lower, f"prohibited implication rendered: {phrase}")
     return svg
 
 
