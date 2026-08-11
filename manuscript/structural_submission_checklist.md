@@ -4,7 +4,7 @@
 
 **Journal:** *Ecological Informatics*  
 **Article type:** Original Research Paper  
-**Working manuscript:** `manuscript/structural_reachability_manuscript_skeleton.md`
+**Working manuscript:** `manuscript/structural_reachability_manuscript.md`
 
 The journal describes its scope as computational ecology and ecological data science, including ecological modelling, data integration, uncertainty analysis, biogeography, and reproducible informatics. The proposed paper fits only if it is presented as a tested computational framework with real ecological benchmarks, not as a universal new dispersal model.
 
@@ -30,8 +30,8 @@ The paper is **not ready to submit** until every blocking item is complete.
 - [x] Full Introduction converted from skeleton to prose.
 - [x] Complete Methods converted from executable contracts to prose.
 - [x] Results tables generated directly from frozen artifacts.
-- [ ] Discussion written around the conditional boundary, not superiority.
-- [x] All literature citations currently used in Introduction/Methods verified against publisher or primary-repository metadata; ledger: `manuscript/structural_verified_references.md`.
+- [x] Results and Discussion written around the conditional evidence boundary rather than superiority.
+- [x] All literature citations currently used in the complete manuscript verified against publisher or primary-repository metadata; ledger: `manuscript/structural_verified_references.md`.
 
 ### Figures
 
