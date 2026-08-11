@@ -61,5 +61,54 @@
       "connected frequency is a dispersal probability",
       "the spatial-block sensitivity confirms an adverse effect"
     ]
+  },
+  "figure_2_aislands": {
+    "purpose": "Show the frozen A-Islands confirmatory structural benchmark, all estimable species, predeclared structural decompositions, and non-estimability without refitting or tuning.",
+    "metric": "conditional concordance within frozen pointwise-support x nearest-training-occurrence-distance strata; 0.5 is the null",
+    "expected": {
+      "primary_summary_sha256": "724d5a7a5bae346f84d229d281fdecc257feb65d2f5b4f2291f4c6edc664ee6c",
+      "primary_species_table_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488",
+      "secondary_summary_sha256": "2e65bdca3b8d98a74b7862588105e650cb3c6415bca93d9dddd29db749b2cfbd",
+      "bottleneck_summary_sha256": "d7d8e79c42d40d9b39afc69a1c1e6343d79e71e0e241a1fc053eed1367dc1bcf",
+      "applicability_table_sha256": "c63ccfb6f5dc4a8ab2807cb3d26cb1cf76193fc0e414c7a5aaf7625dae69b897",
+      "provenance_sha256": "7e03ec62c170342484c568af357ade9e78b882f49c1293d26e99b2df54cc6d96",
+      "primary_workflow_run_id": 31251171516,
+      "primary_artifact_id": 9020090309,
+      "primary_artifact_digest": "sha256:31ff22edf214b48ae99fa8a5510e0e2752b6787dbe6e22602bada0ec96398501",
+      "secondary_workflow_run_id": 31251779250,
+      "secondary_artifact_id": 9020262329,
+      "secondary_artifact_digest": "sha256:bef4cafd9956337c55ecb18d8de2255c07ce2ecb8045fa7eea50a5a04f061d01",
+      "bottleneck_workflow_run_id": 31253541948,
+      "bottleneck_artifact_id": 9020794158,
+      "bottleneck_artifact_digest": "sha256:a2c3bf298f3b1cfd8752a25c8b50a7d22533ce3162aa0350050a0f771a9586e0",
+      "shared_cohort_sha256": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+      "shared_folds_sha256": "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa",
+      "shared_climate_sha256": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285",
+      "islands": 842,
+      "declared_taxa": 886,
+      "primary_estimable_taxa": 845,
+      "bottleneck_estimable_taxa": 793,
+      "folds": 5,
+      "chelsa_predictors": 5,
+      "graph_scenarios": 12,
+      "support_strata": 5,
+      "distance_strata": 5,
+      "species_above_null": 672,
+      "species_equal_null": 42,
+      "species_below_null": 131,
+      "species_not_estimable": 41,
+      "primary_evaluable_species_folds": 3041,
+      "primary_no_comparable_pair_species_folds": 1190,
+      "primary_insufficient_training_species_folds": 199,
+      "bottleneck_evaluable_species_folds": 2591,
+      "bottleneck_no_comparable_pair_species_folds": 1640,
+      "bottleneck_insufficient_training_species_folds": 199
+    },
+    "prohibited_claims": [
+      "EOG is a dispersal probability",
+      "connected frequency is a colonisation probability",
+      "the geography-only mode is significantly superior to the environmentally constrained mode",
+      "the bottleneck score identifies a realised pathway"
+    ]
   }
 }

@@ -1,0 +1,11 @@
+analysis,fold,evaluable,no_comparable_pairs,insufficient_training_classes,total
+primary_combined,1,529,342,15,886
+primary_combined,2,722,114,50,886
+primary_combined,3,508,340,38,886
+primary_combined,4,702,145,39,886
+primary_combined,5,580,249,57,886
+bottleneck_secondary,1,450,421,15,886
+bottleneck_secondary,2,673,163,50,886
+bottleneck_secondary,3,426,422,38,886
+bottleneck_secondary,4,621,226,39,886
+bottleneck_secondary,5,421,408,57,886

@@ -1,0 +1,7 @@
+analysis,fold,status,count
+bottleneck_secondary,ALL,evaluable,2591
+bottleneck_secondary,ALL,no_finite_comparable_pairs_within_frozen_strata,1640
+bottleneck_secondary,ALL,insufficient_training_classes,199
+primary_combined,ALL,evaluable,3041
+primary_combined,ALL,no_comparable_pairs_within_frozen_strata,1190
+primary_combined,ALL,insufficient_training_classes,199

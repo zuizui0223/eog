@@ -1,0 +1,37 @@
+{
+  "artifact_digests": {
+    "bottleneck": "sha256:a2c3bf298f3b1cfd8752a25c8b50a7d22533ce3162aa0350050a0f771a9586e0",
+    "primary": "sha256:31ff22edf214b48ae99fa8a5510e0e2752b6787dbe6e22602bada0ec96398501",
+    "secondary": "sha256:bef4cafd9956337c55ecb18d8de2255c07ce2ecb8045fa7eea50a5a04f061d01"
+  },
+  "claim_boundary": "Added held-out structural information conditional on frozen pointwise support and nearest-training-occurrence distance; not SDM superiority, dispersal probability, colonisation probability, or realised pathway.",
+  "counts": {
+    "above": 672,
+    "below": 131,
+    "bottleneck_estimable_taxa": 793,
+    "declared_taxa": 886,
+    "equal": 42,
+    "islands": 842,
+    "not_estimable": 41,
+    "primary_estimable_taxa": 845
+  },
+  "input_sha256": {
+    "applicability_projection": "c63ccfb6f5dc4a8ab2807cb3d26cb1cf76193fc0e414c7a5aaf7625dae69b897",
+    "bottleneck_summary": "d7d8e79c42d40d9b39afc69a1c1e6343d79e71e0e241a1fc053eed1367dc1bcf",
+    "primary_species": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488",
+    "primary_summary": "724d5a7a5bae346f84d229d281fdecc257feb65d2f5b4f2291f4c6edc664ee6c",
+    "provenance": "7e03ec62c170342484c568af357ade9e78b882f49c1293d26e99b2df54cc6d96",
+    "secondary_summary": "2e65bdca3b8d98a74b7862588105e650cb3c6415bca93d9dddd29db749b2cfbd"
+  },
+  "output_sha256": {
+    "aislands_applicability.csv": "0b323de611e685d524304a9ba51ab3caa6e46fa6c4157b237a02ff74da3be522",
+    "aislands_fold_coverage.csv": "617b0ca57a1d56c91fb794f932bda2e1ee2890c22499484c1bb824c1102506c9",
+    "aislands_mode_estimates.csv": "a96ec413eeb792c7a0fdd409442a8fecdf5e37342cbcb192faa703b11beefabb",
+    "aislands_species_concordance.csv": "9398d1454580ad1db0f6c5419ae677a6d36d255c7370d4ee6628037adbe7796b",
+    "figure_2_accessibility.md": "593cd0271d9cf25b878e430c3ff92f237bd0ea7cadc0b6087e6249c453d20033",
+    "figure_2_aislands.svg": "e706f9b062170552da72f99f4e4996660801c4792ebcb0d39e8b72a93a2a1382",
+    "figure_2_caption.md": "2a5f49f9781b23ac9762e097817def831fa4073ce4cd65eca4471107ded3b6c2"
+  },
+  "schema_version": "eog_figure_2_metadata_v1",
+  "source_status": "post_outcome_archive_projection_not_preregistration"
+}

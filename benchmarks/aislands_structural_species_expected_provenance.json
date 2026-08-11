@@ -1,0 +1,75 @@
+{
+  "bottleneck": {
+    "artifact_digest": "sha256:a2c3bf298f3b1cfd8752a25c8b50a7d22533ce3162aa0350050a0f771a9586e0",
+    "artifact_id": 9020794158,
+    "artifact_name": "aislands-frozen-bottleneck-secondary",
+    "head_sha": "921d785ae94d1fbea0df98fb4dbaa183e617ad1a",
+    "members": {
+      "bottleneck_fold_results.csv": {
+        "bytes": 309556,
+        "sha256": "a080504f022c311f4eaa39414f9a8957ad2842537f9de7d8f5db54cd9c040eff"
+      },
+      "bottleneck_species_results.csv": {
+        "bytes": 34379,
+        "sha256": "d17d01948f0dc562e7121b69d4d14f9c474c678d3b4406b192677d7a36f40d76"
+      },
+      "bottleneck_summary.json": {
+        "bytes": 1048,
+        "sha256": "d7d8e79c42d40d9b39afc69a1c1e6343d79e71e0e241a1fc053eed1367dc1bcf"
+      }
+    },
+    "workflow_run_id": 31253541948
+  },
+  "derived_projection": {
+    "aislands_structural_applicability_expected.csv": {
+      "derivation": "Counts raw fold rows by analysis, fold, and pre-existing failure reason family; no rows excluded.",
+      "sha256": "c63ccfb6f5dc4a8ab2807cb3d26cb1cf76193fc0e414c7a5aaf7625dae69b897"
+    }
+  },
+  "preregistered": false,
+  "primary": {
+    "artifact_digest": "sha256:31ff22edf214b48ae99fa8a5510e0e2752b6787dbe6e22602bada0ec96398501",
+    "artifact_id": 9020090309,
+    "artifact_name": "aislands-authoritative-benchmark",
+    "head_sha": "2702934a3b1c9af680dbcf27feec0e87930c904e",
+    "members": {
+      "fold_results.csv": {
+        "bytes": 451616,
+        "sha256": "e4c6a8057f70cf988984b5b368d385f923a0e70c13bafd1a909833116955fdbc"
+      },
+      "species_results.csv": {
+        "bytes": 35045,
+        "sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488"
+      },
+      "summary.json": {
+        "bytes": 1356,
+        "sha256": "724d5a7a5bae346f84d229d281fdecc257feb65d2f5b4f2291f4c6edc664ee6c"
+      }
+    },
+    "workflow_run_id": 31251171516
+  },
+  "purpose": "Reproducible manuscript Figure 2 only; no model refit or graph tuning.",
+  "schema_version": "eog_post_outcome_projection_v1",
+  "secondary": {
+    "artifact_digest": "sha256:bef4cafd9956337c55ecb18d8de2255c07ce2ecb8045fa7eea50a5a04f061d01",
+    "artifact_id": 9020262329,
+    "artifact_name": "aislands-predeclared-reachability-secondary",
+    "head_sha": "9219276eb9de1ef03a964bae89780ef137cb8378",
+    "members": {
+      "mode_fold_results.csv": {
+        "bytes": 1028957,
+        "sha256": "051f087b04f63ffcc77c14b617c77f3aa7d21e64ee10b806eb3d56254b425f5e"
+      },
+      "mode_species_results.csv": {
+        "bytes": 150981,
+        "sha256": "a387842cd5d7e32dc2c357e460224d86b49858d73ad4f8f9ea1a4f273b29974c"
+      },
+      "mode_summary.json": {
+        "bytes": 1995,
+        "sha256": "2e65bdca3b8d98a74b7862588105e650cb3c6415bca93d9dddd29db749b2cfbd"
+      }
+    },
+    "workflow_run_id": 31251779250
+  },
+  "status": "post_outcome_archive_projection_not_preregistration"
+}
