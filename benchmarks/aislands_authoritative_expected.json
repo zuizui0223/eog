@@ -1,0 +1,33 @@
+{
+  "authoritative_contracts": [
+    "#80",
+    "#81",
+    "#82",
+    "#83",
+    "#87"
+  ],
+  "bootstrap_95_ci": [
+    0.6086806094469824,
+    0.626944450492123
+  ],
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed": 20260808,
+  "claim_boundary": "Tests added held-out structural information conditional on frozen pointwise support and nearest-training-presence distance; not SDM superiority or dispersal probability.",
+  "fold_output_sha256": "e4c6a8057f70cf988984b5b368d385f923a0e70c13bafd1a909833116955fdbc",
+  "input_sha256": {
+    "climate": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285",
+    "cohort": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+    "folds": "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa",
+    "island_data": "d26ae154aeae1e6eab268f22268342077f7e8e7ef000d18a1f052f65866d5bde",
+    "species_data": "43e7d2e8deb1d1d635c8db44a7fe68cfb79c2a059a2207914413a62431eb7b0c"
+  },
+  "n_declared_taxa": 886,
+  "n_islands": 842,
+  "n_species_estimable": 845,
+  "null": 0.5,
+  "overall_conditional_concordance": 0.6177465917820878,
+  "sign_flip_replicates": 100000,
+  "sign_flip_two_sided_p": 9.99990000099999e-06,
+  "species_output_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488",
+  "status": "first_authoritative_aislands_species_outcome_execution"
+}

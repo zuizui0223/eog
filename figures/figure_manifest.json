@@ -1,0 +1,28 @@
+{
+  "schema_version": "eog_structural_figure_manifest_v1",
+  "figure_4_boundary": {
+    "purpose": "Compare the two frozen structural benchmarks without placing incompatible metrics on a common effect-size axis.",
+    "required_benchmark_ids": ["A_ISLANDS", "TANZANIA"],
+    "metrics_share_axis": false,
+    "expected": {
+      "aislands_summary_sha256": "724d5a7a5bae346f84d229d281fdecc257feb65d2f5b4f2291f4c6edc664ee6c",
+      "aislands_artifact_digest": "sha256:31ff22edf214b48ae99fa8a5510e0e2752b6787dbe6e22602bada0ec96398501",
+      "aislands_workflow_run_id": 31251171516,
+      "aislands_declared_taxa": 886,
+      "aislands_estimable_taxa": 845,
+      "aislands_spatial_units": 842,
+      "aislands_species_output_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488",
+      "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4",
+      "tanzania_candidate_library_fingerprint": "3cabff50f138f7ccfe77cdbe87aefe14d5ec4dd40db15f16fb7b072cd3d01026",
+      "tanzania_species": 60,
+      "tanzania_prediction_rows": 3360,
+      "tanzania_primary_matched": 826
+    },
+    "prohibited_claims": [
+      "EOG universally improves prediction",
+      "EOG is generally harmful",
+      "the cross-system contrast identifies a causal mechanism",
+      "connected frequency is a dispersal or colonisation probability"
+    ]
+  }
+}
