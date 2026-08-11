@@ -10,6 +10,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 BUILDER = ROOT / "figures/build_figure_1_roles.py"
 CONTRACT = ROOT / "figures/figure_1_roles.json"
+MANIFEST = ROOT / "figures/figure_manifest.json"
 
 
 def load_builder():
@@ -64,6 +65,16 @@ def test_build_writes_parseable_reproducible_outputs(tmp_path: Path):
     assert metadata["movement_arrows"] is False
     assert metadata["empirical_effect_sizes"] is False
     assert metadata["svg_sha256"] == module.sha256(svg_path)
+
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))["figure_1_roles"]
+    assert manifest["conceptual_only"] is True
+    assert manifest["required_panel_ids"] == metadata["panel_ids"]
+    assert manifest["expected"]["contract_sha256"] == metadata["contract_sha256"]
+    assert manifest["expected"]["competitor_matrix_git_blob_sha1"] == metadata["competitor_matrix_git_blob_sha1"]
+    assert manifest["expected"]["svg_sha256"] == metadata["svg_sha256"]
+    assert manifest["expected"]["movement_arrows"] is False
+    assert manifest["expected"]["empirical_effect_sizes"] is False
+
     assert "deliberately non-sequential" in caption.read_text(encoding="utf-8")
     assert "no arrows are used to imply movement" in accessibility.read_text(encoding="utf-8")
 
