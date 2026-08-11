@@ -66,8 +66,14 @@ def test_every_figure_has_caption_and_accessibility_prose() -> None:
         assert len(re.findall(r"\b[\w’'-]+\b", caption_text)) >= 25
         assert len(re.findall(r"\b[\w’'-]+\b", accessibility_text)) >= 25
         lowered = (caption_text + "\n" + accessibility_text).lower()
-        assert "colonisation probability" not in lowered
-        assert "dispersal probability" not in lowered
+        for affirmative_overclaim in (
+            "estimates colonisation probability",
+            "estimates dispersal probability",
+            "is a colonisation probability",
+            "is a dispersal probability",
+            "shows realised movement",
+        ):
+            assert affirmative_overclaim not in lowered
 
 
 def test_manual_visual_checks_remain_explicitly_open() -> None:
