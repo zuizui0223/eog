@@ -72,6 +72,8 @@ jobs:
                       raise SystemExit(f"unsafe archive member: {member.name}")
               archive.extractall(".", members=members, filter="data")
           PY
+      - name: Install test dependency
+        run: python -m pip install pytest
       - name: Verify dedicated Figure 3 tests
         run: python -m pytest -q tests/test_structural_figure_3.py
       - name: Commit only manuscript Figure 3 files
