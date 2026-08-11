@@ -8,6 +8,7 @@
   "cover_letter": "manuscript/submission/cover_letter.md",
   "data_code_availability": "manuscript/submission/data_code_availability.md",
   "declarations": "manuscript/submission/declarations.md",
+  "environment": "manuscript/submission/environment.md",
   "supplementary_materials_list": "manuscript/submission/supplementary_materials.md",
   "figure_files": [
     "figures/output/figure_1_roles.svg",
