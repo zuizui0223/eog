@@ -44,11 +44,11 @@
       "id": "T3",
       "label": "Table 3 + Table S1",
       "result": "machine-readable manuscript tables",
-      "result_sha256": "dd8d7431cfd44e463849daa7d19fa4cc19b13fa9d4502878f34a99256e3862ba",
+      "result_sha256": "b25da730cec3f01888922de6c96fc98bd027e6213f9f59ab4c07ac2c4b763049",
       "source": "A sidecar a96ec413eeb7; T 6b555c28d61d",
       "transform": "build_structural_results_tables.py"
     }
   ],
   "schema_version": "eog_structural_figure5_audit_v1",
-  "svg_sha256": "1b2968bd49273a9968a9a166daadf55cccfcda323085152fa3e967a3085d3ac5"
+  "svg_sha256": "c29c53ccf71c451438ccf75d9fc646e4c2793ecf874b829c97f5ca38b910fc5d"
 }

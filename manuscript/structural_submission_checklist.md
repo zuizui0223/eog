@@ -70,6 +70,15 @@ The paper is **not ready to submit** until every blocking item is complete.
 - [ ] Supplementary materials list prepared.
 - [ ] Cover letter drafted.
 
+### Claim guard
+
+The following shorthand is explicitly prohibited in the manuscript and submission package because it exceeds the frozen evidence boundary:
+
+- `EOG outperforms SDM`;
+- `EOG accounts for dispersal` without a narrower structural definition;
+- `connected frequency estimates colonisation probability`;
+- `Tanzania shows current flow is better in general`.
+
 ## Current stop/go rule
 
 **Do not submit** while any submission-blocking checkbox above remains open.
