@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import csv
 import importlib.util
 import json
 from pathlib import Path
@@ -10,6 +9,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 BUILDER = ROOT / "manuscript/build_structural_results_tables.py"
 MANIFEST = ROOT / "manuscript/result_tables/result_table_manifest.json"
+METADATA = ROOT / "manuscript/result_tables/structural_results_tables_metadata.json"
 
 
 def load_builder():
@@ -81,6 +81,17 @@ def test_non_estimability_is_retained():
     assert lookup[("Tanzania", "primary::primary_loso", "invalid")] == 14
     assert lookup[("Tanzania", "primary::spatial_mst_block", "matched")] == 718
     assert lookup[("Tanzania", "primary::spatial_mst_block", "invalid")] == 122
+
+
+def test_committed_outputs_match_metadata_fingerprints():
+    module = load_builder()
+    metadata = json.loads(METADATA.read_text(encoding="utf-8"))
+    assert metadata["table_3_rows"] == 12
+    assert metadata["applicability_rows"] == 14
+    for name, expected in metadata["outputs"].items():
+        path = ROOT / "manuscript/result_tables" / name
+        assert path.is_file()
+        assert module.sha256(path) == expected
 
 
 def test_changed_sidecar_sha_is_rejected(tmp_path: Path):
