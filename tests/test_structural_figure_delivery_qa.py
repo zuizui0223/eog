@@ -43,16 +43,50 @@ def test_submission_figure_paths_are_valid_self_contained_svgs() -> None:
                 assert not lowered.startswith("https://"), (relative, key, value)
 
 
+def _stylesheet_class_font_sizes(root: ET.Element) -> dict[str, float]:
+    sizes: dict[str, float] = {}
+    for style in root.findall(f".//{{{SVG_NS}}}style"):
+        css = style.text or ""
+        for match in re.finditer(
+            r"\.([A-Za-z0-9_-]+)\s*\{[^}]*?font-size\s*:\s*([0-9]+(?:\.[0-9]+)?)px",
+            css,
+            flags=re.DOTALL,
+        ):
+            sizes[match.group(1)] = float(match.group(2))
+    return sizes
+
+
+def _inline_style_font_size(value: str) -> float | None:
+    match = re.search(r"(?:^|;)\s*font-size\s*:\s*([0-9]+(?:\.[0-9]+)?)(?:px)?(?:;|$)", value)
+    return float(match.group(1)) if match else None
+
+
 def test_figure_text_does_not_drop_below_internal_minimum() -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     for relative in manifest["figure_files"]:
         root = ET.fromstring((ROOT / relative).read_text(encoding="utf-8"))
-        font_sizes = []
+        class_sizes = _stylesheet_class_font_sizes(root)
+        font_sizes: list[float] = []
+        unresolved_text = 0
         for element in root.findall(f".//{{{SVG_NS}}}text"):
+            size: float | None = None
             if "font-size" in element.attrib:
-                font_sizes.append(numeric(element.attrib["font-size"]))
+                size = numeric(element.attrib["font-size"])
+            elif "style" in element.attrib:
+                size = _inline_style_font_size(element.attrib["style"])
+            if size is None and "class" in element.attrib:
+                candidates = [class_sizes[c] for c in element.attrib["class"].split() if c in class_sizes]
+                if candidates:
+                    size = min(candidates)
+            if size is None:
+                unresolved_text += 1
+            else:
+                font_sizes.append(size)
         assert font_sizes, relative
-        assert min(font_sizes) >= 9.0, (relative, min(font_sizes))
+        # Some SVGs inherit browser/SVG default sizing for a subset of text nodes.
+        # Every explicitly sized node must satisfy the internal floor; unresolved
+        # inherited nodes remain part of the final manual journal-size visual QA.
+        assert min(font_sizes) >= 9.0, (relative, min(font_sizes), unresolved_text)
 
 
 def test_every_figure_has_caption_and_accessibility_prose() -> None:
