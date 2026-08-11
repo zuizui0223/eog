@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILDER = ROOT / "manuscript" / "build_structural_submission_package.py"
 SUBMISSION_MANIFEST = ROOT / "manuscript" / "submission" / "submission_manifest.json"
+MANUSCRIPT = ROOT / "manuscript" / "structural_reachability_manuscript.md"
+HIGHLIGHTS = ROOT / "manuscript" / "structural_highlights.txt"
 
 
 def builder():
@@ -54,6 +57,25 @@ def test_submission_package_is_repeatable_within_one_environment(tmp_path: Path)
     second = module.build(output)
     assert first["source_commit"] == second["source_commit"]
     assert first["files"] == second["files"]
+
+
+def test_complete_manuscript_submission_metadata_is_frozen_under_working_limits() -> None:
+    manifest = json.loads(SUBMISSION_MANIFEST.read_text(encoding="utf-8"))
+    text = MANUSCRIPT.read_text(encoding="utf-8")
+    lines = text.splitlines()
+    assert lines[0] == "# " + manifest["title"]
+    match = re.search(r"^## Abstract\s*$\n(.*?)(?=^\*\*Keywords:\*\*)", text, flags=re.MULTILINE | re.DOTALL)
+    assert match is not None
+    abstract_words = re.findall(r"\b[\w’'-]+\b", match.group(1), flags=re.UNICODE)
+    assert 150 <= len(abstract_words) <= 250
+    keyword_match = re.search(r"^\*\*Keywords:\*\*\s*(.+)$", text, flags=re.MULTILINE)
+    assert keyword_match is not None
+    keywords = [item.strip() for item in keyword_match.group(1).split(";")]
+    assert 5 <= len(keywords) <= 10
+    assert all(keywords)
+    highlights = [line.strip() for line in HIGHLIGHTS.read_text(encoding="utf-8").splitlines() if line.strip()]
+    assert 3 <= len(highlights) <= 5
+    assert all(len(line) <= 85 for line in highlights)
 
 
 def test_submission_facing_files_preserve_positive_and_negative_boundary() -> None:
