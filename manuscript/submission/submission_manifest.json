@@ -11,6 +11,7 @@
   "environment": "manuscript/submission/environment.md",
   "live_policy_verification": "manuscript/submission/live_policy_verification_2026-08-12.md",
   "release_readiness": "manuscript/submission/release_readiness.md",
+  "figure_qa": "manuscript/submission/figure_qa.md",
   "supplementary_materials_list": "manuscript/submission/supplementary_materials.md",
   "figure_files": [
     "figures/output/figure_1_roles.svg",
