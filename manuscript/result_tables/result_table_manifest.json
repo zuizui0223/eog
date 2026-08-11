@@ -1,0 +1,55 @@
+{
+  "schema_version": "eog_structural_results_tables_v1",
+  "purpose": "Generate manuscript-facing results tables only from frozen Figure 2 and Figure 3 evidence, without manual numeric transcription or refitting.",
+  "inputs": {
+    "aislands_mode_estimates": {
+      "path": "figures/output/aislands_mode_estimates.csv",
+      "sha256": "a96ec413eeb792c7a0fdd409442a8fecdf5e37342cbcb192faa703b11beefabb"
+    },
+    "aislands_applicability": {
+      "path": "figures/output/aislands_applicability.csv",
+      "sha256": "0b323de611e685d524304a9ba51ab3caa6e46fa6c4157b237a02ff74da3be522"
+    },
+    "aislands_primary_expected": {
+      "path": "benchmarks/aislands_authoritative_expected.json",
+      "expected_species_output_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488"
+    },
+    "tanzania_aggregate_contrasts": {
+      "path": "figures/output/tanzania_aggregate_contrasts.csv",
+      "sha256": "a73031b817313d5b2a62ac9c1ae8f023c7ec58cbb13a73441b5dc2d04b5d9bbe"
+    },
+    "tanzania_expected": {
+      "path": "benchmarks/tanzania_heldout_expected.json",
+      "result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
+    }
+  },
+  "table_3": {
+    "title": "Main and predeclared sensitivity results",
+    "aislands_rows": [
+      "combined",
+      "geography_only",
+      "environmentally_constrained",
+      "bottleneck_secondary"
+    ],
+    "tanzania_contrasts": [
+      "primary::primary_loso",
+      "inverse_area_sensitivity::primary_loso",
+      "primary::spatial_mst_block",
+      "inverse_area_sensitivity::spatial_mst_block"
+    ],
+    "tanzania_metrics": [
+      "log_loss",
+      "brier"
+    ]
+  },
+  "applicability_table": {
+    "title": "Predeclared non-estimability accounting",
+    "retain_zero_or_failed_categories": true
+  },
+  "claim_boundaries": [
+    "A-Islands estimates test added held-out structural information conditional on frozen pointwise support and nearest-training-occurrence distance.",
+    "Tanzania differences are candidate minus strong current-flow reference; negative values favour adding EOG and positive values are adverse.",
+    "Neither table reports a dispersal, movement, colonisation, or realised-path probability.",
+    "Non-estimable rows remain visible and are not silently dropped from applicability accounting."
+  ]
+}
