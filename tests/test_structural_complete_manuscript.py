@@ -71,26 +71,31 @@ def test_primary_and_sensitivity_values_match_frozen_table3() -> None:
     text = MANUSCRIPT.read_text(encoding="utf-8")
     with TABLE3.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
-    selected = [
-        row for row in rows
-        if row["metric"] == "log loss difference" or
-        (row["system"] == "A-Islands" and row["analysis"] == "Combined connected frequency")
-    ]
-    assert len(selected) == 5
-    for row in selected:
-        effect = float(row["effect"])
-        lo = float(row["ci_low"])
-        hi = float(row["ci_high"])
-        if row["system"] == "A-Islands":
-            assert f"{effect:.7f}" in text
-            assert f"{lo:.7f}" in text
-            assert f"{hi:.7f}" in text
-        else:
-            # Full-precision rows are rounded only for narrative readability; the
-            # manuscript must still carry six-decimal projections for each contrast.
-            assert f"{effect:+.6f}"[:8] in text or f"{effect:+.7f}" in text
-            assert f"{lo:+.6f}"[:8] in text or f"{lo:+.7f}" in text
-            assert f"{hi:+.6f}"[:8] in text or f"{hi:+.7f}" in text
+    lookup = {(row["system"], row["analysis"], row["metric"]): row for row in rows}
+    narrative = {
+        ("A-Islands", "Combined connected frequency", "conditional concordance"): (
+            "0.6177466", "0.6086806", "0.6269445"
+        ),
+        ("Tanzania", "Primary weighting | LOSO", "log loss difference"): (
+            "0.0321131", "0.0174580", "0.0486750"
+        ),
+        ("Tanzania", "Inverse-area weighting | LOSO", "log loss difference"): (
+            "0.0306296", "0.0162138", "0.0469375"
+        ),
+        ("Tanzania", "Primary weighting | spatial MST blocks", "log loss difference"): (
+            "0.0109538", "-0.0121714", "0.0334313"
+        ),
+        ("Tanzania", "Inverse-area weighting | spatial MST blocks", "log loss difference"): (
+            "0.0057016", "-0.0155325", "0.0258239"
+        ),
+    }
+    for key, rendered_values in narrative.items():
+        row = lookup[key]
+        for field, rendered in zip(("effect", "ci_low", "ci_high"), rendered_values):
+            # Table 3 is a six-decimal display projection; the manuscript retains
+            # more digits from the same frozen result. They must agree to rounding.
+            assert abs(float(rendered) - float(row[field])) <= 5.1e-7
+            assert rendered in text
 
 
 def test_applicability_failure_accounting_is_retained() -> None:
@@ -122,7 +127,7 @@ def test_claim_boundary_survives_complete_manuscript() -> None:
     for required in (
         "not a colonisation or dispersal probability",
         "not as confirmation of the adverse primary LOSO effect",
-        "do not establish a historical colonisation route",
+        "does not establish a historical colonisation route",
         "not estimates of realised dispersal or colonisation probability",
     ):
         assert required.lower() in text.lower()
