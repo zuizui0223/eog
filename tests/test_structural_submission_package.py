@@ -63,7 +63,9 @@ def test_complete_manuscript_submission_metadata_is_frozen_under_working_limits(
     manifest = json.loads(SUBMISSION_MANIFEST.read_text(encoding="utf-8"))
     text = MANUSCRIPT.read_text(encoding="utf-8")
     lines = text.splitlines()
-    assert lines[0] == "# " + manifest["title"]
+    heading = lines[0].removeprefix("# ").strip()
+    subtitle = next(line for line in lines[1:5] if line.startswith("**") and line.endswith("**")).strip("*")
+    assert f"{heading} {subtitle}" == manifest["title"]
     match = re.search(r"^## Abstract\s*$\n(.*?)(?=^\*\*Keywords:\*\*)", text, flags=re.MULTILINE | re.DOTALL)
     assert match is not None
     abstract_words = re.findall(r"\b[\w’'-]+\b", match.group(1), flags=re.UNICODE)
