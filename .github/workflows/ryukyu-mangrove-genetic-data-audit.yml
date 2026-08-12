@@ -1,0 +1,122 @@
+name: Ryukyu mangrove genetic release audit
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/ryukyu-mangrove-genetic-data-audit.yml"
+      - "benchmarks/ryukyu_mangrove_genetic_prepare.py"
+      - "benchmarks/ryukyu_mangrove_genetic_data_audit.py"
+      - "docs/eog_v2_ryukyu_mangrove_genetic_retrospective_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install and freeze response-free EOG predictors first
+        run: |
+          python -m pip install -e .
+          mkdir -p benchmark_results/ryukyu_mangrove/raw
+          python benchmarks/ryukyu_mangrove_genetic_prepare.py \
+            --populations benchmark_results/ryukyu_mangrove/populations.csv \
+            --predictors benchmark_results/ryukyu_mangrove/predictors.csv \
+            --manifest benchmark_results/ryukyu_mangrove/predictor_manifest.json \
+            > benchmark_results/ryukyu_mangrove/prepare_stdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('benchmark_results/ryukyu_mangrove/predictor_manifest.json').read_text())
+          assert manifest['genetic_response_attached'] is False
+          assert manifest['n_populations'] == 16
+          assert len(manifest['predictor_manifest_fingerprint']) == 64
+          PY
+      - name: Install browser driver
+        run: |
+          python -m pip install "playwright==1.55.0"
+          google-chrome --version
+      - name: Download public Dryad genotype and README after predictor freeze
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+
+          root = Path('benchmark_results/ryukyu_mangrove')
+          raw = root / 'raw'
+          landing = 'https://datadryad.org/dataset/doi%3A10.5061/dryad.bcc2fqzdh'
+          expected = {
+              'R.stylosaMicrosatelliteOkinawa2017.csv': raw / 'R.stylosaMicrosatelliteOkinawa2017.csv',
+              'README_R.stylosaOkinawa.txt': raw / 'README_R.stylosaOkinawa.txt',
+          }
+          with sync_playwright() as p:
+              browser = p.chromium.launch(channel='chrome', headless=True)
+              context = browser.new_context(accept_downloads=True)
+              page = context.new_page()
+              page.goto(landing, wait_until='domcontentloaded', timeout=120_000)
+              page.wait_for_timeout(2000)
+              for filename, destination in expected.items():
+                  link = page.get_by_role('link', name=filename, exact=True)
+                  if link.count() != 1:
+                      # Dryad may render accessible text around the filename; fallback to text locator.
+                      link = page.locator("a[href*='/downloads/file_stream/']").filter(has_text=filename)
+                  if link.count() != 1:
+                      raise RuntimeError(f'expected one Dryad link for {filename}, found {link.count()}')
+                  with page.expect_download(timeout=120_000) as info:
+                      link.first.click()
+                  download = info.value
+                  download.save_as(destination)
+              browser.close()
+          if expected['R.stylosaMicrosatelliteOkinawa2017.csv'].stat().st_size < 20_000:
+              raise RuntimeError('Ryukyu genotype download is implausibly small')
+          if expected['README_R.stylosaOkinawa.txt'].stat().st_size < 1_000:
+              raise RuntimeError('Ryukyu README download is implausibly small')
+          PY
+          sha256sum benchmark_results/ryukyu_mangrove/raw/R.stylosaMicrosatelliteOkinawa2017.csv \
+            > benchmark_results/ryukyu_mangrove/genotype_sha256.txt
+          sha256sum benchmark_results/ryukyu_mangrove/raw/README_R.stylosaOkinawa.txt \
+            > benchmark_results/ryukyu_mangrove/readme_sha256.txt
+      - name: Audit release schema without FST or migration inference
+        run: |
+          python benchmarks/ryukyu_mangrove_genetic_data_audit.py \
+            --genotypes benchmark_results/ryukyu_mangrove/raw/R.stylosaMicrosatelliteOkinawa2017.csv \
+            --readme benchmark_results/ryukyu_mangrove/raw/README_R.stylosaOkinawa.txt \
+            --predictor-manifest benchmark_results/ryukyu_mangrove/predictor_manifest.json \
+            --output benchmark_results/ryukyu_mangrove/release_audit.json \
+            > benchmark_results/ryukyu_mangrove/audit_stdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('benchmark_results/ryukyu_mangrove/release_audit.json').read_text())
+          assert result['status'] == 'ryukyu-mangrove-genetic-release-schema-audit'
+          assert result['genetic_structure_computed'] is False
+          assert result['fst_computed'] is False
+          assert result['migration_computed'] is False
+          assert result['clustering_computed'] is False
+          assert result['n_rows'] > 0
+          assert result['n_columns'] > 0
+          PY
+      - name: Remove raw genetic files before artifact upload
+        if: always()
+        run: rm -rf benchmark_results/ryukyu_mangrove/raw
+      - name: Upload provenance and schema audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ryukyu-mangrove-genetic-release-audit
+          path: |
+            benchmark_results/ryukyu_mangrove/populations.csv
+            benchmark_results/ryukyu_mangrove/predictors.csv
+            benchmark_results/ryukyu_mangrove/predictor_manifest.json
+            benchmark_results/ryukyu_mangrove/prepare_stdout.json
+            benchmark_results/ryukyu_mangrove/genotype_sha256.txt
+            benchmark_results/ryukyu_mangrove/readme_sha256.txt
+            benchmark_results/ryukyu_mangrove/release_audit.json
+            benchmark_results/ryukyu_mangrove/audit_stdout.json
+          if-no-files-found: warn
