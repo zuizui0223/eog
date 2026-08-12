@@ -30,7 +30,7 @@ def test_candidate_release_tag_matches_package_version() -> None:
 
 def test_release_sequence_reserves_doi_before_final_tag_after_scientific_hold() -> None:
     release = RELEASE.read_text(encoding="utf-8")
-    assert "reserve a DOI" in release.lower()
+    assert "reserve a doi" in release.lower()
     assert "https://help.zenodo.org/docs/deposit/describe-records/reserve-doi/" in release
     assert "Create a Zenodo draft manually and reserve a DOI" in release
     assert "Create tag and GitHub Release" in release
