@@ -53,16 +53,7 @@ def _eventual_support_to_target(
     operator: DynamicTransitionOperator,
     target: int,
 ) -> np.ndarray:
-    """Solve total first-passage support to one target from every source node.
-
-    For non-target states, first-passage support ``h`` satisfies
-
-    ``h = q_target + Q_without_target @ h``.
-
-    Because the frozen operator is strictly sub-stochastic, its spectral radius is
-    below one and the linear system has a unique finite solution. This sums direct and
-    arbitrarily long indirect paths while retaining the explicit loss channel.
-    """
+    """Solve total first-passage support to one target from every source node."""
 
     q = np.asarray(operator.transition, dtype=float)
     n = q.shape[0]
@@ -133,15 +124,24 @@ def pairwise_eventual_reachability_distances(
     pairs are retained in ``zero_support`` and capped numerically at the explicitly
     declared ``support_floor`` for downstream finite-valued models.
 
-    ``mean_log`` is the arithmetic mean of reciprocal directional log distances;
-    equivalently, it is negative log of the geometric mean of reciprocal supports.
-    ``max_log`` retains the more isolated direction. The choice remains explicit.
+    Symmetrisation remains explicit:
+
+    - ``mean_log``: negative log of the geometric mean of reciprocal supports;
+    - ``max_log``: retain the more isolated reciprocal direction;
+    - ``mean_support``: negative log of the arithmetic mean of reciprocal supports.
+
+    ``mean_support`` is included specifically because one-way connectivity can still
+    exchange genes; unlike log-space rules it remains finite when exactly one direction
+    has positive support.
     """
 
     if not np.isfinite(support_floor) or not (0.0 < support_floor < 1.0):
         raise ValueError("support_floor must lie strictly between 0 and 1")
-    if symmetrization not in {"mean_log", "max_log"}:
-        raise ValueError("symmetrization must be 'mean_log' or 'max_log'")
+    allowed = {"mean_log", "max_log", "mean_support"}
+    if symmetrization not in allowed:
+        raise ValueError(
+            "symmetrization must be 'mean_log', 'max_log', or 'mean_support'"
+        )
 
     ids, support = eventual_first_passage_support_matrix(operator, sampled_node_ids)
     zero_support = support <= 0.0
@@ -150,8 +150,11 @@ def pairwise_eventual_reachability_distances(
     np.fill_diagonal(directional, 0.0)
     if symmetrization == "mean_log":
         symmetric = 0.5 * (directional + directional.T)
-    else:
+    elif symmetrization == "max_log":
         symmetric = np.maximum(directional, directional.T)
+    else:
+        mean_support = 0.5 * (support + support.T)
+        symmetric = -np.log(np.maximum(mean_support, support_floor))
     np.fill_diagonal(symmetric, 0.0)
 
     payload = {
