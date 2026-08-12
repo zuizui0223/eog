@@ -22,7 +22,6 @@ from eog.v2_empirical_occurrence_validation import (
 from benchmarks.finland_colonization_prepare import (
     BOOTSTRAP_REPLICATES,
     BOOTSTRAP_SEED,
-    L2_PENALTY,
     _array_sha256,
     _sha256_file,
 )
@@ -76,16 +75,18 @@ def _verify_manifest_and_bundle(
     if observed_fingerprint != expected_fingerprint:
         raise ValueError("Finland feature-bundle manifest fingerprint mismatch")
 
-    if PREOUTCOME_CONTRACT.exists():
-        current = _sha256_file(PREOUTCOME_CONTRACT)
-        frozen = manifest.get("contract_sha256")
-        if frozen is not None and current != frozen:
-            raise ValueError("Finland pre-outcome contract changed after feature freeze")
-    if INFERENCE_FREEZE.exists():
-        expected_seed = int(manifest.get("bootstrap_seed", -1))
-        expected_replicates = int(manifest.get("bootstrap_replicates", -1))
-        if expected_seed != BOOTSTRAP_SEED or expected_replicates != BOOTSTRAP_REPLICATES:
-            raise ValueError("Finland frozen inference settings drifted")
+    if not PREOUTCOME_CONTRACT.exists() or not INFERENCE_FREEZE.exists():
+        raise ValueError("Finland frozen contract files are unavailable")
+    current_contract = _sha256_file(PREOUTCOME_CONTRACT)
+    if manifest.get("contract_sha256") != current_contract:
+        raise ValueError("Finland pre-outcome contract changed after feature freeze")
+    current_inference = _sha256_file(INFERENCE_FREEZE)
+    if manifest.get("inference_freeze_sha256") != current_inference:
+        raise ValueError("Finland inference freeze changed after feature freeze")
+    if int(manifest.get("bootstrap_seed", -1)) != BOOTSTRAP_SEED:
+        raise ValueError("Finland frozen bootstrap seed drifted")
+    if int(manifest.get("bootstrap_replicates", -1)) != BOOTSTRAP_REPLICATES:
+        raise ValueError("Finland frozen bootstrap replicate count drifted")
 
     with np.load(bundle_path, allow_pickle=False) as loaded:
         arrays = {name: np.asarray(loaded[name]) for name in loaded.files}
@@ -317,6 +318,8 @@ def score_finland(
         "status": "frozen-finland-colonization-heldout-result",
         "raw_sha256": manifest["raw_sha256"],
         "feature_bundle_fingerprint": manifest["feature_bundle_fingerprint"],
+        "contract_sha256": manifest["contract_sha256"],
+        "inference_freeze_sha256": manifest["inference_freeze_sha256"],
         "admission_response_free_projection_fingerprint": manifest[
             "admission_response_free_projection_fingerprint"
         ],
