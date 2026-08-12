@@ -8,8 +8,16 @@ frozen before an independent-seed confirmation.
 from __future__ import annotations
 
 import json
+from pathlib import Path
+import sys
 
 import numpy as np
+
+# Direct script execution places ``benchmarks/`` rather than the repository root on
+# sys.path. Add the root explicitly so this development runner can reuse the frozen
+# noisy-generator module both locally and in GitHub Actions.
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from eog import fit_eog_distribution
 from eog.distribution_odds import EOGOddsGateConfig, fit_eog_odds_distribution
