@@ -37,11 +37,27 @@ def _areas() -> np.ndarray:
     return np.asarray([1.0, 2.0, 100.0, 4.0, 5.0])
 
 
+def _mainland_distances() -> np.ndarray:
+    # a is a direct mainland-entry island at every scale; c becomes a direct
+    # entry at 125 km. Other targets may still become mainland-connected through
+    # their species-independent island component.
+    return np.asarray([10.0, 80.0, 100.0, 300.0, 400.0])
+
+
+def _build(anchors, training):
+    return build_island_isolation_reference_features(
+        _prepared(),
+        anchors,
+        training,
+        _areas(),
+        _mainland_distances(),
+    )
+
+
 def test_training_presence_cannot_create_its_own_source_signal() -> None:
-    prepared = _prepared()
     anchors = np.asarray([True, False, True, False, False])
     training = np.asarray([True, True, True, False, False])
-    result = build_island_isolation_reference_features(prepared, anchors, training, _areas())
+    result = _build(anchors, training)
 
     assert result.nearest_training_presence_km[0] == pytest.approx(40.0)
     assert result.nearest_training_presence_km[2] == pytest.approx(40.0)
@@ -52,10 +68,9 @@ def test_training_presence_cannot_create_its_own_source_signal() -> None:
 
 
 def test_multi_source_pressure_and_neutral_geometry_are_separate() -> None:
-    prepared = _prepared()
     anchors = np.asarray([True, False, True, False, False])
     training = np.asarray([True, True, True, False, False])
-    result = build_island_isolation_reference_features(prepared, anchors, training, _areas())
+    result = _build(anchors, training)
 
     assert result.multi_source_pressure[1] > result.multi_source_pressure[4]
     assert result.nearest_other_island_km.tolist() == pytest.approx([10.0, 10.0, 20.0, 20.0, 50.0])
@@ -64,25 +79,41 @@ def test_multi_source_pressure_and_neutral_geometry_are_separate() -> None:
 
 
 def test_area_weighted_pressures_are_distinct_from_count_pressures() -> None:
-    prepared = _prepared()
     anchors = np.asarray([True, False, True, False, False])
     training = np.asarray([True, True, True, False, False])
-    result = build_island_isolation_reference_features(prepared, anchors, training, _areas())
+    result = _build(anchors, training)
 
-    # The large area assigned to source c changes the source-pressure ranking/value
-    # without altering the unweighted source count-pressure definition.
     assert not np.allclose(result.area_weighted_source_pressure, result.multi_source_pressure)
     assert result.area_weighted_source_pressure[1] > result.multi_source_pressure[1]
     assert not np.allclose(result.surrounding_landmass_pressure, result.surrounding_island_pressure)
     assert result.surrounding_landmass_pressure[3] > result.surrounding_island_pressure[3]
 
 
+def test_mainland_stepping_stone_frequency_is_species_independent() -> None:
+    anchors_a = np.asarray([True, False, True, False, False])
+    anchors_b = np.asarray([False, True, False, True, False])
+    training = np.asarray([True, True, True, True, False])
+    result_a = _build(anchors_a, training)
+    result_b = _build(anchors_b, training)
+
+    # Radius 25: a,b are connected to the direct mainland-entry island a; c,d,e are not.
+    # Radius 50: a,b,c share a component containing a; d,e do not.
+    # Radius 125: a,b,c,d are connected and c is also a direct entry; e is not.
+    # Radius 250: all islands form one component containing mainland-entry islands.
+    expected = np.asarray([1.0, 1.0, 0.75, 0.5, 0.25])
+    assert result_a.mainland_stepping_stone_frequency == pytest.approx(expected)
+    assert result_b.mainland_stepping_stone_frequency == pytest.approx(expected)
+    assert not np.allclose(
+        result_a.geography_only_eog_connected_frequency,
+        result_b.geography_only_eog_connected_frequency,
+    )
+
+
 def test_feature_builder_rejects_single_source_after_self_exclusion() -> None:
-    prepared = _prepared()
     anchors = np.asarray([True, False, False, False, False])
     training = np.asarray([True, True, True, False, False])
     with pytest.raises(ValueError, match="at least two outer-training presence anchors"):
-        build_island_isolation_reference_features(prepared, anchors, training, _areas())
+        _build(anchors, training)
 
 
 def test_feature_builder_rejects_invalid_area() -> None:
@@ -92,4 +123,26 @@ def test_feature_builder_rejects_invalid_area() -> None:
     bad_area = _areas()
     bad_area[2] = 0.0
     with pytest.raises(ValueError, match="island_area_km2"):
-        build_island_isolation_reference_features(prepared, anchors, training, bad_area)
+        build_island_isolation_reference_features(
+            prepared,
+            anchors,
+            training,
+            bad_area,
+            _mainland_distances(),
+        )
+
+
+def test_feature_builder_rejects_invalid_mainland_distance() -> None:
+    prepared = _prepared()
+    anchors = np.asarray([True, False, True, False, False])
+    training = np.asarray([True, True, True, False, False])
+    bad_distance = _mainland_distances()
+    bad_distance[4] = -1.0
+    with pytest.raises(ValueError, match="distance_to_mainland_km"):
+        build_island_isolation_reference_features(
+            prepared,
+            anchors,
+            training,
+            _areas(),
+            bad_distance,
+        )
