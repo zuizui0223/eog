@@ -15,6 +15,8 @@ This ledger tracks the separate dynamic island-reachability development line. It
 - [x] Genetic IBD/IBE/current-flow negative controls.
 - [x] Finite-horizon genetic-distance sensitivity; result: 24/24 tested candidates eligible, so horizon is not identified by the toy system.
 - [x] Exact-eventual first-passage implementation for horizon-free long-term genetic development.
+- [x] Directional-FST boundary demonstrated in development: asymmetric migration is not automatically recoverable from symmetric pairwise FST.
+- [x] Hyperparameter-free FST-oriented EOG candidate implemented: reciprocal arithmetic-mean eventual support + continuous distance + explicit bidirectional-disconnection indicator.
 
 ## Frozen fixed-source occurrence confirmation
 
@@ -28,16 +30,19 @@ All gates passed. Dynamic EOG-R correctly added no useful signal when environmen
 
 Finite-horizon genetics is not being frozen because all 24 tested horizon/floor/log-symmetrisation combinations passed the initial known-truth boundaries. Selecting the shortest horizon would be arbitrary and could fail to transfer to larger archipelagos.
 
-The current candidate family instead uses exact eventual first-passage support under the frozen lossy operator, eliminating horizon tuning. Development now compares `mean_log`, `max_log`, and `mean_support` symmetrisations under geography-null, smooth IBD+IBE, intermediate-structure, and asymmetric migration truths.
+Exact eventual first-passage removes the horizon. A development screen of `mean_log`, `max_log`, and `mean_support` showed that symmetric FST did not recover a localized asymmetric migration effect beyond an undirected current-flow reference. Directional EOG predictions therefore require a directional genetic or movement validation endpoint when available; pairwise FST is reserved for symmetric isolation validation.
+
+The current FST-oriented candidate consequently has no horizon, no numerical zero-support floor, and no fitted symmetrisation parameter: reciprocal eventual support is averaged in support space, connected pairs receive `-log` exchange distance, and pairs with zero support in both directions receive a separate disconnection indicator rather than an arbitrary huge distance.
 
 ## Still open before empirical promotion
 
-- [ ] finish exact-eventual genetic development screen;
-- [ ] freeze one exact-eventual `D_eog` synthetic confirmation contract on unused seeds;
-- [ ] execute the fresh one-time synthetic genetic confirmation;
+- [ ] finish CI validation of the hyperparameter-free eventual genetic candidate;
+- [ ] freeze its fresh synthetic confirmation contract on unused seeds;
+- [ ] execute the one-time synthetic genetic confirmation;
 - [ ] nested self-excluded source-set expansion sensitivity;
 - [ ] dynamic-occupancy comparator where repeated incidence supports it;
 - [ ] independently frozen empirical occurrence benchmark;
 - [ ] independent empirical genetic validation;
+- [ ] directional genetic/movement validation when a suitable endpoint exists;
 - [ ] graph-native dynamic visualisation;
 - [ ] predeclared method-paper GO/NO-GO decision.
