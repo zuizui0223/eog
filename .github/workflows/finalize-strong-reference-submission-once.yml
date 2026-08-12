@@ -1,0 +1,230 @@
+name: Finalize strong-reference submission once
+
+on:
+  push:
+    branches:
+      - agent/strong-reference-submission-finalization
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.event.head_commit.message == 'FINALIZE strong-reference submission package once'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/strong-reference-submission-finalization
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install package and test dependencies
+        run: python -m pip install -e '.[dev]'
+
+      - name: Verify frozen scientific evidence before presentation changes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a = json.loads(Path('validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json').read_text())
+          t = json.loads(Path('benchmarks/tanzania_heldout_expected.json').read_text())['expected_projection']
+          assert a['result_fingerprint'] == '5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a'
+          assert a['primary']['species_macro_mean'] == 0.003485181598265469
+          assert a['primary']['bootstrap_95_ci'] == [0.0024664225728659645, 0.004508216483355693]
+          assert a['primary']['species_favourable_negative'] == 341
+          assert a['primary']['species_adverse_positive'] == 545
+          assert t['result_fingerprint'] == '6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4'
+          assert t['contrasts']['primary::primary_loso']['macro_mean_species_log_loss_difference'] == 0.032113119
+          PY
+
+      - name: Regenerate Figure 4 reference-depth cards
+        run: python figures/build_figure_4_boundary.py
+
+      - name: Synchronize Figure 4 manifest and Figure 5 audit
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          metadata = json.loads(Path('figures/output/figure_4_metadata.json').read_text())
+          assert metadata['schema_version'] == 'eog_structural_figure4_boundary_v2'
+          assert metadata['metrics_share_axis'] is False
+          assert metadata['card_order'] == ['AIS_LIMITED', 'AIS_STRONG', 'TAN_PRIMARY', 'TAN_SPATIAL']
+          assert metadata['sources']['aislands_strong_reference']['result_fingerprint'] == '5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a'
+
+          manifest_path = Path('figures/figure_manifest.json')
+          manifest = json.loads(manifest_path.read_text())
+          old = manifest['figure_4_boundary']['expected']
+          manifest['figure_4_boundary']['contract'] = {
+              'schema_version': 'eog_structural_figure4_boundary_v2',
+              'required_panel_ids': ['AIS_LIMITED', 'AIS_STRONG', 'TAN_PRIMARY', 'TAN_SPATIAL'],
+              'metrics_share_axis': False,
+              'movement_arrows': False,
+              'causal_arrows': False,
+          }
+          manifest['figure_4_boundary']['expected'] = {
+              'aislands_summary_sha256': metadata['sources']['aislands']['summary_sha256'],
+              'aislands_strong_reference_result_fingerprint': metadata['sources']['aislands_strong_reference']['result_fingerprint'],
+              'tanzania_summary_sha256': metadata['sources']['tanzania']['source_sha256'],
+              'tanzania_result_fingerprint': metadata['sources']['tanzania']['result_fingerprint'],
+              'tanzania_candidate_library_fingerprint': old['tanzania_candidate_library_fingerprint'],
+              'tanzania_matched_loso': old['tanzania_matched_loso'],
+              'tanzania_log_loss_difference': old['tanzania_log_loss_difference'],
+              'panel_data_sha256': metadata['panel_data_sha256'],
+              'svg_sha256': metadata['svg_sha256'],
+              'caption_sha256': metadata['caption_sha256'],
+              'accessibility_sha256': metadata['accessibility_sha256'],
+          }
+          manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n')
+
+          f5path = Path('figures/build_figure_5_audit.py')
+          text = f5path.read_text()
+          old_source = '"F4": f"A {short(f4[\'aislands_summary_sha256\'])}; T {short(f4[\'tanzania_result_fingerprint\'])}",'
+          new_source = '"F4": f"A-limited {short(f4[\'aislands_summary_sha256\'])}; A-strong {short(f4[\'aislands_strong_reference_result_fingerprint\'])}; T {short(f4[\'tanzania_result_fingerprint\'])}",'
+          if old_source in text:
+              text = text.replace(old_source, new_source)
+          elif new_source not in text:
+              raise SystemExit('Figure 5 F4 provenance source is neither old nor finalized form')
+          old_caption = 'Figure 4 records the two benchmark projections;'
+          new_caption = 'Figure 4 records the limited- and strong-reference A-Islands evidence together with the Tanzania reference-boundary evidence;'
+          if old_caption in text:
+              text = text.replace(old_caption, new_caption)
+          elif new_caption not in text:
+              raise SystemExit('Figure 5 caption is neither old nor finalized form')
+          f5path.write_text(text)
+          PY
+          python figures/build_figure_5_audit.py
+
+      - name: Finalize submission manifest and remaining gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('manuscript/submission/submission_manifest.json')
+          m = json.loads(path.read_text())
+          assert m['frozen_evidence']['aislands_strong_reference_result_fingerprint'] == '5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a'
+          assert m['target_journal'] == 'Ecological Informatics'
+          m['submission_status'] = 'HOLD_HUMAN_POLICY_VISUAL_AND_RELEASE_GATES_ONLY'
+          m['title_status'] = 'scientifically_frozen_after_strong_reference_result'
+          m['figure_status'] = 'reference_depth_figures_frozen_pending_manual_visual_QA'
+          m['required_pre_submission_resolutions'] = [
+              'complete final Ecological Informatics live-policy verification and final visual QA',
+              'replace <RELEASE_TAG> and <ARCHIVE_DOI> only after the final package is frozen and a Zenodo DOI is reserved',
+              'complete author_metadata.template.json with author-approved metadata and remove placeholders in the final submission record',
+              'confirm author list, affiliations, corresponding author, contribution roles, funding, competing interests, ethics/permit applicability, originality and simultaneous-submission statements',
+              'recheck the selected journal\'s live generative-AI policy on submission day',
+              'confirm final figure file format/resolution requirements in the live submission system',
+          ]
+          path.write_text(json.dumps(m, indent=2, ensure_ascii=False) + '\n')
+
+          checklist = Path('manuscript/structural_submission_checklist.md')
+          text = checklist.read_text()
+          replacements = {
+              '- [ ] **Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3, retuning graph scales, changing taxa, or converting the adverse result into a rescue analysis.**': '- [x] **Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3, retuning graph scales, changing taxa, or converting the adverse result into a rescue analysis.**',
+              '- [ ] Introduction rewritten around the question **when occurrence-conditioned structural configuration earns an incremental held-out claim relative to the declared reference**, not around invention of connectivity or residual island novelty.': '- [x] Introduction rewritten around the question **when occurrence-conditioned structural configuration earns an incremental held-out claim relative to the declared reference**, not around invention of connectivity or residual island novelty.',
+              '- [ ] Original A-Islands conditional concordance and new A-Islands strong-reference predictive result explicitly separated as different estimands.': '- [x] Original A-Islands conditional concordance and new A-Islands strong-reference predictive result explicitly separated as different estimands.',
+              '- [ ] Discussion states that strong-reference failure is a valid output of the structural-adequacy diagnostic rather than evidence that connectivity is unimportant.': '- [x] Discussion states that strong-reference failure is a valid output of the structural-adequacy diagnostic rather than evidence that connectivity is unimportant.',
+              '- [ ] R1–R3 explanatory ladder is reported only as post-outcome interpretation of already-predeclared tiers; it must not replace the frozen `C − R3` endpoint.': '- [x] R1–R3 explanatory ladder is reported only as post-outcome interpretation of already-predeclared tiers; it must not replace the frozen `C − R3` endpoint.',
+              '- [ ] Carter et al. 2020, Weigelt & Kreft 2013, Long 2009, Sillero et al. 2018 and Daniel et al. 2023 retained to delimit island-isolation novelty, without implying that R3 causally explains the original concordance signal.': '- [x] Carter et al. 2020, Weigelt & Kreft 2013, Long 2009, Sillero et al. 2018 and Daniel et al. 2023 retained to delimit island-isolation novelty, with the post-outcome Long 2009 role correction explicit and without implying that R3 causally explains the original concordance signal.',
+              '- [ ] General connectivity precedents retained so the paper does not imply that suitability+connectivity integration, source-conditioned proximity, source-area weighting, threshold sensitivity, graph validation or connectivity uncertainty are novel.': '- [x] General connectivity precedents retained so the paper does not imply that suitability+connectivity integration, source-conditioned proximity, source-area weighting, threshold sensitivity, graph validation or connectivity uncertainty are novel.',
+              '- [ ] `manuscript/structural_verified_references.md` expanded/reverified for every citation retained in the final manuscript.': '- [x] `manuscript/structural_verified_references.md` expanded/reverified for the closest-prior and dataset citations retained in the final manuscript; final publisher-style formatting remains part of live journal preparation.',
+              '- [ ] A-Islands result figure reports **both** the original conditional-ordering result and the prospectively frozen strong-reference `C − R3` result, with distinct axes/labels so incompatible estimands are not visually compared as one effect size.': '- [x] Reference-depth Figure 4 reports **both** the original conditional-ordering result and the prospectively frozen strong-reference `C − R3` result, using separate metric cards so incompatible estimands are not visually compared as one effect size.',
+              '- [ ] Reference-tier panel reports R0/R1/R2/R3/C as explanatory context and marks `C − R3` as the only primary extension contrast.': '- [x] The R0/R1/R2/R3/C explanatory ladder is archived in `authoritative_outcome_qa.json` and manuscript prose; Figure 4 marks `C − R3` as the prospective strong-reference endpoint rather than presenting post-outcome tier selection.',
+              '- [ ] Tanzania retained as the external strong-reference boundary, with its spatial-block uncertainty visible.': '- [x] Tanzania retained as the external strong-reference boundary, with its spatial-block uncertainty visible.',
+              '- [ ] Final tables include 886/886 estimable species, 4231/4430 evaluable folds, 199 5/5 class-count failures, 712,515 held-out predictions, and the new result fingerprint.': '- [x] Final tables include 886/886 estimable species, 4231/4430 evaluable folds, 199 5/5 class-count failures, 712,515 held-out predictions, and the new result fingerprint.',
+              '- [ ] Final figures/tables generated from frozen extension artifacts with fresh sync/fingerprint tests.': '- [x] Final figures/tables generated from frozen extension artifacts with fresh sync/fingerprint tests.',
+              '- [ ] Clean-checkout command extended to verify final manuscript-facing projections including the new island result while never rerunning the one-time biological outcome.': '- [x] Clean-checkout command extended to verify final manuscript-facing projections including the new island result while never rerunning the one-time biological outcome.',
+              '- [ ] Final title fixed; current working title: **“When does landscape configuration add held-out information? An auditable reference-conditioned framework across islands and forest fragments.”**': '- [x] Final scientific title fixed: **“When does landscape configuration add held-out information? An auditable reference-conditioned framework across islands and forest fragments.”**',
+              '- [ ] Abstract rewritten around the reference-conditioned evidence boundary and checked against the live Ecological Informatics limit.': '- [x] Abstract rewritten around the reference-conditioned evidence boundary and retained within the project 250-word guard; live journal limit still requires submission-day verification.',
+              '- [ ] Highlights/keywords regenerated for Ecological Informatics.': '- [x] Highlights/keywords regenerated for the Ecological Informatics route.',
+              '- [ ] Cover letter rewritten around the positive conditional-ordering result plus adverse strong-reference tests, not a universal EOG improvement claim.': '- [x] Cover letter rewritten around the positive conditional-ordering result plus adverse strong-reference tests, not a universal EOG improvement claim.',
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'checklist anchor missing: {old[:100]}')
+              text = text.replace(old, new)
+          checklist.write_text(text)
+          PY
+
+      - name: Update Data/Code Availability and supplementary evidence list
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          availability = Path('manuscript/submission/data_code_availability.md')
+          text = availability.read_text()
+          block = """
+
+## Prospective A-Islands strong-reference extension
+
+The prospectively frozen island-isolation adequacy extension was executed exactly once at Git commit `a9329d929933c919fe6c1c03934f0314c40f5c50`, GitHub Actions run `31564146592`, attempt 1. Its authoritative result fingerprint is `5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a`. The repository retains the frozen aggregate result, execution provenance, independent QA, pre-outcome contract, authorization and geographic-input fingerprints under `validation/aislands_isolation_adequacy_20260812/`. The raw held-out predictions, fold applicability and species summaries were archived in workflow artifact `9128998976` and will be included in the final tagged archive. The one-time biological outcome workflow was removed after successful execution and is not rerun by the offline manuscript-package command.
+"""
+          if '## Prospective A-Islands strong-reference extension' not in text:
+              text += block
+          availability.write_text(text)
+
+          supplement = Path('manuscript/submission/supplementary_materials.md')
+          text = supplement.read_text()
+          block = """
+
+## Prospective A-Islands strong-reference evidence
+
+- pre-outcome island-isolation contract (`eog_aislands_isolation_adequacy_v1_3`);
+- frozen polygon-area and continental-mainland geometry/distance gates;
+- zero-outcome smoke validation record;
+- one-time execution authorization and provenance;
+- authoritative aggregate result and independent QA;
+- species-level summary, fold applicability and the compressed 712,515-row held-out prediction table from artifact `9128998976` in the final archive;
+- result fingerprint `5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a`;
+- post-outcome bibliographic correction record documenting the Long et al. (2009) citation-role correction without rewriting the historical pre-outcome contract.
+"""
+          if '## Prospective A-Islands strong-reference evidence' not in text:
+              text += block
+          supplement.write_text(text)
+          PY
+
+      - name: Rebuild result tables and verify no scientific drift
+        run: |
+          python manuscript/build_structural_results_tables.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json').read_text())
+          m = json.loads(Path('manuscript/result_tables/structural_results_tables_metadata.json').read_text())
+          assert r['result_fingerprint'] == m['aislands_strong_reference_result_fingerprint']
+          assert m['table_3_rows'] == 14
+          assert m['applicability_rows'] == 16
+          PY
+
+      - name: Run full package tests and offline submission rebuild
+        run: |
+          python -m pytest -q
+          python manuscript/build_structural_submission_package.py --output-dir build/structural_submission
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/structural_submission/submission_package_manifest.json').read_text())
+          assert p['aislands_strong_reference']['result_fingerprint'] == '5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a'
+          assert p['aislands_strong_reference']['rerun_allowed'] is False
+          assert p['tanzania']['result_fingerprint'] == '6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4'
+          PY
+
+      - name: Remove finalizer and any superseded one-time regeneration workflow
+        run: |
+          rm .github/workflows/finalize-strong-reference-submission-once.yml
+          rm -f .github/workflows/regenerate-figure4-reference-depth-once.yml
+
+      - name: Commit finalized submission-facing state
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Finalize strong-reference submission-facing package'
+          git push origin HEAD:agent/strong-reference-submission-finalization
