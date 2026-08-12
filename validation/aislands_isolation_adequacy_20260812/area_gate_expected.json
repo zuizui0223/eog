@@ -1,0 +1,38 @@
+{
+  "schema_version": "eog_aislands_polygon_area_gate_v1",
+  "status": "successful_outcome_free_geometry_gate",
+  "recorded_at_utc": "2026-08-12",
+  "workflow_run_id": 31557196980,
+  "workflow_head_sha": "f991605df55f00bb4a30492eed7d0ef0a28922ba",
+  "artifact_id": 9126401221,
+  "artifact_name": "aislands-isolation-adequacy-contract",
+  "artifact_digest": "sha256:3843358c64072f901022bd4b4188f518d928a0e674cbd77e6fd89d648e5b5e94",
+  "source": {
+    "aislands_record_id": 10775810,
+    "shapefile_type": "POLYGON",
+    "shapefile_record_count": 887,
+    "surveyed_islands": 842,
+    "shp_sha256": "5d79c86181abd3db43690e0832962ca518339b350465c5d87bb066695711d251",
+    "shx_sha256": "3d5a60a0057cf4476a25ae2e69fc12146a082f82dc9c8b798300544026312d4d",
+    "dbf_sha256": "75210dad46b516a3ff93168e9569910169dd5f0c946da4666970792d46b5e4ee",
+    "prj_sha256": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+    "island_audit_csv_sha256": "3a069f208e1ce7222176ccba3fc334da302c135725c9e88ce41d84f93d900fc4"
+  },
+  "derived_area": {
+    "finite_positive_islands": 842,
+    "failed_islands": 0,
+    "minimum_km2": 0.00001764188034259637,
+    "q25_km2": 0.008780618739523507,
+    "median_km2": 0.08532735700876617,
+    "q75_km2": 0.5751578837168906,
+    "maximum_km2": 4399.206032443962,
+    "method": "spherical Lambert azimuthal equal-area per island; signed polygon rings; Earth radius 6371.0088 km",
+    "area_table_sha256": "496789783a98e55e1b9552f6f6d28e7b4567ef0f52c795657c7e2fea9c60aae2"
+  },
+  "gate_passes": true,
+  "species_outcomes_used": false,
+  "sdm_outputs_used": false,
+  "eog_outputs_used": false,
+  "timing_label": "geometry gate inspected after the isolation-adequacy formulas were committed, before any extension species outcome",
+  "next_rule": "Every future island-isolation outcome run must rederive the 842-row area table from the same A-Islands v1.0 shapefile and hard-fail unless its SHA-256 equals 496789783a98e55e1b9552f6f6d28e7b4567ef0f52c795657c7e2fea9c60aae2."
+}
