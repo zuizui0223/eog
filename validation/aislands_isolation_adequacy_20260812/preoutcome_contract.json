@@ -1,8 +1,16 @@
 {
-  "schema_version": "eog_aislands_isolation_adequacy_v1",
+  "schema_version": "eog_aislands_isolation_adequacy_v1_1",
   "frozen_date": "2026-08-12",
   "outcomes_inspected_for_this_extension": false,
-  "scientific_question": "Does species-conditioned archipelago configuration retain held-out incidence information after local climate, island area, nearest source distance, multi-source pressure, and species-independent archipelago geometry are represented?",
+  "amendments": [
+    {
+      "revision": "1.1",
+      "timing": "after the outcome-free A-Islands polygon-area gate, before any extension species outcome",
+      "change": "add a fixed continental-mainland distance baseline so the primary island-biogeography reference includes classical mainland isolation",
+      "species_outcomes_inspected": false
+    }
+  ],
+  "scientific_question": "Does species-conditioned archipelago configuration retain held-out incidence information after local climate, island area, continental-mainland distance, nearest source distance, multi-source pressure, and species-independent archipelago geometry are represented?",
   "upstream_frozen": {
     "aislands_record": 10775810,
     "surveyed_islands": 842,
@@ -20,15 +28,25 @@
     "external_area_sources_allowed": false,
     "outcome_run_allowed_if_gate_fails": false
   },
+  "mainland_gate": {
+    "source": "Natural Earth 1:10m Admin-0 Countries, official current release 5.1.1 at contract revision",
+    "download_url": "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip",
+    "required_version": "5.1.1",
+    "australia_feature_rule": "select exactly one Australia Admin-0 feature, then select its polygon ring with largest absolute spherical area as continental mainland",
+    "distance_rule": "minimum spherical point-to-minor-great-circle-segment distance from frozen A-Islands centroid to the selected mainland coastline ring",
+    "heldout_or_species_labels_used": false,
+    "outcome_run_allowed_if_gate_fails": false
+  },
   "scales_km": [25.0, 50.0, 125.0, 250.0],
   "reference_tiers": {
     "R0": ["bio1", "bio5", "bio6", "bio12", "bio15"],
-    "R1": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "nearest_training_presence_km"],
-    "R2": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "nearest_training_presence_km", "multi_source_pressure"],
-    "R3": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "nearest_training_presence_km", "multi_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "unanchored_component_exposure"],
-    "C": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "nearest_training_presence_km", "multi_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "unanchored_component_exposure", "geography_only_eog_connected_frequency"]
+    "R1": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km"],
+    "R2": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure"],
+    "R3": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "unanchored_component_exposure"],
+    "C": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "unanchored_component_exposure", "geography_only_eog_connected_frequency"]
   },
   "feature_rules": {
+    "distance_to_australia_mainland_km": "species-independent table frozen from Natural Earth 1:10m v5.1.1 continental-mainland ring before any extension species outcome",
     "multi_source_pressure": "mean_s log(1 + sum_{training presence a != focal} exp(-distance(focal,a)/s))",
     "surrounding_island_pressure": "mean_s log(1 + sum_{j != focal} exp(-distance(focal,j)/s))",
     "unanchored_component_exposure": "mean_s ((component_size(focal,s)-1)/(N-1))",
@@ -59,6 +77,7 @@
     "change geographic scales",
     "choose a subset of source-pressure scales",
     "drop area after seeing its effect",
+    "drop mainland distance after seeing its effect",
     "replace R3 primary contrast with a weaker reference",
     "select favourable taxa",
     "introduce species-specific radii from current outcomes",
