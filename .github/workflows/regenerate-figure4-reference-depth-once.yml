@@ -1,3 +1,4 @@
+# One-time presentation regeneration trigger. Scientific values are frozen upstream.
 name: Regenerate reference-depth Figure 4 and audit once
 
 on:
