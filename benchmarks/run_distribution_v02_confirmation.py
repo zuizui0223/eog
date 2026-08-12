@@ -1,14 +1,15 @@
 """Prospectively frozen independent synthetic confirmation for EOG v0.2.
 
-The runner is inert while the machine-readable confirmation contract has
-``execution_authorized=false``. ``--validate-only`` checks seed separation, model
-identity, source Git-blob hashes, and promotion-gate completeness without generating
-any confirmation labels or fitted outcomes.
+The scientific contract itself remains immutable with ``execution_authorized=false``.
+A separate authorization file may later enable the first confirmation execution only
+when it hard-matches the frozen contract Git-blob SHA. ``--validate-only`` checks seed
+separation, model identity, source Git-blob hashes, and promotion-gate completeness
+without generating any confirmation labels or fitted outcomes.
 
-Once authorization is explicitly changed to true, the runner executes exactly the
-frozen 12-seed x 6-regime design with the fixed alpha=0.125 structural ensemble. No
-model family, alpha, generator, comparator, or gate is selected from confirmation
-outcomes.
+Once a matching authorization is explicitly changed to true, the runner executes
+exactly the frozen 12-seed x 6-regime design with the fixed alpha=0.125 structural
+ensemble. No model family, alpha, generator, comparator, or gate is selected from
+confirmation outcomes.
 """
 from __future__ import annotations
 
@@ -36,6 +37,9 @@ from benchmarks.distribution_model_noisy_regimes import (
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONTRACT = ROOT / "benchmarks" / "distribution_v02_confirmation_contract.json"
+DEFAULT_AUTHORIZATION = (
+    ROOT / "benchmarks" / "distribution_v02_confirmation_authorization.json"
+)
 
 
 def _log_loss(labels: np.ndarray, scores: np.ndarray) -> float:
@@ -67,6 +71,13 @@ def load_contract(path: Path = DEFAULT_CONTRACT) -> dict[str, Any]:
     return payload
 
 
+def load_authorization(path: Path = DEFAULT_AUTHORIZATION) -> dict[str, Any]:
+    payload = json.loads(Path(path).read_text())
+    if payload.get("schema_version") != "eog_distribution_v02_confirmation_authorization_v1":
+        raise ValueError("unexpected v0.2 confirmation authorization schema")
+    return payload
+
+
 def validate_contract(contract: dict[str, Any]) -> dict[str, Any]:
     development = tuple(int(value) for value in contract["development_seeds_excluded"])
     confirmation = tuple(int(value) for value in contract["confirmation_seeds"])
@@ -86,6 +97,10 @@ def validate_contract(contract: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("confirmation stack_weight must remain 0.125")
     if candidate["formula"] != "D = 0.875 * D_probability_gate + 0.125 * D_cross_fitted_stack":
         raise ValueError("confirmation ensemble formula drifted")
+    if contract.get("execution_authorized") is not False:
+        raise ValueError(
+            "scientific confirmation contract must remain immutable with execution_authorized=false"
+        )
 
     gate = contract["promotion_gates"]
     required_gate_keys = {
@@ -122,7 +137,7 @@ def validate_contract(contract: dict[str, Any]) -> dict[str, Any]:
 
     return {
         "schema": "eog_distribution_v02_confirmation_validation_v1",
-        "execution_authorized": bool(contract["execution_authorized"]),
+        "scientific_contract_execution_authorized": bool(contract["execution_authorized"]),
         "development_confirmation_seed_overlap": 0,
         "n_confirmation_seeds": len(confirmation),
         "n_regimes": len(regimes),
@@ -134,9 +149,34 @@ def validate_contract(contract: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def run_confirmation(contract: dict[str, Any]) -> dict[str, Any]:
+def validate_authorization(
+    contract_path: Path,
+    authorization: dict[str, Any],
+) -> dict[str, Any]:
+    observed_contract_blob = _git_blob_sha(Path(contract_path))
+    expected_contract_blob = str(authorization["expected_contract_git_blob_sha"])
+    matches = observed_contract_blob == expected_contract_blob
+    if not matches:
+        raise ValueError("confirmation authorization does not match frozen contract Git blob")
+    return {
+        "schema": "eog_distribution_v02_authorization_validation_v1",
+        "execution_authorized": bool(authorization["execution_authorized"]),
+        "expected_contract_git_blob_sha": expected_contract_blob,
+        "observed_contract_git_blob_sha": observed_contract_blob,
+        "contract_matches": matches,
+        "valid": True,
+    }
+
+
+def run_confirmation(
+    contract: dict[str, Any],
+    authorization: dict[str, Any],
+    *,
+    contract_path: Path = DEFAULT_CONTRACT,
+) -> dict[str, Any]:
     validation = validate_contract(contract)
-    if not contract["execution_authorized"]:
+    authorization_validation = validate_authorization(contract_path, authorization)
+    if not authorization_validation["execution_authorized"]:
         raise RuntimeError(
             "v0.2 confirmation execution is not authorized; validate-only mode is permitted"
         )
@@ -147,6 +187,8 @@ def run_confirmation(contract: dict[str, Any]) -> dict[str, Any]:
     per_regime: dict[str, list[dict[str, Any]]] = {regime: [] for regime in REGIMES}
     integrity = {
         "contract_validated": validation["valid"],
+        "authorization_validated": authorization_validation["valid"],
+        "authorization_contract_match": authorization_validation["contract_matches"],
         "development_confirmation_seed_overlap_zero": set(DEVELOPMENT_SEEDS).isdisjoint(seeds),
         "all_target_labels_held_out": True,
         "all_probability_models_cross_fitted": True,
@@ -285,13 +327,26 @@ def run_confirmation(contract: dict[str, Any]) -> dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT)
+    parser.add_argument("--authorization", type=Path, default=DEFAULT_AUTHORIZATION)
     parser.add_argument("--validate-only", action="store_true")
     args = parser.parse_args()
     contract = load_contract(args.contract)
     if args.validate_only:
-        print(json.dumps(validate_contract(contract), indent=2, sort_keys=True))
+        payload = {
+            "contract": validate_contract(contract),
+        }
+        if args.authorization.exists():
+            payload["authorization"] = validate_authorization(
+                args.contract, load_authorization(args.authorization)
+            )
+        print(json.dumps(payload, indent=2, sort_keys=True))
         return
-    result = run_confirmation(contract)
+    authorization = load_authorization(args.authorization)
+    result = run_confirmation(
+        contract,
+        authorization,
+        contract_path=args.contract,
+    )
     print(json.dumps(result, indent=2, sort_keys=True))
 
 
