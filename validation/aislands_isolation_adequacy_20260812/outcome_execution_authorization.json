@@ -21,6 +21,21 @@
     "island_area": "496789783a98e55e1b9552f6f6d28e7b4567ef0f52c795657c7e2fea9c60aae2",
     "mainland_distance": "7d6f52f03702dd0cfae061023a1b2f405e39397de73eaad21b97d24176c4f869"
   },
+  "preoutcome_smoke_gate": {
+    "workflow_run_id": 31563715669,
+    "head_sha": "ef11c1495d0eeb4c71c98eb9261f9856d22d824a",
+    "artifact_id": 9128779356,
+    "artifact_digest": "sha256:3b27dbac084ca79b88ecfd55b4477f2d83e6464122b9931c031a28e196928f4e",
+    "islands": 842,
+    "taxa": 886,
+    "folds": 5,
+    "presence_count_min": 10,
+    "presence_count_median": 18,
+    "presence_count_max": 303,
+    "models_fitted": 0,
+    "heldout_predictions_scored": 0,
+    "c_minus_r3_inspected": false
+  },
   "heldout_labels_may_construct_features": false,
   "training_presence_self_anchor_excluded": true,
   "postoutcome_reference_changes_allowed": false,
