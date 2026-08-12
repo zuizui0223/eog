@@ -19,6 +19,8 @@ on:
       - "benchmarks/dynamic_archipelago_neutral_genetics.py"
       - "benchmarks/dynamic_archipelago_reference_depth.py"
       - "benchmarks/dynamic_archipelago_ibe_boundary.py"
+      - "benchmarks/dynamic_occurrence_comparator_ladder.py"
+      - "docs/eog_v2_occurrence_comparator_contract.md"
       - ".github/workflows/dynamic-island-reachability.yml"
   workflow_dispatch:
 
@@ -28,7 +30,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -62,6 +64,11 @@ jobs:
         run: |
           python benchmarks/dynamic_archipelago_ibe_boundary.py \
             > benchmark_results/dynamic_island_reachability/ibe_boundary.json
+      - name: Run prospective occurrence comparator confirmation
+        run: |
+          python benchmarks/dynamic_occurrence_comparator_ladder.py \
+            --phase confirmation \
+            --output benchmark_results/dynamic_island_reachability/occurrence_comparator_confirmation.json
       - name: Check benchmark contracts
         run: |
           python - <<'PY'
@@ -73,6 +80,7 @@ jobs:
           genetics = json.loads((root / "neutral_genetics.json").read_text())
           reference_depth = json.loads((root / "reference_depth.json").read_text())
           ibe_boundary = json.loads((root / "ibe_boundary.json").read_text())
+          occurrence = json.loads((root / "occurrence_comparator_confirmation.json").read_text())
 
           scenarios = reachability["scenarios"]
           assert scenarios["open_chain"]["horizon_first_passage_support"] > scenarios["bottleneck"]["horizon_first_passage_support"] > 0
@@ -99,9 +107,14 @@ jobs:
           assert ibe_boundary["mean_geo_env_current_flow_mse"] < ibe_boundary["mean_ibd_ibe_mse"]
           assert ibe_boundary["mean_eog_increment_over_strong_reference"] >= 0
           assert ibe_boundary["eog_added_information_beyond_strong_reference"] is False
+
+          assert occurrence["contract"]["confirmation_seeds"] == [907, 1009, 1103, 1201, 1301, 1409, 1511, 1601]
+          assert occurrence["contract_fingerprint"] == "1b2c5e550019c1e73e8f7199dfcc952dfeed3bbbbc3232d173e811fcd21438e6"
+          assert occurrence["decision"]["passed"] is True
+          assert all(check["passed"] for check in occurrence["decision"]["checks"].values())
           PY
       - name: Upload outputs
-        if: success()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: dynamic-island-reachability-validation
