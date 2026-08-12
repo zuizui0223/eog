@@ -1,5 +1,5 @@
 {
-  "schema_version": "eog_aislands_isolation_adequacy_v1_1",
+  "schema_version": "eog_aislands_isolation_adequacy_v1_2",
   "frozen_date": "2026-08-12",
   "outcomes_inspected_for_this_extension": false,
   "amendments": [
@@ -8,9 +8,15 @@
       "timing": "after the outcome-free A-Islands polygon-area gate, before any extension species outcome",
       "change": "add a fixed continental-mainland distance baseline so the primary island-biogeography reference includes classical mainland isolation",
       "species_outcomes_inspected": false
+    },
+    {
+      "revision": "1.2",
+      "timing": "after the outcome-free polygon-area gate and closest-prior audit, before any extension species outcome",
+      "change": "add area-weighted occupied-source pressure and area-weighted surrounding-landmass pressure so the primary reference addresses source size and established surrounding-land-area isolation information",
+      "species_outcomes_inspected": false
     }
   ],
-  "scientific_question": "Does species-conditioned archipelago configuration retain held-out incidence information after local climate, island area, continental-mainland distance, nearest source distance, multi-source pressure, and species-independent archipelago geometry are represented?",
+  "scientific_question": "Does species-conditioned archipelago configuration retain held-out incidence information after local climate, island area, continental-mainland distance, direct and area-weighted species-source pressure, and species-independent archipelago geometry and surrounding landmass are represented?",
   "upstream_frozen": {
     "aislands_record": 10775810,
     "surveyed_islands": 842,
@@ -32,7 +38,7 @@
     "source": "Natural Earth 1:10m Admin-0 Countries, official current release 5.1.1 at contract revision",
     "download_url": "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip",
     "required_version": "5.1.1",
-    "australia_feature_rule": "select exactly one Australia Admin-0 feature, then select its polygon ring with largest absolute spherical area as continental mainland",
+    "australia_feature_rule": "select exactly one country feature with ADMIN=Australia and ADM0_A3=AUS, then select its polygon ring with largest absolute spherical area as continental mainland",
     "distance_rule": "minimum spherical point-to-minor-great-circle-segment distance from frozen A-Islands centroid to the selected mainland coastline ring",
     "heldout_or_species_labels_used": false,
     "outcome_run_allowed_if_gate_fails": false
@@ -41,14 +47,16 @@
   "reference_tiers": {
     "R0": ["bio1", "bio5", "bio6", "bio12", "bio15"],
     "R1": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km"],
-    "R2": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure"],
-    "R3": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "unanchored_component_exposure"],
-    "C": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "unanchored_component_exposure", "geography_only_eog_connected_frequency"]
+    "R2": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure"],
+    "R3": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "surrounding_landmass_pressure", "unanchored_component_exposure"],
+    "C": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "surrounding_landmass_pressure", "unanchored_component_exposure", "geography_only_eog_connected_frequency"]
   },
   "feature_rules": {
     "distance_to_australia_mainland_km": "species-independent table frozen from Natural Earth 1:10m v5.1.1 continental-mainland ring before any extension species outcome",
     "multi_source_pressure": "mean_s log(1 + sum_{training presence a != focal} exp(-distance(focal,a)/s))",
+    "area_weighted_source_pressure": "mean_s log(1 + sum_{training presence a != focal} area_km2(a) * exp(-distance(focal,a)/s))",
     "surrounding_island_pressure": "mean_s log(1 + sum_{j != focal} exp(-distance(focal,j)/s))",
+    "surrounding_landmass_pressure": "mean_s log(1 + sum_{j != focal} area_km2(j) * exp(-distance(focal,j)/s))",
     "unanchored_component_exposure": "mean_s ((component_size(focal,s)-1)/(N-1))",
     "geography_only_eog_connected_frequency": "fraction of frozen geographic-radius graphs where focal component contains at least one outer-training presence other than focal",
     "training_row_self_anchor_exclusion": true,
@@ -78,6 +86,8 @@
     "choose a subset of source-pressure scales",
     "drop area after seeing its effect",
     "drop mainland distance after seeing its effect",
+    "drop area-weighted source pressure after seeing its effect",
+    "drop surrounding-landmass pressure after seeing its effect",
     "replace R3 primary contrast with a weaker reference",
     "select favourable taxa",
     "introduce species-specific radii from current outcomes",
