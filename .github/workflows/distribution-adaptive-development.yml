@@ -8,6 +8,7 @@ on:
       - "src/eog/distribution_stack.py"
       - "benchmarks/distribution_model_noisy_regimes.py"
       - "benchmarks/distribution_adaptive_development.py"
+      - "benchmarks/distribution_adaptive_margin_screen.py"
       - "tests/test_distribution_adaptive.py"
       - ".github/workflows/distribution-adaptive-development.yml"
   workflow_dispatch:
@@ -26,18 +27,26 @@ jobs:
         run: python -m pytest tests/test_distribution_adaptive.py -q
       - name: Run adaptive noisy development screen
         run: python benchmarks/distribution_adaptive_development.py > adaptive-development.json
-      - name: Show adaptive summary
+      - name: Run finite complexity-margin screen
+        run: python benchmarks/distribution_adaptive_margin_screen.py > adaptive-margin-screen.json
+      - name: Show adaptive summaries
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          result = json.loads(Path("adaptive-development.json").read_text())
+          development = json.loads(Path("adaptive-development.json").read_text())
+          margins = json.loads(Path("adaptive-margin-screen.json").read_text())
           print(json.dumps({
-              "schema": result["schema"],
-              "status": result["status"],
-              "selection_rule": result["selection_rule"],
-              "integrity": result["integrity_checks"],
-              "summary": result["summary"],
+              "schema": development["schema"],
+              "status": development["status"],
+              "selection_rule": development["selection_rule"],
+              "integrity": development["integrity_checks"],
+              "summary": development["summary"],
+              "margin_screen": {
+                  "n_pairs": margins["n_pairs"],
+                  "n_eligible_pairs": margins["n_eligible_pairs"],
+                  "recommended_pair": margins["recommended_pair"],
+              },
           }, indent=2, sort_keys=True))
           PY
       - name: Verify development boundary
@@ -45,14 +54,20 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          result = json.loads(Path("adaptive-development.json").read_text())
-          assert result["status"] == "development_screen_not_confirmation"
-          assert result["all_integrity_checks_pass"] is True
-          assert result["selection_rule"]["complexity_tie_break"] == [
+          development = json.loads(Path("adaptive-development.json").read_text())
+          margins = json.loads(Path("adaptive-margin-screen.json").read_text())
+          assert development["status"] == "development_screen_not_confirmation"
+          assert development["all_integrity_checks_pass"] is True
+          assert development["selection_rule"]["complexity_tie_break"] == [
               "environmental", "probability_gate", "stacked"
           ]
+          assert margins["status"] == "development_screen_not_confirmation"
+          assert margins["n_pairs"] == 54
+          assert margins["recommended_pair"] is not None
           PY
       - uses: actions/upload-artifact@v4
         with:
           name: eog-adaptive-distribution-development
-          path: adaptive-development.json
+          path: |
+            adaptive-development.json
+            adaptive-margin-screen.json
