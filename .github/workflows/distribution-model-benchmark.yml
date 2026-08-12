@@ -7,9 +7,11 @@ on:
       - "src/eog/__init__.py"
       - "benchmarks/distribution_model_heldout_benchmark.py"
       - "benchmarks/distribution_structural_discrimination.py"
+      - "benchmarks/distribution_gate_shrinkage.py"
       - "tests/test_distribution_model.py"
       - "tests/test_distribution_model_heldout_benchmark.py"
       - "tests/test_distribution_structural_discrimination.py"
+      - "tests/test_distribution_gate_shrinkage.py"
       - ".github/workflows/distribution-model-benchmark.yml"
   workflow_dispatch:
 
@@ -25,22 +27,33 @@ jobs:
         run: python -m pip install .
       - name: Run structural discrimination contract
         run: python benchmarks/distribution_structural_discrimination.py > distribution-structural-discrimination.json
-      - name: Run held-out ranking benchmark
+      - name: Run held-out gate-activation benchmark
         run: python benchmarks/distribution_model_heldout_benchmark.py > distribution-heldout-ranking.json
-      - name: Show held-out result
-        run: cat distribution-heldout-ranking.json
-      - name: Verify result contract
+      - name: Run environmental fallback benchmark
+        run: python benchmarks/distribution_gate_shrinkage.py > distribution-gate-shrinkage.json
+      - name: Show benchmark results
+        run: |
+          cat distribution-heldout-ranking.json
+          cat distribution-gate-shrinkage.json
+      - name: Verify result contracts
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
 
-          result = json.loads(Path("distribution-heldout-ranking.json").read_text())
-          assert result["all_checks_pass"] is True
-          assert result["auc"]["environmental_support"] == 0.5
-          assert result["auc"]["environmental_plus_nearest_source"] == 0.5
-          assert result["auc"]["structural_accessibility"] == 1.0
-          assert result["auc"]["eog_distribution_support"] == 1.0
+          structural = json.loads(Path("distribution-heldout-ranking.json").read_text())
+          assert structural["all_checks_pass"] is True
+          assert structural["structural_gate_weight"] >= 0.5
+          assert structural["auc"]["environmental_support"] == 0.5
+          assert structural["auc"]["environmental_plus_nearest_source"] == 0.5
+          assert structural["auc"]["structural_accessibility"] == 1.0
+          assert structural["auc"]["eog_distribution_support"] == 1.0
+
+          fallback = json.loads(Path("distribution-gate-shrinkage.json").read_text())
+          assert fallback["all_checks_pass"] is True
+          assert fallback["structural_gate_weight"] == 0.0
+          assert fallback["auc"]["environmental_support"] == 1.0
+          assert fallback["auc"]["eog_distribution_support"] == 1.0
           PY
       - uses: actions/upload-artifact@v4
         with:
@@ -48,3 +61,4 @@ jobs:
           path: |
             distribution-structural-discrimination.json
             distribution-heldout-ranking.json
+            distribution-gate-shrinkage.json
