@@ -16,11 +16,18 @@ and are not scored as family-selection targets. The remaining candidate rows are
 cross-fitted. Each structural candidate also performs its own inner cross-fitting of
 environmental support and occurrence-source accessibility using ``gate_fold_ids``.
 
-The untouched outer test therefore participates in neither source construction, fusion
-fitting, nor candidate-family selection. The primary family-selection score is
-Bernoulli log loss. If candidates are tied within ``selection_tolerance``, the simpler
-family wins in the order above. Ordinary environmental SDM behavior is consequently an
-explicit member of the EOG model class.
+When a structural candidate cannot satisfy its predeclared class-count gate inside a
+small nested selection fold, that fold does not become post-hoc evidence for weakening
+the gate. Instead, the candidate conservatively falls back to the environmental
+prediction for that fold and the fallback is counted in its selection audit. A
+structural family can therefore win only by improving the folds where it is actually
+estimable.
+
+The untouched outer test participates in neither source construction, fusion fitting,
+nor candidate-family selection. The primary family-selection score is Bernoulli log
+loss. If candidates are tied within ``selection_tolerance``, the simpler family wins in
+the order above. Ordinary environmental SDM behavior is consequently an explicit
+member of the EOG model class.
 """
 from __future__ import annotations
 
@@ -46,7 +53,7 @@ from .distribution_stack import (
     EOGStackedFusionConfig,
     fit_eog_stacked_distribution,
 )
-from .support_model import fit_penalized_logistic_support
+from .support_model import SupportModelError, fit_penalized_logistic_support
 
 
 ADAPTIVE_FAMILIES = ("environmental", "probability_gate", "stacked")
@@ -75,6 +82,7 @@ class AdaptiveCandidateScore:
     family: str
     log_loss: float
     n_predictions: int
+    fallback_folds: int
 
 
 @dataclass(frozen=True)
@@ -94,6 +102,10 @@ class AdaptiveEOGDistributionModel:
     @property
     def candidate_log_loss(self) -> dict[str, float]:
         return {item.family: item.log_loss for item in self.candidate_scores}
+
+    @property
+    def candidate_fallback_folds(self) -> dict[str, int]:
+        return {item.family: item.fallback_folds for item in self.candidate_scores}
 
     def predict(self, node_ids: Sequence[str] | None = None) -> EOGDistributionPrediction:
         if node_ids is None:
@@ -148,7 +160,8 @@ def _normalize_fixed_sources(
             "selection_fixed_source_ids must be positive outer-training observations: "
             f"{nonpositive}"
         )
-    mask = np.asarray([node_id in set(fixed) for node_id in observed_ids], dtype=bool)
+    fixed_set = set(fixed)
+    mask = np.asarray([node_id in fixed_set for node_id in observed_ids], dtype=bool)
     return fixed, mask
 
 
@@ -183,7 +196,7 @@ def _candidate_selection_predictions(
     support_predictors: np.ndarray | None,
     barriers: Mapping[tuple[str, str], float] | None,
     reference_provenance: str,
-) -> tuple[dict[str, np.ndarray], np.ndarray]:
+) -> tuple[dict[str, np.ndarray], np.ndarray, dict[str, int]]:
     selection_array = np.asarray(selection_folds, dtype=object)
     gate_array = np.asarray(gate_folds, dtype=object)
     eligible = ~np.asarray(fixed_mask, dtype=bool)
@@ -196,6 +209,7 @@ def _candidate_selection_predictions(
         family: np.full(len(observed_ids), np.nan, dtype=float)
         for family in ADAPTIVE_FAMILIES
     }
+    fallback_folds = {family: 0 for family in ADAPTIVE_FAMILIES}
     probability_config = replace(config.base_config, structural_gate_weight=None)
 
     for selection_fold in eligible_folds:
@@ -214,7 +228,7 @@ def _candidate_selection_predictions(
             node_id for node_id, keep in zip(observed_ids, test_mask) if keep
         )
 
-        predictions["environmental"][test_mask] = _environmental_selection_prediction(
+        environmental_prediction = _environmental_selection_prediction(
             predictors,
             observed_rows,
             response,
@@ -222,49 +236,62 @@ def _candidate_selection_predictions(
             test_mask,
             probability_config,
         )
+        predictions["environmental"][test_mask] = environmental_prediction
 
-        probability_model = fit_eog_distribution(
-            landscape_nodes,
-            train_ids,
-            train_response,
-            probability_config,
-            support_predictors=support_predictors,
-            barriers=barriers,
-            gate_fold_ids=train_gate_folds,
-            reference_provenance=(
-                f"{reference_provenance}; adaptive selection {selection_fold}; probability"
-            ),
-        )
-        predictions["probability_gate"][test_mask] = probability_model.predict(
-            test_ids
-        ).distribution_support
+        try:
+            probability_model = fit_eog_distribution(
+                landscape_nodes,
+                train_ids,
+                train_response,
+                probability_config,
+                support_predictors=support_predictors,
+                barriers=barriers,
+                gate_fold_ids=train_gate_folds,
+                reference_provenance=(
+                    f"{reference_provenance}; adaptive selection {selection_fold}; probability"
+                ),
+            )
+        except SupportModelError:
+            predictions["probability_gate"][test_mask] = environmental_prediction
+            fallback_folds["probability_gate"] += 1
+        else:
+            predictions["probability_gate"][test_mask] = probability_model.predict(
+                test_ids
+            ).distribution_support
 
-        stacked_model = fit_eog_stacked_distribution(
-            landscape_nodes,
-            train_ids,
-            train_response,
-            EOGStackedFusionConfig(
-                base_config=probability_config,
-                fusion_l2_penalty=config.stacked_fusion_l2_penalty,
-            ),
-            support_predictors=support_predictors,
-            barriers=barriers,
-            gate_fold_ids=train_gate_folds,
-            reference_provenance=(
-                f"{reference_provenance}; adaptive selection {selection_fold}; stacked"
-            ),
-        )
-        stacked_prediction = stacked_model.predict(test_ids).distribution_support
-        if not stacked_model.structural_fusion_present:
-            # A nonstructural stack is the same family as the environmental candidate;
-            # do not let a second response recalibration masquerade as structural gain.
-            stacked_prediction = predictions["environmental"][test_mask].copy()
-        predictions["stacked"][test_mask] = stacked_prediction
+        try:
+            stacked_model = fit_eog_stacked_distribution(
+                landscape_nodes,
+                train_ids,
+                train_response,
+                EOGStackedFusionConfig(
+                    base_config=probability_config,
+                    fusion_l2_penalty=config.stacked_fusion_l2_penalty,
+                ),
+                support_predictors=support_predictors,
+                barriers=barriers,
+                gate_fold_ids=train_gate_folds,
+                reference_provenance=(
+                    f"{reference_provenance}; adaptive selection {selection_fold}; stacked"
+                ),
+            )
+        except SupportModelError:
+            predictions["stacked"][test_mask] = environmental_prediction
+            fallback_folds["stacked"] += 1
+        else:
+            stacked_prediction = stacked_model.predict(test_ids).distribution_support
+            if not stacked_model.structural_fusion_present:
+                # A nonstructural stack is the same family as the environmental
+                # candidate; do not let a second response recalibration masquerade as
+                # evidence for source-conditioned structure.
+                stacked_prediction = environmental_prediction.copy()
+                fallback_folds["stacked"] += 1
+            predictions["stacked"][test_mask] = stacked_prediction
 
     for family, values in predictions.items():
         if not np.isfinite(values[eligible]).all():
             raise ValueError(f"adaptive selection produced non-finite {family} predictions")
-    return predictions, eligible
+    return predictions, eligible, fallback_folds
 
 
 def _select_family(
@@ -272,6 +299,7 @@ def _select_family(
     predictions: Mapping[str, np.ndarray],
     selection_mask: np.ndarray,
     tolerance: float,
+    fallback_folds: Mapping[str, int],
 ) -> tuple[str, tuple[AdaptiveCandidateScore, ...]]:
     mask = np.asarray(selection_mask, dtype=bool)
     if not mask.any():
@@ -281,6 +309,7 @@ def _select_family(
             family=family,
             log_loss=_binary_log_loss(response[mask], predictions[family][mask]),
             n_predictions=int(np.sum(mask)),
+            fallback_folds=int(fallback_folds.get(family, 0)),
         )
         for family in ADAPTIVE_FAMILIES
     )
@@ -391,7 +420,7 @@ def fit_adaptive_eog_distribution(
     )
     observed_rows = np.asarray([node_index[node_id] for node_id in observed_ids], dtype=int)
 
-    selection_predictions, selection_mask = _candidate_selection_predictions(
+    selection_predictions, selection_mask, fallback_folds = _candidate_selection_predictions(
         landscape_nodes,
         observed_ids,
         y,
@@ -410,6 +439,7 @@ def fit_adaptive_eog_distribution(
         selection_predictions,
         selection_mask,
         config.selection_tolerance,
+        fallback_folds,
     )
     prediction, final_model_fingerprint = _fit_final_family(
         selected_family,
@@ -424,7 +454,7 @@ def fit_adaptive_eog_distribution(
     )
 
     payload = {
-        "schema": "adaptive_eog_distribution_v0_2",
+        "schema": "adaptive_eog_distribution_v0_3",
         "config": asdict(config),
         "selected_family": selected_family,
         "candidate_scores": [asdict(item) for item in candidate_scores],
