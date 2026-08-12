@@ -17,6 +17,7 @@ This ledger tracks the separate dynamic island-reachability development line. It
 - [x] Exact-eventual first-passage implementation for horizon-free long-term genetic development.
 - [x] Directional-FST boundary demonstrated in development: asymmetric migration is not automatically recoverable from symmetric pairwise FST.
 - [x] Hyperparameter-free FST-oriented EOG candidate implemented: reciprocal arithmetic-mean eventual support + continuous distance + explicit bidirectional-disconnection indicator.
+- [x] Nested source-expansion leakage audit implemented with outer-test label invariance and inner self-exclusion contracts.
 
 ## Frozen fixed-source occurrence confirmation
 
@@ -39,7 +40,7 @@ The current FST-oriented candidate consequently has no horizon, no numerical zer
 - [ ] finish CI validation of the hyperparameter-free eventual genetic candidate;
 - [ ] freeze its fresh synthetic confirmation contract on unused seeds;
 - [ ] execute the one-time synthetic genetic confirmation;
-- [ ] nested self-excluded source-set expansion sensitivity;
+- [ ] inspect nested source-expansion development performance after leakage audit passes;
 - [ ] dynamic-occupancy comparator where repeated incidence supports it;
 - [ ] independently frozen empirical occurrence benchmark;
 - [ ] independent empirical genetic validation;
