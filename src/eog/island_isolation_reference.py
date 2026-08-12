@@ -1,15 +1,16 @@
 """Leakage-safe reference features for the A-Islands isolation-adequacy extension.
 
 The feature family is frozen by
-``docs/aislands_isolation_adequacy_preoutcome_contract.md``.  It deliberately
+``docs/aislands_isolation_adequacy_preoutcome_contract.md``. It deliberately
 separates direct source proximity, multi-source pressure, source landmass,
-species-independent archipelago geometry, and species-conditioned EOG reachability.
+species-independent archipelago isolation, and species-conditioned EOG reachability.
 
 None of these quantities is a dispersal or colonisation probability.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 from typing import Sequence
 
 import numpy as np
@@ -18,6 +19,7 @@ from .prepared_island_connectivity import PreparedIslandConnectivity
 
 
 AISLANDS_ISOLATION_SCALES_KM = (25.0, 50.0, 125.0, 250.0)
+_GEO_SCENARIO = re.compile(r"^g(?P<radius>[0-9]+(?:\.[0-9]+)?)_env_none$")
 
 
 @dataclass(frozen=True)
@@ -31,6 +33,7 @@ class IslandIsolationReferenceFeatures:
     surrounding_island_pressure: np.ndarray
     surrounding_landmass_pressure: np.ndarray
     unanchored_component_exposure: np.ndarray
+    mainland_stepping_stone_frequency: np.ndarray
     geography_only_eog_connected_frequency: np.ndarray
 
 
@@ -40,6 +43,8 @@ def _validate_scales(scales_km: Sequence[float]) -> np.ndarray:
         raise ValueError("scales_km must be a finite non-empty vector")
     if np.any(scales <= 0):
         raise ValueError("all scales_km must be positive")
+    if np.unique(scales).size != scales.size:
+        raise ValueError("scales_km must not contain duplicates")
     return scales
 
 
@@ -69,11 +74,36 @@ def _kernel_pressure(
     return np.mean(np.vstack(values), axis=0)
 
 
+def _geography_scenarios_for_scales(
+    prepared: PreparedIslandConnectivity,
+    scales: np.ndarray,
+) -> list[tuple[float, int]]:
+    """Resolve exactly one geography-only prepared graph for each declared scale."""
+    available: dict[float, int] = {}
+    for index, scenario_id in enumerate(prepared.scenario_ids):
+        match = _GEO_SCENARIO.fullmatch(str(scenario_id))
+        if not match:
+            continue
+        radius = float(match.group("radius"))
+        if radius in available:
+            raise ValueError(f"duplicate geography-only prepared scenario at {radius} km")
+        available[radius] = index
+
+    resolved: list[tuple[float, int]] = []
+    for scale in scales:
+        radius = float(scale)
+        if radius not in available:
+            raise ValueError(f"missing geography-only prepared scenario at {radius} km")
+        resolved.append((radius, available[radius]))
+    return resolved
+
+
 def build_island_isolation_reference_features(
     prepared: PreparedIslandConnectivity,
     anchor_mask: Sequence[bool],
     self_exclusion_mask: Sequence[bool],
     island_area_km2: Sequence[float],
+    distance_to_mainland_km: Sequence[float],
     *,
     scales_km: Sequence[float] = AISLANDS_ISOLATION_SCALES_KM,
 ) -> IslandIsolationReferenceFeatures:
@@ -87,7 +117,7 @@ def build_island_isolation_reference_features(
         Outer-training presence islands for the focal species.
     self_exclusion_mask:
         Rows whose own occurrence must not act as a source when their feature is used
-        for fitting.  In the planned benchmark this is ``training_mask``: for an
+        for fitting. In the planned benchmark this is ``training_mask``: for an
         outer-training presence the diagonal source contribution is removed; for a
         training absence the operation is a no-op; held-out rows are not sources and
         therefore need no special handling.
@@ -95,18 +125,33 @@ def build_island_isolation_reference_features(
         Positive polygon areas recovered from the frozen A-Islands v1.0 shapefile.
         They weight source-landmass and surrounding-landmass pressure only; the EOG
         graph itself remains the predeclared unweighted geographic graph.
+    distance_to_mainland_km:
+        Fixed species-independent centroid-to-continental-mainland coastline distance
+        from the frozen Natural Earth geometry. At each declared radius, islands within
+        that radius of mainland are generic mainland-entry nodes. Their entire island
+        component is counted as mainland-connected for the species-independent
+        stepping-stone baseline.
     scales_km:
         Must remain the predeclared 25/50/125/250-km ensemble in the authoritative
-        extension runner.  The argument exists for synthetic tests only.
+        extension runner. The argument exists for synthetic tests only.
     """
     n = len(prepared.node_ids)
     anchors = np.asarray(anchor_mask, dtype=bool)
     exclude_self = np.asarray(self_exclusion_mask, dtype=bool)
     areas = np.asarray(island_area_km2, dtype=float)
+    mainland_distance = np.asarray(distance_to_mainland_km, dtype=float)
     if anchors.shape != (n,) or exclude_self.shape != (n,):
         raise ValueError("anchor and self-exclusion masks must align with prepared nodes")
     if areas.shape != (n,) or not np.isfinite(areas).all() or np.any(areas <= 0):
         raise ValueError("island_area_km2 must be finite, positive and align with prepared nodes")
+    if (
+        mainland_distance.shape != (n,)
+        or not np.isfinite(mainland_distance).all()
+        or np.any(mainland_distance < 0)
+    ):
+        raise ValueError(
+            "distance_to_mainland_km must be finite, non-negative and align with prepared nodes"
+        )
     if np.sum(anchors) < 2:
         raise ValueError("at least two outer-training presence anchors are required")
     scales = _validate_scales(scales_km)
@@ -145,22 +190,26 @@ def build_island_isolation_reference_features(
         source_weights=areas,
     )
 
-    geo_indices = [
-        index
-        for index, scenario_id in enumerate(prepared.scenario_ids)
-        if scenario_id.endswith("env_none")
-    ]
-    if not geo_indices:
-        raise ValueError("prepared geometry contains no geography-only scenarios")
-
+    geography_scenarios = _geography_scenarios_for_scales(prepared, scales)
     component_exposure_rows: list[np.ndarray] = []
+    mainland_reach_rows: list[np.ndarray] = []
     eog_reach_rows: list[np.ndarray] = []
-    for index in geo_indices:
+    for radius, index in geography_scenarios:
         labels = np.asarray(prepared.component_labels[index], dtype=int)
         if labels.shape != (n,) or np.any(labels < 0):
             raise ValueError("component labels must align and be non-negative")
         component_sizes = np.bincount(labels)
         component_exposure_rows.append((component_sizes[labels] - 1.0) / (n - 1.0))
+
+        mainland_entry = mainland_distance <= radius
+        if np.any(mainland_entry):
+            mainland_counts = np.bincount(
+                labels[mainland_entry],
+                minlength=len(component_sizes),
+            )
+            mainland_reach_rows.append((mainland_counts[labels] > 0).astype(float))
+        else:
+            mainland_reach_rows.append(np.zeros(n, dtype=float))
 
         anchor_counts = np.bincount(labels[anchors], minlength=len(component_sizes))
         effective_anchor_count = anchor_counts[labels].astype(int)
@@ -168,6 +217,7 @@ def build_island_isolation_reference_features(
         eog_reach_rows.append((effective_anchor_count > 0).astype(float))
 
     component_exposure = np.mean(np.vstack(component_exposure_rows), axis=0)
+    mainland_step_frequency = np.mean(np.vstack(mainland_reach_rows), axis=0)
     geography_eog = np.mean(np.vstack(eog_reach_rows), axis=0)
 
     return IslandIsolationReferenceFeatures(
@@ -178,5 +228,6 @@ def build_island_isolation_reference_features(
         surrounding_island_pressure=surrounding_pressure,
         surrounding_landmass_pressure=surrounding_landmass_pressure,
         unanchored_component_exposure=component_exposure,
+        mainland_stepping_stone_frequency=mainland_step_frequency,
         geography_only_eog_connected_frequency=geography_eog,
     )
