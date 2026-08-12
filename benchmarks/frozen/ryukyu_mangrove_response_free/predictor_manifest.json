@@ -1,0 +1,128 @@
+{
+  "connectivity_fingerprint": "d026ca7a6f4a948ee465ab14b7419cdddea97943886d03ebc18b2429a63bdcfe",
+  "contract_sha256": "80088eaa734f743d5ad7f2011eee092b089d729c8b17aaed84770f5d5878e784",
+  "coordinate_source": "Thomas et al. 2022 Table 1",
+  "dryad_doi": "10.5061/dryad.bcc2fqzdh",
+  "environmental_distance_policy": "all-zero; no IBE claim",
+  "gabriel_edge_count": 24,
+  "gabriel_edges": [
+    [
+      "OKI",
+      "MYKa"
+    ],
+    [
+      "MYKa",
+      "MYKb"
+    ],
+    [
+      "MYKa",
+      "MYKc"
+    ],
+    [
+      "MYKc",
+      "MYKd"
+    ],
+    [
+      "MYKc",
+      "ISGa"
+    ],
+    [
+      "ISGa",
+      "ISGb"
+    ],
+    [
+      "ISGb",
+      "ISGc"
+    ],
+    [
+      "ISGc",
+      "ISGd"
+    ],
+    [
+      "ISGd",
+      "IRMb"
+    ],
+    [
+      "IRMa",
+      "IRMc"
+    ],
+    [
+      "IRMa",
+      "IRMe"
+    ],
+    [
+      "IRMb",
+      "IRMc"
+    ],
+    [
+      "IRMc",
+      "IRMd"
+    ],
+    [
+      "IRMc",
+      "IRMe"
+    ],
+    [
+      "IRMd",
+      "IRMe"
+    ],
+    [
+      "IRMe",
+      "IRMf"
+    ],
+    [
+      "IRMf",
+      "IRMg"
+    ]
+  ],
+  "genetic_response_attached": false,
+  "island_ids": [
+    "Okinawa",
+    "Miyako",
+    "Miyako",
+    "Miyako",
+    "Miyako",
+    "Ishigaki",
+    "Ishigaki",
+    "Ishigaki",
+    "Ishigaki",
+    "Iriomote",
+    "Iriomote",
+    "Iriomote",
+    "Iriomote",
+    "Iriomote",
+    "Iriomote",
+    "Iriomote"
+  ],
+  "loss_support": 0.5,
+  "n_populations": 16,
+  "operator_fingerprint": "61ba283a6d33cfd85fd3b187de88c47e154acd8da0c6c31082aca1c647219830",
+  "population_ids": [
+    "OKI",
+    "MYKa",
+    "MYKb",
+    "MYKc",
+    "MYKd",
+    "ISGa",
+    "ISGb",
+    "ISGc",
+    "ISGd",
+    "IRMa",
+    "IRMb",
+    "IRMc",
+    "IRMd",
+    "IRMe",
+    "IRMf",
+    "IRMg"
+  ],
+  "populations_csv_sha256": "0edd135771e8339074b456a311efd02202d0309d81b539206160bad212236fb4",
+  "predictor_manifest_fingerprint": "8bef3ea334eb99610f04ac4eb38e411731b59649ac926f2b60278a732aad1449",
+  "predictors_csv_sha256": "b5484727b4e690ef880384408a7283964ede593a788b093c74777886bec9851f",
+  "schema": "eog_v2_ryukyu_mangrove_response_free_predictors_v1",
+  "status": "retrospective-external-response-not-attached",
+  "strong_reference": "effective resistance on response-free Gabriel conductance graph",
+  "study_doi": "10.3389/fmars.2022.827590",
+  "support_scale_km": 14.964571106624528,
+  "validation_response_transform": "linearized_fst",
+  "validation_ridge_penalty": 1.0
+}
