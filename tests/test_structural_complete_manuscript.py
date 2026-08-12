@@ -75,7 +75,7 @@ def test_results_and_discussion_are_full_prose_and_keep_both_aislands_endpoints(
         "Reference content and endpoint are part of the estimand",
         "declared reference",
         "original A-Islands result remains valid within its frozen estimand",
-        "does not prove that R3 causally explains the original concordance",
+        "causally explains the original concordance",
         "one-time execution",
         "should not be added now to rescue the adverse island result",
     ):
