@@ -1,0 +1,20 @@
+{
+  "schema_version": "eog_aislands_isolation_execution_provenance_v1",
+  "git_commit": "a9329d929933c919fe6c1c03934f0314c40f5c50",
+  "workflow_run_id": 31564146592,
+  "workflow_run_attempt": 1,
+  "trigger_commit_message": "EXECUTE frozen A-Islands isolation adequacy v1.3 exactly once",
+  "contract_schema": "eog_aislands_isolation_adequacy_v1_3",
+  "result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
+  "artifact_id": 9128998976,
+  "artifact_name": "aislands-isolation-adequacy-authoritative-outcome",
+  "artifact_digest": "sha256:59363bc82924e74445ad10a1d9732511e9bd5bcd056bef17ac89166f45b8355e",
+  "file_sha256": {
+    "heldout_predictions.csv": "511ffb27c5d3d1f446927afd179ce774809127067e19c7847cf4c02923ce0b43",
+    "fold_applicability_and_scores.csv": "89de3b891cec5c838e9624d2e74cc4e8c977ad32772161f2e9856b879a6b7fb4",
+    "species_summary.csv": "7ff1159d44220c5e617c759ad88a9a6fce75a25ff9ac96a771a9505be9d3f8ec",
+    "aggregate_result.json": "d361236eb0197807507571eee5e49769e8ad2b994915cb4caceff8b70242c670"
+  },
+  "authoritative_execution_count_declared": 1,
+  "rerun_allowed": false
+}
