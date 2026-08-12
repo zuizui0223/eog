@@ -6,8 +6,8 @@ or EOG results.
 
 Natural Earth Admin-0 countries contains Australia as multipart polygon geometry.
 The continental mainland is defined mechanically as the polygon ring with the largest
-absolute spherical area in the unique Australia feature.  This excludes Tasmania and
-smaller offshore parts without a hand-curated island-name list.
+absolute spherical area in the unique Australia Admin-0 country feature.  This excludes
+Tasmania and smaller offshore parts without a hand-curated island-name list.
 """
 from __future__ import annotations
 
@@ -62,31 +62,49 @@ def _normalise(value: object) -> str:
 
 
 def _find_australia_record(reader: shapefile.Reader):
+    """Select the unique Australia *country* feature, not Australian dependencies.
+
+    Natural Earth's sovereignty fields deliberately group several dependencies under
+    Australia (``SOV_A3=AUS``), so sovereignty is too broad for this task.  The fixed
+    selector therefore requires the country-level pair ``ADMIN=Australia`` and
+    ``ADM0_A3=AUS``.  Other AUS-sovereignty records are retained only as diagnostics.
+    """
     fields = [field[0] for field in reader.fields[1:]]
-    candidates = []
+    strict_candidates = []
+    sovereign_diagnostics: list[dict[str, str]] = []
     for shape_record in reader.iterShapeRecords():
         record = shape_record.record.as_dict()
-        values = {
-            key.casefold(): _normalise(value)
-            for key, value in record.items()
-        }
-        code_match = any(
-            values.get(key.casefold()) == "aus"
-            for key in ("ADM0_A3", "SOV_A3", "GU_A3", "ISO_A3")
-            if key.casefold() in values
-        )
-        name_match = any(
-            values.get(key.casefold()) == "australia"
-            for key in ("ADMIN", "SOVEREIGNT", "NAME", "NAME_LONG")
-            if key.casefold() in values
-        )
-        if code_match or name_match:
-            candidates.append(shape_record)
-    if len(candidates) != 1:
+        values = {key.casefold(): _normalise(value) for key, value in record.items()}
+        if values.get("sov_a3") == "aus":
+            sovereign_diagnostics.append(
+                {
+                    "admin": str(record.get("ADMIN", "")).strip(),
+                    "adm0_a3": str(record.get("ADM0_A3", "")).strip(),
+                    "sovereignt": str(record.get("SOVEREIGNT", "")).strip(),
+                    "sov_a3": str(record.get("SOV_A3", "")).strip(),
+                    "type": str(record.get("TYPE", "")).strip(),
+                }
+            )
+        if values.get("admin") == "australia" and values.get("adm0_a3") == "aus":
+            strict_candidates.append(shape_record)
+    if len(strict_candidates) != 1:
         raise ValueError(
-            f"expected exactly one Natural Earth Australia feature, found {len(candidates)}; fields={fields}"
+            "expected exactly one Natural Earth country feature with "
+            f"ADMIN=Australia and ADM0_A3=AUS, found {len(strict_candidates)}; "
+            f"AUS-sovereignty diagnostics={sovereign_diagnostics}; fields={fields}"
         )
-    return candidates[0], fields
+    selected = strict_candidates[0]
+    selected_record = selected.record.as_dict()
+    selected_identifiers = {
+        "ADMIN": str(selected_record.get("ADMIN", "")).strip(),
+        "ADM0_A3": str(selected_record.get("ADM0_A3", "")).strip(),
+        "SOVEREIGNT": str(selected_record.get("SOVEREIGNT", "")).strip(),
+        "SOV_A3": str(selected_record.get("SOV_A3", "")).strip(),
+        "TYPE": str(selected_record.get("TYPE", "")).strip(),
+        "ISO_A3": str(selected_record.get("ISO_A3", "")).strip(),
+        "NE_ID": str(selected_record.get("NE_ID", "")).strip(),
+    }
+    return selected, fields, selected_identifiers, sovereign_diagnostics
 
 
 def _rings(shape: shapefile.Shape):
@@ -124,7 +142,7 @@ def freeze_mainland(
         raise ValueError(f"expected one Natural Earth countries shapefile, found {len(shapefiles)}")
     shp = shapefiles[0]
     reader = shapefile.Reader(str(shp), encoding="utf-8")
-    shape_record, fields = _find_australia_record(reader)
+    shape_record, fields, selected_identifiers, sovereign_diagnostics = _find_australia_record(reader)
     shape = shape_record.shape
     if shape.shapeType not in {shapefile.POLYGON, shapefile.POLYGONM, shapefile.POLYGONZ}:
         raise ValueError(f"Australia Natural Earth geometry is not polygonal: {shape.shapeTypeName}")
@@ -187,6 +205,9 @@ def freeze_mainland(
         "embedded_version_files": embedded_versions,
         "extracted_file_sha256": extracted_files,
         "fields": fields,
+        "australia_feature_selector": "ADMIN=Australia AND ADM0_A3=AUS",
+        "selected_australia_identifiers": selected_identifiers,
+        "aus_sovereignty_feature_diagnostics": sovereign_diagnostics,
         "shape_type": shape.shapeTypeName,
         "australia_ring_count": len(rings),
         "selected_mainland_ring_index": int(mainland_index),
