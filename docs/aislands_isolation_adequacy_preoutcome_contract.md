@@ -4,13 +4,15 @@ Date frozen: 2026-08-12
 
 Revision 1.1 was recorded after the outcome-free A-Islands polygon-area gate succeeded and **before any extension species outcome was computed**. It adds a fixed continental-mainland distance baseline so the island-biogeography reference cannot omit the classical mainland-isolation axis.
 
+Revision 1.2 was recorded after the same outcome-free area gate and a closer island-biogeography prior-art audit, again **before any extension species outcome was computed**. Weigelt & Kreft (2013) showed that surrounding land area can outperform simple mainland distance as an isolation representation, and incidence-function/metapopulation work already weights source contributions by patch size. The reference was therefore strengthened prospectively with area-weighted occupied-source pressure and area-weighted surrounding-landmass pressure.
+
 ## Scientific pivot
 
-This extension treats islands as the primary biological domain. It does **not** claim that stepping stones, multiple source pools, graph connectivity, or multidimensional isolation are new. Those ideas are established in island biogeography.
+This extension treats islands as the primary biological domain. It does **not** claim that stepping stones, multiple source pools, graph connectivity, source-area effects, or multidimensional isolation are new. Those ideas are established in island biogeography and metapopulation ecology.
 
 The new question is narrower and stronger:
 
-> **After a reference model represents local climate, island area, continental-mainland distance, direct source proximity, multi-source pressure, and species-independent archipelago geometry, does species-conditioned archipelago configuration retain held-out incidence information?**
+> **After a reference model represents local climate, island area, continental-mainland distance, direct and area-weighted species-source pressure, and species-independent archipelago geometry and surrounding landmass, does species-conditioned archipelago configuration retain held-out incidence information?**
 
 Equivalently: **is the declared island-isolation reference structurally sufficient for a focal species?**
 
@@ -25,6 +27,8 @@ The extension explicitly accepts the following as prior art:
 - multiple-source-pool and dispersal-pathway indices in archipelagos (Yeakley & Weishampel 2000, *Ecology* 81:893–898);
 - multidimensional isolation metrics including surrounding landmass and stepping stones (Weigelt & Kreft 2013, DOI `10.1111/j.1600-0587.2012.07669.x`);
 - graph-theoretic structural connectivity among islands (Sillero et al. 2018, DOI `10.1093/biolinnean/bly033`);
+- graph-connectivity validation with independent ecological/genetic evidence (Daniel et al. 2023, DOI `10.1111/cobi.14047`);
+- source-patch size/quality weighting in incidence-function and metapopulation connectivity;
 - species-specific dispersal ability modifying island occurrence and the meaning of isolation.
 
 No novelty claim may be based on any item above by itself.
@@ -88,21 +92,21 @@ The acquisition workflow must record the exact archive and extracted-file SHA-25
 
 ### Deterministic mainland rule
 
-1. select exactly one Admin-0 Australia feature using the file's Australia identifiers;
-2. split its polygon geometry into rings;
+1. select exactly one Admin-0 country feature with `ADMIN=Australia` and `ADM0_A3=AUS`; sovereignty identifiers such as `SOV_A3=AUS` are diagnostic only because they also include Australian dependencies;
+2. split the selected country's polygon geometry into rings;
 3. calculate spherical absolute area for each ring without using A-Islands occurrences;
 4. select the ring with the largest absolute area as the **continental Australian mainland**;
 5. record its point count, area, bounding box and derived ring SHA-256;
 6. for every frozen A-Islands centroid, calculate the minimum spherical point-to-minor-great-circle-segment distance to that fixed mainland coastline ring.
 
-This rule deliberately excludes Tasmania and smaller Australian islands from the `mainland` baseline by geometry rather than by a hand-curated name list.
+This rule deliberately excludes Tasmania and smaller Australian islands from the `mainland` baseline by geometry rather than by a hand-curated island-name list.
 
 ### Hard stop
 
 Do not run the species outcome extension unless:
 
 - the Natural Earth source resolves to the frozen version/hash;
-- exactly one Australia feature is selected;
+- exactly one country feature satisfies `ADMIN=Australia` and `ADM0_A3=AUS`;
 - a unique largest mainland ring is obtained;
 - all 842 island centroids receive finite non-negative mainland distances;
 - the 842-row mainland-distance table is fingerprinted and reproduced exactly.
@@ -127,27 +131,30 @@ R0 plus:
 
 The fixed mainland-distance term and the species-conditioned nearest-source term are intentionally separate. The former represents a classical island-geography baseline; the latter represents the nearest observed source available for the focal species under the outer-training boundary.
 
-### R2 — multi-source pressure
+### R2 — multiple occupied sources and source landmass
 
-R1 plus a source-pressure ensemble over the already-frozen geographic scales `25, 50, 125, 250 km`.
+R1 plus two source-pressure ensembles over the already-frozen geographic scales `25, 50, 125, 250 km`.
 
-For focal island `i`, anchor set `A`, and scale `s`:
+For focal island `i`, outer-training presence anchor set `A`, scale `s`, and source-island area `A_a`:
 
-`P_s(i) = log(1 + sum_{a in A, a != i} exp(-d(i,a)/s))`.
+`P_s(i) = log(1 + sum_{a in A, a != i} exp(-d(i,a)/s))`
 
-The single predeclared predictor is the arithmetic mean of `P_s(i)` over the four scales.
+`P_area,s(i) = log(1 + sum_{a in A, a != i} A_a * exp(-d(i,a)/s))`.
 
-For an outer-training row, the focal row is excluded from the anchor set even if it is observed present. For a held-out row, all anchors are outer-training presences. This prevents a training presence from creating its own source-proximity signal.
+Each predeclared predictor is the arithmetic mean of its four scale-specific values. The first controls the number/proximity of observed sources; the second also controls source-island landmass without treating area weighting as EOG novelty.
 
-### R3 — species-independent archipelago geometry
+For an outer-training row, the focal row is excluded from the anchor set even if it is observed present. For a held-out row, all anchors are outer-training presences. This prevents a training presence from creating its own source-proximity or source-landmass signal.
+
+### R3 — species-independent archipelago geometry and surrounding landmass
 
 R2 plus all of:
 
 1. nearest-other-island distance;
-2. surrounding-island pressure, defined exactly like source pressure but summing over all other islands rather than occurrence anchors;
-3. unanchored component exposure across the four frozen geography-only radii, defined as the mean over scales of `(component_size(i,s)-1)/(N-1)`.
+2. surrounding-island pressure, defined like unweighted source pressure but summing over all other surveyed islands;
+3. surrounding-landmass pressure, defined as `log(1 + sum area_j * exp(-d(i,j)/s))`, averaged over the same four scales and summing over all other surveyed islands;
+4. unanchored component exposure across the four frozen geography-only radii, defined as the mean over scales of `(component_size(i,s)-1)/(N-1)`.
 
-These terms ask whether any apparent EOG benefit is merely local island density or generic network embedding.
+These terms ask whether any apparent EOG benefit is merely local island density, surrounding landmass, or generic network embedding. They intentionally make the primary comparator stronger than a simple area-plus-mainland-distance ETIB baseline.
 
 ### Candidate C — species-conditioned archipelago configuration
 
@@ -194,18 +201,19 @@ The extension allows all three outcomes:
 2. **Structural saturation / no increment** — interval includes zero or the effect is adverse: the strong reference already captures the tested signal, or EOG adds noise.
 3. **Indeterminate applicability** — data/folds are too sparse for a stable test.
 
-A non-positive result is not grounds for retuning radii, source-pressure scales, topology metrics, species subsets, area handling, or the mainland-distance definition.
+A non-positive result is not grounds for retuning radii, source-pressure scales, topology metrics, species subsets, area handling, mainland-distance definition, or area-weighted pressure definitions.
 
 ## Claim boundary if the primary extension is positive
 
 Permitted:
 
-> Across Australian continental-island plant incidences, species-conditioned archipelago configuration retained held-out information beyond climate, recipient island area, continental-mainland distance, direct species-source distance, multi-source pressure, and species-independent island-network geometry under the frozen reference hierarchy.
+> Across Australian continental-island plant incidences, species-conditioned archipelago configuration retained held-out information beyond climate, recipient island area, continental-mainland distance, direct and area-weighted species-source pressure, surrounding island number/landmass, and species-independent island-network geometry under the frozen reference hierarchy.
 
 Not permitted:
 
 - EOG discovers that island isolation is multidimensional;
 - EOG discovers stepping stones;
+- EOG invents surrounding-land-area or source-area isolation metrics;
 - connected frequency is a dispersal, migration, immigration, occupancy, or colonisation probability;
 - the graph reconstructs historical colonisation routes;
 - unoccupied intermediate islands were actually used as stepping stones;
