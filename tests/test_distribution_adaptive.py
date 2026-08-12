@@ -13,18 +13,34 @@ from eog.distribution_adaptive import (
 )
 
 
-def _selection_folds(observed_ids):
-    return [f"selection_{int(node_id[1:3]) % 3}" for node_id in observed_ids]
-
-
-def _suffix_gate_folds(observed_ids):
-    return ["inner_a" if node_id.endswith("_a") else "inner_b" for node_id in observed_ids]
+def _crossed_selection_folds(observed_ids):
+    offsets = {
+        "source_a": 0,
+        "source_b": 1,
+        "negative_a": 1,
+        "negative_b": 2,
+        "blocked_train_a": 1,
+        "blocked_train_b": 2,
+        "low_negative_a": 2,
+        "low_negative_b": 0,
+    }
+    result = []
+    for node_id in observed_ids:
+        module = int(node_id[1:3])
+        role = node_id.split("_", 1)[1]
+        result.append(f"selection_{(module + offsets[role]) % 3}")
+    return result
 
 
 def test_adaptive_eog_selects_environmental_family_on_exact_structural_null():
-    nodes, observed_ids, response, target_ids, target_response = (
-        build_environment_only_landscape(9)
-    )
+    (
+        nodes,
+        observed_ids,
+        response,
+        gate_folds,
+        target_ids,
+        target_response,
+    ) = build_environment_only_landscape(9)
     model = fit_adaptive_eog_distribution(
         nodes,
         observed_ids,
@@ -42,8 +58,8 @@ def test_adaptive_eog_selects_environmental_family_on_exact_structural_null():
                 min_class_count=4,
             )
         ),
-        selection_fold_ids=_selection_folds(observed_ids),
-        gate_fold_ids=_suffix_gate_folds(observed_ids),
+        selection_fold_ids=_crossed_selection_folds(observed_ids),
+        gate_fold_ids=gate_folds,
     )
     prediction = model.predict(target_ids)
     labels = np.asarray(target_response, dtype=int)
@@ -78,7 +94,7 @@ def test_adaptive_eog_activates_structural_family_when_environment_is_tied():
                 min_class_count=4,
             )
         ),
-        selection_fold_ids=_selection_folds(observed_ids),
+        selection_fold_ids=_crossed_selection_folds(observed_ids),
         gate_fold_ids=gate_folds,
     )
     labels = np.asarray(target_response, dtype=int)
