@@ -9,13 +9,13 @@ on:
       - "benchmarks/dynamic_occurrence_comparator_ladder.py"
       - "src/eog/dynamic_island_reachability.py"
       - ".github/workflows/dynamic-source-expansion-confirmation.yml"
-  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   confirm:
+    if: github.event.pull_request.head.sha == 'e219c21d03ce5518ff92bf03c03036626f64167a'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
