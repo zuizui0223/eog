@@ -1,0 +1,52 @@
+name: EOG structural ensemble development
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/distribution.py"
+      - "src/eog/distribution_stack.py"
+      - "benchmarks/distribution_model_noisy_regimes.py"
+      - "benchmarks/distribution_structural_ensemble_development.py"
+      - ".github/workflows/distribution-ensemble-development.yml"
+  workflow_dispatch:
+
+jobs:
+  ensemble-development:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install .
+      - name: Run fixed structural ensemble development
+        run: python benchmarks/distribution_structural_ensemble_development.py > structural-ensemble-development.json
+      - name: Show recommendation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("structural-ensemble-development.json").read_text())
+          print(json.dumps({
+              "schema": result["schema"],
+              "status": result["status"],
+              "integrity": result["integrity_checks"],
+              "recommended_alpha": result["recommended_alpha"],
+              "candidates": result["candidates"],
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Verify development boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("structural-ensemble-development.json").read_text())
+          assert result["status"] == "development_screen_not_confirmation"
+          assert result["all_integrity_checks_pass"] is True
+          assert result["alpha_grid"] == [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-structural-ensemble-development
+          path: structural-ensemble-development.json
