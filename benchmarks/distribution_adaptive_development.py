@@ -2,11 +2,12 @@
 
 This screen reuses the already-open development seeds, so it can guide model-family
 design but cannot confirm superiority. For every seed/regime, outer target labels are
-untouched. Within each synthetic source module, three crossed selection folds withhold
-some training observations while deliberately retaining source support in the same
-module. They choose among environmental-only, conservative probability-gated EOG, and
-cross-fitted stacked EOG by held-out Bernoulli log loss. Two orthogonal gate folds are
-retained inside each selection-training subset for source/fusion cross-fitting.
+untouched. The two declared positive source anchors in each synthetic module remain
+fixed in every family-selection fit. The additional right/left training candidates are
+assigned to three crossed selection folds and choose among environmental-only,
+conservative probability-gated EOG, and cross-fitted stacked EOG by held-out Bernoulli
+log loss. Two orthogonal gate folds remain inside each selection-training subset for
+source/fusion cross-fitting.
 """
 from __future__ import annotations
 
@@ -36,10 +37,6 @@ from eog import fit_eog_distribution
 
 
 def _selection_folds(observed_ids: tuple[str, ...]) -> tuple[str, ...]:
-    # Cross selection folds *within* each source module. Source A and source B use
-    # different offsets, so holding one source for selection leaves another declared
-    # training source in that module. This matches the outer target task better than
-    # holding an entire module/source system out during model-family selection.
     offsets = {
         "source_a": 0,
         "right_train": 1,
@@ -54,6 +51,14 @@ def _selection_folds(observed_ids: tuple[str, ...]) -> tuple[str, ...]:
     return tuple(result)
 
 
+def _fixed_sources(observed_ids: tuple[str, ...]) -> tuple[str, ...]:
+    return tuple(
+        node_id
+        for node_id in observed_ids
+        if node_id.endswith("_source_a") or node_id.endswith("_source_b")
+    )
+
+
 def run_adaptive_development(
     *,
     seeds: tuple[int, ...] = DEVELOPMENT_SEEDS,
@@ -65,6 +70,8 @@ def run_adaptive_development(
         "all_target_labels_held_out": True,
         "all_selection_has_three_folds": True,
         "all_gate_has_two_folds": True,
+        "all_fixed_sources_positive": True,
+        "all_selection_candidates_have_both_classes": True,
         "all_scores_finite": True,
         "all_candidate_selection_scores_finite": True,
     }
@@ -73,6 +80,18 @@ def run_adaptive_development(
         for seed in seeds:
             bundle = build_noisy_landscape(regime, seed, n_modules=n_modules)
             selection_folds = _selection_folds(bundle.observed_ids)
+            fixed_sources = _fixed_sources(bundle.observed_ids)
+            observed_label = dict(zip(bundle.observed_ids, bundle.observed_response))
+            scored_labels = np.asarray(
+                [
+                    label
+                    for node_id, label in zip(
+                        bundle.observed_ids, bundle.observed_response
+                    )
+                    if node_id not in set(fixed_sources)
+                ],
+                dtype=int,
+            )
             adaptive = fit_adaptive_eog_distribution(
                 bundle.nodes,
                 bundle.observed_ids,
@@ -84,12 +103,11 @@ def run_adaptive_development(
                 ),
                 selection_fold_ids=selection_folds,
                 gate_fold_ids=bundle.gate_folds,
+                selection_fixed_source_ids=fixed_sources,
                 barriers=bundle.barriers,
                 reference_provenance=f"adaptive development {regime} seed {seed}",
             )
 
-            # Reuse the already-declared comparator implementation rather than creating
-            # a more favorable baseline for the adaptive family.
             probability_companion = fit_eog_distribution(
                 bundle.nodes,
                 bundle.observed_ids,
@@ -108,8 +126,20 @@ def run_adaptive_development(
             integrity["all_target_labels_held_out"] &= set(bundle.target_ids).isdisjoint(
                 bundle.observed_ids
             )
-            integrity["all_selection_has_three_folds"] &= len(set(selection_folds)) == 3
+            integrity["all_selection_has_three_folds"] &= len(
+                {
+                    fold
+                    for node_id, fold in zip(bundle.observed_ids, selection_folds)
+                    if node_id not in set(fixed_sources)
+                }
+            ) == 3
             integrity["all_gate_has_two_folds"] &= len(set(bundle.gate_folds)) == 2
+            integrity["all_fixed_sources_positive"] &= all(
+                observed_label[node_id] == 1 for node_id in fixed_sources
+            )
+            integrity["all_selection_candidates_have_both_classes"] &= bool(
+                np.any(scored_labels == 1) and np.any(scored_labels == 0)
+            )
             integrity["all_scores_finite"] &= all(
                 np.isfinite(np.asarray(values, dtype=float)).all()
                 for values in scores.values()
@@ -123,6 +153,8 @@ def run_adaptive_development(
                     "seed": seed,
                     "selected_family": adaptive.selected_family,
                     "candidate_selection_log_loss": adaptive.candidate_log_loss,
+                    "n_fixed_sources": len(fixed_sources),
+                    "n_selection_candidates": int(scored_labels.size),
                     "auc": {name: _auc(labels, values) for name, values in scores.items()},
                     "brier": {name: _brier(labels, values) for name, values in scores.items()},
                 }
@@ -182,12 +214,13 @@ def run_adaptive_development(
         }
 
     return {
-        "schema": "adaptive_eog_noisy_development_v0_2",
+        "schema": "adaptive_eog_noisy_development_v0_3",
         "status": "development_screen_not_confirmation",
         "seeds": list(seeds),
         "regimes": list(REGIMES),
         "selection_rule": {
-            "metric": "Bernoulli log loss on within-module crossed selection folds",
+            "metric": "Bernoulli log loss on non-anchor selection candidates",
+            "fixed_sources": "source_a and source_b within every synthetic module",
             "complexity_tie_break": ["environmental", "probability_gate", "stacked"],
             "selection_folds": 3,
             "gate_folds": 2,
