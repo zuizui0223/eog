@@ -2,8 +2,8 @@
 
 The feature family is frozen by
 ``docs/aislands_isolation_adequacy_preoutcome_contract.md``.  It deliberately
-separates direct source proximity, multi-source pressure, species-independent
-archipelago geometry, and species-conditioned EOG reachability.
+separates direct source proximity, multi-source pressure, source landmass,
+species-independent archipelago geometry, and species-conditioned EOG reachability.
 
 None of these quantities is a dispersal or colonisation probability.
 """
@@ -26,8 +26,10 @@ class IslandIsolationReferenceFeatures:
 
     nearest_training_presence_km: np.ndarray
     multi_source_pressure: np.ndarray
+    area_weighted_source_pressure: np.ndarray
     nearest_other_island_km: np.ndarray
     surrounding_island_pressure: np.ndarray
+    surrounding_landmass_pressure: np.ndarray
     unanchored_component_exposure: np.ndarray
     geography_only_eog_connected_frequency: np.ndarray
 
@@ -41,15 +43,29 @@ def _validate_scales(scales_km: Sequence[float]) -> np.ndarray:
     return scales
 
 
-def _kernel_pressure(distances: np.ndarray, scales: np.ndarray) -> np.ndarray:
+def _kernel_pressure(
+    distances: np.ndarray,
+    scales: np.ndarray,
+    *,
+    source_weights: np.ndarray | None = None,
+) -> np.ndarray:
     """Mean log-one-plus exponential pressure over the frozen scale ensemble."""
     if distances.ndim != 2:
         raise ValueError("distances must be a row-by-source matrix")
+    if source_weights is None:
+        weights_vector = np.ones(distances.shape[1], dtype=float)
+    else:
+        weights_vector = np.asarray(source_weights, dtype=float)
+        if weights_vector.shape != (distances.shape[1],):
+            raise ValueError("source_weights must align with distance columns")
+        if not np.isfinite(weights_vector).all() or np.any(weights_vector <= 0):
+            raise ValueError("source_weights must be finite and positive")
+
     values = []
     for scale in scales:
-        weights = np.exp(-distances / float(scale))
-        weights[~np.isfinite(distances)] = 0.0
-        values.append(np.log1p(np.sum(weights, axis=1)))
+        kernel = np.exp(-distances / float(scale))
+        kernel[~np.isfinite(distances)] = 0.0
+        values.append(np.log1p(np.sum(kernel * weights_vector[None, :], axis=1)))
     return np.mean(np.vstack(values), axis=0)
 
 
@@ -57,6 +73,7 @@ def build_island_isolation_reference_features(
     prepared: PreparedIslandConnectivity,
     anchor_mask: Sequence[bool],
     self_exclusion_mask: Sequence[bool],
+    island_area_km2: Sequence[float],
     *,
     scales_km: Sequence[float] = AISLANDS_ISOLATION_SCALES_KM,
 ) -> IslandIsolationReferenceFeatures:
@@ -74,6 +91,10 @@ def build_island_isolation_reference_features(
         outer-training presence the diagonal source contribution is removed; for a
         training absence the operation is a no-op; held-out rows are not sources and
         therefore need no special handling.
+    island_area_km2:
+        Positive polygon areas recovered from the frozen A-Islands v1.0 shapefile.
+        They weight source-landmass and surrounding-landmass pressure only; the EOG
+        graph itself remains the predeclared unweighted geographic graph.
     scales_km:
         Must remain the predeclared 25/50/125/250-km ensemble in the authoritative
         extension runner.  The argument exists for synthetic tests only.
@@ -81,8 +102,11 @@ def build_island_isolation_reference_features(
     n = len(prepared.node_ids)
     anchors = np.asarray(anchor_mask, dtype=bool)
     exclude_self = np.asarray(self_exclusion_mask, dtype=bool)
+    areas = np.asarray(island_area_km2, dtype=float)
     if anchors.shape != (n,) or exclude_self.shape != (n,):
         raise ValueError("anchor and self-exclusion masks must align with prepared nodes")
+    if areas.shape != (n,) or not np.isfinite(areas).all() or np.any(areas <= 0):
+        raise ValueError("island_area_km2 must be finite, positive and align with prepared nodes")
     if np.sum(anchors) < 2:
         raise ValueError("at least two outer-training presence anchors are required")
     scales = _validate_scales(scales_km)
@@ -103,6 +127,11 @@ def build_island_isolation_reference_features(
     if not np.isfinite(nearest_source).all():
         raise ValueError("self exclusion left at least one row without another source")
     source_pressure = _kernel_pressure(source_distances, scales)
+    area_weighted_source_pressure = _kernel_pressure(
+        source_distances,
+        scales,
+        source_weights=areas[anchor_indices],
+    )
 
     all_other = geographic.copy()
     np.fill_diagonal(all_other, np.inf)
@@ -110,6 +139,11 @@ def build_island_isolation_reference_features(
     if not np.isfinite(nearest_other).all():
         raise ValueError("nearest-other-island distance is not finite")
     surrounding_pressure = _kernel_pressure(all_other, scales)
+    surrounding_landmass_pressure = _kernel_pressure(
+        all_other,
+        scales,
+        source_weights=areas,
+    )
 
     geo_indices = [
         index
@@ -139,8 +173,10 @@ def build_island_isolation_reference_features(
     return IslandIsolationReferenceFeatures(
         nearest_training_presence_km=nearest_source,
         multi_source_pressure=source_pressure,
+        area_weighted_source_pressure=area_weighted_source_pressure,
         nearest_other_island_km=nearest_other,
         surrounding_island_pressure=surrounding_pressure,
+        surrounding_landmass_pressure=surrounding_landmass_pressure,
         unanchored_component_exposure=component_exposure,
         geography_only_eog_connected_frequency=geography_eog,
     )
