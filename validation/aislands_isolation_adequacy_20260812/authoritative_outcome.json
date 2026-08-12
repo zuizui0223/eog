@@ -1,0 +1,56 @@
+{
+  "schema_version": "eog_aislands_isolation_adequacy_outcome_v1",
+  "status": "first_and_only_authoritative_island_isolation_adequacy_execution",
+  "contract_schema": "eog_aislands_isolation_adequacy_v1_3",
+  "taxa_declared": 886,
+  "taxa_estimable": 886,
+  "taxa_non_estimable": 0,
+  "folds_declared": 4430,
+  "folds_evaluable": 4231,
+  "heldout_predictions": 712515,
+  "primary": {
+    "contrast": "C_minus_R3_matched_heldout_log_loss",
+    "favourable_direction": "negative",
+    "species_macro_mean": 0.003485181598265469,
+    "bootstrap_95_ci": [
+      0.0024664225728659645,
+      0.004508216483355693
+    ],
+    "bootstrap_replicates": 10000,
+    "sign_flip_two_sided_p": 9.99990000099999e-06,
+    "sign_flip_replicates": 100000,
+    "species_favourable_negative": 341,
+    "species_zero": 0,
+    "species_adverse_positive": 545
+  },
+  "secondary": {
+    "contrast": "C_minus_R3_matched_heldout_brier",
+    "favourable_direction": "negative",
+    "species_macro_mean": 0.0002682455326733689,
+    "bootstrap_95_ci": [
+      7.890886470882312e-05,
+      0.0004570031232482133
+    ],
+    "sign_flip_two_sided_p": 0.005619943800561995
+  },
+  "failure_counts": {
+    "insufficient_training_class_count_5_5": 199
+  },
+  "input_sha256": {
+    "folds": "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa",
+    "climate": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285",
+    "cohort": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+    "island_data": "d26ae154aeae1e6eab268f22268342077f7e8e7ef000d18a1f052f65866d5bde",
+    "species_data": "43e7d2e8deb1d1d635c8db44a7fe68cfb79c2a059a2207914413a62431eb7b0c",
+    "area": "496789783a98e55e1b9552f6f6d28e7b4567ef0f52c795657c7e2fea9c60aae2",
+    "mainland": "7d6f52f03702dd0cfae061023a1b2f405e39397de73eaad21b97d24176c4f869",
+    "contract": "eecf25fd541d379a2a4cf0c48f91dc095561392ab0546d427f59ffe1a81bbb98"
+  },
+  "output_sha256": {
+    "heldout_predictions": "511ffb27c5d3d1f446927afd179ce774809127067e19c7847cf4c02923ce0b43",
+    "fold_applicability_and_scores": "89de3b891cec5c838e9624d2e74cc4e8c977ad32772161f2e9856b879a6b7fb4",
+    "species_summary": "7ff1159d44220c5e617c759ad88a9a6fce75a25ff9ac96a771a9505be9d3f8ec"
+  },
+  "scientific_boundary": "species-conditioned archipelago increment beyond frozen R3; not dispersal, colonisation, migration, historical-route, or causal-mechanism evidence",
+  "result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a"
+}
