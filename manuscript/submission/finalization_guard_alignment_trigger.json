@@ -1,0 +1,7 @@
+{
+  "schema_version": "eog_finalization_guard_alignment_trigger_v1",
+  "date": "2026-08-12",
+  "scope": "checklist_state_guard_only",
+  "scientific_results_mutable": false,
+  "aislands_strong_reference_result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a"
+}
