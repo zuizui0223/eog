@@ -1,13 +1,14 @@
 """Held-out synthetic ranking benchmark for the experimental EOG distribution model.
 
-The benchmark builds repeated source modules.  Each module contains a reachable target
-and a blocked target with the same environmental state and the same direct distance to
-the known source.  Only the reachable target has intermediate landscape nodes.  Target
-labels are never supplied to model fitting.
+Each replicated module contains two nearby positive sources, a high-environment blocked
+training absence, and a low-environment training absence.  Held-out targets then form a
+matched pair: one target is connected through neutral stepping nodes and the other is
+blocked, while both have the same environmental state and the same direct distance to
+the nearest source.
 
-This is a proof-of-estimand benchmark: environmental-only and environmental-plus-
-nearest-source scores are tied by construction, while source-conditioned graph
-accessibility can distinguish the targets.  It is not a claim of general superiority.
+The target labels are never supplied to fitting.  The structural gate is *not* fixed in
+this benchmark: it is estimated from the training rows only, using second-best source
+paths for positive training sources to prevent zero-cost self-anchor leakage.
 """
 from __future__ import annotations
 
@@ -43,35 +44,45 @@ def build_replicated_landscape(n_modules: int = 8):
     observed_response: list[int] = []
     target_ids: list[str] = []
     target_response: list[int] = []
-    source_for_target: dict[str, str] = {}
+    source_ids_by_module: dict[str, tuple[str, str]] = {}
 
     for module in range(n_modules):
         latitude = -5.25 + module * 1.5
         prefix = f"m{module:02d}"
-        source = f"{prefix}_source"
-        negative = f"{prefix}_negative"
+        source_a = f"{prefix}_source_a"
+        source_b = f"{prefix}_source_b"
+        blocked_train = f"{prefix}_blocked_train"
+        low_negative = f"{prefix}_low_negative"
         open_1 = f"{prefix}_open_1"
         open_2 = f"{prefix}_open_2"
         reachable = f"{prefix}_reachable"
         blocked = f"{prefix}_blocked"
         nodes.extend(
             [
-                BridgeNode(source, latitude, 0.00, (0.8,)),
+                BridgeNode(source_a, latitude + 0.005, 0.00, (0.8,)),
+                BridgeNode(source_b, latitude - 0.005, 0.00, (0.8,)),
                 BridgeNode(open_1, latitude, 0.12, (0.8,)),
                 BridgeNode(open_2, latitude, 0.24, (0.8,)),
                 BridgeNode(reachable, latitude, 0.36, (0.8,)),
+                BridgeNode(blocked_train, latitude, -0.24, (0.8,)),
                 BridgeNode(blocked, latitude, -0.36, (0.8,)),
-                BridgeNode(negative, latitude, 0.90, (0.1,)),
+                BridgeNode(low_negative, latitude, 0.90, (0.1,)),
             ]
         )
-        observed_ids.extend([source, negative])
-        observed_response.extend([1, 0])
+        observed_ids.extend([source_a, source_b, blocked_train, low_negative])
+        observed_response.extend([1, 1, 0, 0])
         target_ids.extend([reachable, blocked])
         target_response.extend([1, 0])
-        source_for_target[reachable] = source
-        source_for_target[blocked] = source
+        source_ids_by_module[prefix] = (source_a, source_b)
 
-    return nodes, observed_ids, observed_response, target_ids, target_response, source_for_target
+    return (
+        nodes,
+        observed_ids,
+        observed_response,
+        target_ids,
+        target_response,
+        source_ids_by_module,
+    )
 
 
 def run_heldout_ranking_benchmark(n_modules: int = 8) -> dict[str, object]:
@@ -81,7 +92,7 @@ def run_heldout_ranking_benchmark(n_modules: int = 8) -> dict[str, object]:
         observed_response,
         target_ids,
         target_response,
-        source_for_target,
+        source_ids_by_module,
     ) = build_replicated_landscape(n_modules)
     by_id = {node.node_id: node for node in nodes}
     model = fit_eog_distribution(
@@ -90,27 +101,28 @@ def run_heldout_ranking_benchmark(n_modules: int = 8) -> dict[str, object]:
         observed_response,
         EOGDistributionConfig(
             graph_declaration=BridgeGraphDeclaration(max_geographic_km=15.0),
-            min_class_count=n_modules,
+            structural_gate_penalty=0.01,
+            min_class_count=n_modules * 2,
         ),
         reference_provenance="replicated held-out structural ranking benchmark",
     )
     prediction = model.predict(target_ids)
     labels = np.asarray(target_response, dtype=int)
-    nearest_distance = np.asarray(
-        [
-            haversine_km(by_id[source_for_target[target]], by_id[target])
-            for target in target_ids
-        ],
-        dtype=float,
-    )
 
-    # A simple nearest-source augmented score.  Its absolute scaling is irrelevant
-    # here because reachable/blocked targets have exactly matched environmental
-    # support and direct source distance within every repeated module, producing the
-    # same score distribution in both classes.
-    distance_scale = float(np.median(nearest_distance))
+    nearest_distance: list[float] = []
+    for target in target_ids:
+        prefix = target.split("_", 1)[0]
+        source_a, source_b = source_ids_by_module[prefix]
+        nearest_distance.append(
+            min(
+                haversine_km(by_id[source_a], by_id[target]),
+                haversine_km(by_id[source_b], by_id[target]),
+            )
+        )
+    nearest_distance_array = np.asarray(nearest_distance, dtype=float)
+    distance_scale = float(np.median(nearest_distance_array))
     support_distance_score = prediction.environmental_support * np.exp(
-        -nearest_distance / distance_scale
+        -nearest_distance_array / distance_scale
     )
 
     environmental_auc = _auc(labels, prediction.environmental_support)
@@ -120,6 +132,8 @@ def run_heldout_ranking_benchmark(n_modules: int = 8) -> dict[str, object]:
 
     checks = {
         "target_labels_are_held_out": set(target_ids).isdisjoint(observed_ids),
+        "structural_gate_is_training_fitted": model.structural_gate_fitted,
+        "structural_gate_is_nontrivial": model.structural_gate_weight >= 0.5,
         "environmental_only_is_tied": abs(environmental_auc - 0.5) <= 1e-12,
         "support_plus_nearest_source_is_tied": abs(support_distance_auc - 0.5) <= 1e-12,
         "accessibility_separates_structural_state": accessibility_auc == 1.0,
@@ -128,10 +142,12 @@ def run_heldout_ranking_benchmark(n_modules: int = 8) -> dict[str, object]:
         "eog_gain_over_support_distance_auc": eog_auc - support_distance_auc >= 0.49,
     }
     return {
-        "schema": "eog_distribution_heldout_ranking_v0",
+        "schema": "eog_distribution_heldout_ranking_v0_1",
         "n_modules": n_modules,
         "n_targets": len(target_ids),
         "model_fingerprint": model.fingerprint,
+        "structural_gate_weight": model.structural_gate_weight,
+        "training_gate_log_loss": model.training_gate_log_loss,
         "auc": {
             "environmental_support": environmental_auc,
             "environmental_plus_nearest_source": support_distance_auc,
@@ -141,8 +157,8 @@ def run_heldout_ranking_benchmark(n_modules: int = 8) -> dict[str, object]:
         "checks": checks,
         "all_checks_pass": bool(all(checks.values())),
         "claim_boundary": (
-            "proof-of-estimand synthetic benchmark; not evidence of universal predictive "
-            "superiority over SDM or connectivity models"
+            "proof-of-estimand synthetic benchmark with training-fitted structural gate; "
+            "not evidence of universal superiority over SDM or connectivity models"
         ),
     }
 
