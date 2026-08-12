@@ -1,33 +1,29 @@
 """Adaptive source-conditioned EOG distribution modelling.
 
-This development model selects the *amount and form* of structural complexity inside
-outer training data rather than committing every species or region to one fusion rule.
-The candidate family is deliberately small and ordered by complexity:
+EOG v0.2 treats ordinary environmental support as the simplest member of a nested
+model family rather than forcing every species or landscape to use structural terms.
+The training-only candidate family is ordered by complexity:
 
 1. ``environmental``: pointwise environmental support only;
 2. ``probability_gate``: conservative EOG accessibility gate;
 3. ``stacked``: cross-fitted ``f(H, M, H*M)`` meta-model.
 
-Candidate selection uses held-out selection folds inside the outer-training sample.
-Because EOG's target estimand is explicitly conditional on already-known source
-occurrences, a declared subset of positive outer-training rows may be supplied as
-``selection_fixed_source_ids``. Those rows remain in every selection-training subset
-and are not scored as family-selection targets. The remaining candidate rows are
-cross-fitted. Each structural candidate also performs its own inner cross-fitting of
-environmental support and occurrence-source accessibility using ``gate_fold_ids``.
+Family selection is performed inside the outer-training data. Declared positive
+``selection_fixed_source_ids`` remain available as known source anchors in every
+selection fit and are not scored as selection targets. Non-anchor training rows are
+held out in selection folds, while each structural candidate performs its own inner
+cross-fitting with ``gate_fold_ids``. The untouched outer test is therefore absent from
+source construction, fusion fitting, and family selection.
 
-When a structural candidate cannot satisfy its predeclared class-count gate inside a
-small nested selection fold, that fold does not become post-hoc evidence for weakening
-the gate. Instead, the candidate conservatively falls back to the environmental
-prediction for that fold and the fallback is counted in its selection audit. A
-structural family can therefore win only by improving the folds where it is actually
-estimable.
+Two explicit complexity margins prevent weak development-set gains from promoting a
+more flexible family. A structural family must improve held-out selection log loss over
+the environmental model by at least ``minimum_structural_log_loss_gain``. The stacked
+family must additionally improve over the probability gate by at least
+``minimum_stack_log_loss_gain``. Ties remain biased toward the simpler family.
 
-The untouched outer test participates in neither source construction, fusion fitting,
-nor candidate-family selection. The primary family-selection score is Bernoulli log
-loss. If candidates are tied within ``selection_tolerance``, the simpler family wins in
-the order above. Ordinary environmental SDM behavior is consequently an explicit
-member of the EOG model class.
+Nested structural candidates that cannot satisfy the predeclared class-count gate in a
+small selection fold fall back to the environmental prediction for that fold; the
+fallback count remains visible in the candidate audit rather than weakening the gate.
 """
 from __future__ import annotations
 
@@ -66,6 +62,8 @@ class AdaptiveEOGDistributionConfig:
     base_config: EOGDistributionConfig
     stacked_fusion_l2_penalty: float = 1.0
     selection_tolerance: float = 1e-12
+    minimum_structural_log_loss_gain: float = 0.0
+    minimum_stack_log_loss_gain: float = 0.0
 
     def __post_init__(self) -> None:
         if (
@@ -73,8 +71,13 @@ class AdaptiveEOGDistributionConfig:
             or self.stacked_fusion_l2_penalty <= 0.0
         ):
             raise ValueError("stacked_fusion_l2_penalty must be finite and positive")
-        if not np.isfinite(self.selection_tolerance) or self.selection_tolerance < 0.0:
-            raise ValueError("selection_tolerance must be finite and non-negative")
+        for value, name in (
+            (self.selection_tolerance, "selection_tolerance"),
+            (self.minimum_structural_log_loss_gain, "minimum_structural_log_loss_gain"),
+            (self.minimum_stack_log_loss_gain, "minimum_stack_log_loss_gain"),
+        ):
+            if not np.isfinite(value) or value < 0.0:
+                raise ValueError(f"{name} must be finite and non-negative")
 
 
 @dataclass(frozen=True)
@@ -95,6 +98,8 @@ class AdaptiveEOGDistributionModel:
     selection_fold_ids: tuple[str, ...]
     gate_fold_ids: tuple[str, ...]
     selection_fixed_source_ids: tuple[str, ...]
+    structural_log_loss_gain: float
+    stack_log_loss_gain: float
     final_model_fingerprint: str
     prediction: EOGDistributionPrediction
     fingerprint: str
@@ -281,9 +286,6 @@ def _candidate_selection_predictions(
         else:
             stacked_prediction = stacked_model.predict(test_ids).distribution_support
             if not stacked_model.structural_fusion_present:
-                # A nonstructural stack is the same family as the environmental
-                # candidate; do not let a second response recalibration masquerade as
-                # evidence for source-conditioned structure.
                 stacked_prediction = environmental_prediction.copy()
                 fallback_folds["stacked"] += 1
             predictions["stacked"][test_mask] = stacked_prediction
@@ -298,9 +300,9 @@ def _select_family(
     response: np.ndarray,
     predictions: Mapping[str, np.ndarray],
     selection_mask: np.ndarray,
-    tolerance: float,
+    config: AdaptiveEOGDistributionConfig,
     fallback_folds: Mapping[str, int],
-) -> tuple[str, tuple[AdaptiveCandidateScore, ...]]:
+) -> tuple[str, tuple[AdaptiveCandidateScore, ...], float, float]:
     mask = np.asarray(selection_mask, dtype=bool)
     if not mask.any():
         raise ValueError("adaptive family selection has no scored candidate rows")
@@ -313,14 +315,49 @@ def _select_family(
         )
         for family in ADAPTIVE_FAMILIES
     )
-    best_loss = min(item.log_loss for item in scores)
-    eligible = {
-        item.family
-        for item in scores
-        if item.log_loss <= best_loss + tolerance
-    }
-    selected = next(family for family in ADAPTIVE_FAMILIES if family in eligible)
-    return selected, scores
+    loss = {item.family: item.log_loss for item in scores}
+    environmental_loss = loss["environmental"]
+    probability_gain = environmental_loss - loss["probability_gate"]
+    stack_gain_vs_environment = environmental_loss - loss["stacked"]
+    stack_gain_vs_probability = loss["probability_gate"] - loss["stacked"]
+    best_structural_gain = max(probability_gain, stack_gain_vs_environment)
+
+    probability_eligible = (
+        probability_gain + config.selection_tolerance
+        >= config.minimum_structural_log_loss_gain
+    )
+    stack_eligible = (
+        stack_gain_vs_environment + config.selection_tolerance
+        >= config.minimum_structural_log_loss_gain
+        and stack_gain_vs_probability + config.selection_tolerance
+        >= config.minimum_stack_log_loss_gain
+    )
+
+    if stack_eligible:
+        selected = "stacked"
+    elif probability_eligible:
+        selected = "probability_gate"
+    else:
+        selected = "environmental"
+    return selected, scores, float(best_structural_gain), float(stack_gain_vs_probability)
+
+
+def _replace_support(
+    prediction: EOGDistributionPrediction,
+    values: np.ndarray,
+) -> EOGDistributionPrediction:
+    support = np.asarray(values, dtype=float).copy()
+    support.setflags(write=False)
+    return EOGDistributionPrediction(
+        node_ids=prediction.node_ids,
+        environmental_support=prediction.environmental_support,
+        structural_accessibility=prediction.structural_accessibility,
+        minimum_cumulative_cost=prediction.minimum_cumulative_cost,
+        minimum_bottleneck_cost=prediction.minimum_bottleneck_cost,
+        secondary_source_cost=prediction.secondary_source_cost,
+        source_redundancy=prediction.source_redundancy,
+        distribution_support=support,
+    )
 
 
 def _fit_final_family(
@@ -434,11 +471,11 @@ def fit_adaptive_eog_distribution(
         barriers=barriers,
         reference_provenance=reference_provenance,
     )
-    selected_family, candidate_scores = _select_family(
+    selected_family, candidate_scores, structural_gain, stack_gain = _select_family(
         y,
         selection_predictions,
         selection_mask,
-        config.selection_tolerance,
+        config,
         fallback_folds,
     )
     prediction, final_model_fingerprint = _fit_final_family(
@@ -454,13 +491,15 @@ def fit_adaptive_eog_distribution(
     )
 
     payload = {
-        "schema": "adaptive_eog_distribution_v0_3",
+        "schema": "adaptive_eog_distribution_v0_4",
         "config": asdict(config),
         "selected_family": selected_family,
         "candidate_scores": [asdict(item) for item in candidate_scores],
         "selection_fold_ids": list(selection_folds),
         "gate_fold_ids": list(gate_folds),
         "selection_fixed_source_ids": list(fixed_sources),
+        "structural_log_loss_gain": structural_gain,
+        "stack_log_loss_gain": stack_gain,
         "final_model_fingerprint": final_model_fingerprint,
         "prediction": prediction.to_dict(),
     }
@@ -474,6 +513,8 @@ def fit_adaptive_eog_distribution(
         selection_fold_ids=selection_folds,
         gate_fold_ids=gate_folds,
         selection_fixed_source_ids=fixed_sources,
+        structural_log_loss_gain=structural_gain,
+        stack_log_loss_gain=stack_gain,
         final_model_fingerprint=final_model_fingerprint,
         prediction=prediction,
         fingerprint=fingerprint,
