@@ -9,12 +9,19 @@ on:
       - "src/eog/reachability_network_diagnostics.py"
       - "src/eog/island_state_layers.py"
       - "src/eog/synthetic_archipelago.py"
+      - "src/eog/v2.py"
+      - "src/eog/v2_empirical_occurrence_validation.py"
+      - "src/eog/v2_empirical_occurrence_io.py"
+      - "src/eog/v2_empirical_occurrence_freeze_cli.py"
+      - "src/eog/v2_empirical_occurrence_validate_cli.py"
       - "tests/test_dynamic_island_reachability.py"
       - "tests/test_reachability_genetics.py"
       - "tests/test_neutral_genetics_simulator.py"
       - "tests/test_reachability_network_diagnostics.py"
       - "tests/test_island_state_layers.py"
       - "tests/test_synthetic_archipelago.py"
+      - "tests/test_v2_empirical_occurrence_validation.py"
+      - "tests/test_v2_empirical_occurrence_io_cli.py"
       - "benchmarks/dynamic_archipelago_simulation.py"
       - "benchmarks/dynamic_archipelago_neutral_genetics.py"
       - "benchmarks/dynamic_archipelago_reference_depth.py"
@@ -22,6 +29,8 @@ on:
       - "benchmarks/dynamic_occurrence_comparator_ladder.py"
       - "benchmarks/dynamic_genetic_distance_sensitivity.py"
       - "docs/eog_v2_occurrence_comparator_contract.md"
+      - "docs/eog_v2_empirical_occurrence_validation_contract.md"
+      - "pyproject.toml"
       - ".github/workflows/dynamic-island-reachability.yml"
   workflow_dispatch:
 
@@ -47,7 +56,9 @@ jobs:
             tests/test_neutral_genetics_simulator.py \
             tests/test_reachability_network_diagnostics.py \
             tests/test_island_state_layers.py \
-            tests/test_synthetic_archipelago.py
+            tests/test_synthetic_archipelago.py \
+            tests/test_v2_empirical_occurrence_validation.py \
+            tests/test_v2_empirical_occurrence_io_cli.py
       - name: Run reachability proof of estimand
         run: |
           mkdir -p benchmark_results/dynamic_island_reachability
