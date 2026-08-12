@@ -147,8 +147,11 @@ def _fit_ridge(
     scale = np.where(sd > 1e-12, sd, 1.0)
     z = (x - mean) / scale
     design = np.column_stack([np.ones(len(z), dtype=float), z])
-    regularizer = np.diag([0.0, *([float(penalty)] * x.shape[1])])
-    beta = np.linalg.solve(design.T @ design + regularizer, design.T @ y)
+    if penalty == 0.0:
+        beta = np.linalg.lstsq(design, y, rcond=None)[0]
+    else:
+        regularizer = np.diag([0.0, *([float(penalty)] * x.shape[1])])
+        beta = np.linalg.solve(design.T @ design + regularizer, design.T @ y)
     return mean, scale, beta
 
 
@@ -175,26 +178,15 @@ def evaluate_genetic_validation_ladder(
 ) -> GeneticValidationResult:
     """Evaluate frozen isolation predictors with leave-one-population-out validation.
 
-    The default ladder is:
-
-    - ``ibd``: geographic distance;
-    - ``ibd_ibe``: geographic + environmental distance;
-    - ``ibd_ibe_eog``: geographic + environmental + EOG continuous distance +
-      EOG bidirectional-disconnection indicator.
-
-    If ``strong_reference_distance`` is supplied, two additional models are evaluated:
-
-    - ``strong_reference``;
-    - ``strong_reference_eog``: strong reference + EOG continuous distance +
-      disconnection indicator.
-
-    Lower MSE/MAE is better. Contrasts are always ``augmented - reference`` so negative
-    values indicate improvement. No predictor is tuned from the held-out genetic response.
+    The default ladder is ``ibd``, ``ibd_ibe`` and ``ibd_ibe_eog``. If a frozen
+    ``strong_reference_distance`` is supplied, ``strong_reference`` and
+    ``strong_reference_eog`` are added. Lower MSE/MAE is better; contrasts are always
+    ``augmented - reference`` so negative values indicate improvement.
     """
 
     ids = tuple(str(value) for value in node_ids)
-    if len(ids) < 4 or len(set(ids)) != len(ids) or any(not value.strip() for value in ids):
-        raise ValueError("node_ids must contain at least four unique non-empty IDs")
+    if len(ids) < 5 or len(set(ids)) != len(ids) or any(not value.strip() for value in ids):
+        raise ValueError("node_ids must contain at least five unique non-empty IDs")
     n = len(ids)
     response = _validate_response_matrix(genetic_distance, n)
     d_geo = _validate_distance_matrix(geographic_distance, n, "geographic_distance")
@@ -203,18 +195,16 @@ def evaluate_genetic_validation_ladder(
     disconnected = _validate_disconnected(eog_disconnected, n).astype(float)
     strong = None
     if strong_reference_distance is not None:
-        strong = _validate_distance_matrix(
-            strong_reference_distance,
-            n,
-            "strong_reference_distance",
-        )
+        strong = _validate_distance_matrix(strong_reference_distance, n, "strong_reference_distance")
 
     upper = [(i, j) for i in range(n) for j in range(i + 1, n) if np.isfinite(response[i, j])]
     if len(upper) < n:
         raise ValueError("too few observed genetic-distance pairs for population-wise validation")
 
-    pair_y = np.asarray([response[i, j] for i, j in upper], dtype=float)
-    pair_y = _transform_response(pair_y, config.response_transform)
+    pair_y = _transform_response(
+        np.asarray([response[i, j] for i, j in upper], dtype=float),
+        config.response_transform,
+    )
     predictor_values: Mapping[str, np.ndarray] = {
         "geographic": np.asarray([d_geo[i, j] for i, j in upper], dtype=float),
         "environmental": np.asarray([d_env[i, j] for i, j in upper], dtype=float),
@@ -223,26 +213,18 @@ def evaluate_genetic_validation_ladder(
     }
     if strong is not None:
         predictor_values = dict(predictor_values)
-        predictor_values["strong_reference"] = np.asarray(
-            [strong[i, j] for i, j in upper], dtype=float
-        )
+        predictor_values["strong_reference"] = np.asarray([strong[i, j] for i, j in upper], dtype=float)
 
     model_specs: list[tuple[str, tuple[str, ...]]] = [
         ("ibd", ("geographic",)),
         ("ibd_ibe", ("geographic", "environmental")),
-        (
-            "ibd_ibe_eog",
-            ("geographic", "environmental", "eog_continuous", "eog_disconnected"),
-        ),
+        ("ibd_ibe_eog", ("geographic", "environmental", "eog_continuous", "eog_disconnected")),
     ]
     if strong is not None:
         model_specs.extend(
             [
                 ("strong_reference", ("strong_reference",)),
-                (
-                    "strong_reference_eog",
-                    ("strong_reference", "eog_continuous", "eog_disconnected"),
-                ),
+                ("strong_reference_eog", ("strong_reference", "eog_continuous", "eog_disconnected")),
             ]
         )
 
