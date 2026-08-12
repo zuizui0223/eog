@@ -1,4 +1,4 @@
-# Experimental EOG distribution-model core (v0.1)
+# Experimental EOG distribution-model core (v0.2)
 
 ## Status
 
@@ -32,9 +32,9 @@ For graph edge `e`, total transition cost remains explicitly decomposable throug
 
 The graph is built over the complete, declared landscape node universe. Unlabelled nodes can therefore act as neutral intermediate states, but only positive training observations are anchors/sources. During held-out validation, the held-out response must not be supplied to the fit call.
 
-## Structural accessibility v0.1
+## Structural accessibility v0.2
 
-Let `C(x)` be the minimum cumulative path cost and `B(x)` the minimum minimax bottleneck cost from any source. Their scales are learned from finite positive costs on the declared landscape. The v0.1 accessibility field is
+Let `C(x)` be the minimum cumulative path cost and `B(x)` the minimum minimax bottleneck cost from any source. Their scales are learned from finite positive costs on the declared landscape. The accessibility field is
 
 `M_EOG(x) = exp(- mean_w[C(x)/scale_C, B(x)/scale_B])`.
 
@@ -53,11 +53,25 @@ This gives two exact boundaries:
 - `lambda = 0`: `D_EOG(x) = H(x)` and the model reduces exactly to the pointwise environmental SDM;
 - `lambda = 1`: `D_EOG(x) = H(x) * M_EOG(x)` and full structural accessibility is required.
 
-When `structural_gate_weight` is not supplied explicitly, `lambda` is estimated on training observations only by a deterministic grid search minimizing binary log loss plus an optional shrinkage penalty. Ties retain the smaller `lambda`, so unsupported structural complexity collapses toward the environmental model.
+When `structural_gate_weight` is not supplied explicitly, `lambda` is estimated by a deterministic grid search minimizing binary log loss plus an optional shrinkage penalty. Ties retain the smaller `lambda`, so unsupported structural complexity collapses toward the environmental model.
 
-Positive training rows are themselves source anchors. Allowing a source to use its zero-cost self path while learning `lambda` would leak its own response into the structural gate. EOG therefore uses the **second-best distinct source path** for positive training rows during gate fitting. The final landscape prediction still uses the ordinary best-source field.
+## Nested gate fitting
 
-This training-only gate is an initial development implementation. A stronger version should inner-cross-fit both `H(x)` and the gate inside each outer training fold before empirical confirmation.
+`fit_eog_distribution(..., gate_fold_ids=...)` supports an inner cross-fitting layer inside the training data. This is now the preferred path for an estimated structural gate.
+
+For each inner fold:
+
+1. the pointwise environmental support model is fitted without that fold;
+2. positive records in that fold are omitted entirely from the structural source set;
+3. cumulative and bottleneck accessibility are reconstructed from the remaining sources;
+4. both `H(x)` and `M_EOG(x)` are predicted for the inner-held-out observations;
+5. the assembled out-of-fold predictions across all inner folds are used to select `lambda`.
+
+The final landscape model is then refitted on all outer-training observations and uses all outer-training positives as sources. Thus an empirical outer test can be arranged as:
+
+`outer training -> inner cross-fit H and M -> select lambda -> refit outer-training EOG -> predict untouched outer test`.
+
+If no `gate_fold_ids` are supplied, the implementation retains a non-cross-fitted fallback for development convenience. Positive training rows then use the second-best distinct source path rather than their zero-cost self path. This fallback is not the preferred confirmatory design.
 
 ## Public API
 
@@ -76,10 +90,12 @@ model = fit_eog_distribution(
     EOGDistributionConfig(
         graph_declaration=BridgeGraphDeclaration(max_geographic_km=50.0),
     ),
+    gate_fold_ids=inner_fold_ids,
 )
 
 prediction = model.predict()
 print(model.structural_gate_weight)
+print(model.structural_gate_cross_fitted)
 ```
 
 The prediction object reports, per node:
@@ -92,7 +108,7 @@ The prediction object reports, per node:
 - `source_redundancy`;
 - `distribution_support`.
 
-The fitted model additionally records whether the structural gate was estimated or fixed, the fitted gate weight, training gate loss, full graph fingerprint, source IDs, and environmental reference.
+The fitted model additionally records whether the structural gate was estimated or fixed, whether it was inner-cross-fitted, the fitted gate weight, gate-fold identities, gate loss, full graph fingerprint, source IDs, and environmental reference.
 
 ## Current synthetic validation contracts
 
@@ -102,39 +118,39 @@ The low-level contract fixes `lambda=1` and constructs targets with identical po
 
 `open bridge > high-cost barrier bridge > disconnected target`.
 
-### Training-fitted structural activation
+### Nested structural activation
 
-A replicated held-out benchmark supplies training examples in which high environmental support alone cannot distinguish occurrence from structural non-occurrence. Target labels are withheld. The current frozen synthetic design requires:
+A replicated held-out benchmark supplies outer-training examples in which high environmental support alone cannot distinguish occurrence from structural non-occurrence. Inner two-fold cross-fitting reconstructs both `H` and `M` before selecting `lambda`. Outer target labels are never supplied to the model.
+
+The synthetic contract requires:
 
 - environmental-only held-out AUC = 0.5;
 - environmental + nearest-source held-out AUC = 0.5;
 - EOG structural accessibility AUC = 1.0;
 - EOG distribution-support AUC = 1.0;
-- a nontrivial training-fitted structural gate.
+- a nontrivial inner-cross-fitted structural gate.
 
-The first training-fitted implementation selected `lambda = 1.0` under this deliberately structure-dependent generator.
+### Nested environmental fallback
 
-### Environmental fallback
-
-A complementary generator makes structural accessibility identically one and makes occurrence depend only on the environmental predictor. The required behavior is:
+A complementary generator makes structural accessibility identically one and makes occurrence depend only on the environmental predictor. Both `H` and `M` used for gate selection are inner-cross-fitted. The required behavior is:
 
 - training-fitted `lambda = 0`;
 - `D_EOG` equals `H` exactly;
 - environmental predictive ordering is retained.
 
-Together, the two gate contracts test the intended model class rather than a one-way advantage: EOG can activate structural constraints when the training process requires them and collapse exactly to an environmental SDM when they carry no information.
+Together, the activation and fallback contracts test the intended model class rather than a one-way advantage: EOG can activate structural constraints when the training process requires them and collapse exactly to an environmental SDM when they carry no information.
 
 ## Validation boundary
 
-These synthetic contracts establish estimand implementation, leakage guards, deterministic behavior, structural activation, and environmental fallback. They do **not** establish empirical superiority over SDM, current flow, dynamic occupancy, habitat-network models, or mechanistic dispersal models.
+These synthetic contracts establish estimand implementation, source leakage guards, nested gate fitting, deterministic behavior, structural activation, and environmental fallback. They do **not** establish empirical superiority over SDM, current flow, dynamic occupancy, habitat-network models, or mechanistic dispersal models.
 
-The existing A-Islands and Tanzania outcomes cannot be used to select future v0.1 accessibility or calibration variants. Any empirical test of this new distribution-model line requires a new pre-outcome contract.
+The existing A-Islands and Tanzania outcomes cannot be used to select future v0.2 accessibility or calibration variants. Any empirical test of this new distribution-model line requires a new pre-outcome contract.
 
 ## Next gates
 
-1. Add nested synthetic generators for habitat-only, dispersal-limited, graded-barrier, stepping-stone, long-jump, and mixed processes with noise rather than perfect separation.
-2. Add **inner cross-fitting** for structural-gate estimation so both environmental support and gate tuning are out-of-fold within each outer training set.
-3. Compare environmental-only SDM, nearest-source SDM, patch/network or current-flow baselines, and EOG under identical outer spatial folds.
-4. Test sensitivity to graph scale, environmental-edge scale, barrier misspecification, prevalence, sparse sources, and unlabelled-node density.
-5. Add a scalable raster/patch adapter so the declared node universe is not hand-assembled.
+1. Add noisy nested generators for habitat-only, dispersal-limited, graded-barrier, stepping-stone, long-jump, and mixed processes rather than perfect separation.
+2. Compare environmental-only SDM, nearest-source SDM, patch/network or current-flow baselines, and EOG under identical outer spatial folds.
+3. Test sensitivity to graph scale, environmental-edge scale, barrier misspecification, prevalence, sparse sources, and unlabelled-node density.
+4. Add a scalable raster/patch adapter so the declared node universe is not hand-assembled.
+5. Define calibration metrics separately from ranking metrics; `distribution_support` remains a support index until calibration is prospectively validated.
 6. Only after the synthetic benchmark family and comparator hierarchy are frozen, preregister a new empirical benchmark independent of the existing frozen outcomes.
