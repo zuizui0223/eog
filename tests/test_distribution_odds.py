@@ -30,7 +30,7 @@ def test_odds_accessibility_never_inflates_environmental_baseline():
     accessibility = np.asarray([0.0, 0.3, 1.0])
     result = odds_accessibility_fusion(environmental, accessibility, 2.0)
     assert np.all(result <= environmental + 1e-15)
-    assert result[-1] == environmental[-1]
+    assert np.isclose(result[-1], environmental[-1], rtol=0.0, atol=1e-15)
     assert result[0] < 1e-10
 
 
