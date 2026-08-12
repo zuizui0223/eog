@@ -152,7 +152,8 @@ Bridge inference and survey decisions:
 - `docs/evidence_ledger.md`: verified positive, negative, and unsupported claims;
 - `docs/claim_matrix.md`: quantity-specific wording and evidence status;
 - `docs/frozen_comparison_tutorial.md`: canonical manifest-to-result workflow;
-- `docs/hypothesis_survey_contract.md`: bridge-hypothesis CSV and output contract.
+- `docs/hypothesis_survey_contract.md`: bridge-hypothesis CSV and output contract;
+- `docs/eog_acsp_program_strategy.md`: division of labour with `zuizui0223/acsp`, the allowed pool-level interface, and the joint sequencing plan.
 
 ## Scientific boundary
 
