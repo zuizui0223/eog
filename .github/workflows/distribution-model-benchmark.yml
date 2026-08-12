@@ -8,10 +8,12 @@ on:
       - "benchmarks/distribution_model_heldout_benchmark.py"
       - "benchmarks/distribution_structural_discrimination.py"
       - "benchmarks/distribution_gate_shrinkage.py"
+      - "benchmarks/distribution_model_noisy_regimes.py"
       - "tests/test_distribution_model.py"
       - "tests/test_distribution_model_heldout_benchmark.py"
       - "tests/test_distribution_structural_discrimination.py"
       - "tests/test_distribution_gate_shrinkage.py"
+      - "tests/test_distribution_model_noisy_regimes.py"
       - ".github/workflows/distribution-model-benchmark.yml"
   workflow_dispatch:
 
@@ -31,10 +33,23 @@ jobs:
         run: python benchmarks/distribution_model_heldout_benchmark.py > distribution-heldout-ranking.json
       - name: Run nested environmental fallback benchmark
         run: python benchmarks/distribution_gate_shrinkage.py > distribution-gate-shrinkage.json
+      - name: Run noisy multi-regime development screen
+        run: python benchmarks/distribution_model_noisy_regimes.py > distribution-noisy-development.json
       - name: Show benchmark results
         run: |
           cat distribution-heldout-ranking.json
           cat distribution-gate-shrinkage.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("distribution-noisy-development.json").read_text())
+          print(json.dumps({
+              "schema": result["schema"],
+              "status": result["status"],
+              "integrity": result["integrity_checks"],
+              "summary": result["summary"],
+          }, indent=2, sort_keys=True))
+          PY
       - name: Verify result contracts
         run: |
           python - <<'PY'
@@ -56,6 +71,18 @@ jobs:
           assert fallback["structural_gate_weight"] == 0.0
           assert fallback["auc"]["environmental_support"] == 1.0
           assert fallback["auc"]["eog_distribution_support"] == 1.0
+
+          noisy = json.loads(Path("distribution-noisy-development.json").read_text())
+          assert noisy["status"] == "development_screen_not_confirmation"
+          assert noisy["all_integrity_checks_pass"] is True
+          assert noisy["regimes"] == [
+              "habitat_only",
+              "dispersal_limited",
+              "graded_barrier",
+              "stepping_stone",
+              "long_jump",
+              "mixed",
+          ]
           PY
       - uses: actions/upload-artifact@v4
         with:
@@ -64,3 +91,4 @@ jobs:
             distribution-structural-discrimination.json
             distribution-heldout-ranking.json
             distribution-gate-shrinkage.json
+            distribution-noisy-development.json
