@@ -29,6 +29,29 @@ def test_penalized_logistic_is_deterministic_and_ranks_signal():
     assert np.all((support >= 0.0) & (support <= 1.0))
 
 
+def test_immediate_prediction_path_is_identical_to_historical_fit_then_predict():
+    x = np.array([
+        [-2.0, 0.0],
+        [-1.5, 0.5],
+        [-1.0, -0.5],
+        [-0.5, 0.2],
+        [0.0, -0.2],
+        [0.5, 0.1],
+        [1.0, -0.4],
+        [1.5, 0.3],
+        [2.0, -0.1],
+        [2.5, 0.4],
+        [3.0, -0.3],
+        [3.5, 0.2],
+    ])
+    y = np.array([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1], dtype=float)
+    target = np.array([[-1.25, 0.1], [0.75, -0.1], [2.75, 0.0]])
+    model = fit_penalized_logistic_support(x, y, min_class_count=5)
+    historical = model.predict_support(target)
+    immediate = fit_penalized_logistic_support(x, y, target, min_class_count=5)
+    assert np.array_equal(immediate, historical)
+
+
 def test_standardization_is_training_only_and_reused_for_prediction():
     x = np.array([
         [0.0, 10.0], [1.0, 11.0], [2.0, 12.0], [3.0, 13.0], [4.0, 14.0],
