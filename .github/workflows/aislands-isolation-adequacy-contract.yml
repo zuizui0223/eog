@@ -1,0 +1,208 @@
+name: A-Islands isolation adequacy contract
+
+on:
+  push:
+    branches:
+      - agent/island-isolation-adequacy-contract
+  pull_request:
+    branches:
+      - agent/novelty-gap-submission-strategy
+  workflow_dispatch:
+
+concurrency:
+  group: aislands-isolation-adequacy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  geometry-and-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install EOG and geometry audit dependency
+        run: |
+          python -m pip install -e .
+          python -m pip install pyshp==2.3.1 pytest
+
+      - name: Test frozen island-isolation contract and geometry features
+        run: |
+          python -m pytest -q \
+            tests/test_aislands_isolation_adequacy_contract.py \
+            tests/test_island_isolation_reference.py \
+            tests/test_aislands_polygon_area.py \
+            tests/test_aislands_mainland_distance.py
+
+      - name: Reproduce exact A-Islands v1.0 source
+        run: |
+          python benchmarks/fetch_aislands_zenodo.py \
+            --record-id 10775809 \
+            --expected-version 1.0 \
+            --output-dir results/aislands_isolation_adequacy/source
+
+      - name: Rebuild outcome-free 842-island model-unit audit
+        run: |
+          python benchmarks/audit_aislands_model_islands.py \
+            --island-data results/aislands_isolation_adequacy/source/island_data.csv \
+            --species-data results/aislands_isolation_adequacy/source/species_data.csv \
+            --shapefile results/aislands_isolation_adequacy/source/raw/A-Island_shape.shp \
+            --projection results/aislands_isolation_adequacy/source/raw/A-Island_shape.prj \
+            --output-csv results/aislands_isolation_adequacy/island_model_audit.csv \
+            --output-summary results/aislands_isolation_adequacy/island_model_audit_summary.json
+
+      - name: Derive island area from the same frozen polygon geometry
+        run: |
+          python benchmarks/audit_aislands_polygon_area.py \
+            --audit-csv results/aislands_isolation_adequacy/island_model_audit.csv \
+            --shapefile results/aislands_isolation_adequacy/source/raw/A-Island_shape.shp \
+            --projection results/aislands_isolation_adequacy/source/raw/A-Island_shape.prj \
+            --output-csv results/aislands_isolation_adequacy/island_area_from_polygon.csv \
+            --output-summary results/aislands_isolation_adequacy/island_area_summary.json
+
+      - name: Freeze Natural Earth continental-mainland geometry
+        run: |
+          python benchmarks/fetch_natural_earth_australia_mainland.py \
+            --declared-version 5.1.1 \
+            --output-dir results/aislands_isolation_adequacy/mainland
+
+      - name: Derive fixed mainland distance for all 842 islands
+        run: |
+          python benchmarks/build_aislands_mainland_distance.py \
+            --island-audit-csv results/aislands_isolation_adequacy/island_model_audit.csv \
+            --mainland-ring-csv results/aislands_isolation_adequacy/mainland/australia_continental_mainland_ring.csv \
+            --output-csv results/aislands_isolation_adequacy/mainland_distance.csv \
+            --output-summary results/aislands_isolation_adequacy/mainland_distance_summary.json
+
+      - name: Enforce frozen pre-outcome island-isolation gates
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          root = Path('results/aislands_isolation_adequacy')
+          source = json.loads((root / 'source/source_manifest.json').read_text())
+          model = json.loads((root / 'island_model_audit_summary.json').read_text())
+          area = json.loads((root / 'island_area_summary.json').read_text())
+          mainland = json.loads((root / 'mainland/mainland_source_manifest.json').read_text())
+          mainland_distance = json.loads((root / 'mainland_distance_summary.json').read_text())
+          contract = json.loads(Path('validation/aislands_isolation_adequacy_20260812/preoutcome_contract.json').read_text())
+          area_expected = json.loads(Path('validation/aislands_isolation_adequacy_20260812/area_gate_expected.json').read_text())
+          mainland_expected = json.loads(Path('validation/aislands_isolation_adequacy_20260812/mainland_gate_expected.json').read_text())
+          area_rows = list(csv.DictReader((root / 'island_area_from_polygon.csv').open()))
+          mainland_rows = list(csv.DictReader((root / 'mainland_distance.csv').open()))
+
+          assert source['resolved_record_id'] == 10775810
+          assert source['version'] == '1.0'
+          assert source['island_data_sha256'] == 'd26ae154aeae1e6eab268f22268342077f7e8e7ef000d18a1f052f65866d5bde'
+          assert source['species_data_sha256'] == '43e7d2e8deb1d1d635c8db44a7fe68cfb79c2a059a2207914413a62431eb7b0c'
+          assert model['surveyed_islands_with_species_rows'] == 842
+          assert model['coordinate_evaluable_islands'] == 842
+          assert model['area_evaluable_islands'] == 0
+          assert contract['outcomes_inspected_for_this_extension'] is False
+          assert contract['reference_design_status'] == 'final_before_extension_species_outcomes'
+          assert contract['geometry_gate']['external_area_sources_allowed'] is False
+          assert contract['mainland_gate']['required_version'] == '5.1.1'
+          assert contract['mainland_gate']['heldout_or_species_labels_used'] is False
+          assert contract['primary_contrast'] == 'candidate C minus reference R3 matched held-out log loss'
+
+          assert area_expected['gate_passes'] is True
+          assert area_expected['species_outcomes_used'] is False
+          assert area['shapefile_type'] in contract['geometry_gate']['required_shape_family']
+          assert area['shapefile_type'] == area_expected['source']['shapefile_type']
+          assert area['surveyed_islands'] == 842
+          assert area['finite_positive_area_islands'] == 842
+          assert area['gate_passes'] is True
+          assert area['species_outcomes_used'] is False
+          assert area['sdm_outputs_used'] is False
+          assert area['eog_outputs_used'] is False
+          assert area['input_sha256']['shp'] == area_expected['source']['shp_sha256']
+          assert area['input_sha256']['shx'] == area_expected['source']['shx_sha256']
+          assert area['input_sha256']['dbf'] == area_expected['source']['dbf_sha256']
+          assert area['input_sha256']['prj'] == area_expected['source']['prj_sha256']
+          assert area['output_area_table_sha256'] == area_expected['derived_area']['area_table_sha256']
+          assert area['derived_area_km2']['min'] == area_expected['derived_area']['minimum_km2']
+          assert area['derived_area_km2']['median'] == area_expected['derived_area']['median_km2']
+          assert area['derived_area_km2']['max'] == area_expected['derived_area']['maximum_km2']
+          assert len(area_rows) == 842
+          assert all(row['finite_positive'] == '1' for row in area_rows)
+
+          ne = mainland_expected['natural_earth']
+          au = mainland_expected['australia_feature']
+          md = mainland_expected['mainland_distance']
+          assert mainland_expected['gate_passes'] is True
+          assert mainland_expected['species_outcomes_used'] is False
+          assert mainland['declared_version_from_official_download_page'] == ne['declared_version']
+          assert mainland['embedded_version_files']['ne_10m_admin_0_countries.VERSION.txt'] == ne['embedded_version']
+          assert mainland['archive_sha256'] == ne['archive_sha256']
+          assert mainland['archive_size_bytes'] == ne['archive_size_bytes']
+          assert mainland['extracted_file_sha256']['ne_10m_admin_0_countries.shp'] == ne['shp_sha256']
+          assert mainland['extracted_file_sha256']['ne_10m_admin_0_countries.shx'] == ne['shx_sha256']
+          assert mainland['extracted_file_sha256']['ne_10m_admin_0_countries.dbf'] == ne['dbf_sha256']
+          assert mainland['extracted_file_sha256']['ne_10m_admin_0_countries.prj'] == ne['prj_sha256']
+          assert mainland['extracted_file_sha256']['ne_10m_admin_0_countries.cpg'] == ne['cpg_sha256']
+          assert mainland['australia_feature_selector'] == au['selector']
+          assert mainland['selected_australia_identifiers'] == au['selected_identifiers']
+          assert len(mainland['australian_sovereignty_feature_diagnostics']) == au['australian_sovereignty_feature_count']
+          assert mainland['shape_type'] == au['shape_type']
+          assert mainland['australia_ring_count'] == au['ring_count']
+          assert mainland['selected_mainland_ring_index'] == au['selected_mainland_ring_index']
+          assert mainland['selected_mainland_point_count'] == au['selected_mainland_point_count']
+          assert mainland['selected_mainland_area_km2'] == au['selected_mainland_area_km2']
+          assert mainland['selected_mainland_bbox_lonlat'] == au['selected_mainland_bbox_lonlat']
+          assert mainland['selected_mainland_ring_sha256'] == au['selected_mainland_ring_sha256']
+          assert mainland['ring_csv_sha256'] == au['ring_csv_sha256']
+          assert mainland['species_outcomes_used'] is False
+          assert mainland['sdm_outputs_used'] is False
+          assert mainland['eog_outputs_used'] is False
+
+          assert mainland_distance['islands'] == md['islands']
+          assert mainland_distance['distance_km']['min'] == md['minimum_km']
+          assert mainland_distance['distance_km']['q25'] == md['q25_km']
+          assert mainland_distance['distance_km']['median'] == md['median_km']
+          assert mainland_distance['distance_km']['q75'] == md['q75_km']
+          assert mainland_distance['distance_km']['max'] == md['maximum_km']
+          assert mainland_distance['input_sha256']['island_audit_csv'] == md['input_island_audit_sha256']
+          assert mainland_distance['input_sha256']['mainland_ring_csv'] == md['input_mainland_ring_csv_sha256']
+          assert mainland_distance['output_distance_table_sha256'] == md['distance_table_sha256']
+          assert mainland_distance['species_outcomes_used'] is False
+          assert mainland_distance['sdm_outputs_used'] is False
+          assert mainland_distance['eog_outputs_used'] is False
+          assert area['output_area_table_sha256'] == mainland_expected['area_table_dependency_sha256']
+          assert len(mainland_rows) == 842
+          assert all(float(row['distance_to_australia_mainland_km']) >= 0 for row in mainland_rows)
+
+          print(json.dumps({
+              'source_record': source['resolved_record_id'],
+              'islands': area['finite_positive_area_islands'],
+              'area_range_km2': area['derived_area_km2'],
+              'area_table_sha256': area['output_area_table_sha256'],
+              'natural_earth_archive_sha256': mainland['archive_sha256'],
+              'mainland_ring_sha256': mainland['selected_mainland_ring_sha256'],
+              'mainland_distance_range_km': mainland_distance['distance_km'],
+              'mainland_distance_table_sha256': mainland_distance['output_distance_table_sha256'],
+              'outcomes_used': False,
+          }, indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aislands-isolation-adequacy-contract
+          path: |
+            validation/aislands_isolation_adequacy_20260812/preoutcome_contract.json
+            validation/aislands_isolation_adequacy_20260812/area_gate_expected.json
+            validation/aislands_isolation_adequacy_20260812/mainland_gate_expected.json
+            docs/aislands_isolation_adequacy_preoutcome_contract.md
+            results/aislands_isolation_adequacy/source/source_manifest.json
+            results/aislands_isolation_adequacy/island_model_audit.csv
+            results/aislands_isolation_adequacy/island_model_audit_summary.json
+            results/aislands_isolation_adequacy/island_area_from_polygon.csv
+            results/aislands_isolation_adequacy/island_area_summary.json
+            results/aislands_isolation_adequacy/mainland/mainland_source_manifest.json
+            results/aislands_isolation_adequacy/mainland/australia_continental_mainland_ring.csv
+            results/aislands_isolation_adequacy/mainland_distance.csv
+            results/aislands_isolation_adequacy/mainland_distance_summary.json
+          if-no-files-found: error

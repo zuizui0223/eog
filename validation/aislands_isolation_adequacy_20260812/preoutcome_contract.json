@@ -1,0 +1,120 @@
+{
+  "schema_version": "eog_aislands_isolation_adequacy_v1_3",
+  "frozen_date": "2026-08-12",
+  "outcomes_inspected_for_this_extension": false,
+  "reference_design_status": "final_before_extension_species_outcomes",
+  "amendments": [
+    {
+      "revision": "1.1",
+      "timing": "after the outcome-free A-Islands polygon-area gate, before any extension species outcome",
+      "change": "add a fixed continental-mainland distance baseline so the primary island-biogeography reference includes classical mainland isolation",
+      "species_outcomes_inspected": false
+    },
+    {
+      "revision": "1.2",
+      "timing": "after the outcome-free polygon-area gate and closest-prior audit, before any extension species outcome",
+      "change": "add area-weighted occupied-source pressure and area-weighted surrounding-landmass pressure so the primary reference addresses source size and established surrounding-land-area isolation information",
+      "species_outcomes_inspected": false
+    },
+    {
+      "revision": "1.3",
+      "timing": "after identifying Carter, Perry & Russell 2020 as the closest multidimensional island-isolation comparator, before any extension species outcome",
+      "change": "add species-independent mainland stepping-stone frequency so R3 explicitly represents mainland distance, generic stepping-stone availability, and generic insular-network position before the species-conditioned EOG probe is added",
+      "species_outcomes_inspected": false
+    }
+  ],
+  "scientific_question": "Does species-conditioned archipelago configuration retain held-out incidence information after local climate, island area, continental-mainland distance, direct and area-weighted species-source pressure, surrounding landmass, generic mainland stepping-stone availability, and species-independent archipelago network position are represented?",
+  "upstream_frozen": {
+    "aislands_record": 10775810,
+    "surveyed_islands": 842,
+    "graph_node_universe": "the same 842 surveyed/model-linked A-Islands used by the authoritative benchmark; shapefile-only records without frozen species-incidence rows are not added as new neutral stepping-stone nodes in this confirmatory extension",
+    "taxa": 886,
+    "folds": 5,
+    "fold_sha256": "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa",
+    "climate_sha256": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285",
+    "cohort_sha256": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+    "authoritative_conditional_concordance": 0.6177465917820878
+  },
+  "closest_multidimensional_isolation_comparator": {
+    "citation": "Carter, Z.T., Perry, G.L.W. & Russell, J.C. (2020). Determining the underlying structure of insular isolation measures. Journal of Biogeography 47: 955-967.",
+    "doi": "10.1111/jbi.13778",
+    "reported_axes": ["mainland distance", "stepping stones", "insular network position"],
+    "eog_boundary": "these generic island-isolation axes are reference information, not EOG novelty"
+  },
+  "geometry_gate": {
+    "source": "same frozen A-Islands v1.0 shapefile only",
+    "required_shape_family": ["POLYGON", "POLYGONM", "POLYGONZ"],
+    "required_positive_finite_area_islands": 842,
+    "external_area_sources_allowed": false,
+    "outcome_run_allowed_if_gate_fails": false
+  },
+  "mainland_gate": {
+    "source": "Natural Earth 1:10m Admin-0 Countries, official current release 5.1.1 at contract revision",
+    "download_url": "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip",
+    "required_version": "5.1.1",
+    "australia_feature_rule": "select exactly one country feature with ADMIN=Australia and ADM0_A3=AUS, then select its polygon ring with largest absolute spherical area as continental mainland",
+    "distance_rule": "minimum spherical point-to-minor-great-circle-segment distance from frozen A-Islands centroid to the selected mainland coastline ring",
+    "heldout_or_species_labels_used": false,
+    "outcome_run_allowed_if_gate_fails": false
+  },
+  "scales_km": [25.0, 50.0, 125.0, 250.0],
+  "reference_tiers": {
+    "R0": ["bio1", "bio5", "bio6", "bio12", "bio15"],
+    "R1": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km"],
+    "R2": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure"],
+    "R3": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "surrounding_landmass_pressure", "unanchored_component_exposure", "mainland_stepping_stone_frequency"],
+    "C": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "surrounding_landmass_pressure", "unanchored_component_exposure", "mainland_stepping_stone_frequency", "geography_only_eog_connected_frequency"]
+  },
+  "feature_rules": {
+    "distance_to_australia_mainland_km": "species-independent table frozen from Natural Earth 1:10m v5.1.1 continental-mainland ring before any extension species outcome",
+    "multi_source_pressure": "mean_s log(1 + sum_{training presence a != focal} exp(-distance(focal,a)/s))",
+    "area_weighted_source_pressure": "mean_s log(1 + sum_{training presence a != focal} area_km2(a) * exp(-distance(focal,a)/s))",
+    "surrounding_island_pressure": "mean_s log(1 + sum_{j != focal} exp(-distance(focal,j)/s))",
+    "surrounding_landmass_pressure": "mean_s log(1 + sum_{j != focal} area_km2(j) * exp(-distance(focal,j)/s))",
+    "unanchored_component_exposure": "mean_s ((component_size(focal,s)-1)/(N-1))",
+    "mainland_stepping_stone_frequency": "fraction of frozen geographic-radius graphs where the focal island component contains at least one island whose fixed centroid-to-mainland coastline distance is <= that graph radius",
+    "geography_only_eog_connected_frequency": "fraction of frozen geographic-radius graphs where focal component contains at least one outer-training presence other than focal",
+    "training_row_self_anchor_exclusion": true,
+    "heldout_labels_used": false
+  },
+  "comparison_model": {
+    "family": "deterministic L2-penalized logistic regression",
+    "lambda": 1.0,
+    "intercept_penalized": false,
+    "training_only_z_standardization": true,
+    "class_weighting": "none",
+    "hyperparameter_tuning": "none",
+    "minimum_training_presences": 5,
+    "minimum_training_absences": 5,
+    "constant_predictor_policy": "within each tier and outer-training fold, drop only columns with training standard deviation <= 1e-12; record every dropped column; apply the retained column indices unchanged to held-out rows",
+    "constant_predictor_tolerance": 1e-12,
+    "rationale": "preserve the original A-Islands 5/5 class gate while using the already-audited Tanzania reduced-tier rule so a constant structural column is neutral rather than causing an artificial whole-fold failure"
+  },
+  "primary_contrast": "candidate C minus reference R3 matched held-out log loss",
+  "favourable_direction": "negative",
+  "secondary_contrast": "candidate C minus reference R3 matched held-out Brier score",
+  "inference": {
+    "replication_unit": "species",
+    "fold_aggregation": "equal mean within species",
+    "species_aggregation": "equal mean across estimable species",
+    "bootstrap_replicates": 10000,
+    "sign_flip_replicates": 100000,
+    "seed": 20260812
+  },
+  "forbidden_postoutcome_changes": [
+    "change geographic scales",
+    "choose a subset of source-pressure scales",
+    "add shapefile-only unsurveyed islands as neutral graph nodes after seeing extension outcomes",
+    "drop area after seeing its effect",
+    "drop mainland distance after seeing its effect",
+    "drop area-weighted source pressure after seeing its effect",
+    "drop surrounding-landmass pressure after seeing its effect",
+    "drop generic mainland stepping-stone frequency after seeing its effect",
+    "replace R3 primary contrast with a weaker reference",
+    "select favourable taxa",
+    "change the 5/5 training-class gate after seeing extension outcomes",
+    "change the training-constant predictor policy after seeing extension outcomes",
+    "introduce species-specific radii from current outcomes",
+    "reinterpret connected frequency as movement or colonisation probability"
+  ]
+}

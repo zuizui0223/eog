@@ -1,0 +1,65 @@
+{
+  "schema_version": "eog_aislands_mainland_gate_v1",
+  "status": "successful_outcome_free_mainland_gate",
+  "recorded_at_utc": "2026-08-12",
+  "workflow_run_id": 31559730976,
+  "workflow_head_sha": "77fe1c7a5eba5485058d12979b7dd2a0255a928b",
+  "artifact_id": 9127300301,
+  "artifact_name": "aislands-isolation-adequacy-contract",
+  "artifact_digest": "sha256:fb2533773d25457bb7e5b98404f063fe625c2a68dd7782e35019b8a01c9b2feb",
+  "natural_earth": {
+    "declared_version": "5.1.1",
+    "embedded_version": "5.1.1",
+    "archive_sha256": "ce1ac7036499a0edd641fbc093cd209a98f96a49d2eca8480aaacad35138a7f6",
+    "archive_size_bytes": 4930492,
+    "shp_sha256": "7ce119ef6342e43cff7c0c3004e0911ab7ec1988a14734372031d2012180e7bc",
+    "shx_sha256": "ca19ec112d054c77bc8f7ac00e3b110d5dff32cc9bcf4cd1b8b66bdd0f611d32",
+    "dbf_sha256": "c5dbd3dd5fd7e2ef49051fc88562c03819e8ea63a382642df6eadd1243bf4b49",
+    "prj_sha256": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+    "cpg_sha256": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824"
+  },
+  "australia_feature": {
+    "selector": "ADMIN=Australia AND ADM0_A3=AUS",
+    "selected_identifiers": {
+      "ADMIN": "Australia",
+      "ADM0_A3": "AUS",
+      "SOVEREIGNT": "Australia",
+      "SOV_A3": "AU1",
+      "TYPE": "Country",
+      "ISO_A3": "AUS",
+      "NE_ID": "1159320355"
+    },
+    "australian_sovereignty_feature_count": 6,
+    "shape_type": "POLYGON",
+    "ring_count": 94,
+    "selected_mainland_ring_index": 0,
+    "selected_mainland_point_count": 9462,
+    "selected_mainland_area_km2": 7613492.071482639,
+    "selected_mainland_bbox_lonlat": [
+      113.156979514,
+      -39.14495208099993,
+      153.63062584700003,
+      -10.687676690999922
+    ],
+    "selected_mainland_ring_sha256": "18d151bfe8aee727677ba8beca6f244f80a9a3cb3b616de534cf4ba331f042a4",
+    "ring_csv_sha256": "de56ee64636a2f428df983879d85122cea4d476e1bf1b3837cb12a0cabbe86c9"
+  },
+  "mainland_distance": {
+    "islands": 842,
+    "minimum_km": 0.0022643958878735796,
+    "q25_km": 4.887664678466882,
+    "median_km": 20.186479960216893,
+    "q75_km": 68.8502783162213,
+    "maximum_km": 492.60304978452757,
+    "input_island_audit_sha256": "3a069f208e1ce7222176ccba3fc334da302c135725c9e88ce41d84f93d900fc4",
+    "input_mainland_ring_csv_sha256": "de56ee64636a2f428df983879d85122cea4d476e1bf1b3837cb12a0cabbe86c9",
+    "distance_table_sha256": "7d6f52f03702dd0cfae061023a1b2f405e39397de73eaad21b97d24176c4f869"
+  },
+  "area_table_dependency_sha256": "496789783a98e55e1b9552f6f6d28e7b4567ef0f52c795657c7e2fea9c60aae2",
+  "gate_passes": true,
+  "species_outcomes_used": false,
+  "sdm_outputs_used": false,
+  "eog_outputs_used": false,
+  "timing_label": "mainland geometry and the 842-row distance baseline were frozen after the final v1.3 reference design and before any island-isolation extension species outcome",
+  "next_rule": "Every future island-isolation outcome run must reproduce the same Natural Earth archive, Australia mainland ring, area table and 842-row mainland-distance table and hard-fail on any fingerprint mismatch."
+}
