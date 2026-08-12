@@ -1,0 +1,59 @@
+name: Frozen eventual genetic confirmation
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/eventual_genetic_connectivity_confirmation.py"
+      - "docs/eog_v2_genetic_confirmation_contract.md"
+      - "src/eog/eventual_genetic_connectivity.py"
+      - "src/eog/eventual_reachability_genetics.py"
+      - "src/eog/dynamic_island_reachability.py"
+      - "src/eog/neutral_genetics_simulator.py"
+      - ".github/workflows/eventual-genetic-confirmation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  confirm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify frozen method-source blobs
+        run: |
+          test "$(git hash-object src/eog/eventual_genetic_connectivity.py)" = "9c48362b9cc75f3ec50a0fa4b71c356b55f62076"
+          test "$(git hash-object src/eog/eventual_reachability_genetics.py)" = "dcdfb92c40c4b7271517988311cd5fff4df86326"
+          test "$(git hash-object src/eog/dynamic_island_reachability.py)" = "d3d57a8bef431c34f5d2c13e5e061ade40bcb64f"
+          test "$(git hash-object src/eog/neutral_genetics_simulator.py)" = "276f77ea88442b567cc6ad5625bf78d0ace530b6"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Run frozen synthetic genetic confirmation
+        run: |
+          mkdir -p benchmark_results/eventual_genetic_confirmation
+          python benchmarks/eventual_genetic_connectivity_confirmation.py \
+            > benchmark_results/eventual_genetic_confirmation/result.json
+      - name: Check frozen decision
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("benchmark_results/eventual_genetic_confirmation/result.json").read_text())
+          assert result["status"] == "frozen-synthetic-genetic-confirmation"
+          assert result["contract_fingerprint"] == "9781b171f703010fe16efdd5adc7f12daaa5a3b0be72986438c2bd63e78db1d7"
+          assert result["contract"]["confirmation_seeds"] == [2503, 2609, 2707, 2801, 2903, 3001, 3109, 3203]
+          assert result["directional_fst_boundary_is_record_only"] is True
+          assert result["decision"]["passed"] is True
+          assert all(check["passed"] for check in result["decision"]["checks"].values())
+          PY
+      - name: Upload frozen confirmation output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eventual-genetic-confirmation
+          path: benchmark_results/eventual_genetic_confirmation
+          if-no-files-found: error
