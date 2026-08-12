@@ -1,0 +1,9 @@
+{
+  "schema_version": "eog_distribution_v02_confirmation_authorization_v1",
+  "status": "pre_outcome_not_authorized",
+  "expected_contract_path": "benchmarks/distribution_v02_confirmation_contract.json",
+  "expected_contract_git_blob_sha": "c5b034f1b74fb71acef390bcff6a52bd701d66f4",
+  "execution_authorized": false,
+  "authorization_rule": "This file may be changed to execution_authorized=true only after the frozen runner validate-only gate and Package checks are green. The scientific contract, generator, model blobs, seeds, alpha, comparators, and promotion gates may not change in the authorization commit.",
+  "scientific_boundary": "Authorization changes execution state only; it must not change any model or outcome-dependent choice."
+}
