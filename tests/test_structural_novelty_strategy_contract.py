@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -7,6 +8,8 @@ ROOT = Path(__file__).resolve().parents[1]
 STRATEGY = ROOT / "manuscript/submission/novelty_submission_strategy_2026-08-12.md"
 ADDITIONS = ROOT / "manuscript/submission/closest_prior_reference_additions.md"
 CHECKLIST = ROOT / "manuscript/structural_submission_checklist.md"
+GATE = ROOT / "manuscript/submission/closest_prior_revision_gate.json"
+ISLAND_CONTRACT = ROOT / "validation/aislands_isolation_adequacy_20260812/preoutcome_contract.json"
 
 
 def test_novelty_strategy_preserves_frozen_empirical_boundary() -> None:
@@ -22,9 +25,11 @@ def test_novelty_strategy_preserves_frozen_empirical_boundary() -> None:
     ):
         assert token in text
     assert "Do not reopen the frozen outcome analyses" in text
+    assert "authorized exactly once" in text
+    assert "C − R3" in text
 
 
-def test_closest_prior_audit_covers_required_method_families() -> None:
+def test_closest_prior_audit_covers_general_and_island_method_families() -> None:
     text = ADDITIONS.read_text(encoding="utf-8")
     required_dois = (
         "10.1890/08-1524.1",
@@ -40,6 +45,11 @@ def test_closest_prior_audit_covers_required_method_families() -> None:
         "10.1111/2041-210X.14444",
         "10.1016/j.scitotenv.2024.178204",
         "10.1016/j.ecoinf.2026.103740",
+        "10.1890/08-1337.1",
+        "10.1111/j.1600-0587.2012.07669.x",
+        "10.1093/biolinnean/bly033",
+        "10.1111/jbi.13778",
+        "10.1111/cobi.14047",
     )
     for doi in required_dois:
         assert doi in text
@@ -50,31 +60,43 @@ def test_closest_prior_audit_covers_required_method_families() -> None:
         "inverse suitability",
         "network topology",
         "dispersal thresholds",
-        "environmental-space suitability",
-        "patch area/configuration/diversity",
-        "incidence-function/species-distribution",
         "uncertainty",
-        "source points",
+        "stepping-stone isolation",
+        "surrounding land-area",
+        "insular network position",
+        "independent presence–absence and genetic evidence",
     ):
         assert concept.lower() in text.lower()
 
 
-def test_submission_is_blocked_until_closest_prior_revision_is_merged() -> None:
+def test_machine_gate_authorizes_only_the_frozen_island_extension() -> None:
+    gate = json.loads(GATE.read_text(encoding="utf-8"))
+    island = json.loads(ISLAND_CONTRACT.read_text(encoding="utf-8"))
+    assert gate["schema_version"] == "eog_structural_closest_prior_gate_v2"
+    assert gate["original_frozen_outcomes_reopen_allowed"] is False
+    assert gate["new_outcome_analysis_required"] is True
+    assert gate["authorized_new_outcome_analysis"] == "aislands_isolation_adequacy_v1_3_exactly_once"
+    assert island["schema_version"] == "eog_aislands_isolation_adequacy_v1_3"
+    assert island["reference_design_status"] == "final_before_extension_species_outcomes"
+    assert island["outcomes_inspected_for_this_extension"] is False
+    assert gate["island_extension_preoutcome_fingerprints"]["species_outcomes_used_when_frozen"] is False
+    assert gate["island_extension_preoutcome_fingerprints"]["area_table_sha256"] == "496789783a98e55e1b9552f6f6d28e7b4567ef0f52c795657c7e2fea9c60aae2"
+    assert gate["island_extension_preoutcome_fingerprints"]["mainland_distance_table_sha256"] == "7d6f52f03702dd0cfae061023a1b2f405e39397de73eaad21b97d24176c4f869"
+
+
+def test_submission_is_blocked_until_island_result_is_incorporated() -> None:
     text = CHECKLIST.read_text(encoding="utf-8")
-    assert "Closest-prior framing revision merged before release" in text
+    assert "Island-isolation adequacy extension executed exactly once" in text
+    assert "Island extension result incorporated without weakening R3" in text
     assert "Verified-reference ledger expanded" in text
-    for overclaim in (
-        "EOG is the first framework to integrate suitability and connectivity",
-        "occurrence anchoring is novel",
-        "scenario sensitivity or connectivity uncertainty analysis is novel",
-    ):
-        assert overclaim in text
-    assert re.search(r"- \[ \] \*\*Closest-prior framing revision merged before release", text)
+    assert re.search(r"- \[ \] \*\*Island-isolation adequacy extension executed exactly once", text)
+    assert re.search(r"- \[ \] \*\*Island extension result incorporated without weakening R3", text)
 
 
-def test_journal_strategy_is_explicit() -> None:
+def test_result_dependent_journal_strategy_is_explicit() -> None:
     text = STRATEGY.read_text(encoding="utf-8")
-    assert "First target — *Ecological Informatics*: GO" in text
-    assert "*Methods in Ecology and Evolution*: NO-GO for the current version" in text
-    assert "Backup — *Ecological Modelling*: CONDITIONAL" in text
-    assert "workflow composed of existing tools" in text
+    assert "Route A — robust residual island increment: *Journal of Biogeography* first" in text
+    assert "Route B — no residual island increment: *Ecological Informatics* first" in text
+    assert "*Methods in Ecology and Evolution*: NO-GO for this empirical paper" in text
+    assert "*Ecological Modelling*: conditional backup" in text
+    assert "HOLD manuscript release, DOI reservation and journal submission" in text
