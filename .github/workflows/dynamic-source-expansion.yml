@@ -1,0 +1,56 @@
+name: Dynamic source expansion leakage audit
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/dynamic_source_expansion_sensitivity.py"
+      - ".github/workflows/dynamic-source-expansion.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Run nested source-expansion sensitivity
+        run: |
+          mkdir -p benchmark_results/dynamic_source_expansion
+          python benchmarks/dynamic_source_expansion_sensitivity.py \
+            > benchmark_results/dynamic_source_expansion/result.json
+      - name: Check leakage contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("benchmark_results/dynamic_source_expansion/result.json").read_text())
+          assert result["status"] == "development-nested-self-excluded-source-expansion"
+          contract = result["leakage_contract"]
+          assert contract["outer_test_labels_never_construct_sources"] is True
+          assert contract["outer_label_invariance_max_abs"] == 0.0
+          assert contract["inner_positive_rows_self_excluded"] is True
+          assert contract["leaky_audit_positive_rows_are_exact_sources"] is True
+          assert set(result["mean_models"]) == {
+              "environment",
+              "fixed_dynamic",
+              "expanded_nearest",
+              "expanded_pressure",
+              "expanded_dynamic",
+              "leaky_expanded_dynamic",
+          }
+          PY
+      - name: Upload output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dynamic-source-expansion-development
+          path: benchmark_results/dynamic_source_expansion
+          if-no-files-found: error
