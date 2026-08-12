@@ -1,11 +1,17 @@
 {
-  "schema_version": "eog_structural_closest_prior_gate_v1",
+  "schema_version": "eog_structural_closest_prior_gate_v2",
   "audit_date": "2026-08-12",
-  "submission_status": "hold_until_manuscript_framing_revision_merged",
-  "new_outcome_analysis_required": false,
-  "first_target": "Ecological Informatics",
-  "first_target_decision": "go_after_framing_and_existing_human_release_gates",
-  "methods_in_ecology_and_evolution_current_version": "no_go",
+  "submission_status": "hold_until_frozen_island_isolation_extension_is_executed_and_incorporated",
+  "original_frozen_outcomes_reopen_allowed": false,
+  "new_outcome_analysis_required": true,
+  "authorized_new_outcome_analysis": "aislands_isolation_adequacy_v1_3_exactly_once",
+  "authorized_analysis_condition": "the complete island reference hierarchy, geographic inputs, class gate, fit policy, endpoint, inference and interpretation rule were frozen before extension species outcomes",
+  "journal_decision_tree": {
+    "robust_negative_C_minus_R3_log_loss": "Journal of Biogeography first target",
+    "null_adverse_or_indeterminate_C_minus_R3": "Ecological Informatics first target",
+    "methods_in_ecology_and_evolution_current_empirical_paper": "no_go_without_separate_simulation_and_general_method_development",
+    "broader_route_backup": "Ecological Modelling conditional"
+  },
   "required_closest_prior_dois": [
     "10.1890/08-1524.1",
     "10.1016/j.ecolmodel.2011.02.011",
@@ -19,13 +25,26 @@
     "10.1016/j.ecoinf.2024.102464",
     "10.1111/2041-210X.14444",
     "10.1016/j.scitotenv.2024.178204",
-    "10.1016/j.ecoinf.2026.103740"
+    "10.1016/j.ecoinf.2026.103740",
+    "10.1890/08-1337.1",
+    "10.1111/j.1600-0587.2012.07669.x",
+    "10.1093/biolinnean/bly033",
+    "10.1111/jbi.13778",
+    "10.1111/cobi.14047"
   ],
-  "defensible_gap": "Leakage-safe, reference-conditioned held-out testing of whether occurrence-conditioned landscape configuration adds information beyond frozen local support, direct source proximity, and where available a stronger landscape-specific connectivity reference.",
+  "primary_island_gap": "Leakage-safe held-out testing of whether species-conditioned occupied-source archipelago configuration retains information after a strong generic island-isolation reference already represents climate, recipient area, continental-mainland distance, direct and area-weighted source pressure, surrounding island number and landmass, generic mainland stepping-stone accessibility, and species-independent island-network position.",
+  "fallback_general_gap": "Leakage-safe, reference-conditioned held-out testing of whether occurrence-conditioned landscape configuration adds information beyond frozen local support, direct source proximity, and where available a stronger landscape-specific connectivity reference.",
   "not_novel_individually": [
+    "multidimensional island isolation",
+    "mainland distance",
+    "stepping-stone isolation",
+    "surrounding land area as island isolation",
+    "insular network position",
+    "graph-theoretic island connectivity",
+    "validation of graph connectivity with ecological or genetic data",
     "accessible-area or movement limitation in SDM/ENM",
     "source-conditioned nearest-occupied-patch proximity",
-    "source-patch quality weighting in connectivity metrics",
+    "source-patch quality or area weighting in connectivity metrics",
     "environmental suitability plus connectivity integration",
     "suitability-derived resistance or circuit connectivity",
     "occupied-neighbour predictors",
@@ -41,5 +60,12 @@
     "tanzania_species": 60,
     "tanzania_primary_loso_log_loss_difference": 0.032113119,
     "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
+  },
+  "island_extension_preoutcome_fingerprints": {
+    "area_table_sha256": "496789783a98e55e1b9552f6f6d28e7b4567ef0f52c795657c7e2fea9c60aae2",
+    "natural_earth_archive_sha256": "ce1ac7036499a0edd641fbc093cd209a98f96a49d2eca8480aaacad35138a7f6",
+    "mainland_ring_sha256": "18d151bfe8aee727677ba8beca6f244f80a9a3cb3b616de534cf4ba331f042a4",
+    "mainland_distance_table_sha256": "7d6f52f03702dd0cfae061023a1b2f405e39397de73eaad21b97d24176c4f869",
+    "species_outcomes_used_when_frozen": false
   }
 }
