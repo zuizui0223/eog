@@ -82,7 +82,12 @@
     "intercept_penalized": false,
     "training_only_z_standardization": true,
     "class_weighting": "none",
-    "hyperparameter_tuning": "none"
+    "hyperparameter_tuning": "none",
+    "minimum_training_presences": 5,
+    "minimum_training_absences": 5,
+    "constant_predictor_policy": "within each tier and outer-training fold, drop only columns with training standard deviation <= 1e-12; record every dropped column; apply the retained column indices unchanged to held-out rows",
+    "constant_predictor_tolerance": 1e-12,
+    "rationale": "preserve the original A-Islands 5/5 class gate while using the already-audited Tanzania reduced-tier rule so a constant structural column is neutral rather than causing an artificial whole-fold failure"
   },
   "primary_contrast": "candidate C minus reference R3 matched held-out log loss",
   "favourable_direction": "negative",
@@ -105,6 +110,8 @@
     "drop generic mainland stepping-stone frequency after seeing its effect",
     "replace R3 primary contrast with a weaker reference",
     "select favourable taxa",
+    "change the 5/5 training-class gate after seeing extension outcomes",
+    "change the training-constant predictor policy after seeing extension outcomes",
     "introduce species-specific radii from current outcomes",
     "reinterpret connected frequency as movement or colonisation probability"
   ]
