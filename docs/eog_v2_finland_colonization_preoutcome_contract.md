@@ -38,6 +38,8 @@ For a focal species, the intended fixed sources are the islands occupied in the 
 
 No recent successful colonization is ever admitted as a source in this benchmark. This is the already-confirmed fixed-source EOG-R estimand; the separately tested expanded-source policy failed its frozen confirmation and is prohibited here.
 
+Species with no occurrence in the historical inventory have no defined fixed source. The source paper reports such cases through missing nearest-historical distance. They are legitimate biological records but are outside this fixed-source EOG-R estimand and must be declared non-applicable before `outcome` is read.
+
 ## Response-free admission gates
 
 The admission program must never parse, summarize, count, stratify or model the `outcome` values.
@@ -46,15 +48,14 @@ It must verify:
 
 1. exactly `471` unique `holmkod` values form the island universe;
 2. each island has one invariant pair of finite `Euref_X_original`/`Euref_Y_original` coordinates across species rows;
-3. each species has a non-empty reconstructed historical-source set after taking the complement of its released potential-target islands;
-4. reconstructed historical source count is consistent with `Historical_total_log` up to one of a small frozen set of monotone release transforms (`raw`, `log10(n)`, `log10(n+1)`, `ln(n)`, `ln(n+1)`) followed by an affine standardization; required `R^2 >= 0.999999` across finite rows;
-5. Euclidean distance from each target island to the nearest reconstructed historical source is consistent with `Dist_to_historical_log` under the analogous frozen transform family followed by affine standardization; required `R^2 >= 0.999999` across finite rows;
-6. no island coordinate or source-reconstruction decision depends on `outcome`;
-7. the raw-file SHA-256 and a response-free projection fingerprint are archived before scoring.
+3. a historical-source complement is reconstructed for every species; zero-source species are explicitly counted as fixed-source non-applicable, and at least `100` species have one or more reconstructed historical sources;
+4. among sourceful species, reconstructed historical source count is consistent with `Historical_total_log` up to one of a small frozen set of monotone release transforms (`raw`, `log10(n)`, `log10(n+1)`, `ln(n)`, `ln(n+1)`) followed by an affine standardization; required `R^2 >= 0.999999` across finite rows;
+5. among sourceful species, Euclidean distance from each target island to the nearest reconstructed historical source is consistent with `Dist_to_historical_log` under the analogous frozen transform family followed by affine standardization; required `R^2 >= 0.999999` across finite rows;
+6. for zero-source species, released nearest-historical distance must be missing wherever it is represented in the admission projection rather than silently imputed from recent outcomes;
+7. no island coordinate or source-reconstruction decision depends on `outcome`;
+8. the raw-file SHA-256 and a response-free projection fingerprint are archived before scoring.
 
-Species with no historical source are outside the fixed-source estimand and are excluded by source state, not by recent outcome.
-
-If gates 1–5 fail, do not infer missing historical source identities from the EOG outcome or optimize a graph to improve prediction.
+If gates 1–6 fail, do not infer missing historical source identities from the EOG outcome or optimize a graph to improve prediction.
 
 ## Primary island graph
 
