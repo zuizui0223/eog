@@ -44,6 +44,13 @@ from .reachability_network_diagnostics import (
 )
 from .reachability_visualization import build_dynamic_reachability_visualization_payload
 from .synthetic_archipelago import SCENARIO_IDS, SyntheticArchipelagoScenario, build_synthetic_archipelago
+from .v2_empirical_occurrence_validation import (
+    FixedSourceOccurrenceFeatures,
+    FixedSourceOccurrenceValidationResult,
+    OccurrenceModelScore,
+    build_fixed_source_occurrence_features,
+    evaluate_fixed_source_occurrence_validation,
+)
 
 __all__ = [
     "DynamicReachabilityEdge",
@@ -77,6 +84,11 @@ __all__ = [
     "SCENARIO_IDS",
     "SyntheticArchipelagoScenario",
     "build_synthetic_archipelago",
+    "FixedSourceOccurrenceFeatures",
+    "OccurrenceModelScore",
+    "FixedSourceOccurrenceValidationResult",
+    "build_fixed_source_occurrence_features",
+    "evaluate_fixed_source_occurrence_validation",
 ]
 
 API_STATUS = "prospective-v2-development"
