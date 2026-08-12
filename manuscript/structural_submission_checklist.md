@@ -42,7 +42,7 @@ The paper is **not ready to submit or release** until every blocking item below 
 - [x] Result fingerprint frozen: `5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a`.
 - [x] One-time execution workflow removed after success so the authoritative run cannot be repeated from the current repository state.
 - [x] Journal route selected by the predeclared rule: **Ecological Informatics** because `C − R3` was adverse rather than robustly negative.
-- [ ] **Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3, retuning graph scales, changing taxa, or converting the adverse result into a rescue analysis.**
+- [x] **Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3, retuning graph scales, changing taxa, or converting the adverse result into a rescue analysis.**
 
 ### Final novelty framing
 
