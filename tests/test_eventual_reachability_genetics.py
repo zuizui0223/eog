@@ -75,6 +75,31 @@ def test_eventual_directionality_and_symmetric_genetic_distance_remain_separate(
     assert np.allclose(result.symmetric_distance, result.symmetric_distance.T)
 
 
+def test_mean_support_symmetrisation_retains_one_way_gene_flow_signal():
+    operator = build_dynamic_transition_operator(
+        ("west", "east"),
+        [edge(0, 1, 0.8)],
+        loss_support=0.5,
+    )
+    mean_log = pairwise_eventual_reachability_distances(
+        operator,
+        support_floor=1e-9,
+        symmetrization="mean_log",
+    )
+    mean_support = pairwise_eventual_reachability_distances(
+        operator,
+        support_floor=1e-9,
+        symmetrization="mean_support",
+    )
+    assert mean_support.symmetric_distance[0, 1] < mean_log.symmetric_distance[0, 1]
+    reciprocal_mean = 0.5 * (
+        mean_support.directional_support[0, 1]
+        + mean_support.directional_support[1, 0]
+    )
+    assert mean_support.symmetric_distance[0, 1] == pytest.approx(-np.log(reciprocal_mean))
+    assert mean_support.fingerprint != mean_log.fingerprint
+
+
 def test_exact_zero_support_is_retained_separately_from_numerical_floor():
     operator = build_dynamic_transition_operator(
         ("a", "b", "c"),
@@ -116,11 +141,25 @@ def test_eventual_bundle_freezes_method_without_genetic_response():
     reachability = pairwise_eventual_reachability_distances(
         operator,
         support_floor=1e-9,
-        symmetrization="mean_log",
+        symmetrization="mean_support",
     )
     d_geo = np.array([[0, 1, 2], [1, 0, 1], [2, 1, 0]], dtype=float)
     d_env = np.array([[0, 0.2, 0.5], [0.2, 0, 0.3], [0.5, 0.3, 0]], dtype=float)
     bundle = build_eventual_genetic_validation_distance_bundle(d_geo, d_env, reachability)
     assert "exact eventual first-passage" in bundle.reachability_method
+    assert "mean_support" in bundle.reachability_method
     assert bundle.reachability_fingerprint == reachability.fingerprint
     assert len(bundle.fingerprint) == 64
+
+
+def test_unknown_eventual_symmetrisation_is_rejected():
+    operator = build_dynamic_transition_operator(
+        ("a", "b"),
+        [edge(0, 1, 0.8), edge(1, 0, 0.8)],
+        loss_support=0.5,
+    )
+    with pytest.raises(ValueError, match="symmetrization"):
+        pairwise_eventual_reachability_distances(
+            operator,
+            symmetrization="automatic",
+        )
