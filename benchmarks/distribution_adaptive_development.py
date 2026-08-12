@@ -36,6 +36,16 @@ from benchmarks.distribution_model_noisy_regimes import (
 from eog import fit_eog_distribution
 
 
+def _log_loss(labels: np.ndarray, scores: np.ndarray) -> float:
+    labels = np.asarray(labels, dtype=float)
+    scores = np.clip(np.asarray(scores, dtype=float), 1e-12, 1.0 - 1e-12)
+    return float(
+        np.mean(
+            -(labels * np.log(scores) + (1.0 - labels) * np.log1p(-scores))
+        )
+    )
+
+
 def _selection_folds(observed_ids: tuple[str, ...]) -> tuple[str, ...]:
     offsets = {
         "source_a": 0,
@@ -81,6 +91,7 @@ def run_adaptive_development(
             bundle = build_noisy_landscape(regime, seed, n_modules=n_modules)
             selection_folds = _selection_folds(bundle.observed_ids)
             fixed_sources = _fixed_sources(bundle.observed_ids)
+            fixed_source_set = set(fixed_sources)
             observed_label = dict(zip(bundle.observed_ids, bundle.observed_response))
             scored_labels = np.asarray(
                 [
@@ -88,7 +99,7 @@ def run_adaptive_development(
                     for node_id, label in zip(
                         bundle.observed_ids, bundle.observed_response
                     )
-                    if node_id not in set(fixed_sources)
+                    if node_id not in fixed_source_set
                 ],
                 dtype=int,
             )
@@ -130,7 +141,7 @@ def run_adaptive_development(
                 {
                     fold
                     for node_id, fold in zip(bundle.observed_ids, selection_folds)
-                    if node_id not in set(fixed_sources)
+                    if node_id not in fixed_source_set
                 }
             ) == 3
             integrity["all_gate_has_two_folds"] &= len(set(bundle.gate_folds)) == 2
@@ -153,10 +164,14 @@ def run_adaptive_development(
                     "seed": seed,
                     "selected_family": adaptive.selected_family,
                     "candidate_selection_log_loss": adaptive.candidate_log_loss,
+                    "candidate_selection_fallback_folds": adaptive.candidate_fallback_folds,
                     "n_fixed_sources": len(fixed_sources),
                     "n_selection_candidates": int(scored_labels.size),
                     "auc": {name: _auc(labels, values) for name, values in scores.items()},
                     "brier": {name: _brier(labels, values) for name, values in scores.items()},
+                    "log_loss": {
+                        name: _log_loss(labels, values) for name, values in scores.items()
+                    },
                 }
             )
 
@@ -177,12 +192,27 @@ def run_adaptive_development(
                 )
                 for family in ("environmental", "probability_gate", "stacked")
             },
+            "mean_candidate_selection_fallback_folds": {
+                family: float(
+                    np.mean(
+                        [
+                            row["candidate_selection_fallback_folds"][family]
+                            for row in rows
+                        ]
+                    )
+                )
+                for family in ("environmental", "probability_gate", "stacked")
+            },
             "mean_auc": {
                 method: float(np.mean([row["auc"][method] for row in rows]))
                 for method in methods
             },
             "mean_brier": {
                 method: float(np.mean([row["brier"][method] for row in rows]))
+                for method in methods
+            },
+            "mean_log_loss": {
+                method: float(np.mean([row["log_loss"][method] for row in rows]))
                 for method in methods
             },
             "adaptive_minus_environmental_mean_auc": float(
@@ -211,10 +241,28 @@ def run_adaptive_development(
                     ]
                 )
             ),
+            "adaptive_minus_environmental_mean_log_loss": float(
+                np.mean(
+                    [
+                        row["log_loss"]["adaptive_eog"]
+                        - row["log_loss"]["environmental_support"]
+                        for row in rows
+                    ]
+                )
+            ),
+            "adaptive_minus_single_path_mean_log_loss": float(
+                np.mean(
+                    [
+                        row["log_loss"]["adaptive_eog"]
+                        - row["log_loss"]["environmental_plus_single_path"]
+                        for row in rows
+                    ]
+                )
+            ),
         }
 
     return {
-        "schema": "adaptive_eog_noisy_development_v0_3",
+        "schema": "adaptive_eog_noisy_development_v0_4",
         "status": "development_screen_not_confirmation",
         "seeds": list(seeds),
         "regimes": list(REGIMES),
@@ -224,6 +272,7 @@ def run_adaptive_development(
             "complexity_tie_break": ["environmental", "probability_gate", "stacked"],
             "selection_folds": 3,
             "gate_folds": 2,
+            "nested_non_estimability": "structural candidate falls back to environmental prediction for that selection fold and records fallback count",
         },
         "integrity_checks": integrity,
         "all_integrity_checks_pass": bool(all(integrity.values())),
