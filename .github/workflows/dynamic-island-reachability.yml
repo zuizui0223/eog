@@ -1,0 +1,74 @@
+name: Dynamic island reachability validation
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/dynamic_island_reachability.py"
+      - "src/eog/reachability_genetics.py"
+      - "src/eog/neutral_genetics_simulator.py"
+      - "tests/test_dynamic_island_reachability.py"
+      - "tests/test_reachability_genetics.py"
+      - "tests/test_neutral_genetics_simulator.py"
+      - "benchmarks/dynamic_archipelago_simulation.py"
+      - "benchmarks/dynamic_archipelago_neutral_genetics.py"
+      - ".github/workflows/dynamic-island-reachability.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Run focused tests
+        run: |
+          python -m pytest -q \
+            tests/test_dynamic_island_reachability.py \
+            tests/test_reachability_genetics.py \
+            tests/test_neutral_genetics_simulator.py
+      - name: Run reachability proof of estimand
+        run: |
+          mkdir -p benchmark_results/dynamic_island_reachability
+          python benchmarks/dynamic_archipelago_simulation.py \
+            > benchmark_results/dynamic_island_reachability/reachability.json
+      - name: Run known-truth neutral genetic benchmark
+        run: |
+          python benchmarks/dynamic_archipelago_neutral_genetics.py \
+            > benchmark_results/dynamic_island_reachability/neutral_genetics.json
+      - name: Check benchmark contracts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("benchmark_results/dynamic_island_reachability")
+          reachability = json.loads((root / "reachability.json").read_text())
+          genetics = json.loads((root / "neutral_genetics.json").read_text())
+
+          scenarios = reachability["scenarios"]
+          assert scenarios["open_chain"]["horizon_first_passage_support"] > scenarios["bottleneck"]["horizon_first_passage_support"] > 0
+          assert scenarios["missing_intermediate"]["horizon_first_passage_support"] == 0
+          assert scenarios["open_chain"]["first_positive_step"] == 3
+          assert scenarios["bottleneck"]["first_positive_step"] == 3
+
+          assert genetics["status"] == "development-known-truth-only"
+          assert genetics["seeds"] == [101, 211, 307, 401, 503, 601, 701, 809]
+          assert genetics["all_seeds_improve"] is True
+          assert genetics["mean_delta_mse"] < 0
+          assert all(row["delta_mse"] < 0 for row in genetics["rows"])
+          PY
+      - name: Upload outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dynamic-island-reachability-validation
+          path: benchmark_results/dynamic_island_reachability
+          if-no-files-found: error
