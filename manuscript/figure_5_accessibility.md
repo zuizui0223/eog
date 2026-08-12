@@ -12,6 +12,6 @@ F3 is Figure 3 Tanzania; its transform is build_figure_3_tanzania.py and its dis
 
 F4 is Figure 4 boundary matrix; its transform is build_figure_4_boundary.py and its displayed result fingerprint begins sha256:e8a7f87fdbadd1603009.
 
-T3 is Table 3 + Table S1; its transform is build_structural_results_tables.py and its displayed result fingerprint begins sha256:b25da730cec3f0188892.
+T3 is Table 3 + Table S1; its transform is build_structural_results_tables.py and its displayed result fingerprint begins sha256:5377a39d7043a0257072.
 
 The figure has no movement or causal arrows and introduces no new effect size or hypothesis test.
