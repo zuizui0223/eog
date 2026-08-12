@@ -8,6 +8,11 @@ source-conditioned accessibility, never on in-sample self-supported structural v
 The meta features are ``H``, ``M`` and ``H*M``. They are low-dimensional and fitted
 with the repository's deterministic L2 logistic engine. This is a development
 candidate, not yet the promoted public EOG fusion.
+
+If cross-fitting shows that the structural columns are constant or exact duplicates of
+the environmental column, the stacked candidate is not allowed to win merely by
+recalibrating ``H``. In that case its distribution support reduces exactly to the
+cross-fitted environmental model, preserving the simpler-family fallback contract.
 """
 from __future__ import annotations
 
@@ -186,6 +191,7 @@ def fit_eog_stacked_distribution(
 
     raw_oof = _fusion_features(oof_environmental, oof_accessibility)
     selected = _select_features(raw_oof)
+    structural_present = any(index in {1, 2} for index in selected)
     min_class_count = (
         config.base_config.min_class_count
         if config.min_class_count is None
@@ -197,7 +203,12 @@ def fit_eog_stacked_distribution(
         l2_penalty=config.fusion_l2_penalty,
         min_class_count=min_class_count,
     )
-    oof_prediction = fusion_model.predict_support(raw_oof[:, selected])
+    if structural_present:
+        oof_prediction = fusion_model.predict_support(raw_oof[:, selected])
+    else:
+        # A stack with only H is not a structural model family. Preserve the exact
+        # environmental OOF prediction so it cannot win by response recalibration.
+        oof_prediction = oof_environmental.copy()
     training_loss = _binary_log_loss(y, oof_prediction)
 
     base_model = fit_eog_distribution(
@@ -213,12 +224,14 @@ def fit_eog_stacked_distribution(
         base_model.prediction.environmental_support,
         base_model.prediction.structural_accessibility,
     )
-    final_support = fusion_model.predict_support(raw_full[:, selected])
+    if structural_present:
+        final_support = fusion_model.predict_support(raw_full[:, selected])
+    else:
+        final_support = base_model.prediction.environmental_support.copy()
     prediction = _replace_distribution_support(base_model.prediction, final_support)
 
-    structural_present = any(index in {1, 2} for index in selected)
     payload = {
-        "schema": "eog_stacked_distribution_model_v0_1",
+        "schema": "eog_stacked_distribution_model_v0_2",
         "config": asdict(config),
         "base_model_fingerprint": base_model.fingerprint,
         "fusion_feature_indices": list(selected),
