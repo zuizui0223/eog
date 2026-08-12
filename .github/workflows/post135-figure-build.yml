@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install smoke-test dependency
+        run: python -m pip install pytest
       - name: Build Figure 4
         run: python figures/build_figure_4_boundary.py --build-timestamp 2026-08-12T08:40:00Z
       - name: Smoke-test Figure 4 values
