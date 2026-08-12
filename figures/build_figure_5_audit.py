@@ -59,8 +59,8 @@ def validate_contract(contract_path: Path) -> tuple[dict[str, Any], dict[str, An
     result_manifest = load_json(ROOT / contract["results_table_manifest"])
     result_metadata = load_json(ROOT / contract["results_table_metadata"])
     require(figure_manifest.get("schema_version") == "eog_structural_figure_manifest_v1", "unexpected figure manifest schema")
-    require(result_manifest.get("schema_version") == "eog_structural_results_tables_v1", "unexpected results-table manifest schema")
-    require(result_metadata.get("schema_version") == "eog_structural_results_tables_v1", "unexpected results-table metadata schema")
+    require(result_manifest.get("schema_version") == "eog_structural_results_tables_v2", "unexpected results-table manifest schema")
+    require(result_metadata.get("schema_version") == "eog_structural_results_tables_v2", "unexpected results-table metadata schema")
     return contract, figure_manifest, result_manifest, result_metadata
 
 
@@ -75,7 +75,7 @@ def build_records(contract: dict[str, Any], figure_manifest: dict[str, Any], res
         "F2": f"primary {short(f2['primary_artifact_digest'])}; secondary {short(f2['secondary_artifact_digest'])}; bottleneck {short(f2['bottleneck_artifact_digest'])}",
         "F3": f"artifact {short(f3['artifact_digest'])}; result {short(f3['result_fingerprint'])}; library {short(f3['candidate_library_fingerprint'])}",
         "F4": f"A {short(f4['aislands_summary_sha256'])}; T {short(f4['tanzania_result_fingerprint'])}",
-        "T3": f"A sidecar {short(result_manifest['inputs']['aislands_mode_estimates']['sha256'])}; T {short(result_manifest['inputs']['tanzania_expected']['result_fingerprint'])}",
+        "T3": f"A sidecar {short(result_manifest['inputs']['aislands_mode_estimates']['sha256'])}; A strong {short(result_manifest['inputs']['aislands_strong_reference']['result_fingerprint'])}; T {short(result_manifest['inputs']['tanzania_expected']['result_fingerprint'])}",
     }
 
     records: list[dict[str, str]] = []
@@ -94,6 +94,7 @@ def build_records(contract: dict[str, Any], figure_manifest: dict[str, Any], res
             require(result_hash == expected, "Table 3 fingerprint mismatch")
             require(result_metadata["tanzania_result_fingerprint"] == f3["result_fingerprint"], "Tanzania table/figure fingerprint mismatch")
             require(result_metadata["aislands_species_output_sha256"] == f2["primary_species_table_sha256"], "A-Islands table/figure fingerprint mismatch")
+            require(result_metadata["aislands_strong_reference_result_fingerprint"] == result_manifest["inputs"]["aislands_strong_reference"]["result_fingerprint"], "A-Islands strong-reference table fingerprint mismatch")
 
         records.append({
             "id": row["id"],
@@ -131,7 +132,6 @@ def render_svg(contract: dict[str, Any], records: list[dict[str, str]]) -> str:
     ]
     x = [60, 265, 725, 1080]
     headers = ["Output", "Frozen evidence / contract", "Committed transform", "Result fingerprint"]
-    widths = [185, 440, 335, 455]
     for hx, header in zip(x, headers):
         out.append(text_svg(hx, 145, [header], size=15, weight=700, fill="#334155"))
     out.append('<line x1="55" y1="160" x2="1545" y2="160" stroke="#94a3b8" stroke-width="2"/>')
@@ -160,7 +160,7 @@ def caption_text(contract: dict[str, Any], records: list[dict[str, str]]) -> str
         "# Figure 5 caption\n\n"
         "**Figure 5 | Frozen evidence-to-result audit trail.** "
         "Each row links a manuscript output to its frozen evidence or semantic contract, the committed transform that builds the output, and the resulting SHA-256 fingerprint. "
-        "Figure 1 is additionally pinned to the competitor-matrix Git blob; Figure 2 records the three frozen A-Islands artifact digests; Figure 3 records the Tanzania artifact, result fingerprint, and candidate-library fingerprint; Figure 4 records the two benchmark projections; and Table 3/Table S1 records the Figure 2/3 sidecar and benchmark fingerprints. "
+        "Figure 1 is additionally pinned to the competitor-matrix Git blob; Figure 2 records the three frozen original A-Islands artifact digests; Figure 3 records the Tanzania artifact, result fingerprint, and candidate-library fingerprint; Figure 4 records the two benchmark projections; and Table 3/Table S1 records the original A-Islands sidecar, prospective A-Islands strong-reference fingerprint, and Tanzania benchmark fingerprint. "
         + contract["claim_boundary"]
         + " The audit trail establishes provenance and rebuildability only.\n"
     )
@@ -214,7 +214,8 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
-    print(json.dumps(build(parse_args().contract, parse_args().out_dir, parse_args().caption, parse_args().accessibility), sort_keys=True))
+    args = parse_args()
+    print(json.dumps(build(args.contract, args.out_dir, args.caption, args.accessibility), sort_keys=True))
     return 0
 
 
