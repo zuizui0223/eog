@@ -8,8 +8,17 @@ adding a new response fit:
 
     D_alpha = (1 - alpha) * D_probability + alpha * D_stack
 
-The alpha grid is finite and declared in source. This is development evidence only;
-independent confirmation seeds remain untouched.
+The alpha grid is finite and declared in source. Development eligibility requires:
+
+- no mean log-loss harm in the two null regimes;
+- mean log-loss improvement in every structural regime;
+- no individual development seed with more than +0.05 log-loss harm versus the
+  environmental baseline.
+
+The screen also records nearest-source and single-cumulative-path comparators using the
+same already-declared leakage-safe implementation, but does not retroactively optimize
+alpha against those comparator outcomes. Independent confirmation seeds remain
+untouched.
 """
 from __future__ import annotations
 
@@ -29,6 +38,7 @@ from benchmarks.distribution_model_noisy_regimes import (
     REGIMES,
     _auc,
     _brier,
+    _fit_comparator_predictions,
     build_noisy_landscape,
 )
 
@@ -41,6 +51,7 @@ STRUCTURAL_REGIMES = (
     "stepping_stone",
     "mixed",
 )
+MAXIMUM_DEVELOPMENT_SEED_LOG_LOSS_HARM = 0.05
 
 
 def _log_loss(labels, scores):
@@ -49,6 +60,14 @@ def _log_loss(labels, scores):
     return float(
         np.mean(-(labels * np.log(scores) + (1.0 - labels) * np.log1p(-scores)))
     )
+
+
+def _metrics(labels, scores):
+    return {
+        "auc": _auc(labels, scores),
+        "brier": _brier(labels, scores),
+        "log_loss": _log_loss(labels, scores),
+    }
 
 
 def run_structural_ensemble_development(
@@ -63,6 +82,7 @@ def run_structural_ensemble_development(
         "all_probability_models_cross_fitted": True,
         "all_stack_models_cross_fitted": True,
         "all_predictions_finite": True,
+        "comparator_contract_reused": True,
     }
 
     for regime in REGIMES:
@@ -95,6 +115,7 @@ def run_structural_ensemble_development(
             p = np.asarray(probability_prediction.distribution_support, dtype=float)
             s = np.asarray(stack_prediction.distribution_support, dtype=float)
             h = np.asarray(probability_prediction.environmental_support, dtype=float)
+            comparator_scores = _fit_comparator_predictions(bundle, probability)
 
             integrity["all_target_labels_held_out"] &= set(bundle.target_ids).isdisjoint(
                 bundle.observed_ids
@@ -104,35 +125,50 @@ def run_structural_ensemble_development(
             )
             integrity["all_stack_models_cross_fitted"] &= bool(stack.gate_fold_ids)
             integrity["all_predictions_finite"] &= bool(
-                np.isfinite(p).all() and np.isfinite(s).all() and np.isfinite(h).all()
+                np.isfinite(p).all()
+                and np.isfinite(s).all()
+                and np.isfinite(h).all()
+                and all(
+                    np.isfinite(np.asarray(values, dtype=float)).all()
+                    for values in comparator_scores.values()
+                )
             )
 
             metrics = {}
             for alpha in ALPHA_GRID:
                 ensemble = (1.0 - alpha) * p + alpha * s
-                metrics[str(alpha)] = {
-                    "auc": _auc(labels, ensemble),
-                    "brier": _brier(labels, ensemble),
-                    "log_loss": _log_loss(labels, ensemble),
-                }
+                metrics[str(alpha)] = _metrics(labels, ensemble)
             per_regime[regime].append(
                 {
                     "seed": seed,
-                    "environmental": {
-                        "auc": _auc(labels, h),
-                        "brier": _brier(labels, h),
-                        "log_loss": _log_loss(labels, h),
-                    },
+                    "environmental": _metrics(labels, h),
+                    "nearest_source": _metrics(
+                        labels, comparator_scores["environmental_plus_nearest_source"]
+                    ),
+                    "single_path": _metrics(
+                        labels, comparator_scores["environmental_plus_single_path"]
+                    ),
+                    "probability_gate": _metrics(labels, p),
+                    "stack": _metrics(labels, s),
                     "alpha_metrics": metrics,
                 }
             )
 
     summary = {}
     for regime, rows in per_regime.items():
-        env = {
-            metric: float(np.mean([row["environmental"][metric] for row in rows]))
-            for metric in ("auc", "brier", "log_loss")
-        }
+        baselines = {}
+        for baseline in (
+            "environmental",
+            "nearest_source",
+            "single_path",
+            "probability_gate",
+            "stack",
+        ):
+            baselines[baseline] = {
+                metric: float(np.mean([row[baseline][metric] for row in rows]))
+                for metric in ("auc", "brier", "log_loss")
+            }
+        env = baselines["environmental"]
         alpha_summary = {}
         for alpha in ALPHA_GRID:
             key = str(alpha)
@@ -148,6 +184,14 @@ def run_structural_ensemble_development(
                     "minus_environmental_brier": values["brier"] - env["brier"],
                     "minus_environmental_log_loss": values["log_loss"]
                     - env["log_loss"],
+                    "minus_nearest_source_log_loss": values["log_loss"]
+                    - baselines["nearest_source"]["log_loss"],
+                    "minus_single_path_log_loss": values["log_loss"]
+                    - baselines["single_path"]["log_loss"],
+                    "minus_probability_gate_log_loss": values["log_loss"]
+                    - baselines["probability_gate"]["log_loss"],
+                    "minus_stack_log_loss": values["log_loss"]
+                    - baselines["stack"]["log_loss"],
                     "worst_seed_log_loss_harm": float(
                         max(
                             row["alpha_metrics"][key]["log_loss"]
@@ -159,7 +203,7 @@ def run_structural_ensemble_development(
             )
             alpha_summary[key] = values
         summary[regime] = {
-            "environmental": env,
+            "baselines": baselines,
             "alpha": alpha_summary,
         }
 
@@ -174,6 +218,12 @@ def run_structural_ensemble_development(
             regime: -summary[regime]["alpha"][key]["minus_environmental_log_loss"]
             for regime in STRUCTURAL_REGIMES
         }
+        maximum_seed_harm = float(
+            max(
+                summary[regime]["alpha"][key]["worst_seed_log_loss_harm"]
+                for regime in REGIMES
+            )
+        )
         candidates.append(
             {
                 "alpha": alpha,
@@ -184,16 +234,13 @@ def run_structural_ensemble_development(
                 "mean_structural_log_loss_gain": float(
                     np.mean(list(structural_gains.values()))
                 ),
-                "maximum_seed_log_loss_harm": float(
-                    max(
-                        summary[regime]["alpha"][key]["worst_seed_log_loss_harm"]
-                        for regime in REGIMES
-                    )
-                ),
+                "maximum_seed_log_loss_harm": maximum_seed_harm,
                 "safe_null_mean_log_loss": null_max_harm <= 1e-12,
                 "all_structural_regimes_improve_mean_log_loss": all(
                     value > 0.0 for value in structural_gains.values()
                 ),
+                "seed_tail_within_development_cap": maximum_seed_harm
+                <= MAXIMUM_DEVELOPMENT_SEED_LOG_LOSS_HARM,
             }
         )
 
@@ -202,26 +249,29 @@ def run_structural_ensemble_development(
         for item in candidates
         if item["safe_null_mean_log_loss"]
         and item["all_structural_regimes_improve_mean_log_loss"]
+        and item["seed_tail_within_development_cap"]
     ]
     recommended = None
     if eligible:
-        # Development recommendation: maximize the weakest structural proper-score
-        # gain, then minimize worst seed harm, then prefer the smaller stack weight.
+        # Among candidates that satisfy null, structural, and seed-tail safety, maximize
+        # the average structural proper-score gain, then the weakest structural gain,
+        # then prefer the smaller stack weight.
         recommended = max(
             eligible,
             key=lambda item: (
+                item["mean_structural_log_loss_gain"],
                 item["minimum_structural_mean_log_loss_gain"],
-                -item["maximum_seed_log_loss_harm"],
                 -item["alpha"],
             ),
         )
 
     return {
-        "schema": "eog_structural_ensemble_development_v0_1",
+        "schema": "eog_structural_ensemble_development_v0_2",
         "status": "development_screen_not_confirmation",
         "alpha_grid": list(ALPHA_GRID),
         "null_regimes": list(NULL_REGIMES),
         "structural_regimes": list(STRUCTURAL_REGIMES),
+        "maximum_development_seed_log_loss_harm": MAXIMUM_DEVELOPMENT_SEED_LOG_LOSS_HARM,
         "integrity_checks": integrity,
         "all_integrity_checks_pass": bool(all(integrity.values())),
         "summary": summary,
@@ -230,7 +280,8 @@ def run_structural_ensemble_development(
         "per_regime": per_regime,
         "claim_boundary": (
             "fixed convex-ensemble development on already-open seeds only; any chosen "
-            "alpha must be frozen before independent confirmation seeds are executed"
+            "alpha and confirmation gates must be frozen before independent confirmation "
+            "seeds are executed"
         ),
     }
 
@@ -240,6 +291,8 @@ def main():
     print(json.dumps(result, indent=2, sort_keys=True))
     if not result["all_integrity_checks_pass"]:
         raise SystemExit("EOG structural ensemble development failed integrity checks")
+    if result["recommended_alpha"] is None:
+        raise SystemExit("no structural ensemble candidate passed development safety")
 
 
 if __name__ == "__main__":
