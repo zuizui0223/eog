@@ -1,0 +1,87 @@
+name: Apply verified manuscript bibliographic correction once
+
+on:
+  push:
+    branches:
+      - agent/aislands-isolation-adequacy-outcome
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.event.head_commit.message == 'APPLY verified manuscript bibliographic correction once'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/aislands-isolation-adequacy-outcome
+          fetch-depth: 0
+
+      - name: Apply only the verified post-outcome bibliographic correction
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('manuscript/structural_reachability_manuscript.md')
+          text = path.read_text(encoding='utf-8')
+
+          replacements = {
+              "Isolation has never been only one geometric distance. Stepping-stone effects have long been recognised (Long et al. 2009), surrounding land area can outperform simple mainland distance as an isolation representation (Weigelt & Kreft 2013), and graph-theoretic island connectivity has been analysed directly (Sillero et al. 2018).":
+              "Isolation has never been only one geometric distance. Classical island area and mainland isolation remain central predictors (Long et al. 2009), while surrounding land area and stepping-stone representations can add information beyond simple mainland distance (Weigelt & Kreft 2013), and graph-theoretic stepping-stone connectivity has been analysed directly (Sillero et al. 2018).",
+
+              "After the original A-Islands result was known, a literature audit identified a legitimate stronger-comparator question. Island area, mainland distance, surrounding landmass, stepping stones, source-area weighting and generic network position all have clear precedents and therefore could not be treated as EOG novelty (Long et al. 2009; Weigelt & Kreft 2013; Sillero et al. 2018; Carter et al. 2020).":
+              "After the original A-Islands result was known, a literature audit identified a legitimate stronger-comparator question. Island area and mainland isolation have clear precedents (Long et al. 2009); surrounding landmass, stepping-stone structure and generic network position are likewise established (Weigelt & Kreft 2013; Sillero et al. 2018; Carter et al. 2020); and source-area weighting is established in metapopulation connectivity. These quantities therefore could not be treated as EOG novelty.",
+
+              "Mainland distance, stepping stones, surrounding land area and insular network position can carry different information (Long et al. 2009; Weigelt & Kreft 2013; Carter et al. 2020).":
+              "Island area and mainland isolation are established predictors (Long et al. 2009), while stepping stones, surrounding land area and insular network position can carry distinct information (Weigelt & Kreft 2013; Sillero et al. 2018; Carter et al. 2020).",
+
+              "Daniel, J. et al. (2023). [Graph-connectivity validation study]. *Conservation Biology*. https://doi.org/10.1111/cobi.14047":
+              "Daniel, A., Savary, P., Foltête, J.-C., Khimoun, A., Faivre, B., Ollivier, A., Éraud, C., Moal, H., Vuidel, G. & Garnier, S. (2023). Validating graph-based connectivity models with independent presence–absence and genetic data sets. *Conservation Biology* 37: e14047. https://doi.org/10.1111/cobi.14047",
+
+              "Long, J.D. et al. (2009). [Stepping-stone island isolation study]. *Ecological Applications*. https://doi.org/10.1890/08-1337.1":
+              "Long, J.D., Trussell, G.C. & Elliman, T. (2009). Linking invasions and biogeography: Isolation differentially affects exotic and native plant diversity. *Ecology* 90: 863–868. https://doi.org/10.1890/08-1337.1",
+
+              "Sillero, N. et al. (2018). [Graph-theoretic structural connectivity among islands]. *Biological Journal of the Linnean Society*. https://doi.org/10.1093/biolinnean/bly033":
+              "Sillero, N., Biaggini, M. & Corti, C. (2018). Analysing the importance of stepping-stone islands in maintaining structural connectivity and endemicity. *Biological Journal of the Linnean Society* 124: 113–125. https://doi.org/10.1093/biolinnean/bly033",
+          }
+
+          for old, new in replacements.items():
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'expected exactly one match for correction, found {count}: {old[:100]}')
+              text = text.replace(old, new)
+
+          forbidden = (
+              '[Graph-connectivity validation study]',
+              '[Stepping-stone island isolation study]',
+              '[Graph-theoretic structural connectivity among islands]',
+              'Stepping-stone effects have long been recognised (Long et al. 2009)',
+              'Mainland distance, stepping stones, surrounding land area and insular network position can carry different information (Long et al. 2009;',
+          )
+          for token in forbidden:
+              if token in text:
+                  raise SystemExit(f'stale bibliographic text remains: {token}')
+
+          required = (
+              'Linking invasions and biogeography: Isolation differentially affects exotic and native plant diversity.',
+              'Analysing the importance of stepping-stone islands in maintaining structural connectivity and endemicity.',
+              'Validating graph-based connectivity models with independent presence–absence and genetic data sets.',
+              'Classical island area and mainland isolation remain central predictors (Long et al. 2009)',
+          )
+          for token in required:
+              if token not in text:
+                  raise SystemExit(f'corrected bibliographic text missing: {token}')
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Remove this one-time workflow and commit the correction
+        run: |
+          rm .github/workflows/apply-manuscript-bibliographic-correction.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add manuscript/structural_reachability_manuscript.md .github/workflows/apply-manuscript-bibliographic-correction.yml
+          git diff --cached --check
+          git commit -m 'Apply verified post-outcome manuscript bibliographic correction'
+          git push origin HEAD:agent/aislands-isolation-adequacy-outcome
