@@ -5,6 +5,8 @@ A-Islands,bottleneck_secondary,ALL,insufficient_training_classes,199
 A-Islands,primary_combined,ALL,evaluable,3041
 A-Islands,primary_combined,ALL,no_comparable_pairs_within_frozen_strata,1190
 A-Islands,primary_combined,ALL,insufficient_training_classes,199
+A-Islands,isolation_adequacy_C_vs_R3,ALL,evaluable_folds,4231
+A-Islands,isolation_adequacy_C_vs_R3,ALL,insufficient_training_class_count_5_5,199
 Tanzania,primary::primary_loso,ALL,matched,826
 Tanzania,primary::primary_loso,ALL,invalid,14
 Tanzania,inverse_area_sensitivity::primary_loso,ALL,matched,826
