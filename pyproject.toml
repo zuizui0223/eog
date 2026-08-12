@@ -19,7 +19,7 @@ eog-hypothesis-survey-report = "eog.hypothesis_survey_report_cli:main"
 eog-support-topology-compare = "eog.support_topology_comparison_cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pandas>=2"]
+dev = ["pytest>=8", "pandas>=2", "pyshp==2.3.1"]
 raster = ["pandas>=2", "rasterio>=1.3"]
 currentflow = ["scipy>=1.11", "pandas>=2", "rasterio>=1.3"]
 
@@ -32,3 +32,4 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+pythonpath = ["."]

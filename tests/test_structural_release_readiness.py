@@ -24,17 +24,18 @@ def test_candidate_release_tag_matches_package_version() -> None:
     release = RELEASE.read_text(encoding="utf-8")
     assert version == "0.1.0"
     assert f"`v{version}`" in release
-    assert "recommended first submission archive tag" in release
+    assert "candidate first submission archive tag remains" in release
+    assert "Current scientific HOLD before DOI reservation" in release
 
 
-def test_release_sequence_reserves_doi_before_final_tag() -> None:
+def test_release_sequence_reserves_doi_before_final_tag_after_scientific_hold() -> None:
     release = RELEASE.read_text(encoding="utf-8")
-    assert "Reserve a DOI" in release or "reserve a DOI" in release
-    assert "Get a DOI now" in release
+    assert "reserve a doi" in release.lower()
     assert "https://help.zenodo.org/docs/deposit/describe-records/reserve-doi/" in release
-    assert "Do **not** create the final `v0.1.0` tag" in release
-    assert "Create tag and GitHub release" in release
-    assert release.index("Create a Zenodo draft manually") < release.index("Create tag and GitHub release")
+    assert "Create a Zenodo draft manually and reserve a DOI" in release
+    assert "Create tag and GitHub Release" in release
+    assert release.index("Create a Zenodo draft manually and reserve a DOI") < release.index("Create tag and GitHub Release")
+    assert "only after the island result and journal route are frozen" in release
 
 
 def test_exact_commit_is_machine_recorded_not_source_self_reference() -> None:
@@ -57,6 +58,6 @@ def test_release_and_figure_qa_are_part_of_submission_manifest() -> None:
 
 def test_manual_external_release_boundary_is_explicit() -> None:
     release = RELEASE.read_text(encoding="utf-8")
-    assert "does not expose a GitHub Release-creation action" in release
+    assert "does not expose GitHub Release creation" in release
     assert "No Zenodo connector is installed" in release
-    assert "must not be reported as completed until their public records exist" in release
+    assert "must not be reported as complete until the public records exist" in release

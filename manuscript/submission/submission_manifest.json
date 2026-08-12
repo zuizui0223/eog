@@ -1,14 +1,15 @@
 {
-  "schema_version": "eog_structural_submission_manifest_v2",
-  "submission_status": "HOLD_PENDING_FROZEN_ISLAND_ISOLATION_RESULT",
-  "target_journal": "PENDING_FROZEN_ISLAND_RESULT",
+  "schema_version": "eog_structural_submission_manifest_v3",
+  "submission_status": "HOLD_PENDING_ISLAND_RESULT_MANUSCRIPT_INCORPORATION_AND_HUMAN_RELEASE_GATES",
+  "target_journal": "Ecological Informatics",
   "journal_decision_rule": {
     "robust_negative_C_minus_R3": "Journal of Biogeography",
-    "null_adverse_or_indeterminate_C_minus_R3": "Ecological Informatics"
+    "null_adverse_or_indeterminate_C_minus_R3": "Ecological Informatics",
+    "observed_route": "Ecological Informatics"
   },
-  "article_type": "PENDING_SELECTED_JOURNAL_ROUTE",
-  "title": "When does landscape configuration add to pointwise distribution support? An auditable reachability framework across islands and forest fragments",
-  "title_status": "original_working_title_pending_island_result",
+  "article_type": "Original Research Paper",
+  "title": "When does landscape configuration add held-out information? An auditable reference-conditioned framework across islands and forest fragments",
+  "title_status": "revised_working_title_after_frozen_island_result",
   "main_manuscript": "manuscript/structural_reachability_manuscript.md",
   "highlights": "manuscript/structural_highlights.txt",
   "cover_letter": "manuscript/submission/cover_letter.md",
@@ -24,6 +25,9 @@
   "island_preoutcome_contract": "validation/aislands_isolation_adequacy_20260812/preoutcome_contract.json",
   "island_area_gate": "validation/aislands_isolation_adequacy_20260812/area_gate_expected.json",
   "island_mainland_gate": "validation/aislands_isolation_adequacy_20260812/mainland_gate_expected.json",
+  "island_authoritative_outcome": "validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json",
+  "island_authoritative_provenance": "validation/aislands_isolation_adequacy_20260812/authoritative_execution_provenance.json",
+  "island_outcome_qa": "validation/aislands_isolation_adequacy_20260812/authoritative_outcome_qa.json",
   "figure_files": [
     "figures/output/figure_1_roles.svg",
     "figures/output/figure_2_aislands.svg",
@@ -31,37 +35,48 @@
     "figures/output/figure_4_boundary.svg",
     "figures/output/figure_5_audit.svg"
   ],
-  "figure_status": "original_working_set_pending_island_result_and_final_redesign",
+  "figure_status": "working_set_requires_island_strong-reference_panel_update_before_release",
   "machine_readable_results": [
     "manuscript/result_tables/table_3_main_sensitivity_results.csv",
-    "manuscript/result_tables/table_s1_applicability_accounting.csv"
+    "manuscript/result_tables/table_s1_applicability_accounting.csv",
+    "validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json",
+    "validation/aislands_isolation_adequacy_20260812/authoritative_outcome_qa.json"
   ],
   "offline_build_command": "python manuscript/build_structural_submission_package.py --output-dir build/structural_submission",
   "frozen_evidence": {
-    "aislands_direction": "positive_added_information_conditional_on_support_and_nearest_source_distance",
+    "aislands_original_direction": "positive_added_ordering_information_conditional_on_support_and_nearest_source_distance",
     "aislands_original_conditional_concordance": 0.6177465917820878,
+    "aislands_strong_reference_direction": "adverse_incremental_predictive_effect_beyond_R3",
+    "aislands_strong_reference_C_minus_R3_log_loss": 0.003485181598265469,
+    "aislands_strong_reference_bootstrap_95_ci": [0.0024664225728659645, 0.004508216483355693],
+    "aislands_strong_reference_species_favourable": 341,
+    "aislands_strong_reference_species_adverse": 545,
+    "aislands_strong_reference_result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
     "tanzania_primary_direction": "adverse_incremental_loso_beyond_current_flow_and_nearest_source_distance",
     "tanzania_spatial_block_direction": "uncertain_interval_crosses_zero",
     "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
   },
-  "pending_scientific_gate": {
+  "completed_scientific_gate": {
     "analysis": "aislands_isolation_adequacy_v1_3_exactly_once",
+    "workflow_run_id": 31564146592,
+    "workflow_run_attempt": 1,
+    "trigger_commit": "a9329d929933c919fe6c1c03934f0314c40f5c50",
     "primary_contrast": "candidate C minus reference R3 matched held-out log loss",
     "favourable_direction": "negative",
-    "reference_design_closed_before_species_outcomes": true,
-    "area_table_sha256": "496789783a98e55e1b9552f6f6d28e7b4567ef0f52c795657c7e2fea9c60aae2",
-    "mainland_distance_table_sha256": "7d6f52f03702dd0cfae061023a1b2f405e39397de73eaad21b97d24176c4f869"
+    "observed_primary_direction": "adverse_positive",
+    "result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
+    "rerun_allowed": false
   },
   "required_pre_submission_resolutions": [
-    "execute the frozen aislands_isolation_adequacy_v1_3 outcome exactly once and freeze its raw predictions, applicability, species summaries, uncertainty and result fingerprint",
-    "incorporate the island result without weakening R3 or retuning scales/taxa",
-    "select Journal of Biogeography versus Ecological Informatics using the predeclared C-R3 decision rule",
-    "rewrite title, abstract, figures, cover letter and final reference ledger for the selected route",
-    "replace <RELEASE_TAG> and <ARCHIVE_DOI> only after the final scientific route is frozen",
+    "incorporate the frozen adverse island C-R3 result in manuscript, figures, result tables and cover letter without weakening R3 or retuning scales/taxa",
+    "rewrite the Introduction and Discussion around reference-conditioned structural adequacy rather than island-specific residual novelty",
+    "update the manuscript-facing result package so the original A-Islands positive conditional-ordering result and the new strong-reference adverse predictive result are both explicit and not conflated",
+    "complete final Ecological Informatics live-policy verification and final visual QA",
+    "replace <RELEASE_TAG> and <ARCHIVE_DOI> only after the revised scientific manuscript is frozen",
     "complete author_metadata.template.json with author-approved metadata and remove placeholders in the final submission record",
     "confirm author list, affiliations, corresponding author, contribution roles, funding, competing interests, originality and simultaneous-submission statements",
-    "recheck the selected journal's live author guide and generative-AI policy on submission day",
-    "confirm final figure file format/resolution requirements in the selected live submission system"
+    "recheck the selected journal's live generative-AI policy on submission day",
+    "confirm final figure file format/resolution requirements in the live submission system"
   ],
   "prohibited_claims": [
     "EOG universally outperforms SDM",
@@ -70,6 +85,8 @@
     "the cross-system difference identifies a causal mechanism",
     "EOG discovers that island isolation is multidimensional",
     "EOG discovers stepping stones",
-    "EOG is the first graph representation of island connectivity"
+    "EOG is the first graph representation of island connectivity",
+    "R3 causally explains the original A-Islands conditional-concordance signal",
+    "R3 universally outperforms simpler island-isolation references"
   ]
 }

@@ -2,97 +2,92 @@
 
 ## Current journal decision state
 
-**Submission is result-dependent and currently on HOLD.**
+**Scientific route selected: _Ecological Informatics_, Original Research Paper.**  
+**Submission remains on HOLD only until the frozen island result is incorporated into the manuscript-facing package and the existing human/release gates are completed.**
 
-The original frozen A-Islands + Tanzania manuscript is already scientifically submission-worthy, but the project has deliberately selected a higher-novelty island-biogeography falsification test before release.
+The prospectively frozen A-Islands strong-reference test was executed exactly once. Its primary `C − R3` log-loss difference was **+0.0034852** (species bootstrap 95% **+0.0024664 to +0.0045082**; 341 species favourable, 545 adverse). Negative had been predeclared as favourable to EOG, so the observed result is adverse. The predeclared journal rule therefore selects *Ecological Informatics*, not *Journal of Biogeography*.
 
-- If the prospectively frozen A-Islands `C − R3` log-loss contrast is robustly negative: **first target = *Journal of Biogeography*, Research Paper**.
-- If the new contrast is null, adverse, or indeterminate: **first target = *Ecological Informatics*, Original Research Paper**, retaining the broader structural-adequacy framing.
-- *Methods in Ecology and Evolution* remains NO-GO for this empirical version unless a separate general method/simulation contribution is developed prospectively.
-- *Ecological Modelling* remains a conditional broader-route backup.
-
-The journal decision rule is frozen in `manuscript/submission/novelty_submission_strategy_2026-08-12.md` and must not be changed to chase whichever journal looks preferable after the result.
+This result does not erase the original A-Islands conditional-concordance result (`0.6177466`) because the endpoints differ. The original result remains evidence of conditional ordering beyond frozen climatic support and nearest-source distance. The new result shows that the same geography-only species-conditioned EOG feature does **not** earn an incremental predictive claim after the stronger R3 reference. Tanzania remains adverse under its matrix-aware strong reference, with spatial-block sensitivity uncertain.
 
 ## Submission-blocking gates
 
-The paper is **not ready to submit or release** until every blocking item is complete.
+The paper is **not ready to submit or release** until every blocking item below is complete.
 
 ### Scientific content already secured
 
-- [x] Positive original real-data benchmark: A-Islands plants.
+- [x] Original positive real-data benchmark: A-Islands plants.
 - [x] Strong-competitor external benchmark: Tanzania forest birds.
 - [x] Negative Tanzania result retained and independently reproduced.
 - [x] Tanzania spatial-block sensitivity reported as uncertain.
 - [x] Species-level inference and all non-estimable cases retained.
 - [x] SDM, spatial CV, source distance, current flow and EOG roles separated.
 - [x] Existing-method competitor matrix drafted.
-- [x] Original full Introduction and Methods converted from contracts to prose.
-- [x] Original Results tables generated directly from frozen artifacts.
-- [x] Original Results/Discussion preserve the positive/adverse evidence boundary.
 - [x] General closest-prior novelty audit completed on 2026-08-12.
-- [x] Island-specific closest-prior audit added: Long 2009; Weigelt & Kreft 2013; Sillero et al. 2018; Carter et al. 2020; Daniel et al. 2023.
+- [x] Island-specific closest-prior audit completed before the new outcome: Long 2009; Weigelt & Kreft 2013; Sillero et al. 2018; Carter et al. 2020; Daniel et al. 2023.
 - [x] Verified closest-prior additions ledger expanded in `manuscript/submission/closest_prior_reference_additions.md`.
 
-### Island-isolation novelty-maximization gate
+### Island-isolation strong-reference falsification gate
 
 - [x] Final island reference hierarchy frozen before extension species outcomes (`eog_aislands_isolation_adequacy_v1_3`).
-- [x] Original A-Islands graph universe locked to the same 842 surveyed/model-linked islands.
-- [x] A-Islands polygon area recovered outcome-free for 842/842 islands and fingerprinted.
+- [x] Graph universe locked to the same 842 surveyed/model-linked A-Islands units.
+- [x] Polygon area recovered outcome-free for 842/842 islands and fingerprinted.
 - [x] Natural Earth 1:10m v5.1.1 continental-Australia geometry frozen outcome-free and fingerprinted.
 - [x] Continental-mainland distance derived for 842/842 islands and fingerprinted.
-- [x] R3 includes climate, recipient area, mainland distance, nearest species source, unweighted and area-weighted multi-source pressure, nearest other island, surrounding-island pressure, surrounding-landmass pressure, generic component exposure, and generic mainland stepping-stone frequency.
-- [x] Candidate C adds only geography-only species-conditioned EOG connected frequency.
-- [x] Held-out labels prohibited from all response-derived spatial feature construction; training presences use focal self-exclusion.
+- [x] R3 fixed as climate + recipient area + mainland distance + nearest species source + unweighted and area-weighted multi-source pressure + nearest other island + surrounding-island pressure + surrounding-landmass pressure + generic component exposure + generic mainland stepping-stone frequency.
+- [x] Candidate C fixed as R3 plus geography-only species-conditioned EOG connected frequency only.
+- [x] Held-out labels prohibited from response-derived spatial feature construction; training presences use focal self-exclusion.
 - [x] Primary endpoint, 5/5 class gate, constant-predictor rule, λ=1 fit engine, bootstrap/sign-flip inference and non-estimability accounting frozen before outcome.
-- [ ] **Island-isolation adequacy extension executed exactly once under the frozen v1.3 contract.**
-- [ ] Raw island-extension held-out predictions, fold applicability, species summaries, uncertainty and result fingerprint frozen without selective deletion.
-- [ ] **Island extension result incorporated without weakening R3, retuning graph scales, changing taxa, or selecting a favourable interpretation.**
-- [ ] Journal route selected by the predeclared `C − R3` decision rule.
+- [x] **Island-isolation adequacy extension executed exactly once under the frozen v1.3 contract.** Trigger commit `a9329d929933c919fe6c1c03934f0314c40f5c50`, workflow run `31564146592`, attempt 1.
+- [x] Raw held-out predictions, fold applicability, species summaries, aggregate uncertainty and result fingerprint frozen in artifact `9128998976`; aggregate/provenance/independent QA are committed in `validation/aislands_isolation_adequacy_20260812/`.
+- [x] Result fingerprint frozen: `5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a`.
+- [x] One-time execution workflow removed after success so the authoritative run cannot be repeated from the current repository state.
+- [x] Journal route selected by the predeclared rule: **Ecological Informatics** because `C − R3` was adverse rather than robustly negative.
+- [ ] **Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3, retuning graph scales, changing taxa, or converting the adverse result into a rescue analysis.**
 
-### Closest-prior manuscript framing after the island result
+### Final novelty framing
 
-- [ ] Introduction rewritten so the main question is generic-isolation adequacy rather than invention of connectivity/continuity.
-- [ ] Carter et al. 2020 explicitly treated as the closest multidimensional-isolation comparator; mainland distance, stepping stones and insular network position are acknowledged as established axes.
-- [ ] Weigelt & Kreft 2013 explicitly used to delimit surrounding-landmass novelty.
-- [ ] Long 2009 and Sillero et al. 2018 explicitly delimit stepping-stone and graph-theoretic island-connectivity novelty.
-- [ ] Daniel et al. 2023 explicitly delimits empirical graph-validation novelty.
-- [ ] General connectivity precedents retained where needed so the paper does not imply that suitability+connectivity integration, source-conditioned proximity, source-area weighting, threshold sensitivity, or connectivity uncertainty are novel.
-- [ ] `manuscript/structural_verified_references.md` expanded and reverified for every citation actually retained in the final island-focused manuscript.
+- [ ] Introduction rewritten around the question **when occurrence-conditioned structural configuration earns an incremental held-out claim relative to the declared reference**, not around invention of connectivity or residual island novelty.
+- [ ] Original A-Islands conditional concordance and new A-Islands strong-reference predictive result explicitly separated as different estimands.
+- [ ] Discussion states that strong-reference failure is a valid output of the structural-adequacy diagnostic rather than evidence that connectivity is unimportant.
+- [ ] R1–R3 explanatory ladder is reported only as post-outcome interpretation of already-predeclared tiers; it must not replace the frozen `C − R3` endpoint.
+- [ ] Carter et al. 2020, Weigelt & Kreft 2013, Long 2009, Sillero et al. 2018 and Daniel et al. 2023 retained to delimit island-isolation novelty, without implying that R3 causally explains the original concordance signal.
+- [ ] General connectivity precedents retained so the paper does not imply that suitability+connectivity integration, source-conditioned proximity, source-area weighting, threshold sensitivity, graph validation or connectivity uncertainty are novel.
+- [ ] `manuscript/structural_verified_references.md` expanded/reverified for every citation retained in the final manuscript.
 
 ### Figures and machine-readable manuscript evidence
 
-The existing five-figure set is reproducible for the original manuscript, but the final figure hierarchy must be rebuilt after the island result because the scientific centre has changed.
-
-- [x] Existing Figure 1–5 assets rebuild from committed frozen inputs.
-- [x] Existing plotting sidecars and Table 3/Table S1 are retained in machine-readable form.
+- [x] Existing Figure 1–5 assets rebuild from committed original frozen inputs.
+- [x] Existing plotting sidecars and Table 3/Table S1 remain machine-readable.
 - [x] Existing figure contracts prohibit realised-movement/colonisation claims.
-- [ ] Final Figure 1 redesigned around the island-isolation reference hierarchy (`R0 → R1 → R2 → R3 → C`) rather than generic connectivity novelty.
-- [ ] Final A-Islands figure reports the prospectively frozen `C − R3` result and applicability, whatever its direction.
-- [ ] Tanzania retained as a non-island strong-reference boundary/stress test rather than forced into a co-equal biological mechanism story.
-- [ ] Final figures/tables generated from frozen extension artifacts with fresh byte/fingerprint tests.
-- [ ] Final visual QA at chosen journal display size: typography, legends, panel labels, grayscale/colour-vision legibility and required file format/resolution.
+- [ ] Figure 1 revised to show `declared reference → held-out structural probe → residual / adverse-or-redundant / indeterminate` rather than presenting EOG as another connectivity index.
+- [ ] A-Islands result figure reports **both** the original conditional-ordering result and the prospectively frozen strong-reference `C − R3` result, with distinct axes/labels so incompatible estimands are not visually compared as one effect size.
+- [ ] Reference-tier panel reports R0/R1/R2/R3/C as explanatory context and marks `C − R3` as the only primary extension contrast.
+- [ ] Tanzania retained as the external strong-reference boundary, with its spatial-block uncertainty visible.
+- [ ] Final tables include 886/886 estimable species, 4231/4430 evaluable folds, 199 5/5 class-count failures, 712,515 held-out predictions, and the new result fingerprint.
+- [ ] Final figures/tables generated from frozen extension artifacts with fresh sync/fingerprint tests.
+- [ ] Final visual QA at Ecological Informatics display size: typography, legends, panel labels, grayscale/colour-vision legibility and required file format/resolution.
 
 ### Reproducibility release
 
 - [ ] Tagged software release created.
-- [ ] Release commit matches final island-result manuscript/code state.
-- [ ] Zenodo/archive DOI minted from the tagged release.
-- [ ] Frozen original benchmarks plus island-extension contracts, geographic fingerprints, predictions, summaries, sidecars and submission manifest archived with the release.
-- [x] Reproducibility environment boundary documented in `manuscript/submission/environment.md` for the original package.
-- [ ] One clean-checkout command path extended to rebuild and verify the final island-focused manuscript figures/tables and the original Tanzania boundary evidence.
-- [ ] Canonical fingerprints reproduced from the final release tag.
+- [ ] Release commit matches final revised manuscript/code state.
+- [ ] Zenodo/archive DOI reserved/minted only after the revised scientific package is frozen.
+- [ ] Frozen original benchmarks plus island-extension contracts, geographic fingerprints, raw authoritative outcome artifact, summaries, sidecars and submission manifest archived with the release.
+- [x] Reproducibility environment boundary documented for the original package.
+- [ ] Clean-checkout command extended to verify final manuscript-facing projections including the new island result while never rerunning the one-time biological outcome.
+- [ ] Canonical original A-Islands, new A-Islands strong-reference, and Tanzania fingerprints reproduced from the final release package.
 - [ ] CI/repository and release DOI resolve from the archived version.
 
 ### Manuscript package
 
-- [ ] Final title fixed after the island result and journal-route decision.
-- [ ] Abstract rewritten around the final island-isolation claim boundary and checked against the selected journal's live limit.
-- [ ] Highlights/keywords regenerated for the selected journal if required.
+- [ ] Final title fixed; current working title: **“When does landscape configuration add held-out information? An auditable reference-conditioned framework across islands and forest fragments.”**
+- [ ] Abstract rewritten around the reference-conditioned evidence boundary and checked against the live Ecological Informatics limit.
+- [ ] Highlights/keywords regenerated for Ecological Informatics.
+- [ ] Cover letter rewritten around the positive conditional-ordering result plus adverse strong-reference tests, not a universal EOG improvement claim.
+- [ ] Data/Code Availability updated to include authoritative island outcome fingerprint/provenance and final archive identifiers.
+- [ ] Supplementary materials updated to archive pre-outcome contract, smoke gate, full prediction/fold/species outputs and explanatory tier QA.
 - [ ] Author list, affiliations, corresponding author and contributions finalized and approved by all authors.
-- [ ] Data Availability / Code Availability statements updated to include the island-extension frozen inputs and final release identifiers.
-- [ ] Generative-AI disclosure reviewed by all authors and conformed to the selected journal's live policy at submission time.
-- [ ] Supplementary materials list updated for the final island hierarchy and Tanzania boundary benchmark.
-- [ ] Cover letter rewritten for the selected result-dependent journal route.
+- [ ] Generative-AI disclosure reviewed by all authors and conformed to the live journal policy at submission time.
 
 ### Author confirmations still required
 
@@ -103,9 +98,7 @@ The existing five-figure set is reproducible for the original manuscript, but th
 
 ### Final live-policy verification
 
-After the result selects the journal route:
-
-- [ ] Re-open the selected journal's current author guide on the actual submission date.
+- [ ] Re-open the current *Ecological Informatics* author guide on the actual submission date.
 - [ ] Confirm article type, word/abstract/keyword limits, figure formats, reference style, data/code requirements, anonymisation model and required declarations.
 - [ ] Confirm the current generative-AI disclosure policy and place the statement exactly where requested.
 
@@ -123,10 +116,10 @@ The following shorthand is explicitly prohibited because it exceeds the evidence
 - `EOG discovers that island isolation is multidimensional`;
 - `EOG discovers stepping stones`;
 - `EOG is the first graph model of archipelagos`;
-- `the EOG graph reconstructs historical colonisation routes`.
+- `the EOG graph reconstructs historical colonisation routes`;
+- `R3 causally explains the original A-Islands conditional-concordance signal`;
+- `R3 universally outperforms simpler island-isolation references`.
 
 ## Current stop/go rule
 
-**GO only for the one already-frozen island-isolation adequacy execution. Do not submit, mint the final DOI, weaken R3, or run a novelty-rescue analysis while its result is unknown.**
-
-The original A-Islands and Tanzania directions remain frozen. The new island analysis is not a reopening of those outcomes: it is a separately predeclared stronger falsification test whose full reference hierarchy and geographic inputs were fixed before its species outcomes. Once executed, its result must be retained regardless of direction.
+**GO to manuscript/result-package revision for Ecological Informatics. Do not rerun the authoritative island analysis, weaken R3, tune graph scales/taxa, or add a favourable dataset to rescue the island claim. HOLD DOI reservation and journal submission until the adverse island result is fully incorporated and the remaining author/policy/visual gates are complete.**

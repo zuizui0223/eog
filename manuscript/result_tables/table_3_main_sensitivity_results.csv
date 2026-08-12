@@ -1,8 +1,10 @@
 system,analysis,metric,effect_definition,n_species,n_matched,effect,ci_low,ci_high,null_value,sign_flip_p,interpretation
-A-Islands,Combined connected frequency,conditional concordance,higher than 0.5 favours added structural information,845,,0.617747,0.608681,0.626944,0.500000,0.00001000,favourable
-A-Islands,Geography-only connected frequency,conditional concordance,higher than 0.5 favours added structural information,845,,0.614746,0.605950,0.623573,0.500000,,favourable
-A-Islands,Environment-constrained connected frequency,conditional concordance,higher than 0.5 favours added structural information,845,,0.606373,0.597487,0.615419,0.500000,,favourable
-A-Islands,Normalized geographic bottleneck secondary,conditional concordance,higher than 0.5 favours added structural information,793,,0.528772,0.517726,0.539568,0.500000,,favourable
+A-Islands,Combined connected frequency,conditional concordance,higher than 0.5 favours added structural ordering information,845,,0.617747,0.608681,0.626944,0.500000,0.00001000,favourable
+A-Islands,Geography-only connected frequency,conditional concordance,higher than 0.5 favours added structural ordering information,845,,0.614746,0.605950,0.623573,0.500000,,favourable
+A-Islands,Environment-constrained connected frequency,conditional concordance,higher than 0.5 favours added structural ordering information,845,,0.606373,0.597487,0.615419,0.500000,,favourable
+A-Islands,Normalized geographic bottleneck secondary,conditional concordance,higher than 0.5 favours added structural ordering information,793,,0.528772,0.517726,0.539568,0.500000,,favourable
+A-Islands,Prospective strong island reference | C vs R3,log loss difference,candidate C minus frozen R3 reference; negative favours EOG,886,712515,0.003485,0.002466,0.004508,0.000000,0.00001000,adverse
+A-Islands,Prospective strong island reference | C vs R3,Brier difference,candidate C minus frozen R3 reference; negative favours EOG,886,712515,0.000268,0.000079,0.000457,0.000000,0.00561994,adverse
 Tanzania,Primary weighting | LOSO,log loss difference,candidate minus current-flow reference; negative favours EOG,60,826,0.032113,0.017458,0.048675,0.000000,0.00003000,adverse
 Tanzania,Primary weighting | LOSO,Brier difference,candidate minus current-flow reference; negative favours EOG,60,826,0.004799,0.002281,0.007315,0.000000,0.00047999,adverse
 Tanzania,Inverse-area weighting | LOSO,log loss difference,candidate minus current-flow reference; negative favours EOG,60,826,0.030630,0.016214,0.046937,0.000000,0.00003000,adverse

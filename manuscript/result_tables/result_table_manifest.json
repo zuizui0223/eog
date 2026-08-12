@@ -1,6 +1,6 @@
 {
-  "schema_version": "eog_structural_results_tables_v1",
-  "purpose": "Generate manuscript-facing results tables only from frozen Figure 2 and Figure 3 evidence, without manual numeric transcription or refitting.",
+  "schema_version": "eog_structural_results_tables_v2",
+  "purpose": "Generate manuscript-facing results tables from frozen original A-Islands, prospective A-Islands strong-reference, and Tanzania evidence without manual numeric transcription or refitting.",
   "inputs": {
     "aislands_mode_estimates": {
       "path": "figures/output/aislands_mode_estimates.csv",
@@ -13,6 +13,14 @@
     "aislands_primary_expected": {
       "path": "benchmarks/aislands_authoritative_expected.json",
       "expected_species_output_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488"
+    },
+    "aislands_strong_reference": {
+      "path": "validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json",
+      "result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a"
+    },
+    "aislands_strong_reference_qa": {
+      "path": "validation/aislands_isolation_adequacy_20260812/authoritative_outcome_qa.json",
+      "source_result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a"
     },
     "tanzania_aggregate_contrasts": {
       "path": "figures/output/tanzania_aggregate_contrasts.csv",
@@ -31,6 +39,10 @@
       "environmentally_constrained",
       "bottleneck_secondary"
     ],
+    "aislands_strong_reference_metrics": [
+      "log_loss",
+      "brier"
+    ],
     "tanzania_contrasts": [
       "primary::primary_loso",
       "inverse_area_sensitivity::primary_loso",
@@ -47,7 +59,9 @@
     "retain_zero_or_failed_categories": true
   },
   "claim_boundaries": [
-    "A-Islands estimates test added held-out structural information conditional on frozen pointwise support and nearest-training-occurrence distance.",
+    "The original A-Islands conditional-concordance estimate tests ordering information conditional on frozen pointwise support and nearest-training-occurrence distance.",
+    "The prospective A-Islands C-minus-R3 estimates are paired held-out predictive-loss differences under a separately frozen stronger island reference; negative values favour EOG and positive values are adverse.",
+    "The original A-Islands concordance and the strong-reference predictive-loss difference are different estimands and must not be compared as one effect size.",
     "Tanzania differences are candidate minus strong current-flow reference; negative values favour adding EOG and positive values are adverse.",
     "Neither table reports a dispersal, movement, colonisation, or realised-path probability.",
     "Non-estimable rows remain visible and are not silently dropped from applicability accounting."

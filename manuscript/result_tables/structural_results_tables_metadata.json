@@ -1,12 +1,13 @@
 {
   "aislands_species_output_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488",
-  "applicability_rows": 14,
+  "aislands_strong_reference_result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
+  "applicability_rows": 16,
   "outputs": {
-    "structural_results_tables.md": "4f580dbc6d9143d3b89b81fd44e819fbe2f89e402f9e99fe4c9abee50ed28bb9",
-    "table_3_main_sensitivity_results.csv": "b25da730cec3f01888922de6c96fc98bd027e6213f9f59ab4c07ac2c4b763049",
-    "table_s1_applicability_accounting.csv": "f040f8ea1b0fd53ae6e45e3538891a40a3cbf111bd9023fdc660cf0522363088"
+    "structural_results_tables.md": "44d41b115d7465e841a10f4ed9d3d057aed21ca1bad825cdee4e574217dce88b",
+    "table_3_main_sensitivity_results.csv": "5377a39d7043a02570723fa9ab8b807e5258e10ec27b471afd22aae2853cde98",
+    "table_s1_applicability_accounting.csv": "2abc75aeb3563e06b06dcf9d24593f2a36799be4528ffd9f97d0b6d7d37eb78b"
   },
-  "schema_version": "eog_structural_results_tables_v1",
-  "table_3_rows": 12,
+  "schema_version": "eog_structural_results_tables_v2",
+  "table_3_rows": 14,
   "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
 }

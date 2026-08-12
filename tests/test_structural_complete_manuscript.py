@@ -36,23 +36,32 @@ def test_complete_manuscript_has_submission_sections_and_no_scaffold_notes() -> 
         "## References",
     ):
         assert heading in text
-    assert "Report the proportion of species" not in text
-    assert "Discuss only as hypotheses" not in text
-    assert "The manuscript should state plainly" not in text
-    assert "## 6. Figure plan" not in text
-    assert "## 8. Evidence map" not in text
+    for stale in (
+        "Report the proportion of species",
+        "Discuss only as hypotheses",
+        "The manuscript should state plainly",
+        "## 6. Figure plan",
+        "## 8. Evidence map",
+    ):
+        assert stale not in text
 
 
-def test_results_and_discussion_are_full_prose() -> None:
+def test_results_and_discussion_are_full_prose_and_keep_both_aislands_endpoints() -> None:
     text = MANUSCRIPT.read_text(encoding="utf-8")
     results = section(text, "3. Results", "4. Discussion")
     discussion = section(text, "4. Discussion", "5. Conclusions")
-    assert 900 <= words(results) <= 1800
-    assert 1500 <= words(discussion) <= 3200
+    assert 900 <= words(results) <= 2000
+    assert 1500 <= words(discussion) <= 3400
     for token in (
         "672 had concordance above 0.5",
         "42 equalled 0.5",
         "131 were below 0.5",
+        "886",
+        "4,231",
+        "712,515",
+        "+0.0034852",
+        "341",
+        "545",
         "Seventeen species",
         "43 had a positive difference",
         "66 single-class training cases",
@@ -62,9 +71,15 @@ def test_results_and_discussion_are_full_prose() -> None:
         "0.0057016",
     ):
         assert token in results
-    assert "reference model" in discussion
-    assert "prospective tests" in discussion.lower()
-    assert "post-outcome trait-specific radii" in discussion
+    for token in (
+        "Reference content and endpoint are part of the estimand",
+        "declared reference",
+        "original A-Islands result remains valid within its frozen estimand",
+        "causally explains the original concordance",
+        "one-time execution",
+        "should not be added now to rescue the adverse island result",
+    ):
+        assert token.lower() in discussion.lower()
 
 
 def test_primary_and_sensitivity_values_match_frozen_table3() -> None:
@@ -75,6 +90,9 @@ def test_primary_and_sensitivity_values_match_frozen_table3() -> None:
     narrative = {
         ("A-Islands", "Combined connected frequency", "conditional concordance"): (
             "0.6177466", "0.6086806", "0.6269445"
+        ),
+        ("A-Islands", "Prospective strong island reference | C vs R3", "log loss difference"): (
+            "0.0034852", "0.0024664", "0.0045082"
         ),
         ("Tanzania", "Primary weighting | LOSO", "log loss difference"): (
             "0.0321131", "0.0174580", "0.0486750"
@@ -92,8 +110,6 @@ def test_primary_and_sensitivity_values_match_frozen_table3() -> None:
     for key, rendered_values in narrative.items():
         row = lookup[key]
         for field, rendered in zip(("effect", "ci_low", "ci_high"), rendered_values):
-            # Table 3 is a six-decimal display projection; the manuscript retains
-            # more digits from the same frozen result. They must agree to rounding.
             assert abs(float(rendered) - float(row[field])) <= 5.1e-7
             assert rendered in text or rendered.replace("-", "−") in text
 
@@ -107,6 +123,8 @@ def test_applicability_failure_accounting_is_retained() -> None:
         ("A-Islands", "bottleneck_secondary", "no_finite_comparable_pairs_within_frozen_strata"): "1,640",
         ("A-Islands", "primary_combined", "evaluable"): "3,041",
         ("A-Islands", "primary_combined", "no_comparable_pairs_within_frozen_strata"): "1,190",
+        ("A-Islands", "isolation_adequacy_C_vs_R3", "evaluable_folds"): "4,231",
+        ("A-Islands", "isolation_adequacy_C_vs_R3", "insufficient_training_class_count_5_5"): "199",
         ("Tanzania", "primary::primary_loso", "matched"): "826",
         ("Tanzania", "primary::spatial_mst_block", "matched"): "718",
     }
@@ -122,12 +140,15 @@ def test_claim_boundary_survives_complete_manuscript() -> None:
         "EOG outperforms SDM",
         "connected frequency estimates colonisation probability",
         "Tanzania shows current flow is better in general",
+        "R3 causally explains the original A-Islands conditional-concordance signal",
     ):
         assert prohibited not in text
     for required in (
         "not a colonisation or dispersal probability",
         "not as confirmation of the adverse primary LOSO effect",
-        "does not establish a historical colonisation route",
-        "not estimates of realised dispersal or colonisation probability",
+        "cannot be interpreted as realised movement",
+        "does not by itself imply improved probability prediction",
+        "cannot be used to claim that EOG captures a generally predictive",
+        "not a controlled one-factor ablation",
     ):
         assert required.lower() in text.lower()

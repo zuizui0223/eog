@@ -1,0 +1,89 @@
+{
+  "schema_version": "eog_aislands_isolation_outcome_qa_v1",
+  "source_result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
+  "independent_consistency_checks": {
+    "taxa_recalculated": 886,
+    "evaluable_folds_recalculated": 4231,
+    "non_evaluable_folds_recalculated": 199,
+    "heldout_prediction_rows_recalculated": 712515,
+    "primary_species_macro_mean_recalculated": 0.003485181598265467,
+    "secondary_species_macro_mean_recalculated": 0.0002682455326733659,
+    "primary_species_favourable_negative_recalculated": 341,
+    "primary_species_adverse_positive_recalculated": 545,
+    "primary_bootstrap_95_ci_recalculated": [
+      0.002466422572865965,
+      0.004508216483355692
+    ],
+    "constant_predictor_drops_in_evaluable_folds": 0
+  },
+  "species_macro_tier_scores": {
+    "R0": {
+      "log_loss": 0.10538508658112085,
+      "brier": 0.02883031544611533
+    },
+    "R1": {
+      "log_loss": 0.09133839558520357,
+      "brier": 0.025413916800642387
+    },
+    "R2": {
+      "log_loss": 0.09448573968261674,
+      "brier": 0.025512810370628726
+    },
+    "R3": {
+      "log_loss": 0.1027945789873443,
+      "brier": 0.026575338904510873
+    },
+    "C": {
+      "log_loss": 0.10627976058560977,
+      "brier": 0.02684358443718424
+    }
+  },
+  "explanatory_log_loss_contrasts": {
+    "R1_minus_R0": {
+      "species_macro_mean": -0.014046690995917281,
+      "bootstrap_95_ci": [-0.01584030141801222, -0.012146857974790473],
+      "species_negative": 764,
+      "species_positive": 122
+    },
+    "R2_minus_R1": {
+      "species_macro_mean": 0.0031473440974131633,
+      "bootstrap_95_ci": [0.0013004854221428932, 0.004906783094667856],
+      "species_negative": 383,
+      "species_positive": 503
+    },
+    "R3_minus_R2": {
+      "species_macro_mean": 0.008308839304727563,
+      "bootstrap_95_ci": [0.0068501366003299365, 0.00992018007859234],
+      "species_negative": 285,
+      "species_positive": 601
+    },
+    "C_minus_R3": {
+      "species_macro_mean": 0.003485181598265468,
+      "bootstrap_95_ci": [0.0024664225728659632, 0.004508216483355694],
+      "species_negative": 341,
+      "species_positive": 545
+    },
+    "C_minus_R2": {
+      "species_macro_mean": 0.011794020902993032,
+      "bootstrap_95_ci": [0.009852289465457314, 0.013934885232483363],
+      "species_negative": 285,
+      "species_positive": 601
+    },
+    "C_minus_R1": {
+      "species_macro_mean": 0.014941365000406197,
+      "bootstrap_95_ci": [0.01215268647621149, 0.017855415690325904],
+      "species_negative": 291,
+      "species_positive": 595
+    }
+  },
+  "interpretation_guard": {
+    "primary_result": "The prospectively frozen C-minus-R3 test is adverse: adding species-conditioned EOG connected frequency to R3 increases held-out log loss on average.",
+    "not_supported": [
+      "R3 is universally superior to simpler island-isolation references",
+      "R3 causally explains the original A-Islands conditional-concordance signal",
+      "multidimensional island isolation is sufficient in every modelling framework",
+      "current EOG connected frequency estimates dispersal or colonisation"
+    ],
+    "explanatory_ladder_status": "Post-outcome descriptive/explanatory use of the predeclared R0-R3-C tier scores only. These contrasts cannot replace the frozen C-minus-R3 primary endpoint."
+  }
+}

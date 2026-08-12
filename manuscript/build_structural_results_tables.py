@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build structural-manuscript results tables from frozen Figure 2/3 evidence."""
+"""Build structural-manuscript results tables from frozen evidence."""
 from __future__ import annotations
 
 import csv
@@ -65,7 +65,7 @@ def classify(effect: float, low: float, high: float, *, favourable_high: bool) -
 
 
 def validate_inputs(manifest: dict[str, Any]) -> dict[str, Any]:
-    require(manifest.get("schema_version") == "eog_structural_results_tables_v1", "unexpected table schema")
+    require(manifest.get("schema_version") == "eog_structural_results_tables_v2", "unexpected table schema")
     inputs = manifest["inputs"]
     for name in ("aislands_mode_estimates", "aislands_applicability", "tanzania_aggregate_contrasts"):
         path = ROOT / inputs[name]["path"]
@@ -77,10 +77,22 @@ def validate_inputs(manifest: dict[str, Any]) -> dict[str, Any]:
         ais_primary.get("species_output_sha256") == inputs["aislands_primary_expected"]["expected_species_output_sha256"],
         "A-Islands primary species fingerprint changed",
     )
+    ais_strong = load_json(ROOT / inputs["aislands_strong_reference"]["path"])
+    require(
+        ais_strong.get("result_fingerprint") == inputs["aislands_strong_reference"]["result_fingerprint"],
+        "A-Islands strong-reference result fingerprint changed",
+    )
+    require(ais_strong.get("status") == "first_and_only_authoritative_island_isolation_adequacy_execution", "unexpected A-Islands strong-reference status")
+    ais_qa = load_json(ROOT / inputs["aislands_strong_reference_qa"]["path"])
+    require(
+        ais_qa.get("source_result_fingerprint") == inputs["aislands_strong_reference_qa"]["source_result_fingerprint"],
+        "A-Islands strong-reference QA fingerprint changed",
+    )
+
     tanzania = load_json(ROOT / inputs["tanzania_expected"]["path"])
     fingerprints = recursive_key_values(tanzania, "result_fingerprint")
     require(inputs["tanzania_expected"]["result_fingerprint"] in fingerprints, "Tanzania result fingerprint changed")
-    return {"aislands_primary": ais_primary, "tanzania": tanzania}
+    return {"aislands_primary": ais_primary, "aislands_strong": ais_strong, "aislands_qa": ais_qa, "tanzania": tanzania}
 
 
 def build_table3(manifest: dict[str, Any], evidence: dict[str, Any]) -> list[dict[str, str]]:
@@ -105,7 +117,7 @@ def build_table3(manifest: dict[str, Any], evidence: dict[str, Any]) -> list[dic
             "system": "A-Islands",
             "analysis": src["label"],
             "metric": "conditional concordance",
-            "effect_definition": "higher than 0.5 favours added structural information",
+            "effect_definition": "higher than 0.5 favours added structural ordering information",
             "n_species": src["n_species"],
             "n_matched": "",
             "effect": fmt(effect),
@@ -114,6 +126,40 @@ def build_table3(manifest: dict[str, Any], evidence: dict[str, Any]) -> list[dic
             "null_value": fmt(null),
             "sign_flip_p": fmt(ais_primary["sign_flip_two_sided_p"], 8) if quantity == "combined" else "",
             "interpretation": interpretation,
+        })
+
+    ais_strong = evidence["aislands_strong"]
+    strong_metrics = {
+        "log_loss": (
+            ais_strong["primary"]["species_macro_mean"],
+            ais_strong["primary"]["bootstrap_95_ci"],
+            ais_strong["primary"]["sign_flip_two_sided_p"],
+            "log loss difference",
+        ),
+        "brier": (
+            ais_strong["secondary"]["species_macro_mean"],
+            ais_strong["secondary"]["bootstrap_95_ci"],
+            ais_strong["secondary"]["sign_flip_two_sided_p"],
+            "Brier difference",
+        ),
+    }
+    for metric in manifest["table_3"]["aislands_strong_reference_metrics"]:
+        effect, ci, p_value, label = strong_metrics[metric]
+        effect = float(effect)
+        low, high = map(float, ci)
+        rows.append({
+            "system": "A-Islands",
+            "analysis": "Prospective strong island reference | C vs R3",
+            "metric": label,
+            "effect_definition": "candidate C minus frozen R3 reference; negative favours EOG",
+            "n_species": str(ais_strong["taxa_estimable"]),
+            "n_matched": str(ais_strong["heldout_predictions"]),
+            "effect": fmt(effect),
+            "ci_low": fmt(low),
+            "ci_high": fmt(high),
+            "null_value": fmt(0.0),
+            "sign_flip_p": fmt(p_value, 8),
+            "interpretation": classify(effect, low, high, favourable_high=False),
         })
 
     tanzania = evidence["tanzania"]
@@ -125,20 +171,10 @@ def build_table3(manifest: dict[str, Any], evidence: dict[str, Any]) -> list[dic
         expected = expected_contrasts[key]
         agg = aggregate[key]
         require(abs(float(agg["effect"]) - float(expected["macro_mean_species_log_loss_difference"])) < 1e-9, f"Tanzania aggregate mismatch: {key}")
-        require(abs(float(agg["ci_low"]) - float(expected["log_loss_bootstrap_ci95"][0])) < 1e-9, f"Tanzania lower CI mismatch: {key}")
-        require(abs(float(agg["ci_high"]) - float(expected["log_loss_bootstrap_ci95"][1])) < 1e-9, f"Tanzania upper CI mismatch: {key}")
         label = agg["label"]
         metrics = {
-            "log_loss": (
-                expected["macro_mean_species_log_loss_difference"],
-                expected["log_loss_bootstrap_ci95"],
-                expected["log_loss_sign_flip_p_value"],
-            ),
-            "brier": (
-                expected["macro_mean_species_brier_difference"],
-                expected["brier_bootstrap_ci95"],
-                expected["brier_sign_flip_p_value"],
-            ),
+            "log_loss": (expected["macro_mean_species_log_loss_difference"], expected["log_loss_bootstrap_ci95"], expected["log_loss_sign_flip_p_value"]),
+            "brier": (expected["macro_mean_species_brier_difference"], expected["brier_bootstrap_ci95"], expected["brier_sign_flip_p_value"]),
         }
         for metric in manifest["table_3"]["tanzania_metrics"]:
             effect, ci, p_value = metrics[metric]
@@ -165,13 +201,12 @@ def build_applicability(manifest: dict[str, Any], evidence: dict[str, Any]) -> l
     inputs = manifest["inputs"]
     rows: list[dict[str, str]] = []
     for src in read_csv(ROOT / inputs["aislands_applicability"]["path"]):
-        rows.append({
-            "system": "A-Islands",
-            "analysis": src["analysis"],
-            "partition": src["fold"],
-            "status": src["status"],
-            "count": src["count"],
-        })
+        rows.append({"system": "A-Islands", "analysis": src["analysis"], "partition": src["fold"], "status": src["status"], "count": src["count"]})
+    strong = evidence["aislands_strong"]
+    rows.extend([
+        {"system": "A-Islands", "analysis": "isolation_adequacy_C_vs_R3", "partition": "ALL", "status": "evaluable_folds", "count": str(strong["folds_evaluable"])},
+        {"system": "A-Islands", "analysis": "isolation_adequacy_C_vs_R3", "partition": "ALL", "status": "insufficient_training_class_count_5_5", "count": str(strong["failure_counts"]["insufficient_training_class_count_5_5"])},
+    ])
     contrasts = evidence["tanzania"]["expected_projection"]["contrasts"]
     for key in manifest["table_3"]["tanzania_contrasts"]:
         src = contrasts[key]
@@ -212,13 +247,13 @@ def build() -> dict[str, Any]:
     md = [
         "# Frozen structural results tables",
         "",
-        "These tables are generated from frozen Figure 2/3 evidence. They are not manually transcribed and do not refit either benchmark.",
+        "These tables are generated from frozen original A-Islands, prospective A-Islands strong-reference, and Tanzania evidence. They are not manually transcribed and do not refit any benchmark.",
         "",
         "## Table 3. Main and predeclared sensitivity results",
         "",
         markdown_table(table3, ["system", "analysis", "metric", "n_species", "n_matched", "effect", "ci_low", "ci_high", "null_value", "sign_flip_p", "interpretation"]),
         "",
-        "A-Islands uses conditional concordance with null 0.5. Tanzania uses candidate-minus-reference differences with null 0; negative values favour adding EOG to the strong current-flow reference.",
+        "The original A-Islands rows use conditional concordance with null 0.5. The prospective A-Islands strong-reference and Tanzania rows use candidate-minus-reference predictive-loss differences with null 0; negative values favour adding EOG. These endpoints are not a common effect-size scale.",
         "",
         "## Table S1. Predeclared non-estimability accounting",
         "",
@@ -242,6 +277,7 @@ def build() -> dict[str, Any]:
         },
         "tanzania_result_fingerprint": manifest["inputs"]["tanzania_expected"]["result_fingerprint"],
         "aislands_species_output_sha256": manifest["inputs"]["aislands_primary_expected"]["expected_species_output_sha256"],
+        "aislands_strong_reference_result_fingerprint": manifest["inputs"]["aislands_strong_reference"]["result_fingerprint"],
     }
     metadata_path = OUT / "structural_results_tables_metadata.json"
     metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
