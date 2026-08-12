@@ -1,7 +1,7 @@
 """Synthetic structural-discrimination contract for the experimental EOG distribution model.
 
 The three target nodes are constructed to have the same environmental state and the
-same direct geographic distance to the only training source.  They differ only in the
+same direct geographic distance to the only training source. They differ only in the
 intermediate landscape structure available under the frozen graph:
 
 - ``open_target`` has a two-step bridge;
@@ -9,7 +9,9 @@ intermediate landscape structure available under the frozen graph:
 - ``blocked_target`` has no admissible intermediate bridge.
 
 The benchmark therefore tests a question that pointwise environmental support and
-nearest-source distance cannot distinguish by construction.
+nearest-source distance cannot distinguish by construction. Because there is only one
+positive training source, this low-level contract fixes the structural gate at one;
+gate learning is tested separately with replicated multi-source training data.
 """
 from __future__ import annotations
 
@@ -51,6 +53,7 @@ def run_synthetic_contract() -> dict[str, object]:
         [1, 0],
         EOGDistributionConfig(
             graph_declaration=BridgeGraphDeclaration(max_geographic_km=15.0),
+            structural_gate_weight=1.0,
             min_class_count=1,
         ),
         barriers=barriers,
@@ -92,8 +95,9 @@ def run_synthetic_contract() -> dict[str, object]:
         ),
     }
     return {
-        "schema": "eog_distribution_structural_discrimination_v0",
+        "schema": "eog_distribution_structural_discrimination_v0_1",
         "model_fingerprint": model.fingerprint,
+        "structural_gate_weight": model.structural_gate_weight,
         "target_ids": list(target_ids),
         "direct_source_distance_km": direct_distances.tolist(),
         "prediction": prediction.to_dict(),
