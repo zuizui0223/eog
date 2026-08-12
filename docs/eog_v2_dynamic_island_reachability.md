@@ -2,95 +2,119 @@
 
 ## Status
 
-Prospective method-development concept. This document does **not** modify, rescue, rerun, reinterpret, or retune the frozen v0.1 structural manuscript outcomes. In particular, the prospectively frozen A-Islands `C − R3` adverse result and the frozen Tanzania strong-reference result remain unchanged.
+Prospective method-development concept with executable core and synthetic confirmation in PR #142. This document does **not** modify, rescue, rerun, reinterpret, or retune the frozen v0.1 structural manuscript outcomes. In particular, the prospectively frozen A-Islands `C − R3` adverse result and the frozen Tanzania strong-reference result remain unchanged.
+
+The estimand/terminology boundary is frozen in `docs/eog_v2_estimand_contract.md`. The fixed-source occurrence-comparator confirmation and its one-time result are frozen in `docs/eog_v2_occurrence_comparator_contract.md`.
 
 ## Core biological distinction
 
-An observed occurrence is not evidence of local environmental viability alone. Presence at a location reflects a mixture of local environmental conditions, arrival/history, establishment and persistence, biotic effects, sampling and detection. Conventional correlative SDMs mainly summarize the association between observations and local predictors and often return a cellwise suitability/support surface. EOG v2 should explicitly separate:
+An observed occurrence is not evidence of local environmental viability alone. Presence at a location reflects a mixture of local environmental conditions, arrival/history, establishment and persistence, biotic effects, sampling and detection. EOG v2 therefore keeps separately reportable:
 
-1. **Viability support** — whether the environmental state at a node is locally compatible with occurrence;
-2. **Reachability support** — whether a node is accessible from declared source occurrences through the intervening island network under a declared transition model;
-3. **Establishment/persistence support** — whether a reached island is large or otherwise capable of sustaining a population;
-4. **Observation/detection** — a separate layer when survey effort or repeat-detection data exist.
+1. **V — viability support**: local environmental/ecological compatibility;
+2. **R — reachability support**: source-conditioned support propagated through a declared island/patch network;
+3. **C — target-capture support**: optional arrival-side target-size/interception effect;
+4. **P — persistence support**: post-arrival establishment/persistence context;
+5. **O — observation/detection support** when survey data permit.
 
-Without direct colonisation-time or movement data, `reachability` must remain a model-based support quantity, not a calibrated dispersal or colonisation probability.
+Without direct colonisation-time or movement calibration, `R` is relative model support, not a dispersal or colonisation probability.
 
 ## Why islands are the primary domain
 
-Islands are a natural graph domain because island/patch nodes are discrete and interpretable, sea gaps are explicit geographic barriers, very small islands may be smaller than a typical environmental raster cell, island area is a node-level persistence/establishment property, and mainland distance / source proximity / surrounding landmass / stepping-stone structure are naturally graph-level quantities.
+Islands are a natural graph domain because island/patch nodes are discrete and interpretable, sea gaps are explicit barriers, small islands can be awkward relative to raster resolution, island area can have distinct arrival and persistence roles, and stepping-stone configuration is naturally a network property.
 
-The method should not claim that SDMs are generally unsuitable for islands. The narrower claim is that cellwise suitability maps can be awkward for small, discrete archipelagos where reachability and patch-level context are primary scientific questions.
+The method does not claim that SDMs are generally unsuitable for islands. The narrower claim is that cellwise local support can be an incomplete prediction object when source-conditioned reachability and patch-level context are primary questions.
 
-## Proposed model: EOG Reachability Field (EOG-R)
-
-### Node system
-
-Primary nodes are islands or declared habitat patches, not raster cells. Each node carries coordinates/polygon geometry, a local environmental vector, viability support from an independently specified SDM or environmental model, island area and other establishment/persistence covariates, survey/detection metadata where available, and occurrence state only when the node belongs to the current training set. Held-out occurrence labels remain unavailable during feature construction.
+## Implemented EOG Reachability Field (EOG-R)
 
 ### Directed transition support
 
-For each ordered pair `i -> j`, define an unnormalised transition support
+For a declared edge `i -> j`, the executable core stores separate support components:
 
-`W_ij = K_geo(d_ij) * K_env(e_ij) * B_ij * D_ij`,
+`W_ij = K_geo(i,j) * K_env(i,j) * B_ij * D_ij * C_j`.
 
-where `K_geo` is a predeclared dispersal-distance kernel or scale ensemble, `K_env` describes environmental transition cost / isolation-by-environment support, `B_ij` represents explicit hard or soft barriers, and `D_ij` is an optional directional modifier such as current or prevailing wind that is omitted unless independently justified.
-
-Target-node viability and establishment remain separately reportable instead of being silently folded into the edge.
+The components represent geographic/dispersal support, environmental-transition support, explicit barrier support, independently justified directionality, and optional target-capture support. Persistence is not silently folded into the edge.
 
 ### Sub-stochastic propagation
 
-Convert `W` into a sub-stochastic transition operator `Q` rather than a fully normalised random walk. A non-zero loss term represents failed dispersal/mortality so that distant or repeatedly difficult routes lose mass instead of guaranteeing eventual arrival.
+`W` is converted to an explicit-loss sub-stochastic operator:
 
-Initial mass is placed only on outer-training occurrence sources. Propagation yields a graph-supported field over pseudo-time / propagation depth:
+`Q_ij = W_ij / (loss_i + sum_k W_ik)`, with `loss_i > 0`.
 
-`m_(t+1) = Q^T m_t`.
+Initial mass is placed only on declared sources. Propagation is finite-depth and sources are not reinjected after step zero. Thus repeatedly difficult routes lose support instead of being normalized into guaranteed eventual arrival.
 
-Unless calibrated by independent temporal or movement data, `t` is a propagation step rather than a year and `m` is relative reachability support rather than realised migrant abundance.
+### Graph-native outputs
 
-### Viability-gated arrival
+The implementation reports:
 
-Maintain separate outputs `R_j(T)` for cumulative reachability support and `V_j` for local viability support. A combined establishment-support quantity may be reported only as a declared composition such as `E_j = f(V_j, R_j, A_j)` and must not be called occupancy probability without calibration.
+- node reachability trajectories and mass decay;
+- integrated edge flux;
+- absorbing-target finite-horizon first-passage support;
+- relative first-arrival depth;
+- source-attribution support;
+- outgoing flux entropy / route diversification;
+- bridge-node importance under frozen-operator node blocking;
+- high-V/low-R and related state mismatches;
+- separate target-capture and persistence layers.
 
-### Non-cellwise / fluid outputs
+The primary object is therefore a dynamic graph rather than a required raster map.
 
-The primary prediction object is a dynamic graph, not a raster. Required outputs include node-level viability, node-level reachability curves, relative first-arrival depth, source-attribution distribution, path/bottleneck ensemble, route entropy/redundancy, bridge-node importance, high-viability/low-reachability islands, low-viability/high-reachability islands, and unsurveyed nodes with high hypothesis-discrimination value.
+## Synthetic archipelago programme
 
-Visualisation should use island nodes, weighted edges, stepped reachability mass, source-attribution ribbons and arrival-depth contours on the archipelago graph. A raster may be shown only as an optional environmental backdrop.
+`src/eog/synthetic_archipelago.py` provides deterministic development fixtures for geography-only structure, environmental isolation, stepping-stone and missing-intermediate cases, bottlenecks, redundant routes, island area/persistence, directional dispersal, rare long jumps, local extinction after historical reach, unsurveyed intermediates and multiple sources.
 
-## IBD / IBE / IBR decomposition
+Survey status, current occurrence, historical reach and source status are separate metadata. Lack of an occurrence record does not itself delete a potential transition node.
 
-Distinguish `D_geo` (geographic isolation / IBD), `D_env` (environmental isolation / IBE), and `D_eog` (effective graph/reachability distance implied by the frozen EOG-R transition network). `D_eog` can be based on effective resistance, commute/first-passage summaries, or negative log reachability; the primary metric must be fixed before genetic validation.
+## Fixed-source occurrence comparator confirmation
 
-IBE is not treated as a movement model. Environmental differences may affect immigrant survival, reproduction or local adaptation and therefore can generate genetic differentiation independently of geographic distance.
+The first independent synthetic occurrence confirmation was frozen before outcome inspection and run once on seeds `(907, 1009, 1103, 1201, 1301, 1409, 1511, 1601)`. Contract fingerprint:
 
-## Genetic validation
+`1b2c5e550019c1e73e8f7199dfcc952dfeed3bbbbc3232d173e811fcd21438e6`.
 
-Genetic data must not tune the EOG-R network in the first validation. Build and freeze the network from occurrence, geography and environmental information, then test whether its effective distances explain independent genetic differentiation.
+All predeclared gates passed. Reference-complete regimes correctly retained the simpler model:
 
-For taxa with population-genetic data, compare pairwise genetic distance against: IBD-only `D_geo`; IBD + IBE; IBD + conventional resistance/connectivity where available; and IBD + IBE + frozen `D_eog`. Prefer MLPE, appropriate mixed-effects pairwise models, dbRDA/RDA, GDM or another predeclared framework over relying on partial Mantel tests as the sole primary analysis.
+- environment-only: environment and dynamic both `0.545359` mean log loss;
+- nearest-source: nearest `0.477056`, dynamic `0.680349`;
+- source-pressure: pressure `0.472929`, dynamic `0.696843`;
+- geography-current-flow: current flow `0.526028`, current flow + dynamic `0.528485`;
+- static topology: static `0.517191`, static + dynamic `0.518616`.
 
-EOG-R may prospectively predict rankings of population-pair isolation, likely genetic discontinuities/bridge zones, source-connectivity groupings and cases where IBD alone should be insufficient. It should not claim exact FST, migration rate, historical colonisation route or demographic history without explicit calibration.
+In contrast, known truths containing information unavailable to those references retained a dynamic signal:
 
-Where feasible, compare frozen EOG-R predictions with EEMS/FEEMS-style effective migration surfaces, resistance models or independently inferred phylogeographic relationships. Agreement is external support; disagreement is informative and must not trigger retuning of the frozen network.
+- dynamic bottleneck: best simple `0.705355` versus dynamic `0.453377`, favourable in `8/8` seeds;
+- dynamic directionality: best simple `0.706028` versus dynamic `0.543223`, favourable in `8/8` seeds.
 
-## Simulation programme
+This supports only the narrow synthetic claim that finite-depth source-conditioned reachability can contain information beyond local environment, direct source distance, source pressure, geography-only current flow and static connectivity when bottleneck magnitude or directionality is part of the truth. It is not empirical superiority evidence.
 
-Use synthetic archipelagos before empirical genetics. Required scenarios: geographic isolation only; equal geographic distance but strong environmental isolation; stepping-stone chain versus identical endpoint distance without intermediates; one bottleneck versus redundant routes; small high-viability islands with low persistence; directional wind/current dispersal; rare long-distance jumps; local extinction after historical colonisation; unsurveyed intermediates; and multiple source clusters.
+## IBD / IBE / genetic validation
 
-Generate occurrence snapshots and, separately, neutral genetic differentiation under known migration networks. Evaluate whether EOG-R recovers relative reachability and whether `D_eog` predicts genetic structure beyond IBD/IBE.
+The genetic layer keeps three information sources distinct:
 
-## Competitors
+- `D_geo`: geographic isolation / IBD;
+- `D_env`: environmental isolation / IBE;
+- `D_eog`: distance derived from a frozen EOG-R operator.
 
-Compare against conventional local-environment SDM/support only, SDM + nearest source distance, incidence-function/metapopulation pressure, least-cost/resistance distance, circuit-theory connectivity, current static EOG connected frequency, and dynamic occupancy/colonisation models when temporal occupancy exists.
+Directional first-passage distance is separate from the symmetric distance required for pairwise genetic differentiation. Genetic data are absent from the distance constructors and must not tune the first empirical EOG-R network.
 
-EOG-R does not need to outperform all competitors. Its target contribution is to separate viability from source-conditioned reachability and to provide graph-native, leakage-safe, uncertainty-aware predictions for discrete archipelagos.
+Development known-truth results currently show:
 
-## Relationship to current EOG
+- structured two-chain truth: `D_geo + candidate D_eog` improves over Euclidean `D_geo` in `8/8` seeds, mean delta MSE `-0.0012208032`;
+- geography-only current-flow truth: EOG increment `+9.0302e-08`, i.e. no mean added information;
+- bottleneck/disconnection absent from geography reference: EOG increment `-0.001345032`, favourable `8/8`;
+- smooth IBD+IBE truth: geography+environment current flow already reaches mean MSE `1.08932e-4`; adding candidate EOG worsens it to `1.09502e-4`.
 
-Reuse `island_reachability.py` for frozen graph/source construction, `conditional_reachability.py` for leakage-safe held-out diagnostics, support-topology/bottleneck utilities, hypothesis-discrimination survey code, and fingerprints/manifests. Add separate modules such as `dynamic_island_reachability.py`, `reachability_first_passage.py`, `reachability_genetics.py`, and `benchmarks/dynamic_archipelago_simulation.py`.
+A 24-candidate development sensitivity over horizon, support floor and symmetrisation is now being used to select a single metric definition before a fresh synthetic genetic confirmation. No empirical genetic outcome will be inspected before that definition and confirmation contract are frozen.
 
-Do not change frozen v0.1 manuscript estimands or results.
+## Remaining gates
 
-## Go/no-go for a separate method paper
+1. complete self-excluded source-set expansion sensitivity;
+2. finish the genetic-distance development sensitivity and freeze one `D_eog` definition;
+3. run a fresh one-time synthetic genetic confirmation on unused seeds;
+4. add temporal/dynamic-occupancy comparison only where repeated incidence data support that estimand;
+5. run an independently frozen empirical occurrence benchmark;
+6. run at least one independent empirical genetic validation;
+7. implement graph-native dynamic visualisation;
+8. make a predeclared method-paper GO/NO-GO decision.
 
-Proceed only if simulation separates viability from accessibility under known truth, held-out tests show added value in scenarios where intermediate configuration truly matters, the method correctly returns no added information when simpler references are sufficient, at least one independent genetic dataset supports a pre-frozen `D_eog` increment or barrier/bridge prediction, and failure/non-identifiability cases remain explicit.
+## Hard boundary
+
+No v2 development step may reopen or weaken the frozen v0.1 A-Islands or Tanzania evidence. Failed or no-added-information results are retained rather than tuned away.
