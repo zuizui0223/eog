@@ -4,34 +4,36 @@ Decision date: **2026-08-12**
 
 ## Decision
 
-**Scientific evidence: GO.**  
-**Current manuscript release: HOLD pending closest-prior framing revision.**  
-**New outcome analysis before first submission: NO by default.**  
-**First target after revision: Ecological Informatics.**
+**Original scientific evidence: GO.**  
+**One new prospectively frozen island-isolation test: GO exactly once.**  
+**Current manuscript release / DOI / submission: HOLD until that result is incorporated.**  
+**Journal route: result-dependent by predeclared rule.**
 
-## Why the result is already publishable
+## Why the original result is already publishable
 
-The paper has a broad positive multi-species benchmark, a deliberately stronger adverse external benchmark, explicit sensitivity boundaries, species-level inference, failure accounting and an unusually complete reproducibility trail. The adverse Tanzania result is part of the contribution because it demonstrates that generic structural information is not automatically useful once a strong landscape-specific connectivity reference is present.
+The paper already has a broad positive multi-species A-Islands benchmark, a deliberately stronger adverse external Tanzania benchmark, explicit sensitivity boundaries, species-level inference, failure accounting and a complete reproducibility trail. The Tanzania result is part of the contribution because it demonstrates that generic structural information is not automatically useful once a strong landscape-specific connectivity reference is present.
 
-## Why the current prose is not yet release-ready
+## Why one additional analysis is now justified
 
-The literature audit found several closest precedents that are more direct than the current reference framing. Without citing and discussing them, reviewers could reasonably conclude that the manuscript repackages functional habitat or habitat-network occurrence modelling. The required fix is conceptual and bibliographic: state what those methods already do, then isolate the held-out reference-conditioned validation gap.
+The island-specific closest-prior audit did not reveal a reason to invalidate the original A-Islands result, but it did reveal a stronger, independently specifiable question that materially changes the biological contribution.
 
-## Final novelty position
+Multidimensional island isolation, stepping stones, surrounding landmass and generic network position are established. The remaining high-value question is whether **species-conditioned occupied-source archipelago configuration** adds held-out information after those generic island-isolation dimensions and conventional source-pressure terms are already represented.
 
-The publishable contribution is the **combination** of:
+That question was frozen before its species outcomes as `eog_aislands_isolation_adequacy_v1_3`. It is therefore not a post-hoc rescue of the original result.
 
-- explicit separation of local support, direct source proximity, generic graph configuration and stronger connectivity references;
-- outer-training-only occurrence conditioning;
-- predeclared scenario aggregation without outcome-based graph selection;
-- matched held-out incremental testing;
-- a strong-reference falsification benchmark;
-- visible non-estimability;
-- positive and adverse benchmark retention;
-- source-to-manuscript auditability.
+## Frozen decision rule
 
-No single graph/connectivity component is claimed as unprecedented.
+- If candidate `C − R3` matched held-out log loss is robustly negative: retain the result and pursue an island-biogeography manuscript, with *Journal of Biogeography* as the preferred first target.
+- If `C − R3` is null, adverse or indeterminate: retain the result, do not weaken R3, and pursue the broader structural-adequacy manuscript, with *Ecological Informatics* as the preferred first target.
 
-## First-submission rule
+## Current release rule
 
-Once the closest-prior framing revision is merged and all existing author/journal/visual/release gates are complete, submit without adding a new favourable outcome analysis.
+Do not mint the final DOI, tag the final manuscript release or submit to a journal until:
+
+1. the frozen island extension has been executed exactly once;
+2. raw predictions, applicability, species summaries, uncertainty and result fingerprint are frozen;
+3. the result is incorporated without weakening the predeclared reference;
+4. the journal route is selected by the rule above;
+5. the final manuscript/figures/references and human approval gates are completed.
+
+No additional favourable-outcome search is authorized after this test.
