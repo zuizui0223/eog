@@ -38,14 +38,16 @@ jobs:
           assert manifest['n_populations'] == 16
           assert len(manifest['predictor_manifest_fingerprint']) == 64
           PY
-      - name: Install browser driver
+      - name: Install browser transport dependencies
         run: |
-          python -m pip install "playwright==1.55.0"
+          python -m pip install "playwright==1.55.0" "requests==2.32.5"
           google-chrome --version
       - name: Download public Dryad genotype and README after predictor freeze
         run: |
           python - <<'PY'
           from pathlib import Path
+          from urllib.parse import urljoin
+          import requests
           from playwright.sync_api import sync_playwright
 
           root = Path('benchmark_results/ryukyu_mangrove')
@@ -57,22 +59,71 @@ jobs:
           }
           with sync_playwright() as p:
               browser = p.chromium.launch(channel='chrome', headless=True)
-              context = browser.new_context(accept_downloads=True)
+              context = browser.new_context()
               page = context.new_page()
               page.goto(landing, wait_until='domcontentloaded', timeout=120_000)
-              page.wait_for_timeout(2000)
-              for filename, destination in expected.items():
+              page.wait_for_function("typeof window.AwsWafIntegration !== 'undefined'", timeout=60_000)
+              token = page.evaluate(
+                  """async () => {
+                    for (let i = 0; i < 6; i++) {
+                      try {
+                        const value = await window.AwsWafIntegration.getToken();
+                        if (value) return value;
+                      } catch (e) {}
+                      await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                    throw new Error('AWS WAF token acquisition failed');
+                  }"""
+              )
+              ua = page.evaluate('navigator.userAgent')
+              stream_urls = {}
+              for filename in expected:
                   link = page.get_by_role('link', name=filename, exact=True)
                   if link.count() != 1:
-                      # Dryad may render accessible text around the filename; fallback to text locator.
                       link = page.locator("a[href*='/downloads/file_stream/']").filter(has_text=filename)
                   if link.count() != 1:
                       raise RuntimeError(f'expected one Dryad link for {filename}, found {link.count()}')
-                  with page.expect_download(timeout=120_000) as info:
-                      link.first.click()
-                  download = info.value
-                  download.save_as(destination)
+                  href = link.first.get_attribute('href')
+                  if not href:
+                      raise RuntimeError(f'Dryad link has no href for {filename}')
+                  stream_urls[filename] = urljoin(landing, href)
               browser.close()
+
+          headers = {
+              'User-Agent': ua,
+              'x-aws-waf-token': token,
+              'Accept': 'text/plain,text/csv,application/octet-stream,*/*',
+          }
+          with requests.Session() as session:
+              for filename, destination in expected.items():
+                  stream = stream_urls[filename]
+                  first = session.get(stream, headers=headers, allow_redirects=False, stream=True, timeout=90)
+                  if first.status_code in {301, 302, 303, 307, 308}:
+                      location = first.headers.get('Location')
+                      if not location:
+                          raise RuntimeError(f'Dryad redirect has no Location for {filename}')
+                      object_url = urljoin(stream, location)
+                      response = session.get(
+                          object_url,
+                          headers={'User-Agent': ua},
+                          allow_redirects=True,
+                          stream=True,
+                          timeout=90,
+                      )
+                  elif first.status_code == 200:
+                      response = first
+                  else:
+                      body = first.raw.read(2048, decode_content=True)
+                      raise RuntimeError(
+                          f'Dryad tokenized stream failed for {filename}: HTTP {first.status_code}: {body[:500]!r}'
+                      )
+                  with response:
+                      response.raise_for_status()
+                      with destination.open('wb') as handle:
+                          for chunk in response.iter_content(chunk_size=1024 * 1024):
+                              if chunk:
+                                  handle.write(chunk)
+
           if expected['R.stylosaMicrosatelliteOkinawa2017.csv'].stat().st_size < 20_000:
               raise RuntimeError('Ryukyu genotype download is implausibly small')
           if expected['README_R.stylosaOkinawa.txt'].stat().st_size < 1_000:
