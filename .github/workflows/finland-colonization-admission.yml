@@ -23,45 +23,66 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install frozen package code
-        run: python -m pip install -e .
-      - name: Resolve and download authoritative public Dryad file
+      - name: Install frozen package code and browser driver
+        run: |
+          python -m pip install -e .
+          python -m pip install "playwright==1.55.0"
+          google-chrome --version
+      - name: Download authoritative Dryad file through public browser flow
         run: |
           mkdir -p benchmark_results/finland_colonization/raw
-          LANDING="https://datadryad.org/dataset/doi%3A10.5061/dryad.ffbg79cr6"
-          curl --fail --location --retry 4 --retry-delay 5 \
-            --user-agent "Mozilla/5.0 EOG-v2-response-free-admission/1.0" \
-            --cookie-jar benchmark_results/finland_colonization/dryad_cookies.txt \
-            "$LANDING" \
-            --output benchmark_results/finland_colonization/dryad_landing.html
-          test -s benchmark_results/finland_colonization/dryad_landing.html
-          sha256sum benchmark_results/finland_colonization/dryad_landing.html \
-            > benchmark_results/finland_colonization/dryad_landing_sha256.txt
-          STREAM_PATH="$(python - <<'PY'
-          import re
+          python - <<'PY'
           from pathlib import Path
-          text = Path('benchmark_results/finland_colonization/dryad_landing.html').read_text(encoding='utf-8', errors='ignore')
-          matches = re.findall(r'''(?:href|data-url)=["']([^"']*?/downloads/file_stream/\d+)["']''', text)
-          unique = list(dict.fromkeys(matches))
-          if len(unique) != 1:
-              raise SystemExit(f'expected exactly one public Dryad file stream, found {unique}')
-          print(unique[0])
+          from playwright.sync_api import sync_playwright
+
+          root = Path("benchmark_results/finland_colonization")
+          raw = root / "raw" / "colonization_select.csv"
+          landing = "https://datadryad.org/dataset/doi%3A10.5061/dryad.ffbg79cr6"
+
+          with sync_playwright() as p:
+              browser = p.chromium.launch(channel="chrome", headless=True)
+              context = browser.new_context(accept_downloads=True)
+              page = context.new_page()
+              page.goto(landing, wait_until="domcontentloaded", timeout=120_000)
+              page.wait_for_timeout(2000)
+              links = page.locator("a[href*='/downloads/file_stream/']")
+              count = links.count()
+              if count != 1:
+                  raise RuntimeError(f"expected exactly one Dryad file link, found {count}")
+              href = links.first.get_attribute("href")
+              if not href:
+                  raise RuntimeError("Dryad file link has no href")
+              (root / "dryad_file_stream_url.txt").write_text(
+                  (href if href.startswith("http") else "https://datadryad.org" + href) + "\n",
+                  encoding="utf-8",
+              )
+              with page.expect_download(timeout=240_000) as download_info:
+                  links.first.click()
+              download = download_info.value
+              download.save_as(raw)
+              (root / "dryad_suggested_filename.txt").write_text(
+                  download.suggested_filename + "\n", encoding="utf-8"
+              )
+              browser.close()
+
+          if not raw.exists():
+              raise RuntimeError("browser download did not create colonization_select.csv")
+          size = raw.stat().st_size
+          if size < 100_000_000:
+              raise RuntimeError(f"downloaded Dryad file is implausibly small: {size} bytes")
+          with raw.open("rb") as handle:
+              header = handle.readline(65536).decode("utf-8-sig", errors="strict")
+          required = {"outcome", "spp.name", "holmkod", "Historical_total_log", "Dist_to_historical_log"}
+          columns = {value.strip() for value in header.rstrip("\r\n").split(",")}
+          missing = required - columns
+          if missing:
+              raise RuntimeError(f"downloaded file header lacks required columns: {sorted(missing)}")
+          (root / "transport_header.txt").write_text(header, encoding="utf-8")
+          (root / "raw_path.txt").write_text(str(raw) + "\n", encoding="utf-8")
           PY
-          )"
-          if [[ "$STREAM_PATH" == http* ]]; then
-            STREAM_URL="$STREAM_PATH"
-          else
-            STREAM_URL="https://datadryad.org${STREAM_PATH}"
-          fi
-          printf '%s\n' "$STREAM_URL" > benchmark_results/finland_colonization/dryad_file_stream_url.txt
-          RAW="benchmark_results/finland_colonization/raw/colonization_select.csv"
-          curl --fail --location --retry 4 --retry-delay 5 \
-            --user-agent "Mozilla/5.0 EOG-v2-response-free-admission/1.0" \
-            --cookie benchmark_results/finland_colonization/dryad_cookies.txt \
-            "$STREAM_URL" --output "$RAW"
-          test -s "$RAW"
-          printf '%s\n' "$RAW" > benchmark_results/finland_colonization/raw_path.txt
+          RAW="$(cat benchmark_results/finland_colonization/raw_path.txt)"
           sha256sum "$RAW" > benchmark_results/finland_colonization/raw_csv_sha256.txt
+          stat --printf='%s\n' "$RAW" > benchmark_results/finland_colonization/raw_size_bytes.txt
           ls -lh "$RAW"
       - name: Run response-free source reconstruction admission
         run: |
@@ -104,10 +125,7 @@ jobs:
           PY
       - name: Remove raw data before artifact upload
         if: always()
-        run: |
-          rm -rf benchmark_results/finland_colonization/raw
-          rm -f benchmark_results/finland_colonization/dryad_cookies.txt
-          rm -f benchmark_results/finland_colonization/dryad_landing.html
+        run: rm -rf benchmark_results/finland_colonization/raw
       - name: Upload response-free admission artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -119,6 +137,8 @@ jobs:
             benchmark_results/finland_colonization/feature_manifest.json
             benchmark_results/finland_colonization/prepare_stdout.json
             benchmark_results/finland_colonization/raw_csv_sha256.txt
-            benchmark_results/finland_colonization/dryad_landing_sha256.txt
+            benchmark_results/finland_colonization/raw_size_bytes.txt
             benchmark_results/finland_colonization/dryad_file_stream_url.txt
+            benchmark_results/finland_colonization/dryad_suggested_filename.txt
+            benchmark_results/finland_colonization/transport_header.txt
           if-no-files-found: warn
