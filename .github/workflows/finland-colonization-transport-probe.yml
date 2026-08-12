@@ -1,0 +1,97 @@
+name: Finland Dryad public transport probe
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/finland-colonization-transport-probe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install browser driver
+        run: python -m pip install "playwright==1.55.0"
+      - name: Probe landing and file-stream transport only
+        run: |
+          mkdir -p benchmark_results/finland_transport_probe
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from urllib.parse import urljoin, urlparse
+          from playwright.sync_api import sync_playwright
+
+          root = Path('benchmark_results/finland_transport_probe')
+          landing = 'https://datadryad.org/dataset/doi%3A10.5061/dryad.ffbg79cr6'
+          with sync_playwright() as p:
+              browser = p.chromium.launch(channel='chrome', headless=True)
+              context = browser.new_context(accept_downloads=True)
+              page = context.new_page()
+              requests = []
+              responses = []
+              context.on('request', lambda request: requests.append(request.url))
+              context.on('response', lambda response: responses.append({
+                  'url': response.url,
+                  'status': response.status,
+                  'content_type': response.headers.get('content-type'),
+                  'content_disposition': response.headers.get('content-disposition'),
+                  'location': response.headers.get('location'),
+              }))
+              page.goto(landing, wait_until='domcontentloaded', timeout=120_000)
+              page.wait_for_timeout(1500)
+              link = page.locator("a[href*='/downloads/file_stream/']").first
+              href = link.get_attribute('href')
+              if not href:
+                  raise RuntimeError('no Dryad file stream href')
+              stream = urljoin(landing, href)
+              root.joinpath('stream_url.txt').write_text(stream + '\n')
+
+              api_response = context.request.get(stream, max_redirects=0, timeout=60_000)
+              root.joinpath('stream_api_headers.json').write_text(json.dumps({
+                  'status': api_response.status,
+                  'headers': dict(api_response.headers),
+              }, indent=2, sort_keys=True))
+              body = api_response.body()
+              root.joinpath('stream_api_body.bin').write_bytes(body[:100_000])
+
+              # Navigate rather than waiting for a download; record resulting pages/network.
+              try:
+                  page.goto(stream, wait_until='domcontentloaded', timeout=60_000)
+              except Exception as exc:
+                  root.joinpath('navigation_exception.txt').write_text(repr(exc))
+              page.wait_for_timeout(5000)
+              root.joinpath('final_page_url.txt').write_text(page.url + '\n')
+              try:
+                  root.joinpath('final_page_content.html').write_text(page.content(), encoding='utf-8')
+              except Exception as exc:
+                  root.joinpath('content_exception.txt').write_text(repr(exc))
+              root.joinpath('requests.json').write_text(json.dumps(requests, indent=2))
+              root.joinpath('responses.json').write_text(json.dumps(responses, indent=2, sort_keys=True))
+              candidate_hosts = []
+              for url in requests:
+                  host = urlparse(url).netloc.lower()
+                  if any(token in host for token in ('amazonaws', 'cloudfront', 's3', 'storage.googleapis')):
+                      candidate_hosts.append(url)
+              root.joinpath('object_store_requests.txt').write_text('\n'.join(dict.fromkeys(candidate_hosts)) + '\n')
+              browser.close()
+          PY
+      - name: Print safe transport summary
+        run: |
+          cat benchmark_results/finland_transport_probe/stream_url.txt
+          cat benchmark_results/finland_transport_probe/stream_api_headers.json
+          cat benchmark_results/finland_transport_probe/final_page_url.txt || true
+          cat benchmark_results/finland_transport_probe/object_store_requests.txt || true
+      - name: Upload transport probe
+        uses: actions/upload-artifact@v4
+        with:
+          name: finland-dryad-transport-probe
+          path: benchmark_results/finland_transport_probe
+          if-no-files-found: error
