@@ -2,7 +2,9 @@
 
 ## Status
 
-This file freezes a **development-informed, outcome-blind confirmation** for the EOG v2 occurrence comparator ladder. The motif design and numerical gates below were chosen after inspection of the development seeds `(101, 211, 307, 401, 503, 601, 701, 809)`. The confirmation seeds `(907, 1009, 1103, 1201, 1301, 1409, 1511, 1601)` are separate and must not be inspected, changed, or supplemented after this contract is committed.
+This file freezes a **development-informed, outcome-blind confirmation** for the EOG v2 occurrence comparator ladder. The motif design and numerical gates below were chosen after inspection of the development seeds `(101, 211, 307, 401, 503, 601, 701, 809)`. The confirmation seeds `(907, 1009, 1103, 1201, 1301, 1409, 1511, 1601)` are separate and were committed before their outcomes were inspected.
+
+The confirmation was executed once by the dedicated CI workflow and passed all predeclared gates. The frozen contract fingerprint is `1b2c5e550019c1e73e8f7199dfcc952dfeed3bbbbc3232d173e811fcd21438e6`. The successful confirmation artifact was produced by workflow run `31597625261` at source head `b22a53c586c045244aaf65b2ce8e9acc2db66661`.
 
 This benchmark does not alter or rescue the frozen EOG v0.1 A-Islands or Tanzania results. It is synthetic method validation only.
 
@@ -76,38 +78,55 @@ These are development outcomes and are not confirmation evidence.
 
 ## Frozen confirmation gates
 
-The confirmation uses only the eight predeclared confirmation seeds.
+The confirmation used only the eight predeclared confirmation seeds.
 
 ### Required simple-reference signals
 
-The appropriate simple reference must improve mean log loss over `environment` by at least `0.05` in the nearest-source, source-pressure, current-flow, and static-topology regimes.
+The appropriate simple reference had to improve mean log loss over `environment` by at least `0.05` in the nearest-source, source-pressure, current-flow, and static-topology regimes.
 
 ### Required no-added-information behaviour
 
-Adding dynamic EOG-R may improve mean log loss by **at most 0.01** in a reference-complete regime. Equivalently, the dynamic-minus-reference mean log-loss difference must be `>= -0.01` for:
-
-- environment-only;
-- nearest-source;
-- source-pressure;
-- current-flow after the current-flow reference;
-- static-topology after the static reference.
+Adding dynamic EOG-R was allowed to improve mean log loss by **at most 0.01** in a reference-complete regime. Equivalently, the dynamic-minus-reference mean log-loss difference had to be `>= -0.01` for environment-only, nearest-source, source-pressure, current-flow after the current-flow reference, and static-topology after the static reference.
 
 ### Required dynamic signal
 
-For each of `dynamic_bottleneck` and `dynamic_directional`:
+For each of `dynamic_bottleneck` and `dynamic_directional`, `env_dynamic` had to beat the best of environment, nearest-source, source-pressure, current-flow, and static-topology by at least `0.05` mean log loss and beat that seed-specific best simple reference in at least `6/8` confirmation seeds.
 
-- `env_dynamic` must beat the best of environment, nearest-source, source-pressure, current-flow, and static-topology by at least `0.05` mean log loss; and
-- `env_dynamic` must beat that seed-specific best simple reference in at least `6/8` confirmation seeds.
+All confirmation targets had to be estimable. A one-class training fold or other non-estimability was a failed confirmation, not a reason to silently drop a fold.
 
-All confirmation targets must be estimable. A one-class training fold or other non-estimability is a failed confirmation, not a reason to silently drop a fold.
+## Frozen confirmation result
+
+All gates passed on the predeclared confirmation seeds.
+
+| Regime | Appropriate / best simple reference | Reference mean log loss | Dynamic comparison | Confirmation result |
+|---|---|---:|---:|---|
+| environment-only | environment | `0.545359` | dynamic `0.545359` | no added information |
+| nearest-source | env + nearest | `0.477056` | dynamic `0.680349` | nearest source sufficient |
+| source-pressure | env + pressure | `0.472929` | dynamic `0.696843` | source pressure sufficient |
+| current-flow | env + current flow | `0.526028` | current flow + dynamic `0.528485` | strong geography reference sufficient |
+| static-topology | env + static | `0.517191` | static + dynamic `0.518616` | static topology sufficient |
+| dynamic-bottleneck | best simple `0.705355` | `0.705355` | dynamic `0.453377` | dynamic gain `0.251978`, favourable `8/8` |
+| dynamic-directional | best simple `0.706028` | `0.706028` | dynamic `0.543223` | dynamic gain `0.162805`, favourable `8/8` |
+
+The exact frozen decision diagnostics were:
+
+- environment-null dynamic increment `0.0`;
+- nearest-source signal `0.203293`, dynamic-minus-reference `+0.203293`;
+- source-pressure signal `0.223914`, dynamic-minus-reference `+0.223914`;
+- current-flow signal `0.181778`, dynamic-minus-reference `+0.00245667`;
+- static-topology signal `0.191818`, dynamic-minus-reference `+0.00142546`;
+- dynamic-bottleneck gain over best simple reference `0.251978`, favourable seeds `8/8`;
+- dynamic-directional gain over best simple reference `0.162805`, favourable seeds `8/8`.
+
+Thus the fixed-source synthetic confirmation supports a narrow claim: finite-depth EOG-R contains information not recovered by the tested pointwise, direct-source, source-pressure, geography-current-flow, or static-connectivity references when the known truth contains intermediate bottleneck magnitude or directionality; it correctly returns no useful increment when those simpler references are sufficient.
 
 ## Hard stop
 
-The confirmation is executed by CI from `benchmarks/dynamic_occurrence_comparator_ladder.py`. If any gate fails, the output is retained as a negative result. Do not change seeds, thresholds, motif levels, fold allocation, or decision tolerances to rescue the confirmation. A redesigned method must use a new explicit development/confirmation cycle.
+The confirmation result is frozen. Do not change seeds, thresholds, motif levels, fold allocation, or decision tolerances to improve it. A redesigned method must use a new explicit development/confirmation cycle.
 
-## Next scope after confirmation
+## Next scope
 
-Passing this synthetic confirmation does not establish empirical superiority. It only justifies proceeding to:
+Passing this synthetic confirmation does not establish empirical superiority. It justifies proceeding to:
 
 1. self-excluded source-set expansion sensitivity;
 2. temporal/dynamic-occupancy comparator work when repeated incidence exists;
