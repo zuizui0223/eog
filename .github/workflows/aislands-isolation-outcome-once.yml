@@ -14,7 +14,7 @@ jobs:
       github.run_attempt == 1 &&
       github.event.head_commit.message == 'EXECUTE frozen A-Islands isolation adequacy v1.3 exactly once'
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
 
@@ -41,7 +41,7 @@ jobs:
       - name: Install package and frozen audit dependencies
         run: |
           python -m pip install -e .
-          python -m pip install pyshp==2.3.1 pytest
+          python -m pip install pyshp==2.3.1 rasterio==1.4.3 pytest
 
       - name: Re-run all pre-outcome runner and contract tests
         run: |
@@ -59,7 +59,27 @@ jobs:
             --expected-version 1.0 \
             --output-dir build/island_outcome_once/source
 
-      - name: Rebuild exact 842-island audit and area
+      - name: Reproduce frozen 886-taxon cohort
+        run: |
+          python benchmarks/aislands_species_screen.py \
+            --island-data build/island_outcome_once/source/island_data.csv \
+            --species-data build/island_outcome_once/source/species_data.csv \
+            --output build/island_outcome_once/species_screen.csv \
+            --min-present-islands 10 \
+            --min-absent-islands 10 \
+            --min-prevalence 0 \
+            --max-prevalence 1
+          python benchmarks/audit_aislands_taxon_status.py \
+            --species-data build/island_outcome_once/source/species_data.csv \
+            --species-screen build/island_outcome_once/species_screen.csv \
+            --output-csv build/island_outcome_once/taxon_status_audit.csv \
+            --output-summary build/island_outcome_once/taxon_status_summary.json
+          python benchmarks/freeze_aislands_native_cohort.py \
+            --status-audit build/island_outcome_once/taxon_status_audit.csv \
+            --output-cohort build/island_outcome_once/frozen_taxon_cohort.csv \
+            --output-summary build/island_outcome_once/frozen_taxon_cohort_summary.json
+
+      - name: Rebuild exact 842-island audit
         run: |
           python benchmarks/audit_aislands_model_islands.py \
             --island-data build/island_outcome_once/source/island_data.csv \
@@ -68,6 +88,42 @@ jobs:
             --projection build/island_outcome_once/source/raw/A-Island_shape.prj \
             --output-csv build/island_outcome_once/island_model_audit.csv \
             --output-summary build/island_outcome_once/island_model_audit_summary.json
+
+      - name: Reproduce frozen five-fold spatial partition
+        run: |
+          python benchmarks/freeze_aislands_spatial_folds.py \
+            --audit-csv build/island_outcome_once/island_model_audit.csv \
+            --output-folds build/island_outcome_once/spatial_folds.csv \
+            --output-summary build/island_outcome_once/spatial_folds_summary.json \
+            --block-size-degrees 5 \
+            --n-folds 5
+
+      - name: Reproduce frozen CHELSA climate artifact
+        run: |
+          python benchmarks/extract_aislands_chelsa_climate.py \
+            --island-audit build/island_outcome_once/island_model_audit.csv \
+            --output-csv build/island_outcome_once/island_climate.csv \
+            --output-manifest build/island_outcome_once/climate_manifest.json
+
+      - name: Hard-match frozen cohort fold and climate fingerprints
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          expected = {
+              'frozen_taxon_cohort.csv': 'cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12',
+              'spatial_folds.csv': '221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa',
+              'island_climate.csv': '6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285',
+          }
+          root = Path('build/island_outcome_once')
+          for name, accepted in expected.items():
+              actual = hashlib.sha256((root / name).read_bytes()).hexdigest()
+              print(name, actual)
+              assert actual == accepted, (name, actual, accepted)
+          PY
+
+      - name: Rebuild exact 842-island area
+        run: |
           python benchmarks/audit_aislands_polygon_area.py \
             --audit-csv build/island_outcome_once/island_model_audit.csv \
             --shapefile build/island_outcome_once/source/raw/A-Island_shape.shp \
@@ -187,6 +243,9 @@ jobs:
           retention-days: 90
           path: |
             build/island_outcome_once/input_validation.json
+            build/island_outcome_once/frozen_taxon_cohort_summary.json
+            build/island_outcome_once/spatial_folds_summary.json
+            build/island_outcome_once/climate_manifest.json
             build/island_outcome_once/island_model_audit_summary.json
             build/island_outcome_once/island_area_summary.json
             build/island_outcome_once/mainland/mainland_source_manifest.json
