@@ -279,7 +279,11 @@ def prepare_bundle(input_path: str | Path, bundle_path: str | Path, manifest_pat
         json.dumps(row_keys, separators=(",", ":"), ensure_ascii=True).encode()
     ).hexdigest()
     contract_path = Path("docs/eog_v2_finland_colonization_preoutcome_contract.md")
-    contract_sha256 = _sha256_file(contract_path) if contract_path.exists() else None
+    inference_path = Path("docs/eog_v2_finland_colonization_inference_freeze.md")
+    if not contract_path.exists() or not inference_path.exists():
+        raise RuntimeError("Finland pre-outcome contract files must exist before feature freeze")
+    contract_sha256 = _sha256_file(contract_path)
+    inference_sha256 = _sha256_file(inference_path)
 
     manifest = {
         "schema": "eog_v2_finland_colonization_response_free_bundle_v1",
@@ -291,6 +295,8 @@ def prepare_bundle(input_path: str | Path, bundle_path: str | Path, manifest_pat
         "admission_fold_fingerprint": admission["fold_fingerprint"],
         "contract_path": str(contract_path),
         "contract_sha256": contract_sha256,
+        "inference_freeze_path": str(inference_path),
+        "inference_freeze_sha256": inference_sha256,
         "n_islands": len(island_ids),
         "n_sourceful_species": len(sourceful_species),
         "n_zero_source_species": admission["n_zero_source_species"],
