@@ -1,8 +1,19 @@
 {
   "schema_version": "eog_distribution_v02_confirmation_contract_v1",
-  "status": "pre_outcome_seed_and_model_freeze_comparator_gates_pending",
+  "status": "pre_outcome_complete_execution_not_authorized",
   "created_date": "2026-08-12",
-  "purpose": "Freeze the independent synthetic confirmation seed universe and final candidate model before any confirmation outcome is computed. Strong-comparator numerical promotion gates will be added from development evidence before execution authorization.",
+  "purpose": "Prospectively freeze the independent synthetic confirmation design for the fixed EOG v0.2 structural ensemble before any confirmation outcome is computed.",
+  "development_evidence": {
+    "workflow_run": 31592324122,
+    "artifact_id": 9139639710,
+    "artifact_digest": "sha256:ab4083a6b7ec2d59f7fbe660be3d633ca76042f783b2a6b87b0f32966107e7f1",
+    "head_sha": "d67eb5588cf45ae07945774e637dc1098cd950f2",
+    "development_seeds": [101, 211, 307, 401, 503, 601, 701, 809],
+    "selected_candidate": {
+      "stack_weight": 0.125,
+      "reason": "Only alpha=0.125 satisfied mean null safety, positive mean log-loss gain in every structural regime, and the predeclared +0.05 maximum development-seed harm cap. It also beat the frozen single-cumulative-path comparator in mean log loss in all four structural regimes."
+    }
+  },
   "development_seeds_excluded": [101, 211, 307, 401, 503, 601, 701, 809],
   "confirmation_seeds": [907, 1009, 1103, 1201, 1301, 1409, 1511, 1601, 1709, 1801, 1907, 2003],
   "n_modules_per_seed": 24,
@@ -14,10 +25,13 @@
     "long_jump",
     "mixed"
   ],
+  "null_regimes": ["habitat_only", "long_jump"],
+  "structural_regimes": ["dispersal_limited", "graded_barrier", "stepping_stone", "mixed"],
   "primary_metric": "mean Bernoulli log loss over untouched target rows within regime, averaged equally across confirmation seeds",
   "secondary_metrics": [
     "AUC",
     "Brier score",
+    "nearest-source comparator log loss",
     "worst-seed log-loss harm relative to environmental support"
   ],
   "candidate_model": {
@@ -44,6 +58,12 @@
     "environmental_plus_single_cumulative_path",
     "fixed_alpha_EOG_structural_ensemble"
   ],
+  "promotion_gates": {
+    "null_regime_maximum_mean_log_loss_harm_vs_environmental": 0.01,
+    "maximum_single_seed_log_loss_harm_vs_environmental": 0.05,
+    "each_structural_regime_requires_positive_mean_log_loss_gain_vs_environmental": true,
+    "each_structural_regime_requires_positive_mean_log_loss_gain_vs_single_path": true
+  },
   "frozen_source_blobs": {
     "generator": {
       "path": "benchmarks/distribution_model_noisy_regimes.py",
@@ -60,23 +80,17 @@
     "ensemble_core": {
       "path": "src/eog/distribution_ensemble.py",
       "git_blob_sha": "9aba8f0e8d86241d28e8661753d00f9012038be3"
+    },
+    "confirmation_runner": {
+      "path": "benchmarks/run_distribution_v02_confirmation.py",
+      "git_blob_sha": "5e29fc08f96d81a0d39540eac0ebd1152af68c2a"
     }
   },
-  "already_frozen_general_gates": {
-    "development_and_confirmation_seed_overlap": 0,
-    "all_target_labels_held_out": true,
-    "all_predictions_finite": true,
-    "null_regimes": ["habitat_only", "long_jump"],
-    "structural_regimes": ["dispersal_limited", "graded_barrier", "stepping_stone", "mixed"],
-    "null_regime_maximum_mean_log_loss_harm_vs_environmental": 0.01,
-    "maximum_single_seed_log_loss_harm_vs_environmental": 0.05,
-    "each_structural_regime_requires_positive_mean_log_loss_gain_vs_environmental": true
-  },
-  "pending_before_execution": [
-    "freeze regime-specific strong-comparator noninferiority/superiority gates from the already-open development evidence",
-    "freeze exact confirmation runner source and expected contract fingerprint",
-    "add explicit one-time execution authorization"
-  ],
   "execution_authorized": false,
-  "scientific_boundary": "Synthetic confirmation evaluates predictive support under declared source-conditioned generators. It does not establish realized movement, colonisation probability, latent occupancy, or universal empirical superiority over dynamic/mechanistic/connectivity models."
+  "pending_before_execution": [
+    "pass source-blob/seed/gate validation from the frozen confirmation runner",
+    "pass package regression checks with the final ensemble and confirmation runner",
+    "add a separate explicit execution authorization that hard-matches this contract Git blob"
+  ],
+  "scientific_boundary": "Synthetic confirmation evaluates predictive support under declared source-conditioned generators. It does not establish realized movement, colonisation probability, latent occupancy, or universal empirical superiority over dynamic, mechanistic, circuit-theory, or other process/connectivity models."
 }
