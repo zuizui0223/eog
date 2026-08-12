@@ -1,9 +1,10 @@
 {
   "schema_version": "eog_structural_figure_manifest_v1",
   "figure_4_boundary": {
-    "purpose": "Compare the two frozen structural benchmarks without placing incompatible metrics on a common effect-size axis.",
+    "purpose": "Compare three frozen reference-conditioned structural tests without placing incompatible metrics on a common effect-size axis.",
     "required_benchmark_ids": [
-      "A_ISLANDS",
+      "A_ISLANDS_ORIGINAL",
+      "A_ISLANDS_STRONG",
       "TANZANIA"
     ],
     "metrics_share_axis": false,
@@ -15,17 +16,26 @@
       "aislands_estimable_taxa": 845,
       "aislands_spatial_units": 842,
       "aislands_species_output_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488",
+      "aislands_strong_result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
+      "aislands_strong_estimable_taxa": 886,
+      "aislands_strong_evaluable_folds": 4231,
+      "aislands_strong_heldout_predictions": 712515,
       "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4",
       "tanzania_candidate_library_fingerprint": "3cabff50f138f7ccfe77cdbe87aefe14d5ec4dd40db15f16fb7b072cd3d01026",
       "tanzania_species": 60,
       "tanzania_prediction_rows": 3360,
-      "tanzania_primary_matched": 826
+      "tanzania_primary_matched": 826,
+      "panel_data_sha256": "d042a07dd27fdcbcab14d3a80a9d1b9ab607634b709386e3afa834a177a8ca47",
+      "svg_sha256": "f64048829647be6d6d12c012d8ccd03afc107e523a5d1b31c7d6a105ec35c36d",
+      "caption_sha256": "4c2a82618fc690b17a7c1751cd89125486b4a05efab27874aa994a322ac40153",
+      "accessibility_sha256": "f85ff043f79385ef3ceeec69a0cb7b57c03b3cb90fa03641b52c1173a8ead39e"
     },
     "prohibited_claims": [
       "EOG universally improves prediction",
       "EOG is generally harmful",
       "the cross-system contrast identifies a causal mechanism",
-      "connected frequency is a dispersal or colonisation probability"
+      "connected frequency is a dispersal or colonisation probability",
+      "the original A-Islands concordance and predictive log-loss effects are comparable magnitudes"
     ]
   },
   "figure_3_tanzania": {
