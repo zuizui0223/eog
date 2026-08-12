@@ -87,13 +87,16 @@ def test_machine_gate_was_frozen_before_the_single_island_execution() -> None:
     assert outcome["result_fingerprint"] == "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a"
 
 
-def test_submission_checklist_records_completed_execution_and_remaining_incorporation_gate() -> None:
+def test_submission_checklist_records_completed_scientific_incorporation_and_remaining_figure_gate() -> None:
     text = CHECKLIST.read_text(encoding="utf-8")
     assert "Island-isolation adequacy extension executed exactly once" in text
-    assert "Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3" in text
+    assert "Island extension result incorporated into manuscript prose, machine-readable tables, highlights, cover letter" in text
     assert "Verified closest-prior additions ledger expanded" in text
     assert re.search(r"- \[x\] \*\*Island-isolation adequacy extension executed exactly once", text)
-    assert re.search(r"- \[ \] \*\*Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3", text)
+    assert re.search(r"- \[x\] Island extension result incorporated into manuscript prose, machine-readable tables", text)
+    assert re.search(r"- \[ \] Figure 1 revised to show", text)
+    assert re.search(r"- \[ \] A-Islands result figure reports", text)
+    assert re.search(r"- \[ \] Reference-tier panel reports R0/R1/R2/R3/C", text)
 
 
 def test_predeclared_result_dependent_journal_strategy_is_explicit() -> None:
