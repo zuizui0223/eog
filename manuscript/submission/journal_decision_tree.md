@@ -1,59 +1,61 @@
-# Journal decision tree for the structural-reachability manuscript
+# Journal decision tree for the structural/island-isolation manuscript
 
-## Route A — Ecological Informatics
+The journal route is selected only after the prospectively frozen A-Islands island-isolation adequacy result. Retargeting may not be used to alter that result or its comparator.
 
-**Default and preferred first submission.**
+## Route A — Journal of Biogeography
 
-Submit after the closest-prior framing revision, author approvals, live policy check, final visual QA and v0.1.0 DOI/archive release are complete.
+**Trigger:** the frozen primary `C − R3` matched held-out log-loss contrast is robustly negative.
 
-Position the manuscript as:
+Position the manuscript around the biogeographic question:
 
-- computational ecological validation;
+> Is generic multidimensional island isolation structurally sufficient for species occurrence, or does the target's position relative to the focal species' occupied source network retain additional held-out information?
+
+The main hierarchy is:
+
+- recipient climate and island area;
+- continental-mainland distance;
+- nearest and multi-source species-source pressure, including source landmass;
+- surrounding island number and landmass;
+- generic mainland stepping-stone accessibility;
+- generic island-network position;
+- final species-conditioned EOG archipelago term.
+
+Carter, Perry & Russell (2020; DOI `10.1111/jbi.13778`) must be treated as the closest multidimensional-isolation comparator. Long 2009, Weigelt & Kreft 2013, Sillero et al. 2018 and Daniel et al. 2023 delimit stepping-stone, surrounding-landmass, graph-connectivity and graph-validation novelty.
+
+Tanzania should remain as a non-island strong-reference boundary rather than be forced into an island mechanism narrative.
+
+## Route B — Ecological Informatics
+
+**Trigger:** `C − R3` is null, adverse or indeterminate.
+
+Do not weaken R3. Position the paper as a computational structural-adequacy framework:
+
 - reference-conditioned structural inference;
-- multi-species empirical benchmarking;
+- cross-fitted response-derived spatial features;
+- explicit separation of local support, source pressure, generic configuration and landscape-specific connectivity;
+- positive, adverse and saturation/indeterminate outcomes retained;
 - uncertainty/applicability accounting;
 - reproducible source-to-result informatics.
 
-Do **not** position it as the first integration of SDM and connectivity or as a new movement model.
+The island extension then tests whether the original A-Islands signal beyond climate + nearest source survives a stronger conventional isolation reference. A non-positive answer is itself part of the method's falsifiable boundary.
 
-### If desk-rejected for insufficient novelty
+## Route C — Ecological Modelling
 
-Read the editor's stated reason before changing any analysis.
-
-- If the editor says the work duplicates suitability-connectivity integration: revise the positioning only if the closest-prior distinction was not sufficiently explicit.
-- If the editor says the contribution is primarily an application rather than informatics: retarget; do not manufacture a new positive benchmark.
-- If the editor identifies a concrete missing comparator that undermines the stated incremental estimand: specify that comparator prospectively before inspecting its result, then decide whether revision or retargeting is more appropriate.
-
-## Route B — Ecological Modelling
-
-Use if the first journal rejects primarily on editorial fit or on the view that the contribution is a model-validation application rather than an informatics contribution.
-
-Reframe toward:
-
-- explicit separation of support, distance and structural estimands;
-- frozen reference-dependent model comparison;
-- why positive and adverse external benchmarks constrain model use;
-- reproducibility and failure accounting as part of model evaluation.
+Use as a conditional backup for the broader computational route if *Ecological Informatics* rejects primarily on editorial fit or on the view that the contribution is a model-validation application rather than informatics.
 
 Do not make the paper more mechanistic than the data allow.
 
-## Route C — landscape-ecology outlet
-
-Consider only if reviews indicate that the empirical landscape-configuration result is stronger than the informatics contribution.
-
-Likely editorial demands will shift toward:
-
-- biological interpretation of connectivity;
-- scale and landscape representation;
-- movement/resistance assumptions;
-- broader comparison with habitat-network and functional-connectivity methods.
-
-That route may therefore require a different emphasis and possibly additional prospective evidence. It is not the default first submission.
-
 ## Methods in Ecology and Evolution
 
-**Do not submit the current paper there as a Research Article.** Current guidance explicitly distinguishes genuinely new methods from workflows linking existing methods, and computational Research Articles normally require simulation/benchmark validation. A later methodological EOG paper could become competitive there if it adds formal simulations with known truth, ablation/error propagation, general theoretical properties, and broad benchmark comparisons.
+**Do not submit the current empirical paper there as a Research Article.** A later methodological EOG paper could become competitive only after a separate prospectively designed simulation/benchmark program establishes calibration, specificity, error propagation and general properties beyond the present empirical architecture.
 
 ## Stop rule
 
-Journal retargeting must not be used as a reason to delete the adverse Tanzania result, replace the A-Islands estimand, or tune graph scenarios post hoc.
+Journal choice must not be used as a reason to:
+
+- delete the adverse Tanzania result;
+- replace the original A-Islands estimand;
+- weaken the island R3 reference;
+- change graph scales, class gates or taxa after the island result;
+- add another empirical system merely to create a positive result;
+- interpret connected frequency as realised dispersal or colonisation.
