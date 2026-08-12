@@ -2,13 +2,15 @@
 
 Date frozen: 2026-08-12
 
+Revision 1.1 was recorded after the outcome-free A-Islands polygon-area gate succeeded and **before any extension species outcome was computed**. It adds a fixed continental-mainland distance baseline so the island-biogeography reference cannot omit the classical mainland-isolation axis.
+
 ## Scientific pivot
 
 This extension treats islands as the primary biological domain. It does **not** claim that stepping stones, multiple source pools, graph connectivity, or multidimensional isolation are new. Those ideas are established in island biogeography.
 
 The new question is narrower and stronger:
 
-> **After a reference model represents local climate, island area, direct source proximity, multi-source pressure, and species-independent archipelago geometry, does species-conditioned archipelago configuration retain held-out incidence information?**
+> **After a reference model represents local climate, island area, continental-mainland distance, direct source proximity, multi-source pressure, and species-independent archipelago geometry, does species-conditioned archipelago configuration retain held-out incidence information?**
 
 Equivalently: **is the declared island-isolation reference structurally sufficient for a focal species?**
 
@@ -70,7 +72,42 @@ The geometry audit must record:
 
 If the shapefile is not polygonal, if any surveyed island lacks a finite positive derived area, or if geometry identity cannot be verified against the existing frozen source manifest, **do not run the area-adjusted outcome analysis**. A coordinate-only sensitivity may be developed separately, but it cannot be relabelled as the primary island-biogeography test.
 
-The accept/reject rule is fixed before derived areas are inspected.
+The accept/reject rule was fixed before derived areas were inspected. The successful geometry-only gate is recorded separately in `validation/aislands_isolation_adequacy_20260812/area_gate_expected.json`; it does not contain species outcomes.
+
+## Gate 1b — freeze continental-mainland distance before species outcomes
+
+A serious island-biogeography reference should not omit the classical mainland-isolation axis merely because A-Islands v1.0 lacks a downloadable mainland-distance column.
+
+### Mainland geometry source
+
+Use **Natural Earth 1:10m Admin-0 Countries, version 5.1.1**, acquired from the official Natural Earth CDN:
+
+`https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip`
+
+The acquisition workflow must record the exact archive and extracted-file SHA-256 values before any extension species outcome is computed.
+
+### Deterministic mainland rule
+
+1. select exactly one Admin-0 Australia feature using the file's Australia identifiers;
+2. split its polygon geometry into rings;
+3. calculate spherical absolute area for each ring without using A-Islands occurrences;
+4. select the ring with the largest absolute area as the **continental Australian mainland**;
+5. record its point count, area, bounding box and derived ring SHA-256;
+6. for every frozen A-Islands centroid, calculate the minimum spherical point-to-minor-great-circle-segment distance to that fixed mainland coastline ring.
+
+This rule deliberately excludes Tasmania and smaller Australian islands from the `mainland` baseline by geometry rather than by a hand-curated name list.
+
+### Hard stop
+
+Do not run the species outcome extension unless:
+
+- the Natural Earth source resolves to the frozen version/hash;
+- exactly one Australia feature is selected;
+- a unique largest mainland ring is obtained;
+- all 842 island centroids receive finite non-negative mainland distances;
+- the 842-row mainland-distance table is fingerprinted and reproduced exactly.
+
+Natural Earth is used only for this fixed species-independent geographic baseline. It does not define EOG edges or occurrence anchors.
 
 ## Gate 2 — frozen reference hierarchy
 
@@ -80,12 +117,15 @@ All features below must be calculated without held-out response labels.
 
 Five CHELSA predictors: BIO1, BIO5, BIO6, BIO12, BIO15.
 
-### R1 — classical recipient-size and direct-source terms
+### R1 — classical recipient-size, mainland-isolation and direct-source terms
 
 R0 plus:
 
 - `log_area_km2 = log(area_km2)` from Gate 1;
+- fixed distance to the continental Australian mainland from Gate 1b;
 - nearest outer-training-presence geographic distance.
+
+The fixed mainland-distance term and the species-conditioned nearest-source term are intentionally separate. The former represents a classical island-geography baseline; the latter represents the nearest observed source available for the focal species under the outer-training boundary.
 
 ### R2 — multi-source pressure
 
@@ -154,13 +194,13 @@ The extension allows all three outcomes:
 2. **Structural saturation / no increment** — interval includes zero or the effect is adverse: the strong reference already captures the tested signal, or EOG adds noise.
 3. **Indeterminate applicability** — data/folds are too sparse for a stable test.
 
-A non-positive result is not grounds for retuning radii, source-pressure scales, topology metrics, species subsets, or area handling.
+A non-positive result is not grounds for retuning radii, source-pressure scales, topology metrics, species subsets, area handling, or the mainland-distance definition.
 
 ## Claim boundary if the primary extension is positive
 
 Permitted:
 
-> Across Australian continental-island plant incidences, species-conditioned archipelago configuration retained held-out information beyond climate, recipient island area, direct source distance, multi-source pressure, and species-independent island-network geometry under the frozen reference hierarchy.
+> Across Australian continental-island plant incidences, species-conditioned archipelago configuration retained held-out information beyond climate, recipient island area, continental-mainland distance, direct species-source distance, multi-source pressure, and species-independent island-network geometry under the frozen reference hierarchy.
 
 Not permitted:
 
@@ -173,6 +213,6 @@ Not permitted:
 
 ## Journal-positioning decision rule
 
-If Gate 1 succeeds and `C-R3` retains a robust held-out increment, the manuscript may be repositioned primarily as an **island-biogeography isolation-adequacy** paper and *Journal of Biogeography* becomes a serious first-target candidate.
+If both geographic gates succeed and `C-R3` retains a robust held-out increment, the manuscript may be repositioned primarily as an **island-biogeography isolation-adequacy** paper and *Journal of Biogeography* becomes a serious first-target candidate.
 
-If Gate 1 fails or R3 absorbs the EOG increment, retain the broader *Ecological Informatics* structural-adequacy framing rather than weakening the area/isolation standard for an island-biogeography claim.
+If a gate fails or R3 absorbs the EOG increment, retain the broader *Ecological Informatics* structural-adequacy framing rather than weakening the area/isolation standard for an island-biogeography claim.
