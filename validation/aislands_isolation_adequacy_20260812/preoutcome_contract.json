@@ -1,7 +1,8 @@
 {
-  "schema_version": "eog_aislands_isolation_adequacy_v1_2",
+  "schema_version": "eog_aislands_isolation_adequacy_v1_3",
   "frozen_date": "2026-08-12",
   "outcomes_inspected_for_this_extension": false,
+  "reference_design_status": "final_before_extension_species_outcomes",
   "amendments": [
     {
       "revision": "1.1",
@@ -14,9 +15,15 @@
       "timing": "after the outcome-free polygon-area gate and closest-prior audit, before any extension species outcome",
       "change": "add area-weighted occupied-source pressure and area-weighted surrounding-landmass pressure so the primary reference addresses source size and established surrounding-land-area isolation information",
       "species_outcomes_inspected": false
+    },
+    {
+      "revision": "1.3",
+      "timing": "after identifying Carter, Perry & Russell 2020 as the closest multidimensional island-isolation comparator, before any extension species outcome",
+      "change": "add species-independent mainland stepping-stone frequency so R3 explicitly represents mainland distance, generic stepping-stone availability, and generic insular-network position before the species-conditioned EOG probe is added",
+      "species_outcomes_inspected": false
     }
   ],
-  "scientific_question": "Does species-conditioned archipelago configuration retain held-out incidence information after local climate, island area, continental-mainland distance, direct and area-weighted species-source pressure, and species-independent archipelago geometry and surrounding landmass are represented?",
+  "scientific_question": "Does species-conditioned archipelago configuration retain held-out incidence information after local climate, island area, continental-mainland distance, direct and area-weighted species-source pressure, surrounding landmass, generic mainland stepping-stone availability, and species-independent archipelago network position are represented?",
   "upstream_frozen": {
     "aislands_record": 10775810,
     "surveyed_islands": 842,
@@ -26,6 +33,12 @@
     "climate_sha256": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285",
     "cohort_sha256": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
     "authoritative_conditional_concordance": 0.6177465917820878
+  },
+  "closest_multidimensional_isolation_comparator": {
+    "citation": "Carter, Z.T., Perry, G.L.W. & Russell, J.C. (2020). Determining the underlying structure of insular isolation measures. Journal of Biogeography 47: 955-967.",
+    "doi": "10.1111/jbi.13778",
+    "reported_axes": ["mainland distance", "stepping stones", "insular network position"],
+    "eog_boundary": "these generic island-isolation axes are reference information, not EOG novelty"
   },
   "geometry_gate": {
     "source": "same frozen A-Islands v1.0 shapefile only",
@@ -48,8 +61,8 @@
     "R0": ["bio1", "bio5", "bio6", "bio12", "bio15"],
     "R1": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km"],
     "R2": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure"],
-    "R3": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "surrounding_landmass_pressure", "unanchored_component_exposure"],
-    "C": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "surrounding_landmass_pressure", "unanchored_component_exposure", "geography_only_eog_connected_frequency"]
+    "R3": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "surrounding_landmass_pressure", "unanchored_component_exposure", "mainland_stepping_stone_frequency"],
+    "C": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "distance_to_australia_mainland_km", "nearest_training_presence_km", "multi_source_pressure", "area_weighted_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "surrounding_landmass_pressure", "unanchored_component_exposure", "mainland_stepping_stone_frequency", "geography_only_eog_connected_frequency"]
   },
   "feature_rules": {
     "distance_to_australia_mainland_km": "species-independent table frozen from Natural Earth 1:10m v5.1.1 continental-mainland ring before any extension species outcome",
@@ -58,6 +71,7 @@
     "surrounding_island_pressure": "mean_s log(1 + sum_{j != focal} exp(-distance(focal,j)/s))",
     "surrounding_landmass_pressure": "mean_s log(1 + sum_{j != focal} area_km2(j) * exp(-distance(focal,j)/s))",
     "unanchored_component_exposure": "mean_s ((component_size(focal,s)-1)/(N-1))",
+    "mainland_stepping_stone_frequency": "fraction of frozen geographic-radius graphs where the focal island component contains at least one island whose fixed centroid-to-mainland coastline distance is <= that graph radius",
     "geography_only_eog_connected_frequency": "fraction of frozen geographic-radius graphs where focal component contains at least one outer-training presence other than focal",
     "training_row_self_anchor_exclusion": true,
     "heldout_labels_used": false
@@ -88,6 +102,7 @@
     "drop mainland distance after seeing its effect",
     "drop area-weighted source pressure after seeing its effect",
     "drop surrounding-landmass pressure after seeing its effect",
+    "drop generic mainland stepping-stone frequency after seeing its effect",
     "replace R3 primary contrast with a weaker reference",
     "select favourable taxa",
     "introduce species-specific radii from current outcomes",
