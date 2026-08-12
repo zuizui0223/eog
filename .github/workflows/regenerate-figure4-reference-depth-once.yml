@@ -1,0 +1,111 @@
+name: Regenerate reference-depth Figure 4 and audit once
+
+on:
+  push:
+    branches:
+      - agent/strong-reference-submission-finalization
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.event.head_commit.message == 'REGENERATE reference-depth Figure 4 and audit once'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/strong-reference-submission-finalization
+          fetch-depth: 0
+
+      - name: Make Figure 5 audit display the new A-Islands strong-reference source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('figures/build_figure_5_audit.py')
+          text = path.read_text(encoding='utf-8')
+          old = '"F4": f"A {short(f4[\'aislands_summary_sha256\'])}; T {short(f4[\'tanzania_result_fingerprint\'])}",'
+          new = '"F4": f"A-limited {short(f4[\'aislands_summary_sha256\'])}; A-strong {short(f4[\'aislands_strong_reference_result_fingerprint\'])}; T {short(f4[\'tanzania_result_fingerprint\'])}",'
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one Figure 4 source-string match, found {text.count(old)}')
+          text = text.replace(old, new)
+          old_caption = 'Figure 4 records the two benchmark projections;'
+          new_caption = 'Figure 4 records the limited- and strong-reference A-Islands evidence together with the Tanzania reference-boundary evidence;'
+          if text.count(old_caption) != 1:
+              raise SystemExit(f'expected one Figure 5 caption-string match, found {text.count(old_caption)}')
+          text = text.replace(old_caption, new_caption)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Generate Figure 4 cards and sidecars
+        run: python figures/build_figure_4_boundary.py
+
+      - name: Update only the Figure 4 section of the frozen figure manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest_path = Path('figures/figure_manifest.json')
+          metadata = json.loads(Path('figures/output/figure_4_metadata.json').read_text())
+          manifest = json.loads(manifest_path.read_text())
+          item = manifest['figure_4_boundary']
+          old = item['expected']
+          item['contract'] = {
+              'schema_version': 'eog_structural_figure4_boundary_v2',
+              'required_panel_ids': ['AIS_LIMITED', 'AIS_STRONG', 'TAN_PRIMARY', 'TAN_SPATIAL'],
+              'metrics_share_axis': False,
+              'movement_arrows': False,
+              'causal_arrows': False,
+          }
+          item['expected'] = {
+              'aislands_summary_sha256': metadata['sources']['aislands']['summary_sha256'],
+              'aislands_strong_reference_result_fingerprint': metadata['sources']['aislands_strong_reference']['result_fingerprint'],
+              'tanzania_summary_sha256': metadata['sources']['tanzania']['source_sha256'],
+              'tanzania_result_fingerprint': metadata['sources']['tanzania']['result_fingerprint'],
+              'tanzania_candidate_library_fingerprint': old['tanzania_candidate_library_fingerprint'],
+              'tanzania_matched_loso': old['tanzania_matched_loso'],
+              'tanzania_log_loss_difference': old['tanzania_log_loss_difference'],
+              'panel_data_sha256': metadata['panel_data_sha256'],
+              'svg_sha256': metadata['svg_sha256'],
+              'caption_sha256': metadata['caption_sha256'],
+              'accessibility_sha256': metadata['accessibility_sha256'],
+          }
+          manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n')
+          PY
+
+      - name: Regenerate Figure 5 from the updated audit manifest
+        run: python figures/build_figure_5_audit.py
+
+      - name: Verify the new figure boundary and provenance
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          f4 = json.loads(Path('figures/output/figure_4_metadata.json').read_text())
+          f5 = json.loads(Path('figures/output/figure_5_metadata.json').read_text())
+          manifest = json.loads(Path('figures/figure_manifest.json').read_text())
+          assert f4['schema_version'] == 'eog_structural_figure4_boundary_v2'
+          assert f4['metrics_share_axis'] is False
+          assert f4['card_order'] == ['AIS_LIMITED', 'AIS_STRONG', 'TAN_PRIMARY', 'TAN_SPATIAL']
+          assert f4['sources']['aislands_strong_reference']['result_fingerprint'] == '5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a'
+          assert f4['sources']['tanzania']['result_fingerprint'] == '6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4'
+          assert manifest['figure_4_boundary']['expected']['svg_sha256'] == f4['svg_sha256']
+          f4row = next(row for row in f5['rows'] if row['id'] == 'F4')
+          assert 'A-strong 5c9b1594b29d' in f4row['source']
+          assert f5['movement_arrows'] is False and f5['causal_arrows'] is False
+          PY
+
+      - name: Remove one-time workflow and commit generated scientific presentation assets
+        run: |
+          rm .github/workflows/regenerate-figure4-reference-depth-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add figures/build_figure_4_boundary.py figures/build_figure_5_audit.py figures/figure_manifest.json \
+            figures/output/figure_4_boundary.svg figures/output/figure_4_metadata.json figures/output/figure_4_panel_data.csv \
+            manuscript/figure_data/structural_cross_system_evidence.csv manuscript/figure_4_caption.md manuscript/figure_4_accessibility.md \
+            figures/output/figure_5_audit.svg figures/output/figure_5_metadata.json manuscript/figure_5_caption.md manuscript/figure_5_accessibility.md \
+            .github/workflows/regenerate-figure4-reference-depth-once.yml
+          git diff --cached --check
+          git commit -m 'Regenerate reference-depth Figure 4 and provenance audit'
+          git push origin HEAD:agent/strong-reference-submission-finalization
