@@ -18,7 +18,7 @@ Likewise, spatial dependence models address a different problem. Gaussian random
 
 Landscape-connectivity methods already provide a rich vocabulary for the structural part of the problem. Least-cost models quantify effective distance through resistance surfaces (Adriaensen et al. 2003), circuit theory integrates multiple possible pathways (McRae et al. 2008), and habitat-network models combine local suitability, weighted connectivity and network topology to predict occurrence (Ortiz-Rodríguez et al. 2019). Nearest occupied patches and occupied-neighbour density have long been used as predictors in patch-occupancy analyses (Prugh 2009; Berlow et al. 2013), and source-patch quality or size can be incorporated into connectivity measures (Schooley & Branch 2011). Suitability-derived resistance and circuit connectivity are also established (Nelli et al. 2022). More recent work has formalised environmental, geographic and topological spaces within a common habitat-functionality framework (Van Moorter et al. 2023), reviewed incorporation of patch effects into species-distribution models (Riva et al. 2024), combined connectivity with incidence-function and species-distribution modelling (Kim et al. 2024), and quantified uncertainty caused by connectivity-model, source and threshold choices (Prima et al. 2024; Cushman et al. 2026). These precedents mean that EOG cannot claim novelty simply for adding connectivity, using occurrence anchors, or averaging across graph scenarios.
 
-Island biogeography makes this boundary especially important. Isolation has never been only one geometric distance. Stepping-stone effects have long been recognised (Long et al. 2009), surrounding land area can outperform simple mainland distance as an isolation representation (Weigelt & Kreft 2013), and graph-theoretic island connectivity has been analysed directly (Sillero et al. 2018). Carter et al. (2020) compared 16 measures across New Zealand offshore islands and identified major axes corresponding to mainland distance, stepping stones and insular network position. Graph-derived connectivity has also been validated against independent ecological and genetic data (Daniel et al. 2023). Thus the scientific opportunity is not to rediscover multidimensional island isolation, but to ask whether **species-conditioned source-network configuration contributes held-out information after those generic isolation dimensions and simpler source terms are already represented**.
+Island biogeography makes this boundary especially important. Isolation has never been only one geometric distance. Classical island area and mainland isolation remain central predictors (Long et al. 2009), while surrounding land area and stepping-stone representations can add information beyond simple mainland distance (Weigelt & Kreft 2013), and graph-theoretic stepping-stone connectivity has been analysed directly (Sillero et al. 2018). Carter et al. (2020) compared 16 measures across New Zealand offshore islands and identified major axes corresponding to mainland distance, stepping stones and insular network position. Graph-derived connectivity has also been validated against independent ecological and genetic data (Daniel et al. 2023). Thus the scientific opportunity is not to rediscover multidimensional island isolation, but to ask whether **species-conditioned source-network configuration contributes held-out information after those generic isolation dimensions and simpler source terms are already represented**.
 
 We call the framework Environmental Occupancy Geometry because it describes how locations occupied by observed training records are arranged relative to candidate locations in a declared graph. Here *occupancy* refers only to observed occurrence support in the declared analysis; it is not the latent state of an occupancy model. The principal feature used here, **connected frequency**, is the fraction of predeclared graph scenarios in which a target belongs to a component containing at least one outer-training occurrence. It is a robustness summary over declared structural assumptions, **not a colonisation or dispersal probability**.
 
@@ -76,7 +76,7 @@ Predeclared secondary summaries separated geography-only and environmentally con
 
 #### 2.4.1 Why a second A-Islands test was frozen
 
-After the original A-Islands result was known, a literature audit identified a legitimate stronger-comparator question. Island area, mainland distance, surrounding landmass, stepping stones, source-area weighting and generic network position all have clear precedents and therefore could not be treated as EOG novelty (Long et al. 2009; Weigelt & Kreft 2013; Sillero et al. 2018; Carter et al. 2020). Before calculating any outcome for the extension, we froze a new reference hierarchy to ask whether species-conditioned archipelago configuration retained predictive information after those quantities were represented. This extension did not replace or reanalyse the original conditional-concordance estimand.
+After the original A-Islands result was known, a literature audit identified a legitimate stronger-comparator question. Island area and mainland isolation have clear precedents (Long et al. 2009); surrounding landmass, stepping-stone structure and generic network position are likewise established (Weigelt & Kreft 2013; Sillero et al. 2018; Carter et al. 2020); and source-area weighting is established in metapopulation connectivity. These quantities therefore could not be treated as EOG novelty. Before calculating any outcome for the extension, we froze a new reference hierarchy to ask whether species-conditioned archipelago configuration retained predictive information after those quantities were represented. This extension did not replace or reanalyse the original conditional-concordance estimand.
 
 #### 2.4.2 Outcome-free island area and mainland geometry
 
@@ -192,7 +192,7 @@ This within-system result is methodologically valuable because it removes one we
 
 ### 4.3 The island result is not a failure of island biogeography
 
-Island isolation is already known to be multidimensional. Mainland distance, stepping stones, surrounding land area and insular network position can carry different information (Long et al. 2009; Weigelt & Kreft 2013; Carter et al. 2020). Graph-theoretic island connectivity is also established (Sillero et al. 2018), and graph predictions can be evaluated with independent ecological or genetic evidence (Daniel et al. 2023). The adverse C−R3 result therefore should not be read as evidence that stepping stones or network context are unimportant.
+Island isolation is already known to be multidimensional. Island area and mainland isolation are established predictors (Long et al. 2009), while stepping stones, surrounding land area and insular network position can carry distinct information (Weigelt & Kreft 2013; Sillero et al. 2018; Carter et al. 2020). Graph-theoretic island connectivity is also established (Sillero et al. 2018), and graph predictions can be evaluated with independent ecological or genetic evidence (Daniel et al. 2023). The adverse C−R3 result therefore should not be read as evidence that stepping stones or network context are unimportant.
 
 Instead, it answers a model-comparison question about the specific species-conditioned connected-frequency feature. R3 was deliberately constructed to deny EOG novelty credit for generic isolation dimensions. The result says that, after this declared reference was fitted with the common L2 engine, adding EOG did not lower held-out loss. That is exactly the type of falsification the pre-outcome design was intended to permit. We consequently close the stronger island-specific novelty route rather than weakening R3 or selecting a favourable subset of taxa.
 
@@ -254,7 +254,7 @@ Carter, Z.T., Perry, G.L.W. & Russell, J.C. (2020). Determining the underlying s
 
 Cushman, S.A. et al. (2026). One-hundred seventy-one models of connectivity across Scotland: Influences of method, source points, dispersal threshold, and functional shape on connectivity predictions. *Ecological Informatics* 95: 103740. https://doi.org/10.1016/j.ecoinf.2026.103740
 
-Daniel, J. et al. (2023). [Graph-connectivity validation study]. *Conservation Biology*. https://doi.org/10.1111/cobi.14047
+Daniel, A., Savary, P., Foltête, J.-C., Khimoun, A., Faivre, B., Ollivier, A., Éraud, C., Moal, H., Vuidel, G. & Garnier, S. (2023). Validating graph-based connectivity models with independent presence–absence and genetic data sets. *Conservation Biology* 37: e14047. https://doi.org/10.1111/cobi.14047
 
 Felin, A. et al. (2025). The role of river connectivity in the distribution of fish in an anthropized watershed. *Science of the Total Environment* 959: 178204. https://doi.org/10.1016/j.scitotenv.2024.178204
 
@@ -262,7 +262,7 @@ Karger, D.N. et al. (2017). Climatologies at high resolution for the earth’s l
 
 Kim, E.S. et al. (2024). Metapopulation models using landscape connectivity can better reflect landscape heterogeneity. *Ecological Informatics* 80: 102464. https://doi.org/10.1016/j.ecoinf.2024.102464
 
-Long, J.D. et al. (2009). [Stepping-stone island isolation study]. *Ecological Applications*. https://doi.org/10.1890/08-1337.1
+Long, J.D., Trussell, G.C. & Elliman, T. (2009). Linking invasions and biogeography: Isolation differentially affects exotic and native plant diversity. *Ecology* 90: 863–868. https://doi.org/10.1890/08-1337.1
 
 McRae, B.H., Dickson, B.G., Keitt, T.H. & Shah, V.B. (2008). Using circuit theory to model connectivity in ecology, evolution, and conservation. *Ecology* 89: 2712–2724. https://doi.org/10.1890/07-1861.1
 
@@ -286,7 +286,7 @@ Schooley, R.L. & Branch, L.C. (2011). Habitat quality of source patches and conn
 
 Schrader, J. et al. (2025). A-Islands: A Vascular Plant Dataset for Biodiversity Research and Species Monitoring on Australian Continental Islands. *Journal of Vegetation Science* 36: e70019. https://doi.org/10.1111/jvs.70019
 
-Sillero, N. et al. (2018). [Graph-theoretic structural connectivity among islands]. *Biological Journal of the Linnean Society*. https://doi.org/10.1093/biolinnean/bly033
+Sillero, N., Biaggini, M. & Corti, C. (2018). Analysing the importance of stepping-stone islands in maintaining structural connectivity and endemicity. *Biological Journal of the Linnean Society* 124: 113–125. https://doi.org/10.1093/biolinnean/bly033
 
 Valavi, R., Elith, J., Lahoz-Monfort, J.J. & Guillera-Arroita, G. (2019). blockCV: An R package for generating spatially or environmentally separated folds for k-fold cross-validation of species distribution models. *Methods in Ecology and Evolution* 10: 225–232. https://doi.org/10.1111/2041-210X.13107
 
