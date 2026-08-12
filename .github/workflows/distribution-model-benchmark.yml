@@ -27,9 +27,9 @@ jobs:
         run: python -m pip install .
       - name: Run structural discrimination contract
         run: python benchmarks/distribution_structural_discrimination.py > distribution-structural-discrimination.json
-      - name: Run held-out gate-activation benchmark
+      - name: Run nested held-out gate-activation benchmark
         run: python benchmarks/distribution_model_heldout_benchmark.py > distribution-heldout-ranking.json
-      - name: Run environmental fallback benchmark
+      - name: Run nested environmental fallback benchmark
         run: python benchmarks/distribution_gate_shrinkage.py > distribution-gate-shrinkage.json
       - name: Show benchmark results
         run: |
@@ -43,6 +43,7 @@ jobs:
 
           structural = json.loads(Path("distribution-heldout-ranking.json").read_text())
           assert structural["all_checks_pass"] is True
+          assert structural["structural_gate_cross_fitted"] is True
           assert structural["structural_gate_weight"] >= 0.5
           assert structural["auc"]["environmental_support"] == 0.5
           assert structural["auc"]["environmental_plus_nearest_source"] == 0.5
@@ -51,6 +52,7 @@ jobs:
 
           fallback = json.loads(Path("distribution-gate-shrinkage.json").read_text())
           assert fallback["all_checks_pass"] is True
+          assert fallback["structural_gate_cross_fitted"] is True
           assert fallback["structural_gate_weight"] == 0.0
           assert fallback["auc"]["environmental_support"] == 1.0
           assert fallback["auc"]["eog_distribution_support"] == 1.0
