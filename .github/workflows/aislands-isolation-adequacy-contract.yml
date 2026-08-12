@@ -9,6 +9,10 @@ on:
       - agent/novelty-gap-submission-strategy
   workflow_dispatch:
 
+concurrency:
+  group: aislands-isolation-adequacy-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   geometry-and-contract:
     runs-on: ubuntu-latest
