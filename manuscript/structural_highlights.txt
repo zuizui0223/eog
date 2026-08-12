@@ -1,5 +1,5 @@
-EOG separates local environmental support from landscape reachability.
-Island-chain structure added information beyond support and source distance.
-EOG did not improve a strong matrix-aware forest-fragment reference.
-Positive and negative benchmarks define the method's current boundary.
-Frozen folds, failures, and result fingerprints make claims auditable.
+EOG tests structural information relative to an explicitly declared reference.
+Island structure ordered incidence beyond climate support and nearest source.
+The same island EOG term worsened prediction after the frozen strong R3 reference.
+A Tanzanian current-flow benchmark independently showed an adverse increment.
+Frozen contrasts, failures, and fingerprints make negative results auditable.
