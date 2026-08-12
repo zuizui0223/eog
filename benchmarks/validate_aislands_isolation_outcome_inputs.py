@@ -61,7 +61,12 @@ def validate(args: argparse.Namespace) -> dict[str, object]:
         if set(mapping) != island_set:
             raise RuntimeError(f"{label} island identities differ from the frozen model audit")
 
-    presence_sets = load_presence_sets(args.species_data, island_set, cohort)
+    presence_sets = load_presence_sets(
+        args.species_data,
+        args.island_data,
+        island_set,
+        cohort,
+    )
     presence_counts = [len(presence_sets[taxon]) for taxon in cohort]
     if len(presence_sets) != 886 or min(presence_counts) < 1:
         raise RuntimeError("frozen cohort/presence mapping is incomplete")
