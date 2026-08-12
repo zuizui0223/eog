@@ -27,8 +27,12 @@ def test_novelty_strategy_preserves_frozen_empirical_boundary() -> None:
 def test_closest_prior_audit_covers_required_method_families() -> None:
     text = ADDITIONS.read_text(encoding="utf-8")
     required_dois = (
+        "10.1890/08-1524.1",
         "10.1016/j.ecolmodel.2011.02.011",
+        "10.1007/s10531-011-0049-5",
         "10.1371/journal.pone.0072200",
+        "10.1002/ece3.5567",
+        "10.1111/1365-2664.14118",
         "10.1371/journal.pone.0293966",
         "10.1002/ecy.4105",
         "10.1111/1365-2745.14403",
@@ -40,8 +44,10 @@ def test_closest_prior_audit_covers_required_method_families() -> None:
     for doi in required_dois:
         assert doi in text
     for concept in (
-        "accessible",
-        "nearest occupied patch",
+        "nearest occupied",
+        "source patches",
+        "source quality",
+        "inverse suitability",
         "network topology",
         "dispersal thresholds",
         "environmental-space suitability",
