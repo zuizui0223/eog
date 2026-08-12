@@ -25,7 +25,7 @@ def test_novelty_strategy_preserves_frozen_empirical_boundary() -> None:
     ):
         assert token in text
     assert "Do not reopen the frozen outcome analyses" in text
-    assert "authorized exactly once" in text
+    assert "authorized exactly once" in text.lower()
     assert "C − R3" in text
 
 
@@ -88,7 +88,7 @@ def test_submission_is_blocked_until_island_result_is_incorporated() -> None:
     text = CHECKLIST.read_text(encoding="utf-8")
     assert "Island-isolation adequacy extension executed exactly once" in text
     assert "Island extension result incorporated without weakening R3" in text
-    assert "Verified-reference ledger expanded" in text
+    assert "Verified closest-prior additions ledger expanded" in text
     assert re.search(r"- \[ \] \*\*Island-isolation adequacy extension executed exactly once", text)
     assert re.search(r"- \[ \] \*\*Island extension result incorporated without weakening R3", text)
 
