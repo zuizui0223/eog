@@ -8,10 +8,6 @@ One-time workflow run: `31601076569`.
 
 Frozen contract fingerprint:
 
-`387118b1de858514f073bd8ea49a0a721d21b52a0`
-
-Correction: the authoritative contract fingerprint used by the run is:
-
 `387118b1de858514f0734c989b97d1559d020abcc9965098892dd8bb85fc2ac4`
 
 Artifact ID: `9143557433`.
