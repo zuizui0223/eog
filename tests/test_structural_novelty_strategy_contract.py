@@ -93,7 +93,7 @@ def test_submission_checklist_records_completed_execution_and_remaining_incorpor
     assert "Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3" in text
     assert "Verified closest-prior additions ledger expanded" in text
     assert re.search(r"- \[x\] \*\*Island-isolation adequacy extension executed exactly once", text)
-    assert re.search(r"- \[ \] \*\*Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3", text)
+    assert re.search(r"- \[x\] \*\*Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3", text)
 
 
 def test_predeclared_result_dependent_journal_strategy_is_explicit() -> None:
