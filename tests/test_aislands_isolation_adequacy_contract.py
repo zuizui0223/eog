@@ -20,12 +20,15 @@ def test_extension_is_explicitly_preoutcome_and_preserves_authoritative_result()
     assert payload["upstream_frozen"]["fold_sha256"] == "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa"
     assert payload["upstream_frozen"]["climate_sha256"] == "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285"
     assert payload["upstream_frozen"]["cohort_sha256"] == "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12"
+    assert payload["amendments"][0]["species_outcomes_inspected"] is False
 
 
 def test_primary_contrast_uses_strongest_declared_reference() -> None:
     payload = _contract()
     tiers = payload["reference_tiers"]
     assert "log_area_km2" in tiers["R1"]
+    assert "distance_to_australia_mainland_km" in tiers["R1"]
+    assert "nearest_training_presence_km" in tiers["R1"]
     assert "multi_source_pressure" in tiers["R2"]
     for feature in (
         "nearest_other_island_km",
@@ -59,10 +62,22 @@ def test_area_gate_cannot_be_weakened_to_external_posthoc_data() -> None:
     assert "do not run the area-adjusted outcome analysis" in text
 
 
+def test_mainland_gate_is_fixed_and_species_independent() -> None:
+    payload = _contract()
+    gate = payload["mainland_gate"]
+    assert gate["required_version"] == "5.1.1"
+    assert gate["download_url"] == "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip"
+    assert "largest absolute spherical area" in gate["australia_feature_rule"]
+    assert "minor-great-circle-segment" in gate["distance_rule"]
+    assert gate["heldout_or_species_labels_used"] is False
+    assert gate["outcome_run_allowed_if_gate_fails"] is False
+
+
 def test_contract_forbids_postoutcome_reference_weakening() -> None:
     payload = _contract()
     forbidden = set(payload["forbidden_postoutcome_changes"])
     assert "drop area after seeing its effect" in forbidden
+    assert "drop mainland distance after seeing its effect" in forbidden
     assert "replace R3 primary contrast with a weaker reference" in forbidden
     assert "select favourable taxa" in forbidden
     assert "change geographic scales" in forbidden
