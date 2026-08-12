@@ -10,7 +10,17 @@ All EOG analysis code, pre-outcome contracts, tests, workflow definitions, froze
 python manuscript/build_structural_submission_package.py --output-dir build/structural_submission
 ```
 
-The command reconstructs the manuscript figures and result tables into a separate package directory and verifies the scientific assets against the committed frozen outputs. The generated `submission_package_manifest.json` records the exact source Git commit automatically together with the frozen Tanzania result fingerprint, so the manuscript text does not attempt to embed the SHA of the commit that contains itself.
+The command reconstructs the manuscript-facing figures and result tables into a separate package directory and verifies the scientific assets against committed frozen outputs. It does not rerun the one-time biological A-Islands strong-reference analysis. The generated `submission_package_manifest.json` records the exact source Git commit automatically together with all submission-facing result identities.
+
+The original A-Islands conditional-ordering benchmark and the prospective A-Islands strong-reference predictive benchmark are archived as separate estimands. The latter was executed exactly once under the frozen `eog_aislands_isolation_adequacy_v1_3` contract after an outcome-free smoke gate and is identified by result fingerprint:
+
+`5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a`
+
+The Tanzania strong-reference benchmark remains identified by result fingerprint:
+
+`6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4`
+
+The A-Islands one-time execution provenance, aggregate result, independent QA, and output checksums are committed under `validation/aislands_isolation_adequacy_20260812/`. Raw held-out predictions, fold applicability/scores, and species summaries from the authoritative execution are retained in the frozen workflow artifact identified by the committed provenance record and are to be included in the final archival release when source-data terms permit.
 
 Before submission, the final tagged repository release will be archived in a DOI-issuing repository. Replace the remaining placeholders only after a DOI has been reserved for the final archive:
 
@@ -31,4 +41,4 @@ Third-party source files should be cited and reacquired from their original prov
 
 ## Claim boundary
 
-Availability of code, hashes, manifests, and frozen results establishes provenance and rebuildability. It does not make a post-outcome archive preregistered and does not establish ecological causality, realised dispersal, or colonisation probability.
+Availability of code, hashes, manifests, one-time execution provenance, and frozen results establishes provenance and rebuildability. It does not make post-outcome material preregistered and does not establish ecological causality, realised dispersal, historical colonisation routes, or colonisation probability.
