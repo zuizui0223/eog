@@ -27,6 +27,7 @@
   "upstream_frozen": {
     "aislands_record": 10775810,
     "surveyed_islands": 842,
+    "graph_node_universe": "the same 842 surveyed/model-linked A-Islands used by the authoritative benchmark; shapefile-only records without frozen species-incidence rows are not added as new neutral stepping-stone nodes in this confirmatory extension",
     "taxa": 886,
     "folds": 5,
     "fold_sha256": "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa",
@@ -103,6 +104,7 @@
   "forbidden_postoutcome_changes": [
     "change geographic scales",
     "choose a subset of source-pressure scales",
+    "add shapefile-only unsurveyed islands as neutral graph nodes after seeing extension outcomes",
     "drop area after seeing its effect",
     "drop mainland distance after seeing its effect",
     "drop area-weighted source pressure after seeing its effect",
