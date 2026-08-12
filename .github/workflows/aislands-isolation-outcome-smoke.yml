@@ -1,0 +1,134 @@
+name: A-Islands isolation outcome smoke
+
+on:
+  push:
+    branches:
+      - agent/aislands-isolation-adequacy-outcome
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: aislands-isolation-outcome-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-without-outcome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install package and audit dependencies
+        run: |
+          python -m pip install -e .
+          python -m pip install pyshp==2.3.1 pytest
+
+      - name: Run runner unit and contract tests
+        run: |
+          python -m pytest -q \
+            tests/test_aislands_isolation_outcome_runner.py \
+            tests/test_aislands_isolation_adequacy_contract.py \
+            tests/test_island_isolation_reference.py \
+            tests/test_aislands_polygon_area.py \
+            tests/test_aislands_mainland_distance.py
+
+      - name: Reproduce exact A-Islands v1.0 source
+        run: |
+          python benchmarks/fetch_aislands_zenodo.py \
+            --record-id 10775809 \
+            --expected-version 1.0 \
+            --output-dir build/island_outcome_smoke/source
+
+      - name: Rebuild frozen 842-island model audit
+        run: |
+          python benchmarks/audit_aislands_model_islands.py \
+            --island-data build/island_outcome_smoke/source/island_data.csv \
+            --species-data build/island_outcome_smoke/source/species_data.csv \
+            --shapefile build/island_outcome_smoke/source/raw/A-Island_shape.shp \
+            --projection build/island_outcome_smoke/source/raw/A-Island_shape.prj \
+            --output-csv build/island_outcome_smoke/island_model_audit.csv \
+            --output-summary build/island_outcome_smoke/island_model_audit_summary.json
+
+      - name: Reproduce frozen 842-island polygon areas
+        run: |
+          python benchmarks/audit_aislands_polygon_area.py \
+            --audit-csv build/island_outcome_smoke/island_model_audit.csv \
+            --shapefile build/island_outcome_smoke/source/raw/A-Island_shape.shp \
+            --projection build/island_outcome_smoke/source/raw/A-Island_shape.prj \
+            --output-csv build/island_outcome_smoke/island_area.csv \
+            --output-summary build/island_outcome_smoke/island_area_summary.json
+
+      - name: Reproduce frozen Natural Earth mainland geometry
+        run: |
+          python benchmarks/fetch_natural_earth_australia_mainland.py \
+            --declared-version 5.1.1 \
+            --output-dir build/island_outcome_smoke/mainland
+
+      - name: Reproduce frozen 842-island mainland distances
+        run: |
+          python benchmarks/build_aislands_mainland_distance.py \
+            --island-audit-csv build/island_outcome_smoke/island_model_audit.csv \
+            --mainland-ring-csv build/island_outcome_smoke/mainland/australia_continental_mainland_ring.csv \
+            --output-csv build/island_outcome_smoke/mainland_distance.csv \
+            --output-summary build/island_outcome_smoke/mainland_distance_summary.json
+
+      - name: Hard-match outcome-independent geographic fingerprints
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          area = json.loads(Path('build/island_outcome_smoke/island_area_summary.json').read_text())
+          mainland = json.loads(Path('build/island_outcome_smoke/mainland/mainland_source_manifest.json').read_text())
+          distance = json.loads(Path('build/island_outcome_smoke/mainland_distance_summary.json').read_text())
+          area_expected = json.loads(Path('validation/aislands_isolation_adequacy_20260812/area_gate_expected.json').read_text())
+          mainland_expected = json.loads(Path('validation/aislands_isolation_adequacy_20260812/mainland_gate_expected.json').read_text())
+          assert area['output_area_table_sha256'] == area_expected['derived_area']['area_table_sha256']
+          assert mainland['archive_sha256'] == mainland_expected['natural_earth']['archive_sha256']
+          assert mainland['selected_mainland_ring_sha256'] == mainland_expected['australia_feature']['selected_mainland_ring_sha256']
+          assert distance['output_distance_table_sha256'] == mainland_expected['mainland_distance']['distance_table_sha256']
+          assert area['species_outcomes_used'] is False
+          assert mainland['species_outcomes_used'] is False
+          assert distance['species_outcomes_used'] is False
+          PY
+
+      - name: Validate real input identities and schemas without model fitting
+        run: |
+          python benchmarks/validate_aislands_isolation_outcome_inputs.py \
+            --repo-root . \
+            --island-data build/island_outcome_smoke/source/island_data.csv \
+            --species-data build/island_outcome_smoke/source/species_data.csv \
+            --island-audit-csv build/island_outcome_smoke/island_model_audit.csv \
+            --area-csv build/island_outcome_smoke/island_area.csv \
+            --mainland-csv build/island_outcome_smoke/mainland_distance.csv \
+            --output build/island_outcome_smoke/input_validation.json
+
+      - name: Prove no extension outcome was scored
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('build/island_outcome_smoke/input_validation.json').read_text())
+          assert result['islands'] == 842
+          assert result['taxa'] == 886
+          assert result['folds'] == 5
+          assert result['models_fitted'] == 0
+          assert result['heldout_predictions_scored'] == 0
+          assert result['c_minus_r3_inspected'] is False
+          print(json.dumps(result, indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aislands-isolation-outcome-smoke
+          path: |
+            build/island_outcome_smoke/input_validation.json
+            build/island_outcome_smoke/island_model_audit_summary.json
+            build/island_outcome_smoke/island_area_summary.json
+            build/island_outcome_smoke/mainland/mainland_source_manifest.json
+            build/island_outcome_smoke/mainland_distance_summary.json
+          if-no-files-found: error
