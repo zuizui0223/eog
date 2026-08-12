@@ -10,6 +10,7 @@ ADDITIONS = ROOT / "manuscript/submission/closest_prior_reference_additions.md"
 CHECKLIST = ROOT / "manuscript/structural_submission_checklist.md"
 GATE = ROOT / "manuscript/submission/closest_prior_revision_gate.json"
 ISLAND_CONTRACT = ROOT / "validation/aislands_isolation_adequacy_20260812/preoutcome_contract.json"
+OUTCOME = ROOT / "validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json"
 
 
 def test_novelty_strategy_preserves_frozen_empirical_boundary() -> None:
@@ -69,9 +70,10 @@ def test_closest_prior_audit_covers_general_and_island_method_families() -> None
         assert concept.lower() in text.lower()
 
 
-def test_machine_gate_authorizes_only_the_frozen_island_extension() -> None:
+def test_machine_gate_was_frozen_before_the_single_island_execution() -> None:
     gate = json.loads(GATE.read_text(encoding="utf-8"))
     island = json.loads(ISLAND_CONTRACT.read_text(encoding="utf-8"))
+    outcome = json.loads(OUTCOME.read_text(encoding="utf-8"))
     assert gate["schema_version"] == "eog_structural_closest_prior_gate_v2"
     assert gate["original_frozen_outcomes_reopen_allowed"] is False
     assert gate["new_outcome_analysis_required"] is True
@@ -82,18 +84,19 @@ def test_machine_gate_authorizes_only_the_frozen_island_extension() -> None:
     assert gate["island_extension_preoutcome_fingerprints"]["species_outcomes_used_when_frozen"] is False
     assert gate["island_extension_preoutcome_fingerprints"]["area_table_sha256"] == "496789783a98e55e1b9552f6f6d28e7b4567ef0f52c795657c7e2fea9c60aae2"
     assert gate["island_extension_preoutcome_fingerprints"]["mainland_distance_table_sha256"] == "7d6f52f03702dd0cfae061023a1b2f405e39397de73eaad21b97d24176c4f869"
+    assert outcome["result_fingerprint"] == "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a"
 
 
-def test_submission_is_blocked_until_island_result_is_incorporated() -> None:
+def test_submission_checklist_records_completed_execution_and_remaining_incorporation_gate() -> None:
     text = CHECKLIST.read_text(encoding="utf-8")
     assert "Island-isolation adequacy extension executed exactly once" in text
-    assert "Island extension result incorporated without weakening R3" in text
+    assert "Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3" in text
     assert "Verified closest-prior additions ledger expanded" in text
-    assert re.search(r"- \[ \] \*\*Island-isolation adequacy extension executed exactly once", text)
-    assert re.search(r"- \[ \] \*\*Island extension result incorporated without weakening R3", text)
+    assert re.search(r"- \[x\] \*\*Island-isolation adequacy extension executed exactly once", text)
+    assert re.search(r"- \[ \] \*\*Island extension result incorporated into manuscript prose, figures, tables and cover letter without weakening R3", text)
 
 
-def test_result_dependent_journal_strategy_is_explicit() -> None:
+def test_predeclared_result_dependent_journal_strategy_is_explicit() -> None:
     text = STRATEGY.read_text(encoding="utf-8")
     assert "Route A — robust residual island increment: *Journal of Biogeography* first" in text
     assert "Route B — no residual island increment: *Ecological Informatics* first" in text
