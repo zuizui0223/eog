@@ -1,0 +1,67 @@
+{
+  "schema_version": "eog_aislands_isolation_adequacy_v1",
+  "frozen_date": "2026-08-12",
+  "outcomes_inspected_for_this_extension": false,
+  "scientific_question": "Does species-conditioned archipelago configuration retain held-out incidence information after local climate, island area, nearest source distance, multi-source pressure, and species-independent archipelago geometry are represented?",
+  "upstream_frozen": {
+    "aislands_record": 10775810,
+    "surveyed_islands": 842,
+    "taxa": 886,
+    "folds": 5,
+    "fold_sha256": "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa",
+    "climate_sha256": "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285",
+    "cohort_sha256": "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12",
+    "authoritative_conditional_concordance": 0.6177465917820878
+  },
+  "geometry_gate": {
+    "source": "same frozen A-Islands v1.0 shapefile only",
+    "required_shape_family": ["POLYGON", "POLYGONM", "POLYGONZ"],
+    "required_positive_finite_area_islands": 842,
+    "external_area_sources_allowed": false,
+    "outcome_run_allowed_if_gate_fails": false
+  },
+  "scales_km": [25.0, 50.0, 125.0, 250.0],
+  "reference_tiers": {
+    "R0": ["bio1", "bio5", "bio6", "bio12", "bio15"],
+    "R1": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "nearest_training_presence_km"],
+    "R2": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "nearest_training_presence_km", "multi_source_pressure"],
+    "R3": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "nearest_training_presence_km", "multi_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "unanchored_component_exposure"],
+    "C": ["bio1", "bio5", "bio6", "bio12", "bio15", "log_area_km2", "nearest_training_presence_km", "multi_source_pressure", "nearest_other_island_km", "surrounding_island_pressure", "unanchored_component_exposure", "geography_only_eog_connected_frequency"]
+  },
+  "feature_rules": {
+    "multi_source_pressure": "mean_s log(1 + sum_{training presence a != focal} exp(-distance(focal,a)/s))",
+    "surrounding_island_pressure": "mean_s log(1 + sum_{j != focal} exp(-distance(focal,j)/s))",
+    "unanchored_component_exposure": "mean_s ((component_size(focal,s)-1)/(N-1))",
+    "geography_only_eog_connected_frequency": "fraction of frozen geographic-radius graphs where focal component contains at least one outer-training presence other than focal",
+    "training_row_self_anchor_exclusion": true,
+    "heldout_labels_used": false
+  },
+  "comparison_model": {
+    "family": "deterministic L2-penalized logistic regression",
+    "lambda": 1.0,
+    "intercept_penalized": false,
+    "training_only_z_standardization": true,
+    "class_weighting": "none",
+    "hyperparameter_tuning": "none"
+  },
+  "primary_contrast": "candidate C minus reference R3 matched held-out log loss",
+  "favourable_direction": "negative",
+  "secondary_contrast": "candidate C minus reference R3 matched held-out Brier score",
+  "inference": {
+    "replication_unit": "species",
+    "fold_aggregation": "equal mean within species",
+    "species_aggregation": "equal mean across estimable species",
+    "bootstrap_replicates": 10000,
+    "sign_flip_replicates": 100000,
+    "seed": 20260812
+  },
+  "forbidden_postoutcome_changes": [
+    "change geographic scales",
+    "choose a subset of source-pressure scales",
+    "drop area after seeing its effect",
+    "replace R3 primary contrast with a weaker reference",
+    "select favourable taxa",
+    "introduce species-specific radii from current outcomes",
+    "reinterpret connected frequency as movement or colonisation probability"
+  ]
+}
