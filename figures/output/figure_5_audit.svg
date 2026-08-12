@@ -33,10 +33,10 @@
 <text x="1080" y="611" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" fill="#64748b"><tspan x="1080" dy="0">sha256:e8a7f87fdbadd1603009</tspan></text>
 <rect x="55" y="674" width="1490" height="108" rx="10" fill="#ffffff" stroke="#d7dee8"/>
 <text x="60" y="706" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#172033"><tspan x="60" dy="0">T3</tspan><tspan x="60" dy="19">Table 3 + Table S1</tspan></text>
-<text x="265" y="701" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="265" dy="0">A sidecar a96ec413eeb7; T 6b555c28d61d</tspan></text>
+<text x="265" y="701" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="265" dy="0">A sidecar a96ec413eeb7; A strong 5c9b1594b29d; T</tspan><tspan x="265" dy="17">6b555c28d61d</tspan></text>
 <text x="725" y="701" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#334155"><tspan x="725" dy="0">build_structural_results_tables.py</tspan></text>
 <text x="1080" y="696" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#334155"><tspan x="1080" dy="0">machine-readable manuscript tables</tspan></text>
-<text x="1080" y="737" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" fill="#64748b"><tspan x="1080" dy="0">sha256:b25da730cec3f0188892</tspan></text>
+<text x="1080" y="737" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" fill="#64748b"><tspan x="1080" dy="0">sha256:5377a39d7043a0257072</tspan></text>
 <text x="60" y="850" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#334155"><tspan x="60" dy="0">Fingerprints establish provenance and reproducibility; they do not establish ecological causality, realised movement, or model superiority.</tspan></text>
 <text x="60" y="892" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#5c667a"><tspan x="60" dy="0">No new model fit, effect size, hypothesis test, movement route, or causal ordering is introduced in this figure.</tspan></text>
 </svg>
