@@ -18,11 +18,9 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
-import inspect
 import json
 import math
 import re
-from dataclasses import asdict
 from pathlib import Path
 from typing import Iterable, Sequence
 
@@ -125,18 +123,36 @@ def load_cohort(path: Path) -> list[str]:
     if not rows:
         raise ValueError("empty cohort table")
     keys = list(rows[0])
-    preferred = ("taxon", "taxon_name", "species", "species_name", "scientific_name", "accepted_name")
-    ordered = []
+    primary_key = _candidate_key(keys, ("primary_cohort_included",))
+    if primary_key is not None:
+        rows = [row for row in rows if str(row.get(primary_key, "")).strip() == "1"]
+        if len(rows) != 886:
+            raise ValueError(
+                "frozen cohort audit must contain exactly 886 rows with "
+                f"primary_cohort_included=1, got {len(rows)}"
+            )
+        keys = list(rows[0])
+
+    preferred = (
+        "taxon",
+        "taxon_name",
+        "species",
+        "species_name",
+        "species_update",
+        "scientific_name",
+        "accepted_name",
+    )
+    ordered: list[str] = []
     preferred_key = _candidate_key(keys, preferred)
     if preferred_key:
         ordered.append(preferred_key)
-    ordered.extend(key for key in keys if key not in ordered)
+    ordered.extend(key for key in keys if key not in ordered and key != primary_key)
     for key in ordered:
         taxa = [norm_taxon(row.get(key)) for row in rows]
         taxa = [x for x in taxa if x]
         if len(taxa) == 886 and len(set(taxa)) == 886:
             return taxa
-    raise ValueError(f"could not identify 886 unique taxa in cohort columns {keys}")
+    raise ValueError(f"could not identify 886 unique primary taxa in cohort columns {keys}")
 
 
 def _load_json_rows(path: Path) -> list[dict[str, object]]:
@@ -235,43 +251,85 @@ def load_model_audit(path: Path) -> tuple[list[str], np.ndarray]:
     return ids, coords
 
 
-def identify_species_columns(rows: list[dict[str, str]], island_ids: set[str], cohort: set[str]) -> tuple[str, str]:
+def _required_column(rows: list[dict[str, str]], *names: str) -> str:
     if not rows:
-        raise ValueError("empty species_data")
-    keys = list(rows[0])
-    island_candidates = []
-    for key in keys:
-        values = [norm_id(row.get(key)) for row in rows[: min(len(rows), 20000)]]
-        overlap = sum(value in island_ids for value in values if value)
-        island_candidates.append((overlap, key))
-    island_key = max(island_candidates)[1]
-    if max(island_candidates)[0] == 0:
-        raise ValueError("could not identify species_data island column")
-
-    species_candidates = []
-    for key in keys:
-        if key == island_key:
-            continue
-        values = [norm_taxon(row.get(key)) for row in rows[: min(len(rows), 50000)]]
-        overlap = sum(value in cohort for value in values if value)
-        name_bonus = 1 if any(token in key.casefold() for token in ("species", "taxon", "scientific", "accepted")) else 0
-        species_candidates.append((overlap, name_bonus, key))
-    best = max(species_candidates)
-    if best[0] == 0:
-        raise ValueError("could not identify species_data taxon column by frozen cohort overlap")
-    return island_key, best[2]
+        raise ValueError("source table is empty")
+    key = _candidate_key(list(rows[0]), names)
+    if key is None:
+        raise ValueError(f"missing required column among {names}; available={list(rows[0])}")
+    return key
 
 
-def load_presence_sets(path: Path, island_ids: set[str], cohort: Sequence[str]) -> dict[str, set[str]]:
-    rows = read_csv(path)
+def load_presence_sets(
+    species_path: Path,
+    island_path: Path,
+    island_ids: set[str],
+    cohort: Sequence[str],
+) -> dict[str, set[str]]:
+    """Map species List_ID rows to the authoritative surveyed Island_ID universe."""
+    island_rows = read_csv(island_path)
+    species_rows = read_csv(species_path)
+    island_list_key = _required_column(island_rows, "List_ID", "list_ID")
+    island_id_key = _required_column(island_rows, "Island_ID", "island_ID")
+    species_list_key = _required_column(species_rows, "List_ID", "list_ID")
+
+    list_to_island: dict[str, str] = {}
+    for row in island_rows:
+        list_id = str(row.get(island_list_key, "")).strip()
+        island_id = norm_id(row.get(island_id_key))
+        if not list_id or not island_id:
+            raise ValueError("blank List_ID or Island_ID in island_data")
+        previous = list_to_island.get(list_id)
+        if previous is not None and previous != island_id:
+            raise ValueError(f"List_ID maps to multiple islands: {list_id}")
+        list_to_island[list_id] = island_id
+
     cohort_set = set(cohort)
-    island_key, species_key = identify_species_columns(rows, island_ids, cohort_set)
+    species_keys = list(species_rows[0]) if species_rows else []
+    preferred_species_key = _candidate_key(
+        species_keys,
+        (
+            "Species_update",
+            "species_update",
+            "taxon",
+            "taxon_name",
+            "species",
+            "species_name",
+            "scientific_name",
+            "accepted_name",
+        ),
+    )
+    candidate_order: list[str] = []
+    if preferred_species_key:
+        candidate_order.append(preferred_species_key)
+    candidate_order.extend(
+        key for key in species_keys if key not in candidate_order and key != species_list_key
+    )
+    species_key = None
+    best_overlap = -1
+    for key in candidate_order:
+        overlap = sum(
+            norm_taxon(row.get(key)) in cohort_set
+            for row in species_rows[: min(len(species_rows), 50000)]
+        )
+        if overlap > best_overlap:
+            best_overlap = overlap
+            species_key = key
+    if species_key is None or best_overlap <= 0:
+        raise ValueError("could not identify species_data taxon column by frozen cohort overlap")
+
     result = {taxon: set() for taxon in cohort}
-    for row in rows:
-        island_id = norm_id(row.get(island_key))
+    for row in species_rows:
+        list_id = str(row.get(species_list_key, "")).strip()
+        if not list_id:
+            raise ValueError("blank List_ID in species_data")
+        if list_id not in list_to_island:
+            raise ValueError(f"species_data List_ID missing from island_data: {list_id}")
+        island_id = list_to_island[list_id]
         taxon = norm_taxon(row.get(species_key))
         if island_id in island_ids and taxon in cohort_set:
             result[taxon].add(island_id)
+
     missing = [taxon for taxon, islands in result.items() if not islands]
     if missing:
         raise ValueError(f"{len(missing)} frozen taxa have no presence rows; first={missing[:5]}")
@@ -328,65 +386,18 @@ def build_prepared(ids: Sequence[str], coords_lonlat: np.ndarray) -> PreparedIsl
     )
 
 
-def _extract_probabilities(result: object, x_test: np.ndarray) -> np.ndarray | None:
-    n = x_test.shape[0]
-    if isinstance(result, np.ndarray):
-        arr = np.asarray(result, dtype=float).reshape(-1)
-        if arr.size == n:
-            return arr
-    if isinstance(result, dict):
-        for key in ("probabilities", "probability", "proba", "support", "predictions", "prediction"):
-            if key in result:
-                arr = np.asarray(result[key], dtype=float).reshape(-1)
-                if arr.size == n:
-                    return arr
-    if isinstance(result, (tuple, list)):
-        for item in result:
-            arr = _extract_probabilities(item, x_test)
-            if arr is not None:
-                return arr
-    for attr in ("probabilities", "probability", "proba", "support", "predictions"):
-        if hasattr(result, attr):
-            arr = np.asarray(getattr(result, attr), dtype=float).reshape(-1)
-            if arr.size == n:
-                return arr
-    if hasattr(result, "predict_proba"):
-        arr = np.asarray(result.predict_proba(x_test), dtype=float)
-        if arr.ndim == 2 and arr.shape == (n, 2):
-            return arr[:, 1]
-    if hasattr(result, "predict_probability"):
-        arr = np.asarray(result.predict_probability(x_test), dtype=float).reshape(-1)
-        if arr.size == n:
-            return arr
-    return None
-
-
 def fit_probabilities(x_train: np.ndarray, y_train: np.ndarray, x_test: np.ndarray) -> np.ndarray:
-    """Call the repository's authoritative L2 support engine without changing its math."""
-    attempts = [
-        lambda: fit_penalized_logistic_support(x_train, y_train, x_test),
-        lambda: fit_penalized_logistic_support(x_train=x_train, y_train=y_train, x_predict=x_test),
-        lambda: fit_penalized_logistic_support(x_train=x_train, y_train=y_train, x_test=x_test),
-        lambda: fit_penalized_logistic_support(X_train=x_train, y_train=y_train, X_predict=x_test),
-        lambda: fit_penalized_logistic_support(X_train=x_train, y_train=y_train, X_test=x_test),
-    ]
-    errors: list[str] = []
-    for call in attempts:
-        try:
-            result = call()
-        except TypeError as exc:
-            errors.append(str(exc))
-            continue
-        probabilities = _extract_probabilities(result, x_test)
-        if probabilities is not None:
-            probabilities = np.asarray(probabilities, dtype=float)
-            if probabilities.shape != (x_test.shape[0],) or not np.isfinite(probabilities).all():
-                raise ValueError("support model returned invalid probabilities")
-            return np.clip(probabilities, 1e-12, 1.0 - 1e-12)
-    raise TypeError(
-        "could not call/extract probabilities from fit_penalized_logistic_support; "
-        f"signature={inspect.signature(fit_penalized_logistic_support)}; errors={errors}"
+    """Fit the authoritative L2 support engine, then predict held-out rows."""
+    model = fit_penalized_logistic_support(
+        x_train,
+        y_train,
+        l2_penalty=1.0,
+        min_class_count=5,
     )
+    probabilities = np.asarray(model.predict_support(x_test), dtype=float)
+    if probabilities.shape != (x_test.shape[0],) or not np.isfinite(probabilities).all():
+        raise ValueError("support model returned invalid probabilities")
+    return np.clip(probabilities, 1e-12, 1.0 - 1e-12)
 
 
 def reduce_constant_columns(x_train: np.ndarray, x_test: np.ndarray, names: Sequence[str]) -> tuple[np.ndarray, np.ndarray, list[str], list[str]]:
@@ -530,7 +541,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     log_area = np.log(area)
     prepared = build_prepared(island_ids, coords)
 
-    presence_sets = load_presence_sets(args.species_data, set(island_ids), cohort)
+    presence_sets = load_presence_sets(args.species_data, args.island_data, set(island_ids), cohort)
     fold_levels = sorted(set(fold_values.tolist()), key=lambda value: (len(str(value)), str(value)))
     if len(fold_levels) != 5:
         raise RuntimeError(f"expected five frozen outer folds, got {fold_levels}")
