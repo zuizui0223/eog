@@ -23,6 +23,7 @@ on:
       - "tests/test_v2_empirical_occurrence_validation.py"
       - "tests/test_v2_empirical_occurrence_io_cli.py"
       - "tests/test_finland_colonization_preoutcome_admission.py"
+      - "tests/test_finland_colonization_score.py"
       - "benchmarks/dynamic_archipelago_simulation.py"
       - "benchmarks/dynamic_archipelago_neutral_genetics.py"
       - "benchmarks/dynamic_archipelago_reference_depth.py"
@@ -30,9 +31,12 @@ on:
       - "benchmarks/dynamic_occurrence_comparator_ladder.py"
       - "benchmarks/dynamic_genetic_distance_sensitivity.py"
       - "benchmarks/finland_colonization_preoutcome_admission.py"
+      - "benchmarks/finland_colonization_prepare.py"
+      - "benchmarks/finland_colonization_score.py"
       - "docs/eog_v2_occurrence_comparator_contract.md"
       - "docs/eog_v2_empirical_occurrence_validation_contract.md"
       - "docs/eog_v2_finland_colonization_preoutcome_contract.md"
+      - "docs/eog_v2_finland_colonization_inference_freeze.md"
       - "pyproject.toml"
       - ".github/workflows/dynamic-island-reachability.yml"
   workflow_dispatch:
@@ -62,7 +66,8 @@ jobs:
             tests/test_synthetic_archipelago.py \
             tests/test_v2_empirical_occurrence_validation.py \
             tests/test_v2_empirical_occurrence_io_cli.py \
-            tests/test_finland_colonization_preoutcome_admission.py
+            tests/test_finland_colonization_preoutcome_admission.py \
+            tests/test_finland_colonization_score.py
       - name: Run reachability proof of estimand
         run: |
           mkdir -p benchmark_results/dynamic_island_reachability
