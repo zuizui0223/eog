@@ -1,0 +1,82 @@
+{
+  "schema_version": "eog_distribution_v02_confirmation_contract_v1",
+  "status": "pre_outcome_seed_and_model_freeze_comparator_gates_pending",
+  "created_date": "2026-08-12",
+  "purpose": "Freeze the independent synthetic confirmation seed universe and final candidate model before any confirmation outcome is computed. Strong-comparator numerical promotion gates will be added from development evidence before execution authorization.",
+  "development_seeds_excluded": [101, 211, 307, 401, 503, 601, 701, 809],
+  "confirmation_seeds": [907, 1009, 1103, 1201, 1301, 1409, 1511, 1601, 1709, 1801, 1907, 2003],
+  "n_modules_per_seed": 24,
+  "regimes": [
+    "habitat_only",
+    "dispersal_limited",
+    "graded_barrier",
+    "stepping_stone",
+    "long_jump",
+    "mixed"
+  ],
+  "primary_metric": "mean Bernoulli log loss over untouched target rows within regime, averaged equally across confirmation seeds",
+  "secondary_metrics": [
+    "AUC",
+    "Brier score",
+    "worst-seed log-loss harm relative to environmental support"
+  ],
+  "candidate_model": {
+    "name": "fixed probability-gate plus cross-fitted-stack EOG structural ensemble",
+    "formula": "D = 0.875 * D_probability_gate + 0.125 * D_cross_fitted_stack",
+    "stack_weight": 0.125,
+    "ensemble_has_no_response_fit": true,
+    "probability_gate": "training-fitted lambda in D = H * ((1-lambda) + lambda*M_EOG)",
+    "stack": "deterministic L2 logistic f(H, M_EOG, H*M_EOG) fitted on inner out-of-fold H/M; nonstructural stack collapses to H",
+    "source_rule": "positive training observations only",
+    "unlabelled_landscape_nodes": "may act as neutral intermediate nodes but never as sources",
+    "outer_target_labels_available_to_fit": false
+  },
+  "nested_validation": {
+    "gate_folds": 2,
+    "outer_confirmation_targets_held_out": true,
+    "inner_positive_rows_removed_from_inner_source_set": true,
+    "support_model_training_only": true,
+    "stack_meta_model_inner_oof_only": true
+  },
+  "comparator_ladder": [
+    "environmental_support",
+    "environmental_plus_nearest_training_source",
+    "environmental_plus_single_cumulative_path",
+    "fixed_alpha_EOG_structural_ensemble"
+  ],
+  "frozen_source_blobs": {
+    "generator": {
+      "path": "benchmarks/distribution_model_noisy_regimes.py",
+      "git_blob_sha": "6668c9e30f3a848528fc18fdc05c8b14ba7cddda"
+    },
+    "probability_core": {
+      "path": "src/eog/distribution.py",
+      "git_blob_sha": "1b6652e2f80945b136973cad918836be9f871246"
+    },
+    "stack_core": {
+      "path": "src/eog/distribution_stack.py",
+      "git_blob_sha": "66a26f6d40b301f3876b08af7149cfc55a15537b"
+    },
+    "ensemble_core": {
+      "path": "src/eog/distribution_ensemble.py",
+      "git_blob_sha": "9aba8f0e8d86241d28e8661753d00f9012038be3"
+    }
+  },
+  "already_frozen_general_gates": {
+    "development_and_confirmation_seed_overlap": 0,
+    "all_target_labels_held_out": true,
+    "all_predictions_finite": true,
+    "null_regimes": ["habitat_only", "long_jump"],
+    "structural_regimes": ["dispersal_limited", "graded_barrier", "stepping_stone", "mixed"],
+    "null_regime_maximum_mean_log_loss_harm_vs_environmental": 0.01,
+    "maximum_single_seed_log_loss_harm_vs_environmental": 0.05,
+    "each_structural_regime_requires_positive_mean_log_loss_gain_vs_environmental": true
+  },
+  "pending_before_execution": [
+    "freeze regime-specific strong-comparator noninferiority/superiority gates from the already-open development evidence",
+    "freeze exact confirmation runner source and expected contract fingerprint",
+    "add explicit one-time execution authorization"
+  ],
+  "execution_authorized": false,
+  "scientific_boundary": "Synthetic confirmation evaluates predictive support under declared source-conditioned generators. It does not establish realized movement, colonisation probability, latent occupancy, or universal empirical superiority over dynamic/mechanistic/connectivity models."
+}
