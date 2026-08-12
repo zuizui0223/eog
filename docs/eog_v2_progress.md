@@ -13,7 +13,7 @@ This ledger tracks the separate dynamic island-reachability development line. It
 - [x] Neutral drift/migration simulator.
 - [x] Fixed-source occurrence comparator development + one-time independent confirmation.
 - [x] Genetic IBD/IBE/current-flow negative controls.
-- [x] Finite-horizon genetic-distance sensitivity; result: 24/24 tested candidates eligible, so horizon is not identified by the toy system.
+- [x] Finite-horizon genetic-distance sensitivity; 24/24 tested candidates were eligible, so horizon was not identified by the toy system.
 - [x] Exact-eventual first-passage implementation for horizon-free long-term genetic development.
 - [x] Directional-FST boundary demonstrated in development: asymmetric migration is not automatically recoverable from symmetric pairwise FST.
 - [x] Hyperparameter-free FST-oriented EOG candidate implemented: reciprocal arithmetic-mean eventual support + continuous distance + explicit bidirectional-disconnection indicator.
