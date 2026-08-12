@@ -14,15 +14,27 @@ def _contract():
 def test_extension_is_explicitly_preoutcome_and_preserves_authoritative_result() -> None:
     payload = _contract()
     assert payload["outcomes_inspected_for_this_extension"] is False
+    assert payload["reference_design_status"] == "final_before_extension_species_outcomes"
     assert payload["upstream_frozen"]["surveyed_islands"] == 842
     assert payload["upstream_frozen"]["taxa"] == 886
     assert payload["upstream_frozen"]["authoritative_conditional_concordance"] == 0.6177465917820878
     assert payload["upstream_frozen"]["fold_sha256"] == "221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa"
     assert payload["upstream_frozen"]["climate_sha256"] == "6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285"
     assert payload["upstream_frozen"]["cohort_sha256"] == "cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12"
-    assert payload["schema_version"] == "eog_aislands_isolation_adequacy_v1_2"
-    assert len(payload["amendments"]) == 2
+    assert payload["schema_version"] == "eog_aislands_isolation_adequacy_v1_3"
+    assert len(payload["amendments"]) == 3
     assert all(item["species_outcomes_inspected"] is False for item in payload["amendments"])
+
+
+def test_closest_isolation_comparator_is_explicitly_not_claimed_as_novelty() -> None:
+    payload = _contract()["closest_multidimensional_isolation_comparator"]
+    assert payload["doi"] == "10.1111/jbi.13778"
+    assert payload["reported_axes"] == [
+        "mainland distance",
+        "stepping stones",
+        "insular network position",
+    ]
+    assert "not EOG novelty" in payload["eog_boundary"]
 
 
 def test_primary_contrast_uses_strongest_declared_reference() -> None:
@@ -38,6 +50,7 @@ def test_primary_contrast_uses_strongest_declared_reference() -> None:
         "surrounding_island_pressure",
         "surrounding_landmass_pressure",
         "unanchored_component_exposure",
+        "mainland_stepping_stone_frequency",
     ):
         assert feature in tiers["R3"]
     assert tiers["C"][:-1] == tiers["R3"]
@@ -54,6 +67,7 @@ def test_response_derived_features_are_cross_fitted_and_self_excluded() -> None:
     assert "training presence a != focal" in rules["multi_source_pressure"]
     assert "training presence a != focal" in rules["area_weighted_source_pressure"]
     assert "area_km2(j)" in rules["surrounding_landmass_pressure"]
+    assert "fixed centroid-to-mainland coastline distance" in rules["mainland_stepping_stone_frequency"]
     assert "outer-training presence other than focal" in rules["geography_only_eog_connected_frequency"]
 
 
@@ -88,6 +102,7 @@ def test_contract_forbids_postoutcome_reference_weakening() -> None:
     assert "drop mainland distance after seeing its effect" in forbidden
     assert "drop area-weighted source pressure after seeing its effect" in forbidden
     assert "drop surrounding-landmass pressure after seeing its effect" in forbidden
+    assert "drop generic mainland stepping-stone frequency after seeing its effect" in forbidden
     assert "replace R3 primary contrast with a weaker reference" in forbidden
     assert "select favourable taxa" in forbidden
     assert "change geographic scales" in forbidden
