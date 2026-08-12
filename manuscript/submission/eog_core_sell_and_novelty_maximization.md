@@ -1,155 +1,112 @@
-# EOG core sell and novelty-maximization path
+# EOG core sell and active novelty-maximization path
 
 Date: 2026-08-12
 
-## Central repositioning
+## Active scientific position
 
-Connectivity itself is not the novelty target. Existing work already establishes that accessibility, source proximity, habitat-network topology, resistance, current flow, and habitat-patch context can matter for occurrence and distribution.
+Connectivity itself is not the novelty target. Island biogeography already contains mainland distance, stepping-stone isolation, surrounding landmass, insular network position, graph connectivity and biological validation of connectivity models.
 
-The strongest defensible EOG sell is instead:
+The strongest current EOG sell is:
 
-> **EOG is a reference-conditioned structural adequacy diagnostic: it asks whether occurrence-conditioned landscape configuration retains held-out information after the reference model has already represented local support, direct source proximity, and—where available—a stronger landscape-specific connectivity model.**
+> **EOG is a reference-conditioned structural adequacy probe: after generic multidimensional island isolation and conventional species-source pressure are represented, it asks whether the target island's position relative to the focal species' observed source network still contains held-out incidence information.**
 
-A shorter editorial form is:
+Short editorial question:
 
-> **Does the reference model know enough landscape geometry?**
+> **Is generic island isolation structurally sufficient for the species?**
 
-EOG therefore should not be presented primarily as another connectivity index or dispersal proxy. It is a model-checking / incremental-information framework for structural information.
+This is stronger than “is the landscape connected?” and narrower than a dispersal-process claim.
 
-## Three diagnostic states already represented by the frozen empirical evidence
+## Generic isolation versus species-conditioned configuration
 
-The framework should explicitly allow three outcomes.
+The final A-Islands extension deliberately separates two objects.
 
-1. **Residual structural information** — a declared structural feature adds held-out ordering or predictive information beyond the reference. The A-Islands benchmark currently provides this state relative to frozen climatic support plus nearest outer-training source distance.
-2. **No added structural information / adverse increment** — the structural feature is redundant, too coarse, or variance-increasing relative to the tested reference. Tanzania primary LOSO currently provides this state after matrix-aware current flow, patch area, the area×current-flow interaction, and nearest-source distance.
-3. **Indeterminate under the evaluation design** — the data or partition do not support a stable incremental conclusion. Tanzania spatial-block sensitivity currently provides this state.
+**Generic island isolation (R3)** represents recipient climate/area, mainland distance, source distance/pressure, source landmass, surrounding island number/landmass, generic mainland stepping-stone accessibility and generic island-network position.
 
-This trichotomy is preferable to a universal-improvement claim because a negative result becomes a valid output of the diagnostic rather than a failure of the method.
+**Species-conditioned configuration (C−R3)** adds only the geography-only EOG term: whether the target belongs to components containing outer-training occurrences of the focal species across the frozen 25/50/125/250-km graph ensemble.
 
-## What must be distinguished from established spatial diagnostics
+This means EOG cannot win merely because:
 
-Residual spatial autocorrelation, CAR/SAR models, barrier spatial fields, and habitat-network occurrence models already address important classes of residual or network structure. EOG must therefore be described more narrowly as testing **source-conditioned, graph-mediated structural information under a held-out boundary**.
+- the island is close to Australia;
+- the island is large;
+- many islands are nearby;
+- much landmass is nearby;
+- large occupied source islands are nearby;
+- a generic island chain reaches the mainland;
+- the island is generically central/embedded in the archipelago network.
 
-The distinctive combination is:
+The target novelty is whatever held-out information remains after those explanations are available.
 
-- occurrence anchors rebuilt from outer-training presences only;
-- target rows never act as their own sources;
-- intermediate nodes can create transitive connection differences even when local support and endpoint distance are similar;
-- graph scenarios are predeclared rather than selected from held-out outcomes;
-- the structural increment is evaluated relative to an explicit reference model;
-- stronger reference content is allowed to remove the EOG increment;
-- non-estimability and adverse results remain visible;
-- source-to-manuscript provenance is auditable.
+## Closest island prior and why it matters
 
-No individual item above should be called unprecedented. The claim is about the combined diagnostic architecture.
+Carter, Perry & Russell (2020; DOI `10.1111/jbi.13778`) is the closest multidimensional-isolation comparator: 16 isolation measures across 890 New Zealand offshore islands reduce to major dimensions represented by mainland distance, stepping stones and insular network position.
 
-## Generalisable cross-fitting principle
+Weigelt & Kreft (2013) establish surrounding-landmass and other multidimensional isolation metrics; Long et al. (2009) establish explicit stepping-stone isolation; Sillero et al. (2018) establish graph-theoretic island structural connectivity; Daniel et al. (2023) establish biological validation of graph-based connectivity.
 
-A particularly strong informatics contribution is broader than the EOG score itself:
+These are **reference information**, not claims to novelty.
 
-> **Any spatial predictor whose value is derived from the observed response must respect the train/test boundary and be reconstructed from training responses only.**
+## Why the new A-Islands test is legitimate rather than post-hoc rescue
 
-This applies in principle to nearest occupied-source distance, occupied-source density, source-weighted connectivity, occupancy-conditioned network summaries, and other response-derived spatial features. Spatial CV alone is insufficient if a predictor was constructed before the split using occurrence labels that later appear in the held-out fold.
+The project did not inspect the new 886-taxon outcome and then choose stronger or weaker controls. Before the extension species outcomes, it froze:
 
-EOG operationalises this rule by rebuilding occurrence anchors inside each outer-training set and forbidding the focal target from acting as its own source. Cross-fitting itself is not claimed as a new statistical concept. The potentially distinctive ecological contribution is making this leakage boundary an explicit, executable contract for source-conditioned graph features and evaluating its consequences in structural prediction.
+- the 842-island graph universe;
+- polygon-derived island area;
+- Natural Earth v5.1.1 continental-mainland geometry and distance;
+- R0/R1/R2/R3/C feature hierarchy;
+- source/landmass pressure formulas and four scales;
+- focal self-exclusion and held-out leakage rules;
+- 5/5 class gate;
+- constant-predictor policy;
+- deterministic L2 λ=1 fit engine;
+- primary `C−R3` log-loss contrast and secondary Brier contrast;
+- species bootstrap/sign-flip inference;
+- result-dependent journal route.
 
-The controlled simulation benchmark below should therefore include a deliberately leaky comparator. If all-occurrence anchors inflate apparent structural gain when the data-generating process contains no extra structural information, the simulation would demonstrate why the training-only construction is necessary rather than merely documenting it as a software choice.
+The extension therefore functions as a **prospective falsification test of the stronger island claim**. A null/adverse result narrows the paper; it does not trigger retuning.
 
-## Highest-return novelty additions
+## Three possible island outcomes
 
-### Priority A — controlled simulation benchmark
+1. **Residual species-conditioned archipelago structure** — C improves R3 robustly. This supports an island-biogeography claim that conventional generic isolation is not fully structurally sufficient for species incidence under the declared representation.
+2. **Structural saturation** — C does not improve R3 or is adverse. The stronger conventional isolation/source reference absorbs the original A-Islands structural signal.
+3. **Indeterminate** — sparse/failing folds prevent stable inference. Applicability becomes part of the result.
 
-Add a simulation study with known data-generating truth. This is the safest way to strengthen the method without reopening or tuning the frozen empirical outcomes.
+All three are valid outputs.
 
-Predeclare generative regimes such as:
+## General cross-fitting principle retained
 
-- local support only;
-- local support plus direct nearest-source effect;
-- local support plus multi-source kernel / incidence-function-style source pressure;
-- local support plus genuinely transitive stepping-stone structure;
-- local support plus matrix-resistance/current-flow structure;
-- graph misspecification / no structural signal.
+A broader informatics lesson remains important:
 
-For each regime compare a correctly cross-fitted EOG construction (outer-training anchors only) against a deliberately naive construction that allows held-out occurrence information to influence source-conditioned features. The simulation should estimate false-positive structural gain, power under transitive structure, redundancy when the reference already contains the generating connectivity process, and sensitivity to graph misspecification.
+> **Any spatial predictor derived from the observed response must respect the train/test boundary and be reconstructed from training responses only.**
 
-The main methodological question becomes not whether EOG can improve prediction, but whether EOG is **calibrated to detect missing structural information without manufacturing it from the held-out response**.
+Nearest occupied-source distance, occupied-source pressure, area-weighted source pressure and EOG anchors are therefore all rebuilt from outer-training occurrences. Cross-fitting itself is not claimed as statistically new; the contribution is making the leakage boundary explicit and executable for source-conditioned ecological graph features.
 
-### Priority B — stronger A-Islands structural baselines
+## Active novelty-maximization order
 
-The most important empirical reviewer challenge is that A-Islands connected frequency may be acting as a proxy for ordinary source pressure or local network density rather than specifically for intermediate-patch configuration.
+The active path for the current paper is now:
 
-A new comparator analysis should therefore be prospectively contracted before execution and reported regardless of direction. Candidate baselines should be simple, literature-recognisable, and computed strictly from outer-training information:
+1. freeze the strongest defensible generic island-isolation/source reference before outcomes — **completed**;
+2. freeze outcome-independent area and continental-mainland inputs — **completed and fingerprinted**;
+3. merge that contract to main;
+4. execute the 886-taxon `C−R3` comparison exactly once;
+5. freeze and report the result regardless of direction;
+6. if robustly favourable, rewrite around island-isolation adequacy and target *Journal of Biogeography* first;
+7. if null/adverse/indeterminate, retain the broader structural-adequacy paper and target *Ecological Informatics* first.
 
-- nearest occupied source distance (already controlled);
-- occupied-source count or density within fixed distance bands;
-- an incidence-function-style or exponential all-source pressure term with a predeclared scale rule;
-- unanchored local topology such as degree / k-hop neighbourhood size / component size, where scientifically interpretable.
+## Deferred, not part of the current first-submission path
 
-The strongest possible A-Islands claim would be that EOG retains held-out information after local climatic support, nearest source, **multi-source pressure, and simple unanchored topology** are represented. If it does not, the result should narrow the EOG claim rather than trigger post-hoc retuning.
+Known-truth simulation, leaky-vs-cross-fitted calibration experiments, Tanzania reference ablation and constrained graph nulls remain useful **future method-development work**, especially for a later general-method/MEE paper. They are no longer pre-submission requirements for the current island-focused empirical test.
 
-### Priority C — same-system Tanzania reference ablation
+Do not add them after seeing the island result merely to rescue novelty.
 
-The current cross-system contrast cannot establish that the stronger Tanzania reference *causes* the EOG increment to disappear because system, taxon, sample size, graph, and endpoint all differ.
+## What not to do
 
-A prospectively frozen explanatory ablation within Tanzania could compare, on identical outer folds and rows:
+Do not:
 
-- patch area + nearest source;
-- the same reference + EOG;
-- patch area + nearest source + selected current flow (+ the predeclared interaction);
-- the same strong reference + EOG.
+- weaken R3 after the result;
+- tune species-specific radii or graph thresholds;
+- add shapefile-only unsurveyed islands to the confirmatory graph after the result;
+- select favourable taxa;
+- convert connected frequency into a movement/colonisation probability;
+- hide the adverse Tanzania benchmark;
+- add another positive empirical system merely to improve appearance.
 
-If EOG helps under the weaker reference but not after current flow, the paper gains a direct within-system demonstration of **structural information saturation / substitutability**. Because the primary strong-reference Tanzania outcome is already known, this must be labelled a post-primary explanatory ablation rather than confirmatory evidence and must be reported whatever its direction.
-
-### Priority D — constrained topological null, only if needed
-
-A more demanding extension would test whether the A-Islands signal survives a null that preserves simpler structural summaries while disrupting multi-step configuration. Possible designs include constrained edge rewiring or other graph randomisations that preserve degree/local density as far as possible.
-
-This should not be added unless the null can be justified clearly. A poorly chosen graph null could create more reviewer objections than it resolves.
-
-## Reference-conditioned structural increment
-
-The manuscript can formalise a family of estimands rather than force both benchmarks onto one numerical scale.
-
-Let `R` denote the declared reference information and `G` an EOG structural feature. The target is the held-out information in `G` conditional on `R`:
-
-`structural increment = held-out evidence contributed by G after R is fixed`.
-
-A-Islands instantiates this through conditional concordance after matching on local support and nearest-source distance. Tanzania instantiates it through paired held-out loss between `R + G` and `R`.
-
-The endpoints need not be numerically comparable. The unifying object is the **reference-conditioned question**, not a universal effect-size formula.
-
-## Manuscript-level novelty sentence
-
-Preferred form:
-
-> Existing ecological models already represent habitat accessibility, occupied-source proximity, network topology and resistance-based connectivity. The unresolved question addressed here is therefore not whether connectivity matters, but whether a declared reference model has already captured the structural information available from the observed landscape. EOG provides a leakage-safe, source-conditioned held-out test of that remaining structural increment.
-
-Avoid:
-
-- first integration of suitability and connectivity;
-- first source-conditioned connectivity model;
-- first threshold-robust connectivity framework;
-- first network-based occurrence model;
-- dispersal or colonisation probability claims.
-
-## Figure and story redesign
-
-Figure 1 should lead with the reference-conditioned diagnostic, not with a new connectivity cartoon. The visual logic should be `reference information -> held-out structural probe -> three possible outcomes: residual / no gain or adverse / indeterminate`.
-
-The cross-system figure should show A-Islands and Tanzania as **different reference tests**, not as evidence that EOG is biologically stronger in islands. The strongest editorial message is that the framework was constructed to be falsifiable and the empirical data occupied more than one diagnostic state.
-
-## What not to do for novelty
-
-Do not add another empirical system merely to obtain another positive result. Do not tune species-specific radii, directed edges, graph thresholds, or trait rules after seeing current outcomes. Do not convert connected frequency into a pseudo-probability of movement. Do not hide the Tanzania adverse result. These moves would increase apparent novelty at the cost of credibility.
-
-## Decision rule
-
-For the current paper, the highest-return path is:
-
-1. reframe EOG as a reference-conditioned structural adequacy diagnostic;
-2. add a controlled simulation benchmark if method-development scope is expanded;
-3. if adding new empirical work, prioritise the A-Islands multi-source/topology comparator before any new dataset;
-4. consider the Tanzania reference ablation only as explicitly post-primary explanatory evidence;
-5. report all added analyses regardless of direction and preserve the existing frozen outcomes unchanged.
-
-If the simulation establishes calibration/specificity and A-Islands retains an increment beyond multi-source pressure and simple topology, the methodological novelty becomes substantially stronger than a standard connectivity-plus-SDM paper. If those tests absorb the A-Islands signal, the paper should retain the narrower but still useful audit/reproducibility contribution rather than manufacture a stronger claim.
+The strongest novelty comes from allowing the island adequacy hypothesis to fail under a deliberately strong comparator.
