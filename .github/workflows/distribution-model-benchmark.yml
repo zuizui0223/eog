@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "src/eog/distribution.py"
+      - "src/eog/distribution_adaptive.py"
       - "src/eog/distribution_odds.py"
       - "src/eog/distribution_stack.py"
       - "src/eog/grid_adapter.py"
@@ -13,7 +14,9 @@ on:
       - "benchmarks/distribution_gate_shrinkage.py"
       - "benchmarks/distribution_model_noisy_regimes.py"
       - "benchmarks/distribution_fusion_development.py"
+      - "benchmarks/distribution_adaptive_development.py"
       - "tests/test_distribution_model.py"
+      - "tests/test_distribution_adaptive.py"
       - "tests/test_distribution_odds.py"
       - "tests/test_distribution_stack.py"
       - "tests/test_grid_adapter.py"
@@ -44,6 +47,8 @@ jobs:
         run: python benchmarks/distribution_model_noisy_regimes.py > distribution-noisy-development.json
       - name: Run fusion development comparison
         run: python benchmarks/distribution_fusion_development.py > distribution-fusion-development.json
+      - name: Run adaptive-family development screen
+        run: python benchmarks/distribution_adaptive_development.py > distribution-adaptive-development.json
       - name: Show benchmark summaries
         run: |
           cat distribution-heldout-ranking.json
@@ -54,6 +59,7 @@ jobs:
           for filename in [
               "distribution-noisy-development.json",
               "distribution-fusion-development.json",
+              "distribution-adaptive-development.json",
           ]:
               result = json.loads(Path(filename).read_text())
               print(filename)
@@ -95,6 +101,15 @@ jobs:
           assert fusion["all_integrity_checks_pass"] is True
           assert fusion["seeds"] == noisy["seeds"]
           assert fusion["regimes"] == noisy["regimes"]
+
+          adaptive = json.loads(Path("distribution-adaptive-development.json").read_text())
+          assert adaptive["status"] == "development_screen_not_confirmation"
+          assert adaptive["all_integrity_checks_pass"] is True
+          assert adaptive["seeds"] == noisy["seeds"]
+          assert adaptive["regimes"] == noisy["regimes"]
+          assert adaptive["selection_rule"]["complexity_tie_break"] == [
+              "environmental", "probability_gate", "stacked"
+          ]
           PY
       - uses: actions/upload-artifact@v4
         with:
@@ -105,3 +120,4 @@ jobs:
             distribution-gate-shrinkage.json
             distribution-noisy-development.json
             distribution-fusion-development.json
+            distribution-adaptive-development.json
