@@ -1,0 +1,115 @@
+name: A-Islands isolation adequacy contract
+
+on:
+  push:
+    branches:
+      - agent/island-isolation-adequacy-contract
+  pull_request:
+    branches:
+      - agent/novelty-gap-submission-strategy
+  workflow_dispatch:
+
+jobs:
+  geometry-and-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install EOG and geometry audit dependency
+        run: |
+          python -m pip install -e .
+          python -m pip install pyshp==2.3.1 pytest
+
+      - name: Test frozen isolation-reference features and spherical polygon area
+        run: |
+          python -m pytest -q \
+            tests/test_island_isolation_reference.py \
+            tests/test_aislands_polygon_area.py
+
+      - name: Reproduce exact A-Islands v1.0 source
+        run: |
+          python benchmarks/fetch_aislands_zenodo.py \
+            --record-id 10775809 \
+            --expected-version 1.0 \
+            --output-dir results/aislands_isolation_adequacy/source
+
+      - name: Rebuild outcome-free 842-island model-unit audit
+        run: |
+          python benchmarks/audit_aislands_model_islands.py \
+            --island-data results/aislands_isolation_adequacy/source/island_data.csv \
+            --species-data results/aislands_isolation_adequacy/source/species_data.csv \
+            --shapefile results/aislands_isolation_adequacy/source/raw/A-Island_shape.shp \
+            --projection results/aislands_isolation_adequacy/source/raw/A-Island_shape.prj \
+            --output-csv results/aislands_isolation_adequacy/island_model_audit.csv \
+            --output-summary results/aislands_isolation_adequacy/island_model_audit_summary.json
+
+      - name: Derive island area from the same frozen polygon geometry
+        run: |
+          python benchmarks/audit_aislands_polygon_area.py \
+            --audit-csv results/aislands_isolation_adequacy/island_model_audit.csv \
+            --shapefile results/aislands_isolation_adequacy/source/raw/A-Island_shape.shp \
+            --projection results/aislands_isolation_adequacy/source/raw/A-Island_shape.prj \
+            --output-csv results/aislands_isolation_adequacy/island_area_from_polygon.csv \
+            --output-summary results/aislands_isolation_adequacy/island_area_summary.json
+
+      - name: Enforce pre-outcome island-isolation gate
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          root = Path('results/aislands_isolation_adequacy')
+          source = json.loads((root / 'source/source_manifest.json').read_text())
+          model = json.loads((root / 'island_model_audit_summary.json').read_text())
+          area = json.loads((root / 'island_area_summary.json').read_text())
+          contract = json.loads(Path('validation/aislands_isolation_adequacy_20260812/preoutcome_contract.json').read_text())
+          area_rows = list(csv.DictReader((root / 'island_area_from_polygon.csv').open()))
+
+          assert source['resolved_record_id'] == 10775810
+          assert source['version'] == '1.0'
+          assert source['island_data_sha256'] == 'd26ae154aeae1e6eab268f22268342077f7e8e7ef000d18a1f052f65866d5bde'
+          assert source['species_data_sha256'] == '43e7d2e8deb1d1d635c8db44a7fe68cfb79c2a059a2207914413a62431eb7b0c'
+          assert model['surveyed_islands_with_species_rows'] == 842
+          assert model['coordinate_evaluable_islands'] == 842
+          assert model['area_evaluable_islands'] == 0
+          assert contract['outcomes_inspected_for_this_extension'] is False
+          assert contract['geometry_gate']['external_area_sources_allowed'] is False
+          assert contract['primary_contrast'] == 'candidate C minus reference R3 matched held-out log loss'
+          assert area['shapefile_type'] in contract['geometry_gate']['required_shape_family']
+          assert area['surveyed_islands'] == 842
+          assert area['finite_positive_area_islands'] == 842
+          assert area['gate_passes'] is True
+          assert area['species_outcomes_used'] is False
+          assert area['sdm_outputs_used'] is False
+          assert area['eog_outputs_used'] is False
+          assert len(area_rows) == 842
+          assert all(row['finite_positive'] == '1' for row in area_rows)
+          assert min(float(row['area_km2']) for row in area_rows) > 0
+
+          print(json.dumps({
+              'source_record': source['resolved_record_id'],
+              'shape_type': area['shapefile_type'],
+              'islands': area['finite_positive_area_islands'],
+              'area_range_km2': area['derived_area_km2'],
+              'area_table_sha256': area['output_area_table_sha256'],
+              'outcomes_used': False,
+          }, indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aislands-isolation-adequacy-contract
+          path: |
+            validation/aislands_isolation_adequacy_20260812/preoutcome_contract.json
+            docs/aislands_isolation_adequacy_preoutcome_contract.md
+            results/aislands_isolation_adequacy/source/source_manifest.json
+            results/aislands_isolation_adequacy/island_model_audit.csv
+            results/aislands_isolation_adequacy/island_model_audit_summary.json
+            results/aislands_isolation_adequacy/island_area_from_polygon.csv
+            results/aislands_isolation_adequacy/island_area_summary.json
+          if-no-files-found: error
