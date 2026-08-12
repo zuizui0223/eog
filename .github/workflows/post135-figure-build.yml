@@ -7,13 +7,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   figure4:
+    if: ${{ !contains(github.event.head_commit.message || '', '[figure-output]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: agent/post135-figure-alignment
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -23,6 +26,23 @@ jobs:
         run: python figures/build_figure_4_boundary.py --build-timestamp 2026-08-12T08:40:00Z
       - name: Smoke-test Figure 4 values
         run: python -m pytest -q tests/test_structural_figure_4.py -k 'frozen_values_and_three_separate_axes or plot_code_has_no_frozen_effect_literals'
+      - name: Commit generated outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            figures/output/figure_4_boundary.svg \
+            figures/output/figure_4_metadata.json \
+            figures/output/figure_4_panel_data.csv \
+            manuscript/figure_4_caption.md \
+            manuscript/figure_4_accessibility.md \
+            manuscript/figure_data/structural_cross_system_evidence.csv
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "Regenerate post-135 Figure 4 outputs [figure-output]"
+            git push origin HEAD:agent/post135-figure-alignment
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: post135-figure4-generated
