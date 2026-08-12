@@ -1,0 +1,25 @@
+{
+  "schema_version": "eog_strong_reference_submission_finalization_trigger_v1",
+  "date": "2026-08-12",
+  "scope": "presentation_and_submission_package_only",
+  "scientific_results_mutable": false,
+  "aislands_strong_reference_result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
+  "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4",
+  "allowed_changes": [
+    "Figure 4 reference-depth presentation",
+    "Figure 5 provenance synchronization",
+    "submission manifest status",
+    "checklist completion state",
+    "data/code availability description",
+    "supplementary evidence list",
+    "offline package verification"
+  ],
+  "forbidden_changes": [
+    "rerun biological outcome",
+    "change R3 or C",
+    "change graph radii",
+    "change taxa or folds",
+    "change frozen effect estimates or intervals",
+    "weaken adverse result"
+  ]
+}
