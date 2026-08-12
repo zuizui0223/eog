@@ -43,6 +43,18 @@ The distinctive combination is:
 
 No individual item above should be called unprecedented. The claim is about the combined diagnostic architecture.
 
+## Generalisable cross-fitting principle
+
+A particularly strong informatics contribution is broader than the EOG score itself:
+
+> **Any spatial predictor whose value is derived from the observed response must respect the train/test boundary and be reconstructed from training responses only.**
+
+This applies in principle to nearest occupied-source distance, occupied-source density, source-weighted connectivity, occupancy-conditioned network summaries, and other response-derived spatial features. Spatial CV alone is insufficient if a predictor was constructed before the split using occurrence labels that later appear in the held-out fold.
+
+EOG operationalises this rule by rebuilding occurrence anchors inside each outer-training set and forbidding the focal target from acting as its own source. Cross-fitting itself is not claimed as a new statistical concept. The potentially distinctive ecological contribution is making this leakage boundary an explicit, executable contract for source-conditioned graph features and evaluating its consequences in structural prediction.
+
+The controlled simulation benchmark below should therefore include a deliberately leaky comparator. If all-occurrence anchors inflate apparent structural gain when the data-generating process contains no extra structural information, the simulation would demonstrate why the training-only construction is necessary rather than merely documenting it as a software choice.
+
 ## Highest-return novelty additions
 
 ### Priority A — controlled simulation benchmark
