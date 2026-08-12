@@ -64,10 +64,11 @@ def _normalise(value: object) -> str:
 def _find_australia_record(reader: shapefile.Reader):
     """Select the unique Australia *country* feature, not Australian dependencies.
 
-    Natural Earth's sovereignty fields deliberately group several dependencies under
-    Australia (``SOV_A3=AUS``), so sovereignty is too broad for this task.  The fixed
-    selector therefore requires the country-level pair ``ADMIN=Australia`` and
-    ``ADM0_A3=AUS``.  Other AUS-sovereignty records are retained only as diagnostics.
+    Natural Earth's sovereignty fields group the country and several Australian
+    dependencies under the same sovereign name, so sovereignty alone is too broad for
+    this task.  The fixed selector therefore requires the country-level pair
+    ``ADMIN=Australia`` and ``ADM0_A3=AUS``.  All records whose sovereign name is
+    Australia are retained only as diagnostics.
     """
     fields = [field[0] for field in reader.fields[1:]]
     strict_candidates = []
@@ -75,7 +76,7 @@ def _find_australia_record(reader: shapefile.Reader):
     for shape_record in reader.iterShapeRecords():
         record = shape_record.record.as_dict()
         values = {key.casefold(): _normalise(value) for key, value in record.items()}
-        if values.get("sov_a3") == "aus":
+        if values.get("sovereignt") == "australia":
             sovereign_diagnostics.append(
                 {
                     "admin": str(record.get("ADMIN", "")).strip(),
@@ -83,6 +84,8 @@ def _find_australia_record(reader: shapefile.Reader):
                     "sovereignt": str(record.get("SOVEREIGNT", "")).strip(),
                     "sov_a3": str(record.get("SOV_A3", "")).strip(),
                     "type": str(record.get("TYPE", "")).strip(),
+                    "iso_a3": str(record.get("ISO_A3", "")).strip(),
+                    "ne_id": str(record.get("NE_ID", "")).strip(),
                 }
             )
         if values.get("admin") == "australia" and values.get("adm0_a3") == "aus":
@@ -91,7 +94,7 @@ def _find_australia_record(reader: shapefile.Reader):
         raise ValueError(
             "expected exactly one Natural Earth country feature with "
             f"ADMIN=Australia and ADM0_A3=AUS, found {len(strict_candidates)}; "
-            f"AUS-sovereignty diagnostics={sovereign_diagnostics}; fields={fields}"
+            f"Australian-sovereignty diagnostics={sovereign_diagnostics}; fields={fields}"
         )
     selected = strict_candidates[0]
     selected_record = selected.record.as_dict()
@@ -207,7 +210,7 @@ def freeze_mainland(
         "fields": fields,
         "australia_feature_selector": "ADMIN=Australia AND ADM0_A3=AUS",
         "selected_australia_identifiers": selected_identifiers,
-        "aus_sovereignty_feature_diagnostics": sovereign_diagnostics,
+        "australian_sovereignty_feature_diagnostics": sovereign_diagnostics,
         "shape_type": shape.shapeTypeName,
         "australia_ring_count": len(rings),
         "selected_mainland_ring_index": int(mainland_index),
