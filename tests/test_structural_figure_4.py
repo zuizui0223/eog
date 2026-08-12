@@ -10,6 +10,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "figures/build_figure_4_boundary.py"
+STRONG = ROOT / "validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json"
 
 
 def builder():
@@ -30,31 +31,37 @@ def run_tmp(tmp_path: Path):
         output_dir=tmp_path / "out",
         caption_path=caption,
         accessibility_path=alt,
-        build_timestamp="2026-08-11T01:30:00Z",
+        build_timestamp="2026-08-12T08:40:00Z",
     )
     return b, outputs, data, caption, alt
 
 
-def test_frozen_values_and_separate_axes(tmp_path: Path) -> None:
+def test_frozen_values_and_three_separate_axes(tmp_path: Path) -> None:
     b, outputs, data, caption, alt = run_tmp(tmp_path)
     rows = list(csv.DictReader(data.open(newline="", encoding="utf-8")))
-    assert [r["benchmark_id"] for r in rows] == ["A_ISLANDS", "TANZANIA"]
+    assert [r["benchmark_id"] for r in rows] == ["A_ISLANDS_ORIGINAL", "A_ISLANDS_STRONG", "TANZANIA"]
     a = json.loads((ROOT / "benchmarks/aislands_authoritative_expected.json").read_text())
+    strong = json.loads(STRONG.read_text())
     t = json.loads((ROOT / "benchmarks/tanzania_heldout_expected.json").read_text())
-    primary = t["expected_projection"]["contrasts"]["primary::primary_loso"]
+    tprimary = t["expected_projection"]["contrasts"]["primary::primary_loso"]
     assert float(rows[0]["effect"]) == pytest.approx(a["overall_conditional_concordance"])
-    assert float(rows[1]["effect"]) == pytest.approx(primary["macro_mean_species_log_loss_difference"])
-    assert rows[1]["source_fingerprint"] == t["expected_projection"]["result_fingerprint"]
+    assert float(rows[1]["effect"]) == pytest.approx(strong["primary"]["species_macro_mean"])
+    assert rows[1]["source_fingerprint"] == strong["result_fingerprint"]
+    assert float(rows[2]["effect"]) == pytest.approx(tprimary["macro_mean_species_log_loss_difference"])
+    assert rows[2]["source_fingerprint"] == t["expected_projection"]["result_fingerprint"]
     svg = outputs["svg"].read_text()
     ET.fromstring(svg)
-    assert "separate scales" in svg
-    assert "no incremental benefit" in svg.lower()
+    assert "own metric scale" in svg
+    assert "No predictive increment beyond R3" in svg
+    assert "No incremental benefit beyond current flow" in svg
     assert all(term not in svg.lower() for term in b.PROHIBITED_TERMS)
     metadata = json.loads(outputs["metadata"].read_text())
     assert metadata["metrics_share_axis"] is False
-    assert metadata["sources"]["aislands"]["workflow_run_id"] == 31251171516
-    assert "incompatible metrics" in caption.read_text()
-    assert "axes are deliberately separate" in alt.read_text().lower()
+    assert metadata["row_count"] == 3
+    assert metadata["sources"]["aislands_original"]["workflow_run_id"] == 31251171516
+    assert metadata["sources"]["aislands_strong_reference"]["result_fingerprint"] == b.AIS_STRONG_FP
+    assert "Each row uses its own endpoint" in caption.read_text()
+    assert "separate scales" in alt.read_text().lower()
 
 
 def test_committed_outputs_reproduce(tmp_path: Path) -> None:
@@ -83,5 +90,5 @@ def test_aislands_sha_gate_rejects_tampering(tmp_path: Path) -> None:
 
 def test_plot_code_has_no_frozen_effect_literals() -> None:
     source = SCRIPT.read_text()
-    for literal in ("0.617746592", "0.032113119", "0.608680609", "0.048675011"):
+    for literal in ("0.617746592", "0.003485182", "0.032113119", "0.608680609", "0.004508216"):
         assert literal not in source
