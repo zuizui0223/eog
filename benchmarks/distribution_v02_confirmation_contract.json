@@ -83,14 +83,14 @@
     },
     "confirmation_runner": {
       "path": "benchmarks/run_distribution_v02_confirmation.py",
-      "git_blob_sha": "5e29fc08f96d81a0d39540eac0ebd1152af68c2a"
+      "git_blob_sha": "15596b4f2de07113a3b6614f43289323baec3765"
     }
   },
   "execution_authorized": false,
   "pending_before_execution": [
     "pass source-blob/seed/gate validation from the frozen confirmation runner",
     "pass package regression checks with the final ensemble and confirmation runner",
-    "add a separate explicit execution authorization that hard-matches this contract Git blob"
+    "set the separate authorization file to true while hard-matching this exact contract Git blob"
   ],
   "scientific_boundary": "Synthetic confirmation evaluates predictive support under declared source-conditioned generators. It does not establish realized movement, colonisation probability, latent occupancy, or universal empirical superiority over dynamic, mechanistic, circuit-theory, or other process/connectivity models."
 }
