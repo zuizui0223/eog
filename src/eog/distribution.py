@@ -139,6 +139,8 @@ class EOGDistributionModel:
     bottleneck_cost_scale: float
     structural_gate_weight: float
     structural_gate_fitted: bool
+    structural_gate_cross_fitted: bool
+    gate_fold_ids: tuple[str, ...] | None
     training_gate_log_loss: float
     prediction: EOGDistributionPrediction
     fingerprint: str
@@ -236,6 +238,22 @@ def _normalize_observations(
     if not np.isfinite(y).all() or not np.all(np.isin(y, (0.0, 1.0))):
         raise ValueError("response must contain only finite binary 0/1 values")
     return ids, y
+
+
+def _normalize_gate_folds(
+    gate_fold_ids: Sequence[object] | None,
+    n_observations: int,
+) -> tuple[str, ...] | None:
+    if gate_fold_ids is None:
+        return None
+    folds = tuple(str(value) for value in gate_fold_ids)
+    if len(folds) != n_observations:
+        raise ValueError("gate_fold_ids must align with observed_node_ids")
+    if any(not value.strip() for value in folds):
+        raise ValueError("gate_fold_ids must be non-empty")
+    if len(set(folds)) < 2:
+        raise ValueError("gate_fold_ids must contain at least two folds")
+    return folds
 
 
 def _adjacency(graph: BuiltBridgeGraph, weights: BridgeWeights):
@@ -391,6 +409,68 @@ def _fit_structural_gate(
     return best_weight, True, best_loss
 
 
+def _cross_fitted_gate_inputs(
+    graph: BuiltBridgeGraph,
+    predictors: np.ndarray,
+    observed_ids: tuple[str, ...],
+    observed_rows: np.ndarray,
+    response: np.ndarray,
+    folds: tuple[str, ...],
+    config: EOGDistributionConfig,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Build out-of-fold environmental and accessibility inputs for gate fitting."""
+    fold_array = np.asarray(folds, dtype=object)
+    environmental = np.full(len(observed_ids), np.nan, dtype=float)
+    accessibility = np.full(len(observed_ids), np.nan, dtype=float)
+
+    for fold in sorted(set(folds)):
+        test_mask = fold_array == fold
+        train_mask = ~test_mask
+        if not test_mask.any() or not train_mask.any():
+            raise ValueError(f"invalid gate fold: {fold}")
+        inner_support = fit_penalized_logistic_support(
+            predictors[observed_rows[train_mask]],
+            response[train_mask],
+            l2_penalty=config.l2_penalty,
+            min_class_count=config.min_class_count,
+        )
+        environmental[test_mask] = inner_support.predict_support(
+            predictors[observed_rows[test_mask]]
+        )
+
+        inner_source_ids = tuple(
+            sorted(
+                node_id
+                for node_id, value, keep in zip(observed_ids, response, train_mask)
+                if keep and value == 1.0
+            )
+        )
+        if not inner_source_ids:
+            raise SupportModelError(f"gate fold {fold} leaves no positive structural source")
+        inner_source_indices = tuple(graph.node_index[node_id] for node_id in inner_source_ids)
+        cumulative = _two_best_source_costs(
+            graph, inner_source_indices, config.bridge_weights, bottleneck=False
+        )
+        bottleneck = _two_best_source_costs(
+            graph, inner_source_indices, config.bridge_weights, bottleneck=True
+        )
+        cumulative_scale = _positive_scale(cumulative.primary)
+        bottleneck_scale = _positive_scale(bottleneck.primary)
+        fold_accessibility = _structural_accessibility(
+            cumulative.primary,
+            bottleneck.primary,
+            cumulative_scale=cumulative_scale,
+            bottleneck_scale=bottleneck_scale,
+            cumulative_weight=config.cumulative_cost_weight,
+            bottleneck_weight=config.bottleneck_cost_weight,
+        )
+        accessibility[test_mask] = fold_accessibility[observed_rows[test_mask]]
+
+    if not np.isfinite(environmental).all() or not np.isfinite(accessibility).all():
+        raise ValueError("cross-fitted gate inputs contain non-finite values")
+    return environmental, accessibility
+
+
 def _canonical_barriers(
     barriers: Mapping[tuple[str, str], float] | None,
 ) -> list[tuple[str, str, float]]:
@@ -413,21 +493,26 @@ def fit_eog_distribution(
     *,
     support_predictors: np.ndarray | None = None,
     barriers: Mapping[tuple[str, str], float] | None = None,
+    gate_fold_ids: Sequence[object] | None = None,
     reference_provenance: str = "EOG distribution-model landscape environmental reference",
 ) -> EOGDistributionModel:
     """Fit EOG on one declared landscape universe and return a full distribution map.
 
-    Only response-positive training rows become structural sources. During validation,
-    held-out labels must not be supplied here. The optional structural gate is fitted
-    from training rows only. For positive source rows used to fit that gate, structural
-    accessibility is recomputed from the *second-best* source path, preventing a source
-    from proving its own accessibility with a zero-cost self anchor.
+    Only response-positive training rows become structural sources. During outer
+    validation, held-out labels must not be supplied here.
+
+    When ``gate_fold_ids`` is supplied and the gate is estimated, both environmental
+    support and structural accessibility used to select the gate are generated
+    out-of-fold. Inner held-out positive rows are completely absent from the source set.
+    Without gate folds, a stricter-than-self but non-cross-fitted fallback uses the
+    second-best distinct source path for positive rows during gate fitting.
     """
     input_nodes = tuple(landscape_nodes)
     ordered_nodes = _validate_nodes(input_nodes)
     node_index = {node.node_id: i for i, node in enumerate(ordered_nodes)}
     predictors = _reorder_support_predictors(input_nodes, ordered_nodes, support_predictors)
     observed_ids, y = _normalize_observations(node_index, observed_node_ids, response)
+    folds = _normalize_gate_folds(gate_fold_ids, len(observed_ids))
 
     observed_rows = np.asarray([node_index[node_id] for node_id in observed_ids], dtype=int)
     support_model = fit_penalized_logistic_support(
@@ -476,25 +561,40 @@ def fit_eog_distribution(
         cumulative_scale=cumulative_scale,
     )
 
-    training_cumulative = cumulative.primary[observed_rows].copy()
-    training_bottleneck = bottleneck.primary[observed_rows].copy()
-    for position, (node_id, value) in enumerate(zip(observed_ids, y)):
-        if value == 1.0:
-            row = graph.node_index[node_id]
-            training_cumulative[position] = cumulative.secondary[row]
-            training_bottleneck[position] = bottleneck.secondary[row]
-    training_accessibility = _structural_accessibility(
-        training_cumulative,
-        training_bottleneck,
-        cumulative_scale=cumulative_scale,
-        bottleneck_scale=bottleneck_scale,
-        cumulative_weight=config.cumulative_cost_weight,
-        bottleneck_weight=config.bottleneck_cost_weight,
-    )
+    gate_cross_fitted = False
+    if config.structural_gate_weight is None and folds is not None:
+        gate_environmental, gate_accessibility = _cross_fitted_gate_inputs(
+            graph,
+            predictors,
+            observed_ids,
+            observed_rows,
+            y,
+            folds,
+            config,
+        )
+        gate_cross_fitted = True
+    else:
+        gate_environmental = environmental_support[observed_rows]
+        training_cumulative = cumulative.primary[observed_rows].copy()
+        training_bottleneck = bottleneck.primary[observed_rows].copy()
+        for position, (node_id, value) in enumerate(zip(observed_ids, y)):
+            if value == 1.0:
+                row = graph.node_index[node_id]
+                training_cumulative[position] = cumulative.secondary[row]
+                training_bottleneck[position] = bottleneck.secondary[row]
+        gate_accessibility = _structural_accessibility(
+            training_cumulative,
+            training_bottleneck,
+            cumulative_scale=cumulative_scale,
+            bottleneck_scale=bottleneck_scale,
+            cumulative_weight=config.cumulative_cost_weight,
+            bottleneck_weight=config.bottleneck_cost_weight,
+        )
+
     gate_weight, gate_fitted, gate_loss = _fit_structural_gate(
         y,
-        environmental_support[observed_rows],
-        training_accessibility,
+        gate_environmental,
+        gate_accessibility,
         config,
     )
     distribution_support = _gate_fusion(
@@ -514,7 +614,7 @@ def fit_eog_distribution(
     )
 
     payload = {
-        "schema": "eog_distribution_model_v0_1",
+        "schema": "eog_distribution_model_v0_2",
         "config": asdict(config),
         "graph_fingerprint": graph.fingerprint,
         "reference": reference.to_dict(),
@@ -523,6 +623,7 @@ def fit_eog_distribution(
         ),
         "sources": list(source_ids),
         "barriers": _canonical_barriers(barriers),
+        "gate_fold_ids": None if folds is None else list(folds),
         "support_model": {
             "predictor_mean": support_model.predictor_mean.tolist(),
             "predictor_scale": support_model.predictor_scale.tolist(),
@@ -534,6 +635,7 @@ def fit_eog_distribution(
         "bottleneck_cost_scale": bottleneck_scale,
         "structural_gate_weight": gate_weight,
         "structural_gate_fitted": gate_fitted,
+        "structural_gate_cross_fitted": gate_cross_fitted,
         "training_gate_log_loss": gate_loss,
         "prediction": prediction.to_dict(),
     }
@@ -553,6 +655,8 @@ def fit_eog_distribution(
         bottleneck_cost_scale=float(bottleneck_scale),
         structural_gate_weight=float(gate_weight),
         structural_gate_fitted=bool(gate_fitted),
+        structural_gate_cross_fitted=bool(gate_cross_fitted),
+        gate_fold_ids=folds,
         training_gate_log_loss=float(gate_loss),
         prediction=prediction,
         fingerprint=fingerprint,
