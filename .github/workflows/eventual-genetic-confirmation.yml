@@ -10,13 +10,13 @@ on:
       - "src/eog/dynamic_island_reachability.py"
       - "src/eog/neutral_genetics_simulator.py"
       - ".github/workflows/eventual-genetic-confirmation.yml"
-  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   confirm:
+    if: github.event.pull_request.head.sha == 'c73e276360fbeb24057434a79157501db2ca6367'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
