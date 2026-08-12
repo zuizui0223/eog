@@ -1,18 +1,20 @@
 """Experimental source-conditioned distribution modelling for EOG.
 
-This module is deliberately separate from the frozen structural manuscript.  It turns
+This module is deliberately separate from the frozen structural manuscript. It turns
 EOG's graph primitives into a location-indexed distribution-support model rather than
 adding one connected-frequency predictor to an external SDM.
 
-The model operates on a *declared landscape node universe*.  Observation labels are
-available for only a subset of those nodes.  Positive training observations define
+The model operates on a *declared landscape node universe*. Observation labels are
+available for only a subset of those nodes. Positive training observations define
 sources; unlabelled landscape nodes may act as neutral intermediate nodes but never as
-sources.  The model returns three separate quantities for every landscape node:
+sources. The model returns three separate quantities for every landscape node:
 
 1. pointwise environmental support;
 2. source-conditioned structural accessibility;
-3. their explicitly declared fusion, called distribution support.
+3. a shrinkable structural gate applied to environmental support.
 
+The gate weight lies in [0, 1]. A value of zero reduces EOG exactly to the pointwise
+environmental model, while a value of one applies the full accessibility constraint.
 Distribution support is a unit-interval support index, not yet a calibrated occupancy,
 colonisation, dispersal, or movement probability.
 """
@@ -49,24 +51,27 @@ class EOGDistributionConfig:
     bridge_weights: BridgeWeights = field(default_factory=BridgeWeights)
     cumulative_cost_weight: float = 1.0
     bottleneck_cost_weight: float = 1.0
-    environmental_support_weight: float = 1.0
-    structural_accessibility_weight: float = 1.0
+    structural_gate_weight: float | None = None
+    structural_gate_penalty: float = 0.0
+    gate_grid_size: int = 1001
     l2_penalty: float = 1.0
     min_class_count: int = 2
 
     def __post_init__(self) -> None:
         cost_weights = (self.cumulative_cost_weight, self.bottleneck_cost_weight)
-        fusion_weights = (
-            self.environmental_support_weight,
-            self.structural_accessibility_weight,
-        )
-        all_weights = cost_weights + fusion_weights
-        if not all(np.isfinite(all_weights)) or any(value < 0 for value in all_weights):
-            raise ValueError("distribution-model weights must be finite and non-negative")
+        if not all(np.isfinite(cost_weights)) or any(value < 0 for value in cost_weights):
+            raise ValueError("structural cost weights must be finite and non-negative")
         if not any(value > 0 for value in cost_weights):
             raise ValueError("at least one structural cost weight must be positive")
-        if not any(value > 0 for value in fusion_weights):
-            raise ValueError("at least one distribution fusion weight must be positive")
+        if self.structural_gate_weight is not None and (
+            not np.isfinite(self.structural_gate_weight)
+            or not 0.0 <= self.structural_gate_weight <= 1.0
+        ):
+            raise ValueError("structural_gate_weight must lie in [0, 1] when supplied")
+        if not np.isfinite(self.structural_gate_penalty) or self.structural_gate_penalty < 0:
+            raise ValueError("structural_gate_penalty must be finite and non-negative")
+        if self.gate_grid_size < 2:
+            raise ValueError("gate_grid_size must be at least two")
         if not np.isfinite(self.l2_penalty) or self.l2_penalty <= 0:
             raise ValueError("l2_penalty must be finite and positive")
         if self.min_class_count < 1:
@@ -132,6 +137,9 @@ class EOGDistributionModel:
     observed_response: tuple[int, ...]
     cumulative_cost_scale: float
     bottleneck_cost_scale: float
+    structural_gate_weight: float
+    structural_gate_fitted: bool
+    training_gate_log_loss: float
     prediction: EOGDistributionPrediction
     fingerprint: str
 
@@ -248,13 +256,7 @@ def _two_best_source_costs(
     *,
     bottleneck: bool,
 ) -> _SourceCostPair:
-    """Find the two best costs reaching every node from distinct source nodes.
-
-    The algorithm propagates only the two best source labels at each node.  Because
-    edge accumulation is monotone for both addition and ``max``, a third-worse source
-    label at an intermediate node cannot become one of the two best labels after the
-    same non-negative outgoing edge is applied.
-    """
+    """Find the two best costs reaching every node from distinct source nodes."""
     sources = tuple(sorted(set(int(index) for index in source_indices)))
     if not sources:
         raise ValueError("at least one source node is required")
@@ -345,21 +347,48 @@ def _source_redundancy(
     return np.clip(result, 0.0, 1.0)
 
 
-def _geometric_fusion(
+def _gate_fusion(
     environmental: np.ndarray,
     accessibility: np.ndarray,
-    *,
-    environmental_weight: float,
-    accessibility_weight: float,
+    gate_weight: float,
 ) -> np.ndarray:
-    denominator = environmental_weight + accessibility_weight
-    result = np.ones_like(environmental, dtype=float)
-    if environmental_weight > 0:
-        result *= np.power(np.clip(environmental, 0.0, 1.0), environmental_weight)
-    if accessibility_weight > 0:
-        result *= np.power(np.clip(accessibility, 0.0, 1.0), accessibility_weight)
-    result = np.power(result, 1.0 / denominator)
+    result = np.asarray(environmental, dtype=float) * (
+        (1.0 - gate_weight) + gate_weight * np.asarray(accessibility, dtype=float)
+    )
     return np.clip(result, 0.0, 1.0)
+
+
+def _binary_log_loss(response: np.ndarray, prediction: np.ndarray) -> float:
+    probability = np.clip(np.asarray(prediction, dtype=float), 1e-12, 1.0 - 1e-12)
+    y = np.asarray(response, dtype=float)
+    return float(np.mean(-(y * np.log(probability) + (1.0 - y) * np.log1p(-probability))))
+
+
+def _fit_structural_gate(
+    response: np.ndarray,
+    environmental_support: np.ndarray,
+    training_accessibility: np.ndarray,
+    config: EOGDistributionConfig,
+) -> tuple[float, bool, float]:
+    if config.structural_gate_weight is not None:
+        weight = float(config.structural_gate_weight)
+        loss = _binary_log_loss(
+            response, _gate_fusion(environmental_support, training_accessibility, weight)
+        )
+        return weight, False, loss
+
+    best_weight = 0.0
+    best_objective = float("inf")
+    best_loss = float("inf")
+    for weight in np.linspace(0.0, 1.0, config.gate_grid_size):
+        prediction = _gate_fusion(environmental_support, training_accessibility, float(weight))
+        loss = _binary_log_loss(response, prediction)
+        objective = loss + 0.5 * config.structural_gate_penalty * float(weight * weight)
+        if objective < best_objective - 1e-15:
+            best_objective = objective
+            best_loss = loss
+            best_weight = float(weight)
+    return best_weight, True, best_loss
 
 
 def _canonical_barriers(
@@ -388,26 +417,11 @@ def fit_eog_distribution(
 ) -> EOGDistributionModel:
     """Fit EOG on one declared landscape universe and return a full distribution map.
 
-    Parameters
-    ----------
-    landscape_nodes:
-        Every patch/cell/node allowed to participate in the structural graph.  Nodes
-        without observations are neutral intermediate states, never implicit sources.
-    observed_node_ids, response:
-        Training observations.  Only rows with response == 1 become source anchors.
-        A held-out row must therefore be omitted from these labels during validation.
-    support_predictors:
-        Optional pointwise predictors for every landscape node.  When omitted, each
-        node's ``environmental_state`` is also used by the pointwise support model.
-
-    Notes
-    -----
-    The returned ``distribution_support`` is not calibrated as an occupancy or
-    colonisation probability.  The current v0 fusion is deliberately explicit and
-    parameter-free after fitting the pointwise support model: a weighted geometric
-    mean of environmental support and structural accessibility.  Later calibration
-    must be developed prospectively against held-out outcomes rather than tuned to
-    the frozen A-Islands or Tanzania results.
+    Only response-positive training rows become structural sources. During validation,
+    held-out labels must not be supplied here. The optional structural gate is fitted
+    from training rows only. For positive source rows used to fit that gate, structural
+    accessibility is recomputed from the *second-best* source path, preventing a source
+    from proving its own accessibility with a zero-cost self anchor.
     """
     input_nodes = tuple(landscape_nodes)
     ordered_nodes = _validate_nodes(input_nodes)
@@ -461,11 +475,32 @@ def fit_eog_distribution(
         cumulative.secondary,
         cumulative_scale=cumulative_scale,
     )
-    distribution_support = _geometric_fusion(
+
+    training_cumulative = cumulative.primary[observed_rows].copy()
+    training_bottleneck = bottleneck.primary[observed_rows].copy()
+    for position, (node_id, value) in enumerate(zip(observed_ids, y)):
+        if value == 1.0:
+            row = graph.node_index[node_id]
+            training_cumulative[position] = cumulative.secondary[row]
+            training_bottleneck[position] = bottleneck.secondary[row]
+    training_accessibility = _structural_accessibility(
+        training_cumulative,
+        training_bottleneck,
+        cumulative_scale=cumulative_scale,
+        bottleneck_scale=bottleneck_scale,
+        cumulative_weight=config.cumulative_cost_weight,
+        bottleneck_weight=config.bottleneck_cost_weight,
+    )
+    gate_weight, gate_fitted, gate_loss = _fit_structural_gate(
+        y,
+        environmental_support[observed_rows],
+        training_accessibility,
+        config,
+    )
+    distribution_support = _gate_fusion(
         environmental_support,
         accessibility,
-        environmental_weight=config.environmental_support_weight,
-        accessibility_weight=config.structural_accessibility_weight,
+        gate_weight,
     )
     prediction = _make_prediction(
         tuple(node.node_id for node in graph.nodes),
@@ -479,7 +514,7 @@ def fit_eog_distribution(
     )
 
     payload = {
-        "schema": "eog_distribution_model_v0",
+        "schema": "eog_distribution_model_v0_1",
         "config": asdict(config),
         "graph_fingerprint": graph.fingerprint,
         "reference": reference.to_dict(),
@@ -497,6 +532,9 @@ def fit_eog_distribution(
         },
         "cumulative_cost_scale": cumulative_scale,
         "bottleneck_cost_scale": bottleneck_scale,
+        "structural_gate_weight": gate_weight,
+        "structural_gate_fitted": gate_fitted,
+        "training_gate_log_loss": gate_loss,
         "prediction": prediction.to_dict(),
     }
     fingerprint = hashlib.sha256(
@@ -513,6 +551,9 @@ def fit_eog_distribution(
         observed_response=tuple(int(value) for value in y),
         cumulative_cost_scale=float(cumulative_scale),
         bottleneck_cost_scale=float(bottleneck_scale),
+        structural_gate_weight=float(gate_weight),
+        structural_gate_fitted=bool(gate_fitted),
+        training_gate_log_loss=float(gate_loss),
         prediction=prediction,
         fingerprint=fingerprint,
     )
