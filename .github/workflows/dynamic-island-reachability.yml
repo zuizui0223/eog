@@ -12,6 +12,7 @@ on:
       - "benchmarks/dynamic_archipelago_simulation.py"
       - "benchmarks/dynamic_archipelago_neutral_genetics.py"
       - "benchmarks/dynamic_archipelago_reference_depth.py"
+      - "benchmarks/dynamic_archipelago_ibe_boundary.py"
       - ".github/workflows/dynamic-island-reachability.yml"
   workflow_dispatch:
 
@@ -48,6 +49,10 @@ jobs:
         run: |
           python benchmarks/dynamic_archipelago_reference_depth.py \
             > benchmark_results/dynamic_island_reachability/reference_depth.json
+      - name: Run IBD IBE boundary screen
+        run: |
+          python benchmarks/dynamic_archipelago_ibe_boundary.py \
+            > benchmark_results/dynamic_island_reachability/ibe_boundary.json
       - name: Check benchmark contracts
         run: |
           python - <<'PY'
@@ -58,6 +63,7 @@ jobs:
           reachability = json.loads((root / "reachability.json").read_text())
           genetics = json.loads((root / "neutral_genetics.json").read_text())
           reference_depth = json.loads((root / "reference_depth.json").read_text())
+          ibe_boundary = json.loads((root / "ibe_boundary.json").read_text())
 
           scenarios = reachability["scenarios"]
           assert scenarios["open_chain"]["horizon_first_passage_support"] > scenarios["bottleneck"]["horizon_first_passage_support"] > 0
@@ -78,6 +84,12 @@ jobs:
           assert reference_depth["geography_only_null"]["mean_delta_mse"] >= 0
           assert reference_depth["intermediate_structure"]["mean_delta_mse"] < 0
           assert reference_depth["intermediate_structure"]["favourable_seed_count"] == 8
+
+          assert ibe_boundary["status"] == "development-known-truth-ibd-ibe-boundary"
+          assert ibe_boundary["mean_ibd_ibe_mse"] < ibe_boundary["mean_ibd_mse"]
+          assert ibe_boundary["mean_geo_env_current_flow_mse"] < ibe_boundary["mean_ibd_ibe_mse"]
+          assert ibe_boundary["mean_eog_increment_over_strong_reference"] >= 0
+          assert ibe_boundary["eog_added_information_beyond_strong_reference"] is False
           PY
       - name: Upload outputs
         if: success()
