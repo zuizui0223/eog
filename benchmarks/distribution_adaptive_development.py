@@ -1,11 +1,12 @@
 """Adaptive-family development screen on the frozen noisy EOG generators.
 
 This screen reuses the already-open development seeds, so it can guide model-family
-design but cannot confirm superiority.  For every seed/regime, outer target labels are
-untouched.  Within observed training rows, three module-stratified selection folds
-choose among environmental-only, conservative probability-gated EOG, and cross-fitted
-stacked EOG by held-out Bernoulli log loss.  Two orthogonal gate folds are retained
-inside each selection-training subset for source/fusion cross-fitting.
+design but cannot confirm superiority. For every seed/regime, outer target labels are
+untouched. Within each synthetic source module, three crossed selection folds withhold
+some training observations while deliberately retaining source support in the same
+module. They choose among environmental-only, conservative probability-gated EOG, and
+cross-fitted stacked EOG by held-out Bernoulli log loss. Two orthogonal gate folds are
+retained inside each selection-training subset for source/fusion cross-fitting.
 """
 from __future__ import annotations
 
@@ -35,10 +36,22 @@ from eog import fit_eog_distribution
 
 
 def _selection_folds(observed_ids: tuple[str, ...]) -> tuple[str, ...]:
-    return tuple(
-        f"selection_{int(node_id[1:3]) % 3}"
-        for node_id in observed_ids
-    )
+    # Cross selection folds *within* each source module. Source A and source B use
+    # different offsets, so holding one source for selection leaves another declared
+    # training source in that module. This matches the outer target task better than
+    # holding an entire module/source system out during model-family selection.
+    offsets = {
+        "source_a": 0,
+        "right_train": 1,
+        "source_b": 1,
+        "left_train": 2,
+    }
+    result: list[str] = []
+    for node_id in observed_ids:
+        module = int(node_id[1:3])
+        role = node_id.split("_", 1)[1]
+        result.append(f"selection_{(module + offsets[role]) % 3}")
+    return tuple(result)
 
 
 def run_adaptive_development(
@@ -169,12 +182,12 @@ def run_adaptive_development(
         }
 
     return {
-        "schema": "adaptive_eog_noisy_development_v0_1",
+        "schema": "adaptive_eog_noisy_development_v0_2",
         "status": "development_screen_not_confirmation",
         "seeds": list(seeds),
         "regimes": list(REGIMES),
         "selection_rule": {
-            "metric": "Bernoulli log loss on selection-fold held-out training rows",
+            "metric": "Bernoulli log loss on within-module crossed selection folds",
             "complexity_tie_break": ["environmental", "probability_gate", "stacked"],
             "selection_folds": 3,
             "gate_folds": 2,
