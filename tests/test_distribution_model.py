@@ -20,7 +20,7 @@ def _landscape():
     ]
 
 
-def _fit(nodes=None, predictors=None):
+def _fit(nodes=None, predictors=None, gate_weight=1.0):
     nodes = _landscape() if nodes is None else nodes
     return fit_eog_distribution(
         nodes,
@@ -28,6 +28,7 @@ def _fit(nodes=None, predictors=None):
         [1, 1, 0, 0],
         EOGDistributionConfig(
             graph_declaration=BridgeGraphDeclaration(max_geographic_km=30.0),
+            structural_gate_weight=gate_weight,
             min_class_count=2,
         ),
         support_predictors=predictors,
@@ -48,6 +49,23 @@ def test_equal_environmental_support_is_separated_by_structural_accessibility():
     assert np.isinf(prediction.minimum_cumulative_cost[1])
     assert prediction.distribution_support[0] > prediction.distribution_support[1]
     assert prediction.distribution_support[1] == pytest.approx(0.0)
+
+
+def test_zero_gate_reduces_exactly_to_environmental_support():
+    model = _fit(gate_weight=0.0)
+    prediction = model.predict()
+    assert model.structural_gate_weight == 0.0
+    assert model.structural_gate_fitted is False
+    assert np.array_equal(prediction.distribution_support, prediction.environmental_support)
+
+
+def test_full_gate_is_environmental_support_times_accessibility():
+    model = _fit(gate_weight=1.0)
+    prediction = model.predict()
+    assert np.allclose(
+        prediction.distribution_support,
+        prediction.environmental_support * prediction.structural_accessibility,
+    )
 
 
 def test_only_positive_observations_become_sources():
@@ -114,4 +132,12 @@ def test_observed_labels_must_be_inside_declared_landscape():
                 graph_declaration=BridgeGraphDeclaration(max_geographic_km=30.0),
                 min_class_count=2,
             ),
+        )
+
+
+def test_gate_weight_must_lie_in_unit_interval():
+    with pytest.raises(ValueError, match="structural_gate_weight"):
+        EOGDistributionConfig(
+            graph_declaration=BridgeGraphDeclaration(max_geographic_km=30.0),
+            structural_gate_weight=1.1,
         )
