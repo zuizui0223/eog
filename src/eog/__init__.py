@@ -39,6 +39,12 @@ from .support_model import (
     SupportModelError,
     fit_penalized_logistic_support,
 )
+from .distribution import (
+    EOGDistributionConfig,
+    EOGDistributionModel,
+    EOGDistributionPrediction,
+    fit_eog_distribution,
+)
 from .support_topology import (
     ComponentRecovery,
     OccurrenceAnchor,
@@ -146,6 +152,9 @@ __all__ = [
     "ConditionalConcordance",
     "PenalizedLogisticSupportModel",
     "SupportModelError",
+    "EOGDistributionConfig",
+    "EOGDistributionModel",
+    "EOGDistributionPrediction",
     "SupportGridMetadata",
     "SupportTopologyConfig",
     "OccurrenceAnchor",
@@ -195,6 +204,7 @@ __all__ = [
     "nearest_anchor_distance_km",
     "conditional_reachability_concordance",
     "fit_penalized_logistic_support",
+    "fit_eog_distribution",
     "assign_occurrence_anchors",
     "infer_support_topology",
     "summarize_support_components",
