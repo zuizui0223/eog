@@ -1,0 +1,39 @@
+{
+  "schema_version": "eog_structural_closest_prior_gate_v1",
+  "audit_date": "2026-08-12",
+  "submission_status": "hold_until_manuscript_framing_revision_merged",
+  "new_outcome_analysis_required": false,
+  "first_target": "Ecological Informatics",
+  "first_target_decision": "go_after_framing_and_existing_human_release_gates",
+  "methods_in_ecology_and_evolution_current_version": "no_go",
+  "required_closest_prior_dois": [
+    "10.1016/j.ecolmodel.2011.02.011",
+    "10.1371/journal.pone.0072200",
+    "10.1002/ece3.5567",
+    "10.1371/journal.pone.0293966",
+    "10.1002/ecy.4105",
+    "10.1111/1365-2745.14403",
+    "10.1016/j.ecoinf.2024.102464",
+    "10.1111/2041-210X.14444",
+    "10.1016/j.scitotenv.2024.178204",
+    "10.1016/j.ecoinf.2026.103740"
+  ],
+  "defensible_gap": "Leakage-safe, reference-conditioned held-out testing of whether occurrence-conditioned landscape configuration adds information beyond frozen local support, direct source proximity, and where available a stronger landscape-specific connectivity reference.",
+  "not_novel_individually": [
+    "accessible-area or movement limitation in SDM/ENM",
+    "environmental suitability plus connectivity integration",
+    "occupied-neighbour or nearest-occupied-patch predictors",
+    "habitat-network occurrence prediction",
+    "least-cost or circuit connectivity",
+    "dispersal-threshold sensitivity",
+    "connectivity-model uncertainty or scenario ensembles",
+    "general reproducibility principles"
+  ],
+  "frozen_evidence_must_not_change": {
+    "aislands_estimable_taxa": 845,
+    "aislands_conditional_concordance": 0.6177465917820878,
+    "tanzania_species": 60,
+    "tanzania_primary_loso_log_loss_difference": 0.032113119,
+    "tanzania_result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
+  }
+}
