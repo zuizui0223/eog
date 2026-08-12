@@ -68,17 +68,23 @@ def _objective(
 def fit_penalized_logistic_support(
     predictors: np.ndarray,
     response: np.ndarray,
+    prediction_predictors: np.ndarray | None = None,
     *,
     l2_penalty: float = 1.0,
     min_class_count: int = 5,
     max_iterations: int = 200,
     tolerance: float = 1e-9,
-) -> PenalizedLogisticSupportModel:
-    """Fit a deterministic L2-penalized logistic support model.
+) -> PenalizedLogisticSupportModel | np.ndarray:
+    """Fit the deterministic L2 support model, optionally predicting immediately.
 
     Predictor standardization is learned from the supplied training rows only. The
     intercept is not penalized. A damped Newton update is used so the result does not
     depend on a random seed or an external optimizer version.
+
+    ``prediction_predictors`` is only a convenience path for callers that need held-out
+    probabilities immediately after fitting. It does not change fitting, scaling,
+    regularisation, convergence, or any scientific contract. With no prediction array,
+    the historical API is preserved and the fitted model object is returned.
     """
     x = _as_2d_float(predictors)
     y = np.asarray(response, dtype=float)
@@ -151,7 +157,7 @@ def fit_penalized_logistic_support(
     if not converged:
         raise SupportModelError(f"penalized logistic model did not converge in {max_iterations} iterations")
 
-    return PenalizedLogisticSupportModel(
+    model = PenalizedLogisticSupportModel(
         predictor_mean=mean.copy(),
         predictor_scale=scale.copy(),
         coefficients=beta[1:].copy(),
@@ -160,3 +166,6 @@ def fit_penalized_logistic_support(
         converged=True,
         n_iterations=used_iterations,
     )
+    if prediction_predictors is None:
+        return model
+    return model.predict_support(prediction_predictors)
