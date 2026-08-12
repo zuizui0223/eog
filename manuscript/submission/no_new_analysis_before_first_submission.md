@@ -1,19 +1,42 @@
-# No-new-outcome-analysis rule before first submission
+# No-unplanned-outcome-analysis rule before first submission
 
 Effective date: **2026-08-12**
 
-The post-manuscript literature audit identified a required framing and citation correction, not a failure of the frozen empirical results. To avoid outcome-guided escalation of the analysis, the default rule is:
+The original A-Islands and Tanzania outcomes remain frozen. They may not be reopened, retuned, selectively subsetted or replaced to improve novelty, significance, or narrative symmetry.
 
-> **Do not add or retune A-Islands or Tanzania outcome analyses before first submission solely to improve novelty, significance, or narrative symmetry.**
+The default rule remains:
 
-A new outcome analysis is allowed before first submission only if all of the following are true:
+> **Do not add or retune outcome analyses before first submission solely to obtain a stronger or more favourable story.**
 
-1. a specific omitted comparator or validity threat is identified independently from the observed EOG effect direction;
-2. the new estimand and decision rule can be written down before the new result is inspected;
-3. the analysis cannot be satisfied by correcting the literature framing or by narrowing the claim;
-4. the frozen positive A-Islands and adverse Tanzania results remain visible regardless of the new outcome;
-5. the new analysis is labelled prospective relative to this audit rather than retroactively confirmatory.
+## One authorized exception
 
-The present closest-prior audit does **not** identify such a fatal missing comparator. It instead requires the manuscript to acknowledge that suitability+connectivity integration, occupied-neighbour predictors, threshold sensitivity and connectivity uncertainty already have substantial precedents.
+The closest-prior island-biogeography audit identified a specific high-value validity/novelty question that could be specified independently of the existing A-Islands effect direction: whether species-conditioned occupied-source archipelago configuration retains held-out information after a strong multidimensional island-isolation reference.
 
-This rule can be reconsidered in peer review if a reviewer identifies a concrete validity problem or asks for a clearly specified additional analysis. Reviewer-requested analyses must be reported as such and must not replace the frozen results.
+Accordingly, exactly one new pre-submission outcome analysis is authorized:
+
+`aislands_isolation_adequacy_v1_3_exactly_once`
+
+Its complete design was frozen before extension species outcomes in:
+
+- `docs/aislands_isolation_adequacy_preoutcome_contract.md`;
+- `validation/aislands_isolation_adequacy_20260812/preoutcome_contract.json`;
+- `validation/aislands_isolation_adequacy_20260812/area_gate_expected.json`;
+- `validation/aislands_isolation_adequacy_20260812/mainland_gate_expected.json`.
+
+The frozen primary comparison is candidate C minus strong reference R3 matched held-out log loss. The result must be reported whether favourable, null, adverse or indeterminate.
+
+This exception does **not** authorize modification of the original authoritative A-Islands conditional-concordance result or the frozen Tanzania result.
+
+## After the island result
+
+No additional novelty-rescue outcome analysis is permitted before first submission. In particular, do not:
+
+- weaken R3;
+- change the frozen 25/50/125/250-km scales;
+- introduce species-specific radii from the observed result;
+- add a favourable taxon subset;
+- add shapefile-only unsurveyed islands as new graph nodes in response to the result;
+- add another empirical system merely to obtain a positive example;
+- hide the adverse Tanzania benchmark.
+
+If peer review later identifies a concrete validity problem, any new response must be explicitly prospective relative to the frozen island result and reported as reviewer-requested evidence.
