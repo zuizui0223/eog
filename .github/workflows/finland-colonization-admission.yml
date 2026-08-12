@@ -25,24 +25,44 @@ jobs:
           python-version: "3.12"
       - name: Install frozen package code
         run: python -m pip install -e .
-      - name: Download authoritative Dryad dataset archive
+      - name: Resolve and download authoritative public Dryad file
         run: |
           mkdir -p benchmark_results/finland_colonization/raw
+          LANDING="https://datadryad.org/dataset/doi%3A10.5061/dryad.ffbg79cr6"
           curl --fail --location --retry 4 --retry-delay 5 \
-            --user-agent "EOG-v2-response-free-admission/1.0" \
-            "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.ffbg79cr6/download" \
-            --output benchmark_results/finland_colonization/dryad_dataset.zip
-          test -s benchmark_results/finland_colonization/dryad_dataset.zip
-          sha256sum benchmark_results/finland_colonization/dryad_dataset.zip \
-            > benchmark_results/finland_colonization/dryad_archive_sha256.txt
-          unzip -q benchmark_results/finland_colonization/dryad_dataset.zip \
-            -d benchmark_results/finland_colonization/raw
-          find benchmark_results/finland_colonization/raw -type f -maxdepth 3 -print
-          RAW="$(find benchmark_results/finland_colonization/raw -type f -name 'colonization_select.csv' -print -quit)"
-          test -n "$RAW"
+            --user-agent "Mozilla/5.0 EOG-v2-response-free-admission/1.0" \
+            --cookie-jar benchmark_results/finland_colonization/dryad_cookies.txt \
+            "$LANDING" \
+            --output benchmark_results/finland_colonization/dryad_landing.html
+          test -s benchmark_results/finland_colonization/dryad_landing.html
+          sha256sum benchmark_results/finland_colonization/dryad_landing.html \
+            > benchmark_results/finland_colonization/dryad_landing_sha256.txt
+          STREAM_PATH="$(python - <<'PY'
+          import re
+          from pathlib import Path
+          text = Path('benchmark_results/finland_colonization/dryad_landing.html').read_text(encoding='utf-8', errors='ignore')
+          matches = re.findall(r'''(?:href|data-url)=["']([^"']*?/downloads/file_stream/\d+)["']''', text)
+          unique = list(dict.fromkeys(matches))
+          if len(unique) != 1:
+              raise SystemExit(f'expected exactly one public Dryad file stream, found {unique}')
+          print(unique[0])
+          PY
+          )"
+          if [[ "$STREAM_PATH" == http* ]]; then
+            STREAM_URL="$STREAM_PATH"
+          else
+            STREAM_URL="https://datadryad.org${STREAM_PATH}"
+          fi
+          printf '%s\n' "$STREAM_URL" > benchmark_results/finland_colonization/dryad_file_stream_url.txt
+          RAW="benchmark_results/finland_colonization/raw/colonization_select.csv"
+          curl --fail --location --retry 4 --retry-delay 5 \
+            --user-agent "Mozilla/5.0 EOG-v2-response-free-admission/1.0" \
+            --cookie benchmark_results/finland_colonization/dryad_cookies.txt \
+            "$STREAM_URL" --output "$RAW"
           test -s "$RAW"
           printf '%s\n' "$RAW" > benchmark_results/finland_colonization/raw_path.txt
           sha256sum "$RAW" > benchmark_results/finland_colonization/raw_csv_sha256.txt
+          ls -lh "$RAW"
       - name: Run response-free source reconstruction admission
         run: |
           RAW="$(cat benchmark_results/finland_colonization/raw_path.txt)"
@@ -86,7 +106,8 @@ jobs:
         if: always()
         run: |
           rm -rf benchmark_results/finland_colonization/raw
-          rm -f benchmark_results/finland_colonization/dryad_dataset.zip
+          rm -f benchmark_results/finland_colonization/dryad_cookies.txt
+          rm -f benchmark_results/finland_colonization/dryad_landing.html
       - name: Upload response-free admission artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -98,5 +119,6 @@ jobs:
             benchmark_results/finland_colonization/feature_manifest.json
             benchmark_results/finland_colonization/prepare_stdout.json
             benchmark_results/finland_colonization/raw_csv_sha256.txt
-            benchmark_results/finland_colonization/dryad_archive_sha256.txt
+            benchmark_results/finland_colonization/dryad_landing_sha256.txt
+            benchmark_results/finland_colonization/dryad_file_stream_url.txt
           if-no-files-found: warn
