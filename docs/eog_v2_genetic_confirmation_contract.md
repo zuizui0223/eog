@@ -10,6 +10,17 @@ Contract fingerprint:
 
 `9781b171f703010fe16efdd5adc7f12daaa5a3b0be72986438c2bd63e78db1d7`
 
+## Frozen method-source blobs
+
+The confirmation workflow must verify these Git blob hashes **before** running the confirmation simulation:
+
+- `src/eog/eventual_genetic_connectivity.py`: `9c48362b9cc75f3ec50a0fa4b71c356b55f62076`
+- `src/eog/eventual_reachability_genetics.py`: `dcdfb92c40c4b7271517988311cd5fff4df86326`
+- `src/eog/dynamic_island_reachability.py`: `d3d57a8bef431c34f5d2c13e5e061ade40bcb64f`
+- `src/eog/neutral_genetics_simulator.py`: `276f77ea88442b567cc6ad5625bf78d0ace530b6`
+
+If any of these method-source blobs changes, this confirmation is no longer reusable. The workflow should fail before simulation rather than rerun the same confirmation seeds against a changed method.
+
 ## Candidate method
 
 The symmetric FST-oriented EOG predictors are fixed as:
