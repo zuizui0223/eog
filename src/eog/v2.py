@@ -20,6 +20,14 @@ from .eventual_genetic_connectivity import (
     build_eventual_genetic_validation_bundle,
     infer_eventual_genetic_connectivity,
 )
+from .genetic_validation import (
+    GeneticValidationConfig,
+    GeneticValidationContrast,
+    GeneticValidationFoldResult,
+    GeneticValidationModelResult,
+    GeneticValidationResult,
+    evaluate_genetic_validation_ladder,
+)
 from .island_state_layers import (
     AreaSupportDeclaration,
     AreaSupportResult,
@@ -34,11 +42,7 @@ from .reachability_network_diagnostics import (
     summarize_network_flux,
 )
 from .reachability_visualization import build_dynamic_reachability_visualization_payload
-from .synthetic_archipelago import (
-    SCENARIO_IDS,
-    SyntheticArchipelagoScenario,
-    build_synthetic_archipelago,
-)
+from .synthetic_archipelago import SCENARIO_IDS, SyntheticArchipelagoScenario, build_synthetic_archipelago
 
 __all__ = [
     "DynamicReachabilityEdge",
@@ -52,6 +56,12 @@ __all__ = [
     "EventualGeneticValidationBundle",
     "infer_eventual_genetic_connectivity",
     "build_eventual_genetic_validation_bundle",
+    "GeneticValidationConfig",
+    "GeneticValidationFoldResult",
+    "GeneticValidationModelResult",
+    "GeneticValidationContrast",
+    "GeneticValidationResult",
+    "evaluate_genetic_validation_ladder",
     "AreaSupportDeclaration",
     "AreaSupportResult",
     "IslandStateLayers",
