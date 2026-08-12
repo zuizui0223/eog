@@ -11,6 +11,7 @@ on:
       - "tests/test_neutral_genetics_simulator.py"
       - "benchmarks/dynamic_archipelago_simulation.py"
       - "benchmarks/dynamic_archipelago_neutral_genetics.py"
+      - "benchmarks/dynamic_archipelago_reference_depth.py"
       - ".github/workflows/dynamic-island-reachability.yml"
   workflow_dispatch:
 
@@ -43,6 +44,10 @@ jobs:
         run: |
           python benchmarks/dynamic_archipelago_neutral_genetics.py \
             > benchmark_results/dynamic_island_reachability/neutral_genetics.json
+      - name: Run strong-reference depth screen
+        run: |
+          python benchmarks/dynamic_archipelago_reference_depth.py \
+            > benchmark_results/dynamic_island_reachability/reference_depth.json
       - name: Check benchmark contracts
         run: |
           python - <<'PY'
@@ -52,6 +57,7 @@ jobs:
           root = Path("benchmark_results/dynamic_island_reachability")
           reachability = json.loads((root / "reachability.json").read_text())
           genetics = json.loads((root / "neutral_genetics.json").read_text())
+          reference_depth = json.loads((root / "reference_depth.json").read_text())
 
           scenarios = reachability["scenarios"]
           assert scenarios["open_chain"]["horizon_first_passage_support"] > scenarios["bottleneck"]["horizon_first_passage_support"] > 0
@@ -64,6 +70,14 @@ jobs:
           assert genetics["all_seeds_improve"] is True
           assert genetics["mean_delta_mse"] < 0
           assert all(row["delta_mse"] < 0 for row in genetics["rows"])
+
+          assert reference_depth["status"] == "development-known-truth-reference-depth"
+          assert reference_depth["reference"] == "geography-only effective resistance/current-flow"
+          assert reference_depth["null_no_added_information"] is True
+          assert reference_depth["structure_added_information"] is True
+          assert reference_depth["geography_only_null"]["mean_delta_mse"] >= 0
+          assert reference_depth["intermediate_structure"]["mean_delta_mse"] < 0
+          assert reference_depth["intermediate_structure"]["favourable_seed_count"] == 8
           PY
       - name: Upload outputs
         if: success()
