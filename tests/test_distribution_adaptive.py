@@ -119,7 +119,7 @@ def _build_adaptive_landscape(*, structural: bool, n_modules: int = 9):
     )
 
 
-def test_adaptive_eog_selects_environmental_family_on_exact_structural_null():
+def test_adaptive_complexity_margin_can_force_environmental_family_on_structural_null():
     (
         nodes,
         observed_ids,
@@ -144,7 +144,9 @@ def test_adaptive_eog_selects_environmental_family_on_exact_structural_null():
                 structural_gate_penalty=0.01,
                 gate_grid_size=201,
                 min_class_count=4,
-            )
+            ),
+            minimum_structural_log_loss_gain=1.0,
+            minimum_stack_log_loss_gain=1.0,
         ),
         selection_fold_ids=_selection_folds(observed_ids),
         gate_fold_ids=gate_folds,
@@ -162,7 +164,7 @@ def test_adaptive_eog_selects_environmental_family_on_exact_structural_null():
     assert _auc(labels, prediction.distribution_support) == 1.0
 
 
-def test_adaptive_eog_activates_structural_family_when_environment_is_tied():
+def test_adaptive_eog_activates_structural_family_when_environment_is_tied_at_zero_margin():
     (
         nodes,
         observed_ids,
@@ -197,10 +199,28 @@ def test_adaptive_eog_activates_structural_family_when_environment_is_tied():
     prediction = model.predict(target_ids)
 
     assert model.selected_family in {"probability_gate", "stacked"}
+    assert model.structural_log_loss_gain > 0.0
     assert model.candidate_log_loss[model.selected_family] < model.candidate_log_loss[
         "environmental"
     ]
     assert _auc(labels, prediction.distribution_support) == 1.0
+
+
+def test_adaptive_margin_config_rejects_negative_values():
+    base = EOGDistributionConfig(
+        graph_declaration=BridgeGraphDeclaration(max_geographic_km=12.0),
+        min_class_count=2,
+    )
+    for kwargs in (
+        {"minimum_structural_log_loss_gain": -0.01},
+        {"minimum_stack_log_loss_gain": -0.01},
+    ):
+        try:
+            AdaptiveEOGDistributionConfig(base_config=base, **kwargs)
+        except ValueError as exc:
+            assert "non-negative" in str(exc)
+        else:
+            raise AssertionError("negative adaptive complexity margins must be rejected")
 
 
 def test_adaptive_eog_rejects_nonpositive_fixed_source():
