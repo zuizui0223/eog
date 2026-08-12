@@ -23,16 +23,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install frozen package code and browser driver
+      - name: Install frozen package code and browser transport dependencies
         run: |
           python -m pip install -e .
-          python -m pip install "playwright==1.55.0"
+          python -m pip install "playwright==1.55.0" "requests==2.32.5"
           google-chrome --version
-      - name: Download authoritative Dryad file through public browser flow
+      - name: Acquire public AWS WAF token and download authoritative Dryad file
         run: |
           mkdir -p benchmark_results/finland_colonization/raw
           python - <<'PY'
           from pathlib import Path
+          from urllib.parse import urljoin
+          import requests
           from playwright.sync_api import sync_playwright
 
           root = Path("benchmark_results/finland_colonization")
@@ -41,32 +43,81 @@ jobs:
 
           with sync_playwright() as p:
               browser = p.chromium.launch(channel="chrome", headless=True)
-              context = browser.new_context(accept_downloads=True)
+              context = browser.new_context()
               page = context.new_page()
               page.goto(landing, wait_until="domcontentloaded", timeout=120_000)
-              page.wait_for_timeout(2000)
-              links = page.locator("a[href*='/downloads/file_stream/']")
-              count = links.count()
-              if count != 1:
-                  raise RuntimeError(f"expected exactly one Dryad file link, found {count}")
-              href = links.first.get_attribute("href")
+              page.wait_for_function(
+                  "typeof window.AwsWafIntegration !== 'undefined'",
+                  timeout=60_000,
+              )
+              token = page.evaluate(
+                  """async () => {
+                    for (let i = 0; i < 6; i++) {
+                      try {
+                        const value = await window.AwsWafIntegration.getToken();
+                        if (value) return value;
+                      } catch (e) {}
+                      await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                    throw new Error('AWS WAF token acquisition failed');
+                  }"""
+              )
+              if not token:
+                  raise RuntimeError("AWS WAF public challenge returned no token")
+              ua = page.evaluate("navigator.userAgent")
+              link = page.locator("a[href*='/downloads/file_stream/']").first
+              href = link.get_attribute("href")
               if not href:
-                  raise RuntimeError("Dryad file link has no href")
-              (root / "dryad_file_stream_url.txt").write_text(
-                  (href if href.startswith("http") else "https://datadryad.org" + href) + "\n",
-                  encoding="utf-8",
-              )
-              with page.expect_download(timeout=240_000) as download_info:
-                  links.first.click()
-              download = download_info.value
-              download.save_as(raw)
-              (root / "dryad_suggested_filename.txt").write_text(
-                  download.suggested_filename + "\n", encoding="utf-8"
-              )
+                  raise RuntimeError("Dryad landing has no file-stream href")
+              stream = urljoin(landing, href)
+              (root / "dryad_file_stream_url.txt").write_text(stream + "\n", encoding="utf-8")
               browser.close()
 
+          headers = {
+              "User-Agent": ua,
+              "x-aws-waf-token": token,
+              "Accept": "text/csv,application/octet-stream,*/*",
+          }
+          with requests.Session() as session:
+              first = session.get(
+                  stream,
+                  headers=headers,
+                  allow_redirects=False,
+                  stream=True,
+                  timeout=90,
+              )
+              (root / "dryad_stream_status.txt").write_text(str(first.status_code) + "\n")
+              if first.status_code in {301, 302, 303, 307, 308}:
+                  location = first.headers.get("Location")
+                  if not location:
+                      raise RuntimeError("Dryad file stream redirected without Location")
+                  object_url = urljoin(stream, location)
+                  with session.get(
+                      object_url,
+                      headers={"User-Agent": ua},
+                      allow_redirects=True,
+                      stream=True,
+                      timeout=180,
+                  ) as response:
+                      response.raise_for_status()
+                      with raw.open("wb") as handle:
+                          for chunk in response.iter_content(chunk_size=1024 * 1024):
+                              if chunk:
+                                  handle.write(chunk)
+              elif first.status_code == 200:
+                  with first:
+                      with raw.open("wb") as handle:
+                          for chunk in first.iter_content(chunk_size=1024 * 1024):
+                              if chunk:
+                                  handle.write(chunk)
+              else:
+                  body = first.raw.read(4096, decode_content=True)
+                  raise RuntimeError(
+                      f"Dryad tokenized file stream failed with HTTP {first.status_code}: {body[:500]!r}"
+                  )
+
           if not raw.exists():
-              raise RuntimeError("browser download did not create colonization_select.csv")
+              raise RuntimeError("tokenized Dryad request did not create colonization_select.csv")
           size = raw.stat().st_size
           if size < 100_000_000:
               raise RuntimeError(f"downloaded Dryad file is implausibly small: {size} bytes")
@@ -139,6 +190,6 @@ jobs:
             benchmark_results/finland_colonization/raw_csv_sha256.txt
             benchmark_results/finland_colonization/raw_size_bytes.txt
             benchmark_results/finland_colonization/dryad_file_stream_url.txt
-            benchmark_results/finland_colonization/dryad_suggested_filename.txt
+            benchmark_results/finland_colonization/dryad_stream_status.txt
             benchmark_results/finland_colonization/transport_header.txt
           if-no-files-found: warn
