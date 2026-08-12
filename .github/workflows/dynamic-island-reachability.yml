@@ -20,6 +20,7 @@ on:
       - "benchmarks/dynamic_archipelago_reference_depth.py"
       - "benchmarks/dynamic_archipelago_ibe_boundary.py"
       - "benchmarks/dynamic_occurrence_comparator_ladder.py"
+      - "benchmarks/dynamic_genetic_distance_sensitivity.py"
       - "docs/eog_v2_occurrence_comparator_contract.md"
       - ".github/workflows/dynamic-island-reachability.yml"
   workflow_dispatch:
@@ -30,7 +31,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -69,6 +70,10 @@ jobs:
           python benchmarks/dynamic_occurrence_comparator_ladder.py \
             --phase confirmation \
             --output benchmark_results/dynamic_island_reachability/occurrence_comparator_confirmation.json
+      - name: Run genetic-distance development sensitivity
+        run: |
+          python benchmarks/dynamic_genetic_distance_sensitivity.py \
+            > benchmark_results/dynamic_island_reachability/genetic_distance_sensitivity.json
       - name: Check benchmark contracts
         run: |
           python - <<'PY'
@@ -81,6 +86,7 @@ jobs:
           reference_depth = json.loads((root / "reference_depth.json").read_text())
           ibe_boundary = json.loads((root / "ibe_boundary.json").read_text())
           occurrence = json.loads((root / "occurrence_comparator_confirmation.json").read_text())
+          sensitivity = json.loads((root / "genetic_distance_sensitivity.json").read_text())
 
           scenarios = reachability["scenarios"]
           assert scenarios["open_chain"]["horizon_first_passage_support"] > scenarios["bottleneck"]["horizon_first_passage_support"] > 0
@@ -112,6 +118,11 @@ jobs:
           assert occurrence["contract_fingerprint"] == "1b2c5e550019c1e73e8f7199dfcc952dfeed3bbbbc3232d173e811fcd21438e6"
           assert occurrence["decision"]["passed"] is True
           assert all(check["passed"] for check in occurrence["decision"]["checks"].values())
+
+          assert sensitivity["status"] == "development-genetic-distance-sensitivity-before-empirical-genetics"
+          assert sensitivity["n_candidates"] == 24
+          assert sensitivity["selected_candidate"] is not None
+          assert sensitivity["n_eligible"] >= 1
           PY
       - name: Upload outputs
         if: always()
