@@ -35,6 +35,7 @@ from .island_state_layers import (
     area_support_layers,
     assemble_island_state_layers,
 )
+from .reachability_html import render_dynamic_reachability_html
 from .reachability_network_diagnostics import (
     BridgeNodeImportanceResult,
     NetworkFluxDiagnostics,
@@ -72,6 +73,7 @@ __all__ = [
     "summarize_network_flux",
     "evaluate_bridge_node_importance",
     "build_dynamic_reachability_visualization_payload",
+    "render_dynamic_reachability_html",
     "SCENARIO_IDS",
     "SyntheticArchipelagoScenario",
     "build_synthetic_archipelago",
