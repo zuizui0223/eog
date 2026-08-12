@@ -1,0 +1,34 @@
+name: Post-135 figure build
+
+on:
+  push:
+    branches:
+      - agent/post135-figure-alignment
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  figure4:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build Figure 4
+        run: python figures/build_figure_4_boundary.py --build-timestamp 2026-08-12T08:40:00Z
+      - name: Smoke-test Figure 4 values
+        run: python -m pytest -q tests/test_structural_figure_4.py -k 'frozen_values_and_three_separate_axes or plot_code_has_no_frozen_effect_literals'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: post135-figure4-generated
+          path: |
+            figures/output/figure_4_boundary.svg
+            figures/output/figure_4_metadata.json
+            figures/output/figure_4_panel_data.csv
+            manuscript/figure_4_caption.md
+            manuscript/figure_4_accessibility.md
+            manuscript/figure_data/structural_cross_system_evidence.csv
+          if-no-files-found: error
