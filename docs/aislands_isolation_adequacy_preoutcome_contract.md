@@ -41,7 +41,8 @@ No novelty claim may be based on any item above by itself.
 This extension does not supersede the authoritative A-Islands benchmark.
 
 - source: A-Islands v1.0, immutable record 10775810;
-- surveyed universe: 842 species-linked islands;
+- surveyed universe and graph node universe: the same 842 species-linked/model-linked islands used by the authoritative benchmark;
+- shapefile-only records lacking frozen species-incidence rows are **not** added as neutral stepping-stone nodes in this confirmatory extension;
 - cohort: 886 APC-native taxa;
 - folds: frozen five-fold 5-degree spatial partition;
 - climate: CHELSA BIO1/BIO5/BIO6/BIO12/BIO15;
@@ -85,7 +86,7 @@ The acquisition workflow must record the exact archive and extracted-file SHA-25
 
 ### Deterministic mainland rule
 
-1. select exactly one Admin-0 country feature with `ADMIN=Australia` and `ADM0_A3=AUS`; sovereignty identifiers such as `SOV_A3=AUS` are diagnostic only because they also include Australian dependencies;
+1. select exactly one Admin-0 country feature with `ADMIN=Australia` and `ADM0_A3=AUS`; the broader `SOVEREIGNT=Australia` grouping is diagnostic only because it includes the country and five dependencies in the frozen Natural Earth file;
 2. split the selected country's polygon geometry into rings;
 3. calculate spherical absolute area for each ring without using A-Islands occurrences;
 4. select the ring with the largest absolute area as the **continental Australian mainland**;
@@ -94,9 +95,11 @@ The acquisition workflow must record the exact archive and extracted-file SHA-25
 
 This rule deliberately excludes Tasmania and smaller Australian islands from the `mainland` baseline by geometry rather than by a hand-curated island-name list.
 
-### Hard stop
+### Hard stop and frozen result
 
 Do not run the species outcome extension unless the Natural Earth source resolves to the frozen version/hash, exactly one country feature satisfies `ADMIN=Australia` and `ADM0_A3=AUS`, a unique largest mainland ring is obtained, all 842 island centroids receive finite non-negative mainland distances, and the 842-row mainland-distance table is fingerprinted and reproduced exactly.
+
+The outcome-free gate succeeded before any extension species outcome. The fixed mainland ring contains 9,462 vertices and has SHA-256 `18d151bfe8aee727677ba8beca6f244f80a9a3cb3b616de534cf4ba331f042a4`; the 842-row mainland-distance table has SHA-256 `7d6f52f03702dd0cfae061023a1b2f405e39397de73eaad21b97d24176c4f869`. Exact source, geometry and distance fingerprints are stored in `validation/aislands_isolation_adequacy_20260812/mainland_gate_expected.json`.
 
 Natural Earth is used only for this fixed species-independent geographic baseline. It does not define EOG occurrence anchors.
 
@@ -162,10 +165,14 @@ For each taxon × frozen outer fold:
 
 1. build all response-derived spatial features from outer-training labels only;
 2. construct training-row source/EOG features with focal-row self exclusion;
-3. fit each reference/candidate tier using the same deterministic L2-penalized logistic engine, `lambda = 1`, intercept unpenalized, training-only z-standardisation, no class weighting;
-4. score the identical held-out rows for all tiers;
-5. retain a row only when all compared tiers produce finite probabilities;
-6. calculate candidate-minus-reference log loss on matched held-out rows.
+3. require at least five outer-training presences and five outer-training absences, matching the original A-Islands class gate;
+4. within each probability tier, remove only predictors whose outer-training standard deviation is `<= 1e-12`, record every removed column, and apply the same retained column indices unchanged to held-out rows;
+5. fit each tier using the same deterministic L2-penalized logistic engine, `lambda = 1`, intercept unpenalized, training-only z-standardisation, no class weighting and no hyperparameter tuning;
+6. score the identical held-out rows for all tiers;
+7. retain a row for a contrast only when both compared tiers produce finite probabilities;
+8. calculate candidate-minus-reference log loss on matched held-out rows.
+
+The constant-predictor rule mirrors the already-audited reduced-tier policy used by the Tanzania benchmark: a constant EOG or reference column becomes neutral rather than causing an artificial whole-fold failure.
 
 The **primary extension contrast** is `C - R3` log loss. Negative values favour the EOG structural probe. The prespecified secondary is the matched Brier-score difference.
 
@@ -191,7 +198,7 @@ The extension allows all three outcomes:
 2. **Structural saturation / no increment** — interval includes zero or the effect is adverse: the strong reference already captures the tested signal, or EOG adds noise.
 3. **Indeterminate applicability** — data/folds are too sparse for a stable test.
 
-A non-positive result is not grounds for retuning radii, source-pressure scales, topology metrics, species subsets, area handling, mainland-distance definition, landmass weighting, or generic stepping-stone definitions.
+A non-positive result is not grounds for retuning radii, source-pressure scales, topology metrics, species subsets, area handling, mainland-distance definition, landmass weighting, generic stepping-stone definitions, the 5/5 class gate, or the constant-predictor policy.
 
 ## Claim boundary if the primary extension is positive
 
