@@ -24,9 +24,10 @@ jobs:
           python -m pip install -e .
           python -m pip install pyshp==2.3.1 pytest
 
-      - name: Test frozen isolation-reference features and spherical polygon area
+      - name: Test frozen island-isolation contract and geometry features
         run: |
           python -m pytest -q \
+            tests/test_aislands_isolation_adequacy_contract.py \
             tests/test_island_isolation_reference.py \
             tests/test_aislands_polygon_area.py
 
