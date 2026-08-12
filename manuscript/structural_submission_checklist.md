@@ -31,7 +31,9 @@ The paper is **not ready to submit** until every blocking item is complete.
 - [x] Complete Methods converted from executable contracts to prose.
 - [x] Results tables generated directly from frozen artifacts.
 - [x] Results and Discussion written around the conditional evidence boundary rather than superiority.
-- [x] All literature citations currently used in the complete manuscript verified against publisher or primary-repository metadata; ledger: `manuscript/structural_verified_references.md`.
+- [x] Literature-gap and journal-strategy audit completed on 2026-08-12; see `manuscript/submission/novelty_submission_strategy_2026-08-12.md`.
+- [ ] **Closest-prior framing revision merged before release:** the Introduction/Discussion must explicitly position EOG against Berlow 2013, Ortiz-Rodríguez 2019/2023, Van Moorter 2023, Riva et al. 2024, Kim et al. 2024, Prima et al. 2024, Felin et al. 2025, and Cushman et al. 2026. The manuscript must state that suitability+connectivity integration, occupied-neighbour predictors, threshold sensitivity, and connectivity-model uncertainty are not individually novel.
+- [ ] Verified-reference ledger expanded to cover every closest-prior citation used by that framing revision.
 
 ### Figures and machine-readable manuscript evidence
 
@@ -90,10 +92,13 @@ The following shorthand is explicitly prohibited in the manuscript and submissio
 - `EOG outperforms SDM`;
 - `EOG accounts for dispersal` without a narrower structural definition;
 - `connected frequency estimates colonisation probability`;
-- `Tanzania shows current flow is better in general`.
+- `Tanzania shows current flow is better in general`;
+- `EOG is the first framework to integrate suitability and connectivity`;
+- `occurrence anchoring is novel`;
+- `scenario sensitivity or connectivity uncertainty analysis is novel`.
 
 ## Current stop/go rule
 
-**Do not submit** while any submission-blocking checkbox above remains open.
+**Do not submit or mint the final release while any submission-blocking checkbox above remains open.**
 
-The empirical result direction must not be changed by manuscript polishing. A-Islands remains the positive added-information benchmark; Tanzania remains the negative strong-competitor benchmark unless a new, independently frozen analysis explicitly supersedes one of those contracts.
+The empirical result direction must not be changed by manuscript polishing. A-Islands remains the positive added-information benchmark; Tanzania remains the negative strong-competitor benchmark unless a new, independently frozen analysis explicitly supersedes one of those contracts. The 2026-08-12 novelty audit specifically prohibits reopening those outcomes merely to differentiate EOG from existing suitability-connectivity frameworks.
