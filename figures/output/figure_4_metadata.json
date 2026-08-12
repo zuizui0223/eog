@@ -1,38 +1,37 @@
 {
-  "built_at_utc": "2026-08-11T01:30:00Z",
+  "built_at_utc": "2026-08-12T08:40:00Z",
   "figure_id": "figure_4_boundary",
   "metrics_share_axis": false,
   "outputs": {
-    "accessibility_sha256": "8d69183978b7c45b7a233188c7e5cb2ee36b6c34d0c924114ddcf0349d5e7e19",
-    "caption_sha256": "dda2669f5e119c8330db567dc0bcb6167aaf50b466881fa436f50b0320d87798",
-    "output_panel_data_sha256": "c62f3702326a5af9fa7a46d8dadc4149e201263512c46bd0379576821f772f8c",
-    "panel_data_sha256": "c62f3702326a5af9fa7a46d8dadc4149e201263512c46bd0379576821f772f8c",
-    "svg_sha256": "e8a7f87fdbadd1603009e4526776ca4e040926d7fc0d8935918fa4ac377aea24"
+    "accessibility_sha256": "f85ff043f79385ef3ceeec69a0cb7b57c03b3cb90fa03641b52c1173a8ead39e",
+    "caption_sha256": "4c2a82618fc690b17a7c1751cd89125486b4a05efab27874aa994a322ac40153",
+    "output_panel_data_sha256": "d042a07dd27fdcbcab14d3a80a9d1b9ab607634b709386e3afa834a177a8ca47",
+    "panel_data_sha256": "d042a07dd27fdcbcab14d3a80a9d1b9ab607634b709386e3afa834a177a8ca47",
+    "svg_sha256": "f64048829647be6d6d12c012d8ccd03afc107e523a5d1b31c7d6a105ec35c36d"
   },
-  "schema_version": "eog_structural_figure_4_metadata_v1",
+  "row_count": 3,
+  "schema_version": "eog_structural_figure_4_metadata_v2",
   "software": {
     "implementation": "CPython",
-    "python": "3.13.5"
+    "python": "3.12.13"
   },
   "sources": {
-    "aislands": {
+    "aislands_original": {
       "artifact_digest": "sha256:31ff22edf214b48ae99fa8a5510e0e2752b6787dbe6e22602bada0ec96398501",
       "path": "benchmarks/aislands_authoritative_expected.json",
       "sha256": "724d5a7a5bae346f84d229d281fdecc257feb65d2f5b4f2291f4c6edc664ee6c",
       "species_output_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488",
       "workflow_run_id": 31251171516
     },
-    "manifest": {
-      "path": "figures/figure_manifest.json",
-      "sha256": "ea73ad830004ba51ae920fbd137729d9a4a696c7381755eac13c55478fdb3120"
+    "aislands_strong_reference": {
+      "path": "validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json",
+      "result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
+      "sha256": "d361236eb0197807507571eee5e49769e8ad2b994915cb4caceff8b70242c670"
     },
     "tanzania": {
-      "group_rows_sha256": "79fd84fc9f202d1dd0d42f3cc36537791a34a082e16b094d40c119f47921a798",
       "path": "benchmarks/tanzania_heldout_expected.json",
-      "prediction_rows_sha256": "a8c7551d728de41874c795913b1fd17853c5123a7f1c9c6b037ba0028331f6c5",
       "result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4",
-      "sha256": "ae47c3875b2fe07e82d16f6ae710da81003df7ce37b41cba0c03b869cf391071",
-      "species_rows_sha256": "8ff8d931759031c78235f140887d4ed051d5c8e49a7dff992cd17d94fd45c2b3"
+      "sha256": "ae47c3875b2fe07e82d16f6ae710da81003df7ce37b41cba0c03b869cf391071"
     }
   }
 }
