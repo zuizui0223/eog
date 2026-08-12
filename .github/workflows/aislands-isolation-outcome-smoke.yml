@@ -16,6 +16,7 @@ concurrency:
 jobs:
   validate-without-outcome:
     runs-on: ubuntu-latest
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
 
@@ -26,7 +27,7 @@ jobs:
       - name: Install package and audit dependencies
         run: |
           python -m pip install -e .
-          python -m pip install pyshp==2.3.1 pytest
+          python -m pip install pyshp==2.3.1 rasterio==1.4.3 pytest
 
       - name: Run runner unit and contract tests
         run: |
@@ -44,6 +45,26 @@ jobs:
             --expected-version 1.0 \
             --output-dir build/island_outcome_smoke/source
 
+      - name: Reproduce frozen 886-taxon cohort
+        run: |
+          python benchmarks/aislands_species_screen.py \
+            --island-data build/island_outcome_smoke/source/island_data.csv \
+            --species-data build/island_outcome_smoke/source/species_data.csv \
+            --output build/island_outcome_smoke/species_screen.csv \
+            --min-present-islands 10 \
+            --min-absent-islands 10 \
+            --min-prevalence 0 \
+            --max-prevalence 1
+          python benchmarks/audit_aislands_taxon_status.py \
+            --species-data build/island_outcome_smoke/source/species_data.csv \
+            --species-screen build/island_outcome_smoke/species_screen.csv \
+            --output-csv build/island_outcome_smoke/taxon_status_audit.csv \
+            --output-summary build/island_outcome_smoke/taxon_status_summary.json
+          python benchmarks/freeze_aislands_native_cohort.py \
+            --status-audit build/island_outcome_smoke/taxon_status_audit.csv \
+            --output-cohort build/island_outcome_smoke/frozen_taxon_cohort.csv \
+            --output-summary build/island_outcome_smoke/frozen_taxon_cohort_summary.json
+
       - name: Rebuild frozen 842-island model audit
         run: |
           python benchmarks/audit_aislands_model_islands.py \
@@ -53,6 +74,39 @@ jobs:
             --projection build/island_outcome_smoke/source/raw/A-Island_shape.prj \
             --output-csv build/island_outcome_smoke/island_model_audit.csv \
             --output-summary build/island_outcome_smoke/island_model_audit_summary.json
+
+      - name: Reproduce frozen five-fold spatial partition
+        run: |
+          python benchmarks/freeze_aislands_spatial_folds.py \
+            --audit-csv build/island_outcome_smoke/island_model_audit.csv \
+            --output-folds build/island_outcome_smoke/spatial_folds.csv \
+            --output-summary build/island_outcome_smoke/spatial_folds_summary.json \
+            --block-size-degrees 5 \
+            --n-folds 5
+
+      - name: Reproduce frozen CHELSA climate artifact
+        run: |
+          python benchmarks/extract_aislands_chelsa_climate.py \
+            --island-audit build/island_outcome_smoke/island_model_audit.csv \
+            --output-csv build/island_outcome_smoke/island_climate.csv \
+            --output-manifest build/island_outcome_smoke/climate_manifest.json
+
+      - name: Hard-match frozen cohort fold and climate fingerprints
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          expected = {
+              'frozen_taxon_cohort.csv': 'cf645d55b8bcc46be8a8dc5399db736bbcc20bb7114a72c79a5dee61ec918e12',
+              'spatial_folds.csv': '221a925e289347069c89354d26acfab83fa3d4bc130b56f0178b8db30ab427fa',
+              'island_climate.csv': '6ae7f4a78eea28f074ef3c3399368a4886b09d2d0714e723e957d0a99b524285',
+          }
+          root = Path('build/island_outcome_smoke')
+          for name, accepted in expected.items():
+              actual = hashlib.sha256((root / name).read_bytes()).hexdigest()
+              print(name, actual)
+              assert actual == accepted, (name, actual, accepted)
+          PY
 
       - name: Reproduce frozen 842-island polygon areas
         run: |
@@ -127,6 +181,9 @@ jobs:
           name: aislands-isolation-outcome-smoke
           path: |
             build/island_outcome_smoke/input_validation.json
+            build/island_outcome_smoke/frozen_taxon_cohort_summary.json
+            build/island_outcome_smoke/spatial_folds_summary.json
+            build/island_outcome_smoke/climate_manifest.json
             build/island_outcome_smoke/island_model_audit_summary.json
             build/island_outcome_smoke/island_area_summary.json
             build/island_outcome_smoke/mainland/mainland_source_manifest.json
