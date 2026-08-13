@@ -1,0 +1,202 @@
+name: Finland strict-source one-time occurrence validation
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/finland-strict-source-one-time-score.yml"
+      - "benchmarks/frozen/finland_strict_source_cohort/scoring_authorization.json"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  score:
+    if: ${{ github.run_number == 1 }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install frozen scoring dependencies
+        run: |
+          python -m pip install -e ".[dev]"
+          python -m pip install "requests==2.32.5"
+      - name: Verify response-access authorization and exact scoring code
+        run: |
+          python - <<'PY'
+          import hashlib, json, subprocess
+          from pathlib import Path
+
+          path=Path('benchmarks/frozen/finland_strict_source_cohort/scoring_authorization.json')
+          auth=json.loads(path.read_text())
+          fingerprint=auth.pop('fingerprint')
+          observed=hashlib.sha256(
+              json.dumps(auth,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode()
+          ).hexdigest()
+          assert observed==fingerprint=='303e5382a61428b1b6617b5850cdd746e70f38d7bdc5f26a7f713b33222aedb2'
+          assert auth['outcome_values_accessed'] is False
+          assert auth['preflight_workflow_run']==31690179200
+          assert auth['preflight_artifact_id']==9177055050
+          assert auth['preflight_artifact_digest']=='sha256:2fbf619ac5905e18538d6ead39cf1a28c305945302ab32660969649d5667fddc'
+          assert auth['preflight_fingerprint']=='d9cd041d6893592b20389f56a560099123dedbbf2fda0795bc618f88efebdc91'
+          assert auth['feature_freeze_artifact_id']==9176686695
+          assert auth['feature_freeze_artifact_digest']=='sha256:9a2a0b78ab5000698f97f6e3371c6548c3c95a04c93744a9b571f6ce7f62c758'
+          for filename, expected in auth['scoring_code_blobs'].items():
+              observed_blob=subprocess.check_output(['git','hash-object',filename],text=True).strip()
+              assert observed_blob==expected, (filename, observed_blob, expected)
+          PY
+      - name: Verify green response-free preflight artifact metadata
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p benchmark_results/finland_strict_one_time
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          import requests
+
+          response=requests.get(
+              'https://api.github.com/repos/zuizui0223/eog/actions/artifacts/9177055050',
+              headers={
+                  'Authorization':f"Bearer {os.environ['GITHUB_TOKEN']}",
+                  'Accept':'application/vnd.github+json',
+              },
+              timeout=60,
+          )
+          response.raise_for_status()
+          payload=response.json()
+          assert payload['id']==9177055050
+          assert payload['name']=='finland-strict-source-scoring-preflight'
+          assert payload['expired'] is False
+          assert payload['digest']=='sha256:2fbf619ac5905e18538d6ead39cf1a28c305945302ab32660969649d5667fddc'
+          assert payload['workflow_run']['id']==31690179200
+          assert payload['workflow_run']['head_sha']=='3429b26658ac781e813ed13532f703fa37749144'
+          Path('benchmark_results/finland_strict_one_time/preflight_artifact_metadata.json').write_text(
+              json.dumps(payload,indent=2,sort_keys=True)+'\n'
+          )
+          PY
+      - name: Download green response-free scoring preflight
+        uses: actions/download-artifact@v4
+        with:
+          name: finland-strict-source-scoring-preflight
+          path: benchmark_results/finland_strict_one_time/preflight
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: zuizui0223/eog
+          run-id: 31690179200
+      - name: Verify preflight result before any response access
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('benchmark_results/finland_strict_one_time/preflight/preflight.json').read_text())
+          assert p['status']=='response-free-scoring-preflight-passed'
+          assert p['outcome_values_accessed'] is False
+          assert p['fingerprint']=='d9cd041d6893592b20389f56a560099123dedbbf2fda0795bc618f88efebdc91'
+          assert p['features_sha256']=='60d4c982e2c533a40e2ba375f371386c5b21c91c937de70d6c3c8f096a705745'
+          PY
+      - name: Download exact frozen response-free feature artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: finland-strict-source-response-free-freeze
+          path: benchmark_results/finland_strict_one_time/frozen
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: zuizui0223/eog
+          run-id: 31689131928
+      - name: Reacquire exact outcome-bearing raw bytes without parsing rows
+        run: |
+          mkdir -p benchmark_results/finland_strict_one_time/raw
+          python benchmarks/finland_institutional_mirror_transport.py \
+            --output benchmark_results/finland_strict_one_time/raw/colonization_select.csv \
+            --provenance benchmark_results/finland_strict_one_time/transport_provenance.json \
+            > benchmark_results/finland_strict_one_time/transport_stdout.json
+      - name: Re-run final response-free verifier
+        run: |
+          python benchmarks/finland_strict_source_score.py \
+            --preflight-only \
+            --input benchmark_results/finland_strict_one_time/raw/colonization_select.csv \
+            --bundle benchmark_results/finland_strict_one_time/frozen/features.npz \
+            --manifest benchmark_results/finland_strict_one_time/frozen/feature_manifest.json \
+            --output benchmark_results/finland_strict_one_time/final_preflight.json \
+            > benchmark_results/finland_strict_one_time/final_preflight_stdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('benchmark_results/finland_strict_one_time/final_preflight.json').read_text())
+          assert p['outcome_values_accessed'] is False
+          assert p['fingerprint']=='d9cd041d6893592b20389f56a560099123dedbbf2fda0795bc618f88efebdc91'
+          PY
+      - name: FIRST RESPONSE ACCESS — score frozen strict-source outcome
+        run: |
+          python benchmarks/finland_strict_source_score.py \
+            --input benchmark_results/finland_strict_one_time/raw/colonization_select.csv \
+            --bundle benchmark_results/finland_strict_one_time/frozen/features.npz \
+            --manifest benchmark_results/finland_strict_one_time/frozen/feature_manifest.json \
+            --output benchmark_results/finland_strict_one_time/result.json \
+            > benchmark_results/finland_strict_one_time/result_stdout.json
+      - name: Validate and seal the one-time result without direction filtering
+        env:
+          EOG_RUN_ID: ${{ github.run_id }}
+          EOG_RUN_NUMBER: ${{ github.run_number }}
+          EOG_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          from benchmarks.finland_strict_source_score import _canonical_sha256
+
+          root=Path('benchmark_results/finland_strict_one_time')
+          r=json.loads((root/'result.json').read_text())
+          assert r['schema']=='eog_v2_finland_strict_source_empirical_result_v1'
+          assert r['status']=='frozen-finland-colonization-heldout-result'
+          assert r['n_species']==180
+          assert r['n_rows']==74700
+          assert r['bootstrap_replicates']==10000
+          assert r['bootstrap_seed']==20260812
+          assert r['response_free_preflight_fingerprint']=='d9cd041d6893592b20389f56a560099123dedbbf2fda0795bc618f88efebdc91'
+          assert r['decision'] in {
+              'empirical_added_information_go',
+              'no_empirical_added_information',
+              'indeterminate_strong_reference_failure',
+          }
+          observed=r.pop('result_fingerprint')
+          assert _canonical_sha256(r)==observed
+          r['result_fingerprint']=observed
+          execution={
+              'schema':'eog_v2_finland_strict_source_one_time_execution_v1',
+              'workflow_run':int(os.environ['EOG_RUN_ID']),
+              'workflow_run_number':int(os.environ['EOG_RUN_NUMBER']),
+              'workflow_run_attempt':int(os.environ['EOG_RUN_ATTEMPT']),
+              'response_accessed':True,
+              'result_fingerprint':observed,
+              'decision':r['decision'],
+              'promotion_go':r['decision']=='empirical_added_information_go',
+              'post_response_retuning_allowed':False,
+          }
+          (root/'execution.json').write_text(json.dumps(execution,indent=2,sort_keys=True)+'\n')
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as handle:
+              handle.write(f"Decision: `{r['decision']}`\n\n")
+              handle.write(f"Result fingerprint: `{observed}`\n")
+          PY
+      - name: Remove raw outcome-bearing CSV before artifact upload
+        if: always()
+        run: rm -rf benchmark_results/finland_strict_one_time/raw
+      - name: Upload authoritative one-time Finland result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: finland-strict-source-one-time-result
+          path: |
+            benchmark_results/finland_strict_one_time/result.json
+            benchmark_results/finland_strict_one_time/result_stdout.json
+            benchmark_results/finland_strict_one_time/execution.json
+            benchmark_results/finland_strict_one_time/final_preflight.json
+            benchmark_results/finland_strict_one_time/final_preflight_stdout.json
+            benchmark_results/finland_strict_one_time/preflight_artifact_metadata.json
+            benchmark_results/finland_strict_one_time/transport_provenance.json
+            benchmark_results/finland_strict_one_time/transport_stdout.json
+            benchmarks/frozen/finland_strict_source_cohort/scoring_authorization.json
+          if-no-files-found: warn
