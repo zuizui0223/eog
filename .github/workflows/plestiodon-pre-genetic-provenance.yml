@@ -1,0 +1,145 @@
+name: Plestiodon pre-genetic raw-member provenance
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/plestiodon-pre-genetic-provenance.yml"
+      - "docs/eog_v2_plestiodon_pre_genetic_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install transport dependency
+        run: python -m pip install "requests==2.32.5"
+      - name: Verify Zenodo identity and checksum opaque genetic workbook
+        run: |
+          mkdir -p benchmark_results/plestiodon_pre_genetic/raw
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import requests
+
+          root = Path('benchmark_results/plestiodon_pre_genetic')
+          raw_dir = root / 'raw'
+          api = 'https://zenodo.org/api/records/5001548'
+          expected_name = 'Microsatellite genotype of Plestiodon marginatus.xlsx'
+          expected_md5 = 'c7a24bd9f4e5036925409897fd85ff4f'
+          expected_dryad = '10.5061/dryad.7gs71'
+          expected_study = '10.1093/jhered/esu055'
+
+          response = requests.get(api, timeout=90)
+          response.raise_for_status()
+          record = response.json()
+          (root / 'zenodo_record.json').write_text(
+              json.dumps(record, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          serialized = json.dumps(record, sort_keys=True).lower()
+          title = str((record.get('metadata') or {}).get('title') or '')
+          if 'population maintenance mechanism' not in title.lower():
+              raise RuntimeError(f'unexpected Zenodo title: {title!r}')
+          if expected_dryad.lower() not in serialized:
+              raise RuntimeError('Zenodo metadata does not contain expected Dryad DOI')
+          if expected_study.lower() not in serialized:
+              # The record may encode the journal DOI only as a related identifier in some
+              # versions. Keep the evidence explicit rather than silently assuming it.
+              raise RuntimeError('Zenodo metadata does not contain expected study DOI')
+
+          files = record.get('files') or []
+          matches = []
+          for item in files:
+              key = str(item.get('key') or item.get('filename') or item.get('name') or '')
+              if key == expected_name:
+                  matches.append(item)
+          if len(matches) != 1:
+              raise RuntimeError(f'expected exactly one {expected_name!r}; found {len(matches)}')
+          item = matches[0]
+          links = item.get('links') or {}
+          url = links.get('content') or links.get('download') or links.get('self')
+          if not url:
+              raise RuntimeError('Zenodo workbook entry has no content/download URL')
+
+          destination = raw_dir / 'plestiodon_genotypes_opaque.xlsx'
+          sha256 = hashlib.sha256()
+          md5 = hashlib.md5()
+          size = 0
+          with requests.get(url, stream=True, timeout=120) as download:
+              download.raise_for_status()
+              with destination.open('wb') as handle:
+                  for chunk in download.iter_content(chunk_size=1024 * 1024):
+                      if not chunk:
+                          continue
+                      handle.write(chunk)
+                      sha256.update(chunk)
+                      md5.update(chunk)
+                      size += len(chunk)
+          actual_md5 = md5.hexdigest()
+          if actual_md5 != expected_md5:
+              raise RuntimeError(f'Plestiodon workbook MD5 mismatch: {actual_md5}')
+          if size < 30_000 or size > 100_000:
+              raise RuntimeError(f'implausible workbook size: {size}')
+
+          result = {
+              'status': 'plestiodon-stage1a-opaque-genetic-member-provenance-pass',
+              'zenodo_record': 5001548,
+              'zenodo_title': title,
+              'study_doi': expected_study,
+              'dryad_doi': expected_dryad,
+              'file_name': expected_name,
+              'file_size_bytes': size,
+              'file_md5': actual_md5,
+              'file_sha256': sha256.hexdigest(),
+              'genetic_workbook_contents_accessed': False,
+              'xlsx_zip_members_inspected': False,
+              'worksheet_names_accessed': False,
+              'cell_values_accessed': False,
+              'genetic_response_computed': False,
+              'claim_boundary': (
+                  'The xlsx was downloaded only as an opaque byte stream for provenance. '
+                  'No workbook ZIP member, worksheet, cell, population label or genotype was opened.'
+              ),
+          }
+          encoded = json.dumps(result, sort_keys=True, separators=(',', ':')).encode()
+          result['fingerprint'] = hashlib.sha256(encoded).hexdigest()
+          (root / 'stage1a_result.json').write_text(
+              json.dumps(result, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Enforce response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('benchmark_results/plestiodon_pre_genetic/stage1a_result.json').read_text())
+          assert r['status']=='plestiodon-stage1a-opaque-genetic-member-provenance-pass'
+          assert r['file_md5']=='c7a24bd9f4e5036925409897fd85ff4f'
+          assert r['genetic_workbook_contents_accessed'] is False
+          assert r['xlsx_zip_members_inspected'] is False
+          assert r['worksheet_names_accessed'] is False
+          assert r['cell_values_accessed'] is False
+          assert r['genetic_response_computed'] is False
+          assert len(r['file_sha256'])==64
+          PY
+      - name: Remove opaque genetic workbook before artifact upload
+        if: always()
+        run: rm -rf benchmark_results/plestiodon_pre_genetic/raw
+      - name: Upload provenance evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: plestiodon-stage1a-opaque-provenance
+          path: |
+            benchmark_results/plestiodon_pre_genetic/zenodo_record.json
+            benchmark_results/plestiodon_pre_genetic/stage1a_result.json
+          if-no-files-found: error
