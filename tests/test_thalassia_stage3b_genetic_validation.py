@@ -13,7 +13,11 @@ from benchmarks.thalassia_stage3b_genetic_validation import (
 
 
 def _sample(row, sample_id, population_id, *genotypes):
-    return SampleGenotype(row, sample_id, population_id, tuple(genotypes))
+    # Real Stage-3B parser canonicalizes the unordered diploid allele pair at every locus
+    # before constructing SampleGenotype. Keep direct synthetic fixtures on that same input
+    # invariant so this test exercises clone correction rather than bypassing the parser.
+    canonical = tuple(None if genotype is None else tuple(sorted(genotype)) for genotype in genotypes)
+    return SampleGenotype(row, sample_id, population_id, canonical)
 
 
 def test_clone_correction_is_exact_within_population_and_deterministic():
