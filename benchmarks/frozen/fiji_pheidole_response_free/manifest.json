@@ -1,0 +1,53 @@
+{
+  "allowed_archive_member_contents_accessed": [
+    "dryad/VCFs/sequenceMetaData.csv"
+  ],
+  "archive_sha256": "9a23543ad59d5f4de7e6f26cc91b75dc60f93c259744e640b8f6576fde89abc7",
+  "bootstrap_interval": [
+    0.025,
+    0.975
+  ],
+  "bootstrap_resamples": 10000,
+  "bootstrap_seed": 20260813,
+  "bootstrap_unit": "outer_population_fold",
+  "candidate_family_fingerprint": "093d5a9c9580f924edf539eb54350c82ad867563ef32044cfca623e047c09985",
+  "contract_sha256": "398b21af1e2e158bba77e16ef8a99870457e6b1f22033404858ff7041ff2a7c3",
+  "conventional_candidate_ids": [
+    "gabriel_current_flow",
+    "gabriel_shortest_path",
+    "geographic"
+  ],
+  "dryad_doi": "10.5061/dryad.xd2547dcp",
+  "eventual_connectivity_fingerprint": "a1cf6d7fafa3bd6364fa6193eb0498145d55cdb06781b2a9e649874b5119c601",
+  "focal_egpa": "EGPA0079",
+  "focal_species_label": "ululevu",
+  "gabriel_edge_count": 15,
+  "gabriel_edges": [
+    {
+      "a": "BQ",
+      "b": "KV",
+      "projected_length_km": 74.80965444456724,
+      "support": 0.3800647511278376
+    },
+    {
+      "a": "BQ",
+      "b": "VL3",
+      "projected_length_km": 32.12604955543933,
+      "support": 0.6600475379986386
+    },
+    {
+      "a": "BQ",
+      "b": "VL4",
+      "projected_length_km": 46.93411249632633,
+      "support": 0.5450180429040786
+    },
+    {
+      "a": "EVN",
+      "b": "KR",
+      "projected_length_km": 77.32954251806966,
+      "support": 0.36787944117144233
+    },
+    {
+      "a": "EVN",
+      "b": "TA",
+      "projfV7FVEöÆVæwF…ö¶Ò#¢“Bã“3“#ƒcsƒƒbÀ¢'7W÷'B#¢ã#“csƒ““““3C“sp¢ÒÀ¢°¢&#¢$t"À¢&"#¢$µ""À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢srãsƒ3ƒ##cƒ#S2À¢'7W÷'B#¢ã3cSs#Cc3ƒcS““C¢ÒÀ¢°¢&#¢$t"À¢&"#¢$Ä"À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢Srãsƒ#cCCƒCƒ3CÀ¢'7W÷'B#¢ãCs3cƒss““s¢ÒÀ¢°¢&#¢$t"À¢&"#¢$ÔÂ"À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢“Bãccƒ“3333“ƒcRÀ¢'7W÷'B#¢ã#“CS3Sc““S¢ÒÀ¢°¢&#¢$µ""À¢&"#¢$Ä"À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢sRãC#ƒ#cC“Sccƒ2À¢'7W÷'B#¢ã3sscs““ƒCƒCs€¢ÒÀ¢°¢&#¢$µ"À¢&"#¢%D"À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢ƒ’ãScƒ“ƒsC3#s““c"À¢'7W÷'B#¢ã3C#c“Sƒ3cS“# ¢ÒÀ¢°¢&#¢$µb"À¢&"#¢$ÔÂ"À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢“bã##cC“cC#ssRÀ¢'7W÷'B#¢ãs“#s#S3c#CCp¢ÒÀ¢°¢&#¢$Ä"À¢&"#¢%dÃB"À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢cãƒcc“#s“ƒcsBÀ¢'7W÷'B#¢ãCC“3““3C#Ssƒp¢ÒÀ¢°¢&#¢$Ä²"À¢&"#¢$ÔÂ"À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢CRãC“#ccƒc“3c“rÀ¢'7W÷'B#¢ãS#3cs3ƒ3“#cƒp¢ÒÀ¢°¢&#¢$Ä²"À¢&"#¢%D"À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢“2ãƒCsSC#cƒs#“BÀ¢'7W÷'B#¢ãƒSsc33Ss3C@¢ÒÀ¢°¢&#¢%dÃ2"À¢&"#¢%dÃB"À¢'&ö¦V7FVEöÆVæwF…ö¶Ò#¢Cbã#ƒ“S3ƒs#Cs’À¢'7W÷'B#¢ãSSc#“3ƒ33p¢Ğ¢ÒÀ¢&vVæWF–5öÖVÖ&W%ö6öçFVçG5ö66W76VB#¢fÇ6RÀ¢&–ææW%÷&VfW&Væ6U÷6VÆV7F–öâ#¢&ÆVfRÖöæR×÷VÆF–öâÖ÷WBv—F†–â÷WFW"G&–æ–æs²WVÂ×vV–v‡B–ææW"×÷VÆF–öâÕ4S²ÆW†–6öw&†–2F–R"À¢&Æ÷75÷7W÷'B#¢ãRÀ¢&Ö–æ–×VÕö–æF—f–GVÇ5÷W%öæöFR#¢RÀ¢&åöæöFW2#¢À¢&æöFUöFÖ—76–öå÷'VÆR#¢&åö–æF—f–GVÇ2ãÒRæBf–æ—FR&W7öç6RÖg&VR÷VÆF–öâ6VçG&ö–B"À¢&æöFUöf–ævW'&–çB#¢#ffV#–3CS###cvc6&Ff&fFfSsCvVF#SFC6Fc†&SVS63Ccv3†C&3#s66b"À¢&æöFUö–G2#¢°¢$%"À¢$Udâ"À¢$t"À¢$µ"À¢$µb"À¢$Ä"À¢$Ä²"À¢$ÔÂ"À¢%D"À¢%dÃ2"À¢%dÃB ¢ÒÀ¢&æöFW5ö77e÷6†#Sb#¢#C6SvvFc“fcS3&c3“ƒV3S–#c#Cv6CCvc#S##CcƒVcv#&c“S’"À¢&÷W&F÷%öf–ævW'&–çB#¢&F&3cc†VVcvF3†F6cf6cc3FSsfVc#V6C6&3SfV3V3C†c&cS“C#Ssf“CFB"À¢&÷WFW%÷fÆ–FF–öå÷Væ—B#¢'÷VÆF–öâ"À¢'&VF–7F÷%öÖæ–fW7Eöf–ævW'&–çB#¢&SF#c#†cc“SF–#C#c“&c–36f#cs“&3ƒƒ#s“Sf†CCF“v#3ƒ3f#v2"À¢'&VF–7F÷'5ö77e÷6†#Sb#¢#&6S–V3cc–VCS#“s“F&SVVf66CS33“FFc&fff&CsƒVƒf3&#&63Ss†#‚"À¢'&ö¦V7F–öâ#¢&FFVÆ–æRÖv&RÆö6ÂWV—&V7FæwVÆ#²6—&7VÆ"ÖVâÆöæv—GVFS²w&VBöfg6WG2"À¢'&öÖ÷F–öå÷'VÆR#¢°¢&ÆÂg&÷¦Vâ÷VÆF–öç2Æ–vâFòF†Rfö6ÂvVæWF–2&W7öç6R"À¢&ÆÂ÷WFW"föÆG2W7F–Ö&ÆR"À¢&ÖVå÷÷VÆF–öåöFVÇFö×6RÂ"À¢'÷VÆF–öåö&ö÷G7G&÷WW%ó“uóU÷W&6VçBÂ ¢ÒÀ¢'&W7öç6U÷G&ç6f÷&Ò#¢&Æ–æV&—¦VEög7B"À¢'&–FvU÷VæÇG’#¢ãÀ¢'66†VÖ#¢&Vöu÷c%óöf–¦•÷†V–FöÆU÷&W7öç6Uög&VU÷&VF–7F÷'5÷c"À¢'6WVVæ6UöÖWFFF÷6†#Sb#¢#VCc“cvCƒSV&S6#6S“c3&#vVS#f–SvfS6c&C“VVcsc#“3&6Ff&B"À¢'7FvSöf–ævW'&–çB#¢#ƒ#“S3vSCVSv#36cƒ&cvscS6ffS3sƒS33#6c&3V3“†&Vfc3&fCƒB"À¢'7FvS&öfö6Åög&VW¦Uöf–ævW'&–çB#¢&&3cv6SsFC“#s#6CF6S3cs63†S†VS&cfc†CcƒsCvSs3Fcv–#sr"À¢'7FGW2#¢'&W7öç6RÖg&VRÖvVæWF–2×&VF–7F÷"Ög&VW¦R"À¢'7GVG•öFö’#¢#ãöÖV2ãS3#b"À¢'7W÷'E÷66ÆUö¶Ò#¢srã3#“SC#Sƒc“cbÀ¢'¦VæöFõ÷&V6÷&B#¢C“cSSc§Ğ 
