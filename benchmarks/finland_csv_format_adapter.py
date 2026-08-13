@@ -1,9 +1,9 @@
 """Response-free CSV-format adapter for the frozen SW Finland benchmark.
 
-This module only resolves the syntactic delimiter from the CSV header and then runs the
-already-frozen admission / feature-preparation functions with that delimiter.  It never
-reads the released ``outcome`` values itself and does not alter any scientific variable,
-source reconstruction, graph, fold, predictor, or promotion rule.
+This module resolves raw-file syntax and the published binary representation of the
+``Limestone`` island covariate before running the already-frozen admission / feature
+preparation. It never reads the released ``outcome`` values and does not alter any
+scientific variable, source reconstruction, graph, fold, predictor, or promotion rule.
 """
 from __future__ import annotations
 
@@ -16,9 +16,6 @@ from pathlib import Path
 import sys
 from typing import Iterator
 
-# ``python benchmarks/finland_csv_format_adapter.py`` otherwise exposes only the
-# benchmarks directory on sys.path.  Add the repository root before importing the frozen
-# sibling modules; this changes import resolution only, never scientific logic.
 if __package__ in {None, ""}:
     _repo_root = str(Path(__file__).resolve().parents[1])
     if _repo_root not in sys.path:
@@ -32,6 +29,10 @@ HEADER_REQUIRED = {
     "Historical_total_log",
     "Dist_to_historical_log",
 }
+# Dryad's public metadata defines Limestone as presence (0=absent, 1=present). The
+# released table uses categorical Yes/No tokens, so this syntactic adapter canonicalizes
+# only that declared binary field. No other field receives categorical coercion.
+BINARY_RECODING = {"Limestone": {"yes": "1", "no": "0"}}
 
 
 def _canonical_sha256(value: object) -> str:
@@ -66,6 +67,7 @@ def detect_csv_format(path: str | Path) -> dict[str, object]:
         "n_fields": len(fields),
         "field_names": fields,
         "header_sha256": hashlib.sha256(header.encode("utf-8")).hexdigest(),
+        "binary_recoding": BINARY_RECODING,
         "outcome_column_exists": "outcome" in fields,
         "outcome_values_accessed": False,
     }
@@ -73,8 +75,36 @@ def detect_csv_format(path: str | Path) -> dict[str, object]:
     return payload
 
 
+class _NormalizedDictReader:
+    def __init__(self, delegate):
+        self._delegate = delegate
+
+    @property
+    def fieldnames(self):
+        return self._delegate.fieldnames
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        row = next(self._delegate)
+        if row is None:
+            return row
+        for column, mapping in BINARY_RECODING.items():
+            if column not in row or row[column] is None:
+                continue
+            token = str(row[column]).strip().lower()
+            if token in mapping:
+                row[column] = mapping[token]
+        return row
+
+    def __getattr__(self, name):
+        return getattr(self._delegate, name)
+
+
 @contextmanager
 def fixed_dict_reader_delimiter(delimiter: str) -> Iterator[None]:
+    """Freeze delimiter and documented binary representation for existing readers."""
     if delimiter not in DELIMITER_CANDIDATES:
         raise ValueError(f"unsupported delimiter: {delimiter!r}")
     original = csv.DictReader
@@ -82,7 +112,7 @@ def fixed_dict_reader_delimiter(delimiter: str) -> Iterator[None]:
     def reader(handle, *args, **kwargs):
         if "dialect" in kwargs or "delimiter" in kwargs:
             raise ValueError("Finland response-free reader must use the frozen adapter delimiter")
-        return original(handle, *args, delimiter=delimiter, **kwargs)
+        return _NormalizedDictReader(original(handle, *args, delimiter=delimiter, **kwargs))
 
     csv.DictReader = reader  # type: ignore[assignment]
     try:
