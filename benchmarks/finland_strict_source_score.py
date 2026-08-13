@@ -11,6 +11,12 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import sys
+
+if __package__ in {None, ""}:
+    _repo_root = str(Path(__file__).resolve().parents[1])
+    if _repo_root not in sys.path:
+        sys.path.insert(0, _repo_root)
 
 import benchmarks.finland_colonization_score as base_score
 from benchmarks.finland_csv_format_adapter import (
