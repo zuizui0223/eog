@@ -1,0 +1,135 @@
+name: Thalassia one-time exact genetic validation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install frozen validation dependencies
+        run: python -m pip install -e . "requests==2.32.5" "openpyxl==3.1.5"
+      - name: Require harmonized pre-FST manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('benchmarks/frozen/thalassia_stage3_preaccess/manifest.json').read_text())
+          assert m['schema']=='eog_v2_1_thalassia_prefst_harmonization_v2'
+          assert m['status']=='frozen-after-schema-before-fst'
+          assert m['schema_only_workbook_access_completed'] is True
+          assert m['multilocus_genotypes_computed'] is False
+          assert m['pairwise_fst_computed'] is False
+          assert m['genetic_response_computed'] is False
+          assert m['response_transform'].startswith('theta/(1-theta), primary domain requires 0<=theta<1')
+          PY
+      - name: Download exact frozen microsatellite workbook
+        run: |
+          set -euo pipefail
+          mkdir -p benchmark_results/thalassia_exact
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          import requests
+          record_id=4937634
+          session=requests.Session()
+          session.headers.update({'User-Agent':'EOG-v2.1-one-time-exact-genetics/1.0'})
+          response=session.get(f'https://zenodo.org/api/records/{record_id}',timeout=60)
+          response.raise_for_status()
+          record=response.json()
+          title=str((record.get('metadata') or {}).get('title') or '')
+          if 'Thalassia hemprichii' not in title:
+              raise SystemExit('Zenodo record identity mismatch')
+          raw_files=record.get('files')
+          if isinstance(raw_files,list):
+              entries=raw_files
+          elif isinstance(raw_files,dict) and isinstance(raw_files.get('entries'),dict):
+              entries=list(raw_files['entries'].values())
+          else:
+              raise SystemExit('unexpected Zenodo files schema')
+          by_name={str(e.get('key') or e.get('filename') or '').strip():e for e in entries}
+          entry=by_name.get('Genalex_Th3all_IAA.xlsx')
+          if entry is None:
+              raise SystemExit('frozen microsatellite member absent')
+          links=entry.get('links') or {}
+          url=links.get('content') or links.get('download') or links.get('self')
+          if not url:
+              raise SystemExit('no content URL for frozen microsatellite member')
+          destination=Path('benchmark_results/thalassia_exact/Genalex_Th3all_IAA.xlsx')
+          md5=hashlib.md5(); sha=hashlib.sha256(); size=0
+          with session.get(url,stream=True,timeout=120) as download:
+              download.raise_for_status()
+              with destination.open('wb') as handle:
+                  for chunk in download.iter_content(chunk_size=1024*1024):
+                      if not chunk: continue
+                      handle.write(chunk); md5.update(chunk); sha.update(chunk); size += len(chunk)
+          if size != 118400 or md5.hexdigest()!='ec25c053161d4d62b86c860193475784' or sha.hexdigest()!='aaaab9e302c9be8cf4e108d2aee5867c0b64ed70b6d3b81bad4d60168ee7f2f3':
+              raise SystemExit('frozen microsatellite byte identity mismatch')
+          released_checksum=str(entry.get('checksum') or '')
+          if released_checksum.startswith('md5:') and released_checksum.split(':',1)[1] != md5.hexdigest():
+              raise SystemExit('released Zenodo checksum mismatch')
+          Path('benchmark_results/thalassia_exact/raw_identity.json').write_text(json.dumps({
+              'zenodo_record':record_id,'record_title':title,'file_name':'Genalex_Th3all_IAA.xlsx',
+              'size_bytes':size,'md5':md5.hexdigest(),'sha256':sha.hexdigest(),
+              'zenodo_checksum':released_checksum,'zenodo_size':entry.get('size')
+          },indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Run frozen primary response and nested validation once
+        run: |
+          python benchmarks/thalassia_exact_genetic_validation.py \
+            --input benchmark_results/thalassia_exact/Genalex_Th3all_IAA.xlsx \
+            --primary-response benchmark_results/thalassia_exact/primary_pairwise_fst.csv \
+            --result benchmark_results/thalassia_exact/result.json \
+            --ramet-sensitivity benchmark_results/thalassia_exact/all_complete_ramet_fst.csv \
+            > benchmark_results/thalassia_exact/stdout.json
+      - name: Enforce frozen result boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('benchmark_results/thalassia_exact/result.json').read_text())
+          allowed={
+              'empirical_added_information_go',
+              'indeterminate_selector_reference_failure',
+              'no_empirical_added_information',
+              'non_estimable_linearized_fst_domain',
+              'non_estimable_insufficient_clone_corrected_genets',
+              'non_estimable_microsatellite_response',
+              'non_estimable_population_or_pair_alignment',
+          }
+          assert r['status'] in allowed
+          assert isinstance(r['promotion_go'], bool)
+          assert r['raw_sha256']=='aaaab9e302c9be8cf4e108d2aee5867c0b64ed70b6d3b81bad4d60168ee7f2f3'
+          assert r['stage2_fingerprint']=='ef119675a596fe2044aca97b43efc618cfb7b00aee1dc3a1663ff5736c0a94ea'
+          assert r['schema_fingerprint']=='a0b2c6bb0755f1d09f9aa88fbe4bfa645c5a4c8f011907fe4ceb93f64ff674de'
+          assert len(r['fingerprint'])==64
+          if r['status']=='empirical_added_information_go':
+              assert r['promotion_go'] is True
+              checks=r['promotion_checks']
+              assert all(checks.values())
+          else:
+              assert r['promotion_go'] is False
+          PY
+      - name: Delete raw workbook before artifact upload
+        if: always()
+        run: rm -f benchmark_results/thalassia_exact/Genalex_Th3all_IAA.xlsx
+      - name: Upload derived exact validation outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: thalassia-one-time-exact-genetic-validation
+          path: |
+            benchmark_results/thalassia_exact/result.json
+            benchmark_results/thalassia_exact/primary_pairwise_fst.csv
+            benchmark_results/thalassia_exact/all_complete_ramet_fst.csv
+            benchmark_results/thalassia_exact/raw_identity.json
+            benchmark_results/thalassia_exact/stdout.json
+          if-no-files-found: warn
