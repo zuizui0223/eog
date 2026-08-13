@@ -1,0 +1,42 @@
+name: Nested genetic reference selection
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/nested-genetic-reference.yml"
+      - "src/eog/genetic_reference_selection.py"
+      - "src/eog/v2.py"
+      - "tests/test_genetic_reference_selection.py"
+      - "tests/test_v2_namespace.py"
+      - "docs/eog_v2_nested_genetic_reference_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          python -m pip install -e .
+          python -m pip install pytest
+      - name: Run nested-reference boundaries
+        run: |
+          python -m pytest -q \
+            tests/test_genetic_reference_selection.py \
+            tests/test_v2_namespace.py
+      - name: Check Zhoushan non-rescue boundary
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          contract = Path('docs/eog_v2_nested_genetic_reference_contract.md').read_text()
+          assert '585b4b6c3a616d353e3abcfd95b5c341cb4e022da012a8d72ad310ddb9ae48cd' in contract
+          assert 'must not be run on the frozen Zhoushan response' in contract
+          assert 'indeterminate_strong_reference_failure' in contract
+          PY
