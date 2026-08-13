@@ -1,0 +1,130 @@
+name: Periploca response-free geography admission
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/periploca-pre-genetic-geography.yml"
+      - "benchmarks/periploca_pre_genetic_geography_audit.py"
+      - "docs/eog_v2_periploca_pre_genetic_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install transport dependency
+        run: python -m pip install "requests==2.32.5"
+      - name: Verify Zenodo record and download geography + opaque microsatellite bytes only
+        run: |
+          mkdir -p benchmark_results/periploca_stage1/raw
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import requests
+
+          root=Path('benchmark_results/periploca_stage1')
+          raw=root/'raw'
+          api='https://zenodo.org/api/records/4994024'
+          response=requests.get(api,timeout=90)
+          response.raise_for_status()
+          record=response.json()
+          (root/'zenodo_record.json').write_text(json.dumps(record,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          serialized=json.dumps(record,sort_keys=True).lower()
+          title=str((record.get('metadata') or {}).get('title') or '')
+          if 'do island plant populations really have lower genetic variation than mainland populations' not in title.lower():
+              raise RuntimeError(f'unexpected Zenodo title: {title!r}')
+          if '10.5061/dryad.9nc22' not in serialized:
+              raise RuntimeError('Zenodo record does not contain expected Dryad DOI')
+          if '10.1111/mec.13060' not in serialized:
+              raise RuntimeError('Zenodo record does not contain expected study DOI')
+
+          expected={'Periploca pops data.txt','Periploca_nSSR.txt','Periploca99samples_4cpDNAregions.txt'}
+          by_name={str(item.get('key') or item.get('filename') or item.get('name') or ''): item for item in (record.get('files') or [])}
+          missing=expected-set(by_name)
+          if missing:
+              raise RuntimeError(f'missing expected Periploca files: {sorted(missing)}')
+
+          identities={}
+          for name in ('Periploca pops data.txt','Periploca_nSSR.txt'):
+              item=by_name[name]
+              links=item.get('links') or {}
+              url=links.get('content') or links.get('download') or links.get('self')
+              if not url:
+                  raise RuntimeError(f'no download URL for {name}')
+              destination=raw/('geography.txt' if name=='Periploca pops data.txt' else 'microsatellite_opaque.txt')
+              sha=hashlib.sha256(); md5=hashlib.md5(); size=0
+              with requests.get(url,stream=True,timeout=120) as download:
+                  download.raise_for_status()
+                  with destination.open('wb') as handle:
+                      for chunk in download.iter_content(chunk_size=1024*1024):
+                          if chunk:
+                              handle.write(chunk); sha.update(chunk); md5.update(chunk); size+=len(chunk)
+              identities[name]={
+                  'size_bytes':size,
+                  'sha256':sha.hexdigest(),
+                  'md5':md5.hexdigest(),
+                  'zenodo_checksum':item.get('checksum'),
+              }
+          (root/'transport_identity.json').write_text(json.dumps({
+              'zenodo_record':4994024,
+              'zenodo_title':title,
+              'dryad_doi':'10.5061/dryad.9nc22',
+              'study_doi':'10.1111/mec.13060',
+              'files':identities,
+              'cpdna_file_downloaded':False,
+              'microsatellite_contents_accessed':False,
+          },indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+      - name: Run geography-schema audit with microsatellite byte object kept opaque
+        run: |
+          python benchmarks/periploca_pre_genetic_geography_audit.py \
+            --geography benchmark_results/periploca_stage1/raw/geography.txt \
+            --microsatellite benchmark_results/periploca_stage1/raw/microsatellite_opaque.txt \
+            --output benchmark_results/periploca_stage1/stage1_audit.json \
+            > benchmark_results/periploca_stage1/stdout.json
+      - name: Enforce response firewall and report Stage-1 status
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('benchmark_results/periploca_stage1/stage1_audit.json').read_text())
+          assert r['microsatellite_contents_accessed'] is False
+          assert r['cpdna_contents_accessed'] is False
+          assert r['genetic_response_computed'] is False
+          assert len(r['geography_sha256'])==64
+          assert len(r['microsatellite_sha256'])==64
+          print(json.dumps({
+              'status':r['status'],
+              'admitted':r['admitted'],
+              'headers':r['headers'],
+              'population_candidates':r['population_id_candidate_columns'],
+              'lat_candidates':r['latitude_candidate_columns'],
+              'lon_candidates':r['longitude_candidate_columns'],
+              'coordinate_pair_audits':r['coordinate_pair_audits'],
+              'island_region_candidates':r['island_region_candidate_columns'],
+              'fingerprint':r['fingerprint'],
+          },indent=2,sort_keys=True))
+          PY
+      - name: Remove raw files before artifact upload
+        if: always()
+        run: rm -rf benchmark_results/periploca_stage1/raw
+      - name: Upload response-free evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: periploca-stage1-response-free-geography
+          path: |
+            benchmark_results/periploca_stage1/zenodo_record.json
+            benchmark_results/periploca_stage1/transport_identity.json
+            benchmark_results/periploca_stage1/stage1_audit.json
+            benchmark_results/periploca_stage1/stdout.json
+          if-no-files-found: error
