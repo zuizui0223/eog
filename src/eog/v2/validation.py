@@ -21,6 +21,17 @@ from ..v2_empirical_occurrence_validation import (
     build_fixed_source_occurrence_features,
     evaluate_fixed_source_occurrence_validation,
 )
+from .evidence_discrimination import (
+    CombinedRuleStatus,
+    DirectionalEvidenceRow,
+    DirectionalOrderConstraint,
+    DirectionalRuleEvidence,
+    DirectionalStatus,
+    RuleEvidenceStatus,
+    TransitionRuleEvidenceComparison,
+    combine_occurrence_and_directional_evidence,
+    evaluate_directional_order_evidence,
+)
 
 __all__ = [
     "EventualGeneticConnectivity",
@@ -38,4 +49,13 @@ __all__ = [
     "FixedSourceOccurrenceValidationResult",
     "build_fixed_source_occurrence_features",
     "evaluate_fixed_source_occurrence_validation",
+    "DirectionalStatus",
+    "CombinedRuleStatus",
+    "DirectionalOrderConstraint",
+    "DirectionalEvidenceRow",
+    "DirectionalRuleEvidence",
+    "RuleEvidenceStatus",
+    "TransitionRuleEvidenceComparison",
+    "evaluate_directional_order_evidence",
+    "combine_occurrence_and_directional_evidence",
 ]

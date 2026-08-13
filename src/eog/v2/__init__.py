@@ -46,6 +46,11 @@ from .traversability import (
     summarize_path_traversability,
 )
 from .validation import (
+    CombinedRuleStatus,
+    DirectionalEvidenceRow,
+    DirectionalOrderConstraint,
+    DirectionalRuleEvidence,
+    DirectionalStatus,
     EventualGeneticConnectivity,
     EventualGeneticValidationBundle,
     FixedSourceOccurrenceFeatures,
@@ -56,8 +61,12 @@ from .validation import (
     GeneticValidationModelResult,
     GeneticValidationResult,
     OccurrenceModelScore,
+    RuleEvidenceStatus,
+    TransitionRuleEvidenceComparison,
     build_eventual_genetic_validation_bundle,
     build_fixed_source_occurrence_features,
+    combine_occurrence_and_directional_evidence,
+    evaluate_directional_order_evidence,
     evaluate_fixed_source_occurrence_validation,
     evaluate_genetic_validation_ladder,
     infer_eventual_genetic_connectivity,
@@ -114,6 +123,15 @@ __all__ = [
     "FixedSourceOccurrenceValidationResult",
     "build_fixed_source_occurrence_features",
     "evaluate_fixed_source_occurrence_validation",
+    "DirectionalStatus",
+    "CombinedRuleStatus",
+    "DirectionalOrderConstraint",
+    "DirectionalEvidenceRow",
+    "DirectionalRuleEvidence",
+    "RuleEvidenceStatus",
+    "TransitionRuleEvidenceComparison",
+    "evaluate_directional_order_evidence",
+    "combine_occurrence_and_directional_evidence",
 ]
 
 API_STATUS = "prospective-v2-development"

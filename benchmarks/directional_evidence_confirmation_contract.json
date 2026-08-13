@@ -1,0 +1,59 @@
+{
+  "confirmation_seeds": [
+    4103,
+    4201,
+    4303,
+    4409,
+    4513,
+    4603,
+    4703,
+    4801
+  ],
+  "constraints": [
+    {
+      "earlier_id": "A",
+      "evidence_id": "order_ab",
+      "later_id": "B"
+    },
+    {
+      "earlier_id": "B",
+      "evidence_id": "order_bc",
+      "later_id": "C"
+    },
+    {
+      "earlier_id": "C",
+      "evidence_id": "order_cd",
+      "later_id": "D"
+    }
+  ],
+  "empirical_firewall": "no empirical directional, occurrence or genetic outcome accessed",
+  "failure_policy": "retain fail; do not tune candidate operators, seeds, thresholds or statuses after inspection",
+  "fingerprint": "dc7e43c33fd724c813c09b8dbbc6228cb6d377271f40330323b0f8920d98db3c",
+  "fixed_source_ids": [
+    "A"
+  ],
+  "gates": {
+    "all_rules_occurrence_compatible": "coverage == 1.0 for all rules and seeds",
+    "combined_statuses_separate_rules": "true compatible, permissive indistinguishable, reverse-dominant contradicted for all seeds",
+    "permissive_direction_ambiguous": "all directional constraints ambiguous for all seeds",
+    "reverse_direction_contradicted": "all directional constraints contradicted for all seeds",
+    "true_direction_supported": "all directional constraints supported for all seeds"
+  },
+  "loss_support": 0.5,
+  "max_steps": 3,
+  "minimum_support_ratio": 2.0,
+  "node_ids": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "occurrence_ids": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "schema": "eog_v2_directional_evidence_confirmation_contract_v1",
+  "selection_policy": "no winner score or posterior; evidence-specific qualitative statuses remain separate"
+}
