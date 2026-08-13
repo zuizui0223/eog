@@ -14,11 +14,11 @@ from pathlib import Path
 import benchmarks.ryukyu_published_binary_connectivity as sensitivity
 
 FROZEN_DIR = Path("benchmarks/frozen/ryukyu_mangrove_response_free")
-FROZEN_PREDICTOR_MANIFEST_FINGERPRINT = "8bef3ea334eb99610f04ac4eb38e411731b59649ac926f2b60278a732aad1449"
-FROZEN_OPERATOR_FINGERPRINT = "61ba283a6d33cfd85fd3b187de88c47e154acd8da0c6c31082aca1c647219830"
-FROZEN_CONNECTIVITY_FINGERPRINT = "d026ca7a6f4a948ee465ab14b7419cdddea97943886d03ebc18b2429a63bdcfe"
-FROZEN_PREDICTORS_SHA256 = "b5484727b4e690ef880384408a7283964ede593a788b093c74777886bec9851f"
-FROZEN_POPULATIONS_SHA256 = "0edd135771e8339074b456a311efd02202d0309d81b539206160bad212236fb4"
+FROZEN_PREDICTOR_MANIFEST_FINGERPRINT = "8bef3ea33d24f1f124aab5e023cbfac087f74b2e5584546b9da50adaf2de7d31"
+FROZEN_OPERATOR_FINGERPRINT = "61b4794914976bd1ac5687fd814a2d2878d397a2feac02314031feb68c249e35"
+FROZEN_CONNECTIVITY_FINGERPRINT = "d0261069e634cb21068a45ff59c5bb891ce573ec9a6d01e75308b7b8e2215c38"
+FROZEN_PREDICTORS_SHA256 = "b5485e42c8c884bf31f3d8b76fd71db04a93c377bc9836f085a4c65b6f62aa7f"
+FROZEN_POPULATIONS_SHA256 = "6de60475209e49927c68d2467bdac253a0e2777c39a9f4df49dde4832ee3495e"
 SOURCE_RUN = 31610691970
 SOURCE_ARTIFACT = 9147048185
 SOURCE_ARTIFACT_DIGEST = "sha256:23725655494ff7ba09fd764186a675e4f13190d92f0605e601d9b3cc4737a681"
@@ -47,6 +47,10 @@ def evaluate(figure: str | Path) -> dict[str, object]:
         raise ValueError("archived pre-response Ryukyu operator fingerprint drifted")
     if manifest.get("connectivity_fingerprint") != FROZEN_CONNECTIVITY_FINGERPRINT:
         raise ValueError("archived pre-response Ryukyu connectivity fingerprint drifted")
+    if manifest.get("populations_csv_sha256") != FROZEN_POPULATIONS_SHA256:
+        raise ValueError("archived pre-response Ryukyu manifest/population SHA disagreement")
+    if manifest.get("predictors_csv_sha256") != FROZEN_PREDICTORS_SHA256:
+        raise ValueError("archived pre-response Ryukyu manifest/predictor SHA disagreement")
     if manifest.get("genetic_response_attached") is not False:
         raise ValueError("archived Ryukyu predictor manifest is no longer response-free")
 

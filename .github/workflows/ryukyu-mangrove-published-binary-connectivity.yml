@@ -28,16 +28,18 @@ jobs:
       - name: Verify archived response-free predictors from pre-response run
         run: |
           mkdir -p benchmark_results/ryukyu_published_binary
-          echo "0edd135771e8339074b456a311efd02202d0309d81b539206160bad212236fb4  benchmarks/frozen/ryukyu_mangrove_response_free/populations.csv" | sha256sum --check
-          echo "b5484727b4e690ef880384408a7283964ede593a788b093c74777886bec9851f  benchmarks/frozen/ryukyu_mangrove_response_free/predictors.csv" | sha256sum --check
+          echo "6de60475209e49927c68d2467bdac253a0e2777c39a9f4df49dde4832ee3495e  benchmarks/frozen/ryukyu_mangrove_response_free/populations.csv" | sha256sum --check
+          echo "b5485e42c8c884bf31f3d8b76fd71db04a93c377bc9836f085a4c65b6f62aa7f  benchmarks/frozen/ryukyu_mangrove_response_free/predictors.csv" | sha256sum --check
           python - <<'PY'
           import json
           from pathlib import Path
           m=json.loads(Path('benchmarks/frozen/ryukyu_mangrove_response_free/predictor_manifest.json').read_text())
           assert m['genetic_response_attached'] is False
-          assert m['predictor_manifest_fingerprint']=='8bef3ea334eb99610f04ac4eb38e411731b59649ac926f2b60278a732aad1449'
-          assert m['operator_fingerprint']=='61ba283a6d33cfd85fd3b187de88c47e154acd8da0c6c31082aca1c647219830'
-          assert m['connectivity_fingerprint']=='d026ca7a6f4a948ee465ab14b7419cdddea97943886d03ebc18b2429a63bdcfe'
+          assert m['populations_csv_sha256']=='6de60475209e49927c68d2467bdac253a0e2777c39a9f4df49dde4832ee3495e'
+          assert m['predictors_csv_sha256']=='b5485e42c8c884bf31f3d8b76fd71db04a93c377bc9836f085a4c65b6f62aa7f'
+          assert m['predictor_manifest_fingerprint']=='8bef3ea33d24f1f124aab5e023cbfac087f74b2e5584546b9da50adaf2de7d31'
+          assert m['operator_fingerprint']=='61b4794914976bd1ac5687fd814a2d2878d397a2feac02314031feb68c249e35'
+          assert m['connectivity_fingerprint']=='d0261069e634cb21068a45ff59c5bb891ce573ec9a6d01e75308b7b8e2215c38'
           PY
       - name: Download official Frontiers Figure 2
         run: |
@@ -60,7 +62,7 @@ jobs:
           r=json.loads(Path('benchmark_results/ryukyu_published_binary/result.json').read_text())
           assert r['status']=='ryukyu-published-binary-fst-connectivity-retrospective'
           assert r['figure_sha256']=='70d35809ac5e6408b647a920366703aff02b99cab5888ce10744ed3f7b6e9ad1'
-          assert r['predictor_manifest_fingerprint']=='8bef3ea334eb99610f04ac4eb38e411731b59649ac926f2b60278a732aad1449'
+          assert r['predictor_manifest_fingerprint']=='8bef3ea33d24f1f124aab5e023cbfac087f74b2e5584546b9da50adaf2de7d31'
           assert r['response_free_predictor_source']['workflow_run']==31610691970
           assert r['response_free_predictor_source']['artifact_id']==9147048185
           assert r['response_free_predictor_source']['regenerated_after_response_visible'] is False

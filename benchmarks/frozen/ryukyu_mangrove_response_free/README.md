@@ -10,13 +10,13 @@ Authoritative CI provenance:
 - artifact name: `ryukyu-mangrove-response-free-genetic-predictors`;
 - artifact digest: `sha256:23725655494ff7ba09fd764186a675e4f13190d92f0605e601d9b3cc4737a681`.
 
-Frozen file identities:
+Frozen file identities, read directly from that archived artifact:
 
-- `populations.csv` SHA-256: `0edd135771e8339074b456a311efd02202d0309d81b539206160bad212236fb4`;
-- `predictors.csv` SHA-256: `b5484727b4e690ef880384408a7283964ede593a788b093c74777886bec9851f`;
-- predictor-manifest fingerprint: `8bef3ea334eb99610f04ac4eb38e411731b59649ac926f2b60278a732aad1449`;
-- operator fingerprint: `61ba283a6d33cfd85fd3b187de88c47e154acd8da0c6c31082aca1c647219830`;
-- exact-eventual connectivity fingerprint: `d026ca7a6f4a948ee465ab14b7419cdddea97943886d03ebc18b2429a63bdcfe`.
+- `populations.csv` SHA-256: `6de60475209e49927c68d2467bdac253a0e2777c39a9f4df49dde4832ee3495e`;
+- `predictors.csv` SHA-256: `b5485e42c8c884bf31f3d8b76fd71db04a93c377bc9836f085a4c65b6f62aa7f`;
+- predictor-manifest fingerprint: `8bef3ea33d24f1f124aab5e023cbfac087f74b2e5584546b9da50adaf2de7d31`;
+- operator fingerprint: `61b4794914976bd1ac5687fd814a2d2878d397a2feac02314031feb68c249e35`;
+- exact-eventual connectivity fingerprint: `d0261069e634cb21068a45ff59c5bb891ce573ec9a6d01e75308b7b8e2215c38`.
 
 The files are archived rather than regenerated for published-response sensitivity analyses. This prevents later numerical implementation drift from changing the response-free predictors after the external genetic outcome has become visible.
 
