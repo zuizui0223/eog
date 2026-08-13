@@ -11,12 +11,17 @@ def test_v2_remains_backward_compatible_after_subpackage_consolidation():
     assert v2.build_dynamic_transition_operator is reachability.build_dynamic_transition_operator
     assert v2.fit_occurrence_environmental_scale is traversability.fit_occurrence_environmental_scale
     assert v2.evaluate_genetic_validation_ladder is validation.evaluate_genetic_validation_ladder
+    assert v2.evaluate_directional_order_evidence is validation.evaluate_directional_order_evidence
 
 
 def test_v2_facades_keep_estimands_separated():
     assert hasattr(reachability, "summarize_first_passage")
     assert not hasattr(reachability, "evaluate_genetic_validation_ladder")
+    assert not hasattr(reachability, "evaluate_directional_order_evidence")
     assert hasattr(traversability, "summarize_path_traversability")
+    assert hasattr(traversability, "compare_occurrence_transition_rules")
     assert not hasattr(traversability, "GeneticValidationConfig")
+    assert not hasattr(traversability, "evaluate_directional_order_evidence")
     assert hasattr(validation, "GeneticValidationConfig")
+    assert hasattr(validation, "evaluate_directional_order_evidence")
     assert not hasattr(validation, "EcologicalTransitionEdge")
