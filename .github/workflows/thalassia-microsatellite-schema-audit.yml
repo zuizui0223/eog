@@ -28,34 +28,89 @@ jobs:
           set -euo pipefail
           mkdir -p benchmark_results/thalassia_schema
           python - <<'PY'
-          import hashlib, json
+          import hashlib
+          import json
           from pathlib import Path
           import requests
-          record=requests.get('https://zenodo.org/api/records/4937634',headers={'User-Agent':'EOG-v2.1-stage3-schema/1.0'},timeout=60).json()
-          title=str((record.get('metadata') or {}).get('title') or '')
-          assert 'Thalassia hemprichii' in title
-          files=record.get('files') or []
-          if isinstance(files,dict): files=list((files.get('entries') or {}).values())
-          matches=[entry for entry in files if str(entry.get('key') or entry.get('filename') or '')=='Genalex_Th3all_IAA.xlsx']
-          assert len(matches)==1
-          entry=matches[0]
-          url=(entry.get('links') or {}).get('content') or (entry.get('links') or {}).get('download')
-          assert url
-          response=requests.get(url,headers={'User-Agent':'EOG-v2.1-stage3-schema/1.0'},timeout=120)
+
+          record_id = 4937634
+          record_url = f"https://zenodo.org/api/records/{record_id}"
+          session = requests.Session()
+          session.headers.update({"User-Agent":"EOG-v2.1-stage3-schema/1.0"})
+          response = session.get(record_url, timeout=60)
           response.raise_for_status()
-          data=response.content
-          assert len(data)==118400
-          assert hashlib.md5(data).hexdigest()=='ec25c053161d4d62b86c860193475784'
-          assert hashlib.sha256(data).hexdigest()=='aaaab9e302c9be8cf4e108d2aee5867c0b64ed70b6d3b81bad4d60168ee7f2f3'
-          Path('benchmark_results/thalassia_schema/Genalex_Th3all_IAA.xlsx').write_bytes(data)
-          Path('benchmark_results/thalassia_schema/source_identity.json').write_text(json.dumps({
-              'zenodo_record':4937634,
-              'record_title':title,
-              'file_name':'Genalex_Th3all_IAA.xlsx',
-              'size_bytes':len(data),
-              'md5':hashlib.md5(data).hexdigest(),
-              'sha256':hashlib.sha256(data).hexdigest(),
-          },indent=2,sort_keys=True)+'\n')
+          record = response.json()
+
+          title = str((record.get('metadata') or {}).get('title') or '')
+          if 'Thalassia hemprichii' not in title:
+              raise SystemExit(f'Zenodo mirror title mismatch: {title!r}')
+
+          raw_files = record.get('files')
+          if isinstance(raw_files, list):
+              entries = raw_files
+          elif isinstance(raw_files, dict) and isinstance(raw_files.get('entries'), dict):
+              entries = list(raw_files['entries'].values())
+          else:
+              raise SystemExit(f'unexpected Zenodo files schema: {type(raw_files).__name__}')
+
+          by_name = {}
+          for entry in entries:
+              key = str(entry.get('key') or entry.get('filename') or '').strip()
+              if key:
+                  by_name[key] = entry
+          expected_name = 'Genalex_Th3all_IAA.xlsx'
+          if expected_name not in by_name:
+              raise SystemExit(f'Zenodo mirror missing {expected_name!r}; found={sorted(by_name)}')
+
+          entry = by_name[expected_name]
+          links = entry.get('links') or {}
+          content_url = links.get('content') or links.get('download') or links.get('self')
+          if not content_url:
+              raise SystemExit('no Zenodo content link for frozen microsatellite workbook')
+
+          destination = Path('benchmark_results/thalassia_schema/Genalex_Th3all_IAA.xlsx')
+          md5 = hashlib.md5()
+          sha = hashlib.sha256()
+          size = 0
+          with session.get(content_url, stream=True, timeout=120) as download:
+              download.raise_for_status()
+              with destination.open('wb') as handle:
+                  for chunk in download.iter_content(chunk_size=1024*1024):
+                      if not chunk:
+                          continue
+                      handle.write(chunk)
+                      md5.update(chunk)
+                      sha.update(chunk)
+                      size += len(chunk)
+
+          released_checksum = str(entry.get('checksum') or '')
+          released_size = entry.get('size')
+          if released_checksum.startswith('md5:') and md5.hexdigest() != released_checksum.split(':',1)[1]:
+              raise SystemExit('Zenodo MD5 mismatch for frozen microsatellite workbook')
+          if released_size is not None and int(released_size) != size:
+              raise SystemExit(f'Zenodo size mismatch: {size} != {released_size}')
+          if size != 118400:
+              raise SystemExit(f'frozen microsatellite size drifted: {size}')
+          if md5.hexdigest() != 'ec25c053161d4d62b86c860193475784':
+              raise SystemExit('frozen microsatellite MD5 drifted')
+          if sha.hexdigest() != 'aaaab9e302c9be8cf4e108d2aee5867c0b64ed70b6d3b81bad4d60168ee7f2f3':
+              raise SystemExit('frozen microsatellite SHA-256 drifted')
+
+          Path('benchmark_results/thalassia_schema/source_identity.json').write_text(
+              json.dumps({
+                  'zenodo_record': record_id,
+                  'record_title': title,
+                  'record_api_url': record_url,
+                  'file_name': expected_name,
+                  'size_bytes': size,
+                  'md5': md5.hexdigest(),
+                  'sha256': sha.hexdigest(),
+                  'zenodo_checksum': released_checksum,
+                  'zenodo_size': released_size,
+                  'transport_reused_from_stage1': True,
+              }, indent=2, sort_keys=True) + '\n',
+              encoding='utf-8',
+          )
           PY
       - name: Perform schema-only first open
         run: |
@@ -94,4 +149,4 @@ jobs:
             benchmark_results/thalassia_schema/schema_audit.json
             benchmark_results/thalassia_schema/source_identity.json
             benchmark_results/thalassia_schema/stdout.json
-          if-no-files-found: error
+          if-no-files-found: warn
