@@ -1,0 +1,59 @@
+name: EOG v2 directional evidence confirmation
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/directional-evidence-confirmation.yml"
+      - "src/eog/v2/evidence_discrimination.py"
+      - "src/eog/v2/validation.py"
+      - "src/eog/v2/__init__.py"
+      - "benchmarks/directional_evidence_confirmation.py"
+      - "benchmarks/directional_evidence_confirmation_contract.json"
+      - "tests/test_directional_evidence_discrimination.py"
+      - "tests/test_directional_evidence_contract.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  confirm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Run focused contracts
+        run: |
+          pytest -q \
+            tests/test_directional_evidence_discrimination.py \
+            tests/test_directional_evidence_contract.py \
+            tests/test_occurrence_rule_compatibility.py \
+            tests/test_v2_namespace.py \
+            tests/test_v2_package_layout.py
+      - name: Run frozen synthetic confirmation
+        run: |
+          mkdir -p benchmark_results/directional_evidence
+          python benchmarks/directional_evidence_confirmation.py \
+            --output benchmark_results/directional_evidence/result.json \
+            | tee benchmark_results/directional_evidence/stdout.json
+      - name: Display scientific decision
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('benchmark_results/directional_evidence/result.json').read_text())
+          print('decision:', result['decision'])
+          print('fingerprint:', result['fingerprint'])
+          for name, gate in result['gates'].items():
+              print(name, gate)
+          PY
+      - name: Upload frozen result
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-v2-directional-evidence-confirmation
+          path: benchmark_results/directional_evidence
