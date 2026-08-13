@@ -1,0 +1,28 @@
+{
+  "artifact_digest": "sha256:3dcecc9796098ef7954c0453d6a1625bf32a5a5e2c13de225bb883762336efe7",
+  "artifact_id": 9178765198,
+  "contract_fingerprint": "dc7e43c33fd724c813c09b8dbbc6228cb6d377271f40330323b0f8920d98db3c",
+  "decision": "pass",
+  "gates": {
+    "all_rules_occurrence_compatible": {
+      "passed": true
+    },
+    "combined_statuses_separate_rules": {
+      "passed": true
+    },
+    "permissive_direction_ambiguous": {
+      "passed": true
+    },
+    "reverse_direction_contradicted": {
+      "passed": true
+    },
+    "true_direction_supported": {
+      "passed": true
+    }
+  },
+  "head_sha": "a2dd88aae0294336a102071321e13702e0475f88",
+  "result_fingerprint": "c06d71d5c9b872fe20bf0004b9369b61c90806dae4edb00795cafa566afe365d",
+  "schema": "eog_v2_directional_evidence_confirmation_result_v1",
+  "scope": "synthetic independent-evidence discrimination only; no empirical history or winner claim",
+  "workflow_run": 31694565199
+}
