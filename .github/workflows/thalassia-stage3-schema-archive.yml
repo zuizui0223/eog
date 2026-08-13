@@ -1,3 +1,4 @@
+# Re-triggered after protocol reconciliation so the successful Stage-3A artifact is archived from the current branch head.
 name: Thalassia one-time Stage 3A schema archive
 
 on:
