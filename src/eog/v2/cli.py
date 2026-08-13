@@ -6,8 +6,6 @@ has one discoverable command boundary.
 """
 from __future__ import annotations
 
-from typing import NoReturn
-
 
 def genetic_validate_main() -> int | None:
     """Run the existing frozen/prospective genetic validation CLI."""
