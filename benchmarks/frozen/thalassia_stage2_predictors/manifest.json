@@ -1,0 +1,232 @@
+{
+  "bootstrap_resamples": 10000,
+  "bootstrap_seed": 20260813,
+  "candidate_family_fingerprint": "2895d0b1420fbd80cfabec7336bb2aa6b4fa501a452c90102859c3fe486f3ecb",
+  "candidate_ids": [
+    "gabriel_current_flow",
+    "gabriel_shortest_path",
+    "geographic"
+  ],
+  "connectivity_fingerprint": "e0ab1d046906d362b6766ec7b887e300d25efb119282406a0daf319abd156f89",
+  "dryad_doi": "10.5061/dryad.404rm",
+  "environmental_distance_policy": "all-zero / IBE non-applicable",
+  "fingerprint": "ef119675a596fe2044aca97b43efc618cfb7b00aee1dc3a1663ff5736c0a94ea",
+  "gabriel_edge_count": 27,
+  "genetic_response_attached": false,
+  "genetic_workbook_contents_accessed": false,
+  "graph_edges": [
+    {
+      "a": "BIA",
+      "b": "TUA",
+      "geodesic_length_km": 630.8416940391824,
+      "support": 0.42100011624108447
+    },
+    {
+      "a": "TUA",
+      "b": "AMB",
+      "geodesic_length_km": 550.4088353178194,
+      "support": 0.47009600069817115
+    },
+    {
+      "a": "AMB",
+      "b": "KEN",
+      "geodesic_length_km": 621.3148241232531,
+      "support": 0.42653654360406174
+    },
+    {
+      "a": "AMB",
+      "b": "BIT",
+      "geodesic_length_km": 657.9828248463114,
+      "support": 0.40561821941310366
+    },
+    {
+      "a": "AMB",
+      "b": "KUP",
+      "geodesic_length_km": 877.5821135992237,
+      "support": 0.30014293916333895
+    },
+    {
+      "a": "KEN",
+      "b": "BIT",
+      "geodesic_length_km": 659.4222780131885,
+      "support": 0.4048183051141249
+    },
+    {
+      "a": "KEN",
+      "b": "PAL",
+      "geodesic_length_km": 472.9616311477661,
+      "support": 0.5227724543862722
+    },
+    {
+      "a": "KEN",
+      "b": "KUP",
+      "geodesic_length_km": 692.4578152781927,
+      "support": 0.38688757279157127
+    },
+    {
+      "a": "KEN",
+      "b": "MAT",
+      "geodesic_length_km": 872.5819255756592,
+      "support": 0.3022081356600251
+    },
+    {
+      "a": "BIT",
+      "b": "PAL",
+      "geodesic_length_km": 629.7396569453033,
+      "support": 0.4216368585360085
+    },
+    {
+      "a": "PAL",
+      "b": "NAT",
+      "geodesic_length_km": 1376.3117529500453,
+      "support": 0.15145857701704268
+    },
+    {
+      "a": "PAL",
+      "b": "MAT",
+      "geodesic_length_km": 948.4916611921195,
+      "support": 0.27233013441030834
+    },
+    {
+      "a": "JEP",
+      "b": "PAR",
+      "geodesic_length_km": 451.44246841236134,
+      "support": 0.5384298342059524
+    },
+    {
+      "a": "JEP",
+      "b": "DRI",
+      "geodesic_length_km": 173.90290109592087,
+      "support": 0.7878192895785889
+    },
+    {
+      "a": "PAR",
+      "b": "BAN",
+      "geodesic_length_km": 321.299489991202,
+      "support": 0.6436353603360645
+    },
+    {
+      "a": "PAR",
+      "b": "CK",
+      "geodesic_length_km": 1282.734740088015,
+      "support": 0.17219741632701355
+    },
+    {
+      "a": "BAN",
+      "b": "NAT",
+      "geodesic_length_km": 794.3615068339525,
+      "support": 0.33642851886269104
+    },
+    {
+      "a": "BAN",
+      "b": "PAD",
+      "geodesic_length_km": 729.1937676592626,
+      "support": 0.36787944117144233
+    },
+    {
+      "a": "NAT",
+      "b": "PAD",
+      "geodesic_length_km": 1047.62088494566,
+      "support": 0.2377147588499772
+    },
+    {
+      "a": "KUP",
+      "b": "MAT",
+      "geodesic_length_km": 853.5841601499764,
+      "support": 0.3101850580745277
+    },
+    {
+      "a": "KUP",
+      "b": "MI",
+      "geodesic_length_km": 701.2624883839359,
+      "support": 0.3822441764456359
+    },
+    {
+      "a": "MAT",
+      "b": "DRI",
+      "geodesic_length_km": 606.0185584012062,
+      "support": 0.4355784866564752
+    },
+    {
+      "a": "MAT",
+      "b": "Ex2",
+      "geodesic_length_km": 1483.9121382619542,
+      "support": 0.1306799769336379
+    },
+    {
+      "a": "DRI",
+      "b": "Ex2",
+      "geodesic_length_km": 1556.18147460539,
+      "support": 0.1183495887507916
+    },
+    {
+      "a": "PAD",
+      "b": "CK",
+      "geodesic_length_km": 1303.4381199068996,
+      "support": 0.167377114395792
+    },
+    {
+      "a": "CK",
+      "b": "Ex2",
+      "geodesic_length_km": 2137.6846922007685,
+      "support": 0.05331311566335844
+    },
+    {
+      "a": "MI",
+      "b": "Ex2",
+      "geodesic_length_km": 1106.3094958971712,
+      "support": 0.21933214312616756
+    }
+  ],
+  "graph_fingerprint": "4523868e8536805c7b90df870f0e49cc22080470701e0bf7b13dd8e169ef752e",
+  "inner_selector": "leave-one-population-out; equal-weight inner-population MSE; lexicographic exact tie",
+  "loss_support": 0.5,
+  "n_pairs": 136,
+  "n_populations": 17,
+  "nested_selector_contract_sha256": "0e0f0d8e625f66ec7cbb57771ad75b13df57f5d898249466ff2b2ad235e6fb7a",
+  "opaque_genetic_file_sha256": "aaaab9e302c9be8cf4e108d2aee5867c0b64ed70b6d3b81bad4d60168ee7f2f3",
+  "operator_fingerprint": "50a9b3456027ea24d6e9effddca9988288972e18e23fe084fb0970f4f2675d8a",
+  "outer_unit": "population",
+  "population_ids": [
+    "BIA",
+    "TUA",
+    "AMB",
+    "KEN",
+    "BIT",
+    "PAL",
+    "JEP",
+    "PAR",
+    "BAN",
+    "NAT",
+    "KUP",
+    "MAT",
+    "DRI",
+    "PAD",
+    "CK",
+    "MI",
+    "Ex2"
+  ],
+  "predictors_csv_sha256": "05c3a2e65029d44532e55436bc97c33482f96fb2d1951d79a0b50c776b02b7e1",
+  "projection": {
+    "center_latitude": -6.062304764705882,
+    "center_longitude": 116.61670705921516,
+    "method": "WGS84 azimuthal equidistant centered on response-free sample mean latitude/circular-mean longitude"
+  },
+  "promotion_rule": {
+    "all_frozen_populations_mechanically_aligned": true,
+    "mean_outer_population_selected_plus_eog_minus_selected_mse_must_be_lt_zero": true,
+    "nested_selected_conventional_pooled_mse_must_be_lte_geographic_pooled_mse": true,
+    "no_candidate_removal_or_addition_after_genetic_response_access": true,
+    "population_bootstrap_95pct_upper_bound_must_be_lt_zero": true
+  },
+  "response_transform": "linearized_fst",
+  "ridge_penalty": 1.0,
+  "schema": "eog_v2_1_thalassia_response_free_predictors_v1",
+  "source_coordinate_fingerprint": "334948e6af43c50d5fb7bfec3396065a1c39d64e0bab7eb5f4a767a42249245d",
+  "source_coordinate_sha256": "7311e561ec2dbeecc57b0b6d8b83b4819697f23480303bcb4478e5750660ce49",
+  "source_stage1_fingerprint": "12a34c597dbf4130ad1dcda8a9822504291a0ac7d4f34fa31c43d8d373d49764",
+  "stage2_contract_sha256": "90ff2d904b49cd097484efc90ac1ba3c09bbb56d628db2cf41a25af3221131e0",
+  "status": "response-free-genetic-predictor-freeze",
+  "study_doi": "10.1111/mec.13966",
+  "support_scale_km": 729.1937676592626
+}
