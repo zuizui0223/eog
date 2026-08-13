@@ -1,0 +1,86 @@
+name: Periploca response-free coordinate freeze
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/periploca-utm-coordinate-freeze.yml"
+      - "benchmarks/periploca_utm_schema_extract.py"
+      - "benchmarks/periploca_utm_coordinate_freeze.py"
+      - "docs/eog_v2_periploca_utm_conversion_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install response-free coordinate dependency
+        run: python -m pip install "pyproj==3.7.2"
+      - name: Download authoritative geography only
+        run: |
+          mkdir -p benchmark_results/periploca_coordinate_freeze
+          curl --fail --location --retry 4 --retry-delay 3 \
+            --user-agent "Mozilla/5.0 EOG-v2.1-response-free-geography/1.0" \
+            "https://zenodo.org/api/records/4994024/files/Periploca%20pops%20data.txt/content" \
+            --output benchmark_results/periploca_coordinate_freeze/geography.txt
+          echo "d54af743f39332aab753964ee0d6950550097d7b29216d155a50967153d5d233  benchmark_results/periploca_coordinate_freeze/geography.txt" | sha256sum --check
+      - name: Recreate frozen response-free UTM row table
+        run: |
+          python benchmarks/periploca_utm_schema_extract.py \
+            --geography benchmark_results/periploca_coordinate_freeze/geography.txt \
+            --output benchmark_results/periploca_coordinate_freeze/utm_rows.json \
+            > benchmark_results/periploca_coordinate_freeze/utm_stdout.json
+      - name: Select UTM scale and freeze coordinates
+        run: |
+          python benchmarks/periploca_utm_coordinate_freeze.py \
+            --utm-rows benchmark_results/periploca_coordinate_freeze/utm_rows.json \
+            --manifest benchmark_results/periploca_coordinate_freeze/coordinate_manifest.json \
+            --all-coordinates benchmark_results/periploca_coordinate_freeze/all_coordinates.csv \
+            --canary-coordinates benchmark_results/periploca_coordinate_freeze/canary_coordinates.csv \
+            > benchmark_results/periploca_coordinate_freeze/coordinate_stdout.json
+      - name: Enforce response-free coordinate contract
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          root=Path('benchmark_results/periploca_coordinate_freeze')
+          result=json.loads((root/'coordinate_manifest.json').read_text())
+          assert result['status']=='periploca-response-free-coordinate-freeze'
+          assert result['selected_multiplier']==10
+          assert result['n_populations']==33
+          assert result['n_canary_populations']==20
+          assert result['genetic_contents_accessed'] is False
+          assert result['genetic_response_computed'] is False
+          surviving=[x['scale'] for x in result['scale_screens'] if x['admissible']]
+          assert surviving==[10]
+          with (root/'all_coordinates.csv').open(newline='',encoding='utf-8') as h:
+              all_rows=list(csv.DictReader(h))
+          with (root/'canary_coordinates.csv').open(newline='',encoding='utf-8') as h:
+              canary=list(csv.DictReader(h))
+          assert len(all_rows)==33 and len(canary)==20
+          assert all(-90 <= float(r['latitude']) <= 90 and -180 <= float(r['longitude']) <= 180 for r in all_rows)
+          assert [r['population'] for r in canary]==result['canary_population_codes']
+          PY
+      - name: Remove source geography before artifact upload
+        if: always()
+        run: rm -f benchmark_results/periploca_coordinate_freeze/geography.txt
+      - name: Upload response-free coordinate bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: periploca-response-free-coordinate-freeze
+          path: |
+            benchmark_results/periploca_coordinate_freeze/utm_rows.json
+            benchmark_results/periploca_coordinate_freeze/coordinate_manifest.json
+            benchmark_results/periploca_coordinate_freeze/all_coordinates.csv
+            benchmark_results/periploca_coordinate_freeze/canary_coordinates.csv
+            benchmark_results/periploca_coordinate_freeze/utm_stdout.json
+            benchmark_results/periploca_coordinate_freeze/coordinate_stdout.json
+          if-no-files-found: error
