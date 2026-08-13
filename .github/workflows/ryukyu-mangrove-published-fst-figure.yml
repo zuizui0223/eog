@@ -1,0 +1,48 @@
+name: Ryukyu mangrove published FST figure archive
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/ryukyu-mangrove-published-fst-figure.yml"
+      - "docs/eog_v2_ryukyu_mangrove_genetic_retrospective_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download official Frontiers Figure 2 asset
+        run: |
+          mkdir -p benchmark_results/ryukyu_mangrove_published_fst
+          URL="https://www.frontiersin.org/files/Articles/827590/xml-images/fmars-09-827590-g002.webp"
+          printf '%s\n' "$URL" > benchmark_results/ryukyu_mangrove_published_fst/source_url.txt
+          curl --fail --location --retry 4 --retry-delay 3 \
+            --user-agent "Mozilla/5.0 EOG-v2-retrospective-validation/1.0" \
+            "$URL" \
+            --output benchmark_results/ryukyu_mangrove_published_fst/figure2.webp
+          test -s benchmark_results/ryukyu_mangrove_published_fst/figure2.webp
+          sha256sum benchmark_results/ryukyu_mangrove_published_fst/figure2.webp \
+            > benchmark_results/ryukyu_mangrove_published_fst/figure2_sha256.txt
+          file benchmark_results/ryukyu_mangrove_published_fst/figure2.webp \
+            > benchmark_results/ryukyu_mangrove_published_fst/file_type.txt
+          stat --printf='%s\n' benchmark_results/ryukyu_mangrove_published_fst/figure2.webp \
+            > benchmark_results/ryukyu_mangrove_published_fst/size_bytes.txt
+      - name: Record source boundary
+        run: |
+          cat > benchmark_results/ryukyu_mangrove_published_fst/README.txt <<'EOF'
+          Official Figure 2 asset from Thomas, Nakajima & Mitarai (2022), DOI 10.3389/fmars.2022.827590.
+          The figure is a published pairwise FST matrix. Any numeric transcription derived from it is a
+          published-response retrospective sensitivity, not raw-genotype replication and not blinded confirmation.
+          Response-free EOG predictors were frozen separately before this figure archive.
+          EOF
+      - name: Upload official figure provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: ryukyu-mangrove-published-fst-figure
+          path: benchmark_results/ryukyu_mangrove_published_fst
+          if-no-files-found: error

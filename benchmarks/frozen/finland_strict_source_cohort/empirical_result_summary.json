@@ -1,0 +1,61 @@
+{
+  "artifact_digest": "sha256:47231b1163046a468805383010d652c019b92edb92336d5b48393ff8c922b870",
+  "artifact_id": 9177201442,
+  "artifact_result_json_sha256": "c2c7c6d2f42615b9e7c4e9bb223d984b7659b415718abdebbf1fd90b4851ce3c",
+  "checks": {
+    "bootstrap_upper_bound": false,
+    "mean_species_candidate_increment": true,
+    "minimum_species": true,
+    "strong_reference_operational": true
+  },
+  "decision": "no_empirical_added_information",
+  "feature_bundle_fingerprint": "24590e53c511330e99992e4399b711b85ce160a54a5bbc01364790f30982301b",
+  "fingerprint": "209eb703be5e0574bec9ebc8b129d0760fdb8c6db807c5fe7ccbb2d519e2afe0",
+  "fraction_species_C_favourable": 0.55,
+  "mean_species_C_minus_R2_log_loss": -0.00013800642598677228,
+  "median_species_C_minus_R2_log_loss": -7.438036891028739e-05,
+  "model_scores": {
+    "C": {
+      "brier": 0.0650446961475513,
+      "log_loss": 0.2373256991040136
+    },
+    "C_geo": {
+      "brier": 0.06505908006296221,
+      "log_loss": 0.23733676822841138
+    },
+    "R0": {
+      "brier": 0.06900727437821262,
+      "log_loss": 0.25845732128037924
+    },
+    "R1": {
+      "brier": 0.06540081971213522,
+      "log_loss": 0.2381955499852448
+    },
+    "R2": {
+      "brier": 0.0650719441366525,
+      "log_loss": 0.237422158781551
+    }
+  },
+  "n_rows": 74700,
+  "n_species": 180,
+  "pooled_C_geo_minus_R2_log_loss": -8.539055313963595e-05,
+  "pooled_C_minus_R2_log_loss": -9.645967753740825e-05,
+  "pooled_R2_minus_R0_log_loss": -0.021035162498828225,
+  "post_response_retuning_allowed": false,
+  "promotion_go": false,
+  "raw_sha256": "72b631033ef36210ee19b151dc4f6569760262d68f70b9ce6de6c8a11afeb957",
+  "response_free_preflight_fingerprint": "d9cd041d6893592b20389f56a560099123dedbbf2fda0795bc618f88efebdc91",
+  "result_fingerprint": "97de0a30c197e8352589fd98f0da976c69d4761229d2ec70106975292182068e",
+  "schema": "eog_v2_finland_strict_source_frozen_result_summary_v1",
+  "species_C_adverse": 81,
+  "species_C_exact_zero": 0,
+  "species_C_favourable": 99,
+  "species_bootstrap_95_interval": [
+    -0.00028370978779246455,
+    1.4795433136458638e-08
+  ],
+  "status": "frozen_finland_strict_source_result",
+  "workflow_run": 31690500533,
+  "workflow_run_attempt": 1,
+  "workflow_run_number": 1
+}

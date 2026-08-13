@@ -1,0 +1,36 @@
+{
+  "exact_complement_species_list_sha256": "e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc",
+  "historical_count_grid": {
+    "candidate_exact_line_support": 184,
+    "candidate_exact_line_support_fraction": 0.5897435897435898,
+    "intercept": -3.0098005679308137,
+    "max_integer_decode_error": 2.5011104298755527e-12,
+    "max_released_residual": 5.551115123125783e-15,
+    "slope": 0.7981217334649451,
+    "transform": "affine_lnp1_integer_grid_exact_consensus"
+  },
+  "n_exact_complement_species": 184,
+  "n_strict_sourceful_exact_complement_species": 180,
+  "n_zero_source_exact_complement_species": 4,
+  "outcome_values_accessed": false,
+  "raw_sha256": "72b631033ef36210ee19b151dc4f6569760262d68f70b9ce6de6c8a11afeb957",
+  "schema": "eog_v2_finland_strict_source_cohort_response_free_v1",
+  "source_artifact_digest": "sha256:6ceffc22d6b97c26a0a656e3a8c4e14d9e345c6fb7377e6bfa151df5c7c78503",
+  "source_artifact_id": 9175904550,
+  "source_identifiability_fingerprint": "06f38cb7a5d1321c5dde4072ee0c1329f52de05a55fed353909b342e3f4e2afd",
+  "source_identifiability_json_sha256": "0e73ddb3d9f93e57d69a9a31abb2afa4ca9c2404a2d7249da938c9e4716ff38e",
+  "source_identity_status_counts": {
+    "ambiguous_multiple_removable_sources": 123,
+    "exact_complement": 184,
+    "inconsistent_nearest_distance_constraints": 2,
+    "unique_recovered_by_count_and_nearest": 3
+  },
+  "source_workflow_run": 31687132743,
+  "strict_rule": "admit only exact_complement species with decoded historical count > 0; exclude four zero-source exact complements as fixed-source non-applicable, and exclude unique-recovered, ambiguous, inconsistent, and species without decoded released historical count",
+  "zero_source_exact_complement_species": [
+    "Epilobium adenocaulon",
+    "Epilobium ciliatum",
+    "Galium album",
+    "Senecio viscosus"
+  ]
+}

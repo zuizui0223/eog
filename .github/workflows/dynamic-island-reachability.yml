@@ -1,0 +1,153 @@
+name: Dynamic island reachability validation
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/dynamic_island_reachability.py"
+      - "src/eog/reachability_genetics.py"
+      - "src/eog/neutral_genetics_simulator.py"
+      - "src/eog/reachability_network_diagnostics.py"
+      - "src/eog/island_state_layers.py"
+      - "src/eog/synthetic_archipelago.py"
+      - "src/eog/v2.py"
+      - "src/eog/v2_empirical_occurrence_validation.py"
+      - "src/eog/v2_empirical_occurrence_io.py"
+      - "src/eog/v2_empirical_occurrence_freeze_cli.py"
+      - "src/eog/v2_empirical_occurrence_validate_cli.py"
+      - "tests/test_dynamic_island_reachability.py"
+      - "tests/test_reachability_genetics.py"
+      - "tests/test_neutral_genetics_simulator.py"
+      - "tests/test_reachability_network_diagnostics.py"
+      - "tests/test_island_state_layers.py"
+      - "tests/test_synthetic_archipelago.py"
+      - "tests/test_v2_empirical_occurrence_validation.py"
+      - "tests/test_v2_empirical_occurrence_io_cli.py"
+      - "tests/test_finland_colonization_preoutcome_admission.py"
+      - "tests/test_finland_colonization_score.py"
+      - "benchmarks/dynamic_archipelago_simulation.py"
+      - "benchmarks/dynamic_archipelago_neutral_genetics.py"
+      - "benchmarks/dynamic_archipelago_reference_depth.py"
+      - "benchmarks/dynamic_archipelago_ibe_boundary.py"
+      - "benchmarks/dynamic_occurrence_comparator_ladder.py"
+      - "benchmarks/dynamic_genetic_distance_sensitivity.py"
+      - "benchmarks/finland_colonization_preoutcome_admission.py"
+      - "benchmarks/finland_colonization_prepare.py"
+      - "benchmarks/finland_colonization_score.py"
+      - "docs/eog_v2_occurrence_comparator_contract.md"
+      - "docs/eog_v2_empirical_occurrence_validation_contract.md"
+      - "docs/eog_v2_finland_colonization_preoutcome_contract.md"
+      - "docs/eog_v2_finland_colonization_inference_freeze.md"
+      - "pyproject.toml"
+      - ".github/workflows/dynamic-island-reachability.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Run focused tests
+        run: |
+          python -m pytest -q \
+            tests/test_dynamic_island_reachability.py \
+            tests/test_reachability_genetics.py \
+            tests/test_neutral_genetics_simulator.py \
+            tests/test_reachability_network_diagnostics.py \
+            tests/test_island_state_layers.py \
+            tests/test_synthetic_archipelago.py \
+            tests/test_v2_empirical_occurrence_validation.py \
+            tests/test_v2_empirical_occurrence_io_cli.py \
+            tests/test_finland_colonization_preoutcome_admission.py \
+            tests/test_finland_colonization_score.py
+      - name: Run reachability proof of estimand
+        run: |
+          mkdir -p benchmark_results/dynamic_island_reachability
+          python benchmarks/dynamic_archipelago_simulation.py \
+            > benchmark_results/dynamic_island_reachability/reachability.json
+      - name: Run known-truth neutral genetic benchmark
+        run: |
+          python benchmarks/dynamic_archipelago_neutral_genetics.py \
+            > benchmark_results/dynamic_island_reachability/neutral_genetics.json
+      - name: Run strong-reference depth screen
+        run: |
+          python benchmarks/dynamic_archipelago_reference_depth.py \
+            > benchmark_results/dynamic_island_reachability/reference_depth.json
+      - name: Run IBD IBE boundary screen
+        run: |
+          python benchmarks/dynamic_archipelago_ibe_boundary.py \
+            > benchmark_results/dynamic_island_reachability/ibe_boundary.json
+      - name: Run prospective occurrence comparator confirmation
+        run: |
+          python benchmarks/dynamic_occurrence_comparator_ladder.py \
+            --phase confirmation \
+            --output benchmark_results/dynamic_island_reachability/occurrence_comparator_confirmation.json
+      - name: Run genetic-distance development sensitivity
+        run: |
+          python benchmarks/dynamic_genetic_distance_sensitivity.py \
+            > benchmark_results/dynamic_island_reachability/genetic_distance_sensitivity.json
+      - name: Check benchmark contracts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("benchmark_results/dynamic_island_reachability")
+          reachability = json.loads((root / "reachability.json").read_text())
+          genetics = json.loads((root / "neutral_genetics.json").read_text())
+          reference_depth = json.loads((root / "reference_depth.json").read_text())
+          ibe_boundary = json.loads((root / "ibe_boundary.json").read_text())
+          occurrence = json.loads((root / "occurrence_comparator_confirmation.json").read_text())
+          sensitivity = json.loads((root / "genetic_distance_sensitivity.json").read_text())
+
+          scenarios = reachability["scenarios"]
+          assert scenarios["open_chain"]["horizon_first_passage_support"] > scenarios["bottleneck"]["horizon_first_passage_support"] > 0
+          assert scenarios["missing_intermediate"]["horizon_first_passage_support"] == 0
+          assert scenarios["open_chain"]["first_positive_step"] == 3
+          assert scenarios["bottleneck"]["first_positive_step"] == 3
+
+          assert genetics["status"] == "development-known-truth-only"
+          assert genetics["seeds"] == [101, 211, 307, 401, 503, 601, 701, 809]
+          assert genetics["all_seeds_improve"] is True
+          assert genetics["mean_delta_mse"] < 0
+          assert all(row["delta_mse"] < 0 for row in genetics["rows"])
+
+          assert reference_depth["status"] == "development-known-truth-reference-depth"
+          assert reference_depth["reference"] == "geography-only effective resistance/current-flow"
+          assert reference_depth["null_no_added_information"] is True
+          assert reference_depth["structure_added_information"] is True
+          assert reference_depth["geography_only_null"]["mean_delta_mse"] >= 0
+          assert reference_depth["intermediate_structure"]["mean_delta_mse"] < 0
+          assert reference_depth["intermediate_structure"]["favourable_seed_count"] == 8
+
+          assert ibe_boundary["status"] == "development-known-truth-ibd-ibe-boundary"
+          assert ibe_boundary["mean_ibd_ibe_mse"] < ibe_boundary["mean_ibd_mse"]
+          assert ibe_boundary["mean_geo_env_current_flow_mse"] < ibe_boundary["mean_ibd_ibe_mse"]
+          assert ibe_boundary["mean_eog_increment_over_strong_reference"] >= 0
+          assert ibe_boundary["eog_added_information_beyond_strong_reference"] is False
+
+          assert occurrence["contract"]["confirmation_seeds"] == [907, 1009, 1103, 1201, 1301, 1409, 1511, 1601]
+          assert occurrence["contract_fingerprint"] == "1b2c5e550019c1e73e8f7199dfcc952dfeed3bbbbc3232d173e811fcd21438e6"
+          assert occurrence["decision"]["passed"] is True
+          assert all(check["passed"] for check in occurrence["decision"]["checks"].values())
+
+          assert sensitivity["status"] == "development-genetic-distance-sensitivity-before-empirical-genetics"
+          assert sensitivity["n_candidates"] == 24
+          assert sensitivity["selected_candidate"] is not None
+          assert sensitivity["n_eligible"] >= 1
+          PY
+      - name: Upload outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dynamic-island-reachability-validation
+          path: benchmark_results/dynamic_island_reachability
+          if-no-files-found: error

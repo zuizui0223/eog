@@ -1,0 +1,28 @@
+population_id,node_type,latitude,longitude,coordinate_class,source,source_id,provenance,sensitivity_radius_km
+Guoju,mainland,29.8503658,122.0330326,mainland_town_centroid,OpenStreetMap,relation:17863471,Nominatim run 31654792433,3
+Xiepu,mainland,30.0340649,121.5965724,mainland_town_centroid,OpenStreetMap,relation:11242984,Nominatim run 31654792433,3
+Yuanhua,mainland,30.4145400,120.7715500,mainland_town_centroid,OpenStreetMap,node:1699762355,Mapcarta/OSM response-free fallback; GeoNames 1786088,3
+Meishan,island,29.7867289,121.9866593,island_centroid,OpenStreetMap,relation:11582905,Nominatim run 31654792433,5
+Fodu,island,29.7387412,122.0178178,island_centroid,OpenStreetMap,relation:11590501,Nominatim run 31654792433,5
+Liuheng,island,29.7250538,122.1143027,island_centroid,OpenStreetMap,relation:8379574,Nominatim run 31654792433,5
+Huni,island,29.7929400,122.1892400,island_centroid,GeoNames,1886850,Mapcarta/GeoNames response-free fallback,5
+Xiashi,island,29.7563489,122.2394976,island_centroid,OpenStreetMap,relation:11602519,Nominatim run 31654792433; Xiazhi alias,5
+Mayi,island,29.8718933,122.2588864,island_centroid,OpenStreetMap,way:9996294,Nominatim run 31654792433,5
+Taohua,island,29.8099542,122.2765342,island_centroid,OpenStreetMap,way:10008247,Nominatim run 31654792433,5
+Dengbu,island,29.8689648,122.3076085,island_centroid,OpenStreetMap,way:9986846,Nominatim run 31654792433,5
+Zhujiajian,island,29.8955595,122.3964054,island_centroid,OpenStreetMap,relation:7237467,Nominatim run 31654792433,5
+Putuoshan,island,30.0011100,122.3841700,island_centroid,GeoNames,1798437,Mapcarta/GeoNames response-free fallback,5
+Zhoushan,island,30.0630266,122.1324165,large_island_centroid,OpenStreetMap,relation:8377612,Nominatim run 31654792433,10
+Damao,island,29.9495186,122.0395018,island_centroid,OpenStreetMap,relation:11582433,Nominatim run 31654792433,5
+Cezi,island,30.0962489,121.9333206,island_centroid,OpenStreetMap,node:2519579910,Nominatim run 31654792433,5
+Jintang,island,30.0361337,121.8798201,island_centroid,OpenStreetMap,way:10008171,Nominatim run 31654792433,5
+Dapengshan,island,30.0754100,121.8329400,island_centroid,GeoNames,1813726,Mapcarta/GeoNames response-free fallback; paper reports 0.6 km shoreline separation from Jintang,5
+Changbai,island,30.1831288,122.0369119,island_centroid,OpenStreetMap,relation:11571340,Nominatim run 31654792433,5
+Xiushan,island,30.1711830,122.1617000,island_centroid,OpenStreetMap,relation:7237454,Nominatim run 31654792433,5
+Dayushan,island,30.3179072,121.9594015,island_centroid,OpenStreetMap,relation:11635227,Nominatim run 31654792433,5
+Daishan,island,30.2933941,122.1458006,island_centroid,OpenStreetMap,relation:11601614,Nominatim run 31654792433,5
+Dongji,island,30.1953078,122.6804536,archipelago_admin_centroid,OpenStreetMap,relation:15571510,Nominatim run 31654792433; representative node for sampled Dongji site,10
+Qushan,island,30.4447556,122.3518208,island_centroid,OpenStreetMap,relation:11630607,Nominatim run 31654792433,5
+Sijiao,island,30.7094400,122.4644400,island_centroid,GeoNames,1794244,Mapcarta/GeoNames response-free fallback; Shengsi Sijiao,5
+Shengshan,island,30.7188452,122.8181597,island_centroid,OpenStreetMap,relation:14484252,Nominatim run 31654792433,5
+Huaniao,island,30.8488345,122.6899481,island_admin_centroid,OpenStreetMap,relation:10399578,Nominatim run 31654792433; representative node for Huaniao,5

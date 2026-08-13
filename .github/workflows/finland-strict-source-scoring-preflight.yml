@@ -1,0 +1,113 @@
+name: Finland strict-source scoring preflight
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/finland-strict-source-scoring-preflight.yml"
+      - "benchmarks/finland_strict_source_score.py"
+      - "benchmarks/frozen/finland_strict_source_cohort/feature_freeze.json"
+      - "benchmarks/frozen/finland_strict_source_cohort/csv_format_manifest.json"
+      - "tests/test_finland_strict_source_score_contract.py"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install frozen preflight dependencies
+        run: |
+          python -m pip install -e ".[dev]"
+          python -m pip install "requests==2.32.5"
+      - name: Test committed response-free scoring contracts
+        run: pytest -q tests/test_finland_strict_source_score_contract.py
+      - name: Verify frozen feature artifact metadata before download
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p benchmark_results/finland_strict_scoring_preflight
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          import requests
+
+          expected_id=9176686695
+          expected_run=31689131928
+          expected_digest='sha256:9a2a0b78ab5000698f97f6e3371c6548c3c95a04c93744a9b571f6ce7f62c758'
+          response=requests.get(
+              f'https://api.github.com/repos/zuizui0223/eog/actions/artifacts/{expected_id}',
+              headers={
+                  'Authorization':f"Bearer {os.environ['GITHUB_TOKEN']}",
+                  'Accept':'application/vnd.github+json',
+              },
+              timeout=60,
+          )
+          response.raise_for_status()
+          payload=response.json()
+          assert payload['id']==expected_id
+          assert payload['name']=='finland-strict-source-response-free-freeze'
+          assert payload['expired'] is False
+          assert payload['digest']==expected_digest
+          assert payload['workflow_run']['id']==expected_run
+          assert payload['workflow_run']['head_sha']=='dbef67fda247452a0c76975aa60e5cad0b984007'
+          Path('benchmark_results/finland_strict_scoring_preflight/artifact_metadata.json').write_text(
+              json.dumps(payload,indent=2,sort_keys=True)+'\n'
+          )
+          PY
+      - name: Download exact frozen response-free feature artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: finland-strict-source-response-free-freeze
+          path: benchmark_results/finland_strict_scoring_preflight/frozen
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: zuizui0223/eog
+          run-id: 31689131928
+      - name: Reacquire exact raw bytes through verified institutional mirror
+        run: |
+          mkdir -p benchmark_results/finland_strict_scoring_preflight/raw
+          python benchmarks/finland_institutional_mirror_transport.py \
+            --output benchmark_results/finland_strict_scoring_preflight/raw/colonization_select.csv \
+            --provenance benchmark_results/finland_strict_scoring_preflight/transport_provenance.json \
+            > benchmark_results/finland_strict_scoring_preflight/transport_stdout.json
+      - name: Run complete response-free scoring preflight
+        run: |
+          python benchmarks/finland_strict_source_score.py \
+            --preflight-only \
+            --input benchmark_results/finland_strict_scoring_preflight/raw/colonization_select.csv \
+            --bundle benchmark_results/finland_strict_scoring_preflight/frozen/features.npz \
+            --manifest benchmark_results/finland_strict_scoring_preflight/frozen/feature_manifest.json \
+            --output benchmark_results/finland_strict_scoring_preflight/preflight.json \
+            > benchmark_results/finland_strict_scoring_preflight/preflight_stdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('benchmark_results/finland_strict_scoring_preflight/preflight.json').read_text())
+          assert p['status']=='response-free-scoring-preflight-passed'
+          assert p['outcome_values_accessed'] is False
+          assert p['freeze_workflow_run']==31689131928
+          assert p['freeze_artifact_id']==9176686695
+          assert len(p['fingerprint'])==64
+          PY
+      - name: Delete raw outcome-bearing CSV before artifact upload
+        if: always()
+        run: rm -rf benchmark_results/finland_strict_scoring_preflight/raw
+      - name: Upload response-free scoring preflight
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: finland-strict-source-scoring-preflight
+          path: |
+            benchmark_results/finland_strict_scoring_preflight/artifact_metadata.json
+            benchmark_results/finland_strict_scoring_preflight/transport_provenance.json
+            benchmark_results/finland_strict_scoring_preflight/transport_stdout.json
+            benchmark_results/finland_strict_scoring_preflight/preflight.json
+            benchmark_results/finland_strict_scoring_preflight/preflight_stdout.json
+          if-no-files-found: warn

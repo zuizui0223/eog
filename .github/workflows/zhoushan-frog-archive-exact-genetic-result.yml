@@ -1,0 +1,106 @@
+name: Archive Zhoushan exact genetic result
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/zhoushan-frog-archive-exact-genetic-result.yml"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/eog-v2-dynamic-island-reachability
+          fetch-depth: 0
+      - name: Download authoritative one-time result artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/zhoushan-result
+          curl --fail --location \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/eog/actions/artifacts/9164737355/zip" \
+            --output /tmp/zhoushan-result.zip
+          echo "0dce3020b616a00c08ee602d5f1b44d5bc59f08ad753e8a989b51802d612633c  /tmp/zhoushan-result.zip" | sha256sum --check
+          unzip -q /tmp/zhoushan-result.zip -d /tmp/zhoushan-result
+          echo "88c3f9aa4210e61eb3eb6398cc7ba64a9cf2e23a0e7e09164f2ed958153355b8  /tmp/zhoushan-result/result.json" | sha256sum --check
+          echo "8f6836b3219b7ef2bb92a3a21cf41ed750e3afac21480ebf1a70d6b0fed0eda3  /tmp/zhoushan-result/pairwise_fst_response.csv" | sha256sum --check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/zhoushan-result/result.json').read_text())
+          assert r['fingerprint']=='585b4b6c3a616d353e3abcfd95b5c341cb4e022da012a8d72ad310ddb9ae48cd'
+          assert r['status']=='indeterminate_strong_reference_failure'
+          assert r['promotion_go'] is False
+          assert r['response_summary']['n_pairs']==351
+          assert r['response_summary']['n_nonfinite_or_outside_linearized_domain']==0
+          PY
+      - name: Archive derived response and immutable result
+        run: |
+          target="benchmarks/frozen/zhoushan_frog_exact_genetic_result"
+          mkdir -p "$target"
+          cp /tmp/zhoushan-result/pairwise_fst_response.csv "$target/pairwise_fst_response.csv"
+          cp /tmp/zhoushan-result/result.json "$target/result.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          source=Path('/tmp/zhoushan-result/result.json')
+          r=json.loads(source.read_text())
+          models={model['model_id']:{'mse':model['mse'],'mae':model['mae']} for model in r['models']}
+          contrasts={c['contrast_id']:{'delta_mse':c['delta_mse'],'delta_mae':c['delta_mae']} for c in r['contrasts']}
+          summary={
+              'status':r['status'],
+              'promotion_go':r['promotion_go'],
+              'fingerprint':r['fingerprint'],
+              'study_doi':r['study_doi'],
+              'response_estimator':r['response_estimator'],
+              'response_transform':r['response_transform'],
+              'response_summary':r['response_summary'],
+              'models':models,
+              'contrasts':contrasts,
+              'primary_population_inference':r['primary_population_inference'],
+              'decision_checks':r['decision_checks'],
+              'frozen_predictor_manifest_fingerprint':r['frozen_predictor_manifest_fingerprint'],
+              'frozen_operator_fingerprint':r['frozen_operator_fingerprint'],
+              'frozen_connectivity_fingerprint':r['frozen_connectivity_fingerprint'],
+              'raw_genotype_sha256':r['raw_genotype_provenance']['raw_sha256'],
+          }
+          Path('benchmarks/frozen/zhoushan_frog_exact_genetic_result/result_summary.json').write_text(
+              json.dumps(summary,indent=2,sort_keys=True,allow_nan=False)+'\n',encoding='utf-8')
+          PY
+          cat > "$target/README.md" <<'EOF'
+          # Frozen Zhoushan exact genetic validation result
+
+          This directory contains **derived genetic response and validation outputs only**. The copyrighted/raw microsatellite workbook is not committed.
+
+          Authoritative one-time empirical run:
+
+          - workflow run: `31656924070`;
+          - workflow head: `44839bdec13c7ea315079a2ece5728b7efbf5fe5`;
+          - artifact ID: `9164737355`;
+          - artifact digest: `sha256:0dce3020b616a00c08ee602d5f1b44d5bc59f08ad753e8a989b51802d612633c`;
+          - full result JSON SHA-256: `88c3f9aa4210e61eb3eb6398cc7ba64a9cf2e23a0e7e09164f2ed958153355b8`;
+          - pairwise derived response CSV SHA-256: `8f6836b3219b7ef2bb92a3a21cf41ed750e3afac21480ebf1a70d6b0fed0eda3`;
+          - result fingerprint: `585b4b6c3a616d353e3abcfd95b5c341cb4e022da012a8d72ad310ddb9ae48cd`.
+
+          The response file contains all 351 recomputed Weir–Cockerham pairwise FST values and their predeclared linearized values. It is a derived analytical artifact, not raw genotype data.
+
+          Frozen decision: `indeterminate_strong_reference_failure`; `promotion_go = false`.
+
+          The full interpretation and claim boundary are recorded in `docs/eog_v2_zhoushan_frog_independent_genetic_result.md`.
+          EOF
+          echo "88c3f9aa4210e61eb3eb6398cc7ba64a9cf2e23a0e7e09164f2ed958153355b8  $target/result.json" | sha256sum --check
+          echo "8f6836b3219b7ef2bb92a3a21cf41ed750e3afac21480ebf1a70d6b0fed0eda3  $target/pairwise_fst_response.csv" | sha256sum --check
+          git config user.name "EOG exact genetic result freeze"
+          git config user.email "actions@users.noreply.github.com"
+          git add "$target"
+          git diff --cached --quiet && { echo "Exact result already archived"; exit 0; }
+          git commit -m "Archive Zhoushan exact genetic validation result"
+          git push origin HEAD:agent/eog-v2-dynamic-island-reachability

@@ -1,0 +1,116 @@
+name: Finland strict-source response-free freeze
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/finland-strict-source-freeze.yml"
+      - "benchmarks/finland_strict_source_prepare.py"
+      - "benchmarks/finland_strict_source_prepare_cli.py"
+      - "benchmarks/finland_historical_count_grid.py"
+      - "benchmarks/finland_institutional_mirror_transport.py"
+      - "benchmarks/finland_csv_format_adapter.py"
+      - "benchmarks/frozen/finland_strict_source_cohort/**"
+      - "docs/eog_v2_finland_strict_source_cohort_contract.md"
+      - "docs/eog_v2_finland_colonization_preoutcome_contract.md"
+      - "docs/eog_v2_finland_colonization_inference_freeze.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install frozen dependencies
+        run: |
+          python -m pip install -e ".[dev]"
+          python -m pip install "requests==2.32.5"
+      - name: Verify frozen sourceful exact-complement cohort identity
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          species=Path('benchmarks/frozen/finland_strict_source_cohort/exact_complement_species.txt')
+          summary=json.loads(Path('benchmarks/frozen/finland_strict_source_cohort/response_free_summary.json').read_text())
+          assert hashlib.sha256(species.read_bytes()).hexdigest()=='e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc'
+          assert len(species.read_text().splitlines())==180
+          assert summary['n_exact_complement_species']==184
+          assert summary['n_zero_source_exact_complement_species']==4
+          assert summary['n_strict_sourceful_exact_complement_species']==180
+          assert summary['source_identifiability_fingerprint']=='06f38cb7a5d1321c5dde4072ee0c1329f52de05a55fed353909b342e3f4e2afd'
+          assert summary['outcome_values_accessed'] is False
+          PY
+      - name: Acquire exact Dryad bytes through verified institutional mirror
+        run: |
+          mkdir -p benchmark_results/finland_strict/raw
+          python benchmarks/finland_institutional_mirror_transport.py \
+            --output benchmark_results/finland_strict/raw/colonization_select.csv \
+            --provenance benchmark_results/finland_strict/transport_provenance.json \
+            > benchmark_results/finland_strict/transport_stdout.json
+      - name: Build strict-source response-free bundle
+        run: |
+          python benchmarks/finland_strict_source_prepare_cli.py \
+            --input benchmark_results/finland_strict/raw/colonization_select.csv \
+            --admission benchmark_results/finland_strict/strict_admission.json \
+            --bundle benchmark_results/finland_strict/features.npz \
+            --manifest benchmark_results/finland_strict/feature_manifest.json \
+            > benchmark_results/finland_strict/freeze_stdout.json
+      - name: Verify strict-source freeze and promotion prerequisites
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root=Path('benchmark_results/finland_strict')
+          raw=root/'raw'/'colonization_select.csv'
+          raw_sha=hashlib.sha256(raw.read_bytes()).hexdigest()
+          provenance=json.loads((root/'transport_provenance.json').read_text())
+          admission=json.loads((root/'strict_admission.json').read_text())
+          manifest=json.loads((root/'feature_manifest.json').read_text())
+          assert raw_sha=='72b631033ef36210ee19b151dc4f6569760262d68f70b9ce6de6c8a11afeb957'
+          assert provenance['downloaded_sha256']==raw_sha
+          assert provenance['outcome_values_accessed'] is False
+          assert admission['status']=='finland-strict-source-response-free-admission'
+          assert admission['admitted'] is True
+          assert admission['outcome_values_accessed'] is False
+          assert admission['n_islands']==471
+          assert admission['n_species_strict']==180
+          assert admission['checks']['nearest_history_consistency']['passed'] is True
+          assert admission['strict_species_list_sha256']=='e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc'
+          assert manifest['schema']=='eog_v2_finland_strict_source_response_free_bundle_v1'
+          assert manifest['outcome_values_accessed'] is False
+          assert manifest['raw_sha256']==raw_sha
+          assert manifest['n_sourceful_species']==180
+          assert manifest['n_species_analysis_response_free']>=100
+          assert manifest['strict_species_list_sha256']=='e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc'
+          assert manifest['source_identifiability_fingerprint']=='06f38cb7a5d1321c5dde4072ee0c1329f52de05a55fed353909b342e3f4e2afd'
+          assert manifest['bootstrap_seed']==20260812
+          assert manifest['bootstrap_replicates']==10000
+          assert manifest['loss_support']==0.55 and manifest['max_steps']==5
+          feature_sha=hashlib.sha256((root/'features.npz').read_bytes()).hexdigest()
+          (root/'features_sha256.txt').write_text(feature_sha+'\n')
+          (root/'features_size_bytes.txt').write_text(str((root/'features.npz').stat().st_size)+'\n')
+          PY
+      - name: Remove raw outcome-bearing CSV before artifact upload
+        if: always()
+        run: rm -rf benchmark_results/finland_strict/raw
+      - name: Upload immutable response-free freeze candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: finland-strict-source-response-free-freeze
+          path: |
+            benchmark_results/finland_strict/transport_provenance.json
+            benchmark_results/finland_strict/transport_stdout.json
+            benchmark_results/finland_strict/strict_admission.json
+            benchmark_results/finland_strict/features.npz
+            benchmark_results/finland_strict/feature_manifest.json
+            benchmark_results/finland_strict/features_sha256.txt
+            benchmark_results/finland_strict/features_size_bytes.txt
+            benchmark_results/finland_strict/freeze_stdout.json
+          if-no-files-found: warn

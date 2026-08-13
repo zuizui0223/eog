@@ -1,0 +1,47 @@
+name: Zhoushan frog pre-genetic gazetteer probe
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/zhoushan-frog-pre-genetic-gazetteer.yml"
+      - "benchmarks/zhoushan_frog_response_free_gazetteer_probe.py"
+      - "docs/eog_v2_zhoushan_frog_pre_genetic_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Query response-free public gazetteer candidates
+        run: |
+          mkdir -p benchmark_results/zhoushan_frog_gazetteer
+          python benchmarks/zhoushan_frog_response_free_gazetteer_probe.py \
+            --output benchmark_results/zhoushan_frog_gazetteer/candidates.json \
+            > benchmark_results/zhoushan_frog_gazetteer/stdout.json
+      - name: Check genetic firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('benchmark_results/zhoushan_frog_gazetteer/candidates.json').read_text())
+          assert result['status']=='zhoushan-frog-response-free-gazetteer-candidate-probe'
+          assert result['n_nodes']==27
+          assert result['genetic_response_accessed'] is False
+          assert result['microsatellite_file_accessed'] is False
+          assert result['coordinate_selection_performed'] is False
+          assert len(result['fingerprint'])==64
+          PY
+      - name: Upload response-free gazetteer candidates
+        uses: actions/upload-artifact@v4
+        with:
+          name: zhoushan-frog-pre-genetic-gazetteer-candidates
+          path: benchmark_results/zhoushan_frog_gazetteer/candidates.json
+          if-no-files-found: error
