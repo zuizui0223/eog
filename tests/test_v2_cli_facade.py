@@ -1,5 +1,4 @@
 import importlib
-import tomllib
 from pathlib import Path
 
 import eog.v2.cli as cli
@@ -13,9 +12,12 @@ EXPECTED_V2_SCRIPTS = {
 
 
 def test_all_v2_console_scripts_route_through_one_v2_facade():
-    project = tomllib.loads(Path("pyproject.toml").read_text())
-    scripts = project["project"]["scripts"]
-    observed = {name: value for name, value in scripts.items() if name.startswith("eog-v2-")}
+    text = Path("pyproject.toml").read_text()
+    observed = {
+        line.split("=", 1)[0].strip(): line.split("=", 1)[1].strip().strip('"')
+        for line in text.splitlines()
+        if line.strip().startswith("eog-v2-")
+    }
     assert observed == EXPECTED_V2_SCRIPTS
 
 
