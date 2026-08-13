@@ -7,7 +7,9 @@ on:
       - "benchmarks/finland_institutional_mirror_transport.py"
       - "benchmarks/finland_csv_format_adapter.py"
       - "benchmarks/finland_historical_count_diagnostic.py"
+      - "benchmarks/finland_source_identity_identifiability.py"
       - "tests/test_finland_csv_format_adapter.py"
+      - "tests/test_finland_source_identity_identifiability.py"
       - "docs/eog_v2_finland_institutional_mirror_transport_contract.md"
       - "docs/eog_v2_finland_response_free_schema_normalization.md"
   workflow_dispatch:
@@ -28,8 +30,9 @@ jobs:
         run: |
           python -m pip install -e ".[dev]"
           python -m pip install "requests==2.32.5"
-      - name: Test response-free CSV format adapter
-        run: pytest -q tests/test_finland_csv_format_adapter.py
+      - name: Test response-free adapters and source identifiability
+        run: |
+          pytest -q tests/test_finland_csv_format_adapter.py tests/test_finland_source_identity_identifiability.py
       - name: Acquire byte-identical Dryad object through institutional Zenodo mirror
         run: |
           mkdir -p benchmark_results/finland_colonization/raw
@@ -54,6 +57,13 @@ jobs:
             --input benchmark_results/finland_colonization/raw/colonization_select.csv \
             --output benchmark_results/finland_colonization/historical_count_diagnostic.json \
             > benchmark_results/finland_colonization/historical_count_diagnostic_stdout.json
+      - name: Audit source identity identifiability without outcome access
+        if: failure() && steps.response_free_admission.outcome == 'failure'
+        run: |
+          python benchmarks/finland_source_identity_identifiability.py \
+            --input benchmark_results/finland_colonization/raw/colonization_select.csv \
+            --output benchmark_results/finland_colonization/source_identity_identifiability.json \
+            > benchmark_results/finland_colonization/source_identity_identifiability_stdout.json
       - name: Verify response firewall, provenance and scientific admission
         if: success()
         run: |
@@ -75,19 +85,16 @@ jobs:
           assert provenance['csv_contents_parsed'] is False
           assert provenance['downloaded_sha256']==provenance['dryad_digest']==sha
           assert provenance['downloaded_size']==provenance['dryad_file_size']==129157803
-
           assert fmt['schema']=='eog_v2_finland_csv_format_v1'
           assert fmt['outcome_values_accessed'] is False
           assert fmt['raw_sha256']==sha
           assert fmt['scientific_code_changed_by_adapter'] is False
-
           assert admission['status']=='finland-colonization-response-free-admission'
           assert admission['outcome_values_accessed'] is False
           assert admission['admitted'] is True
           assert admission['n_islands']==471
           assert admission['n_sourceful_species']>=100
           assert all(check['passed'] for check in admission['checks'].values())
-
           assert manifest['schema']=='eog_v2_finland_colonization_response_free_bundle_v1'
           assert manifest['outcome_values_accessed'] is False
           assert manifest['raw_sha256']==admission['raw_sha256']==sha
@@ -120,6 +127,8 @@ jobs:
             benchmark_results/finland_colonization/admission.json
             benchmark_results/finland_colonization/historical_count_diagnostic.json
             benchmark_results/finland_colonization/historical_count_diagnostic_stdout.json
+            benchmark_results/finland_colonization/source_identity_identifiability.json
+            benchmark_results/finland_colonization/source_identity_identifiability_stdout.json
             benchmark_results/finland_colonization/features.npz
             benchmark_results/finland_colonization/feature_manifest.json
             benchmark_results/finland_colonization/raw_csv_sha256.txt
