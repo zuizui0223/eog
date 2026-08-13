@@ -1,0 +1,97 @@
+name: Thalassia one-time microsatellite schema audit
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/thalassia-microsatellite-schema-audit.yml"
+      - "benchmarks/thalassia_microsatellite_schema_audit.py"
+      - "docs/eog_v2_thalassia_stage3_microsatellite_contract.md"
+      - "benchmarks/frozen/thalassia_response_free/**"
+      - "benchmarks/frozen/thalassia_stage2_predictors/**"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install schema dependency
+        run: python -m pip install "requests==2.32.5" "openpyxl==3.1.5"
+      - name: Download exact frozen microsatellite workbook from verified Zenodo record
+        run: |
+          set -euo pipefail
+          mkdir -p benchmark_results/thalassia_schema
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          import requests
+          record=requests.get('https://zenodo.org/api/records/4937634',headers={'User-Agent':'EOG-v2.1-stage3-schema/1.0'},timeout=60).json()
+          title=str((record.get('metadata') or {}).get('title') or '')
+          assert 'Thalassia hemprichii' in title
+          files=record.get('files') or []
+          if isinstance(files,dict): files=list((files.get('entries') or {}).values())
+          matches=[entry for entry in files if str(entry.get('key') or entry.get('filename') or '')=='Genalex_Th3all_IAA.xlsx']
+          assert len(matches)==1
+          entry=matches[0]
+          url=(entry.get('links') or {}).get('content') or (entry.get('links') or {}).get('download')
+          assert url
+          response=requests.get(url,headers={'User-Agent':'EOG-v2.1-stage3-schema/1.0'},timeout=120)
+          response.raise_for_status()
+          data=response.content
+          assert len(data)==118400
+          assert hashlib.md5(data).hexdigest()=='ec25c053161d4d62b86c860193475784'
+          assert hashlib.sha256(data).hexdigest()=='aaaab9e302c9be8cf4e108d2aee5867c0b64ed70b6d3b81bad4d60168ee7f2f3'
+          Path('benchmark_results/thalassia_schema/Genalex_Th3all_IAA.xlsx').write_bytes(data)
+          Path('benchmark_results/thalassia_schema/source_identity.json').write_text(json.dumps({
+              'zenodo_record':4937634,
+              'record_title':title,
+              'file_name':'Genalex_Th3all_IAA.xlsx',
+              'size_bytes':len(data),
+              'md5':hashlib.md5(data).hexdigest(),
+              'sha256':hashlib.sha256(data).hexdigest(),
+          },indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Perform schema-only first open
+        run: |
+          python benchmarks/thalassia_microsatellite_schema_audit.py \
+            --input benchmark_results/thalassia_schema/Genalex_Th3all_IAA.xlsx \
+            --output benchmark_results/thalassia_schema/schema_audit.json \
+            > benchmark_results/thalassia_schema/stdout.json
+      - name: Enforce no-response schema contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('benchmark_results/thalassia_schema/schema_audit.json').read_text())
+          assert r['status']=='thalassia-microsatellite-schema-admitted'
+          assert r['raw_sha256']=='aaaab9e302c9be8cf4e108d2aee5867c0b64ed70b6d3b81bad4d60168ee7f2f3'
+          assert r['stage2_manifest_fingerprint']=='ef119675a596fe2044aca97b43efc618cfb7b00aee1dc3a1663ff5736c0a94ea'
+          assert r['genetic_workbook_contents_accessed_for_schema_only'] is True
+          assert r['allele_frequencies_computed'] is False
+          assert r['multilocus_genotypes_computed'] is False
+          assert r['genetic_response_computed'] is False
+          b=r['admitted_block']
+          assert b['n_loci']==16 and b['n_populations']==17
+          assert set(b['mapped_population_counts'])==set(['BIA','TUA','AMB','KEN','BIT','PAL','JEP','PAR','BAN','NAT','KUP','MAT','DRI','PAD','CK','MI','Ex2'])
+          assert len(b['locus_names'])==16 and len(set(b['locus_names']))==16
+          assert len(r['schema_fingerprint'])==64 and len(r['fingerprint'])==64
+          PY
+      - name: Remove raw microsatellite workbook before artifact upload
+        if: always()
+        run: rm -f benchmark_results/thalassia_schema/Genalex_Th3all_IAA.xlsx
+      - name: Upload schema audit only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: thalassia-microsatellite-schema-audit
+          path: |
+            benchmark_results/thalassia_schema/schema_audit.json
+            benchmark_results/thalassia_schema/source_identity.json
+            benchmark_results/thalassia_schema/stdout.json
+          if-no-files-found: error
