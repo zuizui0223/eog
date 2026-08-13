@@ -9,6 +9,12 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
+
+if __package__ in {None, ""}:
+    _repo_root = str(Path(__file__).resolve().parents[1])
+    if _repo_root not in sys.path:
+        sys.path.insert(0, _repo_root)
 
 import benchmarks.finland_source_identity_identifiability as base
 from benchmarks.finland_historical_count_grid import decode_integer_historical_counts
@@ -25,7 +31,9 @@ def audit(path: str | Path) -> dict[str, object]:
     result["count_decoder"] = "finland_historical_count_grid.decode_integer_historical_counts"
     result["count_decoder_response_free"] = True
     result["outcome_values_accessed"] = False
-    result["fingerprint"] = base._canonical_sha256({key: value for key, value in result.items() if key != "fingerprint"})
+    result["fingerprint"] = base._canonical_sha256(
+        {key: value for key, value in result.items() if key != "fingerprint"}
+    )
     return result
 
 
@@ -36,7 +44,10 @@ def main() -> None:
     args = parser.parse_args()
     result = audit(args.input)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
+    args.output.write_text(
+        json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
     print(json.dumps({
         "status": result["status"],
         "outcome_values_accessed": False,
