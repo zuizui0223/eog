@@ -29,13 +29,20 @@ jobs:
           from pathlib import Path
           import requests
           expected='d54af743f39332aab753964ee0d6950550097d7b29216d155a50967153d5d233'
-          record=requests.get('https://zenodo.org/api/records/4994024',timeout=90).json()
+          response=requests.get('https://zenodo.org/api/records/4994024',timeout=90)
+          response.raise_for_status()
+          record=response.json()
           files={str(i.get('key') or i.get('filename') or i.get('name') or ''):i for i in (record.get('files') or [])}
           item=files['Periploca pops data.txt']
-          url=(item.get('links') or {}).get('content') or (item.get('links') or {}).get('download')
+          links=item.get('links') or {}
+          url=links.get('content') or links.get('download') or links.get('self')
+          if not url:
+              raise RuntimeError(f'no Zenodo download URL for Periploca geography: {item}')
           path=Path('benchmark_results/periploca_utm/raw/geography.txt')
-          response=requests.get(url,timeout=90); response.raise_for_status(); path.write_bytes(response.content)
-          actual=hashlib.sha256(response.content).hexdigest()
+          download=requests.get(url,timeout=90)
+          download.raise_for_status()
+          path.write_bytes(download.content)
+          actual=hashlib.sha256(download.content).hexdigest()
           if actual!=expected:
               raise RuntimeError(f'Periploca geography SHA mismatch: {actual}')
           PY
