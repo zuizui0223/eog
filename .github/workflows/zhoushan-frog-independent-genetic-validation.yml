@@ -72,7 +72,7 @@ jobs:
           echo "52ee37e431aff3303d58685cfef064a7ee34cf0117f52eaca3889e21eacebb17  benchmark_results/zhoushan_independent_genetics/raw/Microsatellite_data.xls" | sha256sum --check
       - name: Compute exact raw FST and immediately run frozen LOPO ladder
         run: |
-          python benchmarks/zhoushan_frog_independent_genetic_validation.py \
+          python -m benchmarks.zhoushan_frog_independent_genetic_validation \
             --genotypes benchmark_results/zhoushan_independent_genetics/raw/Microsatellite_data.xls \
             --output benchmark_results/zhoushan_independent_genetics/result.json \
             --response-csv benchmark_results/zhoushan_independent_genetics/pairwise_fst_response.csv \
