@@ -20,6 +20,12 @@ from .eventual_genetic_connectivity import (
     build_eventual_genetic_validation_bundle,
     infer_eventual_genetic_connectivity,
 )
+from .genetic_reference_selection import (
+    NestedGeneticReferenceResult,
+    NestedReferenceInnerScore,
+    NestedReferenceOuterFold,
+    evaluate_nested_genetic_reference_selection,
+)
 from .genetic_validation import (
     GeneticValidationConfig,
     GeneticValidationContrast,
@@ -70,6 +76,10 @@ __all__ = [
     "GeneticValidationContrast",
     "GeneticValidationResult",
     "evaluate_genetic_validation_ladder",
+    "NestedReferenceInnerScore",
+    "NestedReferenceOuterFold",
+    "NestedGeneticReferenceResult",
+    "evaluate_nested_genetic_reference_selection",
     "AreaSupportDeclaration",
     "AreaSupportResult",
     "IslandStateLayers",
