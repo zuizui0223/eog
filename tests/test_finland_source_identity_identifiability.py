@@ -2,21 +2,20 @@ from __future__ import annotations
 
 import numpy as np
 
-from benchmarks.finland_source_identity_identifiability import (
-    _individually_removable_sources,
-    decode_integer_historical_counts,
-)
+from benchmarks.finland_historical_count_grid import decode_integer_historical_counts
+from benchmarks.finland_source_identity_identifiability import _individually_removable_sources
 
 
-def test_integer_historical_grid_recovers_true_counts_despite_small_complement_overcounts():
-    true = np.asarray([12, 19, 23, 44, 63, 117, 288], dtype=float)
-    candidate = true + np.asarray([1, 1, 1, 1, 1, 3, 0], dtype=float)
+def test_integer_historical_grid_recovers_true_counts_despite_response_free_complement_overcounts():
+    true = np.asarray([12, 19, 23, 44, 63, 117, 144, 179, 288], dtype=float)
+    candidate = true + np.asarray([1, 0, 0, 0, 0, 3, 0, 2, 0], dtype=float)
     intercept = -3.0098005679308053
     slope = 0.7981217334649422
     released = intercept + slope * np.log1p(true)
     decoded, metadata = decode_integer_historical_counts(candidate, released, max_count=471)
     assert decoded.tolist() == true.astype(int).tolist()
-    assert metadata["transform"] == "affine_lnp1_integer_grid"
+    assert metadata["transform"] == "affine_lnp1_integer_grid_exact_consensus"
+    assert metadata["candidate_exact_line_support"] == 6
     assert metadata["max_integer_decode_error"] < 1e-7
     assert metadata["max_released_residual"] < 1e-10
 
@@ -24,11 +23,11 @@ def test_integer_historical_grid_recovers_true_counts_despite_small_complement_o
 def test_individually_removable_source_is_one_never_needed_for_nearest_distance():
     coordinates = np.asarray(
         [
-            [0.0, 0.0],   # source 0, unique nearest to target 3
-            [10.0, 0.0],  # source 1, never nearest
-            [20.0, 0.0],  # source 2, unique nearest to target 4
-            [4.0, 0.0],   # target
-            [16.0, 0.0],  # target
+            [0.0, 0.0],
+            [10.0, 0.0],
+            [20.0, 0.0],
+            [4.0, 0.0],
+            [16.0, 0.0],
         ]
     )
     removable = _individually_removable_sources(
@@ -39,7 +38,7 @@ def test_individually_removable_source_is_one_never_needed_for_nearest_distance(
     assert removable == (1,)
 
 
-def test_tied_nearest_sources_are_conservatively_both_individually_removable():
+def test_tied_nearest_sources_are_conservatively_individually_removable():
     coordinates = np.asarray(
         [
             [0.0, 0.0],
@@ -53,6 +52,4 @@ def test_tied_nearest_sources_are_conservatively_both_individually_removable():
         np.asarray([3]),
         coordinates,
     )
-    # Sources 1 and 2 are tied. For a one-island count discrepancy either could be removed,
-    # so the higher-level audit correctly treats the source identity as ambiguous.
     assert removable == (0, 1, 2)
