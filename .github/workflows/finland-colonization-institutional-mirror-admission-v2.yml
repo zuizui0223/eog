@@ -6,8 +6,10 @@ on:
       - ".github/workflows/finland-colonization-institutional-mirror-admission-v2.yml"
       - "benchmarks/finland_institutional_mirror_transport.py"
       - "benchmarks/finland_csv_format_adapter.py"
+      - "benchmarks/finland_historical_count_diagnostic.py"
       - "tests/test_finland_csv_format_adapter.py"
       - "docs/eog_v2_finland_institutional_mirror_transport_contract.md"
+      - "docs/eog_v2_finland_response_free_schema_normalization.md"
   workflow_dispatch:
 
 permissions:
@@ -36,6 +38,7 @@ jobs:
             --provenance benchmark_results/finland_colonization/institutional_mirror_provenance.json \
             > benchmark_results/finland_colonization/transport_stdout.json
       - name: Run frozen response-free admission and predictor preparation through dialect adapter
+        id: response_free_admission
         run: |
           python benchmarks/finland_csv_format_adapter.py \
             --input benchmark_results/finland_colonization/raw/colonization_select.csv \
@@ -44,7 +47,15 @@ jobs:
             --manifest benchmark_results/finland_colonization/feature_manifest.json \
             --format-manifest benchmark_results/finland_colonization/csv_format_manifest.json \
             > benchmark_results/finland_colonization/adapter_stdout.json
+      - name: Diagnose historical-count mismatch without outcome access
+        if: failure() && steps.response_free_admission.outcome == 'failure'
+        run: |
+          python benchmarks/finland_historical_count_diagnostic.py \
+            --input benchmark_results/finland_colonization/raw/colonization_select.csv \
+            --output benchmark_results/finland_colonization/historical_count_diagnostic.json \
+            > benchmark_results/finland_colonization/historical_count_diagnostic_stdout.json
       - name: Verify response firewall, provenance and scientific admission
+        if: success()
         run: |
           python - <<'PY'
           import hashlib
@@ -85,11 +96,14 @@ jobs:
           assert fmt['feature_bundle_fingerprint']==manifest['feature_bundle_fingerprint']
           PY
       - name: Record immutable raw identity before removal
+        if: always()
         run: |
-          sha256sum benchmark_results/finland_colonization/raw/colonization_select.csv \
-            > benchmark_results/finland_colonization/raw_csv_sha256.txt
-          stat --printf='%s\n' benchmark_results/finland_colonization/raw/colonization_select.csv \
-            > benchmark_results/finland_colonization/raw_size_bytes.txt
+          if test -f benchmark_results/finland_colonization/raw/colonization_select.csv; then
+            sha256sum benchmark_results/finland_colonization/raw/colonization_select.csv \
+              > benchmark_results/finland_colonization/raw_csv_sha256.txt
+            stat --printf='%s\n' benchmark_results/finland_colonization/raw/colonization_select.csv \
+              > benchmark_results/finland_colonization/raw_size_bytes.txt
+          fi
       - name: Remove raw data before artifact upload
         if: always()
         run: rm -rf benchmark_results/finland_colonization/raw
@@ -104,6 +118,8 @@ jobs:
             benchmark_results/finland_colonization/csv_format_manifest.json
             benchmark_results/finland_colonization/adapter_stdout.json
             benchmark_results/finland_colonization/admission.json
+            benchmark_results/finland_colonization/historical_count_diagnostic.json
+            benchmark_results/finland_colonization/historical_count_diagnostic_stdout.json
             benchmark_results/finland_colonization/features.npz
             benchmark_results/finland_colonization/feature_manifest.json
             benchmark_results/finland_colonization/raw_csv_sha256.txt
