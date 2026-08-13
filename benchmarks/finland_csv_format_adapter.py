@@ -22,23 +22,18 @@ if __package__ in {None, ""}:
         sys.path.insert(0, _repo_root)
 
 DELIMITER_CANDIDATES = (",", ";", "\t", "|")
-HEADER_REQUIRED = {
-    "outcome",
-    "spp.name",
-    "holmkod",
-    "Historical_total_log",
-    "Dist_to_historical_log",
-}
-# Dryad's public metadata defines Limestone as presence (0=absent, 1=present). The
-# released table uses categorical Yes/No tokens, so this syntactic adapter canonicalizes
-# only that declared binary field. No other field receives categorical coercion.
+HEADER_REQUIRED = {"outcome", "spp.name", "holmkod", "Historical_total_log", "Dist_to_historical_log"}
 BINARY_RECODING = {"Limestone": {"yes": "1", "no": "0"}}
 
 
 def _canonical_sha256(value: object) -> str:
-    return hashlib.sha256(
-        json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
-    ).hexdigest()
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")).hexdigest()
+
+
+def _write_json(path: str | Path, value: object) -> None:
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
 
 
 def detect_csv_format(path: str | Path) -> dict[str, object]:
@@ -88,14 +83,11 @@ class _NormalizedDictReader:
 
     def __next__(self):
         row = next(self._delegate)
-        if row is None:
-            return row
         for column, mapping in BINARY_RECODING.items():
-            if column not in row or row[column] is None:
-                continue
-            token = str(row[column]).strip().lower()
-            if token in mapping:
-                row[column] = mapping[token]
+            if column in row and row[column] is not None:
+                token = str(row[column]).strip().lower()
+                if token in mapping:
+                    row[column] = mapping[token]
         return row
 
     def __getattr__(self, name):
@@ -104,7 +96,6 @@ class _NormalizedDictReader:
 
 @contextmanager
 def fixed_dict_reader_delimiter(delimiter: str) -> Iterator[None]:
-    """Freeze delimiter and documented binary representation for existing readers."""
     if delimiter not in DELIMITER_CANDIDATES:
         raise ValueError(f"unsupported delimiter: {delimiter!r}")
     original = csv.DictReader
@@ -141,29 +132,39 @@ def run_response_free_pipeline(
     evaluate_admission, prepare_bundle = _load_frozen_pipeline_functions()
     with fixed_dict_reader_delimiter(delimiter):
         admission = evaluate_admission(source)
-        if not admission.get("admitted"):
-            raise RuntimeError("Finland response-free scientific admission failed")
-        feature_manifest = prepare_bundle(source, bundle_path, manifest_path)
     if admission.get("outcome_values_accessed") is not False:
         raise RuntimeError("Finland admission outcome firewall was not preserved")
-    if feature_manifest.get("outcome_values_accessed") is not False:
-        raise RuntimeError("Finland feature-preparation outcome firewall was not preserved")
+
+    # Preserve a negative response-free admission as evidence rather than hiding its failed
+    # checks behind an exception. This still occurs before any outcome value is accessed.
+    _write_json(admission_path, admission)
     format_manifest = dict(format_manifest)
     format_manifest.update(
         {
             "raw_sha256": admission.get("raw_sha256"),
             "admission_fingerprint": admission.get("fingerprint"),
-            "feature_bundle_fingerprint": feature_manifest.get("feature_bundle_fingerprint"),
             "scientific_code_changed_by_adapter": False,
         }
     )
+    if not admission.get("admitted"):
+        format_manifest["feature_bundle_fingerprint"] = None
+        format_manifest["response_free_admission_passed"] = False
+        format_manifest["fingerprint"] = _canonical_sha256(format_manifest)
+        _write_json(format_manifest_path, format_manifest)
+        raise RuntimeError("Finland response-free scientific admission failed")
+
+    with fixed_dict_reader_delimiter(delimiter):
+        feature_manifest = prepare_bundle(source, bundle_path, manifest_path)
+    if feature_manifest.get("outcome_values_accessed") is not False:
+        raise RuntimeError("Finland feature-preparation outcome firewall was not preserved")
+    format_manifest.update(
+        {
+            "feature_bundle_fingerprint": feature_manifest.get("feature_bundle_fingerprint"),
+            "response_free_admission_passed": True,
+        }
+    )
     format_manifest["fingerprint"] = _canonical_sha256(format_manifest)
-    admission_path = Path(admission_path)
-    format_manifest_path = Path(format_manifest_path)
-    admission_path.parent.mkdir(parents=True, exist_ok=True)
-    format_manifest_path.parent.mkdir(parents=True, exist_ok=True)
-    admission_path.write_text(json.dumps(admission, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
-    format_manifest_path.write_text(json.dumps(format_manifest, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
+    _write_json(format_manifest_path, format_manifest)
     return {"format": format_manifest, "admission": admission, "feature_manifest": feature_manifest}
 
 
