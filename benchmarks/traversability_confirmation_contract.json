@@ -1,0 +1,40 @@
+{
+  "confirmation_seeds": [
+    1709,
+    1801,
+    1907,
+    2003,
+    2111,
+    2203,
+    2309,
+    2411
+  ],
+  "failure_policy": "retain fail; do not tune gates or confirmation seeds after inspection",
+  "fingerprint": "e40dd8807a3ca51b3d228cf29ef6d8c9ee66caf4837dd29ec2e85479b34fb034",
+  "gates": {
+    "endpoint_retreat": {
+      "R3_minus_R0_mean_min": -0.01
+    },
+    "long_jump_added_information": {
+      "R3_minus_R2_mean_max": -0.025
+    },
+    "niche_added_information": {
+      "R2_minus_R1_mean_max": -0.035
+    },
+    "path_added_information": {
+      "R1_minus_R0_mean_max": -0.035
+    }
+  },
+  "l2_penalty": 1.0,
+  "minimum_favourable_seeds": 6,
+  "n_folds": 6,
+  "n_motifs": 96,
+  "regimes": [
+    "endpoint_ibe",
+    "path_discontinuity",
+    "niche_desert",
+    "long_jump"
+  ],
+  "response_firewall": "synthetic known truth only; no empirical outcome used",
+  "schema": "eog_v2_traversability_confirmation_contract_v1"
+}
