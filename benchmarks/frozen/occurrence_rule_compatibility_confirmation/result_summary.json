@@ -1,0 +1,31 @@
+{
+  "artifact_digest": "sha256:67fbe6b3b12439b0fb0879b56199c3729510cc7084af079bd417aa77e33a9137",
+  "artifact_id": 9178446646,
+  "contract_fingerprint": "cd792c4aa5f3e1e7cdd5b4d4b9e61be8d8f191d00733ff53eac5f0a16a7f29ba",
+  "decision": "pass",
+  "gates": {
+    "broken_rule_constrained": {
+      "maximum_coverage": 0.6666666666666666,
+      "passed": true
+    },
+    "peer_source_not_directional_history": {
+      "maximum_peer_coverage": 0.75,
+      "passed": true,
+      "unsupported_target": "A"
+    },
+    "permissive_rule_not_uniquely_identified": {
+      "minimum_edge_fraction_advantage": 0.75,
+      "minimum_permissive_coverage": 1.0,
+      "passed": true
+    },
+    "true_fixed_supported": {
+      "minimum_coverage": 1.0,
+      "passed": true
+    }
+  },
+  "head_sha": "ea5ad5fb4e928f2fe5234000113070981c0ffbd7",
+  "result_fingerprint": "50ddb917312822ebafa5c2557633803654916533ce8532f5f9484737bfb0246a",
+  "schema": "eog_v2_occurrence_rule_compatibility_confirmation_result_v1",
+  "scope": "synthetic constraint/falsification only; no unique-history or empirical-superiority claim",
+  "workflow_run": 31693738735
+}
