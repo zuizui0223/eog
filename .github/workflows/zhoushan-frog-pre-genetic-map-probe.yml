@@ -1,0 +1,59 @@
+name: Zhoushan frog pre-genetic map probe
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/zhoushan-frog-pre-genetic-map-probe.yml"
+      - "docs/eog_v2_zhoushan_frog_pre_genetic_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download author-uploaded response-free study map
+        run: |
+          mkdir -p benchmark_results/zhoushan_frog_map_probe
+          curl --fail --location --retry 4 --retry-delay 3 \
+            --user-agent "Mozilla/5.0 EOG-v2-pre-genetic-map-probe/1.0" \
+            "https://www.researchgate.net/figure/profile/Supen-Wang/publication/259385867/figure/fig2/AS%3A272062803607572%401441876237162/Study-areas-for-pond-frog-in-the-Zhoushan-Archipelago-and-neighbouring-mainland-China.png" \
+            --output benchmark_results/zhoushan_frog_map_probe/figure1.png
+          test -s benchmark_results/zhoushan_frog_map_probe/figure1.png
+          sha256sum benchmark_results/zhoushan_frog_map_probe/figure1.png \
+            > benchmark_results/zhoushan_frog_map_probe/figure1_sha256.txt
+      - name: Record image dimensions and source boundary
+        run: |
+          python -m pip install "Pillow==11.3.0"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image
+          root=Path('benchmark_results/zhoushan_frog_map_probe')
+          image=Image.open(root/'figure1.png')
+          payload={
+              'status':'zhoushan-frog-response-free-study-map-probe',
+              'source':'author-uploaded Figure 1 from Wang et al. 2014, DOI 10.1111/mec.12634',
+              'source_page':'https://www.researchgate.net/figure/Study-areas-for-pond-frog-in-the-Zhoushan-Archipelago-and-neighbouring-mainland-China_fig2_259385867',
+              'width_px':image.width,
+              'height_px':image.height,
+              'mode':image.mode,
+              'genetic_response_accessed':False,
+              'microsatellite_file_accessed':False,
+              'purpose':'response-free geography digitization only',
+          }
+          (root/'map_probe.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Upload temporary map probe for coordinate calibration
+        uses: actions/upload-artifact@v4
+        with:
+          name: zhoushan-frog-pre-genetic-map-probe
+          path: benchmark_results/zhoushan_frog_map_probe
+          if-no-files-found: error
