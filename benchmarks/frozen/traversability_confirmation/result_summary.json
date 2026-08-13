@@ -1,0 +1,36 @@
+{
+  "artifact_digest": "sha256:26d7613b3dd9ca72e47d1c53640faa77c255a3e77865b163a709ca5ce5103a19",
+  "artifact_id": 9178210087,
+  "contract_fingerprint": "e40dd8807a3ca51b3d228cf29ef6d8c9ee66caf4837dd29ec2e85479b34fb034",
+  "decision": "pass",
+  "gates": {
+    "endpoint_retreat": {
+      "mean_R3_minus_R0_log_loss": 0.03352338011536377,
+      "passed": true,
+      "threshold": -0.01
+    },
+    "long_jump_added_information": {
+      "favourable_seeds": 8,
+      "mean_R3_minus_R2_log_loss": -0.11232784525425349,
+      "passed": true,
+      "threshold": -0.025
+    },
+    "niche_added_information": {
+      "favourable_seeds": 8,
+      "mean_R2_minus_R1_log_loss": -0.20248787721145578,
+      "passed": true,
+      "threshold": -0.035
+    },
+    "path_added_information": {
+      "favourable_seeds": 8,
+      "mean_R1_minus_R0_log_loss": -0.22701673339503556,
+      "passed": true,
+      "threshold": -0.035
+    }
+  },
+  "head_sha": "a682d95ffab69d43de350c07f245129a12b08232",
+  "promotion_scope": "synthetic estimand confirmation only; no empirical superiority claim",
+  "result_fingerprint": "bfd5afd87eff31a96a593ba8c579a7c5bdb0fdf63405d0792066a772efd43181",
+  "schema": "eog_v2_traversability_confirmation_result_v1",
+  "workflow_run": 31693122698
+}
