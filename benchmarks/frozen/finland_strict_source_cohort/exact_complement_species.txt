@@ -1,0 +1,184 @@
+Acer platanoides
+Achillea ptarmica
+Actaea spicata
+Adoxa moschatellina
+Agrimonia eupatoria
+Agrostis canina
+Alchemilla filicaulis  ssp. filicaulis
+Allium oleraceum
+Allium scorodoprasum
+Alopecurus geniculatus
+Alopecurus pratensis
+Anemone nemorosa
+Arabis hirsuta
+Arctostaphylos uva ursi
+Arenaria serpyllifolia
+Artemisia campestris
+Artemisia vulgaris var. coarctata
+Artemisia vulgaris var. vulgaris
+Atriplex littoralis
+Atriplex prostrata
+Avenula pubescens
+Betula verrucosa
+Blysmus rufus
+Briza media
+Bromus hordeaceus
+Calamagrostis canescens
+Caltha palustris
+Calystegia sepium ssp. sepium
+Campanula persicifolia
+Campanula rotundifolia
+Capsella bursa pastoris
+Cardamine pratensis ssp. pratensis
+Carex digitata
+Carex disticha
+Carex echinata
+Carex magellanica
+Carex muricata
+Carex rostrata
+Carex spicata
+Carex vesicaria
+Carum carvi
+Centaurium littorale
+Centaurium pulchellum
+Cerastium glutinosum
+Cerastium semidecandrum
+Chenopodium album
+Cirsium palustre
+Convallaria majalis
+Cornus suecica
+Corylus avellana
+Dactylis glomerata
+Dactylorhiza maculata ssp. maculata
+Dactylorhiza sambucina
+Dianthus deltoides
+Draba muralis
+Drosera rotundifolia
+Eleocharis palustris coll.
+Eleocharis quinqueflora
+Elymus caninus
+Epilobium adenocaulon
+Epilobium ciliatum
+Erophila verna
+Erysimum cheiranthoides ssp. cheiranthoides
+Euphrasia nemorosa
+Euphrasia stricta var. tenuis
+Fallopia convolvulus
+Fallopia dumetorum
+Filipendula vulgaris
+Galium album
+Galium aparine
+Galium boreale
+Gentianella amarella ssp. lingulata
+Geranium lucidum
+Geranium robertianum
+Geranium sanguineum
+Geranium syvaticum
+Geum rivale
+Geum urbanum
+Glechoma hederacea
+Glyceria fluitans
+Heracleum sibiricum
+Hierochloe odorata ssp. baltica
+Hippophaë rhamnoides
+Hippuris vulgaris
+Iris pseudacorus
+Juncus conglomeratus
+Juncus effusus
+Lathyrus palustris
+Lathyrus pratensis
+Ledum palustre
+Lemna minor
+Leontodon autumnalis
+Leucanthemum vulgare
+Limosella aquatica
+Linaria vulgaris
+Linnaea borealis
+Linum catharticum
+Listera ovata
+Lonicera xylosteum
+Luzula pilosa
+Lychnis flos cuculi
+Lychnis viscaria
+Lycopus europaeus
+Malus sylvestris
+Melampyrum cristatum
+Melampyrum pratense
+Melampyrum sylvaticum
+Menyanthes trifoliata
+Milium effusum
+Moehringia trinervia
+Montia fontana
+Myosotis laxa ssp. baltica
+Myosotis stricta
+Myosurus minimus
+Odontites litoralis
+Oxalis acetosella
+Paris quadrifolia
+Pedicularis palustris
+Phleum pratense ssp. pratense
+Phragmites australis
+Pinus silvestris
+Plantago lanceolata
+Plantago major ssp. major
+Plantago maritima
+Platanthera bifolia
+Platanthera chlorantha
+Poa annua
+Poa compressa
+Poa palustris
+Poa trivialis
+Polygala amarella
+Polygonatum odoratum
+Polygonum aviculare
+Populus tremula
+Potentilla anserina ssp. egedii
+Potentilla crantzii
+Primula veris
+Prunella vulgaris
+Quercus robur
+Ranunculus auricomus
+Ranunculus bulbosus
+Ranunculus ficaria
+Ranunculus flammula
+Ranunculus polyanthemos
+Ranunculus repens
+Rhinanthus minor
+Rhinanthus serotinus
+Sagina maritima
+Sagina nodosa
+Salix caprea
+Salix cinerea
+Salix repens ssp. repens
+Satureja vulgaris
+Saxifraga tridactylites
+Scleranthus annuus
+Scutellaria hastifolia
+Sedum  album
+Senecio viscosus
+Senecio vulgaris
+Silene dioica
+Silene nutans
+Solanum dulcamara
+Stachys palustris
+Thalictrum flavum
+Thlaspi arvense
+Trifolium arvense
+Trifolium fragiferum
+Trifolium medium
+Trifolium pratense
+Triglochin maritima
+Triglochin palustris
+Tussilago farfara
+Typha latifolia
+Vaccinium myrtillus
+Vaccinium oxycoccos
+Valeriana officinalis
+Verbascum thapsus
+Veronica arvensis
+Veronica scutellata
+Veronica serpyllifolia
+Viburnum opulus
+Vicia sepium
+Vicia tetrasperma
+Viola riviniana
