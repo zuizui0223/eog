@@ -136,3 +136,5 @@ jobs:
             benchmark_results/thalassia_exact/raw_identity.json
             benchmark_results/thalassia_exact/stdout.json
           if-no-files-found: warn
+
+# One-time execution authorized after pre-FST manifest freeze: 2026-08-13.
