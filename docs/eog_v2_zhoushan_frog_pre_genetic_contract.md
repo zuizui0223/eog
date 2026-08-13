@@ -2,7 +2,7 @@
 
 ## Status
 
-**Prospective analysis freeze — exact pairwise genetic response access prohibited until Stage 2 predictors are archived and fingerprinted.**
+**Stage-2 predictors are irreversibly frozen. Exact genetic-response access is now permitted only through the predeclared routes below.**
 
 Candidate study: Wang et al. (2014), *Population size and time since island isolation determine genetic diversity loss in insular frog populations*, Molecular Ecology 23:637–648, DOI `10.1111/mec.12634`.
 
@@ -11,10 +11,10 @@ Public non-genetic/genetic mirror: Zenodo record `5012316`, corresponding to Dry
 Relevant released files are deliberately separated by stage:
 
 - `Raw transects .xlsx` — response-free field-survey metadata;
-- Wiley Supporting Information `Table S1` (`mec12634-sup-0001-TableS1.xlsx`) — **primary exact pairwise FST response, forbidden until Stage 2 is frozen**;
-- `Microsatellite data.xls` — optional later raw-genotype replication, also forbidden until Stage 2 is frozen.
+- Wiley Supporting Information `Table S1` (`mec12634-sup-0001-TableS1.xlsx`) — published exact pairwise FST response;
+- Zenodo/Dryad `Microsatellite data.xls` — raw nine-locus genotype fallback/replication source.
 
-The published article-level narrative is already known, so this is not claimed to be publication-blinded. The critical prospective firewall is that the **exact pairwise response values are not opened until nodes, coordinates, graph, EOG predictors, reference model and inference rule are frozen**.
+The published article-level narrative was already known, so this is not claimed to be publication-blinded. The prospective firewall is narrower and auditable: **exact pairwise FST values and raw genotypes were not accessed until nodes, coordinates, graph, EOG predictors, reference model, response transform and promotion rule were frozen and byte-archived.**
 
 ## Declared biological nodes
 
@@ -72,28 +72,38 @@ The negative result is frozen in `docs/eog_v2_zhoushan_frog_pre_genetic_metadata
 
 Public geographic candidates were queried without genetic access in Nominatim run `31654792433`. Missing/ambiguous island entities were resolved only with independent GeoNames-backed geography.
 
-The final coordinate-selection hierarchy and all 27 selected representative points are now frozen in:
+The final coordinate-selection hierarchy and all 27 selected representative points are frozen in:
 
 - `docs/eog_v2_zhoushan_frog_coordinate_freeze.md`;
 - `benchmarks/frozen/zhoushan_frog_response_free/population_coordinates.csv`.
 
 The nodes represent population/site locations at island/site scale, not asserted individual frog capture coordinates. The source paper states that transects covered accessible habitat across each island/site.
 
-## Stage 2 — response-free predictor freeze
+## Stage 2 — response-free predictor freeze — COMPLETE
 
-Before any exact FST value is opened, the repository must generate and archive a complete 351-pair predictor table from the frozen coordinate CSV.
+A complete 351-pair predictor table was generated and archived before any exact FST value or raw genotype was opened.
+
+Authoritative pre-response artifact:
+
+- workflow run `31655358037`;
+- workflow head `4e604d86f60e0815c7d39e78b31d137ad5689206`;
+- artifact ID `9164198982`;
+- artifact digest `sha256:60f0cb0eff61a0af15a2e2d0a8d107c0f334a5597d73ea3de2c4691f04f6dcb1`;
+- predictor-manifest fingerprint `e0a18112d9adfd197958b3e0e1cd1043485055425371b073f2cb74ad917ead70`.
+
+The artifact was then committed byte-for-byte to `benchmarks/frozen/zhoushan_frog_response_free/` by one-time archival workflow `31655603171`; it is not regenerated after response visibility.
 
 ### Geographic predictors
 
 - great-circle geographic distance in km;
-- a parameter-free Gabriel graph in a local tangent plane;
+- parameter-free Gabriel graph in a local tangent plane;
 - edge support `exp(-d / median_Gabriel_edge_length)`;
 - `loss_support = 0.5`;
 - effective-resistance/current-flow distance on the same response-free conductance graph.
 
 ### EOG predictor
 
-Use the already-confirmed exact-eventual genetic construction on the same sub-stochastic operator:
+The already-confirmed exact-eventual genetic construction is frozen on the same sub-stochastic operator:
 
 - reciprocal eventual support averaged in support space;
 - continuous connected-pair distance `-log(exchange support)`;
@@ -104,39 +114,65 @@ Use the already-confirmed exact-eventual genetic construction on the same sub-st
 
 ### IBE boundary
 
-No environmental predictor is invented. `environmental_distance = 0` for all pairs and IBE is explicitly **non-applicable** in this candidate unless a separately frozen, response-independent environmental state is added before Stage 2 closes.
+No environmental predictor is invented. `environmental_distance = 0` for all pairs and IBE is explicitly **non-applicable**.
 
-### Predictor/inference fingerprints
+Frozen identities include:
 
-Stage 2 must archive before response access:
-
-- population-coordinate CSV SHA-256;
-- complete predictor CSV SHA-256;
-- coordinate-selection manifest/fingerprint;
-- Gabriel edge set and support scale;
-- transition-operator fingerprint;
-- exact-eventual connectivity fingerprint;
-- validation settings and contract SHA-256.
-
-The Stage-2 artifact is the immutable predictor source for the one-time genetic response run. It may not be regenerated after exact FST values become visible merely because floating-point or implementation changes alter results.
+- populations CSV SHA-256 `a540a3d2ec6dd9b74a2ed80bc040d649cb179ec89e0e60ad87f3e529e96cf6f5`;
+- predictors CSV SHA-256 `dd14cacf10ce39442977b6b68ae7fc45ced7ae78e458e4feb8338fadd138d7d9`;
+- coordinate fingerprint `decfa791f879c38dd6168240684383b01e2f2ab730de8c36575291c622a4e794`;
+- operator fingerprint `242d251353d1180d9a39a8698969246264e65a3ba9b6ad3c0a5a3fc3259369df`;
+- exact-eventual connectivity fingerprint `2822fbd07b22d4a6f77123077f49f660e99a9641da6cecbf44203b45b5ffefb9`.
 
 ## Stage 3 — exact genetic response attachment
 
-### Primary response
+### Route A — published Wiley Table S1
 
-After Stage 2 is committed/fingerprinted, download the Wiley Supporting Information **Table S1** for DOI `10.1111/mec.12634` and record its SHA-256.
+The preferred response source is Wiley Supporting Information `mec12634-sup-0001-TableS1.xlsx`, described by Wiley as pairwise FST for all studied populations.
 
-The primary response is the published symmetric pairwise FST value for each frozen population pair.
+After Stage 2 was byte-frozen, two automated requests to the official Wiley supplement endpoint returned HTTP 403. The first used an incorrectly inferred supplement filename and the second used the corrected official filename. The corrected failure is a publisher transport failure, not a response/admission result.
 
-Response transform is frozen as:
+No Table S1 numeric FST value has been read by EOG through this route.
+
+### Route B — predeclared raw-genotype fallback
+
+Because Route A is transport-blocked, `Microsatellite data.xls` from Zenodo/Dryad is now permitted **only after this contract amendment is committed and before that raw file is opened**.
+
+The raw-genotype fallback must reproduce the estimator declared in the source paper:
+
+- pairwise FST is Weir & Cockerham (1984) `theta`;
+- the source paper used FSTAT version 2.9.3.2;
+- all nine released microsatellite loci are retained;
+- all 27 frozen populations are retained;
+- no locus or population is selected from observed FST magnitude;
+- missing diploid genotypes are excluded locus-wise/pair-wise rather than imputed;
+- empty strings, explicit `NA`/`N/A`/`.` tokens, or non-positive allele codes are treated as missing only if the released schema uses them as missing codes;
+- allele values are otherwise treated as categorical microsatellite alleles, not metric values;
+- the across-locus pairwise Weir–Cockerham estimator is calculated from the released diploid genotypes without significance-based filtering;
+- Bonferroni/permutation significance is not an EOG validation response;
+- negative or `>=1` raw pairwise FST is **not clipped**. If any primary pair is outside `[0,1)`, the predeclared `FST/(1-FST)` response transform is non-admissible for that pair and the exact reason is retained rather than repaired post hoc.
+
+Before FST is computed, a separate raw-file schema audit must record:
+
+- raw file SHA-256 and released MD5 identity;
+- workbook/sheet dimensions;
+- row count and population labels/codes;
+- the nine locus column groups / allele-pair encoding;
+- missing-value tokens;
+- whether all 27 frozen population identities can be mapped mechanically;
+- total individual count, with the published study total of 810 used only as a provenance/integrity check.
+
+The schema audit must not report pairwise FST values. If the genotype schema cannot be mapped mechanically to the 27 frozen nodes and nine loci, the raw fallback is a provenance NO-GO; mapping may not use clustering, FST, migration or allele similarity.
+
+### Primary response identity under the fallback
+
+If Route B passes the schema/provenance gate, the primary EOG response is the raw-genotype-derived Weir–Cockerham pairwise FST matrix. The unavailable Wiley Table S1 remains the preferred published cross-check if it later becomes lawfully retrievable; it does not become a tuning source.
+
+Response transform remains frozen as:
 
 `linearized_FST = FST / (1 - FST)`.
 
-If an exact pair is missing in Table S1 it remains missing. Values are not reconstructed from figures, allele frequencies or genetic clustering.
-
-### Optional replication
-
-`Microsatellite data.xls` may be downloaded only after the primary Stage-2 freeze and primary Table-S1 response attachment. It is a replication/provenance check, not a source for choosing graph topology or reference models.
+No response-model or graph setting changes because the response provenance changed from published table to source-paper-equivalent raw recomputation.
 
 ## Validation and promotion rule
 
@@ -174,7 +210,7 @@ This dataset is a **GO for independent empirical genetic added information** onl
 3. equal-weight mean held-out-population `(current flow + EOG) − current flow` MSE is `< 0`;
 4. the upper bound of the fixed 95% population-bootstrap interval is `< 0`.
 
-If condition 2 fails, status is `indeterminate_strong_reference_failure`; current flow is not dropped. If conditions 3–4 fail, the exact independent result is retained as null/adverse. No threshold/reference/graph rescue is permitted after Table S1 is opened.
+If condition 2 fails, status is `indeterminate_strong_reference_failure`; current flow is not dropped. If conditions 3–4 fail, the exact independent result is retained as null/adverse. No threshold/reference/graph rescue is permitted after raw genotypes are opened.
 
 ## Coordinate sensitivity
 
@@ -190,6 +226,6 @@ No perturbation replaces the primary coordinate set, and no perturbation is sele
 
 ## Claim boundary
 
-This candidate tests whether the exact-eventual EOG construction adds held-out information beyond geography/current-flow in an independent land-bridge archipelago system with exact published pairwise FST.
+This candidate tests whether the exact-eventual EOG construction adds held-out information beyond geography/current-flow in an independent land-bridge archipelago system with exact neutral microsatellite FST.
 
-Pairwise FST is symmetric and cannot validate migration direction. A null/adverse/indeterminate result remains visible and blocks a strong empirical-genetic promotion claim from this dataset.
+Pairwise FST is symmetric and cannot validate migration direction. Table S2 asymmetric migration estimates remain out of scope. A null/adverse/indeterminate result remains visible and blocks a strong empirical-genetic promotion claim from this dataset.
