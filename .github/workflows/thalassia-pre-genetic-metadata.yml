@@ -20,23 +20,112 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install GPS-workbook dependency only
-        run: python -m pip install "openpyxl==3.1.5"
-      - name: Download GPS workbook and opaque microsatellite bytes
+      - name: Install response-free transport and GPS-workbook dependencies
+        run: python -m pip install "requests==2.32.5" "openpyxl==3.1.5"
+      - name: Resolve UWA-declared Zenodo mirror and download GPS plus opaque genetic bytes
         run: |
           mkdir -p benchmark_results/thalassia_pre_genetic
-          curl --fail --location --retry 4 --retry-delay 3 \
-            --user-agent "Mozilla/5.0 EOG-v2.1-response-free-metadata/1.0" \
-            "https://datadryad.org/downloads/file_stream/28987" \
-            --output benchmark_results/thalassia_pre_genetic/gps.xlsx
-          curl --fail --location --retry 4 --retry-delay 3 \
-            --user-agent "Mozilla/5.0 EOG-v2.1-opaque-genetic-provenance/1.0" \
-            "https://datadryad.org/downloads/file_stream/28986" \
-            --output benchmark_results/thalassia_pre_genetic/genetic_opaque.xlsx
-          test "$(stat -c%s benchmark_results/thalassia_pre_genetic/gps.xlsx)" -gt 5000
-          test "$(stat -c%s benchmark_results/thalassia_pre_genetic/genetic_opaque.xlsx)" -gt 100000
-          sha256sum benchmark_results/thalassia_pre_genetic/gps.xlsx > benchmark_results/thalassia_pre_genetic/gps_sha256.txt
-          sha256sum benchmark_results/thalassia_pre_genetic/genetic_opaque.xlsx > benchmark_results/thalassia_pre_genetic/genetic_sha256.txt
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import requests
+
+          record_id = 4937634
+          record_url = f"https://zenodo.org/api/records/{record_id}"
+          session = requests.Session()
+          session.headers.update({"User-Agent":"EOG-v2.1-response-free-provenance/1.0"})
+          response = session.get(record_url, timeout=60)
+          response.raise_for_status()
+          record = response.json()
+          root = Path('benchmark_results/thalassia_pre_genetic')
+          (root/'zenodo_record_metadata.json').write_text(
+              json.dumps(record, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+
+          title = str((record.get('metadata') or {}).get('title') or '')
+          if 'Thalassia hemprichii' not in title:
+              raise SystemExit(f'Zenodo mirror title mismatch: {title!r}')
+
+          raw_files = record.get('files')
+          if isinstance(raw_files, list):
+              entries = raw_files
+          elif isinstance(raw_files, dict) and isinstance(raw_files.get('entries'), dict):
+              entries = list(raw_files['entries'].values())
+          else:
+              raise SystemExit(f'unexpected Zenodo files schema: {type(raw_files).__name__}')
+
+          by_name = {}
+          for entry in entries:
+              key = str(entry.get('key') or entry.get('filename') or '').strip()
+              if key:
+                  by_name[key] = entry
+          expected = {
+              'GPS site IAA.xlsx': root/'gps.xlsx',
+              'Genalex_Th3all_IAA.xlsx': root/'genetic_opaque.xlsx',
+          }
+          missing = sorted(set(expected) - set(by_name))
+          if missing:
+              raise SystemExit(f'Zenodo mirror missing expected files: {missing}; found={sorted(by_name)}')
+
+          provenance = {
+              'record_id': record_id,
+              'record_title': title,
+              'record_api_url': record_url,
+              'institutional_route': 'UWA repository -> Zenodo record 4937634',
+              'files': {},
+              'genetic_workbook_contents_accessed': False,
+              'genetic_workbook_container_inspected': False,
+              'genetic_response_computed': False,
+          }
+          for name, destination in expected.items():
+              entry = by_name[name]
+              links = entry.get('links') or {}
+              content_url = links.get('content') or links.get('download') or links.get('self')
+              if not content_url:
+                  raise SystemExit(f'no Zenodo content link for {name}')
+              with session.get(content_url, stream=True, timeout=120) as download:
+                  download.raise_for_status()
+                  md5 = hashlib.md5()
+                  sha = hashlib.sha256()
+                  size = 0
+                  with destination.open('wb') as handle:
+                      for chunk in download.iter_content(chunk_size=1024*1024):
+                          if not chunk:
+                              continue
+                          handle.write(chunk)
+                          md5.update(chunk)
+                          sha.update(chunk)
+                          size += len(chunk)
+              released_checksum = str(entry.get('checksum') or '')
+              if released_checksum.startswith('md5:') and md5.hexdigest() != released_checksum.split(':',1)[1]:
+                  raise SystemExit(f'Zenodo MD5 mismatch for {name}')
+              released_size = entry.get('size')
+              if released_size is not None and int(released_size) != size:
+                  raise SystemExit(f'Zenodo size mismatch for {name}: {size} != {released_size}')
+              provenance['files'][name] = {
+                  'size_bytes': size,
+                  'md5': md5.hexdigest(),
+                  'sha256': sha.hexdigest(),
+                  'zenodo_checksum': released_checksum,
+                  'zenodo_size': released_size,
+              }
+
+          if provenance['files']['GPS site IAA.xlsx']['size_bytes'] <= 5000:
+              raise SystemExit('GPS mirror object is too small to be the released workbook')
+          if provenance['files']['Genalex_Th3all_IAA.xlsx']['size_bytes'] <= 100000:
+              raise SystemExit('microsatellite mirror object is too small to be the released workbook')
+
+          (root/'mirror_provenance.json').write_text(
+              json.dumps(provenance, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          (root/'gps_sha256.txt').write_text(
+              provenance['files']['GPS site IAA.xlsx']['sha256'] + '  gps.xlsx\n', encoding='utf-8'
+          )
+          (root/'genetic_sha256.txt').write_text(
+              provenance['files']['Genalex_Th3all_IAA.xlsx']['sha256'] + '  genetic_opaque.xlsx\n', encoding='utf-8'
+          )
+          PY
       - name: Read GPS workbook only
         run: |
           GEN_SIZE="$(stat -c%s benchmark_results/thalassia_pre_genetic/genetic_opaque.xlsx)"
@@ -47,24 +136,30 @@ jobs:
             --genetic-sha256 "$GEN_SHA" \
             --output benchmark_results/thalassia_pre_genetic/metadata_audit.json \
             > benchmark_results/thalassia_pre_genetic/stdout.json
-      - name: Enforce response firewall
+      - name: Enforce response firewall and mirror agreement
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          r=json.loads(Path('benchmark_results/thalassia_pre_genetic/metadata_audit.json').read_text())
+          root=Path('benchmark_results/thalassia_pre_genetic')
+          r=json.loads((root/'metadata_audit.json').read_text())
+          p=json.loads((root/'mirror_provenance.json').read_text())
           assert r['status']=='thalassia-response-free-gps-schema-audit'
           assert r['genetic_workbook_contents_accessed'] is False
           assert r['genetic_workbook_container_inspected'] is False
           assert r['genetic_response_computed'] is False
-          assert len(r['gps_sha256'])==64 and len(r['genetic_file_sha256'])==64
-          assert r['gps_size_bytes'] > 5000
-          assert r['genetic_file_size_bytes'] > 100000
+          assert p['genetic_workbook_contents_accessed'] is False
+          assert p['genetic_workbook_container_inspected'] is False
+          assert p['genetic_response_computed'] is False
+          assert r['gps_sha256']==p['files']['GPS site IAA.xlsx']['sha256']
+          assert r['genetic_file_sha256']==p['files']['Genalex_Th3all_IAA.xlsx']['sha256']
+          assert r['gps_size_bytes']==p['files']['GPS site IAA.xlsx']['size_bytes']
+          assert r['genetic_file_size_bytes']==p['files']['Genalex_Th3all_IAA.xlsx']['size_bytes']
           assert len(r['fingerprint'])==64
           PY
-      - name: Remove raw GPS and genetic files before artifact upload
+      - name: Remove raw GPS, genetic, and full Zenodo metadata before artifact upload
         if: always()
-        run: rm -f benchmark_results/thalassia_pre_genetic/gps.xlsx benchmark_results/thalassia_pre_genetic/genetic_opaque.xlsx
+        run: rm -f benchmark_results/thalassia_pre_genetic/gps.xlsx benchmark_results/thalassia_pre_genetic/genetic_opaque.xlsx benchmark_results/thalassia_pre_genetic/zenodo_record_metadata.json
       - name: Upload response-free audit only
         if: always()
         uses: actions/upload-artifact@v4
@@ -73,6 +168,7 @@ jobs:
           path: |
             benchmark_results/thalassia_pre_genetic/metadata_audit.json
             benchmark_results/thalassia_pre_genetic/stdout.json
+            benchmark_results/thalassia_pre_genetic/mirror_provenance.json
             benchmark_results/thalassia_pre_genetic/gps_sha256.txt
             benchmark_results/thalassia_pre_genetic/genetic_sha256.txt
           if-no-files-found: error
