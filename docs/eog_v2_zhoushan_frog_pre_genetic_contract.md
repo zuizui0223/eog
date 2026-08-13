@@ -11,7 +11,7 @@ Public non-genetic/genetic mirror: Zenodo record `5012316`, corresponding to Dry
 Relevant released files are deliberately separated by stage:
 
 - `Raw transects .xlsx` — response-free field-survey metadata;
-- Wiley Supporting Information `Table S1` (`mec12634-sup-0002-TableS1.xlsx`) — **primary exact pairwise FST response, forbidden until Stage 2 is frozen**;
+- Wiley Supporting Information `Table S1` (`mec12634-sup-0001-TableS1.xlsx`) — **primary exact pairwise FST response, forbidden until Stage 2 is frozen**;
 - `Microsatellite data.xls` — optional later raw-genotype replication, also forbidden until Stage 2 is frozen.
 
 The published article-level narrative is already known, so this is not claimed to be publication-blinded. The critical prospective firewall is that the **exact pairwise response values are not opened until nodes, coordinates, graph, EOG predictors, reference model and inference rule are frozen**.
