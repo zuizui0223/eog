@@ -1,0 +1,91 @@
+name: Fiji Pheidole focal genetic-member preflight
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/fiji-pheidole-genetic-member-preflight.yml"
+      - "benchmarks/fiji_pheidole_genetic_member_preflight.py"
+      - "benchmarks/frozen/fiji_pheidole_response_free/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install transport dependency
+        run: python -m pip install "requests==2.32.5"
+      - name: Verify frozen response-free predictor artifact
+        run: |
+          echo "1d3e7a7da6191ff15032f3985c1e9b1f00b47cd47f121a1e224685f7b2a61959  benchmarks/frozen/fiji_pheidole_response_free/nodes.csv" | sha256sum --check
+          echo "2ce9ec669ed0529794be05efccd1530394df1bfffbd780ea86c2b2a3ac578a28  benchmarks/frozen/fiji_pheidole_response_free/predictors.csv" | sha256sum --check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('benchmarks/frozen/fiji_pheidole_response_free/manifest.json').read_text())
+          assert m['predictor_manifest_fingerprint']=='e1db628f61954a9b0a42692f9c3fb670192c882711956a08d144a97a23836b7c'
+          assert m['candidate_family_fingerprint']=='093d5a9c9580f924edf539eb54350c82ad867563ef32044cfca623e047c09985'
+          assert m['eventual_connectivity_fingerprint']=='a1cf6d7fafa3bd6364fa6193eb0498145d55cdb06781b2a9e649874b5119c601'
+          assert m['genetic_member_contents_accessed'] is False
+          PY
+      - name: Download immutable archive for member-name inspection only
+        run: |
+          mkdir -p benchmark_results/fiji_pheidole_preflight/raw
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          import requests
+          expected='9a23543ad59d5f4de7e6f26cc91b75dc60f93c259744e640b8f6576fde89abc7'
+          path=Path('benchmark_results/fiji_pheidole_preflight/raw/dryad.zip')
+          digest=hashlib.sha256()
+          with requests.get('https://zenodo.org/api/records/4965569/files/dryad.zip/content',stream=True,timeout=180) as response:
+              response.raise_for_status()
+              with path.open('wb') as handle:
+                  for chunk in response.iter_content(chunk_size=1024*1024):
+                      if chunk:
+                          handle.write(chunk)
+                          digest.update(chunk)
+          if digest.hexdigest()!=expected:
+              raise RuntimeError('Fiji archive SHA mismatch')
+          PY
+      - name: Run member-name-only genetic preflight
+        run: |
+          python benchmarks/fiji_pheidole_genetic_member_preflight.py \
+            --archive benchmark_results/fiji_pheidole_preflight/raw/dryad.zip \
+            --output benchmark_results/fiji_pheidole_preflight/result.json \
+            > benchmark_results/fiji_pheidole_preflight/stdout.json
+      - name: Enforce frozen Fiji non-estimable result without opening VCF
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('benchmark_results/fiji_pheidole_preflight/result.json').read_text())
+          assert result['status']=='non_estimable_focal_genetic_member_absent'
+          assert result['focal_egpa']=='EGPA0079'
+          assert result['expected_genetic_member']=='dryad/VCFs/EGPA0079.filtered.vcf'
+          assert result['expected_genetic_member_present'] is False
+          assert result['focal_egpa_named_archive_members']==[]
+          assert result['genetic_member_contents_accessed'] is False
+          assert result['genetic_response_computed'] is False
+          assert result['alternate_egpa_substitution_permitted'] is False
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Remove raw archive before artifact upload
+        if: always()
+        run: rm -rf benchmark_results/fiji_pheidole_preflight/raw
+      - name: Upload preflight result only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fiji-pheidole-genetic-member-preflight
+          path: |
+            benchmark_results/fiji_pheidole_preflight/result.json
+            benchmark_results/fiji_pheidole_preflight/stdout.json
+          if-no-files-found: error
