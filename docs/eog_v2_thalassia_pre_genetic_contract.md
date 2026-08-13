@@ -6,15 +6,19 @@
 
 Study: Hernawan et al. (2017), *Historical processes and contemporary ocean currents drive genetic structure in the seagrass Thalassia hemprichii in the Indo-Australian Archipelago*, DOI `10.1111/mec.13966`.
 
-Data: Dryad `10.5061/dryad.404rm`.
+Primary data identity: Dryad `10.5061/dryad.404rm`.
 
-Dryad separates:
+The University of Western Australia research repository independently records the same Dryad dataset and explicitly lists Zenodo record `4937634` as an `Access Dataset` route. The Edith Cowan University institutional repository likewise exposes the same two released workbook names under the Dryad DOI. Therefore Zenodo `4937634` is permitted as an archival transport mirror **only if its API metadata title and exact expected file names agree before any file use**. A mismatched record is a transport/provenance failure, not a substitute dataset.
 
-- `GPS site IAA.xlsx` (file-stream `28987`) — response-free sampling-site GPS metadata;
-- `Genalex_Th3all_IAA.xlsx` (file-stream `28986`) — response-bearing microsatellite genotype workbook;
+Released sources are separated:
+
+- `GPS site IAA.xlsx` — response-free sampling-site GPS metadata;
+- `Genalex_Th3all_IAA.xlsx` — response-bearing microsatellite genotype workbook;
 - `Th_SNP_data_UdhiHernawan_Chapter3.phy` — SNP sequence source, outside the primary microsatellite validation.
 
-Dryad states that genotype site IDs correspond to the site IDs in the GPS workbook and that the microsatellite panel contains 16 markers.
+Dryad/ECU metadata states that genotype site IDs correspond to the site IDs in the GPS workbook and that the study used a panel of 16 microsatellite markers.
+
+The first direct Dryad `file_stream` attempt on PR #144 returned only approximately 4.2-kB intermediate HTML objects for both workbook endpoints and stopped at transport-size checks. No GPS workbook cell, microsatellite workbook structure, genotype, or genetic response was accessed in that attempt.
 
 ## Hard response firewall
 
@@ -22,9 +26,12 @@ Before Stage 2 is fully frozen:
 
 Permitted:
 
+- resolve and verify Zenodo `4937634` metadata through its public API;
+- require the record title to contain `Thalassia hemprichii` and require the exact released file names before download;
 - download/read the full GPS workbook;
 - record GPS workbook file identity, worksheet names, cells, site IDs and coordinates;
-- download the microsatellite workbook as an opaque byte object only for file existence, size and SHA-256;
+- download the microsatellite workbook as an opaque byte stream only for file existence, size and checksum/SHA-256;
+- verify any released Zenodo checksum/size against the downloaded bytes;
 - delete the opaque genetic file before artifact upload.
 
 Prohibited:
@@ -35,7 +42,7 @@ Prohibited:
 - reading the SNP file to reconstruct microsatellite sample identities;
 - using exact published genetic values to choose nodes, graph topology, candidate references or EOG settings.
 
-The Stage-1 audit code must not accept a genetic-file path; it receives only the already-computed opaque size/SHA-256 strings.
+The Stage-1 GPS audit code must not accept a genetic-file path; it receives only the already-computed opaque genetic size/SHA-256 strings.
 
 ## Stage 1 admission
 
