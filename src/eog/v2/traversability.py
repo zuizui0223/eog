@@ -11,6 +11,13 @@ from ..ecological_traversability import (
     fit_occurrence_environmental_scale,
     summarize_path_traversability,
 )
+from .occurrence_constraints import (
+    OccurrenceRuleComparison,
+    OccurrenceRuleCompatibility,
+    OccurrenceTargetCompatibility,
+    compare_occurrence_transition_rules,
+    evaluate_occurrence_rule_compatibility,
+)
 
 __all__ = [
     "DispersalMode",
@@ -22,4 +29,9 @@ __all__ = [
     "environmental_transition_support",
     "build_traversability_transition_bundle",
     "summarize_path_traversability",
+    "OccurrenceTargetCompatibility",
+    "OccurrenceRuleCompatibility",
+    "OccurrenceRuleComparison",
+    "evaluate_occurrence_rule_compatibility",
+    "compare_occurrence_transition_rules",
 ]
