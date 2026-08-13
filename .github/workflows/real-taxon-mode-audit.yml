@@ -8,7 +8,6 @@ on:
       - "benchmarks/mode_separation_comparators.py"
       - "benchmarks/real_taxon_pilot_manifest.csv"
       - ".github/workflows/real-taxon-mode-audit.yml"
-      - "src/eog/**"
   workflow_dispatch:
 
 permissions:
