@@ -40,7 +40,7 @@ jobs:
           mkdir -p benchmark_results/zhoushan_table_s1
           curl --fail --location --retry 4 --retry-delay 3 \
             --user-agent "Mozilla/5.0 EOG-v2-post-freeze-response-audit/1.0" \
-            "https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fmec.12634&file=mec12634-sup-0002-TableS1.xlsx" \
+            "https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fmec.12634&file=mec12634-sup-0001-TableS1.xlsx" \
             --output benchmark_results/zhoushan_table_s1/TableS1.xlsx
           test -s benchmark_results/zhoushan_table_s1/TableS1.xlsx
           sha256sum benchmark_results/zhoushan_table_s1/TableS1.xlsx \
