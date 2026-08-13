@@ -1,6 +1,6 @@
 """Freeze the Fiji focal EGPA group using response-free sample metadata only.
 
-The archive must be the Stage-1 verified Zenodo/Dryad byte object.  This script opens
+The archive must be the Stage-1 verified Zenodo/Dryad byte object. This script opens
 only ``sequenceMetaData.csv`` and never opens VCF, SNP, FST/WC, clustering or migration
 result members.
 """
@@ -22,6 +22,7 @@ EXPECTED_ARCHIVE_SHA256 = "9a23543ad59d5f4de7e6f26cc91b75dc60f93c259744e640b8f65
 EXPECTED_METADATA_SHA256 = "5a41f967d81e005be3b3e91f31bb1a7eae26a9e7fe3f2a495aef7162932cdfbd"
 EXPECTED_BASENAME = "sequencemetadata.csv"
 MIN_POPULATIONS = 6
+MISSING_COORD_TOKENS = {"", "na", "nan", "n/a", "null", "none", "."}
 
 
 @dataclass(frozen=True)
@@ -29,8 +30,12 @@ class MetadataRow:
     species: str
     egpa: str
     population: str
-    latitude: float
-    longitude: float
+    latitude: float | None
+    longitude: float | None
+
+    @property
+    def has_finite_coordinate(self) -> bool:
+        return self.latitude is not None and self.longitude is not None
 
 
 def _sha256(path: Path) -> str:
@@ -46,12 +51,27 @@ def _canonical_sha256(value: object) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def _parse_coordinate(value: object, *, row_index: int, field: str) -> float | None:
+    text = str(value or "").strip()
+    if text.lower() in MISSING_COORD_TOKENS:
+        return None
+    try:
+        parsed = float(text)
+    except ValueError as exc:
+        raise ValueError(f"unrecognized {field} coordinate token at metadata row {row_index}: {text!r}") from exc
+    if not math.isfinite(parsed):
+        return None
+    bound = 90.0 if field == "latitude" else 180.0
+    if not (-bound <= parsed <= bound):
+        raise ValueError(f"out-of-range {field} at metadata row {row_index}")
+    return parsed
+
+
 def _load_metadata(archive: Path) -> tuple[list[MetadataRow], str, str]:
     archive_sha = _sha256(archive)
     if archive_sha != EXPECTED_ARCHIVE_SHA256:
         raise ValueError("Fiji archive SHA-256 differs from the Stage-1 verified byte object")
 
-    member_info = None
     with zipfile.ZipFile(archive, "r") as handle:
         matches = [
             info for info in handle.infolist()
@@ -59,9 +79,8 @@ def _load_metadata(archive: Path) -> tuple[list[MetadataRow], str, str]:
         ]
         if len(matches) != 1:
             raise ValueError(f"expected one sequenceMetaData.csv member, found {len(matches)}")
-        member_info = matches[0]
-        # This is the only member content opened by this script.
-        data = handle.read(member_info)
+        # Hard response firewall: this is the only member content opened by this script.
+        data = handle.read(matches[0])
 
     metadata_sha = hashlib.sha256(data).hexdigest()
     if metadata_sha != EXPECTED_METADATA_SHA256:
@@ -79,15 +98,10 @@ def _load_metadata(archive: Path) -> tuple[list[MetadataRow], str, str]:
         population = str(raw.get("pop") or "").strip()
         if not species or not egpa or not population:
             raise ValueError(f"missing species/egpa/pop at metadata row {index}")
-        try:
-            latitude = float(str(raw.get("lat") or "").strip())
-            longitude = float(str(raw.get("long") or "").strip())
-        except ValueError as exc:
-            raise ValueError(f"non-numeric coordinates at metadata row {index}") from exc
-        if not math.isfinite(latitude) or not math.isfinite(longitude):
-            raise ValueError(f"non-finite coordinates at metadata row {index}")
-        if not (-90.0 <= latitude <= 90.0 and -180.0 <= longitude <= 180.0):
-            raise ValueError(f"out-of-range coordinates at metadata row {index}")
+        latitude = _parse_coordinate(raw.get("lat"), row_index=index, field="latitude")
+        longitude = _parse_coordinate(raw.get("long"), row_index=index, field="longitude")
+        if (latitude is None) != (longitude is None):
+            raise ValueError(f"only one coordinate is missing at metadata row {index}")
         rows.append(MetadataRow(species, egpa, population, latitude, longitude))
     if not rows:
         raise ValueError("sequence metadata contains no rows")
@@ -108,47 +122,71 @@ def freeze_focal_group(archive: Path) -> dict[str, object]:
         populations: dict[str, list[MetadataRow]] = {}
         for row in group_rows:
             populations.setdefault(row.population, []).append(row)
+
         population_rows: list[dict[str, object]] = []
+        populations_without_coordinates: list[str] = []
         for population in sorted(populations):
             values = populations[population]
+            finite = [row for row in values if row.has_finite_coordinate]
+            if not finite:
+                populations_without_coordinates.append(population)
+                continue
+            latitudes = [float(row.latitude) for row in finite if row.latitude is not None]
+            longitudes = [float(row.longitude) for row in finite if row.longitude is not None]
             population_rows.append(
                 {
                     "population_id": population,
                     "n_individuals": len(values),
-                    "latitude": float(sum(row.latitude for row in values) / len(values)),
-                    "longitude": float(sum(row.longitude for row in values) / len(values)),
+                    "n_individuals_with_coordinates": len(finite),
+                    "n_individuals_missing_coordinates": len(values) - len(finite),
+                    "latitude": float(sum(latitudes) / len(latitudes)),
+                    "longitude": float(sum(longitudes) / len(longitudes)),
                     "n_unique_sample_coordinates": len({
-                        (round(row.latitude, 8), round(row.longitude, 8)) for row in values
+                        (round(float(row.latitude), 8), round(float(row.longitude), 8))
+                        for row in finite
+                        if row.latitude is not None and row.longitude is not None
                     }),
                 }
             )
-        counts = [row["n_individuals"] for row in population_rows]
-        eligible = len(population_rows) >= MIN_POPULATIONS and len(species_labels) == 1
+
+        counts_all = [len(values) for values in populations.values()]
+        n_rows_with_coordinates = sum(row.has_finite_coordinate for row in group_rows)
+        all_populations_have_coordinates = not populations_without_coordinates
+        eligible = (
+            len(populations) >= MIN_POPULATIONS
+            and len(species_labels) == 1
+            and all_populations_have_coordinates
+        )
         candidates.append(
             {
                 "egpa": egpa,
                 "species_labels": species_labels,
                 "n_individuals": len(group_rows),
-                "n_populations": len(population_rows),
-                "min_individuals_per_population": int(min(counts)),
-                "median_individuals_per_population": float(statistics.median(counts)),
-                "max_individuals_per_population": int(max(counts)),
-                "all_rows_have_finite_coordinates": True,
+                "n_individuals_with_coordinates": int(n_rows_with_coordinates),
+                "n_individuals_missing_coordinates": int(len(group_rows) - n_rows_with_coordinates),
+                "coordinate_completeness": float(n_rows_with_coordinates / len(group_rows)),
+                "n_populations": len(populations),
+                "n_populations_with_coordinates": len(population_rows),
+                "populations_without_coordinates": populations_without_coordinates,
+                "min_individuals_per_population": int(min(counts_all)),
+                "median_individuals_per_population": float(statistics.median(counts_all)),
+                "max_individuals_per_population": int(max(counts_all)),
+                "all_populations_have_finite_centroid": all_populations_have_coordinates,
                 "single_species_label": len(species_labels) == 1,
                 "eligible": eligible,
             }
         )
         centroids_by_group[egpa] = population_rows
 
-    eligible = [candidate for candidate in candidates if candidate["eligible"]]
-    if not eligible:
+    eligible_candidates = [candidate for candidate in candidates if candidate["eligible"]]
+    if not eligible_candidates:
         selected = None
         selected_populations: list[dict[str, object]] = []
         status = "no-response-free-group-meets-minimum-population-rule"
     else:
         # Frozen rule: most populations, then most individuals, then lexicographic EGPA.
         selected = sorted(
-            eligible,
+            eligible_candidates,
             key=lambda value: (
                 -int(value["n_populations"]),
                 -int(value["n_individuals"]),
@@ -163,11 +201,18 @@ def freeze_focal_group(archive: Path) -> dict[str, object]:
         "archive_sha256": archive_sha,
         "sequence_metadata_sha256": metadata_sha,
         "n_metadata_rows": len(rows),
+        "n_metadata_rows_missing_coordinates": int(sum(not row.has_finite_coordinate for row in rows)),
         "n_egpa_groups": len(candidates),
         "minimum_populations": MIN_POPULATIONS,
+        "coordinate_missing_policy": (
+            "recognized NA/blank coordinate pairs are retained as missing sample metadata; "
+            "an EGPA group is eligible only if every declared population has at least one finite "
+            "coordinate pair so a finite population centroid can be frozen"
+        ),
         "selection_rule": (
-            "eligible iff >=6 distinct population codes and exactly one species label; "
-            "select highest n_populations, then highest n_individuals, then lexicographic EGPA"
+            "eligible iff >=6 distinct population codes, exactly one species label, and every "
+            "population has a finite coordinate centroid; select highest n_populations, then "
+            "highest n_individuals, then lexicographic EGPA"
         ),
         "candidates": candidates,
         "selected_group": selected,
