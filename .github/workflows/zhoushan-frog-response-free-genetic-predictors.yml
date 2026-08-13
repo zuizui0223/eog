@@ -1,0 +1,77 @@
+name: Zhoushan frog response-free genetic predictors
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/zhoushan-frog-response-free-genetic-predictors.yml"
+      - "benchmarks/zhoushan_frog_genetic_predictor_freeze.py"
+      - "benchmarks/frozen/zhoushan_frog_response_free/population_coordinates.csv"
+      - "docs/eog_v2_zhoushan_frog_coordinate_freeze.md"
+      - "docs/eog_v2_zhoushan_frog_pre_genetic_contract.md"
+      - "src/eog/dynamic_island_reachability.py"
+      - "src/eog/eventual_genetic_connectivity.py"
+      - "src/eog/eventual_reachability_genetics.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install frozen EOG code
+        run: python -m pip install -e .
+      - name: Generate response-free 27-population predictor bundle
+        run: |
+          mkdir -p benchmark_results/zhoushan_frog_response_free
+          python benchmarks/zhoushan_frog_genetic_predictor_freeze.py \
+            --populations benchmark_results/zhoushan_frog_response_free/populations.csv \
+            --predictors benchmark_results/zhoushan_frog_response_free/predictors.csv \
+            --manifest benchmark_results/zhoushan_frog_response_free/predictor_manifest.json \
+            > benchmark_results/zhoushan_frog_response_free/stdout.json
+      - name: Check response firewall and frozen inference contract
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          root=Path('benchmark_results/zhoushan_frog_response_free')
+          m=json.loads((root/'predictor_manifest.json').read_text())
+          assert m['schema']=='eog_v2_zhoushan_frog_response_free_predictors_v1'
+          assert m['n_populations']==27
+          assert m['n_pairs']==351
+          assert m['loss_support']==0.5
+          assert m['validation_response_transform']=='linearized_fst'
+          assert m['validation_ridge_penalty']==1.0
+          assert m['validation_scheme']=='leave-one-population-out'
+          assert m['bootstrap_seed']==20260813
+          assert m['bootstrap_replicates']==10000
+          assert m['exact_pairwise_fst_accessed'] is False
+          assert m['microsatellite_file_accessed'] is False
+          assert m['genetic_response_attached'] is False
+          assert len(m['coordinate_fingerprint'])==64
+          assert len(m['operator_fingerprint'])==64
+          assert len(m['connectivity_fingerprint'])==64
+          assert len(m['predictor_manifest_fingerprint'])==64
+          with (root/'predictors.csv').open(newline='') as handle:
+              rows=list(csv.DictReader(handle))
+          assert len(rows)==351
+          assert all(row['environmental_distance']=='0' for row in rows)
+          assert all(row['population_a']!=row['population_b'] for row in rows)
+          PY
+      - name: Upload immutable pre-response predictor candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: zhoushan-frog-response-free-genetic-predictors
+          path: |
+            benchmark_results/zhoushan_frog_response_free/populations.csv
+            benchmark_results/zhoushan_frog_response_free/predictors.csv
+            benchmark_results/zhoushan_frog_response_free/predictor_manifest.json
+            benchmark_results/zhoushan_frog_response_free/stdout.json
+          if-no-files-found: error

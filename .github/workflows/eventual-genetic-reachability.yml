@@ -1,0 +1,79 @@
+name: Exact eventual genetic reachability validation
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/eventual_reachability_genetics.py"
+      - "src/eog/eventual_genetic_connectivity.py"
+      - "tests/test_eventual_reachability_genetics.py"
+      - "tests/test_eventual_genetic_connectivity.py"
+      - "benchmarks/eventual_genetic_distance_development.py"
+      - "benchmarks/eventual_genetic_connectivity_development.py"
+      - ".github/workflows/eventual-genetic-reachability.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Run exact-eventual tests
+        run: |
+          python -m pytest -q \
+            tests/test_eventual_reachability_genetics.py \
+            tests/test_eventual_genetic_connectivity.py
+      - name: Run exact-eventual symmetrisation development screen
+        run: |
+          mkdir -p benchmark_results/eventual_genetic_reachability
+          python benchmarks/eventual_genetic_distance_development.py \
+            > benchmark_results/eventual_genetic_reachability/symmetrisation_development.json
+      - name: Run hyperparameter-free genetic connectivity development check
+        run: |
+          python benchmarks/eventual_genetic_connectivity_development.py \
+            > benchmark_results/eventual_genetic_reachability/connectivity_development.json
+      - name: Check output contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("benchmark_results/eventual_genetic_reachability")
+          sym = json.loads((root / "symmetrisation_development.json").read_text())
+          con = json.loads((root / "connectivity_development.json").read_text())
+          assert sym["status"] == "development-exact-eventual-genetic-distance-before-empirical-genetics"
+          assert sym["n_candidates"] == 9
+          assert sym["symmetrisations"] == ["mean_log", "max_log", "mean_support"]
+          for candidate in sym["candidates"]:
+              assert set(candidate["regimes"]) == {
+                  "geography_null",
+                  "ibe_reference_complete",
+                  "intermediate_structure",
+                  "directional_structure",
+              }
+          assert con["status"] == "development-hyperparameter-free-eventual-genetic-connectivity"
+          assert set(con["regimes"]) == {
+              "geography_null",
+              "ibe_reference_complete",
+              "intermediate_structure",
+              "directional_structure_fst_boundary",
+          }
+          assert con["regimes"]["geography_null"]["mean_delta_mse"] >= -1e-5
+          assert con["regimes"]["ibe_reference_complete"]["mean_delta_mse"] >= -1e-5
+          assert con["regimes"]["intermediate_structure"]["mean_delta_mse"] < -5e-4
+          assert con["regimes"]["intermediate_structure"]["favourable_seed_count"] >= 6
+          PY
+      - name: Upload outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eventual-genetic-reachability-development
+          path: benchmark_results/eventual_genetic_reachability
+          if-no-files-found: error

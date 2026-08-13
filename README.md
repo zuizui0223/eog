@@ -1,12 +1,14 @@
 # Environmental Occupancy Geometry (EOG)
 
-EOG is a layered, model-agnostic framework for auditable ecological support analysis. It connects three distinct objects without treating them as interchangeable:
+EOG is a layered, model-agnostic framework for auditable ecological support analysis. It connects distinct objects without treating them as interchangeable:
 
 1. **environmental-state geometry** of observed occurrence clouds in feature space;
 2. **spatial support topology** of frozen pointwise support fields in geographical grids;
 3. **bridge inference and hypothesis-discriminating surveys** between declared populations or support components.
 
-EOG does **not** fit a species-distribution model, estimate latent occupancy, or claim that a structural component proves demographic or dispersal isolation.
+A separate prospective **EOG v2** line is now under development for dynamic source-conditioned island reachability. It keeps local viability, reachability, target capture, persistence and observation processes separate and uses a graph-native rather than necessarily raster-native prediction object.
+
+EOG does **not** fit a species-distribution model by default, estimate latent occupancy, or claim that a structural component proves demographic or dispersal isolation.
 
 ```text
 SDM, environmental similarity model, or expert support surface
@@ -22,12 +24,30 @@ SDM, environmental similarity model, or expert support surface
 
 Version `0.1.0` began as a frozen extraction of environmental-state geometry from `zuizui0223/acsp` PR #35. Subsequent validation narrowed the defensible interpretation and added bridge, sensitivity, survey, verification, and reporting layers. The spatial support-topology layer absorbs the scientifically defensible component work from `zuizui0223/odsp`; ODSP's widest-path and path-classification implementation is deliberately not duplicated because EOG already owns bridge and bottleneck inference.
 
-Empirical structural validation now includes both a positive confirmatory result and a negative external boundary result:
+Empirical structural validation includes both a positive limited-reference result and adverse strong-reference boundaries:
 
-- **A-Islands:** across 842 islands and 886 plant taxa, connected frequency retained held-out incidence information after conditioning on pointwise climatic support and nearest-training-occurrence distance. The primary conditional concordance was 0.6177466 for 845 estimable species (95% interval 0.6086806–0.6269445).
-- **Tanzania forest fragments:** across 60 bird species and 14 fragments, adding the frozen geography-only EOG connected-frequency feature to patch area, training-selected matrix-aware current flow, their interaction, and nearest-training-occurrence distance worsened leave-one-fragment-out log loss by 0.0321131 (95% interval +0.0174580 to +0.0486750). Spatial-block sensitivity was weaker and uncertain.
+- **A-Islands limited reference:** connected frequency retained held-out incidence ordering after conditioning on pointwise climatic support and nearest-training-occurrence distance; conditional concordance `0.6177466` for 845 estimable species.
+- **A-Islands prospective strong reference:** the pre-frozen `C − R3` extension was adverse (`+0.00348518` log loss), so the generic static connected-frequency addition is not promoted beyond the strong island-isolation reference.
+- **Tanzania forest fragments:** adding frozen geography-only EOG connected frequency to a patch-area/current-flow reference worsened primary leave-one-fragment-out log loss by `0.0321131`; spatial-block sensitivity remains weaker and uncertain.
 
-Together these results show that structural configuration can contain information absent from pointwise support and direct source distance, but EOG is **not** a universally beneficial add-on once a strong landscape-specific connectivity model is already present. See [`docs/structural_validation_synthesis.md`](docs/structural_validation_synthesis.md).
+These results establish a conditional boundary rather than universal superiority.
+
+### EOG v2 prospective development
+
+Issue #141 and draft PR #142 develop a separate dynamic island-reachability method without reopening the frozen v0.1 results. Current v2 components include:
+
+- directed geography/environment/barrier/direction/target-capture transition support;
+- explicit-loss sub-stochastic propagation;
+- finite-horizon first-passage support and source attribution;
+- integrated edge flux, route entropy and bridge-node importance;
+- separate V/R/C/P/O state layers;
+- deterministic synthetic archipelago and neutral-genetic validation infrastructure;
+- fixed-source occurrence comparator confirmation;
+- exact-eventual first-passage development for long-term genetic connectivity.
+
+The frozen fixed-source occurrence confirmation showed no useful dynamic increment when environment, nearest source, source pressure, geography-current-flow or static topology contained the known truth, while dynamic EOG-R retained substantial held-out signal for bottleneck and directional truths. This remains synthetic method validation, not empirical superiority evidence.
+
+See `docs/eog_v2_dynamic_island_reachability.md`, `docs/eog_v2_estimand_contract.md`, and `docs/eog_v2_occurrence_comparator_contract.md`.
 
 ## Layer 1: environmental-state geometry
 
@@ -71,13 +91,11 @@ for component in result.components:
     print(component.component_id, component.component_class)
 ```
 
-The identical high local support on the two islands does not imply identical structure: one component is occurrence anchored and the other is detached. Sea cells are unavailable, not merely low-support cells.
-
-See [`docs/sdm_support_topology_positioning.md`](docs/sdm_support_topology_positioning.md) and [`examples/support_topology/synthetic_islands.py`](examples/support_topology/synthetic_islands.py).
+The identical high local support on two islands does not imply identical structure: one component can be occurrence anchored while another remains detached. Sea cells are unavailable, not merely low-support cells.
 
 ## Layer 3: bridge inference and survey decisions
 
-Bridge analysis asks a different question: under declared geographical, environmental, and barrier assumptions, what cumulative-cost or minimax path connects declared nodes or components? The support-topology module does not implement paths, bottlenecks, stepping stones, route redundancy, or hypothesis ranking.
+Bridge analysis asks a different question: under declared geographical, environmental, and barrier assumptions, what cumulative-cost or minimax path connects declared nodes or components? The support-topology module does not itself implement paths, bottlenecks, stepping stones, route redundancy, or hypothesis ranking.
 
 The bridge workflow converts predeclared sensitivity scenarios into hypothesis-specific path support and ranks candidate field sites by how strongly hypotheses disagree there. The score is decision support, not occurrence probability, posterior model probability, or expected information gain.
 
@@ -88,8 +106,6 @@ eog-hypothesis-survey \
   --candidates examples/hypothesis_survey/candidates.csv \
   --output-dir results/hypothesis_survey
 ```
-
-The canonical example and audit contract are documented in [`docs/hypothesis_survey_contract.md`](docs/hypothesis_survey_contract.md).
 
 ## Installation
 
@@ -138,32 +154,9 @@ Bridge inference and survey decisions:
 - `verify_hypothesis_survey_bundle`
 - `render_hypothesis_survey_report`
 
-## Validation and manuscript materials
-
-- `docs/eog_design_charter.md`: authoritative four-layer design charter, estimand separation rules, absence taxonomy, and the admission checklist for new work;
-- `docs/sdm_support_topology_positioning.md`: SDM, topology, bridge, and survey distinctions;
-- `docs/structural_validation_synthesis.md`: A-Islands positive result and Tanzania negative boundary result in one evidence frame;
-- `docs/tanzania_heldout_result.md`: independently reproduced strong-competitor external benchmark;
-- `docs/aislands_authoritative_contracts.md`: authoritative A-Islands pre-outcome design;
-- `manuscript/structural_reachability_manuscript_skeleton.md`: structural-method paper organized around conditional incremental value;
-- `docs/odsp_migration_map.md`: copy/adapt/replace/retire decisions and archival plan;
-- `examples/support_topology/synthetic_islands.py`: hard-mask island demonstration;
-- `tests/test_support_topology.py`: component, persistence, masking, recovery, and determinism tests;
-- `docs/multiaxial_methodology.md`: restrained environmental-state geometry position;
-- `docs/evidence_ledger.md`: verified positive, negative, and unsupported claims;
-- `docs/claim_matrix.md`: quantity-specific wording and evidence status;
-- `docs/frozen_comparison_tutorial.md`: canonical manifest-to-result workflow;
-- `docs/hypothesis_survey_contract.md`: bridge-hypothesis CSV and output contract.
-
 ## Scientific boundary
 
-EOG converts pointwise environmental support into occurrence-conditioned spatial components and explicit reachability hypotheses. It does not claim to replace standard, dynamic, mechanistic, resistance, circuit-theory, or process-based models. A support component does not establish occupancy, colonisation probability, historical dispersal, demographic connectivity, genetic isolation, or causal barriers without additional data.
-
-The central structural manuscript question is now:
-
-> Under which landscape and reference-model conditions does occurrence-anchored spatial configuration add held-out information beyond pointwise environmental support, direct occurrence proximity, and landscape-specific connectivity models?
-
-The current evidence supports a conditional answer, not universal superiority: structural reachability added information in the frozen A-Islands comparison, but the tested generic connected-frequency feature did not improve the stronger Tanzania current-flow reference.
+EOG converts pointwise environmental support into occurrence-conditioned spatial components and explicit reachability hypotheses. It does not claim to replace standard, dynamic, mechanistic, resistance, circuit-theory, or process-based models. A support component or uncalibrated EOG-R value does not establish occupancy, colonisation probability, historical dispersal, demographic connectivity, genetic isolation, or causal barriers without additional data.
 
 ## Provenance
 

@@ -239,17 +239,39 @@ records gaps; it does not authorise closing them without the section 8 checklist
 | Layer 4 hypothesis vocabulary | partial | hypotheses are caller-declared support surfaces; the charter's named hypothesis classes (filtering, dispersal limitation, barrier, stepping stone, long-distance dispersal, sampling gap) are not first-class types |
 | Support field is an input, never fitted by EOG | conformant in substance, blurred at the API surface | Layers 2–4 consume a frozen field and no EOG function converts structure to an occurrence probability. However the top-level API exports `fit_penalized_logistic_support`, a benchmark-side support producer, next to the structural entry points; only its module docstring marks the boundary |
 | Estimands not collapsed into one score | conformant | separate endpoints; conditional-ordering and predictive-loss results are never pooled |
-| Absence five-state taxonomy | **not implemented** | no occurrence of `unsurveyed`, `surveyed_empty` or sampling-gap states anywhere in `src/`; Layer 2 carries only `low_support_or_unresolved` |
+| Absence five-state taxonomy | **partial** | the v2 simulator and validation I/O separate `surveyed_mask`, `current_occurrence`, `historical_reached` and an `unsurveyed_intermediate` scenario, and `v2_empirical_occurrence_validate_cli` treats blanks as unsurveyed rather than as zeros. The states are **not** first-class node types in the propagation operator, so no inference rule prevents an unsurveyed node from being scored like a surveyed-empty one |
 | Comparability audit machinery | **partial** | `manifest.py` and `reference_policy.py` validate Layer 1 metrics only; Layers 2–4 each emit independent ad-hoc fingerprints with no shared manifest |
 | Non-estimable states retained | conformant | A-Islands and Tanzania outcomes report non-estimable species and folds explicitly |
 | No overclaiming against existing methods | conformant | `manuscript/submission/novelty_claim_matrix.md` enumerates prohibited framings |
 
+### Relationship to EOG v2
+
+The v2 line merged into `main` in PR #142 subdivides Layer 3 rather than adding a fifth
+layer. Its `V` / `R` / `C` / `P` / `O` separation is a refinement of this charter's
+suitability-versus-reachability rule: `V` is local viability, `R` is source-conditioned
+reachability, and `C`, `P`, `O` keep target capture, establishment and detection from being
+folded into either. `DynamicReachabilityEdge` keeps geographic, environmental, barrier,
+directional and target-capture support as separate multiplicative components, which
+satisfies the estimand-separation rule of section 3 at the edge level.
+
+Two charter requirements remain unmet by v2 and define the current development frontier:
+
+- **transit viability is not represented.** Edge support and node viability are separate
+  objects in v2, but the operator does not require intermediate nodes to be viable, so a
+  route through a state the species cannot occupy is not distinguished from a route through
+  habitable intermediates. This conflates continuous propagation with long-distance jumps —
+  a section 3 violation.
+- **environmental transition support is exogenous.** `environmental_support` is supplied
+  per edge by the caller. Nothing derives which environmental transitions are traversable
+  for the species from the occurrence configuration itself, so the charter's framing
+  question — what occurrence records constrain beyond viability — is only half answered.
+
 ### Open gaps, in priority order
 
-1. **Absence taxonomy is absent.** This is the largest divergence between charter and code.
-   The five states in section 4 exist only as prose. Any survey-design or reachability claim
-   that treats a blank region as informative currently has no mechanism preventing the
-   barrier interpretation the charter forbids.
+1. **The absence taxonomy is not enforced in inference.** The states exist in v2 simulation
+   and I/O but not as node types the operator reasons over. Nothing currently stops an
+   unsurveyed node from being treated as evidence of absence, which is the interpretation
+   section 4 forbids.
 2. **No unified comparability manifest.** Section 5 requires declaration and freezing across
    all four layers, but the manifest and reference-policy modules only cover Layer 1. Layers
    2–4 self-fingerprint in mutually incompatible formats.

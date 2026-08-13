@@ -17,6 +17,9 @@ eog-hypothesis-survey = "eog.hypothesis_survey_cli:main"
 eog-hypothesis-survey-verify = "eog.hypothesis_survey_verify_cli:main"
 eog-hypothesis-survey-report = "eog.hypothesis_survey_report_cli:main"
 eog-support-topology-compare = "eog.support_topology_comparison_cli:main"
+eog-v2-genetic-validate = "eog.genetic_validation_cli:main"
+eog-v2-occurrence-freeze = "eog.v2_empirical_occurrence_freeze_cli:main"
+eog-v2-occurrence-validate = "eog.v2_empirical_occurrence_validate_cli:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "pandas>=2", "pyshp==2.3.1"]

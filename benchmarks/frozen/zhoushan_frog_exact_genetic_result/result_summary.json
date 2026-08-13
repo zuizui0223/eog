@@ -1,0 +1,126 @@
+{
+  "contrasts": {
+    "ibd_ibe_eog_minus_ibd_ibe": {
+      "delta_mae": -0.0022210595792154786,
+      "delta_mse": -0.00030538307992314384
+    },
+    "strong_reference_eog_minus_strong_reference": {
+      "delta_mae": 0.05056683667129766,
+      "delta_mse": 0.4049487163894815
+    }
+  },
+  "decision_checks": {
+    "all_27_populations_and_351_pairs": true,
+    "bootstrap_upper_95_lt_zero": false,
+    "mean_population_delta_mse_lt_zero": false,
+    "strong_reference_mse_le_ibd": false
+  },
+  "fingerprint": "585b4b6c3a616d353e3abcfd95b5c341cb4e022da012a8d72ad310ddb9ae48cd",
+  "frozen_connectivity_fingerprint": "2822fbd07b22d4a6f77123077f49f660e99a9641da6cecbf44203b45b5ffefb9",
+  "frozen_operator_fingerprint": "242d251353d1180d9a39a8698969246264e65a3ba9b6ad3c0a5a3fc3259369df",
+  "frozen_predictor_manifest_fingerprint": "e0a18112d9adfd197958b3e0e1cd1043485055425371b073f2cb74ad917ead70",
+  "models": {
+    "ibd": {
+      "mae": 0.07906704095501883,
+      "mse": 0.00996365409427833
+    },
+    "ibd_ibe": {
+      "mae": 0.07906704095501883,
+      "mse": 0.009963654094278329
+    },
+    "ibd_ibe_eog": {
+      "mae": 0.07684598137580335,
+      "mse": 0.009658271014355185
+    },
+    "strong_reference": {
+      "mae": 0.18357305484156716,
+      "mse": 0.3086355932696019
+    },
+    "strong_reference_eog": {
+      "mae": 0.23413989151286482,
+      "mse": 0.7135843096590834
+    }
+  },
+  "primary_population_inference": {
+    "bootstrap_95_percentile": [
+      -0.0016766290474561126,
+      1.2171240084760835
+    ],
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20260813,
+    "fraction_negative": 0.7037037037037037,
+    "mean_difference": 0.40494871638948166,
+    "median_difference": -0.0012588308676032365,
+    "per_population_mse_difference": [
+      -0.001611252617680103,
+      0.0020410167908696004,
+      10.955016670454386,
+      -0.0007961222546736691,
+      -0.0023142558419966255,
+      -0.0014677817021838636,
+      -0.0024388153254582016,
+      -0.002036005080227784,
+      -0.0017341795209660886,
+      -0.0015688264981955653,
+      -0.001817825432041527,
+      -0.0013026004610849828,
+      -0.0010643804537329056,
+      -0.0018896013436659927,
+      0.004022057549543684,
+      -0.0008815270943347614,
+      -0.001372091195396781,
+      -0.000752290937332918,
+      0.0021231196446800417,
+      -0.00028731387024606356,
+      0.00011251130339421517,
+      2.8058802765585852e-05,
+      -0.0012588308676032365,
+      0.0011838503955618872,
+      0.009321977733567079,
+      -0.00834721043960275,
+      -0.007293009222340559
+    ],
+    "population_order": [
+      "Guoju",
+      "Xiepu",
+      "Yuanhua",
+      "Meishan",
+      "Fodu",
+      "Liuheng",
+      "Huni",
+      "Xiashi",
+      "Mayi",
+      "Taohua",
+      "Dengbu",
+      "Zhujiajian",
+      "Putuoshan",
+      "Zhoushan",
+      "Damao",
+      "Cezi",
+      "Jintang",
+      "Dapengshan",
+      "Changbai",
+      "Xiushan",
+      "Dayushan",
+      "Daishan",
+      "Dongji",
+      "Qushan",
+      "Sijiao",
+      "Shengshan",
+      "Huaniao"
+    ]
+  },
+  "promotion_go": false,
+  "raw_genotype_sha256": "52ee37e431aff3303d58685cfef064a7ee34cf0117f52eaca3889e21eacebb17",
+  "response_estimator": "Weir-Cockerham-1984-theta-all-nine-loci",
+  "response_summary": {
+    "invalid_pairs": [],
+    "max_fst": 0.3948445531820409,
+    "min_fst": 0.024408645098300274,
+    "n_nonfinite_or_outside_linearized_domain": 0,
+    "n_pairs": 351
+  },
+  "response_transform": "FST/(1-FST)",
+  "status": "indeterminate_strong_reference_failure",
+  "study_doi": "10.1111/mec.12634"
+}

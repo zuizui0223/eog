@@ -1,0 +1,87 @@
+name: Ryukyu mangrove published binary FST sensitivity
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/ryukyu-mangrove-published-binary-connectivity.yml"
+      - "benchmarks/ryukyu_published_binary_connectivity.py"
+      - "benchmarks/ryukyu_published_binary_connectivity_frozen.py"
+      - "benchmarks/frozen/ryukyu_mangrove_response_free/**"
+      - "docs/eog_v2_ryukyu_mangrove_genetic_retrospective_contract.md"
+      - "docs/eog_v2_ryukyu_published_binary_connectivity_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e . "Pillow==11.3.0"
+      - name: Verify archived response-free predictors from pre-response run
+        run: |
+          mkdir -p benchmark_results/ryukyu_published_binary
+          echo "6de60475209e49927c68d2467bdac253a0e2777c39a9f4df49dde4832ee3495e  benchmarks/frozen/ryukyu_mangrove_response_free/populations.csv" | sha256sum --check
+          echo "b5485e42c8c884bf31f3d8b76fd71db04a93c377bc9836f085a4c65b6f62aa7f  benchmarks/frozen/ryukyu_mangrove_response_free/predictors.csv" | sha256sum --check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('benchmarks/frozen/ryukyu_mangrove_response_free/predictor_manifest.json').read_text())
+          assert m['genetic_response_attached'] is False
+          assert m['populations_csv_sha256']=='6de60475209e49927c68d2467bdac253a0e2777c39a9f4df49dde4832ee3495e'
+          assert m['predictors_csv_sha256']=='b5485e42c8c884bf31f3d8b76fd71db04a93c377bc9836f085a4c65b6f62aa7f'
+          assert m['predictor_manifest_fingerprint']=='8bef3ea33d24f1f124aab5e023cbfac087f74b2e5584546b9da50adaf2de7d31'
+          assert m['operator_fingerprint']=='61b4794914976bd1ac5687fd814a2d2878d397a2feac02314031feb68c249e35'
+          assert m['connectivity_fingerprint']=='d0261069e634cb21068a45ff59c5bb891ce573ec9a6d01e75308b7b8e2215c38'
+          PY
+      - name: Download official Frontiers Figure 2
+        run: |
+          curl --fail --location --retry 4 --retry-delay 3 \
+            --user-agent "Mozilla/5.0 EOG-v2-retrospective-validation/1.0" \
+            "https://www.frontiersin.org/files/Articles/827590/xml-images/fmars-09-827590-g002.webp" \
+            --output benchmark_results/ryukyu_published_binary/figure2.webp
+          echo "70d35809ac5e6408b647a920366703aff02b99cab5888ce10744ed3f7b6e9ad1  benchmark_results/ryukyu_published_binary/figure2.webp" | sha256sum --check
+      - name: Extract published FST less-than-0.1 binary response and run LOPO
+        run: |
+          python benchmarks/ryukyu_published_binary_connectivity_frozen.py \
+            --figure benchmark_results/ryukyu_published_binary/figure2.webp \
+            --output benchmark_results/ryukyu_published_binary/result.json \
+            > benchmark_results/ryukyu_published_binary/stdout.json
+      - name: Check retrospective result contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('benchmark_results/ryukyu_published_binary/result.json').read_text())
+          assert r['status']=='ryukyu-published-binary-fst-connectivity-retrospective'
+          assert r['figure_sha256']=='70d35809ac5e6408b647a920366703aff02b99cab5888ce10744ed3f7b6e9ad1'
+          assert r['predictor_manifest_fingerprint']=='8bef3ea33d24f1f124aab5e023cbfac087f74b2e5584546b9da50adaf2de7d31'
+          assert r['response_free_predictor_source']['workflow_run']==31610691970
+          assert r['response_free_predictor_source']['artifact_id']==9147048185
+          assert r['response_free_predictor_source']['regenerated_after_response_visible'] is False
+          assert r['n_pairs']==120
+          assert r['n_published_FST_lt_0.1']==25
+          positives={tuple(sorted((row['population_a'],row['population_b']))) for row in r['response_rows'] if row['published_FST_lt_0.1']==1}
+          for pair in [('IRMe','IRMf'),('ISGa','ISGc'),('MYKb','MYKd'),('MYKc','IRMd')]:
+              assert tuple(sorted(pair)) in positives
+          assert r['interpretation'] in {'retrospective_binary_added_information','retrospective_binary_no_added_information'}
+          PY
+      - name: Remove copyrighted figure before artifact upload
+        if: always()
+        run: rm -f benchmark_results/ryukyu_published_binary/figure2.webp
+      - name: Upload published-response sensitivity outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ryukyu-mangrove-published-binary-fst-sensitivity
+          path: |
+            benchmark_results/ryukyu_published_binary/result.json
+            benchmark_results/ryukyu_published_binary/stdout.json
+          if-no-files-found: warn

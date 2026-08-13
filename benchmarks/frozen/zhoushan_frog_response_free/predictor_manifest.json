@@ -1,0 +1,235 @@
+{
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed": 20260813,
+  "bootstrap_unit": "held_out_population",
+  "connectivity_fingerprint": "2822fbd07b22d4a6f77123077f49f660e99a9641da6cecbf44203b45b5ffefb9",
+  "contract_sha256": "b5911858e2ee7c9965feda19ea2372a14e91477dc3bd8dab980415119bb0b357",
+  "coordinate_csv": "benchmarks/frozen/zhoushan_frog_response_free/population_coordinates.csv",
+  "coordinate_csv_sha256": "dd1ae9114d7439d8bea5008c735352ccdc94d1c7f57e1bf6f66cb43ccbdcae62",
+  "coordinate_fingerprint": "decfa791f879c38dd6168240684383b01e2f2ab730de8c36575291c622a4e794",
+  "coordinate_freeze_sha256": "2e126246660d59a3ab1542d8fc6c78f0b385dd1ba5d7b5a4bf77ddbf676fde8b",
+  "coordinate_sensitivity_policy": "one node at a time; eight compass directions at frozen per-node radius; never replaces primary coordinates",
+  "data_mirror": "Zenodo 5012316 / Dryad 10.5061/dryad.dq4g5",
+  "environmental_distance_policy": "all-zero; IBE non-applicable",
+  "exact_pairwise_fst_accessed": false,
+  "gabriel_edge_count": 42,
+  "gabriel_edges": [
+    [
+      "Guoju",
+      "Meishan"
+    ],
+    [
+      "Guoju",
+      "Huni"
+    ],
+    [
+      "Guoju",
+      "Damao"
+    ],
+    [
+      "Xiepu",
+      "Yuanhua"
+    ],
+    [
+      "Xiepu",
+      "Dapengshan"
+    ],
+    [
+      "Meishan",
+      "Fodu"
+    ],
+    [
+      "Fodu",
+      "Liuheng"
+    ],
+    [
+      "Liuheng",
+      "Huni"
+    ],
+    [
+      "Huni",
+      "Xiashi"
+    ],
+    [
+      "Huni",
+      "Mayi"
+    ],
+    [
+      "Huni",
+      "Taohua"
+    ],
+    [
+      "Xiashi",
+      "Taohua"
+    ],
+    [
+      "Mayi",
+      "Taohua"
+    ],
+    [
+      "Mayi",
+      "Dengbu"
+    ],
+    [
+      "Mayi",
+      "Zhoushan"
+    ],
+    [
+      "Mayi",
+      "Damao"
+    ],
+    [
+      "Taohua",
+      "Dengbu"
+    ],
+    [
+      "Dengbu",
+      "Zhujiajian"
+    ],
+    [
+      "Zhujiajian",
+      "Putuoshan"
+    ],
+    [
+      "Putuoshan",
+      "Zhoushan"
+    ],
+    [
+      "Putuoshan",
+      "Dongji"
+    ],
+    [
+      "Zhoushan",
+      "Damao"
+    ],
+    [
+      "Zhoushan",
+      "Cezi"
+    ],
+    [
+      "Zhoushan",
+      "Changbai"
+    ],
+    [
+      "Zhoushan",
+      "Xiushan"
+    ],
+    [
+      "Damao",
+      "Cezi"
+    ],
+    [
+      "Damao",
+      "Jintang"
+    ],
+    [
+      "Cezi",
+      "Jintang"
+    ],
+    [
+      "Cezi",
+      "Dapengshan"
+    ],
+    [
+      "Cezi",
+      "Changbai"
+    ],
+    [
+      "Jintang",
+      "Dapengshan"
+    ],
+    [
+      "Changbai",
+      "Xiushan"
+    ],
+    [
+      "Changbai",
+      "Dayushan"
+    ],
+    [
+      "Changbai",
+      "Daishan"
+    ],
+    [
+      "Xiushan",
+      "Daishan"
+    ],
+    [
+      "Dayushan",
+      "Daishan"
+    ],
+    [
+      "Daishan",
+      "Qushan"
+    ],
+    [
+      "Dongji",
+      "Qushan"
+    ],
+    [
+      "Dongji",
+      "Shengshan"
+    ],
+    [
+      "Qushan",
+      "Sijiao"
+    ],
+    [
+      "Sijiao",
+      "Huaniao"
+    ],
+    [
+      "Shengshan",
+      "Huaniao"
+    ]
+  ],
+  "genetic_response_attached": false,
+  "loss_support": 0.5,
+  "microsatellite_file_accessed": false,
+  "n_pairs": 351,
+  "n_populations": 27,
+  "operator_fingerprint": "242d251353d1180d9a39a8698969246264e65a3ba9b6ad3c0a5a3fc3259369df",
+  "population_ids": [
+    "Guoju",
+    "Xiepu",
+    "Yuanhua",
+    "Meishan",
+    "Fodu",
+    "Liuheng",
+    "Huni",
+    "Xiashi",
+    "Mayi",
+    "Taohua",
+    "Dengbu",
+    "Zhujiajian",
+    "Putuoshan",
+    "Zhoushan",
+    "Damao",
+    "Cezi",
+    "Jintang",
+    "Dapengshan",
+    "Changbai",
+    "Xiushan",
+    "Dayushan",
+    "Daishan",
+    "Dongji",
+    "Qushan",
+    "Sijiao",
+    "Shengshan",
+    "Huaniao"
+  ],
+  "populations_csv_sha256": "a540a3d2ec6dd9b74a2ed80bc040d649cb179ec89e0e60ad87f3e529e96cf6f5",
+  "predictor_manifest_fingerprint": "e0a18112d9adfd197958b3e0e1cd1043485055425371b073f2cb74ad917ead70",
+  "predictors_csv_sha256": "dd14cacf10ce39442977b6b68ae7fc45ced7ae78e458e4feb8338fadd138d7d9",
+  "primary_contrast": "strong_reference_eog_minus_strong_reference_mse",
+  "promotion_requires_strong_reference_mse_le_ibd": true,
+  "response_source_policy": "Wiley Table S1 exact pairwise FST after predictor freeze; raw microsatellites optional replication",
+  "schema": "eog_v2_zhoushan_frog_response_free_predictors_v1",
+  "status": "independent-exact-fst-response-not-attached",
+  "strong_reference": "effective resistance on the same response-free Gabriel conductance graph",
+  "study_doi": "10.1111/mec.12634",
+  "support_scale_km": 14.672878196208607,
+  "validation_response_transform": "linearized_fst",
+  "validation_ridge_penalty": 1.0,
+  "validation_scheme": "leave-one-population-out"
+}

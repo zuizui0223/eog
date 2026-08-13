@@ -93,23 +93,22 @@ def test_charter_forbids_overclaiming_against_existing_methods() -> None:
     assert "forbidden framings" in text
 
 
-def test_recorded_gap_absence_taxonomy_is_still_unimplemented() -> None:
-    """The charter records the absence taxonomy as missing.
+def test_recorded_gap_absence_taxonomy_is_not_enforced_in_inference() -> None:
+    """The charter records the absence taxonomy as present in I/O but not in inference.
 
-    If the taxonomy is implemented, this test must fail so that the conformance
-    table in the charter is updated in the same change rather than drifting.
+    v2 separates surveyed, current-occurrence, historical and unsurveyed states in its
+    simulator and validation I/O. The gap is that the propagation operator does not
+    reason over them. If a node-state type reaches the operator, this test must fail so
+    that the conformance table is updated in the same change rather than drifting.
     """
-    source = _source_text()
-    implemented = [
-        state
-        for state in ("environmentally_unsupported", "reachability_limited", "surveyed_empty", "unsurveyed")
-        if state in source
-    ]
-    assert not implemented, (
-        f"absence states {implemented} now exist in src/eog; "
-        "update the conformance table in docs/eog_design_charter.md"
-    )
-    assert "**not implemented**" in _charter_text()
+    operator = (SRC / "dynamic_island_reachability.py").read_text(encoding="utf-8")
+    for state in ("unsurveyed", "surveyed_empty", "surveyed_absent", "historical_occurrence"):
+        assert state not in operator, (
+            f"node state {state!r} now reaches the propagation operator; "
+            "update the conformance table in docs/eog_design_charter.md"
+        )
+    charter = _charter_text()
+    assert "The absence taxonomy is not enforced in inference" in charter
 
 
 def test_recorded_gap_sampling_uncertainty_absent_from_bridge_inference() -> None:
