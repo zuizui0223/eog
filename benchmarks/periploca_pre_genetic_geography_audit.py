@@ -19,6 +19,7 @@ import re
 POP_PATTERN = re.compile(r"pop|population|code|site|locality|location", re.I)
 LAT_PATTERN = re.compile(r"(^|[^a-z])lat(?:itude)?([^a-z]|$)", re.I)
 LON_PATTERN = re.compile(r"(^|[^a-z])(lon|long|longitude)([^a-z]|$)", re.I)
+UTM_PATTERN = re.compile(r"utm", re.I)
 ISLAND_PATTERN = re.compile(r"island|mainland|region|country|geogr|position", re.I)
 DMS_PATTERN = re.compile(
     r"^\s*([+-]?\d+(?:\.\d+)?)\s*(?:°|d)?\s*"
@@ -113,6 +114,7 @@ def audit(geography_path: Path, microsatellite_path: Path) -> dict[str, object]:
     population_candidates = [header for header in headers if POP_PATTERN.search(header or "")]
     latitude_candidates = [header for header in headers if LAT_PATTERN.search(header or "")]
     longitude_candidates = [header for header in headers if LON_PATTERN.search(header or "")]
+    utm_candidates = [header for header in headers if UTM_PATTERN.search(header or "")]
     island_region_candidates = [header for header in headers if ISLAND_PATTERN.search(header or "")]
 
     coordinate_pair_audits: list[dict[str, object]] = []
@@ -137,6 +139,25 @@ def audit(geography_path: Path, microsatellite_path: Path) -> dict[str, object]:
                 }
             )
 
+    utm_audits: list[dict[str, object]] = []
+    for header in utm_candidates:
+        values = [str(row.get(header) or "").strip() for row in rows]
+        nonempty = [value for value in values if value]
+        # Raw examples are public response-free geography metadata and are retained only
+        # to establish the released coordinate syntax before a converter is frozen.
+        utm_audits.append(
+            {
+                "column": header,
+                "n_nonempty_rows": len(nonempty),
+                "n_unique_values": len(set(nonempty)),
+                "raw_examples_first_12": nonempty[:12],
+                "contains_zone_like_token_count": sum(bool(re.search(r"\b\d{1,2}\s*[A-Z]\b", value, re.I)) for value in nonempty),
+                "contains_two_large_numeric_tokens_count": sum(
+                    len(re.findall(r"\d{4,}(?:\.\d+)?", value)) >= 2 for value in nonempty
+                ),
+            }
+        )
+
     population_distinct_counts: dict[str, int] = {}
     for header in population_candidates:
         population_distinct_counts[header] = len(
@@ -154,20 +175,24 @@ def audit(geography_path: Path, microsatellite_path: Path) -> dict[str, object]:
         default=0,
     )
     best_population_count = max(population_distinct_counts.values(), default=0)
-    admitted = bool(
+    direct_latlon_admitted = bool(
         population_candidates
         and coordinate_pair_audits
         and best_coordinate_rows >= 6
         and best_population_count >= 6
     )
+    response_free_coordinate_schema_available = bool(direct_latlon_admitted or utm_audits)
 
     result: dict[str, object] = {
         "status": (
-            "periploca-stage1-response-free-geography-schema-pass"
-            if admitted
+            "periploca-stage1-response-free-direct-coordinate-pass"
+            if direct_latlon_admitted
+            else "periploca-stage1-response-free-utm-schema-detected"
+            if utm_audits
             else "non_estimable_response_free_geography_unavailable"
         ),
-        "admitted": admitted,
+        "admitted": direct_latlon_admitted,
+        "response_free_coordinate_schema_available": response_free_coordinate_schema_available,
         "geography_file_name": geography_path.name,
         "geography_size_bytes": geography_path.stat().st_size,
         "geography_sha256": hashlib.sha256(geography_bytes).hexdigest(),
@@ -181,6 +206,8 @@ def audit(geography_path: Path, microsatellite_path: Path) -> dict[str, object]:
         "latitude_candidate_columns": latitude_candidates,
         "longitude_candidate_columns": longitude_candidates,
         "coordinate_pair_audits": coordinate_pair_audits,
+        "utm_candidate_columns": utm_candidates,
+        "utm_schema_audits": utm_audits,
         "island_region_candidate_columns": island_region_candidates,
         "island_region_candidate_distinct_counts": island_region_distinct_counts,
         "microsatellite_file_name": microsatellite_path.name,
@@ -191,7 +218,8 @@ def audit(geography_path: Path, microsatellite_path: Path) -> dict[str, object]:
         "genetic_response_computed": False,
         "claim_boundary": (
             "Only the released population-geography text was decoded/parsed. The microsatellite "
-            "file was treated as an opaque byte object for checksum only; cpDNA was not opened."
+            "file was treated as an opaque byte object for checksum only; cpDNA was not opened. "
+            "UTM raw examples are recorded solely to freeze the released response-free coordinate syntax."
         ),
     }
     result["fingerprint"] = _canonical_sha256(result)
