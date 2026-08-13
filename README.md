@@ -140,6 +140,7 @@ Bridge inference and survey decisions:
 
 ## Validation and manuscript materials
 
+- `docs/eog_design_charter.md`: authoritative four-layer design charter, estimand separation rules, absence taxonomy, and the admission checklist for new work;
 - `docs/sdm_support_topology_positioning.md`: SDM, topology, bridge, and survey distinctions;
 - `docs/structural_validation_synthesis.md`: A-Islands positive result and Tanzania negative boundary result in one evidence frame;
 - `docs/tanzania_heldout_result.md`: independently reproduced strong-competitor external benchmark;
