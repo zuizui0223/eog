@@ -1,15 +1,6 @@
 name: Zhoushan frog one-time independent genetic validation
 
 on:
-  pull_request:
-    paths:
-      - ".github/workflows/zhoushan-frog-independent-genetic-validation.yml"
-      - "benchmarks/zhoushan_frog_independent_genetic_validation.py"
-      - "benchmarks/zhoushan_weir_cockerham.py"
-      - "tests/test_zhoushan_weir_cockerham.py"
-      - "benchmarks/frozen/zhoushan_frog_response_free/raw_population_mapping.csv"
-      - "docs/eog_v2_zhoushan_frog_pre_genetic_contract.md"
-      - "docs/eog_v2_zhoushan_frog_raw_schema_result.md"
   workflow_dispatch:
 
 permissions:
@@ -24,6 +15,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Authoritative-run boundary
+        run: |
+          echo "Authoritative empirical run: 31656924070"
+          echo "Frozen result fingerprint: 585b4b6c3a616d353e3abcfd95b5c341cb4e022da012a8d72ad310ddb9ae48cd"
+          echo "Manual reruns are reproducibility checks only and cannot replace the authoritative promotion decision."
       - name: Install frozen package and raw-data reader
         run: python -m pip install -e ".[dev]" "xlrd==2.0.2"
       - name: Verify Weir-Cockerham estimator boundaries before empirical response
@@ -70,57 +66,37 @@ jobs:
             --output benchmark_results/zhoushan_independent_genetics/raw/Microsatellite_data.xls
           echo "0f9d9b36bb0c481f41170ad2d6cc6344  benchmark_results/zhoushan_independent_genetics/raw/Microsatellite_data.xls" | md5sum --check
           echo "52ee37e431aff3303d58685cfef064a7ee34cf0117f52eaca3889e21eacebb17  benchmark_results/zhoushan_independent_genetics/raw/Microsatellite_data.xls" | sha256sum --check
-      - name: Compute exact raw FST and immediately run frozen LOPO ladder
+      - name: Reproduce exact raw FST and frozen LOPO ladder
         run: |
           python -m benchmarks.zhoushan_frog_independent_genetic_validation \
             --genotypes benchmark_results/zhoushan_independent_genetics/raw/Microsatellite_data.xls \
             --output benchmark_results/zhoushan_independent_genetics/result.json \
             --response-csv benchmark_results/zhoushan_independent_genetics/pairwise_fst_response.csv \
             > benchmark_results/zhoushan_independent_genetics/stdout.json
-      - name: Check one-time result contract without requiring a favourable outcome
+      - name: Require byte/scientific agreement with authoritative result
         run: |
           python - <<'PY'
-          import csv
+          import hashlib
           import json
           from pathlib import Path
           root=Path('benchmark_results/zhoushan_independent_genetics')
-          r=json.loads((root/'result.json').read_text())
-          assert r['study_doi']=='10.1111/mec.12634'
-          assert r['frozen_predictor_manifest_fingerprint']=='e0a18112d9adfd197958b3e0e1cd1043485055425371b073f2cb74ad917ead70'
-          assert r['frozen_operator_fingerprint']=='242d251353d1180d9a39a8698969246264e65a3ba9b6ad3c0a5a3fc3259369df'
-          assert r['frozen_connectivity_fingerprint']=='2822fbd07b22d4a6f77123077f49f660e99a9641da6cecbf44203b45b5ffefb9'
-          assert r['raw_genotype_provenance']['raw_sha256']=='52ee37e431aff3303d58685cfef064a7ee34cf0117f52eaca3889e21eacebb17'
-          assert r['raw_genotype_provenance']['n_individuals']==810
-          assert r['raw_genotype_provenance']['n_loci']==9
-          assert r['response_summary']['n_pairs']==351
-          assert r['response_estimator']=='Weir-Cockerham-1984-theta-all-nine-loci'
-          assert r['response_transform']=='FST/(1-FST)'
-          assert r['ridge_penalty']==1.0
-          assert r['validation_scheme']=='leave-one-population-out'
-          assert r['status'] in {
-              'response_transform_nonadmissible',
-              'indeterminate_strong_reference_failure',
-              'independent_empirical_genetic_added_information',
-              'independent_empirical_genetic_no_added_information',
-          }
-          with (root/'pairwise_fst_response.csv').open(newline='') as h:
-              rows=list(csv.DictReader(h))
-          assert len(rows)==351
-          assert len(r['fingerprint'])==64
-          if r['validation_executed']:
-              assert len(r['models'])==5
-              assert r['primary_population_inference']['bootstrap_seed']==20260813
-              assert r['primary_population_inference']['bootstrap_replicates']==10000
-              assert len(r['primary_population_inference']['per_population_mse_difference'])==27
+          result_path=root/'result.json'
+          response_path=root/'pairwise_fst_response.csv'
+          r=json.loads(result_path.read_text())
+          assert r['fingerprint']=='585b4b6c3a616d353e3abcfd95b5c341cb4e022da012a8d72ad310ddb9ae48cd'
+          assert r['status']=='indeterminate_strong_reference_failure'
+          assert r['promotion_go'] is False
+          assert hashlib.sha256(result_path.read_bytes()).hexdigest()=='88c3f9aa4210e61eb3eb6398cc7ba64a9cf2e23a0e7e09164f2ed958153355b8'
+          assert hashlib.sha256(response_path.read_bytes()).hexdigest()=='8f6836b3219b7ef2bb92a3a21cf41ed750e3afac21480ebf1a70d6b0fed0eda3'
           PY
       - name: Remove raw genotypes before artifact upload
         if: always()
         run: rm -rf benchmark_results/zhoushan_independent_genetics/raw
-      - name: Upload one-time exact genetic result
+      - name: Upload reproducibility check
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: zhoushan-frog-one-time-independent-genetic-validation
+          name: zhoushan-frog-exact-genetic-reproducibility-check
           path: |
             benchmark_results/zhoushan_independent_genetics/result.json
             benchmark_results/zhoushan_independent_genetics/pairwise_fst_response.csv
