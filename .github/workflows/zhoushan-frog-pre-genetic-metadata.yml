@@ -1,0 +1,65 @@
+name: Zhoushan frog pre-genetic metadata audit
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/zhoushan-frog-pre-genetic-metadata.yml"
+      - "benchmarks/zhoushan_frog_pre_genetic_metadata_audit.py"
+      - "docs/eog_v2_zhoushan_frog_pre_genetic_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download response-free transect workbook only
+        run: |
+          mkdir -p benchmark_results/zhoushan_frog_pre_genetic
+          curl --fail --location --retry 4 --retry-delay 3 \
+            --user-agent "Mozilla/5.0 EOG-v2-pre-genetic-metadata/1.0" \
+            "https://zenodo.org/records/5012316/files/Raw%20transects%20.xlsx?download=1" \
+            --output benchmark_results/zhoushan_frog_pre_genetic/raw_transects.xlsx
+          test -s benchmark_results/zhoushan_frog_pre_genetic/raw_transects.xlsx
+          echo "3fcd9bc56c414d6ca6518303d87c4736  benchmark_results/zhoushan_frog_pre_genetic/raw_transects.xlsx" | md5sum --check
+          sha256sum benchmark_results/zhoushan_frog_pre_genetic/raw_transects.xlsx \
+            > benchmark_results/zhoushan_frog_pre_genetic/raw_sha256.txt
+      - name: Run response-free workbook audit
+        run: |
+          python benchmarks/zhoushan_frog_pre_genetic_metadata_audit.py \
+            --input benchmark_results/zhoushan_frog_pre_genetic/raw_transects.xlsx \
+            --output benchmark_results/zhoushan_frog_pre_genetic/metadata_audit.json \
+            > benchmark_results/zhoushan_frog_pre_genetic/audit_stdout.json
+      - name: Check pre-genetic firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('benchmark_results/zhoushan_frog_pre_genetic/metadata_audit.json').read_text())
+          assert result['status'] == 'zhoushan-frog-response-free-transect-metadata-audit'
+          assert result['n_declared_nodes'] == 27
+          assert result['genetic_response_accessed'] is False
+          assert result['microsatellite_file_accessed'] is False
+          assert len(result['response_free_metadata_fingerprint']) == 64
+          assert result['raw_md5'] == '3fcd9bc56c414d6ca6518303d87c4736'
+          PY
+      - name: Remove raw workbook before artifact upload
+        if: always()
+        run: rm -f benchmark_results/zhoushan_frog_pre_genetic/raw_transects.xlsx
+      - name: Upload response-free metadata audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zhoushan-frog-pre-genetic-metadata-audit
+          path: |
+            benchmark_results/zhoushan_frog_pre_genetic/metadata_audit.json
+            benchmark_results/zhoushan_frog_pre_genetic/audit_stdout.json
+            benchmark_results/zhoushan_frog_pre_genetic/raw_sha256.txt
+          if-no-files-found: error
