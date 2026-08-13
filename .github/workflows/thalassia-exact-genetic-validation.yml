@@ -2,6 +2,9 @@ name: Thalassia one-time exact genetic validation
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/thalassia-exact-genetic-validation.yml"
 
 permissions:
   contents: read
