@@ -1,0 +1,138 @@
+name: Thalassia one-time pre-FST harmonization freeze
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/thalassia-prefst-harmonization-freeze.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate harmonized parser/tests before freezing
+        run: |
+          python -m pip install -e . "openpyxl==3.1.5" pytest
+          pytest -q tests/test_thalassia_genalex_stage3.py
+          python -m py_compile benchmarks/thalassia_exact_genetic_validation.py
+      - name: Write accurate pre-FST manifest v2
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+
+          def sha(path):
+              h=hashlib.sha256()
+              with Path(path).open('rb') as f:
+                  for chunk in iter(lambda:f.read(1024*1024),b''):
+                      h.update(chunk)
+              return h.hexdigest()
+
+          schema_path=Path('benchmarks/frozen/thalassia_stage3_schema/schema_audit.json')
+          schema=json.loads(schema_path.read_text())
+          assert sha(schema_path)=='2adacdadb9bd10488e4514dce583b57156f97e964037c5683592b83524038f2b'
+          assert schema['schema_fingerprint']=='a0b2c6bb0755f1d09f9aa88fbe4bfa645c5a4c8f011907fe4ceb93f64ff674de'
+          assert schema['genetic_response_computed'] is False
+          assert schema['multilocus_genotypes_computed'] is False
+          assert schema['allele_frequencies_computed'] is False
+
+          stage2_path=Path('benchmarks/frozen/thalassia_stage2_predictors/manifest.json')
+          stage2=json.loads(stage2_path.read_text())
+          assert sha(stage2_path)=='38f677f4d5f864d7d661e251c4e3970f2098ae2155a0125bb88045aa55fc442f'
+          assert stage2['fingerprint']=='ef119675a596fe2044aca97b43efc618cfb7b00aee1dc3a1663ff5736c0a94ea'
+          assert stage2['genetic_response_attached'] is False
+
+          paths=[
+              'benchmarks/thalassia_genalex_stage3.py',
+              'benchmarks/thalassia_exact_genetic_validation.py',
+              'tests/test_thalassia_genalex_stage3.py',
+              'docs/eog_v2_thalassia_stage3_microsatellite_contract.md',
+              'docs/eog_v2_thalassia_stage3_genetic_response_contract.md',
+              'docs/eog_v2_nested_genetic_reference_contract.md',
+              'src/eog/genetic_reference_selection.py',
+              'benchmarks/zhoushan_weir_cockerham.py',
+              'benchmarks/frozen/thalassia_stage2_predictors/predictors.csv',
+              'benchmarks/frozen/thalassia_stage2_predictors/manifest.json',
+              'benchmarks/frozen/thalassia_stage3_schema/schema_audit.json',
+          ]
+          file_sha={path:sha(path) for path in paths}
+          manifest={
+              'schema':'eog_v2_1_thalassia_prefst_harmonization_v2',
+              'status':'frozen-after-schema-before-fst',
+              'study_doi':'10.1111/mec.13966',
+              'dryad_doi':'10.5061/dryad.404rm',
+              'genetic_workbook_sha256':'aaaab9e302c9be8cf4e108d2aee5867c0b64ed70b6d3b81bad4d60168ee7f2f3',
+              'n_populations':17,
+              'n_loci':16,
+              'n_pairs':136,
+              'stage1_fingerprint':'12a34c597dbf4130ad1dcda8a9822504291a0ac7d4f34fa31c43d8d373d49764',
+              'stage2_fingerprint':'ef119675a596fe2044aca97b43efc618cfb7b00aee1dc3a1663ff5736c0a94ea',
+              'stage3_schema_fingerprint':'a0b2c6bb0755f1d09f9aa88fbe4bfa645c5a4c8f011907fe4ceb93f64ff674de',
+              'stage3_schema_audit_fingerprint':'3734a91c72f5f3fc7732e490216b9218b52f79a2506453039a8b2d72a01c03f9',
+              'schema_only_workbook_access_completed':True,
+              'schema_only_access_run':31668567528,
+              'allele_frequencies_computed':False,
+              'multilocus_genotypes_computed':False,
+              'pairwise_fst_computed':False,
+              'genetic_response_computed':False,
+              'candidate_ids':['gabriel_current_flow','gabriel_shortest_path','geographic'],
+              'candidate_family_fingerprint':'2895d0b1420fbd80cfabec7336bb2aa6b4fa501a452c90102859c3fe486f3ecb',
+              'exact_eventual_connectivity_fingerprint':'e0ab1d046906d362b6766ec7b887e300d25efb119282406a0daf319abd156f89',
+              'clone_policy':'exact complete 16-locus MLG within population; retain smallest normalized sample ID then source row',
+              'missing_policy':'0 or blank in either allele makes locus missing; primary uses complete 16-locus samples only; no imputation',
+              'fst_estimator':'Weir-Cockerham 1984 multilocus theta; all 16 loci; no clipping',
+              'response_transform':'theta/(1-theta), primary domain requires 0<=theta<1; otherwise non_estimable_linearized_fst_domain',
+              'nested_selector':'inner population-held-out conventional-reference selection; EOG excluded from selection',
+              'ridge_penalty':1.0,
+              'bootstrap_resamples':10000,
+              'bootstrap_seed':20260813,
+              'post_response_rescue_allowed':False,
+              'supersedes_manifest_schema':'eog_v2_1_thalassia_stage3_preaccess_contract_v1',
+              'supersession_reason':(
+                  'v1 incorrectly stated that workbook cells had never been accessed and allowed negative theta. '
+                  'The schema-only audit had already occurred, but no MLG/FST/genetic response had been computed. '
+                  'v2 restores precedence of the first Stage-3 microsatellite contract before pairwise FST.'
+              ),
+              'file_sha256':file_sha,
+          }
+          encoded=json.dumps(manifest,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+          manifest['fingerprint']=hashlib.sha256(encoded).hexdigest()
+          destination=Path('benchmarks/frozen/thalassia_stage3_preaccess/manifest.json')
+          destination.parent.mkdir(parents=True,exist_ok=True)
+          destination.write_text(json.dumps(manifest,indent=2,sort_keys=True,allow_nan=False)+'\n')
+          print(json.dumps(manifest,indent=2,sort_keys=True))
+          PY
+      - name: Verify no genetic response was introduced
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('benchmarks/frozen/thalassia_stage3_preaccess/manifest.json').read_text())
+          assert m['status']=='frozen-after-schema-before-fst'
+          assert m['schema_only_workbook_access_completed'] is True
+          assert m['allele_frequencies_computed'] is False
+          assert m['multilocus_genotypes_computed'] is False
+          assert m['pairwise_fst_computed'] is False
+          assert m['genetic_response_computed'] is False
+          assert m['response_transform'].startswith('theta/(1-theta), primary domain requires 0<=theta<1')
+          assert len(m['fingerprint'])==64
+          PY
+      - name: Commit pre-FST manifest v2
+        run: |
+          set -euo pipefail
+          git config user.name "EOG pre-FST freeze"
+          git config user.email "actions@users.noreply.github.com"
+          git add benchmarks/frozen/thalassia_stage3_preaccess/manifest.json
+          git diff --cached --quiet && { echo "manifest unchanged"; exit 1; }
+          git commit -m "Freeze harmonized Thalassia pre-FST manifest"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
