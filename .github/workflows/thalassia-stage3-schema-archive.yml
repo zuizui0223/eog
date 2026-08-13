@@ -1,0 +1,76 @@
+name: Thalassia one-time Stage 3A schema archive
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/thalassia-stage3-schema-archive.yml"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+      - name: Download exact successful schema artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e benchmarks/frozen/thalassia_stage3_schema
+          mkdir -p /tmp/thalassia_schema benchmarks/frozen/thalassia_stage3_schema
+          curl --fail --location \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9168860529/zip" \
+            -o /tmp/thalassia-schema.zip
+          unzip -q /tmp/thalassia-schema.zip -d /tmp/thalassia_schema
+          echo "2adacdadb9bd10488e4514dce583b57156f97e964037c5683592b83524038f2b  /tmp/thalassia_schema/schema_audit.json" | sha256sum --check
+          echo "6c8ddd950080191cd766f4ad268181b505e24311e2bc8628a419df19fd76cab5  /tmp/thalassia_schema/source_identity.json" | sha256sum --check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/thalassia_schema/schema_audit.json').read_text())
+          assert r['status']=='thalassia-microsatellite-schema-admitted'
+          assert r['fingerprint']=='3734a91c72f5f3fc7732e490216b9218b52f79a2506453039a8b2d72a01c03f9'
+          assert r['schema_fingerprint']=='a0b2c6bb0755f1d09f9aa88fbe4bfa645c5a4c8f011907fe4ceb93f64ff674de'
+          assert r['genetic_response_computed'] is False
+          assert r['multilocus_genotypes_computed'] is False
+          b=r['admitted_block']
+          assert b['n_samples']==806 and b['n_populations']==17 and b['n_loci']==16
+          assert b['missing_allele_cells']==0
+          assert b['partial_missing_locus_pairs']==0
+          PY
+          cp /tmp/thalassia_schema/schema_audit.json benchmarks/frozen/thalassia_stage3_schema/schema_audit.json
+          cp /tmp/thalassia_schema/source_identity.json benchmarks/frozen/thalassia_stage3_schema/source_identity.json
+          cat > benchmarks/frozen/thalassia_stage3_schema/README.md <<'EOF'
+          # Frozen Thalassia Stage-3A microsatellite schema audit
+
+          This directory contains the schema-only artifact from the first authorized opening of the exact microsatellite workbook. No MLG, allele-frequency, FST, cluster, migration or genetic-distance response was computed in this stage.
+
+          - source workflow run: `31668567528`;
+          - source head: `f34948e2d946872794fa8525ab6f254a56795390`;
+          - artifact ID: `9168860529`;
+          - artifact digest: `sha256:b9adb0d21e0509df105502995b525b5fe4b184090d3ae05122801ddd90dac67e`;
+          - schema JSON SHA-256: `2adacdadb9bd10488e4514dce583b57156f97e964037c5683592b83524038f2b`;
+          - source identity SHA-256: `6c8ddd950080191cd766f4ad268181b505e24311e2bc8628a419df19fd76cab5`;
+          - schema fingerprint: `a0b2c6bb0755f1d09f9aa88fbe4bfa645c5a4c8f011907fe4ceb93f64ff674de`;
+          - audit fingerprint: `3734a91c72f5f3fc7732e490216b9218b52f79a2506453039a8b2d72a01c03f9`.
+
+          Admitted block: one `Genalex` sheet, 806 samples, 17 populations, 16 codominant loci, zero missing allele cells and zero partially missing locus pairs. All workbook population tokens map exactly to the 17 response-free GPS Code identifiers.
+          EOF
+      - name: Commit immutable schema artifact to the PR branch
+        run: |
+          set -euo pipefail
+          git config user.name "EOG Stage-3 schema archive"
+          git config user.email "actions@users.noreply.github.com"
+          git add benchmarks/frozen/thalassia_stage3_schema
+          git diff --cached --quiet && { echo "nothing to archive"; exit 1; }
+          git commit -m "Archive Thalassia Stage 3A schema audit"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
