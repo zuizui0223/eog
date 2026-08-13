@@ -1,10 +1,10 @@
 """Prepare the frozen SW Finland strict-source cohort without reading outcomes.
 
 This response-free redesign preserves the original 471-island graph, predictors, folds,
-fit settings and inference contract.  It changes only species eligibility: the exact
-184-species list whose released potential-target complement cardinality equals the
-independently decoded released historical-island count is used.  No historical source is
-repaired, deleted, or inferred.
+fit settings and inference contract. It changes only species eligibility: the exact
+180-species sourceful list whose released potential-target complement cardinality equals
+the independently decoded positive historical-island count is used. No historical source
+is repaired, deleted, or inferred.
 """
 from __future__ import annotations
 
@@ -54,10 +54,10 @@ STRICT_SUMMARY_PATH = Path("benchmarks/frozen/finland_strict_source_cohort/respo
 STRICT_CONTRACT_PATH = Path("docs/eog_v2_finland_strict_source_cohort_contract.md")
 ORIGINAL_CONTRACT_PATH = Path("docs/eog_v2_finland_colonization_preoutcome_contract.md")
 INFERENCE_FREEZE_PATH = Path("docs/eog_v2_finland_colonization_inference_freeze.md")
-EXPECTED_STRICT_LIST_SHA256 = "081dda9b8070dca2d817ea060b8098afa82eea7d2bf33d30c3e158f1567f0034"
+EXPECTED_STRICT_LIST_SHA256 = "e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc"
 EXPECTED_SOURCE_IDENTIFIABILITY_FP = "06f38cb7a5d1321c5dde4072ee0c1329f52de05a55fed353909b342e3f4e2afd"
 EXPECTED_RAW_SHA256 = "72b631033ef36210ee19b151dc4f6569760262d68f70b9ce6de6c8a11afeb957"
-EXPECTED_STRICT_SPECIES = 184
+EXPECTED_STRICT_SPECIES = 180
 MIN_STRICT_ANALYSIS_SPECIES = 100
 STRICT_BUNDLE_SCHEMA = "eog_v2_finland_strict_source_response_free_bundle_v1"
 
@@ -103,6 +103,8 @@ def _decoded_counts(projection: dict[str, object]) -> dict[str, int]:
     summary = json.loads(STRICT_SUMMARY_PATH.read_text(encoding="utf-8"))
     if summary.get("source_identifiability_fingerprint") != EXPECTED_SOURCE_IDENTIFIABILITY_FP:
         raise RuntimeError("Finland strict-source response-free summary fingerprint drifted")
+    if summary.get("n_strict_sourceful_exact_complement_species") != EXPECTED_STRICT_SPECIES:
+        raise RuntimeError("Finland strict-source response-free summary count drifted")
     expected_grid = summary.get("historical_count_grid") or {}
     for key in ("transform", "intercept", "slope", "candidate_exact_line_support"):
         if key not in expected_grid:

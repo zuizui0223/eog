@@ -31,16 +31,18 @@ jobs:
         run: |
           python -m pip install -e ".[dev]"
           python -m pip install "requests==2.32.5"
-      - name: Verify frozen exact-complement cohort identity
+      - name: Verify frozen sourceful exact-complement cohort identity
         run: |
           python - <<'PY'
           import hashlib, json
           from pathlib import Path
           species=Path('benchmarks/frozen/finland_strict_source_cohort/exact_complement_species.txt')
           summary=json.loads(Path('benchmarks/frozen/finland_strict_source_cohort/response_free_summary.json').read_text())
-          assert hashlib.sha256(species.read_bytes()).hexdigest()=='081dda9b8070dca2d817ea060b8098afa82eea7d2bf33d30c3e158f1567f0034'
-          assert len(species.read_text().splitlines())==184
+          assert hashlib.sha256(species.read_bytes()).hexdigest()=='e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc'
+          assert len(species.read_text().splitlines())==180
           assert summary['n_exact_complement_species']==184
+          assert summary['n_zero_source_exact_complement_species']==4
+          assert summary['n_strict_sourceful_exact_complement_species']==180
           assert summary['source_identifiability_fingerprint']=='06f38cb7a5d1321c5dde4072ee0c1329f52de05a55fed353909b342e3f4e2afd'
           assert summary['outcome_values_accessed'] is False
           PY
@@ -77,15 +79,15 @@ jobs:
           assert admission['admitted'] is True
           assert admission['outcome_values_accessed'] is False
           assert admission['n_islands']==471
-          assert admission['n_species_strict']==184
+          assert admission['n_species_strict']==180
           assert admission['checks']['nearest_history_consistency']['passed'] is True
-          assert admission['strict_species_list_sha256']=='081dda9b8070dca2d817ea060b8098afa82eea7d2bf33d30c3e158f1567f0034'
+          assert admission['strict_species_list_sha256']=='e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc'
           assert manifest['schema']=='eog_v2_finland_strict_source_response_free_bundle_v1'
           assert manifest['outcome_values_accessed'] is False
           assert manifest['raw_sha256']==raw_sha
-          assert manifest['n_sourceful_species']==184
+          assert manifest['n_sourceful_species']==180
           assert manifest['n_species_analysis_response_free']>=100
-          assert manifest['strict_species_list_sha256']=='081dda9b8070dca2d817ea060b8098afa82eea7d2bf33d30c3e158f1567f0034'
+          assert manifest['strict_species_list_sha256']=='e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc'
           assert manifest['source_identifiability_fingerprint']=='06f38cb7a5d1321c5dde4072ee0c1329f52de05a55fed353909b342e3f4e2afd'
           assert manifest['bootstrap_seed']==20260812
           assert manifest['bootstrap_replicates']==10000

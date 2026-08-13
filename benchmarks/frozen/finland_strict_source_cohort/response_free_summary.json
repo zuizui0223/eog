@@ -1,5 +1,5 @@
 {
-  "exact_complement_species_list_sha256": "081dda9b8070dca2d817ea060b8098afa82eea7d2bf33d30c3e158f1567f0034",
+  "exact_complement_species_list_sha256": "e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc",
   "historical_count_grid": {
     "candidate_exact_line_support": 184,
     "candidate_exact_line_support_fraction": 0.5897435897435898,
@@ -10,6 +10,8 @@
     "transform": "affine_lnp1_integer_grid_exact_consensus"
   },
   "n_exact_complement_species": 184,
+  "n_strict_sourceful_exact_complement_species": 180,
+  "n_zero_source_exact_complement_species": 4,
   "outcome_values_accessed": false,
   "raw_sha256": "72b631033ef36210ee19b151dc4f6569760262d68f70b9ce6de6c8a11afeb957",
   "schema": "eog_v2_finland_strict_source_cohort_response_free_v1",
@@ -24,5 +26,11 @@
     "unique_recovered_by_count_and_nearest": 3
   },
   "source_workflow_run": 31687132743,
-  "strict_rule": "admit only exact_complement species; exclude unique-recovered, ambiguous, inconsistent, and species without decoded released historical count"
+  "strict_rule": "admit only exact_complement species with decoded historical count > 0; exclude four zero-source exact complements as fixed-source non-applicable, and exclude unique-recovered, ambiguous, inconsistent, and species without decoded released historical count",
+  "zero_source_exact_complement_species": [
+    "Epilobium adenocaulon",
+    "Epilobium ciliatum",
+    "Galium album",
+    "Senecio viscosus"
+  ]
 }

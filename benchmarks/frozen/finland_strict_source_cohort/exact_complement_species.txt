@@ -57,8 +57,6 @@ Drosera rotundifolia
 Eleocharis palustris coll.
 Eleocharis quinqueflora
 Elymus caninus
-Epilobium adenocaulon
-Epilobium ciliatum
 Erophila verna
 Erysimum cheiranthoides ssp. cheiranthoides
 Euphrasia nemorosa
@@ -66,7 +64,6 @@ Euphrasia stricta var. tenuis
 Fallopia convolvulus
 Fallopia dumetorum
 Filipendula vulgaris
-Galium album
 Galium aparine
 Galium boreale
 Gentianella amarella ssp. lingulata
@@ -155,7 +152,6 @@ Saxifraga tridactylites
 Scleranthus annuus
 Scutellaria hastifolia
 Sedum  album
-Senecio viscosus
 Senecio vulgaris
 Silene dioica
 Silene nutans

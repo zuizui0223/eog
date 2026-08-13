@@ -8,6 +8,17 @@ This contract does not erase or reinterpret the original Finland admission failu
 
 The redesign is deliberately narrower: it admits only species for which source identity is already exact from the released potential-target row structure and therefore requires **no source repair, deletion inference, or outcome-dependent choice**.
 
+### Pre-outcome integrity correction
+
+The first strict-bundle freeze exposed an internal contradiction before any `outcome` value was accessed: the initial 184-name file was copied from the response-free `exact_complement` status, but four of those taxa had decoded historical source count `0`. That contradicted the already-written fixed-source rule requiring a positive historical source count and would make source-conditioned EOG-R undefined. The correction removes exactly these four fixed-source-non-applicable taxa and changes no graph, predictor, fold, threshold, fit, inference, or promotion rule:
+
+- `Epilobium adenocaulon`;
+- `Epilobium ciliatum`;
+- `Galium album`;
+- `Senecio viscosus`.
+
+The response-free audit still contains 184 `exact_complement` statuses; the prospective strict sourceful cohort is therefore 180 species. This correction was made solely from the already-frozen response-free audit and before outcome scoring.
+
 ## Immutable raw data and response firewall
 
 Authoritative raw object:
@@ -35,12 +46,12 @@ The released `Historical_total_log` values form an exact shared affine transform
 
 Among the 312 species with a released historical count:
 
-- 184 species: potential-target complement count equals decoded historical island count exactly;
+- 184 species: potential-target complement count equals decoded historical island count exactly; 180 have a positive decoded historical count and 4 have count `0`;
 - 3 species: source set could be uniquely repaired from count + nearest-distance constraints;
 - 123 species: multiple source deletions satisfy the released response-free summaries;
 - 2 species: nearest-distance constraints are inconsistent with the required count reduction.
 
-The 3 uniquely repairable species are **not used** in this strict cohort. Ambiguous and inconsistent species are excluded. The redesign therefore does not infer any missing historical source identity.
+The 4 zero-source exact complements are fixed-source non-applicable. The 3 uniquely repairable species are **not used** in this strict cohort. Ambiguous and inconsistent species are excluded. The redesign therefore does not infer any missing historical source identity.
 
 Response-free audit provenance:
 
@@ -60,7 +71,7 @@ A species is admitted if and only if all following response-free conditions hold
 5. that decoded count equals exactly the number of islands in the 471-island universe that are absent from the species' released potential-target row set;
 6. no inferred deletion or repaired historical source is required.
 
-This rule yielded exactly **184 species** before outcome access.
+This rule yielded exactly **180 species** before outcome access.
 
 The exact species list is frozen at:
 
@@ -68,7 +79,7 @@ The exact species list is frozen at:
 
 with SHA-256:
 
-`081dda9b8070dca2d817ea060b8098afa82eea7d2bf33d30c3e158f1567f0034`.
+`e218f94e5facd4ed330a80b0fead0012b31fd5cb7b7b026f2ee0ff326277b2bc`.
 
 After outcome access this list cannot be enlarged, reduced, taxonomically repaired, or replaced because of predictive performance.
 
@@ -134,6 +145,6 @@ If the strong-reference condition fails, status is indeterminate reference failu
 
 ## Claim boundary
 
-This is a prospective independent occurrence test on a response-free source-identifiable subset of the released Finland dataset. A favourable result would support incremental held-out information from frozen source-conditioned dynamic reachability beyond R2 **for this strict cohort**. It would not establish colonization probability, realized movement routes, universal superiority over SDMs, or validity for the 403 excluded/zero-source/undecodable/ambiguous species.
+This is a prospective independent occurrence test on a response-free source-identifiable subset of the released Finland dataset. A favourable result would support incremental held-out information from frozen source-conditioned dynamic reachability beyond R2 **for this strict cohort**. It would not establish colonization probability, realized movement routes, universal superiority over SDMs, or validity for the 407 excluded/zero-source/undecodable/ambiguous species.
 
 The original failed global Finland admission and every excluded-species reason remain part of the audit trail.
