@@ -1,0 +1,123 @@
+name: Fiji Pheidole pre-genetic metadata audit
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/fiji-pheidole-pre-genetic-metadata.yml"
+      - "benchmarks/fiji_pheidole_pre_genetic_metadata_audit.py"
+      - "docs/eog_v2_fiji_pheidole_pre_genetic_contract.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install transport dependency
+        run: python -m pip install "requests==2.32.5"
+      - name: Verify Zenodo record and download immutable archive
+        run: |
+          mkdir -p benchmark_results/fiji_pheidole/raw
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import requests
+
+          root = Path('benchmark_results/fiji_pheidole')
+          raw = root / 'raw'
+          api = 'https://zenodo.org/api/records/4965569'
+          response = requests.get(api, timeout=90)
+          response.raise_for_status()
+          record = response.json()
+          (root / 'zenodo_record.json').write_text(
+              json.dumps(record, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+
+          files = record.get('files') or []
+          archives = []
+          for item in files:
+              key = str(item.get('key') or item.get('filename') or item.get('name') or '')
+              if key.lower().endswith('.zip'):
+                  archives.append((key, item))
+          if len(archives) != 1:
+              raise RuntimeError(f'expected exactly one Zenodo ZIP archive, found {[key for key, _ in archives]}')
+          key, item = archives[0]
+          links = item.get('links') or {}
+          download_url = links.get('content') or links.get('download') or links.get('self')
+          if not download_url:
+              raise RuntimeError(f'Zenodo ZIP entry has no download link: {item}')
+
+          destination = raw / 'fiji_pheidole_archive.zip'
+          digest = hashlib.sha256()
+          size = 0
+          with requests.get(download_url, stream=True, timeout=180) as download:
+              download.raise_for_status()
+              with destination.open('wb') as handle:
+                  for chunk in download.iter_content(chunk_size=1024 * 1024):
+                      if not chunk:
+                          continue
+                      handle.write(chunk)
+                      digest.update(chunk)
+                      size += len(chunk)
+          if size < 1_000_000:
+              raise RuntimeError(f'Zenodo archive implausibly small: {size} bytes')
+          identity = {
+              'zenodo_record_id': 4965569,
+              'record_api': api,
+              'archive_key': key,
+              'archive_size_bytes': size,
+              'archive_sha256': digest.hexdigest(),
+              'download_link_source': 'Zenodo record files[].links',
+          }
+          (root / 'transport_identity.json').write_text(
+              json.dumps(identity, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          PY
+      - name: Run response-free ZIP-directory and metadata-schema audit
+        run: |
+          python benchmarks/fiji_pheidole_pre_genetic_metadata_audit.py \
+            --record-json benchmark_results/fiji_pheidole/zenodo_record.json \
+            --archive benchmark_results/fiji_pheidole/raw/fiji_pheidole_archive.zip \
+            --output benchmark_results/fiji_pheidole/stage1_audit.json \
+            > benchmark_results/fiji_pheidole/stage1_stdout.json
+      - name: Check response firewall and report admission status
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('benchmark_results/fiji_pheidole/stage1_audit.json').read_text())
+          assert result['status'] == 'fiji-pheidole-pre-genetic-stage1-metadata-audit'
+          assert result['genetic_member_contents_accessed'] is False
+          assert result['checks']['genetic_member_contents_accessed'] is False
+          assert result['n_archive_members'] > 0
+          assert len(result['archive_sha256']) == 64
+          print(json.dumps({
+              'stage1_admitted': result['admitted'],
+              'archive_sha256': result['archive_sha256'],
+              'n_members': result['n_archive_members'],
+              'n_allowlisted_metadata_members_read': result['n_allowlisted_metadata_members_read'],
+              'fingerprint': result['fingerprint'],
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Remove raw archive before artifact upload
+        if: always()
+        run: rm -rf benchmark_results/fiji_pheidole/raw
+      - name: Upload response-free Stage 1 evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fiji-pheidole-pre-genetic-stage1
+          path: |
+            benchmark_results/fiji_pheidole/zenodo_record.json
+            benchmark_results/fiji_pheidole/transport_identity.json
+            benchmark_results/fiji_pheidole/stage1_audit.json
+            benchmark_results/fiji_pheidole/stage1_stdout.json
+          if-no-files-found: warn
