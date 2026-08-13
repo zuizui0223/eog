@@ -97,6 +97,22 @@ def fixed_dict_reader_delimiter(delimiter: str) -> Iterator[None]:
         csv.DictReader = original  # type: ignore[assignment]
 
 
+def _load_frozen_pipeline_functions():
+    """Resolve the same frozen modules in package or direct-script execution mode."""
+    try:
+        from benchmarks.finland_colonization_preoutcome_admission import evaluate_admission
+        from benchmarks.finland_colonization_prepare import prepare_bundle
+    except ModuleNotFoundError as exc:
+        # ``python benchmarks/finland_csv_format_adapter.py`` puts the benchmarks directory,
+        # not the repository root, on sys.path.  Falling back to sibling-module imports is a
+        # pure execution-path fix; the imported source files are identical.
+        if exc.name != "benchmarks":
+            raise
+        from finland_colonization_preoutcome_admission import evaluate_admission
+        from finland_colonization_prepare import prepare_bundle
+    return evaluate_admission, prepare_bundle
+
+
 def run_response_free_pipeline(
     input_path: str | Path,
     *,
@@ -109,10 +125,9 @@ def run_response_free_pipeline(
     format_manifest = detect_csv_format(source)
     delimiter = str(format_manifest["delimiter"])
 
-    # Import before the temporary constructor replacement; both modules still hold the same
-    # stdlib csv module object, so only DictReader syntax changes at execution time.
-    from benchmarks.finland_colonization_preoutcome_admission import evaluate_admission
-    from benchmarks.finland_colonization_prepare import prepare_bundle
+    # Only import resolution differs between package and direct-script execution.  Both
+    # paths resolve the same frozen response-free scientific functions.
+    evaluate_admission, prepare_bundle = _load_frozen_pipeline_functions()
 
     with fixed_dict_reader_delimiter(delimiter):
         admission = evaluate_admission(source)
