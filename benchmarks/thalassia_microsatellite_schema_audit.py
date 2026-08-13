@@ -1,7 +1,7 @@
 """First authorized open of the frozen Thalassia microsatellite workbook.
 
 This script validates only the GenAlEx schema, sample/population alignment, locus headers,
-and missing-value representation.  It deliberately does not identify multilocus genotypes,
+and missing-value representation. It deliberately does not identify multilocus genotypes,
 calculate allele frequencies, or compute any genetic-distance/FST response.
 """
 from __future__ import annotations
@@ -124,7 +124,10 @@ def audit(raw_path: Path) -> dict[str, object]:
         raise ValueError("Thalassia Stage-2 predictors are no longer response-free")
 
     aliases, frozen_alias_rows = _frozen_aliases()
-    workbook = load_workbook(raw_path, read_only=True, data_only=True)
+    # Normal worksheet mode caches cells once.  This changes no schema or response rule;
+    # it only avoids the repeated XML rescans caused by random .cell() access on a
+    # ReadOnlyWorksheet.
+    workbook = load_workbook(raw_path, read_only=False, data_only=True)
     sheet_summaries: list[dict[str, object]] = []
     candidates: list[dict[str, object]] = []
 
@@ -146,7 +149,10 @@ def audit(raw_path: Path) -> dict[str, object]:
         if n_cols < 2 + 2 * n_loci:
             continue
 
-        pop_sizes = [_int_parameter(sheet.cell(1, 4 + index).value, f"{sheet.title}!pop_size_{index+1}") for index in range(n_pops)]
+        pop_sizes = [
+            _int_parameter(sheet.cell(1, 4 + index).value, f"{sheet.title}!pop_size_{index+1}")
+            for index in range(n_pops)
+        ]
         if any(value <= 0 for value in pop_sizes) or sum(pop_sizes) != n_samples:
             raise ValueError(f"{sheet.title}: declared population sizes do not sum to sample count")
         declared_pop_tokens = [_text(sheet.cell(2, 4 + index).value) for index in range(n_pops)]
@@ -229,7 +235,9 @@ def audit(raw_path: Path) -> dict[str, object]:
         for declared_id, declared_size in zip(declared_pop_ids, pop_sizes):
             block = mapped_population_ids[cursor:cursor + declared_size]
             block_ok = len(block) == declared_size and set(block) == {declared_id}
-            block_checks.append({"population_id": declared_id, "declared_size": declared_size, "contiguous_block_ok": block_ok})
+            block_checks.append(
+                {"population_id": declared_id, "declared_size": declared_size, "contiguous_block_ok": block_ok}
+            )
             cursor += declared_size
         if cursor != n_samples or not all(bool(item["contiguous_block_ok"]) for item in block_checks):
             raise ValueError(f"{sheet.title}: population data rows do not match declared contiguous GenAlEx blocks")
@@ -256,7 +264,9 @@ def audit(raw_path: Path) -> dict[str, object]:
         )
 
     if len(candidates) != 1:
-        raise RuntimeError(f"non_estimable_microsatellite_schema_or_population_alignment: candidate_blocks={len(candidates)}")
+        raise RuntimeError(
+            f"non_estimable_microsatellite_schema_or_population_alignment: candidate_blocks={len(candidates)}"
+        )
 
     admitted = candidates[0]
     schema_payload = {
