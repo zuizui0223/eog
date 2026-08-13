@@ -1,0 +1,77 @@
+name: Zhoushan frog Table S1 post-freeze schema audit
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/zhoushan-frog-table-s1-schema-audit.yml"
+      - "benchmarks/zhoushan_frog_table_s1_schema_audit.py"
+      - "benchmarks/frozen/zhoushan_frog_response_free/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify immutable Stage-2 predictor freeze before response access
+        run: |
+          echo "a540a3d2ec6dd9b74a2ed80bc040d649cb179ec89e0e60ad87f3e529e96cf6f5  benchmarks/frozen/zhoushan_frog_response_free/populations.csv" | sha256sum --check
+          echo "dd14cacf10ce39442977b6b68ae7fc45ced7ae78e458e4feb8338fadd138d7d9  benchmarks/frozen/zhoushan_frog_response_free/predictors.csv" | sha256sum --check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('benchmarks/frozen/zhoushan_frog_response_free/predictor_manifest.json').read_text())
+          assert m['predictor_manifest_fingerprint']=='e0a18112d9adfd197958b3e0e1cd1043485055425371b073f2cb74ad917ead70'
+          assert m['coordinate_fingerprint']=='decfa791f879c38dd6168240684383b01e2f2ab730de8c36575291c622a4e794'
+          assert m['operator_fingerprint']=='242d251353d1180d9a39a8698969246264e65a3ba9b6ad3c0a5a3fc3259369df'
+          assert m['connectivity_fingerprint']=='2822fbd07b22d4a6f77123077f49f660e99a9641da6cecbf44203b45b5ffefb9'
+          assert m['exact_pairwise_fst_accessed'] is False
+          assert m['genetic_response_attached'] is False
+          PY
+      - name: Download Wiley exact pairwise FST Table S1 after freeze
+        run: |
+          mkdir -p benchmark_results/zhoushan_table_s1
+          curl --fail --location --retry 4 --retry-delay 3 \
+            --user-agent "Mozilla/5.0 EOG-v2-post-freeze-response-audit/1.0" \
+            "https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fmec.12634&file=mec12634-sup-0002-TableS1.xlsx" \
+            --output benchmark_results/zhoushan_table_s1/TableS1.xlsx
+          test -s benchmark_results/zhoushan_table_s1/TableS1.xlsx
+          sha256sum benchmark_results/zhoushan_table_s1/TableS1.xlsx \
+            > benchmark_results/zhoushan_table_s1/table_s1_sha256.txt
+          file benchmark_results/zhoushan_table_s1/TableS1.xlsx
+      - name: Audit workbook schema and string labels only
+        run: |
+          python benchmarks/zhoushan_frog_table_s1_schema_audit.py \
+            --input benchmark_results/zhoushan_table_s1/TableS1.xlsx \
+            --output benchmark_results/zhoushan_table_s1/schema_audit.json \
+            > benchmark_results/zhoushan_table_s1/stdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('benchmark_results/zhoushan_table_s1/schema_audit.json').read_text())
+          assert result['status']=='zhoushan-frog-table-s1-post-freeze-schema-audit'
+          assert result['predictor_freeze_completed_before_access'] is True
+          assert result['numeric_fst_values_emitted'] is False
+          assert result['numeric_fst_values_summarized'] is False
+          assert len(result['raw_sha256'])==64
+          PY
+      - name: Remove copyrighted response workbook before artifact upload
+        if: always()
+        run: rm -f benchmark_results/zhoushan_table_s1/TableS1.xlsx
+      - name: Upload provenance and schema audit only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zhoushan-frog-table-s1-post-freeze-schema-audit
+          path: |
+            benchmark_results/zhoushan_table_s1/schema_audit.json
+            benchmark_results/zhoushan_table_s1/stdout.json
+            benchmark_results/zhoushan_table_s1/table_s1_sha256.txt
+          if-no-files-found: warn
