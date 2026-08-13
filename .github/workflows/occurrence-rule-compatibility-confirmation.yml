@@ -1,0 +1,58 @@
+name: EOG v2 occurrence-rule compatibility confirmation
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/occurrence-rule-compatibility-confirmation.yml"
+      - "src/eog/v2/occurrence_constraints.py"
+      - "src/eog/v2/traversability.py"
+      - "src/eog/v2/__init__.py"
+      - "benchmarks/occurrence_rule_compatibility_confirmation.py"
+      - "benchmarks/occurrence_rule_compatibility_confirmation_contract.json"
+      - "tests/test_occurrence_rule_compatibility.py"
+      - "tests/test_occurrence_rule_compatibility_contract.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  confirm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Run focused contracts
+        run: |
+          pytest -q \
+            tests/test_occurrence_rule_compatibility.py \
+            tests/test_occurrence_rule_compatibility_contract.py \
+            tests/test_v2_namespace.py \
+            tests/test_v2_package_layout.py
+      - name: Run frozen structural confirmation
+        run: |
+          mkdir -p benchmark_results/occurrence_rule_compatibility
+          python benchmarks/occurrence_rule_compatibility_confirmation.py \
+            --output benchmark_results/occurrence_rule_compatibility/result.json \
+            | tee benchmark_results/occurrence_rule_compatibility/stdout.json
+      - name: Display scientific decision
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('benchmark_results/occurrence_rule_compatibility/result.json').read_text())
+          print('decision:', result['decision'])
+          print('fingerprint:', result['fingerprint'])
+          for name, gate in result['gates'].items():
+              print(name, gate)
+          PY
+      - name: Upload frozen result
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-v2-occurrence-rule-compatibility-confirmation
+          path: benchmark_results/occurrence_rule_compatibility
