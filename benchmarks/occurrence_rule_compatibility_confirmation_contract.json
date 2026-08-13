@@ -1,0 +1,40 @@
+{
+  "confirmation_seeds": [
+    3109,
+    3203,
+    3301,
+    3407,
+    3511,
+    3607,
+    3701,
+    3803
+  ],
+  "empirical_firewall": "no empirical occurrence or genetic outcome accessed",
+  "failure_policy": "retain fail; do not tune seeds, operators, source policy or gates after inspection",
+  "fingerprint": "cd792c4aa5f3e1e7cdd5b4d4b9e61be8d8f191d00733ff53eac5f0a16a7f29ba",
+  "fixed_source_ids": [
+    "A"
+  ],
+  "gates": {
+    "broken_rule_constrained": "coverage < 1.0 for all seeds",
+    "peer_source_not_directional_history": "self-excluded true chain coverage < 1.0 and unsupported target is ancestral source A for all seeds",
+    "permissive_rule_not_uniquely_identified": "coverage == 1.0 and both active-edge fraction and mean outgoing mass exceed true chain for all seeds",
+    "true_fixed_supported": "coverage == 1.0 for all seeds"
+  },
+  "loss_support": 0.5,
+  "max_steps": 3,
+  "node_ids": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "occurrence_ids": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "schema": "eog_v2_occurrence_rule_compatibility_confirmation_contract_v1",
+  "selection_policy": "no winner score; compatibility and operator permissiveness remain separate"
+}
