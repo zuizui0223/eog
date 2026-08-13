@@ -35,19 +35,47 @@ jobs:
           assert m['exact_pairwise_fst_accessed'] is False
           assert m['genetic_response_attached'] is False
           PY
-      - name: Download Wiley exact pairwise FST Table S1 after freeze
+      - name: Probe Wiley exact pairwise FST Table S1 transport after freeze
+        id: transport
+        shell: bash
         run: |
           mkdir -p benchmark_results/zhoushan_table_s1
-          curl --fail --location --retry 4 --retry-delay 3 \
+          set +e
+          HTTP_CODE="$(curl --location --retry 2 --retry-delay 2 \
+            --silent --show-error \
             --user-agent "Mozilla/5.0 EOG-v2-post-freeze-response-audit/1.0" \
+            --write-out '%{http_code}' \
             "https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fmec.12634&file=mec12634-sup-0001-TableS1.xlsx" \
-            --output benchmark_results/zhoushan_table_s1/TableS1.xlsx
-          test -s benchmark_results/zhoushan_table_s1/TableS1.xlsx
+            --output benchmark_results/zhoushan_table_s1/TableS1.xlsx)"
+          CURL_STATUS=$?
+          set -e
+          python - "$HTTP_CODE" "$CURL_STATUS" <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+          http_code=sys.argv[1]
+          curl_status=int(sys.argv[2])
+          path=Path('benchmark_results/zhoushan_table_s1/TableS1.xlsx')
+          usable=(curl_status==0 and http_code=='200' and path.exists() and path.stat().st_size>10000)
+          payload={
+              'status':'retrieved' if usable else 'transport_blocked',
+              'http_code':http_code,
+              'curl_status':curl_status,
+              'bytes_received':path.stat().st_size if path.exists() else 0,
+              'official_filename':'mec12634-sup-0001-TableS1.xlsx',
+              'response_values_parsed':False,
+              'scientific_admission_failure':False,
+          }
+          Path('benchmark_results/zhoushan_table_s1/transport_status.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          with Path('/tmp/transport_env').open('w') as handle:
+              handle.write(f"TABLE_S1_RETRIEVED={'true' if usable else 'false'}\n")
+          PY
+          cat /tmp/transport_env >> "$GITHUB_ENV"
+      - name: Audit workbook schema and string labels only
+        if: env.TABLE_S1_RETRIEVED == 'true'
+        run: |
           sha256sum benchmark_results/zhoushan_table_s1/TableS1.xlsx \
             > benchmark_results/zhoushan_table_s1/table_s1_sha256.txt
-          file benchmark_results/zhoushan_table_s1/TableS1.xlsx
-      - name: Audit workbook schema and string labels only
-        run: |
           python benchmarks/zhoushan_frog_table_s1_schema_audit.py \
             --input benchmark_results/zhoushan_table_s1/TableS1.xlsx \
             --output benchmark_results/zhoushan_table_s1/schema_audit.json \
@@ -62,15 +90,27 @@ jobs:
           assert result['numeric_fst_values_summarized'] is False
           assert len(result['raw_sha256'])==64
           PY
+      - name: Confirm transport block is not a scientific failure
+        if: env.TABLE_S1_RETRIEVED != 'true'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('benchmark_results/zhoushan_table_s1/transport_status.json').read_text())
+          assert r['status']=='transport_blocked'
+          assert r['response_values_parsed'] is False
+          assert r['scientific_admission_failure'] is False
+          PY
       - name: Remove copyrighted response workbook before artifact upload
         if: always()
         run: rm -f benchmark_results/zhoushan_table_s1/TableS1.xlsx
-      - name: Upload provenance and schema audit only
+      - name: Upload provenance/transport/schema audit only
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: zhoushan-frog-table-s1-post-freeze-schema-audit
           path: |
+            benchmark_results/zhoushan_table_s1/transport_status.json
             benchmark_results/zhoushan_table_s1/schema_audit.json
             benchmark_results/zhoushan_table_s1/stdout.json
             benchmark_results/zhoushan_table_s1/table_s1_sha256.txt
