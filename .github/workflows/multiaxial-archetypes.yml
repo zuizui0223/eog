@@ -5,7 +5,7 @@ on:
     paths:
       - "benchmarks/multiaxial_archetypes.py"
       - "docs/multiaxial_methodology.md"
-      - "src/eog/**"
+      - ".github/workflows/multiaxial-archetypes.yml"
   workflow_dispatch:
 
 permissions:

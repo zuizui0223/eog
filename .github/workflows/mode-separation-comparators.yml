@@ -5,7 +5,6 @@ on:
     paths:
       - "benchmarks/mode_separation_comparators.py"
       - ".github/workflows/mode-separation-comparators.yml"
-      - "src/eog/**"
   workflow_dispatch:
 
 permissions:

@@ -7,7 +7,6 @@ on:
       - "benchmarks/real_taxon_pilot_manifest.csv"
       - "docs/real_taxon_pilot_protocol.md"
       - ".github/workflows/real-taxon-pilot.yml"
-      - "src/eog/**"
   workflow_dispatch:
 
 permissions:

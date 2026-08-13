@@ -6,7 +6,6 @@ on:
       - "benchmarks/null_family_comparison.py"
       - "docs/null_family_comparison_protocol.md"
       - ".github/workflows/null-family-comparison.yml"
-      - "src/eog/**"
   workflow_dispatch:
 
 permissions:

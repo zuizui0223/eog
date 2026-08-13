@@ -4,7 +4,6 @@ on:
     paths:
       - "benchmarks/core_local_bridge_benchmark.py"
       - ".github/workflows/core-local-bridge.yml"
-      - "src/eog/**"
   workflow_dispatch:
 permissions:
   contents: read

@@ -6,7 +6,6 @@ on:
       - "benchmarks/calibrated_gap_feature_selection.py"
       - "docs/calibrated_gap_feature_selection_protocol.md"
       - ".github/workflows/calibrated-gap-feature-selection.yml"
-      - "src/eog/**"
   workflow_dispatch:
 
 permissions:
