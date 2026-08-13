@@ -6,7 +6,6 @@ on:
       - "benchmarks/persistent_split_benchmark.py"
       - "docs/persistent_split_protocol.md"
       - ".github/workflows/persistent-split.yml"
-      - "src/eog/**"
   workflow_dispatch:
 
 permissions:
