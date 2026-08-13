@@ -1,0 +1,81 @@
+name: Archive Zhoushan pre-response predictor artifact
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/zhoushan-frog-freeze-pre-response-artifact.yml"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/eog-v2-dynamic-island-reachability
+          fetch-depth: 0
+      - name: Download exact pre-response artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/zhoushan-artifact
+          curl --fail --location \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/zuizui0223/eog/actions/artifacts/9164198982/zip" \
+            --output /tmp/zhoushan-artifact.zip
+          echo "60f0cb0eff61a0af15a2e2d0a8d107c0f334a5597d73ea3de2c4691f04f6dcb1  /tmp/zhoushan-artifact.zip" | sha256sum --check
+          unzip -q /tmp/zhoushan-artifact.zip -d /tmp/zhoushan-artifact
+          echo "a540a3d2ec6dd9b74a2ed80bc040d649cb179ec89e0e60ad87f3e529e96cf6f5  /tmp/zhoushan-artifact/populations.csv" | sha256sum --check
+          echo "dd14cacf10ce39442977b6b68ae7fc45ced7ae78e458e4feb8338fadd138d7d9  /tmp/zhoushan-artifact/predictors.csv" | sha256sum --check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('/tmp/zhoushan-artifact/predictor_manifest.json').read_text())
+          assert m['predictor_manifest_fingerprint']=='e0a18112d9adfd197958b3e0e1cd1043485055425371b073f2cb74ad917ead70'
+          assert m['operator_fingerprint']=='242d251353d1180d9a39a8698969246264e65a3ba9b6ad3c0a5a3fc3259369df'
+          assert m['connectivity_fingerprint']=='2822fbd07b22d4a6f77123077f49f660e99a9641da6cecbf44203b45b5ffefb9'
+          assert m['coordinate_fingerprint']=='decfa791f879c38dd6168240684383b01e2f2ab730de8c36575291c622a4e794'
+          assert m['exact_pairwise_fst_accessed'] is False
+          assert m['microsatellite_file_accessed'] is False
+          assert m['genetic_response_attached'] is False
+          PY
+      - name: Archive byte-identical predictors in repository
+        run: |
+          target="benchmarks/frozen/zhoushan_frog_response_free"
+          mkdir -p "$target"
+          cp /tmp/zhoushan-artifact/populations.csv "$target/populations.csv"
+          cp /tmp/zhoushan-artifact/predictors.csv "$target/predictors.csv"
+          cp /tmp/zhoushan-artifact/predictor_manifest.json "$target/predictor_manifest.json"
+          cat > "$target/README.md" <<'EOF'
+          # Frozen Zhoushan pond-frog response-free genetic predictors
+
+          These files are the byte-identical response-free predictor artifact created **before** exact Wiley Table S1 pairwise FST values or the raw microsatellite workbook were accessed by EOG v2.
+
+          Authoritative provenance:
+
+          - workflow run: `31655358037`;
+          - workflow head: `4e604d86f60e0815c7d39e78b31d137ad5689206`;
+          - artifact ID: `9164198982`;
+          - artifact digest: `sha256:60f0cb0eff61a0af15a2e2d0a8d107c0f334a5597d73ea3de2c4691f04f6dcb1`;
+          - populations CSV SHA-256: `a540a3d2ec6dd9b74a2ed80bc040d649cb179ec89e0e60ad87f3e529e96cf6f5`;
+          - predictors CSV SHA-256: `dd14cacf10ce39442977b6b68ae7fc45ced7ae78e458e4feb8338fadd138d7d9`;
+          - predictor-manifest fingerprint: `e0a18112d9adfd197958b3e0e1cd1043485055425371b073f2cb74ad917ead70`;
+          - coordinate fingerprint: `decfa791f879c38dd6168240684383b01e2f2ab730de8c36575291c622a4e794`;
+          - operator fingerprint: `242d251353d1180d9a39a8698969246264e65a3ba9b6ad3c0a5a3fc3259369df`;
+          - exact-eventual connectivity fingerprint: `2822fbd07b22d4a6f77123077f49f660e99a9641da6cecbf44203b45b5ffefb9`.
+
+          The predictor set contains 27 frozen population/site nodes and 351 unordered pairs. It is archived rather than regenerated after genetic-response visibility. The primary exact response is Wiley Supporting Information Table S1 and is attached only after this archive commit exists.
+          EOF
+          echo "a540a3d2ec6dd9b74a2ed80bc040d649cb179ec89e0e60ad87f3e529e96cf6f5  $target/populations.csv" | sha256sum --check
+          echo "dd14cacf10ce39442977b6b68ae7fc45ced7ae78e458e4feb8338fadd138d7d9  $target/predictors.csv" | sha256sum --check
+          git config user.name "EOG response-free freeze"
+          git config user.email "actions@users.noreply.github.com"
+          git add "$target/populations.csv" "$target/predictors.csv" "$target/predictor_manifest.json" "$target/README.md"
+          git diff --cached --quiet && { echo "Frozen files already archived"; exit 0; }
+          git commit -m "Freeze Zhoushan pre-response genetic predictor artifact"
+          git push origin HEAD:agent/eog-v2-dynamic-island-reachability
