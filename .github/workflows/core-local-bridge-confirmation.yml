@@ -6,7 +6,6 @@ on:
       - "benchmarks/core_local_bridge_confirmation.py"
       - "docs/core_local_bridge_confirmation_protocol.md"
       - ".github/workflows/core-local-bridge-confirmation.yml"
-      - "src/eog/**"
   workflow_dispatch:
 
 permissions:
