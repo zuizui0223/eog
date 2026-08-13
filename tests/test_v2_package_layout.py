@@ -1,0 +1,22 @@
+import eog
+import eog.v2 as v2
+import eog.v2.reachability as reachability
+import eog.v2.traversability as traversability
+import eog.v2.validation as validation
+
+
+def test_v2_remains_backward_compatible_after_subpackage_consolidation():
+    assert eog.__version__ == "0.1.0"
+    assert v2.API_STATUS == "prospective-v2-development"
+    assert v2.build_dynamic_transition_operator is reachability.build_dynamic_transition_operator
+    assert v2.fit_occurrence_environmental_scale is traversability.fit_occurrence_environmental_scale
+    assert v2.evaluate_genetic_validation_ladder is validation.evaluate_genetic_validation_ladder
+
+
+def test_v2_facades_keep_estimands_separated():
+    assert hasattr(reachability, "summarize_first_passage")
+    assert not hasattr(reachability, "evaluate_genetic_validation_ladder")
+    assert hasattr(traversability, "summarize_path_traversability")
+    assert not hasattr(traversability, "GeneticValidationConfig")
+    assert hasattr(validation, "GeneticValidationConfig")
+    assert not hasattr(validation, "EcologicalTransitionEdge")
