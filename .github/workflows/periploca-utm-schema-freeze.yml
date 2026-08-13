@@ -1,0 +1,72 @@
+name: Periploca response-free UTM schema freeze
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/periploca-utm-schema-freeze.yml"
+      - "benchmarks/periploca_utm_schema_extract.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install transport dependency
+        run: python -m pip install "requests==2.32.5"
+      - name: Download response-free geography file only
+        run: |
+          mkdir -p benchmark_results/periploca_utm/raw
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          import requests
+          expected='d54af743f39332aab753964ee0d6950550097d7b29216d155a50967153d5d233'
+          record=requests.get('https://zenodo.org/api/records/4994024',timeout=90).json()
+          files={str(i.get('key') or i.get('filename') or i.get('name') or ''):i for i in (record.get('files') or [])}
+          item=files['Periploca pops data.txt']
+          url=(item.get('links') or {}).get('content') or (item.get('links') or {}).get('download')
+          path=Path('benchmark_results/periploca_utm/raw/geography.txt')
+          response=requests.get(url,timeout=90); response.raise_for_status(); path.write_bytes(response.content)
+          actual=hashlib.sha256(response.content).hexdigest()
+          if actual!=expected:
+              raise RuntimeError(f'Periploca geography SHA mismatch: {actual}')
+          PY
+      - name: Freeze released population-region-UTM rows
+        run: |
+          python benchmarks/periploca_utm_schema_extract.py \
+            --geography benchmark_results/periploca_utm/raw/geography.txt \
+            --output benchmark_results/periploca_utm/utm_rows.json \
+            > benchmark_results/periploca_utm/stdout.json
+      - name: Check response-free row contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('benchmark_results/periploca_utm/utm_rows.json').read_text())
+          assert r['status']=='periploca-response-free-utm-row-freeze'
+          assert r['n_rows']==33
+          assert r['n_populations']==33
+          assert r['n_island_regions']==14
+          assert r['genetic_contents_accessed'] is False
+          print(json.dumps(r,indent=2,sort_keys=True))
+          PY
+      - name: Remove raw geography file before artifact upload
+        if: always()
+        run: rm -rf benchmark_results/periploca_utm/raw
+      - name: Upload response-free UTM rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: periploca-response-free-utm-rows
+          path: |
+            benchmark_results/periploca_utm/utm_rows.json
+            benchmark_results/periploca_utm/stdout.json
+          if-no-files-found: error
