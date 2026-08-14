@@ -53,6 +53,19 @@ def _worlds():
     )
 
 
+def test_source_weights_remain_attached_to_source_identity_when_canonicalized():
+    world = FiniteWorld(
+        "multi_source",
+        _operator(((0, 2), (1, 2))),
+        ("B", "A"),
+        source_weights=(0.25, 0.75),
+    )
+
+    assert world.source_ids == ("A", "B")
+    assert world.source_weights == pytest.approx((0.75, 0.25))
+    assert world.source_weight_mapping == pytest.approx({"A": 0.75, "B": 0.25})
+
+
 def test_forward_envelopes_preserve_different_routes_without_calling_them_history():
     chain, direct, _ = _worlds()
     chain_forward = forward_reachable_configuration(chain, max_steps=3)
@@ -104,6 +117,24 @@ def test_relaxation_frontier_keeps_geographic_and_environmental_axes_separate():
     assert frontier.points[0].environmental_relaxation == pytest.approx(0.6)
     assert frontier.points[1].geographic_relaxation == pytest.approx(0.6)
     assert frontier.points[1].environmental_relaxation == pytest.approx(0.1)
+
+
+def test_relaxation_frontier_removes_compatible_worlds_that_are_worse_on_every_axis():
+    chain, direct, broken = _worlds()
+    dominated = FiniteWorld(
+        "loose_chain",
+        chain.operator,
+        ("A",),
+        geographic_relaxation=0.9,
+        environmental_relaxation=0.9,
+        barrier_relaxation=0.1,
+    )
+    worlds = (chain, direct, broken, dominated)
+    reconstruction = reconstruct_compatible_worlds(worlds, ("A", "C"), max_steps=3)
+    frontier = minimum_relaxation_frontier(reconstruction, worlds)
+
+    assert reconstruction.compatible_world_ids == ("chain", "direct", "loose_chain")
+    assert tuple(point.world_id for point in frontier.points) == ("chain", "direct")
 
 
 def test_new_positive_occurrence_contracts_world_set_and_can_make_it_identifiable():
