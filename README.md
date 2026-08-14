@@ -52,7 +52,11 @@ The watershed language is structural, not decorative:
 
 Geographic isolation (IBD-like) and environmental isolation (IBE-like) are retained as separate axes rather than being collapsed automatically into one weighted distance.
 
-The **exact finite-world core is implemented**: it reconstructs compatible declared worlds, retains world-indexed support flows, classifies finite-universe robust/contingent reachability, preserves non-dominated geographic/environmental/barrier relaxation explanations, measures world-set contraction after new positive occurrences, and supports declared monotone basin-merge families. Large-raster/time-dependent forecasting, detection/absence models, continuous world spaces and empirical promotion remain active development rather than completed EOG claims.
+The **exact finite-world core is implemented**: it reconstructs compatible declared worlds, retains world-indexed support flows, classifies finite-universe robust/contingent reachability, preserves non-dominated geographic/environmental/barrier relaxation explanations, measures world-set contraction after new positive occurrences, and supports declared monotone basin-merge families.
+
+The first **finite time-varying world-flow layer is also implemented**. A declared temporal world applies one transition operator per ordered interval, with source mass injected only at the initial state. EOG retains exact-time support by world and separately reports cumulative reachable-in-all / contingent / robustly-unreachable structure by declared time. These time labels are ordered states, not calibrated calendar time. Time-stamped observations are not yet used to reconstruct the compatible temporal-world set.
+
+Large-raster forecasting, detection/absence models, continuous world spaces, calibrated time and empirical promotion remain active development rather than completed EOG claims.
 
 ## Implemented layers
 
@@ -93,7 +97,7 @@ Bridge analysis evaluates declared geographic, environmental and barrier transit
 
 The existing v2 namespace is retained as a compatibility layer with three facades:
 
-- `eog.v2.reachability` — dynamic transition operators, first passage, flux, graph diagnostics, exact finite-world reconstruction and declared basin-merge diagnostics;
+- `eog.v2.reachability` — dynamic transition operators, first passage, flux, graph diagnostics, exact finite-world reconstruction, declared basin-merge diagnostics, and finite time-varying world-flow sets;
 - `eog.v2.traversability` — geographic/environmental transition constraints and pathwise ecological continuity;
 - `eog.v2.validation` — independent occurrence, genetic and directional-evidence validation.
 
@@ -123,9 +127,9 @@ The cleanup policy is intentionally conservative:
 - manuscript/submission assets preserve publication provenance and do not define package architecture;
 - new scientific ideas should reuse existing operators instead of creating another top-level EOG branch, module family or workflow suite.
 
-## Current falsification gate
+## Known-truth gates
 
-Before opening another empirical dataset or expanding to large rasters/time, the finite core is tested as one system on `benchmarks/finite_world_archetype_matrix.py`. The matrix is deliberately a benchmark/test-layer object rather than another package namespace. It checks whether the same finite-world operators can preserve:
+The finite core is tested as one system on `benchmarks/finite_world_archetype_matrix.py`. The matrix checks whether the same finite-world operators can preserve:
 
 - geographic/IBD, environmental/IBE and barrier-dominated rescue as separate axes;
 - alternative geographic-jump versus environmental-crossing explanations of an intermediate niche desert;
@@ -135,7 +139,9 @@ Before opening another empirical dataset or expanding to large rasters/time, the
 - analytical-representation-dependent versus robust basin merge;
 - robust exclusion under explicit finite-universe expansion.
 
-Passing this matrix is a structural falsification gate, not empirical superiority evidence.
+The temporal known-truth tests additionally check transition order, temporary bridge opening, no source reinjection, exact-time versus reached-by-time separation, robust reachability across support magnitudes, and hard temporal barriers.
+
+Passing these tests is structural validation, not empirical superiority evidence.
 
 ## Installation
 
