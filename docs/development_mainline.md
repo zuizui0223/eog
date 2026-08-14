@@ -199,3 +199,23 @@ Still outside this finite core:
 - empirical promotion claims.
 
 These omissions are current boundaries, not invitations to add complexity before the finite known-truth tests pass.
+
+## Current falsification gate — finite archetype matrix
+
+The next question is no longer whether another feature can be added. It is whether the **same finite core** preserves the major distinctions claimed by the theory across a compact known-truth matrix.
+
+The benchmark/test layer therefore exercises:
+
+- geographic/IBD-dominated rescue;
+- environmental/IBE-dominated rescue;
+- barrier-dominated rescue;
+- an intermediate niche-desert configuration that admits both environmental-crossing and geographic-jump explanations on a non-dominated frontier;
+- stepping-stone versus direct-route underidentification followed by compatible-world contraction after a discriminating positive occurrence;
+- a rare long-distance jump with positive but very low support, which must remain possible rather than being labelled impossible;
+- branching and route reconvergence;
+- analytical-representation ambiguity with distinct first-possible and first-robust basin-merge levels;
+- a robust exclusion that survives explicit expansion of the finite admissible-world universe.
+
+This gate belongs in `benchmarks/` and `tests/`. It must not create a new package namespace, CLI, empirical adapter or workflow family. Passing the matrix is evidence that the finite architecture is internally coherent under known truth; it is **not** evidence of empirical superiority.
+
+Only after this matrix is green should the mainline choose between the next two scientifically necessary expansions: adding explicit observation/detection evidence, or adding time-dependent worlds. Large-raster implementation remains downstream of that choice.

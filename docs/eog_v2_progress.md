@@ -60,19 +60,50 @@ These gates remain recorded but are **not automatic active-mainline tasks**:
 
 They should be resumed only if the integrated mainline requires the corresponding evidence, not to search for favourable promotion outcomes.
 
-## Active integration gates
+## Integrated finite-core gates — completed
 
-The next repository-level work is deliberately smaller and more general:
+The former repository-level TODO list is now implemented behind the explicit `eog.v2.reachability` facade:
 
-- [ ] define a finite `world -> transition operator -> occurrence configuration` forward contract;
-- [ ] reconstruct the compatible world set from an observed occurrence configuration without selecting a unique history;
-- [ ] retain world-indexed probability/support distributions instead of collapsing them to one average surface;
-- [ ] define watershed/basin merge and minimum-relaxation diagnostics while keeping geographic/IBD and environmental/IBE axes separate;
-- [ ] define a reconstructability diagnostic for how strongly observations shrink the compatible world set;
-- [ ] classify robustly unreachable structure only with coverage appropriate to the declared world universe;
-- [ ] connect survey ranking to expected discrimination among compatible worlds;
-- [ ] only then consider large-raster/time-dependent expansion.
+- [x] finite `world -> transition operator -> occurrence-compatible reachability envelope` forward contract;
+- [x] exact inverse reconstruction of the compatible world set from observed positive occurrences without selecting a unique history;
+- [x] world-indexed support-flow distributions retained as a set, including lower/upper envelopes without averaging away world identity;
+- [x] non-dominated minimum-relaxation frontier with geographic/IBD, environmental/IBE and barrier axes retained separately;
+- [x] exact finite-universe `reachable_in_all`, `contingent` and `robustly_unreachable` classification;
+- [x] reconstructability contraction when a new positive occurrence removes compatible worlds;
+- [x] positive-occurrence survey ranking by discrimination among compatible worlds;
+- [x] declared monotone one-dimensional relaxation families when a scalar water level is scientifically predeclared;
+- [x] basin-merge inference separating first possible merge from first robust merge across declared analytical variants;
+- [x] package-root cleanup so new prospective APIs stay on the owning facade instead of widening `eog.v2` compatibility exports.
+
+These are **finite known-truth capabilities**, not empirical promotion claims. `robustly_unreachable` is certified only over the exhaustively enumerated compatible world set, and a scalar `lambda` is permitted only inside a declared monotone one-dimensional family.
+
+## Current falsification gate
+
+Before large-raster, temporal or new empirical expansion, the finite core must pass one compact archetype matrix using the same operators throughout. The matrix should cover at least:
+
+- geographic/IBD-dominated rescue;
+- environmental/IBE-dominated rescue;
+- barrier-dominated rescue;
+- an intermediate niche-desert case with more than one non-dominated explanation;
+- stepping-stone versus direct-route underidentification followed by world-set contraction after a discriminating positive occurrence;
+- a rare long-distance jump that remains possible at very low support rather than being misclassified as impossible;
+- branching and route reconvergence;
+- analytical-representation ambiguity with distinct first-possible and first-robust basin-merge levels;
+- a robust exclusion that survives an explicit expansion of the finite admissible-world universe.
+
+This benchmark belongs in the benchmark/test layer. It must not create another public namespace, CLI, workflow family or system-specific empirical branch.
+
+## Deferred expansion
+
+Only after the archetype matrix is green should the active mainline consider:
+
+- unobserved/hypothetical historical sources;
+- surveyed absences and detection models;
+- calibrated time and temporal evidence;
+- continuous or enormous world spaces requiring optimization/sampling/certification;
+- large-raster forecasting;
+- new empirical promotion claims.
 
 ## Stop rule
 
-Do not run another occurrence or genetic dataset merely to obtain a favourable result. Do not retune any frozen adverse/null/indeterminate result. The first success criterion of the active mainline is that genuinely different worlds capable of producing the same observed distribution remain represented as a set rather than being collapsed into a fabricated historical answer.
+Do not run another occurrence or genetic dataset merely to obtain a favourable result. Do not retune any frozen adverse/null/indeterminate result. The first success criterion of the active mainline remains that genuinely different worlds capable of producing the same observed distribution stay represented as a set rather than being collapsed into a fabricated historical answer.
