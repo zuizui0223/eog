@@ -26,7 +26,7 @@ def _operator(edges):
 
 def _worlds():
     # Both chain and direct worlds can realize the observed A/C configuration, but
-    # they require genuinely different latent routes.  E remains unreachable in all
+    # they require genuinely different latent routes. E remains unreachable in all
     # compatible worlds and is therefore an exact finite-universe negative control.
     return (
         FiniteWorld(
@@ -67,14 +67,16 @@ def test_forward_envelopes_preserve_different_routes_without_calling_them_histor
 
 def test_inverse_reconstruction_keeps_multiple_compatible_worlds_explicit():
     reconstruction = reconstruct_compatible_worlds(_worlds(), ("A", "C"), max_steps=3)
+    by_world = {result.world_id: result for result in reconstruction.world_results}
 
     assert reconstruction.compatible_world_ids == ("chain", "direct")
     assert reconstruction.incompatible_world_ids == ("broken",)
     assert reconstruction.compatible_fraction == pytest.approx(2 / 3)
     assert reconstruction.identifiable is False
     assert reconstruction.coverage_certificate == "exhaustive_finite_world_enumeration"
-    assert all(result.occurrence_result.coverage_fraction == 1.0 for result in reconstruction.world_results[:2])
-    assert reconstruction.world_results[2].occurrence_result.coverage_fraction == 0.0
+    assert by_world["chain"].occurrence_result.coverage_fraction == 1.0
+    assert by_world["direct"].occurrence_result.coverage_fraction == 1.0
+    assert by_world["broken"].occurrence_result.coverage_fraction == 0.0
 
 
 def test_world_flow_set_retains_world_identity_and_certifies_only_finite_universe_exclusion():
