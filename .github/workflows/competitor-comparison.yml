@@ -20,6 +20,7 @@ on:
       - "src/eog/comparators.py"
       - "src/eog/comparative.py"
       - "src/eog/geometry.py"
+  workflow_dispatch:
 
 jobs:
   benchmark:
