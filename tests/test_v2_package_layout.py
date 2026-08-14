@@ -14,7 +14,7 @@ def test_v2_keeps_historical_convenience_exports_backward_compatible():
     assert v2.evaluate_directional_order_evidence is validation.evaluate_directional_order_evidence
 
 
-def test_new_finite_world_and_basin_merge_apis_stay_on_explicit_reachability_facade():
+def test_new_prospective_reachability_apis_stay_on_explicit_facade():
     for name in (
         "FiniteWorld",
         "FiniteWorldReconstruction",
@@ -32,6 +32,9 @@ def test_new_finite_world_and_basin_merge_apis_stay_on_explicit_reachability_fac
         "BasinMergeResult",
         "build_monotone_relaxation_family",
         "infer_basin_merge",
+        "TemporalWorld",
+        "TemporalFlowSet",
+        "build_temporal_flow_set",
     ):
         assert hasattr(reachability, name)
         assert not hasattr(v2, name)
@@ -42,16 +45,19 @@ def test_v2_facades_keep_estimands_separated():
     assert hasattr(reachability, "reconstruct_compatible_worlds")
     assert hasattr(reachability, "build_world_flow_set")
     assert hasattr(reachability, "infer_basin_merge")
+    assert hasattr(reachability, "build_temporal_flow_set")
     assert not hasattr(reachability, "evaluate_genetic_validation_ladder")
     assert not hasattr(reachability, "evaluate_directional_order_evidence")
     assert hasattr(traversability, "summarize_path_traversability")
     assert hasattr(traversability, "compare_occurrence_transition_rules")
     assert not hasattr(traversability, "FiniteWorldReconstruction")
     assert not hasattr(traversability, "BasinMergeResult")
+    assert not hasattr(traversability, "TemporalFlowSet")
     assert not hasattr(traversability, "GeneticValidationConfig")
     assert not hasattr(traversability, "evaluate_directional_order_evidence")
     assert hasattr(validation, "GeneticValidationConfig")
     assert hasattr(validation, "evaluate_directional_order_evidence")
     assert not hasattr(validation, "FiniteWorldReconstruction")
     assert not hasattr(validation, "BasinMergeResult")
+    assert not hasattr(validation, "TemporalFlowSet")
     assert not hasattr(validation, "EcologicalTransitionEdge")

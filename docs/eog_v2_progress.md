@@ -2,7 +2,7 @@
 
 ## Status after the 2026-08 cleanup
 
-This ledger preserves the completed dynamic island-reachability development evidence. It does **not** reopen frozen EOG v0.1/v2 outcomes.
+This ledger preserves completed dynamic island-reachability development evidence. It does **not** reopen frozen EOG v0.1/v2 outcomes.
 
 The earlier island/genetic promotion sequence is no longer the repository-wide development mainline. Existing v2 components are retained as reachability, traversability and validation **operators** under the integrated direction in [`development_mainline.md`](development_mainline.md): distributional realizability, probability-set dynamics and reconstruction of compatible distribution-forming worlds.
 
@@ -62,7 +62,7 @@ They should be resumed only if the integrated mainline requires the correspondin
 
 ## Integrated finite-core gates — completed
 
-The former repository-level TODO list is now implemented behind the explicit `eog.v2.reachability` facade:
+The former repository-level TODO list is implemented behind the explicit `eog.v2.reachability` facade:
 
 - [x] finite `world -> transition operator -> occurrence-compatible reachability envelope` forward contract;
 - [x] exact inverse reconstruction of the compatible world set from observed positive occurrences without selecting a unique history;
@@ -77,33 +77,67 @@ The former repository-level TODO list is now implemented behind the explicit `eo
 
 These are **finite known-truth capabilities**, not empirical promotion claims. `robustly_unreachable` is certified only over the exhaustively enumerated compatible world set, and a scalar `lambda` is permitted only inside a declared monotone one-dimensional family.
 
-## Current falsification gate
+## Finite archetype matrix — passed
 
-Before large-raster, temporal or new empirical expansion, the finite core must pass one compact archetype matrix using the same operators throughout. The matrix should cover at least:
+The integrated finite core passes the compact known-truth matrix in `benchmarks/finite_world_archetype_matrix.py` / `tests/test_finite_world_archetype_matrix.py`.
+
+Covered distinctions:
 
 - geographic/IBD-dominated rescue;
 - environmental/IBE-dominated rescue;
 - barrier-dominated rescue;
-- an intermediate niche-desert case with more than one non-dominated explanation;
-- stepping-stone versus direct-route underidentification followed by world-set contraction after a discriminating positive occurrence;
-- a rare long-distance jump that remains possible at very low support rather than being misclassified as impossible;
+- niche-desert tradeoff with non-dominated environmental-crossing and geographic-jump explanations;
+- stepping-stone versus direct-route underidentification and subsequent world-set contraction after a discriminating positive occurrence;
+- rare long-distance jump retained as possible at very low support;
 - branching and route reconvergence;
 - analytical-representation ambiguity with distinct first-possible and first-robust basin-merge levels;
-- a robust exclusion that survives an explicit expansion of the finite admissible-world universe.
+- robust exclusion surviving explicit finite-universe expansion.
 
-This benchmark belongs in the benchmark/test layer. It must not create another public namespace, CLI, workflow family or system-specific empirical branch.
+The first run exposed only a benchmark-boundary `numpy.bool_` normalization issue; no scientific operator failed the known-truth claim. The final matrix passes Package checks across supported Python versions.
+
+## Finite temporal-flow gate — implemented
+
+The active reachability facade now supports an ordered finite temporal world without introducing calibrated time or a second dynamic model family.
+
+- [x] `TemporalWorld`: fixed node/source universe plus one declared transition operator per interval;
+- [x] initial source mass injected once only;
+- [x] sequential application of time-specific operators;
+- [x] exact-time support trajectory retained per world;
+- [x] cumulative `reached by time` state kept distinct from exact-time mass/persistence;
+- [x] lower/upper exact-time support envelopes across declared temporal worlds;
+- [x] `reachable_in_all`, `contingent`, and `robustly_unreachable` classes at every declared time;
+- [x] first-arrival and lost-mass diagnostics per world;
+- [x] source-ID/source-weight canonicalization that preserves the declared weight mapping;
+- [x] known-truth distinction between correct versus incorrect temporal order of the same transition set;
+- [x] robust reachability under different support magnitudes;
+- [x] robust temporal barrier exclusion.
+
+The certificate `exhaustive_declared_temporal_world_set` is finite-universe coverage only. Time labels are ordered state labels, not calibrated calendar time or generations.
+
+## Current active gate
+
+The next finite method layer is **temporal world reconstructability from time-stamped positive observations**.
+
+It should answer, without using non-detection as absence:
+
+- which declared temporal worlds could have reached each observed node by its declared observation time;
+- which worlds are eliminated by temporal ordering constraints;
+- whether adding a time-stamped occurrence contracts the compatible temporal world set;
+- whether several temporal histories remain underidentified even though all observations are satisfied.
+
+This should reuse `TemporalWorld` / temporal propagation rather than create another transition implementation, namespace, CLI or workflow family.
 
 ## Deferred expansion
 
-Only after the archetype matrix is green should the active mainline consider:
+Remain deferred until temporal positive-observation reconstruction is stable:
 
-- unobserved/hypothetical historical sources;
 - surveyed absences and detection models;
-- calibrated time and temporal evidence;
+- calibrated calendar time and transition durations;
+- unobserved/hypothetical historical sources;
 - continuous or enormous world spaces requiring optimization/sampling/certification;
 - large-raster forecasting;
 - new empirical promotion claims.
 
 ## Stop rule
 
-Do not run another occurrence or genetic dataset merely to obtain a favourable result. Do not retune any frozen adverse/null/indeterminate result. The first success criterion of the active mainline remains that genuinely different worlds capable of producing the same observed distribution stay represented as a set rather than being collapsed into a fabricated historical answer.
+Do not run another occurrence or genetic dataset merely to obtain a favourable result. Do not retune any frozen adverse/null/indeterminate result. The active mainline must continue to preserve genuinely different worlds as a set whenever the observations do not identify one history.
