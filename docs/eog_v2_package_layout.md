@@ -2,114 +2,98 @@
 
 ## Status
 
-`eog.v2` is a **prospective operator namespace**, not a second independent EOG identity. The active integrated scientific direction is defined in [`development_mainline.md`](development_mainline.md).
+`eog.v2` is a **compatibility namespace over three explicit prospective facades**, not a second independent EOG identity. The active integrated scientific direction is defined in [`development_mainline.md`](development_mainline.md).
 
-This layout does not alter, rerun, rescue or reinterpret frozen v0.1/v2 results, contracts or fingerprints.
+Repository reorganization must not alter, rerun, rescue or reinterpret frozen v0.1/v2 results, contracts or fingerprints.
 
 ## Public boundary
 
-The repository keeps the frozen v0.1 compatibility API under root `eog`. Prospective implementation already developed for v2 is grouped behind three explicit facades:
+The repository keeps the frozen v0.1 compatibility API under root `eog`. Prospective work is grouped behind:
 
-- `eog.v2.reachability` — transition operators, first passage, flux, state layers, graph diagnostics, exact finite-world reconstruction, and declared monotone basin-merge diagnostics;
-- `eog.v2.traversability` — geographic/environmental transition constraints, transit viability and occurrence-conditioned rule compatibility;
+- `eog.v2.reachability` — transition propagation, first passage, finite-world reconstruction, declared relaxation families, temporal world-flow/reconstruction and positive survey discrimination;
+- `eog.v2.traversability` — geographic/IBD, environmental/IBE, barrier and pathwise transition constraints;
 - `eog.v2.validation` — independent occurrence, genetic and directional-evidence validation;
-- `eog.v2.cli` — console-script routing only.
+- `eog.v2.cli` — routing for already-existing console commands only.
 
-The historical convenience surface `from eog.v2 import ...` remains available for already-published compatibility names, but it is a **lazy compatibility facade**. Importing `eog.v2` alone does not eagerly import the reachability, traversability and validation implementation trees.
+Historical `from eog.v2 import ...` convenience names remain available through a lazy compatibility facade. **New prospective names do not automatically get mirrored onto `eog.v2` root.**
 
-New prospective names should stay on the explicit owning facade instead of automatically widening the `eog.v2` package root. The basin-merge API follows this stricter rule and is available from `eog.v2.reachability`, not from `eog.v2` directly.
+## Reachability internals
 
-## Active architectural role
+The explicit reachability facade currently composes these internal modules:
 
-The three facades are operators within the current integrated mainline:
+- `world_reconstruction.py` — exact finite `W(O)`, world-indexed flow sets, non-dominated relaxation frontier and static positive survey discrimination;
+- `relaxation_family.py` — predeclared monotone one-dimensional `lambda` families and first-possible / first-robust basin merge;
+- `temporal_reachability.py` — ordered time-varying transition worlds and finite temporal flow sets;
+- `temporal_reconstruction.py` — time-stamped **positive** occurrences as necessary `reached by time` constraints;
+- `temporal_survey.py` — positive `(node, time)` candidate discrimination among still-compatible temporal worlds.
 
-- **reachability** supplies forward transition/flow operators, the finite inverse layer `observed occurrences -> compatible declared worlds`, and finite-family joint-realization diagnostics;
-- **traversability** supplies IBD/IBE/barrier/pathwise ecological constraints used to construct or reject transitions;
-- **validation** tests whether occurrence, genetic or directional evidence supports, rejects or fails to identify a declared rule/world.
+These are implementation layers under **one reachability estimand family**, not separate public EOG subdisciplines.
 
-Finite-world implementation lives internally in `eog.v2.world_reconstruction`; explicitly one-dimensional relaxation-family logic lives in `eog.v2.relaxation_family`. Both are exposed only through `eog.v2.reachability`. They are compositions over existing transition/occurrence operators, not additional public EOG subdisciplines.
+## Current prospective reachability surface
 
-Do not create another top-level package for watershed, probability-set or reconstructability ideas unless the finite core demonstrates a genuinely separate reusable estimand.
+Static finite-world names on `eog.v2.reachability` include:
 
-## Finite-world public surface
+- `FiniteWorld`, `FiniteWorldReconstruction`, `FiniteWorldFlowSet`;
+- `RelaxationFrontier`, `ReconstructionUpdate`, `PositiveOccurrenceSurveyRanking`;
+- `forward_reachable_configuration`, `reconstruct_compatible_worlds`, `build_world_flow_set`;
+- `minimum_relaxation_frontier`, `compare_reconstructions`, `rank_positive_occurrence_candidates`.
 
-The reconstruction surface is intentionally narrow:
+Declared basin-merge names:
 
-- `FiniteWorld`;
-- `FiniteWorldReconstruction`;
-- `FiniteWorldFlowSet`;
-- `RelaxationFrontier`;
-- `ReconstructionUpdate`;
-- `PositiveOccurrenceSurveyRanking`;
-- `forward_reachable_configuration`;
-- `reconstruct_compatible_worlds`;
-- `build_world_flow_set`;
-- `minimum_relaxation_frontier`;
-- `compare_reconstructions`;
-- `rank_positive_occurrence_candidates`.
+- `MonotoneRelaxationFamily`, `BasinMergeResult`;
+- `build_monotone_relaxation_family`, `infer_basin_merge`.
 
-The declared one-dimensional basin-merge surface adds only:
+Temporal names:
 
-- `MonotoneRelaxationFamily`;
-- `BasinMergeResult`;
-- `build_monotone_relaxation_family`;
-- `infer_basin_merge`.
+- `TemporalWorld`, `TemporalFlowSet`, `build_temporal_flow_set`;
+- `TemporalWorldReconstruction`, `TemporalReconstructionUpdate`;
+- `reconstruct_temporal_worlds`, `compare_temporal_reconstructions`;
+- `PositiveTemporalSurveyRanking`, `rank_positive_temporal_occurrence_candidates`.
 
-Row-level helper dataclasses and status aliases remain implementation details instead of being promoted into compatibility facades.
+Row-level helper dataclasses/status aliases remain internal.
 
-## Why basin merge requires a declared family
+## Scientific contracts
 
-EOG must not manufacture a scalar water level by assigning arbitrary weights to geographic/IBD, environmental/IBE and barrier axes. `build_monotone_relaxation_family` therefore accepts an explicit level-by-analytical-variant grid and requires:
+### Separate IBD / IBE / barrier axes
 
-- the same analytical variants at every level;
-- fixed node and source contracts within each variant;
-- fixed loss support;
-- elementwise non-decreasing raw transition support;
-- non-decreasing declared geographic, environmental and barrier relaxation coordinates.
+Geographic, environmental and barrier relaxation remain separately inspectable. They are not silently converted to one weighted distance.
 
-`infer_basin_merge` then distinguishes:
+### Scalar water level only when declared
 
-- the first level where **at least one** declared analytical variant jointly realizes all occurrence groups (`first_possible_level`);
-- the first level where **all** declared analytical variants do so (`first_robust_level`).
+A scalar `lambda` is accepted only for a predeclared monotone one-dimensional family. Within each analytical variant, node/source/loss contracts stay fixed and transition support cannot decrease as `lambda` increases.
 
-Both are finite-family structural diagnostics, not historical event estimates or biological time.
+### Time is ordered, not calibrated
 
-## Console scripts
+Temporal `time_labels` are ordered state labels. They are not calendar time, generation length or demographic duration unless externally calibrated.
 
-Commands whose public name begins with `eog-v2-` continue to route through `eog.v2.cli`:
+### Positive temporal evidence only
 
-- `eog-v2-genetic-validate`;
-- `eog-v2-occurrence-freeze`;
-- `eog-v2-occurrence-validate`.
+A time-stamped positive occurrence requires that the node was reached **by** the declared time. It is not an exact-time occupancy likelihood. Non-detection is not absence without a detection model.
 
-No basin-merge CLI is added at this stage. The finite API should stabilize before another command surface is justified.
+### Support is not automatically probability
 
-## Compatibility boundary
+Existing transition/reachability quantities are model support. Package naming or reorganization must not promote them into colonisation, dispersal, migration or occupancy probabilities without external calibration.
 
-Existing implementation modules remain in place because frozen workflows and reproduction paths may import them directly. Consolidation therefore proceeds in this order:
+### Claim strength follows coverage
 
-1. narrow/document the public facades;
-2. remove eager/package-root coupling;
-3. reuse existing first-passage and occurrence-compatibility logic rather than duplicating it in the world layer;
-4. keep new prospective names off the compatibility package root unless compatibility requires them;
-5. search all frozen reproduction paths before any physical module move/delete;
-6. preserve compatibility aliases where needed;
-7. allow package CI to prove that cleanup did not alter scientific code paths.
+`robustly_unreachable` means unreachable over the exhaustively declared finite world set relevant to that result. It is not universal biological impossibility.
 
-A later major-version migration may relocate internals only when release notes, compatibility aliases and frozen reproduction paths are handled explicitly.
-
-## Development rules
+## Compatibility and cleanup rules
 
 1. Reuse an existing facade before creating a new namespace.
-2. Keep system-specific A-Islands/Tanzania/Finland/Ryukyu/Zhoushan logic out of generic API names.
-3. Keep IBD/geographic and IBE/environmental quantities separately inspectable.
-4. Do not promote an uncalibrated reachability support into probability/process terminology by package reorganization.
-5. Package-wide regression belongs to Package checks; estimand-specific workflows should remain narrowly scoped.
-6. Presentation/manuscript code must not become a dependency of core operators.
-7. A cleanup PR must not change frozen benchmark inputs, results, seeds, fingerprints, promotion gates or claim directions.
-8. Exact finite-universe exclusion must remain labelled as finite-universe coverage, not universal ecological impossibility.
-9. A scalar relaxation level is valid only inside a predeclared monotone one-dimensional family; otherwise retain the separate relaxation frontier.
+2. Keep system-specific A-Islands/Tanzania/Finland/Ryukyu/Zhoushan code out of generic API names.
+3. Do not duplicate transition, first-passage, bottleneck or reconstruction logic for a new narrative.
+4. Keep new prospective names off `eog.v2` root unless an actual compatibility obligation exists.
+5. Search frozen reproduction paths before any physical module move/delete.
+6. Preserve compatibility aliases where frozen workflows need them.
+7. Package-wide regression belongs to Package checks; scientific confirmation workflows keep narrow path scopes.
+8. Presentation/manuscript code must not become a core dependency.
+9. Cleanup must not change frozen inputs, results, seeds, fingerprints, promotion gates or claim directions.
+
+## Console boundary
+
+Existing `eog-v2-*` console commands continue to route through `eog.v2.cli`. No finite-world, temporal-flow, basin-merge or temporal-survey CLI is added while those prospective APIs are still being falsified and consolidated.
 
 ## Scientific boundary
 
-Package layout is an implementation-maintenance concern. Reorganization must not be used to obtain a more favourable empirical result or to conceal a negative/indeterminate validation outcome.
+Package layout is an implementation-maintenance concern. Reorganization must never be used to obtain a more favourable empirical result or conceal adverse/null/indeterminate evidence.
