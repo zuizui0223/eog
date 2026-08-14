@@ -39,25 +39,33 @@ This does not deprecate, delete or reinterpret any benchmark. It only prevents u
 
 ## Prospective operator policy
 
-Prospective workflows should use narrow path filters for the scientific operator or frozen contract they test, for example:
+Prospective workflows use narrow path filters for the scientific implementation or frozen contract they test, for example:
 
-- dynamic reachability;
-- ecological traversability;
-- occurrence-rule compatibility;
-- directional evidence;
+- dynamic reachability implementation;
+- ecological traversability implementation;
+- occurrence-rule compatibility implementation;
+- directional-evidence implementation;
 - validation-specific code and frozen contracts.
 
-A scientific confirmation workflow should not become a second package-wide test suite.
+A scientific confirmation workflow must not become a second package-wide test suite.
 
-Changes that only reorganize the compatibility facades (`src/eog/__init__.py` or `src/eog/v2/__init__.py`) belong to Package checks unless they also change the scientific implementation or contract owned by a confirmation workflow. The package suite is responsible for verifying that all preserved public imports still resolve.
+Facade-only changes belong to Package checks. This includes:
 
-Where a confirmation module depends directly on another scientific implementation, that dependency should be named explicitly in the path filter rather than approximated with a broad subtree glob. For example, occurrence-rule and directional-evidence confirmation depend on the dynamic transition operator, while traversability confirmation depends on the ecological-traversability implementation.
+- `src/eog/__init__.py`;
+- `src/eog/v2/__init__.py`;
+- `src/eog/v2/reachability.py`;
+- `src/eog/v2/traversability.py`;
+- `src/eog/v2/validation.py`.
 
-The finite-world reconstruction core is currently covered by Package checks and dedicated unit tests. It composes already-tested first-passage and occurrence-compatibility operators and does not receive a separate scientific confirmation workflow until a predeclared frozen confirmation contract exists. This avoids creating a workflow family merely because a new internal module was added.
+Those files route public names but do not own frozen scientific estimands. Their compatibility, lazy loading, and full symbol resolution are tested by the package suite. The traversability, occurrence-rule, and directional-evidence confirmation workflows therefore watch the owning implementation modules and contracts, not the facade files or package-layout tests.
+
+Where a confirmation module depends directly on another scientific implementation, that dependency is named explicitly in the path filter rather than approximated with a broad subtree glob. For example, occurrence-rule and directional-evidence confirmation depend on the dynamic transition operator, while traversability confirmation depends on `ecological_traversability.py`.
+
+The finite-world reconstruction and temporal transition-landscape layers are currently covered by Package checks and dedicated known-truth tests. They compose already-declared transition operators and do not receive separate scientific confirmation workflow families merely because new internal modules were added.
 
 ## Global regression boundary
 
-Broad Python-version compatibility, full unit tests, public compatibility imports and wheel construction remain the responsibility of the existing Package checks workflow. Frozen benchmark workflows remain manually reproducible when an implementation-level historical audit is intentionally requested.
+Broad Python-version compatibility, full unit tests, public compatibility imports, lazy-facade contracts and wheel construction remain the responsibility of Package checks. Frozen benchmark workflows remain manually reproducible when an implementation-level historical audit is intentionally requested.
 
 ## Scientific boundary
 
