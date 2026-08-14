@@ -1,149 +1,144 @@
 # EOG v2 prospective progress ledger
 
-## Status after the 2026-08 cleanup
+## Current status
 
-This ledger preserves completed dynamic island-reachability development evidence. It does **not** reopen frozen EOG v0.1/v2 outcomes.
+The active EOG prospective line is no longer a sequence of separate island/genetic promotion experiments. Existing v2 work is retained as operators inside the integrated direction in [`development_mainline.md`](development_mainline.md):
 
-The earlier island/genetic promotion sequence is no longer the repository-wide development mainline. Existing v2 components are retained as reachability, traversability and validation **operators** under the integrated direction in [`development_mainline.md`](development_mainline.md): distributional realizability, probability-set dynamics and reconstruction of compatible distribution-forming worlds.
+> **observed occurrences constrain a set of distribution-forming worlds; EOG keeps that set explicit, propagates world-indexed reachability, and makes strong exclusions only over a declared/certified universe.**
 
-Unfinished items below remain valid historical gates if those specific claims are resumed, but they must not automatically generate another dataset search, another top-level method line or another independent EOG API.
+This ledger preserves historical outcomes but makes the current implementation boundary explicit.
 
-## Completed implementation gates
+## Integrated finite loop — implemented
 
-- [x] V/R/C/P/O estimands and prohibited terminology frozen before empirical genetics.
-- [x] Directed sub-stochastic dynamic reachability core.
-- [x] Finite-horizon first-passage support and source attribution.
-- [x] Integrated edge flux, route entropy and bridge-node importance.
-- [x] Separate target-capture and persistence area effects.
-- [x] Deterministic synthetic archipelago generator.
-- [x] Neutral drift/migration simulator.
-- [x] Fixed-source occurrence comparator development + one-time independent confirmation.
-- [x] Genetic IBD/IBE/current-flow negative controls.
-- [x] Finite-horizon genetic-distance sensitivity; 24/24 tested candidates were eligible, so horizon was not identified by the toy system.
-- [x] Exact-eventual first-passage implementation for horizon-free long-term genetic development.
-- [x] Directional-FST boundary demonstrated in development: asymmetric migration is not automatically recoverable from symmetric pairwise FST.
-- [x] Hyperparameter-free FST-oriented EOG candidate implemented: reciprocal arithmetic-mean eventual support + continuous distance + explicit bidirectional-disconnection indicator.
-- [x] Nested source-expansion leakage audit implemented with outer-test label invariance and inner self-exclusion contracts.
+Behind `eog.v2.reachability`, the finite known-truth core now supports:
 
-## Frozen fixed-source occurrence confirmation
-
-Contract fingerprint: `1b2c5e550019c1e73e8f7199dfcc952dfeed3bbbbc3232d173e811fcd21438e6`.
-
-Confirmation run: `31597625261`; source head `b22a53c586c045244aaf65b2ce8e9acc2db66661`; artifact digest `sha256:f77d020cd2617d45894662bfc8f7fd88e522866832f4ae7dc6cd378d2d1479e7`.
-
-All gates passed. Dynamic EOG-R correctly added no useful signal when environment, nearest source, source pressure, geography-current-flow or static topology was sufficient. It added substantial held-out signal when the known truth contained continuous bottleneck magnitude or directionality unavailable to those references.
-
-This remains synthetic method validation, not empirical superiority evidence.
-
-## Genetic-development boundary retained as evidence
-
-Finite-horizon genetics was not frozen because all 24 tested horizon/floor/log-symmetrisation combinations passed the initial known-truth boundaries. Selecting the shortest horizon would have been arbitrary and potentially scale-dependent.
-
-Exact eventual first-passage removes the horizon. A development screen of `mean_log`, `max_log`, and `mean_support` showed that symmetric FST did not recover a localized asymmetric migration effect beyond an undirected current-flow reference. Directional EOG predictions therefore require a directional genetic or movement validation endpoint when available; pairwise FST is reserved for symmetric isolation validation.
-
-The FST-oriented candidate consequently has no horizon, no numerical zero-support floor, and no fitted symmetrisation parameter: reciprocal eventual support is averaged in support space, connected pairs receive `-log` exchange distance, and pairs with zero support in both directions receive a separate disconnection indicator rather than an arbitrary huge distance.
-
-## Historical claim-specific gates
-
-These gates remain recorded but are **not automatic active-mainline tasks**:
-
-- [ ] finish CI validation of the hyperparameter-free eventual genetic candidate;
-- [ ] freeze its fresh synthetic confirmation contract on unused seeds;
-- [ ] execute the one-time synthetic genetic confirmation;
-- [ ] inspect nested source-expansion development performance after leakage audit passes;
-- [ ] dynamic-occupancy comparator where repeated incidence supports it;
-- [ ] independently frozen empirical occurrence benchmark;
-- [ ] independent empirical genetic validation;
-- [ ] directional genetic/movement validation when a suitable endpoint exists;
-- [ ] graph-native dynamic visualisation;
-- [ ] predeclared method-paper GO/NO-GO decision.
-
-They should be resumed only if the integrated mainline requires the corresponding evidence, not to search for favourable promotion outcomes.
-
-## Integrated finite-core gates — completed
-
-The integrated finite core is implemented behind the explicit `eog.v2.reachability` facade:
-
-- [x] finite forward reachability envelopes;
-- [x] exact inverse reconstruction of compatible worlds from positive occurrences;
-- [x] world-indexed support-flow sets and lower/upper envelopes;
-- [x] separate geographic/IBD, environmental/IBE and barrier relaxation axes;
+- [x] directed sub-stochastic transition operators and finite-horizon first passage;
+- [x] exact finite `world -> reachability envelope` forward evaluation;
+- [x] positive-occurrence `O -> W(O)` inverse reconstruction;
+- [x] world-indexed flow sets rather than one averaged support surface;
+- [x] finite-universe `reachable_in_all`, `contingent`, and `robustly_unreachable` classes;
+- [x] geographic/IBD, environmental/IBE and barrier relaxation kept as separate axes;
 - [x] non-dominated minimum-relaxation frontier;
-- [x] exact finite-universe `reachable_in_all`, `contingent` and `robustly_unreachable` classes;
-- [x] compatible-world contraction after new positive occurrences;
-- [x] positive-occurrence survey discrimination;
-- [x] declared monotone one-dimensional relaxation families;
-- [x] first-possible versus first-robust basin merge across analytical variants;
-- [x] package-root cleanup that keeps new prospective APIs on owning facades.
+- [x] compatible-world contraction after additional positive evidence;
+- [x] positive static survey discrimination among compatible worlds;
+- [x] predeclared monotone one-dimensional relaxation families;
+- [x] first-possible versus first-robust basin merge across declared analytical variants;
+- [x] finite temporal worlds as ordered sequences of existing transition operators;
+- [x] exact-time temporal support plus cumulative `reached by time` structure;
+- [x] time-stamped positive observations constraining temporal worlds;
+- [x] positive `(node,time)` survey discrimination among still-compatible temporal worlds;
+- [x] all new prospective names kept on the explicit owning facade rather than widening `eog.v2` root.
 
-These are **finite known-truth capabilities**, not empirical promotion claims.
+The positive-only finite temporal loop is therefore closed:
 
-## Finite archetype matrix — passed
+```text
+declared temporal worlds
+        -> world-indexed temporal flow
+        -> time-stamped positive observations
+        -> compatible temporal worlds
+        -> next positive (node,time) discriminator
+        -> added positive evidence
+        -> contracted world set
+```
 
-The integrated finite core passes the compact known-truth matrix in `benchmarks/finite_world_archetype_matrix.py` / `tests/test_finite_world_archetype_matrix.py`.
+This is a structural inference loop, not an occupancy/detection model.
 
-It preserves geographic/IBD, environmental/IBE and barrier rescue distinctions; alternative niche-desert explanations; stepping-stone/direct-route underidentification; rare low-support possibilities; branching/reconvergence; analytical ambiguity; and robust exclusion under explicit finite-universe expansion.
+## Known-truth falsification — passed
 
-## Finite temporal-flow gate — implemented
+### Static finite archetype matrix
 
-The active reachability facade supports an ordered finite temporal world without introducing calibrated time or a second dynamic model family.
+`benchmarks/finite_world_archetype_matrix.py` and its tests verify one common core across:
 
-- [x] `TemporalWorld`: fixed node/source universe plus one transition operator per declared interval;
-- [x] initial source mass injected once only;
-- [x] sequential application of time-specific operators;
-- [x] exact-time support trajectory retained per world;
-- [x] cumulative `reached by time` state distinct from exact-time mass/persistence;
-- [x] lower/upper exact-time support envelopes across temporal worlds;
-- [x] `reachable_in_all`, `contingent`, and `robustly_unreachable` classes at every declared time;
-- [x] first-arrival and lost-mass diagnostics per world;
-- [x] source-ID/source-weight canonicalization preserving source identity;
-- [x] known-truth temporal-order, bridge-opening, support-magnitude and hard-barrier contracts.
+- geographic/IBD-dominated rescue;
+- environmental/IBE-dominated rescue;
+- barrier-dominated rescue;
+- niche-desert tradeoff with both environmental-crossing and geographic-jump explanations retained;
+- stepping-stone versus direct-route underidentification;
+- world-set contraction after a discriminating positive occurrence;
+- rare long-distance jump retained as possible at very low support;
+- branching and reconvergence;
+- analytical-representation-dependent versus robust basin merge;
+- robust exclusion surviving explicit finite-universe expansion.
 
-The certificate `exhaustive_declared_temporal_world_set` is finite-universe coverage only. Time labels are ordered state labels, not calibrated calendar time or generations.
+### Temporal known truths
 
-## Positive temporal-world reconstruction — implemented
+The temporal layer additionally verifies:
 
-Time-stamped positive occurrences now act as necessary reachability constraints on the finite temporal world set.
+- identical edge sets can differ under different temporal order;
+- a bridge must open in the required order to transmit support downstream;
+- source mass is injected once and not silently re-injected;
+- exact-time mass is distinct from cumulative `reached by time`;
+- robust reachability can hold across worlds with different support magnitude;
+- hard temporal barriers remain excluded across the declared temporal universe;
+- an earlier time-stamped positive observation can eliminate a world that reaches the same endpoint later;
+- unobserved reachable nodes are not treated as absences;
+- a candidate positive `(node,time)` observation can discriminate early versus late compatible worlds;
+- a candidate unsupported by every remaining world is identified as a challenge to the declared universe, not ranked as ordinary discrimination.
 
-- [x] `reconstruct_temporal_worlds` retains worlds that reached every observed node by its declared observation time;
-- [x] worlds that reach the same final endpoint too late are eliminated;
-- [x] multiple temporal histories remain explicitly underidentified when all satisfy the observations;
-- [x] unsupported positive observations are reported per world;
-- [x] observation order is canonicalized for deterministic fingerprints;
-- [x] low but positive support remains compatible above the declared tolerance;
-- [x] unobserved reachable nodes are not treated as absences;
-- [x] `compare_temporal_reconstructions` measures compatible-world contraction after added positive temporal evidence;
-- [x] world-universe and tolerance mismatches are rejected when comparing reconstructions.
+## Important development failures retained as diagnostics
 
-The known-truth test initially failed because the late-route fixture attempted to delay movement with an empty first interval; under the explicit no-reinjection contract that correctly destroyed source mass. The fixture was corrected to represent a genuinely longer route (`A -> D -> B -> C`) rather than hidden waiting/persistence. The production temporal operator did not require rescue or retuning.
+The finite/temporal work intentionally records failures instead of hiding them:
 
-This remains a **necessary reached-by-time test**, not exact-time occupancy or persistence inference. Non-detection has no negative evidential meaning here.
+- a benchmark output initially returned `numpy.bool_` rather than Python `bool`; the benchmark boundary was normalized without changing scientific logic;
+- an early temporal known-truth fixture attempted to represent “waiting” with an empty transition interval, which correctly destroyed source mass under the no-reinjection contract. The fixture was replaced by a genuinely longer route rather than modifying the production operator to recover the expected answer;
+- a test collection failure from an unclosed tuple was fixed as syntax only.
 
-## Current active gate
+These were diagnostic/test-definition failures, not reasons to retune frozen biological outcomes.
 
-The next finite method layer is **positive temporal survey discrimination**.
+## Frozen historical evidence — preserved, not active promotion tasks
 
-Given a frozen `TemporalWorldReconstruction`, rank candidate `(node, time)` positive observations by how strongly a positive detection would split the still-compatible temporal worlds.
+Earlier empirical/synthetic v0.1/v2 outcomes remain evidence boundaries. In particular:
 
-The gate should:
+- fixed-source synthetic reachability showed added information only in known-truth cases containing bottleneck magnitude or directionality unavailable to simpler references;
+- source-expansion leakage/negative boundaries remain frozen;
+- symmetric pairwise FST did not automatically recover directional migration information;
+- Ryukyu, Zhoushan, Thalassia and SW Finland adverse/indeterminate/non-promoting results remain unchanged;
+- A-Islands/Tanzania structural empirical results remain publication evidence, not proof that the newer world-reconstruction framework is empirically superior.
 
-- use cumulative reached-by-time support already computed by the temporal layer;
-- preserve the positive-only interpretation;
-- report candidate observations unsupported by every remaining world separately from discriminating candidates;
-- avoid claiming expected information gain unless a detection probability model exists;
-- add no new transition implementation, top-level namespace, CLI or workflow family.
+The earlier fixed-source occurrence confirmation keeps its recorded contract fingerprint:
 
-## Deferred expansion
+`1b2c5e550019c1e73e8f7199dfcc952dfeed3bbbbc3232d173e811fcd21438e6`
 
-Remain deferred until temporal positive-observation survey discrimination is stable:
+and artifact digest:
 
-- surveyed absences and detection models;
-- calibrated calendar time and transition durations;
-- unobserved/hypothetical historical sources;
-- continuous or enormous world spaces requiring optimization/sampling/certification;
+`sha256:f77d020cd2617d45894662bfc8f7fd88e522866832f4ae7dc6cd378d2d1479e7`.
+
+Historical claim-specific gates may be resumed only if the integrated method genuinely requires them; they must not trigger another dataset search merely to obtain a favourable result.
+
+## Scientific boundaries that remain active
+
+- Transition/reachability values are **model support**, not calibrated colonisation, dispersal, migration or occupancy probabilities.
+- Positive occurrence evidence provides necessary reachability constraints; non-detection is not absence.
+- `reached by time` is not persistence or exact-time occupancy.
+- Time labels are ordered states, not calibrated calendar time or generations.
+- IBD/geographic, IBE/environmental and barrier relaxation remain separate unless a one-dimensional family is declared in advance.
+- `robustly_unreachable` is always relative to the exhaustively declared finite universe/certificate.
+- Multiple compatible worlds remain explicitly underidentified rather than being replaced by one best history.
+
+## Deferred work
+
+Do **not** open these automatically just because the finite positive-only loop is complete:
+
+- surveyed absence / imperfect-detection inference;
+- calibrated calendar time and transition duration models;
+- hypothetical/unobserved historical source states;
+- continuous or enormous world spaces requiring optimization, sampling or formal enclosure;
 - large-raster forecasting;
-- new empirical promotion claims.
+- another empirical promotion dataset;
+- another top-level namespace, CLI family or confirmation workflow.
+
+## Current development gate
+
+Feature growth is paused after the positive-only finite loop. The next work should be **consolidation and end-to-end falsification**, not another process assumption.
+
+Before opening detection models or large-raster forecasting:
+
+1. keep README, package-layout and manuscript provenance consistent with the current architecture;
+2. ensure no new prospective names leak onto compatibility roots;
+3. preserve frozen empirical/manuscript assets as historical evidence rather than active API drivers;
+4. build one compact end-to-end temporal feedback benchmark showing that a ranked positive `(node,time)` observation, when applied, produces exactly the predicted compatible-world contraction;
+5. only then decide whether the next scientific need is detection/absence evidence, calibrated time, or continuous-world certification.
 
 ## Stop rule
 
-Do not run another occurrence or genetic dataset merely to obtain a favourable result. Do not retune any frozen adverse/null/indeterminate result. The active mainline must continue to preserve genuinely different worlds as a set whenever the observations do not identify one history.
+Do not run another occurrence or genetic dataset merely to obtain a favourable result. Do not retune frozen adverse/null/indeterminate outcomes. If several worlds remain compatible, EOG must keep them as a set.
