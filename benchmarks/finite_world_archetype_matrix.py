@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Known-truth matrix for the integrated finite-world EOG core.
 
-The matrix is deliberately small and qualitative.  It tests whether the existing
+The matrix is deliberately small and qualitative. It tests whether the existing
 reachability/world-reconstruction operators preserve distinctions that matter to the
 active EOG mainline without adding a new public API or another empirical data line.
 
@@ -234,7 +234,7 @@ def _branch_and_confluence():
         "all_declared_branch_edges_used": all(positive),
         "positive_branch_edge_count": sum(positive),
         "confluence_first_arrival_step": int(result.first_arrival_step[index["D"]]),
-        "target_support_positive": result.mass_by_step[2, index["D"]] > 0.0,
+        "target_support_positive": bool(result.mass_by_step[2, index["D"]] > 0.0),
     }
 
 
