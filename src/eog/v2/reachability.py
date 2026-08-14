@@ -25,6 +25,12 @@ from ..reachability_network_diagnostics import (
 )
 from ..reachability_visualization import build_dynamic_reachability_visualization_payload
 from ..synthetic_archipelago import SCENARIO_IDS, SyntheticArchipelagoScenario, build_synthetic_archipelago
+from .relaxation_family import (
+    BasinMergeResult,
+    MonotoneRelaxationFamily,
+    build_monotone_relaxation_family,
+    infer_basin_merge,
+)
 from .world_reconstruction import (
     FiniteWorld,
     FiniteWorldFlowSet,
@@ -74,4 +80,8 @@ __all__ = [
     "minimum_relaxation_frontier",
     "compare_reconstructions",
     "rank_positive_occurrence_candidates",
+    "MonotoneRelaxationFamily",
+    "BasinMergeResult",
+    "build_monotone_relaxation_family",
+    "infer_basin_merge",
 ]
