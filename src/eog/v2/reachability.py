@@ -32,6 +32,12 @@ from .relaxation_family import (
     infer_basin_merge,
 )
 from .temporal_reachability import TemporalFlowSet, TemporalWorld, build_temporal_flow_set
+from .temporal_reconstruction import (
+    TemporalReconstructionUpdate,
+    TemporalWorldReconstruction,
+    compare_temporal_reconstructions,
+    reconstruct_temporal_worlds,
+)
 from .world_reconstruction import (
     FiniteWorld,
     FiniteWorldFlowSet,
@@ -88,4 +94,8 @@ __all__ = [
     "TemporalWorld",
     "TemporalFlowSet",
     "build_temporal_flow_set",
+    "TemporalWorldReconstruction",
+    "TemporalReconstructionUpdate",
+    "reconstruct_temporal_worlds",
+    "compare_temporal_reconstructions",
 ]
