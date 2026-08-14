@@ -30,6 +30,12 @@ PROSPECTIVE_CONFIRMATION_WORKFLOWS = (
     "directional-evidence-confirmation.yml",
 )
 
+FACADE_PATHS_BY_WORKFLOW = {
+    "traversability-confirmation.yml": ('"src/eog/v2/traversability.py"',),
+    "occurrence-rule-compatibility-confirmation.yml": ('"src/eog/v2/traversability.py"',),
+    "directional-evidence-confirmation.yml": ('"src/eog/v2/validation.py"',),
+}
+
 
 def test_frozen_legacy_workflows_do_not_watch_all_eog_source_files():
     root = Path(".github/workflows")
@@ -62,4 +68,8 @@ def test_prospective_scientific_confirmations_do_not_watch_facade_only_changes()
         text = (root / name).read_text()
         assert '"src/eog/v2/**"' not in text, name
         assert '"src/eog/v2/__init__.py"' not in text, name
+        for facade_path in FACADE_PATHS_BY_WORKFLOW.get(name, ()):
+            assert facade_path not in text, name
+        assert "tests/test_v2_namespace.py" not in text, name
+        assert "tests/test_v2_package_layout.py" not in text, name
         assert "workflow_dispatch:" in text, name
