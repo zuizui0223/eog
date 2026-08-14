@@ -1,15 +1,15 @@
 """Exact finite-world reconstruction for the EOG development mainline.
 
-This module is intentionally small and compositional.  It does not fit a new movement
-model.  Instead it treats already-declared transition operators as a finite admissible
-world universe and reuses EOG's existing first-passage and occurrence-compatibility
-operators to answer a different question: which worlds remain compatible with an
-observed positive occurrence configuration?
+This module does not fit a new movement model. It treats already-declared transition
+operators as a finite admissible world universe and reuses EOG's existing first-passage
+and occurrence-compatibility operators to ask which worlds remain compatible with an
+observed positive occurrence configuration.
 
-The finite universe is exhaustively enumerated, so statements such as ``robustly
-unreachable`` are always qualified by that declared universe.  The implementation does
-not infer a unique historical route, treat low support as impossibility, or interpret
-unobserved nodes as absences.
+Because the declared world universe is finite and exhaustively enumerated, exclusion
+claims can carry an explicit finite-universe certificate. They are never promoted to
+universal ecological impossibility outside that declared universe. Unobserved nodes are
+not treated as absences and compatible worlds are not collapsed into one historical
+answer.
 """
 from __future__ import annotations
 
@@ -58,8 +58,8 @@ def _finite_nonnegative(value: float, label: str) -> float:
 class FiniteWorld:
     """One declared distribution-forming world in a finite admissible universe.
 
-    Relaxation axes are kept separate.  They are declared monotone coordinates, not
-    fitted biological constants and not a weighted composite distance.
+    Relaxation axes are separate declared monotone coordinates. They are not fitted
+    biological constants and are not combined into an opaque weighted distance.
     """
 
     world_id: str
@@ -77,25 +77,41 @@ class FiniteWorld:
             raise ValueError("world_id must be non-empty")
         object.__setattr__(self, "world_id", world_id)
 
-        sources = tuple(str(value).strip() for value in self.source_ids)
-        if not sources or any(not value for value in sources) or len(set(sources)) != len(sources):
+        declared_sources = tuple(str(value).strip() for value in self.source_ids)
+        if (
+            not declared_sources
+            or any(not value for value in declared_sources)
+            or len(set(declared_sources)) != len(declared_sources)
+        ):
             raise ValueError("source_ids must contain unique non-empty node IDs")
-        missing = set(sources).difference(self.operator.node_ids)
+        missing = set(declared_sources).difference(self.operator.node_ids)
         if missing:
             raise ValueError(f"source_ids are outside the operator node universe: {sorted(missing)}")
-        ordered_sources = tuple(node_id for node_id in self.operator.node_ids if node_id in set(sources))
-        object.__setattr__(self, "source_ids", ordered_sources)
 
         if self.source_weights is None:
-            weights = np.full(len(ordered_sources), 1.0 / len(ordered_sources), dtype=float)
+            declared_weights = np.full(
+                len(declared_sources), 1.0 / len(declared_sources), dtype=float
+            )
         else:
-            declared = np.asarray(self.source_weights, dtype=float)
-            if declared.shape != (len(ordered_sources),):
-                raise ValueError("source_weights must contain one value per source")
-            if not np.isfinite(declared).all() or np.any(declared < 0.0) or float(np.sum(declared)) <= 0.0:
+            declared_weights = np.asarray(self.source_weights, dtype=float)
+            if declared_weights.shape != (len(declared_sources),):
+                raise ValueError("source_weights must contain one value per declared source")
+            if (
+                not np.isfinite(declared_weights).all()
+                or np.any(declared_weights < 0.0)
+                or float(np.sum(declared_weights)) <= 0.0
+            ):
                 raise ValueError("source_weights must be finite, non-negative, and sum to > 0")
-            weights = declared / np.sum(declared)
-        object.__setattr__(self, "source_weights", tuple(float(value) for value in weights))
+            declared_weights = declared_weights / np.sum(declared_weights)
+
+        weight_by_source = dict(zip(declared_sources, declared_weights, strict=True))
+        source_set = set(declared_sources)
+        ordered_sources = tuple(
+            node_id for node_id in self.operator.node_ids if node_id in source_set
+        )
+        ordered_weights = tuple(float(weight_by_source[node_id]) for node_id in ordered_sources)
+        object.__setattr__(self, "source_ids", ordered_sources)
+        object.__setattr__(self, "source_weights", ordered_weights)
 
         object.__setattr__(
             self,
@@ -139,12 +155,7 @@ class FiniteWorld:
 
 @dataclass(frozen=True)
 class WorldReachableConfiguration:
-    """Positive-support forward envelope for one finite world.
-
-    This is the set of nodes structurally reachable within the declared propagation
-    depth.  It is not a realised occupancy map and does not turn unlisted nodes into
-    biological absences.
-    """
+    """Positive-support forward envelope for one world, not realised occupancy."""
 
     world_id: str
     node_ids: tuple[str, ...]
@@ -167,7 +178,7 @@ class WorldCompatibility:
 
 @dataclass(frozen=True)
 class FiniteWorldReconstruction:
-    """Exact inverse image of an occurrence configuration in a finite world universe."""
+    """Exact inverse image ``W(O)`` inside one frozen finite world universe."""
 
     occurrence_ids: tuple[str, ...]
     world_results: tuple[WorldCompatibility, ...]
@@ -202,7 +213,7 @@ class WorldNodeEnvelope:
 
 @dataclass(frozen=True)
 class FiniteWorldFlowSet:
-    """World-indexed flow set without averaging away world identity."""
+    """World-indexed flow set that retains the world-to-flow association."""
 
     node_ids: tuple[str, ...]
     members: tuple[WorldFlowMember, ...]
@@ -229,7 +240,7 @@ class RelaxationPoint:
 
 @dataclass(frozen=True)
 class RelaxationFrontier:
-    """Non-dominated compatible relaxation points with IBD/IBE axes preserved."""
+    """Non-dominated compatible relaxations with IBD/IBE/barrier axes preserved."""
 
     points: tuple[RelaxationPoint, ...]
     compatible_world_ids: tuple[str, ...]
@@ -262,7 +273,7 @@ class PositiveOccurrenceCandidate:
 
 @dataclass(frozen=True)
 class PositiveOccurrenceSurveyRanking:
-    """Positive-occurrence discrimination only; surveyed absences are not inferred."""
+    """Positive-occurrence discrimination only; non-detections are not inferred."""
 
     rows: tuple[PositiveOccurrenceCandidate, ...]
     compatible_world_ids: tuple[str, ...]
@@ -284,14 +295,30 @@ def _ordered_worlds(worlds: Sequence[FiniteWorld]) -> tuple[FiniteWorld, ...]:
     return ordered
 
 
-def _ordered_occurrences(node_ids: tuple[str, ...], occurrence_ids: Sequence[str]) -> tuple[str, ...]:
+def _ordered_occurrences(
+    node_ids: tuple[str, ...], occurrence_ids: Sequence[str]
+) -> tuple[str, ...]:
     requested = tuple(str(value).strip() for value in occurrence_ids)
-    if len(requested) < 2 or any(not value for value in requested) or len(set(requested)) != len(requested):
+    if (
+        len(requested) < 2
+        or any(not value for value in requested)
+        or len(set(requested)) != len(requested)
+    ):
         raise ValueError("occurrence_ids must contain at least two unique non-empty node IDs")
     missing = set(requested).difference(node_ids)
     if missing:
         raise ValueError(f"occurrence_ids are outside the world node universe: {sorted(missing)}")
-    return tuple(node_id for node_id in node_ids if node_id in set(requested))
+    requested_set = set(requested)
+    return tuple(node_id for node_id in node_ids if node_id in requested_set)
+
+
+def _validate_world_universe(
+    reconstruction: FiniteWorldReconstruction,
+    ordered_worlds: tuple[FiniteWorld, ...],
+) -> None:
+    current = tuple((world.world_id, world.fingerprint) for world in ordered_worlds)
+    if current != reconstruction.world_fingerprints:
+        raise ValueError("world universe or world definitions changed after reconstruction")
 
 
 def _first_passage_vector(
@@ -316,6 +343,24 @@ def _first_passage_vector(
     return support
 
 
+def _candidate_support(
+    world: FiniteWorld,
+    candidate_id: str,
+    reconstruction: FiniteWorldReconstruction,
+) -> float:
+    if candidate_id in set(world.source_ids):
+        return 1.0
+    return float(
+        summarize_first_passage(
+            world.operator,
+            world.source_ids,
+            candidate_id,
+            max_steps=reconstruction.max_steps,
+            support_tolerance=reconstruction.support_tolerance,
+        ).horizon_support
+    )
+
+
 def forward_reachable_configuration(
     world: FiniteWorld,
     *,
@@ -329,9 +374,14 @@ def forward_reachable_configuration(
     tolerance = _finite_nonnegative(support_tolerance, "support_tolerance")
     support = _first_passage_vector(world, max_steps=max_steps, support_tolerance=tolerance)
     reachable = tuple(
-        node_id for node_id, value in zip(world.operator.node_ids, support, strict=True) if value > tolerance
+        node_id
+        for node_id, value in zip(world.operator.node_ids, support, strict=True)
+        if value > tolerance
     )
-    unreachable = tuple(node_id for node_id in world.operator.node_ids if node_id not in set(reachable))
+    reachable_set = set(reachable)
+    unreachable = tuple(
+        node_id for node_id in world.operator.node_ids if node_id not in reachable_set
+    )
     payload = {
         "world_fingerprint": world.fingerprint,
         "reachable_ids": list(reachable),
@@ -363,10 +413,10 @@ def reconstruct_compatible_worlds(
 ) -> FiniteWorldReconstruction:
     """Enumerate the exact finite inverse image ``W(O)`` for positive occurrences.
 
-    Every world's declared sources must be among the observed occurrences in this first
-    finite core.  A world is compatible when every non-source observed occurrence has
-    positive first-passage support above ``support_tolerance``.  No winner score is
-    created among compatible worlds.
+    In this first finite core, each world's declared fixed sources must themselves be
+    observed occurrences. A world is compatible when every other observed occurrence
+    has positive first-passage support above ``support_tolerance``. Compatible worlds
+    remain an unranked set.
     """
 
     ordered = _ordered_worlds(worlds)
@@ -401,6 +451,7 @@ def reconstruct_compatible_worlds(
 
     compatible = tuple(result.world_id for result in results if result.compatible)
     incompatible = tuple(result.world_id for result in results if not result.compatible)
+    certificate = "exhaustive_finite_world_enumeration"
     payload = {
         "occurrence_ids": list(occurrences),
         "world_results": [
@@ -415,7 +466,7 @@ def reconstruct_compatible_worlds(
         "max_steps": int(max_steps),
         "support_floor": float(support_floor),
         "support_tolerance": float(support_tolerance),
-        "coverage_certificate": "exhaustive_finite_world_enumeration",
+        "coverage_certificate": certificate,
     }
     return FiniteWorldReconstruction(
         occurrence_ids=occurrences,
@@ -428,7 +479,7 @@ def reconstruct_compatible_worlds(
         max_steps=int(max_steps),
         support_floor=float(support_floor),
         support_tolerance=float(support_tolerance),
-        coverage_certificate="exhaustive_finite_world_enumeration",
+        coverage_certificate=certificate,
         fingerprint=_canonical_sha256(payload),
     )
 
@@ -440,11 +491,7 @@ def build_world_flow_set(
     """Propagate and retain one flow trajectory per compatible finite world."""
 
     ordered = _ordered_worlds(worlds)
-    fingerprint_map = dict(reconstruction.world_fingerprints)
-    if tuple(world.world_id for world in ordered) != tuple(world_id for world_id, _ in reconstruction.world_fingerprints):
-        raise ValueError("world universe does not match reconstruction")
-    if any(fingerprint_map[world.world_id] != world.fingerprint for world in ordered):
-        raise ValueError("world definitions changed after reconstruction")
+    _validate_world_universe(reconstruction, ordered)
     if not reconstruction.compatible_world_ids:
         raise ValueError("cannot build a flow set when no world is compatible")
 
@@ -477,7 +524,8 @@ def build_world_flow_set(
     envelopes: list[WorldNodeEnvelope] = []
     for node_index, node_id in enumerate(ordered[0].operator.node_ids):
         supports = tuple(
-            (member.world_id, float(member.first_passage_support[node_index])) for member in members
+            (member.world_id, float(member.first_passage_support[node_index]))
+            for member in members
         )
         values = np.asarray([value for _, value in supports], dtype=float)
         positive = values > reconstruction.support_tolerance
@@ -500,6 +548,7 @@ def build_world_flow_set(
     robust = tuple(row.node_id for row in envelopes if row.status == "robustly_unreachable")
     contingent = tuple(row.node_id for row in envelopes if row.status == "contingent")
     universal = tuple(row.node_id for row in envelopes if row.status == "reachable_in_all")
+    certificate = "exhaustive_finite_compatible_world_set"
     payload = {
         "reconstruction_fingerprint": reconstruction.fingerprint,
         "members": [
@@ -520,7 +569,7 @@ def build_world_flow_set(
             }
             for row in envelopes
         ],
-        "coverage_certificate": "exhaustive_finite_compatible_world_set",
+        "coverage_certificate": certificate,
     }
     return FiniteWorldFlowSet(
         node_ids=ordered[0].operator.node_ids,
@@ -532,7 +581,7 @@ def build_world_flow_set(
         contingent_ids=contingent,
         reachable_in_all_ids=universal,
         max_steps=reconstruction.max_steps,
-        coverage_certificate="exhaustive_finite_compatible_world_set",
+        coverage_certificate=certificate,
         reconstruction_fingerprint=reconstruction.fingerprint,
         fingerprint=_canonical_sha256(payload),
     )
@@ -542,17 +591,16 @@ def minimum_relaxation_frontier(
     reconstruction: FiniteWorldReconstruction,
     worlds: Sequence[FiniteWorld],
 ) -> RelaxationFrontier:
-    """Return the non-dominated compatible relaxation frontier.
+    """Return non-dominated compatible relaxations without collapsing IBD and IBE.
 
-    Geographic, environmental and barrier relaxation remain separate coordinates.  A
-    single scalar 'water level' is intentionally not manufactured; callers that want
-    one must predeclare a one-dimensional relaxation family.
+    A scalar 'water level' is deliberately not manufactured here. If a one-dimensional
+    relaxation sequence is scientifically justified, callers should declare that family
+    explicitly before projecting this axis-preserving frontier onto it.
     """
 
     ordered = _ordered_worlds(worlds)
+    _validate_world_universe(reconstruction, ordered)
     world_by_id = {world.world_id: world for world in ordered}
-    if set(world_by_id) != {world_id for world_id, _ in reconstruction.world_fingerprints}:
-        raise ValueError("world universe does not match reconstruction")
     points = [
         RelaxationPoint(
             world_id=world_id,
@@ -585,6 +633,7 @@ def minimum_relaxation_frontier(
                 break
         if not dominated:
             frontier.append(point)
+
     frontier.sort(
         key=lambda row: (
             row.geographic_relaxation,
@@ -595,7 +644,16 @@ def minimum_relaxation_frontier(
     )
     payload = {
         "reconstruction_fingerprint": reconstruction.fingerprint,
-        "points": [row.__dict__ for row in frontier],
+        "points": [
+            {
+                "world_id": row.world_id,
+                "geographic_relaxation": row.geographic_relaxation,
+                "environmental_relaxation": row.environmental_relaxation,
+                "barrier_relaxation": row.barrier_relaxation,
+                "analytical_variant": row.analytical_variant,
+            }
+            for row in frontier
+        ],
     }
     return RelaxationFrontier(
         points=tuple(frontier),
@@ -609,11 +667,15 @@ def compare_reconstructions(
     before: FiniteWorldReconstruction,
     after: FiniteWorldReconstruction,
 ) -> ReconstructionUpdate:
-    """Quantify contraction of the compatible world set after added positive evidence."""
+    """Quantify compatible-world contraction after added positive occurrence evidence."""
 
     if before.world_fingerprints != after.world_fingerprints:
         raise ValueError("reconstructions must use the same frozen world universe")
-    if before.max_steps != after.max_steps or before.support_tolerance != after.support_tolerance:
+    if (
+        before.max_steps != after.max_steps
+        or before.support_floor != after.support_floor
+        or before.support_tolerance != after.support_tolerance
+    ):
         raise ValueError("reconstructions must use the same reachability contract")
     if not set(before.occurrence_ids).issubset(after.occurrence_ids):
         raise ValueError("after occurrence set must contain the before occurrence set")
@@ -651,23 +713,24 @@ def rank_positive_occurrence_candidates(
     worlds: Sequence[FiniteWorld],
     candidate_ids: Sequence[str],
 ) -> PositiveOccurrenceSurveyRanking:
-    """Rank candidate nodes by how a *positive occurrence* would split compatible worlds.
+    """Rank nodes by how a *positive occurrence* would split compatible worlds.
 
-    This is not expected information gain and does not score non-detections.  A node
-    unreachable in every compatible world is reported as ``unsupported_by_universe``:
-    observing it would challenge the declared finite world universe rather than select
-    one of its members.
+    This is not expected information gain and it does not score non-detections. A node
+    unreachable in every compatible world is ``unsupported_by_universe``: observing it
+    would challenge the declared finite universe rather than select one of its members.
     """
 
     ordered = _ordered_worlds(worlds)
-    world_by_id = {world.world_id: world for world in ordered}
-    if set(world_by_id) != {world_id for world_id, _ in reconstruction.world_fingerprints}:
-        raise ValueError("world universe does not match reconstruction")
+    _validate_world_universe(reconstruction, ordered)
     if not reconstruction.compatible_world_ids:
         raise ValueError("candidate discrimination requires at least one compatible world")
 
     candidates = tuple(str(value).strip() for value in candidate_ids)
-    if not candidates or any(not value for value in candidates) or len(set(candidates)) != len(candidates):
+    if (
+        not candidates
+        or any(not value for value in candidates)
+        or len(set(candidates)) != len(candidates)
+    ):
         raise ValueError("candidate_ids must contain unique non-empty node IDs")
     node_set = set(ordered[0].operator.node_ids)
     missing = set(candidates).difference(node_set)
@@ -677,23 +740,14 @@ def rank_positive_occurrence_candidates(
     if overlap:
         raise ValueError(f"candidate_ids already contain observed occurrences: {sorted(overlap)}")
 
+    world_by_id = {world.world_id: world for world in ordered}
     rows: list[PositiveOccurrenceCandidate] = []
     total = len(reconstruction.compatible_world_ids)
     for candidate_id in candidates:
         reachable: list[str] = []
         unreachable: list[str] = []
         for world_id in reconstruction.compatible_world_ids:
-            world = world_by_id[world_id]
-            if candidate_id in set(world.source_ids):
-                support = 1.0
-            else:
-                support = summarize_first_passage(
-                    world.operator,
-                    world.source_ids,
-                    candidate_id,
-                    max_steps=reconstruction.max_steps,
-                    support_tolerance=reconstruction.support_tolerance,
-                ).horizon_support
+            support = _candidate_support(world_by_id[world_id], candidate_id, reconstruction)
             if support > reconstruction.support_tolerance:
                 reachable.append(world_id)
             else:
@@ -727,7 +781,17 @@ def rank_positive_occurrence_candidates(
     )
     payload = {
         "reconstruction_fingerprint": reconstruction.fingerprint,
-        "rows": [row.__dict__ for row in rows],
+        "rows": [
+            {
+                "candidate_id": row.candidate_id,
+                "reachable_world_ids": list(row.reachable_world_ids),
+                "unreachable_world_ids": list(row.unreachable_world_ids),
+                "positive_elimination_fraction": row.positive_elimination_fraction,
+                "split_balance": row.split_balance,
+                "status": row.status,
+            }
+            for row in rows
+        ],
     }
     return PositiveOccurrenceSurveyRanking(
         rows=tuple(rows),
