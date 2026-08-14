@@ -25,6 +25,31 @@ def _operator(node_ids, edges):
     return build_dynamic_transition_operator(node_ids, declared, loss_support=1.0)
 
 
+def test_temporal_world_canonicalizes_source_ids_without_changing_weight_identity():
+    nodes = ("A", "B", "C")
+    operator = _operator(nodes, (("A", "C"), ("B", "C")))
+
+    reversed_declaration = TemporalWorld(
+        "weighted",
+        ("t0", "t1"),
+        (operator,),
+        ("B", "A"),
+        source_weights=(0.8, 0.2),
+    )
+    canonical_declaration = TemporalWorld(
+        "weighted",
+        ("t0", "t1"),
+        (operator,),
+        ("A", "B"),
+        source_weights=(0.2, 0.8),
+    )
+
+    assert reversed_declaration.source_ids == ("A", "B")
+    assert reversed_declaration.source_weights == pytest.approx((0.2, 0.8))
+    assert reversed_declaration.source_weight_mapping == pytest.approx({"A": 0.2, "B": 0.8})
+    assert reversed_declaration.fingerprint == canonical_declaration.fingerprint
+
+
 def test_temporal_order_changes_reachability_even_with_the_same_edges():
     nodes = ("A", "B", "C")
     ab = _operator(nodes, (("A", "B"),))
