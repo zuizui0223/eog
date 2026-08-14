@@ -2,6 +2,12 @@ name: Analysis manifest contract
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/analysis-manifest.yml"
+      - "tests/test_manifest.py"
+      - "src/eog/manifest.py"
+      - "src/eog/reference_policy.py"
+      - "src/eog/uncertainty.py"
   workflow_dispatch:
 
 jobs:
