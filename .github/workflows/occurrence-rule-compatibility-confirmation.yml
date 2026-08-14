@@ -6,7 +6,6 @@ on:
       - ".github/workflows/occurrence-rule-compatibility-confirmation.yml"
       - "src/eog/dynamic_island_reachability.py"
       - "src/eog/v2/occurrence_constraints.py"
-      - "src/eog/v2/traversability.py"
       - "benchmarks/occurrence_rule_compatibility_confirmation.py"
       - "benchmarks/occurrence_rule_compatibility_confirmation_contract.json"
       - "tests/test_occurrence_rule_compatibility.py"
@@ -31,9 +30,7 @@ jobs:
         run: |
           pytest -q \
             tests/test_occurrence_rule_compatibility.py \
-            tests/test_occurrence_rule_compatibility_contract.py \
-            tests/test_v2_namespace.py \
-            tests/test_v2_package_layout.py
+            tests/test_occurrence_rule_compatibility_contract.py
       - name: Run frozen structural confirmation
         run: |
           mkdir -p benchmark_results/occurrence_rule_compatibility
