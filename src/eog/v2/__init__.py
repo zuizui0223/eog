@@ -1,78 +1,20 @@
-"""Prospective EOG v2 public package.
+"""Prospective EOG v2 compatibility namespace.
 
-The v2 namespace is intentionally separate from :mod:`eog`'s frozen v0.1 public API.
-Implementation modules remain internal details; public v2 work is grouped into
-``reachability``, ``traversability`` and ``validation`` facades while the historical
-``from eog.v2 import ...`` surface remains compatible.
+The active repository direction is defined in ``docs/development_mainline.md``.
+The v2 namespace is intentionally thin: new code should import from the explicit
+``reachability``, ``traversability`` or ``validation`` facades rather than widening
+this package root.  Historical ``from eog.v2 import ...`` imports remain available
+through lazy attribute routing so frozen workflows do not need to move with the
+repository narrative.
 """
 
-from .reachability import (
-    AreaSupportDeclaration,
-    AreaSupportResult,
-    BridgeNodeImportanceResult,
-    DynamicReachabilityEdge,
-    DynamicReachabilityResult,
-    DynamicTransitionOperator,
-    FirstPassageSummary,
-    IslandStateLayers,
-    NetworkFluxDiagnostics,
-    SCENARIO_IDS,
-    SyntheticArchipelagoScenario,
-    area_support_layers,
-    assemble_island_state_layers,
-    build_dynamic_reachability_visualization_payload,
-    build_dynamic_transition_operator,
-    build_synthetic_archipelago,
-    evaluate_bridge_node_importance,
-    propagate_dynamic_reachability,
-    render_dynamic_reachability_html,
-    summarize_first_passage,
-    summarize_network_flux,
-)
-from .traversability import (
-    DispersalMode,
-    EcologicalTransitionEdge,
-    OccurrenceEnvironmentalScale,
-    OccurrenceRuleComparison,
-    OccurrenceRuleCompatibility,
-    OccurrenceTargetCompatibility,
-    PathTraversabilitySummary,
-    TraversabilityTransitionBundle,
-    build_traversability_transition_bundle,
-    compare_occurrence_transition_rules,
-    environmental_transition_support,
-    evaluate_occurrence_rule_compatibility,
-    fit_occurrence_environmental_scale,
-    summarize_path_traversability,
-)
-from .validation import (
-    CombinedRuleStatus,
-    DirectionalEvidenceRow,
-    DirectionalOrderConstraint,
-    DirectionalRuleEvidence,
-    DirectionalStatus,
-    EventualGeneticConnectivity,
-    EventualGeneticValidationBundle,
-    FixedSourceOccurrenceFeatures,
-    FixedSourceOccurrenceValidationResult,
-    GeneticValidationConfig,
-    GeneticValidationContrast,
-    GeneticValidationFoldResult,
-    GeneticValidationModelResult,
-    GeneticValidationResult,
-    OccurrenceModelScore,
-    RuleEvidenceStatus,
-    TransitionRuleEvidenceComparison,
-    build_eventual_genetic_validation_bundle,
-    build_fixed_source_occurrence_features,
-    combine_occurrence_and_directional_evidence,
-    evaluate_directional_order_evidence,
-    evaluate_fixed_source_occurrence_validation,
-    evaluate_genetic_validation_ladder,
-    infer_eventual_genetic_connectivity,
-)
+from __future__ import annotations
 
-__all__ = [
+from importlib import import_module
+from typing import Final
+
+
+_REACHABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "DynamicReachabilityEdge",
     "DynamicReachabilityResult",
     "DynamicTransitionOperator",
@@ -94,6 +36,9 @@ __all__ = [
     "SCENARIO_IDS",
     "SyntheticArchipelagoScenario",
     "build_synthetic_archipelago",
+)
+
+_TRAVERSABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "OccurrenceEnvironmentalScale",
     "EcologicalTransitionEdge",
     "TraversabilityTransitionBundle",
@@ -108,6 +53,9 @@ __all__ = [
     "OccurrenceRuleComparison",
     "evaluate_occurrence_rule_compatibility",
     "compare_occurrence_transition_rules",
+)
+
+_VALIDATION_EXPORTS: Final[tuple[str, ...]] = (
     "EventualGeneticConnectivity",
     "EventualGeneticValidationBundle",
     "infer_eventual_genetic_connectivity",
@@ -132,6 +80,41 @@ __all__ = [
     "TransitionRuleEvidenceComparison",
     "evaluate_directional_order_evidence",
     "combine_occurrence_and_directional_evidence",
+)
+
+_EXPORT_MODULE: Final[dict[str, str]] = {
+    **{name: "reachability" for name in _REACHABILITY_EXPORTS},
+    **{name: "traversability" for name in _TRAVERSABILITY_EXPORTS},
+    **{name: "validation" for name in _VALIDATION_EXPORTS},
+}
+
+__all__ = [
+    *_REACHABILITY_EXPORTS,
+    *_TRAVERSABILITY_EXPORTS,
+    *_VALIDATION_EXPORTS,
 ]
 
+# Kept unchanged because frozen tests and external reproduction paths use this
+# status string.  The separate direction marker records the active architecture
+# without rewriting the historical v2 contract.
 API_STATUS = "prospective-v2-development"
+DEVELOPMENT_DIRECTION = "distributional-watershed-world-reconstruction"
+
+
+def __getattr__(name: str):
+    """Resolve historical v2 convenience imports through the declared facade."""
+
+    module_name = _EXPORT_MODULE.get(name)
+    if module_name is None:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+    module = import_module(f"{__name__}.{module_name}")
+    value = getattr(module, name)
+    globals()[name] = value
+    return value
+
+
+def __dir__() -> list[str]:
+    """Expose the compatibility surface without eagerly importing its modules."""
+
+    return sorted(set(globals()) | set(__all__))
