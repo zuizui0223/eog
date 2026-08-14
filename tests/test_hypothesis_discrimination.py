@@ -58,5 +58,5 @@ def test_at_least_two_hypotheses_are_required():
 
 
 def test_support_must_be_bounded():
-    with pytest.raises(ValueError, match="\[0, 1\]"):
+    with pytest.raises(ValueError, match=r"\[0, 1\]"):
         BridgeHypothesis("invalid", {"middle": 1.1})
