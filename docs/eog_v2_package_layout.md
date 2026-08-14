@@ -8,29 +8,29 @@ This layout does not alter, rerun, rescue or reinterpret frozen v0.1/v2 results,
 
 ## Public boundary
 
-The repository keeps the frozen v0.1 compatibility API under root `eog`. Prospective implementation already developed for v2 is grouped behind three explicit facades:
+The repository keeps the frozen v0.1 compatibility API under root `eog`. Prospective implementation is grouped behind three explicit scientific facades:
 
 - `eog.v2.reachability` — transition operators, finite/static and temporal world reconstruction, probability/support-set summaries, basin-merge diagnostics and transition-landscape summaries;
 - `eog.v2.traversability` — geographic/environmental transition constraints, transit viability and occurrence-conditioned rule compatibility;
 - `eog.v2.validation` — independent occurrence, genetic and directional-evidence validation;
 - `eog.v2.cli` — console-script routing only.
 
-The historical convenience surface `from eog.v2 import ...` remains available for already-published compatibility names, but it is a **lazy compatibility facade**. Importing `eog.v2` alone does not eagerly import the reachability, traversability and validation implementation trees.
+The historical convenience surface `from eog.v2 import ...` remains available for already-published compatibility names, but it is a **lazy compatibility facade**. New prospective names stay on the explicit owning facade instead of automatically widening the package root.
 
-New prospective names stay on the explicit owning facade instead of automatically widening the `eog.v2` package root.
+## All scientific facades are lazy
 
-## Reachability facade is also lazy
+`reachability`, `traversability`, and `validation` now resolve public symbols from their owning implementation modules only when accessed.
 
-`eog.v2.reachability` is now itself a lazy facade. Importing it does not automatically load:
+This means plain facade imports do not eagerly load:
 
-- HTML/report rendering;
-- visualization payload builders;
+- HTML/report rendering or visualization;
 - synthetic archipelago fixtures;
-- static finite-world reconstruction internals;
-- temporal reconstruction/survey/transition-landscape internals;
-- system-specific state-layer helpers.
+- all finite/temporal reconstruction layers;
+- occurrence-rule constraints when only ecological traversability is needed;
+- genetic validation when only directional evidence is needed;
+- empirical occurrence validation when another validation family is requested.
 
-A public symbol loads only its owning implementation module when accessed. This keeps presentation and synthetic/system-specific code from becoming an eager dependency of the active scientific core while preserving the existing reachability public names.
+The purpose is architectural, not scientific: presentation, synthetic/system-specific, and unrelated validation trees should not become eager dependencies of active core imports. Every existing facade public name remains available.
 
 ## Active architectural role
 
@@ -40,9 +40,9 @@ The three facades are operators within the current integrated mainline:
 - **traversability** supplies IBD/IBE/barrier/pathwise ecological constraints used to construct or reject transitions;
 - **validation** tests whether occurrence, genetic or directional evidence supports, rejects or fails to identify a declared rule/world.
 
-Finite-world, relaxation-family and temporal implementations remain internal modules exposed through `eog.v2.reachability`. They are components of one reachability estimand family, not separate public EOG subdisciplines.
+Finite-world, relaxation-family and temporal implementations remain internal modules exposed through `eog.v2.reachability`. Occurrence-rule compatibility remains behind `eog.v2.traversability`; independent evidence families remain behind `eog.v2.validation`. They are components of one method architecture, not separate public EOG subdisciplines.
 
-Do not create another top-level package for watershed, probability-set, temporal-flow or reconstructability ideas unless the finite core demonstrates a genuinely separate reusable estimand.
+Do not create another top-level package for watershed, probability-set, temporal-flow or reconstructability ideas unless a genuinely separate reusable estimand appears.
 
 ## Prospective reachability surface
 
@@ -70,7 +70,7 @@ Commands whose public name begins with `eog-v2-` continue to route through `eog.
 - `eog-v2-occurrence-freeze`;
 - `eog-v2-occurrence-validate`.
 
-No finite-world, basin-merge or temporal-flow CLI is added at this stage. The scientific APIs should stabilize before another command surface is justified.
+No finite-world, basin-merge or temporal-flow CLI is added at this stage. Scientific APIs should stabilize before another command surface is justified.
 
 ## Compatibility boundary
 
@@ -81,9 +81,10 @@ Existing implementation modules remain in place because frozen workflows and rep
 3. reuse first-passage, occurrence-compatibility and transition logic rather than duplicating it;
 4. keep new prospective names off the compatibility package root unless compatibility requires them;
 5. keep presentation/system-specific code out of eager scientific-core imports;
-6. search all frozen reproduction paths before any physical module move/delete;
-7. preserve compatibility aliases where needed;
-8. let package CI prove that cleanup did not alter scientific code paths.
+6. keep independent validation families decoupled until requested;
+7. search frozen reproduction paths before any physical module move/delete;
+8. preserve compatibility aliases where needed;
+9. let package CI prove cleanup did not alter scientific code paths.
 
 A later major-version migration may relocate internals only when release notes, compatibility aliases and frozen reproduction paths are handled explicitly.
 
@@ -98,7 +99,7 @@ A later major-version migration may relocate internals only when release notes, 
 7. Cleanup must not change frozen benchmark inputs, results, seeds, fingerprints, promotion gates or claim directions.
 8. Exact finite-universe exclusion remains labelled as finite-universe coverage, not universal ecological impossibility.
 9. Scalar relaxation levels are valid only inside predeclared monotone one-dimensional families.
-10. New temporal summaries describe declared transition structure, not observed historical movement events.
+10. Temporal summaries describe declared transition structure, not observed historical movement events.
 
 ## Scientific boundary
 
