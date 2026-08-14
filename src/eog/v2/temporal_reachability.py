@@ -1,11 +1,11 @@
 """Time-varying finite-world reachability for the active EOG mainline.
 
 This module adds the smallest temporal layer needed to turn a static finite world into
-an ordered sequence of already-declared transition operators.  It does not fit time,
+an ordered sequence of already-declared transition operators. It does not fit time,
 calibrate transition support, infer historical dates, or create a new process model.
 
-Each temporal world preserves one operator per declared transition interval.  Source
-mass is injected only at the initial state and is never re-injected.  The world-set
+Each temporal world preserves one operator per declared transition interval. Source
+mass is injected only at the initial state and is never re-injected. The world-set
 summary retains every world trajectory, reports exact-time support envelopes, and
 classifies cumulative reachability by declared time as reachable in all worlds,
 contingent, or robustly unreachable over the exhaustively enumerated temporal world
@@ -46,7 +46,7 @@ class TemporalWorld:
     """One declared time-ordered transition world.
 
     ``time_labels`` label state snapshots and therefore contain one more entry than
-    ``operators``.  They are ordered labels only; no calendar-time or equal-duration
+    ``operators``. They are ordered labels only; no calendar-time or equal-duration
     interpretation is implied.
     """
 
@@ -75,25 +75,39 @@ class TemporalWorld:
             raise ValueError("all temporal operators must share the same node IDs and order")
         object.__setattr__(self, "operators", operators)
 
-        sources = tuple(str(value).strip() for value in self.source_ids)
-        if not sources or any(not value for value in sources) or len(set(sources)) != len(sources):
+        declared_sources = tuple(str(value).strip() for value in self.source_ids)
+        if (
+            not declared_sources
+            or any(not value for value in declared_sources)
+            or len(set(declared_sources)) != len(declared_sources)
+        ):
             raise ValueError("source_ids must contain unique non-empty node IDs")
-        missing = set(sources).difference(node_ids)
+        missing = set(declared_sources).difference(node_ids)
         if missing:
             raise ValueError(f"source_ids are outside the temporal node universe: {sorted(missing)}")
-        ordered_sources = tuple(node_id for node_id in node_ids if node_id in set(sources))
-        object.__setattr__(self, "source_ids", ordered_sources)
 
         if self.source_weights is None:
-            weights = np.full(len(ordered_sources), 1.0 / len(ordered_sources), dtype=float)
+            declared_weights = np.full(
+                len(declared_sources), 1.0 / len(declared_sources), dtype=float
+            )
         else:
-            declared = np.asarray(self.source_weights, dtype=float)
-            if declared.shape != (len(ordered_sources),):
-                raise ValueError("source_weights must contain one value per source")
-            if not np.isfinite(declared).all() or np.any(declared < 0.0) or float(np.sum(declared)) <= 0.0:
+            declared_weights = np.asarray(self.source_weights, dtype=float)
+            if declared_weights.shape != (len(declared_sources),):
+                raise ValueError("source_weights must contain one value per declared source")
+            if (
+                not np.isfinite(declared_weights).all()
+                or np.any(declared_weights < 0.0)
+                or float(np.sum(declared_weights)) <= 0.0
+            ):
                 raise ValueError("source_weights must be finite, non-negative, and sum to > 0")
-            weights = declared / np.sum(declared)
-        object.__setattr__(self, "source_weights", tuple(float(value) for value in weights))
+            declared_weights = declared_weights / np.sum(declared_weights)
+
+        weight_by_source = dict(zip(declared_sources, declared_weights, strict=True))
+        source_set = set(declared_sources)
+        ordered_sources = tuple(node_id for node_id in node_ids if node_id in source_set)
+        ordered_weights = tuple(float(weight_by_source[node_id]) for node_id in ordered_sources)
+        object.__setattr__(self, "source_ids", ordered_sources)
+        object.__setattr__(self, "source_weights", ordered_weights)
 
     @property
     def node_ids(self) -> tuple[str, ...]:
@@ -214,14 +228,14 @@ def build_temporal_flow_set(
     """Propagate an exhaustively declared finite set of time-varying worlds.
 
     The function assumes the supplied worlds are the temporal world universe to be
-    compared.  It does not infer their compatibility from later observations.  All
+    compared. It does not infer their compatibility from later observations. All
     worlds must share node IDs, time labels and initial source IDs so that differences
     in the output represent transition-world uncertainty rather than a changing anchor
     definition.
 
     Reachability classes are cumulative-by-time: once a node has positive support in a
     world, that world counts it as reached at later declared times even if exact-time
-    mass subsequently leaves the node.  Exact-time support is retained separately in
+    mass subsequently leaves the node. Exact-time support is retained separately in
     ``mass_by_world`` and the lower/upper mass envelopes.
     """
 
