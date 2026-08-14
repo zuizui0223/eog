@@ -46,7 +46,7 @@ Treat the forward mapping schematically as `F(w) -> O`. The inverse object is
 
 `W(O) = { w : F(w) is compatible with O }`.
 
-World reconstructability asks how tightly `O` constrains this set. A new occurrence, surveyed absence, temporal observation, movement observation or independent genetic datum can reduce `W(O)`; a useful survey target is therefore one expected to discriminate among still-compatible worlds.
+World reconstructability asks how tightly `O` constrains this set. A new occurrence, temporal occurrence, surveyed absence under an explicit detection model, movement observation or independent genetic datum can reduce `W(O)`; a useful survey target is therefore one expected to discriminate among still-compatible worlds.
 
 ## Distributional-watershed interpretation
 
@@ -119,7 +119,7 @@ The root `eog` API remains the compatibility surface for environmental geometry,
 
 `eog.v2` remains a compatibility namespace for the already implemented reachability, traversability and validation facades. These modules become operators supporting the integrated mainline rather than separate competing scientific stories.
 
-- `eog.v2.reachability` — transition propagation, first passage, flux, graph diagnostics, finite-world reconstruction, declared finite-family basin merge and finite time-varying world-flow sets;
+- `eog.v2.reachability` — transition propagation, first passage, flux, graph diagnostics, finite-world reconstruction, declared finite-family basin merge, finite time-varying world-flow sets and positive temporal-world reconstruction;
 - `eog.v2.traversability` — geographic/environmental transition constraints and pathwise ecological continuity;
 - `eog.v2.validation` — independent occurrence/genetic/evidence validation.
 
@@ -145,101 +145,58 @@ Submission bundles, figures and journal-specific material preserve publication p
 8. A historical negative result is evidence, not dead code to be erased.
 9. A new prospective API does not automatically belong on the compatibility package root.
 
-## Minimal finite-core program
+## Finite-core checkpoints
 
-Do not begin with a new SPDE, PDE, ABM or deep graph model. First prove the integrated architecture on a small finite graph with exact enumeration of a finite world set:
+The exact finite-world core, declared relaxation-family basin merge and finite archetype matrix are implemented and pass known-truth tests. The finite core can:
 
-1. forward `world -> transition operator -> occurrence-compatible reachability envelope`;
-2. inverse `occurrence configuration -> compatible world set`;
-3. probability/support-distribution set retained by world;
-4. basin merge / minimum-relaxation diagnostic;
-5. separate IBD and IBE constraints;
-6. reconstructability diagnostic;
-7. robust-impossibility classification;
-8. observation/survey discrimination among compatible worlds.
+- reconstruct the exact compatible world set from positive occurrences;
+- preserve world-indexed support-flow distributions rather than averaging worlds;
+- classify reachable-in-all / contingent / robustly-unreachable states over an exhaustively enumerated finite universe;
+- keep geographic/IBD, environmental/IBE and barrier relaxation axes separate;
+- retain non-dominated alternative explanations;
+- quantify compatible-world contraction after new positive observations;
+- distinguish first-possible from first-robust basin merge under declared analytical variants;
+- preserve rare low-support possibilities, branching/reconvergence and robust exclusions under declared universe expansion.
 
-The first success condition is deliberately conservative:
-
-> **When multiple genuinely different worlds produce the same observed distribution, EOG must preserve them as a set instead of manufacturing one historical answer.**
-
-## Finite-core implementation checkpoint — 2026-08-14
-
-The exact-enumeration core is implemented behind the existing `eog.v2.reachability` facade. It composes existing first-passage and occurrence-compatibility operators instead of duplicating them.
-
-Implemented in the finite core:
-
-- a `FiniteWorld` declaration containing a frozen transition operator, observed fixed sources and separately declared geographic/environmental/barrier relaxation axes;
-- a positive-support forward reachability envelope for each world;
-- exhaustive inverse enumeration of `W(O)` with explicit compatible and incompatible world IDs;
-- an `identifiable` flag that is true only when exactly one declared world remains compatible;
-- world-indexed propagation results and lower/upper envelopes without averaging away world identity;
-- exact finite-universe node classes: `reachable_in_all`, `contingent`, and `robustly_unreachable`;
-- a non-dominated relaxation frontier that preserves geographic/IBD, environmental/IBE and barrier axes rather than inventing one weighted water level;
-- reconstructability contraction after adding a new positive occurrence;
-- positive-occurrence candidate ranking by how strongly an observation would split the still-compatible world set;
-- a `MonotoneRelaxationFamily` contract for cases where a one-dimensional relaxation sequence is scientifically declared in advance;
-- basin-merge diagnostics that distinguish `first_possible_level` from `first_robust_level` across a complete set of declared analytical variants.
-
-The one-dimensional family is accepted only when raw transition support never decreases with increasing `lambda`, node/source/loss contracts remain fixed within analytical variants, and geographic/environmental/barrier relaxation coordinates are each non-decreasing. This keeps `lambda` an auditable declared coordinate instead of an inferred weighted blend of IBD and IBE.
-
-The finite-universe certificates remain deliberately narrow:
-
-- `robustly_unreachable` means unreachable in every **enumerated compatible world**, not impossible in nature;
-- `first_robust_level` means every **declared analytical variant in the finite family** supports joint realization at that level, not that nature used that relaxation or route.
-
-## Finite archetype falsification checkpoint
-
-The finite core passes one compact known-truth matrix using the same operators throughout. The matrix covers:
-
-- geographic/IBD-dominated rescue;
-- environmental/IBE-dominated rescue;
-- barrier-dominated rescue;
-- an intermediate niche-desert configuration with both environmental-crossing and geographic-jump explanations retained on the non-dominated frontier;
-- stepping-stone versus direct-route underidentification followed by compatible-world contraction after a discriminating positive occurrence;
-- a rare long-distance jump with positive but very low support, retained as possible rather than labelled impossible;
-- branching and route reconvergence;
-- analytical-representation ambiguity with distinct first-possible and first-robust basin-merge levels;
-- a robust exclusion that survives explicit expansion of the finite admissible-world universe.
-
-This is known-truth structural validation, not empirical superiority evidence.
+These are known-truth structural capabilities, not empirical superiority claims.
 
 ## Finite temporal-flow checkpoint
 
-The first time-varying layer is implemented without introducing calibrated time or a new process model.
+A `TemporalWorld` is an ordered sequence of already-declared `DynamicTransitionOperator` objects over a fixed node/source universe. Source mass is injected only at the initial state and each interval-specific operator is applied once in declared order.
 
-A `TemporalWorld` is an ordered sequence of already-declared `DynamicTransitionOperator` objects over a fixed node/source universe. Source mass is injected only at the initial state. Each interval-specific operator is applied once in declared order.
+`build_temporal_flow_set` retains one exact-time support trajectory per declared temporal world and reports exact-time support envelopes plus cumulative reached-by-time structure. It distinguishes `reachable_in_all`, `contingent` and `robustly_unreachable` states at each declared time and retains first-arrival/loss diagnostics by world.
 
-`build_temporal_flow_set` retains one exact-time support trajectory per declared temporal world and reports:
-
-- exact-time mass by world;
-- lower/upper exact-time support envelopes;
-- cumulative `reached by time` state per world;
-- `reachable_in_all`, `contingent` and `robustly_unreachable` node sets at each declared time;
-- first-arrival step and loss support by world;
-- the finite-universe certificate `exhaustive_declared_temporal_world_set`.
-
-Known-truth tests establish that:
-
-- the same transitions in a different temporal order can produce different reachability;
-- a bridge must open in the correct order to transmit support downstream;
-- source mass is not silently re-injected at later steps;
-- exact-time mass and cumulative reachability-by-time remain distinct;
-- target reachability can be robust across worlds even when support magnitudes differ;
-- a hard temporal barrier remains robustly unreachable across the declared temporal world set.
+Known-truth tests confirm temporal-order dependence, temporary bridge opening, no source reinjection, exact-time versus reached-by-time separation, robust reachability across support magnitudes and hard temporal barriers.
 
 Time labels are ordered state labels only. They are not calibrated calendar time, generation length or demographic persistence.
+
+## Positive temporal-world reconstruction checkpoint
+
+Time-stamped **positive** occurrences now constrain the finite temporal-world set through `reconstruct_temporal_worlds`.
+
+An observation `(node, time)` is treated only as the necessary condition that the node must have been reached **by** that declared time. It is not treated as an exact-time occupancy likelihood or persistence model. Non-detection remains non-evidence.
+
+The temporal inverse layer:
+
+- retains multiple temporal histories when they all satisfy the declared positive observations;
+- eliminates worlds that reach an observed endpoint too late;
+- reports unsupported positive observations per world;
+- quantifies compatible temporal-world contraction after additional positive temporal evidence;
+- canonicalizes observation order for deterministic fingerprints;
+- preserves very low positive support above the declared tolerance;
+- does not penalize a world merely because an unobserved node is also reachable.
+
+The finite certificate is `exhaustive_declared_temporal_world_set_positive_observations`; it applies only to the declared temporal world universe.
 
 ## Current boundary and next gate
 
 Still outside the integrated core:
 
-- unobserved/hypothetical historical source states;
 - surveyed-absence likelihoods and detection models;
-- inverse reconstruction of temporal worlds from time-stamped observations;
 - calibrated calendar time or externally justified transition durations;
-- arbitrary post-hoc scalarization of geographic, environmental and barrier axes when no one-dimensional family was declared;
+- unobserved/hypothetical historical source states;
 - continuous or enormous world spaces requiring optimization/sampling/certification rather than exact enumeration;
 - large-raster forecasting;
 - empirical promotion claims.
 
-The next finite methodological gate should connect **time-stamped positive observations to temporal-world compatibility/reconstructability**. It must continue to treat non-detection as unresolved unless an explicit detection model is declared. Only after that gate is stable should large-raster or empirical temporal forecasting be opened.
+Before opening absence/detection or empirical forecasting, the next finite gate is **positive temporal survey discrimination**: rank candidate `(node, time)` positive observations by how strongly they split the still-compatible temporal worlds. This should reuse the temporal reconstruction layer, preserve positive-only semantics, and add no new transition implementation, top-level namespace, CLI or workflow family.
