@@ -2,37 +2,17 @@
 
 ## Status after the 2026-08 cleanup
 
-This ledger preserves completed dynamic island-reachability development evidence. It does **not** reopen frozen EOG v0.1/v2 outcomes.
+This ledger preserves completed dynamic reachability evidence without reopening frozen adverse, null, failed or indeterminate results. The active repository direction is the integrated one in [`development_mainline.md`](development_mainline.md): distributional realizability, world-indexed probability/support flow, and reconstruction of compatible distribution-forming worlds.
 
-The earlier island/genetic promotion sequence is no longer the repository-wide development mainline. Existing v2 components are retained as reachability, traversability and validation **operators** under the integrated direction in [`development_mainline.md`](development_mainline.md): distributional realizability, probability-set dynamics and reconstruction of compatible distribution-forming worlds.
-
-Unfinished historical items remain valid claim-specific gates only if those claims are resumed. They must not automatically generate another dataset search, top-level method line, public namespace, CLI or workflow family.
-
-## Completed implementation gates
-
-- [x] V/R/C/P/O estimands and prohibited terminology frozen before empirical genetics.
-- [x] Directed sub-stochastic dynamic reachability core.
-- [x] Finite-horizon first-passage support and source attribution.
-- [x] Integrated edge flux, route entropy and bridge-node importance.
-- [x] Separate target-capture and persistence area effects.
-- [x] Deterministic synthetic archipelago generator.
-- [x] Neutral drift/migration simulator.
-- [x] Fixed-source occurrence comparator development + one-time independent confirmation.
-- [x] Genetic IBD/IBE/current-flow negative controls.
-- [x] Exact-eventual first-passage implementation for horizon-free long-term genetic development.
-- [x] Directional-FST boundary demonstrated in development.
-- [x] Hyperparameter-free FST-oriented candidate implemented.
-- [x] Nested source-expansion leakage audit implemented.
+Historical claim-specific gates remain available only when the integrated method needs that evidence. They must not automatically trigger another dataset search, top-level method line, public namespace, CLI or workflow family.
 
 ## Frozen evidence boundary retained
 
-The fixed-source synthetic confirmation passed only where dynamic bottleneck/directionality information was omitted by simpler references. Source-expansion, dynamic-process and several empirical validation attempts also produced adverse, null or indeterminate outcomes. Those results and their fingerprints remain evidence and are not retuned by the integrated mainline.
-
-Historical claim-specific gates such as additional genetic confirmation, independent empirical promotion, or graph-native presentation should be resumed only when the integrated method requires that evidence, not to search for a favourable result.
+Earlier fixed-source synthetic work supported dynamic EOG only where bottleneck/directionality information was omitted by simpler references. Source-expansion, dynamic-process and several empirical/genetic validations also produced adverse, null or indeterminate outcomes. Those results, contracts and fingerprints remain preserved and are not retuned by the integrated mainline.
 
 ## Integrated finite core — completed
 
-The integrated finite core is implemented behind the explicit `eog.v2.reachability` facade:
+Implemented behind the explicit `eog.v2.reachability` facade:
 
 - [x] finite forward reachability envelopes;
 - [x] exact inverse reconstruction of compatible worlds from positive occurrences;
@@ -44,82 +24,65 @@ The integrated finite core is implemented behind the explicit `eog.v2.reachabili
 - [x] positive-occurrence survey discrimination;
 - [x] declared monotone one-dimensional relaxation families;
 - [x] first-possible versus first-robust basin merge across analytical variants;
-- [x] package-root cleanup that keeps new prospective APIs on owning facades.
+- [x] finite archetype matrix covering IBD, IBE, hard barriers, niche deserts, stepping stones, rare low-support jumps, branching/reconvergence, analytical ambiguity and universe expansion.
 
-These are **finite known-truth capabilities**, not empirical promotion claims.
+These are finite known-truth capabilities, not empirical promotion claims.
 
-## Finite archetype matrix — passed
+## Finite temporal core — completed
 
-The compact known-truth matrix in `benchmarks/finite_world_archetype_matrix.py` / `tests/test_finite_world_archetype_matrix.py` distinguishes the core failure modes required by the mainline.
+The reachability facade now supports ordered finite temporal worlds without introducing calibrated calendar time or a second process family.
 
-It preserves geographic/IBD, environmental/IBE and barrier rescue distinctions; alternative niche-desert explanations; stepping-stone/direct-route underidentification; rare low-support possibilities; branching/reconvergence; analytical ambiguity; and robust exclusion under explicit finite-universe expansion.
-
-## Finite temporal flow — implemented
-
-The reachability facade supports ordered finite temporal worlds without introducing calibrated calendar time or a second dynamic model family.
-
-- [x] `TemporalWorld`: fixed node/source universe plus one transition operator per declared interval;
-- [x] initial source mass injected once only;
-- [x] sequential application of time-specific operators;
-- [x] exact-time support trajectory retained per world;
-- [x] cumulative `reached by time` state distinct from exact-time mass/persistence;
+- [x] `TemporalWorld` with one declared transition operator per interval;
+- [x] source mass injected once only;
+- [x] exact-time support trajectories and cumulative reached-by-time states kept distinct;
 - [x] lower/upper exact-time support envelopes across temporal worlds;
-- [x] `reachable_in_all`, `contingent`, and `robustly_unreachable` classes at every declared time;
-- [x] first-arrival and lost-mass diagnostics per world;
-- [x] source-ID/source-weight canonicalization preserving source identity;
-- [x] known-truth temporal-order, bridge-opening, support-magnitude and hard-barrier contracts.
+- [x] `reachable_in_all`, `contingent`, and `robustly_unreachable` node classes by declared time;
+- [x] first-arrival and lost-mass diagnostics;
+- [x] positive temporal-world reconstruction from reached-by-time observations;
+- [x] elimination of worlds that reach an observed endpoint too late;
+- [x] explicit preservation of multiple compatible temporal histories;
+- [x] positive temporal survey discrimination without inventing a detection model;
+- [x] transition-network summaries by interval: robust, contingent and inactive directed edges;
+- [x] possible and robust edge-opening / edge-closure events;
+- [x] raw-support lower/upper envelopes for transition edges;
+- [x] lazy v2 scientific facades so presentation, system-specific and unrelated validation trees are not eager core dependencies.
 
-The certificate `exhaustive_declared_temporal_world_set` is finite-universe coverage only. Time labels are ordered state labels, not calibrated calendar time or generations.
+Temporal labels remain ordered state labels, not calibrated dates or generations. Edge opening is a property of the declared transition world, not evidence that historical movement occurred then.
 
-## Positive temporal-world reconstruction — implemented
+## Current active gate — temporal world-universe monotonicity
 
-Time-stamped positive occurrences act as necessary reached-by-time constraints on the finite temporal world set.
+The transition-landscape layer must now obey the same complexity-monotone claim rule as the static finite core.
 
-- [x] worlds that reach every observed node by its declared observation time are retained;
-- [x] worlds that reach the same final endpoint too late are eliminated;
-- [x] multiple temporal histories remain explicitly underidentified when all satisfy the observations;
-- [x] unsupported positive observations are reported per world;
-- [x] observation order is canonicalized for deterministic fingerprints;
-- [x] low but positive support remains compatible above the declared tolerance;
-- [x] unobserved reachable nodes are not treated as absences;
-- [x] reconstruction contraction is measured after added positive temporal evidence.
+For nested declared temporal world universes `W1 subset W2`, exact finite logic requires:
 
-This remains a **necessary reached-by-time test**, not exact-time occupancy or persistence inference. Non-detection has no negative evidential meaning here.
+- robust transition edges can only stay the same or disappear;
+- possible transition edges can only stay the same or appear;
+- edges inactive in every world can only stay inactive or become possible;
+- a stronger exclusion/robustness claim must never be created merely by adding admissible worlds.
 
-## Positive temporal survey discrimination — implemented
+The implementation compares two fingerprint-preserving nested temporal transition-world sets and reports:
 
-The temporal layer can rank candidate `(node, time)` positive observations by how strongly a positive detection would split the still-compatible temporal worlds.
+- worlds added to the universe;
+- robust edges lost after expansion;
+- possible edges gained after expansion;
+- all-world-inactive edges lost after expansion;
+- explicit monotonicity certificates for robust, possible and exclusion classes.
 
-- [x] cumulative reached-by-time support is reused rather than recomputed through a new process model;
-- [x] positive-only interpretation is preserved;
-- [x] candidates unsupported by every remaining world are separated from genuinely discriminating candidates;
-- [x] no expected information-gain claim is made because no detection-probability model exists;
-- [x] no new top-level namespace, CLI or workflow family was added.
+Shared world IDs must retain identical fingerprints, time/node contracts and support tolerance. The comparison is an exact finite-set logical certificate, not a Monte Carlo robustness estimate.
 
-## Current active gate — temporal transition landscape
+## Next gate after monotonicity
 
-The next structural layer is to summarize the **transition network itself** through time, rather than only cumulative reached nodes.
+Do not jump to a new empirical dataset or large-raster forecast. Once temporal universe monotonicity is stable, inspect whether the existing finite outputs already answer the core mainline claims without another new operator. Only add another layer if it closes a concrete missing estimand. Candidate future needs remain:
 
-For every declared interval and finite temporal-world set, classify directed transitions as:
-
-- robustly active — positive support in every declared world;
-- contingent — positive support in some but not all worlds;
-- inactive across the declared universe — zero support in every world.
-
-Then record possible and robust edge-opening / edge-closure events between adjacent intervals.
-
-This gate must:
-
-- use existing frozen transition operators without fitting a new model;
-- preserve low-positive support as possible rather than calling it impossible;
-- keep exact support lower/upper envelopes associated with the declared world set;
-- qualify robust/possible corridor language by exhaustive finite-universe coverage;
-- avoid interpreting an edge opening as a historical movement event;
-- remain on `eog.v2.reachability` only, with no new CLI or confirmation-workflow family.
+- positive evidence that discriminates transition/corridor hypotheses rather than only node reachability;
+- surveyed absences only after an explicit detection model exists;
+- continuous/enormous world spaces only with an explicit coverage/certification strategy;
+- calibrated time only if transition durations become a scientific estimand;
+- large-raster forecasting only after finite-world contracts remain intact.
 
 ## Deferred expansion
 
-Remain deferred until the finite transition-landscape layer is stable:
+Still deferred:
 
 - surveyed absences and detection models;
 - calibrated calendar time and transition durations;
