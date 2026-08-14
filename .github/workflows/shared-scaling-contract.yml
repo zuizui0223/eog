@@ -2,6 +2,12 @@ name: Shared scaling contract
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/shared-scaling-contract.yml"
+      - "benchmarks/shared_scaling_contract.py"
+      - "tests/test_comparative.py"
+      - "src/eog/comparative.py"
+      - "src/eog/geometry.py"
   workflow_dispatch:
 
 jobs:
