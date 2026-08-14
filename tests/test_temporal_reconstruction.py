@@ -30,13 +30,15 @@ def _empty(node_ids):
 
 
 def _early_and_late_worlds():
-    nodes = ("A", "B", "C")
+    nodes = ("A", "B", "C", "D")
     ab = _operator(nodes, (("A", "B", 1.0),))
     bc = _operator(nodes, (("B", "C", 1.0),))
+    ad = _operator(nodes, (("A", "D", 1.0),))
+    db = _operator(nodes, (("D", "B", 1.0),))
     empty = _empty(nodes)
     return (
         TemporalWorld("early", ("t0", "t1", "t2", "t3"), (ab, bc, empty), ("A",)),
-        TemporalWorld("late", ("t0", "t1", "t2", "t3"), (empty, ab, bc), ("A",)),
+        TemporalWorld("late", ("t0", "t1", "t2", "t3"), (ad, db, bc), ("A",)),
     )
 
 
@@ -69,10 +71,10 @@ def test_earlier_time_stamp_eliminates_a_world_that_reaches_the_same_endpoint_la
 
 def test_positive_observations_are_canonical_and_input_order_does_not_change_fingerprint():
     worlds = _early_and_late_worlds()
-    first = reconstruct_temporal_worlds(worlds, (("C", "t3"), ("B", "t1")))
-    second = reconstruct_temporal_worlds(worlds, (("B", "t1"), ("C", "t3")))
+    first = reconstruct_temporal_worlds(worlds, (("C", "t3"), ("A", "t0")))
+    second = reconstruct_temporal_worlds(worlds, (("A", "t0"), ("C", "t3")))
 
-    assert first.observations == (("B", "t1"), ("C", "t3"))
+    assert first.observations == (("A", "t0"), ("C", "t3"))
     assert first == second
 
 
@@ -129,7 +131,7 @@ def test_temporal_observation_contract_rejects_invalid_or_duplicate_rows():
     with pytest.raises(ValueError, match="unique"):
         reconstruct_temporal_worlds(worlds, (("C", "t3"), ("C", "t3")))
     with pytest.raises(ValueError, match="outside"):
-        reconstruct_temporal_worlds(worlds, (("D", "t3"),))
+        reconstruct_temporal_worlds(worlds, (("E", "t3"),))
     with pytest.raises(ValueError, match="undeclared"):
         reconstruct_temporal_worlds(worlds, (("C", "t9"),))
 
