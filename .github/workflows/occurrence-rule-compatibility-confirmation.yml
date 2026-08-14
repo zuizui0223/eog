@@ -4,9 +4,9 @@ on:
   pull_request:
     paths:
       - ".github/workflows/occurrence-rule-compatibility-confirmation.yml"
+      - "src/eog/dynamic_island_reachability.py"
       - "src/eog/v2/occurrence_constraints.py"
       - "src/eog/v2/traversability.py"
-      - "src/eog/v2/__init__.py"
       - "benchmarks/occurrence_rule_compatibility_confirmation.py"
       - "benchmarks/occurrence_rule_compatibility_confirmation_contract.json"
       - "tests/test_occurrence_rule_compatibility.py"
