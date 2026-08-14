@@ -4,7 +4,7 @@ EOG is an auditable ecological framework for asking a broader question than loca
 
 > **Given an observed distribution, what geographic–environmental distribution-forming structures are compatible with it, and which structures remain possible, unresolved, or excluded?**
 
-The repository contains a frozen v0.1 evidence line plus prospective reachability/traversability operators. The active development direction is now to integrate those operators into a single **distributional-realizability / world-reconstruction** framework rather than continue adding parallel EOG variants.
+The repository contains a frozen v0.1 evidence line plus prospective reachability/traversability operators. The active development direction is to integrate those operators into a single **distributional-realizability / world-reconstruction** framework rather than continue adding parallel EOG variants.
 
 See [`docs/development_mainline.md`](docs/development_mainline.md) for the active scientific and cleanup contract.
 
@@ -52,7 +52,7 @@ The watershed language is structural, not decorative:
 
 Geographic isolation (IBD-like) and environmental isolation (IBE-like) are retained as separate axes rather than being collapsed automatically into one weighted distance.
 
-This integrated world-set / probability-set engine is **active development**, not yet a completed or empirically promoted EOG claim.
+The **exact finite-world core is implemented**: it reconstructs compatible declared worlds, retains world-indexed support flows, classifies finite-universe robust/contingent reachability, preserves non-dominated geographic/environmental/barrier relaxation explanations, measures world-set contraction after new positive occurrences, and supports declared monotone basin-merge families. Large-raster/time-dependent forecasting, detection/absence models, continuous world spaces and empirical promotion remain active development rather than completed EOG claims.
 
 ## Implemented layers
 
@@ -93,11 +93,11 @@ Bridge analysis evaluates declared geographic, environmental and barrier transit
 
 The existing v2 namespace is retained as a compatibility layer with three facades:
 
-- `eog.v2.reachability` — dynamic transition operators, first passage, flux and graph diagnostics;
+- `eog.v2.reachability` — dynamic transition operators, first passage, flux, graph diagnostics, exact finite-world reconstruction and declared basin-merge diagnostics;
 - `eog.v2.traversability` — geographic/environmental transition constraints and pathwise ecological continuity;
 - `eog.v2.validation` — independent occurrence, genetic and directional-evidence validation.
 
-These are now treated as operators supporting the integrated mainline, not as separate competing EOG identities. Existing v2 quantities remain uncalibrated model support unless independent calibration justifies stronger probability/process language.
+These are operators supporting the integrated mainline, not separate competing EOG identities. New prospective APIs stay on their explicit owning facade instead of widening the `eog.v2` package root. Existing v2 quantities remain uncalibrated model support unless independent calibration justifies stronger probability/process language.
 
 ## Frozen evidence is preserved
 
@@ -122,6 +122,20 @@ The cleanup policy is intentionally conservative:
 - `benchmarks/frozen/`, manifests, fingerprints and evidence documents are preservation targets;
 - manuscript/submission assets preserve publication provenance and do not define package architecture;
 - new scientific ideas should reuse existing operators instead of creating another top-level EOG branch, module family or workflow suite.
+
+## Current falsification gate
+
+Before opening another empirical dataset or expanding to large rasters/time, the finite core is tested as one system on `benchmarks/finite_world_archetype_matrix.py`. The matrix is deliberately a benchmark/test-layer object rather than another package namespace. It checks whether the same finite-world operators can preserve:
+
+- geographic/IBD, environmental/IBE and barrier-dominated rescue as separate axes;
+- alternative geographic-jump versus environmental-crossing explanations of an intermediate niche desert;
+- stepping-stone versus direct-route underidentification and contraction after a discriminating positive occurrence;
+- a rare long-distance jump that remains possible at very low support;
+- branching and route reconvergence;
+- analytical-representation-dependent versus robust basin merge;
+- robust exclusion under explicit finite-universe expansion.
+
+Passing this matrix is a structural falsification gate, not empirical superiority evidence.
 
 ## Installation
 
