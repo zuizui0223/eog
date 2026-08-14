@@ -58,10 +58,10 @@ The watershed language is a structural analogy that should be implemented only w
 - **confluence** — route reconvergence;
 - **bottleneck** — a transition or state whose removal/constraint sharply reduces reachability;
 - **divide** — a boundary between otherwise disconnected reachable basins;
-- **water level `lambda`** — declared relaxation of ecological, geographic, barrier, temporal or analytical constraints;
-- **basin merge** — the first relaxation level at which previously disconnected occurrence basins become jointly realizable.
+- **water level `lambda`** — a predeclared one-dimensional monotone relaxation coordinate; it must not be manufactured by weighting unrelated ecological axes after seeing outcomes;
+- **basin merge** — the first declared relaxation level at which previously separated occurrence groups become jointly realizable.
 
-The minimum merge level between occurrence groups is a minimum-required-relaxation diagnostic. It is not evidence that the corresponding historical event actually occurred.
+The minimum merge level between occurrence groups is a minimum-required-relaxation diagnostic. It is not evidence that the corresponding historical event actually occurred. When several analytical representations are declared at every level, keep separate the first level where merge is possible in at least one representation from the first level where it is supported across all declared representations.
 
 ## IBD and IBE remain separate axes
 
@@ -71,6 +71,8 @@ Geographic isolation and environmental isolation must not be collapsed premature
 - `D_env` represents the environmental / IBE axis.
 
 A long geographic jump and a large environmental transition are different ecological explanations. EOG should preserve that distinction through transition construction, rescue analysis and validation.
+
+A scalar `lambda` is therefore valid only when a one-dimensional family has already been declared. It is not a license to estimate weights that combine `D_geo`, `D_env` and barrier terms into one post-hoc score.
 
 ## Mosaic to landscape
 
@@ -117,11 +119,11 @@ The root `eog` API remains the compatibility surface for environmental geometry,
 
 `eog.v2` remains a compatibility namespace for the already implemented reachability, traversability and validation facades. These modules become operators supporting the integrated mainline rather than separate competing scientific stories.
 
-- `eog.v2.reachability` — transition propagation, first passage, flux, graph diagnostics and finite-world reconstruction;
+- `eog.v2.reachability` — transition propagation, first passage, flux, graph diagnostics, finite-world reconstruction and declared finite-family basin merge;
 - `eog.v2.traversability` — geographic/environmental transition constraints and pathwise ecological continuity;
 - `eog.v2.validation` — independent occurrence/genetic/evidence validation.
 
-Do not add another top-level namespace for each new ecological idea.
+New prospective names should prefer the explicit owning facade. Do not keep widening the `eog.v2` package root merely for convenience.
 
 ### System-specific adapters and experiments
 
@@ -141,8 +143,9 @@ Submission bundles, figures and journal-specific material preserve publication p
 6. Compatibility imports may remain while public documentation stops promoting obsolete surfaces.
 7. Physical deletion of legacy modules is allowed only after repository search shows no frozen reproduction path depends on them and package CI remains green.
 8. A historical negative result is evidence, not dead code to be erased.
+9. A new prospective API does not automatically belong on the compatibility package root.
 
-## Minimal next implementation
+## Minimal finite-core program
 
 Do not begin with a new SPDE, PDE, ABM or deep graph model. First prove the integrated architecture on a small finite graph with exact enumeration of a finite world set:
 
@@ -163,7 +166,7 @@ Only after this finite, falsifiable core is stable should time-dependent large-r
 
 ## Finite-core implementation checkpoint — 2026-08-14
 
-The first exact-enumeration implementation is now being developed behind the existing `eog.v2.reachability` facade. It composes existing first-passage and occurrence-compatibility operators instead of duplicating them.
+The exact-enumeration core is implemented behind the existing `eog.v2.reachability` facade. It composes existing first-passage and occurrence-compatibility operators instead of duplicating them.
 
 Implemented in the finite core:
 
@@ -175,16 +178,23 @@ Implemented in the finite core:
 - exact finite-universe node classes: `reachable_in_all`, `contingent`, and `robustly_unreachable`;
 - a non-dominated relaxation frontier that preserves geographic/IBD, environmental/IBE and barrier axes rather than inventing one weighted water level;
 - reconstructability contraction after adding a new positive occurrence;
-- positive-occurrence candidate ranking by how strongly an observation would split the still-compatible world set.
+- positive-occurrence candidate ranking by how strongly an observation would split the still-compatible world set;
+- a `MonotoneRelaxationFamily` contract for cases where a one-dimensional relaxation sequence is scientifically declared in advance;
+- basin-merge diagnostics that distinguish `first_possible_level` from `first_robust_level` across a complete set of declared analytical variants.
 
-The finite-universe certificate is deliberately narrow: `robustly_unreachable` means unreachable in every **enumerated compatible world**, not impossible in nature.
+The one-dimensional family is accepted only when raw transition support never decreases with increasing `lambda`, node/source/loss contracts remain fixed within analytical variants, and geographic/environmental/barrier relaxation coordinates are each non-decreasing. This keeps `lambda` an auditable declared coordinate instead of an inferred weighted blend of IBD and IBE.
 
-Still outside this first core:
+The finite-universe certificates remain deliberately narrow:
+
+- `robustly_unreachable` means unreachable in every **enumerated compatible world**, not impossible in nature;
+- `first_robust_level` means every **declared analytical variant in the finite family** supports joint realization at that level, not that nature used that relaxation or route.
+
+Still outside this finite core:
 
 - unobserved/hypothetical historical source states;
 - surveyed-absence likelihoods and detection models;
 - temporal observations and calibrated calendar time;
-- scalar basin-merge water levels unless a one-dimensional relaxation family is declared in advance;
+- arbitrary post-hoc scalarization of geographic, environmental and barrier axes when no one-dimensional family was declared;
 - continuous or enormous world spaces requiring optimization/sampling/certification rather than exact enumeration;
 - empirical promotion claims.
 
