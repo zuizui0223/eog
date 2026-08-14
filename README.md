@@ -54,7 +54,9 @@ Geographic isolation (IBD-like) and environmental isolation (IBE-like) are retai
 
 The **exact finite-world core is implemented**: it reconstructs compatible declared worlds, retains world-indexed support flows, classifies finite-universe robust/contingent reachability, preserves non-dominated geographic/environmental/barrier relaxation explanations, measures world-set contraction after new positive occurrences, and supports declared monotone basin-merge families.
 
-The first **finite time-varying world-flow layer is also implemented**. A declared temporal world applies one transition operator per ordered interval, with source mass injected only at the initial state. EOG retains exact-time support by world and separately reports cumulative reachable-in-all / contingent / robustly-unreachable structure by declared time. These time labels are ordered states, not calibrated calendar time. Time-stamped observations are not yet used to reconstruct the compatible temporal-world set.
+The first **finite time-varying world-flow layer is also implemented**. A declared temporal world applies one transition operator per ordered interval, with source mass injected only at the initial state. EOG retains exact-time support by world and separately reports cumulative reachable-in-all / contingent / robustly-unreachable structure by declared time. These time labels are ordered states, not calibrated calendar time.
+
+Time-stamped **positive** occurrences can now be used as necessary `reached by time` constraints to reconstruct the compatible temporal-world set. This can eliminate worlds that reach the same final endpoint too late while preserving multiple temporal histories when the observations do not identify one. Non-detection is still not treated as absence, and persistence is not inferred from propagated mass.
 
 Large-raster forecasting, detection/absence models, continuous world spaces, calibrated time and empirical promotion remain active development rather than completed EOG claims.
 
@@ -97,7 +99,7 @@ Bridge analysis evaluates declared geographic, environmental and barrier transit
 
 The existing v2 namespace is retained as a compatibility layer with three facades:
 
-- `eog.v2.reachability` — dynamic transition operators, first passage, flux, graph diagnostics, exact finite-world reconstruction, declared basin-merge diagnostics, and finite time-varying world-flow sets;
+- `eog.v2.reachability` — dynamic transition operators, first passage, flux, graph diagnostics, exact finite-world reconstruction, declared basin-merge diagnostics, finite time-varying world-flow sets, and positive temporal-world reconstruction;
 - `eog.v2.traversability` — geographic/environmental transition constraints and pathwise ecological continuity;
 - `eog.v2.validation` — independent occurrence, genetic and directional-evidence validation.
 
@@ -139,7 +141,7 @@ The finite core is tested as one system on `benchmarks/finite_world_archetype_ma
 - analytical-representation-dependent versus robust basin merge;
 - robust exclusion under explicit finite-universe expansion.
 
-The temporal known-truth tests additionally check transition order, temporary bridge opening, no source reinjection, exact-time versus reached-by-time separation, robust reachability across support magnitudes, and hard temporal barriers.
+The temporal known-truth tests additionally check transition order, temporary bridge opening, no source reinjection, exact-time versus reached-by-time separation, robust reachability across support magnitudes, hard temporal barriers, and time-stamped positive observations that contract the temporal-world set without interpreting unobserved states as absences.
 
 Passing these tests is structural validation, not empirical superiority evidence.
 
