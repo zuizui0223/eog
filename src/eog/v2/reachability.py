@@ -25,6 +25,28 @@ from ..reachability_network_diagnostics import (
 )
 from ..reachability_visualization import build_dynamic_reachability_visualization_payload
 from ..synthetic_archipelago import SCENARIO_IDS, SyntheticArchipelagoScenario, build_synthetic_archipelago
+from .world_reconstruction import (
+    CandidateStatus,
+    FiniteWorld,
+    FiniteWorldFlowSet,
+    FiniteWorldReconstruction,
+    PositiveOccurrenceCandidate,
+    PositiveOccurrenceSurveyRanking,
+    ReconstructionUpdate,
+    RelaxationFrontier,
+    RelaxationPoint,
+    WorldCompatibility,
+    WorldFlowMember,
+    WorldNodeEnvelope,
+    WorldNodeStatus,
+    WorldReachableConfiguration,
+    build_world_flow_set,
+    compare_reconstructions,
+    forward_reachable_configuration,
+    minimum_relaxation_frontier,
+    rank_positive_occurrence_candidates,
+    reconstruct_compatible_worlds,
+)
 
 __all__ = [
     "DynamicReachabilityEdge",
@@ -48,4 +70,24 @@ __all__ = [
     "SCENARIO_IDS",
     "SyntheticArchipelagoScenario",
     "build_synthetic_archipelago",
+    "WorldNodeStatus",
+    "CandidateStatus",
+    "FiniteWorld",
+    "WorldReachableConfiguration",
+    "WorldCompatibility",
+    "FiniteWorldReconstruction",
+    "WorldFlowMember",
+    "WorldNodeEnvelope",
+    "FiniteWorldFlowSet",
+    "RelaxationPoint",
+    "RelaxationFrontier",
+    "ReconstructionUpdate",
+    "PositiveOccurrenceCandidate",
+    "PositiveOccurrenceSurveyRanking",
+    "forward_reachable_configuration",
+    "reconstruct_compatible_worlds",
+    "build_world_flow_set",
+    "minimum_relaxation_frontier",
+    "compare_reconstructions",
+    "rank_positive_occurrence_candidates",
 ]
