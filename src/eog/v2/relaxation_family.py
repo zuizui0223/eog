@@ -37,8 +37,8 @@ def _canonical_sha256(payload: object) -> str:
 
 def _finite_level(value: float) -> float:
     level = float(value)
-    if not np.isfinite(level):
-        raise ValueError("relaxation levels must be finite")
+    if not np.isfinite(level) or level < 0.0:
+        raise ValueError("relaxation levels must be finite and non-negative")
     return level
 
 
@@ -299,8 +299,6 @@ def infer_basin_merge(
     first_possible = possible_levels[0] if possible_levels else None
     first_robust = robust_levels[0] if robust_levels else None
 
-    # Monotonic-family validation means support should not disappear at higher lambda.
-    # Keep this explicit so future operator changes cannot silently break the contract.
     possible_flags = [row.possible for row in level_results]
     robust_flags = [row.robust for row in level_results]
     if any(previous and not current for previous, current in zip(possible_flags[:-1], possible_flags[1:])):
