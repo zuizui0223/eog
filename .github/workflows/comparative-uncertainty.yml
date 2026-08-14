@@ -2,6 +2,13 @@ name: Comparative uncertainty audit
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/comparative-uncertainty.yml"
+      - "benchmarks/comparative_uncertainty.py"
+      - "tests/test_uncertainty.py"
+      - "src/eog/uncertainty.py"
+      - "src/eog/comparative.py"
+      - "src/eog/geometry.py"
   workflow_dispatch:
 
 jobs:
