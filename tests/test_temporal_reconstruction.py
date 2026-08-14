@@ -95,7 +95,7 @@ def test_very_low_positive_support_remains_compatible_above_the_declared_toleran
     rare = TemporalWorld(
         "rare",
         ("t0", "t1"),
-        (_operator(nodes, (("A", "C", 1e-8),)),
+        (_operator(nodes, (("A", "C", 1e-8),)),),
         ("A",),
     )
 
