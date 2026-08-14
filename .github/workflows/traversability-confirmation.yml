@@ -5,13 +5,11 @@ on:
     paths:
       - ".github/workflows/traversability-confirmation.yml"
       - "src/eog/ecological_traversability.py"
-      - "src/eog/v2/**"
+      - "src/eog/v2/traversability.py"
       - "benchmarks/traversability_confirmation.py"
       - "benchmarks/traversability_confirmation_contract.json"
       - "tests/test_ecological_traversability.py"
       - "tests/test_traversability_confirmation_contract.py"
-      - "tests/test_v2_package_layout.py"
-      - "tests/test_v2_namespace.py"
   workflow_dispatch:
 
 permissions:
