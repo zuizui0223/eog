@@ -2,8 +2,24 @@ name: Competitor comparison benchmark
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/competitor-comparison.yml"
+      - "benchmarks/competitor_comparison.py"
+      - "benchmarks/expected/competitor_comparison.json"
+      - "tests/test_comparators.py"
+      - "src/eog/comparators.py"
+      - "src/eog/comparative.py"
+      - "src/eog/geometry.py"
   push:
     branches: [main]
+    paths:
+      - ".github/workflows/competitor-comparison.yml"
+      - "benchmarks/competitor_comparison.py"
+      - "benchmarks/expected/competitor_comparison.json"
+      - "tests/test_comparators.py"
+      - "src/eog/comparators.py"
+      - "src/eog/comparative.py"
+      - "src/eog/geometry.py"
 
 jobs:
   benchmark:
