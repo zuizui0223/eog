@@ -2,148 +2,154 @@
 
 EOG is an auditable ecological framework for asking a broader question than local suitability alone:
 
-> **Given an observed distribution, what geographic–environmental distribution-forming structures are compatible with it, and which structures remain possible, unresolved, or excluded?**
+> **Given an observed distribution, what distribution-forming worlds are compatible with it, and which reachability structures remain robust, contingent or excluded across those worlds?**
 
-The repository contains a frozen v0.1 evidence line plus prospective reachability/traversability operators. The active development direction is to integrate those operators into a single **distributional-realizability / world-reconstruction** framework rather than continue adding parallel EOG variants.
-
-See [`docs/development_mainline.md`](docs/development_mainline.md) for the active scientific and cleanup contract.
+The repository contains a frozen evidence line plus a prospective finite-world reachability framework. The single active development direction is documented in [`docs/development_mainline.md`](docs/development_mainline.md).
 
 ## Core distinction
 
-EOG keeps the following objects separate:
+EOG keeps these objects separate:
 
-1. **local viability/support** — whether a state is locally compatible with a declared environmental model;
-2. **environmental-state geometry** — how observed occurrences occupy environmental feature space;
-3. **spatial support topology** — how frozen support fields form geographic components;
-4. **reachability/traversability** — which state-to-state transitions are compatible with declared geographic, environmental and barrier assumptions;
-5. **distributional realizability** — whether an observed occurrence configuration can be produced under those assumptions;
-6. **world reconstructability** — how tightly the observations constrain the set of compatible distribution-forming worlds.
+1. local environmental viability/support;
+2. geometry of observed environmental states;
+3. geographic topology of frozen support fields;
+4. state-to-state geographic/environmental/barrier transitions;
+5. distributional realizability of observed occurrence configurations;
+6. reconstructability of the compatible world set.
 
-Observed occurrences are treated as realized states that constrain possible distribution-forming processes. They are **not** treated as proof of one unique historical route.
+Observed occurrences are realized constraints, **not proof of one historical route**.
 
-## Active development direction
+## Distributional-watershed view
 
-The current conceptual target is a distributional-watershed representation:
+The active model is relational and flow-based:
 
 ```text
 observed occurrences
         ↓
 compatible ecological / analytical worlds
         ↓
-one auditable transition landscape per world
+one transition landscape per world
         ↓
-branching and merging reachability flow
+branching / merging reachability flow
         ↓
-set of defensible flow distributions
+robust / contingent / excluded structure
         ↓
-robust / contingent / unresolved / excluded structure
-        ↓
-next observation that best discriminates remaining worlds
+next positive observation that can discriminate remaining worlds
 ```
 
-The watershed language is structural, not decorative:
+Watershed terminology is used only with explicit structural meanings: occurrence anchors, reachable basins, transition channels, confluences, bottlenecks/divides and predeclared monotone relaxation levels.
 
-- occurrence anchors define realized states;
-- reachable components act as basins;
-- supported transition sequences act as channels or tributaries;
-- bottlenecks and divides limit basin connection;
-- a declared relaxation level acts as a water level;
-- the first level at which disconnected occurrence basins merge is a minimum-required-relaxation diagnostic.
+Geographic/IBD-like, environmental/IBE-like and explicit barrier constraints remain separate. EOG does not automatically combine them into one weighted distance.
 
-Geographic isolation (IBD-like) and environmental isolation (IBE-like) are retained as separate axes rather than being collapsed automatically into one weighted distance.
+## What is implemented
 
-The **exact finite-world core is implemented**: it reconstructs compatible declared worlds, retains world-indexed support flows, classifies finite-universe robust/contingent reachability, preserves non-dominated geographic/environmental/barrier relaxation explanations, measures world-set contraction after new positive occurrences, and supports declared monotone basin-merge families.
+### Stable root `eog`
 
-The first **finite time-varying world-flow layer is also implemented**. A declared temporal world applies one transition operator per ordered interval, with source mass injected only at the initial state. EOG retains exact-time support by world and separately reports cumulative reachable-in-all / contingent / robustly-unreachable structure by declared time. These time labels are ordered states, not calibrated calendar time.
+The frozen/stable compatibility layer contains:
 
-Time-stamped **positive** occurrences can now be used as necessary `reached by time` constraints to reconstruct the compatible temporal-world set. This can eliminate worlds that reach the same final endpoint too late while preserving multiple temporal histories when the observations do not identify one. Non-detection is still not treated as absence, and persistence is not inferred from propagated mass.
+- environmental-state geometry and shared-reference comparison;
+- support topology over frozen 2D support fields;
+- bridge/bottleneck operators;
+- hypothesis-discriminating survey tooling;
+- manifests, fingerprints and audit contracts.
 
-Large-raster forecasting, detection/absence models, continuous world spaces, calibrated time and empirical promotion remain active development rather than completed EOG claims.
+These historical operators remain reproducible and are not silently rewritten to fit the newer world-reconstruction narrative.
 
-## Implemented layers
+### Prospective `eog.v2.reachability`
 
-### Environmental-state geometry
+The explicit reachability facade now provides a finite known-truth framework for:
 
-For occurrence-by-feature matrices EOG provides standardized extent, MST compactness, gap diagnostics, shared-reference comparisons and sampling/uncertainty audits. These describe observed environmental-state clouds; they are not suitability, occupancy or dispersal estimates.
+- exact finite forward reachability;
+- positive-occurrence `O -> W(O)` world reconstruction;
+- world-indexed flow sets and support envelopes;
+- finite-universe `reachable_in_all`, `contingent`, and `robustly_unreachable` classes;
+- separate geographic/environmental/barrier relaxation axes and non-dominated frontiers;
+- predeclared monotone `lambda` families and first-possible / first-robust basin merge;
+- positive static survey discrimination;
+- finite time-varying worlds built from ordered transition operators;
+- exact-time temporal support and cumulative `reached by time` structure;
+- time-stamped positive occurrence reconstruction;
+- positive `(node,time)` survey discrimination among compatible temporal worlds.
 
-### Spatial support topology
+New prospective names stay on this explicit facade rather than widening `eog.v2` root.
 
-For a frozen 2D support field, EOG tracks superlevel-set components across declared thresholds, including occurrence anchoring, persistence, mergers, masks and deterministic fingerprints.
+### `eog.v2.traversability`
 
-```python
-import numpy as np
-from eog import SupportTopologyConfig, infer_support_topology
+Provides geographic/IBD, environmental/IBE, barrier and pathwise ecological transition constraints used to construct/test candidate transition worlds.
 
-support = np.array([[0.9, 0.8, 0.0, 0.9, 0.9]])
-sea_mask = np.array([[False, False, True, False, False]])
+### `eog.v2.validation`
 
-result = infer_support_topology(
-    support,
-    {"historical_population": (0, 0)},
-    SupportTopologyConfig(
-        thresholds=(0.8, 0.6, 0.4),
-        neighbourhood=4,
-        minimum_persistence_steps=2,
-    ),
-    missing_mask=sea_mask,
-)
+Keeps independent occurrence, genetic and directional-evidence validation separate from the reachability estimand.
+
+## Positive-only temporal feedback loop
+
+The finite temporal framework currently closes this loop:
+
+```text
+declared temporal worlds
+  -> temporal flow
+  -> positive timed observations
+  -> compatible temporal worlds
+  -> ranked positive (node,time) discriminator
+  -> added positive evidence
+  -> contracted world set
 ```
 
-Identical local support on two islands does not imply identical distributional structure: one component may be occurrence anchored while another remains detached.
+No non-detection evidence is used. A time-stamped positive occurrence is only a necessary requirement that the node was reachable **by** that declared time; it is not an exact-time occupancy/persistence likelihood.
 
-### Bridge and survey operators
+## Known-truth falsification
 
-Bridge analysis evaluates declared geographic, environmental and barrier transition hypotheses between nodes/components. Survey tooling ranks observations that discriminate among declared hypotheses. These outputs are decision/structural support, not posterior historical-route probabilities.
+The static finite archetype matrix covers:
 
-### Prospective `eog.v2` operators
-
-The existing v2 namespace is retained as a compatibility layer with three facades:
-
-- `eog.v2.reachability` — dynamic transition operators, first passage, flux, graph diagnostics, exact finite-world reconstruction, declared basin-merge diagnostics, finite time-varying world-flow sets, and positive temporal-world reconstruction;
-- `eog.v2.traversability` — geographic/environmental transition constraints and pathwise ecological continuity;
-- `eog.v2.validation` — independent occurrence, genetic and directional-evidence validation.
-
-These are operators supporting the integrated mainline, not separate competing EOG identities. New prospective APIs stay on their explicit owning facade instead of widening the `eog.v2` package root. Existing v2 quantities remain uncalibrated model support unless independent calibration justifies stronger probability/process language.
-
-## Frozen evidence is preserved
-
-EOG has accumulated positive, adverse, null and indeterminate benchmarks. Cleanup must not erase or retune them. In particular, previously frozen A-Islands, Tanzania, Finland, genetic/reference and synthetic validation outcomes remain evidence boundaries even when they do not support promotion.
-
-The repository keeps those results, fingerprints and protocols for reproducibility. See:
-
-- [`docs/evidence_ledger.md`](docs/evidence_ledger.md)
-- [`docs/claim_matrix.md`](docs/claim_matrix.md)
-- [`docs/ci_scope_policy.md`](docs/ci_scope_policy.md)
-- [`docs/eog_v2_progress.md`](docs/eog_v2_progress.md)
-
-A negative result is not a legacy implementation to be deleted merely because the scientific story changes.
-
-## Repository architecture
-
-The cleanup policy is intentionally conservative:
-
-- root `eog` remains the frozen/stable compatibility API;
-- `eog.v2` contains prospective operator facades;
-- system-specific A-Islands/Tanzania/Finland/Ryukyu/Zhoushan code is validation/adapter material, not generic core API;
-- `benchmarks/frozen/`, manifests, fingerprints and evidence documents are preservation targets;
-- manuscript/submission assets preserve publication provenance and do not define package architecture;
-- new scientific ideas should reuse existing operators instead of creating another top-level EOG branch, module family or workflow suite.
-
-## Known-truth gates
-
-The finite core is tested as one system on `benchmarks/finite_world_archetype_matrix.py`. The matrix checks whether the same finite-world operators can preserve:
-
-- geographic/IBD, environmental/IBE and barrier-dominated rescue as separate axes;
-- alternative geographic-jump versus environmental-crossing explanations of an intermediate niche desert;
-- stepping-stone versus direct-route underidentification and contraction after a discriminating positive occurrence;
-- a rare long-distance jump that remains possible at very low support;
-- branching and route reconvergence;
+- IBD-dominated, IBE-dominated and barrier-dominated rescue;
+- niche-desert tradeoffs with multiple non-dominated explanations;
+- stepping-stone versus direct-route underidentification;
+- rare low-support long-distance reachability;
+- branching and reconvergence;
 - analytical-representation-dependent versus robust basin merge;
 - robust exclusion under explicit finite-universe expansion.
 
-The temporal known-truth tests additionally check transition order, temporary bridge opening, no source reinjection, exact-time versus reached-by-time separation, robust reachability across support magnitudes, hard temporal barriers, and time-stamped positive observations that contract the temporal-world set without interpreting unobserved states as absences.
+Temporal tests additionally cover transition ordering, temporary bridge opening, no source reinjection, timed positive reconstruction and positive timed survey discrimination.
 
-Passing these tests is structural validation, not empirical superiority evidence.
+Passing these gates is **structural known-truth validation**, not empirical superiority evidence.
+
+## Scientific boundaries
+
+EOG does not currently justify calling uncalibrated transition/reachability support:
+
+- occupancy probability;
+- colonisation/dispersal probability;
+- migration rate;
+- demographic connectivity;
+- ancestry or a historical route.
+
+Keep these rules explicit:
+
+- low positive support is not impossibility;
+- multiple compatible worlds remain underidentified;
+- non-detection is not absence without a detection model;
+- `reached by time` is not persistence;
+- time labels are ordered states, not calibrated dates/generations;
+- a scalar relaxation level is valid only inside a predeclared monotone family;
+- `robustly_unreachable` is relative to the declared/certified finite universe.
+
+## Frozen evidence and manuscript provenance
+
+Positive, adverse, null and indeterminate historical results are retained. They are evidence boundaries, not dead code.
+
+See:
+
+- [`docs/evidence_ledger.md`](docs/evidence_ledger.md)
+- [`docs/claim_matrix.md`](docs/claim_matrix.md)
+- [`docs/eog_v2_progress.md`](docs/eog_v2_progress.md)
+- [`docs/eog_v2_package_layout.md`](docs/eog_v2_package_layout.md)
+- [`manuscript/README.md`](manuscript/README.md)
+
+`manuscript/` preserves the earlier structural empirical paper line and does not define the active package architecture.
+
+## Cleanup / development rule
+
+Feature growth is currently paused after closing the positive-only finite temporal loop. The next task is consolidation and an end-to-end temporal feedback falsification benchmark before opening imperfect detection, calibrated time, continuous-world certification, large-raster forecasting or another empirical promotion dataset.
 
 ## Installation
 
@@ -151,33 +157,11 @@ Passing these tests is structural validation, not empirical superiority evidence
 python -m pip install .
 ```
 
-For CHELSA/raster benchmark work:
+For raster/CHELSA benchmark utilities:
 
 ```bash
 python -m pip install ".[raster]"
 ```
-
-## Stable root API
-
-The root compatibility API includes environmental geometry, comparative references, support topology, bridge inference and hypothesis-discriminating survey utilities. Existing direct imports remain supported for frozen reproduction paths; new prospective work should prefer the documented facades rather than widen the root namespace.
-
-Examples include:
-
-- `OccupancyGeometry`, `infer_occupancy_geometry`
-- `fit_robust_reference`, `infer_comparative_geometry`, `compare_geometry`
-- `SupportTopologyConfig`, `infer_support_topology`
-- `BridgeInference`, `infer_bridge`, `evaluate_bridge_sensitivity`
-- `run_hypothesis_survey_pipeline`, `verify_hypothesis_survey_bundle`
-
-## Scientific boundary
-
-EOG does not currently justify calling uncalibrated reachability support an occupancy probability, colonisation probability, dispersal probability, migration rate, historical route, demographic connectivity or ancestry estimate.
-
-The active direction is explicitly conservative: preserve alternative compatible worlds when they cannot be distinguished, and make a strong impossibility claim only when it survives the declared admissible world set with appropriate coverage/certification.
-
-## Provenance
-
-The original environmental-state implementation was extracted from ACSP. The support-topology design incorporates the defensible frozen-field, occurrence-anchor, component, recovery and audit concepts previously developed in ODSP while avoiding duplicate path implementations. Later prospective validation layers remain reproducible through their frozen contracts and evidence ledgers.
 
 ## License
 
