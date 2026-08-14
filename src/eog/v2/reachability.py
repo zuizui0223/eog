@@ -77,7 +77,9 @@ _TEMPORAL_SURVEY_EXPORTS: Final[tuple[str, ...]] = (
 
 _TEMPORAL_TRANSITION_EXPORTS: Final[tuple[str, ...]] = (
     "TemporalTransitionLandscape",
+    "TemporalTransitionUniverseUpdate",
     "summarize_temporal_transition_landscape",
+    "compare_temporal_transition_universes",
 )
 
 _SYNTHETIC_EXPORTS: Final[tuple[str, ...]] = (

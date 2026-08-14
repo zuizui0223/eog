@@ -1,8 +1,8 @@
 """Finite-world transition-landscape summaries for the active EOG mainline.
 
 This module summarizes the *declared transition networks* that underlie temporal
-reachability.  It does not infer occupancy, movement history, or calibrated event
-probabilities.  For every declared transition interval it classifies directed edges as
+reachability. It does not infer occupancy, movement history, or calibrated event
+probabilities. For every declared transition interval it classifies directed edges as
 active in all worlds, active in only some worlds, or inactive in every world, then
 reports opening/closure events between adjacent intervals.
 
@@ -84,6 +84,25 @@ class TemporalTransitionLandscape:
     fingerprint: str
 
 
+@dataclass(frozen=True)
+class TemporalTransitionUniverseUpdate:
+    """Monotone change after expanding an exhaustively declared temporal world set."""
+
+    before_world_ids: tuple[str, ...]
+    after_world_ids: tuple[str, ...]
+    added_world_ids: tuple[str, ...]
+    lost_robust_edges_by_interval: tuple[tuple[Edge, ...], ...]
+    gained_possible_edges_by_interval: tuple[tuple[Edge, ...], ...]
+    lost_inactive_edges_by_interval: tuple[tuple[Edge, ...], ...]
+    robust_monotonicity_holds: bool
+    possible_monotonicity_holds: bool
+    exclusion_monotonicity_holds: bool
+    before_fingerprint: str
+    after_fingerprint: str
+    coverage_certificate: str
+    fingerprint: str
+
+
 def summarize_temporal_transition_landscape(
     worlds: Sequence[TemporalWorld],
     *,
@@ -92,10 +111,10 @@ def summarize_temporal_transition_landscape(
     """Summarize robust/contingent transition edges and their opening/closure events.
 
     ``possible_*`` events track whether an edge is active in at least one world.
-    ``robust_*`` events track whether it is active in every declared world.  The first
+    ``robust_*`` events track whether it is active in every declared world. The first
     interval has no predecessor, so all four event collections are empty there.
 
-    The support envelopes use each operator's *raw* transition support.  Positive but
+    The support envelopes use each operator's *raw* transition support. Positive but
     very small support remains possible unless it is at or below ``support_tolerance``;
     this function therefore does not convert low support into impossibility.
     """
@@ -210,5 +229,95 @@ def summarize_temporal_transition_landscape(
         support_tolerance=tolerance,
         coverage_certificate=certificate,
         world_fingerprints=tuple((world.world_id, world.fingerprint) for world in ordered),
+        fingerprint=_canonical_sha256(payload),
+    )
+
+
+def compare_temporal_transition_universes(
+    before: TemporalTransitionLandscape,
+    after: TemporalTransitionLandscape,
+) -> TemporalTransitionUniverseUpdate:
+    """Compare nested finite world universes under the complexity-monotonicity rule.
+
+    The ``before`` world set must be an exact fingerprint-preserving subset of
+    ``after``. Under world-set expansion:
+
+    - robust edges may only be lost, never gained;
+    - possible edges may only be gained, never lost;
+    - inactive-in-all-worlds edges may only be lost, never gained.
+
+    These are finite-set logical consequences, not empirical performance claims.
+    """
+
+    if before.node_ids != after.node_ids or before.time_labels != after.time_labels:
+        raise ValueError("transition landscapes must share node IDs and time labels")
+    if before.support_tolerance != after.support_tolerance:
+        raise ValueError("transition landscapes must share support_tolerance")
+
+    before_worlds = dict(before.world_fingerprints)
+    after_worlds = dict(after.world_fingerprints)
+    if not set(before_worlds).issubset(after_worlds):
+        raise ValueError("before world universe must be a subset of after world universe")
+    for world_id, fingerprint in before_worlds.items():
+        if after_worlds[world_id] != fingerprint:
+            raise ValueError("shared world IDs must preserve identical fingerprints")
+
+    lost_robust: list[tuple[Edge, ...]] = []
+    gained_possible: list[tuple[Edge, ...]] = []
+    lost_inactive: list[tuple[Edge, ...]] = []
+    robust_ok = True
+    possible_ok = True
+    exclusion_ok = True
+
+    for interval in range(len(before.robust_edges_by_interval)):
+        before_robust = set(before.robust_edges_by_interval[interval])
+        after_robust = set(after.robust_edges_by_interval[interval])
+        before_possible = before_robust | set(before.contingent_edges_by_interval[interval])
+        after_possible = after_robust | set(after.contingent_edges_by_interval[interval])
+        before_inactive = set(before.inactive_edges_by_interval[interval])
+        after_inactive = set(after.inactive_edges_by_interval[interval])
+
+        robust_ok = robust_ok and after_robust.issubset(before_robust)
+        possible_ok = possible_ok and before_possible.issubset(after_possible)
+        exclusion_ok = exclusion_ok and after_inactive.issubset(before_inactive)
+
+        lost_robust.append(tuple(sorted(before_robust - after_robust)))
+        gained_possible.append(tuple(sorted(after_possible - before_possible)))
+        lost_inactive.append(tuple(sorted(before_inactive - after_inactive)))
+
+    if not (robust_ok and possible_ok and exclusion_ok):
+        raise RuntimeError("world-universe expansion violated transition monotonicity")
+
+    added_world_ids = tuple(sorted(set(after_worlds) - set(before_worlds)))
+    certificate = "exact_nested_temporal_transition_world_universes"
+    payload = {
+        "before_fingerprint": before.fingerprint,
+        "after_fingerprint": after.fingerprint,
+        "added_world_ids": list(added_world_ids),
+        "lost_robust_edges_by_interval": [
+            [list(edge) for edge in values] for values in lost_robust
+        ],
+        "gained_possible_edges_by_interval": [
+            [list(edge) for edge in values] for values in gained_possible
+        ],
+        "lost_inactive_edges_by_interval": [
+            [list(edge) for edge in values] for values in lost_inactive
+        ],
+        "coverage_certificate": certificate,
+    }
+
+    return TemporalTransitionUniverseUpdate(
+        before_world_ids=before.world_ids,
+        after_world_ids=after.world_ids,
+        added_world_ids=added_world_ids,
+        lost_robust_edges_by_interval=tuple(lost_robust),
+        gained_possible_edges_by_interval=tuple(gained_possible),
+        lost_inactive_edges_by_interval=tuple(lost_inactive),
+        robust_monotonicity_holds=robust_ok,
+        possible_monotonicity_holds=possible_ok,
+        exclusion_monotonicity_holds=exclusion_ok,
+        before_fingerprint=before.fingerprint,
+        after_fingerprint=after.fingerprint,
+        coverage_certificate=certificate,
         fingerprint=_canonical_sha256(payload),
     )
