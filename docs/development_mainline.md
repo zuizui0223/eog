@@ -119,7 +119,7 @@ The root `eog` API remains the compatibility surface for environmental geometry,
 
 `eog.v2` remains a compatibility namespace for the already implemented reachability, traversability and validation facades. These modules become operators supporting the integrated mainline rather than separate competing scientific stories.
 
-- `eog.v2.reachability` — transition propagation, first passage, flux, graph diagnostics, finite-world reconstruction and declared finite-family basin merge;
+- `eog.v2.reachability` — transition propagation, first passage, flux, graph diagnostics, finite-world reconstruction, declared finite-family basin merge and finite time-varying world-flow sets;
 - `eog.v2.traversability` — geographic/environmental transition constraints and pathwise ecological continuity;
 - `eog.v2.validation` — independent occurrence/genetic/evidence validation.
 
@@ -162,8 +162,6 @@ The first success condition is deliberately conservative:
 
 > **When multiple genuinely different worlds produce the same observed distribution, EOG must preserve them as a set instead of manufacturing one historical answer.**
 
-Only after this finite, falsifiable core is stable should time-dependent large-raster forecasting be expanded.
-
 ## Finite-core implementation checkpoint — 2026-08-14
 
 The exact-enumeration core is implemented behind the existing `eog.v2.reachability` facade. It composes existing first-passage and occurrence-compatibility operators instead of duplicating them.
@@ -189,33 +187,59 @@ The finite-universe certificates remain deliberately narrow:
 - `robustly_unreachable` means unreachable in every **enumerated compatible world**, not impossible in nature;
 - `first_robust_level` means every **declared analytical variant in the finite family** supports joint realization at that level, not that nature used that relaxation or route.
 
-Still outside this finite core:
+## Finite archetype falsification checkpoint
 
-- unobserved/hypothetical historical source states;
-- surveyed-absence likelihoods and detection models;
-- temporal observations and calibrated calendar time;
-- arbitrary post-hoc scalarization of geographic, environmental and barrier axes when no one-dimensional family was declared;
-- continuous or enormous world spaces requiring optimization/sampling/certification rather than exact enumeration;
-- empirical promotion claims.
-
-These omissions are current boundaries, not invitations to add complexity before the finite known-truth tests pass.
-
-## Current falsification gate — finite archetype matrix
-
-The next question is no longer whether another feature can be added. It is whether the **same finite core** preserves the major distinctions claimed by the theory across a compact known-truth matrix.
-
-The benchmark/test layer therefore exercises:
+The finite core passes one compact known-truth matrix using the same operators throughout. The matrix covers:
 
 - geographic/IBD-dominated rescue;
 - environmental/IBE-dominated rescue;
 - barrier-dominated rescue;
-- an intermediate niche-desert configuration that admits both environmental-crossing and geographic-jump explanations on a non-dominated frontier;
+- an intermediate niche-desert configuration with both environmental-crossing and geographic-jump explanations retained on the non-dominated frontier;
 - stepping-stone versus direct-route underidentification followed by compatible-world contraction after a discriminating positive occurrence;
-- a rare long-distance jump with positive but very low support, which must remain possible rather than being labelled impossible;
+- a rare long-distance jump with positive but very low support, retained as possible rather than labelled impossible;
 - branching and route reconvergence;
 - analytical-representation ambiguity with distinct first-possible and first-robust basin-merge levels;
 - a robust exclusion that survives explicit expansion of the finite admissible-world universe.
 
-This gate belongs in `benchmarks/` and `tests/`. It must not create a new package namespace, CLI, empirical adapter or workflow family. Passing the matrix is evidence that the finite architecture is internally coherent under known truth; it is **not** evidence of empirical superiority.
+This is known-truth structural validation, not empirical superiority evidence.
 
-Only after this matrix is green should the mainline choose between the next two scientifically necessary expansions: adding explicit observation/detection evidence, or adding time-dependent worlds. Large-raster implementation remains downstream of that choice.
+## Finite temporal-flow checkpoint
+
+The first time-varying layer is implemented without introducing calibrated time or a new process model.
+
+A `TemporalWorld` is an ordered sequence of already-declared `DynamicTransitionOperator` objects over a fixed node/source universe. Source mass is injected only at the initial state. Each interval-specific operator is applied once in declared order.
+
+`build_temporal_flow_set` retains one exact-time support trajectory per declared temporal world and reports:
+
+- exact-time mass by world;
+- lower/upper exact-time support envelopes;
+- cumulative `reached by time` state per world;
+- `reachable_in_all`, `contingent` and `robustly_unreachable` node sets at each declared time;
+- first-arrival step and loss support by world;
+- the finite-universe certificate `exhaustive_declared_temporal_world_set`.
+
+Known-truth tests establish that:
+
+- the same transitions in a different temporal order can produce different reachability;
+- a bridge must open in the correct order to transmit support downstream;
+- source mass is not silently re-injected at later steps;
+- exact-time mass and cumulative reachability-by-time remain distinct;
+- target reachability can be robust across worlds even when support magnitudes differ;
+- a hard temporal barrier remains robustly unreachable across the declared temporal world set.
+
+Time labels are ordered state labels only. They are not calibrated calendar time, generation length or demographic persistence.
+
+## Current boundary and next gate
+
+Still outside the integrated core:
+
+- unobserved/hypothetical historical source states;
+- surveyed-absence likelihoods and detection models;
+- inverse reconstruction of temporal worlds from time-stamped observations;
+- calibrated calendar time or externally justified transition durations;
+- arbitrary post-hoc scalarization of geographic, environmental and barrier axes when no one-dimensional family was declared;
+- continuous or enormous world spaces requiring optimization/sampling/certification rather than exact enumeration;
+- large-raster forecasting;
+- empirical promotion claims.
+
+The next finite methodological gate should connect **time-stamped positive observations to temporal-world compatibility/reconstructability**. It must continue to treat non-detection as unresolved unless an explicit detection model is declared. Only after that gate is stable should large-raster or empirical temporal forecasting be opened.
