@@ -62,74 +62,80 @@ They should be resumed only if the integrated mainline requires the correspondin
 
 ## Integrated finite-core gates — completed
 
-The former repository-level TODO list is implemented behind the explicit `eog.v2.reachability` facade:
+The integrated finite core is implemented behind the explicit `eog.v2.reachability` facade:
 
-- [x] finite `world -> transition operator -> occurrence-compatible reachability envelope` forward contract;
-- [x] exact inverse reconstruction of the compatible world set from observed positive occurrences without selecting a unique history;
-- [x] world-indexed support-flow distributions retained as a set, including lower/upper envelopes without averaging away world identity;
-- [x] non-dominated minimum-relaxation frontier with geographic/IBD, environmental/IBE and barrier axes retained separately;
-- [x] exact finite-universe `reachable_in_all`, `contingent` and `robustly_unreachable` classification;
-- [x] reconstructability contraction when a new positive occurrence removes compatible worlds;
-- [x] positive-occurrence survey ranking by discrimination among compatible worlds;
-- [x] declared monotone one-dimensional relaxation families when a scalar water level is scientifically predeclared;
-- [x] basin-merge inference separating first possible merge from first robust merge across declared analytical variants;
-- [x] package-root cleanup so new prospective APIs stay on the owning facade instead of widening `eog.v2` compatibility exports.
+- [x] finite forward reachability envelopes;
+- [x] exact inverse reconstruction of compatible worlds from positive occurrences;
+- [x] world-indexed support-flow sets and lower/upper envelopes;
+- [x] separate geographic/IBD, environmental/IBE and barrier relaxation axes;
+- [x] non-dominated minimum-relaxation frontier;
+- [x] exact finite-universe `reachable_in_all`, `contingent` and `robustly_unreachable` classes;
+- [x] compatible-world contraction after new positive occurrences;
+- [x] positive-occurrence survey discrimination;
+- [x] declared monotone one-dimensional relaxation families;
+- [x] first-possible versus first-robust basin merge across analytical variants;
+- [x] package-root cleanup that keeps new prospective APIs on owning facades.
 
-These are **finite known-truth capabilities**, not empirical promotion claims. `robustly_unreachable` is certified only over the exhaustively enumerated compatible world set, and a scalar `lambda` is permitted only inside a declared monotone one-dimensional family.
+These are **finite known-truth capabilities**, not empirical promotion claims.
 
 ## Finite archetype matrix — passed
 
 The integrated finite core passes the compact known-truth matrix in `benchmarks/finite_world_archetype_matrix.py` / `tests/test_finite_world_archetype_matrix.py`.
 
-Covered distinctions:
-
-- geographic/IBD-dominated rescue;
-- environmental/IBE-dominated rescue;
-- barrier-dominated rescue;
-- niche-desert tradeoff with non-dominated environmental-crossing and geographic-jump explanations;
-- stepping-stone versus direct-route underidentification and subsequent world-set contraction after a discriminating positive occurrence;
-- rare long-distance jump retained as possible at very low support;
-- branching and route reconvergence;
-- analytical-representation ambiguity with distinct first-possible and first-robust basin-merge levels;
-- robust exclusion surviving explicit finite-universe expansion.
-
-The first run exposed only a benchmark-boundary `numpy.bool_` normalization issue; no scientific operator failed the known-truth claim. The final matrix passes Package checks across supported Python versions.
+It preserves geographic/IBD, environmental/IBE and barrier rescue distinctions; alternative niche-desert explanations; stepping-stone/direct-route underidentification; rare low-support possibilities; branching/reconvergence; analytical ambiguity; and robust exclusion under explicit finite-universe expansion.
 
 ## Finite temporal-flow gate — implemented
 
-The active reachability facade now supports an ordered finite temporal world without introducing calibrated time or a second dynamic model family.
+The active reachability facade supports an ordered finite temporal world without introducing calibrated time or a second dynamic model family.
 
-- [x] `TemporalWorld`: fixed node/source universe plus one declared transition operator per interval;
+- [x] `TemporalWorld`: fixed node/source universe plus one transition operator per declared interval;
 - [x] initial source mass injected once only;
 - [x] sequential application of time-specific operators;
 - [x] exact-time support trajectory retained per world;
-- [x] cumulative `reached by time` state kept distinct from exact-time mass/persistence;
-- [x] lower/upper exact-time support envelopes across declared temporal worlds;
+- [x] cumulative `reached by time` state distinct from exact-time mass/persistence;
+- [x] lower/upper exact-time support envelopes across temporal worlds;
 - [x] `reachable_in_all`, `contingent`, and `robustly_unreachable` classes at every declared time;
 - [x] first-arrival and lost-mass diagnostics per world;
-- [x] source-ID/source-weight canonicalization that preserves the declared weight mapping;
-- [x] known-truth distinction between correct versus incorrect temporal order of the same transition set;
-- [x] robust reachability under different support magnitudes;
-- [x] robust temporal barrier exclusion.
+- [x] source-ID/source-weight canonicalization preserving source identity;
+- [x] known-truth temporal-order, bridge-opening, support-magnitude and hard-barrier contracts.
 
 The certificate `exhaustive_declared_temporal_world_set` is finite-universe coverage only. Time labels are ordered state labels, not calibrated calendar time or generations.
 
+## Positive temporal-world reconstruction — implemented
+
+Time-stamped positive occurrences now act as necessary reachability constraints on the finite temporal world set.
+
+- [x] `reconstruct_temporal_worlds` retains worlds that reached every observed node by its declared observation time;
+- [x] worlds that reach the same final endpoint too late are eliminated;
+- [x] multiple temporal histories remain explicitly underidentified when all satisfy the observations;
+- [x] unsupported positive observations are reported per world;
+- [x] observation order is canonicalized for deterministic fingerprints;
+- [x] low but positive support remains compatible above the declared tolerance;
+- [x] unobserved reachable nodes are not treated as absences;
+- [x] `compare_temporal_reconstructions` measures compatible-world contraction after added positive temporal evidence;
+- [x] world-universe and tolerance mismatches are rejected when comparing reconstructions.
+
+The known-truth test initially failed because the late-route fixture attempted to delay movement with an empty first interval; under the explicit no-reinjection contract that correctly destroyed source mass. The fixture was corrected to represent a genuinely longer route (`A -> D -> B -> C`) rather than hidden waiting/persistence. The production temporal operator did not require rescue or retuning.
+
+This remains a **necessary reached-by-time test**, not exact-time occupancy or persistence inference. Non-detection has no negative evidential meaning here.
+
 ## Current active gate
 
-The next finite method layer is **temporal world reconstructability from time-stamped positive observations**.
+The next finite method layer is **positive temporal survey discrimination**.
 
-It should answer, without using non-detection as absence:
+Given a frozen `TemporalWorldReconstruction`, rank candidate `(node, time)` positive observations by how strongly a positive detection would split the still-compatible temporal worlds.
 
-- which declared temporal worlds could have reached each observed node by its declared observation time;
-- which worlds are eliminated by temporal ordering constraints;
-- whether adding a time-stamped occurrence contracts the compatible temporal world set;
-- whether several temporal histories remain underidentified even though all observations are satisfied.
+The gate should:
 
-This should reuse `TemporalWorld` / temporal propagation rather than create another transition implementation, namespace, CLI or workflow family.
+- use cumulative reached-by-time support already computed by the temporal layer;
+- preserve the positive-only interpretation;
+- report candidate observations unsupported by every remaining world separately from discriminating candidates;
+- avoid claiming expected information gain unless a detection probability model exists;
+- add no new transition implementation, top-level namespace, CLI or workflow family.
 
 ## Deferred expansion
 
-Remain deferred until temporal positive-observation reconstruction is stable:
+Remain deferred until temporal positive-observation survey discrimination is stable:
 
 - surveyed absences and detection models;
 - calibrated calendar time and transition durations;
