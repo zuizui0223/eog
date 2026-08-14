@@ -4,13 +4,15 @@ on:
   pull_request:
     paths:
       - ".github/workflows/directional-evidence-confirmation.yml"
+      - "src/eog/dynamic_island_reachability.py"
+      - "src/eog/v2/occurrence_constraints.py"
       - "src/eog/v2/evidence_discrimination.py"
       - "src/eog/v2/validation.py"
-      - "src/eog/v2/__init__.py"
       - "benchmarks/directional_evidence_confirmation.py"
       - "benchmarks/directional_evidence_confirmation_contract.json"
       - "tests/test_directional_evidence_discrimination.py"
       - "tests/test_directional_evidence_contract.py"
+      - "tests/test_occurrence_rule_compatibility.py"
   workflow_dispatch:
 
 permissions:

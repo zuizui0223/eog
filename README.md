@@ -1,73 +1,68 @@
 # Environmental Occupancy Geometry (EOG)
 
-EOG is a layered, model-agnostic framework for auditable ecological support analysis. It connects distinct objects without treating them as interchangeable:
+EOG is an auditable ecological framework for asking a broader question than local suitability alone:
 
-1. **environmental-state geometry** of observed occurrence clouds in feature space;
-2. **spatial support topology** of frozen pointwise support fields in geographical grids;
-3. **bridge inference and hypothesis-discriminating surveys** between declared populations or support components.
+> **Given an observed distribution, what geographic–environmental distribution-forming structures are compatible with it, and which structures remain possible, unresolved, or excluded?**
 
-A separate prospective **EOG v2** line is now under development for dynamic source-conditioned island reachability. It keeps local viability, reachability, target capture, persistence and observation processes separate and uses a graph-native rather than necessarily raster-native prediction object.
+The repository contains a frozen v0.1 evidence line plus prospective reachability/traversability operators. The active development direction is now to integrate those operators into a single **distributional-realizability / world-reconstruction** framework rather than continue adding parallel EOG variants.
 
-EOG does **not** fit a species-distribution model by default, estimate latent occupancy, or claim that a structural component proves demographic or dispersal isolation.
+See [`docs/development_mainline.md`](docs/development_mainline.md) for the active scientific and cleanup contract.
 
-```text
-SDM, environmental similarity model, or expert support surface
-    -> frozen pointwise support field
-    -> EOG spatial support topology
-    -> occurrence-anchored and detached support components
-    -> EOG bridge and reachability hypotheses
-    -> EOG hypothesis-discrimination survey workflow
-    -> optional external finite-site optimization by ACSP
-```
+## Core distinction
 
-## Status
+EOG keeps the following objects separate:
 
-Version `0.1.0` began as a frozen extraction of environmental-state geometry from `zuizui0223/acsp` PR #35. Subsequent validation narrowed the defensible interpretation and added bridge, sensitivity, survey, verification, and reporting layers. The spatial support-topology layer absorbs the scientifically defensible component work from `zuizui0223/odsp`; ODSP's widest-path and path-classification implementation is deliberately not duplicated because EOG already owns bridge and bottleneck inference.
+1. **local viability/support** — whether a state is locally compatible with a declared environmental model;
+2. **environmental-state geometry** — how observed occurrences occupy environmental feature space;
+3. **spatial support topology** — how frozen support fields form geographic components;
+4. **reachability/traversability** — which state-to-state transitions are compatible with declared geographic, environmental and barrier assumptions;
+5. **distributional realizability** — whether an observed occurrence configuration can be produced under those assumptions;
+6. **world reconstructability** — how tightly the observations constrain the set of compatible distribution-forming worlds.
 
-Empirical structural validation includes both a positive limited-reference result and adverse strong-reference boundaries:
+Observed occurrences are treated as realized states that constrain possible distribution-forming processes. They are **not** treated as proof of one unique historical route.
 
-- **A-Islands limited reference:** connected frequency retained held-out incidence ordering after conditioning on pointwise climatic support and nearest-training-occurrence distance; conditional concordance `0.6177466` for 845 estimable species.
-- **A-Islands prospective strong reference:** the pre-frozen `C − R3` extension was adverse (`+0.00348518` log loss), so the generic static connected-frequency addition is not promoted beyond the strong island-isolation reference.
-- **Tanzania forest fragments:** adding frozen geography-only EOG connected frequency to a patch-area/current-flow reference worsened primary leave-one-fragment-out log loss by `0.0321131`; spatial-block sensitivity remains weaker and uncertain.
+## Active development direction
 
-These results establish a conditional boundary rather than universal superiority.
-
-### EOG v2 prospective development
-
-Issue #141 and draft PR #142 develop a separate dynamic island-reachability method without reopening the frozen v0.1 results. Current v2 components include:
-
-- directed geography/environment/barrier/direction/target-capture transition support;
-- explicit-loss sub-stochastic propagation;
-- finite-horizon first-passage support and source attribution;
-- integrated edge flux, route entropy and bridge-node importance;
-- separate V/R/C/P/O state layers;
-- deterministic synthetic archipelago and neutral-genetic validation infrastructure;
-- fixed-source occurrence comparator confirmation;
-- exact-eventual first-passage development for long-term genetic connectivity.
-
-The frozen fixed-source occurrence confirmation showed no useful dynamic increment when environment, nearest source, source pressure, geography-current-flow or static topology contained the known truth, while dynamic EOG-R retained substantial held-out signal for bottleneck and directional truths. This remains synthetic method validation, not empirical superiority evidence.
-
-See `docs/eog_v2_dynamic_island_reachability.md`, `docs/eog_v2_estimand_contract.md`, and `docs/eog_v2_occurrence_comparator_contract.md`.
-
-## Layer 1: environmental-state geometry
-
-For occurrence-by-feature matrices, EOG reports:
-
-- **standardized span**: a declared quantile of positive pairwise distances after robust scaling;
-- **MST compactness** (legacy API name `continuity`): environmental diameter divided by minimum-spanning-tree length;
-- **gap strength**: largest positive MST edge divided by the median positive MST edge.
-
-These are descriptions of observed environmental-state clouds. They are not suitability, occupancy, fragmentation, or dispersal estimates. Comparative breadth requires a shared, frozen transformation.
-
-## Layer 2: spatial support topology
-
-For a frozen 2D support array `s(x)`, EOG evaluates connected components of superlevel sets
+The current conceptual target is a distributional-watershed representation:
 
 ```text
-R_tau = {x : s(x) >= tau}
+observed occurrences
+        ↓
+compatible ecological / analytical worlds
+        ↓
+one auditable transition landscape per world
+        ↓
+branching and merging reachability flow
+        ↓
+set of defensible flow distributions
+        ↓
+robust / contingent / unresolved / excluded structure
+        ↓
+next observation that best discriminates remaining worlds
 ```
 
-across a predeclared threshold sequence. It reports deterministic component lineages, persistence, occurrence-anchor membership, lower-threshold mergers into anchored components, cell count or area, support summaries, hard masks, and explicit four- or eight-neighbour connectivity.
+The watershed language is structural, not decorative:
+
+- occurrence anchors define realized states;
+- reachable components act as basins;
+- supported transition sequences act as channels or tributaries;
+- bottlenecks and divides limit basin connection;
+- a declared relaxation level acts as a water level;
+- the first level at which disconnected occurrence basins merge is a minimum-required-relaxation diagnostic.
+
+Geographic isolation (IBD-like) and environmental isolation (IBE-like) are retained as separate axes rather than being collapsed automatically into one weighted distance.
+
+This integrated world-set / probability-set engine is **active development**, not yet a completed or empirically promoted EOG claim.
+
+## Implemented layers
+
+### Environmental-state geometry
+
+For occurrence-by-feature matrices EOG provides standardized extent, MST compactness, gap diagnostics, shared-reference comparisons and sampling/uncertainty audits. These describe observed environmental-state clouds; they are not suitability, occupancy or dispersal estimates.
+
+### Spatial support topology
+
+For a frozen 2D support field, EOG tracks superlevel-set components across declared thresholds, including occurrence anchoring, persistence, mergers, masks and deterministic fingerprints.
 
 ```python
 import numpy as np
@@ -86,26 +81,47 @@ result = infer_support_topology(
     ),
     missing_mask=sea_mask,
 )
-
-for component in result.components:
-    print(component.component_id, component.component_class)
 ```
 
-The identical high local support on two islands does not imply identical structure: one component can be occurrence anchored while another remains detached. Sea cells are unavailable, not merely low-support cells.
+Identical local support on two islands does not imply identical distributional structure: one component may be occurrence anchored while another remains detached.
 
-## Layer 3: bridge inference and survey decisions
+### Bridge and survey operators
 
-Bridge analysis asks a different question: under declared geographical, environmental, and barrier assumptions, what cumulative-cost or minimax path connects declared nodes or components? The support-topology module does not itself implement paths, bottlenecks, stepping stones, route redundancy, or hypothesis ranking.
+Bridge analysis evaluates declared geographic, environmental and barrier transition hypotheses between nodes/components. Survey tooling ranks observations that discriminate among declared hypotheses. These outputs are decision/structural support, not posterior historical-route probabilities.
 
-The bridge workflow converts predeclared sensitivity scenarios into hypothesis-specific path support and ranks candidate field sites by how strongly hypotheses disagree there. The score is decision support, not occurrence probability, posterior model probability, or expected information gain.
+### Prospective `eog.v2` operators
 
-```bash
-eog-hypothesis-survey \
-  --scenarios examples/hypothesis_survey/scenarios.csv \
-  --families examples/hypothesis_survey/families.csv \
-  --candidates examples/hypothesis_survey/candidates.csv \
-  --output-dir results/hypothesis_survey
-```
+The existing v2 namespace is retained as a compatibility layer with three facades:
+
+- `eog.v2.reachability` — dynamic transition operators, first passage, flux and graph diagnostics;
+- `eog.v2.traversability` — geographic/environmental transition constraints and pathwise ecological continuity;
+- `eog.v2.validation` — independent occurrence, genetic and directional-evidence validation.
+
+These are now treated as operators supporting the integrated mainline, not as separate competing EOG identities. Existing v2 quantities remain uncalibrated model support unless independent calibration justifies stronger probability/process language.
+
+## Frozen evidence is preserved
+
+EOG has accumulated positive, adverse, null and indeterminate benchmarks. Cleanup must not erase or retune them. In particular, previously frozen A-Islands, Tanzania, Finland, genetic/reference and synthetic validation outcomes remain evidence boundaries even when they do not support promotion.
+
+The repository keeps those results, fingerprints and protocols for reproducibility. See:
+
+- [`docs/evidence_ledger.md`](docs/evidence_ledger.md)
+- [`docs/claim_matrix.md`](docs/claim_matrix.md)
+- [`docs/ci_scope_policy.md`](docs/ci_scope_policy.md)
+- [`docs/eog_v2_progress.md`](docs/eog_v2_progress.md)
+
+A negative result is not a legacy implementation to be deleted merely because the scientific story changes.
+
+## Repository architecture
+
+The cleanup policy is intentionally conservative:
+
+- root `eog` remains the frozen/stable compatibility API;
+- `eog.v2` contains prospective operator facades;
+- system-specific A-Islands/Tanzania/Finland/Ryukyu/Zhoushan code is validation/adapter material, not generic core API;
+- `benchmarks/frozen/`, manifests, fingerprints and evidence documents are preservation targets;
+- manuscript/submission assets preserve publication provenance and do not define package architecture;
+- new scientific ideas should reuse existing operators instead of creating another top-level EOG branch, module family or workflow suite.
 
 ## Installation
 
@@ -113,54 +129,33 @@ eog-hypothesis-survey \
 python -m pip install .
 ```
 
-For direct CHELSA raster sampling used in benchmark work:
+For CHELSA/raster benchmark work:
 
 ```bash
 python -m pip install ".[raster]"
 ```
 
-## Public API
+## Stable root API
 
-Environmental-state geometry:
+The root compatibility API includes environmental geometry, comparative references, support topology, bridge inference and hypothesis-discriminating survey utilities. Existing direct imports remain supported for frozen reproduction paths; new prospective work should prefer the documented facades rather than widen the root namespace.
 
-- `OccupancyGeometry`
-- `infer_occupancy_geometry`
-- `fit_robust_reference`
-- `infer_comparative_geometry`
-- `compare_geometry`
+Examples include:
 
-Spatial support topology:
-
-- `SupportGridMetadata`
-- `SupportTopologyConfig`
-- `OccurrenceAnchor`
-- `SupportComponent`
-- `SupportTopologyResult`
-- `assign_occurrence_anchors`
-- `infer_support_topology`
-- `summarize_support_components`
-- `evaluate_component_recovery`
-- `evaluate_support_topology_sensitivity`
-
-Bridge inference and survey decisions:
-
-- `BridgeInference`
-- `BridgeSensitivityResult`
-- `HypothesisFamilyDeclaration`
-- `HypothesisSurveyPipelineResult`
-- `infer_bridge`
-- `evaluate_bridge_sensitivity`
-- `run_hypothesis_survey_pipeline`
-- `verify_hypothesis_survey_bundle`
-- `render_hypothesis_survey_report`
+- `OccupancyGeometry`, `infer_occupancy_geometry`
+- `fit_robust_reference`, `infer_comparative_geometry`, `compare_geometry`
+- `SupportTopologyConfig`, `infer_support_topology`
+- `BridgeInference`, `infer_bridge`, `evaluate_bridge_sensitivity`
+- `run_hypothesis_survey_pipeline`, `verify_hypothesis_survey_bundle`
 
 ## Scientific boundary
 
-EOG converts pointwise environmental support into occurrence-conditioned spatial components and explicit reachability hypotheses. It does not claim to replace standard, dynamic, mechanistic, resistance, circuit-theory, or process-based models. A support component or uncalibrated EOG-R value does not establish occupancy, colonisation probability, historical dispersal, demographic connectivity, genetic isolation, or causal barriers without additional data.
+EOG does not currently justify calling uncalibrated reachability support an occupancy probability, colonisation probability, dispersal probability, migration rate, historical route, demographic connectivity or ancestry estimate.
+
+The active direction is explicitly conservative: preserve alternative compatible worlds when they cannot be distinguished, and make a strong impossibility claim only when it survives the declared admissible world set with appropriate coverage/certification.
 
 ## Provenance
 
-The original environmental-state implementation was copied from ACSP main commit `cfa24ba30fa0607e530d5cf716ce8729d54d773e`. The support-topology design adapts ODSP's defensible frozen-field, anchor, component, recovery, and audit concepts while retiring its duplicated widest-path layer.
+The original environmental-state implementation was extracted from ACSP. The support-topology design incorporates the defensible frozen-field, occurrence-anchor, component, recovery and audit concepts previously developed in ODSP while avoiding duplicate path implementations. Later prospective validation layers remain reproducible through their frozen contracts and evidence ledgers.
 
 ## License
 
