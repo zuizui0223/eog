@@ -5,6 +5,7 @@ from eog.v2.reachability import (
     DynamicReachabilityEdge,
     TemporalWorld,
     build_dynamic_transition_operator,
+    compare_temporal_transition_universes,
     summarize_temporal_transition_landscape,
 )
 
@@ -86,8 +87,6 @@ def test_transition_landscape_reports_possible_and_robust_openings_and_closures(
     assert ("A", "B") in result.possible_closures_by_interval[1]
     assert ("A", "B") in result.robust_closures_by_interval[1]
 
-    # B->C disappears from every declared world at the final interval, while A->C
-    # remains only a world-dependent possible channel throughout.
     assert result.possible_closures_by_interval[2] == (("B", "C"),)
     assert result.robust_closures_by_interval[2] == (("B", "C"),)
     assert result.contingent_edges_by_interval[2] == (("A", "C"),)
@@ -122,6 +121,62 @@ def test_low_positive_support_is_not_relabelled_as_impossible():
     assert np.all(
         permissive.support_lower_by_interval[0] <= permissive.support_upper_by_interval[0]
     )
+
+
+def test_expanding_world_universe_weakens_robustness_and_expands_possibility():
+    nodes = ("A", "B", "C")
+    baseline = TemporalWorld(
+        "baseline",
+        ("t0", "t1"),
+        (_operator(nodes, (("A", "B", 1.0),)),),
+        ("A",),
+    )
+    alternative = TemporalWorld(
+        "alternative",
+        ("t0", "t1"),
+        (_operator(nodes, (("A", "C", 1.0),)),),
+        ("A",),
+    )
+
+    before = summarize_temporal_transition_landscape((baseline,))
+    after = summarize_temporal_transition_landscape((baseline, alternative))
+    update = compare_temporal_transition_universes(before, after)
+
+    assert update.added_world_ids == ("alternative",)
+    assert update.lost_robust_edges_by_interval[0] == (("A", "B"),)
+    assert update.gained_possible_edges_by_interval[0] == (("A", "C"),)
+    assert update.lost_inactive_edges_by_interval[0] == (("A", "C"),)
+    assert update.robust_monotonicity_holds
+    assert update.possible_monotonicity_holds
+    assert update.exclusion_monotonicity_holds
+    assert update.coverage_certificate == "exact_nested_temporal_transition_world_universes"
+
+
+def test_nested_universe_comparison_requires_identical_shared_worlds_and_tolerance():
+    nodes = ("A", "B")
+    baseline = TemporalWorld(
+        "baseline",
+        ("t0", "t1"),
+        (_operator(nodes, (("A", "B", 1.0),)),),
+        ("A",),
+    )
+    changed_baseline = TemporalWorld(
+        "baseline",
+        ("t0", "t1"),
+        (_operator(nodes, ()),),
+        ("A",),
+    )
+
+    before = summarize_temporal_transition_landscape((baseline,))
+    changed = summarize_temporal_transition_landscape((changed_baseline,))
+    with pytest.raises(ValueError, match="identical fingerprints"):
+        compare_temporal_transition_universes(before, changed)
+
+    different_tolerance = summarize_temporal_transition_landscape(
+        (baseline,), support_tolerance=1e-10
+    )
+    with pytest.raises(ValueError, match="support_tolerance"):
+        compare_temporal_transition_universes(before, different_tolerance)
 
 
 def test_transition_landscape_rejects_incomparable_temporal_worlds():
