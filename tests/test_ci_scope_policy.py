@@ -14,6 +14,16 @@ LEGACY_FROZEN_WORKFLOWS = (
     "calibrated-gap-feature-selection.yml",
 )
 
+FOCUSED_V01_CONTRACT_WORKFLOWS = (
+    "reference-choice-audit.yml",
+    "comparative-uncertainty.yml",
+    "competitor-comparison.yml",
+    "analysis-manifest.yml",
+    "shared-scaling-contract.yml",
+    "frozen-comparison-example.yml",
+    "audited-runner.yml",
+)
+
 PROSPECTIVE_CONFIRMATION_WORKFLOWS = (
     "traversability-confirmation.yml",
     "occurrence-rule-compatibility-confirmation.yml",
@@ -31,8 +41,19 @@ def test_frozen_legacy_workflows_do_not_watch_all_eog_source_files():
 
 def test_ci_scope_policy_names_every_guarded_legacy_workflow():
     policy = Path("docs/ci_scope_policy.md").read_text()
-    for name in LEGACY_FROZEN_WORKFLOWS:
+    for name in (*LEGACY_FROZEN_WORKFLOWS, *FOCUSED_V01_CONTRACT_WORKFLOWS):
         assert f"`{name}`" in policy
+
+
+def test_v01_contract_workflows_are_dependency_scoped_and_manually_reproducible():
+    root = Path(".github/workflows")
+    for name in FOCUSED_V01_CONTRACT_WORKFLOWS:
+        text = (root / name).read_text()
+        assert "paths:" in text, name
+        assert "workflow_dispatch:" in text, name
+        assert '"src/eog/**"' not in text, name
+        assert '"src/eog/v2/**"' not in text, name
+        assert '"src/eog/v2/' not in text, name
 
 
 def test_prospective_scientific_confirmations_do_not_watch_facade_only_changes():

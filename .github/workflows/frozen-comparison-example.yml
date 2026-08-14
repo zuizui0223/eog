@@ -2,6 +2,15 @@ name: Frozen comparison example
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/frozen-comparison-example.yml"
+      - "examples/frozen_comparison/**"
+      - "src/eog/runner.py"
+      - "src/eog/manifest.py"
+      - "src/eog/reference_policy.py"
+      - "src/eog/uncertainty.py"
+      - "src/eog/comparative.py"
+      - "src/eog/geometry.py"
   workflow_dispatch:
 
 jobs:

@@ -23,6 +23,18 @@ The following v0.1 development/evidence workflows remain in the repository and k
 
 Their automatic pull-request triggers are limited to their own benchmark inputs, protocol documents, manifests and workflow definitions. They must not use a blanket `src/eog/**` trigger.
 
+The following older v0.1 contract/reproduction workflows are also dependency-scoped instead of running on every pull request:
+
+- `reference-choice-audit.yml`
+- `comparative-uncertainty.yml`
+- `competitor-comparison.yml`
+- `analysis-manifest.yml`
+- `shared-scaling-contract.yml`
+- `frozen-comparison-example.yml`
+- `audited-runner.yml`
+
+These workflows name their direct geometry/comparative/manifest/runner dependencies explicitly and retain `workflow_dispatch` for intentional reproduction. A prospective `eog.v2`-only change therefore does not need to rerun the frozen v0.1 geometry stack.
+
 This does not deprecate, delete or reinterpret any benchmark. It only prevents unrelated development from repeatedly executing historical exploratory/frozen benchmark suites.
 
 ## Prospective operator policy
@@ -40,6 +52,8 @@ A scientific confirmation workflow should not become a second package-wide test 
 Changes that only reorganize the compatibility facades (`src/eog/__init__.py` or `src/eog/v2/__init__.py`) belong to Package checks unless they also change the scientific implementation or contract owned by a confirmation workflow. The package suite is responsible for verifying that all preserved public imports still resolve.
 
 Where a confirmation module depends directly on another scientific implementation, that dependency should be named explicitly in the path filter rather than approximated with a broad subtree glob. For example, occurrence-rule and directional-evidence confirmation depend on the dynamic transition operator, while traversability confirmation depends on the ecological-traversability implementation.
+
+The finite-world reconstruction core is currently covered by Package checks and dedicated unit tests. It composes already-tested first-passage and occurrence-compatibility operators and does not receive a separate scientific confirmation workflow until a predeclared frozen confirmation contract exists. This avoids creating a workflow family merely because a new internal module was added.
 
 ## Global regression boundary
 

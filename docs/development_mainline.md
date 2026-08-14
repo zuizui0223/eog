@@ -117,7 +117,7 @@ The root `eog` API remains the compatibility surface for environmental geometry,
 
 `eog.v2` remains a compatibility namespace for the already implemented reachability, traversability and validation facades. These modules become operators supporting the integrated mainline rather than separate competing scientific stories.
 
-- `eog.v2.reachability` — transition propagation, first passage, flux and graph diagnostics;
+- `eog.v2.reachability` — transition propagation, first passage, flux, graph diagnostics and finite-world reconstruction;
 - `eog.v2.traversability` — geographic/environmental transition constraints and pathwise ecological continuity;
 - `eog.v2.validation` — independent occurrence/genetic/evidence validation.
 
@@ -146,9 +146,9 @@ Submission bundles, figures and journal-specific material preserve publication p
 
 Do not begin with a new SPDE, PDE, ABM or deep graph model. First prove the integrated architecture on a small finite graph with exact enumeration of a finite world set:
 
-1. forward `world -> transition operator -> occurrence configuration`;
+1. forward `world -> transition operator -> occurrence-compatible reachability envelope`;
 2. inverse `occurrence configuration -> compatible world set`;
-3. probability-distribution set retained by world;
+3. probability/support-distribution set retained by world;
 4. basin merge / minimum-relaxation diagnostic;
 5. separate IBD and IBE constraints;
 6. reconstructability diagnostic;
@@ -160,3 +160,32 @@ The first success condition is deliberately conservative:
 > **When multiple genuinely different worlds produce the same observed distribution, EOG must preserve them as a set instead of manufacturing one historical answer.**
 
 Only after this finite, falsifiable core is stable should time-dependent large-raster forecasting be expanded.
+
+## Finite-core implementation checkpoint — 2026-08-14
+
+The first exact-enumeration implementation is now being developed behind the existing `eog.v2.reachability` facade. It composes existing first-passage and occurrence-compatibility operators instead of duplicating them.
+
+Implemented in the finite core:
+
+- a `FiniteWorld` declaration containing a frozen transition operator, observed fixed sources and separately declared geographic/environmental/barrier relaxation axes;
+- a positive-support forward reachability envelope for each world;
+- exhaustive inverse enumeration of `W(O)` with explicit compatible and incompatible world IDs;
+- an `identifiable` flag that is true only when exactly one declared world remains compatible;
+- world-indexed propagation results and lower/upper envelopes without averaging away world identity;
+- exact finite-universe node classes: `reachable_in_all`, `contingent`, and `robustly_unreachable`;
+- a non-dominated relaxation frontier that preserves geographic/IBD, environmental/IBE and barrier axes rather than inventing one weighted water level;
+- reconstructability contraction after adding a new positive occurrence;
+- positive-occurrence candidate ranking by how strongly an observation would split the still-compatible world set.
+
+The finite-universe certificate is deliberately narrow: `robustly_unreachable` means unreachable in every **enumerated compatible world**, not impossible in nature.
+
+Still outside this first core:
+
+- unobserved/hypothetical historical source states;
+- surveyed-absence likelihoods and detection models;
+- temporal observations and calibrated calendar time;
+- scalar basin-merge water levels unless a one-dimensional relaxation family is declared in advance;
+- continuous or enormous world spaces requiring optimization/sampling/certification rather than exact enumeration;
+- empirical promotion claims.
+
+These omissions are current boundaries, not invitations to add complexity before the finite known-truth tests pass.

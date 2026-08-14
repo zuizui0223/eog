@@ -3,7 +3,7 @@
 The active repository direction is defined in ``docs/development_mainline.md``.
 The v2 namespace is intentionally thin: new code should import from the explicit
 ``reachability``, ``traversability`` or ``validation`` facades rather than widening
-this package root.  Historical ``from eog.v2 import ...`` imports remain available
+this package root. Historical ``from eog.v2 import ...`` imports remain available
 through lazy attribute routing so frozen workflows do not need to move with the
 repository narrative.
 """
@@ -36,6 +36,18 @@ _REACHABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "SCENARIO_IDS",
     "SyntheticArchipelagoScenario",
     "build_synthetic_archipelago",
+    "FiniteWorld",
+    "FiniteWorldReconstruction",
+    "FiniteWorldFlowSet",
+    "RelaxationFrontier",
+    "ReconstructionUpdate",
+    "PositiveOccurrenceSurveyRanking",
+    "forward_reachable_configuration",
+    "reconstruct_compatible_worlds",
+    "build_world_flow_set",
+    "minimum_relaxation_frontier",
+    "compare_reconstructions",
+    "rank_positive_occurrence_candidates",
 )
 
 _TRAVERSABILITY_EXPORTS: Final[tuple[str, ...]] = (
@@ -95,7 +107,7 @@ __all__ = [
 ]
 
 # Kept unchanged because frozen tests and external reproduction paths use this
-# status string.  The separate direction marker records the active architecture
+# status string. The separate direction marker records the active architecture
 # without rewriting the historical v2 contract.
 API_STATUS = "prospective-v2-development"
 DEVELOPMENT_DIRECTION = "distributional-watershed-world-reconstruction"

@@ -2,6 +2,15 @@ name: Audited comparative runner
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/audited-runner.yml"
+      - "tests/test_runner.py"
+      - "src/eog/runner.py"
+      - "src/eog/manifest.py"
+      - "src/eog/reference_policy.py"
+      - "src/eog/uncertainty.py"
+      - "src/eog/comparative.py"
+      - "src/eog/geometry.py"
   workflow_dispatch:
 
 jobs:

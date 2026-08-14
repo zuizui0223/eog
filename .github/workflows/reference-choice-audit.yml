@@ -2,6 +2,13 @@ name: Reference choice audit
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/reference-choice-audit.yml"
+      - "benchmarks/reference_choice_audit.py"
+      - "tests/test_reference_policy.py"
+      - "src/eog/reference_policy.py"
+      - "src/eog/comparative.py"
+      - "src/eog/geometry.py"
   workflow_dispatch:
 
 jobs:
