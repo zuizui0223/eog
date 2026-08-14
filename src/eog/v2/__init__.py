@@ -14,6 +14,9 @@ from importlib import import_module
 from typing import Final
 
 
+# Historical v2 convenience exports retained for frozen/reproduction compatibility.
+# New prospective APIs (including finite-world reconstruction and basin merge) live
+# only on their explicit owning facade.
 _REACHABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "DynamicReachabilityEdge",
     "DynamicReachabilityResult",
@@ -36,18 +39,6 @@ _REACHABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "SCENARIO_IDS",
     "SyntheticArchipelagoScenario",
     "build_synthetic_archipelago",
-    "FiniteWorld",
-    "FiniteWorldReconstruction",
-    "FiniteWorldFlowSet",
-    "RelaxationFrontier",
-    "ReconstructionUpdate",
-    "PositiveOccurrenceSurveyRanking",
-    "forward_reachable_configuration",
-    "reconstruct_compatible_worlds",
-    "build_world_flow_set",
-    "minimum_relaxation_frontier",
-    "compare_reconstructions",
-    "rank_positive_occurrence_candidates",
 )
 
 _TRAVERSABILITY_EXPORTS: Final[tuple[str, ...]] = (
