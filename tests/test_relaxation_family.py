@@ -88,6 +88,21 @@ def test_family_does_not_create_lambda_from_component_weights():
         family.worlds_at(1.5)
 
 
+def test_family_rejects_negative_relaxation_levels():
+    with pytest.raises(ValueError, match="finite and non-negative"):
+        build_monotone_relaxation_family(
+            "negative",
+            {
+                -1.0: {
+                    "reference": _world("reference-neg", "reference", 0.0, ((0, 1),))
+                },
+                0.0: {
+                    "reference": _world("reference-zero", "reference", 0.0, ((0, 1),))
+                },
+            },
+        )
+
+
 def test_monotone_family_rejects_transition_support_that_disappears_at_higher_lambda():
     with pytest.raises(ValueError, match="non-decreasing"):
         build_monotone_relaxation_family(
