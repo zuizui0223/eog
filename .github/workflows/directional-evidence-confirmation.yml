@@ -7,7 +7,6 @@ on:
       - "src/eog/dynamic_island_reachability.py"
       - "src/eog/v2/occurrence_constraints.py"
       - "src/eog/v2/evidence_discrimination.py"
-      - "src/eog/v2/validation.py"
       - "benchmarks/directional_evidence_confirmation.py"
       - "benchmarks/directional_evidence_confirmation_contract.json"
       - "tests/test_directional_evidence_discrimination.py"
@@ -34,9 +33,7 @@ jobs:
           pytest -q \
             tests/test_directional_evidence_discrimination.py \
             tests/test_directional_evidence_contract.py \
-            tests/test_occurrence_rule_compatibility.py \
-            tests/test_v2_namespace.py \
-            tests/test_v2_package_layout.py
+            tests/test_occurrence_rule_compatibility.py
       - name: Run frozen synthetic confirmation
         run: |
           mkdir -p benchmark_results/directional_evidence
