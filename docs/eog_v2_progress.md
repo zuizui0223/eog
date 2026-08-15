@@ -49,7 +49,7 @@ The active question is no longer whether another operator can be added. It is wh
 
 ### Gate 2 — existing static bridge baseline: passed
 
-`benchmarks/bridge_vs_temporal_reconstruction.py` reuses the existing v0.1 cumulative/minimax/redundancy bridge implementation. The static bridge is correct for a time-aggregated A-B-C graph, while a time-stamped `C@t2` observation distinguishes worlds with different transition order. Static connectivity and time-constrained realizability are different estimands.
+`benchmarks/bridge_vs_temporal_reconstruction.py` reuses the existing v0.1 cumulative/minimax/redundancy bridge implementation. Static connectivity and time-constrained realizability are confirmed as different estimands.
 
 ### Gate 3 — time-respecting Boolean dynamic connectivity: negative boundary passed
 
@@ -59,57 +59,50 @@ Therefore EOG must **not** claim novelty for forward dynamic reachability, time-
 
 ### Gate 4 — consensus frequency versus universal certificate: passed
 
-`benchmarks/consensus_vs_universal_certificate.py` establishes the distinction between agreement frequency and invariance across every declared world.
+`benchmarks/consensus_vs_universal_certificate.py` shows that a state reachable in 99/100 worlds can satisfy a 0.95 consensus rule while remaining `contingent` rather than robust after the one excluding world is admitted. A state unreachable in all worlds retains the finite-universe exclusion certificate.
 
-Known truth:
-
-- `A` is the fixed source;
-- `R` is a common observed non-source target reachable in every world;
-- `T` is reachable in 99 of 100 worlds;
-- `E` is unreachable in all 100 worlds.
-
-Result:
-
-- T has 0.99 reachability frequency and satisfies a 0.95 consensus rule;
-- T is robust in the original 99-world universe but becomes `contingent` after adding the one excluding world;
-- T remains possible and is not relabelled impossible;
-- E remains finite-universe `robustly_unreachable` with frequency 0.
-
-Consensus and universal robustness are both valid but different estimands.
+Consensus and universal robustness are valid but different estimands.
 
 ### Gate 5 — Keitt-style critical geographic distance: negative boundary passed
 
-`benchmarks/keitt_critical_distance_boundary.py` compares EOG's one-dimensional geographic relaxation family with the critical patch-distance logic of Keitt, Urban & Milne (1997).
+`benchmarks/keitt_critical_distance_boundary.py` reproduces the critical patch-distance result in a one-dimensional geographic EOG family: A=0, B=4, C=10 connects at threshold 6 through stepping stone B, and EOG `first_possible_level = first_robust_level = 6`.
 
-Known truth uses A=0, B=4, C=10:
-
-- direct A-C distance = 10;
-- A-B = 4 and B-C = 6;
-- the patch graph first connects A to C at threshold 6 via stepping stone B;
-- EOG `first_possible_level` and `first_robust_level` are also 6.
-
-Therefore EOG must **not** claim novelty for varying a geographic connection threshold, detecting the first threshold where components merge, or a stepping-stone-mediated one-dimensional critical dispersal distance.
+Therefore EOG must **not** claim novelty for geographic threshold sweeps, first component-merge distance, or one-dimensional stepping-stone critical dispersal distance.
 
 ### Gate 6 — Dobrowski/Parks minimum cumulative environmental exposure: negative boundary passed
 
-`benchmarks/mce_environmental_exposure_boundary.py` compares an independent least-exposure graph analogue with the existing EOG bridge environmental-cost path.
+`benchmarks/mce_environmental_exposure_boundary.py` shows equal-climate endpoints can have different intermediate exposure. The independent least-exposure baseline and the existing EOG pure-environmental bridge both select the longer low-exposure route and recover the same accumulated exposure.
 
-Known truth has equal-climate endpoints A and C:
+Therefore EOG must **not** claim novelty for endpoint-similarity/path-feasibility mismatch, cumulative environmental exposure, least-exposure path selection, or environmental bottleneck by themselves.
 
-- short route `A-B-C`: geographic length 2 but cumulative environmental exposure 2.0 because B is strongly dissimilar;
-- long route `A-D-E-C`: geographic length 3 but cumulative exposure 0.4 because intermediate states remain close to the source environment.
+### Gate 7 — circuit theory / multiple pathways: negative boundary plus world-aggregation distinction passed
 
-Both the independent minimum-exposure baseline and EOG's existing pure-environmental bridge select the longer `A-D-E-C` route with exposure 0.4.
+`benchmarks/circuit_world_aggregation_boundary.py` uses two alternative worlds:
 
-Therefore EOG must **not** claim novelty for endpoint-similarity/path-feasibility mismatch, cumulative environmental exposure along a path, selecting a least-exposure path, or an environmental path bottleneck by themselves.
+- `world_B`: A-B-C only;
+- `world_D`: A-D-C only.
+
+Within each world:
+
+- one edge-disjoint A-C path;
+- unit-resistance effective resistance = 2.
+
+If the two mutually alternative world graphs are unioned before connectivity inference:
+
+- two parallel paths appear simultaneously;
+- edge-disjoint path count becomes 2;
+- effective resistance falls to 1;
+- yet no declared individual world contains that union graph.
+
+Circuit theory is correct for the union graph when the union graph is the declared landscape. EOG therefore must **not** claim novelty for recognizing or integrating multiple dispersal pathways or route redundancy. The remaining question is whether mutually exclusive ecological/analytical world representations may be aggregated before connectivity inference, or must remain world-indexed and explicitly underidentified.
 
 ## What remains after the negative boundaries
 
-The remaining candidate contribution is now deliberately narrow:
+The remaining candidate contribution is deliberately narrow:
 
-> **Occurrence-conditioned inference over an explicitly declared ecological + analytical world universe, retaining multiple world-indexed explanations and non-dominated geographic/environmental/barrier relaxations, with underidentification and finite-universe robustness/exclusion certificates made explicit.**
+> **Occurrence-conditioned inference over an explicitly declared ecological + analytical world universe, retaining mutually alternative world-indexed explanations and non-dominated geographic/environmental/barrier relaxations, with underidentification and finite-universe robustness/exclusion certificates made explicit.**
 
-The individual ingredients of geographic thresholding, stepping stones, dynamic reachability, least-cost exposure, path bottlenecks, and consensus are not claimed as new.
+The individual ingredients of geographic thresholding, stepping stones, dynamic reachability, least-cost exposure, bottlenecks, multiple pathways, route redundancy and consensus are not claimed as new.
 
 ## Repository cleanup state
 
@@ -126,16 +119,13 @@ The repository still contains many historical branches. The available connector 
 
 ## Next external boundary
 
-Do **not** add another EOG operator. The next useful comparator should test a strong multi-path/accessibility method rather than another shortest-path variant.
+Do **not** add another EOG operator. The next closest prior art is a functional/accessibility framework that already combines environmental quality and movement connectivity.
 
-Priority:
+Primary target:
 
-- circuit/resistance connectivity, where multiple route redundancy is already an established estimand;
-- functional / accessible habitat frameworks integrating environmental suitability and geographic/network accessibility;
-- analyst-choice/model-universe uncertainty approaches, which are closest to the remaining EOG claim;
-- dynamic occupancy/mechanistic range models only when repeated observations and detection data make their process estimands identifiable.
+- Van Moorter et al. (2023) functional habitat: suitability in E-space combined with geographic/network accessibility in G/T-space.
 
-The external benchmark should report where estimands coincide and which additional EOG claim remains after the negative boundaries above. EOG does not need to win every predictive metric.
+The comparison should explicitly expect overlap for **suitable + accessible habitat**. The remaining EOG distinction must be tested only in the inverse/world-set layer: incompatible versus compatible world families, analyst-choice alternatives kept separate, Pareto rescue sets, and certificate-strength rules.
 
 ## Deferred until a concrete validation need exists
 
