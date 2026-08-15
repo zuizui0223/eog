@@ -21,7 +21,7 @@ This ledger tracks only the **active integrated method line**. Frozen positive, 
 - declared one-dimensional monotone relaxation families only when scientifically predeclared;
 - first-possible versus first-robust basin merge across analytical variants;
 - positive-occurrence discrimination among underidentified worlds;
-- finite archetype falsification covering IBD, IBE, hard barriers, niche deserts, stepping stones, rare low-support jumps, branching/reconvergence, analytical ambiguity, and universe expansion.
+- finite archetype falsification across IBD, IBE, barriers, stepping stones, rare jumps, branching/reconvergence, analytical ambiguity, and universe expansion.
 
 ### Temporal worlds
 
@@ -40,8 +40,6 @@ These are finite known-truth capabilities, **not empirical superiority claims**.
 
 ## Comparator / prior-art boundaries
 
-The comparator program intentionally tries to remove overbroad novelty claims before new empirical work.
-
 | Gate | Comparator / prior art | Result for EOG claim boundary |
 |---|---|---|
 | 1 | endpoint-only, final-horizon, scalar relaxation | timing and axis identity can be lost; set-valued inverse frontier retains them |
@@ -49,36 +47,31 @@ The comparator program intentionally tries to remove overbroad novelty claims be
 | 3 | independent Boolean dynamic connectivity | exact structural match; **dynamic reachability / time-respecting path existence are not EOG novelty** |
 | 4 | consensus frequency | 99/100 support can remain contingent; high agreement and universal finite-world invariance differ |
 | 5 | Keitt-style critical patch distance | exact 1D geographic threshold match; **water-level threshold / first merge / stepping-stone critical distance are prior art** |
-| 6 | Dobrowski/Parks minimum cumulative exposure | exact low-exposure-path match; **path environmental exposure / least-exposure route / bottleneck are prior art** |
+| 6 | Dobrowski/Parks minimum cumulative exposure | exact low-exposure-path match; **path exposure / least-exposure route / bottleneck are prior art** |
 | 7 | circuit theory | multiple pathways and route redundancy are prior art; unioning mutually exclusive worlds can manufacture simultaneous redundancy |
 | 8 | Van Moorter functional habitat | suitable + accessible and E/G/T-space integration are prior art; averaging alternative analytical worlds can manufacture a state occurring in no declared world |
 | 9 | history matching / NROY | exact finite special-case match; **generic model-world filtering, compatible/NROY sets, and sequential set contraction are prior art** |
+| 10 | Masten/Poirier falsification frontier | exact finite Pareto-frontier match; **minimum-assumption relaxation / Pareto-minimal rescue / falsification-frontier mathematics are prior art** |
 
-Benchmark implementations are under `benchmarks/` with matching tests under `tests/`. Detailed known-truth values belong there rather than being duplicated in this ledger.
+Benchmark implementations are under `benchmarks/` with matching tests under `tests/`. Detailed known-truth values belong there rather than being duplicated here.
 
-## Gate 9 — history matching result
+## Gate 10 — falsification-frontier result
 
-`benchmarks/history_matching_nroy_boundary.py` uses three deterministic finite worlds:
+`benchmarks/falsification_frontier_boundary.py` uses a falsified baseline `(0,0,0)` plus compatible geographic-only, environmental-only, barrier-only, mixed, and all-axis rescue worlds.
 
-- `world_B`: A -> B -> C;
-- `world_D`: A -> D -> C;
-- `world_fail`: A -> B only.
+An independent componentwise Pareto calculation and EOG `minimum_relaxation_frontier` return exactly the same four non-dominated relaxation vectors. The `(1,1,1)` all-axis rescue is dominated and removed by both.
 
-Independent finite history matching and EOG reconstruction agree exactly:
-
-- observations `A,C` retain `world_B, world_D` and rule out `world_fail`;
-- adding B (`A,B,C`) contracts the retained set to `world_B`;
-- both eliminate `world_D` between waves with contraction fraction 0.5.
-
-This is only the deterministic finite special case. Full history matching also addresses emulation, observation uncertainty, model discrepancy, implausibility measures, and large/continuous parameter spaces.
+This is only a discrete deterministic special case, not the linear-IV identification theory in Masten & Poirier. It is sufficient to establish that the **generic mathematics of minimum relaxation and a Pareto/falsification frontier is not an EOG invention**.
 
 ## What remains after the negative boundaries
 
-The candidate EOG contribution is now deliberately narrow and ecological rather than a claim of new graph mathematics:
+The candidate EOG contribution is now a domain framework/composition claim, not a claim of new general graph or inverse-problem mathematics:
 
-> **Occurrence-conditioned biogeographic constraint inference over an explicitly declared ecological + analytical world universe, with mutually alternative worlds kept separate, geographic/environmental/barrier rescue requirements retained as a non-dominated set, underidentification reported explicitly, and structural claims limited by finite-universe coverage/certification rules.**
+> **An auditable biogeographic framework that turns observed occurrence configurations into explicit geographic/environmental/barrier/temporal reachability constraints, carries both ecological and analyst-choice alternatives as declared worlds, preserves underidentified alternatives rather than averaging them away, and reports only structural conclusions justified by the declared coverage/certificate.**
 
-EOG therefore does **not** claim novelty for any of the following by themselves:
+Potential scientific value must therefore come from **how these established ideas are combined for biogeographic questions and whether that combination yields useful ecological information**, not from renaming any constituent algorithm.
+
+EOG does **not** claim novelty for, by themselves:
 
 - suitable versus reachable;
 - graphs, stepping stones, bridge/bottleneck paths;
@@ -88,7 +81,8 @@ EOG therefore does **not** claim novelty for any of the following by themselves:
 - multiple pathways / route redundancy;
 - functional habitat or suitability + accessibility integration;
 - consensus ensembles;
-- generic history-matching elimination of worlds inconsistent with observations.
+- generic history-matching elimination / NROY sets;
+- generic minimum-relaxation, Pareto-frontier, or falsification-frontier mathematics.
 
 ## Repository cleanup state
 
@@ -102,19 +96,26 @@ EOG therefore does **not** claim novelty for any of the following by themselves:
 - stale diverged cleanup work is not merged wholesale across later scientific changes;
 - historical branch refs remain because the available connector does not expose safe branch deletion; they are not force-reset simply to reduce branch count.
 
-## Next decision
+## Next decision — stop algorithm expansion, freeze ecological validation
 
-**Do not add another EOG operator by default.**
+The prior-art audit has now removed most claims of generic methodological novelty. Do **not** add another EOG operator merely to chase a smaller novelty niche.
 
-Before any empirical promotion, the remaining claim should be audited against the closest generic inferential precedents:
+Next work should freeze one ecological validation question where the combined framework might be useful, for example:
 
-1. **partial identification / identified sets** — does “retain all compatible worlds and report underidentification” add anything mathematically new?
-2. **falsification frontier / minimal relaxation / robust optimization** — are multi-axis rescue and Pareto-minimal relaxations generic prior art, leaving only the ecological world construction and interpretation as EOG-specific?
-3. **model/analysis multiverse uncertainty** — is explicit analyst-choice world uncertainty already formalized in ways that subsume the proposed analytical-world layer?
+- an island system where equally suitable endpoints differ in which ecological versus analytical worlds can connect them;
+- a case where mutually exclusive raster/resistance assumptions produce different connectivity structures and averaging would hide that distinction;
+- a time-stamped colonisation/recolonisation record where observations rule out some world families and shift the minimum required ecological relaxation;
+- a survey design case where a positive observation would discriminate among still-compatible biogeographic worlds.
 
-If those boundaries also match, EOG should be positioned as a **biogeographic application/framework that composes established inferential ideas around occurrence-conditioned reachability constraints**, not as a new general mathematical algorithm.
+Before touching a new dataset, predeclare:
 
-Only after this boundary is honest should one freeze a real ecological validation case and ask whether the framework adds useful ecological information.
+1. the ecological question;
+2. the world universe and which dimensions are **natural** versus **analyst-choice** uncertainty;
+3. the established comparator matching each estimand;
+4. the held-out or independent validation endpoint;
+5. the result that would count as **no added value** for EOG.
+
+If no real ecological case benefits from retaining the world set / constraint frontier beyond established methods, the integrated EOG line should stop rather than add complexity.
 
 ## Deferred until a concrete validation need exists
 
@@ -122,8 +123,7 @@ Only after this boundary is honest should one freeze a real ecological validatio
 - calibrated calendar time / transition duration — only if duration is itself an estimand;
 - unobserved historical sources — requires a declared latent-source contract;
 - continuous/enormous world spaces — require explicit search/coverage/certification rather than finite enumeration;
-- large-raster forecasting — only after a specific ecological question and comparator are frozen;
-- new empirical promotion claims — only after endpoint, comparator, and validation contracts are predeclared.
+- large-raster forecasting — only after a specific ecological question and comparator are frozen.
 
 ## Stop rule
 
