@@ -77,24 +77,19 @@ Therefore EOG must **not** claim novelty for endpoint-similarity/path-feasibilit
 
 ### Gate 7 — circuit theory / multiple pathways: negative boundary plus world-aggregation distinction passed
 
-`benchmarks/circuit_world_aggregation_boundary.py` uses two alternative worlds:
+`benchmarks/circuit_world_aggregation_boundary.py` uses two mutually alternative worlds, each with one A-C corridor and effective resistance 2. Unioning the two world graphs creates two simultaneous edge-disjoint paths and effective resistance 1 even though no declared world contains that union network.
 
-- `world_B`: A-B-C only;
-- `world_D`: A-D-C only.
+Circuit theory is correct for the union graph when that union graph is the declared landscape. EOG therefore must **not** claim novelty for recognizing or integrating multiple dispersal pathways or route redundancy. The remaining question is whether mutually exclusive ecological/analytical world representations may be aggregated before connectivity inference.
 
-Within each world:
+### Gate 8 — Van Moorter functional habitat: negative boundary plus analytical-world distinction passed
 
-- one edge-disjoint A-C path;
-- unit-resistance effective resistance = 2.
+`benchmarks/functional_habitat_world_boundary.py` implements the functional-habitat special case `m_st = q_s * q_t * k_st` for two equally admissible analytical connectivity representations.
 
-If the two mutually alternative world graphs are unioned before connectivity inference:
+All nodes have the same local habitat quality `q=1`. Candidate C has functional score 2 when connected to A and score 1 when isolated; functional habitat therefore correctly distinguishes suitable + accessible from suitable but isolated habitat.
 
-- two parallel paths appear simultaneously;
-- edge-disjoint path count becomes 2;
-- effective resistance falls to 1;
-- yet no declared individual world contains that union graph.
+Both analytical representations remain compatible with the common observed A-R relation. EOG keeps C `contingent` across the world set. Averaging the two functional-habitat outputs gives C=1.5, a value occurring in no declared world.
 
-Circuit theory is correct for the union graph when the union graph is the declared landscape. EOG therefore must **not** claim novelty for recognizing or integrating multiple dispersal pathways or route redundancy. The remaining question is whether mutually exclusive ecological/analytical world representations may be aggregated before connectivity inference, or must remain world-indexed and explicitly underidentified.
+Therefore EOG must **not** claim novelty for combining habitat suitability with movement/accessibility, integrating E-space with G/T-space through a network, or down-ranking isolated high-quality habitat. The remaining question is how to retain alternative analytical worlds and their underidentification instead of collapsing them into one chosen or averaged landscape.
 
 ## What remains after the negative boundaries
 
@@ -102,7 +97,7 @@ The remaining candidate contribution is deliberately narrow:
 
 > **Occurrence-conditioned inference over an explicitly declared ecological + analytical world universe, retaining mutually alternative world-indexed explanations and non-dominated geographic/environmental/barrier relaxations, with underidentification and finite-universe robustness/exclusion certificates made explicit.**
 
-The individual ingredients of geographic thresholding, stepping stones, dynamic reachability, least-cost exposure, bottlenecks, multiple pathways, route redundancy and consensus are not claimed as new.
+The individual ingredients of geographic thresholding, stepping stones, dynamic reachability, least-cost exposure, bottlenecks, multiple pathways, route redundancy, suitability/accessibility integration and consensus are not claimed as new.
 
 ## Repository cleanup state
 
@@ -117,15 +112,19 @@ The individual ingredients of geographic thresholding, stepping stones, dynamic 
 
 The repository still contains many historical branches. The available connector does not expose safe branch deletion, so branch refs are not force-reset merely to reduce their count.
 
-## Next external boundary
+## Next external boundary — history matching / NROY
 
-Do **not** add another EOG operator. The next closest prior art is a functional/accessibility framework that already combines environmental quality and movement connectivity.
+Do **not** add another EOG operator. The next closest prior art is generic model-world elimination based on observations.
 
-Primary target:
+History matching rules out model parameter/world regions inconsistent with observations and uncertainty and retains a Not-Ruled-Out-Yet (NROY) set. The next negative-boundary benchmark should therefore test whether finite EOG compatible-world reconstruction and sequential world-set contraction are exact special cases of finite history matching when the simulator output is structural reachability.
 
-- Van Moorter et al. (2023) functional habitat: suitability in E-space combined with geographic/network accessibility in G/T-space.
+Expected negative boundary if they agree:
 
-The comparison should explicitly expect overlap for **suitable + accessible habitat**. The remaining EOG distinction must be tested only in the inverse/world-set layer: incompatible versus compatible world families, analyst-choice alternatives kept separate, Pareto rescue sets, and certificate-strength rules.
+- ruling out finite model worlds inconsistent with observations is not unique to EOG;
+- retaining a compatible/NROY world set is not unique;
+- sequential contraction after additional observations is not unique.
+
+The remaining ecological contribution would then have to lie in the **biogeographic structure of the world universe and constraints**: occurrence-anchored reachability, explicit ecological versus analyst-choice alternatives, axis-preserving rescue/Pareto diagnostics, and finite-universe certificate/monotonicity rules.
 
 ## Deferred until a concrete validation need exists
 
