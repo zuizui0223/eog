@@ -82,7 +82,7 @@ This is an occurrence-conditioned minimum-required-relaxation diagnostic. It doe
 
 After the temporal minimum-relaxation frontier is validated, do **not** add another operator merely to complete the conceptual picture. The finite architecture already covers compatible-world reconstruction, world-indexed flow sets, static and temporal robust/contingent/excluded structure, basin merge, positive survey discrimination, corridor opening/closure, world-universe monotonicity and minimum-relaxation inference.
 
-The next repository-level decision should be evidence-driven: choose a comparator/validation question that tests whether these outputs add ecological information not already available from simpler or established methods. The strongest unresolved external-method boundary remains that reachability/connectivity alone is heavily covered by existing dynamic occupancy, mechanistic SDM, least-cost, circuit and functional-habitat approaches; the distinctive EOG claim is the inverse, set-valued, occurrence-conditioned constraint/reconstruction layer. This boundary is consistent with the prior literature review. fileciteturn291file4
+The next repository-level decision should be evidence-driven: choose a comparator/validation question that tests whether these outputs add ecological information not already available from simpler or established methods. Reachability/connectivity alone is heavily covered by existing dynamic occupancy, mechanistic SDM, least-cost, circuit and functional-habitat approaches; the distinctive EOG claim is the inverse, set-valued, occurrence-conditioned constraint/reconstruction layer.
 
 ## Deferred until a concrete estimand requires them
 
