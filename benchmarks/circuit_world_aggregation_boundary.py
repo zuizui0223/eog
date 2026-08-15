@@ -2,7 +2,7 @@
 """Circuit-theory negative boundary and world-aggregation test.
 
 McRae et al. (2008) explicitly introduced circuit-theoretic ecological connectivity as a
-way to integrate contributions of multiple dispersal pathways.  EOG therefore must not
+way to integrate contributions of multiple dispersal pathways. EOG therefore must not
 claim novelty merely for recognizing multiple routes or route redundancy.
 
 This benchmark asks a narrower question that matters to the remaining EOG mainline:
@@ -19,9 +19,9 @@ Known truth:
   parallel paths, edge-disjoint redundancy 2, and effective resistance 1.
 
 Circuit theory is correct for the aggregate graph **if that graph is the declared
-landscape**.  The negative boundary is that multiple-path integration itself is prior
-art.  The additional EOG question is whether uncertain/mutually exclusive world
-representations should be aggregated before connectivity is calculated.  EOG retains
+landscape**. The negative boundary is that multiple-path integration itself is prior
+art. The additional EOG question is whether uncertain/mutually exclusive world
+representations should be aggregated before connectivity is calculated. EOG retains
 world identity and therefore does not manufacture simultaneous redundancy that occurs
 in no individual admissible world.
 """
@@ -94,56 +94,42 @@ def _bridge_summary(edges):
     }
 
 
-def _effective_resistance(edges, source="A", target="C") -> float:
-    """Effective resistance for an undirected unit-resistance graph."""
-
-    n_nodes = len(NODE_IDS)
-    laplacian = np.zeros((n_nodes, n_nodes), dtype=float)
+def _laplacian(edges):
+    matrix = np.zeros((len(NODE_IDS), len(NODE_IDS)), dtype=float)
     for left, right in edges:
         i = INDEX[left]
         j = INDEX[right]
         conductance = 1.0
-        laplacian[i, i] += conductance
-        laplacian[j, j] += conductance
-        laplacian[i, j] -= conductance
-        laplacian[j, i] -= conductance
+        matrix[i, i] += conductance
+        matrix[j, j] += conductance
+        matrix[i, j] -= conductance
+        matrix[j, i] -= conductance
+    return matrix
 
-    source_index = INDEX[source]
-    target_index = INDEX[target]
-    keep = [index for index in range(n_nodes) if index != target_index]
-    reduced = laplacian[np.ix_(keep, keep)]
-    injection = np.zeros(n_nodes, dtype=float)
-    injection[source_index] = 1.0
-    injection[target_index] = -1.0
-    reduced_injection = injection[keep]
-    voltages_reduced = np.linalg.solve(reduced, reduced_injection)
-    voltages = np.zeros(n_nodes, dtype=float)
-    voltages[keep] = voltages_reduced
-    voltages[target_index] = 0.0
-    return float(voltages[source_index] - voltages[target_index])
+
+def _circuit_voltages(edges, source="A", target="C"):
+    """Unit-current voltage solution using the Laplacian pseudoinverse.
+
+    The full declared node universe may contain isolated nodes that are absent from one
+    alternative world. The Moore-Penrose solution keeps those nodes from making a
+    grounded reduced system singular while preserving source-target voltage differences
+    inside the connected component of interest.
+    """
+
+    laplacian = _laplacian(edges)
+    injection = np.zeros(len(NODE_IDS), dtype=float)
+    injection[INDEX[source]] = 1.0
+    injection[INDEX[target]] = -1.0
+    return np.linalg.pinv(laplacian) @ injection
+
+
+def _effective_resistance(edges, source="A", target="C") -> float:
+    voltages = _circuit_voltages(edges, source=source, target=target)
+    return float(voltages[INDEX[source]] - voltages[INDEX[target]])
 
 
 def _edge_currents(edges, source="A", target="C"):
-    n_nodes = len(NODE_IDS)
-    laplacian = np.zeros((n_nodes, n_nodes), dtype=float)
-    for left, right in edges:
-        i = INDEX[left]
-        j = INDEX[right]
-        laplacian[i, i] += 1.0
-        laplacian[j, j] += 1.0
-        laplacian[i, j] -= 1.0
-        laplacian[j, i] -= 1.0
-    source_index = INDEX[source]
-    target_index = INDEX[target]
-    keep = [index for index in range(n_nodes) if index != target_index]
-    injection = np.zeros(n_nodes, dtype=float)
-    injection[source_index] = 1.0
-    injection[target_index] = -1.0
-    voltages_reduced = np.linalg.solve(
-        laplacian[np.ix_(keep, keep)], injection[keep]
-    )
-    voltages = np.zeros(n_nodes, dtype=float)
-    voltages[keep] = voltages_reduced
+    voltages = _circuit_voltages(edges, source=source, target=target)
     currents = []
     for left, right in edges:
         current = abs(voltages[INDEX[left]] - voltages[INDEX[right]])
