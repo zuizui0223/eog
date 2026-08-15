@@ -2,51 +2,72 @@
 
 ## Status
 
-This document defines the active scientific and repository-development direction after the 2026-08 cleanup. It does **not** alter, rerun, rescue or reinterpret any frozen v0.1 result, empirical benchmark, manuscript fingerprint or prospective validation outcome recorded elsewhere.
+This document defines the active scientific and repository-development direction after the 2026-08 cleanup and prior-art audit. It does **not** alter, rerun, rescue, or reinterpret frozen results recorded elsewhere.
 
-Detailed implementation status belongs in [`eog_v2_progress.md`](eog_v2_progress.md). Frozen claims and negative results belong in their evidence ledgers/contracts. This file exists to keep **one scientific mainline** and prevent a new narrative/module family from appearing for every idea.
+Detailed implementation and comparator status belongs in [`eog_v2_progress.md`](eog_v2_progress.md). Frozen claims and negative results belong in their evidence ledgers/contracts. This file exists to keep **one scientific mainline**.
 
 ## Scientific center
 
-EOG starts from one distinction:
+EOG begins from a valid ecological distinction:
 
 > **Local possibility is not the same object as distributional realizability.**
 
-Observed occurrences are realized outcomes that constrain distribution-forming processes, but they do not identify one true migration route, colonisation history, ancestry or movement rate.
+Observed occurrences constrain distribution-forming processes but do not identify one true route, colonisation history, ancestry, or movement rate.
 
-The active EOG question is:
+The active question is:
 
-> **What declared ecological and analytical worlds could have produced the observed distribution, what minimum constraints must those worlds relax, and which reachability statements survive disagreement among them?**
+> **Given an observed distribution and an explicitly declared set of ecological and analytical representations, what distribution-forming explanations remain compatible, what constraints must be relaxed to make the observations realizable, and which structural statements survive disagreement among those representations?**
 
-EOG is therefore not defined by adding movement covariates to an SDM, by using graphs, or by making a 3D visualization. Local suitability/support may be a node property; the prospective EOG object is the **set of admissible state relations and distribution-forming worlds consistent with the observations**.
+## Positioning after the prior-art audit
 
-## Core inferential objects
+EOG is **not currently positioned as a new general graph, connectivity, inverse-problem, or sensitivity-analysis algorithm**.
 
-### Compatible world set
+Known-truth comparators now show that the following ideas already reduce to established prior art in their corresponding special cases:
 
-For observations `O` and a declared admissible universe `W`, the inverse object is
+- dynamic/time-respecting reachability;
+- critical geographic connection thresholds and stepping stones;
+- minimum cumulative environmental exposure / least-exposure paths;
+- multiple pathways and circuit-style redundancy;
+- suitability + accessibility / functional habitat;
+- consensus versus unanimity as different summaries;
+- history-matching/NROY model-space reduction;
+- minimum assumption relaxation / Pareto falsification frontiers.
 
-`W(O) = { w in W : w is compatible with O }`.
+These components may still be useful operators inside EOG, but they are not themselves novelty claims.
 
-If several worlds remain compatible, underidentification is an explicit result. Do not manufacture one historical answer.
+The remaining hypothesis is a **domain-framework/composition claim**:
 
-### World-indexed flow set
+> **EOG may provide ecological value by making occurrence-conditioned biogeographic world construction, ecological versus analyst-choice uncertainty, world identity, multi-axis rescue interpretation, underidentification, and coverage-limited structural claims explicit in one auditable workflow.**
 
-For every compatible world retain its own flow/support trajectory:
+This claim now requires empirical validation. It cannot be established by adding another synthetic operator.
 
-`K_t = { p_t^(w) : w in W(O) }`.
+## Core contracts retained
 
-Lower/upper envelopes are useful summaries but must not erase world identity. Uncalibrated transition support is not called a colonisation, dispersal, migration or occupancy probability.
+### Occurrence constraints
 
-### Robust / contingent / excluded structure
+Occurrences are positive realized states. They constrain admissible worlds but do not prove a historical path.
 
-Across the declared certified universe, distinguish:
+Unobserved locations are not absences. Non-detection becomes evidence only under an explicit detection model.
 
-1. reachable/supported in all worlds;
-2. contingent on world/representation choice;
-3. unreachable/inactive in every enumerated world.
+### World identity
 
-`robust` always means **robust under the declared certified universe**, not universal truth in nature.
+Ecological and analytical alternatives are declared as worlds. Mutually exclusive worlds must not be silently unioned or averaged before interpretation when that operation creates a configuration occurring in no declared world.
+
+### Flow/support identity
+
+Per-world flow/support outputs remain associated with the world that generated them. Lower/upper envelopes may summarize them but must not erase world identity.
+
+Uncalibrated support is not called colonisation, dispersal, migration, occupancy, or ancestry probability.
+
+### Relaxation axes
+
+Geographic/IBD-like, environmental/IBE-like, and barrier relaxations remain separately inspectable unless a one-dimensional family was scientifically declared in advance.
+
+A Pareto/minimum-relaxation frontier is treated as established sensitivity/falsification mathematics. EOG-specific interpretation, if useful, is the ecological meaning of those axes for an occurrence-conditioned biogeographic explanation.
+
+### Coverage-limited robustness
+
+`Robust` means robust over the declared certified universe, not universally true in nature.
 
 Adding admissible worlds must make strong claims more conservative:
 
@@ -54,122 +75,63 @@ Adding admissible worlds must make strong claims more conservative:
 - possible sets may stay the same or expand;
 - all-world exclusion may stay the same or shrink.
 
-### Minimum required relaxation
+Claim strength must not exceed coverage/certificate strength.
 
-For observations that cannot be realized under stricter worlds, ask what declared assumptions must be relaxed.
+## Distributional-watershed language
 
-Keep at least these axes separately inspectable:
-
-- geographic / IBD-like relaxation;
-- environmental / IBE-like relaxation;
-- barrier relaxation.
-
-Return non-dominated alternatives as a Pareto set. Do not collapse them into a weighted scalar unless a genuinely one-dimensional monotone family was predeclared for a specific scientific reason.
-
-Time-stamped positive observations may eliminate worlds that reach an endpoint too late and can therefore change the minimum-relaxation frontier.
-
-## Distributional-watershed interpretation
-
-The watershed language is structural, not decorative:
+The watershed language is retained only as an ecological interpretation layer:
 
 - occurrence = realized anchor;
-- basin = reachable set under declared constraints;
-- channel / tributary = supported transition sequence or edge family;
-- confluence = route reconvergence;
+- basin = reachable set under a declared world;
+- channel / tributary = supported transition sequence;
+- confluence = reconvergence;
 - bottleneck = critical transition/state;
 - divide = disconnected reachability boundary;
-- water level `lambda` = only a predeclared monotone one-dimensional relaxation coordinate;
-- basin merge = first declared relaxation level that jointly realizes previously separated occurrence groups.
+- water level `lambda` = a declared monotone one-dimensional relaxation coordinate only;
+- basin merge = first declared relaxation level yielding joint realizability.
 
-A basin merge or Pareto-minimal rescue is a **necessary-condition diagnostic**, not evidence that the corresponding historical event actually occurred.
-
-## Mosaic to landscape
-
-Local viability/support `V_i` remains useful. The active representation is conceptually:
-
-`distributional landscape = local node states + relations/transitions among states`.
-
-Many existing methods already model dispersal, landscape configuration, least-cost paths, connectivity, dynamic occupancy and mechanistic range change. EOG must not claim novelty for those ingredients alone. The distinctive target is the **inverse, set-valued, occurrence-conditioned constraint/reconstruction problem**.
+Threshold sweeps, basin merges, stepping-stone critical distances, and least-cost paths are established ideas. The watershed analogy is therefore **not a novelty claim**.
 
 ## Repository architecture
 
-### Stable/frozen compatibility layer
+### Frozen/stable compatibility layer
 
-Root `eog` remains the v0.1 compatibility surface for environmental geometry, shared-reference comparison, support topology, bridge inference and survey tooling. Frozen reproduction paths remain valid.
+Root `eog` remains the v0.1 compatibility surface for environmental geometry, shared-reference comparison, support topology, bridge inference, and survey tooling. Frozen reproduction paths remain valid.
 
 ### Prospective operator layer
 
 `eog.v2` remains a thin compatibility namespace. New work stays behind three explicit lazy facades:
 
-- `eog.v2.reachability` — static/temporal transition flow, compatible-world reconstruction, relaxation/frontier diagnostics, survey discrimination and transition-landscape summaries;
+- `eog.v2.reachability` — static/temporal flow, compatible-world reconstruction, relaxation/frontier diagnostics, survey discrimination, and transition-landscape summaries;
 - `eog.v2.traversability` — geographic/environmental/barrier/pathwise transition constraints;
-- `eog.v2.validation` — independent occurrence, genetic and directional-evidence validation.
+- `eog.v2.validation` — independent occurrence, genetic, and directional-evidence validation.
 
-Do not create a fourth top-level scientific facade merely because a new conceptual phrase appears.
+Do not create another scientific facade because a new conceptual phrase appears.
 
 ### Empirical/system-specific layer
 
-A-Islands, Tanzania, Finland, Ryukyu, Zhoushan and similar code are validation/adapters, not the general API.
+A-Islands, Tanzania, Finland, Ryukyu, Zhoushan, and similar code are validation/adapters, not the generic API.
 
 ### Manuscript layer
 
-`manuscript/` preserves the earlier structural-reachability empirical/submission line. It is publication provenance and evidence, not the current package architecture. See [`../manuscript/README.md`](../manuscript/README.md).
+`manuscript/` preserves the earlier structural-reachability empirical/submission line. It is publication provenance and evidence, not the active package architecture. See [`../manuscript/README.md`](../manuscript/README.md).
 
-## Completed finite architecture
+## Current phase — freeze one ecological validation contract
 
-The finite known-truth program already covers:
+Synthetic operator growth stops here by default.
 
-- static and temporal compatible-world reconstruction;
-- world-indexed flow/support sets;
-- robust / contingent / finite-universe excluded node and edge structure;
-- separate IBD/IBE/barrier minimum-relaxation frontiers;
-- first-possible versus first-robust basin merge;
-- positive occurrence and positive `(node,time)` discrimination;
-- temporal corridor opening/closure;
-- exact nested-world-universe monotonicity;
-- temporal minimum-relaxation frontiers;
-- archetype falsification covering IBD, IBE, hard barriers, niche deserts, stepping stones, rare low-support jumps, branching/reconvergence and analytical ambiguity.
+The next work must ask whether the **combined framework** adds useful ecological information beyond established methods in a predeclared case.
 
-This list is a capability boundary, **not an empirical superiority claim**.
+Before touching an outcome, freeze:
 
-## Current phase — comparator / validation, not feature growth
+1. **Ecological question** — e.g. what current distribution requires a geographic versus environmental versus barrier relaxation, or which analytical representations remain compatible with an observed island configuration.
+2. **World universe** — list natural/ecological uncertainties separately from analyst-choice uncertainties.
+3. **Comparators** — match each estimand with the strongest established method rather than a weak baseline.
+4. **Validation endpoint** — held-out occurrence, time-stamped colonisation/recolonisation, independently surveyed intermediate site, or independent genetic/movement evidence only where scientifically appropriate.
+5. **No-added-value outcome** — specify what result would show the combined EOG framework provides no useful additional information.
+6. **Claim certificate** — state whether the universe is exhaustively enumerated, sampled, bounded, or otherwise incomplete.
 
-The next question is no longer “what operator is missing?” It is:
-
-> **Does the inverse, set-valued, occurrence-conditioned EOG estimand add information that simpler or established methods do not already provide for the same scientific question?**
-
-The validation order is deliberately conservative.
-
-### Gate 1 — simple estimand separation
-
-Passed by `benchmarks/inverse_estimand_comparator.py`:
-
-- endpoint-only identity cannot distinguish `C@t2` from `C@t3`;
-- final-horizon reachability retains slow and fast explanations together;
-- scalarizing geographic/environmental/barrier relaxation loses axis identity;
-- EOG retains the non-dominated explanation set and timing constraint without selecting one history.
-
-This is **not** external-method superiority.
-
-### Gate 2 — existing strong internal connectivity baseline
-
-Current comparison: reuse the existing v0.1 bridge operator rather than weaken the baseline.
-
-A time-aggregated A-B-C graph can have a correct cumulative/minimax bridge even when the temporal ordering of A→B and B→C makes one declared world unable to satisfy `C@t2`.
-
-The intended result is not “bridge is wrong”; it is that **static connectivity and time-constrained realizability are different estimands**.
-
-### Gate 3 — external established methods
-
-Only after the first two gates remain coherent, freeze exact comparison contracts for methods such as:
-
-- least-cost / circuit-style connectivity;
-- functional or accessible habitat;
-- dynamic connectivity;
-- dynamic occupancy or mechanistic range models when repeated temporal data support their process estimands;
-- single-model / consensus ensembles that collapse analytical world uncertainty.
-
-Compare estimands and failure modes before comparing predictive scores. EOG does not need to win every metric.
+A favourable result may justify a biogeographic methods/framework paper. A null result is equally admissible and must remain in the evidence record.
 
 ## Cleanup rules
 
@@ -179,9 +141,9 @@ Compare estimands and failure modes before comparing predictive scores. EOG does
 4. Keep new workflows narrowly dependency-scoped; Package checks own package-wide regression.
 5. Keep presentation/manuscript code out of eager scientific-core imports.
 6. New prospective names stay off root compatibility namespaces unless compatibility requires them.
-7. Physically remove or move legacy code only after repository search shows no frozen reproduction path depends on it.
-8. A stale branch must not be merged wholesale across later scientific changes; salvage only still-valid changes onto current main.
-9. Claim strength must never exceed the explicit coverage/certificate strength.
+7. Physically remove/move legacy code only after repository search shows no frozen reproduction path depends on it.
+8. Do not merge stale diverged branches wholesale across later scientific changes; salvage only still-valid changes onto current main.
+9. Benchmark/prior-art comparisons belong in `benchmarks/` and `tests/`, not the public API.
 
 ## Deferred until a concrete validation need exists
 
@@ -189,9 +151,8 @@ Compare estimands and failure modes before comparing predictive scores. EOG does
 - calibrated calendar time / transition duration — only if duration is itself an estimand;
 - unobserved historical sources — requires a declared latent-source contract;
 - continuous/enormous world spaces — require explicit search/coverage/certification rather than finite enumeration;
-- large-raster forecasting — only after a specific forecast question and comparator are frozen;
-- new empirical promotion claims — only after endpoint, comparator and validation contracts are predeclared.
+- large-raster forecasting — only after a specific forecast question and comparator are frozen.
 
 ## Stop rule
 
-Do not add another operator merely to complete the conceptual picture. Do not open another occurrence/genetic dataset merely to obtain a favourable result. Preserve genuinely different worlds as a set whenever the observations do not identify one history.
+Do not add another operator merely to chase a smaller novelty niche. Do not open another occurrence/genetic dataset merely to obtain a favourable result. Preserve genuinely different worlds as a set whenever observations do not identify one history, and stop the integrated line if a predeclared ecological validation shows no useful added value beyond established methods.
