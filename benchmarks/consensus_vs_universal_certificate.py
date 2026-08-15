@@ -39,13 +39,16 @@ def _operator(node_ids, edges):
 
 
 def _world(world_id, *, target_reachable):
-    nodes = ("A", "T", "E")
+    # A and S are fixed observed sources in every world.  The second source is not a
+    # rescue device: it satisfies the already-frozen FiniteWorld reconstruction contract
+    # that occurrence configurations contain at least two unique observed nodes.
+    nodes = ("A", "S", "T", "E")
     edges = (("A", "T", 1.0),) if target_reachable else ()
-    return FiniteWorld(world_id, _operator(nodes, edges), ("A",))
+    return FiniteWorld(world_id, _operator(nodes, edges), ("A", "S"))
 
 
 def _flow_set(worlds):
-    reconstruction = reconstruct_compatible_worlds(worlds, ("A",), max_steps=1)
+    reconstruction = reconstruct_compatible_worlds(worlds, ("A", "S"), max_steps=1)
     return reconstruction, build_world_flow_set(reconstruction, worlds)
 
 
@@ -83,7 +86,8 @@ def run_consensus_certificate_comparator():
             "base_world_count": len(supporting),
             "expanded_world_count": len(expanded_worlds),
             "added_world_id": excluding.world_id,
-            "all_worlds_compatible_with_source_observation": (
+            "fixed_observed_sources": ["A", "S"],
+            "all_worlds_compatible_with_source_observations": (
                 len(expanded_reconstruction.compatible_world_ids) == len(expanded_worlds)
             ),
         },
