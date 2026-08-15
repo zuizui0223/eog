@@ -82,6 +82,12 @@ _TEMPORAL_TRANSITION_EXPORTS: Final[tuple[str, ...]] = (
     "compare_temporal_transition_universes",
 )
 
+_TEMPORAL_RELAXATION_EXPORTS: Final[tuple[str, ...]] = (
+    "TemporalRelaxationDeclaration",
+    "TemporalRelaxationFrontier",
+    "minimum_temporal_relaxation_frontier",
+)
+
 _SYNTHETIC_EXPORTS: Final[tuple[str, ...]] = (
     "SCENARIO_IDS",
     "SyntheticArchipelagoScenario",
@@ -109,6 +115,7 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         name: "eog.v2.temporal_transition_landscape"
         for name in _TEMPORAL_TRANSITION_EXPORTS
     },
+    **{name: "eog.v2.temporal_relaxation" for name in _TEMPORAL_RELAXATION_EXPORTS},
     **{name: "eog.synthetic_archipelago" for name in _SYNTHETIC_EXPORTS},
     "build_dynamic_reachability_visualization_payload": "eog.reachability_visualization",
     "render_dynamic_reachability_html": "eog.reachability_html",
@@ -126,6 +133,7 @@ __all__ = [
     *_TEMPORAL_RECONSTRUCTION_EXPORTS,
     *_TEMPORAL_SURVEY_EXPORTS,
     *_TEMPORAL_TRANSITION_EXPORTS,
+    *_TEMPORAL_RELAXATION_EXPORTS,
 ]
 
 

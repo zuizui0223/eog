@@ -45,6 +45,9 @@ def test_new_prospective_reachability_apis_stay_on_explicit_facade():
         "TemporalTransitionUniverseUpdate",
         "summarize_temporal_transition_landscape",
         "compare_temporal_transition_universes",
+        "TemporalRelaxationDeclaration",
+        "TemporalRelaxationFrontier",
+        "minimum_temporal_relaxation_frontier",
     ):
         assert hasattr(reachability, name)
         assert not hasattr(v2, name)
@@ -60,6 +63,7 @@ def test_v2_facades_keep_estimands_separated():
     assert hasattr(reachability, "rank_positive_temporal_occurrence_candidates")
     assert hasattr(reachability, "summarize_temporal_transition_landscape")
     assert hasattr(reachability, "compare_temporal_transition_universes")
+    assert hasattr(reachability, "minimum_temporal_relaxation_frontier")
     assert not hasattr(reachability, "evaluate_genetic_validation_ladder")
     assert not hasattr(reachability, "evaluate_directional_order_evidence")
     assert hasattr(traversability, "summarize_path_traversability")
@@ -71,6 +75,7 @@ def test_v2_facades_keep_estimands_separated():
     assert not hasattr(traversability, "PositiveTemporalSurveyRanking")
     assert not hasattr(traversability, "TemporalTransitionLandscape")
     assert not hasattr(traversability, "TemporalTransitionUniverseUpdate")
+    assert not hasattr(traversability, "TemporalRelaxationFrontier")
     assert not hasattr(traversability, "GeneticValidationConfig")
     assert not hasattr(traversability, "evaluate_directional_order_evidence")
     assert hasattr(validation, "GeneticValidationConfig")
@@ -82,4 +87,5 @@ def test_v2_facades_keep_estimands_separated():
     assert not hasattr(validation, "PositiveTemporalSurveyRanking")
     assert not hasattr(validation, "TemporalTransitionLandscape")
     assert not hasattr(validation, "TemporalTransitionUniverseUpdate")
+    assert not hasattr(validation, "TemporalRelaxationFrontier")
     assert not hasattr(validation, "EcologicalTransitionEdge")
