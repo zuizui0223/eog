@@ -8,7 +8,7 @@ Active scientific direction: [`development_mainline.md`](development_mainline.md
 
 ## Finite inverse/reachability architecture — implemented
 
-The explicit `eog.v2.reachability` facade now contains the finite known-truth core needed for the distributional-watershed / world-reconstruction program:
+The explicit `eog.v2.reachability` facade contains the finite known-truth core for the distributional-watershed / world-reconstruction program.
 
 ### Static finite worlds
 
@@ -34,25 +34,64 @@ The explicit `eog.v2.reachability` facade now contains the finite known-truth co
 - [x] positive `(node, time)` survey discrimination without treating non-detection as absence;
 - [x] robust / contingent / inactive directed transition edges by interval;
 - [x] possible and robust corridor opening/closure summaries;
-- [x] exact nested temporal-world-universe monotonicity: adding admissible worlds may weaken robust/exclusion claims but cannot strengthen them;
-- [x] axis-preserving temporal minimum-relaxation frontier: earlier occurrence timing can eliminate a zero-relaxation slow world and require geographic-, environmental-, or barrier-specific rescue explanations without scalarizing them.
+- [x] exact nested temporal-world-universe monotonicity;
+- [x] axis-preserving temporal minimum-relaxation frontier.
 
-All of these are finite known-truth capabilities. `robust` means robust over the explicitly declared and exhaustively enumerated universe, not universal ecological certainty.
+These are finite known-truth capabilities. `robust` means robust over the explicitly declared and exhaustively enumerated universe, not universal ecological certainty.
 
-## Inverse-estimand separation gate — passed
+## Comparator / falsification gates
 
-`benchmarks/inverse_estimand_comparator.py` now tests the prerequisite claim that the integrated EOG output is a distinct inferential object rather than another connectivity score.
+The active question is no longer whether another operator can be added. It is whether the integrated inverse/set-valued architecture contains inferential information that simpler or established representations do not already provide.
 
-One frozen temporal world universe is summarized four ways:
+### Gate 1 — endpoint/final-horizon/scalar summaries: passed
 
-1. **endpoint-only identity** — discarding time makes `C@t2` and `C@t3` identical;
-2. **final-horizon compatibility** — looking only at C by `t3` retains slow and fast explanations together;
-3. **scalar relaxation** — summing geographic + environmental + barrier relaxation gives the same minimum score to three ecologically distinct rescue explanations;
-4. **EOG inverse** — `C@t2` eliminates the slow zero-relaxation world, removes an all-axis dominated explanation, and retains the geographic-only, environmental-only and barrier-only rescues as a Pareto set.
+`benchmarks/inverse_estimand_comparator.py` shows:
 
-Known-truth Package checks pass across Python 3.10–3.12, wheel build and the frozen topology regression gate.
+- discarding time makes `C@t2` and `C@t3` identical;
+- final-horizon compatibility retains slow and fast explanations together;
+- scalar geographic + environmental + barrier relaxation loses axis identity;
+- the EOG inverse layer can eliminate a slow zero-relaxation world with earlier timing while retaining three non-dominated axis-specific rescue explanations.
 
-This benchmark is **estimand separation, not external-method superiority**. It does not claim to reproduce or beat dynamic occupancy, mechanistic SDMs, least-cost, circuit theory, functional habitat or other full competitor methods.
+This is estimand separation, not external-method superiority.
+
+### Gate 2 — existing static bridge baseline: passed
+
+`benchmarks/bridge_vs_temporal_reconstruction.py` reuses the existing v0.1 cumulative/minimax/redundancy bridge implementation.
+
+Two temporal worlds have the same time-aggregated A-B-C graph. Static bridge inference correctly returns the same A-B-C path, cumulative cost and bottleneck for both. Only the world with A→B before B→C can satisfy the time-stamped positive observation `C@t2`.
+
+Conclusion: **static connectivity and time-constrained realizability are different estimands**. The bridge result is not considered wrong.
+
+### Gate 3 — time-respecting Boolean dynamic connectivity: negative boundary passed
+
+`benchmarks/dynamic_connectivity_negative_boundary.py` independently propagates Boolean time-respecting connectivity.
+
+At zero structural support tolerance it exactly reproduces:
+
+- EOG cumulative reached-by-time structure across ordered, reversed, branching/confluence and low-positive-support scenarios;
+- positive temporal compatible-world filtering for `C@t2`.
+
+Therefore EOG must **not** claim novelty for forward dynamic reachability, time-respecting path existence, or positive temporal filtering by themselves.
+
+### Gate 4 — consensus frequency versus universal certificate: current gate
+
+`benchmarks/consensus_vs_universal_certificate.py` compares two valid but different summaries.
+
+Final known-truth design:
+
+- `A` is a fixed source;
+- `R` is a common observed non-source target reachable in every declared world, so all worlds satisfy the same frozen occurrence contract;
+- `T` is reachable in 99 of 100 worlds;
+- `E` is unreachable in all 100 worlds.
+
+Expected distinction:
+
+- T has 0.99 reachability frequency and satisfies a 0.95 consensus rule;
+- T is robust in the original 99-world universe but becomes `contingent` after adding the one excluding world;
+- T remains possible and is not relabelled impossible;
+- E remains finite-universe `robustly_unreachable` with frequency 0.
+
+This tests **agreement frequency versus invariance**, not whether consensus methods are wrong.
 
 ## Repository cleanup state
 
@@ -61,28 +100,24 @@ This benchmark is **estimand separation, not external-method superiority**. It d
 - [x] new prospective names remain on explicit owning facades rather than widening `eog.v2` root;
 - [x] package/facade refactors no longer rerun unrelated frozen scientific confirmations;
 - [x] package-wide regression remains in Package checks;
-- [x] historical structural manuscript assets are explicitly labelled as a frozen publication/evidence line in `manuscript/README.md`, not as the active method architecture;
-- [x] the stale `cleanup/post-temporal-mainline` branch is not merged wholesale because it diverged before later temporal and facade work; its still-valid manuscript-boundary cleanup has been ported onto current mainline work.
+- [x] historical structural manuscript assets are explicitly labelled as a frozen publication/evidence line in `manuscript/README.md`;
+- [x] `README.md`, `development_mainline.md`, `eog_v2_progress.md`, and `eog_v2_package_layout.md` now have distinct roles rather than duplicating stale “next gate” narratives;
+- [x] stale diverged cleanup work is not merged wholesale across later scientific changes; only still-valid changes are ported to current mainline work.
 
-## Current phase — comparator / validation design
+The repository still contains many historical branches. The available connector does not expose safe branch deletion, so branch refs are not force-reset merely to reduce their count.
 
-**Do not add another operator by default.** The finite architecture is already broad enough to express compatible-world reconstruction, set-valued flows, robust/contingent/excluded structure, basin merge, temporal corridor changes, positive observation discrimination, universe monotonicity and minimum-required relaxation.
+## Next decision after Gate 4
 
-The next task is to predeclare a comparator/validation design for the distinctive claim:
+If the consensus/certificate gate passes, the next step is **not another EOG operator**. Freeze one external established-method comparison around a matching estimand.
 
-> **Observed occurrences constrain a set of distribution-forming worlds and the minimum geographic/environmental/barrier assumptions required to realize them; EOG preserves alternative explanations and underidentification instead of forcing one scalar score or one historical route.**
+Priority candidates:
 
-External comparator work should therefore test this inverse estimand directly rather than ask whether EOG merely predicts occurrence better.
+- functional / accessible habitat or least-cost/circuit summaries for static accessibility;
+- a published dynamic-connectivity representation for time-respecting reachability, where agreement with EOG forward structure is expected;
+- dynamic occupancy or mechanistic range models only when repeated observations/detection data make those process estimands identifiable;
+- ensemble/consensus approaches specifically for analyst-choice uncertainty and world aggregation.
 
-Priority comparator families to implement or interface only when the exact estimand is frozen:
-
-- endpoint/local-support or distance-to-source baselines;
-- least-cost / bottleneck / circuit-style connectivity summaries;
-- functional-habitat / accessible-habitat representations;
-- dynamic occupancy or mechanistic range models when repeated temporal data make their process estimands identifiable;
-- single-model or ensemble consensus approaches that collapse analyst-choice uncertainty.
-
-The first external benchmark should report **where the estimands coincide and where they do not**. EOG does not need to win every predictive metric.
+The external benchmark should report where estimands coincide, where they differ, and which additional EOG claim remains after the negative boundaries above. EOG does not need to win every predictive metric.
 
 ## Deferred until a concrete validation need exists
 
