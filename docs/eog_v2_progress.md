@@ -90,7 +90,26 @@ Known truth uses A=0, B=4, C=10:
 
 Therefore EOG must **not** claim novelty for varying a geographic connection threshold, detecting the first threshold where components merge, or a stepping-stone-mediated one-dimensional critical dispersal distance.
 
-The remaining candidate distinction is narrower: **multi-axis occurrence-conditioned relaxation sets, explicit ecological + analytical world universes, underidentification, and finite-universe certificate/monotonicity rules.**
+### Gate 6 — Dobrowski/Parks minimum cumulative environmental exposure: negative boundary passed
+
+`benchmarks/mce_environmental_exposure_boundary.py` compares an independent least-exposure graph analogue with the existing EOG bridge environmental-cost path.
+
+Known truth has equal-climate endpoints A and C:
+
+- short route `A-B-C`: geographic length 2 but cumulative environmental exposure 2.0 because B is strongly dissimilar;
+- long route `A-D-E-C`: geographic length 3 but cumulative exposure 0.4 because intermediate states remain close to the source environment.
+
+Both the independent minimum-exposure baseline and EOG's existing pure-environmental bridge select the longer `A-D-E-C` route with exposure 0.4.
+
+Therefore EOG must **not** claim novelty for endpoint-similarity/path-feasibility mismatch, cumulative environmental exposure along a path, selecting a least-exposure path, or an environmental path bottleneck by themselves.
+
+## What remains after the negative boundaries
+
+The remaining candidate contribution is now deliberately narrow:
+
+> **Occurrence-conditioned inference over an explicitly declared ecological + analytical world universe, retaining multiple world-indexed explanations and non-dominated geographic/environmental/barrier relaxations, with underidentification and finite-universe robustness/exclusion certificates made explicit.**
+
+The individual ingredients of geographic thresholding, stepping stones, dynamic reachability, least-cost exposure, path bottlenecks, and consensus are not claimed as new.
 
 ## Repository cleanup state
 
@@ -107,13 +126,13 @@ The repository still contains many historical branches. The available connector 
 
 ## Next external boundary
 
-Do **not** add another EOG operator. The next comparator should target the other well-established part of the intuition: environmental/path exposure or resistance, not generic reachability.
+Do **not** add another EOG operator. The next useful comparator should test a strong multi-path/accessibility method rather than another shortest-path variant.
 
-Priority candidates:
+Priority:
 
-- environmental barrier / minimum cumulative exposure path summaries;
-- circuit/resistance or functional-habitat accessibility;
-- published dynamic-connectivity formulations where forward reachability equivalence is expected;
+- circuit/resistance connectivity, where multiple route redundancy is already an established estimand;
+- functional / accessible habitat frameworks integrating environmental suitability and geographic/network accessibility;
+- analyst-choice/model-universe uncertainty approaches, which are closest to the remaining EOG claim;
 - dynamic occupancy/mechanistic range models only when repeated observations and detection data make their process estimands identifiable.
 
 The external benchmark should report where estimands coincide and which additional EOG claim remains after the negative boundaries above. EOG does not need to win every predictive metric.
