@@ -2,9 +2,9 @@
 """Functional-habitat prior-art boundary and analytical-world uncertainty test.
 
 Van Moorter et al. (2023) formalized functional habitat by combining habitat quality in
-environmental space with geographic/topological connectivity.  Their landscape matrix
+environmental space with geographic/topological connectivity. Their landscape matrix
 has elements m_st = q_s * q_t * k_st, where q is habitat quality and k is pairwise
-connectivity/proximity.  EOG therefore must not claim novelty merely for combining
+connectivity/proximity. EOG therefore must not claim novelty merely for combining
 suitability with accessibility or for down-ranking isolated but locally suitable
 habitat.
 
@@ -14,9 +14,9 @@ same local habitat qualities and the same observed A->R relation:
 - connected_representation also connects source A to candidate C;
 - isolated_representation leaves C locally suitable but inaccessible from A.
 
-Functional habitat is computed correctly in each representation.  EOG's additional
+Functional habitat is computed correctly in each representation. EOG's additional
 question is not how to compute functional habitat in one chosen landscape, but whether
-alternative analytical landscapes should be averaged/collapsed before inference.  The
+alternative analytical landscapes should be averaged/collapsed before inference. The
 finite-world layer retains C as contingent across the two declared worlds.
 """
 from __future__ import annotations
@@ -136,7 +136,7 @@ def run_functional_habitat_world_boundary():
             "mean_scores_if_world_identity_is_collapsed": {
                 node_id: float(mean_scores[INDEX[node_id]]) for node_id in NODE_IDS
             },
-            "C_same_local_quality_but_different_functionality": (
+            "C_same_local_quality_but_different_functionality": bool(
                 QUALITY["C"] == 1.0
                 and connected_scores[INDEX["C"]] > isolated_scores[INDEX["C"]]
             ),
