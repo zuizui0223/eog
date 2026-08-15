@@ -3,10 +3,10 @@
 
 This runner reuses the *pre-outcome* A-Islands inputs and the frozen 12 graph scenarios,
 but it does not evaluate held-out incidence, fit the frozen pointwise support model, or
-compute AUC/concordance.  For each species/fold it uses only outer-training presences as
+compute AUC/concordance. For each species/fold it uses only outer-training presences as
 occurrence anchors and treats every held-out island as an unlabeled candidate state.
 
-The output is exploratory development evidence only.  The A-Islands outcome has already
+The output is exploratory development evidence only. The A-Islands outcome has already
 been viewed in earlier work and cannot become a new confirmatory result for the
 integrated EOG world-reconstruction framework.
 """
@@ -27,6 +27,27 @@ from eog.prepared_island_connectivity import prepare_island_connectivity
 
 
 PREDICTORS = authoritative.PREDICTORS
+OUTPUT_FIELDS = (
+    "species",
+    "fold",
+    "island_id",
+    "training_presences",
+    "world_count",
+    "support_count",
+    "connected_frequency",
+    "world_class",
+    "geography_support_count",
+    "geography_world_count",
+    "geography_connected_frequency",
+    "geography_world_class",
+    "environment_support_count",
+    "environment_world_count",
+    "environment_connected_frequency",
+    "environment_world_class",
+    "geo_environment_class_disagreement",
+    "supporting_world_ids",
+    "unsupported_world_ids",
+)
 
 
 def _read_primary_cohort(path: Path) -> list[dict[str, str]]:
@@ -44,6 +65,24 @@ def _write_csv(path: Path, rows: list[dict[str, object]], fields: list[str]) -> 
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def _training_anchor_ids(
+    taxon_presence_ids: set[str],
+    fold_by_island: dict[str, int],
+    heldout_fold: int,
+) -> set[str]:
+    """Return occurrence anchors using training-fold membership only.
+
+    Presence status on islands assigned to ``heldout_fold`` cannot affect this set. This
+    helper is intentionally separate so the response-free contract is directly testable.
+    """
+
+    return {
+        island_id
+        for island_id in taxon_presence_ids
+        if fold_by_island[island_id] != heldout_fold
+    }
 
 
 def run(
@@ -132,7 +171,7 @@ def run(
     taxon_set = set(taxa)
 
     # Species rows are used only to identify occurrence anchors that lie in the outer
-    # training fold.  Held-out occurrence states are never converted to labels or read
+    # training fold. Held-out occurrence states are never converted to labels or read
     # into the output/evaluation path below.
     presence_ids: dict[str, set[str]] = {taxon: set() for taxon in taxa}
     for row in species_rows:
@@ -176,11 +215,7 @@ def run(
         for fold in range(1, 6):
             training = fold_vector != fold
             heldout_indices = np.flatnonzero(~training)
-            anchor_ids = {
-                node_id
-                for node_id in taxon_presence_ids
-                if fold_by_island[node_id] != fold
-            }
+            anchor_ids = _training_anchor_ids(taxon_presence_ids, fold_by_island, fold)
             if len(anchor_ids) < min_training_anchors:
                 failure_counts["fewer_than_minimum_training_anchors"] += 1
                 continue
@@ -222,28 +257,7 @@ def run(
                     }
                 )
 
-    fields = [
-        "species",
-        "fold",
-        "island_id",
-        "training_presences",
-        "world_count",
-        "support_count",
-        "connected_frequency",
-        "world_class",
-        "geography_support_count",
-        "geography_world_count",
-        "geography_connected_frequency",
-        "geography_world_class",
-        "environment_support_count",
-        "environment_world_count",
-        "environment_connected_frequency",
-        "environment_world_class",
-        "geo_environment_class_disagreement",
-        "supporting_world_ids",
-        "unsupported_world_ids",
-    ]
-    _write_csv(row_output, rows, fields)
+    _write_csv(row_output, rows, list(OUTPUT_FIELDS))
 
     row_summary = summarize_worldset(rows) if rows else None
     class_counts = Counter(str(row["world_class"]) for row in rows)
