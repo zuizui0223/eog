@@ -50,6 +50,20 @@ _WORLD_EXPORTS: Final[tuple[str, ...]] = (
     "rank_positive_occurrence_candidates",
 )
 
+_FORECAST_EXPORTS: Final[tuple[str, ...]] = (
+    "ForecastGateDeclaration",
+    "WorldForecastMember",
+    "ForecastNodeEnvelope",
+    "WorldSetForecast",
+    "ForecastUpdate",
+    "ForecastFrontierCandidate",
+    "ForecastFrontierRanking",
+    "build_worldset_forecast",
+    "forecast_from_occurrences",
+    "update_worldset_forecast",
+    "rank_worldset_forecast_frontier",
+)
+
 _RELAXATION_EXPORTS: Final[tuple[str, ...]] = (
     "MonotoneRelaxationFamily",
     "BasinMergeResult",
@@ -104,6 +118,7 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.island_state_layers" for name in _STATE_LAYER_EXPORTS},
     **{name: "eog.reachability_network_diagnostics" for name in _NETWORK_EXPORTS},
     **{name: "eog.v2.world_reconstruction" for name in _WORLD_EXPORTS},
+    **{name: "eog.v2.world_forecast" for name in _FORECAST_EXPORTS},
     **{name: "eog.v2.relaxation_family" for name in _RELAXATION_EXPORTS},
     **{name: "eog.v2.temporal_reachability" for name in _TEMPORAL_FLOW_EXPORTS},
     **{
@@ -128,6 +143,7 @@ __all__ = [
     *_PRESENTATION_EXPORTS,
     *_SYNTHETIC_EXPORTS,
     *_WORLD_EXPORTS,
+    *_FORECAST_EXPORTS,
     *_RELAXATION_EXPORTS,
     *_TEMPORAL_FLOW_EXPORTS,
     *_TEMPORAL_RECONSTRUCTION_EXPORTS,
