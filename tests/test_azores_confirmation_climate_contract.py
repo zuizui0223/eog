@@ -5,7 +5,8 @@ from pathlib import Path
 
 CONTRACT = Path("benchmarks/azores_confirmation_climate_contract.json")
 NODES = Path("validation/azores_confirmation/azores_nodes.csv")
-EXPECTED_NODE_SHA256 = "df6117ce4b68098b22ab6af0c769cbdbfa9f9adf1101307b2619b206e624dc62"
+EXPECTED_ARTIFACT_NODE_SHA256 = "df6117ce4b68098b22ab6af0c769cbdbfa9f9adf1101307b2619b206e624dc62"
+EXPECTED_REPOSITORY_NODE_SHA256 = "6b7ea467097ce7fedf13c7aab2f64eca414019ffd8383a28507383314b8f1601"
 
 
 def _load():
@@ -15,7 +16,9 @@ def _load():
 def test_climate_contract_uses_the_immutable_frozen_node_table():
     contract = _load()
     assert contract["frozen_node_table"] == str(NODES)
-    assert hashlib.sha256(NODES.read_bytes()).hexdigest() == EXPECTED_NODE_SHA256
+    assert contract["frozen_node_artifact_sha256"] == EXPECTED_ARTIFACT_NODE_SHA256
+    assert contract["frozen_node_repository_sha256"] == EXPECTED_REPOSITORY_NODE_SHA256
+    assert hashlib.sha256(NODES.read_bytes()).hexdigest() == EXPECTED_REPOSITORY_NODE_SHA256
 
 
 def test_climate_products_and_variables_are_declared_before_sampling():
