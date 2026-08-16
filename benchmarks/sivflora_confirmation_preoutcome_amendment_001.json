@@ -1,0 +1,42 @@
+{
+  "amendment_id": "001",
+  "frozen_date": "2026-08-16",
+  "stage": "post_source_schema_pre_worldset_pre_model",
+  "reason": "Resolve schema-driven node-coordinate precedence and freeze WorldClim resolution before any world construction or held-out validation.",
+  "outcome_information_used": false,
+  "worldset_built_before_amendment": false,
+  "heldout_model_fitted_before_amendment": false,
+  "node_coordinate_rule": {
+    "source_sheet": "islands_data",
+    "primary_rows": "Id is non-null",
+    "expected_nodes": 22,
+    "coordinate_use": [
+      "geographic_distance",
+      "CHELSA_sampling",
+      "WorldClim_sampling"
+    ],
+    "locality_weighted_environmental_aggregation": false,
+    "species_weighted_coordinates": false
+  },
+  "climate": {
+    "CHELSA": {
+      "version": "2.1",
+      "climatology": "1981-2010",
+      "variables": ["bio1", "bio5", "bio6", "bio12", "bio15"],
+      "sampling": "direct_at_frozen_island_coordinate",
+      "fallback_or_nearby_cell_substitution": false
+    },
+    "WorldClim": {
+      "version": "2.1",
+      "resolution": "2.5m",
+      "archive": "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_2.5m_bio.zip",
+      "variables": ["bio1", "bio5", "bio6", "bio12", "bio15"],
+      "sampling": "direct_at_frozen_island_coordinate",
+      "fallback_or_nearby_cell_substitution": false
+    },
+    "missing_value_rule": "Any missing/nodata selected variable at any of the 22 nodes blocks the climate freeze; do not move nodes, change resolution, substitute localities, or impute after outcome inspection.",
+    "standardization": "independently within each product across the 22 nodes using mean and sample standard deviation",
+    "distance": "euclidean in five-dimensional standardized environmental space"
+  },
+  "unchanged_primary_design": true
+}
