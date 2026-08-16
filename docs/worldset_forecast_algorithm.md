@@ -8,11 +8,17 @@ Working name:
 
 > **EOG-WF — inverse-conditioned world-set forecasting**
 
-It is a prediction algorithm in the sense that it maps a current observed positive distribution plus a declared world universe to future/unsampled node states over a finite propagation horizon. It does **not** claim that its uncalibrated support values are occupancy or colonisation probabilities.
+Current algorithmic status:
+
+> **Implemented and known-truth validated. Independent ecological predictive superiority is not established.**
+
+EOG-WF maps a current positive distribution plus a declared finite world universe to future/unsampled node states through a finite propagation horizon, then updates that forecast when later positive evidence arrives.
+
+It does **not** claim that uncalibrated support values are occupancy or colonisation probabilities.
 
 ## 1. Prediction target
 
-Classical sitewise SDMs usually estimate a scalar suitability or occurrence quantity at each location. EOG-WF instead predicts a **world-indexed distributional-realizability set through horizon**.
+Classical sitewise SDMs typically produce a scalar suitability/occurrence surface. EOG-WF instead predicts a **world-indexed distributional-realizability set through horizon**.
 
 Given:
 
@@ -45,7 +51,7 @@ viability    >= tau_V      # optional
 persistence  >= tau_P      # optional
 ```
 
-The layers are deliberately not multiplied into one opaque score.
+The layers are deliberately not multiplied into one opaque occupancy-like score.
 
 ## 2. Set-valued forecast
 
@@ -119,7 +125,7 @@ At the forecast horizon:
 
 ```text
 b: supported by 1/2 worlds
- d: supported by 1/2 worlds
+d: supported by 1/2 worlds
 ```
 
 A scalar frequency compression gives both nodes the same value, `0.5`.
@@ -138,56 +144,68 @@ b -> robustly_supported
 d -> excluded_in_all_worlds
 ```
 
-The old scalar `0.5` values are insufficient to perform this update because they erased which world generated each support value.
+The old scalar `0.5` values are insufficient to perform this exact update because they erased which world generated each support value.
 
 This is the operational reason world identity is retained: **it is state required for sequential prediction under structural uncertainty**, not decoration on an ensemble map.
 
-## 5. Three forecast views
+## 5. Algorithmic invariants
 
-`rank_worldset_forecast_frontier` exposes three deliberately different views.
+The first EOG-WF implementation enforces:
+
+1. **frozen-world identity** — world IDs and fingerprints cannot change between reconstruction, forecast and update;
+2. **positive-evidence contraction** — adding positive constraints cannot create newly compatible worlds;
+3. **horizon monotonicity** — cumulative first-passage support cannot decrease as forecast horizon increases;
+4. **separate local gates** — reachability, viability and persistence remain separately declared;
+5. **finite-universe falsification** — if every declared world is contradicted, the algorithm returns that failure explicitly;
+6. **certificate-bounded claims** — robust/excluded classes are exact only over the declared compatible finite universe;
+7. **deterministic reproducibility** — reconstruction, gate, member and forecast fingerprints bind the frozen inputs/state.
+
+## 6. Three forecast views
+
+`rank_worldset_forecast_frontier` exposes three deliberately different decision views.
 
 ### Robust view
 
 Prioritises nodes with high lower support that are supported across all retained worlds.
 
-Use when the decision is conservative and the declared world universe is itself defensible.
+Use when decisions are conservative and the declared world universe is itself defensible.
 
 ### Possible-expansion view
 
 Prioritises nodes with high upper support under at least one retained world.
 
-Use for search or surveillance where missing a plausible expansion is more costly than investigating extra sites.
+Use for surveillance/search where missing a plausible expansion is more costly than investigating extra sites.
 
 ### Discriminating view
 
 Prioritises contingent nodes whose world split is closest to 50:50 and whose support envelope is wide.
 
-Use when the next observation should maximally distinguish still-compatible structural explanations.
+Use when the next positive observation should distinguish still-compatible structural explanations.
 
 The split score is an information-targeting heuristic, not an occurrence probability.
 
-## 6. What is genuinely new versus prior art
+## 7. What is genuinely new versus prior art
 
-EOG-WF must not claim generic novelty for any of the following:
+EOG-WF must not claim generic novelty for:
 
 - dynamic reachability or first-passage propagation;
 - dynamic/process-based SDMs;
-- ensemble SDMs;
-- Bayesian model averaging;
-- credal classifiers or imprecise-probability prediction sets;
+- ensemble SDMs or model averaging;
+- Bayesian/credal/imprecise-probability classification or prediction sets in general;
 - viability kernels or generic robust reachability;
 - multiverse analysis;
-- adaptive survey design.
+- adaptive survey design;
+- history matching / compatible-set filtering in general.
 
 These all have established literatures.
 
-The **candidate domain-method contribution** is the specific biogeographic composition:
+The **candidate domain-method contribution** is the specific biogeographic inverse-to-forward composition:
 
-> observed positive distributions are first used as inverse consistency constraints on explicit ecological/analytical transition worlds; the surviving world identities are then carried forward as the state of a sequential, horizon-indexed distribution forecast instead of being averaged away; later positive evidence contracts or falsifies that world set without post-outcome retuning.
+> observed positive distributions are first used as inverse consistency constraints on explicit ecological/analytical transition worlds; the surviving exact world identities are then carried forward as the state of a horizon-indexed distribution forecast instead of being averaged away; later positive evidence contracts or falsifies that frozen world set without post-outcome retuning.
 
-This is narrower than claiming a new general mathematics of set-valued forecasting.
+This is narrower than claiming new general mathematics for set-valued forecasting.
 
-## 7. Relationship to SDM
+## 8. Relationship to SDM
 
 EOG-WF can consume local suitability/viability information rather than replacing it.
 
@@ -198,7 +216,7 @@ local SDM or mechanistic layer
     -> local viability support
 
 EOG transition world
-    -> reachability support through landscape/history assumptions
+    -> reachability support through landscape/process assumptions
 
 optional persistence layer
     -> post-arrival support
@@ -213,30 +231,60 @@ Conversely, a reachable cell can be rejected by a declared viability gate.
 
 This is the intended transition from a flat sitewise mosaic to a stateful landscape/flow forecast.
 
-## 8. Current evidence level
+## 9. Current evidence level
 
-The implementation establishes algorithmic behaviour on known-truth cases and preserves the earlier frozen empirical evidence.
+The implementation establishes algorithmic behavior on known-truth cases and preserves all earlier frozen empirical evidence.
 
-It does **not yet establish** that EOG-WF predicts real independent distributions better than a strong SDM, dynamic SDM, or ensemble/credal comparator.
+The known-truth suite demonstrates:
 
-Required empirical validation is now explicit:
+- world-identity collision despite equal scalar support frequency;
+- exact forecast sharpening after later positive evidence;
+- finite-universe falsification;
+- horizon monotonicity;
+- separate local viability gating;
+- robust/possible/discriminating forecast views.
 
-1. freeze a world universe before outcomes;
-2. freeze local-state inputs and forecast gates;
-3. hold out genuinely independent spatial or temporal units;
-4. compare EOG-WF against:
-   - local-only SDM;
-   - same-world scalar/union/mean compression;
-   - a strong dynamic/accessibility comparator appropriate to the system;
-5. score both:
-   - predictive performance when a calibrated response exists;
-   - structural forecast utility, especially whether sequential observations discriminate world identities lost by compression;
-6. accept adverse or null results without retuning.
+Package regression is required on Python 3.10/3.11/3.12 plus the frozen topology benchmark.
 
-## 9. Claim boundary
+This does **not yet establish** that EOG-WF predicts real independent distributions better than a strong SDM, dynamic SDM, ensemble/credal comparator, or matched scalar compression.
 
-Until the empirical gate is passed, the strongest method claim is:
+## 10. Required empirical validation
+
+A future independent forecast test must freeze, before outcome inspection:
+
+1. a generically eligible ecological system with enough independent spatial/temporal units;
+2. world universe and adequacy certificate;
+3. local viability/persistence inputs and gates when used;
+4. forecast horizon and whether it is physical-time calibrated;
+5. a same-world scalar/union/mean compression comparator;
+6. a strong external SDM/dynamic/accessibility comparator appropriate to the system;
+7. predictive scoring when a calibrated response exists;
+8. an identity-preserving sequential-update endpoint;
+9. dependence-aware inference;
+10. a null/adverse/no-added-value stop rule.
+
+Run once without retuning after outcomes/evidence are opened.
+
+## 11. Product threshold
+
+EOG-WF has crossed the **algorithm threshold** when all of the following hold:
+
+- a deterministic forecast API exists;
+- output semantics and finite-world certificate are explicit;
+- sequential update/falsification exists;
+- exact world identity demonstrably changes a future update relative to scalar compression;
+- known-truth and package tests are green.
+
+It crosses the stronger **validated ecological prediction-product threshold** only after an independent eligible system demonstrates useful forecast behavior relative to the frozen matched comparators.
+
+These thresholds must not be conflated.
+
+## 12. Claim boundary
+
+The strongest current algorithm claim is:
 
 > **EOG-WF is an implemented inverse-conditioned, identity-preserving, set-valued forecasting algorithm for declared finite biogeographic worlds.**
 
-It is not yet justified to claim universal predictive superiority, true colonisation routes, calibrated occupancy probabilities, or generic mathematical novelty.
+The strongest current scientific boundary is:
+
+> **Independent ecological predictive superiority, calibrated occupancy/colonisation probability, true historical routes, and generic mathematical novelty are not yet established.**
