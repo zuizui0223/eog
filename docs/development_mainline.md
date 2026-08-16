@@ -14,7 +14,7 @@ Current methodological state:
 
 Synthetic/generic operator growth is stopped by default.
 
-Normative validation rules now live in [`method_validation_protocol.md`](method_validation_protocol.md). Frozen earlier empirical contracts are evidence and are not rewritten to match the improved protocol.
+Normative validation rules and literature anchors now live in [`method_validation_protocol.md`](method_validation_protocol.md). Frozen earlier empirical contracts are evidence and are not rewritten to match the improved protocol.
 
 ## Scientific center
 
@@ -81,6 +81,20 @@ If prediction is itself a target, compare exact world identity against:
 A same-world `C_identity - R2` contrast tests identity beyond that compression. It does not, by itself, establish superiority over SDM, occupancy, dispersal, circuit, least-cost or other process models.
 
 Predictive success and inferential-value success must be reported separately.
+
+## Literature position after the method audit
+
+The correction is consistent with established methodological boundaries:
+
+- ecological niche/distribution models already distinguish potential and actual distributional interpretations;
+- accessible area is already a core issue in niche/SDM calibration and comparison;
+- dynamic dispersal-explicit models already connect potential and realized ranges;
+- ensemble and multiverse approaches already address disagreement among models or defensible analytical choices;
+- spatial/hierarchical dependence already requires structured validation rather than naive random cross-validation.
+
+Therefore EOG does not claim novelty for any of those ingredients. The candidate contribution remains their **domain-specific identity-preserving composition** under an explicit finite-world certificate.
+
+Exact references/DOIs are listed in `method_validation_protocol.md`.
 
 ## World-universe adequacy
 
