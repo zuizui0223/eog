@@ -1,0 +1,115 @@
+{
+  "contract_version": "1.0-preoutcome",
+  "frozen_date": "2026-08-16",
+  "status": "pre_outcome_response_and_comparison_contract_frozen",
+  "scientific_question": "Does preserving exact identities of the frozen alternative geographic/environmental connectivity worlds predict held-out catalogued natural vascular-plant island incidence beyond strong compressed summaries of the same worlds?",
+  "source": {
+    "dataset_uuid": "ec1a0bfb-7d8e-4c6b-bc4d-dfd68a1e844f",
+    "doi": "10.15468/hyvwxi",
+    "archive_sha256": "4129876585a2168abe68bd048d241dfe080e4135ab2f0a0bf1b184a4f50bb2d5",
+    "schema_record": "validation/azores_confirmation/dwca_schema_record.json",
+    "schema_inspection_only_before_contract": true
+  },
+  "frozen_world_universe": {
+    "world_count": 20,
+    "fingerprint": "0cdf326bb0aa670b10bb7004b6cbb5294c3c5f9cb22c4c45601482535f583ec6",
+    "worlds_json_sha256": "5f557ccb7b3dea9ecd1e8bb6b43eefffd9a26297f86f69874c80fc030852f358",
+    "reconstruction": "regenerate deterministically from validation/azores_confirmation/azores_climate.csv and benchmarks/freeze_azores_world_universe.py, then require the frozen fingerprint before parsing response rows"
+  },
+  "node_universe": {
+    "count": 9,
+    "order": ["corvo", "flores", "faial", "pico", "graciosa", "sao_jorge", "terceira", "sao_miguel", "santa_maria"],
+    "locality_mapping": "normalize distribution locality and each frozen node match_label/geonames_name/geonames_asciiname by Unicode NFKD -> ASCII -> casefold -> replace non-alphanumeric runs with one space -> strip; require exact equality to one node alias; unmatched localities are out of scope and are never reassigned",
+    "coordinate_or_node_rescue_forbidden": true
+  },
+  "taxon_scope": {
+    "canonical_identity": "follow acceptedNameUsageID when non-empty and different from taxonID until an accepted core row is reached; blank/self acceptedNameUsageID denotes the canonical row; unresolved references or cycles are excluded and counted",
+    "rank": "species only after normalization",
+    "kingdom": "Plantae after normalization",
+    "vascular_rule": "canonical core row phylum normalizes to Tracheophyta OR higherClassification contains a normalized Tracheophyta token",
+    "post_outcome_scope_change_forbidden": true
+  },
+  "response": {
+    "name": "catalogued_natural_vascular_plant_island_incidence",
+    "distribution_positive_occurrence_status": "present after normalization",
+    "natural_establishment_means": ["native", "endemic"],
+    "positive_pair": "at least one mapped present distribution row with natural establishment and no mapped present non-natural/ambiguous establishment row for the canonical taxon-island pair",
+    "catalogue_nonrecord_pair": "no mapped distribution row for the canonical taxon-island pair",
+    "excluded_pair": "any explicit mapped distribution record that is not an unconflicted natural present record, including explicit absent, present non-natural, present blank/ambiguous establishment, or natural/non-natural conflict",
+    "zero_interpretation": "catalogue non-record under the frozen mapping/status rule; never biological absence"
+  },
+  "outer_validation": {
+    "split": "leave_one_island_out_9",
+    "taxon_eligibility_uses_outer_training_only": true,
+    "minimum_outer_training_positive_islands": 2,
+    "minimum_outer_training_catalogue_nonrecord_islands": 2,
+    "outer_heldout_island_forbidden_from_eligibility_and_anchors": true,
+    "training_row_reference": "for training target island t, reference nodes exclude both the outer held-out island and t",
+    "test_row_reference": "all eight outer-training islands",
+    "minimum_evaluable_test_pairs_per_outer_island": 20,
+    "minimum_evaluable_outer_islands": 7,
+    "non_estimable_rule": "if fewer than 7 outer islands satisfy all frozen eligibility/model requirements, report independent confirmation non-estimable and do not retune"
+  },
+  "features": {
+    "R0": [
+      "training_natural_incidence_prevalence",
+      "log1p_nearest_training_occurrence_geographic_distance",
+      "nearest_training_occurrence_CHELSA_environmental_distance",
+      "nearest_training_occurrence_WorldClim_environmental_distance"
+    ],
+    "R1_addition": "total 20-world reachability frequency",
+    "R2_additions": [
+      "geography_only_support_count",
+      "CHELSA_q50_support_count",
+      "CHELSA_q75_support_count",
+      "WorldClim_q50_support_count",
+      "WorldClim_q75_support_count"
+    ],
+    "C_identity_addition": "complete ordered 20-bit world reachability vector",
+    "world_reachability_bit": "1 iff target node shares a connected component in that frozen world with at least one positive occurrence anchor in the row reference set",
+    "world_order": "exact order produced by the frozen Gate 4 world universe",
+    "post_outcome_feature_change_forbidden": true
+  },
+  "models": {
+    "algorithm": "sklearn LogisticRegression L2",
+    "solver": "lbfgs",
+    "C": 1.0,
+    "fit_intercept": true,
+    "class_weight": null,
+    "max_iter": 5000,
+    "tol": 0.0001,
+    "scaling": "within each outer fold, standardize all R0/R1/R2 scalar columns using pooled training-row mean and population SD (ddof=0); zero-SD scalar columns become zero; in C_identity standardize the first ten R2 scalar columns identically and leave the 20 binary identity bits as 0/1",
+    "probability_clip": [1e-15, 0.999999999999999]
+  },
+  "primary_metric": {
+    "name": "island_macro_binary_log_loss",
+    "per_island": "mean binary log loss across all evaluable held-out taxon pairs on that island",
+    "primary_contrast": "C_identity_minus_R2",
+    "better_direction": "negative",
+    "macro_summary": "unweighted mean across evaluable outer islands",
+    "bootstrap_unit": "outer_island",
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20260816,
+    "interval": "percentile_95"
+  },
+  "favourable_gate": {
+    "minimum_evaluable_outer_islands": 7,
+    "mean_delta_C_minus_R2_lt_zero": true,
+    "bootstrap_95_upper_delta_lt_zero": true,
+    "C_better_outer_islands_at_least": 6,
+    "C_macro_logloss_not_worse_than_R1": true,
+    "world_identity_not_deterministic_from_R2_decomposition": true,
+    "all_conditions_required": true
+  },
+  "identity_nonredundancy_check": "among generated response-independent feature rows, group by the five R2 family support counts plus total world support; require at least one group containing multiple distinct ordered 20-bit world vectors; this condition does not use response labels",
+  "no_added_value_rule": "If the run is estimable but every favourable condition is not satisfied, report no_confirmed_added_value for explicit world identity. Do not retune nodes, taxon scope, response mapping, worlds, climate variables/products, thresholds, R2, model hyperparameters, metric, or dataset choice.",
+  "claim_if_favourable": "Only that, in this independently frozen nine-island Azores vascular-plant checklist system and declared finite 20-world universe, exact analyst-choice world identity retains held-out catalogue-incidence information beyond the frozen strong compressed world summaries. It does not establish true dispersal routes, biological absence, historical colonisation, universal robustness, generic algorithmic novelty, or superiority for other taxa/regions.",
+  "certificate": "Exact only over the enumerated frozen 20-world finite universe; no continuous or universal ecological coverage claim.",
+  "firewall_at_freeze": {
+    "taxon_rows_read": false,
+    "distribution_rows_read": false,
+    "species_island_response_values_inspected": false,
+    "confirmation_models_fitted": false,
+    "confirmation_metric_computed": false
+  }
+}
