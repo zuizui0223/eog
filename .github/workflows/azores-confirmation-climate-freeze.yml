@@ -1,0 +1,75 @@
+name: Azores confirmation climate freeze
+
+on:
+  push:
+    branches:
+      - agent/azores-worldset-confirmation-climate-freeze
+    paths:
+      - benchmarks/azores_confirmation_climate_contract.json
+      - benchmarks/freeze_azores_climate.py
+      - tests/test_azores_confirmation_climate_contract.py
+      - .github/workflows/azores-confirmation-climate-freeze.yml
+  workflow_dispatch:
+
+jobs:
+  climate-freeze:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Lock climate contract before sampling
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_azores_confirmation_climate_contract.py
+          test -f validation/azores_confirmation/source_freeze_manifest.json
+          test -f validation/azores_confirmation/node_freeze_manifest.json
+
+      - name: Install raster sampling dependency
+        run: |
+          python -m pip install numpy rasterio==1.4.3
+
+      - name: Sample only the predeclared climate representation
+        run: |
+          mkdir -p results/azores_climate_freeze
+          python benchmarks/freeze_azores_climate.py \
+            --nodes validation/azores_confirmation/azores_nodes.csv \
+            --output-csv results/azores_climate_freeze/azores_climate.csv \
+            --output-manifest results/azores_climate_freeze/climate_freeze_manifest.json
+
+      - name: Assert outcome firewall remained closed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('results/azores_climate_freeze/climate_freeze_manifest.json').read_text(encoding='utf-8'))
+          assert manifest['n_nodes'] == 9
+          assert manifest['variables'] == ['bio1', 'bio5', 'bio6', 'bio12', 'bio15']
+          assert manifest['fallback_or_imputation_used'] is False
+          assert manifest['species_incidence_used'] is False
+          assert manifest['outcome_statistics_computed'] is False
+          print(json.dumps({
+              'status': manifest['status'],
+              'nodes_csv_sha256': manifest['nodes_csv_sha256'],
+              'climate_csv_sha256': manifest['climate_csv_sha256'],
+              'chelsa_variables': [row['variable'] for row in manifest['chelsa']['sources']],
+              'worldclim_archive_sha256': manifest['worldclim']['archive_sha256'],
+              'species_incidence_used': manifest['species_incidence_used'],
+              'outcome_statistics_computed': manifest['outcome_statistics_computed'],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload pre-outcome climate freeze
+        uses: actions/upload-artifact@v4
+        with:
+          name: azores-climate-freeze
+          path: |
+            results/azores_climate_freeze/azores_climate.csv
+            results/azores_climate_freeze/climate_freeze_manifest.json
+          if-no-files-found: error
