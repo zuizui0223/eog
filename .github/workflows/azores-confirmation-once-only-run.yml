@@ -1,0 +1,80 @@
+name: Azores confirmation once-only run
+
+on:
+  push:
+    branches:
+      - agent/azores-worldset-confirmation-once-only-run
+    paths:
+      - benchmarks/azores_confirmation_outcome_contract.json
+      - benchmarks/run_azores_confirmation_estimability_gate.py
+      - tests/test_azores_confirmation_outcome_contract.py
+      - tests/test_azores_confirmation_estimability_gate.py
+      - validation/azores_confirmation/dwca_schema_record.json
+      - .github/workflows/azores-confirmation-once-only-run.yml
+  workflow_dispatch:
+
+jobs:
+  confirmation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify frozen outcome contract before source rows
+        run: |
+          python -m pip install pytest
+          python -m pytest -q \
+            tests/test_azores_confirmation_outcome_contract.py \
+            tests/test_azores_confirmation_estimability_gate.py
+
+      - name: Acquire exact frozen Azores DwC-A bytes
+        run: |
+          mkdir -p results/azores_confirmation
+          curl --fail --location --retry 5 --retry-all-errors --retry-delay 3 \
+            --connect-timeout 30 --max-time 900 \
+            --output results/azores_confirmation/uac_checklist_acores_dwca.zip \
+            'https://ipt.gbif.pt/ipt/archive.do?r=uac_checklist_acores'
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          path = Path('results/azores_confirmation/uac_checklist_acores_dwca.zip')
+          digest = hashlib.sha256(path.read_bytes()).hexdigest()
+          expected = '4129876585a2168abe68bd048d241dfe080e4135ab2f0a0bf1b184a4f50bb2d5'
+          assert digest == expected, (digest, expected)
+          print({'source_sha256': digest, 'source_bytes': path.stat().st_size})
+          PY
+
+      - name: Run frozen pre-model estimability gate
+        run: |
+          python benchmarks/run_azores_confirmation_estimability_gate.py \
+            --source results/azores_confirmation/uac_checklist_acores_dwca.zip \
+            --output results/azores_confirmation/estimability_result.json
+
+      - name: Enforce no-retuning stop if frozen taxon scope is empty
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('results/azores_confirmation/estimability_result.json').read_text(encoding='utf-8'))
+          if result['status'] == 'non_estimable_pre_model_taxon_scope_zero':
+              assert result['eligible_species_under_frozen_tracheophyta_rule'] == 0
+              assert result['distribution_rows_read'] == 0
+              assert result['predictive_models_fitted'] is False
+              assert result['confirmation_metric_computed'] is False
+              print('FROZEN STOP: Azores confirmation is non-estimable before response modelling; do not broaden taxon scope.')
+          else:
+              raise SystemExit('Frozen taxon scope unexpectedly became estimable; downstream once-only model stage is not implemented in this branch.')
+          PY
+
+      - name: Upload independent confirmation stop record
+        uses: actions/upload-artifact@v4
+        with:
+          name: azores-confirmation-estimability
+          path: results/azores_confirmation/estimability_result.json
+          if-no-files-found: error
