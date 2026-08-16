@@ -17,10 +17,11 @@ Methodological audit status:
 > **The finite world-set inference is coherent as a conditional, set-valued framework. Predictive superiority is a separate estimand and is not established.**
 
 - **A-Islands**: response-free exploratory work showed that retaining exact world identity can preserve structure erased by scalar `connected_frequency`; this is not independent confirmation because the system had already been viewed.
+- **A-Islands strong-reference predictive extension**: a separate prospectively frozen candidate-vs-R3 test was adverse; it did not establish predictive superiority.
 - **SIVFLORA**: independent attempt stopped pre-outcome because the frozen WorldClim representation had nodata at four frozen nodes. It was not rescued.
 - **Azores**: independent attempt passed source, node, climate, world-universe and outcome-contract gates, then stopped pre-model because the frozen literal `Tracheophyta` taxon rule yielded zero eligible species. Distribution rows were not read and no predictive model or confirmation metric was computed.
 
-The repository therefore does **not** currently claim independent evidence that exact world identity improves held-out ecological prediction beyond a strong compressed comparator.
+The repository therefore does **not** currently claim independent evidence that exact world identity improves held-out ecological prediction or has independent identity-preserving inferential value.
 
 Canonical project state:
 
@@ -73,7 +74,7 @@ The only active integrated-method hypothesis is:
 
 That hypothesis remains **unconfirmed independently**.
 
-The method audit now separates two empirical questions:
+The method audit separates two empirical questions:
 
 1. **identity-preserving inferential value** — does exact world identity retain an independently testable distinction that a predeclared compression of the same worlds erases?;
 2. **predictive increment** — does world identity improve held-out predictive loss over a stated comparator?
