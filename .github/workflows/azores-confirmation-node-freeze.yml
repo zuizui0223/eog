@@ -1,0 +1,144 @@
+name: Azores confirmation node freeze
+
+on:
+  push:
+    branches:
+      - agent/azores-worldset-confirmation-node-freeze
+    paths:
+      - benchmarks/azores_confirmation_node_contract.json
+      - tests/test_azores_confirmation_node_contract.py
+      - .github/workflows/azores-confirmation-node-freeze.yml
+  workflow_dispatch:
+
+jobs:
+  node-freeze:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Lock response-blind node contract
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_azores_confirmation_node_contract.py
+          test -f validation/azores_confirmation/source_freeze_manifest.json
+
+      - name: Download GeoNames Portugal dump
+        run: |
+          mkdir -p results/azores_node_freeze
+          curl --fail --location --retry 5 --retry-all-errors --retry-delay 3 \
+            --connect-timeout 30 --max-time 600 \
+            --output results/azores_node_freeze/PT.zip \
+            https://download.geonames.org/export/dump/PT.zip
+          test -s results/azores_node_freeze/PT.zip
+
+      - name: Resolve exactly nine T.ISL nodes under frozen rule
+        run: |
+          python - <<'PY'
+          import csv
+          import hashlib
+          import json
+          import unicodedata
+          import zipfile
+          from pathlib import Path
+
+          root = Path('results/azores_node_freeze')
+          archive = root / 'PT.zip'
+          contract = json.loads(Path('benchmarks/azores_confirmation_node_contract.json').read_text(encoding='utf-8'))
+
+          def norm(value: str) -> str:
+              text = unicodedata.normalize('NFKD', value)
+              text = text.encode('ascii', 'ignore').decode('ascii').casefold()
+              return ' '.join(text.split())
+
+          with zipfile.ZipFile(archive) as zf:
+              names = zf.namelist()
+              assert names == ['PT.txt'], names
+              lines = zf.read('PT.txt').decode('utf-8').splitlines()
+
+          candidates = []
+          for line in lines:
+              fields = line.split('\t')
+              if len(fields) < 19:
+                  continue
+              if fields[6] != 'T' or fields[7] != 'ISL' or fields[8] != 'PT':
+                  continue
+              names = {norm(fields[1]), norm(fields[2])}
+              names.update(norm(value) for value in fields[3].split(',') if value)
+              candidates.append((fields, names))
+
+          resolved = []
+          for target in contract['targets']:
+              wanted = norm(target['match_label'])
+              matches = [fields for fields, names in candidates if wanted in names]
+              if len(matches) != 1:
+                  raise RuntimeError(
+                      f"target {target['island_id']} / {target['match_label']!r} has {len(matches)} T.ISL matches"
+                  )
+              fields = matches[0]
+              resolved.append({
+                  'island_id': target['island_id'],
+                  'match_label': target['match_label'],
+                  'geonameid': fields[0],
+                  'geonames_name': fields[1],
+                  'geonames_asciiname': fields[2],
+                  'latitude': fields[4],
+                  'longitude': fields[5],
+                  'feature_class': fields[6],
+                  'feature_code': fields[7],
+                  'country_code': fields[8],
+                  'admin1_code': fields[10],
+                  'modification_date': fields[18],
+              })
+
+          if len(resolved) != contract['expected_node_count']:
+              raise RuntimeError(f"resolved {len(resolved)} nodes; expected {contract['expected_node_count']}")
+          ids = [row['geonameid'] for row in resolved]
+          if len(set(ids)) != len(ids):
+              raise RuntimeError('two Azores targets resolved to the same geonameid')
+
+          node_csv = root / 'azores_nodes.csv'
+          with node_csv.open('w', encoding='utf-8', newline='') as handle:
+              writer = csv.DictWriter(handle, fieldnames=list(resolved[0]))
+              writer.writeheader()
+              writer.writerows(resolved)
+
+          archive_sha = hashlib.sha256(archive.read_bytes()).hexdigest()
+          node_sha = hashlib.sha256(node_csv.read_bytes()).hexdigest()
+          manifest = {
+              'status': 'pre_outcome_response_blind_nodes_frozen',
+              'geonames_archive': {
+                  'url': contract['coordinate_source']['country_dump_url'],
+                  'bytes': archive.stat().st_size,
+                  'sha256': archive_sha,
+              },
+              'node_count': len(resolved),
+              'node_csv': node_csv.name,
+              'node_csv_sha256': node_sha,
+              'geonameids': ids,
+              'species_island_incidence_parsed': False,
+              'climate_sampled': False,
+              'world_universe_frozen': False,
+              'outcome_statistics_computed': False,
+          }
+          (root / 'node_freeze_manifest.json').write_text(
+              json.dumps(manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(node_csv.read_text(encoding='utf-8'))
+          print(json.dumps(manifest, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload response-blind node-freeze evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: azores-node-freeze
+          path: |
+            results/azores_node_freeze/PT.zip
+            results/azores_node_freeze/azores_nodes.csv
+            results/azores_node_freeze/node_freeze_manifest.json
+          if-no-files-found: error
