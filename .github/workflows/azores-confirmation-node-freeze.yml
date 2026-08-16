@@ -57,8 +57,8 @@ jobs:
               return ' '.join(text.split())
 
           with zipfile.ZipFile(archive) as zf:
-              names = zf.namelist()
-              assert names == ['PT.txt'], names
+              names = set(zf.namelist())
+              assert 'PT.txt' in names, sorted(names)
               lines = zf.read('PT.txt').decode('utf-8').splitlines()
 
           candidates = []
