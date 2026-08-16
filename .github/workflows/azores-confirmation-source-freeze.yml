@@ -58,8 +58,13 @@ jobs:
           assert metadata['title'] == expected['title']
           assert metadata.get('doi') == expected['doi']
           assert publisher['title'] == expected['publisher']
-          licence = str(metadata.get('license', '')).replace('_', ' ').replace('-', ' ').upper()
-          assert 'CC' in licence and 'BY' in licence and '4' in licence
+          raw_licence = str(metadata.get('license', ''))
+          licence = raw_licence.lower().replace('_', '-').replace(' ', '-')
+          accepted = (
+              'cc-by-4' in licence
+              or 'creativecommons.org/licenses/by/4.0' in licence
+          )
+          assert accepted, raw_licence
           print(json.dumps({
               'gbif_uuid': metadata['key'],
               'doi': metadata.get('doi'),
