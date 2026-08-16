@@ -1,0 +1,46 @@
+{
+  "contract_version": "1.0-preoutcome-world-freeze",
+  "status": "pre_outcome_world_contract_frozen",
+  "scientific_role": "response-blind finite world-universe prerequisite for the independent Azores EOG confirmation",
+  "upstream": {
+    "node_table": "validation/azores_confirmation/azores_nodes.csv",
+    "node_table_sha256": "6b7ea467097ce7fedf13c7aab2f64eca414019ffd8383a28507383314b8f1601",
+    "climate_table": "validation/azores_confirmation/azores_climate.csv",
+    "climate_table_sha256": "ee2aabd22256dd11bbd412ec59443750af695befc85444cc6f79ea1c3946e22a",
+    "gate3_artifact_climate_sha256_crlf": "31ab93c89770295b2ce31d23bfe757d0baff28451f805af4cd25aee7fb21891d"
+  },
+  "node_order": ["corvo", "flores", "faial", "pico", "graciosa", "sao_jorge", "terceira", "sao_miguel", "santa_maria"],
+  "variables": ["bio1", "bio5", "bio6", "bio12", "bio15"],
+  "geography": {
+    "metric": "great_circle_haversine_km",
+    "threshold_rule": "linear quantiles of all positive upper-triangle pairwise distances among the nine frozen nodes",
+    "quantiles": [0.25, 0.50, 0.75, 0.90]
+  },
+  "environment": {
+    "representations": ["chelsa", "worldclim"],
+    "standardization": "within each frozen climate representation and variable, subtract the nine-node mean and divide by the nine-node sample standard deviation (ddof=1)",
+    "metric": "euclidean distance in the five standardized BIO variables",
+    "threshold_rule": "linear quantiles of all positive upper-triangle pairwise environmental distances",
+    "quantiles": [0.50, 0.75]
+  },
+  "world_definition": {
+    "geography_only_worlds": 4,
+    "chelsa_worlds": 8,
+    "worldclim_worlds": 8,
+    "total_worlds": 20,
+    "edge_rule": "an undirected edge exists when pairwise geographic distance is <= the world's geography threshold and, for environmental worlds, pairwise environmental distance is also <= that representation's environmental threshold",
+    "component_rule": "connected components of the exact undirected edge set; isolated nodes remain singleton components"
+  },
+  "identity_rule": "retain every world ID, family, exact edge set, component partition and deterministic SHA-256 fingerprint; do not average or union worlds before the later confirmation comparison",
+  "firewall": {
+    "species_island_incidence_parsed": false,
+    "heldout_outcomes_scored": false,
+    "predictive_model_fitted": false
+  },
+  "stop_rules": [
+    "do not change the 20-world family after species-island incidence or outcome information is opened",
+    "do not add or remove nodes, climate variables, climate representations or threshold quantiles based on world structure",
+    "do not parse the Azores species-incidence archive in Gate 4",
+    "if the exact 20-world universe cannot be built from the frozen Gate 3 table, stop Gate 4 rather than rescue it with a new representation"
+  ]
+}
