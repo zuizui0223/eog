@@ -3,6 +3,9 @@
   "status": "pre_outcome_climate_contract_frozen",
   "upstream_node_manifest": "validation/azores_confirmation/node_freeze_manifest.json",
   "frozen_node_table": "validation/azores_confirmation/azores_nodes.csv",
+  "frozen_node_artifact_sha256": "df6117ce4b68098b22ab6af0c769cbdbfa9f9adf1101307b2619b206e624dc62",
+  "frozen_node_repository_sha256": "6b7ea467097ce7fedf13c7aab2f64eca414019ffd8383a28507383314b8f1601",
+  "node_hash_note": "The Gate 2 workflow artifact was emitted with CRLF line endings, while the committed repository CSV is canonical LF text. Coordinates, node identities, row order, and scientific content are identical; both byte identities are retained explicitly.",
   "variables": ["bio1", "bio5", "bio6", "bio12", "bio15"],
   "products": {
     "chelsa": {
