@@ -1,0 +1,10 @@
+island_id,match_label,geonameid,geonames_name,geonames_asciiname,latitude,longitude,feature_class,feature_code,country_code,admin1_code,modification_date
+corvo,Corvo,3373167,Ilha do Corvo,Ilha do Corvo,39.70184,-31.1053,T,ISL,PT,23,2023-10-18
+flores,Flores,3373059,Ilha das Flores,Ilha das Flores,39.44494,-31.20426,T,ISL,PT,23,2020-12-28
+faial,Faial,3373109,Ilha do Faial,Ilha do Faial,38.57736,-28.69994,T,ISL,PT,23,2020-12-27
+pico,Pico,3372803,Ilha do Pico,Ilha do Pico,38.47644,-28.35091,T,ISL,PT,23,2018-06-08
+graciosa,Graciosa,3373008,Ilha Graciosa,Ilha Graciosa,39.05412,-28.01188,T,ISL,PT,23,2020-12-28
+sao_jorge,Sao Jorge,3372606,Ilha de São Jorge,Ilha de Sao Jorge,38.64101,-28.03694,T,ISL,PT,23,2020-12-28
+terceira,Terceira,3372530,Terceira Island,Terceira Island,38.72805,-27.21849,T,ISL,PT,23,2023-09-27
+sao_miguel,Sao Miguel,3372598,Ilha de São Miguel,Ilha de Sao Miguel,37.77614,-25.49515,T,ISL,PT,23,2020-12-28
+santa_maria,Santa Maria,3372641,Santa Maria Island,Santa Maria Island,36.97914,-25.10359,T,ISL,PT,23,2018-08-24
