@@ -10,6 +10,7 @@ on:
       - "benchmarks/sivflora_confirmation_contract.json"
       - "benchmarks/sivflora_confirmation_preoutcome_amendment_001.json"
       - "benchmarks/sivflora_confirmation_preoutcome_amendment_003.json"
+      - "benchmarks/sivflora_confirmation_preoutcome_amendment_004.json"
       - "benchmarks/freeze_sivflora_nodes.py"
       - "benchmarks/freeze_sivflora_climate.py"
       - "benchmarks/run_sivflora_climate_freeze_with_archive.py"
@@ -55,24 +56,31 @@ jobs:
             --output-csv results/sivflora_preoutcome/nodes.csv \
             --output-manifest results/sivflora_preoutcome/nodes_manifest.json
 
-      - name: Download frozen WorldClim 2.1 2.5m archive from pre-outcome transport fallback
+      - name: Download audited GitHub WorldClimData v2.1 2.5m mirror asset
         run: |
           mkdir -p results/sivflora_preoutcome/raw
           curl --fail --location \
-            --retry 4 --retry-all-errors --retry-delay 5 \
+            --retry 5 --retry-all-errors --retry-delay 3 \
             --connect-timeout 30 --max-time 2400 \
             --continue-at - \
-            --output results/sivflora_preoutcome/raw/wc2.1_2.5m_bio.zip \
-            https://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_2.5m_bio.zip
-          test -s results/sivflora_preoutcome/raw/wc2.1_2.5m_bio.zip
+            --output results/sivflora_preoutcome/raw/worldclim_base_v21_current_bio_2_5m.zip \
+            https://github.com/brunomioto/WorldClimData/releases/download/latest/worldclim_base_v21_current_bio_2_5m.zip
+          test -s results/sivflora_preoutcome/raw/worldclim_base_v21_current_bio_2_5m.zip
+          test "$(stat -c%s results/sivflora_preoutcome/raw/worldclim_base_v21_current_bio_2_5m.zip)" -eq 658405521
+          sha256sum results/sivflora_preoutcome/raw/worldclim_base_v21_current_bio_2_5m.zip
 
       - name: Freeze CHELSA and WorldClim at the 22 nodes
         run: |
           python benchmarks/run_sivflora_climate_freeze_with_archive.py \
             --nodes results/sivflora_preoutcome/nodes.csv \
-            --worldclim-archive results/sivflora_preoutcome/raw/wc2.1_2.5m_bio.zip \
+            --worldclim-archive results/sivflora_preoutcome/raw/worldclim_base_v21_current_bio_2_5m.zip \
             --output-csv results/sivflora_preoutcome/climate.csv \
-            --output-manifest results/sivflora_preoutcome/climate_manifest.json
+            --output-manifest results/sivflora_preoutcome/climate_manifest.json \
+            --acquisition-url https://github.com/brunomioto/WorldClimData/releases/download/latest/worldclim_base_v21_current_bio_2_5m.zip \
+            --acquisition-repository brunomioto/WorldClimData \
+            --release-id 126226857 \
+            --asset-id 132037048 \
+            --expected-asset-bytes 658405521
 
       - name: Freeze the exact 20-world universe
         run: |
@@ -81,7 +89,7 @@ jobs:
             --output-json results/sivflora_preoutcome/worlds.json \
             --output-manifest results/sivflora_preoutcome/worlds_manifest.json
 
-      - name: Verify response firewall
+      - name: Verify response firewall and mirror provenance
         run: |
           python - <<'PY'
           import json
@@ -91,6 +99,7 @@ jobs:
           nodes = json.loads((root/'nodes_manifest.json').read_text())
           climate = json.loads((root/'climate_manifest.json').read_text())
           worlds = json.loads((root/'worlds_manifest.json').read_text())
+          mirror = climate['worldclim']['acquisition_mirror']
           assert source['downloaded_sha256'] == '6c9715e5a3b39942a9c9c9e364a85bb7fa9024697cb19c9d82dac30920935bdf'
           assert source['incidence_content_parsed'] is False
           assert nodes['species_incidence_sheet_opened'] is False
@@ -98,12 +107,18 @@ jobs:
           assert climate['species_incidence_used'] is False
           assert climate['outcome_statistics_computed'] is False
           assert climate['fallback_or_imputation_used'] is False
+          assert mirror['repository'] == 'brunomioto/WorldClimData'
+          assert mirror['release_id'] == 126226857
+          assert mirror['asset_id'] == 132037048
+          assert mirror['asset_bytes'] == 658405521
+          assert len(mirror['archive_sha256']) == 64
           assert worlds['species_incidence_used'] is False
           assert worlds['heldout_outcomes_scored'] is False
           assert worlds['world_count'] == 20
           print(json.dumps({
               'nodes_sha256': nodes['nodes_csv_sha256'],
               'climate_sha256': climate['climate_csv_sha256'],
+              'worldclim_archive_sha256': mirror['archive_sha256'],
               'worlds_sha256': worlds['worlds_json_sha256'],
               'world_universe_fingerprint': worlds['world_universe_fingerprint'],
           }, indent=2, sort_keys=True))
