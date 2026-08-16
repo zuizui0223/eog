@@ -1,0 +1,44 @@
+{
+  "contract_version": "0.1-source-freeze",
+  "status": "pre_outcome_source_freeze",
+  "dataset": {
+    "gbif_uuid": "ec1a0bfb-7d8e-4c6b-bc4d-dfd68a1e844f",
+    "doi": "10.15468/hyvwxi",
+    "title": "A list of the terrestrial and marine biota from the Azores",
+    "publisher": "Universidade dos Açores",
+    "license": "CC BY 4.0",
+    "gbif_api_url": "https://api.gbif.org/v1/dataset/ec1a0bfb-7d8e-4c6b-bc4d-dfd68a1e844f",
+    "dwca_url": "https://ipt.gbif.pt/ipt/archive.do?r=uac_checklist_acores"
+  },
+  "candidate_scope_metadata_only": {
+    "realm": "terrestrial vascular plants",
+    "island_level_distribution_required": true,
+    "declared_islands": [
+      "Corvo",
+      "Flores",
+      "Faial",
+      "Pico",
+      "Graciosa",
+      "São Jorge",
+      "Terceira",
+      "São Miguel",
+      "Santa Maria"
+    ],
+    "expected_island_count": 9
+  },
+  "response_firewall": {
+    "archive_downloaded": false,
+    "archive_content_parsed": false,
+    "species_island_incidence_parsed": false,
+    "climate_sampled": false,
+    "world_universe_frozen": false,
+    "outcome_statistics_computed": false
+  },
+  "stop_rules": [
+    "stop if GBIF UUID, DOI, title, publisher or licence differs from the frozen metadata contract",
+    "stop if the Darwin Core Archive cannot be downloaded reproducibly; any transport fallback must be declared before archive parsing",
+    "stop if a later response-blind node rule does not resolve exactly the nine declared islands",
+    "stop if any later predeclared climate product or variable is nodata at a frozen node; do not snap, replace coordinates, change resolution, impute or drop nodes after the climate contract is frozen",
+    "do not parse species-island incidence or fit any predictive outcome before source bytes, node universe, climate table and world universe have each been frozen"
+  ]
+}

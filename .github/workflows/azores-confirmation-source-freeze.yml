@@ -1,0 +1,124 @@
+name: Azores confirmation source freeze
+
+on:
+  push:
+    branches:
+      - agent/azores-worldset-confirmation-source-freeze
+    paths:
+      - benchmarks/azores_confirmation_source_contract.json
+      - docs/azores_worldset_confirmation_preoutcome_contract.md
+      - tests/test_azores_confirmation_source_contract.py
+      - .github/workflows/azores-confirmation-source-freeze.yml
+  workflow_dispatch:
+
+jobs:
+  source-freeze:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Lock source contract tests
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_azores_confirmation_source_contract.py
+
+      - name: Verify GBIF metadata without opening incidence content
+        run: |
+          mkdir -p results/azores_source_freeze
+          curl --fail --location --retry 5 --retry-all-errors --retry-delay 3 \
+            --connect-timeout 30 --max-time 300 \
+            --output results/azores_source_freeze/gbif_metadata.json \
+            https://api.gbif.org/v1/dataset/ec1a0bfb-7d8e-4c6b-bc4d-dfd68a1e844f
+          ORG_KEY=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          metadata = json.loads(Path('results/azores_source_freeze/gbif_metadata.json').read_text(encoding='utf-8'))
+          print(metadata['publishingOrganizationKey'])
+          PY
+          )
+          curl --fail --location --retry 5 --retry-all-errors --retry-delay 3 \
+            --connect-timeout 30 --max-time 300 \
+            --output results/azores_source_freeze/gbif_publisher.json \
+            "https://api.gbif.org/v1/organization/${ORG_KEY}"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          contract = json.loads(Path('benchmarks/azores_confirmation_source_contract.json').read_text(encoding='utf-8'))
+          metadata = json.loads(Path('results/azores_source_freeze/gbif_metadata.json').read_text(encoding='utf-8'))
+          publisher = json.loads(Path('results/azores_source_freeze/gbif_publisher.json').read_text(encoding='utf-8'))
+          expected = contract['dataset']
+          assert metadata['key'] == expected['gbif_uuid']
+          assert metadata['title'] == expected['title']
+          assert metadata.get('doi') == expected['doi']
+          assert publisher['title'] == expected['publisher']
+          raw_licence = str(metadata.get('license', ''))
+          licence = raw_licence.lower().replace('_', '-').replace(' ', '-')
+          accepted = (
+              'cc-by-4' in licence
+              or 'creativecommons.org/licenses/by/4.0' in licence
+          )
+          assert accepted, raw_licence
+          print(json.dumps({
+              'gbif_uuid': metadata['key'],
+              'doi': metadata.get('doi'),
+              'title': metadata['title'],
+              'publishing_organization_key': metadata['publishingOrganizationKey'],
+              'publisher': publisher['title'],
+              'license_api_value': metadata.get('license'),
+              'metadata_only': True,
+              'incidence_content_parsed': False,
+              'outcome_statistics_computed': False,
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Download Darwin Core Archive as opaque bytes
+        run: |
+          curl --fail --location --retry 5 --retry-all-errors --retry-delay 3 \
+            --connect-timeout 30 --max-time 900 \
+            --output results/azores_source_freeze/uac_checklist_acores_dwca.zip \
+            'https://ipt.gbif.pt/ipt/archive.do?r=uac_checklist_acores'
+          test -s results/azores_source_freeze/uac_checklist_acores_dwca.zip
+
+      - name: Freeze archive byte identity without parsing archive content
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          archive = Path('results/azores_source_freeze/uac_checklist_acores_dwca.zip')
+          digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+          manifest = {
+              'status': 'pre_outcome_source_bytes_frozen',
+              'archive_file': archive.name,
+              'archive_bytes': archive.stat().st_size,
+              'archive_sha256': digest,
+              'archive_content_parsed': False,
+              'species_island_incidence_parsed': False,
+              'climate_sampled': False,
+              'world_universe_frozen': False,
+              'outcome_statistics_computed': False,
+          }
+          Path('results/azores_source_freeze/source_freeze_manifest.json').write_text(
+              json.dumps(manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps(manifest, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload opaque source-freeze evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: azores-source-freeze
+          path: |
+            results/azores_source_freeze/gbif_metadata.json
+            results/azores_source_freeze/gbif_publisher.json
+            results/azores_source_freeze/uac_checklist_acores_dwca.zip
+            results/azores_source_freeze/source_freeze_manifest.json
+          if-no-files-found: error

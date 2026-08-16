@@ -1,0 +1,36 @@
+{
+  "status": "pre_outcome_source_bytes_frozen",
+  "dataset": {
+    "gbif_uuid": "ec1a0bfb-7d8e-4c6b-bc4d-dfd68a1e844f",
+    "doi": "10.15468/hyvwxi",
+    "title": "A list of the terrestrial and marine biota from the Azores",
+    "publisher": "Universidade dos Açores",
+    "publishing_organization_key": "0a80feca-b411-428a-a34e-c5c2fa07cdba",
+    "license_api_value": "http://creativecommons.org/licenses/by/4.0/legalcode"
+  },
+  "archive": {
+    "file_name": "uac_checklist_acores_dwca.zip",
+    "acquisition_url": "https://ipt.gbif.pt/ipt/archive.do?r=uac_checklist_acores",
+    "bytes": 1603337,
+    "sha256": "4129876585a2168abe68bd048d241dfe080e4135ab2f0a0bf1b184a4f50bb2d5"
+  },
+  "github_actions": {
+    "workflow": "Azores confirmation source freeze",
+    "run_id": 31950257304,
+    "head_sha": "ba02bd16873a84016bc4f1b81ec79d6c7168c72e",
+    "artifact_id": 9264438164,
+    "artifact_zip_sha256": "dba55b284805fdb2569ae063630bd2f396807b65a4794325a7af9cad20a57784"
+  },
+  "firewall": {
+    "archive_content_parsed": false,
+    "species_island_incidence_parsed": false,
+    "climate_sampled": false,
+    "world_universe_frozen": false,
+    "outcome_statistics_computed": false
+  },
+  "notes": [
+    "The archive was handled as opaque bytes only during Gate 1.",
+    "The first workflow attempt failed because the GBIF publisher field was assumed to be embedded directly in the dataset JSON; the second failed because the licence API value was a Creative Commons URL rather than the expected shorthand. Both were transport/schema normalization fixes and did not change the frozen dataset identity or inspect archive content.",
+    "No downstream node, climate, world-universe or outcome rule is frozen by this manifest."
+  ]
+}
