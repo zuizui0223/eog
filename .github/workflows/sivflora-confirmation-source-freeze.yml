@@ -1,0 +1,55 @@
+name: SIVFLORA confirmation source freeze
+
+on:
+  push:
+    branches:
+      - agent/sivflora-worldset-confirmation-contract
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Lock pre-outcome contract
+        run: python -m pytest -q tests/test_sivflora_confirmation_contract.py
+
+      - name: Download exact SIVFLORA file as opaque bytes
+        run: |
+          python benchmarks/freeze_sivflora_source.py \
+            --contract benchmarks/sivflora_confirmation_contract.json \
+            --output-dir results/sivflora_confirmation_source
+
+      - name: Verify response-blind source manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('results/sivflora_confirmation_source/source_freeze_manifest.json').read_text())
+          assert manifest['zenodo_record_id'] == 14639076
+          assert manifest['file_name'] == '20250113_sivflora_v1.0.xlsx'
+          assert manifest['published_md5'] == '146d67f6b6628e9f570a2325880f76e8'
+          assert manifest['downloaded_md5'] == manifest['published_md5']
+          assert len(manifest['downloaded_sha256']) == 64
+          assert manifest['incidence_content_parsed'] is False
+          assert manifest['spreadsheet_opened'] is False
+          assert manifest['outcome_statistics_computed'] is False
+          print(json.dumps(manifest, indent=2, sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sivflora-confirmation-source-freeze
+          path: |
+            results/sivflora_confirmation_source/20250113_sivflora_v1.0.xlsx
+            results/sivflora_confirmation_source/source_freeze_manifest.json
+          if-no-files-found: error
