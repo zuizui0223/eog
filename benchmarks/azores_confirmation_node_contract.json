@@ -1,0 +1,45 @@
+{
+  "contract_version": "0.1-node-freeze",
+  "status": "pre_outcome_response_blind_node_freeze",
+  "upstream_source_manifest": "validation/azores_confirmation/source_freeze_manifest.json",
+  "coordinate_source": {
+    "provider": "GeoNames",
+    "country_dump_url": "https://download.geonames.org/export/dump/PT.zip",
+    "country_code": "PT",
+    "license": "CC BY 4.0",
+    "format": "GeoNames country dump geoname tab-delimited schema"
+  },
+  "selection_rule": {
+    "feature_class": "T",
+    "feature_code": "ISL",
+    "matching_fields": ["name", "asciiname", "alternatenames"],
+    "normalization": "Unicode NFKD -> ASCII transliteration -> casefold -> collapse whitespace",
+    "require_exactly_one_match_per_target": true,
+    "require_distinct_geonameids": true
+  },
+  "targets": [
+    {"island_id": "corvo", "match_label": "Corvo"},
+    {"island_id": "flores", "match_label": "Flores"},
+    {"island_id": "faial", "match_label": "Faial"},
+    {"island_id": "pico", "match_label": "Pico"},
+    {"island_id": "graciosa", "match_label": "Graciosa"},
+    {"island_id": "sao_jorge", "match_label": "Sao Jorge"},
+    {"island_id": "terceira", "match_label": "Terceira"},
+    {"island_id": "sao_miguel", "match_label": "Sao Miguel"},
+    {"island_id": "santa_maria", "match_label": "Santa Maria"}
+  ],
+  "expected_node_count": 9,
+  "firewall": {
+    "species_island_incidence_parsed": false,
+    "climate_sampled": false,
+    "world_universe_frozen": false,
+    "outcome_statistics_computed": false
+  },
+  "stop_rules": [
+    "stop if PT.zip cannot be downloaded and byte-identified reproducibly",
+    "stop if any target has zero or multiple T.ISL matches under the frozen normalization rule",
+    "stop if two targets resolve to the same geonameid",
+    "freeze the resulting latitude/longitude values exactly; do not move or snap coordinates after later climate coverage is seen",
+    "do not sample climate or parse species-island incidence in this gate"
+  ]
+}
