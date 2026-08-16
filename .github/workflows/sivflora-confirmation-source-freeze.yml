@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - agent/sivflora-worldset-confirmation-contract
+    paths:
+      - ".github/workflows/sivflora-confirmation-source-freeze.yml"
+      - "benchmarks/freeze_sivflora_source.py"
+      - "benchmarks/sivflora_confirmation_contract.json"
+      - "tests/test_sivflora_confirmation_contract.py"
   workflow_dispatch:
 
 permissions:

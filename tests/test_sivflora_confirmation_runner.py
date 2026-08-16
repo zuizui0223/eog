@@ -1,5 +1,9 @@
 import runpy
 
+import pytest
+
+pytest.importorskip("openpyxl")
+pytest.importorskip("sklearn")
 
 _NS = runpy.run_path("benchmarks/run_sivflora_worldset_confirmation.py")
 pair_state = _NS["pair_state"]
