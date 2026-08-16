@@ -9,6 +9,7 @@ on:
       - "benchmarks/freeze_sivflora_source.py"
       - "benchmarks/sivflora_confirmation_contract.json"
       - "benchmarks/sivflora_confirmation_preoutcome_amendment_001.json"
+      - "benchmarks/sivflora_confirmation_preoutcome_amendment_003.json"
       - "benchmarks/freeze_sivflora_nodes.py"
       - "benchmarks/freeze_sivflora_climate.py"
       - "benchmarks/run_sivflora_climate_freeze_with_archive.py"
@@ -54,15 +55,15 @@ jobs:
             --output-csv results/sivflora_preoutcome/nodes.csv \
             --output-manifest results/sivflora_preoutcome/nodes_manifest.json
 
-      - name: Download the frozen WorldClim 2.5m archive with retry/resume
+      - name: Download frozen WorldClim 2.1 2.5m archive from pre-outcome transport fallback
         run: |
           mkdir -p results/sivflora_preoutcome/raw
           curl --fail --location \
-            --retry 8 --retry-all-errors --retry-delay 5 \
+            --retry 4 --retry-all-errors --retry-delay 5 \
             --connect-timeout 30 --max-time 2400 \
             --continue-at - \
             --output results/sivflora_preoutcome/raw/wc2.1_2.5m_bio.zip \
-            https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_2.5m_bio.zip
+            https://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_2.5m_bio.zip
           test -s results/sivflora_preoutcome/raw/wc2.1_2.5m_bio.zip
 
       - name: Freeze CHELSA and WorldClim at the 22 nodes
