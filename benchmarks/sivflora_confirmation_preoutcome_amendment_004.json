@@ -1,0 +1,45 @@
+{
+  "amendment_id": "004",
+  "frozen_date": "2026-08-16",
+  "stage": "pre_worldset_outcome_pre_model",
+  "reason": "Both historical/current UC Davis WorldClim hosts were inaccessible from the GitHub-hosted runner before any climate/world/outcome result. Freeze an audited GitHub Release mirror whose repository explicitly exists to redistribute WorldClim data via piggyback/GitHub Releases and whose download code labels the data WorldClim v2.1.",
+  "outcome_information_used": false,
+  "prior_transport_failures": [
+    {
+      "endpoint": "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_2.5m_bio.zip",
+      "failure": "TCP connect timeout; 0 bytes transferred across nine attempts"
+    },
+    {
+      "endpoint": "https://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_2.5m_bio.zip",
+      "failure": "DNS resolution failure; 0 bytes transferred across five attempts"
+    }
+  ],
+  "mirror": {
+    "repository": "brunomioto/WorldClimData",
+    "repository_purpose": "README states that WorldClimData provides a faster way to download WorldClim data using piggyback/GitHub Releases",
+    "code_provenance": "R/download_worldclim.R documents WorldClim v2.1 and downloads matching release assets from brunomioto/WorldClimData",
+    "release_id": 126226857,
+    "release_tag": "latest",
+    "release_published_at": "2023-10-23T12:04:00Z",
+    "asset_id": 132037048,
+    "asset_name": "worldclim_base_v21_current_bio_2_5m.zip",
+    "asset_size_bytes": 658405521,
+    "browser_download_url": "https://github.com/brunomioto/WorldClimData/releases/download/latest/worldclim_base_v21_current_bio_2_5m.zip",
+    "asset_created_at": "2023-10-24T01:45:03Z",
+    "asset_updated_at": "2023-10-24T01:49:43Z",
+    "release_asset_digest_from_github_api": null
+  },
+  "identity_rule": "Before species-incidence scoring, download this exact GitHub release asset, require the GitHub API byte size, compute and freeze archive SHA-256 plus SHA-256 for selected BIO1/BIO5/BIO6/BIO12/BIO15 members, and preserve those identifiers in the climate manifest. No later mirror substitution is allowed after outcome inspection.",
+  "unchanged": {
+    "dataset": "WorldClim",
+    "version": "2.1",
+    "period": "1970-2000 current climatology",
+    "resolution": "2.5 arc-minutes",
+    "variables": ["bio1", "bio5", "bio6", "bio12", "bio15"],
+    "node_coordinates": 22,
+    "missing_value_rule": "hard block; no snapping, locality substitution, resolution change or imputation",
+    "world_count": 20,
+    "environment_thresholds": ["pairwise_q50", "pairwise_q75"],
+    "confirmation_gate": "unchanged"
+  }
+}
