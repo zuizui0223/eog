@@ -12,6 +12,10 @@ Current evidence status:
 
 > **exploratory-supported but independently unconfirmed**
 
+Methodological audit status:
+
+> **The finite world-set inference is coherent as a conditional, set-valued framework. Predictive superiority is a separate estimand and is not established.**
+
 - **A-Islands**: response-free exploratory work showed that retaining exact world identity can preserve structure erased by scalar `connected_frequency`; this is not independent confirmation because the system had already been viewed.
 - **SIVFLORA**: independent attempt stopped pre-outcome because the frozen WorldClim representation had nodata at four frozen nodes. It was not rescued.
 - **Azores**: independent attempt passed source, node, climate, world-universe and outcome-contract gates, then stopped pre-model because the frozen literal `Tracheophyta` taxon rule yielded zero eligible species. Distribution rows were not read and no predictive model or confirmation metric was computed.
@@ -21,6 +25,7 @@ The repository therefore does **not** currently claim independent evidence that 
 Canonical project state:
 
 - scientific mainline: [`docs/development_mainline.md`](docs/development_mainline.md)
+- method-validation protocol: [`docs/method_validation_protocol.md`](docs/method_validation_protocol.md)
 - implementation / prior-art ledger: [`docs/eog_v2_progress.md`](docs/eog_v2_progress.md)
 - package boundary: [`docs/eog_v2_package_layout.md`](docs/eog_v2_package_layout.md)
 - frozen evidence: [`docs/evidence_ledger.md`](docs/evidence_ledger.md), [`docs/claim_matrix.md`](docs/claim_matrix.md)
@@ -31,7 +36,7 @@ Canonical project state:
 EOG keeps four objects separate:
 
 1. **local possibility** — a state is locally supported by a declared representation;
-2. **reachability** — a declared transition process can reach that state;
+2. **reachability** — a declared transition process can reach that state from a declared anchor/source set;
 3. **distributional realizability** — an observed configuration is compatible with a declared world;
 4. **historical truth** — what actually happened in nature.
 
@@ -68,15 +73,24 @@ The only active integrated-method hypothesis is:
 
 That hypothesis remains **unconfirmed independently**.
 
+The method audit now separates two empirical questions:
+
+1. **identity-preserving inferential value** — does exact world identity retain an independently testable distinction that a predeclared compression of the same worlds erases?;
+2. **predictive increment** — does world identity improve held-out predictive loss over a stated comparator?
+
+The first is the primary validation target for the current framework claim. The second is a separate, narrower claim. Predictive failure does not automatically invalidate a useful set-valued uncertainty representation, and predictive success would not identify historical truth.
+
 ## Robust, contingent and excluded structure
 
 Within an explicitly declared finite universe, EOG distinguishes structure that is:
 
-- supported/reachable in every world;
+- supported/reachable in every compatible world;
 - contingent on ecological or analytical representation;
-- unsupported/unreachable in every enumerated world.
+- unsupported/unreachable in every compatible world.
 
 `Robust` means robust over the **declared certified universe**, not universally true in nature.
+
+World-universe adequacy is therefore part of the method. Future empirical worlds must distinguish biologically intended process uncertainty from analyst-choice sensitivity worlds and state which plausible alternatives lie outside the certificate.
 
 ## Watershed language
 
@@ -104,9 +118,15 @@ System-specific validation code belongs in `benchmarks/`, `validation/` and test
 
 ## Development rule now
 
-The next default task is **evidence consolidation and simplification**, not another ecological operator and not another bespoke dataset search.
+The next default task is **method/evidence consolidation and simplification**, not another ecological operator and not another bespoke dataset search.
 
-A future independent confirmation is admissible only when a generic predeclared eligibility screen is applied **before** EOG outcome inspection. The screen must establish, at minimum, usable source bytes, unambiguous node mapping, declared climate coverage, compatible taxonomic schema and enough independent held-out units. It may not be tuned to world-identity results.
+A future independent confirmation is admissible only through the protocol in [`docs/method_validation_protocol.md`](docs/method_validation_protocol.md). In particular, a generic pre-outcome eligibility screen must establish source identity, node mapping, input coverage, taxonomic/response vocabulary, response semantics and enough genuinely independent holdout units before EOG-specific outcomes are opened.
+
+A future confirmation must predeclare which claim it tests:
+
+- structural/identity-preserving inferential value;
+- predictive added value;
+- or both, with separate decision rules.
 
 ## Side lines
 
@@ -123,8 +143,10 @@ Do not create another EOG identity, duplicate established connectivity machinery
 - Preserve adverse, null, blocked and indeterminate evidence.
 - Reuse existing operators/facades before adding modules.
 - Keep system-specific validation outside eager package imports.
-- Do not infer absence without an explicit response/detection interpretation.
+- Do not infer biological absence without an explicit response/detection interpretation.
 - Do not return one history when several worlds remain compatible.
+- Do not call analyst-choice thresholds biological dispersal/tolerance constants without external calibration.
+- Do not use a large number of bootstrap draws to disguise a small number of genuinely independent holdout units.
 - Claim strength must not exceed coverage/certificate strength.
 
 ## Installation
