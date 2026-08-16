@@ -20,6 +20,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install contract-test dependency
+        run: python -m pip install pytest
+
       - name: Lock pre-outcome contract
         run: python -m pytest -q tests/test_sivflora_confirmation_contract.py
 
