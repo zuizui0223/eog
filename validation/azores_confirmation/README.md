@@ -1,35 +1,66 @@
 # Azores independent-confirmation evidence
 
-This directory preserves the staged Azores validation evidence for the integrated EOG world-identity hypothesis. It is **not** a successful confirmation result.
-
 ## Final status
 
 `non_estimable_pre_model_taxon_scope_zero`
 
-The validation was intentionally staged so that source bytes, nodes, climate representation, finite world universe, response/comparison contract, and finally the source taxonomy were opened in that order.
+This directory preserves the staged Azores independent-confirmation attempt under the contracts that were frozen at the time. It is **not** a successful confirmation result, and the historical contract is not rewritten after the later EOG method audit.
 
-1. Source bytes were frozen before archive parsing.
-2. Nine GeoNames island nodes were frozen without using species incidence.
-3. CHELSA v2.1 and WorldClim v2.1 BIO1/BIO5/BIO6/BIO12/BIO15 covered all nine nodes.
-4. A response-blind 20-world universe was frozen and fingerprinted.
-5. The nine-island LOIO response/model/comparator contract was frozen before reading taxon or distribution rows.
-6. The exact frozen Taxon core was then opened once. The frozen vascular rule required literal `Tracheophyta` in `phylum` or `higherClassification`, but no canonical Plantae species satisfied that rule.
-7. The run stopped before Distribution parsing or any R0/R1/R2/C model fit.
+For future validation rules see [`../../docs/method_validation_protocol.md`](../../docs/method_validation_protocol.md).
+
+## Frozen sequence
+
+1. exact GBIF/DwC-A source identity frozen before archive parsing;
+2. nine GeoNames island nodes frozen response-blindly;
+3. CHELSA v2.1 and WorldClim v2.1 BIO1/BIO5/BIO6/BIO12/BIO15 frozen at those nodes;
+4. exact response-blind 20-world universe frozen and fingerprinted;
+5. nine-island LOIO response/comparator/model contract frozen before Taxon/Distribution rows were read;
+6. Taxon-core estimability gate run once.
+
+## Final stop
+
+The Taxon core contained:
+
+- 15,256 canonical taxa;
+- 8,078 canonical species;
+- 2,455 canonical Plantae species;
+- **0 species satisfying the frozen literal `Tracheophyta` rule**.
+
+The source used vascular phylum vocabulary including `Magnoliophyta`, `Pteridophyta`, `Lycopodiophyta` and `Pinophyta`. Broadening the frozen rule after observing that vocabulary would change the predeclared population and is prohibited for this attempt.
+
+Critically:
+
+- Distribution rows read: **0**;
+- species-island response scored: **false**;
+- predictive models fitted: **false**;
+- confirmation metric computed: **false**;
+- contract changed after source rows: **false**.
+
+The exact frozen stop is [`estimability_result.json`](estimability_result.json).
+
+Azores therefore supplies **no favourable or null EOG result**. It is an independent but non-estimable process-integrity record.
+
+## Prospective methodological lesson
+
+The later method audit does not rescue Azores. It changes only future protocol:
+
+- a generic response-blind eligibility screen may inspect taxonomic/rank/establishment vocabularies needed to define a deterministic **semantic** mapping before the EOG-specific outcome contract is frozen;
+- future validation separates identity-preserving inferential value from predictive added value;
+- future world families distinguish biological/process uncertainty from analyst-choice sensitivity worlds;
+- confirmatory uncertainty respects the actual number of independent outer units.
 
 ## Preserved evidence
 
-- `azores_nodes.csv` — immutable response-blind island nodes.
-- `node_freeze_manifest.json` — node source/rule provenance.
-- `azores_climate.csv` — frozen nine-node climate table.
-- `climate_freeze_record.json` — climate product/transport/hash record.
-- `world_freeze_record.json` — exact 20-world family fingerprint and thresholds.
-- `dwca_schema_record.json` — schema-only record inspected before response-contract freeze.
-- `estimability_result.json` — authoritative pre-model stop result recovered from the once-only workflow artifact.
+- `azores_nodes.csv` — immutable response-blind island nodes;
+- `node_freeze_manifest.json` — node source/rule provenance;
+- `azores_climate.csv` — frozen nine-node climate table;
+- `climate_freeze_record.json` — climate product/transport/hash record;
+- `world_freeze_record.json` — exact 20-world family fingerprint and thresholds;
+- `dwca_schema_record.json` — schema-only record inspected before response-contract freeze;
+- `estimability_result.json` — authoritative pre-model stop result.
 
-The corresponding contracts and reproduction scripts remain under `benchmarks/`, with contract tests under `tests/`.
+The corresponding contracts and reproduction scripts remain under `benchmarks/`, with contract tests under `tests/`. Completed one-time GitHub Actions scaffolding is not part of the durable scientific surface.
 
 ## Claim boundary
 
-This attempt is neither favourable nor null evidence for EOG predictive added value. It is a frozen non-estimability result caused by a predeclared taxonomic vocabulary rule. The source must not be re-used as a fresh independent confirmation by broadening that rule after observing the source vocabulary.
-
-The integrated EOG claim therefore remains **exploratory-supported but independently unconfirmed**.
+This attempt is neither favourable nor null evidence for EOG predictive added value or identity-preserving inferential value. The integrated EOG claim remains **exploratory-supported but independently unconfirmed**.
