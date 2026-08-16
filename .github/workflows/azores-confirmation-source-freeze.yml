@@ -35,24 +35,37 @@ jobs:
             --connect-timeout 30 --max-time 300 \
             --output results/azores_source_freeze/gbif_metadata.json \
             https://api.gbif.org/v1/dataset/ec1a0bfb-7d8e-4c6b-bc4d-dfd68a1e844f
+          ORG_KEY=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          metadata = json.loads(Path('results/azores_source_freeze/gbif_metadata.json').read_text(encoding='utf-8'))
+          print(metadata['publishingOrganizationKey'])
+          PY
+          )
+          curl --fail --location --retry 5 --retry-all-errors --retry-delay 3 \
+            --connect-timeout 30 --max-time 300 \
+            --output results/azores_source_freeze/gbif_publisher.json \
+            "https://api.gbif.org/v1/organization/${ORG_KEY}"
           python - <<'PY'
           import json
           from pathlib import Path
 
           contract = json.loads(Path('benchmarks/azores_confirmation_source_contract.json').read_text(encoding='utf-8'))
           metadata = json.loads(Path('results/azores_source_freeze/gbif_metadata.json').read_text(encoding='utf-8'))
+          publisher = json.loads(Path('results/azores_source_freeze/gbif_publisher.json').read_text(encoding='utf-8'))
           expected = contract['dataset']
           assert metadata['key'] == expected['gbif_uuid']
           assert metadata['title'] == expected['title']
-          assert metadata['publishingOrganizationTitle'] == expected['publisher']
           assert metadata.get('doi') == expected['doi']
-          licence = str(metadata.get('license', '')).replace('_', ' ').upper()
+          assert publisher['title'] == expected['publisher']
+          licence = str(metadata.get('license', '')).replace('_', ' ').replace('-', ' ').upper()
           assert 'CC' in licence and 'BY' in licence and '4' in licence
           print(json.dumps({
               'gbif_uuid': metadata['key'],
               'doi': metadata.get('doi'),
               'title': metadata['title'],
-              'publisher': metadata['publishingOrganizationTitle'],
+              'publishing_organization_key': metadata['publishingOrganizationKey'],
+              'publisher': publisher['title'],
               'license_api_value': metadata.get('license'),
               'metadata_only': True,
               'incidence_content_parsed': False,
@@ -100,6 +113,7 @@ jobs:
           name: azores-source-freeze
           path: |
             results/azores_source_freeze/gbif_metadata.json
+            results/azores_source_freeze/gbif_publisher.json
             results/azores_source_freeze/uac_checklist_acores_dwca.zip
             results/azores_source_freeze/source_freeze_manifest.json
           if-no-files-found: error
