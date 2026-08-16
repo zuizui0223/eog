@@ -1,0 +1,24 @@
+{
+  "amendment_id": "003",
+  "frozen_date": "2026-08-16",
+  "stage": "pre_worldset_outcome_pre_model",
+  "reason": "The current official geodata.ucdavis.edu WorldClim 2.1 2.5m archive endpoint was unreachable from the GitHub-hosted Azure runner at TCP connect time in all nine pre-outcome attempts. No bytes were transferred and no climate/world/outcome result was produced. Freeze a transport-only fallback to the historical UC Davis WorldClim distribution host for the identically named v2.1 2.5m bioclim archive.",
+  "outcome_information_used": false,
+  "primary_endpoint_attempted": "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_2.5m_bio.zip",
+  "primary_endpoint_failure": "TCP connect timeout on GitHub-hosted Azure westus3 runner; 0 bytes received in 9 attempts",
+  "fallback_endpoint": "https://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_2.5m_bio.zip",
+  "fallback_scope": "transport_only",
+  "unchanged": {
+    "dataset": "WorldClim",
+    "version": "2.1",
+    "resolution": "2.5m",
+    "file_name": "wc2.1_2.5m_bio.zip",
+    "variables": ["bio1", "bio5", "bio6", "bio12", "bio15"],
+    "node_coordinates": 22,
+    "missing_value_rule": "hard block; no snapping, locality substitution, resolution change or imputation",
+    "world_count": 20,
+    "environment_thresholds": ["pairwise_q50", "pairwise_q75"],
+    "confirmation_gate": "unchanged"
+  },
+  "archive_identity_rule": "Record SHA-256 and selected member SHA-256 values from the successfully retrieved fallback archive before species-incidence scoring. Do not substitute another mirror after outcome inspection."
+}
