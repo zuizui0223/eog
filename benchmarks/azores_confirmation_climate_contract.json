@@ -1,5 +1,5 @@
 {
-  "contract_version": "0.1-climate-freeze",
+  "contract_version": "0.2-climate-freeze-transport",
   "status": "pre_outcome_climate_contract_frozen",
   "upstream_node_manifest": "validation/azores_confirmation/node_freeze_manifest.json",
   "frozen_node_table": "validation/azores_confirmation/azores_nodes.csv",
@@ -22,12 +22,22 @@
       "version": "2.1",
       "resolution": "2.5m",
       "archive_url": "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_2.5m_bio.zip",
-      "member_suffix_template": "_bio_{number}.tif"
+      "member_suffix_template": "_bio_{number}.tif",
+      "transport_mirror": {
+        "repository": "brunomioto/WorldClimData",
+        "release_id": 126226857,
+        "asset_id": 132037048,
+        "asset_name": "worldclim_base_v21_current_bio_2_5m.zip",
+        "browser_download_url": "https://github.com/brunomioto/WorldClimData/releases/download/latest/worldclim_base_v21_current_bio_2_5m.zip",
+        "expected_asset_bytes": 658405521,
+        "expected_archive_sha256": "acdc818765cb362d61c1bd88ee3ae7312e81da54ae2a8d87188bdcbe9b828ace",
+        "provenance": "This exact asset size and SHA-256 were obtained in EOG GitHub Actions run 31946684346 before any SIVFLORA incidence outcome was computed. It is frozen here before any Azores species-island incidence, world-set outcome, or confirmatory statistic is opened."
+      }
     }
   },
   "sampling_rule": "direct raster sample at immutable GeoNames longitude/latitude; no snapping, nearby-cell substitution, interpolation, imputation, coordinate replacement, island drop or resolution change",
   "coverage_rule": "every declared variable from both declared products must be finite and non-nodata at all nine frozen nodes",
-  "transport_rule": "a byte-identical or explicitly frozen transport mirror may replace a failing download route, but may not change the logical product/version/resolution or raster bytes",
+  "transport_rule": "try the declared UC Davis WorldClim route first; if transport fails before climate coverage is observed, the exactly frozen WorldClimData release asset may be used only after byte-size and SHA-256 verification; this changes no logical product, version, resolution, variable, node, sampling rule or missing-value rule",
   "firewall": {
     "species_island_incidence_parsed": false,
     "world_universe_frozen": false,
@@ -37,6 +47,7 @@
     "stop if any CHELSA or WorldClim variable is missing/nodata at any frozen node",
     "do not move, snap, replace or drop a frozen node after coverage is observed",
     "do not change WorldClim resolution or substitute a different climate product after coverage is observed",
+    "do not change the frozen WorldClim transport mirror identity after coverage or outcome information is observed",
     "do not parse species-island incidence or construct the EOG world universe in this gate"
   ]
 }
