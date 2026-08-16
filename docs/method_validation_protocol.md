@@ -242,3 +242,17 @@ Current EOG status is:
 - Do not broaden a frozen blocked contract on the same opened dataset and call it independent confirmation.
 - Do not require predictive superiority as proof of a set-valued inferential representation, and do not use set-valued usefulness as proof of predictive superiority.
 - Do not claim universal robustness outside the declared adequacy certificate.
+
+## 13. Literature anchors for the methodological boundary
+
+These sources motivate boundaries that EOG adopts; they are not novelty claims for EOG.
+
+- Soberón & Peterson (2005), *Interpretation of Models of Fundamental Ecological Niches and Species' Distributional Areas*, DOI `10.17161/bi.v2i0.4` — distinguishes ecological niche/distributional interpretations and motivates explicit conceptual boundaries.
+- Barve et al. (2011), *The crucial role of the accessible area in ecological niche modeling and species distribution modeling*, DOI `10.1016/j.ecolmodel.2011.02.011` — accessibility is already a central part of distribution-model calibration/testing logic.
+- Araújo & New (2007), *Ensemble forecasting of species distributions*, DOI `10.1016/j.tree.2006.09.010` — multiple model projections and their disagreement/aggregation are established SDM concerns.
+- Merow et al. (2011), *Developing Dynamic Mechanistic Species Distribution Models*, DOI `10.1086/660295` — dynamic, dispersal-explicit links between potential and realized distributions are established process-model territory.
+- Steegen et al. (2016), *Increasing Transparency Through a Multiverse Analysis*, DOI `10.1177/1745691616658637` — retaining outcomes across defensible analytical choices is an established transparency/sensitivity principle outside ecology.
+- Roberts et al. (2017), *Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure*, DOI `10.1111/ecog.02881` — held-out design must respect dependence and the intended generalisation structure.
+- Cameron, Gelbach & Miller (2008), *Bootstrap-Based Improvements for Inference with Clustered Errors*, DOI `10.1162/rest.90.3.414` — few-cluster inference can be unreliable; bootstrap repetition does not remove the need to respect the number of independent clusters.
+
+Accordingly, EOG's potential distinct contribution is **not** “adding accessibility”, “using several models”, “adding dispersal”, or generic multiverse mathematics. The candidate contribution is the domain-specific, auditable composition in which occurrence-conditioned worlds retain identity, underidentification is an explicit result, and robust/exclusion claims are certificate-limited.
