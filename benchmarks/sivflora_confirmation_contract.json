@@ -1,0 +1,86 @@
+{
+  "contract_version": "1.0",
+  "frozen_date": "2026-08-16",
+  "status": "pre_outcome",
+  "scientific_question": "Does preserving exact identities of declared alternative geographic/environmental connectivity worlds predict held-out catalogued island incidence beyond strong compressed summaries of the same worlds?",
+  "source": {
+    "dataset": "SIVFLORA: Southern Islands Vascular Flora database",
+    "zenodo_record_id": 14639076,
+    "zenodo_record_doi": "10.5281/zenodo.14639076",
+    "paper_cited_zenodo_doi": "10.5281/zenodo.13997147",
+    "file_name": "20250113_sivflora_v1.0.xlsx",
+    "published_md5": "146d67f6b6628e9f570a2325880f76e8",
+    "data_descriptor_doi": "10.1038/s41597-025-04702-9"
+  },
+  "node_universe": {
+    "unit": "published island_or_archipelago",
+    "expected_nodes": 22,
+    "published_localities": 62,
+    "species_weighted_coordinates_forbidden": true
+  },
+  "response": {
+    "name": "catalogued_native_endemic_island_incidence",
+    "positive_statuses": ["native", "endemic"],
+    "species_rank_only": true,
+    "conflicting_establishment_pair": "exclude",
+    "zero_interpretation": "not catalogued under the frozen primary natural-status rule; not biological absence"
+  },
+  "environment": {
+    "variables": ["bio1", "bio5", "bio6", "bio12", "bio15"],
+    "products": ["CHELSA_v2.1", "WorldClim_v2.1"],
+    "node_aggregation": "equal-weight mean over unique published localities within island",
+    "standardization": "mean_and_sample_sd_across_22_nodes",
+    "distance": "euclidean_in_5d_standardized_environment"
+  },
+  "world_universe": {
+    "world_count": 20,
+    "geographic_thresholds": ["pairwise_q25", "pairwise_q50", "pairwise_q75", "pairwise_q90"],
+    "environmental_thresholds_by_product": ["pairwise_q50", "pairwise_q75"],
+    "geography_only_worlds": 4,
+    "chelsa_worlds": 8,
+    "worldclim_worlds": 8,
+    "directed": false,
+    "posthoc_world_weights_forbidden": true
+  },
+  "validation": {
+    "outer_split": "leave_one_island_out_22",
+    "minimum_outer_training_positive_islands": 4,
+    "minimum_outer_training_catalogue_nonrecord_islands": 4,
+    "minimum_evaluable_pairs_per_outer_island": 20,
+    "minimum_evaluable_outer_islands": 15,
+    "nested_training_features_exclude_target_island": true,
+    "outer_heldout_island_forbidden_from_inner_anchors": true
+  },
+  "base_covariates": [
+    "training_natural_incidence_prevalence",
+    "log1p_nearest_training_occurrence_geographic_distance",
+    "nearest_training_occurrence_CHELSA_environmental_distance",
+    "nearest_training_occurrence_WorldClim_environmental_distance"
+  ],
+  "models": {
+    "algorithm": "L2_logistic_regression",
+    "C": 1.0,
+    "class_weight": null,
+    "R0": "base_covariates",
+    "R1": "R0_plus_total_20_world_reachability_frequency",
+    "R2": "R1_plus_geography_CHELSAq50_CHELSAq75_WorldClimq50_WorldClimq75_support_counts",
+    "C_identity": "R2_plus_complete_20_bit_world_reachability_vector"
+  },
+  "primary_metric": {
+    "name": "island_macro_binary_log_loss",
+    "contrast": "C_identity_minus_R2",
+    "bootstrap_unit": "outer_island",
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20260816,
+    "interval": "percentile_95"
+  },
+  "favourable_gate": {
+    "mean_delta_identity_lt_zero": true,
+    "bootstrap_upper_lt_zero": true,
+    "candidate_better_outer_islands_at_least": 12,
+    "candidate_mean_not_worse_than_R1": true,
+    "world_identity_not_deterministic_from_R2_decomposition": true
+  },
+  "no_added_value_rule": "If all favourable conditions are not satisfied, report no confirmed added value for explicit world identity; do not retune worlds, variables, thresholds, R2, or dataset choice.",
+  "certificate": "Exact only over the enumerated 20-world finite universe; no continuous or universal ecological coverage claim."
+}
