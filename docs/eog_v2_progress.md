@@ -4,11 +4,15 @@
 
 This ledger tracks the **single active integrated method line**. Frozen positive, adverse, blocked, null and indeterminate results remain evidence; they are not retuned here.
 
-Current phase:
+Current empirical phase:
 
 > **exploratory-supported but independently unconfirmed**
 
-Synthetic operator growth is stopped by default. The active repository task is consolidation and reproducibility.
+Current methodological phase:
+
+> **finite world-set inference is coherent conditionally; independent inferential value and predictive added value are separate unresolved estimands**
+
+Synthetic operator growth is stopped by default. The normative future validation sequence is defined in [`method_validation_protocol.md`](method_validation_protocol.md).
 
 ## Implemented finite architecture
 
@@ -25,6 +29,8 @@ The finite-world engine already supports:
 - temporal support, corridor and transition summaries.
 
 These are known-truth capabilities, not empirical superiority claims.
+
+The implementation itself preserves the main inferential boundaries: compatible worlds remain an unranked set, support remains attached to world identity, unobserved nodes are not treated as absences, and declared anchors are conditioning information rather than proof of ancestry/history.
 
 ## Prior-art boundary
 
@@ -43,13 +49,47 @@ These are known-truth capabilities, not empirical superiority claims.
 
 The remaining hypothesis is therefore a **domain-framework/composition claim**, not another generic operator claim.
 
+## Methodological audit: validation target corrected
+
+The 2026-08 audit found that the implementation's inferential object and the latest confirmation contracts were not perfectly aligned.
+
+The SIVFLORA/Azores contracts made `C_identity - R2` held-out log loss the decisive endpoint. That is a valid test of **predictive increment beyond a strong compression of the same frozen worlds**, but it is not equivalent to testing the central set-valued inference claim.
+
+Future validation separates:
+
+1. **Primary: identity-preserving inferential value** — exact world identity preserves a predeclared distinction erased by a same-world compression, and independent evidence discriminates a consequence on which those worlds disagree.
+2. **Secondary: predictive added value** — exact identity improves held-out predictive loss over a stated same-world comparator and, when claimed, separate external ecological comparators.
+
+A same-world `R2` comparison is not automatically a comparison against state-of-the-art SDM, dispersal, occupancy, circuit, least-cost or process models. Those require separate matched comparators if superiority is claimed.
+
+Predictive success does not identify historical truth; predictive failure does not automatically invalidate a useful uncertainty/identifiability representation.
+
+## World-universe adequacy boundary
+
+A finite world universe makes set operations exact but does not make the universe ecologically complete.
+
+Every future empirical world dimension must be typed as:
+
+- **natural/process uncertainty**; or
+- **analyst-choice uncertainty**.
+
+Quantile thresholds, climate-product alternatives and preprocessing/graph alternatives are analyst-choice worlds unless independently calibrated as biological process parameters.
+
+Future contracts must record provenance/calibration, why the enumerated levels are admissible, plausible alternatives outside the certificate, and universe-expansion sensitivity. `Robust`/`excluded` claims remain conditional on that adequacy certificate.
+
 ## Empirical validation ledger
 
-### A-Islands — exploratory support
+### A-Islands — exploratory structural support
 
 A response-free adapter retained the frozen 12 scenario identities rather than only aggregate `connected_frequency`. It showed that exact world identity and geography-vs-environment decomposition can retain distinctions erased by scalar aggregation.
 
 Because A-Islands had already been viewed, this is exploratory only.
+
+### A-Islands — frozen strong-reference predictive extension adverse
+
+A separate prospectively frozen predictive extension compared candidate `C` with a strong island-isolation reference `R3`. Its primary held-out log-loss contrast was adverse rather than favourable. That evidence remains frozen.
+
+It shows that adding the tested structural predictor did not establish predictive superiority in that design. It is **not** retroactively redefined as the confirmatory test of the newer exact-world-identity estimand.
 
 ### SIVFLORA — independent, blocked pre-outcome
 
@@ -82,31 +122,44 @@ Status: `non_estimable_pre_model_taxon_scope_zero`.
 
 Evidence is indexed at `validation/azores_confirmation/README.md` and the exact stop result is committed as `validation/azores_confirmation/estimability_result.json`.
 
-## Current scientific decision
+The future design lesson is prospective rather than a rescue: a generic eligibility screen may inspect response-blind categorical vocabularies needed to define a deterministic semantic taxonomic/response mapping before the EOG-specific outcome contract is frozen.
 
-EOG has **no independent confirmatory evidence** that the complete world-identity representation improves held-out ecological prediction beyond the frozen strong compressed comparator.
+## Response/absence boundary
 
-This does not falsify the framework; neither independent attempt reached an estimable confirmation outcome. It also does not support promotion: non-estimability is not favourable evidence.
+Catalogue non-record may be a negative class only for an explicitly stated **catalogue-record target**. It is not biological absence by default.
 
-Therefore:
+Occupancy, failed colonisation, extinction or unsuitable-habitat claims require an observation/detection or survey-completeness interpretation appropriate to that claim.
 
-- keep the active claim exploratory;
-- stop new generic operator growth;
-- do not repair SIVFLORA or Azores after their frozen stop conditions;
-- do not search for a bespoke favourable dataset;
-- keep system-specific validation out of the production API.
+## Dependence / validation-unit boundary
+
+Validation units must match the generalisation claim. Many species-island rows do not create many independent islands.
+
+A large number of bootstrap draws does not replace genuinely independent outer units. Small-cluster confirmatory inference requires pre-outcome design-specific calibration or simulation; otherwise uncertainty remains descriptive and paired outer-unit effects/directions are reported without artificial precision.
+
+The frozen nine-island Azores contract remains historical and is not retuned.
+
+## Current method status
+
+- finite mathematical/core behavior: **supported by known-truth implementation/tests**;
+- ecological meaning: **conditional on explicit world, anchor and response contracts**;
+- independent identity-preserving inferential value: **unconfirmed**;
+- predictive superiority: **not established; frozen strong-reference extensions include adverse evidence**;
+- historical identification: **not claimed**.
 
 ## Future confirmation eligibility
 
-A future independent system is admissible only through a generic predeclared screen applied before EOG outcome inspection. At minimum:
+A future independent system is admissible only through the generic protocol in `method_validation_protocol.md`.
 
-- exact source bytes available;
+Before EOG-specific outcome inspection it must establish:
+
+- exact source identity;
 - unambiguous node mapping;
-- declared environmental representation covers those nodes;
-- taxonomic/response schema is compatible with the predeclared scope;
-- sufficient independent held-out units exist.
+- input/environmental coverage;
+- taxonomic/response vocabularies sufficient for deterministic semantic mapping;
+- response/absence semantics;
+- enough independent held-out units for the planned generalisation and inference.
 
-Only after eligibility is established should a world universe and once-only outcome contract be frozen.
+Then the world-universe adequacy, primary identity-preserving test and optional predictive test are frozen separately and run once.
 
 ## Repository cleanup state
 
@@ -133,4 +186,4 @@ Do not use a side line to create another EOG architecture, duplicate established
 
 ## Stop rule
 
-The next default action is **consolidation and simplification**, not another occurrence dataset and not another operator. Preserve underidentified alternatives as explicit worlds where appropriate, but keep all empirical value claims bounded by actual independent evidence.
+Do not open another empirical dataset merely to obtain a favourable result and do not add another operator to rescue the framework. The next valid scientific test is a genuinely independent, pre-eligible test of **identity-preserving inferential value**, with predictive performance treated separately when it is itself an intended estimand.
