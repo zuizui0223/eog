@@ -1,0 +1,78 @@
+{
+  "source_sha256": "6c9715e5a3b39942a9c9c9e364a85bb7fa9024697cb19c9d82dac30920935bdf",
+  "schema_audit_stage": "post_contract_pre_model",
+  "workbook_sheets": [
+    "sivflora",
+    "islands_data",
+    "sivflora_metadata"
+  ],
+  "sivflora_data_rows": 14598,
+  "published_abstract_record_count": 14589,
+  "published_data_records_count": 14598,
+  "record_count_note": "The article abstract reports 14,589 records while the Data Records section and frozen workbook contain 14,598. The exact frozen workbook is authoritative for this confirmation; the discrepancy is preserved, not reconciled by row removal.",
+  "island_count": 22,
+  "primary_island_metadata_rows": 22,
+  "required_fields_present": [
+    "island",
+    "locality",
+    "decimal_latitude",
+    "decimal_longitude",
+    "reviewed_name",
+    "establishment_means",
+    "gbif_rank"
+  ],
+  "required_field_missing_rows": {
+    "island": 0,
+    "reviewed_name": 0,
+    "establishment_means": 276,
+    "gbif_rank": 9
+  },
+  "establishment_means_values": [
+    "Alien",
+    "Alien*",
+    "Alien**",
+    "Cosmopolite",
+    "Endemic",
+    "Native"
+  ],
+  "gbif_rank_values": [
+    "FORM",
+    "GENUS",
+    "SPECIES",
+    "SUBSPECIES",
+    "VARIETY"
+  ],
+  "primary_rule_resolution": {
+    "species_rank": "gbif_rank == SPECIES",
+    "positive_establishment": ["Native", "Endemic"],
+    "missing_or_other_establishment": "not a positive anchor; conflicting taxon-island status is excluded from evaluation",
+    "taxon_identity": "reviewed_name"
+  },
+  "main_to_island_metadata_name": {
+    "Amsterdam": "Amsterdam",
+    "Auckland archipelago": "Auckland (arch.)",
+    "Campbell": "Campbell",
+    "Cape Horn archipelago": "Cape Horn (arch.)",
+    "Crozet archipelago": "Crozet (arch.)",
+    "Diego Ramirez archipelago": "Diego Ramirez (arch.)",
+    "Falkland / Malvinas archipelago": "Falkland/Malvinas (arch.)",
+    "Gough": "Gough",
+    "Heard": "Heard",
+    "Kerguelen archipelago": "Kerguelen (arch.)",
+    "Macquarie": "Macquarie",
+    "Marion": "Marion",
+    "McDonald": "McDonald",
+    "Prince Edward": "Prince Edward",
+    "Saint Paul": "Saint Paul",
+    "Snares archipelago": "Snares (arch.)",
+    "South Georgia": "South Georgia",
+    "South Orkney archipelago": "South Orkney (arch.)",
+    "South Sandwich archipelago": "South Sandwich (arch.)",
+    "Staten Island": "De los Estados",
+    "The Antipodes archipelago": "The Antipodes (arch.)",
+    "Tristan da Cunha archipelago": "Tristan da Cunha (arch.)"
+  },
+  "outcome_model_fitted": false,
+  "worldset_built": false,
+  "heldout_incidence_scored": false
+}
