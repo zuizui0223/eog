@@ -1,0 +1,44 @@
+{
+  "amendment_id": "002",
+  "frozen_date": "2026-08-16",
+  "stage": "pre_worldset_outcome_pre_model",
+  "reason": "Freeze predictive preprocessing and solver details not fully specified in the original contract before any held-out confirmation result is computed.",
+  "outcome_information_used": false,
+  "training_unit": "eligible taxon_by_training_island row",
+  "training_row_weight": "equal",
+  "evaluation_unit": "outer_island_macro",
+  "preprocessing": {
+    "standardized_columns": [
+      "training_natural_incidence_prevalence",
+      "log1p_nearest_training_occurrence_geographic_distance",
+      "nearest_training_occurrence_CHELSA_environmental_distance",
+      "nearest_training_occurrence_WorldClim_environmental_distance",
+      "total_20_world_reachability_frequency",
+      "geography_only_support_count",
+      "CHELSA_q50_support_count",
+      "CHELSA_q75_support_count",
+      "WorldClim_q50_support_count",
+      "WorldClim_q75_support_count"
+    ],
+    "standardization_reference": "outer_fold_training_rows_only",
+    "standardization_sd": "population_sd_ddof_0",
+    "zero_sd_column": "map_to_zero_without dropping the column",
+    "world_identity_bits": "remain_binary_0_1_unscaled"
+  },
+  "logistic_regression": {
+    "penalty": "L2",
+    "C": 1.0,
+    "solver": "lbfgs",
+    "fit_intercept": true,
+    "class_weight": null,
+    "max_iter": 5000,
+    "tolerance": 0.0001,
+    "hyperparameter_search": false
+  },
+  "prediction": {
+    "probability_clip": [1e-15, 0.999999999999999],
+    "single_class_outer_training": "outer fold non_estimable",
+    "fit_or_convergence_error": "outer fold non_estimable; do not change solver or regularization after outcome inspection"
+  },
+  "unchanged_primary_gate": true
+}
