@@ -1,0 +1,39 @@
+{
+  "status": "gate4_pass_pre_outcome",
+  "authoritative_run_id": 31952496151,
+  "authoritative_head_sha": "e5760fe57c919711c90ca08e4628ced3656fa74c",
+  "artifact_id": 9265039209,
+  "artifact_zip_sha256": "26c3ffafd6af1654592edf5cd867d3baa4542dd10e02c49279041647fce309a3",
+  "worlds_json_sha256": "5f557ccb7b3dea9ecd1e8bb6b43eefffd9a26297f86f69874c80fc030852f358",
+  "world_freeze_manifest_sha256": "58c71919419ce50f8a32c9e83c0a236d8a9ba1e3887932e5916ea14110628d6c",
+  "world_universe_fingerprint": "0cdf326bb0aa670b10bb7004b6cbb5294c3c5f9cb22c4c45601482535f583ec6",
+  "climate_csv_sha256": "ee2aabd22256dd11bbd412ec59443750af695befc85444cc6f79ea1c3946e22a",
+  "world_count": 20,
+  "family_counts": {
+    "geography_only": 4,
+    "chelsa_q50": 4,
+    "chelsa_q75": 4,
+    "worldclim_q50": 4,
+    "worldclim_q75": 4
+  },
+  "thresholds": {
+    "geographic_km": {
+      "q25": 91.29618375448557,
+      "q50": 265.2523711256937,
+      "q75": 320.4414564952706,
+      "q90": 446.0351497445339
+    },
+    "chelsa_standardized_environment": {
+      "q50": 2.773893615853617,
+      "q75": 3.8391738986236827
+    },
+    "worldclim_standardized_environment": {
+      "q50": 2.745564038350423,
+      "q75": 3.5790400207721675
+    }
+  },
+  "species_incidence_used": false,
+  "heldout_outcomes_scored": false,
+  "predictive_model_fitted": false,
+  "next_gate": "freeze Azores incidence interpretation and once-only held-out comparison contract before computing any EOG outcome"
+}

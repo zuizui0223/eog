@@ -1,0 +1,49 @@
+{
+  "status": "schema_only_pre_outcome",
+  "source_dataset_uuid": "ec1a0bfb-7d8e-4c6b-bc4d-dfd68a1e844f",
+  "source_doi": "10.15468/hyvwxi",
+  "source_archive_sha256": "4129876585a2168abe68bd048d241dfe080e4135ab2f0a0bf1b184a4f50bb2d5",
+  "archive_files_observed": ["taxon.txt", "distribution.txt", "eml.xml", "meta.xml"],
+  "inspection_boundary": "Only archive member names and meta.xml field declarations were inspected. No taxon.txt or distribution.txt data rows were read before this record and the outcome contract were frozen.",
+  "core": {
+    "row_type": "http://rs.tdwg.org/dwc/terms/Taxon",
+    "file": "taxon.txt",
+    "id_index": 0,
+    "fields": [
+      "taxonID",
+      "scientificNameID",
+      "acceptedNameUsageID",
+      "parentNameUsageID",
+      "scientificName",
+      "higherClassification",
+      "kingdom",
+      "phylum",
+      "class",
+      "order",
+      "family",
+      "genus",
+      "subgenus",
+      "specificEpithet",
+      "infraspecificEpithet",
+      "taxonRank",
+      "scientificNameAuthorship",
+      "taxonRemarks"
+    ]
+  },
+  "distribution_extension": {
+    "row_type": "http://rs.gbif.org/terms/1.0/Distribution",
+    "file": "distribution.txt",
+    "coreid_index": 0,
+    "fields": [
+      "locality",
+      "countryCode",
+      "occurrenceStatus",
+      "establishmentMeans",
+      "eventDate",
+      "source",
+      "occurrenceRemarks"
+    ]
+  },
+  "response_values_inspected": false,
+  "eog_outcome_computed": false
+}

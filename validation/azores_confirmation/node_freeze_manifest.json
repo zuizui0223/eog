@@ -1,0 +1,47 @@
+{
+  "status": "pre_outcome_response_blind_nodes_frozen",
+  "upstream_source_manifest": "validation/azores_confirmation/source_freeze_manifest.json",
+  "coordinate_source": {
+    "provider": "GeoNames",
+    "url": "https://download.geonames.org/export/dump/PT.zip",
+    "bytes": 1164987,
+    "sha256": "c8e0e0dbbcebe68b613b82618043488ae4de809aaa51337290f63e623b9da55e"
+  },
+  "node_table": {
+    "path": "validation/azores_confirmation/azores_nodes.csv",
+    "rows": 9,
+    "repository_lf_sha256": "6b7ea467097ce7fedf13c7aab2f64eca414019ffd8383a28507383314b8f1601",
+    "workflow_artifact_crlf_sha256": "df6117ce4b68098b22ab6af0c769cbdbfa9f9adf1101307b2619b206e624dc62",
+    "canonical_input_sha256": "6b7ea467097ce7fedf13c7aab2f64eca414019ffd8383a28507383314b8f1601",
+    "geonameids": [
+      "3373167",
+      "3373059",
+      "3373109",
+      "3372803",
+      "3373008",
+      "3372606",
+      "3372530",
+      "3372598",
+      "3372641"
+    ]
+  },
+  "github_actions": {
+    "workflow": "Azores confirmation node freeze",
+    "run_id": 31950549393,
+    "head_sha": "276b9a9666266ea34a97de330e632137f7c9a903",
+    "artifact_id": 9264515183,
+    "artifact_zip_sha256": "9c55eda033206cb06395538f104b1e6478674214f337bfad0fa367270ffb6945"
+  },
+  "firewall": {
+    "species_island_incidence_parsed": false,
+    "climate_sampled": false,
+    "world_universe_frozen": false,
+    "outcome_statistics_computed": false
+  },
+  "notes": [
+    "The first workflow attempt failed before target matching because PT.zip also contained readme.txt; the parser was corrected to require PT.txt rather than require it to be the only archive member.",
+    "The frozen T.ISL/name normalization and exactly-one-match rule was unchanged between attempts.",
+    "The CI csv.DictWriter artifact used CRLF line endings while the committed repository CSV uses LF. The parsed nine rows are identical; both byte hashes are retained, and the committed LF file is the canonical downstream input.",
+    "These nine coordinates are immutable inputs for subsequent climate coverage checks and may not be snapped or moved after climate results are observed."
+  ]
+}
