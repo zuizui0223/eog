@@ -1,0 +1,99 @@
+name: SIVFLORA pre-outcome world freeze
+
+on:
+  push:
+    branches:
+      - agent/sivflora-worldset-confirmation-contract
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preoutcome-world-freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install freeze dependencies
+        run: |
+          python -m pip install pytest openpyxl numpy rasterio
+
+      - name: Lock pre-outcome contracts and utilities
+        run: |
+          python -m pytest -q \
+            tests/test_sivflora_confirmation_contract.py \
+            tests/test_sivflora_preoutcome_freeze.py
+
+      - name: Reproduce exact SIVFLORA source bytes
+        run: |
+          python benchmarks/freeze_sivflora_source.py \
+            --contract benchmarks/sivflora_confirmation_contract.json \
+            --output-dir results/sivflora_preoutcome/source
+
+      - name: Freeze 22 explicit island nodes without reading incidence
+        run: |
+          python benchmarks/freeze_sivflora_nodes.py \
+            --source-xlsx results/sivflora_preoutcome/source/20250113_sivflora_v1.0.xlsx \
+            --output-csv results/sivflora_preoutcome/nodes.csv \
+            --output-manifest results/sivflora_preoutcome/nodes_manifest.json
+
+      - name: Freeze CHELSA and WorldClim at the 22 nodes
+        run: |
+          python benchmarks/freeze_sivflora_climate.py \
+            --nodes results/sivflora_preoutcome/nodes.csv \
+            --output-csv results/sivflora_preoutcome/climate.csv \
+            --output-manifest results/sivflora_preoutcome/climate_manifest.json
+
+      - name: Freeze the exact 20-world universe
+        run: |
+          python benchmarks/freeze_sivflora_world_universe.py \
+            --climate results/sivflora_preoutcome/climate.csv \
+            --output-json results/sivflora_preoutcome/worlds.json \
+            --output-manifest results/sivflora_preoutcome/worlds_manifest.json
+
+      - name: Verify response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('results/sivflora_preoutcome')
+          source = json.loads((root/'source/source_freeze_manifest.json').read_text())
+          nodes = json.loads((root/'nodes_manifest.json').read_text())
+          climate = json.loads((root/'climate_manifest.json').read_text())
+          worlds = json.loads((root/'worlds_manifest.json').read_text())
+          assert source['downloaded_sha256'] == '6c9715e5a3b39942a9c9c9e364a85bb7fa9024697cb19c9d82dac30920935bdf'
+          assert source['incidence_content_parsed'] is False
+          assert nodes['species_incidence_sheet_opened'] is False
+          assert nodes['outcome_statistics_computed'] is False
+          assert climate['species_incidence_used'] is False
+          assert climate['outcome_statistics_computed'] is False
+          assert climate['fallback_or_imputation_used'] is False
+          assert worlds['species_incidence_used'] is False
+          assert worlds['heldout_outcomes_scored'] is False
+          assert worlds['world_count'] == 20
+          print(json.dumps({
+              'nodes_sha256': nodes['nodes_csv_sha256'],
+              'climate_sha256': climate['climate_csv_sha256'],
+              'worlds_sha256': worlds['worlds_json_sha256'],
+              'world_universe_fingerprint': worlds['world_universe_fingerprint'],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sivflora-preoutcome-world-freeze
+          path: |
+            results/sivflora_preoutcome/source/source_freeze_manifest.json
+            results/sivflora_preoutcome/nodes.csv
+            results/sivflora_preoutcome/nodes_manifest.json
+            results/sivflora_preoutcome/climate.csv
+            results/sivflora_preoutcome/climate_manifest.json
+            results/sivflora_preoutcome/worlds.json
+            results/sivflora_preoutcome/worlds_manifest.json
+          if-no-files-found: error
