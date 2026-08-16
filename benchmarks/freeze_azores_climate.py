@@ -36,6 +36,15 @@ CHELSA_LEGACY_BASE = (
 WORLDCLIM_ARCHIVE_URL = (
     "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_2.5m_bio.zip"
 )
+WORLDCLIM_MIRROR_URL = (
+    "https://github.com/brunomioto/WorldClimData/releases/download/latest/"
+    "worldclim_base_v21_current_bio_2_5m.zip"
+)
+WORLDCLIM_MIRROR_BYTES = 658405521
+WORLDCLIM_MIRROR_SHA256 = "acdc818765cb362d61c1bd88ee3ae7312e81da54ae2a8d87188bdcbe9b828ace"
+WORLDCLIM_MIRROR_REPOSITORY = "brunomioto/WorldClimData"
+WORLDCLIM_MIRROR_RELEASE_ID = 126226857
+WORLDCLIM_MIRROR_ASSET_ID = 132037048
 
 
 def sha256(path: Path) -> str:
@@ -156,6 +165,51 @@ def download(url: str, path: Path) -> dict[str, object]:
         }
 
 
+def download_worldclim_archive(path: Path) -> dict[str, object]:
+    """Use the declared primary route, then the pre-frozen transport-only mirror."""
+    attempts: list[dict[str, object]] = []
+    try:
+        headers = download(WORLDCLIM_ARCHIVE_URL, path)
+        return {
+            "transport": "primary",
+            "acquisition_url": WORLDCLIM_ARCHIVE_URL,
+            "candidate_attempts": [{"url": WORLDCLIM_ARCHIVE_URL, "status": "success"}],
+            **headers,
+        }
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError) as exc:
+        attempts.append({
+            "url": WORLDCLIM_ARCHIVE_URL,
+            "status": "transport_failure",
+            "error_type": type(exc).__name__,
+        })
+        if path.exists():
+            path.unlink()
+
+    headers = download(WORLDCLIM_MIRROR_URL, path)
+    actual_bytes = path.stat().st_size
+    actual_sha = sha256(path)
+    if actual_bytes != WORLDCLIM_MIRROR_BYTES:
+        raise RuntimeError(
+            f"frozen WorldClim transport mirror byte size changed: {actual_bytes} != {WORLDCLIM_MIRROR_BYTES}"
+        )
+    if actual_sha != WORLDCLIM_MIRROR_SHA256:
+        raise RuntimeError(
+            f"frozen WorldClim transport mirror SHA-256 changed: {actual_sha} != {WORLDCLIM_MIRROR_SHA256}"
+        )
+    attempts.append({"url": WORLDCLIM_MIRROR_URL, "status": "success"})
+    return {
+        "transport": "frozen_transport_mirror",
+        "acquisition_url": WORLDCLIM_MIRROR_URL,
+        "mirror_repository": WORLDCLIM_MIRROR_REPOSITORY,
+        "mirror_release_id": WORLDCLIM_MIRROR_RELEASE_ID,
+        "mirror_asset_id": WORLDCLIM_MIRROR_ASSET_ID,
+        "verified_expected_bytes": WORLDCLIM_MIRROR_BYTES,
+        "verified_expected_sha256": WORLDCLIM_MIRROR_SHA256,
+        "candidate_attempts": attempts,
+        **headers,
+    }
+
+
 def worldclim_member(variable: str, names: list[str]) -> str:
     number = int(variable.replace("bio", ""))
     suffix = f"_bio_{number}.tif"
@@ -183,7 +237,7 @@ def freeze(nodes_csv: Path, output_csv: Path, output_manifest: Path) -> dict[str
     with tempfile.TemporaryDirectory(prefix="azores_worldclim_") as temp_dir:
         temp = Path(temp_dir)
         archive = temp / "wc2.1_2.5m_bio.zip"
-        archive_headers = download(WORLDCLIM_ARCHIVE_URL, archive)
+        archive_transport = download_worldclim_archive(archive)
         archive_sha = sha256(archive)
         selected_members: list[dict[str, object]] = []
         with zipfile.ZipFile(archive) as bundle:
@@ -213,10 +267,11 @@ def freeze(nodes_csv: Path, output_csv: Path, output_manifest: Path) -> dict[str
             "dataset": "WorldClim bioclim",
             "version": "2.1",
             "resolution": "2.5m",
-            "archive_url": WORLDCLIM_ARCHIVE_URL,
+            "primary_archive_url": WORLDCLIM_ARCHIVE_URL,
+            "archive_url": archive_transport["acquisition_url"],
             "archive_sha256": archive_sha,
             "archive_bytes": archive.stat().st_size,
-            **archive_headers,
+            **archive_transport,
             "selected_members": selected_members,
         }
 
@@ -239,6 +294,7 @@ def freeze(nodes_csv: Path, output_csv: Path, output_manifest: Path) -> dict[str
                 **{f"worldclim_{v}": repr(float(values[f'worldclim_{v}'][i])) for v in VARIABLES},
             })
 
+    transport_mirror_used = worldclim_source["transport"] == "frozen_transport_mirror"
     manifest = {
         "status": "pre_outcome_climate_freeze",
         "nodes_csv_sha256": sha256(nodes_csv),
@@ -246,6 +302,7 @@ def freeze(nodes_csv: Path, output_csv: Path, output_manifest: Path) -> dict[str
         "variables": list(VARIABLES),
         "sampling_rule": "direct raster sample at immutable frozen GeoNames coordinates",
         "fallback_or_imputation_used": False,
+        "transport_mirror_used": transport_mirror_used,
         "species_incidence_used": False,
         "outcome_statistics_computed": False,
         "chelsa": {
