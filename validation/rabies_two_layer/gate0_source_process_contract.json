@@ -1,0 +1,88 @@
+{
+  "status": "gate0_pre_response_source_process_freeze",
+  "study_system": {
+    "host": "Procyon lotor",
+    "state": "raccoon rabies virus occurrence",
+    "region": "three-state eastern USA surveillance region",
+    "survey_period": "2006-2015",
+    "scientific_role": "fresh independent stress test of the two-layer EOG-WF architecture on a source-conditioned ecological spread process"
+  },
+  "source": {
+    "zenodo_record": 5009339,
+    "source_dryad_doi": "10.5061/dryad.v23517k",
+    "expected_files": [
+      {
+        "name": "CovariateData.csv",
+        "expected_md5": "386c0498ace1dd9929c69119354dd7ae",
+        "role": "non-response grid geometry and habitat/management covariates"
+      },
+      {
+        "name": "SurveillanceData.csv",
+        "expected_md5": "3b4e34f30462176ceb73736da22b6290",
+        "role": "response-bearing rabies surveillance data; rows forbidden at Gate 0"
+      }
+    ],
+    "transport": "public Zenodo individual-file download with checksum verification"
+  },
+  "public_documentation_basis": {
+    "dynamic_occupancy_period": "10 years, 2006-2015",
+    "response_design": "positive and negative rabies surveillance counts by grid ID, season, year and surveillance method",
+    "spatial_inputs": "CovariateData.csv provides grid ID plus latitude and longitude of each grid-cell centroid",
+    "management_input": "ORV marks oral-rabies-vaccination management zone",
+    "external_comparator_class": "published multi-method dynamic occupancy model with method-specific detection and habitat/management effects"
+  },
+  "process_closure_gate": {
+    "provisional_status": "conditional_internal_source_claim_only_subject_to_schema_and_geometry_confirmation",
+    "claim_boundary": "EOG will not claim that the three-state grid universe is closed to all rabies introduction from outside. Any forecast is explicitly conditional on realised internal source grids and may be falsified by later positives unsupported by the frozen internal-source world universe.",
+    "eligible_only_if": [
+      "the grid universe has stable machine-readable coordinates",
+      "the spatial domain and temporal cadence support a meaningful internal-source propagation claim",
+      "external-source uncertainty can be handled by narrowing the claim rather than silently treating the region as closed"
+    ],
+    "must_be_rechecked_before_response_access": true
+  },
+  "two_layer_architecture_freeze": {
+    "latent_layer": "exact frozen rule identities retained for compatibility, sequential contraction and finite-universe falsification",
+    "predictive_layer": "symmetric_world_support_summary_v1; arbitrary world IDs are forbidden as supervised predictive features",
+    "glanville_reuse_prohibited": true
+  },
+  "response_firewall": {
+    "surveillance_rows_opened": false,
+    "allowed_at_gate0": [
+      "full CovariateData.csv because it is declared non-response node/geometry input",
+      "SurveillanceData.csv bytes for exact checksum only",
+      "exactly the first physical header line of SurveillanceData.csv",
+      "Zenodo metadata/file sizes/checksums"
+    ],
+    "forbidden_before_later_gates": [
+      "SurveillanceData.csv data rows",
+      "rabies-positive or rabies-negative counts",
+      "year/season response frequencies",
+      "heldout outcome statistics",
+      "response-driven world-scale or prediction-feature tuning"
+    ]
+  },
+  "gate0_decision_rule": {
+    "pass_if": [
+      "both published files match frozen MD5 checksums",
+      "CovariateData has unique stable grid IDs and finite centroid coordinates",
+      "surveillance schema can be identified from its header without reading data rows",
+      "response and non-response inputs remain deterministically separable",
+      "the conditional internal-source spread interpretation remains defensible"
+    ],
+    "stop_if": [
+      "source bytes/checksums fail",
+      "grid geometry is ambiguous or duplicated beyond deterministic resolution",
+      "basic node/world construction requires response rows",
+      "the spatial process cannot support even a conditional internal-source claim"
+    ]
+  },
+  "post_gate0_sequence": [
+    "freeze full response-blind grid geometry and non-response habitat/ORV inputs",
+    "construct response-blind structural scale ladder and adequacy certificate",
+    "freeze internal-source update semantics and symmetric_world_support_summary_v1",
+    "freeze temporal holdout plus published dynamic-occupancy and flexible external comparators",
+    "only then open SurveillanceData.csv rows once"
+  ],
+  "no_rescue_rule": "If a pre-response scientific gate fails, stop without opening surveillance rows and do not change the gate to force eligibility."
+}
