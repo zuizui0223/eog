@@ -1,0 +1,142 @@
+name: Rabies two-layer EOG-WF Gate 0 source schema
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/rabies_gate0_source_schema.yml"
+      - "validation/rabies_two_layer/gate0_source_process_contract.json"
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fetch exact Zenodo files and verify checksums
+        run: |
+          mkdir -p /tmp/rabies build/rabies_gate0
+          curl -L --fail --retry 3 \
+            'https://zenodo.org/records/5009339/files/CovariateData.csv?download=1' \
+            -o /tmp/rabies/CovariateData.csv
+          curl -L --fail --retry 3 \
+            'https://zenodo.org/records/5009339/files/SurveillanceData.csv?download=1' \
+            -o /tmp/rabies/SurveillanceData.csv
+          test "$(md5sum /tmp/rabies/CovariateData.csv | awk '{print $1}')" = "386c0498ace1dd9929c69119354dd7ae"
+          test "$(md5sum /tmp/rabies/SurveillanceData.csv | awk '{print $1}')" = "3b4e34f30462176ceb73736da22b6290"
+          sha256sum /tmp/rabies/CovariateData.csv /tmp/rabies/SurveillanceData.csv \
+            > build/rabies_gate0/source_sha256.txt
+      - name: Validate non-response grid geometry and read response header only
+        run: |
+          python - <<'PY'
+          import csv
+          import hashlib
+          import io
+          import json
+          import math
+          import pathlib
+
+          cov_path = pathlib.Path('/tmp/rabies/CovariateData.csv')
+          surveillance_path = pathlib.Path('/tmp/rabies/SurveillanceData.csv')
+          out = pathlib.Path('build/rabies_gate0')
+
+          with cov_path.open('r', encoding='utf-8-sig', newline='') as handle:
+              reader = csv.DictReader(handle)
+              fields = tuple(reader.fieldnames or ())
+              rows = list(reader)
+
+          lowered = {name.lower(): name for name in fields}
+          site_col = next((lowered[k] for k in ('site', 'grid', 'gridid', 'grid_id') if k in lowered), None)
+          lat_col = next((lowered[k] for k in ('latitude', 'lat') if k in lowered), None)
+          lon_col = next((lowered[k] for k in ('longitude', 'lon', 'long') if k in lowered), None)
+          if not site_col or not lat_col or not lon_col:
+              raise SystemExit(f'non-response geometry columns not found in {fields!r}')
+
+          site_ids = []
+          coords = []
+          for row in rows:
+              site = str(row[site_col]).strip()
+              if not site:
+                  raise SystemExit('empty grid/site ID')
+              lat = float(row[lat_col])
+              lon = float(row[lon_col])
+              if not math.isfinite(lat) or not math.isfinite(lon):
+                  raise SystemExit('non-finite grid centroid')
+              if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+                  raise SystemExit('invalid grid centroid range')
+              site_ids.append(site)
+              coords.append((lat, lon))
+          if len(set(site_ids)) != len(site_ids):
+              raise SystemExit('duplicate grid/site IDs in CovariateData')
+
+          # Read exactly one physical line from response-bearing file.
+          with surveillance_path.open('rb') as handle:
+              first = handle.readline().decode('utf-8-sig').rstrip('\r\n')
+          surveillance_header = next(csv.reader(io.StringIO(first)))
+
+          def sha256(path):
+              digest = hashlib.sha256()
+              with path.open('rb') as handle:
+                  for chunk in iter(lambda: handle.read(1024 * 1024), b''):
+                      digest.update(chunk)
+              return digest.hexdigest()
+
+          result = {
+              'status': 'gate0_source_schema_geometry_pass',
+              'response_rows_opened': False,
+              'zenodo_record': 5009339,
+              'files': {
+                  'CovariateData.csv': {
+                      'size': cov_path.stat().st_size,
+                      'md5': '386c0498ace1dd9929c69119354dd7ae',
+                      'sha256': sha256(cov_path),
+                  },
+                  'SurveillanceData.csv': {
+                      'size': surveillance_path.stat().st_size,
+                      'md5': '3b4e34f30462176ceb73736da22b6290',
+                      'sha256': sha256(surveillance_path),
+                      'data_rows_parsed': False,
+                  },
+              },
+              'covariate_header': list(fields),
+              'surveillance_header_only': surveillance_header,
+              'node_count': len(site_ids),
+              'site_id_column': site_col,
+              'latitude_column': lat_col,
+              'longitude_column': lon_col,
+              'coordinate_bounds': {
+                  'lat_min': min(v[0] for v in coords),
+                  'lat_max': max(v[0] for v in coords),
+                  'lon_min': min(v[1] for v in coords),
+                  'lon_max': max(v[1] for v in coords),
+              },
+          }
+          (out / 'gate0_result.json').write_text(
+              json.dumps(result, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          # CovariateData is explicitly non-response and is preserved for the next response-blind gate.
+          (out / 'CovariateData.csv').write_bytes(cov_path.read_bytes())
+          print(json.dumps({
+              'status': result['status'],
+              'node_count': result['node_count'],
+              'covariate_header': result['covariate_header'],
+              'surveillance_header_only': result['surveillance_header_only'],
+              'response_rows_opened': False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Remove response-bearing bytes before artifact upload
+        run: |
+          rm -f /tmp/rabies/SurveillanceData.csv
+          test ! -e build/rabies_gate0/SurveillanceData.csv
+          test -s build/rabies_gate0/gate0_result.json
+          test -s build/rabies_gate0/CovariateData.csv
+      - name: Upload Gate 0 response-free evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: rabies-two-layer-gate0
+          path: build/rabies_gate0
