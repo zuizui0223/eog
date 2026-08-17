@@ -1,0 +1,59 @@
+{
+  "status": "gate2_outcome_runner_synthetic_smoke_pass",
+  "response_file_read": false,
+  "response_rows_opened": false,
+  "scientific_result": false,
+  "runner": {
+    "path": "benchmarks/run_chiricahua_gate2_outcome.py",
+    "blob_sha": "e40c7252419a52c6605b46caa27a5f7de47b1774",
+    "rule": "the empirical once-only outcome must use this runner blob unchanged"
+  },
+  "authoritative_run": {
+    "workflow_run_id": 32067855168,
+    "head_sha": "73250a6641fe47ab42aaae20ff899bb9cd2139e1",
+    "artifact_id": 9300594060,
+    "artifact_name": "chiricahua-gate2-outcome-runner-smoke",
+    "artifact_zip_sha256": "5f29876f6f244d43d2cf6a5aacfd9696cd15ed6ce11a72e650627a658b2815cc"
+  },
+  "runtime": {
+    "python": "3.11.15",
+    "numpy": "2.3.2",
+    "scipy": "1.16.1",
+    "scikit_learn": "1.7.1"
+  },
+  "synthetic_response_gate": {
+    "calibration_positive_first_detections": 12,
+    "calibration_negative_candidate_rows": 219,
+    "heldout_positive_first_detections": 5,
+    "heldout_negative_candidate_rows": 135,
+    "heldout_years_with_both_classes": 5,
+    "heldout_prediction_rows": 140,
+    "heldout_scoring_complete": true
+  },
+  "dynamic_occupancy_hmm": {
+    "estimable": true,
+    "calibration_negative_log_likelihood": 135.22553100446854
+  },
+  "synthetic_decision_path": {
+    "layer_b_status": "favorable_layer_b_predictive_value",
+    "layer_b_macro_log_loss_difference_eog_minus_mean": -0.015298204944776489,
+    "layer_b_eog_year_wins": 4,
+    "external_status": "adverse_external_predictive_added_value",
+    "best_external_model": "flexible_random_forest",
+    "external_macro_log_loss_difference_eog_minus_best": 0.013981341705826572,
+    "external_eog_year_wins": 1,
+    "interpretation": "These directions are synthetic control outputs only. They demonstrate that favorable, adverse and comparator decision branches execute; they are not evidence about EOG or frogs."
+  },
+  "world_state": {
+    "universe_falsified_year": null,
+    "surviving_world_ids_final": [
+      "full_gaussian_lcc900_scale",
+      "truncated_geo_lcc250",
+      "truncated_geo_lcc500",
+      "truncated_geo_lcc750",
+      "truncated_geo_lcc900"
+    ]
+  },
+  "smoke_result_fingerprint": "e5d078b438225e16642b8cc897c42cab0354e989df8f97962f3849dd47bcd11f",
+  "next_gate": "Run the unchanged runner once on the exact checksummed y.wide.dryad.csv under the same pinned runtime, accept the frozen outcome without retuning, then preserve and remove the one-time workflow."
+}
