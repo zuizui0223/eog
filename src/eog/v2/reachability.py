@@ -64,6 +64,18 @@ _FORECAST_EXPORTS: Final[tuple[str, ...]] = (
     "rank_worldset_forecast_frontier",
 )
 
+_SEQUENTIAL_FORECAST_EXPORTS: Final[tuple[str, ...]] = (
+    "SequentialWorldRuleState",
+    "TransitionRuleCompatibility",
+    "TransitionEvidenceResult",
+    "SequentialWorldRuleUpdate",
+    "SequentialWorldSetForecast",
+    "finite_world_rule_fingerprint",
+    "initialize_sequential_world_rule_state",
+    "update_sequential_world_rules",
+    "build_sequential_worldset_forecast",
+)
+
 _RELAXATION_EXPORTS: Final[tuple[str, ...]] = (
     "MonotoneRelaxationFamily",
     "BasinMergeResult",
@@ -119,6 +131,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.reachability_network_diagnostics" for name in _NETWORK_EXPORTS},
     **{name: "eog.v2.world_reconstruction" for name in _WORLD_EXPORTS},
     **{name: "eog.v2.world_forecast" for name in _FORECAST_EXPORTS},
+    **{
+        name: "eog.v2.sequential_world_forecast"
+        for name in _SEQUENTIAL_FORECAST_EXPORTS
+    },
     **{name: "eog.v2.relaxation_family" for name in _RELAXATION_EXPORTS},
     **{name: "eog.v2.temporal_reachability" for name in _TEMPORAL_FLOW_EXPORTS},
     **{
@@ -144,6 +160,7 @@ __all__ = [
     *_SYNTHETIC_EXPORTS,
     *_WORLD_EXPORTS,
     *_FORECAST_EXPORTS,
+    *_SEQUENTIAL_FORECAST_EXPORTS,
     *_RELAXATION_EXPORTS,
     *_TEMPORAL_FLOW_EXPORTS,
     *_TEMPORAL_RECONSTRUCTION_EXPORTS,
