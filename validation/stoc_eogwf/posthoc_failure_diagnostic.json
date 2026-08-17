@@ -1,0 +1,86 @@
+{
+  "schema_version": "eog_stoc_world_failure_posthoc_compact_v1",
+  "status": "posthoc_nonconfirmatory_diagnostic",
+  "confirmatory_result_fingerprint": "1ec6e5beb0cfc791b1edec94d14dd416fc14de4426cdc73975a2bbcf388a779b",
+  "diagnostic_fingerprint": "5aa1885f682663aea28c25877f36b3ea1fb7225bd299d9447a51555928aff453",
+  "workflow_run": 31985516490,
+  "artifact": {
+    "id": 9273640879,
+    "zip_sha256": "2439afc62630e6906726c12c474747bc68e9178b2d37b46ea16d2a0ec6c543bd",
+    "role": "full posthoc per-world/per-species diagnostic; compact authoritative summary is committed here"
+  },
+  "frozen_world_contract": {
+    "world_count": 20,
+    "max_steps": 8,
+    "geographic_q90_km": 18.110714907817556,
+    "worlds_retuned": false,
+    "anchors_retuned": false,
+    "horizon_retuned": false
+  },
+  "least_fragmented_world": {
+    "world_id": "geo_q90",
+    "component_count": 231,
+    "isolated_sites": 101,
+    "largest_component_sites": 87,
+    "largest_component_fraction": 0.08673978065802593,
+    "mean_degree": 3.455633100697906,
+    "median_degree": 2.0,
+    "max_degree": 19
+  },
+  "geography_only_structure": {
+    "geo_q25": {"component_count": 849, "isolated_sites": 752, "largest_component_sites": 10, "largest_component_fraction": 0.009970089730807577},
+    "geo_q50": {"component_count": 663, "isolated_sites": 500, "largest_component_sites": 20, "largest_component_fraction": 0.019940179461615155},
+    "geo_q75": {"component_count": 434, "isolated_sites": 250, "largest_component_sites": 40, "largest_component_fraction": 0.03988035892323031},
+    "geo_q90": {"component_count": 231, "isolated_sites": 101, "largest_component_sites": 87, "largest_component_fraction": 0.08673978065802593}
+  },
+  "geo_q90_environment_structure": {
+    "geo_q90_env_q25": {"component_count": 960, "isolated_sites": 928, "largest_component_sites": 5, "largest_component_fraction": 0.004985044865403789},
+    "geo_q90_env_q50": {"component_count": 925, "isolated_sites": 872, "largest_component_sites": 6, "largest_component_fraction": 0.005982053838484547},
+    "geo_q90_env_q75": {"component_count": 844, "isolated_sites": 750, "largest_component_sites": 16, "largest_component_fraction": 0.015952143569292122},
+    "geo_q90_env_q90": {"component_count": 725, "isolated_sites": 588, "largest_component_sites": 18, "largest_component_fraction": 0.01794616151545364}
+  },
+  "species_summary": {
+    "species_count": 20,
+    "species_with_full_coverage_in_any_frozen_world": 0,
+    "best_world_for_all_species": "geo_q90",
+    "median_best_target_coverage_within_8": 0.08630211771875476,
+    "min_best_target_coverage_within_8": 0.044630404463040445,
+    "max_best_target_coverage_within_8": 0.25,
+    "median_fraction_targets_disconnected_from_all_anchors_in_best_world": 0.9017181887770123,
+    "min_fraction_targets_disconnected_from_all_anchors_in_best_world": 0.75,
+    "max_fraction_targets_disconnected_from_all_anchors_in_best_world": 0.9553695955369595,
+    "total_targets_disconnected_from_all_anchors_in_best_world_across_species": 8702,
+    "total_targets_connected_but_over_8_hops_in_best_world_across_species": 48,
+    "max_fraction_targets_connected_but_over_8_hops": 0.02727272727272727
+  },
+  "species_best_world_coverage": [
+    ["Cuculus canorus", 0.13528748590755355],
+    ["Emberiza citrinella", 0.09481481481481481],
+    ["Erithacus rubecula", 0.06209150326797386],
+    ["Fulica atra", 0.13953488372093023],
+    ["Luscinia megarhynchos", 0.07965860597439545],
+    ["Passer domesticus", 0.08497536945812807],
+    ["Phylloscopus trochilus", 0.16140350877192983],
+    ["Serinus serinus", 0.16022099447513813],
+    ["Sitta europaea", 0.044630404463040445],
+    ["Streptopelia decaocto", 0.14248704663212436],
+    ["Turdus philomelos", 0.062146892655367235],
+    ["Alauda arvensis", 0.0985691573926868],
+    ["Periparus ater", 0.05533596837944664],
+    ["Coccothraustes coccothraustes", 0.053061224489795916],
+    ["Emberiza calandra", 0.0633245382585752],
+    ["Phylloscopus bonelli", 0.08762886597938144],
+    ["Regulus regulus", 0.08484848484848485],
+    ["Perdix perdix", 0.1834319526627219],
+    ["Sylvia melanocephala", 0.25],
+    ["Cettia cetti", 0.0707070707070707]
+  ],
+  "diagnosis": {
+    "primary_failure_mode": "response-blind nearest-neighbour-quantile world construction is far too spatially fragmented for the country-scale STOC site universe",
+    "horizon_role": "secondary; very few targets are connected to anchors but require more than eight hops compared with the number in disconnected components",
+    "environment_role": "adding the frozen environmental threshold only increases fragmentation; no geography-environment world is more permissive than geo_q90",
+    "confirmatory_interpretation": "the frozen STOC world universe failed before heldout prediction; this is not evidence for identity predictive value or predictive superiority",
+    "development_interpretation": "future EOG-WF validation needs a response-blind structural adequacy gate for candidate world universes before response access",
+    "prohibition": "do not use this diagnostic to retune STOC thresholds, anchors, horizon, worlds, or comparators"
+  }
+}
