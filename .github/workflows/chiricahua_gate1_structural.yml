@@ -1,0 +1,60 @@
+name: Chiricahua leopard frog two-layer EOG-WF Gate 1 structural adequacy
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/chiricahua_gate1_structural.yml"
+      - "benchmarks/run_chiricahua_gate1_structural.py"
+      - "validation/chiricahua_two_layer/gate0_result.json"
+      - "validation/chiricahua_two_layer/gate0_amendment_v1_1.json"
+      - "validation/chiricahua_two_layer/gate1_scale_adequacy_declaration.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+
+permissions:
+  contents: read
+
+jobs:
+  gate1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install EOG
+        run: python -m pip install .
+
+      - name: Fetch exact response-free Figshare inputs
+        run: |
+          curl -L --fail --retry 3 \
+            'https://ndownloader.figshare.com/files/10458202' \
+            -o /tmp/coords.dryad.csv
+          curl -L --fail --retry 3 \
+            'https://ndownloader.figshare.com/files/10458193' \
+            -o /tmp/water.dryad.csv
+          test "$(md5sum /tmp/coords.dryad.csv | awk '{print $1}')" = "3df38d6b4aa7d52f8dea01aa6d8ca164"
+          test "$(md5sum /tmp/water.dryad.csv | awk '{print $1}')" = "63deb40bf290a794cd39dc760629f4ab"
+
+      - name: Run frozen response-blind structural gate
+        run: |
+          python benchmarks/run_chiricahua_gate1_structural.py \
+            --coords /tmp/coords.dryad.csv \
+            --hydroperiod /tmp/water.dryad.csv \
+            --output build/chiricahua_gate1_structural.json
+
+      - name: Prove no detection response was fetched
+        if: always()
+        run: |
+          test ! -e /tmp/y.wide.dryad.csv
+          find build -maxdepth 2 -type f -print || true
+
+      - name: Upload structural Gate 1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chiricahua-two-layer-gate1-structural
+          path: build/chiricahua_gate1_structural.json
+          if-no-files-found: warn
