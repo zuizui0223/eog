@@ -1,0 +1,53 @@
+{
+  "status": "gate2_pre_response_amendment_v1_1",
+  "response_rows_opened": false,
+  "reason": "Freeze implementation details that are determined by response-free source code, bounded headers, non-response covariates and the already frozen comparator classes before y.wide.dryad.csv is opened.",
+  "wide_array_mapping": {
+    "physical_columns": "V1 through V45",
+    "mapping": "three visits nested within each of 15 years, in year order 2003-2017",
+    "python_shape": [47, 15, 3],
+    "source_code_discrepancy": "the archived demonstration R script selects columns 2:45 and then reshapes to 47x3x15, which would omit V45 and recycle values under R array semantics",
+    "frozen_correction": "use all 45 published visit columns exactly once; do not reproduce the apparent demonstration-script indexing error",
+    "scientific_rule_changed": false
+  },
+  "first_detection_risk_set": {
+    "candidate_until": "first archived positive detection",
+    "surveyed_year": "at least one finite 0/1 response visit",
+    "positive": "any finite visit equals 1",
+    "negative": "at least one finite visit and all finite visits equal 0",
+    "after_first_detection": "site leaves the first-detection risk set",
+    "founder_sites": "excluded from prediction risk rows",
+    "destroyed_sites": "indices 10,19,31 excluded from 2010 onward; any positive detection after destruction is a response-schema error",
+    "invalid_values": "any finite response outside {0,1} stops the run"
+  },
+  "survey_covariates": {
+    "visit_count": "number of finite response visits in that site-year",
+    "wind_temperature_means": "mean over visits that are both surveyed and have finite covariate values",
+    "fallback": "if a surveyed row has no finite value for one covariate, use that covariate's response-free calibration-period global median",
+    "calibration_scaling": "all supervised-model means/SDs and imputation constants use calibration years only"
+  },
+  "rule_update_order": {
+    "prediction_features": "computed from worlds surviving before the current year's response",
+    "calibration_update": "after each calibration year's positive first detections, incompatible frozen rules are eliminated",
+    "heldout_update": "after scoring each heldout year, that year's positive first detections may eliminate rules for later years",
+    "model_refitting": "never during heldout",
+    "universe_falsification": "if no rule survives before all heldout years are scored, preserve partial evidence and mark the primary endpoint non-estimable"
+  },
+  "dynamic_occupancy_hmm": {
+    "state_space": "two-state latent occupancy at the 47 surveyed sites",
+    "calibration_years": [2007, 2008, 2009, 2010, 2011, 2012],
+    "initial_occupancy_logit": ["intercept", "Semi-permanent indicator", "Permanent indicator", "full-tail founder connectivity"],
+    "colonization_logit": ["intercept", "Semi-permanent indicator", "Permanent indicator", "full-tail founder connectivity", "year horizon"],
+    "persistence_logit": ["intercept", "Semi-permanent indicator", "Permanent indicator"],
+    "detection_logit": ["intercept", "wind", "temperature"],
+    "missing_visits": "ignored in the observation likelihood",
+    "destroyed_site_years": "latent occupancy forced to zero from 2010 onward",
+    "fit": "deterministic bounded L-BFGS-B maximum likelihood with zero start plus four fixed-seed normal starts; at least one converged finite solution required",
+    "bounds": [-8.0, 8.0],
+    "max_iterations": 3000,
+    "heldout_prediction": "one-year-ahead probability of at least one recorded detection, using the filtered occupancy state through the preceding year and the frozen detection covariates; state filtering updates after each heldout response",
+    "nonestimable_status": "dynamic_occupancy_hmm_non_estimable"
+  },
+  "decision_effect_of_missing_hmm": "Layer-B versus same-world mean-only remains estimable if its own gates pass, but the external-added-value endpoint is non-estimable if the HMM cannot be fit under the frozen specification.",
+  "no_retuning": true
+}
