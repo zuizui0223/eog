@@ -1,0 +1,131 @@
+{
+  "status": "gate0_pre_response_source_process_response_semantics_freeze",
+  "study_system": {
+    "taxon": "Lithobates chiricahuensis",
+    "common_name": "Chiricahua leopard frog",
+    "region": "Buenos Aires National Wildlife Refuge / Altar Valley, Arizona, USA",
+    "reintroduction": "three source ponds received reintroduced larvae in 2003 after regional extirpation and predator control",
+    "monitoring_period_documented": "2007-2017 (11 years)",
+    "scientific_role": "fresh EOG-specific independent validation candidate for the post-Glanville two-layer predictor"
+  },
+  "independence_boundary": {
+    "published_system_results_viewed_before_eog": true,
+    "known_from_publication": [
+      "the system is a reintroduced wetland metapopulation",
+      "published models analyse colonization/extinction and landscape resistance",
+      "published aggregate conclusions about hydroperiod, isolation and resistance were viewed during candidate screening"
+    ],
+    "eog_specific_outcomes_viewed": false,
+    "eog_layer_b_score_viewed": false,
+    "rule": "Published findings may justify comparator class and process relevance but must not tune EOG world thresholds, Layer-B features, holdout years or favourable/adverse rules.",
+    "label": "fresh EOG-specific independent validation; not completely outcome-naive ecological-system validation"
+  },
+  "source": {
+    "official_usgs_release_title": "Chiricahua leopard frog - Arizona: influence of landscape features on landscape resistance and colonization dynamics (presence data, wind speed, air temp; hydroperiod spatial coordinates)",
+    "figshare_article_id": 5838189,
+    "figshare_version": 4,
+    "figshare_doi": "10.6084/m9.figshare.5838189.v4",
+    "figshare_api_article_version": "https://api.figshare.com/v2/articles/5838189/versions/4",
+    "figshare_api_files": "https://api.figshare.com/v2/articles/5838189/versions/4/files",
+    "source_freeze_rule": "freeze version-4 metadata, every published file name/size/checksum and exact bytes before any occupancy row is parsed"
+  },
+  "public_process_basis": {
+    "site_definition": "published methods define sites as wetlands potentially suitable for reproduction rather than only wetlands known to become occupied",
+    "founder_sources": "three known 2003 reintroduction ponds provide a biologically explicit source-state origin",
+    "availability": "hydroperiod/water permanence is a patch-state covariate and intermittent sites can become unavailable or high-extinction patches",
+    "process_match": "published work explicitly models annual occupancy, colonization/extinction and distance/landscape-mediated immigration",
+    "process_closure_boundary": "Forecasts remain conditional on the declared refuge wetland universe and known/current internal source ponds; complete closure to every external immigrant is not asserted."
+  },
+  "node_universe_gate": {
+    "critical_question": "Does the Figshare release contain response-free coordinates/hydroperiod for the full potentially suitable wetland network independent of future occupancy?",
+    "pass_if": [
+      "stable site IDs and coordinates are available without occupancy response rows",
+      "node inclusion is based on potential wetland habitat/survey design rather than ever-occupied response",
+      "hydroperiod/availability can be represented independently of future occupancy"
+    ],
+    "stop_if": [
+      "coordinates exist only for sites selected by eventual occupancy",
+      "node inclusion requires response inspection",
+      "site identity or geometry is ambiguous without using occupancy outcomes"
+    ]
+  },
+  "response_semantics_gate": {
+    "target_candidate": "annual survey-recorded pond occupancy/colonization conditional on pond availability",
+    "positive_candidate": "surveyed available site with frog presence/detection in target year",
+    "negative_candidate": "surveyed available site with documented non-detection/absence under the archived monitoring design",
+    "unavailable_state": "pond-year lacking habitat availability/water under the archived hydroperiod contract; not an ordinary binary negative",
+    "forbidden_negative": "missing/not-surveyed/unavailable pond-year must never be recoded as absence",
+    "pass_requirement": "schema/code/documentation must distinguish surveyed non-detection from missing/not-surveyed and habitat unavailability before response values are inspected",
+    "stop_requirement": "if only positive presence rows exist or survey effort/availability cannot be separated from absence, stop pre-response"
+  },
+  "response_firewall": {
+    "occupancy_response_rows_opened": false,
+    "allowed_at_gate0": [
+      "Figshare version metadata, file names, sizes, checksums and download URLs",
+      "exact file bytes for checksum verification",
+      "full README/metadata/code files",
+      "bounded first physical record of text-like data files via eog.v2.validation.read_bounded_first_record_text",
+      "binary-file inventory without deserializing response objects"
+    ],
+    "forbidden_at_gate0": [
+      "presence/detection data rows",
+      "annual occupancy values",
+      "colonization/extinction event values",
+      "response-conditioned node selection",
+      "deserializing unknown binary response objects",
+      "using published aggregate results to tune EOG design"
+    ],
+    "text_header_reader": "eog.v2.validation.read_bounded_first_record_text",
+    "max_header_record_bytes": 16384
+  },
+  "two_layer_architecture_freeze": {
+    "latent_layer": "exact frozen rule identities retained for compatibility, current-source propagation, sequential contraction and finite-universe falsification",
+    "predictive_layer": "symmetric_world_support_summary_v1",
+    "world_id_predictive_columns": false,
+    "glanville_retuning_prohibited": true
+  },
+  "structural_gate_if_gate0_passes": {
+    "distance_basis": "archive-provided site coordinates or explicit distance matrix only; no response-derived geometry",
+    "scale_rule": "reuse response-blind 0.25/0.50/0.75/0.90 LCC ladder",
+    "requirements": [
+      "LCC90 >= 0.90",
+      "isolated-node fraction at LCC90 <= 0.05",
+      "at least three distinct positive structural thresholds",
+      "nested deterministic worlds"
+    ],
+    "no_rescue": "do not add kNN/arbitrary thresholds after a scale-diversity failure"
+  },
+  "external_comparator_class": {
+    "primary": "published-style spatial occupancy/metapopulation model using hydroperiod, patch isolation and landscape resistance/connectivity",
+    "flexible": "predeclared flexible classifier using only the same response-free site/availability/geometry information",
+    "freeze_later": "exact comparator features/hyperparameters and temporal holdout are frozen only after Gate 0 and structural gates pass, still before occupancy response rows"
+  },
+  "gate0_decision_rule": {
+    "pass_if_all": [
+      "Figshare v4 metadata and exact source bytes are reproducibly frozen",
+      "response-bearing files are separable from code/documentation/geometry",
+      "wetland node universe is habitat/survey-defined rather than future-response-defined",
+      "coordinates or explicit distances are response-free and deterministic",
+      "surveyed non-detection can be distinguished from missing/not-surveyed/unavailable",
+      "11-year monitoring structure is available for a prospective temporal holdout",
+      "conditional internal-source propagation remains scientifically defensible"
+    ],
+    "stop_if_any": [
+      "source bytes cannot be reproducibly frozen",
+      "node universe is future-response-selected",
+      "surveyed absence cannot be separated from missing/not-surveyed/unavailable",
+      "geometry requires response inspection",
+      "process/source semantics are incompatible with an internal-source conditional forecast"
+    ]
+  },
+  "post_gate0_sequence": [
+    "freeze canonical wetland universe and full response-free geometry/availability inputs",
+    "run the same response-blind structural scale/adequacy Gate 1 used after Glanville",
+    "freeze known-founder/current-source update semantics",
+    "freeze symmetric_world_support_summary_v1 without tuning",
+    "freeze published-style spatial occupancy comparator and flexible external comparator",
+    "freeze temporal calibration/heldout split from metadata only",
+    "only then open occupancy/detection response rows once"
+  ],
+  "no_rescue_rule": "If Gate 0 or structural adequacy fails, stop pre-response and move to another candidate rather than altering EOG worlds or endpoint definitions."
+}
