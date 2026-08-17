@@ -1,0 +1,71 @@
+{
+  "status": "gate2_pre_response_amendment_v1_2",
+  "response_rows_opened": false,
+  "reason": "Freeze every remaining deterministic implementation choice needed by the once-only outcome runner before y.wide.dryad.csv is downloaded or parsed.",
+  "runtime": {
+    "python": "3.11",
+    "numpy": "2.3.2",
+    "scipy": "1.16.1",
+    "scikit_learn": "1.7.1",
+    "policy": "the synthetic-smoke and once-only outcome workflows use the same pinned numerical runtime"
+  },
+  "early_detection_boundary": {
+    "years": [2003, 2004, 2005, 2006],
+    "use": "remove a site from the 2007 first-detection risk set when an archived positive already occurred",
+    "layer_a_update": "do not eliminate frozen worlds from pre-2007 detections because the frozen response/update period begins in 2007"
+  },
+  "founder_connectivity": {
+    "kernel_per_founder": "k_fj = exp(-distance_fj^2 / (2 * sigma_km^2))",
+    "aggregation": "1 - product_f(1 - k_fj)",
+    "range": [0.0, 1.0],
+    "use": [
+      "founder-connectivity logistic baseline",
+      "dynamic occupancy HMM initial/colonization covariate",
+      "flexible random-forest baseline"
+    ]
+  },
+  "supervised_preprocessing": {
+    "logistic_models": "fit a separate calibration-only mean/SD transform for each frozen feature set; drop columns with calibration SD <= 1e-12; use L2 lbfgs C=1 and max_iter=3000",
+    "random_forest": "use finite raw frozen features without standardization",
+    "probability_clipping_for_metrics": [1e-15, 0.999999999999999],
+    "no_heldout_refitting": true
+  },
+  "hmm_covariate_scaling": {
+    "hydroperiod": "Intermittent is the reference; Semi-permanent and Permanent indicators remain unscaled",
+    "founder_connectivity": "standardize across the 47 surveyed sites",
+    "year_horizon": "standardize the 2008-2012 transition horizons using calibration values only",
+    "wind_temperature": "replace missing visit covariates by the response-free 2007-2012 global median, then standardize using all resulting calibration visit values",
+    "heldout": "apply the frozen calibration transforms without refitting"
+  },
+  "hmm_likelihood": {
+    "false_positives": false,
+    "initial_year": 2007,
+    "initial_state": "Bernoulli occupancy with the frozen initial-occupancy logit",
+    "transition": "P(z_t=1|z_t-1=0)=colonization and P(z_t=1|z_t-1=1)=persistence",
+    "destroyed_site_years": "force prior and posterior occupancy to zero from 2010 onward",
+    "emission": "conditional-independent Bernoulli detections over finite visits; missing visits contribute one",
+    "optimization": "bounded L-BFGS-B over 15 coefficients from zero plus four fixed-seed N(0,0.5) starts; select the converged finite minimum calibration NLL",
+    "prediction": "before each heldout response, prior occupancy times one-minus-the-product of visit non-detection probabilities over archived surveyed visits",
+    "filtering": "after each heldout response, update posterior occupancy for the next heldout year"
+  },
+  "layer_a_denominator": {
+    "declared_world_count": 5,
+    "members": "only rules surviving before the current year's response",
+    "surviving_world_fraction": "surviving member count divided by the original declared count of five"
+  },
+  "decision_completion": {
+    "layer_b_adverse_if": "macro-year logloss(EOG - mean-only) > 0 and EOG wins in at most one of five heldout years",
+    "layer_b_no_confirmed_if": "neither the frozen favorable rule nor the adverse rule is met",
+    "external_adverse_if": "EOG macro-year log loss exceeds the best external comparator and EOG beats the best available external comparator in at most one heldout year",
+    "external_no_confirmed_if": "neither the frozen favorable rule nor the adverse rule is met",
+    "universe_falsification": "if all worlds are eliminated before all five heldout years are scored, the primary endpoint is non-estimable; elimination after the final heldout score is preserved separately from the completed metrics"
+  },
+  "workflow_order": [
+    "commit the frozen runner and this amendment",
+    "run the full runner on deterministic synthetic detections while y.wide.dryad.csv is absent",
+    "require HMM convergence, finite predictions, five heldout metric years and an allowed decision state",
+    "freeze the smoke result and keep the runner unchanged",
+    "only then download the exact checksummed y.wide.dryad.csv once and run the empirical outcome"
+  ],
+  "no_retuning": true
+}
