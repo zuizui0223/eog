@@ -1,0 +1,75 @@
+{
+  "status": "gate0_pass_source_schema_process",
+  "source": {
+    "dryad_doi": "10.5061/dryad.ksn02v707",
+    "zenodo_record": 4987060,
+    "archive_name": "ECOG-04799.zip",
+    "expected_md5": "69122a1d82b1fb970fb6638b02da3db4",
+    "observed_sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9"
+  },
+  "workflow": {
+    "run_id": 32015024535,
+    "artifact_id": 9283168426,
+    "artifact_zip_sha256": "7bc25ed9d7880ebdcb8778649a69001622e7e3b5b49c42fbfbbdc4d0a0f24b80"
+  },
+  "archive": {
+    "member_count": 32,
+    "response_files_extracted": false,
+    "data_members": [
+      {"name": "data/covariates.tsv", "size": 1368},
+      {"name": "data/landuse_buffer.tsv", "size": 588901},
+      {"name": "data/landuse_edge.tsv", "size": 290119},
+      {"name": "data/landuse_patch.tsv", "size": 246425},
+      {"name": "data/patch_area.tsv", "size": 1703971},
+      {"name": "data/patch_network.tsv", "size": 155379},
+      {"name": "data/survey_data.tsv", "size": 2626851}
+    ]
+  },
+  "readme_schema": {
+    "patch_network": "patch identifier, area in hectares, centroid coordinates in kilometers, EPSG:3067",
+    "patch_area": "habitat-patch area in hectares in different years",
+    "survey_data_fields": [
+      "year",
+      "patch",
+      "population",
+      "plantago",
+      "veronica",
+      "plantago_low",
+      "veronica_low",
+      "plantago_dry",
+      "veronica_dry",
+      "grazing_presence",
+      "grazing_intensity",
+      "previous_population"
+    ],
+    "response_fields_forbidden_before_gate4": [
+      "population",
+      "previous_population"
+    ],
+    "response_free_fields_may_be_read_selectively": [
+      "year",
+      "patch",
+      "plantago",
+      "veronica",
+      "plantago_low",
+      "veronica_low",
+      "plantago_dry",
+      "veronica_dry",
+      "grazing_presence",
+      "grazing_intensity"
+    ]
+  },
+  "process_source_closure": {
+    "status": "pass_for_regional_patch_metapopulation_conditional_claim",
+    "claim_boundary": "annual EOG-WF forecasts will be conditional on realized occupied states within the declared Aland habitat-patch network; complete closure to every immigrant outside the region is not claimed",
+    "reason": "annual extinction and recolonization among discrete habitat patches is the core process studied by the long-term metapopulation system"
+  },
+  "unresolved_before_outcome": [
+    "exact survey year sequence and candidate temporal split",
+    "exact patch_network column names",
+    "response-blind structural ladder thresholds",
+    "study-specific structural adequacy declaration result",
+    "final annual source/horizon/comparator contract"
+  ],
+  "response_content_opened": false
+}
