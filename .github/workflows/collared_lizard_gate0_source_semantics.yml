@@ -107,28 +107,32 @@ jobs:
           if len(lines) < 200:
               raise SystemExit(f'unexpected GPS waypoint length: {len(lines)} lines')
 
-          # First line is Garmin format metadata; second line is a tab-delimited header.
-          header = next(csv.reader(io.StringIO(lines[1]), delimiter='\t'))
-          normalized = {name.strip().lower(): i for i, name in enumerate(header)}
-          for required in ('name', 'latitude', 'longitude'):
-              if required not in normalized:
-                  raise SystemExit(f'missing GPS column {required!r}: {header!r}')
-
+          # Garmin's exported header contains spacer columns around Date/Time, while
+          # actual waypoint rows are the compact nine-field layout:
+          # ID, Name, Comment, DateTime, Latitude, Longitude, Icon, Display, Altitude.
+          raw_header = next(csv.reader(io.StringIO(lines[1]), delimiter='\t'))
+          compact_header = [
+              'ID', 'Name', 'Comment', 'DateTime', 'Latitude', 'Longitude',
+              'Icon', 'Display Option', 'Altitude'
+          ]
           coords = []
           for line in lines[2:]:
               if not line.strip():
                   continue
               row = next(csv.reader(io.StringIO(line), delimiter='\t'))
-              if len(row) <= max(normalized['name'], normalized['latitude'], normalized['longitude']):
-                  raise SystemExit(f'malformed GPS row: {line!r}')
-              name = row[normalized['name']].strip()
-              lat = float(row[normalized['latitude']])
-              lon = float(row[normalized['longitude']])
+              if len(row) != len(compact_header):
+                  raise SystemExit(f'unexpected compact GPS row length {len(row)}: {line!r}')
+              name = row[1].strip()
+              lat = float(row[4])
+              lon = float(row[5])
               if not name or not math.isfinite(lat) or not math.isfinite(lon):
                   raise SystemExit('GPS name/coordinates must be non-empty and finite')
               if not (-90 <= lat <= 90 and -180 <= lon <= 180):
                   raise SystemExit('GPS coordinate outside valid range')
               coords.append((name, lat, lon))
+
+          if len(coords) != 219:
+              raise SystemExit(f'expected 219 documented waypoint rows, got {len(coords)}')
 
           digest = hashlib.sha256(path.read_bytes()).hexdigest()
           payload = {
@@ -138,7 +142,8 @@ jobs:
               'md5': '7baa4bb0dc11cdff774dfe95540ed785',
               'sha256': digest,
               'line_count': len(lines),
-              'header': header,
+              'raw_export_header': raw_header,
+              'parsed_compact_layout': compact_header,
               'parsed_coordinate_rows': len(coords),
               'unique_parsed_names': len({name for name, _, _ in coords}),
               'duplicate_names': len(coords) - len({name for name, _, _ in coords}),
