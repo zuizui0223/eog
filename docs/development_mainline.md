@@ -6,222 +6,195 @@ This file is the **single source of truth for active scientific development**.
 
 Current empirical state:
 
-> **EOG-WF is algorithmically valid, while the first independent empirical attempt (STOC) falsified its frozen world universe before heldout prediction.**
+> **EOG-WF reached a fully prospectively gated independent heldout test on the Åland Glanville fritillary system. Exact world identity as a direct predictive representation was adverse.**
 
-Current algorithmic/method state:
+Current method/product state:
 
-> **EOG-WF prediction, response-blind world-scale construction, and response-blind structural adequacy certification are implemented. Independent identity-preserving and predictive added value remain unconfirmed.**
+> **Exact world identity is retained as the latent sequential update/falsification state. The default predictive interface is being narrowed to a world-label-invariant summary of that exact state. This revised predictive head is implemented/tested synthetically but is not yet independently validated.**
 
-Generic operator growth is stopped. The active scientific mainline is now **fresh independent forecast validation after prospective structural certification**.
+Generic operator growth remains stopped.
 
-Canonical method documents:
+Canonical documents:
 
 - [`worldset_forecast_algorithm.md`](worldset_forecast_algorithm.md)
 - [`method_validation_protocol.md`](method_validation_protocol.md)
 - [`world_universe_scale_design.md`](world_universe_scale_design.md)
+- [`two_layer_forecast_architecture.md`](two_layer_forecast_architecture.md)
 
 ## Scientific center
 
 EOG keeps four objects separate:
 
-1. **local possibility** — locally supported under a declared environmental/process representation;
-2. **reachability** — reachable from declared realized anchors under a declared transition world;
-3. **distributional realizability** — compatible with the observed positive distribution under that world;
-4. **historical truth** — the actual route, sequence, ancestry, movement rate or demographic process in nature.
+1. **local possibility**;
+2. **reachability from declared current sources**;
+3. **distributional realizability under declared worlds**;
+4. **historical truth**.
 
-Observed occurrences are realized positive states. They constrain admissible distribution-forming worlds but do not identify one true route/history.
+Observed positive states constrain worlds but do not identify one true route/history.
 
-For a declared finite universe `W` and current positive observations `O`, EOG reconstructs
+For finite universe `W` and evidence `O`:
 
 ```text
 W(O) = {w in W : w is compatible with O}
 ```
 
-and EOG-WF carries surviving world identities forward into prediction rather than averaging them away.
+The exact identity of surviving worlds remains auditable and is required for evidence-driven contraction/falsification.
 
-## EOG-WF prediction/update loop
+## Active two-layer EOG-WF architecture
 
-```text
-positive observations O
-      ↓
-inverse world filtering W(O)
-      ↓
-forward first-passage propagation inside each retained world
-      ↓
-optional separately declared local viability/persistence gates
-      ↓
-world × horizon × node forecast cube
-      ↓
-robust / contingent / all-world-excluded projections
-      ↓
-new positive evidence O+
-      ↓
-W(O ∪ O+) ⊆ W(O), or finite-universe falsification
-      ↓
-revised forecast
-```
+### Layer A — exact latent/update state
 
-The implementation is `src/eog/v2/world_forecast.py`, exposed lazily through `eog.v2.reachability`.
+Retain:
 
-Exact world identity is prediction state. In the known-truth fixture, two nodes can both have scalar support frequency 0.5 while being supported by mutually exclusive worlds; a later positive observation eliminates one world and changes the two forecasts in opposite directions. This behavior is covered by `tests/test_world_forecast.py`.
+- exact world/rule IDs and fingerprints;
+- current source state;
+- per-world support;
+- compatible/surviving rule set;
+- robust/contingent/excluded structure;
+- sequential contraction and finite-universe falsification.
 
-## World-universe scale is now a prospective gate
+Implementations:
 
-STOC established a method-design failure that occurs **before** prediction quality can be judged: a response-blind threshold rule may still generate worlds at the wrong structural scale for the forecast domain.
+- `src/eog/v2/world_reconstruction.py`
+- `src/eog/v2/world_forecast.py`
+- `src/eog/v2/sequential_world_forecast.py`
 
-The repository therefore separates:
+### Layer B — world-label-invariant predictive representation
 
-### A. World-scale construction
+Default predictive features are produced by:
 
-Preferred route: externally calibrated movement/dispersal/transition scale when scientifically defensible.
+`src/eog/v2/world_predictive_summary.py`
 
-Fallback route: prospectively declared **analyst-choice structural scale ladder** using `src/eog/v2/world_scale_ladder.py`.
+The v1 projection uses ten symmetric quantities per node/horizon:
 
-For each predeclared target largest-component fraction, the ladder selects the minimum metric threshold that reaches that structural regime. This is graph-threshold/percolation prior art used as design discipline, not a new connectivity theorem or biological dispersal estimator.
+- surviving-world fraction;
+- support mean/std/min/max;
+- q25/q50/q75;
+- positive-support fraction;
+- support range.
 
-### B. World-universe structural certification
+World IDs remain in Layer A and are **not** supervised predictive columns by default.
 
-`src/eog/v2/world_adequacy.py` audits the fully composed world universe before ecological responses are opened. It reports component structure, isolation, degree and horizon reachability, and applies only prospectively declared criteria.
+The feature representation must be invariant to world renaming and member order. The exact upstream latent fingerprint remains separate for scientific provenance.
 
-Both scale-construction and adequacy APIs are response-blind by design and accept no species-response vector.
+## Why the product boundary changed
 
-### C. Outcome opening
+The first independent EOG-WF system to reach heldout prediction was the Åland Glanville fritillary metapopulation.
 
-Only a structurally eligible independent system may proceed to occurrence-conditioned world filtering, identity-vs-compression comparison, and external predictive comparison.
+Its source/process, response-blind world-scale, structural-adequacy, temporal split, comparator and response-balance gates all passed before the final heldout result was interpreted.
+
+Authoritative result:
+
+- workflow run `32017872743`;
+- result fingerprint `628511ac3f42fe108d334a6458428bbf56f3c3fea1e753b2bee8d980b3d84c33`;
+- calibration rows 35,217;
+- heldout rows 18,918 across six annual transitions;
+- exact identity was independently estimable beyond the declared compression.
+
+Primary macro-year log loss:
+
+| representation/model | log loss |
+|---|---:|
+| **same-world symmetric compression** | **0.187983** |
+| random forest | 0.191725 |
+| IFM logistic | 0.200242 |
+| **exact world identity** | **0.230197** |
+
+Exact identity minus compression = `+0.042214` (worse), and identity lost to compression in **6/6 heldout transitions**.
+
+Frozen decision statuses:
+
+- `adverse_identity_predictive_value`;
+- `adverse_external_predictive_added_value`.
+
+This rejects/narrows the claim that exact world labels should be the default predictive representation.
+
+It does **not** invalidate exact world identity as update state. During Glanville calibration:
+
+- three narrow structural worlds were eliminated in `1999→2000`;
+- the broad 6.418-km structural world was eliminated in `2010→2011`;
+- the full exponential process world survived into all heldout forecasts.
+
+Exact identity therefore remained useful for scientific falsification even while direct identity features harmed predictive log loss.
+
+Canonical evidence: [`../validation/glanville_eogwf/README.md`](../validation/glanville_eogwf/README.md).
+
+## Earlier validation ledger
+
+### A-Islands
+
+Exploratory evidence showed scalar frequency can erase exact world identity. Not independent confirmation. Earlier strong-reference predictive extension was adverse.
+
+### SIVFLORA
+
+Independent attempt stopped pre-outcome on frozen climate coverage. Not rescued.
+
+### Azores
+
+Independent attempt stopped pre-model on frozen taxonomic scope. Not rescued.
+
+### STOC
+
+First independent EOG-WF attempt stopped because the frozen world universe was structurally inadequate before heldout prediction. It motivated response-blind world-scale construction and adequacy gates. STOC remains frozen and is not reused.
+
+### Glanville
+
+First independent attempt to pass prospective structural gates and complete heldout forecast. Exact-identity prediction adverse. This result drives the current two-layer product architecture.
+
+## Prospective gates remain mandatory
+
+Any future independent test must freeze before response access:
+
+1. immutable source/schema and response semantics;
+2. process/source closure;
+3. process-calibrated and/or response-blind world-scale construction;
+4. response-blind structural adequacy;
+5. current-source/sequential update policy;
+6. predictive representation;
+7. strong external comparator;
+8. holdout design, metrics and null/adverse rules.
+
+Then run once without retuning.
 
 ## Fixed novelty boundary
 
 Do not claim novelty for:
 
-- graph threshold filtration, critical connectivity, percolation or minimum spanning trees;
-- dynamic/time-respecting reachability;
-- stepping-stone or least-cost methods;
-- circuit redundancy;
-- suitable + accessible functional habitat;
+- graph threshold/percolation/MST machinery;
+- dynamic reachability;
+- least-cost/stepping-stone/circuit methods;
+- functional habitat / suitability+accessibility;
 - dynamic/mechanistic SDMs;
-- ensemble/model averaging;
-- credal/imprecise prediction generally;
-- viability kernels;
+- model averaging/ensembles;
+- permutation-invariant set functions or distributional summaries;
+- credal/imprecise prediction;
 - history matching/NROY;
-- minimum-relaxation/Pareto frontiers;
-- multiverse analysis or generic adaptive survey design.
+- Pareto/minimum-relaxation frontiers;
+- generic adaptive survey design.
 
-The candidate contribution remains the **biogeographic composition and update state**:
+The candidate EOG contribution remains the domain-specific composition:
 
-> current positive distributions filter a prospectively scale-certified set of ecological/analytical transition worlds; exact surviving world identities are propagated through forecast horizon and retained as the state needed for later evidence to contract or falsify the prediction universe without post-outcome retuning.
-
-## Validation targets
-
-### 1. Algorithmic correctness
-
-Current state: **PASS** on known-truth tests and package regression.
-
-### 2. Prospective world-universe adequacy
-
-Current infrastructure: **implemented and regression-tested**.
-
-The next independent system must pass this before response access.
-
-### 3. Independent identity-preserving forecast value
-
-Current state: **known-truth PASS; independently ecological unconfirmed**.
-
-### 4. Predictive added value
-
-Current state: **not established**.
-
-A valid comparison requires both:
-
-- matched same-world compression; and
-- strong external ecological comparator appropriate to the system.
-
-### 5. Historical identification
-
-Current state: **not claimed**.
-
-## Frozen validation ledger
-
-### A-Islands
-
-Exploratory structural support for exact world identity; separate frozen strong-reference predictive extension adverse. Not independent EOG-WF confirmation.
-
-### SIVFLORA
-
-Independent attempt stopped pre-outcome because frozen climate coverage failed. Not rescued.
-
-### Azores
-
-Independent attempt stopped pre-model under frozen taxonomic scope. Response rows were not scored. Not rescued.
-
-### STOC
-
-First independent EOG-WF forecast attempt.
-
-Status:
-
-`independent_world_universe_falsified_on_calibration`
-
-Authoritative run `31985291050`:
-
-- response-estimability failure: 0/20 species;
-- calibration world-universe falsification: 20/20 species;
-- heldout prediction: 0/20 species;
-- identity predictive endpoint: non-estimable;
-- external predictive endpoint: non-estimable.
-
-Post-hoc diagnosis showed the most permissive frozen geography world (`18.1107 km`) still had 231 components and largest component only 8.67% of 1,003 sites. Across species, 8,702 positive targets were disconnected from all fixed anchors while only 48 were connected but beyond the eight-hop horizon. The dominant problem was world-scale fragmentation, not horizon length.
-
-STOC is frozen and cannot be redesigned as independent confirmation.
-
-A response-blind post-hoc method demonstration then showed that the same site geometry has major structural transitions around:
-
-- 20.398 km → LCC 29.8%;
-- 24.390 km → 53.0%;
-- 34.970 km → 87.0%;
-- 41.640 km → 90.0%.
-
-This validates the scale-ladder construction as a structural diagnostic only; it does not change STOC's result.
+> **a prospectively source- and scale-certified finite world universe is conditioned by positive distribution evidence; exact world identities remain auditable sequential update state; a label-invariant projection is used for prediction; later evidence contracts or falsifies the same frozen rule universe without post-outcome retuning.**
 
 ## Next scientific milestone
 
-Proceed only with a **fresh independent system** that passes all pre-response gates.
+Do **not** add another graph/connectivity operator and do **not** rerun Glanville with the new predictive summary.
 
-Required sequence:
+The next valid milestone is:
 
-1. immutable source/provenance freeze;
-2. node and non-response input freeze;
-3. response semantics documented but response content unopened;
-4. process-closure/source semantics check — internal anchors must plausibly represent the distribution-forming process, or externally entering source states must be explicitly represented prospectively;
-5. response-blind world-scale construction;
-6. response-blind structural adequacy gate;
-7. forecast horizon/gates/compression/external comparator freeze;
-8. one-time response opening;
-9. preserve favourable, null, adverse or non-estimable outcomes without rescue.
+> **validate the two-layer EOG-WF architecture on a fresh independent system selected and frozen before outcome access.**
 
-The **process-closure/source semantics check** is now explicit because a system can have excellent repeated detection data yet still be inappropriate for anchor-conditioned spatial propagation if states are replenished freely from outside the declared node universe.
+The exact latent state and symmetric predictive summary must both be fixed before that new response is opened.
 
-## Repository architecture
+If the revised predictive head is null/adverse, preserve the result and narrow the general prediction-product claim further.
 
-- root `eog`: frozen v0.1 compatibility surface;
-- `eog.v2`: thin lazy compatibility namespace;
-- `eog.v2.reachability`: EOG-WF and reachability-facing scientific APIs;
-- `eog.v2.traversability`: path/environment diagnostics;
-- `eog.v2.validation`: empirical validation plus response-blind scale/adequacy infrastructure;
-- `benchmarks/` + `validation/`: system-specific evidence;
-- `manuscript/`: frozen earlier structural publication line.
+## Stop rules
 
-Do not create another facade or public EOG identity.
+1. Preserve favourable, adverse, blocked, null and non-estimable evidence.
+2. Do not rescue Glanville, STOC, Azores or SIVFLORA by redesign and call it independent confirmation.
+3. Do not expose arbitrary exact world labels to the default predictive head merely to recover performance.
+4. Do not claim the current symmetric summary is optimal or externally superior from Glanville; that endpoint was not prospectively tested.
+5. Do not promote raw EOG support to colonisation/occupancy probability without calibration.
+6. Do not claim universal robustness outside the declared world certificate.
 
-## Cleanup / stop rules
-
-1. Preserve positive, adverse, blocked, null and indeterminate evidence.
-2. Do not add a generic operator to rescue EOG-WF.
-3. Do not weaken comparators after outcome inspection.
-4. Do not repair/reuse STOC, SIVFLORA or Azores as fresh independent confirmation.
-5. Do not call structural ladder thresholds biological dispersal constants without external calibration.
-6. Do not open ecological response before source/process, scale and structural gates are frozen.
-7. Do not promote uncalibrated support to occupancy/colonisation probability.
-8. Do not claim universal robustness outside the world-universe certificate.
-9. If a fresh structurally eligible independent test is null/adverse, preserve it and narrow the product claim.
-
-The development mainline is now **prospective, structurally certified independent EOG-WF validation**.
+The active mainline is now **fresh independent validation of the two-layer EOG-WF predictor**.
