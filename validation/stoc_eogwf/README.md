@@ -54,13 +54,7 @@ The geographic cutoffs frozen from the 1,003 sites were:
 
 ## First technical attempt
 
-Workflow `31985198572` successfully:
-
-1. installed the frozen runtime;
-2. downloaded the exact source;
-3. verified file size and Git blob identity.
-
-It then stopped before modelling because the real CSV uses lowercase `x_wgs84,y_wgs84` while the public documentation/frozen runner used `X_WGS84,Y_WGS84`.
+Workflow `31985198572` successfully installed the frozen runtime, downloaded the exact source and verified file size/Git blob identity. It then stopped before modelling because the real CSV uses lowercase `x_wgs84,y_wgs84` while the public documentation/frozen runner used uppercase labels.
 
 Only a transparent in-memory header-case adapter was added. No source bytes, responses, worlds, thresholds, anchors, horizon, models, metrics or decision rules changed.
 
@@ -71,12 +65,6 @@ Artifact: `9273564113`
 Artifact ZIP SHA-256: `a900fada68f61e084e749a1206d7fce397892de41a15ab821a7232e09128aa89`  
 Result fingerprint: `1ec6e5beb0cfc791b1edec94d14dd416fc14de4426cdc73975a2bbcf388a779b`
 
-Runtime:
-
-- NumPy `2.1.3`;
-- pandas `2.2.3`;
-- scikit-learn `1.5.2`.
-
 Outcome:
 
 - response-class non-estimability: **0/20 species**;
@@ -84,8 +72,6 @@ Outcome:
 - species reaching heldout predictive modelling: **0/20**;
 - identity predictive value status: `non_estimable`;
 - external predictive added value status: `non_estimable`.
-
-Even the rarest frozen species gate example, *Sylvia melanocephala*, had 58 calibration positives / 945 zeros and 58 heldout positives / 945 zeros. The failure is therefore not caused by insufficient positive/negative responses.
 
 Exact species-level statuses are in `stoc_eogwf_species_summary.csv`; the authoritative result is `stoc_eogwf_result.json`.
 
@@ -98,7 +84,7 @@ Artifact: `9273640879`
 Artifact ZIP SHA-256: `2439afc62630e6906726c12c474747bc68e9178b2d37b46ea16d2a0ec6c543bd`  
 Diagnostic fingerprint: `5aa1885f682663aea28c25877f36b3ea1fb7225bd299d9447a51555928aff453`
 
-The least fragmented frozen world was the most permissive geography-only world, `geo_q90`:
+The least fragmented frozen world was `geo_q90`:
 
 - 231 connected components across 1,003 sites;
 - 101 isolated sites;
@@ -106,47 +92,51 @@ The least fragmented frozen world was the most permissive geography-only world, 
 - mean degree: 3.46;
 - median degree: 2.
 
-Adding environmental thresholds made fragmentation substantially worse. For example `geo_q90_env_q90` had 725 components, 588 isolated sites, and a largest component of only 18 sites.
-
-For **all 20 species**, the best frozen world was `geo_q90`, yet fixed-anchor coverage of calibration positive targets within eight steps was:
-
-- median: **8.63%**;
-- minimum: **4.46%**;
-- maximum: **25.0%**;
-- full coverage in any frozen world: **0 species**.
-
-Across the species' best frozen world:
-
-- 8,702 positive targets were in components disconnected from every fixed anchor;
-- only 48 targets were connected to an anchor but required more than eight hops.
-
-Therefore the main failure is **graph fragmentation, not the eight-step horizon**.
+Adding environmental thresholds fragmented the graph further. Across species' best world, 8,702 calibration-positive targets were disconnected from every fixed anchor, while only 48 were connected but beyond the eight-hop horizon. Thus the main failure is **graph fragmentation, not horizon length**.
 
 Compact diagnostic evidence is preserved in `posthoc_failure_diagnostic.json`.
 
-## Scientific interpretation
+## Prospective method correction
 
-The independent STOC attempt revealed a critical limitation in the first generic world-generation recipe:
+The independent STOC attempt revealed:
 
-> nearest-neighbour quantiles of monitoring-site spacing are response-blind, but they do not automatically define an ecologically or structurally adequate transition-world universe at the spatial scale of the prediction problem.
+> **response-blind is necessary but not sufficient; a candidate world universe can avoid outcome leakage and still occupy the wrong structural scale for the intended forecast.**
 
-The q90 geographic threshold was only 18.11 km across a country-scale 1,003-site system. That produced hundreds of disconnected components before species responses were considered. Environmental intersection only fragmented those graphs further.
+The repository now contains:
 
-This is **not** evidence that exact world identity lacks predictive value, because no species reached that comparison. It is also **not** a successful EOG-WF prediction result.
+- `src/eog/v2/world_scale_ladder.py` — response-blind local-to-spanning scale construction when no externally calibrated process distance is defensible;
+- `src/eog/v2/world_adequacy.py` — response-blind structural certification before ecological outcomes are opened;
+- `docs/world_universe_scale_design.md` — canonical prospective design rules.
 
-It is evidence that EOG-WF needs a generic, response-blind **world-universe structural adequacy gate** before response access.
+Neither validation API accepts a species-response vector. Structurally derived thresholds remain analyst-choice worlds unless external biological evidence calibrates them.
+
+## STOC response-blind scale-ladder demonstration — method evidence only
+
+After STOC was already frozen as failed, a separate post-hoc demonstration explicitly parsed only site IDs, period, coordinates and environmental columns. Species-response columns were not parsed.
+
+With demonstration targets 0.25 / 0.50 / 0.75 / 0.90, the geography ladder was:
+
+- `20.398 km` -> largest component **29.8%**;
+- `24.390 km` -> **53.0%**;
+- `34.970 km` -> **87.0%**;
+- `41.640 km` -> **90.0%**.
+
+The jump from approximately `24.4 km / 53%` to `35.0 km / 87%` shows a major structural transition that the frozen `18.11 km` q90 nearest-neighbour world did not bracket.
+
+Durable evidence:
+
+- `posthoc_scale_ladder_declaration.json`;
+- `posthoc_scale_ladder_result.json`;
+- `posthoc_scale_ladder_provenance.json`;
+- result fingerprint `2e04d84f29b0ec71e66cec43ecb047e783c1ebcab3a78da625635d54413dcc3c`;
+- workflow run `32013352759`;
+- artifact `9282581381`;
+- artifact ZIP SHA-256 `c2d5bd06f78a6eb1ddf40d8307f9cc02cf358e06b9c2e945d37a0a57aa13c119`.
+
+This is method evidence only. It cannot replace the frozen STOC worlds or relabel STOC as independent confirmation.
 
 ## No-rescue boundary
 
-For this STOC attempt, do not:
+Do not increase STOC thresholds/horizon, alter anchors/species/realization rules, change comparators/metrics, or rerun a redesigned STOC universe as independent confirmation.
 
-- increase geographic/environmental thresholds;
-- increase `max_steps`;
-- change the anchor count or anchor rule;
-- promote compatibility targets into forecast sources;
-- weaken the requirement that calibration positives be realizable;
-- alter species inclusion;
-- change comparator models or favourable rules;
-- reuse STOC as a fresh independent confirmation after redesigning worlds.
-
-A future system may use an improved prospectively justified world-universe construction, but STOC remains frozen as the adverse calibration-falsification result above.
+The next independent system must pass a prospectively declared response-blind scale-construction + structural-adequacy gate **before its ecological response is opened**.
