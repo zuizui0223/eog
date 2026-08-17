@@ -1,0 +1,47 @@
+{
+  "status": "gate1_pre_response_structural_scale_and_adequacy_freeze",
+  "response_rows_opened": false,
+  "node_input": {
+    "coordinates_file": "coords.dryad.csv",
+    "hydroperiod_file": "water.dryad.csv",
+    "expected_node_count": 274,
+    "node_order": "exact row order of coords.dryad.csv",
+    "coordinate_columns": ["x", "y"],
+    "coordinate_units": "projected metres, converted to kilometres for the structural ladder, consistent with the frozen source code dividing ecological distances by 1000",
+    "allowed_content": "full coordinates and hydroperiod rows because both are frozen non-response inputs"
+  },
+  "founder_freeze": {
+    "indices_1_based": [15, 33, 274],
+    "identity_resolution": "resolve exact node IDs only after coordinate row order is frozen",
+    "source_policy": "fixed 2003 founders under gate0_amendment_v1_1"
+  },
+  "analyst_choice_structural_axis": {
+    "axis_id": "geo",
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "construction": "minimum Euclidean centroid-distance threshold reaching each target largest weak component fraction; equal-distance ties admitted together",
+    "interpretation": "response-blind local-to-near-spanning analyst-choice scales, not biological dispersal limits"
+  },
+  "world_universe_at_gate1": {
+    "include_all_four_primary_structural_worlds": true,
+    "hydroperiod_intersections_deferred": true,
+    "reason": "first test whether response-free geographic geometry brackets the refuge-scale founder-conditioned forecast; hydroperiod remains a later separately inspectable viability/persistence input"
+  },
+  "structural_adequacy_declaration": {
+    "requirements": [
+      "the 0.90 level must achieve largest weak component fraction >= 0.90",
+      "the 0.90 level must have isolated-node fraction <= 0.05",
+      "at least three distinct positive distance thresholds must exist across the four levels",
+      "thresholds and edge sets must be nested and deterministic"
+    ],
+    "audit_horizon": 14,
+    "horizon_interpretation": "maximum discrete propagation depth from 2003 through 2017; reported structurally but not used as a universal pass cutoff",
+    "stop_rule": "if any declared requirement fails, stop before reading y.wide.dryad.csv response rows"
+  },
+  "next_if_pass": [
+    "freeze node IDs, founder IDs, hydroperiod classes and structural fingerprints",
+    "freeze temporal calibration/holdout years from metadata only",
+    "freeze fixed-founder world rules, symmetric_world_support_summary_v1 and external comparators",
+    "only then open detection rows once"
+  ],
+  "no_retuning": "Do not add kNN worlds, change LCC targets, exclude remote candidate ponds, or use detections to alter the 274-node geometry after this declaration."
+}
