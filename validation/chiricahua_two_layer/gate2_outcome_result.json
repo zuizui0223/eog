@@ -1,0 +1,313 @@
+{
+  "annual_metric_rows": [],
+  "annual_metrics_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "calibration_negative_candidate_rows": 137,
+  "calibration_positive_first_detections": 8,
+  "calibration_risk_rows": 145,
+  "calibration_years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+  ],
+  "contraction_history": [
+    {
+      "eliminated": [],
+      "phase": "calibration",
+      "positive_first_detections": 3,
+      "risk_rows": 22,
+      "summary_fingerprint": "53db292a1bc76e1bf8242ac6a73516b92751ec9ebe6075f79092c8e120f12d1e",
+      "surviving_after": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "surviving_before": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "year": 2007
+    },
+    {
+      "eliminated": [],
+      "phase": "calibration",
+      "positive_first_detections": 2,
+      "risk_rows": 19,
+      "summary_fingerprint": "c3e2ad49a514309934c067221146b76e5a40448a9f897236ee37dcf4ec7a932f",
+      "surviving_after": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "surviving_before": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "year": 2008
+    },
+    {
+      "eliminated": [],
+      "phase": "calibration",
+      "positive_first_detections": 1,
+      "risk_rows": 17,
+      "summary_fingerprint": "97b4ce27361964bdbc57e2b342998e50b74e72c6c9725db71761c42fa731a400",
+      "surviving_after": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "surviving_before": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "year": 2009
+    },
+    {
+      "eliminated": [],
+      "phase": "calibration",
+      "positive_first_detections": 1,
+      "risk_rows": 30,
+      "summary_fingerprint": "2866192d2854d10df36891d99f77f2bb8121e3781442d386d056d0387c351090",
+      "surviving_after": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "surviving_before": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "year": 2010
+    },
+    {
+      "eliminated": [],
+      "phase": "calibration",
+      "positive_first_detections": 1,
+      "risk_rows": 29,
+      "summary_fingerprint": "e15f9c9a0da00149d63d537f9bafd205ac162a2d353dd16975608ee4b8a5c91b",
+      "surviving_after": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "surviving_before": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "year": 2011
+    },
+    {
+      "eliminated": [],
+      "phase": "calibration",
+      "positive_first_detections": 0,
+      "risk_rows": 28,
+      "summary_fingerprint": "5985230fccd316d51afe608cf81f07fb210ad9e1870a42ae188eca97e93384df",
+      "surviving_after": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "surviving_before": [
+        "full_gaussian_lcc900_scale",
+        "truncated_geo_lcc250",
+        "truncated_geo_lcc500",
+        "truncated_geo_lcc750",
+        "truncated_geo_lcc900"
+      ],
+      "year": 2012
+    }
+  ],
+  "declared_world_ids": [
+    "full_gaussian_lcc900_scale",
+    "truncated_geo_lcc250",
+    "truncated_geo_lcc500",
+    "truncated_geo_lcc750",
+    "truncated_geo_lcc900"
+  ],
+  "external_added_value_decision": {
+    "best_external_model": null,
+    "eog_year_wins_against_best_available_each_year": 0,
+    "macro_log_loss_difference_eog_minus_best_external": null,
+    "status": "non_estimable_external_predictive_added_value"
+  },
+  "falsified_before_completion": false,
+  "heldout_negative_candidate_rows": 0,
+  "heldout_positive_first_detections": 0,
+  "heldout_risk_rows": 0,
+  "heldout_scoring_complete": false,
+  "heldout_years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+  ],
+  "heldout_years_with_both_classes": 0,
+  "layer_b_decision": {
+    "eog_year_wins": 0,
+    "macro_log_loss_difference_eog_minus_mean": null,
+    "status": "non_estimable_response_or_representation"
+  },
+  "model_fits": {},
+  "model_metrics": {
+    "dynamic_occupancy_hmm": {
+      "estimable": false
+    },
+    "eog_summary_logistic": {
+      "estimable": false
+    },
+    "flexible_random_forest": {
+      "estimable": false
+    },
+    "founder_connectivity_logistic": {
+      "estimable": false
+    },
+    "same_world_mean_only_logistic": {
+      "estimable": false
+    }
+  },
+  "node_count": 274,
+  "prediction_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "prediction_rows": [],
+  "response_estimability": {
+    "calibration_gate_pass": false,
+    "endpoint_estimable": false,
+    "heldout_gate_pass": false,
+    "layer_b_variation": {
+      "estimable": true,
+      "max_residual_sd": 0.6843968116505889,
+      "rows": [
+        {
+          "feature": "support_std",
+          "raw_sd": 0.009297821439651004,
+          "residual_sd": 0.6843968116505889
+        },
+        {
+          "feature": "support_min",
+          "raw_sd": 0.03178505331358217,
+          "residual_sd": 0.33939438192532684
+        },
+        {
+          "feature": "support_max",
+          "raw_sd": 0.044449444994593815,
+          "residual_sd": 0.1415889565892306
+        },
+        {
+          "feature": "support_q25",
+          "raw_sd": 0.03822647097472814,
+          "residual_sd": 0.1917593106714572
+        },
+        {
+          "feature": "support_q50",
+          "raw_sd": 0.0402497791801038,
+          "residual_sd": 0.11325616714772083
+        },
+        {
+          "feature": "support_q75",
+          "raw_sd": 0.0445604982125485,
+          "residual_sd": 0.15497515453703622
+        },
+        {
+          "feature": "positive_support_fraction",
+          "raw_sd": 0.2985051938792513,
+          "residual_sd": 0.5677164044214785
+        },
+        {
+          "feature": "support_range",
+          "raw_sd": 0.02438652041860091,
+          "residual_sd": 0.6652838435588648
+        }
+      ],
+      "shared_plus_scalar_kept_columns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        9
+      ]
+    }
+  },
+  "response_file_read": true,
+  "response_rows_opened": true,
+  "response_sha256": "29f18ccaad9f9882bdb93e246ba12e58816c186b0833474c16fd8430ce566438",
+  "response_source": "frozen_y_wide_dryad_csv",
+  "result_fingerprint": "41a8a051d1ce8711caaa4325f1f9c563f64cc5da8a429b9b239361aa79708a95",
+  "runtime": {
+    "numpy": "2.3.2",
+    "python": "3.11.15",
+    "scikit_learn": "1.7.1",
+    "scipy": "1.16.1"
+  },
+  "sampled_site_count": 47,
+  "scientific_boundaries": [
+    "survey-recorded detection is not latent biological colonization probability",
+    "fixed founders are not replaced by inferred unsurveyed current sources",
+    "structural scales are analyst-choice scales rather than frog dispersal estimates",
+    "exact world identities remain Layer-A update/falsification state and are not supervised columns",
+    "no actual colonization route is inferred"
+  ],
+  "scientific_target": "first survey-recorded detection from fixed 2003 founders",
+  "status": "non_estimable_response_or_representation",
+  "surviving_world_ids_final": [
+    "full_gaussian_lcc900_scale",
+    "truncated_geo_lcc250",
+    "truncated_geo_lcc500",
+    "truncated_geo_lcc750",
+    "truncated_geo_lcc900"
+  ],
+  "universe_falsified_year": null,
+  "world_operator_fingerprints": [
+    [
+      "full_gaussian_lcc900_scale",
+      "295c8018e7a7d5d54b5957063747859dcd0ed8ac0b463b452ec251aa0dfa56d3"
+    ],
+    [
+      "truncated_geo_lcc250",
+      "fbca812e658accf77077cef21c8800270da31ad3e6e393eb7234979099f66b1d"
+    ],
+    [
+      "truncated_geo_lcc500",
+      "3b9e757816b43507cdae6da08bef01f0340662f51af6b4b91c61fb0500105f66"
+    ],
+    [
+      "truncated_geo_lcc750",
+      "f66f4cf80299d77b806cf3c660a893400ee5c1cecdfec1209222db599578d965"
+    ],
+    [
+      "truncated_geo_lcc900",
+      "a7d564c850202243baaa3bc9b3fc972ba85b587f72f40f6fcd466d7f712aafc7"
+    ]
+  ]
+}
