@@ -1,0 +1,10 @@
+{
+  "excluded_survey_rows": 755,
+  "excluded_unique_patch_ids": 417,
+  "filter_key": "patch membership in frozen patch_network only",
+  "network_node_count": 4656,
+  "node_universe_expanded": false,
+  "population_response_values_parsed_or_used_for_filter": false,
+  "retained_survey_rows": 73310,
+  "status": "frozen_node_survey_filter_complete"
+}
