@@ -1,0 +1,264 @@
+name: Chiricahua leopard frog two-layer EOG-WF Gate 0
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/chiricahua_gate0_source_schema.yml"
+      - "validation/chiricahua_two_layer/gate0_source_process_response_contract.json"
+      - "src/eog/v2/response_firewall.py"
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install EOG response firewall
+        run: python -m pip install .
+
+      - name: Freeze Figshare v4 metadata and file list
+        run: |
+          mkdir -p /tmp/chiricahua build/chiricahua_gate0/code
+          curl -L --fail --retry 3 \
+            'https://api.figshare.com/v2/articles/5838189/versions/4' \
+            -o /tmp/article_v4.json
+          curl -L --fail --retry 3 \
+            'https://api.figshare.com/v2/articles/5838189/versions/4/files' \
+            -o /tmp/files_v4.json
+          python - <<'PY'
+          import json
+          import pathlib
+
+          article = json.loads(pathlib.Path('/tmp/article_v4.json').read_text(encoding='utf-8'))
+          files = json.loads(pathlib.Path('/tmp/files_v4.json').read_text(encoding='utf-8'))
+          if not isinstance(files, list) or not files:
+              raise SystemExit('Figshare v4 has no public files')
+          manifest = []
+          for info in files:
+              manifest.append({
+                  'id': info.get('id'),
+                  'name': info.get('name'),
+                  'size': int(info.get('size') or 0),
+                  'download_url': info.get('download_url'),
+                  'supplied_md5': info.get('supplied_md5'),
+                  'computed_md5': info.get('computed_md5'),
+              })
+          result = {
+              'article_id': article.get('id'),
+              'version': article.get('version'),
+              'doi': article.get('doi'),
+              'title': article.get('title'),
+              'description': article.get('description'),
+              'license': article.get('license'),
+              'file_count': len(manifest),
+              'total_bytes': sum(row['size'] for row in manifest),
+              'files': manifest,
+              'occupancy_response_rows_opened': False,
+          }
+          pathlib.Path('build/chiricahua_gate0/figshare_manifest.json').write_text(
+              json.dumps(result, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps({
+              'article_id': result['article_id'],
+              'version': result['version'],
+              'doi': result['doi'],
+              'file_count': result['file_count'],
+              'file_names': [row['name'] for row in manifest],
+              'response_rows_opened': False,
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Download and checksum every Figshare v4 file without response parsing
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import subprocess
+
+          files = json.loads(pathlib.Path('build/chiricahua_gate0/figshare_manifest.json').read_text(encoding='utf-8'))['files']
+          root = pathlib.Path('/tmp/chiricahua')
+          verified = []
+          for row in files:
+              name = str(row['name'])
+              url = str(row['download_url'] or '')
+              if not url:
+                  raise SystemExit(f'missing Figshare download URL for {name}')
+              target = root / name
+              target.parent.mkdir(parents=True, exist_ok=True)
+              subprocess.run(['curl', '-L', '--fail', '--retry', '3', url, '-o', str(target)], check=True)
+              if target.stat().st_size != int(row['size']):
+                  raise SystemExit(f'Figshare file size mismatch for {name}')
+              md5 = hashlib.md5()
+              sha256 = hashlib.sha256()
+              with target.open('rb') as handle:
+                  for chunk in iter(lambda: handle.read(1024 * 1024), b''):
+                      md5.update(chunk)
+                      sha256.update(chunk)
+              expected = str(row.get('computed_md5') or row.get('supplied_md5') or '').lower()
+              if expected and md5.hexdigest().lower() != expected:
+                  raise SystemExit(f'Figshare MD5 mismatch for {name}')
+              verified.append({
+                  'id': row['id'],
+                  'name': name,
+                  'size': target.stat().st_size,
+                  'md5': md5.hexdigest(),
+                  'sha256': sha256.hexdigest(),
+              })
+          pathlib.Path('build/chiricahua_gate0/verified_files.json').write_text(
+              json.dumps(verified, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps({'verified_files': verified, 'response_rows_parsed': False}, indent=2))
+          PY
+
+      - name: Inspect code docs and bounded text headers only
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+          import re
+
+          from eog.v2.validation import read_bounded_first_record_text
+
+          root = pathlib.Path('/tmp/chiricahua')
+          verified = json.loads(pathlib.Path('build/chiricahua_gate0/verified_files.json').read_text(encoding='utf-8'))
+          code_suffixes = {'.r', '.rmd', '.qmd', '.py', '.stan', '.md'}
+          text_data_suffixes = {'.csv', '.tsv', '.txt', '.dat'}
+          documentation_tokens = {'readme', 'metadata', 'description', 'license', 'licence'}
+          code_inventory = []
+          headers = []
+          binary_inventory = []
+
+          for row in verified:
+              path = root / row['name']
+              suffix = path.suffix.lower()
+              lower_name = path.name.lower()
+              is_doc = any(token in lower_name for token in documentation_tokens)
+
+              if suffix in code_suffixes or is_doc:
+                  text = path.read_text(encoding='utf-8', errors='replace')
+                  safe = re.sub(r'[^A-Za-z0-9_.-]+', '_', path.name)
+                  (pathlib.Path('build/chiricahua_gate0/code') / safe).write_text(text, encoding='utf-8')
+                  refs = sorted(set(re.findall(
+                      r'[A-Za-z0-9_./ -]+\.(?:csv|tsv|txt|dat|rds|rda|RData|xlsx|xls|shp|dbf|geojson)',
+                      text,
+                      flags=re.IGNORECASE,
+                  )))
+                  terms = sorted({
+                      term for term in (
+                          'site', 'pond', 'wetland', 'coord', 'longitude', 'latitude', 'hydroperiod',
+                          'presence', 'absence', 'detect', 'occup', 'colon', 'extinct', 'year',
+                          'survey', 'distance', 'water', 'intermittent', 'permanent'
+                      )
+                      if term in text.lower()
+                  })
+                  code_inventory.append({
+                      'name': row['name'],
+                      'size': row['size'],
+                      'referenced_data_files': refs,
+                      'matched_role_terms': terms,
+                  })
+                  continue
+
+              if suffix in text_data_suffixes:
+                  text, physical = read_bounded_first_record_text(path, max_record_bytes=16384)
+                  headers.append({
+                      'name': row['name'],
+                      'size': row['size'],
+                      'first_physical_record_only': text,
+                      'terminator': physical.terminator,
+                      'bytes_consumed': physical.bytes_consumed,
+                      'response_rows_read': False,
+                  })
+                  continue
+
+              binary_inventory.append({
+                  'name': row['name'],
+                  'size': row['size'],
+                  'suffix': suffix,
+                  'deserialized': False,
+              })
+
+          pathlib.Path('build/chiricahua_gate0/code_inventory.json').write_text(
+              json.dumps(code_inventory, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          pathlib.Path('build/chiricahua_gate0/text_headers.json').write_text(
+              json.dumps(headers, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          pathlib.Path('build/chiricahua_gate0/binary_inventory.json').write_text(
+              json.dumps(binary_inventory, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps({
+              'code_docs_read': [row['name'] for row in code_inventory],
+              'text_headers_only': [row['name'] for row in headers],
+              'binary_not_deserialized': [row['name'] for row in binary_inventory],
+              'occupancy_response_rows_read': False,
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Produce Gate 0 schema diagnostic
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+
+          manifest = json.loads(pathlib.Path('build/chiricahua_gate0/figshare_manifest.json').read_text(encoding='utf-8'))
+          headers = json.loads(pathlib.Path('build/chiricahua_gate0/text_headers.json').read_text(encoding='utf-8'))
+          code = json.loads(pathlib.Path('build/chiricahua_gate0/code_inventory.json').read_text(encoding='utf-8'))
+          binaries = json.loads(pathlib.Path('build/chiricahua_gate0/binary_inventory.json').read_text(encoding='utf-8'))
+          code_text = '\n'.join(
+              path.read_text(encoding='utf-8', errors='replace').lower()
+              for path in pathlib.Path('build/chiricahua_gate0/code').glob('*')
+              if path.is_file()
+          )
+          header_text = '\n'.join(row['first_physical_record_only'].lower() for row in headers)
+          names = '\n'.join(row['name'].lower() for row in manifest['files'])
+          searchable = code_text + '\n' + header_text + '\n' + names
+          diagnostic = {
+              'status': 'gate0_sources_frozen_schema_ready_for_role_adjudication',
+              'occupancy_response_rows_opened': False,
+              'file_count': manifest['file_count'],
+              'geometry_tokens_seen': [
+                  token for token in ('longitude','latitude','coord','spatial','hydroperiod','distance','pond','site')
+                  if token in searchable
+              ],
+              'response_semantic_tokens_seen': [
+                  token for token in ('presence','absence','detect','occup','colon','extinct','survey','water')
+                  if token in searchable
+              ],
+              'critical_questions': [
+                  'Is the full potentially suitable wetland universe represented independently of future occupancy?',
+                  'Are site coordinates/hydroperiod available without response inspection?',
+                  'Can surveyed non-detection be distinguished from missing/not-surveyed and unavailable pond-years?',
+              ],
+              'binary_objects_not_deserialized': [row['name'] for row in binaries],
+          }
+          pathlib.Path('build/chiricahua_gate0/gate0_schema_diagnostic.json').write_text(
+              json.dumps(diagnostic, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps(diagnostic, indent=2, sort_keys=True))
+          PY
+
+      - name: Remove downloaded source bytes before artifact upload
+        run: |
+          rm -rf /tmp/chiricahua /tmp/article_v4.json /tmp/files_v4.json
+          find build/chiricahua_gate0 -maxdepth 2 -type f -print
+          test -s build/chiricahua_gate0/figshare_manifest.json
+          test -s build/chiricahua_gate0/verified_files.json
+          test -s build/chiricahua_gate0/text_headers.json
+          test -s build/chiricahua_gate0/code_inventory.json
+          test -s build/chiricahua_gate0/binary_inventory.json
+          test -s build/chiricahua_gate0/gate0_schema_diagnostic.json
+
+      - name: Upload response-free Gate 0 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: chiricahua-two-layer-gate0
+          path: build/chiricahua_gate0
