@@ -1,0 +1,71 @@
+name: Glanville outcome runner pre-response smoke
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/glanville_outcome_runner_smoke.yml"
+      - "benchmarks/run_glanville_eogwf_once.py"
+      - "validation/glanville_eogwf/runtime_lock.txt"
+      - "validation/glanville_eogwf/gate2_temporal_prediction_contract.json"
+      - "validation/glanville_eogwf/gate2_amendment_v1_1.json"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r validation/glanville_eogwf/runtime_lock.txt
+      - name: Compile runner
+        run: python -m py_compile benchmarks/run_glanville_eogwf_once.py
+      - name: Run synthetic helper smoke
+        run: |
+          python - <<'PY'
+          import importlib.util
+          import numpy as np
+
+          spec = importlib.util.spec_from_file_location('runner', 'benchmarks/run_glanville_eogwf_once.py')
+          runner = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(runner)
+
+          distance = np.array([
+              [0.0, 0.5, 2.0],
+              [0.5, 0.0, 1.5],
+              [2.0, 1.5, 0.0],
+          ])
+          kernel = np.exp(-distance)
+          np.fill_diagonal(kernel, 0.0)
+          active = np.array([True, True, True])
+          supports = runner.compute_world_supports(distance, kernel, active, np.array([0]))
+          assert supports.shape == (5, 3)
+          assert np.all(np.isfinite(supports))
+          surviving = np.array([True, True, True, True, True])
+          identity = runner.identity_eog_features(supports[:, [1, 2]], surviving)
+          compression = runner.compressed_eog_features(supports[:, [1, 2]], surviving)
+          assert identity.shape == (2, 10)
+          assert compression.shape == (2, 10)
+
+          # Non-degenerate model helper smoke with enough synthetic rows.
+          rng = np.random.default_rng(20260817)
+          x = rng.normal(size=(200, 12))
+          y = np.array([0, 1] * 100)
+          fit = runner.fit_logistic(x, y)
+          p = fit.predict(x[:10])
+          assert p.shape == (10,)
+          assert np.all((p > 0) & (p < 1))
+          estimability = runner.identity_estimability(
+              rng.normal(size=(200, 10)),
+              rng.normal(size=(200, 10)),
+          )
+          assert estimability['estimable'] is True
+          print('synthetic Glanville runner smoke PASS')
+          PY
