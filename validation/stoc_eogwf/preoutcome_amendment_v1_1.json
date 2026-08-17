@@ -1,0 +1,53 @@
+{
+  "schema_version": "eog_stoc_eogwf_validation_v1_1_amendment",
+  "frozen_date": "2026-08-17",
+  "timing": "after Gate-0 contract CI passed, before DataSTOC response rows were fetched or inspected for EOG-WF",
+  "reason": "The v1 contract's raw supporting-world-frequency log-loss is a valid set-valued forecast projection but does not by itself isolate predictive information carried by exact world identity. This amendment fixes that estimand before outcome access.",
+  "nonresponse_numerics": {
+    "environment_standardisation": "calibration-period mean and population standard deviation (ddof=0) per predictor; zero-SD predictor is a pre-model failure",
+    "distance_quantiles": "numpy linear quantile interpolation at 0.25, 0.50, 0.75, 0.90"
+  },
+  "identity_calibration": {
+    "world_order": "the fixed 20 world IDs in deterministic family/threshold order",
+    "site_world_bit": "1 iff the world survived calibration reconstruction and supports the site by horizon 8; 0 otherwise",
+    "frequency_feature": "mean of site_world_bit over surviving worlds; if no world survives the species is calibration-falsified and not modeled",
+    "frequency_model": "L2 logistic regression fitted on 2006-2011 observed_in_period using intercept + frequency_feature; C=1.0, lbfgs, max_iter=2000, no class weights",
+    "identity_model": "L2 logistic regression fitted on 2006-2011 observed_in_period using intercept + frequency_feature + the ordered surviving-world bit columns; drop training-constant columns only; C=1.0, lbfgs, max_iter=2000, no class weights",
+    "heldout_application": "apply the fitted frequency and identity models unchanged to the 2012-2017 site forecast features"
+  },
+  "primary_identity_endpoint": {
+    "contrast": "heldout logloss(identity_model) - heldout logloss(frequency_model), species-macro",
+    "favourable_direction": "negative",
+    "species_direction_rule": "identity model log loss < frequency model log loss",
+    "favourable_family_rule": [
+      "at least 10 species estimable after the already-frozen species gate",
+      "species-macro contrast < 0",
+      "at least 60% of estimable species have a negative species contrast"
+    ],
+    "otherwise_status": "no_confirmed_identity_predictive_value"
+  },
+  "external_prediction_endpoint": {
+    "eog_candidate": "identity_model",
+    "primary_external_reference": "fixed equal-weight mean of the already-frozen environment-only L2 logistic and random-forest SDM probabilities",
+    "contrast": "heldout logloss(identity_model) - heldout logloss(external_ensemble), species-macro",
+    "favourable_direction": "negative",
+    "additional_guardrail": "identity_model must not be worse than the already-frozen persistence baseline on species-macro log loss"
+  },
+  "raw_set_valued_endpoints": {
+    "report": [
+      "heldout positive rate by robust/contingent/excluded class",
+      "heldout positive enrichment of robust vs excluded class when both classes contain >=10 heldout sites",
+      "number of equal-frequency collision levels containing multiple exact world-bit identities",
+      "heldout positive-rate spread across exact identities within those collision levels, descriptive only"
+    ],
+    "claim_boundary": "These diagnose the set-valued forecast. Confirmatory identity predictive value is determined only by the predeclared identity-vs-frequency heldout log-loss contrast above."
+  },
+  "no_retuning": true,
+  "forbidden_after_response_open": [
+    "change the identity/frequency feature definitions",
+    "change logistic regularisation or solver",
+    "select world-bit columns using heldout outcomes",
+    "change the 60% species-direction threshold",
+    "replace the external reference after seeing results"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "status": "posthoc_nonconfirmatory_method_diagnostic",
+  "purpose": "Demonstrate the response-blind structural scale-ladder constructor on STOC node geometry after the frozen independent attempt had already stopped. This must not be used to rescue or rerun STOC as independent confirmation.",
+  "response_columns_allowed": false,
+  "geography_axis": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "interpretation": "analyst-choice structural coverage regimes, not bird dispersal distances"
+  },
+  "environment_axis": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "interpretation": "analyst-choice standardized environmental-continuity regimes, not physiological tolerance limits"
+  },
+  "composition": {
+    "include_geography_only_worlds": true,
+    "also_include_geography_environment_intersections": true
+  },
+  "frozen_stoc_result_is_not_recomputed": true
+}

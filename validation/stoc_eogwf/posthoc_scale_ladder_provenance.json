@@ -1,0 +1,11 @@
+{
+  "workflow_run_id": 32013352759,
+  "artifact_id": 9282581381,
+  "artifact_name": "stoc-response-blind-scale-ladder-posthoc",
+  "artifact_zip_sha256": "c2d5bd06f78a6eb1ddf40d8307f9cc02cf358e06b9c2e945d37a0a57aa13c119",
+  "result_fingerprint": "2e04d84f29b0ec71e66cec43ecb047e783c1ebcab3a78da625635d54413dcc3c",
+  "composed_audit_fingerprint": "b5c8d63a1ce8cd8353bd9c60ec8d1edf838ddebad7fb49bd175c7a243376613c",
+  "source_git_blob_sha": "4bfa2cd39a7e90340ad6a319e5c611e8646462c8",
+  "species_response_columns_parsed": false,
+  "interpretation": "posthoc non-confirmatory method diagnostic only; STOC independent result remains frozen and is not rerun"
+}

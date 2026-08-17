@@ -2,330 +2,277 @@
 
 ## Status
 
-This document defines how the active EOG method and the EOG-WF forecast algorithm are to be validated after the 2026-08 methodological audit.
-
-The audit does **not** reopen or retune any frozen empirical result. In particular, the A-Islands strong-reference result, the SIVFLORA climate block, and the Azores pre-model taxon-scope block remain unchanged historical evidence.
+This document defines how the active EOG method and EOG-WF forecast algorithm are validated after the 2026-08 methodological audit and the first independent STOC attempt.
 
 Current verdict:
 
-> **EOG's finite world-set inference is coherent conditionally, and EOG-WF is now an implemented inverse-conditioned world-set forecasting algorithm. Independent identity-preserving forecast value and predictive superiority remain unconfirmed and must be tested separately.**
+> **EOG-WF is an implemented inverse-conditioned world-set forecast/update algorithm with known-truth support. Independent ecological value remains unconfirmed. Future independent tests must pass source/process semantics, response-blind world-scale construction, and structural adequacy before outcomes are opened.**
 
-The active contribution claim is therefore narrower than a new generic SDM, dispersal algorithm, ensemble method, credal classifier, or universal forecasting mathematics.
+Frozen empirical results are not reopened or retuned under this improved protocol.
 
 ## 1. Inferential and predictive objects
 
-EOG keeps four scientific objects distinct:
+EOG keeps four objects distinct:
 
 1. **local possibility** — locally supported under a declared environmental/process representation;
-2. **reachability** — reachable from a declared anchor/source set under a declared transition rule;
-3. **distributional realizability** — compatible with the observed positive occurrence configuration inside a declared world;
+2. **reachability** — reachable from a declared source/anchor set under a declared transition rule;
+3. **distributional realizability** — compatible with observed positive states inside a declared world;
 4. **historical truth** — the actual route, sequence, ancestry, movement rate, or demographic process in nature.
 
-For a declared finite world universe `W`, observations `O`, and compatibility predicate `C(w, O)`, the inverse object is
+For finite world universe `W`, observations `O`, and compatibility predicate `C(w,O)`:
 
 ```text
-W(O) = {w in W : C(w, O)}
+W(O) = {w in W : C(w,O)}
 ```
 
-This is an **unranked compatible set** unless an independently justified ranking model was declared.
+This is an unranked compatible set unless an independently justified ranking model was prospectively declared.
 
-EOG-WF adds a forward object. For each retained world `w`, node `x`, and horizon `h`, it computes cumulative first-passage support `S_w(x,h)` and retains the full world-indexed forecast state rather than averaging the worlds before prediction.
-
-The canonical prediction object is therefore
+EOG-WF propagates each retained world separately. The canonical forecast object is:
 
 ```text
 compatible world × horizon × node
 ```
 
-plus robust/contingent/excluded projections derived from that cube.
+plus robust/contingent/excluded projections.
 
-Observed occurrences are positive realized constraints. Unobserved locations are not biological absences without an explicit observation/detection interpretation.
+Unobserved locations are not biological absences without an explicit observation/detection interpretation.
 
 ## 2. What is methodologically valid now
 
 ### 2.1 Conditional world reconstruction
 
-The finite core explicitly conditions on declared source/anchor policy and declared transition operators. It does not infer one true historical route. This is a valid conditional inverse question.
+The finite core conditions on declared sources and transitions. It does not infer one true historical route.
 
 ### 2.2 World identity preservation
 
-If two admissible worlds imply different structures or forecasts, EOG may retain them separately rather than average, union, or select them before interpretation. An aggregate is allowed only when the scientific estimand itself is the aggregate.
+Mutually exclusive worlds may remain separate rather than being averaged/unioned before interpretation or update.
 
 ### 2.3 Finite-universe forecast classes
 
-At each forecast horizon, EOG-WF may classify a node as:
+At any forecast horizon a node may be:
 
 - `robustly_supported` — supported by every compatible world;
-- `contingent` — supported by some but not every compatible world;
-- `excluded_in_all_worlds` — supported by none of the compatible worlds.
+- `contingent` — supported by some but not all compatible worlds;
+- `excluded_in_all_worlds` — supported by no compatible world.
 
-These statements are exact only over the enumerated, certified universe. They are conditional finite-world statements, not universal ecological certainty.
+These are exact only over the enumerated certified universe.
 
-### 2.4 Underidentification is forecast state
+### 2.4 Sequential update
 
-If several worlds remain compatible, EOG-WF carries those alternatives into the forecast. Failure to identify one history is not an algorithmic failure.
-
-### 2.5 Sequential update without retuning
-
-When new positive evidence is added, the same frozen world universe is re-evaluated. Under the declared positive-constraint logic,
+Under positive-constraint logic:
 
 ```text
 W(O ∪ O+) ⊆ W(O)
 ```
 
-The compatible set may remain equal, contract, or become empty. An empty set is reported as finite-universe falsification rather than repaired by changing thresholds/world definitions after seeing the evidence.
+New positive evidence may leave the world set unchanged, contract it, or falsify the entire finite universe. World definitions are not altered after evidence is opened.
 
-## 3. What the method must not claim
+## 3. Prior-art / claim boundary
 
-EOG/EOG-WF must not claim novelty for, or superiority simply by containing:
+Do not claim generic novelty for:
 
+- graph threshold filtration, critical connectivity, percolation or minimum spanning trees;
 - dynamic/time-respecting reachability;
-- critical connection thresholds or stepping stones;
-- least-cost/minimum-exposure paths;
-- circuit-style redundancy;
-- suitability + accessibility / functional habitat;
+- stepping stones, least-cost paths, circuit redundancy;
+- suitable + accessible functional habitat;
 - dynamic/mechanistic SDMs;
-- ensemble/consensus prediction or model averaging;
-- Bayesian/credal/imprecise-probability classification in general;
-- viability kernels or generic robust reachability;
-- history matching / NROY filtering;
-- minimum-relaxation/Pareto/falsification-frontier mathematics;
+- ensemble/model averaging;
+- Bayesian/credal/imprecise prediction generally;
+- viability kernels;
+- history matching/NROY;
+- minimum-relaxation/Pareto frontiers;
 - multiverse analysis;
 - generic adaptive survey design.
 
-Likewise, a probability-like reachability support is not called occupancy probability, colonisation probability, migration rate, ancestry probability, or demographic connectivity unless a calibrated stochastic model supports that interpretation.
+Uncalibrated support is not occupancy, colonisation, migration or ancestry probability. Propagation depth is not physical time without calibration.
 
-A forecast horizon is propagation depth, not physical time, unless independently calibrated.
-
-## 4. Validation estimands must remain separate
+## 4. Validation estimands remain separate
 
 ### A. Algorithmic correctness
 
-Question:
+Does inverse-filter → forward-propagate → update/falsify obey its declared invariants?
 
-> **Does the inverse-filter → forward-propagate → update/falsify algorithm obey its declared finite-world invariants?**
+Known-truth tests require:
 
-Required known-truth tests include:
+- compatible-world filtering;
+- monotone cumulative first-passage support;
+- exact supporting-world identity preservation;
+- monotone contraction after added positive evidence;
+- finite-universe falsification;
+- separate viability/persistence gates;
+- deterministic fingerprints.
 
-- exact reproduction of compatible-world filtering;
-- monotone cumulative first-passage support through horizon;
-- preservation of exact supporting-world identity;
-- monotone contraction of compatible worlds after added positive evidence;
-- finite-universe falsification when all worlds are contradicted;
-- local viability/persistence gates applied separately from reachability;
-- deterministic fingerprints for frozen worlds, gates and forecast state.
+Current state: supported by package tests.
 
-Current state: supported by `tests/test_world_forecast.py` plus package-wide regression.
+### B. World-universe adequacy
 
-### B. Identity-preserving forecast value
+Was the declared world set structurally capable of representing the intended forecast scale **before species outcomes were opened**?
 
-Question:
+This is now a first-class estimand because STOC showed that a response-blind threshold rule can still occupy the wrong graph scale.
 
-> **Does retaining exact world identity preserve a scientifically actionable forecast distinction that is erased by a predeclared compression of the same world universe, and can independent evidence discriminate that distinction?**
+### C. Identity-preserving forecast value
 
-A valid test requires a predeclared collision/equivalence class in which two targets have the same compressed summary but differ in exact supporting-world identity or decomposition.
+Does exact world identity preserve a scientifically actionable forecast distinction erased by a frozen compression of the same worlds, and does independent evidence discriminate it?
 
-Independent evidence must then test a consequence that differs between those worlds.
+### D. Predictive added value
 
-Examples include:
+Does EOG-WF improve genuinely heldout prediction over:
 
-- a later positive occurrence at a site supported by only a subset of colliding worlds;
-- time-stamped colonisation/recolonisation evidence;
-- an independently surveyed intermediate site with explicit detection semantics;
-- genetic or movement evidence whose interpretation was frozen before inspecting the EOG forecast.
+1. matched same-world compression; and
+2. strong external ecological comparators appropriate to the system?
 
-Success validates the identity-preserving forecast state, not historical truth.
+### E. Historical identification
 
-### C. Predictive added value
+Actual routes/ancestry/colonisation sequence require stronger evidence and are not implied by A–D.
 
-Question:
+## 5. World scale construction
 
-> **Does EOG-WF improve genuinely held-out ecological prediction beyond strong predeclared comparators?**
+World-universe construction must precede response access.
 
-At minimum distinguish:
+### 5.1 Externally calibrated process scale
 
-1. **same-world compression comparators** — scalar frequency, union, mean/envelope summaries that use the same frozen world universe but erase identity;
-2. **external ecological comparators** — strong SDM, dynamic-SDM, accessibility/dispersal, occupancy or other process models appropriate to the scientific system.
+When defensible movement/dispersal/transport/barrier evidence exists, use it prospectively and document provenance and uncertainty.
 
-A same-world comparison isolates value of identity retention. It is not automatically a state-of-the-art ecological-method comparison.
+### 5.2 Response-blind structural scale ladder
 
-Predictive failure does not by itself invalidate a correctly implemented uncertainty/identifiability representation. Predictive success does not establish historical truth.
+When no defensible biological scale exists, analyst-choice structural worlds may be generated using `src/eog/v2/world_scale_ladder.py`.
 
-### D. Historical identification
+For prospectively declared largest-component targets `c1 < ... < ck`, choose the minimum metric threshold reaching each regime. Targets are study declarations, not universal constants. The resulting thresholds are not biological dispersal limits without external calibration.
 
-Actual routes, ancestry or colonisation sequence require stronger independent evidence and are not implied by the first three estimands.
+Primary-only structural worlds should be retained when secondary geography×environment/barrier intersections would otherwise force the entire universe into a narrower fragmented regime.
 
-## 5. World-universe adequacy is part of the method
+## 6. Structural adequacy gate
 
-A mathematically exact finite-world forecast can still be ecologically weak if the declared universe is poorly justified.
+After world axes are composed, audit the candidate universe using `src/eog/v2/world_adequacy.py` before species response access.
 
-Every future world dimension must be typed as one of:
+The response-blind audit may include:
 
-- **natural/process uncertainty** — biologically plausible processes or parameter regimes;
-- **analyst-choice uncertainty** — products, thresholds, preprocessing choices, graph constructions or other defensible analytical alternatives.
+- weak component count;
+- largest-component fraction;
+- isolated-node fraction;
+- degree summaries;
+- directed horizon-reachable fractions.
 
-For each dimension record:
+Pass/fail criteria must be declared prospectively and justified relative to the forecast claim. EOG embeds no universal structural cutoff.
 
-1. provenance or external rationale;
-2. whether values are biologically calibrated or only sensitivity-grid levels;
-3. why the enumerated levels are admissible;
-4. which plausible alternatives remain outside the certificate;
-5. how forecast classes change when admissible worlds are added.
+Fragmented worlds are allowed when fragmentation is scientifically intended. The universe as a whole must nevertheless include structural regimes capable of expressing the forecast domain claimed by the study.
 
-Quantile-based geographic/environmental thresholds are acceptable analyst-choice sensitivity worlds. They are **not** automatically species-specific dispersal limits or biological tolerance thresholds.
+## 7. Process closure and source semantics
 
-No `robust`, `excluded`, `impossible`, or high-confidence wording may exceed this adequacy record.
+Before response access, the study must answer:
 
-## 6. Anchor/source conditionality
+> **Can future/unsampled positive states reasonably be conditioned on propagation from the declared internal source/anchor system, or are important source states located outside the declared node universe?**
 
-Training or observed occurrences may be used as realized anchors under an explicit policy, including fixed-source or self-excluded evaluation.
+This is separate from graph connectivity.
 
-They must not silently become inferred ancestral sources.
+A candidate system is eligible only if one of the following is prospectively justified:
 
-Every empirical forecast must state the conditioning explicitly, for example:
+1. the node universe approximately closes the relevant distribution-forming process over the forecast interval;
+2. external source states are represented explicitly in the declared worlds;
+3. the scientific target is explicitly conditional on internal realized sources and does not pretend to cover external recruitment.
 
-> reachable from the outer-training realized occurrences under the declared world universe
+Do not silently treat observed training sites as ancestral sources. Do not use an anchor-conditioned spread model for a system dominated by unconstrained external immigration and then interpret failure as evidence about EOG-WF prediction quality.
 
-rather than:
+The process-closure check is conceptual and evidence-based rather than a universal numerical gate.
 
-> the species historically dispersed from these locations.
+## 8. Anchor/source conditionality
 
-Held-out targets must not contribute to their own anchor set.
+Training occurrences may be realized anchors under an explicit policy, including fixed-source or self-excluded evaluation. Heldout targets must never contribute to their own anchor set.
 
-## 7. Local viability and persistence gates
+Use wording such as:
 
-EOG-WF may consume local-state information from SDMs, mechanistic models, or independently declared support layers.
+> reachable from declared training-period realized anchors under the certified world universe
 
-If used, viability and persistence must remain separately inspectable. The default forecast algorithm must not manufacture an occupancy-like probability by multiplying reachability × viability × persistence unless a calibrated generative model justifies that operation.
+rather than asserting historical dispersal from those anchors.
 
-A locally suitable node can remain all-world excluded through accessibility constraints. A reachable node can fail a predeclared viability gate. These are different failure modes and must remain distinguishable.
+## 9. Local viability and persistence gates
 
-## 8. Response and absence semantics
+EOG-WF may consume SDM/mechanistic/local-state layers, but viability and persistence must remain separately inspectable. Do not multiply support layers into an occupancy-like probability without a calibrated generative model.
 
-A catalogue non-record may be used as a negative class only when the prediction target is explicitly **catalogue-record status under the frozen catalogue rule**.
+## 10. Response and absence semantics
 
-It is not biological absence by default.
+Catalogue/non-record data may be a negative class only for an explicitly stated record/detection target. It is not biological absence by default.
 
-Claims about occupancy, extinction, failed colonisation, unsuitable habitat or calibrated binary forecast skill require an observation/detection or survey-completeness model appropriate to that claim.
+Claims about occupancy, failed colonisation, extinction or calibrated binary skill require appropriate detection/survey-completeness interpretation.
 
-Positive-only sequential forecast validation is permitted when the endpoint is world contraction/discrimination rather than binary absence prediction.
+Positive-only sequential validation is valid when the endpoint is world contraction/discrimination rather than binary absence prediction.
 
-## 9. Pre-outcome eligibility screen
+## 11. Dependence and validation units
 
-Before freezing an EOG-WF empirical contract, a candidate dataset must pass a **generic eligibility screen** that does not inspect the forecast outcome.
+Validation units must match intended generalisation. Many site/species/year rows do not automatically create independent spatial or temporal replicates.
 
-The screen may inspect source/schema metadata and non-response vocabularies needed for deterministic semantic mappings. It must establish:
+Small-cluster confirmatory inference requires prospectively justified operating characteristics; bootstrap repetition does not create new independent units.
 
-1. immutable source identity and licence/provenance;
-2. unambiguous node/spatial-unit mapping;
-3. environmental/local-state input coverage;
-4. taxonomic/rank/establishment vocabulary sufficient for the intended semantic population;
-5. response semantics and whether non-records can support the planned target;
-6. enough genuinely independent held-out spatial or temporal units;
-7. no dependence of eligibility on EOG-WF forecast results.
+## 12. Required independent EOG-WF sequence
 
-This preserves the Azores lesson prospectively without reopening its frozen stop result.
+### Gate 0 — immutable source and semantic eligibility
 
-## 10. Dependence and uncertainty
+Freeze source identity, licence/provenance, nodes, non-response inputs, taxonomic/response vocabulary and independent holdout structure.
 
-Validation units must match the intended generalisation target.
+### Gate 1 — process closure/source semantics
 
-For a claim that generalises to new islands, island-level holdout remains the primary independence unit; thousands of species-island rows must not be treated as thousands of independent island replicates.
+Freeze why internal anchors are an appropriate conditional source system, or explicitly declare external source states / narrower conditional claim.
 
-A large number of bootstrap draws does not create additional independent units. Therefore:
+### Gate 2 — response-blind world-scale construction
 
-- a percentile bootstrap over very few outer units is descriptive unless design-specific operating characteristics were justified pre-outcome;
-- confirmatory interval/test language requires pre-outcome simulation or another design-specific justification;
-- otherwise report paired outer-unit effects, direction counts and uncertainty descriptively.
+Freeze process-calibrated distances or analyst-choice structural target regimes and all secondary world axes.
 
-The frozen nine-island Azores contract remains historical and is not retuned.
+### Gate 3 — response-blind structural adequacy
 
-## 11. Required EOG-WF empirical validation sequence
+Run and freeze the world-universe structural audit. Stop before response access if the prospectively declared gate fails.
 
-### Gate 0 — generic eligibility
-
-Pass source/schema/node/input/taxonomy/response/independent-unit checks before EOG-specific outcome design.
-
-### Gate 1 — world-universe adequacy freeze
-
-Freeze world IDs, natural versus analyst-choice dimensions, provenance, parameter/threshold rationale, anchor policy, coverage boundary, horizon interpretation and universe-expansion sensitivity.
-
-### Gate 2 — forecast-state freeze
+### Gate 4 — forecast state and comparator contract
 
 Freeze:
 
-- local viability/persistence inputs when used;
-- reachability/viability/persistence gates;
-- forecast horizon;
-- output classes and fingerprints;
-- rule for handling full universe falsification.
+- anchor rule;
+- horizon and interpretation;
+- viability/persistence gates if any;
+- same-world compression comparator;
+- strong external comparator;
+- identity-discrimination endpoint;
+- predictive target/metric when appropriate;
+- dependence-aware analysis;
+- favourable/null/adverse/non-estimable rules.
 
-### Gate 3 — identity-preserving comparison freeze
+### Gate 5 — open response once
 
-Predeclare:
+Run once. Do not retune world scales, anchors, horizon, models or semantics after outcome access.
 
-- a compression of the same world universe;
-- the collision/disagreement object erased by that compression;
-- the later independent evidence that can discriminate the alternatives;
-- the result that counts as no added identity-preserving forecast value.
+## 13. STOC lesson remains frozen
 
-### Gate 4 — predictive-comparator freeze
+STOC's first independent EOG-WF universe was falsified during calibration for 20/20 response-estimable species before heldout prediction.
 
-Only when calibrated prediction is itself a claim, predeclare:
+Post-hoc structural diagnosis showed the most permissive frozen geography world had a largest component of only 8.67% of 1,003 sites; 8,702 positive targets were disconnected from fixed anchors versus 48 that were connected but beyond the eight-hop horizon.
 
-- same-world compression comparator(s);
-- external ecological comparator(s);
-- holdout structure;
-- prediction target and loss/score;
-- dependence-aware inference;
-- no-added-value rule.
+A later response-blind method diagnostic demonstrated broader structural regimes, but those thresholds do not replace the frozen STOC universe. STOC remains:
 
-### Gate 5 — run once
+`independent_world_universe_falsified_on_calibration`
 
-Open the frozen outcome/evidence once. Do not retune worlds, gates, horizons, comparators or semantic population after seeing forecast results.
+## 14. Stop rules
 
-## 12. Decision rules
+- Do not add an operator to rescue a failed validation.
+- Do not weaken comparators after outcome inspection.
+- Do not retune graph scale after species responses are seen.
+- Do not call structural thresholds biological dispersal limits without calibration.
+- Do not treat internal anchors as a closed source process when important external recruitment is unrepresented.
+- Do not call non-detection biological absence without an observation model.
+- Do not fuse support layers into occupancy probability without calibration.
+- Do not equate propagation depth with physical time without calibration.
+- Do not reuse a failed opened dataset as a fresh independent confirmation after redesign.
+- Do not claim universal robustness outside the declared certificate.
 
-The following statements remain separate:
+## 15. Literature anchors
 
-- **algorithmic correctness** — EOG-WF performs its declared inverse/forward/update operations;
-- **ecological interpretability** — world/gate/response semantics correspond to stated ecological concepts;
-- **independent identity-preserving value** — independent evidence discriminates world-identity forecast distinctions erased by a frozen compression;
-- **predictive added value** — held-out predictive loss/score improves over stated comparators;
-- **historical identification** — actual history is identified.
+These sources define boundaries; they are not EOG novelty claims.
 
-Current EOG-WF status:
+- Soberón & Peterson (2005), DOI `10.17161/bi.v2i0.4`.
+- Barve et al. (2011), DOI `10.1016/j.ecolmodel.2011.02.011`.
+- Urban & Keitt (2001), DOI `10.1890/0012-9658(2001)082[1205:LCAGTP]2.0.CO;2`.
+- Metzger & Décamps (1997), DOI `10.1016/S1146-609X(97)80075-6`.
+- Moilanen (2011), DOI `10.1111/j.1365-2664.2011.02062.x`.
+- Araújo & New (2007), DOI `10.1016/j.tree.2006.09.010`.
+- Merow et al. (2011), DOI `10.1086/660295`.
+- Roberts et al. (2017), DOI `10.1111/ecog.02881`.
 
-- algorithmic correctness: **supported by known-truth and package tests**;
-- ecological interpretability: **conditional on explicit world/anchor/gate/response contracts**;
-- independent identity-preserving value: **unconfirmed**;
-- predictive added value: **not established; earlier frozen strong-reference extensions include adverse evidence**;
-- historical identification: **not claimed**.
-
-## 13. Stop rules
-
-- Do not add an operator to rescue a failed forecast validation.
-- Do not weaken a comparator after outcome inspection.
-- Do not call analyst-choice quantiles biological dispersal limits.
-- Do not call catalogue non-record biological absence without an observation model.
-- Do not fuse support layers into an occupancy probability without calibration.
-- Do not equate propagation steps with physical time without calibration.
-- Do not use small-cluster resampling to manufacture apparent replication.
-- Do not broaden a frozen blocked contract on the same opened dataset and call it independent confirmation.
-- Do not require predictive superiority as proof of algorithmic correctness.
-- Do not use known-truth algorithmic success as proof of ecological superiority.
-- Do not claim universal robustness outside the declared adequacy certificate.
-
-## 14. Literature anchors for the methodological boundary
-
-These sources motivate boundaries EOG adopts; they are not novelty claims for EOG.
-
-- Soberón & Peterson (2005), *Interpretation of Models of Fundamental Ecological Niches and Species' Distributional Areas*, DOI `10.17161/bi.v2i0.4` — distinguishes ecological niche/distributional interpretations and motivates explicit conceptual boundaries.
-- Barve et al. (2011), *The crucial role of the accessible area in ecological niche modeling and species distribution modeling*, DOI `10.1016/j.ecolmodel.2011.02.011` — accessibility is already central to distribution-model calibration/testing logic.
-- Araújo & New (2007), *Ensemble forecasting of species distributions*, DOI `10.1016/j.tree.2006.09.010` — multiple model projections and their disagreement/aggregation are established SDM concerns.
-- Merow et al. (2011), *Developing Dynamic Mechanistic Species Distribution Models*, DOI `10.1086/660295` — dynamic, dispersal-explicit links between potential and realized distributions are established process-model territory.
-- Steegen et al. (2016), *Increasing Transparency Through a Multiverse Analysis*, DOI `10.1177/1745691616658637` — retaining outcomes across defensible analytical choices is an established transparency/sensitivity principle.
-- Roberts et al. (2017), *Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure*, DOI `10.1111/ecog.02881` — held-out design must respect dependence and intended generalisation.
-- Cameron, Gelbach & Miller (2008), *Bootstrap-Based Improvements for Inference with Clustered Errors*, DOI `10.1162/rest.90.3.414` — bootstrap repetition does not remove the need to respect the number of independent clusters.
-
-Accordingly, EOG-WF's candidate distinct contribution is **not** “adding accessibility”, “using several models”, “adding dispersal”, “returning prediction sets”, or generic multiverse mathematics. It is the biogeographic inverse-to-forward composition in which occurrence-conditioned structural worlds retain identity as sequential forecast state, underidentification remains explicit, and later positive evidence contracts or falsifies the frozen finite world universe.
+The candidate EOG-WF contribution is the biogeographic composition in which a prospectively source- and scale-certified finite world universe is occurrence-conditioned, world identity is retained as sequential forecast state, and later evidence contracts or falsifies that frozen universe without post-outcome retuning.

@@ -1,0 +1,138 @@
+{
+  "calibration_period": "2006-2011",
+  "composed_audit_fingerprint": "b5c8d63a1ce8cd8353bd9c60ec8d1edf838ddebad7fb49bd175c7a243376613c",
+  "composed_most_spanning_world_id": "primary::geo_lcc900",
+  "composed_world_count": 20,
+  "environment_ladder": [
+    {
+      "achieved_largest_component_fraction": 0.26719840478564305,
+      "directed_edge_count": 1488,
+      "distance_threshold": 0.366665208458647,
+      "fingerprint": "f80efefb40332ce1435a4c047cd2419cfd28e9404114aef6624935ed44d5c3a8",
+      "isolated_node_fraction": 0.5074775672981057,
+      "level_id": "env_lcc250",
+      "target_largest_component_fraction": 0.25,
+      "weak_component_count": 587
+    },
+    {
+      "achieved_largest_component_fraction": 0.5004985044865404,
+      "directed_edge_count": 4072,
+      "distance_threshold": 0.4983647572790348,
+      "fingerprint": "6962d8a04adaf08b66571a8eb40703f9a52f26af4ad026ecd2266166d113e1e5",
+      "isolated_node_fraction": 0.3320039880358923,
+      "level_id": "env_lcc500",
+      "target_largest_component_fraction": 0.5,
+      "weak_component_count": 382
+    },
+    {
+      "achieved_largest_component_fraction": 0.7507477567298105,
+      "directed_edge_count": 13098,
+      "distance_threshold": 0.7155323375309813,
+      "fingerprint": "1a02110962b4054cd32090379853262dbcabed25be7a64a0312347a75d42e896",
+      "isolated_node_fraction": 0.16051844466600199,
+      "level_id": "env_lcc750",
+      "target_largest_component_fraction": 0.75,
+      "weak_component_count": 190
+    },
+    {
+      "achieved_largest_component_fraction": 0.909272183449651,
+      "directed_edge_count": 40410,
+      "distance_threshold": 1.0331119399985502,
+      "fingerprint": "78000a37c5e9ec62ff90ca7c39ddb3dd8250dd2aad925fa8bc02420084cf57f6",
+      "isolated_node_fraction": 0.06480558325024925,
+      "level_id": "env_lcc900",
+      "target_largest_component_fraction": 0.9,
+      "weak_component_count": 74
+    }
+  ],
+  "fingerprint": "2e04d84f29b0ec71e66cec43ecb047e783c1ebcab3a78da625635d54413dcc3c",
+  "geography_ladder": [
+    {
+      "achieved_largest_component_fraction": 0.29810568295114653,
+      "directed_edge_count": 4354,
+      "distance_threshold": 20.39836362591683,
+      "fingerprint": "2ce6eb02aef2a443eac0c75b63cc9ec5d829f75b8cd3eeaba4e523f4ecc14ea7",
+      "isolated_node_fraction": 0.0707876370887338,
+      "level_id": "geo_lcc250",
+      "target_largest_component_fraction": 0.25,
+      "weak_component_count": 168
+    },
+    {
+      "achieved_largest_component_fraction": 0.5304087736789631,
+      "directed_edge_count": 5900,
+      "distance_threshold": 24.389874629605405,
+      "fingerprint": "27806ccc05329e5a81fe604224782041170075655aabe2fc72f5550c7b1c5d2e",
+      "isolated_node_fraction": 0.038883349950149554,
+      "level_id": "geo_lcc500",
+      "target_largest_component_fraction": 0.5,
+      "weak_component_count": 105
+    },
+    {
+      "achieved_largest_component_fraction": 0.8703888334995015,
+      "directed_edge_count": 10944,
+      "distance_threshold": 34.97034919362714,
+      "fingerprint": "b65d68c8394bb26e1884864b0c8f4f2c1055d065fb72b461b01628c3496b2589",
+      "isolated_node_fraction": 0.009970089730807577,
+      "level_id": "geo_lcc750",
+      "target_largest_component_fraction": 0.75,
+      "weak_component_count": 33
+    },
+    {
+      "achieved_largest_component_fraction": 0.9002991026919243,
+      "directed_edge_count": 14572,
+      "distance_threshold": 41.64011700997373,
+      "fingerprint": "0f64db3b102fa4dc144ee72aecb3344f20b6bd9134f6a97c684859a7e4c1ade6",
+      "isolated_node_fraction": 0.004985044865403789,
+      "level_id": "geo_lcc900",
+      "target_largest_component_fraction": 0.9,
+      "weak_component_count": 18
+    }
+  ],
+  "node_count": 1003,
+  "note": "This diagnostic demonstrates structural scale bracketing only. It does not reopen STOC prediction and must not be interpreted as independent confirmation.",
+  "old_frozen_stoc_geo_q90_largest_component_fraction": 0.08673978065802593,
+  "old_frozen_stoc_geo_q90_threshold_km": 18.110714907817556,
+  "primary_geography_world_audit": [
+    {
+      "distance_threshold_km": 20.39836362591683,
+      "isolated_node_fraction": 0.0707876370887338,
+      "largest_weak_component_fraction": 0.29810568295114653,
+      "median_horizon_reachable_fraction": 0.019940179461615155,
+      "weak_component_count": 168,
+      "world_id": "primary::geo_lcc250"
+    },
+    {
+      "distance_threshold_km": 24.389874629605405,
+      "isolated_node_fraction": 0.038883349950149554,
+      "largest_weak_component_fraction": 0.5304087736789631,
+      "median_horizon_reachable_fraction": 0.04287138584247258,
+      "weak_component_count": 105,
+      "world_id": "primary::geo_lcc500"
+    },
+    {
+      "distance_threshold_km": 34.97034919362714,
+      "isolated_node_fraction": 0.009970089730807577,
+      "largest_weak_component_fraction": 0.8703888334995015,
+      "median_horizon_reachable_fraction": 0.1914257228315055,
+      "weak_component_count": 33,
+      "world_id": "primary::geo_lcc750"
+    },
+    {
+      "distance_threshold_km": 41.64011700997373,
+      "isolated_node_fraction": 0.004985044865403789,
+      "largest_weak_component_fraction": 0.9002991026919243,
+      "median_horizon_reachable_fraction": 0.28913260219341974,
+      "weak_component_count": 18,
+      "world_id": "primary::geo_lcc900"
+    }
+  ],
+  "source_git_blob_sha": "4bfa2cd39a7e90340ad6a319e5c611e8646462c8",
+  "species_response_columns_parsed": false,
+  "status": "posthoc_nonconfirmatory_response_blind_scale_ladder_diagnostic",
+  "targets": [
+    0.25,
+    0.5,
+    0.75,
+    0.9
+  ]
+}
