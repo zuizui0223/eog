@@ -1,0 +1,48 @@
+{
+  "status": "authoritative_once_only_outcome_preserved",
+  "workflow_run_id": 32068163306,
+  "workflow_run_number": 1,
+  "head_sha": "be41689b63547d35d270e74df02cb652b94e500c",
+  "artifact": {
+    "id": 9300697352,
+    "name": "chiricahua-gate2-once-only-outcome",
+    "zip_sha256": "034056d686cc66b4e092931ffea5d93118210218ed2c3ce58eae4316dbca6de1"
+  },
+  "runner": {
+    "path": "benchmarks/run_chiricahua_gate2_outcome.py",
+    "blob_sha": "e40c7252419a52c6605b46caa27a5f7de47b1774",
+    "same_as_response_free_smoke": true
+  },
+  "source_identity": {
+    "figshare_article": 5838189,
+    "figshare_version": 4,
+    "coords_md5": "3df38d6b4aa7d52f8dea01aa6d8ca164",
+    "hydroperiod_md5": "63deb40bf290a794cd39dc760629f4ab",
+    "temperature_md5": "c32a57c8053e34d71990f0fa6e0bb95b",
+    "wind_md5": "6ff1e576989da12d728951517a81967d",
+    "response_size_bytes": 5859,
+    "response_md5": "1a71e692356300fcf181fe77347da1b6",
+    "response_sha256": "29f18ccaad9f9882bdb93e246ba12e58816c186b0833474c16fd8430ce566438"
+  },
+  "runtime": {
+    "python": "3.11.15",
+    "numpy": "2.3.2",
+    "scipy": "1.16.1",
+    "scikit_learn": "1.7.1"
+  },
+  "result": {
+    "status": "non_estimable_response_or_representation",
+    "fingerprint": "41a8a051d1ce8711caaa4325f1f9c563f64cc5da8a429b9b239361aa79708a95",
+    "calibration_positive_first_detections": 8,
+    "required_calibration_positive_first_detections": 10,
+    "calibration_negative_candidate_rows": 137,
+    "required_calibration_negative_candidate_rows": 40,
+    "model_fit_started": false,
+    "heldout_scoring_started": false,
+    "all_five_rules_survived_calibration": true,
+    "layer_b_representation_estimable": true,
+    "layer_b_max_residual_sd": 0.6843968116505889
+  },
+  "interpretation": "The candidate is non-estimable because the prospectively frozen calibration first-detection minimum was not reached. This is neither favorable nor adverse evidence about Layer-B prediction or external predictive added value. The response was opened once, so the candidate must not be redesigned and relabeled as fresh independent validation.",
+  "no_rerun_or_rescue": true
+}
