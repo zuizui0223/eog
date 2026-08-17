@@ -1,0 +1,44 @@
+name: STOC response-blind scale ladder posthoc
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/stoc_scale_ladder_posthoc.yml"
+      - "benchmarks/stoc_response_blind_scale_ladder.py"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+      - "validation/stoc_eogwf/posthoc_scale_ladder_declaration.json"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Fetch exact frozen DataSTOC source
+        run: |
+          curl -L --fail --retry 3 \
+            https://raw.githubusercontent.com/biomodhub/biomod2/v4.3-4-6/inst/external/DATA_biomod2_STOC.csv \
+            -o /tmp/DATA_biomod2_STOC.csv
+          test "$(stat -c%s /tmp/DATA_biomod2_STOC.csv)" = "330891"
+          test "$(git hash-object /tmp/DATA_biomod2_STOC.csv)" = "4bfa2cd39a7e90340ad6a319e5c611e8646462c8"
+      - name: Build response-blind structural ladder
+        run: |
+          python benchmarks/stoc_response_blind_scale_ladder.py \
+            --source /tmp/DATA_biomod2_STOC.csv \
+            --output build/stoc_scale_ladder_posthoc.json
+      - name: Upload diagnostic
+        uses: actions/upload-artifact@v4
+        with:
+          name: stoc-response-blind-scale-ladder-posthoc
+          path: build/stoc_scale_ladder_posthoc.json
