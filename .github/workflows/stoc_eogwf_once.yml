@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/stoc_eogwf_once.yml"
       - "benchmarks/run_stoc_eogwf_validation.py"
+      - "benchmarks/run_stoc_eogwf_validation_schema_adapter.py"
       - "validation/stoc_eogwf/runtime_lock.txt"
 
 permissions:
@@ -39,7 +40,7 @@ jobs:
           test "$(git hash-object /tmp/DATA_biomod2_STOC.csv)" = "4bfa2cd39a7e90340ad6a319e5c611e8646462c8"
       - name: Execute frozen independent validation
         run: |
-          python benchmarks/run_stoc_eogwf_validation.py \
+          python benchmarks/run_stoc_eogwf_validation_schema_adapter.py \
             --source /tmp/DATA_biomod2_STOC.csv \
             --output build/stoc_eogwf
       - name: Upload frozen result
