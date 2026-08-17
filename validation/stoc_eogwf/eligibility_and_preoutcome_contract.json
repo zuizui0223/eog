@@ -1,0 +1,150 @@
+{
+  "schema_version": "eog_stoc_eogwf_validation_v1",
+  "frozen_date": "2026-08-17",
+  "outcomes_inspected_before_freeze": false,
+  "role": "first independent EOG-WF forecast validation after algorithm merge",
+  "source": {
+    "dataset_name": "DataSTOC / French Breeding Bird Survey STOC biomod2 example",
+    "primary_repository": "biomodhub/biomod2",
+    "immutable_ref": "v4.3-4-6",
+    "path": "inst/external/DATA_biomod2_STOC.csv",
+    "git_blob_sha": "4bfa2cd39a7e90340ad6a319e5c611e8646462c8",
+    "byte_size": 330891,
+    "zenodo_doi": "10.5281/zenodo.17898708",
+    "zenodo_bundle_md5": "a9e24226d1b6efa3be0d8b7fd846ece6",
+    "license": "CC-BY-4.0",
+    "transport_rule": "Use the immutable official biomod2 GitHub tag/path. No alternate data version after response rows are inspected."
+  },
+  "metadata_only_eligibility": {
+    "declared_rows": 2006,
+    "declared_sites": 1003,
+    "declared_periods": ["2006-2011", "2012-2017"],
+    "declared_species_count": 20,
+    "declared_nonresponse_columns": [
+      "site", "period", "X_WGS84", "Y_WGS84", "temp", "precip",
+      "cover_agri", "cover_water", "cover_wet", "sdiv_hab"
+    ],
+    "declared_environmental_predictors": [
+      "temp", "precip", "cover_agri", "cover_water", "cover_wet", "sdiv_hab"
+    ],
+    "eligibility_status": "pass_metadata_only",
+    "reason": "The public documentation declares paired periods, 1003 georeferenced sites, six environmental predictors, and 20 bird responses in one fixed source."
+  },
+  "response_semantics": {
+    "raw_response": "yearly average headcount within each declared multi-year period",
+    "primary_binary_target": "observed_in_period = raw_response > 0",
+    "interpretation": "survey-period detection/record at a fixed STOC site, not latent biological occupancy probability",
+    "negative_class": "raw_response == 0 within the published STOC period aggregate",
+    "missing_response": "exclude that species-site-period pair; do not coerce to zero"
+  },
+  "temporal_design": {
+    "calibration_period": "2006-2011",
+    "heldout_period": "2012-2017",
+    "heldout_outcomes_must_remain_unread_until": "all source, schema, world, anchor, comparator, metric and stop rules below are committed and tests are green",
+    "generalisation_target": "future-period observed presence at the same fixed monitoring sites"
+  },
+  "site_and_input_gate": {
+    "required_unique_sites": 1003,
+    "required_rows_per_site": 2,
+    "required_periods_per_site": ["2006-2011", "2012-2017"],
+    "coordinate_rule": "finite WGS84 coordinates, identical for the paired rows of each site",
+    "predictor_rule": "all six declared predictors finite for both period rows",
+    "failure_status": "non_estimable_pre_model_input_gate"
+  },
+  "species_estimability_rule": {
+    "population": "all 20 published DataSTOC species; no species selected by EOG-WF performance",
+    "calibration_min_positive_sites": 30,
+    "calibration_min_zero_sites": 30,
+    "heldout_min_positive_sites": 10,
+    "heldout_min_zero_sites": 10,
+    "rule_timing": "thresholds frozen before response rows are opened",
+    "insufficient_species_status": "excluded_non_estimable",
+    "minimum_estimable_species_for_family_claim": 10
+  },
+  "world_universe": {
+    "uncertainty_type": "analyst-choice sensitivity universe; not calibrated bird dispersal/tolerance parameters",
+    "coordinate_distance": "pairwise Haversine distance among the 1003 fixed sites",
+    "environment_distance": "Euclidean distance after calibration-period z-standardisation of the six declared predictors",
+    "geographic_threshold_rule": "q25, q50, q75, q90 of each site's nearest-neighbour geographic distance distribution",
+    "environment_threshold_rule": "q25, q50, q75, q90 of nearest-neighbour environmental-distance distribution, using the same calibration-period sites",
+    "families": [
+      "4 geography-only worlds",
+      "16 geography-by-environment worlds"
+    ],
+    "world_count": 20,
+    "edge_rule_geography_only": "directed symmetric edge i<->j when geographic distance <= geographic threshold",
+    "edge_rule_geo_environment": "directed symmetric edge i<->j when geographic distance <= geographic threshold AND environmental distance <= environmental threshold",
+    "edge_support": "1 for admitted edge components, 0 otherwise; dynamic operator loss_support fixed at 1.0",
+    "coverage_claim": "All robustness/exclusion statements are conditional only on these 20 declared sensitivity worlds."
+  },
+  "anchor_and_reconstruction_policy": {
+    "calibration_positive_pool": "sites with observed_in_period=1 in 2006-2011 for the species",
+    "anchor_rule": "select up to 10 calibration-positive anchor sites by deterministic farthest-first geographic traversal; seed is the lexicographically smallest site ID; if fewer than 10 positives exist the species is already non-estimable by the species gate",
+    "compatibility_targets": "all remaining calibration-positive sites not selected as anchors",
+    "world_survival_rule": "a world survives only when every compatibility target has positive first-passage support from the frozen anchors within max_steps=8",
+    "forecast_source_rule": "heldout forecast propagation uses all 2006-2011 calibration-positive sites as realized sources inside each surviving world; these sources are conditioning information, not inferred ancestry",
+    "no_world_survives_status": "declared_world_universe_falsified_on_calibration"
+  },
+  "forecast_contract": {
+    "max_steps": 8,
+    "reachability_threshold": 1e-15,
+    "viability_gate": "none in the primary test; environmental effects are already represented as declared world-edge alternatives and external SDM comparators",
+    "prediction_state": "world x horizon x site",
+    "primary_horizon": 8,
+    "site_outputs": [
+      "exact supporting_world_ids",
+      "supporting_world_fraction",
+      "lower_reachability_support",
+      "upper_reachability_support",
+      "robustly_supported/contingent/excluded_in_all_worlds"
+    ]
+  },
+  "comparators": {
+    "same_world_compressions": [
+      "supporting_world_fraction only",
+      "mean cumulative reachability support across surviving worlds",
+      "union/possible indicator"
+    ],
+    "external": [
+      "period-1 persistence baseline: heldout prediction equals 2006-2011 observed_in_period",
+      "environment-only L2 logistic SDM on the six calibration-period predictors",
+      "environment-only random-forest SDM on the six calibration-period predictors",
+      "fixed equal-weight mean of logistic and random-forest predicted probabilities"
+    ],
+    "hyperparameter_rule": "no heldout tuning; logistic C=1.0, random forest n_estimators=500 max_features='sqrt' min_samples_leaf=5 random_state=20260817",
+    "scaling_rule": "fit transformations on calibration period only"
+  },
+  "primary_endpoints": {
+    "prediction_metric": "species-macro heldout binary log loss on 2012-2017 observed_in_period",
+    "eog_scalar_for_logloss": "supporting_world_fraction at horizon 8, clipped only numerically to [1e-6, 1-1e-6] for log loss",
+    "identity_preserving_endpoint": "within equal supporting-world-frequency collision groups, test whether exact supporting-world identity partitions heldout positives more sharply than frequency alone using a predeclared one-hot world-vector logistic extension fitted only on calibration-derived pseudo-target structure is forbidden; therefore the first independent endpoint is descriptive hit enrichment by exact support sets, not an additional fitted outcome model",
+    "spatial_summary_units": "10 coordinate-only k-means blocks with random_state=20260817, frozen without heldout response; report block effects descriptively",
+    "family_summary_unit": "species"
+  },
+  "decision_rules": {
+    "algorithmic_success_already_established": true,
+    "predictive_added_value_favourable_only_if": [
+      "at least 10 species are estimable",
+      "species-macro EOG-WF log loss is lower than supporting-world-frequency compression baseline if that baseline differs from the EOG scalar implementation",
+      "species-macro EOG-WF log loss is lower than the fixed external ensemble comparator",
+      "EOG-WF is not worse than the persistence baseline",
+      "at least 60% of estimable species favour EOG-WF over the fixed external ensemble"
+    ],
+    "otherwise_status": "no_confirmed_predictive_added_value",
+    "independent_identity_value": "may be labelled supported only if exact support-set identity shows predeclared heldout enrichment beyond equal-frequency collisions without outcome-tuned regrouping",
+    "no_retuning": true
+  },
+  "forbidden_after_response_open": [
+    "change source tag/path/version",
+    "change period roles",
+    "change species estimability thresholds",
+    "change world count or threshold quantiles",
+    "change max_steps or reachability threshold",
+    "change anchor count or farthest-first rule",
+    "change comparator families or hyperparameters",
+    "select favourable species",
+    "change prediction metric or favourable rule",
+    "reinterpret zero counts as latent biological absence",
+    "add a new dataset to rescue an adverse result"
+  ]
+}
