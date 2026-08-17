@@ -175,7 +175,7 @@ def main() -> None:
     ordered_adjacencies = [structural[level.level_id] for level in ladder.levels]
     nested_pass = all(
         np.all(~earlier | later)
-        for earlier, later in zip(ordered_adjacencies, ordered_adjacencies[1:], strict=True)
+        for earlier, later in zip(ordered_adjacencies, ordered_adjacencies[1:])
     )
     final_pass = bool(gate.passed and level90_pass and distinct_scale_pass and nested_pass)
 
