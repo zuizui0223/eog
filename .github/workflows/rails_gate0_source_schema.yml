@@ -1,0 +1,126 @@
+name: Rails two-layer EOG-WF Gate 0 source schema
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/rails_gate0_source_schema.yml"
+      - "validation/rails_two_layer/gate0_source_process_contract.json"
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fetch exact public Dryad bundle
+        run: |
+          curl -L --fail --retry 3 \
+            'https://datadryad.org/api/v2/datasets/doi%253A10.5061%252Fdryad.xpnvx0kjk/download' \
+            -o /tmp/rails_dryad.zip
+          test -s /tmp/rails_dryad.zip
+          file /tmp/rails_dryad.zip
+          sha256sum /tmp/rails_dryad.zip | tee /tmp/archive_sha256.txt
+      - name: Extract documentation and headers only
+        run: |
+          mkdir -p build/rails_gate0/readme
+          python - <<'PY'
+          import csv
+          import io
+          import json
+          import pathlib
+          import zipfile
+
+          archive = pathlib.Path('/tmp/rails_dryad.zip')
+          out = pathlib.Path('build/rails_gate0')
+          out.mkdir(parents=True, exist_ok=True)
+
+          expected = {
+              'README_Annual_climate_WNV_conditions.txt',
+              'README_BLRA_Detection_History_2002-2019.txt',
+              'README_Both_rails_02_19_dynamics_Covariates.txt',
+              'README_Rail_Infection_Covariates.txt',
+              'README_SiteCovariates.txt',
+              'README_VIRA_Detection_History_2005_2019.txt',
+              'Site_Covariates.csv',
+              'BLRA_Detection_History_2002-2019.csv',
+              'VIRA_Detection_History_2005_2019.csv',
+          }
+
+          with zipfile.ZipFile(archive) as zf:
+              infos = zf.infolist()
+              manifest = [
+                  {
+                      'name': info.filename,
+                      'basename': pathlib.PurePosixPath(info.filename).name,
+                      'size': info.file_size,
+                      'compressed_size': info.compress_size,
+                      'crc32': f'{info.CRC:08x}',
+                      'is_dir': info.is_dir(),
+                  }
+                  for info in infos
+              ]
+              (out / 'archive_manifest.json').write_text(
+                  json.dumps(manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+              )
+
+              by_base = {
+                  pathlib.PurePosixPath(info.filename).name: info
+                  for info in infos
+                  if not info.is_dir()
+              }
+              missing = sorted(expected.difference(by_base))
+              if missing:
+                  raise SystemExit(f'expected public files missing: {missing}')
+
+              readme_manifest = []
+              for basename, info in sorted(by_base.items()):
+                  if not basename.startswith('README_') or not basename.endswith('.txt'):
+                      continue
+                  raw = zf.read(info)
+                  target = out / 'readme' / basename
+                  target.write_bytes(raw)
+                  readme_manifest.append({'name': basename, 'size': info.file_size})
+              (out / 'readme_manifest.json').write_text(
+                  json.dumps(readme_manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+              )
+
+              headers = {}
+              for basename in (
+                  'Site_Covariates.csv',
+                  'BLRA_Detection_History_2002-2019.csv',
+                  'VIRA_Detection_History_2005_2019.csv',
+              ):
+                  info = by_base[basename]
+                  with zf.open(info) as handle:
+                      first = handle.readline().decode('utf-8-sig').rstrip('\r\n')
+                  headers[basename] = next(csv.reader(io.StringIO(first)))
+              (out / 'headers_only.json').write_text(
+                  json.dumps(headers, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+              )
+
+          print(json.dumps({
+              'archive_members': len(manifest),
+              'readmes_extracted': len(readme_manifest),
+              'headers_only': headers,
+              'detection_history_data_rows_read': False,
+          }, indent=2, sort_keys=True))
+          PY
+          cp /tmp/archive_sha256.txt build/rails_gate0/archive_sha256.txt
+      - name: Prove response rows were not materialized
+        run: |
+          find build/rails_gate0 -maxdepth 2 -type f -print
+          test -s build/rails_gate0/archive_manifest.json
+          test -s build/rails_gate0/headers_only.json
+          test ! -e build/rails_gate0/BLRA_Detection_History_2002-2019.csv
+          test ! -e build/rails_gate0/VIRA_Detection_History_2005_2019.csv
+      - name: Upload Gate 0 metadata only
+        uses: actions/upload-artifact@v4
+        with:
+          name: rails-two-layer-gate0-schema
+          path: build/rails_gate0
