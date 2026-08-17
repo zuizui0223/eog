@@ -1,0 +1,39 @@
+{
+  "status": "gate0_pre_response_amendment_v1_1_fixed_founder_semantics",
+  "response_rows_opened": false,
+  "reason": "Response-free source code shows that only 47 of the 274 candidate wetlands carry repeated detection histories. Annual occupied source state is therefore not observed over the full network. The validation target is narrowed before response access to the known-founder conditional forecast supported by the three 2003 reintroduction sites.",
+  "latent_layer": {
+    "source_policy": "fixed known 2003 founder ponds throughout reconstruction and multi-horizon propagation",
+    "founder_indices_1_based": [15, 33, 274],
+    "node_universe": "all 274 response-free candidate wetlands in coords.dryad.csv",
+    "world_update": "early positive survey detections may contract the frozen rule universe; they are evidence constraints, not automatically promoted to observed annual sources",
+    "historical_claim": "none; reachable from declared founders under a frozen rule does not identify the actual colonization path"
+  },
+  "predictive_target_candidate": {
+    "name": "first survey-recorded detection by declared horizon from the 2003 founders",
+    "evaluation_nodes": "the 47 archived repeatedly surveyed sites, whose row alignment is declared in the source code without opening detection values",
+    "positive_semantics": "survey-recorded detection by the target horizon",
+    "negative_semantics": "no recorded detection by the target horizon among site-years with archived survey effort; not latent biological absence",
+    "missing_semantics": "NA or no survey is excluded rather than recoded as negative",
+    "destroyed_sites": "the three source-code-declared destroyed sites are unavailable from their declared model-year index and are not ordinary negatives"
+  },
+  "temporal_design_to_freeze_after_structural_gate": {
+    "origin_year": 2003,
+    "archived_detection_years": [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017],
+    "candidate_holdout_policy": "freeze a final contiguous block using year metadata only after structural Gate 1 passes",
+    "horizon_interpretation": "discrete propagation depth from the known founders; physical annual interpretation requires the later frozen transition calibration"
+  },
+  "two_layer_prediction": {
+    "layer_a": "exact frozen rule identity for compatibility, contraction and falsification",
+    "layer_b": "unchanged symmetric_world_support_summary_v1",
+    "exact_world_ids_as_predictive_columns": false
+  },
+  "forbidden": [
+    "using latent occupancy estimates at the 227 unsurveyed wetlands as observed source state",
+    "restricting the candidate network to ever-detected wetlands",
+    "using later detection values to choose structural thresholds or founders",
+    "claiming actual route reconstruction",
+    "retuning symmetric_world_support_summary_v1"
+  ],
+  "scientific_contract_changed_after_response": false
+}
