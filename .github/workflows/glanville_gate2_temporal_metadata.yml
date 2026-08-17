@@ -1,0 +1,108 @@
+name: Glanville EOG-WF Gate 2 temporal metadata
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/glanville_gate2_temporal_metadata.yml"
+      - "validation/glanville_eogwf/gate2_temporal_prediction_contract.json"
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fetch exact source archive
+        run: |
+          curl -L --fail --retry 3 \
+            'https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1' \
+            -o /tmp/ECOG-04799.zip
+          test "$(md5sum /tmp/ECOG-04799.zip | awk '{print $1}')" = "69122a1d82b1fb970fb6638b02da3db4"
+      - name: Derive response-free survey index and patch-area metadata
+        run: |
+          mkdir -p build/glanville_gate2
+          unzip -p /tmp/ECOG-04799.zip data/patch_area.tsv > /tmp/patch_area.tsv
+          # The response table is streamed through cut; only year and patch (fields 1-2)
+          # are retained. Population fields are never emitted to files or logs.
+          unzip -p /tmp/ECOG-04799.zip data/survey_data.tsv | cut -f1,2 > /tmp/survey_index.tsv
+          python - <<'PY'
+          import csv, json, pathlib
+          from collections import Counter
+
+          out = pathlib.Path('build/glanville_gate2')
+
+          survey_rows = []
+          with open('/tmp/survey_index.tsv', encoding='utf-8-sig', newline='') as handle:
+              reader = csv.DictReader(handle, delimiter='\t')
+              if tuple(reader.fieldnames or ()) != ('year', 'patch'):
+                  raise SystemExit(f'unexpected survey index schema: {reader.fieldnames!r}')
+              for row in reader:
+                  survey_rows.append((int(row['year']), str(row['patch']).strip()))
+
+          area_rows = []
+          with open('/tmp/patch_area.tsv', encoding='utf-8-sig', newline='') as handle:
+              reader = csv.DictReader(handle, delimiter='\t')
+              if tuple(reader.fieldnames or ()) != ('patch', 'year', 'area'):
+                  raise SystemExit(f'unexpected patch_area schema: {reader.fieldnames!r}')
+              for row in reader:
+                  area_rows.append((str(row['patch']).strip(), int(row['year']), float(row['area'])))
+
+          survey_years = sorted({year for year, _ in survey_rows})
+          area_years = sorted({year for _, year, _ in area_rows})
+          common_years = sorted(set(survey_years) & set(area_years))
+          consecutive = all(b == a + 1 for a, b in zip(common_years, common_years[1:]))
+          transitions = [[a, b] for a, b in zip(common_years, common_years[1:]) if b == a + 1]
+          if len(transitions) < 12 or len(transitions) != len(common_years) - 1:
+              raise SystemExit('predeclared consecutive-transition eligibility failed')
+          heldout = transitions[-6:]
+          calibration = transitions[:-6]
+
+          survey_counts = Counter(year for year, _ in survey_rows)
+          survey_unique_patches = Counter()
+          for year in survey_years:
+              survey_unique_patches[year] = len({patch for y, patch in survey_rows if y == year})
+          area_counts = Counter(year for _, year, _ in area_rows)
+          finite_positive_area = Counter()
+          for _, year, area in area_rows:
+              if area > 0:
+                  finite_positive_area[year] += 1
+
+          payload = {
+              'status': 'gate2_temporal_metadata_pass',
+              'response_values_emitted': False,
+              'response_columns_retained': ['year', 'patch'],
+              'survey_years': survey_years,
+              'patch_area_years': area_years,
+              'common_years': common_years,
+              'common_years_consecutive': consecutive,
+              'all_consecutive_transitions': transitions,
+              'calibration_transitions': calibration,
+              'heldout_transitions': heldout,
+              'survey_row_count_by_year': {str(k): survey_counts[k] for k in survey_years},
+              'survey_unique_patch_count_by_year': {str(k): survey_unique_patches[k] for k in survey_years},
+              'patch_area_row_count_by_year': {str(k): area_counts[k] for k in area_years},
+              'positive_area_patch_count_by_year': {str(k): finite_positive_area[k] for k in area_years},
+          }
+          (out / 'temporal_metadata_result.json').write_text(
+              json.dumps(payload, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps({
+              'status': payload['status'],
+              'survey_years': survey_years,
+              'common_years': common_years,
+              'calibration_transition_count': len(calibration),
+              'heldout_transitions': heldout,
+              'response_values_emitted': False,
+          }, indent=2))
+          PY
+      - name: Upload response-free temporal metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-eogwf-gate2-temporal-metadata
+          path: build/glanville_gate2/temporal_metadata_result.json
