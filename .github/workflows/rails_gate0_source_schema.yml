@@ -18,29 +18,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Fetch exact public Dryad bundle
+      - name: Fetch public Dryad landing page and resolve individual file links
         run: |
+          mkdir -p /tmp/rails_files build/rails_gate0/readme
           curl -L --fail --retry 3 \
-            'https://datadryad.org/api/v2/datasets/doi%253A10.5061%252Fdryad.xpnvx0kjk/download' \
-            -o /tmp/rails_dryad.zip
-          test -s /tmp/rails_dryad.zip
-          file /tmp/rails_dryad.zip
-          sha256sum /tmp/rails_dryad.zip | tee /tmp/archive_sha256.txt
-      - name: Extract documentation and headers only
-        run: |
-          mkdir -p build/rails_gate0/readme
+            'https://datadryad.org/dataset/doi:10.5061/dryad.xpnvx0kjk' \
+            -o /tmp/rails_landing.html
+          test -s /tmp/rails_landing.html
+          sha256sum /tmp/rails_landing.html | tee build/rails_gate0/landing_sha256.txt
           python - <<'PY'
-          import csv
-          import io
+          from html.parser import HTMLParser
           import json
           import pathlib
-          import zipfile
+          from urllib.parse import urljoin
 
-          archive = pathlib.Path('/tmp/rails_dryad.zip')
-          out = pathlib.Path('build/rails_gate0')
-          out.mkdir(parents=True, exist_ok=True)
-
-          expected = {
+          EXPECTED = [
+              'Annual_climate_WNV_conditions.xlsx',
+              'BLRA_Detection_History_2002-2019.csv',
+              'Both_rails_02_19_dynamics.csv',
+              'Rail_Infection_Covariates.csv',
               'README_Annual_climate_WNV_conditions.txt',
               'README_BLRA_Detection_History_2002-2019.txt',
               'README_Both_rails_02_19_dynamics_Covariates.txt',
@@ -48,77 +44,152 @@ jobs:
               'README_SiteCovariates.txt',
               'README_VIRA_Detection_History_2005_2019.txt',
               'Site_Covariates.csv',
+              'VIRA_Detection_History_2005_2019.csv',
+          ]
+
+          class Links(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.current = None
+                  self.text = []
+                  self.links = []
+              def handle_starttag(self, tag, attrs):
+                  if tag == 'a':
+                      href = dict(attrs).get('href')
+                      if href:
+                          self.current = href
+                          self.text = []
+              def handle_data(self, data):
+                  if self.current is not None:
+                      self.text.append(data)
+              def handle_endtag(self, tag):
+                  if tag == 'a' and self.current is not None:
+                      label = ''.join(self.text).strip()
+                      self.links.append((label, self.current))
+                      self.current = None
+                      self.text = []
+
+          html = pathlib.Path('/tmp/rails_landing.html').read_text(encoding='utf-8', errors='replace')
+          parser = Links()
+          parser.feed(html)
+          resolved = {}
+          for label, href in parser.links:
+              label = label.strip()
+              for expected in EXPECTED:
+                  if label == expected or expected in label:
+                      resolved.setdefault(expected, urljoin('https://datadryad.org/', href))
+
+          missing = [name for name in EXPECTED if name not in resolved]
+          if missing:
+              # Dryad may place the filename near a nested button rather than directly
+              # inside the download anchor.  In that case locate file_stream hrefs in
+              # the local HTML context, still without touching file contents.
+              import re
+              for expected in list(missing):
+                  pos = html.find(expected)
+                  if pos < 0:
+                      continue
+                  window = html[max(0, pos - 2500): pos + 2500]
+                  candidates = re.findall(r'href=["\']([^"\']*?/stash/downloads/file_stream/[^"\']+)["\']', window)
+                  if candidates:
+                      resolved[expected] = urljoin('https://datadryad.org/', candidates[0])
+              missing = [name for name in EXPECTED if name not in resolved]
+          if missing:
+              raise SystemExit(f'could not resolve published Dryad file links: {missing}')
+
+          pathlib.Path('/tmp/resolved_links.json').write_text(
+              json.dumps(resolved, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps({'resolved_file_count': len(resolved), 'response_rows_read': False}, indent=2))
+          PY
+      - name: Download and checksum published files without parsing data rows
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+          import subprocess
+
+          links = json.loads(pathlib.Path('/tmp/resolved_links.json').read_text(encoding='utf-8'))
+          root = pathlib.Path('/tmp/rails_files')
+          for name, url in links.items():
+              target = root / name
+              subprocess.run(
+                  ['curl', '-L', '--fail', '--retry', '3', url, '-o', str(target)],
+                  check=True,
+              )
+              if not target.is_file() or target.stat().st_size == 0:
+                  raise SystemExit(f'empty published file: {name}')
+          PY
+          python - <<'PY'
+          import hashlib
+          import json
+          import pathlib
+
+          root = pathlib.Path('/tmp/rails_files')
+          links = json.loads(pathlib.Path('/tmp/resolved_links.json').read_text(encoding='utf-8'))
+          rows = []
+          for name in sorted(links):
+              path = root / name
+              rows.append({
+                  'name': name,
+                  'size': path.stat().st_size,
+                  'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+              })
+          pathlib.Path('build/rails_gate0/file_manifest.json').write_text(
+              json.dumps(rows, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps({'checksummed_files': len(rows), 'response_rows_parsed': False}, indent=2))
+          PY
+      - name: Extract documentation and headers only
+        run: |
+          python - <<'PY'
+          import csv
+          import io
+          import json
+          import pathlib
+
+          root = pathlib.Path('/tmp/rails_files')
+          out = pathlib.Path('build/rails_gate0')
+          readme_out = out / 'readme'
+          readme_out.mkdir(parents=True, exist_ok=True)
+
+          readme_manifest = []
+          for path in sorted(root.glob('README_*.txt')):
+              data = path.read_bytes()
+              (readme_out / path.name).write_bytes(data)
+              readme_manifest.append({'name': path.name, 'size': len(data)})
+          (out / 'readme_manifest.json').write_text(
+              json.dumps(readme_manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+
+          headers = {}
+          for basename in (
+              'Site_Covariates.csv',
               'BLRA_Detection_History_2002-2019.csv',
               'VIRA_Detection_History_2005_2019.csv',
-          }
-
-          with zipfile.ZipFile(archive) as zf:
-              infos = zf.infolist()
-              manifest = [
-                  {
-                      'name': info.filename,
-                      'basename': pathlib.PurePosixPath(info.filename).name,
-                      'size': info.file_size,
-                      'compressed_size': info.compress_size,
-                      'crc32': f'{info.CRC:08x}',
-                      'is_dir': info.is_dir(),
-                  }
-                  for info in infos
-              ]
-              (out / 'archive_manifest.json').write_text(
-                  json.dumps(manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8'
-              )
-
-              by_base = {
-                  pathlib.PurePosixPath(info.filename).name: info
-                  for info in infos
-                  if not info.is_dir()
-              }
-              missing = sorted(expected.difference(by_base))
-              if missing:
-                  raise SystemExit(f'expected public files missing: {missing}')
-
-              readme_manifest = []
-              for basename, info in sorted(by_base.items()):
-                  if not basename.startswith('README_') or not basename.endswith('.txt'):
-                      continue
-                  raw = zf.read(info)
-                  target = out / 'readme' / basename
-                  target.write_bytes(raw)
-                  readme_manifest.append({'name': basename, 'size': info.file_size})
-              (out / 'readme_manifest.json').write_text(
-                  json.dumps(readme_manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8'
-              )
-
-              headers = {}
-              for basename in (
-                  'Site_Covariates.csv',
-                  'BLRA_Detection_History_2002-2019.csv',
-                  'VIRA_Detection_History_2005_2019.csv',
-              ):
-                  info = by_base[basename]
-                  with zf.open(info) as handle:
-                      first = handle.readline().decode('utf-8-sig').rstrip('\r\n')
-                  headers[basename] = next(csv.reader(io.StringIO(first)))
-              (out / 'headers_only.json').write_text(
-                  json.dumps(headers, indent=2, sort_keys=True) + '\n', encoding='utf-8'
-              )
-
+          ):
+              path = root / basename
+              # Read exactly one physical line. Detection-history rows are not read.
+              with path.open('rb') as handle:
+                  first = handle.readline().decode('utf-8-sig').rstrip('\r\n')
+              headers[basename] = next(csv.reader(io.StringIO(first)))
+          (out / 'headers_only.json').write_text(
+              json.dumps(headers, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
           print(json.dumps({
-              'archive_members': len(manifest),
               'readmes_extracted': len(readme_manifest),
               'headers_only': headers,
               'detection_history_data_rows_read': False,
           }, indent=2, sort_keys=True))
           PY
-          cp /tmp/archive_sha256.txt build/rails_gate0/archive_sha256.txt
-      - name: Prove response rows were not materialized
+      - name: Prove response rows were not materialized in artifact
         run: |
           find build/rails_gate0 -maxdepth 2 -type f -print
-          test -s build/rails_gate0/archive_manifest.json
+          test -s build/rails_gate0/file_manifest.json
           test -s build/rails_gate0/headers_only.json
           test ! -e build/rails_gate0/BLRA_Detection_History_2002-2019.csv
           test ! -e build/rails_gate0/VIRA_Detection_History_2005_2019.csv
+          rm -rf /tmp/rails_files /tmp/resolved_links.json /tmp/rails_landing.html
       - name: Upload Gate 0 metadata only
         uses: actions/upload-artifact@v4
         with:
