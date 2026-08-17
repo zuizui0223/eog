@@ -20,6 +20,7 @@ jobs:
           python-version: "3.11"
       - name: Install container readers only
         run: python -m pip install openpyxl xlrd
+
       - name: Freeze Figshare Ecological Archives collection metadata and bytes
         run: |
           mkdir -p /tmp/collared_figshare build/collared_gate0
@@ -27,6 +28,7 @@ jobs:
             'https://api.figshare.com/v2/collections/3304128/articles?page_size=100' \
             -o /tmp/collection_articles.json
           python - <<'PY'
+          import hashlib
           import json
           import pathlib
           import subprocess
@@ -59,7 +61,8 @@ jobs:
                       check=True,
                   )
                   if not target.is_file() or target.stat().st_size != size:
-                      raise SystemExit(f'Figshare size mismatch for {name}: {target.stat().st_size if target.exists() else None} != {size}')
+                      raise SystemExit(f'Figshare size mismatch for {name}')
+                  digest = hashlib.sha256(target.read_bytes()).hexdigest()
                   manifest.append({
                       'article_id': article_id,
                       'article_title': meta.get('title'),
@@ -69,6 +72,7 @@ jobs:
                       'size': size,
                       'supplied_md5': file_info.get('supplied_md5'),
                       'computed_md5': file_info.get('computed_md5'),
+                      'sha256': digest,
                       'local_name': target.name,
                   })
 
@@ -82,50 +86,64 @@ jobs:
               'demographic_rows_parsed': False,
           }, indent=2))
           PY
-      - name: Freeze response-free Zenodo GPS bytes and parse full geometry
+
+      - name: Freeze response-free Zenodo GPS bytes and parse decimal-degree geometry
         run: |
           curl -L --fail --retry 3 \
             'https://zenodo.org/records/15557864/files/Peck_Glade_GPS_Waypoints.txt?download=1' \
             -o /tmp/Peck_Glade_GPS_Waypoints.txt
           test "$(md5sum /tmp/Peck_Glade_GPS_Waypoints.txt | awk '{print $1}')" = "7baa4bb0dc11cdff774dfe95540ed785"
           python - <<'PY'
+          import csv
           import hashlib
+          import io
           import json
+          import math
           import pathlib
-          import re
 
           path = pathlib.Path('/tmp/Peck_Glade_GPS_Waypoints.txt')
-          lines = path.read_text(encoding='utf-8', errors='replace').splitlines()
+          text = path.read_text(encoding='utf-8-sig', errors='strict')
+          lines = text.splitlines()
           if len(lines) < 200:
               raise SystemExit(f'unexpected GPS waypoint length: {len(lines)} lines')
 
-          # Garmin text is response-free. Parse only names and coordinate tokens.
+          # First line is Garmin format metadata; second line is a tab-delimited header.
+          header = next(csv.reader(io.StringIO(lines[1]), delimiter='\t'))
+          normalized = {name.strip().lower(): i for i, name in enumerate(header)}
+          for required in ('name', 'latitude', 'longitude'):
+              if required not in normalized:
+                  raise SystemExit(f'missing GPS column {required!r}: {header!r}')
+
           coords = []
-          for line in lines:
-              # Latitude/longitude appear as N/S and E/W coordinate tokens in the waypoint export.
-              match = re.search(r'\b([NS])\s*([0-9]+(?:\.[0-9]+)?)\s+([EW])\s*([0-9]+(?:\.[0-9]+)?)\b', line)
-              if not match:
+          for line in lines[2:]:
+              if not line.strip():
                   continue
-              ns, lat, ew, lon = match.groups()
-              lat = float(lat) * (1 if ns == 'N' else -1)
-              lon = float(lon) * (1 if ew == 'E' else -1)
-              # Glade name is the second tab-delimited field in the documented Garmin export.
-              fields = line.split('\t')
-              name = fields[1].strip() if len(fields) > 1 else ''
+              row = next(csv.reader(io.StringIO(line), delimiter='\t'))
+              if len(row) <= max(normalized['name'], normalized['latitude'], normalized['longitude']):
+                  raise SystemExit(f'malformed GPS row: {line!r}')
+              name = row[normalized['name']].strip()
+              lat = float(row[normalized['latitude']])
+              lon = float(row[normalized['longitude']])
+              if not name or not math.isfinite(lat) or not math.isfinite(lon):
+                  raise SystemExit('GPS name/coordinates must be non-empty and finite')
+              if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+                  raise SystemExit('GPS coordinate outside valid range')
               coords.append((name, lat, lon))
 
           digest = hashlib.sha256(path.read_bytes()).hexdigest()
           payload = {
-              'status': 'gps_bytes_frozen',
+              'status': 'gps_bytes_and_geometry_frozen',
               'file': 'Peck_Glade_GPS_Waypoints.txt',
               'size': path.stat().st_size,
               'md5': '7baa4bb0dc11cdff774dfe95540ed785',
               'sha256': digest,
               'line_count': len(lines),
+              'header': header,
               'parsed_coordinate_rows': len(coords),
-              'nonempty_parsed_names': sum(bool(name) for name, _, _ in coords),
-              'unique_parsed_names': len({name for name, _, _ in coords if name}),
-              'coordinate_bounds': None if not coords else {
+              'unique_parsed_names': len({name for name, _, _ in coords}),
+              'duplicate_names': len(coords) - len({name for name, _, _ in coords}),
+              'duplicate_coordinates': len(coords) - len({(lat, lon) for _, lat, lon in coords}),
+              'coordinate_bounds': {
                   'lat_min': min(row[1] for row in coords),
                   'lat_max': max(row[1] for row in coords),
                   'lon_min': min(row[2] for row in coords),
@@ -139,44 +157,78 @@ jobs:
           pathlib.Path('build/collared_gate0/Peck_Glade_GPS_Waypoints.txt').write_bytes(path.read_bytes())
           print(json.dumps(payload, indent=2, sort_keys=True))
           PY
-      - name: Inspect machine-readable Figshare containers without data rows
+
+      - name: Inspect Figshare demographic supplement header only
         run: |
           python - <<'PY'
-          import csv
-          import hashlib
-          import io
           import json
           import pathlib
 
-          import openpyxl
-          import xlrd
-
           root = pathlib.Path('/tmp/collared_figshare')
           manifest = json.loads(pathlib.Path('build/collared_gate0/figshare_manifest.json').read_text(encoding='utf-8'))
-          inspected = []
+          target_row = next((row for row in manifest if row['name'] == 'Individual_Glade_Sizes.txt'), None)
+          if target_row is None:
+              raise SystemExit('Individual_Glade_Sizes.txt missing from Figshare collection')
+          path = root / target_row['local_name']
+          with path.open('rb') as handle:
+              first = handle.readline().decode('utf-8-sig', errors='replace').rstrip('\r\n')
+          payload = {
+              'file': 'Individual_Glade_Sizes.txt',
+              'size': path.stat().st_size,
+              'sha256': target_row['sha256'],
+              'header_line_only': first,
+              'data_rows_read': False,
+              'publisher_description': target_row['article_title'],
+          }
+          pathlib.Path('build/collared_gate0/figshare_demographic_header.json').write_text(
+              json.dumps(payload, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps(payload, indent=2, sort_keys=True))
+          PY
 
-          def sha256(path):
-              digest = hashlib.sha256()
-              with path.open('rb') as handle:
-                  for chunk in iter(lambda: handle.read(1024 * 1024), b''):
-                      digest.update(chunk)
-              return digest.hexdigest()
+      - name: One-shot Dryad main-workbook transport and header inspection
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import subprocess
+          import zipfile
 
-          for row in manifest:
-              path = root / row['local_name']
-              suffix = path.suffix.lower()
-              entry = {
-                  'article_id': row['article_id'],
-                  'article_title': row['article_title'],
-                  'file_id': row['file_id'],
-                  'name': row['name'],
-                  'size': path.stat().st_size,
-                  'sha256': sha256(path),
-                  'rows_parsed': False,
-              }
+          import openpyxl
 
-              # Gate 0 may inspect only workbook/sheet structure and first row labels.
-              if suffix == '.xlsx':
+          url = 'https://datadryad.org/downloads/file_stream/4096501'
+          path = pathlib.Path('/tmp/Peck_Ranch_Collared_Lizard_Data.xlsx')
+          curl = subprocess.run(
+              ['curl', '-L', '-sS', '--max-time', '90', '-w', '%{http_code}', url, '-o', str(path)],
+              text=True,
+              capture_output=True,
+          )
+          http_code = curl.stdout.strip()[-3:] if curl.stdout.strip() else None
+          result = {
+              'file': 'Peck_Ranch_Collared_Lizard_Data.xlsx',
+              'url': url,
+              'curl_returncode': curl.returncode,
+              'http_code': http_code,
+              'transport_ok': False,
+              'is_xlsx_zip': False,
+              'size': path.stat().st_size if path.exists() else 0,
+              'sha256': None,
+              'workbook': None,
+              'data_rows_read': False,
+              'transport_stop_reason': None,
+          }
+
+          if path.exists() and path.stat().st_size:
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              result['sha256'] = digest
+              try:
+                  result['is_xlsx_zip'] = zipfile.is_zipfile(path)
+              except Exception:
+                  result['is_xlsx_zip'] = False
+
+          if curl.returncode == 0 and http_code == '200' and result['is_xlsx_zip']:
+              try:
                   wb = openpyxl.load_workbook(path, read_only=True, data_only=False)
                   sheets = []
                   for ws in wb.worksheets:
@@ -187,52 +239,64 @@ jobs:
                           'max_column_reported': ws.max_column,
                           'header_row_only': [None if value is None else str(value) for value in first],
                       })
-                  entry['workbook'] = sheets
-              elif suffix == '.xls':
-                  book = xlrd.open_workbook(path, on_demand=True)
-                  sheets = []
-                  for name in book.sheet_names():
-                      sheet = book.sheet_by_name(name)
-                      header = [str(sheet.cell_value(0, c)) for c in range(sheet.ncols)] if sheet.nrows else []
-                      sheets.append({
-                          'title': name,
-                          'max_row_reported': sheet.nrows,
-                          'max_column_reported': sheet.ncols,
-                          'header_row_only': header,
-                      })
-                  entry['workbook'] = sheets
-              elif suffix in {'.csv', '.tsv'}:
+                  result['workbook'] = sheets
+                  result['transport_ok'] = True
+              except Exception as exc:
+                  result['transport_stop_reason'] = f'xlsx_container_open_failed:{type(exc).__name__}'
+          else:
+              prefix = b''
+              if path.exists():
                   with path.open('rb') as handle:
-                      first = handle.readline().decode('utf-8-sig', errors='replace').rstrip('\r\n')
-                  dialect = csv.excel_tab if suffix == '.tsv' else csv.excel
-                  entry['header_row_only'] = next(csv.reader(io.StringIO(first), dialect=dialect))
-              elif suffix in {'.txt', '.md'}:
-                  # Only README/documentation-like files are copied and read in full. Other text
-                  # files are kept as checksum metadata only because they may contain response rows.
-                  lower = row['name'].lower()
-                  if 'readme' in lower or 'metadata' in lower or 'description' in lower:
-                      text = path.read_text(encoding='utf-8', errors='replace')
-                      entry['documentation_text'] = text
-              inspected.append(entry)
+                      prefix = handle.read(120)
+              preview = prefix.decode('utf-8', errors='replace').replace('\n', ' ').replace('\r', ' ')
+              result['transport_stop_reason'] = (
+                  f'public_file_stream_not_reproducible:http={http_code};returncode={curl.returncode};'
+                  f'zip={result["is_xlsx_zip"]};prefix={preview[:100]}'
+              )
 
-          pathlib.Path('build/collared_gate0/container_schema.json').write_text(
-              json.dumps(inspected, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          pathlib.Path('build/collared_gate0/dryad_main_workbook_transport.json').write_text(
+              json.dumps(result, indent=2, sort_keys=True) + '\n', encoding='utf-8'
           )
-          print(json.dumps({
-              'inspected_files': len(inspected),
-              'machine_readable_names': [row['name'] for row in inspected if 'workbook' in row or 'header_row_only' in row],
-              'demographic_data_rows_parsed': False,
-          }, indent=2))
+          print(json.dumps(result, indent=2, sort_keys=True))
           PY
-      - name: Verify firewall and upload Gate 0 metadata only
+
+      - name: Record Gate 0 technical summary and enforce response firewall
         run: |
-          find build/collared_gate0 -maxdepth 2 -type f -print
+          python - <<'PY'
+          import json
+          import pathlib
+
+          gps = json.loads(pathlib.Path('build/collared_gate0/gps_result.json').read_text(encoding='utf-8'))
+          fig = json.loads(pathlib.Path('build/collared_gate0/figshare_demographic_header.json').read_text(encoding='utf-8'))
+          dryad = json.loads(pathlib.Path('build/collared_gate0/dryad_main_workbook_transport.json').read_text(encoding='utf-8'))
+          summary = {
+              'status': 'gate0_technical_sources_complete' if dryad['transport_ok'] else 'gate0_stop_main_response_source_transport_blocked',
+              'demographic_response_rows_opened': False,
+              'gps_coordinate_rows': gps['parsed_coordinate_rows'],
+              'gps_unique_names': gps['unique_parsed_names'],
+              'figshare_demographic_header_only': fig['header_line_only'],
+              'figshare_demographic_rows_read': False,
+              'dryad_main_workbook_transport_ok': dryad['transport_ok'],
+              'dryad_main_workbook_header_only': None if not dryad['transport_ok'] else dryad['workbook'],
+              'scientific_response_semantics_not_yet_adjudicated': True,
+          }
+          pathlib.Path('build/collared_gate0/gate0_technical_summary.json').write_text(
+              json.dumps(summary, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          PY
+          find build/collared_gate0 -maxdepth 1 -type f -print
           test -s build/collared_gate0/figshare_manifest.json
           test -s build/collared_gate0/gps_result.json
-          test -s build/collared_gate0/container_schema.json
-          rm -rf /tmp/collared_figshare /tmp/collection_articles.json
-        
-      - uses: actions/upload-artifact@v4
+          test -s build/collared_gate0/figshare_demographic_header.json
+          test -s build/collared_gate0/dryad_main_workbook_transport.json
+          test -s build/collared_gate0/gate0_technical_summary.json
+          rm -rf /tmp/collared_figshare /tmp/collection_articles.json /tmp/Peck_Ranch_Collared_Lizard_Data.xlsx
+
+      - name: Upload Gate 0 metadata only
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: collared-lizard-two-layer-gate0
           path: build/collared_gate0
+          if-no-files-found: warn
