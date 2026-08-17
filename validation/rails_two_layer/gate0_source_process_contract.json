@@ -11,7 +11,15 @@
   "source": {
     "dryad_doi": "10.5061/dryad.xpnvx0kjk",
     "dryad_dataset_title": "Stability of patch-turnover relationships under equilibrium and nonequilibrium metapopulation dynamics driven by biogeography",
-    "download_route": "https://datadryad.org/api/v2/datasets/doi%253A10.5061%252Fdryad.xpnvx0kjk/download",
+    "transport_resolution": "public Dryad landing page -> exact individual published file download links; checksum every file before scientific parsing",
+    "landing_page": "https://datadryad.org/dataset/doi:10.5061/dryad.xpnvx0kjk",
+    "initial_api_bundle_attempt": {
+      "workflow_run_id": 32024713150,
+      "route": "https://datadryad.org/api/v2/datasets/doi%253A10.5061%252Fdryad.xpnvx0kjk/download",
+      "status": "http_401_transport_only_stop",
+      "detection_history_rows_read": false,
+      "scientific_contract_changed": false
+    },
     "expected_public_files_from_landing_page": [
       "Annual_climate_WNV_conditions.xlsx",
       "BLRA_Detection_History_2002-2019.csv",
@@ -26,7 +34,8 @@
       "Site_Covariates.csv",
       "VIRA_Detection_History_2005_2019.csv"
     ],
-    "checksum_status": "must_be_observed_and_frozen_by_gate0"
+    "checksum_status": "must_freeze filename, byte size, and SHA-256 for each published file at Gate 0",
+    "transport_change_boundary": "Changing from an authenticated API bundle route to public landing-page individual-file routes is a transport-only correction. No file may be substituted, renamed scientifically, or selected based on response contents."
   },
   "public_documentation_basis": {
     "patch_count_reported": 307,
@@ -55,11 +64,11 @@
   "response_firewall": {
     "detection_history_content_opened": false,
     "allowed_at_gate0": [
-      "archive byte identity and checksum",
-      "archive member names and sizes",
+      "published file bytes for checksum and byte-size identity only",
+      "Dryad landing-page HTML for transport resolution",
       "README/documentation files",
       "header/schema of Site_Covariates.csv only",
-      "header/schema of detection-history files only if necessary to identify forbidden response columns; no data rows"
+      "exactly the first physical header line of each detection-history CSV; no data rows"
     ],
     "forbidden_before_later_gates": [
       "black rail detection-history data rows",
@@ -71,14 +80,14 @@
   },
   "gate0_decision_rule": {
     "pass_if": [
-      "exact public archive can be downloaded and checksummed",
+      "every expected public file can be resolved from the published Dryad landing page and checksummed",
       "README/schema confirms stable site identifiers and machine-readable spatial information or a deterministic site distance/isolation representation",
       "detection history remains separable from non-response site geometry/covariates",
       "survey years and repeat-detection structure are compatible with prospective temporal holdout",
       "conditional internal-source metapopulation interpretation remains scientifically defensible"
     ],
     "stop_if": [
-      "source bytes cannot be frozen",
+      "published source files cannot be frozen through lawful public routes",
       "site spatial mapping is unavailable/ambiguous",
       "basic node/world inputs require reading detection-history response rows",
       "external immigration makes an internal-source conditional forecast scientifically indefensible"
@@ -97,5 +106,5 @@
     "only then open California black rail detection history once",
     "use Virginia rail only under its predeclared supportive role"
   ],
-  "no_rescue_rule": "If this candidate fails a pre-response gate, stop without opening detection-history rows and do not change the gate to force eligibility."
+  "no_rescue_rule": "If this candidate fails a pre-response scientific gate, stop without opening detection-history rows and do not change the gate to force eligibility. Transport-only corrections that do not alter files or scientific rules must be recorded explicitly."
 }
