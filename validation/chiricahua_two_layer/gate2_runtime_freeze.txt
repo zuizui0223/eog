@@ -1,0 +1,6 @@
+environmental-occupancy-geometry @ file:///home/runner/work/eog/eog
+joblib==1.5.3
+numpy==2.3.2
+scikit-learn==1.7.1
+scipy==1.16.1
+threadpoolctl==3.6.0
