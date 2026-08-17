@@ -25,7 +25,7 @@ jobs:
 
       - name: Freeze Zenodo record metadata
         run: |
-          mkdir -p /tmp/gull_zenodo build/gull_gate0/code
+          mkdir -p /tmp/gull_zenodo /tmp/gull_members build/gull_gate0/code
           curl -L --fail --retry 3 \
             'https://zenodo.org/api/records/18300536' \
             -o /tmp/gull_record.json
@@ -91,10 +91,7 @@ jobs:
               url = f'https://zenodo.org/records/18300536/files/{encoded}?download=1'
               target = root / key
               target.parent.mkdir(parents=True, exist_ok=True)
-              subprocess.run(
-                  ['curl', '-L', '--fail', '--retry', '3', url, '-o', str(target)],
-                  check=True,
-              )
+              subprocess.run(['curl', '-L', '--fail', '--retry', '3', url, '-o', str(target)], check=True)
               actual_size = target.stat().st_size
               if actual_size != row['size']:
                   raise SystemExit(f'size mismatch for {key}: {actual_size} != {row["size"]}')
@@ -129,38 +126,68 @@ jobs:
           print(json.dumps({'verified_file_count': len(verified), 'response_rows_parsed': False}, indent=2))
           PY
 
-      - name: Inspect code and bounded text headers without data rows
+      - name: Inventory archive members and inspect only code docs and bounded data headers
         run: |
           python - <<'PY'
+          import hashlib
           import json
           import pathlib
           import re
-          import shutil
+          import zipfile
 
           from eog.v2.validation import read_bounded_first_record_text
 
-          root = pathlib.Path('/tmp/gull_zenodo')
+          source_root = pathlib.Path('/tmp/gull_zenodo')
+          member_root = pathlib.Path('/tmp/gull_members')
+          code_out = pathlib.Path('build/gull_gate0/code')
+          code_out.mkdir(parents=True, exist_ok=True)
           verified = json.loads(pathlib.Path('build/gull_gate0/verified_files.json').read_text(encoding='utf-8'))
-          text_data_suffixes = {'.csv', '.tsv', '.txt', '.dat'}
-          code_suffixes = {'.r', '.rmd', '.py', '.stan', '.md'}
-          document_names = {'readme', 'license', 'licence'}
 
+          text_data_suffixes = {'.csv', '.tsv', '.txt', '.dat'}
+          code_suffixes = {'.r', '.rmd', '.qmd', '.py', '.stan', '.md'}
+          document_tokens = {'readme', 'license', 'licence', 'metadata', 'description'}
+          archive_manifest = []
           headers = []
           code_inventory = []
           binary_inventory = []
-          for row in verified:
-              key = row['key']
-              path = root / key
+
+          def inspect_path(logical_key: str, path: pathlib.Path, *, source: str) -> None:
               suffix = path.suffix.lower()
               lower_name = path.name.lower()
+              is_document = any(token in lower_name for token in document_tokens)
+
+              if is_document or suffix in code_suffixes:
+                  text = path.read_text(encoding='utf-8', errors='replace')
+                  safe_name = re.sub(r'[^A-Za-z0-9_.-]+', '_', logical_key)
+                  destination = code_out / safe_name
+                  destination.write_text(text, encoding='utf-8')
+                  referenced_data = sorted(set(re.findall(
+                      r'[A-Za-z0-9_./ -]+\.(?:csv|tsv|txt|dat|rds|rda|RData|xlsx|xls|shp|gpkg|geojson)',
+                      text,
+                      flags=re.IGNORECASE,
+                  )))
+                  terms = sorted({
+                      term for term in (
+                          'pond', 'etang', 'coord', 'longitude', 'latitude', 'distance', 'drain',
+                          'vidang', 'occup', 'colon', 'persist', 'success', 'breeding', 'geometry',
+                          'spatial', 'available', 'absence', 'unoccupied', 'presence'
+                      )
+                      if term in text.lower()
+                  })
+                  code_inventory.append({
+                      'key': logical_key,
+                      'source': source,
+                      'size': path.stat().st_size,
+                      'referenced_data_files': referenced_data,
+                      'matched_role_terms': terms,
+                  })
+                  return
 
               if suffix in text_data_suffixes:
-                  text, physical = read_bounded_first_record_text(
-                      path,
-                      max_record_bytes=16_384,
-                  )
+                  text, physical = read_bounded_first_record_text(path, max_record_bytes=16_384)
                   headers.append({
-                      'key': key,
+                      'key': logical_key,
+                      'source': source,
                       'suffix': suffix,
                       'first_physical_record_only': text,
                       'terminator': physical.terminator,
@@ -168,43 +195,48 @@ jobs:
                       'file_size': path.stat().st_size,
                       'data_rows_read': False,
                   })
-                  continue
-
-              if suffix in code_suffixes or any(token in lower_name for token in document_names):
-                  # Code/documentation may be read in full to identify source roles and
-                  # schema expectations; raw response tables remain unopened.
-                  text = path.read_text(encoding='utf-8', errors='replace')
-                  safe_name = re.sub(r'[^A-Za-z0-9_.-]+', '_', key)
-                  destination = pathlib.Path('build/gull_gate0/code') / safe_name
-                  destination.write_text(text, encoding='utf-8')
-                  referenced_data = sorted(set(re.findall(
-                      r'[A-Za-z0-9_./ -]+\.(?:csv|tsv|txt|rds|rda|RData|xlsx|xls|shp|gpkg)',
-                      text,
-                      flags=re.IGNORECASE,
-                  )))
-                  terms = sorted({
-                      term for term in (
-                          'pond', 'coord', 'longitude', 'latitude', 'distance', 'drain',
-                          'occup', 'colon', 'persist', 'success', 'breeding', 'geometry',
-                          'spatial', 'available', 'absence', 'unoccupied'
-                      )
-                      if term in text.lower()
-                  })
-                  code_inventory.append({
-                      'key': key,
-                      'size': path.stat().st_size,
-                      'referenced_data_files': referenced_data,
-                      'matched_role_terms': terms,
-                  })
-                  continue
+                  return
 
               binary_inventory.append({
-                  'key': key,
+                  'key': logical_key,
+                  'source': source,
                   'suffix': suffix,
                   'size': path.stat().st_size,
                   'deserialized': False,
               })
 
+          for outer in verified:
+              outer_key = outer['key']
+              outer_path = source_root / outer_key
+              if outer_path.suffix.lower() != '.zip':
+                  inspect_path(outer_key, outer_path, source='zenodo_root')
+                  continue
+
+              with zipfile.ZipFile(outer_path) as zf:
+                  for index, info in enumerate(zf.infolist()):
+                      logical = f'{outer_key}::{info.filename}'
+                      archive_manifest.append({
+                          'archive': outer_key,
+                          'member': info.filename,
+                          'size': info.file_size,
+                          'compressed_size': info.compress_size,
+                          'crc32': f'{info.CRC:08x}',
+                          'is_dir': info.is_dir(),
+                      })
+                      if info.is_dir():
+                          continue
+                      # Materialize a member only into ephemeral /tmp. The response firewall
+                      # still controls what bytes are actually parsed/logged from data-like text.
+                      data = zf.read(info)
+                      digest = hashlib.sha256(data).hexdigest()
+                      safe_member = member_root / f'member_{index:04d}{pathlib.PurePosixPath(info.filename).suffix}'
+                      safe_member.write_bytes(data)
+                      archive_manifest[-1]['sha256'] = digest
+                      inspect_path(logical, safe_member, source='zenodo_zip_member')
+
+          pathlib.Path('build/gull_gate0/archive_members.json').write_text(
+              json.dumps(archive_manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8'
+          )
           pathlib.Path('build/gull_gate0/text_headers.json').write_text(
               json.dumps(headers, indent=2, sort_keys=True) + '\n', encoding='utf-8'
           )
@@ -215,9 +247,11 @@ jobs:
               json.dumps(binary_inventory, indent=2, sort_keys=True) + '\n', encoding='utf-8'
           )
           print(json.dumps({
-              'text_like_files_header_only': [row['key'] for row in headers],
+              'archive_member_count': len(archive_manifest),
+              'archive_members': [row['member'] for row in archive_manifest],
+              'text_like_members_header_only': [row['key'] for row in headers],
               'code_or_docs_read': [row['key'] for row in code_inventory],
-              'binary_files_not_deserialized': [row['key'] for row in binary_inventory],
+              'binary_members_not_deserialized': [row['key'] for row in binary_inventory],
               'response_data_rows_read': False,
           }, indent=2, sort_keys=True))
           PY
@@ -231,19 +265,21 @@ jobs:
           headers = json.loads(pathlib.Path('build/gull_gate0/text_headers.json').read_text(encoding='utf-8'))
           code = json.loads(pathlib.Path('build/gull_gate0/code_inventory.json').read_text(encoding='utf-8'))
           binaries = json.loads(pathlib.Path('build/gull_gate0/binary_inventory.json').read_text(encoding='utf-8'))
+          archive = json.loads(pathlib.Path('build/gull_gate0/archive_members.json').read_text(encoding='utf-8'))
           combined_text = '\n'.join(row['first_physical_record_only'] for row in headers).lower()
           combined_code = '\n'.join(
-              pathlib.Path('build/gull_gate0/code', path.name).read_text(encoding='utf-8', errors='replace').lower()
+              path.read_text(encoding='utf-8', errors='replace').lower()
               for path in pathlib.Path('build/gull_gate0/code').glob('*')
               if path.is_file()
           )
-          searchable = combined_text + '\n' + combined_code
-
-          geometry_tokens = [token for token in ('longitude', 'latitude', 'coord', 'x', 'y', 'distance') if token in searchable]
-          state_tokens = [token for token in ('drain', 'occupied', 'unoccupied', 'presence', 'absence', 'colon') if token in searchable]
+          names = '\n'.join(row['member'].lower() for row in archive)
+          searchable = combined_text + '\n' + combined_code + '\n' + names
+          geometry_tokens = [token for token in ('longitude', 'latitude', 'coord', 'distance', 'spatial', 'pond', 'etang') if token in searchable]
+          state_tokens = [token for token in ('drain', 'vidang', 'occupied', 'unoccupied', 'presence', 'absence', 'colon') if token in searchable]
           diagnostic = {
-              'status': 'gate0_sources_frozen_schema_pending_human_interpretation',
+              'status': 'gate0_sources_frozen_inner_schema_available',
               'response_rows_opened': False,
+              'archive_member_count': len(archive),
               'text_header_file_count': len(headers),
               'code_document_file_count': len(code),
               'binary_file_count': len(binaries),
@@ -263,10 +299,11 @@ jobs:
 
       - name: Remove all downloaded source bytes before artifact upload
         run: |
-          rm -rf /tmp/gull_zenodo /tmp/gull_record.json
+          rm -rf /tmp/gull_zenodo /tmp/gull_members /tmp/gull_record.json
           find build/gull_gate0 -maxdepth 2 -type f -print
           test -s build/gull_gate0/zenodo_manifest.json
           test -s build/gull_gate0/verified_files.json
+          test -s build/gull_gate0/archive_members.json
           test -s build/gull_gate0/text_headers.json
           test -s build/gull_gate0/code_inventory.json
           test -s build/gull_gate0/binary_inventory.json
