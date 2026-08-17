@@ -1,0 +1,155 @@
+{
+  "status": "gate2_pre_response_temporal_prediction_contract",
+  "response_content_opened": false,
+  "primary_prediction_target": {
+    "name": "survey_recorded_annual_colonization_transition",
+    "candidate_definition": "patch is survey-recorded unoccupied at year t, has finite survey response at t+1, and has finite positive patch area at t",
+    "positive_definition": "survey-recorded population at t+1 is > 0",
+    "negative_definition": "survey-recorded population at t+1 is 0",
+    "source_definition": "all patches survey-recorded occupied (>0) at t with finite positive patch area at t",
+    "detection_boundary": "This target is a recorded transition under the long-term survey protocol, not latent biological colonization/absence. Imperfect detection is acknowledged and no occupancy probability is inferred from a zero record."
+  },
+  "temporal_split_rule": {
+    "metadata_allowed_before_response": "derive only year and patch columns from survey_data.tsv, plus full non-response patch_area.tsv",
+    "year_sequence_requirement": "at least 12 consecutive annual transitions after deterministic intersection of survey-year and patch-area-year support",
+    "heldout_rule": "last 6 consecutive annual transitions are heldout; every earlier consecutive transition is calibration",
+    "model_refitting_during_holdout": false,
+    "world_state_update_during_holdout": "allowed only after each heldout transition outcome has occurred; later heldout forecasts may contract the frozen rule set using earlier heldout positive transition evidence but predictive model coefficients remain calibration-frozen"
+  },
+  "world_rules": {
+    "rule_count": 5,
+    "distance_kernel": "exp(-distance_km / 1.0)",
+    "kernel_scale_type": "externally supported process reference; alpha=1 km^-1 is close to independent/published estimates and is not treated as a hard maximum distance",
+    "loss_support": 1.0,
+    "source_weights": "equal across all currently survey-recorded occupied source patches",
+    "support_tolerance": 1e-15,
+    "rules": [
+      {
+        "world_id": "process_full_exp_alpha1",
+        "edge_rule": "all distinct patch pairs receive raw geographic support exp(-d/1km)"
+      },
+      {
+        "world_id": "struct_geo_lcc250",
+        "edge_rule": "exp(-d/1km) when d <= 0.8412958233838802 km, else 0"
+      },
+      {
+        "world_id": "struct_geo_lcc500",
+        "edge_rule": "exp(-d/1km) when d <= 1.1527935766506063 km, else 0"
+      },
+      {
+        "world_id": "struct_geo_lcc750",
+        "edge_rule": "exp(-d/1km) when d <= 1.6079604357918804 km, else 0"
+      },
+      {
+        "world_id": "struct_geo_lcc900",
+        "edge_rule": "exp(-d/1km) when d <= 6.418444554899734 km, else 0"
+      }
+    ],
+    "sequential_rule_filter": "A rule survives a transition only if every observed positive colonization target has first-passage support > 1e-15 from that transition's current occupied source set. Surviving rule IDs may stay equal or contract across transitions and are never recreated.",
+    "universe_falsification_rule": "If no frozen rule survives, preserve finite-universe falsification and stop EOG predictive comparison without retuning."
+  },
+  "eog_one_step_support_semantics": {
+    "equivalence_to_package_operator": "For horizon=1, source-to-target support is computed exactly under Q[s,t]=W[s,t]/(1+sum_k W[s,k]) and equal normalized source weights, matching build_dynamic_transition_operator(loss_support=1) without materializing five dense DynamicTransitionOperator objects simultaneously.",
+    "probability_claim": "none; raw EOG supports are assumption-conditioned features unless the downstream calibration model maps them to the recorded binary target"
+  },
+  "external_comparators": {
+    "ifm_logistic": {
+      "type": "incidence-function/metapopulation connectivity baseline",
+      "features": [
+        "target patch area at t raised to 0.2",
+        "S_i(t)=sum over occupied source patches j of area_j(t)^0.2 * exp(-distance_ij/1km)"
+      ],
+      "coefficient_policy": "fit L2 logistic coefficients using calibration transitions only; do not reuse coefficients fitted in publications to overlapping heldout outcomes",
+      "scientific_anchor": "Hanski et al. 2017 Nature Communications DOI 10.1038/ncomms14504"
+    },
+    "flexible_rf": {
+      "type": "fixed random-forest binary prediction reference",
+      "features": [
+        "target area^0.2",
+        "IFM connectivity S_i",
+        "nearest distance to an occupied source",
+        "number of occupied sources within 1 km",
+        "number of occupied sources within 2 km"
+      ],
+      "hyperparameters": {
+        "n_estimators": 500,
+        "max_features": "sqrt",
+        "min_samples_leaf": 5,
+        "class_weight": null,
+        "random_state": 20260817,
+        "n_jobs": -1
+      }
+    }
+  },
+  "identity_vs_compression_models": {
+    "shared_baseline_features": [
+      "target area^0.2",
+      "IFM connectivity S_i"
+    ],
+    "identity_features": "ordered 5-world survival indicators followed by ordered 5-world one-step supports; eliminated worlds have survival=0 and support=0",
+    "compression_features": [
+      "surviving_world_fraction",
+      "support_mean_over_surviving",
+      "support_std_over_surviving",
+      "support_min_over_surviving",
+      "support_max_over_surviving",
+      "support_q25_over_surviving",
+      "support_q50_over_surviving",
+      "support_q75_over_surviving",
+      "positive_support_fraction_over_surviving",
+      "support_range_over_surviving"
+    ],
+    "feature_dimension_note": "identity and compression each contribute 10 EOG-specific dimensions beyond the identical ecological baseline",
+    "calibration_model": {
+      "type": "L2 logistic regression",
+      "C": 1.0,
+      "solver": "lbfgs",
+      "max_iter": 3000,
+      "class_weight": null,
+      "standardization": "calibration mean/SD only; zero-SD columns dropped identically from train and heldout"
+    },
+    "identity_estimability": "If the exact identity design has no nonconstant information beyond the declared compression in calibration, report identity_non_estimable and do not invent extra world axes."
+  },
+  "response_estimability": {
+    "minimum_calibration_positive_colonizations": 100,
+    "minimum_calibration_negative_candidates": 500,
+    "minimum_heldout_positive_colonizations": 50,
+    "minimum_heldout_negative_candidates": 200,
+    "minimum_heldout_transition_years_with_both_classes": 4,
+    "failure_status": "non_estimable_response_balance"
+  },
+  "metrics": {
+    "primary": "macro-heldout-transition binary log loss",
+    "secondary": [
+      "pooled heldout log loss",
+      "Brier score",
+      "ROC AUC when both classes exist",
+      "annual direction count"
+    ],
+    "independence_boundary": "annual transitions are the outer temporal reporting units; thousands of patch rows are not treated as independent years and no small-n year bootstrap is used to manufacture precision"
+  },
+  "decision_rules": {
+    "identity_favorable_if_all": [
+      "identity endpoint is estimable",
+      "macro-year mean logloss(identity - compression) < 0",
+      "identity has lower logloss than compression in at least 4 of the 6 heldout transitions"
+    ],
+    "external_predictive_added_value_if_all": [
+      "EOG identity endpoint is estimable",
+      "macro-year mean identity logloss is lower than both IFM logistic and flexible RF",
+      "identity has lower logloss than the better of the two external comparators in at least 4 of 6 heldout transitions"
+    ],
+    "otherwise": "preserve no_confirmed_added_value, adverse, non_estimable, or universe_falsified result without retuning"
+  },
+  "no_retuning_after_response": [
+    "world distance kernel or structural thresholds",
+    "source weighting",
+    "support tolerance",
+    "temporal split rule",
+    "response definition",
+    "baseline/compression/identity features",
+    "external comparator features or hyperparameters",
+    "estimability thresholds",
+    "metrics or decision rules"
+  ]
+}
