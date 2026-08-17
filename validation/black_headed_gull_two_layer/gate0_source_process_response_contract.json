@@ -1,0 +1,130 @@
+{
+  "status": "gate0_pre_response_source_process_response_semantics_freeze",
+  "study_system": {
+    "taxon": "Chroicocephalus ridibundus",
+    "common_name": "black-headed gull",
+    "region": "Forez plain, central France",
+    "study_period_documented": "1976-2019",
+    "scientific_role": "fresh EOG-specific independent validation candidate for the post-Glanville two-layer predictor"
+  },
+  "independence_boundary": {
+    "published_system_results_viewed_before_eog": true,
+    "known_from_publication": [
+      "the system is a long-term spatially structured pond population",
+      "published models analyse patch colonization, persistence and growth using neighboring-patch covariates with a distance-decay function",
+      "published aggregate ecological findings and turnover patterns were viewed during candidate screening"
+    ],
+    "eog_specific_outcomes_viewed": false,
+    "eog_layer_b_score_viewed": false,
+    "rule": "Published ecological findings may justify comparator class and process relevance but must not tune EOG worlds, structural thresholds, Layer-B features, holdout years or favourable/adverse rules.",
+    "label": "fresh EOG-specific independent validation; not completely outcome-naive ecological-system validation"
+  },
+  "source": {
+    "paper_doi": "10.1002/ecy.70349",
+    "zenodo_doi": "10.5281/zenodo.18300536",
+    "zenodo_record": 18300536,
+    "record_api": "https://zenodo.org/api/records/18300536",
+    "source_freeze_rule": "enumerate all Zenodo files from record metadata, download and checksum published files without parsing response rows, and preserve only metadata/code/documentation/response-free geometry in Gate 0 artifacts"
+  },
+  "public_process_basis": {
+    "landscape": "more than 350 human-managed freshwater ponds in the Forez plain",
+    "ever_occupied_reported": "95 ponds were occupied at least once between 1976 and 2019",
+    "annual_monitoring": "occupied colonies and drained ponds were identified annually during the breeding season from 1976 to 2019",
+    "drained_pond_semantics": "drained ponds are unavailable habitat for that breeding season and must not be treated as ordinary available negative ponds",
+    "process_match": "patch colonization/persistence is explicitly modelled as a spatially structured population process with distance-dependent neighboring-patch effects",
+    "process_closure_boundary": "The EOG claim is conditional on the declared Forez pond universe and current occupied source ponds; no unique dispersal history or complete closure to all immigration outside the study region is claimed."
+  },
+  "node_universe_gate": {
+    "critical_question": "Does the archived geometry include the prospectively surveyed pond universe independently of future occupancy outcomes, or only the 95 ponds that were ever occupied?",
+    "pass_if": [
+      "pond IDs and geometry/distance are available without reading occupancy response rows",
+      "the candidate node universe is defined by survey/habitat availability rather than by ever having a colony",
+      "unoccupied-but-surveyed available ponds can be represented without future-response selection"
+    ],
+    "stop_if": [
+      "the only machine-readable pond universe consists of ponds selected because they were occupied at least once during 1976-2019",
+      "node inclusion requires inspecting future colony occurrence",
+      "pond identity/geometry cannot be frozen independently of response"
+    ],
+    "reason": "Selecting only ever-occupied ponds would condition the prediction universe on future response and invalidate a fresh colonization/non-colonization benchmark."
+  },
+  "response_semantics_gate": {
+    "target_candidate": "annual survey-recorded colonization of an available pond that was unoccupied at t and is available at t+1",
+    "positive_candidate": "available pond with a colony recorded at t+1",
+    "negative_candidate": "available and surveyed pond with no colony recorded at t+1",
+    "unavailable_state": "drained pond-year; exclude from ordinary binary colonization target rather than code as negative",
+    "forbidden_negative": "missing/not-surveyed/unrepresented pond-year must never be recoded as absence",
+    "pass_requirement": "archive schema/code must mechanically distinguish available-unoccupied, occupied and drained/unavailable states before any response data values are inspected",
+    "stop_requirement": "if absence/survey availability is implicit only through missing rows or only ever-occupied ponds are recorded, stop rather than invent binary negatives"
+  },
+  "response_firewall": {
+    "response_rows_opened": false,
+    "allowed_at_gate0": [
+      "Zenodo record metadata, filenames, sizes and checksums",
+      "complete source-code/scripts and README/documentation files",
+      "file bytes solely for exact checksum verification",
+      "full files that are unambiguously response-free geometry/distance metadata by filename plus code/documentation contract",
+      "bounded first physical record/header of text-like data files using eog.v2.validation.read_bounded_first_record_text"
+    ],
+    "forbidden_at_gate0": [
+      "occupancy/colony-count/breeding-success data rows",
+      "annual occupied/unoccupied response values",
+      "colonization/extinction event rows",
+      "response-conditioned pond inclusion",
+      "deserializing binary response objects to inspect values",
+      "using published aggregate response results to tune EOG design"
+    ],
+    "text_header_reader": "eog.v2.validation.read_bounded_first_record_text",
+    "max_header_record_bytes": 16384
+  },
+  "two_layer_architecture_freeze": {
+    "latent_layer": "exact frozen rule identities retained for compatibility, current-source propagation, contraction and finite-universe falsification",
+    "predictive_layer": "symmetric_world_support_summary_v1",
+    "world_id_predictive_columns": false,
+    "glanville_retuning_prohibited": true
+  },
+  "structural_gate_if_gate0_passes": {
+    "distance_basis": "freeze archive-provided pond coordinates or explicit pond distance matrix; no response-derived geometry",
+    "scale_rule": "reuse response-blind 0.25/0.50/0.75/0.90 LCC ladder",
+    "requirements": [
+      "LCC90 >= 0.90",
+      "isolated-node fraction at LCC90 <= 0.05",
+      "at least three distinct positive structural thresholds",
+      "nested deterministic worlds"
+    ],
+    "no_rescue": "do not add kNN/arbitrary thresholds after observing a scale-diversity failure"
+  },
+  "external_comparator_class": {
+    "primary": "published-style patch occupancy/colonization model using focal and neighboring patch covariates with distance-decay influence",
+    "flexible": "predeclared flexible classifier using the same response-free pond/source geometry and non-response availability covariates",
+    "freeze_later": "exact comparator features/hyperparameters and holdout years only after Gate 0/structural gates pass and before response rows"
+  },
+  "gate0_decision_rule": {
+    "pass_if_all": [
+      "Zenodo record and all required source bytes are reproducibly frozen",
+      "response-bearing data can be separated from code/documentation/geometry",
+      "pond node universe is not future-response-selected",
+      "pond coordinates or explicit distances are response-free and deterministic",
+      "occupied / available-unoccupied / drained-unavailable states are mechanically representable without inventing absence",
+      "a sufficiently long temporal sequence exists for prospective calibration/heldout design",
+      "conditional internal-source patch propagation remains scientifically defensible"
+    ],
+    "stop_if_any": [
+      "source bytes cannot be reproducibly frozen",
+      "only ever-occupied ponds define the node universe",
+      "surveyed absence cannot be separated from missing/not-surveyed",
+      "geometry requires response inspection",
+      "process/source semantics are incompatible with an internal-source conditional forecast"
+    ]
+  },
+  "post_gate0_sequence": [
+    "freeze canonical pond universe and response-free geometry",
+    "run response-blind structural scale/adequacy Gate 1",
+    "freeze temporal source/update semantics and pond availability treatment",
+    "freeze symmetric_world_support_summary_v1 without tuning",
+    "freeze published-style occupancy/neighborhood comparator and flexible external comparator",
+    "freeze temporal calibration/heldout split from metadata only",
+    "only then open response rows once"
+  ],
+  "no_rescue_rule": "If Gate 0 or structural adequacy fails, stop pre-response and move to another fresh candidate."
+}
