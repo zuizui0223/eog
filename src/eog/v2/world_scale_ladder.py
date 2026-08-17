@@ -27,6 +27,9 @@ from typing import Mapping, Sequence
 import numpy as np
 
 
+_DISTANCE_TOLERANCE = 1e-12
+
+
 def _canonical_sha256(payload: object) -> str:
     encoded = json.dumps(
         payload,
@@ -170,7 +173,7 @@ def _matrix_fingerprint(node_ids: tuple[str, ...], matrix: np.ndarray) -> str:
 
 
 def _threshold_adjacency(matrix: np.ndarray, threshold: float) -> np.ndarray:
-    adjacency = matrix <= float(threshold) + 1e-12
+    adjacency = matrix <= float(threshold) + _DISTANCE_TOLERANCE
     np.fill_diagonal(adjacency, False)
     return adjacency
 
@@ -210,10 +213,12 @@ def build_structural_scale_ladder(
     """Build the minimal nested threshold ladder satisfying declared coverage regimes.
 
     For each target largest-component fraction, the returned threshold is the smallest
-    observed pairwise distance at which the threshold graph reaches that target.  All
-    edges sharing the same distance are admitted together before a target is evaluated,
-    making tie handling deterministic.  The resulting thresholds are non-decreasing and
-    the corresponding edge sets are nested.
+    observed pairwise distance at which the threshold graph reaches that target.  Edges
+    within the same absolute numerical distance tolerance are admitted together before
+    a target is evaluated.  The exact same tolerance is used when threshold adjacencies
+    are reconstructed, so an edge used by the union-find scan can never disappear from
+    the frozen level.  The resulting thresholds are non-decreasing and the corresponding
+    edge sets are nested.
     """
 
     ids = _validated_ids(node_ids)
@@ -241,8 +246,9 @@ def build_structural_scale_ladder(
     while edge_index < len(distances) and target_index < len(targets):
         threshold = float(distances[edge_index])
         group_end = edge_index + 1
-        while group_end < len(distances) and np.isclose(
-            distances[group_end], threshold, atol=1e-12, rtol=1e-12
+        while (
+            group_end < len(distances)
+            and float(distances[group_end]) <= threshold + _DISTANCE_TOLERANCE
         ):
             group_end += 1
         for idx in range(edge_index, group_end):
@@ -260,13 +266,13 @@ def build_structural_scale_ladder(
     previous_threshold = -np.inf
     for index, (target, threshold_value) in enumerate(zip(targets, thresholds, strict=True)):
         threshold = float(threshold_value)
-        if threshold + 1e-12 < previous_threshold:
+        if threshold + _DISTANCE_TOLERANCE < previous_threshold:
             raise RuntimeError("structural scale thresholds must be non-decreasing")
         previous_threshold = threshold
         adjacency = _threshold_adjacency(matrix, threshold)
         component_count, largest_size, isolated_fraction = _component_summary(adjacency)
         achieved_fraction = largest_size / n
-        if achieved_fraction + 1e-12 < target:
+        if achieved_fraction + _DISTANCE_TOLERANCE < target:
             raise RuntimeError("constructed scale level does not satisfy its declared target")
         level_id = f"{declaration.axis_id}_lcc{int(round(target * 1000)):03d}"
         payload = {
