@@ -1,0 +1,29 @@
+{
+  "status": "post_open_id_only_mapping_audit_pass_for_frozen_node_filter",
+  "scientific_outcome_statistics_computed_before_audit": false,
+  "population_response_columns_read_by_this_audit": false,
+  "network_node_count": 4656,
+  "patch_area_unique_node_count": 4656,
+  "patch_area_nodes_outside_network": [],
+  "survey_rows_outside_network": 755,
+  "survey_unique_ids_outside_network": 417,
+  "unknown_survey_ids_with_patch_area": [],
+  "mapping_conclusion": "All survey rows outside the frozen 4656-node patch_network also lack any patch_area record. Under the already-frozen rule requiring finite positive source-year patch area for sources/candidates, these rows are structurally ineligible independent of population value and must be filtered rather than added to the world universe.",
+  "node_universe_changed": false,
+  "world_thresholds_changed": false,
+  "temporal_split_changed": false,
+  "response_definition_changed": false,
+  "comparator_or_metric_changed": false,
+  "workflow": {
+    "run_id": 32017516345,
+    "artifact_id": 9284078408,
+    "artifact_zip_sha256": "84b833f5dc5c8522de678f6d0ffb544cc4b20f284b3538e6dceb73d14f6ebee5"
+  },
+  "first_outcome_attempt": {
+    "run_id": 32017396835,
+    "status": "technical_schema_stop_before_population_evaluation",
+    "failure": "runner rejected survey IDs outside frozen patch_network before applying the frozen positive-area eligibility filter",
+    "result_artifact_generated": false
+  },
+  "allowed_correction": "Filter survey rows to frozen patch_network IDs before population parsing/evaluation, while recording excluded row/ID counts. No unknown survey ID may be added to the world/node universe."
+}

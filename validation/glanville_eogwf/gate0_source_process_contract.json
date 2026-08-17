@@ -1,0 +1,72 @@
+{
+  "status": "gate0_pre_response_source_and_process_freeze",
+  "study_system": {
+    "taxon": "Melitaea cinxia",
+    "common_name": "Glanville fritillary",
+    "region": "Aland Islands, Finland",
+    "scientific_role": "fresh independent candidate for EOG-WF annual metapopulation forecast validation"
+  },
+  "source": {
+    "primary_record_doi": "10.5061/dryad.ksn02v707",
+    "transport_mirror": "Zenodo record 4987060",
+    "archive_name": "ECOG-04799.zip",
+    "expected_md5": "69122a1d82b1fb970fb6638b02da3db4",
+    "license": "CC0",
+    "transport_rule": "Zenodo is used only as a stable byte transport route for the same public study bundle; no alternative data content may be substituted after response access"
+  },
+  "public_documentation_basis": {
+    "long_term_design": "annual habitat-patch surveys of the Aland Glanville fritillary metapopulation; the study bundle reports 19 years of habitat surveys",
+    "process_match": "annual local extinction and recolonization in a discrete habitat-patch network is the intended biological process, unlike systems dominated by unrepresented external recruitment",
+    "external_comparator_class": "established metapopulation occupancy/colonization/extinction models using patch area/quality/connectivity",
+    "detection_boundary": "annual patch occupancy is survey-based and imperfect detection must remain explicit; non-detection is not silently treated as perfect biological absence"
+  },
+  "process_closure_gate": {
+    "provisional_status": "pass_subject_to_archive_schema_confirmation",
+    "rationale": [
+      "the scientific system is a spatially explicit habitat-patch metapopulation in which local extinction and recolonization are core state transitions",
+      "the regional patch network is the actual object of long-term census and metapopulation modelling",
+      "the intended EOG claim will be conditional on the declared regional patch universe and will not assert complete closure to all immigration outside Aland"
+    ],
+    "must_be_rechecked_before_response_access": true
+  },
+  "response_firewall": {
+    "response_content_opened": false,
+    "allowed_before_gate1": [
+      "archive byte identity/checksum",
+      "archive member names and sizes",
+      "README/documentation text",
+      "schema/header information that can be obtained without reading occupancy values",
+      "coordinate/patch-attribute data only after exact non-response columns are identified"
+    ],
+    "forbidden_before_structural_gate": [
+      "annual occupancy values",
+      "colonization/extinction outcomes",
+      "population abundance values used as biological response",
+      "any result-dependent world-scale tuning"
+    ]
+  },
+  "gate0_decision_rule": {
+    "pass_if": [
+      "exact archive checksum matches",
+      "README/schema identifies a stable patch ID and spatial coordinates or another deterministic spatial mapping",
+      "survey years can be identified without opening outcome values",
+      "response and non-response columns/files can be separated deterministically",
+      "process/source closure remains scientifically defensible for a regional metapopulation forecast"
+    ],
+    "stop_if": [
+      "source bytes cannot be frozen",
+      "patch spatial mapping is unavailable or ambiguous",
+      "outcome values must be inspected to discover basic node/world inputs",
+      "the study is not interpretable as a regional patch-transition process under an explicit source policy"
+    ]
+  },
+  "post_gate0_sequence": [
+    "freeze non-response node/patch/environment inputs",
+    "freeze externally calibrated process-scale evidence when defensible",
+    "construct response-blind structural scale ladder as analyst-choice coverage bracket",
+    "run prospectively declared structural adequacy gate",
+    "freeze temporal holdout, source rule, horizon, same-world compression and external metapopulation comparator",
+    "only then open occupancy response once"
+  ],
+  "no_rescue_rule": "If the fresh candidate fails any pre-response gate, stop without opening biological outcomes and do not alter the gate to force eligibility."
+}

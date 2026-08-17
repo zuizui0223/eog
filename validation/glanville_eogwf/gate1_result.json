@@ -1,0 +1,80 @@
+{
+  "status": "gate1_pass_structural_adequacy",
+  "response_content_opened": false,
+  "response_file_read": false,
+  "node_count": 4656,
+  "patch_network_schema": ["patch", "x", "y", "area"],
+  "coordinate_reference_system": "EPSG:3067",
+  "coordinate_units": "km",
+  "area_summary_ha": {
+    "min": 0.00063,
+    "median": 0.063585,
+    "max": 10.00615
+  },
+  "process_reference": {
+    "world_id": "process_mean_dispersal_1km",
+    "distance_threshold_km": 1.0,
+    "interpretation": "independent mean dispersal reference; not maximum dispersal distance",
+    "largest_weak_component_fraction": 0.3599656357388316,
+    "weak_component_count": 109,
+    "isolated_node_fraction": 0.0053694158075601375,
+    "median_one_step_reachable_fraction": 0.00429553264604811
+  },
+  "structural_targets": [0.25, 0.5, 0.75, 0.9],
+  "structural_ladder": [
+    {
+      "level_id": "geo_lcc250",
+      "target_largest_component_fraction": 0.25,
+      "distance_threshold_km": 0.8412958233838802,
+      "achieved_largest_component_fraction": 0.2620274914089347,
+      "weak_component_count": 166,
+      "isolated_node_fraction": 0.009235395189003437,
+      "directed_edge_count": 80160,
+      "fingerprint": "a5971331a5a392f8ca0bc7c6efa942b7dd587e108f0d3949df1fd644c3aec231"
+    },
+    {
+      "level_id": "geo_lcc500",
+      "target_largest_component_fraction": 0.5,
+      "distance_threshold_km": 1.1527935766506063,
+      "achieved_largest_component_fraction": 0.5004295532646048,
+      "weak_component_count": 73,
+      "isolated_node_fraction": 0.004080756013745705,
+      "directed_edge_count": 123372,
+      "fingerprint": "a8b8513d57b1e03cb8a8ff35a19fda09f87aa927ec98870c6f0e3cfcc7807596"
+    },
+    {
+      "level_id": "geo_lcc750",
+      "target_largest_component_fraction": 0.75,
+      "distance_threshold_km": 1.6079604357918804,
+      "achieved_largest_component_fraction": 0.7693298969072165,
+      "weak_component_count": 29,
+      "isolated_node_fraction": 0.0019329896907216496,
+      "directed_edge_count": 192042,
+      "fingerprint": "8c1d8a938fbc81c276fe5a2fd074c4c5eda5acad8190d30da8338c930c5b306c"
+    },
+    {
+      "level_id": "geo_lcc900",
+      "target_largest_component_fraction": 0.9,
+      "distance_threshold_km": 6.418444554899734,
+      "achieved_largest_component_fraction": 0.9521048109965635,
+      "weak_component_count": 5,
+      "isolated_node_fraction": 0.0,
+      "directed_edge_count": 1372376,
+      "fingerprint": "08f4c553e9ccfcbebf534f00c96a5b55e5e9beb7f427c39c2bdd89f10007770b"
+    }
+  ],
+  "distinct_positive_structural_thresholds": 4,
+  "level90_pass": true,
+  "distinct_scale_pass": true,
+  "structural_gate_passing_world_ids": ["structural::geo_lcc900"],
+  "final_gate_pass": true,
+  "audit_fingerprint": "12d99953273aa73f1276f85d8e56b938a889589d13b36f1e1578e3b4701853eb",
+  "gate_fingerprint": "564f5374dc910de989d858e36c70f27d280ff7b4bf0d46b278dca55598dfb8cc",
+  "fingerprint": "d4df12f0c95376b6bff0ed946dc789339d03faeae178a573b66bbdd883ec338d",
+  "workflow": {
+    "run_id": 32015434413,
+    "artifact_id": 9283334019,
+    "artifact_zip_sha256": "65e44ca4837175c7f94162359649a5b9f03ed80881ba0d7c1faf4f85bb7911c5"
+  },
+  "scientific_interpretation": "The externally referenced 1 km process world is intentionally local and fragmented, while the independently declared structural ladder successfully brackets local-to-near-spanning regimes. Unlike STOC, the fresh candidate passes the prospectively frozen response-blind world-scale gate before any occupancy response is read."
+}

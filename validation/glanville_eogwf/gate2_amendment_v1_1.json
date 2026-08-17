@@ -1,0 +1,35 @@
+{
+  "status": "gate2_pre_response_amendment_v1_1",
+  "response_content_opened": false,
+  "reason": "Resolve implementation details that depend only on already-open non-response patch-area metadata and the frozen feature definitions, before any population value is opened.",
+  "annual_active_node_rule": {
+    "active_at_t": "patch has finite patch_area.tsv area > 0 in source year t",
+    "sources": "survey-recorded occupied patches at t intersect active_at_t",
+    "colonization_candidates": "survey-recorded unoccupied patches at t with finite response at t+1 intersect active_at_t",
+    "transition_operator_destination_set": "only active_at_t destination patches contribute outgoing raw edge support and row-normalization denominator",
+    "inactive_nodes": "remain in the immutable 4,656-patch identity universe but receive no destination edge support for that annual transition",
+    "rationale": "patch-area dynamics are non-response habitat state; allowing extinct/nonexistent habitat patches to absorb transition mass would be an avoidable structural artifact"
+  },
+  "eog_one_step_computation": {
+    "source_weighting": "equal normalized weight over current active occupied sources",
+    "row_normalization": "Q[s,i]=W[s,i]/(1+sum over active destination k W[s,k])",
+    "candidate_support": "mean over current sources of Q[s,i]",
+    "self_edges": "zero",
+    "structural_world_raw_support": "exp(-d/1km) inside frozen threshold and 0 outside",
+    "process_world_raw_support": "exp(-d/1km) for every distinct active source-destination pair"
+  },
+  "identity_estimability_rule": {
+    "scope": "calibration rows only, before heldout outcomes are scored",
+    "test": "after dropping zero-SD EOG feature columns and standardizing on calibration, regress each retained identity-specific EOG feature by ordinary least squares on an intercept plus the 10 declared compression features; compute residual standard deviation",
+    "estimable_if": "at least one retained identity-specific feature has residual SD > 1e-8",
+    "non_estimable_status": "identity_non_estimable_from_declared_compression",
+    "no_rescue": "do not add axes, nonlinear encodings, or alternative compression after this test"
+  },
+  "missingness_rule": {
+    "population": "rows with non-finite source-year or target-year population are excluded from that transition",
+    "patch_area": "rows without finite positive source-year patch area are excluded from sources/candidates",
+    "no_imputation": true
+  },
+  "negative_population_rule": "if any finite population value is <0, stop as response-schema-invalid rather than recoding it",
+  "contract_changed_after_response": false
+}
