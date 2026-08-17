@@ -1,0 +1,106 @@
+{
+  "status": "gate0_pre_response_source_process_response_semantics_freeze",
+  "study_system": {
+    "taxon": "Crotaphytus collaris collaris",
+    "common_name": "eastern collared lizard",
+    "region": "Peck Ranch and adjoining Ozark glade systems, Missouri, USA",
+    "scientific_role": "fresh independent candidate for the post-Glanville two-layer EOG-WF predictor"
+  },
+  "scientific_process_basis": {
+    "known_founder_program": "three Stegall Mountain glades received translocated populations beginning in 1984, 1987 and 1989",
+    "management_transition": "prescribed woodland fire began in 1994 and changed matrix permeability/dispersal",
+    "published_dynamic_phases": [
+      "isolated translocated populations with little/no dispersal and colonisation",
+      "post-fire expanding colonising metapopulation",
+      "approximately stable metapopulation from about 2000 on Stegall Mountain"
+    ],
+    "published_patch_process": "the 2011 Ecology study explicitly analyses annual initial colonisation, recolonisation, extinction/turnover, occupied glades and nearest previously occupied source glades",
+    "process_closure_provisional_status": "strong_for_conditional_glade_metapopulation_claim_subject_to_node_and_survey_schema_confirmation",
+    "historical_claim_boundary": "Known translocations may define declared initial sources; EOG still does not infer one unique historical route for later colonisations."
+  },
+  "source_routes": {
+    "ecological_archives_figshare": {
+      "collection_id": 3304128,
+      "collection_doi": "10.6084/m9.figshare.c.3304128",
+      "role": "stable publisher-linked supporting-information route for the 2011 Ecology article, including the demographic supplement/appendices if present",
+      "gate0_action": "enumerate collection article/file metadata and checksum all downloadable machine-readable files; do not parse demographic data rows"
+    },
+    "zenodo_gps": {
+      "record": 15557864,
+      "file": "Peck_Glade_GPS_Waypoints.txt",
+      "expected_md5": "7baa4bb0dc11cdff774dfe95540ed785",
+      "role": "response-free glade/glade-section GPS geometry"
+    },
+    "dryad_documentation": {
+      "doi": "10.5061/dryad.63xsj3v50",
+      "role": "documentation/provenance only at Gate 0 unless a stable non-challenge byte route becomes available",
+      "documented_main_file": "Peck_Ranch_Collared_Lizard_Data.xlsx",
+      "documented_rows": "row 1 header; rows 2-6746 are capture/recapture or glade-survey records",
+      "documented_zero_capture_semantics": "the README states that sometimes no captures occurred on a glade and capture-related fields are then entered as n/a"
+    }
+  },
+  "response_semantics_gate": {
+    "target_question": "Can annual survey-recorded glade occupancy/colonisation be reconstructed without treating unsurveyed glade-years as absence?",
+    "candidate_positive": "surveyed glade-year with at least one recorded lizard/capture or a publisher-provided positive population estimate",
+    "candidate_negative": "explicitly surveyed glade-year with zero captures/zero estimated population under a source field that distinguishes it from an unsurveyed glade-year",
+    "forbidden_negative": "a missing glade-year, absent row, missing population estimate, or not-monitored year must never be recoded as absence",
+    "gate0_pass_requirement": "README/schema/supporting tables must make surveyed-zero versus unsurveyed/missing status mechanically distinguishable before any individual demographic data values are inspected",
+    "fallback_if_binary_negatives_fail": "positive-only sequential rule contraction may be scientifically possible, but it is insufficient for the current fresh Layer-B binary predictive validation goal; stop this candidate rather than changing the endpoint after response access"
+  },
+  "response_firewall": {
+    "demographic_response_rows_opened": false,
+    "allowed_at_gate0": [
+      "full GPS waypoint text and derived coordinate schema because it is response-free",
+      "Figshare collection/article/file metadata including names, sizes, checksums and download URLs",
+      "README/documentation text",
+      "Excel workbook sheet names and dimensions",
+      "header rows/column labels only from demographic spreadsheets/tables",
+      "file bytes solely for checksum/container metadata before row parsing"
+    ],
+    "forbidden_before_gate0_semantics_pass": [
+      "individual capture/recapture data rows",
+      "glade-year population values",
+      "colonisation/extinction outcomes",
+      "counts of occupied/unoccupied glades by year computed from response tables",
+      "response-driven node definition, world scale, feature selection or holdout choice"
+    ]
+  },
+  "node_geometry_gate": {
+    "provisional_node_unit": "glade or explicitly mapped glade-section, to be resolved only from GPS names plus response schema before demographic values",
+    "requirements": [
+      "stable names can be mapped deterministically between the spatial source and the demographic schema",
+      "at least three distinct response-blind structural LCC scales are possible under the reused generic scale-diversity rule",
+      "no node is added because it happens to contain a favourable response"
+    ]
+  },
+  "two_layer_architecture_freeze": {
+    "latent_layer": "exact frozen rule identities retained for sequential compatibility, contraction and finite-universe falsification",
+    "predictive_layer": "symmetric_world_support_summary_v1",
+    "arbitrary_world_id_predictive_columns": false,
+    "glanville_retuning_prohibited": true
+  },
+  "gate0_decision_rule": {
+    "pass_if_all": [
+      "Figshare publisher-linked supporting files and Zenodo GPS bytes can be reproducibly frozen",
+      "spatial node names/coordinates are machine-readable and deterministic",
+      "demographic schema has an explicit way to distinguish surveyed zero from not surveyed/missing without reading biological outcome values",
+      "a temporal sequence with enough monitored years for a heldout design exists from documentation/schema",
+      "conditional internal-source glade-metapopulation interpretation remains scientifically defensible"
+    ],
+    "stop_if_any": [
+      "stable response-bearing source bytes cannot be frozen",
+      "survey zero versus unsurveyed cannot be distinguished",
+      "node names cannot be reconciled without inspecting outcomes",
+      "only positive capture events are available with no auditable negative/effort semantics for Layer-B evaluation"
+    ]
+  },
+  "post_gate0_sequence": [
+    "freeze canonical node unit and full response-free geometry",
+    "run the same response-blind structural scale/adequacy gate used after Glanville",
+    "freeze known founder/current-source semantics and management/world rules",
+    "freeze symmetric_world_support_summary_v1 and strong metapopulation/nearest-source comparators",
+    "freeze temporal calibration/heldout split using metadata only",
+    "only then open demographic response rows once"
+  ],
+  "no_rescue_rule": "If source, response semantics, node mapping or structural adequacy fails before response access, stop without changing the endpoint or introducing post-hoc graph worlds."
+}
