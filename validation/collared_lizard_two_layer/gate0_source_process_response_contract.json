@@ -22,21 +22,31 @@
     "ecological_archives_figshare": {
       "collection_id": 3304128,
       "collection_doi": "10.6084/m9.figshare.c.3304128",
-      "role": "stable publisher-linked supporting-information route for the 2011 Ecology article, including the demographic supplement/appendices if present",
-      "gate0_action": "enumerate collection article/file metadata and checksum all downloadable machine-readable files; do not parse demographic data rows"
+      "role": "stable publisher-linked supporting-information route for the 2011 Ecology article",
+      "frozen_files_observed_at_first_gate0": [
+        "appendix-A.htm",
+        "appendix-B.htm",
+        "suppl-1.htm",
+        "Individual_Glade_Sizes.txt"
+      ],
+      "gate0_action": "checksum all published files; inspect only documentation and the first physical line/header of machine-readable demographic text"
     },
     "zenodo_gps": {
       "record": 15557864,
       "file": "Peck_Glade_GPS_Waypoints.txt",
       "expected_md5": "7baa4bb0dc11cdff774dfe95540ed785",
-      "role": "response-free glade/glade-section GPS geometry"
+      "role": "response-free glade/glade-section GPS geometry",
+      "format_correction_after_first_gate0": "the exact bytes use a tab-delimited decimal-degree header (ID, Name, Comment, Date, Time, Latitude, Longitude, ...), not N/S token coordinates; correcting that parser uses no response information"
     },
-    "dryad_documentation": {
+    "dryad_main_workbook": {
       "doi": "10.5061/dryad.63xsj3v50",
-      "role": "documentation/provenance only at Gate 0 unless a stable non-challenge byte route becomes available",
-      "documented_main_file": "Peck_Ranch_Collared_Lizard_Data.xlsx",
+      "file": "Peck_Ranch_Collared_Lizard_Data.xlsx",
+      "current_public_file_stream": "https://datadryad.org/downloads/file_stream/4096501",
+      "documented_size": "about 414.12 KB on the current Dryad landing page",
+      "role": "primary source needed to distinguish explicit glade-survey zero-capture rows from unsurveyed/missing glade-years",
       "documented_rows": "row 1 header; rows 2-6746 are capture/recapture or glade-survey records",
-      "documented_zero_capture_semantics": "the README states that sometimes no captures occurred on a glade and capture-related fields are then entered as n/a"
+      "documented_zero_capture_semantics": "the README states that sometimes no captures occurred on a glade and capture-related fields are then entered as n/a",
+      "gate0_transport_rule": "attempt the current public file_stream exactly once as a deterministic byte route; accept only a real XLSX ZIP container that openpyxl can open; if HTTP/browser challenge/HTML is returned, stop this fresh candidate rather than entering repeated Dryad transport hacks"
     }
   },
   "response_semantics_gate": {
@@ -44,7 +54,8 @@
     "candidate_positive": "surveyed glade-year with at least one recorded lizard/capture or a publisher-provided positive population estimate",
     "candidate_negative": "explicitly surveyed glade-year with zero captures/zero estimated population under a source field that distinguishes it from an unsurveyed glade-year",
     "forbidden_negative": "a missing glade-year, absent row, missing population estimate, or not-monitored year must never be recoded as absence",
-    "gate0_pass_requirement": "README/schema/supporting tables must make surveyed-zero versus unsurveyed/missing status mechanically distinguishable before any individual demographic data values are inspected",
+    "gate0_pass_requirement": "stable source bytes plus README/schema must make surveyed-zero versus unsurveyed/missing status mechanically distinguishable before any individual demographic data values are inspected",
+    "figshare_supplement_boundary": "Individual_Glade_Sizes.txt is described as population sizes for every year of occupation; unless its schema itself contains auditable surveyed-zero/non-survey states, it cannot replace the main survey workbook for binary Layer-B validation",
     "fallback_if_binary_negatives_fail": "positive-only sequential rule contraction may be scientifically possible, but it is insufficient for the current fresh Layer-B binary predictive validation goal; stop this candidate rather than changing the endpoint after response access"
   },
   "response_firewall": {
@@ -55,10 +66,12 @@
       "README/documentation text",
       "Excel workbook sheet names and dimensions",
       "header rows/column labels only from demographic spreadsheets/tables",
+      "exact first physical line of Individual_Glade_Sizes.txt",
       "file bytes solely for checksum/container metadata before row parsing"
     ],
     "forbidden_before_gate0_semantics_pass": [
       "individual capture/recapture data rows",
+      "Individual_Glade_Sizes.txt data rows after its first physical line",
       "glade-year population values",
       "colonisation/extinction outcomes",
       "counts of occupied/unoccupied glades by year computed from response tables",
@@ -81,7 +94,8 @@
   },
   "gate0_decision_rule": {
     "pass_if_all": [
-      "Figshare publisher-linked supporting files and Zenodo GPS bytes can be reproducibly frozen",
+      "Figshare publisher-linked supporting files and Zenodo GPS bytes are reproducibly frozen",
+      "the Dryad main workbook is reproducibly frozen through the one-shot public file_stream or an already-established stable publisher mirror",
       "spatial node names/coordinates are machine-readable and deterministic",
       "demographic schema has an explicit way to distinguish surveyed zero from not surveyed/missing without reading biological outcome values",
       "a temporal sequence with enough monitored years for a heldout design exists from documentation/schema",
@@ -91,7 +105,7 @@
       "stable response-bearing source bytes cannot be frozen",
       "survey zero versus unsurveyed cannot be distinguished",
       "node names cannot be reconciled without inspecting outcomes",
-      "only positive capture events are available with no auditable negative/effort semantics for Layer-B evaluation"
+      "only positive occupied-year population sizes are available with no auditable negative/effort semantics for Layer-B evaluation"
     ]
   },
   "post_gate0_sequence": [
