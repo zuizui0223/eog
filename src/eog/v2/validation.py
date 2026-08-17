@@ -1,7 +1,7 @@
 """Validation-facing public API for prospective EOG v2.
 
-The facade is lazy so genetic, empirical-occurrence, and directional-evidence trees
-remain independent until their public symbols are accessed.
+The facade is lazy so genetic, empirical-occurrence, directional-evidence, and
+response-blind world-adequacy trees remain independent until accessed.
 """
 from __future__ import annotations
 
@@ -45,6 +45,16 @@ _DIRECTIONAL_EXPORTS: Final[tuple[str, ...]] = (
     "combine_occurrence_and_directional_evidence",
 )
 
+_WORLD_ADEQUACY_EXPORTS: Final[tuple[str, ...]] = (
+    "StructuralAdequacyDeclaration",
+    "WorldStructuralAudit",
+    "WorldStructuralGateResult",
+    "WorldUniverseStructuralAudit",
+    "WorldUniverseStructuralGate",
+    "audit_world_universe_structure",
+    "apply_structural_adequacy_gate",
+)
+
 _EXPORT_MODULE: Final[dict[str, str]] = {
     **{
         name: "eog.eventual_genetic_connectivity"
@@ -56,6 +66,7 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         for name in _OCCURRENCE_VALIDATION_EXPORTS
     },
     **{name: "eog.v2.evidence_discrimination" for name in _DIRECTIONAL_EXPORTS},
+    **{name: "eog.v2.world_adequacy" for name in _WORLD_ADEQUACY_EXPORTS},
 }
 
 __all__ = [
@@ -63,6 +74,7 @@ __all__ = [
     *_GENETIC_VALIDATION_EXPORTS,
     *_OCCURRENCE_VALIDATION_EXPORTS,
     *_DIRECTIONAL_EXPORTS,
+    *_WORLD_ADEQUACY_EXPORTS,
 ]
 
 
