@@ -1,0 +1,86 @@
+{
+  "status": "gate0_stop_response_conditioned_or_incomplete_node_universe",
+  "fresh_eog_specific_candidate_valid": false,
+  "response_rows_opened": false,
+  "model_fitted": false,
+  "heldout_metric_computed": false,
+  "source": {
+    "paper_doi": "10.1002/ecy.70349",
+    "zenodo_doi": "10.5281/zenodo.18300536",
+    "zenodo_record": 18300536,
+    "archive": "gregory_et_al_2025-neighbouring_patches_ssp_dynamics.zip",
+    "archive_size": 8924195,
+    "archive_md5": "4d7dfc93cb0129bd44a5be6250f56dcb",
+    "archive_sha256": "4819d156fefec399587f9644791525399e5290e5313de90bb9d2a6c003da96ea"
+  },
+  "outer_gate0": {
+    "workflow_run_id": 32028913070,
+    "artifact_id": 9288138558,
+    "artifact_zip_sha256": "ef8917961fbc21ebdb7feeee8078e97457da85a5f5705f3564f10b7ddc1afe19",
+    "role": "Zenodo record/file byte freeze only"
+  },
+  "inner_schema_gate0": {
+    "workflow_run_id": 32029179138,
+    "artifact_id": 9288251907,
+    "artifact_zip_sha256": "2ba332c0c4b8bd8d8eb37a96d245759afc64e798ad1139d91509fa5aeaabb61b",
+    "archive_member_count": 32,
+    "response_rows_opened": false,
+    "bounded_header_reader": "eog.v2.validation.read_bounded_first_record_text"
+  },
+  "response_free_geometry_gate": {
+    "workflow_run_id": 32029576016,
+    "artifact_id": 9288361703,
+    "artifact_zip_sha256": "0558e041edaed917d65a36dc5e3f83d1af15071bbbbb09d827bc44b6e9ef1209",
+    "parsed_members": [
+      "data/data-distance_between_patches.csv",
+      "data/data-water.csv"
+    ],
+    "response_rows_opened": false,
+    "geometry": {
+      "node_count": 402,
+      "distance_rows": 161202,
+      "unique_directed_pairs": 161202,
+      "unique_unordered_pairs": 80601,
+      "complete_unordered_pair_count": 80601,
+      "unordered_pair_coverage": 1.0,
+      "min_positive_distance_m": 77.3675783211663,
+      "max_distance_m": 249208.465949704,
+      "coordinate_reference_system": "EPSG:2154 Lambert-93",
+      "x_min": 779553.540232001,
+      "x_max": 802548.864984,
+      "y_min": 6279544.02409618,
+      "y_max": 6528635.60778899
+    },
+    "annual_water_availability": {
+      "node_count": 95,
+      "year_start": 1976,
+      "year_end": 2019,
+      "year_count": 44,
+      "geometry_only_node_count": 307,
+      "water_only_node_count": 0
+    }
+  },
+  "critical_node_universe_result": {
+    "public_ever_occupied_count_known_before_gate0": 95,
+    "geometry_node_count": 402,
+    "water_availability_node_count": 95,
+    "water_table_equals_known_ever_occupied_count": true,
+    "geometry_includes_more_than_ever_occupied": true,
+    "water_table_includes_more_than_ever_occupied": false,
+    "predeclared_node_universe_gate_pass": false
+  },
+  "scientific_interpretation": "The archived pairwise geometry covers 402 ponds, but annual water availability/unavailability is supplied only for 95 ponds, exactly matching the publicly known set of ponds occupied at least once during 1976-2019. A fresh binary colonization benchmark restricted to those 95 ponds would therefore condition the prediction universe on future response. The 307 geometry-only ponds cannot be silently treated as available, surveyed, unoccupied, or negative because their annual availability/survey state is not archived in the response-free water table.",
+  "response_semantics_supported_within_95": {
+    "occupancy_code_contract": "0=absence, 1=presence",
+    "water_code_contract": "0=dry/unavailable, 1=water/potentially occupiable",
+    "note": "These semantics are well-defined for the archived 95-pond subset but do not cure future-response selection of that subset."
+  },
+  "no_rescue_boundary": [
+    "Do not use only the 95 ever-occupied ponds and call the result a fresh binary validation.",
+    "Do not assign missing water/availability states to the 307 geometry-only ponds.",
+    "Do not treat geometry-only ponds as surveyed negatives.",
+    "Do not inspect colony outcomes to reconstruct the missing node universe.",
+    "Do not change to a positive-only endpoint and relabel it as the frozen Layer-B validation."
+  ],
+  "eog_evidence": "none; candidate stopped before colony-response access and before Layer-B prediction"
+}
