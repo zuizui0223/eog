@@ -1,0 +1,43 @@
+{
+  "status": "gate1_pre_response_world_scale_and_structural_adequacy_freeze",
+  "response_rows_opened": false,
+  "node_input": {
+    "source": "Zenodo record 5009339 / CovariateData.csv",
+    "site_id_column": "Site",
+    "latitude_column": "Latitude",
+    "longitude_column": "Longitude",
+    "node_count": 257,
+    "distance_metric": "Haversine great-circle distance in km on frozen centroid coordinates"
+  },
+  "process_scale_axis": {
+    "included": false,
+    "reason": "Published raccoon movement/dispersal estimates are not directly interchangeable with RABV grid-to-grid spread at this surveillance aggregation. The candidate is therefore not given a post-hoc biological threshold merely to create world diversity."
+  },
+  "analyst_choice_structural_axis": {
+    "axis_id": "geo",
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "construction": "minimum Haversine distance threshold reaching each target largest weak component fraction, admitting tied distances together",
+    "interpretation": "response-blind structural coverage regimes only; not biological dispersal distances"
+  },
+  "structural_adequacy_declaration": {
+    "reused_criterion": "same scale-diversity criterion used prospectively in the Glanville structural gate",
+    "requirements": [
+      "the 0.90 structural level achieves largest weak component fraction >= 0.90",
+      "the 0.90 structural level has isolated-node fraction <= 0.05",
+      "at least three distinct positive distance thresholds occur across the four 0.25/0.50/0.75/0.90 structural levels",
+      "thresholds and edge sets are nested and deterministic under frozen node geometry"
+    ],
+    "reason_for_distinct_scale_requirement": "The intended finite world universe must bracket meaningfully different local/intermediate/regional spatial regimes. If a regular grid causes all targets to collapse to one threshold, the generic scale ladder has not supplied the required structural world diversity for this independent prediction test.",
+    "stop_rule": "If any requirement fails, stop before reading SurveillanceData.csv data rows. Do not replace the failed ladder with post-hoc k-nearest-neighbour, arbitrary distance, or response-tuned worlds."
+  },
+  "secondary_axes": {
+    "habitat_covariate_intersections": "deferred until primary spatial scale certification passes",
+    "ORV_management": "not used to rescue a failed geography ladder; if later used, it belongs to a separately declared viability/management or analytical-world layer rather than being silently treated as dispersal distance"
+  },
+  "two_layer_prediction": {
+    "latent_state": "exact rule identities if Gate 1 passes",
+    "predictive_representation": "symmetric_world_support_summary_v1",
+    "world_id_predictive_columns": false
+  },
+  "no_retuning": "Do not alter target fractions, distinct-scale requirement, or add a biological distance after seeing this Gate 1 geometry result."
+}
