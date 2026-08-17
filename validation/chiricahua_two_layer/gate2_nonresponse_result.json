@@ -1,0 +1,65 @@
+{
+  "status": "gate2_nonresponse_implementation_pass",
+  "response_file_read": false,
+  "response_rows_opened": false,
+  "node_count": 274,
+  "sampled_site_count": 47,
+  "calibration_years": [2007, 2008, 2009, 2010, 2011, 2012],
+  "heldout_years": [2013, 2014, 2015, 2016, 2017],
+  "rows_by_response_year": {
+    "2007": 22,
+    "2008": 22,
+    "2009": 22,
+    "2010": 36,
+    "2011": 36,
+    "2012": 36,
+    "2013": 36,
+    "2014": 42,
+    "2015": 42,
+    "2016": 42,
+    "2017": 42
+  },
+  "calibration_response_free_row_count": 174,
+  "response_years_complete": true,
+  "temperature_fingerprint": "1daba9fe6d6e611b249dfb229e919fc15f8ad7d3e86c4036506ea120dc0cd0c4",
+  "wind_fingerprint": "4702199fc56263df8750ee6ea9ec1c76d2b661fdf705288a5d97e7ddf0fa8701",
+  "world_operator_fingerprints": [
+    ["full_gaussian_lcc900_scale", "c2576acac9510da42d8f08864853fb4e85071c9927864361936a493d709af431"],
+    ["truncated_geo_lcc250", "2ea24d39986c88a00c1ee96cad3f4b1140e09c9560ed617fc4214440dcfeea1e"],
+    ["truncated_geo_lcc500", "fa1785513cd33634be2675ff29b879ddfb097da446968c9f18d053ff0b36f8c6"],
+    ["truncated_geo_lcc750", "0e3fc3b378b9e9703a9243bca4328913c9e1f577ac8ee897603be14371e08712"],
+    ["truncated_geo_lcc900", "a54ff2a375e20645365f4c5d76d35420c658f5c236e696472d938067b7808a5c"]
+  ],
+  "forecast_fingerprint": "188bf0849c6b78e0c184cef866c7d7ba46e4fd005539cb418762a84045108179",
+  "design_fingerprint": "4df659240e01b1f1739827dfbde85e922166360c5c5e7ee7979ac6cb5ecdf2a0",
+  "layer_b_feature_names": [
+    "surviving_world_fraction",
+    "support_mean",
+    "support_std",
+    "support_min",
+    "support_max",
+    "support_q25",
+    "support_q50",
+    "support_q75",
+    "positive_support_fraction",
+    "support_range"
+  ],
+  "layer_b_variation_beyond_shared_plus_mean_only": {
+    "estimable": true,
+    "max_residual_sd": 0.6725562351253673,
+    "largest_residual_features": {
+      "support_std": 0.6725562351253673,
+      "support_range": 0.6535431525155806,
+      "positive_support_fraction": 0.5838278408269331
+    }
+  },
+  "result_fingerprint": "e2cf6e9eeb44c295a3c5b2fd9cb511430fbc3d8d2b93fbad9a9ac81a601b0009",
+  "authoritative_run": {
+    "workflow_run_id": 32044042118,
+    "artifact_id": 9292469636,
+    "artifact_zip_sha256": "15daf2f74be7d565676041c4a1a873136af8828d361732fa771a2019f7327ad2",
+    "head_sha": "3958cfcf4a601c7826b8b1a1926bbb76460ca63d"
+  },
+  "scientific_interpretation": "The frozen five-world Layer-B representation is computable from response-free inputs and contains nontrivial information beyond shared ecological covariates plus mean support. This is an estimability/implementation result, not a predictive result.",
+  "next_gate": "Freeze and smoke-test the once-only outcome runner, including repeated-detection HMM and all decision rules, before opening y.wide.dryad.csv."
+}
