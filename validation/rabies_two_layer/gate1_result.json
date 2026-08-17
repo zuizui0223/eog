@@ -1,0 +1,74 @@
+{
+  "status": "gate1_stop_structural_scale_diversity_failed",
+  "response_rows_opened": false,
+  "node_count": 257,
+  "distance_metric": "Haversine_km",
+  "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+  "minimum_distinct_positive_thresholds": 3,
+  "distinct_positive_thresholds": 2,
+  "lcc90_requirement": 0.9,
+  "isolated90_maximum": 0.05,
+  "lcc90_pass": true,
+  "isolated90_pass": true,
+  "distinct_scale_pass": false,
+  "final_gate_pass": false,
+  "levels": [
+    {
+      "level_id": "geo_lcc250",
+      "target_largest_component_fraction": 0.25,
+      "distance_threshold_km": 13.463500314675558,
+      "achieved_largest_component_fraction": 0.5214007782101168,
+      "weak_component_count": 3,
+      "isolated_node_fraction": 0.0,
+      "directed_edge_count": 866,
+      "fingerprint": "4a4d6ce05b9b9c68532a3bb2f96c48d052c286b9b1a14756c7c62bb80763b846"
+    },
+    {
+      "level_id": "geo_lcc500",
+      "target_largest_component_fraction": 0.5,
+      "distance_threshold_km": 13.463500314675558,
+      "achieved_largest_component_fraction": 0.5214007782101168,
+      "weak_component_count": 3,
+      "isolated_node_fraction": 0.0,
+      "directed_edge_count": 866,
+      "fingerprint": "67484ed2ad06c398f53d4cdb10dbda7a35a931d05dab2563e455fc04de28fe72"
+    },
+    {
+      "level_id": "geo_lcc750",
+      "target_largest_component_fraction": 0.75,
+      "distance_threshold_km": 13.463500314676972,
+      "achieved_largest_component_fraction": 1.0,
+      "weak_component_count": 1,
+      "isolated_node_fraction": 0.0,
+      "directed_edge_count": 922,
+      "fingerprint": "fe28f37abc61374f79617ee983b171413b9b25f3739177401e0c26793e693b7c"
+    },
+    {
+      "level_id": "geo_lcc900",
+      "target_largest_component_fraction": 0.9,
+      "distance_threshold_km": 13.463500314676972,
+      "achieved_largest_component_fraction": 1.0,
+      "weak_component_count": 1,
+      "isolated_node_fraction": 0.0,
+      "directed_edge_count": 922,
+      "fingerprint": "ceb8fdd310198e665d4e911346e989abc18dcbad50b1061cf83b0a3e43cb6a3b"
+    }
+  ],
+  "ladder_fingerprint": "0030f565ec2322e695d60bf302643be66fb27009df7708c490fafd932a3ac7c2",
+  "audit_fingerprint": "7f61153789a5a57a47eadf9f374f7d1e82a8d322d10f87606bd6ecb9c68af432",
+  "fingerprint": "ff193c7284fe7ae206ead4e43ecee0c5ef47c28b688a9fef34f77258e7eed614",
+  "workflow": {
+    "authoritative_scientific_gate_run_id": 32026152890,
+    "artifact_id": 9287149732,
+    "artifact_zip_sha256": "f86d4d6117a321230d3b4370f3e0790bbd66f2c7a087fc806eb5f9c731cb6481"
+  },
+  "pre_result_technical_bug": {
+    "initial_gate_run_id": 32025974349,
+    "failure": "structural scale union-find near-tie grouping used a relative tolerance that was inconsistent with adjacency reconstruction",
+    "response_rows_opened": false,
+    "scientific_criteria_changed": false,
+    "generic_fix": "separated into PR #199 with a regression test"
+  },
+  "scientific_interpretation": "The frozen 257-node surveillance grid passes spanning connectivity and isolation requirements but the response-blind 0.25/0.50/0.75/0.90 LCC ladder collapses to only two distinct geographic thresholds. Under the prospectively reused three-scale diversity requirement, this candidate does not provide the required local/intermediate/regional world diversity for a fresh two-layer EOG-WF prediction test.",
+  "stop_rule": "Do not read SurveillanceData.csv data rows and do not add kNN, arbitrary distance, post-hoc process thresholds, habitat intersections, or response-tuned worlds to rescue this candidate."
+}
