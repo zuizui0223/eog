@@ -1,0 +1,57 @@
+{
+  "status": "gate1_pre_response_world_scale_and_structural_adequacy_freeze",
+  "response_content_opened": false,
+  "node_input": {
+    "archive_member": "data/patch_network.tsv",
+    "allowed_content": "full file because README establishes it as non-response patch ID/area/centroid geometry",
+    "coordinate_reference_system": "EPSG:3067",
+    "coordinate_units": "kilometers according to archive README"
+  },
+  "process_scale_axis": {
+    "world_id": "process_mean_dispersal_1km",
+    "distance_threshold_km": 1.0,
+    "type": "externally_process_calibrated_reference",
+    "evidence": {
+      "primary_study": "Fountain et al. 2018, Inferring dispersal across a fragmented landscape using reconstructed families in the Glanville fritillary butterfly",
+      "doi": "10.1111/eva.12552",
+      "interpretation": "independent reconstructed-family/genetic dispersal evidence; 1 km is used as a mean-dispersal reference scale, not a hard maximum dispersal limit"
+    },
+    "must_be_retained_even_if_structurally_fragmented": true
+  },
+  "analyst_choice_structural_axis": {
+    "axis_id": "geo",
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "construction": "minimum Euclidean patch-centroid distance threshold reaching each target largest weak component fraction, with tied distances admitted together",
+    "interpretation": "local/intermediate/regional/near-spanning response-blind structural bracket; not biological dispersal distances"
+  },
+  "world_universe_at_gate1": {
+    "retain_process_world": true,
+    "retain_all_four_primary_structural_worlds": true,
+    "secondary_environment_or_landuse_intersections_deferred": true,
+    "reason_for_deferral": "first establish that the primary spatial world family brackets the regional patch-network scale before adding restrictive secondary axes"
+  },
+  "forecast_structure": {
+    "temporal_unit": "one annual transition",
+    "forecast_horizon_steps": 1,
+    "future_source_policy": "all realized occupied patches at year t become declared current sources for forecasting t+1; exact response years remain unopened until later gates",
+    "historical_claim": "none; this is conditional annual metapopulation propagation, not ancestry reconstruction"
+  },
+  "structural_adequacy_declaration": {
+    "applies_to": "primary analyst-choice structural worlds as a family, not the biologically calibrated 1 km reference world individually",
+    "requirements": [
+      "the declared 0.90 structural level must achieve largest weak component fraction >= 0.90 by construction",
+      "the 0.90 structural level must have isolated-node fraction <= 0.05",
+      "at least three distinct positive distance thresholds must be present across the four structural levels",
+      "thresholds and edge sets must be nested and deterministic under the frozen node geometry"
+    ],
+    "horizon_reachability": "report one-step reachability distributions but do not impose a universal minimum because annual colonization is local and the later source set contains all current occupied patches",
+    "stop_rule": "if these response-blind structural requirements fail, stop before reading survey_data.tsv response fields"
+  },
+  "next_if_pass": [
+    "freeze exact patch-network schema and structural thresholds/fingerprints",
+    "read only response-free year/patch fields needed to freeze temporal split",
+    "freeze annual forecast source/update rule and external metapopulation comparator",
+    "only then open population response once"
+  ],
+  "no_retuning": "Do not change 1 km reference, LCC targets, isolated-node criterion, annual horizon, or source-policy class after occupancy response access."
+}
