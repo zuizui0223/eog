@@ -95,6 +95,35 @@ def test_tied_distances_are_admitted_together_before_target_evaluation():
     assert all(row.achieved_largest_component_fraction == pytest.approx(1.0) for row in ladder.levels)
 
 
+def test_near_ties_outside_absolute_threshold_tolerance_are_not_union_only_edges():
+    # Regression for geodesic regular grids: rtol-based np.isclose previously grouped
+    # the first two edges at threshold 10.0 because 5e-12 is tiny relative to 10 km,
+    # while adjacency reconstruction admitted only <= 10.0 + 1e-12.  The union-find
+    # scan could therefore claim 3/4 connectivity at an adjacency with only 2/4.
+    distance = np.asarray(
+        [
+            [0.0, 10.0, 30.0, 60.0],
+            [10.0, 0.0, 10.0 + 5e-12, 40.0],
+            [30.0, 10.0 + 5e-12, 0.0, 50.0],
+            [60.0, 40.0, 50.0, 0.0],
+        ]
+    )
+    declaration = StructuralScaleLadderDeclaration(
+        axis_id="geo",
+        target_largest_component_fractions=(0.75,),
+    )
+
+    ladder = build_structural_scale_ladder(("a", "b", "c", "d"), distance, declaration)
+    worlds = structural_scale_adjacencies(ladder, distance)
+
+    assert ladder.thresholds[0] == pytest.approx(10.0 + 5e-12, abs=1e-13)
+    assert ladder.levels[0].achieved_largest_component_fraction == pytest.approx(0.75)
+    adjacency = worlds[ladder.level_ids[0]]
+    assert adjacency[0, 1]
+    assert adjacency[1, 2]
+    assert not adjacency[0, 2]
+
+
 def test_structural_scale_api_has_no_response_or_occurrence_argument():
     signature = inspect.signature(build_structural_scale_ladder)
     forbidden = {"response", "responses", "species", "occurrence", "occurrences", "y"}
