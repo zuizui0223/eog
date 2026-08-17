@@ -64,6 +64,13 @@ _FORECAST_EXPORTS: Final[tuple[str, ...]] = (
     "rank_worldset_forecast_frontier",
 )
 
+_PREDICTIVE_SUMMARY_EXPORTS: Final[tuple[str, ...]] = (
+    "PREDICTIVE_FEATURE_NAMES",
+    "PredictiveNodeSummary",
+    "WorldSetPredictiveSummary",
+    "summarize_worldset_for_prediction",
+)
+
 _SEQUENTIAL_FORECAST_EXPORTS: Final[tuple[str, ...]] = (
     "SequentialWorldRuleState",
     "TransitionRuleCompatibility",
@@ -131,6 +138,7 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.reachability_network_diagnostics" for name in _NETWORK_EXPORTS},
     **{name: "eog.v2.world_reconstruction" for name in _WORLD_EXPORTS},
     **{name: "eog.v2.world_forecast" for name in _FORECAST_EXPORTS},
+    **{name: "eog.v2.world_predictive_summary" for name in _PREDICTIVE_SUMMARY_EXPORTS},
     **{
         name: "eog.v2.sequential_world_forecast"
         for name in _SEQUENTIAL_FORECAST_EXPORTS
@@ -160,6 +168,7 @@ __all__ = [
     *_SYNTHETIC_EXPORTS,
     *_WORLD_EXPORTS,
     *_FORECAST_EXPORTS,
+    *_PREDICTIVE_SUMMARY_EXPORTS,
     *_SEQUENTIAL_FORECAST_EXPORTS,
     *_RELAXATION_EXPORTS,
     *_TEMPORAL_FLOW_EXPORTS,
