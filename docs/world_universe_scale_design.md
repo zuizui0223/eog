@@ -38,7 +38,7 @@ largest weak component / number of nodes >= ci.
 
 All equal-distance edges are admitted together. The resulting thresholds are non-decreasing and the graph edge sets are nested.
 
-The targets are **not universal constants**. They must be declared before response access and justified by the intended forecast scale. For example, a study may deliberately bracket local, regional and near-spanning regimes, but EOG does not prescribe fixed fractions for all studies.
+The targets are **not universal constants**. They must be declared before response access and justified by the intended forecast scale. A study may deliberately bracket local, regional and near-spanning regimes, but EOG does not prescribe fixed fractions for all studies.
 
 The implementation is:
 
@@ -62,7 +62,7 @@ Relevant prior-art anchors include:
 
 - Urban & Keitt (2001), *Landscape Connectivity: A Graph-Theoretic Perspective*, Ecology 82:1205–1218, DOI `10.1890/0012-9658(2001)082[1205:LCAGTP]2.0.CO;2`.
 - Moilanen (2011), *On the limitations of graph-theoretic connectivity in spatial ecology and conservation*, Journal of Applied Ecology 48, DOI `10.1111/j.1365-2664.2011.02062.x`.
-- With & Crist (1995/1997 structural-threshold/percolation tradition; see also the 1997 Acta Oecologica structural connectivity threshold paper), DOI `10.1016/S1146-609X(97)80075-6`.
+- Metzger & Décamps (1997), *The structural connectivity threshold: An hypothesis in conservation biology at the landscape scale*, Acta Oecologica 18:1–12, DOI `10.1016/S1146-609X(97)80075-6`.
 - Pascual-Hortal & Saura (2006), graph-based landscape connectivity indices, DOI `10.1007/s10980-006-0013-z`.
 
 EOG's use is methodological discipline, not new graph theory:
@@ -125,6 +125,19 @@ For every prospective independent EOG-WF study record:
 The frozen STOC nearest-neighbour q90 geography world used `18.110714907817556 km` yet had 231 weak components, 101 isolated sites and a largest component of only 87/1003 sites (8.67%). Across species, 8,702 positive calibration targets were disconnected from all fixed anchors, versus only 48 targets that were connected but required more than the frozen eight-hop horizon.
 
 Therefore the dominant failure was graph-scale fragmentation rather than horizon length.
+
+A later **response-blind post-hoc method diagnostic** used only STOC site/period/coordinate/environment columns and never parsed species responses. With declared coverage targets `0.25, 0.50, 0.75, 0.90`, the geography ladder was:
+
+| target | minimal distance | achieved largest component | weak components | isolated fraction |
+|---|---:|---:|---:|---:|
+| 0.25 | 20.398 km | 0.298 | 168 | 0.0708 |
+| 0.50 | 24.390 km | 0.530 | 105 | 0.0389 |
+| 0.75 | 34.970 km | 0.870 | 33 | 0.0100 |
+| 0.90 | 41.640 km | 0.900 | 18 | 0.0050 |
+
+The jump from approximately `24.4 km / 53%` to `35.0 km / 87%` shows that the STOC node geometry contains a sharp structural transition regime that the frozen nearest-neighbour q90 world did not bracket.
+
+This diagnostic has fingerprint `2e04d84f29b0ec71e66cec43ecb047e783c1ebcab3a78da625635d54413dcc3c` and is preserved in `validation/stoc_eogwf/posthoc_scale_ladder_result.json`. It is **not** a rerun of the STOC predictive test and cannot be used as independent confirmation.
 
 No threshold produced by the new ladder is permitted to replace the frozen STOC world universe for confirmatory interpretation. STOC remains `independent_world_universe_falsified_on_calibration`.
 
