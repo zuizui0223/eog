@@ -1,0 +1,75 @@
+{
+  "status": "gate0_source_schema_geometry_pass",
+  "response_rows_opened": false,
+  "zenodo_record": 5009339,
+  "files": {
+    "CovariateData.csv": {
+      "size": 27157,
+      "md5": "386c0498ace1dd9929c69119354dd7ae",
+      "sha256": "ccbb073ee2171d3f8cb486dd1769aaac767e3f96b99556973071cc6669b8b097"
+    },
+    "SurveillanceData.csv": {
+      "size": 4391345,
+      "md5": "3b4e34f30462176ceb73736da22b6290",
+      "sha256": "7e3ca576e6bdedd9c2bcd9b189aea528f2920ab5979c88500cb7a63a1e861d9d",
+      "data_rows_parsed": false
+    }
+  },
+  "node_count": 257,
+  "site_id_column": "Site",
+  "latitude_column": "Latitude",
+  "longitude_column": "Longitude",
+  "coordinate_bounds": {
+    "lat_min": 39.83188,
+    "lat_max": 42.1324,
+    "lon_min": -81.04652,
+    "lon_max": -78.50384
+  },
+  "geometry_quality": {
+    "missing_covariate_values": 0,
+    "duplicate_site_ids": 0,
+    "duplicate_coordinates": 0,
+    "unique_latitudes": 20,
+    "unique_longitudes": 22,
+    "regular_latitude_increment_degrees": 0.12108,
+    "regular_longitude_increment_degrees": 0.12108,
+    "orv_managed_grid_count": 88,
+    "orv_unmanaged_grid_count": 169
+  },
+  "covariate_header": [
+    "Site",
+    "Longitude",
+    "Latitude",
+    "ORV",
+    "Cult",
+    "DFMF",
+    "EVF",
+    "Hay",
+    "MedHi",
+    "OpenLow",
+    "WT"
+  ],
+  "surveillance_header_only": [
+    "Site",
+    "Season",
+    "Year",
+    "Number of Samples",
+    "Number of rabies positive samples",
+    "Surveillance Method"
+  ],
+  "non_response_covariate_ranges": {
+    "Cult": {"min": 0.0, "median": 0.071645485, "max": 0.374309614},
+    "DFMF": {"min": 0.105992368, "median": 0.52241166, "max": 0.894628289},
+    "EVF": {"min": 0.0000687, "median": 0.005385215, "max": 0.183269169},
+    "Hay": {"min": 0.000229184, "median": 0.140632698, "max": 0.394504978},
+    "MedHi": {"min": 0.0000115, "median": 0.005615145, "max": 0.554030206},
+    "OpenLow": {"min": 0.023516199, "median": 0.091531057, "max": 0.696886352},
+    "WT": {"min": 0.0, "median": 0.000481326, "max": 0.24824686}
+  },
+  "workflow": {
+    "run_id": 32025570104,
+    "artifact_id": 9286951307,
+    "artifact_zip_sha256": "34b1b3e663915803aa515b1c97065930447c4457495be24478d3301b7ff645b0"
+  },
+  "next_gate": "response-blind structural scale ladder and adequacy; no surveillance data rows may be opened before that gate passes"
+}
