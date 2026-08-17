@@ -1,0 +1,88 @@
+{
+  "status": "gate1_pass_structural_adequacy",
+  "response_rows_opened": false,
+  "detection_file_read": false,
+  "node_count": 274,
+  "node_ids_fingerprint": "b9dc63a74431e8e6fc265e913316a563695e9e33b26445759048cb441acc4ed5",
+  "sampled_site_count": 47,
+  "sampled_node_ids_fingerprint": "8889fe8dda8cc4a9802fdc09511fcc9caf1f8816cf37915e2a0ddca6d778a386",
+  "founder_indices_1_based": [15, 33, 274],
+  "founder_node_ids": ["15", "33", "274"],
+  "coordinate_units": "projected metres; pairwise distances converted to kilometres",
+  "coordinate_range": {
+    "x_min": 439582.0,
+    "x_max": 487709.0,
+    "y_min": 3471329.0,
+    "y_max": 3523841.0
+  },
+  "hydroperiod_counts": {
+    "Intermittent": 224,
+    "Semi-permanent": 10,
+    "Permanent": 40
+  },
+  "hydroperiod_fingerprint": "47f210884d1715c153e47fc42eb19703c2b64677e3d92262b7aaa5ee2b22e8bb",
+  "structural_targets": [0.25, 0.5, 0.75, 0.9],
+  "structural_ladder": [
+    {
+      "level_id": "geo_lcc250",
+      "distance_threshold_km": 2.5750036893177453,
+      "achieved_largest_component_fraction": 0.291970802919708,
+      "weak_component_count": 32,
+      "isolated_node_fraction": 0.040145985401459854,
+      "directed_edge_count": 1220,
+      "fingerprint": "ecb8bdc27c32261a4cb267b76d91197e2352a7fbfb23120821505ea07b586796"
+    },
+    {
+      "level_id": "geo_lcc500",
+      "distance_threshold_km": 2.596906043737432,
+      "achieved_largest_component_fraction": 0.5255474452554745,
+      "weak_component_count": 29,
+      "isolated_node_fraction": 0.032846715328467155,
+      "directed_edge_count": 1244,
+      "fingerprint": "952ca68ef6a0ea9ef26ad648f8c4553b1452766dbdfacbb072ee4b4bc07158b8"
+    },
+    {
+      "level_id": "geo_lcc750",
+      "distance_threshold_km": 3.0378047995221813,
+      "achieved_largest_component_fraction": 0.8576642335766423,
+      "weak_component_count": 13,
+      "isolated_node_fraction": 0.010948905109489052,
+      "directed_edge_count": 1708,
+      "fingerprint": "53b5644c8bca1812c499cff24771374d35434ac8385f27794cd3aab8010032bf"
+    },
+    {
+      "level_id": "geo_lcc900",
+      "distance_threshold_km": 3.312102655413929,
+      "achieved_largest_component_fraction": 0.9452554744525548,
+      "weak_component_count": 6,
+      "isolated_node_fraction": 0.0,
+      "directed_edge_count": 2072,
+      "fingerprint": "6af527106ce9ed2f9f03ef5b0c1b8e41affc88260a2b320ce5cb2352c1860d1c"
+    }
+  ],
+  "distinct_positive_structural_thresholds": 4,
+  "level90_pass": true,
+  "distinct_scale_pass": true,
+  "nested_scale_pass": true,
+  "generic_gate_passing_world_ids": ["structural::geo_lcc900"],
+  "audit_horizon": 14,
+  "audit_fingerprint": "0e6aa7b0dd9880dd1fbb845ab06427060cdc432be70664502e3bb926b8a3e60c",
+  "gate_fingerprint": "d4eec14e82707a81aea20ea86e275c6dd944f1c18b453fa2c9744cd608580d48",
+  "result_fingerprint": "b4b8b0a1879aeac4c368630bc0bbf7f3b1052f37fa7b9d013335814c127b2d12",
+  "authoritative_run": {
+    "workflow_run_id": 32043150953,
+    "artifact_id": 9292316766,
+    "artifact_zip_sha256": "c73664e52e7849c2112d34e1d439c4376d859237d0a99c92ffbc01425d6c0985",
+    "head_sha": "3c4d9d5b26ccecadc5d40721e141478467a6e4dc"
+  },
+  "initial_technical_attempt": {
+    "workflow_run_id": 32042932578,
+    "status": "technical_runner_failure_before_gate_decision",
+    "cause": "zip(strict=True) was incorrectly applied to four world matrices and their three adjacent pairs",
+    "scientific_contract_changed": false,
+    "response_rows_opened": false,
+    "fix": "remove strict=True only; world construction, node universe, thresholds and pass criteria unchanged"
+  },
+  "scientific_interpretation": "The complete 274-wetland response-free network provides four distinct nested local-to-near-spanning analyst-choice scales and passes the prospectively frozen structural adequacy gate. These thresholds are not biological dispersal limits.",
+  "next_gate": "Freeze the fixed-founder multi-horizon prediction target, temporal holdout, unchanged symmetric_world_support_summary_v1, and strong external comparators before opening y.wide.dryad.csv once."
+}
