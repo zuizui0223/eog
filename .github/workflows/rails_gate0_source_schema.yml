@@ -22,6 +22,8 @@ jobs:
         run: |
           mkdir -p /tmp/rails_files build/rails_gate0/readme
           curl -L --fail --retry 3 \
+            -A 'Mozilla/5.0 (compatible; EOG-reproducibility-gate/1.0)' \
+            -c /tmp/dryad_cookies.txt \
             'https://datadryad.org/dataset/doi:10.5061/dryad.xpnvx0kjk' \
             -o /tmp/rails_landing.html
           test -s /tmp/rails_landing.html
@@ -74,23 +76,22 @@ jobs:
           parser.feed(html)
           resolved = {}
           for label, href in parser.links:
-              label = label.strip()
               for expected in EXPECTED:
-                  if label == expected or expected in label:
+                  if label.strip() == expected or expected in label:
                       resolved.setdefault(expected, urljoin('https://datadryad.org/', href))
 
           missing = [name for name in EXPECTED if name not in resolved]
           if missing:
-              # Dryad may place the filename near a nested button rather than directly
-              # inside the download anchor.  In that case locate file_stream hrefs in
-              # the local HTML context, still without touching file contents.
               import re
               for expected in list(missing):
                   pos = html.find(expected)
                   if pos < 0:
                       continue
                   window = html[max(0, pos - 2500): pos + 2500]
-                  candidates = re.findall(r'href=["\']([^"\']*?/stash/downloads/file_stream/[^"\']+)["\']', window)
+                  candidates = re.findall(
+                      r'href=["\']([^"\']*?/downloads/file_stream/[^"\']+)["\']',
+                      window,
+                  )
                   if candidates:
                       resolved[expected] = urljoin('https://datadryad.org/', candidates[0])
               missing = [name for name in EXPECTED if name not in resolved]
@@ -109,12 +110,20 @@ jobs:
           import pathlib
           import subprocess
 
+          landing = 'https://datadryad.org/dataset/doi:10.5061/dryad.xpnvx0kjk'
           links = json.loads(pathlib.Path('/tmp/resolved_links.json').read_text(encoding='utf-8'))
           root = pathlib.Path('/tmp/rails_files')
           for name, url in links.items():
               target = root / name
               subprocess.run(
-                  ['curl', '-L', '--fail', '--retry', '3', url, '-o', str(target)],
+                  [
+                      'curl', '-L', '--fail', '--retry', '3',
+                      '-A', 'Mozilla/5.0 (compatible; EOG-reproducibility-gate/1.0)',
+                      '-b', '/tmp/dryad_cookies.txt',
+                      '-c', '/tmp/dryad_cookies.txt',
+                      '-e', landing,
+                      url, '-o', str(target),
+                  ],
                   check=True,
               )
               if not target.is_file() or target.stat().st_size == 0:
@@ -130,10 +139,14 @@ jobs:
           rows = []
           for name in sorted(links):
               path = root / name
+              digest = hashlib.sha256()
+              with path.open('rb') as handle:
+                  for chunk in iter(lambda: handle.read(1024 * 1024), b''):
+                      digest.update(chunk)
               rows.append({
                   'name': name,
                   'size': path.stat().st_size,
-                  'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                  'sha256': digest.hexdigest(),
               })
           pathlib.Path('build/rails_gate0/file_manifest.json').write_text(
               json.dumps(rows, indent=2, sort_keys=True) + '\n', encoding='utf-8'
@@ -169,7 +182,6 @@ jobs:
               'VIRA_Detection_History_2005_2019.csv',
           ):
               path = root / basename
-              # Read exactly one physical line. Detection-history rows are not read.
               with path.open('rb') as handle:
                   first = handle.readline().decode('utf-8-sig').rstrip('\r\n')
               headers[basename] = next(csv.reader(io.StringIO(first)))
@@ -189,7 +201,7 @@ jobs:
           test -s build/rails_gate0/headers_only.json
           test ! -e build/rails_gate0/BLRA_Detection_History_2002-2019.csv
           test ! -e build/rails_gate0/VIRA_Detection_History_2005_2019.csv
-          rm -rf /tmp/rails_files /tmp/resolved_links.json /tmp/rails_landing.html
+          rm -rf /tmp/rails_files /tmp/resolved_links.json /tmp/rails_landing.html /tmp/dryad_cookies.txt
       - name: Upload Gate 0 metadata only
         uses: actions/upload-artifact@v4
         with:
