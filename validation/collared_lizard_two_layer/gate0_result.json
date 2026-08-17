@@ -1,0 +1,53 @@
+{
+  "status": "invalidated_pre_model_response_firewall_contamination_and_source_transport_block",
+  "fresh_independent_candidate_valid": false,
+  "scientific_prediction_evaluated": false,
+  "model_fitted": false,
+  "heldout_metric_computed": false,
+  "gate0_run": {
+    "workflow_run_id": 32027797441,
+    "artifact_id": 9287716753,
+    "artifact_zip_sha256": "a833bbb52d535ccf7d23621dc68af4072dcac61f1ca614732857b2a10dff943c"
+  },
+  "response_firewall_incident": {
+    "response_rows_opened": true,
+    "file": "Individual_Glade_Sizes.txt",
+    "file_size": 56485,
+    "cause": "The Figshare demographic text uses carriage-return record separators without newline bytes. The Gate 0 code used binary readline(), which stops only at newline, so the intended first-record read consumed the entire response-bearing file into the logged/artifact field header_line_only.",
+    "values_exposed": "population-size table contents were unintentionally materialized in the CI log/artifact",
+    "used_for_scientific_tuning": false,
+    "consequence": "Peck Ranch can no longer serve as a fresh independent validation of the post-Glanville Layer-B predictor in this development sequence. Do not use the leaked values to tune worlds, features, thresholds, holdout, or decision rules."
+  },
+  "response_free_geometry": {
+    "gps_file": "Peck_Glade_GPS_Waypoints.txt",
+    "gps_md5": "7baa4bb0dc11cdff774dfe95540ed785",
+    "gps_sha256": "62475b761c4805b4d756ceacd5d6c4007f47312dce2f781d2935d3a04db2bdaf",
+    "coordinate_rows": 219,
+    "unique_names": 219,
+    "duplicate_names": 0,
+    "duplicate_coordinates": 0,
+    "lat_range": [37.06907, 37.12726],
+    "lon_range": [-91.22071, -91.16541]
+  },
+  "figshare_source_freeze": {
+    "collection_id": 3304128,
+    "files": [
+      {"name": "appendix-A.htm", "md5": "dcf19daa2f1da85c9ec512898987f8d7", "sha256": "f3c5946eeb608ec63158ab2e5dc66596ebc1cac5d87078150a455d672d23499b"},
+      {"name": "appendix-B.htm", "md5": "d2c8cfc231d27c8677fd8448eb5fc0be", "sha256": "f0f584fac20788185cf2e14c021a6f1006190a35eded47fd20cb2315a8c4af17"},
+      {"name": "suppl-1.htm", "md5": "305c6a8a896c120da3ea4ce8fefbb6d6", "sha256": "4ff9c593d78f978e291b31a1669cb2da229c8ade1b67606b98e3912b15092a81"},
+      {"name": "Individual_Glade_Sizes.txt", "md5": "b8e4a280baa52f5bcbcd5669e156d770", "sha256": "cb21394f85904bd88bc12dc3a31cf207f3876460f06d634206c9440a0e51e91c"}
+    ]
+  },
+  "dryad_main_workbook": {
+    "file": "Peck_Ranch_Collared_Lizard_Data.xlsx",
+    "public_file_stream": "https://datadryad.org/downloads/file_stream/4096501",
+    "http_code": 403,
+    "transport_ok": false,
+    "downloaded_object_size": 118,
+    "downloaded_object_sha256": "58bf2215b395dcac74c009aa98701854e43cbe54a1cd3a95fee6a647ca9910d4",
+    "is_xlsx_zip": false,
+    "interpretation": "The primary survey workbook needed to audit surveyed-zero versus unsurveyed/missing semantics could not be reproducibly frozen through the one-shot public route."
+  },
+  "stop_reason": "The candidate is independently invalidated by accidental response exposure, and the primary survey workbook also remains transport-blocked. No demographic model, world tuning, structural Gate 1, or Layer-B heldout prediction is allowed on this candidate as a fresh independent test.",
+  "next_method_action": "Fix the generic response-firewall first-record reader so it is bounded by either CR or LF at the byte level and regression-test CR-only, LF-only, and CRLF files before screening another response-bearing candidate."
+}
