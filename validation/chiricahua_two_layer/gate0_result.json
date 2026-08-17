@@ -1,0 +1,55 @@
+{
+  "status": "gate0_pass_fixed_founder_conditional_design",
+  "response_rows_opened": false,
+  "eog_outcomes_computed": false,
+  "source_freeze": {
+    "figshare_article_id": 5838189,
+    "figshare_version": 4,
+    "doi": "10.6084/m9.figshare.5838189.v4",
+    "title": "Increasing connectivity between metapopulation ecology and landscape ecology",
+    "license": "CC0",
+    "file_count": 10,
+    "total_bytes": 1857254,
+    "all_file_sizes_and_md5_values_verified": true,
+    "workflow_run_id": 32030446500,
+    "artifact_id": 9288678675,
+    "artifact_zip_sha256": "0aaca661c0e86f650ec9eeb093b3fa0c818f51602513b567a2f92c51bcc19d6a"
+  },
+  "response_firewall": {
+    "bounded_text_headers_only": true,
+    "csv_record_terminator": "CR",
+    "presence_detection_rows_read": false,
+    "binary_response_objects_deserialized": false,
+    "note": "MetadataS1.docx was checksummed but its convenience artifact copy was not used for adjudication because the one-time workflow treated its binary bytes as documentation text. Scientific adjudication relies on the frozen R code, bounded CSV headers, source manifest and public article methods."
+  },
+  "response_free_schema_adjudication": {
+    "full_candidate_node_count": 274,
+    "node_definition": "possible wetland sites, not only sampled or eventually occupied sites",
+    "coordinate_file": "coords.dryad.csv",
+    "coordinate_columns": ["x", "y"],
+    "hydroperiod_file": "water.dryad.csv",
+    "hydroperiod_classes_used_by_source_model": ["Intermittent", "Semi-permanent", "Permanent"],
+    "surveyed_site_count": 47,
+    "repeat_visits_per_year": 3,
+    "model_year_axis": "2003-2017",
+    "years_with archived detection data": "2007-2017",
+    "known_2003_founder_indices_1_based": [15, 33, 274],
+    "known_destroyed_site_indices_1_based": [10, 19, 31],
+    "destroyed_state_start_model_year_index": 8,
+    "evidence_basis": "Frozen source code declares nSites from all coordinate rows, nSampled from the 47-row detection array, three founder sites, NA-aware repeated detection, and explicit destroyed-site states."
+  },
+  "gate0_decisions": {
+    "source_bytes_reproducible": "pass",
+    "response_and_nonresponse_files_separable": "pass",
+    "node_universe_future_response_independent": "pass",
+    "response_free_geometry_and_hydroperiod_available": "pass",
+    "surveyed_nondetection_distinguishable_from_missing": "pass",
+    "temporal_holdout_possible": "pass",
+    "annual_current_source_state_observed_over_all_274_nodes": "fail",
+    "fixed_founder_source_process_scientifically_defensible": "pass"
+  },
+  "allowed_validation_claim": "Founder-conditioned, multi-horizon survey-recorded detection/reachability from the three known 2003 reintroduction ponds across the full 274-wetland candidate network.",
+  "disallowed_validation_claim": "Annual changing-current-source prediction over the full network, because occupancy is observed at only 47 of 274 nodes and latent unsurveyed occupancy may not be imported as observed EOG source state.",
+  "next_gate": "Parse only coords.dryad.csv and water.dryad.csv, freeze node order/founder IDs, and run the unchanged response-blind 0.25/0.50/0.75/0.90 LCC structural-scale gate before any detection row is opened.",
+  "no_rescue": "Do not switch back to annual current-source prediction, infer unsurveyed sources from published latent occupancy, or restrict the 274-node universe using future detections."
+}
