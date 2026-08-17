@@ -1,0 +1,172 @@
+{
+  "status": "gate2_pre_response_prediction_comparator_freeze",
+  "response_rows_opened": false,
+  "scientific_target": {
+    "name": "first_survey_recorded_detection_from_known_2003_founders",
+    "node_universe": "all 274 response-free candidate wetlands",
+    "evaluation_sites": "the 47 archived repeatedly surveyed sites in the source-code-declared row order",
+    "founder_sites_1_based": [15, 33, 274],
+    "founder_sites_are_not_prediction_candidates": true,
+    "positive": "at least one archived detection in a surveyed site-year, provided no earlier archived detection exists for that site",
+    "negative": "at least one archived visit and no detection in that site-year, provided no earlier archived detection exists",
+    "missing": "all visits missing/not surveyed; excluded rather than recoded",
+    "unavailable": "source-code-declared destroyed site-years; excluded rather than recoded",
+    "claim_boundary": "survey-recorded first detection conditional on the declared founders and archived monitoring; not latent biological colonization probability or actual route reconstruction"
+  },
+  "time_contract": {
+    "founder_origin_year": 2003,
+    "response_years": [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017],
+    "calibration_years": [2007, 2008, 2009, 2010, 2011, 2012],
+    "heldout_years": [2013, 2014, 2015, 2016, 2017],
+    "year_to_horizon": "year - 2003",
+    "coefficient_refitting_in_holdout": false,
+    "rule_state_update_in_holdout": "allowed only after each heldout year's first-detection outcomes occur; model coefficients remain calibration-frozen"
+  },
+  "layer_a_worlds": {
+    "rule_count": 5,
+    "source_policy": "fixed equal-weight 2003 founder set",
+    "loss_support": 1.0,
+    "support_tolerance": 1e-15,
+    "kernel": "exp(-distance_km^2 / (2 * sigma_km^2))",
+    "sigma_km": 3.312102655413929,
+    "sigma_interpretation": "response-blind analyst-choice full-tail scale equal to the frozen LCC90 threshold; not an estimated frog dispersal parameter",
+    "rules": [
+      {
+        "world_id": "full_gaussian_lcc900_scale",
+        "edge_rule": "all distinct wetland pairs receive Gaussian raw support"
+      },
+      {
+        "world_id": "truncated_geo_lcc250",
+        "distance_threshold_km": 2.5750036893177453
+      },
+      {
+        "world_id": "truncated_geo_lcc500",
+        "distance_threshold_km": 2.596906043737432
+      },
+      {
+        "world_id": "truncated_geo_lcc750",
+        "distance_threshold_km": 3.0378047995221813
+      },
+      {
+        "world_id": "truncated_geo_lcc900",
+        "distance_threshold_km": 3.312102655413929
+      }
+    ],
+    "compatibility_update": "A surviving rule is eliminated when a calibration/previously observed heldout first-detection target has cumulative first-passage support <= 1e-15 by its declared horizon from the fixed founders.",
+    "monotonicity": "surviving rule identities may remain or contract and are never recreated",
+    "finite_universe_falsification": "if all five rules are eliminated, preserve universe_falsified and stop predictive scoring without retuning"
+  },
+  "layer_b_prediction": {
+    "representation": "symmetric_world_support_summary_v1",
+    "implementation": "eog.v2.reachability.summarize_worldset_for_prediction",
+    "feature_names": [
+      "surviving_world_fraction",
+      "support_mean",
+      "support_std",
+      "support_min",
+      "support_max",
+      "support_q25",
+      "support_q50",
+      "support_q75",
+      "positive_support_fraction",
+      "support_range"
+    ],
+    "world_id_predictive_columns": false,
+    "representation_retuning": false
+  },
+  "shared_non_eog_features": {
+    "site_features": [
+      "hydroperiod one-hot: Intermittent / Semi-permanent / Permanent",
+      "log1p Euclidean distance to nearest founder",
+      "year horizon since 2003"
+    ],
+    "survey_features": [
+      "number of non-missing visits in the target site-year",
+      "mean wind across non-missing visits",
+      "mean air temperature across non-missing visits"
+    ],
+    "missing_covariate_rule": "candidate row requires finite survey covariates for at least one archived visit; calibration medians may fill remaining within-row missing non-response visit covariates only",
+    "standardization": "calibration mean/SD only; zero-SD columns dropped without heldout inspection"
+  },
+  "models": {
+    "eog_summary_logistic": {
+      "features": "shared non-EOG features plus the ten frozen Layer-B features",
+      "type": "L2 logistic regression",
+      "C": 1.0,
+      "solver": "lbfgs",
+      "max_iter": 3000,
+      "class_weight": null
+    },
+    "same_world_mean_only_logistic": {
+      "features": "shared non-EOG features plus support_mean and surviving_world_fraction only",
+      "purpose": "test whether the frozen distributional Layer-B summary adds information beyond a scalar compression of the same worlds",
+      "type": "L2 logistic regression with the same fitting policy"
+    },
+    "founder_connectivity_logistic": {
+      "features": "shared non-EOG features plus full-tail Gaussian founder connectivity",
+      "purpose": "single-process spatial metapopulation/connectivity baseline",
+      "type": "L2 logistic regression with the same fitting policy"
+    },
+    "dynamic_occupancy_hmm": {
+      "purpose": "strong external repeated-detection comparator",
+      "latent_initial_and_colonization_features": [
+        "hydroperiod",
+        "full-tail Gaussian founder connectivity",
+        "year horizon"
+      ],
+      "persistence_features": ["hydroperiod"],
+      "detection_features": ["wind", "temperature"],
+      "fitting": "maximum-likelihood two-state hidden Markov occupancy model on calibration years only; heldout coefficients frozen and latent filtering updated sequentially after observations"
+    },
+    "flexible_random_forest": {
+      "features": [
+        "shared non-EOG features",
+        "x and y coordinates",
+        "distance to each of the three founders",
+        "founder counts within each four frozen structural thresholds",
+        "full-tail Gaussian founder connectivity"
+      ],
+      "n_estimators": 500,
+      "max_features": "sqrt",
+      "min_samples_leaf": 5,
+      "class_weight": null,
+      "random_state": 20260818,
+      "n_jobs": -1
+    }
+  },
+  "response_estimability": {
+    "minimum_calibration_positive_first_detections": 10,
+    "minimum_calibration_negative_candidate_rows": 40,
+    "minimum_heldout_positive_first_detections": 5,
+    "minimum_heldout_negative_candidate_rows": 20,
+    "minimum_heldout_years_with_both_classes": 3,
+    "layer_b_estimability": "at least one frozen Layer-B feature must contain calibration variation beyond the shared baseline; otherwise report layer_b_non_estimable",
+    "failure_status": "non_estimable_response_or_representation"
+  },
+  "metrics_and_decisions": {
+    "primary_metric": "macro-heldout-year binary log loss",
+    "secondary_metrics": ["pooled log loss", "Brier score", "ROC AUC when both classes exist"],
+    "layer_b_favorable_if_all": [
+      "Layer-B endpoint estimable",
+      "macro-year logloss(EOG summary - same-world mean-only) < 0",
+      "EOG summary lower log loss than mean-only in at least 4 of 5 heldout years"
+    ],
+    "external_added_value_favorable_if_all": [
+      "Layer-B endpoint estimable",
+      "EOG summary macro-year log loss lower than founder-connectivity logistic, dynamic occupancy HMM and flexible random forest",
+      "EOG summary lower than the best external comparator in at least 4 of 5 heldout years"
+    ],
+    "otherwise": "preserve no_confirmed_added_value, adverse, non_estimable or universe_falsified without retuning",
+    "dependence_boundary": "heldout years are the outer reporting units; wetland-year rows do not create independent years and no bootstrap is used to manufacture temporal replication"
+  },
+  "no_retuning_after_response": [
+    "node universe or founder set",
+    "world thresholds, kernel, sigma or support tolerance",
+    "Layer-B features",
+    "response and missingness semantics",
+    "calibration/heldout years",
+    "model features or hyperparameters",
+    "estimability thresholds",
+    "metrics or decision rules"
+  ]
+}
