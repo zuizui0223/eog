@@ -1,0 +1,30 @@
+{
+  "schema_version": "eog_stoc_eogwf_validation_v1_2_amendment",
+  "frozen_date": "2026-08-17",
+  "timing": "before DataSTOC response values are fetched or inspected for EOG-WF",
+  "reason": "The two STOC periods provide period-specific environmental predictors. A fair temporal forecast must let both EOG-WF and external SDMs use heldout-period predictors while freezing every threshold and transformation on calibration-period inputs only.",
+  "world_time_rule": {
+    "geography": "site coordinates are fixed; pairwise Haversine distances are the same in both periods",
+    "environment_scaling": "fit calibration-period mean and population SD on the six predictors; apply unchanged to both periods",
+    "threshold_freeze": "geographic and environmental threshold values are computed only from calibration-period inputs",
+    "calibration_operator": "build each of the fixed 20 world graphs using calibration-period environmental distances",
+    "heldout_operator": "build the same 20 world IDs using the same frozen threshold values but heldout-period environmental distances",
+    "world_identity": "world ID denotes the frozen threshold/family rule, not a byte-identical adjacency matrix across time",
+    "reconstruction": "world survival is determined only on the calibration operator using the frozen anchor/compatibility rule",
+    "forecast": "for each world that survives calibration, compute heldout horizon-8 support on that world's heldout operator from the same frozen calibration anchors"
+  },
+  "feature_time_rule": {
+    "frequency_model_train_features": "support frequency derived from surviving calibration operators",
+    "frequency_model_heldout_features": "support frequency derived from the corresponding surviving heldout operators",
+    "identity_model_train_features": "ordered support bits from surviving calibration operators",
+    "identity_model_heldout_features": "ordered support bits from the corresponding surviving heldout operators",
+    "external_logistic_and_rf": "fit on calibration-period predictor rows and responses; predict heldout-period rows using the unchanged fitted models"
+  },
+  "forbidden_after_response_open": [
+    "recompute thresholds from heldout predictors",
+    "choose whether to use calibration or heldout environment after observing response",
+    "drop period-varying predictors because they hurt one method",
+    "change the world IDs between periods"
+  ],
+  "no_retuning": true
+}
