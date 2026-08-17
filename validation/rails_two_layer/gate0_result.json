@@ -1,0 +1,35 @@
+{
+  "status": "non_estimable_pre_response_source_transport_blocked",
+  "response_rows_opened": false,
+  "scientific_gate_evaluated": false,
+  "dryad_doi": "10.5061/dryad.xpnvx0kjk",
+  "published_file_metadata_visible": true,
+  "transport_attempts": [
+    {
+      "workflow_run_id": 32024713150,
+      "method": "Dryad API full-dataset download",
+      "result": "HTTP 401 before any source bytes or response rows"
+    },
+    {
+      "workflow_run_id": 32025012705,
+      "method": "public landing page file-link resolution followed by direct file_stream download",
+      "result": "12 file links resolved; first published file download returned HTTP 403; no response rows read"
+    },
+    {
+      "workflow_run_id": 32025113850,
+      "artifact_id": 9286785579,
+      "artifact_zip_sha256": "4f129e46dbd18f7662765da0c021d2b9df3a914509340f87de19df2216cf9e94",
+      "method": "landing-page session/cookie/referer carried into file_stream downloads",
+      "result": "transport returned Anubis JavaScript proof-of-work challenge HTML rather than published file bytes",
+      "diagnostic": {
+        "all_downloaded_objects_about_bytes": 4279,
+        "expected_real_sizes_include_kb_scale_files_up_to_about_801_49_kb": true,
+        "detection_header_started_with": "<!doctype html><html lang=\"en\"><head><title>Validating...</title>",
+        "accepted_as_gate_pass": false
+      }
+    }
+  ],
+  "stop_reason": "After three transport approaches, the published Dryad files could not be reproducibly frozen in the current execution environment without solving the site's browser proof-of-work challenge or supplying authenticated API access. Continuing transport hacks would violate the diagnostic stop rule and add no scientific information.",
+  "interpretation": "This is not evidence for or against EOG, the two-layer predictive head, rail metapopulation dynamics, or response estimability. The candidate stopped before detection-history data rows were opened.",
+  "no_rescue_boundary": "Do not open response rows through an ad hoc manual copy and call this attempt prospectively reproducible. A future independently archived stable copy could support a new source-availability screen, but this attempt remains stopped."
+}
