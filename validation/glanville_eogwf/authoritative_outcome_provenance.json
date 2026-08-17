@@ -1,0 +1,66 @@
+{
+  "status": "authoritative_independent_outcome_frozen",
+  "source": {
+    "dryad_doi": "10.5061/dryad.ksn02v707",
+    "zenodo_transport_record": 4987060,
+    "archive_name": "ECOG-04799.zip",
+    "archive_md5": "69122a1d82b1fb970fb6638b02da3db4",
+    "archive_sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9"
+  },
+  "authoritative_run": {
+    "workflow_run_id": 32017872743,
+    "artifact_id": 9284217174,
+    "artifact_name": "glanville-eogwf-authoritative-outcome",
+    "artifact_zip_sha256": "2a1676ed04638bec8a92049d614b79f270a914480bd8c6194c5e66551a575572",
+    "result_fingerprint": "628511ac3f42fe108d334a6458428bbf56f3c3fea1e753b2bee8d980b3d84c33",
+    "workflow_removed_after_evidence_freeze": true
+  },
+  "pre_response_gates": {
+    "gate0_source_schema_process": "pass",
+    "gate1_response_blind_structural_adequacy": "pass",
+    "gate2_temporal_split_and_comparator_contract": "pass",
+    "pre_response_runner_smoke": "pass"
+  },
+  "first_response_opening_attempt": {
+    "workflow_run_id": 32017396835,
+    "status": "technical_schema_stop_before_population_evaluation",
+    "failure": "survey_data contained historical patch IDs outside the frozen 4656-node patch_network and the first runner rejected them before applying the already-frozen positive-area eligibility rule",
+    "result_artifact_generated": false,
+    "biological_prediction_or_score_computed": false
+  },
+  "automatic_repeat_after_id_audit_commit": {
+    "workflow_run_id": 32017516271,
+    "status": "same_technical_schema_stop",
+    "scientific_information_added": false,
+    "outcome_workflow_then_removed_to_prevent_further_automatic_reruns": true
+  },
+  "post_open_id_only_audit": {
+    "workflow_run_id": 32017516345,
+    "artifact_id": 9284078408,
+    "artifact_zip_sha256": "84b833f5dc5c8522de678f6d0ffb544cc4b20f284b3538e6dceb73d14f6ebee5",
+    "population_response_columns_read_by_audit": false,
+    "survey_rows_outside_network": 755,
+    "survey_unique_ids_outside_network": 417,
+    "unknown_survey_ids_with_patch_area": 0
+  },
+  "deterministic_mapping_correction": {
+    "node_universe_changed": false,
+    "worlds_or_thresholds_changed": false,
+    "temporal_split_changed": false,
+    "response_or_metric_changed": false,
+    "rule": "filter survey rows by patch membership in the already-frozen 4656-node patch_network before the unchanged scientific runner; excluded response values are never parsed for the filter decision",
+    "authoritative_filter_audit": {
+      "retained_survey_rows": 73310,
+      "excluded_survey_rows": 755,
+      "excluded_unique_patch_ids": 417
+    }
+  },
+  "final_decision_status": {
+    "identity_predictive_value": "adverse_identity_predictive_value",
+    "external_predictive_added_value": "adverse_external_predictive_added_value",
+    "identity_macro_delta_logloss_vs_compression": 0.0422136779017416,
+    "identity_better_years_vs_compression": 0,
+    "identity_better_years_vs_best_external": 1
+  },
+  "no_retuning_after_outcome": true
+}
