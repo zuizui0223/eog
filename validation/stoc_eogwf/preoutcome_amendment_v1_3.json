@@ -1,0 +1,24 @@
+{
+  "schema_version": "eog_stoc_eogwf_validation_v1_3_amendment",
+  "frozen_date": "2026-08-17",
+  "timing": "before DataSTOC response values are fetched or inspected for EOG-WF",
+  "reason": "The initial contract stated that all calibration positives would become forecast sources, while the merged EOG-WF algorithm distinguishes declared source anchors from additional positive observations used to eliminate incompatible worlds. This amendment resolves that implementation-contract mismatch before outcome access.",
+  "supersedes": {
+    "eligibility_and_preoutcome_contract.json#anchor_and_reconstruction_policy/forecast_source_rule": "heldout forecast propagation uses all 2006-2011 calibration-positive sites as realized sources inside each surviving world"
+  },
+  "final_source_policy": {
+    "anchor_selection": "select up to 10 calibration-positive sites by the already-frozen deterministic farthest-first geographic rule",
+    "calibration_constraints": "all other calibration-positive sites are positive compatibility targets; they may eliminate worlds but do not become additional forecast sources",
+    "calibration_forecast_features": "compute horizon-8 site support from the fixed anchor set in each surviving calibration-period world operator",
+    "heldout_forecast_features": "compute horizon-8 site support from the same fixed anchor set in the corresponding surviving heldout-period world operator",
+    "ecological_interpretation": "anchors are a deterministic conditioning subset of realized period-1 positives, not inferred ancestral populations or historical colonization origins"
+  },
+  "why_not_all_positives_as_sources": "Using every calibration positive as a forecast source would collapse the distinction between observations that condition source state and observations that test a world's ability to realize the observed distribution. It would also not match the current EOG-WF inverse-then-forward implementation.",
+  "no_retuning": true,
+  "forbidden_after_response_open": [
+    "change the number of anchors",
+    "promote calibration compatibility targets to forecast sources",
+    "choose source sites by heldout prediction performance",
+    "reinterpret deterministic anchors as inferred ancestry"
+  ]
+}
