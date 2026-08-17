@@ -1,0 +1,48 @@
+name: Glanville EOG-WF Gate 1 structural adequacy
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/glanville_gate1_structural.yml"
+      - "benchmarks/run_glanville_gate1_structural.py"
+      - "validation/glanville_eogwf/gate1_scale_adequacy_declaration.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+
+permissions:
+  contents: read
+
+jobs:
+  gate1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG
+        run: python -m pip install .
+      - name: Fetch exact source archive
+        run: |
+          curl -L --fail --retry 3 \
+            'https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1' \
+            -o /tmp/ECOG-04799.zip
+          test "$(md5sum /tmp/ECOG-04799.zip | awk '{print $1}')" = "69122a1d82b1fb970fb6638b02da3db4"
+      - name: Extract patch network only
+        run: |
+          unzip -p /tmp/ECOG-04799.zip data/patch_network.tsv > /tmp/patch_network.tsv
+          test -s /tmp/patch_network.tsv
+          head -n 1 /tmp/patch_network.tsv | grep -Fx $'patch\tx\ty\tarea'
+      - name: Run frozen response-blind structural gate
+        run: |
+          python benchmarks/run_glanville_gate1_structural.py \
+            --patch-network /tmp/patch_network.tsv \
+            --output build/glanville_gate1_structural.json
+      - name: Upload structural Gate 1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-eogwf-gate1-structural
+          path: build/glanville_gate1_structural.json
+          if-no-files-found: warn
