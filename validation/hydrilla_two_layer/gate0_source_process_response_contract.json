@@ -1,0 +1,162 @@
+{
+  "status": "gate0_pre_response_source_process_response_semantics_freeze",
+  "study_system": {
+    "taxon": "Hydrilla verticillata",
+    "system": "James River riverine rock-pool network, Virginia, USA",
+    "monitoring_period": "2017-2021",
+    "scientific_role": "fresh EOG-specific independent validation candidate for the post-Glanville label-invariant Layer-B predictor"
+  },
+  "independence_boundary": {
+    "published_aggregate_results_viewed": true,
+    "known_before_eog_response_access": {
+      "survey_defined_pool_count": 506,
+      "monitoring_years": 5,
+      "survey_count": "more than 5000",
+      "detected_pool_count": 147,
+      "colonization_event_count": 133,
+      "extinction_event_count": 55,
+      "persistence_event_count": 147,
+      "annual_sampling_effort": {
+        "2017": {"pools_sampled": 67, "surveys": 93},
+        "2018": {"pools_sampled": 211, "surveys": 356},
+        "2019": {"pools_sampled": 230, "surveys": 523},
+        "2020": {"pools_sampled": 506, "surveys": 1461},
+        "2021": {"pools_sampled": 505, "surveys": 2051}
+      }
+    },
+    "eog_specific_scores_viewed": false,
+    "rule": "Published aggregate event counts are used only to establish plausible estimability and comparator relevance. They may not tune worlds, Layer-B features, holdout, models, metrics, or favourable/adverse thresholds.",
+    "label": "fresh EOG-specific validation; not completely outcome-naive ecological-system validation"
+  },
+  "source": {
+    "dryad_doi": "10.5061/dryad.jsxksn0fn",
+    "dataset_title": "Regional and local factors interact to shape colonization and extinction dynamics of invasive Hydrilla verticillata in a patchy landscape",
+    "publication_doi": "10.1002/ece3.11558",
+    "dryad_dataset_api": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.jsxksn0fn",
+    "dryad_versions_api": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.jsxksn0fn/versions",
+    "expected_file_names": [
+      "All_Data.csv",
+      "All_dist.csv",
+      "Days_since_occupancy.csv",
+      "FiveYearAverages.csv",
+      "near_neigh_dist.csv",
+      "Post_Hoc_Dataset.csv",
+      "README.md"
+    ],
+    "source_freeze_rule": "Freeze the latest published Dryad version, every file name/size/API checksum, and exact downloaded bytes before any response row is parsed."
+  },
+  "public_process_basis": {
+    "node_definition": "506 rock pools were randomly selected as the monitored patch universe rather than selected by future Hydrilla occupancy.",
+    "survey_semantics": "Hydrilla presence/non-detection was recorded by trained visual surveys; opportunistic within-day repeat surveys were used to estimate detection probability.",
+    "dynamic_process": "The publication reports annual/temporal colonization, extinction, and persistence in a patchy riverine pool network.",
+    "internal_source_candidate": "currently survey-recorded occupied pools",
+    "external_source_uncertainty": "the James River channel is described as a potential propagule source; Gate 0 must establish whether a response-free distance-to-river representation is available before claiming internal process closure.",
+    "claim_boundary": "Any EOG forecast will be conditional on declared recorded pool sources and any prospectively represented river-source state; no unique historical route is inferred."
+  },
+  "event_count_feasibility_gate": {
+    "status": "pass_from_published_aggregate_metadata",
+    "basis": "133 reported colonization events greatly exceeds the prior Chiricahua minimum-event failure and makes a frozen heldout transition endpoint plausible.",
+    "not_an_outcome_result": true
+  },
+  "node_geometry_gate": {
+    "critical_question": "Does the release provide response-free stable pool IDs plus complete coordinates or a complete pairwise distance representation for the 506-pool universe?",
+    "allowed_inputs": [
+      "README.md",
+      "All_dist.csv if its schema is response-free",
+      "near_neigh_dist.csv if its schema is response-free",
+      "bounded first physical records of every other text table"
+    ],
+    "pass_if": [
+      "506 stable pool identities can be frozen independently of occupancy",
+      "complete pool geometry is available as coordinates or all unordered pairwise distances",
+      "geometry rows contain no occupancy, colonization, extinction, abundance, or future-response selection",
+      "distance units and symmetry/completeness can be audited"
+    ],
+    "stop_if": [
+      "only nearest-neighbour or distance-to-river summaries are released",
+      "complete geometry requires opening response-bearing All_Data rows",
+      "pool identities cannot be reconciled without response values",
+      "geometry is restricted to occupied or eventually occupied pools"
+    ]
+  },
+  "response_semantics_gate": {
+    "candidate_target": "survey-recorded annual pool colonization among surveyed previously non-detected pools",
+    "positive_candidate": "surveyed pool recorded occupied in target period after a prior surveyed non-detection state",
+    "negative_candidate": "surveyed pool with documented non-detection in target period while still in the colonization risk set",
+    "missing_candidate": "not surveyed or otherwise unavailable pool-period; excluded rather than recoded as absence",
+    "detection_requirement": "The final comparator contract must use the archived repeat-survey structure or a detection-aware external model; raw non-detection is not asserted to be certain biological absence.",
+    "stop_if": "Survey effort/missingness cannot be distinguished from recorded non-detection before response scoring."
+  },
+  "response_firewall": {
+    "response_rows_opened": false,
+    "allowed_at_gate0": [
+      "Dryad version/file metadata and exact byte checksums",
+      "full README text",
+      "full tables only after a bounded header proves they are response-free and the contract explicitly whitelists their role",
+      "bounded first physical record of response-bearing or ambiguous CSV files via eog.v2.validation.read_bounded_first_record_text"
+    ],
+    "forbidden_at_gate0": [
+      "All_Data.csv data rows",
+      "annual Hydrilla occupancy/detection values",
+      "colonization/extinction event rows",
+      "Days_since_occupancy.csv data rows",
+      "Post_Hoc_Dataset.csv data rows",
+      "response-conditioned node selection"
+    ],
+    "text_header_reader": "eog.v2.validation.read_bounded_first_record_text",
+    "max_header_record_bytes": 16384
+  },
+  "two_layer_architecture_freeze": {
+    "latent_layer": "exact frozen process/structural rule identities retained for compatibility, sequential contraction, and finite-universe falsification",
+    "predictive_layer": "symmetric_world_support_summary_v1",
+    "world_id_predictive_columns": false,
+    "glanville_and_chiricahua_retuning_prohibited": true
+  },
+  "structural_gate_if_gate0_passes": {
+    "scale_rule": "reuse the unchanged response-blind 0.25/0.50/0.75/0.90 largest-component ladder on complete pool geometry",
+    "requirements": [
+      "LCC90 >= 0.90",
+      "isolated-node fraction at LCC90 <= 0.05",
+      "at least three distinct positive thresholds",
+      "nested deterministic worlds"
+    ],
+    "no_rescue": "Do not add kNN, river-distance-only pseudo-geometry, or arbitrary thresholds after a structural failure."
+  },
+  "prospective_source_gate_after_geometry": {
+    "internal_sources": "recorded occupied pools at the preceding eligible period",
+    "river_source": "must be represented prospectively as an external source world if response-free distance-to-river information is available and public process evidence requires it",
+    "stop_if": "Neither internal-source conditionality nor an explicit external river source can represent the documented colonization process without opening/tuning on outcome rows."
+  },
+  "external_comparator_classes": [
+    "detection-aware dynamic occupancy model using frozen local pool/flooding covariates",
+    "single-process connectivity model based on currently occupied pools and/or explicit river-source distance",
+    "fixed flexible classifier using only the same prospectively frozen response-free inputs"
+  ],
+  "gate0_decision_rule": {
+    "pass_if_all": [
+      "exact Dryad bytes and metadata are reproducibly frozen",
+      "the 506-pool node universe is future-response independent",
+      "complete response-free geometry exists",
+      "surveyed non-detection can be separated from missing/not-surveyed periods",
+      "source closure can be represented prospectively",
+      "published aggregate colonization counts support plausible estimability"
+    ],
+    "stop_if_any": [
+      "source bytes cannot be reproduced",
+      "complete geometry is absent or response-bearing",
+      "node universe is response selected",
+      "survey semantics cannot distinguish non-detection from missing",
+      "documented external recruitment cannot be represented prospectively"
+    ]
+  },
+  "post_gate0_sequence": [
+    "freeze canonical pool universe and complete response-free geometry",
+    "run unchanged response-blind structural Gate 1",
+    "freeze source-state and river-source world semantics",
+    "freeze temporal/spatial holdout and unchanged Layer-B representation",
+    "freeze strong dynamic-occupancy/connectivity/flexible comparators",
+    "synthetic-smoke the complete once-only runner without response rows",
+    "open response once and preserve favourable, null, adverse, universe-falsified, or non-estimable result"
+  ],
+  "no_rescue_rule": "If Gate 0 or Gate 1 fails, close the candidate unmerged and move on. Do not redesign its geometry or endpoint after opening response-bearing data."
+}
