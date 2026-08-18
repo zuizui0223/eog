@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/hydrilla_gate0_bundle.yml"
       - "benchmarks/run_hydrilla_gate0_bundle.py"
+      - "benchmarks/run_hydrilla_gate0_bundle_v2.py"
       - "validation/hydrilla_two_layer/gate0_source_process_response_contract.json"
       - "src/eog/v2/response_firewall.py"
       - "src/eog/v2/validation.py"
@@ -27,7 +28,7 @@ jobs:
           python -m pip install .
       - name: Run official-bundle response-firewalled Gate 0
         run: |
-          python benchmarks/run_hydrilla_gate0_bundle.py \
+          python benchmarks/run_hydrilla_gate0_bundle_v2.py \
             --output-dir build/hydrilla_gate0
       - name: Assert response firewall and terminal Gate 0 result
         run: |
