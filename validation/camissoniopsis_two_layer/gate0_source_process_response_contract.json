@@ -1,0 +1,147 @@
+{
+  "status": "gate0_pre_response_source_process_response_semantics_freeze",
+  "study_system": {
+    "taxon": "Camissoniopsis cheiranthifolia",
+    "common_name": "beach evening primrose",
+    "region": "Pacific coastal dunes from San Francisco, California to the northern range limit near Dunes City, Oregon",
+    "survey_transition": "2019 to 2022",
+    "scientific_role": "fresh EOG-specific independent validation candidate for the post-Glanville label-invariant Layer-B predictor"
+  },
+  "independence_boundary": {
+    "published_aggregate_results_viewed": true,
+    "known_before_eog_response_access": {
+      "random_coordinates_generated": 5418,
+      "reported_analysis_plots": 3485,
+      "coastline_extent_km": 938,
+      "colonization_risk_plots": 1223,
+      "observed_colonization_events": 232,
+      "extinction_risk_plots": 638,
+      "observed_extinction_events": 195,
+      "occupancy_2019": 0.222,
+      "occupancy_2022": 0.224
+    },
+    "eog_specific_scores_viewed": false,
+    "rule": "Published aggregate event counts establish plausible estimability and comparator relevance only. They may not tune EOG worlds, Layer-B features, spatial blocks, models, metrics, or favourable/adverse rules.",
+    "label": "fresh EOG-specific validation; not completely outcome-naive ecological-system validation"
+  },
+  "source": {
+    "zenodo_record_id": 14860282,
+    "zenodo_doi": "10.5281/zenodo.14860282",
+    "record_version": "v3",
+    "archive_name": "MetapopulationsCode.zip",
+    "archive_size_bytes": 17694720,
+    "archive_md5": "77f8047ce9fc908683824643a7ea7c0b",
+    "download_url": "https://zenodo.org/records/14860282/files/MetapopulationsCode.zip?download=1",
+    "license": "CC-BY-4.0",
+    "publication_doi": "10.1111/ele.70128",
+    "source_freeze_rule": "Freeze the exact Zenodo archive bytes, archive manifest, documentation/code, and bounded physical headers before any occupancy or abundance row is parsed."
+  },
+  "public_process_basis": {
+    "node_definition": "spatially randomized 5 x 5 m coastal-dune survey plots; inclusion must be based on accessible confirmed dune habitat rather than future species occupancy",
+    "current_sources": "plots recorded occupied in 2019",
+    "candidate_target": "survey-recorded colonization by 2022 among plots recorded vacant in 2019 and eligible under the prospectively frozen habitat/survey rule",
+    "local_process_evidence": "the publication reports that colonization increases with local abundance in neighbouring plots and suitable habitat area",
+    "source_closure_limit": "the survey covers the northern half of the range rather than every potential external source; forecasts must be explicitly conditional on recorded 2019 sources or include a prospectively defined southern-boundary source world from response-free geometry",
+    "historical_claim": "none; no unique dispersal route or ancestry is inferred"
+  },
+  "event_count_feasibility_gate": {
+    "status": "pass_from_published_aggregate_metadata",
+    "basis": "232 colonization events among 1223 risk plots make spatially blocked heldout prediction plausible without lowering the Chiricahua event threshold.",
+    "not_an_eog_outcome": true
+  },
+  "node_geometry_gate": {
+    "critical_question": "Does the archive contain a response-free file with stable plot IDs and complete coordinates for the survey-defined plot universe?",
+    "pass_if": [
+      "exact archive bytes and manifest are reproducibly frozen",
+      "plot IDs and coordinates are stored separately from occupancy/abundance outcomes or in a file whose rows are demonstrably response-free",
+      "node inclusion is habitat/survey-defined rather than selected by 2022 occupancy",
+      "coordinate system and units can be audited",
+      "the eligible 2019-to-2022 plot universe can be frozen without reading response values"
+    ],
+    "stop_if": [
+      "coordinates and response values are inseparable in the same row-bearing object",
+      "geometry exists only for occupied/eventual-occupied plots",
+      "plot IDs cannot be reconciled without response values",
+      "the public archive lacks complete coordinates or deterministic pairwise geometry"
+    ]
+  },
+  "response_semantics_gate": {
+    "primary_target": "survey-recorded 2019-to-2022 colonization",
+    "positive_candidate": "eligible plot recorded vacant in 2019 and occupied in 2022",
+    "negative_candidate": "eligible plot recorded vacant in 2019 and still recorded vacant in 2022",
+    "missing_candidate": "inaccessible, not revisited, not confirmed as dune habitat, or otherwise missing; excluded rather than recoded as absence",
+    "detection_boundary": "the endpoint is recorded plot occupancy/abundance, not a claim of perfect detection or latent biological absence",
+    "stop_if": "revisited/surveyed status cannot be separated from recorded zero before scoring"
+  },
+  "response_firewall": {
+    "response_rows_opened": false,
+    "allowed_at_gate0_inventory": [
+      "Zenodo landing metadata and exact archive bytes/checksum",
+      "archive member names, sizes, CRC values, and extensions",
+      "full README, metadata, R/Rmd, and plain-text documentation/code files",
+      "bounded first physical record of CSV/TSV/TXT data members",
+      "binary-file inventory without loading RData/RDS, shapefile attributes, spreadsheets, or serialized objects"
+    ],
+    "forbidden_at_gate0_inventory": [
+      "occupancy or abundance data rows",
+      "2019 or 2022 response values",
+      "colonization/extinction event rows",
+      "deserializing response-bearing RData/RDS objects",
+      "opening DBF/XLSX rows before their role is prospectively adjudicated",
+      "response-conditioned node selection"
+    ],
+    "header_reader_contract": "one bounded physical CR/LF-delimited record only",
+    "max_header_record_bytes": 16384
+  },
+  "structural_gate_if_geometry_passes": {
+    "scale_rule": "unchanged response-blind 0.25/0.50/0.75/0.90 largest-component ladder over frozen plot coordinates",
+    "requirements": [
+      "LCC90 >= 0.90",
+      "isolated-node fraction at LCC90 <= 0.05",
+      "at least three distinct positive thresholds",
+      "nested deterministic worlds"
+    ],
+    "no_rescue": "Do not add kNN, coast-order pseudo-distances, or arbitrary thresholds after a structural failure."
+  },
+  "prospective_validation_shape": {
+    "holdout_class": "spatial rather than temporal, because only one 2019-to-2022 transition exists",
+    "candidate_outer_units": "contiguous coastline/latitude blocks frozen response-blind from coordinates",
+    "current_source_policy": "all eligible plots recorded occupied in 2019 are forecast-origin sources, including sources located in heldout blocks because their state predates the 2022 outcome",
+    "rule_contraction": "within each spatial fold, only training-block 2022 colonization positives may contract frozen Layer-A worlds before heldout scoring",
+    "primary_reporting_unit": "spatial block, not individual plot",
+    "no_bootstrap_precision_inflation": true
+  },
+  "two_layer_architecture_freeze": {
+    "latent_layer": "exact frozen process/structural rule identities retained for compatibility, contraction, robust/contingent interpretation, and finite-universe falsification",
+    "predictive_layer": "symmetric_world_support_summary_v1",
+    "world_id_predictive_columns": false,
+    "prior_candidate_retuning_prohibited": true
+  },
+  "external_comparator_classes": [
+    "published-style colonization logistic model using suitable habitat area and prospectively reproducible local abundance/source pressure",
+    "single-process source-connectivity logistic model",
+    "fixed flexible classifier using the same response-free covariates and spatial-block design"
+  ],
+  "gate0_inventory_decision": {
+    "pass_if": [
+      "archive MD5 matches",
+      "archive manifest and documentation are reproducibly frozen",
+      "response-bearing members remain unopened beyond bounded headers",
+      "at least one plausible response-free geometry member is identified for a separate role-specific Gate 0 adjudication"
+    ],
+    "stop_if": [
+      "archive bytes are unavailable or checksum mismatches",
+      "response data are exposed by the inventory workflow",
+      "the archive contains no plausible response-free geometry route"
+    ]
+  },
+  "post_inventory_sequence": [
+    "adjudicate the exact role of geometry candidates using documentation/code only",
+    "open only a prospectively whitelisted response-free geometry object",
+    "freeze the eligible node universe and run unchanged structural Gate 1",
+    "freeze spatial blocks, source/boundary worlds, Layer B, and strong comparators",
+    "synthetic-smoke the complete once-only runner without response rows",
+    "open response once and preserve favourable, null, adverse, universe-falsified, or non-estimable outcome"
+  ],
+  "no_rescue_rule": "If archive roles, response-free geometry, structural adequacy, or source semantics fail, close the candidate unmerged and move on without opening occupancy rows."
+}
