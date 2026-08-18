@@ -1,0 +1,56 @@
+name: Neckera two-layer Gate 0 inventory
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/neckera_gate0_inventory.yml"
+      - "benchmarks/run_neckera_gate0_inventory.py"
+      - "validation/neckera_two_layer/gate0_source_process_estimability_contract.json"
+      - "src/eog/v2/prospective_estimability.py"
+      - "src/eog/v2/response_firewall.py"
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG
+        run: python -m pip install .
+      - name: Fetch public SND/SLU archive
+        run: |
+          curl -L --fail --retry 3 \
+            'https://earchive.slu.se/bitstreams/60a2543e-dd1d-484a-a805-7a0f84ce56d9/download' \
+            -o /tmp/SND1073-001-V1.0-csv.zip
+          test -s /tmp/SND1073-001-V1.0-csv.zip
+          unzip -t /tmp/SND1073-001-V1.0-csv.zip >/dev/null
+          sha256sum /tmp/SND1073-001-V1.0-csv.zip
+      - name: Run prospective estimability and header-only inventory
+        run: |
+          python benchmarks/run_neckera_gate0_inventory.py \
+            --archive /tmp/SND1073-001-V1.0-csv.zip \
+            --output build/neckera_gate0
+          python - <<'PY'
+          import json
+          p=json.load(open('build/neckera_gate0/gate0_inventory_result.json'))
+          assert p['prospective_estimability']['status']=='plausibly_eligible_pre_response'
+          assert p['response_rows_opened'] is False
+          assert p['response_values_parsed'] is False
+          assert p['data_rows_after_first_physical_record_opened'] is False
+          PY
+      - name: Remove source bytes
+        if: always()
+        run: rm -f /tmp/SND1073-001-V1.0-csv.zip
+      - name: Upload immutable Gate 0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: neckera-two-layer-gate0-inventory
+          path: build/neckera_gate0
+          if-no-files-found: warn
