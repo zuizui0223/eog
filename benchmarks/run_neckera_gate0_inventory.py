@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import dataclass
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
@@ -14,10 +15,33 @@ from eog.v2.prospective_estimability import (
     ProspectiveEstimabilityDeclaration,
     evaluate_prospective_estimability,
 )
-from eog.v2.response_firewall import read_bounded_first_record_bytes
 
 TEXT_EXT = {".csv", ".tsv", ".txt", ".tab", ".dat"}
 DOC_NAMES = ("readme", "codebook", "metadata", "variable")
+
+
+@dataclass(frozen=True)
+class ZipFirstRecord:
+    data: bytes
+    terminator: str
+    bytes_consumed: int
+
+
+def read_zip_first_record(stream, *, max_record_bytes: int = 16_384) -> ZipFirstRecord:
+    """Read one ZIP member byte-by-byte and stop at its first physical CR/LF."""
+    if isinstance(max_record_bytes, bool) or not isinstance(max_record_bytes, int) or max_record_bytes <= 0:
+        raise ValueError("max_record_bytes must be a positive integer")
+    buffer = bytearray()
+    while len(buffer) < max_record_bytes:
+        value = stream.read(1)
+        if value == b"":
+            raise ValueError("physical record terminator not found before EOF")
+        if value == b"\r":
+            return ZipFirstRecord(bytes(buffer), "CR", len(buffer) + 1)
+        if value == b"\n":
+            return ZipFirstRecord(bytes(buffer), "LF", len(buffer) + 1)
+        buffer.extend(value)
+    raise ValueError("physical first record exceeds frozen byte bound")
 
 
 def sha256(path: Path) -> str:
@@ -86,8 +110,8 @@ def main() -> None:
                 doc_members.append(name)
             elif suffix in TEXT_EXT:
                 with zf.open(info, "r") as stream:
-                    bounded = read_bounded_first_record_bytes(stream, max_bytes=16384)
-                text = bounded.payload.decode("utf-8-sig", errors="replace")
+                    bounded = read_zip_first_record(stream, max_record_bytes=16_384)
+                text = bounded.data.decode("utf-8-sig", errors="replace")
                 headers.append({
                     "name": name,
                     "header": text,
