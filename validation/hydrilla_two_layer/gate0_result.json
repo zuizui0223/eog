@@ -1,0 +1,48 @@
+{
+  "actual_api_file_names": [
+    "All_Data.csv",
+    "All_dist.csv",
+    "Days_since_occupancy.csv",
+    "FiveYearAverages.csv",
+    "Post_Hoc_Dataset.csv",
+    "README.md",
+    "near_neigh_dist.csv"
+  ],
+  "api_file_manifest": [
+    {"name":"All_Data.csv","size":370002,"sha256":"4d1d6386ab503bef51b174803f25bb91cb7940ad6ee664c1d5caf0958eaac930","file_id":3199083},
+    {"name":"All_dist.csv","size":32964,"sha256":"0c4245f1cf2f5d01be6a4ce339ad3e059d6e56af7c70cda8665cf48c0f17692e","file_id":3199082},
+    {"name":"Days_since_occupancy.csv","size":53410,"sha256":"0258db64d5dd1fe2bc52161e0d71824d0ee947a9ee0f501179cd4691636eb637","file_id":3199079},
+    {"name":"FiveYearAverages.csv","size":16407,"sha256":"7ca18790fa4bcb9f3f9c940111d041189a70348f725d5a3857bb9ca34695aad0","file_id":3199080},
+    {"name":"Post_Hoc_Dataset.csv","size":56187,"sha256":"f27da6272f8377cf820abdcc789af9163b00435aa6a3813fe436c8accb531a8c","file_id":3199081},
+    {"name":"README.md","size":5289,"sha256":"17e3c95291e0cffd3f3203e59f369a3f8eed4bb84e7612cff210f344d013b887","file_id":3199085},
+    {"name":"near_neigh_dist.csv","size":39515,"sha256":"4d4d905bf07d8b8d42306bcd29bfbc05980ef250f0936de7ca2693364b27400a","file_id":3199084}
+  ],
+  "event_count_feasibility": {
+    "published_colonization_events": 133,
+    "published_extinction_events": 55,
+    "published_persistence_events": 147,
+    "status": "pass_from_public_aggregate_metadata"
+  },
+  "fingerprint": "8d39874422089f100a41f28838c0d34ebf990f996a3258d3ec2a73ad15709fbf",
+  "resolved_version_id": 296642,
+  "response_data_rows_parsed": false,
+  "response_rows_opened": false,
+  "status": "gate0_stop_source_transport_blocked",
+  "transport_attempts": {
+    "individual_file_route": {
+      "workflow_run_id": 32093871518,
+      "http_status": 401,
+      "response_rows_opened": false
+    },
+    "official_dataset_bundle_route": {
+      "workflow_run_id": 32094591434,
+      "artifact_id": 9309483998,
+      "artifact_zip_sha256": "4d8538aa01668fa7cf1079fd31e4f25b2a813f8da404a9d9164f52f3d74e402d",
+      "http_status": 401,
+      "response_body": "{\"error\":\"Unauthorized, must have current bearer token\"}",
+      "response_body_sha256": "1ac025323ea66e58c9a8a0b960db5a839ef812e1ff8bfea2f3aff74dc3961296"
+    }
+  },
+  "interpretation": "The system passed published event-count feasibility, but exact public source bytes were not reproducibly transportable through either official Dryad route in the execution environment. No response row, geometry row, or EOG prediction was opened or computed.",
+  "no_rescue": "Do not use browser challenges, authenticated private tokens, response-bearing mirrors, or reconstructed geometry to revive this attempt as fresh independent validation."
+}
