@@ -1,0 +1,146 @@
+{
+  "status": "gate0_pre_response_source_process_response_semantics_freeze",
+  "study_system": {
+    "taxon": "Panthera tigris",
+    "common_name": "tiger",
+    "region": "India",
+    "monitoring_cycles": [2006, 2010, 2014, 2018],
+    "sampling_frame": "national 10 x 10 km grid used consistently across four survey cycles",
+    "scientific_role": "fresh EOG-specific validation candidate for the post-Glanville two-layer predictor"
+  },
+  "independence_boundary": {
+    "published_system_results_viewed_before_eog": true,
+    "known_from_publication": [
+      "national tiger occupancy expanded substantially between 2006 and 2018",
+      "the same 10 x 10 km grid framework was used across four survey cycles",
+      "sign surveys and model-based occupancy estimation were used",
+      "published aggregate extent and growth were viewed only to establish endpoint plausibility"
+    ],
+    "eog_specific_outcomes_viewed": false,
+    "eog_layer_b_score_viewed": false,
+    "label": "fresh EOG-specific validation; not completely outcome-naive ecological-system validation",
+    "rule": "Published aggregate findings may justify process relevance, comparator class and event-count plausibility, but may not tune EOG thresholds, Layer-B features, holdout blocks, model hyperparameters, metrics or favourable/adverse rules."
+  },
+  "source": {
+    "zenodo_record": 13856111,
+    "zenodo_version": 2,
+    "zenodo_doi": "10.5281/zenodo.13856111",
+    "archive_name": "data28sep24.xlsx",
+    "expected_md5": "ac4fd29ab1f7ea1045ac279885c72a11",
+    "publication_doi": "10.1126/science.adk4827",
+    "source_freeze_rule": "freeze exact workbook bytes and the complete XLSX ZIP/member manifest before interpreting worksheet roles"
+  },
+  "response_firewall": {
+    "occupancy_response_rows_opened": false,
+    "allowed_at_gate0_inventory": [
+      "exact XLSX bytes for checksum verification",
+      "ZIP member names, sizes, CRC values and SHA-256 fingerprints",
+      "workbook.xml sheet names and relationship metadata",
+      "worksheet dimensions and table definitions",
+      "the first logical worksheet row only when it can be decoded without reading later cells",
+      "shared-string records only as far as strictly required to resolve first-row header references",
+      "styles and document properties"
+    ],
+    "forbidden_at_gate0_inventory": [
+      "any worksheet row after the first logical row",
+      "cached formula values outside header cells",
+      "grid occupancy, presence, absence, sign-detection or abundance values",
+      "future-cycle response-conditioned node selection",
+      "loading the workbook with pandas or openpyxl",
+      "using worksheet order or hidden sheets as a substitute for documented scientific role"
+    ],
+    "implementation_rule": "inspect the XLSX as a ZIP/XML package; do not deserialize spreadsheet tables through a general workbook library"
+  },
+  "node_universe_gate": {
+    "critical_question": "Does the workbook contain a separate response-free registry for the constant national grid, including stable grid IDs and deterministic geometry?",
+    "pass_if": [
+      "a worksheet or table is documented as the survey/grid frame rather than an occupancy result",
+      "stable grid IDs are present",
+      "geometry is available as coordinates, grid row/column plus a declared origin/CRS, or an explicit pairwise-distance representation",
+      "the registry is independent of future tiger occupancy",
+      "survey availability/effort can be joined without opening occupancy outcomes"
+    ],
+    "stop_if": [
+      "geometry exists only in rows that also contain occupancy or future response values",
+      "only occupied/detected cells are released",
+      "grid IDs cannot be mapped deterministically across cycles",
+      "worksheet role cannot be established without reading response rows",
+      "geometry is absent or requires reconstruction from figures"
+    ]
+  },
+  "response_semantics_gate": {
+    "candidate_target": "later-cycle survey-recorded tiger occurrence/occupancy among grid cells eligible under the archived survey design",
+    "positive_candidate": "grid-cycle with archived tiger sign/presence under the declared survey protocol",
+    "negative_candidate": "surveyed eligible grid-cycle with archived non-detection/absence under the same protocol",
+    "missing_candidate": "not surveyed, unavailable or structurally missing grid-cycle; excluded rather than recoded as absence",
+    "pass_requirement": "worksheet schema/documentation must distinguish surveyed non-detection from missing/not-surveyed before any response value is opened",
+    "stop_requirement": "if zeros cannot be separated from missing/unsurveyed cells, stop before outcome access"
+  },
+  "source_process_gate": {
+    "prospective_source_state": "grid cells recorded occupied in the preceding survey cycle",
+    "claim_boundary": "forecast is conditional on the archived preceding-cycle occupied grid state and the declared national sampling frame; it does not identify dispersal routes, ancestry or complete demographic closure",
+    "external_recruitment_boundary": "unrepresented immigration and demographic processes remain outside the finite-world certificate unless a response-free external-source representation is prospectively documented",
+    "stop_if": "the workbook exposes only per-cycle outputs without stable cross-cycle grid identity or an admissible preceding-cycle source state"
+  },
+  "event_count_feasibility": {
+    "published_aggregate_extent_2018_km2": 138200,
+    "published_aggregate_growth": "approximately 30 percent expansion from 2006 to 2018",
+    "grid_area_km2": 100,
+    "interpretation": "the published occupied-area scale makes a nontrivial transition endpoint plausible; it is not an observed colonization-event count and cannot tune the frozen event threshold",
+    "exact_transition_counts_opened": false
+  },
+  "two_layer_architecture_freeze": {
+    "latent_layer": "exact frozen rule identities retained for compatibility, source-conditioned propagation, contraction and finite-universe falsification",
+    "predictive_layer": "symmetric_world_support_summary_v1",
+    "world_id_predictive_columns": false,
+    "glanville_retuning_prohibited": true
+  },
+  "structural_gate_if_gate0_passes": {
+    "distance_basis": "response-free cell centroids or an exact response-free distance representation only",
+    "scale_rule": "reuse the unchanged 0.25/0.50/0.75/0.90 largest-component structural ladder",
+    "requirements": [
+      "LCC90 >= 0.90",
+      "isolated-node fraction at LCC90 <= 0.05",
+      "at least three distinct positive structural thresholds",
+      "nested deterministic worlds"
+    ],
+    "no_rescue": "do not introduce kNN, arbitrary thresholds or response-derived geometry after a structural-scale failure"
+  },
+  "holdout_and_comparator_direction_if_eligible": {
+    "temporal_direction": "use earlier cycles to calibrate and preserve the final 2018 cycle as a genuinely future cycle; add prospectively declared spatial outer units because there is only one final temporal transition",
+    "same_world_comparator": "a scalar/mean compression of the exact same frozen worlds",
+    "external_comparators": [
+      "published-style dynamic/spatial occupancy model using the same response-free effort and habitat covariates",
+      "fixed flexible classifier using the same response-free covariates"
+    ],
+    "freeze_later": "exact blocks, event threshold, features, hyperparameters and metrics are frozen only after source, grid registry, geometry and structural adequacy pass, still before occupancy response rows"
+  },
+  "gate0_decision_rule": {
+    "pass_if_all": [
+      "exact Zenodo workbook bytes are reproducibly frozen",
+      "worksheet/table roles can be inventoried without response rows",
+      "a separate response-free constant-grid registry exists",
+      "stable grid identity and complete geometry are deterministic",
+      "surveyed non-detection can be distinguished from missing/not-surveyed",
+      "preceding-cycle occupied cells form a scientifically bounded conditional source state"
+    ],
+    "stop_if_any": [
+      "source bytes cannot be frozen",
+      "grid geometry is response-inseparable",
+      "node universe is future-response-selected",
+      "cross-cycle IDs are unstable or ambiguous",
+      "survey effort/non-detection semantics are not auditable",
+      "source-process semantics are incompatible with a conditional forecast"
+    ]
+  },
+  "post_inventory_sequence": [
+    "adjudicate worksheet/table roles from metadata and published documentation",
+    "parse only a proven response-free grid/geometry table",
+    "freeze the canonical cell universe and structural fingerprints",
+    "run the unchanged response-blind structural adequacy Gate 1",
+    "freeze source update, Layer B, same-world and external comparators, spatial blocks, runtime and stop rules",
+    "synthetic-smoke the complete outcome runner without response",
+    "open occupancy/sign response exactly once"
+  ],
+  "no_rescue_rule": "If any Gate 0 or structural condition fails, close unmerged and move to another candidate rather than weakening the firewall, geometry or endpoint."
+}
