@@ -1,0 +1,88 @@
+{
+  "status": "gate0_stop_response_inseparable_geometry",
+  "response_rows_opened": false,
+  "response_values_parsed": false,
+  "serialized_objects_deserialized": false,
+  "spatial_attribute_tables_opened": false,
+  "source_inventory": {
+    "workflow_run_id": 32095779472,
+    "artifact_id": 9309878540,
+    "artifact_zip_sha256": "c1b4fe1e93312d86f82f8f2b4d7a28d86ffc4d7d1d5cccbb2252d49a1494995f",
+    "inventory_fingerprint": "4b400a5b29689b1d39755917d275b95c08303dfbdd42053336e6d1bd3641cd61"
+  },
+  "actual_survey_geometry_objects": [
+    {
+      "file": "MetapopulationsCode/Data/survey_dat.csv",
+      "geometry_columns": ["plot_id", "plot_lat", "plot_long"],
+      "response_or_outcome_columns_in_same_physical_rows": [
+        "cam_total",
+        "log10_cam_total",
+        "occupancy_bn",
+        "quad_cam_pres",
+        "local_abund_mean",
+        "local_abund_total",
+        "colonization",
+        "extinction"
+      ],
+      "role_from_code": "primary analysis table read directly by Analysis.R and figure scripts"
+    },
+    {
+      "file": "MetapopulationsCode/Data/metapopulations_data.csv",
+      "geometry_columns": ["plot_id", "plot_lat", "plot_long"],
+      "response_or_outcome_columns_in_same_physical_rows": [
+        "cam_total",
+        "occupancy_bn",
+        "quad_cam_pres"
+      ],
+      "role_from_code": "released survey/metapopulation table, not a response-free node registry"
+    },
+    {
+      "file": "MetapopulationsCode/Data/ext_plots_unsuit.csv",
+      "geometry_columns": ["plot_id", "plot_lat", "plot_long"],
+      "response_or_outcome_columns_in_same_physical_rows": [
+        "cam_total",
+        "log10_cam_total",
+        "occupancy_bn",
+        "quad_cam_pres",
+        "local_abund_mean",
+        "local_abund_total",
+        "colonization",
+        "extinction"
+      ],
+      "role_from_code": "extended plot table used for supplementary analysis, still response-bearing"
+    }
+  ],
+  "rejected_alternatives": [
+    {
+      "file": "MetapopulationsCode/Data/gbif_occurrencedata.csv",
+      "reason": "coordinates describe external GBIF occurrence records, not the randomized 2019/2022 survey-plot universe"
+    },
+    {
+      "file": "MetapopulationsCode/Data/occupancy_bootstraps.csv",
+      "reason": "response-derived occupancy/bootstrap output with no canonical survey geometry"
+    },
+    {
+      "pattern": "__MACOSX/**/._*",
+      "reason": "AppleDouble metadata sidecars; binary headers produced false geometry-keyword hits and are not scientific data"
+    },
+    {
+      "route": "extract coordinate columns from response-bearing CSV rows before the frozen outcome gate",
+      "reason": "would physically open the same rows that contain 2019/2022 occupancy, abundance, colonization and extinction values"
+    }
+  ],
+  "archive_role_conclusion": {
+    "separate_response_free_plot_registry": false,
+    "separate_response_free_coordinates": false,
+    "separate_response_free_pairwise_distance_matrix": false,
+    "full_survey_node_universe_can_be_frozen_without_response_rows": false
+  },
+  "decision": "Stop before geometry parsing and structural Gate 1. Event richness does not override the response-firewall requirement.",
+  "no_rescue": [
+    "do not parse survey_dat.csv coordinates and claim response remained unopened",
+    "do not use GBIF occurrences as the randomized plot network",
+    "do not infer geometry from figure outputs",
+    "do not rerun this archive with weakened firewall semantics",
+    "do not call a redesigned analysis fresh independent confirmation"
+  ],
+  "fingerprint": "d1e75555999048a29973d26076f3838efc99777d2820b59c558e0dc84dd795b6"
+}
