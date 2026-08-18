@@ -1,0 +1,84 @@
+{
+  "effort_candidate_sheet_names": [],
+  "fingerprint": "f51e74ae4dfc281e6464c6a3dd3b26aaa45f568f18be8943d9bb2cdd14d41a7f",
+  "general_workbook_library_used": false,
+  "geometry_candidate_sheet_names": [],
+  "geometry_response_colocated_sheet_names": [],
+  "next_gate": "stop candidate pre-response; do not read farther to rescue headers",
+  "response_rows_opened": false,
+  "response_values_parsed": false,
+  "rows_after_first_logical_row_opened": false,
+  "sheet_count": 2,
+  "sheet_inventory": [
+    {
+      "bytes_consumed_through_first_row": 2336,
+      "classification": {
+        "has_cycle_term": false,
+        "has_effort_term": false,
+        "has_geometry_term": false,
+        "has_response_term": false,
+        "has_stable_id_term": false,
+        "normalized_tokens": [],
+        "provisional_role": "unresolved_or_nongeometry_table"
+      },
+      "dimension": "A1:AR7184",
+      "effective_columns": [],
+      "first_row": {
+        "cell_count": 43,
+        "columns": [],
+        "shared_string_indices": [46,47,48,49,50,51,52,53,54,27,0,1,2,3,4,5,6,7,8,28,29,30,31,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,82,83],
+        "status": "unresolved_noncontiguous_shared_string_header_indices"
+      },
+      "member": "xl/worksheets/sheet1.xml",
+      "name": "occupancy",
+      "relationship_id": "rId1",
+      "relationship_type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet",
+      "sheet_id": "1",
+      "state": "visible",
+      "table_definitions": []
+    },
+    {
+      "bytes_consumed_through_first_row": 10811,
+      "classification": {
+        "has_cycle_term": false,
+        "has_effort_term": false,
+        "has_geometry_term": false,
+        "has_response_term": false,
+        "has_stable_id_term": false,
+        "normalized_tokens": [],
+        "provisional_role": "unresolved_or_nongeometry_table"
+      },
+      "dimension": "A1:FD29878",
+      "effective_columns": [],
+      "first_row": {
+        "cell_count": 160,
+        "columns": [],
+        "shared_string_indices": [46,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242],
+        "status": "unresolved_noncontiguous_shared_string_header_indices"
+      },
+      "member": "xl/worksheets/sheet2.xml",
+      "name": "cooccurrence",
+      "relationship_id": "rId2",
+      "relationship_type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet",
+      "sheet_id": "3",
+      "state": "visible",
+      "table_definitions": []
+    }
+  ],
+  "status": "gate0_stop_unresolved_workbook_headers",
+  "table_definition_count": 0,
+  "unresolved_header_sheet_names": ["occupancy", "cooccurrence"],
+  "workbook": {
+    "md5": "ac4fd29ab1f7ea1045ac279885c72a11",
+    "member_count": 12,
+    "name": "data28sep24.xlsx",
+    "sha256": "8e9b5269b2c946200ce8bf1df36fd0da6f6e378dece69125025a7e9cd7bb9b0d",
+    "size": 24630077
+  },
+  "workflow": {
+    "run_id": 32097349646,
+    "artifact_id": 9310384905,
+    "artifact_zip_sha256": "4073f367ab3a06a6fa64be3d8542769c58c17b62268f4d6c05ebe41ad708c21f",
+    "head_sha": "09de0bedf799a545494dfc85d9fb4ebba0ef6773"
+  }
+}
