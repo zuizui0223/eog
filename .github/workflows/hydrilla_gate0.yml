@@ -1,0 +1,57 @@
+name: Hydrilla two-layer Gate 0 source and geometry
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/hydrilla_gate0.yml"
+      - "benchmarks/run_hydrilla_gate0.py"
+      - "validation/hydrilla_two_layer/gate0_source_process_response_contract.json"
+      - "src/eog/v2/response_firewall.py"
+      - "src/eog/v2/validation.py"
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG Gate 0 runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .
+      - name: Run frozen response-firewalled Gate 0
+        run: |
+          python benchmarks/run_hydrilla_gate0.py \
+            --output-dir build/hydrilla_gate0
+      - name: Assert response firewall and result presence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result_path = Path('build/hydrilla_gate0/gate0_result.json')
+          assert result_path.exists()
+          result = json.loads(result_path.read_text())
+          assert result['response_rows_opened'] is False
+          assert result['response_data_rows_parsed'] is False
+          assert result['status'].startswith('gate0_')
+          print(json.dumps({
+              'status': result['status'],
+              'complete_geometry_files': result['complete_geometry_files'],
+              'fingerprint': result['fingerprint'],
+              'response_rows_opened': result['response_rows_opened'],
+          }, indent=2))
+          PY
+      - name: Upload immutable Gate 0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hydrilla-two-layer-gate0
+          path: build/hydrilla_gate0
+          if-no-files-found: warn
