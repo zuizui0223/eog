@@ -1,0 +1,28 @@
+{
+  "status": "gate0_inventory_pass_pending_geometry_role_adjudication",
+  "archive": {
+    "name": "MetapopulationsCode.zip",
+    "size": 17670844,
+    "md5": "77f8047ce9fc908683824643a7ea7c0b",
+    "sha256": "c28054f8393c0ea5f8b35efd23ab2d24db630c148503fcd1c65d25644a373e4e",
+    "member_count": 230,
+    "file_count": 209
+  },
+  "workflow": {
+    "run_id": 32095779472,
+    "artifact_id": 9309878540,
+    "artifact_zip_sha256": "c1b4fe1e93312d86f82f8f2b4d7a28d86ffc4d7d1d5cccbb2252d49a1494995f",
+    "head_sha": "3fd217f609b9bac7d0abb9d46c87930248bcb153"
+  },
+  "inventory": {
+    "full_text_code_or_documentation_count": 16,
+    "bounded_header_member_count": 10,
+    "binary_inventory_member_count": 183,
+    "response_rows_opened": false,
+    "response_values_parsed": false,
+    "serialized_objects_deserialized": false,
+    "spatial_attribute_tables_opened": false
+  },
+  "candidate_inventory_fingerprint": "4b400a5b29689b1d39755917d275b95c08303dfbdd42053336e6d1bd3641cd61",
+  "next_gate": "adjudicate candidate roles from frozen documentation/code before opening any geometry rows"
+}
