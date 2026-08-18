@@ -23,13 +23,34 @@ jobs:
           python-version: "3.11"
       - name: Install EOG
         run: python -m pip install .
-      - name: Fetch public SND/SLU archive
+      - name: Fetch exact public SND/SLU archive through official DSpace routes
         run: |
-          curl -L --fail --retry 3 \
-            'https://earchive.slu.se/bitstreams/60a2543e-dd1d-484a-a805-7a0f84ce56d9/download' \
-            -o /tmp/SND1073-001-V1.0-csv.zip
+          set -euo pipefail
+          rm -f /tmp/SND1073-001-V1.0-csv.zip /tmp/neckera_candidate.bin
+          urls=(
+            'https://earchive.slu.se/server/api/core/bitstreams/60a2543e-dd1d-484a-a805-7a0f84ce56d9/content'
+            'https://earchive.slu.se/bitstreams/60a2543e-dd1d-484a-a805-7a0f84ce56d9/download'
+          )
+          route=''
+          for url in "${urls[@]}"; do
+            rm -f /tmp/neckera_candidate.bin
+            if curl -L --fail --retry 2 --retry-all-errors "$url" -o /tmp/neckera_candidate.bin; then
+              if python - <<'PY'
+          import zipfile
+          raise SystemExit(0 if zipfile.is_zipfile('/tmp/neckera_candidate.bin') else 1)
+          PY
+              then
+                mv /tmp/neckera_candidate.bin /tmp/SND1073-001-V1.0-csv.zip
+                route="$url"
+                break
+              fi
+            fi
+          done
+          test -n "$route"
           test -s /tmp/SND1073-001-V1.0-csv.zip
           unzip -t /tmp/SND1073-001-V1.0-csv.zip >/dev/null
+          echo "accepted_public_route=$route"
+          wc -c /tmp/SND1073-001-V1.0-csv.zip
           sha256sum /tmp/SND1073-001-V1.0-csv.zip
       - name: Run prospective estimability and header-only inventory
         run: |
@@ -46,7 +67,7 @@ jobs:
           PY
       - name: Remove source bytes
         if: always()
-        run: rm -f /tmp/SND1073-001-V1.0-csv.zip
+        run: rm -f /tmp/SND1073-001-V1.0-csv.zip /tmp/neckera_candidate.bin
       - name: Upload immutable Gate 0 evidence
         if: always()
         uses: actions/upload-artifact@v4
