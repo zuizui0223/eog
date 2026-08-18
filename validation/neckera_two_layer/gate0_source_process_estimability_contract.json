@@ -1,0 +1,72 @@
+{
+  "status": "gate0_pre_response_freeze",
+  "candidate": "Neckera pennata host-tree metapopulation, Sweden",
+  "source": {
+    "snd_doi": "10.5878/6xjf-ma84",
+    "researchdata_dataset": "snd1073-1 version 1.0",
+    "archive_name": "SND1073-001-V1.0-csv.zip",
+    "published_size_kib": 26.25,
+    "slu_earchive_bitstream_uuid": "60a2543e-dd1d-484a-a805-7a0f84ce56d9",
+    "slu_earchive_download": "https://earchive.slu.se/bitstreams/60a2543e-dd1d-484a-a805-7a0f84ce56d9/download"
+  },
+  "response_firewall": {
+    "response_rows_opened": false,
+    "allowed": [
+      "archive byte identity and member metadata",
+      "README/codebook/documentation text",
+      "exactly the first physical record of text-like data members"
+    ],
+    "forbidden": [
+      "occurrence/colonization/extinction rows",
+      "tree-level response values",
+      "geometry columns from the same physical rows as response values",
+      "post-outcome world or split tuning"
+    ]
+  },
+  "published_endpoint_evidence": {
+    "endpoint_definition": "survey-recorded colonization of host trees previously recorded unoccupied",
+    "classic_full_survey_colonization_events": 164,
+    "calibration_candidate_period": "1997-2001",
+    "calibration_colonization_events_lower_bound": 38,
+    "calibration_candidate_observations_lower_bound": 1077,
+    "heldout_candidate_period": "2001-2008",
+    "heldout_colonization_events_lower_bound": 32,
+    "heldout_unoccupied_surviving_trees": 184,
+    "sources": [
+      "Snall et al. 2005 Ecology 86:106-115",
+      "Roberge et al. 2011 Journal of Applied Ecology",
+      "Singer et al. 2019 Methods in Ecology and Evolution"
+    ]
+  },
+  "prospective_estimability_declaration": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 1
+  },
+  "prospective_count_intervals": {
+    "calibration_events": {"lower": 38, "upper": null},
+    "calibration_non_events": {"lower": 1039, "upper": null},
+    "heldout_events": {"lower": 32, "upper": 32},
+    "heldout_non_events": {"lower": 152, "upper": 152},
+    "heldout_outer_units_with_both_classes": {"lower": 1, "upper": 1}
+  },
+  "process_boundary": {
+    "provisional_status": "plausible_source_conditioned_patch_tracking_metapopulation",
+    "reason": "published studies model colonization among mapped host trees using occupied-tree connectivity and tree-to-tree distances; exact source/update semantics remain to be frozen after geometry role adjudication"
+  },
+  "gate0_pass_if": [
+    "stable public archive bytes are reproducibly obtainable",
+    "prospective aggregate estimability gate passes",
+    "a complete tree-node registry and deterministic geometry/distance representation can be identified without opening response rows",
+    "surveyed-unoccupied semantics are documented"
+  ],
+  "gate0_stop_if": [
+    "source transport is not reproducible",
+    "tree geometry is available only in response-bearing physical rows",
+    "node universe is response-conditioned",
+    "endpoint-matched aggregate estimability becomes uncertain or ineligible"
+  ],
+  "no_rescue": "Do not extract response-bearing coordinate rows, change event minima, or redefine the endpoint after Gate 0."
+}
