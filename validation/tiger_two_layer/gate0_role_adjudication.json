@@ -1,0 +1,59 @@
+{
+  "status": "gate0_stop_no_separate_response_free_grid_registry",
+  "response_rows_opened": false,
+  "response_values_parsed": false,
+  "rows_after_first_logical_row_opened": false,
+  "general_workbook_library_used": false,
+  "source_inventory": {
+    "workflow_run_id": 32097349646,
+    "artifact_id": 9310384905,
+    "artifact_zip_sha256": "4073f367ab3a06a6fa64be3d8542769c58c17b62268f4d6c05ebe41ad708c21f",
+    "inventory_fingerprint": "f51e74ae4dfc281e6464c6a3dd3b26aaa45f568f18be8943d9bb2cdd14d41a7f",
+    "head_sha": "09de0bedf799a545494dfc85d9fb4ebba0ef6773"
+  },
+  "workbook": {
+    "name": "data28sep24.xlsx",
+    "size": 24630077,
+    "md5": "ac4fd29ab1f7ea1045ac279885c72a11",
+    "sha256": "8e9b5269b2c946200ce8bf1df36fd0da6f6e378dece69125025a7e9cd7bb9b0d",
+    "member_count": 12
+  },
+  "sheet_inventory": [
+    {
+      "name": "occupancy",
+      "state": "visible",
+      "dimension": "A1:AR7184",
+      "first_row_cell_count": 43,
+      "first_row_shared_string_indices_min": 0,
+      "first_row_shared_string_indices_max": 83,
+      "header_status": "unresolved_noncontiguous_shared_string_header_indices"
+    },
+    {
+      "name": "cooccurrence",
+      "state": "visible",
+      "dimension": "A1:FD29878",
+      "first_row_cell_count": 160,
+      "first_row_shared_string_indices_min": 46,
+      "first_row_shared_string_indices_max": 242,
+      "header_status": "unresolved_noncontiguous_shared_string_header_indices"
+    }
+  ],
+  "role_adjudication": {
+    "worksheet_count": 2,
+    "table_definition_count": 0,
+    "separate_geometry_sheet_or_table": false,
+    "separate_effort_or_availability_sheet_or_table": false,
+    "only_sheet_names": ["occupancy", "cooccurrence"],
+    "shared_string_policy": "The frozen Gate 0 contract permits bounded shared-string decoding only when header references form a contiguous prefix from zero. Both sheets reference noncontiguous indices, so reading through later unique strings would risk opening data values and was not used to rescue the candidate.",
+    "conclusion": "The workbook provides no separately documented response-free national grid registry or geometry object. Any stable cell identifiers or geometry would have to be recovered from response-bearing occupancy/cooccurrence worksheets."
+  },
+  "decision": "Stop before decoding additional shared strings, opening worksheet row 2, constructing geometry, or running structural Gate 1.",
+  "no_rescue": [
+    "do not read shared strings beyond the frozen header-prefix policy",
+    "do not open occupancy/cooccurrence rows to extract grid IDs or geometry",
+    "do not infer centroids from figures or occupied-area maps",
+    "do not treat a constant conceptual 10 x 10 km frame as a released deterministic node registry",
+    "do not rerun a weakened-firewall design as fresh independent confirmation"
+  ],
+  "fingerprint": "714937030869fa3313a9e4635a241669db9bb04b29d371c6337d06476b938787"
+}
