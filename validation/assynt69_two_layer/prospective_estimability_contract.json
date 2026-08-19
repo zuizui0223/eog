@@ -55,16 +55,15 @@
     "lcc90_isolated_fraction": 0.0
   },
   "final_ci": {
-    "validated_head_sha": "e2300a4925e6c5aff82fb67b5e40efd1a3af3d79",
-    "package_checks_run": 32246975276,
+    "validated_head_sha": "6eee6736bc1fa5ccc3285cf11cdac9bb399c044d",
+    "package_checks_run": 32247204698,
     "package_checks": "success",
-    "metadata_gate_run": 32246975152,
+    "metadata_gate_run": 32247204741,
     "metadata_gate": "success",
-    "structural_gate_run": 32246975302,
+    "structural_gate_run": 32247204946,
     "structural_gate_ci": "success",
-    "prospective_estimability_run": 32246975236,
-    "prospective_estimability_ci": "success",
-    "note": "This evidence block records the last fully green scientific head before the final metadata-only run-ID correction."
+    "prospective_estimability_run": 32247204712,
+    "prospective_estimability_ci": "success"
   },
   "decision": {
     "status": "uncertain_pre_response_non_event_lower_bounds_unpublished",
