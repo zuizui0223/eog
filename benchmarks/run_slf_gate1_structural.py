@@ -49,8 +49,9 @@ def read_nodes(zip_path: Path) -> tuple[tuple[str, ...], np.ndarray, str]:
         text = zf.read(member).decode("utf-8-sig")
     reader = csv.DictReader(io.StringIO(text), delimiter="\t")
     required = {"USPS", "GEOID", "INTPTLAT", "INTPTLONG"}
-    if not required.issubset(set(reader.fieldnames or ())):
-        raise ValueError("Census schema mismatch")
+    fields = {str(value).strip() for value in (reader.fieldnames or ())}
+    if not required.issubset(fields):
+        raise ValueError(f"Census schema mismatch: {sorted(fields)!r}")
     rows: list[tuple[str, float, float]] = []
     for raw in reader:
         row = normalize(raw)
