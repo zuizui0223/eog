@@ -1,0 +1,129 @@
+name: Assynt 69-patch response-blind structural gate
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/assynt69_structural_gate.yml"
+      - "src/eog/v2/world_scale_ladder.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  structural:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG
+        run: python -m pip install .
+      - name: Freeze XY and run unchanged LCC ladder
+        run: |
+          set -euo pipefail
+          mkdir -p build/assynt69_structural
+          python - <<'PY'
+          import csv, hashlib, io, json, urllib.request
+          from pathlib import Path
+          import numpy as np
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+          )
+
+          url = "https://ndownloader.figshare.com/files/5623767"
+          expected_md5 = "9174c10342b9d0d1d94397fa6ce5d4be"
+          req = urllib.request.Request(url, headers={"User-Agent": "eog-response-blind-structural-gate/1.0"})
+          with urllib.request.urlopen(req, timeout=30) as r:
+              data = r.read()
+          md5 = hashlib.md5(data).hexdigest()
+          if md5 != expected_md5:
+              raise SystemExit(f"geometry MD5 mismatch: {md5}")
+          sha256 = hashlib.sha256(data).hexdigest()
+          text = data.decode("utf-8-sig", errors="strict")
+          body = "\n".join(line for line in text.splitlines() if line.strip() and not line.lstrip().startswith("#"))
+          reader = csv.DictReader(io.StringIO(body), delimiter="\t")
+          rows = list(reader)
+          if reader.fieldnames != ["ID", "X_coord", "Y_coord"]:
+              raise SystemExit(f"unexpected geometry schema: {reader.fieldnames}")
+          if len(rows) != 69:
+              raise SystemExit(f"expected 69 geometry rows, found {len(rows)}")
+          node_ids = tuple(row["ID"].strip() for row in rows)
+          if len(set(node_ids)) != 69:
+              raise SystemExit("geometry node IDs are not unique")
+          coords_km = np.array(
+              [[float(row["X_coord"]) / 1000.0, float(row["Y_coord"]) / 1000.0] for row in rows],
+              dtype=float,
+          )
+          if len({tuple(row) for row in coords_km.tolist()}) != 69:
+              raise SystemExit("geometry coordinates are not unique")
+          delta = coords_km[:, None, :] - coords_km[None, :, :]
+          distance_matrix = np.sqrt(np.sum(delta * delta, axis=2))
+
+          declaration = StructuralScaleLadderDeclaration(
+              axis_id="geo",
+              target_largest_component_fractions=(0.25, 0.50, 0.75, 0.90),
+          )
+          ladder = build_structural_scale_ladder(node_ids, distance_matrix, declaration)
+          levels = [
+              {
+                  "level_id": level.level_id,
+                  "target_lcc": level.target_largest_component_fraction,
+                  "threshold_km": level.distance_threshold,
+                  "achieved_lcc": level.achieved_largest_component_fraction,
+                  "component_count": level.weak_component_count,
+                  "isolated_fraction": level.isolated_node_fraction,
+                  "directed_edge_count": level.directed_edge_count,
+                  "fingerprint": level.fingerprint,
+              }
+              for level in ladder.levels
+          ]
+          positive_thresholds = sorted({row["threshold_km"] for row in levels if row["threshold_km"] > 0})
+          final = levels[-1]
+          gate = {
+              "minimum_distinct_positive_scales": 3,
+              "distinct_positive_scale_count": len(positive_thresholds),
+              "lcc90_minimum": 0.90,
+              "lcc90_observed": final["achieved_lcc"],
+              "lcc90_isolated_fraction_maximum": 0.05,
+              "lcc90_isolated_fraction_observed": final["isolated_fraction"],
+          }
+          passed = (
+              gate["distinct_positive_scale_count"] >= gate["minimum_distinct_positive_scales"]
+              and gate["lcc90_observed"] >= gate["lcc90_minimum"]
+              and gate["lcc90_isolated_fraction_observed"] <= gate["lcc90_isolated_fraction_maximum"]
+          )
+          result = {
+              "status": "pass_response_blind_structural_gate" if passed else "stop_response_blind_structural_gate",
+              "candidate": "Assynt water vole 69-patch 1999-2005 system",
+              "geometry_file_id": 5623767,
+              "geometry_md5": md5,
+              "geometry_sha256": sha256,
+              "node_count": len(node_ids),
+              "coordinate_system": "British National Grid; source coordinates divided by 1000 to km",
+              "declaration_fingerprint": declaration.fingerprint,
+              "ladder_fingerprint": ladder.fingerprint,
+              "distance_matrix_fingerprint": ladder.distance_matrix_fingerprint,
+              "levels": levels,
+              "gate": gate,
+              "response_file_downloaded": False,
+              "response_rows_opened": False,
+              "local_pop_data_file_id_touched": False,
+          }
+          Path("build/assynt69_structural/structural_gate_result.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps(result, indent=2, sort_keys=True))
+          if not passed:
+              raise SystemExit("response-blind structural gate failed")
+          PY
+      - name: Upload structural evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assynt69-response-blind-structural-gate
+          path: build/assynt69_structural/structural_gate_result.json
+          if-no-files-found: warn
