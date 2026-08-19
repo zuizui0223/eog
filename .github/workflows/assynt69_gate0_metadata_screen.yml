@@ -6,6 +6,9 @@ on:
       - agent/assynt69-gate0-screen
     paths:
       - ".github/workflows/assynt69_gate0_metadata_screen.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/assynt69_gate0_metadata_screen.yml"
   workflow_dispatch:
 
 permissions:
@@ -46,7 +49,6 @@ jobs:
                   "id": article_id,
                   "title": meta.get("title"),
                   "doi": meta.get("doi"),
-                  "url_private_api": meta.get("url_private_api"),
                   "url_public_api": meta.get("url_public_api"),
                   "published_date": meta.get("published_date"),
                   "files": [
