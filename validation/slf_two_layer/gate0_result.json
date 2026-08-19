@@ -1,0 +1,44 @@
+{
+  "candidate": "Spotted lanternfly US county invasion 2014-2021",
+  "census_source": {
+    "archive_sha256": "02ef546e4c4f9c032c19616eabb9526caa016f778f41ede3b8c9755dacce20ef",
+    "conterminous_node_count": 3108,
+    "excluded_usps": ["AK", "HI", "PR"],
+    "geometry_fingerprint": "5b05192ae33e398c5381bdab37db048373e61e9cd84523fc4f48b7a2bc8dbb07",
+    "member": "2020_Gaz_counties_national.txt"
+  },
+  "fingerprint": "2cc08f58ef090901e5aa930cc2803e36279480cc17209c6bfe35d4fc4499cc5f",
+  "prospective_estimability": {
+    "calibration_events": 44,
+    "calibration_non_events_lower_bound": 3063,
+    "failing_keys": [],
+    "fingerprint": "81c9ab135a2565479e3bfca387ba4a1505d061dd1b6030824f1d6e6b6e1c9666",
+    "heldout_events": 85,
+    "heldout_non_events_lower_bound": 2978,
+    "heldout_outer_units_with_both_classes": 3,
+    "status": "plausibly_eligible_pre_response",
+    "unresolved_keys": []
+  },
+  "response_source": {
+    "data_rows_after_first_physical_record_opened": false,
+    "file_sha256": "9af3fba4e4a45b6bf8c0b11f869a82188297d34c76745535db00238d2020cb4c",
+    "git_blob_sha1": "e845dcc72080089d11c3f1078766cc14cdeb2340",
+    "header_bytes_consumed": 167,
+    "header_fields": [
+      "fips", "latitude", "longitude", "region", "sid", "county", "state",
+      "nis", "is_presence", "gc", "nps", "nps_presence", "pop",
+      "latitude_num", "longitude_num", "e_dist", "std_nis", "std_nps",
+      "std_gc", "std_pop", "infested", "year"
+    ],
+    "header_terminator": "LF",
+    "response_rows_opened": false,
+    "response_values_parsed": false
+  },
+  "status": "gate0_pass_source_estimability_response_free_geometry",
+  "workflow": {
+    "run_id": 32223117325,
+    "artifact_id": 9354619504,
+    "artifact_digest": "sha256:aae1be06a1fbd42668f128e690fafc02f90bb5f50e196416c0afca5c7b6abfaa"
+  },
+  "next": "run response-blind structural scale ladder on Census county geometry only"
+}
