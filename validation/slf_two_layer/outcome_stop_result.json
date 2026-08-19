@@ -1,0 +1,43 @@
+{
+  "status": "pre_model_response_registry_mismatch",
+  "candidate": "Spotted lanternfly US county invasion 2014-2021",
+  "authoritative_run": {
+    "workflow_run_id": 32224405320,
+    "response_opening_completed": true,
+    "runner_contract_runtime_match_smoke_frozen_commit": true,
+    "smoke_frozen_commit": "dcba7ec1a668de38d6748d44d24b6bac08ec2e7e",
+    "response_git_blob_sha1": "e845dcc72080089d11c3f1078766cc14cdeb2340",
+    "response_sha256": "9af3fba4e4a45b6bf8c0b11f869a82188297d34c76745535db00238d2020cb4c",
+    "census_sha256": "02ef546e4c4f9c032c19616eabb9526caa016f778f41ede3b8c9755dacce20ef",
+    "artifact_generated": false
+  },
+  "frozen_pre_model_validation_check": {
+    "expected_cumulative_positive_count_by_year": {
+      "2014": 1,
+      "2015": 3,
+      "2016": 7,
+      "2017": 17,
+      "2018": 45,
+      "2019": 57,
+      "2020": 84,
+      "2021": 130
+    },
+    "first_mismatch_year": 2015,
+    "expected_2015": 3,
+    "observed_unique_fips_with_infested_gt_0_5_2015": 4,
+    "failure_message": "published cumulative count mismatch for 2015: 4 != 3"
+  },
+  "execution_boundary": {
+    "model_fit_count": 0,
+    "heldout_prediction_count": 0,
+    "layer_b_scored": false,
+    "external_comparators_scored": false,
+    "worlds_retuned_after_response": false,
+    "features_retuned_after_response": false,
+    "split_retuned_after_response": false,
+    "metrics_retuned_after_response": false
+  },
+  "interpretation": "The once-only exact response failed a prospectively frozen registry-consistency check before any EOG or comparator model fit. The candidate cannot be rescued by changing the published-count contract from 3 to 4 after response access. This is not favourable, null, or adverse evidence about the two-layer Layer-B predictor.",
+  "decision": "stop candidate; preserve mismatch; do not rerun SLF as fresh independent validation",
+  "scientific_evidence_for_layer_b": "none"
+}
