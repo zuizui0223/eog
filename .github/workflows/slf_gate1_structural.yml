@@ -1,0 +1,47 @@
+name: Spotted lanternfly two-layer Gate 1 structural adequacy
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/slf_gate1_structural.yml"
+      - "benchmarks/run_slf_gate1_structural.py"
+      - "validation/slf_two_layer/gate1_structural_declaration.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+
+permissions:
+  contents: read
+
+jobs:
+  gate1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG
+        run: python -m pip install .
+      - name: Fetch response-independent Census county geometry
+        run: |
+          curl -L --fail --retry 3 \
+            'https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2020_Gazetteer/2020_Gaz_counties_national.zip' \
+            -o /tmp/2020_Gaz_counties_national.zip
+          test -s /tmp/2020_Gaz_counties_national.zip
+          test "$(sha256sum /tmp/2020_Gaz_counties_national.zip | awk '{print $1}')" = "02ef546e4c4f9c032c19616eabb9526caa016f778f41ede3b8c9755dacce20ef"
+      - name: Run frozen response-blind structural gate
+        run: |
+          python benchmarks/run_slf_gate1_structural.py \
+            --census-zip /tmp/2020_Gaz_counties_national.zip \
+            --output build/slf_gate1/gate1_result.json
+      - name: Upload Gate 1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: slf-two-layer-gate1-structural
+          path: build/slf_gate1
+          if-no-files-found: warn
+      - name: Remove source geometry
+        if: always()
+        run: rm -f /tmp/2020_Gaz_counties_national.zip
