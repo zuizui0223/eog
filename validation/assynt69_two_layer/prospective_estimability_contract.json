@@ -63,7 +63,8 @@
     "structural_gate_run": 32247603839,
     "structural_gate_ci": "success",
     "prospective_estimability_run": 32247603818,
-    "prospective_estimability_ci": "success"
+    "prospective_estimability_ci": "success",
+    "note": "Subsequent branch commits only recorded already-observed CI provenance and did not change scientific calculations or response access."
   },
   "decision": {
     "status": "uncertain_pre_response_non_event_lower_bounds_unpublished",
