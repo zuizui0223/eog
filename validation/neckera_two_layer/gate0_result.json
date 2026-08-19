@@ -1,0 +1,66 @@
+{
+  "status": "gate0_stop_response_inseparable_geometry",
+  "candidate": "Neckera pennata host-tree metapopulation, Sweden",
+  "source": {
+    "snd_doi": "10.5878/6xjf-ma84",
+    "archive_name": "SND1073-001-V1.0-csv.zip",
+    "archive_size_bytes": 26883,
+    "archive_sha256": "c0736507b96cae21263de86a9089236470f4ad12cc1236e403dee9cca2a081b3",
+    "only_data_member": "Neckera.csv"
+  },
+  "prospective_estimability": {
+    "status": "plausibly_eligible_pre_response",
+    "fingerprint": "e1b28e39a1f542ae7ce2974839d7530a962ba0c848be82628720fbf9752f6ccb",
+    "published_calibration_colonizations_lower_bound": 38,
+    "published_calibration_non_events_lower_bound": 1039,
+    "published_heldout_colonizations": 32,
+    "published_heldout_non_events": 152
+  },
+  "gate0_inventory": {
+    "workflow_run_id": 32118170877,
+    "artifact_id": 9317484380,
+    "artifact_digest": "sha256:2b906980ea53e64527fdc09dc6e010a76a39eaf98e0927b81bbed6ef03abf529",
+    "inventory_fingerprint": "1a7fa0d98e6c4b33178e5b6ee0991b2f14a172e20adb3329fbb4ab64e6882a34",
+    "archive_member_count": 1,
+    "header_bytes_consumed": 443,
+    "response_rows_opened": false,
+    "response_values_parsed": false,
+    "data_rows_after_first_physical_record_opened": false
+  },
+  "header_role_evidence": {
+    "geometry_fields": ["x", "y"],
+    "longitudinal_response_fields": [
+      "abund19971998",
+      "abund1999",
+      "abund2001",
+      "abund2003",
+      "abund2006",
+      "abund2008",
+      "abund2010"
+    ],
+    "same_physical_rows": true
+  },
+  "decision": {
+    "complete_response_free_geometry_frozen": false,
+    "structural_gate1_run": false,
+    "eog_worlds_constructed": false,
+    "layer_b_evaluated": false,
+    "model_fit": false,
+    "reason": "The public archive contains one data table and the permitted header proves that x/y geometry is co-located in the same physical rows as longitudinal abundance response. Freezing tree geometry would require opening response-bearing rows, which violates the prospective firewall."
+  },
+  "package_checks": {
+    "workflow_run_id": 32118171034,
+    "python_3_10": "success",
+    "python_3_11": "success",
+    "python_3_12": "success",
+    "wheel": "success",
+    "frozen_topology_benchmark": "success"
+  },
+  "no_rescue": [
+    "do not extract x/y from response-bearing data rows",
+    "do not change the event minima or temporal endpoint",
+    "do not substitute response-derived distances",
+    "do not weaken the response firewall and call a rerun fresh independent validation"
+  ],
+  "scientific_evidence_for_layer_b": "none"
+}
