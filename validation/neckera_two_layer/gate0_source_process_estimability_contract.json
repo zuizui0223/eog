@@ -1,5 +1,5 @@
 {
-  "status": "gate0_pre_response_freeze",
+  "status": "gate0_stopped_response_firewall",
   "candidate": "Neckera pennata host-tree metapopulation, Sweden",
   "source": {
     "snd_doi": "10.5878/6xjf-ma84",
@@ -54,7 +54,35 @@
   },
   "process_boundary": {
     "provisional_status": "plausible_source_conditioned_patch_tracking_metapopulation",
-    "reason": "published studies model colonization among mapped host trees using occupied-tree connectivity and tree-to-tree distances; exact source/update semantics remain to be frozen after geometry role adjudication"
+    "reason": "published studies model colonization among mapped host trees using occupied-tree connectivity and tree-to-tree distances; exact source/update semantics would have required a response-free geometry registry"
+  },
+  "gate0_observation": {
+    "workflow_run_id": 32118170877,
+    "artifact_id": 9317484380,
+    "archive_sha256": "c0736507b96cae21263de86a9089236470f4ad12cc1236e403dee9cca2a081b3",
+    "inventory_fingerprint": "1a7fa0d98e6c4b33178e5b6ee0991b2f14a172e20adb3329fbb4ab64e6882a34",
+    "archive_member_count": 1,
+    "only_data_member": "Neckera.csv",
+    "header_contains_geometry_fields": ["x", "y"],
+    "header_contains_response_fields": [
+      "abund19971998",
+      "abund1999",
+      "abund2001",
+      "abund2003",
+      "abund2006",
+      "abund2008",
+      "abund2010"
+    ],
+    "response_rows_opened": false,
+    "response_values_parsed": false,
+    "data_rows_after_first_physical_record_opened": false
+  },
+  "geometry_role_adjudication": {
+    "status": "stop",
+    "triggered_stop_rule": "tree geometry is available only in response-bearing physical rows",
+    "reason": "The public archive contains a single data member. Its permitted first physical record places x/y geometry columns in the same physical CSV rows as longitudinal abundance/occurrence response columns. Building the tree-node geometry would therefore require opening response-bearing rows, which is forbidden by the predeclared firewall.",
+    "decision": "Do not open row-level Neckera.csv. Do not freeze worlds, run the scale ladder, tune comparators, or perform held-out outcome evaluation for this candidate.",
+    "scientific_interpretation": "negative Gate 0 result demonstrating that the response firewall rejects an otherwise prospectively estimable candidate when predictor geometry cannot be frozen independently of outcomes"
   },
   "gate0_pass_if": [
     "stable public archive bytes are reproducibly obtainable",
@@ -68,5 +96,5 @@
     "node universe is response-conditioned",
     "endpoint-matched aggregate estimability becomes uncertain or ineligible"
   ],
-  "no_rescue": "Do not extract response-bearing coordinate rows, change event minima, or redefine the endpoint after Gate 0."
+  "no_rescue": "Do not extract response-bearing coordinate rows, change event minima, redefine the endpoint, or weaken the response firewall after Gate 0."
 }
