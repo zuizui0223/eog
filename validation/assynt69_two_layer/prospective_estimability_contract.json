@@ -47,8 +47,6 @@
   },
   "structural_gate": {
     "status": "pass",
-    "workflow_run": 32232504078,
-    "artifact_id": 9357756332,
     "declaration_fingerprint": "866927e6a2471b3342147a8851737b09a4494fd46cf7f09a66a694c790b5e6a3",
     "distance_matrix_fingerprint": "c3e679ef6bdb289a3e26c629b9dc1942a0f599ca4c368904c9bdf68d2ad60c2f",
     "ladder_fingerprint": "10ebc7c2d00dd616aa2487c0678adb4959fa047122bf46c647493f8b4f34003b",
@@ -57,14 +55,14 @@
     "lcc90_isolated_fraction": 0.0
   },
   "final_ci": {
-    "head_sha": "71700a0ebdbdd04d2f5ba5b2b2aec81a73a69933",
-    "package_checks_run": 32234511190,
+    "head_sha": "398efab646c9d8215c85982b60e163f157e470a0",
+    "package_checks_run": 32246775522,
     "package_checks": "success",
-    "metadata_gate_run": 32234511187,
+    "metadata_gate_run": 32246775514,
     "metadata_gate": "success",
-    "structural_gate_run": 32234511184,
+    "structural_gate_run": 32246775434,
     "structural_gate_ci": "success",
-    "prospective_estimability_run": 32234511227,
+    "prospective_estimability_run": 32246775528,
     "prospective_estimability_ci": "success"
   },
   "decision": {
