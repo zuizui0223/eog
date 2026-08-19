@@ -1,0 +1,161 @@
+{
+  "status": "gate2_pre_response_prediction_contract_frozen",
+  "candidate": "Spotted lanternfly US county invasion 2014-2021",
+  "response_content_opened": false,
+  "gate0_fingerprint": "2cc08f58ef090901e5aa930cc2803e36279480cc17209c6bfe35d4fc4499cc5f",
+  "gate1_fingerprint": "e2d01cfd9802240fdaa2a474ad453165b7fb413e1620b6710c2e24380bd88ca9",
+  "response_target": {
+    "name": "first_official_county_infestation_designation",
+    "risk_set": "all frozen Census counties not officially designated infested by source year t",
+    "positive": "first official designation occurs by t+1",
+    "negative": "no official designation through t+1",
+    "boundary": "recorded designation status, not latent biological absence",
+    "positive_registry_rule": "after once-only response opening, use only rows with infested=1 to reconstruct cumulative positive FIPS sets; counties absent from the positive registry remain recorded non-designated for this endpoint",
+    "validation_check": "cumulative positive FIPS counts must exactly equal 1,3,7,17,45,57,84,130 for 2014-2021 before any model fit"
+  },
+  "temporal_design": {
+    "calibration_transitions": [[2014,2015],[2015,2016],[2016,2017],[2017,2018]],
+    "heldout_transitions": [[2018,2019],[2019,2020],[2020,2021]],
+    "model_refitting_during_heldout": false,
+    "rule_state_update_during_heldout": "allowed only after each heldout transition outcome is observed"
+  },
+  "layer_a": {
+    "declared_rule_count": 5,
+    "node_universe": "3108 response-independent Census counties",
+    "current_sources": "all counties officially designated infested by source year t",
+    "source_weights": "equal normalized weight across current sources",
+    "loss_support": 1.0,
+    "support_tolerance": 1e-15,
+    "local_kernel_scale_km": 40.540163111516925,
+    "local_kernel_scale_interpretation": "response-blind analyst-choice scale equal to the frozen LCC50 threshold; not a biological dispersal estimate",
+    "rules": [
+      {
+        "world_id": "geo_lcc250",
+        "raw_edge_support": "exp(-d/40.540163111516925) for d<=35.828724722428895 km, otherwise 0"
+      },
+      {
+        "world_id": "geo_lcc500",
+        "raw_edge_support": "exp(-d/40.540163111516925) for d<=40.540163111516925 km, otherwise 0"
+      },
+      {
+        "world_id": "geo_lcc750",
+        "raw_edge_support": "exp(-d/40.540163111516925) for d<=49.44841925688052 km, otherwise 0"
+      },
+      {
+        "world_id": "geo_lcc900",
+        "raw_edge_support": "exp(-d/40.540163111516925) for d<=86.45483634210984 km, otherwise 0"
+      },
+      {
+        "world_id": "human_heavy_tail_full",
+        "raw_edge_support": "1/(1+d/40.540163111516925)^2 for every distinct county pair",
+        "interpretation": "admissible nonzero long-distance possibility world motivated by human-mediated SLF transport; not a calibrated transport probability"
+      }
+    ],
+    "transition_normalization": "Q[s,j]=W[s,j]/(1+sum_k W[s,k]); candidate support is the equal-source mean of Q[s,j]",
+    "rule_filter": "after each observed transition, eliminate a surviving rule if any newly designated positive county has support <=1e-15",
+    "monotonicity": "surviving rule IDs may only remain or contract; eliminated rules never return",
+    "falsification": "if all five rules are eliminated, stop and report frozen-universe falsification without retuning"
+  },
+  "layer_b": {
+    "representation": "symmetric_world_support_summary_v1",
+    "implementation": "call production summarize_worldset_for_prediction on a forecast-like object containing only the surviving per-world support matrices",
+    "feature_names": [
+      "surviving_world_fraction",
+      "support_mean",
+      "support_std",
+      "support_min",
+      "support_max",
+      "support_q25",
+      "support_q50",
+      "support_q75",
+      "positive_support_fraction",
+      "support_range"
+    ],
+    "world_labels_exposed_as_supervised_columns": false
+  },
+  "shared_geometry_process_baseline": {
+    "features": [
+      "source_year_index",
+      "current_source_count",
+      "county_internal_point_latitude",
+      "county_internal_point_longitude",
+      "nearest_current_source_distance_km",
+      "current_source_count_within_35.828724722428895_km",
+      "current_source_count_within_40.540163111516925_km",
+      "current_source_count_within_49.44841925688052_km",
+      "current_source_count_within_86.45483634210984_km",
+      "heavy_tail_source_exposure_sum"
+    ],
+    "heavy_tail_source_exposure_sum": "sum_s 1/(1+d_sj/40.540163111516925)^2 over current sources"
+  },
+  "models": {
+    "geometry_process_logistic": {
+      "features": "shared baseline only",
+      "type": "L2 logistic regression",
+      "C": 1.0,
+      "solver": "lbfgs",
+      "max_iter": 3000,
+      "standardization": "calibration mean/SD; zero-SD columns dropped"
+    },
+    "geometry_process_rf": {
+      "features": "shared baseline only",
+      "n_estimators": 500,
+      "max_features": "sqrt",
+      "min_samples_leaf": 5,
+      "class_weight": null,
+      "random_state": 20260819,
+      "n_jobs": -1
+    },
+    "mean_only_logistic": {
+      "features": "shared baseline + surviving_world_fraction + support_mean",
+      "type": "same frozen L2 logistic specification"
+    },
+    "layer_b_logistic": {
+      "features": "shared baseline + all 10 symmetric_world_support_summary_v1 features",
+      "type": "same frozen L2 logistic specification"
+    }
+  },
+  "representation_estimability": {
+    "scope": "calibration rows after once-only response opening but before heldout scoring",
+    "rule": "after dropping zero-SD columns, regress each Layer-B feature not already in mean-only by OLS on intercept + shared baseline + mean-only EOG features; require at least one residual SD >1e-8",
+    "failure_status": "layer_b_non_estimable_beyond_mean_only",
+    "no_rescue": "do not add features/worlds or redefine mean-only after this check"
+  },
+  "response_estimability": {
+    "minimum_calibration_events": 10,
+    "minimum_calibration_non_events": 40,
+    "minimum_heldout_events": 10,
+    "minimum_heldout_non_events": 40,
+    "minimum_heldout_outer_units_with_both_classes": 3,
+    "failure_status": "non_estimable_response_balance"
+  },
+  "metrics": {
+    "primary": "macro-heldout-transition binary log loss",
+    "secondary": ["pooled log loss", "Brier score", "ROC AUC", "average precision", "annual direction count"],
+    "outer_units": "the three heldout annual transitions; county rows do not create independent years",
+    "no_bootstrap_precision_claim": true
+  },
+  "decision_rules": {
+    "layer_b_vs_mean_only_favorable_if_all": [
+      "representation is estimable beyond mean-only",
+      "macro logloss(layer_b - mean_only) < 0",
+      "Layer B has lower log loss in at least 2 of 3 heldout transitions"
+    ],
+    "layer_b_vs_mean_only_adverse_if": "macro logloss(layer_b - mean_only) > 0 and Layer B loses in at least 2 of 3 heldout transitions",
+    "external_added_value_favorable_if_all": [
+      "macro Layer-B log loss is lower than geometry_process_logistic and geometry_process_rf",
+      "Layer B beats the better external baseline in at least 2 of 3 heldout transitions"
+    ],
+    "otherwise": "preserve no_confirmed_added_value, adverse, non_estimable or universe_falsified without retuning"
+  },
+  "no_retuning_after_response": [
+    "Census node universe",
+    "event split/minima",
+    "five Layer-A rules or their kernels/thresholds",
+    "source weighting or support tolerance",
+    "Layer-B feature surface",
+    "shared baseline features",
+    "model hyperparameters",
+    "metrics or decision rules"
+  ]
+}
