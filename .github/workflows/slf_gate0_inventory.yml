@@ -1,0 +1,73 @@
+name: Spotted lanternfly two-layer Gate 0
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/slf_gate0_inventory.yml"
+      - "benchmarks/run_slf_gate0_inventory.py"
+      - "validation/slf_two_layer/gate0_source_process_estimability_contract.json"
+      - "src/eog/v2/prospective_estimability.py"
+      - "src/eog/v2/response_firewall.py"
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG
+        run: python -m pip install .
+      - name: Fetch response-independent Census county geometry
+        run: |
+          curl -L --fail --retry 3 \
+            'https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2020_Gazetteer/2020_Gaz_counties_national.zip' \
+            -o /tmp/2020_Gaz_counties_national.zip
+          test -s /tmp/2020_Gaz_counties_national.zip
+          unzip -t /tmp/2020_Gaz_counties_national.zip >/dev/null
+          sha256sum /tmp/2020_Gaz_counties_national.zip
+      - name: Fetch exact frozen SLFS response bytes without parsing rows
+        run: |
+          curl -L --fail --retry 3 \
+            'https://raw.githubusercontent.com/danielstrombom/SLFS/f0cf5345346ece720b6d6fde18c91072fdcc9b01/Maps/data_2_temporal.csv' \
+            -o /tmp/data_2_temporal.csv
+          test -s /tmp/data_2_temporal.csv
+          python - <<'PY'
+          import hashlib
+          p='/tmp/data_2_temporal.csv'
+          b=open(p,'rb').read()
+          got=hashlib.sha1(f'blob {len(b)}\0'.encode()+b).hexdigest()
+          assert got=='e845dcc72080089d11c3f1078766cc14cdeb2340', got
+          print('git_blob_sha1', got)
+          PY
+      - name: Run frozen Gate 0
+        run: |
+          python benchmarks/run_slf_gate0_inventory.py \
+            --census-zip /tmp/2020_Gaz_counties_national.zip \
+            --response /tmp/data_2_temporal.csv \
+            --output build/slf_gate0/gate0_result.json
+          python - <<'PY'
+          import json
+          p=json.load(open('build/slf_gate0/gate0_result.json'))
+          assert p['status']=='gate0_pass_source_estimability_response_free_geometry'
+          assert p['prospective_estimability']['status']=='plausibly_eligible_pre_response'
+          assert p['response_source']['response_rows_opened'] is False
+          assert p['response_source']['response_values_parsed'] is False
+          assert p['response_source']['data_rows_after_first_physical_record_opened'] is False
+          assert p['census_source']['conterminous_node_count'] > 2500
+          PY
+      - name: Remove source bytes
+        if: always()
+        run: rm -f /tmp/2020_Gaz_counties_national.zip /tmp/data_2_temporal.csv
+      - name: Upload Gate 0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: slf-two-layer-gate0
+          path: build/slf_gate0
+          if-no-files-found: warn
