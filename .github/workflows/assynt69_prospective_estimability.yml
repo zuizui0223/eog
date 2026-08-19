@@ -1,0 +1,66 @@
+name: Assynt 69-patch prospective estimability
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/assynt69_prospective_estimability.yml"
+      - "validation/assynt69_two_layer/prospective_estimability_contract.json"
+      - "src/eog/v2/prospective_estimability.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  estimability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG
+        run: python -m pip install .
+      - name: Verify frozen response-blind uncertainty
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from eog.v2.prospective_estimability import (
+              AggregateCountInterval,
+              AggregateEstimabilityEvidence,
+              ProspectiveEstimabilityDeclaration,
+              evaluate_prospective_estimability,
+          )
+
+          contract = json.loads(Path(
+              "validation/assynt69_two_layer/prospective_estimability_contract.json"
+          ).read_text())
+          d = contract["prospective_estimability_declaration"]
+          declaration = ProspectiveEstimabilityDeclaration(**d)
+          intervals = {
+              key: AggregateCountInterval(**value)
+              for key, value in contract["prospective_count_intervals"].items()
+          }
+          evidence = AggregateEstimabilityEvidence(
+              source_label="published Assynt 1999-2005 annual transition summaries fixed before local_pop_data access",
+              endpoint_definition_matches=True,
+              response_rows_opened=False,
+              intervals=intervals,
+              note="event lower bounds are sufficient; calibration/heldout empty-to-empty non-event lower bounds remain unpublished",
+          )
+          result = evaluate_prospective_estimability(declaration, evidence)
+          print(json.dumps({
+              "status": result.status,
+              "failing_keys": list(result.failing_keys),
+              "unresolved_keys": list(result.unresolved_keys),
+              "fingerprint": result.fingerprint,
+          }, indent=2, sort_keys=True))
+          assert result.status == "uncertain_pre_response"
+          assert result.failing_keys == ()
+          assert result.unresolved_keys == ("calibration_non_events", "heldout_non_events")
+          assert contract["response_firewall"]["response_rows_opened"] is False
+          assert contract["response_firewall"]["response_file_downloaded"] is False
+          assert contract["response_firewall"]["response_file_touched"] is False
+          PY
