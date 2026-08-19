@@ -1,5 +1,5 @@
 {
-  "status": "gate0_stopped_response_firewall",
+  "status": "gate0_stop_response_inseparable_geometry",
   "candidate": "Neckera pennata host-tree metapopulation, Sweden",
   "source": {
     "snd_doi": "10.5878/6xjf-ma84",
@@ -59,6 +59,7 @@
   "gate0_observation": {
     "workflow_run_id": 32118170877,
     "artifact_id": 9317484380,
+    "artifact_digest": "sha256:2b906980ea53e64527fdc09dc6e010a76a39eaf98e0927b81bbed6ef03abf529",
     "archive_sha256": "c0736507b96cae21263de86a9089236470f4ad12cc1236e403dee9cca2a081b3",
     "inventory_fingerprint": "1a7fa0d98e6c4b33178e5b6ee0991b2f14a172e20adb3329fbb4ab64e6882a34",
     "archive_member_count": 1,
@@ -83,6 +84,14 @@
     "reason": "The public archive contains a single data member. Its permitted first physical record places x/y geometry columns in the same physical CSV rows as longitudinal abundance/occurrence response columns. Building the tree-node geometry would therefore require opening response-bearing rows, which is forbidden by the predeclared firewall.",
     "decision": "Do not open row-level Neckera.csv. Do not freeze worlds, run the scale ladder, tune comparators, or perform held-out outcome evaluation for this candidate.",
     "scientific_interpretation": "negative Gate 0 result demonstrating that the response firewall rejects an otherwise prospectively estimable candidate when predictor geometry cannot be frozen independently of outcomes"
+  },
+  "package_checks": {
+    "workflow_run_id": 32118171034,
+    "python_3_10": "success",
+    "python_3_11": "success",
+    "python_3_12": "success",
+    "wheel": "success",
+    "frozen_topology_benchmark": "success"
   },
   "gate0_pass_if": [
     "stable public archive bytes are reproducibly obtainable",
