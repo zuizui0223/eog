@@ -1,0 +1,108 @@
+{
+  "status": "gate0_pre_response_contract_frozen",
+  "candidate": "Spotted lanternfly US county invasion 2014-2021",
+  "taxon": "Lycorma delicatula",
+  "scientific_target": "fresh independent validation of the post-Glanville two-layer EOG-WF predictor",
+  "response_semantics": {
+    "target": "first official county infestation designation",
+    "positive_transition": "county changes from not officially designated infested by year t to officially designated infested by year t+1",
+    "negative_transition": "county remains without official infestation designation through t+1",
+    "boundary": "recorded county infestation status, not latent biological absence or proof of a unique dispersal route",
+    "persistence": "once a county is officially designated infested it remains in the current-source set for later transitions"
+  },
+  "source_process_boundary": {
+    "initial_source": "Berks County, Pennsylvania in 2014",
+    "later_sources": "all counties officially designated infested by the current year",
+    "claim": "conditional prediction of subsequent US county infestation designations from the observed invasion state",
+    "not_claimed": [
+      "complete closure to every overseas reintroduction",
+      "natural dispersal only",
+      "historical route identification"
+    ],
+    "long_distance_boundary": "human-mediated long-distance spread is biologically plausible and must remain representable in at least one frozen rule world rather than being silently ruled out"
+  },
+  "response_independent_node_universe": {
+    "definition": "all 2020 Census county or county-equivalent nodes in the conterminous United States plus District of Columbia, excluding Alaska, Hawaii and Puerto Rico",
+    "geometry_source": "2020 Census National Counties Gazetteer",
+    "geometry_url": "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2020_Gazetteer/2020_Gaz_counties_national.zip",
+    "node_id": "GEOID",
+    "coordinates": ["INTPTLAT", "INTPTLONG"],
+    "construction_uses_response_rows": false,
+    "reason": "avoid the paper's 166-county convex-hull assessment region because that region was defined from counties known infested by 2021"
+  },
+  "frozen_response_source": {
+    "repository": "danielstrombom/SLFS",
+    "commit": "f0cf5345346ece720b6d6fde18c91072fdcc9b01",
+    "path": "Maps/data_2_temporal.csv",
+    "git_blob_sha1": "e845dcc72080089d11c3f1078766cc14cdeb2340",
+    "raw_url": "https://raw.githubusercontent.com/danielstrombom/SLFS/f0cf5345346ece720b6d6fde18c91072fdcc9b01/Maps/data_2_temporal.csv",
+    "allowed_pre_response_access": "exact bytes may be transported for identity verification, but only the bounded first physical record may be parsed",
+    "expected_header_fields": ["year", "infested", "fips"]
+  },
+  "published_pre_response_counts": {
+    "cumulative_infested_count_by_year": {
+      "2014": 1,
+      "2015": 3,
+      "2016": 7,
+      "2017": 17,
+      "2018": 45,
+      "2019": 57,
+      "2020": 84,
+      "2021": 130
+    },
+    "newly_infested_count_by_transition": {
+      "2014-2015": 2,
+      "2015-2016": 4,
+      "2016-2017": 10,
+      "2017-2018": 28,
+      "2018-2019": 12,
+      "2019-2020": 27,
+      "2020-2021": 46
+    },
+    "source": "Human-mediated dispersal drives the spread of the spotted lanternfly (published county counts)"
+  },
+  "temporal_split": {
+    "calibration_transitions": [[2014,2015],[2015,2016],[2016,2017],[2017,2018]],
+    "heldout_transitions": [[2018,2019],[2019,2020],[2020,2021]],
+    "calibration_events": 44,
+    "heldout_events": 85,
+    "model_refitting_during_heldout": false
+  },
+  "prospective_estimability_declaration": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 3
+  },
+  "prospective_evidence_rule": {
+    "calibration_events": {"lower": 44, "upper": 44},
+    "heldout_events": {"lower": 85, "upper": 85},
+    "calibration_non_events": "after response-free Census node count N is frozen, use lower=N-45",
+    "heldout_non_events": "after response-free Census node count N is frozen, use lower=N-130",
+    "heldout_outer_units_with_both_classes": {"lower": 3, "upper": 3},
+    "endpoint_definition_matches": true,
+    "response_rows_opened": false
+  },
+  "gate0_pass_if": [
+    "Census county bytes are reproducibly obtainable",
+    "conterminous county GEOIDs are unique and all have finite internal-point coordinates",
+    "response file git-blob identity matches the frozen commit",
+    "bounded header contains year, infested and fips",
+    "prospective aggregate estimability result is plausibly_eligible_pre_response"
+  ],
+  "gate0_stop_if": [
+    "response-independent county universe cannot be constructed",
+    "response header is incompatible with deterministic FIPS mapping",
+    "prospective event-count screen is uncertain or ineligible",
+    "any response row after the first physical record is parsed"
+  ],
+  "after_gate0_if_pass": [
+    "construct response-blind Haversine structural scale ladder from Census county internal points",
+    "require at least three distinct structural scales and the unchanged LCC90/isolation adequacy criteria",
+    "freeze Layer-A worlds including a long-distance-capable process world",
+    "freeze unchanged symmetric_world_support_summary_v1 and strong spread comparators",
+    "only then open county response once"
+  ],
+  "no_rescue": "Do not use the future-response-defined 166-county convex hull, do not alter the event split/minima after Gate 0, and do not open county response rows to design geometry or structural scales."
+}
