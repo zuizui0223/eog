@@ -1,0 +1,92 @@
+name: Assynt 69-patch Gate 0 metadata screen
+
+on:
+  push:
+    branches:
+      - agent/assynt69-gate0-screen
+    paths:
+      - ".github/workflows/assynt69_gate0_metadata_screen.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Inventory Figshare collection metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/assynt69_gate0
+          python - <<'PY'
+          import json, urllib.request
+          from pathlib import Path
+
+          collection_id = 3305100
+          base = "https://api.figshare.com/v2"
+
+          def get_json(url):
+              req = urllib.request.Request(url, headers={"User-Agent": "eog-response-blind-gate0/1.0"})
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  return json.load(r)
+
+          collection = get_json(f"{base}/collections/{collection_id}")
+          articles = get_json(f"{base}/collections/{collection_id}/articles?page_size=1000")
+          out_articles = []
+          for row in articles:
+              article_id = int(row["id"])
+              meta = get_json(f"{base}/articles/{article_id}")
+              out_articles.append({
+                  "id": article_id,
+                  "title": meta.get("title"),
+                  "doi": meta.get("doi"),
+                  "url_private_api": meta.get("url_private_api"),
+                  "url_public_api": meta.get("url_public_api"),
+                  "published_date": meta.get("published_date"),
+                  "files": [
+                      {
+                          "id": f.get("id"),
+                          "name": f.get("name"),
+                          "size": f.get("size"),
+                          "computed_md5": f.get("computed_md5"),
+                          "download_url": f.get("download_url"),
+                      }
+                      for f in meta.get("files", [])
+                  ],
+              })
+
+          result = {
+              "status": "metadata_inventory_complete",
+              "candidate": "Assynt water vole 69-patch 1999-2005 system",
+              "collection_id": collection_id,
+              "collection_title": collection.get("title"),
+              "collection_doi": collection.get("doi"),
+              "article_count": len(out_articles),
+              "articles": out_articles,
+              "response_rows_opened": False,
+              "response_file_bytes_downloaded": False,
+              "scientific_decision": "metadata_only_pending_role_adjudication",
+          }
+          Path("build/assynt69_gate0/figshare_metadata_inventory.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps({
+              "status": result["status"],
+              "collection_title": result["collection_title"],
+              "article_count": result["article_count"],
+              "files": [f["name"] for a in out_articles for f in a["files"]],
+              "response_rows_opened": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Upload metadata-only evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: assynt69-gate0-metadata-screen
+          path: build/assynt69_gate0/figshare_metadata_inventory.json
+          if-no-files-found: error
