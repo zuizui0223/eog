@@ -1,0 +1,71 @@
+{
+  "status": "uncertain_pre_response",
+  "candidate": "Assynt water vole 69-patch metapopulation, 1999-2005",
+  "scientific_target": "survey-recorded annual colonisation of a patch recorded empty in the preceding year",
+  "response_firewall": {
+    "response_rows_opened": false,
+    "response_file_downloaded": false,
+    "response_file_name": "local_pop_data.txt",
+    "response_file_id": 5623770,
+    "response_file_touched": false
+  },
+  "published_design_evidence": {
+    "fixed_patch_count": 69,
+    "survey_years": [1999, 2000, 2001, 2002, 2003, 2004, 2005],
+    "annual_colonisation_events_minimum": 5,
+    "annual_colonisation_events_median": 11,
+    "annual_colonisation_events_maximum": 27,
+    "survey_zero_semantics": "all 69 suitable patches were intensively surveyed annually; absence of fresh signs was recorded as empty",
+    "source_conditioned_semantics": "colonisation is an empty-to-occupied transition modeled from extant occupied patches in the preceding year"
+  },
+  "provisional_temporal_split": {
+    "calibration": ["1999->2000", "2000->2001", "2001->2002"],
+    "heldout": ["2002->2003", "2003->2004", "2004->2005"]
+  },
+  "prospective_estimability_declaration": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 1
+  },
+  "prospective_count_intervals": {
+    "calibration_events": {"lower": 15, "upper": null},
+    "calibration_non_events": {"lower": null, "upper": null},
+    "heldout_events": {"lower": 15, "upper": null},
+    "heldout_non_events": {"lower": null, "upper": null},
+    "heldout_outer_units_with_both_classes": {"lower": 1, "upper": null}
+  },
+  "geometry_gate": {
+    "status": "pass",
+    "figshare_geometry_file": "XY_data.txt",
+    "figshare_geometry_file_id": 5623767,
+    "geometry_md5": "9174c10342b9d0d1d94397fa6ce5d4be",
+    "geometry_sha256": "bfdef51a5860e5974846c339815ce5dff4057688f0dd5c8d07671411be2712e0",
+    "node_count": 69,
+    "response_independent": true
+  },
+  "structural_gate": {
+    "status": "pass",
+    "workflow_run": 32232504078,
+    "artifact_id": 9357756332,
+    "declaration_fingerprint": "866927e6a2471b3342147a8851737b09a4494fd46cf7f09a66a694c790b5e6a3",
+    "distance_matrix_fingerprint": "c3e679ef6bdb289a3e26c629b9dc1942a0f599ca4c368904c9bdf68d2ad60c2f",
+    "ladder_fingerprint": "10ebc7c2d00dd616aa2487c0678adb4959fa047122bf46c647493f8b4f34003b",
+    "distinct_positive_scale_count": 3,
+    "lcc90": 1.0,
+    "lcc90_isolated_fraction": 0.0
+  },
+  "decision": {
+    "status": "uncertain_pre_response_non_event_lower_bounds_unpublished",
+    "reason": "Published response-blind evidence establishes enough colonisation events in both provisional temporal blocks, but does not establish the frozen minimum of 40 empty-to-empty non-events in both calibration and heldout blocks without opening row-level response data.",
+    "next": "stop this candidate without opening local_pop_data.txt"
+  },
+  "no_rescue": [
+    "do not open local_pop_data.txt to count non-events",
+    "do not infer exact annual occupancy counts from ambiguous OCR text",
+    "do not substitute later 98-patch model-corrected summaries",
+    "do not lower the frozen 40-non-event minimum",
+    "do not alter the temporal split after response access"
+  ]
+}
