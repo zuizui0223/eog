@@ -1,0 +1,46 @@
+{
+  "status": "gate1_pre_response_structural_contract_frozen",
+  "candidate": "Spotted lanternfly US county invasion 2014-2021",
+  "gate0_fingerprint": "2cc08f58ef090901e5aa930cc2803e36279480cc17209c6bfe35d4fc4499cc5f",
+  "response_content_opened": false,
+  "geometry": {
+    "source": "2020 Census National Counties Gazetteer",
+    "node_count": 3108,
+    "geometry_fingerprint": "5b05192ae33e398c5381bdab37db048373e61e9cd84523fc4f48b7a2bc8dbb07",
+    "distance_metric": "great-circle Haversine distance between Census county internal points",
+    "earth_radius_km": 6371.0088,
+    "interpretation": "response-blind analyst-choice county-centroid structural geometry, not SLF movement distance"
+  },
+  "scale_ladder": {
+    "axis_id": "geo",
+    "target_largest_component_fractions": [0.25, 0.50, 0.75, 0.90],
+    "construction": "minimum observed Haversine threshold reaching each target under the existing world_scale_ladder implementation",
+    "required_distinct_positive_thresholds": 3,
+    "nested_required": true
+  },
+  "structural_adequacy": {
+    "required_lcc90_fraction": 0.90,
+    "max_lcc90_isolated_fraction": 0.05,
+    "horizon_for_audit": 1,
+    "universal_movement_claim": false
+  },
+  "gate1_pass_if": [
+    "at least three distinct positive structural thresholds are constructed",
+    "geo_lcc900 largest weak component fraction is at least 0.90",
+    "geo_lcc900 isolated-node fraction is at most 0.05",
+    "all four edge sets are nested and deterministic under the frozen geometry"
+  ],
+  "gate1_stop_if": [
+    "fewer than three distinct positive structural scales exist",
+    "the 0.90 world fails the frozen LCC or isolation criteria",
+    "the frozen Census node/geometry fingerprint cannot be reproduced"
+  ],
+  "next_if_pass": [
+    "freeze Layer-A rule universe without using response rows",
+    "include at least one long-distance-capable rule because human-mediated spread is plausible",
+    "freeze unchanged symmetric_world_support_summary_v1",
+    "freeze external county-spread comparators, runtime and once-only outcome rules",
+    "only then open county response once"
+  ],
+  "no_rescue": "Do not replace the county geometry with a kNN graph, future-response 166-county region, response-tuned thresholds, or alternative scale targets after this declaration."
+}
