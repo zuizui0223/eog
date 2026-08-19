@@ -84,8 +84,8 @@ def read_census_counties(zip_path: Path) -> tuple[list[dict[str, object]], str, 
 
 
 def response_header(path: Path) -> tuple[list[str], int, str]:
-    bounded = read_bounded_first_record_text(path, max_record_bytes=16_384)
-    fields = [value.strip().lower() for value in next(csv.reader([bounded.text]))]
+    text, bounded = read_bounded_first_record_text(path, max_record_bytes=16_384)
+    fields = [value.strip().lower() for value in next(csv.reader([text]))]
     if not EXPECTED_RESPONSE_FIELDS.issubset(set(fields)):
         raise ValueError(f"response header lacks required fields: {fields!r}")
     return fields, bounded.bytes_consumed, bounded.terminator
