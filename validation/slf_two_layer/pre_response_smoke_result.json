@@ -1,0 +1,24 @@
+{
+  "status": "pre_response_runner_smoke_pass",
+  "response_bytes_opened": false,
+  "world_support_shape": [5, 30],
+  "layer_b_shape": [30, 10],
+  "baseline_shape": [30, 10],
+  "synthetic_eliminated_worlds": ["geo_lcc250", "geo_lcc500", "geo_lcc750", "geo_lcc900"],
+  "heavy_tail_survived": true,
+  "representation_estimable": true,
+  "workflow": {
+    "run_id": 32224187166,
+    "artifact_id": 9354955867,
+    "artifact_digest": "sha256:80e5e81e402995fa6e1b06a7287f73be7529ecfb7ffe60db2d9eb84c781374ce"
+  },
+  "package_checks": {
+    "run_id": 32224187120,
+    "python_3_10": "success",
+    "python_3_11": "success",
+    "python_3_12": "success",
+    "wheel": "success",
+    "frozen_topology_benchmark": "success"
+  },
+  "response_firewall_status": "may_open_once_under_frozen_gate2_contract"
+}
