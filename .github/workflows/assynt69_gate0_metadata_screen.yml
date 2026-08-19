@@ -73,7 +73,7 @@ jobs:
               "articles": out_articles,
               "response_rows_opened": False,
               "response_file_bytes_downloaded": False,
-              "scientific_decision": "metadata_only_pending_role_adjudication",
+              "scientific_decision": "separate_geometry_member_identified",
           }
           Path("build/assynt69_gate0/figshare_metadata_inventory.json").write_text(
               json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -86,9 +86,67 @@ jobs:
               "response_rows_opened": False,
           }, indent=2, sort_keys=True))
           PY
-      - name: Upload metadata-only evidence
+      - name: Freeze exact response-independent XY geometry
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv, hashlib, io, json, re, urllib.request
+          from pathlib import Path
+
+          outdir = Path("build/assynt69_gate0")
+          outdir.mkdir(parents=True, exist_ok=True)
+          url = "https://ndownloader.figshare.com/files/5623767"
+          expected_md5 = "9174c10342b9d0d1d94397fa6ce5d4be"
+          req = urllib.request.Request(url, headers={"User-Agent": "eog-response-blind-gate0/1.0"})
+          with urllib.request.urlopen(req, timeout=30) as r:
+              data = r.read()
+          md5 = hashlib.md5(data).hexdigest()
+          sha256 = hashlib.sha256(data).hexdigest()
+          if md5 != expected_md5:
+              raise SystemExit(f"XY_data.txt MD5 mismatch: {md5}")
+          (outdir / "XY_data.txt").write_bytes(data)
+
+          text = data.decode("utf-8-sig", errors="strict")
+          nonempty = [line.strip() for line in text.splitlines() if line.strip()]
+          token_rows = [re.split(r"[\t,; ]+", line) for line in nonempty]
+          numeric_counts = []
+          for row in token_rows:
+              count = 0
+              for value in row:
+                  try:
+                      float(value)
+                      count += 1
+                  except ValueError:
+                      pass
+              numeric_counts.append(count)
+          result = {
+              "status": "response_independent_geometry_bytes_frozen",
+              "source_file_id": 5623767,
+              "source_name": "XY_data.txt",
+              "source_url": url,
+              "size_bytes": len(data),
+              "md5": md5,
+              "sha256": sha256,
+              "physical_nonempty_lines": len(nonempty),
+              "first_record": nonempty[0] if nonempty else None,
+              "last_record": nonempty[-1] if nonempty else None,
+              "tokens_per_line_unique": sorted({len(row) for row in token_rows}),
+              "numeric_tokens_per_line_unique": sorted(set(numeric_counts)),
+              "response_file_downloaded": False,
+              "response_rows_opened": False,
+              "local_pop_data_file_id_touched": False,
+          }
+          (outdir / "geometry_freeze_result.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Upload Gate 0 evidence
         uses: actions/upload-artifact@v4
         with:
           name: assynt69-gate0-metadata-screen
-          path: build/assynt69_gate0/figshare_metadata_inventory.json
+          path: |
+            build/assynt69_gate0/figshare_metadata_inventory.json
+            build/assynt69_gate0/geometry_freeze_result.json
+            build/assynt69_gate0/XY_data.txt
           if-no-files-found: error
