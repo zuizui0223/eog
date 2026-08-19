@@ -1,0 +1,67 @@
+{
+  "status": "gate1_pass_structural_adequacy",
+  "candidate": "Spotted lanternfly US county invasion 2014-2021",
+  "node_count": 3108,
+  "response_rows_opened": false,
+  "response_values_parsed": false,
+  "geometry_fingerprint": "5b05192ae33e398c5381bdab37db048373e61e9cd84523fc4f48b7a2bc8dbb07",
+  "distance_metric": "Haversine county internal-point distance km",
+  "earth_radius_km": 6371.0088,
+  "distance_matrix_fingerprint": "cd6e6302fbeec173075bd82642ae96acb0e68d24db05c45bf93fe3b44aee971d",
+  "ladder_fingerprint": "d216c0f8095b8ffaa44c76d29ca25fd7de7a47611f4a8c46aa1800817ef6b47d",
+  "audit_fingerprint": "e5f5e1d148b8a96e711a2f8eee098ac9f27f6f54163aec85932217763da31419",
+  "generic_gate_fingerprint": "ad5ad4079821f15de7125838219e15006b4bc1d9fddb4412b848df978dffe8ef",
+  "fingerprint": "e2d01cfd9802240fdaa2a474ad453165b7fb413e1620b6710c2e24380bd88ca9",
+  "distinct_positive_thresholds": 4,
+  "nested": true,
+  "lcc90_pass": true,
+  "levels": [
+    {
+      "level_id": "geo_lcc250",
+      "target_largest_component_fraction": 0.25,
+      "distance_threshold_km": 35.828724722428895,
+      "achieved_largest_component_fraction": 0.28635778635778636,
+      "weak_component_count": 1691,
+      "isolated_node_fraction": 0.47136422136422135,
+      "directed_edge_count": 4072,
+      "fingerprint": "35d50e7f923039c62a4f87325de6df64268aaf067fa92a5c71f944dca64286ba"
+    },
+    {
+      "level_id": "geo_lcc500",
+      "target_largest_component_fraction": 0.50,
+      "distance_threshold_km": 40.540163111516925,
+      "achieved_largest_component_fraction": 0.5006435006435006,
+      "weak_component_count": 1081,
+      "isolated_node_fraction": 0.29407979407979407,
+      "directed_edge_count": 6758,
+      "fingerprint": "af85df4fee0c909c0648e75225c436c077a745c1614f7fdec468a079362a69a9"
+    },
+    {
+      "level_id": "geo_lcc750",
+      "target_largest_component_fraction": 0.75,
+      "distance_threshold_km": 49.44841925688052,
+      "achieved_largest_component_fraction": 0.7519305019305019,
+      "weak_component_count": 512,
+      "isolated_node_fraction": 0.1373873873873874,
+      "directed_edge_count": 12102,
+      "fingerprint": "2c7b8e6ed24f3313a568caa9dbf6982c3c343e862e41a359fd42c21a363c5d6d"
+    },
+    {
+      "level_id": "geo_lcc900",
+      "target_largest_component_fraction": 0.90,
+      "distance_threshold_km": 86.45483634210984,
+      "achieved_largest_component_fraction": 0.9555984555984556,
+      "weak_component_count": 72,
+      "isolated_node_fraction": 0.018018018018018018,
+      "directed_edge_count": 40554,
+      "fingerprint": "3015ebb605827de8f3113c07263a1bfd73c822d39b28bff418057105d213de0e"
+    }
+  ],
+  "generic_gate_passing_world_ids": ["geo_lcc900"],
+  "workflow": {
+    "run_id": 32223548701,
+    "artifact_id": 9354753392,
+    "artifact_digest": "sha256:796b489b818aa609b5e77c48c0cf55aee567a41c1672b45c8a94bb04606e4d5f"
+  },
+  "next": "freeze Layer-A rules and Layer-B/comparator contract"
+}
