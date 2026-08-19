@@ -56,6 +56,17 @@
     "lcc90": 1.0,
     "lcc90_isolated_fraction": 0.0
   },
+  "final_ci": {
+    "head_sha": "71700a0ebdbdd04d2f5ba5b2b2aec81a73a69933",
+    "package_checks_run": 32234511190,
+    "package_checks": "success",
+    "metadata_gate_run": 32234511187,
+    "metadata_gate": "success",
+    "structural_gate_run": 32234511184,
+    "structural_gate_ci": "success",
+    "prospective_estimability_run": 32234511227,
+    "prospective_estimability_ci": "success"
+  },
   "decision": {
     "status": "uncertain_pre_response_non_event_lower_bounds_unpublished",
     "reason": "Published response-blind evidence establishes enough colonisation events in both provisional temporal blocks, but does not establish the frozen minimum of 40 empty-to-empty non-events in both calibration and heldout blocks without opening row-level response data.",
