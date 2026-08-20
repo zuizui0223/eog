@@ -1,0 +1,52 @@
+{
+  "status": "runtime_frozen_pre_response",
+  "candidate": "Luo et al. 2022 Tvarminne Daphnia rock-pool metacommunity",
+  "response_rows_opened": false,
+  "runner": {
+    "path": "benchmarks/run_daphnia_eogwf_once.py",
+    "git_blob_sha": "01b950fd3495196908ba759bf6fea75eb75a2407"
+  },
+  "prediction_contract": {
+    "path": "validation/daphnia_rockpool_two_layer/gate2_prediction_contract.json",
+    "git_blob_sha": "c6a69536060760d2892e36cc61ccce6f7f94cba8"
+  },
+  "prospective_estimability_contract": {
+    "path": "validation/daphnia_rockpool_two_layer/prospective_estimability_contract.json",
+    "git_blob_sha": "fe5aee1a75337dc867d7f82c754e4bb02f4e5ad3"
+  },
+  "structural_gate": {
+    "path": "validation/daphnia_rockpool_two_layer/gate1_result.json",
+    "git_blob_sha": "5478e4de4c77f14ec8f4b76a4cf78fd7db8c7061",
+    "result_fingerprint": "9a2ac506fc138f0e1125404d7db38777579038b34c33a61fc084a94702788b21"
+  },
+  "smoke": {
+    "workflow_run_id": 32365842897,
+    "workflow_blob_sha": "9662c8feac8e20df59eb3b1f7aa325ce4ee68ae1",
+    "result_fingerprint": "7ee926f5f7cb9167d9e27c2577dd8174350f6b156a6030ea6aceb0c0d9916a9c",
+    "artifact_id": 9405300372,
+    "artifact_digest": "sha256:7356ded6ff05365861a8703fa573fcefa4be83cc242318f0fb5ed3c78a80d3d6",
+    "models_fit": 4,
+    "heldout_scores": 44,
+    "response_member_bytes_downloaded": false
+  },
+  "package_checks": {
+    "workflow_run_id": 32365842969,
+    "conclusion": "success"
+  },
+  "runtime": {
+    "python": "3.11.15",
+    "numpy": "2.4.6",
+    "scikit_learn": "1.9.0",
+    "scipy": "1.17.1",
+    "joblib": "1.5.3",
+    "threadpoolctl": "3.6.0",
+    "narwhals": "2.24.0"
+  },
+  "safety": {
+    "exact_count_gate_first": true,
+    "zero_model_fits_on_count_failure": true,
+    "no_post_open_redesign": true,
+    "outcome_execution_count": 1
+  },
+  "boundary": "Any response-capable workflow must verify the frozen runner, contracts, structural result and exact runtime versions before selectively extracting data_M.csv."
+}
