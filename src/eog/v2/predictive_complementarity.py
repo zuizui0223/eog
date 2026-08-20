@@ -1,13 +1,13 @@
 """Prospective paired added-value evaluation for EOG predictive features.
 
-This module does not fit a predictor and does not add an ecological operator.  It
+This module does not fit a predictor and does not add an ecological operator. It
 formalizes the post-Daphnia mainline question: when a strong external learner is
 already frozen, do unchanged EOG Layer-B features improve that *same learner* on the
 same heldout outer units?
 
-The contract is deliberately paired.  A baseline score and an augmented score must
+The contract is deliberately paired. A baseline score and an augmented score must
 refer to the same outer unit, learner/fit policy, response endpoint, split and external
-feature set.  The only declared augmentation is the frozen EOG feature representation.
+feature set. The only declared augmentation is the frozen EOG feature representation.
 This prevents a favourable result from being manufactured by changing the model family,
 hyperparameters, split or conventional covariates together with the EOG features.
 """
@@ -39,8 +39,10 @@ def _canonical_sha256(payload: object) -> str:
     ).hexdigest()
 
 
-def _clean(value: object, label: str) -> str:
-    text = str(value).strip()
+def _nonempty_string(value: object, label: str) -> str:
+    if not isinstance(value, str):
+        raise TypeError(f"{label} must be a string")
+    text = value.strip()
     if not text:
         raise ValueError(f"{label} must be non-empty")
     return text
@@ -71,7 +73,9 @@ class PredictiveComplementarityDeclaration:
     eog_feature_fingerprint: str
 
     def __post_init__(self) -> None:
-        _clean(self.metric_name, "metric_name")
+        _nonempty_string(self.metric_name, "metric_name")
+        if not isinstance(self.lower_is_better, bool):
+            raise TypeError("lower_is_better must be bool")
         for label in (
             "learner_fit_fingerprint",
             "response_endpoint_fingerprint",
@@ -79,8 +83,12 @@ class PredictiveComplementarityDeclaration:
             "external_feature_fingerprint",
             "eog_feature_fingerprint",
         ):
-            _clean(getattr(self, label), label)
-        if isinstance(self.expected_outer_unit_count, bool) or self.expected_outer_unit_count <= 0:
+            _nonempty_string(getattr(self, label), label)
+        if (
+            isinstance(self.expected_outer_unit_count, bool)
+            or not isinstance(self.expected_outer_unit_count, int)
+            or self.expected_outer_unit_count <= 0
+        ):
             raise ValueError("expected_outer_unit_count must be a positive integer")
         for label in ("favorable_min_augmented_wins", "adverse_min_baseline_wins"):
             value = getattr(self, label)
@@ -116,7 +124,7 @@ class PairedOuterUnitScore:
     augmented_score: float
 
     def __post_init__(self) -> None:
-        _clean(self.outer_unit_id, "outer_unit_id")
+        _nonempty_string(self.outer_unit_id, "outer_unit_id")
         object.__setattr__(
             self,
             "baseline_score",
@@ -157,11 +165,11 @@ def evaluate_predictive_complementarity(
     """Evaluate prospectively frozen paired complementary added value.
 
     For a lower-is-better metric, favourable requires both a lower augmented macro score
-    and at least ``favorable_min_augmented_wins`` paired outer-unit wins.  Adverse
+    and at least ``favorable_min_augmented_wins`` paired outer-unit wins. Adverse
     requires the reverse macro direction and at least ``adverse_min_baseline_wins``
-    baseline wins.  Higher-is-better metrics reverse only the score direction.
+    baseline wins. Higher-is-better metrics reverse only the score direction.
 
-    Anything else is preserved as ``no_confirmed_complementary_added_value``.  The
+    Anything else is preserved as ``no_confirmed_complementary_added_value``. The
     function never changes thresholds or resolves ambiguous results by tuning.
     """
 
