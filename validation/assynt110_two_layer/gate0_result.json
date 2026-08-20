@@ -1,0 +1,42 @@
+{
+  "status": "gate0_stop_no_response_independent_geometry_and_uncertain_counts",
+  "candidate": "Assynt water vole 110-patch metapopulation, 2011-2019",
+  "response_firewall": {
+    "response_rows_opened": false,
+    "patch_year_response_files_downloaded": false,
+    "analysis_dataset_response_rows_opened": false
+  },
+  "metadata_inventory": {
+    "workflow_run": 32324649570,
+    "workflow_conclusion": "success",
+    "artifact_id": 9390916683,
+    "artifact_digest": "sha256:6848111d7a08c8b97c43b12dcae6df7837f6da2f0313d68042ff7c665683fb13",
+    "osf_file_count": 93,
+    "geometry_name_candidates": [],
+    "separate_complete_110_patch_geometry_identified": false,
+    "note": "The public OSF inventory contains analysis datasets, yearly colonisation/extinction summaries, results, README files and code, but no separately identifiable coordinate, distance, patch-registry or site-geometry file for the 110-patch universe."
+  },
+  "published_endpoint_evidence": {
+    "survey_years": "2011-2019",
+    "node_count": 110,
+    "colonisation_definition_matches": true,
+    "mean_annual_colonisation_rate": 0.40,
+    "annual_colonisation_rate_range": [0.20, 0.75],
+    "count_gate_status": "uncertain_pre_response",
+    "reason": "Published rates are not frozen lower bounds on calibration/heldout event and non-event counts. Row-level occupancy data must not be opened merely to decide eligibility."
+  },
+  "gate_decision": {
+    "geometry_gate": "fail",
+    "prospective_count_gate": "uncertain",
+    "structural_scale_gate_run": false,
+    "layer_b_frozen_for_candidate": false,
+    "response_opening_allowed": false
+  },
+  "no_rescue": [
+    "do not extract coordinates from response-bearing analysis datasets",
+    "do not infer patch geometry from figures or aggregate connectivity values",
+    "do not convert colonisation rates into event counts without documented risk-set counts",
+    "do not open patch-year occupancy rows to decide candidate eligibility",
+    "do not reuse the stopped 1999-2005 69-patch response to rescue this later candidate"
+  ]
+}
