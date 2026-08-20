@@ -1,0 +1,198 @@
+name: Serengeti complementarity Gate 0
+
+on:
+  push:
+    branches:
+      - agent/serengeti-complementarity-gate0
+    paths:
+      - ".github/workflows/serengeti_complementarity_gate0.yml"
+      - "validation/serengeti_complementarity/gate0_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/serengeti_complementarity_gate0.yml"
+      - "validation/serengeti_complementarity/gate0_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG package
+        run: python -m pip install .
+      - name: Download only response-independent camera registry
+        run: |
+          set -euo pipefail
+          mkdir -p build/serengeti_complementarity_gate0
+          curl -L --fail --retry 3 --retry-delay 2 \
+            -o build/serengeti_complementarity_gate0/search_effort.csv \
+            'https://zenodo.org/records/5026386/files/search_effort.csv?download=1'
+      - name: Build response-blind SiteID geometry and structural ladder
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from __future__ import annotations
+
+          import csv
+          import hashlib
+          import json
+          import math
+          from pathlib import Path
+          import re
+
+          import numpy as np
+
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+              structural_scale_adjacencies,
+          )
+
+          ROOT = Path('validation/serengeti_complementarity')
+          OUT = Path('build/serengeti_complementarity_gate0')
+          contract = json.loads((ROOT / 'gate0_contract.json').read_text(encoding='utf-8'))
+          registry_path = OUT / 'search_effort.csv'
+          raw = registry_path.read_bytes()
+          md5 = hashlib.md5(raw).hexdigest()
+          expected_md5 = contract['registry_source']['md5']
+          if md5 != expected_md5:
+              raise RuntimeError(f'search_effort.csv md5 mismatch: {md5} != {expected_md5}')
+
+          text = raw.decode('utf-8-sig')
+          reader = csv.DictReader(text.splitlines())
+          fieldnames = tuple(reader.fieldnames or ())
+          if not fieldnames:
+              raise RuntimeError('search_effort.csv has no header')
+
+          def norm(value: str) -> str:
+              return re.sub(r'[^a-z0-9]+', '', value.lower())
+
+          normalized = {norm(name): name for name in fieldnames}
+          site_field = None
+          for key in ('siteid', 'site', 'stationid', 'station'):
+              if key in normalized:
+                  site_field = normalized[key]
+                  break
+          if site_field is None:
+              candidates = [name for name in fieldnames if 'site' in norm(name)]
+              if len(candidates) == 1:
+                  site_field = candidates[0]
+          if site_field is None:
+              raise RuntimeError(f'could not identify SiteID field from {fieldnames!r}')
+
+          rows = list(reader)
+          if not rows:
+              raise RuntimeError('search_effort.csv contains no data rows')
+          site_values = sorted({str(row.get(site_field, '')).strip().upper() for row in rows if str(row.get(site_field, '')).strip()})
+          pattern = re.compile(r'^([A-Z])0*([0-9]{1,2})$')
+          parsed = []
+          bad = []
+          for site in site_values:
+              match = pattern.match(site)
+              if not match:
+                  bad.append(site)
+                  continue
+              letter, number_text = match.groups()
+              number = int(number_text)
+              if not ('B' <= letter <= 'V' and 1 <= number <= 13):
+                  bad.append(site)
+                  continue
+              parsed.append((site, ord(letter) - ord('B'), number - 1))
+          if bad:
+              raise RuntimeError(f'unexpected SiteID values; first examples: {bad[:10]}')
+
+          minimum_nodes = int(contract['node_universe']['minimum_nodes'])
+          if len(parsed) < minimum_nodes:
+              raise RuntimeError(f'only {len(parsed)} unique response-independent sites; require >= {minimum_nodes}')
+          if len({site for site, _, _ in parsed}) != len(parsed):
+              raise RuntimeError('duplicate SiteID after normalization')
+
+          node_ids = tuple(site for site, _, _ in parsed)
+          coords = np.asarray([[x, y] for _, x, y in parsed], dtype=float)
+          delta = coords[:, None, :] - coords[None, :, :]
+          distance = np.sqrt(np.sum(delta * delta, axis=2))
+          np.fill_diagonal(distance, 0.0)
+
+          targets = tuple(float(v) for v in contract['structural_gate']['target_largest_component_fractions'])
+          declaration = StructuralScaleLadderDeclaration(
+              axis_id='serengeti_siteid_grid',
+              target_largest_component_fractions=targets,
+          )
+          ladder = build_structural_scale_ladder(node_ids, distance, declaration)
+          adjacencies = structural_scale_adjacencies(ladder, distance)
+          ordered = [adjacencies[level.level_id] for level in ladder.levels]
+          nested = all(bool(np.all(~a | b)) for a, b in zip(ordered, ordered[1:]))
+
+          positive_thresholds = [float(v) for v in ladder.thresholds if float(v) > 0]
+          distinct = len({round(v, 12) for v in positive_thresholds})
+          min_distinct = int(contract['structural_gate']['minimum_distinct_positive_thresholds'])
+          level90 = ladder.levels[-1]
+          lcc90_pass = float(level90.achieved_largest_component_fraction) >= float(contract['structural_gate']['minimum_lcc_at_0_9_world']) - 1e-12
+          isolated90_pass = float(level90.isolated_node_fraction) <= float(contract['structural_gate']['maximum_isolated_fraction_at_0_9_world']) + 1e-12
+          final_pass = bool(distinct >= min_distinct and lcc90_pass and isolated90_pass and nested)
+
+          payload = {
+              'status': 'gate0_pass_response_blind_registry_and_structure' if final_pass else 'gate0_stop_structural_scale_collapse',
+              'candidate': contract['candidate'],
+              'registry_md5': md5,
+              'registry_fieldnames': list(fieldnames),
+              'site_field': site_field,
+              'registry_row_count': len(rows),
+              'node_count': len(node_ids),
+              'node_ids': list(node_ids),
+              'geometry': 'SiteID-derived predetermined grid indices only',
+              'response_archive_bytes_opened': False,
+              'response_rows_opened': False,
+              'response_table_coordinates_opened': False,
+              'structural_ladder': [
+                  {
+                      'level_id': level.level_id,
+                      'target_largest_component_fraction': level.target_largest_component_fraction,
+                      'distance_threshold_grid_units': level.distance_threshold,
+                      'achieved_largest_component_fraction': level.achieved_largest_component_fraction,
+                      'weak_component_count': level.weak_component_count,
+                      'isolated_node_fraction': level.isolated_node_fraction,
+                      'directed_edge_count': level.directed_edge_count,
+                  }
+                  for level in ladder.levels
+              ],
+              'distinct_positive_structural_thresholds': distinct,
+              'minimum_distinct_required': min_distinct,
+              'nested_scale_pass': nested,
+              'level90_lcc_pass': lcc90_pass,
+              'level90_isolated_pass': isolated90_pass,
+              'final_gate_pass': final_pass,
+              'scientific_boundary': 'Grid-unit thresholds are analyst-choice structural regimes from the predetermined camera SiteID layout, not biological wildebeest movement distances.',
+              'next': 'if PASS, freeze response transport/schema/count gate and paired same-learner complementarity design before opening the 2011-2018 occupancy archive; if STOP, close unmerged without using response-table X_coord/Y_coord as rescue geometry',
+          }
+          payload['fingerprint'] = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+          (OUT / 'gate0_result.json').write_text(json.dumps(payload, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+          print(json.dumps(payload, indent=2, sort_keys=True))
+          if not final_pass:
+              raise SystemExit(2)
+          PY
+      - name: Assert response firewall
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/serengeti_complementarity_gate0/gate0_result.json'))
+          assert p['response_archive_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          assert p['response_table_coordinates_opened'] is False
+          assert p['final_gate_pass'] is True
+          PY
+      - name: Upload Gate 0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: serengeti-complementarity-gate0
+          path: build/serengeti_complementarity_gate0/gate0_result.json
+          if-no-files-found: error
