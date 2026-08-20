@@ -1,0 +1,106 @@
+name: Chicago coyote complementarity outcome audit
+
+on:
+  push:
+    branches:
+      - agent/coyote-complementarity-gate0
+    paths:
+      - ".github/workflows/coyote_complementarity_outcome_audit.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/coyote_complementarity_outcome_audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      EXPECTED_HEAD_SHA: 8a67cb7a0a3863721b6ad00a18597981b5886996
+      EXPECTED_WORKFLOW: coyote_complementarity_once_only_outcome.yml
+    steps:
+      - uses: actions/checkout@v4
+      - name: Locate the sole response-capable run
+        run: |
+          set -euo pipefail
+          mkdir -p build/coyote_complementarity_outcome_audit
+          gh api "/repos/${GITHUB_REPOSITORY}/actions/workflows/${EXPECTED_WORKFLOW}/runs?branch=agent%2Fcoyote-complementarity-gate0&event=push&per_page=20" \
+            > build/coyote_complementarity_outcome_audit/runs.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.load(open('build/coyote_complementarity_outcome_audit/runs.json'))
+          matches=[r for r in data.get('workflow_runs',[]) if r.get('run_number')==1]
+          if len(matches)!=1:
+              raise SystemExit(f'expected exactly one run_number=1, found {len(matches)}')
+          r=matches[0]
+          if r.get('head_sha')!='8a67cb7a0a3863721b6ad00a18597981b5886996':
+              raise SystemExit(f"unexpected outcome head SHA {r.get('head_sha')}")
+          if r.get('run_attempt')!=1:
+              raise SystemExit(f"unexpected run attempt {r.get('run_attempt')}")
+          Path('build/coyote_complementarity_outcome_audit/run_id.txt').write_text(str(r['id']))
+          print(json.dumps({
+              'run_id':r['id'],'name':r['name'],'head_sha':r['head_sha'],
+              'run_number':r['run_number'],'run_attempt':r['run_attempt'],
+              'status':r['status'],'conclusion':r.get('conclusion')
+          },indent=2,sort_keys=True))
+          PY
+      - name: Wait for sole outcome run without rerunning it
+        run: |
+          set -euo pipefail
+          RUN_ID="$(cat build/coyote_complementarity_outcome_audit/run_id.txt)"
+          gh run watch "$RUN_ID" --exit-status --interval 3
+      - name: Retrieve authoritative result artifact
+        run: |
+          set -euo pipefail
+          RUN_ID="$(cat build/coyote_complementarity_outcome_audit/run_id.txt)"
+          mkdir -p build/coyote_complementarity_outcome_audit/artifact
+          gh run download "$RUN_ID" -n chicago-coyote-complementarity-once-only-outcome -D build/coyote_complementarity_outcome_audit/artifact
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          run_id=int(Path('build/coyote_complementarity_outcome_audit/run_id.txt').read_text())
+          candidates=list(Path('build/coyote_complementarity_outcome_audit/artifact').rglob('outcome_result.json'))
+          if len(candidates)!=1:
+              raise SystemExit(f'expected one outcome_result.json, found {len(candidates)}')
+          p=candidates[0]
+          raw=p.read_bytes()
+          r=json.loads(raw)
+          payload={
+              'audit_status':'authoritative_once_only_result_recovered',
+              'run_id':run_id,
+              'head_sha':'8a67cb7a0a3863721b6ad00a18597981b5886996',
+              'run_number':1,
+              'run_attempt':1,
+              'authoritative_result_available':True,
+              'result_file_sha256':hashlib.sha256(raw).hexdigest(),
+              'result_fingerprint':r['fingerprint'],
+              'result_status':r['status'],
+              'exact_count_gate':r['exact_count_gate'],
+              'models_fit':r.get('models_fit',0),
+              'heldout_scores':r.get('heldout_scores',0),
+              'complementarity_status':r.get('complementarity_status'),
+              'complementarity':r.get('complementarity'),
+              'pooled_metrics':r.get('pooled_metrics'),
+              'final_surviving_world_ids':r.get('final_surviving_world_ids'),
+              'response_sha256':r.get('response_provenance',{}).get('response_sha256'),
+              'selected_frozen_node_rows':r.get('response_provenance',{}).get('selected_frozen_node_rows'),
+              'known_site_seasons':r.get('response_provenance',{}).get('known_site_seasons'),
+              'missing_site_seasons':r.get('response_provenance',{}).get('missing_site_seasons'),
+              'response_reexecuted_by_audit':False,
+          }
+          out=Path('build/coyote_complementarity_outcome_audit/outcome_audit.json')
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Upload audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: chicago-coyote-complementarity-outcome-audit
+          path: build/coyote_complementarity_outcome_audit
+          if-no-files-found: error
