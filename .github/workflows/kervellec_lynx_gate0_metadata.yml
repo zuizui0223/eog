@@ -1,0 +1,116 @@
+name: Kervellec lynx Gate 0 metadata
+
+on:
+  push:
+    branches:
+      - agent/kervellec-lynx-gate0-screen
+    paths:
+      - ".github/workflows/kervellec_lynx_gate0_metadata.yml"
+      - "validation/kervellec_lynx_two_layer/gate0_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/kervellec_lynx_gate0_metadata.yml"
+      - "validation/kervellec_lynx_two_layer/gate0_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Inventory Zenodo record metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/kervellec_lynx_gate0
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import urllib.request
+
+          RECORD_ID = 13354571
+          API_URL = f"https://zenodo.org/api/records/{RECORD_ID}"
+
+          req = urllib.request.Request(API_URL, headers={"User-Agent": "eog-response-blind-gate0/1.0"})
+          with urllib.request.urlopen(req, timeout=30) as response:
+              record = json.load(response)
+
+          files = []
+          for row in record.get("files", []):
+              links = row.get("links") or {}
+              files.append({
+                  "id": row.get("id"),
+                  "key": row.get("key"),
+                  "size": row.get("size"),
+                  "checksum": row.get("checksum"),
+                  "download_url": links.get("self") or links.get("content"),
+              })
+
+          if not files:
+              raise RuntimeError("Zenodo record exposes no files")
+
+          lower = [str(row["key"]).lower() for row in files]
+          geometry_terms = ("coord", "xy", "grid", "site", "cell", "point", "location", "distance", "dist")
+          response_terms = ("lynx", "detect", "presence", "occup", "history", "y.", "response")
+          geometry_candidates = [
+              files[i]["key"] for i, name in enumerate(lower)
+              if any(term in name for term in geometry_terms)
+          ]
+          response_candidates = [
+              files[i]["key"] for i, name in enumerate(lower)
+              if any(term in name for term in response_terms)
+          ]
+
+          result = {
+              "status": "zenodo_metadata_inventory_complete",
+              "candidate": "Kervellec et al. 2024 Jura lynx recolonisation",
+              "record_id": RECORD_ID,
+              "doi": (record.get("metadata") or {}).get("doi") or record.get("doi"),
+              "title": (record.get("metadata") or {}).get("title"),
+              "created": record.get("created"),
+              "modified": record.get("modified"),
+              "files": files,
+              "geometry_name_candidates": geometry_candidates,
+              "response_name_candidates": response_candidates,
+              "response_rows_opened": False,
+              "response_file_bytes_downloaded": False,
+              "any_file_bytes_downloaded": False,
+              "next": "role-adjudicate file names and documentation; download only clearly non-response geometry/documentation members"
+          }
+          Path("build/kervellec_lynx_gate0/zenodo_metadata_inventory.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps({
+              "status": result["status"],
+              "title": result["title"],
+              "doi": result["doi"],
+              "file_count": len(files),
+              "file_names": [row["key"] for row in files],
+              "geometry_name_candidates": geometry_candidates,
+              "response_name_candidates": response_candidates,
+              "response_rows_opened": False,
+              "any_file_bytes_downloaded": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/kervellec_lynx_gate0/zenodo_metadata_inventory.json'))
+          assert p['response_rows_opened'] is False
+          assert p['response_file_bytes_downloaded'] is False
+          assert p['any_file_bytes_downloaded'] is False
+          PY
+      - name: Upload metadata-only evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: kervellec-lynx-gate0-metadata
+          path: build/kervellec_lynx_gate0/zenodo_metadata_inventory.json
+          if-no-files-found: error
