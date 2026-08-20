@@ -1,0 +1,48 @@
+{
+  "status": "gate1_pre_response_structural_scale_and_adequacy_freeze",
+  "response_rows_opened": false,
+  "node_input": {
+    "geometry_member": "SpatialOccupancyNimble2/Lynx/data/xy99_Lynx.RData",
+    "sampled_grid_member": "SpatialOccupancyNimble2/Lynx/data/gridFrCroppedSampled.RData",
+    "expected_node_count": 644,
+    "node_id_column": "site",
+    "geometry_class": "sfc_POINT",
+    "availability_columns": ["eff_1999_2000", "eff_2009_2010", "eff_2019_2020"],
+    "allowed_content": "response-independent site geometry and sampling-effort/availability columns only; Data99.RData remains forbidden"
+  },
+  "analyst_choice_structural_axis": {
+    "axis_id": "geo",
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "construction": "minimum Euclidean point-distance threshold reaching each target largest weak component fraction; equal-distance ties admitted together",
+    "interpretation": "response-blind local-to-near-spanning analyst-choice scales, not lynx dispersal limits or fitted resistance scales"
+  },
+  "world_universe_at_gate1": {
+    "include_all_four_primary_structural_worlds": true,
+    "resistance_or_environment_intersections_deferred": true,
+    "reason": "first certify that response-free geographic geometry brackets the declared sampled Jura grid; do not import fitted circuit/LCP resistance into EOG world design"
+  },
+  "structural_adequacy_declaration": {
+    "requirements": [
+      "the 0.90 level must achieve largest weak component fraction >= 0.90",
+      "the 0.90 level must have isolated-node fraction <= 0.05",
+      "at least three distinct positive distance thresholds must exist across the four levels",
+      "thresholds and edge sets must be nested and deterministic"
+    ],
+    "audit_horizon": 1,
+    "horizon_interpretation": "one declared EOG propagation transition per primary-occasion interval; this is structural depth, not calibrated physical movement distance or time",
+    "stop_rule": "if any declared requirement fails, stop before reading Data99.RData response rows"
+  },
+  "coordinate_policy": {
+    "use_geometry_coordinates_in_frozen_CRS": true,
+    "distance_metric": "Euclidean",
+    "reporting_units": "kilometres when the frozen projected CRS is metre-based; otherwise stop for unit adjudication before ladder construction"
+  },
+  "next_if_pass": [
+    "freeze exact node IDs, coordinates, availability summaries and structural fingerprints",
+    "freeze source/process boundary and Layer-A rules without fitted resistance tuning",
+    "retain unchanged symmetric_world_support_summary_v1 for Layer B",
+    "freeze authors' circuit/LCP spatial dynamic occupancy comparators and all metrics/runtime",
+    "complete the generic 16-key outcome-access contract before opening Data99.RData"
+  ],
+  "no_retuning": "Do not add kNN worlds, change LCC targets, exclude remote sampled cells, use lynx detections to alter the 644-node geometry, or use fitted connectivity parameters to choose EOG graph scales after this declaration."
+}
