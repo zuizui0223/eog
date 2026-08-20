@@ -1,0 +1,30 @@
+{
+  "status": "gate0_stop_external_registry_incomplete",
+  "candidate": "Kase et al. 2025 Chicago striped skunk dynamic occupancy",
+  "workflow_run_id": 32376287074,
+  "result_fingerprint": "57440758d8f211a445b4e5b6315625d993fc544c29ca545bd5e4015088889db4",
+  "site_registry_count": 106,
+  "coordinate_registry_count": 136,
+  "matched_exact_site_count": 100,
+  "exact_join_coverage_fraction": 0.9433962264150944,
+  "required_exact_coverage_fraction": 1.0,
+  "missing_exact_site_ids": [
+    "C05-SPA1",
+    "D02-BMT1",
+    "D05-ADC2",
+    "R02-HRF1",
+    "S06-CBW0",
+    "S08-WGL3"
+  ],
+  "response_rows_opened": false,
+  "response_file_bytes_opened": false,
+  "structural_ladder_attempted": false,
+  "interpretation": "The older response-free coordinate registry does not provide an exact immutable coordinate match for all 106 skunk-analysis sites. Alias or nearest-location repair would introduce post-selection analyst judgment, so the candidate stops before structural or response access.",
+  "no_rescue": [
+    "do not inspect complete_data.csv Long/Lat to repair missing coordinates",
+    "do not map missing Site IDs to similarly named older stations",
+    "do not weaken the exact-coverage requirement",
+    "do not treat the 100-site subset as the original 106-site fresh endpoint"
+  ],
+  "repository_disposition": "close candidate PR unmerged"
+}
