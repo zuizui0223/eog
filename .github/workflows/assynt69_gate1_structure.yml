@@ -1,0 +1,68 @@
+name: Assynt 69-patch Gate 1 structure
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/assynt69_gate1_structure.yml"
+      - "benchmarks/run_assynt69_gate1_structure.py"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/prospective_estimability.py"
+  push:
+    branches:
+      - agent/assynt69-gate0-screen
+    paths:
+      - ".github/workflows/assynt69_gate1_structure.yml"
+      - "benchmarks/run_assynt69_gate1_structure.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG
+        run: python -m pip install .
+      - name: Fetch exact response-independent geometry only
+        run: |
+          set -euo pipefail
+          rm -f /tmp/XY_data.txt
+          curl -L --fail --retry 2 --retry-all-errors \
+            'https://ndownloader.figshare.com/files/5623767' \
+            -o /tmp/XY_data.txt
+          test "$(wc -c < /tmp/XY_data.txt)" -eq 1397
+          echo '9174c10342b9d0d1d94397fa6ce5d4be  /tmp/XY_data.txt' | md5sum -c -
+      - name: Run response-blind structural and estimability audit
+        run: |
+          python benchmarks/run_assynt69_gate1_structure.py \
+            --geometry /tmp/XY_data.txt \
+            --output build/assynt69_gate1
+          python - <<'PY'
+          import json
+          p=json.load(open('build/assynt69_gate1/assynt69_gate1_result.json'))
+          assert p['response_rows_opened'] is False
+          assert p['response_file_downloaded'] is False
+          assert p['geometry']['node_count'] == 69
+          assert p['structural_gate']['pass'] is True
+          assert p['structural_gate']['distinct_positive_threshold_count'] >= 3
+          assert p['prospective_estimability']['status'] == 'uncertain_pre_response'
+          assert 'calibration_non_events' in p['prospective_estimability']['unresolved_keys']
+          assert 'heldout_non_events' in p['prospective_estimability']['unresolved_keys']
+          assert p['status'] == 'stop_uncertain_pre_response_non_event_bounds'
+          PY
+      - name: Remove source bytes
+        if: always()
+        run: rm -f /tmp/XY_data.txt
+      - name: Upload immutable response-blind Gate 1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assynt69-gate1-structure
+          path: build/assynt69_gate1
+          if-no-files-found: warn
