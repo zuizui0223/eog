@@ -1,8 +1,8 @@
 """Response-blind categorical token schema for once-only validation.
 
-This module is validation infrastructure, not an ecological operator.  It freezes the
+This module is validation infrastructure, not an ecological operator. It freezes the
 small, deterministic text-normalization choices needed to interpret categorical
-response tokens before row-level outcome access.  A later response opening may use the
+response tokens before row-level outcome access. A later response opening may use the
 frozen rules, but may not invent aliases or alter normalization after seeing a token.
 """
 from __future__ import annotations
@@ -11,7 +11,6 @@ from dataclasses import dataclass
 import hashlib
 import json
 import re
-from typing import Sequence
 
 
 _ASCII_WHITESPACE = re.compile(r"[ \t\r\n\f\v]+")
@@ -30,10 +29,11 @@ def _canonical_sha256(payload: object) -> str:
 
 
 def _clean_text(value: object, label: str) -> str:
-    text = str(value)
-    if not text.strip():
+    if not isinstance(value, str):
+        raise TypeError(f"{label} must be str")
+    if not value.strip():
         raise ValueError(f"{label} must be non-empty")
-    return text
+    return value
 
 
 def _require_bool(value: object, label: str) -> bool:
@@ -46,9 +46,9 @@ def _require_bool(value: object, label: str) -> bool:
 class CategoricalTokenRule:
     """Frozen normalization and allowed categories for one response field.
 
-    Normalization is intentionally narrow and deterministic.  The rule can strip outer
+    Normalization is intentionally narrow and deterministic. The rule can strip outer
     whitespace, Unicode-casefold the token, and optionally remove ASCII whitespace
-    characters anywhere in the token.  No fuzzy matching, punctuation removal, numeric
+    characters anywhere in the token. No fuzzy matching, punctuation removal, numeric
     coercion, or post-hoc alias table is performed.
     """
 
@@ -64,9 +64,11 @@ class CategoricalTokenRule:
 
         if isinstance(self.canonical_values, (str, bytes)):
             raise TypeError("canonical_values must be a sequence of category strings")
-        values = tuple(str(value) for value in self.canonical_values)
+        values = tuple(self.canonical_values)
         if not values:
             raise ValueError("canonical_values must contain at least one category")
+        if not all(isinstance(value, str) for value in values):
+            raise TypeError("canonical_values must contain only strings")
         if any(not value.strip() for value in values):
             raise ValueError("canonical_values must not contain empty categories")
         if len(set(values)) != len(values):
@@ -81,8 +83,6 @@ class CategoricalTokenRule:
         )
 
         normalized = [normalize_categorical_token(self, value) for value in values]
-        if any(not value for value in normalized):
-            raise ValueError("a canonical category normalizes to an empty token")
         if len(set(normalized)) != len(normalized):
             collisions: dict[str, list[str]] = {}
             for raw, norm in zip(values, normalized, strict=True):
@@ -122,7 +122,6 @@ class CategoricalTokenRule:
         return canonicalize_categorical_token(self, value)
 
 
-
 def normalize_categorical_token(rule: CategoricalTokenRule, value: object) -> str:
     """Apply only the normalization operations prospectively declared by ``rule``."""
 
@@ -130,7 +129,9 @@ def normalize_categorical_token(rule: CategoricalTokenRule, value: object) -> st
         raise TypeError("rule must be CategoricalTokenRule")
     if value is None:
         raise ValueError(f"{rule.field_name} token must not be None")
-    text = str(value)
+    if not isinstance(value, str):
+        raise TypeError(f"{rule.field_name} token must be str")
+    text = value
     if rule.strip_outer_whitespace:
         text = text.strip()
     if rule.casefold:
@@ -140,7 +141,6 @@ def normalize_categorical_token(rule: CategoricalTokenRule, value: object) -> st
     if not text:
         raise ValueError(f"{rule.field_name} token normalizes to empty")
     return text
-
 
 
 def canonicalize_categorical_token(rule: CategoricalTokenRule, value: object) -> str:
@@ -161,7 +161,7 @@ class ResponseTokenSchemaDeclaration:
     """Frozen collection of per-field categorical token rules.
 
     Rule order is not scientifically meaningful, so schema fingerprinting canonicalizes
-    by field name.  Field names themselves must be unique.
+    by field name. Field names themselves must be unique.
     """
 
     rules: tuple[CategoricalTokenRule, ...]
@@ -198,7 +198,11 @@ class ResponseTokenSchemaDeclaration:
         )
 
     def rule_for(self, field_name: object) -> CategoricalTokenRule:
-        field = str(field_name).strip()
+        if not isinstance(field_name, str):
+            raise TypeError("field_name must be str")
+        field = field_name.strip()
+        if not field:
+            raise ValueError("field_name must be non-empty")
         for rule in self.rules:
             if rule.field_name == field:
                 return rule
