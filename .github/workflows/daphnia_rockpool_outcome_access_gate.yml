@@ -1,0 +1,142 @@
+name: Daphnia rock-pool outcome access gate
+
+on:
+  push:
+    branches:
+      - agent/daphnia-rockpool-gate0-screen
+    paths:
+      - ".github/workflows/daphnia_rockpool_outcome_access_gate.yml"
+      - "validation/daphnia_rockpool_two_layer/outcome_access_freeze_ledger.json"
+      - "validation/daphnia_rockpool_two_layer/runtime_lock.json"
+      - "validation/daphnia_rockpool_two_layer/gate2_prediction_contract.json"
+      - "validation/daphnia_rockpool_two_layer/prospective_estimability_contract.json"
+      - "src/eog/v2/outcome_access.py"
+      - "src/eog/v2/prospective_estimability.py"
+  pull_request:
+    paths:
+      - ".github/workflows/daphnia_rockpool_outcome_access_gate.yml"
+      - "validation/daphnia_rockpool_two_layer/outcome_access_freeze_ledger.json"
+      - "validation/daphnia_rockpool_two_layer/runtime_lock.json"
+      - "validation/daphnia_rockpool_two_layer/gate2_prediction_contract.json"
+      - "validation/daphnia_rockpool_two_layer/prospective_estimability_contract.json"
+      - "src/eog/v2/outcome_access.py"
+      - "src/eog/v2/prospective_estimability.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authorize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen package
+        run: python -m pip install .
+      - name: Evaluate generic once-only outcome-access gate
+        run: |
+          set -euo pipefail
+          mkdir -p build/daphnia_rockpool_outcome_access
+          python - <<'PY'
+          from __future__ import annotations
+          from dataclasses import asdict
+          import json
+          from pathlib import Path
+
+          from eog.v2.prospective_estimability import (
+              AggregateCountInterval,
+              AggregateEstimabilityEvidence,
+              ProspectiveEstimabilityDeclaration,
+              evaluate_prospective_estimability,
+          )
+          from eog.v2.outcome_access import (
+              FrozenOutcomeAccessContract,
+              evaluate_outcome_access_gate,
+          )
+
+          root = Path("validation/daphnia_rockpool_two_layer")
+          prospective = json.loads((root / "prospective_estimability_contract.json").read_text(encoding="utf-8"))
+          ledger = json.loads((root / "outcome_access_freeze_ledger.json").read_text(encoding="utf-8"))
+          runtime = json.loads((root / "runtime_lock.json").read_text(encoding="utf-8"))
+
+          declaration = ProspectiveEstimabilityDeclaration(**prospective["required_counts"])
+          evidence = AggregateEstimabilityEvidence(
+              source_label=prospective["source_label"],
+              endpoint_definition_matches=bool(prospective["endpoint_definition_matches"]),
+              response_rows_opened=bool(prospective["response_rows_opened"]),
+              intervals={
+                  key: AggregateCountInterval(lower=value.get("lower"), upper=value.get("upper"))
+                  for key, value in prospective["published_evidence"].items()
+              },
+              note=prospective["reason"],
+          )
+          estimability = evaluate_prospective_estimability(declaration, evidence)
+          if estimability.status != prospective["status"]:
+              raise RuntimeError(
+                  f"prospective status drift: {estimability.status} != {prospective['status']}"
+              )
+
+          contract = FrozenOutcomeAccessContract(
+              attempt_id=ledger["attempt_id"],
+              freeze_fingerprints=ledger["freeze_fingerprints"],
+              response_rows_opened=bool(ledger["response_rows_opened"]),
+              exact_count_gate_first=bool(ledger["exact_count_gate_first"]),
+              zero_fit_on_count_failure=bool(ledger["zero_fit_on_count_failure"]),
+              no_post_open_redesign=bool(ledger["no_post_open_redesign"]),
+              note=ledger["note"],
+          )
+          decision = evaluate_outcome_access_gate(contract, estimability)
+
+          if runtime["smoke"]["response_member_bytes_downloaded"] is not False:
+              raise RuntimeError("runtime lock records response access during smoke")
+          if runtime["smoke"]["result_fingerprint"] != "7ee926f5f7cb9167d9e27c2577dd8174350f6b156a6030ea6aceb0c0d9916a9c":
+              raise RuntimeError("smoke fingerprint drift")
+          if runtime["runner"]["git_blob_sha"] != "01b950fd3495196908ba759bf6fea75eb75a2407":
+              raise RuntimeError("runner blob drift in runtime lock")
+
+          payload = {
+              "status": decision.status,
+              "authorized": decision.authorized,
+              "prospective_status": estimability.status,
+              "prospective_disposition": decision.prospective_disposition,
+              "missing_freeze_keys": list(decision.missing_freeze_keys),
+              "contract_fingerprint": decision.contract_fingerprint,
+              "estimability_fingerprint": decision.estimability_fingerprint,
+              "decision_fingerprint": decision.fingerprint,
+              "exact_count_gate_first": decision.exact_count_gate_first,
+              "zero_fit_on_count_failure": decision.zero_fit_on_count_failure,
+              "no_post_open_redesign": decision.no_post_open_redesign,
+              "response_rows_opened": False,
+              "response_member_bytes_downloaded": False,
+              "reason": decision.reason,
+          }
+          out = Path("build/daphnia_rockpool_outcome_access/outcome_access_gate_result.json")
+          out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(payload, indent=2, sort_keys=True))
+
+          if not decision.authorized:
+              raise SystemExit(2)
+          if decision.status != "authorized_once_only_exact_count_gate_required":
+              raise SystemExit(3)
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/daphnia_rockpool_outcome_access/outcome_access_gate_result.json'))
+          assert p['authorized'] is True
+          assert p['status'] == 'authorized_once_only_exact_count_gate_required'
+          assert p['missing_freeze_keys'] == []
+          assert p['response_rows_opened'] is False
+          assert p['response_member_bytes_downloaded'] is False
+          PY
+      - name: Upload authorization evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: daphnia-rockpool-outcome-access-gate
+          path: build/daphnia_rockpool_outcome_access/outcome_access_gate_result.json
+          if-no-files-found: error
