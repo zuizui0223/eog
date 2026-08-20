@@ -1,0 +1,63 @@
+{
+  "status": "gate0_pass_response_blind_registry_and_structure",
+  "candidate": "Murray et al. 2021 Chicago coyote multi-season camera survey",
+  "workflow_run_id": 32376971820,
+  "fingerprint": "8d83cd2c100e160f6e0887f9d37c9fb5e2bba89050b5d3f771d7cee4780f8244",
+  "ladder_fingerprint": "c7b335ff85cc16901a1a55bb96258068eb68981359adc7c32da64a6165469d6e",
+  "model_covariates_blob": "e55380935ab1ea75e24a62d114fa70dd0e26aa59",
+  "raw_site_coords_blob": "391b6de221f3f827e94bf6d3f8a8050f279c6a8e",
+  "response_blob_frozen": "3ba6cfa50f5b74bdc6532676f7eb475ab0c46523",
+  "site_registry_count": 113,
+  "coordinate_registry_count": 136,
+  "matched_exact_site_count": 113,
+  "missing_exact_site_ids": [],
+  "exact_join_coverage_fraction": 1.0,
+  "exact_join_pass": true,
+  "response_bytes_opened": false,
+  "response_rows_opened": false,
+  "distinct_positive_structural_thresholds": 4,
+  "nested_scale_pass": true,
+  "level90_lcc_pass": true,
+  "level90_isolated_pass": true,
+  "structural_pass": true,
+  "final_gate_pass": true,
+  "structural_ladder": [
+    {
+      "level_id": "chicago_coyote_utm_lcc250",
+      "target_largest_component_fraction": 0.25,
+      "distance_threshold_m": 3078.2730548149884,
+      "achieved_largest_component_fraction": 0.30973451327433627,
+      "weak_component_count": 22,
+      "isolated_node_fraction": 0.05309734513274336,
+      "directed_edge_count": 270
+    },
+    {
+      "level_id": "chicago_coyote_utm_lcc500",
+      "target_largest_component_fraction": 0.5,
+      "distance_threshold_m": 3618.619211798887,
+      "achieved_largest_component_fraction": 0.6194690265486725,
+      "weak_component_count": 11,
+      "isolated_node_fraction": 0.02654867256637168,
+      "directed_edge_count": 378
+    },
+    {
+      "level_id": "chicago_coyote_utm_lcc750",
+      "target_largest_component_fraction": 0.75,
+      "distance_threshold_m": 4792.435393409076,
+      "achieved_largest_component_fraction": 0.831858407079646,
+      "weak_component_count": 3,
+      "isolated_node_fraction": 0.0,
+      "directed_edge_count": 610
+    },
+    {
+      "level_id": "chicago_coyote_utm_lcc900",
+      "target_largest_component_fraction": 0.9,
+      "distance_threshold_m": 5230.133937099508,
+      "achieved_largest_component_fraction": 0.9823008849557522,
+      "weak_component_count": 2,
+      "isolated_node_fraction": 0.0,
+      "directed_edge_count": 682
+    }
+  ],
+  "scientific_boundary": "All geometry and conventional site covariates were read from response-free files in one immutable public release. Thresholds are analyst-choice structural regimes, not biological coyote movement distances. Coyote detections remained unopened."
+}
