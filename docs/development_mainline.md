@@ -50,7 +50,7 @@ Retain:
 - current source state;
 - per-world support;
 - compatible/surviving rule set;
-- robust/contingent/excluded structure;
+- possible/robust/unresolved and finite-world-excluded structure;
 - sequential contraction and finite-universe falsification.
 
 Implementations:

@@ -26,7 +26,8 @@ EOG v2 now includes:
 - static/dynamic reachability;
 - inverse compatible-world reconstruction;
 - exact world-indexed support state;
-- robust / contingent / all-world-excluded classes;
+- exact possible / robust / unresolved / all-world-excluded views;
+- fingerprint-preserving compatible-world-universe monotonicity audit;
 - sequential rule contraction and finite-universe falsification;
 - changing-current-source sequential forecast with frozen rule identities;
 - response-blind structural scale ladders;
@@ -53,7 +54,7 @@ Keep exact world/rule identity for:
 - compatibility;
 - per-world support;
 - evidence-driven rule elimination;
-- robust/contingent interpretation;
+- possible/robust/unresolved finite-world interpretation;
 - finite-universe falsification.
 
 Known-truth tests and the independent Glanville rule history both support this role.

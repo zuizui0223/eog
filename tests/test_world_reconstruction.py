@@ -5,6 +5,7 @@ from eog.dynamic_island_reachability import DynamicReachabilityEdge, build_dynam
 from eog.v2.world_reconstruction import (
     FiniteWorld,
     build_world_flow_set,
+    compare_world_flow_universes,
     compare_reconstructions,
     forward_reachable_configuration,
     minimum_relaxation_frontier,
@@ -101,10 +102,73 @@ def test_world_flow_set_retains_world_identity_and_certifies_only_finite_univers
     assert flow_set.robustly_unreachable_ids == ("E",)
     assert flow_set.contingent_ids == ("B", "D")
     assert flow_set.reachable_in_all_ids == ("A", "C")
+    assert flow_set.possible_ids == ("A", "B", "C", "D")
+    assert flow_set.robust_ids == ("A", "C")
+    assert flow_set.unresolved_ids == ("B", "D")
+    assert set(flow_set.possible_ids) == set(flow_set.robust_ids) | set(
+        flow_set.unresolved_ids
+    )
+    assert set(flow_set.possible_ids).isdisjoint(flow_set.robustly_unreachable_ids)
     assert flow_set.coverage_certificate == "exhaustive_finite_compatible_world_set"
     assert flow_set.mass_lower_envelope.shape == (4, len(NODE_IDS))
     assert flow_set.mass_upper_envelope.shape == (4, len(NODE_IDS))
     assert np.all(flow_set.mass_lower_envelope <= flow_set.mass_upper_envelope)
+
+
+def test_expanding_compatible_world_universe_weakens_robustness_and_exclusion():
+    chain, direct, _ = _worlds()
+    before_reconstruction = reconstruct_compatible_worlds(
+        (chain,), ("A", "C"), max_steps=3
+    )
+    after_reconstruction = reconstruct_compatible_worlds(
+        (chain, direct), ("A", "C"), max_steps=3
+    )
+    before = build_world_flow_set(before_reconstruction, (chain,))
+    after = build_world_flow_set(after_reconstruction, (chain, direct))
+
+    update = compare_world_flow_universes(before, after)
+
+    assert before.robust_ids == ("A", "B", "C")
+    assert after.robust_ids == ("A", "C")
+    assert before.possible_ids == ("A", "B", "C")
+    assert after.possible_ids == ("A", "B", "C", "D")
+    assert update.added_world_ids == ("direct",)
+    assert update.lost_robust_ids == ("B",)
+    assert update.gained_possible_ids == ("D",)
+    assert update.lost_robustly_unreachable_ids == ("D",)
+    assert update.possible_monotonicity_holds
+    assert update.robust_monotonicity_holds
+    assert update.exclusion_monotonicity_holds
+    assert update.monotonicity_holds
+    assert update.coverage_certificate == "exact_nested_finite_compatible_world_sets"
+
+
+def test_world_universe_comparison_rejects_changed_shared_world_or_contract():
+    chain, direct, _ = _worlds()
+    before_reconstruction = reconstruct_compatible_worlds(
+        (chain,), ("A", "C"), max_steps=3
+    )
+    before = build_world_flow_set(before_reconstruction, (chain,))
+
+    changed_chain = FiniteWorld("chain", direct.operator, ("A",))
+    changed_reconstruction = reconstruct_compatible_worlds(
+        (changed_chain, direct), ("A", "C"), max_steps=3
+    )
+    changed = build_world_flow_set(changed_reconstruction, (changed_chain, direct))
+    with pytest.raises(ValueError, match="identical fingerprints"):
+        compare_world_flow_universes(before, changed)
+
+    different_tolerance_reconstruction = reconstruct_compatible_worlds(
+        (chain, direct),
+        ("A", "C"),
+        max_steps=3,
+        support_tolerance=1e-10,
+    )
+    different_tolerance = build_world_flow_set(
+        different_tolerance_reconstruction, (chain, direct)
+    )
+    with pytest.raises(ValueError, match="support_tolerance"):
+        compare_world_flow_universes(before, different_tolerance)
 
 
 def test_relaxation_frontier_keeps_geographic_and_environmental_axes_separate():
