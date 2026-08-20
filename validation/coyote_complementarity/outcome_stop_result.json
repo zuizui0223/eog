@@ -1,0 +1,26 @@
+{
+  "status": "pre_model_response_schema_mismatch",
+  "candidate": "Murray et al. 2021 Chicago coyote multi-season camera survey",
+  "authoritative_once_only_run_id": 32422045837,
+  "authoritative_head_sha": "8a67cb7a0a3863721b6ad00a18597981b5886996",
+  "run_number": 1,
+  "run_attempt": 1,
+  "response_identity_git_blob": "3ba6cfa50f5b74bdc6532676f7eb475ab0c46523",
+  "response_bytes_opened": true,
+  "response_rows_opened": true,
+  "failure_stage": "read_released_response before exact_count_gate",
+  "failure": {
+    "field": "Week",
+    "observed_token": "week1",
+    "frozen_parser_expected_tokens": ["week 1", "week 2", "week 3", "week 4"],
+    "exception": "ValueError: unexpected Week value: 'week1'"
+  },
+  "exact_count_gate_executed": false,
+  "models_fit": 0,
+  "heldout_scores": 0,
+  "complementarity_status": "not_evaluated",
+  "post_response_retuning": false,
+  "rerun_permitted_as_independent": false,
+  "interpretation": "The candidate is neither favorable nor adverse evidence for EOG paired complementarity. The frozen response parser was not compatible with the released categorical Week token representation. Changing the parser after this response opening would violate the no-post-open-redesign and once-only contracts.",
+  "next": "close candidate unmerged; add a generic pre-response token-normalization/schema contract for future attempts without rerunning this coyote endpoint"
+}
