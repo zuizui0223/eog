@@ -1,0 +1,47 @@
+{
+  "status": "gate0_response_blind_screen",
+  "candidate": "Pyrgus armoricanus northern Swedish 50-patch metapopulation, 2004-2016",
+  "paper_doi": "10.1111/1365-2656.12740",
+  "dryad_doi": "10.5061/dryad.b563d",
+  "scientific_target": "survey-recorded summer-generation patch colonisation: surveyed non-detection at t followed by surveyed detection at t+1",
+  "response_independent_node_definition": "dry unfertilized grassland patch containing at least one larval host plant, separated from adjacent patches by >=50 m of divergent vegetation",
+  "declared_node_universe": "all 50 habitat-defined monitored patches, not the response-conditioned 40 patches occupied at least once used in some original analyses",
+  "response_firewall": {
+    "allowed_before_outcome_authorization": [
+      "Dryad dataset/version/file metadata",
+      "Site_data.csv only after metadata verifies it is physically separate from Monitoring_data.csv",
+      "published methods and aggregate colonisation/extinction summaries"
+    ],
+    "forbidden_before_outcome_authorization": [
+      "Monitoring_data.csv bytes",
+      "patch-year abundance or detection rows",
+      "response-derived calibration/heldout event counts"
+    ],
+    "response_rows_opened": false,
+    "monitoring_file_downloaded": false
+  },
+  "prospective_split_candidate": {
+    "calibration_transitions": "2004->2005 through 2009->2010",
+    "heldout_transitions": "2010->2011 through 2015->2016",
+    "note": "Frozen before response access; exact usable rows remain subject to published survey-availability semantics and the once-only exact count gate."
+  },
+  "prospective_estimability": {
+    "status": "uncertain_pre_response",
+    "published_aggregate": "mean 2.64 colonisation events per year over 13 years; blockwise exact counts not inspected",
+    "execution_policy": "continue response-blind only; exact count gate required before any fit or heldout score"
+  },
+  "source_process_boundary": "Primary interpretation will be conditional on realised sources inside the declared monitored patch network unless stronger closure is established response-blind. External recruitment is not silently claimed absent.",
+  "gate0_pass_requires": [
+    "stable public Dryad version and separate Monitoring_data.csv / Site_data.csv identities",
+    "Site_data.csv contains a complete response-independent patch registry with usable geometry for the declared 50-patch universe",
+    "Site_data.csv contains no butterfly response columns",
+    "survey design supports explicit unavailable/missing patch-years rather than treating unsurveyed years as zero"
+  ],
+  "no_rescue": [
+    "do not subset to patches occupied at least once",
+    "do not open Monitoring_data.csv to determine candidate eligibility",
+    "do not redefine split after outcome access",
+    "do not lower frozen exact count minima",
+    "do not add candidate-specific connectivity operators"
+  ]
+}
