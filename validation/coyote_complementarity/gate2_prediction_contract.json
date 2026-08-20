@@ -1,0 +1,109 @@
+{
+  "status": "gate2_pre_response_paired_complementarity_frozen",
+  "candidate": "Murray et al. 2021 Chicago coyote multi-season camera survey",
+  "response_content_opened": false,
+  "gate0_fingerprint": "8d83cd2c100e160f6e0887f9d37c9fb5e2bba89050b5d3f771d7cee4780f8244",
+  "source_repository_commit": "a068e2aba265551e3b29b1c3ec8c4b1f34eafcdb",
+  "published_prep_code": {
+    "path": "R/prep_data.R",
+    "git_blob_sha": "e932ef12ad60310331aeadf392419ecb6baf969a",
+    "role": "response-blind provenance for the exact 16-season order and published seasonal temperature vector"
+  },
+  "response_source": {
+    "path": "data/coyote_detection_data.csv",
+    "git_blob_sha": "3ba6cfa50f5b74bdc6532676f7eb475ab0c46523",
+    "expected_columns": ["Season", "Week", "Date", "SeasonWeek", "StationID", "SurveyID", "IDWeek", "Coyote"]
+  },
+  "response_target": {
+    "name": "recorded_seasonal_coyote_reappearance",
+    "node_universe": "113 exact model_covariates sites",
+    "season_state": {
+      "known": "at least one active weekly Coyote value in the season",
+      "positive": "at least one Coyote=1 among active weekly records",
+      "negative": "at least one active weekly record and no Coyote=1",
+      "missing": "no active weekly records"
+    },
+    "risk_set": "site is known negative in source season and known in target season",
+    "positive": "risk-set site is positive in target season",
+    "negative": "risk-set site is negative in target season",
+    "boundary": "recorded camera detection transition, not latent biological colonisation or absence",
+    "fingerprint": "48a5bbd1981d42aec28619cfe47af77b80365ef0d720b1365031d0b41b61a86e"
+  },
+  "season_order": ["SP10", "SU10", "FA10", "WI11", "SP11", "SU11", "FA11", "WI12", "SP12", "SU12", "FA12", "WI13", "SP13", "SU13", "FA13", "WI14"],
+  "published_temperature_f": [47, 70, 48, 18, 42, 72, 47, 23, 43, 74, 45, 20, 39, 73, 53, 16],
+  "temporal_design": {
+    "calibration_transitions": [["SP10","SU10"],["SU10","FA10"],["FA10","WI11"],["WI11","SP11"],["SP11","SU11"],["SU11","FA11"],["FA11","WI12"],["WI12","SP12"],["SP12","SU12"],["SU12","FA12"]],
+    "heldout_transitions": [["FA12","WI13"],["WI13","SP13"],["SP13","SU13"],["SU13","FA13"],["FA13","WI14"]],
+    "calibration_transition_count": 10,
+    "heldout_transition_count": 5,
+    "model_refitting_during_heldout": false,
+    "rule_state_update_during_heldout": "allowed only after each heldout transition outcome is observed",
+    "fingerprint": "b6adca431b04f91ace2ceaa2a2df166ef7fe12e17f2cee1723941840c2b2d353"
+  },
+  "response_estimability": {
+    "minimum_calibration_events": 10,
+    "minimum_calibration_non_events": 40,
+    "minimum_heldout_events": 10,
+    "minimum_heldout_non_events": 40,
+    "minimum_heldout_outer_units_with_both_classes": 4,
+    "exact_count_gate_before_model_fit": true,
+    "zero_model_fits_on_failure": true,
+    "failure_status": "non_estimable_response_balance"
+  },
+  "layer_a": {
+    "declared_rule_count": 5,
+    "node_universe": "113 response-independent Chicago camera sites",
+    "current_sources": "all source-season sites with known positive recorded coyote detection",
+    "source_weights": "equal normalized weight across current sources",
+    "loss_support": 1.0,
+    "support_tolerance": 1e-15,
+    "kernel_scale_m": 3618.619211798887,
+    "kernel_scale_interpretation": "response-blind LCC50 analyst-choice scale, not a biological coyote movement estimate",
+    "rules": [
+      {"world_id":"geo_lcc250","threshold_m":3078.2730548149884,"raw_edge_support":"exp(-d/3618.619211798887) within threshold, otherwise 0"},
+      {"world_id":"geo_lcc500","threshold_m":3618.619211798887,"raw_edge_support":"exp(-d/3618.619211798887) within threshold, otherwise 0"},
+      {"world_id":"geo_lcc750","threshold_m":4792.435393409076,"raw_edge_support":"exp(-d/3618.619211798887) within threshold, otherwise 0"},
+      {"world_id":"geo_lcc900","threshold_m":5230.133937099508,"raw_edge_support":"exp(-d/3618.619211798887) within threshold, otherwise 0"},
+      {"world_id":"geo_exponential_full","threshold_m":null,"raw_edge_support":"exp(-d/3618.619211798887) for every distinct site pair"}
+    ],
+    "transition_normalization": "Q[s,j]=W[s,j]/(1+sum_k W[s,k]); candidate support is equal-source mean of Q[s,j]",
+    "rule_filter": "after each observed transition, eliminate a surviving rule if any newly positive risk-set target has support <=1e-15",
+    "monotonicity": "surviving world IDs may only remain or contract; eliminated worlds never return",
+    "falsification": "if all five worlds are eliminated, stop without retuning"
+  },
+  "layer_b": {
+    "representation": "symmetric_world_support_summary_v1",
+    "implementation": "production eog.v2.world_predictive_summary.summarize_worldset_for_prediction",
+    "feature_names": ["surviving_world_fraction","support_mean","support_std","support_min","support_max","support_q25","support_q50","support_q75","positive_support_fraction","support_range"],
+    "world_labels_exposed_as_supervised_columns": false,
+    "feature_fingerprint": "8d10de705b2b357ee8d8cd587c1d64fb3fb5f48839aec3c131ffe44d56372a6d"
+  },
+  "shared_external_features": {
+    "features": ["source_season_index","source_temperature_f","target_temperature_f","target_house","target_tree","target_imperv","target_utm_east","target_utm_north","current_source_count","nearest_current_source_distance_m","current_source_count_within_lcc250","current_source_count_within_lcc500","current_source_count_within_lcc750","current_source_count_within_lcc900","exp_source_exposure_within_lcc250","exp_source_exposure_within_lcc500","exp_source_exposure_within_lcc750","exp_source_exposure_within_lcc900","exp_source_exposure_full","source_active_week_count","target_active_week_count"],
+    "fingerprint": "43db6c215b63943a3f3639c08d86d0606a5fbfb973663b4fd8ea03370251adca",
+    "boundary": "Both paired models receive exactly these same conventional geometry, environment, source-exposure and observation-effort features."
+  },
+  "paired_learner": {
+    "type": "RandomForestClassifier",
+    "n_estimators": 500,
+    "max_features": "sqrt",
+    "min_samples_leaf": 5,
+    "class_weight": null,
+    "random_state": 20260820,
+    "n_jobs": -1,
+    "fingerprint": "b7787b2eedf85c2c1c1e55d6ee9202d4c9b120b94204c215bbf39026ed73d6f9",
+    "baseline": "shared external features only",
+    "augmented": "same learner and shared external features plus all 10 unchanged Layer-B features"
+  },
+  "paired_complementarity": {
+    "metric_name": "log_loss",
+    "lower_is_better": true,
+    "expected_outer_unit_count": 5,
+    "favorable_min_augmented_wins": 3,
+    "adverse_min_baseline_wins": 3,
+    "tie_tolerance": 0.0,
+    "evaluation": "production eog.v2.predictive_complementarity.evaluate_predictive_complementarity"
+  },
+  "secondary_metrics": ["pooled_log_loss", "Brier_score", "ROC_AUC", "average_precision"],
+  "no_retuning_after_response": ["113-site node universe","season order or 10/5 split","recorded-detection endpoint semantics","count minima","five Layer-A worlds or thresholds","source weighting or support tolerance","Layer-B feature surface","21 shared external features","RF hyperparameters","paired complementarity win thresholds or primary metric"]
+}
