@@ -1,0 +1,143 @@
+{
+  "status": "completed_frozen_heldout_test",
+  "candidate": "Luo et al. 2022 Tvärminne Daphnia rock-pool metacommunity",
+  "authoritative_once_only_run": {
+    "workflow_run_id": 32368225530,
+    "event": "push",
+    "head_sha": "e7e92fd72c67853280ddf4a5a116dab07a5f2774",
+    "run_number": 1,
+    "run_attempt": 1,
+    "conclusion": "success"
+  },
+  "result_identity": {
+    "result_fingerprint": "8fcf0e74452e29e14fd63efa51184bfbb00b7fb075ad485616798d8fd3a5a4ae",
+    "result_file_sha256": "0114c38864b270afa9ef1fad483e0e31bf6480525c589b3fadaa433629993d51",
+    "response_sha256": "077535f5fa0022b46a3463db13326493334b46c3d14b4e85b9e75a1fe5bd5e90",
+    "response_crc32": "aa2c0d97",
+    "response_shape": [546, 36],
+    "explicit_missing_values_zero_imputed_per_paper": 0
+  },
+  "response_boundary": "released annual 0/1 D. magna endpoint; zero is not interpreted as latent biological absence",
+  "exact_count_gate": {
+    "passed": true,
+    "all_transitions_have_current_sources": true,
+    "calibration_events": 730,
+    "calibration_non_events": 10102,
+    "heldout_events": 258,
+    "heldout_non_events": 4502,
+    "heldout_outer_units_with_both_classes": 11,
+    "minimums": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 8
+    }
+  },
+  "layer_a": {
+    "initial_world_ids": [
+      "geo_lcc250",
+      "geo_lcc500",
+      "geo_lcc750",
+      "geo_lcc900",
+      "geo_exponential_full"
+    ],
+    "first_update": {
+      "transition": [1982, 1983],
+      "events": 40,
+      "eliminated": ["geo_lcc250", "geo_lcc500", "geo_lcc750", "geo_lcc900"],
+      "surviving": ["geo_exponential_full"]
+    },
+    "final_surviving_world_ids": ["geo_exponential_full"],
+    "interpretation": "Positive distribution evidence immediately falsified every finite hard-threshold structural world while retaining the full-support exponential world. This is exact finite-universe rule contraction, not historical route identification."
+  },
+  "layer_b_estimability": {
+    "estimable_beyond_mean_only": true,
+    "retained_extra_feature_indices": [2, 3, 4, 5, 6, 7, 8, 9],
+    "max_residual_sd": 0.4532423928731796,
+    "residual_sd": [
+      0.4287979971383746,
+      0.040590124801735454,
+      0.0594711110020846,
+      0.03149453379822007,
+      0.02936336627010022,
+      0.028057407051631456,
+      0.4532423928731796,
+      0.42393591717810264
+    ]
+  },
+  "predictive_result": {
+    "models_fit": 4,
+    "heldout_scores": 44,
+    "heldout_transition_count": 11,
+    "macro_logloss": {
+      "geometry_process_rf": 0.20408367658820945,
+      "geometry_process_logistic": 0.25805164244501066,
+      "layer_b": 0.2857142161217336,
+      "mean_only": 0.2872752578981955
+    },
+    "pooled_metrics": {
+      "geometry_process_rf": {
+        "logloss": 0.20365718806414293,
+        "brier": 0.05193970683654456,
+        "auc": 0.7554566618109436,
+        "average_precision": 0.1462562707108106
+      },
+      "geometry_process_logistic": {
+        "logloss": 0.2589318444318966,
+        "brier": 0.06590720839343236,
+        "auc": 0.6760767824119512,
+        "average_precision": 0.10199908315916435
+      },
+      "layer_b": {
+        "logloss": 0.28713189955997287,
+        "brier": 0.07726294386018943,
+        "auc": 0.7166573684736155,
+        "average_precision": 0.11182050345590501
+      },
+      "mean_only": {
+        "logloss": 0.2884916963300313,
+        "brier": 0.07614292298353578,
+        "auc": 0.6692288354185393,
+        "average_precision": 0.09897419939513488
+      }
+    },
+    "layer_b_vs_mean_only": {
+      "status": "favorable_layer_b_predictive_value",
+      "macro_logloss_delta_layer_b_minus_mean_only": -0.0015610417764619355,
+      "layer_b_better_transitions": 8,
+      "total_transitions": 11
+    },
+    "layer_b_vs_external": {
+      "status": "adverse_external_predictive_added_value",
+      "better_external_baseline": "geometry_process_rf",
+      "layer_b_better_than_better_external_transitions": 0,
+      "total_transitions": 11,
+      "macro_logloss_gap_layer_b_minus_rf": 0.08163053953352415
+    }
+  },
+  "frozen_interpretation": {
+    "supported": [
+      "The label-invariant world-set distribution contains small but independently detectable heldout predictive information beyond surviving-world fraction plus mean support.",
+      "Exact world identity remains useful as an auditable update/falsification state: four hard structural worlds were eliminated by the first calibration transition."
+    ],
+    "not_supported": [
+      "EOG Layer B is a superior standalone predictor relative to a strong conventional machine-learning baseline.",
+      "The surviving exponential world is the true dispersal process or true historical route.",
+      "The current symmetric summary is optimal."
+    ],
+    "product_boundary": "Retain Layer A as exact scientific update/falsification state. Treat Layer B as a compact diagnostic or candidate complementary feature representation, not as a replacement for a strong external predictor."
+  },
+  "no_rescue": [
+    "do not retune the Daphnia worlds, split, features, count minima, comparators or metrics and call the rerun independent",
+    "do not replace the RF comparator after seeing the adverse result",
+    "do not interpret the full-support surviving world as identified biological dispersal truth",
+    "do not shop additional datasets merely to overturn the adverse external-prediction result"
+  ],
+  "audit": {
+    "audit_run_id": 32368453417,
+    "audit_artifact_id": 9406195518,
+    "audit_artifact_digest": "sha256:d5e780f31f7f73c7a9f0ceb244d9aa230c3a1e498d5c813fb67b917b1fa01dc3",
+    "response_reexecuted_by_audit": false
+  }
+}
