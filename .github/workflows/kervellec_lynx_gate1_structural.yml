@@ -1,0 +1,304 @@
+name: Kervellec lynx Gate 1 structural
+
+on:
+  push:
+    branches:
+      - agent/kervellec-lynx-gate0-screen
+    paths:
+      - ".github/workflows/kervellec_lynx_gate1_structural.yml"
+      - "validation/kervellec_lynx_two_layer/gate1_scale_adequacy_declaration.json"
+  pull_request:
+    paths:
+      - ".github/workflows/kervellec_lynx_gate1_structural.yml"
+      - "validation/kervellec_lynx_two_layer/gate1_scale_adequacy_declaration.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  structural:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.4.2"
+      - name: Install EOG package
+        run: python -m pip install .
+      - name: Selectively extract xy99_Lynx geometry only
+        run: |
+          set -euo pipefail
+          mkdir -p build/kervellec_lynx_gate1
+          python - <<'PY'
+          from __future__ import annotations
+          import binascii
+          from pathlib import Path
+          import struct
+          import urllib.request
+          import zlib
+
+          URL = "https://zenodo.org/api/records/13354572/files/SpatialOccupancyNimble_withData.zip/content"
+          NAME = "SpatialOccupancyNimble2/Lynx/data/xy99_Lynx.RData"
+          OFFSET = 237186
+          COMPRESSED_SIZE = 9032
+          UNCOMPRESSED_SIZE = 9216
+          CRC32 = "e9f15d75"
+          UA = "eog-response-blind-gate1/1.0"
+
+          def range_get(start, end):
+              req = urllib.request.Request(
+                  URL,
+                  headers={"User-Agent": UA, "Range": f"bytes={start}-{end}", "Accept-Encoding": "identity"},
+              )
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  status = getattr(response, "status", None) or response.getcode()
+                  if status != 206:
+                      raise RuntimeError(f"range request returned {status}, expected 206")
+                  body = response.read()
+              if len(body) != end - start + 1:
+                  raise RuntimeError("range response length mismatch")
+              return body
+
+          fixed = range_get(OFFSET, OFFSET + 29)
+          fields = struct.unpack("<4s5H3I2H", fixed)
+          if fields[0] != b"PK\x03\x04":
+              raise RuntimeError("invalid local ZIP header")
+          name_len, extra_len = fields[-2], fields[-1]
+          raw_name = range_get(OFFSET + 30, OFFSET + 30 + name_len - 1)
+          decoded = raw_name.decode("utf-8", errors="replace")
+          if decoded != NAME:
+              raise RuntimeError(f"member name mismatch: {decoded!r}")
+          data_start = OFFSET + 30 + name_len + extra_len
+          compressed = range_get(data_start, data_start + COMPRESSED_SIZE - 1)
+          content = zlib.decompress(compressed, -15)
+          if len(content) != UNCOMPRESSED_SIZE:
+              raise RuntimeError("xy99_Lynx uncompressed-size mismatch")
+          crc = f"{binascii.crc32(content) & 0xffffffff:08x}"
+          if crc != CRC32:
+              raise RuntimeError(f"xy99_Lynx CRC mismatch: {crc} != {CRC32}")
+          Path("build/kervellec_lynx_gate1/xy99_Lynx.RData").write_bytes(content)
+          PY
+      - name: Export response-blind coordinates and availability with base R
+        run: |
+          Rscript - <<'RS'
+          env <- new.env(parent = emptyenv())
+          load("build/kervellec_lynx_gate1/xy99_Lynx.RData", envir = env)
+          if (!exists("xy", envir = env, inherits = FALSE)) stop("xy object absent")
+          xy <- get("xy", envir = env)
+          if (nrow(xy) != 644L) stop(sprintf("expected 644 geometry rows, found %d", nrow(xy)))
+          required <- c("eff_1999_2000", "eff_2009_2010", "eff_2019_2020", "site", "geometry")
+          if (!all(required %in% names(xy))) stop("xy missing frozen response-blind columns")
+          geom <- xy[["geometry"]]
+          coords <- do.call(rbind, lapply(geom, function(g) as.numeric(unclass(g))[1:2]))
+          if (!is.matrix(coords) || nrow(coords) != 644L || ncol(coords) != 2L || any(!is.finite(coords))) {
+            stop("could not recover 644 finite point coordinates from xy geometry")
+          }
+          if (nrow(unique(coords)) != 644L) stop("xy geometry coordinates are not unique")
+          ids <- as.character(xy[["site"]])
+          if (length(unique(ids)) != 644L || any(!nzchar(ids))) stop("site IDs are not 644 unique non-empty values")
+
+          crs <- attr(geom, "crs")
+          crs_input <- if (!is.null(crs) && !is.null(crs$input)) as.character(crs$input) else NA_character_
+          crs_wkt <- if (!is.null(crs) && !is.null(crs$wkt)) as.character(crs$wkt) else NA_character_
+          metre_based <- FALSE
+          combined <- paste(c(crs_input, crs_wkt), collapse = " ")
+          if (grepl("2154|Lambert-93|metre|meter", combined, ignore.case = TRUE)) metre_based <- TRUE
+          if (!metre_based) stop(sprintf("could not certify metre-based projected CRS from metadata: %s", crs_input))
+
+          out <- data.frame(
+            site = ids,
+            x_m = coords[,1],
+            y_m = coords[,2],
+            eff_1999_2000 = xy[["eff_1999_2000"]],
+            eff_2009_2010 = xy[["eff_2009_2010"]],
+            eff_2019_2020 = xy[["eff_2019_2020"]],
+            stringsAsFactors = FALSE
+          )
+          write.csv(out, "build/kervellec_lynx_gate1/geometry_availability.csv", row.names = FALSE, quote = TRUE)
+
+          availability_summary <- function(v) {
+            vals <- suppressWarnings(as.numeric(v))
+            c(
+              finite = sum(is.finite(vals)),
+              positive = sum(is.finite(vals) & vals > 0),
+              zero = sum(is.finite(vals) & vals == 0),
+              missing = sum(!is.finite(vals))
+            )
+          }
+          s1 <- availability_summary(xy[["eff_1999_2000"]])
+          s2 <- availability_summary(xy[["eff_2009_2010"]])
+          s3 <- availability_summary(xy[["eff_2019_2020"]])
+          esc <- function(s) {
+            if (is.na(s)) return("null")
+            s <- gsub("\\\\", "\\\\\\\\", s)
+            s <- gsub('"', '\\"', s, fixed = TRUE)
+            paste0('"', s, '"')
+          }
+          sv <- function(x) paste0("{", paste(sprintf('"%s":%s', names(x), as.integer(x)), collapse=","), "}")
+          json <- paste0(
+            "{",
+            '"status":"response_blind_geometry_export_pass",',
+            '"node_count":644,',
+            '"unique_site_ids":644,',
+            '"unique_coordinates":644,',
+            '"crs_input":', esc(crs_input), ",",
+            '"metre_based_projected_crs":true,',
+            '"availability":{',
+              '"1999_2000":', sv(s1), ",",
+              '"2009_2010":', sv(s2), ",",
+              '"2019_2020":', sv(s3),
+            "},",
+            '"Data99_response_member_downloaded":false,',
+            '"response_rows_opened":false',
+            "}"
+          )
+          writeLines(json, "build/kervellec_lynx_gate1/geometry_availability_summary.json", useBytes=TRUE)
+          RS
+      - name: Build structural ladder and apply frozen adequacy contract
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+          import csv
+          import hashlib
+          import json
+          from pathlib import Path
+          import numpy as np
+
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+              structural_scale_adjacencies,
+          )
+          from eog.v2.world_adequacy import (
+              StructuralAdequacyDeclaration,
+              audit_world_universe_structure,
+              apply_structural_adequacy_gate,
+          )
+
+          TARGETS = (0.25, 0.50, 0.75, 0.90)
+          EXPECTED = 644
+          HORIZON = 1
+          MIN_LCC = 0.90
+          MAX_ISOLATED = 0.05
+
+          def canonical_sha256(payload):
+              return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
+
+          rows = list(csv.DictReader(open("build/kervellec_lynx_gate1/geometry_availability.csv", encoding="utf-8-sig")))
+          if len(rows) != EXPECTED:
+              raise RuntimeError(f"expected {EXPECTED} coordinate rows, found {len(rows)}")
+          node_ids = tuple(row["site"].strip() for row in rows)
+          if len(set(node_ids)) != EXPECTED or any(not x for x in node_ids):
+              raise RuntimeError("node IDs are not 644 unique non-empty values")
+          coords_m = np.asarray([(float(row["x_m"]), float(row["y_m"])) for row in rows], dtype=float)
+          if not np.isfinite(coords_m).all() or len({tuple(x) for x in coords_m}) != EXPECTED:
+              raise RuntimeError("coordinate matrix invalid or non-unique")
+
+          sq = np.sum(coords_m * coords_m, axis=1)
+          dist2 = sq[:,None] + sq[None,:] - 2.0 * (coords_m @ coords_m.T)
+          distance_km = np.sqrt(np.maximum(dist2, 0.0)) / 1000.0
+          np.fill_diagonal(distance_km, 0.0)
+
+          declaration = StructuralScaleLadderDeclaration(
+              axis_id="geo",
+              target_largest_component_fractions=TARGETS,
+          )
+          ladder = build_structural_scale_ladder(node_ids, distance_km, declaration)
+          structural = structural_scale_adjacencies(ladder, distance_km)
+          worlds = {f"structural::{world_id}": adjacency for world_id, adjacency in structural.items()}
+          audit = audit_world_universe_structure(node_ids, worlds, horizon=HORIZON)
+          gate = apply_structural_adequacy_gate(
+              audit,
+              StructuralAdequacyDeclaration(
+                  min_largest_weak_component_fraction=MIN_LCC,
+                  max_isolated_node_fraction=MAX_ISOLATED,
+                  require_at_least_one_world_pass=True,
+              ),
+          )
+
+          audits = {row.world_id: row for row in audit.world_audits}
+          level90 = audits.get("structural::geo_lcc900")
+          if level90 is None:
+              raise RuntimeError("missing structural::geo_lcc900 world")
+          positive = [v for v in ladder.thresholds if v > 0]
+          distinct_count = len({round(v, 12) for v in positive})
+          distinct_pass = distinct_count >= 3
+          level90_pass = level90.largest_weak_component_fraction >= MIN_LCC - 1e-12 and level90.isolated_node_fraction <= MAX_ISOLATED + 1e-12
+          ordered = [structural[level.level_id] for level in ladder.levels]
+          nested_pass = all(np.all(~a | b) for a, b in zip(ordered, ordered[1:]))
+          final_pass = bool(gate.passed and level90_pass and distinct_pass and nested_pass)
+
+          availability = json.load(open("build/kervellec_lynx_gate1/geometry_availability_summary.json"))
+          payload = {
+              "status": "gate1_pass_structural_adequacy" if final_pass else "gate1_stop_structural_inadequacy",
+              "response_rows_opened": False,
+              "Data99_response_member_downloaded": False,
+              "node_count": EXPECTED,
+              "node_ids_fingerprint": canonical_sha256(list(node_ids)),
+              "coordinate_units": "EPSG:2154/Lambert-93 projected metres; pairwise Euclidean distances converted to kilometres for the structural ladder",
+              "coordinate_range_m": {
+                  "x_min": float(np.min(coords_m[:,0])),
+                  "x_max": float(np.max(coords_m[:,0])),
+                  "y_min": float(np.min(coords_m[:,1])),
+                  "y_max": float(np.max(coords_m[:,1])),
+              },
+              "availability_summary": availability["availability"],
+              "structural_targets": list(TARGETS),
+              "audit_horizon": HORIZON,
+              "structural_ladder": [
+                  {
+                      "level_id": level.level_id,
+                      "target_largest_component_fraction": level.target_largest_component_fraction,
+                      "distance_threshold_km": level.distance_threshold,
+                      "achieved_largest_component_fraction": level.achieved_largest_component_fraction,
+                      "weak_component_count": level.weak_component_count,
+                      "isolated_node_fraction": level.isolated_node_fraction,
+                      "directed_edge_count": level.directed_edge_count,
+                      "fingerprint": level.fingerprint,
+                  }
+                  for level in ladder.levels
+              ],
+              "distinct_positive_structural_thresholds": distinct_count,
+              "level90_pass": level90_pass,
+              "distinct_scale_pass": distinct_pass,
+              "nested_scale_pass": nested_pass,
+              "generic_gate_pass": gate.passed,
+              "generic_gate_passing_world_ids": list(gate.passing_world_ids),
+              "declaration_fingerprint": ladder.declaration_fingerprint,
+              "distance_matrix_fingerprint": ladder.distance_matrix_fingerprint,
+              "ladder_fingerprint": ladder.fingerprint,
+              "audit_fingerprint": audit.fingerprint,
+              "gate_fingerprint": gate.fingerprint,
+              "final_gate_pass": final_pass,
+              "scientific_boundary": "These are response-blind analyst-choice geographic structural scales, not lynx dispersal limits, 10-year movement distances, or fitted resistance parameters.",
+              "next": "if pass, freeze source/process semantics, Layer-A rules, unchanged Layer-B summary, strongest spatial dynamic occupancy comparators, metrics/runtime and the 16-key outcome-access contract before opening Data99.RData",
+          }
+          payload["fingerprint"] = canonical_sha256(payload)
+          Path("build/kervellec_lynx_gate1/gate1_result.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(payload, indent=2, sort_keys=True))
+          if not final_pass:
+              raise SystemExit(2)
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/kervellec_lynx_gate1/gate1_result.json'))
+          assert p['response_rows_opened'] is False
+          assert p['Data99_response_member_downloaded'] is False
+          assert p['node_count'] == 644
+          assert p['final_gate_pass'] is True
+          PY
+      - name: Upload Gate 1 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: kervellec-lynx-gate1-structural
+          path: |
+            build/kervellec_lynx_gate1/geometry_availability_summary.json
+            build/kervellec_lynx_gate1/gate1_result.json
+          if-no-files-found: error
