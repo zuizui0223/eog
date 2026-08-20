@@ -33,6 +33,7 @@ jobs:
           from __future__ import annotations
           import json
           from pathlib import Path
+          import re
           from urllib.parse import quote
           import urllib.request
 
@@ -45,24 +46,62 @@ jobs:
               with urllib.request.urlopen(req, timeout=30) as response:
                   return json.load(response)
 
+          def embedded(payload, relation):
+              value = (payload.get("_embedded") or {}).get(relation)
+              if value is None:
+                  return []
+              return value if isinstance(value, list) else [value]
+
+          def link_href(row, *keys):
+              links = row.get("_links") or row.get("links") or {}
+              for key in keys:
+                  value = links.get(key)
+                  if isinstance(value, dict):
+                      value = value.get("href")
+                  if value:
+                      return str(value)
+              return None
+
           dataset = get_json(f"{API}/datasets/{encoded}")
           versions_payload = get_json(f"{API}/datasets/{encoded}/versions")
-          versions = versions_payload.get("_embedded", {}).get("stash:versions", [])
+          versions = embedded(versions_payload, "stash:versions")
           if not versions:
               versions = versions_payload.get("data", [])
           if not versions:
               raise RuntimeError("Dryad API returned no dataset versions")
 
-          def version_id(row):
-              return row.get("id") or row.get("versionId") or row.get("version_id")
+          def sort_key(row):
+              for key in ("versionNumber", "version_number", "version"):
+                  value = row.get(key)
+                  if value is not None:
+                      try:
+                          return (2, int(value))
+                      except (TypeError, ValueError):
+                          pass
+              for key in ("publicationDate", "publication_date", "lastModificationDate", "last_modification_date"):
+                  value = row.get(key)
+                  if value:
+                      return (1, str(value))
+              return (0, json.dumps(row, sort_keys=True))
 
-          version_rows = [row for row in versions if version_id(row) is not None]
-          if not version_rows:
-              raise RuntimeError("Dryad version metadata has no usable version ID")
-          latest = max(version_rows, key=lambda row: int(version_id(row)))
-          vid = int(version_id(latest))
-          files_payload = get_json(f"{API}/versions/{vid}/files")
-          files = files_payload.get("_embedded", {}).get("stash:files", [])
+          latest = max(versions, key=sort_key)
+          files_url = link_href(latest, "stash:files", "files")
+          self_url = link_href(latest, "self")
+          version_api_id = None
+          if self_url:
+              match = re.search(r"/versions/(\d+)(?:$|[/?#])", self_url)
+              if match:
+                  version_api_id = int(match.group(1))
+          if files_url is None and version_api_id is not None:
+              files_url = f"{API}/versions/{version_api_id}/files"
+          if files_url is None:
+              raise RuntimeError(
+                  "Dryad version metadata exposes neither a files link nor a parseable version API ID; "
+                  f"version keys={sorted(latest)} links={latest.get('_links')!r}"
+              )
+
+          files_payload = get_json(files_url)
+          files = embedded(files_payload, "stash:files")
           if not files:
               files = files_payload.get("data", [])
           if not files:
@@ -76,22 +115,14 @@ jobs:
 
           inventory = []
           for row in files:
-              links = row.get("_links") or row.get("links") or {}
-              download = None
-              for key in ("stash:download", "download", "self"):
-                  value = links.get(key)
-                  if isinstance(value, dict):
-                      value = value.get("href")
-                  if value and key != "self":
-                      download = value
-                      break
               inventory.append({
                   "id": pick(row, "id", "fileId", "file_id"),
                   "path": pick(row, "path", "filename", "name"),
                   "size": pick(row, "size", "fileSize", "file_size"),
                   "mime_type": pick(row, "mimeType", "mime_type"),
                   "digest": pick(row, "digest", "checksum"),
-                  "download_url": download,
+                  "download_url": link_href(row, "stash:download", "download"),
+                  "self_url": link_href(row, "self"),
               })
 
           names = [str(row["path"]) for row in inventory]
@@ -104,8 +135,10 @@ jobs:
               "candidate": "Pyrgus armoricanus 50-patch system",
               "doi": DOI,
               "dataset": dataset,
-              "selected_version_id": vid,
-              "version_metadata": latest,
+              "versions_payload": versions_payload,
+              "selected_version_metadata": latest,
+              "selected_version_api_id": version_api_id,
+              "selected_files_url": files_url,
               "files": inventory,
               "required_files_separate": True,
               "site_file_name": "Site_data.csv",
@@ -120,7 +153,7 @@ jobs:
           )
           print(json.dumps({
               "status": result["status"],
-              "selected_version_id": vid,
+              "selected_version_api_id": version_api_id,
               "files": names,
               "required_files_separate": True,
               "response_rows_opened": False,
