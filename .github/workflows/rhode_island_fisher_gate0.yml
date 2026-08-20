@@ -1,0 +1,360 @@
+name: Rhode Island fisher complementarity Gate 0
+
+on:
+  push:
+    branches:
+      - agent/rhode-island-fisher-gate0
+    paths:
+      - ".github/workflows/rhode_island_fisher_gate0.yml"
+      - "validation/rhode_island_fisher_complementarity/gate0_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/rhode_island_fisher_gate0.yml"
+      - "validation/rhode_island_fisher_complementarity/gate0_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG package
+        run: python -m pip install .
+      - name: Inspect archive metadata and selectively extract deployments only
+        run: |
+          set -euo pipefail
+          mkdir -p build/rhode_island_fisher_gate0
+          python - <<'PY'
+          from __future__ import annotations
+
+          import binascii
+          import csv
+          import hashlib
+          import io
+          import json
+          import math
+          from pathlib import Path
+          import re
+          import struct
+          import urllib.request
+          import zlib
+
+          import numpy as np
+
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+              structural_scale_adjacencies,
+          )
+
+          ROOT=Path('validation/rhode_island_fisher_complementarity')
+          OUT=Path('build/rhode_island_fisher_gate0')
+          contract=json.loads((ROOT/'gate0_contract.json').read_text(encoding='utf-8'))
+          archive_url=contract['public_source']['archive_url']
+          record_id=int(contract['public_source']['zenodo_record'])
+          expected_md5=contract['public_source']['archive_md5']
+          deployment_basename=contract['allowed_pre_response_members'][0]
+          detection_basename=contract['forbidden_response_member']
+          UA='eog-rhode-island-fisher-gate0/1.0'
+
+          def request_json(url: str) -> dict:
+              req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':'application/json'})
+              with urllib.request.urlopen(req,timeout=60) as r:
+                  return json.load(r)
+
+          metadata=request_json(f'https://zenodo.org/api/records/{record_id}')
+          files=metadata.get('files',[])
+          archive_meta=[f for f in files if f.get('key')==contract['public_source']['archive_name']]
+          if len(archive_meta)!=1:
+              raise RuntimeError(f'expected one archive metadata entry, found {len(archive_meta)}')
+          checksum=str(archive_meta[0].get('checksum',''))
+          if checksum != f'md5:{expected_md5}':
+              raise RuntimeError(f'Zenodo checksum drift: {checksum!r}')
+
+          range_bytes_downloaded=0
+          def range_get(header_value: str) -> tuple[bytes, str]:
+              global range_bytes_downloaded
+              req=urllib.request.Request(
+                  archive_url,
+                  headers={
+                      'User-Agent':UA,
+                      'Range':header_value,
+                      'Accept-Encoding':'identity',
+                  },
+              )
+              with urllib.request.urlopen(req,timeout=60) as r:
+                  status=getattr(r,'status',None) or r.getcode()
+                  if status != 206:
+                      raise RuntimeError(f'archive server ignored Range: HTTP {status}')
+                  body=r.read()
+                  content_range=str(r.headers.get('Content-Range',''))
+              range_bytes_downloaded += len(body)
+              return body, content_range
+
+          tail, tail_range=range_get('bytes=-65557')
+          eocd_pos=tail.rfind(b'PK\x05\x06')
+          if eocd_pos < 0 or eocd_pos + 22 > len(tail):
+              raise RuntimeError('ZIP EOCD not found in bounded suffix')
+          eocd=struct.unpack('<4s4H2IH',tail[eocd_pos:eocd_pos+22])
+          if eocd[0] != b'PK\x05\x06':
+              raise RuntimeError('invalid ZIP EOCD signature')
+          entries_total=int(eocd[4])
+          cd_size=int(eocd[5])
+          cd_offset=int(eocd[6])
+          if entries_total >= 0xFFFF or cd_size >= 0xFFFFFFFF or cd_offset >= 0xFFFFFFFF:
+              raise RuntimeError('ZIP64 archive is outside this frozen Gate 0 parser')
+          central, _ = range_get(f'bytes={cd_offset}-{cd_offset+cd_size-1}')
+          if len(central) != cd_size:
+              raise RuntimeError('central-directory Range length mismatch')
+
+          members=[]
+          cursor=0
+          for _ in range(entries_total):
+              fixed=central[cursor:cursor+46]
+              if len(fixed)!=46:
+                  raise RuntimeError('truncated central directory')
+              fields=struct.unpack('<4s6H3I5H2I',fixed)
+              if fields[0] != b'PK\x01\x02':
+                  raise RuntimeError('invalid central-directory file header')
+              flag=int(fields[3])
+              method=int(fields[4])
+              crc=int(fields[7])
+              comp_size=int(fields[8])
+              uncomp_size=int(fields[9])
+              name_len=int(fields[10])
+              extra_len=int(fields[11])
+              comment_len=int(fields[12])
+              local_offset=int(fields[16])
+              raw_name=central[cursor+46:cursor+46+name_len]
+              encoding='utf-8' if flag & 0x800 else 'cp437'
+              name=raw_name.decode(encoding,errors='strict')
+              members.append({
+                  'name':name,
+                  'flag':flag,
+                  'method':method,
+                  'crc32':f'{crc:08x}',
+                  'compressed_size':comp_size,
+                  'uncompressed_size':uncomp_size,
+                  'local_header_offset':local_offset,
+              })
+              cursor += 46 + name_len + extra_len + comment_len
+          if cursor != len(central):
+              raise RuntimeError('central-directory parse did not consume declared bytes')
+
+          def match_basename(basename: str) -> dict:
+              matches=[m for m in members if Path(m['name']).name == basename]
+              if len(matches)!=1:
+                  raise RuntimeError(f'expected one {basename!r} member, found {len(matches)}')
+              return matches[0]
+
+          deployment_member=match_basename(deployment_basename)
+          detection_member=match_basename(detection_basename)
+
+          def extract_member(member: dict) -> bytes:
+              offset=int(member['local_header_offset'])
+              fixed,_=range_get(f'bytes={offset}-{offset+29}')
+              if len(fixed)!=30:
+                  raise RuntimeError('local header length mismatch')
+              fields=struct.unpack('<4s5H3I2H',fixed)
+              if fields[0] != b'PK\x03\x04':
+                  raise RuntimeError(f"invalid local header for {member['name']}")
+              method=int(fields[3])
+              name_len=int(fields[9])
+              extra_len=int(fields[10])
+              raw_name,_=range_get(f'bytes={offset+30}-{offset+30+name_len-1}')
+              encoding='utf-8' if int(fields[2]) & 0x800 else 'cp437'
+              name=raw_name.decode(encoding,errors='strict')
+              if name != member['name']:
+                  raise RuntimeError(f'local/central member-name mismatch: {name!r}')
+              data_start=offset+30+name_len+extra_len
+              comp_size=int(member['compressed_size'])
+              compressed,_=range_get(f'bytes={data_start}-{data_start+comp_size-1}')
+              if len(compressed)!=comp_size:
+                  raise RuntimeError('compressed member Range length mismatch')
+              if method==8:
+                  content=zlib.decompress(compressed,-15)
+              elif method==0:
+                  content=compressed
+              else:
+                  raise RuntimeError(f'unsupported ZIP method {method}')
+              if len(content)!=int(member['uncompressed_size']):
+                  raise RuntimeError('deployment uncompressed-size mismatch')
+              crc=f'{binascii.crc32(content)&0xffffffff:08x}'
+              if crc != member['crc32']:
+                  raise RuntimeError(f'deployment CRC mismatch: {crc} != {member["crc32"]}')
+              return content
+
+          deployment_bytes=extract_member(deployment_member)
+          deployment_sha256=hashlib.sha256(deployment_bytes).hexdigest()
+          text=deployment_bytes.decode('utf-8-sig')
+          reader=csv.DictReader(io.StringIO(text))
+          fieldnames=tuple(reader.fieldnames or ())
+          rows=list(reader)
+          if not fieldnames or not rows:
+              raise RuntimeError('deployment CSV is empty or lacks a header')
+
+          def norm(name: str) -> str:
+              return re.sub(r'[^a-z0-9]+','',name.casefold())
+          by_norm={norm(name):name for name in fieldnames}
+          def pick(keys: tuple[str,...], label: str) -> str:
+              found=[]
+              for key in keys:
+                  if key in by_norm:
+                      found.append(by_norm[key])
+              found=list(dict.fromkeys(found))
+              if len(found)!=1:
+                  raise RuntimeError(f'could not resolve one {label} field from {fieldnames!r}; matches={found!r}')
+              return found[0]
+
+          site_field=pick(('site','siteid','surveysite','surveysiteid','primarysite','primarysiteid','location','locationid'),'primary site')
+          lat_field=pick(('latitude','lat'),'latitude')
+          lon_field=pick(('longitude','lon','long'),'longitude')
+          period_field=pick(('yearseason','seasonyear','surveyperiod'),'YearSeason')
+
+          site_coords={}
+          site_periods={}
+          period_sites={}
+          for row in rows:
+              site=str(row.get(site_field,'')).strip()
+              period=str(row.get(period_field,'')).strip()
+              if not site or not period:
+                  raise RuntimeError('blank site or period in deployment registry')
+              try:
+                  lat=float(row[lat_field])
+                  lon=float(row[lon_field])
+              except Exception as exc:
+                  raise RuntimeError(f'invalid coordinate for site {site!r}') from exc
+              if not (math.isfinite(lat) and math.isfinite(lon) and -90<=lat<=90 and -180<=lon<=180):
+                  raise RuntimeError(f'out-of-range coordinate for site {site!r}')
+              site_coords.setdefault(site,[]).append((lat,lon))
+              site_periods.setdefault(site,set()).add(period)
+              period_sites.setdefault(period,set()).add(site)
+
+          sites=sorted(site_coords)
+          periods=sorted(period_sites)
+          repeated=sum(len(site_periods[site])>=2 for site in sites)
+          minimums=contract['registry_gate']
+          registry_pass=bool(
+              len(sites)>=int(minimums['minimum_unique_sites'])
+              and len(periods)>=int(minimums['minimum_unique_periods'])
+              and repeated>=int(minimums['minimum_sites_observed_in_two_or_more_periods'])
+              and min(len(period_sites[p]) for p in periods)>=int(minimums['minimum_sites_in_any_period'])
+          )
+
+          centroids=np.asarray([
+              [
+                  sum(v[0] for v in site_coords[site])/len(site_coords[site]),
+                  sum(v[1] for v in site_coords[site])/len(site_coords[site]),
+              ]
+              for site in sites
+          ],dtype=float)
+          lat=np.radians(centroids[:,0])
+          lon=np.radians(centroids[:,1])
+          dlat=lat[:,None]-lat[None,:]
+          dlon=lon[:,None]-lon[None,:]
+          a=np.sin(dlat/2.0)**2 + np.cos(lat[:,None])*np.cos(lat[None,:])*np.sin(dlon/2.0)**2
+          a=np.clip(a,0.0,1.0)
+          distance=2.0*6371.0088*np.arcsin(np.sqrt(a))
+          np.fill_diagonal(distance,0.0)
+
+          targets=tuple(float(v) for v in contract['structural_gate']['target_largest_component_fractions'])
+          declaration=StructuralScaleLadderDeclaration(
+              axis_id='rhode_island_fisher_site_centroid_haversine_km',
+              target_largest_component_fractions=targets,
+          )
+          ladder=build_structural_scale_ladder(tuple(sites),distance,declaration)
+          adj=structural_scale_adjacencies(ladder,distance)
+          ordered=[adj[level.level_id] for level in ladder.levels]
+          nested=all(bool(np.all(~left|right)) for left,right in zip(ordered,ordered[1:]))
+          distinct=len({round(float(v),9) for v in ladder.thresholds if float(v)>0})
+          level90=ladder.levels[-1]
+          sg=contract['structural_gate']
+          structural_pass=bool(
+              distinct>=int(sg['minimum_distinct_positive_thresholds'])
+              and nested
+              and float(level90.achieved_largest_component_fraction)>=float(sg['minimum_lcc_at_0_9_world'])-1e-12
+              and float(level90.isolated_node_fraction)<=float(sg['maximum_isolated_fraction_at_0_9_world'])+1e-12
+          )
+          final_pass=bool(registry_pass and structural_pass)
+          status='gate0_pass_response_blind_registry_and_structure' if final_pass else (
+              'gate0_stop_registry_or_repeated_period_inadequacy' if not registry_pass else 'gate0_stop_structural_inadequacy'
+          )
+
+          payload={
+              'status':status,
+              'candidate':contract['candidate'],
+              'focal_taxon':contract['focal_taxon'],
+              'archive_metadata_checksum':checksum,
+              'archive_bytes_fully_downloaded':False,
+              'range_bytes_downloaded':range_bytes_downloaded,
+              'zip_tail_content_range':tail_range,
+              'member_names':[m['name'] for m in members],
+              'deployment_member':deployment_member,
+              'detection_member_metadata':detection_member,
+              'detection_member_bytes_downloaded':False,
+              'detection_rows_opened':False,
+              'deployment_sha256':deployment_sha256,
+              'deployment_fieldnames':list(fieldnames),
+              'deployment_row_count':len(rows),
+              'site_field':site_field,
+              'latitude_field':lat_field,
+              'longitude_field':lon_field,
+              'period_field':period_field,
+              'unique_site_count':len(sites),
+              'unique_period_count':len(periods),
+              'period_labels':periods,
+              'sites_per_period':{p:len(period_sites[p]) for p in periods},
+              'sites_observed_in_two_or_more_periods':repeated,
+              'registry_pass':registry_pass,
+              'structural_ladder':[
+                  {
+                      'level_id':level.level_id,
+                      'target_largest_component_fraction':level.target_largest_component_fraction,
+                      'distance_threshold_km':level.distance_threshold,
+                      'achieved_largest_component_fraction':level.achieved_largest_component_fraction,
+                      'weak_component_count':level.weak_component_count,
+                      'isolated_node_fraction':level.isolated_node_fraction,
+                      'directed_edge_count':level.directed_edge_count,
+                  }
+                  for level in ladder.levels
+              ],
+              'distinct_positive_structural_thresholds':distinct,
+              'nested_scale_pass':nested,
+              'structural_pass':structural_pass,
+              'final_gate_pass':final_pass,
+              'scientific_boundary':contract['geometry_policy'],
+              'next':contract['next_if_pass'] if final_pass else contract['stop_if_fail'],
+          }
+          payload['fingerprint']=hashlib.sha256(
+              json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+          ).hexdigest()
+          out=OUT/'gate0_result.json'
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          if not final_pass:
+              raise SystemExit(2)
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/rhode_island_fisher_gate0/gate0_result.json'))
+          assert p['archive_bytes_fully_downloaded'] is False
+          assert p['detection_member_bytes_downloaded'] is False
+          assert p['detection_rows_opened'] is False
+          assert p['final_gate_pass'] is True
+          PY
+      - name: Upload Gate 0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rhode-island-fisher-gate0
+          path: build/rhode_island_fisher_gate0/gate0_result.json
+          if-no-files-found: error
