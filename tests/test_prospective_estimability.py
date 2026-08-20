@@ -5,6 +5,7 @@ from eog.v2.prospective_estimability import (
     AggregateEstimabilityEvidence,
     ProspectiveEstimabilityDeclaration,
     evaluate_prospective_estimability,
+    prospective_estimability_disposition,
 )
 
 
@@ -35,6 +36,10 @@ def test_pass_requires_all_published_lower_bounds_to_clear_frozen_minima():
     assert result.status == "plausibly_eligible_pre_response"
     assert result.failing_keys == ()
     assert result.unresolved_keys == ()
+    assert (
+        prospective_estimability_disposition(result)
+        == "continue_response_blind_with_pre_response_support"
+    )
 
 
 def test_known_upper_bound_below_minimum_stops_candidate_pre_response():
@@ -53,6 +58,7 @@ def test_known_upper_bound_below_minimum_stops_candidate_pre_response():
     result = evaluate_prospective_estimability(_declaration(), evidence)
     assert result.status == "ineligible_pre_response"
     assert result.failing_keys == ("calibration_events",)
+    assert prospective_estimability_disposition(result) == "stop_known_ineligible_pre_response"
 
 
 def test_missing_lower_bound_is_uncertain_not_silent_pass():
@@ -67,6 +73,10 @@ def test_missing_lower_bound_is_uncertain_not_silent_pass():
     result = evaluate_prospective_estimability(_declaration(), evidence)
     assert result.status == "uncertain_pre_response"
     assert "heldout_events" in result.unresolved_keys
+    assert (
+        prospective_estimability_disposition(result)
+        == "continue_response_blind_exact_gate_required"
+    )
 
 
 def test_mismatched_endpoint_definition_is_uncertain_even_with_large_counts():
@@ -85,6 +95,32 @@ def test_mismatched_endpoint_definition_is_uncertain_even_with_large_counts():
     result = evaluate_prospective_estimability(_declaration(), evidence)
     assert result.status == "uncertain_pre_response"
     assert len(result.unresolved_keys) == 5
+    assert (
+        prospective_estimability_disposition(result)
+        == "continue_response_blind_exact_gate_required"
+    )
+
+
+def test_uncertain_disposition_never_turns_uncertainty_into_pass():
+    evidence = AggregateEstimabilityEvidence(
+        source_label="partial published counts",
+        endpoint_definition_matches=True,
+        response_rows_opened=False,
+        intervals={
+            "calibration_events": AggregateCountInterval(lower=10),
+            "heldout_events": AggregateCountInterval(lower=10),
+        },
+    )
+    result = evaluate_prospective_estimability(_declaration(), evidence)
+    assert result.status == "uncertain_pre_response"
+    assert result.unresolved_keys
+    assert (
+        prospective_estimability_disposition(result)
+        == "continue_response_blind_exact_gate_required"
+    )
+    # Continuing response-blind work does not authorize outcome access or erase the
+    # unresolved evidence state; the exact once-only gate remains downstream.
+    assert result.status != "plausibly_eligible_pre_response"
 
 
 def test_response_opened_evidence_is_rejected():
@@ -108,6 +144,11 @@ def test_invalid_intervals_and_unknown_keys_are_rejected():
             response_rows_opened=False,
             intervals={"auc": AggregateCountInterval(lower=1)},
         )
+
+
+def test_disposition_rejects_non_result_input():
+    with pytest.raises(TypeError, match="ProspectiveEstimabilityResult"):
+        prospective_estimability_disposition("uncertain_pre_response")  # type: ignore[arg-type]
 
 
 def test_same_inputs_have_deterministic_fingerprint():
