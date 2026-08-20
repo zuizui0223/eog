@@ -1,0 +1,235 @@
+name: Kervellec lynx Gate 0 geometry
+
+on:
+  push:
+    branches:
+      - agent/kervellec-lynx-gate0-screen
+    paths:
+      - ".github/workflows/kervellec_lynx_gate0_geometry.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/kervellec_lynx_gate0_geometry.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.4.2"
+      - name: Selectively extract geometry members only
+        run: |
+          set -euo pipefail
+          mkdir -p build/kervellec_lynx_gate0/geometry
+          python - <<'PY'
+          from __future__ import annotations
+          import binascii
+          import json
+          from pathlib import Path
+          import struct
+          import urllib.request
+          import zlib
+
+          URL = "https://zenodo.org/api/records/13354572/files/SpatialOccupancyNimble_withData.zip/content"
+          UA = "eog-response-blind-geometry-extract/1.0"
+          MEMBERS = {
+              "SpatialOccupancyNimble2/Lynx/data/gridFrCroppedSampled.RData": {
+                  "offset": 222088, "compressed_size": 15008, "uncompressed_size": 16010,
+                  "compression": 8, "crc32": "ab52155a",
+              },
+              "SpatialOccupancyNimble2/Lynx/data/xy99_Lynx.RData": {
+                  "offset": 237186, "compressed_size": 9032, "uncompressed_size": 9216,
+                  "compression": 8, "crc32": "e9f15d75",
+              },
+          }
+
+          def range_get(start, end):
+              req = urllib.request.Request(
+                  URL,
+                  headers={"User-Agent": UA, "Range": f"bytes={start}-{end}", "Accept-Encoding": "identity"},
+              )
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  status = getattr(response, "status", None) or response.getcode()
+                  if status != 206:
+                      raise RuntimeError(f"range request returned {status}, expected 206")
+                  body = response.read()
+              if len(body) != end - start + 1:
+                  raise RuntimeError("range response length mismatch")
+              return body
+
+          def extract_member(name, meta):
+              offset = meta["offset"]
+              fixed = range_get(offset, offset + 29)
+              fields = struct.unpack("<4s5H3I2H", fixed)
+              if fields[0] != b"PK\x03\x04":
+                  raise RuntimeError(f"invalid local header for {name}")
+              name_len, extra_len = fields[-2], fields[-1]
+              raw_name = range_get(offset + 30, offset + 30 + name_len - 1)
+              decoded = raw_name.decode("utf-8", errors="replace")
+              if decoded != name:
+                  raise RuntimeError(f"member name mismatch: {decoded!r} != {name!r}")
+              data_start = offset + 30 + name_len + extra_len
+              compressed = range_get(data_start, data_start + meta["compressed_size"] - 1)
+              if meta["compression"] == 8:
+                  content = zlib.decompress(compressed, -15)
+              elif meta["compression"] == 0:
+                  content = compressed
+              else:
+                  raise RuntimeError(f"unsupported compression {meta['compression']}")
+              if len(content) != meta["uncompressed_size"]:
+                  raise RuntimeError(f"uncompressed size mismatch for {name}")
+              crc = f"{binascii.crc32(content) & 0xffffffff:08x}"
+              if crc != meta["crc32"]:
+                  raise RuntimeError(f"CRC mismatch for {name}: {crc} != {meta['crc32']}")
+              return content
+
+          frozen = []
+          for name, meta in MEMBERS.items():
+              content = extract_member(name, meta)
+              out = Path("build/kervellec_lynx_gate0/geometry") / Path(name).name
+              out.write_bytes(content)
+              frozen.append({"name": name, **meta, "output": str(out), "crc_verified": True})
+
+          manifest = {
+              "status": "geometry_members_frozen_response_blind",
+              "members": frozen,
+              "Data99_response_member_downloaded": False,
+              "response_rows_opened": False,
+          }
+          Path("build/kervellec_lynx_gate0/geometry_member_manifest.json").write_text(
+              json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          PY
+      - name: Inspect RData geometry with base R only
+        run: |
+          Rscript - <<'RS'
+          options(stringsAsFactors = FALSE)
+          out_dir <- "build/kervellec_lynx_gate0/geometry"
+
+          inspect_rdata <- function(path) {
+            env <- new.env(parent = emptyenv())
+            loaded <- load(path, envir = env)
+            result <- list(file = basename(path), objects = list())
+            for (nm in loaded) {
+              x <- get(nm, envir = env)
+              info <- list(
+                name = nm,
+                class = class(x),
+                length = length(x),
+                nrow = if (!is.null(dim(x))) nrow(x) else if (is.data.frame(x)) nrow(x) else NA_integer_,
+                ncol = if (!is.null(dim(x))) ncol(x) else if (is.data.frame(x)) ncol(x) else NA_integer_,
+                names = names(x)
+              )
+              if (inherits(x, "sf") || is.data.frame(x)) {
+                info$nrow <- nrow(x)
+                info$ncol <- ncol(x)
+                geom_col <- attr(x, "sf_column")
+                if (is.null(geom_col) && "geometry" %in% names(x)) geom_col <- "geometry"
+                info$sf_column <- geom_col
+                if (!is.null(geom_col) && geom_col %in% names(x)) {
+                  g <- x[[geom_col]]
+                  info$geometry_class <- class(g)
+                  pts <- lapply(g, function(v) {
+                    raw <- unclass(v)
+                    if (is.numeric(raw) && length(raw) >= 2) return(as.numeric(raw[1:2]))
+                    return(c(NA_real_, NA_real_))
+                  })
+                  mat <- do.call(rbind, pts)
+                  if (is.matrix(mat) && ncol(mat) == 2 && all(is.finite(mat))) {
+                    info$point_like_coordinate_rows <- nrow(mat)
+                    info$unique_point_like_coordinates <- nrow(unique(mat))
+                  }
+                }
+              }
+              result$objects[[length(result$objects) + 1]] <- info
+            }
+            result
+          }
+
+          xy <- inspect_rdata(file.path(out_dir, "xy99_Lynx.RData"))
+          grid <- inspect_rdata(file.path(out_dir, "gridFrCroppedSampled.RData"))
+
+          find_nrow <- function(result) {
+            vals <- vapply(result$objects, function(z) ifelse(is.na(z$nrow), -1L, z$nrow), integer(1))
+            max(vals)
+          }
+          if (find_nrow(xy) != 644L) stop(sprintf("xy99_Lynx must expose 644 rows; found %s", find_nrow(xy)))
+          if (find_nrow(grid) != 644L) stop(sprintf("sampled grid must expose 644 rows; found %s", find_nrow(grid)))
+
+          # Minimal JSON writer avoids external R packages.
+          esc <- function(s) {
+            s <- gsub("\\\\", "\\\\\\\\", s)
+            s <- gsub('"', '\\"', s, fixed = TRUE)
+            s <- gsub("\n", "\\n", s, fixed = TRUE)
+            s
+          }
+          scalar <- function(v) {
+            if (length(v) == 0 || is.null(v) || (length(v) == 1 && is.na(v))) return("null")
+            if (is.logical(v)) return(ifelse(v, "true", "false"))
+            if (is.numeric(v)) return(as.character(v))
+            paste0('"', esc(as.character(v)), '"')
+          }
+          vec <- function(v) paste0("[", paste(vapply(v, scalar, character(1)), collapse=","), "]")
+          obj_json <- function(info) paste0(
+            "{",
+            '"name":', scalar(info$name), ",",
+            '"class":', vec(info$class), ",",
+            '"length":', scalar(info$length), ",",
+            '"nrow":', scalar(info$nrow), ",",
+            '"ncol":', scalar(info$ncol), ",",
+            '"names":', vec(info$names), ",",
+            '"sf_column":', scalar(info$sf_column), ",",
+            '"geometry_class":', vec(info$geometry_class), ",",
+            '"point_like_coordinate_rows":', scalar(info$point_like_coordinate_rows), ",",
+            '"unique_point_like_coordinates":', scalar(info$unique_point_like_coordinates),
+            "}"
+          )
+          result_json <- function(result) paste0(
+            "{",
+            '"file":', scalar(result$file), ",",
+            '"objects":[', paste(vapply(result$objects, obj_json, character(1)), collapse=","), "]",
+            "}"
+          )
+          final <- paste0(
+            "{",
+            '"status":"gate0_geometry_structure_pass",',
+            '"expected_nodes":644,',
+            '"xy":', result_json(xy), ",",
+            '"grid":', result_json(grid), ",",
+            '"Data99_response_member_downloaded":false,',
+            '"response_rows_opened":false',
+            "}"
+          )
+          writeLines(final, "build/kervellec_lynx_gate0/geometry_structure.json", useBytes = TRUE)
+          cat(final, "\n")
+          RS
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          m=json.load(open('build/kervellec_lynx_gate0/geometry_member_manifest.json'))
+          g=json.load(open('build/kervellec_lynx_gate0/geometry_structure.json'))
+          assert m['Data99_response_member_downloaded'] is False
+          assert m['response_rows_opened'] is False
+          assert g['status'] == 'gate0_geometry_structure_pass'
+          assert g['expected_nodes'] == 644
+          assert g['Data99_response_member_downloaded'] is False
+          assert g['response_rows_opened'] is False
+          PY
+      - name: Upload response-blind geometry evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: kervellec-lynx-gate0-geometry
+          path: |
+            build/kervellec_lynx_gate0/geometry_member_manifest.json
+            build/kervellec_lynx_gate0/geometry_structure.json
+          if-no-files-found: error
