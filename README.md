@@ -59,7 +59,7 @@ per-world forward propagation
     ↓
 world × horizon × node support state
     ↓
-robust / contingent / excluded projection
+possible / robust / unresolved / finite-world-excluded projection
     ↓
 new positive evidence
     ↓
@@ -76,6 +76,13 @@ Repeated-transition implementation with changing current sources and frozen rule
 - `src/eog/v2/sequential_world_forecast.py`
 
 All remain lazily exposed through `eog.v2.reachability`.
+
+For the exhaustively retained compatible-world set, `possible` is the union of
+per-world reachable nodes, `robust` is their intersection, `unresolved` is the
+possible-minus-robust disagreement set, and `robustly unreachable` is the complement
+inside the declared node universe. `compare_world_flow_universes` verifies the exact
+set-inclusion contract when a fingerprint-preserving compatible-world universe is
+expanded; these labels remain conditional on the declared finite universe.
 
 ## Two-layer prediction architecture
 

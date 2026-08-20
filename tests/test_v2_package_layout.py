@@ -19,12 +19,14 @@ def test_new_prospective_reachability_apis_stay_on_explicit_facade():
         "FiniteWorld",
         "FiniteWorldReconstruction",
         "FiniteWorldFlowSet",
+        "WorldFlowUniverseUpdate",
         "RelaxationFrontier",
         "ReconstructionUpdate",
         "PositiveOccurrenceSurveyRanking",
         "forward_reachable_configuration",
         "reconstruct_compatible_worlds",
         "build_world_flow_set",
+        "compare_world_flow_universes",
         "minimum_relaxation_frontier",
         "compare_reconstructions",
         "rank_positive_occurrence_candidates",
@@ -68,6 +70,7 @@ def test_v2_facades_keep_estimands_separated():
     assert hasattr(reachability, "summarize_first_passage")
     assert hasattr(reachability, "reconstruct_compatible_worlds")
     assert hasattr(reachability, "build_world_flow_set")
+    assert hasattr(reachability, "compare_world_flow_universes")
     assert hasattr(reachability, "forecast_from_occurrences")
     assert hasattr(reachability, "update_worldset_forecast")
     assert hasattr(reachability, "rank_worldset_forecast_frontier")
@@ -83,6 +86,7 @@ def test_v2_facades_keep_estimands_separated():
     assert hasattr(traversability, "summarize_path_traversability")
     assert hasattr(traversability, "compare_occurrence_transition_rules")
     assert not hasattr(traversability, "FiniteWorldReconstruction")
+    assert not hasattr(traversability, "WorldFlowUniverseUpdate")
     assert not hasattr(traversability, "WorldSetForecast")
     assert not hasattr(traversability, "BasinMergeResult")
     assert not hasattr(traversability, "TemporalFlowSet")
@@ -96,6 +100,7 @@ def test_v2_facades_keep_estimands_separated():
     assert hasattr(validation, "GeneticValidationConfig")
     assert hasattr(validation, "evaluate_directional_order_evidence")
     assert not hasattr(validation, "FiniteWorldReconstruction")
+    assert not hasattr(validation, "WorldFlowUniverseUpdate")
     assert not hasattr(validation, "WorldSetForecast")
     assert not hasattr(validation, "BasinMergeResult")
     assert not hasattr(validation, "TemporalFlowSet")

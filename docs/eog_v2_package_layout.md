@@ -36,14 +36,15 @@ The purpose is dependency hygiene only. Public scientific meanings are not chang
 The current explicit reachability surface includes operators for:
 
 - `FiniteWorld` forward/inverse reconstruction;
-- world-indexed support/flow sets;
+- world-indexed support/flow sets with explicit possible, robust, unresolved and
+  finite-world robustly-unreachable views;
 - static non-dominated geographic/IBD, environmental/IBE and barrier relaxation frontiers;
 - declared monotone one-dimensional basin-merge families;
 - `TemporalWorld` flow sets;
 - positive time-stamped occurrence reconstruction;
 - positive `(node,time)` survey discrimination;
 - temporal transition edge classes and opening/closure summaries;
-- exact nested temporal-world-universe monotonicity;
+- exact nested static compatible-world and temporal-world-universe monotonicity;
 - temporal minimum-relaxation frontiers with IBD/IBE/barrier axes preserved.
 
 These implementations remain internal modules routed through `eog.v2.reachability`; they are not separate public EOG subdisciplines.

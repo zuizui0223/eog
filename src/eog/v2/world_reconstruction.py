@@ -210,6 +210,30 @@ class WorldNodeEnvelope:
     upper_support: float
     status: WorldNodeStatus
 
+    @property
+    def possible(self) -> bool:
+        """Whether at least one compatible world reaches this node."""
+
+        return self.status != "robustly_unreachable"
+
+    @property
+    def robust(self) -> bool:
+        """Whether every compatible world reaches this node."""
+
+        return self.status == "reachable_in_all"
+
+    @property
+    def unresolved(self) -> bool:
+        """Whether reachability depends on which compatible world is used."""
+
+        return self.status == "contingent"
+
+    @property
+    def robustly_unreachable(self) -> bool:
+        """Whether no world in the exhaustive compatible set reaches this node."""
+
+        return self.status == "robustly_unreachable"
+
 
 @dataclass(frozen=True)
 class FiniteWorldFlowSet:
@@ -224,8 +248,57 @@ class FiniteWorldFlowSet:
     contingent_ids: tuple[str, ...]
     reachable_in_all_ids: tuple[str, ...]
     max_steps: int
+    support_tolerance: float
     coverage_certificate: str
     reconstruction_fingerprint: str
+    fingerprint: str
+
+    @property
+    def world_ids(self) -> tuple[str, ...]:
+        return tuple(member.world_id for member in self.members)
+
+    @property
+    def world_fingerprints(self) -> tuple[tuple[str, str], ...]:
+        return tuple((member.world_id, member.world_fingerprint) for member in self.members)
+
+    @property
+    def possible_ids(self) -> tuple[str, ...]:
+        """Nodes reached in at least one compatible world (finite-set union)."""
+
+        unreachable = set(self.robustly_unreachable_ids)
+        return tuple(node_id for node_id in self.node_ids if node_id not in unreachable)
+
+    @property
+    def robust_ids(self) -> tuple[str, ...]:
+        """Nodes reached in every compatible world (finite-set intersection)."""
+
+        return self.reachable_in_all_ids
+
+    @property
+    def unresolved_ids(self) -> tuple[str, ...]:
+        """Possible but non-robust nodes whose reachability is world-dependent."""
+
+        return self.contingent_ids
+
+
+@dataclass(frozen=True)
+class WorldFlowUniverseUpdate:
+    """Exact set changes after a fingerprint-preserving world-universe expansion."""
+
+    before_world_ids: tuple[str, ...]
+    after_world_ids: tuple[str, ...]
+    added_world_ids: tuple[str, ...]
+    lost_robust_ids: tuple[str, ...]
+    gained_possible_ids: tuple[str, ...]
+    lost_robustly_unreachable_ids: tuple[str, ...]
+    shared_world_results_identical: bool
+    possible_monotonicity_holds: bool
+    robust_monotonicity_holds: bool
+    exclusion_monotonicity_holds: bool
+    monotonicity_holds: bool
+    before_fingerprint: str
+    after_fingerprint: str
+    coverage_certificate: str
     fingerprint: str
 
 
@@ -319,6 +392,18 @@ def _validate_world_universe(
     current = tuple((world.world_id, world.fingerprint) for world in ordered_worlds)
     if current != reconstruction.world_fingerprints:
         raise ValueError("world universe or world definitions changed after reconstruction")
+
+
+def _flow_member_fingerprint(member: WorldFlowMember) -> str:
+    return _canonical_sha256(
+        {
+            "world_id": member.world_id,
+            "world_fingerprint": member.world_fingerprint,
+            "operator_fingerprint": member.result.operator_fingerprint,
+            "mass_by_step": member.result.mass_by_step.tolist(),
+            "first_passage_support": member.first_passage_support.tolist(),
+        }
+    )
 
 
 def _first_passage_vector(
@@ -569,6 +654,13 @@ def build_world_flow_set(
             }
             for row in envelopes
         ],
+        "possible_ids": [
+            row.node_id for row in envelopes if row.status != "robustly_unreachable"
+        ],
+        "robust_ids": [row.node_id for row in envelopes if row.status == "reachable_in_all"],
+        "unresolved_ids": [row.node_id for row in envelopes if row.status == "contingent"],
+        "robustly_unreachable_ids": list(robust),
+        "support_tolerance": reconstruction.support_tolerance,
         "coverage_certificate": certificate,
     }
     return FiniteWorldFlowSet(
@@ -581,8 +673,101 @@ def build_world_flow_set(
         contingent_ids=contingent,
         reachable_in_all_ids=universal,
         max_steps=reconstruction.max_steps,
+        support_tolerance=reconstruction.support_tolerance,
         coverage_certificate=certificate,
         reconstruction_fingerprint=reconstruction.fingerprint,
+        fingerprint=_canonical_sha256(payload),
+    )
+
+
+def compare_world_flow_universes(
+    before: FiniteWorldFlowSet,
+    after: FiniteWorldFlowSet,
+) -> WorldFlowUniverseUpdate:
+    """Audit exact reachability monotonicity for nested compatible-world sets.
+
+    The shared worlds must retain identical definitions and results. Adding worlds may
+    expand possible reachability, contract robust reachability, and contract the set
+    that is unreachable in every compatible world. ``unresolved`` is deliberately not
+    monotone: a node may enter or leave disagreement as worlds are added.
+    """
+
+    if before.node_ids != after.node_ids:
+        raise ValueError("world flow sets must share identical node IDs and order")
+    if before.max_steps != after.max_steps:
+        raise ValueError("world flow sets must share max_steps")
+    if before.support_tolerance != after.support_tolerance:
+        raise ValueError("world flow sets must share support_tolerance")
+
+    before_members = {
+        member.world_id: _flow_member_fingerprint(member) for member in before.members
+    }
+    after_members = {
+        member.world_id: _flow_member_fingerprint(member) for member in after.members
+    }
+    if not set(before_members).issubset(after_members):
+        raise ValueError("before compatible-world universe must be a subset of after")
+    shared_identical = all(
+        after_members[world_id] == fingerprint
+        for world_id, fingerprint in before_members.items()
+    )
+    if not shared_identical:
+        raise ValueError("shared world IDs must preserve identical fingerprints and results")
+
+    before_possible = set(before.possible_ids)
+    after_possible = set(after.possible_ids)
+    before_robust = set(before.robust_ids)
+    after_robust = set(after.robust_ids)
+    before_unreachable = set(before.robustly_unreachable_ids)
+    after_unreachable = set(after.robustly_unreachable_ids)
+
+    possible_ok = before_possible.issubset(after_possible)
+    robust_ok = after_robust.issubset(before_robust)
+    exclusion_ok = after_unreachable.issubset(before_unreachable)
+    if not (possible_ok and robust_ok and exclusion_ok):
+        raise RuntimeError("world-universe expansion violated exact reachability monotonicity")
+
+    added_world_ids = tuple(
+        world_id for world_id in after.world_ids if world_id not in before_members
+    )
+    lost_robust_ids = tuple(
+        node_id for node_id in before.node_ids if node_id in before_robust - after_robust
+    )
+    gained_possible_ids = tuple(
+        node_id for node_id in before.node_ids if node_id in after_possible - before_possible
+    )
+    lost_unreachable_ids = tuple(
+        node_id
+        for node_id in before.node_ids
+        if node_id in before_unreachable - after_unreachable
+    )
+    certificate = "exact_nested_finite_compatible_world_sets"
+    payload = {
+        "before_fingerprint": before.fingerprint,
+        "after_fingerprint": after.fingerprint,
+        "added_world_ids": list(added_world_ids),
+        "lost_robust_ids": list(lost_robust_ids),
+        "gained_possible_ids": list(gained_possible_ids),
+        "lost_robustly_unreachable_ids": list(lost_unreachable_ids),
+        "coverage_certificate": certificate,
+    }
+    return WorldFlowUniverseUpdate(
+        before_world_ids=before.world_ids,
+        after_world_ids=after.world_ids,
+        added_world_ids=added_world_ids,
+        lost_robust_ids=lost_robust_ids,
+        gained_possible_ids=gained_possible_ids,
+        lost_robustly_unreachable_ids=lost_unreachable_ids,
+        shared_world_results_identical=shared_identical,
+        possible_monotonicity_holds=possible_ok,
+        robust_monotonicity_holds=robust_ok,
+        exclusion_monotonicity_holds=exclusion_ok,
+        monotonicity_holds=(
+            shared_identical and possible_ok and robust_ok and exclusion_ok
+        ),
+        before_fingerprint=before.fingerprint,
+        after_fingerprint=after.fingerprint,
+        coverage_certificate=certificate,
         fingerprint=_canonical_sha256(payload),
     )
 
