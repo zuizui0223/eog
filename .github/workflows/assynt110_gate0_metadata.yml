@@ -60,6 +60,7 @@ jobs:
                   kind = attrs.get("kind")
                   name = attrs.get("name") or ""
                   path = f"{parent}/{name}".strip("/")
+                  links = row.get("links") or {}
                   inventory.append({
                       "id": row.get("id"),
                       "provider": provider,
@@ -70,6 +71,8 @@ jobs:
                       "date_modified": attrs.get("date_modified"),
                       "extra_hashes": (attrs.get("extra") or {}).get("hashes"),
                       "materialized_path": attrs.get("materialized_path"),
+                      "download_link": links.get("download") if kind == "file" else None,
+                      "html_link": links.get("html"),
                   })
                   if kind == "folder":
                       related = (((row.get("relationships") or {}).get("files") or {}).get("links") or {}).get("related")
@@ -91,18 +94,16 @@ jobs:
               if listing_url:
                   visit_listing(listing_url, str(provider_name))
 
-          lower_paths = [row["path"].lower() for row in inventory if row["kind"] == "file"]
+          files = [row for row in inventory if row["kind"] == "file"]
           geometry_terms = ("coord", "coordinate", "location", "patch", "distance", "dist", "xy", "site")
           response_terms = ("occup", "colon", "vole", "presence", "absence", "latrine")
           geometry_candidates = sorted({
-              inventory[i]["path"]
-              for i, p in enumerate(lower_paths)
-              if any(term in p for term in geometry_terms)
+              row["path"] for row in files
+              if any(term in row["path"].lower() for term in geometry_terms)
           })
           response_named_candidates = sorted({
-              inventory[i]["path"]
-              for i, p in enumerate(lower_paths)
-              if any(term in p for term in response_terms)
+              row["path"] for row in files
+              if any(term in row["path"].lower() for term in response_terms)
           })
 
           result = {
@@ -117,7 +118,7 @@ jobs:
               "response_rows_opened": False,
               "response_file_bytes_downloaded": False,
               "file_bytes_downloaded": False,
-              "next": "role-adjudicate metadata names only; download only a clearly response-independent geometry member if one exists"
+              "next": "role-adjudicate metadata names/links only; download only a predeclared documentation, aggregate, or clearly response-independent geometry member"
           }
           Path("build/assynt110_gate0/osf_metadata_inventory.json").write_text(
               json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -125,7 +126,7 @@ jobs:
           print(json.dumps({
               "status": result["status"],
               "title": result["node_title"],
-              "file_count": sum(row["kind"] == "file" for row in inventory),
+              "file_count": len(files),
               "geometry_name_candidates": geometry_candidates,
               "response_name_candidates": response_named_candidates,
               "response_rows_opened": False,
