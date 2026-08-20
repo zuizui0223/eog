@@ -1,0 +1,35 @@
+{
+  "status": "response_blind_structural_scale_gate_declared",
+  "candidate": "Luo et al. 2022 Tvärminne Daphnia rock-pool metacommunity",
+  "geometry_source": {
+    "member": "code_SpatialCoex/Bayesian model fitting/distance.csv",
+    "sha256": "4ffb62d36b808b18fb999aa1f585e1987d0df76e289543ef43941f2e3037b750",
+    "shape": [546, 546],
+    "node_identity": "stable response-independent row order 1..546 of the frozen distance matrix"
+  },
+  "distance_units": "released distance-matrix units; used here only as analyst-choice structural scale, not as a biological dispersal unit",
+  "structural_targets": [0.25, 0.5, 0.75, 0.9],
+  "audit_horizon": 1,
+  "adequacy": {
+    "min_largest_weak_component_fraction": 0.9,
+    "max_isolated_node_fraction": 0.05,
+    "minimum_distinct_positive_structural_thresholds": 3,
+    "require_nested_scales": true,
+    "require_at_least_one_world_pass": true
+  },
+  "response_firewall": {
+    "response_rows_opened": false,
+    "response_member_bytes_downloaded": false,
+    "allowed_member_content": [
+      "code_SpatialCoex/Bayesian model fitting/distance.csv"
+    ]
+  },
+  "scientific_boundary": "Structural thresholds are response-blind analyst-choice geographic regimes derived from the released patch-distance matrix. They are not fitted Daphnia dispersal distances, colonisation probabilities or historical migration routes.",
+  "next_if_pass": "Freeze process/source semantics, temporal split, Layer-A rules, unchanged Layer-B symmetric summary, strong comparators, exact count gate and once-only runner before opening data_M.csv.",
+  "no_rescue": [
+    "do not replace the frozen 0.25/0.50/0.75/0.90 ladder after seeing the result",
+    "do not inject fitted Daphnia dispersal parameters into structural world selection",
+    "do not open data_M.csv to choose graph scales",
+    "do not add candidate-specific connectivity operators"
+  ]
+}
