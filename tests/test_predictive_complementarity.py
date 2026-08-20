@@ -148,6 +148,37 @@ def test_nonfinite_scores_and_invalid_thresholds_are_rejected():
         )
 
 
+def test_contract_types_fail_closed():
+    with pytest.raises(TypeError, match="lower_is_better"):
+        PredictiveComplementarityDeclaration(
+            metric_name="log_loss",
+            lower_is_better="yes",  # type: ignore[arg-type]
+            expected_outer_unit_count=3,
+            favorable_min_augmented_wins=2,
+            adverse_min_baseline_wins=2,
+            learner_fit_fingerprint="learner",
+            response_endpoint_fingerprint="endpoint",
+            split_fingerprint="split",
+            external_feature_fingerprint="external",
+            eog_feature_fingerprint="eog",
+        )
+    with pytest.raises(ValueError, match="positive integer"):
+        PredictiveComplementarityDeclaration(
+            metric_name="log_loss",
+            lower_is_better=True,
+            expected_outer_unit_count=3.5,  # type: ignore[arg-type]
+            favorable_min_augmented_wins=2,
+            adverse_min_baseline_wins=2,
+            learner_fit_fingerprint="learner",
+            response_endpoint_fingerprint="endpoint",
+            split_fingerprint="split",
+            external_feature_fingerprint="external",
+            eog_feature_fingerprint="eog",
+        )
+    with pytest.raises(TypeError, match="outer_unit_id"):
+        PairedOuterUnitScore(1, 0.2, 0.1)  # type: ignore[arg-type]
+
+
 def test_declaration_fingerprint_changes_with_frozen_scientific_choice():
     base = declaration()
     changed = PredictiveComplementarityDeclaration(
@@ -163,3 +194,11 @@ def test_declaration_fingerprint_changes_with_frozen_scientific_choice():
         eog_feature_fingerprint=base.eog_feature_fingerprint,
     )
     assert base.fingerprint != changed.fingerprint
+
+
+def test_validation_facade_exposes_complementarity_without_root_growth():
+    from eog.v2 import validation
+
+    assert validation.PredictiveComplementarityDeclaration is PredictiveComplementarityDeclaration
+    assert validation.PairedOuterUnitScore is PairedOuterUnitScore
+    assert validation.evaluate_predictive_complementarity is evaluate_predictive_complementarity
