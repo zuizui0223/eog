@@ -1,0 +1,44 @@
+{
+  "status": "gate0_blocked_authenticated_file_download",
+  "candidate": "Pyrgus armoricanus northern Swedish 50-patch metapopulation, 2004-2016",
+  "dryad": {
+    "doi": "10.5061/dryad.b563d",
+    "version_api_id": 17929,
+    "metadata_run": 32338313095,
+    "metadata_artifact_id": 9395403204,
+    "metadata_artifact_sha256": "4afb78fb7a39b0c83be3d4317475c001b3fc474765ea3b1cd8ac60db39615a44"
+  },
+  "metadata_pass": {
+    "files_physically_separate": true,
+    "site_file": {
+      "name": "Site_data.csv",
+      "file_id_from_metadata_link": 59823,
+      "size_bytes": 2763,
+      "md5": "41eca42bc08eb4195b33b5fd30c2e4c3"
+    },
+    "response_file": {
+      "name": "Monitoring_data.csv",
+      "file_id_from_metadata_link": 59822,
+      "size_bytes": 8380,
+      "md5": "f7d32e5cad93f08b08efbfee4fe59ac1",
+      "downloaded": false,
+      "rows_opened": false
+    }
+  },
+  "blocker": {
+    "type": "transport_authentication_requirement",
+    "site_file_bytes_obtained": false,
+    "site_file_rows_inspected": false,
+    "api_download_status": 401,
+    "public_file_stream_status": 403,
+    "diagnosis": "Current Dryad API documentation requires authenticated sessions for file/archive downloads. Anonymous metadata access is sufficient to prove physical file separation but not to freeze and validate the exact 50-row Site_data.csv bytes in this execution environment.",
+    "scientific_gate_interpretation": "Do not infer geometry completeness from file name/landing-page description alone. The candidate cannot advance to structural-scale validation until exact response-independent site bytes are reproducibly frozen."
+  },
+  "response_firewall": {
+    "monitoring_file_downloaded": false,
+    "monitoring_rows_opened": false,
+    "outcome_access_authorized": false
+  },
+  "decision": "block this candidate without opening Monitoring_data.csv; do not weaken byte-freeze requirements or reconstruct coordinates from figures",
+  "next": "screen a genuinely fresh candidate whose response-independent geometry bytes are anonymously and reproducibly retrievable (prefer Zenodo/Figshare or equivalent stable public object storage)"
+}
