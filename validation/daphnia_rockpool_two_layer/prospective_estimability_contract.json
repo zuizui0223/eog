@@ -1,0 +1,27 @@
+{
+  "status": "uncertain_pre_response",
+  "candidate": "Luo et al. 2022 Tvärminne Daphnia rock-pool metacommunity",
+  "endpoint": "released annual Daphnia magna occupancy transition 0->1 among source-year 0 pools",
+  "source_label": "PNAS 2022 methods and public Figshare/code metadata only; no data_M.csv response row opened",
+  "endpoint_definition_matches": true,
+  "response_rows_opened": false,
+  "required_counts": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 8
+  },
+  "published_evidence": {
+    "calibration_events": {"lower": null, "upper": null},
+    "calibration_non_events": {"lower": null, "upper": null},
+    "heldout_events": {"lower": null, "upper": null},
+    "heldout_non_events": {"lower": null, "upper": null},
+    "heldout_outer_units_with_both_classes": {"lower": null, "upper": null}
+  },
+  "reason": "The paper establishes 546 annual patch-occupancy histories over 1982-2017 and explicitly defines annual occupancy, but it does not publish endpoint-matched 0->1 / 0->0 counts for the prospectively frozen temporal split. Older colonisation totals use a different event definition and are not substituted.",
+  "execution_policy": "continue_response_blind_exact_gate_required",
+  "exact_gate_first": true,
+  "zero_model_fits_if_exact_gate_fails": true,
+  "no_post_open_redesign": true
+}
