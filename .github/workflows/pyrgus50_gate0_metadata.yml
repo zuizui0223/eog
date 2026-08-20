@@ -1,0 +1,145 @@
+name: Pyrgus 50-patch Gate 0 metadata
+
+on:
+  push:
+    branches:
+      - agent/pyrgus50-gate0-screen
+    paths:
+      - ".github/workflows/pyrgus50_gate0_metadata.yml"
+      - "validation/pyrgus50_two_layer/gate0_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/pyrgus50_gate0_metadata.yml"
+      - "validation/pyrgus50_two_layer/gate0_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Inventory Dryad dataset metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/pyrgus50_gate0
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          from urllib.parse import quote
+          import urllib.request
+
+          DOI = "doi:10.5061/dryad.b563d"
+          API = "https://datadryad.org/api/v2"
+          encoded = quote(DOI, safe="")
+
+          def get_json(url: str):
+              req = urllib.request.Request(url, headers={"User-Agent": "eog-response-blind-gate0/1.0"})
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  return json.load(response)
+
+          dataset = get_json(f"{API}/datasets/{encoded}")
+          versions_payload = get_json(f"{API}/datasets/{encoded}/versions")
+          versions = versions_payload.get("_embedded", {}).get("stash:versions", [])
+          if not versions:
+              versions = versions_payload.get("data", [])
+          if not versions:
+              raise RuntimeError("Dryad API returned no dataset versions")
+
+          def version_id(row):
+              return row.get("id") or row.get("versionId") or row.get("version_id")
+
+          version_rows = [row for row in versions if version_id(row) is not None]
+          if not version_rows:
+              raise RuntimeError("Dryad version metadata has no usable version ID")
+          latest = max(version_rows, key=lambda row: int(version_id(row)))
+          vid = int(version_id(latest))
+          files_payload = get_json(f"{API}/versions/{vid}/files")
+          files = files_payload.get("_embedded", {}).get("stash:files", [])
+          if not files:
+              files = files_payload.get("data", [])
+          if not files:
+              raise RuntimeError("Dryad API returned no files for selected version")
+
+          def pick(row, *keys):
+              for key in keys:
+                  if key in row and row[key] is not None:
+                      return row[key]
+              return None
+
+          inventory = []
+          for row in files:
+              links = row.get("_links") or row.get("links") or {}
+              download = None
+              for key in ("stash:download", "download", "self"):
+                  value = links.get(key)
+                  if isinstance(value, dict):
+                      value = value.get("href")
+                  if value and key != "self":
+                      download = value
+                      break
+              inventory.append({
+                  "id": pick(row, "id", "fileId", "file_id"),
+                  "path": pick(row, "path", "filename", "name"),
+                  "size": pick(row, "size", "fileSize", "file_size"),
+                  "mime_type": pick(row, "mimeType", "mime_type"),
+                  "digest": pick(row, "digest", "checksum"),
+                  "download_url": download,
+              })
+
+          names = [str(row["path"]) for row in inventory]
+          required = {"Site_data.csv", "Monitoring_data.csv"}
+          if not required.issubset(set(names)):
+              raise RuntimeError(f"required separate files not found; files={names!r}")
+
+          result = {
+              "status": "dryad_metadata_inventory_complete",
+              "candidate": "Pyrgus armoricanus 50-patch system",
+              "doi": DOI,
+              "dataset": dataset,
+              "selected_version_id": vid,
+              "version_metadata": latest,
+              "files": inventory,
+              "required_files_separate": True,
+              "site_file_name": "Site_data.csv",
+              "response_file_name": "Monitoring_data.csv",
+              "response_rows_opened": False,
+              "response_file_downloaded": False,
+              "any_file_bytes_downloaded": False,
+              "next": "download and inspect Site_data.csv only; Monitoring_data.csv remains prohibited",
+          }
+          Path("build/pyrgus50_gate0/dryad_metadata_inventory.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps({
+              "status": result["status"],
+              "selected_version_id": vid,
+              "files": names,
+              "required_files_separate": True,
+              "response_rows_opened": False,
+              "response_file_downloaded": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/pyrgus50_gate0/dryad_metadata_inventory.json'))
+          assert p['required_files_separate'] is True
+          assert p['response_rows_opened'] is False
+          assert p['response_file_downloaded'] is False
+          assert p['any_file_bytes_downloaded'] is False
+          PY
+      - name: Upload metadata-only evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyrgus50-gate0-metadata
+          path: build/pyrgus50_gate0/dryad_metadata_inventory.json
+          if-no-files-found: error
