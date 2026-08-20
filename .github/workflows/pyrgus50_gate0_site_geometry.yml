@@ -52,16 +52,6 @@ jobs:
               with urllib.request.urlopen(req, timeout=30) as response:
                   return json.load(response)
 
-          def link_href(row, *keys):
-              links = row.get("_links") or row.get("links") or {}
-              for key in keys:
-                  value = links.get(key)
-                  if isinstance(value, dict):
-                      value = value.get("href")
-                  if value:
-                      return absolute(value)
-              return None
-
           payload = get_json(f"{API}/versions/{VERSION_ID}/files")
           files = (payload.get("_embedded") or {}).get("stash:files") or payload.get("data") or []
           if not isinstance(files, list):
@@ -72,13 +62,14 @@ jobs:
 
           site_meta = by_name[SITE_NAME]
           response_meta = by_name[RESPONSE_NAME]
-          site_url = link_href(site_meta, "stash:download", "download")
-          if site_url is None:
-              file_id = site_meta.get("id") or site_meta.get("fileId")
-              if file_id is None:
-                  raise RuntimeError("Site_data.csv has neither download link nor file ID")
-              site_url = f"{API}/files/{file_id}/download"
+          site_file_id = site_meta.get("id") or site_meta.get("fileId") or site_meta.get("file_id")
+          response_file_id = response_meta.get("id") or response_meta.get("fileId") or response_meta.get("file_id")
+          if site_file_id is None or response_file_id is None:
+              raise RuntimeError("Dryad file metadata must expose stable file IDs")
 
+          # Public, anonymous Dryad file delivery. Deliberately construct this URL only
+          # for Site_data.csv; the response member is never requested.
+          site_url = f"{ORIGIN}/downloads/file_stream/{int(site_file_id)}"
           req = urllib.request.Request(site_url, headers={"User-Agent": "eog-response-blind-gate0/1.0"})
           with urllib.request.urlopen(req, timeout=30) as response:
               site_bytes = response.read()
@@ -138,7 +129,9 @@ jobs:
               "dryad_version_id": VERSION_ID,
               "site_file": {
                   "name": SITE_NAME,
+                  "id": int(site_file_id),
                   "metadata": site_meta,
+                  "public_download_url": site_url,
                   "sha256": site_sha256,
                   "declared_digest": declared_digest,
                   "bytes": len(site_bytes),
@@ -146,7 +139,7 @@ jobs:
               "response_file": {
                   "name": RESPONSE_NAME,
                   "metadata_identity_only": {
-                      "id": response_meta.get("id") or response_meta.get("fileId"),
+                      "id": int(response_file_id),
                       "path": response_meta.get("path") or response_meta.get("filename") or response_meta.get("name"),
                       "size": response_meta.get("size") or response_meta.get("fileSize"),
                       "digest": response_meta.get("digest") or response_meta.get("checksum"),
@@ -169,6 +162,8 @@ jobs:
           )
           print(json.dumps({
               "status": result["status"],
+              "site_file_id": int(site_file_id),
+              "response_file_id_metadata_only": int(response_file_id),
               "row_count": result["row_count"],
               "columns": columns,
               "coordinate_columns": result["coordinate_columns"],
