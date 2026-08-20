@@ -1,0 +1,38 @@
+{
+  "status": "gate0_response_blind_contract_frozen",
+  "candidate": "Rhode Island statewide fisher seasonal dynamic occupancy 2018-2022",
+  "focal_taxon": "Pekania pennanti",
+  "public_source": {
+    "zenodo_record": 14508932,
+    "zenodo_version": 3,
+    "archive_name": "DataS1.zip",
+    "archive_url": "https://zenodo.org/records/14508932/files/DataS1.zip?download=1",
+    "archive_md5": "c66943e6c2a9aab0abce2a1eba8ce02e"
+  },
+  "allowed_pre_response_members": [
+    "RI_CameraSurvey_Deployments.csv"
+  ],
+  "forbidden_response_member": "RI_CameraSurvey_Detections.csv",
+  "response_firewall": {
+    "zip_central_directory_allowed": true,
+    "deployment_member_content_allowed": true,
+    "detection_member_content_allowed": false,
+    "detection_member_bytes_downloaded": false,
+    "detection_rows_opened": false
+  },
+  "registry_gate": {
+    "minimum_unique_sites": 150,
+    "minimum_unique_periods": 6,
+    "minimum_sites_observed_in_two_or_more_periods": 75,
+    "minimum_sites_in_any_period": 40
+  },
+  "structural_gate": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "minimum_lcc_at_0_9_world": 0.9,
+    "maximum_isolated_fraction_at_0_9_world": 0.05
+  },
+  "geometry_policy": "Use only deployment-table coordinates. Collapse multiple camera/deployment rows to one site centroid using all response-independent deployment coordinates for that primary site. Distances are geodesic/haversine kilometers from latitude-longitude centroids and are analyst-choice structural regimes, not fisher movement limits.",
+  "next_if_pass": "freeze chronological overlap/availability, fisher response semantics and token schema, prospective count screen, Layer A/B, same-learner paired complementarity, smoke/runtime and once-only outcome access before any detection row is opened",
+  "stop_if_fail": "close unmerged; do not inspect detection rows or tune the structural gate to rescue the candidate"
+}
