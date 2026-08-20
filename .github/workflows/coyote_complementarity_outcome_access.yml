@@ -1,0 +1,132 @@
+name: Chicago coyote complementarity outcome access gate
+
+on:
+  push:
+    branches:
+      - agent/coyote-complementarity-gate0
+    paths:
+      - ".github/workflows/coyote_complementarity_outcome_access.yml"
+      - "validation/coyote_complementarity/outcome_access_freeze_ledger.json"
+      - "validation/coyote_complementarity/runtime_lock.json"
+      - "validation/coyote_complementarity/prospective_estimability_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/coyote_complementarity_outcome_access.yml"
+      - "validation/coyote_complementarity/outcome_access_freeze_ledger.json"
+      - "validation/coyote_complementarity/runtime_lock.json"
+      - "validation/coyote_complementarity/prospective_estimability_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authorize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen package
+        run: python -m pip install .
+      - name: Evaluate generic once-only outcome-access gate
+        run: |
+          set -euo pipefail
+          mkdir -p build/coyote_complementarity_outcome_access
+          python - <<'PY'
+          from __future__ import annotations
+          from dataclasses import asdict
+          import json
+          from pathlib import Path
+
+          from eog.v2.prospective_estimability import (
+              AggregateCountInterval,
+              AggregateEstimabilityEvidence,
+              ProspectiveEstimabilityDeclaration,
+              evaluate_prospective_estimability,
+          )
+          from eog.v2.outcome_access import FrozenOutcomeAccessContract, evaluate_outcome_access_gate
+
+          root=Path('validation/coyote_complementarity')
+          prospective=json.loads((root/'prospective_estimability_contract.json').read_text(encoding='utf-8'))
+          ledger=json.loads((root/'outcome_access_freeze_ledger.json').read_text(encoding='utf-8'))
+          runtime=json.loads((root/'runtime_lock.json').read_text(encoding='utf-8'))
+
+          declaration=ProspectiveEstimabilityDeclaration(**prospective['required_counts'])
+          evidence=AggregateEstimabilityEvidence(
+              source_label=prospective['source_label'],
+              endpoint_definition_matches=bool(prospective['endpoint_definition_matches']),
+              response_rows_opened=bool(prospective['response_rows_opened']),
+              intervals={
+                  key: AggregateCountInterval(lower=value.get('lower'), upper=value.get('upper'))
+                  for key,value in prospective['published_evidence'].items()
+              },
+              note=prospective['reason'],
+          )
+          estimability=evaluate_prospective_estimability(declaration,evidence)
+          if estimability.status != prospective['status']:
+              raise RuntimeError(f"prospective status drift: {estimability.status} != {prospective['status']}")
+
+          contract=FrozenOutcomeAccessContract(
+              attempt_id=ledger['attempt_id'],
+              freeze_fingerprints=ledger['freeze_fingerprints'],
+              response_rows_opened=bool(ledger['response_rows_opened']),
+              exact_count_gate_first=bool(ledger['exact_count_gate_first']),
+              zero_fit_on_count_failure=bool(ledger['zero_fit_on_count_failure']),
+              no_post_open_redesign=bool(ledger['no_post_open_redesign']),
+              note=ledger['note'],
+          )
+          decision=evaluate_outcome_access_gate(contract,estimability)
+
+          assert runtime['runner']['git_blob_sha']=='a5185e9db51185f92bcf3f8a7bd2ff7dfb2918d9'
+          assert runtime['smoke']['result_fingerprint']=='622c8c30ea9246791d226a7c146bca09bd6d395eb7d68e891fbef99605c96b68'
+          assert runtime['smoke']['response_bytes_opened'] is False
+          assert runtime['smoke']['response_rows_opened'] is False
+          assert runtime['safety']['exact_count_gate_first'] is True
+          assert runtime['safety']['zero_model_fits_on_count_failure'] is True
+          assert runtime['safety']['no_post_open_redesign'] is True
+          assert runtime['safety']['same_learner_paired_comparison'] is True
+
+          payload={
+              'status':decision.status,
+              'authorized':decision.authorized,
+              'prospective_status':estimability.status,
+              'prospective_disposition':decision.prospective_disposition,
+              'missing_freeze_keys':list(decision.missing_freeze_keys),
+              'contract_fingerprint':decision.contract_fingerprint,
+              'estimability_fingerprint':decision.estimability_fingerprint,
+              'decision_fingerprint':decision.fingerprint,
+              'exact_count_gate_first':decision.exact_count_gate_first,
+              'zero_fit_on_count_failure':decision.zero_fit_on_count_failure,
+              'no_post_open_redesign':decision.no_post_open_redesign,
+              'response_rows_opened':False,
+              'response_bytes_opened':False,
+              'reason':decision.reason,
+          }
+          out=Path('build/coyote_complementarity_outcome_access/outcome_access_gate_result.json')
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          if not decision.authorized:
+              raise SystemExit(2)
+          if decision.status!='authorized_once_only_exact_count_gate_required':
+              raise SystemExit(3)
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/coyote_complementarity_outcome_access/outcome_access_gate_result.json'))
+          assert p['authorized'] is True
+          assert p['status']=='authorized_once_only_exact_count_gate_required'
+          assert p['missing_freeze_keys']==[]
+          assert p['response_rows_opened'] is False
+          assert p['response_bytes_opened'] is False
+          PY
+      - name: Upload authorization evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: chicago-coyote-complementarity-outcome-access
+          path: build/coyote_complementarity_outcome_access/outcome_access_gate_result.json
+          if-no-files-found: error
