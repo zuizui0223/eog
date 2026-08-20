@@ -49,7 +49,7 @@ def test_normalization_collision_is_rejected():
         )
 
 
-def test_unknown_empty_and_none_tokens_fail_closed():
+def test_unknown_empty_none_and_numeric_tokens_fail_closed():
     rule = CategoricalTokenRule(
         field_name="State",
         canonical_values=("present", "absent"),
@@ -60,6 +60,8 @@ def test_unknown_empty_and_none_tokens_fail_closed():
         rule.canonicalize("   ")
     with pytest.raises(ValueError, match="must not be None"):
         rule.canonicalize(None)
+    with pytest.raises(TypeError, match="token must be str"):
+        rule.canonicalize(1)
 
 
 def test_schema_rule_order_does_not_change_fingerprint():
@@ -106,6 +108,10 @@ def test_fingerprint_changes_with_canonical_categories_and_normalization_choice(
 def test_invalid_rule_and_schema_types_fail_closed():
     with pytest.raises(TypeError, match="canonical_values must be a sequence"):
         CategoricalTokenRule(field_name="Week", canonical_values="week1")  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="canonical_values must contain only strings"):
+        CategoricalTokenRule(field_name="Week", canonical_values=(1, 2))  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="field_name must be str"):
+        CategoricalTokenRule(field_name=1, canonical_values=("a",))  # type: ignore[arg-type]
     with pytest.raises(TypeError, match="strip_outer_whitespace must be bool"):
         CategoricalTokenRule(
             field_name="Week",
@@ -114,6 +120,11 @@ def test_invalid_rule_and_schema_types_fail_closed():
         )
     with pytest.raises(TypeError, match="rules must contain only"):
         ResponseTokenSchemaDeclaration(rules=("not-a-rule",))  # type: ignore[arg-type]
+    schema = ResponseTokenSchemaDeclaration(
+        rules=(CategoricalTokenRule(field_name="Week", canonical_values=("week1",)),)
+    )
+    with pytest.raises(TypeError, match="field_name must be str"):
+        schema.rule_for(1)
 
 
 def test_validation_facade_exposes_response_schema_without_root_widening():
