@@ -1,0 +1,61 @@
+{
+  "status": "response_blind_gate0_candidate_frozen",
+  "candidate": "Murray et al. 2021 Chicago coyote multi-season camera survey",
+  "selected_after_main_commit": "afd7c6fe8439153b8900753aad0df2bcd500580b",
+  "published_design": {
+    "site_count": 113,
+    "season_count": 16,
+    "season_range": "spring 2010 through winter 2014",
+    "secondary_surveys_per_season": 4,
+    "published_model_boundary": "coyote occurrence was fitted as a multi-season autologistic state; EOG future endpoint will be the recorded seasonal detection state, not latent biological absence"
+  },
+  "frozen_repository": {
+    "repository": "mfidino/coyote-mange",
+    "commit": "a068e2aba265551e3b29b1c3ec8c4b1f34eafcdb"
+  },
+  "site_registry": {
+    "path": "data/model_covariates.csv",
+    "git_blob_sha": "e55380935ab1ea75e24a62d114fa70dd0e26aa59",
+    "expected_rows": 113,
+    "site_column": "site",
+    "role": "response-independent site registry and conventional urban covariates"
+  },
+  "geometry_registry": {
+    "path": "data/raw_site_coords.csv",
+    "git_blob_sha": "391b6de221f3f827e94bf6d3f8a8050f279c6a8e",
+    "columns": ["site", "utmEast", "utmNorth"],
+    "crs": "UTM zone 16N",
+    "role": "response-independent camera coordinates"
+  },
+  "future_response": {
+    "path": "data/coyote_detection_data.csv",
+    "git_blob_sha": "3ba6cfa50f5b74bdc6532676f7eb475ab0c46523",
+    "response_bytes_opened": false,
+    "future_observed_endpoint": "season-level recorded coyote detection: positive if >=1 weekly detection among active weeks; recorded negative only when camera effort is present and no weekly coyote detection occurs",
+    "biological_absence_claim": false
+  },
+  "join_gate": {
+    "rule": "all 113 model_covariates site IDs must exactly match response-free coordinate site IDs",
+    "minimum_exact_coverage_fraction": 1.0,
+    "minimum_nodes_after_join": 113,
+    "no_aliases_or_fuzzy_repair": true
+  },
+  "structural_gate": {
+    "distance": "Euclidean UTM meters",
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "minimum_lcc_at_0_9_world": 0.9,
+    "maximum_isolated_fraction_at_0_9_world": 0.05
+  },
+  "prospective_estimability": {
+    "status": "uncertain_pre_response",
+    "published_support": "16 seasons x 113 sites; published naive coyote occupancy averaged 0.45 and coyote was photographed at 78% of sites across seasons",
+    "reason": "endpoint-matched 0->1 and 0->0 counts under a future frozen temporal split are not published; exact count gate remains mandatory before fitting"
+  },
+  "no_rescue": [
+    "do not open coyote_detection_data.csv to alter node geometry or scale",
+    "do not weaken exact Site-ID coverage",
+    "do not substitute the paper's fitted autologistic parameter for EOG structural scale",
+    "do not add candidate-specific connectivity operators"
+  ]
+}
