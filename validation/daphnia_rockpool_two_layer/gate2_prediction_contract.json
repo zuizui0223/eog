@@ -1,0 +1,214 @@
+{
+  "status": "gate2_pre_response_prediction_contract_frozen",
+  "candidate": "Luo et al. 2022 Tvärminne Daphnia rock-pool metacommunity",
+  "response_content_opened": false,
+  "figshare_article_id": 20329245,
+  "figshare_version": 1,
+  "top_level_zip_md5": "012431094673144b28f056210a516f63",
+  "gate1_fingerprint": "9a2ac506fc138f0e1125404d7db38777579038b34c33a61fc084a94702788b21",
+  "response_member": {
+    "name": "code_SpatialCoex/Bayesian model fitting/data_M.csv",
+    "local_header_offset": 5084,
+    "compressed_size": 2523,
+    "uncompressed_size": 40111,
+    "crc32": "aa2c0d97",
+    "role": "released annual Daphnia magna occupancy matrix Y_M"
+  },
+  "response_target": {
+    "name": "released_annual_daphnia_magna_recolonisation",
+    "years": [1982, 2017],
+    "risk_set": "pool i with released annual Y_M(i,t)=0 at source year t",
+    "positive": "released Y_M(i,t)=0 and Y_M(i,t+1)=1",
+    "negative": "released Y_M(i,t)=0 and Y_M(i,t+1)=0",
+    "source_state": "all pools with released Y_M(i,t)=1",
+    "boundary": "The paper defines annual occupancy as 1 if observed in at least one of two annual samples and 0 otherwise, and states that a small fraction of missing observations after 2008 were treated as zero. Therefore zero is interpreted only as the published/released annual endpoint code and is never called latent biological absence.",
+    "schema_gate_before_fit": [
+      "selectively extract only the frozen data_M.csv member after once-only authorization",
+      "member name, CRC32 and uncompressed size must match the frozen ZIP directory",
+      "after deterministic CSV-header removal the matrix must be exactly 546 x 36",
+      "columns are prospectively mapped in order to years 1982..2017, matching the paper and the published R code read.csv(...,header=T) -> Y_M contract",
+      "values must be only 0, 1 or explicit missing tokens; explicit missing tokens, if any, are converted to 0 to reproduce the paper's released endpoint semantics",
+      "every transition must contain at least one current source before any model fit"
+    ]
+  },
+  "temporal_design": {
+    "split_rule": "first 24 of 35 annual transitions for calibration; final 11 for heldout",
+    "calibration_transitions": "1982->1983 through 2005->2006",
+    "heldout_transitions": "2006->2007 through 2016->2017",
+    "calibration_transition_count": 24,
+    "heldout_transition_count": 11,
+    "model_refitting_during_heldout": false,
+    "rule_state_update_during_heldout": "allowed only after each heldout transition outcome is observed"
+  },
+  "response_estimability": {
+    "minimum_calibration_events": 10,
+    "minimum_calibration_non_events": 40,
+    "minimum_heldout_events": 10,
+    "minimum_heldout_non_events": 40,
+    "minimum_heldout_outer_units_with_both_classes": 8,
+    "exact_count_gate_before_model_fit": true,
+    "failure_status": "non_estimable_response_balance",
+    "zero_model_fits_on_failure": true
+  },
+  "response_independent_inputs": {
+    "patch_size": {
+      "member": "code_SpatialCoex/Bayesian model fitting/A.csv",
+      "sha256": "3134ec64abc5a285069a27752a8aae7a7d881144d94d7e003d66d99005abf8b0",
+      "shape": [546],
+      "use": "log patch size as a shared conventional predictor; never a response"
+    },
+    "distance": {
+      "member": "code_SpatialCoex/Bayesian model fitting/distance.csv",
+      "sha256": "4ffb62d36b808b18fb999aa1f585e1987d0df76e289543ef43941f2e3037b750",
+      "shape": [546, 546],
+      "use": "frozen structural worlds and conventional connectivity predictors"
+    },
+    "temperature": {
+      "member": "code_SpatialCoex/Bayesian model fitting/tem.csv",
+      "local_header_offset": 2374199,
+      "compressed_size": 196,
+      "uncompressed_size": 454,
+      "crc32": "6b1484de",
+      "expected_values": 36,
+      "year_mapping": "row order 1982..2017",
+      "use": "source-year summer temperature in the shared conventional baseline"
+    }
+  },
+  "layer_a": {
+    "declared_rule_count": 5,
+    "node_universe": "546 response-independent rock-pool rows from frozen distance.csv",
+    "current_sources": "all released Y_M=1 pools at source year t",
+    "source_weights": "equal normalized weight across current sources",
+    "loss_support": 1.0,
+    "support_tolerance": 1e-15,
+    "kernel_scale": 0.274502525748238,
+    "kernel_scale_interpretation": "response-blind analyst-choice scale equal to the frozen LCC50 threshold in released distance units; not a biological dispersal estimate",
+    "rules": [
+      {
+        "world_id": "geo_lcc250",
+        "raw_edge_support": "exp(-d/0.274502525748238) for d<=0.22151186379051, otherwise 0"
+      },
+      {
+        "world_id": "geo_lcc500",
+        "raw_edge_support": "exp(-d/0.274502525748238) for d<=0.274502525748238, otherwise 0"
+      },
+      {
+        "world_id": "geo_lcc750",
+        "raw_edge_support": "exp(-d/0.274502525748238) for d<=0.284129344781106, otherwise 0"
+      },
+      {
+        "world_id": "geo_lcc900",
+        "raw_edge_support": "exp(-d/0.274502525748238) for d<=0.364920914083473, otherwise 0"
+      },
+      {
+        "world_id": "geo_exponential_full",
+        "raw_edge_support": "exp(-d/0.274502525748238) for every distinct pool pair",
+        "interpretation": "full-support response-blind analytical world preserving nonzero long-distance possibility; not the fitted D. magna xi parameter"
+      }
+    ],
+    "transition_normalization": "Q[s,j]=W[s,j]/(1+sum_k W[s,k]); candidate support is the equal-source mean of Q[s,j]",
+    "rule_filter": "after each observed transition, eliminate a surviving rule if any newly positive 0->1 target has support <=1e-15",
+    "monotonicity": "surviving rule IDs may only remain or contract; eliminated rules never return",
+    "falsification": "if all five rules are eliminated, stop and report frozen-universe falsification without retuning"
+  },
+  "layer_b": {
+    "representation": "symmetric_world_support_summary_v1",
+    "implementation": "production eog.v2.world_predictive_summary.summarize_worldset_for_prediction",
+    "feature_names": [
+      "surviving_world_fraction",
+      "support_mean",
+      "support_std",
+      "support_min",
+      "support_max",
+      "support_q25",
+      "support_q50",
+      "support_q75",
+      "positive_support_fraction",
+      "support_range"
+    ],
+    "world_labels_exposed_as_supervised_columns": false
+  },
+  "shared_geometry_process_baseline": {
+    "features": [
+      "source_year_index",
+      "source_year_summer_temperature",
+      "log_target_patch_size",
+      "current_source_count",
+      "nearest_current_source_distance",
+      "current_source_count_within_lcc250",
+      "current_source_count_within_lcc500",
+      "current_source_count_within_lcc750",
+      "current_source_count_within_lcc900",
+      "area_weighted_exponential_exposure_within_lcc250",
+      "area_weighted_exponential_exposure_within_lcc500",
+      "area_weighted_exponential_exposure_within_lcc750",
+      "area_weighted_exponential_exposure_within_lcc900",
+      "area_weighted_full_exponential_exposure"
+    ],
+    "connectivity_formula": "sum over current sources of A_source * exp(-d/0.274502525748238), truncated where specified",
+    "boundary": "This is a strong conventional single-species geometry/process baseline using the same response-independent patch size, temperature and connectivity information; it does not use EOG world identity. The full published multispecies Bayesian model is not used as an executable comparator because doing so would require opening the two nonfocal species response matrices before the D. magna test."
+  },
+  "models": {
+    "geometry_process_logistic": {
+      "features": "shared baseline only",
+      "type": "L2 logistic regression",
+      "C": 1.0,
+      "solver": "lbfgs",
+      "max_iter": 3000,
+      "standardization": "calibration mean/SD; zero-SD columns dropped"
+    },
+    "geometry_process_rf": {
+      "features": "shared baseline only",
+      "n_estimators": 500,
+      "max_features": "sqrt",
+      "min_samples_leaf": 5,
+      "class_weight": null,
+      "random_state": 20260820,
+      "n_jobs": -1
+    },
+    "mean_only_logistic": {
+      "features": "shared baseline + surviving_world_fraction + support_mean",
+      "type": "same frozen L2 logistic specification"
+    },
+    "layer_b_logistic": {
+      "features": "shared baseline + all 10 symmetric_world_support_summary_v1 features",
+      "type": "same frozen L2 logistic specification"
+    }
+  },
+  "representation_estimability": {
+    "scope": "calibration rows after exact response-count gate but before model fitting",
+    "rule": "after dropping zero-SD columns, regress each Layer-B feature not already in mean-only by OLS on intercept + shared baseline + mean-only EOG features; require at least one residual SD >1e-8",
+    "failure_status": "layer_b_non_estimable_beyond_mean_only",
+    "no_rescue": "do not add features/worlds or redefine mean-only after this check"
+  },
+  "metrics": {
+    "primary": "macro-heldout-transition binary log loss across the 11 frozen heldout transitions",
+    "secondary": ["pooled log loss", "Brier score", "ROC AUC", "average precision", "heldout transition direction count"],
+    "outer_units": "annual transitions; pool rows do not create independent years",
+    "no_bootstrap_precision_claim": true
+  },
+  "decision_rules": {
+    "layer_b_vs_mean_only_favorable_if_all": [
+      "representation is estimable beyond mean-only",
+      "macro logloss(layer_b - mean_only) < 0",
+      "Layer B has lower log loss in at least 6 of 11 heldout transitions"
+    ],
+    "layer_b_vs_mean_only_adverse_if": "macro logloss(layer_b - mean_only) > 0 and Layer B loses in at least 6 of 11 heldout transitions",
+    "external_added_value_favorable_if_all": [
+      "macro Layer-B log loss is lower than geometry_process_logistic and geometry_process_rf",
+      "Layer B beats the better external baseline in at least 6 of 11 heldout transitions"
+    ],
+    "otherwise": "preserve no_confirmed_added_value, adverse, non_estimable or universe_falsified without retuning"
+  },
+  "no_retuning_after_response": [
+    "546-pool node universe or row order",
+    "1982-2006 calibration / 2006-2017 heldout split",
+    "count minima or released zero-imputed endpoint semantics",
+    "five Layer-A rules, kernel scale or structural thresholds",
+    "source weighting, loss support or support tolerance",
+    "Layer-B feature surface",
+    "shared baseline features",
+    "model hyperparameters",
+    "metrics or decision rules"
+  ]
+}
