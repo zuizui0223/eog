@@ -1,0 +1,65 @@
+{
+  "status": "gate0_response_blind_geometry_member_freeze",
+  "candidate": "Luo et al. 2022 Tvärminne Daphnia rock-pool metacommunity",
+  "figshare_article_id": 20329245,
+  "figshare_version": 1,
+  "top_level_file": {
+    "id": 36330951,
+    "name": "code_SpatialCoex.zip",
+    "size": 11034608,
+    "md5": "012431094673144b28f056210a516f63"
+  },
+  "scientific_role_evidence": {
+    "paper_statement": "The published model defines A_i as patch size and d_ij as pairwise distance between patches; the empirical system contains 546 rock-pool patches.",
+    "archive_separation": "A.csv and distance.csv are distinct archive members from data_L.csv, data_M.csv and data_P.csv.",
+    "canonical_member_choice": "Use the Bayesian model fitting copies. Identical duplicate copies exist under plot/ with matching CRC32 values.",
+    "claim_boundary": "This gate establishes response-independent patch-size and pairwise-distance inputs only. It does not establish occupancy, colonisation events, missingness resolution, biological dispersal scale or historical routes."
+  },
+  "selected_members": [
+    {
+      "role": "patch_size_vector",
+      "name": "code_SpatialCoex/Bayesian model fitting/A.csv",
+      "local_header_offset": 70,
+      "compressed_size": 2603,
+      "uncompressed_size": 6669,
+      "crc32": "08470def"
+    },
+    {
+      "role": "pairwise_distance_matrix",
+      "name": "code_SpatialCoex/Bayesian model fitting/distance.csv",
+      "local_header_offset": 9093,
+      "compressed_size": 2362738,
+      "uncompressed_size": 5235396,
+      "crc32": "f5f840c0"
+    }
+  ],
+  "expected_node_count": 546,
+  "geometry_pass_requires": [
+    "both selected members are extracted only by bounded HTTP Range requests using their frozen ZIP local-header offsets and central-directory sizes",
+    "member names, CRC32 values and uncompressed sizes match the frozen inventory",
+    "A.csv resolves to exactly 546 finite positive patch-size values after removal of at most deterministic row/column labels",
+    "distance.csv resolves to a 546 x 546 finite non-negative symmetric matrix with near-zero diagonal after removal of at most deterministic row/column labels",
+    "no data_L.csv, data_M.csv, data_P.csv, post_sample.csv or other response-bearing member bytes are downloaded"
+  ],
+  "response_firewall": {
+    "response_rows_opened": false,
+    "response_member_bytes_downloaded": false,
+    "allowed_member_content": [
+      "code_SpatialCoex/Bayesian model fitting/A.csv",
+      "code_SpatialCoex/Bayesian model fitting/distance.csv"
+    ],
+    "forbidden_member_content": [
+      "code_SpatialCoex/Bayesian model fitting/data_L.csv",
+      "code_SpatialCoex/Bayesian model fitting/data_M.csv",
+      "code_SpatialCoex/Bayesian model fitting/data_P.csv",
+      "code_SpatialCoex/plot/post_sample.csv"
+    ]
+  },
+  "next_if_pass": "Build the unchanged response-blind structural LCC scale ladder from the frozen pairwise-distance matrix before any Daphnia occupancy row is opened.",
+  "no_rescue": [
+    "do not inspect occupancy members to repair patch IDs or geometry",
+    "do not change the 546-node universe after outcome access",
+    "do not use fitted Daphnia dispersal parameters to choose structural worlds",
+    "do not add a candidate-specific connectivity operator"
+  ]
+}
