@@ -1,0 +1,27 @@
+{
+  "status": "uncertain_pre_response",
+  "candidate": "Murray et al. 2021 Chicago coyote multi-season camera survey",
+  "endpoint": "recorded seasonal coyote reappearance 0->1 among source-season known non-detections",
+  "source_label": "published README/paper and response-free repository files only; coyote_detection_data.csv rows unopened",
+  "endpoint_definition_matches": true,
+  "response_rows_opened": false,
+  "required_counts": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 4
+  },
+  "published_evidence": {
+    "calibration_events": {"lower": null, "upper": null},
+    "calibration_non_events": {"lower": null, "upper": null},
+    "heldout_events": {"lower": null, "upper": null},
+    "heldout_non_events": {"lower": null, "upper": null},
+    "heldout_outer_units_with_both_classes": {"lower": null, "upper": null}
+  },
+  "reason": "The study documents 113 sites, 16 seasons, four weekly surveys per season, mean naive coyote occupancy about 0.45 and coyote photographs at 78% of sites, but does not publish endpoint-matched 0->1/0->0 counts for the frozen 10/5 transition split.",
+  "execution_policy": "continue_response_blind_exact_gate_required",
+  "exact_gate_first": true,
+  "zero_model_fits_if_exact_gate_fails": true,
+  "no_post_open_redesign": true
+}
