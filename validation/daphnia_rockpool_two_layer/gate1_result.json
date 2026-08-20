@@ -1,0 +1,69 @@
+{
+  "audit_fingerprint": "a24f7735327a11494b43397621dcd529a3374b5b477106f6796d7ad392129235",
+  "audit_horizon": 1,
+  "candidate": "Luo et al. 2022 Tvärminne Daphnia rock-pool metacommunity",
+  "declaration_fingerprint": "866927e6a2471b3342147a8851737b09a4494fd46cf7f09a66a694c790b5e6a3",
+  "distance_csv_raw_numeric_shape": [547, 547],
+  "distance_matrix_fingerprint": "eea7c77f6af25019a1163163ff63247a1f78d4e0cfe2e3138417219743f76e12",
+  "distance_matrix_shape": [546, 546],
+  "distance_member_sha256": "4ffb62d36b808b18fb999aa1f585e1987d0df76e289543ef43941f2e3037b750",
+  "distinct_positive_structural_thresholds": 4,
+  "distinct_scale_pass": true,
+  "final_gate_pass": true,
+  "fingerprint": "9a2ac506fc138f0e1125404d7db38777579038b34c33a61fc084a94702788b21",
+  "gate_fingerprint": "25abf9a7cdd6be74607eedac18734974984950860135ab46bfd85468e76b3cd3",
+  "generic_gate_pass": true,
+  "generic_gate_passing_world_ids": ["structural::geo_lcc900"],
+  "ladder_fingerprint": "34157c2d185265c7a9ee4f6739250a830f8ebf92966383a0859fb87497a0c59b",
+  "level90_pass": true,
+  "nested_scale_pass": true,
+  "node_count": 546,
+  "node_identity": "stable response-independent row order 1..546 of frozen distance.csv",
+  "response_member_bytes_downloaded": false,
+  "response_rows_opened": false,
+  "scientific_boundary": "These are response-blind analyst-choice structural scales in released distance units, not biological Daphnia dispersal distances or fitted colonisation parameters.",
+  "status": "gate1_pass_structural_adequacy",
+  "structural_ladder": [
+    {
+      "achieved_largest_component_fraction": 0.4706959706959707,
+      "directed_edge_count": 47988,
+      "distance_threshold_released_units": 0.22151186379051,
+      "fingerprint": "b0fc51578a18e46792c137ca86603705fc372e166a31a2d6dda27438b7992002",
+      "isolated_node_fraction": 0.0,
+      "level_id": "geo_lcc250",
+      "target_largest_component_fraction": 0.25,
+      "weak_component_count": 4
+    },
+    {
+      "achieved_largest_component_fraction": 0.6886446886446886,
+      "directed_edge_count": 52178,
+      "distance_threshold_released_units": 0.274502525748238,
+      "fingerprint": "c7599e11272c86239ca52e87763d6ce64609931a5c65e94600172ea061235a3a",
+      "isolated_node_fraction": 0.0,
+      "level_id": "geo_lcc500",
+      "target_largest_component_fraction": 0.5,
+      "weak_component_count": 3
+    },
+    {
+      "achieved_largest_component_fraction": 0.8205128205128205,
+      "directed_edge_count": 52968,
+      "distance_threshold_released_units": 0.284129344781106,
+      "fingerprint": "fbe309e708682c8046a43edd5e98318a26b2ca7333155db48a699ca1bec42652",
+      "isolated_node_fraction": 0.0,
+      "level_id": "geo_lcc750",
+      "target_largest_component_fraction": 0.75,
+      "weak_component_count": 2
+    },
+    {
+      "achieved_largest_component_fraction": 1.0,
+      "directed_edge_count": 60386,
+      "distance_threshold_released_units": 0.364920914083473,
+      "fingerprint": "f8654e8be0dbf993acfd185e04998d11bd9a10e00f3604748b62bf41ceabf1ec",
+      "isolated_node_fraction": 0.0,
+      "level_id": "geo_lcc900",
+      "target_largest_component_fraction": 0.9,
+      "weak_component_count": 1
+    }
+  ],
+  "structural_targets": [0.25, 0.5, 0.75, 0.9]
+}
