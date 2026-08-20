@@ -1,0 +1,49 @@
+{
+  "status": "response_blind_gate0_candidate_frozen",
+  "candidate": "Snapshot Serengeti fixed-grid wildebeest 4-day occupancy 2011-2018",
+  "selected_after_main_commit": "afd7c6fe8439153b8900753aad0df2bcd500580b",
+  "scientific_question": "On a genuinely fresh system, do unchanged EOG Layer-B features add heldout value to the same already-strong external learner under the paired complementarity contract?",
+  "registry_source": {
+    "record": "Zenodo 5026386 / Dryad 10.5061/dryad.5pt92",
+    "member": "search_effort.csv",
+    "url": "https://zenodo.org/records/5026386/files/search_effort.csv?download=1",
+    "md5": "27cb42f3feaa0642b17cbde24ba15fbd",
+    "role": "response-independent camera SiteID and operation-date registry"
+  },
+  "response_source": {
+    "dataset": "Dryad 10.5061/dryad.7sqv9s4zk",
+    "member": "Serenegti_occupancy_data_4-day_2011-2018.zip",
+    "dryad_file_stream_id": 3499711,
+    "reported_size_bytes_approx": 332318,
+    "response_bytes_opened": false,
+    "focal_column": "wildebeest",
+    "published_semantics": "1 if wildebeest were present and 0 if absent during DAYS.ON for each 4-day NDVI.BIN",
+    "published_effort_column": "DAYS.ON"
+  },
+  "node_universe": {
+    "rule": "unique camera SiteIDs in frozen search_effort.csv",
+    "minimum_nodes": 200,
+    "response_conditioned": false
+  },
+  "geometry": {
+    "construction": "derive fixed analysis-grid coordinates solely from SiteID: letter B..V is grid x and integer 1..13 is grid y; Euclidean distance is measured in grid-index units",
+    "why_response_blind": "the published camera array was a predetermined regular grid; no X_coord/Y_coord value from the 2011-2018 occupancy response tables is read for world construction",
+    "biological_distance_claim": false
+  },
+  "structural_gate": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "minimum_lcc_at_0_9_world": 0.9,
+    "maximum_isolated_fraction_at_0_9_world": 0.05
+  },
+  "prospective_estimability": {
+    "status": "uncertain_pre_response",
+    "reason": "published data description establishes eight years of 4-day occupancy but does not publish endpoint-matched frozen 0->1/0->0 counts for the future split; exact count gate remains mandatory before fitting"
+  },
+  "no_rescue": [
+    "do not read wildebeest/zebra/gazelle response values to choose geometry or structural thresholds",
+    "do not use response-table X_coord/Y_coord to rescue a failed SiteID-grid gate",
+    "do not change the focal species after opening response",
+    "do not weaken the paired same-learner complementarity endpoint after response"
+  ]
+}
