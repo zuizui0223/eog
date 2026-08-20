@@ -1,0 +1,167 @@
+name: Yosemite amphibian metadata-only Gate 0
+
+on:
+  push:
+    branches:
+      - agent/yosemite-amphibian-gate0
+    paths:
+      - ".github/workflows/yosemite_amphibian_manifest_gate0.yml"
+      - "validation/yosemite_amphibian_complementarity/gate0_manifest_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/yosemite_amphibian_manifest_gate0.yml"
+      - "validation/yosemite_amphibian_complementarity/gate0_manifest_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fetch ScienceBase metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/yosemite_amphibian_manifest
+          python - <<'PY'
+          from __future__ import annotations
+
+          import hashlib
+          import json
+          from pathlib import Path
+          import urllib.parse
+          import urllib.request
+
+          ROOT=Path('validation/yosemite_amphibian_complementarity')
+          OUT=Path('build/yosemite_amphibian_manifest')
+          contract=json.loads((ROOT/'gate0_manifest_contract.json').read_text(encoding='utf-8'))
+          item_id=contract['sciencebase_item_id']
+          ua='eog-yosemite-amphibian-manifest-gate0/1.0'
+
+          requests_made=[]
+          def get_json(url: str):
+              requests_made.append(url)
+              req=urllib.request.Request(url,headers={'User-Agent':ua,'Accept':'application/json'})
+              with urllib.request.urlopen(req,timeout=60) as r:
+                  content_type=str(r.headers.get('Content-Type',''))
+                  if 'json' not in content_type.casefold():
+                      raise RuntimeError(f'non-JSON ScienceBase response: {content_type!r}')
+                  return json.load(r)
+
+          parent_url=f'https://www.sciencebase.gov/catalog/item/{item_id}?format=json'
+          parent=get_json(parent_url)
+          title=str(parent.get('title',''))
+          if contract['expected_title_contains'].casefold() not in title.casefold():
+              raise RuntimeError(f'unexpected ScienceBase title: {title!r}')
+
+          children_url=(
+              'https://www.sciencebase.gov/catalog/items?'
+              + urllib.parse.urlencode({'parentId':item_id,'format':'json','max':1000})
+          )
+          children_payload=get_json(children_url)
+          children=children_payload.get('items') or []
+          if not isinstance(children,list):
+              raise RuntimeError('ScienceBase children payload does not contain an item list')
+
+          def compact_file(file_obj: dict, owner_id: str, owner_title: str) -> dict:
+              return {
+                  'owner_item_id':owner_id,
+                  'owner_title':owner_title,
+                  'name':file_obj.get('name'),
+                  'title':file_obj.get('title'),
+                  'size':file_obj.get('size'),
+                  'contentType':file_obj.get('contentType'),
+                  'checksum':file_obj.get('checksum'),
+                  'url':file_obj.get('url'),
+                  'downloadUri':file_obj.get('downloadUri'),
+              }
+
+          all_items=[]
+          def add_item(item: dict):
+              owner_id=str(item.get('id',''))
+              owner_title=str(item.get('title',''))
+              files=item.get('files') or []
+              all_items.append({
+                  'id':owner_id,
+                  'title':owner_title,
+                  'file_count':len(files),
+                  'files':[compact_file(f,owner_id,owner_title) for f in files],
+              })
+
+          add_item(parent)
+          for child_stub in children:
+              child_id=str(child_stub.get('id','')).strip()
+              if not child_id:
+                  raise RuntimeError('ScienceBase child item is missing id')
+              child=get_json(f'https://www.sciencebase.gov/catalog/item/{child_id}?format=json')
+              add_item(child)
+
+          files=[f for item in all_items for f in item['files']]
+          if not files:
+              raise RuntimeError('ScienceBase metadata exposes no files on parent or child items')
+
+          name_text=[str(f.get('name') or f.get('title') or '') for f in files]
+          geometry_terms=('site','sites','location','locations','coordinate','coordinates','predictor','predictors','covariate','covariates','habitat')
+          response_terms=('occurrence','observation','observations','survey','surveys','detection','detections','state','states')
+          likely_geometry=[
+              name for name in name_text
+              if any(term in name.casefold() for term in geometry_terms)
+              and not any(term in name.casefold() for term in response_terms)
+          ]
+          likely_response=[
+              name for name in name_text
+              if any(term in name.casefold() for term in response_terms)
+          ]
+          distinct_named_candidates=bool(likely_geometry and likely_response)
+
+          payload={
+              'status':'metadata_inventory_complete',
+              'candidate':contract['candidate'],
+              'sciencebase_item_id':item_id,
+              'parent_title':title,
+              'parent_id':str(parent.get('id','')),
+              'child_item_count':len(children),
+              'items':all_items,
+              'file_count':len(files),
+              'file_names':name_text,
+              'likely_geometry_or_registry_names':likely_geometry,
+              'likely_response_names':likely_response,
+              'distinct_named_role_candidates':distinct_named_candidates,
+              'data_file_bytes_downloaded':False,
+              'data_rows_opened':False,
+              'requests_made':requests_made,
+              'next':(
+                  contract['next_if_manifest_supports_separation']
+                  if distinct_named_candidates
+                  else contract['stop_if_not_separable']
+              ),
+          }
+          payload['fingerprint']=hashlib.sha256(
+              json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+          ).hexdigest()
+          (OUT/'manifest_result.json').write_text(
+              json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8'
+          )
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Assert metadata-only firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/yosemite_amphibian_manifest/manifest_result.json'))
+          assert p['status']=='metadata_inventory_complete'
+          assert p['data_file_bytes_downloaded'] is False
+          assert p['data_rows_opened'] is False
+          PY
+      - name: Upload metadata inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: yosemite-amphibian-manifest-gate0
+          path: build/yosemite_amphibian_manifest/manifest_result.json
+          if-no-files-found: error
