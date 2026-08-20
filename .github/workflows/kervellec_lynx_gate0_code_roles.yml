@@ -1,0 +1,129 @@
+name: Kervellec lynx Gate 0 code roles
+
+on:
+  push:
+    branches:
+      - agent/kervellec-lynx-gate0-screen
+    paths:
+      - ".github/workflows/kervellec_lynx_gate0_code_roles.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/kervellec_lynx_gate0_code_roles.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  code-roles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Selectively extract non-response code members by byte range
+        run: |
+          set -euo pipefail
+          mkdir -p build/kervellec_lynx_gate0/code
+          python - <<'PY'
+          from __future__ import annotations
+          import binascii
+          import json
+          from pathlib import Path
+          import struct
+          import urllib.request
+          import zlib
+
+          URL = "https://zenodo.org/api/records/13354572/files/SpatialOccupancyNimble_withData.zip/content"
+          UA = "eog-response-blind-member-extract/1.0"
+          MEMBERS = {
+              "SpatialOccupancyNimble2/Lynx/LynxModel.Rmd": {
+                  "offset": 247786, "compressed_size": 5139, "uncompressed_size": 22373,
+                  "compression": 8, "crc32": "4741b20a",
+              },
+              "SpatialOccupancyNimble2/Lynx/functionsLynx.R": {
+                  "offset": 246297, "compressed_size": 1415, "uncompressed_size": 3526,
+                  "compression": 8, "crc32": "95960ff2",
+              },
+              "SpatialOccupancyNimble2/README.rtf": {
+                  "offset": 268456, "compressed_size": 2242, "uncompressed_size": 9989,
+                  "compression": 8, "crc32": "493591cf",
+              },
+          }
+
+          def range_get(start, end):
+              req = urllib.request.Request(
+                  URL,
+                  headers={"User-Agent": UA, "Range": f"bytes={start}-{end}", "Accept-Encoding": "identity"},
+              )
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  status = getattr(response, "status", None) or response.getcode()
+                  if status != 206:
+                      raise RuntimeError(f"range request returned {status}, expected 206")
+                  body = response.read()
+              if len(body) != end - start + 1:
+                  raise RuntimeError("range response length mismatch")
+              return body
+
+          def extract_member(name, meta):
+              offset = meta["offset"]
+              fixed = range_get(offset, offset + 29)
+              fields = struct.unpack("<4s5H3I2H", fixed)
+              if fields[0] != b"PK\x03\x04":
+                  raise RuntimeError(f"invalid local header for {name}")
+              name_len, extra_len = fields[-2], fields[-1]
+              raw_name = range_get(offset + 30, offset + 30 + name_len - 1)
+              decoded = raw_name.decode("utf-8", errors="replace")
+              if decoded != name:
+                  raise RuntimeError(f"local member name mismatch: {decoded!r} != {name!r}")
+              data_start = offset + 30 + name_len + extra_len
+              compressed = range_get(data_start, data_start + meta["compressed_size"] - 1)
+              if meta["compression"] == 8:
+                  content = zlib.decompress(compressed, -15)
+              elif meta["compression"] == 0:
+                  content = compressed
+              else:
+                  raise RuntimeError(f"unsupported compression {meta['compression']} for {name}")
+              if len(content) != meta["uncompressed_size"]:
+                  raise RuntimeError(f"uncompressed size mismatch for {name}")
+              crc = f"{binascii.crc32(content) & 0xffffffff:08x}"
+              if crc != meta["crc32"]:
+                  raise RuntimeError(f"CRC mismatch for {name}: {crc} != {meta['crc32']}")
+              return content
+
+          manifest = []
+          for name, meta in MEMBERS.items():
+              content = extract_member(name, meta)
+              output = Path("build/kervellec_lynx_gate0/code") / Path(name).name
+              output.write_bytes(content)
+              manifest.append({"name": name, **meta, "output": str(output), "crc_verified": True})
+
+          result = {
+              "status": "nonresponse_code_members_frozen",
+              "members": manifest,
+              "response_member_Data99_downloaded": False,
+              "response_rows_opened": False,
+              "geometry_member_payload_downloaded": False,
+          }
+          Path("build/kervellec_lynx_gate0/code_roles_manifest.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/kervellec_lynx_gate0/code_roles_manifest.json'))
+          assert p['response_member_Data99_downloaded'] is False
+          assert p['response_rows_opened'] is False
+          assert p['geometry_member_payload_downloaded'] is False
+          PY
+      - name: Upload non-response code evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: kervellec-lynx-gate0-code-roles
+          path: build/kervellec_lynx_gate0
+          if-no-files-found: error
