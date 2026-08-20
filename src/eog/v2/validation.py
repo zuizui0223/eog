@@ -1,8 +1,8 @@
 """Validation-facing public API for prospective EOG v2.
 
 The facade is lazy so genetic, empirical-occurrence, directional-evidence, response
-firewall, prospective estimability, and response-blind world-adequacy /
-scale-construction trees remain independent until accessed.
+firewall, prospective estimability, outcome-access authorization, and response-blind
+world-adequacy / scale-construction trees remain independent until accessed.
 """
 from __future__ import annotations
 
@@ -62,6 +62,14 @@ _PROSPECTIVE_ESTIMABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "prospective_estimability_disposition",
 )
 
+_OUTCOME_ACCESS_EXPORTS: Final[tuple[str, ...]] = (
+    "OutcomeAccessStatus",
+    "REQUIRED_FREEZE_KEYS",
+    "FrozenOutcomeAccessContract",
+    "OutcomeAccessGateResult",
+    "evaluate_outcome_access_gate",
+)
+
 _WORLD_ADEQUACY_EXPORTS: Final[tuple[str, ...]] = (
     "StructuralAdequacyDeclaration",
     "WorldStructuralAudit",
@@ -97,6 +105,7 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         name: "eog.v2.prospective_estimability"
         for name in _PROSPECTIVE_ESTIMABILITY_EXPORTS
     },
+    **{name: "eog.v2.outcome_access" for name in _OUTCOME_ACCESS_EXPORTS},
     **{name: "eog.v2.world_adequacy" for name in _WORLD_ADEQUACY_EXPORTS},
     **{name: "eog.v2.world_scale_ladder" for name in _WORLD_SCALE_EXPORTS},
 }
@@ -108,6 +117,7 @@ __all__ = [
     *_DIRECTIONAL_EXPORTS,
     *_RESPONSE_FIREWALL_EXPORTS,
     *_PROSPECTIVE_ESTIMABILITY_EXPORTS,
+    *_OUTCOME_ACCESS_EXPORTS,
     *_WORLD_ADEQUACY_EXPORTS,
     *_WORLD_SCALE_EXPORTS,
 ]
