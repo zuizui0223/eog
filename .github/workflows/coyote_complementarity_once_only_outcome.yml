@@ -1,0 +1,125 @@
+name: Chicago coyote complementarity once-only outcome
+
+on:
+  push:
+    branches:
+      - agent/coyote-complementarity-gate0
+    paths:
+      - ".github/workflows/coyote_complementarity_once_only_outcome.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  outcome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Enforce one-time execution and frozen identities
+        env:
+          RUN_NUMBER: ${{ github.run_number }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          test "$RUN_NUMBER" = "1"
+          test "$RUN_ATTEMPT" = "1"
+          test "$(git hash-object benchmarks/run_coyote_complementarity_once.py)" = "a5185e9db51185f92bcf3f8a7bd2ff7dfb2918d9"
+          test "$(git hash-object validation/coyote_complementarity/gate0_result.json)" = "6e50e4a7c369c051154d2dbb56188f3dbcd47530"
+          test "$(git hash-object validation/coyote_complementarity/gate2_prediction_contract.json)" = "9e90a5a5feb92feeb79f7838961b49564e18e10f"
+          test "$(git hash-object validation/coyote_complementarity/prospective_estimability_contract.json)" = "88d27828db23f5d3da86a5e4f5c333505cd43374"
+          test "$(git hash-object validation/coyote_complementarity/runtime_lock.json)" = "3ab210367be16a471ab587a87516d4488d5470a0"
+          test "$(git hash-object validation/coyote_complementarity/outcome_access_freeze_ledger.json)" = "8464803c13305525e81a69423ae664919575bfb7"
+          test "$(git hash-object validation/coyote_complementarity/outcome_access_gate_result.json)" = "b3fcf5c1512f78408b38823da940a3b349a52e00"
+          python - <<'PY'
+          import json
+          root='validation/coyote_complementarity'
+          auth=json.load(open(f'{root}/outcome_access_gate_result.json'))
+          runtime=json.load(open(f'{root}/runtime_lock.json'))
+          assert auth['authorized'] is True
+          assert auth['status']=='authorized_once_only_exact_count_gate_required'
+          assert auth['decision_fingerprint']=='9c79cc7bb35fb7e3e976f36d35bfc5caab197580aa450f2361f45a29fed719bd'
+          assert auth['missing_freeze_keys']==[]
+          assert auth['response_rows_opened'] is False
+          assert auth['response_bytes_opened'] is False
+          assert runtime['runner']['git_blob_sha']=='a5185e9db51185f92bcf3f8a7bd2ff7dfb2918d9'
+          assert runtime['smoke']['result_fingerprint']=='622c8c30ea9246791d226a7c146bca09bd6d395eb7d68e891fbef99605c96b68'
+          assert runtime['safety']['exact_count_gate_first'] is True
+          assert runtime['safety']['zero_model_fits_on_count_failure'] is True
+          assert runtime['safety']['no_post_open_redesign'] is True
+          assert runtime['safety']['same_learner_paired_comparison'] is True
+          PY
+      - name: Install exact smoke-frozen runtime
+        run: |
+          set -euo pipefail
+          python -m pip install numpy==2.4.6 scipy==1.17.1 scikit-learn==1.9.0 joblib==1.5.3 threadpoolctl==3.6.0 narwhals==2.24.0
+          python -m pip install --no-deps .
+          python - <<'PY'
+          import sys, numpy, scipy, sklearn, joblib, threadpoolctl, narwhals
+          assert sys.version.startswith('3.11.15')
+          assert numpy.__version__=='2.4.6'
+          assert scipy.__version__=='1.17.1'
+          assert sklearn.__version__=='1.9.0'
+          assert joblib.__version__=='1.5.3'
+          assert threadpoolctl.__version__=='3.6.0'
+          assert narwhals.__version__=='2.24.0'
+          PY
+      - name: Execute frozen coyote response once
+        run: |
+          set -euo pipefail
+          mkdir -p build/coyote_complementarity_outcome
+          python benchmarks/run_coyote_complementarity_once.py \
+            --mode outcome \
+            --output build/coyote_complementarity_outcome/outcome_result.json
+      - name: Enforce frozen stop and scoring boundaries
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/coyote_complementarity_outcome/outcome_result.json'))
+          assert p['execution_mode']=='outcome'
+          assert p['response_provenance']['response_bytes_opened'] is True
+          assert p['response_provenance']['response_rows_opened'] is True
+          allowed={
+              'non_estimable_response_balance',
+              'universe_falsified_during_calibration',
+              'universe_falsified_during_heldout',
+              'completed_frozen_paired_complementarity_test',
+          }
+          assert p['status'] in allowed
+          if not p['exact_count_gate']['passed']:
+              assert p['status']=='non_estimable_response_balance'
+              assert p['models_fit']==0
+              assert p['heldout_scores']==0
+          if p['status']=='completed_frozen_paired_complementarity_test':
+              assert p['models_fit']==2
+              assert p['heldout_scores']==10
+              assert len(p['heldout_metrics'])==5
+              assert p['complementarity']['outer_unit_count']==5
+              assert p['complementarity_status'] in {
+                  'favorable_complementary_added_value',
+                  'adverse_complementary_added_value',
+                  'no_confirmed_complementary_added_value',
+              }
+          print(json.dumps({
+              'status':p['status'],
+              'fingerprint':p['fingerprint'],
+              'exact_count_gate':p['exact_count_gate'],
+              'models_fit':p['models_fit'],
+              'heldout_scores':p['heldout_scores'],
+              'complementarity_status':p.get('complementarity_status'),
+              'complementarity':p.get('complementarity'),
+              'pooled_metrics':p.get('pooled_metrics'),
+              'final_surviving_world_ids':p.get('final_surviving_world_ids'),
+              'response_sha256':p.get('response_provenance',{}).get('response_sha256'),
+          },indent=2,sort_keys=True))
+          PY
+      - name: Upload authoritative once-only result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chicago-coyote-complementarity-once-only-outcome
+          path: build/coyote_complementarity_outcome/outcome_result.json
+          if-no-files-found: error
