@@ -104,7 +104,7 @@ jobs:
                   compressed_size = fields[8]
                   uncompressed_size = fields[9]
                   name_len, extra_len, comment_len = fields[10], fields[11], fields[12]
-                  local_header_offset = fields[17]
+                  local_header_offset = fields[16]
                   start = offset + 46
                   end = start + name_len
                   name = cd[start:end].decode("utf-8", errors="replace")
