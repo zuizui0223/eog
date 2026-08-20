@@ -1,0 +1,149 @@
+name: Assynt 110-patch Gate 0 metadata
+
+on:
+  push:
+    branches:
+      - agent/assynt110-gate0-screen
+    paths:
+      - ".github/workflows/assynt110_gate0_metadata.yml"
+      - "validation/assynt110_two_layer/gate0_source_process_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/assynt110_gate0_metadata.yml"
+      - "validation/assynt110_two_layer/gate0_source_process_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Inventory public OSF metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/assynt110_gate0
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import urllib.request
+
+          NODE = "pyqsn"
+          API = "https://api.osf.io/v2"
+
+          def get_json(url: str) -> dict:
+              req = urllib.request.Request(url, headers={"User-Agent": "eog-response-blind-gate0/1.0"})
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  return json.load(response)
+
+          def paged(url: str):
+              while url:
+                  payload = get_json(url)
+                  for row in payload.get("data", []):
+                      yield row
+                  url = (payload.get("links") or {}).get("next")
+
+          node = get_json(f"{API}/nodes/{NODE}/")
+          providers = list(paged(f"{API}/nodes/{NODE}/files/"))
+          inventory = []
+
+          def visit_listing(url: str, provider: str, parent: str = "") -> None:
+              for row in paged(url):
+                  attrs = row.get("attributes") or {}
+                  kind = attrs.get("kind")
+                  name = attrs.get("name") or ""
+                  path = f"{parent}/{name}".strip("/")
+                  inventory.append({
+                      "id": row.get("id"),
+                      "provider": provider,
+                      "kind": kind,
+                      "name": name,
+                      "path": path,
+                      "size": attrs.get("size"),
+                      "date_modified": attrs.get("date_modified"),
+                      "extra_hashes": (attrs.get("extra") or {}).get("hashes"),
+                      "materialized_path": attrs.get("materialized_path"),
+                  })
+                  if kind == "folder":
+                      related = (((row.get("relationships") or {}).get("files") or {}).get("links") or {}).get("related")
+                      if isinstance(related, dict):
+                          child_url = related.get("href")
+                      else:
+                          child_url = related
+                      if child_url:
+                          visit_listing(child_url, provider, path)
+
+          for provider_row in providers:
+              attrs = provider_row.get("attributes") or {}
+              provider_name = attrs.get("name") or provider_row.get("id") or "unknown"
+              related = (((provider_row.get("relationships") or {}).get("files") or {}).get("links") or {}).get("related")
+              if isinstance(related, dict):
+                  listing_url = related.get("href")
+              else:
+                  listing_url = related
+              if listing_url:
+                  visit_listing(listing_url, str(provider_name))
+
+          lower_paths = [row["path"].lower() for row in inventory if row["kind"] == "file"]
+          geometry_terms = ("coord", "coordinate", "location", "patch", "distance", "dist", "xy", "site")
+          response_terms = ("occup", "colon", "vole", "presence", "absence", "latrine")
+          geometry_candidates = sorted({
+              inventory[i]["path"]
+              for i, p in enumerate(lower_paths)
+              if any(term in p for term in geometry_terms)
+          })
+          response_named_candidates = sorted({
+              inventory[i]["path"]
+              for i, p in enumerate(lower_paths)
+              if any(term in p for term in response_terms)
+          })
+
+          result = {
+              "status": "osf_metadata_inventory_complete",
+              "candidate": "Assynt water vole 110-patch metapopulation, 2011-2019",
+              "osf_node": NODE,
+              "node_title": (node.get("data", {}).get("attributes") or {}).get("title"),
+              "provider_count": len(providers),
+              "inventory": inventory,
+              "geometry_name_candidates": geometry_candidates,
+              "response_name_candidates": response_named_candidates,
+              "response_rows_opened": False,
+              "response_file_bytes_downloaded": False,
+              "file_bytes_downloaded": False,
+              "next": "role-adjudicate metadata names only; download only a clearly response-independent geometry member if one exists"
+          }
+          Path("build/assynt110_gate0/osf_metadata_inventory.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps({
+              "status": result["status"],
+              "title": result["node_title"],
+              "file_count": sum(row["kind"] == "file" for row in inventory),
+              "geometry_name_candidates": geometry_candidates,
+              "response_name_candidates": response_named_candidates,
+              "response_rows_opened": False,
+              "file_bytes_downloaded": False
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/assynt110_gate0/osf_metadata_inventory.json'))
+          assert p['response_rows_opened'] is False
+          assert p['response_file_bytes_downloaded'] is False
+          assert p['file_bytes_downloaded'] is False
+          PY
+      - name: Upload metadata-only evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: assynt110-gate0-metadata
+          path: build/assynt110_gate0/osf_metadata_inventory.json
+          if-no-files-found: error
