@@ -1,0 +1,19 @@
+{
+  "authorized": true,
+  "contract_fingerprint": "885be960753c1536ba2b497a4fd55d5e1c61ee2b61c05fddab085a1cba106f23",
+  "decision_fingerprint": "ededbd2a70fff93842462d988ee86d789caa6a31da8168ce5d85941a30d12c73",
+  "estimability_fingerprint": "6fd18e2452ee2bd7db9a76b6fa3daa17a949e62e68ad2a9896507f0b43d0cd35",
+  "exact_count_gate_first": true,
+  "missing_freeze_keys": [],
+  "no_post_open_redesign": true,
+  "prospective_disposition": "continue_response_blind_exact_gate_required",
+  "prospective_status": "uncertain_pre_response",
+  "reason": "all response-blind freezes are present; outcome runner may begin with the exact count gate and must stop before fitting/scoring if that gate fails",
+  "response_member_bytes_downloaded": false,
+  "response_rows_opened": false,
+  "status": "authorized_once_only_exact_count_gate_required",
+  "zero_fit_on_count_failure": true,
+  "authoritative_workflow_run_id": 32367939086,
+  "authoritative_artifact_id": 9406026632,
+  "authoritative_artifact_digest": "sha256:bf158722acad1f27d7cdb5d6c37e6e88a0b31349024cb906c189e8eb4c6c274c"
+}
