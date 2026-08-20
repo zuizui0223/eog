@@ -1,0 +1,32 @@
+{
+  "status": "metadata_only_gate0_frozen",
+  "candidate": "USGS Yosemite amphibian multi-state occurrence 2007-2021",
+  "sciencebase_item_id": "639a2d8dd34e0de3a1f0de4b",
+  "doi": "10.5066/P9X6SKT8",
+  "expected_title_contains": "Multi-State Occurrence Data and Predictors for Amphibians in Yosemite National Park",
+  "published_design": {
+    "site_count": 174,
+    "start_year": 2007,
+    "end_year": 2021,
+    "dynamic_occupancy": true
+  },
+  "allowed_actions": [
+    "GET ScienceBase item JSON metadata",
+    "record child item metadata when linked by the parent item",
+    "record file names, sizes, checksums, content types and download URIs"
+  ],
+  "forbidden_actions": [
+    "download any data file",
+    "open any CSV/TSV/RDS row",
+    "inspect occurrence or observation content",
+    "infer geometry from response-bearing rows"
+  ],
+  "separation_gate": {
+    "require_distinct_geometry_or_site_registry_file": true,
+    "require_distinct_response_or_occurrence_file": true,
+    "require_physical_file_separation": true,
+    "do_not_choose_fields_by_row_content": true
+  },
+  "next_if_manifest_supports_separation": "freeze exact geometry/site-registry file identity before selectively opening only that non-response file; then run registry and structural Gate 1",
+  "stop_if_not_separable": "close unmerged without downloading row-level data"
+}
