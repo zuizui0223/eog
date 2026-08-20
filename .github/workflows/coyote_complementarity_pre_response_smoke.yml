@@ -1,0 +1,88 @@
+name: Chicago coyote complementarity pre-response smoke
+
+on:
+  push:
+    branches:
+      - agent/coyote-complementarity-gate0
+    paths:
+      - ".github/workflows/coyote_complementarity_pre_response_smoke.yml"
+      - "benchmarks/run_coyote_complementarity_once.py"
+      - "validation/coyote_complementarity/gate2_prediction_contract.json"
+      - "validation/coyote_complementarity/prospective_estimability_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/coyote_complementarity_pre_response_smoke.yml"
+      - "benchmarks/run_coyote_complementarity_once.py"
+      - "validation/coyote_complementarity/gate2_prediction_contract.json"
+      - "validation/coyote_complementarity/prospective_estimability_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Install frozen smoke runtime
+        run: |
+          set -euo pipefail
+          python -m pip install numpy==2.4.6 scipy==1.17.1 scikit-learn==1.9.0 joblib==1.5.3 threadpoolctl==3.6.0 narwhals==2.24.0
+          python -m pip install --no-deps .
+          python - <<'PY'
+          import sys, numpy, scipy, sklearn, joblib, threadpoolctl, narwhals
+          assert sys.version.startswith('3.11.15')
+          assert numpy.__version__ == '2.4.6'
+          assert scipy.__version__ == '1.17.1'
+          assert sklearn.__version__ == '1.9.0'
+          assert joblib.__version__ == '1.5.3'
+          assert threadpoolctl.__version__ == '3.6.0'
+          assert narwhals.__version__ == '2.24.0'
+          PY
+      - name: Run deterministic response-free smoke
+        run: |
+          set -euo pipefail
+          mkdir -p build/coyote_complementarity_smoke
+          python benchmarks/run_coyote_complementarity_once.py \
+            --mode smoke \
+            --output build/coyote_complementarity_smoke/smoke_result.json
+      - name: Assert response firewall and full paired path
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/coyote_complementarity_smoke/smoke_result.json'))
+          assert p['execution_mode'] == 'smoke'
+          assert p['status'] == 'smoke_pass'
+          assert p['response_provenance']['response_bytes_opened'] is False
+          assert p['response_provenance']['response_rows_opened'] is False
+          assert p['exact_count_gate']['passed'] is True
+          assert p['models_fit'] == 2
+          assert p['heldout_scores'] == 10
+          assert len(p['heldout_metrics']) == 5
+          assert p['complementarity']['outer_unit_count'] == 5
+          assert p['complementarity_status'] in {
+              'favorable_complementary_added_value',
+              'adverse_complementary_added_value',
+              'no_confirmed_complementary_added_value',
+          }
+          print(json.dumps({
+              'status':p['status'],
+              'fingerprint':p['fingerprint'],
+              'count_gate':p['exact_count_gate'],
+              'models_fit':p['models_fit'],
+              'heldout_scores':p['heldout_scores'],
+              'complementarity_status':p['complementarity_status'],
+              'complementarity_fingerprint':p['complementarity']['fingerprint'],
+          },indent=2,sort_keys=True))
+          PY
+      - name: Upload smoke evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: chicago-coyote-complementarity-smoke
+          path: build/coyote_complementarity_smoke/smoke_result.json
+          if-no-files-found: error
