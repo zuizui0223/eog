@@ -1,0 +1,186 @@
+name: Chicago coyote complementarity Gate 0
+
+on:
+  push:
+    branches:
+      - agent/coyote-complementarity-gate0
+    paths:
+      - ".github/workflows/coyote_complementarity_gate0.yml"
+      - "validation/coyote_complementarity/gate0_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/coyote_complementarity_gate0.yml"
+      - "validation/coyote_complementarity/gate0_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG package
+        run: python -m pip install .
+      - name: Download only frozen response-independent registries
+        run: |
+          set -euo pipefail
+          mkdir -p build/coyote_complementarity_gate0
+          curl -L --fail --retry 3 \
+            -o build/coyote_complementarity_gate0/model_covariates.csv \
+            'https://raw.githubusercontent.com/mfidino/coyote-mange/a068e2aba265551e3b29b1c3ec8c4b1f34eafcdb/data/model_covariates.csv'
+          curl -L --fail --retry 3 \
+            -o build/coyote_complementarity_gate0/raw_site_coords.csv \
+            'https://raw.githubusercontent.com/mfidino/coyote-mange/a068e2aba265551e3b29b1c3ec8c4b1f34eafcdb/data/raw_site_coords.csv'
+      - name: Exact-join response-free registry and build structural ladder
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from __future__ import annotations
+
+          import csv
+          import hashlib
+          import json
+          from pathlib import Path
+
+          import numpy as np
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+              structural_scale_adjacencies,
+          )
+
+          ROOT=Path('validation/coyote_complementarity')
+          OUT=Path('build/coyote_complementarity_gate0')
+          contract=json.loads((ROOT/'gate0_contract.json').read_text(encoding='utf-8'))
+
+          def git_blob_sha(data: bytes) -> str:
+              return hashlib.sha1(f'blob {len(data)}\0'.encode('ascii')+data).hexdigest()
+
+          cov_bytes=(OUT/'model_covariates.csv').read_bytes()
+          coord_bytes=(OUT/'raw_site_coords.csv').read_bytes()
+          if git_blob_sha(cov_bytes)!=contract['site_registry']['git_blob_sha']:
+              raise RuntimeError('model_covariates.csv identity mismatch')
+          if git_blob_sha(coord_bytes)!=contract['geometry_registry']['git_blob_sha']:
+              raise RuntimeError('raw_site_coords.csv identity mismatch')
+
+          cov_reader=csv.DictReader(cov_bytes.decode('utf-8-sig').splitlines())
+          coord_reader=csv.DictReader(coord_bytes.decode('utf-8-sig').splitlines())
+          if 'site' not in (cov_reader.fieldnames or []):
+              raise RuntimeError(f'unexpected covariate fields {cov_reader.fieldnames}')
+          if not {'site','utmEast','utmNorth'}.issubset(set(coord_reader.fieldnames or [])):
+              raise RuntimeError(f'unexpected coordinate fields {coord_reader.fieldnames}')
+          cov_rows=list(cov_reader)
+          coord_rows=list(coord_reader)
+          site_ids=[str(row['site']).strip() for row in cov_rows]
+          if len(site_ids)!=int(contract['site_registry']['expected_rows']):
+              raise RuntimeError(f"expected 113 model-covariate rows, found {len(site_ids)}")
+          if any(not x for x in site_ids) or len(set(site_ids))!=len(site_ids):
+              raise RuntimeError('model-covariate site IDs empty or duplicated')
+          coords={}
+          for row in coord_rows:
+              site=str(row['site']).strip()
+              if not site or site in coords:
+                  raise RuntimeError('coordinate Site IDs empty or duplicated')
+              coords[site]=(float(row['utmEast']),float(row['utmNorth']))
+
+          matched=[site for site in site_ids if site in coords]
+          missing=[site for site in site_ids if site not in coords]
+          coverage=len(matched)/len(site_ids)
+          join_pass=(coverage>=float(contract['join_gate']['minimum_exact_coverage_fraction'])-1e-15 and len(matched)>=int(contract['join_gate']['minimum_nodes_after_join']))
+
+          structural=[]
+          distinct=0
+          nested=False
+          lcc90_pass=False
+          isolated90_pass=False
+          structure_pass=False
+          ladder_fingerprint=None
+          if join_pass:
+              node_ids=tuple(matched)
+              xy=np.asarray([coords[site] for site in node_ids],dtype=float)
+              delta=xy[:,None,:]-xy[None,:,:]
+              distance=np.sqrt(np.sum(delta*delta,axis=2))
+              np.fill_diagonal(distance,0.0)
+              targets=tuple(float(v) for v in contract['structural_gate']['target_largest_component_fractions'])
+              declaration=StructuralScaleLadderDeclaration(axis_id='chicago_coyote_utm',target_largest_component_fractions=targets)
+              ladder=build_structural_scale_ladder(node_ids,distance,declaration)
+              adj=structural_scale_adjacencies(ladder,distance)
+              ordered=[adj[level.level_id] for level in ladder.levels]
+              nested=all(bool(np.all(~a|b)) for a,b in zip(ordered,ordered[1:]))
+              distinct=len({round(float(v),9) for v in ladder.thresholds if float(v)>0})
+              level90=ladder.levels[-1]
+              lcc90_pass=float(level90.achieved_largest_component_fraction)>=float(contract['structural_gate']['minimum_lcc_at_0_9_world'])-1e-12
+              isolated90_pass=float(level90.isolated_node_fraction)<=float(contract['structural_gate']['maximum_isolated_fraction_at_0_9_world'])+1e-12
+              structure_pass=bool(distinct>=int(contract['structural_gate']['minimum_distinct_positive_thresholds']) and nested and lcc90_pass and isolated90_pass)
+              ladder_fingerprint=ladder.fingerprint
+              structural=[{
+                  'level_id':level.level_id,
+                  'target_largest_component_fraction':level.target_largest_component_fraction,
+                  'distance_threshold_m':level.distance_threshold,
+                  'achieved_largest_component_fraction':level.achieved_largest_component_fraction,
+                  'weak_component_count':level.weak_component_count,
+                  'isolated_node_fraction':level.isolated_node_fraction,
+                  'directed_edge_count':level.directed_edge_count,
+              } for level in ladder.levels]
+
+          final_pass=bool(join_pass and structure_pass)
+          if not join_pass:
+              status='gate0_stop_response_free_registry_incomplete'
+          elif not structure_pass:
+              status='gate0_stop_structural_inadequacy'
+          else:
+              status='gate0_pass_response_blind_registry_and_structure'
+          payload={
+              'status':status,
+              'candidate':contract['candidate'],
+              'model_covariates_blob':contract['site_registry']['git_blob_sha'],
+              'raw_site_coords_blob':contract['geometry_registry']['git_blob_sha'],
+              'site_registry_count':len(site_ids),
+              'coordinate_registry_count':len(coords),
+              'matched_exact_site_count':len(matched),
+              'missing_exact_site_ids':missing,
+              'exact_join_coverage_fraction':coverage,
+              'exact_join_pass':join_pass,
+              'response_blob_frozen':contract['future_response']['git_blob_sha'],
+              'response_bytes_opened':False,
+              'response_rows_opened':False,
+              'structural_ladder':structural,
+              'distinct_positive_structural_thresholds':distinct,
+              'nested_scale_pass':nested,
+              'level90_lcc_pass':lcc90_pass,
+              'level90_isolated_pass':isolated90_pass,
+              'structural_pass':structure_pass,
+              'ladder_fingerprint':ladder_fingerprint,
+              'final_gate_pass':final_pass,
+              'scientific_boundary':'All geometry and conventional site covariates were read from response-free files in one immutable public release. Coyote detections remain unopened.',
+              'next':'if PASS, freeze season-level recorded-detection endpoint, exact count gate, temporal split, Layer A/B and same-RF paired complementarity before opening response; otherwise stop unmerged',
+          }
+          payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          (OUT/'gate0_result.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          if not final_pass:
+              raise SystemExit(2)
+          PY
+      - name: Assert response firewall
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/coyote_complementarity_gate0/gate0_result.json'))
+          assert p['response_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          assert p['final_gate_pass'] is True
+          PY
+      - name: Upload Gate 0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chicago-coyote-complementarity-gate0
+          path: build/coyote_complementarity_gate0/gate0_result.json
+          if-no-files-found: error
