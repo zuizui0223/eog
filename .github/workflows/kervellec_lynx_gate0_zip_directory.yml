@@ -1,0 +1,195 @@
+name: Kervellec lynx Gate 0 ZIP directory
+
+on:
+  push:
+    branches:
+      - agent/kervellec-lynx-gate0-screen
+    paths:
+      - ".github/workflows/kervellec_lynx_gate0_zip_directory.yml"
+      - "validation/kervellec_lynx_two_layer/gate0_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/kervellec_lynx_gate0_zip_directory.yml"
+      - "validation/kervellec_lynx_two_layer/gate0_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zip-directory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Read ZIP central directory only via HTTP Range
+        run: |
+          set -euo pipefail
+          mkdir -p build/kervellec_lynx_gate0
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import struct
+          import urllib.request
+
+          URL = "https://zenodo.org/api/records/13354572/files/SpatialOccupancyNimble_withData.zip/content"
+          EXPECTED_SIZE = 515448451
+          TAIL_BYTES = 1024 * 1024
+          UA = "eog-response-blind-zip-directory/1.0"
+
+          def range_get(start: int, end: int) -> tuple[bytes, str | None]:
+              req = urllib.request.Request(
+                  URL,
+                  headers={
+                      "User-Agent": UA,
+                      "Range": f"bytes={start}-{end}",
+                      "Accept-Encoding": "identity",
+                  },
+              )
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  status = getattr(response, "status", None) or response.getcode()
+                  if status != 206:
+                      raise RuntimeError(f"range request must return 206, got {status}")
+                  body = response.read()
+                  content_range = response.headers.get("Content-Range")
+              expected_len = end - start + 1
+              if len(body) != expected_len:
+                  raise RuntimeError(
+                      f"range response length mismatch: {len(body)} != {expected_len}"
+                  )
+              return body, content_range
+
+          tail_start = max(0, EXPECTED_SIZE - TAIL_BYTES)
+          tail, tail_content_range = range_get(tail_start, EXPECTED_SIZE - 1)
+
+          eocd_sig = b"PK\x05\x06"
+          eocd_pos = tail.rfind(eocd_sig)
+          if eocd_pos < 0:
+              raise RuntimeError("standard ZIP EOCD not found in final 1 MiB")
+          if eocd_pos + 22 > len(tail):
+              raise RuntimeError("truncated EOCD")
+
+          (
+              signature,
+              disk_no,
+              cd_start_disk,
+              entries_disk,
+              entries_total,
+              cd_size,
+              cd_offset,
+              comment_len,
+          ) = struct.unpack_from("<4s4H2IH", tail, eocd_pos)
+          if signature != eocd_sig:
+              raise RuntimeError("invalid EOCD signature")
+          if any(value in (0xFFFF, 0xFFFFFFFF) for value in (entries_total, cd_size, cd_offset)):
+              raise RuntimeError("ZIP64 central directory is not supported by this metadata-only gate")
+          if disk_no != 0 or cd_start_disk != 0 or entries_disk != entries_total:
+              raise RuntimeError("multi-disk ZIP is not supported")
+          if cd_offset + cd_size > EXPECTED_SIZE:
+              raise RuntimeError("central directory exceeds frozen archive size")
+
+          # Fetch exactly the central-directory byte range. This contains member metadata
+          # only; no local file payload bytes are requested.
+          cd, cd_content_range = range_get(cd_offset, cd_offset + cd_size - 1)
+
+          members = []
+          pos = 0
+          header_sig = b"PK\x01\x02"
+          while pos < len(cd):
+              if pos + 46 > len(cd):
+                  raise RuntimeError("truncated central-directory member header")
+              fields = struct.unpack_from("<4s6H3I5H2I", cd, pos)
+              if fields[0] != header_sig:
+                  raise RuntimeError(f"invalid central-directory signature at byte {pos}")
+              flags = fields[3]
+              compression = fields[4]
+              crc32 = fields[7]
+              compressed_size = fields[8]
+              uncompressed_size = fields[9]
+              name_len = fields[10]
+              extra_len = fields[11]
+              comment_len_member = fields[12]
+              local_header_offset = fields[16]
+              start = pos + 46
+              end = start + name_len
+              raw_name = cd[start:end]
+              encoding = "utf-8" if (flags & 0x800) else "cp437"
+              name = raw_name.decode(encoding, errors="replace")
+              members.append({
+                  "name": name,
+                  "compression": compression,
+                  "crc32": f"{crc32:08x}",
+                  "compressed_size": compressed_size,
+                  "uncompressed_size": uncompressed_size,
+                  "local_header_offset": local_header_offset,
+              })
+              pos = end + extra_len + comment_len_member
+
+          if len(members) != entries_total:
+              raise RuntimeError(
+                  f"central-directory entry count mismatch: {len(members)} != {entries_total}"
+              )
+
+          lower = [m["name"].lower() for m in members]
+          geometry_terms = ("coord", "xy", "grid", "site", "cell", "point", "location", "distance", "dist", "jura")
+          response_terms = ("lynx", "detect", "presence", "occup", "history", "response", "y_")
+          geometry_candidates = [
+              members[i]["name"] for i, name in enumerate(lower)
+              if any(term in name for term in geometry_terms)
+          ]
+          response_candidates = [
+              members[i]["name"] for i, name in enumerate(lower)
+              if any(term in name for term in response_terms)
+          ]
+
+          result = {
+              "status": "zip_central_directory_inventory_complete",
+              "archive": "SpatialOccupancyNimble_withData.zip",
+              "archive_expected_size": EXPECTED_SIZE,
+              "full_archive_downloaded": False,
+              "member_payload_bytes_downloaded": False,
+              "tail_range": [tail_start, EXPECTED_SIZE - 1],
+              "tail_content_range": tail_content_range,
+              "central_directory_range": [cd_offset, cd_offset + cd_size - 1],
+              "central_directory_content_range": cd_content_range,
+              "central_directory_size": cd_size,
+              "member_count": len(members),
+              "members": members,
+              "geometry_name_candidates": geometry_candidates,
+              "response_name_candidates": response_candidates,
+              "response_rows_opened": False,
+              "next": "role-adjudicate archive members; selectively range-fetch only a clearly non-response geometry/documentation member if available",
+          }
+          Path("build/kervellec_lynx_gate0/zip_directory_inventory.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps({
+              "status": result["status"],
+              "member_count": result["member_count"],
+              "member_names": [m["name"] for m in members],
+              "geometry_name_candidates": geometry_candidates,
+              "response_name_candidates": response_candidates,
+              "full_archive_downloaded": False,
+              "member_payload_bytes_downloaded": False,
+              "response_rows_opened": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/kervellec_lynx_gate0/zip_directory_inventory.json'))
+          assert p['full_archive_downloaded'] is False
+          assert p['member_payload_bytes_downloaded'] is False
+          assert p['response_rows_opened'] is False
+          PY
+      - name: Upload ZIP-directory metadata evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: kervellec-lynx-gate0-zip-directory
+          path: build/kervellec_lynx_gate0/zip_directory_inventory.json
+          if-no-files-found: error
