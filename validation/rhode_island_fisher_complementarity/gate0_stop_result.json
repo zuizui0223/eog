@@ -1,0 +1,51 @@
+{
+  "status": "gate0_stop_registry_or_repeated_period_inadequacy",
+  "candidate": "Rhode Island statewide fisher seasonal dynamic occupancy 2018-2022",
+  "focal_taxon": "Pekania pennanti",
+  "gate_run_id": 32423278402,
+  "gate_fingerprint": "6a6040ab4b7ac2c775b7e711363ffef95cf1b4442e3b77497d2b61fb08595808",
+  "archive_md5": "c66943e6c2a9aab0abce2a1eba8ce02e",
+  "deployment_sha256": "31fbce48b193fc9296ca6a22074cc66de06713f3ca3848e841ed268ab640b738",
+  "archive_fully_downloaded": false,
+  "detection_member_bytes_downloaded": false,
+  "detection_rows_opened": false,
+  "deployment_row_count": 2982,
+  "unique_site_count": 265,
+  "unique_period_count": 12,
+  "sites_observed_in_two_or_more_periods": 241,
+  "sites_per_period": {
+    "s18": 100,
+    "s19": 100,
+    "s20": 100,
+    "s21": 240,
+    "s22": 240,
+    "sp22": 9,
+    "w18": 40,
+    "w19": 20,
+    "w20": 100,
+    "w21": 200,
+    "w22": 239,
+    "w23": 100
+  },
+  "frozen_minimum_sites_in_any_period": 40,
+  "registry_pass": false,
+  "structural_pass": true,
+  "distinct_positive_structural_thresholds": 3,
+  "structural_thresholds_km": [
+    3.0743820059705675,
+    3.7720353475276447,
+    4.679131002191422,
+    4.679131002191422
+  ],
+  "structural_lcc": [
+    0.3283018867924528,
+    0.5132075471698113,
+    0.9358490566037736,
+    0.9358490566037736
+  ],
+  "interpretation": "The response-independent survey registry and spatial structure are substantial, but the prospectively frozen requirement that every released survey period contain at least 40 sites fails because w19 has 20 sites and sp22 has 9. Sparse periods are not dropped after inspection to rescue the candidate.",
+  "no_rescue": true,
+  "models_fit": 0,
+  "heldout_scores": 0,
+  "next": "close unmerged and select a genuinely fresh system with prospectively adequate repeated-site coverage"
+}
