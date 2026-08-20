@@ -2,427 +2,352 @@
 
 ## Status
 
-This document defines the active EOG-WF validation protocol after:
+This document defines the active prospective validation protocol after four empirical
+lessons:
 
-1. the 2026-08 methodological audit;
-2. STOC's independent world-universe failure before prediction;
-3. the completed independent Glanville heldout forecast, in which exact world identity was adverse as a direct predictive representation; and
-4. the completed fresh Tvärminne Daphnia heldout forecast, in which the label-invariant Layer-B summary was slightly favourable relative to mean-only EOG but clearly adverse relative to a strong frozen random forest.
+1. STOC showed that a frozen world universe can fail before prediction;
+2. Glanville showed that exact world IDs can remain scientifically useful while harming direct supervised prediction;
+3. Tvärminne Daphnia showed that label-invariant Layer B carries small non-redundant information but can remain worse than a strong RF;
+4. Chicago coyote showed that even a fully frozen scientific/model contract can still fail before scoring if categorical response-token parsing was not prospectively specified.
 
 Current verdict:
 
-> **EOG-WF remains a coherent exact world-set reconstruction/update framework. Exact world identity is retained as latent sequential state. The world-label-invariant Layer-B representation has independently demonstrated non-redundant predictive information beyond mean support, but current evidence does not support it as a superior standalone predictor. New prediction claims must therefore be tested as paired complementary added value on top of a prospectively frozen strong learner.**
+> **Layer A is the auditable exact update/falsification state. Layer B is a candidate complementary representation. Any predictive claim must use a prospectively paired strong-learner comparison, and all response semantics—including deterministic categorical token normalization—must be frozen before row-level outcome access.**
 
-Frozen empirical results are never reopened or retuned to match later protocol improvements.
+Frozen empirical attempts are never repaired and rerun as independent confirmation.
 
 ## 1. Scientific objects
 
 EOG keeps distinct:
 
-1. **local possibility**;
-2. **reachability from declared current sources**;
-3. **distributional realizability under declared worlds**;
-4. **historical truth**.
+1. local possibility;
+2. reachability from declared current sources;
+3. distributional realizability under declared worlds;
+4. historical truth.
 
-For finite world universe `W` and positive evidence `O`:
+For finite world universe `W` and evidence `O`:
 
 ```text
 W(O) = {w in W : w is compatible with O}
 ```
 
-This is an unranked compatible set unless ranking was prospectively justified.
+Observed states constrain the compatible set; they do not identify one true route or
+history.
 
-Unobserved/zero records are not biological absences without an appropriate observation model.
-
-## 2. Two-layer forecast object
+## 2. Two-layer architecture
 
 ### Layer A — exact latent/update state
 
-The canonical scientific state retains:
+Retain exact:
 
-- exact world/rule IDs and fingerprints;
-- current realised source state;
-- per-world support through horizon;
-- surviving/compatible rule set;
-- robust/contingent/excluded structure;
-- sequential contraction and finite-universe falsification.
+- world/rule IDs and fingerprints;
+- current source state;
+- per-world support;
+- compatible/surviving set;
+- possible / robust / unresolved / finite-world-excluded structure;
+- monotone sequential contraction;
+- finite-universe falsification.
 
-Exact identities remain necessary to say **which rule was eliminated**.
+Exact identities are required to say which rule was eliminated. They are not default
+supervised prediction columns and are not historical truth.
 
-### Layer B — world-label-invariant representation
+### Layer B — label-invariant representation
 
-The default numerical projection must be invariant to arbitrary world labels and member order unless a future independent contract explicitly establishes otherwise.
-
-Current v1 interface:
+Production implementation:
 
 `src/eog/v2/world_predictive_summary.py`
 
-It returns ten symmetric world-set quantities per node/horizon:
+Current v1 features:
 
 - surviving-world fraction;
-- mean / SD / min / max support;
+- support mean / SD / min / max;
 - q25 / q50 / q75;
 - positive-support fraction;
-- range.
+- support range.
 
-This is not a novelty claim for generic set functions or statistical summaries.
+The representation must be invariant to arbitrary world names and member order.
 
-Layer B is now treated as a diagnostic/complementary representation, not a presumed standalone prediction replacement.
-
-## 3. Sequential updating
-
-For repeated transitions with changing current sources, use frozen rule identity plus changing source state:
-
-`src/eog/v2/sequential_world_forecast.py`
-
-Evidence from transition `t→t+1` is evaluated only from the current sources at `t` to positive targets at `t+1`. Past positives are not re-tested from later source sets.
-
-Surviving rules may only remain or contract:
-
-```text
-W_{t+1} ⊆ W_t
-```
-
-or the frozen universe is falsified.
-
-## 4. Validation estimands remain separate
+## 3. Validation estimands are separate
 
 ### A. Algorithmic correctness
 
-Does exact reconstruction/propagation/update obey declared invariants?
-
-Current state: supported by known-truth/package tests.
+Do exact reconstruction, propagation and contraction obey declared invariants?
 
 ### B. World-universe adequacy
 
-Can the prospectively declared world set represent the intended forecast scale before response access?
+Can the prospectively declared world set represent the intended structural/process scale
+before response access?
 
-Current infrastructure:
+### C. Layer-A scientific value
 
-- `src/eog/v2/world_scale_ladder.py`;
-- `src/eog/v2/world_adequacy.py`.
+Does exact identity support meaningful compatibility, elimination or finite-universe
+falsification?
 
-### C. Latent identity/update value
+### D. Layer-B information value
 
-Does retaining exact identity enable scientifically meaningful rule elimination, discrimination or finite-universe falsification?
+Does the symmetric representation contain heldout information beyond a simpler EOG
+projection?
 
-Known-truth: supported.  
-Independent Glanville: exact rule contraction observed.  
-Independent Daphnia: all four finite hard-threshold worlds were eliminated at the first calibration update while the full-support world survived.
+### E. Standalone predictive value
 
-### D. Layer-B representation value
+Does an EOG prediction head outperform strong external prediction?
 
-Does the frozen symmetric world-set representation retain heldout information beyond a prospectively declared simpler EOG projection such as surviving fraction + mean support?
+Current independent Daphnia evidence says no.
 
-Independent Daphnia: yes, slightly; Layer B beat mean-only in 8/11 heldout years with macro log-loss delta `-0.001561` and was estimable beyond mean-only.
+### F. Complementary predictive added value — active prediction estimand
 
-### E. Standalone external predictive value
-
-Does a Layer-B prediction head outperform strong external predictors?
-
-Independent Daphnia: no. The frozen RF macro log loss was `0.204084` versus Layer B `0.285714`, and Layer B beat RF in 0/11 heldout years.
-
-Standalone superiority is therefore not the active product claim.
-
-### F. Complementary predictive added value — active new estimand
-
-Does adding unchanged EOG Layer-B features improve an already frozen strong learner, compared with the **same learner** using the same conventional features without EOG?
+Does adding unchanged Layer-B features improve an already frozen strong learner compared
+with the **same learner** using the same conventional features without EOG?
 
 Executable evaluator:
 
 `src/eog/v2/predictive_complementarity.py`
 
-This is the active prediction-validation endpoint for future fresh systems.
-
 ### G. Historical identification
 
-Actual routes, ancestry or colonisation sequence require stronger evidence and are not implied by A–F.
+Actual route, ancestry and colonization sequence require stronger evidence and are not
+implied by A–F.
 
-## 5. Independent Glanville boundary
+## 4. Response semantics and token schema
 
-Glanville was the first independent EOG-WF system to reach the heldout predictive endpoint.
+Define the observed target before row-level outcome access.
 
-Authoritative result fingerprint:
+For survey transitions, a zero may be a recorded negative target only under the frozen
+observation interpretation. It is not automatically latent biological absence.
 
-`628511ac3f42fe108d334a6458428bbf56f3c3fea1e753b2bee8d980b3d84c33`
+For every categorical response field used by the runner, also freeze any deterministic
+text normalization needed to recognize categories.
 
-Primary macro-year log loss:
+Implementation:
 
-- symmetric same-world compression: `0.187983`;
-- RF: `0.191725`;
-- IFM logistic: `0.200242`;
-- exact world identity: `0.230197`.
+`src/eog/v2/response_schema.py`
 
-Identity minus compression = `+0.042214`; identity lost to compression in 6/6 heldout transitions.
+A `CategoricalTokenRule` may declare only:
 
-Frozen statuses:
+- complete canonical categories;
+- outer-whitespace stripping;
+- Unicode casefolding;
+- optional internal ASCII-whitespace removal.
 
-- `adverse_identity_predictive_value`;
-- `adverse_external_predictive_added_value`.
+No fuzzy matching, punctuation repair or post-open aliasing is allowed. Canonical
+categories that collide after normalization are invalid. Unknown values fail closed.
 
-Identity was estimable beyond the declared compression, so this cannot be dismissed as a redundant design matrix.
+The `ResponseTokenSchemaDeclaration.fingerprint` is incorporated into the candidate's
+existing `response_semantics` fingerprint. The generic outcome-access contract remains a
+sixteen-key surface; no historical ledger rewrite is required.
 
-The exact world state still eliminated four truncated structural worlds during calibration and retained the full process world. Therefore the result narrowed the **prediction interface**, not the existence of an exact latent world state.
+If an undeclared token is first encountered after response opening, stop the attempt
+before count/model/scoring as applicable. Parser repair may inform a future fresh attempt,
+but the opened endpoint is not rerun and called independent.
 
-Do not rerun Glanville with later interfaces and call the rerun independent confirmation.
+Canonical documentation:
 
-## 6. Independent Daphnia boundary
+`docs/response_token_schema_contract.md`
 
-The Tvärminne Daphnia attempt was selected and frozen after the two-layer architecture was established.
+## 5. World-scale construction and adequacy
 
-Authoritative result fingerprint:
+Before response access, use defensible external process scales and/or a prospectively
+declared response-blind structural scale ladder.
 
-`8fcf0e74452e29e14fd63efa51184bfbb00b7fb075ad485616798d8fd3a5a4ae`
+Structural worlds must be audited for the quantities relevant to the claim, such as:
 
-Exact count gate passed with:
-
-- calibration events/non-events: `730 / 10,102`;
-- heldout events/non-events: `258 / 4,502`;
-- 11 heldout annual units with both classes.
-
-At `1982→1983`, all four finite hard-threshold worlds were eliminated; only `geo_exponential_full` survived thereafter.
-
-Layer-B vs mean-only macro log loss:
-
-- Layer B `0.285714`;
-- mean-only `0.287275`;
-- delta `-0.001561`;
-- Layer B won 8/11 years.
-
-Frozen status:
-
-`favorable_layer_b_predictive_value`
-
-Strong external comparison:
-
-- geometry/process RF `0.204084`;
-- geometry/process logistic `0.258052`;
-- Layer B `0.285714`;
-- Layer B beat RF 0/11 years.
-
-Frozen status:
-
-`adverse_external_predictive_added_value`
-
-This result is not rescued or reclassified. It establishes the current complementarity boundary.
-
-Daphnia cannot independently validate a later `strong learner + EOG` endpoint because that paired augmentation was not prospectively declared there.
-
-## 7. World-scale construction
-
-Before response access, use one or both:
-
-### 7.1 Externally calibrated process scale
-
-Use defensible movement/dispersal/transport/barrier evidence, with provenance and uncertainty.
-
-### 7.2 Response-blind structural scale ladder
-
-When no sufficient biological scale exists, construct prospectively declared analyst-choice structural regimes.
-
-For target largest-component fractions `c1 < ... < ck`, choose the minimum metric threshold reaching each target. These are not biological dispersal limits without external calibration.
-
-Primary structural worlds should remain inspectable when secondary environment/barrier intersections are added.
-
-## 8. Structural adequacy gate
-
-Before response access, audit candidate worlds for:
-
-- component structure;
+- component count;
 - largest-component fraction;
 - isolated-node fraction;
 - degree;
 - directed horizon reach.
 
-Pass criteria must be frozen prospectively and tied to the intended forecast claim. EOG embeds no universal connectivity cutoff.
+Structural thresholds are analyst-choice regimes unless separately calibrated as
+biological movement/dispersal scales.
 
-## 9. Process closure/source semantics
+## 6. Process/source closure
 
-Before response access, justify why the declared source system is appropriate.
-
-Eligible designs must prospectively establish at least one:
+Before response access establish at least one:
 
 1. the node universe approximately closes the relevant transition process;
 2. external source states are explicitly represented;
-3. the claim is explicitly conditional on internal realised sources and does not pretend to cover external recruitment.
+3. the claim is explicitly conditional on internal realized sources.
 
 Observed sources are conditioning states, not inferred ancestors.
 
-## 10. Response semantics
+## 7. Paired complementarity contract
 
-Define the actual observed target before outcome access.
+Freeze one strong baseline learner before response access:
 
-For survey-recorded transitions, a zero may be used as a recorded negative target only under the declared survey interpretation. It is not automatically latent biological absence.
-
-Raw EOG support is not occupancy/colonisation probability. A calibrated supervised learner may use frozen EOG features, but that calibration does not turn the latent world state into historical truth.
-
-## 11. Dependence and validation units
-
-Validation units must match the intended generalisation target.
-
-Many site/species/patch rows do not create many independent years/islands/regions. Do not manufacture precision by resampling a very small number of outer units without prospectively justified operating characteristics.
-
-Complementarity decisions are paired at the frozen outer-unit level. Row count does not substitute for outer-unit replication.
-
-## 12. Required fresh independent sequence
-
-### Gate 0 — source/schema/response semantics
-
-Freeze immutable source, nodes, non-response inputs, response interpretation and holdout structure.
-
-### Gate 1 — process/source closure
-
-Freeze why the declared current-source system is scientifically admissible.
-
-### Gate 2 — world scale
-
-Freeze process-calibrated and/or analyst-choice structural worlds before response access.
-
-### Gate 3 — structural adequacy
-
-Run response-blind structural audit and stop if the prospectively declared gate fails.
-
-### Gate 4 — latent/update state
-
-Freeze rule IDs, source update policy, horizon, gates and falsification rule.
-
-### Gate 5 — Layer-B representation
-
-Freeze the Layer-B representation before response access.
-
-Current default remains `symmetric_world_support_summary_v1`. Do not tune it on Daphnia heldout results and call the new interface prospective.
-
-### Gate 6 — strong learner baseline
-
-Freeze:
-
-- learner/model family;
+- model family;
 - preprocessing;
-- hyperparameters/fit policy;
-- conventional/external feature set;
-- any calibration procedure.
+- hyperparameters / fit policy;
+- conventional feature set;
+- calibration procedure.
 
-This baseline is not weakened after outcomes merely to make EOG useful.
-
-### Gate 7 — paired EOG augmentation
-
-Freeze an augmented specification using:
+Then freeze one augmented model using:
 
 - the **same learner and fit policy**;
-- the same conventional/external features;
+- the same conventional features;
 - the same response endpoint and split;
-- plus the unchanged frozen EOG Layer-B feature block.
+- plus the unchanged Layer-B feature block.
 
-Fingerprint the learner, response endpoint, split, external feature set and EOG feature set separately.
+For each frozen heldout outer unit `u` record paired scores:
 
-### Gate 8 — complementarity metric and decision rule
+```text
+S_base(u) = strong learner
+S_aug(u)  = same strong learner + Layer B
+```
 
-Freeze before response access:
+Use `PredictiveComplementarityDeclaration` to freeze:
 
 - primary metric;
-- lower/higher-is-better direction;
+- score direction;
 - expected heldout outer-unit count;
 - favourable minimum augmented wins;
 - adverse minimum baseline wins;
-- tie tolerance, if nonzero.
+- tie tolerance.
 
-Use `PredictiveComplementarityDeclaration` and `evaluate_predictive_complementarity()` to preserve favourable/adverse/no-confirmed results without post-outcome threshold changes.
+For lower-is-better metrics, favourable requires both lower augmented macro score and the
+prospectively declared number of augmented outer-unit wins. Adverse is symmetric.
+Conflicting evidence remains `no_confirmed_complementary_added_value`.
 
-### Gate 9 — outcome opening once
+Rows within a year/site network do not substitute for independent heldout outer units.
 
-Use the machine-checkable outcome-access freeze ledger. Run exact count/estimability checks first. If those fail, stop before model fitting/scoring. Otherwise fit/score the already frozen baseline and augmented learner once.
+## 8. Required fresh independent sequence
 
-Do not retune worlds, source policy, Layer B, learner, conventional features, metrics or semantics after outcome access.
+### Gate 0 — immutable source and response identity
 
-## 13. Complementarity execution contract
+Freeze exact source versions, response identity and non-response inputs.
 
-For each heldout outer unit `u` compute a paired score:
+### Gate 1 — node universe / response-free geometry
 
-```text
-S_base(u) = strong learner with frozen conventional features
-S_aug(u)  = same learner + same conventional features + frozen Layer B
-```
+Freeze the complete analysis registry and geometry without response conditioning.
 
-For lower-is-better metrics:
+### Gate 2 — response semantics and token schema
 
-```text
-Delta = mean_u S_aug(u) - mean_u S_base(u)
-```
+Freeze target meaning, missingness/effort semantics, canonical categorical values and any
+allowed deterministic token normalization.
 
-Favourable requires both:
+### Gate 3 — process/source closure
 
-- `Delta < 0` beyond the frozen tie tolerance; and
-- at least the frozen minimum number of augmented outer-unit wins.
+Freeze why current-source propagation is scientifically admissible.
 
-Adverse is the symmetric reverse condition. Conflicting macro/direction evidence remains:
+### Gate 4 — world scale and structural adequacy
 
-`no_confirmed_complementary_added_value`
+Construct worlds without response tuning and stop if the prospective adequacy gate fails.
 
-Higher-is-better metrics reverse score direction only.
+### Gate 5 — Layer A
 
-The evaluator canonicalizes outer-unit order and requires exactly the prospectively declared number of unique finite paired scores.
+Freeze world IDs, source update policy, support/falsification rules and monotonic
+contraction.
 
-## 14. Frozen earlier lessons
+### Gate 6 — Layer B
 
-### STOC
+Freeze the unchanged label-invariant representation.
 
-Independent world universe falsified during calibration before heldout prediction. This motivated prospective scale/adequacy gates. STOC is not reused.
+### Gate 7 — strong learner and paired augmentation
 
-### SIVFLORA
+Freeze identical learner/preprocessing/conventional features, differing only by the Layer-B
+augmentation.
 
-Independent pre-outcome non-estimable. Not rescued.
+### Gate 8 — split, estimability and decision rules
 
-### Azores
+Freeze calibration/heldout outer units, exact count minima, metric and favourable/adverse
+rules.
 
-Independent pre-model non-estimable. Not rescued.
+### Gate 9 — response-free full smoke
 
-### A-Islands
+Run the exact scientific/model path with synthetic outcome only. Freeze runner/runtime and
+smoke fingerprints.
 
-Exploratory exact-world structural information; not independent. Earlier predictive extension adverse.
+### Gate 10 — outcome-access authorization
+
+Use the existing 16-key `FrozenOutcomeAccessContract`. The `response_semantics` entry must
+bind the token-schema fingerprint when categorical fields are used.
+
+### Gate 11 — open response once
+
+After authorization:
+
+1. verify frozen response/runtime/runner identity;
+2. open row-level response once;
+3. parse only with the frozen token schema;
+4. run the exact count gate before any model fit;
+5. if count gate fails, stop with zero fits/scores;
+6. otherwise fit and score the already-frozen paired models once.
+
+No post-open world, parser, split, model, feature, metric or threshold redesign is
+permitted.
+
+## 9. Empirical boundary
 
 ### Glanville
 
-Completed independent forecast; exact world identity adverse as direct supervised encoding. Established the two-layer architecture.
+Completed independent heldout forecast. Exact world identity was adverse as a direct
+supervised encoding while retaining Layer-A contraction value.
 
 ### Daphnia
 
-Completed fresh independent forecast; symmetric Layer B slightly favourable vs mean-only but clearly adverse vs strong RF. Established the paired complementarity endpoint as the next valid prediction question.
+Completed fresh independent heldout forecast.
 
-## 15. Prior-art / novelty boundary
+- Layer B vs mean-only: `0.285714` vs `0.287275`, 8/11 wins;
+- Layer B vs strong RF: `0.285714` vs `0.204084`, 0/11 wins.
+
+This established the paired complementarity question as the next valid predictive
+estimand.
+
+### Snapshot Serengeti
+
+Stopped before response because its regular camera grid collapsed all prospective LCC
+levels to one structural threshold.
+
+### Chicago striped skunk
+
+Stopped before response because the response-free external coordinate registry matched
+only 100/106 frozen analysis sites. No alias repair was allowed.
+
+### Chicago coyote
+
+Passed 113/113 response-free registry join, four structural scales, paired design, full
+synthetic smoke and 16-key authorization. On its sole response opening, the frozen parser
+encountered `Week="week1"` while it had declared `week 1` etc.
+
+Status: `pre_model_response_schema_mismatch`.
+
+- exact count gate executed: false;
+- models fit: 0;
+- heldout scores: 0;
+- complementarity: not evaluated.
+
+The endpoint is not rerun after parser repair. This failure motivates the generic token
+schema contract; it provides no favourable/adverse EOG evidence.
+
+## 10. Novelty boundary
 
 Do not claim generic novelty for:
 
-- threshold filtration, percolation, MST or critical connectivity;
+- threshold filtration, percolation or MST machinery;
 - dynamic reachability;
 - stepping stones, least-cost or circuit methods;
-- suitable + accessible functional habitat;
 - dynamic/mechanistic SDMs;
 - ensembles/model averaging;
-- permutation-invariant set functions, DeepSets or distributional summaries generally;
-- generic feature augmentation, stacking or model comparison;
-- Bayesian/credal/imprecise prediction;
-- viability kernels;
+- permutation-invariant summaries;
+- generic feature augmentation/stacking;
+- credal/imprecise prediction;
 - history matching/NROY;
 - Pareto/minimum-relaxation frontiers;
-- multiverse analysis;
+- generic schema normalization;
 - generic adaptive survey design.
 
 The candidate EOG contribution is the domain-specific composition:
 
-> **a prospectively source- and scale-certified finite world universe is conditioned by positive distribution evidence; exact world identities remain auditable sequential update state; a label-invariant representation exposes surviving world-set structure; later evidence contracts or falsifies the same frozen rule universe; and any predictive added-value claim is tested as a paired augmentation of a strong unchanged predictor without post-outcome retuning.**
+> **a prospectively source- and scale-certified finite world universe is conditioned by distribution evidence; exact world identities remain auditable sequential update/falsification state; a label-invariant representation exposes surviving world-set structure; later evidence contracts or falsifies the same frozen universe; and predictive added value is tested as a paired augmentation of a strong unchanged predictor under once-only, schema-frozen outcome access.**
 
-## 16. Stop rules
+## 11. Stop rules
 
-- Do not add operators to rescue failed validation.
-- Do not weaken comparators after outcomes.
-- Do not retune graph scale after responses.
-- Do not expose arbitrary world labels to the default prediction head after independent adverse evidence.
-- Do not tune the symmetric summary on Daphnia heldout outcomes and relabel the result prospective.
-- Do not change learner family, hyperparameters or conventional features between paired baseline and augmented fits.
-- Do not rerun Daphnia and call the new complementarity endpoint independently confirmed.
-- Do not sequentially shop datasets merely to overturn the adverse standalone external-prediction result.
-- Do not call structural thresholds biological dispersal limits without calibration.
-- Do not call survey zero latent biological absence without observation justification.
-- Do not promote raw support to occupancy/colonisation probability.
-- Do not equate propagation depth with physical time without calibration.
-- Do not claim universal robustness outside the declared world certificate.
+- Do not add ecological operators to rescue failed validation.
+- Do not weaken the external learner after outcomes.
+- Do not retune graph/world scale after response access.
+- Do not repair a categorical parser after opening and rerun the same endpoint as independent.
+- Do not expose arbitrary world IDs as default prediction features.
+- Do not change learner family/hyperparameters/conventional features between paired models.
+- Do not call structural thresholds biological movement limits without calibration.
+- Do not call survey non-detection latent biological absence without observation justification.
+- Do not identify a surviving world as historical truth.
+- Do not claim robustness outside the declared finite-world certificate.
