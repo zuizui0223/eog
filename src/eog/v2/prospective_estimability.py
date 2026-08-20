@@ -8,6 +8,13 @@ It is validation infrastructure, not an ecological operator and not evidence of 
 performance.  A prospective PASS means only that published aggregate evidence makes
 the planned empirical endpoint plausibly estimable.  The once-only empirical runner
 must still enforce its exact row-level count gate after response access.
+
+An ``uncertain_pre_response`` result is deliberately different from both PASS and known
+ineligibility.  It never authorizes response access, but it may continue through purely
+response-blind gates.  If all those gates are frozen, the unchanged once-only empirical
+runner may then open the response and enforce the exact count gate *before* any model is
+fit or any held-out prediction is scored.  This mirrors the already-used Chiricahua
+execution order without weakening any count threshold.
 """
 from __future__ import annotations
 
@@ -21,6 +28,12 @@ ProspectiveEstimabilityStatus = Literal[
     "plausibly_eligible_pre_response",
     "ineligible_pre_response",
     "uncertain_pre_response",
+]
+
+ProspectiveEstimabilityDisposition = Literal[
+    "continue_response_blind_with_pre_response_support",
+    "continue_response_blind_exact_gate_required",
+    "stop_known_ineligible_pre_response",
 ]
 
 REQUIRED_KEYS = (
@@ -121,6 +134,39 @@ class ProspectiveEstimabilityResult:
     fingerprint: str
 
 
+def prospective_estimability_disposition(
+    result: ProspectiveEstimabilityResult,
+) -> ProspectiveEstimabilityDisposition:
+    """Return the allowed *pre-response* execution path for a screening result.
+
+    This function never authorizes row-level response access.
+
+    ``ineligible_pre_response``
+        A known upper bound already violates a frozen minimum.  Stop before any further
+        candidate-specific validation work that would only serve this empirical test.
+
+    ``uncertain_pre_response``
+        Published/documented aggregate evidence is incomplete.  The candidate may
+        continue through response-blind source/geometry/scale/implementation freezes,
+        but an unchanged once-only empirical runner must enforce the exact row-level
+        count gate before fitting or scoring.  Uncertainty is not silently promoted to
+        PASS.
+
+    ``plausibly_eligible_pre_response``
+        Published lower bounds clear all minima.  Response-blind work may continue, but
+        the exact once-only row-level gate remains mandatory because aggregate evidence
+        is only a prospective screen.
+    """
+
+    if not isinstance(result, ProspectiveEstimabilityResult):
+        raise TypeError("result must be ProspectiveEstimabilityResult")
+    if result.status == "ineligible_pre_response":
+        return "stop_known_ineligible_pre_response"
+    if result.status == "uncertain_pre_response":
+        return "continue_response_blind_exact_gate_required"
+    return "continue_response_blind_with_pre_response_support"
+
+
 def evaluate_prospective_estimability(
     declaration: ProspectiveEstimabilityDeclaration,
     evidence: AggregateEstimabilityEvidence,
@@ -136,6 +182,11 @@ def evaluate_prospective_estimability(
     * PASS only when every required quantity has a known lower bound at or above the
       frozen minimum;
     * otherwise return ``uncertain_pre_response``.
+
+    The result classifies pre-response evidence only.  Use
+    :func:`prospective_estimability_disposition` to determine whether additional
+    response-blind validation work is allowed.  Any eventual empirical run must still
+    enforce the exact row-level count gate before model fitting/scoring.
     """
 
     required = tuple((key, int(getattr(declaration, key))) for key in REQUIRED_KEYS)

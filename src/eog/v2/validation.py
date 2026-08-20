@@ -57,7 +57,9 @@ _PROSPECTIVE_ESTIMABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "AggregateEstimabilityEvidence",
     "ProspectiveEstimabilityDeclaration",
     "ProspectiveEstimabilityResult",
+    "ProspectiveEstimabilityDisposition",
     "evaluate_prospective_estimability",
+    "prospective_estimability_disposition",
 )
 
 _WORLD_ADEQUACY_EXPORTS: Final[tuple[str, ...]] = (
