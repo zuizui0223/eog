@@ -1,0 +1,126 @@
+name: Daphnia rock-pool outcome audit
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/daphnia_rockpool_outcome_audit.yml"
+      - "validation/daphnia_rockpool_two_layer/outcome_access_gate_result.json"
+      - ".github/workflows/daphnia_rockpool_once_only_outcome.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      EXPECTED_HEAD_SHA: e7e92fd72c67853280ddf4a5a116dab07a5f2774
+      EXPECTED_WORKFLOW: daphnia_rockpool_once_only_outcome.yml
+    steps:
+      - uses: actions/checkout@v4
+      - name: Locate the sole response-capable run
+        run: |
+          set -euo pipefail
+          mkdir -p build/daphnia_rockpool_outcome_audit
+          gh api "/repos/${GITHUB_REPOSITORY}/actions/workflows/${EXPECTED_WORKFLOW}/runs?branch=agent%2Fdaphnia-rockpool-gate0-screen&event=push&per_page=20" \
+            > build/daphnia_rockpool_outcome_audit/runs.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.load(open('build/daphnia_rockpool_outcome_audit/runs.json'))
+          matches=[r for r in data.get('workflow_runs',[]) if r.get('run_number')==1]
+          if len(matches)!=1:
+              raise SystemExit(f'expected exactly one run_number=1, found {len(matches)}')
+          r=matches[0]
+          if r.get('head_sha')!='e7e92fd72c67853280ddf4a5a116dab07a5f2774':
+              raise SystemExit(f"unexpected outcome head SHA {r.get('head_sha')}")
+          if r.get('run_attempt')!=1:
+              raise SystemExit(f"unexpected run attempt {r.get('run_attempt')}")
+          Path('build/daphnia_rockpool_outcome_audit/run_id.txt').write_text(str(r['id']))
+          Path('build/daphnia_rockpool_outcome_audit/run_metadata.json').write_text(
+              json.dumps({
+                  'run_id':r['id'],
+                  'name':r['name'],
+                  'event':r['event'],
+                  'head_sha':r['head_sha'],
+                  'run_number':r['run_number'],
+                  'run_attempt':r['run_attempt'],
+                  'status':r['status'],
+                  'conclusion':r.get('conclusion'),
+                  'created_at':r['created_at'],
+                  'updated_at':r['updated_at'],
+              },indent=2,sort_keys=True)+'\n'
+          )
+          print(json.dumps(json.load(open('build/daphnia_rockpool_outcome_audit/run_metadata.json')),indent=2,sort_keys=True))
+          PY
+      - name: Retrieve authoritative result artifact if completed
+        run: |
+          set -euo pipefail
+          RUN_ID="$(cat build/daphnia_rockpool_outcome_audit/run_id.txt)"
+          CONCLUSION="$(python -c "import json; print(json.load(open('build/daphnia_rockpool_outcome_audit/run_metadata.json')).get('conclusion') or '')")"
+          if [ "$CONCLUSION" != "success" ]; then
+            gh run view "$RUN_ID" --log > build/daphnia_rockpool_outcome_audit/outcome_run.log || true
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.load(open('build/daphnia_rockpool_outcome_audit/run_metadata.json'))
+          payload={
+              'audit_status':'once_only_run_not_successful',
+              **m,
+              'authoritative_result_available':False,
+              'response_reexecuted_by_audit':False,
+          }
+          Path('build/daphnia_rockpool_outcome_audit/outcome_audit.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+            exit 2
+          fi
+          mkdir -p build/daphnia_rockpool_outcome_audit/artifact
+          gh run download "$RUN_ID" -n daphnia-rockpool-once-only-outcome -D build/daphnia_rockpool_outcome_audit/artifact
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          m=json.load(open('build/daphnia_rockpool_outcome_audit/run_metadata.json'))
+          candidates=list(Path('build/daphnia_rockpool_outcome_audit/artifact').rglob('outcome_result.json'))
+          if len(candidates)!=1:
+              raise SystemExit(f'expected one outcome_result.json, found {len(candidates)}')
+          p=candidates[0]
+          raw=p.read_bytes()
+          r=json.loads(raw)
+          payload={
+              'audit_status':'authoritative_once_only_result_recovered',
+              **m,
+              'authoritative_result_available':True,
+              'result_file_sha256':hashlib.sha256(raw).hexdigest(),
+              'result_fingerprint':r['fingerprint'],
+              'result_status':r['status'],
+              'exact_count_gate':r['exact_count_gate'],
+              'models_fit':r.get('models_fit',0),
+              'heldout_scores':r.get('heldout_scores',0),
+              'layer_b_predictive_status':r.get('layer_b_predictive_status'),
+              'external_predictive_status':r.get('external_predictive_status'),
+              'macro_logloss':r.get('macro_logloss'),
+              'layer_b_minus_mean_only_macro_logloss':r.get('layer_b_minus_mean_only_macro_logloss'),
+              'layer_b_better_heldout_transitions':r.get('layer_b_better_heldout_transitions'),
+              'better_external_baseline':r.get('better_external_baseline'),
+              'layer_b_better_than_better_external_transitions':r.get('layer_b_better_than_better_external_transitions'),
+              'final_surviving_world_ids':r.get('final_surviving_world_ids'),
+              'response_sha256':r.get('response_provenance',{}).get('response_sha256'),
+              'explicit_missing_values_zero_imputed_per_paper':r.get('response_provenance',{}).get('explicit_missing_values_zero_imputed_per_paper'),
+              'response_reexecuted_by_audit':False,
+          }
+          out=Path('build/daphnia_rockpool_outcome_audit/outcome_audit.json')
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daphnia-rockpool-outcome-audit
+          path: build/daphnia_rockpool_outcome_audit
+          if-no-files-found: error
