@@ -1,0 +1,26 @@
+{
+  "attempt_id": "chicago_coyote_paired_complementarity_20260821",
+  "response_rows_opened": false,
+  "exact_count_gate_first": true,
+  "zero_fit_on_count_failure": true,
+  "no_post_open_redesign": true,
+  "freeze_fingerprints": {
+    "source_identity": "a068e2aba265551e3b29b1c3ec8c4b1f34eafcdb",
+    "response_identity": "3ba6cfa50f5b74bdc6532676f7eb475ab0c46523",
+    "node_geometry": "8d83cd2c100e160f6e0887f9d37c9fb5e2bba89050b5d3f771d7cee4780f8244",
+    "response_semantics": "48a5bbd1981d42aec28619cfe47af77b80365ef0d720b1365031d0b41b61a86e",
+    "temporal_split": "b6adca431b04f91ace2ceaa2a2df166ef7fe12e17f2cee1723941840c2b2d353",
+    "count_gate": "88d27828db23f5d3da86a5e4f5c333505cd43374",
+    "process_source": "9e90a5a5feb92feeb79f7838961b49564e18e10f",
+    "world_scale": "c7b335ff85cc16901a1a55bb96258068eb68981359adc7c32da64a6165469d6e",
+    "structural_adequacy": "8d83cd2c100e160f6e0887f9d37c9fb5e2bba89050b5d3f771d7cee4780f8244",
+    "layer_a_rules": "9e90a5a5feb92feeb79f7838961b49564e18e10f",
+    "layer_b_representation": "8d10de705b2b357ee8d8cd587c1d64fb3fb5f48839aec3c131ffe44d56372a6d",
+    "comparators": "b7787b2eedf85c2c1c1e55d6ee9202d4c9b120b94204c215bbf39026ed73d6f9",
+    "preprocessing_model_fit": "43db6c215b63943a3f3639c08d86d0606a5fbfb973663b4fd8ea03370251adca",
+    "metrics_decision": "9e90a5a5feb92feeb79f7838961b49564e18e10f",
+    "runtime_runner": "a5185e9db51185f92bcf3f8a7bd2ff7dfb2918d9|622c8c30ea9246791d226a7c146bca09bd6d395eb7d68e891fbef99605c96b68",
+    "non_estimable_stop": "88d27828db23f5d3da86a5e4f5c333505cd43374"
+  },
+  "note": "All sixteen scientific/model/runtime choices are frozen before row-level coyote response access. Authorization permits only the once-only runner to open the frozen response and execute the exact count gate first."
+}
