@@ -1,0 +1,40 @@
+{
+  "status": "runtime_frozen_pre_response",
+  "candidate": "Murray et al. 2021 Chicago coyote multi-season camera survey",
+  "response_rows_opened": false,
+  "runner": {
+    "path": "benchmarks/run_coyote_complementarity_once.py",
+    "git_blob_sha": "a5185e9db51185f92bcf3f8a7bd2ff7dfb2918d9"
+  },
+  "contracts": {
+    "gate0_result_git_blob_sha": "6e50e4a7c369c051154d2dbb56188f3dbcd47530",
+    "gate2_prediction_contract_git_blob_sha": "9e90a5a5feb92feeb79f7838961b49564e18e10f",
+    "prospective_estimability_contract_git_blob_sha": "88d27828db23f5d3da86a5e4f5c333505cd43374"
+  },
+  "runtime": {
+    "python": "3.11.15",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "scikit_learn": "1.9.0",
+    "joblib": "1.5.3",
+    "threadpoolctl": "3.6.0",
+    "narwhals": "2.24.0"
+  },
+  "smoke": {
+    "workflow_run_id": 32421783294,
+    "artifact_id": 9425955373,
+    "artifact_zip_sha256": "38a66d34e3ab7aec893ebf03d9df0e9616d12ac3abcfdedf6b747075d3b0723e",
+    "result_fingerprint": "622c8c30ea9246791d226a7c146bca09bd6d395eb7d68e891fbef99605c96b68",
+    "complementarity_fingerprint": "9b7e2bf1340c18b892550bd29594afc7235a5a520f6bf9740d41d677e166c84c",
+    "models_fit": 2,
+    "heldout_scores": 10,
+    "response_bytes_opened": false,
+    "response_rows_opened": false
+  },
+  "safety": {
+    "exact_count_gate_first": true,
+    "zero_model_fits_on_count_failure": true,
+    "no_post_open_redesign": true,
+    "same_learner_paired_comparison": true
+  }
+}
