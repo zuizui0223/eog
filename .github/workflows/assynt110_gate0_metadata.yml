@@ -118,7 +118,7 @@ jobs:
               "response_rows_opened": False,
               "response_file_bytes_downloaded": False,
               "file_bytes_downloaded": False,
-              "next": "role-adjudicate metadata names/links only; download only a predeclared documentation, aggregate, or clearly response-independent geometry member"
+              "next": "role-adjudicate metadata names/links only; use only predeclared documentation or yearly aggregate before any row-level response access"
           }
           Path("build/assynt110_gate0/osf_metadata_inventory.json").write_text(
               json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -142,9 +142,31 @@ jobs:
           assert p['response_file_bytes_downloaded'] is False
           assert p['file_bytes_downloaded'] is False
           PY
-      - name: Upload metadata-only evidence
+      - name: Freeze only whitelisted documentation and yearly host aggregate
+        run: |
+          set -euo pipefail
+          mkdir -p build/assynt110_gate0/safe_docs
+          curl -L --fail --retry 2 'https://osf.io/download/t4mp9/' -o build/assynt110_gate0/safe_docs/README.txt
+          curl -L --fail --retry 2 'https://osf.io/download/2ny9q/' -o build/assynt110_gate0/safe_docs/README.csv
+          curl -L --fail --retry 2 'https://osf.io/download/64a544a538091113373c2dde/' -o build/assynt110_gate0/safe_docs/Host.col.ext.rates.yr.csv
+          echo '9e9435bb9ee556d9b8050feb1572e56ac8c568110b8192cf91fd0ae18e368d50  build/assynt110_gate0/safe_docs/README.txt' | sha256sum -c -
+          echo '36897ba9d50336f65a500980c51bb1dd2064c1afcda954dac112138c328228df  build/assynt110_gate0/safe_docs/README.csv' | sha256sum -c -
+          echo '6c5d3b3d08f9de5940d14bc135ea24b773181f847fefd3806f17156206ffcc63  build/assynt110_gate0/safe_docs/Host.col.ext.rates.yr.csv' | sha256sum -c -
+          test "$(wc -c < build/assynt110_gate0/safe_docs/README.txt)" -eq 510
+          test "$(wc -c < build/assynt110_gate0/safe_docs/README.csv)" -eq 11157
+          test "$(wc -c < build/assynt110_gate0/safe_docs/Host.col.ext.rates.yr.csv)" -eq 316
+          cat > build/assynt110_gate0/safe_docs/scope.json <<'JSON'
+          {
+            "response_rows_opened": false,
+            "patch_year_response_files_downloaded": false,
+            "analysis_dataset_files_downloaded": false,
+            "allowed_files": ["README.txt", "README.csv", "Host.col.ext.rates.yr.csv"],
+            "aggregate_semantics": "published yearly host colonisation/extinction summary, not patch-year response rows"
+          }
+          JSON
+      - name: Upload metadata and safe evidence
         uses: actions/upload-artifact@v4
         with:
           name: assynt110-gate0-metadata
-          path: build/assynt110_gate0/osf_metadata_inventory.json
+          path: build/assynt110_gate0
           if-no-files-found: error
