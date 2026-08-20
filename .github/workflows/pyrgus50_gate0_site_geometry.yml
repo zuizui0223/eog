@@ -1,0 +1,199 @@
+name: Pyrgus 50-patch Gate 0 site geometry
+
+on:
+  push:
+    branches:
+      - agent/pyrgus50-gate0-screen
+    paths:
+      - ".github/workflows/pyrgus50_gate0_site_geometry.yml"
+      - "validation/pyrgus50_two_layer/gate0_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/pyrgus50_gate0_site_geometry.yml"
+      - "validation/pyrgus50_two_layer/gate0_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Download and inspect Site_data.csv only
+        run: |
+          set -euo pipefail
+          mkdir -p build/pyrgus50_gate0
+          python - <<'PY'
+          from __future__ import annotations
+          import csv
+          import hashlib
+          import json
+          from pathlib import Path
+          from urllib.parse import urljoin
+          import urllib.request
+
+          ORIGIN = "https://datadryad.org"
+          API = f"{ORIGIN}/api/v2"
+          VERSION_ID = 17929
+          SITE_NAME = "Site_data.csv"
+          RESPONSE_NAME = "Monitoring_data.csv"
+
+          def absolute(url):
+              return urljoin(ORIGIN, str(url))
+
+          def get_json(url):
+              req = urllib.request.Request(absolute(url), headers={"User-Agent": "eog-response-blind-gate0/1.0"})
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  return json.load(response)
+
+          def link_href(row, *keys):
+              links = row.get("_links") or row.get("links") or {}
+              for key in keys:
+                  value = links.get(key)
+                  if isinstance(value, dict):
+                      value = value.get("href")
+                  if value:
+                      return absolute(value)
+              return None
+
+          payload = get_json(f"{API}/versions/{VERSION_ID}/files")
+          files = (payload.get("_embedded") or {}).get("stash:files") or payload.get("data") or []
+          if not isinstance(files, list):
+              files = [files]
+          by_name = {str(row.get("path") or row.get("filename") or row.get("name")): row for row in files}
+          if SITE_NAME not in by_name or RESPONSE_NAME not in by_name:
+              raise RuntimeError(f"expected separate Dryad members are missing: {sorted(by_name)}")
+
+          site_meta = by_name[SITE_NAME]
+          response_meta = by_name[RESPONSE_NAME]
+          site_url = link_href(site_meta, "stash:download", "download")
+          if site_url is None:
+              file_id = site_meta.get("id") or site_meta.get("fileId")
+              if file_id is None:
+                  raise RuntimeError("Site_data.csv has neither download link nor file ID")
+              site_url = f"{API}/files/{file_id}/download"
+
+          req = urllib.request.Request(site_url, headers={"User-Agent": "eog-response-blind-gate0/1.0"})
+          with urllib.request.urlopen(req, timeout=30) as response:
+              site_bytes = response.read()
+
+          site_sha256 = hashlib.sha256(site_bytes).hexdigest()
+          declared_digest = site_meta.get("digest") or site_meta.get("checksum")
+          text = site_bytes.decode("utf-8-sig")
+          sample = text[:4096]
+          dialect = csv.Sniffer().sniff(sample, delimiters=",;\t")
+          rows = list(csv.DictReader(text.splitlines(), dialect=dialect))
+          columns = list(rows[0].keys()) if rows else []
+          if len(rows) != 50:
+              raise RuntimeError(f"Site_data.csv must define exactly 50 habitat patches, found {len(rows)}")
+
+          lower = {str(name).strip().lower(): name for name in columns}
+          response_terms = ("abund", "occup", "presence", "absence", "colon", "extinct", "butterfly", "pyrgus", "detect")
+          response_like_columns = [name for name in columns if any(term in str(name).lower() for term in response_terms)]
+          if response_like_columns:
+              raise RuntimeError(f"Site_data.csv contains response-like columns: {response_like_columns}")
+
+          coordinate_pairs = [
+              ("x", "y"), ("lon", "lat"), ("longitude", "latitude"),
+              ("easting", "northing"), ("east", "north")
+          ]
+          coordinate_columns = None
+          for a, b in coordinate_pairs:
+              if a in lower and b in lower:
+                  coordinate_columns = (lower[a], lower[b])
+                  break
+          if coordinate_columns is None:
+              raise RuntimeError(f"no recognized coordinate pair in Site_data.csv columns={columns!r}")
+
+          a, b = coordinate_columns
+          coords = []
+          for index, row in enumerate(rows, start=1):
+              try:
+                  x = float(str(row[a]).strip())
+                  y = float(str(row[b]).strip())
+              except Exception as exc:
+                  raise RuntimeError(f"non-numeric/missing coordinate at site row {index}") from exc
+              coords.append((x, y))
+          if len(set(coords)) != 50:
+              raise RuntimeError("Site_data.csv does not provide 50 unique coordinate pairs")
+
+          id_candidates = [name for name in columns if str(name).strip().lower() in {"site", "siteid", "site_id", "id", "patch", "patchid", "patch_id"}]
+          id_column = id_candidates[0] if id_candidates else None
+          unique_ids = None
+          if id_column is not None:
+              ids = [str(row[id_column]).strip() for row in rows]
+              unique_ids = len(set(ids))
+              if unique_ids != 50 or any(not value for value in ids):
+                  raise RuntimeError(f"site identifier column {id_column!r} is not complete/unique")
+
+          result = {
+              "status": "gate0_site_geometry_pass",
+              "candidate": "Pyrgus armoricanus 50-patch system",
+              "dryad_version_id": VERSION_ID,
+              "site_file": {
+                  "name": SITE_NAME,
+                  "metadata": site_meta,
+                  "sha256": site_sha256,
+                  "declared_digest": declared_digest,
+                  "bytes": len(site_bytes),
+              },
+              "response_file": {
+                  "name": RESPONSE_NAME,
+                  "metadata_identity_only": {
+                      "id": response_meta.get("id") or response_meta.get("fileId"),
+                      "path": response_meta.get("path") or response_meta.get("filename") or response_meta.get("name"),
+                      "size": response_meta.get("size") or response_meta.get("fileSize"),
+                      "digest": response_meta.get("digest") or response_meta.get("checksum"),
+                  },
+                  "downloaded": False,
+                  "rows_opened": False,
+              },
+              "row_count": len(rows),
+              "columns": columns,
+              "response_like_columns": response_like_columns,
+              "coordinate_columns": list(coordinate_columns),
+              "unique_coordinate_pairs": len(set(coords)),
+              "id_column": id_column,
+              "unique_ids": unique_ids,
+              "geometry_response_independent": True,
+              "next": "freeze response-blind structural scale ladder and survey-availability semantics; Monitoring_data.csv remains closed",
+          }
+          Path("build/pyrgus50_gate0/site_geometry_result.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps({
+              "status": result["status"],
+              "row_count": result["row_count"],
+              "columns": columns,
+              "coordinate_columns": result["coordinate_columns"],
+              "unique_coordinate_pairs": result["unique_coordinate_pairs"],
+              "id_column": id_column,
+              "unique_ids": unique_ids,
+              "site_sha256": site_sha256,
+              "response_downloaded": False,
+              "response_rows_opened": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/pyrgus50_gate0/site_geometry_result.json'))
+          assert p['status'] == 'gate0_site_geometry_pass'
+          assert p['row_count'] == 50
+          assert p['unique_coordinate_pairs'] == 50
+          assert p['response_file']['downloaded'] is False
+          assert p['response_file']['rows_opened'] is False
+          PY
+      - name: Upload response-blind geometry evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyrgus50-gate0-site-geometry
+          path: build/pyrgus50_gate0/site_geometry_result.json
+          if-no-files-found: error
