@@ -1,0 +1,33 @@
+{
+  "status": "metadata_inventory_complete",
+  "candidate": "USGS Yosemite amphibian multi-state occurrence 2007-2021",
+  "sciencebase_item_id": "639a2d8dd34e0de3a1f0de4b",
+  "data_file_bytes_downloaded": false,
+  "data_rows_opened": false,
+  "file_count": 4,
+  "files": {
+    "yose_site_data.csv": {
+      "md5": "7c644e651088f15a72070c89e11c5803",
+      "size": 18983,
+      "download_uri": "https://www.sciencebase.gov/catalog/file/get/639a2d8dd34e0de3a1f0de4b?f=__disk__fc%2Fc5%2F54%2Ffcc5544daac3d11569f99d80c00ca640488b07ff"
+    },
+    "yose_site_year_data.csv": {
+      "md5": "9d761b85c369d7edf131ab9084706750",
+      "size": 137875,
+      "download_uri": "https://www.sciencebase.gov/catalog/file/get/639a2d8dd34e0de3a1f0de4b?f=__disk__6b%2Fac%2F4b%2F6bac4b89ae35af843f5d887ec6a7b4e3392901d4"
+    },
+    "yose_site_year_survey_data.csv": {
+      "md5": "ad55fae00e8517581fbd4a4fd4258055",
+      "size": 121788,
+      "download_uri": "https://www.sciencebase.gov/catalog/file/get/639a2d8dd34e0de3a1f0de4b?f=__disk__fb%2Fdb%2F83%2Ffbdb83f2b5e3c215fe92becccd601279228116ce"
+    },
+    "metadata_xml": {
+      "name": "Multi-state occurrence data and predictors for amphibians in Yosemite National Park (2007-2021).xml",
+      "md5": "f2dbefdb2e816c385e507a667acba213",
+      "size": 44990,
+      "download_uri": "https://www.sciencebase.gov/catalog/file/get/639a2d8dd34e0de3a1f0de4b?f=__disk__03%2F67%2F02%2F036702d265534bd266f3602a6d69a0c7c32920fd"
+    }
+  },
+  "manifest_fingerprint": "b81e739418f8b2480b6b3fa2714be72ea873031001cd755cbdcdf999851f8fcd",
+  "next": "open only the frozen FGDC metadata XML to classify file roles before any CSV content is read"
+}
