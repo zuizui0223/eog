@@ -1,0 +1,55 @@
+{
+  "status": "response_blind_gate0_candidate_frozen",
+  "candidate": "Kase et al. 2025 Chicago striped skunk dynamic occupancy",
+  "selected_after_main_commit": "afd7c6fe8439153b8900753aad0df2bcd500580b",
+  "published_design": {
+    "training": "2014-2020, 23 observed primary seasons after four published no-data seasons",
+    "heldout": "2021, four seasons",
+    "published_site_count_model": 106,
+    "source_conditioned_colonization": "local colonization is defined in the paper using previous-season occupied sites within 2.5 km; long-distance colonization applies when no such occupied neighbor exists"
+  },
+  "response_firewall": {
+    "forbidden_before_full_freeze": "Anna-Kase/skunk data/complete_data.csv",
+    "reason": "complete_data.csv co-locates Site, Long/Lat, skunk detection Y and effort J",
+    "response_rows_opened": false
+  },
+  "site_registry": {
+    "repository": "Anna-Kase/skunk",
+    "commit": "d6bb18c7c1591014fbee8e8fc8ff425e84495609",
+    "path": "data/site_covariates.csv",
+    "git_blob_sha": "66f441fa47c79eb79fb06c39bc93fca5ddc7097a",
+    "role": "response-independent 107-row site/covariate registry"
+  },
+  "geometry_registry": {
+    "repository": "mfidino/coyote-mange",
+    "commit": "a068e2aba265551e3b29b1c3ec8c4b1f34eafcdb",
+    "path": "data/raw_site_coords.csv",
+    "git_blob_sha": "391b6de221f3f827e94bf6d3f8a8050f279c6a8e",
+    "columns": ["site", "utmEast", "utmNorth"],
+    "role": "earlier public response-free coordinate registry for the same long-running Chicago camera network"
+  },
+  "join_gate": {
+    "rule": "exact case-sensitive Site/site string equality only",
+    "minimum_exact_coverage_fraction": 1.0,
+    "no_aliases_or_fuzzy_repair": true,
+    "minimum_nodes_after_join": 100
+  },
+  "structural_gate": {
+    "distance": "Euclidean UTM coordinate distance in meters from frozen external coordinate registry",
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "minimum_lcc_at_0_9_world": 0.9,
+    "maximum_isolated_fraction_at_0_9_world": 0.05
+  },
+  "prospective_estimability": {
+    "status": "uncertain_pre_response",
+    "reason": "published paper establishes 23 training seasons, four 2021 heldout seasons, 106 modeled sites and substantial skunk detections, but endpoint-matched frozen 0->1/0->0 counts for the EOG transition target are not published; an exact once-only count gate remains mandatory before fitting"
+  },
+  "no_rescue": [
+    "do not open complete_data.csv to recover coordinates before authorization",
+    "do not fuzzy-match or manually alias site identifiers after seeing join failures",
+    "do not change structural target fractions or distinct-scale minimum after the gate",
+    "do not use the paper's 2.5 km biological neighborhood to replace a failed response-blind structural ladder",
+    "do not add a candidate-specific connectivity operator"
+  ]
+}
