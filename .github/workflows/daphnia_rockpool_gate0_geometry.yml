@@ -1,0 +1,223 @@
+name: Daphnia rock-pool Gate 0 geometry
+
+on:
+  push:
+    branches:
+      - agent/daphnia-rockpool-gate0-screen
+    paths:
+      - ".github/workflows/daphnia_rockpool_gate0_geometry.yml"
+      - "validation/daphnia_rockpool_two_layer/gate0_geometry_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/daphnia_rockpool_gate0_geometry.yml"
+      - "validation/daphnia_rockpool_two_layer/gate0_geometry_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install numerical dependency
+        run: python -m pip install numpy
+      - name: Selectively extract frozen response-independent geometry members
+        run: |
+          set -euo pipefail
+          mkdir -p build/daphnia_rockpool_gate0_geometry
+          python - <<'PY'
+          from __future__ import annotations
+
+          import binascii
+          import csv
+          import hashlib
+          import io
+          import json
+          from pathlib import Path
+          import struct
+          import urllib.request
+          import zlib
+
+          import numpy as np
+
+          URL = "https://ndownloader.figshare.com/files/36330951"
+          UA = "eog-response-blind-daphnia-geometry/1.0"
+          EXPECTED_N = 546
+          OUT = Path("build/daphnia_rockpool_gate0_geometry")
+          CONTRACT = json.load(open("validation/daphnia_rockpool_two_layer/gate0_geometry_contract.json", encoding="utf-8"))
+
+          def range_get(start: int, end: int) -> bytes:
+              req = urllib.request.Request(
+                  URL,
+                  headers={
+                      "User-Agent": UA,
+                      "Range": f"bytes={start}-{end}",
+                      "Accept-Encoding": "identity",
+                  },
+              )
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  status = getattr(response, "status", None) or response.getcode()
+                  if status != 206:
+                      raise RuntimeError(f"range request returned HTTP {status}, expected 206")
+                  body = response.read()
+              if len(body) != end - start + 1:
+                  raise RuntimeError("range response length mismatch")
+              return body
+
+          def extract_member(spec: dict) -> bytes:
+              offset = int(spec["local_header_offset"])
+              fixed = range_get(offset, offset + 29)
+              fields = struct.unpack("<4s5H3I2H", fixed)
+              if fields[0] != b"PK\x03\x04":
+                  raise RuntimeError(f"invalid local ZIP header for {spec['name']}")
+              flags = fields[2]
+              method = fields[3]
+              name_len = fields[9]
+              extra_len = fields[10]
+              raw_name = range_get(offset + 30, offset + 30 + name_len - 1)
+              name = raw_name.decode("utf-8", errors="replace")
+              if name != spec["name"]:
+                  raise RuntimeError(f"member name mismatch: {name!r} != {spec['name']!r}")
+              data_start = offset + 30 + name_len + extra_len
+              compressed_size = int(spec["compressed_size"])
+              compressed = range_get(data_start, data_start + compressed_size - 1)
+              if method == 8:
+                  content = zlib.decompress(compressed, -15)
+              elif method == 0:
+                  content = compressed
+              else:
+                  raise RuntimeError(f"unsupported ZIP compression method {method} for {name}")
+              if len(content) != int(spec["uncompressed_size"]):
+                  raise RuntimeError(f"uncompressed-size mismatch for {name}")
+              crc = f"{binascii.crc32(content) & 0xffffffff:08x}"
+              if crc != spec["crc32"]:
+                  raise RuntimeError(f"CRC mismatch for {name}: {crc} != {spec['crc32']}")
+              return content
+
+          def numeric_csv(content: bytes) -> np.ndarray:
+              text = content.decode("utf-8-sig")
+              arr = np.genfromtxt(io.StringIO(text), delimiter=",", dtype=float)
+              arr = np.asarray(arr, dtype=float)
+              if arr.ndim == 0:
+                  arr = arr.reshape(1, 1)
+              elif arr.ndim == 1:
+                  arr = arr.reshape(-1, 1)
+              keep_rows = ~np.all(~np.isfinite(arr), axis=1)
+              keep_cols = ~np.all(~np.isfinite(arr), axis=0)
+              return arr[keep_rows][:, keep_cols]
+
+          def sequential_labels(v: np.ndarray, n: int) -> bool:
+              if v.shape != (n,) or not np.isfinite(v).all():
+                  return False
+              return bool(np.allclose(v, np.arange(1, n + 1), atol=1e-9, rtol=0.0))
+
+          def normalize_vector(arr: np.ndarray, n: int) -> np.ndarray:
+              if arr.shape == (n, 1):
+                  return arr[:, 0]
+              if arr.shape == (1, n):
+                  return arr[0, :]
+              if arr.shape == (n, 2) and sequential_labels(arr[:, 0], n):
+                  return arr[:, 1]
+              if arr.shape == (2, n) and sequential_labels(arr[0, :], n):
+                  return arr[1, :]
+              raise RuntimeError(f"A.csv could not be normalized to {n} patch-size values; numeric shape={arr.shape}")
+
+          def normalize_distance(arr: np.ndarray, n: int) -> np.ndarray:
+              candidates = [arr]
+              if arr.shape == (n, n + 1) and sequential_labels(arr[:, 0], n):
+                  candidates.append(arr[:, 1:])
+              if arr.shape == (n + 1, n) and sequential_labels(arr[0, :], n):
+                  candidates.append(arr[1:, :])
+              if arr.shape == (n + 1, n + 1):
+                  if sequential_labels(arr[1:, 0], n) and sequential_labels(arr[0, 1:], n):
+                      candidates.append(arr[1:, 1:])
+              for candidate in candidates:
+                  if candidate.shape == (n, n) and np.isfinite(candidate).all():
+                      return candidate
+              raise RuntimeError(f"distance.csv could not be normalized to {n}x{n}; numeric shape={arr.shape}")
+
+          specs = {row["role"]: row for row in CONTRACT["selected_members"]}
+          a_bytes = extract_member(specs["patch_size_vector"])
+          d_bytes = extract_member(specs["pairwise_distance_matrix"])
+
+          a_raw = numeric_csv(a_bytes)
+          d_raw = numeric_csv(d_bytes)
+          patch_size = normalize_vector(a_raw, EXPECTED_N)
+          distance = normalize_distance(d_raw, EXPECTED_N)
+
+          if not np.isfinite(patch_size).all() or np.any(patch_size <= 0):
+              raise RuntimeError("patch-size vector contains non-finite or non-positive values")
+          if not np.isfinite(distance).all() or np.any(distance < -1e-12):
+              raise RuntimeError("distance matrix contains non-finite or negative values")
+          if not np.allclose(distance, distance.T, atol=1e-9, rtol=1e-9):
+              raise RuntimeError("distance matrix is not symmetric")
+          if not np.allclose(np.diag(distance), 0.0, atol=1e-9, rtol=0.0):
+              raise RuntimeError("distance matrix diagonal is not zero")
+          offdiag = distance[~np.eye(EXPECTED_N, dtype=bool)]
+          positive_offdiag = offdiag[offdiag > 0]
+          if positive_offdiag.size == 0:
+              raise RuntimeError("distance matrix has no positive off-diagonal distances")
+
+          result = {
+              "status": "gate0_response_blind_geometry_pass",
+              "candidate": CONTRACT["candidate"],
+              "node_count": EXPECTED_N,
+              "selected_member_content_bytes_downloaded": True,
+              "selected_members": {
+                  "A.csv": {
+                      "sha256": hashlib.sha256(a_bytes).hexdigest(),
+                      "bytes": len(a_bytes),
+                      "numeric_shape_before_normalization": list(a_raw.shape),
+                      "normalized_shape": [int(patch_size.size)],
+                      "min": float(np.min(patch_size)),
+                      "max": float(np.max(patch_size)),
+                  },
+                  "distance.csv": {
+                      "sha256": hashlib.sha256(d_bytes).hexdigest(),
+                      "bytes": len(d_bytes),
+                      "numeric_shape_before_normalization": list(d_raw.shape),
+                      "normalized_shape": list(distance.shape),
+                      "min_positive_offdiag": float(np.min(positive_offdiag)),
+                      "max": float(np.max(distance)),
+                      "symmetric": True,
+                      "zero_diagonal": True,
+                  },
+              },
+              "response_rows_opened": False,
+              "response_member_bytes_downloaded": False,
+              "forbidden_response_members_downloaded": [],
+              "response_firewall_pass": True,
+              "scientific_boundary": "A.csv and distance.csv are frozen response-independent patch-size/distance inputs. This result contains no Daphnia occupancy values, transition counts, fitted dispersal parameters or historical-route evidence.",
+              "next": "build the unchanged response-blind structural LCC scale ladder from the frozen 546x546 distance matrix before opening occupancy response rows",
+          }
+          (OUT / "gate0_geometry_result.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Assert response firewall and geometry contract
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/daphnia_rockpool_gate0_geometry/gate0_geometry_result.json'))
+          assert p['status'] == 'gate0_response_blind_geometry_pass'
+          assert p['node_count'] == 546
+          assert p['response_rows_opened'] is False
+          assert p['response_member_bytes_downloaded'] is False
+          assert p['forbidden_response_members_downloaded'] == []
+          assert p['response_firewall_pass'] is True
+          assert p['selected_members']['distance.csv']['normalized_shape'] == [546, 546]
+          PY
+      - name: Upload Gate 0 geometry evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daphnia-rockpool-gate0-geometry
+          path: build/daphnia_rockpool_gate0_geometry/*.json
+          if-no-files-found: error
