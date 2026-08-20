@@ -1,0 +1,19 @@
+{
+  "authorized": true,
+  "status": "authorized_once_only_exact_count_gate_required",
+  "prospective_status": "uncertain_pre_response",
+  "prospective_disposition": "continue_response_blind_exact_gate_required",
+  "missing_freeze_keys": [],
+  "contract_fingerprint": "2c48f522972d5d198dd584abbc40a35f84f8929b1a52abd03dcb450a3e8868fd",
+  "estimability_fingerprint": "f24a5ae98efc2268e87c0b0f5880ee40db5dc6f9d281e135162bfc68c37eb87b",
+  "decision_fingerprint": "9c79cc7bb35fb7e3e976f36d35bfc5caab197580aa450f2361f45a29fed719bd",
+  "exact_count_gate_first": true,
+  "zero_fit_on_count_failure": true,
+  "no_post_open_redesign": true,
+  "response_rows_opened": false,
+  "response_bytes_opened": false,
+  "workflow_run_id": 32421957741,
+  "artifact_id": 9426007537,
+  "artifact_zip_sha256": "c0f9bf6da66104446c4b6a442a20189c99bd0021e4e88cc4e0523e912f156e41",
+  "reason": "all response-blind freezes are present; outcome runner may begin with the exact count gate and must stop before fitting/scoring if that gate fails"
+}
