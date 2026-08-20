@@ -1,0 +1,57 @@
+{
+  "status": "gate0_response_blind_screen",
+  "candidate": "Kervellec et al. 2024 Eurasian lynx recolonisation in the French Jura",
+  "paper_doi": "10.1111/2041-210X.14418",
+  "zenodo_doi": "10.5281/zenodo.13354571",
+  "scientific_target": "survey-recorded grid-cell recolonisation between primary occasions, conditioned on realised occupied source cells in the preceding primary occasion",
+  "node_universe": {
+    "definition": "100 km2 Jura grid cells sampled at least once during the study period",
+    "reported_node_count": 644,
+    "response_independent_selection": "sampling history rather than lynx detection status"
+  },
+  "temporal_split": {
+    "calibration_transition": "1999-2000 -> 2009-2010",
+    "heldout_transition": "2009-2010 -> 2019-2020",
+    "primary_occasions": ["1999-2000", "2009-2010", "2019-2020"]
+  },
+  "response_semantics": "A secondary-occasion detection is a lynx sign (e.g. track, hair, camera-trap image) recorded in a grid cell; the eventual once-only endpoint must preserve the authors' detection/non-detection and sampling-effort semantics rather than treating unsurveyed cells as zero.",
+  "prospective_estimability": {
+    "status": "uncertain_pre_response",
+    "reason": "Published text reports 128/644 cells detected over three primary occasions but does not establish the frozen transition-specific event/non-event minima without outcome access.",
+    "execution_policy": "continue response-blind only; exact count gate required before any model fit or heldout score"
+  },
+  "strong_external_comparators": [
+    "authors' commute-time/circuit-theory spatial dynamic occupancy model",
+    "authors' least-cost-path spatial dynamic occupancy model",
+    "Euclidean-distance spatial dynamic occupancy baseline if reproducible from frozen code"
+  ],
+  "response_firewall": {
+    "allowed_gate0": [
+      "Zenodo record metadata",
+      "file names, sizes, checksums and download URLs",
+      "published methods and non-response documentation"
+    ],
+    "forbidden_gate0": [
+      "lynx detection/non-detection rows",
+      "latent occupancy estimates",
+      "response-derived colonisation counts",
+      "post-outcome model-selection results used to tune EOG"
+    ],
+    "response_rows_opened": false,
+    "response_file_bytes_downloaded": false
+  },
+  "gate0_pass_requires": [
+    "stable anonymous Zenodo record and exact file identities",
+    "complete 644-cell response-independent geometry or grid definition obtainable without opening lynx response rows",
+    "sampling-effort/availability semantics independently identifiable",
+    "response bytes remain closed"
+  ],
+  "process_source_boundary": "The claim is conditional on realised occupied cells inside the declared Jura sampling grid unless the published model/data explicitly represent external recruitment; no claim of globally closed lynx dispersal is made.",
+  "no_rescue": [
+    "do not use the authors' fitted resistance parameter to choose EOG structural worlds after response access",
+    "do not change the 1-transition calibration / 1-transition heldout split after outcome access",
+    "do not lower exact count minima",
+    "do not add candidate-specific connectivity operators",
+    "do not read response rows merely to decide candidate eligibility"
+  ]
+}
