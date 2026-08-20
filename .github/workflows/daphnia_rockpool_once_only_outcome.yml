@@ -1,0 +1,118 @@
+name: Daphnia rock-pool once-only outcome
+
+on:
+  push:
+    branches:
+      - agent/daphnia-rockpool-gate0-screen
+    paths:
+      - ".github/workflows/daphnia_rockpool_once_only_outcome.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  outcome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Enforce one-time execution and frozen identities
+        env:
+          RUN_NUMBER: ${{ github.run_number }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          test "$RUN_NUMBER" = "1"
+          test "$RUN_ATTEMPT" = "1"
+          test "$(git hash-object benchmarks/run_daphnia_eogwf_once.py)" = "01b950fd3495196908ba759bf6fea75eb75a2407"
+          test "$(git hash-object validation/daphnia_rockpool_two_layer/gate2_prediction_contract.json)" = "c6a69536060760d2892e36cc61ccce6f7f94cba8"
+          test "$(git hash-object validation/daphnia_rockpool_two_layer/prospective_estimability_contract.json)" = "fe5aee1a75337dc867d7f82c754e4bb02f4e5ad3"
+          test "$(git hash-object validation/daphnia_rockpool_two_layer/gate1_result.json)" = "5478e4de4c77f14ec8f4b76a4cf78fd7db8c7061"
+          test "$(git hash-object validation/daphnia_rockpool_two_layer/runtime_lock.json)" = "bef4e5a55d4fbd357f2c43a9aa20d6ff56fa8bdc"
+          test "$(git hash-object validation/daphnia_rockpool_two_layer/outcome_access_freeze_ledger.json)" = "bd57916932450fb9651350a6de8a240b09aaec24"
+          test "$(git hash-object validation/daphnia_rockpool_two_layer/outcome_access_gate_result.json)" = "5d971aa5523edc651f2946e216d239d395772a96"
+          python - <<'PY'
+          import json
+          root='validation/daphnia_rockpool_two_layer'
+          auth=json.load(open(f'{root}/outcome_access_gate_result.json'))
+          runtime=json.load(open(f'{root}/runtime_lock.json'))
+          assert auth['authorized'] is True
+          assert auth['status']=='authorized_once_only_exact_count_gate_required'
+          assert auth['decision_fingerprint']=='ededbd2a70fff93842462d988ee86d789caa6a31da8168ce5d85941a30d12c73'
+          assert auth['missing_freeze_keys']==[]
+          assert auth['response_rows_opened'] is False
+          assert auth['response_member_bytes_downloaded'] is False
+          assert runtime['runner']['git_blob_sha']=='01b950fd3495196908ba759bf6fea75eb75a2407'
+          assert runtime['smoke']['result_fingerprint']=='7ee926f5f7cb9167d9e27c2577dd8174350f6b156a6030ea6aceb0c0d9916a9c'
+          assert runtime['safety']['exact_count_gate_first'] is True
+          assert runtime['safety']['zero_model_fits_on_count_failure'] is True
+          assert runtime['safety']['no_post_open_redesign'] is True
+          PY
+      - name: Install exact smoke-frozen runtime
+        run: |
+          set -euo pipefail
+          python -m pip install numpy==2.4.6 scipy==1.17.1 scikit-learn==1.9.0 joblib==1.5.3 threadpoolctl==3.6.0 narwhals==2.24.0
+          python -m pip install --no-deps .
+          python - <<'PY'
+          import sys, numpy, scipy, sklearn, joblib, threadpoolctl, narwhals
+          assert sys.version.startswith('3.11.15')
+          assert numpy.__version__=='2.4.6'
+          assert scipy.__version__=='1.17.1'
+          assert sklearn.__version__=='1.9.0'
+          assert joblib.__version__=='1.5.3'
+          assert threadpoolctl.__version__=='3.6.0'
+          assert narwhals.__version__=='2.24.0'
+          PY
+      - name: Execute frozen response once
+        run: |
+          set -euo pipefail
+          mkdir -p build/daphnia_rockpool_outcome
+          python benchmarks/run_daphnia_eogwf_once.py \
+            --mode outcome \
+            --output build/daphnia_rockpool_outcome/outcome_result.json
+      - name: Enforce frozen stop and scoring boundaries
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/daphnia_rockpool_outcome/outcome_result.json'))
+          assert p['execution_mode']=='outcome'
+          assert p['response_provenance']['response_member_bytes_downloaded'] is True
+          assert p['response_provenance']['response_rows_opened'] is True
+          allowed={
+              'non_estimable_response_balance',
+              'universe_falsified_during_calibration',
+              'layer_b_non_estimable_beyond_mean_only',
+              'universe_falsified_during_heldout',
+              'completed_frozen_heldout_test',
+          }
+          assert p['status'] in allowed
+          if not p['exact_count_gate']['passed']:
+              assert p['status']=='non_estimable_response_balance'
+              assert p['models_fit']==0
+              assert p['heldout_scores']==0
+          if p['status']=='completed_frozen_heldout_test':
+              assert p['models_fit']==4
+              assert p['heldout_scores']==44
+              assert len(p['annual_metrics'])==11
+          print(json.dumps({
+              'status':p['status'],
+              'fingerprint':p['fingerprint'],
+              'exact_count_gate':p['exact_count_gate'],
+              'models_fit':p['models_fit'],
+              'heldout_scores':p['heldout_scores'],
+              'layer_b_predictive_status':p.get('layer_b_predictive_status'),
+              'external_predictive_status':p.get('external_predictive_status'),
+              'macro_logloss':p.get('macro_logloss'),
+              'final_surviving_world_ids':p.get('final_surviving_world_ids'),
+          },indent=2,sort_keys=True))
+          PY
+      - name: Upload authoritative once-only result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daphnia-rockpool-once-only-outcome
+          path: build/daphnia_rockpool_outcome/outcome_result.json
+          if-no-files-found: error
