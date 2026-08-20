@@ -1,0 +1,64 @@
+{
+  "status": "gate0_response_blind_screen",
+  "candidate": "Luo et al. 2022 Tvärminne Daphnia rock-pool metacommunity",
+  "paper_doi": "10.1073/pnas.2201503119",
+  "figshare_article_id": 20329245,
+  "figshare_version": 1,
+  "figshare_item_url": "https://figshare.com/articles/software/code_SpatialCoex_zip/20329245/1",
+  "scientific_target": "survey-recorded annual recolonisation of Daphnia magna rock-pool occupancy, conditioned on realised occupied source pools in the preceding year",
+  "node_universe": {
+    "definition": "546 clearly delimited rock pools in the Tvärminne archipelago monitored as habitat patches independently of focal-year Daphnia occupancy",
+    "reported_node_count": 546,
+    "reported_island_count": 17,
+    "monitoring_years": "1982-2017",
+    "sampling_schedule": "two samples per year, spring and midsummer",
+    "annual_occupancy_rule": "occupied in year t if observed in at least one of the two samples"
+  },
+  "primary_species": "Daphnia magna",
+  "response_semantics": "The eventual endpoint is annual survey-recorded occupancy transition 0->1. Missing observations must remain distinguishable from recorded absence; the published modelling choice to treat a small fraction of post-2008 missing values as zero is not imported automatically into EOG.",
+  "prospective_estimability": {
+    "status": "uncertain_pre_response",
+    "reason": "The published paper establishes a long repeated patch-occupancy series but does not provide endpoint-matched annual D. magna 0->1 and 0->0 count lower bounds for a frozen calibration/heldout split without opening response rows. Older published colonisation totals use a different colonisation definition and are not substituted.",
+    "execution_policy": "continue response-blind only; exact count gate required before any model fit or heldout score"
+  },
+  "candidate_external_comparators": [
+    "authors' Bayesian spatially explicit stochastic patch-occupancy/metacommunity model",
+    "a frozen area-plus-source-connectivity colonisation baseline derived from the same response-independent patch registry",
+    "a strong non-EOG supervised baseline using the same frozen covariates and temporal split"
+  ],
+  "response_firewall": {
+    "allowed_gate0": [
+      "Figshare public item metadata",
+      "file names, IDs, sizes, checksums and anonymous download URLs",
+      "ZIP end-of-central-directory and central-directory metadata only",
+      "published methods and non-response documentation"
+    ],
+    "forbidden_gate0": [
+      "Daphnia occupancy/presence rows",
+      "annual response values",
+      "response-derived transition counts",
+      "fitted colonisation/extinction parameters used to tune EOG worlds",
+      "post-outcome scale or feature selection"
+    ],
+    "response_rows_opened": false,
+    "response_member_bytes_downloaded": false
+  },
+  "gate0_pass_requires": [
+    "stable anonymous Figshare metadata for article 20329245 version 1",
+    "exact top-level file identities and checksums frozen",
+    "archive member directory inspectable without downloading member contents",
+    "complete 546-pool response-independent registry/geometry or pairwise distance representation identifiable in member(s) distinct from occupancy response member(s)",
+    "survey availability/missingness semantics independently identifiable",
+    "response member bytes remain closed"
+  ],
+  "process_source_boundary": "Prediction is conditional on realised occupied pools within the declared 546-pool Tvärminne patch system at the preceding year. No unique dispersal history, ancestry, or external-source closure is assumed without separate evidence.",
+  "no_rescue": [
+    "do not open occupancy rows merely to locate geometry",
+    "do not treat published fitted dispersal or interaction parameters as EOG world scales after outcome access",
+    "do not recode post-2008 missing observations as biological absences before the response contract is frozen",
+    "do not change the temporal split after response access",
+    "do not lower exact count minima",
+    "do not add candidate-specific connectivity operators",
+    "do not use archive-member co-location as permission to read response rows"
+  ]
+}
