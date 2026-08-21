@@ -1,0 +1,255 @@
+name: HJA bird geometry gate
+
+on:
+  push:
+    branches:
+      - agent/hja-bird-preflight
+    paths:
+      - ".github/workflows/hja_bird_geometry_gate.yml"
+      - "validation/hja_bird_complementarity/source_freeze.json"
+      - "validation/hja_bird_complementarity/geometry_gate_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+  pull_request:
+    paths:
+      - ".github/workflows/hja_bird_geometry_gate.yml"
+      - "validation/hja_bird_complementarity/source_freeze.json"
+      - "validation/hja_bird_complementarity/geometry_gate_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen package
+        run: python -m pip install .
+      - name: Open only SA024 study-location geometry and run frozen structural gate
+        run: |
+          set -euo pipefail
+          mkdir -p build/hja_bird_geometry_gate
+          python - <<'PY'
+          import csv
+          from dataclasses import asdict
+          import hashlib
+          import io
+          import json
+          import math
+          import re
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          import numpy as np
+
+          from eog.v2.world_adequacy import (
+              StructuralAdequacyDeclaration,
+              apply_structural_adequacy_gate,
+              audit_world_universe_structure,
+          )
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+              structural_scale_adjacencies,
+          )
+
+          root = Path("validation/hja_bird_complementarity")
+          contract_path = root / "geometry_gate_contract.json"
+          source_path = root / "source_freeze.json"
+          contract_bytes = contract_path.read_bytes()
+          source_bytes = source_path.read_bytes()
+          contract = json.loads(contract_bytes)
+          source = json.loads(source_bytes)
+
+          assert contract["response_content_opened"] is False
+          assert source["response_content_opened"] is False
+          for entity in source["response_entities"].values():
+              assert entity["content_opened"] is False
+
+          declared = contract["geometry_source"]
+          assert source["geometry"]["url"] == declared["url"]
+          assert source["geometry"]["content_opened"] is False
+
+          req = Request(
+              declared["url"],
+              headers={
+                  "Accept": "text/csv,text/plain,*/*;q=0.1",
+                  "User-Agent": "EOG-response-blind-HJA-geometry-gate/1.0",
+              },
+          )
+          with urlopen(req, timeout=30) as response:
+              geometry_bytes = response.read()
+              final_url = response.geturl()
+              ctype = response.headers.get_content_type()
+          if not geometry_bytes:
+              raise RuntimeError("SA024 study-location endpoint returned empty content")
+
+          text = geometry_bytes.decode("utf-8-sig")
+          reader = csv.DictReader(io.StringIO(text))
+          if reader.fieldnames is None:
+              raise RuntimeError("SA024 study-location geometry has no CSV header")
+          fieldnames = [str(value).strip() for value in reader.fieldnames]
+          rows = list(reader)
+
+          def norm(value):
+              return re.sub(r"[^a-z0-9]", "", str(value).strip().lower())
+
+          normalized_to_physical = {}
+          for physical in fieldnames:
+              key = norm(physical)
+              if not key:
+                  raise RuntimeError("geometry contains an empty normalized column name")
+              normalized_to_physical.setdefault(key, []).append(physical)
+
+          def resolve(alias_key):
+              aliases = set(declared[alias_key])
+              matches = []
+              for alias in aliases:
+                  matches.extend(normalized_to_physical.get(alias, []))
+              matches = sorted(set(matches))
+              if len(matches) != 1:
+                  raise RuntimeError(
+                      f"geometry semantic field {alias_key!r} resolved to {matches!r}; expected exactly one match"
+                  )
+              return matches[0]
+
+          id_col = resolve("id_aliases_normalized")
+          lat_col = resolve("latitude_aliases_normalized")
+          lon_col = resolve("longitude_aliases_normalized")
+          if len({id_col, lat_col, lon_col}) != 3:
+              raise RuntimeError("geometry semantic columns must be distinct")
+
+          expected_nodes = int(declared["expected_node_count"])
+          if len(rows) != expected_nodes:
+              raise RuntimeError(f"geometry row count {len(rows)} != frozen {expected_nodes}")
+
+          node_ids = []
+          latitudes = []
+          longitudes = []
+          for index, row in enumerate(rows):
+              node_id = str(row.get(id_col, "")).strip()
+              if not node_id:
+                  raise RuntimeError(f"empty site ID at geometry row {index}")
+              try:
+                  lat_value = float(str(row.get(lat_col, "")).strip())
+                  lon_value = float(str(row.get(lon_col, "")).strip())
+              except ValueError as exc:
+                  raise RuntimeError(f"non-numeric coordinate at geometry row {index}") from exc
+              if not math.isfinite(lat_value) or not math.isfinite(lon_value):
+                  raise RuntimeError(f"non-finite coordinate at geometry row {index}")
+              if not -90.0 <= lat_value <= 90.0 or not -180.0 <= lon_value <= 180.0:
+                  raise RuntimeError(f"coordinate outside frozen geographic range at geometry row {index}")
+              node_ids.append(node_id)
+              latitudes.append(lat_value)
+              longitudes.append(lon_value)
+
+          if len(set(node_ids)) != len(node_ids):
+              raise RuntimeError("geometry site identifiers are not unique")
+
+          radius = float(contract["distance_axis"]["earth_radius_km"])
+          lat = np.radians(np.asarray(latitudes, dtype=float))
+          lon = np.radians(np.asarray(longitudes, dtype=float))
+          dlat = lat[:, None] - lat[None, :]
+          dlon = lon[:, None] - lon[None, :]
+          hav = (
+              np.sin(dlat / 2.0) ** 2
+              + np.cos(lat[:, None]) * np.cos(lat[None, :]) * np.sin(dlon / 2.0) ** 2
+          )
+          hav = np.clip(hav, 0.0, 1.0)
+          distance = 2.0 * radius * np.arcsin(np.sqrt(hav))
+          np.fill_diagonal(distance, 0.0)
+
+          scale = contract["structural_scale_declaration"]
+          declaration = StructuralScaleLadderDeclaration(
+              axis_id=contract["distance_axis"]["axis_id"],
+              target_largest_component_fractions=tuple(scale["target_largest_component_fractions"]),
+          )
+          ladder = build_structural_scale_ladder(node_ids, distance, declaration)
+          adjacencies = structural_scale_adjacencies(ladder, distance)
+
+          previous = np.zeros((len(node_ids), len(node_ids)), dtype=bool)
+          for level_id in ladder.level_ids:
+              current = adjacencies[level_id]
+              if np.any(previous & ~current):
+                  raise RuntimeError("structural edge sets are not nested")
+              previous = current
+
+          distinct_positive = sorted(
+              {round(value, 12) for value in ladder.thresholds if value > 0.0}
+          )
+          if len(distinct_positive) < 3:
+              raise RuntimeError(
+                  f"structural scale collapse: only {len(distinct_positive)} distinct positive thresholds: {distinct_positive}"
+              )
+
+          horizon = int(contract["structural_adequacy"]["forecast_horizon_steps"])
+          universe_audit = audit_world_universe_structure(node_ids, adjacencies, horizon=horizon)
+          level90 = next(
+              level for level in ladder.levels
+              if abs(level.target_largest_component_fraction - 0.9) < 1e-12
+          )
+          audit90 = audit_world_universe_structure(
+              node_ids,
+              {level90.level_id: adjacencies[level90.level_id]},
+              horizon=horizon,
+          )
+          adequacy = StructuralAdequacyDeclaration(
+              min_largest_weak_component_fraction=0.9,
+              max_isolated_node_fraction=0.05,
+              require_at_least_one_world_pass=True,
+          )
+          gate90 = apply_structural_adequacy_gate(audit90, adequacy)
+          if not gate90.passed:
+              raise RuntimeError(
+                  "frozen 0.90 structural adequacy gate failed: "
+                  + json.dumps(asdict(gate90), sort_keys=True)
+              )
+
+          result = {
+              "status": "response_blind_geometry_gate_pass",
+              "candidate": contract["candidate"],
+              "dataset_doi": source["dataset_doi"],
+              "version": source["version"],
+              "geometry_url_requested": declared["url"],
+              "geometry_url_final": final_url,
+              "geometry_content_type": ctype,
+              "geometry_size_bytes": len(geometry_bytes),
+              "geometry_sha256": hashlib.sha256(geometry_bytes).hexdigest(),
+              "physical_columns": fieldnames,
+              "semantic_column_mapping": {
+                  "site_id": id_col,
+                  "latitude": lat_col,
+                  "longitude": lon_col,
+              },
+              "node_count": len(node_ids),
+              "latitude_range": [float(np.min(lat)), float(np.max(lat))],
+              "longitude_range": [float(np.min(lon)), float(np.max(lon))],
+              "contract_sha256": hashlib.sha256(contract_bytes).hexdigest(),
+              "source_freeze_sha256": hashlib.sha256(source_bytes).hexdigest(),
+              "scale_ladder": asdict(ladder),
+              "distinct_positive_threshold_count": len(distinct_positive),
+              "distinct_positive_thresholds_km": distinct_positive,
+              "universe_structural_audit": asdict(universe_audit),
+              "level90_gate": asdict(gate90),
+              "response_entity_urls_opened": [],
+              "response_content_opened": False,
+              "next": contract["next_if_pass"],
+          }
+          out = Path("build/hja_bird_geometry_gate/geometry_gate_result.json")
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Upload response-blind geometry evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: hja-bird-geometry-gate
+          path: build/hja_bird_geometry_gate/geometry_gate_result.json
+          if-no-files-found: error
