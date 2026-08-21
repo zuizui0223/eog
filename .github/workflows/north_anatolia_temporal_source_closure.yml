@@ -1,0 +1,199 @@
+name: North Anatolia roe deer temporal source closure
+
+on:
+  push:
+    branches:
+      - agent/north-anatolia-preflight
+    paths:
+      - ".github/workflows/north_anatolia_temporal_source_closure.yml"
+      - "validation/north_anatolia_roe_deer_complementarity/temporal_source_closure_contract.json"
+      - "validation/north_anatolia_roe_deer_complementarity/source_freeze.json"
+      - "validation/north_anatolia_roe_deer_complementarity/geometry_gate_contract.json"
+      - "validation/north_anatolia_roe_deer_complementarity/paired_runner.py"
+  pull_request:
+    paths:
+      - ".github/workflows/north_anatolia_temporal_source_closure.yml"
+      - "validation/north_anatolia_roe_deer_complementarity/temporal_source_closure_contract.json"
+      - "validation/north_anatolia_roe_deer_complementarity/source_freeze.json"
+      - "validation/north_anatolia_roe_deer_complementarity/geometry_gate_contract.json"
+      - "validation/north_anatolia_roe_deer_complementarity/paired_runner.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen runtime
+        run: |
+          python -m pip install .
+          python -m pip install numpy==2.1.3 pandas==2.2.3 scikit-learn==1.5.2
+      - name: Download only pinned response-independent sources
+        run: |
+          set -euo pipefail
+          mkdir -p build/north_anatolia_temporal_source/input build/north_anatolia_temporal_source/output
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          root = Path("validation/north_anatolia_roe_deer_complementarity")
+          source = json.loads((root / "source_freeze.json").read_text(encoding="utf-8"))
+          contract = json.loads((root / "temporal_source_closure_contract.json").read_text(encoding="utf-8"))
+          assert source["response_content_opened"] is False
+          assert source["response"]["content_opened"] is False
+          assert contract["response_content_opened"] is False
+          repo = source["upstream_repository"]
+          commit = source["upstream_commit"]
+          targets = [
+              (
+                  "stations.csv",
+                  source["geometry"]["stations_path"],
+                  source["geometry"]["stations_size_bytes"],
+                  source["geometry"]["stations_git_blob_sha1"],
+              ),
+              (
+                  "variable_data.csv",
+                  source["geometry"]["variables_path"],
+                  source["geometry"]["variables_size_bytes"],
+                  source["geometry"]["variables_git_blob_sha1"],
+              ),
+              (
+                  "camtrap_effort_Ndays.csv",
+                  "data/camtrap_effort_Ndays.csv",
+                  source["response_independent_predictors"]["camtrap_effort_Ndays.csv"]["size_bytes"],
+                  source["response_independent_predictors"]["camtrap_effort_Ndays.csv"]["git_blob_sha1"],
+              ),
+          ]
+          opened = []
+          for local_name, remote_path, expected_size, expected_blob in targets:
+              url = f"https://raw.githubusercontent.com/{repo}/{commit}/{remote_path}"
+              req = Request(url, headers={"User-Agent": "EOG-response-blind-temporal-source-closure/1.0"})
+              with urlopen(req, timeout=30) as response:
+                  payload = response.read()
+                  final_url = response.geturl()
+              blob = hashlib.sha1(f"blob {len(payload)}\0".encode("ascii") + payload).hexdigest()
+              if len(payload) != int(expected_size) or blob != expected_blob:
+                  raise RuntimeError(f"pinned source drift: {remote_path}")
+              Path("build/north_anatolia_temporal_source/input", local_name).write_bytes(payload)
+              opened.append({"path": remote_path, "url": final_url, "git_blob_sha1": blob})
+          Path("build/north_anatolia_temporal_source/output/source_audit.json").write_text(
+              json.dumps({
+                  "opened_response_independent_sources": opened,
+                  "response_file_downloads": 0,
+                  "response_content_opened": False,
+              }, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          PY
+      - name: Evaluate optimistic temporal source path
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import importlib.util
+          import json
+          from pathlib import Path
+
+          import numpy as np
+
+          root = Path("validation/north_anatolia_roe_deer_complementarity")
+          input_root = Path("build/north_anatolia_temporal_source/input")
+          output_root = Path("build/north_anatolia_temporal_source/output")
+          contract = json.loads((root / "temporal_source_closure_contract.json").read_text(encoding="utf-8"))
+          source = json.loads((root / "source_freeze.json").read_text(encoding="utf-8"))
+          geometry_contract = json.loads((root / "geometry_gate_contract.json").read_text(encoding="utf-8"))
+
+          spec = importlib.util.spec_from_file_location("paired_runner", root / "paired_runner.py")
+          if spec is None or spec.loader is None:
+              raise RuntimeError("unable to load paired runner helpers")
+          runner = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(runner)
+
+          raw_stations, variables, distance, registry = runner.load_registry(
+              input_root / "stations.csv",
+              input_root / "variable_data.csv",
+              source,
+              geometry_contract,
+          )
+          effort = runner.load_effort(
+              input_root / "camtrap_effort_Ndays.csv",
+              source,
+              json.loads((root / "gate2_prediction_contract.json").read_text(encoding="utf-8")),
+          )
+          if distance.shape != (171, 171) or effort.shape != (171, 22):
+              raise RuntimeError("response-blind geometry/effort shape drift")
+
+          threshold = float(contract["broadest_threshold_km"])
+          current = effort[:, 0] > 0.0
+          season_counts = [int(np.sum(current))]
+          transitions = []
+          first_empty_transition = None
+
+          for t in range(21):
+              source_indices = np.flatnonzero(current)
+              next_possible = np.zeros(171, dtype=bool)
+              if len(source_indices):
+                  # Optimistic same-station persistence.
+                  next_possible[source_indices] |= effort[source_indices, t + 1] > 0.0
+
+                  # Optimistic new-station appearance under the exact frozen candidate
+                  # effort semantics and broadest structural threshold.
+                  target_eligible = (effort[:, t] > 0.0) & (effort[:, t + 1] > 0.0)
+                  reachable_from_current = np.any(
+                      distance[:, source_indices] <= threshold,
+                      axis=1,
+                  )
+                  next_possible |= target_eligible & reachable_from_current
+
+              transitions.append({
+                  "transition_index": t,
+                  "possible_source_count_before": int(np.sum(current)),
+                  "positive_effort_source_count": int(len(source_indices)),
+                  "possible_source_count_after": int(np.sum(next_possible)),
+              })
+              current = next_possible
+              season_counts.append(int(np.sum(current)))
+              if not current.any() and first_empty_transition is None:
+                  first_empty_transition = t
+                  break
+
+          passed = first_empty_transition is None and len(season_counts) == 22 and season_counts[-1] > 0
+          result = {
+              "status": "temporal_source_closure_pass" if passed else "stop_temporal_source_closure_gap",
+              "passed": passed,
+              "candidate": contract["candidate"],
+              "threshold_km": threshold,
+              "analysis_registry_fingerprint": registry["registry_fingerprint"],
+              "season_possible_source_counts": season_counts,
+              "transition_audit": transitions,
+              "first_empty_transition_zero_based": first_empty_transition,
+              "first_empty_transition_human": (
+                  None if first_empty_transition is None else f"primary {first_empty_transition + 1} -> {first_empty_transition + 2}"
+              ),
+              "response_file_downloads": 0,
+              "response_content_opened": False,
+              "decision_rule": contract["decision_rule"],
+              "next": contract["next_if_pass"] if passed else contract["next_if_stop"],
+          }
+          output_root.joinpath("temporal_source_closure_result.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
+          print(json.dumps(result, indent=2, sort_keys=True))
+          if not passed:
+              raise SystemExit(3)
+          PY
+      - name: Upload response-blind temporal closure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: north-anatolia-temporal-source-closure
+          path: build/north_anatolia_temporal_source/output/
+          if-no-files-found: error
