@@ -1,0 +1,151 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "contract_id": "giant_kelp_paired_complementarity_v1",
+  "upstream_fingerprints": {
+    "candidate_preflight": "49c491b14a696c7df1e5f9ee15451b0551ab3668d8ce4d36716334431d29d6a6",
+    "geometry_gate": "29739c1e3d4a248219f453ddb0fd58abbd40ac15a248bb71e3dec0faa457cddb",
+    "geometry_centroids": "358d66cdf1b039207e22ae575a23900c4405a7c9c556871e4a60c91e0a19128c",
+    "response_metadata": "748cb92aa525be66662ef917fbf49dc63519733890da79e2dabbe436817d5013",
+    "response_sysmeta": "f5d516f0c6d9bd0e7bdf78f98adc55ebaca8c48dd3007de10d0c752938b14555",
+    "process_metadata": "c19bcc303f89e15d0e109b6b97e760763dfe0128a56ae1045bced4fcfc396630",
+    "process_mapping": "5f117614fdc6367e03bb6a8439320d567473fe8f7b2c831192575e2a1d1fa4c6",
+    "patch_identity_contract_sha256": "35396f8f77f1772b7744612933436424ec28068f9c079fb5be4db6e2f59ad13c"
+  },
+  "periods": [
+    "1996-H1", "1996-H2", "1997-H1", "1997-H2", "1998-H1", "1998-H2",
+    "1999-H1", "1999-H2", "2000-H1", "2000-H2", "2001-H1", "2001-H2",
+    "2002-H1", "2002-H2", "2003-H1", "2003-H2", "2004-H1", "2004-H2",
+    "2005-H1", "2005-H2", "2006-H1", "2006-H2"
+  ],
+  "split": {
+    "state_periods": [
+      "1996-H1", "1996-H2", "1997-H1", "1997-H2", "1998-H1", "1998-H2",
+      "1999-H1", "1999-H2", "2000-H1", "2000-H2", "2001-H1", "2001-H2",
+      "2002-H1", "2002-H2", "2003-H1", "2003-H2", "2004-H1", "2004-H2",
+      "2005-H1", "2005-H2", "2006-H1", "2006-H2"
+    ],
+    "calibration_transition_indices_zero_based": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+    "heldout_transition_indices_zero_based": [16,17,18,19,20],
+    "heldout_labels": [
+      "2004-H1->2004-H2",
+      "2004-H2->2005-H1",
+      "2005-H1->2005-H2",
+      "2005-H2->2006-H1",
+      "2006-H1->2006-H2"
+    ],
+    "fingerprint": "59d90ed93c929c578a3dcade17776af67f5b02ad993a00cfdf30f34c64869d59"
+  },
+  "response_endpoint": {
+    "name": "recorded_semiannual_canopy_reappearance_v1",
+    "risk_set": "canonical patches with a valid source and target record and source patch_biomass == 0",
+    "target": "1 iff target patch_biomass > 0, else 0",
+    "zero_semantics": "recorded zero biomass/non-detection, not latent biological absence",
+    "missing_policy": "EML declares no missing codes; absent rows are unavailable, while blank/nonfinite/unparseable present tokens fail closed",
+    "duplicate_policy": "duplicate canonical patch-period fails closed",
+    "response_patch_id_patterns": ["^socal_([1-9][0-9]*)$", "^([1-9][0-9]*)$"],
+    "response_coordinates": "parse as finite provenance only; never use for geometry",
+    "fingerprint": "d30353f3942fbba443ecce682b11666e13c91e3edf6da8951a2a68f1e82009a1"
+  },
+  "source_process_closure": {
+    "claim": "conditional on the 469 tracked southern California patches and their recorded positive canopy states; external/unrepresented recruitment is outside the claim",
+    "current_source_rule": "at source period t, positive source patches are canonical patches with valid record and patch_biomass > 0",
+    "evidence_update_rule": "positive reappearance targets in the frozen risk set may eliminate incompatible Layer-A worlds; recorded zeros do not eliminate worlds",
+    "process_input_rule": "use the frozen 469x469 semester-specific modeled spore-dispersal times only as conventional source-conditioned predictors, never to tune or add EOG worlds"
+  },
+  "layer_a": {
+    "world_ids": ["geo_lcc250", "geo_lcc500", "geo_lcc750", "geo_lcc900", "geo_exponential_full"],
+    "thresholds_km": [8.784880554989936, 30.599950974020906, 33.76116917197375, 40.81254045279048],
+    "full_kernel_scale_km": 30.599950974020906,
+    "support_tolerance": 1e-15,
+    "loss_support": 1.0,
+    "update_rule": "after each transition eliminate any surviving world with support <= tolerance for any positive target in the endpoint risk set; exact identities remain auditable",
+    "process_threshold_worlds": false
+  },
+  "layer_b": {
+    "representation_name": "symmetric_world_support_summary_v1",
+    "feature_names": [
+      "surviving_world_fraction", "support_mean", "support_std", "support_min", "support_max",
+      "support_q25", "support_q50", "support_q75", "positive_support_fraction", "support_range"
+    ],
+    "fingerprint": "8e68cf9dea4f4d76280786e22bc46fc2fd07211d4711e2c9af49775e7efcadef"
+  },
+  "shared_external_features": {
+    "feature_names": [
+      "target_geometry_pixel_count",
+      "target_latitude",
+      "target_longitude",
+      "source_year_centered_2001",
+      "source_semester_h2",
+      "source_positive_patch_count",
+      "source_total_biomass",
+      "source_total_fecundity",
+      "has_any_positive_source",
+      "min_geometry_distance_to_positive_source_km",
+      "mean_geometry_distance_to_positive_source_km",
+      "positive_source_count_within_lcc250",
+      "positive_source_count_within_lcc500",
+      "positive_source_count_within_lcc750",
+      "positive_source_count_within_lcc900",
+      "min_dispersal_time_from_positive_source_days",
+      "mean_dispersal_time_from_positive_source_days",
+      "fecundity_weighted_inverse_dispersal_exposure",
+      "biomass_weighted_inverse_dispersal_exposure"
+    ],
+    "feature_count": 19,
+    "feature_fingerprint": "2ff695069ce10e1154bed824b778100e8ed17f130dd20257a8f6c20ef900fd35",
+    "no_target_leakage": "all biomass/fecundity source aggregates use period t only; geometry/process features are frozen non-response inputs; target t+1 biomass is used only to define y"
+  },
+  "learner": {
+    "family": "sklearn.ensemble.RandomForestClassifier",
+    "n_estimators": 500,
+    "max_features": "sqrt",
+    "min_samples_leaf": 5,
+    "class_weight": null,
+    "random_state": 20260821,
+    "n_jobs": 1,
+    "hyperparameter_search": false,
+    "probability_calibration": null,
+    "paired_rule": "baseline and augmented use identical learner/fit policy; augmented only appends Layer B",
+    "fingerprint": "d05b57faf4c6a1f9a3d71b666a78a8af958fd072269f86b310d40549780632d1"
+  },
+  "count_gate": {
+    "min_cal_events": 10,
+    "min_cal_non_events": 40,
+    "min_held_events": 10,
+    "min_held_non_events": 40,
+    "min_heldout_outer_units_with_both_classes": 4,
+    "expected_heldout_outer_units": 5,
+    "all_transition_source_sets_nonempty": true,
+    "zero_model_fits_on_failure": true,
+    "zero_heldout_scores_on_failure": true,
+    "fingerprint": "d94e407e260b3b686ad0922708bf6f2ea04d1c4ce71686c08963ecb7af37029d"
+  },
+  "metric_decision": {
+    "primary_metric": "log_loss",
+    "lower_is_better": true,
+    "expected_outer_unit_count": 5,
+    "favorable_min_augmented_wins": 3,
+    "adverse_min_baseline_wins": 3,
+    "tie_tolerance": 0.0,
+    "fingerprint": "88a38feffb2932d83279957544ea557fe046e470d25ba034ca6fc96a60990e6c"
+  },
+  "complementarity_declaration": {
+    "metric_name": "log_loss",
+    "lower_is_better": true,
+    "expected_outer_unit_count": 5,
+    "favorable_min_augmented_wins": 3,
+    "adverse_min_baseline_wins": 3,
+    "learner_fit_fingerprint": "d05b57faf4c6a1f9a3d71b666a78a8af958fd072269f86b310d40549780632d1",
+    "response_endpoint_fingerprint": "d30353f3942fbba443ecce682b11666e13c91e3edf6da8951a2a68f1e82009a1",
+    "split_fingerprint": "59d90ed93c929c578a3dcade17776af67f5b02ad993a00cfdf30f34c64869d59",
+    "external_feature_fingerprint": "2ff695069ce10e1154bed824b778100e8ed17f130dd20257a8f6c20ef900fd35",
+    "eog_feature_fingerprint": "8e68cf9dea4f4d76280786e22bc46fc2fd07211d4711e2c9af49775e7efcadef",
+    "tie_tolerance": 0.0
+  },
+  "prospective_estimability": "uncertain_pre_response",
+  "non_estimable_stop": "count gate is the first outcome-dependent calculation; any failed minimum returns models_fit=0 and heldout_scores=0 with no redesign",
+  "response_access_state": {
+    "response_object_bytes_opened": false,
+    "response_rows_opened": false
+  }
+}
