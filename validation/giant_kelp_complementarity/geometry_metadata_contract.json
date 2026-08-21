@@ -1,0 +1,28 @@
+{
+  "status": "response_blind_geometry_metadata_gate_frozen",
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "preflight_result_fingerprint": "49c491b14a696c7df1e5f9ee15451b0551ab3668d8ce4d36716334431d29d6a6",
+  "geometry_package": {
+    "doi": "doi:10.6073/pasta/97ef540ba3fc62dff50779533bb39466",
+    "doi_md5_segment": "97ef540ba3fc62dff50779533bb39466",
+    "expected_title_terms": ["spatial", "definitions", "giant", "kelp", "patch"]
+  },
+  "forbidden_packages": [
+    "doi:10.6073/pasta/4c5a27154458ece5585384339eb0c2ee",
+    "doi:10.6073/pasta/d1107107e7c9ebc6476dfbe9e64eb6cb"
+  ],
+  "allowed_network_scope": "PASTA endpoints derived only from the frozen geometry DOI resource map",
+  "allowed_content": [
+    "geometry DOI resource map",
+    "geometry package EML metadata",
+    "geometry entity names",
+    "geometry entity checksums"
+  ],
+  "forbidden_content": [
+    "any geometry entity data bytes in this metadata stage",
+    "any biomass/fecundity response package metadata or data",
+    "any dispersal package data"
+  ],
+  "next_if_manifest_resolves": "freeze exact geometry package identifier and entity identities; select only coordinate-bearing geometry entities from EML metadata before downloading any entity bytes",
+  "stop_if_unresolved": "stop or diagnose geometry metadata transport without opening response/time-series data"
+}
