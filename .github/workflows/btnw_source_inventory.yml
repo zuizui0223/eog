@@ -64,6 +64,16 @@ jobs:
                       raise RuntimeError(f"metadata endpoint returned {ctype!r}: {url}")
                   return json.load(response)
 
+          def hal_numeric_id(row, kind):
+              href = row.get("_links", {}).get("self", {}).get("href", "")
+              if not href:
+                  raise RuntimeError(f"Dryad {kind} metadata lacks _links.self.href")
+              tail = href.rstrip("/").split("/")[-1]
+              try:
+                  return int(tail)
+              except ValueError as exc:
+                  raise RuntimeError(f"Dryad {kind} self link has non-numeric ID: {href}") from exc
+
           versions_payload = fetch_json(f"/api/v2/datasets/{encoded}/versions?per_page=100")
           versions = versions_payload.get("_embedded", {}).get("stash:versions", [])
           if not versions:
@@ -71,13 +81,12 @@ jobs:
 
           inventory = []
           for version in versions:
-              version_id = int(version["id"])
+              version_id = hal_numeric_id(version, "version")
               files_payload = fetch_json(f"/api/v2/versions/{version_id}/files?per_page=100")
               files = files_payload.get("_embedded", {}).get("stash:files", [])
               clean_files = []
               for row in files:
-                  self_href = row.get("_links", {}).get("self", {}).get("href", "")
-                  file_id = int(self_href.rstrip("/").split("/")[-1]) if self_href else None
+                  file_id = hal_numeric_id(row, "file")
                   clean_files.append(
                       {
                           "file_id": file_id,
@@ -96,7 +105,7 @@ jobs:
                       "publicationDate": version.get("publicationDate"),
                       "lastModificationDate": version.get("lastModificationDate"),
                       "versionChanges": version.get("versionChanges"),
-                      "files": sorted(clean_files, key=lambda x: (str(x["path"]), x["file_id"] or -1)),
+                      "files": sorted(clean_files, key=lambda x: (str(x["path"]), x["file_id"])),
                   }
               )
 
@@ -115,7 +124,7 @@ jobs:
 
           forbidden = [
               url for url in opened_urls
-              if "/download" in url or "/files/" in url and not "/versions/" in url
+              if "/download" in url or ("/files/" in url and "/versions/" not in url)
           ]
           if forbidden:
               raise RuntimeError(f"source inventory crossed into file download/content endpoints: {forbidden}")
