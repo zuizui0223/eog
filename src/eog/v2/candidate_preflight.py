@@ -1,8 +1,8 @@
 """Response-blind preflight for fresh empirical EOG validation candidates.
 
-This module is validation infrastructure, not an ecological operator.  It consolidates
+This module is validation infrastructure, not an ecological operator. It consolidates
 metadata-level checks that should happen before candidate-specific geometry workflows or
-row-level outcome access.  Candidate-specific sample-size minima remain explicit inputs;
+row-level outcome access. Candidate-specific sample-size minima remain explicit inputs;
 EOG does not embed universal ecological cutoffs here.
 """
 from __future__ import annotations
@@ -147,7 +147,7 @@ class CandidatePreflightEvidence:
     """Response-blind metadata evidence available before the geometry gate.
 
     ``None`` means genuinely unresolved from metadata and produces an incomplete result,
-    not an inferred pass.  File/member identities should be precise enough to audit later.
+    not an inferred pass. File/member identities should be precise enough to audit later.
     """
 
     source_identity: str
@@ -207,6 +207,22 @@ class CandidatePreflightEvidence:
         if not isinstance(self.note, str):
             raise TypeError("note must be str")
 
+        if (
+            self.geometry_response_separable is True
+            and self.geometry_source_identity is not None
+            and self.response_source_identity is not None
+            and self.geometry_source_identity == self.response_source_identity
+        ):
+            raise ValueError(
+                "geometry_response_separable=True contradicts identical geometry/response identities"
+            )
+        if (
+            self.node_count is not None
+            and self.repeated_node_count is not None
+            and self.repeated_node_count > self.node_count
+        ):
+            raise ValueError("repeated_node_count must not exceed node_count")
+
     @property
     def fingerprint(self) -> str:
         return _canonical_sha256(
@@ -255,9 +271,12 @@ def evaluate_candidate_preflight(
         missing.append("geometry_source_identity")
     if evidence.response_source_identity is None:
         missing.append("response_source_identity")
-    if evidence.geometry_response_separable is None:
+    if (
+        declaration.require_separate_geometry_and_response
+        and evidence.geometry_response_separable is None
+    ):
         missing.append("geometry_response_separable")
-    if evidence.coordinate_geometry_present is None:
+    if declaration.require_coordinate_geometry and evidence.coordinate_geometry_present is None:
         missing.append("coordinate_geometry_present")
     if evidence.node_count is None:
         missing.append("node_count")
@@ -301,10 +320,16 @@ def evaluate_candidate_preflight(
         reason = "known response-blind repeated-node count is below the prospectively declared minimum"
     elif missing:
         status = "incomplete_response_blind_metadata"
-        reason = "metadata is insufficient for a fail-closed candidate decision; do not open response to fill the gaps"
+        reason = (
+            "metadata is insufficient for a fail-closed candidate decision; "
+            "do not open response to fill the gaps"
+        )
     else:
         status = "ready_for_geometry_gate"
-        reason = "response-blind metadata passes the declared preflight; structural geometry still requires its own frozen gate"
+        reason = (
+            "response-blind metadata passes the declared preflight; "
+            "structural geometry still requires its own frozen gate"
+        )
 
     ready = status == "ready_for_geometry_gate"
     payload = {
