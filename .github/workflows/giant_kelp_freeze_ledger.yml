@@ -1,0 +1,145 @@
+name: Giant kelp outcome-access freeze ledger
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_freeze_ledger.yml"
+      - "validation/giant_kelp_complementarity/gate2_prediction_contract.json"
+      - "validation/giant_kelp_complementarity/response_object_contract.json"
+      - "validation/giant_kelp_complementarity/process_object_contract.json"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+      - "validation/giant_kelp_complementarity/patch_identity_contract.json"
+      - "validation/giant_kelp_complementarity/runtime_lock.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_freeze_ledger.yml"
+      - "validation/giant_kelp_complementarity/gate2_prediction_contract.json"
+      - "validation/giant_kelp_complementarity/response_object_contract.json"
+      - "validation/giant_kelp_complementarity/process_object_contract.json"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+      - "validation/giant_kelp_complementarity/patch_identity_contract.json"
+      - "validation/giant_kelp_complementarity/runtime_lock.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freeze-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build exact 16-key ledger from frozen contracts
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_freeze_ledger
+          python - <<'PY'
+          import hashlib, json, subprocess
+          from pathlib import Path
+
+          root=Path('validation/giant_kelp_complementarity')
+          pred=json.load(open(root/'gate2_prediction_contract.json'))
+          response=json.load(open(root/'response_object_contract.json'))
+          process=json.load(open(root/'process_object_contract.json'))
+          geometry=json.load(open(root/'southern_geometry_object_contract.json'))
+          identity=json.load(open(root/'patch_identity_contract.json'))
+          runtime=json.load(open(root/'runtime_lock.json'))
+
+          def fp(value):
+              return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode()).hexdigest()
+          def blob(path):
+              return subprocess.check_output(['git','hash-object',str(path)],text=True).strip()
+
+          runtime_blob=blob(root/'runtime_lock.json')
+          if runtime_blob!='1d40cd905d12aff9eb91a84bf64bd192a6b539ef':
+              raise RuntimeError(f'runtime lock blob drift: {runtime_blob}')
+          freeze={
+              'source_identity': fp({
+                  'geometry_pid': geometry['southern_geometry_entity']['data_pid'],
+                  'geometry_sha1': geometry['southern_geometry_entity']['checksum'],
+                  'process_pid': process['process_entity']['data_pid'],
+                  'process_sha1': process['process_entity']['checksum'],
+                  'patch_identity_contract': identity,
+                  'process_mapping_fingerprint': pred['upstream_fingerprints']['process_mapping'],
+              }),
+              'response_identity': fp({
+                  'pid': response['response_entity']['data_pid'],
+                  'size_bytes': response['response_entity']['size_bytes'],
+                  'checksum_algorithm': response['response_entity']['checksum_algorithm'],
+                  'checksum': response['response_entity']['checksum'],
+                  'system_metadata_sha256': response['response_entity']['system_metadata_sha256'],
+                  'response_sysmeta_result_fingerprint': response['response_sysmeta_result_fingerprint'],
+              }),
+              'node_geometry': fp({
+                  'canonical_centroid_fingerprint':'827b0aca7179bd8e68176b559e4c1133531096f61aa6cc3c856aed33163b81f8',
+                  'canonical_geometry_result_fingerprint':'fd66b1ed16892e30966d0709a0478020f04eb5a0d8de6f474a0ea5cb3c896f72',
+                  'patch_count':469,
+              }),
+              'response_semantics': pred['response_endpoint']['fingerprint'],
+              'temporal_split': pred['split']['fingerprint'],
+              'count_gate': pred['count_gate']['fingerprint'],
+              'process_source': fp(pred['source_process_closure']),
+              'world_scale': fp({
+                  'thresholds_km': pred['layer_a']['thresholds_km'],
+                  'full_kernel_scale_km': pred['layer_a']['full_kernel_scale_km'],
+                  'geometry_gate_result_fingerprint': pred['upstream_fingerprints']['geometry_gate'],
+              }),
+              'structural_adequacy': pred['upstream_fingerprints']['geometry_gate'],
+              'layer_a_rules': fp(pred['layer_a']),
+              'layer_b_representation': pred['layer_b']['fingerprint'],
+              'comparators': fp({
+                  'shared_external_features': pred['shared_external_features'],
+                  'learner': pred['learner'],
+              }),
+              'preprocessing_model_fit': fp({
+                  'learner': pred['learner'],
+                  'response_parser_semantics': response['parser_semantics'],
+                  'response_field_domain_freeze': response['field_domain_freeze'],
+                  'process_parser_semantics': process['parser_semantics'],
+                  'process_field_domain_freeze': process['field_domain_freeze'],
+                  'patch_identity_contract': identity,
+              }),
+              'metrics_decision': pred['metric_decision']['fingerprint'],
+              'runtime_runner': runtime_blob,
+              'non_estimable_stop': fp({
+                  'prospective_estimability': pred['prospective_estimability'],
+                  'non_estimable_stop': pred['non_estimable_stop'],
+                  'count_gate': pred['count_gate'],
+              }),
+          }
+          required=(
+              'source_identity','response_identity','node_geometry','response_semantics','temporal_split','count_gate','process_source','world_scale','structural_adequacy','layer_a_rules','layer_b_representation','comparators','preprocessing_model_fit','metrics_decision','runtime_runner','non_estimable_stop'
+          )
+          if tuple(freeze)!=required:
+              raise RuntimeError(f'freeze key order/coverage drift: {tuple(freeze)!r}')
+          if any(not str(freeze[key]).strip() for key in required):
+              raise RuntimeError('blank freeze fingerprint')
+          payload={
+              'attempt_id':'giant_kelp_paired_complementarity_v1',
+              'freeze_fingerprints':freeze,
+              'response_rows_opened':False,
+              'response_bytes_opened':False,
+              'exact_count_gate_first':True,
+              'zero_fit_on_count_failure':True,
+              'zero_heldout_scores_on_count_failure':True,
+              'no_post_open_redesign':True,
+              'runtime_lock_git_blob_sha':runtime_blob,
+              'prospective_estimability_status':'uncertain_pre_response',
+              'prospective_estimability_result_fingerprint':'c62639a406ee7c21cf59c508044ef901daae3e230b4ec545bb198c1e2bf2f4a9',
+              'note':'Complete response-blind freeze ledger. Authorization, if granted, permits only the once-only exact-count-first outcome runner; it does not itself authorize model fitting.',
+          }
+          payload['ledger_fingerprint']=fp(payload)
+          open('build/giant_kelp_freeze_ledger/outcome_access_freeze_ledger.json','w').write(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Upload freeze ledger
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-outcome-access-freeze-ledger
+          path: build/giant_kelp_freeze_ledger/outcome_access_freeze_ledger.json
+          if-no-files-found: error
