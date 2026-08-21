@@ -38,7 +38,7 @@ jobs:
           OUT=Path('build/giant_kelp_process_metadata')
           contract=json.loads((ROOT/'process_metadata_contract.json').read_text(encoding='utf-8'))
           doi=contract['process_doi']; doi_hash=doi.split('/')[-1]
-          UA='eog-giant-kelp-process-metadata/1.0'
+          UA='eog-giant-kelp-process-metadata/1.1'
           fetched=[]
 
           def fetch(url,accept):
@@ -51,7 +51,7 @@ jobs:
               fetched.append({'requested':url,'final':final,'status':status,'bytes':len(body),'content_type':ctype,'sha256':hashlib.sha256(body).hexdigest()})
               return body,final,ctype
 
-          landing,landing_final,_=fetch(doi,'text/html,*/*')
+          landing,landing_final,_=fetch('https://doi.org/'+doi,'text/html,*/*')
           landing_text=landing.decode('utf-8','replace')
           patterns=(
               r'packageid=([A-Za-z0-9_-]+\.\d+\.\d+)',
