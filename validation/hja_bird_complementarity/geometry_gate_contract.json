@@ -1,0 +1,45 @@
+{
+  "status": "response_blind_geometry_gate_freeze",
+  "candidate": "H.J. Andrews Forest long-term bird survey SA024",
+  "response_content_opened": false,
+  "geometry_source": {
+    "url": "https://andlter.forestry.oregonstate.edu/data/location_csv.aspx?dbcode=SA024",
+    "expected_node_count": 183,
+    "schema_policy": "Physical column names may be resolved only within this response-blind geometry stage against the prospectively declared finite semantic alias sets. No response content may inform the mapping.",
+    "id_aliases_normalized": [
+      "site", "siteid", "sitecode", "location", "locationid", "locationcode",
+      "loc", "locid", "loccode", "station", "stationid", "plot", "plotid",
+      "point", "pointid", "samplelocation"
+    ],
+    "latitude_aliases_normalized": ["lat", "latitude", "decimallatitude"],
+    "longitude_aliases_normalized": ["lon", "long", "longitude", "decimallongitude"],
+    "allow_additional_columns": true,
+    "transport_guard": "Download only the frozen SA024 study-location CSV. Do not open either SA024 DATA entity."
+  },
+  "distance_axis": {
+    "axis_id": "geo_haversine_km",
+    "metric": "great-circle Haversine distance",
+    "earth_radius_km": 6371.0088,
+    "coordinate_semantics": "decimal-degree latitude/longitude resolved from the finite alias sets above",
+    "interpretation": "response-blind analyst-choice spatial structure; thresholds are not biological dispersal limits"
+  },
+  "structural_scale_declaration": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "provenance": "Inherited unchanged from the established EOG response-blind scale bracket.",
+    "construction": "minimum observed Haversine pair distance reaching each target LCC fraction with tied distances admitted together"
+  },
+  "structural_adequacy": {
+    "forecast_horizon_steps": 1,
+    "requirements": [
+      "the 0.90 level achieves largest weak component fraction >= 0.90",
+      "the 0.90 level has isolated-node fraction <= 0.05",
+      "at least three distinct positive thresholds occur across the four scale levels",
+      "thresholds and edge sets are nested and deterministic",
+      "exactly 183 unique non-empty site identifiers are present",
+      "latitude/longitude values are finite and in geographic range"
+    ],
+    "stop_rule": "If any requirement fails, stop this candidate before reading SA024 response entities."
+  },
+  "no_retuning": "After geometry is opened, do not change the alias sets, LCC targets, isolated-node criterion, distance metric, expected node count or one-step horizon for this candidate. Geometry-stage schema resolution within the already-declared alias sets is allowed because it is response-blind; outcome-informed redesign is not.",
+  "next_if_pass": "Freeze geometry hash/schema mapping/thresholds/audits, then freeze focal taxon, strong baseline, endpoint and prospective estimability before any SA024 response DATA is opened."
+}
