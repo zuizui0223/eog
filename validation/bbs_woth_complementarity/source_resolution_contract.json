@@ -1,0 +1,67 @@
+{
+  "attempt_id": "bbs_woth_2000_2009_post_pr245_v1",
+  "candidate": "Wood Thrush (Hylocichla mustelina), eastern North American BBS, 2000-2009",
+  "fresh_selection_boundary": {
+    "selected_after_eog_main_commit": "835518f672f57782b8b82059da73c4f81fb864b0",
+    "selected_after_pr": 245,
+    "response_content_opened": false,
+    "selection_reason": "A public multi-season Wood Thrush case study prospectively fixes the focal species and 2000-2009 window; the raw BBS V2 release physically separates route geometry, route-year survey metadata, taxonomy, and avian count response."
+  },
+  "scientific_anchor": {
+    "repository": "doserjef/Switzerland24-Spatial-Workshop",
+    "commit": "d75e7bbba59f21ec7a7a33c4d194c3dda9d91b04",
+    "path": "code/09-wood-thrush-spatial-trend-occ.R",
+    "declared_species": "Wood Thrush",
+    "declared_years": [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009],
+    "declared_region": "eastern United States east of the 100th meridian",
+    "strong_baseline_anchor": "multi-season spatially varying occupancy model with spatial intercept/trend and detection covariates"
+  },
+  "upstream_release": {
+    "title": "North American Breeding Bird Survey Dataset 1966 - 2023",
+    "doi": "10.3886/E231303V2",
+    "usgs_doi": "10.5066/P136CRBV",
+    "datalumos_project_id": 231303,
+    "version": "V2",
+    "published": "2025-06-06"
+  },
+  "response_independent_files": {
+    "Routes.csv": {
+      "role": "route identity and route-start latitude/longitude geometry",
+      "published_size_upper_bound_bytes": 1000000
+    },
+    "Weather.csv": {
+      "role": "route-year survey execution, timing, weather, observer and run-quality metadata",
+      "published_size_upper_bound_bytes": 20000000
+    },
+    "SpeciesList.csv": {
+      "role": "taxonomic code registry used to freeze Wood Thrush response identity before response access",
+      "published_size_upper_bound_bytes": 1000000
+    }
+  },
+  "response_file": {
+    "name": "50-StopData.zip",
+    "role": "avian stop-level count response",
+    "published_size_bytes_approx": 69400000,
+    "downloaded": false,
+    "content_opened": false
+  },
+  "preflight_minima": {
+    "minimum_analysis_nodes": 100,
+    "minimum_primary_periods": 6,
+    "minimum_repeated_nodes": 75,
+    "require_separate_response_independent_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "provisional_response_blind_registry_rule": {
+    "country": "United States",
+    "route_start_longitude_minimum": -100.0,
+    "primary_periods": "calendar years 2000-2009",
+    "minimum_sampled_years_per_route": 6,
+    "note": "Exact physical field names and acceptable run-quality semantics must be resolved from response-independent release metadata before this rule becomes the closed analysis registry. No response values may be used to alter it."
+  },
+  "source_access_safety": {
+    "forbidden_before_authorization": ["50-StopData.zip", "MigrantNonBreeder.zip"],
+    "allowed_now": ["Routes.csv", "Weather.csv", "SpeciesList.csv", "their file-view metadata pages"],
+    "fail_closed_if_individual_response_independent_files_cannot_be_acquired_without_downloading_the_response_archive": true
+  }
+}
