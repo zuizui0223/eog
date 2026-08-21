@@ -1,0 +1,105 @@
+name: Giant kelp paired complementarity smoke
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_complementarity_smoke.yml"
+      - "benchmarks/run_giant_kelp_complementarity_once.py"
+      - "validation/giant_kelp_complementarity/gate2_prediction_contract.json"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+      - "validation/giant_kelp_complementarity/process_object_contract.json"
+      - "validation/giant_kelp_complementarity/response_object_contract.json"
+      - "validation/giant_kelp_complementarity/patch_identity_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_complementarity_smoke.yml"
+      - "benchmarks/run_giant_kelp_complementarity_once.py"
+      - "validation/giant_kelp_complementarity/gate2_prediction_contract.json"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+      - "validation/giant_kelp_complementarity/process_object_contract.json"
+      - "validation/giant_kelp_complementarity/response_object_contract.json"
+      - "validation/giant_kelp_complementarity/patch_identity_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Install frozen smoke runtime
+        run: |
+          set -euo pipefail
+          python -m pip install numpy==2.4.6 scipy==1.17.1 scikit-learn==1.9.0 joblib==1.5.3 threadpoolctl==3.6.0 narwhals==2.24.0
+          python -m pip install --no-deps .
+          python - <<'PY'
+          import sys, numpy, scipy, sklearn, joblib, threadpoolctl, narwhals
+          assert sys.version.startswith('3.11.15')
+          assert numpy.__version__=='2.4.6'
+          assert scipy.__version__=='1.17.1'
+          assert sklearn.__version__=='1.9.0'
+          assert joblib.__version__=='1.5.3'
+          assert threadpoolctl.__version__=='3.6.0'
+          assert narwhals.__version__=='2.24.0'
+          PY
+      - name: Run frozen response-free smoke
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_complementarity_smoke
+          python benchmarks/run_giant_kelp_complementarity_once.py \
+            --mode smoke \
+            --output build/giant_kelp_complementarity_smoke/smoke_result.json
+      - name: Assert smoke boundaries
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_complementarity_smoke/smoke_result.json'))
+          assert p['mode']=='smoke'
+          assert p['response_object_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          assert p['count_gate']['passed'] is True
+          assert p['status']=='completed_paired_complementarity'
+          assert p['models_fit']==2
+          assert p['heldout_scores']==10
+          assert len(p['heldout_transition_results'])==5
+          assert p['complementarity']['outer_unit_count']==5
+          PY
+      - name: Record runtime manifest
+        run: |
+          python - <<'PY'
+          import hashlib, json, platform, sys
+          import numpy, scipy, sklearn, joblib, threadpoolctl, narwhals
+          smoke=json.load(open('build/giant_kelp_complementarity_smoke/smoke_result.json'))
+          payload={
+              'python':sys.version.split()[0],
+              'implementation':platform.python_implementation(),
+              'numpy':numpy.__version__,
+              'scipy':scipy.__version__,
+              'scikit_learn':sklearn.__version__,
+              'joblib':joblib.__version__,
+              'threadpoolctl':threadpoolctl.__version__,
+              'narwhals':narwhals.__version__,
+              'smoke_result_fingerprint':smoke['result_fingerprint'],
+              'response_object_bytes_opened':smoke['response_object_bytes_opened'],
+              'response_rows_opened':smoke['response_rows_opened'],
+          }
+          payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          open('build/giant_kelp_complementarity_smoke/runtime_manifest.json','w').write(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Upload smoke evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-complementarity-smoke
+          path: |
+            build/giant_kelp_complementarity_smoke/smoke_result.json
+            build/giant_kelp_complementarity_smoke/runtime_manifest.json
+          if-no-files-found: error
