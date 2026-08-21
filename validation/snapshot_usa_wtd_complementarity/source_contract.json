@@ -1,0 +1,58 @@
+{
+  "attempt_id": "snapshot_usa_wtd_2019_2024_post_pr245_v1",
+  "candidate": "White-tailed deer (Odocoileus virginianus), Snapshot USA annual camera survey, 2019-2024",
+  "focal_species": {
+    "common_name": "White-tailed deer",
+    "scientific_name": "Odocoileus virginianus",
+    "selection_timing": "before any Snapshot USA sequence-response bytes are accessed",
+    "selection_reason": "preselected as a widespread native North American herbivore with strong conventional environmental/spatial predictors; selection does not use Snapshot USA detection counts"
+  },
+  "outer_units": [2019, 2020, 2021, 2022, 2023, 2024],
+  "sources": [
+    {
+      "label": "snapshot_usa_2019_2023",
+      "doi": "10.5061/dryad.k0p2ngfhn",
+      "deployment_file": "ssusa_finaldeployments.csv",
+      "response_file": "ssusa_finalsequences.csv",
+      "years": [2019, 2020, 2021, 2022, 2023]
+    },
+    {
+      "label": "snapshot_usa_2024",
+      "doi": "10.5061/dryad.bnzs7h4qf",
+      "deployment_file": "ssusa_2024_deployments.csv",
+      "response_file": "ssusa_2024_sequences.csv",
+      "years": [2024]
+    }
+  ],
+  "response_blind_node_rule": {
+    "stable_node_key_fields": ["State", "Camera_Trap_Array", "Site_Name"],
+    "node_coordinate_rule": "median Latitude and median Longitude across all response-independent deployment records for the stable node key",
+    "year_availability_rule": "a node is available in a year when at least one deployment record for that stable node key has Survey_Nights > 0 in that year",
+    "within_year_multiple_deployments": "aggregate availability; sum Survey_Nights only for audit/baseline effort and retain the stable node as one analysis node",
+    "repeated_node_definition": "unique stable node keys available in at least two distinct outer years",
+    "closed_registry_rule": "analysis registry is the union of stable node keys in the frozen deployment files after requiring finite WGS84 coordinates and valid outer-year membership; no sequence response is used to add, remove or merge nodes"
+  },
+  "generic_minima": {
+    "minimum_nodes": 100,
+    "minimum_outer_units": 6,
+    "minimum_repeated_nodes": 75,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "response_firewall": {
+    "allowed_now": [
+      "Dryad dataset/version/file metadata",
+      "ssusa_finaldeployments.csv",
+      "ssusa_2024_deployments.csv"
+    ],
+    "forbidden_now": [
+      "ssusa_finalsequences.csv",
+      "ssusa_2024_sequences.csv",
+      "any bulk Dryad dataset download"
+    ],
+    "response_bytes_opened": false,
+    "response_rows_opened": false
+  },
+  "next_if_preflight_passes": "freeze exact geometry audit and structural-scale contract, then freeze recorded-source semantics and run the generic response-blind temporal source/process closure gate before response-free predictive smoke"
+}
