@@ -4,6 +4,7 @@
   "metadata_pid": "https://pasta.lternet.edu/package/metadata/eml/knb-lter-sbc/102/2",
   "metadata_sha256": "2116198499a1a39b3aea9196186f5c202833fd869401d06036a1e7e013d9644f",
   "response_metadata_result_fingerprint": "748cb92aa525be66662ef917fbf49dc63519733890da79e2dabbe436817d5013",
+  "response_sysmeta_result_fingerprint": "f5d516f0c6d9bd0e7bdf78f98adc55ebaca8c48dd3007de10d0c752938b14555",
   "response_entity": {
     "entity_name": "Patch area, semi-annual delp biomass and fecundity, 1996-2006 southern California",
     "object_name": "castorani_etal_socal_mpyrifera_patch_biomass_fecundity_20160926.csv",
@@ -17,7 +18,12 @@
       "semester",
       "patch_biomass",
       "patch_fecundity"
-    ]
+    ],
+    "format_id": "text/csv",
+    "size_bytes": 453363,
+    "checksum_algorithm": "SHA-1",
+    "checksum": "0f7e95eb9007ade474d0743976ca515c31291493",
+    "system_metadata_sha256": "734776a8b477d282e864056d866008504ca55687115832b715bbc077af92365b"
   },
   "parser_semantics": {
     "patch_number": "exact non-empty string after outer-whitespace stripping only; no aliases, fuzzy matching or numeric coercion",
@@ -25,9 +31,26 @@
     "semester": "strict base-10 integer token; allowed values exactly 1 or 2, where 1=Jan-Jun and 2=Jul-Dec",
     "pixel_latitude": "finite decimal number in [-90,90]",
     "pixel_longitude": "finite decimal number in [-180,180]",
-    "patch_area": "finite non-negative decimal number unless EML declares an explicit missing-value code",
-    "patch_biomass": "finite non-negative decimal number unless EML declares an explicit missing-value code",
-    "patch_fecundity": "finite non-negative decimal number unless EML declares an explicit missing-value code"
+    "patch_area": "finite non-negative decimal number; EML declares no missing-value code",
+    "patch_biomass": "finite non-negative decimal number; EML declares no missing-value code",
+    "patch_fecundity": "finite non-negative decimal number; EML declares no missing-value code"
+  },
+  "field_domain_freeze": {
+    "all_required_fields_have_missing_value_codes": false,
+    "missing_value_codes": {
+      "patch_number": [],
+      "pixel_latitude": [],
+      "pixel_longitude": [],
+      "patch_area": [],
+      "year": [],
+      "semester": [],
+      "patch_biomass": [],
+      "patch_fecundity": []
+    },
+    "semester_enumeration": {
+      "1": "January - June",
+      "2": "July - December"
+    }
   },
   "period_order": [
     "1996-H1", "1996-H2", "1997-H1", "1997-H2", "1998-H1", "1998-H2",
@@ -51,6 +74,10 @@
     ]
   },
   "endpoint": "For each transition, among patches with recorded patch_biomass == 0 at source period t and a valid record at t+1, target y=1 iff recorded patch_biomass > 0 at t+1; otherwise y=0. This is recorded canopy reappearance/non-reappearance, not latent biological colonisation/absence.",
-  "observation_policy": "Rows with explicit metadata-declared missing values are unavailable and are not coerced to zero. Duplicate patch-period records or coordinate disagreement beyond frozen geometry identity fail closed.",
-  "next": "freeze DataONE system metadata/checksum/size and EML missing-value/domain declarations before row access"
+  "observation_policy": "Because EML declares no missing-value codes, every required token must parse under the frozen field rule. Blank/non-finite/unknown tokens fail closed and do not become zero. Duplicate patch-period records or coordinate disagreement beyond frozen geometry identity fail closed.",
+  "response_access_state": {
+    "response_object_bytes_opened": false,
+    "response_rows_opened": false
+  },
+  "next": "freeze process-source input, Layer A/B, same-learner paired comparator and exact count gate before response rows"
 }
