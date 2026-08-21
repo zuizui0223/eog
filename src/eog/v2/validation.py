@@ -1,10 +1,10 @@
 """Validation-facing public API for prospective EOG v2.
 
 The facade is lazy so genetic, empirical-occurrence, directional-evidence, response
-firewall, response-header schema, response-token schema, candidate preflight,
-prospective estimability, outcome-access authorization, predictive complementarity,
-and response-blind world-adequacy / scale-construction trees remain independent until
-accessed.
+firewall, response-header schema, response-token schema, candidate preflight, temporal
+source closure, prospective estimability, outcome-access authorization, predictive
+complementarity, and response-blind world-adequacy / scale-construction trees remain
+independent until accessed.
 """
 from __future__ import annotations
 
@@ -78,6 +78,14 @@ _CANDIDATE_PREFLIGHT_EXPORTS: Final[tuple[str, ...]] = (
     "evaluate_candidate_preflight",
 )
 
+_TEMPORAL_SOURCE_CLOSURE_EXPORTS: Final[tuple[str, ...]] = (
+    "TemporalSourceClosureStatus",
+    "TemporalSourceClosureDeclaration",
+    "TemporalSourceClosureTransition",
+    "TemporalSourceClosureResult",
+    "evaluate_temporal_source_closure",
+)
+
 _PROSPECTIVE_ESTIMABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "AggregateCountInterval",
     "AggregateEstimabilityEvidence",
@@ -142,6 +150,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.v2.response_schema" for name in _RESPONSE_SCHEMA_EXPORTS},
     **{name: "eog.v2.candidate_preflight" for name in _CANDIDATE_PREFLIGHT_EXPORTS},
     **{
+        name: "eog.v2.temporal_source_closure"
+        for name in _TEMPORAL_SOURCE_CLOSURE_EXPORTS
+    },
+    **{
         name: "eog.v2.prospective_estimability"
         for name in _PROSPECTIVE_ESTIMABILITY_EXPORTS
     },
@@ -163,6 +175,7 @@ __all__ = [
     *_RESPONSE_HEADER_SCHEMA_EXPORTS,
     *_RESPONSE_SCHEMA_EXPORTS,
     *_CANDIDATE_PREFLIGHT_EXPORTS,
+    *_TEMPORAL_SOURCE_CLOSURE_EXPORTS,
     *_PROSPECTIVE_ESTIMABILITY_EXPORTS,
     *_OUTCOME_ACCESS_EXPORTS,
     *_PREDICTIVE_COMPLEMENTARITY_EXPORTS,
