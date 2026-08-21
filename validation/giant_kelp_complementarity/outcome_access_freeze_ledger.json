@@ -1,0 +1,32 @@
+{
+  "attempt_id": "giant_kelp_paired_complementarity_v1",
+  "exact_count_gate_first": true,
+  "freeze_fingerprints": {
+    "comparators": "23c4cdfdf903c81bb7d5ccf1db70cce22770f49774767273db500b22ca3b2153",
+    "count_gate": "d94e407e260b3b686ad0922708bf6f2ea04d1c4ce71686c08963ecb7af37029d",
+    "layer_a_rules": "a5955ee936587966637845d720a7934b4c8511028679c3cb081abcc8a1704630",
+    "layer_b_representation": "8e68cf9dea4f4d76280786e22bc46fc2fd07211d4711e2c9af49775e7efcadef",
+    "metrics_decision": "88a38feffb2932d83279957544ea557fe046e470d25ba034ca6fc96a60990e6c",
+    "node_geometry": "a523322ec8d7a90b7e834dbd9c86f6308a38e57a8ac3fc5c68467a49acd0201e",
+    "non_estimable_stop": "fb4ce3bcdebe6d45f2504ec18d977e101f3073ab3eea2f7dca3695b4549f162c",
+    "preprocessing_model_fit": "7d7b197f102a4c471aeb0a73f72cdf27f3716de059610af423c409e292861823",
+    "process_source": "42a80733dbd880b945e4dd688a39380d74aece745e0a47f9e9369c7fcfbde1f4",
+    "response_identity": "336db56d4099534ea813a854dceb48a7788664fa266b4bfecfdcd18f9fb5acb2",
+    "response_semantics": "d30353f3942fbba443ecce682b11666e13c91e3edf6da8951a2a68f1e82009a1",
+    "runtime_runner": "1d40cd905d12aff9eb91a84bf64bd192a6b539ef",
+    "source_identity": "385b528f069d0f7a0c072844b45d32c415ed6af9d8968746a8d042969d364f5a",
+    "structural_adequacy": "29739c1e3d4a248219f453ddb0fd58abbd40ac15a248bb71e3dec0faa457cddb",
+    "temporal_split": "59d90ed93c929c578a3dcade17776af67f5b02ad993a00cfdf30f34c64869d59",
+    "world_scale": "d2800a05a458a6a0f234a7969e2a673e2a846bb2de54baac66b9d81c96ce93f2"
+  },
+  "ledger_fingerprint": "d1cc416f4c26918765a2e97bfbfe3406c88dc5b7b6f850f095a09d7c712c7b2c",
+  "no_post_open_redesign": true,
+  "note": "Complete response-blind freeze ledger. Authorization, if granted, permits only the once-only exact-count-first outcome runner; it does not itself authorize model fitting.",
+  "prospective_estimability_result_fingerprint": "c62639a406ee7c21cf59c508044ef901daae3e230b4ec545bb198c1e2bf2f4a9",
+  "prospective_estimability_status": "uncertain_pre_response",
+  "response_bytes_opened": false,
+  "response_rows_opened": false,
+  "runtime_lock_git_blob_sha": "1d40cd905d12aff9eb91a84bf64bd192a6b539ef",
+  "zero_fit_on_count_failure": true,
+  "zero_heldout_scores_on_count_failure": true
+}
