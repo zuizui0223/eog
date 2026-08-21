@@ -1,0 +1,115 @@
+name: BBS Wood Thrush ScienceBase metadata probe
+
+on:
+  push:
+    branches:
+      - agent/bbs-woth-preflight
+    paths:
+      - ".github/workflows/bbs_woth_sciencebase_probe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Read bounded ScienceBase metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/bbs_woth_sciencebase_probe
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import re
+          import urllib.parse
+          import urllib.request
+
+          ROOT_ID = "5d00efafe4b0573a18f5e03a"
+          UA = "EOG-BBS-WOTH-ScienceBase-metadata-probe/1.0"
+          requested = []
+
+          def get_json(url):
+              requested.append(url)
+              req = urllib.request.Request(url, headers={"User-Agent": UA})
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  payload = r.read(8_000_001)
+              if len(payload) > 8_000_000:
+                  raise RuntimeError("metadata response exceeded bounded cap")
+              return json.loads(payload.decode("utf-8"))
+
+          def children(item_id):
+              url = "https://www.sciencebase.gov/catalog/items?" + urllib.parse.urlencode({
+                  "parentId": item_id,
+                  "format": "json",
+                  "max": 1000,
+              })
+              data = get_json(url)
+              return data.get("items", [])
+
+          def summary(item):
+              files = []
+              for f in item.get("files", []) or []:
+                  if isinstance(f, dict):
+                      files.append(str(f.get("name") or f.get("title") or ""))
+              for link in item.get("distributionLinks", []) or []:
+                  if isinstance(link, dict):
+                      files.append(str(link.get("name") or link.get("title") or ""))
+              return {
+                  "id": item.get("id"),
+                  "title": item.get("title"),
+                  "files_or_distribution_names": sorted(set(x for x in files if x)),
+              }
+
+          root = get_json(f"https://www.sciencebase.gov/catalog/item/{ROOT_ID}?format=json")
+          level1 = children(ROOT_ID)
+          level2 = []
+          year_hits = []
+          for item in level1:
+              s = summary(item)
+              if re.search(r"(?<!\\d)2009(?!\\d)", str(s["title"])):
+                  year_hits.append({"level": 1, **s})
+              iid = item.get("id")
+              if iid:
+                  try:
+                      kids = children(str(iid))
+                  except Exception as exc:
+                      level2.append({"parent": iid, "error": repr(exc)})
+                      continue
+                  for child in kids:
+                      cs = summary(child)
+                      if re.search(r"(?<!\\d)2009(?!\\d)", str(cs["title"])):
+                          full = get_json(f"https://www.sciencebase.gov/catalog/item/{cs['id']}?format=json") if cs["id"] else child
+                          year_hits.append({"level": 2, "parent": iid, **summary(full)})
+
+          result = {
+              "root": summary(root),
+              "level1_count": len(level1),
+              "level1": [summary(x) for x in level1],
+              "ending_2009_hits": year_hits,
+              "metadata_request_count": len(requested),
+              "metadata_urls": requested,
+              "response_file_downloads": 0,
+              "response_content_opened": False,
+          }
+          out = Path("build/bbs_woth_sciencebase_probe/probe.json")
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps({
+              "root": result["root"],
+              "level1_count": result["level1_count"],
+              "ending_2009_hits": result["ending_2009_hits"],
+              "response_file_downloads": 0,
+              "response_content_opened": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bbs-woth-sciencebase-metadata-probe
+          path: build/bbs_woth_sciencebase_probe/probe.json
+          if-no-files-found: error
