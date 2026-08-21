@@ -1,0 +1,59 @@
+{
+  "attempt_id": "maine_marten_2017_2020_post_pr245_v1",
+  "candidate": "American marten (Martes americana), Maine camera-trap multiseason occupancy, 2017-2020",
+  "fresh_selection_boundary": {
+    "selected_after_eog_main_commit": "835518f672f57782b8b82059da73c4f81fb864b0",
+    "selected_after_pr": 245,
+    "response_content_opened": false,
+    "selection_rule": "Use the first focal species named in the paper title (American marten), not the species with the more favorable published result.",
+    "species": "American marten",
+    "scientific_name": "Martes americana"
+  },
+  "scientific_anchor": {
+    "title": "Effects of forest disturbance, snow depth, and intraguild dynamics on American marten and fisher occupancy in Maine, USA",
+    "doi": "10.1002/ecs2.4027",
+    "authors": ["Bryn E. Evans", "Alessio Mortelliti"],
+    "published": "2022-04-03",
+    "published_design": {
+      "camera_stations": 197,
+      "seasons": 7,
+      "study_years": "2017-2020",
+      "station_seasons": 632,
+      "minimum_deployment_days": 15
+    },
+    "strong_baseline_anchor": "published single-species multiseason occupancy with seasonal detection and habitat/disturbance/snow covariates"
+  },
+  "figshare_project": {
+    "project_id": 121533,
+    "title": "Marten and fisher occupancy in Maine, USA",
+    "metadata_api": "https://api.figshare.com/v2/projects/121533/articles"
+  },
+  "source_requirements": {
+    "minimum_analysis_nodes": 100,
+    "minimum_primary_periods": 6,
+    "minimum_repeated_nodes": 75,
+    "require_closed_analysis_registry": true,
+    "require_response_independent_coordinate_geometry": true,
+    "require_response_independent_temporal_availability_or_effort": true,
+    "require_species_response_independently_addressable": true,
+    "require_strong_process_aware_baseline": true
+  },
+  "metadata_only_phase": {
+    "allowed": [
+      "Figshare project metadata",
+      "Figshare article metadata",
+      "Figshare file names, sizes, ids and download URLs"
+    ],
+    "forbidden": [
+      "any Figshare file download",
+      "any marten detection-history bytes",
+      "any row-level species outcome"
+    ],
+    "file_payload_bytes_allowed": 0
+  },
+  "decision_rule": {
+    "pass_to_source_freeze": "metadata exposes independently addressable geometry/site registry, temporal deployment/effort, and American marten response resources",
+    "stop": "required roles are absent, ambiguous, or only co-packaged in an inseparable mixed file/archive",
+    "no_rescue": "Do not open a mixed data file to discover whether it contains separable response-independent columns and then relabel that access response-blind."
+  }
+}
