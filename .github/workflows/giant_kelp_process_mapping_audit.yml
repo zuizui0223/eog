@@ -7,12 +7,18 @@ on:
     paths:
       - ".github/workflows/giant_kelp_process_mapping_audit.yml"
       - "validation/giant_kelp_complementarity/process_object_contract.json"
+      - "validation/giant_kelp_complementarity/patch_identity_contract.json"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
       - "benchmarks/audit_giant_kelp_process_mapping.py"
+      - "benchmarks/audit_giant_kelp_process_mapping_v2.py"
   pull_request:
     paths:
       - ".github/workflows/giant_kelp_process_mapping_audit.yml"
       - "validation/giant_kelp_complementarity/process_object_contract.json"
+      - "validation/giant_kelp_complementarity/patch_identity_contract.json"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
       - "benchmarks/audit_giant_kelp_process_mapping.py"
+      - "benchmarks/audit_giant_kelp_process_mapping_v2.py"
   workflow_dispatch:
 
 permissions:
@@ -30,7 +36,7 @@ jobs:
       - name: Retrieve frozen non-response process and geometry objects only
         run: |
           set -euo pipefail
-          python benchmarks/audit_giant_kelp_process_mapping.py
+          PYTHONPATH=benchmarks python benchmarks/audit_giant_kelp_process_mapping_v2.py
       - name: Assert response firewall
         if: always()
         run: |
