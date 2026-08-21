@@ -129,3 +129,11 @@ def test_fingerprints_are_deterministic():
     assert declaration_a.fingerprint == declaration_b.fingerprint
     assert evidence_a.fingerprint == evidence_b.fingerprint
     assert result_a.fingerprint == result_b.fingerprint
+
+
+def test_validation_facade_exposes_header_gate_lazily():
+    from eog.v2 import validation
+
+    assert validation.ResponseHeaderSchemaDeclaration is ResponseHeaderSchemaDeclaration
+    assert validation.ResponseHeaderSchemaEvidence is ResponseHeaderSchemaEvidence
+    assert validation.evaluate_response_header_schema is evaluate_response_header_schema
