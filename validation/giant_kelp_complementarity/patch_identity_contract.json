@@ -1,0 +1,16 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "nonresponse_diagnostic_fingerprint": "6146581f95998e472334f9992c09a364f4343e681986663189698876aa1b231f",
+  "expected_patch_count": 469,
+  "canonical_node_id": "base-10 positive integer rendered without sign or leading zeros",
+  "geometry_raw_pattern": "^socal_([1-9][0-9]*)$",
+  "process_raw_pattern": "^([1-9][0-9]*)$",
+  "future_response_allowed_patterns": [
+    "^socal_([1-9][0-9]*)$",
+    "^([1-9][0-9]*)$"
+  ],
+  "canonicalization_rule": "Strip outer whitespace only, require exactly one frozen regex match, capture the positive integer group, convert that group to canonical base-10 digits, and reject any token that matches neither pattern or would collide with another raw ID in the same source.",
+  "scientific_boundary": "This is a response-blind one-to-one label normalization between frozen geometry and frozen process sources. It may relabel nodes but may not add, remove, merge or split patches. Geometry thresholds and topology remain unchanged under a bijective relabeling.",
+  "response_boundary": "The two accepted response representations are frozen before response access from the two already observed non-response representations. No third form or post-open alias may be added.",
+  "pass_rule": "Geometry canonical IDs and process source/destination union canonical IDs must each contain exactly 469 unique nodes and be identical sets. Source and destination canonical sets must each be subsets of geometry."
+}
