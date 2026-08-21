@@ -12,7 +12,13 @@
       "patch_number",
       "pixel_latitude",
       "pixel_longitude"
-    ]
+    ],
+    "format_id": "text/csv",
+    "size_bytes": 7530268,
+    "checksum_algorithm": "SHA-1",
+    "checksum": "54d99ca548aff19520a11f689a33296c901ae541",
+    "system_metadata_sha256": "e0c9bf8f2e1ace820857bfb7be0d45e5c895977778279b2a85eaddd966d49824",
+    "system_metadata_result_fingerprint": "d6c7e367fc5dac7b269894bc74c63387137181b00d7fe896839e5c7418d492bc"
   },
   "excluded_entity": {
     "entity_name": "Kelp patch definitions, central California",
@@ -29,6 +35,6 @@
     "distance": "haversine_km_between_frozen_patch_centroids",
     "nested_required": true
   },
-  "system_metadata_only_next": "retrieve DataONE system metadata/checksum/size for this exact data PID; if identity is public and stable, then retrieve this geometry object only and run the frozen structural gate",
+  "geometry_data_next": "retrieve exactly this DataONE object, verify frozen size/checksum/schema/469 patch IDs, derive response-independent centroids, and run the frozen structural gate",
   "response_boundary": "Do not access the semi-annual biomass/fecundity response package or any response rows in this geometry stage."
 }
