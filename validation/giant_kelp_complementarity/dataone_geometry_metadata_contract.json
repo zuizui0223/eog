@@ -1,0 +1,34 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "lineage": {
+    "package_series": "knb-lter-sbc.101",
+    "revision_1_metadata_pid": "https://pasta.lternet.edu/package/metadata/eml/knb-lter-sbc/101/1",
+    "revision_1_resource_map_doi": "doi:10.6073/pasta/e4263e51ed0edcf562835eb0a3b204c4",
+    "revision_1_obsoleted_by": "https://pasta.lternet.edu/package/metadata/eml/knb-lter-sbc/101/2",
+    "revision_2_metadata_pid": "https://pasta.lternet.edu/package/metadata/eml/knb-lter-sbc/101/2",
+    "revision_2_doi": "10.6073/pasta/97ef540ba3fc62dff50779533bb39466",
+    "evidence_note": "DataONE index explicitly links revision 1 to revision 2 via obsoletedBy; DOI.org resolves revision_2_doi to packageid knb-lter-sbc.101.2."
+  },
+  "metadata_read_policy": "Retrieve only the revision-2 EML science-metadata object from the public DataONE Coordinating Node and query DataONE Solr/system-level metadata. Do not retrieve any data entity object in this gate.",
+  "required_title_terms": [
+    "spatial definitions",
+    "giant kelp",
+    "southern",
+    "central California"
+  ],
+  "geometry_attribute_terms": [
+    "latitude",
+    "longitude",
+    "utm",
+    "easting",
+    "northing",
+    "coordinate",
+    "x",
+    "y",
+    "polygon",
+    "centroid",
+    "patch"
+  ],
+  "next_if_entities_resolve": "freeze exact response-independent geometry data entity PID(s), object name(s), checksum(s), size(s), and a deterministic centroid/coordinate rule before retrieving only those data entities",
+  "stop_if_metadata_inadequate": "do not retrieve data entities or response; preserve geometry-metadata inadequacy"
+}
