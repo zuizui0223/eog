@@ -1,0 +1,43 @@
+{
+  "candidate": "France wolf recolonization dynamic occupancy 1994-2017",
+  "selection_state": "selected_after_btnw_response_blind_stop_240",
+  "source": {
+    "repository": "oliviergimenez/occupancy-workshop",
+    "commit": "eff79d38461adf00276e9bec4bc047620d56144b",
+    "scientific_article": "Louvrier et al. Mapping and explaining wolf recolonization in France using dynamic occupancy models and opportunistic data, Ecography",
+    "response_blind_metadata_basis": "public workshop tutorial plus pinned GitHub directory metadata; no wolf_louvrier.rds bytes opened"
+  },
+  "declaration": {
+    "attempt_id": "france_wolf_post240_v1",
+    "minimum_nodes": 100,
+    "minimum_outer_units": 6,
+    "minimum_repeated_nodes": 75,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "threshold_provenance": "Inherited unchanged from preceding fresh-candidate preflights; not adapted to the wolf system."
+  },
+  "response_blind_evidence": {
+    "source_identity": "oliviergimenez/occupancy-workshop@eff79d38461adf00276e9bec4bc047620d56144b",
+    "geometry_source_identity": "tutorials/data/coordcells_wolf.rds :: git blob cce6505b06cd8dd289ea0526cddee6e58b8fbb78 :: 14317 bytes; tutorial declares coordinates for the 3450 10x10-km grid cells",
+    "response_source_identity": "tutorials/data/wolf_louvrier.rds :: git blob 2ad95514261f7de62c0b370ce25e5ac70470a4fe :: 43056 bytes; tutorial declares a 3450 x 92 detection/non-detection matrix = 23 years x 4 visits",
+    "geometry_response_separable": true,
+    "coordinate_geometry_present": true,
+    "node_count": 3450,
+    "outer_unit_count": 23,
+    "repeated_node_count": 3450,
+    "layout_design": "regular_grid",
+    "response_rows_opened": false,
+    "response_bytes_opened": false,
+    "note": "Sites are 100-km^2 grid cells over France. Tutorial reports 3450 sites and 23 annual primary periods (1994-2017) with four winter-month secondary occasions. This preflight does not treat a recorded nondetection as latent absence or a later detection as proven biological colonization."
+  },
+  "response_independent_or_process_predictor_metadata": [
+    "tutorials/data/envcov_louvrier.rds :: static environmental covariates including forest, agriculture, altitude, barrier distance and road density",
+    "tutorials/data/effort_louvrier.rds :: yearly survey effort",
+    "tutorials/data/shortd_spatialautocorr.rds :: published short-distance occupied-neighbour covariate",
+    "tutorials/data/longd_spatialautocorr.rds :: published long-distance occupied-neighbour covariate"
+  ],
+  "strong_baseline_boundary": "If later gates pass, the strong baseline must preserve the published process-aware advantage rather than compare EOG to a weak local-only model. Any occupied-neighbour feature must be temporally audited for heldout leakage before being admitted.",
+  "prospective_endpoint_boundary": "Use a separately frozen recorded detection-state or detection-history predictive endpoint with observation semantics explicit. Do not relabel recorded nondetection-to-detection as true colonization without detection-model justification.",
+  "next_if_ready": "Freeze exact geometry and predictor file identities at the pinned upstream commit, open only coordcells_wolf.rds, verify its object/schema identity, and run the response-blind structural-scale/adequacy gate before touching wolf_louvrier.rds.",
+  "stop_if_not_ready": "Close the candidate unmerged and preserve the response-blind STOP reason."
+}
