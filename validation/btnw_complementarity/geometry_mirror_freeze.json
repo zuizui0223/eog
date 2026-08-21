@@ -1,0 +1,33 @@
+{
+  "status": "response_blind_geometry_mirror_freeze",
+  "candidate": "Calling Lake Black-throated Green Warbler dynamic occupancy 1993-2018",
+  "reason": "Dryad individual-file transports returned HTTP 401/403 in GitHub Actions before any geometry bytes were received. The Dryad README links the public analysis repository, whose directory metadata exposes a separate Data/thinnedpoints.csv geometry file.",
+  "upstream_repository": "harttaylor/BTNW_DynamicOccupancy",
+  "upstream_commit": "53112e6d4ead5cf3f20137ae8f94646c0d05bd4f",
+  "upstream_path": "Data/thinnedpoints.csv",
+  "upstream_git_blob_sha1": "b6205189225002a21fbc2cdb93adee18b7d04c85",
+  "upstream_metadata_size_bytes": 5666,
+  "dryad_reference": {
+    "version_id": 405459,
+    "file_id": 4441889,
+    "path": "thinnedpoints.csv",
+    "size_bytes": 5781,
+    "sha256": "17ffb4ddc38c5e8a5174c9ddf52267058187adfcbf1311731acb917308a73233"
+  },
+  "prospective_equivalence_rule": {
+    "raw_mirror_requirements": [
+      "raw byte length must equal 5666",
+      "raw bytes must contain no CR byte",
+      "raw bytes must decode as UTF-8",
+      "raw header must equal SS,longitude,latitude"
+    ],
+    "canonical_transport_check": "replace every LF byte (0x0A) in the pinned GitHub raw file with CRLF bytes (0x0D 0x0A), without any other transformation",
+    "required_result_size_bytes": 5781,
+    "required_result_sha256": "17ffb4ddc38c5e8a5174c9ddf52267058187adfcbf1311731acb917308a73233",
+    "interpretation_if_pass": "the pinned GitHub geometry mirror is byte-identical to the frozen Dryad geometry after the prospectively declared LF-to-CRLF transport normalization only",
+    "stop_if_fail": "stop the candidate; do not invent another normalization or repair the geometry after content access"
+  },
+  "response_content_opened": false,
+  "geometry_mirror_content_opened": false,
+  "next": "Open only the pinned raw GitHub geometry file, apply the frozen equivalence rule, and continue the already-frozen geometry gate only if it exactly reproduces the Dryad size/SHA-256."
+}
