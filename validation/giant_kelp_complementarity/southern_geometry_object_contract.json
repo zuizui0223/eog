@@ -1,0 +1,34 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "geometry_lineage": "knb-lter-sbc.101 revision 2",
+  "metadata_pid": "https://pasta.lternet.edu/package/metadata/eml/knb-lter-sbc/101/2",
+  "metadata_sha256": "f05920663d5c946e2ecfb0739a02242550c6c98c9beda18b15bc5ab872cb306f",
+  "southern_geometry_entity": {
+    "entity_name": "Kelp patch definitions, southern California",
+    "object_name": "cavanaugh_etal_mpyrifera_patch_defs_southernCA_20160926.csv",
+    "data_pid": "https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/101/2/0d416cc00ad948c6befb2a97e9db6414",
+    "entity_id_suffix": "0d416cc00ad948c6befb2a97e9db6414",
+    "required_columns": [
+      "patch_number",
+      "pixel_latitude",
+      "pixel_longitude"
+    ]
+  },
+  "excluded_entity": {
+    "entity_name": "Kelp patch definitions, central California",
+    "entity_id_suffix": "63b296fafc28d2fe2e1ba068fe3cd8e8"
+  },
+  "patch_coordinate_rule": "Group all rows by exact patch_number. Require finite latitude/longitude for every row and no other analysis columns. For each patch, define latitude as the arithmetic mean of all pixel_latitude values and longitude as the arithmetic mean of all pixel_longitude values. This response-independent Landsat-pixel centroid rule is frozen before geometry bytes are opened.",
+  "node_identity_rule": "Node ID is the exact patch_number string after outer-whitespace stripping only; no aliases, numeric coercion, fuzzy matching, or response-derived filtering.",
+  "expected_unique_patch_count": 469,
+  "structural_gate": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "minimum_lcc_at_0_9_world": 0.9,
+    "maximum_isolated_fraction_at_0_9_world": 0.05,
+    "distance": "haversine_km_between_frozen_patch_centroids",
+    "nested_required": true
+  },
+  "system_metadata_only_next": "retrieve DataONE system metadata/checksum/size for this exact data PID; if identity is public and stable, then retrieve this geometry object only and run the frozen structural gate",
+  "response_boundary": "Do not access the semi-annual biomass/fecundity response package or any response rows in this geometry stage."
+}
