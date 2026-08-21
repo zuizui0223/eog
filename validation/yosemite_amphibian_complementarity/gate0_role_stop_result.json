@@ -1,0 +1,33 @@
+{
+  "status": "gate0_stop_no_response_independent_spatial_geometry",
+  "candidate": "USGS Yosemite amphibian multi-state occurrence 2007-2021",
+  "manifest_fingerprint": "b81e739418f8b2480b6b3fa2714be72ea873031001cd755cbdcdf999851f8fcd",
+  "metadata_role_run_id": 32433477357,
+  "metadata_role_fingerprint": "cd91fc41ab8ee3bc81194b95ea6a92ded282090798054d6cfa97b70a479af289",
+  "metadata_manifest_md5": "f2dbefdb2e816c385e507a667acba213",
+  "metadata_download_md5": "f08e733ea2712eb10ece28fd3807ab72",
+  "metadata_download_sha256": "ba2caaafa0e74469d40bbe52e108a06c8f6fa9cb3096590a5dc05dc45eb26d90",
+  "metadata_content_type": "application/fgdc+xml",
+  "csv_file_bytes_downloaded": false,
+  "csv_rows_opened": false,
+  "site_table": {
+    "name": "yose_site_data.csv",
+    "manifest_md5": "7c644e651088f15a72070c89e11c5803",
+    "metadata_attributes": ["site", "watershed", "elev", "z_elev", "z_elev_2", "area", "l_area", "z_area", "grp_pf", "grp_p"],
+    "response_independent_role": "fixed site identifier and static site predictors",
+    "focal_amphibian_response_columns_present": false,
+    "latitude_longitude_or_projected_coordinate_fields_present": false
+  },
+  "temporal_tables": {
+    "yose_site_year_data.csv": ["site", "year", "dssm", "apr_swe", "sep_spei03", "sep_min_pdsi"],
+    "yose_site_year_survey_data.csv": ["site", "year", "year_no", "survey", "air_temp", "observer", "pssi_obs_state", "rasi_obs_state", "anca_obs_state"]
+  },
+  "interpretation": "The role separation itself is clean: focal amphibian observed states are confined to the site-year-survey table. However the response-independent site table exposes no spatial coordinates. Watershed identity, elevation, area and site type are not substituted for geographic node geometry. The metadata phrase 'presence of fish' belongs to static site type grp_pf and is not treated as focal amphibian response contamination.",
+  "no_rescue": [
+    "do not open occurrence/survey rows to recover coordinates",
+    "do not geocode or infer site locations from response-bearing material",
+    "do not substitute watershed labels or elevation for geographic distance",
+    "do not weaken the requirement for response-independent spatial geometry"
+  ],
+  "repository_disposition": "close candidate unmerged and continue to a fresh system with an explicitly separated coordinate registry"
+}
