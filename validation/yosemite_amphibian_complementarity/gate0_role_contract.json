@@ -1,0 +1,32 @@
+{
+  "status": "response_blind_metadata_role_audit_frozen",
+  "candidate": "USGS Yosemite amphibian multi-state occurrence 2007-2021",
+  "sciencebase_item_id": "639a2d8dd34e0de3a1f0de4b",
+  "manifest_fingerprint": "b81e739418f8b2480b6b3fa2714be72ea873031001cd755cbdcdf999851f8fcd",
+  "metadata_xml": {
+    "name": "Multi-state occurrence data and predictors for amphibians in Yosemite National Park (2007-2021).xml",
+    "md5": "f2dbefdb2e816c385e507a667acba213",
+    "download_uri": "https://www.sciencebase.gov/catalog/file/get/639a2d8dd34e0de3a1f0de4b?f=__disk__03%2F67%2F02%2F036702d265534bd266f3602a6d69a0c7c32920fd"
+  },
+  "candidate_nonresponse_file": {
+    "name": "yose_site_data.csv",
+    "md5": "7c644e651088f15a72070c89e11c5803",
+    "data_bytes_may_be_opened_in_this_gate": false
+  },
+  "other_csv_files": [
+    {
+      "name": "yose_site_year_data.csv",
+      "md5": "9d761b85c369d7edf131ab9084706750",
+      "data_bytes_may_be_opened_in_this_gate": false
+    },
+    {
+      "name": "yose_site_year_survey_data.csv",
+      "md5": "ad55fae00e8517581fbd4a4fd4258055",
+      "data_bytes_may_be_opened_in_this_gate": false
+    }
+  ],
+  "audit_scope": "metadata XML only; extract FGDC entity/attribute labels and definitions without opening any CSV",
+  "separation_requirement": "proceed only if metadata supports yose_site_data.csv as a complete response-independent site registry/geometry or site-predictor table and places species occurrence/observation state in physically distinct site-year or survey tables",
+  "next_if_supported": "freeze exact yose_site_data.csv identity and selectively open only that file for site-registry and structural geometry Gate 1",
+  "stop_if_unsupported": "close unmerged without opening any CSV row"
+}
