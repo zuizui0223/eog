@@ -1,0 +1,20 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "process_doi": "10.6073/pasta/d1107107e7c9ebc6476dfbe9e64eb6cb",
+  "expected_title_terms": [
+    "spore dispersal times",
+    "giant kelp",
+    "southern California",
+    "1996"
+  ],
+  "role_terms": {
+    "source_patch": ["source", "origin", "from", "patch"],
+    "target_patch": ["target", "destination", "to", "patch"],
+    "time": ["year", "semester", "season", "date", "time"],
+    "dispersal": ["dispersal", "travel", "transit", "connectivity", "spore"]
+  },
+  "metadata_only_policy": "Resolve DOI via doi.org and DataONE CN metadata/index only. Do not retrieve process data entity bytes in this gate. This package is non-response process input but still frozen before use.",
+  "process_boundary": "Spore dispersal information may be used as a pre-response process/connectivity predictor and process-support world only if the metadata/data object maps deterministically to the same 469 southern patch IDs. It is not an outcome and must not be tuned using canopy reappearance rows.",
+  "next_if_schema_resolves": "freeze exact process data object identity, checksum, schema, period mapping and deterministic process-feature construction before retrieving process rows",
+  "stop_if_schema_ambiguous": "do not open process data merely to infer ambiguous roles; keep only geometric structural worlds if the process package cannot be frozen"
+}
