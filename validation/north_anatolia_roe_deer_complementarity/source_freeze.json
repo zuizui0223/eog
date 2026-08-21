@@ -1,0 +1,38 @@
+{
+  "status": "response_blind_exact_source_freeze",
+  "candidate": "Northwestern Anatolia roe deer seasonal dynamic occupancy 2008-2018",
+  "upstream_repository": "dilsaddt/NorthAnatolia_2022_singlesp_seasonal_habitat_use",
+  "upstream_commit": "da083d62a584b43fb9d2a6ec613397ef92067ead",
+  "geometry": {
+    "stations_path": "data/stations.csv",
+    "stations_git_blob_sha1": "3629c345242050035229947c7ba2006a1dc283ed",
+    "stations_size_bytes": 2321,
+    "variables_path": "data/variable_data.csv",
+    "variables_git_blob_sha1": "9aa128ea957b37f341a3d4a46b9c48e6828efb13",
+    "variables_size_bytes": 24103,
+    "author_rule_path": "cc_112022_data_prep.R",
+    "author_rule_git_blob_sha1": "85e312f62a185b8e0cc673158f018117b96e3d37",
+    "content_role": "response-independent station registry and UTM coordinate/environment table"
+  },
+  "response": {
+    "path": "data/cc_dh_112022.csv",
+    "git_blob_sha1": "dafa4af1dbd82a58592b75923a4198cdef7b3cd9",
+    "size_bytes": 55405,
+    "content_opened": false
+  },
+  "response_independent_predictors": {
+    "camtrap_effort_Ndays.csv": {
+      "git_blob_sha1": "5eaab0988e670203aa75f9451ce55a84b625b5f1",
+      "size_bytes": 56321,
+      "content_opened": false
+    },
+    "variable_data.csv": {
+      "git_blob_sha1": "9aa128ea957b37f341a3d4a46b9c48e6828efb13",
+      "size_bytes": 24103,
+      "content_opened": true,
+      "reason": "response-blind geometry/predictor source inspected during candidate selection"
+    }
+  },
+  "response_content_opened": false,
+  "next": "Run the frozen 171-station structural geometry gate using only stations.csv and variable_data.csv."
+}
