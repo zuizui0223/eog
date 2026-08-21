@@ -1,0 +1,305 @@
+name: North Anatolia roe deer geometry gate
+
+on:
+  push:
+    branches:
+      - agent/north-anatolia-preflight
+    paths:
+      - ".github/workflows/north_anatolia_geometry_gate.yml"
+      - "validation/north_anatolia_roe_deer_complementarity/source_freeze.json"
+      - "validation/north_anatolia_roe_deer_complementarity/geometry_gate_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+  pull_request:
+    paths:
+      - ".github/workflows/north_anatolia_geometry_gate.yml"
+      - "validation/north_anatolia_roe_deer_complementarity/source_freeze.json"
+      - "validation/north_anatolia_roe_deer_complementarity/geometry_gate_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen package
+        run: python -m pip install .
+      - name: Run response-blind closed-registry structural gate
+        run: |
+          set -euo pipefail
+          mkdir -p build/north_anatolia_geometry_gate
+          python - <<'PY'
+          import csv
+          from dataclasses import asdict
+          import hashlib
+          import io
+          import json
+          import math
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          import numpy as np
+
+          from eog.v2.world_adequacy import (
+              StructuralAdequacyDeclaration,
+              apply_structural_adequacy_gate,
+              audit_world_universe_structure,
+          )
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+              structural_scale_adjacencies,
+          )
+
+          root = Path("validation/north_anatolia_roe_deer_complementarity")
+          contract_path = root / "geometry_gate_contract.json"
+          source_path = root / "source_freeze.json"
+          contract_bytes = contract_path.read_bytes()
+          source_bytes = source_path.read_bytes()
+          contract = json.loads(contract_bytes)
+          source = json.loads(source_bytes)
+
+          assert contract["response_content_opened"] is False
+          assert source["response_content_opened"] is False
+          assert source["response"]["content_opened"] is False
+
+          repo = source["upstream_repository"]
+          commit = source["upstream_commit"]
+          geometry_source = source["geometry"]
+
+          def fetch_pinned(path, expected_size, expected_blob):
+              url = f"https://raw.githubusercontent.com/{repo}/{commit}/{path}"
+              req = Request(
+                  url,
+                  headers={
+                      "Accept": "text/csv,text/plain,*/*;q=0.1",
+                      "User-Agent": "EOG-response-blind-north-anatolia-geometry/1.0",
+                  },
+              )
+              with urlopen(req, timeout=30) as response:
+                  payload = response.read()
+                  final_url = response.geturl()
+              if len(payload) != int(expected_size):
+                  raise RuntimeError(f"pinned {path} size drifted")
+              blob = hashlib.sha1(
+                  f"blob {len(payload)}\0".encode("ascii") + payload
+              ).hexdigest()
+              if blob != expected_blob:
+                  raise RuntimeError(f"pinned {path} Git blob identity drifted")
+              return payload, final_url, blob
+
+          stations_bytes, stations_url, stations_blob = fetch_pinned(
+              geometry_source["stations_path"],
+              geometry_source["stations_size_bytes"],
+              geometry_source["stations_git_blob_sha1"],
+          )
+          variables_bytes, variables_url, variables_blob = fetch_pinned(
+              geometry_source["variables_path"],
+              geometry_source["variables_size_bytes"],
+              geometry_source["variables_git_blob_sha1"],
+          )
+
+          stations_reader = csv.DictReader(io.StringIO(stations_bytes.decode("utf-8-sig")))
+          expected_station_columns = contract["geometry_schema"]["stations_columns_exact"]
+          station_fields = list(stations_reader.fieldnames or [])
+          if station_fields != expected_station_columns:
+              raise RuntimeError(
+                  f"stations.csv schema drift: {station_fields!r} != {expected_station_columns!r}"
+              )
+          station_rows = list(stations_reader)
+          raw_expected = int(contract["analysis_registry"]["raw_station_count"])
+          if len(station_rows) != raw_expected:
+              raise RuntimeError(f"stations.csv row count {len(station_rows)} != frozen {raw_expected}")
+          station_col = contract["geometry_schema"]["station_name_column"]
+          raw_station_names = [str(row[station_col]).strip() for row in station_rows]
+          if any(not value for value in raw_station_names):
+              raise RuntimeError("stations.csv contains empty station names")
+          if len(set(raw_station_names)) != len(raw_station_names):
+              raise RuntimeError("stations.csv station names are not unique")
+
+          variables_reader = csv.DictReader(io.StringIO(variables_bytes.decode("utf-8-sig")))
+          variable_fields = list(variables_reader.fieldnames or [])
+          missing_columns = [
+              name
+              for name in contract["geometry_schema"]["variable_required_columns"]
+              if name not in variable_fields
+          ]
+          if missing_columns:
+              raise RuntimeError(f"variable_data.csv missing frozen columns: {missing_columns}")
+          variable_rows = list(variables_reader)
+          if len(variable_rows) != raw_expected:
+              raise RuntimeError(
+                  f"variable_data.csv row count {len(variable_rows)} != frozen {raw_expected}"
+              )
+
+          variable_by_station = {}
+          for index, row in enumerate(variable_rows):
+              station = str(row["Station"]).strip()
+              if not station:
+                  raise RuntimeError(f"empty Station at variable_data row {index}")
+              if station in variable_by_station:
+                  raise RuntimeError(f"duplicate Station in variable_data.csv: {station}")
+              variable_by_station[station] = row
+
+          if set(variable_by_station) != set(raw_station_names):
+              missing_from_variables = sorted(set(raw_station_names) - set(variable_by_station))
+              unexpected_variables = sorted(set(variable_by_station) - set(raw_station_names))
+              raise RuntimeError(
+                  "raw station registries disagree: "
+                  f"missing_from_variables={missing_from_variables}, "
+                  f"unexpected_variables={unexpected_variables}"
+              )
+
+          excluded = tuple(contract["analysis_registry"]["excluded_station_names"])
+          if len(set(excluded)) != len(excluded):
+              raise RuntimeError("frozen excluded station names are not unique")
+          if any(name not in variable_by_station for name in excluded):
+              raise RuntimeError("a frozen excluded station is absent from the raw registry")
+
+          retained = [name for name in raw_station_names if name not in set(excluded)]
+          expected_analysis = int(contract["analysis_registry"]["expected_analysis_node_count"])
+          if len(retained) != expected_analysis or len(set(retained)) != expected_analysis:
+              raise RuntimeError(
+                  f"frozen analysis registry did not close at {expected_analysis} unique nodes"
+              )
+
+          eastings = []
+          northings = []
+          zones = []
+          for station in retained:
+              row = variable_by_station[station]
+              try:
+                  easting = float(str(row["Easting"]).strip())
+                  northing = float(str(row["Northing"]).strip())
+                  zone = float(str(row["Zone"]).strip())
+              except ValueError as exc:
+                  raise RuntimeError(f"non-numeric coordinate/zone at station {station}") from exc
+              if not all(math.isfinite(value) for value in (easting, northing, zone)):
+                  raise RuntimeError(f"non-finite coordinate/zone at station {station}")
+              eastings.append(easting)
+              northings.append(northing)
+              zones.append(zone)
+
+          unique_zones = sorted(set(zones))
+          if len(unique_zones) != 1:
+              raise RuntimeError(f"retained stations span multiple UTM zones: {unique_zones}")
+
+          x = np.asarray(eastings, dtype=float)
+          y = np.asarray(northings, dtype=float)
+          dx = x[:, None] - x[None, :]
+          dy = y[:, None] - y[None, :]
+          distance = np.hypot(dx, dy) / 1000.0
+          np.fill_diagonal(distance, 0.0)
+
+          scale = contract["structural_scale_declaration"]
+          declaration = StructuralScaleLadderDeclaration(
+              axis_id=contract["distance_axis"]["axis_id"],
+              target_largest_component_fractions=tuple(
+                  scale["target_largest_component_fractions"]
+              ),
+          )
+          ladder = build_structural_scale_ladder(retained, distance, declaration)
+          adjacencies = structural_scale_adjacencies(ladder, distance)
+
+          previous = np.zeros((len(retained), len(retained)), dtype=bool)
+          for level_id in ladder.level_ids:
+              current = adjacencies[level_id]
+              if np.any(previous & ~current):
+                  raise RuntimeError("structural edge sets are not nested")
+              previous = current
+
+          distinct_positive = sorted(
+              {round(value, 12) for value in ladder.thresholds if value > 0.0}
+          )
+          if len(distinct_positive) < 3:
+              raise RuntimeError(
+                  f"structural scale collapse: only {len(distinct_positive)} distinct positive thresholds: {distinct_positive}"
+              )
+
+          horizon = int(contract["structural_adequacy"]["forecast_horizon_steps"])
+          universe_audit = audit_world_universe_structure(
+              retained,
+              adjacencies,
+              horizon=horizon,
+          )
+          level90 = next(
+              level
+              for level in ladder.levels
+              if abs(level.target_largest_component_fraction - 0.9) < 1e-12
+          )
+          audit90 = audit_world_universe_structure(
+              retained,
+              {level90.level_id: adjacencies[level90.level_id]},
+              horizon=horizon,
+          )
+          adequacy = StructuralAdequacyDeclaration(
+              min_largest_weak_component_fraction=0.9,
+              max_isolated_node_fraction=0.05,
+              require_at_least_one_world_pass=True,
+          )
+          gate90 = apply_structural_adequacy_gate(audit90, adequacy)
+          if not gate90.passed:
+              raise RuntimeError(
+                  "frozen 0.90 structural adequacy gate failed: "
+                  + json.dumps(asdict(gate90), sort_keys=True)
+              )
+
+          retained_payload = {
+              "station_names": retained,
+              "excluded_station_names": list(excluded),
+              "common_utm_zone": unique_zones[0],
+          }
+          retained_registry_fingerprint = hashlib.sha256(
+              json.dumps(retained_payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+          ).hexdigest()
+
+          result = {
+              "status": "response_blind_geometry_gate_pass",
+              "candidate": contract["candidate"],
+              "upstream_repository": repo,
+              "upstream_commit": commit,
+              "stations_transport": stations_url,
+              "stations_size_bytes": len(stations_bytes),
+              "stations_git_blob_sha1": stations_blob,
+              "stations_sha256": hashlib.sha256(stations_bytes).hexdigest(),
+              "variables_transport": variables_url,
+              "variables_size_bytes": len(variables_bytes),
+              "variables_git_blob_sha1": variables_blob,
+              "variables_sha256": hashlib.sha256(variables_bytes).hexdigest(),
+              "raw_station_count": len(raw_station_names),
+              "excluded_station_names": list(excluded),
+              "analysis_node_count": len(retained),
+              "analysis_registry_fingerprint": retained_registry_fingerprint,
+              "common_utm_zone": unique_zones[0],
+              "easting_range_m": [float(np.min(x)), float(np.max(x))],
+              "northing_range_m": [float(np.min(y)), float(np.max(y))],
+              "contract_sha256": hashlib.sha256(contract_bytes).hexdigest(),
+              "source_freeze_sha256": hashlib.sha256(source_bytes).hexdigest(),
+              "scale_ladder": asdict(ladder),
+              "distinct_positive_threshold_count": len(distinct_positive),
+              "distinct_positive_thresholds_km": distinct_positive,
+              "universe_structural_audit": asdict(universe_audit),
+              "level90_gate": asdict(gate90),
+              "response_file_downloads": 0,
+              "response_content_opened": False,
+              "next": contract["next_if_pass"],
+          }
+          out = Path("build/north_anatolia_geometry_gate/geometry_gate_result.json")
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Upload response-blind geometry evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: north-anatolia-roe-deer-geometry-gate
+          path: build/north_anatolia_geometry_gate/geometry_gate_result.json
+          if-no-files-found: error
