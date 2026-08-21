@@ -1,0 +1,48 @@
+{
+  "candidate": "Northwestern Anatolia roe deer seasonal dynamic occupancy 2008-2018",
+  "selection_state": "selected_after_registry_closure_gate_243",
+  "source": {
+    "repository": "dilsaddt/NorthAnatolia_2022_singlesp_seasonal_habitat_use",
+    "commit": "da083d62a584b43fb9d2a6ec613397ef92067ead",
+    "response_blind_basis": "README, pinned repository file metadata, response-independent station/coordinate files, and published data-preparation code; cc_dh_112022.csv response content remained unopened"
+  },
+  "declaration": {
+    "attempt_id": "north_anatolia_roe_deer_post243_v1",
+    "minimum_nodes": 100,
+    "minimum_outer_units": 6,
+    "minimum_repeated_nodes": 75,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true,
+    "threshold_provenance": "Inherited unchanged from preceding fresh paired-complementarity attempts; not adapted to this candidate."
+  },
+  "response_blind_evidence": {
+    "source_identity": "dilsaddt/NorthAnatolia_2022_singlesp_seasonal_habitat_use@da083d62a584b43fb9d2a6ec613397ef92067ead",
+    "geometry_source_identity": "data/variable_data.csv blob 9aa128ea957b37f341a3d4a46b9c48e6828efb13 + data/stations.csv blob 3629c345242050035229947c7ba2006a1dc283ed + frozen author rule in cc_112022_data_prep.R",
+    "response_source_identity": "data/cc_dh_112022.csv blob dafa4af1dbd82a58592b75923a4198cdef7b3cd9 :: roe-deer detection history",
+    "geometry_response_separable": true,
+    "coordinate_geometry_present": true,
+    "analysis_registry_closed": true,
+    "node_count": 171,
+    "outer_unit_count": 22,
+    "repeated_node_count": 171,
+    "layout_design": "natural_irregular",
+    "response_rows_opened": false,
+    "response_bytes_opened": false,
+    "note": "Author data-preparation code prospectively closes the analysis registry by listing 173 stations then removing exact stations TUL08 and TUL12 before reading cc_dh, yielding 171 analysis stations. The same code defines 22 primary winter/summer seasons (11 winters + 11 summers) from 2008 winter through 2018 summer. variable_data.csv provides Station/Easting/Northing/Zone independently of the roe-deer response."
+  },
+  "published_analysis_rule": {
+    "code_path": "cc_112022_data_prep.R",
+    "code_blob": "85e312f62a185b8e0cc673158f018117b96e3d37",
+    "raw_station_count": 173,
+    "excluded_station_names": ["TUL08", "TUL12"],
+    "analysis_station_count": 171,
+    "primary_seasons": 22,
+    "secondary_months": 110,
+    "study_window": "December 2007 through October 2018; 11 winter and 11 summer primary seasons"
+  },
+  "strong_baseline_boundary": "If later gates pass, preserve a strong seasonal/spatial/environmental baseline using the frozen response-independent habitat, topography and anthropogenic predictors plus temporal state information available strictly before each heldout season. Do not weaken the baseline relative to the published dynamic-occupancy formulation to make Layer B look favourable.",
+  "endpoint_boundary": "The once-only endpoint will be a separately frozen future recorded-detection-state prediction. Recorded nondetection is not latent biological absence; no true colonization claim is allowed without an observation model.",
+  "next_if_ready": "Freeze exact geometry file identities and the author-defined 171-station rule, then run the unchanged response-blind structural-scale/adequacy gate before opening cc_dh_112022.csv.",
+  "stop_if_not_ready": "Close the candidate unmerged and preserve the response-blind STOP reason."
+}
