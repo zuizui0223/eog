@@ -1,9 +1,10 @@
 """Validation-facing public API for prospective EOG v2.
 
 The facade is lazy so genetic, empirical-occurrence, directional-evidence, response
-firewall, response-token schema, candidate preflight, prospective estimability,
-outcome-access authorization, predictive complementarity, and response-blind
-world-adequacy / scale-construction trees remain independent until accessed.
+firewall, response-header schema, response-token schema, candidate preflight,
+prospective estimability, outcome-access authorization, predictive complementarity,
+and response-blind world-adequacy / scale-construction trees remain independent until
+accessed.
 """
 from __future__ import annotations
 
@@ -51,6 +52,14 @@ _RESPONSE_FIREWALL_EXPORTS: Final[tuple[str, ...]] = (
     "BoundedFirstRecord",
     "read_bounded_first_record_bytes",
     "read_bounded_first_record_text",
+)
+
+_RESPONSE_HEADER_SCHEMA_EXPORTS: Final[tuple[str, ...]] = (
+    "ResponseHeaderSchemaStatus",
+    "ResponseHeaderSchemaDeclaration",
+    "ResponseHeaderSchemaEvidence",
+    "ResponseHeaderSchemaResult",
+    "evaluate_response_header_schema",
 )
 
 _RESPONSE_SCHEMA_EXPORTS: Final[tuple[str, ...]] = (
@@ -126,6 +135,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     },
     **{name: "eog.v2.evidence_discrimination" for name in _DIRECTIONAL_EXPORTS},
     **{name: "eog.v2.response_firewall" for name in _RESPONSE_FIREWALL_EXPORTS},
+    **{
+        name: "eog.v2.response_header_schema"
+        for name in _RESPONSE_HEADER_SCHEMA_EXPORTS
+    },
     **{name: "eog.v2.response_schema" for name in _RESPONSE_SCHEMA_EXPORTS},
     **{name: "eog.v2.candidate_preflight" for name in _CANDIDATE_PREFLIGHT_EXPORTS},
     **{
@@ -147,6 +160,7 @@ __all__ = [
     *_OCCURRENCE_VALIDATION_EXPORTS,
     *_DIRECTIONAL_EXPORTS,
     *_RESPONSE_FIREWALL_EXPORTS,
+    *_RESPONSE_HEADER_SCHEMA_EXPORTS,
     *_RESPONSE_SCHEMA_EXPORTS,
     *_CANDIDATE_PREFLIGHT_EXPORTS,
     *_PROSPECTIVE_ESTIMABILITY_EXPORTS,
