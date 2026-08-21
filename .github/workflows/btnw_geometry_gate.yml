@@ -1,0 +1,261 @@
+name: Black-throated Green Warbler geometry gate
+
+on:
+  push:
+    branches:
+      - agent/btnw-preflight
+    paths:
+      - ".github/workflows/btnw_geometry_gate.yml"
+      - "validation/btnw_complementarity/geometry_gate_contract.json"
+      - "validation/btnw_complementarity/source_freeze.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+  pull_request:
+    paths:
+      - ".github/workflows/btnw_geometry_gate.yml"
+      - "validation/btnw_complementarity/geometry_gate_contract.json"
+      - "validation/btnw_complementarity/source_freeze.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen package
+        run: python -m pip install .
+      - name: Download only frozen geometry and run structural gate
+        run: |
+          set -euo pipefail
+          mkdir -p build/btnw_geometry_gate
+          python - <<'PY'
+          import csv
+          from dataclasses import asdict
+          import hashlib
+          import io
+          import json
+          import math
+          from pathlib import Path
+          from urllib.error import HTTPError, URLError
+          from urllib.request import Request, urlopen
+
+          import numpy as np
+
+          from eog.v2.world_adequacy import (
+              StructuralAdequacyDeclaration,
+              apply_structural_adequacy_gate,
+              audit_world_universe_structure,
+          )
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+              structural_scale_adjacencies,
+          )
+
+          root = Path("validation/btnw_complementarity")
+          contract_path = root / "geometry_gate_contract.json"
+          source_path = root / "source_freeze.json"
+          contract_bytes = contract_path.read_bytes()
+          source_bytes = source_path.read_bytes()
+          contract = json.loads(contract_bytes)
+          source = json.loads(source_bytes)
+
+          assert contract["response_content_opened"] is False
+          assert source["response_content_opened"] is False
+          assert source["response"]["content_opened"] is False
+          frozen = source["geometry"]
+          assert frozen["path"] == contract["geometry_source"]["allowed_file_name"]
+
+          expected_size = int(frozen["size_bytes"])
+          expected_sha = frozen["sha256"]
+          file_id = int(frozen["file_id"])
+
+          # Both permitted transports identify the exact already-frozen geometry file ID.
+          # No dataset-archive or response-file download endpoint is permitted here.
+          candidate_urls = [
+              f"https://datadryad.org/api/v2/files/{file_id}/download",
+              f"https://datadryad.org/downloads/file_stream/{file_id}",
+          ]
+          attempts = []
+          geometry_bytes = None
+          selected_url = None
+          for url in candidate_urls:
+              req = Request(
+                  url,
+                  headers={
+                      "Accept": "text/csv,*/*;q=0.1",
+                      "User-Agent": "EOG-response-blind-geometry-gate/1.0",
+                  },
+              )
+              try:
+                  with urlopen(req, timeout=30) as response:
+                      payload = response.read()
+                      final_url = response.geturl()
+              except (HTTPError, URLError) as exc:
+                  attempts.append({"url": url, "status": "transport_error", "detail": str(exc)})
+                  continue
+              digest = hashlib.sha256(payload).hexdigest()
+              attempts.append(
+                  {
+                      "url": url,
+                      "final_url": final_url,
+                      "status": "bytes_received",
+                      "size": len(payload),
+                      "sha256": digest,
+                  }
+              )
+              if len(payload) == expected_size and digest == expected_sha:
+                  geometry_bytes = payload
+                  selected_url = final_url
+                  break
+
+          if geometry_bytes is None:
+              raise RuntimeError(
+                  "no exact frozen geometry transport matched the declared byte size/SHA-256: "
+                  + json.dumps(attempts, sort_keys=True)
+              )
+
+          text = geometry_bytes.decode("utf-8-sig")
+          reader = csv.DictReader(io.StringIO(text))
+          expected_header = contract["geometry_source"]["expected_header_exact"]
+          if reader.fieldnames != expected_header:
+              raise RuntimeError(
+                  f"geometry schema drift: {reader.fieldnames!r} != {expected_header!r}"
+              )
+          rows = list(reader)
+          expected_nodes = int(contract["geometry_source"]["expected_node_count"])
+          if len(rows) != expected_nodes:
+              raise RuntimeError(f"geometry row count {len(rows)} != frozen {expected_nodes}")
+
+          node_ids = []
+          latitudes = []
+          longitudes = []
+          for index, row in enumerate(rows):
+              node_id = str(row["SS"]).strip()
+              if not node_id:
+                  raise RuntimeError(f"empty SS at geometry row {index}")
+              try:
+                  lon = float(row["longitude"])
+                  lat = float(row["latitude"])
+              except (TypeError, ValueError) as exc:
+                  raise RuntimeError(f"non-numeric coordinate at geometry row {index}") from exc
+              if not math.isfinite(lon) or not math.isfinite(lat):
+                  raise RuntimeError(f"non-finite coordinate at geometry row {index}")
+              if not -180.0 <= lon <= 180.0 or not -90.0 <= lat <= 90.0:
+                  raise RuntimeError(f"coordinate out of range at geometry row {index}")
+              node_ids.append(node_id)
+              longitudes.append(lon)
+              latitudes.append(lat)
+
+          if len(set(node_ids)) != len(node_ids):
+              raise RuntimeError("geometry SS identifiers are not unique")
+
+          radius = float(contract["distance_axis"]["earth_radius_km"])
+          lat = np.radians(np.asarray(latitudes, dtype=float))
+          lon = np.radians(np.asarray(longitudes, dtype=float))
+          dlat = lat[:, None] - lat[None, :]
+          dlon = lon[:, None] - lon[None, :]
+          hav = (
+              np.sin(dlat / 2.0) ** 2
+              + np.cos(lat[:, None]) * np.cos(lat[None, :]) * np.sin(dlon / 2.0) ** 2
+          )
+          hav = np.clip(hav, 0.0, 1.0)
+          distance = 2.0 * radius * np.arcsin(np.sqrt(hav))
+          np.fill_diagonal(distance, 0.0)
+
+          scale = contract["structural_scale_declaration"]
+          declaration = StructuralScaleLadderDeclaration(
+              axis_id=contract["distance_axis"]["axis_id"],
+              target_largest_component_fractions=tuple(
+                  scale["target_largest_component_fractions"]
+              ),
+          )
+          ladder = build_structural_scale_ladder(node_ids, distance, declaration)
+          adjacencies = structural_scale_adjacencies(ladder, distance)
+
+          previous = np.zeros((len(node_ids), len(node_ids)), dtype=bool)
+          for level_id in ladder.level_ids:
+              current = adjacencies[level_id]
+              if np.any(previous & ~current):
+                  raise RuntimeError("structural edge sets are not nested")
+              previous = current
+
+          positive_thresholds = [value for value in ladder.thresholds if value > 0.0]
+          distinct_positive = sorted({round(value, 12) for value in positive_thresholds})
+          if len(distinct_positive) < 3:
+              raise RuntimeError(
+                  f"structural scale collapse: only {len(distinct_positive)} distinct positive thresholds"
+              )
+
+          horizon = int(contract["structural_adequacy"]["forecast_horizon_steps"])
+          universe_audit = audit_world_universe_structure(
+              node_ids,
+              adjacencies,
+              horizon=horizon,
+          )
+
+          level90 = next(
+              level
+              for level in ladder.levels
+              if abs(level.target_largest_component_fraction - 0.9) < 1e-12
+          )
+          level90_adjacency = adjacencies[level90.level_id]
+          audit90 = audit_world_universe_structure(
+              node_ids,
+              {level90.level_id: level90_adjacency},
+              horizon=horizon,
+          )
+          adequacy = StructuralAdequacyDeclaration(
+              min_largest_weak_component_fraction=0.9,
+              max_isolated_node_fraction=0.05,
+              require_at_least_one_world_pass=True,
+          )
+          gate90 = apply_structural_adequacy_gate(audit90, adequacy)
+          if not gate90.passed:
+              raise RuntimeError(
+                  "frozen 0.90 structural adequacy gate failed: "
+                  + json.dumps(asdict(gate90), sort_keys=True)
+              )
+
+          result = {
+              "status": "response_blind_geometry_gate_pass",
+              "candidate": contract["candidate"],
+              "source_version_number": source["selected_version"]["version_number"],
+              "source_version_id": source["selected_version"]["version_id"],
+              "geometry_file_id": file_id,
+              "geometry_size_bytes": len(geometry_bytes),
+              "geometry_sha256": hashlib.sha256(geometry_bytes).hexdigest(),
+              "geometry_header": reader.fieldnames,
+              "node_count": len(node_ids),
+              "transport_selected": selected_url,
+              "transport_attempts": attempts,
+              "contract_sha256": hashlib.sha256(contract_bytes).hexdigest(),
+              "source_freeze_sha256": hashlib.sha256(source_bytes).hexdigest(),
+              "scale_ladder": asdict(ladder),
+              "distinct_positive_threshold_count": len(distinct_positive),
+              "distinct_positive_thresholds_km": distinct_positive,
+              "universe_structural_audit": asdict(universe_audit),
+              "level90_gate": asdict(gate90),
+              "response_file_content_downloads": 0,
+              "response_content_opened": False,
+              "next": contract["next_if_pass"],
+          }
+          out = Path("build/btnw_geometry_gate/geometry_gate_result.json")
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Upload response-blind geometry evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: btnw-geometry-gate
+          path: build/btnw_geometry_gate/geometry_gate_result.json
+          if-no-files-found: error
