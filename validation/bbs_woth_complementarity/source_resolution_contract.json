@@ -5,7 +5,7 @@
     "selected_after_eog_main_commit": "835518f672f57782b8b82059da73c4f81fb864b0",
     "selected_after_pr": 245,
     "response_content_opened": false,
-    "selection_reason": "A public multi-season Wood Thrush case study prospectively fixes the focal species and 2000-2009 window; the raw BBS V2 release physically separates route geometry, route-year survey metadata, taxonomy, and avian count response."
+    "selection_reason": "A public multi-season Wood Thrush case study prospectively fixes the focal species, eastern-US region and 2000-2009 window before any raw Wood Thrush response access."
   },
   "scientific_anchor": {
     "repository": "doserjef/Switzerland24-Spatial-Workshop",
@@ -17,31 +17,45 @@
     "strong_baseline_anchor": "multi-season spatially varying occupancy model with spatial intercept/trend and detection covariates"
   },
   "upstream_release": {
-    "title": "North American Breeding Bird Survey Dataset 1966 - 2023",
-    "doi": "10.3886/E231303V2",
-    "usgs_doi": "10.5066/P136CRBV",
-    "datalumos_project_id": 231303,
-    "version": "V2",
-    "published": "2025-06-06"
+    "title": "North American Breeding Bird Survey Dataset - Archival Releases of Datasets Ending With Years 2000 Through 2015",
+    "doi": "10.5066/P9YASED1",
+    "sciencebase_item_id": "5d00efafe4b0573a18f5e03a",
+    "publisher": "U.S. Geological Survey",
+    "publication_year": 2019,
+    "selected_archival_ending_year": 2009,
+    "selection_rule": "Use the archival BBS release ending in 2009 because 2009 is the prospectively fixed final primary period. Do not choose a different archival ending year after inspecting Wood Thrush counts."
   },
-  "response_independent_files": {
-    "Routes.csv": {
+  "response_independent_file_semantics": {
+    "routes": {
+      "expected_names_case_insensitive": ["routes.zip", "routes.csv"],
       "role": "route identity and route-start latitude/longitude geometry",
-      "published_size_upper_bound_bytes": 1000000
+      "safe_uncompressed_byte_cap": 5000000
     },
-    "Weather.csv": {
+    "weather": {
+      "expected_names_case_insensitive": ["weather.zip", "weather.csv"],
       "role": "route-year survey execution, timing, weather, observer and run-quality metadata",
-      "published_size_upper_bound_bytes": 20000000
+      "safe_uncompressed_byte_cap": 50000000
     },
-    "SpeciesList.csv": {
+    "species": {
+      "expected_names_case_insensitive": ["specieslist.txt", "specieslist.csv"],
       "role": "taxonomic code registry used to freeze Wood Thrush response identity before response access",
-      "published_size_upper_bound_bytes": 1000000
+      "safe_uncompressed_byte_cap": 5000000
     }
   },
-  "response_file": {
-    "name": "50-StopData.zip",
-    "role": "avian stop-level count response",
-    "published_size_bytes_approx": 69400000,
+  "published_schema_anchor": {
+    "route_key_fields": ["country_num", "state_num", "route"],
+    "route_geometry_fields": ["latitude", "longitude"],
+    "usa_country_num": 840,
+    "weather_key_fields": ["country_num", "state_num", "route", "rpid", "year"],
+    "weather_run_type_acceptable_value": 1,
+    "weather_quality_field": "quality_current_id",
+    "species_code_field": "aou",
+    "species_name_field": "english_common_name",
+    "provenance": "patrickbarks/bbs metadata readers for the official USGS BBS layout; physical archival schemas must still be checked before use"
+  },
+  "response_identity": {
+    "role": "avian stop-level count response for the same selected archival release",
+    "physical_file_not_yet_resolved": true,
     "downloaded": false,
     "content_opened": false
   },
@@ -53,15 +67,35 @@
     "require_closed_analysis_registry": true
   },
   "provisional_response_blind_registry_rule": {
-    "country": "United States",
+    "country_num": 840,
     "route_start_longitude_minimum": -100.0,
-    "primary_periods": "calendar years 2000-2009",
+    "primary_periods": [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009],
     "minimum_sampled_years_per_route": 6,
-    "note": "Exact physical field names and acceptable run-quality semantics must be resolved from response-independent release metadata before this rule becomes the closed analysis registry. No response values may be used to alter it."
+    "acceptable_run_type": 1,
+    "note": "Physical field names, duplicate-run handling and the quality_current_id policy must be resolved using response-independent metadata before the registry is closed. No Wood Thrush count values may alter this rule."
   },
   "source_access_safety": {
-    "forbidden_before_authorization": ["50-StopData.zip", "MigrantNonBreeder.zip"],
-    "allowed_now": ["Routes.csv", "Weather.csv", "SpeciesList.csv", "their file-view metadata pages"],
-    "fail_closed_if_individual_response_independent_files_cannot_be_acquired_without_downloading_the_response_archive": true
+    "allowed_before_response_authorization": [
+      "ScienceBase landing/child-item JSON metadata for the archival release",
+      "only exact response-independent route/weather/species metadata files from the selected ending-2009 archival release"
+    ],
+    "forbidden_response_name_fragments_case_insensitive": [
+      "50-stop",
+      "fifty",
+      "10-stop",
+      "migrantnonbreeder",
+      "surveywide",
+      "states/"
+    ],
+    "forbid_generic_bundle_download": true,
+    "fail_closed_if_response_independent_files_cannot_be_individually_resolved": true
+  },
+  "transport_history": {
+    "datalumos_v2_attempt": {
+      "status": "transport_failed_http_403_before_any_response_access",
+      "scientific_contract_changed": false,
+      "response_content_opened": false
+    },
+    "current_transport": "USGS ScienceBase archival release metadata and exact individual response-independent files"
   }
 }
