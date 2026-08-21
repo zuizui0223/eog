@@ -1,0 +1,191 @@
+name: Giant kelp southern geometry structural Gate
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_geometry_structural_gate.yml"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_geometry_structural_gate.yml"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen EOG package
+        run: python -m pip install .
+      - name: Retrieve only frozen southern geometry and run LCC Gate
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_geometry_gate
+          python - <<'PY'
+          from __future__ import annotations
+          import csv, hashlib, io, json, math, urllib.parse, urllib.request
+          from pathlib import Path
+          import numpy as np
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+              structural_scale_adjacencies,
+          )
+
+          ROOT=Path('validation/giant_kelp_complementarity')
+          OUT=Path('build/giant_kelp_geometry_gate')
+          contract=json.loads((ROOT/'southern_geometry_object_contract.json').read_text(encoding='utf-8'))
+          ent=contract['southern_geometry_entity']; sg=contract['structural_gate']
+          pid=ent['data_pid']; encoded=urllib.parse.quote(pid,safe='')
+          url=f'https://cn.dataone.org/cn/v2/object/{encoded}'
+          req=urllib.request.Request(url,headers={'User-Agent':'eog-giant-kelp-geometry-gate/1.0','Accept':'text/csv,*/*'})
+          with urllib.request.urlopen(req,timeout=120) as r:
+              body=r.read(); status=getattr(r,'status',None) or r.getcode(); ctype=str(r.headers.get('Content-Type','')); final=str(r.geturl())
+          if status != 200:
+              raise RuntimeError(f'DataONE geometry object status {status}')
+          if len(body) != int(ent['size_bytes']):
+              raise RuntimeError(f'geometry size drift: {len(body)} != {ent["size_bytes"]}')
+          sha1=hashlib.sha1(body).hexdigest()
+          if sha1.casefold() != ent['checksum'].casefold():
+              raise RuntimeError(f'geometry checksum drift: {sha1} != {ent["checksum"]}')
+
+          text=body.decode('utf-8-sig')
+          reader=csv.DictReader(io.StringIO(text))
+          fields=tuple(reader.fieldnames or ())
+          required=tuple(ent['required_columns'])
+          if fields != required:
+              raise RuntimeError(f'geometry schema drift: {fields!r} != {required!r}')
+
+          grouped={}; row_count=0
+          for row in reader:
+              row_count += 1
+              patch=str(row['patch_number']).strip()
+              if not patch:
+                  raise RuntimeError(f'blank patch_number at row {row_count}')
+              try:
+                  lat=float(row['pixel_latitude']); lon=float(row['pixel_longitude'])
+              except Exception as exc:
+                  raise RuntimeError(f'invalid coordinate at row {row_count}') from exc
+              if not (math.isfinite(lat) and math.isfinite(lon) and -90<=lat<=90 and -180<=lon<=180):
+                  raise RuntimeError(f'out-of-range coordinate at row {row_count}')
+              grouped.setdefault(patch,[]).append((lat,lon))
+          if row_count == 0:
+              raise RuntimeError('geometry CSV contains no data rows')
+
+          node_ids=sorted(grouped)
+          expected=int(contract['expected_unique_patch_count'])
+          patch_count=len(node_ids)
+          centroids=[]
+          for patch in node_ids:
+              vals=grouped[patch]
+              centroids.append((
+                  patch,
+                  sum(v[0] for v in vals)/len(vals),
+                  sum(v[1] for v in vals)/len(vals),
+                  len(vals),
+              ))
+          centroid_payload=[{'patch_number':p,'latitude':lat,'longitude':lon,'pixel_count':n} for p,lat,lon,n in centroids]
+          centroid_fp=hashlib.sha256(json.dumps(centroid_payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+
+          arr=np.asarray([[lat,lon] for _,lat,lon,_ in centroids],dtype=float)
+          lat=np.radians(arr[:,0]); lon=np.radians(arr[:,1])
+          dlat=lat[:,None]-lat[None,:]; dlon=lon[:,None]-lon[None,:]
+          a=np.sin(dlat/2.0)**2 + np.cos(lat[:,None])*np.cos(lat[None,:])*np.sin(dlon/2.0)**2
+          a=np.clip(a,0.0,1.0)
+          distance=2.0*6371.0088*np.arcsin(np.sqrt(a)); np.fill_diagonal(distance,0.0)
+
+          decl=StructuralScaleLadderDeclaration(
+              axis_id='giant_kelp_southern_patch_centroid_haversine_km',
+              target_largest_component_fractions=tuple(float(x) for x in sg['target_largest_component_fractions']),
+          )
+          ladder=build_structural_scale_ladder(tuple(node_ids),distance,decl)
+          adj=structural_scale_adjacencies(ladder,distance)
+          ordered=[adj[level.level_id] for level in ladder.levels]
+          nested=all(bool(np.all(np.logical_or(~left,right))) for left,right in zip(ordered,ordered[1:]))
+          distinct=len({round(float(x),9) for x in ladder.thresholds if float(x)>0})
+          level90=ladder.levels[-1]
+          schema_count_pass=(patch_count==expected)
+          structural_pass=bool(
+              schema_count_pass
+              and distinct>=int(sg['minimum_distinct_positive_thresholds'])
+              and nested==bool(sg['nested_required'])
+              and float(level90.achieved_largest_component_fraction)>=float(sg['minimum_lcc_at_0_9_world'])-1e-12
+              and float(level90.isolated_node_fraction)<=float(sg['maximum_isolated_fraction_at_0_9_world'])+1e-12
+          )
+          status='geometry_structural_gate_pass' if structural_pass else (
+              'geometry_stop_patch_universe_mismatch' if not schema_count_pass else 'geometry_stop_structural_inadequacy'
+          )
+          payload={
+              'status':status,
+              'candidate':contract['candidate'],
+              'data_pid':pid,
+              'object_name':ent['object_name'],
+              'geometry_http_final_url':final,
+              'geometry_content_type':ctype,
+              'geometry_size_bytes':len(body),
+              'geometry_sha1':sha1,
+              'geometry_sha256':hashlib.sha256(body).hexdigest(),
+              'required_columns':list(required),
+              'observed_columns':list(fields),
+              'geometry_row_count':row_count,
+              'unique_patch_count':patch_count,
+              'expected_unique_patch_count':expected,
+              'patch_universe_pass':schema_count_pass,
+              'centroid_rule':contract['patch_coordinate_rule'],
+              'centroid_fingerprint':centroid_fp,
+              'centroids':centroid_payload,
+              'structural_ladder':[
+                  {
+                      'level_id':level.level_id,
+                      'target_largest_component_fraction':level.target_largest_component_fraction,
+                      'distance_threshold_km':level.distance_threshold,
+                      'achieved_largest_component_fraction':level.achieved_largest_component_fraction,
+                      'weak_component_count':level.weak_component_count,
+                      'isolated_node_fraction':level.isolated_node_fraction,
+                      'directed_edge_count':level.directed_edge_count,
+                  }
+                  for level in ladder.levels
+              ],
+              'distinct_positive_structural_thresholds':distinct,
+              'nested_scale_pass':nested,
+              'structural_pass':structural_pass,
+              'geometry_object_bytes_opened':True,
+              'response_package_bytes_opened':False,
+              'response_rows_opened':False,
+              'next':('freeze period/source/response semantics and paired complementarity before response access' if structural_pass else 'close candidate unmerged without opening response; do not change patch universe or structural thresholds'),
+          }
+          payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          (OUT/'geometry_gate_result.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps({k:v for k,v in payload.items() if k not in {'centroids'}},indent=2,sort_keys=True))
+          if not structural_pass:
+              raise SystemExit(2)
+          PY
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          pth=pathlib.Path('build/giant_kelp_geometry_gate/geometry_gate_result.json')
+          assert pth.exists(), 'geometry Gate did not emit durable evidence'
+          p=json.load(open(pth))
+          assert p['geometry_object_bytes_opened'] is True
+          assert p['response_package_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          PY
+      - name: Upload geometry Gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-southern-geometry-gate
+          path: build/giant_kelp_geometry_gate/geometry_gate_result.json
+          if-no-files-found: error
