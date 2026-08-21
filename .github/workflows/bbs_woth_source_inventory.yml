@@ -1,0 +1,231 @@
+name: BBS Wood Thrush response-blind source inventory
+
+on:
+  push:
+    branches:
+      - agent/bbs-woth-preflight
+    paths:
+      - ".github/workflows/bbs_woth_source_inventory.yml"
+      - "validation/bbs_woth_complementarity/**"
+  pull_request:
+    paths:
+      - ".github/workflows/bbs_woth_source_inventory.yml"
+      - "validation/bbs_woth_complementarity/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Resolve and acquire only response-independent BBS files
+        run: |
+          set -euo pipefail
+          mkdir -p build/bbs_woth_source/input build/bbs_woth_source/output
+          python - <<'PY'
+          from __future__ import annotations
+
+          import hashlib
+          import html
+          import io
+          import json
+          from pathlib import Path
+          import re
+          import urllib.parse
+          import urllib.request
+          import zipfile
+
+          root = Path("validation/bbs_woth_complementarity")
+          contract = json.loads((root / "source_resolution_contract.json").read_text(encoding="utf-8"))
+          project = int(contract["upstream_release"]["datalumos_project_id"])
+          version = contract["upstream_release"]["version"]
+          base = f"https://www.datalumos.org/datalumos/project/{project}/version/{version}"
+          repository_path = f"/datalumos/{project}/fcr:versions/{version}"
+          forbidden = tuple(contract["source_access_safety"]["forbidden_before_authorization"])
+          allowed = contract["response_independent_files"]
+          user_agent = "EOG-BBS-WOTH-response-blind-source-inventory/1.0"
+
+          requested_urls: list[str] = []
+          resolved: dict[str, dict] = {}
+          page_audit: dict[str, dict] = {}
+
+          def safe_url(url: str, filename: str) -> None:
+              decoded = urllib.parse.unquote(url)
+              if any(token in decoded for token in forbidden):
+                  raise RuntimeError(f"forbidden response path was about to be requested: {url}")
+              if filename not in decoded:
+                  raise RuntimeError(
+                      f"candidate file URL is not self-identifying for {filename}; refuse generic project download: {url}"
+                  )
+
+          def request(url: str, *, method: str = "GET"):
+              decoded = urllib.parse.unquote(url)
+              if any(token in decoded for token in forbidden):
+                  raise RuntimeError(f"forbidden response URL request: {url}")
+              requested_urls.append(url)
+              req = urllib.request.Request(url, headers={"User-Agent": user_agent}, method=method)
+              return urllib.request.urlopen(req, timeout=30)
+
+          for filename, declaration in allowed.items():
+              quoted_path = urllib.parse.quote(f"{repository_path}/{filename}", safe="")
+              view_url = f"{base}/view?path={quoted_path}&type=file"
+              with request(view_url) as response:
+                  page_bytes = response.read(2_000_000)
+                  page_final = response.geturl()
+              page_text = page_bytes.decode("utf-8", errors="replace")
+              hrefs = [html.unescape(value) for value in re.findall(r'href=[\"\']([^\"\']+)[\"\']', page_text)]
+              discovered = []
+              for href in hrefs:
+                  absolute = urllib.parse.urljoin(page_final, href)
+                  decoded = urllib.parse.unquote(absolute)
+                  if "download" in decoded.lower() and filename in decoded:
+                      discovered.append(absolute)
+
+              guessed = [
+                  f"{base}/download/project?dirPath={urllib.parse.quote(f'{repository_path}/{filename}', safe='/:')}",
+                  f"{base}/download/project?dirPath={urllib.parse.quote(f'{repository_path}/{filename}', safe='')}",
+              ]
+              candidates = []
+              for candidate in [*discovered, *guessed]:
+                  if candidate not in candidates:
+                      candidates.append(candidate)
+              page_audit[filename] = {
+                  "view_url": view_url,
+                  "view_final_url": page_final,
+                  "discovered_download_candidates": discovered,
+                  "candidate_count": len(candidates),
+              }
+
+              max_bytes = int(declaration["published_size_upper_bound_bytes"])
+              attempts = []
+              success = None
+              for candidate in candidates:
+                  try:
+                      safe_url(candidate, filename)
+                      head_meta = {}
+                      try:
+                          with request(candidate, method="HEAD") as head:
+                              head_meta = {
+                                  "status": getattr(head, "status", None),
+                                  "final_url": head.geturl(),
+                                  "content_type": head.headers.get("Content-Type"),
+                                  "content_length": head.headers.get("Content-Length"),
+                                  "content_disposition": head.headers.get("Content-Disposition"),
+                              }
+                      except Exception as exc:
+                          head_meta = {"head_error": repr(exc)}
+
+                      with request(candidate) as data_response:
+                          final_url = data_response.geturl()
+                          content_type = data_response.headers.get("Content-Type", "")
+                          disposition = data_response.headers.get("Content-Disposition", "")
+                          chunks = []
+                          total = 0
+                          while True:
+                              chunk = data_response.read(min(1024 * 1024, max_bytes + 1 - total))
+                              if not chunk:
+                                  break
+                              chunks.append(chunk)
+                              total += len(chunk)
+                              if total > max_bytes:
+                                  raise RuntimeError(
+                                      f"{filename} candidate exceeded response-independent byte cap {max_bytes}"
+                                  )
+                          payload = b"".join(chunks)
+
+                      lowered = payload[:512].lstrip().lower()
+                      if lowered.startswith(b"<!doctype html") or lowered.startswith(b"<html"):
+                          raise RuntimeError("download candidate returned HTML rather than the frozen file")
+
+                      extracted_from_zip = False
+                      if payload.startswith(b"PK\x03\x04"):
+                          with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+                              names = [name for name in archive.namelist() if not name.endswith("/")]
+                              matching = [name for name in names if Path(name).name == filename]
+                              if len(names) != 1 or len(matching) != 1:
+                                  raise RuntimeError(
+                                      f"archive for {filename} was not a single-file safe archive: {names[:20]}"
+                                  )
+                              payload = archive.read(matching[0])
+                              extracted_from_zip = True
+                              if len(payload) > max_bytes:
+                                  raise RuntimeError(f"extracted {filename} exceeded safe byte cap")
+
+                      out = Path("build/bbs_woth_source/input") / filename
+                      out.write_bytes(payload)
+                      success = {
+                          "request_url": candidate,
+                          "final_url": final_url,
+                          "content_type": content_type,
+                          "content_disposition": disposition,
+                          "head": head_meta,
+                          "bytes": len(payload),
+                          "sha256": hashlib.sha256(payload).hexdigest(),
+                          "extracted_from_single_file_zip": extracted_from_zip,
+                      }
+                      attempts.append({"candidate": candidate, "success": True})
+                      break
+                  except Exception as exc:
+                      attempts.append({"candidate": candidate, "success": False, "error": repr(exc)})
+
+              if success is None:
+                  resolved[filename] = {"resolved": False, "attempts": attempts}
+              else:
+                  resolved[filename] = {"resolved": True, "file": success, "attempts": attempts}
+
+          audit = {
+              "attempt_id": contract["attempt_id"],
+              "response_file_downloads": 0,
+              "response_content_opened": False,
+              "forbidden_response_url_requests": 0,
+              "resolved": resolved,
+              "page_audit": page_audit,
+              "requested_url_count": len(requested_urls),
+              "requested_urls": requested_urls,
+          }
+          out = Path("build/bbs_woth_source/output/source_inventory.json")
+          out.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps({
+              "response_file_downloads": 0,
+              "response_content_opened": False,
+              "resolved": {name: value["resolved"] for name, value in resolved.items()},
+              "requested_url_count": len(requested_urls),
+          }, indent=2, sort_keys=True))
+          if not all(value["resolved"] for value in resolved.values()):
+              raise SystemExit(3)
+          PY
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("build/bbs_woth_source/output/source_inventory.json")
+          if not path.exists():
+              raise SystemExit("source inventory was not written")
+          audit = json.loads(path.read_text())
+          assert audit["response_file_downloads"] == 0
+          assert audit["response_content_opened"] is False
+          assert audit["forbidden_response_url_requests"] == 0
+          assert all("50-StopData.zip" not in url for url in audit["requested_urls"])
+          assert all("MigrantNonBreeder.zip" not in url for url in audit["requested_urls"])
+          print(json.dumps({
+              "response_file_downloads": audit["response_file_downloads"],
+              "response_content_opened": audit["response_content_opened"],
+              "resolved": {k: v["resolved"] for k, v in audit["resolved"].items()},
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Upload response-blind source evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbs-woth-response-blind-source-inventory
+          path: build/bbs_woth_source/output/
+          if-no-files-found: error
