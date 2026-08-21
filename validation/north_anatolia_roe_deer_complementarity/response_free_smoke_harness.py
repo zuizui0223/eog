@@ -21,6 +21,60 @@ def load_runner():
     return module
 
 
+def _deterministic_effort_aware_source_chain(
+    effort: np.ndarray,
+    distance: np.ndarray,
+    broad_threshold_km: float,
+) -> list[int]:
+    """Find one 22-season response-free chain under the frozen source/candidate rules."""
+
+    n_nodes, n_primary = effort.shape
+    viable: list[set[int]] = [set() for _ in range(n_primary)]
+    pointer: list[dict[int, int]] = [dict() for _ in range(n_primary - 1)]
+    viable[-1] = set(np.flatnonzero(effort[:, -1] > 0.0).tolist())
+    if not viable[-1]:
+        raise RuntimeError("no positive-effort station in final synthetic primary season")
+
+    for t in range(n_primary - 2, -1, -1):
+        current_nodes = np.flatnonzero(effort[:, t] > 0.0)
+        next_nodes = sorted(viable[t + 1])
+        for i in current_nodes.tolist():
+            chosen = None
+            for j in next_nodes:
+                # Same-station persistence is not a candidate appearance; it only needs
+                # target-season effort. A station change must obey the exact real-runner
+                # candidate effort rule and broadest structural reachability.
+                if i == j:
+                    if effort[j, t + 1] > 0.0:
+                        chosen = j
+                        break
+                elif (
+                    effort[j, t] > 0.0
+                    and effort[j, t + 1] > 0.0
+                    and distance[j, i] <= broad_threshold_km
+                ):
+                    chosen = j
+                    break
+            if chosen is not None:
+                viable[t].add(i)
+                pointer[t][i] = chosen
+        if not viable[t]:
+            raise RuntimeError(
+                f"no response-free source chain can traverse frozen transition {t}->{t + 1} "
+                f"under effort and broad-world rules"
+            )
+
+    start = min(viable[0])
+    chain = [start]
+    current = start
+    for t in range(n_primary - 1):
+        current = pointer[t][current]
+        chain.append(current)
+    if len(chain) != n_primary:
+        raise RuntimeError("synthetic source-chain length drift")
+    return chain
+
+
 def broad_compatible_synthetic_response(
     effort: np.ndarray,
     distance: np.ndarray,
@@ -28,28 +82,21 @@ def broad_compatible_synthetic_response(
 ) -> np.ndarray:
     """Response-free fixture with guaranteed broad-world support for every appearance.
 
-    This fixture is validation plumbing only. It does not change the scientific Layer-A
-    contract. Persistent synthetic anchors are chosen only among stations with positive
-    effort in every primary season, then every synthetic appearance is selected from the
-    same candidate definition used by the real runner and is explicitly required to lie
-    within the frozen broadest structural threshold of a current synthetic source.
+    This is validation plumbing only. It searches the response-independent effort/geometry
+    for a deterministic 22-season source chain, then adds a few synthetic appearances per
+    transition only when they satisfy the exact real-runner candidate definition and the
+    frozen broadest structural world. No scientific threshold or count gate is relaxed.
     """
 
     n_nodes, n_primary = effort.shape
     detected = np.zeros((n_nodes, n_primary), dtype=bool)
-
-    persistent_pool = np.flatnonzero(np.all(effort > 0.0, axis=1))
-    if len(persistent_pool) == 0:
-        raise RuntimeError(
-            "response-free smoke fixture requires at least one station with positive "
-            "effort in all 22 seasons; scientific contracts are not relaxed to rescue smoke"
-        )
-
-    # A small deterministic persistent source set prevents the fixture from losing all
-    # current sources while leaving most nodes available as appearance candidates.
-    anchor_count = min(8, len(persistent_pool))
-    anchors = persistent_pool[np.linspace(0, len(persistent_pool) - 1, anchor_count, dtype=int)]
-    detected[anchors, :] = True
+    source_chain = _deterministic_effort_aware_source_chain(
+        effort,
+        distance,
+        broad_threshold_km,
+    )
+    for t, node in enumerate(source_chain):
+        detected[node, t] = True
 
     audit = []
     for t in range(n_primary - 1):
@@ -70,18 +117,24 @@ def broad_compatible_synthetic_response(
                 f"no broad-compatible response-free appearance candidates at transition {t}"
             )
 
-        # Four events per transition exceeds the inherited heldout minimum when all five
-        # heldout transitions remain estimable, while avoiding saturation of 171 nodes.
-        preferred = candidate_ids[((candidate_ids + 5 * t) % 5) == 0]
-        selected = preferred[: min(4, len(preferred))]
-        if len(selected) < min(4, len(candidate_ids)):
-            missing = min(4, len(candidate_ids)) - len(selected)
-            remainder = np.asarray(
-                [node for node in candidate_ids if node not in set(selected.tolist())],
-                dtype=int,
+        next_chain_node = source_chain[t + 1]
+        required = []
+        if candidates[next_chain_node]:
+            required.append(next_chain_node)
+        elif next_chain_node != source_chain[t] and not detected[next_chain_node, t]:
+            raise RuntimeError(
+                f"source-chain transition {t} changes station without satisfying the "
+                f"real appearance-candidate rule"
             )
-            selected = np.concatenate([selected, remainder[:missing]])
 
+        preferred = candidate_ids[((candidate_ids + 5 * t) % 5) == 0].tolist()
+        ordered = required + [node for node in preferred if node not in required]
+        ordered.extend(
+            node
+            for node in candidate_ids.tolist()
+            if node not in set(ordered)
+        )
+        selected = np.asarray(ordered[: min(4, len(ordered))], dtype=int)
         if len(selected) == 0:
             raise RuntimeError(f"synthetic transition {t} produced zero events")
         if not np.all(broad_reach[selected]):
@@ -96,14 +149,18 @@ def broad_compatible_synthetic_response(
                 "candidate_count": int(len(candidate_ids)),
                 "selected_event_count": int(len(selected)),
                 "selected_nodes": selected.tolist(),
+                "chain_source_node": int(source_chain[t]),
+                "chain_target_node": int(source_chain[t + 1]),
             }
         )
 
-    # Re-evaluate the exact runner candidate/source semantics after the full fixture has
-    # been constructed. This catches any accidental future-source mutation before the
-    # paired runner is allowed to use the fixture.
+    # Re-evaluate the exact real-runner source/candidate semantics after all synthetic
+    # seasons have been built. This prevents later target assignments from silently
+    # creating a broad-incompatible appearance in an earlier transition.
     for t in range(n_primary - 1):
         source = detected[:, t] & (effort[:, t] > 0.0)
+        if not source.any():
+            raise RuntimeError(f"post-construction source set empty at transition {t}")
         broad_reach = np.any(distance[:, source] <= broad_threshold_km, axis=1)
         candidates = (
             (~detected[:, t])
@@ -119,7 +176,7 @@ def broad_compatible_synthetic_response(
             )
 
     broad_compatible_synthetic_response.last_audit = audit
-    broad_compatible_synthetic_response.anchor_nodes = anchors.tolist()
+    broad_compatible_synthetic_response.source_chain = source_chain
     return detected
 
 
@@ -141,8 +198,8 @@ def main() -> None:
         response_path=None,
     )
     result["smoke_fixture"] = {
-        "kind": "persistent-response-free-broad-compatible",
-        "anchor_nodes": getattr(broad_compatible_synthetic_response, "anchor_nodes", []),
+        "kind": "effort-aware-source-chain-broad-compatible",
+        "source_chain": getattr(broad_compatible_synthetic_response, "source_chain", []),
         "transition_audit": getattr(broad_compatible_synthetic_response, "last_audit", []),
         "scientific_contract_changed": False,
     }
