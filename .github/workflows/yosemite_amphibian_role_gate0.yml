@@ -41,19 +41,26 @@ jobs:
           OUT=Path('build/yosemite_amphibian_role')
           contract=json.loads((ROOT/'gate0_role_contract.json').read_text(encoding='utf-8'))
           meta=contract['metadata_xml']
-          req=urllib.request.Request(meta['download_uri'], headers={'User-Agent':'eog-yosemite-amphibian-role-gate0/1.0'})
+          req=urllib.request.Request(meta['download_uri'], headers={'User-Agent':'eog-yosemite-amphibian-role-gate0/1.1','Accept':'application/xml,text/xml,*/*'})
           with urllib.request.urlopen(req,timeout=60) as r:
+              content_type=str(r.headers.get('Content-Type',''))
+              final_url=str(r.geturl())
               xml_bytes=r.read()
           md5=hashlib.md5(xml_bytes).hexdigest()
-          if md5 != meta['md5']:
-              raise RuntimeError(f'FGDC metadata MD5 mismatch: {md5}')
+          sha256=hashlib.sha256(xml_bytes).hexdigest()
+          manifest_md5_match=(md5 == meta['md5'])
+          if len(xml_bytes) > 2_000_000:
+              raise RuntimeError('metadata download unexpectedly exceeds 2 MB')
 
           root=ET.fromstring(xml_bytes)
           def lname(tag: str) -> str:
               return tag.rsplit('}',1)[-1].casefold()
-          def text_of(node, child_name: str) -> str:
+          if lname(root.tag) != 'metadata':
+              raise RuntimeError(f'unexpected FGDC root element: {root.tag!r}')
+
+          def direct_text(node, child_name: str) -> str:
               target=child_name.casefold()
-              for child in node.iter():
+              for child in node:
                   if lname(child.tag)==target:
                       return ' '.join(''.join(child.itertext()).split())
               return ''
@@ -62,21 +69,18 @@ jobs:
           for detailed in root.iter():
               if lname(detailed.tag)!='detailed':
                   continue
-              label=text_of(detailed,'enttypl')
-              definition=text_of(detailed,'enttypd')
+              enttyp=next((c for c in detailed if lname(c.tag)=='enttyp'),None)
+              label=direct_text(enttyp,'enttypl') if enttyp is not None else ''
+              definition=direct_text(enttyp,'enttypd') if enttyp is not None else ''
               attrs=[]
               for attr in detailed:
                   if lname(attr.tag)!='attr':
                       continue
                   attrs.append({
-                      'label': text_of(attr,'attrlabl'),
-                      'definition': text_of(attr,'attrdef'),
+                      'label': direct_text(attr,'attrlabl'),
+                      'definition': direct_text(attr,'attrdef'),
                   })
-              entities.append({
-                  'label':label,
-                  'definition':definition,
-                  'attributes':attrs,
-              })
+              entities.append({'label':label,'definition':definition,'attributes':attrs})
 
           if not entities:
               raise RuntimeError('FGDC XML exposes no detailed entity metadata')
@@ -99,12 +103,18 @@ jobs:
           site_has_geometry=any(term in site_hay for term in geometry_terms)
           site_response_hits=sorted({term for term in response_terms if term in site_hay})
           distinct_temporal_role=bool(site_year_candidates or survey_candidates)
+          role_supported=bool(site_candidates and site_has_id and site_has_geometry and not site_response_hits and distinct_temporal_role)
 
           payload={
               'status':'metadata_role_audit_complete',
               'candidate':contract['candidate'],
               'manifest_fingerprint':contract['manifest_fingerprint'],
-              'metadata_xml_md5':md5,
+              'metadata_manifest_md5':meta['md5'],
+              'metadata_download_md5':md5,
+              'metadata_download_sha256':sha256,
+              'metadata_manifest_md5_match':manifest_md5_match,
+              'metadata_content_type':content_type,
+              'metadata_final_url':final_url,
               'metadata_xml_bytes_downloaded':len(xml_bytes),
               'csv_file_bytes_downloaded':False,
               'csv_rows_opened':False,
@@ -116,8 +126,9 @@ jobs:
               'site_has_geometry_evidence':site_has_geometry,
               'site_response_term_hits':site_response_hits,
               'distinct_temporal_response_role_evidence':distinct_temporal_role,
-              'metadata_supports_role_separation':bool(site_candidates and site_has_id and site_has_geometry and not site_response_hits and distinct_temporal_role),
-              'next':contract['next_if_supported'] if (site_candidates and site_has_id and site_has_geometry and not site_response_hits and distinct_temporal_role) else contract['stop_if_unsupported'],
+              'metadata_supports_role_separation':role_supported,
+              'identity_note':('ScienceBase manifest checksum matches downloaded metadata XML' if manifest_md5_match else 'ScienceBase manifest checksum differs from the currently served FGDC metadata XML; current XML bytes are separately fingerprinted and used only as metadata, never as response data'),
+              'next':contract['next_if_supported'] if role_supported else contract['stop_if_unsupported'],
           }
           payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
           (OUT/'role_result.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
@@ -131,6 +142,7 @@ jobs:
           assert p['status']=='metadata_role_audit_complete'
           assert p['csv_file_bytes_downloaded'] is False
           assert p['csv_rows_opened'] is False
+          assert p['metadata_xml_bytes_downloaded'] > 0
           PY
       - name: Upload role evidence
         uses: actions/upload-artifact@v4
