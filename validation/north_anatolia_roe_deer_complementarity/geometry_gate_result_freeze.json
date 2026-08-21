@@ -1,0 +1,65 @@
+{
+  "status": "response_blind_geometry_gate_pass",
+  "candidate": "Northwestern Anatolia roe deer seasonal dynamic occupancy 2008-2018",
+  "workflow_run_id": 32458034427,
+  "workflow_job_id": 96699065218,
+  "workflow_artifact_id": 9437918526,
+  "upstream_repository": "dilsaddt/NorthAnatolia_2022_singlesp_seasonal_habitat_use",
+  "upstream_commit": "da083d62a584b43fb9d2a6ec613397ef92067ead",
+  "response_content_opened": false,
+  "response_file_downloads": 0,
+  "raw_station_count": 173,
+  "excluded_station_names": ["TUL08", "TUL12"],
+  "analysis_node_count": 171,
+  "analysis_registry_fingerprint": "7566881ba7cfe474d07c3cb3c7d6816939b2a2fe3149c2db053604496a82018b",
+  "common_utm_zone": 36.0,
+  "stations_sha256": "008f3debd934e181522047708d8cabbe13ad61fae09b942d170caeb100344579",
+  "variables_sha256": "7d4072e6e6cf45951ad3b1610d24a35a604e115d0f5e0d063c02e412f2be7f5b",
+  "distance_matrix_fingerprint": "41fc8926ce69806d53389a465a7e346fe7c044ebc24dfdc664abe2a11e489343",
+  "scale_ladder_fingerprint": "589d26a557de47f40c2e92c2643de70fa69a6d9db4a8bdbf50aa13ea405334f3",
+  "universe_structural_audit_fingerprint": "93dc67dbd72746c18658de0e8b5439cff854a59328c0a55fcfd21eb54dd9a5dc",
+  "level90_gate_fingerprint": "cd3374ade14f871fcb6a50bd5f2fef204cffb6c4e59fea62b53c6cc96d02aa5a",
+  "structural_levels": [
+    {
+      "target_largest_component_fraction": 0.25,
+      "threshold_km": 2.029850240781,
+      "achieved_largest_component_fraction": 0.25146198830409355,
+      "weak_component_count": 34,
+      "isolated_node_fraction": 0.0935672514619883
+    },
+    {
+      "target_largest_component_fraction": 0.5,
+      "threshold_km": 31.008897110346,
+      "achieved_largest_component_fraction": 0.7426900584795322,
+      "weak_component_count": 3,
+      "isolated_node_fraction": 0.0
+    },
+    {
+      "target_largest_component_fraction": 0.75,
+      "threshold_km": 37.290775923813,
+      "achieved_largest_component_fraction": 0.9239766081871345,
+      "weak_component_count": 2,
+      "isolated_node_fraction": 0.0
+    },
+    {
+      "target_largest_component_fraction": 0.9,
+      "threshold_km": 37.290775923813,
+      "achieved_largest_component_fraction": 0.9239766081871345,
+      "weak_component_count": 2,
+      "isolated_node_fraction": 0.0
+    }
+  ],
+  "distinct_positive_threshold_count": 3,
+  "distinct_positive_thresholds_km": [
+    2.029850240781,
+    31.008897110346,
+    37.290775923813
+  ],
+  "level90_adequacy": {
+    "largest_weak_component_fraction": 0.9239766081871345,
+    "isolated_node_fraction": 0.0,
+    "passed": true
+  },
+  "interpretation": "The candidate passes the predeclared response-blind structural gate. The 0.75 and 0.90 target fractions collapse to the same adjacency threshold, but the frozen contract requires at least three distinct positive structural scales and is satisfied. No biological dispersal interpretation is assigned to these thresholds.",
+  "next": "Freeze endpoint, split, exact count gate, Layer-A worlds/update rule, unchanged Layer-B representation and same-learner strong baseline before bounded response-header access."
+}
