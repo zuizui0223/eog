@@ -1,0 +1,31 @@
+{
+  "status": "response_blind_exact_source_freeze",
+  "candidate": "H.J. Andrews Forest long-term bird survey SA024",
+  "database_code": "SA024",
+  "version": 7,
+  "dataset_doi": "10.6073/pasta/6fbc15152b412732881dc7a52377f49e",
+  "abstract_url": "https://andlter.forestry.oregonstate.edu/data/Abstract.aspx?dbcode=SA024",
+  "abstract_sha256_at_inventory": "ac4950d082dae100d4e579ca6336e65e4363f16be1fc418d86ea02aa4c10d2d2",
+  "geometry": {
+    "url": "https://andlter.forestry.oregonstate.edu/data/location_csv.aspx?dbcode=SA024",
+    "content_opened": false
+  },
+  "eml": {
+    "url": "https://andrewsforest.oregonstate.edu/sites/default/files/lter/fsdbdata/eml_archive/SA024_7.xml",
+    "content_opened": false
+  },
+  "response_entities": {
+    "survey_information": {
+      "metadata_url": "https://andlter.forestry.oregonstate.edu/data/attributes.aspx?dbcode=SA024&entnum=1",
+      "data_url": "https://andlter.forestry.oregonstate.edu/data/register/default.aspx?datapage=ascii_data&entnum=1&dbcode=SA024",
+      "content_opened": false
+    },
+    "individual_bird_observations": {
+      "metadata_url": "https://andlter.forestry.oregonstate.edu/data/attributes.aspx?dbcode=SA024&entnum=2",
+      "data_url": "https://andlter.forestry.oregonstate.edu/data/register/default.aspx?datapage=ascii_data&entnum=2&dbcode=SA024",
+      "content_opened": false
+    }
+  },
+  "response_content_opened": false,
+  "next": "Open only the frozen study-location CSV and run the prospectively frozen response-blind geometry gate."
+}
