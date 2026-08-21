@@ -1,0 +1,118 @@
+name: Giant kelp outcome-access authorization
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_outcome_access_gate.yml"
+      - "validation/giant_kelp_complementarity/outcome_access_freeze_ledger.json"
+      - "validation/giant_kelp_complementarity/prospective_estimability_contract.json"
+      - "validation/giant_kelp_complementarity/runtime_lock.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_outcome_access_gate.yml"
+      - "validation/giant_kelp_complementarity/outcome_access_freeze_ledger.json"
+      - "validation/giant_kelp_complementarity/prospective_estimability_contract.json"
+      - "validation/giant_kelp_complementarity/runtime_lock.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authorize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen package
+        run: python -m pip install .
+      - name: Evaluate generic outcome-access gate
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_outcome_access
+          python - <<'PY'
+          from dataclasses import asdict
+          import hashlib, json, subprocess
+          from pathlib import Path
+          from eog.v2.outcome_access import (
+              REQUIRED_FREEZE_KEYS,
+              FrozenOutcomeAccessContract,
+              evaluate_outcome_access_gate,
+          )
+          from eog.v2.prospective_estimability import (
+              AggregateCountInterval,
+              AggregateEstimabilityEvidence,
+              ProspectiveEstimabilityDeclaration,
+              evaluate_prospective_estimability,
+          )
+
+          root=Path('validation/giant_kelp_complementarity')
+          ledger=json.load(open(root/'outcome_access_freeze_ledger.json'))
+          est_contract=json.load(open(root/'prospective_estimability_contract.json'))
+          runtime_blob=subprocess.check_output(['git','hash-object',str(root/'runtime_lock.json')],text=True).strip()
+          ledger_blob=subprocess.check_output(['git','hash-object',str(root/'outcome_access_freeze_ledger.json')],text=True).strip()
+          if runtime_blob != ledger['runtime_lock_git_blob_sha']:
+              raise RuntimeError(f'runtime lock drift: {runtime_blob}')
+          if tuple(sorted(ledger['freeze_fingerprints'])) != tuple(sorted(REQUIRED_FREEZE_KEYS)):
+              raise RuntimeError('ledger key set differs from generic required freeze keys')
+          if ledger['freeze_fingerprints']['runtime_runner'] != runtime_blob:
+              raise RuntimeError('runtime_runner freeze does not match runtime lock blob')
+          if ledger['response_rows_opened'] or ledger['response_bytes_opened']:
+              raise RuntimeError('outcome-access ledger is not response-blind')
+
+          d=est_contract['declaration']; e=est_contract['evidence']
+          estimability=evaluate_prospective_estimability(
+              ProspectiveEstimabilityDeclaration(**d),
+              AggregateEstimabilityEvidence(
+                  source_label=e['source_label'],
+                  endpoint_definition_matches=e['endpoint_definition_matches'],
+                  response_rows_opened=e['response_rows_opened'],
+                  intervals={k:AggregateCountInterval(**v) for k,v in e['intervals'].items()},
+                  note=e['note'],
+              ),
+          )
+          if estimability.fingerprint != ledger['prospective_estimability_result_fingerprint']:
+              raise RuntimeError(f'estimability fingerprint drift: {estimability.fingerprint}')
+          if estimability.status != ledger['prospective_estimability_status']:
+              raise RuntimeError(f'estimability status drift: {estimability.status}')
+
+          contract=FrozenOutcomeAccessContract(
+              attempt_id=ledger['attempt_id'],
+              freeze_fingerprints=ledger['freeze_fingerprints'],
+              response_rows_opened=ledger['response_rows_opened'],
+              exact_count_gate_first=ledger['exact_count_gate_first'],
+              zero_fit_on_count_failure=ledger['zero_fit_on_count_failure'],
+              no_post_open_redesign=ledger['no_post_open_redesign'],
+              note=ledger['note'],
+          )
+          result=evaluate_outcome_access_gate(contract,estimability)
+          payload={
+              **asdict(result),
+              'ledger_fingerprint':ledger['ledger_fingerprint'],
+              'ledger_git_blob_sha':ledger_blob,
+              'runtime_lock_git_blob_sha':runtime_blob,
+              'response_bytes_opened':False,
+              'response_rows_opened':False,
+              'zero_heldout_scores_on_count_failure':ledger['zero_heldout_scores_on_count_failure'],
+          }
+          payload['decision_fingerprint']=result.fingerprint
+          assert result.authorized is True
+          assert result.status=='authorized_once_only_exact_count_gate_required'
+          assert result.missing_freeze_keys==()
+          assert result.prospective_disposition=='continue_response_blind_exact_gate_required'
+          assert result.exact_count_gate_first is True
+          assert result.zero_fit_on_count_failure is True
+          assert result.no_post_open_redesign is True
+          open('build/giant_kelp_outcome_access/outcome_access_gate_result.json','w').write(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Upload authorization evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-outcome-access-gate
+          path: build/giant_kelp_outcome_access/outcome_access_gate_result.json
+          if-no-files-found: error
