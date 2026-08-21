@@ -1,0 +1,19 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "declaration": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 4
+  },
+  "evidence": {
+    "source_label": "Castorani et al. 2017 design and EDI metadata before row-level response access",
+    "endpoint_definition_matches": false,
+    "response_rows_opened": false,
+    "intervals": {},
+    "note": "The study documents a dynamic 469-patch metapopulation over 22 semi-annual periods, but no published aggregate counts exactly match the frozen recorded-zero-to-recorded-positive endpoint and 16/5 split. Do not infer a PASS from generic colonization/extinction summaries; retain uncertain_pre_response and require the exact count gate first."
+  },
+  "expected_status": "uncertain_pre_response",
+  "response_boundary": "No row-level biomass/fecundity response has been opened."
+}
