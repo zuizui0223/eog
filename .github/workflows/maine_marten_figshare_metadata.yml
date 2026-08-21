@@ -1,0 +1,155 @@
+name: Maine marten Figshare response-blind metadata inventory
+
+on:
+  push:
+    branches:
+      - agent/maine-marten-preflight
+    paths:
+      - ".github/workflows/maine_marten_figshare_metadata.yml"
+      - "validation/maine_marten_complementarity/**"
+  pull_request:
+    paths:
+      - ".github/workflows/maine_marten_figshare_metadata.yml"
+      - "validation/maine_marten_complementarity/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Read Figshare project/article/file metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/maine_marten_metadata
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import urllib.parse
+          import urllib.request
+
+          root = Path("validation/maine_marten_complementarity")
+          contract = json.loads((root / "source_resolution_contract.json").read_text(encoding="utf-8"))
+          project_id = int(contract["figshare_project"]["project_id"])
+          ua = "EOG-Maine-marten-Figshare-metadata/1.0"
+          requests = []
+
+          def get_json(url):
+              requests.append(url)
+              req = urllib.request.Request(url, headers={"User-Agent": ua, "Accept": "application/json"})
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  payload = response.read(8_000_001)
+                  final_url = response.geturl()
+              if len(payload) > 8_000_000:
+                  raise RuntimeError("Figshare metadata exceeded bounded cap")
+              try:
+                  data = json.loads(payload.decode("utf-8"))
+              except Exception as exc:
+                  raise RuntimeError(f"Figshare endpoint did not return JSON: {final_url}") from exc
+              return data
+
+          articles_url = (
+              f"https://api.figshare.com/v2/projects/{project_id}/articles?"
+              + urllib.parse.urlencode({"page_size": 1000, "page": 1})
+          )
+          listing = get_json(articles_url)
+          if not isinstance(listing, list):
+              raise RuntimeError("Figshare project articles endpoint must return a list")
+
+          articles = []
+          file_names = []
+          file_download_requests = 0
+          file_payload_bytes_read = 0
+          for row in listing:
+              if not isinstance(row, dict):
+                  continue
+              article_id = row.get("id")
+              if not article_id:
+                  continue
+              detail = get_json(f"https://api.figshare.com/v2/articles/{article_id}")
+              files = []
+              for file_row in detail.get("files", []) or []:
+                  if not isinstance(file_row, dict):
+                      continue
+                  item = {
+                      "id": file_row.get("id"),
+                      "name": file_row.get("name"),
+                      "size": file_row.get("size"),
+                      "mimetype": file_row.get("mimetype"),
+                      "download_url": file_row.get("download_url"),
+                      "supplied_md5": file_row.get("supplied_md5"),
+                      "computed_md5": file_row.get("computed_md5"),
+                  }
+                  files.append(item)
+                  if item["name"]:
+                      file_names.append(str(item["name"]))
+              articles.append({
+                  "id": article_id,
+                  "title": detail.get("title") or row.get("title"),
+                  "doi": detail.get("doi"),
+                  "url_private_api": detail.get("url_private_api"),
+                  "url_public_api": detail.get("url_public_api"),
+                  "url_private_html": detail.get("url_private_html"),
+                  "url_public_html": detail.get("url_public_html"),
+                  "published_date": detail.get("published_date"),
+                  "modified_date": detail.get("modified_date"),
+                  "description": detail.get("description"),
+                  "files": files,
+              })
+
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "project_id": project_id,
+              "article_count": len(articles),
+              "articles": articles,
+              "all_file_names": sorted(set(file_names)),
+              "metadata_request_count": len(requests),
+              "metadata_urls": requests,
+              "file_download_requests": file_download_requests,
+              "file_payload_bytes_read": file_payload_bytes_read,
+              "response_content_opened": False,
+          }
+          out = Path("build/maine_marten_metadata/metadata_inventory.json")
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps({
+              "article_count": result["article_count"],
+              "all_file_names": result["all_file_names"],
+              "articles": [
+                  {
+                      "id": article["id"],
+                      "title": article["title"],
+                      "files": [
+                          {"id": f["id"], "name": f["name"], "size": f["size"], "mimetype": f["mimetype"]}
+                          for f in article["files"]
+                      ],
+                  }
+                  for article in articles
+              ],
+              "file_download_requests": 0,
+              "file_payload_bytes_read": 0,
+              "response_content_opened": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Assert metadata-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("build/maine_marten_metadata/metadata_inventory.json").read_text())
+          assert result["file_download_requests"] == 0
+          assert result["file_payload_bytes_read"] == 0
+          assert result["response_content_opened"] is False
+          print("Figshare metadata-only boundary PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: maine-marten-figshare-metadata
+          path: build/maine_marten_metadata/metadata_inventory.json
+          if-no-files-found: error
