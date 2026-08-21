@@ -1,0 +1,175 @@
+name: Giant kelp DataONE geometry lineage metadata
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_dataone_geometry_lineage.yml"
+      - "validation/giant_kelp_complementarity/dataone_geometry_lineage_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_dataone_geometry_lineage.yml"
+      - "validation/giant_kelp_complementarity/dataone_geometry_lineage_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lineage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Query DataONE CN Solr metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_dataone_lineage
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import json
+          from pathlib import Path
+          import urllib.parse
+          import urllib.request
+
+          ROOT=Path('validation/giant_kelp_complementarity')
+          OUT=Path('build/giant_kelp_dataone_lineage')
+          contract=json.loads((ROOT/'dataone_geometry_lineage_contract.json').read_text(encoding='utf-8'))
+          UA='eog-giant-kelp-dataone-lineage/1.0'
+          endpoint='https://cn.dataone.org/cn/v2/query/solr/'
+          fields=contract['required_lineage_fields']
+          fetched=[]
+
+          def query(term: str):
+              params={
+                  'q':term,
+                  'fl':','.join(fields),
+                  'rows':'200',
+                  'wt':'json',
+              }
+              url=endpoint+'?'+urllib.parse.urlencode(params)
+              req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':'application/json'})
+              with urllib.request.urlopen(req,timeout=60) as r:
+                  body=r.read(); status=getattr(r,'status',None) or r.getcode()
+                  ctype=str(r.headers.get('Content-Type','')); final=str(r.geturl())
+              fetched.append({'term':term,'requested':url,'final':final,'status':status,'bytes':len(body),'content_type':ctype,'sha256':hashlib.sha256(body).hexdigest()})
+              if status!=200:
+                  raise RuntimeError(f'DataONE Solr status {status} for {term!r}')
+              obj=json.loads(body)
+              docs=((obj.get('response') or {}).get('docs') or [])
+              if not isinstance(docs,list):
+                  raise RuntimeError(f'DataONE Solr docs not a list for {term!r}')
+              return docs
+
+          by_term={term:query(term) for term in contract['query_terms']}
+
+          # De-duplicate by DataONE id/identifier while retaining only declared fields.
+          docs_by_key={}
+          for term,docs in by_term.items():
+              for doc in docs:
+                  cleaned={field:doc.get(field) for field in fields if field in doc}
+                  key=str(doc.get('id') or doc.get('identifier') or json.dumps(cleaned,sort_keys=True))
+                  entry=docs_by_key.setdefault(key,{'document':cleaned,'matched_terms':[]})
+                  entry['matched_terms'].append(term)
+          entries=[]
+          for key,entry in docs_by_key.items():
+              entry['matched_terms']=sorted(set(entry['matched_terms']))
+              entries.append({'key':key,**entry})
+          entries.sort(key=lambda row:row['key'])
+
+          title_phrase=contract['geometry_title'].casefold()
+          lineage_token=contract['resolved_package_lineage'].casefold()
+          hashes=(
+              contract['initial_geometry_doi'].split('/')[-1].casefold(),
+              contract['bco_dmo_external_geometry_doi'].split('/')[-1].casefold(),
+          )
+          relevant=[]
+          for row in entries:
+              blob=json.dumps(row['document'],ensure_ascii=False,sort_keys=True).casefold()
+              score=sum([
+                  title_phrase in blob,
+                  lineage_token in blob,
+                  hashes[0] in blob,
+                  hashes[1] in blob,
+              ])
+              if score:
+                  relevant.append({**row,'relevance_score':int(score)})
+
+          # Build lineage edges only from explicit DataONE fields, never infer from dates.
+          def values(value):
+              if value is None: return []
+              if isinstance(value,list): return [str(v) for v in value]
+              return [str(value)]
+          edges=[]
+          for row in relevant:
+              doc=row['document']; src=str(doc.get('id') or doc.get('identifier') or row['key'])
+              for dst in values(doc.get('obsoletes')):
+                  edges.append({'relation':'obsoletes','from':src,'to':dst})
+              for dst in values(doc.get('obsoletedBy')):
+                  edges.append({'relation':'obsoletedBy','from':src,'to':dst})
+          edges=sorted(edges,key=lambda e:(e['from'],e['relation'],e['to']))
+
+          # Same-lineage is certified only by explicit package/series/obsolescence evidence.
+          series_ids=sorted({str(r['document'].get('seriesId')) for r in relevant if r['document'].get('seriesId')})
+          lineage_hits=[r for r in relevant if lineage_token in json.dumps(r['document'],ensure_ascii=False,sort_keys=True).casefold()]
+          hash_hits={h:[r['key'] for r in relevant if h in json.dumps(r['document'],ensure_ascii=False,sort_keys=True).casefold()] for h in hashes}
+          both_hashes_seen=all(hash_hits[h] for h in hashes)
+          explicit_relation_between_hash_sets=False
+          left=set(hash_hits[hashes[0]]); right=set(hash_hits[hashes[1]])
+          if left and right:
+              for edge in edges:
+                  if (edge['from'] in left and edge['to'] in right) or (edge['from'] in right and edge['to'] in left):
+                      explicit_relation_between_hash_sets=True
+                      break
+          same_series_certified=(both_hashes_seen and len(series_ids)==1 and bool(series_ids))
+          lineage_resolved=bool(lineage_hits) and (same_series_certified or explicit_relation_between_hash_sets)
+
+          payload={
+              'status':'dataone_geometry_lineage_resolved' if lineage_resolved else 'dataone_geometry_lineage_ambiguous',
+              'candidate':contract['candidate'],
+              'initial_geometry_doi':contract['initial_geometry_doi'],
+              'bco_dmo_external_geometry_doi':contract['bco_dmo_external_geometry_doi'],
+              'resolved_package_lineage':contract['resolved_package_lineage'],
+              'query_terms':contract['query_terms'],
+              'query_result_counts':{term:len(docs) for term,docs in by_term.items()},
+              'deduplicated_document_count':len(entries),
+              'relevant_documents':relevant,
+              'explicit_lineage_edges':edges,
+              'series_ids':series_ids,
+              'hash_hits':hash_hits,
+              'both_doi_hashes_seen':both_hashes_seen,
+              'same_series_certified':same_series_certified,
+              'explicit_relation_between_doi_hash_sets':explicit_relation_between_hash_sets,
+              'lineage_resolved':lineage_resolved,
+              'dataone_object_endpoints_called':False,
+              'geometry_data_bytes_opened':False,
+              'response_package_bytes_opened':False,
+              'response_rows_opened':False,
+              'network_fetches':fetched,
+              'next':contract['next_if_same_lineage_resolves'] if lineage_resolved else contract['stop_if_lineage_ambiguous'],
+          }
+          payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          (OUT/'dataone_lineage_result.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Assert metadata-only firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_dataone_lineage/dataone_lineage_result.json'))
+          assert p['dataone_object_endpoints_called'] is False
+          assert p['geometry_data_bytes_opened'] is False
+          assert p['response_package_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          PY
+      - name: Upload DataONE lineage evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-dataone-geometry-lineage
+          path: build/giant_kelp_dataone_lineage/dataone_lineage_result.json
+          if-no-files-found: error
