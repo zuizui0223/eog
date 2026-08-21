@@ -1,0 +1,56 @@
+name: Giant kelp canonical geometry relabeling
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_canonical_geometry.yml"
+      - "benchmarks/freeze_giant_kelp_canonical_geometry.py"
+      - "benchmarks/audit_giant_kelp_process_mapping.py"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+      - "validation/giant_kelp_complementarity/patch_identity_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_canonical_geometry.yml"
+      - "benchmarks/freeze_giant_kelp_canonical_geometry.py"
+      - "benchmarks/audit_giant_kelp_process_mapping.py"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+      - "validation/giant_kelp_complementarity/patch_identity_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen EOG package
+        run: python -m pip install .
+      - name: Verify bijective relabeling and unchanged structural ladder
+        run: |
+          set -euo pipefail
+          PYTHONPATH=benchmarks python benchmarks/freeze_giant_kelp_canonical_geometry.py
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_canonical_geometry/canonical_geometry_result.json'))
+          assert p['status']=='canonical_geometry_relabeling_pass'
+          assert p['bijection_pass'] is True
+          assert p['structural_thresholds_unchanged'] is True
+          assert p['response_package_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          PY
+      - name: Upload canonical geometry evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-canonical-geometry
+          path: build/giant_kelp_canonical_geometry/canonical_geometry_result.json
+          if-no-files-found: error
