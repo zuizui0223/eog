@@ -19,10 +19,10 @@
     "temporal_split": "59d90ed93c929c578a3dcade17776af67f5b02ad993a00cfdf30f34c64869d59",
     "world_scale": "d2800a05a458a6a0f234a7969e2a673e2a846bb2de54baac66b9d81c96ce93f2"
   },
-  "ledger_fingerprint": "d1cc416f4c26918765a2e97bfbfe3406c88dc5b7b6f850f095a09d7c712c7b2c",
+  "ledger_fingerprint": "80e15bfcf7b9180863db771d6329c0932f77305a7b5adbd1fe2986ea71333b4d",
   "no_post_open_redesign": true,
   "note": "Complete response-blind freeze ledger. Authorization, if granted, permits only the once-only exact-count-first outcome runner; it does not itself authorize model fitting.",
-  "prospective_estimability_result_fingerprint": "c62639a406ee7c21cf59c508044ef901daae3e230b4ec545bb198c1e2bf2f4a9",
+  "prospective_estimability_result_fingerprint": "ba2fdf288fd07280daab9ded454baa9cb637781220892b94596a5bc2c35983d4",
   "prospective_estimability_status": "uncertain_pre_response",
   "response_bytes_opened": false,
   "response_rows_opened": false,
