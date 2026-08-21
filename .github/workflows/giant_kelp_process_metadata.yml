@@ -1,0 +1,170 @@
+name: Giant kelp spore process metadata audit
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_process_metadata.yml"
+      - "validation/giant_kelp_complementarity/process_metadata_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_process_metadata.yml"
+      - "validation/giant_kelp_complementarity/process_metadata_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Resolve process DOI and inspect DataONE EML only
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_process_metadata
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, json, re, urllib.parse, urllib.request, xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          ROOT=Path('validation/giant_kelp_complementarity')
+          OUT=Path('build/giant_kelp_process_metadata')
+          contract=json.loads((ROOT/'process_metadata_contract.json').read_text(encoding='utf-8'))
+          doi=contract['process_doi']; doi_hash=doi.split('/')[-1]
+          UA='eog-giant-kelp-process-metadata/1.0'
+          fetched=[]
+
+          def fetch(url,accept):
+              allowed=('https://doi.org/','https://cn.dataone.org/cn/v2/')
+              if not any(url.startswith(prefix) for prefix in allowed):
+                  raise RuntimeError(f'non-approved metadata endpoint: {url!r}')
+              req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':accept})
+              with urllib.request.urlopen(req,timeout=60) as r:
+                  body=r.read(); status=getattr(r,'status',None) or r.getcode(); ctype=str(r.headers.get('Content-Type','')); final=str(r.geturl())
+              fetched.append({'requested':url,'final':final,'status':status,'bytes':len(body),'content_type':ctype,'sha256':hashlib.sha256(body).hexdigest()})
+              return body,final,ctype
+
+          landing,landing_final,_=fetch(doi,'text/html,*/*')
+          landing_text=landing.decode('utf-8','replace')
+          patterns=(
+              r'packageid=([A-Za-z0-9_-]+\.\d+\.\d+)',
+              r'packageId["\'=:\s]+([A-Za-z0-9_-]+\.\d+\.\d+)',
+              r'\b((?:knb-lter-[A-Za-z0-9_-]+|edi)\.\d+\.\d+)\b',
+          )
+          package_ids=[]
+          for text in (landing_final,urllib.parse.unquote(landing_final),landing_text):
+              for pattern in patterns: package_ids.extend(re.findall(pattern,text,re.IGNORECASE))
+          package_ids=sorted(set(package_ids))
+
+          endpoint='https://cn.dataone.org/cn/v2/query/solr/'
+          fields=['id','identifier','seriesId','title','formatId','resourceMap','documents','isDocumentedBy','obsoletes','obsoletedBy','checksum','checksumAlgorithm','size','authoritativeMN','datasource','dateUploaded','dateModified','fileName']
+          def solr(q):
+              url=endpoint+'?'+urllib.parse.urlencode({'q':q,'fl':','.join(fields),'rows':'200','wt':'json'})
+              body,_,_=fetch(url,'application/json')
+              return ((json.loads(body).get('response') or {}).get('docs') or [])
+          query_terms=[doi_hash,*package_ids,'spore dispersal times giant kelp southern California']
+          by_term={term:solr(term) for term in query_terms}
+          docs={}
+          for term,rows in by_term.items():
+              for doc in rows:
+                  key=str(doc.get('id') or doc.get('identifier') or json.dumps(doc,sort_keys=True))
+                  docs.setdefault(key,{'document':doc,'terms':[]})['terms'].append(term)
+          entries=[{'key':k,'document':v['document'],'matched_terms':sorted(set(v['terms']))} for k,v in docs.items()]
+
+          expected=tuple(t.casefold() for t in contract['expected_title_terms'])
+          candidates=[]
+          for row in entries:
+              doc=row['document']; title=str(doc.get('title') or ''); blob=json.dumps(doc,ensure_ascii=False,sort_keys=True).casefold()
+              matches=sum(t in title.casefold() or t in blob for t in expected)
+              is_meta='eml' in str(doc.get('formatId') or '').casefold() or 'metadata' in str(doc.get('formatId') or '').casefold()
+              if matches or doi_hash.casefold() in blob:
+                  candidates.append({**row,'title_term_matches':matches,'doi_hash_hit':doi_hash.casefold() in blob,'is_metadata_like':is_meta})
+          meta=[c for c in candidates if c['is_metadata_like']]
+          if package_ids:
+              lineage=package_ids[0].rsplit('.',1)[0]
+              meta_lineage=[c for c in meta if lineage.casefold() in json.dumps(c['document'],ensure_ascii=False,sort_keys=True).casefold()]
+              if meta_lineage: meta=meta_lineage
+          if not meta:
+              raise RuntimeError(f'no process EML metadata candidate: package_ids={package_ids!r}, candidates={candidates!r}')
+          def rev(row):
+              m=re.search(r'/metadata/eml/[^/]+/\d+/(\d+)',row['key']); return int(m.group(1)) if m else -1
+          meta.sort(key=lambda r:(rev(r),str(r['document'].get('dateModified') or '')),reverse=True)
+          top_rev=rev(meta[0]); top=[r for r in meta if rev(r)==top_rev]
+          ids={str(r['document'].get('id') or r['document'].get('identifier') or r['key']) for r in top}
+          if len(ids)!=1: raise RuntimeError(f'ambiguous process metadata at revision {top_rev}: {top!r}')
+          chosen=top[0]; metadata_pid=str(chosen['document'].get('id') or chosen['document'].get('identifier') or chosen['key'])
+
+          encoded=urllib.parse.quote(metadata_pid,safe='')
+          eml_bytes,_,ctype=fetch(f'https://cn.dataone.org/cn/v2/object/{encoded}','application/xml,text/xml,*/*')
+          root=ET.fromstring(eml_bytes)
+          def lname(tag): return tag.rsplit('}',1)[-1]
+          def direct(node,target):
+              for child in node:
+                  if lname(child.tag)==target: return ' '.join(''.join(child.itertext()).split())
+              return ''
+          def desc(node,target):
+              for child in node.iter():
+                  if lname(child.tag)==target: return ' '.join(''.join(child.itertext()).split())
+              return ''
+          title=desc(root,'title')
+          missing=[t for t in contract['expected_title_terms'] if t.casefold() not in title.casefold()]
+          if len(missing)>1:
+              raise RuntimeError(f'process title insufficiently specific: {title!r}; missing={missing}')
+
+          entities=[]; attr_names=[]
+          for node in root.iter():
+              kind=lname(node.tag)
+              if kind not in {'dataTable','spatialVector','spatialRaster','view','storedProcedure'}: continue
+              physical=next((c for c in node if lname(c.tag)=='physical'),None)
+              attrs=[]
+              for attr in node.iter():
+                  if lname(attr.tag)!='attribute': continue
+                  item={'name':desc(attr,'attributeName'),'label':desc(attr,'attributeLabel'),'definition':desc(attr,'attributeDefinition'),'unit':desc(attr,'standardUnit') or desc(attr,'customUnit')}
+                  attrs.append(item); attr_names.append(item['name'])
+              entities.append({'kind':kind,'entity_name':direct(node,'entityName'),'object_name':desc(physical,'objectName') if physical is not None else '','distribution_url':desc(physical,'url') if physical is not None else '','attributes':attrs})
+          if not entities: raise RuntimeError('process EML exposes no entities')
+
+          role_terms={k:tuple(t.casefold() for t in v) for k,v in contract['role_terms'].items()}
+          role_hits={k:[] for k in role_terms}
+          for e in entities:
+              for attr in e['attributes']:
+                  blob=' '.join([attr['name'],attr['label'],attr['definition'],attr['unit']]).casefold()
+                  for role,terms in role_terms.items():
+                      if any(t in blob for t in terms): role_hits[role].append({'entity':e['entity_name'],'attribute':attr})
+          schema_resolved=bool(role_hits['dispersal'] and role_hits['source_patch'] and role_hits['target_patch'])
+
+          payload={
+              'status':'process_metadata_schema_resolved' if schema_resolved else 'process_metadata_schema_ambiguous',
+              'candidate':contract['candidate'],'process_doi':doi,'doi_landing_final_url':landing_final,'resolved_package_ids':package_ids,
+              'query_counts':{k:len(v) for k,v in by_term.items()},'metadata_candidates':meta,'resolved_metadata_pid':metadata_pid,'resolved_revision':top_rev,
+              'metadata_sha256':hashlib.sha256(eml_bytes).hexdigest(),'metadata_content_type':ctype,'title':title,'title_missing_expected_terms':missing,
+              'entities':entities,'role_hits':role_hits,'all_attribute_names':sorted(set(attr_names)),
+              'process_data_entity_bytes_opened':False,'response_package_bytes_opened':False,'response_rows_opened':False,'network_fetches':fetched,
+              'process_boundary':contract['process_boundary'],'next':contract['next_if_schema_resolves'] if schema_resolved else contract['stop_if_schema_ambiguous'],
+          }
+          payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          (OUT/'process_metadata_result.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_process_metadata/process_metadata_result.json'))
+          assert p['process_data_entity_bytes_opened'] is False
+          assert p['response_package_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          PY
+      - name: Upload process metadata evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-process-metadata
+          path: build/giant_kelp_process_metadata/process_metadata_result.json
+          if-no-files-found: error
