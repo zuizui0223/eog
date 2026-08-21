@@ -7,6 +7,7 @@ on:
     paths:
       - ".github/workflows/giant_kelp_complementarity_smoke.yml"
       - "benchmarks/run_giant_kelp_complementarity_once.py"
+      - "benchmarks/run_giant_kelp_complementarity_once_v2.py"
       - "validation/giant_kelp_complementarity/gate2_prediction_contract.json"
       - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
       - "validation/giant_kelp_complementarity/process_object_contract.json"
@@ -16,6 +17,7 @@ on:
     paths:
       - ".github/workflows/giant_kelp_complementarity_smoke.yml"
       - "benchmarks/run_giant_kelp_complementarity_once.py"
+      - "benchmarks/run_giant_kelp_complementarity_once_v2.py"
       - "validation/giant_kelp_complementarity/gate2_prediction_contract.json"
       - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
       - "validation/giant_kelp_complementarity/process_object_contract.json"
@@ -54,7 +56,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build/giant_kelp_complementarity_smoke
-          python benchmarks/run_giant_kelp_complementarity_once.py \
+          python benchmarks/run_giant_kelp_complementarity_once_v2.py \
             --mode smoke \
             --output build/giant_kelp_complementarity_smoke/smoke_result.json
       - name: Assert smoke boundaries
@@ -71,6 +73,7 @@ jobs:
           assert p['heldout_scores']==10
           assert len(p['heldout_transition_results'])==5
           assert p['complementarity']['outer_unit_count']==5
+          assert p['nonresponse_provenance']['canonical_centroid_fingerprint']=='827b0aca7179bd8e68176b559e4c1133531096f61aa6cc3c856aed33163b81f8'
           PY
       - name: Record runtime manifest
         run: |
@@ -87,6 +90,8 @@ jobs:
               'joblib':joblib.__version__,
               'threadpoolctl':threadpoolctl.__version__,
               'narwhals':narwhals.__version__,
+              'runner_entrypoint':'benchmarks/run_giant_kelp_complementarity_once_v2.py',
+              'base_runner':'benchmarks/run_giant_kelp_complementarity_once.py',
               'smoke_result_fingerprint':smoke['result_fingerprint'],
               'response_object_bytes_opened':smoke['response_object_bytes_opened'],
               'response_rows_opened':smoke['response_rows_opened'],
