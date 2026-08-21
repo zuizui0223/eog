@@ -25,24 +25,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Inventory ScienceBase hierarchy and file names only
+      - name: Freeze highest 2009 archival revision from ScienceBase metadata
         run: |
           set -euo pipefail
           mkdir -p build/bbs_woth_source/output
           python - <<'PY'
           import json
           from pathlib import Path
-          import urllib.parse
+          import re
           import urllib.request
 
           root = Path("validation/bbs_woth_complementarity")
           contract = json.loads((root / "source_resolution_contract.json").read_text(encoding="utf-8"))
           sb_id = contract["upstream_release"]["sciencebase_item_id"]
-          ua = "EOG-BBS-WOTH-ScienceBase-metadata-inventory/1.0"
-          requested = []
+          ending_year = int(contract["upstream_release"]["selected_archival_ending_year"])
+          ua = "EOG-BBS-WOTH-ScienceBase-archive-identity/1.0"
+          metadata_urls = []
 
           def get_json(url):
-              requested.append(url)
+              metadata_urls.append(url)
               req = urllib.request.Request(url, headers={"User-Agent": ua})
               with urllib.request.urlopen(req, timeout=30) as r:
                   payload = r.read(8_000_001)
@@ -53,74 +54,103 @@ jobs:
                   raise RuntimeError("ScienceBase metadata root must be object")
               return data
 
-          def query(filter_value):
-              url = "https://www.sciencebase.gov/catalog/items?" + urllib.parse.urlencode({
-                  "q": "",
-                  "filter": filter_value,
-                  "format": "json",
-                  "max": 1000,
-              })
-              return get_json(url).get("items", [])
-
           def name_of(record):
               return str(record.get("name") or record.get("title") or "").strip()
 
-          def file_names(item):
-              values = []
-              for f in item.get("files", []) or []:
-                  if isinstance(f, dict) and name_of(f):
-                      values.append(name_of(f))
-              for f in item.get("distributionLinks", []) or []:
-                  if isinstance(f, dict) and name_of(f):
-                      values.append(name_of(f))
-              return sorted(set(values))
+          def url_of(record):
+              for key in ("downloadUri", "downloadUrl", "url", "uri"):
+                  value = record.get(key)
+                  if isinstance(value, str) and value.startswith(("https://", "http://")):
+                      return value
+              return None
 
-          def summarize(item):
-              return {
-                  "id": item.get("id"),
-                  "parent_id": item.get("parentId"),
-                  "title": item.get("title"),
-                  "has_children": item.get("hasChildren"),
-                  "files_or_distribution_names": file_names(item),
+          item_url = f"https://www.sciencebase.gov/catalog/item/{sb_id}?format=json"
+          item = get_json(item_url)
+          file_records = [f for f in item.get("files", []) or [] if isinstance(f, dict)]
+          pattern = re.compile(rf"^Version{ending_year}v(\d+)\.zip$", re.I)
+          candidates = []
+          for record in file_records:
+              name = name_of(record)
+              match = pattern.match(name)
+              if not match:
+                  continue
+              candidates.append((int(match.group(1)), name, record))
+          if not candidates:
+              raise RuntimeError(f"no Version{ending_year}vN.zip archive is present in ScienceBase metadata")
+          candidates.sort(key=lambda row: row[0])
+          highest_revision = candidates[-1][0]
+          highest = [row for row in candidates if row[0] == highest_revision]
+          if len(highest) != 1:
+              raise RuntimeError("highest archival revision is not unique")
+          revision, selected_name, selected_record = highest[0]
+          selected_url = url_of(selected_record)
+          if not selected_url:
+              raise RuntimeError("selected archive record has no HTTP download URL")
+
+          # HEAD is metadata-only. Do not issue any GET against the ZIP in this workflow.
+          head_req = urllib.request.Request(
+              selected_url,
+              headers={"User-Agent": ua},
+              method="HEAD",
+          )
+          with urllib.request.urlopen(head_req, timeout=30) as response:
+              head = {
+                  "status": getattr(response, "status", None),
+                  "final_url": response.geturl(),
+                  "content_length": response.headers.get("Content-Length"),
+                  "accept_ranges": response.headers.get("Accept-Ranges"),
+                  "content_type": response.headers.get("Content-Type"),
+                  "etag": response.headers.get("ETag"),
+                  "last_modified": response.headers.get("Last-Modified"),
+                  "content_disposition": response.headers.get("Content-Disposition"),
               }
 
-          root_item = get_json(f"https://www.sciencebase.gov/catalog/item/{sb_id}?format=json")
-          children = [x for x in query(f"parentId={sb_id}") if isinstance(x, dict)]
-          descendants = [x for x in query(f"ancestors={sb_id}") if isinstance(x, dict)]
-
-          # Fetch full JSON only for direct children. This stays metadata-only and bounded.
-          full_children = []
-          for child in children:
-              cid = child.get("id")
-              if cid:
-                  try:
-                      full_children.append(get_json(f"https://www.sciencebase.gov/catalog/item/{cid}?format=json"))
-                  except Exception as exc:
-                      full_children.append({"id": cid, "title": child.get("title"), "metadata_error": repr(exc)})
+          # Preserve only metadata fields. No ZIP payload bytes are read here.
+          record_meta = {}
+          for key in (
+              "name", "title", "size", "contentType", "downloadUri", "downloadUrl",
+              "url", "uri", "checksum", "checksumType", "dateUploaded", "processed"
+          ):
+              if key in selected_record:
+                  record_meta[key] = selected_record[key]
 
           result = {
-              "root": summarize(root_item),
-              "direct_child_count": len(children),
-              "direct_children": [summarize(x) for x in full_children],
-              "descendant_count": len(descendants),
-              "descendant_titles": [
-                  {"id": x.get("id"), "parent_id": x.get("parentId"), "title": x.get("title")}
-                  for x in descendants
+              "attempt_id": contract["attempt_id"],
+              "sciencebase_item": {
+                  "id": item.get("id"),
+                  "title": item.get("title"),
+              },
+              "selection_rule": "For the prospectively fixed ending year, select the unique highest numeric archived revision VersionYYYYvN.zip; never select revision using Wood Thrush response content.",
+              "ending_year": ending_year,
+              "candidate_archives": [
+                  {"revision": rev, "name": name} for rev, name, _ in candidates
               ],
-              "metadata_request_count": len(requested),
-              "metadata_urls": requested,
-              "response_file_downloads": 0,
+              "selected_archive": {
+                  "revision": revision,
+                  "name": selected_name,
+                  "url": selected_url,
+                  "record_metadata": record_meta,
+                  "head": head,
+              },
+              "range_precondition": {
+                  "accept_ranges_bytes": str(head.get("accept_ranges") or "").strip().casefold() == "bytes",
+                  "known_content_length": str(head.get("content_length") or "").isdigit(),
+                  "next_get_allowed_only_if_both_true": True,
+              },
+              "metadata_request_urls": metadata_urls,
+              "archive_get_requests": 0,
+              "archive_payload_bytes_read": 0,
+              "response_member_requests": 0,
               "response_content_opened": False,
           }
           out = Path("build/bbs_woth_source/output/source_inventory.json")
           out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
           print(json.dumps({
-              "root": result["root"],
-              "direct_child_count": result["direct_child_count"],
-              "direct_children": result["direct_children"],
-              "descendant_count": result["descendant_count"],
-              "descendant_titles": result["descendant_titles"],
-              "response_file_downloads": 0,
+              "candidate_archives": result["candidate_archives"],
+              "selected_archive": result["selected_archive"],
+              "range_precondition": result["range_precondition"],
+              "archive_get_requests": 0,
+              "archive_payload_bytes_read": 0,
               "response_content_opened": False,
           }, indent=2, sort_keys=True))
           PY
@@ -130,9 +160,12 @@ jobs:
           import json
           from pathlib import Path
           audit = json.loads(Path("build/bbs_woth_source/output/source_inventory.json").read_text())
-          assert audit["response_file_downloads"] == 0
+          assert audit["selected_archive"]["name"] == "Version2009v1.zip"
+          assert audit["archive_get_requests"] == 0
+          assert audit["archive_payload_bytes_read"] == 0
+          assert audit["response_member_requests"] == 0
           assert audit["response_content_opened"] is False
-          print("response-blind metadata inventory PASS")
+          print("response-blind archive identity PASS")
           PY
       - name: Upload response-blind source evidence
         uses: actions/upload-artifact@v4
