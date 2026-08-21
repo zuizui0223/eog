@@ -56,6 +56,24 @@ def test_incomplete_metadata_never_implies_pass():
     assert result.missing_metadata == ("node_count", "repeated_node_count")
 
 
+def test_disabled_requirements_do_not_create_false_missing_metadata():
+    decl = CandidatePreflightDeclaration(
+        attempt_id="non-coordinate-test",
+        minimum_nodes=40,
+        minimum_outer_units=6,
+        minimum_repeated_nodes=30,
+        require_separate_geometry_and_response=False,
+        require_coordinate_geometry=False,
+    )
+    evidence = complete_evidence(
+        geometry_response_separable=None,
+        coordinate_geometry_present=None,
+    )
+    result = evaluate_candidate_preflight(decl, evidence)
+    assert result.status == "ready_for_geometry_gate"
+    assert result.missing_metadata == ()
+
+
 @pytest.mark.parametrize("field", ["response_rows_opened", "response_bytes_opened"])
 def test_any_response_access_stops_preflight(field):
     result = evaluate_candidate_preflight(
@@ -142,6 +160,20 @@ def test_boolean_and_count_types_fail_closed():
         complete_evidence(node_count=40.0)
     with pytest.raises(TypeError, match="response_rows_opened must be bool"):
         complete_evidence(response_rows_opened=1)
+
+
+def test_contradictory_separable_same_identity_fails_closed():
+    with pytest.raises(ValueError, match="contradicts identical"):
+        complete_evidence(
+            geometry_source_identity="same.csv@sha256:abc",
+            response_source_identity="same.csv@sha256:abc",
+            geometry_response_separable=True,
+        )
+
+
+def test_repeated_node_count_cannot_exceed_node_count():
+    with pytest.raises(ValueError, match="must not exceed node_count"):
+        complete_evidence(node_count=50, repeated_node_count=51)
 
 
 def test_invalid_layout_and_empty_identities_fail_closed():
