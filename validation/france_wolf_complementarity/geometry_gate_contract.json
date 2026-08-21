@@ -1,0 +1,41 @@
+{
+  "status": "response_blind_geometry_gate_freeze",
+  "candidate": "France wolf recolonization dynamic occupancy 1994-2017",
+  "response_content_opened": false,
+  "geometry_source": {
+    "repository": "oliviergimenez/occupancy-workshop",
+    "commit": "eff79d38461adf00276e9bec4bc047620d56144b",
+    "path": "tutorials/data/coordcells_wolf.rds",
+    "git_blob_sha1": "cce6505b06cd8dd289ea0526cddee6e58b8fbb78",
+    "size_bytes": 14317,
+    "expected_object_type": "data.frame-like table",
+    "required_columns": ["id", "X", "Y"],
+    "allow_additional_columns": true,
+    "expected_node_count": 3450,
+    "transport_guard": "Download only the pinned raw geometry path. Do not open wolf_louvrier.rds or any response-bearing file before later authorization."
+  },
+  "distance_axis": {
+    "axis_id": "lambert93_euclidean_km",
+    "metric": "Euclidean distance after dividing the published Lambert-93 X/Y coordinates by 1000",
+    "crs": "RGF93 v1 / Lambert-93",
+    "interpretation": "response-blind analyst-choice spatial structure; thresholds are not biological wolf movement limits"
+  },
+  "structural_scale_declaration": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "provenance": "Inherited unchanged from the established EOG response-blind scale bracket.",
+    "construction": "minimum observed Euclidean pair distance reaching each target LCC fraction with tied distances admitted together"
+  },
+  "structural_adequacy": {
+    "forecast_horizon_steps": 1,
+    "requirements": [
+      "the 0.90 level achieves largest weak component fraction >= 0.90",
+      "the 0.90 level has isolated-node fraction <= 0.05",
+      "at least three distinct positive thresholds occur across the four scale levels",
+      "thresholds and edge sets are nested and deterministic",
+      "all 3450 geometry IDs are unique and X/Y are finite"
+    ],
+    "stop_rule": "If any requirement fails, stop this candidate before reading wolf_louvrier.rds."
+  },
+  "no_retuning": "Do not change the geometry object requirements, LCC targets, isolated-node criterion, distance metric, or one-step horizon after coordcells_wolf.rds is opened. Geometry-gate failure is not permission to redesign scales for this candidate.",
+  "next_if_pass": "Freeze geometry hash/thresholds/audits, then audit process/source closure and prospective endpoint estimability without opening response content where possible."
+}
