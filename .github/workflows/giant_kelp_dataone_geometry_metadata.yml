@@ -1,0 +1,174 @@
+name: Giant kelp DataONE geometry metadata
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_dataone_geometry_metadata.yml"
+      - "validation/giant_kelp_complementarity/dataone_geometry_metadata_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_dataone_geometry_metadata.yml"
+      - "validation/giant_kelp_complementarity/dataone_geometry_metadata_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Retrieve and inspect rev2 EML metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_dataone_metadata
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, json, re, urllib.parse, urllib.request, xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          ROOT=Path('validation/giant_kelp_complementarity')
+          OUT=Path('build/giant_kelp_dataone_metadata')
+          contract=json.loads((ROOT/'dataone_geometry_metadata_contract.json').read_text(encoding='utf-8'))
+          pid=contract['lineage']['revision_2_metadata_pid']
+          UA='eog-giant-kelp-dataone-metadata/1.0'
+          fetched=[]
+
+          def fetch(url: str, accept: str):
+              if not url.startswith('https://cn.dataone.org/cn/v2/'):
+                  raise RuntimeError(f'non-DataONE-CN URL blocked: {url!r}')
+              req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':accept})
+              with urllib.request.urlopen(req,timeout=60) as r:
+                  body=r.read(); status=getattr(r,'status',None) or r.getcode(); ctype=str(r.headers.get('Content-Type','')); final=str(r.geturl())
+              fetched.append({'requested':url,'final':final,'status':status,'bytes':len(body),'content_type':ctype,'sha256':hashlib.sha256(body).hexdigest()})
+              return body,ctype
+
+          encoded=urllib.parse.quote(pid,safe='')
+          eml_bytes,eml_type=fetch(f'https://cn.dataone.org/cn/v2/object/{encoded}','application/xml,text/xml,*/*')
+          root=ET.fromstring(eml_bytes)
+          def lname(tag): return tag.rsplit('}',1)[-1]
+          def direct_text(node,target):
+              for child in node:
+                  if lname(child.tag)==target:
+                      return ' '.join(''.join(child.itertext()).split())
+              return ''
+          def desc_text(node,target):
+              for child in node.iter():
+                  if lname(child.tag)==target:
+                      return ' '.join(''.join(child.itertext()).split())
+              return ''
+
+          title=desc_text(root,'title')
+          missing=[term for term in contract['required_title_terms'] if term.casefold() not in title.casefold()]
+          if missing:
+              raise RuntimeError(f'rev2 EML title missing required terms {missing}: {title!r}')
+
+          entities=[]
+          for node in root.iter():
+              kind=lname(node.tag)
+              if kind not in {'dataTable','spatialVector','spatialRaster','view','storedProcedure'}: continue
+              physical=next((c for c in node if lname(c.tag)=='physical'),None)
+              object_name=desc_text(physical,'objectName') if physical is not None else ''
+              distribution_url=desc_text(physical,'url') if physical is not None else ''
+              attrs=[]
+              for attr in node.iter():
+                  if lname(attr.tag)!='attribute': continue
+                  attrs.append({
+                      'name':desc_text(attr,'attributeName'),
+                      'label':desc_text(attr,'attributeLabel'),
+                      'definition':desc_text(attr,'attributeDefinition'),
+                      'unit':desc_text(attr,'standardUnit') or desc_text(attr,'customUnit'),
+                  })
+              entity_blob=json.dumps({'name':direct_text(node,'entityName'),'object_name':object_name,'attributes':attrs},ensure_ascii=False).casefold()
+              geometry_hits=sorted({term for term in contract['geometry_attribute_terms'] if term.casefold() in entity_blob})
+              entities.append({
+                  'kind':kind,
+                  'entity_name':direct_text(node,'entityName'),
+                  'eml_entity_id':str(node.attrib.get('id','')),
+                  'object_name':object_name,
+                  'distribution_url':distribution_url,
+                  'attributes':attrs,
+                  'geometry_term_hits':geometry_hits,
+              })
+          if not entities:
+              raise RuntimeError('rev2 EML has no data/spatial entities')
+
+          # Query exact rev2 metadata and data objects documented by it. This remains Solr metadata only.
+          fields=['id','identifier','seriesId','title','formatId','resourceMap','documents','isDocumentedBy','checksum','checksumAlgorithm','size','authoritativeMN','datasource','dateUploaded','dateModified','fileName']
+          endpoint='https://cn.dataone.org/cn/v2/query/solr/'
+          def solr(q):
+              url=endpoint+'?'+urllib.parse.urlencode({'q':q,'fl':','.join(fields),'rows':'200','wt':'json'})
+              body,_=fetch(url,'application/json')
+              return ((json.loads(body).get('response') or {}).get('docs') or [])
+          meta_docs=solr(f'id:"{pid}"')
+          if not meta_docs:
+              meta_docs=solr(f'identifier:"{pid}"')
+          documented=solr(f'isDocumentedBy:"{pid}"')
+
+          # Explicit EML distribution IDs help bind metadata entities to DataONE indexed objects.
+          distribution_ids=[]
+          for e in entities:
+              u=e['distribution_url']
+              if u:
+                  distribution_ids.append(urllib.parse.unquote(urllib.parse.urlparse(u).path.rstrip('/').split('/')[-1]))
+          distribution_ids=sorted(set(x for x in distribution_ids if x))
+
+          indexed_by_id={str(d.get('id') or d.get('identifier')):d for d in documented if d.get('id') or d.get('identifier')}
+          entity_bindings=[]
+          for e in entities:
+              u=e['distribution_url']; eid=''
+              if u: eid=urllib.parse.unquote(urllib.parse.urlparse(u).path.rstrip('/').split('/')[-1])
+              matches=[]
+              for d in documented:
+                  blob=json.dumps(d,ensure_ascii=False,sort_keys=True)
+                  if (eid and eid in blob) or (e['object_name'] and e['object_name'] in blob): matches.append(d)
+              entity_bindings.append({**e,'distribution_entity_id':eid or None,'indexed_object_matches':matches})
+
+          geometry_entities=[b for b in entity_bindings if b['geometry_term_hits']]
+          payload={
+              'status':'dataone_rev2_geometry_entities_resolved' if geometry_entities else 'dataone_rev2_geometry_metadata_inadequate',
+              'candidate':contract['candidate'],
+              'lineage':contract['lineage'],
+              'metadata_pid':pid,
+              'metadata_format_content_type':eml_type,
+              'metadata_sha256':hashlib.sha256(eml_bytes).hexdigest(),
+              'title':title,
+              'entities':entity_bindings,
+              'geometry_entity_candidates':geometry_entities,
+              'metadata_index_documents':meta_docs,
+              'documented_data_objects':documented,
+              'distribution_entity_ids':distribution_ids,
+              'data_entity_object_endpoints_called':False,
+              'data_entity_bytes_opened':False,
+              'response_package_bytes_opened':False,
+              'response_rows_opened':False,
+              'network_fetches':fetched,
+              'next':contract['next_if_entities_resolve'] if geometry_entities else contract['stop_if_metadata_inadequate'],
+          }
+          payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          (OUT/'dataone_geometry_metadata_result.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Assert metadata-only firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_dataone_metadata/dataone_geometry_metadata_result.json'))
+          assert p['data_entity_object_endpoints_called'] is False
+          assert p['data_entity_bytes_opened'] is False
+          assert p['response_package_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          PY
+      - name: Upload rev2 geometry metadata evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-dataone-rev2-geometry-metadata
+          path: build/giant_kelp_dataone_metadata/dataone_geometry_metadata_result.json
+          if-no-files-found: error
