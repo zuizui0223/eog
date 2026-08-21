@@ -1,0 +1,51 @@
+name: Giant kelp patch identity diagnostic
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_patch_identity_diagnostic.yml"
+      - "benchmarks/diagnose_giant_kelp_patch_identity.py"
+      - "benchmarks/audit_giant_kelp_process_mapping.py"
+      - "validation/giant_kelp_complementarity/process_object_contract.json"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_patch_identity_diagnostic.yml"
+      - "benchmarks/diagnose_giant_kelp_patch_identity.py"
+      - "benchmarks/audit_giant_kelp_process_mapping.py"
+      - "validation/giant_kelp_complementarity/process_object_contract.json"
+      - "validation/giant_kelp_complementarity/southern_geometry_object_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compare frozen non-response patch ID representations
+        run: |
+          set -euo pipefail
+          PYTHONPATH=benchmarks python benchmarks/diagnose_giant_kelp_patch_identity.py
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_patch_identity/patch_identity_diagnostic.json'))
+          assert p['response_package_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          PY
+      - name: Upload patch identity diagnostic
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-patch-identity-diagnostic
+          path: build/giant_kelp_patch_identity/patch_identity_diagnostic.json
+          if-no-files-found: error
