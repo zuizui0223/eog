@@ -19,6 +19,7 @@ CandidatePreflightStatus = Literal[
     "stop_response_already_opened",
     "stop_inseparable_geometry_response",
     "stop_no_response_independent_coordinate_geometry",
+    "stop_analysis_registry_not_closed",
     "stop_insufficient_nodes",
     "stop_insufficient_outer_units",
     "stop_insufficient_repeated_nodes",
@@ -104,6 +105,7 @@ class CandidatePreflightDeclaration:
     minimum_repeated_nodes: int
     require_separate_geometry_and_response: bool = True
     require_coordinate_geometry: bool = True
+    require_closed_analysis_registry: bool = False
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "attempt_id", _clean_required(self.attempt_id, "attempt_id"))
@@ -127,6 +129,10 @@ class CandidatePreflightDeclaration:
             "require_separate_geometry_and_response",
         )
         _require_bool(self.require_coordinate_geometry, "require_coordinate_geometry")
+        _require_bool(
+            self.require_closed_analysis_registry,
+            "require_closed_analysis_registry",
+        )
 
     @property
     def fingerprint(self) -> str:
@@ -138,6 +144,7 @@ class CandidatePreflightDeclaration:
                 "minimum_repeated_nodes": self.minimum_repeated_nodes,
                 "require_separate_geometry_and_response": self.require_separate_geometry_and_response,
                 "require_coordinate_geometry": self.require_coordinate_geometry,
+                "require_closed_analysis_registry": self.require_closed_analysis_registry,
             }
         )
 
@@ -148,6 +155,12 @@ class CandidatePreflightEvidence:
 
     ``None`` means genuinely unresolved from metadata and produces an incomplete result,
     not an inferred pass. File/member identities should be precise enough to audit later.
+
+    ``analysis_registry_closed`` means response-blind metadata already establishes a
+    one-to-one registry for the intended analysis nodes, either directly or through a
+    deterministic filtering/centroid rule declared from external metadata before the
+    candidate geometry is opened. A generic source-wide location catalogue is not a
+    closed analysis registry merely because it is physically separate from response.
     """
 
     source_identity: str
@@ -159,6 +172,7 @@ class CandidatePreflightEvidence:
     outer_unit_count: int | None
     repeated_node_count: int | None
     layout_design: LayoutDesign = "unknown"
+    analysis_registry_closed: bool | None = None
     response_rows_opened: bool = False
     response_bytes_opened: bool = False
     note: str = ""
@@ -202,6 +216,11 @@ class CandidatePreflightEvidence:
         )
         if not isinstance(self.layout_design, str) or self.layout_design not in _ALLOWED_LAYOUTS:
             raise ValueError(f"unsupported layout_design: {self.layout_design!r}")
+        object.__setattr__(
+            self,
+            "analysis_registry_closed",
+            _optional_bool(self.analysis_registry_closed, "analysis_registry_closed"),
+        )
         _require_bool(self.response_rows_opened, "response_rows_opened")
         _require_bool(self.response_bytes_opened, "response_bytes_opened")
         if not isinstance(self.note, str):
@@ -236,6 +255,7 @@ class CandidatePreflightEvidence:
                 "outer_unit_count": self.outer_unit_count,
                 "repeated_node_count": self.repeated_node_count,
                 "layout_design": self.layout_design,
+                "analysis_registry_closed": self.analysis_registry_closed,
                 "response_rows_opened": self.response_rows_opened,
                 "response_bytes_opened": self.response_bytes_opened,
                 "note": self.note,
@@ -278,6 +298,8 @@ def evaluate_candidate_preflight(
         missing.append("geometry_response_separable")
     if declaration.require_coordinate_geometry and evidence.coordinate_geometry_present is None:
         missing.append("coordinate_geometry_present")
+    if declaration.require_closed_analysis_registry and evidence.analysis_registry_closed is None:
+        missing.append("analysis_registry_closed")
     if evidence.node_count is None:
         missing.append("node_count")
     if evidence.outer_unit_count is None:
@@ -303,6 +325,12 @@ def evaluate_candidate_preflight(
     elif declaration.require_coordinate_geometry and evidence.coordinate_geometry_present is False:
         status = "stop_no_response_independent_coordinate_geometry"
         reason = "metadata shows no response-independent coordinate geometry for the declared node universe"
+    elif declaration.require_closed_analysis_registry and evidence.analysis_registry_closed is False:
+        status = "stop_analysis_registry_not_closed"
+        reason = (
+            "response-blind metadata shows that the available geometry registry is not already "
+            "closed one-to-one on the intended analysis nodes under a prospectively declared rule"
+        )
     elif evidence.node_count is not None and evidence.node_count < declaration.minimum_nodes:
         status = "stop_insufficient_nodes"
         reason = "known response-blind node count is below the prospectively declared minimum"
