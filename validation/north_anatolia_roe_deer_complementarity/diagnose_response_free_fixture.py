@@ -20,6 +20,50 @@ def load_module(name: str, path: Path):
     return module
 
 
+def vectorized_next(
+    current: np.ndarray,
+    effort: np.ndarray,
+    distance: np.ndarray,
+    threshold: float,
+    transition_index: int,
+) -> np.ndarray:
+    source_indices = np.flatnonzero(current)
+    next_possible = np.zeros(current.shape[0], dtype=bool)
+    if len(source_indices):
+        next_possible[source_indices] |= effort[source_indices, transition_index + 1] > 0.0
+        target_eligible = (
+            (effort[:, transition_index] > 0.0)
+            & (effort[:, transition_index + 1] > 0.0)
+        )
+        reachable_from_current = np.any(
+            distance[:, source_indices] <= threshold,
+            axis=1,
+        )
+        next_possible |= target_eligible & reachable_from_current
+    return next_possible
+
+
+def parent_map_next(
+    current_nodes: set[int],
+    effort: np.ndarray,
+    distance: np.ndarray,
+    threshold: float,
+    transition_index: int,
+) -> tuple[set[int], dict[int, int]]:
+    parent_for_next: dict[int, int] = {}
+    for i in sorted(current_nodes):
+        if effort[i, transition_index + 1] > 0.0:
+            parent_for_next.setdefault(i, i)
+        target_eligible = np.flatnonzero(
+            (effort[:, transition_index] > 0.0)
+            & (effort[:, transition_index + 1] > 0.0)
+            & (distance[:, i] <= threshold)
+        )
+        for j in target_eligible.tolist():
+            parent_for_next.setdefault(int(j), int(i))
+    return set(parent_for_next), parent_for_next
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--stations", type=Path, required=True)
@@ -29,7 +73,6 @@ def main() -> None:
     args = parser.parse_args()
 
     runner = load_module("diag_paired_runner", ROOT / "paired_runner.py")
-    harness = load_module("diag_smoke_harness", ROOT / "response_free_smoke_harness.py")
     source = runner.load_json(ROOT / "source_freeze.json")
     geometry_contract = runner.load_json(ROOT / "geometry_gate_contract.json")
     prediction_contract = runner.load_json(ROOT / "gate2_prediction_contract.json")
@@ -45,94 +88,88 @@ def main() -> None:
         float(world["threshold_km"])
         for world in prediction_contract["layer_a"]["declared_worlds"]
     )
-    chain = harness._deterministic_effort_aware_source_chain(
-        effort,
-        distance,
-        threshold,
-    )
 
-    n_nodes, n_primary = effort.shape
-    detected = np.zeros((n_nodes, n_primary), dtype=bool)
-    for t, node in enumerate(chain):
-        detected[node, t] = True
+    vector_current = effort[:, 0] > 0.0
+    parent_current = set(np.flatnonzero(effort[:, 0] > 0.0).tolist())
+    comparison = []
+    first_divergence = None
+    parent_maps: list[dict[int, int]] = []
 
-    selection_audit = []
-    for t in range(n_primary - 1):
-        source = detected[:, t] & (effort[:, t] > 0.0)
-        source_nodes = np.flatnonzero(source)
-        broad_reach = np.any(distance[:, source_nodes] <= threshold, axis=1)
-        candidates = (
-            (~detected[:, t])
-            & (effort[:, t] > 0.0)
-            & (effort[:, t + 1] > 0.0)
-            & broad_reach
+    for t in range(21):
+        vector_next_state = vectorized_next(
+            vector_current,
+            effort,
+            distance,
+            threshold,
+            t,
         )
-        candidate_ids = np.flatnonzero(candidates)
-        next_chain = chain[t + 1]
-        required = [next_chain] if candidates[next_chain] else []
-        preferred = candidate_ids[((candidate_ids + 5 * t) % 5) == 0].tolist()
-        ordered = required + [node for node in preferred if node not in required]
-        ordered.extend(node for node in candidate_ids.tolist() if node not in set(ordered))
-        selected = np.asarray(ordered[: min(4, len(ordered))], dtype=int)
-        min_distance_selected = {
-            str(int(node)): float(np.min(distance[node, source_nodes]))
-            for node in selected.tolist()
-        }
-        detected[selected, t + 1] = True
-        selection_audit.append(
-            {
-                "transition_index": t,
-                "source_nodes": source_nodes.tolist(),
-                "candidate_count": int(len(candidate_ids)),
-                "selected_nodes": selected.tolist(),
-                "selected_min_source_distance_km": min_distance_selected,
-                "next_chain_node": int(next_chain),
-            }
+        parent_next_nodes, parent_map = parent_map_next(
+            parent_current,
+            effort,
+            distance,
+            threshold,
+            t,
         )
-
-    post_audit = []
-    first_mismatch = None
-    for t in range(n_primary - 1):
-        source = detected[:, t] & (effort[:, t] > 0.0)
-        source_nodes = np.flatnonzero(source)
-        broad_reach = np.any(distance[:, source_nodes] <= threshold, axis=1)
-        candidates = (
-            (~detected[:, t])
-            & (effort[:, t] > 0.0)
-            & (effort[:, t + 1] > 0.0)
-        )
-        positives = np.flatnonzero(candidates & detected[:, t + 1])
-        bad = positives[~broad_reach[positives]]
+        parent_maps.append(parent_map)
+        vector_nodes = set(np.flatnonzero(vector_next_state).tolist())
+        only_vector = sorted(vector_nodes - parent_next_nodes)
+        only_parent = sorted(parent_next_nodes - vector_nodes)
         entry = {
             "transition_index": t,
-            "source_nodes": source_nodes.tolist(),
-            "positive_nodes": positives.tolist(),
-            "bad_nodes": bad.tolist(),
-            "bad_min_source_distance_km": {
-                str(int(node)): float(np.min(distance[node, source_nodes]))
-                for node in bad.tolist()
-            },
-            "source_set_equals_selection_time": (
-                source_nodes.tolist() == selection_audit[t]["source_nodes"]
+            "vector_before_count": int(np.sum(vector_current)),
+            "parent_before_count": len(parent_current),
+            "vector_after_count": len(vector_nodes),
+            "parent_after_count": len(parent_next_nodes),
+            "only_vector": only_vector,
+            "only_parent": only_parent,
+            "equal": vector_nodes == parent_next_nodes,
+            "positive_effort_source_count_vector": int(
+                np.sum(vector_current & (effort[:, t] > 0.0))
             ),
-            "selected_nodes_at_construction": selection_audit[t]["selected_nodes"],
+            "positive_effort_source_count_parent": sum(
+                effort[node, t] > 0.0 for node in parent_current
+            ),
         }
-        post_audit.append(entry)
-        if len(bad) and first_mismatch is None:
-            first_mismatch = entry
+        comparison.append(entry)
+        if not entry["equal"] and first_divergence is None:
+            first_divergence = entry
+        vector_current = vector_next_state
+        parent_current = parent_next_nodes
+
+    chain = None
+    chain_error = None
+    if parent_current:
+        final_node = min(parent_current)
+        recovered = [final_node]
+        node = final_node
+        try:
+            for t in range(20, -1, -1):
+                node = parent_maps[t][node]
+                recovered.append(node)
+            recovered.reverse()
+            chain = recovered
+        except KeyError as exc:
+            chain_error = f"parent-map backtrack missing node {exc.args[0]}"
+    else:
+        chain_error = "parent-map possible set empty after final transition"
 
     result = {
-        "status": "diagnostic_mismatch_found" if first_mismatch else "diagnostic_no_mismatch",
-        "threshold_km": threshold,
-        "source_chain": chain,
-        "possible_source_counts": getattr(
-            harness._deterministic_effort_aware_source_chain,
-            "possible_counts",
-            [],
+        "status": (
+            "diagnostic_closure_implementations_diverge"
+            if first_divergence is not None
+            else "diagnostic_closure_implementations_match"
         ),
-        "selection_audit": selection_audit,
-        "post_audit": post_audit,
-        "first_mismatch": first_mismatch,
+        "threshold_km": threshold,
+        "initial_possible_count": int(np.sum(effort[:, 0] > 0.0)),
+        "effort_positive_counts_by_season": [
+            int(np.sum(effort[:, t] > 0.0)) for t in range(22)
+        ],
+        "comparison": comparison,
+        "first_divergence": first_divergence,
+        "vector_final_count": int(np.sum(vector_current)),
+        "parent_final_count": len(parent_current),
+        "recovered_chain": chain,
+        "chain_error": chain_error,
         "response_content_opened": False,
         "scientific_contract_changed": False,
     }
