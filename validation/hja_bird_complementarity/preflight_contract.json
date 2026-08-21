@@ -1,0 +1,39 @@
+{
+  "candidate": "H.J. Andrews Forest long-term bird survey SA024",
+  "selection_state": "selected_after_france_wolf_response_blind_stop_241",
+  "source": {
+    "database_code": "SA024",
+    "dataset_doi": "10.6073/pasta/6fbc15152b412732881dc7a52377f49e",
+    "version": 7,
+    "last_update": "2026-05-27",
+    "study_period": "2009-05-13 to 2025-06-30",
+    "response_blind_metadata_basis": "Andrews Forest SA024 abstract/data catalog only; no bird-survey or bird-observation entity bytes opened"
+  },
+  "declaration": {
+    "attempt_id": "hja_bird_post241_v1",
+    "minimum_nodes": 100,
+    "minimum_outer_units": 6,
+    "minimum_repeated_nodes": 75,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "threshold_provenance": "Inherited unchanged from preceding fresh-candidate preflights; not adapted to HJA."
+  },
+  "response_blind_evidence": {
+    "source_identity": "Andrews Forest SA024 Version 7; DOI 10.6073/pasta/6fbc15152b412732881dc7a52377f49e; updated 2026-05-27",
+    "geometry_source_identity": "SA024 Download Study Location Information CSV; public catalog states 183 sample locations",
+    "response_source_identity": "SA024 online data entities: bird point-count survey information and individual bird observations; kept unopened during candidate selection/preflight",
+    "geometry_response_separable": true,
+    "coordinate_geometry_present": true,
+    "node_count": 183,
+    "outer_unit_count": 17,
+    "repeated_node_count": 183,
+    "layout_design": "other",
+    "response_rows_opened": false,
+    "response_bytes_opened": false,
+    "note": "Public SA024 metadata describe a stratified, systematic, random design across elevation, road distance and habitat, with established sites visited annually and up to six point-count occasions in a breeding season. The focal taxon and heldout endpoint must be frozen from response-independent scientific criteria before any SA024 response entity is opened. Recorded nondetection is not latent absence."
+  },
+  "strong_baseline_boundary": "Use a strong spatial/environmental predictor consistent with the published HJA bird literature; do not construct a weak baseline to make Layer B look favourable. The exact learner/features remain to be frozen before response access.",
+  "focal_taxon_boundary": "Do not inspect SA024 bird observations to choose an abundant or easy species. Freeze one focal taxon or a species-level aggregate endpoint from external published scientific criteria before response access; otherwise STOP.",
+  "next_if_ready": "Resolve and hash only the SA024 study-location registry, freeze its physical schema before opening it, and run the unchanged structural-scale/adequacy gate before any bird response entity is accessed.",
+  "stop_if_not_ready": "Close the candidate unmerged and preserve the response-blind STOP reason."
+}
