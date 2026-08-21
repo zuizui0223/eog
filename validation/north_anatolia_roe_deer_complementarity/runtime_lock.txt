@@ -1,0 +1,6 @@
+# Reused from the prospectively frozen Glanville strong-RF validation runtime.
+# Frozen before North Anatolia roe-deer response access.
+python==3.11
+numpy==2.1.3
+pandas==2.2.3
+scikit-learn==1.5.2
