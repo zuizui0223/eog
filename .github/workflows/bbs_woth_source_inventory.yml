@@ -41,8 +41,10 @@ jobs:
           import urllib.request
           import zipfile
 
-          root = Path("validation/bbs_woth_complementarity")
-          contract = json.loads((root / "source_resolution_contract.json").read_text(encoding="utf-8"))
+          ROOT = Path("validation/bbs_woth_complementarity")
+          OUT = Path("build/bbs_woth_source/output/source_inventory.json")
+          INPUT = Path("build/bbs_woth_source/input")
+          contract = json.loads((ROOT / "source_resolution_contract.json").read_text(encoding="utf-8"))
           sb_id = contract["upstream_release"]["sciencebase_item_id"]
           ending_year = int(contract["upstream_release"]["selected_archival_ending_year"])
           semantics = contract["response_independent_file_semantics"]
@@ -50,30 +52,49 @@ jobs:
               value.casefold()
               for value in contract["source_access_safety"]["forbidden_response_name_fragments_case_insensitive"]
           )
-          ua = "EOG-BBS-WOTH-response-blind-archive-inventory/1.0"
-          requested_metadata_urls: list[str] = []
-          requested_file_urls: list[str] = []
-          forbidden_response_file_requests = 0
-          errors: list[str] = []
+          state = {
+              "metadata_urls": [],
+              "file_urls": [],
+              "forbidden_file_requests": 0,
+          }
+          resolved = {key: {"resolved": False, "attempts": []} for key in semantics}
+          audit = {
+              "attempt_id": contract["attempt_id"],
+              "transport": "USGS ScienceBase archival release",
+              "selected_ending_year": ending_year,
+              "selected_archival_item": None,
+              "response_file_downloads": 0,
+              "response_content_opened": False,
+              "forbidden_response_file_requests": 0,
+              "response_like_names_seen_in_metadata_only": [],
+              "seen_file_names": [],
+              "resolved": resolved,
+              "errors": [],
+              "requested_metadata_urls": [],
+              "requested_file_urls": [],
+          }
+          UA = "EOG-BBS-WOTH-response-blind-archive-inventory/2.0"
 
-          def is_forbidden_name(value: str) -> bool:
+          def forbidden_name(value: object) -> bool:
               text = urllib.parse.unquote(str(value)).casefold()
               return any(fragment in text for fragment in forbidden)
 
           def get_bytes(url: str, *, metadata: bool, cap: int) -> tuple[bytes, str, dict[str, str]]:
-              nonlocal forbidden_response_file_requests
-              if not metadata and is_forbidden_name(url):
-                  forbidden_response_file_requests += 1
+              if not metadata and forbidden_name(url):
+                  state["forbidden_file_requests"] += 1
                   raise RuntimeError(f"refused response-like file URL: {url}")
-              (requested_metadata_urls if metadata else requested_file_urls).append(url)
-              req = urllib.request.Request(url, headers={"User-Agent": ua})
+              state["metadata_urls" if metadata else "file_urls"].append(url)
+              req = urllib.request.Request(url, headers={"User-Agent": UA})
               with urllib.request.urlopen(req, timeout=30) as response:
                   final_url = response.geturl()
                   headers = {key.lower(): value for key, value in response.headers.items()}
                   chunks = []
                   total = 0
                   while True:
-                      chunk = response.read(min(1024 * 1024, cap + 1 - total))
+                      remaining = cap + 1 - total
+                      if remaining <= 0:
+                          raise RuntimeError(f"safe byte cap exceeded for {url}")
+                      chunk = response.read(min(1024 * 1024, remaining))
                       if not chunk:
                           break
                       chunks.append(chunk)
@@ -83,14 +104,24 @@ jobs:
               return b"".join(chunks), final_url, headers
 
           def get_json(url: str) -> dict:
-              payload, final_url, headers = get_bytes(url, metadata=True, cap=8_000_000)
+              payload, final_url, _ = get_bytes(url, metadata=True, cap=8_000_000)
               try:
                   data = json.loads(payload.decode("utf-8"))
               except Exception as exc:
-                  raise RuntimeError(f"ScienceBase metadata was not JSON: {url} -> {final_url}") from exc
+                  raise RuntimeError(f"ScienceBase response is not JSON: {url} -> {final_url}") from exc
               if not isinstance(data, dict):
-                  raise RuntimeError(f"ScienceBase JSON root is not object: {url}")
+                  raise RuntimeError(f"ScienceBase JSON root is not an object: {url}")
               return data
+
+          def search_descendants(item_id: str) -> list[dict]:
+              url = "https://www.sciencebase.gov/catalog/items?" + urllib.parse.urlencode({
+                  "q": "",
+                  "filter": f"ancestors={item_id}",
+                  "format": "json",
+                  "max": 1000,
+              })
+              values = get_json(url).get("items", [])
+              return [value for value in values if isinstance(value, dict)]
 
           def item_id(item: dict) -> str | None:
               value = item.get("id") or item.get("_id")
@@ -99,224 +130,173 @@ jobs:
           def item_title(item: dict) -> str:
               return str(item.get("title") or item.get("name") or "").strip()
 
-          def child_items(parent_id: str) -> list[dict]:
-              url = (
-                  "https://www.sciencebase.gov/catalog/items?"
-                  + urllib.parse.urlencode({"parentId": parent_id, "format": "json", "max": 1000})
-              )
-              data = get_json(url)
-              values = data.get("items", [])
-              return [value for value in values if isinstance(value, dict)]
-
-          root_url = f"https://www.sciencebase.gov/catalog/item/{sb_id}?format=json"
-          root_item = get_json(root_url)
-          first_level = child_items(sb_id)
-
-          # The archive hub prospectively fixes ending year 2009.  Search only metadata
-          # titles/identifiers; no avian response bytes are touched.
-          year_pattern = re.compile(rf"(?<!\d){ending_year}(?!\d)")
-          candidates = []
-          for item in [root_item, *first_level]:
-              title = item_title(item)
-              if year_pattern.search(title):
-                  candidates.append(item)
-
-          # Some ScienceBase releases use one intermediate grouping level. Resolve at
-          # most one extra metadata-only level, still bounded and response-blind.
-          if not candidates:
-              for parent in first_level:
-                  pid = item_id(parent)
-                  if not pid:
+          def collect_files(item: dict) -> list[dict]:
+              records = []
+              for value in item.get("files", []) or []:
+                  if isinstance(value, dict):
+                      records.append(value)
+              for value in item.get("distributionLinks", []) or []:
+                  if not isinstance(value, dict):
                       continue
-                  for child in child_items(pid):
-                      if year_pattern.search(item_title(child)):
-                          candidates.append(child)
-
-          unique_by_id = {}
-          for item in candidates:
-              pid = item_id(item)
-              if pid:
-                  unique_by_id[pid] = item
-          candidates = list(unique_by_id.values())
-
-          selected = None
-          if len(candidates) == 1:
-              selected = candidates[0]
-          elif len(candidates) > 1:
-              # Resolve only a uniquely self-identifying archival dataset title. Do not
-              # choose among multiple 2009 items using response content or file sizes.
-              preferred = [
-                  item for item in candidates
-                  if re.search(r"1966\s*[-–]\s*2009|ending\s+(?:with\s+)?(?:year\s+)?2009", item_title(item), re.I)
-              ]
-              if len(preferred) == 1:
-                  selected = preferred[0]
-
-          resolved: dict[str, dict] = {
-              key: {"resolved": False, "attempts": []} for key in semantics
-          }
-          selected_meta = None
-          seen_file_names: list[str] = []
-          response_like_metadata_names: list[str] = []
-
-          def collect_named_files(item: dict) -> list[dict]:
-              records: list[dict] = []
-              values = item.get("files", [])
-              if isinstance(values, list):
-                  records.extend(value for value in values if isinstance(value, dict))
-              links = item.get("distributionLinks", [])
-              if isinstance(links, list):
-                  for value in links:
-                      if not isinstance(value, dict):
-                          continue
-                      name = str(value.get("name") or value.get("title") or "").strip()
-                      uri = value.get("uri") or value.get("url")
-                      if name and uri:
-                          records.append({"name": name, "downloadUri": uri, "source": "distributionLinks"})
+                  name = str(value.get("name") or value.get("title") or "").strip()
+                  uri = value.get("uri") or value.get("url")
+                  if name and isinstance(uri, str):
+                      records.append({"name": name, "downloadUri": uri})
               return records
 
-          def canonical_file_url(record: dict) -> str | None:
+          def file_name(record: dict) -> str:
+              return str(record.get("name") or record.get("title") or "").strip()
+
+          def file_url(record: dict) -> str | None:
               for key in ("downloadUri", "downloadUrl", "url", "uri"):
                   value = record.get(key)
                   if isinstance(value, str) and value.startswith(("https://", "http://")):
                       return value
               return None
 
-          def normalized_member_names(archive: zipfile.ZipFile) -> list[str]:
-              return [name for name in archive.namelist() if not name.endswith("/")]
+          def write_audit() -> None:
+              audit["forbidden_response_file_requests"] = state["forbidden_file_requests"]
+              audit["requested_metadata_urls"] = state["metadata_urls"]
+              audit["requested_file_urls"] = state["file_urls"]
+              OUT.parent.mkdir(parents=True, exist_ok=True)
+              OUT.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
-          if selected is None:
-              errors.append(
-                  f"ending-{ending_year} archival item did not resolve uniquely from response-blind ScienceBase metadata; candidates="
-                  + repr([(item_id(item), item_title(item)) for item in candidates])
-              )
-          else:
+          exit_code = 0
+          try:
+              root_item = get_json(f"https://www.sciencebase.gov/catalog/item/{sb_id}?format=json")
+              descendants = search_descendants(sb_id)
+              year_pattern = re.compile(rf"(?<!\d){ending_year}(?!\d)")
+              candidates = [item for item in [root_item, *descendants] if year_pattern.search(item_title(item))]
+              by_id = {item_id(item): item for item in candidates if item_id(item)}
+              candidates = list(by_id.values())
+
+              preferred = [
+                  item for item in candidates
+                  if re.search(
+                      rf"1966\s*[-–]\s*{ending_year}|ending\s+(?:with\s+)?(?:year\s+)?{ending_year}",
+                      item_title(item),
+                      re.I,
+                  )
+              ]
+              selected = candidates[0] if len(candidates) == 1 else (preferred[0] if len(preferred) == 1 else None)
+              if selected is None:
+                  raise RuntimeError(
+                      "ending-year archival item did not resolve uniquely: "
+                      + repr([(item_id(item), item_title(item)) for item in candidates])
+                  )
+
               sid = item_id(selected)
               if not sid:
-                  errors.append("selected archival item has no ScienceBase id")
-              else:
-                  selected_full = get_json(f"https://www.sciencebase.gov/catalog/item/{sid}?format=json")
-                  selected_meta = {"id": sid, "title": item_title(selected_full)}
-                  scope_items = [selected_full]
-                  for child in child_items(sid):
-                      scope_items.append(child)
-                      cid = item_id(child)
-                      if cid:
-                          try:
-                              scope_items.append(get_json(f"https://www.sciencebase.gov/catalog/item/{cid}?format=json"))
-                          except Exception as exc:
-                              errors.append(f"child metadata fetch failed for {cid}: {exc!r}")
+                  raise RuntimeError("selected archival item has no ScienceBase item id")
+              selected_full = get_json(f"https://www.sciencebase.gov/catalog/item/{sid}?format=json")
+              audit["selected_archival_item"] = {"id": sid, "title": item_title(selected_full)}
 
-                  file_records: list[dict] = []
-                  for item in scope_items:
-                      file_records.extend(collect_named_files(item))
-                  seen = set()
-                  deduped = []
-                  for record in file_records:
-                      name = str(record.get("name") or record.get("title") or "").strip()
-                      url = canonical_file_url(record)
-                      key = (name.casefold(), url or "")
-                      if name and key not in seen:
-                          seen.add(key)
-                          deduped.append(record)
-                          seen_file_names.append(name)
-                          if is_forbidden_name(name):
-                              response_like_metadata_names.append(name)
-
-                  for semantic, declaration in semantics.items():
-                      expected = {name.casefold() for name in declaration["expected_names_case_insensitive"]}
-                      matches = []
-                      for record in deduped:
-                          name = str(record.get("name") or record.get("title") or "").strip()
-                          url = canonical_file_url(record)
-                          if name.casefold() in expected and url and not is_forbidden_name(name) and not is_forbidden_name(url):
-                              matches.append((name, url, record))
-                      if len(matches) != 1:
-                          resolved[semantic]["attempts"].append({
-                              "status": "not_unique",
-                              "matching_names": [name for name, _, _ in matches],
-                          })
-                          continue
-
-                      name, url, record = matches[0]
-                      cap = int(declaration["safe_uncompressed_byte_cap"])
+              scope = [selected_full]
+              for child in search_descendants(sid):
+                  cid = item_id(child)
+                  if cid:
                       try:
-                          payload, final_url, headers = get_bytes(url, metadata=False, cap=cap)
-                          output_name = name
-                          archive_members = None
-                          extracted_name = None
-                          if payload.startswith(b"PK\x03\x04"):
-                              with zipfile.ZipFile(io.BytesIO(payload)) as archive:
-                                  archive_members = normalized_member_names(archive)
-                                  if any(is_forbidden_name(member) for member in archive_members):
-                                      raise RuntimeError(
-                                          f"response-like member found inside supposed metadata archive {name}: {archive_members}"
-                                      )
-                                  target_suffix = ".csv" if semantic in {"routes", "weather"} else ".txt"
-                                  plausible = [
-                                      member for member in archive_members
-                                      if Path(member).name.casefold().startswith(semantic.casefold())
-                                      and Path(member).suffix.casefold() == target_suffix
-                                  ]
-                                  if semantic == "routes":
-                                      plausible = [m for m in archive_members if Path(m).name.casefold() == "routes.csv"] or plausible
-                                  elif semantic == "weather":
-                                      plausible = [m for m in archive_members if Path(m).name.casefold() == "weather.csv"] or plausible
-                                  if len(plausible) != 1:
-                                      raise RuntimeError(
-                                          f"could not uniquely resolve {semantic} payload inside {name}: {archive_members}"
-                                      )
-                                  payload = archive.read(plausible[0])
-                                  extracted_name = Path(plausible[0]).name
-                                  output_name = extracted_name
-                                  if len(payload) > cap:
-                                      raise RuntimeError(f"extracted {semantic} file exceeds byte cap")
-
-                          out = Path("build/bbs_woth_source/input") / output_name
-                          out.write_bytes(payload)
-                          resolved[semantic] = {
-                              "resolved": True,
-                              "source_record_name": name,
-                              "source_url": url,
-                              "final_url": final_url,
-                              "output_name": output_name,
-                              "bytes": len(payload),
-                              "sha256": hashlib.sha256(payload).hexdigest(),
-                              "archive_members": archive_members,
-                              "extracted_name": extracted_name,
-                              "content_type": headers.get("content-type"),
-                              "attempts": [{"status": "success"}],
-                          }
+                          scope.append(get_json(f"https://www.sciencebase.gov/catalog/item/{cid}?format=json"))
                       except Exception as exc:
-                          resolved[semantic]["attempts"].append({"status": "download_failed", "error": repr(exc)})
+                          audit["errors"].append(f"child metadata fetch failed for {cid}: {exc!r}")
+                  else:
+                      scope.append(child)
 
-          audit = {
-              "attempt_id": contract["attempt_id"],
-              "transport": "USGS ScienceBase archival release",
-              "selected_ending_year": ending_year,
-              "selected_archival_item": selected_meta,
-              "response_file_downloads": 0,
-              "response_content_opened": False,
-              "forbidden_response_file_requests": forbidden_response_file_requests,
-              "response_like_names_seen_in_metadata_only": sorted(set(response_like_metadata_names)),
-              "seen_file_names": sorted(set(seen_file_names)),
-              "resolved": resolved,
-              "errors": errors,
-              "requested_metadata_urls": requested_metadata_urls,
-              "requested_file_urls": requested_file_urls,
-          }
-          out = Path("build/bbs_woth_source/output/source_inventory.json")
-          out.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+              file_records = []
+              for item in scope:
+                  file_records.extend(collect_files(item))
+              dedup = {}
+              for record in file_records:
+                  name = file_name(record)
+                  url = file_url(record)
+                  if name:
+                      dedup[(name.casefold(), url or "")] = record
+              file_records = list(dedup.values())
+              audit["seen_file_names"] = sorted(set(file_name(record) for record in file_records if file_name(record)))
+              audit["response_like_names_seen_in_metadata_only"] = sorted(
+                  set(name for name in audit["seen_file_names"] if forbidden_name(name))
+              )
+
+              for semantic, declaration in semantics.items():
+                  expected = {value.casefold() for value in declaration["expected_names_case_insensitive"]}
+                  matches = [
+                      record for record in file_records
+                      if file_name(record).casefold() in expected
+                      and file_url(record)
+                      and not forbidden_name(file_name(record))
+                      and not forbidden_name(file_url(record))
+                  ]
+                  if len(matches) != 1:
+                      resolved[semantic]["attempts"].append({
+                          "status": "not_unique",
+                          "matching_names": [file_name(record) for record in matches],
+                      })
+                      continue
+
+                  record = matches[0]
+                  name = file_name(record)
+                  url = file_url(record)
+                  cap = int(declaration["safe_uncompressed_byte_cap"])
+                  try:
+                      payload, final_url, headers = get_bytes(url, metadata=False, cap=cap)
+                      archive_members = None
+                      output_name = name
+                      extracted_name = None
+                      if payload.startswith(b"PK\x03\x04"):
+                          with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+                              archive_members = [member for member in archive.namelist() if not member.endswith("/")]
+                              if any(forbidden_name(member) for member in archive_members):
+                                  raise RuntimeError(f"response-like member inside metadata archive {name}")
+                              exact = {
+                                  "routes": "routes.csv",
+                                  "weather": "weather.csv",
+                              }.get(semantic)
+                              plausible = (
+                                  [member for member in archive_members if Path(member).name.casefold() == exact]
+                                  if exact
+                                  else [member for member in archive_members if Path(member).name.casefold() == "specieslist.txt"]
+                              )
+                              if len(plausible) != 1:
+                                  raise RuntimeError(f"cannot uniquely extract {semantic} from {name}: {archive_members}")
+                              payload = archive.read(plausible[0])
+                              extracted_name = Path(plausible[0]).name
+                              output_name = extracted_name
+                              if len(payload) > cap:
+                                  raise RuntimeError(f"extracted {semantic} exceeds byte cap")
+                      (INPUT / output_name).write_bytes(payload)
+                      resolved[semantic] = {
+                          "resolved": True,
+                          "source_record_name": name,
+                          "source_url": url,
+                          "final_url": final_url,
+                          "output_name": output_name,
+                          "bytes": len(payload),
+                          "sha256": hashlib.sha256(payload).hexdigest(),
+                          "archive_members": archive_members,
+                          "extracted_name": extracted_name,
+                          "content_type": headers.get("content-type"),
+                          "attempts": [{"status": "success"}],
+                      }
+                  except Exception as exc:
+                      resolved[semantic]["attempts"].append({"status": "download_failed", "error": repr(exc)})
+
+              if not all(value["resolved"] for value in resolved.values()):
+                  exit_code = 3
+          except Exception as exc:
+              audit["errors"].append(repr(exc))
+              exit_code = 3
+          finally:
+              write_audit()
+
           print(json.dumps({
-              "selected_archival_item": selected_meta,
+              "selected_archival_item": audit["selected_archival_item"],
               "response_file_downloads": 0,
               "response_content_opened": False,
-              "forbidden_response_file_requests": forbidden_response_file_requests,
+              "forbidden_response_file_requests": state["forbidden_file_requests"],
               "resolved": {key: value["resolved"] for key, value in resolved.items()},
-              "errors": errors,
+              "errors": audit["errors"],
           }, indent=2, sort_keys=True))
-          if selected is None or not all(value["resolved"] for value in resolved.values()):
-              raise SystemExit(3)
+          raise SystemExit(exit_code)
           PY
       - name: Assert response firewall
         if: always()
@@ -340,7 +320,8 @@ jobs:
               "selected_archival_item": audit["selected_archival_item"],
               "response_file_downloads": audit["response_file_downloads"],
               "response_content_opened": audit["response_content_opened"],
-              "resolved": {k: v["resolved"] for k, v in audit["resolved"].items()},
+              "resolved": {key: value["resolved"] for key, value in audit["resolved"].items()},
+              "errors": audit["errors"],
           }, indent=2, sort_keys=True))
           PY
       - name: Upload response-blind source evidence
@@ -348,5 +329,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bbs-woth-response-blind-source-inventory
-          path: build/bbs_woth_source/output/
+          path: build/bbs_woth_source/output/source_inventory.json
           if-no-files-found: error
