@@ -1,0 +1,24 @@
+{
+  "status": "response_blind_temporal_source_closure_freeze",
+  "candidate": "Northwestern Anatolia roe deer seasonal dynamic occupancy 2008-2018",
+  "response_content_opened": false,
+  "analysis_node_count": 171,
+  "primary_season_count": 22,
+  "broadest_world_id": "struct_geo_lcc750",
+  "broadest_threshold_km": 37.290775923813,
+  "source_semantics": "current recorded internal source requires positive source-season camera effort",
+  "optimistic_path_test": {
+    "initial_state": "any retained station with positive effort in primary season 1 may serve as an initial source; no earlier history is required",
+    "same_station_persistence": "a possible source at season t may persist to the same station at t+1 when target-season effort > 0",
+    "new_station_appearance": "a possible source at station i, season t may support station j at t+1 only when j has effort > 0 in both source and target seasons and UTM distance(i,j) <= 37.290775923813 km",
+    "response_values_used": false,
+    "interpretation": "This is an optimistic necessary-condition audit. If even this response-free path set becomes empty, no recorded-response realization can maintain the frozen internal-source explanation through all 22 seasons without a source/jump rule absent from the frozen world universe."
+  },
+  "decision_rule": {
+    "pass": "at least one possible source node remains after every one of the 21 transitions",
+    "stop": "the possible source set becomes empty at any transition",
+    "no_retuning": "A STOP does not authorize adding an external source, memory source, larger threshold or different effort rule to this already-frozen candidate and then calling it the same prospective attempt."
+  },
+  "next_if_pass": "Continue response-free runner smoke and outcome-access freezing.",
+  "next_if_stop": "Close the candidate before response access and promote temporal process/source closure to reusable fresh-candidate validation infrastructure."
+}
