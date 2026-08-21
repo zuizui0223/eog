@@ -1,0 +1,143 @@
+name: Black-throated Green Warbler source inventory
+
+on:
+  push:
+    branches:
+      - agent/btnw-preflight
+    paths:
+      - ".github/workflows/btnw_source_inventory.yml"
+      - "validation/btnw_complementarity/geometry_gate_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/btnw_source_inventory.yml"
+      - "validation/btnw_complementarity/geometry_gate_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Inventory Dryad metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/btnw_source_inventory
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from urllib.parse import quote
+          from urllib.request import Request, urlopen
+
+          contract = json.loads(
+              Path("validation/btnw_complementarity/geometry_gate_contract.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          assert contract["response_content_opened"] is False
+          source = contract["geometry_source"]
+          doi = source["dataset_doi"]
+          encoded = quote(f"doi:{doi}", safe="")
+          base = "https://datadryad.org"
+
+          opened_urls = []
+
+          def fetch_json(path):
+              url = base + path
+              opened_urls.append(url)
+              req = Request(
+                  url,
+                  headers={
+                      "Accept": "application/json",
+                      "User-Agent": "EOG-response-blind-source-inventory/1.0",
+                  },
+              )
+              with urlopen(req, timeout=30) as response:
+                  ctype = response.headers.get_content_type()
+                  if ctype != "application/json":
+                      raise RuntimeError(f"metadata endpoint returned {ctype!r}: {url}")
+                  return json.load(response)
+
+          versions_payload = fetch_json(f"/api/v2/datasets/{encoded}/versions?per_page=100")
+          versions = versions_payload.get("_embedded", {}).get("stash:versions", [])
+          if not versions:
+              raise RuntimeError("Dryad versions metadata returned no public versions")
+
+          inventory = []
+          for version in versions:
+              version_id = int(version["id"])
+              files_payload = fetch_json(f"/api/v2/versions/{version_id}/files?per_page=100")
+              files = files_payload.get("_embedded", {}).get("stash:files", [])
+              clean_files = []
+              for row in files:
+                  self_href = row.get("_links", {}).get("self", {}).get("href", "")
+                  file_id = int(self_href.rstrip("/").split("/")[-1]) if self_href else None
+                  clean_files.append(
+                      {
+                          "file_id": file_id,
+                          "path": row.get("path"),
+                          "size": row.get("size"),
+                          "mimeType": row.get("mimeType"),
+                          "digest": row.get("digest"),
+                          "digestType": row.get("digestType"),
+                      }
+                  )
+              inventory.append(
+                  {
+                      "version_id": version_id,
+                      "version": version.get("version"),
+                      "versionNumber": version.get("versionNumber"),
+                      "publicationDate": version.get("publicationDate"),
+                      "lastModificationDate": version.get("lastModificationDate"),
+                      "versionChanges": version.get("versionChanges"),
+                      "files": sorted(clean_files, key=lambda x: (str(x["path"]), x["file_id"] or -1)),
+                  }
+              )
+
+          allowed = source["allowed_file_name"]
+          geometry_entries = [
+              {
+                  "version_id": version["version_id"],
+                  **row,
+              }
+              for version in inventory
+              for row in version["files"]
+              if row["path"] == allowed
+          ]
+          if not geometry_entries:
+              raise RuntimeError(f"{allowed!r} is absent from all public Dryad versions")
+
+          forbidden = [
+              url for url in opened_urls
+              if "/download" in url or "/files/" in url and not "/versions/" in url
+          ]
+          if forbidden:
+              raise RuntimeError(f"source inventory crossed into file download/content endpoints: {forbidden}")
+
+          result = {
+              "status": "response_blind_source_inventory_complete",
+              "dataset_doi": doi,
+              "allowed_geometry_file": allowed,
+              "versions": inventory,
+              "geometry_entries": geometry_entries,
+              "metadata_endpoints_opened": opened_urls,
+              "file_content_downloads": 0,
+              "response_content_opened": False,
+              "next": "Freeze one exact public version_id + thinnedpoints file_id/digest before geometry content download.",
+          }
+          out = Path("build/btnw_source_inventory/source_inventory.json")
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Upload metadata-only source inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: btnw-source-inventory
+          path: build/btnw_source_inventory/source_inventory.json
+          if-no-files-found: error
