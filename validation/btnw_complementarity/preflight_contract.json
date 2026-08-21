@@ -1,0 +1,40 @@
+{
+  "candidate": "Calling Lake Black-throated Green Warbler dynamic occupancy 1993-2018",
+  "selection_state": "selected_after_response_header_gate_merge_239",
+  "source": {
+    "dataset_doi": "10.5061/dryad.95x69p8z6",
+    "dryad_publication_date": "2025-10-17",
+    "scientific_article_doi": "10.1093/ornithapp/duaf068",
+    "response_blind_metadata_basis": "Dryad dataset landing page and README plus published article; no model_data.rds bytes opened"
+  },
+  "declaration": {
+    "attempt_id": "btnw_calling_lake_post239_v1",
+    "minimum_nodes": 100,
+    "minimum_outer_units": 6,
+    "minimum_repeated_nodes": 75,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "threshold_provenance": "Inherited unchanged from the immediately preceding giant-kelp fresh-candidate preflight; not adapted to this candidate."
+  },
+  "response_blind_evidence": {
+    "source_identity": "Dryad DOI 10.5061/dryad.95x69p8z6; published 2025-10-17",
+    "geometry_source_identity": "Dryad DOI 10.5061/dryad.95x69p8z6 :: thinnedpoints.csv :: 5.78 KB; README declares SS, longitude, latitude for 114 study sites",
+    "response_source_identity": "Dryad DOI 10.5061/dryad.95x69p8z6 :: model_data.rds :: 132.40 KB; README declares y detection array 114 sites x 25 years x 4 visits",
+    "geometry_response_separable": true,
+    "coordinate_geometry_present": true,
+    "node_count": 114,
+    "outer_unit_count": 25,
+    "repeated_node_count": 114,
+    "layout_design": "other",
+    "response_rows_opened": false,
+    "response_bytes_opened": false,
+    "note": "Study sites were systematically arranged within experimental forest patches and later thinned to >=400 m separation; treat layout as neither a generic regular grid nor natural-irregular without the geometry gate. Year 2004 is excluded for incomplete sampling, leaving 25 modeled years. This preflight does not interpret recorded nondetection as latent absence."
+  },
+  "separate_response_blind_predictor_sources": [
+    "Dryad :: harvest_yearly_covs.csv :: 2,850 rows = 114 sites x 25 years; yearly edge/harvest covariates",
+    "Dryad :: distance_model_arrays.rds :: distance-to-edge covariates for persistence/colonization models"
+  ],
+  "prospective_endpoint_boundary": "If later gates pass, use a separately frozen recorded annual detection-state transition endpoint; do not label recorded nondetection-to-detection as true biological colonization unless an observation model justifies that stronger claim.",
+  "next_if_ready": "Resolve and hash only thinnedpoints.csv from the immutable Dryad version; build the response-blind geometry and run the existing structural-scale/adequacy gate before touching model_data.rds.",
+  "stop_if_not_ready": "Close the candidate unmerged and preserve the response-blind STOP reason."
+}
