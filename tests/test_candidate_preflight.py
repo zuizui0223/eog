@@ -18,6 +18,16 @@ def declaration() -> CandidatePreflightDeclaration:
     )
 
 
+def registry_declaration() -> CandidatePreflightDeclaration:
+    return CandidatePreflightDeclaration(
+        attempt_id="fresh-system-registry-v1",
+        minimum_nodes=40,
+        minimum_outer_units=6,
+        minimum_repeated_nodes=30,
+        require_closed_analysis_registry=True,
+    )
+
+
 def complete_evidence(**overrides) -> CandidatePreflightEvidence:
     values = dict(
         source_identity="archive:v1",
@@ -29,6 +39,7 @@ def complete_evidence(**overrides) -> CandidatePreflightEvidence:
         outer_unit_count=8,
         repeated_node_count=75,
         layout_design="natural_irregular",
+        analysis_registry_closed=None,
         response_rows_opened=False,
         response_bytes_opened=False,
         note="metadata only",
@@ -64,13 +75,45 @@ def test_disabled_requirements_do_not_create_false_missing_metadata():
         minimum_repeated_nodes=30,
         require_separate_geometry_and_response=False,
         require_coordinate_geometry=False,
+        require_closed_analysis_registry=False,
     )
     evidence = complete_evidence(
         geometry_response_separable=None,
         coordinate_geometry_present=None,
+        analysis_registry_closed=None,
     )
     result = evaluate_candidate_preflight(decl, evidence)
     assert result.status == "ready_for_geometry_gate"
+    assert result.missing_metadata == ()
+
+
+def test_required_registry_closure_unknown_is_incomplete_not_pass():
+    result = evaluate_candidate_preflight(
+        registry_declaration(),
+        complete_evidence(analysis_registry_closed=None),
+    )
+    assert result.status == "incomplete_response_blind_metadata"
+    assert result.ready is False
+    assert result.missing_metadata == ("analysis_registry_closed",)
+
+
+def test_required_registry_known_open_is_hard_stop():
+    result = evaluate_candidate_preflight(
+        registry_declaration(),
+        complete_evidence(analysis_registry_closed=False),
+    )
+    assert result.status == "stop_analysis_registry_not_closed"
+    assert result.ready is False
+    assert "one-to-one" in result.reason
+
+
+def test_required_registry_known_closed_reaches_geometry_gate():
+    result = evaluate_candidate_preflight(
+        registry_declaration(),
+        complete_evidence(analysis_registry_closed=True),
+    )
+    assert result.status == "ready_for_geometry_gate"
+    assert result.ready is True
     assert result.missing_metadata == ()
 
 
@@ -141,10 +184,14 @@ def test_fingerprints_change_with_scientific_contract_and_evidence():
         minimum_outer_units=6,
         minimum_repeated_nodes=30,
     )
+    d3 = registry_declaration()
     e1 = complete_evidence()
     e2 = complete_evidence(layout_design="regular_grid")
+    e3 = complete_evidence(analysis_registry_closed=True)
     assert d1.fingerprint != d2.fingerprint
+    assert d1.fingerprint != d3.fingerprint
     assert e1.fingerprint != e2.fingerprint
+    assert e1.fingerprint != e3.fingerprint
     assert evaluate_candidate_preflight(d1, e1).fingerprint != evaluate_candidate_preflight(d1, e2).fingerprint
 
 
@@ -156,8 +203,18 @@ def test_boolean_and_count_types_fail_closed():
             minimum_outer_units=6,
             minimum_repeated_nodes=30,
         )
+    with pytest.raises(TypeError, match="require_closed_analysis_registry must be bool"):
+        CandidatePreflightDeclaration(
+            attempt_id="x",
+            minimum_nodes=40,
+            minimum_outer_units=6,
+            minimum_repeated_nodes=30,
+            require_closed_analysis_registry=1,  # type: ignore[arg-type]
+        )
     with pytest.raises(TypeError, match="node_count must be int"):
         complete_evidence(node_count=40.0)
+    with pytest.raises(TypeError, match="analysis_registry_closed must be bool"):
+        complete_evidence(analysis_registry_closed=1)
     with pytest.raises(TypeError, match="response_rows_opened must be bool"):
         complete_evidence(response_rows_opened=1)
 
