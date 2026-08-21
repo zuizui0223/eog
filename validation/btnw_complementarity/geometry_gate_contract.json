@@ -1,0 +1,38 @@
+{
+  "status": "response_blind_geometry_gate_freeze",
+  "candidate": "Calling Lake Black-throated Green Warbler dynamic occupancy 1993-2018",
+  "response_content_opened": false,
+  "geometry_source": {
+    "dataset_doi": "10.5061/dryad.95x69p8z6",
+    "dataset_version_date": "2025-10-17",
+    "allowed_file_name": "thinnedpoints.csv",
+    "allowed_content": "full geometry file only; README declares SS, longitude, latitude for the 114 study sites",
+    "expected_header_exact": ["SS", "longitude", "latitude"],
+    "expected_node_count": 114,
+    "transport_guard": "Resolve the Dryad API entry for exactly thinnedpoints.csv and download only that file. Zero model_data.rds or other response-bearing bytes may be opened. Ambiguous or missing file identity is a STOP."
+  },
+  "distance_axis": {
+    "axis_id": "geo_haversine_km",
+    "metric": "great-circle Haversine distance",
+    "earth_radius_km": 6371.0088,
+    "interpretation": "response-blind analyst-choice spatial structure; thresholds are not biological dispersal limits"
+  },
+  "structural_scale_declaration": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "provenance": "Inherited unchanged from the established EOG response-blind local/intermediate/regional/near-spanning bracket.",
+    "construction": "minimum observed Haversine pair distance reaching each target LCC fraction with tied distances admitted together"
+  },
+  "structural_adequacy": {
+    "forecast_horizon_steps": 1,
+    "requirements": [
+      "the 0.90 level achieves largest weak component fraction >= 0.90",
+      "the 0.90 level has isolated-node fraction <= 0.05",
+      "at least three distinct positive thresholds occur across the four scale levels",
+      "thresholds and edge sets are nested and deterministic",
+      "all 114 geometry IDs are unique and coordinates finite/in-range"
+    ],
+    "stop_rule": "If any requirement fails, stop this candidate before reading model_data.rds."
+  },
+  "no_retuning": "Do not change the geometry file identity, expected header, LCC targets, isolated-node criterion, distance metric, or one-step horizon after geometry is opened. Geometry-gate failure is not permission to redesign scales for this candidate.",
+  "next_if_pass": "Freeze geometry hash, thresholds, structural fingerprints and then evaluate prospective endpoint estimability/process closure without opening response rows where possible."
+}
