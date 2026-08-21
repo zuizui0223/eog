@@ -1,0 +1,42 @@
+{
+  "status": "response_blind_exact_source_freeze",
+  "candidate": "France wolf recolonization dynamic occupancy 1994-2017",
+  "upstream_repository": "oliviergimenez/occupancy-workshop",
+  "upstream_commit": "eff79d38461adf00276e9bec4bc047620d56144b",
+  "geometry": {
+    "path": "tutorials/data/coordcells_wolf.rds",
+    "git_blob_sha1": "cce6505b06cd8dd289ea0526cddee6e58b8fbb78",
+    "size_bytes": 14317,
+    "content_opened": false
+  },
+  "response": {
+    "path": "tutorials/data/wolf_louvrier.rds",
+    "git_blob_sha1": "2ad95514261f7de62c0b370ce25e5ac70470a4fe",
+    "size_bytes": 43056,
+    "content_opened": false
+  },
+  "predictors": {
+    "envcov_louvrier.rds": {
+      "git_blob_sha1": "a270046f0072c2a1a70509118f1d33ed0fa01382",
+      "size_bytes": 104935,
+      "content_opened": false
+    },
+    "effort_louvrier.rds": {
+      "git_blob_sha1": "22d11a9be3051cab4794e43076d0f573f1686b38",
+      "size_bytes": 78223,
+      "content_opened": false
+    },
+    "shortd_spatialautocorr.rds": {
+      "git_blob_sha1": "4883e3f362bb4924c8e59d0368465c139cf357d0",
+      "size_bytes": 8774,
+      "content_opened": false
+    },
+    "longd_spatialautocorr.rds": {
+      "git_blob_sha1": "e23b89b1d02b2620645db81791533d92259295ac",
+      "size_bytes": 46994,
+      "content_opened": false
+    }
+  },
+  "response_content_opened": false,
+  "next": "Open only the pinned coordcells_wolf.rds geometry file and run the prospectively frozen structural geometry gate."
+}
