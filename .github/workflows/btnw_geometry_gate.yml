@@ -8,6 +8,7 @@ on:
       - ".github/workflows/btnw_geometry_gate.yml"
       - "validation/btnw_complementarity/geometry_gate_contract.json"
       - "validation/btnw_complementarity/source_freeze.json"
+      - "validation/btnw_complementarity/geometry_mirror_freeze.json"
       - "src/eog/v2/world_scale_ladder.py"
       - "src/eog/v2/world_adequacy.py"
   pull_request:
@@ -15,6 +16,7 @@ on:
       - ".github/workflows/btnw_geometry_gate.yml"
       - "validation/btnw_complementarity/geometry_gate_contract.json"
       - "validation/btnw_complementarity/source_freeze.json"
+      - "validation/btnw_complementarity/geometry_mirror_freeze.json"
       - "src/eog/v2/world_scale_ladder.py"
       - "src/eog/v2/world_adequacy.py"
   workflow_dispatch:
@@ -64,31 +66,41 @@ jobs:
           root = Path("validation/btnw_complementarity")
           contract_path = root / "geometry_gate_contract.json"
           source_path = root / "source_freeze.json"
+          mirror_path = root / "geometry_mirror_freeze.json"
           contract_bytes = contract_path.read_bytes()
           source_bytes = source_path.read_bytes()
+          mirror_bytes = mirror_path.read_bytes()
           contract = json.loads(contract_bytes)
           source = json.loads(source_bytes)
+          mirror = json.loads(mirror_bytes)
 
           assert contract["response_content_opened"] is False
           assert source["response_content_opened"] is False
           assert source["response"]["content_opened"] is False
+          assert mirror["response_content_opened"] is False
+          assert mirror["geometry_mirror_content_opened"] is False
           frozen = source["geometry"]
           assert frozen["path"] == contract["geometry_source"]["allowed_file_name"]
+          assert mirror["dryad_reference"]["sha256"] == frozen["sha256"]
+          assert mirror["dryad_reference"]["size_bytes"] == frozen["size_bytes"]
 
           expected_size = int(frozen["size_bytes"])
           expected_sha = frozen["sha256"]
           file_id = int(frozen["file_id"])
 
-          # Both permitted transports identify the exact already-frozen geometry file ID.
-          # No dataset-archive or response-file download endpoint is permitted here.
-          candidate_urls = [
+          attempts = []
+          geometry_bytes = None
+          selected_transport = None
+          equivalence = None
+
+          # First retry only the exact frozen Dryad individual-file endpoints. These
+          # endpoints returned 401/403 on the first run before any geometry bytes were
+          # received; no dataset archive or response file route is permitted.
+          dryad_urls = [
               f"https://datadryad.org/api/v2/files/{file_id}/download",
               f"https://datadryad.org/downloads/file_stream/{file_id}",
           ]
-          attempts = []
-          geometry_bytes = None
-          selected_url = None
-          for url in candidate_urls:
+          for url in dryad_urls:
               req = Request(
                   url,
                   headers={
@@ -115,12 +127,95 @@ jobs:
               )
               if len(payload) == expected_size and digest == expected_sha:
                   geometry_bytes = payload
-                  selected_url = final_url
+                  selected_transport = {
+                      "kind": "dryad_exact_file",
+                      "url": final_url,
+                  }
+                  equivalence = {
+                      "mode": "exact_raw_dryad_sha256",
+                      "dryad_sha256": digest,
+                  }
                   break
+
+          # If Dryad transport remains unavailable, use only the mirror whose repo,
+          # commit, path, blob SHA and LF->CRLF equivalence rule were frozen before
+          # mirror content access.
+          if geometry_bytes is None:
+              commit = mirror["upstream_commit"]
+              path = mirror["upstream_path"]
+              repo = mirror["upstream_repository"]
+              raw_url = f"https://raw.githubusercontent.com/{repo}/{commit}/{path}"
+              req = Request(
+                  raw_url,
+                  headers={
+                      "Accept": "text/csv,*/*;q=0.1",
+                      "User-Agent": "EOG-response-blind-geometry-gate/1.0",
+                  },
+              )
+              try:
+                  with urlopen(req, timeout=30) as response:
+                      raw_mirror = response.read()
+                      final_url = response.geturl()
+              except (HTTPError, URLError) as exc:
+                  attempts.append(
+                      {"url": raw_url, "status": "mirror_transport_error", "detail": str(exc)}
+                  )
+              else:
+                  raw_sha256 = hashlib.sha256(raw_mirror).hexdigest()
+                  git_blob_sha1 = hashlib.sha1(
+                      f"blob {len(raw_mirror)}\0".encode("ascii") + raw_mirror
+                  ).hexdigest()
+                  attempts.append(
+                      {
+                          "url": raw_url,
+                          "final_url": final_url,
+                          "status": "mirror_bytes_received",
+                          "size": len(raw_mirror),
+                          "sha256": raw_sha256,
+                          "git_blob_sha1": git_blob_sha1,
+                      }
+                  )
+
+                  rule = mirror["prospective_equivalence_rule"]
+                  if len(raw_mirror) != int(mirror["upstream_metadata_size_bytes"]):
+                      raise RuntimeError("pinned GitHub geometry mirror raw byte size drifted")
+                  if git_blob_sha1 != mirror["upstream_git_blob_sha1"]:
+                      raise RuntimeError("pinned GitHub geometry mirror git blob identity drifted")
+                  if b"\r" in raw_mirror:
+                      raise RuntimeError("pinned GitHub geometry mirror contains CR despite frozen LF-only rule")
+                  raw_mirror.decode("utf-8")
+                  first_line = raw_mirror.split(b"\n", 1)[0].decode("utf-8")
+                  if first_line != ",".join(contract["geometry_source"]["expected_header_exact"]):
+                      raise RuntimeError(
+                          f"mirror geometry schema drift: {first_line!r}"
+                      )
+                  canonical_dryad = raw_mirror.replace(b"\n", b"\r\n")
+                  canonical_sha = hashlib.sha256(canonical_dryad).hexdigest()
+                  required_size = int(rule["required_result_size_bytes"])
+                  required_sha = rule["required_result_sha256"]
+                  if len(canonical_dryad) != required_size or canonical_sha != required_sha:
+                      raise RuntimeError(
+                          "pinned GitHub mirror failed the prospectively frozen LF-to-CRLF Dryad equivalence rule"
+                      )
+                  geometry_bytes = raw_mirror
+                  selected_transport = {
+                      "kind": "pinned_github_mirror",
+                      "url": final_url,
+                      "repository": repo,
+                      "commit": commit,
+                      "path": path,
+                  }
+                  equivalence = {
+                      "mode": "frozen_lf_to_crlf_reproduces_dryad_sha256",
+                      "mirror_raw_sha256": raw_sha256,
+                      "mirror_git_blob_sha1": git_blob_sha1,
+                      "canonical_dryad_size": len(canonical_dryad),
+                      "canonical_dryad_sha256": canonical_sha,
+                  }
 
           if geometry_bytes is None:
               raise RuntimeError(
-                  "no exact frozen geometry transport matched the declared byte size/SHA-256: "
+                  "no frozen response-blind geometry transport passed: "
                   + json.dumps(attempts, sort_keys=True)
               )
 
@@ -144,17 +239,17 @@ jobs:
               if not node_id:
                   raise RuntimeError(f"empty SS at geometry row {index}")
               try:
-                  lon = float(row["longitude"])
-                  lat = float(row["latitude"])
+                  lon_value = float(row["longitude"])
+                  lat_value = float(row["latitude"])
               except (TypeError, ValueError) as exc:
                   raise RuntimeError(f"non-numeric coordinate at geometry row {index}") from exc
-              if not math.isfinite(lon) or not math.isfinite(lat):
+              if not math.isfinite(lon_value) or not math.isfinite(lat_value):
                   raise RuntimeError(f"non-finite coordinate at geometry row {index}")
-              if not -180.0 <= lon <= 180.0 or not -90.0 <= lat <= 90.0:
+              if not -180.0 <= lon_value <= 180.0 or not -90.0 <= lat_value <= 90.0:
                   raise RuntimeError(f"coordinate out of range at geometry row {index}")
               node_ids.append(node_id)
-              longitudes.append(lon)
-              latitudes.append(lat)
+              longitudes.append(lon_value)
+              latitudes.append(lat_value)
 
           if len(set(node_ids)) != len(node_ids):
               raise RuntimeError("geometry SS identifiers are not unique")
@@ -231,15 +326,19 @@ jobs:
               "candidate": contract["candidate"],
               "source_version_number": source["selected_version"]["version_number"],
               "source_version_id": source["selected_version"]["version_id"],
-              "geometry_file_id": file_id,
-              "geometry_size_bytes": len(geometry_bytes),
-              "geometry_sha256": hashlib.sha256(geometry_bytes).hexdigest(),
+              "dryad_geometry_file_id": file_id,
+              "dryad_geometry_size_bytes": expected_size,
+              "dryad_geometry_sha256": expected_sha,
+              "geometry_transport_bytes_used": len(geometry_bytes),
+              "geometry_transport_sha256": hashlib.sha256(geometry_bytes).hexdigest(),
               "geometry_header": reader.fieldnames,
               "node_count": len(node_ids),
-              "transport_selected": selected_url,
+              "selected_transport": selected_transport,
               "transport_attempts": attempts,
+              "transport_equivalence": equivalence,
               "contract_sha256": hashlib.sha256(contract_bytes).hexdigest(),
               "source_freeze_sha256": hashlib.sha256(source_bytes).hexdigest(),
+              "mirror_freeze_sha256": hashlib.sha256(mirror_bytes).hexdigest(),
               "scale_ladder": asdict(ladder),
               "distinct_positive_threshold_count": len(distinct_positive),
               "distinct_positive_thresholds_km": distinct_positive,
