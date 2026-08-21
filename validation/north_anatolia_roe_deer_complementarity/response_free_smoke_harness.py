@@ -26,52 +26,58 @@ def _deterministic_effort_aware_source_chain(
     distance: np.ndarray,
     broad_threshold_km: float,
 ) -> list[int]:
-    """Find one 22-season response-free chain under the frozen source/candidate rules."""
+    """Recover one witness path from forward response-free possible-source sets."""
 
     n_nodes, n_primary = effort.shape
-    viable: list[set[int]] = [set() for _ in range(n_primary)]
-    pointer: list[dict[int, int]] = [dict() for _ in range(n_primary - 1)]
-    viable[-1] = set(np.flatnonzero(effort[:, -1] > 0.0).tolist())
-    if not viable[-1]:
-        raise RuntimeError("no positive-effort station in final synthetic primary season")
+    current = set(np.flatnonzero(effort[:, 0] > 0.0).tolist())
+    if not current:
+        raise RuntimeError("no positive-effort station in first synthetic primary season")
 
-    for t in range(n_primary - 2, -1, -1):
-        current_nodes = np.flatnonzero(effort[:, t] > 0.0)
-        next_nodes = sorted(viable[t + 1])
-        for i in current_nodes.tolist():
-            chosen = None
-            for j in next_nodes:
-                # Same-station persistence is not a candidate appearance; it only needs
-                # target-season effort. A station change must obey the exact real-runner
-                # candidate effort rule and broadest structural reachability.
-                if i == j:
-                    if effort[j, t + 1] > 0.0:
-                        chosen = j
-                        break
-                elif (
-                    effort[j, t] > 0.0
-                    and effort[j, t + 1] > 0.0
-                    and distance[j, i] <= broad_threshold_km
-                ):
-                    chosen = j
-                    break
-            if chosen is not None:
-                viable[t].add(i)
-                pointer[t][i] = chosen
-        if not viable[t]:
-            raise RuntimeError(
-                f"no response-free source chain can traverse frozen transition {t}->{t + 1} "
-                f"under effort and broad-world rules"
-            )
-
-    start = min(viable[0])
-    chain = [start]
-    current = start
+    parents: list[dict[int, int]] = []
+    possible_counts = [len(current)]
     for t in range(n_primary - 1):
-        current = pointer[t][current]
-        chain.append(current)
+        parent_for_next: dict[int, int] = {}
+        for i in sorted(current):
+            if effort[i, t + 1] > 0.0:
+                parent_for_next.setdefault(i, i)
+
+            target_eligible = np.flatnonzero(
+                (effort[:, t] > 0.0)
+                & (effort[:, t + 1] > 0.0)
+                & (distance[:, i] <= broad_threshold_km)
+            )
+            for j in target_eligible.tolist():
+                parent_for_next.setdefault(j, i)
+
+        if not parent_for_next:
+            raise RuntimeError(
+                f"response-free possible-source set becomes empty at transition {t}->{t + 1}"
+            )
+        parents.append(parent_for_next)
+        current = set(parent_for_next)
+        possible_counts.append(len(current))
+
+    final_node = min(current)
+    chain = [final_node]
+    node = final_node
+    for t in range(n_primary - 2, -1, -1):
+        node = parents[t][node]
+        chain.append(node)
+    chain.reverse()
+
     if len(chain) != n_primary:
         raise RuntimeError("synthetic source-chain length drift")
+    for t in range(n_primary - 1):
+        i = chain[t]
+        j = chain[t + 1]
+        if effort[i, t] <= 0.0 or effort[j, t + 1] <= 0.0:
+            raise RuntimeError("recovered source chain violates positive-effort semantics")
+        if i != j and not (
+            effort[j, t] > 0.0 and distance[j, i] <= broad_threshold_km
+        ):
+            raise RuntimeError("recovered source-chain station change violates broad-world candidate semantics")
+
+    _deterministic_effort_aware_source_chain.possible_counts = possible_counts
     return chain
 
 
@@ -82,10 +88,11 @@ def broad_compatible_synthetic_response(
 ) -> np.ndarray:
     """Response-free fixture with guaranteed broad-world support for every appearance.
 
-    This is validation plumbing only. It searches the response-independent effort/geometry
-    for a deterministic 22-season source chain, then adds a few synthetic appearances per
-    transition only when they satisfy the exact real-runner candidate definition and the
-    frozen broadest structural world. No scientific threshold or count gate is relaxed.
+    This is validation plumbing only. It derives a witness chain from the same optimistic
+    response-free possible-source recursion that passed the temporal source-closure gate,
+    then adds a few synthetic appearances per transition only when they satisfy the exact
+    real-runner candidate definition and frozen broadest structural world. No scientific
+    threshold or count gate is relaxed.
     """
 
     n_nodes, n_primary = effort.shape
@@ -129,11 +136,7 @@ def broad_compatible_synthetic_response(
 
         preferred = candidate_ids[((candidate_ids + 5 * t) % 5) == 0].tolist()
         ordered = required + [node for node in preferred if node not in required]
-        ordered.extend(
-            node
-            for node in candidate_ids.tolist()
-            if node not in set(ordered)
-        )
+        ordered.extend(node for node in candidate_ids.tolist() if node not in set(ordered))
         selected = np.asarray(ordered[: min(4, len(ordered))], dtype=int)
         if len(selected) == 0:
             raise RuntimeError(f"synthetic transition {t} produced zero events")
@@ -154,9 +157,6 @@ def broad_compatible_synthetic_response(
             }
         )
 
-    # Re-evaluate the exact real-runner source/candidate semantics after all synthetic
-    # seasons have been built. This prevents later target assignments from silently
-    # creating a broad-incompatible appearance in an earlier transition.
     for t in range(n_primary - 1):
         source = detected[:, t] & (effort[:, t] > 0.0)
         if not source.any():
@@ -177,6 +177,11 @@ def broad_compatible_synthetic_response(
 
     broad_compatible_synthetic_response.last_audit = audit
     broad_compatible_synthetic_response.source_chain = source_chain
+    broad_compatible_synthetic_response.possible_source_counts = getattr(
+        _deterministic_effort_aware_source_chain,
+        "possible_counts",
+        [],
+    )
     return detected
 
 
@@ -198,8 +203,13 @@ def main() -> None:
         response_path=None,
     )
     result["smoke_fixture"] = {
-        "kind": "effort-aware-source-chain-broad-compatible",
+        "kind": "forward-possible-source-witness-chain-broad-compatible",
         "source_chain": getattr(broad_compatible_synthetic_response, "source_chain", []),
+        "possible_source_counts": getattr(
+            broad_compatible_synthetic_response,
+            "possible_source_counts",
+            [],
+        ),
         "transition_audit": getattr(broad_compatible_synthetic_response, "last_audit", []),
         "scientific_contract_changed": False,
     }
