@@ -1,0 +1,42 @@
+{
+  "status": "response_blind_exact_source_freeze",
+  "candidate": "Calling Lake Black-throated Green Warbler dynamic occupancy 1993-2018",
+  "dataset_doi": "10.5061/dryad.95x69p8z6",
+  "selected_version": {
+    "version_number": 5,
+    "version_id": 405459,
+    "publication_date": "2025-10-17",
+    "last_modification_date": "2025-11-03",
+    "selection_rule": "highest visible public version number returned by the metadata-only Dryad inventory before any candidate file content was downloaded"
+  },
+  "geometry": {
+    "path": "thinnedpoints.csv",
+    "file_id": 4441889,
+    "size_bytes": 5781,
+    "digest_type": "sha-256",
+    "sha256": "17ffb4ddc38c5e8a5174c9ddf52267058187adfcbf1311731acb917308a73233",
+    "cross_version_check": "same SHA-256 and size as public version 3 (version_id 402363, file_id 4413583)"
+  },
+  "response": {
+    "path": "model_data.rds",
+    "file_id": 4441878,
+    "size_bytes": 132397,
+    "digest_type": "sha-256",
+    "sha256": "abc7ecbf6ff0eb433bde857ef9d94f66eb9f160de0b080747cdd028042474664",
+    "content_opened": false
+  },
+  "response_independent_predictors": {
+    "distance_model_arrays.rds": {
+      "file_id": 4441879,
+      "size_bytes": 61848,
+      "sha256": "afb49a1be09930025704eca0d4a522989fac0f30c36eaf66b5ffd5467c6eab1d"
+    },
+    "harvest_yearly_covs.csv": {
+      "file_id": 4441888,
+      "size_bytes": 220786,
+      "sha256": "6db1a76d30f28066619f88ac4ca8212e3e2755ab477378e2af8e3347e15cc9c4"
+    }
+  },
+  "response_content_opened": false,
+  "next": "Download only frozen geometry file_id 4441889, verify byte size/SHA/header, and run the already-frozen structural geometry gate."
+}
