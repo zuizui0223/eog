@@ -14,8 +14,12 @@
       "destination_patch",
       "year",
       "semester",
-      "time"
+      "dispersal_time"
     ],
+    "eml_to_physical_header_mapping": {
+      "time": "dispersal_time"
+    },
+    "header_mapping_provenance": "The frozen non-response process object was checksum-verified before schema audit. EML declares attribute name 'time' with definition 'Estimated minimum mean duration of time for dispersal from the source patch to the recipient patch in the semester'; the physical CSV header for that fifth column is 'dispersal_time'. This mapping was established without opening the canopy/biomass response package.",
     "format_id": "text/csv",
     "size_bytes": 103428326,
     "checksum_algorithm": "SHA-1",
@@ -27,7 +31,7 @@
     "destination_patch": "exact non-empty string after outer-whitespace stripping only",
     "year": "strict base-10 integer allowed exactly 1996 through 2006",
     "semester": "strict base-10 integer allowed exactly 1 or 2",
-    "time": "finite non-negative decimal dispersal duration in nominal days; EML declares no missing-value code"
+    "dispersal_time": "finite non-negative decimal dispersal duration in nominal days; EML attribute 'time' declares no missing-value code"
   },
   "field_domain_freeze": {
     "missing_value_codes": {
@@ -35,13 +39,13 @@
       "destination_patch": [],
       "year": [],
       "semester": [],
-      "time": []
+      "dispersal_time": []
     },
     "semester_enumeration": {
       "1": "January - June",
       "2": "July - December"
     },
-    "time_unit": "nominalDay"
+    "dispersal_time_unit": "nominalDay"
   },
   "period_order": [
     "1996-H1", "1996-H2", "1997-H1", "1997-H2", "1998-H1", "1998-H2",
@@ -62,9 +66,9 @@
   "process_feature_boundary": "Use process values only as frozen pre-response covariates. No outcome-derived cutoff. Strong baseline may use current-source minimum modeled dispersal time, finite-source count, and current-source fecundity-weighted inverse-time exposure; the augmented learner receives exactly the same conventional/process features plus frozen Layer B.",
   "layer_a_boundary": "Do not create a new tuned process-threshold world from these times. Layer A remains the four prospectively frozen structural geometry worlds plus one full continuous geometry-support world; process times strengthen the external comparator and source-conditioned covariates.",
   "response_access_state": {
-    "process_object_bytes_opened": false,
+    "process_object_bytes_opened": true,
     "response_package_bytes_opened": false,
     "response_rows_opened": false
   },
-  "next": "retrieve process and geometry objects only, verify exact patch mapping and period/schema integrity without opening response"
+  "next": "rerun process-to-geometry audit using the explicit EML-to-physical header mapping; do not alter patch or period gates"
 }
