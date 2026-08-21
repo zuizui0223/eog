@@ -106,8 +106,7 @@ jobs:
       - name: Run exact response-free paired runner path
         run: |
           set -euo pipefail
-          python validation/north_anatolia_roe_deer_complementarity/paired_runner.py \
-            --mode smoke \
+          python validation/north_anatolia_roe_deer_complementarity/response_free_smoke_harness.py \
             --stations build/north_anatolia_smoke/input/stations.csv \
             --variables build/north_anatolia_smoke/input/variable_data.csv \
             --effort build/north_anatolia_smoke/input/camtrap_effort_Ndays.csv \
@@ -121,6 +120,7 @@ jobs:
           result = json.loads(Path("build/north_anatolia_smoke/output/smoke_result.json").read_text())
           assert result["mode"] == "smoke"
           assert result["response_opened"] is False
+          assert result["smoke_fixture"]["scientific_contract_changed"] is False
           assert result["count_gate"]["passed"] is True, result["count_gate"]
           assert result["model_fit_count"] == 2, result
           assert result["heldout_score_count"] == 10, result
@@ -137,10 +137,12 @@ jobs:
               "model_fit_count": result["model_fit_count"],
               "heldout_score_count": result["heldout_score_count"],
               "surviving_world_ids_final": result["surviving_world_ids_final"],
+              "smoke_anchor_nodes": result["smoke_fixture"]["anchor_nodes"],
               "fingerprint": result["fingerprint"],
           }, indent=2, sort_keys=True))
           PY
       - name: Upload response-free smoke evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: north-anatolia-response-free-smoke
