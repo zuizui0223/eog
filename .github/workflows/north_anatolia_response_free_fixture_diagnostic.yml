@@ -96,15 +96,15 @@ jobs:
               encoding="utf-8",
           )
           PY
-      - name: Diagnose selection-time versus post-audit source sets
+      - name: Diagnose vectorized versus parent-map closure
         run: |
           set -euo pipefail
           python validation/north_anatolia_roe_deer_complementarity/diagnose_response_free_fixture.py \
             --stations build/north_anatolia_fixture_diagnostic/input/stations.csv \
             --variables build/north_anatolia_fixture_diagnostic/input/variable_data.csv \
             --effort build/north_anatolia_fixture_diagnostic/input/camtrap_effort_Ndays.csv \
-            --output build/north_anatolia_fixture_diagnostic/output/fixture_diagnostic.json
-      - name: Assert diagnostic stays response-blind
+            --output build/north_anatolia_fixture_diagnostic/output/fixture_diagnostic.json >/dev/null
+      - name: Print compact diagnostic
         run: |
           python - <<'PY'
           import json
@@ -114,8 +114,11 @@ jobs:
           assert result["scientific_contract_changed"] is False
           print(json.dumps({
               "status": result["status"],
-              "first_mismatch": result["first_mismatch"],
-              "possible_source_counts": result["possible_source_counts"],
+              "first_divergence": result["first_divergence"],
+              "vector_final_count": result["vector_final_count"],
+              "parent_final_count": result["parent_final_count"],
+              "chain_error": result["chain_error"],
+              "effort_positive_counts_by_season": result["effort_positive_counts_by_season"],
           }, indent=2, sort_keys=True))
           PY
       - name: Upload response-free diagnostic evidence
