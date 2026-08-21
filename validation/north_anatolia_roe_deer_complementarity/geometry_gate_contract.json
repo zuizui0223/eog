@@ -1,0 +1,43 @@
+{
+  "status": "response_blind_geometry_gate_freeze",
+  "candidate": "Northwestern Anatolia roe deer seasonal dynamic occupancy 2008-2018",
+  "response_content_opened": false,
+  "analysis_registry": {
+    "raw_station_count": 173,
+    "excluded_station_names": ["TUL08", "TUL12"],
+    "expected_analysis_node_count": 171,
+    "rule_provenance": "Frozen from upstream cc_112022_data_prep.R before response access; the author removes TUL08 and TUL12 and reports 171 stations.",
+    "closure_requirement": "stations.csv and variable_data.csv must expose the same 173 unique station names before the frozen two-name exclusion, and the same 171 names afterward"
+  },
+  "geometry_schema": {
+    "stations_columns_exact": ["", "x"],
+    "station_name_column": "x",
+    "variable_required_columns": ["Station", "Easting", "Northing", "Zone"],
+    "allow_additional_variable_columns": true,
+    "coordinate_rule": "Easting/Northing are treated as metre-scale UTM coordinates only if all retained nodes share one finite Zone value; otherwise STOP rather than invent a cross-zone transform"
+  },
+  "distance_axis": {
+    "axis_id": "utm_euclidean_km",
+    "metric": "Euclidean distance on retained Easting/Northing divided by 1000",
+    "interpretation": "response-blind analyst-choice spatial structure; thresholds are not biological roe-deer movement limits"
+  },
+  "structural_scale_declaration": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "provenance": "Inherited unchanged from the established EOG fresh-candidate response-blind scale bracket.",
+    "construction": "minimum observed Euclidean pair distance reaching each target LCC fraction with tied distances admitted together"
+  },
+  "structural_adequacy": {
+    "forecast_horizon_steps": 1,
+    "requirements": [
+      "the 0.90 level achieves largest weak component fraction >= 0.90",
+      "the 0.90 level has isolated-node fraction <= 0.05",
+      "at least three distinct positive thresholds occur across the four scale levels",
+      "thresholds and edge sets are nested and deterministic",
+      "the frozen 173-to-171 analysis registry closure is exact",
+      "retained Easting/Northing values are finite and all retained nodes share one UTM zone"
+    ],
+    "stop_rule": "If any requirement fails, stop before opening cc_dh_112022.csv."
+  },
+  "no_retuning": "Do not change the TUL08/TUL12 exclusion, coordinate columns, unit conversion, LCC targets, isolated-node criterion or one-step horizon after this gate runs. Failure is not permission to redesign the geometry for this candidate.",
+  "next_if_pass": "Freeze geometry hashes, 171-node registry, structural thresholds and audits; then freeze endpoint, count gate, Layer-A worlds, Layer-B representation and strong paired predictor before once-only response access."
+}
