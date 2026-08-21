@@ -1,0 +1,140 @@
+name: Yosemite amphibian metadata role Gate 0B
+
+on:
+  push:
+    branches:
+      - agent/yosemite-amphibian-gate0
+    paths:
+      - ".github/workflows/yosemite_amphibian_role_gate0.yml"
+      - "validation/yosemite_amphibian_complementarity/gate0_role_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/yosemite_amphibian_role_gate0.yml"
+      - "validation/yosemite_amphibian_complementarity/gate0_role_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  role-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Read FGDC XML metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/yosemite_amphibian_role
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import json
+          from pathlib import Path
+          import urllib.request
+          import xml.etree.ElementTree as ET
+
+          ROOT=Path('validation/yosemite_amphibian_complementarity')
+          OUT=Path('build/yosemite_amphibian_role')
+          contract=json.loads((ROOT/'gate0_role_contract.json').read_text(encoding='utf-8'))
+          meta=contract['metadata_xml']
+          req=urllib.request.Request(meta['download_uri'], headers={'User-Agent':'eog-yosemite-amphibian-role-gate0/1.0'})
+          with urllib.request.urlopen(req,timeout=60) as r:
+              xml_bytes=r.read()
+          md5=hashlib.md5(xml_bytes).hexdigest()
+          if md5 != meta['md5']:
+              raise RuntimeError(f'FGDC metadata MD5 mismatch: {md5}')
+
+          root=ET.fromstring(xml_bytes)
+          def lname(tag: str) -> str:
+              return tag.rsplit('}',1)[-1].casefold()
+          def text_of(node, child_name: str) -> str:
+              target=child_name.casefold()
+              for child in node.iter():
+                  if lname(child.tag)==target:
+                      return ' '.join(''.join(child.itertext()).split())
+              return ''
+
+          entities=[]
+          for detailed in root.iter():
+              if lname(detailed.tag)!='detailed':
+                  continue
+              label=text_of(detailed,'enttypl')
+              definition=text_of(detailed,'enttypd')
+              attrs=[]
+              for attr in detailed:
+                  if lname(attr.tag)!='attr':
+                      continue
+                  attrs.append({
+                      'label': text_of(attr,'attrlabl'),
+                      'definition': text_of(attr,'attrdef'),
+                  })
+              entities.append({
+                  'label':label,
+                  'definition':definition,
+                  'attributes':attrs,
+              })
+
+          if not entities:
+              raise RuntimeError('FGDC XML exposes no detailed entity metadata')
+
+          def hay(entity):
+              pieces=[entity['label'],entity['definition']]
+              for attr in entity['attributes']:
+                  pieces.extend([attr['label'],attr['definition']])
+              return ' '.join(pieces).casefold()
+
+          site_candidates=[e for e in entities if 'yose_site_data' in hay(e) or 'yose site data' in hay(e)]
+          site_year_candidates=[e for e in entities if 'yose_site_year_data' in hay(e) or 'yose site year data' in hay(e)]
+          survey_candidates=[e for e in entities if 'yose_site_year_survey_data' in hay(e) or 'yose site year survey data' in hay(e)]
+
+          geometry_terms=('latitude','longitude','coordinate','easting','northing','utm','x coordinate','y coordinate')
+          id_terms=('site','site id','siteid')
+          response_terms=('occurrence','observation','detection','detected','presence','occupancy state','reproduction state','species state')
+          site_hay=' '.join(hay(e) for e in site_candidates)
+          site_has_id=any(term in site_hay for term in id_terms)
+          site_has_geometry=any(term in site_hay for term in geometry_terms)
+          site_response_hits=sorted({term for term in response_terms if term in site_hay})
+          distinct_temporal_role=bool(site_year_candidates or survey_candidates)
+
+          payload={
+              'status':'metadata_role_audit_complete',
+              'candidate':contract['candidate'],
+              'manifest_fingerprint':contract['manifest_fingerprint'],
+              'metadata_xml_md5':md5,
+              'metadata_xml_bytes_downloaded':len(xml_bytes),
+              'csv_file_bytes_downloaded':False,
+              'csv_rows_opened':False,
+              'entities':entities,
+              'site_entity_candidate_count':len(site_candidates),
+              'site_year_entity_candidate_count':len(site_year_candidates),
+              'survey_entity_candidate_count':len(survey_candidates),
+              'site_has_identifier_evidence':site_has_id,
+              'site_has_geometry_evidence':site_has_geometry,
+              'site_response_term_hits':site_response_hits,
+              'distinct_temporal_response_role_evidence':distinct_temporal_role,
+              'metadata_supports_role_separation':bool(site_candidates and site_has_id and site_has_geometry and not site_response_hits and distinct_temporal_role),
+              'next':contract['next_if_supported'] if (site_candidates and site_has_id and site_has_geometry and not site_response_hits and distinct_temporal_role) else contract['stop_if_unsupported'],
+          }
+          payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          (OUT/'role_result.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Assert CSV firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/yosemite_amphibian_role/role_result.json'))
+          assert p['status']=='metadata_role_audit_complete'
+          assert p['csv_file_bytes_downloaded'] is False
+          assert p['csv_rows_opened'] is False
+          PY
+      - name: Upload role evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: yosemite-amphibian-role-gate0
+          path: build/yosemite_amphibian_role/role_result.json
+          if-no-files-found: error
