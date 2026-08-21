@@ -4,6 +4,7 @@
   "metadata_pid": "https://pasta.lternet.edu/package/metadata/eml/knb-lter-sbc/103/4",
   "metadata_sha256": "9e64f53f6ff0eeb45345d45e544b532149d4d366749c8b9f095c06049e350977",
   "process_metadata_result_fingerprint": "c19bcc303f89e15d0e109b6b97e760763dfe0128a56ae1045bced4fcfc396630",
+  "process_sysmeta_result_fingerprint": "94cc97b6dd913b028236b9dd91d64237bf8be0181083845f00bef350cfb91dd1",
   "process_entity": {
     "entity_name": "Inter-patch dispersal times, 1996-2006 southern California",
     "object_name": "castorani_etal_socal_mpyrifera_interpatch_dispersal_20160926.csv",
@@ -14,14 +15,33 @@
       "year",
       "semester",
       "time"
-    ]
+    ],
+    "format_id": "text/csv",
+    "size_bytes": 103428326,
+    "checksum_algorithm": "SHA-1",
+    "checksum": "214ab4fce184835b680c13a8ede6523a085936a6",
+    "system_metadata_sha256": "9dbac74c1187de54251c177af756b1d0795f829669da923c5c5ebfa9f3c26998"
   },
   "parser_semantics": {
     "source_patch": "exact non-empty string after outer-whitespace stripping only",
     "destination_patch": "exact non-empty string after outer-whitespace stripping only",
     "year": "strict base-10 integer allowed exactly 1996 through 2006",
     "semester": "strict base-10 integer allowed exactly 1 or 2",
-    "time": "finite non-negative decimal dispersal duration in nominal days unless EML declares an explicit missing-value code"
+    "time": "finite non-negative decimal dispersal duration in nominal days; EML declares no missing-value code"
+  },
+  "field_domain_freeze": {
+    "missing_value_codes": {
+      "source_patch": [],
+      "destination_patch": [],
+      "year": [],
+      "semester": [],
+      "time": []
+    },
+    "semester_enumeration": {
+      "1": "January - June",
+      "2": "July - December"
+    },
+    "time_unit": "nominalDay"
   },
   "period_order": [
     "1996-H1", "1996-H2", "1997-H1", "1997-H2", "1998-H1", "1998-H2",
@@ -35,9 +55,16 @@
     "geometry_sha1": "54d99ca548aff19520a11f689a33296c901ae541",
     "require_source_patch_subset_of_geometry": true,
     "require_destination_patch_subset_of_geometry": true,
-    "require_union_equals_geometry_patch_set": true
+    "require_union_equals_geometry_patch_set": true,
+    "require_all_22_periods": true,
+    "require_unique_source_destination_period_rows": true
   },
   "process_feature_boundary": "Use process values only as frozen pre-response covariates. No outcome-derived cutoff. Strong baseline may use current-source minimum modeled dispersal time, finite-source count, and current-source fecundity-weighted inverse-time exposure; the augmented learner receives exactly the same conventional/process features plus frozen Layer B.",
   "layer_a_boundary": "Do not create a new tuned process-threshold world from these times. Layer A remains the four prospectively frozen structural geometry worlds plus one full continuous geometry-support world; process times strengthen the external comparator and source-conditioned covariates.",
-  "next": "freeze DataONE system metadata/checksum/size; then retrieve process and geometry objects only, verify exact patch mapping and period/schema integrity without opening response"
+  "response_access_state": {
+    "process_object_bytes_opened": false,
+    "response_package_bytes_opened": false,
+    "response_rows_opened": false
+  },
+  "next": "retrieve process and geometry objects only, verify exact patch mapping and period/schema integrity without opening response"
 }
