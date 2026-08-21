@@ -1,0 +1,159 @@
+{
+  "status": "response_blind_prediction_contract_freeze",
+  "candidate": "Northwestern Anatolia roe deer seasonal dynamic occupancy 2008-2018",
+  "response_content_opened": false,
+  "scientific_estimand": {
+    "name": "survey_recorded_seasonal_appearance",
+    "candidate_definition": "For transition t->t+1, retain an analysis station only when source-season camera effort > 0, target-season camera effort > 0, and the source-season aggregate recorded roe-deer detection is 0.",
+    "positive_definition": "Among frozen candidates, target = 1 when any non-missing monthly roe-deer count in target primary season is > 0; otherwise target = 0 when target effort > 0.",
+    "interpretation": "survey-recorded seasonal appearance under positive camera effort",
+    "forbidden_interpretations": [
+      "latent biological colonization",
+      "latent absence at source season",
+      "true dispersal event",
+      "historical migration route"
+    ],
+    "source_state": "current recorded internal source: station has source-season effort > 0 and aggregate recorded detection = 1",
+    "process_source_closure": "All reachability claims are explicitly conditional on currently recorded internal sources in the frozen 171-station universe. Undetected or external biological sources are not claimed absent; a world eliminated under this rule is incompatible only with the declared recorded-source explanation."
+  },
+  "response_semantics": {
+    "response_path": "data/cc_dh_112022.csv",
+    "response_git_blob_sha1": "dafa4af1dbd82a58592b75923a4198cdef7b3cd9",
+    "response_size_bytes": 55405,
+    "format": "CSV read with first physical column as row index",
+    "expected_raw_station_columns": "exactly the 173 station names in frozen stations.csv order before TUL08/TUL12 exclusion",
+    "expected_month_rows": 110,
+    "expected_month_index": "integers 1 through 110 in ascending order",
+    "cell_rule": "each non-missing response cell must parse as a finite non-negative integer count; any count > 0 is a recorded detection",
+    "allowed_missing_tokens_after_csv_parsing": ["", "NA"],
+    "primary_season_mapping": "five consecutive monthly rows per primary season: months 1-5 -> season 1, ..., months 106-110 -> season 22",
+    "season_labels": "odd primary seasons are winter; even primary seasons are summer, inherited from author data-preparation code",
+    "analysis_station_exclusion": ["TUL08", "TUL12"],
+    "post_open_unknown_schema_or_token_rule": "STOP before exact count/model/scoring; no parser repair and rerun as independent evidence"
+  },
+  "effort_semantics": {
+    "path": "data/camtrap_effort_Ndays.csv",
+    "git_blob_sha1": "5eaab0988e670203aa75f9451ce55a84b625b5f1",
+    "expected_rows": 3762,
+    "expected_columns": ["", "ndays", "site", "pocc"],
+    "site_mapping": "site is 1-based index in the frozen 171-station retained order after TUL08/TUL12 exclusion",
+    "primary_mapping": "pocc is integer 1..22",
+    "effort_rule": "ndays must be finite and >=0; source/target season enters the appearance endpoint only when ndays>0"
+  },
+  "transition_split": {
+    "state_count": 22,
+    "transition_count": 21,
+    "calibration_transition_indices_zero_based": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    "heldout_transition_indices_zero_based": [16, 17, 18, 19, 20],
+    "interpretation": "first 16 transitions calibration; final 5 transitions held out, inherited from the immediately preceding giant-kelp fresh contract rather than adapted to roe-deer outcomes",
+    "heldout_outer_unit_count": 5
+  },
+  "exact_count_gate": {
+    "minimum_calibration_events": 10,
+    "minimum_calibration_non_events": 40,
+    "minimum_heldout_events": 10,
+    "minimum_heldout_non_events": 40,
+    "minimum_heldout_outer_units_with_both_classes": 4,
+    "provenance": "Inherited unchanged from the giant-kelp fresh complementarity contract.",
+    "failure_rule": "If any minimum fails, stop with zero model fits and zero heldout scores."
+  },
+  "layer_a": {
+    "declared_worlds": [
+      {
+        "world_id": "struct_geo_lcc250",
+        "threshold_km": 2.029850240781
+      },
+      {
+        "world_id": "struct_geo_lcc500",
+        "threshold_km": 31.008897110346
+      },
+      {
+        "world_id": "struct_geo_lcc750",
+        "threshold_km": 37.290775923813
+      }
+    ],
+    "deduplication_rule": "The frozen 0.90 LCC target has the same 37.290775923813-km adjacency as the 0.75 target and is not duplicated as a second scientific world.",
+    "support_definition": "For each world/node/transition before target response is used, support is the fraction of current recorded source stations whose frozen UTM distance to the node is <= that world's threshold.",
+    "support_tolerance": 0.0,
+    "calibration_update": "After scoring/building features for a calibration transition, eliminate each surviving world if any positive survey-recorded appearance in that target season has support <= 0 under that world.",
+    "heldout_update": "For each heldout transition, create predictions using the surviving set before target outcome; only after scoring that outer unit may its positive appearances contract the surviving set for later heldout transitions.",
+    "universe_falsification_rule": "If no world survives during calibration, paired prediction is non-estimable and no model is fit. If no world survives after a heldout score, later heldout units are not fabricated and the paired endpoint is incomplete/non-confirmatory.",
+    "interpretation": "exact finite structural source-exposure worlds; thresholds are analyst-choice regimes, not calibrated roe-deer dispersal distances"
+  },
+  "layer_b": {
+    "implementation": "src/eog/v2/world_predictive_summary.py",
+    "version": "WorldPredictiveSummary v1 unchanged",
+    "features": [
+      "surviving_world_fraction",
+      "support_mean",
+      "support_std",
+      "support_min",
+      "support_max",
+      "support_q25",
+      "support_q50",
+      "support_q75",
+      "positive_support_fraction",
+      "support_range"
+    ],
+    "declared_world_count": 3,
+    "no_tuning": "No Layer-B feature selection, transformation or outcome-specific tuning is permitted."
+  },
+  "strong_baseline": {
+    "model_family": "sklearn RandomForestClassifier",
+    "n_estimators": 500,
+    "max_features": "sqrt",
+    "min_samples_leaf": 5,
+    "class_weight": null,
+    "random_state": 20260817,
+    "n_jobs": -1,
+    "hyperparameter_provenance": "Reuses the frozen strong-RF policy from the Glanville EOG validation; no roe-deer response tuning.",
+    "fit_policy": "fit once to pooled calibration candidate rows; do not refit on heldout outcomes",
+    "static_numeric_features": [
+      "Easting",
+      "Northing",
+      "Elevation",
+      "Slope",
+      "Aspect",
+      "Ruggedness",
+      "PopDen",
+      "RoadDen",
+      "DistPop",
+      "DistRoad"
+    ],
+    "static_categorical_features": [
+      "study_area_prefix",
+      "Grid_code",
+      "Habitat",
+      "Aspect_Cat2",
+      "Aspect_Cat8"
+    ],
+    "study_area_prefix_rule": "first three ASCII letters of frozen Station ID; the retained station registry uses the ten externally interpretable prefixes TAC,TAR,TBA,TDA,TEL,TIL,TKA,TKG,TTO,TUL, matching the published narea=10 structure",
+    "dynamic_features_known_before_target_outcome": [
+      "target_season_winter",
+      "source_ndays",
+      "target_ndays",
+      "prior_recorded_detection_count_through_source",
+      "seasons_since_last_recorded_detection_before_or_at_source"
+    ],
+    "never_detected_sentinel_for_seasons_since_last": 23,
+    "preprocessing": "Fail closed on missing/non-finite frozen static numeric predictors. Encode frozen response-independent categorical levels with deterministic one-hot columns sorted lexicographically; no response-derived feature selection or scaling is applied to RF inputs.",
+    "scientific_strength": "Contains spatial coordinates, habitat/topography/anthropogenic predictors, ten-area structure, season, camera effort and lagged detection history. This is intentionally at least as information-rich as a simple local/environment-only baseline."
+  },
+  "augmented_model": {
+    "model_family_and_hyperparameters": "identical to strong_baseline",
+    "conventional_features": "identical to strong_baseline",
+    "additional_features_only": "the unchanged 10-column Layer-B block",
+    "forbidden_difference": "No learner, hyperparameter, preprocessing, split, target or conventional-feature change between paired fits."
+  },
+  "metric_and_decision": {
+    "primary_metric": "mean heldout outer-unit logloss",
+    "score_direction": "lower_is_better",
+    "tie_tolerance": 1e-12,
+    "favorable_minimum_augmented_outer_unit_wins": 4,
+    "adverse_minimum_baseline_outer_unit_wins": 4,
+    "favorable_rule": "augmented macro logloss < baseline macro logloss and augmented wins at least 4 of 5 heldout transitions",
+    "adverse_rule": "baseline macro logloss < augmented macro logloss and baseline wins at least 4 of 5 heldout transitions",
+    "otherwise": "no_confirmed_complementary_added_value"
+  },
+  "next": "Implement the exact response-free runner path, run synthetic smoke, freeze runner/runtime/fingerprints and only then construct the 16-key once-only outcome-access authorization."
+}
