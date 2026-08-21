@@ -1,0 +1,140 @@
+name: Giant kelp BCO-DMO geometry metadata inventory
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_bcodmo_geometry_inventory.yml"
+      - "validation/giant_kelp_complementarity/bcodmo_geometry_mirror_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_bcodmo_geometry_inventory.yml"
+      - "validation/giant_kelp_complementarity/bcodmo_geometry_mirror_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Resolve BCO-DMO geometry dataset metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_bcodmo_inventory
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import html
+          import json
+          from pathlib import Path
+          import re
+          import urllib.request
+
+          ROOT=Path('validation/giant_kelp_complementarity')
+          OUT=Path('build/giant_kelp_bcodmo_inventory')
+          contract=json.loads((ROOT/'bcodmo_geometry_mirror_contract.json').read_text(encoding='utf-8'))
+          project=int(contract['bco_dmo_project_id'])
+          award=int(contract['bco_dmo_award_id'])
+          UA='eog-giant-kelp-bcodmo-metadata/1.0'
+          fetched=[]
+
+          def get(url: str, accept: str='text/html,application/json,*/*') -> bytes:
+              allowed=('https://www.bco-dmo.org/project/','https://www.bco-dmo.org/award/','https://www.bco-dmo.org/api/dataset/')
+              if not any(url.startswith(prefix) for prefix in allowed):
+                  raise RuntimeError(f'non-metadata BCO-DMO endpoint blocked: {url!r}')
+              req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':accept})
+              with urllib.request.urlopen(req,timeout=60) as r:
+                  body=r.read(); status=getattr(r,'status',None) or r.getcode()
+                  ctype=str(r.headers.get('Content-Type','')); final=str(r.geturl())
+              fetched.append({'requested':url,'final':final,'status':status,'bytes':len(body),'content_type':ctype,'sha256':hashlib.sha256(body).hexdigest()})
+              return body
+
+          project_html=get(f'https://www.bco-dmo.org/project/{project}').decode('utf-8','replace')
+          award_html=get(f'https://www.bco-dmo.org/award/{award}').decode('utf-8','replace')
+          dataset_ids=sorted(set(int(x) for x in re.findall(r'(?:href=["\']|https?://www\.bco-dmo\.org)/dataset/(\d+)',project_html+'\n'+award_html)))
+          if not dataset_ids:
+              raise RuntimeError('BCO-DMO project/award metadata exposed no dataset IDs')
+
+          expected=tuple(term.casefold() for term in contract['expected_geometry_title_terms'])
+          datasets=[]
+          for did in dataset_ids:
+              try:
+                  raw=get(f'https://www.bco-dmo.org/api/dataset/{did}',accept='application/json,*/*')
+                  obj=json.loads(raw)
+              except Exception as exc:
+                  datasets.append({'dataset_id':did,'metadata_error':f'{type(exc).__name__}: {exc}'})
+                  continue
+
+              # Retain auditable metadata scalars/URLs, but never call any URL discovered here.
+              scalars=[]
+              def walk(value,path=''):
+                  if isinstance(value,dict):
+                      for k,v in value.items(): walk(v,f'{path}.{k}' if path else str(k))
+                  elif isinstance(value,list):
+                      for i,v in enumerate(value): walk(v,f'{path}[{i}]')
+                  elif value is None or isinstance(value,(str,int,float,bool)):
+                      text=str(value)
+                      if len(text)>2000: text=text[:2000]+'…'
+                      scalars.append({'path':path,'value':text})
+              walk(obj)
+              searchable=' '.join(row['value'] for row in scalars).casefold()
+              titleish=[row for row in scalars if any(token in row['path'].casefold() for token in ('title','name','label','description','abstract'))]
+              urlish=[row for row in scalars if row['value'].startswith(('http://','https://'))]
+              matches=sum(term in searchable for term in expected)
+              datasets.append({
+                  'dataset_id':did,
+                  'expected_title_term_matches':matches,
+                  'matches_all_expected_title_terms':matches==len(expected),
+                  'titleish_metadata':titleish[:80],
+                  'url_metadata':urlish[:80],
+                  'top_level_keys':sorted(obj.keys()) if isinstance(obj,dict) else [],
+                  'metadata_sha256':hashlib.sha256(raw).hexdigest(),
+              })
+
+          exact=[d for d in datasets if d.get('matches_all_expected_title_terms')]
+          status='bcodmo_geometry_dataset_identified' if len(exact)==1 else ('bcodmo_geometry_dataset_ambiguous' if len(exact)>1 else 'bcodmo_geometry_dataset_not_identified')
+          payload={
+              'status':status,
+              'candidate':contract['candidate'],
+              'geometry_edi_doi':contract['geometry_edi_doi'],
+              'resolved_edi_package_id':contract['resolved_edi_package_id'],
+              'bco_dmo_project_id':project,
+              'bco_dmo_award_id':award,
+              'dataset_ids':dataset_ids,
+              'dataset_count':len(dataset_ids),
+              'datasets':datasets,
+              'exact_geometry_matches':exact,
+              'data_download_endpoints_called':False,
+              'data_file_bytes_opened':False,
+              'response_rows_opened':False,
+              'network_fetches':fetched,
+              'next':contract['next_if_dataset_resolves'] if len(exact)==1 else contract['stop_if_unresolved'],
+          }
+          payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          (OUT/'bcodmo_inventory_result.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Assert metadata-only firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_bcodmo_inventory/bcodmo_inventory_result.json'))
+          assert p['data_download_endpoints_called'] is False
+          assert p['data_file_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          assert p['dataset_count'] >= 1
+          PY
+      - name: Upload BCO-DMO inventory evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-bcodmo-geometry-inventory
+          path: build/giant_kelp_bcodmo_inventory/bcodmo_inventory_result.json
+          if-no-files-found: error
