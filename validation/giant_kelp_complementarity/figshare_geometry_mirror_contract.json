@@ -1,0 +1,34 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "geometry_edi_doi": "10.6073/pasta/97ef540ba3fc62dff50779533bb39466",
+  "resolved_edi_package_id": "knb-lter-sbc.101.2",
+  "patch_definition_article_doi": "10.1890/13-0221.1",
+  "figshare_collection": {
+    "collection_id": 3306471,
+    "doi": "10.6084/m9.figshare.c.3306471"
+  },
+  "inventory_policy": "Query only public Figshare collection/article JSON metadata and file metadata. Do not follow any file download URL and do not open any file bytes in this gate.",
+  "geometry_name_terms": [
+    "patch",
+    "spatial",
+    "polygon",
+    "shape",
+    "shp",
+    "coordinate",
+    "centroid",
+    "location",
+    "kml",
+    "geojson"
+  ],
+  "response_name_terms": [
+    "biomass",
+    "fecundity",
+    "canopy",
+    "colonization",
+    "extinction",
+    "time series",
+    "timeseries"
+  ],
+  "next_if_geometry_file_identified": "freeze exact Figshare article/file identity and checksum, establish equivalence/provenance to the published patch-definition geometry, then open only that geometry file for the frozen LCC gate",
+  "stop_if_not_identified": "do not open Figshare files merely to hunt for geometry; continue metadata-only mirror discovery or preserve transport-blocked status"
+}
