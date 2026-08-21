@@ -1,0 +1,167 @@
+name: HJA bird source inventory
+
+on:
+  push:
+    branches:
+      - agent/hja-bird-preflight
+    paths:
+      - ".github/workflows/hja_bird_source_inventory.yml"
+      - "validation/hja_bird_complementarity/source_inventory_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/hja_bird_source_inventory.yml"
+      - "validation/hja_bird_complementarity/source_inventory_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Parse SA024 metadata links only
+        run: |
+          set -euo pipefail
+          mkdir -p build/hja_bird_source_inventory
+          python - <<'PY'
+          from html.parser import HTMLParser
+          import hashlib
+          import json
+          import re
+          from pathlib import Path
+          from urllib.parse import urljoin
+          from urllib.request import Request, urlopen
+
+          contract = json.loads(
+              Path("validation/hja_bird_complementarity/source_inventory_contract.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          assert contract["response_content_opened"] is False
+          url = contract["allowed_metadata_url"]
+          req = Request(
+              url,
+              headers={
+                  "Accept": "text/html,*/*;q=0.1",
+                  "User-Agent": "EOG-response-blind-HJA-source-inventory/1.0",
+              },
+          )
+          with urlopen(req, timeout=30) as response:
+              html_bytes = response.read()
+              final_url = response.geturl()
+              ctype = response.headers.get_content_type()
+          if ctype not in {"text/html", "application/xhtml+xml"}:
+              raise RuntimeError(f"SA024 metadata URL returned unexpected content type {ctype!r}")
+          html = html_bytes.decode("utf-8", errors="replace")
+
+          class AnchorParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.current = None
+                  self.anchors = []
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower() == "a":
+                      attr = dict(attrs)
+                      self.current = {"href": attr.get("href", ""), "text": ""}
+              def handle_data(self, data):
+                  if self.current is not None:
+                      self.current["text"] += data
+              def handle_endtag(self, tag):
+                  if tag.lower() == "a" and self.current is not None:
+                      self.anchors.append(self.current)
+                      self.current = None
+
+          parser = AnchorParser()
+          parser.feed(html)
+          anchors = []
+          for row in parser.anchors:
+              href = row["href"].strip()
+              if not href:
+                  continue
+              anchors.append(
+                  {
+                      "text": " ".join(row["text"].split()),
+                      "url": urljoin(final_url, href),
+                  }
+              )
+
+          plain = " ".join(re.sub(r"<[^>]+>", " ", html).split())
+          if "SA024" not in plain:
+              raise RuntimeError("metadata page no longer identifies SA024")
+
+          version_matches = re.findall(r"Version\s+(\d+)", plain, flags=re.IGNORECASE)
+          versions = [int(value) for value in version_matches]
+          max_version = max(versions) if versions else None
+          if max_version is None or max_version < int(contract["expected_minimum_version"]):
+              raise RuntimeError(
+                  f"SA024 metadata version unresolved/older than frozen minimum: {max_version!r}"
+              )
+
+          doi_matches = re.findall(
+              r"10\.6073/pasta/[0-9a-fA-F]{32}",
+              html,
+              flags=re.IGNORECASE,
+          )
+          dois = sorted(set(value.lower() for value in doi_matches))
+          if not dois:
+              raise RuntimeError("SA024 metadata page contains no resolvable PASTA DOI")
+
+          location_candidates = [
+              row for row in anchors
+              if (
+                  "location" in row["url"].lower()
+                  or "location" in row["text"].lower()
+                  or "site" in row["url"].lower() and "csv" in row["url"].lower()
+              )
+          ]
+          eml_candidates = [
+              row for row in anchors
+              if "eml" in row["url"].lower() or row["url"].lower().endswith(".xml")
+          ]
+          data_candidates = [
+              row for row in anchors
+              if row["text"].strip().upper() == "DATA"
+          ]
+          metadata_candidates = [
+              row for row in anchors
+              if row["text"].strip().upper() == "METADATA"
+          ]
+
+          result = {
+              "status": "response_blind_source_inventory_complete",
+              "metadata_url_requested": url,
+              "metadata_url_final": final_url,
+              "metadata_content_type": ctype,
+              "metadata_size_bytes": len(html_bytes),
+              "metadata_sha256": hashlib.sha256(html_bytes).hexdigest(),
+              "max_version_seen": max_version,
+              "pasta_dois_seen": dois,
+              "study_location_candidates": location_candidates,
+              "eml_candidates": eml_candidates,
+              "entity_data_candidates": data_candidates,
+              "entity_metadata_candidates": metadata_candidates,
+              "metadata_pages_opened": [final_url],
+              "entity_data_urls_opened": [],
+              "response_content_opened": False,
+              "next": contract["next"],
+          }
+          out = Path("build/hja_bird_source_inventory/source_inventory.json")
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(result, indent=2, sort_keys=True))
+
+          assert len(data_candidates) >= 2, data_candidates
+          assert len(metadata_candidates) >= 2, metadata_candidates
+          assert location_candidates, anchors
+          PY
+      - name: Upload metadata-only source inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: hja-bird-source-inventory
+          path: build/hja_bird_source_inventory/source_inventory.json
+          if-no-files-found: error
