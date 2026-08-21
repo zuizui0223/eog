@@ -1,0 +1,16 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "geometry_edi_doi": "10.6073/pasta/97ef540ba3fc62dff50779533bb39466",
+  "resolved_edi_package_id": "knb-lter-sbc.101.2",
+  "bco_dmo_project_id": 563139,
+  "bco_dmo_award_id": 563148,
+  "expected_geometry_title_terms": [
+    "spatial definitions",
+    "giant kelp",
+    "patches",
+    "Landsat"
+  ],
+  "metadata_only_policy": "Read BCO-DMO project/award HTML and BCO-DMO dataset JSON metadata only. Do not call dataset download/data endpoints in this gate.",
+  "next_if_dataset_resolves": "freeze exact BCO-DMO dataset/file identity and provenance to EDI knb-lter-sbc.101.2 before downloading only geometry",
+  "stop_if_unresolved": "preserve EDI transport-blocked status; do not inspect response package"
+}
