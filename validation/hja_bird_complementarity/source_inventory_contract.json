@@ -1,0 +1,20 @@
+{
+  "status": "response_blind_source_inventory_freeze",
+  "candidate": "H.J. Andrews Forest long-term bird survey SA024",
+  "allowed_metadata_url": "https://andlter.forestry.oregonstate.edu/data/Abstract.aspx?dbcode=SA024",
+  "allowed_operations": [
+    "fetch the SA024 abstract HTML",
+    "parse metadata text and href attributes only",
+    "resolve absolute hrefs for study-location CSV, EML, entity metadata and entity data without opening those targets"
+  ],
+  "forbidden_operations": [
+    "open entity DATA URLs",
+    "open bird point-count rows",
+    "open individual bird-observation rows",
+    "select a focal taxon from observed SA024 counts"
+  ],
+  "expected_database_code": "SA024",
+  "expected_minimum_version": 7,
+  "response_content_opened": false,
+  "next": "Use the metadata-only inventory to freeze exact location-registry and response-entity identities."
+}
