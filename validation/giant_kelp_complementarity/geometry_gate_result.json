@@ -1,0 +1,61 @@
+{
+  "status": "geometry_structural_gate_pass",
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "run_id": 32443015826,
+  "job_id": 96657296921,
+  "result_fingerprint": "29739c1e3d4a248219f453ddb0fd58abbd40ac15a248bb71e3dec0faa457cddb",
+  "data_pid": "https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/101/2/0d416cc00ad948c6befb2a97e9db6414",
+  "object_name": "cavanaugh_etal_mpyrifera_patch_defs_southernCA_20160926.csv",
+  "geometry_size_bytes": 7530268,
+  "geometry_sha1": "54d99ca548aff19520a11f689a33296c901ae541",
+  "geometry_sha256": "8f34b68c6e2f20d686357c67a2f31302a24f5584fe4790f19b91a34e89401081",
+  "geometry_row_count": 206241,
+  "observed_columns": [
+    "patch_number",
+    "pixel_latitude",
+    "pixel_longitude"
+  ],
+  "unique_patch_count": 469,
+  "expected_unique_patch_count": 469,
+  "patch_universe_pass": true,
+  "centroid_rule": "Group all rows by exact patch_number. Require finite latitude/longitude for every row. For each patch, define latitude and longitude as arithmetic means of all Landsat-pixel center coordinates.",
+  "centroid_fingerprint": "358d66cdf1b039207e22ae575a23900c4405a7c9c556871e4a60c91e0a19128c",
+  "structural_ladder": [
+    {
+      "target_largest_component_fraction": 0.25,
+      "distance_threshold_km": 8.784880554989936,
+      "achieved_largest_component_fraction": 0.29637526652452023,
+      "weak_component_count": 11,
+      "isolated_node_fraction": 0.0
+    },
+    {
+      "target_largest_component_fraction": 0.5,
+      "distance_threshold_km": 30.599950974020906,
+      "achieved_largest_component_fraction": 0.5031982942430704,
+      "weak_component_count": 8,
+      "isolated_node_fraction": 0.0
+    },
+    {
+      "target_largest_component_fraction": 0.75,
+      "distance_threshold_km": 33.76116917197375,
+      "achieved_largest_component_fraction": 0.7995735607675906,
+      "weak_component_count": 4,
+      "isolated_node_fraction": 0.0
+    },
+    {
+      "target_largest_component_fraction": 0.9,
+      "distance_threshold_km": 40.81254045279048,
+      "achieved_largest_component_fraction": 0.9637526652452025,
+      "weak_component_count": 2,
+      "isolated_node_fraction": 0.0
+    }
+  ],
+  "distinct_positive_structural_thresholds": 4,
+  "nested_scale_pass": true,
+  "structural_pass": true,
+  "transport_mode": "DataONE CN resolve to GMN member node",
+  "geometry_object_bytes_opened": true,
+  "response_package_bytes_opened": false,
+  "response_rows_opened": false,
+  "next": "Freeze response-package metadata, temporal order/split, response semantics, source/process closure, Layer A/B, same-learner paired comparator, count gate and runtime before any response row access."
+}
