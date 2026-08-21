@@ -6,6 +6,9 @@ on:
       - agent/giant-kelp-preflight
     paths:
       - ".github/workflows/giant_kelp_outcome_audit.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_outcome_audit.yml"
 
 permissions:
   contents: read
@@ -40,7 +43,7 @@ jobs:
               'Authorization':f'Bearer {token}',
               'Accept':'application/vnd.github+json',
               'X-GitHub-Api-Version':'2022-11-28',
-              'User-Agent':'eog-giant-kelp-outcome-audit/1.0',
+              'User-Agent':'eog-giant-kelp-outcome-audit/1.1',
           })
           with urllib.request.urlopen(req,timeout=60) as r:
               payload=json.load(r)
