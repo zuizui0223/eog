@@ -1,0 +1,62 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "smoke": {
+    "workflow_run_id": 32445028814,
+    "workflow_head": "f57fd35341338c41cd4addeed179ebbfe65338b6",
+    "result_fingerprint": "0e46635be7aa6a90590708dee8da12f19dd85ef0f60d8f339c910f7e1c27a46c",
+    "runtime_manifest_fingerprint": "44c7abaa17e8e295d12ecd081538fd2687bbc7c77abfbb6dcb85336554b70777",
+    "status": "completed_paired_complementarity",
+    "models_fit": 2,
+    "heldout_scores": 10,
+    "response_object_bytes_opened": false,
+    "response_rows_opened": false,
+    "scientific_interpretation": "Synthetic smoke status is execution evidence only and carries no empirical EOG claim."
+  },
+  "runner": {
+    "entrypoint_path": "benchmarks/run_giant_kelp_complementarity_once_v2.py",
+    "entrypoint_git_blob_sha": "585f5c007a501c21a66d700a4502ae59ed0b3820",
+    "base_runner_path": "benchmarks/run_giant_kelp_complementarity_once.py",
+    "base_runner_git_blob_sha": "cd88667f7115414f1ea50639f69ea8a3f51326a4"
+  },
+  "contract_blobs": {
+    "prediction_contract": {
+      "path": "validation/giant_kelp_complementarity/gate2_prediction_contract.json",
+      "git_blob_sha": "68ef40032358682ab4fc78e327c36ae5043d741f"
+    },
+    "response_contract": {
+      "path": "validation/giant_kelp_complementarity/response_object_contract.json",
+      "git_blob_sha": "ac1021186a49a8785e9f021769a5de1e80af6c28"
+    },
+    "process_contract": {
+      "path": "validation/giant_kelp_complementarity/process_object_contract.json",
+      "git_blob_sha": "a4922de89564e043226dcae3e714f154bfcc62de"
+    },
+    "geometry_contract": {
+      "path": "validation/giant_kelp_complementarity/southern_geometry_object_contract.json",
+      "git_blob_sha": "a771cda7bf3936b1ef5e6abad6923273ac549b8d"
+    },
+    "patch_identity_contract": {
+      "path": "validation/giant_kelp_complementarity/patch_identity_contract.json",
+      "git_blob_sha": "82881380268363f4a83ef967df1689e9a85bd5e6"
+    }
+  },
+  "runtime": {
+    "python": "3.11.15",
+    "implementation": "CPython",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "scikit_learn": "1.9.0",
+    "joblib": "1.5.3",
+    "threadpoolctl": "3.6.0",
+    "narwhals": "2.24.0"
+  },
+  "safety": {
+    "exact_count_gate_first": true,
+    "zero_model_fits_on_count_failure": true,
+    "zero_heldout_scores_on_count_failure": true,
+    "no_post_open_redesign": true,
+    "same_learner_paired_comparison": true,
+    "response_patch_aliases_frozen_before_access": true,
+    "response_geometry_never_used_for_model_geometry": true
+  }
+}
