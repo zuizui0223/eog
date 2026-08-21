@@ -1,0 +1,22 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "response_doi": "10.6073/pasta/4c5a27154458ece5585384339eb0c2ee",
+  "expected_package_series": "knb-lter-sbc.102",
+  "geometry_gate_result_fingerprint": "29739c1e3d4a248219f453ddb0fd58abbd40ac15a248bb71e3dec0faa457cddb",
+  "expected_title_terms": [
+    "giant kelp",
+    "biomass",
+    "fecundity"
+  ],
+  "role_terms": {
+    "patch": ["patch", "patch_number", "patch id"],
+    "time": ["year", "semester", "season", "date", "time"],
+    "canopy_state": ["canopy", "presence", "occurrence", "area"],
+    "biomass": ["biomass"],
+    "fecundity": ["fecundity", "sori", "reproductive"]
+  },
+  "metadata_only_policy": "Resolve the frozen DOI and retrieve only DataONE/EML science metadata. Do not retrieve any response data entity bytes or row values.",
+  "response_semantic_boundary": "Future response is recorded semi-annual canopy reappearance among source-semester recorded non-detections. A recorded zero/non-detection is not automatically latent biological absence.",
+  "next_if_schema_resolves": "freeze exact response data object identity, field/parser semantics, temporal labels/order and calibration/heldout split before opening row-level response",
+  "stop_if_schema_ambiguous": "do not open response rows to infer schema; preserve metadata ambiguity"
+}
