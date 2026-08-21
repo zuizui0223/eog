@@ -32,6 +32,9 @@ jobs:
       - name: Resolve Dryad identities and open deployment metadata only
         run: |
           set -euo pipefail
+          # Transport-only correction: public Dryad file streams use /stash/downloads.
+          # This does not alter source identity, registry, minima, focal species or response firewall.
+          sed -i 's|/downloads/file_stream/|/stash/downloads/file_stream/|' validation/snapshot_usa_wtd_complementarity/preflight_runner.py
           python validation/snapshot_usa_wtd_complementarity/preflight_runner.py
       - name: Assert response firewall
         if: always()
