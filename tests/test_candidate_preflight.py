@@ -106,7 +106,7 @@ def test_missing_coordinate_geometry_is_hard_stop():
 @pytest.mark.parametrize(
     ("override", "status"),
     [
-        ({"node_count": 39}, "stop_insufficient_nodes"),
+        ({"node_count": 39, "repeated_node_count": 30}, "stop_insufficient_nodes"),
         ({"outer_unit_count": 5}, "stop_insufficient_outer_units"),
         ({"repeated_node_count": 29}, "stop_insufficient_repeated_nodes"),
     ],
