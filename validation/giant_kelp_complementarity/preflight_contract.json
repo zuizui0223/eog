@@ -1,0 +1,42 @@
+{
+  "status": "response_blind_candidate_preflight_frozen",
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "focal_taxon": "Macrocystis pyrifera",
+  "selected_after_main_commit": "d52b30cc8e719aa1e8d34887e49300b3f15ea89f",
+  "scientific_source": {
+    "article_doi": "10.1098/rspb.2016.2086",
+    "published_design": "469 fixed patches; 11 years; two semesters per year; patch canopy biomass used to define recorded occupancy dynamics"
+  },
+  "declaration": {
+    "attempt_id": "giant_kelp_paired_complementarity_20260821",
+    "minimum_nodes": 100,
+    "minimum_outer_units": 6,
+    "minimum_repeated_nodes": 75,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true
+  },
+  "response_blind_evidence": {
+    "source_identity": "article:10.1098/rspb.2016.2086|EDI-role-separated-packages",
+    "geometry_source_identity": "doi:10.6073/pasta/97ef540ba3fc62dff50779533bb39466",
+    "response_source_identity": "doi:10.6073/pasta/4c5a27154458ece5585384339eb0c2ee",
+    "process_source_identity": "doi:10.6073/pasta/d1107107e7c9ebc6476dfbe9e64eb6cb",
+    "geometry_response_separable": true,
+    "coordinate_geometry_present": true,
+    "node_count": 469,
+    "outer_unit_count": 22,
+    "repeated_node_count": 469,
+    "layout_design": "natural_irregular",
+    "response_rows_opened": false,
+    "response_bytes_opened": false,
+    "note": "The patch-definition dataset is a physically distinct EDI package from the semi-annual biomass/fecundity time series and the dispersal-time package. The article describes 469 patch centroids with nearest-neighbour distances ranging 0.06-4.3 km and evaluates all patches over two semesters per year. No EDI response row is opened at preflight."
+  },
+  "future_endpoint_boundary": "recorded semi-annual canopy reappearance among source-semester recorded non-detections; not latent biological colonisation or true absence",
+  "no_rescue": [
+    "do not choose spatial thresholds from canopy response rows",
+    "do not use published outcome direction to tune Layer B",
+    "do not weaken the strong process-aware baseline",
+    "do not identify patch canopy non-detection as latent biological absence",
+    "do not alter preflight minima after response access"
+  ],
+  "next_if_ready": "freeze exact EDI geometry package metadata/file identity and run structural geometry gate without opening biomass/fecundity response rows"
+}
