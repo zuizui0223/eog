@@ -1,0 +1,98 @@
+name: HJA bird stopped geometry header audit
+
+on:
+  push:
+    branches:
+      - agent/hja-bird-preflight
+    paths:
+      - ".github/workflows/hja_bird_geometry_header_audit.yml"
+      - "validation/hja_bird_complementarity/source_freeze.json"
+      - "validation/hja_bird_complementarity/geometry_gate_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/hja_bird_geometry_header_audit.yml"
+      - "validation/hja_bird_complementarity/source_freeze.json"
+      - "validation/hja_bird_complementarity/geometry_gate_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Record physical header only; do not rescue gate
+        run: |
+          set -euo pipefail
+          mkdir -p build/hja_bird_geometry_header_audit
+          python - <<'PY'
+          import csv
+          import hashlib
+          import io
+          import json
+          import re
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          root = Path("validation/hja_bird_complementarity")
+          source = json.loads((root / "source_freeze.json").read_text(encoding="utf-8"))
+          contract = json.loads((root / "geometry_gate_contract.json").read_text(encoding="utf-8"))
+          assert source["response_content_opened"] is False
+          assert contract["response_content_opened"] is False
+          for entity in source["response_entities"].values():
+              assert entity["content_opened"] is False
+
+          url = source["geometry"]["url"]
+          req = Request(
+              url,
+              headers={
+                  "Accept": "text/csv,text/plain,*/*;q=0.1",
+                  "User-Agent": "EOG-response-blind-HJA-stopped-header-audit/1.0",
+              },
+          )
+          with urlopen(req, timeout=30) as response:
+              payload = response.read()
+              final_url = response.geturl()
+              ctype = response.headers.get_content_type()
+          text = payload.decode("utf-8-sig")
+          reader = csv.DictReader(io.StringIO(text))
+          fieldnames = [str(value).strip() for value in (reader.fieldnames or [])]
+          rows = list(reader)
+
+          def norm(value):
+              return re.sub(r"[^a-z0-9]", "", str(value).strip().lower())
+
+          result = {
+              "status": "stopped_geometry_header_audit_only",
+              "geometry_url": final_url,
+              "content_type": ctype,
+              "size_bytes": len(payload),
+              "sha256": hashlib.sha256(payload).hexdigest(),
+              "physical_columns": fieldnames,
+              "normalized_columns": [norm(value) for value in fieldnames],
+              "row_count": len(rows),
+              "frozen_alias_sets_unchanged": {
+                  "id": contract["geometry_source"]["id_aliases_normalized"],
+                  "latitude": contract["geometry_source"]["latitude_aliases_normalized"],
+                  "longitude": contract["geometry_source"]["longitude_aliases_normalized"],
+              },
+              "response_entity_urls_opened": [],
+              "response_content_opened": False,
+              "scientific_disposition": "audit the already-stopped geometry gate only; do not add aliases or rerun this candidate as fresh",
+          }
+          out = Path("build/hja_bird_geometry_header_audit/header_audit.json")
+          out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Upload stopped-header audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: hja-bird-stopped-geometry-header-audit
+          path: build/hja_bird_geometry_header_audit/header_audit.json
+          if-no-files-found: error
