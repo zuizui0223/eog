@@ -1,0 +1,35 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "geometry_title": "Spatial definitions of giant kelp (Macrocystis pyrifera) patches in southern and central California",
+  "initial_geometry_doi": "10.6073/pasta/97ef540ba3fc62dff50779533bb39466",
+  "bco_dmo_external_geometry_doi": "10.6073/pasta/e4263e51ed0edcf562835eb0a3b204c4",
+  "resolved_package_lineage": "knb-lter-sbc.101",
+  "query_terms": [
+    "97ef540ba3fc62dff50779533bb39466",
+    "e4263e51ed0edcf562835eb0a3b204c4",
+    "knb-lter-sbc.101",
+    "Spatial definitions of giant kelp"
+  ],
+  "metadata_only_policy": "Use only the anonymous DataONE Coordinating Node Solr query endpoint. Do not call DataONE object/download endpoints. Return index/system-level lineage fields only.",
+  "required_lineage_fields": [
+    "id",
+    "identifier",
+    "seriesId",
+    "title",
+    "formatId",
+    "resourceMap",
+    "documents",
+    "isDocumentedBy",
+    "obsoletes",
+    "obsoletedBy",
+    "checksum",
+    "checksumAlgorithm",
+    "size",
+    "authoritativeMN",
+    "datasource",
+    "dateUploaded",
+    "dateModified"
+  ],
+  "next_if_same_lineage_resolves": "freeze exact current geometry metadata/data PID and checksum only after proving the DOI/package versions belong to the same spatial-definition lineage; then download only the geometry object",
+  "stop_if_lineage_ambiguous": "do not assume DOI equivalence and do not open response; preserve transport/lineage ambiguity"
+}
