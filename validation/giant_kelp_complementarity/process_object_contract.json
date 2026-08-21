@@ -1,0 +1,43 @@
+{
+  "candidate": "Southern California giant kelp metapopulation 1996-2006",
+  "process_doi": "10.6073/pasta/d1107107e7c9ebc6476dfbe9e64eb6cb",
+  "metadata_pid": "https://pasta.lternet.edu/package/metadata/eml/knb-lter-sbc/103/4",
+  "metadata_sha256": "9e64f53f6ff0eeb45345d45e544b532149d4d366749c8b9f095c06049e350977",
+  "process_metadata_result_fingerprint": "c19bcc303f89e15d0e109b6b97e760763dfe0128a56ae1045bced4fcfc396630",
+  "process_entity": {
+    "entity_name": "Inter-patch dispersal times, 1996-2006 southern California",
+    "object_name": "castorani_etal_socal_mpyrifera_interpatch_dispersal_20160926.csv",
+    "data_pid": "https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/103/4/8f8d23290f81ecf6e10d0fb53c905a4e",
+    "required_columns": [
+      "source_patch",
+      "destination_patch",
+      "year",
+      "semester",
+      "time"
+    ]
+  },
+  "parser_semantics": {
+    "source_patch": "exact non-empty string after outer-whitespace stripping only",
+    "destination_patch": "exact non-empty string after outer-whitespace stripping only",
+    "year": "strict base-10 integer allowed exactly 1996 through 2006",
+    "semester": "strict base-10 integer allowed exactly 1 or 2",
+    "time": "finite non-negative decimal dispersal duration in nominal days unless EML declares an explicit missing-value code"
+  },
+  "period_order": [
+    "1996-H1", "1996-H2", "1997-H1", "1997-H2", "1998-H1", "1998-H2",
+    "1999-H1", "1999-H2", "2000-H1", "2000-H2", "2001-H1", "2001-H2",
+    "2002-H1", "2002-H2", "2003-H1", "2003-H2", "2004-H1", "2004-H2",
+    "2005-H1", "2005-H2", "2006-H1", "2006-H2"
+  ],
+  "patch_mapping_gate": {
+    "expected_geometry_patch_count": 469,
+    "geometry_data_pid": "https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/101/2/0d416cc00ad948c6befb2a97e9db6414",
+    "geometry_sha1": "54d99ca548aff19520a11f689a33296c901ae541",
+    "require_source_patch_subset_of_geometry": true,
+    "require_destination_patch_subset_of_geometry": true,
+    "require_union_equals_geometry_patch_set": true
+  },
+  "process_feature_boundary": "Use process values only as frozen pre-response covariates. No outcome-derived cutoff. Strong baseline may use current-source minimum modeled dispersal time, finite-source count, and current-source fecundity-weighted inverse-time exposure; the augmented learner receives exactly the same conventional/process features plus frozen Layer B.",
+  "layer_a_boundary": "Do not create a new tuned process-threshold world from these times. Layer A remains the four prospectively frozen structural geometry worlds plus one full continuous geometry-support world; process times strengthen the external comparator and source-conditioned covariates.",
+  "next": "freeze DataONE system metadata/checksum/size; then retrieve process and geometry objects only, verify exact patch mapping and period/schema integrity without opening response"
+}
