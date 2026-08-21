@@ -1,0 +1,109 @@
+name: Giant kelp candidate preflight
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_candidate_preflight.yml"
+      - "validation/giant_kelp_complementarity/preflight_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_candidate_preflight.yml"
+      - "validation/giant_kelp_complementarity/preflight_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen package
+        run: python -m pip install .
+      - name: Evaluate response-blind candidate preflight
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_candidate_preflight
+          python - <<'PY'
+          from dataclasses import asdict
+          import hashlib
+          import json
+          from pathlib import Path
+
+          from eog.v2.candidate_preflight import (
+              CandidatePreflightDeclaration,
+              CandidatePreflightEvidence,
+              evaluate_candidate_preflight,
+          )
+
+          root=Path('validation/giant_kelp_complementarity')
+          contract=json.loads((root/'preflight_contract.json').read_text(encoding='utf-8'))
+          d=contract['declaration']
+          e=contract['response_blind_evidence']
+          declaration=CandidatePreflightDeclaration(
+              attempt_id=d['attempt_id'],
+              minimum_nodes=d['minimum_nodes'],
+              minimum_outer_units=d['minimum_outer_units'],
+              minimum_repeated_nodes=d['minimum_repeated_nodes'],
+              require_separate_geometry_and_response=d['require_separate_geometry_and_response'],
+              require_coordinate_geometry=d['require_coordinate_geometry'],
+          )
+          evidence=CandidatePreflightEvidence(
+              source_identity=e['source_identity'],
+              geometry_source_identity=e['geometry_source_identity'],
+              response_source_identity=e['response_source_identity'],
+              geometry_response_separable=e['geometry_response_separable'],
+              coordinate_geometry_present=e['coordinate_geometry_present'],
+              node_count=e['node_count'],
+              outer_unit_count=e['outer_unit_count'],
+              repeated_node_count=e['repeated_node_count'],
+              layout_design=e['layout_design'],
+              response_rows_opened=e['response_rows_opened'],
+              response_bytes_opened=e['response_bytes_opened'],
+              note=e['note'],
+          )
+          result=evaluate_candidate_preflight(declaration,evidence)
+          payload={
+              **asdict(result),
+              'candidate':contract['candidate'],
+              'focal_taxon':contract['focal_taxon'],
+              'process_source_identity':e['process_source_identity'],
+              'response_rows_opened':e['response_rows_opened'],
+              'response_bytes_opened':e['response_bytes_opened'],
+              'future_endpoint_boundary':contract['future_endpoint_boundary'],
+              'next':contract['next_if_ready'] if result.ready else 'stop or complete response-blind metadata before any response access',
+          }
+          payload['evidence_contract_sha256']=hashlib.sha256(
+              (root/'preflight_contract.json').read_bytes()
+          ).hexdigest()
+          out=Path('build/giant_kelp_candidate_preflight/preflight_result.json')
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          if not result.ready:
+              raise SystemExit(2)
+          PY
+      - name: Assert response firewall
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_candidate_preflight/preflight_result.json'))
+          assert p['status']=='ready_for_geometry_gate'
+          assert p['ready'] is True
+          assert p['response_rows_opened'] is False
+          assert p['response_bytes_opened'] is False
+          PY
+      - name: Upload preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-candidate-preflight
+          path: build/giant_kelp_candidate_preflight/preflight_result.json
+          if-no-files-found: error
