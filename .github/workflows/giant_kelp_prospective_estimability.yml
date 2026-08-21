@@ -1,0 +1,65 @@
+name: Giant kelp prospective estimability
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_prospective_estimability.yml"
+      - "validation/giant_kelp_complementarity/prospective_estimability_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_prospective_estimability.yml"
+      - "validation/giant_kelp_complementarity/prospective_estimability_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  estimability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package
+        run: python -m pip install .
+      - name: Evaluate pre-response evidence
+        run: |
+          mkdir -p build/giant_kelp_estimability
+          python - <<'PY'
+          from dataclasses import asdict
+          import hashlib, json
+          from eog.v2.prospective_estimability import (
+              AggregateCountInterval,
+              AggregateEstimabilityEvidence,
+              ProspectiveEstimabilityDeclaration,
+              evaluate_prospective_estimability,
+              prospective_estimability_disposition,
+          )
+          path='validation/giant_kelp_complementarity/prospective_estimability_contract.json'
+          c=json.load(open(path))
+          d=c['declaration']; e=c['evidence']
+          declaration=ProspectiveEstimabilityDeclaration(**d)
+          evidence=AggregateEstimabilityEvidence(
+              source_label=e['source_label'],
+              endpoint_definition_matches=e['endpoint_definition_matches'],
+              response_rows_opened=e['response_rows_opened'],
+              intervals={k:AggregateCountInterval(**v) for k,v in e['intervals'].items()},
+              note=e['note'],
+          )
+          result=evaluate_prospective_estimability(declaration,evidence)
+          payload={**asdict(result),'disposition':prospective_estimability_disposition(result),'contract_sha256':hashlib.sha256(open(path,'rb').read()).hexdigest(),'response_rows_opened':False}
+          assert result.status==c['expected_status']=='uncertain_pre_response'
+          assert payload['disposition']=='continue_response_blind_exact_gate_required'
+          payload['result_fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          open('build/giant_kelp_estimability/prospective_estimability_result.json','w').write(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-prospective-estimability
+          path: build/giant_kelp_estimability/prospective_estimability_result.json
+          if-no-files-found: error
