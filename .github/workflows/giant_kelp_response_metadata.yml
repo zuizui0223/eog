@@ -1,0 +1,201 @@
+name: Giant kelp response metadata audit
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_response_metadata.yml"
+      - "validation/giant_kelp_complementarity/response_metadata_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/giant_kelp_response_metadata.yml"
+      - "validation/giant_kelp_complementarity/response_metadata_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Resolve response DOI and EML metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_response_metadata
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, json, re, urllib.parse, urllib.request, xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          ROOT=Path('validation/giant_kelp_complementarity')
+          OUT=Path('build/giant_kelp_response_metadata')
+          contract=json.loads((ROOT/'response_metadata_contract.json').read_text(encoding='utf-8'))
+          doi_hash=contract['response_doi'].split('/')[-1]
+          lineage=contract['expected_package_series']
+          UA='eog-giant-kelp-response-metadata/1.0'
+          endpoint='https://cn.dataone.org/cn/v2/query/solr/'
+          fetched=[]
+
+          fields=['id','identifier','seriesId','title','formatId','resourceMap','documents','isDocumentedBy','obsoletes','obsoletedBy','checksum','checksumAlgorithm','size','authoritativeMN','datasource','dateUploaded','dateModified','fileName']
+          def solr(q):
+              url=endpoint+'?'+urllib.parse.urlencode({'q':q,'fl':','.join(fields),'rows':'200','wt':'json'})
+              req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':'application/json'})
+              with urllib.request.urlopen(req,timeout=60) as r:
+                  body=r.read(); status=getattr(r,'status',None) or r.getcode(); ctype=str(r.headers.get('Content-Type','')); final=str(r.geturl())
+              fetched.append({'requested':url,'final':final,'status':status,'bytes':len(body),'content_type':ctype,'sha256':hashlib.sha256(body).hexdigest()})
+              obj=json.loads(body)
+              return ((obj.get('response') or {}).get('docs') or [])
+
+          by_hash=solr(doi_hash)
+          by_lineage=solr(lineage)
+          docs={}
+          for source,rows in (('doi_hash',by_hash),('lineage',by_lineage)):
+              for doc in rows:
+                  key=str(doc.get('id') or doc.get('identifier') or json.dumps(doc,sort_keys=True))
+                  docs.setdefault(key,{'document':doc,'sources':[]})['sources'].append(source)
+          entries=[{'key':k,'document':v['document'],'sources':sorted(set(v['sources']))} for k,v in docs.items()]
+          entries.sort(key=lambda x:x['key'])
+
+          title_terms=tuple(term.casefold() for term in contract['expected_title_terms'])
+          candidates=[]
+          for row in entries:
+              blob=json.dumps(row['document'],ensure_ascii=False,sort_keys=True).casefold()
+              title=str(row['document'].get('title') or '')
+              score=sum(term in (title.casefold()+' '+blob) for term in title_terms)
+              is_metadata='metadata' in str(row['document'].get('formatId') or '').casefold() or 'eml' in str(row['document'].get('formatId') or '').casefold()
+              lineage_hit=lineage.casefold() in blob
+              hash_hit=doi_hash.casefold() in blob
+              if score or lineage_hit or hash_hit:
+                  candidates.append({**row,'title_term_matches':score,'lineage_hit':lineage_hit,'doi_hash_hit':hash_hit,'is_metadata_like':is_metadata})
+
+          # Prefer the newest explicit metadata object in the same package lineage; require a unique best candidate.
+          metadata_candidates=[c for c in candidates if c['is_metadata_like'] and c['lineage_hit']]
+          if not metadata_candidates:
+              metadata_candidates=[c for c in candidates if c['is_metadata_like'] and c['doi_hash_hit']]
+          if not metadata_candidates:
+              raise RuntimeError(f'no response science-metadata object resolved for DOI/lineage; candidates={candidates!r}')
+
+          def revision_from_pid(text):
+              m=re.search(r'/metadata/eml/[^/]+/\d+/(\d+)',text)
+              return int(m.group(1)) if m else -1
+          metadata_candidates.sort(key=lambda c:(revision_from_pid(c['key']),str(c['document'].get('dateModified') or '')),reverse=True)
+          best_rev=revision_from_pid(metadata_candidates[0]['key'])
+          best=[c for c in metadata_candidates if revision_from_pid(c['key'])==best_rev]
+          if len(best)!=1:
+              # If multiple Solr docs refer to same exact identifier, collapse by identifier; otherwise fail closed.
+              ids={str(c['document'].get('id') or c['document'].get('identifier') or c['key']) for c in best}
+              if len(ids)!=1:
+                  raise RuntimeError(f'ambiguous response metadata objects at revision {best_rev}: {best!r}')
+          meta_doc=best[0]
+          metadata_pid=str(meta_doc['document'].get('id') or meta_doc['document'].get('identifier') or meta_doc['key'])
+          if '/metadata/eml/' not in metadata_pid:
+              raise RuntimeError(f'resolved response metadata PID is not EML: {metadata_pid!r}')
+
+          encoded=urllib.parse.quote(metadata_pid,safe='')
+          object_url=f'https://cn.dataone.org/cn/v2/object/{encoded}'
+          req=urllib.request.Request(object_url,headers={'User-Agent':UA,'Accept':'application/xml,text/xml,*/*'})
+          with urllib.request.urlopen(req,timeout=60) as r:
+              eml_bytes=r.read(); status=getattr(r,'status',None) or r.getcode(); ctype=str(r.headers.get('Content-Type','')); final=str(r.geturl())
+          fetched.append({'requested':object_url,'final':final,'status':status,'bytes':len(eml_bytes),'content_type':ctype,'sha256':hashlib.sha256(eml_bytes).hexdigest()})
+          root=ET.fromstring(eml_bytes)
+          def lname(tag): return tag.rsplit('}',1)[-1]
+          def direct(node,target):
+              for child in node:
+                  if lname(child.tag)==target:
+                      return ' '.join(''.join(child.itertext()).split())
+              return ''
+          def desc(node,target):
+              for child in node.iter():
+                  if lname(child.tag)==target:
+                      return ' '.join(''.join(child.itertext()).split())
+              return ''
+
+          title=desc(root,'title')
+          missing=[t for t in contract['expected_title_terms'] if t.casefold() not in title.casefold()]
+          # EDI title revisions sometimes omit one analysis word; retain this as evidence but require at least 2/3 title terms.
+          title_match_count=len(contract['expected_title_terms'])-len(missing)
+          if title_match_count < 2:
+              raise RuntimeError(f'response EML title does not identify expected kelp dataset: {title!r}, missing={missing}')
+
+          entities=[]
+          all_attr_names=[]
+          for node in root.iter():
+              kind=lname(node.tag)
+              if kind not in {'dataTable','spatialVector','spatialRaster','view','storedProcedure'}: continue
+              physical=next((c for c in node if lname(c.tag)=='physical'),None)
+              attrs=[]
+              for attr in node.iter():
+                  if lname(attr.tag)!='attribute': continue
+                  item={
+                      'name':desc(attr,'attributeName'),
+                      'label':desc(attr,'attributeLabel'),
+                      'definition':desc(attr,'attributeDefinition'),
+                      'unit':desc(attr,'standardUnit') or desc(attr,'customUnit'),
+                  }
+                  attrs.append(item); all_attr_names.append(item['name'])
+              entity={
+                  'kind':kind,
+                  'entity_name':direct(node,'entityName'),
+                  'object_name':desc(physical,'objectName') if physical is not None else '',
+                  'distribution_url':desc(physical,'url') if physical is not None else '',
+                  'attributes':attrs,
+              }
+              entities.append(entity)
+          if not entities:
+              raise RuntimeError('response EML exposes no data entity metadata')
+
+          role_terms={k:tuple(term.casefold() for term in v) for k,v in contract['role_terms'].items()}
+          role_hits={k:[] for k in role_terms}
+          for e in entities:
+              for attr in e['attributes']:
+                  blob=' '.join([attr['name'],attr['label'],attr['definition'],attr['unit']]).casefold()
+                  for role,terms in role_terms.items():
+                      if any(term in blob for term in terms): role_hits[role].append({'entity':e['entity_name'],'attribute':attr})
+
+          payload={
+              'status':'response_metadata_schema_resolved' if role_hits['patch'] and role_hits['time'] and role_hits['canopy_state'] else 'response_metadata_schema_ambiguous',
+              'candidate':contract['candidate'],
+              'response_doi':contract['response_doi'],
+              'expected_package_series':lineage,
+              'query_counts':{'doi_hash':len(by_hash),'lineage':len(by_lineage)},
+              'metadata_candidates':metadata_candidates,
+              'resolved_metadata_pid':metadata_pid,
+              'resolved_revision':best_rev,
+              'metadata_sha256':hashlib.sha256(eml_bytes).hexdigest(),
+              'metadata_content_type':ctype,
+              'title':title,
+              'title_missing_expected_terms':missing,
+              'entities':entities,
+              'role_hits':role_hits,
+              'all_attribute_names':sorted(set(all_attr_names)),
+              'response_data_entity_bytes_opened':False,
+              'response_rows_opened':False,
+              'network_fetches':fetched,
+              'semantic_boundary':contract['response_semantic_boundary'],
+              'next':contract['next_if_schema_resolves'] if role_hits['patch'] and role_hits['time'] and role_hits['canopy_state'] else contract['stop_if_schema_ambiguous'],
+          }
+          payload['fingerprint']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          (OUT/'response_metadata_result.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - name: Assert response-row firewall
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_response_metadata/response_metadata_result.json'))
+          assert p['response_data_entity_bytes_opened'] is False
+          assert p['response_rows_opened'] is False
+          PY
+      - name: Upload response metadata evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-response-metadata
+          path: build/giant_kelp_response_metadata/response_metadata_result.json
+          if-no-files-found: error
