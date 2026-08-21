@@ -1,0 +1,128 @@
+name: Giant kelp once-only paired complementarity outcome
+
+on:
+  push:
+    branches:
+      - agent/giant-kelp-preflight
+    paths:
+      - ".github/workflows/giant_kelp_outcome_once.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  outcome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      RUN_NUMBER: ${{ github.run_number }}
+      RUN_ATTEMPT: ${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Enforce once-only execution and all frozen identities
+        run: |
+          set -euo pipefail
+          test "$RUN_NUMBER" = "1"
+          test "$RUN_ATTEMPT" = "1"
+          test "$(git hash-object benchmarks/run_giant_kelp_complementarity_once.py)" = "cd88667f7115414f1ea50639f69ea8a3f51326a4"
+          test "$(git hash-object benchmarks/run_giant_kelp_complementarity_once_v2.py)" = "585f5c007a501c21a66d700a4502ae59ed0b3820"
+          test "$(git hash-object validation/giant_kelp_complementarity/gate2_prediction_contract.json)" = "68ef40032358682ab4fc78e327c36ae5043d741f"
+          test "$(git hash-object validation/giant_kelp_complementarity/response_object_contract.json)" = "ac1021186a49a8785e9f021769a5de1e80af6c28"
+          test "$(git hash-object validation/giant_kelp_complementarity/process_object_contract.json)" = "a4922de89564e043226dcae3e714f154bfcc62de"
+          test "$(git hash-object validation/giant_kelp_complementarity/southern_geometry_object_contract.json)" = "a771cda7bf3936b1ef5e6abad6923273ac549b8d"
+          test "$(git hash-object validation/giant_kelp_complementarity/patch_identity_contract.json)" = "82881380268363f4a83ef967df1689e9a85bd5e6"
+          test "$(git hash-object validation/giant_kelp_complementarity/prospective_estimability_contract.json)" = "871f951a32abbc64e3da99d4e7ee9a0119368e8e"
+          test "$(git hash-object validation/giant_kelp_complementarity/runtime_lock.json)" = "1d40cd905d12aff9eb91a84bf64bd192a6b539ef"
+          test "$(git hash-object validation/giant_kelp_complementarity/outcome_access_freeze_ledger.json)" = "8293dd723aa0cfc657ac4f5e934932e5dcb76f54"
+          test "$(git hash-object validation/giant_kelp_complementarity/outcome_access_gate_result.json)" = "09904fd994d1db54bad21caa3b7f75978a560842"
+          python - <<'PY'
+          import json
+          root='validation/giant_kelp_complementarity'
+          auth=json.load(open(f'{root}/outcome_access_gate_result.json'))
+          ledger=json.load(open(f'{root}/outcome_access_freeze_ledger.json'))
+          runtime=json.load(open(f'{root}/runtime_lock.json'))
+          assert auth['authorized'] is True
+          assert auth['status']=='authorized_once_only_exact_count_gate_required'
+          assert auth['decision_fingerprint']=='316243cde9e77fc9a211f9ac34d0e1e7c1c580cea1c8f31be93ec4462901b864'
+          assert auth['missing_freeze_keys']==[]
+          assert auth['response_rows_opened'] is False
+          assert auth['response_bytes_opened'] is False
+          assert auth['ledger_git_blob_sha']=='8293dd723aa0cfc657ac4f5e934932e5dcb76f54'
+          assert ledger['ledger_fingerprint']=='80e15bfcf7b9180863db771d6329c0932f77305a7b5adbd1fe2986ea71333b4d'
+          assert ledger['prospective_estimability_status']=='uncertain_pre_response'
+          assert ledger['response_rows_opened'] is False
+          assert ledger['response_bytes_opened'] is False
+          assert runtime['smoke']['result_fingerprint']=='0e46635be7aa6a90590708dee8da12f19dd85ef0f60d8f339c910f7e1c27a46c'
+          assert runtime['smoke']['runtime_manifest_fingerprint']=='44c7abaa17e8e295d12ecd081538fd2687bbc7c77abfbb6dcb85336554b70777'
+          assert runtime['safety']['exact_count_gate_first'] is True
+          assert runtime['safety']['zero_model_fits_on_count_failure'] is True
+          assert runtime['safety']['zero_heldout_scores_on_count_failure'] is True
+          assert runtime['safety']['no_post_open_redesign'] is True
+          assert runtime['safety']['same_learner_paired_comparison'] is True
+          assert runtime['safety']['response_patch_aliases_frozen_before_access'] is True
+          PY
+      - name: Install exact smoke-frozen runtime
+        run: |
+          set -euo pipefail
+          python -m pip install numpy==2.4.6 scipy==1.17.1 scikit-learn==1.9.0 joblib==1.5.3 threadpoolctl==3.6.0 narwhals==2.24.0
+          python -m pip install --no-deps .
+          python - <<'PY'
+          import sys, numpy, scipy, sklearn, joblib, threadpoolctl, narwhals
+          assert sys.version.startswith('3.11.15')
+          assert numpy.__version__=='2.4.6'
+          assert scipy.__version__=='1.17.1'
+          assert sklearn.__version__=='1.9.0'
+          assert joblib.__version__=='1.5.3'
+          assert threadpoolctl.__version__=='3.6.0'
+          assert narwhals.__version__=='2.24.0'
+          PY
+      - name: Execute frozen response once
+        run: |
+          set -euo pipefail
+          mkdir -p build/giant_kelp_outcome
+          python benchmarks/run_giant_kelp_complementarity_once_v2.py \
+            --mode outcome \
+            --output build/giant_kelp_outcome/outcome_result.json
+      - name: Enforce frozen stop/scoring boundaries
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/giant_kelp_outcome/outcome_result.json'))
+          assert p['mode']=='outcome'
+          assert p['response_object_bytes_opened'] is True
+          assert p['response_rows_opened'] is True
+          status=p['status']
+          if status=='non_estimable_response_balance':
+              assert p['count_gate']['passed'] is False
+              assert p['models_fit']==0
+              assert p['heldout_scores']==0
+          elif status=='universe_falsified_during_calibration':
+              assert p['count_gate']['passed'] is True
+              assert p['models_fit']==0
+              assert p['heldout_scores']==0
+              assert p['final_surviving_world_ids']==[]
+          elif status=='universe_falsified_during_heldout':
+              assert p['count_gate']['passed'] is True
+              assert p['models_fit']==2
+              assert 0 < p['heldout_scores'] < 10
+              assert p['final_surviving_world_ids']==[]
+          elif status=='completed_paired_complementarity':
+              assert p['count_gate']['passed'] is True
+              assert p['models_fit']==2
+              assert p['heldout_scores']==10
+              assert len(p['heldout_transition_results'])==5
+              assert p['complementarity']['outer_unit_count']==5
+          else:
+              raise AssertionError(f'unexpected frozen outcome status: {status!r}')
+          PY
+      - name: Upload authoritative once-only result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-once-only-outcome
+          path: build/giant_kelp_outcome/outcome_result.json
+          if-no-files-found: error
