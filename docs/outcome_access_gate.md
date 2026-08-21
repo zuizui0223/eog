@@ -44,8 +44,15 @@ bind the prospectively declared categorical-token schema from
 deterministic outer-whitespace stripping, casefolding, or internal ASCII-whitespace
 removal used by the empirical runner.
 
-Token normalization is therefore not a seventeenth freeze key and historical ledgers do
-not need to be rewritten.
+For sources where published metadata can disagree with the physical response-file
+header, the same **response semantics** freeze must also bind the bounded physical-header
+schema result from `src/eog/v2/response_header_schema.py`. The header must be acquired
+under `src/eog/v2/response_firewall.py` discipline before any response row or response
+value is opened. Missing/unexpected columns or a frozen order mismatch stop before
+outcome authorization; aliases are not inferred.
+
+Header-schema and token normalization therefore do not add seventeenth or eighteenth
+freeze keys, and historical ledgers do not need to be rewritten.
 
 ## Safety invariants
 
@@ -78,28 +85,31 @@ After authorization, the empirical runner must:
 
 1. verify the response identity and its own frozen runtime/runner fingerprint;
 2. open the response once;
-3. parse categorical fields only with the already-frozen response-token schema;
-4. compute exact calibration/heldout event, non-event and both-class counts;
-5. stop with zero model fits and zero heldout scores if any frozen minimum fails;
-6. only then fit the already-frozen models and score the already-frozen heldout endpoint.
+3. verify that the physical header still matches the already-frozen bounded header schema;
+4. parse categorical fields only with the already-frozen response-token schema;
+5. compute exact calibration/heldout event, non-event and both-class counts;
+6. stop with zero model fits and zero heldout scores if any frozen minimum fails;
+7. only then fit the already-frozen models and score the already-frozen heldout endpoint.
 
-No outcome-derived change to worlds, split, response semantics, token normalization,
-Layer B, comparator, preprocessing, metrics or decision thresholds is permitted after
-step 2.
+No outcome-derived change to worlds, split, response semantics, physical column names,
+token normalization, Layer B, comparator, preprocessing, metrics or decision thresholds
+is permitted after step 2.
 
-An unknown token encountered after response opening is a **pre-model schema stop**, not
-permission to add an alias. The opened endpoint is not rerun and relabeled independent.
+An unknown token or unexpected physical column encountered after response opening is a
+**pre-model schema stop**, not permission to add an alias. The opened endpoint is not
+rerun and relabeled independent.
 
 Canonical contract documentation:
 
-`docs/response_token_schema_contract.md`
+- `docs/response_header_schema_gate.md`
+- `docs/response_token_schema_contract.md`
 
 ## What this gate is not
 
 It is not:
 
 - a new ecological operator;
-- a replacement for the response firewall;
+- a replacement for the response firewall or bounded header-schema gate;
 - proof that a candidate will be estimable;
 - permission to inspect response rows during candidate selection;
 - a fuzzy schema-repair mechanism;
