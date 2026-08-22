@@ -74,7 +74,6 @@ jobs:
           if path.casefold() in forbidden_paths:
               raise RuntimeError("patch registry collides with frozen response path")
 
-          # Request one short-lived URL only for the already-frozen patch registry.
           auth_payload = json.dumps({"cr_id": dataset_id, "file": path}).encode("utf-8")
           auth_req = urllib.request.Request(
               transport["authorize_endpoint"],
@@ -163,8 +162,6 @@ jobs:
                   "geometry_present": bool(values[geometry_field]),
               })
 
-          # The frozen contract does not authorize candidate-specific deletion of bad
-          # rows learned from this file. Any missing/invalid required field stops.
           if missing_core:
               raise RuntimeError(
                   f"patch registry has missing frozen core fields; first={missing_core[:5]} total={len(missing_core)}"
@@ -176,41 +173,55 @@ jobs:
 
           node_ids = [row["node_id"] for row in selected]
           if len(set(node_ids)) != len(node_ids):
-              duplicates = sorted({value for value in node_ids if node_ids.count(value) > 1})
-              raise RuntimeError(f"duplicate frozen patch IDs: {duplicates[:20]}")
+              seen = set()
+              duplicates = set()
+              for value in node_ids:
+                  if value in seen:
+                      duplicates.add(value)
+                  seen.add(value)
+              raise RuntimeError(f"duplicate frozen patch IDs: {sorted(duplicates)[:20]}")
           coords = np.asarray([(row["x"], row["y"]) for row in selected], dtype=float)
           if len({(float(x), float(y)) for x, y in coords}) != len(coords):
               raise RuntimeError("duplicate patch centroid coordinates are not allowed by this frozen geometry contract")
 
-          # Generic candidate preflight after the physical closed registry has been
-          # verified. Repeated-node count is not response-blindly known yet, so only
-          # registry/geometry and primary-period minima are asserted here.
+          outer_count = (
+              int(contract["scientific_anchor"]["primary_window"][1])
+              - int(contract["scientific_anchor"]["primary_window"][0])
+              + 1
+          )
           preflight_decl = CandidatePreflightDeclaration(
-              candidate_id=contract["attempt_id"],
+              attempt_id=contract["attempt_id"],
               minimum_nodes=int(registry["minimum_analysis_nodes"]),
               minimum_outer_units=int(registry["minimum_primary_periods"]),
               minimum_repeated_nodes=0,
-              require_response_independent_coordinates=True,
+              require_separate_geometry_and_response=True,
+              require_coordinate_geometry=True,
               require_closed_analysis_registry=True,
           )
           preflight_ev = CandidatePreflightEvidence(
-              response_opened=False,
+              source_identity=contract["fairdata_record_resolution"]["selected_pid"],
+              geometry_source_identity=f"{path}|sha256:{spec['sha256']}",
+              response_source_identity=(
+                  f"{manifest['locality_visit_response']['path']}|sha256:"
+                  f"{manifest['locality_visit_response']['sha256']}"
+              ),
               geometry_response_separable=True,
-              response_independent_coordinates_available=True,
-              known_node_count=len(selected),
-              known_outer_unit_count=(contract["scientific_anchor"]["primary_window"][1] - contract["scientific_anchor"]["primary_window"][0] + 1),
-              known_repeated_node_count=0,
-              layout_design="irregular",
+              coordinate_geometry_present=True,
+              node_count=len(selected),
+              outer_unit_count=outer_count,
+              repeated_node_count=0,
+              layout_design="natural_irregular",
               analysis_registry_closed=True,
+              response_rows_opened=False,
+              response_bytes_opened=False,
+              note="Merged patch IDs plus EPSG:3067 centroids are response-independent and one-to-one under the frozen dictionary-derived contract.",
           )
           preflight = evaluate_candidate_preflight(preflight_decl, preflight_ev)
           if preflight.status != "ready_for_geometry_gate":
               raise RuntimeError(f"candidate preflight did not reach geometry gate: {preflight.status}")
 
-          # Exact Euclidean connectivity thresholds can be recovered from the Euclidean
-          # MST. The Euclidean MST is a subgraph of the Delaunay triangulation; this
-          # avoids materializing an O(n^2) distance matrix for ~4k patches while
-          # preserving the same single-linkage/LCC thresholds used by the generic gate.
+          # The Euclidean MST is contained in the Delaunay triangulation, so the same
+          # single-linkage LCC thresholds can be recovered without O(n^2) storage.
           tri = Delaunay(coords)
           edge_set = set()
           for simplex in tri.simplices:
@@ -243,18 +254,15 @@ jobs:
           parent = list(range(len(coords)))
           size = [1] * len(coords)
           largest = 1
-          component_count = len(coords)
           def find(x):
               while parent[x] != x:
                   parent[x] = parent[parent[x]]
                   x = parent[x]
               return x
           def union(a, b):
-              nonlocal_dummy = None
-              nonlocal_dummy
               ra, rb = find(a), find(b)
               if ra == rb:
-                  return
+                  return None
               if size[ra] < size[rb]:
                   ra, rb = rb, ra
               parent[rb] = ra
@@ -264,11 +272,9 @@ jobs:
           targets = [float(value) for value in registry["structural_scale_targets_lcc"]]
           thresholds = [None] * len(targets)
           target_index = 0
-          largest = 1
           for weight, u, v in mst_edges:
               new_size = union(u, v)
               if new_size is not None:
-                  component_count -= 1
                   largest = max(largest, int(new_size))
               achieved = largest / len(coords)
               while target_index < len(targets) and achieved >= targets[target_index] - 1e-15:
@@ -280,7 +286,6 @@ jobs:
               raise RuntimeError("MST failed to realize frozen structural LCC targets")
           thresholds = [float(value) for value in thresholds]
 
-          # Compute exact graph summaries at each frozen threshold using cKDTree.
           tree = cKDTree(coords)
           nearest = tree.query(coords, k=2)[0][:, 1]
           levels = []
