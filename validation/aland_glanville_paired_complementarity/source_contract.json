@@ -1,0 +1,37 @@
+{
+  "attempt_id": "aland_glanville_fresh_paired_v1",
+  "candidate": "Glanville fritillary (Melitaea cinxia), Aland metapopulation, annual autumn surveys",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "dataset_title": "M. cinxia and C. melitaearum in the Åland metapopulation system",
+    "published_scope": "1993-2017; circa 4000 dry-meadow habitat patches; autumn patch surveys plus spring revisits",
+    "focal_taxon": "Melitaea cinxia",
+    "provisional_primary_window": "2000-2017",
+    "window_reason": "A published analysis of this public metapopulation explicitly restricts to 2000-2017 after the comprehensive 1998-1999 habitat remapping; freeze this window before any locality-visit outcome rows are opened.",
+    "source_process_claim": "conditional internal-source metapopulation explanation within the published Aland patch registry; no claim that biological immigration from outside the declared source universe is impossible"
+  },
+  "fairdata_record_candidates": [
+    "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
+    "cc1b7bea-a388-4b4d-bf35-2f41e025136c"
+  ],
+  "record_selection_rule": "Using metadata only, select the unique non-deprecated published Fairdata version of the exact dataset title that covers 1993-2017 and exposes separately identifiable Patch and Locality-visit resources. If version relations do not make one record uniquely current, stop rather than choose using file contents.",
+  "required_resource_roles": {
+    "patch_registry": "one row per habitat patch, location and geometry; response-independent",
+    "locality_visit": "one row per patch-survey combination; contains Melitaea cinxia nest abundance/occupancy and therefore remains forbidden at this stage",
+    "documentation": "field definitions sufficient to freeze physical schemas, survey/existence semantics, and prospective missing-row admissibility before locality-visit rows are opened"
+  },
+  "stage_boundary": {
+    "metadata_only": true,
+    "file_payload_downloads_allowed": false,
+    "patch_registry_payload_opened": false,
+    "locality_visit_payload_opened": false,
+    "nest_payload_opened": false,
+    "outcome_access_authorized": false
+  }
+}
