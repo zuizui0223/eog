@@ -16,15 +16,30 @@
     "window_reason": "A published analysis of this public metapopulation explicitly restricts to 2000-2017 after the comprehensive 1998-1999 habitat remapping; freeze this window before any locality-visit outcome rows are opened.",
     "source_process_claim": "conditional internal-source metapopulation explanation within the published Aland patch registry; no claim that biological immigration from outside the declared source universe is impossible"
   },
-  "fairdata_record_candidates": [
-    "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
-    "cc1b7bea-a388-4b4d-bf35-2f41e025136c"
-  ],
-  "record_selection_rule": "Using metadata only, select the unique non-deprecated published Fairdata version of the exact dataset title that covers 1993-2017 and exposes separately identifiable Patch and Locality-visit resources. If version relations do not make one record uniquely current, stop rather than choose using file contents.",
+  "fairdata_record_resolution": {
+    "origin_ida_record": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
+    "origin_pid": "urn:nbn:fi:att:f803b32d-8e52-421a-b27e-d2a2a48d4b35",
+    "selected_preservation_record": "cc1b7bea-a388-4b4d-bf35-2f41e025136c",
+    "selected_pid": "doi:10.23729/3f0522b4-3c4f-4ac8-b16e-63a5687bd515",
+    "selected_version": 1,
+    "selected_catalog": "urn:nbn:fi:att:data-catalog-pas",
+    "published": true,
+    "removed": false,
+    "deprecated": false,
+    "file_count": 5,
+    "total_file_bytes": 43486551,
+    "resolution_reason": "Response-blind Metax metadata shows the IDA record points to this preservation_dataset_version and the PAS record points back to the IDA preservation_dataset_origin_version. Both represent the same five-file version; the PAS DOI record is frozen as the immutable source identity."
+  },
   "required_resource_roles": {
     "patch_registry": "one row per habitat patch, location and geometry; response-independent",
     "locality_visit": "one row per patch-survey combination; contains Melitaea cinxia nest abundance/occupancy and therefore remains forbidden at this stage",
     "documentation": "field definitions sufficient to freeze physical schemas, survey/existence semantics, and prospective missing-row admissibility before locality-visit rows are opened"
+  },
+  "file_metadata_stage": {
+    "selected_record": "cc1b7bea-a388-4b4d-bf35-2f41e025136c",
+    "expected_total_files": 5,
+    "payload_downloads_allowed": false,
+    "purpose": "Resolve exact file names, sizes, checksums, dataset-specific role metadata and embargo availability without following any file download URL."
   },
   "stage_boundary": {
     "metadata_only": true,
