@@ -6,6 +6,11 @@ on:
       - agent/springtail-paired-complementarity
     paths:
       - "validation/springtail_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "validation/springtail_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json"
 
 permissions:
   contents: read
@@ -17,6 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 2
       - uses: actions/setup-python@v5
         with:
