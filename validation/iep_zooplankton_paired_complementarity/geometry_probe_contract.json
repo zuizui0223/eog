@@ -29,7 +29,7 @@
       "object_name": "StationLookup.csv",
       "object_id": "99cfcab5237f91e85c5df1b0d1d57725",
       "pasta_url": "https://pasta.lternet.edu/package/data/eml/edi/522/14/99cfcab5237f91e85c5df1b0d1d57725",
-      "resolver_url": "https://gmn.lternet.edu/mn/v2/object/https:%2F%2Fpasta.lternet.edu%2Fpackage%2Fdata%2Feml%2Fedi%2F522%2F14%2F99cfcab5237f91e85c5df1b0d1d57725",
+      "resolver_url": "https://cn.dataone.org/cn/v2/resolve/https%3A%2F%2Fpasta.lternet.edu%2Fpackage%2Fdata%2Feml%2Fedi%2F522%2F14%2F99cfcab5237f91e85c5df1b0d1d57725",
       "bytes": 11212,
       "md5": "47663f24a9f440173caf2b89699c058e",
       "records": 90,
@@ -153,6 +153,17 @@
     "response_rows_or_values_permitted_in_geometry_probe": false,
     "models_permitted_in_geometry_probe": 0,
     "heldout_scores_permitted_in_geometry_probe": 0
+  },
+  "transport_amendment": {
+    "kind": "pre-response transport-only correction",
+    "scientific_rules_changed": false,
+    "prior_geometry_resolver_url": "https://gmn.lternet.edu/mn/v2/object/https:%2F%2Fpasta.lternet.edu%2Fpackage%2Fdata%2Feml%2Fedi%2F522%2F14%2F99cfcab5237f91e85c5df1b0d1d57725",
+    "prior_run_id": 32565092411,
+    "prior_result": "HTTP 404 before the geometry role was appended to requested_entity_roles",
+    "prior_response_entity_requests": 0,
+    "prior_response_payload_bytes_opened": 0,
+    "prior_models_fit": 0,
+    "replacement": "use the DataONE coordinating-node resolver for the identical immutable geometry PID"
   },
   "preflight_declaration": {
     "minimum_nodes": 12,
