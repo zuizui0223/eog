@@ -35,28 +35,26 @@ jobs:
           import json
           from pathlib import Path
           import urllib.error
+          import urllib.parse
           import urllib.request
 
           contract = json.loads(Path(
               "validation/aland_glanville_paired_complementarity/source_contract.json"
           ).read_text())
-          dataset_id = contract["fairdata_record_resolution"]["selected_preservation_record"]
-          allowed_paths = (
-              "/Butterflies/Patches final.csv",
-              "/Butterflies/Variables_PAS_final.csv",
-          )
-          forbidden_fragments = (
-              "locality visit",
-              "nests final",
-          )
-          endpoint = "https://etsin.fairdata.fi/api/download/authorize"
-          ua = "EOG-Aland-Glanville-nonresponse-transport-authorization/1.0"
+          transport = contract["transport_resolution"]
+          dataset_id = transport["second_attempt_dataset_id"]
+          allowed_paths = tuple(transport["allowed_second_attempt_paths"])
+          forbidden_paths = {
+              contract["exact_file_manifest"]["locality_visit_response"]["path"].casefold(),
+              contract["exact_file_manifest"]["nest_response"]["path"].casefold(),
+          }
+          endpoint = transport["authorize_endpoint"]
+          ua = "EOG-Aland-Glanville-nonresponse-transport-authorization/2.0"
           attempts = []
 
           for path in allowed_paths:
-              low = path.casefold()
-              if any(fragment in low for fragment in forbidden_fragments):
-                  raise RuntimeError(f"refusing response-like path: {path}")
+              if path.casefold() in forbidden_paths:
+                  raise RuntimeError(f"refusing response path: {path}")
               payload = json.dumps({"cr_id": dataset_id, "file": path}).encode("utf-8")
               req = urllib.request.Request(
                   endpoint,
@@ -83,16 +81,10 @@ jobs:
                       "content_type": content_type,
                       "authorized": status == 200 and isinstance(returned_url, str) and returned_url.startswith("https://"),
                       "returned_url_present": isinstance(returned_url, str),
-                      "returned_url_host": (
-                          urllib.request.urlparse(returned_url).netloc
-                          if False else None
-                      ),
+                      "returned_url_host": urllib.parse.urlparse(returned_url).netloc if isinstance(returned_url, str) else None,
                       "response_keys": sorted(parsed) if isinstance(parsed, dict) else [],
                       "error": None,
                   })
-                  # Deliberately do not persist the short-lived download URL into the
-                  # repository or follow it. A later frozen payload stage will request
-                  # a fresh authorization and then GET only this exact nonresponse path.
               except urllib.error.HTTPError as exc:
                   body = exc.read(100_001)
                   attempts.append({
@@ -100,6 +92,7 @@ jobs:
                       "status": exc.code,
                       "authorized": False,
                       "returned_url_present": False,
+                      "returned_url_host": None,
                       "response_keys": [],
                       "error": body.decode("utf-8", errors="replace")[:2000],
                   })
@@ -109,12 +102,14 @@ jobs:
                       "status": None,
                       "authorized": False,
                       "returned_url_present": False,
+                      "returned_url_host": None,
                       "response_keys": [],
                       "error": repr(exc),
                   })
 
           result = {
               "attempt_id": contract["attempt_id"],
+              "transport_attempt": 2,
               "dataset_id": dataset_id,
               "endpoint": endpoint,
               "allowed_paths": list(allowed_paths),
