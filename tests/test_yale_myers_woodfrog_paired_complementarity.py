@@ -7,6 +7,10 @@ from pathlib import Path
 import sys
 
 import numpy as np
+import pytest
+
+
+pytest.importorskip("sklearn")
 
 
 ROOT = Path(__file__).resolve().parents[1]

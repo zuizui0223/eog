@@ -35,7 +35,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m pip install --upgrade pip
-          python -m pip install "numpy==2.3.5" "scikit-learn==1.8.0"
+          python -m pip install "numpy==2.3.5" "scikit-learn==1.8.0" "pytest==8.4.2"
           python -m pip install -e .
       - name: Run response-blind admission, geometry, header, and authorization preflight
         run: |
