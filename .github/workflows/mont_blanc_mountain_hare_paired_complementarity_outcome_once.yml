@@ -1,0 +1,122 @@
+name: Mont-Blanc mountain hare paired complementarity outcome once
+
+on:
+  push:
+    branches:
+      - agent/mont-blanc-hare-paired-complementarity
+    paths:
+      - "validation/mont_blanc_mountain_hare_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json"
+
+permissions:
+  contents: read
+
+jobs:
+  once-only-outcome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify marker-only authorization commit
+        run: |
+          set -euo pipefail
+          marker_path="validation/mont_blanc_mountain_hare_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json"
+          changed_paths="$(git diff --name-only HEAD^ HEAD)"
+          test "$changed_paths" = "$marker_path"
+          authorized_parent="$(git rev-parse HEAD^)"
+          python - "$authorized_parent" <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+
+          marker = json.loads(Path(
+              "validation/mont_blanc_mountain_hare_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json"
+          ).read_text())
+          assert marker["authorized_parent_commit"] == sys.argv[1]
+          assert marker["invocation_budget"] == 1
+          assert marker["response_rows_opened"] is False
+          assert marker["no_retry"] is True
+          assert marker["no_post_open_redesign"] is True
+          PY
+      - name: Install frozen technical environment
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scikit-learn==1.8.0"
+          python -m pip install -e .
+      - name: Re-run response-blind authorization preflight
+        run: |
+          set -euo pipefail
+          python validation/mont_blanc_mountain_hare_paired_complementarity/preflight.py
+      - name: Open the fixed response once and execute the frozen endpoint
+        run: |
+          set -euo pipefail
+          python benchmarks/run_mont_blanc_mountain_hare_paired_complementarity_once.py \
+            --mode outcome \
+            --authorization-marker validation/mont_blanc_mountain_hare_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json \
+            --preflight-result build/mont_blanc_mountain_hare_paired_complementarity/preflight/preflight.json \
+            --output build/mont_blanc_mountain_hare_paired_complementarity/outcome.json
+      - name: Assert immutable terminal outcome invariants
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(Path(
+              "build/mont_blanc_mountain_hare_paired_complementarity/outcome.json"
+          ).read_text())
+          assert result["execution_mode"] == "outcome"
+          assert result["response_download_requests"] == ["taghare_1day.csv"]
+          terminal = {
+              "completed_frozen_paired_test",
+              "post_open_schema_or_identity_stop_no_retry",
+              "post_open_count_gate_stop_no_retry",
+              "post_open_layer_b_nonestimable_stop_no_retry",
+              "post_open_execution_stop_no_retry",
+          }
+          assert result["status"] in terminal
+          if result["response_payload_bytes_opened"]:
+              assert result["response_payload_bytes_opened"] == 21379
+              assert result["response_rows_opened"] is True
+          if result["status"] == "completed_frozen_paired_test":
+              assert result["response_payload_bytes_opened"] == 21379
+              assert result["exact_count_gate"]["passed"] is True
+              assert result["exact_count_gate"]["executed_before_any_layer_a_update_or_model_fit"] is True
+              assert result["models_fit"] == 2
+              assert result["heldout_scores"] == 12
+              assert result["paired_complementarity"]["status"] in {
+                  "favorable_complementary_added_value",
+                  "no_confirmed_complementary_added_value",
+                  "adverse_complementary_added_value",
+              }
+              assert result["model_feature_audit"]["exact_site_id_supervised"] is False
+              assert result["model_feature_audit"]["exact_world_id_supervised"] is False
+          elif result["status"] in {
+              "post_open_count_gate_stop_no_retry",
+              "post_open_layer_b_nonestimable_stop_no_retry",
+              "post_open_schema_or_identity_stop_no_retry",
+          }:
+              assert result["models_fit"] == 0
+              assert result["heldout_scores"] == 0
+          print(json.dumps({
+              "status": result["status"],
+              "paired_status": result.get("paired_complementarity", {}).get("status"),
+              "response_download_requests": 1,
+              "response_payload_bytes_opened": result["response_payload_bytes_opened"],
+              "models_fit": result["models_fit"],
+              "heldout_scores": result["heldout_scores"],
+              "result_fingerprint": result["fingerprint"],
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Upload immutable once-only outcome
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mont-blanc-mountain-hare-once-only-outcome
+          path: build/mont_blanc_mountain_hare_paired_complementarity/
+          if-no-files-found: error

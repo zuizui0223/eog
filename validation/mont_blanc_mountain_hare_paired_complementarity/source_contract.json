@@ -1,0 +1,427 @@
+{
+  "attempt_id": "mont_blanc_mountain_hare_fresh_paired_v1",
+  "candidate": "Monthly observed mountain-hare detection reappearance across 46 fixed Mont-Blanc camera sites",
+  "dryad_source": {
+    "doi": "10.5061/dryad.b2rbnzsp7",
+    "version_id": 277486,
+    "version_number": 1,
+    "version_download_url": "https://datadryad.org/api/v2/versions/277486/download",
+    "manifest_maximum_bytes": 200000
+  },
+  "response_file": "taghare_1day.csv",
+  "nonresponse_files": [
+    "README.md",
+    "camerainfo.csv"
+  ],
+  "files": {
+    "README.md": {
+      "size": 4115,
+      "sha256": "96743701fb4118465da77962f8c3a2f7a01826bd5e713657d7c4df28ee37fc32",
+      "role": "nonresponse_readme"
+    },
+    "camerainfo.csv": {
+      "size": 14389,
+      "sha256": "98a8b49c608775fa0ca02d19febd06c03427dd3d9faf993b82154f69ff9e4403",
+      "role": "nonresponse_geometry_effort"
+    },
+    "out_contact.csv": {
+      "size": 7878,
+      "sha256": "bb2fccc62b2cc054dfc4ed636ce1866ef52ce388ef82e1c330d6ad7cc59296eb",
+      "role": "ancillary_nonresponse_forbidden"
+    },
+    "out_height.csv": {
+      "size": 107408,
+      "sha256": "3f9abb16ed499790b1b5890564aa1435166762afa65732f93ee3e5002012f984",
+      "role": "ancillary_nonresponse_forbidden"
+    },
+    "out_plot.csv": {
+      "size": 4456,
+      "sha256": "ec9f38a73cd5f1a9d8b9d7721071525b43a0fca6a90f552201e2923412bef8e1",
+      "role": "ancillary_nonresponse_forbidden"
+    },
+    "taghare_1day.csv": {
+      "size": 21379,
+      "sha256": "e9a6f3cf1b861b1a130819adf3104046641c866aa4620fe1b6443fb554649aac",
+      "role": "response"
+    }
+  },
+  "response_header_firewall": {
+    "maximum_header_bytes": 64,
+    "expected_header_text": "Station;Date",
+    "expected_header_sha256": "2d4e412eed33323ba80afdcccef04cc8fdaef58c18fcae97a9f4f273872d946f",
+    "expected_terminator": "CR",
+    "expected_bytes_consumed_including_terminator": 13,
+    "expected_columns": [
+      "Station",
+      "Date"
+    ],
+    "delimiter": ";",
+    "require_exact_order": true
+  },
+  "preflight_declaration": {
+    "minimum_nodes": 40,
+    "minimum_outer_units": 6,
+    "minimum_repeated_nodes": 40,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "structural_targets": [
+    0.25,
+    0.5,
+    0.75,
+    0.9
+  ],
+  "published_aggregate_evidence": {
+    "source": "Bison et al. 2024 Wildlife Biology DOI 10.1002/wlb3.01186 and Dryad README",
+    "endpoint_definition_matches": true,
+    "split_specific_intervals": {
+      "calibration_events": {
+        "lower": null,
+        "upper": null
+      },
+      "calibration_non_events": {
+        "lower": null,
+        "upper": null
+      },
+      "heldout_events": {
+        "lower": null,
+        "upper": null
+      },
+      "heldout_non_events": {
+        "lower": null,
+        "upper": null
+      },
+      "heldout_outer_units_with_both_classes": {
+        "lower": null,
+        "upper": null
+      }
+    },
+    "note": "The paper fixes 46 cameras, monthly primary occasions, six five-day secondary occasions, 2018-2022 coverage, and observed detected/non-detected semantics, but does not publish the planned calibration/heldout zero-to-positive and zero-to-zero counts."
+  },
+  "freezes": {
+    "source_identity": {
+      "publication_doi": "10.1002/wlb3.01186",
+      "data_doi": "10.5061/dryad.b2rbnzsp7",
+      "dryad_version_id": 277486,
+      "dryad_version_number": 1,
+      "closed_file_count": 6,
+      "file_identity": "exact filename + byte size + SHA-256 for all six version files"
+    },
+    "response_identity": {
+      "filename": "taghare_1day.csv",
+      "size": 21379,
+      "sha256": "e9a6f3cf1b861b1a130819adf3104046641c866aa4620fe1b6443fb554649aac",
+      "physical_header_sha256": "2d4e412eed33323ba80afdcccef04cc8fdaef58c18fcae97a9f4f273872d946f",
+      "physical_header_terminator": "CR",
+      "physical_header_bytes_including_terminator": 13,
+      "row_count_not_frozen_pre_response": true,
+      "response_payload_opened_pre_authorization": false
+    },
+    "node_geometry": {
+      "node_count": 46,
+      "registry_rule": "the 46 physical camerainfo.csv rows have unique exact Station values and unique coordinate pairs",
+      "ordered_node_ids_sha256": "b096d0a615ffea3a322f4b0d140b8ab935ac041389c07336c99d2742a5682737",
+      "camera_file_sha256": "98a8b49c608775fa0ca02d19febd06c03427dd3d9faf993b82154f69ff9e4403",
+      "coordinate_reference": "WGS84 longitude/latitude",
+      "distance_units": "meters",
+      "distance_semantics": "Haversine great-circle distance with Earth radius 6371008.8 m, derived only from response-independent coordinates",
+      "exact_site_id_supervised": false,
+      "survey_effort": {
+        "analysis_start": "2019-01-01",
+        "analysis_end": "2022-06-30",
+        "analysis_month_count": 42,
+        "active_day_rule": "calendar days on or after setup_date minus the inclusive union of every ProblemX_from..ProblemX_to interval with both dates present",
+        "problem_description_role": "audit only; a missing ProblemX description does not erase a complete dated interval",
+        "problem_interval_count": 187,
+        "missing_description_interval_count": 2,
+        "minimum_active_days_for_observed_month": 20,
+        "date_format": "DD/MM/YYYY",
+        "camerainfo_encoding": "cp1252",
+        "missing_token": "NA"
+      }
+    },
+    "response_semantics": {
+      "endpoint": "observed monthly camera-detection reappearance",
+      "risk_set": "closed-registry station with at least 20 response-independent active camera days and zero released mountain-hare contact dates in source month t, followed by at least 20 active days in target month t+1",
+      "event": "risk-set station has at least one released unique contact date in target month t+1",
+      "non_event": "risk-set station has zero released contact dates in target month t+1",
+      "source_state": "all closed-registry stations with at least 20 active days and at least one released unique contact date in source month t",
+      "contact_day_intensity": "number of unique released Station-Date identities in the source month; used only as a lagged source weight",
+      "duplicate_response_rows": "exact duplicate Station-Date rows collapse to one observed contact day; raw and unique counts remain audited",
+      "absence_basis": "zero is inferred only for station-months with at least 20 active days under the response-independent camera problem ledger",
+      "date_parser": "slash tokens are strict DD/MM/YYYY; hyphen tokens are strict ISO YYYY-MM-DD; no other format or alias is accepted",
+      "accepted_date_range": [
+        "2018-01-01",
+        "2022-06-30"
+      ],
+      "missingness": "blank, invalid, unknown-station, out-of-range, or pre-setup response identities cause terminal schema/identity STOP; no alias repair or carry-forward",
+      "boundary": "observed camera-station detection reappearance, not latent occupancy, abundance, demographic immigration, parentage, or reconstructed seasonal migration",
+      "physical_header_columns": [
+        "Station",
+        "Date"
+      ],
+      "physical_header_schema_id": "mont_blanc_mountain_hare_response_header_v1",
+      "categorical_token_schema": "Station must exactly match the closed nonresponse registry"
+    },
+    "temporal_split": {
+      "analysis_months": {
+        "start": "2019-01",
+        "end": "2022-06",
+        "count": 42
+      },
+      "calibration_transitions": {
+        "first": [
+          "2019-01",
+          "2019-02"
+        ],
+        "last": [
+          "2020-11",
+          "2020-12"
+        ],
+        "count": 23
+      },
+      "heldout_transitions": {
+        "first": [
+          "2020-12",
+          "2021-01"
+        ],
+        "last": [
+          "2022-05",
+          "2022-06"
+        ],
+        "count": 18
+      },
+      "fit_policy": "fit exactly once on pooled eligible calibration risk rows; never refit on heldout outcomes",
+      "sequential_layer_a_policy": "each month is designed and scored from sources and surviving worlds available before its target response; target outcomes update Layer A only after that month and before the next month",
+      "outer_score_units": [
+        "2021_Q1",
+        "2021_Q2",
+        "2021_Q3",
+        "2021_Q4",
+        "2022_Q1",
+        "2022_Q2"
+      ],
+      "outer_score_unit": "three-month heldout calendar block",
+      "expected_outer_score_units": 6
+    },
+    "count_gate": {
+      "must_run_before_model_fit": true,
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4,
+      "heldout_outer_units_with_rows": 6,
+      "require_every_transition_has_current_internal_source": true,
+      "require_every_heldout_outer_unit_has_rows": true,
+      "failure_action": "write immutable non-estimable result with zero fits and zero heldout scores"
+    },
+    "process_source": {
+      "system": "46 fixed camera stations on five elevation gradients in the French Mont-Blanc massif",
+      "conditioning_boundary": "the predictive claim is conditional on currently recorded, adequately observed internal station sources",
+      "external_sources": "not represented; an observed monthly reappearance is not interpreted as physical immigration",
+      "persistence": "same-station possible-source persistence is admitted when the next month has at least 20 active days",
+      "transition_relation": "the full-support exponential world permits every distinct internal station pair; hard worlds remain falsifiable submodels",
+      "claim_limit": "monthly internal source-conditioned predictive support for observed camera contacts, not individual movement or seasonal migration reconstruction"
+    },
+    "world_scale": {
+      "axis": "response-independent WGS84 Haversine station distance in meters",
+      "earth_radius_m": 6371008.8,
+      "lcc_targets": [
+        0.25,
+        0.5,
+        0.75,
+        0.9
+      ],
+      "raw_lcc_thresholds_m": [
+        537.3506129733488,
+        2586.4041822399345,
+        7218.081476438778,
+        7218.081476438778
+      ],
+      "thresholds_m": [
+        537.3506129733488,
+        2586.4041822399345,
+        7218.081476438778
+      ],
+      "threshold_world_ids": [
+        "geo_lcc250",
+        "geo_lcc500",
+        "geo_lcc750_900"
+      ],
+      "duplicate_lcc_policy": "identical raw LCC thresholds are represented once; the 0.75 and 0.90 targets share geo_lcc750_900",
+      "full_world_id": "geo_exponential_full",
+      "kernel_scale_m": 2586.4041822399345,
+      "kernel_scale_basis": "the response-blind 50-percent LCC threshold; an analytical decay scale, not a fitted movement distance",
+      "loss_support": 1.0,
+      "support_tolerance": 1e-15,
+      "threshold_interpretation": "minimal response-blind structural LCC regimes, not fitted dispersal limits"
+    },
+    "structural_adequacy": {
+      "required_distinct_lcc_thresholds": 3,
+      "minimum_largest_weak_component_fraction_for_one_world": 0.9,
+      "maximum_isolated_node_fraction_for_one_world": 0.1,
+      "require_at_least_one_world_pass": true,
+      "forecast_horizon": 1,
+      "expected_node_count": 46,
+      "expected_pair_count": 1035,
+      "matrix_symmetric": true,
+      "world_identity_supervised_column": false
+    },
+    "layer_a_rules": {
+      "declared_world_count": 4,
+      "current_sources": "all adequately observed camera stations detected in source month t",
+      "source_weights": "equal normalized weight across current internal sources",
+      "hard_world_support": "exp(-distance/kernel_scale) for distinct pairs at or below the frozen LCC threshold, otherwise zero",
+      "full_world_support": "exp(-distance/kernel_scale) for every distinct station pair",
+      "transition_normalization": "Q[s,j]=W[s,j]/(1+sum_k W[s,k]); target support is the equal-current-source mean of Q[s,j]",
+      "update": "after each observed transition, eliminate a surviving rule if any newly detected risk-set target has support at or below 1e-15",
+      "monotonicity": "worlds may only remain or be eliminated; eliminated worlds never return",
+      "all_eliminated": "stop and report frozen-universe falsification without scale or source rescue",
+      "world_labels_used_for_prediction": false,
+      "new_ecological_operator_added": false
+    },
+    "layer_b_representation": {
+      "implementation": "eog.v2.world_predictive_summary.summarize_worldset_for_prediction",
+      "representation_name": "symmetric_world_support_summary_v1",
+      "feature_names": [
+        "surviving_world_fraction",
+        "support_mean",
+        "support_std",
+        "support_min",
+        "support_max",
+        "support_q25",
+        "support_q50",
+        "support_q75",
+        "positive_support_fraction",
+        "support_range"
+      ],
+      "world_label_invariant": true,
+      "exact_world_id_exposed_to_learner": false,
+      "unchanged_from_frozen_production_implementation": true
+    },
+    "comparators": {
+      "baseline": "frozen strong random forest with calendar season, terrain/habitat/camera, geometry, effort, conventional source-distance exposure, and lagged contact-day predictors",
+      "augmented": "the identical frozen learner and identical conventional predictors plus the unchanged ten-column Layer-B block",
+      "only_difference": "Layer-B feature block",
+      "same_rows_labels_split_imputation_fit_policy_and_hyperparameters": true
+    },
+    "preprocessing_model_fit": {
+      "python": "3.12",
+      "numpy": "2.3.5",
+      "scikit_learn": "1.8.0",
+      "seed": 20260822,
+      "learner": "sklearn.ensemble.RandomForestClassifier",
+      "hyperparameters": {
+        "n_estimators": 1000,
+        "max_features": "sqrt",
+        "min_samples_leaf": 5,
+        "class_weight": null,
+        "random_state": 20260822,
+        "n_jobs": 1
+      },
+      "baseline_feature_names": [
+        "target_month_index",
+        "target_month_index_squared",
+        "target_month_sin",
+        "target_month_cos",
+        "longitude_centered_km",
+        "latitude_centered_km",
+        "elevation_m",
+        "slope_degrees",
+        "aspect_sin",
+        "aspect_cos",
+        "habitat_forest",
+        "habitat_shrubland",
+        "habitat_grassland",
+        "model_bushnell_natureview",
+        "model_moultrie_40i",
+        "model_reconyx_hf2x",
+        "model_moultrie_50i",
+        "model_moultrie_reconyx_mixed",
+        "target_mean_distance_m",
+        "target_nearest_other_site_m",
+        "target_degree_lcc250",
+        "target_degree_lcc500",
+        "target_degree_lcc750_900",
+        "source_month_active_days",
+        "target_month_active_days",
+        "current_source_count",
+        "log1p_current_source_contact_days",
+        "nearest_current_source_distance_m",
+        "source_count_lcc250",
+        "source_count_lcc500",
+        "source_count_lcc750_900",
+        "source_exponential_exposure_lcc250",
+        "source_exponential_exposure_lcc500",
+        "source_exponential_exposure_lcc750_900",
+        "source_exponential_exposure_full",
+        "contact_day_weighted_exposure_lcc250",
+        "contact_day_weighted_exposure_lcc500",
+        "contact_day_weighted_exposure_lcc750_900",
+        "contact_day_weighted_exposure_full"
+      ],
+      "habitat_mapping": {
+        "forest": "forest",
+        "shrubland": "shrubland",
+        "shrubland sur crete": "shrubland",
+        "grassland": "grassland",
+        "prairie": "grassland"
+      },
+      "aspect_degrees_clockwise_from_north": {
+        "NO": 315,
+        "S": 180,
+        "SE": 135,
+        "SO": 225,
+        "O": 270
+      },
+      "model_tokens": [
+        "Buchnell NatureView HD",
+        "Moultrie 40i",
+        "Reconyx HF2X",
+        "Moultrie 50i",
+        "Moultrie 40i/Reconyx HF2X"
+      ],
+      "forbidden_response_derived_predictors": [
+        "target-month mountain-hare contact",
+        "target-month detected state",
+        "exact Station ID",
+        "exact world ID"
+      ],
+      "missing_value_policy": "no predictor imputation; any nonfinite calibration or heldout predictor stops before fit",
+      "exact_site_id_supervised": false,
+      "exact_world_id_supervised": false
+    },
+    "metrics_decision": {
+      "primary_metric": "binary_log_loss",
+      "probability_clip": 1e-06,
+      "macro_unit": "three-month heldout calendar block",
+      "expected_outer_unit_count": 6,
+      "lower_is_better": true,
+      "favorable_min_augmented_wins": 4,
+      "adverse_min_baseline_wins": 4,
+      "tie_tolerance": 0.0,
+      "favorable": "favorable_complementary_added_value",
+      "null": "no_confirmed_complementary_added_value",
+      "adverse": "adverse_complementary_added_value"
+    },
+    "runtime_runner": {
+      "path": "benchmarks/run_mont_blanc_mountain_hare_paired_complementarity_once.py",
+      "sha256": "f7629568552db9de532e8b943862d770b15e763f5e429890eac92627a640578d",
+      "response_full_downloads_per_authorized_run": 1,
+      "response_header_range_reads_before_authorization": true,
+      "outcome_retry_policy": "none",
+      "outcome_invocation": "one marker-only GitHub Actions commit"
+    },
+    "non_estimable_stop": {
+      "exact_count_gate_first": true,
+      "zero_fit_on_count_failure": true,
+      "zero_score_on_count_failure": true,
+      "no_post_open_redesign": true,
+      "no_post_open_retry": true,
+      "schema_or_identity_failure_after_open_is_terminal": true,
+      "result_recording_after_open_is_not_redesign": true
+    }
+  }
+}
