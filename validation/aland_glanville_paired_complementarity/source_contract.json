@@ -69,12 +69,14 @@
     "first_attempt_result": "HTTP 403 Not authorized for both frozen nonresponse paths; zero payload GETs",
     "second_attempt_dataset_id": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
     "second_attempt_reason": "Metax metadata, frozen before this transport attempt, establishes that this is the IDA origin of the selected PAS preservation record and represents the same five-file version. The second attempt changes transport record identity only, not scientific source, file path, checksum, candidate definition, or response firewall.",
-    "allowed_second_attempt_paths": [
-      "/Butterflies/Patches final.csv",
-      "/Butterflies/Variables_PAS_final.csv"
+    "second_attempt_result": "PASS: HTTP 200 authorization for Patches final.csv and Variables_PAS_final.csv; returned host download.fairdata.fi:443 for both; zero payload GETs and zero response-file authorization requests.",
+    "frozen_payload_dataset_id": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
+    "frozen_payload_paths_in_order": [
+      "/Butterflies/Variables_PAS_final.csv",
+      "/Butterflies/Patches final.csv"
     ],
     "response_file_authorization_forbidden": true,
-    "payload_get_forbidden_until_authorization_succeeds": true
+    "payload_access_rule": "For each frozen nonresponse path in order, request one fresh Etsin authorization, GET only the returned download.fairdata.fi URL, require exact byte size and SHA-256 from exact_file_manifest, then parse with the frozen ISO-8859-15 encoding. Any mismatch stops before the next file."
   },
   "file_metadata_stage": {
     "selected_record": "cc1b7bea-a388-4b4d-bf35-2f41e025136c",
@@ -83,9 +85,12 @@
     "purpose": "Resolve exact file names, sizes, checksums, dataset-specific role metadata and embargo availability without following any file download URL."
   },
   "stage_boundary": {
-    "metadata_only": true,
-    "file_payload_downloads_allowed": false,
+    "metadata_only_complete": true,
+    "nonresponse_transport_authorized": true,
+    "nonresponse_payload_access_now_allowed": true,
+    "response_payload_access_allowed": false,
     "patch_registry_payload_opened": false,
+    "variable_dictionary_payload_opened": false,
     "locality_visit_payload_opened": false,
     "nest_payload_opened": false,
     "outcome_access_authorized": false
