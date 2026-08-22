@@ -1,0 +1,60 @@
+name: RMAP fresh paired complementarity metadata preflight
+
+on:
+  push:
+    branches:
+      - agent/rmap-paired-complementarity
+    paths:
+      - ".github/workflows/rmap_paired_complementarity_preflight.yml"
+      - "validation/rmap_paired_complementarity/**"
+  pull_request:
+    paths:
+      - ".github/workflows/rmap_paired_complementarity_preflight.yml"
+      - "validation/rmap_paired_complementarity/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Inventory exact Figshare version metadata only
+        run: |
+          set -euo pipefail
+          python validation/rmap_paired_complementarity/metadata_preflight.py
+      - name: Assert zero file or response access
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("build/rmap_paired_complementarity/metadata/metadata_inventory.json")
+          result = json.loads(path.read_text(encoding="utf-8"))
+          assert result["file_download_requests"] == []
+          assert result["file_payload_bytes_opened"] == 0
+          assert result["archive_member_bytes_opened"] == 0
+          assert result["response_rows_opened"] is False
+          assert result["response_file_ids"] == []
+          print(json.dumps({
+              "status": result["status"],
+              "file_count": result.get("file_count"),
+              "file_download_requests": [],
+              "file_payload_bytes_opened": 0,
+              "response_rows_opened": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Upload response-blind metadata evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rmap-response-blind-metadata-inventory
+          path: build/rmap_paired_complementarity/metadata/
+          if-no-files-found: error
