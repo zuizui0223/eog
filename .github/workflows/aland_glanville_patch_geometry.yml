@@ -1,0 +1,413 @@
+name: Aland Glanville patch registry and structural geometry
+
+on:
+  push:
+    branches:
+      - agent/aland-glanville-preflight
+    paths:
+      - ".github/workflows/aland_glanville_patch_geometry.yml"
+      - "validation/aland_glanville_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/aland_glanville_patch_geometry.yml"
+      - "validation/aland_glanville_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  patch-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install response-blind geometry dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scipy==1.18.1"
+          python -m pip install -e .
+      - name: Download and verify only Patches final.csv, then audit registry and geometry
+        run: |
+          set -euo pipefail
+          mkdir -p build/aland_glanville_patch_geometry
+          python - <<'PY'
+          from __future__ import annotations
+
+          import csv
+          import hashlib
+          import io
+          import json
+          import math
+          from pathlib import Path
+          import urllib.parse
+          import urllib.request
+
+          import numpy as np
+          from scipy.sparse import coo_matrix
+          from scipy.sparse.csgraph import minimum_spanning_tree
+          from scipy.spatial import Delaunay, cKDTree
+
+          from eog.v2.candidate_preflight import (
+              CandidatePreflightDeclaration,
+              CandidatePreflightEvidence,
+              evaluate_candidate_preflight,
+          )
+
+          contract = json.loads(Path(
+              "validation/aland_glanville_paired_complementarity/source_contract.json"
+          ).read_text())
+          manifest = contract["exact_file_manifest"]
+          spec = manifest["patch_registry"]
+          registry = contract["dictionary_derived_patch_registry_contract"]
+          transport = contract["transport_resolution"]
+          dataset_id = transport["frozen_payload_dataset_id"]
+          path = spec["path"]
+          forbidden_paths = {
+              manifest["locality_visit_response"]["path"].casefold(),
+              manifest["nest_response"]["path"].casefold(),
+          }
+          if path.casefold() in forbidden_paths:
+              raise RuntimeError("patch registry collides with frozen response path")
+
+          # Request one short-lived URL only for the already-frozen patch registry.
+          auth_payload = json.dumps({"cr_id": dataset_id, "file": path}).encode("utf-8")
+          auth_req = urllib.request.Request(
+              transport["authorize_endpoint"],
+              data=auth_payload,
+              headers={
+                  "User-Agent": "EOG-Aland-Glanville-patch-geometry/1.0",
+                  "Accept": "application/json",
+                  "Content-Type": "application/json",
+              },
+              method="POST",
+          )
+          with urllib.request.urlopen(auth_req, timeout=30) as response:
+              auth_body = response.read(100_001)
+              auth_status = getattr(response, "status", None)
+          if auth_status != 200 or len(auth_body) > 100_000:
+              raise RuntimeError("patch authorization failed bounded checks")
+          auth = json.loads(auth_body.decode("utf-8"))
+          download_url = auth.get("url") if isinstance(auth, dict) else None
+          if not isinstance(download_url, str):
+              raise RuntimeError("patch authorization returned no URL")
+          parsed = urllib.parse.urlparse(download_url)
+          if parsed.scheme != "https" or parsed.hostname != "download.fairdata.fi":
+              raise RuntimeError(f"patch authorization returned unexpected host: {parsed.netloc}")
+
+          expected_bytes = int(spec["bytes"])
+          data_req = urllib.request.Request(
+              download_url,
+              headers={"User-Agent": "EOG-Aland-Glanville-patch-geometry/1.0"},
+          )
+          with urllib.request.urlopen(data_req, timeout=120) as response:
+              payload = response.read(expected_bytes + 1)
+              payload_status = getattr(response, "status", None)
+          if payload_status != 200:
+              raise RuntimeError(f"patch download returned {payload_status}")
+          if len(payload) != expected_bytes:
+              raise RuntimeError(f"patch byte mismatch: {len(payload)} != {expected_bytes}")
+          observed_sha = hashlib.sha256(payload).hexdigest()
+          if observed_sha != spec["sha256"]:
+              raise RuntimeError(f"patch SHA mismatch: {observed_sha}")
+
+          text = payload.decode(spec["encoding"])
+          delimiter = registry["delimiter_to_resolve_physically"]
+          reader = csv.DictReader(io.StringIO(text), delimiter=delimiter)
+          fieldnames = list(reader.fieldnames or [])
+          required_fields = list(registry["required_fields"])
+          missing_header = [name for name in required_fields if name not in fieldnames]
+          if missing_header:
+              raise RuntimeError(f"patch schema missing frozen fields: {missing_header}")
+
+          rows = list(reader)
+          if len(rows) < int(registry["minimum_analysis_nodes"]):
+              raise RuntimeError("patch registry below frozen minimum analysis nodes")
+
+          node_field = registry["node_id_field"]
+          x_field = registry["x_field"]
+          y_field = registry["y_field"]
+          area_field = registry["area_field"]
+          geometry_field = registry["geometry_field"]
+          selected = []
+          missing_core = []
+          invalid_numeric = []
+          for index, row in enumerate(rows, start=2):
+              values = {name: (row.get(name) or "").strip() for name in required_fields}
+              missing = [name for name, value in values.items() if value == ""]
+              if missing:
+                  missing_core.append({"row": index, "fields": missing})
+                  continue
+              try:
+                  x = float(values[x_field].replace(",", "."))
+                  y = float(values[y_field].replace(",", "."))
+                  area = float(values[area_field].replace(",", "."))
+              except Exception:
+                  invalid_numeric.append(index)
+                  continue
+              if not all(math.isfinite(value) for value in (x, y, area)) or area <= 0:
+                  invalid_numeric.append(index)
+                  continue
+              selected.append({
+                  "node_id": values[node_field],
+                  "x": x,
+                  "y": y,
+                  "area": area,
+                  "survey_area": values["Survey area"],
+                  "commune": values["Commune"],
+                  "village": values["Village"],
+                  "geometry_present": bool(values[geometry_field]),
+              })
+
+          # The frozen contract does not authorize candidate-specific deletion of bad
+          # rows learned from this file. Any missing/invalid required field stops.
+          if missing_core:
+              raise RuntimeError(
+                  f"patch registry has missing frozen core fields; first={missing_core[:5]} total={len(missing_core)}"
+              )
+          if invalid_numeric:
+              raise RuntimeError(
+                  f"patch registry has invalid frozen numeric fields; first={invalid_numeric[:5]} total={len(invalid_numeric)}"
+              )
+
+          node_ids = [row["node_id"] for row in selected]
+          if len(set(node_ids)) != len(node_ids):
+              duplicates = sorted({value for value in node_ids if node_ids.count(value) > 1})
+              raise RuntimeError(f"duplicate frozen patch IDs: {duplicates[:20]}")
+          coords = np.asarray([(row["x"], row["y"]) for row in selected], dtype=float)
+          if len({(float(x), float(y)) for x, y in coords}) != len(coords):
+              raise RuntimeError("duplicate patch centroid coordinates are not allowed by this frozen geometry contract")
+
+          # Generic candidate preflight after the physical closed registry has been
+          # verified. Repeated-node count is not response-blindly known yet, so only
+          # registry/geometry and primary-period minima are asserted here.
+          preflight_decl = CandidatePreflightDeclaration(
+              candidate_id=contract["attempt_id"],
+              minimum_nodes=int(registry["minimum_analysis_nodes"]),
+              minimum_outer_units=int(registry["minimum_primary_periods"]),
+              minimum_repeated_nodes=0,
+              require_response_independent_coordinates=True,
+              require_closed_analysis_registry=True,
+          )
+          preflight_ev = CandidatePreflightEvidence(
+              response_opened=False,
+              geometry_response_separable=True,
+              response_independent_coordinates_available=True,
+              known_node_count=len(selected),
+              known_outer_unit_count=(contract["scientific_anchor"]["primary_window"][1] - contract["scientific_anchor"]["primary_window"][0] + 1),
+              known_repeated_node_count=0,
+              layout_design="irregular",
+              analysis_registry_closed=True,
+          )
+          preflight = evaluate_candidate_preflight(preflight_decl, preflight_ev)
+          if preflight.status != "ready_for_geometry_gate":
+              raise RuntimeError(f"candidate preflight did not reach geometry gate: {preflight.status}")
+
+          # Exact Euclidean connectivity thresholds can be recovered from the Euclidean
+          # MST. The Euclidean MST is a subgraph of the Delaunay triangulation; this
+          # avoids materializing an O(n^2) distance matrix for ~4k patches while
+          # preserving the same single-linkage/LCC thresholds used by the generic gate.
+          tri = Delaunay(coords)
+          edge_set = set()
+          for simplex in tri.simplices:
+              a, b, c = [int(v) for v in simplex]
+              for u, v in ((a, b), (b, c), (c, a)):
+                  if u > v:
+                      u, v = v, u
+                  edge_set.add((u, v))
+          edge_pairs = np.asarray(sorted(edge_set), dtype=int)
+          deltas = coords[edge_pairs[:, 0]] - coords[edge_pairs[:, 1]]
+          weights = np.sqrt(np.sum(deltas * deltas, axis=1))
+          graph = coo_matrix(
+              (
+                  np.concatenate([weights, weights]),
+                  (
+                      np.concatenate([edge_pairs[:, 0], edge_pairs[:, 1]]),
+                      np.concatenate([edge_pairs[:, 1], edge_pairs[:, 0]]),
+                  ),
+              ),
+              shape=(len(coords), len(coords)),
+          ).tocsr()
+          mst = minimum_spanning_tree(graph).tocoo()
+          mst_edges = sorted(
+              (float(w), int(u), int(v))
+              for u, v, w in zip(mst.row, mst.col, mst.data, strict=True)
+          )
+          if len(mst_edges) != len(coords) - 1:
+              raise RuntimeError("Euclidean Delaunay graph did not yield a spanning tree")
+
+          parent = list(range(len(coords)))
+          size = [1] * len(coords)
+          largest = 1
+          component_count = len(coords)
+          def find(x):
+              while parent[x] != x:
+                  parent[x] = parent[parent[x]]
+                  x = parent[x]
+              return x
+          def union(a, b):
+              nonlocal_dummy = None
+              nonlocal_dummy
+              ra, rb = find(a), find(b)
+              if ra == rb:
+                  return
+              if size[ra] < size[rb]:
+                  ra, rb = rb, ra
+              parent[rb] = ra
+              size[ra] += size[rb]
+              return size[ra]
+
+          targets = [float(value) for value in registry["structural_scale_targets_lcc"]]
+          thresholds = [None] * len(targets)
+          target_index = 0
+          largest = 1
+          for weight, u, v in mst_edges:
+              new_size = union(u, v)
+              if new_size is not None:
+                  component_count -= 1
+                  largest = max(largest, int(new_size))
+              achieved = largest / len(coords)
+              while target_index < len(targets) and achieved >= targets[target_index] - 1e-15:
+                  thresholds[target_index] = weight
+                  target_index += 1
+              if target_index == len(targets):
+                  break
+          if any(value is None for value in thresholds):
+              raise RuntimeError("MST failed to realize frozen structural LCC targets")
+          thresholds = [float(value) for value in thresholds]
+
+          # Compute exact graph summaries at each frozen threshold using cKDTree.
+          tree = cKDTree(coords)
+          nearest = tree.query(coords, k=2)[0][:, 1]
+          levels = []
+          for target, threshold in zip(targets, thresholds, strict=True):
+              pairs = tree.query_pairs(threshold + 1e-9, output_type="ndarray")
+              p = list(range(len(coords)))
+              s = [1] * len(coords)
+              largest_level = 1
+              comps = len(coords)
+              def f(x):
+                  while p[x] != x:
+                      p[x] = p[p[x]]
+                      x = p[x]
+                  return x
+              for u, v in pairs:
+                  u, v = int(u), int(v)
+                  ru, rv = f(u), f(v)
+                  if ru == rv:
+                      continue
+                  if s[ru] < s[rv]:
+                      ru, rv = rv, ru
+                  p[rv] = ru
+                  s[ru] += s[rv]
+                  comps -= 1
+                  largest_level = max(largest_level, s[ru])
+              levels.append({
+                  "target_lcc_fraction": target,
+                  "distance_threshold_m": threshold,
+                  "achieved_lcc_fraction": largest_level / len(coords),
+                  "component_count": comps,
+                  "isolated_fraction": float(np.mean(nearest > threshold + 1e-9)),
+                  "undirected_edge_count": int(len(pairs)),
+              })
+
+          positive_unique = sorted({value for value in thresholds if value > 0})
+          if len(positive_unique) < int(registry["minimum_distinct_positive_thresholds"]):
+              raise RuntimeError(
+                  f"structural scale collapse: only {len(positive_unique)} positive thresholds {positive_unique}"
+              )
+          broadest = levels[-1]
+          if broadest["achieved_lcc_fraction"] < float(registry["broadest_minimum_lcc_fraction"]):
+              raise RuntimeError("broadest world fails frozen LCC minimum")
+          if broadest["isolated_fraction"] > float(registry["broadest_maximum_isolated_fraction"]):
+              raise RuntimeError("broadest world fails frozen isolated-node maximum")
+
+          registry_fp = hashlib.sha256(json.dumps(
+              [[row["node_id"], row["x"], row["y"], row["area"]] for row in selected],
+              separators=(",", ":"),
+              ensure_ascii=True,
+          ).encode()).hexdigest()
+          scale_fp = hashlib.sha256(json.dumps(
+              levels,
+              sort_keys=True,
+              separators=(",", ":"),
+              ensure_ascii=True,
+          ).encode()).hexdigest()
+
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "status": "response_blind_patch_registry_and_structural_geometry_pass",
+              "patch_path": path,
+              "observed_bytes": len(payload),
+              "observed_sha256": observed_sha,
+              "delimiter": delimiter,
+              "physical_header": fieldnames,
+              "row_count": len(rows),
+              "node_count": len(selected),
+              "registry_fingerprint": registry_fp,
+              "crs": registry["crs"],
+              "distance_metric": registry["distance_metric"],
+              "coordinate_bounds": {
+                  "x_min": float(np.min(coords[:, 0])),
+                  "x_max": float(np.max(coords[:, 0])),
+                  "y_min": float(np.min(coords[:, 1])),
+                  "y_max": float(np.max(coords[:, 1])),
+              },
+              "area_bounds_m2": {
+                  "min": float(min(row["area"] for row in selected)),
+                  "max": float(max(row["area"] for row in selected)),
+              },
+              "preflight": {
+                  "status": preflight.status,
+                  "fingerprint": preflight.fingerprint,
+              },
+              "structural_levels": levels,
+              "distinct_positive_threshold_count": len(positive_unique),
+              "scale_ladder_fingerprint": scale_fp,
+              "patch_registry_authorization_requests": 1,
+              "patch_registry_payload_get_requests": 1,
+              "patch_registry_payload_opened": True,
+              "locality_visit_authorization_requests": 0,
+              "locality_visit_payload_opened": False,
+              "nest_authorization_requests": 0,
+              "nest_payload_opened": False,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+          Path(
+              "build/aland_glanville_patch_geometry/patch_geometry.json"
+          ).write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Assert strict pre-response boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path(
+              "build/aland_glanville_patch_geometry/patch_geometry.json"
+          ).read_text())
+          assert result["status"] == "response_blind_patch_registry_and_structural_geometry_pass"
+          assert result["patch_registry_payload_opened"] is True
+          assert result["locality_visit_authorization_requests"] == 0
+          assert result["locality_visit_payload_opened"] is False
+          assert result["nest_authorization_requests"] == 0
+          assert result["nest_payload_opened"] is False
+          assert result["response_rows_opened"] is False
+          assert result["response_values_opened"] is False
+          assert result["model_fits"] == 0
+          assert result["heldout_scores"] == 0
+          print("Aland patch-registry geometry firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aland-glanville-patch-registry-geometry
+          path: build/aland_glanville_patch_geometry/patch_geometry.json
+          if-no-files-found: error
