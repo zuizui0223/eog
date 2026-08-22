@@ -206,6 +206,25 @@
     "maximum_header_bytes": 2048,
     "delimiter": ",",
     "require_exact_order": true,
+    "expected_header_text": "\"recordID\",\"month\",\"day\",\"year\",\"period\",\"plot\",\"note1\",\"stake\",\"species\",\"sex\",\"reprod\",\"age\",\"testes\",\"vagina\",\"pregnant\",\"nipples\",\"lactation\",\"hfl\",\"wgt\",\"tag\",\"note2\",\"ltag\",\"note3\",\"prevrt\",\"prevlet\",\"nestdir\",\"neststk\",\"note4\",\"note5\",\"pit_tag\",\"id\"",
+    "expected_header_sha256": "a0636e62bfc997b0cc42644d7df1fa55f964705c0985f694b6c40935083b6bda",
+    "expected_terminator": "LF",
+    "expected_header_content_bytes": 256,
+    "expected_bytes_consumed_including_terminator": 257,
+    "expected_columns": [
+      "recordID", "month", "day", "year", "period", "plot", "note1", "stake",
+      "species", "sex", "reprod", "age", "testes", "vagina", "pregnant",
+      "nipples", "lactation", "hfl", "wgt", "tag", "note2", "ltag", "note3",
+      "prevrt", "prevlet", "nestdir", "neststk", "note4", "note5", "pit_tag", "id"
+    ],
+    "stage_one_evidence": {
+      "workflow_run_id": 32567630732,
+      "artifact_id": 9474502148,
+      "artifact_sha256": "00ebfe3107d4163d621a5ec72823570f66cfe1397625e60aab7ff366fae497d2",
+      "preflight_fingerprint": "ff9c28411e2faad45c949e6a321f63f9b72ad9dfadaf174c2c3e09dd781ba552",
+      "matched_candidate_index_one_based": 2,
+      "header_gate_fingerprint": "252660c84b4869dfdea2f55fe93f6d4ce04aa67f86587034f5e67e30d8b7de99"
+    },
     "candidate_columns": [
       [
         "recordID", "month", "day", "year", "period", "plot", "note1", "stake",
@@ -220,14 +239,262 @@
         "prevrt", "prevlet", "nestdir", "neststk", "note4", "note5", "pit_tag", "id"
       ]
     ],
-    "candidate_basis": "official current writer fixes 31 columns and official EML/Methods disagree only on prevlet versus prevlt; this finite pair is frozen before physical header access"
+    "candidate_basis": "official current writer fixes 31 columns and official EML/Methods disagree only on prevlet versus prevlt; the bounded physical header matched the prospectively frozen prevlet candidate before any response row/value access"
+  },
+  "freezes": {
+    "source_identity": {
+      "official_repository": "weecology/PortalData",
+      "repository_commit": "e3307bf4cb42e7f3c550b0d9bcb747a837fc73b3",
+      "repository_version": "6.96.0",
+      "data_concept_doi": "10.5281/zenodo.1215988",
+      "data_paper_doi": "10.1101/332783",
+      "fixed_file_git_blobs": {
+        "SiteandMethods/Methods.md": "c196c58d5a9a71685fe739ba9af127bed455197d",
+        "SiteandMethods/Portal_UTMCoords.csv": "fa96bd174b28767acb27758fddaca0b51676800f",
+        "SiteandMethods/Portal_plots.csv": "d4502de80688bd42b52eee1f9e0b8bc429385178",
+        "Rodents/Portal_rodent_trapping.csv": "e405c7669c9a25a9111527270cdaec7af26f31c7",
+        "Rodents/Portal_rodent_species.csv": "bcecdbeab3fb364a7712d17486fa12b5ceda835f",
+        "Rodents/README.md": "1d8ad18094ef38e136759bf6fdb1c94d4e5feea3",
+        "Rodents/moon_dates.csv": "0e32369bfede619ba8b0eea952a3fcf77edb60ff",
+        "DataCleaningScripts/new_rodent_data.r": "0b3c058a002e3ec083a9fc4812fddb37c5c8ddb5",
+        "EML/eml_portal_data.R": "45672488bf0682ddd14b11396b16ed1beb25e5b3"
+      },
+      "stage_one_source_contract_sha256": "a62d8f623d9b0e428d734398f1217444a1cdf87ddf52273f5f3fe604f8653f4d"
+    },
+    "response_identity": {
+      "path": "Rodents/Portal_rodent.csv",
+      "git_blob_sha1": "daac4615a868339e3c1f77b35ceebf005e1240ad",
+      "size": 7342949,
+      "physical_header_schema_id": "portal_dm_response_header_candidate_2_v1",
+      "physical_header_sha256": "a0636e62bfc997b0cc42644d7df1fa55f964705c0985f694b6c40935083b6bda",
+      "physical_header_gate_fingerprint": "252660c84b4869dfdea2f55fe93f6d4ce04aa67f86587034f5e67e30d8b7de99",
+      "full_downloads_per_authorized_run": 1,
+      "response_rows_opened_before_freeze": false,
+      "response_values_opened_before_freeze": false
+    },
+    "node_geometry": {
+      "analysis_node_ids": [
+        "plot_01", "plot_02", "plot_03", "plot_04", "plot_05", "plot_06",
+        "plot_07", "plot_08", "plot_09", "plot_10", "plot_11", "plot_12",
+        "plot_13", "plot_14", "plot_15", "plot_16", "plot_17", "plot_18",
+        "plot_19", "plot_20", "plot_21", "plot_22", "plot_23", "plot_24"
+      ],
+      "point_construction": "arithmetic mean east/north over exactly 49 released type=stake coordinate rows per plot, retaining all released flags and the plot-1 54/55 label anomaly without repair or imputation",
+      "center_fingerprint": "9c2c97734a8bb448e08ebffb24ebce22473b2a455b0b52645a83aeb5e02af5ce",
+      "minimum_pair_distance_m": 73.95061497735496,
+      "maximum_pair_distance_m": 524.2325548975788,
+      "pair_count": 276,
+      "closed_registry": true,
+      "exact_plot_id_supervised": false
+    },
+    "response_semantics": {
+      "endpoint": "observed monthly plot-level Dipodomys merriami capture reappearance",
+      "risk_set": "plot admitted by the frozen effort rule in both source and target periods and with zero exact DM capture rows in the source period",
+      "event": "risk-set plot has one or more exact DM capture rows in the target period",
+      "non_event": "risk-set plot has zero exact DM capture rows in the target period",
+      "source_state": "all source-period plots admitted by the frozen effort rule with one or more exact DM capture rows",
+      "focal_token": "species must equal DM exactly; no trimming, casefolding, aliasing or token repair",
+      "numeric_tokens": "recordID, focal period and focal plot must parse as finite exact integers; normal-protocol focal rows must join the closed period/plot registry",
+      "zero_boundary": "zero is inferred only through the separate sampled=1, effort>=47, qcflag=1 ledger",
+      "negative_period_policy": "focal rows with period<=0 are audited and excluded as special non-census trapping",
+      "physical_header_columns": [
+        "recordID", "month", "day", "year", "period", "plot", "note1", "stake",
+        "species", "sex", "reprod", "age", "testes", "vagina", "pregnant",
+        "nipples", "lactation", "hfl", "wgt", "tag", "note2", "ltag", "note3",
+        "prevrt", "prevlet", "nestdir", "neststk", "note4", "note5", "pit_tag", "id"
+      ],
+      "boundary": "observed capture reappearance conditional on current recorded internal sources; not latent occupancy, external immigration, ancestry, demographic recruitment, or individual movement"
+    },
+    "temporal_split": {
+      "temporal_adjacency": "source and target map to consecutive newmoonnumber values with at least one response-independent risk-eligible plot",
+      "declared_scored_transition_count": 460,
+      "calibration_rule": "target census year <=2011",
+      "calibration_transition_count": 373,
+      "calibration_potential_plot_rows": 8675,
+      "heldout_rule": "target census year in 2012..2019",
+      "heldout_transition_count": 87,
+      "heldout_potential_plot_rows": 1888,
+      "outer_score_unit": "target census year",
+      "outer_score_units": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
+      "expected_outer_score_units": 8,
+      "fit_policy": "fit once on pooled calibration risk rows only; never refit on heldout outcomes",
+      "sequential_layer_a_policy": "each transition is predicted before that transition's outcomes may monotonically update Layer A for later transitions",
+      "zero_risk_gap": {"newmoonnumber": 297, "source_period": 277, "target_period": 278, "target_date": "2001-07-21"}
+    },
+    "count_gate": {
+      "must_run_before_any_layer_a_update_or_model_fit": true,
+      "calibration_events": 40,
+      "calibration_non_events": 200,
+      "heldout_events": 16,
+      "heldout_non_events": 80,
+      "heldout_outer_units_with_both_classes": 8,
+      "heldout_outer_units_with_rows": 8,
+      "require_every_scored_transition_has_current_internal_source": true,
+      "failure_action": "write immutable non-estimable result with zero Layer-A updates, zero model fits and zero heldout scores"
+    },
+    "process_source": {
+      "conditioning_boundary": "the claim is conditional on realized current captured DM sources inside the closed 24-plot registry",
+      "external_sources": "not represented and not inferred; no external or memory source may be added after response access",
+      "one_step_scope": "each scored consecutive-newmoon forecast uses its own observed source-period conditioning state; no ancestry or continuity is inferred across the unscored gap",
+      "full_support_relation": "the frozen full-support world permits every distinct internal plot pair",
+      "response_blind_closure_status": "temporal_source_closure_pass",
+      "response_blind_closure_transition_count": 460,
+      "response_blind_closure_declaration_fingerprint": "61c048d9af6133c64a216dd15b6e9b9a4b301d25bc5a600cf42bd80b2a19709d",
+      "minimum_possible_internal_source_count": 11,
+      "claim_limit": "internal source-conditioned predictive support, not biological closure or historical movement"
+    },
+    "world_scale": {
+      "axis": "response-independent UTM Euclidean plot-center distance in meters",
+      "lcc_targets": [0.25, 0.5, 0.75],
+      "thresholds_m": [76.05553519036314, 89.40034001122076, 98.43596865180841],
+      "world_ids": [
+        "portal_plot_euclidean_m_lcc250",
+        "portal_plot_euclidean_m_lcc500",
+        "portal_plot_euclidean_m_lcc750",
+        "portal_plot_euclidean_full"
+      ],
+      "kernel_scale_m": 89.40034001122076,
+      "kernel_scale_basis": "response-blind 50-percent LCC threshold; analytical decay scale, not fitted movement distance",
+      "loss_support": 1.0,
+      "support_tolerance": 1e-15,
+      "threshold_interpretation": "minimal response-blind structural LCC regimes, not biological dispersal limits"
+    },
+    "structural_adequacy": {
+      "required_distinct_lcc_thresholds": 3,
+      "minimum_largest_weak_component_fraction_for_one_world": 0.75,
+      "maximum_isolated_node_fraction_for_one_world": 0.25,
+      "require_at_least_one_world_pass": true,
+      "passing_world_ids": ["portal_plot_euclidean_full", "portal_plot_euclidean_m_lcc750"],
+      "forecast_horizon": 1,
+      "expected_node_count": 24,
+      "expected_pair_count": 276,
+      "matrix_symmetric": true,
+      "world_identity_supervised_column": false,
+      "stage_one_gate_fingerprint": "6d803c46ef579cd3e0b023fe23818f0880bfdb9a00af0935ebc21be4c1ca48dc"
+    },
+    "layer_a_rules": {
+      "declared_world_count": 4,
+      "current_sources": "all effort-eligible plots with one or more exact DM capture rows in source period",
+      "source_weights": "equal normalized weight across current internal source plots",
+      "hard_world_support": "exp(-distance/kernel_scale) for distinct pairs at or below each frozen LCC threshold, otherwise zero",
+      "full_world_support": "exp(-distance/kernel_scale) for every distinct plot pair",
+      "transition_normalization": "Q[s,j]=W[s,j]/(1+sum_k W[s,k]); target support is the equal-current-source mean of Q[s,j]",
+      "update": "after each observed transition, eliminate a surviving rule if any event target has support at or below 1e-15",
+      "monotonicity": "worlds may only remain or be eliminated; eliminated worlds never return",
+      "all_eliminated": "stop and report frozen-universe falsification without scale or source rescue",
+      "world_labels_used_for_prediction": false,
+      "new_ecological_operator_added": false
+    },
+    "layer_b_representation": {
+      "implementation": "eog.v2.world_predictive_summary.summarize_worldset_for_prediction",
+      "representation_name": "symmetric_world_support_summary_v1",
+      "feature_names": [
+        "surviving_world_fraction", "support_mean", "support_std", "support_min",
+        "support_max", "support_q25", "support_q50", "support_q75",
+        "positive_support_fraction", "support_range"
+      ],
+      "world_label_invariant": true,
+      "exact_world_id_exposed_to_learner": false,
+      "unchanged_from_frozen_production_implementation": true
+    },
+    "comparators": {
+      "baseline": "frozen strong random forest with season/trend, UTM geometry, target treatment, effort, conventional source-distance/capture exposure and lagged target history predictors",
+      "augmented": "the identical frozen learner and identical conventional predictors plus the unchanged ten-column Layer-B block",
+      "only_difference": "Layer-B feature block",
+      "same_rows_labels_split_preprocessing_fit_policy_and_hyperparameters": true
+    },
+    "preprocessing_model_fit": {
+      "python": "3.12",
+      "numpy": "2.3.5",
+      "scikit_learn": "1.8.0",
+      "seed": 20260822,
+      "learner": "sklearn.ensemble.RandomForestClassifier",
+      "hyperparameters": {
+        "n_estimators": 1000,
+        "max_features": "sqrt",
+        "min_samples_leaf": 10,
+        "class_weight": null,
+        "random_state": 20260822,
+        "n_jobs": 1
+      },
+      "baseline_feature_names": [
+        "target_newmoon_index_scaled", "target_newmoon_index_scaled_squared",
+        "target_year_index", "target_month_sin", "target_month_cos",
+        "observation_gap_days", "utm_easting_centered_km",
+        "utm_northing_centered_km", "target_mean_distance_m",
+        "target_nearest_other_plot_m", "target_degree_lcc250",
+        "target_degree_lcc500", "target_degree_lcc750", "source_effort_traps",
+        "target_effort_traps", "treatment_control", "treatment_exclosure",
+        "treatment_removal", "treatment_setup", "treatment_spectabs",
+        "resourcetreatment_na", "resourcetreatment_all_annuals",
+        "resourcetreatment_biseas_annuals", "resourcetreatment_large_seeds",
+        "resourcetreatment_mixed_pulse", "resourcetreatment_mixed_seeds",
+        "resourcetreatment_none", "resourcetreatment_small_seeds",
+        "resourcetreatment_summer_annuals", "resourcetreatment_winter_annuals",
+        "anttreatment_na", "anttreatment_all_ants", "anttreatment_none",
+        "anttreatment_rugosus", "current_source_count",
+        "log1p_current_source_captures", "current_source_mean_positive_captures",
+        "nearest_current_source_distance_m", "target_never_previously_positive",
+        "target_newmoons_since_last_positive", "target_prior_positive_period_count",
+        "log1p_target_cumulative_prior_captures", "source_count_lcc250",
+        "source_count_lcc500", "source_count_lcc750",
+        "source_exponential_exposure_lcc250",
+        "source_exponential_exposure_lcc500",
+        "source_exponential_exposure_lcc750", "source_exponential_exposure_full",
+        "capture_weighted_exposure_lcc250", "capture_weighted_exposure_lcc500",
+        "capture_weighted_exposure_lcc750", "capture_weighted_exposure_full"
+      ],
+      "treatment_categories": {
+        "treatment": ["control", "exclosure", "removal", "setup", "spectabs"],
+        "resourcetreatment": ["NA", "all_annuals", "biseas_annuals", "large_seeds", "mixed_pulse", "mixed_seeds", "none", "small_seeds", "summer_annuals", "winter_annuals"],
+        "anttreatment": ["NA", "all_ants", "none", "rugosus"]
+      },
+      "forbidden_response_derived_predictors": [
+        "target-period capture count", "target-period label", "exact plot ID", "exact world ID"
+      ],
+      "missing_value_policy": "no imputation; fail closed on any nonfinite predictor or focal identity",
+      "exact_plot_id_supervised": false,
+      "exact_world_id_supervised": false
+    },
+    "metrics_decision": {
+      "primary_metric": "binary_log_loss",
+      "probability_clip": 0.000001,
+      "macro_unit": "heldout target census year",
+      "expected_outer_unit_count": 8,
+      "lower_is_better": true,
+      "favorable_min_augmented_wins": 5,
+      "adverse_min_baseline_wins": 5,
+      "tie_tolerance": 0.0,
+      "favorable": "favorable_complementary_added_value",
+      "null": "no_confirmed_complementary_added_value",
+      "adverse": "adverse_complementary_added_value"
+    },
+    "runtime_runner": {
+      "path": "benchmarks/run_portal_dm_paired_complementarity_once.py",
+      "sha256": "ea5d1be4de93b4ce08b5852464abb7b0741ca7d5bc47c32c38548327c755d687",
+      "response_full_downloads_per_authorized_run": 1,
+      "response_header_range_reads_before_authorization": true,
+      "synthetic_smoke_core_fingerprint": null,
+      "outcome_retry_policy": "none",
+      "outcome_invocation": "one marker-only GitHub Actions commit"
+    },
+    "non_estimable_stop": {
+      "exact_count_gate_first": true,
+      "zero_layer_a_update_on_count_failure": true,
+      "zero_fit_on_count_failure": true,
+      "zero_score_on_count_failure": true,
+      "no_post_open_redesign": true,
+      "no_post_open_retry": true,
+      "schema_or_identity_failure_after_open_is_terminal": true,
+      "result_recording_after_open_is_not_redesign": true
+    }
   },
   "stage_boundary": {
-    "stage": "response_blind_candidate_geometry_effort_closure_and_bounded_header",
+    "stage": "response_blind_full_runner_freeze_smoke_fingerprint_pending",
     "complete_outcome_access_freeze_present": false,
     "outcome_access_authorized": false,
     "response_download_budget": 0,
-    "next_if_green": "freeze the one observed physical header, full 16-key paired contract, exact-count-first runner and synthetic smoke before adding a marker-only once authorization commit",
+    "next_if_green": "run the deterministic response-free full-path smoke, freeze its core fingerprint, then require a green 16-key authorization gate before adding a marker-only once authorization commit",
     "failure_action": "record the pre-response stop and do not redesign this candidate after opening any response row"
   }
 }

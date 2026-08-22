@@ -99,6 +99,27 @@ def download_nonresponse(path: str, contract: dict, audit: dict) -> bytes:
     return payload
 
 
+def download_response_once(contract: dict, audit: dict) -> bytes:
+    """Open the pinned response blob once after marker-bound authorization."""
+
+    path = contract["response_file"]
+    spec = contract["files"][path]
+    if spec["role"] != "response":
+        raise RuntimeError("declared response path does not have the response role")
+    if audit["response_download_requests"]:
+        raise RuntimeError("response download budget already exhausted")
+    audit["response_download_requests"].append(path)
+    payload = _bounded_get(_raw_url(contract, path), int(spec["size"]), role=path)
+    audit["response_payload_bytes_opened"] = len(payload)
+    audit["response_rows_opened"] = True
+    audit["response_values_opened"] = True
+    if len(payload) != int(spec["size"]):
+        raise RuntimeError("once-opened response size mismatch")
+    if git_blob_sha1(payload) != spec["git_blob_sha1"]:
+        raise RuntimeError("once-opened response Git blob mismatch")
+    return payload
+
+
 def _proxy_headers(proxy) -> dict[str, str]:  # noqa: ANN001
     if proxy is None or proxy.username is None:
         return {}

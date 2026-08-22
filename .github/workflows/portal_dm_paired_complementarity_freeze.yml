@@ -1,0 +1,132 @@
+name: Portal DM paired complementarity full freeze
+
+on:
+  push:
+    branches:
+      - agent/fresh-candidate-next
+    paths:
+      - ".github/workflows/portal_dm_paired_complementarity_freeze.yml"
+      - "benchmarks/run_portal_dm_paired_complementarity_once.py"
+      - "validation/portal_dm_paired_complementarity/**"
+  pull_request:
+    paths:
+      - ".github/workflows/portal_dm_paired_complementarity_freeze.yml"
+      - "benchmarks/run_portal_dm_paired_complementarity_once.py"
+      - "validation/portal_dm_paired_complementarity/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  response-blind-full-freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install frozen paired environment
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scikit-learn==1.8.0"
+          python -m pip install -e .
+      - name: Re-run response-blind stage one
+        run: |
+          set -euo pipefail
+          python validation/portal_dm_paired_complementarity/preflight.py \
+            build/portal_dm_paired_complementarity/full_freeze/stage_one
+      - name: Run deterministic response-free full-path smoke
+        run: |
+          set -euo pipefail
+          python benchmarks/run_portal_dm_paired_complementarity_once.py \
+            --mode smoke \
+            --output build/portal_dm_paired_complementarity/full_freeze/smoke.json
+      - name: Assert smoke firewall and paired path
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(Path(
+              "build/portal_dm_paired_complementarity/full_freeze/smoke.json"
+          ).read_text())
+          assert result["status"] == "smoke_pass"
+          assert result["response_download_requests"] == []
+          assert result["response_payload_bytes_opened"] == 0
+          assert result["response_rows_opened"] is False
+          assert result["exact_count_gate"]["passed"] is True
+          assert result["exact_count_gate"]["outcome_dependent_operation_index"] == 1
+          assert result["models_fit"] == 2
+          assert result["heldout_scores"] == 16
+          assert result["model_feature_audit"]["exact_world_id_supervised"] is False
+          assert result["model_feature_audit"]["only_augmented_difference"] == [
+              "surviving_world_fraction", "support_mean", "support_std", "support_min",
+              "support_max", "support_q25", "support_q50", "support_q75",
+              "positive_support_fraction", "support_range",
+          ]
+          assert result["smoke_core_fingerprint"]
+          print(json.dumps({
+              "status": result["status"],
+              "smoke_core_fingerprint": result["smoke_core_fingerprint"],
+              "models_fit": result["models_fit"],
+              "heldout_scores": result["heldout_scores"],
+              "response_payload_bytes_opened": 0,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Run complete 16-key gate when smoke fingerprint is frozen
+        run: |
+          set -euo pipefail
+          if python - <<'PY'
+          import json
+          from pathlib import Path
+          value = json.loads(Path(
+              "validation/portal_dm_paired_complementarity/source_contract.json"
+          ).read_text())["freezes"]["runtime_runner"]["synthetic_smoke_core_fingerprint"]
+          raise SystemExit(0 if isinstance(value, str) and value else 1)
+          PY
+          then
+            python validation/portal_dm_paired_complementarity/freeze_gate.py \
+              build/portal_dm_paired_complementarity/full_freeze/stage_one/preflight.json \
+              build/portal_dm_paired_complementarity/full_freeze/smoke.json \
+              build/portal_dm_paired_complementarity/full_freeze/authorization.json
+          else
+            echo "Smoke core fingerprint pending prospective freeze; outcome remains unauthorized."
+          fi
+      - name: Assert current stage boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          contract = json.loads(Path(
+              "validation/portal_dm_paired_complementarity/source_contract.json"
+          ).read_text())
+          expected = contract["freezes"]["runtime_runner"][
+              "synthetic_smoke_core_fingerprint"
+          ]
+          authorization = Path(
+              "build/portal_dm_paired_complementarity/full_freeze/authorization.json"
+          )
+          if expected is None:
+              assert authorization.exists() is False
+              assert contract["stage_boundary"][
+                  "complete_outcome_access_freeze_present"
+              ] is False
+          else:
+              result = json.loads(authorization.read_text())
+              assert result["status"] == "authorized_once_only_exact_count_gate_required"
+              assert result["prospective_estimability"]["status"] == "uncertain_pre_response"
+              assert result["response_rows_opened"] is False
+              assert result["model_fits"] == 0
+              assert result["heldout_scores"] == 0
+          PY
+      - name: Upload response-blind full-freeze evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portal-dm-response-blind-full-freeze
+          path: build/portal_dm_paired_complementarity/full_freeze/
+          if-no-files-found: error

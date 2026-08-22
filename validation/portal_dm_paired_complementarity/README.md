@@ -36,3 +36,17 @@ If stage one is green, the exact observed physical header and derived geometry e
 will be frozen with the complete 16-key outcome-access ledger, identical strong learners,
 the unchanged `symmetric_world_support_summary_v1`, exact count minima and a synthetic
 full-path smoke test. Only a later marker-only commit may authorize one response opening.
+
+Stage one is green. The bounded header matched the prospectively declared `prevlet`
+candidate at 256 content bytes plus one LF byte; no response row or value was opened.
+The paired runner now freezes a 53-column conventional baseline (time/season, plot-center
+geometry, treatment, effort, conventional current-source exposure and lagged target
+history) and an otherwise identical random forest augmented only by the unchanged
+ten-column Layer-B block. Exact plot and world identifiers are not supervised.
+
+Published materials do not supply endpoint-matched split-specific counts for this monthly
+zero-to-positive DM risk table, so prospective estimability remains explicitly uncertain.
+The once-only runner must therefore compute the frozen exact event/non-event and eight-year
+both-class gate as its first outcome-dependent analytical operation. A deterministic
+synthetic full-path smoke is run first; its core fingerprint must be frozen before the
+16-key authorization gate can turn green.
