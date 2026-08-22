@@ -50,3 +50,9 @@ The once-only runner must therefore compute the frozen exact event/non-event and
 both-class gate as its first outcome-dependent analytical operation. A deterministic
 synthetic full-path smoke is run first; its core fingerprint must be frozen before the
 16-key authorization gate can turn green.
+
+The response-free smoke passed with core fingerprint
+`82df01921f770c5a692a6847c3d94f42c65e9bcb3ef910c69da950b57e9b7b3b` and is now frozen.
+Its synthetic paired classification is only a deterministic plumbing control and is not
+Portal evidence. Outcome access remains unexecuted until the reproduced smoke and full
+16-key gate are green and a separate marker-only commit binds their fingerprints.

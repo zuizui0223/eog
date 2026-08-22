@@ -475,7 +475,12 @@
       "sha256": "22dfcfa274a53d598245e8842abd6f883ed604626341a488646473399199f46d",
       "response_full_downloads_per_authorized_run": 1,
       "response_header_range_reads_before_authorization": true,
-      "synthetic_smoke_core_fingerprint": null,
+      "synthetic_smoke_core_fingerprint": "82df01921f770c5a692a6847c3d94f42c65e9bcb3ef910c69da950b57e9b7b3b",
+      "synthetic_smoke_fixture_fingerprint": "136bbd023b9fd68e8990e68ecf08b45fc0c0efed1a7e071d186d1f68a00bb58f",
+      "synthetic_smoke_result_fingerprint_before_core_freeze": "196d34618b7f6321df96f6d5319fe80f0780a22cab61edc93c88dae4cc55b12f",
+      "synthetic_smoke_workflow_run_id": 32568629985,
+      "synthetic_smoke_artifact_id": 9474739877,
+      "synthetic_smoke_artifact_sha256": "6e71850f6a08e0bb6eeeaa2956688371e6dbfab2a7f98df71d1e79fa513779d0",
       "outcome_retry_policy": "none",
       "outcome_invocation": "one marker-only GitHub Actions commit"
     },
@@ -491,11 +496,11 @@
     }
   },
   "stage_boundary": {
-    "stage": "response_blind_full_runner_freeze_smoke_fingerprint_pending",
-    "complete_outcome_access_freeze_present": false,
+    "stage": "response_blind_complete_16_key_freeze_and_synthetic_smoke",
+    "complete_outcome_access_freeze_present": true,
     "outcome_access_authorized": false,
     "response_download_budget": 0,
-    "next_if_green": "run the deterministic response-free full-path smoke, freeze its core fingerprint, then require a green 16-key authorization gate before adding a marker-only once authorization commit",
+    "next_if_green": "require the frozen smoke to reproduce and the 16-key gate to authorize; only then add a marker-only once authorization commit",
     "failure_action": "record the pre-response stop and do not redesign this candidate after opening any response row"
   }
 }
