@@ -1,0 +1,12 @@
+{
+  "attempt_id": "mt_gibson_phascogale_fresh_paired_v1",
+  "authorized_parent_commit": "d17c90c17017c617583b33c90204c1f0dfb5d560",
+  "contract_sha256": "fc4bae378eb0bb73dc4aaf1c6fe63e5dbb476cde29784dca5596e09451dde7d4",
+  "runner_sha256": "e54c710efef6b3f571922b26bc7f7ee665316a1a4bd92ff7a258664bb4f8f47c",
+  "preflight_fingerprint": "7d2b380c6f0ee4636aeac82828bff454aae3f416865e10f1bd466dcc164c81b1",
+  "outcome_access_gate_fingerprint": "29985c83f2c7cd9dfe16fe7b602cd82ce803e8d6e84a797f83e96277bd03d110",
+  "invocation_budget": 1,
+  "response_rows_opened": false,
+  "no_retry": true,
+  "no_post_open_redesign": true
+}
