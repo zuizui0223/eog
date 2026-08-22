@@ -1,0 +1,97 @@
+{
+  "attempt_id": "rmap_2012_2019_figshare_v2_fresh_paired_v1",
+  "status": "ineligible_pre_response",
+  "stage": "gate0_to_gate1_file_role_separability",
+  "source_identity": {
+    "article_id": 31257466,
+    "version": 2,
+    "doi": "10.6084/m9.figshare.31257466.v2",
+    "title": "Rocky Mountain Amphibian Project occupancy data and analyses",
+    "modified_date": "2026-08-18T16:25:05Z"
+  },
+  "evidence_provenance": {
+    "workflow_run_id": 32547060128,
+    "workflow_conclusion": "success",
+    "artifact_id": 9468837870,
+    "artifact_name": "rmap-response-blind-metadata-inventory",
+    "artifact_digest": "sha256:03a060895dcfaf27399f679b8cb9857b22201655ff01e7f8f7235d5c70b487a2"
+  },
+  "observed_top_level_files": [
+    {
+      "id": 61646542,
+      "name": "RMAP_Readme.txt",
+      "size": 7886,
+      "md5": "e2cab456c03577e0c7431bc6e1bc7b58",
+      "conservative_preopen_role": "documentation"
+    },
+    {
+      "id": 61646545,
+      "name": "bcf.ch_bayesian.csv",
+      "size": 875377,
+      "md5": "4fa699e9fa07da0cb15bfea59f926591",
+      "conservative_preopen_role": "species_specific_response_bearing_capture_history"
+    },
+    {
+      "id": 61646548,
+      "name": "bt.ch_bayesian.csv",
+      "size": 875377,
+      "md5": "217d0635f6fb4e31ee09e7c0513471a0",
+      "conservative_preopen_role": "species_specific_response_bearing_capture_history"
+    },
+    {
+      "id": 61646551,
+      "name": "csf.ch_bayesian.csv",
+      "size": 310108,
+      "md5": "dd79475616a6de86a557d257d9304075",
+      "conservative_preopen_role": "species_specific_response_bearing_capture_history"
+    },
+    {
+      "id": 61646554,
+      "name": "nlf.ch_bayesian.csv",
+      "size": 565485,
+      "md5": "82e6331c1eb2c48908d0b28e21eb1774",
+      "conservative_preopen_role": "species_specific_response_bearing_capture_history"
+    },
+    {
+      "id": 61646557,
+      "name": "ts.ch_bayesian.csv",
+      "size": 875377,
+      "md5": "b8e9af3929f7283756804d7c8d5ac849",
+      "conservative_preopen_role": "focal_species_response_bearing_capture_history"
+    },
+    {
+      "id": 61646560,
+      "name": "wf.ch_bayesian.csv",
+      "size": 592764,
+      "md5": "058ad5de7674e0156ed582766acf7099",
+      "conservative_preopen_role": "species_specific_response_bearing_capture_history"
+    },
+    {
+      "id": 67288517,
+      "name": "RMAP_Autologistic_Code.txt",
+      "size": 36656,
+      "md5": "7ac0b8ca4ecfaa8e9dc5abda14be7a18",
+      "conservative_preopen_role": "analysis_code"
+    }
+  ],
+  "separately_identifiable_registry_files": [],
+  "separately_identifiable_coordinate_geometry_files": [],
+  "frozen_requirements": {
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "stop_reason": "The exact top-level inventory contains no independently identifiable site registry or coordinate geometry source. Recovering node membership or geometry from the focal ts.ch_bayesian.csv would require opening a response-bearing capture-history file before the closed registry and geometry were frozen. The prospective contract forbids that operation.",
+  "response_firewall": {
+    "metadata_request_urls": [
+      "https://api.figshare.com/v2/articles/31257466/versions/2"
+    ],
+    "file_download_requests": [],
+    "file_payload_bytes_opened": 0,
+    "archive_member_bytes_opened": 0,
+    "response_rows_opened": false
+  },
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "next": "close this candidate-specific attempt and select a new source with a response-independent closed registry and coordinate geometry identity"
+}
