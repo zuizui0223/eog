@@ -23,9 +23,13 @@ import urllib.request
 import zlib
 
 
-ARCHIVE_URL = "https://datadryad.org/downloads/file_stream/4657362"
+ARCHIVE_URL = "https://datadryad.org/api/v2/files/4657362/download"
 DATASET_DOI = "10.5061/dryad.80gb5mm4h"
-USER_AGENT = "eog-glenelg-response-blind-probe/1.0"
+USER_AGENT = (
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/131.0 Safari/537.36 "
+    "eog-glenelg-response-blind-probe/1.0"
+)
 SAFE_BASENAMES = (
     "sites_monitoring_glenelg.csv",
     "env_cov_allsites_glenelg_scaled_updated.csv",
@@ -59,6 +63,9 @@ def range_get(
             "User-Agent": USER_AGENT,
             "Range": f"bytes={start}-{end}",
             "Accept-Encoding": "identity",
+            "Accept": "application/zip,application/octet-stream;q=0.9,*/*;q=0.1",
+            "Referer": "https://datadryad.org/dataset/doi:10.5061/dryad.80gb5mm4h",
+            "X-API-Version": "2.1.0",
         },
     )
     with urllib.request.urlopen(request, timeout=90) as response:
