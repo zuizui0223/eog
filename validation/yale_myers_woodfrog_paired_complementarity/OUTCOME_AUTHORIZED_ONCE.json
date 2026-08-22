@@ -1,0 +1,12 @@
+{
+  "attempt_id": "yale_myers_woodfrog_fresh_paired_v1",
+  "authorized_parent_commit": "784fd2415e18f59287f0b394a8155387e9f32db3",
+  "contract_sha256": "f2dd8e4586a380e23748c1af89afea2b5ed4c1c5b1187e453134343830c350ad",
+  "runner_sha256": "3431592090535735daa687f63391acc610e7a9a7f29e33a2fc35c9c1bcbc2625",
+  "preflight_fingerprint": "10855293d6a0f480ebaf135386686666c574b8cd111cff70deb817bc7d3bd022",
+  "outcome_access_gate_fingerprint": "2f0ac84f6009a3a295ca4e6761ac704b59b271250cc31993c32fb8af2a2b38ae",
+  "invocation_budget": 1,
+  "response_rows_opened": false,
+  "no_retry": true,
+  "no_post_open_redesign": true
+}
