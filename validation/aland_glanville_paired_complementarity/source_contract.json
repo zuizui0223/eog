@@ -12,9 +12,9 @@
     "dataset_title": "M. cinxia and C. melitaearum in the Åland metapopulation system",
     "published_scope": "1993-2017; circa 4000 dry-meadow habitat patches; autumn patch surveys plus spring revisits",
     "focal_taxon": "Melitaea cinxia",
-    "provisional_primary_window": "2000-2017",
-    "window_reason": "A published analysis of this public metapopulation explicitly restricts to 2000-2017 after the comprehensive 1998-1999 habitat remapping; freeze this window before any locality-visit outcome rows are opened.",
-    "source_process_claim": "conditional internal-source metapopulation explanation within the published Aland patch registry; no claim that biological immigration from outside the declared source universe is impossible"
+    "primary_window": [2000, 2017],
+    "window_reason": "A published analysis of this public metapopulation explicitly restricts to 2000-2017 after the comprehensive 1998-1999 habitat remapping; this window was frozen before any locality-visit outcome rows were opened.",
+    "source_process_claim": "conditional internal-source metapopulation explanation within the published Aland merged patch registry; no claim that biological immigration from outside the declared source universe is impossible"
   },
   "fairdata_record_resolution": {
     "origin_ida_record": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
@@ -28,12 +28,7 @@
     "deprecated": false,
     "file_count": 5,
     "total_file_bytes": 43486551,
-    "resolution_reason": "Response-blind Metax metadata shows the IDA record points to this preservation_dataset_version and the PAS record points back to the IDA preservation_dataset_origin_version. Both represent the same five-file version; the PAS DOI record is frozen as the immutable source identity."
-  },
-  "required_resource_roles": {
-    "patch_registry": "one row per habitat patch, location and geometry; response-independent",
-    "locality_visit": "one row per patch-survey combination; contains Melitaea cinxia nest abundance/occupancy and therefore remains forbidden at this stage",
-    "documentation": "field definitions sufficient to freeze physical schemas, survey/existence semantics, and prospective missing-row admissibility before locality-visit rows are opened"
+    "resolution_reason": "Response-blind Metax metadata shows the IDA record points to this preservation_dataset_version and the PAS record points back to the IDA preservation_dataset_origin_version. Both represent the same five-file version; the PAS DOI record is frozen as the immutable scientific source identity."
   },
   "exact_file_manifest": {
     "patch_registry": {
@@ -48,7 +43,10 @@
       "path": "/Butterflies/Variables_PAS_final.csv",
       "bytes": 19990,
       "sha256": "7b0c4ce85ce0d649fbd45a0601757977473d199854a64ba3cd41c5cc4d205410",
-      "encoding": "ISO-8859-15"
+      "encoding": "ISO-8859-15",
+      "opened_response_blind": true,
+      "verified_row_count": 71,
+      "delimiter": ";"
     },
     "locality_visit_response": {
       "id": "34ede3ba-89a6-44ba-b09f-3dd8fedc3c8b",
@@ -67,32 +65,95 @@
     "authorize_endpoint": "https://etsin.fairdata.fi/api/download/authorize",
     "first_attempt_dataset_id": "cc1b7bea-a388-4b4d-bf35-2f41e025136c",
     "first_attempt_result": "HTTP 403 Not authorized for both frozen nonresponse paths; zero payload GETs",
-    "second_attempt_dataset_id": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
-    "second_attempt_reason": "Metax metadata, frozen before this transport attempt, establishes that this is the IDA origin of the selected PAS preservation record and represents the same five-file version. The second attempt changes transport record identity only, not scientific source, file path, checksum, candidate definition, or response firewall.",
-    "second_attempt_result": "PASS: HTTP 200 authorization for Patches final.csv and Variables_PAS_final.csv; returned host download.fairdata.fi:443 for both; zero payload GETs and zero response-file authorization requests.",
     "frozen_payload_dataset_id": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
-    "frozen_payload_paths_in_order": [
-      "/Butterflies/Variables_PAS_final.csv",
-      "/Butterflies/Patches final.csv"
-    ],
-    "response_file_authorization_forbidden": true,
-    "payload_access_rule": "For each frozen nonresponse path in order, request one fresh Etsin authorization, GET only the returned download.fairdata.fi URL, require exact byte size and SHA-256 from exact_file_manifest, then parse with the frozen ISO-8859-15 encoding. Any mismatch stops before the next file."
+    "origin_fallback_reason": "Metax metadata frozen before transport proves this IDA record is the origin of the selected PAS preservation record and represents the same five-file version. The fallback changes transport record identity only.",
+    "origin_authorization_result": "PASS: HTTP 200 authorization for Patches final.csv and Variables_PAS_final.csv; returned host download.fairdata.fi:443 for both; zero response-file authorization requests.",
+    "payload_access_rule": "Request one fresh authorization for one already-frozen path, GET only the returned download.fairdata.fi URL, require exact byte size and SHA-256, then parse only with the frozen encoding. Response file authorization remains forbidden until a later complete outcome freeze."
   },
-  "file_metadata_stage": {
-    "selected_record": "cc1b7bea-a388-4b4d-bf35-2f41e025136c",
-    "expected_total_files": 5,
-    "payload_downloads_allowed": false,
-    "purpose": "Resolve exact file names, sizes, checksums, dataset-specific role metadata and embargo availability without following any file download URL."
+  "dictionary_derived_patch_registry_contract": {
+    "delimiter_to_resolve_physically": ";",
+    "required_fields": [
+      "Name",
+      "Survey area",
+      "Commune",
+      "Village",
+      "GeometryLatest",
+      "Centroid_X",
+      "Centroid_Y",
+      "Area"
+    ],
+    "node_id_field": "Name",
+    "node_id_semantics": "PatchID; merged patch identities are used to keep long-term patch IDs consistent after historical patch mergers.",
+    "geometry_field": "GeometryLatest",
+    "geometry_semantics": "Most recent WKT polygon recorded for the merged patch; used only as registry geometry evidence, not as an outcome.",
+    "x_field": "Centroid_X",
+    "y_field": "Centroid_Y",
+    "crs": "EPSG:3067 ETRS89 / ETRS-TM35FIN",
+    "distance_metric": "Euclidean metres on frozen patch centroids",
+    "area_field": "Area",
+    "static_world_geometry_rule": "Use the response-independent merged-patch centroid coordinates in Patches final.csv for all structural worlds. Do not use Locality Visit GeometryUpdated/Centroid_X/Centroid_Y after response access to redesign worlds.",
+    "required_field_missing_action": "stop_analysis_registry_not_closed",
+    "duplicate_node_id_action": "stop_analysis_registry_not_closed",
+    "minimum_analysis_nodes": 100,
+    "minimum_primary_periods": 18,
+    "structural_scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "broadest_minimum_lcc_fraction": 0.9,
+    "broadest_maximum_isolated_fraction": 0.05,
+    "no_post_geometry_retuning": true
+  },
+  "dictionary_derived_response_semantics": {
+    "response_file": "/Butterflies/Locality Visit merged final_v2.csv",
+    "required_core_fields": ["Locality", "Dataset", "Year", "Nest Total"],
+    "patch_id_field": "Locality",
+    "dataset_field": "Dataset",
+    "dataset_prefix_rule": "AF prefix only; AF denotes Aland fall survey. AS spring and CS Cotesia rows are outside the endpoint rather than negative outcomes.",
+    "year_field": "Year",
+    "years_inclusive": [2000, 2017],
+    "outcome_field": "Nest Total",
+    "outcome_definition": "Binary fall occupancy/detection endpoint: event if Nest Total > 0; non-event if Nest Total == 0. Nest Total is the total M. cinxia nests found during the normal survey.",
+    "extra_survey_fields_forbidden_from_endpoint": ["Ex PLNest", "Ex VSNest", "Ex Other Nest", "Ex Nest Total", "Nest All"],
+    "extra_survey_reason": "The variable dictionary states later extra effort was added for some genotyping years but the normal survey was always performed with the original search effort for comparability. Therefore the endpoint uses normal-survey Nest Total only.",
+    "response_row_admissibility": {
+      "Locality": "stop on None or empty",
+      "Dataset": "stop on None or empty",
+      "Year": "stop on None or empty or nonnumeric",
+      "Nest Total": "stop on None or empty or nonnumeric; the public dictionary documents allowed values 0- but does not document any missing sentinel, so missing is never coerced to zero and no row-exclusion rule is authorized yet"
+    },
+    "unknown_token_action": "stop; do not infer aliases or missingness after response access",
+    "response_rows_opened": false
+  },
+  "dictionary_derived_conventional_feature_candidates": {
+    "static_patch": ["Centroid_X", "Centroid_Y", "Area", "Survey area"],
+    "time_varying_habitat_if_physical_header_matches_later": [
+      "Grazing percent",
+      "PL",
+      "PLM2",
+      "PLDRY",
+      "PLLOW",
+      "VS",
+      "VSM2",
+      "VSDRY",
+      "VSLOW",
+      "PLPercent",
+      "VSPercent",
+      "Unmapped percent"
+    ],
+    "note": "This is a pre-response feature candidate set only. The final same-learner baseline fingerprint must be frozen before any Locality Visit row values are opened."
   },
   "stage_boundary": {
     "metadata_only_complete": true,
-    "nonresponse_transport_authorized": true,
-    "nonresponse_payload_access_now_allowed": true,
-    "response_payload_access_allowed": false,
+    "variable_dictionary_payload_opened": true,
+    "patch_registry_payload_access_now_allowed": true,
     "patch_registry_payload_opened": false,
-    "variable_dictionary_payload_opened": false,
+    "locality_visit_authorization_requests": 0,
     "locality_visit_payload_opened": false,
+    "nest_authorization_requests": 0,
     "nest_payload_opened": false,
-    "outcome_access_authorized": false
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "outcome_access_authorized": false,
+    "model_fits": 0,
+    "heldout_scores": 0
   }
 }
