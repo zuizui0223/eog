@@ -1,0 +1,31 @@
+name: Niwot pika response-blind geometry probe
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package
+        run: python -m pip install -e .
+      - name: Probe immutable metadata and geometry only
+        run: |
+          mkdir -p probe-output
+          python validation/niwot_pika_paired_complementarity/probe_geometry.py \
+            probe-output/geometry_probe.json
+      - name: Upload response-blind probe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: niwot-pika-response-blind-geometry-probe
+          path: probe-output/geometry_probe.json
+          if-no-files-found: error

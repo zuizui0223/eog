@@ -1,0 +1,166 @@
+{
+  "attempt_id": "niwot_pika_paired_complementarity_v1",
+  "candidate": {
+    "common_name": "American pika",
+    "scientific_name": "Ochotona princeps",
+    "ecosystem": "alpine terrestrial talus",
+    "study": "Niwot Ridge and Green Lakes Valley pika habitat occupancy survey",
+    "temporal_coverage": [
+      "2016-08-04",
+      "2024-08-20"
+    ]
+  },
+  "package": {
+    "scope": "knb-lter-nwt",
+    "identifier": 17,
+    "revision": 4,
+    "metadata_pid": "https://pasta.lternet.edu/package/metadata/eml/knb-lter-nwt/17/4",
+    "metadata_resolver_url": "https://cn.dataone.org/cn/v2/resolve/https%3A%2F%2Fpasta.lternet.edu%2Fpackage%2Fmetadata%2Feml%2Fknb-lter-nwt%2F17%2F4",
+    "metadata_bytes": 172737,
+    "metadata_sha1": "080d56c99ef2e380dc543cedf47690e595267091",
+    "metadata_sha256": "a07a8cb2e415ad9d041c04c1ee4b39caad4efaae090d645b0b02d2b11aebbf1f",
+    "package_doi": "10.6073/pasta/4ee3633c83b06cdf1ab84daca4e8c1ef",
+    "publication_date": "2025-05-07",
+    "title": "Pika habitat occupancy survey data for Niwot Ridge and Green Lakes Valley, 2016 - ongoing"
+  },
+  "entities": {
+    "geometry": {
+      "entity_name": "Plot locations",
+      "object_name": "pika_survey_GRTS_plot_tracking.cr.data.csv",
+      "object_id": "313b4ae5a8cf0ce9434e24a6ceccbb73",
+      "pasta_url": "https://pasta.lternet.edu/package/data/eml/knb-lter-nwt/17/4/313b4ae5a8cf0ce9434e24a6ceccbb73",
+      "resolver_url": "https://cn.dataone.org/cn/v2/resolve/https%3A%2F%2Fpasta.lternet.edu%2Fpackage%2Fdata%2Feml%2Fknb-lter-nwt%2F17%2F4%2F313b4ae5a8cf0ce9434e24a6ceccbb73",
+      "bytes": 37127,
+      "md5": "2240fed8c0afc81eaf850e2862744747",
+      "records": 360,
+      "expected_header": [
+        "lter_site",
+        "plot",
+        "easting_original",
+        "northing_original",
+        "mdcaty",
+        "panel_original",
+        "panel_current",
+        "easting_final",
+        "northing_final",
+        "replaced_by",
+        "moved_dist_field",
+        "moved_dist_lab"
+      ]
+    },
+    "survey_registry": {
+      "entity_name": "Pika survey plot conditions",
+      "object_name": "pika_survey.cr.data.csv",
+      "object_id": "49227c03eb09ddba1df06c9c3cb32c16",
+      "pasta_url": "https://pasta.lternet.edu/package/data/eml/knb-lter-nwt/17/4/49227c03eb09ddba1df06c9c3cb32c16",
+      "bytes": 228455,
+      "md5": "c6a4c881b343563d1421eb1b19a722d0",
+      "records": 525
+    },
+    "timed_search_response": {
+      "entity_name": "Pika survey search sign detection",
+      "object_name": "pika_survey_search_sign.cr.data.csv",
+      "object_id": "41743c54b6039299aaf0e0f1a106c4eb",
+      "pasta_url": "https://pasta.lternet.edu/package/data/eml/knb-lter-nwt/17/4/41743c54b6039299aaf0e0f1a106c4eb",
+      "bytes": 225797,
+      "md5": "148b04f395152992bfb4edd33cda9a7d",
+      "records": 1942
+    },
+    "extra_search_response": {
+      "entity_name": "Pika survey extra sign detection",
+      "object_name": "pika_survey_extra_sign.cr.data.csv",
+      "object_id": "0e2f4a9981eec86d8e12ac9f60896a8f",
+      "pasta_url": "https://pasta.lternet.edu/package/data/eml/knb-lter-nwt/17/4/0e2f4a9981eec86d8e12ac9f60896a8f",
+      "bytes": 49721,
+      "md5": "2fc2c2ac2f596da0ef776ceabca4fb89",
+      "records": 435
+    },
+    "methods": {
+      "entity_name": "Pika survey detailed methods",
+      "object_name": "pika_survey.cr.methods.docx",
+      "object_id": "e5ccc28e2431805b53030799a33ac79c",
+      "bytes": 728169,
+      "md5": "689a43375a9ac50b226e2d631e183813"
+    }
+  },
+  "response_firewall": {
+    "response_entities": [
+      "survey_registry",
+      "timed_search_response",
+      "extra_search_response"
+    ],
+    "opportunistic_sign_entity_excluded": true,
+    "reason": "The focal endpoint uses only completed standardized plot surveys and detections tied to those surveys; free opportunistic detections are not an effort-controlled response.",
+    "response_requests_permitted_in_geometry_probe": 0,
+    "response_payload_bytes_permitted_in_geometry_probe": 0,
+    "response_rows_or_values_permitted_in_geometry_probe": false
+  },
+  "preflight_declaration": {
+    "minimum_nodes": 60,
+    "minimum_outer_units": 5,
+    "minimum_repeated_nodes": 24,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "published_response_blind_counts": {
+    "analysis_nodes": 72,
+    "surveyed_nodes_per_year": 48,
+    "annual_panel_nodes": 24,
+    "even_year_panel_nodes": 24,
+    "odd_year_panel_nodes": 24,
+    "available_years": [
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "calibration_transition_years": [
+      2017,
+      2018,
+      2019
+    ],
+    "heldout_transition_years": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "geometry_rule": {
+    "coordinate_reference": "UTM WGS84 Zone 13, meters",
+    "missing_tokens_after_outer_strip": [
+      "",
+      "NaN"
+    ],
+    "selection": "retain a row iff panel_current is non-missing, replaced_by is missing, and easting_final and northing_final are finite",
+    "expected_selected_nodes": 72,
+    "expected_normalized_panel_tokens": [
+      "annual",
+      "even",
+      "odd"
+    ],
+    "expected_nodes_per_panel": 24,
+    "normalization": "outer whitespace stripping followed by Unicode casefold; no aliases or fuzzy matching",
+    "node_identity": "exact stripped plot token",
+    "duplicate_policy": "STOP on duplicate selected plot ID or duplicate final coordinate pair"
+  },
+  "structural_gate": {
+    "axis_id": "final_plot_utm_wgs84_zone13_euclidean_distance_m",
+    "target_largest_component_fractions": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "minimum_distinct_positive_thresholds": 3,
+    "full_support_world_included": true,
+    "threshold_interpretation": "response-blind structural regimes, not fitted biological movement limits"
+  }
+}
