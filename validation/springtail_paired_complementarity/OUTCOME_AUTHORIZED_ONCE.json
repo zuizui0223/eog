@@ -1,0 +1,21 @@
+{
+  "attempt_id": "springtail_pnas_2023_fresh_paired_v1",
+  "authorized_parent_commit": "f76eb81f2daa77eabd457f9145a27723fbbcc9f5",
+  "contract_sha256": "efb3b327ad44d1321cc8e029b0cdfe7909b213adc35469ef27718ae338509b76",
+  "runner_sha256": "5c6dc5ca8e303fbc40397488beabe98d7ccd54d87047baefc147a016f78734c8",
+  "preflight_fingerprint": "7126bab95192528e3aa8799e116111d7761ed3644c3659d72c8d327c5142c73b",
+  "outcome_access_gate_fingerprint": "e3da1527dd5b43907b222ab0226a00f7c2762fcb79ad944f8a24d7f2c28a8878",
+  "preflight_workflow_run_id": 32552174744,
+  "preflight_artifact_id": 9470367448,
+  "preflight_artifact_digest": "sha256:4906015de7b1f38d70c4d4f225e179ec9b0ea4ddc9cf193dd29d2f631e250c57",
+  "package_checks_workflow_run_id": 32552174713,
+  "response_git_blob_sha1": "878df2c8fa81fb0b38f1ee2e122dcd32bf424062",
+  "response_expected_bytes": 102819,
+  "response_rows_opened": false,
+  "invocation_budget": 1,
+  "exact_count_gate_first": true,
+  "zero_fit_on_count_failure": true,
+  "no_retry": true,
+  "no_post_open_redesign": true,
+  "authorized_on": "2026-08-22"
+}
