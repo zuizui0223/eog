@@ -1,0 +1,191 @@
+name: Aland Glanville variable dictionary audit
+
+on:
+  push:
+    branches:
+      - agent/aland-glanville-preflight
+    paths:
+      - ".github/workflows/aland_glanville_variables_audit.yml"
+      - "validation/aland_glanville_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/aland_glanville_variables_audit.yml"
+      - "validation/aland_glanville_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dictionary-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download and verify only Variables_PAS_final.csv
+        run: |
+          set -euo pipefail
+          mkdir -p build/aland_glanville_variables
+          python - <<'PY'
+          from __future__ import annotations
+
+          import csv
+          import hashlib
+          import io
+          import json
+          from pathlib import Path
+          import re
+          import urllib.request
+
+          contract = json.loads(Path(
+              "validation/aland_glanville_paired_complementarity/source_contract.json"
+          ).read_text())
+          manifest = contract["exact_file_manifest"]
+          spec = manifest["variable_dictionary"]
+          transport = contract["transport_resolution"]
+          dataset_id = transport["frozen_payload_dataset_id"]
+          path = spec["path"]
+          assert path == transport["frozen_payload_paths_in_order"][0]
+          forbidden = {
+              manifest["locality_visit_response"]["path"].casefold(),
+              manifest["nest_response"]["path"].casefold(),
+          }
+          if path.casefold() in forbidden:
+              raise RuntimeError("dictionary path collides with frozen response path")
+
+          authorize_url = transport["authorize_endpoint"]
+          auth_payload = json.dumps({"cr_id": dataset_id, "file": path}).encode("utf-8")
+          auth_req = urllib.request.Request(
+              authorize_url,
+              data=auth_payload,
+              headers={
+                  "User-Agent": "EOG-Aland-Glanville-variables-only/1.0",
+                  "Accept": "application/json",
+                  "Content-Type": "application/json",
+              },
+              method="POST",
+          )
+          with urllib.request.urlopen(auth_req, timeout=30) as response:
+              auth_body = response.read(100_001)
+              auth_status = getattr(response, "status", None)
+          if auth_status != 200 or len(auth_body) > 100_000:
+              raise RuntimeError("dictionary authorization failed bounded checks")
+          auth = json.loads(auth_body.decode("utf-8"))
+          download_url = auth.get("url") if isinstance(auth, dict) else None
+          if not isinstance(download_url, str) or not download_url.startswith("https://download.fairdata.fi:"):
+              raise RuntimeError("dictionary authorization returned unexpected download host")
+
+          max_bytes = int(spec["bytes"])
+          data_req = urllib.request.Request(
+              download_url,
+              headers={"User-Agent": "EOG-Aland-Glanville-variables-only/1.0"},
+          )
+          with urllib.request.urlopen(data_req, timeout=60) as response:
+              payload = response.read(max_bytes + 1)
+              payload_status = getattr(response, "status", None)
+          if payload_status != 200:
+              raise RuntimeError(f"dictionary download returned {payload_status}")
+          if len(payload) != max_bytes:
+              raise RuntimeError(f"dictionary byte mismatch: {len(payload)} != {max_bytes}")
+          observed_sha = hashlib.sha256(payload).hexdigest()
+          if observed_sha != spec["sha256"]:
+              raise RuntimeError(f"dictionary SHA mismatch: {observed_sha}")
+
+          text = payload.decode(spec["encoding"])
+          sample = text[:8192]
+          try:
+              dialect = csv.Sniffer().sniff(sample, delimiters=",;\t|")
+              delimiter = dialect.delimiter
+          except csv.Error:
+              delimiter = ","
+          reader = csv.DictReader(io.StringIO(text), delimiter=delimiter)
+          fieldnames = list(reader.fieldnames or [])
+          rows = [
+              {str(key): value for key, value in row.items()}
+              for row in reader
+          ]
+          if not fieldnames or not rows:
+              raise RuntimeError("variable dictionary parsed as empty")
+
+          keywords = re.compile(
+              r"patch|locality|visit|survey|year|date|coordinate|latitude|longitude|area|"
+              r"merge|split|destroy|exist|nest|melitaea|cinxia|occup|abundan|count|"
+              r"host|plant|quality|missing|null|blank|unknown|na\b|not available",
+              re.I,
+          )
+          relevant = [
+              row for row in rows
+              if keywords.search(" | ".join(str(value or "") for value in row.values()))
+          ]
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "dataset_id": dataset_id,
+              "path": path,
+              "expected_bytes": max_bytes,
+              "observed_bytes": len(payload),
+              "expected_sha256": spec["sha256"],
+              "observed_sha256": observed_sha,
+              "encoding": spec["encoding"],
+              "delimiter": delimiter,
+              "fieldnames": fieldnames,
+              "row_count": len(rows),
+              "all_rows": rows,
+              "relevant_rows": relevant,
+              "authorization_requests": 1,
+              "file_payload_get_requests": 1,
+              "file_payload_bytes_opened": len(payload),
+              "variable_dictionary_payload_opened": True,
+              "patch_registry_authorization_requests": 0,
+              "patch_registry_payload_opened": False,
+              "response_file_authorization_requests": 0,
+              "locality_visit_payload_opened": False,
+              "nest_payload_opened": False,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+          Path(
+              "build/aland_glanville_variables/variables_audit.json"
+          ).write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
+          print(json.dumps({
+              "status": "variable_dictionary_verified_and_opened",
+              "observed_bytes": len(payload),
+              "observed_sha256": observed_sha,
+              "delimiter": delimiter,
+              "fieldnames": fieldnames,
+              "row_count": len(rows),
+              "relevant_rows": relevant,
+              "patch_registry_payload_opened": False,
+              "response_rows_opened": False,
+          }, indent=2, sort_keys=True, ensure_ascii=False))
+          PY
+      - name: Assert strict dictionary-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path(
+              "build/aland_glanville_variables/variables_audit.json"
+          ).read_text())
+          assert result["variable_dictionary_payload_opened"] is True
+          assert result["patch_registry_authorization_requests"] == 0
+          assert result["patch_registry_payload_opened"] is False
+          assert result["response_file_authorization_requests"] == 0
+          assert result["locality_visit_payload_opened"] is False
+          assert result["nest_payload_opened"] is False
+          assert result["response_rows_opened"] is False
+          assert result["response_values_opened"] is False
+          assert result["model_fits"] == 0
+          assert result["heldout_scores"] == 0
+          print("Aland variable-dictionary-only firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aland-glanville-variable-dictionary-audit
+          path: build/aland_glanville_variables/variables_audit.json
+          if-no-files-found: error
