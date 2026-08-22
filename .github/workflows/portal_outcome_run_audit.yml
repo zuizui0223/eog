@@ -1,0 +1,101 @@
+name: Portal outcome run metadata audit
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/portal_outcome_run_audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  audit-existing-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query existing authoritative Portal outcome run only
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: e898a840983be53a74874998edea5eafa0025ee3
+          TARGET_WORKFLOW: portal_dm_paired_complementarity_outcome_once.yml
+          TARGET_BRANCH: agent/fresh-candidate-next
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, urllib.parse, urllib.request
+          from pathlib import Path
+
+          repo = os.environ["GITHUB_REPOSITORY"]
+          token = os.environ["GH_TOKEN"]
+          target_sha = os.environ["TARGET_SHA"]
+          workflow = os.environ["TARGET_WORKFLOW"]
+          branch = os.environ["TARGET_BRANCH"]
+          headers = {
+              "Accept": "application/vnd.github+json",
+              "Authorization": f"Bearer {token}",
+              "X-GitHub-Api-Version": "2022-11-28",
+              "User-Agent": "eog-portal-outcome-metadata-audit",
+          }
+
+          def get(url):
+              req = urllib.request.Request(url, headers=headers)
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  return json.load(response)
+
+          base = f"https://api.github.com/repos/{repo}"
+          q = urllib.parse.urlencode({"branch": branch, "event": "push", "per_page": 50})
+          runs = get(f"{base}/actions/workflows/{workflow}/runs?{q}").get("workflow_runs", [])
+          matches = [r for r in runs if r.get("head_sha") == target_sha]
+          if len(matches) != 1:
+              raise SystemExit(f"expected exactly one existing authoritative run for {target_sha}, got {len(matches)}")
+          run = matches[0]
+          run_id = int(run["id"])
+          jobs = get(f"{base}/actions/runs/{run_id}/jobs?per_page=100").get("jobs", [])
+          artifacts = get(f"{base}/actions/runs/{run_id}/artifacts?per_page=100").get("artifacts", [])
+          result = {
+              "target_sha": target_sha,
+              "run": {
+                  "id": run_id,
+                  "name": run.get("name"),
+                  "event": run.get("event"),
+                  "status": run.get("status"),
+                  "conclusion": run.get("conclusion"),
+                  "run_number": run.get("run_number"),
+                  "run_attempt": run.get("run_attempt"),
+                  "created_at": run.get("created_at"),
+                  "updated_at": run.get("updated_at"),
+                  "html_url": run.get("html_url"),
+              },
+              "jobs": [
+                  {
+                      "id": j.get("id"),
+                      "name": j.get("name"),
+                      "status": j.get("status"),
+                      "conclusion": j.get("conclusion"),
+                      "started_at": j.get("started_at"),
+                      "completed_at": j.get("completed_at"),
+                  }
+                  for j in jobs
+              ],
+              "artifacts": [
+                  {
+                      "id": a.get("id"),
+                      "name": a.get("name"),
+                      "size_in_bytes": a.get("size_in_bytes"),
+                      "expired": a.get("expired"),
+                      "digest": a.get("digest"),
+                  }
+                  for a in artifacts
+              ],
+              "audit_scope": "GitHub Actions metadata only; no outcome workflow rerun and no response access",
+          }
+          Path("portal_outcome_run_audit.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portal-outcome-run-metadata-audit
+          path: portal_outcome_run_audit.json
+          if-no-files-found: error
