@@ -141,6 +141,22 @@
     "temporal_adjacency": "source and target periods must map to consecutive newmoonnumber values",
     "claim_limit": "observed internal source-conditioned capture support, not latent occupancy, individual movement, ancestry, or biological closure"
   },
+  "effort_time_registry": {
+    "expected_effort_rows": 13224,
+    "expected_effort_period_count": 551,
+    "expected_plot_treatment_rows": 14063,
+    "moon_missing_value_tokens": ["", "NA"],
+    "time_authority": "period identity and target census year/month come from Rodents/moon_dates.csv; trapping-ledger day/month/year fields describe plot-level collection dates and may cross a calendar-year boundary within one period",
+    "multi_calendar_year_effort_periods": [
+      {
+        "period": 53,
+        "calendar_years": [1981, 1982],
+        "trapping_dates": ["1981-12-30", "1981-12-31", "1982-01-01"],
+        "newmoonnumber": 56,
+        "censusdate": "1981-12-30"
+      }
+    ]
+  },
   "temporal_split": {
     "calibration": "eligible target census year <= 2011",
     "heldout": "eligible target census year in 2012..2019",

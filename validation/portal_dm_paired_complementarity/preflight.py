@@ -318,21 +318,25 @@ def effort_time_gate(
     plot_payload: bytes,
     worlds: dict[str, np.ndarray],
     node_ids: tuple[str, ...],
+    contract: dict,
 ) -> dict[str, object]:
     effort_rows = parse_csv(effort_payload, EFFORT_HEADER, "Portal_rodent_trapping.csv")
     moon_rows = parse_csv(moon_payload, MOON_HEADER, "moon_dates.csv")
     plot_rows = parse_csv(plot_payload, PLOT_HEADER, "Portal_plots.csv")
-    if len(effort_rows) != 13224:
+    frozen = contract["effort_time_registry"]
+    if len(effort_rows) != int(frozen["expected_effort_rows"]):
         raise RuntimeError("effort row count drift")
-    if len(plot_rows) != 14063:
+    if len(plot_rows) != int(frozen["expected_plot_treatment_rows"]):
         raise RuntimeError("plot-treatment row count drift")
 
     availability: dict[tuple[int, int], bool] = {}
-    period_year: dict[int, int] = {}
+    period_dates: dict[int, set[date]] = {}
     for row in effort_rows:
         period = exact_int(row["period"], "effort period")
         plot = exact_int(row["plot"], "effort plot")
         year = exact_int(row["year"], "effort year")
+        month = exact_int(row["month"], "effort month")
+        day = exact_int(row["day"], "effort day")
         sampled = exact_int(row["sampled"], "effort sampled")
         effort = exact_int(row["effort"], "effort traps")
         qcflag = exact_int(row["qcflag"], "effort qcflag")
@@ -340,25 +344,52 @@ def effort_time_gate(
         if period <= 0 or plot not in range(1, 25) or key in availability:
             raise RuntimeError("effort registry contains invalid or duplicate identity")
         availability[key] = sampled == 1 and effort >= 47 and qcflag == 1
-        if period in period_year and period_year[period] != year:
-            raise RuntimeError("one effort period maps to multiple years")
-        period_year[period] = year
+        try:
+            observed_date = date(year, month, day)
+        except ValueError as exc:
+            raise RuntimeError("effort row has an invalid calendar date") from exc
+        period_dates.setdefault(period, set()).add(observed_date)
     if set(plot for _, plot in availability) != set(range(1, 25)):
         raise RuntimeError("effort registry does not cover all 24 plots")
+    if len(period_dates) != int(frozen["expected_effort_period_count"]):
+        raise RuntimeError("effort period count drift")
 
     moon_by_number: dict[int, tuple[int, date]] = {}
+    moon_by_period: dict[int, tuple[int, date]] = {}
+    missing_tokens = set(frozen["moon_missing_value_tokens"])
     for row in moon_rows:
         number = exact_int(row["newmoonnumber"], "newmoonnumber")
-        if not row["period"] or not row["censusdate"]:
+        if row["period"] in missing_tokens or row["censusdate"] in missing_tokens:
             continue
         period = exact_int(row["period"], "moon period")
         try:
             census = date.fromisoformat(row["censusdate"])
         except ValueError as exc:
             raise RuntimeError("moon censusdate is not strict ISO") from exc
-        if number in moon_by_number:
-            raise RuntimeError("duplicate sampled newmoonnumber")
+        if number in moon_by_number or period in moon_by_period:
+            raise RuntimeError("duplicate sampled newmoonnumber or period")
         moon_by_number[number] = (period, census)
+        moon_by_period[period] = (number, census)
+    if set(period_dates) != set(moon_by_period):
+        raise RuntimeError("effort and moon registries do not contain the same periods")
+
+    multi_calendar_year_periods = []
+    for period, observed_dates in sorted(period_dates.items()):
+        years = sorted({value.year for value in observed_dates})
+        if len(years) <= 1:
+            continue
+        newmoonnumber, census = moon_by_period[period]
+        multi_calendar_year_periods.append(
+            {
+                "period": period,
+                "calendar_years": years,
+                "trapping_dates": [value.isoformat() for value in sorted(observed_dates)],
+                "newmoonnumber": newmoonnumber,
+                "censusdate": census.isoformat(),
+            }
+        )
+    if multi_calendar_year_periods != frozen["multi_calendar_year_effort_periods"]:
+        raise RuntimeError("multi-calendar-year effort period differs from the contract")
 
     plot_months: set[tuple[int, int, int]] = set()
     categories = {"treatment": set(), "resourcetreatment": set(), "anttreatment": set()}
@@ -446,7 +477,9 @@ def effort_time_gate(
         raise RuntimeError(f"temporal source closure stopped: {result.status}")
     return {
         "effort_rows": len(effort_rows),
-        "effort_period_count": len(period_year),
+        "effort_period_count": len(period_dates),
+        "multi_calendar_year_effort_periods": multi_calendar_year_periods,
+        "time_authority": frozen["time_authority"],
         "plot_treatment_rows": len(plot_rows),
         "treatment_categories": {key: sorted(value) for key, value in categories.items()},
         "declared_transition_count": len(transitions),
@@ -552,6 +585,7 @@ def run(output: Path) -> dict[str, object]:
             payloads["SiteandMethods/Portal_plots.csv"],
             worlds,
             node_ids,
+            contract,
         )
         species = species_gate(payloads["Rodents/Portal_rodent_species.csv"])
         header = header_gate(contract, audit)

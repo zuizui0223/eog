@@ -23,7 +23,9 @@ about biological dispersal limits.
 Calibration targets end in 2011. Calendar years 2012 through 2019 are the eight heldout
 outer units. A plot-period zero is eligible only when the separate effort ledger says
 `sampled=1`, `effort>=47` and `qcflag=1`, and transitions must join consecutive new-moon
-indices. The predictive claim is explicitly conditional on currently recorded internal
+indices. Period 53 legitimately spans collection dates from 30 December 1981 through
+1 January 1982; its period identity and census date remain those in the separate moon
+registry. The predictive claim is explicitly conditional on currently recorded internal
 plot sources; outside immigration is not represented or interpreted.
 
 If stage one is green, the exact observed physical header and derived geometry evidence
