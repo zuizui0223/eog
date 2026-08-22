@@ -1,0 +1,103 @@
+name: Yale-Myers wood-frog fresh paired complementarity preflight
+
+on:
+  push:
+    branches:
+      - agent/yale-myers-woodfrog-paired-complementarity
+    paths:
+      - ".github/workflows/yale_myers_woodfrog_paired_complementarity_preflight.yml"
+      - ".github/workflows/yale_myers_woodfrog_paired_complementarity_outcome_once.yml"
+      - "benchmarks/run_yale_myers_woodfrog_paired_complementarity_once.py"
+      - "validation/yale_myers_woodfrog_paired_complementarity/**"
+      - "tests/test_yale_myers_woodfrog_paired_complementarity.py"
+  pull_request:
+    paths:
+      - ".github/workflows/yale_myers_woodfrog_paired_complementarity_preflight.yml"
+      - ".github/workflows/yale_myers_woodfrog_paired_complementarity_outcome_once.yml"
+      - "benchmarks/run_yale_myers_woodfrog_paired_complementarity_once.py"
+      - "validation/yale_myers_woodfrog_paired_complementarity/**"
+      - "tests/test_yale_myers_woodfrog_paired_complementarity.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  response-blind-preflight-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install frozen technical environment
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scikit-learn==1.8.0"
+          python -m pip install -e .
+      - name: Run response-blind admission, geometry, header, and authorization preflight
+        run: |
+          set -euo pipefail
+          python validation/yale_myers_woodfrog_paired_complementarity/preflight.py
+      - name: Run deterministic synthetic paired pipeline
+        run: |
+          set -euo pipefail
+          python benchmarks/run_yale_myers_woodfrog_paired_complementarity_once.py \
+            --mode smoke \
+            --output build/yale_myers_woodfrog_paired_complementarity/smoke.json
+      - name: Assert response firewall and paired smoke invariants
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("build/yale_myers_woodfrog_paired_complementarity")
+          preflight = json.loads((root / "preflight/preflight.json").read_text())
+          smoke = json.loads((root / "smoke.json").read_text())
+          assert preflight["status"] == "authorized_once_only_exact_count_gate_required"
+          assert preflight["candidate_preflight"]["result"]["status"] == "ready_for_geometry_gate"
+          assert preflight["prospective_estimability"]["result"]["status"] == "uncertain_pre_response"
+          assert preflight["temporal_source_closure"]["result"]["status"] == "temporal_source_closure_pass"
+          assert preflight["response_header_gate"]["result"]["status"] == "header_schema_match"
+          assert preflight["response_header_bytes_opened"] == 138
+          assert preflight["response_payload_bytes_opened"] == 0
+          assert preflight["response_rows_opened"] is False
+          assert preflight["response_values_opened"] is False
+          assert preflight["model_fits"] == 0
+          assert preflight["heldout_scores"] == 0
+          assert smoke["status"] == "smoke_pass"
+          assert smoke["execution_mode"] == "smoke"
+          assert smoke["response_download_requests"] == []
+          assert smoke["response_payload_bytes_opened"] == 0
+          assert smoke["response_rows_opened"] is False
+          assert smoke["exact_count_gate"]["passed"] is True
+          assert smoke["exact_count_gate"]["executed_before_any_layer_a_update_or_model_fit"] is True
+          assert smoke["models_fit"] == 2
+          assert smoke["heldout_scores"] == 18
+          assert smoke["model_feature_audit"]["exact_pond_id_supervised"] is False
+          assert smoke["model_feature_audit"]["exact_world_id_supervised"] is False
+          assert smoke["model_feature_audit"]["only_augmented_difference"] == [
+              "surviving_world_fraction", "support_mean", "support_std", "support_min",
+              "support_max", "support_q25", "support_q50", "support_q75",
+              "positive_support_fraction", "support_range",
+          ]
+          print(json.dumps({
+              "preflight_status": preflight["status"],
+              "smoke_status": smoke["status"],
+              "response_header_bytes_opened": 138,
+              "response_payload_bytes_opened": 0,
+              "response_rows_opened": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Run candidate-specific pure tests
+        run: |
+          python -m pytest -q tests/test_yale_myers_woodfrog_paired_complementarity.py
+      - name: Upload response-blind freeze evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: yale-myers-woodfrog-response-blind-preflight-and-smoke
+          path: build/yale_myers_woodfrog_paired_complementarity/
+          if-no-files-found: error

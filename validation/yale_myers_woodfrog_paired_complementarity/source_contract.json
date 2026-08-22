@@ -1,0 +1,341 @@
+{
+  "attempt_id": "yale_myers_woodfrog_fresh_paired_v1",
+  "frozen_on": "2026-08-22",
+  "candidate": "Rana sylvatica breeding-count reappearance across 64 Yale-Myers Forest ponds",
+  "publication": {
+    "citation": "Rowland et al. (2022), Asynchrony, density dependence, and persistence in an amphibian",
+    "doi": "10.1002/ecy.3696",
+    "data_doi": "10.5061/dryad.0cfxpnw3r"
+  },
+  "dryad_source": {
+    "dataset_doi": "10.5061/dryad.0cfxpnw3r",
+    "version_id": 162105,
+    "version_number": 3,
+    "publication_date": "2022-02-02",
+    "last_modification_date": "2022-02-03",
+    "version_download_url": "https://datadryad.org/api/v2/versions/162105/download",
+    "manifest_maximum_bytes": 20000,
+    "closed_file_count": 4
+  },
+  "files": {
+    "README_file.rtf": {
+      "role": "nonresponse_readme",
+      "size": 3330,
+      "sha256": "d7ef1ac4dcf80626277b1860dfcaaf7699912eb7ffff14042bee852ed1fd0cd2"
+    },
+    "distance.mat.csv": {
+      "role": "nonresponse_distance_geometry",
+      "size": 48956,
+      "sha256": "2b611f984775c067bf48fd9293b978c43662f29b537d6e6e17bb8cbf81c1af32"
+    },
+    "pondinfo.csv": {
+      "role": "nonresponse_static_pond_registry",
+      "size": 938,
+      "sha256": "952d14ec3f9d59d2e0c7709297ef4f8902f0c3ef41e7283b292b2868b7444e6b"
+    },
+    "woodfrogdata.csv": {
+      "role": "response",
+      "size": 90203,
+      "sha256": "efb3b846d170a52e96a5d99f809319f44b9f7d9eb995861e3702078a39a65a8d"
+    }
+  },
+  "response_file": "woodfrogdata.csv",
+  "nonresponse_files": [
+    "README_file.rtf",
+    "distance.mat.csv",
+    "pondinfo.csv"
+  ],
+  "preflight_declaration": {
+    "minimum_nodes": 40,
+    "minimum_outer_units": 8,
+    "minimum_repeated_nodes": 40,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": false,
+    "require_closed_analysis_registry": true
+  },
+  "response_header_firewall": {
+    "maximum_header_bytes": 1024,
+    "acquisition": "one independently verified HTTP Range request per byte, stopping on the first CR or LF",
+    "expected_header_text": "Pond.ID,Year,Depth,RASY.Count.1,RASY.Count.2,Avg.RASY.Count,Canopy,RASYdens,GrowthRate,RASYdens_t2,days_thawed,spfaPDSI,spfaPDSIlag,wEggs",
+    "expected_header_sha256": "5782ba939c843e6cb36d633da895967668441e95f641b6b9afbca82b05eef3df",
+    "expected_terminator": "CR",
+    "expected_bytes_consumed_including_terminator": 138,
+    "expected_columns": [
+      "Pond.ID",
+      "Year",
+      "Depth",
+      "RASY.Count.1",
+      "RASY.Count.2",
+      "Avg.RASY.Count",
+      "Canopy",
+      "RASYdens",
+      "GrowthRate",
+      "RASYdens_t2",
+      "days_thawed",
+      "spfaPDSI",
+      "spfaPDSIlag",
+      "wEggs"
+    ],
+    "require_exact_order": true,
+    "response_rows_opened": false,
+    "response_values_opened": false
+  },
+  "published_aggregate_evidence": {
+    "source": "Dryad metadata and Rowland et al. article-level study description only",
+    "endpoint_definition_matches": true,
+    "split_specific_intervals": {
+      "calibration_events": {"lower": null, "upper": null},
+      "calibration_non_events": {"lower": null, "upper": null},
+      "heldout_events": {"lower": null, "upper": null},
+      "heldout_non_events": {"lower": null, "upper": null},
+      "heldout_outer_units_with_both_classes": {"lower": null, "upper": null}
+    },
+    "note": "The release documents 64 ponds over 2000-2020 and 1130 response rows, but publishes no split-specific observed zero-to-positive or zero-to-zero counts for this frozen endpoint. General egg-mass totals and zero counts are not substituted."
+  },
+  "response_firewall": {
+    "pre_response_allowed": [
+      "Dryad dataset/version/file metadata",
+      "official tokenized four-file manifest with ephemeral URLs retained only in memory",
+      "README_file.rtf",
+      "distance.mat.csv",
+      "pondinfo.csv",
+      "the bounded physical header of woodfrogdata.csv through one-byte Range reads"
+    ],
+    "pre_response_forbidden": [
+      "any data row or value in woodfrogdata.csv",
+      "the dynamically assembled whole-version ZIP body",
+      "any mirror or derivative containing row-level egg-mass outcomes"
+    ],
+    "response_full_download_budget": 1,
+    "response_rows_opened": false,
+    "model_fits_before_exact_count_gate": 0,
+    "post_open_redesign_or_retry": false
+  },
+  "structural_targets": [0.25, 0.5, 0.75, 0.9],
+  "freezes": {
+    "source_identity": {
+      "publication_doi": "10.1002/ecy.3696",
+      "data_doi": "10.5061/dryad.0cfxpnw3r",
+      "dryad_version_id": 162105,
+      "dryad_version_number": 3,
+      "closed_file_count": 4,
+      "file_identity": "exact filename + byte size + SHA-256 for all four version files"
+    },
+    "response_identity": {
+      "filename": "woodfrogdata.csv",
+      "size": 90203,
+      "sha256": "efb3b846d170a52e96a5d99f809319f44b9f7d9eb995861e3702078a39a65a8d",
+      "physical_header_sha256": "5782ba939c843e6cb36d633da895967668441e95f641b6b9afbca82b05eef3df",
+      "physical_header_terminator": "CR",
+      "physical_header_bytes_including_terminator": 138,
+      "row_count_metadata_only": 1130,
+      "response_payload_opened_pre_authorization": false
+    },
+    "node_geometry": {
+      "node_count": 64,
+      "registry_rule": "the 64 ordered row labels and 64 ordered column labels in distance.mat.csv must be identical; pondinfo.csv Pond.ID must join one-to-one to that set",
+      "ordered_node_ids_sha256": "2c484ae857b8c2ee3bd9937953a08b56597828033f886d41996026f1c87b3b2f",
+      "distance_file_sha256": "2b611f984775c067bf48fd9293b978c43662f29b537d6e6e17bb8cbf81c1af32",
+      "pondinfo_file_sha256": "952d14ec3f9d59d2e0c7709297ef4f8902f0c3ef41e7283b292b2868b7444e6b",
+      "distance_units": "meters",
+      "distance_semantics": "author-released symmetric inter-pond distance matrix",
+      "exact_pond_id_supervised": false
+    },
+    "response_semantics": {
+      "endpoint": "observed annual wood-frog egg-mass reappearance",
+      "risk_set": "pond with a finite released Avg.RASY.Count equal to zero at source year t and a finite released Avg.RASY.Count at the consecutive target year t+1",
+      "event": "risk-set pond has released Avg.RASY.Count greater than zero at t+1",
+      "non_event": "risk-set pond has released Avg.RASY.Count equal to zero at t+1",
+      "source_state": "all closed-registry ponds with finite released Avg.RASY.Count greater than zero at t",
+      "missingness": "missing row or nonfinite Avg.RASY.Count makes that pond-transition unavailable; no interpolation, carry-forward, zero fill, or alias repair",
+      "count_validation": "Avg.RASY.Count must be finite and nonnegative whenever used; positive means strictly greater than zero",
+      "boundary": "observed whole-pond breeding-count reappearance, not latent occupancy, demographic immigration, parentage, or a reconstructed colonization history",
+      "physical_header_columns": [
+        "Pond.ID", "Year", "Depth", "RASY.Count.1", "RASY.Count.2",
+        "Avg.RASY.Count", "Canopy", "RASYdens", "GrowthRate",
+        "RASYdens_t2", "days_thawed", "spfaPDSI", "spfaPDSIlag", "wEggs"
+      ],
+      "physical_header_schema_id": "yale_myers_woodfrog_response_header_v1",
+      "categorical_token_schema": "none; Pond.ID must exactly match the closed nonresponse registry and numeric fields use strict finite parsing"
+    },
+    "temporal_split": {
+      "available_study_years": [2000, 2020],
+      "calibration_transitions": "2000->2001 through 2010->2011",
+      "calibration_transition_count": 11,
+      "heldout_transitions": "2011->2012 through 2019->2020",
+      "heldout_transition_count": 9,
+      "fit_policy": "fit exactly once on pooled eligible calibration risk rows; never refit on heldout outcomes",
+      "sequential_layer_a_policy": "calibration outcomes update Layer A after each calibration prediction design; each heldout year is scored before that year's outcomes may update Layer A for the next year",
+      "outer_score_unit": "target year",
+      "expected_outer_score_units": 9
+    },
+    "count_gate": {
+      "must_run_before_model_fit": true,
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 7,
+      "heldout_outer_units_with_rows": 9,
+      "require_every_transition_has_current_internal_source": true,
+      "require_every_heldout_outer_unit_has_rows": true,
+      "failure_action": "write immutable non-estimable result with zero fits and zero heldout scores"
+    },
+    "process_source": {
+      "system": "64 monitored nonpermanent freshwater ponds in the 3212-ha Yale-Myers Forest",
+      "conditioning_boundary": "the predictive claim is explicitly conditional on realized current-year positive ponds inside the closed 64-pond monitoring registry",
+      "external_sources": "not represented; the endpoint is not interpreted as physical immigration and no external source is added after response access",
+      "persistence": "same-node possible-source persistence is admitted in the response-blind temporal closure audit",
+      "transition_relation": "the full-support exponential world permits every distinct internal pond pair; hard worlds remain falsifiable submodels",
+      "published_context": "female site fidelity after first breeding is high, while a small juvenile fraction may disperse up to 2000 m before first breeding",
+      "claim_limit": "internal source-conditioned predictive support, not biological source closure or ancestry"
+    },
+    "world_scale": {
+      "axis": "author-released inter-pond distance in meters",
+      "lcc_targets": [0.25, 0.5, 0.75, 0.9],
+      "thresholds_m": [288.2702158, 420.3265484, 512.778387, 847.3584341],
+      "threshold_world_ids": [
+        "geo_lcc250", "geo_lcc500", "geo_lcc750", "geo_lcc900"
+      ],
+      "full_world_id": "geo_exponential_full",
+      "kernel_scale_m": 500.0,
+      "kernel_scale_basis": "the publication's response-independent 500-m neighboring-pond density window; used as an analytical decay scale, not a dispersal limit",
+      "loss_support": 1.0,
+      "support_tolerance": 1e-15,
+      "threshold_interpretation": "minimal response-blind structural LCC regimes, not fitted movement distances"
+    },
+    "structural_adequacy": {
+      "required_distinct_lcc_thresholds": 4,
+      "minimum_largest_weak_component_fraction_for_one_world": 0.9,
+      "maximum_isolated_node_fraction_for_one_world": 0.1,
+      "require_at_least_one_world_pass": true,
+      "forecast_horizon": 1,
+      "expected_node_count": 64,
+      "expected_pair_count": 2016,
+      "matrix_symmetric": true,
+      "world_identity_supervised_column": false
+    },
+    "layer_a_rules": {
+      "declared_world_count": 5,
+      "current_sources": "all finite positive Avg.RASY.Count ponds at source year t",
+      "source_weights": "equal normalized weight across current internal sources",
+      "hard_world_support": "exp(-distance/500) for distinct pairs at or below the frozen LCC threshold, otherwise zero",
+      "full_world_support": "exp(-distance/500) for every distinct pond pair",
+      "transition_normalization": "Q[s,j]=W[s,j]/(1+sum_k W[s,k]); target support is the equal-current-source mean of Q[s,j]",
+      "update": "after each observed transition, eliminate a surviving hard rule if any newly positive risk-set target has support at or below 1e-15; the full-support rule is evaluated by the same unchanged rule",
+      "monotonicity": "worlds may only remain or be eliminated; eliminated worlds never return",
+      "all_eliminated": "stop and report frozen-universe falsification without scale or source rescue",
+      "world_labels_used_for_prediction": false,
+      "new_ecological_operator_added": false
+    },
+    "layer_b_representation": {
+      "implementation": "eog.v2.world_predictive_summary.summarize_worldset_for_prediction",
+      "representation_name": "symmetric_world_support_summary_v1",
+      "feature_names": [
+        "surviving_world_fraction", "support_mean", "support_std", "support_min",
+        "support_max", "support_q25", "support_q50", "support_q75",
+        "positive_support_fraction", "support_range"
+      ],
+      "world_label_invariant": true,
+      "exact_world_id_exposed_to_learner": false,
+      "unchanged_from_frozen_production_implementation": true
+    },
+    "comparators": {
+      "baseline": "frozen strong random-forest learner with conventional static pond, annual climate/hydrology, response-independent geometry, and lagged source-state predictors",
+      "augmented": "the identical frozen learner and identical conventional predictors plus the unchanged ten-column Layer-B block",
+      "only_difference": "Layer-B feature block",
+      "same_rows_labels_split_imputation_fit_policy_and_hyperparameters": true
+    },
+    "preprocessing_model_fit": {
+      "python": "3.12",
+      "numpy": "2.3.5",
+      "scikit_learn": "1.8.0",
+      "seed": 20260822,
+      "learner": "sklearn.ensemble.RandomForestClassifier",
+      "hyperparameters": {
+        "n_estimators": 1000,
+        "max_features": "sqrt",
+        "min_samples_leaf": 5,
+        "class_weight": null,
+        "random_state": 20260822,
+        "n_jobs": 1
+      },
+      "baseline_feature_names": [
+        "target_year_index",
+        "target_year_index_squared",
+        "log1p_area_m2",
+        "area_missing",
+        "canopy_percent",
+        "canopy_missing",
+        "target_depth_cm",
+        "target_depth_missing",
+        "target_days_thawed",
+        "target_days_thawed_missing",
+        "target_spfa_pdsi",
+        "target_spfa_pdsi_missing",
+        "target_lag2_log1p_egg_masses",
+        "target_lag2_missing",
+        "target_mean_distance_m",
+        "target_nearest_other_pond_m",
+        "target_degree_lcc250",
+        "target_degree_lcc500",
+        "target_degree_lcc750",
+        "target_degree_lcc900",
+        "current_source_count",
+        "log1p_current_source_total_egg_masses",
+        "nearest_current_source_distance_m",
+        "source_count_lcc250",
+        "source_count_lcc500",
+        "source_count_lcc750",
+        "source_count_lcc900",
+        "source_exponential_exposure_lcc250",
+        "source_exponential_exposure_lcc500",
+        "source_exponential_exposure_lcc750",
+        "source_exponential_exposure_lcc900",
+        "source_exponential_exposure_full",
+        "eggmass_weighted_exposure_lcc250",
+        "eggmass_weighted_exposure_lcc500",
+        "eggmass_weighted_exposure_lcc750",
+        "eggmass_weighted_exposure_lcc900",
+        "eggmass_weighted_exposure_full"
+      ],
+      "forbidden_response_derived_predictors": [
+        "RASY.Count.1", "RASY.Count.2", "Avg.RASY.Count at target year",
+        "RASYdens", "GrowthRate", "RASYdens_t2", "spfaPDSIlag", "wEggs"
+      ],
+      "missing_value_policy": "numeric medians learned on calibration rows only and applied unchanged to heldout rows; explicit missing-indicator columns are frozen; an all-missing calibration feature stops before fit",
+      "exact_pond_id_supervised": false,
+      "exact_world_id_supervised": false
+    },
+    "metrics_decision": {
+      "primary_metric": "binary_log_loss",
+      "probability_clip": 1e-06,
+      "macro_unit": "heldout target year",
+      "expected_outer_unit_count": 9,
+      "lower_is_better": true,
+      "favorable_min_augmented_wins": 5,
+      "adverse_min_baseline_wins": 5,
+      "tie_tolerance": 0.0,
+      "favorable": "favorable_complementary_added_value",
+      "null": "no_confirmed_complementary_added_value",
+      "adverse": "adverse_complementary_added_value"
+    },
+    "runtime_runner": {
+      "path": "benchmarks/run_yale_myers_woodfrog_paired_complementarity_once.py",
+      "sha256": "3431592090535735daa687f63391acc610e7a9a7f29e33a2fc35c9c1bcbc2625",
+      "response_full_downloads_per_authorized_run": 1,
+      "response_header_range_reads_before_authorization": true,
+      "outcome_retry_policy": "none",
+      "outcome_invocation": "one marker-only GitHub Actions commit"
+    },
+    "non_estimable_stop": {
+      "exact_count_gate_first": true,
+      "zero_fit_on_count_failure": true,
+      "zero_score_on_count_failure": true,
+      "no_post_open_redesign": true,
+      "no_post_open_retry": true,
+      "schema_or_identity_failure_after_open_is_terminal": true,
+      "result_recording_after_open_is_not_redesign": true
+    }
+  }
+}
