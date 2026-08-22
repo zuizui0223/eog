@@ -25,8 +25,12 @@ outer units. A plot-period zero is eligible only when the separate effort ledger
 `sampled=1`, `effort>=47` and `qcflag=1`, and transitions must join consecutive new-moon
 indices. Period 53 legitimately spans collection dates from 30 December 1981 through
 1 January 1982; its period identity and census date remain those in the separate moon
-registry. The predictive claim is explicitly conditional on currently recorded internal
-plot sources; outside immigration is not represented or interpreted.
+registry. The consecutive period 277 to 278 pair has zero possible risk rows under the
+frozen effort rule and is recorded but not scored. Source closure is evaluated separately
+for every declared one-step score because current sources are observed conditioning
+states, not inferred ancestors across an unscored gap. The predictive claim is explicitly
+conditional on currently recorded internal plot sources; outside immigration is not
+represented or interpreted.
 
 If stage one is green, the exact observed physical header and derived geometry evidence
 will be frozen with the complete 16-key outcome-access ledger, identical strong learners,

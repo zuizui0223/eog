@@ -406,6 +406,7 @@ def effort_time_gate(
             categories[name].add(row[name])
 
     transitions: list[dict[str, object]] = []
+    zero_risk_row_transitions: list[dict[str, object]] = []
     for number in sorted(moon_by_number):
         if number + 1 not in moon_by_number:
             continue
@@ -420,6 +421,14 @@ def effort_time_gate(
             and availability.get((target_period, plot), False)
         ]
         if not eligible:
+            zero_risk_row_transitions.append(
+                {
+                    "newmoonnumber": number,
+                    "source_period": source_period,
+                    "target_period": target_period,
+                    "target_date": target_date.isoformat(),
+                }
+            )
             continue
         for plot in eligible:
             if (target_date.year, target_date.month, plot) not in plot_months:
@@ -448,33 +457,89 @@ def effort_time_gate(
         }
         for year in range(2012, 2020)
     }
-    if len(calibration) != 374 or len(heldout) != 87:
+    split_frozen = contract["temporal_split"]
+    observed_counts = {
+        "declared_transition_count": len(transitions),
+        "calibration_transition_count": len(calibration),
+        "calibration_potential_plot_rows": sum(
+            len(row["eligible_plots"]) for row in calibration
+        ),
+        "heldout_transition_count": len(heldout),
+        "heldout_potential_plot_rows": sum(
+            len(row["eligible_plots"]) for row in heldout
+        ),
+    }
+    if observed_counts != split_frozen["response_independent_counts"]:
         raise RuntimeError("response-independent transition count drift")
-    if any(value["transition_count"] == 0 for value in by_year.values()):
-        raise RuntimeError("a frozen heldout year has no response-independent transition")
+    if by_year != split_frozen["heldout_response_independent_counts"]:
+        raise RuntimeError("heldout response-independent year counts drift")
+    if zero_risk_row_transitions != split_frozen["zero_risk_row_transitions"]:
+        raise RuntimeError("zero-risk-row consecutive transition registry drift")
 
-    eligible_matrix = np.zeros((24, len(transitions)), dtype=bool)
-    for column, row in enumerate(transitions):
-        for plot in row["eligible_plots"]:
-            eligible_matrix[plot - 1, column] = True
     declaration = TemporalSourceClosureDeclaration(
-        closure_id="portal_dm_declared_score_transition_closure_v1",
-        source_semantics="all response-blind possible internal plots at the first declared scored transition",
+        closure_id="portal_dm_independent_one_step_internal_source_closure_v1",
+        source_semantics=(
+            "for each scored transition independently, every source-period plot admitted "
+            "by the frozen effort rule is a response-blind possible realized internal source"
+        ),
         transition_semantics=(
-            "optimistic propagation across each declared consecutive-newmoon scored transition; "
-            "target and persistence eligibility require the frozen effort rule"
+            "one-step propagation through the frozen full-support conditional world to a "
+            "different risk-eligible target; no ancestry or continuity is claimed across "
+            "unscored gaps"
         ),
     )
-    result = evaluate_temporal_source_closure(
-        declaration,
-        node_ids,
-        np.ones(24, dtype=bool),
-        eligible_matrix,
-        eligible_matrix,
-        worlds["portal_plot_euclidean_full"],
-    )
-    if not result.passed:
-        raise RuntimeError(f"temporal source closure stopped: {result.status}")
+    closure_transitions = []
+    for transition_index, row in enumerate(transitions):
+        source_period = int(row["source_period"])
+        initial = np.asarray(
+            [availability.get((source_period, plot), False) for plot in range(1, 25)],
+            dtype=bool,
+        )
+        targets = np.zeros((24, 1), dtype=bool)
+        for plot in row["eligible_plots"]:
+            targets[plot - 1, 0] = True
+        result = evaluate_temporal_source_closure(
+            declaration,
+            node_ids,
+            initial,
+            np.zeros((24, 1), dtype=bool),
+            targets,
+            worlds["portal_plot_euclidean_full"],
+        )
+        if not result.passed:
+            raise RuntimeError(
+                "independent one-step temporal source closure stopped at "
+                f"newmoonnumber {row['newmoonnumber']}: {result.status}"
+            )
+        closure_transitions.append(
+            {
+                "transition_index": transition_index,
+                "newmoonnumber": row["newmoonnumber"],
+                "source_period": source_period,
+                "target_period": row["target_period"],
+                "initial_possible_source_count": result.possible_source_counts[0],
+                "risk_eligible_target_count": len(row["eligible_plots"]),
+                "possible_after_count": result.possible_source_counts[-1],
+                "input_fingerprint": result.input_fingerprint,
+                "result_fingerprint": result.fingerprint,
+            }
+        )
+    closure_result = {
+        "status": "temporal_source_closure_pass",
+        "passed": True,
+        "evaluated_transition_count": len(closure_transitions),
+        "minimum_initial_possible_source_count": min(
+            row["initial_possible_source_count"] for row in closure_transitions
+        ),
+        "minimum_risk_eligible_target_count": min(
+            row["risk_eligible_target_count"] for row in closure_transitions
+        ),
+        "minimum_possible_after_count": min(
+            row["possible_after_count"] for row in closure_transitions
+        ),
+        "declaration_fingerprint": declaration.fingerprint,
+        "transition_audits": closure_transitions,
+    }
     return {
         "effort_rows": len(effort_rows),
         "effort_period_count": len(period_dates),
@@ -482,14 +547,11 @@ def effort_time_gate(
         "time_authority": frozen["time_authority"],
         "plot_treatment_rows": len(plot_rows),
         "treatment_categories": {key: sorted(value) for key, value in categories.items()},
-        "declared_transition_count": len(transitions),
-        "calibration_transition_count": len(calibration),
-        "calibration_potential_plot_rows": sum(len(row["eligible_plots"]) for row in calibration),
-        "heldout_transition_count": len(heldout),
-        "heldout_potential_plot_rows": sum(len(row["eligible_plots"]) for row in heldout),
+        **observed_counts,
+        "zero_risk_row_transitions": zero_risk_row_transitions,
         "heldout_response_independent_counts": by_year,
         "closure_declaration": asdict(declaration),
-        "closure_result": asdict(result),
+        "closure_result": closure_result,
     }
 
 

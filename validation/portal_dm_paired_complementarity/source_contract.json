@@ -161,7 +161,33 @@
     "calibration": "eligible target census year <= 2011",
     "heldout": "eligible target census year in 2012..2019",
     "outer_score_units": ["2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"],
-    "fit_policy": "fit once on pooled calibration risk rows only; never refit on heldout outcomes"
+    "fit_policy": "fit once on pooled calibration risk rows only; never refit on heldout outcomes",
+    "response_independent_counts": {
+      "declared_transition_count": 460,
+      "calibration_transition_count": 373,
+      "calibration_potential_plot_rows": 8675,
+      "heldout_transition_count": 87,
+      "heldout_potential_plot_rows": 1888
+    },
+    "heldout_response_independent_counts": {
+      "2012": {"transition_count": 12, "potential_plot_rows": 266},
+      "2013": {"transition_count": 5, "potential_plot_rows": 120},
+      "2014": {"transition_count": 12, "potential_plot_rows": 276},
+      "2015": {"transition_count": 11, "potential_plot_rows": 252},
+      "2016": {"transition_count": 11, "potential_plot_rows": 216},
+      "2017": {"transition_count": 13, "potential_plot_rows": 261},
+      "2018": {"transition_count": 12, "potential_plot_rows": 240},
+      "2019": {"transition_count": 11, "potential_plot_rows": 257}
+    },
+    "zero_risk_row_transitions": [
+      {
+        "newmoonnumber": 297,
+        "source_period": 277,
+        "target_period": 278,
+        "target_date": "2001-07-21"
+      }
+    ],
+    "closure_scope": "evaluate each declared one-step scored transition independently because sources are observed conditioning states at that transition; do not infer ancestry or continuity across the unscored zero-risk gap"
   },
   "world_scale": {
     "axis_id": "portal_plot_euclidean_m",

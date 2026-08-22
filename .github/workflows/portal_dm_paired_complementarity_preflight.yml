@@ -49,7 +49,7 @@ jobs:
           assert result["geometry_audit"]["node_count"] == 24
           assert result["geometry_audit"]["stake_rows"] == 1176
           assert result["structural_gates"]["distinct_threshold_count"] == 3
-          assert result["effort_time_audit"]["calibration_transition_count"] == 374
+          assert result["effort_time_audit"]["calibration_transition_count"] == 373
           assert result["effort_time_audit"]["heldout_transition_count"] == 87
           assert result["effort_time_audit"]["closure_result"]["status"] == "temporal_source_closure_pass"
           assert result["response_header_gate"]["result"]["status"] == "header_schema_match"
