@@ -2,6 +2,13 @@ name: IEP zooplankton response-blind geometry probe
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - agent/iep-zooplankton-geometry-gate
+    paths:
+      - .github/workflows/iep_zooplankton_geometry_probe.yml
+      - validation/iep_zooplankton_paired_complementarity/geometry_probe_contract.json
+      - validation/iep_zooplankton_paired_complementarity/probe_geometry.py
 
 permissions:
   contents: read
