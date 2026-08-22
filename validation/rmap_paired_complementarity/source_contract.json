@@ -1,0 +1,78 @@
+{
+  "attempt_id": "rmap_2012_2019_figshare_v2_fresh_paired_v1",
+  "candidate": "Rocky Mountain Amphibian Project dynamic occupancy, 2012-2019",
+  "source": {
+    "repository": "Figshare",
+    "article_id": 31257466,
+    "article_version": 2,
+    "versioned_doi": "10.6084/m9.figshare.31257466.v2",
+    "landing_url": "https://figshare.com/articles/dataset/Rocky_Mountain_Amphibian_Project_occupancy_data_and_analyses/31257466",
+    "expected_title": "Rocky Mountain Amphibian Project occupancy data and analyses"
+  },
+  "focal_species": {
+    "common_name": "Western tiger salamander",
+    "scientific_name": "Ambystoma mavortium",
+    "selection_timing": "frozen before any Figshare file payload bytes are opened",
+    "selection_reason": "preselected for its aquatic-breeding and terrestrial-matrix life cycle, which makes spatial support and process complementarity scientifically material; no RMAP detection, occupancy, count, fitted-state, or model-result payload was consulted"
+  },
+  "outer_units": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
+  "prospective_split": {
+    "calibration_transitions": [
+      "2012->2013",
+      "2013->2014",
+      "2014->2015",
+      "2015->2016"
+    ],
+    "heldout_transitions": [
+      "2016->2017",
+      "2017->2018",
+      "2018->2019"
+    ],
+    "fit_policy": "fit the frozen learner on calibration transitions only; do not refit on heldout outcomes",
+    "heldout_source_policy": "a heldout transition may condition on its observed source-year state only if the response-blind temporal source/process closure gate passes; source states are not training rows or inferred ancestors"
+  },
+  "generic_minima": {
+    "minimum_nodes": 60,
+    "minimum_outer_units": 8,
+    "minimum_repeated_nodes": 40,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "paired_decision_shell": {
+    "primary_metric": "binary log loss",
+    "lower_is_better": true,
+    "expected_heldout_outer_units": 3,
+    "favorable_min_augmented_wins": 2,
+    "adverse_min_baseline_wins": 2,
+    "tie_tolerance": 0.0,
+    "comparison": "one frozen strong learner with conventional predictors versus the same learner, preprocessing, fit policy, conventional predictors, response endpoint, and split plus the unchanged label-invariant Layer-B feature block"
+  },
+  "metadata_inventory_gate": {
+    "allowed_now": [
+      "the exact version-2 Figshare article JSON metadata response",
+      "top-level file identities contained in that JSON: file ID, name, declared size, link-only flag, checksum fields, and download URL string"
+    ],
+    "forbidden_now": [
+      "every URL exposed in a Figshare file download_url field",
+      "Figshare ndownloader article or file endpoints",
+      "archive range requests or archive member bytes",
+      "file previews",
+      "README, code, registry, geometry, response, fitted-state, and model-result payload bytes"
+    ],
+    "pass_condition": "the exact article identity is verified and a non-empty top-level file inventory is obtained with zero file-download requests and zero file payload bytes",
+    "stop_condition": "article identity drift, missing file inventory, ambiguous or malformed file identities, or any file-download request"
+  },
+  "next_gate_if_metadata_inventory_passes": {
+    "action": "freeze exact file IDs for response-independent registry/geometry and code documentation from the metadata inventory before selectively opening any such payload",
+    "node_rule": "use only an author-defined persistent catchment or wetland-site identifier present in a separately identifiable response-independent registry/geometry source; do not derive membership, merge nodes, or filter nodes from detections, occupancy, fitted states, or model results",
+    "hard_stop": "if the top-level inventory cannot separate response-independent registry/geometry and documentation from response-bearing payloads without guessing, record ineligible_pre_response and do not download the mixed payload"
+  },
+  "response_firewall": {
+    "response_file_ids": [],
+    "response_file_ids_status": "not yet resolved; all file payload access is therefore forbidden",
+    "file_download_requests": [],
+    "file_payload_bytes_opened": 0,
+    "response_rows_opened": false
+  }
+}
