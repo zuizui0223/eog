@@ -2,6 +2,7 @@
 """Response-blind source, geometry, effort, closure and header gate for Portal DM."""
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import asdict
 import csv
 from datetime import date
@@ -179,27 +180,66 @@ def geometry_gate(payload: bytes, contract: dict) -> tuple[tuple[str, ...], np.n
     if len(rows) != int(contract["node_geometry"]["expected_coordinate_rows"]):
         raise RuntimeError("coordinate row count drift")
     expected_numbers = {10 * r + c for r in range(1, 8) for c in range(1, 8)}
-    stakes: dict[int, dict[int, tuple[float, float]]] = {plot: {} for plot in range(1, 25)}
+    stakes: dict[int, list[tuple[int, int, float, float, int]]] = {
+        plot: [] for plot in range(1, 25)
+    }
+    stake_gps_numbers: set[int] = set()
     flag_counts = {0: 0, 1: 0}
     for row in rows:
         if row["type"] != "stake":
             continue
+        gps_number = exact_int(row["gps_num"], "coordinate gps_num")
         plot = exact_int(row["plot"], "coordinate plot")
         number = exact_int(row["number"], "coordinate stake number")
         flag = exact_int(row["flag"], "coordinate flag")
         if plot not in stakes or number not in expected_numbers or flag not in flag_counts:
             raise RuntimeError("stake row lies outside the frozen registry")
-        if number in stakes[plot]:
-            raise RuntimeError(f"duplicate coordinate stake: {(plot, number)}")
+        if gps_number in stake_gps_numbers:
+            raise RuntimeError(f"duplicate stake gps_num: {gps_number}")
         east = finite_float(row["east"], "stake east")
         north = finite_float(row["north"], "stake north")
-        stakes[plot][number] = (east, north)
+        stakes[plot].append((gps_number, number, east, north, flag))
+        stake_gps_numbers.add(gps_number)
         flag_counts[flag] += 1
-    if any(set(values) != expected_numbers for values in stakes.values()):
-        raise RuntimeError("stake geometry does not exactly cover 24 released 7x7 grids")
+    expected_rows_per_plot = int(contract["node_geometry"]["expected_stake_rows_per_plot"])
+    if any(len(values) != expected_rows_per_plot for values in stakes.values()):
+        raise RuntimeError("stake geometry does not have exactly 49 released rows per plot")
+
+    number_anomalies: list[dict[str, object]] = []
+    for plot, values in stakes.items():
+        counts = Counter(value[1] for value in values)
+        missing = sorted(expected_numbers - set(counts))
+        duplicated = [
+            {
+                "number": number,
+                "row_count": count,
+                "gps_num": sorted(value[0] for value in values if value[1] == number),
+            }
+            for number, count in sorted(counts.items())
+            if count > 1
+        ]
+        if missing or duplicated:
+            number_anomalies.append(
+                {
+                    "plot": plot,
+                    "missing_numbers": missing,
+                    "duplicated_numbers": duplicated,
+                }
+            )
+    if number_anomalies != contract["node_geometry"]["released_stake_number_anomalies"]:
+        raise RuntimeError("released stake-number anomaly differs from the frozen contract")
+
+    coordinate_pairs = [
+        (value[2], value[3]) for values in stakes.values() for value in values
+    ]
+    if len(set(coordinate_pairs)) != 24 * expected_rows_per_plot:
+        raise RuntimeError("released stake coordinate pairs are not unique")
     centers = np.asarray(
         [
-            np.mean(np.asarray([stakes[p][n] for n in sorted(expected_numbers)]), axis=0)
+            np.mean(
+                np.asarray([(value[2], value[3]) for value in stakes[p]], dtype=float),
+                axis=0,
+            )
             for p in range(1, 25)
         ],
         dtype=float,
@@ -216,7 +256,10 @@ def geometry_gate(payload: bytes, contract: dict) -> tuple[tuple[str, ...], np.n
         "coordinate_rows": len(rows),
         "stake_rows": sum(len(value) for value in stakes.values()),
         "node_count": len(node_ids),
-        "stakes_per_plot": 49,
+        "released_stake_rows_per_plot": expected_rows_per_plot,
+        "released_stake_number_anomalies": number_anomalies,
+        "unique_stake_gps_num_count": len(stake_gps_numbers),
+        "unique_stake_coordinate_pair_count": len(set(coordinate_pairs)),
         "stake_flag_counts": flag_counts,
         "plot_centers": centers.tolist(),
         "minimum_pair_distance_m": float(np.min(pairs)),
