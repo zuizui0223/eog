@@ -1,0 +1,31 @@
+name: Glenelg fox paired complementarity probe
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "validation/glenelg_fox_paired_complementarity/probe.py"
+      - ".github/workflows/glenelg_fox_paired_complementarity_probe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  response-blind-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Probe only non-response ZIP members
+        run: |
+          python validation/glenelg_fox_paired_complementarity/probe.py \
+            --output build/glenelg_fox_paired_complementarity/probe.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: glenelg-fox-response-blind-probe
+          path: build/glenelg_fox_paired_complementarity/probe.json
+          if-no-files-found: error
