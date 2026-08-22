@@ -6,11 +6,13 @@ on:
       - agent/fresh-candidate-next
     paths:
       - ".github/workflows/portal_dm_paired_complementarity_freeze.yml"
+      - ".github/workflows/portal_dm_paired_complementarity_outcome_once.yml"
       - "benchmarks/run_portal_dm_paired_complementarity_once.py"
       - "validation/portal_dm_paired_complementarity/**"
   pull_request:
     paths:
       - ".github/workflows/portal_dm_paired_complementarity_freeze.yml"
+      - ".github/workflows/portal_dm_paired_complementarity_outcome_once.yml"
       - "benchmarks/run_portal_dm_paired_complementarity_once.py"
       - "validation/portal_dm_paired_complementarity/**"
   workflow_dispatch:

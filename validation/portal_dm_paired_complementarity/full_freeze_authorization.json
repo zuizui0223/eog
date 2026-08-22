@@ -1,0 +1,157 @@
+{
+  "attempt_id": "portal_dm_fresh_paired_v1",
+  "contract_sha256": "7ad690c65f1ba79548086c4a8861ba8b21ea410dc2b095f987d595ae104ea0dc",
+  "fingerprint": "16a811b66984421d16807d0a7533b357d539105dfa2b74886aa8e3d31d528c0d",
+  "freeze_fingerprints": {
+    "comparators": "bd892879dc8e06d160be5e1a537eed9948402df0e138c33f3b6e923cade23992",
+    "count_gate": "0489bc18d09211bce314ef8213a5d4ae10b21da1186463a579c98827061543f3",
+    "layer_a_rules": "ce37dd067b20717111c242b049a2e538ac0e4f7d0f75e032b9c8a3d5fa9f8060",
+    "layer_b_representation": "92e87060b7481bfdf90d9444eedac63c6d83f91d3991c1b311dc8154ca24b7fb",
+    "metrics_decision": "3b38b7e86196465ba9734b71fcfd761550a1b307bb5efa037a608784daeb46b0",
+    "node_geometry": "ab26f39a6853081b412fd1c2528b7f5e65f278d5638719ac6b9e55d32cee4e8b",
+    "non_estimable_stop": "48cc0ee74fd51182010b57ee62be42108c41322f54b7dc2b44a6e2604cb98c0a",
+    "preprocessing_model_fit": "3115dfa869f85abee1aae42a653619f20fe10ef88d78349c50bed481cc060bd9",
+    "process_source": "a6380b9b446fada151900025de3b2543b79cfe4cf68fa06672c07b230c25ff46",
+    "response_identity": "c4f3fdf8bd5b88bb4ccedaa6d3652e44fb2fd5c3be110d00e607d3d2260dcd55",
+    "response_semantics": "b9a549607c3af4a26e18ced25105bd0991a5ac6c1a117da528859c84393b70ff",
+    "runtime_runner": "5df97806dc8252bfaca922692927f143280f60adc3fda68f605c62957a805cbc",
+    "source_identity": "19397f6c05140db77870f64daa28abe95f837553fe3086a3c794439d511fd1c7",
+    "structural_adequacy": "051ca2a7b6e17b72b9b203250259daa7044151d4ae31df6ffc9bf4d8f008b220",
+    "temporal_split": "6a413a3a28f1870c1a2b625a33a7ccdcf9dbb1b07ac971585810388e2647519f",
+    "world_scale": "71f84a74199cfbb5d8785a240e7742c7364ed6851715472acc661b4b81c81f78"
+  },
+  "heldout_scores": 0,
+  "model_fits": 0,
+  "outcome_access_contract_fingerprint": "a0b3ca70b6b6ef660cff06083d0736904e46d314bf5d2ca0b4a5630ab3d13cad",
+  "outcome_access_gate": {
+    "authorized": true,
+    "contract_fingerprint": "a0b3ca70b6b6ef660cff06083d0736904e46d314bf5d2ca0b4a5630ab3d13cad",
+    "estimability_fingerprint": "c64ec9acac0b396b38da54e2981e7d3be8ddd1801aa40cdf64f8ca0ff2945eb7",
+    "exact_count_gate_first": true,
+    "fingerprint": "308e45fff25bdad015f1aca393ee794e5ebfcaf8f9b79cbb9f06d4b6d966c296",
+    "missing_freeze_keys": [],
+    "no_post_open_redesign": true,
+    "prospective_disposition": "continue_response_blind_exact_gate_required",
+    "reason": "all response-blind freezes are present; outcome runner may begin with the exact count gate and must stop before fitting/scoring if that gate fails",
+    "status": "authorized_once_only_exact_count_gate_required",
+    "zero_fit_on_count_failure": true
+  },
+  "prospective_declaration": {
+    "calibration_events": 40,
+    "calibration_non_events": 200,
+    "heldout_events": 16,
+    "heldout_non_events": 80,
+    "heldout_outer_units_with_both_classes": 8
+  },
+  "prospective_estimability": {
+    "endpoint_definition_matches": false,
+    "evidence_intervals": [
+      [
+        "calibration_events",
+        null,
+        null
+      ],
+      [
+        "calibration_non_events",
+        null,
+        null
+      ],
+      [
+        "heldout_events",
+        null,
+        null
+      ],
+      [
+        "heldout_non_events",
+        null,
+        null
+      ],
+      [
+        "heldout_outer_units_with_both_classes",
+        null,
+        null
+      ]
+    ],
+    "failing_keys": [],
+    "fingerprint": "c64ec9acac0b396b38da54e2981e7d3be8ddd1801aa40cdf64f8ca0ff2945eb7",
+    "note": "unknown is retained as uncertain_pre_response; the unchanged exact count gate is the first outcome-dependent analytical operation",
+    "required_counts": [
+      [
+        "calibration_events",
+        40
+      ],
+      [
+        "calibration_non_events",
+        200
+      ],
+      [
+        "heldout_events",
+        16
+      ],
+      [
+        "heldout_non_events",
+        80
+      ],
+      [
+        "heldout_outer_units_with_both_classes",
+        8
+      ]
+    ],
+    "source_label": "official Portal metadata and living-data paper provide no endpoint-matched split-specific counts for the frozen monthly zero-to-positive DM risk rows",
+    "status": "uncertain_pre_response",
+    "unresolved_keys": [
+      "calibration_events",
+      "calibration_non_events",
+      "heldout_events",
+      "heldout_non_events",
+      "heldout_outer_units_with_both_classes"
+    ]
+  },
+  "prospective_evidence": {
+    "endpoint_definition_matches": false,
+    "intervals": {
+      "calibration_events": {
+        "lower": null,
+        "upper": null
+      },
+      "calibration_non_events": {
+        "lower": null,
+        "upper": null
+      },
+      "heldout_events": {
+        "lower": null,
+        "upper": null
+      },
+      "heldout_non_events": {
+        "lower": null,
+        "upper": null
+      },
+      "heldout_outer_units_with_both_classes": {
+        "lower": null,
+        "upper": null
+      }
+    },
+    "note": "unknown is retained as uncertain_pre_response; the unchanged exact count gate is the first outcome-dependent analytical operation",
+    "response_rows_opened": false,
+    "source_label": "official Portal metadata and living-data paper provide no endpoint-matched split-specific counts for the frozen monthly zero-to-positive DM risk rows"
+  },
+  "response_download_requests": [],
+  "response_payload_bytes_opened": 0,
+  "response_rows_opened": false,
+  "response_values_opened": false,
+  "runner_sha256": "22dfcfa274a53d598245e8842abd6f883ed604626341a488646473399199f46d",
+  "stage_one_audit": {
+    "closure_declaration_fingerprint": "61c048d9af6133c64a216dd15b6e9b9a4b301d25bc5a600cf42bd80b2a19709d",
+    "geometry_center_fingerprint": "9c2c97734a8bb448e08ebffb24ebce22473b2a455b0b52645a83aeb5e02af5ce",
+    "header_gate_fingerprint": "252660c84b4869dfdea2f55fe93f6d4ce04aa67f86587034f5e67e30d8b7de99",
+    "stage_one_fingerprint": "f1b0a5a3bfaac2f8dc5e17d695acdf0fdd87ceec5ef2e6c062d59bfdeeec061e",
+    "structural_adequacy_fingerprint": "6d803c46ef579cd3e0b023fe23818f0880bfdb9a00af0935ebc21be4c1ca48dc"
+  },
+  "status": "authorized_once_only_exact_count_gate_required",
+  "synthetic_smoke_audit": {
+    "paired_declaration_fingerprint": "81c1a71b6f369761dadcd40abb5f90c53a5f1c5fcd9c0dafc674e9014294a961",
+    "smoke_core_fingerprint": "82df01921f770c5a692a6847c3d94f42c65e9bcb3ef910c69da950b57e9b7b3b",
+    "smoke_result_fingerprint": "83d7bafa3d9cb21d8d837da7d2c1dc95eb5eb7225a15dec86c13a43a3152a1d9",
+    "synthetic_fixture_fingerprint": "136bbd023b9fd68e8990e68ecf08b45fc0c0efed1a7e071d186d1f68a00bb58f"
+  }
+}

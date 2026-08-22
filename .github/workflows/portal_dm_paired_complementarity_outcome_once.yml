@@ -1,0 +1,159 @@
+name: Portal DM paired complementarity authoritative outcome once
+
+on:
+  push:
+    branches:
+      - agent/fresh-candidate-next
+    paths:
+      - "validation/portal_dm_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portal-dm-authoritative-outcome-once
+  cancel-in-progress: false
+
+jobs:
+  authoritative-outcome-once:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Reject any workflow rerun before checkout or response access
+        run: |
+          if [ "${GITHUB_RUN_ATTEMPT}" != "1" ]; then
+            echo "The frozen no-retry contract rejects workflow reruns."
+            exit 64
+          fi
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Assert the authorizing commit contains only the marker
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import subprocess
+
+          marker_path = Path(
+              "validation/portal_dm_paired_complementarity/"
+              "OUTCOME_AUTHORIZED_ONCE.json"
+          )
+          authorization_path = Path(
+              "validation/portal_dm_paired_complementarity/"
+              "full_freeze_authorization.json"
+          )
+          contract_path = Path(
+              "validation/portal_dm_paired_complementarity/source_contract.json"
+          )
+          runner_path = Path("benchmarks/run_portal_dm_paired_complementarity_once.py")
+          expected = {
+              marker_path.as_posix()
+          }
+          changed = set(subprocess.check_output(
+              ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"],
+              text=True,
+          ).splitlines())
+          if changed != expected:
+              raise SystemExit(f"authorizing commit is not marker-only: {sorted(changed)!r}")
+
+          marker = json.loads(marker_path.read_text())
+          authorization = json.loads(authorization_path.read_text())
+          parent = subprocess.check_output(
+              ["git", "rev-parse", "HEAD^"], text=True
+          ).strip()
+          if marker["authorized_parent_commit"] != parent:
+              raise SystemExit("marker does not bind the immediately preceding commit")
+          if marker["preflight_fingerprint"] != authorization["fingerprint"]:
+              raise SystemExit("marker does not bind the committed full-freeze result")
+          if marker["outcome_access_gate_fingerprint"] != authorization[
+              "outcome_access_gate"
+          ]["fingerprint"]:
+              raise SystemExit("marker does not bind the committed outcome gate")
+          for field, path in (
+              ("contract_sha256", contract_path),
+              ("runner_sha256", runner_path),
+          ):
+              observed = hashlib.sha256(path.read_bytes()).hexdigest()
+              if marker[field] != observed or authorization[field] != observed:
+                  raise SystemExit(f"{field} differs from the authorized freeze")
+          PY
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install frozen paired environment
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scikit-learn==1.8.0"
+          python -m pip install -e .
+      - name: Open the pinned response once and run the frozen test
+        run: |
+          set -euo pipefail
+          python benchmarks/run_portal_dm_paired_complementarity_once.py \
+            --mode outcome \
+            --authorization-marker \
+              validation/portal_dm_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json \
+            --preflight-result \
+              validation/portal_dm_paired_complementarity/full_freeze_authorization.json \
+            --output \
+              build/portal_dm_paired_complementarity/authoritative_outcome_once/outcome.json
+      - name: Assert the no-retry terminal boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path(
+              "build/portal_dm_paired_complementarity/"
+              "authoritative_outcome_once/outcome.json"
+          )
+          result = json.loads(path.read_text())
+          allowed = {
+              "completed_frozen_paired_test",
+              "non_estimable_exact_count_gate_zero_fit",
+              "layer_b_non_estimable_zero_fit",
+              "post_open_schema_or_identity_stop_no_retry",
+              "post_open_count_gate_stop_no_retry",
+              "post_open_execution_failure_no_retry",
+          }
+          assert result["status"] in allowed
+          assert result["execution_mode"] == "outcome"
+          assert len(result["response_download_requests"]) == 1
+          assert result["authorization"]["invocation_budget"] == 1
+          assert result["exact_plot_id_supervised"] is False
+          assert result["exact_world_id_supervised"] is False
+
+          if result["status"] == "non_estimable_exact_count_gate_zero_fit":
+              assert result["exact_count_gate_executed"] is True
+              assert result["exact_count_gate"]["outcome_dependent_operation_index"] == 1
+              assert result["layer_a_updates"] == 0
+              assert result["models_fit"] == 0
+              assert result["heldout_scores"] == 0
+
+          if result["status"] == "completed_frozen_paired_test":
+              assert result["response_rows_opened"] is True
+              assert result["response_values_opened"] is True
+              assert result["exact_count_gate"]["passed"] is True
+              assert result["exact_count_gate"]["outcome_dependent_operation_index"] == 1
+              assert result["models_fit"] == 2
+              assert result["heldout_scores"] == 16
+              assert result["model_feature_audit"]["exact_plot_id_supervised"] is False
+              assert result["model_feature_audit"]["exact_world_id_supervised"] is False
+
+          print(json.dumps({
+              "status": result["status"],
+              "paired_status": result.get("paired_complementarity", {}).get("status"),
+              "models_fit": result.get("models_fit", 0),
+              "heldout_scores": result.get("heldout_scores", 0),
+              "fingerprint": result["fingerprint"],
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Upload the authoritative once-only outcome
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portal-dm-authoritative-outcome-once
+          path: build/portal_dm_paired_complementarity/authoritative_outcome_once/
+          if-no-files-found: error
