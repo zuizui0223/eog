@@ -1,0 +1,79 @@
+name: Portal DM fresh paired complementarity preflight
+
+on:
+  push:
+    branches:
+      - agent/fresh-candidate-next
+    paths:
+      - ".github/workflows/portal_dm_paired_complementarity_preflight.yml"
+      - "validation/portal_dm_paired_complementarity/**"
+  pull_request:
+    paths:
+      - ".github/workflows/portal_dm_paired_complementarity_preflight.yml"
+      - "validation/portal_dm_paired_complementarity/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  response-blind-candidate-and-header:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install frozen response-blind environment
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5"
+          python -m pip install -e .
+      - name: Run response-blind candidate, geometry, effort, closure and header gates
+        run: |
+          set -euo pipefail
+          python validation/portal_dm_paired_complementarity/preflight.py
+      - name: Assert strict stage-one boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(Path(
+              "build/portal_dm_paired_complementarity/preflight/preflight.json"
+          ).read_text())
+          assert result["status"] == "response_blind_candidate_header_ready_for_full_freeze"
+          assert result["candidate_preflight"]["result"]["status"] == "ready_for_geometry_gate"
+          assert result["geometry_audit"]["node_count"] == 24
+          assert result["geometry_audit"]["stake_rows"] == 1176
+          assert result["structural_gates"]["distinct_threshold_count"] == 3
+          assert result["effort_time_audit"]["calibration_transition_count"] == 374
+          assert result["effort_time_audit"]["heldout_transition_count"] == 87
+          assert result["effort_time_audit"]["closure_result"]["status"] == "temporal_source_closure_pass"
+          assert result["response_header_gate"]["result"]["status"] == "header_schema_match"
+          assert result["response_header_bytes_opened"] > 0
+          assert result["response_payload_bytes_opened"] == 0
+          assert result["response_rows_opened"] is False
+          assert result["response_values_opened"] is False
+          assert result["model_fits"] == 0
+          assert result["heldout_scores"] == 0
+          assert result["outcome_access_authorized"] is False
+          print(json.dumps({
+              "status": result["status"],
+              "thresholds_m": result["structural_gates"]["thresholds_m"],
+              "matched_header_candidate": result["response_header_gate"]["matched_candidate_index_one_based"],
+              "response_header_bytes_opened": result["response_header_bytes_opened"],
+              "response_payload_bytes_opened": 0,
+              "response_rows_opened": False,
+              "outcome_access_authorized": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Upload response-blind stage-one evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portal-dm-response-blind-candidate-and-header
+          path: build/portal_dm_paired_complementarity/
+          if-no-files-found: error

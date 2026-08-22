@@ -1,0 +1,178 @@
+{
+  "attempt_id": "portal_dm_fresh_paired_v1",
+  "frozen_on": "2026-08-22",
+  "candidate": "Monthly observed Dipodomys merriami capture reappearance across 24 Portal Project plots",
+  "publication": {
+    "citation": "Ernest et al. (2018), The Portal Project: a long-term study of a Chihuahuan desert ecosystem",
+    "data_paper_doi": "10.1101/332783",
+    "data_concept_doi": "10.5281/zenodo.1215988",
+    "official_repository": "weecology/PortalData",
+    "repository_commit": "e3307bf4cb42e7f3c550b0d9bcb747a837fc73b3",
+    "repository_version": "6.96.0"
+  },
+  "github_tree": {
+    "url": "https://api.github.com/repos/weecology/PortalData/git/trees/e3307bf4cb42e7f3c550b0d9bcb747a837fc73b3?recursive=1",
+    "maximum_bytes": 4000000
+  },
+  "files": {
+    "SiteandMethods/Methods.md": {
+      "role": "nonresponse_methods",
+      "size": 37065,
+      "git_blob_sha1": "c196c58d5a9a71685fe739ba9af127bed455197d"
+    },
+    "SiteandMethods/Portal_UTMCoords.csv": {
+      "role": "nonresponse_geometry",
+      "size": 105729,
+      "git_blob_sha1": "fa96bd174b28767acb27758fddaca0b51676800f"
+    },
+    "SiteandMethods/Portal_plots.csv": {
+      "role": "nonresponse_treatment",
+      "size": 390214,
+      "git_blob_sha1": "d4502de80688bd42b52eee1f9e0b8bc429385178"
+    },
+    "Rodents/Portal_rodent_trapping.csv": {
+      "role": "nonresponse_effort",
+      "size": 309178,
+      "git_blob_sha1": "e405c7669c9a25a9111527270cdaec7af26f31c7"
+    },
+    "Rodents/Portal_rodent_species.csv": {
+      "role": "nonresponse_species_registry",
+      "size": 4247,
+      "git_blob_sha1": "bcecdbeab3fb364a7712d17486fa12b5ceda835f"
+    },
+    "Rodents/README.md": {
+      "role": "nonresponse_response_semantics",
+      "size": 3797,
+      "git_blob_sha1": "1d8ad18094ef38e136759bf6fdb1c94d4e5feea3"
+    },
+    "Rodents/moon_dates.csv": {
+      "role": "nonresponse_time_registry",
+      "size": 17563,
+      "git_blob_sha1": "0e32369bfede619ba8b0eea952a3fcf77edb60ff"
+    },
+    "DataCleaningScripts/new_rodent_data.r": {
+      "role": "nonresponse_header_provenance",
+      "size": 15693,
+      "git_blob_sha1": "0b3c058a002e3ec083a9fc4812fddb37c5c8ddb5"
+    },
+    "EML/eml_portal_data.R": {
+      "role": "nonresponse_header_provenance",
+      "size": 29963,
+      "git_blob_sha1": "45672488bf0682ddd14b11396b16ed1beb25e5b3"
+    },
+    "Rodents/Portal_rodent.csv": {
+      "role": "response",
+      "size": 7342949,
+      "git_blob_sha1": "daac4615a868339e3c1f77b35ceebf005e1240ad"
+    }
+  },
+  "response_file": "Rodents/Portal_rodent.csv",
+  "response_firewall": {
+    "pre_response_allowed_roles": [
+      "nonresponse_methods",
+      "nonresponse_geometry",
+      "nonresponse_treatment",
+      "nonresponse_effort",
+      "nonresponse_species_registry",
+      "nonresponse_response_semantics",
+      "nonresponse_time_registry",
+      "nonresponse_header_provenance"
+    ],
+    "pre_response_forbidden": [
+      "Rodents/Portal_rodent.csv beyond its first physical header record",
+      "any mirror or derived table containing row-level Portal rodent captures",
+      "any fitted or reconstructed D. merriami response values"
+    ],
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "response_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "candidate_preflight": {
+    "minimum_nodes": 20,
+    "minimum_outer_units": 8,
+    "minimum_repeated_nodes": 20,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true,
+    "known_node_count": 24,
+    "known_outer_unit_count": 8,
+    "known_repeated_node_count": 24,
+    "layout_design": "other"
+  },
+  "node_geometry": {
+    "analysis_node_ids": [
+      "plot_01", "plot_02", "plot_03", "plot_04", "plot_05", "plot_06",
+      "plot_07", "plot_08", "plot_09", "plot_10", "plot_11", "plot_12",
+      "plot_13", "plot_14", "plot_15", "plot_16", "plot_17", "plot_18",
+      "plot_19", "plot_20", "plot_21", "plot_22", "plot_23", "plot_24"
+    ],
+    "coordinate_source": "SiteandMethods/Portal_UTMCoords.csv",
+    "coordinate_axis": "author-released projected east/north coordinates in meters",
+    "point_construction": "for each integer plot 1..24, take the arithmetic mean east and north across exactly the 49 unique rows with type=stake and numbers 11..77 on the released 7x7 grid",
+    "flag_policy": "retain all released stake coordinates; flag marks lower GPS accuracy and does not mark an absent coordinate",
+    "expected_coordinate_rows": 1660,
+    "expected_stakes_per_plot": 49,
+    "analysis_registry_closed": true
+  },
+  "response_semantics": {
+    "focal_species_code": "DM",
+    "focal_species": "Dipodomys merriami",
+    "endpoint": "observed monthly plot-level capture reappearance",
+    "event": "an effort-eligible plot with zero focal captures in source period has one or more focal capture rows in target period",
+    "non_event": "an effort-eligible plot with zero focal captures in source period has zero focal capture rows in target period",
+    "source_state": "all effort-eligible plots with one or more focal capture rows in the source period",
+    "zero_boundary": "zero is inferred only from the separate effort ledger when sampled=1, effort>=47 and qcflag=1",
+    "normal_protocol": "period must be positive; negative special-trapping periods are excluded as directed by the official README",
+    "temporal_adjacency": "source and target periods must map to consecutive newmoonnumber values",
+    "claim_limit": "observed internal source-conditioned capture support, not latent occupancy, individual movement, ancestry, or biological closure"
+  },
+  "temporal_split": {
+    "calibration": "eligible target census year <= 2011",
+    "heldout": "eligible target census year in 2012..2019",
+    "outer_score_units": ["2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"],
+    "fit_policy": "fit once on pooled calibration risk rows only; never refit on heldout outcomes"
+  },
+  "world_scale": {
+    "axis_id": "portal_plot_euclidean_m",
+    "target_largest_component_fractions": [0.25, 0.5, 0.75],
+    "minimum_distinct_threshold_count": 3,
+    "interpretation": "response-blind analyst-choice local, intermediate and spanning structural regimes; not biological dispersal limits",
+    "include_full_support_world": true
+  },
+  "structural_adequacy": {
+    "horizon": 1,
+    "min_largest_weak_component_fraction": 0.75,
+    "max_isolated_node_fraction": 0.25,
+    "require_at_least_one_world_pass": true
+  },
+  "response_header_firewall": {
+    "maximum_header_bytes": 2048,
+    "delimiter": ",",
+    "require_exact_order": true,
+    "candidate_columns": [
+      [
+        "recordID", "month", "day", "year", "period", "plot", "note1", "stake",
+        "species", "sex", "reprod", "age", "testes", "vagina", "pregnant",
+        "nipples", "lactation", "hfl", "wgt", "tag", "note2", "ltag", "note3",
+        "prevrt", "prevlt", "nestdir", "neststk", "note4", "note5", "pit_tag", "id"
+      ],
+      [
+        "recordID", "month", "day", "year", "period", "plot", "note1", "stake",
+        "species", "sex", "reprod", "age", "testes", "vagina", "pregnant",
+        "nipples", "lactation", "hfl", "wgt", "tag", "note2", "ltag", "note3",
+        "prevrt", "prevlet", "nestdir", "neststk", "note4", "note5", "pit_tag", "id"
+      ]
+    ],
+    "candidate_basis": "official current writer fixes 31 columns and official EML/Methods disagree only on prevlet versus prevlt; this finite pair is frozen before physical header access"
+  },
+  "stage_boundary": {
+    "stage": "response_blind_candidate_geometry_effort_closure_and_bounded_header",
+    "complete_outcome_access_freeze_present": false,
+    "outcome_access_authorized": false,
+    "response_download_budget": 0,
+    "next_if_green": "freeze the one observed physical header, full 16-key paired contract, exact-count-first runner and synthetic smoke before adding a marker-only once authorization commit",
+    "failure_action": "record the pre-response stop and do not redesign this candidate after opening any response row"
+  }
+}
