@@ -1,0 +1,303 @@
+{
+  "attempt_id": "springtail_pnas_2023_fresh_paired_v1",
+  "frozen_on": "2026-08-22",
+  "candidate": "Folsomia candida spread through 24 experimental habitat networks",
+  "publication": {
+    "citation": "Rayfield et al. (2023), Spread of networked populations is determined by the interplay between dispersal behavior and habitat configuration",
+    "doi": "10.1073/pnas.2201553120",
+    "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10089154/",
+    "institutional_data_doi": "10.25678/0005V2",
+    "github_repository": "GonzalezBiodiversityLab/Springtail-networks",
+    "github_commit": "ceeada9fb8eeb0519ef5284d8edcfee0e58f1b80"
+  },
+  "github_tree": {
+    "url": "https://api.github.com/repos/GonzalezBiodiversityLab/Springtail-networks/git/trees/ceeada9fb8eeb0519ef5284d8edcfee0e58f1b80?recursive=1",
+    "maximum_bytes": 2000000
+  },
+  "nonresponse_files": {
+    "readme": {
+      "path": "README.txt",
+      "raw_url": "https://raw.githubusercontent.com/GonzalezBiodiversityLab/Springtail-networks/ceeada9fb8eeb0519ef5284d8edcfee0e58f1b80/README.txt",
+      "git_blob_sha1": "f53f3827a97d4b7042c6339e7db3cb244bf13d51",
+      "sha256": "589526a5df57609b3692b4a3e2aaa5639e43285370d8dec22ab881fdd67a96ee",
+      "size": 2284
+    },
+    "node_geometry": {
+      "path": "Data for analysis/Node spatial properties.txt",
+      "raw_url": "https://raw.githubusercontent.com/GonzalezBiodiversityLab/Springtail-networks/ceeada9fb8eeb0519ef5284d8edcfee0e58f1b80/Data%20for%20analysis/Node%20spatial%20properties.txt",
+      "git_blob_sha1": "8d4c982c9767fdc8f56ad247f7177123fd0124aa",
+      "sha256": "a55342bcf4f3257d965f2ec917216cd18cd778742773ec9d55cc92b38298a7f1",
+      "size": 3485
+    },
+    "network_geometry": {
+      "path": "Data for analysis/Network spatial properties.txt",
+      "raw_url": "https://raw.githubusercontent.com/GonzalezBiodiversityLab/Springtail-networks/ceeada9fb8eeb0519ef5284d8edcfee0e58f1b80/Data%20for%20analysis/Network%20spatial%20properties.txt",
+      "git_blob_sha1": "81452809b97f09b90fd3c15342ba948da1def43d",
+      "sha256": "1152b11443ef58fc1940d5eb6c55f08ded9376c55fed98f69fa14a8c04672082",
+      "size": 818
+    }
+  },
+  "response_file": {
+    "path": "Data for analysis/Experiment_Node population size.txt",
+    "raw_url": "https://raw.githubusercontent.com/GonzalezBiodiversityLab/Springtail-networks/ceeada9fb8eeb0519ef5284d8edcfee0e58f1b80/Data%20for%20analysis/Experiment_Node%20population%20size.txt",
+    "git_blob_sha1": "878df2c8fa81fb0b38f1ee2e122dcd32bf424062",
+    "size": 102819,
+    "response_rows_opened": false,
+    "response_payload_bytes_opened": 0
+  },
+  "published_aggregate_evidence": {
+    "supplement": {
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC10089154.1/pnas.2201553120.sapp.pdf",
+      "sha256": "16c1205eae7e27a89d2378f7f8b5d9f2afab6f898b601011f6a26a01dff418b8",
+      "size": 1823489,
+      "relevant_sections": [
+        "S4.1-S4.3",
+        "S5",
+        "Figure S3",
+        "Figure S10"
+      ]
+    },
+    "main_figure_2": {
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC10089154.1/pnas.2201553120fig02.jpg",
+      "sha256": "20c1b353329186e3e832875551e7b899c17e8116af139c8d9df9bf0c0fcbb4bd",
+      "size": 109140
+    },
+    "manual_lower_bound_rule": "Only visibly separated published markers are counted. No point coordinates, fitted values, response table, supporting spreadsheet, or model-result table is digitized or opened.",
+    "split_specific_lower_bounds": {
+      "calibration_events": {
+        "lower": 10,
+        "basis": "Figure S10 experiment panel visibly contains at least ten non-source node first-colonization markers at Day <= 7."
+      },
+      "calibration_non_events": {
+        "lower": 40,
+        "basis": "Figure S10 visibly contains at least forty nodes with first colonization after Day 5; the documented maximum five-day photography gap guarantees at least one prior observed-zero risk row with target Day <= 7 for each."
+      },
+      "heldout_events": {
+        "lower": 10,
+        "basis": "Figure S10 visibly contains at least ten non-source node first-colonization markers after Day 7."
+      },
+      "heldout_non_events": {
+        "lower": 40,
+        "basis": "Figure S10 visibly contains at least forty nodes with first colonization after Day 12; the documented maximum five-day photography gap guarantees at least one observed-zero risk row with target Day > 7 for each."
+      },
+      "heldout_outer_units_with_both_classes": {
+        "lower": 8,
+        "basis": "The experiment panel of main Figure 2 visibly contains at least eight physical networks reaching full occupancy after Day 12; each therefore has a post-Day-7 event and, under the maximum five-day photography gap, a post-Day-7 non-event."
+      },
+      "heldout_outer_units_with_rows": {
+        "lower": 24,
+        "basis": "All 24 experiment points in main Figure 2 reach full occupancy after Day 7, so every closed-registry physical network has at least one post-Day-7 at-risk event row."
+      }
+    }
+  },
+  "response_firewall": {
+    "pre_response_allowed": [
+      "fixed-commit Git tree metadata",
+      "README.txt",
+      "Node spatial properties.txt",
+      "Network spatial properties.txt",
+      "peer-reviewed article and supplementary PDF",
+      "published aggregate Figure 2 and Figure S10"
+    ],
+    "pre_response_forbidden": [
+      "Experiment_Node population size.txt payload",
+      "pnas.2201553120.sd01.xlsx",
+      "any archive member or mirror containing row-level experimental population sizes",
+      "any fitted or reconstructed node-level response values"
+    ],
+    "response_download_budget": 1,
+    "response_rows_opened": false,
+    "model_fits_before_exact_count_gate": 0,
+    "post_open_redesign_or_retry": false
+  },
+  "freezes": {
+    "source_identity": {
+      "publication_doi": "10.1073/pnas.2201553120",
+      "institutional_data_doi": "10.25678/0005V2",
+      "github_repository": "GonzalezBiodiversityLab/Springtail-networks",
+      "github_commit": "ceeada9fb8eeb0519ef5284d8edcfee0e58f1b80"
+    },
+    "response_identity": {
+      "path": "Data for analysis/Experiment_Node population size.txt",
+      "git_blob_sha1": "878df2c8fa81fb0b38f1ee2e122dcd32bf424062",
+      "size": 102819,
+      "required_columns": [
+        "Config",
+        "Rep",
+        "Day",
+        "Node1",
+        "Node2",
+        "Node3",
+        "Node4",
+        "Node5",
+        "Node6",
+        "Node7",
+        "Node8",
+        "Node9",
+        "Node10"
+      ],
+      "only_optional_column": "Date"
+    },
+    "node_geometry": {
+      "analysis_registry": "Config in {1,2,3} x Rep in {2,...,9}",
+      "physical_landscape_count": 24,
+      "nodes_per_landscape": 10,
+      "node_ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "inoculation_source_node": 5,
+      "complete_endpoint_geometry": "distToSource is the author-released minimum corridor distance from fixed inoculation source node 5 to every focal node in every closed-registry physical landscape",
+      "node_file_git_blob_sha1": "8d4c982c9767fdc8f56ad247f7177123fd0124aa",
+      "network_file_git_blob_sha1": "81452809b97f09b90fd3c15342ba948da1def43d"
+    },
+    "response_semantics": {
+      "endpoint": "first observed node colonization",
+      "event": "first observation with released automated image count N > 0 for a non-source node",
+      "non_event": "an observation with released automated image count N == 0 while the node has never previously been observed with N > 0",
+      "zero_boundary": "observed zero in a repeated photograph, not latent biological absence",
+      "initial_state": "at Day 0 exactly ten F. candida were placed in source node 5 and all other nodes were empty",
+      "observation_frequency": "97 photography days over 182 days; typically every 1-2 days and maximum gap five days",
+      "image_validation": "automated estimates were compared with manual counts in 30 images; r=0.93 and R2=0.86; underestimation was reported particularly at high abundance",
+      "source_node_scored": false
+    },
+    "temporal_split": {
+      "calibration_rule": "at-risk transition rows whose target observation Day <= 7",
+      "heldout_rule": "at-risk transition rows whose target observation Day > 7",
+      "fit_policy": "fit once on calibration rows only; never refit on heldout outcomes",
+      "spatial_split": false,
+      "outer_score_unit": "physical landscape Config-Rep",
+      "expected_outer_score_units": 24
+    },
+    "count_gate": {
+      "must_run_before_model_fit": true,
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 8,
+      "heldout_outer_units_with_rows": 24,
+      "require_all_216_non_source_nodes_eventually_observed_positive": true,
+      "failure_action": "write immutable non-estimable result with zero fits and zero heldout scores"
+    },
+    "process_source": {
+      "system": "24 physically separate laboratory habitat networks",
+      "entry_boundary": "only the declared Day-0 inoculation of ten individuals into node 5",
+      "network_boundary": "vial lids closed except during photography; nonhabitable Tygon corridors are the only movement links",
+      "network_design": "10 fixed nodes and 20 links; eight lattice, eight partially rewired, and eight random physical networks",
+      "external_immigration_after_day_0": false
+    },
+    "world_scale": {
+      "distance_units": "mm of author-released minimum corridor path from source node 5",
+      "kernel_a": 0.178,
+      "kernel_b_worlds": [-0.057, -0.05, -0.043, -0.036, -0.029],
+      "kernel_basis": "published b=-0.043 +/- 0.007; frozen mean plus/minus one and two reported standard errors",
+      "loss_support": 1.0,
+      "support_tolerance": 1e-15
+    },
+    "structural_adequacy": {
+      "closed_registry_rows": 240,
+      "fixed_source_distance_complete": true,
+      "physical_network_count": 24,
+      "configuration_count": 3,
+      "temporal_duration_days": 182,
+      "published_photography_days": 97,
+      "world_identity_supervised_column": false
+    },
+    "layer_a_rules": {
+      "world_definition": "five response-independent negative-exponential dispersal-kernel worlds over fixed-source corridor distance",
+      "support_formula": "raw_j=a*exp(b*distToSource_j), raw_source=0, support_j=raw_j/(loss_support+sum(raw))",
+      "world_filtering": "none; a first-positive observation cannot falsify a nonzero stochastic-support world",
+      "world_labels_used_for_prediction": false,
+      "new_ecological_operator_added": false
+    },
+    "layer_b_representation": {
+      "implementation": "eog.v2.world_predictive_summary.summarize_worldset_for_prediction",
+      "representation_name": "symmetric_world_support_summary_v1",
+      "feature_names": [
+        "surviving_world_fraction",
+        "support_mean",
+        "support_std",
+        "support_min",
+        "support_max",
+        "support_q25",
+        "support_q50",
+        "support_q75",
+        "positive_support_fraction",
+        "support_range"
+      ],
+      "world_label_invariant": true,
+      "exact_world_id_exposed_to_learner": false
+    },
+    "comparators": {
+      "baseline": "frozen strong random-forest learner with conventional temporal, node, network, mean-kernel, and lagged spread-state predictors",
+      "augmented": "the identical frozen learner and identical conventional predictors plus the unchanged ten-column Layer-B block",
+      "only_difference": "Layer-B feature block",
+      "same_rows_labels_split_fit_policy_and_hyperparameters": true
+    },
+    "preprocessing_model_fit": {
+      "python": "3.11",
+      "numpy": "2.3.5",
+      "scikit_learn": "1.8.0",
+      "seed": 20260822,
+      "learner": "sklearn.ensemble.RandomForestClassifier",
+      "hyperparameters": {
+        "n_estimators": 1000,
+        "max_features": "sqrt",
+        "min_samples_leaf": 5,
+        "class_weight": null,
+        "random_state": 20260822,
+        "n_jobs": 1
+      },
+      "baseline_feature_names": [
+        "target_day",
+        "log1p_target_day",
+        "observation_gap_days",
+        "dist_to_source_mm",
+        "node_degree",
+        "config_lattice",
+        "config_partially_random",
+        "config_random",
+        "algebraic_connectivity_binary",
+        "log_algebraic_connectivity_weighted",
+        "network_diameter_binary",
+        "network_diameter_weighted_mm",
+        "mean_kernel_support",
+        "current_observed_fraction",
+        "ever_colonized_fraction",
+        "log1p_current_total_abundance",
+        "log1p_current_source_abundance",
+        "log1p_current_mean_positive_abundance",
+        "current_observed_front_mm",
+        "ever_colonized_front_mm"
+      ],
+      "missing_value_policy": "no imputation; fail closed on any nonfinite predictor or released count",
+      "exact_landscape_id_supervised": false
+    },
+    "metrics_decision": {
+      "primary_metric": "binary_log_loss",
+      "probability_clip": 1e-06,
+      "macro_unit": "physical landscape Config-Rep",
+      "expected_outer_unit_count": 24,
+      "lower_is_better": true,
+      "favorable_min_augmented_wins": 13,
+      "adverse_min_baseline_wins": 13,
+      "tie_tolerance": 0.0,
+      "favorable": "favorable_complementary_added_value",
+      "null": "no_confirmed_complementary_added_value",
+      "adverse": "adverse_complementary_added_value"
+    },
+    "runtime_runner": {
+      "path": "benchmarks/run_springtail_paired_complementarity_once.py",
+      "sha256": "5c6dc5ca8e303fbc40397488beabe98d7ccd54d87047baefc147a016f78734c8",
+      "response_downloads_per_authorized_run": 1,
+      "network_retry_policy": "none",
+      "outcome_invocation": "one marker-triggered GitHub Actions run"
+    },
+    "non_estimable_stop": {
+      "exact_count_gate_first": true,
+      "zero_fit_on_count_failure": true,
+      "zero_score_on_count_failure": true,
+      "no_post_open_redesign": true,
+      "no_post_open_retry": true,
+      "result_recording_after_open_is_not_redesign": true
+    }
+  }
+}

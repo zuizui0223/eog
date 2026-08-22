@@ -1,0 +1,117 @@
+name: Springtail paired complementarity outcome once
+
+on:
+  push:
+    branches:
+      - agent/springtail-paired-complementarity
+    paths:
+      - "validation/springtail_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json"
+
+permissions:
+  contents: read
+
+jobs:
+  once-only-outcome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify marker-only authorization commit
+        run: |
+          set -euo pipefail
+          marker_path="validation/springtail_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json"
+          changed_paths="$(git diff --name-only HEAD^ HEAD)"
+          test "$changed_paths" = "$marker_path"
+          authorized_parent="$(git rev-parse HEAD^)"
+          python - "$authorized_parent" <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+
+          marker = json.loads(Path(
+              "validation/springtail_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json"
+          ).read_text(encoding="utf-8"))
+          assert marker["authorized_parent_commit"] == sys.argv[1]
+          assert marker["invocation_budget"] == 1
+          assert marker["response_rows_opened"] is False
+          assert marker["no_retry"] is True
+          assert marker["no_post_open_redesign"] is True
+          PY
+      - name: Install frozen technical environment
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scikit-learn==1.8.0"
+          python -m pip install -e .
+      - name: Re-run response-blind authorization preflight
+        run: |
+          set -euo pipefail
+          python validation/springtail_paired_complementarity/preflight.py
+      - name: Open the fixed response once and execute the frozen endpoint
+        run: |
+          set -euo pipefail
+          python benchmarks/run_springtail_paired_complementarity_once.py \
+            --mode outcome \
+            --authorization-marker validation/springtail_paired_complementarity/OUTCOME_AUTHORIZED_ONCE.json \
+            --preflight-result build/springtail_paired_complementarity/preflight/preflight.json \
+            --output build/springtail_paired_complementarity/outcome.json
+      - name: Assert immutable terminal outcome invariants
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(Path(
+              "build/springtail_paired_complementarity/outcome.json"
+          ).read_text(encoding="utf-8"))
+          assert result["execution_mode"] == "outcome"
+          assert len(result["response_download_requests"]) == 1
+          assert result["response_payload_bytes_opened"] == 102819
+          assert result["response_rows_opened"] is True
+          assert result["physical_landscape_id_supervised"] is False
+          terminal = {
+              "completed_frozen_paired_test",
+              "non_estimable_exact_count_gate_zero_fit",
+              "layer_b_non_estimable_zero_fit",
+              "post_open_schema_or_identity_stop_no_retry",
+              "post_open_risk_table_stop_no_retry",
+              "post_open_execution_failure_no_retry",
+          }
+          assert result["status"] in terminal
+          if result["status"] == "completed_frozen_paired_test":
+              assert result["exact_count_gate"]["passed"] is True
+              assert result["models_fit"] == 2
+              assert result["heldout_scores"] == 48
+              assert result["paired_complementarity"]["status"] in {
+                  "favorable_complementary_added_value",
+                  "no_confirmed_complementary_added_value",
+                  "adverse_complementary_added_value",
+              }
+          elif result["status"] in {
+              "non_estimable_exact_count_gate_zero_fit",
+              "layer_b_non_estimable_zero_fit",
+          }:
+              assert result["models_fit"] == 0
+              assert result["heldout_scores"] == 0
+          print(json.dumps({
+              "status": result["status"],
+              "paired_status": result.get("paired_complementarity", {}).get("status"),
+              "response_download_requests": 1,
+              "response_payload_bytes_opened": result["response_payload_bytes_opened"],
+              "models_fit": result["models_fit"],
+              "heldout_scores": result["heldout_scores"],
+              "result_fingerprint": result["fingerprint"],
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Upload immutable once-only outcome
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: springtail-once-only-outcome
+          path: build/springtail_paired_complementarity/
+          if-no-files-found: error

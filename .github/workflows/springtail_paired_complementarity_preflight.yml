@@ -1,0 +1,90 @@
+name: Springtail fresh paired complementarity preflight
+
+on:
+  push:
+    branches:
+      - agent/springtail-paired-complementarity
+    paths:
+      - ".github/workflows/springtail_paired_complementarity_preflight.yml"
+      - ".github/workflows/springtail_paired_complementarity_outcome_once.yml"
+      - "benchmarks/run_springtail_paired_complementarity_once.py"
+      - "validation/springtail_paired_complementarity/**"
+  pull_request:
+    paths:
+      - ".github/workflows/springtail_paired_complementarity_preflight.yml"
+      - ".github/workflows/springtail_paired_complementarity_outcome_once.yml"
+      - "benchmarks/run_springtail_paired_complementarity_once.py"
+      - "validation/springtail_paired_complementarity/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  response-blind-preflight-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen technical environment
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install "numpy==2.3.5" "scikit-learn==1.8.0"
+          python -m pip install -e .
+      - name: Run response-blind source, geometry, and authorization preflight
+        run: |
+          set -euo pipefail
+          python validation/springtail_paired_complementarity/preflight.py
+      - name: Run synthetic technical-control paired pipeline
+        run: |
+          set -euo pipefail
+          python benchmarks/run_springtail_paired_complementarity_once.py \
+            --mode smoke \
+            --output build/springtail_paired_complementarity/smoke.json
+      - name: Assert response firewall and paired smoke invariants
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          preflight = json.loads(Path(
+              "build/springtail_paired_complementarity/preflight/preflight.json"
+          ).read_text(encoding="utf-8"))
+          smoke = json.loads(Path(
+              "build/springtail_paired_complementarity/smoke.json"
+          ).read_text(encoding="utf-8"))
+          assert preflight["status"] == "authorized_once_only_exact_count_gate_required"
+          assert preflight["response_download_requests"] == []
+          assert preflight["response_payload_bytes_opened"] == 0
+          assert preflight["response_rows_opened"] is False
+          assert preflight["model_fits"] == 0
+          assert preflight["heldout_scores"] == 0
+          assert smoke["status"] == "smoke_pass"
+          assert smoke["execution_mode"] == "smoke"
+          assert smoke["response_download_requests"] == []
+          assert smoke["response_payload_bytes_opened"] == 0
+          assert smoke["response_rows_opened"] is False
+          assert smoke["exact_count_gate"]["passed"] is True
+          assert smoke["models_fit"] == 2
+          assert smoke["heldout_scores"] == 48
+          assert smoke["physical_landscape_id_supervised"] is False
+          assert smoke["model_feature_audit"]["exact_world_id_supervised"] is False
+          print(json.dumps({
+              "preflight_status": preflight["status"],
+              "smoke_status": smoke["status"],
+              "response_download_requests": 0,
+              "response_payload_bytes_opened": 0,
+              "response_rows_opened": False,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Upload response-blind freeze evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: springtail-response-blind-preflight-and-smoke
+          path: build/springtail_paired_complementarity/
+          if-no-files-found: error
