@@ -1,10 +1,10 @@
 """Validation-facing public API for prospective EOG v2.
 
 The facade is lazy so genetic, empirical-occurrence, directional-evidence, response
-firewall, response-header schema, response-token schema, candidate preflight, temporal
-source closure, prospective estimability, outcome-access authorization, predictive
-complementarity, and response-blind world-adequacy / scale-construction trees remain
-independent until accessed.
+firewall, response-header schema, response-token schema, response-row admissibility,
+candidate preflight, temporal source closure, prospective estimability, outcome-access
+authorization, predictive complementarity, and response-blind world-adequacy /
+scale-construction trees remain independent until accessed.
 """
 from __future__ import annotations
 
@@ -67,6 +67,15 @@ _RESPONSE_SCHEMA_EXPORTS: Final[tuple[str, ...]] = (
     "ResponseTokenSchemaDeclaration",
     "normalize_categorical_token",
     "canonicalize_categorical_token",
+)
+
+_RESPONSE_ROW_ADMISSIBILITY_EXPORTS: Final[tuple[str, ...]] = (
+    "MissingDisposition",
+    "ResponseRowAdmissibilityStatus",
+    "ResponseFieldMissingPolicy",
+    "ResponseRowAdmissibilityDeclaration",
+    "ResponseRowAdmissibilityResult",
+    "evaluate_response_row_admissibility",
 )
 
 _CANDIDATE_PREFLIGHT_EXPORTS: Final[tuple[str, ...]] = (
@@ -148,6 +157,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         for name in _RESPONSE_HEADER_SCHEMA_EXPORTS
     },
     **{name: "eog.v2.response_schema" for name in _RESPONSE_SCHEMA_EXPORTS},
+    **{
+        name: "eog.v2.response_row_admissibility"
+        for name in _RESPONSE_ROW_ADMISSIBILITY_EXPORTS
+    },
     **{name: "eog.v2.candidate_preflight" for name in _CANDIDATE_PREFLIGHT_EXPORTS},
     **{
         name: "eog.v2.temporal_source_closure"
@@ -174,6 +187,7 @@ __all__ = [
     *_RESPONSE_FIREWALL_EXPORTS,
     *_RESPONSE_HEADER_SCHEMA_EXPORTS,
     *_RESPONSE_SCHEMA_EXPORTS,
+    *_RESPONSE_ROW_ADMISSIBILITY_EXPORTS,
     *_CANDIDATE_PREFLIGHT_EXPORTS,
     *_TEMPORAL_SOURCE_CLOSURE_EXPORTS,
     *_PROSPECTIVE_ESTIMABILITY_EXPORTS,

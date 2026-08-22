@@ -44,6 +44,15 @@ bind the prospectively declared categorical-token schema from
 deterministic outer-whitespace stripping, casefolding, or internal ASCII-whitespace
 removal used by the empirical runner.
 
+If missingness in a response-side field can change which physical rows enter the
+endpoint, the same **response semantics** fingerprint must also bind a prospective
+`ResponseRowAdmissibilityDeclaration` from
+`src/eog/v2/response_row_admissibility.py`. The declaration must identify the exact
+field-level missing sentinels and freeze whether each has `stop` or `exclude_row`
+disposition. An `exclude_row` decision removes that row before construction of the
+exact count-gate population. Unknown non-missing categories are never reinterpreted as
+missing and still pass to the frozen categorical-token parser.
+
 For sources where published metadata can disagree with the physical response-file
 header, the same **response semantics** freeze must also bind the bounded physical-header
 schema result from `src/eog/v2/response_header_schema.py`. The header must be acquired
@@ -51,8 +60,9 @@ under `src/eog/v2/response_firewall.py` discipline before any response row or re
 value is opened. Missing/unexpected columns or a frozen order mismatch stop before
 outcome authorization; aliases are not inferred.
 
-Header-schema and token normalization therefore do not add seventeenth or eighteenth
-freeze keys, and historical ledgers do not need to be rewritten.
+Header-schema, token normalization and row-admissibility therefore do not add
+seventeenth, eighteenth or nineteenth freeze keys, and historical ledgers do not need
+to be rewritten.
 
 ## Safety invariants
 
@@ -86,23 +96,26 @@ After authorization, the empirical runner must:
 1. verify the response identity and its own frozen runtime/runner fingerprint;
 2. open the response once;
 3. verify that the physical header still matches the already-frozen bounded header schema;
-4. parse categorical fields only with the already-frozen response-token schema;
-5. compute exact calibration/heldout event, non-event and both-class counts;
-6. stop with zero model fits and zero heldout scores if any frozen minimum fails;
-7. only then fit the already-frozen models and score the already-frozen heldout endpoint.
+4. apply only the already-frozen row-admissibility declaration, if one exists;
+5. parse included categorical fields only with the already-frozen response-token schema;
+6. compute exact calibration/heldout event, non-event and both-class counts on the prospectively admissible rows;
+7. stop with zero model fits and zero heldout scores if any frozen minimum fails;
+8. only then fit the already-frozen models and score the already-frozen heldout endpoint.
 
 No outcome-derived change to worlds, split, response semantics, physical column names,
-token normalization, Layer B, comparator, preprocessing, metrics or decision thresholds
-is permitted after step 2.
+missing-token disposition, token normalization, Layer B, comparator, preprocessing,
+metrics or decision thresholds is permitted after step 2.
 
-An unknown token or unexpected physical column encountered after response opening is a
-**pre-model schema stop**, not permission to add an alias. The opened endpoint is not
-rerun and relabeled independent.
+An unknown token, undeclared missingness condition or unexpected physical column
+encountered after response opening is a **pre-model schema stop**, not permission to add
+an alias or row-exclusion rule. The opened endpoint is not rerun and relabeled
+independent.
 
 Canonical contract documentation:
 
 - `docs/response_header_schema_gate.md`
 - `docs/response_token_schema_contract.md`
+- `docs/response_row_admissibility_gate.md`
 
 ## What this gate is not
 
