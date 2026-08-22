@@ -1,0 +1,12 @@
+{
+  "attempt_id": "mont_blanc_mountain_hare_fresh_paired_v1",
+  "authorized_parent_commit": "0793c5829047cf0fea7413e9445c53941447b658",
+  "contract_sha256": "4916b066191bf5ebdba274ba420728196c919b32ffdd524c862b94ee8fc28dd4",
+  "runner_sha256": "f7629568552db9de532e8b943862d770b15e763f5e429890eac92627a640578d",
+  "preflight_fingerprint": "484a536d76477b0a6e08317055a7794e1401bb207ab3e30abc9330511397b3dc",
+  "outcome_access_gate_fingerprint": "24c0743c334cdfd84359a15fb83d09b1ca0202f1866e43b3b3bd943fbd35ed78",
+  "invocation_budget": 1,
+  "response_rows_opened": false,
+  "no_retry": true,
+  "no_post_open_redesign": true
+}
