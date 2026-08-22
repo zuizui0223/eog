@@ -193,7 +193,7 @@ def candidate_gate(contract: dict) -> dict[str, object]:
         node_count=int(published["analysis_nodes"]),
         outer_unit_count=len(published["heldout_transition_years"]),
         repeated_node_count=int(published["annual_panel_nodes"]),
-        layout_design="GRTS spatially balanced random sample",
+        layout_design="natural_irregular",
         analysis_registry_closed=True,
         response_rows_opened=False,
         response_bytes_opened=False,
