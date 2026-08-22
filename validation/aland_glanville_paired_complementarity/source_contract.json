@@ -35,6 +35,47 @@
     "locality_visit": "one row per patch-survey combination; contains Melitaea cinxia nest abundance/occupancy and therefore remains forbidden at this stage",
     "documentation": "field definitions sufficient to freeze physical schemas, survey/existence semantics, and prospective missing-row admissibility before locality-visit rows are opened"
   },
+  "exact_file_manifest": {
+    "patch_registry": {
+      "id": "e1585394-be55-4853-bd65-8d64ef22d416",
+      "path": "/Butterflies/Patches final.csv",
+      "bytes": 10826822,
+      "sha256": "1cc94383d9356e6898580379dd1aa573a1a915047f504b5e7ecb2c60d0b7c6ac",
+      "encoding": "ISO-8859-15"
+    },
+    "variable_dictionary": {
+      "id": "6a4df553-68f5-4efd-be13-3154853791f3",
+      "path": "/Butterflies/Variables_PAS_final.csv",
+      "bytes": 19990,
+      "sha256": "7b0c4ce85ce0d649fbd45a0601757977473d199854a64ba3cd41c5cc4d205410",
+      "encoding": "ISO-8859-15"
+    },
+    "locality_visit_response": {
+      "id": "34ede3ba-89a6-44ba-b09f-3dd8fedc3c8b",
+      "path": "/Butterflies/Locality Visit merged final_v2.csv",
+      "bytes": 21210995,
+      "sha256": "2080cb29bfcc353ecba3975959c56418d1037ea6ee5b0d7038f73a4b2b9fc46b"
+    },
+    "nest_response": {
+      "id": "c5f939b4-88a2-47f8-bcd2-73183e175456",
+      "path": "/Butterflies/Nests final.csv",
+      "bytes": 3906245,
+      "sha256": "70a9eb6cdf2612e4af4628ebaf16023ead59a5fdf19f2fc695d3ae070dcca535"
+    }
+  },
+  "transport_resolution": {
+    "authorize_endpoint": "https://etsin.fairdata.fi/api/download/authorize",
+    "first_attempt_dataset_id": "cc1b7bea-a388-4b4d-bf35-2f41e025136c",
+    "first_attempt_result": "HTTP 403 Not authorized for both frozen nonresponse paths; zero payload GETs",
+    "second_attempt_dataset_id": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
+    "second_attempt_reason": "Metax metadata, frozen before this transport attempt, establishes that this is the IDA origin of the selected PAS preservation record and represents the same five-file version. The second attempt changes transport record identity only, not scientific source, file path, checksum, candidate definition, or response firewall.",
+    "allowed_second_attempt_paths": [
+      "/Butterflies/Patches final.csv",
+      "/Butterflies/Variables_PAS_final.csv"
+    ],
+    "response_file_authorization_forbidden": true,
+    "payload_get_forbidden_until_authorization_succeeds": true
+  },
   "file_metadata_stage": {
     "selected_record": "cc1b7bea-a388-4b4d-bf35-2f41e025136c",
     "expected_total_files": 5,
