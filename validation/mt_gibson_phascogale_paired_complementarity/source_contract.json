@@ -1,0 +1,274 @@
+{
+  "attempt_id": "mt_gibson_phascogale_fresh_paired_v1",
+  "frozen_on": "2026-08-22",
+  "candidate": "Post-release camera-detection reappearance across 70 Mt Gibson red-tailed phascogale sites",
+  "publication": {
+    "citation": "Anderson et al. (2024), Remote camera monitoring and arboreal trapping methods used to evaluate the outcomes of a reintroduction of red-tailed phascogales (Phascogale calura) in Western Australia",
+    "doi": "10.1071/AM23040",
+    "data_doi": "10.5061/dryad.xd2547dp4"
+  },
+  "dryad_source": {
+    "dataset_doi": "10.5061/dryad.xd2547dp4",
+    "version_id": 303436,
+    "version_number": 1,
+    "publication_date": "2024-07-05",
+    "last_modification_date": "2024-07-05",
+    "version_download_url": "https://datadryad.org/api/v2/versions/303436/download",
+    "manifest_maximum_bytes": 30000,
+    "closed_file_count": 6
+  },
+  "files": {
+    "Arboreal_trapping_capture_data.csv": {"role": "ancillary_response_forbidden", "size": 4233, "sha256": "901a42c92fec0a3fd5c9f38f919d7dbc6d07dd1c242c60017d8c2a4d46be050e"},
+    "Arboreal_trapping_trap_site_location_data.csv": {"role": "unused_nonresponse_forbidden", "size": 2787, "sha256": "d6b481881d8a2c78a616621925132d77b9c9f35c9d66469cc139cb75b5185bc2"},
+    "Camera_survey_deployment_data.csv": {"role": "nonresponse_effort", "size": 13355, "sha256": "0d44104c6cd389b2fd83ced9965aeccfea968741e19bf2b6f4c251d751042984"},
+    "Camera_survey_detection_data.csv": {"role": "response", "size": 4646, "sha256": "e5b96b50695f8f64f4eb16feb64e3feba6b05d68a76541a853e22ce550992f85"},
+    "Camera_survey_site_location_data.csv": {"role": "nonresponse_geometry", "size": 1491, "sha256": "50af8247188cbe1cef849c6cf3ed4b1f177959c041630fbf005fc5a0e690dca0"},
+    "README.md": {"role": "nonresponse_readme", "size": 1425, "sha256": "1f3c196e78a29fe2dad039149b48414bef8258ba56caeccd05985ba68bf87af3"}
+  },
+  "response_file": "Camera_survey_detection_data.csv",
+  "nonresponse_files": ["README.md", "Camera_survey_site_location_data.csv", "Camera_survey_deployment_data.csv"],
+  "preflight_declaration": {
+    "minimum_nodes": 40,
+    "minimum_outer_units": 2,
+    "minimum_repeated_nodes": 40,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "response_header_firewall": {
+    "maximum_header_bytes": 256,
+    "acquisition": "one independently verified HTTP Range request per byte, stopping on the first CR or LF",
+    "expected_header_text": "Detection date,Camera Site",
+    "expected_header_sha256": "cfc2425f4a6b451c15a1d7d7541067e7fb7d523b736461117e6304ccaaef34f9",
+    "expected_terminator": "CR",
+    "expected_bytes_consumed_including_terminator": 27,
+    "expected_columns": ["Detection date", "Camera Site"],
+    "require_exact_order": true,
+    "response_rows_opened": false,
+    "response_values_opened": false
+  },
+  "published_aggregate_evidence": {
+    "source": "Dryad metadata, README, and Anderson et al. article-level monitoring description",
+    "endpoint_definition_matches": true,
+    "split_specific_intervals": {
+      "calibration_events": {"lower": null, "upper": null},
+      "calibration_non_events": {"lower": null, "upper": null},
+      "heldout_events": {"lower": null, "upper": null},
+      "heldout_non_events": {"lower": null, "upper": null},
+      "heldout_outer_units_with_both_classes": {"lower": null, "upper": null}
+    },
+    "note": "Published materials establish 70 annual camera sites, surveys from 2018 through 2024, and detections in every annual survey, but do not publish split-specific observed undetected-to-detected or undetected-to-undetected counts for the frozen 2020-2024 endpoint. Model-based latent occupancy estimates are not substituted for observed transition counts."
+  },
+  "response_firewall": {
+    "pre_response_allowed": [
+      "Dryad dataset/version/file metadata",
+      "official tokenized six-file manifest with ephemeral URLs retained only in memory",
+      "README.md",
+      "Camera_survey_site_location_data.csv",
+      "Camera_survey_deployment_data.csv",
+      "the bounded physical header of Camera_survey_detection_data.csv through one-byte Range reads"
+    ],
+    "pre_response_forbidden": [
+      "any data row or value in Camera_survey_detection_data.csv",
+      "any row or value in Arboreal_trapping_capture_data.csv",
+      "the dynamically assembled whole-version ZIP body",
+      "any mirror or derivative containing row-level phascogale detections"
+    ],
+    "response_full_download_budget": 1,
+    "response_rows_opened": false,
+    "model_fits_before_exact_count_gate": 0,
+    "post_open_redesign_or_retry": false
+  },
+  "structural_targets": [0.25, 0.5, 0.75, 0.9],
+  "freezes": {
+    "source_identity": {
+      "publication_doi": "10.1071/AM23040",
+      "data_doi": "10.5061/dryad.xd2547dp4",
+      "dryad_version_id": 303436,
+      "dryad_version_number": 1,
+      "closed_file_count": 6,
+      "file_identity": "exact filename + byte size + SHA-256 for all six version files"
+    },
+    "response_identity": {
+      "filename": "Camera_survey_detection_data.csv",
+      "size": 4646,
+      "sha256": "e5b96b50695f8f64f4eb16feb64e3feba6b05d68a76541a853e22ce550992f85",
+      "physical_header_sha256": "cfc2425f4a6b451c15a1d7d7541067e7fb7d523b736461117e6304ccaaef34f9",
+      "physical_header_terminator": "CR",
+      "physical_header_bytes_including_terminator": 27,
+      "row_count_not_frozen_pre_response": true,
+      "response_payload_opened_pre_authorization": false
+    },
+    "node_geometry": {
+      "node_count": 70,
+      "registry_rule": "the 70 ordered Site values in Camera_survey_site_location_data.csv are unique and every site joins to exactly one deployment group in each 2018-2024 campaign",
+      "ordered_node_ids_sha256": "369bc20473faad0e0b01eccea7c8690d3d5ab0afc28d738fa0f59a81ffc0220a",
+      "site_location_file_sha256": "50af8247188cbe1cef849c6cf3ed4b1f177959c041630fbf005fc5a0e690dca0",
+      "deployment_file_sha256": "0d44104c6cd389b2fd83ced9965aeccfea968741e19bf2b6f4c251d751042984",
+      "coordinate_reference": "UTM zone 50",
+      "distance_units": "meters",
+      "distance_semantics": "Euclidean distance derived only from response-independent UTM coordinates",
+      "exact_site_id_supervised": false,
+      "survey_effort": {
+        "campaigns": [2018, 2019, 2020, 2021, 2022, 2023, 2024],
+        "deployment_rows": 493,
+        "site_campaign_groups": 490,
+        "campaign_assignment": "if Date deployed is in 2017 assign campaign 2018; otherwise assign the calendar year of Date retrieved",
+        "effort_rule": "inclusive union of all valid deployment calendar days within site campaign",
+        "midpoint_rule": "mean union-day index relative to October 1 before the named campaign",
+        "duplicate_groups": [
+          {"site": "EW21", "campaign": 2021, "interval_count": 2},
+          {"site": "EW17", "campaign": 2023, "interval_count": 2},
+          {"site": "EW18", "campaign": 2023, "interval_count": 2}
+        ],
+        "invalid_intervals_excluded": [
+          {"site": "EW17", "campaign": 2023, "start": "2023-01-16", "end": "2023-01-15"}
+        ]
+      }
+    },
+    "response_semantics": {
+      "endpoint": "observed annual camera-detection reappearance after managed releases ended",
+      "risk_set": "closed-registry camera site with zero released detection dates in source campaign t",
+      "event": "risk-set site has at least one released detection date in target campaign t+1",
+      "non_event": "risk-set site has zero released detection dates in target campaign t+1",
+      "source_state": "all closed-registry sites with at least one released detection date in source campaign t",
+      "detection_day_intensity": "number of unique released detection dates per site campaign; used only as a lagged source weight",
+      "absence_basis": "response-independent deployment table closes all 70 sites in all seven campaigns; no unsurveyed site campaign is zero-filled",
+      "date_mapping": "each detection date must lie inside valid deployment interval(s) belonging to exactly one campaign for its exact Camera Site",
+      "missingness": "blank, invalid, duplicate, unknown-site, or unmapped response identities cause terminal schema/identity STOP; no alias repair, interpolation, or carry-forward",
+      "boundary": "observed camera-site detection reappearance, not latent occupancy, demographic immigration, parentage, or reconstructed colonization history",
+      "physical_header_columns": ["Detection date", "Camera Site"],
+      "physical_header_schema_id": "mt_gibson_phascogale_response_header_v1",
+      "categorical_token_schema": "Camera Site must exactly match the closed nonresponse registry; Detection date is strict day/month/year"
+    },
+    "temporal_split": {
+      "available_campaigns": [2018, 2019, 2020, 2021, 2022, 2023, 2024],
+      "managed_release_period": [2017, 2019],
+      "analysis_start": 2020,
+      "calibration_transitions": [[2020, 2021], [2021, 2022]],
+      "calibration_transition_count": 2,
+      "heldout_transitions": [[2022, 2023], [2023, 2024]],
+      "heldout_transition_count": 2,
+      "fit_policy": "fit exactly once on pooled eligible calibration risk rows; never refit on heldout outcomes",
+      "sequential_layer_a_policy": "calibration outcomes update Layer A after each calibration prediction design; each heldout year is scored before that year's outcomes may update Layer A for the next year",
+      "outer_score_unit": "target campaign year",
+      "expected_outer_score_units": 2
+    },
+    "count_gate": {
+      "must_run_before_model_fit": true,
+      "calibration_events": 8,
+      "calibration_non_events": 40,
+      "heldout_events": 8,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 2,
+      "heldout_outer_units_with_rows": 2,
+      "require_every_transition_has_current_internal_source": true,
+      "require_every_heldout_outer_unit_has_rows": true,
+      "failure_action": "write immutable non-estimable result with zero fits and zero heldout scores"
+    },
+    "process_source": {
+      "system": "70 standardized annual camera sites inside the 7838-ha feral-predator-proof Mt Gibson exclosure",
+      "conditioning_boundary": "the predictive claim is conditional on realized current detected sites inside the closed 70-site registry",
+      "managed_releases": "165 animals were released during 2017-2019; every analyzed transition begins in 2020 or later and therefore contains no managed addition",
+      "external_sources": "not represented; the fenced post-release endpoint is not interpreted as physical immigration and no external source is added after response access",
+      "persistence": "same-site possible-source persistence is admitted in the response-blind temporal closure audit",
+      "transition_relation": "the full-support exponential world permits every distinct internal site pair; hard worlds remain falsifiable submodels",
+      "claim_limit": "post-release internal source-conditioned predictive support, not ancestry or individual dispersal"
+    },
+    "world_scale": {
+      "axis": "response-independent UTM Euclidean site distance in meters",
+      "lcc_targets": [0.25, 0.5, 0.75, 0.9],
+      "thresholds_m": [1100.9177989296022, 1120.5891307700606, 1171.2591515117394, 1294.2101838573208],
+      "threshold_world_ids": ["geo_lcc250", "geo_lcc500", "geo_lcc750", "geo_lcc900"],
+      "full_world_id": "geo_exponential_full",
+      "kernel_scale_m": 1120.5891307700606,
+      "kernel_scale_basis": "the response-blind 50-percent LCC threshold; an analytical decay scale, not a fitted movement distance",
+      "loss_support": 1.0,
+      "support_tolerance": 1e-15,
+      "threshold_interpretation": "minimal response-blind structural LCC regimes, not fitted dispersal limits"
+    },
+    "structural_adequacy": {
+      "required_distinct_lcc_thresholds": 4,
+      "minimum_largest_weak_component_fraction_for_one_world": 0.9,
+      "maximum_isolated_node_fraction_for_one_world": 0.1,
+      "require_at_least_one_world_pass": true,
+      "forecast_horizon": 1,
+      "expected_node_count": 70,
+      "expected_pair_count": 2415,
+      "matrix_symmetric": true,
+      "world_identity_supervised_column": false
+    },
+    "layer_a_rules": {
+      "declared_world_count": 5,
+      "current_sources": "all camera sites detected in source campaign t",
+      "source_weights": "equal normalized weight across current internal sources",
+      "hard_world_support": "exp(-distance/kernel_scale) for distinct pairs at or below the frozen LCC threshold, otherwise zero",
+      "full_world_support": "exp(-distance/kernel_scale) for every distinct site pair",
+      "transition_normalization": "Q[s,j]=W[s,j]/(1+sum_k W[s,k]); target support is the equal-current-source mean of Q[s,j]",
+      "update": "after each observed transition, eliminate a surviving rule if any newly detected risk-set target has support at or below 1e-15",
+      "monotonicity": "worlds may only remain or be eliminated; eliminated worlds never return",
+      "all_eliminated": "stop and report frozen-universe falsification without scale or source rescue",
+      "world_labels_used_for_prediction": false,
+      "new_ecological_operator_added": false
+    },
+    "layer_b_representation": {
+      "implementation": "eog.v2.world_predictive_summary.summarize_worldset_for_prediction",
+      "representation_name": "symmetric_world_support_summary_v1",
+      "feature_names": ["surviving_world_fraction", "support_mean", "support_std", "support_min", "support_max", "support_q25", "support_q50", "support_q75", "positive_support_fraction", "support_range"],
+      "world_label_invariant": true,
+      "exact_world_id_exposed_to_learner": false,
+      "unchanged_from_frozen_production_implementation": true
+    },
+    "comparators": {
+      "baseline": "frozen strong random forest with campaign, UTM geometry, survey effort, conventional source-distance exposure, and lagged detection-day predictors",
+      "augmented": "the identical frozen learner and identical conventional predictors plus the unchanged ten-column Layer-B block",
+      "only_difference": "Layer-B feature block",
+      "same_rows_labels_split_imputation_fit_policy_and_hyperparameters": true
+    },
+    "preprocessing_model_fit": {
+      "python": "3.12",
+      "numpy": "2.3.5",
+      "scikit_learn": "1.8.0",
+      "seed": 20260822,
+      "learner": "sklearn.ensemble.RandomForestClassifier",
+      "hyperparameters": {"n_estimators": 1000, "max_features": "sqrt", "min_samples_leaf": 5, "class_weight": null, "random_state": 20260822, "n_jobs": 1},
+      "baseline_feature_names": [
+        "target_year_index", "target_year_index_squared", "utm_easting_centered_km", "utm_northing_centered_km", "target_mean_distance_m", "target_nearest_other_site_m", "target_degree_lcc250", "target_degree_lcc500", "target_degree_lcc750", "target_degree_lcc900", "source_campaign_effort_days", "target_campaign_effort_days", "target_campaign_mid_day_index", "current_source_count", "log1p_current_source_detection_days", "nearest_current_source_distance_m", "source_count_lcc250", "source_count_lcc500", "source_count_lcc750", "source_count_lcc900", "source_exponential_exposure_lcc250", "source_exponential_exposure_lcc500", "source_exponential_exposure_lcc750", "source_exponential_exposure_lcc900", "source_exponential_exposure_full", "detection_day_weighted_exposure_lcc250", "detection_day_weighted_exposure_lcc500", "detection_day_weighted_exposure_lcc750", "detection_day_weighted_exposure_lcc900", "detection_day_weighted_exposure_full"
+      ],
+      "forbidden_response_derived_predictors": ["target-campaign detection date", "target-campaign detected state", "exact Camera Site ID", "exact world ID"],
+      "missing_value_policy": "numeric medians learned on calibration rows only and applied unchanged to heldout rows; an all-missing calibration feature stops before fit",
+      "exact_site_id_supervised": false,
+      "exact_world_id_supervised": false
+    },
+    "metrics_decision": {
+      "primary_metric": "binary_log_loss",
+      "probability_clip": 0.000001,
+      "macro_unit": "heldout target campaign year",
+      "expected_outer_unit_count": 2,
+      "lower_is_better": true,
+      "favorable_min_augmented_wins": 2,
+      "adverse_min_baseline_wins": 2,
+      "tie_tolerance": 0.0,
+      "favorable": "favorable_complementary_added_value",
+      "null": "no_confirmed_complementary_added_value",
+      "adverse": "adverse_complementary_added_value"
+    },
+    "runtime_runner": {
+      "path": "benchmarks/run_mt_gibson_phascogale_paired_complementarity_once.py",
+      "sha256": "e54c710efef6b3f571922b26bc7f7ee665316a1a4bd92ff7a258664bb4f8f47c",
+      "response_full_downloads_per_authorized_run": 1,
+      "response_header_range_reads_before_authorization": true,
+      "outcome_retry_policy": "none",
+      "outcome_invocation": "one marker-only GitHub Actions commit"
+    },
+    "non_estimable_stop": {
+      "exact_count_gate_first": true,
+      "zero_fit_on_count_failure": true,
+      "zero_score_on_count_failure": true,
+      "no_post_open_redesign": true,
+      "no_post_open_retry": true,
+      "schema_or_identity_failure_after_open_is_terminal": true,
+      "result_recording_after_open_is_not_redesign": true
+    }
+  }
+}
