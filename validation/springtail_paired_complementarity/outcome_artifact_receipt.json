@@ -1,0 +1,17 @@
+{
+  "attempt_id": "springtail_pnas_2023_fresh_paired_v1",
+  "terminal_status": "post_open_schema_or_identity_stop_no_retry",
+  "outcome_workflow_run_id": 32552447311,
+  "outcome_artifact_id": 9470442063,
+  "outcome_artifact_digest": "sha256:3f90bc367fdcc3a218c303fd79e7dcf8597d1b7ba94002d173709f0ebd28c422",
+  "outcome_file_sha256": "2bcf439b72a6f19bae0b7a90bf83e53efb3638b09ddf5f69a6eb820560bd5a76",
+  "result_fingerprint": "de03e43d08288fd2d0c51df681e98273493445b741915aeb57eacafd80ae1f0f",
+  "response_download_requests": 1,
+  "response_payload_bytes_opened": 102819,
+  "response_rows_opened": true,
+  "exact_count_gate_executed": false,
+  "models_fit": 0,
+  "heldout_scores": 0,
+  "retry_permitted": false,
+  "pull_request": "https://github.com/zuizui0223/eog/pull/250"
+}
