@@ -706,8 +706,15 @@ def _history_by_period(
 
 def _treatment_matrix(static: StaticInputs, transition: Transition) -> np.ndarray:
     rows = []
+    scored = set(transition.eligible_indices)
     for plot in range(1, 25):
-        observed = static.treatments[(transition.target_date.year, transition.target_date.month, plot)]
+        key = (transition.target_date.year, transition.target_date.month, plot)
+        if key not in static.treatments:
+            if plot - 1 in scored:
+                raise RuntimeError("scored target lacks a frozen treatment identity")
+            rows.append([0.0] * len(TREATMENT_FEATURE_NAMES))
+            continue
+        observed = static.treatments[key]
         values: list[float] = []
         for index, (_, categories) in enumerate(TREATMENT_CATEGORIES):
             if observed[index] not in categories:

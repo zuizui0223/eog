@@ -453,6 +453,7 @@
         "target-period capture count", "target-period label", "exact plot ID", "exact world ID"
       ],
       "missing_value_policy": "no imputation; fail closed on any nonfinite predictor or focal identity",
+      "unscored_treatment_placeholder": "a non-effort-eligible plot lacking a target-month treatment row receives an all-zero treatment vector only in the temporary 24-node matrix and is never admitted to a risk row; every scored row must have an exact treatment identity",
       "exact_plot_id_supervised": false,
       "exact_world_id_supervised": false
     },
@@ -471,7 +472,7 @@
     },
     "runtime_runner": {
       "path": "benchmarks/run_portal_dm_paired_complementarity_once.py",
-      "sha256": "ea5d1be4de93b4ce08b5852464abb7b0741ca7d5bc47c32c38548327c755d687",
+      "sha256": "22dfcfa274a53d598245e8842abd6f883ed604626341a488646473399199f46d",
       "response_full_downloads_per_authorized_run": 1,
       "response_header_range_reads_before_authorization": true,
       "synthetic_smoke_core_fingerprint": null,
