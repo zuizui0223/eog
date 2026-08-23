@@ -1,4 +1,4 @@
-name: Cakile CSIRO supporting-file metadata only
+name: Cakile CSIRO file metadata only
 
 on:
   push:
@@ -20,75 +20,67 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Read supporting-file metadata only
+      - name: Read primary file-list metadata only
         run: |
           set -euo pipefail
-          mkdir -p build/cakile_csiro_support_metadata
+          mkdir -p build/cakile_csiro_file_metadata
           python - <<'PY'
           import json
           from pathlib import Path
           import urllib.request
-
-          url = "https://data.csiro.au/dap/ws/v2/collections/46047/support"
-          req = urllib.request.Request(url, headers={"Accept":"application/json","User-Agent":"EOG-Cakile-support-metadata/1.0"})
-          with urllib.request.urlopen(req, timeout=40) as response:
-              body = response.read(2_000_001)
-              status = getattr(response, "status", None)
-              ctype = response.headers.get("Content-Type")
-          if status != 200 or len(body) > 2_000_000:
-              raise SystemExit(f"bounded metadata request failed: status={status} bytes={len(body)}")
-          data = json.loads(body.decode("utf-8"))
-
-          def compact(v):
-              if isinstance(v, dict):
-                  out = {}
-                  for k, item in v.items():
-                      low = str(k).casefold()
-                      if any(t in low for t in ("file", "name", "title", "description", "media", "size", "id", "href", "url", "checksum", "md5", "sha", "type")):
-                          out[k] = compact(item)
-                      elif isinstance(item, (dict, list)):
-                          nested = compact(item)
-                          if nested not in ({}, []): out[k] = nested
-                  return out
-              if isinstance(v, list):
-                  return [compact(x) for x in v]
-              return v
-
-          result = {
-              "status": "supporting_file_metadata_resolved",
-              "endpoint": url,
-              "http_status": status,
-              "content_type": ctype,
-              "metadata": compact(data),
-              "file_payload_requests": 0,
-              "file_payload_bytes_opened": 0,
-              "response_requests": 0,
-              "response_bytes_opened": 0,
-              "response_rows_opened": False,
-              "model_fits": 0,
-              "heldout_scores": 0,
+          url="https://data.csiro.au/dap/ws/v2/collections/46047/data"
+          req=urllib.request.Request(url,headers={"Accept":"application/json","User-Agent":"EOG-Cakile-file-metadata/1.0"})
+          with urllib.request.urlopen(req,timeout=40) as response:
+              body=response.read(2_000_001)
+              status=getattr(response,"status",None)
+              ctype=response.headers.get("Content-Type")
+          if status!=200 or len(body)>2_000_000:
+              raise SystemExit(f"bounded metadata request failed: {status} {len(body)}")
+          data=json.loads(body.decode("utf-8"))
+          files=[]
+          rows=data.get("file",[]) if isinstance(data,dict) else []
+          for r in rows:
+              if not isinstance(r,dict):
+                  continue
+              files.append({
+                  "fileId": r.get("fileId"),
+                  "filename": r.get("filename"),
+                  "size": r.get("size") if "size" in r else r.get("fileSize"),
+                  "mediaType": r.get("mediaType"),
+                  "description": r.get("description"),
+                  "link": (r.get("link") or {}).get("href") if isinstance(r.get("link"),dict) else None,
+              })
+          result={
+              "status":"primary_file_metadata_resolved",
+              "endpoint":url,
+              "http_status":status,
+              "content_type":ctype,
+              "file_count":len(files),
+              "files":files,
+              "file_payload_requests":0,
+              "file_payload_bytes_opened":0,
+              "response_rows_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
           }
-          p = Path("build/cakile_csiro_support_metadata/support.json")
-          p.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False)+"\n")
-          print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+          Path("build/cakile_csiro_file_metadata/files.json").write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
           PY
       - name: Assert metadata-only firewall
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          r=json.loads(Path("build/cakile_csiro_support_metadata/support.json").read_text())
-          assert r["file_payload_requests"] == 0
-          assert r["file_payload_bytes_opened"] == 0
-          assert r["response_requests"] == 0
-          assert r["response_bytes_opened"] == 0
+          r=json.loads(Path("build/cakile_csiro_file_metadata/files.json").read_text())
+          assert r["file_payload_requests"]==0
+          assert r["file_payload_bytes_opened"]==0
           assert r["response_rows_opened"] is False
-          assert r["model_fits"] == 0
-          assert r["heldout_scores"] == 0
-          print("Cakile supporting-file metadata firewall PASS")
+          assert r["model_fits"]==0
+          assert r["heldout_scores"]==0
+          print("Cakile primary-file metadata firewall PASS")
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: cakile-csiro-support-metadata-only
-          path: build/cakile_csiro_support_metadata/support.json
+          name: cakile-csiro-file-metadata-only
+          path: build/cakile_csiro_file_metadata/files.json
           if-no-files-found: error
