@@ -22,24 +22,43 @@
     "size": 17833,
     "md5": "7baa4bb0dc11cdff774dfe95540ed785",
     "content_url": "https://zenodo.org/api/records/15557864/files/Peck_Glade_GPS_Waypoints.txt/content",
-    "role": "response-independent central glade latitude/longitude registry"
+    "role": "response-independent glade/section waypoint latitude-longitude registry"
   },
   "zenodo_non_geometry_members": [
     "Stegall_and_Mule_Mountain_Glades.pdf",
     "Thorny_Mountain_Glades.pdf",
     "Mill_Mountain_Glades.pdf"
   ],
+  "gps_format_freeze": {
+    "encoding": "utf-8-sig",
+    "physical_line_count": 221,
+    "header_line_count": 2,
+    "waypoint_record_count": 219,
+    "record_delimiter": "tab",
+    "record_field_count": 9,
+    "record_type_index": 0,
+    "required_record_type": "W",
+    "node_name_index": 1,
+    "latitude_index": 4,
+    "longitude_index": 5,
+    "icon_index": 6,
+    "required_icon": "Waypoint",
+    "rule": "after the first two documentation/header lines, every remaining physical line must split into exactly 9 tab-separated fields and satisfy the frozen W/Waypoint markers; node name, latitude and longitude are taken at the frozen indices without aliasing or row deletion"
+  },
   "geometry_contract": {
     "use_every_physical_waypoint_record": true,
     "no_post_open_row_deletion_or_coordinate_repair": true,
-    "glade_id_must_be_nonempty_and_unique": true,
+    "glade_or_section_id_must_be_nonempty_and_unique": true,
     "latitude_longitude_must_be_finite": true,
     "coordinate_pairs_must_be_unique": true,
+    "latitude_bounds": [-90.0, 90.0],
+    "longitude_bounds": [-180.0, 180.0],
     "distance_metric": "great_circle_haversine_km from frozen latitude/longitude",
+    "earth_radius_km": 6371.0088,
     "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
     "minimum_distinct_positive_thresholds": 3,
     "no_pdf_geometry_reconstruction": true,
-    "physical_schema_rule": "parse the published Garmin/text waypoint structure without consulting response; if waypoint IDs and latitude/longitude cannot be resolved deterministically from the text structure, stop rather than repair"
+    "no_waypoint_aggregation_before_response_registry_match": true
   },
   "admission_rules": {
     "require_response_independent_glade_geometry": true,
@@ -64,7 +83,8 @@
   },
   "stage_boundary": {
     "zenodo_metadata_complete": true,
-    "gps_payload_access_allowed": true,
+    "gps_format_open_complete": true,
+    "structural_geometry_evaluation_allowed": true,
     "pdf_payload_access_allowed": false,
     "capture_workbook_access_allowed": false,
     "response_header_access_allowed": false,
