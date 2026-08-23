@@ -1,0 +1,164 @@
+{
+  "attempt_id": "peck_collared_lizard_fresh_paired_v1",
+  "frozen_before_row_level_population_response_access": true,
+  "header_status_at_freeze": "bounded physical header probe running; no row-level outcome content opened",
+  "endpoint": {
+    "analysis_years": [1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006],
+    "calibration_transitions": [[1995,1996],[1996,1997],[1997,1998],[1998,1999],[1999,2000]],
+    "heldout_transitions": [[2000,2001],[2001,2002],[2002,2003],[2003,2004],[2004,2005],[2005,2006]],
+    "heldout_outer_unit_ids": ["2001","2002","2003","2004","2005","2006"],
+    "fit_policy": "fit exactly once on pooled calibration colonisation-risk rows; never refit on heldout target outcomes",
+    "sequential_layer_a_policy": "for each transition, construct features from state and surviving worlds known before the target year; score heldout target; only after scoring may that target outcome contract Layer A for the next year"
+  },
+  "state_semantics": {
+    "registry": "53 frozen Stegall glade nodes from the response-independent documented glade/section aggregation",
+    "survey_zero_basis": "published Stegall protocol surveyed each glade at least three times per field season throughout 1995-2006, while E092-148-S1 documents population-size rows only for years of occupation",
+    "occupied": "a valid S1 Stegall glade-year row in 1995-2006 with finite estimated population size > 0",
+    "surveyed_zero": "a frozen registry glade-year in 1995-2006 with no S1 occupation row, conditional on the complete annual all-glade Stegall survey protocol",
+    "colonisation_risk_set": "glade surveyed zero at source year t",
+    "event": "risk-set glade is occupied at target year t+1",
+    "non_event": "risk-set glade remains surveyed zero at target year t+1",
+    "current_sources": "all occupied frozen registry glades at source year t",
+    "duplicate_glade_year": "terminal schema/identity stop",
+    "unknown_Stegall_glade": "terminal schema/identity stop",
+    "invalid_or_nonpositive_population_estimate_on_documented_occupation_row": "terminal schema/identity stop",
+    "out_of_window_rows": "parse and audit identity, then exclude prospectively by year; they never enter features, updates, counts or scores",
+    "non_Stegall_rows": "parse and audit identity, then exclude prospectively by mountain/glade prefix; they never enter features, updates, counts or scores"
+  },
+  "glade_token_semantics": {
+    "accepted_pre_response_documented_forms": ["SM<number>", "SM-<number>"],
+    "case_policy": "ASCII case-insensitive by uppercasing before the exact regex",
+    "whitespace_policy": "strip outer ASCII whitespace only",
+    "canonicalization_regex": "^SM-?([0-9]+)$",
+    "canonical_id": "SM plus the captured base-10 integer with no leading-zero padding",
+    "section_suffix_in_S1": "not accepted because S1 is documented at glade, not section, level",
+    "numeric_only_alias": "not accepted unless independently documented before row-level access",
+    "unknown_token": "terminal schema/identity stop"
+  },
+  "count_gate": {
+    "outcome_dependent_operation_index": 1,
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 4,
+    "heldout_outer_units_with_rows": 6,
+    "require_each_scored_transition_has_at_least_one_current_internal_source": true,
+    "require_every_heldout_outer_unit_has_rows": true,
+    "failure": "terminal non-estimable stop with zero Layer-A outcome updates, zero model fits and zero heldout scores"
+  },
+  "layer_a": {
+    "world_count": 4,
+    "thresholds_km": [0.23819008401809294,0.26133621974711535,0.3230197437607773,0.47012433520167657],
+    "world_ladder_fingerprint": "06e2e32e49aa788e6caaa82e93bc7a881da18c120cc70091ec2e068a0d24a9fa",
+    "distance": "great-circle distance between frozen response-independent representative glade coordinates",
+    "kernel_scale_km": 0.26133621974711535,
+    "kernel_scale_basis": "response-blind 50-percent LCC structural threshold; analytical scale only, not a fitted movement distance",
+    "hard_world_pair_weight": "exp(-distance/kernel_scale) for distinct glade pairs at or below that world's frozen threshold, else zero",
+    "source_transition_normalization": "Q[s,j] = W[s,j] / (1 + sum_k W[s,k])",
+    "target_support": "arithmetic mean of Q[s,j] across all current occupied source glades",
+    "update": "after each observed transition, eliminate a surviving world if any newly colonised risk-set target has support <= 1e-15",
+    "monotonicity": "eliminated worlds never return",
+    "all_worlds_eliminated": "terminal frozen-universe falsification; no threshold/source rescue and no paired predictive classification for missing later outer units",
+    "exact_world_id_supervised": false,
+    "historical_truth_claim": false
+  },
+  "layer_b": {
+    "implementation": "eog.v2.world_predictive_summary.summarize_worldset_for_prediction",
+    "representation_name": "symmetric_world_support_summary_v1",
+    "feature_names": [
+      "surviving_world_fraction",
+      "support_mean",
+      "support_std",
+      "support_min",
+      "support_max",
+      "support_q25",
+      "support_q50",
+      "support_q75",
+      "positive_support_fraction",
+      "support_range"
+    ],
+    "world_label_invariant": true,
+    "unchanged_production_representation": true,
+    "exact_world_id_exposed_to_learner": false
+  },
+  "conventional_baseline_features": {
+    "target_static": [
+      "representative_latitude",
+      "representative_longitude",
+      "within_glade_waypoint_count",
+      "minimum_distance_to_founder_glade_km",
+      "mean_distance_to_all_Stegall_glades_km"
+    ],
+    "time_management": [
+      "target_year_centered_at_2000",
+      "fire_stage_initial_1995_1996",
+      "fire_stage_expanded_1997_1998",
+      "fire_stage_full_1999_2006"
+    ],
+    "current_source_exposure": [
+      "current_source_count",
+      "current_total_estimated_population",
+      "nearest_current_source_distance_km",
+      "mean_current_source_distance_km",
+      "unweighted_exponential_source_connectivity",
+      "population_weighted_exponential_source_connectivity"
+    ],
+    "exponential_scale_km": 0.26133621974711535,
+    "exposure_formulas": {
+      "unweighted_exponential_source_connectivity": "sum_s exp(-d(s,j)/scale) over current occupied sources",
+      "population_weighted_exponential_source_connectivity": "sum_s population_s * exp(-d(s,j)/scale) over current occupied sources"
+    },
+    "missing_or_nonfinite_feature": "terminal pre-fit stop; no imputation discovered from outcome",
+    "feature_scaling": "none; random forest uses raw finite numeric columns"
+  },
+  "paired_comparator": {
+    "baseline": "frozen strong random forest on conventional_baseline_features",
+    "augmented": "identical random forest on identical rows and conventional features plus unchanged ten-column Layer B",
+    "only_difference": "Layer B feature block",
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "python": "3.12",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.8.0",
+    "random_seed": 20260822,
+    "hyperparameters": {
+      "n_estimators": 1000,
+      "max_features": "sqrt",
+      "min_samples_leaf": 5,
+      "class_weight": null,
+      "random_state": 20260822,
+      "n_jobs": 1
+    },
+    "hyperparameter_tuning": false,
+    "exact_node_id_supervised": false,
+    "exact_world_id_supervised": false
+  },
+  "metric_decision": {
+    "primary_metric": "binary_log_loss",
+    "probability_clip": 0.000001,
+    "macro_unit": "heldout target year",
+    "expected_outer_unit_count": 6,
+    "lower_is_better": true,
+    "favorable_min_augmented_wins": 4,
+    "adverse_min_baseline_wins": 4,
+    "tie_tolerance": 0.0,
+    "favorable": "favorable_complementary_added_value",
+    "null": "no_confirmed_complementary_added_value",
+    "adverse": "adverse_complementary_added_value"
+  },
+  "fire_boundary": {
+    "fire_management_is_common_to_both_arms": true,
+    "fire_stage_is_not_layer_b": true,
+    "fire_does_not_retune_world_thresholds": true,
+    "interpretation": "Layer B tests added value of frozen source-reachability world-set structure after a strong learner already receives the major known management-stage signal"
+  },
+  "non_estimable_stop": {
+    "no_retry": true,
+    "no_post_open_redesign": true,
+    "no_header_alias_after_row_open": true,
+    "no_glade_alias_after_row_open": true,
+    "no_count_threshold_weakening": true,
+    "no_world_threshold_retuning": true,
+    "no_learner_or_feature_change": true
+  }
+}
