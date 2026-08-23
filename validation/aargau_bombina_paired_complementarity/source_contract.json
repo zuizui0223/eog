@@ -12,6 +12,9 @@
   "scientific_anchor": {
     "dataset_doi": "10.16904/envidat.270",
     "dataset_slug": "amphibian-data-aargau",
+    "ckan_package_id": "f6bfbf55-bf8d-4602-bff6-47ee277e9b7f",
+    "ckan_package_version": "1.0",
+    "license": "CC-BY-SA",
     "paper_doi": "10.1073/pnas.2123070119",
     "focal_taxon": "Bombina variegata",
     "focal_selection_reason": "prospectively chosen conservation-target species: target-species monitoring comprehensively surveys all potentially suitable breeding sites in surveyed subregions; Bombina variegata is one of the more mobile target species and has a substantial documented Aargau breeding-site network. Common species are not chosen because their potential sites were not all visited.",
@@ -22,13 +25,69 @@
     "survey_semantics": "target-species breeding sites are surveyed comprehensively in a rotating subregion panel; repeat visits within surveyed breeding seasons provide detection/nondetection histories",
     "process_boundary": "the five major river-valley regions are treated by the source study as distinct metapopulations, potentially connected within regions but relatively isolated between regions. EOG will not invent cross-region edges; source/process closure must be certified within each retained region before outcome access."
   },
-  "required_public_resource_roles": {
-    "readme": "response-independent schema/method documentation",
-    "covariate_static": "time-invariant anonymized site registry/covariates; must provide an auditable site identity and raw/masked coordinate or an independently sufficient pairwise spatial representation",
-    "covariate_dynamic": "year-specific site existence/availability and time-varying covariates, physically separate from species observation response",
-    "observation_response": "species detection/nondetection response; FORBIDDEN until all response-blind gates and outcome authorization are frozen",
-    "structural_connectivity": "response-independent structural connectivity resource",
-    "potential_population_connectivity": "species-specific potential connectivity resource; may inform conventional baseline features but is not a substitute for raw EOG geometry"
+  "exact_public_resources": {
+    "readme_v2": {
+      "id": "c31abb8b-f5ab-492c-b0fa-2e8c85afe5f6",
+      "name": "Readme, v 2.0",
+      "format": "PDF",
+      "bytes": 312052,
+      "last_modified": "2023-10-05T16:39:43.796000",
+      "url": "https://www.envidat.ch/dataset/f6bfbf55-bf8d-4602-bff6-47ee277e9b7f/resource/c31abb8b-f5ab-492c-b0fa-2e8c85afe5f6/download/datadescriptionenvidat2.pdf"
+    },
+    "covariate_static": {
+      "id": "3c9f85f8-6c9b-4532-9038-b027927b1aac",
+      "name": "Covariate data 1",
+      "format": "CSV",
+      "bytes": 57933,
+      "url": "https://www.envidat.ch/dataset/f6bfbf55-bf8d-4602-bff6-47ee277e9b7f/resource/3c9f85f8-6c9b-4532-9038-b027927b1aac/download/covdata1.csv"
+    },
+    "covariate_dynamic": {
+      "id": "e16a1c32-0953-44d3-bcf4-835b6ac9b0ac",
+      "name": "Covariate data 2",
+      "format": "CSV",
+      "bytes": 486115,
+      "url": "https://www.envidat.ch/dataset/f6bfbf55-bf8d-4602-bff6-47ee277e9b7f/resource/e16a1c32-0953-44d3-bcf4-835b6ac9b0ac/download/covdata2.csv"
+    },
+    "observation_response": {
+      "id": "2bfcece3-c25b-4dd9-a059-1b60f8d1c738",
+      "name": "Observation data",
+      "format": "CSV",
+      "bytes": 2742709,
+      "url": "https://www.envidat.ch/dataset/f6bfbf55-bf8d-4602-bff6-47ee277e9b7f/resource/2bfcece3-c25b-4dd9-a059-1b60f8d1c738/download/obsdata.csv",
+      "role": "FORBIDDEN until complete prospective outcome authorization"
+    },
+    "structural_connectivity": {
+      "id": "643685b3-940c-44ff-a703-dfd01f6496da",
+      "name": "Structural connectivity data",
+      "format": "CSV",
+      "bytes": 2351634,
+      "last_modified": "2023-10-05T16:45:08.547000",
+      "url": "https://www.envidat.ch/dataset/f6bfbf55-bf8d-4602-bff6-47ee277e9b7f/resource/643685b3-940c-44ff-a703-dfd01f6496da/download/covdata_structconn.csv"
+    },
+    "potential_population_connectivity": {
+      "id": "6b907363-02d8-4cfa-8b0f-36ab945866f8",
+      "name": "Potential population connectivity data",
+      "format": "CSV",
+      "bytes": 28849564,
+      "last_modified": "2023-10-05T16:46:22.731000",
+      "url": "https://www.envidat.ch/dataset/f6bfbf55-bf8d-4602-bff6-47ee277e9b7f/resource/6b907363-02d8-4cfa-8b0f-36ab945866f8/download/covdata_popconn.csv",
+      "role": "response-derived occupied-neighbor connectivity; FORBIDDEN before response authorization except metadata identity"
+    },
+    "model_code_v2": {
+      "id": "27deb8d2-b414-4331-92f0-f988f1979516",
+      "name": "Model code 2",
+      "format": "Rmd",
+      "bytes": 46506,
+      "last_modified": "2024-09-24T15:09:29.443000",
+      "url": "https://www.envidat.ch/dataset/f6bfbf55-bf8d-4602-bff6-47ee277e9b7f/resource/27deb8d2-b414-4331-92f0-f988f1979516/download/runmodels2.rmd"
+    }
+  },
+  "metadata_resolution": {
+    "status": "exact_resource_ids_frozen_from_response_blind_CKAN_package_show",
+    "metadata_endpoint": "https://www.envidat.ch/api/3/action/package_show?id=amphibian-data-aargau",
+    "metadata_bytes_opened": 20573,
+    "resource_payload_bytes_opened": 0,
+    "note": "the first generic role matcher overmatched descriptive text, but CKAN returned a complete unambiguous resource manifest. Exact IDs/names above are frozen directly from that response; this correction occurs before any resource payload or ecological response access."
   },
   "preflight_minima": {
     "minimum_nodes": 50,
@@ -38,14 +97,13 @@
     "require_coordinate_geometry": true,
     "require_closed_analysis_registry": true
   },
-  "metadata_stage": {
-    "landing_page": "https://www.envidat.ch/dataset/amphibian-data-aargau",
-    "ckan_package_show_candidates": [
-      "https://www.envidat.ch/api/3/action/package_show?id=amphibian-data-aargau",
-      "https://envidat.ch/api/3/action/package_show?id=amphibian-data-aargau"
-    ],
-    "payload_downloads_allowed": false,
-    "purpose": "resolve exact public resource IDs, names, URLs, sizes/hashes when available, and verify physical separation of static covariates, dynamic covariates, observation response and connectivity resources before any resource payload is opened"
+  "response_blind_schema_stage": {
+    "payloads_now_allowed": ["covariate_static", "model_code_v2"],
+    "purpose": "determine exact static-site ID/region/spatial fields and whether a complete raw or anonymized coordinate representation is publicly present before opening dynamic availability or any species observation response",
+    "identity_rule": "require exact CKAN resource ID, URL and byte size; compute and freeze SHA-256 on first successful response-independent retrieval",
+    "observation_response_forbidden": true,
+    "potential_population_connectivity_forbidden": true,
+    "readme_pdf_not_required_for_this stage": true
   },
   "future_geometry_boundary": {
     "spatial_requirement": "a complete response-independent site coordinate registry or a complete pairwise distance/network representation for the chosen analysis nodes must be available as physical public bytes; precomputed scalar connectivity summaries alone are insufficient",
