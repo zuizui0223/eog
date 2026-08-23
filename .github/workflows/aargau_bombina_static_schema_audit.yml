@@ -1,0 +1,144 @@
+name: Aargau Bombina response-blind static schema audit
+
+on:
+  push:
+    branches: [agent/aargau-amphibian-paired-complementarity]
+    paths:
+      - ".github/workflows/aargau_bombina_static_schema_audit.yml"
+      - "validation/aargau_bombina_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/aargau_bombina_static_schema_audit.yml"
+      - "validation/aargau_bombina_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-schema-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Retrieve only frozen static covariate and model-code resources
+        run: |
+          set -euo pipefail
+          mkdir -p build/aargau_bombina_static_schema
+          python - <<'PY'
+          from __future__ import annotations
+          import csv
+          import hashlib
+          import io
+          import json
+          from pathlib import Path
+          import re
+          import urllib.error
+          import urllib.request
+
+          contract=json.loads(Path("validation/aargau_bombina_paired_complementarity/source_contract.json").read_text())
+          resources=contract["exact_public_resources"]
+          allowed=("covariate_static","model_code_v2")
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"not_evaluated",
+              "resource_requests":0,
+              "resource_bytes_opened":0,
+              "resource_diagnostics":{},
+              "covariate_dynamic_requests":0,
+              "structural_connectivity_requests":0,
+              "potential_population_connectivity_requests":0,
+              "observation_response_requests":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          def finish(status,**extra):
+              result.update(extra); result["status"]=status
+              Path("build/aargau_bombina_static_schema/audit.json").write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+              print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
+          payloads={}
+          for role in allowed:
+              spec=resources[role]
+              req=urllib.request.Request(spec["url"],headers={"User-Agent":"EOG-Aargau-Bombina-static-schema/1.0","Accept-Encoding":"identity"})
+              result["resource_requests"] += 1
+              try:
+                  with urllib.request.urlopen(req,timeout=60) as response:
+                      body=response.read(int(spec["bytes"])+1)
+                      status=getattr(response,"status",None)
+              except urllib.error.HTTPError as exc:
+                  finish("stop_nonresponse_transport",failed_role=role,http_status=exc.code); raise SystemExit(3)
+              if status!=200:
+                  finish("stop_nonresponse_transport",failed_role=role,http_status=status); raise SystemExit(3)
+              if len(body)!=int(spec["bytes"]):
+                  finish("stop_nonresponse_identity_mismatch",failed_role=role,expected_bytes=int(spec["bytes"]),observed_bytes=len(body)); raise SystemExit(3)
+              sha=hashlib.sha256(body).hexdigest()
+              payloads[role]=body
+              result["resource_bytes_opened"] += len(body)
+              result["resource_diagnostics"][role]={"resource_id":spec["id"],"bytes":len(body),"sha256":sha}
+
+          static_text=payloads["covariate_static"].decode("utf-8-sig")
+          sample=static_text[:8192]
+          try:
+              delimiter=csv.Sniffer().sniff(sample,delimiters=",;\t|").delimiter
+          except csv.Error:
+              delimiter="," 
+          reader=csv.DictReader(io.StringIO(static_text),delimiter=delimiter)
+          fields=list(reader.fieldnames or [])
+          rows=list(reader)
+          if not fields or not rows:
+              finish("stop_static_registry_empty",physical_fields=fields,row_count=len(rows)); raise SystemExit(3)
+
+          # Response-blind physical schema only. Do not infer an outcome or inspect obsdata.
+          normalized={str(f).strip().casefold():f for f in fields}
+          coordinate_tokens=("x","y","lon","longitude","lat","latitude","easting","northing","east","north","coord","coordinate")
+          spatial_fields=[f for f in fields if any(token in str(f).strip().casefold() for token in coordinate_tokens)]
+          id_like=[f for f in fields if any(token in str(f).strip().casefold() for token in ("pond","site","id","object","locality"))]
+          region_like=[f for f in fields if "region" in str(f).strip().casefold() or "valley" in str(f).strip().casefold()]
+
+          code_text=payloads["model_code_v2"].decode("utf-8-sig")
+          code_lines=code_text.splitlines()
+          role_re=re.compile(r"(?i)(covdata1|covdata2|structconn|popconn|obsdata|coord|longitude|latitude|easting|northing|distance|pond.?id|site.?id|region|object.?id|x\b|y\b)")
+          code_relevant=[{"line_number":i+1,"text":line} for i,line in enumerate(code_lines) if role_re.search(line)]
+
+          finish(
+              "static_schema_audit_complete",
+              static_delimiter=delimiter,
+              static_fields=fields,
+              static_row_count=len(rows),
+              spatial_field_candidates=spatial_fields,
+              id_field_candidates=id_like,
+              region_field_candidates=region_like,
+              model_code_line_count=len(code_lines),
+              model_code_role_relevant_lines=code_relevant,
+          )
+          PY
+      - name: Assert strict response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/aargau_bombina_static_schema/audit.json")
+          if not p.exists(): raise SystemExit("audit missing")
+          r=json.loads(p.read_text())
+          assert r["covariate_dynamic_requests"]==0
+          assert r["structural_connectivity_requests"]==0
+          assert r["potential_population_connectivity_requests"]==0
+          assert r["observation_response_requests"]==0
+          assert r["response_header_bytes_opened"]==0
+          assert r["response_rows_opened"] is False and r["response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Aargau static-schema response firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aargau-bombina-static-schema-audit
+          path: build/aargau_bombina_static_schema/audit.json
+          if-no-files-found: error
