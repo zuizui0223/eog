@@ -1,0 +1,259 @@
+name: Peck collared lizard response-blind registry geometry
+
+on:
+  push:
+    branches:
+      - agent/peck-collared-lizard-preflight
+    paths:
+      - ".github/workflows/peck_collared_lizard_registry_geometry.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+      - "src/eog/v2/candidate_preflight.py"
+      - "src/eog/v2/world_scale_ladder.py"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_collared_lizard_registry_geometry.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+      - "src/eog/v2/candidate_preflight.py"
+      - "src/eog/v2/world_scale_ladder.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  registry-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package
+        run: python -m pip install -e .
+      - name: Build frozen Stegall registry and structural ladder
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_registry_geometry
+          python - <<'PY'
+          from __future__ import annotations
+          from collections import Counter
+          import hashlib
+          import json
+          import math
+          from pathlib import Path
+          import re
+          import urllib.request
+
+          import numpy as np
+          from eog.v2.candidate_preflight import CandidatePreflightDeclaration, CandidatePreflightEvidence, evaluate_candidate_preflight
+          from eog.v2.world_scale_ladder import StructuralScaleLadderDeclaration, build_structural_scale_ladder
+
+          contract = json.loads(Path("validation/peck_collared_lizard_paired_complementarity/source_contract.json").read_text())
+          spec = contract["exact_resource_manifest"]["gps_registry"]
+          rule = contract["gps_registry_contract"]
+          out = Path("build/peck_registry_geometry/result.json")
+
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "status": "not_evaluated",
+              "gps_requests": 0,
+              "gps_bytes_opened": 0,
+              "s1_response_requests": 0,
+              "response_header_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+
+          def finish(status: str, **extra):
+              result.update(extra)
+              result["status"] = status
+              out.write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n")
+              print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
+
+          req = urllib.request.Request(spec["download_url"], headers={"User-Agent":"EOG-Peck-registry-geometry/1.0"})
+          result["gps_requests"] = 1
+          with urllib.request.urlopen(req, timeout=60) as response:
+              payload = response.read(int(spec["bytes"]) + 1)
+              http_status = getattr(response, "status", None)
+          if http_status != 200 or len(payload) != int(spec["bytes"]):
+              finish("stop_nonresponse_transport_or_identity", http_status=http_status, observed_bytes=len(payload))
+              raise SystemExit(3)
+          observed_md5 = hashlib.md5(payload).hexdigest()
+          if observed_md5 != spec["md5"]:
+              finish("stop_nonresponse_transport_or_identity", observed_md5=observed_md5)
+              raise SystemExit(3)
+          result["gps_bytes_opened"] = len(payload)
+
+          text = payload.decode("utf-8-sig")
+          lines = text.splitlines()
+          if len(lines) < 3:
+              finish("stop_analysis_registry_not_closed", reason="GPS text has fewer than three lines")
+              raise SystemExit(3)
+          data_rows = []
+          malformed = []
+          prefix_counts = Counter()
+          for line_number, line in enumerate(lines[2:], start=3):
+              if not line.strip():
+                  malformed.append({"line": line_number, "reason": "blank_data_line"})
+                  continue
+              fields = line.split("\t")
+              if len(fields) != 9:
+                  malformed.append({"line": line_number, "reason": "field_count", "count": len(fields)})
+                  continue
+              if fields[0].strip() != rule["required_record_type"]:
+                  malformed.append({"line": line_number, "reason": "record_type", "value": fields[0]})
+                  continue
+              name = fields[1].strip().upper()
+              try:
+                  latitude = float(fields[4].strip())
+                  longitude = float(fields[5].strip())
+              except Exception:
+                  malformed.append({"line": line_number, "reason": "coordinate_parse"})
+                  continue
+              if not name or not math.isfinite(latitude) or not math.isfinite(longitude):
+                  malformed.append({"line": line_number, "reason": "missing_or_nonfinite"})
+                  continue
+              m = re.match(r"^[A-Z]+", name)
+              prefix_counts[m.group(0) if m else "<none>"] += 1
+              data_rows.append((name, latitude, longitude, line_number))
+          if malformed:
+              finish(
+                  "stop_analysis_registry_not_closed",
+                  reason="one or more physical GPS rows violate the frozen nine-field parser",
+                  malformed_count=len(malformed),
+                  first_malformed=malformed[:10],
+                  prefix_counts=dict(sorted(prefix_counts.items())),
+              )
+              raise SystemExit(3)
+
+          selected_re = re.compile(rule["stegall_name_regex"])
+          selected = [(name, lat, lon, line_no) for name, lat, lon, line_no in data_rows if selected_re.fullmatch(name)]
+          names = [r[0] for r in selected]
+          coords = [(r[1], r[2]) for r in selected]
+          if len(set(names)) != len(names):
+              finish("stop_analysis_registry_not_closed", reason="duplicate Stegall glade names", node_count=len(names), unique_names=len(set(names)))
+              raise SystemExit(3)
+          if len(set(coords)) != len(coords):
+              finish("stop_analysis_registry_not_closed", reason="duplicate Stegall coordinate pairs", node_count=len(names), unique_coordinates=len(set(coords)))
+              raise SystemExit(3)
+
+          pre = contract["preflight_minima"]
+          declaration = CandidatePreflightDeclaration(
+              attempt_id=contract["attempt_id"],
+              minimum_nodes=int(pre["minimum_nodes"]),
+              minimum_outer_units=int(pre["minimum_outer_units"]),
+              minimum_repeated_nodes=int(pre["minimum_repeated_nodes"]),
+              require_separate_geometry_and_response=bool(pre["require_separate_geometry_and_response"]),
+              require_coordinate_geometry=bool(pre["require_coordinate_geometry"]),
+              require_closed_analysis_registry=bool(pre["require_closed_analysis_registry"]),
+          )
+          evidence = CandidatePreflightEvidence(
+              source_identity=f"Zenodo:{contract['scientific_anchor']['zenodo_doi']} + Figshare:{contract['exact_resource_manifest']['population_size_response']['article_doi']}",
+              geometry_source_identity=f"{spec['name']}|md5:{spec['md5']}",
+              response_source_identity=f"{contract['exact_resource_manifest']['population_size_response']['name']}|md5:{contract['exact_resource_manifest']['population_size_response']['md5']}",
+              geometry_response_separable=True,
+              coordinate_geometry_present=True,
+              node_count=len(names),
+              outer_unit_count=len(contract["scientific_anchor"]["provisional_heldout_transitions"]),
+              repeated_node_count=len(names),
+              layout_design="natural_irregular",
+              analysis_registry_closed=True,
+              response_rows_opened=False,
+              response_bytes_opened=False,
+              note="GPS is documented as glades in the study; frozen SM physical naming selects Stegall, whose 1995-2006 protocol visits each glade at least three times per field season.",
+          )
+          preflight = evaluate_candidate_preflight(declaration, evidence)
+          if not preflight.ready:
+              finish(
+                  preflight.status,
+                  reason=preflight.reason,
+                  node_count=len(names),
+                  prefix_counts=dict(sorted(prefix_counts.items())),
+                  preflight_fingerprint=preflight.fingerprint,
+              )
+              raise SystemExit(3)
+
+          # Great-circle haversine distances, frozen Earth radius in contract.
+          earth_radius_km = 6371.0088
+          lat = np.radians(np.asarray([r[1] for r in selected], dtype=float))
+          lon = np.radians(np.asarray([r[2] for r in selected], dtype=float))
+          dlat = lat[:, None] - lat[None, :]
+          dlon = lon[:, None] - lon[None, :]
+          a = np.sin(dlat / 2.0) ** 2 + np.cos(lat[:, None]) * np.cos(lat[None, :]) * np.sin(dlon / 2.0) ** 2
+          a = np.clip(a, 0.0, 1.0)
+          distance = 2.0 * earth_radius_km * np.arcsin(np.sqrt(a))
+          np.fill_diagonal(distance, 0.0)
+
+          ladder_decl = StructuralScaleLadderDeclaration(
+              axis_id="peck_stegall_great_circle_km",
+              target_largest_component_fractions=tuple(float(x) for x in rule["scale_targets_lcc"]),
+          )
+          ladder = build_structural_scale_ladder(names, distance, ladder_decl)
+          thresholds = [float(x) for x in ladder.thresholds]
+          distinct_positive = sorted({round(x, 12) for x in thresholds if x > 0})
+          levels = [
+              {
+                  "level_id": level.level_id,
+                  "target_lcc": level.target_largest_component_fraction,
+                  "threshold_km": level.distance_threshold,
+                  "achieved_lcc": level.achieved_largest_component_fraction,
+                  "weak_component_count": level.weak_component_count,
+                  "isolated_node_fraction": level.isolated_node_fraction,
+                  "directed_edge_count": level.directed_edge_count,
+                  "fingerprint": level.fingerprint,
+              }
+              for level in ladder.levels
+          ]
+          if len(distinct_positive) < int(rule["minimum_distinct_positive_thresholds"]):
+              finish(
+                  "stop_structural_scale_collapse",
+                  node_count=len(names),
+                  prefix_counts=dict(sorted(prefix_counts.items())),
+                  thresholds_km=thresholds,
+                  levels=levels,
+                  distinct_positive_threshold_count=len(distinct_positive),
+                  ladder_fingerprint=ladder.fingerprint,
+                  preflight_fingerprint=preflight.fingerprint,
+              )
+              raise SystemExit(3)
+
+          finish(
+              "registry_and_structural_geometry_pass",
+              physical_waypoint_count=len(data_rows),
+              prefix_counts=dict(sorted(prefix_counts.items())),
+              node_count=len(names),
+              selected_names=sorted(names),
+              latitude_range=[float(np.min(np.degrees(lat))), float(np.max(np.degrees(lat)))],
+              longitude_range=[float(np.min(np.degrees(lon))), float(np.max(np.degrees(lon)))],
+              thresholds_km=thresholds,
+              distinct_positive_threshold_count=len(distinct_positive),
+              levels=levels,
+              preflight_status=preflight.status,
+              preflight_fingerprint=preflight.fingerprint,
+              ladder_fingerprint=ladder.fingerprint,
+          )
+          PY
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path("build/peck_registry_geometry/result.json").read_text())
+          assert r["s1_response_requests"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck registry/geometry response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: peck-collared-lizard-registry-geometry
+          path: build/peck_registry_geometry/result.json
+          if-no-files-found: error
