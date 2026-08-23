@@ -1,0 +1,150 @@
+name: Assynt water vole README-only role audit
+
+on:
+  push:
+    branches: [agent/assynt-water-vole-paired-complementarity]
+    paths:
+      - ".github/workflows/assynt_water_vole_readme_role_audit.yml"
+      - "validation/assynt_water_vole_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/assynt_water_vole_readme_role_audit.yml"
+      - "validation/assynt_water_vole_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readme-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Retrieve and verify only frozen README
+        run: |
+          set -euo pipefail
+          mkdir -p build/assynt_water_vole_readme
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import json
+          from pathlib import Path
+          import re
+          import urllib.error
+          import urllib.request
+
+          contract=json.loads(Path("validation/assynt_water_vole_paired_complementarity/source_contract.json").read_text())
+          spec=contract["exact_readme_identity"]
+          stage=contract["readme_only_stage"]
+          out=Path("build/assynt_water_vole_readme/audit.json")
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"not_evaluated",
+              "readme_requests":0,
+              "readme_bytes_opened":0,
+              "selected_transport":None,
+              "transport_attempts":[],
+              "rdata_payload_requests":0,
+              "chain_summary_csv_payload_requests":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+
+          def write(status,**extra):
+              result.update(extra); result["status"]=status
+              out.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+              print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
+
+          payload=None
+          for key in stage["transport_order"]:
+              url=spec[key]
+              req=urllib.request.Request(url,headers={"User-Agent":"EOG-Assynt-README-role-audit/1.0","Accept-Encoding":"identity"})
+              result["readme_requests"] += 1
+              attempt={"route":key,"url":url,"http_status":None,"opened_bytes":0,"error":None}
+              try:
+                  with urllib.request.urlopen(req,timeout=60) as response:
+                      body=response.read(int(spec["bytes"])+1)
+                      status=getattr(response,"status",None)
+                  attempt["http_status"]=status
+                  attempt["opened_bytes"]=len(body)
+                  if status!=200:
+                      attempt["error"]=f"unexpected HTTP {status}"
+                  elif len(body)!=int(spec["bytes"]):
+                      attempt["error"]=f"byte mismatch {len(body)} != {spec['bytes']}"
+                  else:
+                      observed=hashlib.sha256(body).hexdigest()
+                      attempt["observed_sha256"]=observed
+                      if observed!=spec["sha256"]:
+                          attempt["error"]="SHA-256 mismatch"
+                      else:
+                          payload=body
+                          result["selected_transport"]=key
+                          result["readme_bytes_opened"]=len(body)
+                          result["transport_attempts"].append(attempt)
+                          break
+              except urllib.error.HTTPError as exc:
+                  attempt["http_status"]=exc.code
+                  attempt["error"]=f"HTTPError {exc.code}"
+              except Exception as exc:
+                  attempt["error"]=repr(exc)
+              result["transport_attempts"].append(attempt)
+
+          if payload is None:
+              write("stop_readme_transport_unavailable")
+              raise SystemExit(3)
+
+          text=None
+          encoding=None
+          for candidate in ("utf-8-sig","utf-8","cp1252","latin-1"):
+              try:
+                  text=payload.decode(candidate); encoding=candidate; break
+              except UnicodeDecodeError:
+                  pass
+          if text is None:
+              write("stop_readme_decode_failure")
+              raise SystemExit(3)
+
+          lines=text.splitlines()
+          # Record only role-relevant lines in the audit JSON. The verified README itself
+          # is saved separately as a non-response artifact for exact inspection.
+          role_re=re.compile(r"(?i)(\.rdata|\.csv|coordinate|spatial|patch|site|detect|occup|history|survey|latrine|data input|model input|object|variable|x\b|y\b)")
+          role_lines=[{"line_number":i+1,"text":line} for i,line in enumerate(lines) if role_re.search(line)]
+          Path("build/assynt_water_vole_readme/README.verified.txt").write_text(text,encoding="utf-8")
+          write(
+              "readme_identity_verified_and_opened",
+              observed_sha256=hashlib.sha256(payload).hexdigest(),
+              encoding=encoding,
+              line_count=len(lines),
+              role_relevant_lines=role_lines,
+          )
+          PY
+      - name: Assert README-only firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/assynt_water_vole_readme/audit.json")
+          if not p.exists(): raise SystemExit("README audit missing")
+          r=json.loads(p.read_text())
+          assert r["rdata_payload_requests"]==0
+          assert r["chain_summary_csv_payload_requests"]==0
+          assert r["response_header_bytes_opened"]==0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Assynt README-only firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: assynt-water-vole-readme-role-audit
+          path: build/assynt_water_vole_readme/
+          if-no-files-found: error
