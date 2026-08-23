@@ -1,0 +1,48 @@
+{
+  "attempt_id": "assynt_water_vole_fresh_paired_v1",
+  "candidate": "Assynt water vole (Arvicola amphibius) long-term riparian metapopulation",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "prior_screening_only": true,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "dryad_doi": "10.5061/dryad.sn02v6x70",
+    "focal_taxon": "Arvicola amphibius",
+    "published_registry": "98 temporally stable riparian habitat patches mapped from a comprehensive 1998 waterway survey independently of future occupancy outcomes",
+    "published_monitoring": "annual breeding-season presence/absence surveys from 1999 onward; 1999-2012 explicitly documented for the fixed 98-patch study system",
+    "source_process_claim": "classic metapopulation with recolonization dependent on dispersers from neighboring occupied patches; no managed additions are part of the declared period"
+  },
+  "admission_rules": {
+    "require_exact_98_patch_registry": true,
+    "require_response_independent_machine_readable_geometry": true,
+    "require_geometry_physically_separate_from_occupancy_response": true,
+    "require_closed_analysis_registry": true,
+    "require_annual_surveyed_zero_semantics": true,
+    "require_at_least_three_distinct_positive_structural_scales": true,
+    "require_temporal_source_closure_before_response": true,
+    "no_geometry_reconstruction_from_figures": true,
+    "no_post_inventory_source_substitution": true
+  },
+  "response_semantics_boundary": {
+    "not_yet_frozen": true,
+    "count_minima_reserved_for_full_freeze": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    },
+    "prospective_estimability": "uncertain_pre_response; exact count gate must be first outcome-dependent operation if all response-blind gates pass"
+  },
+  "stage_boundary": {
+    "dryad_metadata_only_first": true,
+    "file_payload_access_allowed": false,
+    "response_header_access_allowed": false,
+    "response_payload_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
