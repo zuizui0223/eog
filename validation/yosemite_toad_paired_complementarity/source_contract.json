@@ -1,0 +1,62 @@
+{
+  "attempt_id": "yosemite_toad_fresh_paired_v1",
+  "candidate": "Anaxyrus canorus occupancy dynamics in randomly selected Yosemite watersheds, 2007–2021",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "selected_after_aargau_pr": 267,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "dataset_doi": "10.5066/P9X6SKT8",
+    "sciencebase_item_id": "639a2d8dd34e0de3a1f0de4b",
+    "paper_doi": "10.3389/fevo.2022.1040114",
+    "focal_taxon": "Anaxyrus canorus",
+    "focal_selection_reason": "chosen prospectively for a discrete breeding-site metapopulation question in a conservation-relevant high-elevation amphibian; selection is based on life history and the response-independent monitoring design, not on inspecting released species outcomes",
+    "published_sampling_frame": "Yosemite divided into 220 watershed units with 10–25 potential amphibian breeding sites each; six Merced and eight Tuolumne watersheds were randomly selected; all potential breeding sites in each selected watershed were surveyed",
+    "published_analysis_sites": 174,
+    "published_watersheds": 14,
+    "published_years": [2007, 2021],
+    "published_year_count": 15,
+    "survey_semantics": "independent double-observer visual encounter surveys at ponds, lakes, streams and meadows, recording adults and pre-metamorphic life stages",
+    "node_universe_boundary": "the selected-watershed breeding-site frame is response-independent with respect to focal-species occurrence; do not add or remove sites based on Anaxyrus observations",
+    "source_process_boundary": "the 14 sampled watersheds are only a random subset of 220 watershed units, so sampled-site internal dispersal is not assumed biologically closed. Before outcome access, an existing EOG-compatible exogenous-source representation or an explicit stop must be frozen response-blind; no external source is invented after observing colonization outcomes."
+  },
+  "metadata_stage": {
+    "item_json": "https://www.sciencebase.gov/catalog/item/639a2d8dd34e0de3a1f0de4b?format=json",
+    "children_json": "https://www.sciencebase.gov/catalog/items?filter=parentId=639a2d8dd34e0de3a1f0de4b&format=json&max=100",
+    "payload_downloads_allowed": false,
+    "purpose": "resolve exact ScienceBase item/child/file identities, file names, sizes/checksums and physical separation of site/static geometry, dynamic covariates and species observations before any data file payload is opened"
+  },
+  "preflight_minima": {
+    "minimum_nodes": 50,
+    "minimum_outer_units": 4,
+    "minimum_repeated_nodes": 50,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "future_geometry_boundary": {
+    "spatial_requirement": "complete response-independent site coordinates or a complete pairwise distance/network representation for the frozen analysis nodes must exist as separately addressable public bytes",
+    "watershed_rule": "retain published watershed identity; do not select watersheds using focal-species detections and do not invent between-watershed edges without a frozen response-independent geometry/source rule",
+    "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "no_post_geometry_filter_or_scale_retuning": true
+  },
+  "future_endpoint_boundary": {
+    "provisional_endpoint": "one-year-ahead adult Anaxyrus canorus site occurrence, with survey availability and site existence fixed independently before response access; exact response columns and missing-row handling must be frozen from documentation/schema first",
+    "reserved_count_minima": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    },
+    "learner_boundary": "same frozen strong random forest and conventional features in both arms; augmented arm adds only unchanged symmetric_world_support_summary_v1",
+    "response_payload_access_allowed": false,
+    "response_header_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
