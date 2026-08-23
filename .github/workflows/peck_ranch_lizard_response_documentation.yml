@@ -1,0 +1,104 @@
+name: Peck Ranch collared lizard response documentation-only audit
+
+on:
+  push:
+    branches:
+      - agent/peck-ranch-lizard-preflight
+    paths:
+      - ".github/workflows/peck_ranch_lizard_response_documentation.yml"
+      - "validation/peck_ranch_lizard_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_ranch_lizard_response_documentation.yml"
+      - "validation/peck_ranch_lizard_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  documentation-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Open only frozen suppl-1.htm documentation
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_ranch_response_documentation
+          python - <<'PY'
+          import hashlib, html, json, re
+          from pathlib import Path
+          import urllib.request
+
+          contract=json.loads(Path("validation/peck_ranch_lizard_paired_complementarity/source_contract.json").read_text())
+          spec=contract["candidate_response_source"]["documentation_file"]
+          req=urllib.request.Request(spec["download_url"],headers={"User-Agent":"EOG-Peck-Ranch-response-doc/1.0"})
+          with urllib.request.urlopen(req,timeout=60) as response:
+              payload=response.read(int(spec["size"])+1)
+              status=getattr(response,"status",None)
+          if status != 200 or len(payload) != int(spec["size"]):
+              raise RuntimeError(f"documentation transport/size mismatch: status={status} bytes={len(payload)}")
+          md5=hashlib.md5(payload).hexdigest()
+          if md5 != spec["md5"]:
+              raise RuntimeError(f"documentation MD5 mismatch: {md5}")
+          text=None
+          encoding=None
+          for enc in ("utf-8-sig","cp1252","latin-1"):
+              try:
+                  text=payload.decode(enc,errors="strict")
+                  encoding=enc
+                  break
+              except UnicodeDecodeError:
+                  pass
+          if text is None:
+              raise RuntimeError("documentation could not be decoded")
+          # Documentation only: strip tags for compact audit. Do not follow links.
+          plain=re.sub(r"<[^>]+>"," ",text)
+          plain=html.unescape(re.sub(r"\s+"," ",plain)).strip()
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"response_documentation_only_pass",
+              "observed_bytes":len(payload),
+              "observed_md5":md5,
+              "encoding":encoding,
+              "plain_text":plain,
+              "documentation_payload_requests":1,
+              "response_data_file_requests":0,
+              "response_data_bytes_opened":0,
+              "gps_payload_requests":0,
+              "capture_workbook_requests":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0
+          }
+          Path("build/peck_ranch_response_documentation/documentation_audit.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True))
+          PY
+      - name: Assert documentation-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("build/peck_ranch_response_documentation/documentation_audit.json").read_text())
+          assert r["documentation_payload_requests"] == 1
+          assert r["response_data_file_requests"] == 0
+          assert r["response_data_bytes_opened"] == 0
+          assert r["gps_payload_requests"] == 0
+          assert r["capture_workbook_requests"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck Ranch response documentation-only firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: peck-ranch-response-documentation-only
+          path: build/peck_ranch_response_documentation/documentation_audit.json
+          if-no-files-found: error
