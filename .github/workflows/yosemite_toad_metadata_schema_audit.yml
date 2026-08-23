@@ -1,0 +1,130 @@
+name: Yosemite toad response-blind metadata schema audit
+
+on:
+  push:
+    branches: [agent/yosemite-toad-paired-complementarity]
+    paths:
+      - ".github/workflows/yosemite_toad_metadata_schema_audit.yml"
+      - "validation/yosemite_toad_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/yosemite_toad_metadata_schema_audit.yml"
+      - "validation/yosemite_toad_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  xml-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Open only exact FGDC metadata XML
+        run: |
+          set -euo pipefail
+          mkdir -p build/yosemite_toad_schema
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import json
+          from pathlib import Path
+          import urllib.error
+          import urllib.request
+          import xml.etree.ElementTree as ET
+
+          contract=json.loads(Path("validation/yosemite_toad_paired_complementarity/source_contract.json").read_text())
+          spec=contract["exact_sciencebase_files"]["fgdc_metadata"]
+          out=Path("build/yosemite_toad_schema/schema.json")
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"not_evaluated",
+              "xml_requests":0,
+              "xml_bytes_opened":0,
+              "csv_payload_requests":0,
+              "csv_payload_bytes_opened":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          def finish(status,**extra):
+              result.update(extra); result["status"]=status
+              out.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+              print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
+
+          req=urllib.request.Request(spec["download_uri"],headers={"User-Agent":"EOG-Yosemite-toad-FGDC-schema/1.0","Accept-Encoding":"identity"})
+          result["xml_requests"]=1
+          try:
+              with urllib.request.urlopen(req,timeout=60) as response:
+                  body=response.read(int(spec["bytes"])+1); status=getattr(response,"status",None)
+          except urllib.error.HTTPError as exc:
+              finish("stop_metadata_payload_transport",http_status=exc.code); raise SystemExit(3)
+          if status!=200:
+              finish("stop_metadata_payload_transport",http_status=status); raise SystemExit(3)
+          if len(body)!=int(spec["bytes"]):
+              finish("stop_metadata_identity_mismatch",expected_bytes=int(spec["bytes"]),observed_bytes=len(body)); raise SystemExit(3)
+          md5=hashlib.md5(body).hexdigest()
+          if md5!=spec["md5"]:
+              finish("stop_metadata_identity_mismatch",expected_md5=spec["md5"],observed_md5=md5); raise SystemExit(3)
+          result["xml_bytes_opened"]=len(body)
+
+          root=ET.fromstring(body)
+          entities=[]
+          for detailed in root.findall(".//detailed"):
+              ent_label=(detailed.findtext("./enttyp/enttypl") or "").strip()
+              ent_def=(detailed.findtext("./enttyp/enttypd") or "").strip()
+              attrs=[]
+              for attr in detailed.findall("./attr"):
+                  label=(attr.findtext("./attrlabl") or "").strip()
+                  definition=(attr.findtext("./attrdef") or "").strip()
+                  domain=[]
+                  for elem in attr.findall(".//edom"):
+                      value=(elem.findtext("./edomv") or "").strip()
+                      meaning=(elem.findtext("./edomvd") or "").strip()
+                      if value or meaning: domain.append({"value":value,"meaning":meaning})
+                  attrs.append({"label":label,"definition":definition,"enumerated_domain":domain})
+              entities.append({"entity_label":ent_label,"entity_definition":ent_def,"attributes":attrs})
+
+          if not entities:
+              finish("stop_metadata_schema_unresolved",reason="FGDC metadata contained no detailed entity definitions")
+              raise SystemExit(3)
+
+          # Compact role flags derived only from metadata labels/definitions.
+          role_summary=[]
+          for entity in entities:
+              labels=[a["label"] for a in entity["attributes"]]
+              text=" ".join([entity["entity_label"],entity["entity_definition"]]+[a["label"]+" "+a["definition"] for a in entity["attributes"]]).casefold()
+              coordinate_like=[a["label"] for a in entity["attributes"] if any(t in (a["label"]+" "+a["definition"]).casefold() for t in ("latitude","longitude","utm","easting","northing","coordinate"))]
+              response_like=[a["label"] for a in entity["attributes"] if any(t in (a["label"]+" "+a["definition"]).casefold() for t in ("anaxyrus","yosemite toad","amphibian count","adult count","larva","detection","occurrence"))]
+              role_summary.append({"entity_label":entity["entity_label"],"attribute_labels":labels,"coordinate_like_fields":coordinate_like,"response_like_fields":response_like,"mentions_site":("site" in text),"mentions_year":("year" in text),"mentions_survey":("survey" in text)})
+
+          finish("fgdc_schema_verified_and_opened",observed_md5=md5,entity_count=len(entities),entities=entities,role_summary=role_summary)
+          PY
+      - name: Assert XML-only response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/yosemite_toad_schema/schema.json")
+          if not p.exists(): raise SystemExit("schema audit missing")
+          r=json.loads(p.read_text())
+          assert r["csv_payload_requests"]==0
+          assert r["csv_payload_bytes_opened"]==0
+          assert r["response_header_bytes_opened"]==0
+          assert r["response_rows_opened"] is False and r["response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Yosemite XML-only response firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: yosemite-toad-metadata-schema-audit
+          path: build/yosemite_toad_schema/schema.json
+          if-no-files-found: error
