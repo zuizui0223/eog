@@ -53,6 +53,7 @@ jobs:
           geo = contract["response_blind_geometry_contract"]
           result = {
               "attempt_id": contract["attempt_id"],
+              "transport_attempt": 2,
               "status": "not_evaluated",
               "coordinate_file_request_count": 0,
               "coordinate_payload_bytes_opened": 0,
@@ -73,13 +74,15 @@ jobs:
 
           try:
               req = urllib.request.Request(
-                  spec["api_download"],
-                  headers={"User-Agent":"EOG-Morgan-water-vole-coordinate-registry/1.0"},
+                  spec["public_file_stream"],
+                  headers={"User-Agent":"EOG-Morgan-water-vole-coordinate-registry/2.0"},
               )
               result["coordinate_file_request_count"] = 1
               with urllib.request.urlopen(req, timeout=60) as response:
                   payload = response.read(int(spec["bytes"]) + 1)
                   http_status = getattr(response, "status", None)
+                  final_url = response.geturl()
+              result["final_download_host"] = urllib.request.urlparse(final_url).netloc if False else None
               if http_status != 200:
                   finish("stop_nonresponse_transport", http_status=http_status)
                   raise SystemExit(3)
@@ -113,7 +116,8 @@ jobs:
                   raise SystemExit(3)
 
               def resolve(candidates, role):
-                  matches = [field for field in fields if field in set(candidates)]
+                  candidate_set = set(candidates)
+                  matches = [field for field in fields if field in candidate_set]
                   if len(matches) != 1:
                       finish(
                           "stop_analysis_registry_not_closed",
