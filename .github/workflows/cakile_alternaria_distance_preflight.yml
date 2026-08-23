@@ -1,0 +1,242 @@
+name: Cakile Alternaria response-blind distance preflight
+
+on:
+  push:
+    branches: [agent/cakile-alternaria-paired-complementarity]
+    paths:
+      - ".github/workflows/cakile_alternaria_distance_preflight.yml"
+      - "validation/cakile_alternaria_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  pull_request:
+    paths:
+      - ".github/workflows/cakile_alternaria_distance_preflight.yml"
+      - "validation/cakile_alternaria_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  distance-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package and XLS reader
+        run: python -m pip install -e . xlrd==2.0.1
+      - name: Open only frozen inter-population distance workbook
+        run: |
+          set -euo pipefail
+          mkdir -p build/cakile_alternaria_distance
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import json
+          import math
+          from pathlib import Path
+          import urllib.error
+          import urllib.request
+
+          import numpy as np
+          import xlrd
+          from eog.v2.world_scale_ladder import StructuralScaleLadderDeclaration, build_structural_scale_ladder
+
+          root = Path("validation/cakile_alternaria_paired_complementarity")
+          contract = json.loads((root / "source_contract.json").read_text())
+          spec = contract["exact_collection_file_metadata"]["interpopulation_distances"]
+          geo = contract["distance_workbook_contract"]
+          out = Path("build/cakile_alternaria_distance/result.json")
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "status": "not_evaluated",
+              "distance_requests": 0,
+              "distance_bytes_opened": 0,
+              "response_summary_requests": 0,
+              "response_summary_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+
+          def finish(status: str, **extra):
+              result.update(extra)
+              result["status"] = status
+              out.write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n")
+              print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
+
+          def fail(status: str, reason: str, **extra):
+              finish(status, reason=reason, **extra)
+              raise SystemExit(3)
+
+          def blank(value) -> bool:
+              return value is None or (isinstance(value, str) and not value.strip()) or value == ""
+
+          def label(value) -> str:
+              if isinstance(value, str):
+                  return value.strip()
+              if isinstance(value, bool):
+                  return str(value)
+              if isinstance(value, (int, float)) and math.isfinite(float(value)):
+                  number = float(value)
+                  return str(int(number)) if number.is_integer() else format(number, ".15g")
+              return str(value).strip()
+
+          try:
+              req = urllib.request.Request(
+                  spec["download_url"],
+                  headers={"User-Agent": "EOG-Cakile-distance-preflight/1.0", "Accept-Encoding": "identity"},
+              )
+              result["distance_requests"] = 1
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  payload = response.read(int(spec["bytes"]) + 1)
+                  http_status = getattr(response, "status", None)
+              if http_status != 200:
+                  fail("stop_nonresponse_transport", f"distance resource returned HTTP {http_status}")
+              if len(payload) != int(spec["bytes"]):
+                  fail("stop_nonresponse_identity_mismatch", "distance byte size differs from frozen collection metadata", observed_bytes=len(payload), expected_bytes=int(spec["bytes"]))
+              result["distance_bytes_opened"] = len(payload)
+              result["distance_sha256"] = hashlib.sha256(payload).hexdigest()
+
+              book = xlrd.open_workbook(file_contents=payload, on_demand=True)
+              sheet_diagnostics = []
+              graphs = []
+              union_labels = []
+              seen = set()
+
+              for sheet_name in book.sheet_names():
+                  sheet = book.sheet_by_name(sheet_name)
+                  nrows, ncols = sheet.nrows, sheet.ncols
+                  if nrows == 0 or ncols == 0:
+                      continue
+                  raw = [[sheet.cell_value(r, c) for c in range(ncols)] for r in range(nrows)]
+                  if all(blank(v) for row in raw for v in row):
+                      continue
+
+                  # Prospectively allowed formatting cleanup: trim only completely blank trailing rows/columns.
+                  while raw and all(blank(v) for v in raw[-1]):
+                      raw.pop()
+                  while raw and raw[0] and all(blank(row[-1]) for row in raw):
+                      for row in raw:
+                          row.pop()
+                  if not raw or not raw[0]:
+                      fail("stop_distance_workbook_schema", f"nonempty sheet {sheet_name!r} became empty after trailing-blank trim")
+                  width = len(raw[0])
+                  if any(len(row) != width for row in raw):
+                      fail("stop_distance_workbook_schema", f"ragged used rectangle in {sheet_name!r}")
+                  if len(raw) != width or len(raw) < 3:
+                      fail("stop_distance_workbook_schema", f"sheet {sheet_name!r} is not a labeled square matrix after frozen trim", nrows=len(raw), ncols=width)
+
+                  top = [label(v) for v in raw[0][1:]]
+                  left = [label(raw[r][0]) for r in range(1, len(raw))]
+                  if any(not x for x in top + left):
+                      fail("stop_distance_workbook_schema", f"empty node label in {sheet_name!r}")
+                  if top != left:
+                      fail("stop_distance_workbook_schema", f"row/column label sequences differ in {sheet_name!r}", top_labels=top, left_labels=left)
+                  if len(set(top)) != len(top):
+                      fail("stop_analysis_registry_not_closed", f"duplicate node labels within {sheet_name!r}")
+                  overlap = sorted(set(top).intersection(seen))
+                  if overlap:
+                      fail("stop_analysis_registry_not_closed", "node labels overlap across distance sheets", overlap=overlap)
+
+                  matrix = np.zeros((len(top), len(top)), dtype=float)
+                  for r in range(len(top)):
+                      for c in range(len(top)):
+                          value = raw[r + 1][c + 1]
+                          if blank(value):
+                              fail("stop_distance_workbook_schema", f"blank distance cell in {sheet_name!r}", row=r, col=c)
+                          try:
+                              number = float(value)
+                          except Exception:
+                              fail("stop_distance_workbook_schema", f"non-numeric distance cell in {sheet_name!r}", row=r, col=c, value=str(value))
+                          if not math.isfinite(number) or number < 0:
+                              fail("stop_distance_workbook_schema", f"invalid distance in {sheet_name!r}", row=r, col=c, value=number)
+                          matrix[r, c] = number
+                  if not np.allclose(matrix, matrix.T, atol=1e-9, rtol=1e-9):
+                      fail("stop_distance_workbook_schema", f"distance matrix not symmetric in {sheet_name!r}")
+                  if not np.allclose(np.diag(matrix), 0.0, atol=1e-9, rtol=0.0):
+                      fail("stop_distance_workbook_schema", f"distance diagonal not zero in {sheet_name!r}")
+
+                  seen.update(top)
+                  union_labels.extend(top)
+                  graphs.append((sheet_name, tuple(top), matrix))
+                  sheet_diagnostics.append({"sheet": sheet_name, "node_count": len(top), "labels": top})
+
+              sizes = sorted(len(ids) for _, ids, _ in graphs)
+              if sizes == [61]:
+                  geometry_mode = "full_61_matrix"
+              elif sizes == [15, 23, 23]:
+                  geometry_mode = "three_subregion_matrices"
+              else:
+                  fail("stop_analysis_registry_not_closed", "distance workbook does not match either prospectively allowed 61-node geometry mode", accepted_graph_sizes=sizes, sheet_diagnostics=sheet_diagnostics)
+              if len(union_labels) != 61 or len(set(union_labels)) != 61:
+                  fail("stop_analysis_registry_not_closed", "distance workbook node union is not exactly 61 unique labels", node_union_count=len(union_labels), unique_node_count=len(set(union_labels)))
+
+              graph_results = []
+              for graph_index, (sheet_name, ids, matrix) in enumerate(graphs):
+                  declaration = StructuralScaleLadderDeclaration(
+                      axis_id=f"cakile_distance_graph_{graph_index}",
+                      target_largest_component_fractions=tuple(float(v) for v in geo["scale_targets_lcc"]),
+                  )
+                  ladder = build_structural_scale_ladder(ids, matrix, declaration)
+                  thresholds = [float(v) for v in ladder.thresholds]
+                  distinct = sorted({round(v, 12) for v in thresholds if v > 0})
+                  if len(distinct) < int(geo["minimum_distinct_positive_thresholds_per_graph"]):
+                      fail("stop_structural_scale_collapse", "one accepted graph has fewer than three distinct positive structural thresholds", sheet=sheet_name, thresholds=thresholds, distinct_positive_threshold_count=len(distinct))
+                  graph_results.append({
+                      "sheet": sheet_name,
+                      "node_count": len(ids),
+                      "thresholds": thresholds,
+                      "distinct_positive_threshold_count": len(distinct),
+                      "ladder_fingerprint": ladder.fingerprint,
+                      "levels": [
+                          {
+                              "level_id": level.level_id,
+                              "target_lcc": level.target_largest_component_fraction,
+                              "achieved_lcc": level.achieved_largest_component_fraction,
+                              "distance_threshold": level.distance_threshold,
+                              "component_count": level.weak_component_count,
+                              "isolated_fraction": level.isolated_node_fraction,
+                          }
+                          for level in ladder.levels
+                      ],
+                  })
+
+              finish(
+                  "distance_registry_and_structural_geometry_pass",
+                  geometry_mode=geometry_mode,
+                  workbook_sheet_names=book.sheet_names(),
+                  accepted_sheet_diagnostics=sheet_diagnostics,
+                  node_union_count=len(union_labels),
+                  graph_results=graph_results,
+              )
+          except urllib.error.HTTPError as exc:
+              fail("stop_nonresponse_transport", f"distance request HTTP {exc.code}")
+          PY
+      - name: Assert strict response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/cakile_alternaria_distance/result.json")
+          if not p.exists(): raise SystemExit("distance audit missing")
+          r=json.loads(p.read_text())
+          assert r["response_summary_requests"] == 0
+          assert r["response_summary_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print(f"Cakile distance-only response firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cakile-alternaria-distance-preflight
+          path: build/cakile_alternaria_distance/result.json
+          if-no-files-found: error
