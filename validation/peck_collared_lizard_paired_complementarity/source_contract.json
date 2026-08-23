@@ -1,6 +1,6 @@
 {
   "attempt_id": "peck_collared_lizard_fresh_paired_v1",
-  "candidate": "Crotophytus collaris Peck Ranch/Stegall Mountain metapopulation",
+  "candidate": "Crotaphytus collaris Peck Ranch/Stegall Mountain metapopulation",
   "selection_boundary": {
     "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
     "response_rows_opened": false,
@@ -15,7 +15,7 @@
     "zenodo_expected_title": "Peck ranch collared lizard files",
     "ecological_archives_figshare_collection": 3304128,
     "paper_doi": "10.1890/10-1994.1",
-    "focal_taxon": "Crotophytus collaris collaris",
+    "focal_taxon": "Crotaphytus collaris collaris",
     "analysis_mountain": "Stegall Mountain",
     "provisional_window": "1995-2006",
     "window_reason": "published field protocol reports at least three visits per glade per field season on Stegall from 1995-2006; no human-assisted translocations occurred after the original 1984/1987/1989 releases",
@@ -73,21 +73,43 @@
     "heldout_non_events": 40,
     "heldout_outer_units_with_both_classes": 4
   },
+  "gps_registry_contract": {
+    "physical_format": "Garmin text export: line 1 metadata, line 2 tabular header, each waypoint data line has exactly nine tab-delimited fields",
+    "field_positions_zero_based": {
+      "record_type": 0,
+      "name": 1,
+      "comment": 2,
+      "datetime": 3,
+      "latitude": 4,
+      "longitude": 5,
+      "icon": 6,
+      "display_option": 7,
+      "altitude": 8
+    },
+    "required_record_type": "W",
+    "ste g all_note": "physical naming in the source omits the hyphen used in some publications",
+    "stegall_name_rule": "uppercase literal name begins with SM and the remainder matches one or more digits optionally followed by uppercase letters; no fuzzy aliasing",
+    "stegall_name_regex": "^SM[0-9]+[A-Z]*$",
+    "row_rule": "all physical waypoint rows must parse; the analysis registry is exactly every row whose physical Name matches the frozen Stegall regex",
+    "coordinate_rule": "latitude and longitude must be finite decimal degrees; selected names and coordinate pairs must both be unique; no selected row may be dropped or repaired",
+    "registry_closure_evidence": "Zenodo describes GPS waypoints as latitude/longitude of the glades in this study; the published 1995-2006 Stegall protocol visits each glade at least three times per field season",
+    "distance_rule": "great-circle haversine distance in kilometres with Earth radius 6371.0088 km",
+    "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "no_post_geometry_retuning": true
+  },
   "metadata_only_resource_roles": {
-    "glade_registry_required": "Zenodo GPS waypoints are described as latitude/longitude of the glades in this study; payload must still establish a complete Stegall registry under a response-blind physical-format audit",
     "capture_workbook_forbidden": "capture/recapture workbook is outcome-bearing and not used as geometry or zero semantics",
     "population_size_response_required": "Ecological Archives E092-148-S1 Individual_Glade_Sizes.txt remains unopened at this stage",
     "expansion_maps_forbidden_as_geometry": "E092-148-A2 / map PDFs encode colonisation outcomes and may not define the node universe"
   },
-  "gps_physical_audit": {
-    "allowed_now": true,
-    "purpose": "verify exact GPS bytes and inspect physical line/header structure only; no node subset, coordinate parsing or structural threshold is chosen until this response-blind format is known",
-    "response_resource_requests_allowed": false,
-    "s1_response_requests_allowed": false
-  },
-  "metadata_gate": {
+  "stage_boundary": {
     "metadata_manifest_complete": true,
+    "gps_physical_format_opened_response_blind": true,
+    "gps_registry_and_structural_gate_allowed": true,
+    "s1_response_requests_allowed": false,
     "response_header_access_allowed": false,
-    "response_payload_access_allowed": false
+    "response_payload_access_allowed": false,
+    "outcome_access_authorized": false
   }
 }
