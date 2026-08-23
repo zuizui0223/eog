@@ -1,0 +1,46 @@
+{
+  "attempt_id": "fletcher_2026_figshare_fresh_paired_v1",
+  "candidate": "Chelinidea vittiger experimental habitat-loss/fragmentation/matrix landscapes, Fletcher et al. 2026",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "paper_doi": "10.1038/s41559-026-03095-1",
+    "figshare_doi": "10.6084/m9.figshare.30508496",
+    "figshare_article_id": 30508496,
+    "focal_taxon": "Chelinidea vittiger",
+    "published_design": "27 experimental landscapes, >3000 Opuntia habitat patches, controlled habitat loss, fragmentation and matrix quality, introduced cactus-bug populations followed longitudinally",
+    "source_process_claim": "experimental landscape populations initiated by controlled introductions after removal of resident cactus bugs; any evidence of unrepresented additions or non-negligible external immigration in the analyzed periods must be represented prospectively or the candidate stops"
+  },
+  "admission_rules": {
+    "require_response_independent_patch_or_landscape_geometry": true,
+    "require_geometry_physically_separate_from_response": true,
+    "require_closed_analysis_registry": true,
+    "require_repeated_survey_semantics": true,
+    "require_at_least_three_distinct_positive_structural_scales": true,
+    "require_source_process_closure_before_response": true,
+    "no_geometry_reconstruction_from_figures": true,
+    "no_post_inventory_role_relabeling_to_rescue_candidate": true
+  },
+  "response_semantics_boundary": {
+    "not_yet_frozen": true,
+    "count_minima_reserved_for_full_freeze": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    }
+  },
+  "stage_boundary": {
+    "metadata_only_first": true,
+    "figshare_file_payload_downloads_allowed": false,
+    "response_header_access_allowed": false,
+    "response_payload_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
