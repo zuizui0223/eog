@@ -1,0 +1,42 @@
+{
+  "attempt_id": "peck_collared_lizard_fresh_paired_v1",
+  "frozen_before_population_response_access": true,
+  "resource": {
+    "name": "Individual_Glade_Sizes.txt",
+    "figshare_file_id": 5619525,
+    "download_url": "https://ndownloader.figshare.com/files/5619525",
+    "bytes": 56485,
+    "md5": "b8e4a280baa52f5bcbcd5669e156d770"
+  },
+  "documentation_expectation": {
+    "delimiter": "TAB",
+    "semantic_column_count": 7,
+    "semantic_order": [
+      "year",
+      "glade name",
+      "number of animals observed",
+      "estimated population size",
+      "standard deviation of estimate",
+      "estimation method",
+      "estimated sample coverage"
+    ],
+    "basis": "E092-148-S1 wrapper description, opened response-blind before this probe"
+  },
+  "firewall": {
+    "transport": "HTTP one-byte Range requests only",
+    "max_first_record_bytes_including_terminator": 512,
+    "accepted_http_status": 206,
+    "require_content_range_exact_one_byte": true,
+    "stop_on_first_CR_or_LF": true,
+    "read_after_first_terminator": false,
+    "allowed_decoding": "UTF-8 strict; ASCII is a subset",
+    "server_ignores_range": "STOP before consuming response body beyond the single requested byte"
+  },
+  "outcome_boundary": {
+    "header_probe_is_not_outcome_row_access": true,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "row_level_population_response_forbidden": true,
+    "exact_physical_header_names_will_be_frozen_from_this_single_record_before_any_row-level access": true
+  }
+}
