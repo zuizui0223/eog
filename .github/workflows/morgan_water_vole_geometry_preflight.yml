@@ -1,0 +1,250 @@
+name: Morgan water vole response-blind geometry preflight
+
+on:
+  push:
+    branches:
+      - agent/morgan-water-vole-paired-complementarity
+    paths:
+      - ".github/workflows/morgan_water_vole_geometry_preflight.yml"
+      - "validation/morgan_water_vole_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  pull_request:
+    paths:
+      - ".github/workflows/morgan_water_vole_geometry_preflight.yml"
+      - "validation/morgan_water_vole_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  coordinate-registry-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package
+        run: python -m pip install -e .
+      - name: Open only frozen coordinate registry and evaluate structural geometry
+        run: |
+          set -euo pipefail
+          mkdir -p build/morgan_water_vole_geometry
+          python - <<'PY'
+          from __future__ import annotations
+          import csv
+          import hashlib
+          import io
+          import json
+          import math
+          from pathlib import Path
+          import urllib.error
+          import urllib.request
+
+          import numpy as np
+          from eog.v2.world_scale_ladder import StructuralScaleLadderDeclaration, build_structural_scale_ladder
+
+          out = Path("build/morgan_water_vole_geometry/geometry_preflight.json")
+          contract = json.loads(Path("validation/morgan_water_vole_paired_complementarity/source_contract.json").read_text())
+          spec = contract["exact_nonresponse_manifest"]["cell_coordinates_and_habitat"]
+          geo = contract["response_blind_geometry_contract"]
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "status": "not_evaluated",
+              "coordinate_file_request_count": 0,
+              "coordinate_payload_bytes_opened": 0,
+              "section_habitat_file_requests": 0,
+              "response_file_requests": 0,
+              "response_header_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+
+          def finish(status: str, **kwargs):
+              result.update(kwargs)
+              result["status"] = status
+              out.write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n")
+              print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
+
+          try:
+              req = urllib.request.Request(
+                  spec["api_download"],
+                  headers={"User-Agent":"EOG-Morgan-water-vole-coordinate-registry/1.0"},
+              )
+              result["coordinate_file_request_count"] = 1
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  payload = response.read(int(spec["bytes"]) + 1)
+                  http_status = getattr(response, "status", None)
+              if http_status != 200:
+                  finish("stop_nonresponse_transport", http_status=http_status)
+                  raise SystemExit(3)
+              if len(payload) != int(spec["bytes"]):
+                  finish("stop_nonresponse_identity_mismatch", observed_bytes=len(payload), expected_bytes=int(spec["bytes"]))
+                  raise SystemExit(3)
+              result["coordinate_payload_bytes_opened"] = len(payload)
+              observed_md5 = hashlib.md5(payload).hexdigest()
+              if observed_md5 != spec["md5"]:
+                  finish("stop_nonresponse_identity_mismatch", observed_md5=observed_md5, expected_md5=spec["md5"])
+                  raise SystemExit(3)
+
+              text = payload.decode("utf-8-sig")
+              sample = text[:8192]
+              try:
+                  delimiter = csv.Sniffer().sniff(sample, delimiters=",;\t|").delimiter
+              except csv.Error:
+                  delimiter = ","
+              reader = csv.DictReader(io.StringIO(text), delimiter=delimiter)
+              fields = list(reader.fieldnames or [])
+              rows = list(reader)
+              result.update({
+                  "observed_md5": observed_md5,
+                  "observed_bytes": len(payload),
+                  "delimiter": delimiter,
+                  "physical_fields": fields,
+                  "physical_row_count": len(rows),
+              })
+              if not fields or not rows:
+                  finish("stop_analysis_registry_not_closed", reason="coordinate registry parsed empty")
+                  raise SystemExit(3)
+
+              def resolve(candidates, role):
+                  matches = [field for field in fields if field in set(candidates)]
+                  if len(matches) != 1:
+                      finish(
+                          "stop_analysis_registry_not_closed",
+                          reason=f"{role} physical field did not resolve uniquely from frozen candidate set",
+                          failed_role=role,
+                          matches=matches,
+                      )
+                      raise SystemExit(3)
+                  return matches[0]
+
+              id_field = resolve(geo["cell_id_field_candidates"], "cell_id")
+              x_field = resolve(geo["x_field_candidates"], "x")
+              y_field = resolve(geo["y_field_candidates"], "y")
+              result.update({"resolved_id_field":id_field,"resolved_x_field":x_field,"resolved_y_field":y_field})
+
+              node_ids = []
+              coords = []
+              bad_rows = []
+              for line_number, row in enumerate(rows, start=2):
+                  node_id = str(row.get(id_field, "")).strip()
+                  try:
+                      x = float(str(row.get(x_field, "")).strip())
+                      y = float(str(row.get(y_field, "")).strip())
+                  except Exception:
+                      bad_rows.append({"line":line_number,"reason":"non_numeric_coordinate"})
+                      continue
+                  if not node_id:
+                      bad_rows.append({"line":line_number,"reason":"empty_node_id"})
+                      continue
+                  if not (math.isfinite(x) and math.isfinite(y)):
+                      bad_rows.append({"line":line_number,"reason":"non_finite_coordinate"})
+                      continue
+                  node_ids.append(node_id)
+                  coords.append((x,y))
+              if bad_rows:
+                  finish(
+                      "stop_analysis_registry_not_closed",
+                      reason="one or more physical registry rows violate frozen ID/coordinate completeness",
+                      invalid_row_count=len(bad_rows),
+                      first_invalid_rows=bad_rows[:10],
+                  )
+                  raise SystemExit(3)
+              if len(set(node_ids)) != len(node_ids):
+                  finish("stop_analysis_registry_not_closed", reason="duplicate node IDs in full physical registry", unique_node_ids=len(set(node_ids)))
+                  raise SystemExit(3)
+              if len(set(coords)) != len(coords):
+                  finish("stop_analysis_registry_not_closed", reason="duplicate coordinate pairs in full physical registry", unique_coordinate_pairs=len(set(coords)))
+                  raise SystemExit(3)
+              minimum_nodes = int(contract["preflight_minima"]["minimum_nodes"])
+              if len(node_ids) < minimum_nodes:
+                  finish("stop_insufficient_nodes", node_count=len(node_ids), minimum_nodes=minimum_nodes)
+                  raise SystemExit(3)
+
+              xy = np.asarray(coords, dtype=float)
+              delta = xy[:,None,:] - xy[None,:,:]
+              distance = np.sqrt(np.sum(delta * delta, axis=2))
+              declaration = StructuralScaleLadderDeclaration(
+                  axis_id="morgan_water_vole_coordinate_distance",
+                  target_largest_component_fractions=tuple(float(v) for v in geo["scale_targets_lcc"]),
+              )
+              ladder = build_structural_scale_ladder(node_ids, distance, declaration)
+              thresholds = [float(v) for v in ladder.thresholds]
+              positive_distinct = sorted({round(v, 12) for v in thresholds if v > 0})
+              levels = [
+                  {
+                      "level_id": level.level_id,
+                      "target_lcc": level.target_largest_component_fraction,
+                      "distance_threshold": level.distance_threshold,
+                      "achieved_lcc": level.achieved_largest_component_fraction,
+                      "weak_component_count": level.weak_component_count,
+                      "isolated_node_fraction": level.isolated_node_fraction,
+                      "directed_edge_count": level.directed_edge_count,
+                      "fingerprint": level.fingerprint,
+                  }
+                  for level in ladder.levels
+              ]
+              minimum_distinct = int(geo["minimum_distinct_positive_thresholds"])
+              if len(positive_distinct) < minimum_distinct:
+                  finish(
+                      "stop_structural_scale_collapse",
+                      node_count=len(node_ids),
+                      distinct_positive_threshold_count=len(positive_distinct),
+                      minimum_distinct_positive_thresholds=minimum_distinct,
+                      thresholds=thresholds,
+                      levels=levels,
+                      ladder_fingerprint=ladder.fingerprint,
+                  )
+                  raise SystemExit(3)
+
+              finish(
+                  "coordinate_registry_and_structural_geometry_pass",
+                  node_count=len(node_ids),
+                  unique_node_count=len(set(node_ids)),
+                  unique_coordinate_pair_count=len(set(coords)),
+                  coordinate_min=[float(np.min(xy[:,0])), float(np.min(xy[:,1]))],
+                  coordinate_max=[float(np.max(xy[:,0])), float(np.max(xy[:,1]))],
+                  distinct_positive_threshold_count=len(positive_distinct),
+                  thresholds=thresholds,
+                  levels=levels,
+                  ladder_fingerprint=ladder.fingerprint,
+                  response_file_requests=0,
+                  response_header_bytes_opened=0,
+                  response_rows_opened=False,
+                  response_values_opened=False,
+              )
+          except urllib.error.HTTPError as exc:
+              finish("stop_nonresponse_transport", http_status=exc.code, error=str(exc))
+              raise SystemExit(3)
+          PY
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("build/morgan_water_vole_geometry/geometry_preflight.json")
+          if not p.exists():
+              raise SystemExit("geometry audit missing")
+          r = json.loads(p.read_text())
+          assert r["section_habitat_file_requests"] == 0
+          assert r["response_file_requests"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Morgan water vole coordinate-only response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morgan-water-vole-geometry-preflight
+          path: build/morgan_water_vole_geometry/geometry_preflight.json
+          if-no-files-found: error
