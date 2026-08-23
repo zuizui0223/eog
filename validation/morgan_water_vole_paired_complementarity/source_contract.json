@@ -33,6 +33,7 @@
       "name": "Morgan_et_al_Cell_coordinates_and_habitat_variables.csv",
       "file_id": 82022,
       "api_download": "https://datadryad.org/api/v2/files/82022/download",
+      "public_file_stream": "https://datadryad.org/stash/downloads/file_stream/82022",
       "bytes": 14771,
       "digest_type": "md5",
       "md5": "98966d55f01d956d4a0d9b81dfc415f7"
@@ -41,10 +42,21 @@
       "name": "Morgan_et_al_Data_Section_habitat_scores.csv",
       "file_id": 82021,
       "api_download": "https://datadryad.org/api/v2/files/82021/download",
+      "public_file_stream": "https://datadryad.org/stash/downloads/file_stream/82021",
       "bytes": 7845,
       "digest_type": "md5",
       "md5": "c83b0a2f55a83f2f543309cd246322d2"
     }
+  },
+  "transport_contract": {
+    "first_coordinate_attempt": "Dryad API v2 file download for file 82022",
+    "first_coordinate_result": "HTTP 401 before byte 0 in GitHub Actions run 32623560834",
+    "second_coordinate_attempt": "Dryad public stash file_stream route for the exact same file id 82022",
+    "second_attempt_is_transport_only": true,
+    "identity_requirement_unchanged": "exact 14771 bytes and MD5 98966d55f01d956d4a0d9b81dfc415f7",
+    "maximum_transport_attempts_for_coordinate_file": 2,
+    "if_second_attempt_fails": "stop_nonresponse_transport; do not seek bot-bypass or self-created mirror",
+    "response_file_transport_requests_allowed": false
   },
   "forbidden_response_manifest": {
     "Morgan_et_al_Data_Section_occupancy.csv": {"file_id": 82020, "bytes": 73622, "md5": "000f0cd9a8ffaa8fbd196030c3d7c9c0"},
