@@ -1,0 +1,294 @@
+name: Kerguelen trout response-blind matrix and structural gate
+
+on:
+  push:
+    branches: [agent/kerguelen-trout-paired-complementarity]
+    paths:
+      - ".github/workflows/kerguelen_trout_matrix_structural_gate.yml"
+      - "validation/kerguelen_trout_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+  pull_request:
+    paths:
+      - ".github/workflows/kerguelen_trout_matrix_structural_gate.yml"
+      - "validation/kerguelen_trout_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+      - "src/eog/v2/world_adequacy.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  matrix-structural-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package and frozen PDF text utilities
+        run: |
+          python -m pip install -e .
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+      - name: Parse exact three matrices and apply existing structural universe gate
+        run: |
+          set -euo pipefail
+          mkdir -p build/kerguelen_trout_matrix_gate
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import json
+          import math
+          from pathlib import Path
+          import re
+          import subprocess
+          import urllib.error
+          import urllib.request
+
+          import numpy as np
+          from eog.v2.world_scale_ladder import (
+              StructuralScaleLadderDeclaration,
+              build_structural_scale_ladder,
+              structural_scale_adjacencies,
+          )
+          from eog.v2.world_adequacy import (
+              StructuralAdequacyDeclaration,
+              audit_world_universe_structure,
+              apply_structural_adequacy_gate,
+          )
+
+          contract=json.loads(Path("validation/kerguelen_trout_paired_complementarity/source_contract.json").read_text())
+          spec=contract["exact_public_supplements"]["distance_appendix"]
+          gate_contract=contract["distance_gate_contract"]
+          parser_contract=gate_contract["frozen_matrix_parser"]
+          universe_contract=gate_contract["structural_universe_rule"]
+          out=Path("build/kerguelen_trout_matrix_gate/result.json")
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"not_evaluated",
+              "distance_pdf_requests":0,
+              "distance_pdf_bytes_opened":0,
+              "colonization_appendix_requests":0,
+              "colonization_appendix_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          def finish(status,**extra):
+              result.update(extra); result["status"]=status
+              out.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False,allow_nan=False)+"\n")
+              print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False,allow_nan=False))
+          def fail(status,reason,**extra):
+              finish(status,reason=reason,**extra); raise SystemExit(3)
+
+          # Exact response-independent source identity.
+          req=urllib.request.Request(spec["download_url"],headers={"User-Agent":"EOG-Kerguelen-matrix-gate/1.0","Accept":"application/pdf","Accept-Encoding":"identity"})
+          result["distance_pdf_requests"]=1
+          try:
+              with urllib.request.urlopen(req,timeout=90) as response:
+                  body=response.read(int(spec["frozen_bytes"])+1)
+                  status=getattr(response,"status",None)
+                  ctype=response.headers.get("Content-Type")
+          except urllib.error.HTTPError as exc:
+              fail("stop_distance_pdf_transport",f"HTTP {exc.code}")
+          if status!=200:
+              fail("stop_distance_pdf_transport",f"HTTP {status}")
+          if len(body)!=int(spec["frozen_bytes"]):
+              fail("stop_distance_pdf_identity","byte size differs from frozen layout audit",observed_bytes=len(body),expected_bytes=int(spec["frozen_bytes"]))
+          pdf_sha=hashlib.sha256(body).hexdigest()
+          if pdf_sha!=spec["frozen_sha256"]:
+              fail("stop_distance_pdf_identity","PDF SHA-256 differs from frozen layout audit",observed_sha256=pdf_sha,expected_sha256=spec["frozen_sha256"])
+          if not body.startswith(b"%PDF"):
+              fail("stop_distance_pdf_identity","PDF magic missing",content_type=ctype)
+          result["distance_pdf_bytes_opened"]=len(body)
+          pdf_path=Path("build/kerguelen_trout_matrix_gate/appendix_s2.pdf")
+          txt_path=Path("build/kerguelen_trout_matrix_gate/appendix_s2.layout.txt")
+          pdf_path.write_bytes(body)
+          subprocess.run(["pdftotext","-layout",str(pdf_path),str(txt_path)],check=True)
+          text=txt_path.read_text(encoding="utf-8",errors="replace")
+          text_bytes=text.encode("utf-8")
+          text_sha=hashlib.sha256(text_bytes).hexdigest()
+          if len(text_bytes)!=int(spec["frozen_pdftotext_layout_bytes"]):
+              fail("stop_layout_text_identity","pdftotext byte size differs from frozen layout audit",observed_text_bytes=len(text_bytes),expected_text_bytes=int(spec["frozen_pdftotext_layout_bytes"]))
+          if text_sha!=spec["frozen_pdftotext_layout_sha256"]:
+              fail("stop_layout_text_identity","pdftotext SHA-256 differs from frozen layout audit",observed_text_sha256=text_sha,expected_text_sha256=spec["frozen_pdftotext_layout_sha256"])
+
+          pages=[page for page in text.split("\f") if page.strip()]
+          scenarios=tuple(parser_contract["scenario_order"])
+          heading_needles=("stepping-stone approach","1 km buffer","5 km buffer")
+          if len(pages)!=3:
+              fail("stop_distance_matrix_schema","frozen layout did not split into exactly three nonempty pages",page_count=len(pages))
+
+          number_re=re.compile(r"(?<![A-Za-z])[+-]?\d+(?:[.,]\d+)?")
+          matrices={}
+          labels_by_scenario={}
+          parse_diagnostics=[]
+          for page_index,(scenario,page,needle) in enumerate(zip(scenarios,pages,heading_needles,strict=True)):
+              if needle.casefold() not in page.casefold():
+                  fail("stop_distance_matrix_schema","expected published scenario heading missing from page",scenario=scenario,needle=needle)
+              candidates=[]
+              for line_number,line in enumerate(page.splitlines(),start=1):
+                  if not line.strip():
+                      continue
+                  matches=list(number_re.finditer(line))
+                  if len(matches)<85:
+                      continue
+                  distance_matches=matches[-85:]
+                  label=line[:distance_matches[0].start()].strip()
+                  if not label:
+                      fail("stop_distance_matrix_schema","empty river label under rightmost-85 parser",scenario=scenario,line_number=line_number)
+                  values=[]
+                  for match in distance_matches:
+                      token=match.group(0)
+                      if token.count(",")>1 or token.count(".")>1 or ("," in token and "." in token):
+                          fail("stop_distance_matrix_schema","ambiguous numeric token",scenario=scenario,line_number=line_number,token=token)
+                      number=float(token.replace(",","."))
+                      if not math.isfinite(number) or number<0:
+                          fail("stop_distance_matrix_schema","non-finite or negative distance",scenario=scenario,line_number=line_number,token=token)
+                      values.append(number)
+                  candidates.append((label,values,line_number,len(matches)))
+              if len(candidates)!=85:
+                  fail("stop_distance_matrix_schema","page did not yield exactly 85 rows under frozen rightmost-85 parser",scenario=scenario,candidate_row_count=len(candidates))
+              labels=tuple(row[0] for row in candidates)
+              if len(set(labels))!=85:
+                  dup=sorted({x for x in labels if labels.count(x)>1})
+                  fail("stop_analysis_registry_not_closed","duplicate exact river labels within a distance matrix",scenario=scenario,duplicates=dup)
+              matrix=np.asarray([row[1] for row in candidates],dtype=float)
+              if matrix.shape!=(85,85):
+                  fail("stop_distance_matrix_schema","matrix shape differs from 85x85",scenario=scenario,shape=list(matrix.shape))
+              if not np.allclose(np.diag(matrix),0.0,atol=1e-9,rtol=0.0):
+                  fail("stop_distance_matrix_schema","distance matrix diagonal is not zero",scenario=scenario,max_abs_diagonal=float(np.max(np.abs(np.diag(matrix)))))
+              if not np.allclose(matrix,matrix.T,atol=1e-9,rtol=1e-9):
+                  fail("stop_distance_matrix_schema","distance matrix is not symmetric",scenario=scenario,max_abs_asymmetry=float(np.max(np.abs(matrix-matrix.T))))
+              labels_by_scenario[scenario]=labels
+              matrices[scenario]=matrix
+              parse_diagnostics.append({
+                  "scenario":scenario,
+                  "row_count":85,
+                  "first_label":labels[0],
+                  "last_label":labels[-1],
+                  "row_numeric_match_count_min":min(row[3] for row in candidates),
+                  "row_numeric_match_count_max":max(row[3] for row in candidates),
+                  "matrix_min":float(np.min(matrix)),
+                  "matrix_max":float(np.max(matrix)),
+                  "matrix_sha256":hashlib.sha256(np.asarray(matrix,dtype="<f8").tobytes()).hexdigest(),
+              })
+
+          reference_labels=labels_by_scenario[scenarios[0]]
+          for scenario in scenarios[1:]:
+              if labels_by_scenario[scenario]!=reference_labels:
+                  fail("stop_analysis_registry_not_closed","exact ordered river label tuple differs across official distance scenarios",scenario=scenario)
+
+          # Existing response-blind structural ladder + universe-wide adequacy gate.
+          worlds={}
+          ladders=[]
+          adjacency_fingerprints={}
+          targets=tuple(float(v) for v in universe_contract["structural_targets_lcc"])
+          for scenario in scenarios:
+              matrix=matrices[scenario]
+              ladder=build_structural_scale_ladder(
+                  reference_labels,
+                  matrix,
+                  StructuralScaleLadderDeclaration(axis_id=scenario,target_largest_component_fractions=targets),
+              )
+              adjacencies=structural_scale_adjacencies(ladder,matrix)
+              ladder_rows=[]
+              for level in ladder.levels:
+                  local_id=level.level_id
+                  world_id=f"{scenario}::{local_id}"
+                  adjacency=adjacencies[local_id]
+                  adj_fp=hashlib.sha256(np.asarray(adjacency,dtype=np.uint8).tobytes()).hexdigest()
+                  worlds[world_id]=adjacency
+                  adjacency_fingerprints[world_id]=adj_fp
+                  ladder_rows.append({
+                      "level_id":local_id,
+                      "world_id":world_id,
+                      "target_lcc":level.target_largest_component_fraction,
+                      "distance_threshold":level.distance_threshold,
+                      "achieved_lcc":level.achieved_largest_component_fraction,
+                      "weak_component_count":level.weak_component_count,
+                      "isolated_node_fraction":level.isolated_node_fraction,
+                      "directed_edge_count":level.directed_edge_count,
+                      "level_fingerprint":level.fingerprint,
+                      "adjacency_fingerprint":adj_fp,
+                  })
+              ladders.append({
+                  "scenario":scenario,
+                  "ladder_fingerprint":ladder.fingerprint,
+                  "distance_matrix_fingerprint":ladder.distance_matrix_fingerprint,
+                  "levels":ladder_rows,
+                  "distinct_threshold_count":len({round(float(level.distance_threshold),12) for level in ladder.levels if level.distance_threshold>0}),
+              })
+
+          audit=audit_world_universe_structure(reference_labels,worlds,horizon=int(universe_contract["horizon"]))
+          declaration=StructuralAdequacyDeclaration(
+              min_largest_weak_component_fraction=float(universe_contract["adequacy_min_largest_weak_component_fraction"]),
+              max_isolated_node_fraction=float(universe_contract["adequacy_max_isolated_node_fraction"]),
+              require_at_least_one_world_pass=bool(universe_contract["require_at_least_one_world_pass"]),
+          )
+          gate=apply_structural_adequacy_gate(audit,declaration)
+          unique_adj=len(set(adjacency_fingerprints.values()))
+          passing=set(gate.passing_world_ids)
+          lcc900_passing=sorted(world_id for world_id in passing if world_id.endswith("lcc900"))
+          final_pass=(
+              gate.passed
+              and unique_adj>=int(universe_contract["minimum_distinct_adjacency_fingerprints_across_universe"])
+              and (bool(lcc900_passing) if universe_contract["require_at_least_one_lcc900_world_pass"] else True)
+          )
+          world_audits=[{
+              "world_id":row.world_id,
+              "largest_weak_component_fraction":row.largest_weak_component_fraction,
+              "isolated_node_fraction":row.isolated_node_fraction,
+              "weak_component_count":row.weak_component_count,
+              "median_horizon_reachable_fraction":row.median_horizon_reachable_fraction,
+              "directed_edge_count":row.directed_edge_count,
+              "fingerprint":row.fingerprint,
+          } for row in audit.world_audits]
+
+          finish(
+              "matrix_registry_and_structural_universe_pass" if final_pass else "stop_structural_universe_inadequate",
+              pdf_sha256=pdf_sha,
+              layout_text_sha256=text_sha,
+              node_count=len(reference_labels),
+              exact_node_labels=list(reference_labels),
+              parse_diagnostics=parse_diagnostics,
+              structural_ladders=ladders,
+              world_count=len(worlds),
+              distinct_adjacency_fingerprint_count=unique_adj,
+              adjacency_fingerprints=adjacency_fingerprints,
+              structural_audit_fingerprint=audit.fingerprint,
+              structural_gate_fingerprint=gate.fingerprint,
+              structural_gate_passing_world_ids=list(gate.passing_world_ids),
+              lcc900_passing_world_ids=lcc900_passing,
+              world_audits=world_audits,
+              final_structural_pass=final_pass,
+          )
+          if not final_pass:
+              raise SystemExit(3)
+          PY
+      - name: Assert strict Appendix-S1 response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/kerguelen_trout_matrix_gate/result.json")
+          if not p.exists(): raise SystemExit("matrix gate result missing")
+          r=json.loads(p.read_text())
+          assert r["colonization_appendix_requests"]==0
+          assert r["colonization_appendix_bytes_opened"]==0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Kerguelen matrix-gate response firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kerguelen-trout-matrix-structural-gate
+          path: build/kerguelen_trout_matrix_gate/result.json
+          if-no-files-found: error
