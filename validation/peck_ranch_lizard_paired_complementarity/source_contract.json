@@ -17,6 +17,30 @@
     "source_process_claim": "known managed introductions are external additions and must be prospectively represented by year/glade; natural expansion among the mapped glade universe is the target process. Any additional unmanaged external source not representable before response access stops the candidate.",
     "historical_anchor": "1980 extensive Peck Ranch survey reported no collared-lizard populations; initial translocations occurred 1984-1989; prescribed woodland burning began 1994 and initiated the colonizing phase; stable metapopulation phase was established by about 2000."
   },
+  "zenodo_geometry_manifest": {
+    "name": "Peck_Glade_GPS_Waypoints.txt",
+    "size": 17833,
+    "md5": "7baa4bb0dc11cdff774dfe95540ed785",
+    "content_url": "https://zenodo.org/api/records/15557864/files/Peck_Glade_GPS_Waypoints.txt/content",
+    "role": "response-independent central glade latitude/longitude registry"
+  },
+  "zenodo_non_geometry_members": [
+    "Stegall_and_Mule_Mountain_Glades.pdf",
+    "Thorny_Mountain_Glades.pdf",
+    "Mill_Mountain_Glades.pdf"
+  ],
+  "geometry_contract": {
+    "use_every_physical_waypoint_record": true,
+    "no_post_open_row_deletion_or_coordinate_repair": true,
+    "glade_id_must_be_nonempty_and_unique": true,
+    "latitude_longitude_must_be_finite": true,
+    "coordinate_pairs_must_be_unique": true,
+    "distance_metric": "great_circle_haversine_km from frozen latitude/longitude",
+    "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "no_pdf_geometry_reconstruction": true,
+    "physical_schema_rule": "parse the published Garmin/text waypoint structure without consulting response; if waypoint IDs and latitude/longitude cannot be resolved deterministically from the text structure, stop rather than repair"
+  },
   "admission_rules": {
     "require_response_independent_glade_geometry": true,
     "require_geometry_physically_separate_from_capture_response": true,
@@ -39,8 +63,9 @@
     }
   },
   "stage_boundary": {
-    "zenodo_metadata_only_first": true,
-    "file_payload_access_allowed": false,
+    "zenodo_metadata_complete": true,
+    "gps_payload_access_allowed": true,
+    "pdf_payload_access_allowed": false,
     "capture_workbook_access_allowed": false,
     "response_header_access_allowed": false,
     "response_payload_access_allowed": false,
