@@ -1,0 +1,105 @@
+name: Peck Ranch collared lizard metadata-only preflight
+
+on:
+  push:
+    branches:
+      - agent/peck-ranch-lizard-preflight
+    paths:
+      - ".github/workflows/peck_ranch_lizard_metadata_preflight.yml"
+      - "validation/peck_ranch_lizard_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_ranch_lizard_metadata_preflight.yml"
+      - "validation/peck_ranch_lizard_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Query Zenodo record metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_ranch_lizard_metadata
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import urllib.request
+
+          contract = json.loads(Path("validation/peck_ranch_lizard_paired_complementarity/source_contract.json").read_text())
+          record = int(contract["scientific_anchor"]["zenodo_record"])
+          url = f"https://zenodo.org/api/records/{record}"
+          req = urllib.request.Request(url, headers={"User-Agent":"EOG-Peck-Ranch-lizard-metadata/1.0","Accept":"application/json"})
+          with urllib.request.urlopen(req, timeout=60) as response:
+              body = response.read(5_000_001)
+              status = getattr(response, "status", None)
+          if status != 200 or len(body) > 5_000_000:
+              raise RuntimeError(f"Zenodo metadata request failed bounded checks: {status}")
+          payload = json.loads(body.decode("utf-8"))
+          files=[]
+          for row in payload.get("files", []):
+              links=row.get("links") or {}
+              files.append({
+                  "id":row.get("id"),
+                  "key":row.get("key"),
+                  "size":row.get("size"),
+                  "checksum":row.get("checksum"),
+                  "self":links.get("self"),
+                  "content":links.get("content"),
+              })
+          metadata=payload.get("metadata") or {}
+          result={
+              "attempt_id":contract["attempt_id"],
+              "record_id":payload.get("id"),
+              "doi":metadata.get("doi"),
+              "title":metadata.get("title"),
+              "publication_date":metadata.get("publication_date"),
+              "version":metadata.get("version"),
+              "rights":metadata.get("rights"),
+              "file_count":len(files),
+              "files":files,
+              "metadata_requests":1,
+              "file_payload_requests":0,
+              "file_payload_bytes_opened":0,
+              "capture_workbook_bytes_opened":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          Path("build/peck_ranch_lizard_metadata/metadata_inventory.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True))
+          if not files:
+              raise SystemExit("Zenodo record exposes no files")
+          PY
+      - name: Assert strict metadata-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("build/peck_ranch_lizard_metadata/metadata_inventory.json").read_text())
+          assert r["file_payload_requests"] == 0
+          assert r["file_payload_bytes_opened"] == 0
+          assert r["capture_workbook_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck Ranch metadata-only firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: peck-ranch-lizard-metadata-only
+          path: build/peck_ranch_lizard_metadata/metadata_inventory.json
+          if-no-files-found: error
