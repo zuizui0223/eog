@@ -1,6 +1,6 @@
 {
   "attempt_id": "peck_collared_lizard_fresh_paired_v1",
-  "candidate": "Crotaphytus collaris Peck Ranch/Stegall Mountain metapopulation",
+  "candidate": "Crotophytus collaris Peck Ranch/Stegall Mountain metapopulation",
   "selection_boundary": {
     "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
     "response_rows_opened": false,
@@ -10,16 +10,45 @@
   },
   "scientific_anchor": {
     "zenodo_record": 15557864,
+    "zenodo_doi": "10.5281/zenodo.15557864",
+    "zenodo_concept_doi": "10.5281/zenodo.6762697",
     "zenodo_expected_title": "Peck ranch collared lizard files",
     "ecological_archives_figshare_collection": 3304128,
     "paper_doi": "10.1890/10-1994.1",
-    "focal_taxon": "Crotaphytus collaris collaris",
+    "focal_taxon": "Crotophytus collaris collaris",
     "analysis_mountain": "Stegall Mountain",
     "provisional_window": "1995-2006",
     "window_reason": "published field protocol reports at least three visits per glade per field season on Stegall from 1995-2006; no human-assisted translocations occurred after the original 1984/1987/1989 releases",
     "provisional_calibration_transitions": ["1995->1996", "1996->1997", "1997->1998", "1998->1999", "1999->2000"],
     "provisional_heldout_transitions": ["2000->2001", "2001->2002", "2002->2003", "2003->2004", "2004->2005", "2005->2006"],
     "source_process_claim": "after the last human-assisted release in 1989, colonisation/recolonisation on Stegall is conditioned on occupied glades in the mapped Stegall glade universe; woodland burn management is a known time-varying external condition and must be represented prospectively or the candidate stops before response"
+  },
+  "exact_resource_manifest": {
+    "gps_registry": {
+      "name": "Peck_Glade_GPS_Waypoints.txt",
+      "zenodo_file_id": "4a583611-4125-4fb3-9942-456a4c91cb38",
+      "download_url": "https://zenodo.org/api/records/15557864/files/Peck_Glade_GPS_Waypoints.txt/content",
+      "bytes": 17833,
+      "md5": "7baa4bb0dc11cdff774dfe95540ed785",
+      "role": "response-independent physical glade waypoint registry"
+    },
+    "population_size_response": {
+      "figshare_article_id": 3551832,
+      "article_doi": "10.6084/m9.figshare.3551832.v1",
+      "name": "Individual_Glade_Sizes.txt",
+      "figshare_file_id": 5619525,
+      "download_url": "https://ndownloader.figshare.com/files/5619525",
+      "bytes": 56485,
+      "md5": "b8e4a280baa52f5bcbcd5669e156d770",
+      "role": "outcome-bearing annual glade population-size source; forbidden until full response semantics are frozen"
+    },
+    "s1_documentation": {
+      "name": "suppl-1.htm",
+      "figshare_file_id": 5619522,
+      "bytes": 3932,
+      "md5": "305c6a8a896c120da3ea4ce8fefbb6d6",
+      "role": "supplement wrapper/documentation only; do not use response rows from linked data before authorization"
+    }
   },
   "prospective_endpoint": {
     "unit": "Stegall glade-year",
@@ -45,16 +74,19 @@
     "heldout_outer_units_with_both_classes": 4
   },
   "metadata_only_resource_roles": {
-    "glade_registry_required": "Zenodo supplementary PECK GLADE GPS WAYPOINTS; must be independently addressable and must be documented as the glades in the study, not only occupied glades",
-    "capture_workbook_forbidden": "PECK RANCH COLLARED LIZARD DATA workbook remains outcome-bearing and unopened",
-    "population_size_response_required": "Ecological Archives E092-148-S1; estimated population sizes per glade/year of occupation; payload remains unopened until complete zero semantics and full freeze are established",
-    "expansion_maps_forbidden_as_geometry": "E092-148-A2 / maps encode colonisation outcomes and may not define the node universe"
+    "glade_registry_required": "Zenodo GPS waypoints are described as latitude/longitude of the glades in this study; payload must still establish a complete Stegall registry under a response-blind physical-format audit",
+    "capture_workbook_forbidden": "capture/recapture workbook is outcome-bearing and not used as geometry or zero semantics",
+    "population_size_response_required": "Ecological Archives E092-148-S1 Individual_Glade_Sizes.txt remains unopened at this stage",
+    "expansion_maps_forbidden_as_geometry": "E092-148-A2 / map PDFs encode colonisation outcomes and may not define the node universe"
+  },
+  "gps_physical_audit": {
+    "allowed_now": true,
+    "purpose": "verify exact GPS bytes and inspect physical line/header structure only; no node subset, coordinate parsing or structural threshold is chosen until this response-blind format is known",
+    "response_resource_requests_allowed": false,
+    "s1_response_requests_allowed": false
   },
   "metadata_gate": {
-    "zenodo_file_payload_requests_allowed": false,
-    "figshare_file_payload_requests_allowed": false,
-    "require_unique_gps_resource": true,
-    "require_unique_s1_resource": true,
+    "metadata_manifest_complete": true,
     "response_header_access_allowed": false,
     "response_payload_access_allowed": false
   }
