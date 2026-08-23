@@ -7,6 +7,11 @@
     "dataset_handle": "102.100.100/366494",
     "published_design": "61 potential beach populations fixed from physical coastline structure; approximately 6-week censuses for 5 years; 42 censuses"
   },
+  "csiro_public_metadata_route": {
+    "api_root": "https://data.csiro.au/dap/ws/v2",
+    "search_endpoint": "collections/searchbylocation",
+    "documentation": "CSIRO DAP public OpenAPI/Web Services; metadata harvesting only"
+  },
   "admission_target": "Resolve only CSIRO collection/file metadata and determine whether a response-independent beach registry or distance resource is physically separate from longitudinal disease census data.",
   "search_terms": ["Cakile", "Alternaria", "metapopulation"],
   "required_pre_pr_evidence": [
