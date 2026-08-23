@@ -10,6 +10,9 @@
   },
   "scientific_anchor": {
     "dataset_doi": "10.5061/dryad.sn02v6x70",
+    "dryad_version_api": "https://datadryad.org/api/v2/versions/188238",
+    "dryad_version_number": 5,
+    "publication_date": "2022-07-19",
     "paper_doi": "10.1111/1365-2656.13783",
     "focal_taxon": "Arvicola amphibius",
     "published_node_count": 98,
@@ -27,10 +30,30 @@
     "require_coordinate_geometry": true,
     "require_closed_analysis_registry": true
   },
-  "metadata_stage": {
-    "dryad_manifest_only": true,
-    "payload_downloads_allowed": false,
-    "purpose": "resolve exact immutable file inventory, sizes, digests and role-separability before opening any spatial or detection payload"
+  "exact_readme_identity": {
+    "name": "README.txt",
+    "file_id": 1674973,
+    "bytes": 5952,
+    "digest_type": "sha-256",
+    "sha256": "c503113a55e569b7981407380e43f20f9a32451b6f352710d936527837462162",
+    "api_download": "https://datadryad.org/api/v2/files/1674973/download",
+    "public_file_stream": "https://datadryad.org/stash/downloads/file_stream/1674973"
+  },
+  "frozen_large_payload_inventory": {
+    "mp_DI2022.RData": {"file_id": 1674966, "bytes": 48721434, "sha256": "838475c88e3dbc80dc7927c8807535a47cf159ed8272db4b1d7a1bc6a01ae90e"},
+    "mp_DV2022.RData": {"file_id": 1674972, "bytes": 2712, "sha256": "634e501edb333b7d4b14b8db40483486dabe6d80f37bfda973ed292852e6f6e3"},
+    "mp_UI2022.RData": {"file_id": 1674971, "bytes": 48629017, "sha256": "65b463bffa426040778935913b3bf69bd9d85aeb48a1721c537d6525787baf11"},
+    "mp_UV2022.RData": {"file_id": 1674975, "bytes": 62397107, "sha256": "1003303257464641a7597c791045a44fb63d72b45a3e3cb16bd986835e4110a3"},
+    "mp_modselect2022.RData": {"file_id": 1674969, "bytes": 4695, "sha256": "08619f524ac7c130a1283e4bd2bbe88931fb946bbd8dd8eba50440764f278bda"}
+  },
+  "readme_only_stage": {
+    "payload_access_now_allowed": ["README.txt"],
+    "all_rdata_payloads_forbidden": true,
+    "all_chain_and_summary_csv_payloads_forbidden": true,
+    "purpose": "use only the exact README to map released file/object roles and determine whether a complete masked 98-node spatial registry is physically separable from longitudinal detection/occupancy response before opening any RData or model-output payload",
+    "transport_order": ["api_download", "public_file_stream"],
+    "transport_fallback_rule": "the second route is allowed only for the same immutable README file id and only if the first route returns an HTTP transport denial; exact byte size and SHA-256 must match before decoding",
+    "stop_rule": "if README transport fails on both frozen routes, or README establishes that complete geometry and ecological response cannot be physically separated under a prospective file/object contract, close this attempt before response access"
   },
   "future_endpoint_boundary": {
     "provisional_endpoint": "one-year-ahead patch occupancy/detection state under a frozen observation rule; final physical response semantics must be fixed from response-independent README/schema evidence before any response row access",
