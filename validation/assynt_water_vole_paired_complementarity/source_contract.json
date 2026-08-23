@@ -1,0 +1,49 @@
+{
+  "attempt_id": "assynt_water_vole_fresh_paired_v1",
+  "candidate": "Assynt Arvicola amphibius 98-patch long-term metapopulation, 1999–2015",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "dataset_doi": "10.5061/dryad.sn02v6x70",
+    "paper_doi": "10.1111/1365-2656.13783",
+    "focal_taxon": "Arvicola amphibius",
+    "published_node_count": 98,
+    "published_years": [1999, 2015],
+    "published_year_count": 17,
+    "survey_semantics": "year- and patch-specific binary detection histories from faecal latrine surveys, 1–4 visits per breeding season",
+    "registry_semantics": "riparian suitable-habitat patches are temporally stable and were mapped independently of future occupancy; masked released XY values retain relative network structure for reproducibility",
+    "process_boundary": "classic fragmented metapopulation with frequent occupancy turnover and dispersal among suitable patches embedded in unsuitable heather matrix; later source/process closure must still be certified before response access"
+  },
+  "preflight_minima": {
+    "minimum_nodes": 50,
+    "minimum_outer_units": 4,
+    "minimum_repeated_nodes": 50,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "metadata_stage": {
+    "dryad_manifest_only": true,
+    "payload_downloads_allowed": false,
+    "purpose": "resolve exact immutable file inventory, sizes, digests and role-separability before opening any spatial or detection payload"
+  },
+  "future_endpoint_boundary": {
+    "provisional_endpoint": "one-year-ahead patch occupancy/detection state under a frozen observation rule; final physical response semantics must be fixed from response-independent README/schema evidence before any response row access",
+    "reserved_count_minima": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    },
+    "learner_boundary": "same frozen strong random forest in baseline and augmented arms; only unchanged 10-column Layer B may differ",
+    "response_payload_access_allowed": false,
+    "response_header_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
