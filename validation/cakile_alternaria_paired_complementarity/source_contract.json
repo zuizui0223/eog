@@ -40,10 +40,15 @@
     "use_all_nonempty_sheets": true,
     "trailing_blank_rule": "rows and columns that are completely blank across the used sheet rectangle may be trimmed; no nonblank row/column may be dropped",
     "accepted_matrix_layout": "after blank-edge trimming, each nonempty sheet must be a labeled square distance matrix: top row excluding corner contains node labels, left column excluding corner contains the same labels in the same order, numeric body is finite symmetric with zero diagonal",
-    "node_union_rule": "matrix node labels across nonempty sheets must be disjoint and their union must contain exactly 61 unique nonempty labels",
+    "allowed_geometry_modes": {
+      "full_61_matrix": "exactly one accepted 61-node matrix",
+      "three_subregion_matrices": "exactly three disjoint accepted matrices whose sizes sort to [15,23,23], matching the prospectively published MB/DU/CT metapopulation sizes; no cross-subregion distance is invented"
+    },
+    "node_union_rule": "matrix node labels must be unique and nonempty; in either allowed mode the union must contain exactly 61 labels",
+    "subregion_graph_rule": "if the workbook resolves as three matrices, each matrix is retained as a separate metapopulation graph for all later Layer-A/Layer-B calculations; it is not stitched into a 61-node graph",
     "distance_units": "use workbook numeric units as published; do not rescale or infer biological dispersal distance",
     "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
-    "minimum_distinct_positive_thresholds": 3,
+    "minimum_distinct_positive_thresholds_per_graph": 3,
     "no_post_open_layout_reinterpretation": true,
     "no_node_filtering_or_alias_repair": true
   },
