@@ -1,0 +1,161 @@
+name: Aargau Bombina response-blind source manifest
+
+on:
+  push:
+    branches: [agent/aargau-amphibian-paired-complementarity]
+    paths:
+      - ".github/workflows/aargau_bombina_source_manifest.yml"
+      - "validation/aargau_bombina_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/aargau_bombina_source_manifest.yml"
+      - "validation/aargau_bombina_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Resolve EnviDat CKAN resource metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/aargau_bombina_source
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import urllib.error
+          import urllib.request
+
+          contract=json.loads(Path("validation/aargau_bombina_paired_complementarity/source_contract.json").read_text())
+          urls=contract["metadata_stage"]["ckan_package_show_candidates"]
+          attempts=[]; package=None; selected=None
+          for url in urls:
+              req=urllib.request.Request(url,headers={"Accept":"application/json","User-Agent":"EOG-Aargau-Bombina-source-manifest/1.0"})
+              attempt={"url":url,"status":None,"bytes":0,"error":None}
+              try:
+                  with urllib.request.urlopen(req,timeout=40) as response:
+                      body=response.read(5_000_001); status=getattr(response,"status",None)
+                  attempt["status"]=status; attempt["bytes"]=len(body)
+                  if status!=200 or len(body)>5_000_000:
+                      attempt["error"]="bounded metadata request failed"
+                  else:
+                      data=json.loads(body.decode("utf-8"))
+                      if isinstance(data,dict) and data.get("success") is True and isinstance(data.get("result"),dict):
+                          package=data["result"]; selected=url
+                          attempts.append(attempt); break
+                      attempt["error"]="CKAN response did not contain successful result"
+              except urllib.error.HTTPError as exc:
+                  attempt["status"]=exc.code; attempt["error"]=f"HTTPError {exc.code}"
+              except Exception as exc:
+                  attempt["error"]=repr(exc)
+              attempts.append(attempt)
+          if package is None:
+              result={
+                  "attempt_id":contract["attempt_id"],
+                  "status":"stop_metadata_transport_unavailable",
+                  "metadata_attempts":attempts,
+                  "resource_payload_requests":0,
+                  "resource_payload_bytes_opened":0,
+                  "observation_response_requests":0,
+                  "response_rows_opened":False,
+                  "response_values_opened":False,
+                  "model_fits":0,
+                  "heldout_scores":0,
+              }
+              Path("build/aargau_bombina_source/manifest.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+              print(json.dumps(result,indent=2,sort_keys=True)); raise SystemExit(3)
+
+          resources=[]
+          for r in package.get("resources",[]):
+              if not isinstance(r,dict): continue
+              resources.append({
+                  "id":r.get("id"),
+                  "name":r.get("name"),
+                  "description":r.get("description"),
+                  "format":r.get("format"),
+                  "mimetype":r.get("mimetype"),
+                  "url":r.get("url"),
+                  "url_type":r.get("url_type"),
+                  "size":r.get("size"),
+                  "hash":r.get("hash"),
+                  "resource_type":r.get("resource_type"),
+                  "created":r.get("created"),
+                  "last_modified":r.get("last_modified"),
+              })
+
+          required=contract["required_public_resource_roles"]
+          def role_matches(role):
+              out=[]
+              for r in resources:
+                  text=((r.get("name") or "")+" "+(r.get("description") or "")).casefold()
+                  if role=="readme" and "readme" in text: out.append(r)
+                  elif role=="covariate_static" and "covariate data 1" in text: out.append(r)
+                  elif role=="covariate_dynamic" and "covariate data 2" in text: out.append(r)
+                  elif role=="observation_response" and "observation data" in text: out.append(r)
+                  elif role=="structural_connectivity" and "structural connectivity" in text: out.append(r)
+                  elif role=="potential_population_connectivity" and "potential population connectivity" in text: out.append(r)
+              return out
+          role_map={role:[r.get("id") for r in role_matches(role)] for role in required}
+          unresolved=[role for role,ids in role_map.items() if len(ids)!=1]
+          status="resource_manifest_roles_resolved" if not unresolved else "stop_resource_role_manifest_not_unique"
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":status,
+              "selected_metadata_endpoint":selected,
+              "metadata_attempts":attempts,
+              "package_id":package.get("id"),
+              "package_name":package.get("name"),
+              "package_title":package.get("title"),
+              "package_version":package.get("version"),
+              "package_license_id":package.get("license_id"),
+              "package_license_title":package.get("license_title"),
+              "resource_count":len(resources),
+              "resources":resources,
+              "role_map":role_map,
+              "unresolved_roles":unresolved,
+              "resource_payload_requests":0,
+              "resource_payload_bytes_opened":0,
+              "observation_response_requests":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          Path("build/aargau_bombina_source/manifest.json").write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
+          if unresolved: raise SystemExit(3)
+          PY
+      - name: Assert metadata-only response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/aargau_bombina_source/manifest.json")
+          if not p.exists(): raise SystemExit("manifest missing")
+          r=json.loads(p.read_text())
+          assert r["resource_payload_requests"]==0
+          assert r["resource_payload_bytes_opened"]==0
+          assert r["observation_response_requests"]==0
+          assert r.get("response_header_bytes_opened",0)==0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Aargau metadata-only response firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aargau-bombina-source-manifest
+          path: build/aargau_bombina_source/manifest.json
+          if-no-files-found: error
