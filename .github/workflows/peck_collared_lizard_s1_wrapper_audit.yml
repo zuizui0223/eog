@@ -1,0 +1,135 @@
+name: Peck collared lizard S1 wrapper audit
+
+on:
+  push:
+    branches:
+      - agent/peck-collared-lizard-preflight
+    paths:
+      - ".github/workflows/peck_collared_lizard_s1_wrapper_audit.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_collared_lizard_s1_wrapper_audit.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wrapper-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Open only exact S1 documentation wrapper
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_s1_wrapper
+          python - <<'PY'
+          from __future__ import annotations
+          from html.parser import HTMLParser
+          import hashlib
+          import json
+          from pathlib import Path
+          import urllib.parse
+          import urllib.request
+
+          contract = json.loads(Path("validation/peck_collared_lizard_paired_complementarity/source_contract.json").read_text())
+          spec = contract["exact_resource_manifest"]["s1_documentation"]
+          endpoint = contract["response_unit_identity_gate"]
+          if not endpoint["documentation_wrapper_request_allowed"]:
+              raise RuntimeError("wrapper access not prospectively authorized")
+          if endpoint["population_size_response_request_allowed"]:
+              raise RuntimeError("population-size response must remain forbidden")
+
+          req = urllib.request.Request(spec["download_url"], headers={"User-Agent":"EOG-Peck-S1-wrapper-response-blind/1.0"})
+          with urllib.request.urlopen(req, timeout=60) as response:
+              payload = response.read(int(spec["bytes"]) + 1)
+              status = getattr(response, "status", None)
+          if status != 200:
+              raise RuntimeError(f"wrapper returned {status}")
+          if len(payload) != int(spec["bytes"]):
+              raise RuntimeError(f"wrapper byte mismatch {len(payload)} != {spec['bytes']}")
+          observed_md5 = hashlib.md5(payload).hexdigest()
+          if observed_md5 != spec["md5"]:
+              raise RuntimeError(f"wrapper MD5 mismatch {observed_md5}")
+          text = payload.decode("utf-8", errors="strict")
+
+          class Extractor(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.text_parts = []
+                  self.hrefs = []
+              def handle_data(self, data):
+                  value = " ".join(data.split())
+                  if value:
+                      self.text_parts.append(value)
+              def handle_starttag(self, tag, attrs):
+                  if tag.casefold() == "a":
+                      for key, value in attrs:
+                          if key.casefold() == "href" and value:
+                              self.hrefs.append(value)
+
+          parser = Extractor()
+          parser.feed(text)
+          visible_text = "\n".join(parser.text_parts)
+          hrefs = parser.hrefs
+          # Do not follow any link. Record only host/path metadata so the wrapper cannot
+          # silently trigger the outcome-bearing text file.
+          compact_hrefs = []
+          for href in hrefs:
+              parsed = urllib.parse.urlparse(href)
+              compact_hrefs.append({
+                  "scheme": parsed.scheme,
+                  "host": parsed.netloc,
+                  "path": parsed.path,
+                  "query_keys": sorted({item.split("=", 1)[0] for item in parsed.query.split("&") if item}),
+              })
+
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "status": "s1_documentation_wrapper_opened_response_blind",
+              "wrapper_requests": 1,
+              "wrapper_bytes_opened": len(payload),
+              "wrapper_md5": observed_md5,
+              "visible_text": visible_text,
+              "href_count": len(hrefs),
+              "hrefs_metadata_only": compact_hrefs,
+              "linked_resource_get_requests": 0,
+              "population_size_response_requests": 0,
+              "population_size_response_bytes_opened": 0,
+              "response_header_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+          Path("build/peck_s1_wrapper/result.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Assert wrapper-only firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path("build/peck_s1_wrapper/result.json").read_text())
+          assert r["wrapper_requests"] == 1
+          assert r["linked_resource_get_requests"] == 0
+          assert r["population_size_response_requests"] == 0
+          assert r["population_size_response_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck S1-wrapper-only response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: peck-collared-lizard-s1-wrapper-audit
+          path: build/peck_s1_wrapper/result.json
+          if-no-files-found: error
