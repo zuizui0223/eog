@@ -1,0 +1,175 @@
+name: Fletcher 2026 ZIP central-directory preflight
+
+on:
+  push:
+    branches:
+      - agent/fletcher-2026-figshare-preflight
+    paths:
+      - ".github/workflows/fletcher_2026_zip_directory_preflight.yml"
+      - "validation/fletcher_2026_figshare_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/fletcher_2026_zip_directory_preflight.yml"
+      - "validation/fletcher_2026_figshare_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  central-directory-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read only ZIP EOCD and central directory
+        run: |
+          set -euo pipefail
+          mkdir -p build/fletcher_2026_zip_directory
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import struct
+          import urllib.request
+
+          contract = json.loads(Path("validation/fletcher_2026_figshare_paired_complementarity/source_contract.json").read_text())
+          spec = contract["figshare_archive_manifest"]
+          rule = contract["archive_inventory_rule"]
+          url = spec["download_url"]
+          total = int(spec["bytes"])
+          tail_size = min(int(rule["maximum_tail_bytes"]), total)
+          requests = []
+          bytes_opened = 0
+
+          def range_get(start: int, end: int) -> tuple[bytes, dict[str, str], int]:
+              nonlocal_dummy = None
+              req = urllib.request.Request(
+                  url,
+                  headers={
+                      "User-Agent": "EOG-Fletcher-2026-ZIP-directory/1.0",
+                      "Range": f"bytes={start}-{end}",
+                      "Accept-Encoding": "identity",
+                  },
+              )
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  body = response.read((end - start + 1) + 1)
+                  status = getattr(response, "status", None)
+                  headers = {k.lower(): v for k, v in response.headers.items()}
+              requests.append({"start": start, "end": end, "status": status, "content_range": headers.get("content-range")})
+              if status != 206:
+                  raise RuntimeError(f"range request not honored: status={status}")
+              if len(body) != end - start + 1:
+                  raise RuntimeError(f"range byte count mismatch: {len(body)} != {end-start+1}")
+              return body, headers, status
+
+          tail_start = total - tail_size
+          tail, tail_headers, _ = range_get(tail_start, total - 1)
+          bytes_opened += len(tail)
+          sig = b"PK\x05\x06"
+          pos = tail.rfind(sig)
+          if pos < 0:
+              raise RuntimeError("EOCD signature not found in bounded tail")
+          if len(tail) - pos < 22:
+              raise RuntimeError("truncated EOCD")
+          disk_no, cd_disk, disk_entries, total_entries, cd_size, cd_offset, comment_len = struct.unpack_from("<HHHHIIH", tail, pos + 4)
+          if disk_no != 0 or cd_disk != 0 or disk_entries != total_entries:
+              raise RuntimeError("multi-disk ZIP is not allowed")
+          if cd_size == 0xFFFFFFFF or cd_offset == 0xFFFFFFFF or total_entries == 0xFFFF:
+              raise RuntimeError("ZIP64 is not allowed at this preflight")
+          eocd_absolute = tail_start + pos
+          if eocd_absolute + 22 + comment_len != total:
+              raise RuntimeError("EOCD/comment does not terminate at frozen archive byte size")
+          cd_end = cd_offset + cd_size - 1
+          if cd_offset < tail_start and cd_size > 0:
+              central, _, _ = range_get(cd_offset, cd_end)
+              bytes_opened += len(central)
+          else:
+              rel = cd_offset - tail_start
+              central = tail[rel:rel + cd_size]
+              if len(central) != cd_size:
+                  raise RuntimeError("central directory not fully contained in retrieved tail")
+
+          members = []
+          cursor = 0
+          while cursor < len(central):
+              if central[cursor:cursor+4] != b"PK\x01\x02":
+                  raise RuntimeError(f"central directory signature mismatch at offset {cursor}")
+              if cursor + 46 > len(central):
+                  raise RuntimeError("truncated central-directory fixed header")
+              (
+                  _sig, ver_made, ver_need, flags, method, mtime, mdate, crc32,
+                  comp_size, uncomp_size, name_len, extra_len, comment_len2,
+                  disk_start, int_attr, ext_attr, local_offset,
+              ) = struct.unpack_from("<IHHHHHHIIIHHHHHII", central, cursor)
+              if disk_start != 0:
+                  raise RuntimeError("member starts on nonzero disk")
+              start = cursor + 46
+              name_bytes = central[start:start+name_len]
+              try:
+                  name = name_bytes.decode("utf-8" if flags & 0x800 else "cp437")
+              except Exception as exc:
+                  raise RuntimeError(f"member name decode failed: {exc!r}")
+              members.append({
+                  "name": name,
+                  "crc32": f"{crc32:08x}",
+                  "compression_method": method,
+                  "compressed_size": comp_size,
+                  "uncompressed_size": uncomp_size,
+                  "local_header_offset": local_offset,
+              })
+              cursor = start + name_len + extra_len + comment_len2
+          if cursor != len(central):
+              raise RuntimeError("central-directory parse did not consume exact byte interval")
+          if len(members) != total_entries:
+              raise RuntimeError(f"member count mismatch: {len(members)} != {total_entries}")
+
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "archive_name": spec["name"],
+              "archive_bytes": total,
+              "archive_md5_from_metadata": spec["md5"],
+              "eocd_offset": eocd_absolute,
+              "central_directory_offset": cd_offset,
+              "central_directory_size": cd_size,
+              "member_count": total_entries,
+              "members": members,
+              "range_requests": requests,
+              "archive_bytes_opened_total": bytes_opened,
+              "full_archive_get_requests": 0,
+              "member_payload_requests": 0,
+              "response_header_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+              "status": "zip_central_directory_inventory_pass",
+          }
+          Path("build/fletcher_2026_zip_directory/zip_directory.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Assert no member payload access
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path("build/fletcher_2026_zip_directory/zip_directory.json").read_text())
+          assert r["full_archive_get_requests"] == 0
+          assert r["member_payload_requests"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          assert all(q["status"] == 206 for q in r["range_requests"])
+          print("Fletcher ZIP central-directory-only firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fletcher-2026-zip-central-directory
+          path: build/fletcher_2026_zip_directory/zip_directory.json
+          if-no-files-found: error
