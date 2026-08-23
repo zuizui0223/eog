@@ -1,0 +1,194 @@
+name: Aargau Bombina final response-blind geometry audit
+
+on:
+  push:
+    branches: [agent/aargau-amphibian-paired-complementarity]
+    paths:
+      - ".github/workflows/aargau_bombina_final_geometry_audit.yml"
+      - "validation/aargau_bombina_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/aargau_bombina_final_geometry_audit.yml"
+      - "validation/aargau_bombina_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Inspect only frozen dynamic and structural response-independent resources
+        run: |
+          set -euo pipefail
+          mkdir -p build/aargau_bombina_final_geometry
+          python - <<'PY'
+          from __future__ import annotations
+          import csv
+          import hashlib
+          import io
+          import json
+          import math
+          from pathlib import Path
+          import urllib.error
+          import urllib.request
+
+          contract=json.loads(Path("validation/aargau_bombina_paired_complementarity/source_contract.json").read_text())
+          resources=contract["exact_public_resources"]
+          allowed=("covariate_dynamic","structural_connectivity")
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"not_evaluated",
+              "resource_requests":0,
+              "resource_bytes_opened":0,
+              "resources":{},
+              "observation_response_requests":0,
+              "observation_response_bytes_opened":0,
+              "potential_population_connectivity_requests":0,
+              "potential_population_connectivity_bytes_opened":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+
+          def finish(status,**extra):
+              result.update(extra); result["status"]=status
+              Path("build/aargau_bombina_final_geometry/result.json").write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False,allow_nan=False)+"\n")
+              print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False,allow_nan=False))
+
+          parsed={}
+          for role in allowed:
+              spec=resources[role]
+              req=urllib.request.Request(spec["url"],headers={"User-Agent":"EOG-Aargau-Bombina-final-geometry/1.0","Accept-Encoding":"identity"})
+              result["resource_requests"] += 1
+              try:
+                  with urllib.request.urlopen(req,timeout=90) as response:
+                      body=response.read(int(spec["bytes"])+1)
+                      status=getattr(response,"status",None)
+              except urllib.error.HTTPError as exc:
+                  finish("stop_nonresponse_transport",failed_role=role,http_status=exc.code)
+                  raise SystemExit(3)
+              if status!=200:
+                  finish("stop_nonresponse_transport",failed_role=role,http_status=status)
+                  raise SystemExit(3)
+              if len(body)!=int(spec["bytes"]):
+                  finish("stop_nonresponse_identity_mismatch",failed_role=role,expected_bytes=int(spec["bytes"]),observed_bytes=len(body))
+                  raise SystemExit(3)
+              sha=hashlib.sha256(body).hexdigest()
+              text=body.decode("utf-8-sig")
+              sample=text[:8192]
+              try:
+                  delimiter=csv.Sniffer().sniff(sample,delimiters=",;\t|").delimiter
+              except csv.Error:
+                  delimiter=","
+              reader=csv.DictReader(io.StringIO(text),delimiter=delimiter)
+              fields=list(reader.fieldnames or [])
+              rows=list(reader)
+              if not fields or not rows:
+                  finish("stop_response_independent_geometry_resource_empty",failed_role=role,fields=fields,row_count=len(rows))
+                  raise SystemExit(3)
+              parsed[role]=(fields,rows)
+              result["resource_bytes_opened"] += len(body)
+              result["resources"][role]={
+                  "resource_id":spec["id"],
+                  "bytes":len(body),
+                  "sha256":sha,
+                  "delimiter":delimiter,
+                  "fields":fields,
+                  "row_count":len(rows),
+              }
+
+          def canon(s):
+              return "".join(ch for ch in str(s).strip().casefold() if ch.isalnum())
+
+          # Coordinate pairs accepted prospectively only when two explicit physical fields
+          # form one of these common semantic pairs. A scalar distance/connectivity field is
+          # never reinterpreted as geometry.
+          coordinate_pairs=(
+              ({"x"},{"y"}),
+              ({"lon","longitude"},{"lat","latitude"}),
+              ({"easting","eastings","east"},{"northing","northings","north"}),
+              ({"coordx","coordinatex"},{"coordy","coordinatey"}),
+          )
+          source_aliases={"source","sourceid","from","fromid","sitei","site1","pond1","origin","originid"}
+          target_aliases={"target","targetid","to","toid","sitej","site2","pond2","destination","destinationid"}
+          distance_aliases={"distance","dist","distance_m","distancem","pairwisedistance","separation","separationm"}
+
+          geometry_evidence=[]
+          for role,(fields,rows) in parsed.items():
+              cmap={canon(f):f for f in fields}
+              coordinate_matches=[]
+              for lefts,rights in coordinate_pairs:
+                  left=[cmap[k] for k in lefts if k in cmap]
+                  right=[cmap[k] for k in rights if k in cmap]
+                  if len(left)==1 and len(right)==1:
+                      coordinate_matches.append([left[0],right[0]])
+              source=[cmap[k] for k in source_aliases if k in cmap]
+              target=[cmap[k] for k in target_aliases if k in cmap]
+              distance=[cmap[k] for k in distance_aliases if k in cmap]
+              pairwise_matches=[]
+              if len(source)==1 and len(target)==1 and len(distance)==1:
+                  pairwise_matches.append([source[0],target[0],distance[0]])
+
+              site_field=cmap.get("siteid")
+              year_field=cmap.get("year")
+              unique_sites=None
+              unique_years=None
+              if site_field:
+                  unique_sites=len({str(r.get(site_field,"")).strip() for r in rows if str(r.get(site_field,"")).strip()})
+              if year_field:
+                  unique_years=len({str(r.get(year_field,"")).strip() for r in rows if str(r.get(year_field,"")).strip()})
+              result["resources"][role].update({
+                  "coordinate_field_pairs":coordinate_matches,
+                  "pairwise_source_target_distance_fields":pairwise_matches,
+                  "unique_site_ids":unique_sites,
+                  "unique_year_values":unique_years,
+              })
+              if coordinate_matches:
+                  geometry_evidence.append({"role":role,"kind":"coordinates","fields":coordinate_matches})
+              if pairwise_matches:
+                  geometry_evidence.append({"role":role,"kind":"pairwise","fields":pairwise_matches})
+
+          if not geometry_evidence:
+              finish(
+                  "stop_no_response_independent_coordinate_geometry",
+                  reason="all remaining frozen response-independent public resources contain only site/year covariates or per-site scalar connectivity summaries; no explicit coordinate pair or source-target pairwise-distance representation exists",
+                  geometry_evidence=[],
+              )
+              raise SystemExit(3)
+
+          finish("response_independent_geometry_representation_found",geometry_evidence=geometry_evidence)
+          PY
+      - name: Assert final response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/aargau_bombina_final_geometry/result.json")
+          if not p.exists(): raise SystemExit("geometry audit missing")
+          r=json.loads(p.read_text())
+          assert r["observation_response_requests"]==0
+          assert r["observation_response_bytes_opened"]==0
+          assert r["potential_population_connectivity_requests"]==0
+          assert r["potential_population_connectivity_bytes_opened"]==0
+          assert r["response_header_bytes_opened"]==0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Aargau final geometry response firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aargau-bombina-final-geometry-audit
+          path: build/aargau_bombina_final_geometry/result.json
+          if-no-files-found: error
