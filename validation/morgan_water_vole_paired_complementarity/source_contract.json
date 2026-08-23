@@ -11,16 +11,13 @@
   },
   "scientific_anchor": {
     "doi": "10.5061/dryad.7f3kt77",
+    "dryad_version_api": "https://datadryad.org/api/v2/versions/23635",
+    "dryad_version_number": 1,
+    "publication_date": "2019-02-08",
     "paper_doi": "10.1111/ecog.04180",
     "focal_taxon": "Arvicola amphibius",
     "study_design": "experimental translocations followed by repeated surveys of fixed 200 m waterway sections",
-    "published_primary_survey_seasons": [
-      "2015-07",
-      "2015-10",
-      "2016-07",
-      "2016-10",
-      "2017-05"
-    ],
+    "published_primary_survey_seasons": ["2015-07", "2015-10", "2016-07", "2016-10", "2017-05"],
     "source_process_claim": "range expansion after declared experimental releases within a mapped waterway-section universe; release additions must be represented prospectively before any response-capable run, otherwise stop"
   },
   "preflight_minima": {
@@ -31,22 +28,50 @@
     "require_coordinate_geometry": true,
     "require_closed_analysis_registry": true
   },
-  "allowed_nonresponse_files": [
-    "Morgan_et_al_Cell_coordinates_and_habitat_variables.csv",
-    "Morgan_et_al_Data_Section_habitat_scores.csv"
-  ],
-  "forbidden_response_files": [
-    "Morgan_et_al_Data_Section_occupancy.csv",
-    "Morgan_et_al_Colonisation_Analysis_10_days_closure.csv",
-    "Morgan_et_al_Colonisation_Analysis_20_days_closure.csv",
-    "Morgan_et_al_Colonisation_Analysis_30_days_closure.csv",
-    "Morgan_et_al_Persistence_Analysis_10_days_closure.csv",
-    "Morgan_et_al_Persistence_Analysis_20_days_closure.csv",
-    "Morgan_et_al_Persistence_Analysis_30_days_closure.csv"
-  ],
+  "exact_nonresponse_manifest": {
+    "cell_coordinates_and_habitat": {
+      "name": "Morgan_et_al_Cell_coordinates_and_habitat_variables.csv",
+      "file_id": 82022,
+      "api_download": "https://datadryad.org/api/v2/files/82022/download",
+      "bytes": 14771,
+      "digest_type": "md5",
+      "md5": "98966d55f01d956d4a0d9b81dfc415f7"
+    },
+    "section_habitat_scores": {
+      "name": "Morgan_et_al_Data_Section_habitat_scores.csv",
+      "file_id": 82021,
+      "api_download": "https://datadryad.org/api/v2/files/82021/download",
+      "bytes": 7845,
+      "digest_type": "md5",
+      "md5": "c83b0a2f55a83f2f543309cd246322d2"
+    }
+  },
+  "forbidden_response_manifest": {
+    "Morgan_et_al_Data_Section_occupancy.csv": {"file_id": 82020, "bytes": 73622, "md5": "000f0cd9a8ffaa8fbd196030c3d7c9c0"},
+    "Morgan_et_al_Colonisation_Analysis_10_days_closure.csv": {"file_id": 82023, "bytes": 166638, "md5": "809a12448b69d52ba66ddf0cb62fa8aa"},
+    "Morgan_et_al_Colonisation_Analysis_20_days_closure.csv": {"file_id": 82024, "bytes": 169428, "md5": "19a9e3a0bc9494062786aa9a20d00204"},
+    "Morgan_et_al_Colonisation_Analysis_30_days_closure.csv": {"file_id": 82025, "bytes": 173778, "md5": "11a7308c1448dc563a73cf447579a197"},
+    "Morgan_et_al_Persistence_Analysis_10_days_closure.csv": {"file_id": 82026, "bytes": 32010, "md5": "a7f6ddabb555221bbc2dadb618857817"},
+    "Morgan_et_al_Persistence_Analysis_20_days_closure.csv": {"file_id": 82027, "bytes": 30534, "md5": "9ff1e52910b70329bd07007dcf4f4474"},
+    "Morgan_et_al_Persistence_Analysis_30_days_closure.csv": {"file_id": 82028, "bytes": 25815, "md5": "2695acabfef8ea6f81c95883f594e46e"}
+  },
+  "response_blind_geometry_contract": {
+    "registry_rule": "use every physical data row in the cell-coordinate file; no post-open row deletion, imputation, fuzzy ID repair or coordinate derivation is allowed",
+    "cell_id_field_candidates": ["Cell", "cell", "Cell_ID", "Cell ID", "CellID", "cell_id", "Section", "section", "Section_ID", "Section ID", "SectionID", "section_id", "ID", "id"],
+    "x_field_candidates": ["x", "X", "Easting", "easting", "Eastings", "eastings", "Longitude", "longitude", "lon", "Lon"],
+    "y_field_candidates": ["y", "Y", "Northing", "northing", "Northings", "northings", "Latitude", "latitude", "lat", "Lat"],
+    "section_habitat_id_field_candidates": ["Section", "section", "Section_ID", "Section ID", "SectionID", "section_id", "Cell", "cell", "Cell_ID", "Cell ID", "CellID", "cell_id", "ID", "id"],
+    "physical_schema_resolution": "each semantic role must resolve to exactly one physical field from its frozen candidate list; zero or multiple matches stop before structural analysis",
+    "coordinate_rule": "x/y values must be finite numeric for every registry row and coordinate pairs must be unique; no incomplete row may be excluded",
+    "registry_closure_rule": "the coordinate registry must have unique non-empty node IDs and the section-habitat table must resolve to the same node universe one-to-one, or the candidate stops as analysis_registry_not_closed",
+    "distance_rule": "Euclidean distance in the physical coordinate units; do not infer or transform a CRS at this stage",
+    "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "no_post_geometry_retuning": true
+  },
   "response_semantics_boundary": {
     "not_yet_frozen": true,
-    "reason": "response-independent source/registry/geometry must pass first; no response authorization is permitted by this contract",
+    "reason": "response-independent source/registry/geometry and release/source semantics must pass first; no response authorization is permitted by this contract",
     "count_minima_reserved_for_full_freeze": {
       "calibration_events": 10,
       "calibration_non_events": 40,
@@ -56,8 +81,8 @@
     }
   },
   "stage_boundary": {
-    "metadata_only_first": true,
-    "nonresponse_payload_access_allowed_after_exact_manifest_freeze": true,
+    "metadata_manifest_complete": true,
+    "nonresponse_payload_access_allowed": true,
     "response_payload_access_allowed": false,
     "response_header_access_allowed": false,
     "outcome_access_authorized": false
