@@ -1,0 +1,66 @@
+{
+  "attempt_id": "peck_collared_lizard_fresh_paired_v1",
+  "frozen_before_population_response_access": true,
+  "initial_state_year": 1995,
+  "known_founder_source_glades": ["SM7", "SM8", "SM9"],
+  "founder_basis": "the three human-assisted founder populations were released on SM7, SM8, and SM9 in 1984, 1987, and 1989 and all persisted through the pre-burn phase; no later human-assisted release is admitted as a source",
+  "annual_transition_years": [
+    [1995, 1996],
+    [1996, 1997],
+    [1997, 1998],
+    [1998, 1999],
+    [1999, 2000],
+    [2000, 2001],
+    [2001, 2002],
+    [2002, 2003],
+    [2003, 2004],
+    [2004, 2005],
+    [2005, 2006]
+  ],
+  "graph_dynamics": {
+    "persistence_allowed": true,
+    "one_graph_edge_expansion_per_annual_transition": true,
+    "transition_edges": "undirected distance-threshold adjacency from the frozen 53-glade representative geometry",
+    "outside_source_nodes": [],
+    "historical_truth_claim": false,
+    "interpretation": "optimistic internal-source structural reachability certificate, not identification of the actual colonist source or route"
+  },
+  "world_thresholds_km": [
+    0.23819008401809294,
+    0.26133621974711535,
+    0.3230197437607773,
+    0.47012433520167657
+  ],
+  "world_ladder_fingerprint": "06e2e32e49aa788e6caaa82e93bc7a881da18c120cc70091ec2e068a0d24a9fa",
+  "heldout_start_year": 2000,
+  "pre_response_source_closure_gate": {
+    "required": true,
+    "pass_condition": "at least one frozen world reaches every declared Stegall analysis glade by the start of heldout year 2000 from SM7/SM8/SM9 under the frozen annual propagation rule",
+    "failure": "stop_temporal_source_closure_gap",
+    "no_use_of_observed_1994_1999_colonisation_rows": true
+  },
+  "fire_management_conventional_feature": {
+    "included_in_both_baseline_and_augmented_arms": true,
+    "not_a_layer_b_feature": true,
+    "not_used_to_change_world_thresholds": true,
+    "stages": [
+      {
+        "label": "initial_northern_Stegall_burn_management",
+        "years": [1995, 1996],
+        "published_basis": "the initial managed burn began in 1994 and was repeated in 1996"
+      },
+      {
+        "label": "expanded_Stegall_burn_management",
+        "years": [1997, 1998],
+        "published_basis": "a second Stegall segment south of the initial area was burned in 1997"
+      },
+      {
+        "label": "full_Stegall_burn_management",
+        "years": [1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006],
+        "published_basis": "the burn management area expanded in 1999 to include all of Stegall Mountain and management continued thereafter"
+      }
+    ],
+    "scientific_boundary": "fire strongly alters matrix permeability; EOG Layer A in this candidate is therefore interpreted as geographic source-reachability conditional on the managed landscape, while fire stage is supplied unchanged to both strong-learner arms rather than credited to Layer B"
+  },
+  "external_mountain_boundary": "post-1999 inter-mountain movement is biologically possible, but the primary endpoint does not claim that external immigration is impossible. The prospective certificate asks only whether an internal Stegall source explanation remains structurally possible; surviving worlds are not historical-source identifications."
+}
