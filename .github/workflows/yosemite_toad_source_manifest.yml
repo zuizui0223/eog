@@ -1,0 +1,144 @@
+name: Yosemite toad response-blind source manifest
+
+on:
+  push:
+    branches: [agent/yosemite-toad-paired-complementarity]
+    paths:
+      - ".github/workflows/yosemite_toad_source_manifest.yml"
+      - "validation/yosemite_toad_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/yosemite_toad_source_manifest.yml"
+      - "validation/yosemite_toad_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Resolve ScienceBase item and child metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/yosemite_toad_source
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import urllib.error
+          import urllib.request
+
+          contract=json.loads(Path("validation/yosemite_toad_paired_complementarity/source_contract.json").read_text())
+          urls=(contract["metadata_stage"]["item_json"],contract["metadata_stage"]["children_json"])
+          requested=[]
+          def get_json(url,cap=8_000_000):
+              requested.append(url)
+              req=urllib.request.Request(url,headers={"Accept":"application/json","User-Agent":"EOG-Yosemite-toad-source-manifest/1.0"})
+              with urllib.request.urlopen(req,timeout=60) as response:
+                  body=response.read(cap+1); status=getattr(response,"status",None); ctype=response.headers.get("Content-Type")
+              if status!=200 or len(body)>cap: raise RuntimeError(f"bounded metadata request failed: {status} {url}")
+              value=json.loads(body.decode("utf-8"))
+              if not isinstance(value,dict): raise RuntimeError("ScienceBase metadata is not object")
+              return value, {"url":url,"status":status,"bytes":len(body),"content_type":ctype}
+
+          item,item_meta=get_json(urls[0])
+          children,children_meta=get_json(urls[1])
+
+          def compact_file(f,parent_id):
+              if not isinstance(f,dict): return None
+              return {
+                  "parent_item_id":parent_id,
+                  "name":f.get("name"),
+                  "title":f.get("title"),
+                  "size":f.get("size"),
+                  "content_type":f.get("contentType"),
+                  "checksum":f.get("checksum"),
+                  "checksum_type":f.get("checksumType"),
+                  "download_uri":f.get("downloadUri"),
+                  "url":f.get("url"),
+                  "original_metadata":f.get("originalMetadata"),
+              }
+
+          item_files=[compact_file(f,item.get("id")) for f in item.get("files",[]) if isinstance(f,dict)]
+          child_rows=children.get("items",[]) if isinstance(children.get("items"),list) else []
+          child_inventory=[]; all_files=list(item_files)
+          for child in child_rows:
+              if not isinstance(child,dict): continue
+              child_id=child.get("id")
+              child_files=[compact_file(f,child_id) for f in child.get("files",[]) if isinstance(f,dict)]
+              all_files.extend(child_files)
+              child_inventory.append({
+                  "id":child_id,
+                  "title":child.get("title"),
+                  "summary":child.get("summary"),
+                  "tags":[t.get("name") for t in child.get("tags",[]) if isinstance(t,dict)],
+                  "file_count":len(child_files),
+                  "files":child_files,
+              })
+
+          # Some ScienceBase child-list responses omit file details. Metadata-only follow-up
+          # of each returned child item is permitted and never follows a download URI.
+          for entry in child_inventory:
+              if entry["file_count"]!=0: continue
+              child_url=f"https://www.sciencebase.gov/catalog/item/{entry['id']}?format=json"
+              child,meta=get_json(child_url)
+              child_files=[compact_file(f,entry["id"]) for f in child.get("files",[]) if isinstance(f,dict)]
+              entry["file_count"]=len(child_files); entry["files"]=child_files
+              all_files.extend(child_files)
+
+          names=[str(f.get("name") or f.get("title") or "") for f in all_files if isinstance(f,dict)]
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"sciencebase_metadata_manifest_resolved" if all_files else "stop_no_public_file_manifest",
+              "item_id":item.get("id"),
+              "item_title":item.get("title"),
+              "item_summary":item.get("summary"),
+              "item_files":item_files,
+              "child_count":len(child_inventory),
+              "children":child_inventory,
+              "all_file_count":len(all_files),
+              "all_file_names":names,
+              "requested_metadata_urls":requested,
+              "metadata_request_count":len(requested),
+              "file_payload_requests":0,
+              "file_payload_bytes_opened":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          Path("build/yosemite_toad_source/manifest.json").write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
+          if not all_files: raise SystemExit(3)
+          PY
+      - name: Assert metadata-only response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/yosemite_toad_source/manifest.json")
+          if not p.exists(): raise SystemExit("manifest missing")
+          r=json.loads(p.read_text())
+          assert r["file_payload_requests"]==0
+          assert r["file_payload_bytes_opened"]==0
+          assert r["response_header_bytes_opened"]==0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Yosemite metadata-only response firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: yosemite-toad-source-manifest
+          path: build/yosemite_toad_source/manifest.json
+          if-no-files-found: error
