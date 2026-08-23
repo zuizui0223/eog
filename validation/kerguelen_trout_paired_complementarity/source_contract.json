@@ -16,7 +16,7 @@
     "published_monitoring_years": [1954, 2012],
     "published_natural_inference_years": 51,
     "published_source_history": "brown trout successfully introduced into 6 hydrographic systems, secondarily transported to 3 additional systems, and naturally colonized 32 new systems",
-    "published_process": "anadromous trout leave already colonized rivers and disperse through the marine environment to reproduce in new hydrographic systems; no local extinction was documented after successful reproduction",
+    "published_process": "anadromous trout leave already colonized rivers and disperse through the marine environment to reproduce in new hydrographic systems; no local extinction was documented thereafter after successful reproduction",
     "node_frame_note": "the paper analyzes 85 contiguous river systems; the monitoring zone expanded historically following introduction attempts. This attempt does not yet claim temporally complete availability and must freeze a response-independent availability/source ledger before outcome access or stop."
   },
   "exact_public_supplements": {
@@ -38,14 +38,16 @@
   "distance_gate_contract": {
     "purpose": "before any colonization-response access, determine whether the official distance supplement has a deterministic born-digital representation sufficient to recover the complete 85-node matrices without OCR, figure tracing, or manual node alias repair",
     "accepted_document_identity": "HTTP 200 application/pdf with PDF magic; freeze exact byte size and SHA-256 on first retrieval",
-    "text_extraction_rule": "use pdftotext -layout only; OCR is forbidden; no visual/manual transcription is used to construct geometry",
-    "required_node_labels": "the extracted appendix must expose a consistent 1..85 or equivalent explicit 85-label sequence for each accepted matrix without fuzzy aliases",
+    "physical_layout_resolution": "one response-blind physical-layout audit of Appendix S2 is allowed before the matrix parser is frozen. It may use pdfinfo and pdftotext -layout and report page count, text hashes, headings, token counts and bounded nonempty line excerpts. It may not inspect Appendix S1, drop nodes, alter distances, use OCR, or choose a scientific world based on colonization response. After this one layout audit, the deterministic matrix parser must be frozen before any further scientific geometry computation.",
+    "text_extraction_rule": "pdftotext -layout only; OCR is forbidden; no visual/manual transcription is used to construct geometry",
+    "required_node_labels": "the eventual parser must expose a consistent 1..85 or equivalent explicit 85-label sequence for each accepted matrix without fuzzy aliases",
     "required_scenarios": ["stepping_stone", "coastal_1km", "shortest_path_5km"],
-    "matrix_rule": "each accepted scenario must recover exactly 85 x 85 finite non-negative values, a zero diagonal, and a symmetric matrix from the official extracted text under one parser frozen before colonization response access",
+    "matrix_rule": "each accepted scenario must eventually recover exactly 85 x 85 finite non-negative values, a zero diagonal, and a symmetric matrix from the official extracted text under a parser frozen before colonization response access",
     "minimum_usable_matrices": 3,
     "no_ocr": true,
     "no_manual_table_reconstruction": true,
-    "no_post_open_pdf_layout_reinterpretation": true
+    "no_node_filtering_or_alias_repair": true,
+    "no_scientific_scale_retuning_after_layout_audit": true
   },
   "preflight_minima": {
     "minimum_nodes": 50,
