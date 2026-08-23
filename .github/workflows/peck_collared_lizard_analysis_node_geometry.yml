@@ -1,0 +1,253 @@
+name: Peck collared lizard analysis-node geometry
+
+on:
+  push:
+    branches:
+      - agent/peck-collared-lizard-preflight
+    paths:
+      - ".github/workflows/peck_collared_lizard_analysis_node_geometry.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+      - "validation/peck_collared_lizard_paired_complementarity/node_identity_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_collared_lizard_analysis_node_geometry.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+      - "validation/peck_collared_lizard_paired_complementarity/node_identity_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analysis-node-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package
+        run: python -m pip install -e .
+      - name: Build documented glade units and response-blind scale ladder
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_analysis_node_geometry
+          python - <<'PY'
+          from __future__ import annotations
+          from collections import defaultdict
+          import hashlib
+          import json
+          import math
+          from pathlib import Path
+          import re
+          import urllib.request
+
+          import numpy as np
+          from eog.v2.world_scale_ladder import StructuralScaleLadderDeclaration, build_structural_scale_ladder
+
+          source = json.loads(Path("validation/peck_collared_lizard_paired_complementarity/source_contract.json").read_text())
+          identity = json.loads(Path("validation/peck_collared_lizard_paired_complementarity/node_identity_contract.json").read_text())
+          spec = source["exact_resource_manifest"]["gps_registry"]
+          rule = identity["analysis_node_rule"]
+          scale = identity["structural_scale_rule"]
+          out = Path("build/peck_analysis_node_geometry/result.json")
+
+          result = {
+              "attempt_id": source["attempt_id"],
+              "status": "not_evaluated",
+              "gps_requests": 0,
+              "gps_bytes_opened": 0,
+              "population_size_response_requests": 0,
+              "population_size_response_bytes_opened": 0,
+              "response_header_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+
+          def finish(status: str, **extra):
+              result.update(extra)
+              result["status"] = status
+              out.write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n")
+              print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
+
+          req = urllib.request.Request(spec["download_url"], headers={"User-Agent":"EOG-Peck-analysis-node-geometry/1.0"})
+          result["gps_requests"] = 1
+          with urllib.request.urlopen(req, timeout=60) as response:
+              payload = response.read(int(spec["bytes"]) + 1)
+              status = getattr(response, "status", None)
+          if status != 200 or len(payload) != int(spec["bytes"]):
+              finish("stop_nonresponse_transport_or_identity", http_status=status, observed_bytes=len(payload))
+              raise SystemExit(3)
+          observed_md5 = hashlib.md5(payload).hexdigest()
+          if observed_md5 != spec["md5"]:
+              finish("stop_nonresponse_transport_or_identity", observed_md5=observed_md5)
+              raise SystemExit(3)
+          result["gps_bytes_opened"] = len(payload)
+
+          text = payload.decode("utf-8-sig")
+          lines = text.splitlines()
+          physical_re = re.compile(rule["physical_waypoint_regex"])
+          groups = defaultdict(list)
+          invalid_rows = []
+          all_waypoints = 0
+          selected_waypoints = 0
+          for line_number, line in enumerate(lines[2:], start=3):
+              if not line.strip():
+                  invalid_rows.append({"line": line_number, "reason": "blank_data_line"})
+                  continue
+              fields = line.split("\t")
+              if len(fields) != 9 or fields[0].strip() != "W":
+                  invalid_rows.append({"line": line_number, "reason": "physical_format"})
+                  continue
+              all_waypoints += 1
+              name = fields[1].strip().upper()
+              if not name.startswith(rule["mountain_prefix"]):
+                  continue
+              match = physical_re.fullmatch(name)
+              if not match:
+                  invalid_rows.append({"line": line_number, "reason": "stegall_name_does_not_match_frozen_rule", "name": name})
+                  continue
+              try:
+                  lat = float(fields[4].strip())
+                  lon = float(fields[5].strip())
+              except Exception:
+                  invalid_rows.append({"line": line_number, "reason": "coordinate_parse", "name": name})
+                  continue
+              if not (math.isfinite(lat) and math.isfinite(lon)):
+                  invalid_rows.append({"line": line_number, "reason": "coordinate_nonfinite", "name": name})
+                  continue
+              glade_id = f"SM{match.group(1)}"
+              section = match.group(2)
+              groups[glade_id].append({"physical_name": name, "section": section, "lat": lat, "lon": lon})
+              selected_waypoints += 1
+
+          if invalid_rows:
+              finish(
+                  "stop_analysis_registry_not_closed",
+                  reason="GPS rows fail the frozen documented glade/section parser",
+                  invalid_row_count=len(invalid_rows),
+                  first_invalid_rows=invalid_rows[:10],
+              )
+              raise SystemExit(3)
+
+          node_ids = sorted(groups, key=lambda value: int(value[2:]))
+          representative = []
+          group_sizes = {}
+          for glade_id in node_ids:
+              rows = groups[glade_id]
+              group_sizes[glade_id] = len(rows)
+              # Unit-sphere mean of all section-centre points.
+              lat_r = np.radians(np.asarray([row["lat"] for row in rows], dtype=float))
+              lon_r = np.radians(np.asarray([row["lon"] for row in rows], dtype=float))
+              x = np.cos(lat_r) * np.cos(lon_r)
+              y = np.cos(lat_r) * np.sin(lon_r)
+              z = np.sin(lat_r)
+              xyz = np.asarray([np.mean(x), np.mean(y), np.mean(z)], dtype=float)
+              norm = float(np.linalg.norm(xyz))
+              if not math.isfinite(norm) or norm <= 0:
+                  finish("stop_analysis_registry_not_closed", reason="spherical representative coordinate is undefined", glade_id=glade_id)
+                  raise SystemExit(3)
+              xyz /= norm
+              rep_lat = math.degrees(math.asin(float(xyz[2])))
+              rep_lon = math.degrees(math.atan2(float(xyz[1]), float(xyz[0])))
+              representative.append((rep_lat, rep_lon))
+
+          minimum_nodes = int(source["preflight_minima"]["minimum_nodes"])
+          if len(node_ids) < minimum_nodes:
+              finish(
+                  "stop_insufficient_nodes",
+                  node_count=len(node_ids),
+                  minimum_nodes=minimum_nodes,
+                  selected_waypoint_count=selected_waypoints,
+                  group_sizes=group_sizes,
+              )
+              raise SystemExit(3)
+          if len(set(representative)) != len(representative):
+              finish("stop_analysis_registry_not_closed", reason="duplicate representative glade coordinates", node_count=len(node_ids))
+              raise SystemExit(3)
+
+          lat = np.radians(np.asarray([p[0] for p in representative], dtype=float))
+          lon = np.radians(np.asarray([p[1] for p in representative], dtype=float))
+          dlat = lat[:, None] - lat[None, :]
+          dlon = lon[:, None] - lon[None, :]
+          a = np.sin(dlat/2.0)**2 + np.cos(lat[:,None])*np.cos(lat[None,:])*np.sin(dlon/2.0)**2
+          a = np.clip(a, 0.0, 1.0)
+          distance = 2.0 * 6371.0088 * np.arcsin(np.sqrt(a))
+          np.fill_diagonal(distance, 0.0)
+
+          declaration = StructuralScaleLadderDeclaration(
+              axis_id="peck_stegall_glade_representative_great_circle_km",
+              target_largest_component_fractions=tuple(float(v) for v in scale["target_lcc_fractions"]),
+          )
+          ladder = build_structural_scale_ladder(node_ids, distance, declaration)
+          thresholds = [float(v) for v in ladder.thresholds]
+          distinct_positive = sorted({round(v, 12) for v in thresholds if v > 0})
+          levels = [
+              {
+                  "level_id": level.level_id,
+                  "target_lcc": level.target_largest_component_fraction,
+                  "threshold_km": level.distance_threshold,
+                  "achieved_lcc": level.achieved_largest_component_fraction,
+                  "weak_component_count": level.weak_component_count,
+                  "isolated_node_fraction": level.isolated_node_fraction,
+                  "directed_edge_count": level.directed_edge_count,
+                  "fingerprint": level.fingerprint,
+              }
+              for level in ladder.levels
+          ]
+          if len(distinct_positive) < int(scale["minimum_distinct_positive_thresholds"]):
+              finish(
+                  "stop_structural_scale_collapse",
+                  physical_waypoint_count=all_waypoints,
+                  selected_waypoint_count=selected_waypoints,
+                  node_count=len(node_ids),
+                  group_sizes=group_sizes,
+                  thresholds_km=thresholds,
+                  distinct_positive_threshold_count=len(distinct_positive),
+                  levels=levels,
+                  ladder_fingerprint=ladder.fingerprint,
+              )
+              raise SystemExit(3)
+
+          finish(
+              "analysis_glade_registry_and_structural_geometry_pass",
+              physical_waypoint_count=all_waypoints,
+              selected_waypoint_count=selected_waypoints,
+              node_count=len(node_ids),
+              node_ids=node_ids,
+              group_sizes=group_sizes,
+              representative_coordinates=[[node_id, representative[i][0], representative[i][1]] for i, node_id in enumerate(node_ids)],
+              thresholds_km=thresholds,
+              distinct_positive_threshold_count=len(distinct_positive),
+              levels=levels,
+              ladder_fingerprint=ladder.fingerprint,
+              node_identity_contract_fingerprint=hashlib.sha256(Path("validation/peck_collared_lizard_paired_complementarity/node_identity_contract.json").read_bytes()).hexdigest(),
+          )
+          PY
+      - name: Assert outcome firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path("build/peck_analysis_node_geometry/result.json").read_text())
+          assert r["population_size_response_requests"] == 0
+          assert r["population_size_response_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck coarse-glade geometry response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: peck-collared-lizard-analysis-node-geometry
+          path: build/peck_analysis_node_geometry/result.json
+          if-no-files-found: error
