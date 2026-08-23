@@ -1,0 +1,49 @@
+{
+  "attempt_id": "peck_ranch_collared_lizard_fresh_paired_v1",
+  "candidate": "Eastern collared lizard (Crotaphytus collaris collaris), Peck Ranch experimental restoration/reintroduction metapopulation",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "zenodo_record": 15557864,
+    "zenodo_doi": "10.5281/zenodo.15557864",
+    "dryad_doi": "10.5061/dryad.63xsj3v50",
+    "focal_taxon": "Crotaphytus collaris collaris",
+    "published_design": "translocation/reintroduction beginning in 1984 on restored Ozark glades followed by long-term capture/recapture and glade surveys through 2014",
+    "source_process_claim": "known managed introductions are external additions and must be prospectively represented by year/glade; natural expansion among the mapped glade universe is the target process. Any additional unmanaged external source not representable before response access stops the candidate.",
+    "historical_anchor": "1980 extensive Peck Ranch survey reported no collared-lizard populations; initial translocations occurred 1984-1989; prescribed woodland burning began 1994 and initiated the colonizing phase; stable metapopulation phase was established by about 2000."
+  },
+  "admission_rules": {
+    "require_response_independent_glade_geometry": true,
+    "require_geometry_physically_separate_from_capture_response": true,
+    "require_machine_readable_glade_waypoints": true,
+    "require_closed_analysis_registry": true,
+    "require_repeated_survey_semantics": true,
+    "require_managed_release_schedule_resolvable_before_response": true,
+    "require_at_least_three_distinct_positive_structural_scales": true,
+    "no_geometry_reconstruction_from_pdf_maps": true,
+    "no_response_table_opening_to_determine_candidate_eligibility": true
+  },
+  "response_semantics_boundary": {
+    "not_yet_frozen": true,
+    "count_minima_reserved_for_full_freeze": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    }
+  },
+  "stage_boundary": {
+    "zenodo_metadata_only_first": true,
+    "file_payload_access_allowed": false,
+    "capture_workbook_access_allowed": false,
+    "response_header_access_allowed": false,
+    "response_payload_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
