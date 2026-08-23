@@ -16,6 +16,35 @@
     "published_design": "27 experimental landscapes, >3000 Opuntia habitat patches, controlled habitat loss, fragmentation and matrix quality, introduced cactus-bug populations followed longitudinally",
     "source_process_claim": "experimental landscape populations initiated by controlled introductions after removal of resident cactus bugs; any evidence of unrepresented additions or non-negligible external immigration in the analyzed periods must be represented prospectively or the candidate stops"
   },
+  "figshare_archive_manifest": {
+    "versioned_doi": "10.6084/m9.figshare.30508496.v1",
+    "version": 1,
+    "file_id": 63659451,
+    "name": "Fletcher_etal_2026_data_code.zip",
+    "bytes": 241783,
+    "md5": "97da878fe492e3729fafa4904211bc72",
+    "download_url": "https://ndownloader.figshare.com/files/63659451",
+    "license": "CC BY 4.0"
+  },
+  "archive_inventory_rule": {
+    "purpose": "inspect ZIP member metadata only before any member payload is opened",
+    "allowed_http_method": "GET with bounded Range only",
+    "full_archive_get_forbidden": true,
+    "member_payload_open_forbidden": true,
+    "allowed_metadata": [
+      "member_name",
+      "crc32",
+      "compression_method",
+      "compressed_size",
+      "uncompressed_size",
+      "local_header_offset"
+    ],
+    "procedure": "request only a bounded tail sufficient to locate EOCD; if the complete central directory is not contained in that bounded tail, request only the exact central-directory byte interval declared by EOCD; require HTTP 206 for every archive-byte request; never request any local-file member interval at this stage",
+    "maximum_tail_bytes": 65557,
+    "stop_if_range_unsupported": true,
+    "stop_if_zip64_required": true,
+    "stop_if_multidisk": true
+  },
   "admission_rules": {
     "require_response_independent_patch_or_landscape_geometry": true,
     "require_geometry_physically_separate_from_response": true,
@@ -38,7 +67,10 @@
   },
   "stage_boundary": {
     "metadata_only_first": true,
+    "archive_identity_frozen": true,
+    "zip_central_directory_metadata_access_allowed": true,
     "figshare_file_payload_downloads_allowed": false,
+    "zip_member_payload_access_allowed": false,
     "response_header_access_allowed": false,
     "response_payload_access_allowed": false,
     "outcome_access_authorized": false
