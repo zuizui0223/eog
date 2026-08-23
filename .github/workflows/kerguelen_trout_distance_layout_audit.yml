@@ -1,0 +1,144 @@
+name: Kerguelen trout response-blind distance PDF layout audit
+
+on:
+  push:
+    branches: [agent/kerguelen-trout-paired-complementarity]
+    paths:
+      - ".github/workflows/kerguelen_trout_distance_layout_audit.yml"
+      - "validation/kerguelen_trout_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/kerguelen_trout_distance_layout_audit.yml"
+      - "validation/kerguelen_trout_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  distance-layout-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PDF text utilities
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+      - name: Open only Appendix S2 and audit born-digital layout
+        run: |
+          set -euo pipefail
+          mkdir -p build/kerguelen_trout_distance_layout
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import json
+          from pathlib import Path
+          import re
+          import subprocess
+          import urllib.error
+          import urllib.request
+
+          contract=json.loads(Path("validation/kerguelen_trout_paired_complementarity/source_contract.json").read_text())
+          spec=contract["exact_public_supplements"]["distance_appendix"]
+          out=Path("build/kerguelen_trout_distance_layout/audit.json")
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"not_evaluated",
+              "distance_pdf_requests":0,
+              "distance_pdf_bytes_opened":0,
+              "colonization_appendix_requests":0,
+              "colonization_appendix_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          def finish(status,**extra):
+              result.update(extra); result["status"]=status
+              out.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+              print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
+
+          req=urllib.request.Request(spec["download_url"],headers={"User-Agent":"EOG-Kerguelen-distance-layout/1.0","Accept":"application/pdf","Accept-Encoding":"identity"})
+          result["distance_pdf_requests"]=1
+          try:
+              with urllib.request.urlopen(req,timeout=90) as response:
+                  body=response.read(5_000_001)
+                  status=getattr(response,"status",None)
+                  ctype=response.headers.get("Content-Type")
+                  final_url=response.geturl()
+          except urllib.error.HTTPError as exc:
+              finish("stop_distance_pdf_transport",http_status=exc.code); raise SystemExit(3)
+          if status!=200 or len(body)>5_000_000:
+              finish("stop_distance_pdf_transport",http_status=status,observed_bytes=len(body)); raise SystemExit(3)
+          if not body.startswith(b"%PDF"):
+              finish("stop_distance_pdf_identity",content_type=ctype,observed_bytes=len(body),first_bytes=body[:16].hex()); raise SystemExit(3)
+          result["distance_pdf_bytes_opened"]=len(body)
+          pdf_sha=hashlib.sha256(body).hexdigest()
+          pdf_path=Path("build/kerguelen_trout_distance_layout/appendix_s2.pdf")
+          pdf_path.write_bytes(body)
+
+          info=subprocess.run(["pdfinfo",str(pdf_path)],check=True,capture_output=True,text=True).stdout
+          text_path=Path("build/kerguelen_trout_distance_layout/appendix_s2.layout.txt")
+          subprocess.run(["pdftotext","-layout",str(pdf_path),str(text_path)],check=True)
+          text=text_path.read_text(encoding="utf-8",errors="replace")
+          text_sha=hashlib.sha256(text.encode("utf-8")).hexdigest()
+          lines=text.splitlines()
+          nonempty=[line.rstrip() for line in lines if line.strip()]
+          numeric_token_re=re.compile(r"(?<![A-Za-z])[-+]?\d+(?:[.,]\d+)?")
+          numeric_counts=[len(numeric_token_re.findall(line)) for line in nonempty]
+          heading_re=re.compile(r"(?i)(appendix|distance|stepping|stone|coast|buffer|matrix|matrice|dispers)")
+          heading_lines=[{"line_number":i+1,"text":line[:500]} for i,line in enumerate(lines) if line.strip() and heading_re.search(line)]
+          dense_lines=[{"text":line[:1000],"numeric_token_count":count} for line,count in zip(nonempty,numeric_counts) if count>=10]
+          integer_tokens=[int(m.group()) for line in nonempty for m in re.finditer(r"(?<![.\d])(?:[1-9]|[1-7]\d|8[0-5])(?![.\d])",line)]
+          observed_label_set=sorted(set(integer_tokens))
+
+          page_match=re.search(r"^Pages:\s+(\d+)",info,re.M)
+          page_count=int(page_match.group(1)) if page_match else None
+          finish(
+              "distance_pdf_layout_audit_complete",
+              final_url=final_url,
+              content_type=ctype,
+              pdf_bytes=len(body),
+              pdf_sha256=pdf_sha,
+              page_count=page_count,
+              pdfinfo=info.splitlines(),
+              layout_text_bytes=len(text.encode("utf-8")),
+              layout_text_sha256=text_sha,
+              layout_line_count=len(lines),
+              nonempty_line_count=len(nonempty),
+              form_feed_count=text.count("\f"),
+              max_numeric_tokens_on_one_line=max(numeric_counts) if numeric_counts else 0,
+              dense_line_count=len(dense_lines),
+              bounded_dense_line_examples=dense_lines[:80],
+              heading_lines=heading_lines[:100],
+              observed_integer_labels_1_to_85=observed_label_set,
+              contains_all_integer_labels_1_to_85=(observed_label_set==list(range(1,86))),
+              text_extractable=(len(nonempty)>0),
+          )
+          PY
+      - name: Assert distance-only response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/kerguelen_trout_distance_layout/audit.json")
+          if not p.exists(): raise SystemExit("distance layout audit missing")
+          r=json.loads(p.read_text())
+          assert r["colonization_appendix_requests"]==0
+          assert r["colonization_appendix_bytes_opened"]==0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Kerguelen distance-only response firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kerguelen-trout-distance-layout-audit
+          path: build/kerguelen_trout_distance_layout/audit.json
+          if-no-files-found: error
