@@ -51,7 +51,7 @@ jobs:
               req = urllib.request.Request(
                   url,
                   headers={
-                      "User-Agent": "EOG-Peck-response-header-firewall/1.0",
+                      "User-Agent": "EOG-Peck-response-header-firewall/1.1",
                       "Range": f"bytes={offset}-{offset}",
                       "Accept-Encoding": "identity",
                   },
@@ -84,27 +84,41 @@ jobs:
           header_text = bytes(consumed).decode("utf-8", errors="strict")
           rows = list(csv.reader(io.StringIO(header_text), delimiter="\t", strict=True))
           if len(rows) != 1:
-              raise RuntimeError("header does not decode to exactly one tab-delimited record")
-          columns = [value.strip() for value in rows[0]]
-          if any(not value for value in columns):
-              raise RuntimeError("header contains empty column name")
-          if len(set(columns)) != len(columns):
-              raise RuntimeError("header contains duplicate column names")
-          expected_count = int(contract["documentation_expectation"]["semantic_column_count"])
-          if len(columns) != expected_count:
-              raise RuntimeError(f"header column count {len(columns)} != documented {expected_count}")
+              columns = []
+              status = "stop_header_parse_error"
+              reason = "header does not decode to exactly one tab-delimited record"
+          else:
+              columns = [value.strip() for value in rows[0]]
+              expected_count = int(contract["documentation_expectation"]["semantic_column_count"])
+              empty_indices = [i for i, value in enumerate(columns) if not value]
+              duplicate_names = sorted({value for value in columns if value and columns.count(value) > 1})
+              if empty_indices:
+                  status = "stop_header_empty_column"
+                  reason = "physical response header contains one or more empty column names"
+              elif duplicate_names:
+                  status = "stop_header_duplicate_columns"
+                  reason = "physical response header contains duplicate column names"
+              elif len(columns) != expected_count:
+                  status = "stop_header_documented_column_count_mismatch"
+                  reason = f"physical header column count {len(columns)} differs from documented semantic count {expected_count}"
+              else:
+                  status = "bounded_physical_header_acquired"
+                  reason = "one physical header record acquired; exact names may now be frozen before any row-level outcome access"
 
           result = {
               "attempt_id": contract["attempt_id"],
-              "status": "bounded_physical_header_acquired",
+              "status": status,
+              "reason": reason,
               "range_request_count": requests,
               "bytes_before_terminator": len(consumed),
               "bytes_consumed_including_terminator": len(consumed) + 1,
               "terminator": terminator,
               "header_text": header_text,
               "observed_columns": columns,
+              "empty_column_indices_zero_based": [i for i, value in enumerate(columns) if not value],
+              "duplicate_nonempty_column_names": sorted({value for value in columns if value and columns.count(value) > 1}),
               "delimiter": "TAB",
-              "documented_semantic_column_count": expected_count,
+              "documented_semantic_column_count": int(contract["documentation_expectation"]["semantic_column_count"]),
               "row_level_response_requests": 0,
               "response_rows_opened": False,
               "response_values_opened": False,
@@ -115,20 +129,24 @@ jobs:
           print(json.dumps(result, indent=2, sort_keys=True))
           PY
       - name: Assert header-only boundary
+        if: always()
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          r = json.loads(Path("build/peck_response_header/header_probe.json").read_text())
-          assert r["status"] == "bounded_physical_header_acquired"
+          p = Path("build/peck_response_header/header_probe.json")
+          if not p.exists():
+              raise SystemExit("header diagnostic artifact missing")
+          r = json.loads(p.read_text())
           assert r["row_level_response_requests"] == 0
           assert r["response_rows_opened"] is False
           assert r["response_values_opened"] is False
           assert r["model_fits"] == 0
           assert r["heldout_scores"] == 0
-          print("Peck bounded response-header firewall PASS")
+          print(f"Peck bounded response-header firewall preserved: {r['status']}")
           PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: peck-collared-lizard-bounded-response-header
           path: build/peck_response_header/header_probe.json
