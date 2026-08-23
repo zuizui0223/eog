@@ -42,7 +42,7 @@ jobs:
 
           def get_range(start, end):
               req = urllib.request.Request(url, headers={
-                  "User-Agent":"EOG-Fletcher-2026-README-only/1.0",
+                  "User-Agent":"EOG-Fletcher-2026-README-only/1.1",
                   "Range":f"bytes={start}-{end}",
                   "Accept-Encoding":"identity",
               })
@@ -77,12 +77,13 @@ jobs:
           observed_crc = zlib.crc32(payload) & 0xffffffff
           if f"{observed_crc:08x}" != doc["crc32"]:
               raise RuntimeError("README CRC mismatch")
-          text = payload.decode("utf-8", errors="strict")
+          text = payload.decode("cp1252", errors="strict")
           result = {
               "attempt_id": contract["attempt_id"],
               "documentation_member": name,
               "documentation_bytes_opened": len(payload),
               "documentation_crc32": f"{observed_crc:08x}",
+              "documentation_encoding": "cp1252",
               "readme_text": text,
               "range_requests": requests,
               "other_member_payload_requests": 0,
