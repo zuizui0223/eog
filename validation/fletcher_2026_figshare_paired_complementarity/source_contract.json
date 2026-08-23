@@ -27,23 +27,32 @@
     "license": "CC BY 4.0"
   },
   "archive_inventory_rule": {
-    "purpose": "inspect ZIP member metadata only before any member payload is opened",
+    "purpose": "inspect ZIP member metadata only before any scientific member payload is opened",
     "allowed_http_method": "GET with bounded Range only",
     "full_archive_get_forbidden": true,
-    "member_payload_open_forbidden": true,
-    "allowed_metadata": [
-      "member_name",
-      "crc32",
-      "compression_method",
-      "compressed_size",
-      "uncompressed_size",
-      "local_header_offset"
-    ],
-    "procedure": "request only a bounded tail sufficient to locate EOCD; if the complete central directory is not contained in that bounded tail, request only the exact central-directory byte interval declared by EOCD; require HTTP 206 for every archive-byte request; never request any local-file member interval at this stage",
+    "allowed_metadata": ["member_name", "crc32", "compression_method", "compressed_size", "uncompressed_size", "local_header_offset"],
     "maximum_tail_bytes": 65557,
     "stop_if_range_unsupported": true,
     "stop_if_zip64_required": true,
     "stop_if_multidisk": true
+  },
+  "frozen_member_inventory": {
+    "member_count": 13,
+    "central_directory_offset": 240241,
+    "central_directory_size": 1520,
+    "documentation_member": {
+      "name": "Analysis_Figshare_final/README.txt",
+      "crc32": "bae6a3a6",
+      "compression_method": 8,
+      "compressed_size": 923,
+      "uncompressed_size": 2455,
+      "local_header_offset": 239206
+    },
+    "response_like_members_forbidden": [
+      "Analysis_Figshare_final/abundance_patchscale_data.csv",
+      "Analysis_Figshare_final/mrr_data.csv"
+    ],
+    "documentation_access_rule": "Only README.txt may be opened next. Fetch exactly its local-header prefix and compressed member interval by HTTP Range, verify central-directory name/method/sizes/CRC32, decompress locally, and do not request any other member payload. README is used only to determine whether a physically separate response-independent geometry/registry resource exists and to document survey/release semantics."
   },
   "admission_rules": {
     "require_response_independent_patch_or_landscape_geometry": true,
@@ -68,9 +77,9 @@
   "stage_boundary": {
     "metadata_only_first": true,
     "archive_identity_frozen": true,
-    "zip_central_directory_metadata_access_allowed": true,
-    "figshare_file_payload_downloads_allowed": false,
-    "zip_member_payload_access_allowed": false,
+    "zip_central_directory_metadata_access_complete": true,
+    "documentation_member_payload_access_allowed": true,
+    "other_zip_member_payload_access_allowed": false,
     "response_header_access_allowed": false,
     "response_payload_access_allowed": false,
     "outcome_access_authorized": false
