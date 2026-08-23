@@ -1,0 +1,121 @@
+name: Fletcher 2026 README-only preflight
+
+on:
+  push:
+    branches:
+      - agent/fletcher-2026-figshare-preflight
+    paths:
+      - ".github/workflows/fletcher_2026_readme_preflight.yml"
+      - "validation/fletcher_2026_figshare_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/fletcher_2026_readme_preflight.yml"
+      - "validation/fletcher_2026_figshare_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readme-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Open only frozen README member
+        run: |
+          set -euo pipefail
+          mkdir -p build/fletcher_2026_readme
+          python - <<'PY'
+          from __future__ import annotations
+          import json, struct, urllib.request, zlib
+          from pathlib import Path
+
+          contract = json.loads(Path("validation/fletcher_2026_figshare_paired_complementarity/source_contract.json").read_text())
+          archive = contract["figshare_archive_manifest"]
+          doc = contract["frozen_member_inventory"]["documentation_member"]
+          url = archive["download_url"]
+          requests = []
+
+          def get_range(start, end):
+              req = urllib.request.Request(url, headers={
+                  "User-Agent":"EOG-Fletcher-2026-README-only/1.0",
+                  "Range":f"bytes={start}-{end}",
+                  "Accept-Encoding":"identity",
+              })
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  body = response.read(end-start+2)
+                  status = getattr(response, "status", None)
+                  content_range = response.headers.get("Content-Range")
+              requests.append({"start":start,"end":end,"status":status,"content_range":content_range})
+              if status != 206 or len(body) != end-start+1:
+                  raise RuntimeError(f"bounded README range failed: status={status} bytes={len(body)}")
+              return body
+
+          off = int(doc["local_header_offset"])
+          fixed = get_range(off, off+29)
+          sig, ver, flags, method, mtime, mdate, crc, csize, usize, nlen, xlen = struct.unpack("<IHHHHHIIIHH", fixed)
+          if sig != 0x04034B50:
+              raise RuntimeError("README local header signature mismatch")
+          name_extra = get_range(off+30, off+30+nlen+xlen-1)
+          name = name_extra[:nlen].decode("utf-8" if flags & 0x800 else "cp437")
+          if name != doc["name"] or method != int(doc["compression_method"]):
+              raise RuntimeError("README local header identity mismatch")
+          data_start = off+30+nlen+xlen
+          compressed = get_range(data_start, data_start+int(doc["compressed_size"])-1)
+          if method == 8:
+              payload = zlib.decompress(compressed, -15)
+          elif method == 0:
+              payload = compressed
+          else:
+              raise RuntimeError(f"unsupported README compression method {method}")
+          if len(payload) != int(doc["uncompressed_size"]):
+              raise RuntimeError("README uncompressed size mismatch")
+          observed_crc = zlib.crc32(payload) & 0xffffffff
+          if f"{observed_crc:08x}" != doc["crc32"]:
+              raise RuntimeError("README CRC mismatch")
+          text = payload.decode("utf-8", errors="strict")
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "documentation_member": name,
+              "documentation_bytes_opened": len(payload),
+              "documentation_crc32": f"{observed_crc:08x}",
+              "readme_text": text,
+              "range_requests": requests,
+              "other_member_payload_requests": 0,
+              "response_member_payload_requests": 0,
+              "response_header_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+              "status": "readme_documentation_only_pass"
+          }
+          Path("build/fletcher_2026_readme/readme_audit.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Assert README-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("build/fletcher_2026_readme/readme_audit.json").read_text())
+          assert r["other_member_payload_requests"] == 0
+          assert r["response_member_payload_requests"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          assert all(x["status"] == 206 for x in r["range_requests"])
+          print("Fletcher README-only firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fletcher-2026-readme-only
+          path: build/fletcher_2026_readme/readme_audit.json
+          if-no-files-found: error
