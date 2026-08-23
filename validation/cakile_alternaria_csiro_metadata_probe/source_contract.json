@@ -1,0 +1,28 @@
+{
+  "attempt_id": "cakile_alternaria_csiro_metadata_screen_v1",
+  "candidate": "Cakile maritima–Alternaria brassicicola, southeastern Australia",
+  "scientific_source": {
+    "article_doi": "10.1086/712248",
+    "dataset_title": "Cakile–Alternaria metapopulation survey data",
+    "dataset_handle": "102.100.100/366494",
+    "published_design": "61 potential beach populations fixed from physical coastline structure; approximately 6-week censuses for 5 years; 42 censuses"
+  },
+  "admission_target": "Resolve only CSIRO collection/file metadata and determine whether a response-independent beach registry or distance resource is physically separate from longitudinal disease census data.",
+  "search_terms": ["Cakile", "Alternaria", "metapopulation"],
+  "required_pre_pr_evidence": [
+    "public collection identity/version",
+    "public file manifest",
+    "separately addressable response-independent site/geometry or distance resource",
+    "separately addressable longitudinal census response resource"
+  ],
+  "stage_boundary": {
+    "candidate_pr_opened": false,
+    "metadata_requests_allowed": true,
+    "file_payload_requests_allowed": false,
+    "response_file_requests_allowed": false,
+    "response_bytes_opened": 0,
+    "response_rows_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
