@@ -24,11 +24,48 @@
     "node_universe_boundary": "the selected-watershed breeding-site frame is response-independent with respect to focal-species occurrence; do not add or remove sites based on Anaxyrus observations",
     "source_process_boundary": "the 14 sampled watersheds are only a random subset of 220 watershed units, so sampled-site internal dispersal is not assumed biologically closed. Before outcome access, an existing EOG-compatible exogenous-source representation or an explicit stop must be frozen response-blind; no external source is invented after observing colonization outcomes."
   },
-  "metadata_stage": {
-    "item_json": "https://www.sciencebase.gov/catalog/item/639a2d8dd34e0de3a1f0de4b?format=json",
-    "children_json": "https://www.sciencebase.gov/catalog/items?filter=parentId=639a2d8dd34e0de3a1f0de4b&format=json&max=100",
-    "payload_downloads_allowed": false,
-    "purpose": "resolve exact ScienceBase item/child/file identities, file names, sizes/checksums and physical separation of site/static geometry, dynamic covariates and species observations before any data file payload is opened"
+  "exact_sciencebase_files": {
+    "site_static": {
+      "name": "yose_site_data.csv",
+      "bytes": 18983,
+      "md5": "7c644e651088f15a72070c89e11c5803",
+      "download_uri": "https://www.sciencebase.gov/catalog/file/get/639a2d8dd34e0de3a1f0de4b?f=__disk__fc%2Fc5%2F54%2Ffcc5544daac3d11569f99d80c00ca640488b07ff"
+    },
+    "site_year": {
+      "name": "yose_site_year_data.csv",
+      "bytes": 137875,
+      "md5": "9d761b85c369d7edf131ab9084706750",
+      "download_uri": "https://www.sciencebase.gov/catalog/file/get/639a2d8dd34e0de3a1f0de4b?f=__disk__6b%2Fac%2F4b%2F6bac4b89ae35af843f5d887ec6a7b4e3392901d4"
+    },
+    "site_year_survey": {
+      "name": "yose_site_year_survey_data.csv",
+      "bytes": 121788,
+      "md5": "ad55fae00e8517581fbd4a4fd4258055",
+      "download_uri": "https://www.sciencebase.gov/catalog/file/get/639a2d8dd34e0de3a1f0de4b?f=__disk__fb%2Fdb%2F83%2Ffbdb83f2b5e3c215fe92becccd601279228116ce"
+    },
+    "fgdc_metadata": {
+      "name": "Multi-state occurrence data and predictors for amphibians in Yosemite National Park (2007-2021).xml",
+      "bytes": 44990,
+      "md5": "f2dbefdb2e816c385e507a667acba213",
+      "download_uri": "https://www.sciencebase.gov/catalog/file/get/639a2d8dd34e0de3a1f0de4b?f=__disk__03%2F67%2F02%2F036702d265534bd266f3602a6d69a0c7c32920fd",
+      "role": "response-independent schema documentation; may be opened before any CSV"
+    }
+  },
+  "completed_metadata_manifest": {
+    "status": "sciencebase_metadata_manifest_resolved",
+    "file_count": 4,
+    "child_count": 0,
+    "file_payload_bytes_opened": 0,
+    "response_rows_opened": false,
+    "workflow_run": 32636950635,
+    "workflow_job": 97188040148
+  },
+  "schema_documentation_stage": {
+    "payloads_now_allowed": ["fgdc_metadata"],
+    "all_csv_payloads_forbidden": true,
+    "purpose": "freeze entity/attribute roles for site-static, site-year and site-year-survey tables, determine which table contains complete response-independent geometry, and identify where Anaxyrus adult/larval outcomes physically reside before opening any CSV",
+    "identity_rule": "exact byte size and MD5 must match the frozen ScienceBase metadata before XML parsing",
+    "stop_rule": "if metadata shows no physically separable complete site geometry, stop before any CSV; if metadata is sufficient, only the minimum response-independent CSV needed for geometry may be opened next"
   },
   "preflight_minima": {
     "minimum_nodes": 50,
