@@ -25,7 +25,14 @@
       "name": "Appendix S2",
       "role": "response-independent distance matrices for alternative dispersal scenarios",
       "download_url": "https://journals.plos.org/plosone/article/file?type=supplementary&id=info:doi/10.1371/journal.pone.0071052.s007",
-      "payload_access_allowed": true
+      "payload_access_allowed": true,
+      "frozen_bytes": 106855,
+      "frozen_sha256": "647b00984d94df836779ede850544a4c4979e1f8acef9650c228f9927c1960bf",
+      "frozen_content_type": "application/pdf",
+      "frozen_page_count": 3,
+      "frozen_pdftotext_layout_bytes": 1080577,
+      "frozen_pdftotext_layout_sha256": "7c6431a80f3921b6bacece6414b52461e114fea0af3016fe9aaf10dd88f589b1",
+      "layout_runtime": "Ubuntu 24.04 / poppler-utils 24.02.0; rerun must reproduce the frozen text SHA before matrix parsing"
     },
     "colonization_appendix": {
       "doi": "10.1371/journal.pone.0071052.s006",
@@ -36,14 +43,45 @@
     }
   },
   "distance_gate_contract": {
-    "purpose": "before any colonization-response access, determine whether the official distance supplement has a deterministic born-digital representation sufficient to recover the complete 85-node matrices without OCR, figure tracing, or manual node alias repair",
-    "accepted_document_identity": "HTTP 200 application/pdf with PDF magic; freeze exact byte size and SHA-256 on first retrieval",
-    "physical_layout_resolution": "one response-blind physical-layout audit of Appendix S2 is allowed before the matrix parser is frozen. It may use pdfinfo and pdftotext -layout and report page count, text hashes, headings, token counts and bounded nonempty line excerpts. It may not inspect Appendix S1, drop nodes, alter distances, use OCR, or choose a scientific world based on colonization response. After this one layout audit, the deterministic matrix parser must be frozen before any further scientific geometry computation.",
-    "text_extraction_rule": "pdftotext -layout only; OCR is forbidden; no visual/manual transcription is used to construct geometry",
-    "required_node_labels": "the eventual parser must expose a consistent 1..85 or equivalent explicit 85-label sequence for each accepted matrix without fuzzy aliases",
-    "required_scenarios": ["stepping_stone", "coastal_1km", "shortest_path_5km"],
-    "matrix_rule": "each accepted scenario must eventually recover exactly 85 x 85 finite non-negative values, a zero diagonal, and a symmetric matrix from the official extracted text under a parser frozen before colonization response access",
-    "minimum_usable_matrices": 3,
+    "purpose": "recover and certify the three official 85-node distance hypotheses before any colonization-response access",
+    "completed_layout_audit": {
+      "workflow_run": 32637403349,
+      "workflow_job": 97189119435,
+      "status": "distance_pdf_layout_audit_complete",
+      "dense_line_count": 255,
+      "expected_dense_line_count": 255,
+      "contains_all_integer_labels_1_to_85": true,
+      "scenario_headings": [
+        "Appendix 2A: Distance matrix between hydrographic systems with a stepping-stone approach",
+        "Appendix 2B: Distance matrix between hydrographic systems calculated with a 1 km buffer",
+        "Appendix 2C: Distance matrix between hydrographic systems calculated with a 5 km buffer"
+      ],
+      "colonization_appendix_requests": 0,
+      "colonization_appendix_bytes_opened": 0
+    },
+    "frozen_matrix_parser": {
+      "page_rule": "run pdftotext -layout under the frozen runtime, require the exact frozen layout-text SHA, split on form-feed, discard only empty trailing page fragments, and require exactly three nonempty page texts in published scenario order",
+      "row_candidate_rule": "within each page, retain exactly those nonempty lines containing at least 85 tokens matching [+-]?[0-9]+(?:[.,][0-9]+)?; require exactly 85 retained lines per page",
+      "rightmost_85_rule": "for each retained row, the rightmost 85 numeric-regex matches are the distance vector. All preceding characters, stripped only at the outer edges, are the exact river label. This deliberately protects labels containing digits such as Brook 1 Ile du Port and Gorfous 1 from being misparsed as distances",
+      "numeric_rule": "replace a single decimal comma with decimal point before float conversion; values must be finite and non-negative",
+      "label_rule": "require 85 unique nonempty exact labels per page and require the same ordered label tuple on all three pages; no case folding, fuzzy alias repair, translation or node deletion is allowed",
+      "matrix_rule": "require exactly 85x85 values per scenario, zero diagonal within 1e-9 and symmetry within atol=rtol=1e-9",
+      "scenario_order": ["stepping_stone", "coastal_1km", "shortest_path_5km"]
+    },
+    "structural_universe_rule": {
+      "justification": "EOG world-universe scale design evaluates adequacy of the declared universe as a whole when multiple legitimate primary metric/process alternatives exist; fragmented or scale-collapsed hypotheses are retained rather than deleted",
+      "structural_targets_lcc": [0.25, 0.5, 0.75, 0.9],
+      "build_rule": "build the standard response-blind structural ladder separately on each of the three frozen distance matrices; retain every scenario x ladder level even when thresholds repeat within a scenario",
+      "horizon": 1,
+      "adequacy_min_largest_weak_component_fraction": 0.9,
+      "adequacy_max_isolated_node_fraction": 0.05,
+      "require_at_least_one_world_pass": true,
+      "require_at_least_one_lcc900_world_pass": true,
+      "minimum_distinct_adjacency_fingerprints_across_universe": 3,
+      "adjacency_distinctness_rule": "distinctness is based on exact binary adjacency fingerprints, not comparison of threshold magnitudes across distance hypotheses",
+      "no_world_deletion_after_audit": true,
+      "stop_rule": "if the complete declared universe fails these pre-response criteria, close the candidate before Appendix S1 access"
+    },
     "no_ocr": true,
     "no_manual_table_reconstruction": true,
     "no_node_filtering_or_alias_repair": true,
