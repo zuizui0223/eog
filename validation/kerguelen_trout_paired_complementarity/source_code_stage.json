@@ -1,0 +1,42 @@
+{
+  "attempt_id": "kerguelen_trout_fresh_paired_v1",
+  "stage_id": "kerguelen_response_blind_source_code_v1",
+  "parent_source_contract_sha256_note": "source_contract.json on this branch already freezes Appendix S1 as forbidden and the 85-node geometry/structural universe as response-blind PASS",
+  "allowed_document": {
+    "doi": "10.1371/journal.pone.0071052.s008",
+    "name": "Appendix S3",
+    "role": "published OpenBUGS model code / implementation documentation; response-independent source/process semantics only",
+    "download_url": "https://journals.plos.org/plosone/article/file?type=supplementary&id=info:doi/10.1371/journal.pone.0071052.s008"
+  },
+  "forbidden_documents": {
+    "colonization_appendix": {
+      "doi": "10.1371/journal.pone.0071052.s006",
+      "name": "Appendix S1",
+      "reason": "contains colonization response and source-history values; remains forbidden before full prospective outcome authorization"
+    }
+  },
+  "audit_rule": {
+    "document_identity": "request Appendix S3 only; require HTTP 200 and PDF magic, then freeze exact byte size and SHA-256",
+    "text_extraction": "pdftotext -layout only; OCR and manual transcription are forbidden",
+    "allowed_semantic_extraction": [
+      "model data-array declarations and dimensions",
+      "literal OpenBUGS equations involving H, Y, A, N or source/colonization state variables",
+      "literal data values only if they are embedded inside Appendix S3 itself as part of the published source code"
+    ],
+    "forbidden_semantic_extraction": [
+      "Appendix S1 colonization rows",
+      "post-hoc reconstruction of artificial-source nodes from natural colonization outcomes",
+      "adding a new EOG ecological operator or changing the frozen 85-node distance worlds"
+    ],
+    "decision_rule": "PASS only if Appendix S3 itself provides an exact human-introduction/source schedule sufficient to freeze exogenous source states without Appendix S1. If it merely declares H or other source variables symbolically and expects their values as external data, record source_values_external_input_only and continue only to a separate introduction-only public-resource search; do not open Appendix S1."
+  },
+  "execution_boundary": {
+    "appendix_s3_requests_before_this_stage": 0,
+    "appendix_s1_requests": 0,
+    "appendix_s1_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
