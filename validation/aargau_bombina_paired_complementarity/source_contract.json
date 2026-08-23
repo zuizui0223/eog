@@ -1,0 +1,71 @@
+{
+  "attempt_id": "aargau_bombina_fresh_paired_v1",
+  "candidate": "Bombina variegata dynamic pond metapopulations, Aargau Switzerland, 1999–2019",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "selected_after_assynt_pr": 266,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "dataset_doi": "10.16904/envidat.270",
+    "dataset_slug": "amphibian-data-aargau",
+    "paper_doi": "10.1073/pnas.2123070119",
+    "focal_taxon": "Bombina variegata",
+    "focal_selection_reason": "prospectively chosen conservation-target species: target-species monitoring comprehensively surveys all potentially suitable breeding sites in surveyed subregions; Bombina variegata is one of the more mobile target species and has a substantial documented Aargau breeding-site network. Common species are not chosen because their potential sites were not all visited.",
+    "published_site_universe": 856,
+    "published_years": [1999, 2019],
+    "published_regions": ["Rheintal", "Aaretal", "Reusstal", "Suhretal", "Wiggertal"],
+    "published_site_dynamics": "469 existing sites in 1999, 780 in 2019; 422 sites newly constructed since 1991 and 76 sites destroyed; site existence is modeled separately from species occupancy",
+    "survey_semantics": "target-species breeding sites are surveyed comprehensively in a rotating subregion panel; repeat visits within surveyed breeding seasons provide detection/nondetection histories",
+    "process_boundary": "the five major river-valley regions are treated by the source study as distinct metapopulations, potentially connected within regions but relatively isolated between regions. EOG will not invent cross-region edges; source/process closure must be certified within each retained region before outcome access."
+  },
+  "required_public_resource_roles": {
+    "readme": "response-independent schema/method documentation",
+    "covariate_static": "time-invariant anonymized site registry/covariates; must provide an auditable site identity and raw/masked coordinate or an independently sufficient pairwise spatial representation",
+    "covariate_dynamic": "year-specific site existence/availability and time-varying covariates, physically separate from species observation response",
+    "observation_response": "species detection/nondetection response; FORBIDDEN until all response-blind gates and outcome authorization are frozen",
+    "structural_connectivity": "response-independent structural connectivity resource",
+    "potential_population_connectivity": "species-specific potential connectivity resource; may inform conventional baseline features but is not a substitute for raw EOG geometry"
+  },
+  "preflight_minima": {
+    "minimum_nodes": 50,
+    "minimum_outer_units": 4,
+    "minimum_repeated_nodes": 50,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "metadata_stage": {
+    "landing_page": "https://www.envidat.ch/dataset/amphibian-data-aargau",
+    "ckan_package_show_candidates": [
+      "https://www.envidat.ch/api/3/action/package_show?id=amphibian-data-aargau",
+      "https://envidat.ch/api/3/action/package_show?id=amphibian-data-aargau"
+    ],
+    "payload_downloads_allowed": false,
+    "purpose": "resolve exact public resource IDs, names, URLs, sizes/hashes when available, and verify physical separation of static covariates, dynamic covariates, observation response and connectivity resources before any resource payload is opened"
+  },
+  "future_geometry_boundary": {
+    "spatial_requirement": "a complete response-independent site coordinate registry or a complete pairwise distance/network representation for the chosen analysis nodes must be available as physical public bytes; precomputed scalar connectivity summaries alone are insufficient",
+    "region_rule": "if coordinates/geometry pass, build worlds separately within published regions; do not add cross-region edges",
+    "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds_per_retained_region": 3,
+    "no_post_geometry_filter_or_scale_retuning": true
+  },
+  "future_endpoint_boundary": {
+    "provisional_endpoint": "one-survey-primary-period-ahead Bombina variegata occupancy/detection state, conditional on independently observed site existence and survey availability; exact observation rule and split are frozen from documentation/code before observation rows are opened",
+    "reserved_count_minima": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    },
+    "learner_boundary": "same frozen strong random forest and same conventional predictors in both arms; augmented arm adds only unchanged symmetric_world_support_summary_v1",
+    "response_payload_access_allowed": false,
+    "response_header_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
