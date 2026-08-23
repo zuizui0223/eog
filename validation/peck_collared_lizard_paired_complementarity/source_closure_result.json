@@ -1,0 +1,56 @@
+{
+  "attempt_id": "peck_collared_lizard_fresh_paired_v1",
+  "workflow_run": 32624566821,
+  "workflow_job": 97157787056,
+  "status": "temporal_source_closure_pass",
+  "response_rows_opened": false,
+  "response_values_opened": false,
+  "population_size_response_requests": 0,
+  "population_size_response_bytes_opened": 0,
+  "node_count": 53,
+  "founders": ["SM7", "SM8", "SM9"],
+  "transition_count": 11,
+  "heldout_start_year": 2000,
+  "heldout_start_index": 5,
+  "process_source_contract_fingerprint": "b051320892426d05418464827ab6123d1bffabd9774a18478a7ba6d00c2f8889",
+  "worlds": [
+    {
+      "world_index": 0,
+      "threshold_km": 0.23819008401809294,
+      "possible_source_counts": [3, 6, 10, 12, 14, 18, 22, 26, 27, 27, 27, 27],
+      "possible_at_heldout_start": 18,
+      "final_possible_count": 27,
+      "all_nodes_reachable_by_heldout_start": false,
+      "closure_fingerprint": "23fc866abfae5edb6769770f8d8fd26a6ab336f9c1f75089b4b1d675e288954e"
+    },
+    {
+      "world_index": 1,
+      "threshold_km": 0.26133621974711535,
+      "possible_source_counts": [3, 9, 13, 15, 21, 27, 29, 31, 34, 35, 35, 35],
+      "possible_at_heldout_start": 27,
+      "final_possible_count": 35,
+      "all_nodes_reachable_by_heldout_start": false,
+      "closure_fingerprint": "1163461ed51f4f50b2eb929370ebc6b0ca2b06db04d8a8cd4783619c31a427f2"
+    },
+    {
+      "world_index": 2,
+      "threshold_km": 0.3230197437607773,
+      "possible_source_counts": [3, 10, 16, 21, 28, 36, 43, 44, 45, 46, 47, 47],
+      "possible_at_heldout_start": 36,
+      "final_possible_count": 47,
+      "all_nodes_reachable_by_heldout_start": false,
+      "closure_fingerprint": "8da09ecf4b97324baa452d4a602582ae4c0f1a0f2aadf6819b53e612d6be3de5"
+    },
+    {
+      "world_index": 3,
+      "threshold_km": 0.47012433520167657,
+      "possible_source_counts": [3, 18, 33, 45, 52, 53, 53, 53, 53, 53, 53, 53],
+      "possible_at_heldout_start": 53,
+      "final_possible_count": 53,
+      "all_nodes_reachable_by_heldout_start": true,
+      "closure_fingerprint": "d16cc5538f46a5b573383104fbe3cd8b2a0627f8436214b3527a56170fe76dac"
+    }
+  ],
+  "worlds_reaching_all_nodes_by_heldout_start": [3],
+  "scientific_boundary": "necessary-condition structural pass only; no particular dispersal route, source, occupied state, or historical world is identified"
+}
