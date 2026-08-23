@@ -1,0 +1,170 @@
+name: Peck Ranch collared lizard structural geometry gate
+
+on:
+  push:
+    branches:
+      - agent/peck-ranch-lizard-preflight
+    paths:
+      - ".github/workflows/peck_ranch_lizard_structural_geometry.yml"
+      - "validation/peck_ranch_lizard_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_ranch_lizard_structural_geometry.yml"
+      - "validation/peck_ranch_lizard_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  structural-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package
+        run: python -m pip install -e .
+      - name: Verify frozen GPS and build structural ladder
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_ranch_lizard_geometry
+          python - <<'PY'
+          import hashlib, json, math
+          from pathlib import Path
+          import urllib.request
+          import numpy as np
+          from eog.v2.world_scale_ladder import StructuralScaleLadderDeclaration, build_structural_scale_ladder
+
+          contract=json.loads(Path("validation/peck_ranch_lizard_paired_complementarity/source_contract.json").read_text())
+          spec=contract["zenodo_geometry_manifest"]
+          fmt=contract["gps_format_freeze"]
+          geo=contract["geometry_contract"]
+          req=urllib.request.Request(spec["content_url"],headers={"User-Agent":"EOG-Peck-Ranch-geometry/1.0"})
+          with urllib.request.urlopen(req,timeout=60) as response:
+              payload=response.read(int(spec["size"])+1)
+              status=getattr(response,"status",None)
+          if status != 200 or len(payload) != int(spec["size"]):
+              raise RuntimeError("GPS transport/size mismatch")
+          if hashlib.md5(payload).hexdigest() != spec["md5"]:
+              raise RuntimeError("GPS MD5 mismatch")
+          text=payload.decode(fmt["encoding"],errors="strict")
+          lines=text.splitlines()
+          if len(lines) != int(fmt["physical_line_count"]):
+              raise RuntimeError(f"physical line count mismatch {len(lines)}")
+          rows=[]
+          for physical_line,line in enumerate(lines[int(fmt["header_line_count"]):],start=int(fmt["header_line_count"])+1):
+              fields=line.split("\t")
+              if len(fields) != int(fmt["record_field_count"]):
+                  raise RuntimeError(f"field count mismatch at physical line {physical_line}: {len(fields)}")
+              if fields[int(fmt["record_type_index"])] != fmt["required_record_type"]:
+                  raise RuntimeError(f"record type mismatch at line {physical_line}")
+              if fields[int(fmt["icon_index"])] != fmt["required_icon"]:
+                  raise RuntimeError(f"icon mismatch at line {physical_line}")
+              node=fields[int(fmt["node_name_index"])].strip()
+              try:
+                  lat=float(fields[int(fmt["latitude_index"])])
+                  lon=float(fields[int(fmt["longitude_index"])])
+              except Exception as exc:
+                  raise RuntimeError(f"coordinate parse failed at line {physical_line}: {exc!r}")
+              if not node or not math.isfinite(lat) or not math.isfinite(lon):
+                  raise RuntimeError(f"invalid node/coordinate at line {physical_line}")
+              if not geo["latitude_bounds"][0] <= lat <= geo["latitude_bounds"][1]:
+                  raise RuntimeError(f"latitude outside bounds at line {physical_line}")
+              if not geo["longitude_bounds"][0] <= lon <= geo["longitude_bounds"][1]:
+                  raise RuntimeError(f"longitude outside bounds at line {physical_line}")
+              rows.append((node,lat,lon))
+          if len(rows) != int(fmt["waypoint_record_count"]):
+              raise RuntimeError("waypoint record count mismatch")
+          node_ids=[r[0] for r in rows]
+          coords=[(r[1],r[2]) for r in rows]
+          if len(set(node_ids)) != len(node_ids):
+              raise RuntimeError("duplicate waypoint names in frozen registry")
+          if len(set(coords)) != len(coords):
+              raise RuntimeError("duplicate coordinate pairs in frozen registry")
+
+          radius=float(geo["earth_radius_km"])
+          lat=np.radians(np.array([r[1] for r in rows],dtype=float))
+          lon=np.radians(np.array([r[2] for r in rows],dtype=float))
+          dlat=lat[:,None]-lat[None,:]
+          dlon=lon[:,None]-lon[None,:]
+          a=np.sin(dlat/2)**2 + np.cos(lat[:,None])*np.cos(lat[None,:])*np.sin(dlon/2)**2
+          a=np.clip(a,0.0,1.0)
+          distance=2*radius*np.arcsin(np.sqrt(a))
+          np.fill_diagonal(distance,0.0)
+          decl=StructuralScaleLadderDeclaration(
+              axis_id="peck_ranch_glade_waypoint_haversine_km",
+              target_largest_component_fractions=tuple(float(v) for v in geo["scale_targets_lcc"]),
+          )
+          ladder=build_structural_scale_ladder(node_ids,distance,decl)
+          thresholds=[float(v) for v in ladder.thresholds]
+          distinct=sorted({round(v,12) for v in thresholds if v > 0})
+          levels=[{
+              "level_id":x.level_id,
+              "target_lcc":x.target_largest_component_fraction,
+              "distance_threshold_km":x.distance_threshold,
+              "achieved_lcc":x.achieved_largest_component_fraction,
+              "weak_component_count":x.weak_component_count,
+              "isolated_node_fraction":x.isolated_node_fraction,
+              "directed_edge_count":x.directed_edge_count,
+              "fingerprint":x.fingerprint,
+          } for x in ladder.levels]
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"structural_geometry_pass" if len(distinct)>=int(geo["minimum_distinct_positive_thresholds"]) else "stop_structural_scale_collapse",
+              "node_count":len(node_ids),
+              "unique_node_count":len(set(node_ids)),
+              "unique_coordinate_pair_count":len(set(coords)),
+              "latitude_range":[min(r[1] for r in rows),max(r[1] for r in rows)],
+              "longitude_range":[min(r[2] for r in rows),max(r[2] for r in rows)],
+              "thresholds_km":thresholds,
+              "distinct_positive_threshold_count":len(distinct),
+              "minimum_distinct_positive_thresholds":int(geo["minimum_distinct_positive_thresholds"]),
+              "levels":levels,
+              "ladder_fingerprint":ladder.fingerprint,
+              "gps_payload_requests":1,
+              "gps_payload_bytes_opened":len(payload),
+              "pdf_payload_requests":0,
+              "capture_workbook_requests":0,
+              "capture_workbook_bytes_opened":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0
+          }
+          Path("build/peck_ranch_lizard_geometry/structural_geometry.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True))
+          if result["status"] != "structural_geometry_pass":
+              raise SystemExit(3)
+          PY
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/peck_ranch_lizard_geometry/structural_geometry.json")
+          if not p.exists():
+              raise SystemExit("structural geometry artifact missing")
+          r=json.loads(p.read_text())
+          assert r["pdf_payload_requests"] == 0
+          assert r["capture_workbook_requests"] == 0
+          assert r["capture_workbook_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck Ranch structural geometry response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: peck-ranch-lizard-structural-geometry
+          path: build/peck_ranch_lizard_geometry/structural_geometry.json
+          if-no-files-found: error
