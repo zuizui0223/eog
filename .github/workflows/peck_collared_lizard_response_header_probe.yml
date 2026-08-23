@@ -1,0 +1,135 @@
+name: Peck collared lizard bounded response header probe
+
+on:
+  push:
+    branches:
+      - agent/peck-collared-lizard-preflight
+    paths:
+      - ".github/workflows/peck_collared_lizard_response_header_probe.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/response_header_probe_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_collared_lizard_response_header_probe.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/response_header_probe_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  header-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read exactly one physical header record through one-byte Range requests
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_response_header
+          python - <<'PY'
+          from __future__ import annotations
+          import csv
+          import io
+          import json
+          from pathlib import Path
+          import urllib.error
+          import urllib.request
+
+          contract = json.loads(Path("validation/peck_collared_lizard_paired_complementarity/response_header_probe_contract.json").read_text())
+          resource = contract["resource"]
+          firewall = contract["firewall"]
+          maximum = int(firewall["max_first_record_bytes_including_terminator"])
+          url = resource["download_url"]
+          consumed = bytearray()
+          terminator = None
+          requests = 0
+
+          for offset in range(maximum):
+              req = urllib.request.Request(
+                  url,
+                  headers={
+                      "User-Agent": "EOG-Peck-response-header-firewall/1.0",
+                      "Range": f"bytes={offset}-{offset}",
+                      "Accept-Encoding": "identity",
+                  },
+              )
+              requests += 1
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as response:
+                      status = getattr(response, "status", None)
+                      content_range = response.headers.get("Content-Range")
+                      if status != 206:
+                          raise RuntimeError(f"server did not honor one-byte range at offset {offset}: status={status}")
+                      expected_prefix = f"bytes {offset}-{offset}/"
+                      if not isinstance(content_range, str) or not content_range.startswith(expected_prefix):
+                          raise RuntimeError(f"unexpected Content-Range at offset {offset}: {content_range!r}")
+                      value = response.read(2)
+              except urllib.error.HTTPError as exc:
+                  raise RuntimeError(f"header range request failed at offset {offset}: HTTP {exc.code}") from exc
+              if len(value) != 1:
+                  raise RuntimeError(f"one-byte range yielded {len(value)} bytes at offset {offset}")
+              if value == b"\r":
+                  terminator = "CR"
+                  break
+              if value == b"\n":
+                  terminator = "LF"
+                  break
+              consumed.extend(value)
+          if terminator is None:
+              raise RuntimeError(f"first physical record exceeds frozen bound {maximum}")
+
+          header_text = bytes(consumed).decode("utf-8", errors="strict")
+          rows = list(csv.reader(io.StringIO(header_text), delimiter="\t", strict=True))
+          if len(rows) != 1:
+              raise RuntimeError("header does not decode to exactly one tab-delimited record")
+          columns = [value.strip() for value in rows[0]]
+          if any(not value for value in columns):
+              raise RuntimeError("header contains empty column name")
+          if len(set(columns)) != len(columns):
+              raise RuntimeError("header contains duplicate column names")
+          expected_count = int(contract["documentation_expectation"]["semantic_column_count"])
+          if len(columns) != expected_count:
+              raise RuntimeError(f"header column count {len(columns)} != documented {expected_count}")
+
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "status": "bounded_physical_header_acquired",
+              "range_request_count": requests,
+              "bytes_before_terminator": len(consumed),
+              "bytes_consumed_including_terminator": len(consumed) + 1,
+              "terminator": terminator,
+              "header_text": header_text,
+              "observed_columns": columns,
+              "delimiter": "TAB",
+              "documented_semantic_column_count": expected_count,
+              "row_level_response_requests": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+          Path("build/peck_response_header/header_probe.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Assert header-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path("build/peck_response_header/header_probe.json").read_text())
+          assert r["status"] == "bounded_physical_header_acquired"
+          assert r["row_level_response_requests"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck bounded response-header firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: peck-collared-lizard-bounded-response-header
+          path: build/peck_response_header/header_probe.json
+          if-no-files-found: error
