@@ -1,0 +1,162 @@
+name: Morgan water vole response-blind source preflight
+
+on:
+  push:
+    branches:
+      - agent/morgan-water-vole-paired-complementarity
+    paths:
+      - ".github/workflows/morgan_water_vole_source_preflight.yml"
+      - "validation/morgan_water_vole_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/morgan_water_vole_source_preflight.yml"
+      - "validation/morgan_water_vole_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Freeze Dryad manifest without file payloads
+        run: |
+          set -euo pipefail
+          mkdir -p build/morgan_water_vole_source
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import urllib.parse
+          import urllib.request
+
+          contract = json.loads(Path("validation/morgan_water_vole_paired_complementarity/source_contract.json").read_text())
+          doi = contract["scientific_anchor"]["doi"]
+          expected = set(contract["allowed_nonresponse_files"] + contract["forbidden_response_files"])
+          root = "https://datadryad.org"
+          api = root + "/api/v2"
+          requested = []
+
+          def absolute(url: str) -> str:
+              return urllib.parse.urljoin(root + "/", url)
+
+          def get_json(url: str, cap: int = 5_000_000):
+              url = absolute(url)
+              requested.append(url)
+              req = urllib.request.Request(url, headers={"User-Agent":"EOG-Morgan-water-vole-source-freeze/1.0","Accept":"application/json"})
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  body = response.read(cap + 1)
+                  status = getattr(response, "status", None)
+              if status != 200 or len(body) > cap:
+                  raise RuntimeError(f"metadata request failed bounded checks: {status} {url}")
+              value = json.loads(body.decode("utf-8"))
+              if not isinstance(value, dict):
+                  raise RuntimeError("Dryad metadata root must be object")
+              return value
+
+          def link(obj: dict, *names: str):
+              links = obj.get("_links")
+              if not isinstance(links, dict):
+                  return None
+              for name in names:
+                  value = links.get(name)
+                  if isinstance(value, dict) and value.get("href"):
+                      return absolute(str(value["href"]))
+              return None
+
+          encoded = urllib.parse.quote(f"doi:{doi}", safe="")
+          dataset_url = f"{api}/datasets/{encoded}"
+          dataset = get_json(dataset_url)
+          version_url = link(dataset, "stash:version", "version")
+          version = get_json(version_url) if version_url else dataset
+          files_url = link(version, "stash:files", "files") or link(dataset, "stash:files", "files")
+          if not files_url:
+              raise RuntimeError("Dryad metadata did not expose files endpoint")
+
+          rows = []
+          next_url = files_url
+          seen = set()
+          while next_url and next_url not in seen:
+              seen.add(next_url)
+              page = get_json(next_url)
+              embedded = page.get("_embedded", {})
+              page_rows = embedded.get("stash:files") if isinstance(embedded, dict) else None
+              if page_rows is None and isinstance(embedded, dict):
+                  page_rows = embedded.get("files")
+              if not isinstance(page_rows, list):
+                  raise RuntimeError("Dryad files page did not expose file list")
+              rows.extend(item for item in page_rows if isinstance(item, dict))
+              next_url = link(page, "next")
+
+          files = []
+          for row in rows:
+              raw_name = row.get("path") or row.get("fileName") or row.get("name")
+              name = Path(str(raw_name or "")).name
+              if not name:
+                  raise RuntimeError("Dryad file record missing name")
+              files.append({
+                  "name": name,
+                  "size": int(row.get("size") or 0),
+                  "digest": row.get("digest"),
+                  "digest_type": row.get("digestType"),
+                  "mime_type": row.get("mimeType"),
+                  "api_self": link(row, "self"),
+                  "api_download": link(row, "stash:download", "download"),
+              })
+
+          names = {row["name"] for row in files}
+          if names != expected:
+              raise RuntimeError(f"frozen nine-file inventory mismatch: missing={sorted(expected-names)} extra={sorted(names-expected)}")
+          if any(row["size"] <= 0 for row in files):
+              raise RuntimeError("file metadata contains non-positive size")
+          if any(not row["digest"] for row in files):
+              raise RuntimeError("file metadata contains missing digest")
+
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "doi": doi,
+              "dataset_api": dataset_url,
+              "version_api": version_url,
+              "version_id": version.get("id"),
+              "version_number": version.get("versionNumber") or version.get("version"),
+              "publication_date": version.get("publicationDate") or dataset.get("publicationDate"),
+              "files": sorted(files, key=lambda row: row["name"]),
+              "requested_metadata_urls": requested,
+              "metadata_requests": len(requested),
+              "file_payload_requests": 0,
+              "file_payload_bytes_opened": 0,
+              "response_header_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+          Path("build/morgan_water_vole_source/source_manifest.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path("build/morgan_water_vole_source/source_manifest.json").read_text())
+          assert result["file_payload_requests"] == 0
+          assert result["file_payload_bytes_opened"] == 0
+          assert result["response_header_bytes_opened"] == 0
+          assert result["response_rows_opened"] is False
+          assert result["response_values_opened"] is False
+          assert result["model_fits"] == 0
+          assert result["heldout_scores"] == 0
+          print("Morgan water vole metadata-only response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: morgan-water-vole-source-manifest
+          path: build/morgan_water_vole_source/source_manifest.json
+          if-no-files-found: error
