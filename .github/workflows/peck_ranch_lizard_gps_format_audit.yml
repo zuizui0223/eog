@@ -1,0 +1,109 @@
+name: Peck Ranch collared lizard GPS-only format audit
+
+on:
+  push:
+    branches:
+      - agent/peck-ranch-lizard-preflight
+    paths:
+      - ".github/workflows/peck_ranch_lizard_gps_format_audit.yml"
+      - "validation/peck_ranch_lizard_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_ranch_lizard_gps_format_audit.yml"
+      - "validation/peck_ranch_lizard_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gps-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download and verify only frozen GPS waypoint text
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_ranch_lizard_gps
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          import urllib.request
+
+          contract=json.loads(Path("validation/peck_ranch_lizard_paired_complementarity/source_contract.json").read_text())
+          spec=contract["zenodo_geometry_manifest"]
+          req=urllib.request.Request(spec["content_url"],headers={"User-Agent":"EOG-Peck-Ranch-GPS-only/1.0"})
+          with urllib.request.urlopen(req,timeout=60) as response:
+              payload=response.read(int(spec["size"])+1)
+              status=getattr(response,"status",None)
+          if status != 200:
+              raise RuntimeError(f"GPS download returned {status}")
+          if len(payload) != int(spec["size"]):
+              raise RuntimeError(f"GPS byte mismatch {len(payload)} != {spec['size']}")
+          md5=hashlib.md5(payload).hexdigest()
+          if md5 != spec["md5"]:
+              raise RuntimeError(f"GPS MD5 mismatch {md5}")
+          # This is response-independent geometry documentation. Preserve exact decoded
+          # text only to resolve its physical waypoint format before freezing a parser.
+          encoding=None
+          text=None
+          for candidate in ("utf-8-sig","cp1252","latin-1"):
+              try:
+                  text=payload.decode(candidate,errors="strict")
+                  encoding=candidate
+                  break
+              except UnicodeDecodeError:
+                  continue
+          if text is None:
+              raise RuntimeError("GPS text did not decode under bounded candidate encodings")
+          lines=text.splitlines()
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":"gps_identity_and_format_open_pass",
+              "observed_bytes":len(payload),
+              "observed_md5":md5,
+              "encoding":encoding,
+              "line_count":len(lines),
+              "nonempty_line_count":sum(bool(line.strip()) for line in lines),
+              "lines":lines,
+              "gps_payload_requests":1,
+              "gps_payload_bytes_opened":len(payload),
+              "pdf_payload_requests":0,
+              "capture_workbook_requests":0,
+              "capture_workbook_bytes_opened":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0
+          }
+          Path("build/peck_ranch_lizard_gps/gps_format_audit.json").write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
+          PY
+      - name: Assert GPS-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("build/peck_ranch_lizard_gps/gps_format_audit.json").read_text())
+          assert r["gps_payload_requests"] == 1
+          assert r["pdf_payload_requests"] == 0
+          assert r["capture_workbook_requests"] == 0
+          assert r["capture_workbook_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck Ranch GPS-only response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: peck-ranch-lizard-gps-format-audit
+          path: build/peck_ranch_lizard_gps/gps_format_audit.json
+          if-no-files-found: error
