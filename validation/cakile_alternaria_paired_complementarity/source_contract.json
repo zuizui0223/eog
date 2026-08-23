@@ -1,0 +1,64 @@
+{
+  "attempt_id": "cakile_alternaria_fresh_paired_v1",
+  "candidate": "Cakile maritima–Alternaria brassicicola NSW coastal metapopulation, 1998–2003",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "selected_after_metadata_audit_pr": 262,
+    "metadata_audit_opened_file_payloads": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "collection": "csiro:45524",
+    "collection_version": 2,
+    "dataset_doi": "10.25919/2ycw-sf27",
+    "paper_doi": "10.1086/712248",
+    "focal_endpoint": "one-census-ahead Alternaria occurrence at each fixed potential beach population",
+    "published_design": "61 potential Cakile/Alternaria populations defined from identifiable beach habitats in three NSW coastal subregions; censused approximately every 6 weeks for 5 years from July 1998, 42 censuses total",
+    "subregion_counts": {"DU": 23, "MB": 15, "CT": 23},
+    "expected_node_count": 61,
+    "expected_census_count": 42,
+    "process_boundary": "Pathogen occurrence is host-dependent and influenced by local persistence plus nonlocal dispersal among beach populations. The prospective world family will represent alternative distance-limited internal dispersal scales plus a full-support world; no world will be called the true historical route and no claim is made that immigration from outside the 61-beach universe is biologically impossible."
+  },
+  "exact_collection_file_metadata": {
+    "response_summary": {
+      "name": "Cakile_98_03_Metapop_Summary.xls",
+      "bytes": 38400,
+      "download_url": "https://data.csiro.au/dap/ws/v2/collections/46047/data/56910051",
+      "role": "FORBIDDEN until all response-blind gates and outcome-access freeze are complete"
+    },
+    "interpopulation_distances": {
+      "name": "Cakile_Interpop_Dists.xls",
+      "bytes": 31744,
+      "download_url": "https://data.csiro.au/dap/ws/v2/collections/46047/data/56910050",
+      "role": "response-independent distance/registry resource; may be opened now"
+    }
+  },
+  "distance_workbook_contract": {
+    "use_all_nonempty_sheets": true,
+    "trailing_blank_rule": "rows and columns that are completely blank across the used sheet rectangle may be trimmed; no nonblank row/column may be dropped",
+    "accepted_matrix_layout": "after blank-edge trimming, each nonempty sheet must be a labeled square distance matrix: top row excluding corner contains node labels, left column excluding corner contains the same labels in the same order, numeric body is finite symmetric with zero diagonal",
+    "node_union_rule": "matrix node labels across nonempty sheets must be disjoint and their union must contain exactly 61 unique nonempty labels",
+    "distance_units": "use workbook numeric units as published; do not rescale or infer biological dispersal distance",
+    "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "no_post_open_layout_reinterpretation": true,
+    "no_node_filtering_or_alias_repair": true
+  },
+  "future_response_contract_boundary": {
+    "summary_payload_access_allowed": false,
+    "summary_header_access_allowed": false,
+    "provisional_split_rule": "freeze exact census indices only after response-independent workbook/documentation confirms the 42-census physical organization; do not inspect population outcomes to choose the split",
+    "reserved_count_minima": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    },
+    "learner_boundary": "same frozen strong random-forest learner in baseline and augmented arms; only unchanged 10-column Layer B may differ",
+    "outcome_access_authorized": false
+  }
+}
