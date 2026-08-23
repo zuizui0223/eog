@@ -1,0 +1,73 @@
+{
+  "attempt_id": "kerguelen_trout_fresh_paired_v1",
+  "candidate": "Salmo trutta invasion of Kerguelen hydrographic systems, 1954–2012",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "selected_after_yosemite_pr": 268,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "paper_doi": "10.1371/journal.pone.0071052",
+    "focal_taxon": "Salmo trutta",
+    "published_patch_count": 85,
+    "published_monitoring_years": [1954, 2012],
+    "published_natural_inference_years": 51,
+    "published_source_history": "brown trout successfully introduced into 6 hydrographic systems, secondarily transported to 3 additional systems, and naturally colonized 32 new systems",
+    "published_process": "anadromous trout leave already colonized rivers and disperse through the marine environment to reproduce in new hydrographic systems; no local extinction was documented after successful reproduction",
+    "node_frame_note": "the paper analyzes 85 contiguous river systems; the monitoring zone expanded historically following introduction attempts. This attempt does not yet claim temporally complete availability and must freeze a response-independent availability/source ledger before outcome access or stop."
+  },
+  "exact_public_supplements": {
+    "distance_appendix": {
+      "doi": "10.1371/journal.pone.0071052.s007",
+      "name": "Appendix S2",
+      "role": "response-independent distance matrices for alternative dispersal scenarios",
+      "download_url": "https://journals.plos.org/plosone/article/file?type=supplementary&id=info:doi/10.1371/journal.pone.0071052.s007",
+      "payload_access_allowed": true
+    },
+    "colonization_appendix": {
+      "doi": "10.1371/journal.pone.0071052.s006",
+      "name": "Appendix S1",
+      "role": "river colonization response and introduction/uncertainty data",
+      "download_url": "https://journals.plos.org/plosone/article/file?type=supplementary&id=info:doi/10.1371/journal.pone.0071052.s006",
+      "payload_access_allowed": false
+    }
+  },
+  "distance_gate_contract": {
+    "purpose": "before any colonization-response access, determine whether the official distance supplement has a deterministic born-digital representation sufficient to recover the complete 85-node matrices without OCR, figure tracing, or manual node alias repair",
+    "accepted_document_identity": "HTTP 200 application/pdf with PDF magic; freeze exact byte size and SHA-256 on first retrieval",
+    "text_extraction_rule": "use pdftotext -layout only; OCR is forbidden; no visual/manual transcription is used to construct geometry",
+    "required_node_labels": "the extracted appendix must expose a consistent 1..85 or equivalent explicit 85-label sequence for each accepted matrix without fuzzy aliases",
+    "required_scenarios": ["stepping_stone", "coastal_1km", "shortest_path_5km"],
+    "matrix_rule": "each accepted scenario must recover exactly 85 x 85 finite non-negative values, a zero diagonal, and a symmetric matrix from the official extracted text under one parser frozen before colonization response access",
+    "minimum_usable_matrices": 3,
+    "no_ocr": true,
+    "no_manual_table_reconstruction": true,
+    "no_post_open_pdf_layout_reinterpretation": true
+  },
+  "preflight_minima": {
+    "minimum_nodes": 50,
+    "minimum_outer_units": 4,
+    "minimum_repeated_nodes": 50,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": false,
+    "require_closed_analysis_registry": true
+  },
+  "future_endpoint_boundary": {
+    "provisional_split": "calendar split 1962–1986 calibration and 1987–2012 heldout, frozen before colonization Appendix S1 is opened; this split is not tuned to observed colonization counts",
+    "prospective_estimability": "uncertain_pre_response; published total natural colonizations = 32 but split-specific counts are not inspected before outcome access",
+    "reserved_count_minima": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    },
+    "source_rule_requirement": "all known artificial introductions/secondary transports and response-independent monitoring availability must be represented before outcome access; if the public documentation cannot freeze them without reading colonization outcomes, stop",
+    "learner_boundary": "same frozen strong random forest and same conventional features in both arms; augmented arm adds only unchanged symmetric_world_support_summary_v1",
+    "colonization_response_payload_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
