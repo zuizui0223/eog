@@ -1,0 +1,229 @@
+name: Peck collared lizard founder-source closure
+
+on:
+  push:
+    branches:
+      - agent/peck-collared-lizard-preflight
+    paths:
+      - ".github/workflows/peck_collared_lizard_source_closure.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+      - "validation/peck_collared_lizard_paired_complementarity/node_identity_contract.json"
+      - "validation/peck_collared_lizard_paired_complementarity/process_source_contract.json"
+      - "src/eog/v2/temporal_source_closure.py"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_collared_lizard_source_closure.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+      - "validation/peck_collared_lizard_paired_complementarity/node_identity_contract.json"
+      - "validation/peck_collared_lizard_paired_complementarity/process_source_contract.json"
+      - "src/eog/v2/temporal_source_closure.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  founder-source-closure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package
+        run: python -m pip install -e .
+      - name: Evaluate frozen founder-source worlds without population outcomes
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_source_closure
+          python - <<'PY'
+          from __future__ import annotations
+          from collections import defaultdict
+          import hashlib
+          import json
+          import math
+          from pathlib import Path
+          import re
+          import urllib.request
+
+          import numpy as np
+          from eog.v2.temporal_source_closure import TemporalSourceClosureDeclaration, evaluate_temporal_source_closure
+
+          root = Path("validation/peck_collared_lizard_paired_complementarity")
+          source = json.loads((root / "source_contract.json").read_text())
+          node_contract = json.loads((root / "node_identity_contract.json").read_text())
+          process = json.loads((root / "process_source_contract.json").read_text())
+          spec = source["exact_resource_manifest"]["gps_registry"]
+          out = Path("build/peck_source_closure/result.json")
+
+          result = {
+              "attempt_id": source["attempt_id"],
+              "status": "not_evaluated",
+              "gps_requests": 0,
+              "gps_bytes_opened": 0,
+              "population_size_response_requests": 0,
+              "population_size_response_bytes_opened": 0,
+              "response_header_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+
+          def finish(status: str, **extra):
+              result.update(extra)
+              result["status"] = status
+              out.write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n")
+              print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
+
+          req = urllib.request.Request(spec["download_url"], headers={"User-Agent":"EOG-Peck-source-closure/1.0"})
+          result["gps_requests"] = 1
+          with urllib.request.urlopen(req, timeout=60) as response:
+              payload = response.read(int(spec["bytes"]) + 1)
+              status = getattr(response, "status", None)
+          if status != 200 or len(payload) != int(spec["bytes"]) or hashlib.md5(payload).hexdigest() != spec["md5"]:
+              finish("stop_nonresponse_transport_or_identity")
+              raise SystemExit(3)
+          result["gps_bytes_opened"] = len(payload)
+
+          physical_re = re.compile(node_contract["analysis_node_rule"]["physical_waypoint_regex"])
+          groups = defaultdict(list)
+          for line_number, line in enumerate(payload.decode("utf-8-sig").splitlines()[2:], start=3):
+              if not line.strip():
+                  finish("stop_analysis_registry_not_closed", reason=f"blank GPS row {line_number}")
+                  raise SystemExit(3)
+              fields = line.split("\t")
+              if len(fields) != 9 or fields[0].strip() != "W":
+                  finish("stop_analysis_registry_not_closed", reason=f"bad GPS row {line_number}")
+                  raise SystemExit(3)
+              name = fields[1].strip().upper()
+              if not name.startswith("SM"):
+                  continue
+              match = physical_re.fullmatch(name)
+              if not match:
+                  finish("stop_analysis_registry_not_closed", reason=f"bad Stegall name {name}")
+                  raise SystemExit(3)
+              lat = float(fields[4].strip())
+              lon = float(fields[5].strip())
+              if not (math.isfinite(lat) and math.isfinite(lon)):
+                  finish("stop_analysis_registry_not_closed", reason=f"bad coordinate {name}")
+                  raise SystemExit(3)
+              groups[f"SM{match.group(1)}"].append((lat, lon))
+
+          node_ids = sorted(groups, key=lambda v: int(v[2:]))
+          representatives = []
+          for node_id in node_ids:
+              rows = groups[node_id]
+              lat_r = np.radians(np.asarray([r[0] for r in rows], dtype=float))
+              lon_r = np.radians(np.asarray([r[1] for r in rows], dtype=float))
+              xyz = np.asarray([
+                  np.mean(np.cos(lat_r) * np.cos(lon_r)),
+                  np.mean(np.cos(lat_r) * np.sin(lon_r)),
+                  np.mean(np.sin(lat_r)),
+              ], dtype=float)
+              xyz /= np.linalg.norm(xyz)
+              representatives.append((math.degrees(math.asin(float(xyz[2]))), math.degrees(math.atan2(float(xyz[1]), float(xyz[0])))))
+
+          if len(node_ids) != 53:
+              finish("stop_analysis_registry_not_closed", reason="frozen documented aggregation no longer yields 53 Stegall glades", node_count=len(node_ids))
+              raise SystemExit(3)
+
+          lat = np.radians(np.asarray([p[0] for p in representatives], dtype=float))
+          lon = np.radians(np.asarray([p[1] for p in representatives], dtype=float))
+          dlat = lat[:,None] - lat[None,:]
+          dlon = lon[:,None] - lon[None,:]
+          a = np.sin(dlat/2)**2 + np.cos(lat[:,None])*np.cos(lat[None,:])*np.sin(dlon/2)**2
+          a = np.clip(a, 0.0, 1.0)
+          distance = 2.0 * 6371.0088 * np.arcsin(np.sqrt(a))
+          np.fill_diagonal(distance, 0.0)
+
+          founders = set(process["known_founder_source_glades"])
+          missing_founders = sorted(founders.difference(node_ids))
+          if missing_founders:
+              finish("stop_analysis_registry_not_closed", reason="founder glades absent from registry", missing_founders=missing_founders)
+              raise SystemExit(3)
+          initial = np.asarray([node_id in founders for node_id in node_ids], dtype=bool)
+          transitions = process["annual_transition_years"]
+          n_t = len(transitions)
+          persistence = np.ones((len(node_ids), n_t), dtype=bool)
+          target_eligible = np.ones((len(node_ids), n_t), dtype=bool)
+          heldout_start_index = next(i for i, pair in enumerate(transitions) if int(pair[1]) == int(process["heldout_start_year"])) + 1
+
+          world_results = []
+          all_nodes_by_heldout = []
+          for world_index, threshold in enumerate(process["world_thresholds_km"]):
+              adjacency = distance <= float(threshold) + 1e-12
+              np.fill_diagonal(adjacency, False)
+              declaration = TemporalSourceClosureDeclaration(
+                  closure_id=f"peck_founder_source_world_{world_index}",
+                  source_semantics="known founder glades SM7/SM8/SM9 at 1995; persistence and all allowed internal-source paths are admitted simultaneously",
+                  transition_semantics=f"one undirected edge per annual transition at frozen distance threshold {threshold} km; fire stage is a common conventional predictor, not a Layer-B edge retuning",
+              )
+              closure = evaluate_temporal_source_closure(
+                  declaration,
+                  node_ids,
+                  initial,
+                  persistence,
+                  target_eligible,
+                  adjacency,
+              )
+              count_by_heldout = int(closure.possible_source_counts[heldout_start_index])
+              reaches_all = count_by_heldout == len(node_ids)
+              if reaches_all:
+                  all_nodes_by_heldout.append(world_index)
+              world_results.append({
+                  "world_index": world_index,
+                  "threshold_km": float(threshold),
+                  "closure_status": closure.status,
+                  "closure_passed": closure.passed,
+                  "possible_source_counts": list(closure.possible_source_counts),
+                  "possible_at_heldout_start": count_by_heldout,
+                  "all_nodes_reachable_by_heldout_start": reaches_all,
+                  "final_possible_count": len(closure.final_possible_node_ids),
+                  "closure_fingerprint": closure.fingerprint,
+              })
+
+          if not all_nodes_by_heldout:
+              finish(
+                  "stop_temporal_source_closure_gap",
+                  reason="no frozen geographic world can reach every declared Stegall glade from SM7/SM8/SM9 by heldout start 2000 under the prospective annual propagation rule",
+                  node_count=len(node_ids),
+                  heldout_start_index=heldout_start_index,
+                  world_results=world_results,
+              )
+              raise SystemExit(3)
+
+          finish(
+              "temporal_source_closure_pass",
+              node_count=len(node_ids),
+              founders=sorted(founders),
+              transition_count=n_t,
+              heldout_start_index=heldout_start_index,
+              worlds_reaching_all_nodes_by_heldout_start=all_nodes_by_heldout,
+              world_results=world_results,
+              process_source_contract_fingerprint=hashlib.sha256((root / "process_source_contract.json").read_bytes()).hexdigest(),
+          )
+          PY
+      - name: Assert outcome firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path("build/peck_source_closure/result.json").read_text())
+          assert r["population_size_response_requests"] == 0
+          assert r["population_size_response_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck founder-source closure response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: peck-collared-lizard-founder-source-closure
+          path: build/peck_source_closure/result.json
+          if-no-files-found: error
