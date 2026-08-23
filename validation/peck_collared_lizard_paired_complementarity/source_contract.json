@@ -1,0 +1,61 @@
+{
+  "attempt_id": "peck_collared_lizard_fresh_paired_v1",
+  "candidate": "Crotaphytus collaris Peck Ranch/Stegall Mountain metapopulation",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "zenodo_record": 15557864,
+    "zenodo_expected_title": "Peck ranch collared lizard files",
+    "ecological_archives_figshare_collection": 3304128,
+    "paper_doi": "10.1890/10-1994.1",
+    "focal_taxon": "Crotaphytus collaris collaris",
+    "analysis_mountain": "Stegall Mountain",
+    "provisional_window": "1995-2006",
+    "window_reason": "published field protocol reports at least three visits per glade per field season on Stegall from 1995-2006; no human-assisted translocations occurred after the original 1984/1987/1989 releases",
+    "provisional_calibration_transitions": ["1995->1996", "1996->1997", "1997->1998", "1998->1999", "1999->2000"],
+    "provisional_heldout_transitions": ["2000->2001", "2001->2002", "2002->2003", "2003->2004", "2004->2005", "2005->2006"],
+    "source_process_claim": "after the last human-assisted release in 1989, colonisation/recolonisation on Stegall is conditioned on occupied glades in the mapped Stegall glade universe; woodland burn management is a known time-varying external condition and must be represented prospectively or the candidate stops before response"
+  },
+  "prospective_endpoint": {
+    "unit": "Stegall glade-year",
+    "state": "occupied if the frozen annual glade population-size source records positive estimated population size; otherwise zero may be assigned only when the complete glade registry and published annual all-glade survey coverage jointly certify that omission represents a surveyed non-detection",
+    "event": "survey-certified zero at t to occupied at t+1",
+    "non_event": "survey-certified zero at t to survey-certified zero at t+1",
+    "missing_or_unsurveyed": "exclude only if prospectively documented as unsurveyed before response; otherwise stop",
+    "no_capture_row_inference": "do not infer surveyed zero merely from absence of an individual capture row"
+  },
+  "preflight_minima": {
+    "minimum_nodes": 50,
+    "minimum_outer_units": 4,
+    "minimum_repeated_nodes": 50,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "count_minima": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 4
+  },
+  "metadata_only_resource_roles": {
+    "glade_registry_required": "Zenodo supplementary PECK GLADE GPS WAYPOINTS; must be independently addressable and must be documented as the glades in the study, not only occupied glades",
+    "capture_workbook_forbidden": "PECK RANCH COLLARED LIZARD DATA workbook remains outcome-bearing and unopened",
+    "population_size_response_required": "Ecological Archives E092-148-S1; estimated population sizes per glade/year of occupation; payload remains unopened until complete zero semantics and full freeze are established",
+    "expansion_maps_forbidden_as_geometry": "E092-148-A2 / maps encode colonisation outcomes and may not define the node universe"
+  },
+  "metadata_gate": {
+    "zenodo_file_payload_requests_allowed": false,
+    "figshare_file_payload_requests_allowed": false,
+    "require_unique_gps_resource": true,
+    "require_unique_s1_resource": true,
+    "response_header_access_allowed": false,
+    "response_payload_access_allowed": false
+  }
+}
