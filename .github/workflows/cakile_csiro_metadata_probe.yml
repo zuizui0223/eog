@@ -1,0 +1,192 @@
+name: Cakile CSIRO metadata-only probe
+
+on:
+  push:
+    branches:
+      - agent/cakile-csiro-metadata-probe
+    paths:
+      - ".github/workflows/cakile_csiro_metadata_probe.yml"
+      - "validation/cakile_alternaria_csiro_metadata_probe/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Query CSIRO public metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/cakile_csiro_metadata
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import urllib.parse
+          import urllib.request
+          import urllib.error
+
+          contract = json.loads(Path(
+              "validation/cakile_alternaria_csiro_metadata_probe/source_contract.json"
+          ).read_text())
+          base = "https://data.csiro.au/dap/ws/v2"
+          ua = "EOG-crawler-Cakile-metadata-probe/1.0"
+          requests_made = []
+
+          def get(url: str, cap: int = 8_000_000):
+              requests_made.append(url)
+              req = urllib.request.Request(
+                  url, headers={"Accept": "application/json", "User-Agent": ua}
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=40) as response:
+                      body = response.read(cap + 1)
+                      status = getattr(response, "status", None)
+                      ctype = response.headers.get("Content-Type")
+              except urllib.error.HTTPError as exc:
+                  return {"ok": False, "status": exc.code, "url": url, "error": repr(exc)}
+              except Exception as exc:
+                  return {"ok": False, "status": None, "url": url, "error": repr(exc)}
+              if len(body) > cap:
+                  return {"ok": False, "status": status, "url": url, "error": "metadata cap exceeded"}
+              try:
+                  data = json.loads(body.decode("utf-8"))
+              except Exception as exc:
+                  return {"ok": False, "status": status, "url": url, "content_type": ctype, "error": f"non-JSON: {exc!r}"}
+              return {"ok": True, "status": status, "url": url, "content_type": ctype, "data": data}
+
+          searches = []
+          candidates = {}
+          for term in contract["search_terms"]:
+              q = urllib.parse.urlencode({
+                  "q": term,
+                  "searchType": "INTERSECTION",
+                  "p": 1,
+                  "rpp": 100,
+                  "soud": "off",
+                  "sb": "TITLE",
+                  "showFacets": "false",
+                  "atom": "false",
+              })
+              url = f"{base}/collections/searchbylocation?{q}"
+              res = get(url)
+              searches.append({k: v for k, v in res.items() if k != "data"})
+              if not res.get("ok"):
+                  continue
+              data = res["data"]
+              rows = data.get("dataCollections", []) if isinstance(data, dict) else []
+              for row in rows:
+                  if not isinstance(row, dict):
+                      continue
+                  blob = json.dumps(row, ensure_ascii=False).casefold()
+                  if "cakile" not in blob and "alternaria" not in blob:
+                      continue
+                  ident_obj = row.get("id")
+                  if isinstance(ident_obj, dict):
+                      ident = str(ident_obj.get("identifier") or ident_obj.get("id") or "").strip()
+                  else:
+                      ident = str(ident_obj or "").strip()
+                  key = ident or str(row.get("landingPage") or row.get("title") or len(candidates))
+                  candidates[key] = row
+
+          details = {}
+          for key, row in candidates.items():
+              ident = key if key else ""
+              if not ident or ident.startswith("http"):
+                  continue
+              encoded = urllib.parse.quote(ident, safe=":")
+              probes = [
+                  f"{base}/collections/{encoded}",
+                  f"{base}/collections/{encoded}/metadata",
+                  f"{base}/collections/{encoded}/metadata/schemaOrg.json",
+                  f"{base}/collections/{encoded}/metadata/csmd.json",
+              ]
+              details[key] = []
+              for url in probes:
+                  res = get(url)
+                  details[key].append(res)
+
+          def interesting(value, path=""):
+              out = []
+              if isinstance(value, dict):
+                  for k, v in value.items():
+                      p = f"{path}.{k}" if path else str(k)
+                      low = str(k).casefold()
+                      if any(token in low for token in ("file", "distribution", "resource", "download", "landing", "identifier", "title", "doi", "handle", "version")):
+                          out.append([p, v])
+                      out.extend(interesting(v, p))
+              elif isinstance(value, list):
+                  for i, v in enumerate(value[:500]):
+                      out.extend(interesting(v, f"{path}[{i}]"))
+              return out
+
+          compact_details = {}
+          for key, probes in details.items():
+              compact_details[key] = []
+              for res in probes:
+                  entry = {k: v for k, v in res.items() if k != "data"}
+                  if res.get("ok"):
+                      entry["interesting_metadata"] = interesting(res["data"])
+                  compact_details[key].append(entry)
+
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "searches": searches,
+              "candidate_count": len(candidates),
+              "candidates": candidates,
+              "candidate_details": compact_details,
+              "metadata_requests": len(requests_made),
+              "requested_urls": requests_made,
+              "file_payload_requests": 0,
+              "file_payload_bytes_opened": 0,
+              "response_file_requests": 0,
+              "response_bytes_opened": 0,
+              "response_rows_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+          Path("build/cakile_csiro_metadata/inventory.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+          )
+          print(json.dumps({
+              "candidate_count": result["candidate_count"],
+              "metadata_requests": result["metadata_requests"],
+              "candidate_keys": sorted(candidates),
+              "file_payload_requests": 0,
+              "response_file_requests": 0,
+          }, indent=2, sort_keys=True))
+          if not candidates:
+              raise SystemExit("No Cakile/Alternaria collection resolved from public CSIRO search metadata")
+          PY
+      - name: Assert metadata-only firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("build/cakile_csiro_metadata/inventory.json")
+          if not path.exists():
+              raise SystemExit("metadata inventory missing")
+          result = json.loads(path.read_text())
+          assert result["file_payload_requests"] == 0
+          assert result["file_payload_bytes_opened"] == 0
+          assert result["response_file_requests"] == 0
+          assert result["response_bytes_opened"] == 0
+          assert result["response_rows_opened"] is False
+          assert result["model_fits"] == 0
+          assert result["heldout_scores"] == 0
+          print("Cakile CSIRO metadata-only firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cakile-csiro-metadata-only
+          path: build/cakile_csiro_metadata/inventory.json
+          if-no-files-found: error
