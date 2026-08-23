@@ -1,0 +1,40 @@
+{
+  "attempt_id": "peck_collared_lizard_fresh_paired_v1",
+  "frozen_before_population_response_access": true,
+  "response_rows_opened": false,
+  "response_values_opened": false,
+  "documentation_basis": {
+    "s1_wrapper": "E092-148-S1 is a tab-delimited file containing estimated population sizes for each glade for every year of occupation on Stegall, Mule, and Thorny Mountains.",
+    "dryad_readme_location_schema": "capture/recapture location is split into Column C = glade and Column D = section of glade; some glades were subdivided into sections while others were not; map files label glade number and sometimes section letter.",
+    "zenodo_gps_methods": "latitude and longitude of central glade positions were taken with a handheld Garmin GPS and downloaded directly from the device.",
+    "published_unit_examples": "founder populations are referred to as glades SM7, SM8, and SM9, whereas the GPS physical file contains suffixed waypoints such as SM7B, SM7F, SM7K, SM7L, SM7M, and SM7N."
+  },
+  "analysis_node_rule": {
+    "mountain_prefix": "SM",
+    "physical_waypoint_regex": "^SM([0-9]+)([A-Z]*)$",
+    "glade_id_rule": "for every frozen Stegall GPS waypoint, analysis glade ID is the literal prefix SM plus the captured digit group; the optional trailing uppercase letters are treated only as the documented section label and are not separate glades",
+    "no_fuzzy_aliasing": true,
+    "no_response_derived_mapping": true,
+    "all_matching_waypoints_must_be_used": true
+  },
+  "representative_coordinate_rule": {
+    "status": "analyst_choice_response_independent_geometry",
+    "method": "unit-sphere mean of every GPS section-centre waypoint assigned to the same analysis glade, converted back to latitude/longitude",
+    "reason": "the public GPS source provides central positions for glades/sections but no separate whole-glade centroid for subdivided glades; the deterministic spherical mean preserves all response-independent section coordinates without selecting a section using outcome data",
+    "claim_boundary": "representative coordinates are not claimed to be official biological glade centroids and structural thresholds remain analyst-choice scales"
+  },
+  "structural_scale_rule": {
+    "distance": "great-circle haversine kilometres between frozen representative glade coordinates, Earth radius 6371.0088 km",
+    "target_lcc_fractions": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "no_post_geometry_retuning": true
+  },
+  "supersession": {
+    "waypoint_node_count": 101,
+    "waypoint_ladder_fingerprint": "f5f7b8c7505fe83df9f9dbbad4124c738ae2434541d8dcc8552842f80a0f6354",
+    "waypoint_ladder_disposition": "invalid_for_empirical_scoring_because_waypoints_include documented within-glade sections",
+    "reuse_for_outcome_forbidden": true
+  },
+  "pass_condition": "coarse Stegall glade IDs are unique, all source waypoints parse under the frozen rule, node count clears the unchanged minimum 50, representative coordinates are finite/unique, and at least three positive structural thresholds are distinct",
+  "stop_condition": "any failure stops before Individual_Glade_Sizes.txt access"
+}
