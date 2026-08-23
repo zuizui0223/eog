@@ -1,0 +1,65 @@
+{
+  "attempt_id": "morgan_water_vole_fresh_paired_v1",
+  "candidate": "Arvicola amphibius experimental translocation/range expansion, Morgan et al. 2019",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "prior_screening_only": true,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "doi": "10.5061/dryad.7f3kt77",
+    "paper_doi": "10.1111/ecog.04180",
+    "focal_taxon": "Arvicola amphibius",
+    "study_design": "experimental translocations followed by repeated surveys of fixed 200 m waterway sections",
+    "published_primary_survey_seasons": [
+      "2015-07",
+      "2015-10",
+      "2016-07",
+      "2016-10",
+      "2017-05"
+    ],
+    "source_process_claim": "range expansion after declared experimental releases within a mapped waterway-section universe; release additions must be represented prospectively before any response-capable run, otherwise stop"
+  },
+  "preflight_minima": {
+    "minimum_nodes": 50,
+    "minimum_outer_units": 4,
+    "minimum_repeated_nodes": 50,
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true
+  },
+  "allowed_nonresponse_files": [
+    "Morgan_et_al_Cell_coordinates_and_habitat_variables.csv",
+    "Morgan_et_al_Data_Section_habitat_scores.csv"
+  ],
+  "forbidden_response_files": [
+    "Morgan_et_al_Data_Section_occupancy.csv",
+    "Morgan_et_al_Colonisation_Analysis_10_days_closure.csv",
+    "Morgan_et_al_Colonisation_Analysis_20_days_closure.csv",
+    "Morgan_et_al_Colonisation_Analysis_30_days_closure.csv",
+    "Morgan_et_al_Persistence_Analysis_10_days_closure.csv",
+    "Morgan_et_al_Persistence_Analysis_20_days_closure.csv",
+    "Morgan_et_al_Persistence_Analysis_30_days_closure.csv"
+  ],
+  "response_semantics_boundary": {
+    "not_yet_frozen": true,
+    "reason": "response-independent source/registry/geometry must pass first; no response authorization is permitted by this contract",
+    "count_minima_reserved_for_full_freeze": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    }
+  },
+  "stage_boundary": {
+    "metadata_only_first": true,
+    "nonresponse_payload_access_allowed_after_exact_manifest_freeze": true,
+    "response_payload_access_allowed": false,
+    "response_header_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
