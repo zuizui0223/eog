@@ -1,0 +1,196 @@
+name: Peck collared lizard metadata-only source preflight
+
+on:
+  push:
+    branches:
+      - agent/peck-collared-lizard-preflight
+    paths:
+      - ".github/workflows/peck_collared_lizard_metadata_preflight.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/peck_collared_lizard_metadata_preflight.yml"
+      - "validation/peck_collared_lizard_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Resolve Zenodo and Figshare manifests without file payloads
+        run: |
+          set -euo pipefail
+          mkdir -p build/peck_collared_lizard_metadata
+          python - <<'PY'
+          from __future__ import annotations
+          import json
+          from pathlib import Path
+          import urllib.parse
+          import urllib.request
+
+          contract = json.loads(Path("validation/peck_collared_lizard_paired_complementarity/source_contract.json").read_text())
+          requested = []
+          UA = "EOG-Peck-collared-lizard-metadata-only/1.0"
+
+          def get_json(url: str, cap: int = 10_000_000):
+              requested.append(url)
+              req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
+              with urllib.request.urlopen(req, timeout=45) as response:
+                  body = response.read(cap + 1)
+                  status = getattr(response, "status", None)
+              if status != 200:
+                  raise RuntimeError(f"metadata request returned {status}: {url}")
+              if len(body) > cap:
+                  raise RuntimeError(f"metadata request exceeded cap: {url}")
+              value = json.loads(body.decode("utf-8"))
+              return value
+
+          record_id = int(contract["scientific_anchor"]["zenodo_record"])
+          zenodo = get_json(f"https://zenodo.org/api/records/{record_id}")
+          if not isinstance(zenodo, dict):
+              raise RuntimeError("Zenodo record root must be object")
+          title = str(zenodo.get("metadata", {}).get("title", "")) if isinstance(zenodo.get("metadata"), dict) else ""
+          if title.casefold() != contract["scientific_anchor"]["zenodo_expected_title"].casefold():
+              raise RuntimeError(f"Zenodo title mismatch: {title!r}")
+          zen_files = []
+          for item in zenodo.get("files", []):
+              if not isinstance(item, dict):
+                  continue
+              links = item.get("links", {}) if isinstance(item.get("links"), dict) else {}
+              zen_files.append({
+                  "key": item.get("key"),
+                  "size": item.get("size"),
+                  "checksum": item.get("checksum"),
+                  "id": item.get("id"),
+                  "self": links.get("self"),
+                  "content": links.get("content"),
+              })
+
+          gps_matches = [
+              item for item in zen_files
+              if "peck" in str(item.get("key", "")).casefold()
+              and "gps" in str(item.get("key", "")).casefold()
+              and "waypoint" in str(item.get("key", "")).casefold()
+          ]
+
+          collection_id = int(contract["scientific_anchor"]["ecological_archives_figshare_collection"])
+          articles = get_json(f"https://api.figshare.com/v2/collections/{collection_id}/articles?page_size=100")
+          if not isinstance(articles, list):
+              raise RuntimeError("Figshare collection articles endpoint must return list")
+          fig_articles = []
+          for article in articles:
+              if not isinstance(article, dict) or not article.get("id"):
+                  continue
+              detail = get_json(f"https://api.figshare.com/v2/articles/{int(article['id'])}")
+              if not isinstance(detail, dict):
+                  continue
+              files = []
+              for f in detail.get("files", []):
+                  if not isinstance(f, dict):
+                      continue
+                  files.append({
+                      "id": f.get("id"),
+                      "name": f.get("name"),
+                      "size": f.get("size"),
+                      "computed_md5": f.get("computed_md5"),
+                      "supplied_md5": f.get("supplied_md5"),
+                      "download_url": f.get("download_url"),
+                  })
+              fig_articles.append({
+                  "id": detail.get("id"),
+                  "title": detail.get("title"),
+                  "doi": detail.get("doi"),
+                  "url_private_api": detail.get("url_private_api"),
+                  "url_public_api": detail.get("url_public_api"),
+                  "files": files,
+              })
+
+          def s1_text(value: object) -> bool:
+              text = str(value or "").casefold()
+              return (
+                  "e092-148-s1" in text
+                  or ("population" in text and "glade" in text and "year" in text)
+                  or ("supplement" in text and "1736" in text)
+              )
+
+          s1_candidates = []
+          for article in fig_articles:
+              if s1_text(article.get("title")):
+                  s1_candidates.append(article)
+                  continue
+              if any(s1_text(f.get("name")) for f in article.get("files", [])):
+                  s1_candidates.append(article)
+
+          result = {
+              "attempt_id": contract["attempt_id"],
+              "zenodo": {
+                  "record_id": record_id,
+                  "title": title,
+                  "doi": zenodo.get("doi"),
+                  "conceptdoi": zenodo.get("conceptdoi"),
+                  "version": zenodo.get("metadata", {}).get("version") if isinstance(zenodo.get("metadata"), dict) else None,
+                  "file_count": len(zen_files),
+                  "files": zen_files,
+                  "gps_candidate_count": len(gps_matches),
+                  "gps_candidates": gps_matches,
+              },
+              "figshare": {
+                  "collection_id": collection_id,
+                  "article_count": len(fig_articles),
+                  "articles": fig_articles,
+                  "s1_candidate_count": len(s1_candidates),
+                  "s1_candidates": s1_candidates,
+              },
+              "metadata_urls_requested": requested,
+              "metadata_request_count": len(requested),
+              "zenodo_file_payload_requests": 0,
+              "figshare_file_payload_requests": 0,
+              "response_header_bytes_opened": 0,
+              "response_rows_opened": False,
+              "response_values_opened": False,
+              "model_fits": 0,
+              "heldout_scores": 0,
+          }
+          Path("build/peck_collared_lizard_metadata/metadata_inventory.json").write_text(
+              json.dumps(result, indent=2, sort_keys=True) + "\n"
+          )
+          print(json.dumps(result, indent=2, sort_keys=True))
+
+          if len(gps_matches) != 1:
+              raise SystemExit(f"GPS resource did not resolve uniquely: {len(gps_matches)}")
+          if len(s1_candidates) != 1:
+              raise SystemExit(f"E092-148-S1 did not resolve uniquely: {len(s1_candidates)}")
+          PY
+      - name: Assert no payload or outcome access
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("build/peck_collared_lizard_metadata/metadata_inventory.json")
+          if not p.exists():
+              raise SystemExit("metadata inventory missing")
+          r = json.loads(p.read_text())
+          assert r["zenodo_file_payload_requests"] == 0
+          assert r["figshare_file_payload_requests"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Peck metadata-only response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: peck-collared-lizard-metadata-only
+          path: build/peck_collared_lizard_metadata/metadata_inventory.json
+          if-no-files-found: error
