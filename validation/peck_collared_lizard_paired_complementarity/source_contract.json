@@ -45,9 +45,10 @@
     "s1_documentation": {
       "name": "suppl-1.htm",
       "figshare_file_id": 5619522,
+      "download_url": "https://ndownloader.figshare.com/files/5619522",
       "bytes": 3932,
       "md5": "305c6a8a896c120da3ea4ce8fefbb6d6",
-      "role": "supplement wrapper/documentation only; do not use response rows from linked data before authorization"
+      "role": "small supplement wrapper/documentation only; may be opened response-blind, but linked Individual_Glade_Sizes.txt remains forbidden"
     }
   },
   "prospective_endpoint": {
@@ -87,16 +88,34 @@
       "altitude": 8
     },
     "required_record_type": "W",
-    "ste g all_note": "physical naming in the source omits the hyphen used in some publications",
+    "stegall_note": "physical naming in the source omits the hyphen used in some publications",
     "stegall_name_rule": "uppercase literal name begins with SM and the remainder matches one or more digits optionally followed by uppercase letters; no fuzzy aliasing",
     "stegall_name_regex": "^SM[0-9]+[A-Z]*$",
-    "row_rule": "all physical waypoint rows must parse; the analysis registry is exactly every row whose physical Name matches the frozen Stegall regex",
+    "row_rule": "all physical waypoint rows must parse; the physical Stegall waypoint registry is every row whose physical Name matches the frozen Stegall regex",
     "coordinate_rule": "latitude and longitude must be finite decimal degrees; selected names and coordinate pairs must both be unique; no selected row may be dropped or repaired",
-    "registry_closure_evidence": "Zenodo describes GPS waypoints as latitude/longitude of the glades in this study; the published 1995-2006 Stegall protocol visits each glade at least three times per field season",
     "distance_rule": "great-circle haversine distance in kilometres with Earth radius 6371.0088 km",
     "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
     "minimum_distinct_positive_thresholds": 3,
     "no_post_geometry_retuning": true
+  },
+  "waypoint_geometry_result": {
+    "status": "response_blind_waypoint_registry_and_scale_pass_not_yet_final_analysis_registry",
+    "physical_waypoint_count": 219,
+    "stegall_waypoint_count": 101,
+    "thresholds_km": [0.1908891327753293, 0.23500278237557548, 0.26536281709730325, 0.3561486712242342],
+    "distinct_positive_threshold_count": 4,
+    "ladder_fingerprint": "f5f7b8c7505fe83df9f9dbbad4124c738ae2434541d8dcc8552842f80a0f6354",
+    "scientific_boundary": "the 101 waypoint IDs are not promoted to final analysis nodes until response-blind documentation proves that Individual_Glade_Sizes.txt uses the same unit. Publications use coarse labels such as SM7/SM8/SM9 while the GPS contains multiple suffixed SM7 waypoints, so final closed-registry status is unresolved.",
+    "no_reuse_if_unit_mismatch": "if S1 uses coarser or otherwise different glade units, this 101-node ladder is invalid for the empirical endpoint and must not be used for scoring"
+  },
+  "response_unit_identity_gate": {
+    "required_before_response": true,
+    "allowed_next_resource": "suppl-1.htm only",
+    "documentation_wrapper_request_allowed": true,
+    "population_size_response_request_allowed": false,
+    "purpose": "resolve whether S1 glade IDs correspond to GPS waypoint IDs or to a prospectively documentable coarser glade unit; no rule may be inferred from S1 outcome rows",
+    "pass_condition": "a response-blind published/documentation rule deterministically maps GPS waypoints to exactly the S1 analysis units before any Individual_Glade_Sizes.txt row is opened",
+    "stop_condition": "if no such independent mapping is documented, stop_analysis_registry_not_closed"
   },
   "metadata_only_resource_roles": {
     "capture_workbook_forbidden": "capture/recapture workbook is outcome-bearing and not used as geometry or zero semantics",
@@ -106,8 +125,10 @@
   "stage_boundary": {
     "metadata_manifest_complete": true,
     "gps_physical_format_opened_response_blind": true,
-    "gps_registry_and_structural_gate_allowed": true,
-    "s1_response_requests_allowed": false,
+    "waypoint_structural_gate_complete": true,
+    "final_analysis_registry_closed": false,
+    "documentation_wrapper_access_allowed": true,
+    "s1_population_response_requests_allowed": false,
     "response_header_access_allowed": false,
     "response_payload_access_allowed": false,
     "outcome_access_authorized": false
