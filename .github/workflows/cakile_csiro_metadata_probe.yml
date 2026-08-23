@@ -7,6 +7,12 @@ on:
     paths:
       - ".github/workflows/cakile_csiro_metadata_probe.yml"
       - "validation/cakile_alternaria_csiro_metadata_probe/source_contract.json"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/cakile_csiro_metadata_probe.yml"
+      - "validation/cakile_alternaria_csiro_metadata_probe/source_contract.json"
   workflow_dispatch:
 
 permissions:
