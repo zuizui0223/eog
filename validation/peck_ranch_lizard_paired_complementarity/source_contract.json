@@ -1,113 +1,14 @@
 {
   "attempt_id": "peck_ranch_collared_lizard_fresh_paired_v1",
   "candidate": "Eastern collared lizard (Crotaphytus collaris collaris), Peck Ranch experimental restoration/reintroduction metapopulation",
-  "selection_boundary": {
-    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
-    "response_rows_opened": false,
-    "response_values_opened": false,
-    "model_fits": 0,
-    "heldout_scores": 0
-  },
-  "scientific_anchor": {
-    "zenodo_record": 15557864,
-    "zenodo_doi": "10.5281/zenodo.15557864",
-    "dryad_doi": "10.5061/dryad.63xsj3v50",
-    "ecology_paper_doi": "10.1890/10-1994.1",
-    "focal_taxon": "Crotaphytus collaris collaris",
-    "published_design": "translocation/reintroduction beginning in 1984 on restored Ozark glades followed by long-term glade-level monitoring",
-    "source_process_claim": "known managed introductions are external additions and are represented prospectively by glade and year; natural expansion among the mapped glade/section universe is the target process. Any additional unmanaged external source not representable before response access stops the candidate.",
-    "historical_anchor": "1980 extensive Peck Ranch survey reported no collared-lizard populations; prescribed woodland burning began in 1994 and initiated the high-colonization phase; a stable metapopulation phase was established by about 2000."
-  },
-  "managed_source_schedule": {
-    "semantic_unit": "source activation at founder glade in release year; founder count is deliberately not used because published descriptions differ on the first release count",
-    "sources": [
-      {"node_glade": "SM7", "activation_year": 1984},
-      {"node_glade": "SM8", "activation_year": 1987},
-      {"node_glade": "SM9", "activation_year": 1989}
-    ],
-    "evidence_boundary": "glade/year identities are concordant across the 2001 PNAS study, 2013 Molecular Ecology study and later restoration summaries; no response table was opened to define these sources"
-  },
-  "zenodo_geometry_manifest": {
-    "name": "Peck_Glade_GPS_Waypoints.txt",
-    "size": 17833,
-    "md5": "7baa4bb0dc11cdff774dfe95540ed785",
-    "content_url": "https://zenodo.org/api/records/15557864/files/Peck_Glade_GPS_Waypoints.txt/content",
-    "role": "response-independent glade/section waypoint latitude-longitude registry"
-  },
-  "gps_format_freeze": {
-    "encoding": "utf-8-sig",
-    "physical_line_count": 221,
-    "header_line_count": 2,
-    "waypoint_record_count": 219,
-    "record_delimiter": "tab",
-    "record_field_count": 9,
-    "record_type_index": 0,
-    "required_record_type": "W",
-    "node_name_index": 1,
-    "latitude_index": 4,
-    "longitude_index": 5,
-    "icon_index": 6,
-    "required_icon": "Waypoint",
-    "rule": "after the first two documentation/header lines, every remaining physical line must split into exactly 9 tab-separated fields and satisfy the frozen W/Waypoint markers; node name, latitude and longitude are taken at the frozen indices without aliasing or row deletion"
-  },
-  "geometry_contract": {
-    "use_every_physical_waypoint_record": true,
-    "no_post_open_row_deletion_or_coordinate_repair": true,
-    "glade_or_section_id_must_be_nonempty_and_unique": true,
-    "latitude_longitude_must_be_finite": true,
-    "coordinate_pairs_must_be_unique": true,
-    "latitude_bounds": [-90.0, 90.0],
-    "longitude_bounds": [-180.0, 180.0],
-    "distance_metric": "great_circle_haversine_km from frozen latitude/longitude",
-    "earth_radius_km": 6371.0088,
-    "scale_targets_lcc": [0.25, 0.5, 0.75, 0.9],
-    "minimum_distinct_positive_thresholds": 3,
-    "frozen_observed_thresholds_km": [0.23853625947867804, 0.5789727103316188, 1.4623290183102744, 1.4623290183102744],
-    "frozen_distinct_positive_threshold_count": 3,
-    "frozen_ladder_fingerprint": "74a2ec2bca9ab8a50edd0ab5794dbd1bebc30431a532c129f525bdce648e724d",
-    "no_pdf_geometry_reconstruction": true,
-    "no_waypoint_aggregation_before_response_registry_match": true
-  },
-  "candidate_response_source": {
-    "figshare_collection_id": 3304128,
-    "collection_doi": "10.6084/m9.figshare.c.3304128",
-    "published_role": "Ecological Archives E092-148-S1: estimated population sizes for each glade for every year of occupation on Stegall, Mule and Thorny Mountains",
-    "metadata_only_next": true,
-    "file_payload_access_allowed": false,
-    "reason": "this glade-by-year supplement is closer to the frozen node-time endpoint than individual capture records; it must be independently machine-readable and physically separate from GPS geometry before any payload access"
-  },
-  "admission_rules": {
-    "require_response_independent_glade_geometry": true,
-    "require_geometry_physically_separate_from_response": true,
-    "require_machine_readable_glade_waypoints": true,
-    "require_closed_analysis_registry": true,
-    "require_repeated_survey_semantics": true,
-    "require_managed_release_schedule_resolvable_before_response": true,
-    "require_at_least_three_distinct_positive_structural_scales": true,
-    "no_geometry_reconstruction_from_pdf_maps": true,
-    "no_response_table_opening_to_determine_candidate_eligibility": true
-  },
-  "response_semantics_boundary": {
-    "not_yet_frozen": true,
-    "count_minima_reserved_for_full_freeze": {
-      "calibration_events": 10,
-      "calibration_non_events": 40,
-      "heldout_events": 10,
-      "heldout_non_events": 40,
-      "heldout_outer_units_with_both_classes": 4
-    }
-  },
-  "stage_boundary": {
-    "zenodo_metadata_complete": true,
-    "gps_format_open_complete": true,
-    "structural_geometry_pass": true,
-    "source_additions_frozen": true,
-    "response_source_metadata_inventory_allowed": true,
-    "response_source_file_payload_access_allowed": false,
-    "pdf_payload_access_allowed": false,
-    "capture_workbook_access_allowed": false,
-    "response_header_access_allowed": false,
-    "response_payload_access_allowed": false,
-    "outcome_access_authorized": false
-  }
+  "selection_boundary": {"selected_after_main_commit":"45f45b30d19f043db1383fb4893fa53b92b4ebee","response_rows_opened":false,"response_values_opened":false,"model_fits":0,"heldout_scores":0},
+  "scientific_anchor": {"zenodo_record":15557864,"zenodo_doi":"10.5281/zenodo.15557864","dryad_doi":"10.5061/dryad.63xsj3v50","ecology_paper_doi":"10.1890/10-1994.1","focal_taxon":"Crotaphytus collaris collaris","published_design":"translocation/reintroduction beginning in 1984 on restored Ozark glades followed by long-term glade-level monitoring","source_process_claim":"known managed introductions are external additions and are represented prospectively by glade and year; natural expansion among the mapped glade/section universe is the target process. Any additional unmanaged external source not representable before response access stops the candidate.","historical_anchor":"1980 extensive Peck Ranch survey reported no collared-lizard populations; prescribed woodland burning began in 1994 and initiated the high-colonization phase; a stable metapopulation phase was established by about 2000."},
+  "managed_source_schedule": {"semantic_unit":"source activation at founder glade in release year; founder count is deliberately not used because published descriptions differ on the first release count","sources":[{"node_glade":"SM7","activation_year":1984},{"node_glade":"SM8","activation_year":1987},{"node_glade":"SM9","activation_year":1989}],"evidence_boundary":"glade/year identities are concordant across independent published descriptions; no response table was opened to define these sources"},
+  "zenodo_geometry_manifest": {"name":"Peck_Glade_GPS_Waypoints.txt","size":17833,"md5":"7baa4bb0dc11cdff774dfe95540ed785","content_url":"https://zenodo.org/api/records/15557864/files/Peck_Glade_GPS_Waypoints.txt/content","role":"response-independent glade/section waypoint latitude-longitude registry"},
+  "gps_format_freeze": {"encoding":"utf-8-sig","physical_line_count":221,"header_line_count":2,"waypoint_record_count":219,"record_delimiter":"tab","record_field_count":9,"record_type_index":0,"required_record_type":"W","node_name_index":1,"latitude_index":4,"longitude_index":5,"icon_index":6,"required_icon":"Waypoint","rule":"after the first two documentation/header lines, every remaining physical line must split into exactly 9 tab-separated fields and satisfy the frozen W/Waypoint markers; node name, latitude and longitude are taken at the frozen indices without aliasing or row deletion"},
+  "geometry_contract": {"use_every_physical_waypoint_record":true,"no_post_open_row_deletion_or_coordinate_repair":true,"glade_or_section_id_must_be_nonempty_and_unique":true,"latitude_longitude_must_be_finite":true,"coordinate_pairs_must_be_unique":true,"latitude_bounds":[-90.0,90.0],"longitude_bounds":[-180.0,180.0],"distance_metric":"great_circle_haversine_km from frozen latitude/longitude","earth_radius_km":6371.0088,"scale_targets_lcc":[0.25,0.5,0.75,0.9],"minimum_distinct_positive_thresholds":3,"frozen_observed_thresholds_km":[0.23853625947867804,0.5789727103316188,1.4623290183102744,1.4623290183102744],"frozen_distinct_positive_threshold_count":3,"frozen_ladder_fingerprint":"74a2ec2bca9ab8a50edd0ab5794dbd1bebc30431a532c129f525bdce648e724d","no_pdf_geometry_reconstruction":true,"no_waypoint_aggregation_before_response_registry_match":true},
+  "candidate_response_source": {"figshare_collection_id":3304128,"collection_doi":"10.6084/m9.figshare.c.3304128.v1","article_id":3551832,"article_doi":"10.6084/m9.figshare.3551832.v1","published_role":"Ecological Archives E092-148-S1: estimated population sizes for each glade for every year of occupation on Stegall, Mule and Thorny Mountains","response_file":{"name":"Individual_Glade_Sizes.txt","file_id":5619525,"size":56485,"md5":"b8e4a280baa52f5bcbcd5669e156d770","download_url":"https://ndownloader.figshare.com/files/5619525"},"documentation_file":{"name":"suppl-1.htm","file_id":5619522,"size":3932,"md5":"305c6a8a896c120da3ea4ce8fefbb6d6","download_url":"https://ndownloader.figshare.com/files/5619522"},"documentation_access_rule":"open only suppl-1.htm to resolve response key level and zero/availability semantics; Individual_Glade_Sizes.txt remains unopened until registry closure is established","response_file_payload_access_allowed":false},
+  "admission_rules": {"require_response_independent_glade_geometry":true,"require_geometry_physically_separate_from_response":true,"require_machine_readable_glade_waypoints":true,"require_closed_analysis_registry":true,"require_repeated_survey_semantics":true,"require_managed_release_schedule_resolvable_before_response":true,"require_at_least_three_distinct_positive_structural_scales":true,"no_geometry_reconstruction_from_pdf_maps":true,"no_response_table_opening_to_determine_candidate_eligibility":true},
+  "response_semantics_boundary": {"not_yet_frozen":true,"count_minima_reserved_for_full_freeze":{"calibration_events":10,"calibration_non_events":40,"heldout_events":10,"heldout_non_events":40,"heldout_outer_units_with_both_classes":4}},
+  "stage_boundary": {"zenodo_metadata_complete":true,"gps_format_open_complete":true,"structural_geometry_pass":true,"source_additions_frozen":true,"response_source_metadata_inventory_complete":true,"response_documentation_payload_access_allowed":true,"response_source_file_payload_access_allowed":false,"pdf_payload_access_allowed":false,"capture_workbook_access_allowed":false,"response_header_access_allowed":false,"response_payload_access_allowed":false,"outcome_access_authorized":false}
 }
