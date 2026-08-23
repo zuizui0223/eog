@@ -1,0 +1,148 @@
+name: Kerguelen trout response-blind source-code audit
+
+on:
+  push:
+    branches: [agent/kerguelen-trout-paired-complementarity]
+    paths:
+      - ".github/workflows/kerguelen_trout_source_code_audit.yml"
+      - "validation/kerguelen_trout_paired_complementarity/source_code_stage.json"
+  pull_request:
+    paths:
+      - ".github/workflows/kerguelen_trout_source_code_audit.yml"
+      - "validation/kerguelen_trout_paired_complementarity/source_code_stage.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-code-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PDF text utilities
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+      - name: Open only Appendix S3 and audit source semantics
+        run: |
+          set -euo pipefail
+          mkdir -p build/kerguelen_trout_source_code
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib
+          import json
+          from pathlib import Path
+          import re
+          import subprocess
+          import urllib.error
+          import urllib.request
+
+          stage=json.loads(Path("validation/kerguelen_trout_paired_complementarity/source_code_stage.json").read_text())
+          spec=stage["allowed_document"]
+          out=Path("build/kerguelen_trout_source_code/audit.json")
+          result={
+              "attempt_id":stage["attempt_id"],
+              "stage_id":stage["stage_id"],
+              "status":"not_evaluated",
+              "appendix_s3_requests":0,
+              "appendix_s3_bytes_opened":0,
+              "appendix_s1_requests":0,
+              "appendix_s1_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          def finish(status,**extra):
+              result.update(extra); result["status"]=status
+              out.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+              print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
+          def fail(status,reason,**extra):
+              finish(status,reason=reason,**extra); raise SystemExit(3)
+
+          req=urllib.request.Request(spec["download_url"],headers={"User-Agent":"EOG-Kerguelen-source-code-audit/1.0","Accept":"application/pdf","Accept-Encoding":"identity"})
+          result["appendix_s3_requests"]=1
+          try:
+              with urllib.request.urlopen(req,timeout=90) as response:
+                  body=response.read(3_000_001)
+                  status=getattr(response,"status",None)
+                  content_type=response.headers.get("Content-Type")
+                  final_url=response.geturl()
+          except urllib.error.HTTPError as exc:
+              fail("stop_source_code_transport",f"Appendix S3 HTTP {exc.code}")
+          if status!=200 or len(body)>3_000_000:
+              fail("stop_source_code_transport",f"Appendix S3 bounded request failed: status={status}, bytes={len(body)}")
+          if not body.startswith(b"%PDF"):
+              fail("stop_source_code_identity","Appendix S3 did not return PDF magic",content_type=content_type,first_bytes=body[:16].hex())
+          result["appendix_s3_bytes_opened"]=len(body)
+          pdf_sha=hashlib.sha256(body).hexdigest()
+          pdf_path=Path("build/kerguelen_trout_source_code/appendix_s3.pdf")
+          txt_path=Path("build/kerguelen_trout_source_code/appendix_s3.layout.txt")
+          pdf_path.write_bytes(body)
+          info=subprocess.run(["pdfinfo",str(pdf_path)],check=True,capture_output=True,text=True).stdout
+          subprocess.run(["pdftotext","-layout",str(pdf_path),str(txt_path)],check=True)
+          text=txt_path.read_text(encoding="utf-8",errors="replace")
+          text_sha=hashlib.sha256(text.encode("utf-8")).hexdigest()
+          lines=text.splitlines()
+
+          # Response-blind code audit: preserve exact relevant source lines with context.
+          symbol_re=re.compile(r"(?i)(\bH\s*\[|\bY\s*\[|\bA\s*\[|\bN\s*\[|introduc|artificial|stock|source|coloniz|occup|data\s*\{|model\s*\{|for\s*\(|inits|initial)")
+          hit_indices=[i for i,line in enumerate(lines) if symbol_re.search(line)]
+          context_indices=set()
+          for i in hit_indices:
+              for j in range(max(0,i-2),min(len(lines),i+3)):
+                  context_indices.add(j)
+          relevant=[{"line_number":i+1,"text":lines[i]} for i in sorted(context_indices) if lines[i].strip()]
+
+          # Evidence for literal embedded source schedules must be explicit, not inferred.
+          # Detect code-like assignment/data declarations containing H plus literal vectors/matrices.
+          literal_h_lines=[]
+          for i,line in enumerate(lines):
+              low=line.casefold()
+              if re.search(r"\bH\s*(?:\[|<-|=)",line,re.I) and re.search(r"(?:c\s*\(|structure\s*\(|matrix\s*\(|\d\s*,\s*\d)",line,re.I):
+                  literal_h_lines.append({"line_number":i+1,"text":line})
+
+          page_match=re.search(r"^Pages:\s+(\d+)",info,re.M)
+          finish(
+              "source_code_audit_complete",
+              final_url=final_url,
+              content_type=content_type,
+              pdf_bytes=len(body),
+              pdf_sha256=pdf_sha,
+              page_count=int(page_match.group(1)) if page_match else None,
+              layout_text_bytes=len(text.encode("utf-8")),
+              layout_text_sha256=text_sha,
+              layout_line_count=len(lines),
+              relevant_source_lines=relevant,
+              literal_h_schedule_candidate_lines=literal_h_lines,
+              literal_h_schedule_candidate_count=len(literal_h_lines),
+              source_schedule_preliminary_classification=("possible_literal_schedule_embedded" if literal_h_lines else "source_values_external_input_only_or_not_embedded"),
+          )
+          PY
+      - name: Assert Appendix-S1 response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/kerguelen_trout_source_code/audit.json")
+          if not p.exists(): raise SystemExit("source-code audit missing")
+          r=json.loads(p.read_text())
+          assert r["appendix_s1_requests"]==0
+          assert r["appendix_s1_bytes_opened"]==0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Kerguelen S3-only response firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kerguelen-trout-source-code-audit
+          path: build/kerguelen_trout_source_code/audit.json
+          if-no-files-found: error
