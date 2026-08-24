@@ -1,0 +1,157 @@
+{
+  "attempt_id": "guadeloupe_physa_acuta_fresh_paired_v1",
+  "candidate": "Physa acuta invasion through the Guadeloupe freshwater-site metapopulation, Pantel et al. 2022",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "prior_eog_use_found": false,
+    "focal_taxon_selection_rule": "select Physa acuta because an independent invasion history gives a declared source-conditioned expansion question; do not select or reject it by its row-level event count or Layer-B performance",
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "paper_doi": "10.1002/ecm.1515",
+    "source_repository": "jhpantel/multimeta",
+    "source_commit": "255eacc6c46f98317b6958f88155a34261392fb7",
+    "source_tree": "09502f0f300cfff653307601ce9304295145b44c",
+    "license": "GPL-3.0",
+    "focal_taxon": "Physa acuta",
+    "focal_directory": "data_for_submission/DataS2/7_Physa_acuta",
+    "periods": [2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015],
+    "node_count_expected": 278,
+    "published_design": "278 freshwater sites sampled annually from 2001 through 2015 under a multistate occupancy design with two within-occasion survey replicates and site/year environmental covariates",
+    "invasion_anchor": "Physa acuta is an introduced snail whose recent Guadeloupe expansion is independently documented from two Grande-Terre sites occupied in 2001; the first Marie-Galante report is later. The response table is not used to choose the focal species or to define the temporal split."
+  },
+  "exact_source_manifest": {
+    "geometry": {
+      "path": "data/final_site_list_coordinates.csv",
+      "git_blob_sha": "9aa8401a4d293e437cb2903a9f0143e0e6f84240",
+      "bytes": 11022,
+      "role": "response-independent site registry and projected E/N coordinates"
+    },
+    "survey_availability": {
+      "path": "data_for_submission/DataS2/7_Physa_acuta/dry_final.txt",
+      "git_blob_sha": "c42d4d6032a40be4a9e5c62242dd01759c83a80e",
+      "bytes": 9517,
+      "role": "response-independent site-year visit/wet/dry state shared across taxa"
+    },
+    "site_covariates": {
+      "path": "data_for_submission/DataS2/7_Physa_acuta/cov.txt",
+      "git_blob_sha": "3d41c6e84fdffa3847d2f8d29c4ad298afba873c",
+      "bytes": 17596,
+      "columns": ["size","veg","connec","stability"]
+    },
+    "habitat_covariates": {
+      "path": "data_for_submission/DataS2/7_Physa_acuta/habit.txt",
+      "git_blob_sha": "8ea6e8ce6e4abe65047906b3fe16b7f04c3a59e3",
+      "bytes": 2970,
+      "columns": ["mangrove","river"]
+    },
+    "rainfall_covariates": {
+      "path": "data_for_submission/DataS2/7_Physa_acuta/pluvio.txt",
+      "git_blob_sha": "dda6cc2d732cd1bfd5bd89ae2e7e89b4c61b0954",
+      "bytes": 566,
+      "columns": ["lrs","rs_July_Dec","rs_60_days"],
+      "rows_expected": 15,
+      "row_labels_expected": [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014]
+    },
+    "model_documentation": {
+      "path": "data_for_submission/DataS2/7_Physa_acuta/JHP_JAGS_covar.R",
+      "git_blob_sha": "7e030f79df7e795abfde794a5f06804bdb90ddda",
+      "bytes": 8397,
+      "role": "response-blind parser and survey-semantic documentation"
+    },
+    "forbidden_response": {
+      "state": {
+        "path": "data_for_submission/DataS2/7_Physa_acuta/state.txt",
+        "git_blob_sha": "bf55242241daeabfc8cc1be5c57f0c3b0be14459",
+        "bytes": 8421,
+        "role": "primary annual observed detection-state response; unopened"
+      },
+      "presence": {
+        "path": "data_for_submission/DataS2/7_Physa_acuta/presence.txt",
+        "git_blob_sha": "177049000082284e2178a5db7d2e2e2827c29d1d",
+        "bytes": 16851,
+        "role": "within-occasion repeated-detection response; not needed for the primary paired endpoint and remains forbidden"
+      },
+      "colsource": {
+        "path": "data_for_submission/DataS2/7_Physa_acuta/colsource.txt",
+        "git_blob_sha": "22995dfd6acf43d6c55d621b4102fe8fe33b9167",
+        "bytes": 54455,
+        "role": "species-specific colonization-source covariate; treated as response-derived and forbidden from conventional predictors"
+      }
+    }
+  },
+  "geometry_contract": {
+    "registry_rule": "use every physical data row of final_site_list_coordinates.csv; no response-conditioned subset, imputation, fuzzy site repair or post-open row deletion is allowed",
+    "required_header": ["Nom complet du site","Numero du site","E","N","Ile"],
+    "site_id_rule": "Numero du site must be the exact unique integer sequence 1..278",
+    "coordinate_rule": "E and N must be finite numeric for every row; coordinate pairs must be unique; do not infer or transform a CRS",
+    "distance_rule": "Euclidean distance in the published E/N coordinate units",
+    "scale_targets_lcc": [0.25,0.5,0.75,0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "no_post_geometry_retuning": true
+  },
+  "availability_contract": {
+    "matrix_shape": [278,15],
+    "physical_tokens": [0,1,2],
+    "token_meaning": {"0":"site not visited or missing at that annual occasion","1":"visited wet site","2":"visited dry site"},
+    "surveyed_row_rule": "site-year is survey-observed iff dry_final != 0",
+    "wet_dry_role": "wet/dry is an environmental state and conventional predictor, not an outcome label and not a hard deletion rule for surveyed rows",
+    "no_post_open_availability_redefinition": true
+  },
+  "response_contract": {
+    "primary_file": "state.txt",
+    "matrix_shape": [278,15],
+    "first_line_is_header": true,
+    "allowed_tokens_after_header": [0,1,2],
+    "token_meaning": {"0":"not visited or missing","1":"species not detected","2":"species detected"},
+    "identity_gate": "before any count/model operation, require (state==0) exactly when dry_final==0 for every site-year; any mismatch is terminal",
+    "row_admissibility": "exclude state==0 rows because survey availability was already frozen from dry_final; among observed rows map 1->0 and 2->1; no other token is admissible",
+    "endpoint": "survey-recorded first detection after a previous surveyed non-detection: previous annual state=1 and current annual state=2; risk-set non-event is previous state=1 and current state=1, with both occasions surveyed",
+    "presence_file_policy": "presence.txt remains unopened and unused for the primary endpoint",
+    "no_latent_occupancy_reconstruction": true
+  },
+  "temporal_design": {
+    "transition_years": [[2001,2002],[2002,2003],[2003,2004],[2004,2005],[2005,2006],[2006,2007],[2007,2008],[2008,2009],[2009,2010],[2010,2011],[2011,2012],[2012,2013],[2013,2014],[2014,2015]],
+    "calibration_transition_indices_zero_based": [0,1,2,3,4,5,6,7],
+    "heldout_transition_indices_zero_based": [8,9,10,11,12,13],
+    "heldout_years": [2010,2011,2012,2013,2014,2015],
+    "no_temporal_split_retuning": true
+  },
+  "process_source_contract": {
+    "source_state_rule": "at each transition, all survey-detected nodes at the previous period are the observed internal source set; this rule is fixed before opening state.txt",
+    "initial_state_rule": "the complete observed 2001 detected set is the initial internal source set; exact site identities are not preselected from response",
+    "external_source_boundary": "no exogenous source node is added after response access. Existing production local-distance worlds plus one predeclared archipelago long-jump possibility world may represent rare between-site/vector transport but cannot create occupancy without a prior internal source. If temporal source closure empties, stop rather than invent an external introduction.",
+    "history_claim_boundary": "PASS means at least one declared world/source path remains possible; it does not identify the true dispersal route or prove natural rather than human/vector transport"
+  },
+  "conventional_feature_contract": {
+    "same_learner_for_baseline_and_augmented": true,
+    "learner_family": "frozen strong tree ensemble used by the paired-complementarity protocol",
+    "response_independent_columns": ["E","N","island_code","size","veg","connec","stability","mangrove","river","current_dry_indicator","previous_dry_indicator","lrs","rs_July_Dec","rs_60_days","transition_index"],
+    "lagged_response_columns_computed_after_authorized_open": ["previous_detected","distance_to_nearest_previous_detected","previous_detected_count_within_each_frozen_structural_threshold"],
+    "forbidden_columns": ["exact_world_id","world_label","colsource.txt values","presence.txt values","future state","heldout labels"],
+    "augmented_difference": "the augmented model adds only the unchanged frozen 10-column EOG Layer-B predictive summary"
+  },
+  "count_gate": {
+    "prospective_status": "uncertain_pre_response",
+    "must_be_first_outcome_dependent_operation_after_identity_gate": true,
+    "calibration_events_min": 10,
+    "calibration_non_events_min": 40,
+    "heldout_events_min": 10,
+    "heldout_non_events_min": 40,
+    "heldout_outer_units_with_both_classes_min": 4,
+    "failure_policy": "terminal zero-fit stop; do not change species, split, threshold, endpoint or count minima and rerun as fresh"
+  },
+  "stage_boundary": {
+    "safe_source_payload_access_allowed": true,
+    "state_header_access_allowed": false,
+    "state_payload_access_allowed": false,
+    "presence_payload_access_allowed": false,
+    "colsource_payload_access_allowed": false,
+    "outcome_access_authorized": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
