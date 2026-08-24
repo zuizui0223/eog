@@ -55,13 +55,30 @@
   "paired_endpoint": {
     "baseline": "same frozen strong learner plus conventional response-independent features",
     "augmented": "same learner plus same conventional features plus unchanged symmetric_world_support_summary_v1",
-    "learner_family": "RandomForestClassifier",
-    "primary_score": "macro_log_loss",
+    "learner_family": "sklearn.ensemble.RandomForestClassifier",
+    "learner_hyperparameters": {
+      "n_estimators": 1000,
+      "max_features": "sqrt",
+      "min_samples_leaf": 10,
+      "class_weight": null,
+      "random_state": 20260822,
+      "n_jobs": 1
+    },
+    "frozen_environment": {
+      "python": "3.12",
+      "numpy": "2.3.5",
+      "scikit_learn": "1.8.0"
+    },
+    "primary_score": "binary_log_loss",
+    "probability_clip": 0.000001,
+    "lower_is_better": true,
+    "outer_unit_and_win_threshold": "freeze exactly from response-independent eligible heldout transition registry after preflight; never from roe-deer outcomes",
+    "tie_tolerance": 0.0,
     "favorable_null_adverse_all_terminally_acceptable": true
   },
   "no_rescue_rules": [
     "do not open the observation attachment during source/geometry/effort preflight",
-    "do not change node identity, coordinate aggregation, structural targets, monthly effort rule, split, count minima, focal taxon, learner family, or Layer-B representation after geometry access",
+    "do not change node identity, coordinate aggregation, structural targets, monthly effort rule, split, count minima, focal taxon, learner family, learner hyperparameters, score metric, or Layer-B representation after geometry access",
     "if the geometry/effort preflight fails, close this attempt without response access",
     "after any row-level response access, no parser repair, retry, endpoint change, row filtering rule change, or candidate-specific rescue is permitted"
   ]
