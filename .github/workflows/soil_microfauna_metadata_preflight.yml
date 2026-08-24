@@ -7,10 +7,14 @@ on:
     paths:
       - ".github/workflows/soil_microfauna_metadata_preflight.yml"
       - "validation/soil_microfauna_paired_complementarity/source_contract.json"
+      - "validation/soil_microfauna_paired_complementarity/run_archive_metadata_preflight.py"
+      - "tests/test_soil_microfauna_archive_metadata_preflight.py"
   pull_request:
     paths:
       - ".github/workflows/soil_microfauna_metadata_preflight.yml"
       - "validation/soil_microfauna_paired_complementarity/source_contract.json"
+      - "validation/soil_microfauna_paired_complementarity/run_archive_metadata_preflight.py"
+      - "tests/test_soil_microfauna_archive_metadata_preflight.py"
   workflow_dispatch:
 
 permissions:
@@ -77,6 +81,16 @@ jobs:
           print(json.dumps(result,indent=2,sort_keys=True))
           if not files:
               raise SystemExit("Zenodo record exposes no files")
+          expected=contract["archive_metadata_gate"]["archive"]
+          observed=files[0] if len(files) == 1 else None
+          if observed is None or {
+              "id":observed["id"],
+              "name":observed["name"],
+              "size_bytes":observed["size"],
+              "checksum":observed["checksum"],
+              "content_url":observed["content_url"],
+          } != expected:
+              raise SystemExit("Zenodo archive identity differs from the frozen contract")
           PY
       - name: Assert metadata-only firewall
         run: |
@@ -93,9 +107,31 @@ jobs:
           assert r["heldout_scores"] == 0
           print("Soil microfauna metadata-only response firewall PASS")
           PY
+      - name: Inspect ZIP container metadata without member payload access
+        run: |
+          python validation/soil_microfauna_paired_complementarity/run_archive_metadata_preflight.py \
+            --output build/soil_microfauna_metadata/archive_metadata_inventory.json
+      - name: Assert archive-metadata response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("build/soil_microfauna_metadata/archive_metadata_inventory.json").read_text())
+          assert r["status"] == "zip_metadata_inventory_pass"
+          assert r["member_payload_requests"] == 0
+          assert r["member_payload_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Soil microfauna ZIP metadata response firewall PASS")
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soil-microfauna-metadata-only
-          path: build/soil_microfauna_metadata/metadata_inventory.json
+          name: soil-microfauna-archive-metadata-only
+          path: |
+            build/soil_microfauna_metadata/metadata_inventory.json
+            build/soil_microfauna_metadata/archive_metadata_inventory.json
           if-no-files-found: error

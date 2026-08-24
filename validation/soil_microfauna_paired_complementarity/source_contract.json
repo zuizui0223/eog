@@ -54,8 +54,44 @@
     },
     "prospective_estimability": "uncertain_pre_response; exact count gate must be first outcome-dependent operation if all response-blind gates pass"
   },
+  "archive_metadata_gate": {
+    "metadata_evidence": {
+      "github_run_id": 32698598118,
+      "artifact_id": 9510782804,
+      "artifact_digest": "sha256:4424b6c36c71e803fe3f01fa47686b3b34994e4894d94f9de02c4b8f269277e3",
+      "status": "zenodo_metadata_inventory_pass",
+      "file_count": 1,
+      "file_payload_requests": 0,
+      "file_payload_bytes_opened": 0,
+      "response_header_bytes_opened": 0,
+      "response_rows_opened": false,
+      "response_values_opened": false
+    },
+    "archive": {
+      "id": "83fcd180-b738-4e68-9e0e-ce10ef479dcd",
+      "name": "ZPHSOIL/DATA-CODE-for-WEB-ECOLOGY-v1.0.0.zip",
+      "size_bytes": 17249862,
+      "checksum": "md5:80599baa3caac8aeedc2eeff0c4e6b63",
+      "content_url": "https://zenodo.org/api/records/7528078/files/ZPHSOIL/DATA-CODE-for-WEB-ECOLOGY-v1.0.0.zip/content"
+    },
+    "transport_contract": {
+      "require_https_zenodo_host": true,
+      "require_http_206": true,
+      "require_exact_content_range_total": true,
+      "require_identity_content_encoding": true,
+      "require_classic_single_disk_zip": true,
+      "require_zero_length_zip_comment": true,
+      "allow_archive_size_probe_byte": true,
+      "allow_exact_eocd_and_central_directory": true,
+      "allow_local_header_name_and_extra_metadata": true,
+      "forbid_all_member_payload_intervals": true,
+      "forbid_backwards_eocd_scan": true
+    }
+  },
   "stage_boundary": {
-    "zenodo_metadata_only_first": true,
+    "zenodo_metadata_only_completed": true,
+    "archive_container_metadata_access_allowed": true,
+    "archive_member_payload_access_allowed": false,
     "file_payload_access_allowed": false,
     "response_header_access_allowed": false,
     "response_payload_access_allowed": false,
