@@ -1,0 +1,64 @@
+{
+  "attempt_id": "luquillo_bullfinch_fresh_paired_v1",
+  "candidate": "Puerto Rican Bullfinch annual surveyed re-detection on the 40-point Luquillo Forest Dynamics Plot bird grid, 1998-2021",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "selected_after_terminal_prs": [284, 286],
+    "tracking_issue": 287,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "focal_taxon": {
+    "common_name": "Puerto Rican Bullfinch",
+    "current_scientific_name": "Melopyrrha portoricensis",
+    "prospective_historical_synonym": "Loxigilla portoricensis",
+    "selection_rule": "fixed from the independent BirdsCaribbean Endemic & Threatened Species Working Group example of a Puerto Rico endemic forest/woodland bird, before Luquillo Dataset 23 response access; not selected from Dataset 23 counts or EOG results"
+  },
+  "scientific_anchor": {
+    "edi_package_id": "knb-lter-luq.23.4630182",
+    "edi_scope": "knb-lter-luq",
+    "edi_identifier": 23,
+    "edi_revision": 4630182,
+    "luquillo_long_term_dataset_title": "LFDP - Bird abundance - point counts",
+    "official_gis_zip_url": "https://luquillo.lter.network/wp-content/uploads/2022/06/LFDP.zip",
+    "official_big_grid_kml_url": "https://luquillo.lter.network/wp-content/uploads/2024/10/BIGGRID_OUT.kml",
+    "published_design": "40 permanently located LFDP point-count sites; 10-minute counts; bird observations recorded within <=25 m and >25 m; official visitor guide describes forty locations on a 60 m x 60 m grid",
+    "endpoint": "annual site-level recorded detection/re-detection using the <=25 m series; not latent occupancy or historical truth"
+  },
+  "temporal_design": {
+    "analysis_years": [1998, 2021],
+    "calibration_years": [1998, 2009],
+    "heldout_years": [2010, 2021],
+    "reason_for_start": "1997 is independently documented as an incomplete census with only 15 sites; 1998 start is effort-defined before focal response access",
+    "count_minima": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_years_with_both_classes": 4
+    },
+    "exact_count_gate_must_be_first_row_level_outcome_operation": true
+  },
+  "gate0": {
+    "edi_eml_metadata_access_allowed": true,
+    "edi_resource_map_access_allowed": true,
+    "edi_data_entity_payload_access_allowed": false,
+    "gis_zip_tail_and_central_directory_access_allowed": true,
+    "gis_member_payload_access_allowed": false,
+    "bird_response_header_access_allowed": false,
+    "bird_response_payload_access_allowed": false,
+    "required_analysis_nodes": 40,
+    "require_geometry_physically_separate_from_bird_response": true,
+    "require_response_independent_site_id_mapping": true,
+    "require_response_independent_annual_survey_availability": true,
+    "minimum_distinct_positive_structural_thresholds": 3,
+    "regular_grid_scale_collapse_is_terminal": true
+  },
+  "future_boundary": {
+    "layer_b": "symmetric_world_support_summary_v1 unchanged",
+    "paired_endpoint": "same frozen strong learner and conventional features in both arms; augmented arm adds only unchanged Layer B",
+    "outcome_access_authorized": false
+  }
+}
