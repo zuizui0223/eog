@@ -28,8 +28,9 @@
   "archive_contract": {
     "archive_name": "DataS1.zip",
     "archive_md5": "c66943e6c2a9aab0abce2a1eba8ce02e",
-    "required_deployment_member": "RI_CameraSurvey_Deployments.csv",
-    "forbidden_detection_member": "RI_CameraSurvey_Detections.csv",
+    "required_deployment_member": "DataS1/RI_CameraSurvey_Deployments.csv",
+    "forbidden_detection_member": "DataS1/RI_CameraSurvey_Detections.csv",
+    "member_path_resolution_note": "The first central-directory-only run opened 189 ZIP metadata bytes and zero member payload bytes, revealing that both predeclared basenames are wrapped by the same DataS1/ directory. Exact wrapper-qualified paths are frozen here before any deployment or detection payload access; no file, dataset, endpoint, node rule, threshold, split, learner or response semantic changed.",
     "eocd_tail_bytes": 22,
     "require_zero_zip_comment": true,
     "require_non_zip64": true,
