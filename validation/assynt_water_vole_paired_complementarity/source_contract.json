@@ -11,10 +11,24 @@
   },
   "scientific_anchor": {
     "dryad_doi": "10.5061/dryad.sn02v6x70",
+    "dryad_version": 5,
     "focal_taxon": "Arvicola amphibius",
     "published_registry": "98 temporally stable riparian habitat patches mapped from a comprehensive 1998 waterway survey independently of future occupancy outcomes",
     "published_monitoring": "annual breeding-season presence/absence surveys from 1999 onward; 1999-2012 explicitly documented for the fixed 98-patch study system",
     "source_process_claim": "classic metapopulation with recolonization dependent on dispersers from neighboring occupied patches; no managed additions are part of the declared period"
+  },
+  "dryad_inventory_freeze": {
+    "file_count": 13,
+    "documentation": {
+      "name": "README.txt",
+      "file_id": 1674973,
+      "size": 5952,
+      "digest_type": "sha-256",
+      "sha256": "c503113a55e569b7981407380e43f20f9a32451b6f352710d936527837462162",
+      "api_download": "https://datadryad.org/api/v2/files/1674973/download"
+    },
+    "observed_structure": "README.txt plus RData/model-output files; no standalone coordinate/distance file name was exposed by metadata",
+    "rule": "open only README.txt next to classify the RData roles and determine whether response-independent geometry is physically separable; no RData or CSV payload may be opened at this stage"
   },
   "admission_rules": {
     "require_exact_98_patch_registry": true,
@@ -39,8 +53,9 @@
     "prospective_estimability": "uncertain_pre_response; exact count gate must be first outcome-dependent operation if all response-blind gates pass"
   },
   "stage_boundary": {
-    "dryad_metadata_only_first": true,
-    "file_payload_access_allowed": false,
+    "dryad_metadata_inventory_complete": true,
+    "readme_documentation_access_allowed": true,
+    "other_file_payload_access_allowed": false,
     "response_header_access_allowed": false,
     "response_payload_access_allowed": false,
     "outcome_access_authorized": false
