@@ -1,0 +1,33 @@
+{
+  "attempt_id": "northeast_atlantic_gannet_fresh_paired_v1",
+  "stage_id": "gannet_documentation_only_v1",
+  "purpose": "Resolve published file/field semantics before any colony-registry or census-response payload access.",
+  "allowed_document": {
+    "name": "Metadata-description .rtf",
+    "url": "https://zenodo.org/api/records/12513978/files/Metadata-description%20.rtf/content",
+    "frozen_bytes": 12090,
+    "frozen_md5": "82157c67d9a92fe683d7169d67c364de"
+  },
+  "forbidden_payloads": [
+    "Colonies.csv",
+    "gannets_master_complete_updated.csv",
+    "HPAI_colonies_matrix.csv",
+    "fecundity_data_sorted.csv",
+    "posterior_run69.csv"
+  ],
+  "questions_to_resolve_without_response": [
+    "What columns and units are documented for Colonies.csv?",
+    "Does Colonies.csv represent a response-independent colony registry rather than colonies selected from census outcomes?",
+    "What fields define the longitudinal colony census table?",
+    "How are zero counts, missing counts, absent colony-years, and survey availability documented?",
+    "Are colony births/appearances or external-source additions part of the response process?"
+  ],
+  "firewall": {
+    "documentation_payload_access_allowed": true,
+    "geometry_payload_access_allowed": false,
+    "response_header_access_allowed": false,
+    "response_payload_access_allowed": false,
+    "model_fits_allowed": false,
+    "heldout_scores_allowed": false
+  }
+}
