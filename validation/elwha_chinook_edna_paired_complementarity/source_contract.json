@@ -1,0 +1,55 @@
+{
+  "attempt_id": "elwha_chinook_edna_fresh_paired_v1",
+  "candidate": "Chinook Salmon monthly eDNA recolonization after Elwha River dam removal",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "prior_eog_use_found": false,
+    "focal_taxon": "Oncorhynchus tshawytscha",
+    "focal_taxon_selection_rule": "first anadromous Pacific salmon listed in the publication's target-species Table 1; selection is not based on EOG scores or row-level event counts",
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "data_doi": "10.5066/P96R5Q0M",
+    "paper_doi": "10.1002/edn3.134",
+    "publisher": "U.S. Geological Survey",
+    "license": "CC0 1.0",
+    "published_design": "25 fixed eDNA sites over 56 river km, sampled repeatedly from 2014 through 2017 in 33 of 40 possible months",
+    "source_process_claim": "anadromous adults enter from a persistent downstream river-mouth/ocean boundary and then move through the mapped river/tributary site network; prior-month internal detections are additional observed sources"
+  },
+  "admission_rules": {
+    "require_machine_readable_site_registry": true,
+    "require_geometry_or_river_distance_physically_separate_from_species_response": true,
+    "require_explicit_monthly_sampling_availability": true,
+    "require_at_least_six_primary_periods": true,
+    "require_at_least_three_distinct_positive_structural_scales": true,
+    "require_source_boundary_resolvable_before_response": true,
+    "no_geometry_reconstruction_from_figure": true,
+    "no_post_inventory_source_substitution": true
+  },
+  "sciencebase_metadata_contract": {
+    "doi_filter": "itemIdentifier={type:DOI,key:doi:10.5066/P96R5Q0M}",
+    "search_endpoint": "https://www.sciencebase.gov/catalog/items",
+    "maximum_results": 20,
+    "metadata_only": true,
+    "file_payload_access_allowed": false
+  },
+  "count_gate": {
+    "prospective_status": "uncertain_pre_response",
+    "calibration_events_min": 10,
+    "calibration_non_events_min": 40,
+    "heldout_events_min": 10,
+    "heldout_non_events_min": 40,
+    "heldout_outer_units_with_both_classes_min": 4,
+    "failure_policy": "terminal zero-fit stop"
+  },
+  "stage_boundary": {
+    "sciencebase_metadata_access_allowed": true,
+    "file_payload_access_allowed": false,
+    "response_header_access_allowed": false,
+    "response_payload_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
