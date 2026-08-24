@@ -13,6 +13,10 @@ on:
       - ".github/workflows/peneda_roedeer_paired_preflight.yml"
   workflow_dispatch:
 
+concurrency:
+  group: peneda-roedeer-paired-preflight-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
