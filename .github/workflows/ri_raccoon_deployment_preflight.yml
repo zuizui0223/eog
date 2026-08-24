@@ -17,6 +17,10 @@ on:
       - "src/eog/v2/world_adequacy.py"
   workflow_dispatch:
 
+concurrency:
+  group: ri-raccoon-deployment-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
