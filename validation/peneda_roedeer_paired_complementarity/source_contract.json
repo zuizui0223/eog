@@ -40,17 +40,19 @@
     "expected_deployment_rows": 331,
     "lcc_target_fractions": [0.25, 0.5, 0.75, 0.9],
     "minimum_distinct_positive_thresholds": 3,
-    "maximum_isolated_fraction_at_lcc90": 0.05
+    "maximum_isolated_fraction_at_lcc90": 0.05,
+    "duplicate_threshold_policy": "identical response-blind LCC thresholds are represented once and their target labels are combined; no duplicate world is allowed to weight the Layer-B summary twice"
   },
   "temporal_semantics": {
     "endpoint": "monthly observed zero-to-detected reappearance at a stable camera location",
     "minimum_active_days_in_each_adjacent_month": 20,
-    "score_only_consecutive_calendar_months_within_continuous_deployment_coverage": true,
+    "active_day_counting": "union of calendar dates covered by one or more deployments for a location; overlapping or replacement deployments never double-count a day",
+    "scored_transition_rule": "consecutive calendar months in which a location independently clears the active-day minimum in both source and target months; no additional no-gap-across-month-boundary assumption is made",
     "calibration_years": [2015, 2016, 2017, 2018],
     "heldout_years": [2019, 2020, 2021],
     "minimum_response_blind_eligible_nodes_per_scored_transition": 40,
-    "minimum_calibration_outer_units": 8,
-    "minimum_heldout_outer_units": 4,
+    "minimum_calibration_scored_transitions": 8,
+    "minimum_heldout_scored_transitions": 4,
     "final_score_outer_unit": "three-month heldout calendar block",
     "final_win_rule": "strict majority of response-independent heldout calendar blocks; exact integer frozen after effort preflight and before any row-level response access"
   },
@@ -62,8 +64,8 @@
     "heldout_outer_units_with_both_classes": 4
   },
   "paired_endpoint": {
-    "baseline": "same frozen strong learner plus conventional response-independent features",
-    "augmented": "same learner plus same conventional features plus unchanged symmetric_world_support_summary_v1",
+    "baseline": "same frozen strong learner plus conventional calendar, geometry, effort, source-exposure and strictly lagged response-history features",
+    "augmented": "same learner plus the identical conventional feature block plus unchanged symmetric_world_support_summary_v1",
     "learner_family": "sklearn.ensemble.RandomForestClassifier",
     "learner_hyperparameters": {
       "n_estimators": 1000,
