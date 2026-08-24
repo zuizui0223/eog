@@ -32,25 +32,62 @@ jobs:
           python - <<'PY'
           import json, urllib.parse, urllib.request
           from pathlib import Path
+
           c=json.loads(Path("validation/elwha_chinook_edna_paired_complementarity/source_contract.json").read_text())
           s=c["sciencebase_metadata_contract"]
-          query=urllib.parse.urlencode({"filter":s["doi_filter"],"format":"json","max":int(s["maximum_results"])})
-          url=s["search_endpoint"]+"?"+query
-          req=urllib.request.Request(url,headers={"User-Agent":"EOG-Elwha-ScienceBase-metadata/1.0","Accept":"application/json"})
+          target_doi="10.5066/P96R5Q0M"
+          target_norm=target_doi.lower()
+
+          # The documented ScienceBase itemIdentifier filter returned HTTP 400 on the
+          # first metadata-only attempt. Use the documented basic q= search only as a
+          # transport/query fallback, then require exact DOI identity before selecting
+          # an item. This does not change the candidate or scientific contract.
+          query=urllib.parse.urlencode({"q":"P96R5Q0M","format":"json","max":int(s["maximum_results"])})
+          search_url=s["search_endpoint"]+"?"+query
+          req=urllib.request.Request(search_url,headers={"User-Agent":"EOG-Elwha-ScienceBase-metadata/1.1","Accept":"application/json"})
           with urllib.request.urlopen(req,timeout=60) as r:
               body=r.read(5_000_001); status=getattr(r,"status",None)
-          if status != 200 or len(body)>5_000_000: raise RuntimeError(f"ScienceBase search failed {status}")
+          if status != 200 or len(body)>5_000_000:
+              raise RuntimeError(f"ScienceBase q search failed {status}")
           payload=json.loads(body.decode("utf-8"))
-          items=payload.get("items") or []
-          if len(items) != 1: raise RuntimeError(f"DOI did not resolve uniquely: {len(items)}")
-          item=items[0]
-          item_id=item.get("id")
-          item_url=f"https://www.sciencebase.gov/catalog/item/{item_id}?format=json"
-          req2=urllib.request.Request(item_url,headers={"User-Agent":"EOG-Elwha-ScienceBase-metadata/1.0","Accept":"application/json"})
-          with urllib.request.urlopen(req2,timeout=60) as r:
-              body2=r.read(10_000_001); status2=getattr(r,"status",None)
-          if status2 != 200 or len(body2)>10_000_000: raise RuntimeError(f"ScienceBase item failed {status2}")
-          detail=json.loads(body2.decode("utf-8"))
+          search_items=payload.get("items") or []
+          if not search_items:
+              raise RuntimeError("ScienceBase q search returned zero items")
+
+          checked=[]
+          exact=[]
+          for row in search_items:
+              item_id=row.get("id")
+              if not item_id:
+                  continue
+              item_url=f"https://www.sciencebase.gov/catalog/item/{item_id}?format=json"
+              req2=urllib.request.Request(item_url,headers={"User-Agent":"EOG-Elwha-ScienceBase-metadata/1.1","Accept":"application/json"})
+              with urllib.request.urlopen(req2,timeout=60) as r:
+                  body2=r.read(10_000_001); status2=getattr(r,"status",None)
+              if status2 != 200 or len(body2)>10_000_000:
+                  raise RuntimeError(f"ScienceBase item failed {status2}: {item_id}")
+              detail=json.loads(body2.decode("utf-8"))
+              identifiers=[]
+              for ident in detail.get("identifiers") or []:
+                  if isinstance(ident,dict):
+                      key=ident.get("key")
+                      typ=ident.get("type")
+                      if key is not None:
+                          identifiers.append({"type":typ,"key":str(key)})
+              normalized=[]
+              for ident in identifiers:
+                  key=ident["key"].strip().lower()
+                  normalized.extend([key,key.removeprefix("doi:"),key.removeprefix("https://doi.org/")])
+              is_exact=target_norm in normalized
+              checked.append({"id":item_id,"title":detail.get("title"),"identifiers":identifiers,"exact_doi_match":is_exact})
+              if is_exact:
+                  exact.append(detail)
+
+          if len(exact) != 1:
+              raise RuntimeError(f"ScienceBase DOI identity did not resolve uniquely after q fallback: {len(exact)} exact matches")
+          detail=exact[0]
+          item_id=detail.get("id")
+
           files=[]
           for f in detail.get("files") or []:
               files.append({
@@ -60,8 +97,10 @@ jobs:
               })
           result={
               "attempt_id":c["attempt_id"],"status":"sciencebase_metadata_inventory_pass",
+              "search_mode":"q_fallback_with_exact_doi_identity_check",
+              "search_url":search_url,"search_result_count":len(search_items),"checked_items":checked,
               "item_id":item_id,"title":detail.get("title"),"files":files,"file_count":len(files),
-              "hasChildren":detail.get("hasChildren"),"metadata_requests":2,
+              "hasChildren":detail.get("hasChildren"),"metadata_requests":1+len(checked),
               "file_payload_requests":0,"file_payload_bytes_opened":0,
               "response_header_bytes_opened":0,"response_rows_opened":False,"response_values_opened":False,
               "model_fits":0,"heldout_scores":0,
