@@ -5,6 +5,7 @@
     "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
     "selected_after_terminal_pr": 284,
     "tracking_issue": 285,
+    "ci_sync_note": "no scientific change; trigger metadata-only CI after PR creation",
     "response_rows_opened": false,
     "response_values_opened": false,
     "model_fits": 0,
