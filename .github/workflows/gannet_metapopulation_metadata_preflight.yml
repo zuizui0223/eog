@@ -1,0 +1,113 @@
+name: Northern gannet response-blind metadata preflight
+
+on:
+  push:
+    branches:
+      - agent/gannet-metapopulation-preflight
+    paths:
+      - ".github/workflows/gannet_metapopulation_metadata_preflight.yml"
+      - "validation/gannet_metapopulation_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/gannet_metapopulation_metadata_preflight.yml"
+      - "validation/gannet_metapopulation_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Query Zenodo record metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/gannet_metapopulation_metadata
+          python - <<'PY'
+          import json, urllib.request
+          from pathlib import Path
+
+          contract=json.loads(Path("validation/gannet_metapopulation_paired_complementarity/source_contract.json").read_text())
+          record=int(contract["scientific_anchor"]["zenodo_record"])
+          url=f"https://zenodo.org/api/records/{record}"
+          req=urllib.request.Request(url,headers={"User-Agent":"EOG-gannet-metadata/1.0","Accept":"application/json"})
+          with urllib.request.urlopen(req,timeout=60) as response:
+              body=response.read(5_000_001)
+              status=getattr(response,"status",None)
+          if status != 200 or len(body) > 5_000_000:
+              raise RuntimeError(f"Zenodo metadata failed bounded checks: {status}")
+          payload=json.loads(body.decode("utf-8"))
+          files=[]
+          for f in payload.get("files",[]):
+              links=f.get("links") or {}
+              files.append({
+                  "id":f.get("id"),
+                  "name":f.get("key"),
+                  "size":f.get("size"),
+                  "checksum":f.get("checksum"),
+                  "content_url":links.get("content") or links.get("self"),
+              })
+          expected=contract["known_public_release_metadata"]
+          by_name={x["name"]:x for x in files}
+          required=[expected["geometry_filename"],expected["response_filename"],expected["documentation_filename"]]
+          missing=[name for name in required if name not in by_name]
+          if missing:
+              raise RuntimeError(f"required frozen file names missing from Zenodo record: {missing}")
+          def md5_of(name):
+              checksum=str(by_name[name].get("checksum") or "")
+              return checksum.split(":",1)[-1] if checksum else ""
+          checks={
+              "geometry_md5_match":md5_of(expected["geometry_filename"]) == expected["geometry_md5"],
+              "response_md5_match":md5_of(expected["response_filename"]) == expected["response_md5"],
+              "documentation_md5_match":md5_of(expected["documentation_filename"]) == expected["documentation_md5"],
+          }
+          if not all(checks.values()):
+              raise RuntimeError(f"frozen file identity mismatch: {checks}")
+          result={
+              "attempt_id":contract["attempt_id"],
+              "record_id":payload.get("id"),
+              "doi":(payload.get("metadata") or {}).get("doi"),
+              "version":(payload.get("metadata") or {}).get("version"),
+              "title":(payload.get("metadata") or {}).get("title"),
+              "files":sorted(files,key=lambda x:str(x["name"])),
+              "required_file_checks":checks,
+              "metadata_requests":1,
+              "file_payload_requests":0,
+              "file_payload_bytes_opened":0,
+              "response_header_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+              "status":"zenodo_metadata_inventory_pass",
+          }
+          Path("build/gannet_metapopulation_metadata/metadata_inventory.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True))
+          PY
+      - name: Assert metadata-only firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("build/gannet_metapopulation_metadata/metadata_inventory.json").read_text())
+          assert r["file_payload_requests"] == 0
+          assert r["file_payload_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0
+          assert r["heldout_scores"] == 0
+          print("Northern gannet metadata-only response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gannet-metapopulation-metadata-only
+          path: build/gannet_metapopulation_metadata/metadata_inventory.json
+          if-no-files-found: error
