@@ -1,0 +1,64 @@
+{
+  "attempt_id": "zhang_2023_soil_microfauna_fresh_paired_v1",
+  "candidate": "Zhang et al. 2023 closed soil-microfauna dispersal experiment",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "paper_doi": "10.5194/we-23-1-2023",
+    "zenodo_record": 7528078,
+    "zenodo_doi": "10.5281/zenodo.7528078",
+    "system": "10 independent rectangular mesocosms, each with 9 plant-resource nodes arranged from clustered to regular while preserving mean inter-node distance",
+    "source_process_claim": "soil microfauna were introduced only into the central plant node at day 0; subsequent spread among the nine nodes within each mesocosm is the target process. Any later external inoculation or cross-mesocosm transfer stops the candidate.",
+    "time_design": "day 0 inoculation followed by six destructive node-level sampling occasions at 15-day intervals through day 90",
+    "focal_response": "presence/absence of plant-feeding nematodes at a node-time, derived prospectively from the published abundance measurement without changing its zero semantics",
+    "focal_response_selection_rule": "plant-feeding nematodes are fixed because they are the subject of the paper's first explicit biological hypothesis and have a priori sedentary/low-mobility life-history justification; no node-by-time response table was inspected to choose the focal group",
+    "prospective_endpoint": "same-learner paired heldout complementarity of frozen conventional node/time/resource features versus the identical learner/features plus frozen EOG Layer B"
+  },
+  "known_design_without_response_rows": {
+    "mesocosm_count": 10,
+    "nodes_per_mesocosm": 9,
+    "central_node_coordinate_cm": [40.0, 30.0],
+    "container_extent_cm": [80.0, 60.0],
+    "post_inoculation_sampling_times_days": [15, 30, 45, 60, 75, 90],
+    "expected_outer_units": "mesocosm identity, with heldout assignment frozen before response access"
+  },
+  "admission_rules": {
+    "require_machine_readable_node_coordinates_before_response": true,
+    "require_geometry_or_coordinate_registry_physically_separable_from_node_time_soil_fauna_response": true,
+    "require_exact_10_by_9_closed_registry": true,
+    "require_no_external_source_after_day0": true,
+    "require_all_mesocosms_have_response_blind_geometry": true,
+    "require_at_least_three_distinct_positive_structural_scales_per_analyzed_mesocosm": true,
+    "require_six_post_inoculation_sampling_times": true,
+    "require_explicit_zero_abundance_means_observed_absence_for_focal_group": true,
+    "require_temporal_source_closure_before_response": true,
+    "require_strong_conventional_baseline": true,
+    "no_geometry_reconstruction_from_figures": true,
+    "no_node_deletion_or_mesocosm_selection_after_geometry_open": true,
+    "no_focal_group_switch_after_response_access": true,
+    "no_post_open_threshold_learner_or_layer_b_change": true
+  },
+  "response_semantics_boundary": {
+    "not_yet_frozen": true,
+    "count_minima_reserved_for_full_freeze": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    },
+    "prospective_estimability": "uncertain_pre_response; exact count gate must be first outcome-dependent operation if all response-blind gates pass"
+  },
+  "stage_boundary": {
+    "zenodo_metadata_only_first": true,
+    "file_payload_access_allowed": false,
+    "response_header_access_allowed": false,
+    "response_payload_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
