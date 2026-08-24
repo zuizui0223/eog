@@ -7,6 +7,10 @@ on:
     paths:
       - "validation/peneda_roedeer_paired_complementarity/**"
       - ".github/workflows/peneda_roedeer_paired_preflight.yml"
+  pull_request:
+    paths:
+      - "validation/peneda_roedeer_paired_complementarity/**"
+      - ".github/workflows/peneda_roedeer_paired_preflight.yml"
   workflow_dispatch:
 
 permissions:
