@@ -19,7 +19,7 @@ permissions:
 jobs:
   response-blind-preflight:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -28,22 +28,61 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Assert preflight script does not reference response payload
+      - name: Assert geometry preflight cannot reference response payload
         shell: bash
         run: |
           set -euo pipefail
           if grep -nE 'response_url|s005\.csv|observations_Peneda' validation/peneda_roedeer_paired_complementarity/run_preflight.py; then
-            echo "Preflight code contains a forbidden response-payload reference." >&2
+            echo "Geometry preflight contains a forbidden response-payload reference." >&2
             exit 1
           fi
 
       - name: Run response-blind geometry and effort gates
         run: python validation/peneda_roedeer_paired_complementarity/run_preflight.py
 
+      - name: Assert response-header gate reads one byte at a time
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(grep -c 'response.read(1)' validation/peneda_roedeer_paired_complementarity/run_header_preflight.py)" = "1"
+          if grep -nE 'response\.read\(\)|response\.read\([^1][^)]*\)' validation/peneda_roedeer_paired_complementarity/run_header_preflight.py; then
+            echo "Header preflight contains a non-single-byte response read." >&2
+            exit 1
+          fi
+
+      - name: Run bounded physical response-header gate
+        run: python validation/peneda_roedeer_paired_complementarity/run_header_preflight.py
+
+      - name: Assert no row-level response was opened
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          geometry = json.loads(Path(
+              "validation/peneda_roedeer_paired_complementarity/preflight_result.json"
+          ).read_text())
+          header = json.loads(Path(
+              "validation/peneda_roedeer_paired_complementarity/header_preflight_result.json"
+          ).read_text())
+          assert geometry["status"] == "ready_for_next_response_blind_freeze"
+          assert geometry["response_requests"] == 0
+          assert geometry["response_bytes"] == 0
+          assert geometry["response_rows_opened"] is False
+          assert header["status"] == "response_header_schema_ready_for_final_freeze"
+          assert header["response_header_requests"] == 1
+          assert header["response_payload_bytes_opened"] == 0
+          assert header["response_rows_opened"] is False
+          assert header["response_values_opened"] is False
+          assert header["model_fits"] == 0
+          assert header["heldout_scores"] == 0
+          PY
+
       - name: Upload preflight result
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: peneda-roedeer-response-blind-preflight
-          path: validation/peneda_roedeer_paired_complementarity/preflight_result.json
+          path: |
+            validation/peneda_roedeer_paired_complementarity/preflight_result.json
+            validation/peneda_roedeer_paired_complementarity/header_preflight_result.json
           if-no-files-found: error
