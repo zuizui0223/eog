@@ -56,7 +56,7 @@ jobs:
               spec=manifest[key]
               path=spec["path"]
               url=f"https://raw.githubusercontent.com/{owner_repo}/{commit}/{urllib.parse.quote(path,safe='/')}"
-              req=urllib.request.Request(url,headers={"User-Agent":"EOG-Guadeloupe-Physa-safe-preflight/1.0"})
+              req=urllib.request.Request(url,headers={"User-Agent":"EOG-Guadeloupe-Physa-safe-preflight/1.1"})
               with urllib.request.urlopen(req,timeout=60) as response:
                   payload=response.read(int(spec["bytes"])+1)
                   status=getattr(response,"status",None)
@@ -76,8 +76,7 @@ jobs:
           habit_payload=get_safe("habitat_covariates")
           rain_payload=get_safe("rainfall_covariates")
 
-          # Geometry registry: all physical rows, exact header, no repair/deletion.
-          coord_text=coord_payload.decode("utf-8-sig",errors="strict")
+          coord_text=coord_payload.decode(manifest["geometry"]["text_encoding"],errors="strict")
           reader=csv.DictReader(io.StringIO(coord_text))
           fields=list(reader.fieldnames or [])
           if fields != geo["required_header"]:
@@ -126,13 +125,12 @@ jobs:
               "fingerprint":x.fingerprint,
           } for x in ladder.levels]
 
-          # Shared site-year survey availability (response-independent).
           dry_text=dry_payload.decode("utf-8-sig",errors="strict")
           dry_reader=csv.reader(io.StringIO(dry_text),delimiter="\t")
           dry_rows=list(dry_reader)
           if len(dry_rows) != avail["matrix_shape"][0]+1:
               raise RuntimeError(f"dry row count mismatch {len(dry_rows)}")
-          if dry_rows[0] != [f'"V{i}"' for i in range(1,16)] and [v.strip('"') for v in dry_rows[0]] != [f"V{i}" for i in range(1,16)]:
+          if [v.strip('"') for v in dry_rows[0]] != [f"V{i}" for i in range(1,16)]:
               raise RuntimeError(f"dry header mismatch {dry_rows[0]!r}")
           dry_matrix=[]
           allowed=set(int(v) for v in avail["physical_tokens"])
@@ -145,7 +143,6 @@ jobs:
               dry_matrix.append(vals)
           dry_arr=np.asarray(dry_matrix,dtype=int)
 
-          # Site covariates: exact 278 rows, finite four-column table.
           cov_reader=csv.DictReader(io.StringIO(cov_payload.decode("utf-8-sig")),delimiter="\t")
           cov_fields=[f.strip('"') for f in (cov_reader.fieldnames or [])]
           if cov_fields != manifest["site_covariates"]["columns"]:
@@ -154,13 +151,10 @@ jobs:
           if len(cov_rows) != 278:
               raise RuntimeError(f"cov row count mismatch {len(cov_rows)}")
           for i,row in enumerate(cov_rows,start=1):
-              vals=[]
-              for field in cov_reader.fieldnames:
-                  vals.append(float(row[field]))
+              vals=[float(row[field]) for field in cov_reader.fieldnames]
               if not all(math.isfinite(v) for v in vals):
                   raise RuntimeError(f"nonfinite covariate at site {i}")
 
-          # Habitat covariates: R-style row names plus two declared data columns.
           habit_lines=list(csv.reader(io.StringIO(habit_payload.decode("utf-8-sig")),delimiter="\t"))
           if len(habit_lines) != 279:
               raise RuntimeError(f"habit physical row count mismatch {len(habit_lines)}")
@@ -174,7 +168,6 @@ jobs:
               if not all(math.isfinite(v) for v in vals):
                   raise RuntimeError(f"nonfinite habit covariate site {i}")
 
-          # Rainfall: 15 rows labeled 2000..2014, exactly three declared predictors.
           rain_lines=list(csv.reader(io.StringIO(rain_payload.decode("utf-8-sig")),delimiter="\t"))
           if len(rain_lines) != 16:
               raise RuntimeError(f"rain physical row count mismatch {len(rain_lines)}")
@@ -211,16 +204,11 @@ jobs:
               "distinct_positive_threshold_count":len(distinct),
               "levels":levels,
               "ladder_fingerprint":ladder.fingerprint,
-              "state_requests":0,
-              "state_bytes_opened":0,
-              "presence_requests":0,
-              "presence_bytes_opened":0,
-              "colsource_requests":0,
-              "colsource_bytes_opened":0,
-              "response_rows_opened":False,
-              "response_values_opened":False,
-              "model_fits":0,
-              "heldout_scores":0,
+              "state_requests":0,"state_bytes_opened":0,
+              "presence_requests":0,"presence_bytes_opened":0,
+              "colsource_requests":0,"colsource_bytes_opened":0,
+              "response_rows_opened":False,"response_values_opened":False,
+              "model_fits":0,"heldout_scores":0,
           }
           Path("build/guadeloupe_physa_safe/safe_preflight.json").write_text(json.dumps(result,indent=2,sort_keys=True,allow_nan=False)+"\n")
           print(json.dumps(result,indent=2,sort_keys=True,allow_nan=False))
