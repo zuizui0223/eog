@@ -28,6 +28,7 @@
       "path": "data/final_site_list_coordinates.csv",
       "git_blob_sha": "9aa8401a4d293e437cb2903a9f0143e0e6f84240",
       "bytes": 11022,
+      "text_encoding": "cp1252",
       "role": "response-independent site registry and projected E/N coordinates"
     },
     "survey_availability": {
