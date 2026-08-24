@@ -1,0 +1,68 @@
+{
+  "schema": "eog.fresh_paired_candidate_source_contract.v1",
+  "candidate_id": "peneda_roedeer_paired_v1",
+  "study": {
+    "title": "Long-term monitoring of mammal communities in the Peneda-Gerês National Park using camera-trap data",
+    "paper_doi": "10.3897/BDJ.11.e99588",
+    "sampling_event_doi": "10.15468/rah33j",
+    "published_camera_locations": 64,
+    "published_deployments": 331,
+    "published_year_blocks": [2015, 2016, 2017, 2018, 2019, 2020]
+  },
+  "focal_taxon": {
+    "scientific_name": "Capreolus capreolus",
+    "selection_rule": "fixed for range-edge expansion relevance, not from site-level camera outcomes",
+    "independent_basis": "pre-existing literature documents roe-deer expansion/current status at the edge of its Portuguese distribution; the paired endpoint is site-time reappearance, not the published annual occupancy estimates"
+  },
+  "response_firewall": {
+    "deployment_geometry_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10848441/bin/bdj-11-e99588-s004.csv",
+    "deployment_attachment_name": "bdj-11-e99588-s004.csv",
+    "response_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10848441/bin/bdj-11-e99588-s005.csv",
+    "response_attachment_name": "bdj-11-e99588-s005.csv",
+    "response_requests_allowed_in_preflight": 0,
+    "response_bytes_allowed_in_preflight": 0
+  },
+  "geometry_semantics": {
+    "node_key": "locationID",
+    "deployment_key": "deploymentID",
+    "required_fields": ["deploymentID", "locationID", "locationName", "longitude", "latitude", "start", "end"],
+    "coordinate_rule": "median WGS84 latitude and longitude across all response-independent deployments sharing a locationID",
+    "distance": "haversine_km",
+    "earth_radius_km": 6371.0088,
+    "expected_unique_nodes": 64,
+    "expected_deployment_rows": 331,
+    "lcc_target_fractions": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "maximum_isolated_fraction_at_lcc90": 0.05
+  },
+  "temporal_semantics": {
+    "endpoint": "monthly observed zero-to-detected reappearance at a stable camera location",
+    "minimum_active_days_in_each_adjacent_month": 20,
+    "score_only_consecutive_calendar_months_within_continuous_deployment_coverage": true,
+    "calibration_years": [2015, 2016, 2017, 2018],
+    "heldout_years": [2019, 2020, 2021],
+    "minimum_response_blind_eligible_nodes_per_scored_transition": 40,
+    "minimum_calibration_outer_units": 8,
+    "minimum_heldout_outer_units": 4
+  },
+  "exact_outcome_count_minima": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 4
+  },
+  "paired_endpoint": {
+    "baseline": "same frozen strong learner plus conventional response-independent features",
+    "augmented": "same learner plus same conventional features plus unchanged symmetric_world_support_summary_v1",
+    "learner_family": "RandomForestClassifier",
+    "primary_score": "macro_log_loss",
+    "favorable_null_adverse_all_terminally_acceptable": true
+  },
+  "no_rescue_rules": [
+    "do not open the observation attachment during source/geometry/effort preflight",
+    "do not change node identity, coordinate aggregation, structural targets, monthly effort rule, split, count minima, focal taxon, learner family, or Layer-B representation after geometry access",
+    "if the geometry/effort preflight fails, close this attempt without response access",
+    "after any row-level response access, no parser repair, retry, endpoint change, row filtering rule change, or candidate-specific rescue is permitted"
+  ]
+}
