@@ -1,0 +1,89 @@
+name: Elwha Chinook ScienceBase metadata-only preflight
+
+on:
+  push:
+    branches:
+      - agent/elwha-chinook-edna-preflight
+    paths:
+      - ".github/workflows/elwha_chinook_sciencebase_metadata.yml"
+      - "validation/elwha_chinook_edna_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/elwha_chinook_sciencebase_metadata.yml"
+      - "validation/elwha_chinook_edna_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Query ScienceBase DOI metadata only
+        run: |
+          set -euo pipefail
+          mkdir -p build/elwha_sciencebase_metadata
+          python - <<'PY'
+          import json, urllib.parse, urllib.request
+          from pathlib import Path
+          c=json.loads(Path("validation/elwha_chinook_edna_paired_complementarity/source_contract.json").read_text())
+          s=c["sciencebase_metadata_contract"]
+          query=urllib.parse.urlencode({"filter":s["doi_filter"],"format":"json","max":int(s["maximum_results"])})
+          url=s["search_endpoint"]+"?"+query
+          req=urllib.request.Request(url,headers={"User-Agent":"EOG-Elwha-ScienceBase-metadata/1.0","Accept":"application/json"})
+          with urllib.request.urlopen(req,timeout=60) as r:
+              body=r.read(5_000_001); status=getattr(r,"status",None)
+          if status != 200 or len(body)>5_000_000: raise RuntimeError(f"ScienceBase search failed {status}")
+          payload=json.loads(body.decode("utf-8"))
+          items=payload.get("items") or []
+          if len(items) != 1: raise RuntimeError(f"DOI did not resolve uniquely: {len(items)}")
+          item=items[0]
+          item_id=item.get("id")
+          item_url=f"https://www.sciencebase.gov/catalog/item/{item_id}?format=json"
+          req2=urllib.request.Request(item_url,headers={"User-Agent":"EOG-Elwha-ScienceBase-metadata/1.0","Accept":"application/json"})
+          with urllib.request.urlopen(req2,timeout=60) as r:
+              body2=r.read(10_000_001); status2=getattr(r,"status",None)
+          if status2 != 200 or len(body2)>10_000_000: raise RuntimeError(f"ScienceBase item failed {status2}")
+          detail=json.loads(body2.decode("utf-8"))
+          files=[]
+          for f in detail.get("files") or []:
+              files.append({
+                  "name":f.get("name"),"title":f.get("title"),"size":f.get("size"),
+                  "checksum":f.get("checksum"),"checksumType":f.get("checksumType"),
+                  "contentType":f.get("contentType"),"url":f.get("url"),
+              })
+          result={
+              "attempt_id":c["attempt_id"],"status":"sciencebase_metadata_inventory_pass",
+              "item_id":item_id,"title":detail.get("title"),"files":files,"file_count":len(files),
+              "hasChildren":detail.get("hasChildren"),"metadata_requests":2,
+              "file_payload_requests":0,"file_payload_bytes_opened":0,
+              "response_header_bytes_opened":0,"response_rows_opened":False,"response_values_opened":False,
+              "model_fits":0,"heldout_scores":0,
+          }
+          Path("build/elwha_sciencebase_metadata/metadata.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True))
+          PY
+      - name: Assert metadata-only firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("build/elwha_sciencebase_metadata/metadata.json").read_text())
+          assert r["file_payload_requests"] == 0 and r["file_payload_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False and r["response_values_opened"] is False
+          assert r["model_fits"] == 0 and r["heldout_scores"] == 0
+          print("Elwha ScienceBase metadata-only firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: elwha-chinook-sciencebase-metadata
+          path: build/elwha_sciencebase_metadata/metadata.json
+          if-no-files-found: error
