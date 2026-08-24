@@ -1,12 +1,6 @@
 name: Peneda roe-deer paired preflight
 
 on:
-  push:
-    branches:
-      - agent/peneda-roedeer-paired-preflight
-    paths:
-      - "validation/peneda_roedeer_paired_complementarity/**"
-      - ".github/workflows/peneda_roedeer_paired_preflight.yml"
   pull_request:
     paths:
       - "validation/peneda_roedeer_paired_complementarity/**"
@@ -57,36 +51,54 @@ jobs:
       - name: Run bounded physical response-header gate
         run: python validation/peneda_roedeer_paired_complementarity/run_header_preflight.py
 
+      - name: Build exact response-blind design freeze candidate
+        run: python validation/peneda_roedeer_paired_complementarity/build_full_freeze.py
+
       - name: Assert no row-level response was opened
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          geometry = json.loads(Path(
-              "validation/peneda_roedeer_paired_complementarity/preflight_result.json"
-          ).read_text())
-          header = json.loads(Path(
-              "validation/peneda_roedeer_paired_complementarity/header_preflight_result.json"
-          ).read_text())
+          root = Path("validation/peneda_roedeer_paired_complementarity")
+          geometry = json.loads((root / "preflight_result.json").read_text())
+          header = json.loads((root / "header_preflight_result.json").read_text())
+          freeze = json.loads((root / "full_freeze_candidate.json").read_text())
           assert geometry["status"] == "ready_for_next_response_blind_freeze"
           assert geometry["response_requests"] == 0
           assert geometry["response_bytes"] == 0
           assert geometry["response_rows_opened"] is False
+          assert geometry["response_values_opened"] is False
+          assert len(geometry["hard_worlds"]) >= 3
+          assert len(geometry["heldout_outer_ids"]) >= 4
           assert header["status"] == "response_header_schema_ready_for_final_freeze"
           assert header["response_header_requests"] == 1
           assert header["response_payload_bytes_opened"] == 0
           assert header["response_rows_opened"] is False
           assert header["response_values_opened"] is False
-          assert header["model_fits"] == 0
-          assert header["heldout_scores"] == 0
+          assert freeze["stage_boundary"]["stage"] == "response_blind_full_freeze_candidate"
+          assert freeze["stage_boundary"]["outcome_access_authorized"] is False
+          assert freeze["audit"]["response_full_payload_requests"] == 0
+          assert freeze["audit"]["response_payload_bytes_opened"] == 0
+          assert freeze["audit"]["response_rows_opened"] is False
+          assert freeze["audit"]["model_fits"] == 0
+          assert freeze["audit"]["heldout_scores"] == 0
+          assert freeze["layer_b_representation"]["feature_names"] == [
+              "surviving_world_fraction", "support_mean", "support_std", "support_min",
+              "support_max", "support_q25", "support_q50", "support_q75",
+              "positive_support_fraction", "support_range",
+          ]
+          assert freeze["metrics_decision"]["favorable_min_augmented_wins"] == (
+              freeze["metrics_decision"]["expected_outer_unit_count"] // 2 + 1
+          )
           PY
 
-      - name: Upload preflight result
+      - name: Upload response-blind full-freeze evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: peneda-roedeer-response-blind-preflight
+          name: peneda-roedeer-response-blind-full-freeze
           path: |
             validation/peneda_roedeer_paired_complementarity/preflight_result.json
             validation/peneda_roedeer_paired_complementarity/header_preflight_result.json
+            validation/peneda_roedeer_paired_complementarity/full_freeze_candidate.json
           if-no-files-found: error
