@@ -25,7 +25,11 @@
       "size": 5952,
       "digest_type": "sha-256",
       "sha256": "c503113a55e569b7981407380e43f20f9a32451b6f352710d936527837462162",
-      "api_download": "https://datadryad.org/api/v2/files/1674973/download"
+      "transport_routes": [
+        "https://datadryad.org/api/v2/files/1674973/download",
+        "https://datadryad.org/stash/downloads/file_stream/1674973"
+      ],
+      "maximum_transport_attempts": 2
     },
     "observed_structure": "README.txt plus RData/model-output files; no standalone coordinate/distance file name was exposed by metadata",
     "rule": "open only README.txt next to classify the RData roles and determine whether response-independent geometry is physically separable; no RData or CSV payload may be opened at this stage"
