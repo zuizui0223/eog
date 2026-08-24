@@ -12,15 +12,22 @@
   "focal_taxon": {
     "scientific_name": "Capreolus capreolus",
     "selection_rule": "fixed for range-edge expansion relevance, not from site-level camera outcomes",
-    "independent_basis": "pre-existing literature documents roe-deer expansion/current status at the edge of its Portuguese distribution; the paired endpoint is site-time reappearance, not the published annual occupancy estimates"
+    "independent_basis": "Torres et al. 2015, Expansion and Current Status of Roe Deer at the Edge of Its Distribution in Portugal, DOI 10.5735/086.052.0508; focal selection is therefore independent of site-level Peneda camera outcomes",
+    "independent_basis_doi": "10.5735/086.052.0508"
   },
   "response_firewall": {
     "deployment_geometry_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10848441/bin/bdj-11-e99588-s004.csv",
     "deployment_attachment_name": "bdj-11-e99588-s004.csv",
     "response_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10848441/bin/bdj-11-e99588-s005.csv",
     "response_attachment_name": "bdj-11-e99588-s005.csv",
-    "response_requests_allowed_in_preflight": 0,
-    "response_bytes_allowed_in_preflight": 0
+    "response_full_payload_requests_allowed_in_preflight": 0,
+    "response_full_payload_bytes_allowed_in_preflight": 0,
+    "bounded_header_requests_allowed_in_preflight": 1,
+    "bounded_header_range": "bytes=0-4095",
+    "bounded_header_maximum_bytes": 4096,
+    "bounded_header_scope": "first physical CSV record only; bytes after the first CR/LF terminator are discarded without parsing or interpretation",
+    "response_rows_opened": false,
+    "response_values_opened": false
   },
   "geometry_semantics": {
     "node_key": "locationID",
@@ -43,7 +50,9 @@
     "heldout_years": [2019, 2020, 2021],
     "minimum_response_blind_eligible_nodes_per_scored_transition": 40,
     "minimum_calibration_outer_units": 8,
-    "minimum_heldout_outer_units": 4
+    "minimum_heldout_outer_units": 4,
+    "final_score_outer_unit": "three-month heldout calendar block",
+    "final_win_rule": "strict majority of response-independent heldout calendar blocks; exact integer frozen after effort preflight and before any row-level response access"
   },
   "exact_outcome_count_minima": {
     "calibration_events": 10,
@@ -72,14 +81,14 @@
     "primary_score": "binary_log_loss",
     "probability_clip": 0.000001,
     "lower_is_better": true,
-    "outer_unit_and_win_threshold": "freeze exactly from response-independent eligible heldout transition registry after preflight; never from roe-deer outcomes",
+    "outer_unit_and_win_threshold": "three-month heldout calendar blocks; strict-majority win threshold frozen exactly from the response-independent eligible heldout transition registry after preflight",
     "tie_tolerance": 0.0,
     "favorable_null_adverse_all_terminally_acceptable": true
   },
   "no_rescue_rules": [
-    "do not open the observation attachment during source/geometry/effort preflight",
-    "do not change node identity, coordinate aggregation, structural targets, monthly effort rule, split, count minima, focal taxon, learner family, learner hyperparameters, score metric, or Layer-B representation after geometry access",
-    "if the geometry/effort preflight fails, close this attempt without response access",
+    "do not open any observation row/value during preflight; only the prospectively bounded first physical header record may be read",
+    "do not change node identity, coordinate aggregation, structural targets, monthly effort rule, split, count minima, focal taxon, learner family, learner hyperparameters, score metric, score-unit rule, or Layer-B representation after geometry access",
+    "if the geometry/effort preflight fails, close this attempt without row-level response access",
     "after any row-level response access, no parser repair, retry, endpoint change, row filtering rule change, or candidate-specific rescue is permitted"
   ]
 }
