@@ -1,0 +1,213 @@
+name: Luquillo bullfinch response-blind Gate 0
+
+on:
+  push:
+    branches:
+      - agent/luquillo-bullfinch-fresh-gate0
+    paths:
+      - ".github/workflows/luquillo_bullfinch_gate0.yml"
+      - "validation/luquillo_bullfinch_paired_complementarity/source_contract.json"
+  pull_request:
+    paths:
+      - ".github/workflows/luquillo_bullfinch_gate0.yml"
+      - "validation/luquillo_bullfinch_paired_complementarity/source_contract.json"
+  workflow_dispatch:
+
+concurrency:
+  group: luquillo-bullfinch-gate0-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-and-gis-inventory-only:
+    runs-on: ubuntu-slim
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Inspect EDI metadata and GIS ZIP central directory only
+        run: |
+          set -euo pipefail
+          mkdir -p build/luquillo_bullfinch_gate0
+          python - <<'PY'
+          from __future__ import annotations
+          import json, struct, urllib.request, xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          c=json.loads(Path("validation/luquillo_bullfinch_paired_complementarity/source_contract.json").read_text())
+          a=c["scientific_anchor"]
+          out=Path("build/luquillo_bullfinch_gate0/gate0.json")
+          result={
+              "attempt_id":c["attempt_id"],
+              "status":"not_evaluated",
+              "edi_metadata_requests":0,
+              "edi_resource_map_requests":0,
+              "edi_data_entity_payload_requests":0,
+              "edi_data_entity_payload_bytes":0,
+              "gis_head_requests":0,
+              "gis_range_requests":0,
+              "gis_metadata_bytes_opened":0,
+              "gis_member_payload_requests":0,
+              "gis_member_payload_bytes":0,
+              "bird_response_header_bytes":0,
+              "bird_response_rows_opened":False,
+              "bird_response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          def finish(status,**extra):
+              result.update(extra); result["status"]=status
+              out.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")
+              print(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False))
+          def fail(status,reason,**extra):
+              finish(status,reason=reason,**extra); raise SystemExit(3)
+          def bounded_get(url,max_bytes,user_agent):
+              req=urllib.request.Request(url,headers={"User-Agent":user_agent,"Accept-Encoding":"identity"})
+              with urllib.request.urlopen(req,timeout=60) as r:
+                  body=r.read(max_bytes+1); status=getattr(r,"status",None); ctype=r.headers.get("Content-Type")
+              if status!=200 or len(body)>max_bytes:
+                  fail("stop_transport",f"bounded GET failed for {url}",http_status=status,observed_bytes=len(body))
+              return body,ctype
+          def localname(tag):
+              return tag.rsplit('}',1)[-1]
+
+          scope=a["edi_scope"]; ident=int(a["edi_identifier"]); rev=int(a["edi_revision"])
+          eml_url=f"https://pasta.lternet.edu/package/metadata/eml/{scope}/{ident}/{rev}"
+          resource_url=f"https://pasta.lternet.edu/package/eml/{scope}/{ident}/{rev}"
+
+          result["edi_metadata_requests"]=1
+          eml_bytes,eml_ctype=bounded_get(eml_url,5_000_000,"EOG-Luquillo-EML/1.0")
+          result["edi_resource_map_requests"]=1
+          resource_bytes,resource_ctype=bounded_get(resource_url,2_000_000,"EOG-Luquillo-resource-map/1.0")
+
+          try:
+              root=ET.fromstring(eml_bytes)
+          except Exception as exc:
+              fail("stop_edi_metadata_schema",f"EML XML parse failed: {exc}")
+
+          entities=[]
+          for elem in root.iter():
+              if localname(elem.tag) not in {"dataTable","spatialRaster","spatialVector","storedProcedure","otherEntity"}:
+                  continue
+              entity={"type":localname(elem.tag),"entity_name":None,"object_name":None,"attributes":[]}
+              for child in elem.iter():
+                  lname=localname(child.tag)
+                  text=(child.text or "").strip()
+                  if lname=="entityName" and text and entity["entity_name"] is None:
+                      entity["entity_name"]=text
+                  if lname=="objectName" and text and entity["object_name"] is None:
+                      entity["object_name"]=text
+                  if lname=="attribute":
+                      name=None; definition=None
+                      for x in child.iter():
+                          xl=localname(x.tag); xt=(x.text or "").strip()
+                          if xl=="attributeName" and xt and name is None: name=xt
+                          if xl=="attributeDefinition" and xt and definition is None: definition=xt
+                      if name:
+                          entity["attributes"].append({"name":name,"definition":definition})
+              entities.append(entity)
+
+          temporal=[]
+          for elem in root.iter():
+              lname=localname(elem.tag)
+              if lname in {"beginDate","endDate","singleDateTime"}:
+                  texts=[]
+                  for x in elem.iter():
+                      xt=(x.text or "").strip()
+                      if xt: texts.append(xt)
+                  if texts: temporal.append({"type":lname,"text":" | ".join(texts)[:500]})
+
+          # GIS archive HEAD and exact ZIP metadata ranges only.
+          gis_url=a["official_gis_zip_url"]
+          result["gis_head_requests"]=1
+          req=urllib.request.Request(gis_url,method="HEAD",headers={"User-Agent":"EOG-Luquillo-GIS/1.0","Accept-Encoding":"identity"})
+          with urllib.request.urlopen(req,timeout=60) as r:
+              head_status=getattr(r,"status",None)
+              content_length=r.headers.get("Content-Length")
+              etag=r.headers.get("ETag")
+              last_modified=r.headers.get("Last-Modified")
+              gis_ctype=r.headers.get("Content-Type")
+          if head_status not in (200,204) or not content_length:
+              fail("stop_gis_head_contract","GIS HEAD did not expose a stable content length",http_status=head_status,content_length=content_length)
+          size=int(content_length)
+          tail_start=max(0,size-65557)
+          req=urllib.request.Request(gis_url,headers={"User-Agent":"EOG-Luquillo-GIS/1.0","Accept-Encoding":"identity","Range":f"bytes={tail_start}-{size-1}"})
+          result["gis_range_requests"]+=1
+          with urllib.request.urlopen(req,timeout=60) as r:
+              tail=r.read(65558); tail_status=getattr(r,"status",None); tail_cr=r.headers.get("Content-Range")
+          if tail_status!=206:
+              fail("stop_gis_range_transport","GIS server did not honor bounded ZIP-tail Range",http_status=tail_status,content_range=tail_cr,observed_bytes=len(tail))
+          result["gis_metadata_bytes_opened"]+=len(tail)
+          idx=tail.rfind(b"PK\x05\x06")
+          if idx<0 or idx+22>len(tail):
+              fail("stop_gis_zip_schema","ZIP EOCD not found in bounded tail")
+          eocd=tail[idx:idx+22]
+          _,disk_no,cd_disk,disk_entries,total_entries,cd_size,cd_offset,comment_len=struct.unpack("<4s4H2IH",eocd)
+          if disk_no!=0 or cd_disk!=0 or disk_entries!=total_entries or total_entries==0xFFFF or cd_size==0xFFFFFFFF or cd_offset==0xFFFFFFFF:
+              fail("stop_gis_zip_schema","multi-disk or ZIP64 GIS archive outside frozen parser")
+          req=urllib.request.Request(gis_url,headers={"User-Agent":"EOG-Luquillo-GIS/1.0","Accept-Encoding":"identity","Range":f"bytes={cd_offset}-{cd_offset+cd_size-1}"})
+          result["gis_range_requests"]+=1
+          with urllib.request.urlopen(req,timeout=60) as r:
+              central=r.read(cd_size+1); cd_status=getattr(r,"status",None); cd_cr=r.headers.get("Content-Range")
+          if cd_status!=206 or len(central)!=cd_size:
+              fail("stop_gis_range_transport","central-directory exact Range failed",http_status=cd_status,content_range=cd_cr,observed_bytes=len(central),expected_bytes=cd_size)
+          result["gis_metadata_bytes_opened"]+=len(central)
+          entries=[]; pos=0
+          while pos<len(central):
+              if central[pos:pos+4]!=b"PK\x01\x02" or pos+46>len(central):
+                  fail("stop_gis_zip_schema","central directory signature/header mismatch",position=pos)
+              fields=struct.unpack_from("<4s6H3I5H2I",central,pos)
+              (_,vmade,vneed,flags,method,mtime,mdate,crc,csize,usize,nlen,xlen,clen,startdisk,iattr,eattr,loff)=fields
+              ns=pos+46; ne=ns+nlen; xe=ne+xlen; ce=xe+clen
+              if ce>len(central): fail("stop_gis_zip_schema","central directory variable field overflow",position=pos)
+              raw=central[ns:ne]
+              name=raw.decode("utf-8" if flags & 0x800 else "cp437")
+              entries.append({"name":name,"compression_method":method,"crc32":crc,"compressed_size":csize,"uncompressed_size":usize,"local_header_offset":loff})
+              pos=ce
+          if pos!=len(central) or len(entries)!=total_entries:
+              fail("stop_gis_zip_schema","GIS central directory count/length mismatch",parsed_entries=len(entries),expected_entries=total_entries)
+
+          finish(
+              "metadata_and_gis_inventory_complete",
+              edi_eml_content_type=eml_ctype,
+              edi_resource_map_content_type=resource_ctype,
+              edi_resource_map_text=resource_bytes.decode("utf-8",errors="replace")[:100000],
+              edi_entities=entities,
+              edi_temporal_coverage=temporal,
+              gis_content_length=size,
+              gis_etag=etag,
+              gis_last_modified=last_modified,
+              gis_content_type=gis_ctype,
+              gis_zip_comment_length=comment_len,
+              gis_entries=entries,
+          )
+          PY
+      - name: Assert strict Gate-0 response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/luquillo_bullfinch_gate0/gate0.json")
+          if not p.exists(): raise SystemExit("Luquillo Gate-0 result missing")
+          r=json.loads(p.read_text())
+          assert r["edi_data_entity_payload_requests"]==0
+          assert r["edi_data_entity_payload_bytes"]==0
+          assert r["gis_member_payload_requests"]==0
+          assert r["gis_member_payload_bytes"]==0
+          assert r["bird_response_header_bytes"]==0
+          assert r["bird_response_rows_opened"] is False
+          assert r["bird_response_values_opened"] is False
+          assert r["model_fits"]==0 and r["heldout_scores"]==0
+          print(f"Luquillo Gate-0 firewall PASS: {r['status']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: luquillo-bullfinch-gate0
+          path: build/luquillo_bullfinch_gate0/gate0.json
+          if-no-files-found: error
