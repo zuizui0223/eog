@@ -1,0 +1,59 @@
+{
+  "attempt_id": "northeast_atlantic_gannet_fresh_paired_v1",
+  "candidate": "Northern gannet (Morus bassanus) Northeast Atlantic colony metapopulation",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "zenodo_record": 12513978,
+    "zenodo_doi": "10.5281/zenodo.12513978",
+    "focal_taxon": "Morus bassanus",
+    "published_design": "Bayesian metapopulation analysis of census data for all Northeast Atlantic northern gannet colonies, extended with climate covariates and historical/future projections",
+    "source_process_claim": "natural inter-colony recruitment/dispersal among the prospectively closed colony universe is the target process; any evidence that colony appearance depends on an external unrepresented source or that colony registry is created from response rows stops the candidate",
+    "prospective_endpoint": "paired heldout complementarity of frozen conventional colony/climate/history features versus the same learner and features plus frozen EOG Layer B"
+  },
+  "known_public_release_metadata": {
+    "geometry_filename": "Colonies.csv",
+    "geometry_md5": "0dae8eb74707a59a64907a7c5d3737a8",
+    "response_filename": "gannets_master_complete_updated.csv",
+    "response_md5": "6eec0d90a1d17af81a7aef7c5b0546af",
+    "documentation_filename": "Metadata-description .rtf",
+    "documentation_md5": "82157c67d9a92fe683d7169d67c364de"
+  },
+  "admission_rules": {
+    "require_geometry_physically_separate_from_response": true,
+    "require_machine_readable_colony_coordinates": true,
+    "require_closed_colony_registry_before_response": true,
+    "require_repeated_census_semantics": true,
+    "require_surveyed_zero_or_other_explicit_absence_semantics": true,
+    "require_at_least_three_distinct_positive_structural_scales": true,
+    "require_temporal_source_closure_before_response": true,
+    "require_strong_conventional_baseline": true,
+    "no_response_preview_or_payload_for_candidate_admission": true,
+    "no_colony_addition_from_response_rows": true,
+    "no_post_open_threshold_or_learner_change": true
+  },
+  "response_semantics_boundary": {
+    "not_yet_frozen": true,
+    "count_minima_reserved_for_full_freeze": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    },
+    "prospective_estimability": "uncertain_pre_response; exact count gate must be first outcome-dependent operation if all response-blind gates pass"
+  },
+  "stage_boundary": {
+    "zenodo_metadata_only_first": true,
+    "geometry_payload_access_allowed": false,
+    "documentation_payload_access_allowed": false,
+    "response_header_access_allowed": false,
+    "response_payload_access_allowed": false,
+    "outcome_access_authorized": false
+  }
+}
