@@ -1,0 +1,740 @@
+from __future__ import annotations
+
+import binascii
+import csv
+import hashlib
+import io
+import json
+import math
+import re
+import statistics
+import struct
+import urllib.request
+import zlib
+from collections import defaultdict
+from datetime import datetime, timedelta
+from pathlib import Path
+
+import numpy as np
+
+from eog.v2.world_scale_ladder import (
+    StructuralScaleLadderDeclaration,
+    build_structural_scale_ladder,
+    structural_scale_adjacencies,
+)
+from eog.v2.world_adequacy import (
+    StructuralAdequacyDeclaration,
+    apply_structural_adequacy_gate,
+    audit_world_universe_structure,
+)
+
+ROOT = Path(__file__).resolve().parents[2]
+CONTRACT_PATH = ROOT / "validation/ri_raccoon_paired_complementarity/source_contract.json"
+OUT_DIR = ROOT / "build/ri_raccoon_preflight"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+OUT = OUT_DIR / "preflight.json"
+
+contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+archive_contract = contract["archive_contract"]
+deploy_contract = contract["deployment_semantics"]
+minima = contract["preflight_minima"]
+structural = contract["structural_gate"]
+
+result = {
+    "attempt_id": contract["attempt_id"],
+    "status": "not_evaluated",
+    "zenodo_metadata_requests": 0,
+    "archive_range_requests": 0,
+    "archive_metadata_bytes_opened": 0,
+    "deployment_member_compressed_bytes_opened": 0,
+    "deployment_member_uncompressed_bytes_opened": 0,
+    "detection_member_payload_requests": 0,
+    "detection_member_payload_bytes_opened": 0,
+    "detection_header_bytes_opened": 0,
+    "response_rows_opened": False,
+    "response_values_opened": False,
+    "model_fits": 0,
+    "heldout_scores": 0,
+}
+
+
+def finish(status: str, **extra):
+    result.update(extra)
+    result["status"] = status
+    OUT.write_text(
+        json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+    print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False))
+
+
+def fail(status: str, reason: str, **extra):
+    finish(status, reason=reason, **extra)
+    raise SystemExit(3)
+
+
+def normalized_header(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", value.casefold())
+
+
+def resolve_role(fieldnames: list[str], aliases: list[str], role: str) -> str:
+    targets = {normalized_header(x) for x in aliases}
+    hits = [name for name in fieldnames if normalized_header(name) in targets]
+    if len(hits) != 1:
+        fail(
+            "stop_deployment_schema",
+            f"semantic role {role!r} did not resolve uniquely",
+            role=role,
+            aliases=aliases,
+            hits=hits,
+            physical_header=fieldnames,
+        )
+    return hits[0]
+
+
+def parse_date(value: str):
+    token = value.strip()
+    for fmt in deploy_contract["allowed_date_formats"]:
+        try:
+            return datetime.strptime(token, fmt).date()
+        except ValueError:
+            pass
+    fail("stop_deployment_schema", "date token does not match any frozen format", token=token)
+
+
+def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    radius = 6371.0088
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+    a = math.sin(dphi / 2.0) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlambda / 2.0) ** 2
+    return 2.0 * radius * math.asin(min(1.0, math.sqrt(a)))
+
+
+def exact_range(url: str, start: int, end: int, kind: str) -> bytes:
+    if start < 0 or end < start:
+        fail("stop_archive_range_contract", "invalid requested byte range", start=start, end=end, kind=kind)
+    expected = end - start + 1
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "EOG-RI-raccoon-response-blind/1.0",
+            "Accept-Encoding": "identity",
+            "Range": f"bytes={start}-{end}",
+        },
+    )
+    result["archive_range_requests"] += 1
+    with urllib.request.urlopen(req, timeout=90) as response:
+        body = response.read(expected + 1)
+        status = getattr(response, "status", None)
+        content_range = response.headers.get("Content-Range")
+    if status != 206:
+        fail(
+            "stop_archive_range_transport",
+            "server did not honor exact Range request",
+            kind=kind,
+            http_status=status,
+            requested=[start, end],
+            content_range=content_range,
+            observed_bytes=len(body),
+        )
+    if len(body) != expected:
+        fail(
+            "stop_archive_range_transport",
+            "exact Range byte count mismatch",
+            kind=kind,
+            requested=[start, end],
+            expected_bytes=expected,
+            observed_bytes=len(body),
+            content_range=content_range,
+        )
+    return body
+
+
+# Exact Zenodo v3 record metadata only.
+record_id = int(contract["scientific_anchor"]["zenodo_record"])
+metadata_url = f"https://zenodo.org/api/records/{record_id}"
+req = urllib.request.Request(
+    metadata_url,
+    headers={"User-Agent": "EOG-RI-raccoon-metadata/1.0", "Accept": "application/json"},
+)
+result["zenodo_metadata_requests"] = 1
+with urllib.request.urlopen(req, timeout=60) as response:
+    metadata_body = response.read(5_000_001)
+    metadata_status = getattr(response, "status", None)
+if metadata_status != 200 or len(metadata_body) > 5_000_000:
+    fail(
+        "stop_zenodo_metadata_transport",
+        "bounded Zenodo metadata request failed",
+        http_status=metadata_status,
+        observed_bytes=len(metadata_body),
+    )
+payload = json.loads(metadata_body.decode("utf-8"))
+if int(payload.get("id")) != record_id:
+    fail(
+        "stop_zenodo_record_identity",
+        "Zenodo record id mismatch",
+        observed_record_id=payload.get("id"),
+        expected_record_id=record_id,
+    )
+
+files = payload.get("files") or []
+archive_matches = [f for f in files if f.get("key") == archive_contract["archive_name"]]
+if len(archive_matches) != 1:
+    fail(
+        "stop_archive_identity",
+        "frozen archive name did not resolve uniquely",
+        matching_file_count=len(archive_matches),
+        public_file_names=[f.get("key") for f in files],
+    )
+archive = archive_matches[0]
+checksum = str(archive.get("checksum") or "")
+observed_md5 = checksum.split(":", 1)[-1] if checksum else ""
+if observed_md5 != archive_contract["archive_md5"]:
+    fail(
+        "stop_archive_identity",
+        "Zenodo archive MD5 differs from frozen public metadata",
+        observed_md5=observed_md5,
+        expected_md5=archive_contract["archive_md5"],
+    )
+archive_size = int(archive.get("size"))
+archive_url = (archive.get("links") or {}).get("content") or (archive.get("links") or {}).get("self")
+if not archive_url or archive_size <= int(archive_contract["eocd_tail_bytes"]):
+    fail(
+        "stop_archive_identity",
+        "archive content URL or size is invalid",
+        archive_size=archive_size,
+        archive_url=archive_url,
+    )
+
+# ZIP metadata only: exact EOCD and central directory ranges.
+tail_bytes = int(archive_contract["eocd_tail_bytes"])
+eocd = exact_range(archive_url, archive_size - tail_bytes, archive_size - 1, "zip_eocd")
+result["archive_metadata_bytes_opened"] += len(eocd)
+if len(eocd) != 22 or eocd[:4] != b"PK\x05\x06":
+    fail("stop_zip_eocd_contract", "exact 22-byte ZIP EOCD not present at archive tail")
+(
+    _sig,
+    disk_no,
+    cd_disk,
+    disk_entries,
+    total_entries,
+    cd_size,
+    cd_offset,
+    comment_len,
+) = struct.unpack("<4s4H2IH", eocd)
+if comment_len != 0 and archive_contract["require_zero_zip_comment"]:
+    fail("stop_zip_eocd_contract", "ZIP comment is nonzero under frozen exact-tail rule", comment_length=comment_len)
+if archive_contract["require_non_zip64"] and (
+    total_entries == 0xFFFF or cd_size == 0xFFFFFFFF or cd_offset == 0xFFFFFFFF
+):
+    fail("stop_zip64_not_allowed", "archive requires ZIP64 under frozen simple-range parser")
+if disk_no != 0 or cd_disk != 0 or disk_entries != total_entries:
+    fail("stop_zip_multidisk_not_allowed", "multi-disk ZIP is outside the frozen archive contract")
+if cd_offset + cd_size + 22 != archive_size:
+    fail(
+        "stop_zip_central_directory_identity",
+        "central directory plus EOCD does not close exactly at archive end",
+        archive_size=archive_size,
+        central_directory_offset=cd_offset,
+        central_directory_size=cd_size,
+    )
+
+central = exact_range(archive_url, cd_offset, cd_offset + cd_size - 1, "zip_central_directory")
+result["archive_metadata_bytes_opened"] += len(central)
+entries: list[dict] = []
+pos = 0
+while pos < len(central):
+    if central[pos : pos + 4] != b"PK\x01\x02":
+        fail("stop_zip_central_directory_schema", "central-directory signature mismatch", position=pos)
+    if pos + 46 > len(central):
+        fail("stop_zip_central_directory_schema", "truncated central-directory fixed header", position=pos)
+    fields = struct.unpack_from("<4s6H3I5H2I", central, pos)
+    (
+        _sig,
+        _version_made,
+        _version_needed,
+        flags,
+        method,
+        _mtime,
+        _mdate,
+        crc32,
+        compressed_size,
+        uncompressed_size,
+        name_len,
+        extra_len,
+        file_comment_len,
+        start_disk,
+        _internal_attr,
+        _external_attr,
+        local_offset,
+    ) = fields
+    name_start = pos + 46
+    name_end = name_start + name_len
+    extra_end = name_end + extra_len
+    comment_end = extra_end + file_comment_len
+    if comment_end > len(central):
+        fail("stop_zip_central_directory_schema", "central-directory variable fields overrun buffer", position=pos)
+    raw_name = central[name_start:name_end]
+    try:
+        name = raw_name.decode("utf-8" if (flags & 0x800) else "cp437")
+    except UnicodeDecodeError:
+        fail("stop_zip_central_directory_schema", "member name decode failure", position=pos)
+    entries.append(
+        {
+            "name": name,
+            "flags": flags,
+            "method": method,
+            "crc32": crc32,
+            "compressed_size": compressed_size,
+            "uncompressed_size": uncompressed_size,
+            "local_header_offset": local_offset,
+            "start_disk": start_disk,
+        }
+    )
+    pos = comment_end
+if pos != len(central) or len(entries) != total_entries:
+    fail(
+        "stop_zip_central_directory_schema",
+        "entry count or central-directory length mismatch",
+        parsed_entries=len(entries),
+        expected_entries=total_entries,
+        parsed_bytes=pos,
+        expected_bytes=len(central),
+    )
+
+by_name = {entry["name"]: entry for entry in entries}
+deployment_name = archive_contract["required_deployment_member"]
+detection_name = archive_contract["forbidden_detection_member"]
+if deployment_name not in by_name or detection_name not in by_name:
+    fail(
+        "stop_zip_member_contract",
+        "required frozen member names are absent",
+        member_names=sorted(by_name),
+    )
+if len(by_name) != len(entries):
+    fail("stop_zip_member_contract", "duplicate ZIP member names are not allowed")
+deployment_entry = by_name[deployment_name]
+detection_entry = by_name[detection_name]
+if detection_entry["local_header_offset"] == deployment_entry["local_header_offset"]:
+    fail("stop_zip_member_contract", "deployment and detection members share a local-header offset")
+
+# Open only the response-independent deployment member.
+local_offset = int(deployment_entry["local_header_offset"])
+local_fixed = exact_range(archive_url, local_offset, local_offset + 29, "deployment_local_header_fixed")
+result["archive_metadata_bytes_opened"] += len(local_fixed)
+if local_fixed[:4] != b"PK\x03\x04":
+    fail("stop_deployment_member_identity", "deployment local-file header signature missing")
+(
+    _sig,
+    _local_version,
+    local_flags,
+    local_method,
+    _local_mtime,
+    _local_mdate,
+    _local_crc,
+    _local_csize,
+    _local_usize,
+    local_name_len,
+    local_extra_len,
+) = struct.unpack("<4s5H3I2H", local_fixed)
+if local_flags & 0x1:
+    fail("stop_deployment_member_identity", "encrypted deployment member is not allowed")
+local_meta_len = int(local_name_len) + int(local_extra_len)
+if local_meta_len:
+    local_meta = exact_range(
+        archive_url,
+        local_offset + 30,
+        local_offset + 30 + local_meta_len - 1,
+        "deployment_local_header_name_extra",
+    )
+else:
+    local_meta = b""
+result["archive_metadata_bytes_opened"] += len(local_meta)
+local_name_raw = local_meta[:local_name_len]
+local_name = local_name_raw.decode("utf-8" if (local_flags & 0x800) else "cp437")
+if local_name != deployment_name:
+    fail(
+        "stop_deployment_member_identity",
+        "local member name differs from central-directory identity",
+        local_name=local_name,
+        expected_name=deployment_name,
+    )
+if int(local_method) != int(deployment_entry["method"]):
+    fail("stop_deployment_member_identity", "compression method differs between local and central headers")
+comp_start = local_offset + 30 + local_meta_len
+comp_end = comp_start + int(deployment_entry["compressed_size"]) - 1
+compressed = exact_range(archive_url, comp_start, comp_end, "deployment_compressed_payload")
+result["deployment_member_compressed_bytes_opened"] = len(compressed)
+if int(local_method) == 0:
+    deployment_bytes = compressed
+elif int(local_method) == 8:
+    deployment_bytes = zlib.decompress(compressed, -15)
+else:
+    fail(
+        "stop_deployment_member_identity",
+        "unsupported deployment compression method",
+        compression_method=local_method,
+    )
+if len(deployment_bytes) != int(deployment_entry["uncompressed_size"]):
+    fail(
+        "stop_deployment_member_identity",
+        "deployment uncompressed size mismatch",
+        observed_bytes=len(deployment_bytes),
+        expected_bytes=deployment_entry["uncompressed_size"],
+    )
+observed_crc = binascii.crc32(deployment_bytes) & 0xFFFFFFFF
+if observed_crc != int(deployment_entry["crc32"]):
+    fail(
+        "stop_deployment_member_identity",
+        "deployment CRC32 mismatch",
+        observed_crc32=observed_crc,
+        expected_crc32=deployment_entry["crc32"],
+    )
+result["deployment_member_uncompressed_bytes_opened"] = len(deployment_bytes)
+
+decoded = None
+used_encoding = None
+for encoding in deploy_contract["allowed_text_encodings_in_order"]:
+    try:
+        decoded = deployment_bytes.decode(encoding)
+        used_encoding = encoding
+        break
+    except UnicodeDecodeError:
+        continue
+if decoded is None:
+    fail("stop_deployment_text_encoding", "deployment member failed all prospectively allowed encodings")
+
+reader = csv.DictReader(io.StringIO(decoded), delimiter=deploy_contract["csv_delimiter"])
+fieldnames = list(reader.fieldnames or [])
+if not fieldnames or len(set(fieldnames)) != len(fieldnames) or any(not str(x).strip() for x in fieldnames):
+    fail(
+        "stop_deployment_schema",
+        "deployment physical header is empty, duplicate, or invalid",
+        physical_header=fieldnames,
+    )
+aliases = deploy_contract["semantic_aliases"]
+role_columns = {
+    role: resolve_role(fieldnames, list(role_aliases), role)
+    for role, role_aliases in aliases.items()
+}
+
+rows: list[dict] = []
+for row_index, row in enumerate(reader, start=2):
+    site = str(row.get(role_columns["site_id"], "")).strip()
+    camera = str(row.get(role_columns["camera_id"], "")).strip()
+    period = str(row.get(role_columns["year_season"], "")).strip()
+    if not site or not camera or not period:
+        fail(
+            "stop_analysis_registry_not_closed",
+            "empty frozen node/camera/period field in deployment row",
+            row_index=row_index,
+            site=site,
+            camera=camera,
+            year_season=period,
+        )
+    try:
+        lat = float(str(row.get(role_columns["latitude"], "")).strip())
+        lon = float(str(row.get(role_columns["longitude"], "")).strip())
+    except ValueError:
+        fail("stop_deployment_schema", "non-numeric deployment coordinate", row_index=row_index)
+    if not math.isfinite(lat) or not math.isfinite(lon) or not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
+        fail(
+            "stop_deployment_schema",
+            "invalid deployment coordinate",
+            row_index=row_index,
+            latitude=lat,
+            longitude=lon,
+        )
+    start = parse_date(str(row.get(role_columns["start_date"], "")))
+    end = parse_date(str(row.get(role_columns["end_date"], "")))
+    if end < start:
+        fail(
+            "stop_deployment_schema",
+            "deployment end precedes start",
+            row_index=row_index,
+            start=str(start),
+            end=str(end),
+        )
+    year_match = re.search(r"(?:19|20)\d{2}", period)
+    if not year_match:
+        fail(
+            "stop_deployment_schema",
+            "YearSeason does not expose a four-digit year under frozen rule",
+            row_index=row_index,
+            year_season=period,
+        )
+    period_year = int(year_match.group(0))
+    if period_year < 2018 or period_year > 2023:
+        fail(
+            "stop_deployment_schema",
+            "YearSeason year is outside frozen 2018-2023 study window",
+            row_index=row_index,
+            year_season=period,
+            period_year=period_year,
+        )
+    rows.append(
+        {
+            "site": site,
+            "camera": camera,
+            "period": period,
+            "period_year": period_year,
+            "lat": lat,
+            "lon": lon,
+            "start": start,
+            "end": end,
+        }
+    )
+if not rows:
+    fail("stop_deployment_schema", "deployment CSV has zero data rows")
+
+sites = sorted({row["site"] for row in rows})
+periods = sorted({row["period"] for row in rows})
+site_coords: dict[str, list[tuple[float, float]]] = defaultdict(list)
+site_period_intervals = defaultdict(list)
+for row in rows:
+    site_coords[row["site"]].append((row["lat"], row["lon"]))
+    site_period_intervals[(row["site"], row["period"])].append((row["start"], row["end"]))
+
+site_centroids: dict[str, tuple[float, float]] = {}
+site_diameters_m: dict[str, float] = {}
+for site in sites:
+    coords = site_coords[site]
+    lat_med = float(statistics.median([x[0] for x in coords]))
+    lon_med = float(statistics.median([x[1] for x in coords]))
+    site_centroids[site] = (lat_med, lon_med)
+    max_d = 0.0
+    for i in range(len(coords)):
+        for j in range(i + 1, len(coords)):
+            max_d = max(
+                max_d,
+                1000.0 * haversine_km(coords[i][0], coords[i][1], coords[j][0], coords[j][1]),
+            )
+    site_diameters_m[site] = max_d
+max_site_diameter_m = max(site_diameters_m.values()) if site_diameters_m else 0.0
+if max_site_diameter_m > float(deploy_contract["site_coordinate_hard_stop_diameter_m"]):
+    worst = max(site_diameters_m, key=site_diameters_m.get)
+    fail(
+        "stop_analysis_registry_not_closed",
+        "a primary Site is not spatially stable under the frozen site-diameter rule",
+        worst_site=worst,
+        worst_site_diameter_m=site_diameters_m[worst],
+        hard_stop_m=deploy_contract["site_coordinate_hard_stop_diameter_m"],
+    )
+
+# Inclusive union active days across cameras within Site x YearSeason.
+effort_days: dict[tuple[str, str], int] = {}
+for key, intervals in site_period_intervals.items():
+    intervals = sorted(intervals)
+    merged: list[list] = []
+    for start, end in intervals:
+        if not merged or start > merged[-1][1] + timedelta(days=1):
+            merged.append([start, end])
+        elif end > merged[-1][1]:
+            merged[-1][1] = end
+    effort_days[key] = int(sum((end - start).days + 1 for start, end in merged))
+
+eligible_pairs = {
+    key
+    for key, days in effort_days.items()
+    if days >= int(deploy_contract["minimum_union_active_days"])
+}
+eligible_periods_by_site = defaultdict(set)
+for site, period in eligible_pairs:
+    eligible_periods_by_site[site].add(period)
+repeated_sites = sorted(site for site in sites if len(eligible_periods_by_site[site]) >= 4)
+
+if len(sites) < int(minima["minimum_unique_sites"]):
+    fail(
+        "stop_insufficient_nodes",
+        "deployment registry has too few primary sites",
+        unique_sites=len(sites),
+        minimum=minima["minimum_unique_sites"],
+    )
+if len(periods) < int(minima["minimum_survey_periods"]):
+    fail(
+        "stop_insufficient_outer_units",
+        "deployment registry has too few survey periods",
+        survey_periods=len(periods),
+        minimum=minima["minimum_survey_periods"],
+    )
+if len(repeated_sites) < int(minima["minimum_sites_eligible_in_at_least_four_periods"]):
+    fail(
+        "stop_insufficient_repeated_nodes",
+        "too few sites meet frozen four-period deployment-effort rule",
+        repeated_sites=len(repeated_sites),
+        minimum=minima["minimum_sites_eligible_in_at_least_four_periods"],
+    )
+
+# Response-blind structural ladder on the closed Site registry.
+n = len(sites)
+distance_matrix = np.zeros((n, n), dtype=float)
+for i, site_i in enumerate(sites):
+    lat_i, lon_i = site_centroids[site_i]
+    for j in range(i + 1, n):
+        site_j = sites[j]
+        lat_j, lon_j = site_centroids[site_j]
+        d = haversine_km(lat_i, lon_i, lat_j, lon_j)
+        distance_matrix[i, j] = distance_matrix[j, i] = d
+
+target_fractions = tuple(float(v) for v in structural["target_largest_component_fractions"])
+ladder = build_structural_scale_ladder(
+    sites,
+    distance_matrix,
+    StructuralScaleLadderDeclaration(
+        axis_id="ri_camera_site_geometry",
+        target_largest_component_fractions=target_fractions,
+    ),
+)
+adjacencies = structural_scale_adjacencies(ladder, distance_matrix)
+worlds = {level.level_id: adjacencies[level.level_id] for level in ladder.levels}
+audit = audit_world_universe_structure(sites, worlds, horizon=int(structural["horizon"]))
+gate = apply_structural_adequacy_gate(
+    audit,
+    StructuralAdequacyDeclaration(
+        min_largest_weak_component_fraction=float(structural["adequacy_min_largest_weak_component_fraction"]),
+        max_isolated_node_fraction=float(structural["adequacy_max_isolated_node_fraction"]),
+        require_at_least_one_world_pass=bool(structural["require_at_least_one_world_pass"]),
+    ),
+)
+distinct_thresholds = sorted(
+    {
+        round(float(level.distance_threshold), 12)
+        for level in ladder.levels
+        if float(level.distance_threshold) > 0
+    }
+)
+lcc900_ids = [level.level_id for level in ladder.levels if level.level_id.endswith("lcc900")]
+lcc900_pass = any(level_id in set(gate.passing_world_ids) for level_id in lcc900_ids)
+structural_pass = (
+    gate.passed
+    and len(distinct_thresholds) >= int(structural["minimum_distinct_positive_thresholds"])
+    and (lcc900_pass if structural["require_lcc900_world_pass"] else True)
+)
+if not structural_pass:
+    fail(
+        "stop_structural_universe_inadequate",
+        "closed response-blind deployment geometry does not satisfy frozen structural gate",
+        distinct_positive_thresholds=distinct_thresholds,
+        structural_gate_passed=gate.passed,
+        passing_world_ids=list(gate.passing_world_ids),
+        lcc900_ids=lcc900_ids,
+        lcc900_pass=lcc900_pass,
+    )
+
+ladder_rows = [
+    {
+        "level_id": level.level_id,
+        "target_lcc": level.target_largest_component_fraction,
+        "distance_threshold_km": level.distance_threshold,
+        "achieved_lcc": level.achieved_largest_component_fraction,
+        "weak_component_count": level.weak_component_count,
+        "isolated_node_fraction": level.isolated_node_fraction,
+        "directed_edge_count": level.directed_edge_count,
+        "level_fingerprint": level.fingerprint,
+    }
+    for level in ladder.levels
+]
+
+period_years: dict[str, int] = {}
+for row in rows:
+    if row["period"] in period_years and period_years[row["period"]] != row["period_year"]:
+        fail(
+            "stop_deployment_schema",
+            "same YearSeason label maps to multiple years",
+            year_season=row["period"],
+        )
+    period_years[row["period"]] = row["period_year"]
+
+soft_warning_sites = sorted(
+    site
+    for site, diameter in site_diameters_m.items()
+    if diameter > float(deploy_contract["site_coordinate_soft_warning_diameter_m"])
+)
+site_registry_fingerprint = hashlib.sha256(
+    json.dumps(
+        [
+            {"site": site, "lat": site_centroids[site][0], "lon": site_centroids[site][1]}
+            for site in sites
+        ],
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+).hexdigest()
+availability_fingerprint = hashlib.sha256(
+    json.dumps(
+        [
+            {
+                "site": site,
+                "period": period,
+                "eligible": (site, period) in eligible_pairs,
+                "effort_days": effort_days[(site, period)],
+            }
+            for site, period in sorted(effort_days)
+        ],
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+).hexdigest()
+
+finish(
+    "deployment_registry_availability_and_structural_gate_pass",
+    zenodo_record_id=record_id,
+    archive_name=archive_contract["archive_name"],
+    archive_size=archive_size,
+    archive_md5=observed_md5,
+    zip_total_entries=total_entries,
+    zip_member_inventory=[
+        {
+            "name": entry["name"],
+            "compressed_size": entry["compressed_size"],
+            "uncompressed_size": entry["uncompressed_size"],
+            "crc32": entry["crc32"],
+            "method": entry["method"],
+            "local_header_offset": entry["local_header_offset"],
+        }
+        for entry in entries
+    ],
+    deployment_member_name=deployment_name,
+    detection_member_name=detection_name,
+    detection_member_compressed_size=detection_entry["compressed_size"],
+    detection_member_uncompressed_size=detection_entry["uncompressed_size"],
+    detection_member_compression_method=detection_entry["method"],
+    detection_member_local_header_offset=detection_entry["local_header_offset"],
+    detection_member_flags=detection_entry["flags"],
+    detection_member_crc32=detection_entry["crc32"],
+    deployment_text_encoding=used_encoding,
+    deployment_physical_header=fieldnames,
+    deployment_role_columns=role_columns,
+    deployment_row_count=len(rows),
+    unique_site_count=len(sites),
+    exact_site_ids=sites,
+    survey_period_count=len(periods),
+    survey_periods=periods,
+    survey_period_years=period_years,
+    eligible_site_period_count=len(eligible_pairs),
+    sites_eligible_in_at_least_four_periods=len(repeated_sites),
+    minimum_union_effort_days=min(effort_days.values()) if effort_days else 0,
+    maximum_union_effort_days=max(effort_days.values()) if effort_days else 0,
+    site_coordinate_max_diameter_m=max_site_diameter_m,
+    site_coordinate_soft_warning_site_count=len(soft_warning_sites),
+    site_coordinate_soft_warning_sites=soft_warning_sites,
+    site_registry_fingerprint=site_registry_fingerprint,
+    availability_fingerprint=availability_fingerprint,
+    distance_matrix_fingerprint=hashlib.sha256(
+        np.asarray(distance_matrix, dtype="<f8").tobytes()
+    ).hexdigest(),
+    structural_ladder_fingerprint=ladder.fingerprint,
+    structural_audit_fingerprint=audit.fingerprint,
+    structural_gate_fingerprint=gate.fingerprint,
+    structural_gate_passing_world_ids=list(gate.passing_world_ids),
+    distinct_positive_structural_thresholds_km=distinct_thresholds,
+    structural_levels=ladder_rows,
+    detection_member_payload_requests=0,
+    detection_member_payload_bytes_opened=0,
+    detection_header_bytes_opened=0,
+    response_rows_opened=False,
+    response_values_opened=False,
+    model_fits=0,
+    heldout_scores=0,
+)
