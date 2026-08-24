@@ -1,0 +1,43 @@
+{
+  "attempt_id": "giant_gartersnake_fresh_paired_v1",
+  "candidate": "Thamnophis gigas annual site-level surveyed detection transitions, Sacramento Valley, 2016-2024",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "selected_after_terminal_pr": 284,
+    "tracking_issue": 285,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "focal_taxon": "Thamnophis gigas",
+    "report_doi": "10.3133/ofr20261020",
+    "data_doi": "10.5066/P1GGM96M",
+    "sciencebase_item": "6a1f57e1b66b018da518f85c",
+    "published_design": "119 Sacramento Valley occupancy sites monitored across 2016-2024 with daily trapping during annual sampling periods",
+    "prospective_endpoint": "annual site-level surveyed detection/re-detection transition among sites with response-independent trapping availability; not latent historical truth"
+  },
+  "gate0_requirements": {
+    "geometry_physically_separate_from_capture_response": true,
+    "annual_effort_or_availability_physically_separate_from_capture_response": true,
+    "closed_site_registry_before_response_rows": true,
+    "minimum_study_years": 8,
+    "no_geometry_from_report_figures": true,
+    "no_geometry_from_capture_coordinates": true,
+    "no_site_labels_from_report_outcome_maps": true,
+    "no_payload_access_at_metadata_stage": true
+  },
+  "future_boundary": {
+    "count_minima_unchanged": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_periods_with_both_classes": 4
+    },
+    "layer_b": "symmetric_world_support_summary_v1 unchanged",
+    "paired_endpoint": "same strong learner and conventional features in both arms; augmented arm adds only frozen Layer B",
+    "outcome_access_authorized": false
+  }
+}
