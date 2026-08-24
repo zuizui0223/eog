@@ -1,0 +1,103 @@
+{
+  "attempt_id": "rhode_island_raccoon_fresh_paired_v1",
+  "candidate": "Procyon lotor site-period re-detection in the Rhode Island statewide camera survey, 2018-2023",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "selected_after_terminal_prs": [269, 275],
+    "tracking_issue": 278,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "focal_taxon": {
+    "scientific_name": "Procyon lotor",
+    "common_name": "raccoon",
+    "selection_rule": "first species listed in the pre-existing urban-adapted-omnivore group in the published Rhode Island camera-study methods; fixed without consulting detection counts or EOG outcomes",
+    "target_family_token_if_present": "Procyonidae"
+  },
+  "scientific_anchor": {
+    "zenodo_record": 14508932,
+    "zenodo_doi": "10.5281/zenodo.14508932",
+    "release_version": "v3",
+    "paper_doi": "10.1002/ecy.70094",
+    "published_design": "249 primary survey sites over 12 survey periods from 2018 through 2023; deployment table carries camera operation dates and coordinates; detection table carries animal records with matching site/camera identifiers",
+    "endpoint": "site-period raccoon re-detection among response-independently active deployments; this is surveyed detection/non-detection, not latent biological occupancy or colonization"
+  },
+  "archive_contract": {
+    "archive_name": "DataS1.zip",
+    "archive_md5": "c66943e6c2a9aab0abce2a1eba8ce02e",
+    "required_deployment_member": "RI_CameraSurvey_Deployments.csv",
+    "forbidden_detection_member": "RI_CameraSurvey_Detections.csv",
+    "eocd_tail_bytes": 22,
+    "require_zero_zip_comment": true,
+    "require_non_zip64": true,
+    "central_directory_metadata_only": true,
+    "detection_member_payload_access_allowed": false
+  },
+  "deployment_semantics": {
+    "csv_delimiter": ",",
+    "allowed_text_encodings_in_order": ["utf-8-sig", "cp1252"],
+    "semantic_aliases": {
+      "site_id": ["site", "siteid", "site_id", "surveysite", "survey_site"],
+      "camera_id": ["camera", "cameraid", "camera_id", "cameranumber", "camera_number"],
+      "latitude": ["latitude", "lat"],
+      "longitude": ["longitude", "lon", "long"],
+      "start_date": ["startdate", "start_date", "deploymentstart", "deployment_start", "start"],
+      "end_date": ["enddate", "end_date", "deploymentend", "deployment_end", "end"],
+      "year_season": ["yearseason", "year_season", "surveyperiod", "survey_period"]
+    },
+    "allowed_date_formats": ["%Y-%m-%d", "%m/%d/%Y", "%m/%d/%y", "%Y/%m/%d"],
+    "analysis_node": "primary Site identifier",
+    "site_coordinate_rule": "component-wise median latitude/longitude across every response-independent deployment row assigned to the Site",
+    "site_coordinate_soft_warning_diameter_m": 250.0,
+    "site_coordinate_hard_stop_diameter_m": 1000.0,
+    "site_period_effort_rule": "merge inclusive active-date intervals across cameras within Site x YearSeason; eligible when union active days >= 14",
+    "minimum_union_active_days": 14,
+    "no_row_filtering_after_deployment_open_except_invalid-contract-stop": true
+  },
+  "preflight_minima": {
+    "minimum_unique_sites": 200,
+    "minimum_survey_periods": 10,
+    "minimum_sites_eligible_in_at_least_four_periods": 50,
+    "require_closed_analysis_registry": true,
+    "require_geometry_and_response_physically_separate": true,
+    "require_response_independent_survey_availability": true
+  },
+  "structural_gate": {
+    "distance": "great-circle haversine using Earth radius 6371.0088 km",
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "horizon": 1,
+    "adequacy_min_largest_weak_component_fraction": 0.9,
+    "adequacy_max_isolated_node_fraction": 0.05,
+    "require_at_least_one_world_pass": true,
+    "require_lcc900_world_pass": true
+  },
+  "temporal_design": {
+    "calibration_years": [2018, 2019, 2020],
+    "heldout_years": [2021, 2022, 2023],
+    "count_minima": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_periods_with_both_classes": 4
+    },
+    "exact_count_gate_must_be_first_row_level_outcome_operation": true
+  },
+  "source_process_boundary": {
+    "internal_sources": "previous-period observed raccoon detections at eligible sites",
+    "external_source_requirement": "finite world universe must include a permissive external/long-distance source world because immigration from outside Rhode Island cannot be closed by the camera network",
+    "interpretation": "the permissive external world closes the declared possibility set; it is not asserted to be the true movement process"
+  },
+  "stage_boundary": {
+    "zenodo_metadata_access_allowed": true,
+    "zip_eocd_and_central_directory_metadata_access_allowed": true,
+    "deployment_member_payload_access_allowed": true,
+    "detection_member_header_access_allowed": false,
+    "detection_member_payload_access_allowed": false,
+    "response_rows_opened": false,
+    "outcome_access_authorized": false
+  }
+}
