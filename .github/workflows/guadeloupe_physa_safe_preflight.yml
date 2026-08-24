@@ -1,0 +1,251 @@
+name: Guadeloupe Physa response-blind safe preflight
+
+on:
+  push:
+    branches:
+      - agent/guadeloupe-physa-acuta-preflight
+    paths:
+      - ".github/workflows/guadeloupe_physa_safe_preflight.yml"
+      - "validation/guadeloupe_physa_acuta_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  pull_request:
+    paths:
+      - ".github/workflows/guadeloupe_physa_safe_preflight.yml"
+      - "validation/guadeloupe_physa_acuta_paired_complementarity/source_contract.json"
+      - "src/eog/v2/world_scale_ladder.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  safe-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install EOG
+        run: python -m pip install -e .
+      - name: Open only frozen response-independent source files
+        run: |
+          set -euo pipefail
+          mkdir -p build/guadeloupe_physa_safe
+          python - <<'PY'
+          from __future__ import annotations
+          import csv, hashlib, io, json, math, urllib.parse, urllib.request
+          from pathlib import Path
+          import numpy as np
+          from eog.v2.world_scale_ladder import StructuralScaleLadderDeclaration, build_structural_scale_ladder
+
+          contract=json.loads(Path("validation/guadeloupe_physa_acuta_paired_complementarity/source_contract.json").read_text())
+          src=contract["scientific_anchor"]
+          manifest=contract["exact_source_manifest"]
+          geo=contract["geometry_contract"]
+          avail=contract["availability_contract"]
+          owner_repo=src["source_repository"]
+          commit=src["source_commit"]
+          opened=[]
+
+          def git_blob_sha(payload: bytes) -> str:
+              return hashlib.sha1(f"blob {len(payload)}\0".encode()+payload).hexdigest()
+
+          def get_safe(key):
+              spec=manifest[key]
+              path=spec["path"]
+              url=f"https://raw.githubusercontent.com/{owner_repo}/{commit}/{urllib.parse.quote(path,safe='/')}"
+              req=urllib.request.Request(url,headers={"User-Agent":"EOG-Guadeloupe-Physa-safe-preflight/1.0"})
+              with urllib.request.urlopen(req,timeout=60) as response:
+                  payload=response.read(int(spec["bytes"])+1)
+                  status=getattr(response,"status",None)
+              if status != 200:
+                  raise RuntimeError(f"{key} transport status {status}")
+              if len(payload) != int(spec["bytes"]):
+                  raise RuntimeError(f"{key} size mismatch {len(payload)} != {spec['bytes']}")
+              observed_blob=git_blob_sha(payload)
+              if observed_blob != spec["git_blob_sha"]:
+                  raise RuntimeError(f"{key} git blob mismatch {observed_blob}")
+              opened.append({"key":key,"path":path,"bytes":len(payload),"git_blob_sha":observed_blob,"sha256":hashlib.sha256(payload).hexdigest()})
+              return payload
+
+          coord_payload=get_safe("geometry")
+          dry_payload=get_safe("survey_availability")
+          cov_payload=get_safe("site_covariates")
+          habit_payload=get_safe("habitat_covariates")
+          rain_payload=get_safe("rainfall_covariates")
+
+          # Geometry registry: all physical rows, exact header, no repair/deletion.
+          coord_text=coord_payload.decode("utf-8-sig",errors="strict")
+          reader=csv.DictReader(io.StringIO(coord_text))
+          fields=list(reader.fieldnames or [])
+          if fields != geo["required_header"]:
+              raise RuntimeError(f"coordinate header mismatch: {fields!r}")
+          rows=list(reader)
+          if len(rows) != int(src["node_count_expected"]):
+              raise RuntimeError(f"coordinate row count mismatch: {len(rows)}")
+          ids=[]; xy=[]; islands=[]
+          for physical_line,row in enumerate(rows,start=2):
+              sid=str(row["Numero du site"]).strip()
+              try:
+                  sid_i=int(sid); x=float(row["E"]); y=float(row["N"])
+              except Exception as exc:
+                  raise RuntimeError(f"coordinate parse failed at line {physical_line}: {exc!r}")
+              if not (math.isfinite(x) and math.isfinite(y)):
+                  raise RuntimeError(f"nonfinite coordinate at line {physical_line}")
+              ids.append(sid_i); xy.append((x,y)); islands.append(str(row["Ile"]).strip())
+          expected=list(range(1,int(src["node_count_expected"])+1))
+          if ids != expected:
+              raise RuntimeError("site IDs are not exact physical sequence 1..278")
+          if len(set(xy)) != len(xy):
+              raise RuntimeError(f"duplicate coordinate pairs: {len(xy)-len(set(xy))}")
+          if any(not code for code in islands):
+              raise RuntimeError("empty island code")
+
+          arr=np.asarray(xy,dtype=float)
+          delta=arr[:,None,:]-arr[None,:,:]
+          distance=np.sqrt(np.sum(delta*delta,axis=2))
+          ladder=build_structural_scale_ladder(
+              [str(v) for v in ids],distance,
+              StructuralScaleLadderDeclaration(
+                  axis_id="guadeloupe_physa_published_EN_distance",
+                  target_largest_component_fractions=tuple(float(v) for v in geo["scale_targets_lcc"]),
+              ),
+          )
+          thresholds=[float(v) for v in ladder.thresholds]
+          distinct=sorted({round(v,12) for v in thresholds if v>0})
+          levels=[{
+              "level_id":x.level_id,
+              "target_lcc":x.target_largest_component_fraction,
+              "distance_threshold":x.distance_threshold,
+              "achieved_lcc":x.achieved_largest_component_fraction,
+              "weak_component_count":x.weak_component_count,
+              "isolated_node_fraction":x.isolated_node_fraction,
+              "directed_edge_count":x.directed_edge_count,
+              "fingerprint":x.fingerprint,
+          } for x in ladder.levels]
+
+          # Shared site-year survey availability (response-independent).
+          dry_text=dry_payload.decode("utf-8-sig",errors="strict")
+          dry_reader=csv.reader(io.StringIO(dry_text),delimiter="\t")
+          dry_rows=list(dry_reader)
+          if len(dry_rows) != avail["matrix_shape"][0]+1:
+              raise RuntimeError(f"dry row count mismatch {len(dry_rows)}")
+          if dry_rows[0] != [f'"V{i}"' for i in range(1,16)] and [v.strip('"') for v in dry_rows[0]] != [f"V{i}" for i in range(1,16)]:
+              raise RuntimeError(f"dry header mismatch {dry_rows[0]!r}")
+          dry_matrix=[]
+          allowed=set(int(v) for v in avail["physical_tokens"])
+          for i,row in enumerate(dry_rows[1:],start=1):
+              if len(row) != 15:
+                  raise RuntimeError(f"dry column count mismatch site {i}: {len(row)}")
+              vals=[int(v) for v in row]
+              if not set(vals) <= allowed:
+                  raise RuntimeError(f"unexpected dry token at site {i}")
+              dry_matrix.append(vals)
+          dry_arr=np.asarray(dry_matrix,dtype=int)
+
+          # Site covariates: exact 278 rows, finite four-column table.
+          cov_reader=csv.DictReader(io.StringIO(cov_payload.decode("utf-8-sig")),delimiter="\t")
+          cov_fields=[f.strip('"') for f in (cov_reader.fieldnames or [])]
+          if cov_fields != manifest["site_covariates"]["columns"]:
+              raise RuntimeError(f"cov header mismatch {cov_fields}")
+          cov_rows=list(cov_reader)
+          if len(cov_rows) != 278:
+              raise RuntimeError(f"cov row count mismatch {len(cov_rows)}")
+          for i,row in enumerate(cov_rows,start=1):
+              vals=[]
+              for field in cov_reader.fieldnames:
+                  vals.append(float(row[field]))
+              if not all(math.isfinite(v) for v in vals):
+                  raise RuntimeError(f"nonfinite covariate at site {i}")
+
+          # Habitat covariates: R-style row names plus two declared data columns.
+          habit_lines=list(csv.reader(io.StringIO(habit_payload.decode("utf-8-sig")),delimiter="\t"))
+          if len(habit_lines) != 279:
+              raise RuntimeError(f"habit physical row count mismatch {len(habit_lines)}")
+          hheader=[v.strip('"') for v in habit_lines[0]]
+          if hheader != manifest["habitat_covariates"]["columns"]:
+              raise RuntimeError(f"habit header mismatch {hheader}")
+          for i,row in enumerate(habit_lines[1:],start=1):
+              if len(row) != 3 or int(row[0].strip('"')) != i:
+                  raise RuntimeError(f"habit row-name/schema mismatch site {i}")
+              vals=[float(row[1]),float(row[2])]
+              if not all(math.isfinite(v) for v in vals):
+                  raise RuntimeError(f"nonfinite habit covariate site {i}")
+
+          # Rainfall: 15 rows labeled 2000..2014, exactly three declared predictors.
+          rain_lines=list(csv.reader(io.StringIO(rain_payload.decode("utf-8-sig")),delimiter="\t"))
+          if len(rain_lines) != 16:
+              raise RuntimeError(f"rain physical row count mismatch {len(rain_lines)}")
+          rheader=[v.strip('"') for v in rain_lines[0]]
+          if rheader != manifest["rainfall_covariates"]["columns"]:
+              raise RuntimeError(f"rain header mismatch {rheader}")
+          labels=[]
+          for row in rain_lines[1:]:
+              if len(row) != 4:
+                  raise RuntimeError("rain row width mismatch")
+              labels.append(int(row[0].strip('"')))
+              vals=[float(v) for v in row[1:]]
+              if not all(math.isfinite(v) for v in vals):
+                  raise RuntimeError("nonfinite rainfall value")
+          if labels != manifest["rainfall_covariates"]["row_labels_expected"]:
+              raise RuntimeError(f"rain labels mismatch {labels}")
+
+          status="safe_registry_geometry_availability_pass" if len(distinct)>=int(geo["minimum_distinct_positive_thresholds"]) else "stop_structural_scale_collapse"
+          result={
+              "attempt_id":contract["attempt_id"],
+              "status":status,
+              "safe_payload_requests":len(opened),
+              "safe_payloads":opened,
+              "node_count":len(ids),
+              "unique_coordinate_pair_count":len(set(xy)),
+              "island_codes":sorted(set(islands)),
+              "coordinate_min":[float(arr[:,0].min()),float(arr[:,1].min())],
+              "coordinate_max":[float(arr[:,0].max()),float(arr[:,1].max())],
+              "surveyed_site_year_count":int(np.sum(dry_arr!=0)),
+              "wet_site_year_count":int(np.sum(dry_arr==1)),
+              "dry_site_year_count":int(np.sum(dry_arr==2)),
+              "missing_or_unvisited_site_year_count":int(np.sum(dry_arr==0)),
+              "thresholds":thresholds,
+              "distinct_positive_threshold_count":len(distinct),
+              "levels":levels,
+              "ladder_fingerprint":ladder.fingerprint,
+              "state_requests":0,
+              "state_bytes_opened":0,
+              "presence_requests":0,
+              "presence_bytes_opened":0,
+              "colsource_requests":0,
+              "colsource_bytes_opened":0,
+              "response_rows_opened":False,
+              "response_values_opened":False,
+              "model_fits":0,
+              "heldout_scores":0,
+          }
+          Path("build/guadeloupe_physa_safe/safe_preflight.json").write_text(json.dumps(result,indent=2,sort_keys=True,allow_nan=False)+"\n")
+          print(json.dumps(result,indent=2,sort_keys=True,allow_nan=False))
+          if status != "safe_registry_geometry_availability_pass":
+              raise SystemExit(3)
+          PY
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/guadeloupe_physa_safe/safe_preflight.json")
+          if not p.exists(): raise SystemExit("safe preflight artifact missing")
+          r=json.loads(p.read_text())
+          assert r["state_requests"] == 0 and r["state_bytes_opened"] == 0
+          assert r["presence_requests"] == 0 and r["presence_bytes_opened"] == 0
+          assert r["colsource_requests"] == 0 and r["colsource_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False and r["response_values_opened"] is False
+          assert r["model_fits"] == 0 and r["heldout_scores"] == 0
+          print("Guadeloupe Physa response firewall PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: guadeloupe-physa-safe-preflight
+          path: build/guadeloupe_physa_safe/safe_preflight.json
+          if-no-files-found: error
