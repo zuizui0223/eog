@@ -1,0 +1,31 @@
+{
+  "schema": "eog.louisiana_marsh_bird_authorization_candidate_certificate.v1",
+  "attempt_id": "southwest_louisiana_king_rail_site_occasion_fresh_paired_v1",
+  "status": "once_only_authorization_candidate_pass",
+  "authoritative_ci": {
+    "workflow": "Louisiana King Rail authorization candidate audit",
+    "run_id": 32811867845,
+    "job_id": 97692586216,
+    "head_sha": "8bc941879672f06a92e4d9d1828c8bc855a96c6a",
+    "conclusion": "success",
+    "artifact_id": 9550061453,
+    "artifact_zip_sha256": "c876c4f4d0aa5b54e4edcf349247cfb40a6c913f5215640c557bf9d7cb54c773"
+  },
+  "authorization_fingerprint": "53c7f2bc4bfd6970adba3fe9a03df1feaeae042ac1dd1d6680ab5dec12ee5232",
+  "full_freeze_spec_sha256": "cac01c5755ec4e775c58fad71f657256f11139fe53fef4bde04ad0b6fa51192c",
+  "bound_git_blob_count": 16,
+  "production_boundary_fingerprint": "c8dc424e510da6c3136ecc3674a0c3345b0c0b830aae22795c8c3df9a4c6f02b",
+  "response_boundary": {
+    "selected_response_payload_requests": 0,
+    "selected_response_payload_bytes_opened": 0,
+    "selected_response_rows_seen": 0,
+    "selected_response_rows_opened": false,
+    "selected_response_values_opened": false,
+    "unselected_species_payload_requests": 0,
+    "unselected_species_payload_bytes_opened": 0,
+    "exact_count_gate_executed": false,
+    "scientific_model_fits": 0,
+    "scientific_outer_units_scored": 0
+  },
+  "actual_marker_rule": "The actual marker must contain the exact same JSON content bytes as the audited candidate marker except for its pathname; once created it is consumed regardless of outcome and the resulting workflow must never be rerun."
+}
