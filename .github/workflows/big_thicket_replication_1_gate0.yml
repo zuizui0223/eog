@@ -1,0 +1,46 @@
+name: Big Thicket replication 1 Gate0
+
+on:
+  push:
+    branches:
+      - agent/big-thicket-heterogeneous-replication-1
+    paths:
+      - "validation/big_thicket_replication_1/**"
+      - ".github/workflows/big_thicket_replication_1_gate0.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  response-blind-gate0:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run site payload and bounded sampling headers
+        run: python validation/big_thicket_replication_1/run_gate0_site_and_headers.py
+      - name: Assert biological response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/big_thicket_replication_1/gate0_site_and_headers.json')
+          r = json.loads(p.read_text())
+          a = r['audit']
+          assert a['biological_response_payload_requests'] == 0
+          assert a['biological_response_payload_bytes_opened'] == 0
+          assert a['biological_response_header_bytes_opened'] == 0
+          assert a['biological_response_rows_opened'] is False
+          assert a['biological_response_values_opened'] is False
+          assert a['model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps(r, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: big-thicket-replication-1-gate0
+          path: build/big_thicket_replication_1/gate0_site_and_headers.json
+          if-no-files-found: error
