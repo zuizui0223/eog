@@ -1,0 +1,81 @@
+{
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.gate0_response_free_certificate.v1",
+  "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
+  "status": "gate0_pass_response_free_source_registry_time_and_geometry_profile",
+  "gate0_fingerprint": "52bba54c562cc9b7eff58b537bb080deff685dca54f9b9d8106d3bc851c1b337",
+  "deployments": {
+    "record_id": 15030965,
+    "filename": "oo_1202827.csv",
+    "md5": "9ee54945758d9d146badd3aeb17a7923",
+    "size": 27065,
+    "row_count": 90,
+    "unique_deployment_id_count": 90,
+    "array_count": 9,
+    "registry_fingerprint": "30387901a541725ed9680b1c1542c2a1fad0da725d9d21a9c953be42e2708d79",
+    "array_sizes": {
+      "Chiba_Forest_Nichidai": 10,
+      "Ehime_Artificial_Omishima": 12,
+      "Fukushima_Forest_NIES": 11,
+      "Gifu_Forest_GifuUnivKEF": 10,
+      "Gunma_Forest_FMKusaki": 10,
+      "Hyogo_Forest_Awaji370": 9,
+      "Hyogo_Forest_Tamba097": 10,
+      "Ibaraki_Forest_Ogawa": 9,
+      "Yamagata_Forest_Kaminagawa_Experimental_Forest": 9
+    }
+  },
+  "habitats": {
+    "record_id": 15030969,
+    "filename": "oo_1203756.csv",
+    "md5": "dd1cb641c6032d40dd7b3e28db7bbfb2",
+    "size": 721,
+    "row_count": 9,
+    "array_count": 9,
+    "array_registry_fingerprint": "15e395652da0b3d66b199d1a82439f5d34ea6521639966f8ffe736d032112b58"
+  },
+  "time_profile": {
+    "earliest_start": "2023-08-22T10:55:00+00:00",
+    "latest_start": "2023-09-15T00:00:00+00:00",
+    "earliest_end": "2023-10-04T00:00:00+00:00",
+    "latest_end": "2023-12-19T00:00:00+00:00",
+    "duration_days_min": 33.45763888888889,
+    "duration_days_q25": 61.99930555555555,
+    "duration_days_median": 64.5,
+    "duration_days_q75": 72.98854166666668,
+    "duration_days_max": 106.0,
+    "duration_days_sum": 6162.395833333333
+  },
+  "geometry_profile": {
+    "pooled_within_array_pair_count": 409,
+    "pooled_within_array_distance_km_q10": 0.35766441052460224,
+    "pooled_within_array_distance_km_q25": 0.5767732135772803,
+    "pooled_within_array_distance_km_q50": 1.046583676807543,
+    "pooled_within_array_distance_km_q75": 3.88125701842997,
+    "pooled_within_array_distance_km_q90": 6.562924828395908,
+    "cross_array_propagation_allowed": false
+  },
+  "sequence_identity": {
+    "supplement_doi": "10.3897/BDJ.13.e141168.suppl2",
+    "filename": "oo_1165478.csv",
+    "binary_object_url": "https://binary.pensoft.net/file/1165478",
+    "pensoft_element_id": "S11978224",
+    "published_sequence_count": 18027,
+    "identity_certificate": "validation/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity_certificate.json"
+  },
+  "audit": {
+    "workflow_run_id": 32820361062,
+    "job_id": 97716972639,
+    "head_sha": "0ede368e88af2dfd3881782bd7156a25e9f211e0",
+    "artifact_id": 9552874816,
+    "artifact_digest": "sha256:a716a71e48472a092e1f00667d24ca2e3e2a98dfdae4e076334fdba2cfdf89dc"
+  },
+  "response_firewall": {
+    "sequence_payload_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
