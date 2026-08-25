@@ -1,0 +1,41 @@
+{
+  "schema": "eog.azores_yellow_eel_once_only_v3_pre_response_failure_certificate.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "authoritative_ci": {
+    "workflow": "Azores yellow eel once-only outcome gate",
+    "run_id": 32806760914,
+    "job_id": 97678283148,
+    "head_sha": "1a0a1cda0a471aa626ecb153aad56e5b11916517",
+    "run_number": 3,
+    "conclusion": "failure"
+  },
+  "status": "terminal_pre_response_legacy_marker_dependency_failure",
+  "marker_v3_consumed": true,
+  "failure": {
+    "production_verifier_passed": true,
+    "outcome_runner_started": true,
+    "runner_status": "terminal_authorization_failure",
+    "runner_reason": "authorization marker fingerprint mismatch",
+    "diagnosis": "outcome_runner.py still hard-coded OUTCOME_AUTHORIZED_ONCE (v1) and duplicated marker validation after the production verifier had already validated the byte-identical v3 marker; current authorization therefore mismatched the legacy v1 marker before any response request"
+  },
+  "response_firewall_at_terminal": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "raw_data_rows_seen": 0,
+    "model_fits": 0,
+    "primary_outer_units_scored": 0
+  },
+  "terminal_artifact": {
+    "artifact_id": 9548405041,
+    "artifact_name": "azores-yellow-eel-once-only-v3-terminal",
+    "artifact_zip_sha256": "67a2fc5d2df9f1bbda998ce87f6b52d5e60560525d37ced5166971c0c66957c4"
+  },
+  "repair_boundary": {
+    "response_was_opened": false,
+    "scientific_freeze_changed": false,
+    "allowed_repair": "make the audited production verifier the sole marker gate; remove legacy marker parsing from outcome_runner; run outcome_runner through all response-independent reconstruction under an explicit pre-response-only mode before any new trigger marker",
+    "forbidden": "rerun v1, v2, or v3 markers or change endpoint, split, features, learner, worlds, thresholds, count minima, or paired decision rule"
+  }
+}
