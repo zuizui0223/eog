@@ -1,0 +1,38 @@
+{
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.pensoft_xml_sequence_identity_certificate.v1",
+  "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
+  "status": "pensoft_xml_resolves_exact_sequence_supplement_identity",
+  "supplement": {
+    "doi": "10.3897/BDJ.13.e141168.suppl2",
+    "role": "Supplementary material 2 / sequences.csv",
+    "published_file_name": "oo_1165478.csv",
+    "pensoft_element_id": "S11978224",
+    "pensoft_numeric_element_id": 11978224,
+    "binary_object_url": "https://binary.pensoft.net/file/1165478",
+    "jats_xlink_href": "bdj-13-e141168-s002.csv",
+    "published_sequence_count": 18027
+  },
+  "article_xml": {
+    "url": "https://bdj.pensoft.net/article/141168/download/xml/",
+    "bytes": 330700,
+    "sha256": "3b07f72df284e2692d1849e103ab895f53b2632115076da6c352201d6908a2e0",
+    "supplementary_material_count": 4,
+    "matching_fragment_sha256": "6ade34a738737cf5ec4ef5aec84c8f82b0451a36e1d72ef9528f9647de1dcf08"
+  },
+  "audit": {
+    "workflow_run_id": 32819913650,
+    "job_id": 97715657523,
+    "artifact_id": 9552712965,
+    "artifact_digest": "sha256:3005971306f7d71e06c43172d250a7ce0891b1f32bd6571765673f6ac0d2ef13",
+    "diagnostic_fingerprint": "503d428fb5fb09417e60dc496d93cf80d75684295ca4bf3e4eb270547d8d9494"
+  },
+  "response_firewall": {
+    "sequence_payload_get_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_csv_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
