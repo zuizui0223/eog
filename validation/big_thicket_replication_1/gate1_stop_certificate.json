@@ -1,0 +1,36 @@
+{
+  "schema": "eog.big_thicket_gate1_stop_certificate.v1",
+  "replication_id": "big_thicket_amphibian_reptile_heterogeneous_replication_1",
+  "status": "terminal_pre_response_sampling_availability_token_failure",
+  "authoritative_ci": {
+    "workflow": "Big Thicket replication 1 Gate1",
+    "run_id": 32809434229,
+    "job_id": 97685823375,
+    "head_sha": "18639e696a274f05690040a2ca3545cfb5f63c72",
+    "conclusion": "failure"
+  },
+  "failure": {
+    "file": "Sample Matrix.csv",
+    "site_number": "33",
+    "year": 2010,
+    "observed_token": "NULL",
+    "frozen_rule": "every 2010-2018 SampleCount token must be a non-empty base-10 non-negative integer; blank or non-integer stops rather than being interpreted as zero",
+    "reason": "the response-independent availability matrix contains a token outside the prospectively frozen admissible grammar"
+  },
+  "repair_boundary": {
+    "allowed": false,
+    "forbidden_rescue": "do not reinterpret NULL as zero, missing, or unsurveyed after observing the token and continue this attempt as a fresh replication",
+    "scientific_reason": "survey-availability semantics were frozen before opening the row-level matrix and are part of the prediction risk-set definition"
+  },
+  "response_firewall": {
+    "biological_response_payload_requests": 0,
+    "biological_response_payload_bytes_opened": 0,
+    "biological_response_header_bytes_opened": 0,
+    "biological_response_rows_opened": false,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "claim_boundary": "This is neither favorable nor adverse evidence for Layer B. Big Thicket stops before focal-species selection and before any biological response access.",
+  "next_action": "promote the metadata-screen secondary candidate, southwest Louisiana secretive marsh birds, to heterogeneous replication #1 without weakening any Big Thicket rule"
+}
