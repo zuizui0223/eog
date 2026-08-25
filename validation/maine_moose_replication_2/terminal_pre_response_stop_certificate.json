@@ -1,0 +1,47 @@
+{
+  "schema": "eog.maine_moose_replication_2.terminal_pre_response_stop.v1",
+  "attempt_id": "maine_moose_camera_fresh_paired_v1",
+  "issue": 301,
+  "status": "stop_response_independent_registry_does_not_reproduce_paper_universe",
+  "reason": "Prospectively frozen paper universe is 84 cameras, but exact ScienceBase locations.csv contains 90 rows and visits.csv references 89 unique fk_locationid values. No response-independent rule was frozen to reduce 90/89 to 84; post hoc subsetting is forbidden.",
+  "sciencebase": {
+    "item_id": "6669b08cd34e9bcc607bd881",
+    "doi": "10.5066/P132SU4S",
+    "locations_rows": 90,
+    "visits_rows": 734,
+    "visited_unique_locations": 89,
+    "locations_md5": "ba0b9fc873266eb467fbb088935132db",
+    "visits_md5": "efc593a55658b5cd675398d80b36eafc",
+    "coordinate_note": "lat and long columns are blank for all 90 rows; 89 rows expose lat_min/lat_max/long_min/long_max bounding boxes and one row lacks those values"
+  },
+  "paper": {
+    "doi": "10.1002/wlb3.01676",
+    "camera_count": 84,
+    "window": "2021-11-19 through 2024-04-30",
+    "total_moose_clusters": 6212
+  },
+  "gate0": {
+    "workflow_run_id": 32860210050,
+    "head_sha": "a4e37e5539dbe641ddcd8f39a8141889e7e6358d",
+    "result_fingerprint": "9e36d4e8efab95db6c76328357268c8a864988bd8af9118204c0db6c3aec9ade",
+    "artifact_id": 9567825016,
+    "artifact_digest": "sha256:11ca55613b83e9f7ce8ce2caa39a6f5f8265175322f197157e969be3b02e4fd7"
+  },
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotations_rows_opened": false,
+    "annotations_values_opened": false,
+    "media_payload_requests": 0,
+    "modeloutputs_payload_requests": 0,
+    "taxa_payload_requests": 0,
+    "photo_zip_payload_requests": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "terminality": {
+    "do_not_subset_to_84_after_observing_this_result": true,
+    "do_not_open_annotations_to_identify_the_84": true,
+    "do_not_relabel_a_repaired_attempt_as_fresh": true
+  }
+}
