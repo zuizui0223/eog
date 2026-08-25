@@ -11,6 +11,15 @@
     "candidate_file_payload_requests": 0,
     "candidate_file_payload_bytes_opened": 0
   },
+  "gate0": {
+    "run_id": 32809608720,
+    "job_id": 97686313502,
+    "fingerprint": "5ce556acd5b119a7b451a3b8cca0fdb254ded2461014c1e2e8388abdaf6802cf",
+    "artifact_id": 9549333676,
+    "artifact_zip_sha256": "08d47a6c59923aa3f4a0104155266da2af79a911d160c96b4a952ac9be788b1d",
+    "biological_response_payload_requests": 0,
+    "biological_response_payload_bytes_opened": 0
+  },
   "official_source": {
     "doi": "10.5066/P9RRIIR2",
     "sciencebase_item_id": "5ecf119d82ce30fd980854bd",
@@ -26,8 +35,8 @@
     }
   },
   "response_independent_assets": {
-    "Sites.csv": {"md5": "b2c125a786a222ebea5a4cdd5627306e", "bytes": 1866, "access": "full payload allowed", "role": "official site-level registry/coordinates/habitat metadata"},
-    "Samples.csv": {"md5": "b719dc436a7fbbfdc2a1add11de2347a", "bytes": 463, "access": "full payload allowed", "role": "official sampling-occasion date/environment metadata"}
+    "Sites.csv": {"md5": "b2c125a786a222ebea5a4cdd5627306e", "bytes": 1866, "access": "full payload allowed", "role": "official site-level registry/coordinates/habitat metadata", "physical_header": ["Site","Latitude","Longitude","Marsh","Habitat"], "table_fingerprint": "c022a06596af5c242f1839c968c5f564a784f04e3f83b1d420c9d4d01b9d8bd8"},
+    "Samples.csv": {"md5": "b719dc436a7fbbfdc2a1add11de2347a", "bytes": 463, "access": "full payload allowed", "role": "official sampling-occasion date/environment metadata", "physical_header": ["Sample Period","Date","Precipitation","MinAirTemp"], "table_fingerprint": "7613014a42e51042e0a05f77b54949021858dbd25eb69d192dca2f1034644049"}
   },
   "biological_response_assets_forbidden": {
     "AMBI.csv": {"md5": "5c6a0b68637d836f31f0220128ee3b49", "bytes": 2619},
@@ -42,15 +51,38 @@
     "SESP.csv": {"md5": "65245b37d2183303727381ddae573270", "bytes": 2619},
     "SORA.csv": {"md5": "85f0780f82b999ff8d590d992b47632e", "bytes": 2619}
   },
-  "gate0": {
-    "allowed_payloads": ["Sites.csv", "Samples.csv"],
-    "required_site_row_count": 33,
-    "required_sampling_occasion_row_count": 20,
-    "action": "verify exact ScienceBase metadata identity, exact MD5/size, UTF-8 CSV parse and fixed row counts; report physical headers and rows without selecting a focal species or interpreting biological response"
+  "geometry_semantics_frozen_after_gate0_before_gate1": {
+    "closed_node_registry": "all 33 Sites.csv rows",
+    "node_id_field": "Site",
+    "latitude_field": "Latitude",
+    "longitude_field": "Longitude",
+    "marsh_covariate_field": "Marsh",
+    "habitat_covariate_field": "Habitat",
+    "distance_metric": "haversine_km",
+    "structural_lcc_targets": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_structural_scales": 3,
+    "response_may_not_filter_registry": true
+  },
+  "sampling_semantics_frozen_after_gate0": {
+    "sample_period_field": "Sample Period",
+    "date_field": "Date",
+    "precipitation_field": "Precipitation",
+    "min_air_temp_field": "MinAirTemp",
+    "date_parser": "M/D/YYYY",
+    "all_20_sample_period_ids_required_once": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+    "prediction_sequence_rule": "sort sampling occasions by parsed Date ascending, breaking any exact date tie by numeric Sample Period; do not use Sample Period numeric order as temporal order",
+    "chronological_sample_period_order": [1,2,3,4,5,6,7,8,9,10,11,12,17,13,18,14,19,15,20,16],
+    "calibration_sample_periods": [1,2,3,4,5,6,7,8,9,10,11,12],
+    "heldout_sample_periods": [17,13,18,14,19,15,20,16],
+    "primary_outer_units": [17,13,18,14,19,15,20,16],
+    "calibration_end_date": "2012-04-30",
+    "heldout_start_date": "2012-05-04",
+    "heldout_end_date": "2012-05-28",
+    "primary_outer_unit_definition": "one heldout sampling occasion across the fixed 33-site registry"
   },
   "focal_species": {
     "status": "not_selected",
-    "rule": "select only after geometry/sampling gates using a response-independent external rule; species file prevalence and detection values are forbidden for selection"
+    "rule": "select only after geometry/sampling Gate1 using a response-independent external rule; species file prevalence and detection values are forbidden for selection"
   },
   "response_firewall": {
     "biological_response_payload_requests": 0,
@@ -60,5 +92,6 @@
     "biological_response_values_opened": false,
     "model_fits": 0,
     "heldout_scores": 0
-  }
+  },
+  "next_gate": "re-verify Sites/Samples identities and frozen table fingerprints; compute the 33-site structural ladder and exact chronological sampling registry with species response still unopened"
 }
