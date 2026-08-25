@@ -1,7 +1,6 @@
 import csv
+import json
 import os
-import subprocess
-import sys
 from dataclasses import replace
 from pathlib import Path
 
@@ -89,43 +88,42 @@ def test_runner_rejects_feature_order_and_duplicate_ids(tmp_path):
         load_audited_csv(duplicate, manifest)
 
 
-def test_azores_yellow_eel_response_blind_stage1_and_header():
-    """Run frozen response-blind Stage1, then the already-frozen one-record header gate."""
+def test_azores_yellow_eel_pre_response_certificates_are_frozen_and_offline():
+    """Validate committed pre-response evidence without reopening any remote data."""
     branch = os.environ.get("GITHUB_HEAD_REF") or os.environ.get("GITHUB_REF_NAME") or ""
     if branch != "agent/azores-yellow-eel-fresh-paired":
-        pytest.skip("Azores yellow eel preflight is branch-scoped")
-    root = Path(__file__).resolve().parents[1]
-    stage1_script = root / "validation/azores_yellow_eel_paired_complementarity/run_stage1_preflight.py"
-    stage1 = subprocess.run(
-        [sys.executable, str(stage1_script)],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    print("\n--- AZORES YELLOW EEL STAGE1 STDOUT ---")
-    print(stage1.stdout)
-    if stage1.stderr:
-        print("--- AZORES YELLOW EEL STAGE1 STDERR ---")
-        print(stage1.stderr)
-    assert stage1.returncode == 0
-    stage1_result_path = root / "build/azores_yellow_eel_stage1/preflight.json"
-    print("--- AZORES YELLOW EEL STAGE1 RESULT ---")
-    print(stage1_result_path.read_text(encoding="utf-8"))
+        pytest.skip("Azores yellow eel certificate check is branch-scoped")
 
-    header_script = root / "validation/azores_yellow_eel_paired_complementarity/run_header_preflight.py"
-    header = subprocess.run(
-        [sys.executable, str(header_script)],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    print("--- AZORES YELLOW EEL HEADER STDOUT ---")
-    print(header.stdout)
-    if header.stderr:
-        print("--- AZORES YELLOW EEL HEADER STDERR ---")
-        print(header.stderr)
-    header_result_path = root / "build/azores_yellow_eel_header/header_preflight.json"
-    if header_result_path.exists():
-        print("--- AZORES YELLOW EEL HEADER RESULT ---")
-        print(header_result_path.read_text(encoding="utf-8"))
-    assert header.returncode == 0
+    root = Path(__file__).resolve().parents[1] / "validation/azores_yellow_eel_paired_complementarity"
+    stage1 = json.loads((root / "stage1_certificate.json").read_text(encoding="utf-8"))
+    header = json.loads((root / "header_certificate.json").read_text(encoding="utf-8"))
+
+    assert stage1["attempt_id"] == header["attempt_id"] == "azores_yellow_eel_receiver_week_fresh_paired_v1"
+    assert stage1["status"] == "stage1_registry_availability_and_structural_pass"
+    assert stage1["registry"]["study_station_count"] == 10
+    assert stage1["animal_sources"]["yellow_target_tag_count"] == 36
+    assert stage1["temporal_availability"]["full_scored_week_count"] == 49
+    assert stage1["temporal_availability"]["calibration_week_count"] == 26
+    assert stage1["temporal_availability"]["heldout_week_count"] == 23
+    assert stage1["temporal_availability"]["full_four_week_heldout_block_count"] == 5
+    assert stage1["structure"]["deduplicated_geometry_world_count"] == 3
+    assert stage1["response_firewall"] == {
+        "response_payload_requests": 0,
+        "response_payload_bytes_opened": 0,
+        "response_header_bytes_opened": 0,
+        "response_rows_opened": False,
+        "response_values_opened": False,
+        "model_fits": 0,
+        "heldout_scores": 0,
+    }
+
+    assert header["status"] == "response_header_schema_pass"
+    assert header["authoritative_ci"]["run_id"] == 32798983182
+    assert header["response_identity"]["md5"] == "20253e15293f8f06472f393f050f7c4a"
+    assert header["response_header_bytes_opened"] == 163
+    assert header["response_payload_requests"] == 0
+    assert header["response_payload_bytes_opened"] == 0
+    assert header["response_rows_opened"] is False
+    assert header["response_values_opened"] is False
+    assert header["model_fits"] == 0
+    assert header["heldout_scores"] == 0
