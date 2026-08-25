@@ -1,0 +1,41 @@
+name: Replication 2 ScienceBase camera metadata screen
+
+on:
+  push:
+    branches:
+      - agent/replication-2-sciencebase-camera-screen
+    paths:
+      - validation/replication_2_source_screen/sciencebase_camera_metadata_screen.py
+      - .github/workflows/replication_2_sciencebase_camera_screen.yml
+
+permissions:
+  contents: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile metadata screen
+        run: python -m py_compile validation/replication_2_source_screen/sciencebase_camera_metadata_screen.py
+      - name: Run metadata-only screen
+        run: python validation/replication_2_source_screen/sciencebase_camera_metadata_screen.py
+      - name: Assert no file payload access
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/replication_2_source_screen/sciencebase_camera_metadata_screen.json')
+          r=json.loads(p.read_text())
+          assert r['file_payload_requests']==0
+          assert r['file_payload_bytes_opened']==0
+          print(json.dumps({'candidate_count':r['candidate_count'],'fingerprint':r['fingerprint']},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: replication-2-sciencebase-camera-metadata-screen
+          path: build/replication_2_source_screen/sciencebase_camera_metadata_screen.json
+          if-no-files-found: error
