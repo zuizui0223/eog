@@ -1,0 +1,49 @@
+name: Green Mountain marten replication 2 Gate0a
+
+on:
+  push:
+    branches:
+      - agent/green-mountain-marten-replication-2
+    paths:
+      - validation/green_mountain_marten_replication_2/**
+      - .github/workflows/green_mountain_marten_replication_2_gate0a.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0a:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile validation/green_mountain_marten_replication_2/gate0a_metadata_only.py
+      - run: python validation/green_mountain_marten_replication_2/gate0a_metadata_only.py
+      - name: Assert payload firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/green_mountain_marten_replication_2/gate0a_metadata_only.json').read_text())
+          assert r['file_payload_requests']==0
+          assert r['file_payload_bytes_opened']==0
+          a=r['response_firewall']
+          assert a['annotations_payload_requests']==0
+          assert a['annotations_payload_bytes_opened']==0
+          assert a['annotations_header_opened'] is False
+          assert a['annotations_rows_opened'] is False
+          assert a['annotations_values_opened'] is False
+          assert a['media_payload_requests']==0
+          assert a['taxa_payload_requests']==0
+          assert a['modeloutputs_payload_requests']==0
+          assert a['photo_zip_payload_requests']==0
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: green-mountain-marten-replication-2-gate0a
+          path: build/green_mountain_marten_replication_2/gate0a_metadata_only.json
+          if-no-files-found: error
