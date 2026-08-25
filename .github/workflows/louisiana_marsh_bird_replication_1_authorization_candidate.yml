@@ -1,0 +1,65 @@
+name: Louisiana King Rail authorization candidate audit
+
+on:
+  push:
+    branches:
+      - agent/louisiana-marsh-bird-heterogeneous-replication-1
+    paths:
+      - "validation/louisiana_marsh_bird_replication_1/OUTCOME_AUTHORIZATION_CANDIDATE"
+
+permissions:
+  contents: read
+
+jobs:
+  candidate-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install exact frozen runtime
+        run: |
+          python -m pip install \
+            numpy==2.3.5 \
+            scipy==1.18.1 \
+            joblib==1.5.3 \
+            threadpoolctl==3.6.0 \
+            scikit-learn==1.8.0
+          python -m pip install --no-deps .
+      - name: Compile production authorization surface
+        run: |
+          python -m py_compile \
+            validation/louisiana_marsh_bird_replication_1/verify_once_only_authorization.py \
+            validation/louisiana_marsh_bird_replication_1/outcome_runner.py \
+            validation/louisiana_marsh_bird_replication_1/runner_core.py
+      - name: Verify candidate with production verifier
+        run: |
+          python validation/louisiana_marsh_bird_replication_1/verify_once_only_authorization.py \
+            --mode candidate \
+            --marker validation/louisiana_marsh_bird_replication_1/OUTCOME_AUTHORIZATION_CANDIDATE
+      - name: Run exact production runner to response boundary
+        run: python validation/louisiana_marsh_bird_replication_1/outcome_runner.py --pre-response-only
+      - name: Assert response is still closed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/louisiana_marsh_bird_replication_1/terminal_result.json').read_text())
+          a = r['audit']
+          assert r['status'] == 'pre_response_boundary_pass'
+          assert a['selected_response_payload_requests'] == 0
+          assert a['selected_response_payload_bytes_opened'] == 0
+          assert a['selected_response_rows_seen'] == 0
+          assert a['selected_response_rows_opened'] is False
+          assert a['selected_response_values_opened'] is False
+          assert a['exact_count_gate_executed'] is False
+          assert a['model_fits'] == 0
+          assert a['primary_outer_units_scored'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: louisiana-king-rail-authorization-candidate-audit
+          path: build/louisiana_marsh_bird_replication_1/terminal_result.json
+          if-no-files-found: error
