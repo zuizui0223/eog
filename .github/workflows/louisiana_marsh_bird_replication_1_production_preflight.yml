@@ -1,0 +1,102 @@
+name: Louisiana marsh-bird replication 1 production preflight
+
+on:
+  push:
+    branches:
+      - agent/louisiana-marsh-bird-heterogeneous-replication-1
+    paths:
+      - "validation/louisiana_marsh_bird_replication_1/outcome_runner.py"
+      - "validation/louisiana_marsh_bird_replication_1/runner_core.py"
+      - "validation/louisiana_marsh_bird_replication_1/full_freeze_spec.json"
+      - "validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py"
+      - "validation/louisiana_marsh_bird_replication_1/pre_response_finalize_certificate.json"
+      - "validation/louisiana_marsh_bird_replication_1/synthetic_smoke_certificate.json"
+      - "validation/louisiana_marsh_bird_replication_1/gate0_certificate.json"
+      - "validation/louisiana_marsh_bird_replication_1/gate1_certificate.json"
+      - "validation/louisiana_marsh_bird_replication_1/gate2_header_certificate.json"
+      - "validation/louisiana_marsh_bird_replication_1/focal_species_selection_certificate.json"
+      - ".github/workflows/louisiana_marsh_bird_replication_1_production_preflight.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  production-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install exact frozen runtime
+        run: |
+          python -m pip install \
+            numpy==2.3.5 \
+            scipy==1.18.1 \
+            joblib==1.5.3 \
+            threadpoolctl==3.6.0 \
+            scikit-learn==1.8.0
+          python -m pip install --no-deps .
+      - name: Verify exact runtime
+        run: |
+          python - <<'PY'
+          import sys, numpy, scipy, sklearn, joblib, threadpoolctl
+          assert sys.version_info[:2] == (3, 12)
+          assert numpy.__version__ == '2.3.5'
+          assert scipy.__version__ == '1.18.1'
+          assert sklearn.__version__ == '1.8.0'
+          assert joblib.__version__ == '1.5.3'
+          assert threadpoolctl.__version__ == '3.6.0'
+          PY
+      - name: Compile exact production surface
+        run: |
+          python -m py_compile \
+            validation/louisiana_marsh_bird_replication_1/outcome_runner.py \
+            validation/louisiana_marsh_bird_replication_1/runner_core.py \
+            validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py
+      - name: Revalidate finalizer certificate
+        run: |
+          python validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          generated = json.loads(Path('build/louisiana_marsh_bird_replication_1/pre_response_finalize.json').read_text())
+          frozen = json.loads(Path('validation/louisiana_marsh_bird_replication_1/pre_response_finalize_certificate.json').read_text())
+          assert generated['fingerprint'] == frozen['finalizer_fingerprint']
+          assert generated['full_freeze_spec_sha256'] == frozen['full_freeze_spec_sha256']
+          assert generated['predictive_complementarity_declaration_fingerprint'] == frozen['predictive_complementarity_declaration_fingerprint']
+          assert generated['response_rows_opened'] is False
+          assert generated['response_values_opened'] is False
+          PY
+      - name: Run production runner through response boundary
+        run: python validation/louisiana_marsh_bird_replication_1/outcome_runner.py --pre-response-only
+      - name: Assert production runner stopped immediately before full KIRA GET
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/louisiana_marsh_bird_replication_1/terminal_result.json').read_text())
+          a = r['audit']
+          assert r['status'] == 'pre_response_boundary_pass'
+          assert r['row_access_authorized'] is False
+          assert a['selected_response_payload_requests'] == 0
+          assert a['selected_response_payload_bytes_opened'] == 0
+          assert a['selected_response_rows_opened'] is False
+          assert a['selected_response_values_opened'] is False
+          assert a['unselected_species_payload_requests'] == 0
+          assert a['unselected_species_payload_bytes_opened'] == 0
+          assert a['exact_count_gate_executed'] is False
+          assert a['model_fits'] == 0
+          assert a['primary_outer_units_scored'] == 0
+          assert r['site_count'] == 33
+          assert r['sample_count'] == 20
+          print(json.dumps(r, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: louisiana-marsh-bird-replication-1-production-preflight
+          path: |
+            build/louisiana_marsh_bird_replication_1/pre_response_finalize.json
+            build/louisiana_marsh_bird_replication_1/terminal_result.json
+          if-no-files-found: error
