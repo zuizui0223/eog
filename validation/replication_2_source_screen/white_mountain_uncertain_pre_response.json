@@ -1,0 +1,32 @@
+{
+  "schema": "eog.replication_2_source_screen.white_mountain_uncertain_pre_response.v1",
+  "status": "uncertain_pre_response",
+  "candidate": {
+    "title": "USDA White Mountain National Forest Volume 1 (2014 - 2024)",
+    "sciencebase_id": "66520b7dd34e702fe87490d4",
+    "doi": "10.5066/P1PUEYQK"
+  },
+  "positive_findings": [
+    "ScienceBase metadata exposes physically separate locations.csv, visits.csv, annotations.csv and taxa.csv.",
+    "Public USGS metadata gives a 2014-01-09 through 2024-05-15 data window and 325099 media files.",
+    "No response file payload was opened during screening."
+  ],
+  "blocking_gate": {
+    "name": "prospective_endpoint_count_estimability",
+    "reason": "Public documentation located for this exact release does not provide focal-species-by-period counts or another endpoint-matched lower bound sufficient to prove calibration positives >=10 and heldout positives >=10 before annotations.csv access. Total media count is not a valid substitute.",
+    "response_rows_may_not_be_opened_to_resolve": true
+  },
+  "external_sources": [
+    "https://www.usgs.gov/data/usda-white-mountain-national-forest-volume-1-2014-2024",
+    "https://data.usgs.gov/datacatalog/data/USGS%3A66520b7dd34e702fe87490d4"
+  ],
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotations_rows_opened": false,
+    "annotations_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "next_action": "Do not promote White Mountain to a response gate. Screen the Maine moose camera project whose 2026 paper publishes exact moose totals, first proving that the publication and ScienceBase volume refer to the same camera universe and that period-specific estimability can be established without row access."
+}
