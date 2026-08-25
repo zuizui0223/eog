@@ -1,0 +1,56 @@
+{
+  "schema": "eog.white_mountain_camera_replication_2.gate1_structure_time_contract.v1",
+  "attempt_id": "white_mountain_nf_camera_2014_2024_fresh_paired_v1",
+  "gate0_certificate": "validation/white_mountain_camera_replication_2/gate0_certificate.json",
+  "focal_species_certificate": "validation/white_mountain_camera_replication_2/focal_species_certificate.json",
+  "relational_mapping": {
+    "location_primary_key": "pk_locationid",
+    "visit_location_foreign_key": "fk_locationid",
+    "visit_primary_key": "pk_visitid",
+    "visit_date": "visit_date",
+    "visit_time": "visit_time",
+    "visit_type": "visit_type"
+  },
+  "response_independent_universe": "all and only unique fk_locationid values present in visits.csv",
+  "geometry": {
+    "coordinate_rule": "midpoint of response-independent location bounds",
+    "latitude": "(lat_min + lat_max) / 2",
+    "longitude": "(long_min + long_max) / 2",
+    "require_every_visited_location_exactly_once_in_locations": true,
+    "require_all_four_bounds_for_every_visited_location": true,
+    "require_finite_valid_coordinate_midpoints": true,
+    "do_not_use_annotations_or_media_for_geometry": true
+  },
+  "structural_ladder": {
+    "distance": "Haversine great-circle distance",
+    "earth_radius_km": 6371.0088,
+    "target_largest_component_fractions": [0.25,0.5,0.75,0.9],
+    "require_at_least_distinct_positive_thresholds": 3
+  },
+  "visit_sequence_profile": {
+    "allowed_visit_types_exact": ["set","check","pull"],
+    "sort_order": ["combined visit_date + visit_time", "numeric pk_visitid"],
+    "profile_first_and_last_type": true,
+    "profile_transition_pairs": true,
+    "profile_strict_active_state_diagnostics": true,
+    "do_not_yet_repair_or_define_prediction_intervals": true
+  },
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotationverifications_payload_requests": 0,
+    "annotationverifications_payload_bytes_opened": 0,
+    "media_payload_requests": 0,
+    "media_payload_bytes_opened": 0,
+    "taxa_payload_requests": 0,
+    "taxa_payload_bytes_opened": 0,
+    "modeloutputs_payload_requests": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "other_response_payload_requests": 0,
+    "other_response_payload_bytes_opened": 0,
+    "photo_zip_payload_requests": 0,
+    "photo_zip_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
