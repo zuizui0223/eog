@@ -48,13 +48,16 @@ def main() -> None:
 
     marker_path = Path(args.marker)
     marker = json.loads(marker_path.read_text(encoding="utf-8"))
-    expected_name = (
+    expected_path = (
         core["candidate_marker_path"] if args.mode == "candidate" else core["actual_marker_path"]
     )
-    if marker_path.as_posix() != expected_name:
-        raise SystemExit(f"marker path mismatch: {marker_path} != {expected_name}")
-    if marker != core["marker_content"]:
-        raise SystemExit("marker bytes/semantic content differs from frozen authorization marker content")
+    if marker_path.as_posix() != expected_path:
+        raise SystemExit(f"marker path mismatch: {marker_path} != {expected_path}")
+
+    expected_marker = dict(core["marker_template"])
+    expected_marker["authorization_fingerprint"] = auth["authorization_fingerprint"]
+    if marker != expected_marker:
+        raise SystemExit("marker bytes/semantic content differs from frozen authorization template")
     if marker["authorization_fingerprint"] != auth["authorization_fingerprint"]:
         raise SystemExit("marker authorization fingerprint mismatch")
     if marker["attempt_id"] != core["attempt_id"]:
