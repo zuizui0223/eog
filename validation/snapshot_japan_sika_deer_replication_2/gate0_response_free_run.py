@@ -2,18 +2,57 @@ from __future__ import annotations
 
 import json
 import urllib.parse
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import gate0_response_free as gate
 
 CERT_PATH = Path(__file__).resolve().parent / "pensoft_xml_sequence_identity_certificate.json"
 ORIGINAL_RECORD_FILE_META = gate.record_file_meta
+JST = timezone(timedelta(hours=9))
 
 # Response-independent schema decision: Snapshot arrays are represented by the
 # published Camtrap DP subproject_name field. project_id may coexist in the same
 # deployment table but is not an alias for array identity in this replication.
 gate.DEP_ALIASES["subproject_name"] = ["subproject_name", "subprojectName"]
 gate.HAB_ALIASES["subproject_name"] = ["subproject_name", "subprojectName"]
+
+
+def parse_dt_snapshot_jst(value: str, field: str):
+    """Parse documented Snapshot Japan deployment timestamps as Japan Standard Time.
+
+    The paper explicitly states that start_date/end_date are in JST. Any explicit
+    timezone in the source is honoured; timezone-naive tokens receive UTC+09:00.
+    The base Gate0 works internally in UTC after parsing, so the returned value is
+    normalized to UTC without changing durations.
+    """
+    s = (value or "").strip()
+    if not s:
+        raise RuntimeError(f"blank {field}")
+    s2 = s.replace("Z", "+00:00")
+    try:
+        dt = datetime.fromisoformat(s2)
+    except ValueError:
+        dt = None
+    if dt is None:
+        for fmt in (
+            "%Y-%m-%d %H:%M:%S",
+            "%Y-%m-%d %H:%M",
+            "%Y-%m-%d",
+            "%Y/%m/%d %H:%M:%S",
+            "%Y/%m/%d %H:%M",
+            "%Y/%m/%d",
+        ):
+            try:
+                dt = datetime.strptime(s, fmt)
+                break
+            except ValueError:
+                continue
+    if dt is None:
+        raise RuntimeError(f"unsupported {field} datetime token: {s!r}")
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=JST)
+    return dt.astimezone(timezone.utc)
 
 
 def record_file_meta_current_zenodo(record: dict, filename: str):
@@ -85,6 +124,7 @@ def discover_from_frozen_pensoft_certificate():
     }
 
 
+gate.parse_dt = parse_dt_snapshot_jst
 gate.record_file_meta = record_file_meta_current_zenodo
 gate.discover_response_metadata_only = discover_from_frozen_pensoft_certificate
 
