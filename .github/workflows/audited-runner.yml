@@ -11,6 +11,7 @@ on:
       - "src/eog/uncertainty.py"
       - "src/eog/comparative.py"
       - "src/eog/geometry.py"
+      - "validation/azores_yellow_eel_paired_complementarity/**"
   workflow_dispatch:
 
 jobs:
@@ -20,6 +21,24 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - run: python -m pip install . pytest
+      - name: Install frozen Azores predictive runtime
+        if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
+        run: python -m pip install --force-reinstall numpy==2.3.5 scikit-learn==1.8.0
       - run: pytest -q tests/test_runner.py
+      - name: Emit machine-checkable Azores outcome authorization
+        if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
+        run: python validation/azores_yellow_eel_paired_complementarity/pre_response_finalize.py
+      - name: Run Azores synthetic paired smoke
+        if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
+        run: python validation/azores_yellow_eel_paired_complementarity/synthetic_smoke.py
+      - name: Upload Azores pre-response evidence
+        if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
+        uses: actions/upload-artifact@v4
+        with:
+          name: azores-yellow-eel-pre-response-freeze
+          path: |
+            build/azores_yellow_eel_pre_response/pre_response_finalize.json
+            build/azores_yellow_eel_pre_response/synthetic_smoke.json
+          if-no-files-found: error
