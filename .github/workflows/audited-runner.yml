@@ -27,6 +27,11 @@ jobs:
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         run: python -m pip install --force-reinstall numpy==2.3.5 scikit-learn==1.8.0
       - run: pytest -q tests/test_runner.py
+      - name: Compile frozen Azores once-only runner
+        if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
+        run: |
+          python -m py_compile validation/azores_yellow_eel_paired_complementarity/runner_core.py
+          python -m py_compile validation/azores_yellow_eel_paired_complementarity/outcome_runner.py
       - name: Emit machine-checkable Azores outcome authorization
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         run: python validation/azores_yellow_eel_paired_complementarity/pre_response_finalize.py
