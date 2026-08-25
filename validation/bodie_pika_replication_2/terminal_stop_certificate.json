@@ -1,0 +1,44 @@
+{
+  "schema": "eog.bodie_pika_replication_2.terminal_stop_certificate.v1",
+  "attempt_id": "bodie_pika_terrestrial_fragmented_fresh_paired_v1",
+  "terminal_status": "stop_response_independent_complete_geometry_not_found",
+  "reason": "The author-released response-independent geometry is internally coherent at 79 patches, but the prospectively frozen current census universe requires exactly 82 patches. Patch-count weakening, figure digitization, census-derived repair, and response-conditioned subset repair are forbidden.",
+  "authoritative_gate": {
+    "workflow_run_id": 32815491806,
+    "job_id": 97702771269,
+    "head_sha": "4094c8cc438d88d611a2fc1b6b8bc8d589d65a31",
+    "conclusion": "success",
+    "gate_fingerprint": "4e074268ca76db0579bb0c08f179b22466d0043fb822eb64c0effc439f3160a0",
+    "artifact_id": 9551228266,
+    "artifact_digest": "sha256:10b8e91ca853280fa0c21d525ea1b2b67fccbc00a5d8f5df5fcc17d0773ed156"
+  },
+  "frozen_expected_patch_count": 82,
+  "observed_response_independent_geometry": {
+    "coordinate_rows": 79,
+    "unique_coordinate_pairs": 79,
+    "distance_matrix_rows": 79,
+    "distance_matrix_columns": 79,
+    "distance_matrix_square": true,
+    "distance_matrix_symmetric": true,
+    "distance_matrix_diagonal_zero": true,
+    "ordered_coordinate_registry_fingerprint": "7a92d8841e090d76b8ddbd2d80905cafaa1bbfe6929dd4895fb11de3feb50662",
+    "author_repo": "eastonwhite/BodiePikaMetapop",
+    "patch_coordinates_git_blob_sha": "ff0395777cb35bbe1364d12b8cb967c5fa0f9d91",
+    "patch_coordinates_sha256": "570f029f64afcdd75d8d13064296e2bef29666de4ed5c68b602e4088f86b544a",
+    "inter_patch_distances_git_blob_sha": "b04f3c56a347b79ab3f9db866449355f446fc1c3",
+    "inter_patch_distances_sha256": "710e38f30f419d1b2d95b4dac37e47daf8ae2ca3d06755a1baa51b550ea0b8d4"
+  },
+  "response_firewall": {
+    "census_payload_requests": 0,
+    "census_payload_bytes_opened": 0,
+    "census_header_bytes_opened": 0,
+    "census_sheet_names_opened": false,
+    "census_rows_opened": false,
+    "census_values_opened": false,
+    "scientific_model_fits": 0,
+    "heldout_scores": 0
+  },
+  "freshness_disposition": "candidate retired without consuming the census response",
+  "rerun_or_repair_permitted": false,
+  "next_action": "select another untouched terrestrial or island-fragmented ecosystem with a physically separate complete registry/geometry and response source"
+}
