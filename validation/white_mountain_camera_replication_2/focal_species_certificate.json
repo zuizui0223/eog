@@ -1,0 +1,35 @@
+{
+  "schema": "eog.white_mountain_camera_replication_2.focal_species_certificate.v1",
+  "attempt_id": "white_mountain_nf_camera_2014_2024_fresh_paired_v1",
+  "scientific_name": "Alces alces",
+  "common_name": "moose",
+  "selection_uses_dataset_response_prevalence": false,
+  "selection_uses_annotations_media_taxa_modeloutputs": false,
+  "species_switching_after_any_response_access": false,
+  "basis": [
+    "New Hampshire Fish and Game treats moose as a regionally managed big-game population with explicit White Mountains density objectives/cutoffs; recent published harvest reporting places the White Mountains below its management cutoff.",
+    "New Hampshire Fish and Game has independently evaluated camera traps as a method for estimating moose abundance/density, making moose a methodologically appropriate focal species for this camera-monitoring network."
+  ],
+  "independent_sources": [
+    {
+      "publisher": "New Hampshire Fish and Game Department",
+      "title": "2023 New Hampshire Wildlife Harvest Summary",
+      "url": "https://www.wildlife.nh.gov/sites/g/files/ehbemt746/files/inline-documents/sonh/2023-harvest-summary.pdf"
+    },
+    {
+      "publisher": "New Hampshire Fish and Game Department",
+      "title": "Fish and Game Commission minutes, February 20, 2024",
+      "url": "https://www.wildlife.nh.gov/sites/g/files/ehbemt746/files/inline-documents/sonh/comm-min-20feb24.pdf"
+    }
+  ],
+  "frozen_after_gate0_fingerprint": "52539bd307e377b401072c3e7a843ae5079f9f6cf62607eab60c45baa1a331e7",
+  "response_firewall_at_selection": {
+    "annotations_payload_bytes_opened": 0,
+    "media_payload_bytes_opened": 0,
+    "taxa_payload_bytes_opened": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "photo_zip_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
