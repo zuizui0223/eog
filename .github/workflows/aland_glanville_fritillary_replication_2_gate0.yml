@@ -1,0 +1,66 @@
+name: Åland Glanville fritillary replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/aland-glanville-fritillary-replication-2
+    paths:
+      - validation/aland_glanville_fritillary_replication_2/**
+      - .github/workflows/aland_glanville_fritillary_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile metadata-only Gate0
+        run: python -m py_compile validation/aland_glanville_fritillary_replication_2/gate0_metadata.py
+      - name: Run Metax metadata-only source gate
+        id: gate
+        continue-on-error: true
+        run: python validation/aland_glanville_fritillary_replication_2/gate0_metadata.py
+      - name: Assert file-payload firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/aland_glanville_fritillary_replication_2/gate0_metadata.json')
+          assert p.exists(), 'Gate0 terminal evidence missing'
+          r = json.loads(p.read_text())
+          a = r['response_firewall']
+          assert a['dataset_file_payload_requests'] == 0
+          assert a['dataset_file_payload_bytes_opened'] == 0
+          assert a['dataset_file_headers_opened'] is False
+          assert a['dataset_file_rows_opened'] is False
+          assert a['dataset_file_values_opened'] is False
+          assert a['locality_visit_payload_requests'] == 0
+          assert a['nest_payload_requests'] == 0
+          assert a['scientific_model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps({'status': r['status'], 'fingerprint': r['fingerprint'], 'roles': r['roles'], 'response_firewall': a}, indent=2, sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aland-glanville-fritillary-replication-2-gate0
+          path: build/aland_glanville_fritillary_replication_2/gate0_metadata.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/aland_glanville_fritillary_replication_2/gate0_metadata.json').read_text())
+          if r['status'] == 'engineering_failure_pre_response':
+              raise SystemExit(r['reason'])
+          print('Scientific Gate0 terminal status:', r['status'])
+          PY
