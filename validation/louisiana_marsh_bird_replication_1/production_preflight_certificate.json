@@ -1,0 +1,33 @@
+{
+  "schema": "eog.louisiana_marsh_bird_production_preflight_certificate.v1",
+  "attempt_id": "southwest_louisiana_king_rail_site_occasion_fresh_paired_v1",
+  "status": "pre_response_boundary_pass",
+  "authoritative_ci": {
+    "workflow": "Louisiana marsh-bird replication 1 production preflight",
+    "run_id": 32811506277,
+    "job_id": 97691565584,
+    "head_sha": "79643fd897c6314764532a53a4b4db895dc15096",
+    "conclusion": "success",
+    "artifact_id": 9549942925,
+    "artifact_zip_sha256": "f1009ec32430c2de2283e65f594bbb5644731168f97266f114a380e9c5fcdb3d"
+  },
+  "production_boundary_fingerprint": "c8dc424e510da6c3136ecc3674a0c3345b0c0b830aae22795c8c3df9a4c6f02b",
+  "full_freeze_spec_sha256": "cac01c5755ec4e775c58fad71f657256f11139fe53fef4bde04ad0b6fa51192c",
+  "predictive_complementarity_declaration_fingerprint": "d97a7062f71d1c2f6aab73bbef77d13737cb00a5c93f524d5c07e85657b26d8e",
+  "site_count": 33,
+  "sample_count": 20,
+  "response_boundary": {
+    "KIRA_header_bytes_opened_before_preflight": 56,
+    "production_preflight_KIRA_full_payload_requests": 0,
+    "production_preflight_KIRA_full_payload_bytes_opened": 0,
+    "production_preflight_KIRA_rows_seen": 0,
+    "production_preflight_KIRA_rows_opened": false,
+    "production_preflight_KIRA_values_opened": false,
+    "unselected_species_payload_requests": 0,
+    "unselected_species_payload_bytes_opened": 0,
+    "exact_count_gate_executed": false,
+    "scientific_model_fits": 0,
+    "scientific_outer_units_scored": 0
+  },
+  "next_authorized_boundary": "A separate once-only marker may authorize exactly one full KIRA.csv GET only after marker/code/certificate identities pass the committed production verifier."
+}
