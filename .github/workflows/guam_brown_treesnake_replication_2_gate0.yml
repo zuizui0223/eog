@@ -1,0 +1,67 @@
+name: Guam Brown Treesnake replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/guam-brown-treesnake-replication-2
+    paths:
+      - validation/guam_brown_treesnake_replication_2/source_contract.json
+      - validation/guam_brown_treesnake_replication_2/gate0_effort_only.py
+      - .github/workflows/guam_brown_treesnake_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile effort-only gate
+        run: python -m py_compile validation/guam_brown_treesnake_replication_2/gate0_effort_only.py
+      - name: Run effort-only gate
+        id: gate
+        continue-on-error: true
+        run: python validation/guam_brown_treesnake_replication_2/gate0_effort_only.py
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/guam_brown_treesnake_replication_2/gate0_effort_only.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          assert a['capture_payload_requests']==0
+          assert a['capture_payload_bytes_opened']==0
+          assert a['capture_header_opened'] is False
+          assert a['capture_rows_opened'] is False
+          assert a['capture_values_opened'] is False
+          assert a['camera_transcription_payload_requests']==0
+          assert a['camera_transcription_payload_bytes_opened']==0
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps({'status':r['status'],'fingerprint':r.get('fingerprint'),'effort':r.get('effort',{}),'candidate_columns':r.get('candidate_columns',{}),'response_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guam-brown-treesnake-replication-2-gate0
+          path: build/guam_brown_treesnake_replication_2/gate0_effort_only.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/guam_brown_treesnake_replication_2/gate0_effort_only.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate0 terminal status:',r['status'])
+          PY
