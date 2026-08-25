@@ -1,0 +1,53 @@
+{
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.gate1_time_geometry_certificate.v1",
+  "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
+  "status": "gate1_pass_response_independent_time_and_structure",
+  "gate1_fingerprint": "1ef56f168b7cb0d55f4b170483e7723b03ea2c52377b4f4d8d604723f5a702a9",
+  "registry": {
+    "deployment_count": 90,
+    "array_count": 9,
+    "registry_fingerprint": "30387901a541725ed9680b1c1542c2a1fad0da725d9d21a9c953be42e2708d79"
+  },
+  "time_axis": {
+    "timezone": "Asia/Tokyo",
+    "bin_days": 7,
+    "minimum_active_hours": 120.0,
+    "week_1_role": "initialization_only_not_scored",
+    "calibration_relative_weeks": [2,3,4,5],
+    "primary_heldout_relative_weeks": [6,7,8,9,10],
+    "max_response_independent_relative_week": 16
+  },
+  "availability": {
+    "calibration_total_eligible_site_weeks": 352,
+    "primary_heldout_total_eligible_site_weeks": 372,
+    "calibration_week_gate_pass": true,
+    "primary_heldout_week_gate_pass": true,
+    "total_gate_pass": true,
+    "final_availability_pass": true,
+    "eligible_site_week_registry_fingerprint": "15cd91a5f8fc9e2f1e3ca3594bd761883f5e933c5b8cb63e8380293c9c6710a0"
+  },
+  "structural_ladder": {
+    "thresholds_km": [0.2839442377281747,0.45588355187266655,1.9252597039957107,3.34728268080147],
+    "targets": [0.25,0.5,0.75,0.9],
+    "distinct_positive_thresholds": 4,
+    "target_0_9_achieved": true,
+    "final_structural_pass": true,
+    "fingerprint": "f0d8c7bcfb27d6e8d66af4452f6fcdfd71e3d872bf03d7cc70dde0ad824fed23"
+  },
+  "audit": {
+    "workflow_run_id": 32821160464,
+    "job_id": 97719378676,
+    "head_sha": "03827e6c619df4c19554d6d1c4fe50687b24d0f6",
+    "artifact_id": 9553141985,
+    "artifact_digest": "sha256:8c466788d4259631a3b397331827555d0b8381d9ab9c6ac9605ae84fe315397d"
+  },
+  "response_firewall": {
+    "sequence_payload_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
