@@ -1,0 +1,68 @@
+name: Åland Glanville fritillary replication 2 Gate1
+
+on:
+  push:
+    branches:
+      - agent/aland-glanville-fritillary-replication-2
+    paths:
+      - validation/aland_glanville_fritillary_replication_2/gate0_metadata_certificate.json
+      - validation/aland_glanville_fritillary_replication_2/gate1_patch_contract.json
+      - validation/aland_glanville_fritillary_replication_2/gate1_patch_profile.py
+      - .github/workflows/aland_glanville_fritillary_replication_2_gate1.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate1:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile Patch-only Gate1
+        run: python -m py_compile validation/aland_glanville_fritillary_replication_2/gate1_patch_profile.py
+      - name: Run exact Patch-only profile
+        id: gate
+        continue-on-error: true
+        run: python validation/aland_glanville_fritillary_replication_2/gate1_patch_profile.py
+      - name: Assert response-bearing files stayed closed
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/aland_glanville_fritillary_replication_2/gate1_patch_profile.json')
+          assert p.exists(), 'Gate1 evidence missing'
+          r = json.loads(p.read_text())
+          a = r['response_firewall']
+          assert a['locality_visit_authorization_requests'] == 0
+          assert a['locality_visit_payload_requests'] == 0
+          assert a['locality_visit_payload_bytes_opened'] == 0
+          assert a['nest_authorization_requests'] == 0
+          assert a['nest_payload_requests'] == 0
+          assert a['nest_payload_bytes_opened'] == 0
+          assert a['other_dataset_file_payload_requests'] == 0
+          assert a['scientific_model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps({'status': r['status'], 'fingerprint': r['fingerprint'], 'patch': r['patch'], 'candidate_columns': r['candidate_columns'], 'response_firewall': a}, indent=2, sort_keys=True))
+          PY
+      - name: Upload Gate1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aland-glanville-fritillary-replication-2-gate1
+          path: build/aland_glanville_fritillary_replication_2/gate1_patch_profile.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/aland_glanville_fritillary_replication_2/gate1_patch_profile.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate1 terminal status:', r['status'])
+          PY
