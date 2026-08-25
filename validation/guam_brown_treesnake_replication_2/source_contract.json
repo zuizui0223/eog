@@ -1,0 +1,33 @@
+{
+  "schema": "eog.guam_brown_treesnake_replication_2.source_contract.v1",
+  "attempt_id": "guam_brown_treesnake_gnwr_2014_fresh_paired_v1",
+  "issue": 298,
+  "sciencebase_item_id": "5e00fdc8e4b0b207aa033d80",
+  "sciencebase_item_title": "Brown Treesnake trap captures, Guam National Wildlife Refuge, 2014",
+  "response_independent_file": "BTS trap effort GNWR.csv",
+  "forbidden_files": [
+    "BTS capture data GNWR.csv",
+    "Camera transcription GNWR.csv"
+  ],
+  "metadata_screen_fingerprint": "e60c6db6d135ee6bc94326b61942484b823cc1a720e8b60af4b45b69389d545f",
+  "gate0": {
+    "download_only_exact_filename": "BTS trap effort GNWR.csv",
+    "profile_entire_effort_file": true,
+    "require_nonempty_rows": true,
+    "require_identifier_candidate": true,
+    "require_two_coordinate_candidates": true,
+    "require_temporal_candidate": true,
+    "do_not_use_capture_rows_to_define_registry_or_effort": true
+  },
+  "response_firewall": {
+    "capture_payload_requests": 0,
+    "capture_payload_bytes_opened": 0,
+    "capture_header_opened": false,
+    "capture_rows_opened": false,
+    "capture_values_opened": false,
+    "camera_transcription_payload_requests": 0,
+    "camera_transcription_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
