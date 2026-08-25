@@ -1,0 +1,46 @@
+name: Heterogeneous replication source screen 1
+
+on:
+  push:
+    branches:
+      - agent/heterogeneous-replication-source-screen-1
+    paths:
+      - "validation/heterogeneous_replication_source_screen_1/**"
+      - ".github/workflows/heterogeneous_replication_source_screen_1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run metadata-only source inventory
+        run: python validation/heterogeneous_replication_source_screen_1/run_source_metadata_screen.py
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/heterogeneous_replication_source_screen_1/source_metadata_screen.json')
+          r = json.loads(p.read_text())
+          a = r['audit']
+          assert a['candidate_file_payload_requests'] == 0
+          assert a['candidate_file_payload_bytes_opened'] == 0
+          assert a['response_header_bytes_opened'] == 0
+          assert a['response_rows_opened'] is False
+          assert a['response_values_opened'] is False
+          assert a['model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps(r, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: heterogeneous-replication-source-screen-1
+          path: build/heterogeneous_replication_source_screen_1/source_metadata_screen.json
+          if-no-files-found: error
