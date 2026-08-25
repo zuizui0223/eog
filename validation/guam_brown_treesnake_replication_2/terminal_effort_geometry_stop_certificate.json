@@ -1,0 +1,39 @@
+{
+  "schema": "eog.guam_brown_treesnake_replication_2.terminal_effort_geometry_stop_certificate.v1",
+  "attempt_id": "guam_brown_treesnake_gnwr_2014_fresh_paired_v1",
+  "status": "stop_effort_identifier_not_identifiable",
+  "reason": "The prospectively frozen response-independent trap-effort file does not contain an individual trap/site/station identifier or two-coordinate geometry. Its exact schema is Date, TRAPLINE, COUNT, LURE, BI, ELAPSED, SPACING. The frozen Gate0 required an individual identifier plus two coordinate candidates and forbade using capture rows to repair the registry/geometry.",
+  "effort": {
+    "file": "BTS trap effort GNWR.csv",
+    "rows": 700,
+    "bytes": 17545,
+    "sha256": "9ea5327e03751417ac8a392d92391ddb06a6c565a01612403ca28bcb7313fafd",
+    "header": ["Date","TRAPLINE","COUNT","LURE","BI","ELAPSED","SPACING"],
+    "unique_dates": 148
+  },
+  "forbidden_response_identity": {
+    "file": "BTS capture data GNWR.csv",
+    "size": 8113,
+    "md5": "80c9c907b766b26cdfaf7580e7501436"
+  },
+  "audit": {
+    "workflow_run_id": 32822179396,
+    "job_id": 97722445852,
+    "head_sha": "0613c17c9b45aa4adfd9454843248a21041b30f6",
+    "artifact_id": 9553520546,
+    "artifact_digest": "sha256:3ffc0dd704bd67d397e0233ccecee0dfdd101f7259a746bfa05cea4e85532b5b",
+    "gate0_fingerprint": "a49ff48ef9a57bd85a7b3524573b78657fac74bf4adae64cc02bea570bcff82a"
+  },
+  "response_firewall": {
+    "capture_payload_requests": 0,
+    "capture_payload_bytes_opened": 0,
+    "capture_header_opened": false,
+    "capture_rows_opened": false,
+    "capture_values_opened": false,
+    "camera_transcription_payload_requests": 0,
+    "camera_transcription_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "freshness_boundary": "Do not repair this fresh attempt by treating TRAPLINE/SPACING as individual-trap two-dimensional geometry or by consulting the capture/camera-transcription response files."
+}
