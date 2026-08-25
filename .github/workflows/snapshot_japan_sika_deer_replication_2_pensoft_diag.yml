@@ -21,10 +21,10 @@ jobs:
           python-version: '3.12'
       - name: Compile diagnostic
         run: python -m py_compile validation/snapshot_japan_sika_deer_replication_2/pensoft_sequence_identity_diag.py
-      - name: Inspect Pensoft supplement landing only
+      - name: Inspect Pensoft supplement landing and HEAD only
         continue-on-error: true
         run: python validation/snapshot_japan_sika_deer_replication_2/pensoft_sequence_identity_diag.py
-      - name: Assert sequence response remains unopened
+      - name: Assert sequence response body remains unopened
         if: always()
         run: |
           python - <<'PY'
@@ -34,11 +34,14 @@ jobs:
           assert p.exists()
           r=json.loads(p.read_text())
           a=r['response_firewall']
-          assert a['sequence_payload_requests']==0
+          assert a['sequence_http_head_requests'] in {0,1}
+          assert a['sequence_payload_get_requests']==0
           assert a['sequence_payload_bytes_opened']==0
           assert a['sequence_csv_header_bytes_opened']==0
           assert a['sequence_rows_opened'] is False
           assert a['sequence_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
           print(json.dumps(r, indent=2, sort_keys=True))
           PY
       - name: Upload diagnostic evidence
