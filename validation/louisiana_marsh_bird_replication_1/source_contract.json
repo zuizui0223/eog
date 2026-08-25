@@ -1,0 +1,64 @@
+{
+  "schema": "eog.louisiana_marsh_bird_heterogeneous_replication_source_contract.v1",
+  "replication_id": "southwest_louisiana_secretive_marsh_birds_heterogeneous_replication_1",
+  "tracking_issue": 292,
+  "selected_after_favorable_endpoint": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "selected_after_terminal_candidate": "big_thicket_amphibian_reptile_heterogeneous_replication_1",
+  "selection_screen": {
+    "run_id": 32809048159,
+    "job_id": 97684744901,
+    "metadata_screen_fingerprint": "7a97c73633742942272b53aec4bf065028f23725f9cb8ed104603c531ca2df6b",
+    "candidate_file_payload_requests": 0,
+    "candidate_file_payload_bytes_opened": 0
+  },
+  "official_source": {
+    "doi": "10.5066/P9RRIIR2",
+    "sciencebase_item_id": "5ecf119d82ce30fd980854bd",
+    "sciencebase_item_metadata_sha256": "2db954c702a4e5b9b0b34dc3ff3e59a83bfe1cf67e9df2f2772a423269aba6bc",
+    "documented_design": {
+      "site_count": 33,
+      "species_count": 11,
+      "sampling_occasion_count": 20,
+      "period": "February-June 2012",
+      "site_selection": "randomly selected",
+      "site_information": "coordinates, marsh type, and habitat designation",
+      "sampling_information": "date and environmental conditions used as detection covariates"
+    }
+  },
+  "response_independent_assets": {
+    "Sites.csv": {"md5": "b2c125a786a222ebea5a4cdd5627306e", "bytes": 1866, "access": "full payload allowed", "role": "official site-level registry/coordinates/habitat metadata"},
+    "Samples.csv": {"md5": "b719dc436a7fbbfdc2a1add11de2347a", "bytes": 463, "access": "full payload allowed", "role": "official sampling-occasion date/environment metadata"}
+  },
+  "biological_response_assets_forbidden": {
+    "AMBI.csv": {"md5": "5c6a0b68637d836f31f0220128ee3b49", "bytes": 2619},
+    "AMCO.csv": {"md5": "057a556f702557b6ca0d73e9e144cd7e", "bytes": 2619},
+    "CLRA.csv": {"md5": "dfec55dad18755307db96e7362495339", "bytes": 2619},
+    "COGA.csv": {"md5": "6d047d8994746de855ac7cf4068ab7d4", "bytes": 2619},
+    "KIRA.csv": {"md5": "3c959681e26599ea2a19030b7507837f", "bytes": 2619},
+    "LEBI.csv": {"md5": "b53bbf1568bced0a68de9de125886e81", "bytes": 2619},
+    "MAWR.csv": {"md5": "bd4c350dd7a05f62c7e69f8e2c2240e4", "bytes": 2619},
+    "PIGR.csv": {"md5": "4c401123453de456db686812ea2408c4", "bytes": 2619},
+    "PUGA.csv": {"md5": "1668aff1252da58922c8fd5d932dc614", "bytes": 2619},
+    "SESP.csv": {"md5": "65245b37d2183303727381ddae573270", "bytes": 2619},
+    "SORA.csv": {"md5": "85f0780f82b999ff8d590d992b47632e", "bytes": 2619}
+  },
+  "gate0": {
+    "allowed_payloads": ["Sites.csv", "Samples.csv"],
+    "required_site_row_count": 33,
+    "required_sampling_occasion_row_count": 20,
+    "action": "verify exact ScienceBase metadata identity, exact MD5/size, UTF-8 CSV parse and fixed row counts; report physical headers and rows without selecting a focal species or interpreting biological response"
+  },
+  "focal_species": {
+    "status": "not_selected",
+    "rule": "select only after geometry/sampling gates using a response-independent external rule; species file prevalence and detection values are forbidden for selection"
+  },
+  "response_firewall": {
+    "biological_response_payload_requests": 0,
+    "biological_response_payload_bytes_opened": 0,
+    "biological_response_header_bytes_opened": 0,
+    "biological_response_rows_opened": false,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
