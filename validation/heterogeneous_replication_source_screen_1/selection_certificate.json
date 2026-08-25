@@ -1,0 +1,46 @@
+{
+  "schema": "eog.heterogeneous_replication_source_selection.v1",
+  "screen_id": "heterogeneous_replication_source_screen_1",
+  "authoritative_ci": {
+    "workflow": "Heterogeneous replication source screen 1",
+    "run_id": 32809048159,
+    "job_id": 97684744901,
+    "head_sha": "24f46804d239874f3a26c1499713b0fd0b231032",
+    "conclusion": "success",
+    "artifact_id": 9549144298,
+    "artifact_zip_sha256": "e2c5577b8c602695aa0088fd08b2291d06c9dc9a3ae10196947a1b7f6c391783"
+  },
+  "metadata_screen_fingerprint": "7a97c73633742942272b53aec4bf065028f23725f9cb8ed104603c531ca2df6b",
+  "selected_candidate": "big_thicket_amphibian_reptile_2010_2018",
+  "selection_reason": "predeclared priority rule: Big Thicket has multi-year 2010-2018 repetition and official ScienceBase metadata exposes individually addressable Site Locations, sampling, observation, and vocalization resources rather than one mixed archive",
+  "selected_source_identity": {
+    "doi": "10.5066/P99Z3UZU",
+    "sciencebase_item_id": "5eb58a3582ce25b5135ae793",
+    "top_item_metadata_sha256": "ad11e8ded8fc792f68b5514f296701330b05f79318e50de9022e1988823d493c",
+    "file_object_count": 18,
+    "key_assets_metadata_only": {
+      "Site Locations.csv": {"md5": "2394ec8b153d744d7edf8573a1b39b28", "bytes": 3819},
+      "Sample Matrix.csv": {"md5": "54a9216d89eaf4604a13f35016c5dd3f", "bytes": 2481},
+      "Sample Data.csv": {"md5": "370c5a177e7ae5bf367c6d3a2adce466", "bytes": 175387},
+      "Observations.csv": {"md5": "bfdd25d8464521aa59692b6373cbc5a5", "bytes": 379997},
+      "Vocalizations.csv": {"md5": "c5222c6904e1f3e68ef8e33b380bf573", "bytes": 110118}
+    }
+  },
+  "secondary_candidate_retained_unopened": {
+    "candidate": "southwest_louisiana_secretive_marsh_birds_2012",
+    "doi": "10.5066/P9RRIIR2",
+    "sciencebase_item_id": "5ecf119d82ce30fd980854bd",
+    "reason_not_selected_first": "single February-June 2012 season; retained as a later heterogeneous replication candidate",
+    "file_object_count": 14
+  },
+  "response_firewall": {
+    "candidate_file_payload_requests": 0,
+    "candidate_file_payload_bytes_opened": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "next_gate": "on a new branch from main, open only the frozen Site Locations.csv payload and bounded headers for candidate sampling resources; establish a response-independent site registry, geometry, survey availability semantics, and structural-scale adequacy before selecting any species response file"
+}
