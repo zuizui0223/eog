@@ -6,6 +6,7 @@ import io
 import json
 import math
 import re
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -37,42 +38,39 @@ def get_bytes(url: str):
         return r.read(), r.geturl(), r.headers.get("Content-Type")
 
 
-def md5_of(data: bytes):
-    return hashlib.md5(data).hexdigest()
-
-
 def norm(s: str):
     return re.sub(r"[^a-z0-9]+", "", (s or "").strip().lower())
 
 
+def checksum_value(value):
+    if isinstance(value, dict):
+        return str(value.get("value") or "").lower()
+    return str(value or "").lower()
+
+
 def decode_csv(data: bytes, name: str):
-    text = None
-    encoding = None
     for enc in ("utf-8-sig", "cp1252"):
         try:
             text = data.decode(enc)
             encoding = enc
             break
         except UnicodeDecodeError:
-            pass
+            text = None
     if text is None:
         raise RuntimeError(f"{name}: unsupported text encoding")
-    sample = text[:65536]
     try:
-        delimiter = csv.Sniffer().sniff(sample, delimiters=",;\t").delimiter
+        delimiter = csv.Sniffer().sniff(text[:65536], delimiters=",;\t").delimiter
     except csv.Error:
         delimiter = ","
     reader = csv.DictReader(io.StringIO(text), delimiter=delimiter)
     header = list(reader.fieldnames or [])
     if not header:
         raise RuntimeError(f"{name}: no header")
-    rows = list(reader)
-    return header, rows, encoding, delimiter
+    return header, list(reader), encoding, delimiter
 
 
 def profile_column(rows, col):
-    vals = []
-    missing = 0
+    vals, missing = [], 0
     for r in rows:
         v = r.get(col)
         if v is None or str(v).strip() == "":
@@ -80,24 +78,17 @@ def profile_column(rows, col):
         else:
             vals.append(str(v).strip())
     unique = sorted(set(vals))
-    out = {
-        "nonempty": len(vals),
-        "missing": missing,
-        "unique_count": len(unique),
-        "examples": unique[:8],
-    }
+    out = {"nonempty": len(vals), "missing": missing, "unique_count": len(unique), "examples": unique[:8]}
     try:
         nums = [float(v) for v in vals]
         if nums:
-            out["numeric_min"] = min(nums)
-            out["numeric_max"] = max(nums)
+            out.update(numeric_min=min(nums), numeric_max=max(nums))
     except ValueError:
         pass
     return out
 
 
-def find_exact_semantic(header, role):
-    nmap = {c: norm(c) for c in header}
+def find_semantic(header, role):
     allowed = {
         "id": {"locationid", "cameraid", "siteid"},
         "lat": {"latitude", "decimallatitude", "lat"},
@@ -106,87 +97,66 @@ def find_exact_semantic(header, role):
         "start": {"startdate", "visitstart", "startdatetime", "deploymentstart", "begindate"},
         "end": {"enddate", "visitend", "enddatetime", "deploymentend", "finishdate"},
     }[role]
-    return [c for c, n in nmap.items() if n in allowed]
+    return [c for c in header if norm(c) in allowed]
 
 
 def haversine(lat1, lon1, lat2, lon2):
     r = 6371.0088
     p1, p2 = math.radians(lat1), math.radians(lat2)
-    dp = p2 - p1
-    dl = math.radians(lon2 - lon1)
+    dp, dl = p2 - p1, math.radians(lon2 - lon1)
     a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
     return 2 * r * math.asin(min(1.0, math.sqrt(a)))
 
 
 def main():
-    firewall = dict(CONTRACT["response_firewall"])
     result = {
         "schema": "eog.maine_moose_replication_2.gate0_response_free_profile.v1",
         "attempt_id": CONTRACT["attempt_id"],
         "status": "engineering_failure_pre_response",
         "reason": None,
-        "sciencebase": {},
-        "locations": {},
-        "visits": {},
-        "response_firewall": firewall,
+        "sciencebase": {}, "locations": {}, "visits": {},
+        "response_firewall": dict(CONTRACT["response_firewall"]),
     }
     try:
         item_id = CONTRACT["sciencebase"]["item_id"]
         item = get_json(f"https://www.sciencebase.gov/catalog/item/{item_id}?format=json")
         files = {f.get("name"): f for f in item.get("files") or [] if isinstance(f, dict) and f.get("name")}
-        result["sciencebase"] = {
-            "item_id": item_id,
-            "title": item.get("title"),
-            "dates": item.get("dates") or [],
-            "identifiers": item.get("identifiers") or [],
-        }
+        result["sciencebase"] = {"item_id": item_id, "title": item.get("title"), "dates": item.get("dates") or [], "identifiers": item.get("identifiers") or []}
 
         parsed = {}
         for name, expected in CONTRACT["allowed_response_independent_files"].items():
             f = files.get(name)
             if f is None:
                 raise RuntimeError(f"missing frozen ScienceBase file metadata: {name}")
-            observed_size = int(f.get("size") or -1)
-            checksum = str((f.get("checksum") or {}).get("value") or f.get("checksum") or "").lower()
-            if observed_size != int(expected["size"]):
-                raise RuntimeError(f"{name}: metadata size mismatch {observed_size} != {expected['size']}")
-            if expected["md5"] not in checksum:
-                raise RuntimeError(f"{name}: metadata MD5 mismatch {checksum!r}")
+            if int(f.get("size") or -1) != int(expected["size"]):
+                raise RuntimeError(f"{name}: metadata size mismatch")
+            if expected["md5"] not in checksum_value(f.get("checksum")):
+                raise RuntimeError(f"{name}: metadata MD5 mismatch")
             url = f.get("downloadUri")
             if not url:
                 raise RuntimeError(f"{name}: no ScienceBase downloadUri")
             data, final_url, content_type = get_bytes(url)
             if len(data) != int(expected["size"]):
                 raise RuntimeError(f"{name}: payload size mismatch {len(data)} != {expected['size']}")
-            actual_md5 = md5_of(data)
+            actual_md5 = hashlib.md5(data).hexdigest()
             if actual_md5 != expected["md5"]:
                 raise RuntimeError(f"{name}: payload MD5 mismatch {actual_md5} != {expected['md5']}")
             header, rows, encoding, delimiter = decode_csv(data, name)
             parsed[name] = (header, rows)
             base = {
-                "payload_bytes": len(data),
-                "verified_md5": actual_md5,
-                "content_type": content_type,
-                "final_download_host": __import__("urllib.parse").parse.urlparse(final_url).netloc,
-                "encoding": encoding,
-                "delimiter": delimiter,
-                "header": header,
-                "column_count": len(header),
-                "row_count": len(rows),
+                "payload_bytes": len(data), "verified_md5": actual_md5,
+                "content_type": content_type, "final_download_host": urllib.parse.urlparse(final_url).netloc,
+                "encoding": encoding, "delimiter": delimiter, "header": header,
+                "column_count": len(header), "row_count": len(rows),
                 "column_profiles": {c: profile_column(rows, c) for c in header},
             }
-            if name == "locations.csv":
-                result["locations"] = base
-            else:
-                result["visits"] = base
+            result["locations" if name == "locations.csv" else "visits"] = base
 
         loc_header, loc_rows = parsed["locations.csv"]
-        id_cols = find_exact_semantic(loc_header, "id")
-        lat_cols = find_exact_semantic(loc_header, "lat")
-        lon_cols = find_exact_semantic(loc_header, "lon")
+        id_cols, lat_cols, lon_cols = find_semantic(loc_header, "id"), find_semantic(loc_header, "lat"), find_semantic(loc_header, "lon")
         result["locations"]["semantic_candidates"] = {"id": id_cols, "latitude": lat_cols, "longitude": lon_cols}
-
         paper_n = int(CONTRACT["paper"]["camera_count"])
+
         if len(loc_rows) != paper_n:
             result["status"] = "stop_locations_row_count_does_not_reproduce_paper_camera_count"
             result["reason"] = f"locations.csv has {len(loc_rows)} rows; paper freezes {paper_n} cameras"
@@ -200,29 +170,20 @@ def main():
                 result["status"] = "stop_location_identifier_registry_invalid"
                 result["reason"] = "location identifiers are blank or non-unique"
             else:
-                pts = []
-                for r in loc_rows:
-                    pts.append((float(r[lat_col]), float(r[lon_col])))
-                ds = []
-                for i in range(len(pts)):
-                    for j in range(i + 1, len(pts)):
-                        ds.append(haversine(*pts[i], *pts[j]))
-                result["locations"]["registry_fingerprint"] = fp(sorted({"id": ids[i], "lat": pts[i][0], "lon": pts[i][1]} for i in range(paper_n), key=lambda x: x["id"]))
-                result["locations"]["geometry_profile"] = {
-                    "pair_count": len(ds),
-                    "min_km": min(ds),
-                    "median_km": sorted(ds)[len(ds)//2],
-                    "max_km": max(ds),
-                }
+                pts = [(float(r[lat_col]), float(r[lon_col])) for r in loc_rows]
+                ds = [haversine(*pts[i], *pts[j]) for i in range(len(pts)) for j in range(i + 1, len(pts))]
+                registry = [{"id": ids[i], "lat": pts[i][0], "lon": pts[i][1]} for i in range(paper_n)]
+                result["locations"]["registry_fingerprint"] = fp(sorted(registry, key=lambda x: x["id"]))
+                result["locations"]["geometry_profile"] = {"pair_count": len(ds), "min_km": min(ds), "median_km": sorted(ds)[len(ds)//2], "max_km": max(ds)}
                 visit_header, _ = parsed["visits.csv"]
                 result["visits"]["semantic_candidates"] = {
-                    "location_id": find_exact_semantic(visit_header, "id"),
-                    "visit_id": find_exact_semantic(visit_header, "visit_id"),
-                    "start": find_exact_semantic(visit_header, "start"),
-                    "end": find_exact_semantic(visit_header, "end"),
+                    "location_id": find_semantic(visit_header, "id"),
+                    "visit_id": find_semantic(visit_header, "visit_id"),
+                    "start": find_semantic(visit_header, "start"),
+                    "end": find_semantic(visit_header, "end"),
                 }
                 result["status"] = "gate0_profile_pass_response_still_closed"
-                result["reason"] = "Exact locations/visits payloads reproduced the 84-row response-independent camera registry; visit semantics are profiled for prospective Gate1 freezing"
+                result["reason"] = "Exact locations/visits payloads reproduced the 84-row response-independent camera registry; visit semantics are profiled for Gate1 freezing"
 
         result["fingerprint"] = fp({k: v for k, v in result.items() if k != "fingerprint"})
         OUT.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
