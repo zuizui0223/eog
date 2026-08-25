@@ -1,0 +1,66 @@
+name: Snapshot Japan sika deer sequence header gate
+
+on:
+  push:
+    branches:
+      - agent/snapshot-japan-sika-deer-replication-2
+    paths:
+      - validation/snapshot_japan_sika_deer_replication_2/sequence_header_contract.json
+      - validation/snapshot_japan_sika_deer_replication_2/sequence_header_gate.py
+      - validation/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity_certificate.json
+      - .github/workflows/snapshot_japan_sika_deer_replication_2_header.yml
+
+permissions:
+  contents: read
+
+jobs:
+  header:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile header gate
+        run: python -m py_compile validation/snapshot_japan_sika_deer_replication_2/sequence_header_gate.py
+      - name: Run exact header-only gate
+        id: gate
+        continue-on-error: true
+        run: python validation/snapshot_japan_sika_deer_replication_2/sequence_header_gate.py
+      - name: Assert data rows and values stayed closed
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/snapshot_japan_sika_deer_replication_2/sequence_header_gate.json')
+          assert p.exists(), 'header gate evidence missing'
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          assert a['sequence_header_get_requests'] in {0,1}
+          assert 0 <= a['sequence_header_bytes_opened'] <= 4096
+          assert a['sequence_data_row_bytes_opened']==0
+          assert a['sequence_rows_opened'] is False
+          assert a['sequence_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps(r,indent=2,sort_keys=True))
+          PY
+      - name: Upload header evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-japan-sika-deer-sequence-header
+          path: build/snapshot_japan_sika_deer_replication_2/sequence_header_gate.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/snapshot_japan_sika_deer_replication_2/sequence_header_gate.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Header terminal status:',r['status'])
+          PY
