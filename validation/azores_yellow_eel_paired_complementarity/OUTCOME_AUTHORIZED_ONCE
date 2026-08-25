@@ -1,0 +1,13 @@
+{
+  "schema": "eog.azores_yellow_eel_once_only_marker.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "authorization_fingerprint": "4ef92c00778bb1f8b29a630e8edab2a1c027965c2c5666a04ba28197a488b522",
+  "full_freeze_spec_sha256": "ca779d1a46c247a69553818dbb633c791c9ddeb8247c1f2c4603e624f46eccef",
+  "outcome_runner_git_blob_sha": "514c1982d9b155f32c1493b58a684a7e1074116e",
+  "runner_core_git_blob_sha": "de4a2ee730d0a253479505c54101b5bff16011c1",
+  "authorization_git_blob_sha": "0ee5106e3914f129f7746010596143d0a6d62820",
+  "synthetic_smoke_certificate_git_blob_sha": "3b1dd1aaad155ddcde6ee3b58145c2827324114d",
+  "exact_count_gate_first": true,
+  "response_rows_opened_before_marker": false,
+  "rerun_permitted": false
+}
