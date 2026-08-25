@@ -1,0 +1,85 @@
+{
+  "schema": "eog.azores_yellow_eel_stage1_certificate.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "authoritative_ci": {
+    "workflow": "Audited comparative runner",
+    "run_id": 32796706825,
+    "job_id": 97649400724,
+    "head_sha": "e5c1d230095a88b269c8c670184c04fde6677040",
+    "conclusion": "success"
+  },
+  "status": "stage1_registry_availability_and_structural_pass",
+  "source_identity": {
+    "zenodo_record_id": 18154777,
+    "deployment_md5": "1ebf3a1d61e66a1d3e1b3b066c17489f",
+    "deployment_bytes": 86674,
+    "eel_metadata_md5": "2046b013e4d74a27f8d2471d8cc75dbd",
+    "eel_metadata_bytes": 13802,
+    "response_md5_metadata_only": "20253e15293f8f06472f393f050f7c4a",
+    "response_size_metadata_only": 159622396
+  },
+  "registry": {
+    "study_station_count": 10,
+    "study_stations": [
+      "148 FLO CRUZ",
+      "149 FLO CRUZ",
+      "150 FLO CRUZ",
+      "151 FLO CRUZ",
+      "152 FLO CRUZ",
+      "153 FLO CRUZ",
+      "154 FLO CRUZ",
+      "155 FLO CRUZ",
+      "156 FLO CRUZ",
+      "157 FLO CRUZ"
+    ],
+    "study_deployment_rows": 28,
+    "station_registry_fingerprint": "118a2a6333b8c4404596dd9346e68992986fa1c55ac2239d6a24ed8f611c3fcc"
+  },
+  "animal_sources": {
+    "raw_tag_count": 37,
+    "yellow_target_tag_count": 36,
+    "excluded_non_yellow_tag": "A69-1303-2711",
+    "latest_yellow_release_datetime": "2021-10-13 11:35:00",
+    "release_anchor_stations": [
+      "148 FLO CRUZ",
+      "149 FLO CRUZ",
+      "150 FLO CRUZ",
+      "151 FLO CRUZ",
+      "152 FLO CRUZ",
+      "155 FLO CRUZ",
+      "156 FLO CRUZ",
+      "157 FLO CRUZ"
+    ],
+    "maximum_release_to_anchor_distance_km": 0.11290560443303975
+  },
+  "temporal_availability": {
+    "first_scored_week_start": "2021-10-18",
+    "full_scored_week_count": 49,
+    "calibration_week_count": 26,
+    "heldout_week_count": 23,
+    "full_four_week_heldout_block_count": 5,
+    "eligible_receiver_week_count": 422,
+    "availability_fingerprint": "4bb9c7dc564f04287454a31c88cd5022231231f7093ae6973c1e46a0e83e2f"
+  },
+  "structure": {
+    "distinct_positive_thresholds_km": [
+      0.16883756567073582,
+      0.43884877739709754,
+      0.49919805227165576
+    ],
+    "deduplicated_geometry_world_count": 3,
+    "structural_ladder_fingerprint": "a33f00227f076c7043eef3cd2178bc7c49265b3e4d831b5fb2ba784934053bfa",
+    "structural_audit_fingerprint": "1d8a8e6432c327feb56afbc7a7fb0dff292a96659b42bfba396ca9043777e49c",
+    "structural_gate_fingerprint": "91a8d817339f4f0cf6c854cd47f25acb9c59843b7f0504573faab5b644ada3cb",
+    "passing_world_ids": ["geometry_world_3"]
+  },
+  "response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
