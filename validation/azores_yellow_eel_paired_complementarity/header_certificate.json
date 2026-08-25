@@ -1,0 +1,41 @@
+{
+  "schema": "eog.azores_yellow_eel_response_header_certificate.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "authoritative_ci": {
+    "workflow": "Audited comparative runner",
+    "run_id": 32798983182,
+    "job_id": 97656001762,
+    "head_sha": "53c56ec1f5937ed29efc18c64ec76516b957b8e2",
+    "conclusion": "success"
+  },
+  "status": "response_header_schema_pass",
+  "response_identity": {
+    "zenodo_record_id": 18154777,
+    "file_name": "raw_detection_data.csv",
+    "md5": "20253e15293f8f06472f393f050f7c4a",
+    "size": 159622396
+  },
+  "physical_header": [
+    "",
+    "animal_project_code",
+    "scientific_name",
+    "date_time",
+    "acoustic_tag_id",
+    "station_name",
+    "acoustic_project_code",
+    "receiver_id",
+    "deploy_latitude",
+    "deploy_longitude"
+  ],
+  "physical_terminator": "LF",
+  "first_record_data_bytes": 162,
+  "response_header_requests": 1,
+  "response_header_bytes_opened": 163,
+  "response_payload_requests": 0,
+  "response_payload_bytes_opened": 0,
+  "response_rows_opened": false,
+  "response_values_opened": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "transport_note": "The first header request returned HTTP 406 before opening any response byte because of an extra Accept header. The sole retry removed only that zero-byte transport header. Source identity and the prospectively frozen physical-header contract were unchanged."
+}
