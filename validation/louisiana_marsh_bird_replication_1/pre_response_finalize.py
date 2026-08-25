@@ -84,9 +84,9 @@ def main() -> None:
     if int(freeze["world_scale"]["declared_world_count"]) != 7:
         raise RuntimeError("declared world universe must contain exactly seven worlds")
 
-    if gate0["result_fingerprint"] != "5ce556acd5b119a7b451a3b8cca0fdb254ded2461014c1e2e8388abdaf6802cf":
+    if gate0["gate0_fingerprint"] != "5ce556acd5b119a7b451a3b8cca0fdb254ded2461014c1e2e8388abdaf6802cf":
         raise RuntimeError("Gate0 certificate fingerprint drift")
-    if gate1["result_fingerprint"] != "4f3dd443ba06bbd0d2bd8a47ead538700522df4df58eb58d2afd8577e3428586":
+    if gate1["gate1_fingerprint"] != "4f3dd443ba06bbd0d2bd8a47ead538700522df4df58eb58d2afd8577e3428586":
         raise RuntimeError("Gate1 certificate fingerprint drift")
     if gate2["result_fingerprint"] != freeze["response_identity"]["header_certificate_fingerprint"]:
         raise RuntimeError("Gate2 header fingerprint drift")
