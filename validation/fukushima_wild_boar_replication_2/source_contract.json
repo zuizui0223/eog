@@ -1,0 +1,73 @@
+{
+  "schema": "eog.fukushima_wild_boar_replication_2.source_contract.v1",
+  "attempt_id": "fukushima_wild_boar_camera_halfyear_fresh_paired_v1",
+  "issue": 295,
+  "source": {
+    "package": "ERDP-2016-03.1.5",
+    "metadata_url": "https://db.cger.nies.go.jp/JaLTER/metacat/metacat/ERDP-2016-03.1.5/jalter-en",
+    "published_site_count": 46,
+    "published_period_start": "2014-05-14",
+    "published_period_end": "2021-06-08",
+    "license": "CC-BY-4.0"
+  },
+  "response_independent_files": {
+    "occasion": {
+      "data_id": "ERDP-2016-03.8.1",
+      "filename": "NIES_FTEM_cameratrap_occasion_updated_29Feb2024.txt",
+      "expected_header": ["institutionCode", "collectionCode", "locationID", "occasionID", "cameraModel", "Modified", "decimalLatitude", "decimalLongitude", "startDate", "startTime", "endDate", "endTime", "Abort"]
+    },
+    "evacuation": {
+      "data_id": "ERDP-2016-03.7.1",
+      "filename": "NIES_FTEM_cameratrap_evacuation_updated_6Mar2024.txt",
+      "expected_header": ["locationID", "evacuationCategory", "designatedDate"]
+    }
+  },
+  "forbidden_response": {
+    "data_id": "ERDP-2016-03.6.1",
+    "filename": "NIES_FTEM_cameratrap_detection_updated_29Feb2024.txt",
+    "species": "Sus scrofa",
+    "payload_requests_before_full_freeze": 0
+  },
+  "focal_species_selection": {
+    "scientific_name": "Sus scrofa",
+    "response_prevalence_used": false,
+    "species_switching_after_response_access": false,
+    "basis": "independent ecological and management relevance of wild-boar occurrence after Fukushima evacuation/land abandonment; medium-to-large mammal compatible with the camera protocol"
+  },
+  "temporal_design": {
+    "unit": "calendar_halfyear",
+    "periods": ["2014H1", "2014H2", "2015H1", "2015H2", "2016H1", "2016H2", "2017H1", "2017H2", "2018H1", "2018H2", "2019H1", "2019H2", "2020H1", "2020H2", "2021H1"],
+    "eligibility_min_active_camera_days": 60.0,
+    "calibration_periods": ["2014H2", "2015H1", "2015H2", "2016H1", "2016H2", "2017H1", "2017H2", "2018H1"],
+    "heldout_periods": ["2018H2", "2019H1", "2019H2", "2020H1", "2020H2", "2021H1"],
+    "minimum_eligible_sites_each_heldout_period": 20,
+    "availability_is_union_of_response_independent_camera_active_intervals": true
+  },
+  "geometry_design": {
+    "coordinate_fields": ["decimalLatitude", "decimalLongitude"],
+    "distance": "haversine_km",
+    "earth_radius_km": 6371.0088,
+    "lcc_targets": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "response_rows_may_not_define_or_filter_registry": true
+  },
+  "stop_rules": [
+    "response-independent transport failure",
+    "occasion schema mismatch",
+    "evacuation schema mismatch",
+    "46-site registry not reproduced",
+    "site coordinates not stable response-independently",
+    "invalid or ambiguous camera-active intervals",
+    "fewer than 20 eligible sites in any frozen heldout half-year",
+    "fewer than 3 distinct positive structural thresholds"
+  ],
+  "response_firewall": {
+    "detection_payload_requests": 0,
+    "detection_payload_bytes_opened": 0,
+    "detection_header_opened": false,
+    "detection_rows_opened": false,
+    "detection_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
