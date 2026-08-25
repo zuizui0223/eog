@@ -1,0 +1,41 @@
+name: AMMonitor replication 2 source screen
+
+on:
+  push:
+    branches:
+      - agent/replication-2-ammonitor-source-screen
+    paths:
+      - validation/ammonitor_replication2_source_screen.py
+      - .github/workflows/ammonitor_replication2_source_screen.yml
+
+permissions:
+  contents: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile metadata-only screen
+        run: python -m py_compile validation/ammonitor_replication2_source_screen.py
+      - name: Screen ScienceBase metadata only
+        run: python validation/ammonitor_replication2_source_screen.py
+      - name: Assert no candidate CSV payload was opened
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/ammonitor_replication2_source_screen/screen.json').read_text())
+          a=r['payload_firewall']
+          assert all(v == 0 for v in a.values()), a
+          print(json.dumps({'status':r['status'],'fingerprint':r['fingerprint'],'candidates':r['candidates'],'payload_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload metadata-only screen
+        uses: actions/upload-artifact@v4
+        with:
+          name: ammonitor-replication2-source-screen
+          path: build/ammonitor_replication2_source_screen/screen.json
+          if-no-files-found: error
