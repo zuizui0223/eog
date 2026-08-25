@@ -1,0 +1,84 @@
+name: Louisiana marsh-bird replication 1 synthetic smoke
+
+on:
+  push:
+    branches:
+      - agent/louisiana-marsh-bird-heterogeneous-replication-1
+    paths:
+      - "validation/louisiana_marsh_bird_replication_1/runner_core.py"
+      - "validation/louisiana_marsh_bird_replication_1/synthetic_smoke.py"
+      - "validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py"
+      - "validation/louisiana_marsh_bird_replication_1/full_freeze_spec.json"
+      - ".github/workflows/louisiana_marsh_bird_replication_1_smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  exact-runtime-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install exact frozen runtime
+        run: |
+          python -m pip install \
+            numpy==2.3.5 \
+            scipy==1.18.1 \
+            joblib==1.5.3 \
+            threadpoolctl==3.6.0 \
+            scikit-learn==1.8.0
+          python -m pip install --no-deps .
+      - name: Verify exact runtime
+        run: |
+          python - <<'PY'
+          import sys, numpy, scipy, sklearn, joblib, threadpoolctl
+          assert sys.version_info[:2] == (3, 12)
+          assert numpy.__version__ == '2.3.5'
+          assert scipy.__version__ == '1.18.1'
+          assert sklearn.__version__ == '1.8.0'
+          assert joblib.__version__ == '1.5.3'
+          assert threadpoolctl.__version__ == '3.6.0'
+          print(sys.version)
+          print(numpy.__version__, scipy.__version__, sklearn.__version__, joblib.__version__, threadpoolctl.__version__)
+          PY
+      - name: Compile frozen runner surface
+        run: |
+          python -m py_compile \
+            validation/louisiana_marsh_bird_replication_1/runner_core.py \
+            validation/louisiana_marsh_bird_replication_1/synthetic_smoke.py \
+            validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py
+      - name: Revalidate full freeze offline
+        run: python validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py
+      - name: Execute response-free end-to-end synthetic smoke
+        run: python validation/louisiana_marsh_bird_replication_1/synthetic_smoke.py
+      - name: Assert smoke boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/louisiana_marsh_bird_replication_1/synthetic_smoke.json').read_text())
+          assert r['status'] == 'synthetic_end_to_end_smoke_pass'
+          assert r['scientific_evidential_value'] is False
+          assert r['paired_outer_unit_count'] == 8
+          assert r['model_fit_count'] == 2
+          assert r['runner_conventional_feature_count'] == 34
+          assert r['layer_b_feature_count'] == 10
+          assert r['response_audit'] == {
+              'response_payload_requests': 0,
+              'response_payload_bytes_opened': 0,
+              'response_rows_opened': False,
+              'response_values_opened': False,
+          }
+          print(json.dumps(r, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: louisiana-marsh-bird-replication-1-pre-response-smoke
+          path: |
+            build/louisiana_marsh_bird_replication_1/pre_response_finalize.json
+            build/louisiana_marsh_bird_replication_1/synthetic_smoke.json
+          if-no-files-found: error
