@@ -6,6 +6,22 @@ from pathlib import Path
 import gate0_response_free as gate
 
 CERT_PATH = Path(__file__).resolve().parent / "pensoft_xml_sequence_identity_certificate.json"
+ORIGINAL_RECORD_FILE_META = gate.record_file_meta
+
+
+def record_file_meta_current_zenodo(record: dict, filename: str):
+    meta = ORIGINAL_RECORD_FILE_META(record, filename)
+    if meta.get("content_url"):
+        return meta
+    matches = [f for f in record.get("files", []) if f.get("key") == filename]
+    if len(matches) != 1:
+        raise RuntimeError(f"record {record.get('id')} has {len(matches)} files named {filename}")
+    self_url = matches[0].get("links", {}).get("self")
+    if not self_url:
+        raise RuntimeError(f"current Zenodo file object has neither links.content nor links.self for {filename}")
+    meta["content_url"] = self_url
+    meta["content_url_source"] = "links.self_current_zenodo_records_api"
+    return meta
 
 
 def discover_from_frozen_pensoft_certificate():
@@ -49,6 +65,7 @@ def discover_from_frozen_pensoft_certificate():
     }
 
 
+gate.record_file_meta = record_file_meta_current_zenodo
 gate.discover_response_metadata_only = discover_from_frozen_pensoft_certificate
 
 if __name__ == "__main__":
