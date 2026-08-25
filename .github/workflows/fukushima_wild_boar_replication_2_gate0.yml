@@ -1,0 +1,64 @@
+name: Fukushima wild boar replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/fukushima-wild-boar-replication-2
+    paths:
+      - validation/fukushima_wild_boar_replication_2/**
+      - .github/workflows/fukushima_wild_boar_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile response-free Gate0
+        run: python -m py_compile validation/fukushima_wild_boar_replication_2/gate0_response_free.py
+      - name: Run occasion / evacuation response-free gate
+        id: gate
+        continue-on-error: true
+        run: python validation/fukushima_wild_boar_replication_2/gate0_response_free.py
+      - name: Assert detection response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/fukushima_wild_boar_replication_2/gate0_response_free.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r = json.loads(p.read_text())
+          a = r['response_firewall']
+          assert a['detection_payload_requests'] == 0
+          assert a['detection_payload_bytes_opened'] == 0
+          assert a['detection_header_opened'] is False
+          assert a['detection_rows_opened'] is False
+          assert a['detection_values_opened'] is False
+          assert a['model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps({'status': r['status'], 'fingerprint': r['fingerprint'], 'registry': r['registry'], 'temporal_availability': r['temporal_availability'], 'structural_ladder': r['structural_ladder'], 'response_firewall': a}, indent=2, sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fukushima-wild-boar-replication-2-gate0
+          path: build/fukushima_wild_boar_replication_2/gate0_response_free.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/fukushima_wild_boar_replication_2/gate0_response_free.json').read_text())
+          if r['status'] == 'engineering_failure_pre_response':
+              raise SystemExit(r['reason'])
+          print('Scientific Gate0 terminal status:', r['status'])
+          PY
