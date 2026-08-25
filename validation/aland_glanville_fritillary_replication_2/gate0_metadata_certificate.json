@@ -1,0 +1,51 @@
+{
+  "schema": "eog.aland_glanville_fritillary_replication_2.gate0_metadata_certificate.v1",
+  "attempt_id": "aland_glanville_fritillary_fragmented_island_fresh_paired_v1",
+  "status": "gate0_pass_physical_roles_separated_metadata_only",
+  "workflow_run_id": 32816375365,
+  "workflow_job_id": 97705390926,
+  "head_sha": "4cf6ca362e7d870342d2e6cd435d853afa59e293",
+  "gate0_fingerprint": "93f6b0e19a3373f71b4036cc62bde5e6a56c7e3ba2318cfedb174ddd60a7adce",
+  "manifest_fingerprint": "cb1a5e7b23da0a1d03140b29e01125f562e2b0f26949117ec05e7569d7ea1a10",
+  "artifact": {
+    "id": 9551538349,
+    "name": "aland-glanville-fritillary-replication-2-gate0",
+    "digest": "sha256:f9c994ff09a2041c57c7e23bea8403404210612ca1897ce22b93ffdb9eed8230"
+  },
+  "dataset_uuid": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
+  "fileset": {
+    "total_files_count": 5,
+    "total_files_size": 43486551
+  },
+  "roles": {
+    "patch": {
+      "id": "e1585394-be55-4853-bd65-8d64ef22d416",
+      "path": "/Butterflies/Patches final.csv",
+      "size": 10826822,
+      "sha256": "1cc94383d9356e6898580379dd1aa573a1a915047f504b5e7ecb2c60d0b7c6ac"
+    },
+    "locality_visit": {
+      "id": "34ede3ba-89a6-44ba-b09f-3dd8fedc3c8b",
+      "path": "/Butterflies/Locality Visit merged final_v2.csv",
+      "size": 21210995,
+      "sha256": "2080cb29bfcc353ecba3975959c56418d1037ea6ee5b0d7038f73a4b2b9fc46b"
+    },
+    "nest": {
+      "id": "c5f939b4-88a2-47f8-bcd2-73183e175456",
+      "path": "/Butterflies/Nests final.csv",
+      "size": 3906245,
+      "sha256": "70a9eb6cdf2612e4af4628ebaf16023ead59a5fdf19f2fc695d3ae070dcca535"
+    }
+  },
+  "response_firewall": {
+    "dataset_file_payload_requests": 0,
+    "dataset_file_payload_bytes_opened": 0,
+    "dataset_file_headers_opened": false,
+    "dataset_file_rows_opened": false,
+    "dataset_file_values_opened": false,
+    "locality_visit_payload_requests": 0,
+    "nest_payload_requests": 0,
+    "scientific_model_fits": 0,
+    "heldout_scores": 0
+  }
+}
