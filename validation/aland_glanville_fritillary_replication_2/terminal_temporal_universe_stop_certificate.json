@@ -1,0 +1,64 @@
+{
+  "schema": "eog.aland_glanville_fritillary_replication_2.terminal_temporal_universe_stop_certificate.v1",
+  "attempt_id": "aland_glanville_fritillary_fragmented_island_fresh_paired_v1",
+  "status": "stop_response_independent_temporal_patch_universe_not_identifiable",
+  "reason": "The physically separate Patch file contains only most-recent patch geometry and no start/end/year/active-period fields. The documented habitat network is temporally dynamic. Reconstructing the 1993-2017 eligible patch universe would therefore require response-bearing Locality Visit rows, which was prospectively forbidden.",
+  "gate0": {
+    "status": "gate0_pass_physical_roles_separated_metadata_only",
+    "fingerprint": "93f6b0e19a3373f71b4036cc62bde5e6a56c7e3ba2318cfedb174ddd60a7adce",
+    "manifest_fingerprint": "cb1a5e7b23da0a1d03140b29e01125f562e2b0f26949117ec05e7569d7ea1a10",
+    "workflow_run_id": 32816375365,
+    "workflow_job_id": 97705390926,
+    "artifact_id": 9551538349,
+    "artifact_digest": "sha256:f9c994ff09a2041c57c7e23bea8403404210612ca1897ce22b93ffdb9eed8230"
+  },
+  "gate1": {
+    "status": "gate1_patch_profile_complete_response_still_closed",
+    "fingerprint": "07226e2324e1cb746fdbb1c8eccfff53fb0b5611b3dccbb1fd4542f1d7f135c9",
+    "workflow_run_id": 32816756330,
+    "workflow_job_id": 97706498349,
+    "artifact_id": 9551698486,
+    "artifact_digest": "sha256:772db34921eee36e8a847855dae07d9b008a1f44a84b9065ed04f140543f593c"
+  },
+  "patch_file": {
+    "id": "e1585394-be55-4853-bd65-8d64ef22d416",
+    "path": "/Butterflies/Patches final.csv",
+    "size": 10826822,
+    "sha256": "1cc94383d9356e6898580379dd1aa573a1a915047f504b5e7ecb2c60d0b7c6ac",
+    "row_count": 4731,
+    "encoding": "cp1252",
+    "delimiter": ";",
+    "header": [
+      "Name",
+      "Survey area",
+      "Commune",
+      "Village",
+      "GeometryLatest",
+      "Centroid_X",
+      "Centroid_Y",
+      "Area"
+    ],
+    "geometry_fields_present": ["GeometryLatest", "Centroid_X", "Centroid_Y", "Area"],
+    "temporal_eligibility_fields_present": [],
+    "centroid_rows_nonempty": 4699,
+    "centroid_rows_missing": 32
+  },
+  "forbidden_repair": [
+    "do not read Locality Visit rows to infer patch creation/deletion or annual eligibility",
+    "do not treat the 2019 latest-geometry patch registry as if it had existed unchanged from 1993 through 2017",
+    "do not drop or backfill patches using future response information",
+    "do not rerun this endpoint after changing the temporal-universe rule and call it fresh"
+  ],
+  "response_firewall_at_stop": {
+    "locality_visit_authorization_requests": 0,
+    "locality_visit_payload_requests": 0,
+    "locality_visit_payload_bytes_opened": 0,
+    "nest_authorization_requests": 0,
+    "nest_payload_requests": 0,
+    "nest_payload_bytes_opened": 0,
+    "other_dataset_file_payload_requests": 0,
+    "scientific_model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_interpretation": "This candidate is neither evidence for nor evidence against Layer-B predictive complementarity. It failed before any response-bearing annual occupancy data were opened because the historical node universe was not identifiable response-independently."
+}
