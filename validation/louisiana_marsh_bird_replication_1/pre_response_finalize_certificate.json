@@ -1,0 +1,51 @@
+{
+  "schema": "eog.louisiana_marsh_bird_pre_response_finalize_certificate.v1",
+  "attempt_id": "southwest_louisiana_king_rail_site_occasion_fresh_paired_v1",
+  "status": "full_freeze_machine_validated_response_rows_still_closed",
+  "authoritative_ci": {
+    "workflow": "Louisiana marsh-bird replication 1 synthetic smoke",
+    "run_id": 32811173384,
+    "job_id": 97690660723,
+    "head_sha": "ab4f0c91ee7d84269c692c3b897a375854df431d",
+    "conclusion": "success",
+    "artifact_id": 9549839080,
+    "artifact_zip_sha256": "627ee0b87ad510f3b78c1e97d2e7b2a9d3d9374e1872de1e69688371eff5a9a9"
+  },
+  "full_freeze_spec_sha256": "cac01c5755ec4e775c58fad71f657256f11139fe53fef4bde04ad0b6fa51192c",
+  "finalizer_fingerprint": "a71e8ee672a14fcd2fa7bdb694a52d0f580a3f802f3ad512ab0b01c88abeff93",
+  "learner_fit_fingerprint": "4c1330ecb1233c369c305188446da21c3c60fd7d24024f51d1f700b02bbe5679",
+  "external_feature_fingerprint": "a979328dd52c7775b1c11bf97b1cfc3b26198bd21bb7aca583a8d8167a937bdd",
+  "eog_feature_fingerprint": "9e33cb060d11636990b5fda200d9a258eeef1b6fbb383c2c467c6075faa1536f",
+  "predictive_complementarity_declaration_fingerprint": "d97a7062f71d1c2f6aab73bbef77d13737cb00a5c93f524d5c07e85657b26d8e",
+  "response_endpoint_fingerprint": "365009fa61864e1239c904c0f3ebca50dd4b0eb84edaac5d02d7b5126dbb2d21",
+  "split_fingerprint": "c2a2ba4767bac907f2d007de4164967acae7c6ee055cf96f3dd1b0cc96b18084",
+  "section_fingerprints": {
+    "source_identity": "4d8a09910c0469fcc346aa4799d6edcfdea964deca49924a5eaf6e0a2aa008c9",
+    "response_identity": "5d84f9d51efd188c105ff3fa47f99655749f4e9aeea5272627a0771834ad0fb5",
+    "node_geometry": "07f7c1869bce616de822d3bb4ce1ea1bc2abba41472f118e6e9270cce537fd04",
+    "response_semantics": "365009fa61864e1239c904c0f3ebca50dd4b0eb84edaac5d02d7b5126dbb2d21",
+    "temporal_split": "c2a2ba4767bac907f2d007de4164967acae7c6ee055cf96f3dd1b0cc96b18084",
+    "count_gate": "a46736ba881a92e29b7d3a93c3f3b5e80429d6642b0d38be6f04b19024663fc1",
+    "process_source": "6f66ba716ae9ff3461e277f3cae2b750fe2124becf559ff1970a9eb6b9c7285c",
+    "world_scale": "dd8fd858e2221813e3c16fd80bd9fd988dc826e84fb4c9edf4e05b1c04081a4c",
+    "structural_adequacy": "05489670e20c8f77901cc36307ece598b913493163f724f4e1e3840c1b27cf59",
+    "layer_a_rules": "49b9f7f709ad8aea219c1619f6436bb9cce6f1a3c84b5313b65068bd515472fb",
+    "layer_b_representation": "bd738abb0325e3345bdc32ca3ff43578a6983e63352000c6001efbf99813ad13",
+    "comparators": "d27ddcb8d699b8a441fec78ac5c7977bdc65e1c2402a13ebab22c9362a6de813",
+    "preprocessing_model_fit": "459e5e2011d1659e2d4da3ac7191a3a10ce9a3e608ae5e33de7e3b4369b9bc00",
+    "metrics_decision": "5d16627d7956745f755645187a8965610936f048da21dc0fc9bb7dfa252c6357",
+    "runtime_runner": "5946e6ea5a9a2744ef9aed9d0aafd500fa168a18da07ad4333e421fced0ac798",
+    "non_estimable_stop": "4d3603da8e440a3df86e198b0964b6240f814db764bececa5d47ba33b465e469"
+  },
+  "response_boundary": {
+    "KIRA_header_bytes_opened": 56,
+    "KIRA_full_payload_requests": 0,
+    "KIRA_full_payload_bytes_opened": 0,
+    "KIRA_rows_opened": false,
+    "KIRA_values_opened": false,
+    "unselected_species_payload_bytes_opened": 0,
+    "scientific_model_fits": 0,
+    "scientific_heldout_scores": 0
+  },
+  "authorization_state": "not_authorized_until_separate_once_only_marker"
+}
