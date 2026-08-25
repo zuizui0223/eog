@@ -13,6 +13,7 @@
   },
   "full_freeze_spec_sha256": "cac01c5755ec4e775c58fad71f657256f11139fe53fef4bde04ad0b6fa51192c",
   "finalizer_fingerprint": "a71e8ee672a14fcd2fa7bdb694a52d0f580a3f802f3ad512ab0b01c88abeff93",
+  "header_certificate_fingerprint": "6defd03992ed825a6f9bb795237c6aaf577542a19ab574fbf6fd735316aab7d9",
   "learner_fit_fingerprint": "4c1330ecb1233c369c305188446da21c3c60fd7d24024f51d1f700b02bbe5679",
   "external_feature_fingerprint": "a979328dd52c7775b1c11bf97b1cfc3b26198bd21bb7aca583a8d8167a937bdd",
   "eog_feature_fingerprint": "9e33cb060d11636990b5fda200d9a258eeef1b6fbb383c2c467c6075faa1536f",
