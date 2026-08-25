@@ -89,25 +89,43 @@ def test_runner_rejects_feature_order_and_duplicate_ids(tmp_path):
         load_audited_csv(duplicate, manifest)
 
 
-def test_azores_yellow_eel_response_blind_stage1():
-    """Run the fresh candidate stage only on its dedicated PR branch."""
+def test_azores_yellow_eel_response_blind_stage1_and_header():
+    """Run frozen response-blind Stage1, then the already-frozen one-record header gate."""
     branch = os.environ.get("GITHUB_HEAD_REF") or os.environ.get("GITHUB_REF_NAME") or ""
     if branch != "agent/azores-yellow-eel-fresh-paired":
         pytest.skip("Azores yellow eel preflight is branch-scoped")
-    script = Path(__file__).resolve().parents[1] / "validation/azores_yellow_eel_paired_complementarity/run_stage1_preflight.py"
-    completed = subprocess.run(
-        [sys.executable, str(script)],
+    root = Path(__file__).resolve().parents[1]
+    stage1_script = root / "validation/azores_yellow_eel_paired_complementarity/run_stage1_preflight.py"
+    stage1 = subprocess.run(
+        [sys.executable, str(stage1_script)],
         check=False,
         capture_output=True,
         text=True,
     )
     print("\n--- AZORES YELLOW EEL STAGE1 STDOUT ---")
-    print(completed.stdout)
-    if completed.stderr:
+    print(stage1.stdout)
+    if stage1.stderr:
         print("--- AZORES YELLOW EEL STAGE1 STDERR ---")
-        print(completed.stderr)
-    assert completed.returncode == 0
-    result_path = Path(__file__).resolve().parents[1] / "build/azores_yellow_eel_stage1/preflight.json"
-    result = result_path.read_text(encoding="utf-8")
+        print(stage1.stderr)
+    assert stage1.returncode == 0
+    stage1_result_path = root / "build/azores_yellow_eel_stage1/preflight.json"
     print("--- AZORES YELLOW EEL STAGE1 RESULT ---")
-    print(result)
+    print(stage1_result_path.read_text(encoding="utf-8"))
+
+    header_script = root / "validation/azores_yellow_eel_paired_complementarity/run_header_preflight.py"
+    header = subprocess.run(
+        [sys.executable, str(header_script)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    print("--- AZORES YELLOW EEL HEADER STDOUT ---")
+    print(header.stdout)
+    if header.stderr:
+        print("--- AZORES YELLOW EEL HEADER STDERR ---")
+        print(header.stderr)
+    header_result_path = root / "build/azores_yellow_eel_header/header_preflight.json"
+    if header_result_path.exists():
+        print("--- AZORES YELLOW EEL HEADER RESULT ---")
+        print(header_result_path.read_text(encoding="utf-8"))
+    assert header.returncode == 0
