@@ -1,0 +1,74 @@
+{
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.source_contract.v1",
+  "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
+  "issue": 297,
+  "paper": {
+    "doi": "10.3897/BDJ.13.e141168",
+    "title": "Snapshot Japan 2023: the first camera trap dataset under a globally standardised protocol in Japan",
+    "published_deployment_count": 90,
+    "published_array_count": 9,
+    "published_trap_nights": 6162,
+    "published_sequence_count": 18027,
+    "published_temporal_coverage": "August 2023 to December 2023, mainly September and October"
+  },
+  "response_independent": {
+    "deployments": {
+      "supplement_doi": "10.3897/BDJ.13.e141168.suppl1",
+      "zenodo_record_id": 15030965,
+      "filename": "oo_1202827.csv",
+      "description": "deployments.csv",
+      "expected_md5": "9ee54945758d9d146badd3aeb17a7923"
+    },
+    "habitats": {
+      "supplement_doi": "10.3897/BDJ.13.e141168.suppl3",
+      "zenodo_record_id": 15030969,
+      "filename": "oo_1203756.csv",
+      "description": "habitats.csv",
+      "expected_md5": "dd1cb641c6032d40dd7b3e28db7bbfb2"
+    }
+  },
+  "forbidden_response": {
+    "supplement_doi": "10.3897/BDJ.13.e141168.suppl2",
+    "filename": "oo_1165478.csv",
+    "description": "sequences.csv",
+    "published_row_count": 18027,
+    "record_id_to_be_discovered_from_zenodo_metadata_only": true,
+    "payload_requests_before_full_freeze": 0,
+    "header_bytes_before_full_freeze": 0,
+    "rows_before_full_freeze": false,
+    "values_before_full_freeze": false
+  },
+  "excluded_mixed_source": {
+    "supplement_doi": "10.3897/BDJ.13.e141168.suppl4",
+    "zenodo_record_id": 15030971,
+    "filename": "oo_1246258.zip",
+    "reason": "Camtrap DP archive mixes deployment and observation objects and is unnecessary while separate supplements exist"
+  },
+  "focal_species": {
+    "scientific_name": "Cervus nippon",
+    "common_name": "sika deer",
+    "selection_uses_snapshot_response_prevalence": false,
+    "species_switching_after_any_response_access": false,
+    "basis": "independent long-standing wildlife-management and ecosystem-impact relevance of sika deer in Japan; medium-large terrestrial mammal suitable for Snapshot camera trapping"
+  },
+  "gate0": {
+    "download_only": ["deployments", "habitats"],
+    "sequence_metadata_only": true,
+    "require_deployment_rows": 90,
+    "require_unique_deployment_id": true,
+    "require_nonmissing_coordinates": true,
+    "require_valid_start_end": true,
+    "require_array_count": 9,
+    "profile_but_do_not_yet_fix_temporal_bin_width": true,
+    "profile_within_array_geometry_only": true
+  },
+  "response_firewall": {
+    "sequence_payload_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
