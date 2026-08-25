@@ -1,0 +1,24 @@
+{
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.sequence_header_contract.v1",
+  "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
+  "source_identity_certificate": "validation/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity_certificate.json",
+  "binary_object_url": "https://binary.pensoft.net/file/1165478",
+  "published_filename": "oo_1165478.csv",
+  "max_header_bytes": 4096,
+  "read_rule": "GET exact frozen binary object; read one byte at a time and stop immediately after first CR or LF terminator; do not read the first data row",
+  "expected_columns_exact_order": [
+    "project_id","deployment_id","sequence_id","is_blank","identified_by","wi_taxon_id","class","order","family","genus","species","common_name","uncertainty","start_time","end_time","group_size","age","sex","animal_recognisable","individual_id","individual_animal_notes","behaviour","highlighted","markings","cv_confidence","licence"
+  ],
+  "expected_column_count": 26,
+  "delimiter": ",",
+  "encoding": "utf-8-sig_or_utf-8",
+  "post_result_schema_repair_allowed": false,
+  "response_boundary": {
+    "header_only_get_allowed": true,
+    "data_rows_allowed": false,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
