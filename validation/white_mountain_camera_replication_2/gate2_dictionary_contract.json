@@ -1,0 +1,52 @@
+{
+  "schema": "eog.white_mountain_camera_replication_2.gate2_dictionary_contract.v1",
+  "attempt_id": "white_mountain_nf_camera_2014_2024_fresh_paired_v1",
+  "sciencebase_item_id": "66520b7dd34e702fe87490d4",
+  "allowed_file": {
+    "filename": "dbdictionary.csv",
+    "size": 68735,
+    "md5": "2320bda9cbddaebf3c406c131eb569d5"
+  },
+  "purpose": [
+    "resolve exact visit_type semantics without repairing visits from response data",
+    "resolve exact annotations/media/taxa table schemas and link fields before any response header access",
+    "determine whether annotations alone can define human taxon response or whether media/taxa joins are structurally required"
+  ],
+  "persist": {
+    "entire_dictionary_header": true,
+    "dictionary_row_count": true,
+    "only_rows_matching_terms": ["location","visit","annotation","media","taxa","species","taxon","date","time","type","verified","model"]
+  },
+  "forbidden_payloads": [
+    "annotations.csv",
+    "annotationverifications.csv",
+    "media.csv",
+    "medialistitems.csv",
+    "medialists.csv",
+    "mediatags.csv",
+    "annotags.csv",
+    "taxa.csv",
+    "modeloutputs.csv",
+    "models.csv",
+    "shinytable.csv",
+    "all photo ZIP child payloads"
+  ],
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotationverifications_payload_requests": 0,
+    "annotationverifications_payload_bytes_opened": 0,
+    "media_payload_requests": 0,
+    "media_payload_bytes_opened": 0,
+    "taxa_payload_requests": 0,
+    "taxa_payload_bytes_opened": 0,
+    "modeloutputs_payload_requests": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "other_response_payload_requests": 0,
+    "other_response_payload_bytes_opened": 0,
+    "photo_zip_payload_requests": 0,
+    "photo_zip_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
