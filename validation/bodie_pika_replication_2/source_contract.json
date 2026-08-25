@@ -1,0 +1,62 @@
+{
+  "schema": "eog.bodie_pika_replication_2.source_contract.v1",
+  "attempt_id": "bodie_pika_terrestrial_fragmented_fresh_paired_v1",
+  "role": "heterogeneous_replication_2_after_two_favorable_fresh_endpoints",
+  "source": {
+    "repository": "Dryad",
+    "doi": "10.5061/dryad.51c59zwbd",
+    "dataset_url": "https://datadryad.org/dataset/doi:10.5061/dryad.51c59zwbd",
+    "latest_public_version_date_frozen_from_landing_page": "2023-06-20",
+    "response_bearing_filename": "Klingler_et_al._BODIE_CENSUS_DATA_1972-2022_DRYAD.xlsx",
+    "allowed_non_response_filenames": [
+      "Klingler_et_al._BODIE_PIKA_DATA_DRYAD.xlsx",
+      "README.csv"
+    ]
+  },
+  "response_firewall": {
+    "census_file_download_permitted_at_gate0": false,
+    "census_file_head_permitted_at_gate0": false,
+    "census_workbook_sheet_listing_permitted_at_gate0": false,
+    "census_workbook_header_permitted_at_gate0": false,
+    "census_rows_permitted_at_gate0": false,
+    "census_values_permitted_at_gate0": false,
+    "metadata_inventory_may_record_census_id_size_digest": true,
+    "expected_census_payload_requests": 0,
+    "expected_census_payload_bytes": 0,
+    "expected_census_rows_opened": false,
+    "expected_census_values_opened": false
+  },
+  "geometry_gate": {
+    "expected_complete_patch_registry_count": 82,
+    "count_source": "2023 public paper description of 82 individual habitat patches surveyed",
+    "allowed_geometry": "physically separate non-census public table/workbook with all eligible patch IDs and complete documented coordinates, or a complete independently released pairwise-distance representation with unambiguous patch identity",
+    "forbidden_geometry": [
+      "census workbook rows or cells",
+      "partial genetic-sampling localities",
+      "approximate figure digitization",
+      "occupancy-conditioned patch subsets",
+      "post-response patch repair"
+    ],
+    "structural_lcc_targets": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "haversine_radius_km": 6371.0088
+  },
+  "prospective_aggregate_estimability_screen": {
+    "screening_only": true,
+    "published_interval_window": "1989-2010",
+    "published_interval_count": 18,
+    "published_patch_extinctions": 114,
+    "published_patch_recolonizations": 109,
+    "exact_future_split_not_yet_frozen": true
+  },
+  "future_endpoint_if_gate0_passes": "next-census recorded patch occupancy/detection among prospectively eligible habitat patches, using only prior-census state and response-independent patch attributes",
+  "layer_b": {
+    "representation": "symmetric_world_support_summary_v1",
+    "must_remain_unchanged": true
+  },
+  "terminal_stop": {
+    "status_if_complete_geometry_not_proven": "stop_response_independent_complete_geometry_not_found",
+    "status_if_structural_scales_insufficient": "stop_response_blind_structural_scale_diversity_insufficient",
+    "response_must_remain_unopened_on_stop": true
+  }
+}
