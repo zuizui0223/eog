@@ -1,0 +1,45 @@
+{
+  "schema": "eog.louisiana_marsh_bird_gate1_certificate.v1",
+  "replication_id": "southwest_louisiana_secretive_marsh_birds_heterogeneous_replication_1",
+  "status": "response_blind_geometry_and_temporal_split_pass",
+  "authoritative_ci": {
+    "workflow": "Louisiana marsh-bird replication 1 Gate1",
+    "run_id": 32809776671,
+    "job_id": 97686783126,
+    "head_sha": "5d3733edba0832d1c47bd305ee2f98995d05d989",
+    "conclusion": "success",
+    "artifact_id": 9549387848,
+    "artifact_zip_sha256": "c376b69c1a615ea93504dbd7a9e7a3280c7802a8ec834e2a1c35451fce987640"
+  },
+  "gate1_fingerprint": "4f3dd443ba06bbd0d2bd8a47ead538700522df4df58eb58d2afd8577e3428586",
+  "site_registry": {
+    "site_count": 33,
+    "site_registry_fingerprint": "c6a4c8dcf458dca881d6e8c67c51b6910fd055d089df563210ee575db8f3b131",
+    "marsh_counts": {"Brackish": 12, "Fresh": 11, "Intermediate": 8, "Salt": 2},
+    "habitat_counts": {"Brackish-Salt Marsh": 14, "Fresh-Intermediate Marsh": 19}
+  },
+  "geometry": {
+    "distance_matrix_fingerprint": "a5b1e432f024812592037da94b73103b046ddf97d7817a58f0e158cd6aa198ac",
+    "distinct_positive_thresholds_km": [2.728021756372908, 2.976793133666009, 17.008648432743254],
+    "structural_ladder_fingerprint": "4c8e4ce50dd05788bc2311318a6473d736351f11217545ccd8e3b870b29dd2de",
+    "deduplicated_geometry_world_count": 3
+  },
+  "temporal_split": {
+    "prediction_order_basis": "Samples.csv Date ascending, ties by numeric Sample Period",
+    "chronological_sample_period_order": [1,2,3,4,5,6,7,8,9,10,11,12,17,13,18,14,19,15,20,16],
+    "calibration_sample_periods": [1,2,3,4,5,6,7,8,9,10,11,12],
+    "heldout_sample_periods": [17,13,18,14,19,15,20,16],
+    "primary_outer_units": [17,13,18,14,19,15,20,16],
+    "calibration_row_capacity_if_complete": 396,
+    "heldout_row_capacity_if_complete": 264
+  },
+  "response_firewall": {
+    "biological_response_payload_requests": 0,
+    "biological_response_payload_bytes_opened": 0,
+    "biological_response_header_bytes_opened": 0,
+    "biological_response_rows_opened": false,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
