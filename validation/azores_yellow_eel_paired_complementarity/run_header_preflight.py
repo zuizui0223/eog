@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import io
 import json
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -98,16 +99,36 @@ if not content_url:
     fail("stop_response_source_identity", "response file content URL missing")
 
 # Strict bounded first-physical-record access: one byte at a time, stop on first CR or LF.
+# The previous attempt received HTTP 406 before opening a body because this request added
+# an Accept header not used by the already-successful Stage-1 Zenodo content transport.
+# This retry changes only that zero-byte transport header; source identity and expected CSV
+# header remain exactly frozen.
 firewall = CONTRACT["firewall"]
 limit = int(firewall["maximum_first_physical_record_bytes"])
 req = urllib.request.Request(
     content_url,
-    headers={"User-Agent": "EOG-Azores-eel-header/1.0", "Accept-Encoding": "identity", "Accept": "text/csv,application/octet-stream"},
+    headers={"User-Agent": "EOG-Azores-eel-header/1.0", "Accept-Encoding": "identity"},
 )
 result["response_header_requests"] = 1
 buffer = bytearray()
 terminator = None
-with urllib.request.urlopen(req, timeout=90) as response:
+try:
+    response_cm = urllib.request.urlopen(req, timeout=90)
+except urllib.error.HTTPError as exc:
+    fail(
+        "stop_response_header_transport",
+        "response header request failed before any response byte was opened",
+        http_status=int(exc.code),
+        response_header_bytes_opened=0,
+    )
+except Exception as exc:
+    fail(
+        "stop_response_header_transport",
+        "response header request failed before any response byte was opened",
+        error=repr(exc),
+        response_header_bytes_opened=0,
+    )
+with response_cm as response:
     http_status = int(getattr(response, "status", 200))
     if http_status != 200:
         fail("stop_response_header_transport", "response header request did not return HTTP 200", http_status=http_status)
