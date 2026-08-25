@@ -1,0 +1,56 @@
+{
+  "schema": "eog.louisiana_marsh_bird_outcome_access_authorization.v1",
+  "authorization_core": {
+    "attempt_id": "southwest_louisiana_king_rail_site_occasion_fresh_paired_v1",
+    "candidate_marker_path": "validation/louisiana_marsh_bird_replication_1/OUTCOME_AUTHORIZATION_CANDIDATE",
+    "actual_marker_path": "validation/louisiana_marsh_bird_replication_1/OUTCOME_AUTHORIZED_ONCE",
+    "marker_template": {
+      "schema": "eog.louisiana_marsh_bird_once_only_marker.v1",
+      "attempt_id": "southwest_louisiana_king_rail_site_occasion_fresh_paired_v1",
+      "full_freeze_spec_sha256": "cac01c5755ec4e775c58fad71f657256f11139fe53fef4bde04ad0b6fa51192c",
+      "production_preflight_fingerprint": "c8dc424e510da6c3136ecc3674a0c3345b0c0b830aae22795c8c3df9a4c6f02b",
+      "exact_count_gate_first": true,
+      "response_rows_opened_before_marker": false,
+      "rerun_permitted": false
+    },
+    "bound_git_blob_shas": {
+      "validation/louisiana_marsh_bird_replication_1/outcome_runner.py": "6ff5d832d45a94334b1a50dcb8b2a39fa048d589",
+      "validation/louisiana_marsh_bird_replication_1/runner_core.py": "f468c1c793de3c25980eba77d56b05d967019adc",
+      "validation/louisiana_marsh_bird_replication_1/full_freeze_spec.json": "82735314767a3b1d6d4906ce43ecddfcedcac2df",
+      "validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py": "baeb74838b8742c94285f426b264915326210937",
+      "validation/louisiana_marsh_bird_replication_1/pre_response_finalize_certificate.json": "2a0688a0ca1f385fe5b3a6596bd2d6875d73123c",
+      "validation/louisiana_marsh_bird_replication_1/synthetic_smoke_certificate.json": "0ae1a96003beca7d67097fb6ff0104bc0e402d8c",
+      "validation/louisiana_marsh_bird_replication_1/production_preflight_certificate.json": "ca94654363e2bf79ab1a33bdff595e0c08aa2367",
+      "validation/louisiana_marsh_bird_replication_1/gate0_certificate.json": "4cfaf105bebf8a9842dfaf7bdcf6661111b1f01c",
+      "validation/louisiana_marsh_bird_replication_1/gate1_certificate.json": "195b6983993747102bdfde9bf0c3cffdfdb79c36",
+      "validation/louisiana_marsh_bird_replication_1/gate2_header_certificate.json": "a390a392d3b4e97782aae791f46b4d0bbce00d6b",
+      "validation/louisiana_marsh_bird_replication_1/focal_species_selection_certificate.json": "0dab34a96e5c10d06364a2485b68a847aed579ec",
+      "validation/louisiana_marsh_bird_replication_1/verify_once_only_authorization.py": "1db415f25cfefe40cbc13043e5dd972f68029e01",
+      "src/eog/v2/world_predictive_summary.py": "5acdf877b6a7a1538298da8610ff6e8575f50461",
+      "src/eog/v2/predictive_complementarity.py": "5fd6ae02004c48f655a9d392f723fd32afeaa663",
+      ".github/workflows/louisiana_marsh_bird_replication_1_once_only.yml": "dc44db17a899947fe5d01d807d4cb613a5851d07",
+      ".github/workflows/louisiana_marsh_bird_replication_1_authorization_candidate.yml": "ada17380dbcc41c053d4b185d3ac406fcdab2b71"
+    },
+    "full_freeze_path": "validation/louisiana_marsh_bird_replication_1/full_freeze_spec.json",
+    "full_freeze_spec_sha256": "cac01c5755ec4e775c58fad71f657256f11139fe53fef4bde04ad0b6fa51192c",
+    "pre_response_finalize_certificate_path": "validation/louisiana_marsh_bird_replication_1/pre_response_finalize_certificate.json",
+    "pre_response_finalize_fingerprint": "a71e8ee672a14fcd2fa7bdb694a52d0f580a3f802f3ad512ab0b01c88abeff93",
+    "synthetic_smoke_certificate_path": "validation/louisiana_marsh_bird_replication_1/synthetic_smoke_certificate.json",
+    "synthetic_smoke_fingerprint": "8d3acc0d20dc43370f0120d97bc77a0a766c4465cd6ec96cd53793824f9a8784",
+    "production_preflight_certificate_path": "validation/louisiana_marsh_bird_replication_1/production_preflight_certificate.json",
+    "production_preflight_fingerprint": "c8dc424e510da6c3136ecc3674a0c3345b0c0b830aae22795c8c3df9a4c6f02b",
+    "header_certificate_path": "validation/louisiana_marsh_bird_replication_1/gate2_header_certificate.json",
+    "header_certificate_fingerprint": "6defd03992ed825a6f9bb795237c6aaf577542a19ab574fbf6fd735316aab7d9",
+    "outcome_access_contract": {
+      "selected_response": "KIRA.csv",
+      "full_response_gets_authorized": 1,
+      "full_response_bytes_before_marker": 0,
+      "response_rows_opened_before_marker": false,
+      "exact_count_gate_first_outcome_dependent_operation": true,
+      "post_response_rerun_permitted": false,
+      "species_switch_permitted": false,
+      "freeze_change_after_response_permitted": false
+    }
+  },
+  "authorization_fingerprint": "53c7f2bc4bfd6970adba3fe9a03df1feaeae042ac1dd1d6680ab5dec12ee5232"
+}
