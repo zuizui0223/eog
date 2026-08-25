@@ -1,0 +1,57 @@
+name: Giant kelp replication 1 geometry gate
+
+on:
+  push:
+    branches:
+      - agent/kelp-heterogeneous-replication-1
+    paths:
+      - ".github/workflows/giant_kelp_replication_1_geometry.yml"
+      - "validation/giant_kelp_replication_1/**"
+      - "src/eog/v2/world_scale_ladder.py"
+
+permissions:
+  contents: read
+
+jobs:
+  geometry-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Run response-blind geometry gate
+        run: python validation/giant_kelp_replication_1/geometry_preflight.py
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('build/giant_kelp_replication_1/geometry_preflight.json')
+          if not path.exists():
+              raise SystemExit('geometry preflight did not emit an audit result')
+          result = json.loads(path.read_text())
+          expected = {
+              'response_payload_requests': 0,
+              'response_payload_bytes_opened': 0,
+              'response_header_bytes_opened': 0,
+              'response_rows_opened': False,
+              'response_values_opened': False,
+              'model_fits': 0,
+              'heldout_scores': 0,
+          }
+          if result['response_firewall'] != expected:
+              raise SystemExit(f"response firewall drift: {result['response_firewall']}")
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Upload geometry evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: giant-kelp-replication-1-geometry
+          path: build/giant_kelp_replication_1/geometry_preflight.json
+          if-no-files-found: error
