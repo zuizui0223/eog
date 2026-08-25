@@ -1,0 +1,56 @@
+name: Louisiana marsh-bird replication 1 Gate2 header
+
+on:
+  push:
+    branches:
+      - agent/louisiana-marsh-bird-heterogeneous-replication-1
+    paths:
+      - "validation/louisiana_marsh_bird_replication_1/run_gate2_kira_header.py"
+      - "validation/louisiana_marsh_bird_replication_1/source_contract.json"
+      - "validation/louisiana_marsh_bird_replication_1/focal_species_selection_certificate.json"
+      - ".github/workflows/louisiana_marsh_bird_replication_1_gate2_header.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  selected-response-header:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Execute bounded KIRA physical header gate
+        run: python validation/louisiana_marsh_bird_replication_1/run_gate2_kira_header.py
+      - name: Assert header pass without row/value access
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/louisiana_marsh_bird_replication_1/gate2_kira_header.json')
+          r = json.loads(p.read_text())
+          a = r['audit']
+          assert r['status'] == 'selected_response_header_schema_pass'
+          assert r['row_access_authorized'] is False
+          assert len(r['selected_response']['physical_header']) == 21
+          assert sorted(r['selected_response']['period_by_column'].values()) == list(range(1, 21))
+          assert a['selected_response_header_requests'] == 1
+          assert 0 < a['selected_response_header_bytes_opened'] <= 4096
+          assert a['selected_response_payload_requests'] == 0
+          assert a['selected_response_payload_bytes_opened'] == 0
+          assert a['selected_response_rows_opened'] is False
+          assert a['selected_response_values_opened'] is False
+          assert a['unselected_species_payload_requests'] == 0
+          assert a['unselected_species_payload_bytes_opened'] == 0
+          assert a['model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps(r, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: louisiana-marsh-bird-replication-1-gate2-header
+          path: build/louisiana_marsh_bird_replication_1/gate2_kira_header.json
+          if-no-files-found: error
