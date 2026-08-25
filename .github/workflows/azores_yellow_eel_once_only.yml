@@ -5,10 +5,10 @@ on:
     branches:
       - agent/azores-yellow-eel-fresh-paired
     paths:
-      - "validation/azores_yellow_eel_paired_complementarity/OUTCOME_AUTHORIZED_ONCE_V3"
+      - "validation/azores_yellow_eel_paired_complementarity/OUTCOME_AUTHORIZED_ONCE_V4"
 
 concurrency:
-  group: azores-yellow-eel-once-only-outcome-v3
+  group: azores-yellow-eel-once-only-outcome-v4
   cancel-in-progress: false
 
 permissions:
@@ -27,14 +27,14 @@ jobs:
         run: |
           python -m pip install numpy==2.3.5 scipy==1.18.1 joblib==1.5.3 threadpoolctl==3.6.0 scikit-learn==1.8.0
           python -m pip install --no-deps -e .
-      - name: Verify v3 marker with audited verifier
-        run: python validation/azores_yellow_eel_paired_complementarity/verify_once_only_marker.py OUTCOME_AUTHORIZED_ONCE_V3
-      - name: Execute sole v3 response stream and terminal gate
-        run: python validation/azores_yellow_eel_paired_complementarity/outcome_runner.py
-      - name: Upload v3 terminal evidence
+      - name: Verify v4 marker with audited verifier
+        run: python validation/azores_yellow_eel_paired_complementarity/verify_once_only_marker.py OUTCOME_AUTHORIZED_ONCE_V4
+      - name: Execute sole v4 response stream through frozen runner
+        run: python validation/azores_yellow_eel_paired_complementarity/run_outcome_with_marker.py OUTCOME_AUTHORIZED_ONCE_V4
+      - name: Upload v4 terminal evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: azores-yellow-eel-once-only-v3-terminal
+          name: azores-yellow-eel-once-only-v4-terminal
           path: build/azores_yellow_eel_outcome/terminal_result.json
           if-no-files-found: error
