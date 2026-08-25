@@ -1,0 +1,62 @@
+{
+  "schema": "eog.green_mountain_marten_replication_2.source_contract.v1",
+  "attempt_id": "green_mountain_marten_camera_oof_fresh_paired_v1",
+  "issue": 302,
+  "paper": {
+    "doi": "10.1002/ece3.10904",
+    "sample_units": 40,
+    "unit_area_km2": 5,
+    "winter_field_seasons": 3,
+    "season_label_range": [2019, 2021],
+    "survey_months": [12, 1, 2, 3, 4],
+    "units_by_field_season": [15, 19, 6],
+    "realized_cameras": 238,
+    "nominal_cameras_per_unit": 6,
+    "survey_days_per_unit": 15,
+    "survey_period_days": 5,
+    "survey_periods_per_unit": 3,
+    "camera_trap_nights": 3600,
+    "marten_positive_units": 18,
+    "marten_negative_units": 22,
+    "marten_positive_cameras": 93,
+    "marten_negative_cameras": 145
+  },
+  "endpoint": {
+    "focal_species": "Martes americana",
+    "target": "camera-level recorded American marten detection during the paper-defined 15-day unit survey",
+    "selection_uses_sciencebase_response": false
+  },
+  "sciencebase_candidate": {
+    "item_id": "663cdf96d34e77890839e178",
+    "doi": "10.5066/P1GVIBFL",
+    "title": "USDA Green Mountain National Forest Volume 1 (2016 - 2022)",
+    "is_known_temporal_superset_of_paper": true
+  },
+  "gate0a": {
+    "metadata_only": true,
+    "required_file_names": ["locations.csv", "visits.csv", "annotations.csv", "media.csv", "taxa.csv", "dbdictionary.csv"],
+    "file_payload_requests": 0,
+    "file_payload_bytes_opened": 0
+  },
+  "gate0b_future": {
+    "allowed_payloads_only_after_gate0a": ["locations.csv", "visits.csv", "dbdictionary.csv"],
+    "require_exact_paper_camera_count": 238,
+    "require_exact_paper_unit_count": 40,
+    "require_unit_count_by_field_season": [15, 19, 6],
+    "require_response_independent_unit_mapping": true,
+    "no_posthoc_subsetting": true
+  },
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotations_header_opened": false,
+    "annotations_rows_opened": false,
+    "annotations_values_opened": false,
+    "media_payload_requests": 0,
+    "taxa_payload_requests": 0,
+    "modeloutputs_payload_requests": 0,
+    "photo_zip_payload_requests": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
