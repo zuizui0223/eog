@@ -1,0 +1,64 @@
+name: White Mountain camera replication 2 Gate1
+
+on:
+  push:
+    branches:
+      - agent/white-mountain-camera-replication-2
+    paths:
+      - validation/white_mountain_camera_replication_2/gate1_structure_time_contract.json
+      - validation/white_mountain_camera_replication_2/gate1_structure_time.py
+      - validation/white_mountain_camera_replication_2/gate0_locations_visits.py
+      - .github/workflows/white_mountain_camera_replication_2_gate1.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate1:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile response-free Gate1
+        run: |
+          python -m py_compile validation/white_mountain_camera_replication_2/gate0_locations_visits.py
+          python -m py_compile validation/white_mountain_camera_replication_2/gate1_structure_time.py
+      - name: Run response-free structure / visit profile
+        id: gate
+        continue-on-error: true
+        working-directory: validation/white_mountain_camera_replication_2
+        run: python gate1_structure_time.py
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/white_mountain_camera_replication_2/gate1_structure_time.json')
+          assert p.exists(), 'Gate1 evidence missing'
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          for k,v in a.items():
+              assert v == 0, (k,v)
+          print(json.dumps({'status':r['status'],'fingerprint':r['fingerprint'],'universe':r['universe'],'geometry':r['geometry'],'structural_ladder':r['structural_ladder'],'visit_sequence':r['visit_sequence'],'response_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: white-mountain-camera-replication-2-gate1
+          path: build/white_mountain_camera_replication_2/gate1_structure_time.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/white_mountain_camera_replication_2/gate1_structure_time.json').read_text())
+          if r['status'] == 'engineering_failure_pre_response':
+              raise SystemExit(r['reason'])
+          print('Gate1 terminal status:',r['status'])
+          PY
