@@ -1,0 +1,52 @@
+{
+  "schema": "eog.predictive_complementarity_product_boundary.v1",
+  "frozen_at_date": "2026-08-25",
+  "status": "candidate_general_predictive_complement",
+  "decision_basis": {
+    "required_question": "does unchanged label-invariant Layer B add heldout predictive value to the same strong conventional learner on a genuinely fresh endpoint?",
+    "first_genuinely_fresh_endpoint": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+    "authoritative_result": "favorable_complementary_added_value",
+    "authoritative_run_id": 32807155541,
+    "authoritative_job_id": 97679387755,
+    "terminal_result_fingerprint": "ec6c91d7e3014cbf075236d9281521dd3d060a41976a61105c043ddf2804c129",
+    "paired_result_fingerprint": "f3499b89b614e119af3643633d15976c217e364f007f3c4bf96ce252681235a5",
+    "baseline_macro_log_loss": 0.14227269867445852,
+    "augmented_macro_log_loss": 0.13228712656635494,
+    "augmented_minus_baseline": -0.00998557210810358,
+    "augmented_block_wins": 5,
+    "baseline_block_wins": 0,
+    "ties": 0,
+    "primary_block_count": 5
+  },
+  "architecture_boundary": {
+    "layer_a": "retain exact world identity, sequential compatibility filtering, contraction, provenance, and falsification",
+    "layer_b": "retain unchanged symmetric_world_support_summary_v1 as a candidate predictive complement to strong conventional learners",
+    "standalone_layer_b_predictor_claim": false,
+    "exact_world_ids_as_supervised_features": false
+  },
+  "allowed_claim": "On the first genuinely fresh post-Daphnia paired endpoint, the unchanged label-invariant Layer B supplied non-redundant heldout predictive information beyond the same strong conventional random forest.",
+  "prohibited_claims": [
+    "universal superiority across ecosystems",
+    "standalone predictive sufficiency of Layer B",
+    "causal identification of ecological process",
+    "truth identification of an exact Layer A world",
+    "production/API readiness from one favorable fresh endpoint"
+  ],
+  "next_gate": {
+    "required_replications": "at least 2-3 heterogeneous ecosystems",
+    "preferred_heterogeneity": [
+      "terrestrial or fragmented-landscape occurrence dynamics",
+      "island or strongly isolated assembly/dispersal dynamics",
+      "a second non-telemetry observation process such as camera, survey, or repeated occurrence data"
+    ],
+    "same_question_required": true,
+    "same_layer_b_representation_required": true,
+    "strong_same-learner_pairing_required": true,
+    "favorable_null_adverse_all_terminally_acceptable": true
+  },
+  "development_boundary": {
+    "api_cli_package_freeze_now": false,
+    "new_connectivity_operator_now": false,
+    "mainline_next_action": "heterogeneous replication"
+  }
+}
