@@ -1,0 +1,37 @@
+name: Replication 2 Maine moose metadata identity
+
+on:
+  push:
+    branches:
+      - agent/replication-2-sciencebase-camera-screen
+    paths:
+      - validation/replication_2_source_screen/maine_moose_metadata_identity.py
+      - .github/workflows/replication_2_maine_moose_metadata_identity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  identity:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile validation/replication_2_source_screen/maine_moose_metadata_identity.py
+      - run: python validation/replication_2_source_screen/maine_moose_metadata_identity.py
+      - name: Assert metadata only
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/replication_2_source_screen/maine_moose_metadata_identity.json').read_text())
+          assert r['file_payload_requests']==0
+          assert r['file_payload_bytes_opened']==0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: replication-2-maine-moose-metadata-identity
+          path: build/replication_2_source_screen/maine_moose_metadata_identity.json
+          if-no-files-found: error
