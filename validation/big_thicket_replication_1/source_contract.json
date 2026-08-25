@@ -10,6 +10,15 @@
     "response_payload_requests": 0,
     "response_payload_bytes_opened": 0
   },
+  "gate0": {
+    "run_id": 32809207206,
+    "job_id": 97685194390,
+    "fingerprint": "8b2fe01ee47dd247ca258df625e803302a4f890894ad26831a5c14c674816f0a",
+    "artifact_id": 9549203293,
+    "artifact_zip_sha256": "c194ad89ce1a33634e2b27c038ce89b31d8644eef38de80ca3411590d29d1ada",
+    "biological_response_payload_requests": 0,
+    "biological_response_payload_bytes_opened": 0
+  },
   "official_source": {
     "doi": "10.5066/P99Z3UZU",
     "sciencebase_item_id": "5eb58a3582ce25b5135ae793",
@@ -17,17 +26,31 @@
     "temporal_coverage": ["2010-08-09", "2018-09-27"]
   },
   "pre_response_asset_identities": {
-    "Site Locations.csv": {"md5": "2394ec8b153d744d7edf8573a1b39b28", "bytes": 3819, "role": "response-independent site geometry", "access": "full payload allowed"},
-    "Sample Matrix.csv": {"md5": "54a9216d89eaf4604a13f35016c5dd3f", "bytes": 2481, "role": "candidate survey availability matrix; role must be confirmed from bounded header before rows", "access": "physical header only"},
-    "Sample Data.csv": {"md5": "370c5a177e7ae5bf367c6d3a2adce466", "bytes": 175387, "role": "candidate survey effort/covariate table; role must be confirmed from bounded header before rows", "access": "physical header only"},
+    "Site Locations.csv": {"md5": "2394ec8b153d744d7edf8573a1b39b28", "bytes": 3819, "role": "response-independent closed site geometry", "access": "full payload allowed"},
+    "Sample Matrix.csv": {"md5": "54a9216d89eaf4604a13f35016c5dd3f", "bytes": 2481, "role": "response-independent annual survey availability/count matrix confirmed by physical header", "access": "full payload allowed after Gate0"},
+    "Sample Data.csv": {"md5": "370c5a177e7ae5bf367c6d3a2adce466", "bytes": 175387, "role": "response-independent survey effort/environment table confirmed by physical header", "access": "full payload allowed after Gate0"},
     "Observations.csv": {"md5": "bfdd25d8464521aa59692b6373cbc5a5", "bytes": 379997, "role": "potential biological response", "access": "forbidden before final response freeze"},
     "Vocalizations.csv": {"md5": "c5222c6904e1f3e68ef8e33b380bf573", "bytes": 110118, "role": "potential biological/acoustic response", "access": "forbidden before final response freeze"}
   },
-  "current_gate": {
-    "site_locations": "open full payload once, verify exact MD5/size, report schema and response-independent site registry/coordinates",
-    "sample_matrix": "read one byte at a time and stop at first CR or LF; maximum 4096 header bytes; no row/value access",
-    "sample_data": "read one byte at a time and stop at first CR or LF; maximum 4096 header bytes; no row/value access",
-    "geometry": "do not define coordinate field mapping until Site Locations physical schema is observed; once observed it must be frozen before structural ladder computation"
+  "geometry_semantics_frozen_after_gate0_before_gate1": {
+    "node_id_field": "Site_Number",
+    "closed_registry": "all 52 rows of Site Locations.csv; no future filtering by survey availability or biological response",
+    "latitude_field": "Latitude",
+    "longitude_field": "Longitude",
+    "distance_metric": "haversine_km",
+    "structural_lcc_targets": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_structural_scales": 3,
+    "site_registry_row_fingerprint": "f11509a550260764651d77a0424f0dfaae2abdb8aa9d14bbb9679f7741e54007"
+  },
+  "sampling_row_semantics_frozen_before_gate1": {
+    "sample_matrix_expected_physical_header": ["Site_Number","2010_SampleCount","2011_SampleCount","2012_SampleCount","2013_SampleCount","2014_SampleCount","2015_SampleCount","2016_SampleCount","2017_SampleCount","2018_SampleCount","Comments"],
+    "sample_matrix_count_rule": "every 2010-2018 SampleCount token must be a non-empty base-10 non-negative integer; blank or non-integer stops rather than being interpreted as zero",
+    "sample_matrix_site_rule": "every Site_Number must belong to the frozen 52-site registry and duplicate Site_Number rows stop",
+    "sample_data_expected_physical_header": ["Survey_ID","Date","Site_Number","Personnel_Code","Sample","Salinity","Start_Time","End_Time","Start_Time","End_Time","Air_Temp","Humidity","Wind","Water_Temp","Backwater_Salinity","Backwater_Water_Temp","Weather","Comments"],
+    "sample_data_internal_positional_names": ["Survey_ID","Date","Site_Number","Personnel_Code","Sample","Salinity","Start_Time_1","End_Time_1","Start_Time_2","End_Time_2","Air_Temp","Humidity","Wind","Water_Temp","Backwater_Salinity","Backwater_Water_Temp","Weather","Comments"],
+    "sample_data_duplicate_header_rule": "duplicate Start_Time/End_Time names are preserved by position; no semantic meaning is assigned to suffix 1 versus 2 at Gate1",
+    "sample_data_site_rule": "non-empty Site_Number must belong to the frozen 52-site registry; no biological-response fields are permitted by the frozen physical header",
+    "sample_data_date_rule": "date must match one of YYYY-MM-DD, YYYY/MM/DD, M/D/YYYY, or M/D/YY; two-digit years map to 2000-2099; any other non-empty date token stops"
   },
   "focal_species": {
     "status": "not_selected",
@@ -41,5 +64,6 @@
     "biological_response_values_opened": false,
     "model_fits": 0,
     "heldout_scores": 0
-  }
+  },
+  "next_gate": "Gate1 may open only Site Locations.csv, Sample Matrix.csv and Sample Data.csv; compute 52-site structural ladder and response-independent annual sampling summaries while biological response assets remain unopened"
 }
