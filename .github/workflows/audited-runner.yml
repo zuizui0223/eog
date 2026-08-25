@@ -28,21 +28,25 @@ jobs:
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         run: python -m pip install --force-reinstall numpy==2.3.5 scikit-learn==1.8.0
       - run: pytest -q tests/test_runner.py
-      - name: Compile frozen Azores once-only runner
+      - name: Compile frozen Azores execution path
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         run: |
           python -m py_compile validation/azores_yellow_eel_paired_complementarity/runner_core.py
           python -m py_compile validation/azores_yellow_eel_paired_complementarity/outcome_runner.py
           python -m py_compile validation/azores_yellow_eel_paired_complementarity/verify_once_only_marker.py
+          python -m py_compile validation/azores_yellow_eel_paired_complementarity/run_outcome_with_marker.py
       - name: Emit machine-checkable Azores outcome authorization
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         run: python validation/azores_yellow_eel_paired_complementarity/pre_response_finalize.py
       - name: Run Azores synthetic paired smoke
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         run: python validation/azores_yellow_eel_paired_complementarity/synthetic_smoke.py
-      - name: Verify exact non-triggering Azores v3 candidate
+      - name: Verify exact non-triggering Azores v4 candidate
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
-        run: python validation/azores_yellow_eel_paired_complementarity/verify_once_only_marker.py OUTCOME_AUTHORIZED_ONCE_V3_CANDIDATE
+        run: python validation/azores_yellow_eel_paired_complementarity/verify_once_only_marker.py OUTCOME_AUTHORIZED_ONCE_V4_CANDIDATE
+      - name: Run frozen Azores path through response boundary without opening response
+        if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
+        run: python validation/azores_yellow_eel_paired_complementarity/run_outcome_with_marker.py OUTCOME_AUTHORIZED_ONCE_V4_CANDIDATE --pre-response-only
       - name: Upload Azores pre-response evidence
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         uses: actions/upload-artifact@v4
