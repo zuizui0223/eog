@@ -1,8 +1,8 @@
 {
-  "schema": "eog.snapshot_japan_sika_deer_replication_2.gate0_response_free_certificate.v1",
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.gate0_response_free_certificate.v2",
   "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
   "status": "gate0_pass_response_free_source_registry_time_and_geometry_profile",
-  "gate0_fingerprint": "52bba54c562cc9b7eff58b537bb080deff685dca54f9b9d8106d3bc851c1b337",
+  "gate0_fingerprint": "946acaf48b0ec0067f242d29966b05fe561bfd9f61692f1ac921d1ba9b4856b9",
   "deployments": {
     "record_id": 15030965,
     "filename": "oo_1202827.csv",
@@ -12,6 +12,7 @@
     "unique_deployment_id_count": 90,
     "array_count": 9,
     "registry_fingerprint": "30387901a541725ed9680b1c1542c2a1fad0da725d9d21a9c953be42e2708d79",
+    "timestamp_semantics": "source-documented Japan Standard Time; timezone-naive start_date/end_date values interpreted as UTC+09:00 before UTC normalization",
     "array_sizes": {
       "Chiba_Forest_Nichidai": 10,
       "Ehime_Artificial_Omishima": 12,
@@ -34,10 +35,10 @@
     "array_registry_fingerprint": "15e395652da0b3d66b199d1a82439f5d34ea6521639966f8ffe736d032112b58"
   },
   "time_profile": {
-    "earliest_start": "2023-08-22T10:55:00+00:00",
-    "latest_start": "2023-09-15T00:00:00+00:00",
-    "earliest_end": "2023-10-04T00:00:00+00:00",
-    "latest_end": "2023-12-19T00:00:00+00:00",
+    "earliest_start_utc": "2023-08-22T01:55:00+00:00",
+    "latest_start_utc": "2023-09-14T15:00:00+00:00",
+    "earliest_end_utc": "2023-10-03T15:00:00+00:00",
+    "latest_end_utc": "2023-12-18T15:00:00+00:00",
     "duration_days_min": 33.45763888888889,
     "duration_days_q25": 61.99930555555555,
     "duration_days_median": 64.5,
@@ -59,15 +60,18 @@
     "filename": "oo_1165478.csv",
     "binary_object_url": "https://binary.pensoft.net/file/1165478",
     "pensoft_element_id": "S11978224",
+    "jats_xlink_href": "bdj-13-e141168-s002.csv",
     "published_sequence_count": 18027,
+    "article_xml_sha256": "3b07f72df284e2692d1849e103ab895f53b2632115076da6c352201d6908a2e0",
+    "matching_fragment_sha256": "6ade34a738737cf5ec4ef5aec84c8f82b0451a36e1d72ef9528f9647de1dcf08",
     "identity_certificate": "validation/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity_certificate.json"
   },
   "audit": {
-    "workflow_run_id": 32820361062,
-    "job_id": 97716972639,
-    "head_sha": "0ede368e88af2dfd3881782bd7156a25e9f211e0",
-    "artifact_id": 9552874816,
-    "artifact_digest": "sha256:a716a71e48472a092e1f00667d24ca2e3e2a98dfdae4e076334fdba2cfdf89dc"
+    "workflow_run_id": 32823340440,
+    "job_id": 97725984391,
+    "head_sha": "1deeac910540d480206070bfdc394f59ba4d9c0f",
+    "artifact_id": 9553949029,
+    "artifact_digest": "sha256:cbbca12237f611544236fc5bdce710bf2c0d1d6218859a52c17328198a948cb7"
   },
   "response_firewall": {
     "sequence_payload_requests": 0,
