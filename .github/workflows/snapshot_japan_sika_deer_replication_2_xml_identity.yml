@@ -1,0 +1,50 @@
+name: Snapshot Japan Pensoft XML sequence identity
+
+on:
+  push:
+    branches:
+      - agent/snapshot-japan-sika-deer-replication-2
+    paths:
+      - validation/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity.py
+      - .github/workflows/snapshot_japan_sika_deer_replication_2_xml_identity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  identity:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile XML identity gate
+        run: python -m py_compile validation/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity.py
+      - name: Inspect official article XML only
+        continue-on-error: true
+        run: python validation/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity.py
+      - name: Assert sequence response remains unopened
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity.json')
+          assert p.exists()
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          assert a['sequence_payload_get_requests']==0
+          assert a['sequence_payload_bytes_opened']==0
+          assert a['sequence_csv_header_bytes_opened']==0
+          assert a['sequence_rows_opened'] is False
+          assert a['sequence_values_opened'] is False
+          print(json.dumps(r, indent=2, sort_keys=True))
+          PY
+      - name: Upload XML identity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-japan-pensoft-xml-sequence-identity
+          path: build/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity.json
+          if-no-files-found: error
