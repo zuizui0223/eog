@@ -1,0 +1,56 @@
+{
+  "schema": "eog.aland_glanville_fritillary_replication_2.source_contract.v1",
+  "attempt_id": "aland_glanville_fritillary_fragmented_island_fresh_paired_v1",
+  "role": "heterogeneous_replication_2_after_two_favorable_fresh_endpoints",
+  "source": {
+    "catalog": "Fairdata Etsin / Metax",
+    "dataset_uuid": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
+    "etsin_url": "https://etsin.fairdata.fi/dataset/e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
+    "expected_public_title": "M. cinxia and C. melitaearum in the Åland metapopulation system",
+    "documented_years": [1993, 2017],
+    "documented_nested_levels": ["Patch", "Locality visit", "Nest"]
+  },
+  "metadata_gate": {
+    "allowed_network_endpoints": [
+      "https://metax.fairdata.fi/v3/datasets/e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
+      "https://metax.fairdata.fi/v3/datasets/e4bfbd3e-f74a-44ad-b320-222bf0eac8a0/files"
+    ],
+    "pagination_may_follow_only_same_dataset_files_endpoint": true,
+    "dataset_payload_downloads_permitted": false,
+    "file_download_urls_may_be_recorded_from_metadata": false,
+    "file_payload_requests": 0,
+    "file_payload_bytes": 0,
+    "file_headers_opened": false,
+    "file_rows_opened": false,
+    "file_values_opened": false
+  },
+  "physical_separation_gate": {
+    "required_roles": ["patch", "locality_visit", "nest"],
+    "patch_role": "response-independent geometry/registry candidate only",
+    "locality_visit_role": "response-bearing and forbidden at Gate0/Gate1 until full freeze",
+    "nest_role": "response-bearing and forbidden at Gate0/Gate1 until full freeze",
+    "require_distinct_physical_file_ids_or_paths": true,
+    "stop_if_patch_file_not_physically_separate": "stop_source_not_physically_separated"
+  },
+  "prospective_limitation": {
+    "network_temporally_dynamic": true,
+    "patch_file_geometry_semantics": "most recently recorded geometry according to public source description",
+    "year_specific_geometry_may_exist_on_locality_visit_level": true,
+    "forbidden_repair": "do not read response-bearing Locality visit values to manufacture a fixed or year-specific geometry universe",
+    "gate1_stop_if_temporal_eligibility_requires_response_bearing_rows": "stop_response_independent_temporal_patch_universe_not_identifiable"
+  },
+  "future_endpoint_if_gates_pass": "next-survey/year recorded Melitaea cinxia patch occupancy, defined as at least one overwintering larval nest, among response-independently eligible surveyed patches",
+  "layer_b": {
+    "representation": "symmetric_world_support_summary_v1",
+    "must_remain_unchanged": true
+  },
+  "terminal_outcomes_allowed": [
+    "source_stop",
+    "geometry_stop",
+    "non_estimable",
+    "universe_falsified",
+    "favorable",
+    "no_confirmed_added_value",
+    "adverse"
+  ]
+}
