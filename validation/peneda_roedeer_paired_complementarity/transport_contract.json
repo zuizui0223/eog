@@ -1,0 +1,25 @@
+{
+  "schema": "eog.peneda_roedeer_transport_contract.v1",
+  "candidate_id": "peneda_roedeer_paired_v1",
+  "resolution_stage": "response_blind_metadata_only",
+  "deployment": {
+    "supplement_doi": "10.3897/BDJ.11.e99588.suppl4",
+    "article_attachment_name": "bdj-11-e99588-s004.csv",
+    "zenodo_file_name": "oo_789819.csv"
+  },
+  "response": {
+    "supplement_doi": "10.3897/BDJ.11.e99588.suppl5",
+    "article_attachment_name": "bdj-11-e99588-s005.csv",
+    "zenodo_file_name": "oo_789818.csv"
+  },
+  "firewall": {
+    "allow_datacite_metadata": true,
+    "allow_zenodo_record_metadata": true,
+    "allow_supplement_file_payload": false,
+    "allow_response_header": false,
+    "allow_response_row_or_value": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "note": "PMC currently exposes the same named supplementary attachments through browser-protected instance URLs. Prior attempts opened 0 true deployment CSV bytes before transport resolution; the 1817-byte instance response did not expose any CSV fields. This contract resolves only repository metadata and exact file content URLs before the existing frozen geometry/header gates run."
+}
