@@ -95,5 +95,19 @@ def test_azores_yellow_eel_response_blind_stage1():
     if branch != "agent/azores-yellow-eel-fresh-paired":
         pytest.skip("Azores yellow eel preflight is branch-scoped")
     script = Path(__file__).resolve().parents[1] / "validation/azores_yellow_eel_paired_complementarity/run_stage1_preflight.py"
-    completed = subprocess.run([sys.executable, str(script)], check=False)
+    completed = subprocess.run(
+        [sys.executable, str(script)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    print("\n--- AZORES YELLOW EEL STAGE1 STDOUT ---")
+    print(completed.stdout)
+    if completed.stderr:
+        print("--- AZORES YELLOW EEL STAGE1 STDERR ---")
+        print(completed.stderr)
     assert completed.returncode == 0
+    result_path = Path(__file__).resolve().parents[1] / "build/azores_yellow_eel_stage1/preflight.json"
+    result = result_path.read_text(encoding="utf-8")
+    print("--- AZORES YELLOW EEL STAGE1 RESULT ---")
+    print(result)
