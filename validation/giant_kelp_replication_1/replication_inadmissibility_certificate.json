@@ -1,0 +1,33 @@
+{
+  "schema": "eog.heterogeneous_replication_inadmissibility.v1",
+  "replication_id": "giant_kelp_southern_california_replication_1",
+  "status": "terminal_replication_inadmissible_prior_response_header_opened",
+  "geometry_gate": {
+    "authoritative_run_id": 32807979019,
+    "authoritative_job_id": 97681678380,
+    "status": "geometry_registry_and_structural_scales_pass",
+    "patch_count": 469,
+    "registry_fingerprint": "8a65a0a6d62b67e5915bdc7f319d72165c8228670fc59553d9186fe7c4a28fcc",
+    "structural_ladder_fingerprint": "470d7760ed7b96b65258be232619449eae4fa57c44764c4c2a8e1f9e21ecc083",
+    "distinct_positive_thresholds_km": [8.784880554989936, 30.599950974020906, 33.76116917197375, 40.81254045279048],
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_rows_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0,
+    "artifact_id": 9548801528,
+    "artifact_zip_sha256": "3d625cb63612cdb072e396ec4898c10d4fb9c7f0be57bb3eaf8ee559663605b0"
+  },
+  "prior_opened_endpoint": {
+    "pull_request": 238,
+    "title": "STOP: giant-kelp complementarity at physical response-schema drift",
+    "terminal_boundary": "physical response header had already been opened once before the current heterogeneous-replication selection",
+    "observed_physical_header_fields": ["patch_number", "patch_latitude", "patch_longitude", "patch_area", "year", "semester", "patch_biomass", "patch_fecundity"],
+    "exact_count_gate_executed": false,
+    "model_fits": 0,
+    "heldout_scores": 0,
+    "post_open_parser_repair": false
+  },
+  "claim_boundary": "The new response-blind geometry result is valid structural evidence but this system cannot count as an independent heterogeneous fresh replication of the Azores favorable endpoint because its physical response header was previously opened in PR #238.",
+  "next_action": "exclude giant kelp from the independent replication count and select a genuinely unopened heterogeneous ecosystem; do not reopen or repair the prior kelp response endpoint."
+}
