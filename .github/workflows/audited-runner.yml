@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/audited-runner.yml"
+      - ".github/workflows/azores_yellow_eel_once_only.yml"
       - "tests/test_runner.py"
       - "src/eog/runner.py"
       - "src/eog/manifest.py"
