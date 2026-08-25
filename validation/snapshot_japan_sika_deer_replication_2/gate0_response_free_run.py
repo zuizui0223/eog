@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import gate0_response_free as gate
 
+ORIGINAL_DISCOVERY = gate.discover_response_metadata_only
+
 
 def discover_with_frozen_metadata_candidates():
     response = gate.CONTRACT["forbidden_response"]
     try:
-        return gate.discover_response_metadata_only()
+        return ORIGINAL_DISCOVERY()
     except RuntimeError as exc:
         if "found 0 candidate Zenodo records" not in str(exc):
             raise
