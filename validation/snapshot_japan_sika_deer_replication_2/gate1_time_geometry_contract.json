@@ -1,0 +1,54 @@
+{
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.gate1_time_geometry_contract.v1",
+  "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
+  "gate0_certificate": "validation/snapshot_japan_sika_deer_replication_2/gate0_response_free_certificate.json",
+  "response_identity_certificate": "validation/snapshot_japan_sika_deer_replication_2/pensoft_xml_sequence_identity_certificate.json",
+  "response_access_permitted": false,
+  "time_axis": {
+    "timestamp_semantics": "camera deployment timestamps are interpreted in Asia/Tokyo when source values are timezone-naive; explicit offsets are converted to Asia/Tokyo",
+    "bin_type": "array-relative fixed seven-day campaign week",
+    "array_anchor": "minimum deployment start timestamp within each frozen subproject_name array, without rounding",
+    "week_index_origin": 1,
+    "week_interval": "[array_anchor + 7*(week_index-1) days, array_anchor + 7*week_index days)",
+    "eligible_site_week_min_active_hours": 120,
+    "week_1_role": "initialization_only_not_scored",
+    "calibration_relative_weeks": [2, 3, 4, 5],
+    "primary_heldout_relative_weeks": [6, 7, 8, 9, 10],
+    "supplementary_relative_weeks": "11+ if response-independently eligible; never changes the primary decision"
+  },
+  "availability_gate": {
+    "each_calibration_week_min_eligible_deployments": 30,
+    "each_calibration_week_min_arrays": 3,
+    "each_primary_heldout_week_min_eligible_deployments": 20,
+    "each_primary_heldout_week_min_arrays": 3,
+    "calibration_total_min_eligible_site_weeks": 150,
+    "primary_heldout_total_min_eligible_site_weeks": 100,
+    "stop_if_failed": "stop_response_independent_temporal_estimability"
+  },
+  "geometry": {
+    "node_id": "deployment_id",
+    "group_id": "subproject_name",
+    "distance": "Haversine km using radius 6371.0088 km",
+    "cross_array_edges": false,
+    "target_weighted_within_array_lcc_fractions": [0.25, 0.5, 0.75, 0.9],
+    "weighted_within_array_lcc_fraction": "sum over arrays of the largest connected component node count at the threshold, divided by 90 frozen deployments",
+    "threshold_rule": "for each target choose the smallest observed positive within-array pairwise distance whose weighted within-array LCC fraction reaches the target",
+    "require_distinct_positive_thresholds": 3,
+    "require_target_0_9_achieved": true,
+    "stop_if_failed": "stop_response_independent_structural_inadequacy"
+  },
+  "future_endpoint_if_gate1_passes": "For each response-independently eligible deployment campaign-week from relative week 2 onward, predict whether at least one Cervus nippon sequence is recorded during that site-week, using only information available before that site's current week outcome.",
+  "layer_b": {
+    "representation": "symmetric_world_support_summary_v1",
+    "must_remain_unchanged": true
+  },
+  "response_firewall": {
+    "sequence_payload_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
