@@ -1,0 +1,54 @@
+name: Louisiana marsh-bird replication 1 freeze audit
+
+on:
+  push:
+    branches:
+      - agent/louisiana-marsh-bird-heterogeneous-replication-1
+    paths:
+      - "validation/louisiana_marsh_bird_replication_1/full_freeze_spec.json"
+      - "validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py"
+      - "validation/louisiana_marsh_bird_replication_1/gate0_certificate.json"
+      - "validation/louisiana_marsh_bird_replication_1/gate1_certificate.json"
+      - "validation/louisiana_marsh_bird_replication_1/gate2_header_certificate.json"
+      - "validation/louisiana_marsh_bird_replication_1/focal_species_selection_certificate.json"
+      - ".github/workflows/louisiana_marsh_bird_replication_1_freeze.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  freeze-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package surface
+        run: python -m pip install .
+      - name: Compile finalizer
+        run: python -m py_compile validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py
+      - name: Validate full freeze without response access
+        run: python validation/louisiana_marsh_bird_replication_1/pre_response_finalize.py
+      - name: Assert response remains closed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/louisiana_marsh_bird_replication_1/pre_response_finalize.json')
+          r = json.loads(p.read_text())
+          assert r['status'] == 'full_freeze_machine_validated_response_rows_still_closed'
+          assert r['response_rows_opened'] is False
+          assert r['response_values_opened'] is False
+          assert r['model_fits'] == 0
+          assert r['heldout_scores'] == 0
+          assert len(r['section_fingerprints']) == 16
+          assert r['authorization_state'] == 'not_authorized_until_separate_once_only_marker'
+          print(json.dumps(r, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: louisiana-marsh-bird-replication-1-freeze-audit
+          path: build/louisiana_marsh_bird_replication_1/pre_response_finalize.json
+          if-no-files-found: error
