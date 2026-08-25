@@ -33,12 +33,16 @@ jobs:
         run: |
           python -m py_compile validation/azores_yellow_eel_paired_complementarity/runner_core.py
           python -m py_compile validation/azores_yellow_eel_paired_complementarity/outcome_runner.py
+          python -m py_compile validation/azores_yellow_eel_paired_complementarity/verify_once_only_marker.py
       - name: Emit machine-checkable Azores outcome authorization
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         run: python validation/azores_yellow_eel_paired_complementarity/pre_response_finalize.py
       - name: Run Azores synthetic paired smoke
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         run: python validation/azores_yellow_eel_paired_complementarity/synthetic_smoke.py
+      - name: Verify exact non-triggering Azores v3 candidate
+        if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
+        run: python validation/azores_yellow_eel_paired_complementarity/verify_once_only_marker.py OUTCOME_AUTHORIZED_ONCE_V3_CANDIDATE
       - name: Upload Azores pre-response evidence
         if: github.head_ref == 'agent/azores-yellow-eel-fresh-paired'
         uses: actions/upload-artifact@v4
