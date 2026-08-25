@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import date, timedelta
-import hashlib
 import json
 from pathlib import Path
 
@@ -137,7 +136,7 @@ def main() -> None:
         "schema": "eog.louisiana_marsh_bird_synthetic_smoke.v1",
         "attempt_id": FREEZE["attempt_id"],
         "status": "synthetic_end_to_end_smoke_pass",
-        "scientific_evidential_value": false,
+        "scientific_evidential_value": False,
         "synthetic_site_count": len(sites),
         "synthetic_label_count": len(labels),
         "prepared_row_count": len(feature_result.rows),
@@ -159,8 +158,8 @@ def main() -> None:
         "response_audit": {
             "response_payload_requests": 0,
             "response_payload_bytes_opened": 0,
-            "response_rows_opened": false,
-            "response_values_opened": false
+            "response_rows_opened": False,
+            "response_values_opened": False
         }
     }
     payload["fingerprint"] = canonical_sha256(payload)
