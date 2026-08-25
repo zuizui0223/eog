@@ -1,0 +1,57 @@
+{
+  "schema": "eog.louisiana_marsh_bird_focal_species_selection.v1",
+  "replication_id": "southwest_louisiana_secretive_marsh_birds_heterogeneous_replication_1",
+  "status": "focal_species_selected_response_blind",
+  "selected_species": {
+    "common_name": "King Rail",
+    "scientific_name": "Rallus elegans",
+    "official_alpha_code": "KIRA",
+    "selected_response_file": "KIRA.csv",
+    "frozen_file_md5": "3c959681e26599ea2a19030b7507837f",
+    "frozen_file_bytes": 2619
+  },
+  "selection_rule": "Select King Rail before opening any species file because independent, pre-existing Gulf Coast conservation literature explicitly emphasizes King Rail as a species of high conservation concern; then bind that species to the official USGS Bird Banding Laboratory alpha code KIRA. Do not use prevalence, event counts, occupancy estimates, detection histories, EOG scores, or candidate-specific response values.",
+  "external_evidence": [
+    {
+      "authority": "U.S. Geological Survey Bird Banding Laboratory",
+      "url": "https://www.pwrc.usgs.gov/BBL/Bander_Portal/login/species_groups_pub.php?p_species_gr=917",
+      "fact_used": "Species ID 2080; alpha code KIRA; common name King Rail; scientific name Rallus elegans"
+    },
+    {
+      "authority": "U.S. Fish and Wildlife Service",
+      "url": "https://www.fws.gov/media/king-rail-nesting-and-brood-rearing-ecology-managed-wetlands-final-report",
+      "fact_used": "King Rail is identified as a secretive marsh bird of conservation concern"
+    },
+    {
+      "authority": "U.S. Geological Survey",
+      "url": "https://www.usgs.gov/publications/microhabitat-selection-demography-and-correlates-home-range-size-king-rail-rallus",
+      "fact_used": "King Rail is described as a wetland bird of high conservation concern; study area includes coastal marshes of southwest Louisiana and southeast Texas"
+    },
+    {
+      "authority": "Louisiana State University",
+      "url": "https://repository.lsu.edu/gradschool_dissertations/1497/",
+      "fact_used": "Northern Gulf Coast secretive-marsh-bird work explicitly emphasizes King Rail as a species of high conservation concern"
+    }
+  ],
+  "selection_timing": {
+    "gate0_fingerprint": "5ce556acd5b119a7b451a3b8cca0fdb254ded2461014c1e2e8388abdaf6802cf",
+    "gate1_fingerprint": "4f3dd443ba06bbd0d2bd8a47ead538700522df4df58eb58d2afd8577e3428586",
+    "selected_after_geometry_and_temporal_gates": true,
+    "selected_before_any_species_response_header": true,
+    "selected_before_any_species_response_row_or_value": true
+  },
+  "irreversibility": {
+    "species_switch_after_header_access": false,
+    "species_switch_after_row_access": false,
+    "other_ten_species_files_remain_forbidden_for_this_replication": true
+  },
+  "response_firewall_at_selection": {
+    "biological_response_payload_requests": 0,
+    "biological_response_payload_bytes_opened": 0,
+    "biological_response_header_bytes_opened": 0,
+    "biological_response_rows_opened": false,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
