@@ -1,0 +1,39 @@
+{
+  "schema": "eog.aland_glanville_fritillary_replication_2.gate1_patch_contract.v1",
+  "attempt_id": "aland_glanville_fritillary_fragmented_island_fresh_paired_v1",
+  "gate0_fingerprint": "93f6b0e19a3373f71b4036cc62bde5e6a56c7e3ba2318cfedb174ddd60a7adce",
+  "selected_response_independent_file": {
+    "role": "patch",
+    "id": "e1585394-be55-4853-bd65-8d64ef22d416",
+    "path": "/Butterflies/Patches final.csv",
+    "size": 10826822,
+    "sha256": "1cc94383d9356e6898580379dd1aa573a1a915047f504b5e7ecb2c60d0b7c6ac"
+  },
+  "download_authorization": {
+    "endpoint": "https://etsin.fairdata.fi/api/v3/download/authorize",
+    "request_json": {
+      "cr_id": "e4bfbd3e-f74a-44ad-b320-222bf0eac8a0",
+      "file": "/Butterflies/Patches final.csv"
+    },
+    "returned_url_may_be_followed_once_for_selected_patch_file_only": true
+  },
+  "forbidden_payloads": [
+    "/Butterflies/Locality Visit merged final_v2.csv",
+    "/Butterflies/Nests final.csv",
+    "/Butterflies/Variables_PAS_final.csv",
+    "/Butterflies/Ojanen_et_al-2013-Ecology_and_Evolution.pdf"
+  ],
+  "audit_requirements": {
+    "verify_exact_size_and_sha256_before_parsing": true,
+    "record_header_and_row_count": true,
+    "profile_identifier_candidates_from_column_names_only": true,
+    "profile_geometry_candidates_from_column_names_only": true,
+    "profile_temporal_eligibility_candidates_from_column_names_only": true,
+    "do_not_consult_locality_visit_or_nest_to_resolve_ambiguity": true
+  },
+  "temporal_universe_rule": {
+    "network_is_known_to_be_dynamic": true,
+    "fixed_current_patch_universe_cannot_be_backcast_without_response_independent_patch_start_end_semantics": true,
+    "terminal_stop_if_patch_payload_lacks_response_independent_temporal_eligibility": "stop_response_independent_temporal_patch_universe_not_identifiable"
+  }
+}
