@@ -1,0 +1,61 @@
+{
+  "schema": "eog.white_mountain_camera_replication_2.gate3_linkage_contract.v1",
+  "attempt_id": "white_mountain_nf_camera_2014_2024_fresh_paired_v1",
+  "sciencebase_item_id": "66520b7dd34e702fe87490d4",
+  "allowed_payloads": {
+    "dbdictionary.csv": {
+      "size": 68735,
+      "md5": "2320bda9cbddaebf3c406c131eb569d5"
+    }
+  },
+  "metadata_only": {
+    "sciencebase_top_level_file_inventory": true
+  },
+  "dictionary_tables_of_interest": [
+    "visits",
+    "media",
+    "annotations",
+    "taxa",
+    "rutcdeployments",
+    "deployments",
+    "logdeployments"
+  ],
+  "dictionary_field_terms_of_interest": [
+    "location",
+    "visit",
+    "deployment",
+    "media",
+    "annotation",
+    "taxa",
+    "date",
+    "time",
+    "latitude",
+    "longitude",
+    "pk_",
+    "fk_"
+  ],
+  "decision_rule": {
+    "pass_only_if": "A physically released response-independent top-level CSV plus dictionary semantics can map deployment/media linkage to the frozen 101-location universe and visit/effort time axis without inspecting any response-bearing file payload or header.",
+    "stop_if": "No separately released response-independent deployment/location linkage exists and dictionary semantics show that media observations require unavailable deployment/location mapping or response-bearing media rows to recover location/time.",
+    "no_post_result_schema_alias_repair": true
+  },
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotations_header_bytes_opened": 0,
+    "media_payload_requests": 0,
+    "media_payload_bytes_opened": 0,
+    "media_header_bytes_opened": 0,
+    "taxa_payload_requests": 0,
+    "taxa_payload_bytes_opened": 0,
+    "taxa_header_bytes_opened": 0,
+    "modeloutputs_payload_requests": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "other_response_payload_requests": 0,
+    "other_response_payload_bytes_opened": 0,
+    "photo_zip_payload_requests": 0,
+    "photo_zip_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
