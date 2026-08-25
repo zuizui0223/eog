@@ -1,0 +1,59 @@
+name: White Mountain camera replication 2 dictionary Gate
+
+on:
+  push:
+    branches:
+      - agent/white-mountain-camera-replication-2
+    paths:
+      - validation/white_mountain_camera_replication_2/gate2_dictionary_contract.json
+      - validation/white_mountain_camera_replication_2/gate2_dictionary.py
+      - .github/workflows/white_mountain_camera_replication_2_gate2_dictionary.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate2:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile dictionary-only gate
+        run: python -m py_compile validation/white_mountain_camera_replication_2/gate2_dictionary.py
+      - name: Read exact dbdictionary only
+        id: gate
+        continue-on-error: true
+        run: python validation/white_mountain_camera_replication_2/gate2_dictionary.py
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/white_mountain_camera_replication_2/gate2_dictionary.json')
+          assert p.exists(), 'dictionary evidence missing'
+          r=json.loads(p.read_text())
+          for k,v in r['response_firewall'].items():
+              assert v==0,(k,v)
+          print(json.dumps({'status':r['status'],'fingerprint':r['fingerprint'],'dictionary':r['dictionary'],'matching_rows':r['matching_rows'],'response_firewall':r['response_firewall']},indent=2,sort_keys=True))
+          PY
+      - name: Upload dictionary evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: white-mountain-camera-replication-2-dictionary
+          path: build/white_mountain_camera_replication_2/gate2_dictionary.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/white_mountain_camera_replication_2/gate2_dictionary.json').read_text())
+          if r['status']=='engineering_failure_pre_response':
+              raise SystemExit(r['reason'])
+          print('Dictionary terminal status:',r['status'])
+          PY
