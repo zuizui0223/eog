@@ -8,6 +8,7 @@ on:
       - validation/aland_glanville_fritillary_replication_2/gate0_metadata_certificate.json
       - validation/aland_glanville_fritillary_replication_2/gate1_patch_contract.json
       - validation/aland_glanville_fritillary_replication_2/gate1_patch_profile.py
+      - validation/aland_glanville_fritillary_replication_2/gate1_patch_profile_run.py
       - .github/workflows/aland_glanville_fritillary_replication_2_gate1.yml
 
 permissions:
@@ -22,11 +23,13 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile Patch-only Gate1
-        run: python -m py_compile validation/aland_glanville_fritillary_replication_2/gate1_patch_profile.py
+        run: |
+          python -m py_compile validation/aland_glanville_fritillary_replication_2/gate1_patch_profile.py
+          python -m py_compile validation/aland_glanville_fritillary_replication_2/gate1_patch_profile_run.py
       - name: Run exact Patch-only profile
         id: gate
         continue-on-error: true
-        run: python validation/aland_glanville_fritillary_replication_2/gate1_patch_profile.py
+        run: python validation/aland_glanville_fritillary_replication_2/gate1_patch_profile_run.py
       - name: Assert response-bearing files stayed closed
         if: always()
         run: |
