@@ -41,5 +41,5 @@
     "runtime_runner": "faaad81b35dbc9609c3554cb617e720eaa5b18728b55a7dfcd30cb73b5679dbe",
     "non_estimable_stop": "bcea9503402991e14bf1d4417e59c7fdf104c6537c6813024765cf4043673705"
   },
-  "execution_rule": "candidate only; does not authorize response access. Actual V3 marker may be created only if this exact candidate passes the same verifier used by the once-only workflow."
+  "execution_rule": "this non-triggering file is the exact preflight copy. These exact bytes authorize exactly one response-opening workflow run only when copied unchanged to OUTCOME_AUTHORIZED_ONCE_V3; regardless of terminal result, that trigger marker must never be rerun."
 }
