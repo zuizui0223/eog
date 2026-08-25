@@ -1,0 +1,44 @@
+{
+  "schema": "eog.fukushima_wild_boar_replication_2.terminal_transport_stop_certificate.v1",
+  "attempt_id": "fukushima_wild_boar_camera_halfyear_fresh_paired_v1",
+  "status": "stop_response_independent_source_transport_unavailable_from_audited_runtime",
+  "reason": "The authoritative JaLTER metadata/package is public and physically separates occasion/evacuation from detection, but every audited GitHub Actions request to the public Metacat read routes and the public licence-page route returned HTTP 503. Repeated transport guessing is not permitted. Detection response was never requested or opened.",
+  "source_identity": {
+    "package": "ERDP-2016-03.1.5",
+    "occasion_data_id": "ERDP-2016-03.8.1",
+    "evacuation_data_id": "ERDP-2016-03.7.1",
+    "forbidden_detection_data_id": "ERDP-2016-03.6.1",
+    "focal_species": "Sus scrofa"
+  },
+  "gate0_attempt": {
+    "workflow_run_id": 32817506725,
+    "workflow_job_id": 97708667934,
+    "head_sha": "e3b2beb7b966a7a591f44fad67401add41200b95",
+    "fingerprint": "12cde41b55ccc32b3a1518a0465966fb3c7558d830bc500f366a413b8ac32e0b",
+    "artifact_id": 9551923526,
+    "artifact_digest": "sha256:5a4e02fadb69a5aab61212fbca0c5140df3688e505abd7322fa13c2b5b33424f",
+    "failure": "HTTP 503 on all prospectively frozen public Metacat read routes for the response-independent occasion table"
+  },
+  "transport_diagnostic": {
+    "workflow_run_id": 32817613035,
+    "workflow_job_id": 97708967322,
+    "head_sha": "b7a67f188c2a966fa4b8ed6a1f30b6e5baeaf9bf",
+    "failure": "HTTP 503 on the public JaLTER licence-page route before any dataset payload access"
+  },
+  "response_firewall_at_stop": {
+    "detection_payload_requests": 0,
+    "detection_payload_bytes_opened": 0,
+    "detection_header_opened": false,
+    "detection_rows_opened": false,
+    "detection_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "forbidden_repair": [
+    "do not scrape or infer detection values from derivative Darwin-Core products",
+    "do not switch focal species after transport failure",
+    "do not treat a future unaudited manual download as this already-frozen fresh attempt",
+    "do not repeatedly probe arbitrary JaLTER URLs until one happens to work"
+  ],
+  "scientific_interpretation": "This is a source-transport STOP and provides no evidence for or against Layer-B predictive complementarity."
+}
