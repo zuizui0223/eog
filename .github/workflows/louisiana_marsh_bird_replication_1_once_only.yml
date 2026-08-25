@@ -1,0 +1,48 @@
+name: Louisiana King Rail once-only outcome gate
+
+on:
+  push:
+    branches:
+      - agent/louisiana-marsh-bird-heterogeneous-replication-1
+    paths:
+      - "validation/louisiana_marsh_bird_replication_1/OUTCOME_AUTHORIZED_ONCE"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: louisiana-king-rail-once-only-outcome
+  cancel-in-progress: false
+
+jobs:
+  once-only-outcome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install exact frozen runtime
+        run: |
+          python -m pip install \
+            numpy==2.3.5 \
+            scipy==1.18.1 \
+            joblib==1.5.3 \
+            threadpoolctl==3.6.0 \
+            scikit-learn==1.8.0
+          python -m pip install --no-deps .
+      - name: Verify actual once-only authorization
+        run: |
+          python validation/louisiana_marsh_bird_replication_1/verify_once_only_authorization.py \
+            --mode actual \
+            --marker validation/louisiana_marsh_bird_replication_1/OUTCOME_AUTHORIZED_ONCE
+      - name: Execute sole King Rail response stream through frozen runner
+        run: python validation/louisiana_marsh_bird_replication_1/outcome_runner.py
+      - name: Upload terminal evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: louisiana-king-rail-once-only-terminal
+          path: build/louisiana_marsh_bird_replication_1/terminal_result.json
+          if-no-files-found: error
