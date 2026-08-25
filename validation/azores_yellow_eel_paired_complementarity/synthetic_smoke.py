@@ -6,8 +6,8 @@ from pathlib import Path
 
 from eog.v2.predictive_complementarity import PredictiveComplementarityDeclaration
 
-from validation.azores_yellow_eel_paired_complementarity.pre_response_finalize import canonical_sha256
-from validation.azores_yellow_eel_paired_complementarity.runner_core import (
+from pre_response_finalize import canonical_sha256
+from runner_core import (
     CONVENTIONAL_FEATURE_NAMES,
     build_prepared_rows,
     exact_count_gate,
