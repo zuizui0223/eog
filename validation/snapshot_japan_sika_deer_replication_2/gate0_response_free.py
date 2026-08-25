@@ -20,6 +20,22 @@ BUILD.mkdir(parents=True, exist_ok=True)
 CONTRACT = json.loads((HERE / "source_contract.json").read_text())
 OUT = BUILD / "gate0_response_free.json"
 
+DEP_ALIASES = {
+    "deployment_id": ["deployment_id", "deploymentID", "deploymentId"],
+    "latitude": ["latitude"],
+    "longitude": ["longitude"],
+    "start_date": ["start_date", "startDate"],
+    "end_date": ["end_date", "endDate"],
+    "subproject_name": ["subproject_name", "subprojectName", "project_id", "projectID"],
+}
+HAB_ALIASES = {
+    "subproject_name": ["subproject_name", "subprojectName", "project_id", "projectID"],
+    "prefecture": ["prefecture", "Prefecture"],
+    "habitat_type": ["habitat_type", "habitatType", "habitat"],
+    "landscape_type": ["landscape_type", "landscapeType", "landscape"],
+    "ecoregion": ["ECO_NAME", "eco_name", "ecoregion", "ecoregion_name"],
+}
+
 
 def canonical(obj):
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
@@ -30,14 +46,23 @@ def fp(obj):
 
 
 def get_json(url: str):
-    req = urllib.request.Request(url, headers={"Accept": "application/json", "User-Agent": "EOG-SnapshotJapan-metadata-only/1.0"})
+    req = urllib.request.Request(
+        url,
+        headers={"Accept": "application/json", "User-Agent": "EOG-SnapshotJapan-metadata-only/1.0"},
+    )
     with urllib.request.urlopen(req, timeout=60) as r:
         raw = r.read()
         return json.loads(raw), len(raw), r.geturl()
 
 
 def get_bytes(url: str):
-    req = urllib.request.Request(url, headers={"Accept": "text/csv,application/octet-stream,*/*;q=0.8", "User-Agent": "EOG-SnapshotJapan-response-free/1.0"})
+    req = urllib.request.Request(
+        url,
+        headers={
+            "Accept": "text/csv,application/octet-stream,*/*;q=0.8",
+            "User-Agent": "EOG-SnapshotJapan-response-free/1.0",
+        },
+    )
     with urllib.request.urlopen(req, timeout=90) as r:
         raw = r.read()
         return raw, r.geturl(), r.headers.get("Content-Type")
@@ -101,10 +126,7 @@ def fetch_known_supplement(spec: dict):
 
 def discover_response_metadata_only():
     response = CONTRACT["forbidden_response"]
-    queries = [
-        f'doi:"{response["supplement_doi"]}"',
-        f'"{response["filename"]}"',
-    ]
+    queries = [f'doi:"{response["supplement_doi"]}"', f'"{response["filename"]}"']
     inspected = []
     candidates = []
     for q in queries:
@@ -112,8 +134,7 @@ def discover_response_metadata_only():
         obj, nbytes, _ = get_json(url)
         inspected.append({"query": q, "metadata_bytes": nbytes, "hit_count": obj.get("hits", {}).get("total", 0)})
         for hit in obj.get("hits", {}).get("hits", []):
-            files = hit.get("files", [])
-            if any(f.get("key") == response["filename"] for f in files):
+            if any(f.get("key") == response["filename"] for f in hit.get("files", [])):
                 candidates.append(hit)
     dedup = {int(c["id"]): c for c in candidates}
     if len(dedup) != 1:
@@ -126,7 +147,6 @@ def discover_response_metadata_only():
         raise RuntimeError(f"sequence record title is not Supplementary material 2: {title!r}")
     if observed_doi and observed_doi != response["supplement_doi"]:
         raise RuntimeError(f"sequence supplement DOI mismatch: {observed_doi} != {response['supplement_doi']}")
-    # Crucial firewall: never follow or persist the content URL here.
     return {
         "record_id": fm["record_id"],
         "supplement_doi": response["supplement_doi"],
@@ -145,17 +165,19 @@ def discover_response_metadata_only():
 
 
 def decode_csv(raw: bytes, name: str):
+    text = None
+    encoding = None
     for enc in ("utf-8-sig", "cp1252"):
         try:
             text = raw.decode(enc)
+            encoding = enc
             break
         except UnicodeDecodeError:
-            text = None
+            continue
     if text is None:
         raise RuntimeError(f"cannot decode {name} as UTF-8-SIG or CP1252")
-    sample = text[:65536]
     try:
-        delim = csv.Sniffer().sniff(sample, delimiters=",;\t").delimiter
+        delim = csv.Sniffer().sniff(text[:65536], delimiters=",;\t").delimiter
     except csv.Error:
         delim = ","
     reader = csv.DictReader(io.StringIO(text), delimiter=delim)
@@ -163,7 +185,17 @@ def decode_csv(raw: bytes, name: str):
     rows = list(reader)
     if not header:
         raise RuntimeError(f"{name} has no header")
-    return header, rows, enc, delim
+    return header, rows, encoding, delim
+
+
+def resolve_aliases(header, aliases, label):
+    resolved = {}
+    for canonical_name, options in aliases.items():
+        matches = [x for x in options if x in header]
+        if len(matches) != 1:
+            raise RuntimeError(f"{label}: expected one alias for {canonical_name}, observed {matches}; header={header}")
+        resolved[canonical_name] = matches[0]
+    return resolved
 
 
 def parse_dt(value: str, field: str):
@@ -178,8 +210,10 @@ def parse_dt(value: str, field: str):
         return dt.astimezone(timezone.utc)
     except ValueError:
         pass
-    formats = ["%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d", "%Y/%m/%d %H:%M:%S", "%Y/%m/%d %H:%M", "%Y/%m/%d"]
-    for fmt in formats:
+    for fmt in (
+        "%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d",
+        "%Y/%m/%d %H:%M:%S", "%Y/%m/%d %H:%M", "%Y/%m/%d",
+    ):
         try:
             return datetime.strptime(s, fmt).replace(tzinfo=timezone.utc)
         except ValueError:
@@ -191,35 +225,9 @@ def haversine(a, b):
     r = 6371.0088
     lat1, lon1 = map(math.radians, a)
     lat2, lon2 = map(math.radians, b)
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
+    dlat, dlon = lat2 - lat1, lon2 - lon1
     h = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
     return 2 * r * math.asin(min(1.0, math.sqrt(h)))
-
-
-def summarize_distances(rows):
-    by_array = defaultdict(list)
-    for r in rows:
-        by_array[r["subproject_name"].strip()].append((float(r["latitude"]), float(r["longitude"])))
-    out = []
-    pooled = []
-    for name in sorted(by_array):
-        pts = by_array[name]
-        ds = []
-        for i in range(len(pts)):
-            for j in range(i + 1, len(pts)):
-                d = haversine(pts[i], pts[j])
-                ds.append(d)
-                pooled.append(d)
-        out.append({
-            "array": name,
-            "site_count": len(pts),
-            "pair_count": len(ds),
-            "within_array_min_km": min(ds) if ds else None,
-            "within_array_median_km": statistics.median(ds) if ds else None,
-            "within_array_max_km": max(ds) if ds else None,
-        })
-    return out, pooled
 
 
 def percentile(xs, q):
@@ -227,10 +235,32 @@ def percentile(xs, q):
     if not xs:
         return None
     pos = (len(xs) - 1) * q
-    lo = int(math.floor(pos)); hi = int(math.ceil(pos))
+    lo, hi = int(math.floor(pos)), int(math.ceil(pos))
     if lo == hi:
         return xs[lo]
     return xs[lo] * (hi - pos) + xs[hi] * (pos - lo)
+
+
+def summarize_distances(dep_rows, cols):
+    by_array = defaultdict(list)
+    for r in dep_rows:
+        arr = r[cols["subproject_name"]].strip()
+        by_array[arr].append((float(r[cols["latitude"]]), float(r[cols["longitude"]])))
+    arrays = []
+    pooled = []
+    for name in sorted(by_array):
+        pts = by_array[name]
+        ds = [haversine(pts[i], pts[j]) for i in range(len(pts)) for j in range(i + 1, len(pts))]
+        pooled.extend(ds)
+        arrays.append({
+            "array": name,
+            "site_count": len(pts),
+            "pair_count": len(ds),
+            "within_array_min_km": min(ds) if ds else None,
+            "within_array_median_km": statistics.median(ds) if ds else None,
+            "within_array_max_km": max(ds) if ds else None,
+        })
+    return arrays, pooled
 
 
 def write(result):
@@ -241,7 +271,7 @@ def write(result):
 
 def main():
     result = {
-        "schema": "eog.snapshot_japan_sika_deer_replication_2.gate0_response_free.v1",
+        "schema": "eog.snapshot_japan_sika_deer_replication_2.gate0_response_free.v2",
         "attempt_id": CONTRACT["attempt_id"],
         "status": "engineering_failure_pre_response",
         "reason": None,
@@ -259,85 +289,85 @@ def main():
         hab_raw, hab_meta = fetch_known_supplement(CONTRACT["response_independent"]["habitats"])
         dep_header, dep_rows, dep_enc, dep_delim = decode_csv(dep_raw, "deployments")
         hab_header, hab_rows, hab_enc, hab_delim = decode_csv(hab_raw, "habitats")
+        dep_cols = resolve_aliases(dep_header, DEP_ALIASES, "deployments")
+        hab_cols = resolve_aliases(hab_header, HAB_ALIASES, "habitats")
 
-        required_dep = ["deployment_id", "latitude", "longitude", "start_date", "end_date", "subproject_name"]
-        missing_dep = [c for c in required_dep if c not in dep_header]
-        if missing_dep:
-            raise RuntimeError(f"deployments missing required columns: {missing_dep}; observed={dep_header}")
-        required_hab = ["subproject_name", "prefecture", "habitat_type", "landscape_type", "ECO_NAME"]
-        missing_hab = [c for c in required_hab if c not in hab_header]
-        if missing_hab:
-            raise RuntimeError(f"habitats missing required columns: {missing_hab}; observed={hab_header}")
-
-        if len(dep_rows) != int(CONTRACT["paper"]["published_deployment_count"]):
+        expected_n = int(CONTRACT["paper"]["published_deployment_count"])
+        if len(dep_rows) != expected_n:
             result["status"] = "stop_published_deployment_count_not_reproduced"
-            result["reason"] = f"observed {len(dep_rows)} deployment rows, expected {CONTRACT['paper']['published_deployment_count']}"
-            write(result); return 0
+            result["reason"] = f"observed {len(dep_rows)} deployment rows, expected {expected_n}"
+            write(result)
+            return 0
 
-        ids = [(r.get("deployment_id") or "").strip() for r in dep_rows]
+        ids = [r[dep_cols["deployment_id"]].strip() for r in dep_rows]
         if any(not x for x in ids) or len(set(ids)) != len(ids):
             result["status"] = "stop_deployment_identifier_registry_invalid"
-            result["reason"] = "deployment_id is blank or non-unique"
-            write(result); return 0
+            result["reason"] = "deployment identifier is blank or non-unique"
+            write(result)
+            return 0
 
-        starts = []
-        ends = []
-        durations = []
-        coords = []
-        arrays = []
+        starts, ends, durations, arrays = [], [], [], []
+        registry = []
         for r in dep_rows:
-            try:
-                lat = float((r.get("latitude") or "").strip())
-                lon = float((r.get("longitude") or "").strip())
-            except ValueError as exc:
-                raise RuntimeError(f"invalid deployment coordinate for {r.get('deployment_id')}: {exc}")
+            did = r[dep_cols["deployment_id"]].strip()
+            lat = float(r[dep_cols["latitude"]].strip())
+            lon = float(r[dep_cols["longitude"]].strip())
             if not (-90 <= lat <= 90 and -180 <= lon <= 180):
-                raise RuntimeError(f"out-of-range coordinate for {r.get('deployment_id')}: {(lat, lon)}")
-            s = parse_dt(r.get("start_date"), "start_date")
-            e = parse_dt(r.get("end_date"), "end_date")
+                raise RuntimeError(f"out-of-range coordinate for {did}: {(lat, lon)}")
+            s = parse_dt(r[dep_cols["start_date"]], "start_date")
+            e = parse_dt(r[dep_cols["end_date"]], "end_date")
             if e <= s:
-                raise RuntimeError(f"nonpositive deployment duration for {r.get('deployment_id')}: {s}..{e}")
-            arr = (r.get("subproject_name") or "").strip()
+                raise RuntimeError(f"nonpositive deployment duration for {did}: {s}..{e}")
+            arr = r[dep_cols["subproject_name"]].strip()
             if not arr:
-                raise RuntimeError(f"blank subproject_name for {r.get('deployment_id')}")
-            starts.append(s); ends.append(e); durations.append((e-s).total_seconds()/86400.0); coords.append((lat, lon)); arrays.append(arr)
+                raise RuntimeError(f"blank array/subproject for {did}")
+            starts.append(s)
+            ends.append(e)
+            durations.append((e - s).total_seconds() / 86400.0)
+            arrays.append(arr)
+            registry.append({
+                "deployment_id": did,
+                "latitude": lat,
+                "longitude": lon,
+                "start_date": r[dep_cols["start_date"]].strip(),
+                "end_date": r[dep_cols["end_date"]].strip(),
+                "subproject_name": arr,
+            })
 
         array_count = len(set(arrays))
-        if array_count != int(CONTRACT["paper"]["published_array_count"]):
+        expected_arrays = int(CONTRACT["paper"]["published_array_count"])
+        if array_count != expected_arrays:
             result["status"] = "stop_published_array_count_not_reproduced"
-            result["reason"] = f"observed {array_count} arrays, expected {CONTRACT['paper']['published_array_count']}"
-            write(result); return 0
+            result["reason"] = f"observed {array_count} arrays, expected {expected_arrays}"
+            write(result)
+            return 0
 
-        hab_arrays = {(r.get("subproject_name") or "").strip() for r in hab_rows if (r.get("subproject_name") or "").strip()}
         dep_arrays = set(arrays)
+        hab_arrays = {r[hab_cols["subproject_name"]].strip() for r in hab_rows if r[hab_cols["subproject_name"]].strip()}
         if hab_arrays != dep_arrays:
             result["status"] = "stop_habitat_array_registry_mismatch"
             result["reason"] = f"habitat arrays != deployment arrays; missing={sorted(dep_arrays-hab_arrays)}, extra={sorted(hab_arrays-dep_arrays)}"
-            write(result); return 0
+            write(result)
+            return 0
 
-        dist_arrays, pooled = summarize_distances(dep_rows)
+        dist_arrays, pooled = summarize_distances(dep_rows, dep_cols)
         result["sequence_response_metadata_only"]["published_sequence_count"] = CONTRACT["forbidden_response"]["published_row_count"]
         result["deployments"] = {
             **dep_meta,
             "header": dep_header,
+            "resolved_columns": dep_cols,
             "encoding": dep_enc,
             "delimiter": dep_delim,
             "row_count": len(dep_rows),
             "unique_deployment_id_count": len(set(ids)),
             "array_count": array_count,
             "array_sizes": dict(sorted(Counter(arrays).items())),
-            "registry_fingerprint": fp(sorted({
-                "deployment_id": r["deployment_id"].strip(),
-                "latitude": float(r["latitude"]),
-                "longitude": float(r["longitude"]),
-                "start_date": r["start_date"].strip(),
-                "end_date": r["end_date"].strip(),
-                "subproject_name": r["subproject_name"].strip(),
-            } for r in dep_rows, key=lambda x: x["deployment_id"])),
+            "registry_fingerprint": fp(sorted(registry, key=lambda x: x["deployment_id"])),
         }
         result["habitats"] = {
             **hab_meta,
             "header": hab_header,
+            "resolved_columns": hab_cols,
             "encoding": hab_enc,
             "delimiter": hab_delim,
             "row_count": len(hab_rows),
@@ -350,25 +380,24 @@ def main():
             "earliest_end": min(ends).isoformat(),
             "latest_end": max(ends).isoformat(),
             "duration_days_min": min(durations),
-            "duration_days_q25": percentile(durations, .25),
+            "duration_days_q25": percentile(durations, 0.25),
             "duration_days_median": statistics.median(durations),
-            "duration_days_q75": percentile(durations, .75),
+            "duration_days_q75": percentile(durations, 0.75),
             "duration_days_max": max(durations),
             "duration_days_sum": sum(durations),
         }
         result["geometry_profile"] = {
             "arrays": dist_arrays,
             "pooled_within_array_pair_count": len(pooled),
-            "pooled_within_array_distance_km_q10": percentile(pooled, .10),
-            "pooled_within_array_distance_km_q25": percentile(pooled, .25),
-            "pooled_within_array_distance_km_q50": percentile(pooled, .50),
-            "pooled_within_array_distance_km_q75": percentile(pooled, .75),
-            "pooled_within_array_distance_km_q90": percentile(pooled, .90),
+            "pooled_within_array_distance_km_q10": percentile(pooled, 0.10),
+            "pooled_within_array_distance_km_q25": percentile(pooled, 0.25),
+            "pooled_within_array_distance_km_q50": percentile(pooled, 0.50),
+            "pooled_within_array_distance_km_q75": percentile(pooled, 0.75),
+            "pooled_within_array_distance_km_q90": percentile(pooled, 0.90),
             "cross_array_propagation_allowed": False,
         }
-
         result["status"] = "gate0_pass_response_free_source_registry_time_and_geometry_profile"
-        result["reason"] = "Zenodo metadata resolved the physically separate sequence response without opening it; exact deployment and habitat supplements reproduced 90 deployments and nine arrays and supplied response-independent geometry/effort profiles"
+        result["reason"] = "Zenodo metadata resolved the physically separate sequence response without opening it; deployment and habitat supplements reproduced the published deployment and array registries and supplied response-independent geometry/effort profiles"
         write(result)
         return 0
     except Exception as exc:
