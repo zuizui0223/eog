@@ -40,8 +40,10 @@
     "if neither candidate has physical role separation, stop this screen and choose a new ecosystem rather than weakening the firewall"
   ],
   "metadata_access": {
-    "allowed_url_template": "https://www.sciencebase.gov/catalog/item/{item_id}?format=json",
-    "allowed_content": "top-level item JSON and embedded file metadata only",
+    "allowed_item_url_template": "https://www.sciencebase.gov/catalog/item/{item_id}?format=json",
+    "allowed_children_url_template": "https://www.sciencebase.gov/catalog/items?parentId={item_id}&format=json&max=100",
+    "allowed_content": "top-level item JSON, direct child-item JSON metadata, and embedded file metadata only",
+    "maximum_child_depth": 1,
     "forbidden": [
       "GET any file download URL",
       "follow any file content URL",
