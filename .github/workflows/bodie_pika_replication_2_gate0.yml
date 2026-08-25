@@ -19,26 +19,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install response-free workbook reader
-        run: python -m pip install openpyxl==3.1.5
-      - name: Compile Gate0
-        run: |
-          python -m py_compile validation/bodie_pika_replication_2/gate0_geometry.py
-          python -m py_compile validation/bodie_pika_replication_2/gate0_run.py
-      - name: Run response-free geometry gate
-        id: gate
-        continue-on-error: true
-        run: python validation/bodie_pika_replication_2/gate0_run.py
-      - name: Assert census response firewall and terminal schema
-        if: always()
+      - name: Compile author-geometry Gate0
+        run: python -m py_compile validation/bodie_pika_replication_2/gate0_author_geometry.py
+      - name: Audit author-released response-independent geometry
+        run: python validation/bodie_pika_replication_2/gate0_author_geometry.py
+      - name: Assert census response firewall and frozen universe rule
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          p = Path('build/bodie_pika_replication_2/gate0_geometry.json')
-          assert p.exists(), 'Gate0 terminal evidence missing'
+          p = Path('build/bodie_pika_replication_2/author_geometry_gate.json')
+          assert p.exists()
           r = json.loads(p.read_text())
           a = r['response_firewall']
+          assert r['frozen_expected_patch_count'] == 82
           assert a['census_payload_requests'] == 0
           assert a['census_payload_bytes_opened'] == 0
           assert a['census_header_bytes_opened'] == 0
@@ -47,23 +41,20 @@ jobs:
           assert a['census_values_opened'] is False
           assert a['scientific_model_fits'] == 0
           assert a['heldout_scores'] == 0
-          print(json.dumps({'status': r['status'], 'fingerprint': r['fingerprint'], 'response_firewall': a}, indent=2, sort_keys=True))
+          assert r['status'] in {
+              'gate0_pass_author_geometry_matches_frozen_universe',
+              'stop_response_independent_complete_geometry_not_found',
+          }
+          print(json.dumps({
+              'status': r['status'],
+              'fingerprint': r['fingerprint'],
+              'geometry': r['geometry'],
+              'response_firewall': a,
+          }, indent=2, sort_keys=True))
           PY
-      - name: Upload terminal Gate0 evidence
-        if: always()
+      - name: Upload authoritative terminal Gate0 evidence
         uses: actions/upload-artifact@v4
         with:
-          name: bodie-pika-replication-2-gate0
-          path: build/bodie_pika_replication_2/gate0_geometry.json
+          name: bodie-pika-replication-2-author-geometry-gate0
+          path: build/bodie_pika_replication_2/author_geometry_gate.json
           if-no-files-found: error
-      - name: Propagate engineering failure only
-        if: always()
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          r = json.loads(Path('build/bodie_pika_replication_2/gate0_geometry.json').read_text())
-          if r['status'] == 'engineering_failure_pre_response':
-              raise SystemExit(r['reason'])
-          print('Scientific Gate0 terminal status:', r['status'])
-          PY
