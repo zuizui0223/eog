@@ -99,6 +99,8 @@ def test_azores_yellow_eel_pre_response_certificates_are_frozen_and_offline():
     stage1 = json.loads((root / "stage1_certificate.json").read_text(encoding="utf-8"))
     header = json.loads((root / "header_certificate.json").read_text(encoding="utf-8"))
     full_freeze = json.loads((root / "full_freeze_spec.json").read_text(encoding="utf-8"))
+    committed_auth = json.loads((root / "outcome_access_authorization.json").read_text(encoding="utf-8"))
+    v1_failure = json.loads((root / "once_only_v1_pre_response_failure_certificate.json").read_text(encoding="utf-8"))
 
     assert stage1["attempt_id"] == header["attempt_id"] == "azores_yellow_eel_receiver_week_fresh_paired_v1"
     assert stage1["status"] == "stage1_registry_availability_and_structural_pass"
@@ -133,6 +135,13 @@ def test_azores_yellow_eel_pre_response_certificates_are_frozen_and_offline():
     assert header["model_fits"] == 0
     assert header["heldout_scores"] == 0
 
+    assert v1_failure["status"] == "terminal_pre_response_certificate_transcription_failure"
+    assert v1_failure["marker_v1_consumed"] is True
+    assert v1_failure["response_firewall_at_terminal"]["response_payload_requests"] == 0
+    assert v1_failure["response_firewall_at_terminal"]["response_payload_bytes_opened"] == 0
+    assert v1_failure["response_firewall_at_terminal"]["response_rows_opened"] is False
+    assert v1_failure["response_firewall_at_terminal"]["response_values_opened"] is False
+
     from validation.azores_yellow_eel_paired_complementarity.pre_response_finalize import main
 
     main()
@@ -149,3 +158,12 @@ def test_azores_yellow_eel_pre_response_certificates_are_frozen_and_offline():
     assert finalized["response_values_opened"] is False
     assert finalized["model_fits"] == 0
     assert finalized["heldout_scores"] == 0
+
+    assert committed_auth["status"] == finalized["status"]
+    assert committed_auth["fingerprint"] == finalized["fingerprint"]
+    assert committed_auth["full_freeze_spec_sha256"] == finalized["full_freeze_spec_sha256"]
+    assert committed_auth["header_certificate_sha256"] == finalized["header_certificate_sha256"]
+    assert committed_auth["stage1_certificate_sha256"] == finalized["stage1_certificate_sha256"]
+    assert committed_auth["section_fingerprints"] == finalized["section_fingerprints"]
+    assert committed_auth["outcome_access_gate_fingerprint"] == finalized["outcome_access_gate_fingerprint"]
+    assert committed_auth["predictive_complementarity_declaration_fingerprint"] == finalized["predictive_complementarity_declaration_fingerprint"]
