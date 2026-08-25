@@ -1,5 +1,9 @@
 import csv
+import os
+import subprocess
+import sys
 from dataclasses import replace
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -83,3 +87,13 @@ def test_runner_rejects_feature_order_and_duplicate_ids(tmp_path):
     _write(duplicate, [("same", "A", 1, 2), ("same", "B", 3, 4)])
     with pytest.raises(ValueError, match="duplicate row_id"):
         load_audited_csv(duplicate, manifest)
+
+
+def test_azores_yellow_eel_response_blind_stage1():
+    """Run the fresh candidate stage only on its dedicated PR branch."""
+    branch = os.environ.get("GITHUB_HEAD_REF") or os.environ.get("GITHUB_REF_NAME") or ""
+    if branch != "agent/azores-yellow-eel-fresh-paired":
+        pytest.skip("Azores yellow eel preflight is branch-scoped")
+    script = Path(__file__).resolve().parents[1] / "validation/azores_yellow_eel_paired_complementarity/run_stage1_preflight.py"
+    completed = subprocess.run([sys.executable, str(script)], check=False)
+    assert completed.returncode == 0
