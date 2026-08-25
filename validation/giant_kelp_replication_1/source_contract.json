@@ -1,0 +1,79 @@
+{
+  "schema": "eog.heterogeneous_replication_source_contract.v1",
+  "replication_id": "giant_kelp_southern_california_replication_1",
+  "selected_after_favorable_endpoint": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "selection_base_main": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+  "tracking_issue": 237,
+  "heterogeneity_role": "marine fixed-patch remotely observed metapopulation dynamics; distinct from aquatic acoustic telemetry",
+  "focal_taxon": "Macrocystis pyrifera",
+  "frozen_historical_endpoint": {
+    "source_issue_freeze": 237,
+    "period": "1996-2006",
+    "temporal_resolution": "semi-annual",
+    "expected_fixed_patch_count_from_selection_record": 469,
+    "endpoint": "recorded semi-annual canopy reappearance among source-semester recorded non-detections",
+    "interpretation": "observed canopy reappearance under the frozen remote-sensing observation process, not latent biological colonization"
+  },
+  "public_role_separation": {
+    "geometry": {
+      "edi_doi": "10.6073/pasta/97ef540ba3fc62dff50779533bb39466",
+      "package_id": "knb-lter-sbc.101.2",
+      "southern_california_file": "cavanaugh_etal_mpyrifera_patch_defs_southernCA_20160926.csv",
+      "edi_md5": "f71e2173ba4259fa776a0279cdd5e46a",
+      "public_snapshot_repository": "adrianstier/sbc-2026-kelp-metapopulation",
+      "public_snapshot_commit": "41522446660b7258802ad28965e2e2b02aecbb43",
+      "public_snapshot_git_blob_sha": "c29fdbefe9bf9a3e927ed279da84a668458ec63e",
+      "public_snapshot_size_bytes": 7530268,
+      "columns_documented": ["patch_number", "pixel_latitude", "pixel_longitude"],
+      "payload_access_allowed_pre_response": true
+    },
+    "response_and_process_timeseries": {
+      "edi_doi_frozen_by_issue_237": "10.6073/pasta/4c5a27154458ece5585384339eb0c2ee",
+      "portal_lineage_frozen_by_issue_237": "knb-lter-sbc.102",
+      "payload_access_allowed_pre_response": false,
+      "metadata_only_until_geometry_and_estimability_pass": true
+    },
+    "dispersal_process": {
+      "edi_doi_frozen_by_issue_237": "10.6073/pasta/d1107107e7c9ebc6476dfbe9e64eb6cb",
+      "payload_access_pre_response": "metadata_or_response-independent_process_only after package identity is verified"
+    }
+  },
+  "geometry_semantics": {
+    "analysis_node": "patch_number",
+    "coordinate_rule": "derive one response-independent patch coordinate from the spatial-definition pixels only; the exact centroid/medoid rule must be frozen before geometry payload computation",
+    "distance_metric": "haversine_km unless the independently released dispersal matrix supplies a prospectively frozen process-distance alternative",
+    "minimum_distinct_positive_structural_scales": 3,
+    "structural_lcc_targets": [0.25, 0.5, 0.75, 0.9],
+    "response_rows_may_not_define_or_filter_patch_registry": true
+  },
+  "paired_replication_boundary": {
+    "layer_b": "unchanged symmetric_world_support_summary_v1",
+    "same_strong_learner_both_arms": true,
+    "only_allowed_arm_difference": "the unchanged 10-feature Layer-B block",
+    "baseline_must_include": [
+      "response-independent patch geometry/size",
+      "strictly lagged canopy history",
+      "response-independent or strictly lagged source/fecundity terms",
+      "frozen dispersal/process covariates available identically to both arms"
+    ],
+    "primary_metric": "binary_log_loss",
+    "exact_count_minima": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_outer_units_with_both_classes": 4
+    },
+    "favorable_null_adverse_all_terminally_acceptable": true
+  },
+  "response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "next_gate": "verify the frozen 1996-2006 response/process package identities and exact role separation without opening row-level time-series response; then compute response-independent patch registry and structural-scale adequacy"
+}
