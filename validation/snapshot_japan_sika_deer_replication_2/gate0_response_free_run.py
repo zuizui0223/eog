@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import urllib.parse
 from pathlib import Path
 
 import gate0_response_free as gate
@@ -18,15 +19,28 @@ gate.HAB_ALIASES["subproject_name"] = ["subproject_name", "subprojectName"]
 def record_file_meta_current_zenodo(record: dict, filename: str):
     meta = ORIGINAL_RECORD_FILE_META(record, filename)
     if meta.get("content_url"):
+        meta["content_url_source"] = "links.content_current_zenodo_records_api"
         return meta
+
     matches = [f for f in record.get("files", []) if f.get("key") == filename]
     if len(matches) != 1:
         raise RuntimeError(f"record {record.get('id')} has {len(matches)} files named {filename}")
+
     self_url = matches[0].get("links", {}).get("self")
-    if not self_url:
-        raise RuntimeError(f"current Zenodo file object has neither links.content nor links.self for {filename}")
-    meta["content_url"] = self_url
-    meta["content_url_source"] = "links.self_current_zenodo_records_api"
+    if self_url:
+        meta["content_url"] = self_url
+        meta["content_url_source"] = "links.self_current_zenodo_records_api"
+        return meta
+
+    # Final response-independent transport fallback. The record ID and filename
+    # are already frozen in source_contract.json and the file MD5/size are
+    # verified from the authoritative Zenodo record metadata before this URL is
+    # used. This path is used only for deployments/habitats; the sequence
+    # response is never passed to fetch_known_supplement before full freeze.
+    record_id = int(record["id"])
+    quoted = urllib.parse.quote(filename, safe="")
+    meta["content_url"] = f"https://zenodo.org/records/{record_id}/files/{quoted}?download=1"
+    meta["content_url_source"] = "canonical_public_zenodo_record_file_url_from_frozen_record_id_and_filename"
     return meta
 
 
