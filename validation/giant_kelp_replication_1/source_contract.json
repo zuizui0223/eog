@@ -35,16 +35,19 @@
     },
     "dispersal_process": {
       "edi_doi_frozen_by_issue_237": "10.6073/pasta/d1107107e7c9ebc6476dfbe9e64eb6cb",
-      "payload_access_pre_response": "metadata_or_response-independent_process_only after package identity is verified"
+      "payload_access_pre_response": "metadata_or response-independent process only after package identity is verified"
     }
   },
   "geometry_semantics": {
     "analysis_node": "patch_number",
-    "coordinate_rule": "derive one response-independent patch coordinate from the spatial-definition pixels only; the exact centroid/medoid rule must be frozen before geometry payload computation",
-    "distance_metric": "haversine_km unless the independently released dispersal matrix supplies a prospectively frozen process-distance alternative",
+    "patch_coordinate_rule": "arithmetic mean pixel_latitude and arithmetic mean pixel_longitude across all spatial-definition Landsat pixel centers assigned to the patch",
+    "patch_size_rule": "pixel_count multiplied by 900 square metres; pixel_count comes only from the spatial-definition file",
+    "distance_metric": "haversine_km unless the independently released dispersal matrix later supplies a prospectively frozen process-distance alternative; geometry Gate 1 itself uses Haversine only",
+    "earth_radius_km": 6371.0088,
     "minimum_distinct_positive_structural_scales": 3,
     "structural_lcc_targets": [0.25, 0.5, 0.75, 0.9],
-    "response_rows_may_not_define_or_filter_patch_registry": true
+    "response_rows_may_not_define_or_filter_patch_registry": true,
+    "expected_geometry_columns_exact": ["patch_number", "pixel_latitude", "pixel_longitude"]
   },
   "paired_replication_boundary": {
     "layer_b": "unchanged symmetric_world_support_summary_v1",
@@ -75,5 +78,5 @@
     "model_fits": 0,
     "heldout_scores": 0
   },
-  "next_gate": "verify the frozen 1996-2006 response/process package identities and exact role separation without opening row-level time-series response; then compute response-independent patch registry and structural-scale adequacy"
+  "next_gate": "download only the response-independent Southern California patch-definition CSV from the frozen public snapshot, verify size and EDI MD5, require exact three-column schema, derive the frozen patch registry/coordinates/areas, require 469 nodes without response filtering, and test structural-scale diversity"
 }
