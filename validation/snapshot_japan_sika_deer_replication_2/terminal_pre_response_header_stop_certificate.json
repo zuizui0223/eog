@@ -1,0 +1,43 @@
+{
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.terminal_pre_response_header_stop_certificate.v1",
+  "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
+  "status": "stop_sequence_header_contract_mismatch",
+  "reason": "The exact physical sequences.csv header had 26 columns but differed from the prospectively frozen published schema in three spellings: animal_recognizable vs animal_recognisable, behavior vs behaviour, and license vs licence. The header contract explicitly forbade post-result schema repair, so the fresh endpoint terminates without opening any data row or response value.",
+  "gate0_status": "gate0_pass_response_free_source_registry_time_and_geometry_profile",
+  "gate0_fingerprint": "52bba54c562cc9b7eff58b537bb080deff685dca54f9b9d8106d3bc851c1b337",
+  "gate1_status": "gate1_pass_response_independent_time_and_structure",
+  "gate1_fingerprint": "1ef56f168b7cb0d55f4b170483e7723b03ea2c52377b4f4d8d604723f5a702a9",
+  "header_gate_fingerprint": "45c7c081f65ec976e267ef2d08b0d0a782ba56e263dd3db236ad241b9220670a",
+  "physical_header": {
+    "column_count": 26,
+    "raw_header_sha256": "9dc37c1f3d81444493075bf38a4d9a3079dfc5e55be868f980a50e6fbcc06cb3",
+    "content_disposition": "attachment;filename=\"oo_1165478.csv\"",
+    "content_type": "text/csv;charset=UTF-8",
+    "reported_content_length": 3757150,
+    "bytes_opened_through_first_line_terminator": 278,
+    "terminator": "CR",
+    "columns": ["project_id","deployment_id","sequence_id","is_blank","identified_by","wi_taxon_id","class","order","family","genus","species","common_name","uncertainty","start_time","end_time","group_size","age","sex","animal_recognizable","individual_id","individual_animal_notes","behavior","highlighted","markings","cv_confidence","license"]
+  },
+  "prospectively_frozen_mismatches": [
+    {"position": 19, "frozen": "animal_recognisable", "physical": "animal_recognizable"},
+    {"position": 22, "frozen": "behaviour", "physical": "behavior"},
+    {"position": 26, "frozen": "licence", "physical": "license"}
+  ],
+  "audit": {
+    "workflow_run_id": 32821443961,
+    "job_id": 97720233420,
+    "head_sha": "2fb92b42d8e53bf575352e2c373d430ab528d60b",
+    "artifact_id": 9553251485,
+    "artifact_digest": "sha256:540fc05f8d32253415bc46629f0dae530e155ab7563f82b2d6f2f1b1271efb3f"
+  },
+  "response_firewall": {
+    "sequence_header_get_requests": 1,
+    "sequence_header_bytes_opened": 278,
+    "sequence_data_row_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "freshness_boundary": "This candidate may not be repaired or relabelled as the same fresh endpoint by changing the three frozen header aliases after observing the physical header. A future independent endpoint must be selected prospectively."
+}
