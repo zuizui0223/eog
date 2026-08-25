@@ -1,0 +1,10 @@
+{
+  "schema": "eog.louisiana_marsh_bird_once_only_marker.v1",
+  "attempt_id": "southwest_louisiana_king_rail_site_occasion_fresh_paired_v1",
+  "full_freeze_spec_sha256": "cac01c5755ec4e775c58fad71f657256f11139fe53fef4bde04ad0b6fa51192c",
+  "production_preflight_fingerprint": "c8dc424e510da6c3136ecc3674a0c3345b0c0b830aae22795c8c3df9a4c6f02b",
+  "exact_count_gate_first": true,
+  "response_rows_opened_before_marker": false,
+  "rerun_permitted": false,
+  "authorization_fingerprint": "53c7f2bc4bfd6970adba3fe9a03df1feaeae042ac1dd1d6680ab5dec12ee5232"
+}
