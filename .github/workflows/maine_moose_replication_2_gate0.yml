@@ -1,0 +1,67 @@
+name: Maine moose replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/maine-moose-replication-2
+    paths:
+      - validation/maine_moose_replication_2/**
+      - .github/workflows/maine_moose_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile response-free profiler
+        run: python -m py_compile validation/maine_moose_replication_2/gate0_response_free_profile.py
+      - name: Run exact locations/visits profile
+        id: gate
+        continue-on-error: true
+        run: python validation/maine_moose_replication_2/gate0_response_free_profile.py
+      - name: Assert response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/maine_moose_replication_2/gate0_response_free_profile.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          assert a['annotations_payload_requests']==0
+          assert a['annotations_payload_bytes_opened']==0
+          assert a['annotations_rows_opened'] is False
+          assert a['annotations_values_opened'] is False
+          assert a['media_payload_requests']==0
+          assert a['modeloutputs_payload_requests']==0
+          assert a['taxa_payload_requests']==0
+          assert a['photo_zip_payload_requests']==0
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps({'status':r['status'],'reason':r['reason'],'locations':r['locations'],'visits':r['visits'],'fingerprint':r['fingerprint']}, indent=2, sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maine-moose-replication-2-gate0
+          path: build/maine_moose_replication_2/gate0_response_free_profile.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/maine_moose_replication_2/gate0_response_free_profile.json').read_text())
+          if r['status']=='engineering_failure_pre_response':
+              raise SystemExit(r['reason'])
+          print('Gate0 terminal status:', r['status'])
+          PY
