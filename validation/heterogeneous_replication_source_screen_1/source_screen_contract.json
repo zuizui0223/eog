@@ -1,0 +1,62 @@
+{
+  "schema": "eog.heterogeneous_replication_source_screen.v1",
+  "screen_id": "heterogeneous_replication_source_screen_1",
+  "selected_after_favorable_endpoint": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "selection_base_main": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+  "purpose": "choose the first genuinely unopened heterogeneous replication system using official metadata only; do not inspect any candidate response payload during this screen",
+  "history_gate": {
+    "giant_kelp": "excluded because PR #238 previously opened the physical response header",
+    "rhode_island_raccoon": "excluded because prior audit explicitly forbids relabeling the repaired attempt as fresh",
+    "bbs_wood_thrush_2000_2009": "excluded exact endpoint; PR #246 stopped with zero response bytes but froze this species/time/region attempt",
+    "candidate_history_searches": {
+      "big_thicket_p99z3uzu": "no EOG issue or PR match found before source screen",
+      "louisiana_marsh_birds_p9rriir2": "no EOG issue or PR match found before source screen"
+    }
+  },
+  "candidates": [
+    {
+      "candidate_id": "big_thicket_amphibian_reptile_2010_2018",
+      "official_doi": "10.5066/P99Z3UZU",
+      "sciencebase_item_id": "5eb58a3582ce25b5135ae793",
+      "known_temporal_coverage": ["2010-08-09", "2018-09-27"],
+      "heterogeneity_role": "terrestrial/freshwater amphibian-reptile repeated visual and acoustic monitoring",
+      "priority_if_role_separation_passes": 1
+    },
+    {
+      "candidate_id": "southwest_louisiana_secretive_marsh_birds_2012",
+      "official_doi": "10.5066/P9RRIIR2",
+      "sciencebase_item_id": "5ecf119d82ce30fd980854bd",
+      "known_design": "33 randomly selected sites, 11 species, 20 sampling occasions, February-June 2012; official description states site coordinates and sampling-information table exist",
+      "heterogeneity_role": "coastal wetland passive-acoustic repeated detection",
+      "priority_if_role_separation_passes": 2
+    }
+  ],
+  "selection_rule_frozen_before_metadata_fetch": [
+    "metadata-only ScienceBase item JSON must be publicly retrievable without authentication or challenge",
+    "candidate response payload files must not be opened during this screen",
+    "inventory must expose independently addressable file objects rather than only one mixed archive",
+    "prefer Big Thicket if metadata supports distinct response-independent site/geometry or survey-effort resources plus separately addressable biological response resources, because it supplies multi-year repetition",
+    "otherwise select Louisiana marsh birds only if its metadata exposes site/geometry and sampling-effort resources independently from species detection histories",
+    "if neither candidate has physical role separation, stop this screen and choose a new ecosystem rather than weakening the firewall"
+  ],
+  "metadata_access": {
+    "allowed_url_template": "https://www.sciencebase.gov/catalog/item/{item_id}?format=json",
+    "allowed_content": "top-level item JSON and embedded file metadata only",
+    "forbidden": [
+      "GET any file download URL",
+      "follow any file content URL",
+      "inspect CSV/ZIP/RDS/XLSX response bytes",
+      "compute species event counts",
+      "choose species from response prevalence"
+    ]
+  },
+  "response_firewall": {
+    "candidate_file_payload_requests": 0,
+    "candidate_file_payload_bytes_opened": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
