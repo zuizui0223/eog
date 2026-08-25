@@ -89,12 +89,13 @@ def test_runner_rejects_feature_order_and_duplicate_ids(tmp_path):
 
 
 def test_azores_yellow_eel_pre_response_certificates_are_frozen_and_offline():
-    """Validate committed pre-response evidence without reopening any remote data."""
+    """Validate committed pre-response evidence and authorization without remote access."""
     branch = os.environ.get("GITHUB_HEAD_REF") or os.environ.get("GITHUB_REF_NAME") or ""
     if branch != "agent/azores-yellow-eel-fresh-paired":
         pytest.skip("Azores yellow eel certificate check is branch-scoped")
 
-    root = Path(__file__).resolve().parents[1] / "validation/azores_yellow_eel_paired_complementarity"
+    repository_root = Path(__file__).resolve().parents[1]
+    root = repository_root / "validation/azores_yellow_eel_paired_complementarity"
     stage1 = json.loads((root / "stage1_certificate.json").read_text(encoding="utf-8"))
     header = json.loads((root / "header_certificate.json").read_text(encoding="utf-8"))
 
@@ -127,3 +128,20 @@ def test_azores_yellow_eel_pre_response_certificates_are_frozen_and_offline():
     assert header["response_values_opened"] is False
     assert header["model_fits"] == 0
     assert header["heldout_scores"] == 0
+
+    from validation.azores_yellow_eel_paired_complementarity.pre_response_finalize import main
+
+    main()
+    finalized = json.loads(
+        (repository_root / "build/azores_yellow_eel_pre_response/pre_response_finalize.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert finalized["status"] == "authorized_once_only_exact_count_gate_required"
+    assert len(finalized["required_freeze_keys"]) == 16
+    assert len(finalized["section_fingerprints"]) == 16
+    assert finalized["prospective_estimability_status"] == "uncertain_pre_response"
+    assert finalized["response_rows_opened"] is False
+    assert finalized["response_values_opened"] is False
+    assert finalized["model_fits"] == 0
+    assert finalized["heldout_scores"] == 0
