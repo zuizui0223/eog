@@ -1,0 +1,185 @@
+{
+  "schema": "eog.azores_yellow_eel_full_freeze.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "source_identity": {
+    "dataset_zenodo_record": 18154777,
+    "dataset_doi": "10.5281/zenodo.18154777",
+    "paper_doi": "10.1111/jfb.70355",
+    "analysis_repository": "PieterjanVerhelst/eel-azores-yellow",
+    "analysis_repository_ref": "v1.0",
+    "deployment_file": ["deployments.csv", "1ebf3a1d61e66a1d3e1b3b066c17489f", 86674],
+    "eel_metadata_file": ["flores_eels_meta_data.csv", "2046b013e4d74a27f8d2471d8cc75dbd", 13802],
+    "response_file": ["raw_detection_data.csv", "20253e15293f8f06472f393f050f7c4a", 159622396],
+    "source_code_blobs": {
+      "attach_release.R": "16f0ad2a3aeb53078263cfee1cc59c3a587e784e",
+      "remove_false.R": "ffd233f31f815de4129eca0086d98f74d3efaabe",
+      "explore_data.R": "2d5f12b894c666de7f4473c168a63624b32b81e1"
+    }
+  },
+  "response_identity": {
+    "physical_header": ["", "animal_project_code", "scientific_name", "date_time", "acoustic_tag_id", "station_name", "acoustic_project_code", "receiver_id", "deploy_latitude", "deploy_longitude"],
+    "physical_terminator": "LF",
+    "header_bytes_opened": 163,
+    "header_certificate_ci_run": 32798983182,
+    "header_certificate_ci_job": 97656001762,
+    "rows_opened_before_freeze": false,
+    "values_opened_before_freeze": false
+  },
+  "node_geometry": {
+    "node_rule": "AZO stations with exact names 148 FLO CRUZ through 157 FLO CRUZ inclusive",
+    "node_count": 10,
+    "coordinate_rule": "component-wise median deployment latitude and longitude per station",
+    "distance_metric": "haversine_km",
+    "earth_radius_km": 6371.0088,
+    "station_registry_fingerprint": "118a2a6333b8c4404596dd9346e68992986fa1c55ac2239d6a24ed8f611c3fcc",
+    "availability_fingerprint": "4bb9c7dc564f04287454a31c88cd5022231231f7093ae6973c1e46a0e83e2f2f"
+  },
+  "response_semantics": {
+    "endpoint": "receiver-week observed detection",
+    "positive_label": "at least one admissible retained yellow-eel detection at an eligible study receiver during the Monday-Sunday scored week",
+    "negative_label": "eligible receiver-week with zero admissible retained yellow-eel detections; interpreted only as observed non-detection, never biological absence",
+    "target_animal_project_code": "2021_YEELAZ",
+    "target_scientific_name": "Anguilla anguilla",
+    "tag_prefix_normalization": ["R64K", "A69-1303"],
+    "raw_tag_count": 37,
+    "excluded_non_yellow_tag": "A69-1303-2711",
+    "target_yellow_tag_count": 36,
+    "required_nonmissing_fields_stop_on_missing": ["animal_project_code", "scientific_name", "date_time", "acoustic_tag_id", "station_name", "acoustic_project_code"],
+    "ignored_fields_for_endpoint": ["", "receiver_id", "deploy_latitude", "deploy_longitude"],
+    "datetime_parser": "strip; replace terminal Z with +00:00; datetime.fromisoformat; any failure stops",
+    "project_or_species_mismatch_for_target_tag": "stop",
+    "rows_from_non_target_tags": "exclude by frozen cohort",
+    "rows_outside_148_157_study_stations": "exclude from endpoint",
+    "excluded_acoustic_project_codes": ["MOBEIA", "Walloneel", "FISHINTEL", "ws1", "FISP", "Danish_Straits", "BTN-IMEDEA", "FISHOWF", "GTN", "PTN/ATLAZUL"],
+    "excluded_tag_station_pairs": [["A69-1303-2692", "155 FLO CRUZ"], ["A69-1303-2698", "155 FLO CRUZ"], ["A69-1303-2699", "155 FLO CRUZ"], ["A69-1303-2706", "155 FLO CRUZ"], ["A69-1303-2707", "155 FLO CRUZ"], ["A69-1303-2713", "152 FLO CRUZ"], ["A69-1303-2714", "152 FLO CRUZ"], ["A69-1303-2715", "152 FLO CRUZ"], ["A69-1303-2716", "152 FLO CRUZ"], ["A69-1303-2717", "152 FLO CRUZ"], ["A69-1303-2719", "152 FLO CRUZ"]],
+    "no_additional_cleaning_after_rows_open": true
+  },
+  "temporal_split": {
+    "study_coverage_end": "2022-10-01",
+    "first_scored_week_start": "2021-10-18",
+    "full_scored_week_count": 49,
+    "calibration_week_count": 26,
+    "calibration_range": ["2021-10-18", "2022-04-11"],
+    "heldout_week_count": 23,
+    "heldout_range": ["2022-04-18", "2022-09-19"],
+    "primary_outer_units": [
+      ["2022-04-18", "2022-04-25", "2022-05-02", "2022-05-09"],
+      ["2022-05-16", "2022-05-23", "2022-05-30", "2022-06-06"],
+      ["2022-06-13", "2022-06-20", "2022-06-27", "2022-07-04"],
+      ["2022-07-11", "2022-07-18", "2022-07-25", "2022-08-01"],
+      ["2022-08-08", "2022-08-15", "2022-08-22", "2022-08-29"]
+    ],
+    "supplementary_terminal_heldout_weeks": ["2022-09-05", "2022-09-12", "2022-09-19"],
+    "receiver_week_effort": "eligible when union deployment coverage contains at least 5 calendar days in that Monday-Sunday week"
+  },
+  "count_gate": {
+    "must_be_first_outcome_dependent_operation_after_stream_parse_and_frozen_exclusions": true,
+    "calibration_events_min": 10,
+    "calibration_non_events_min": 40,
+    "heldout_events_min": 10,
+    "heldout_non_events_min": 40,
+    "primary_outer_units_with_both_classes_min": 4,
+    "count_failure": "terminal_zero_model_fits_zero_scores"
+  },
+  "process_source": {
+    "release_anchor_rule": "nearest study receiver to each retained tag release coordinate; fixed before response",
+    "release_anchor_station_count": 8,
+    "world_source_modes": ["observed_only", "release_persistence"],
+    "observed_only": "first scored week uses release anchors; later weeks use only receivers detected in the immediately previous scored week",
+    "release_persistence": "every scored week uses the union of fixed release anchors and immediately previous-week detected receivers",
+    "interpretation": "source modes are possibility hypotheses, not claims of true movement history"
+  },
+  "world_scale": {
+    "geometry_thresholds_km": [0.16883756567073582, 0.43884877739709754, 0.49919805227165576],
+    "deduplicated_geometry_world_count": 3,
+    "source_mode_count": 2,
+    "declared_world_count": 6,
+    "one_step_support": "source receiver plus every study receiver within the world's Haversine threshold",
+    "structural_ladder_fingerprint": "a33f00227f076c7043eef3cd2178bc7c49265b3e4d831b5fb2ba784934053bfa"
+  },
+  "structural_adequacy": {
+    "min_largest_weak_component_fraction": 0.9,
+    "max_isolated_node_fraction": 0.05,
+    "require_at_least_one_world_pass": true,
+    "most_spanning_world_passed": true,
+    "structural_audit_fingerprint": "1d8a8e6432c327feb56afbc7a7fb0dff292a96659b42bfba396ca9043777e49c",
+    "structural_gate_fingerprint": "91a8d817339f4f0cf6c854cd47f25acb9c59843b7f0504573faab5b644ada3cb"
+  },
+  "layer_a_rules": {
+    "prediction_update_order": "for week t compute world support and Layer B from worlds surviving through t-1; only after the week-t observed labels are known update survival for t+1",
+    "positive_falsification": "a surviving world is eliminated if any positive receiver in week t is unsupported by that world's pre-outcome week-t support",
+    "negative_falsification": "none; observed non-detection never eliminates a world",
+    "contraction": "monotone; eliminated worlds never return",
+    "all_worlds_eliminated": "terminal_structural_falsification_before_model_fit_or_score",
+    "exact_world_identity_retained_only_in_layer_a": true
+  },
+  "layer_b_representation": {
+    "representation_name": "symmetric_world_support_summary_v1",
+    "feature_names": ["surviving_world_fraction", "support_mean", "support_std", "support_min", "support_max", "support_q25", "support_q50", "support_q75", "positive_support_fraction", "support_range"],
+    "support_value": "binary one-step world support 0/1 for each receiver",
+    "computed_before_current_week_outcome_update": true,
+    "exact_world_ids_exposed_as_supervised_features": false
+  },
+  "comparators": {
+    "baseline": "frozen RandomForestClassifier on conventional_feature_names only",
+    "augmented": "same RandomForestClassifier on identical conventional_feature_names followed by the unchanged 10 Layer-B features",
+    "only_allowed_arm_difference": "Layer-B feature block",
+    "conventional_feature_names": [
+      "week_index", "week_index_squared", "week_sin", "week_cos",
+      "longitude_centered_km", "latitude_centered_km", "active_days",
+      "degree_geo1", "degree_geo2", "degree_geo3",
+      "release_anchor_tag_count", "nearest_release_anchor_distance_km", "release_anchor_exposure_geo3",
+      "previous_week_detected", "weeks_since_last_detection", "cumulative_prior_detected_weeks",
+      "previous_week_detected_receiver_count",
+      "previous_week_source_count_geo1", "previous_week_source_count_geo2", "previous_week_source_count_geo3",
+      "previous_week_source_exposure_geo1", "previous_week_source_exposure_geo2", "previous_week_source_exposure_geo3",
+      "cumulative_prior_global_detected_receiver_weeks"
+    ]
+  },
+  "preprocessing_model_fit": {
+    "runtime": {"python": "3.12", "numpy": "2.3.5", "scikit_learn": "1.8.0"},
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "hyperparameters": {"n_estimators": 1000, "max_features": "sqrt", "min_samples_leaf": 10, "class_weight": null, "random_state": 20260825, "n_jobs": 1},
+    "fit_policy": "fit exactly once per arm on all calibration receiver-weeks; no tuning; predict all heldout receiver-weeks once",
+    "week_index": "zero-based scored-week index",
+    "week_cycle": "sin/cos of 2*pi*week_index/52.1775",
+    "coordinate_center": "mean of the ten frozen station coordinates; longitude converted with cos(mean latitude)*111.32 km/degree and latitude with 110.574 km/degree",
+    "degree": "number of other study receivers within each frozen geometry threshold",
+    "release_anchor_tag_count": "number of 36 retained tags assigned to the focal receiver's nearest release anchor",
+    "nearest_release_anchor_distance_km": "minimum Haversine distance to any fixed release-anchor station",
+    "release_anchor_exposure_geo3": "sum over 36 retained tags exp(-distance(focal, tag anchor)/0.49919805227165576)",
+    "previous_week_detected": "0 in first scored week; otherwise previous receiver-week label",
+    "weeks_since_last_detection": "week_index+1 if never previously detected; otherwise current week_index minus most recent prior positive week_index",
+    "cumulative_prior_detected_weeks": "count of earlier positive weeks for focal receiver",
+    "previous_week_detected_receiver_count": "0 in first scored week; otherwise count of positive study receivers in immediately previous week",
+    "previous_week_source_count_geok": "count of immediately previous-week positive receivers at distance <= threshold k from focal receiver, including focal receiver when previously positive; 0 in first week",
+    "previous_week_source_exposure_geok": "sum exp(-distance/threshold k) over immediately previous-week positive receivers; 0 in first week",
+    "cumulative_prior_global_detected_receiver_weeks": "sum of all positive receiver-week labels strictly before the current week"
+  },
+  "metrics_decision": {
+    "primary_metric": "binary_log_loss",
+    "probability_clip": 0.000001,
+    "lower_is_better": true,
+    "primary_outer_unit_count": 5,
+    "favorable_min_augmented_wins": 3,
+    "adverse_min_baseline_wins": 3,
+    "tie_tolerance": 0.0,
+    "primary_macro": "unweighted mean of the five full four-week block log losses",
+    "supplementary": "pooled heldout log loss may include all 23 heldout weeks, including the terminal three weeks, but cannot change the primary status",
+    "terminal_statuses": ["favorable_complementary_added_value", "adverse_complementary_added_value", "no_confirmed_complementary_added_value"]
+  },
+  "runtime_runner": {
+    "response_access": "exactly one full HTTP GET of raw_detection_data.csv after authorization marker",
+    "response_identity_check": "verify Zenodo metadata name/size/md5 before GET and compute MD5 while streaming the sole response GET; any mismatch stops",
+    "streaming_rule": "parse CSV once; do not persist or reopen raw response; aggregate only frozen receiver-week positives plus audit counters",
+    "execution_order": ["verify frozen certificates and authorization", "load and fingerprint response-independent deployment/eel metadata", "single response stream and frozen parsing/exclusions", "verify streamed response MD5", "exact count gate", "if count pass build sequential Layer A/Layer B and conventional lagged features", "fit same frozen RF in two arms", "score five primary blocks", "evaluate frozen paired complementarity declaration", "write one terminal result"],
+    "rerun_after_any_row_open": false
+  },
+  "non_estimable_stop": {
+    "prospective_status_before_rows": "uncertain_pre_response",
+    "reason": "no public aggregate evidence exactly matches frozen receiver-week event/non-event and block-both-class counts",
+    "exact_count_gate_required": true,
+    "terminal_zero_fit_conditions": ["response parser/schema/token failure", "response MD5 mismatch", "exact count gate failure", "all Layer-A worlds eliminated before feature completion", "calibration response has fewer than two classes"],
+    "no_candidate_specific_rescue": true
+  }
+}
