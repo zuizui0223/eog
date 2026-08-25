@@ -1,5 +1,5 @@
 {
-  "schema": "eog.snapshot_japan_sika_deer_replication_2.source_contract.v2",
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.source_contract.v3",
   "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
   "issue": 297,
   "paper": {
@@ -33,8 +33,8 @@
     "description": "sequences.csv",
     "published_row_count": 18027,
     "zenodo_search_api_first": true,
-    "metadata_only_candidate_record_ids_if_search_unindexed": [15030967],
-    "candidate_basis": "supplement record series is prospectively observed as suppl1=15030965, suppl3=15030969, suppl4=15030971; 15030967 is checked only by record metadata and is accepted only if exact supplement DOI, title role and filename all match",
+    "metadata_only_candidate_record_id_range_if_search_unindexed": [15030960, 15030975],
+    "candidate_basis": "bounded metadata-only scan around the prospectively known supplement record block containing suppl1=15030965, suppl3=15030969 and suppl4=15030971; only record JSON is opened and a record is accepted only if exact supplement DOI, title role and filename all match",
     "payload_requests_before_full_freeze": 0,
     "header_bytes_before_full_freeze": 0,
     "rows_before_full_freeze": false,
