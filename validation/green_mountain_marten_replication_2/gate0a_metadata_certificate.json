@@ -1,0 +1,41 @@
+{
+  "schema": "eog.green_mountain_marten_replication_2.gate0a_metadata_certificate.v1",
+  "attempt_id": "green_mountain_marten_camera_oof_fresh_paired_v1",
+  "status": "gate0a_metadata_identity_pass_response_closed",
+  "sciencebase": {
+    "item_id": "663cdf96d34e77890839e178",
+    "doi": "10.5066/P1GVIBFL",
+    "title": "USDA Green Mountain National Forest Volume 1 (2016 - 2022)",
+    "date_start": "2016-11-28",
+    "date_end": "2022-12-31"
+  },
+  "response_independent_files": {
+    "locations.csv": {"size": 11562, "md5": "11d94de6ef9d9c4c0b40fd39fb029cff"},
+    "visits.csv": {"size": 62737, "md5": "e7d653bf7eb80c7f13efe726dcb108cb"},
+    "dbdictionary.csv": {"size": 63911, "md5": "aa348a45e6d7ee9ab1509e2f36d37408"}
+  },
+  "forbidden_response_files": {
+    "annotations.csv": {"size": 5911489, "md5": "4c304a72b0d215dcac212e78f23e981e"},
+    "media.csv": {"size": 9008975, "md5": "2fed7694e44d9ecc78d6079cb009b3f7"},
+    "taxa.csv": {"size": 19788, "md5": "d9472e8d2697a63220e1e98c2cbbe593"}
+  },
+  "gate0a": {
+    "workflow_run_id": 32861133725,
+    "job_id": 97845123083,
+    "head_sha": "cd6c23833f3e4578da27872f9d76bce149c8be34",
+    "result_fingerprint": "17db4501c2977714bb3efcf2b3de94f0b3073d495eee642d71ab115432ea9d11",
+    "artifact_id": 9568186137,
+    "artifact_digest": "sha256:10bb8c3c01377b322f2f79917f2f95d5449432d7fea4b96554a8484f8e3ba9e7"
+  },
+  "response_firewall": {
+    "file_payload_requests": 0,
+    "file_payload_bytes_opened": 0,
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotations_header_opened": false,
+    "annotations_rows_opened": false,
+    "annotations_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
