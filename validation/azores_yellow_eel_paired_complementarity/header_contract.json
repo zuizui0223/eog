@@ -1,0 +1,41 @@
+{
+  "schema": "eog.azores_yellow_eel_response_header_contract.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "stage1_certificate_required_status": "stage1_registry_availability_and_structural_pass",
+  "response_source": {
+    "zenodo_record_id": 18154777,
+    "file_name": "raw_detection_data.csv",
+    "md5": "20253e15293f8f06472f393f050f7c4a",
+    "size": 159622396
+  },
+  "prospective_header_basis": {
+    "repository": "PieterjanVerhelst/eel-azores-yellow",
+    "ref": "v1.0",
+    "source_path": "src/download_data.R",
+    "basis": "the public code selects exactly nine detection columns in this order and writes the data with base R write.csv(), whose default row.names=TRUE creates the leading empty CSV header field"
+  },
+  "expected_physical_header": [
+    "",
+    "animal_project_code",
+    "scientific_name",
+    "date_time",
+    "acoustic_tag_id",
+    "station_name",
+    "acoustic_project_code",
+    "receiver_id",
+    "deploy_latitude",
+    "deploy_longitude"
+  ],
+  "firewall": {
+    "maximum_first_physical_record_bytes": 4096,
+    "read_unit_bytes": 1,
+    "accepted_terminators": ["CR", "LF"],
+    "stop_at_first_terminator": true,
+    "do_not_read_crlf_second_byte_after_cr": true,
+    "row_level_response_access_allowed": false,
+    "response_values_access_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "failure_rule": "any physical-header mismatch, missing delimiter within 4096 bytes, source identity change, or non-UTF-8 first record is terminal for this fresh attempt; no alias repair or header normalization is authorized"
+}
