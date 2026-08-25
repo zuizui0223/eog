@@ -8,6 +8,12 @@ import gate0_response_free as gate
 CERT_PATH = Path(__file__).resolve().parent / "pensoft_xml_sequence_identity_certificate.json"
 ORIGINAL_RECORD_FILE_META = gate.record_file_meta
 
+# Response-independent schema decision: Snapshot arrays are represented by the
+# published Camtrap DP subproject_name field. project_id may coexist in the same
+# deployment table but is not an alias for array identity in this replication.
+gate.DEP_ALIASES["subproject_name"] = ["subproject_name", "subprojectName"]
+gate.HAB_ALIASES["subproject_name"] = ["subproject_name", "subprojectName"]
+
 
 def record_file_meta_current_zenodo(record: dict, filename: str):
     meta = ORIGINAL_RECORD_FILE_META(record, filename)
