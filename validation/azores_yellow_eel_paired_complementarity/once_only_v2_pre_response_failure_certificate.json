@@ -1,0 +1,37 @@
+{
+  "schema": "eog.azores_yellow_eel_once_only_v2_pre_response_failure_certificate.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "authoritative_ci": {
+    "workflow": "Azores yellow eel once-only outcome gate",
+    "run_id": 32805743264,
+    "job_id": 97675385735,
+    "head_sha": "d1ffc8d2def2881270e8d527b58440f90c1db7dc",
+    "run_number": 2,
+    "conclusion": "failure"
+  },
+  "status": "terminal_pre_response_hash_semantics_failure",
+  "marker_v2_consumed": true,
+  "failure": {
+    "failed_step": "Verify v2 marker-bound code and certificates",
+    "outcome_execution_step": "skipped",
+    "message": "full-freeze file SHA-256 mismatch",
+    "diagnosis": "full_freeze_spec_sha256 is the canonical JSON semantic SHA-256 emitted by pre_response_finalize.py, but the v2 workflow compared it to the SHA-256 of raw file bytes; raw file identity was already independently bound by the Git blob SHA",
+    "canonical_hash_source": "pre_response_finalize.py canonical_sha256(spec)",
+    "raw_identity_source": "Git hash-object / full_freeze_spec_git_blob_sha"
+  },
+  "response_firewall_at_terminal": {
+    "response_execution_step_started": false,
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "primary_outer_units_scored": 0
+  },
+  "repair_boundary": {
+    "response_was_opened": false,
+    "scientific_freeze_changed": false,
+    "allowed_repair": "use the same canonical JSON hash semantics as pre_response_finalize.py for the semantic fingerprint while retaining Git blob SHA as the raw-file identity check; validate the verifier offline before any new marker",
+    "forbidden": "rerun v1 or v2 markers or change endpoint, split, features, learner, worlds, thresholds, count minima, or decision rule"
+  }
+}
