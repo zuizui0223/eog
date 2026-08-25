@@ -98,6 +98,7 @@ def test_azores_yellow_eel_pre_response_certificates_are_frozen_and_offline():
     root = repository_root / "validation/azores_yellow_eel_paired_complementarity"
     stage1 = json.loads((root / "stage1_certificate.json").read_text(encoding="utf-8"))
     header = json.loads((root / "header_certificate.json").read_text(encoding="utf-8"))
+    full_freeze = json.loads((root / "full_freeze_spec.json").read_text(encoding="utf-8"))
 
     assert stage1["attempt_id"] == header["attempt_id"] == "azores_yellow_eel_receiver_week_fresh_paired_v1"
     assert stage1["status"] == "stage1_registry_availability_and_structural_pass"
@@ -108,6 +109,9 @@ def test_azores_yellow_eel_pre_response_certificates_are_frozen_and_offline():
     assert stage1["temporal_availability"]["heldout_week_count"] == 23
     assert stage1["temporal_availability"]["full_four_week_heldout_block_count"] == 5
     assert stage1["structure"]["deduplicated_geometry_world_count"] == 3
+    stage1_availability = stage1["temporal_availability"]["availability_fingerprint"]
+    assert len(stage1_availability) == 64
+    assert stage1_availability == full_freeze["node_geometry"]["availability_fingerprint"]
     assert stage1["response_firewall"] == {
         "response_payload_requests": 0,
         "response_payload_bytes_opened": 0,
