@@ -1,0 +1,217 @@
+{
+  "schema": "eog.fresh_paired_candidate_source_contract.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "selection_boundary": {
+    "selected_after_main_commit": "45f45b30d19f043db1383fb4893fa53b92b4ebee",
+    "tracking_issue": 289,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_anchor": {
+    "paper_doi": "10.1111/jfb.70355",
+    "dataset_record": 18154777,
+    "dataset_doi": "10.5281/zenodo.18154777",
+    "analysis_software_doi": "10.5281/zenodo.18154674",
+    "analysis_repository": "PieterjanVerhelst/eel-azores-yellow",
+    "analysis_repository_ref": "v1.0",
+    "dataset_temporal_coverage_end": "2022-10-01",
+    "focal_taxon": "Anguilla anguilla",
+    "endpoint": "receiver-week observed detection among response-independently active study receivers",
+    "forbidden_endpoint": "movement to a different receiver; the paper already reports zero valid between-receiver movements"
+  },
+  "public_files": {
+    "deployment": {
+      "name": "deployments.csv",
+      "md5": "1ebf3a1d61e66a1d3e1b3b066c17489f",
+      "payload_access_allowed_pre_response": true
+    },
+    "eel_metadata": {
+      "name": "flores_eels_meta_data.csv",
+      "md5": "2046b013e4d74a27f8d2471d8cc75dbd",
+      "payload_access_allowed_pre_response": true
+    },
+    "response": {
+      "name": "raw_detection_data.csv",
+      "md5": "20253e15293f8f06472f393f050f7c4a",
+      "payload_access_allowed_pre_response": false,
+      "header_access_allowed_only_after_stage1_pass": true
+    }
+  },
+  "published_code_provenance": {
+    "attach_release": {
+      "path": "src/attach_release.R",
+      "git_blob_sha": "16f0ad2a3aeb53078263cfee1cc59c3a587e784e"
+    },
+    "remove_false": {
+      "path": "src/remove_false.R",
+      "git_blob_sha": "ffd233f31f815de4129eca0086d98f74d3efaabe"
+    },
+    "explore_data": {
+      "path": "src/explore_data.R",
+      "git_blob_sha": "2d5f12b894c666de7f4473c168a63624b32b81e1"
+    }
+  },
+  "predeclared_source_processing": {
+    "tag_prefix_normalization": {
+      "from": "R64K",
+      "to": "A69-1303"
+    },
+    "excluded_non_yellow_tag": "A69-1303-2711",
+    "excluded_acoustic_project_codes": [
+      "MOBEIA",
+      "Walloneel",
+      "FISHINTEL",
+      "ws1",
+      "FISP",
+      "Danish_Straits",
+      "BTN-IMEDEA",
+      "FISHOWF",
+      "GTN",
+      "PTN/ATLAZUL"
+    ],
+    "excluded_tag_station_pairs": [
+      ["A69-1303-2692", "155 FLO CRUZ"],
+      ["A69-1303-2698", "155 FLO CRUZ"],
+      ["A69-1303-2699", "155 FLO CRUZ"],
+      ["A69-1303-2706", "155 FLO CRUZ"],
+      ["A69-1303-2707", "155 FLO CRUZ"],
+      ["A69-1303-2713", "152 FLO CRUZ"],
+      ["A69-1303-2714", "152 FLO CRUZ"],
+      ["A69-1303-2715", "152 FLO CRUZ"],
+      ["A69-1303-2716", "152 FLO CRUZ"],
+      ["A69-1303-2717", "152 FLO CRUZ"],
+      ["A69-1303-2719", "152 FLO CRUZ"]
+    ],
+    "no_additional_response_cleaning_after_row_access": true
+  },
+  "deployment_semantics": {
+    "expected_physical_header": [
+      "",
+      "acoustic_project_code",
+      "station_name",
+      "receiver_id",
+      "deploy_latitude",
+      "deploy_longitude",
+      "deploy_date_time",
+      "recover_date_time"
+    ],
+    "study_station_rule": "strip station_name outer whitespace; retain acoustic_project_code == AZO and station integer prefix 148 through 157 inclusive with exact suffix FLO CRUZ",
+    "expected_study_station_count": 10,
+    "coordinate_rule": "component-wise median deploy_latitude/deploy_longitude across all deployments of the study station",
+    "active_interval_rule": "inclusive calendar dates from deploy_date_time through recover_date_time; missing recovery is treated as open only up to the predeclared study coverage end",
+    "receiver_week_minimum_active_days": 5,
+    "distance_metric": "haversine_km",
+    "earth_radius_km": 6371.0088,
+    "structural_lcc_targets": [0.25, 0.5, 0.75, 0.9],
+    "minimum_distinct_positive_thresholds": 3,
+    "deduplicate_identical_structural_adjacencies": true,
+    "adequacy_min_largest_weak_component_fraction": 0.9,
+    "adequacy_max_isolated_node_fraction": 0.05
+  },
+  "eel_metadata_semantics": {
+    "expected_physical_header": [
+      "",
+      "animal_project_code",
+      "scientific_name",
+      "acoustic_tag_id",
+      "capture_date_time",
+      "capture_location",
+      "capture_latitude",
+      "capture_longitude",
+      "capture_method",
+      "release_date_time",
+      "release_location",
+      "release_latitude",
+      "release_longitude",
+      "length1_type",
+      "length1",
+      "length1_unit",
+      "length2_type",
+      "length2",
+      "length2_unit",
+      "length3_type",
+      "length3",
+      "length3_unit",
+      "length4_type",
+      "length4",
+      "length4_unit",
+      "weight",
+      "weight_unit",
+      "age",
+      "age_unit",
+      "sex",
+      "life_stage",
+      "treatment_type"
+    ],
+    "required_animal_project_code": "2021_YEELAZ",
+    "required_scientific_name": "Anguilla anguilla",
+    "expected_raw_tag_records": 37,
+    "expected_yellow_target_tags_after_predeclared_exclusion": 36,
+    "release_source_rule": "for each retained yellow tag, assign the response-independent nearest study receiver to its release latitude/longitude; the unique assigned receiver set is the frozen release-anchor source set",
+    "latest_release_rule": "maximum release_date_time across the 36 predeclared yellow target tags"
+  },
+  "temporal_design": {
+    "first_scored_week_rule": "first ISO Monday strictly after the calendar date of the latest retained yellow-eel release",
+    "study_coverage_end": "2022-10-01",
+    "full_week_rule": "retain only Monday-Sunday weeks fully contained on or before study_coverage_end",
+    "calibration_full_weeks": 26,
+    "heldout_rule": "all subsequent full study weeks after the first 26 calibration weeks",
+    "heldout_outer_unit": "consecutive four-week blocks starting at the first heldout week; a terminal block shorter than four weeks is excluded from the block-win decision but may remain in the pooled heldout log loss",
+    "exact_count_minima": {
+      "calibration_events": 10,
+      "calibration_non_events": 40,
+      "heldout_events": 10,
+      "heldout_non_events": 40,
+      "heldout_full_four_week_blocks_with_both_classes": 4
+    }
+  },
+  "source_process_boundary": {
+    "observed_sources": "study receivers with observed detection in the immediately previous scored week",
+    "hidden_persistence_source_world": "retain the response-independent release-anchor receiver set as a permissive source possibility so weekly non-detection is never equated to biological absence",
+    "interpretation": "release anchors and observed sources define possibilities for the finite world set; no surviving world is identified as historical movement truth"
+  },
+  "paired_endpoint_boundary": {
+    "learner_family": "sklearn.ensemble.RandomForestClassifier",
+    "same_learner_both_arms": true,
+    "planned_hyperparameters": {
+      "n_estimators": 1000,
+      "max_features": "sqrt",
+      "min_samples_leaf": 10,
+      "class_weight": null,
+      "random_state": 20260825,
+      "n_jobs": 1
+    },
+    "primary_metric": "binary_log_loss",
+    "probability_clip": 0.000001,
+    "layer_b": "unchanged symmetric_world_support_summary_v1",
+    "baseline_conventional_feature_boundary": [
+      "receiver geometry and response-independent active-day effort",
+      "calendar week index and cyclic season terms",
+      "previous-week observed detection at the focal receiver",
+      "strictly lagged rolling detection history",
+      "previous-week observed source count and distance summaries",
+      "response-independent release-anchor exposure"
+    ],
+    "favorable_null_adverse_all_terminally_acceptable": true
+  },
+  "stage_boundary": {
+    "stage1_allowed": [
+      "Zenodo record metadata",
+      "deployments.csv payload",
+      "flores_eels_meta_data.csv payload"
+    ],
+    "response_header_allowed": false,
+    "response_payload_allowed": false,
+    "outcome_access_authorized": false
+  },
+  "no_rescue_rules": [
+    "do not alter the 148-157 study receiver registry after deployment access",
+    "do not use response rows to add or remove receivers or tags",
+    "do not switch to between-receiver movement as an endpoint",
+    "do not add, delete, or alter the published false-positive exclusions after response access",
+    "do not change split, count minima, learner family, score metric, or Layer B after response access"
+  ]
+}
