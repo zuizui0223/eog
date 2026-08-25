@@ -1,0 +1,53 @@
+name: Louisiana marsh-bird replication 1 Gate1
+
+on:
+  push:
+    branches:
+      - agent/louisiana-marsh-bird-heterogeneous-replication-1
+    paths:
+      - "validation/louisiana_marsh_bird_replication_1/**"
+      - ".github/workflows/louisiana_marsh_bird_replication_1_gate1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  geometry-temporal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package surface
+        run: python -m pip install .
+      - name: Run response-blind geometry and temporal gate
+        run: python validation/louisiana_marsh_bird_replication_1/run_gate1_geometry_temporal.py
+      - name: Assert structural diversity and biological response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/louisiana_marsh_bird_replication_1/gate1_geometry_temporal.json')
+          r = json.loads(p.read_text())
+          a = r['audit']
+          assert r['status'] == 'response_blind_geometry_and_temporal_split_pass'
+          assert r['site_registry']['site_count'] == 33
+          assert len(r['geometry']['distinct_positive_thresholds_km']) >= 3
+          assert len(r['temporal']['calibration_sample_periods']) == 12
+          assert len(r['temporal']['heldout_sample_periods']) == 8
+          assert a['biological_response_payload_requests'] == 0
+          assert a['biological_response_payload_bytes_opened'] == 0
+          assert a['biological_response_header_bytes_opened'] == 0
+          assert a['biological_response_rows_opened'] is False
+          assert a['biological_response_values_opened'] is False
+          assert a['model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps(r, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: louisiana-marsh-bird-replication-1-gate1
+          path: build/louisiana_marsh_bird_replication_1/gate1_geometry_temporal.json
+          if-no-files-found: error
