@@ -1,0 +1,45 @@
+{
+  "schema": "eog.big_thicket_heterogeneous_replication_source_contract.v1",
+  "replication_id": "big_thicket_amphibian_reptile_heterogeneous_replication_1",
+  "tracking_issue": 291,
+  "selected_after_favorable_endpoint": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "selection_screen": {
+    "run_id": 32809048159,
+    "job_id": 97684744901,
+    "metadata_screen_fingerprint": "7a97c73633742942272b53aec4bf065028f23725f9cb8ed104603c531ca2df6b",
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0
+  },
+  "official_source": {
+    "doi": "10.5066/P99Z3UZU",
+    "sciencebase_item_id": "5eb58a3582ce25b5135ae793",
+    "sciencebase_item_metadata_sha256": "ad11e8ded8fc792f68b5514f296701330b05f79318e50de9022e1988823d493c",
+    "temporal_coverage": ["2010-08-09", "2018-09-27"]
+  },
+  "pre_response_asset_identities": {
+    "Site Locations.csv": {"md5": "2394ec8b153d744d7edf8573a1b39b28", "bytes": 3819, "role": "response-independent site geometry", "access": "full payload allowed"},
+    "Sample Matrix.csv": {"md5": "54a9216d89eaf4604a13f35016c5dd3f", "bytes": 2481, "role": "candidate survey availability matrix; role must be confirmed from bounded header before rows", "access": "physical header only"},
+    "Sample Data.csv": {"md5": "370c5a177e7ae5bf367c6d3a2adce466", "bytes": 175387, "role": "candidate survey effort/covariate table; role must be confirmed from bounded header before rows", "access": "physical header only"},
+    "Observations.csv": {"md5": "bfdd25d8464521aa59692b6373cbc5a5", "bytes": 379997, "role": "potential biological response", "access": "forbidden before final response freeze"},
+    "Vocalizations.csv": {"md5": "c5222c6904e1f3e68ef8e33b380bf573", "bytes": 110118, "role": "potential biological/acoustic response", "access": "forbidden before final response freeze"}
+  },
+  "current_gate": {
+    "site_locations": "open full payload once, verify exact MD5/size, report schema and response-independent site registry/coordinates",
+    "sample_matrix": "read one byte at a time and stop at first CR or LF; maximum 4096 header bytes; no row/value access",
+    "sample_data": "read one byte at a time and stop at first CR or LF; maximum 4096 header bytes; no row/value access",
+    "geometry": "do not define coordinate field mapping until Site Locations physical schema is observed; once observed it must be frozen before structural ladder computation"
+  },
+  "focal_species": {
+    "status": "not_selected",
+    "rule": "must be selected later by an external response-independent rule; response prevalence/event counts are forbidden"
+  },
+  "response_firewall": {
+    "biological_response_payload_requests": 0,
+    "biological_response_payload_bytes_opened": 0,
+    "biological_response_header_bytes_opened": 0,
+    "biological_response_rows_opened": false,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
