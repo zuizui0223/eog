@@ -1,0 +1,58 @@
+{
+  "schema": "eog.white_mountain_camera_replication_2.gate0_certificate.v1",
+  "attempt_id": "white_mountain_nf_camera_2014_2024_fresh_paired_v1",
+  "status": "gate0_response_free_locations_visits_profile_complete",
+  "fingerprint": "52539bd307e377b401072c3e7a843ae5079f9f6cf62607eab60c45baa1a331e7",
+  "locations": {
+    "file": "locations.csv",
+    "rows": 103,
+    "bytes": 13229,
+    "md5": "7a0685f295b6e8fd509ef7a91d201c56",
+    "sha256": "e5197d1e420910d0a18921d847ee215e61e9f49adeefa8d34048f98eec572194",
+    "primary_key": "pk_locationid",
+    "unique_primary_keys": 103,
+    "direct_lat_long_nonempty": 0,
+    "bounded_geometry_nonempty_locations": 102,
+    "bounded_geometry_columns": ["lat_min","lat_max","long_min","long_max"]
+  },
+  "visits": {
+    "file": "visits.csv",
+    "rows": 1095,
+    "bytes": 136586,
+    "md5": "8bb801452bb54b8bdce930b99b99fa65",
+    "sha256": "6e8267c67bc6f64aef72753696a4a237a5729cd8cab40e97922181ab68a518e3",
+    "primary_key": "pk_visitid",
+    "unique_primary_keys": 1095,
+    "location_foreign_key": "fk_locationid",
+    "unique_visited_location_ids": 101,
+    "visit_date_nonempty": 1095,
+    "visit_date_unique": 469,
+    "visit_time_nonempty": 1095,
+    "visit_type_values": ["check","pull","set"]
+  },
+  "audit": {
+    "workflow_run_id": 32822699057,
+    "job_id": 97724037189,
+    "head_sha": "03ca6a7ed5855ae8b6966be338b7e6c1c6fda71b",
+    "artifact_id": 9553704605,
+    "artifact_digest": "sha256:1671a9081c6980edd27262570b145ed657ed71e1b2b8146d657ac33501bd2b98"
+  },
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotationverifications_payload_requests": 0,
+    "annotationverifications_payload_bytes_opened": 0,
+    "media_payload_requests": 0,
+    "media_payload_bytes_opened": 0,
+    "taxa_payload_requests": 0,
+    "taxa_payload_bytes_opened": 0,
+    "modeloutputs_payload_requests": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "other_response_payload_requests": 0,
+    "other_response_payload_bytes_opened": 0,
+    "photo_zip_payload_requests": 0,
+    "photo_zip_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
