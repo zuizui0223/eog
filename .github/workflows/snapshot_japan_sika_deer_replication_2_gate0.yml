@@ -20,11 +20,13 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile response-free Gate0
-        run: python -m py_compile validation/snapshot_japan_sika_deer_replication_2/gate0_response_free.py
+        run: |
+          python -m py_compile validation/snapshot_japan_sika_deer_replication_2/gate0_response_free.py
+          python -m py_compile validation/snapshot_japan_sika_deer_replication_2/gate0_response_free_run.py
       - name: Run response-free deployment / habitat gate
         id: gate
         continue-on-error: true
-        run: python validation/snapshot_japan_sika_deer_replication_2/gate0_response_free.py
+        run: python validation/snapshot_japan_sika_deer_replication_2/gate0_response_free_run.py
       - name: Assert sequence response firewall
         if: always()
         run: |
