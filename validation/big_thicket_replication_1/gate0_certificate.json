@@ -1,0 +1,50 @@
+{
+  "schema": "eog.big_thicket_gate0_certificate.v1",
+  "replication_id": "big_thicket_amphibian_reptile_heterogeneous_replication_1",
+  "authoritative_ci": {
+    "workflow": "Big Thicket replication 1 Gate0",
+    "run_id": 32809207206,
+    "job_id": 97685194390,
+    "head_sha": "1ce2f08a53cb1c985a0d951463ac8fe45636c1fb",
+    "conclusion": "success",
+    "artifact_id": 9549203293,
+    "artifact_zip_sha256": "c194ad89ce1a33634e2b27c038ce89b31d8644eef38de80ca3411590d29d1ada"
+  },
+  "status": "response_blind_site_registry_and_sampling_headers_pass",
+  "gate0_fingerprint": "8b2fe01ee47dd247ca258df625e803302a4f890894ad26831a5c14c674816f0a",
+  "site_registry": {
+    "file": "Site Locations.csv",
+    "md5": "2394ec8b153d744d7edf8573a1b39b28",
+    "bytes": 3819,
+    "physical_header": ["Site_Number", "Management_Unit", "Latitude", "Longitude"],
+    "row_count": 52,
+    "registry_row_fingerprint": "f11509a550260764651d77a0424f0dfaae2abdb8aa9d14bbb9679f7741e54007",
+    "closed_node_ids": ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52"]
+  },
+  "sampling_headers": {
+    "Sample Matrix.csv": {
+      "md5": "54a9216d89eaf4604a13f35016c5dd3f",
+      "bytes": 2481,
+      "header_bytes_opened": 174,
+      "terminator": "CR",
+      "physical_header": ["Site_Number","2010_SampleCount","2011_SampleCount","2012_SampleCount","2013_SampleCount","2014_SampleCount","2015_SampleCount","2016_SampleCount","2017_SampleCount","2018_SampleCount","Comments"]
+    },
+    "Sample Data.csv": {
+      "md5": "370c5a177e7ae5bf367c6d3a2adce466",
+      "bytes": 175387,
+      "header_bytes_opened": 189,
+      "terminator": "CR",
+      "physical_header": ["Survey_ID","Date","Site_Number","Personnel_Code","Sample","Salinity","Start_Time","End_Time","Start_Time","End_Time","Air_Temp","Humidity","Wind","Water_Temp","Backwater_Salinity","Backwater_Water_Temp","Weather","Comments"],
+      "duplicate_physical_names": {"Start_Time": 2, "End_Time": 2}
+    }
+  },
+  "response_firewall": {
+    "biological_response_payload_requests": 0,
+    "biological_response_payload_bytes_opened": 0,
+    "biological_response_header_bytes_opened": 0,
+    "biological_response_rows_opened": false,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
