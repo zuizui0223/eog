@@ -27,7 +27,21 @@ def get_page(url: str):
     )
     with urllib.request.urlopen(req, timeout=60) as r:
         raw = r.read()
-        return raw, r.geturl(), r.headers.get("Content-Type"), r.headers.get("Content-Length")
+        return raw, r.geturl(), dict(r.headers.items())
+
+
+def head_only(url: str):
+    req = urllib.request.Request(
+        url,
+        method="HEAD",
+        headers={
+            "User-Agent": "Mozilla/5.0 EOG-SnapshotJapan-metadata-diagnostic/1.0",
+            "Accept": "text/csv,application/octet-stream,*/*;q=0.1",
+            "Referer": "https://bdj.pensoft.net/",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=60) as r:
+        return r.geturl(), dict(r.headers.items())
 
 
 def canonical(obj):
@@ -36,14 +50,16 @@ def canonical(obj):
 
 def main():
     result = {
-        "schema": "eog.snapshot_japan_sika_deer_replication_2.pensoft_sequence_identity_diag.v1",
+        "schema": "eog.snapshot_japan_sika_deer_replication_2.pensoft_sequence_identity_diag.v2",
         "attempt_id": CONTRACT["attempt_id"],
         "status": "engineering_failure_pre_response",
         "reason": None,
         "landing": {},
         "candidate_links": [],
+        "direct_supplement_head": {},
         "response_firewall": {
-            "sequence_payload_requests": 0,
+            "sequence_http_head_requests": 0,
+            "sequence_payload_get_requests": 0,
             "sequence_payload_bytes_opened": 0,
             "sequence_csv_header_bytes_opened": 0,
             "sequence_rows_opened": False,
@@ -54,7 +70,7 @@ def main():
     }
     try:
         doi_url = "https://doi.org/" + RESP["supplement_doi"]
-        raw, final_url, ctype, clen = get_page(doi_url)
+        raw, final_url, headers = get_page(doi_url)
         netloc = urllib.parse.urlparse(final_url).netloc.lower()
         if not netloc.endswith("pensoft.net"):
             raise RuntimeError(f"supplement DOI did not resolve to Pensoft: {final_url}")
@@ -72,24 +88,47 @@ def main():
         result["landing"] = {
             "doi_url": doi_url,
             "final_url": final_url,
-            "content_type": ctype,
-            "reported_content_length": clen,
+            "content_type": headers.get("Content-Type"),
             "html_bytes": len(raw),
             "html_sha256": hashlib.sha256(raw).hexdigest(),
             "expected_filename_mentions": filename_mentions,
             "supplement_doi_mentions": doi_mentions,
         }
         result["candidate_links"] = candidates
-        exact_filename_links = [u for u in candidates if RESP["filename"].lower() in u.lower()]
-        if len(exact_filename_links) == 1:
-            result["status"] = "pensoft_landing_resolves_unique_exact_sequence_file_link"
-            result["reason"] = "supplement DOI landing metadata exposes exactly one link containing the frozen sequence filename; sequence file bytes remain unopened"
-        elif filename_mentions > 0:
-            result["status"] = "pensoft_landing_mentions_sequence_file_but_no_unique_direct_link"
-            result["reason"] = "landing HTML names the frozen sequence file but does not expose one unique direct file link"
+
+        direct = [u for u in candidates if "/article/download/suppl/" in u.lower()]
+        if filename_mentions <= 0 or doi_mentions <= 0 or len(direct) != 1:
+            result["status"] = "stop_pensoft_landing_does_not_resolve_unique_direct_sequence_endpoint"
+            result["reason"] = (
+                "supplement DOI landing did not jointly provide the frozen filename, DOI and exactly one direct supplement endpoint; "
+                "sequence payload remained unopened"
+            )
         else:
-            result["status"] = "stop_pensoft_landing_does_not_resolve_frozen_sequence_identity"
-            result["reason"] = "supplement DOI landing HTML does not expose the frozen sequence filename or one unambiguous direct link; no sequence payload was opened"
+            head_url, head_headers = head_only(direct[0])
+            result["response_firewall"]["sequence_http_head_requests"] = 1
+            disp = head_headers.get("Content-Disposition") or head_headers.get("content-disposition")
+            ctype = head_headers.get("Content-Type") or head_headers.get("content-type")
+            clen = head_headers.get("Content-Length") or head_headers.get("content-length")
+            etag = head_headers.get("ETag") or head_headers.get("etag")
+            result["direct_supplement_head"] = {
+                "landing_direct_url": direct[0],
+                "head_final_url": head_url,
+                "content_disposition": disp,
+                "content_type": ctype,
+                "content_length": clen,
+                "etag": etag,
+            }
+            final_host = urllib.parse.urlparse(head_url).netloc.lower()
+            if not (final_host.endswith("pensoft.net") or final_host.endswith("zenodo.org")):
+                result["status"] = "stop_pensoft_direct_sequence_endpoint_redirects_to_unfrozen_host"
+                result["reason"] = f"HEAD redirected to unexpected host {final_host}; payload remained unopened"
+            else:
+                result["status"] = "pensoft_sequence_identity_resolved_without_payload"
+                result["reason"] = (
+                    "the frozen supplement DOI landing names the exact sequence file and exposes one direct supplement endpoint; "
+                    "HEAD metadata were recorded without GET/body access"
+                )
+
         result["fingerprint"] = hashlib.sha256(canonical({k: v for k, v in result.items() if k != "fingerprint"})).hexdigest()
         OUT.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
         print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
