@@ -26,6 +26,27 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Resolve supplement DOI transport metadata only
+        run: python validation/peneda_roedeer_paired_complementarity/resolve_transport.py
+
+      - name: Assert transport resolver opened no supplement payload
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("validation/peneda_roedeer_paired_complementarity/transport_resolution.json")
+          r = json.loads(p.read_text())
+          assert r["status"] == "transport_metadata_resolved"
+          assert r["datacite_metadata_requests"] == 2
+          assert r["zenodo_metadata_requests"] == 2
+          assert r["supplement_file_payload_requests"] == 0
+          assert r["supplement_file_payload_bytes_opened"] == 0
+          assert r["response_header_bytes_opened"] == 0
+          assert r["response_rows_opened"] is False
+          assert r["response_values_opened"] is False
+          assert r["model_fits"] == 0 and r["heldout_scores"] == 0
+          PY
+
       - name: Assert geometry preflight cannot reference response payload
         shell: bash
         run: |
@@ -60,9 +81,12 @@ jobs:
           import json
           from pathlib import Path
           root = Path("validation/peneda_roedeer_paired_complementarity")
+          transport = json.loads((root / "transport_resolution.json").read_text())
           geometry = json.loads((root / "preflight_result.json").read_text())
           header = json.loads((root / "header_preflight_result.json").read_text())
           freeze = json.loads((root / "full_freeze_candidate.json").read_text())
+          assert transport["supplement_file_payload_requests"] == 0
+          assert transport["supplement_file_payload_bytes_opened"] == 0
           assert geometry["status"] == "ready_for_next_response_blind_freeze"
           assert geometry["response_requests"] == 0
           assert geometry["response_bytes"] == 0
@@ -98,6 +122,7 @@ jobs:
         with:
           name: peneda-roedeer-response-blind-full-freeze
           path: |
+            validation/peneda_roedeer_paired_complementarity/transport_resolution.json
             validation/peneda_roedeer_paired_complementarity/preflight_result.json
             validation/peneda_roedeer_paired_complementarity/header_preflight_result.json
             validation/peneda_roedeer_paired_complementarity/full_freeze_candidate.json
