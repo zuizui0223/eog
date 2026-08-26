@@ -1,0 +1,70 @@
+name: BBS Northern Bobwhite replication 2 Gate2
+
+on:
+  push:
+    branches:
+      - agent/bbs-northern-bobwhite-replication-2
+    paths:
+      - validation/bbs_northern_bobwhite_replication_2/gate1_registry_effort_certificate.json
+      - validation/bbs_northern_bobwhite_replication_2/gate2_structural_contract.json
+      - validation/bbs_northern_bobwhite_replication_2/gate2_structural.py
+      - .github/workflows/bbs_northern_bobwhite_replication_2_gate2.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate2:
+    runs-on: ubuntu-24.04
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen structural dependency
+        run: python -m pip install --disable-pip-version-check numpy==2.3.5
+      - name: Compile Gate2
+        run: python -m py_compile validation/bbs_northern_bobwhite_replication_2/gate2_structural.py
+      - name: Run response-blind structural ladder gate
+        id: gate
+        continue-on-error: true
+        run: python validation/bbs_northern_bobwhite_replication_2/gate2_structural.py
+      - name: Assert bird response stayed closed
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/bbs_northern_bobwhite_replication_2/gate2_structural.json')
+          assert p.exists(), 'Gate2 evidence missing'
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          assert a['avian_payload_requests']==0
+          assert a['avian_payload_bytes_opened']==0
+          assert a['avian_header_bytes_opened']==0
+          assert a['avian_rows_opened'] is False
+          assert a['avian_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps({'status':r['status'],'reason':r['reason'],'registry':r.get('registry'),'ladder':r.get('ladder'),'fingerprint':r['fingerprint'],'response_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate2 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbs-northern-bobwhite-replication-2-gate2
+          path: build/bbs_northern_bobwhite_replication_2/gate2_structural.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/bbs_northern_bobwhite_replication_2/gate2_structural.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate2 terminal status:',r['status'])
+          PY
