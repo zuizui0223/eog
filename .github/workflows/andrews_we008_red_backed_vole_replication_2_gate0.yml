@@ -7,6 +7,12 @@ on:
     paths:
       - validation/andrews_we008_red_backed_vole_replication_2/**
       - .github/workflows/andrews_we008_red_backed_vole_replication_2_gate0.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - validation/andrews_we008_red_backed_vole_replication_2/**
+      - .github/workflows/andrews_we008_red_backed_vole_replication_2_gate0.yml
 
 permissions:
   contents: read
