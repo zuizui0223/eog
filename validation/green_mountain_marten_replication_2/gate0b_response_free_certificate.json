@@ -1,0 +1,89 @@
+{
+  "schema": "eog.green_mountain_marten_replication_2.gate0b_response_free_certificate.v1",
+  "attempt_id": "green_mountain_marten_camera_oof_fresh_paired_v1",
+  "status": "gate0b_profile_pass_response_closed_with_track_sign_blacklist",
+  "workflow": {
+    "run_id": 32919731542,
+    "job_id": 98030764550,
+    "head_sha": "7584daefe89bb00d4570071d5f20475edb6d2c65",
+    "result_fingerprint": "d761f14dd3d9ffa3105b5c03014ba720c9e7acb5167eb3b82d603de304e871c7",
+    "artifact_id": 9589405790,
+    "artifact_digest": "sha256:da455dd9e4966ba6fc566cefea69662c957112ed5349f3031e4d084d372d9439"
+  },
+  "verified_response_independent_files": {
+    "locations.csv": {
+      "bytes": 11562,
+      "md5": "11d94de6ef9d9c4c0b40fd39fb029cff",
+      "rows": 92,
+      "unique_location_ids": 92,
+      "exact_lat_long_populated_rows": 0,
+      "public_bbox_rows": 91
+    },
+    "visits.csv": {
+      "bytes": 62737,
+      "md5": "e7d653bf7eb80c7f13efe726dcb108cb",
+      "rows": 527,
+      "unique_visit_ids": 527,
+      "unique_location_ids": 91,
+      "unique_equipment_ids": 87,
+      "visit_types": ["check", "pull", "set"]
+    },
+    "dbdictionary.csv": {
+      "bytes": 63911,
+      "md5": "aa348a45e6d7ee9ab1509e2f36d37408",
+      "rows": 414
+    }
+  },
+  "biological_field_blacklist": {
+    "track_sign": {
+      "table": "visits.csv",
+      "dictionary_definition": "Comma-separated list of species for which tracks/signs were detected near the camera",
+      "exposure_status": "opaque_numeric_tokens_were_profiled_before_blacklist",
+      "taxonomic_mapping_opened": false,
+      "taxa_csv_opened": false,
+      "allowed_for_universe_reconstruction": false,
+      "allowed_for_species_selection": false,
+      "allowed_for_count_gate": false,
+      "allowed_for_layer_a": false,
+      "allowed_for_layer_b": false,
+      "allowed_for_supervised_features": false,
+      "allowed_for_any_future_decision": false,
+      "note": "Because this response-adjacent field was present in an otherwise response-independent visit table, its values are treated as permanently unusable. No taxon decoding or outcome inference may be performed from them."
+    }
+  },
+  "paper_universe_gate_inputs_allowed": [
+    "locations.pk_locationid",
+    "locations.location_type",
+    "locations.long_min",
+    "locations.long_max",
+    "locations.lat_min",
+    "locations.lat_max",
+    "visits.pk_visitid",
+    "visits.fk_locationid",
+    "visits.fk_equipmentid",
+    "visits.visit_type",
+    "visits.visit_date",
+    "visits.visit_time"
+  ],
+  "paper_universe_gate_inputs_forbidden": [
+    "visits.track_sign",
+    "annotations.csv",
+    "media.csv",
+    "taxa.csv",
+    "modeloutputs.csv",
+    "photo archives"
+  ],
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotations_header_opened": false,
+    "annotations_rows_opened": false,
+    "annotations_values_opened": false,
+    "media_payload_requests": 0,
+    "taxa_payload_requests": 0,
+    "modeloutputs_payload_requests": 0,
+    "photo_zip_payload_requests": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
