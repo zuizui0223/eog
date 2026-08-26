@@ -1,0 +1,55 @@
+{
+  "schema": "eog.peneda_roedeer_replication_2.site_registry_certificate.v1",
+  "attempt_id": "peneda_roedeer_camera_interval_fresh_paired_v1",
+  "issue": 308,
+  "decision": "accept_response_independent_leading_zero_alias_as_physical_site_registry",
+  "gate0": {
+    "run_id": 32931313551,
+    "job_id": 98063978370,
+    "head_sha": "071fb3a9cf862d9d494a3739ab9eb51d61c5627e",
+    "fingerprint": "4bee04a1bb915709cfa905bdf98eb966c8a780ed5aac35366f60ae5f58d1e541",
+    "deployment_payload_sha256": "c80ad16f362a46c9ea67d8d19b5da1cb5967929ca7dd9ab9197d6cdb2305cf74",
+    "deployment_rows": 331,
+    "observation_payload_requests": 0,
+    "observation_payload_bytes_opened": 0
+  },
+  "site_identity": {
+    "run_id": 32931809653,
+    "job_id": 98065359182,
+    "head_sha": "b05c6714eeb287bec3f5c4e928e7d9b38a6dd7f7",
+    "site_identity_fingerprint": "ac9ee8e9c47326782249979398ab1c28dbb42e83bb7023b41850f7338aa08e75",
+    "site_profile_fingerprint": "eabdc854005d9452626aee8da4fcfe1c73da515981b59f9e11b6f16697ed8ba7",
+    "deployment_rows": 331,
+    "unique_location_id": 331,
+    "unique_raw_location_name": 125,
+    "raw_names_with_one_coordinate": 125
+  },
+  "alias_rule": {
+    "fingerprint": "8152188614875446e953c254752a71e13ab49d0dcef074ee47283f75f9aeb202",
+    "regex": "^L0*([0-9]+)$",
+    "canonical_form": "L<int(numeric suffix)>",
+    "all_labels_match_regex": true,
+    "coordinate_tolerance": 0.0,
+    "coordinate_conflict_count": 0,
+    "canonical_site_count": 64,
+    "multi_label_group_count": 61,
+    "published_camera_grid_count": 64,
+    "manual_aliases_allowed": false,
+    "post_response_alias_switching_allowed": false
+  },
+  "artifact": {
+    "id": 9593454109,
+    "name": "peneda-roedeer-replication-2-site-identity",
+    "digest": "sha256:a8820362afd084707cd3ce732add39465257556246cd5a227d30ac6f7baf1a93"
+  },
+  "response_firewall": {
+    "observation_payload_requests": 0,
+    "observation_payload_bytes_opened": 0,
+    "observation_header_bytes_opened": 0,
+    "observation_rows_opened": false,
+    "observation_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "boundary": "All subsequent Peneda gates must define the 64 physical camera sites only by the exact frozen leading-zero normalization of response-independent locationName labels. locationID is deployment-specific in this release and may not be substituted as the physical-site key."
+}
