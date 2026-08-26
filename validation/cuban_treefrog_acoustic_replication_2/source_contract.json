@@ -1,0 +1,64 @@
+{
+  "schema": "eog.cuban_treefrog_acoustic_replication_2.source_contract.v1",
+  "attempt_id": "cuban_treefrog_invasion_front_fresh_paired_v1",
+  "issue": 303,
+  "sciencebase": {
+    "item_id": "691cee88d4be021d1d89b3fd",
+    "doi": "10.5066/P14NO6UR",
+    "title": "USGS Cuban Treefrog Invasion Front Volume 1 (2014 - 2022)",
+    "coverage_start": "2014-10-02",
+    "coverage_end": "2022-10-13"
+  },
+  "external_paper": {
+    "doi": "10.1016/j.ecoinf.2026.103764",
+    "locations": 13,
+    "audio_recordings": 139985,
+    "audio_minutes": 596046,
+    "stage1_candidate_signals": 83191,
+    "retained_detections": 20271,
+    "main_known_presence_sites": 3,
+    "false_positive_detections_other_sites": 109
+  },
+  "focal_species": {
+    "scientific_name": "Osteopilus septentrionalis",
+    "common_name": "Cuban treefrog",
+    "selection_uses_response_prevalence": false,
+    "species_switching_after_response_access": false
+  },
+  "response_independent_files": {
+    "dbdictionary.csv": {"md5": "a81bda83e53eb67971ac0a534e7910a1", "size": 65824},
+    "locations.csv": {"md5": "41dda94ce77b07931446045488c90088", "size": 1687},
+    "visits.csv": {"md5": "9b587673dee4567a5b1f53ebba66d691", "size": 13023}
+  },
+  "forbidden_response_files": {
+    "media.csv": {"md5": "2a59c896cd7c4efd219cc464258d0c63", "size": 13644380},
+    "annotations.csv": {"md5": "93fb4721fda75d510d66fa9f8c276a81", "size": 162104},
+    "modeloutputs.csv": {"md5": "b50913c52a7f8db5f7b1bebb167d070a", "size": 37302150},
+    "annotags.csv": {"md5": "e4040ab9eeca3dbb6f5eb25bfebcbd19", "size": 667},
+    "mediatags.csv": {"md5": "bf763c07ff1bc591e6a979e840dcf0d6", "size": 43553},
+    "modelverifications.csv": {"md5": "8d694c8d61bedfec538b6cc70ee0a93f", "size": 703954}
+  },
+  "gate0": {
+    "download_only": ["dbdictionary.csv", "locations.csv", "visits.csv"],
+    "profile_exact_headers_and_rows": true,
+    "profile_candidate_identifier_geometry_time_fields": true,
+    "profile_dictionary_relationship_rows_for_tables": ["locations", "visits", "media", "annotations", "modeloutputs"],
+    "do_not_infer_missing_linkage_from_response": true,
+    "minimum_distinct_positive_structural_scales_future_gate": 3
+  },
+  "response_firewall": {
+    "media_payload_requests": 0,
+    "media_payload_bytes_opened": 0,
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "modeloutputs_payload_requests": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "other_response_payload_requests": 0,
+    "other_response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
