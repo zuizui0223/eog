@@ -1,0 +1,66 @@
+name: Vermont American marten replication 2 Gate4b
+
+on:
+  push:
+    branches:
+      - agent/vermont-american-marten-replication-2
+    paths:
+      - validation/vermont_american_marten_replication_2/gate0_metadata_certificate.json
+      - validation/vermont_american_marten_replication_2/gate1_response_independent_profile.py
+      - validation/vermont_american_marten_replication_2/gate4_response_schema_context_certificate.json
+      - validation/vermont_american_marten_replication_2/gate4b_searchlist_membership.py
+      - .github/workflows/vermont_american_marten_replication_2_gate4b.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate4b:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile Gate4b
+        run: python -m py_compile validation/vermont_american_marten_replication_2/gate4b_searchlist_membership.py
+      - name: Run response-independent marten search-list membership gate
+        continue-on-error: true
+        run: python validation/vermont_american_marten_replication_2/gate4b_searchlist_membership.py
+      - name: Assert biological response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/vermont_american_marten_replication_2/gate4b_searchlist_membership.json')
+          assert p.exists(), 'Gate4b evidence missing'
+          r=json.loads(p.read_text())
+          a=r['biological_response_firewall']
+          assert a['response_payload_requests']==0
+          assert a['response_payload_bytes_opened']==0
+          assert a['response_headers_opened'] is False
+          assert a['response_rows_opened'] is False
+          assert a['response_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps(r,indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate4b evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vermont-american-marten-replication-2-gate4b
+          path: build/vermont_american_marten_replication_2/gate4b_searchlist_membership.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/vermont_american_marten_replication_2/gate4b_searchlist_membership.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate4b terminal status:',r['status'])
+          PY
