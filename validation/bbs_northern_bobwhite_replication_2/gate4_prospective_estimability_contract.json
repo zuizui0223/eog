@@ -1,5 +1,5 @@
 {
-  "schema": "eog.bbs_northern_bobwhite_replication_2.gate4_prospective_estimability_contract.v1",
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate4_prospective_estimability_contract.v2",
   "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
   "declaration": {
     "calibration_events": 10,
@@ -13,15 +13,33 @@
     "endpoint_definition_matches": false,
     "response_rows_opened": false,
     "intervals": {
-      "calibration_events": {"lower": null, "upper": null},
-      "calibration_non_events": {"lower": null, "upper": null},
-      "heldout_events": {"lower": null, "upper": null},
-      "heldout_non_events": {"lower": null, "upper": null},
-      "heldout_outer_units_with_both_classes": {"lower": null, "upper": null}
+      "calibration_events": {
+        "lower": null,
+        "upper": null
+      },
+      "calibration_non_events": {
+        "lower": null,
+        "upper": null
+      },
+      "heldout_events": {
+        "lower": null,
+        "upper": null
+      },
+      "heldout_non_events": {
+        "lower": null,
+        "upper": null
+      },
+      "heldout_outer_units_with_both_classes": {
+        "lower": null,
+        "upper": null
+      }
     },
     "context_only_not_endpoint_evidence": {
       "reported_detected_route_count": 1956,
-      "reported_study_years": [1967, 2019],
+      "reported_study_years": [
+        1967,
+        2019
+      ],
       "reason_not_mapped_to_frozen_intervals": "The paper reports routes with any Northern Bobwhite detection across its own North American biome study, not event/non-event counts for the frozen quality-valid U.S. route-year endpoint split into 2015-2019 calibration and 2021-2025 heldout years."
     },
     "note": "No response-independent publication supplies endpoint-matched lower or upper bounds for all five frozen route-year count quantities. The exact count gate remains mandatory inside the once-only runner before any fit or score."
@@ -38,6 +56,13 @@
     ],
     "exact_count_gate_required": true,
     "outcome_access_authorized": false
+  },
+  "paper_ready_binding": {
+    "file": "paper_ready_binding.json",
+    "sha256": "be8c0d15239e38e095fd49dfa9a2aa3be2b4a1c267eb6a28e67473855becac8a",
+    "third_fresh_endpoint": true,
+    "secondary_placebo_required_before_response": true,
+    "primary_status_rule_unchanged": true
   },
   "response_firewall": {
     "avian_payload_requests": 0,
