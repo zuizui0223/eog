@@ -1,0 +1,63 @@
+name: White Mountain camera replication 2 Gate3
+
+on:
+  push:
+    branches:
+      - agent/white-mountain-camera-replication-2
+    paths:
+      - validation/white_mountain_camera_replication_2/gate3_linkage_contract.json
+      - validation/white_mountain_camera_replication_2/gate3_linkage.py
+      - validation/white_mountain_camera_replication_2/gate2_dictionary.py
+      - .github/workflows/white_mountain_camera_replication_2_gate3.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate3:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile response-free Gate3
+        run: |
+          python -m py_compile validation/white_mountain_camera_replication_2/gate2_dictionary.py
+          python -m py_compile validation/white_mountain_camera_replication_2/gate3_linkage.py
+      - name: Run response-free linkage profile
+        id: gate
+        continue-on-error: true
+        working-directory: validation/white_mountain_camera_replication_2
+        run: python gate3_linkage.py
+      - name: Assert biological response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/white_mountain_camera_replication_2/gate3_linkage.json')
+          assert p.exists(), 'Gate3 evidence missing'
+          r=json.loads(p.read_text()); a=r['response_firewall']
+          for k,v in a.items():
+              assert v == 0, (k,v)
+          print(json.dumps({'status':r['status'],'fingerprint':r['fingerprint'],'linkage_summary':r['linkage_summary'],'response_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate3 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: white-mountain-camera-replication-2-gate3
+          path: build/white_mountain_camera_replication_2/gate3_linkage.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/white_mountain_camera_replication_2/gate3_linkage.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate3 terminal status:',r['status'])
+          PY
