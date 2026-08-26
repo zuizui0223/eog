@@ -1,0 +1,72 @@
+{
+  "schema": "eog.bbs_northern_bobwhite_replication_2.source_contract.v1",
+  "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
+  "issue": 311,
+  "freshness_boundary": {
+    "historical_attempt_branch": "agent/bbs-woth-preflight",
+    "historical_attempt": "Wood Thrush, eastern U.S., 2000-2009, archival ending-2009 release",
+    "historical_response_opened": false,
+    "this_attempt_is_repair_of_historical_attempt": false
+  },
+  "source": {
+    "title": "2026 Release - North American Breeding Bird Survey Dataset (1966 - 2025)",
+    "doi": "10.5066/P144YU3S",
+    "sciencebase_item_id": "6a0b0b0ab66b0188da36aedd",
+    "publisher": "U.S. Geological Survey",
+    "publication_date": "2026-06-03",
+    "metadata_item_url": "https://www.sciencebase.gov/catalog/item/6a0b0b0ab66b0188da36aedd?format=json",
+    "metadata_children_url": "https://www.sciencebase.gov/catalog/items?parentId=6a0b0b0ab66b0188da36aedd&format=json&max=100"
+  },
+  "focal_species": {
+    "scientific_name": "Colinus virginianus",
+    "common_name": "Northern Bobwhite",
+    "selection_uses_2026_response": false,
+    "species_switching_after_response_access": false,
+    "external_basis": "resident terrestrial game bird with independent conservation and management relevance; a recent independent BBS analysis reports detections on 1,956 BBS routes over its study extent"
+  },
+  "endpoint": {
+    "target": "quality-valid U.S. BBS route-year recorded detection of Northern Bobwhite, defined eventually as total eligible stop count greater than zero",
+    "initialization_years": [2014],
+    "calibration_years": [2015, 2016, 2017, 2018, 2019],
+    "structurally_absent_years": [2020],
+    "primary_heldout_years": [2021, 2022, 2023, 2024, 2025],
+    "no_2020_imputation": true,
+    "route_eligibility_must_use_response_independent_run_metadata_only": true,
+    "country_scope": "United States only, resolved from response-independent route/run metadata",
+    "species_range_may_not_define_route_universe": true
+  },
+  "gate0": {
+    "metadata_only": true,
+    "maximum_child_depth": 1,
+    "file_payload_requests": 0,
+    "require_individually_addressable_route_geometry_source": true,
+    "require_individually_addressable_run_effort_source": true,
+    "require_response_physically_separate": true,
+    "forbid_generic_mixed_bundle_as_only_source": true,
+    "role_filename_hints": {
+      "route_geometry": ["route", "routes", "location", "locations", "coordinate", "coordinates"],
+      "run_effort": ["run", "runs", "weather", "survey", "surveys", "effort"],
+      "species_registry": ["species", "taxa", "taxon", "aou"],
+      "avian_response": ["50-stop", "fifty", "10-stop", "ten-stop", "count", "counts", "observation", "observations", "surveywide", "migrantnonbreeder"]
+    }
+  },
+  "future_nonnegotiable": {
+    "minimum_distinct_structural_scales": 3,
+    "layer_b": "symmetric_world_support_summary_v1",
+    "same_strong_learner_pairing": true,
+    "accept_terminal_outcomes": ["favorable", "null", "adverse", "non_estimable", "source_stop", "registry_stop", "schema_stop", "universe_falsified"],
+    "no_post_response_route_drop": true,
+    "no_post_response_year_repair": true,
+    "no_post_response_species_switch": true,
+    "no_api_or_package_expansion": true
+  },
+  "response_firewall": {
+    "avian_payload_requests": 0,
+    "avian_payload_bytes_opened": 0,
+    "avian_header_bytes_opened": 0,
+    "avian_rows_opened": false,
+    "avian_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
