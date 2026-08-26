@@ -1,0 +1,73 @@
+name: Portal Merriam kangaroo rat third fresh Gate0
+
+on:
+  push:
+    branches:
+      - agent/portal-merriams-kangaroo-rat-third-fresh
+    paths:
+      - validation/portal_merriams_kangaroo_rat_third_fresh/**
+      - .github/workflows/portal_merriams_kangaroo_rat_third_fresh_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile response-free Gate0
+        run: python -m py_compile validation/portal_merriams_kangaroo_rat_third_fresh/gate0_response_free.py
+      - name: Run response-free Portal gate
+        id: gate
+        continue-on-error: true
+        run: python validation/portal_merriams_kangaroo_rat_third_fresh/gate0_response_free.py
+      - name: Assert biological response stayed closed
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/portal_merriams_kangaroo_rat_third_fresh/gate0_response_free.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r = json.loads(p.read_text())
+          a = r['response_firewall']
+          assert a['response_payload_requests'] == 0
+          assert a['response_payload_bytes_opened'] == 0
+          assert a['response_header_bytes_opened'] == 0
+          assert a['response_rows_opened'] is False
+          assert a['response_values_opened'] is False
+          assert a['model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps({
+              'status': r['status'],
+              'reason': r['reason'],
+              'fingerprint': r.get('fingerprint'),
+              'species': r.get('species'),
+              'registry': r.get('registry'),
+              'geometry': r.get('geometry'),
+              'temporal': r.get('temporal'),
+              'response_firewall': a,
+          }, indent=2, sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portal-merriams-kangaroo-rat-third-fresh-gate0
+          path: build/portal_merriams_kangaroo_rat_third_fresh/gate0_response_free.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/portal_merriams_kangaroo_rat_third_fresh/gate0_response_free.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate0 terminal status:', r['status'])
+          PY
