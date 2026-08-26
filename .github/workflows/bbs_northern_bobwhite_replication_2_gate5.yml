@@ -5,6 +5,7 @@ on:
     branches:
       - agent/bbs-northern-bobwhite-replication-2
     paths:
+      - validation/bbs_northern_bobwhite_replication_2/paper_ready_binding.json
       - validation/bbs_northern_bobwhite_replication_2/source_contract.json
       - validation/bbs_northern_bobwhite_replication_2/gate0_metadata_certificate.json
       - validation/bbs_northern_bobwhite_replication_2/gate1_registry_effort_certificate.json
