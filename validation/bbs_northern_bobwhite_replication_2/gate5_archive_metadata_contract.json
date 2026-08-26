@@ -1,18 +1,27 @@
 {
-  "schema": "eog.bbs_northern_bobwhite_replication_2.gate5_archive_metadata_contract.v1",
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate5_archive_metadata_contract.v2",
   "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
   "prerequisite_sha256": {
     "source_contract.json": "6b9c6da2795f6aef9f6002bdf60a3f401a94c1499369ff5e0cb9aee4bc948206",
     "gate0_metadata_certificate.json": "173f7f87359bb06cacde31e1fe1d0ca0004afa0e0296c4e9aa2a810d0bf088e6",
     "gate1_registry_effort_certificate.json": "afd402529449a07d89948af968d614d5e2ad664e79e05b061863150a5d976917",
     "gate2_structural_certificate.json": "263b1163152f72dd8faf1b833cc1633b46eaaa33d621097b965c9098cc7d2c75",
-    "gate4_prospective_estimability_contract.json": "0267b100e137b50018bc36252ee91c2c0a6efa2ff734dd779b2e4d2500416cbc"
+    "gate4_prospective_estimability_contract.json": "43873c4fa46e173f8c05f0b21cfadd19a969f0630b6658c2dc3cf4588de41e0f",
+    "paper_ready_binding.json": "be8c0d15239e38e095fd49dfa9a2aa3be2b4a1c267eb6a28e67473855becac8a"
   },
   "gate4_required": {
     "status": "uncertain_pre_response",
     "disposition": "continue_response_blind_exact_gate_required",
     "estimability_fingerprint": "9254f94658ada8cafa0c35caaab45145658643d243570b324e450237ec41dc7c",
     "outcome_access_authorized": false
+  },
+  "paper_ready_required": {
+    "binding_sha256": "be8c0d15239e38e095fd49dfa9a2aa3be2b4a1c267eb6a28e67473855becac8a",
+    "main_merge_commit": "38c4fe1b4ce893afc56d891192ecbe3b8689e575",
+    "cross_ecosystem_contract_blob": "0b7b87a03bd8022caa342a5f7b805cf75f21c388",
+    "feature_count_placebo_contract_blob": "cbc982fc6f23824a9de27c5377cac1d70be06849",
+    "placebo_is_secondary_only": true,
+    "primary_decision_rule_unchanged": true
   },
   "archive": {
     "sciencebase_item_id": "6a0b0b0ab66b0188da36aedd",
@@ -21,7 +30,9 @@
     "md5": "af3a5533a78a386760540f70d80cb240",
     "content_type": "application/zip",
     "download_url": "https://www.sciencebase.gov/catalog/file/get/6a0b0b0ab66b0188da36aedd?f=__disk__5b%2F8f%2F57%2F5b8f5740e0f92c49ed2679cef4605399c7ca0b87",
-    "allowed_final_hosts": ["www.sciencebase.gov"],
+    "allowed_final_hosts": [
+      "www.sciencebase.gov"
+    ],
     "head_evidence": {
       "checked_before_any_archive_get": true,
       "status": 200,
