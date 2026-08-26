@@ -1,0 +1,37 @@
+{
+  "schema": "eog.willamette_red_legged_frog_replication_2.source_contract.v1",
+  "attempt_id": "willamette_red_legged_frog_annual_fresh_paired_v1",
+  "issue": 305,
+  "sciencebase": {
+    "item_id": "5bd8c5dde4b0b3fc5cea2477",
+    "doi": "10.5066/P9XDEBOB",
+    "expected_title_contains": "Long-term amphibian monitoring data from the Willamette Valley, Oregon (2004-2015)"
+  },
+  "external_study": {
+    "paper_doi": "10.1002/ecs2.2674",
+    "study_years": [2004, 2015],
+    "published_site_count": 38,
+    "focal_species": {
+      "common_name": "northern red-legged frog",
+      "scientific_name": "Rana aurora",
+      "selection_uses_release_response_prevalence": false,
+      "species_switching_after_response_access": false
+    }
+  },
+  "gate0": {
+    "metadata_only": true,
+    "file_payload_requests": 0,
+    "classify_by_file_metadata_only": true,
+    "required_future_separation": ["site_registry_or_geometry", "survey_effort_or_availability", "species_detection_response"],
+    "ambiguous_mixed_workbook_or_archive": "STOP unless metadata itself exposes separately addressable response-independent members before any response-member access"
+  },
+  "biological_response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
