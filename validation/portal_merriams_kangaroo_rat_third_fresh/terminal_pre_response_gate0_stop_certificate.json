@@ -1,0 +1,42 @@
+{
+  "schema": "eog.portal_merriams_kangaroo_rat_third_fresh.terminal_pre_response_gate0_stop_certificate.v1",
+  "attempt_id": "portal_project_merriams_kangaroo_rat_plot_period_fresh_v1",
+  "issue": 314,
+  "status": "stop_response_independent_source_value_mismatch",
+  "reason": "The frozen Gate0 parser required moon_dates.period to be an integer for every response-independent moon-calendar row, but physical row 20 contains period=NA. The attempt had already declared this as a scientific Gate0 source-value mismatch and no post-Gate0 parser repair is permitted for the same fresh attempt.",
+  "upstream_commit": "5974464de5b6696fbe5a9f5a3e690964fe96e00e",
+  "positive_pre_stop_results": {
+    "focal_species": {
+      "speciescode": "DM",
+      "scientificname": "Dipodomys merriami",
+      "registry_row_fingerprint": "e9cdcf2f2e6ace1bbc7dcd5700c448210e1c37bab05f38a95c1576b09ee9f956"
+    },
+    "geometry": {
+      "plot_count": 24,
+      "stake_coordinate_rows_per_plot": 49,
+      "centroid_registry_fingerprint": "228a96044f6582902d884ce9192a70fdc843d6f87f920a1643729f0fc37f9191",
+      "structural_thresholds_km": [0.07605553519041866,0.08940034001119505,0.09843596865133045,0.09843596865133045],
+      "distinct_positive_thresholds": 3,
+      "structural_ladder_fingerprint": "ed0d57818dfa3a162c37bd742e47b231075f8a16fe05849cefe41f4bc987c0d7"
+    },
+    "all_response_independent_file_blobs_and_sizes_verified": true
+  },
+  "gate0": {
+    "workflow_run_id": 32954719035,
+    "job_id": 98133741985,
+    "head_sha": "941a266b67af660c0d70d88da468010e83524a4b",
+    "gate0_result_fingerprint": "b07357e008a2096c459607438776fa2a71415e3a14d5e9b97517167dc0c9d8a8",
+    "artifact_id": 9601507501,
+    "artifact_digest": "sha256:a90e66cfe33a6a4e30c3685cd7106417b63beeb7965e2a9ab1e054453f884a52"
+  },
+  "response_firewall": {
+    "Portal_rodent_payload_requests": 0,
+    "Portal_rodent_payload_bytes_opened": 0,
+    "Portal_rodent_header_bytes_opened": 0,
+    "Portal_rodent_rows_opened": false,
+    "Portal_rodent_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "freshness_boundary": "Do not repair the NA moon-period grammar and relabel this same Portal DM attempt as fresh. A later use of Portal data would have to be an independently justified prospective endpoint and cannot count as a repair of issue 314."
+}
