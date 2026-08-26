@@ -1,0 +1,45 @@
+{
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate0_metadata_certificate.v1",
+  "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
+  "status": "gate0_pass_physical_source_separation",
+  "workflow_run_id": 32935741995,
+  "job_id": 98076505879,
+  "head_sha": "10628032a521e4dac3f821a49040c673cc597c85",
+  "gate0_fingerprint": "9107173e08d73e362b0726e9afd5e28fa0a0bdc5e17b7ccb514aa3192f04a198",
+  "artifact": {
+    "id": 9594763414,
+    "name": "bbs-northern-bobwhite-replication-2-gate0",
+    "digest": "sha256:a4dee72831dba2afd9c1f853880e879e89db888e82a39ee6c8a15b1abfc99290"
+  },
+  "sciencebase_item_id": "6a0b0b0ab66b0188da36aedd",
+  "frozen_response_independent_files": {
+    "routes": {"name": "Routes.csv", "size": 392008, "md5": "5fd8404fd91eb6cdbc3577542ea99380", "role": "route identity and route-start geometry"},
+    "weather": {"name": "Weather.csv", "size": 14126685, "md5": "8ba88dec90dd4b9df03bb2200c750bd6", "role": "route-year sampling history, observer, weather and quality metadata"},
+    "species_registry": {"name": "SpeciesList.csv", "size": 73748, "md5": "ae778053cf2db6013f9a24d4e91cae98", "role": "response-independent taxonomic/code registry"}
+  },
+  "frozen_primary_response": {
+    "name": "50-StopData.zip",
+    "size": 68998320,
+    "md5": "af3a5533a78a386760540f70d80cb240",
+    "role": "breeding-bird records/counts 1997-present in 50-stop format",
+    "payload_opened": false
+  },
+  "excluded_alternate_or_nontarget_files": [
+    {"name": "States.zip", "reason": "10-point interval response representation is not the frozen 50-stop endpoint"},
+    {"name": "MigrantNonBreeder.zip", "reason": "non-breeding records are outside the frozen breeding endpoint"},
+    {"name": "VehicleData.csv", "reason": "vehicle/noise counts are not needed for the primary response-independent gate"},
+    {"name": "RunType.pdf", "reason": "quality semantics are externally frozen; PDF payload is not needed at Gate1"}
+  ],
+  "response_firewall": {
+    "all_file_payload_requests_at_gate0": 0,
+    "all_file_payload_bytes_opened_at_gate0": 0,
+    "avian_payload_requests": 0,
+    "avian_payload_bytes_opened": 0,
+    "avian_header_bytes_opened": 0,
+    "avian_rows_opened": false,
+    "avian_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "decision": "PASS: current 2026 BBS release physically separates Routes.csv, Weather.csv and SpeciesList.csv from the frozen 50-StopData.zip avian response; proceed only with the three frozen response-independent CSV payloads"
+}
