@@ -1,0 +1,150 @@
+{
+  "schema": "eog.portal_merriams_kangaroo_rat_third_fresh.source_contract.v1",
+  "attempt_id": "portal_project_merriams_kangaroo_rat_plot_period_fresh_v1",
+  "issue": 314,
+  "paper_ready_bindings": {
+    "cross_ecosystem_synthesis_contract": "validation/paper_ready_replication/cross_ecosystem_synthesis_contract.json",
+    "feature_count_placebo_contract": "validation/paper_ready_replication/feature_count_placebo_contract.json",
+    "candidate_flow_ledger": "validation/paper_ready_replication/candidate_flow_ledger.json"
+  },
+  "upstream": {
+    "repository": "weecology/PortalData",
+    "commit": "5974464de5b6696fbe5a9f5a3e690964fe96e00e",
+    "raw_prefix": "https://raw.githubusercontent.com/weecology/PortalData/5974464de5b6696fbe5a9f5a3e690964fe96e00e/"
+  },
+  "files": {
+    "forbidden_response": {
+      "path": "Rodents/Portal_rodent.csv",
+      "git_blob": "daac4615a868339e3c1f77b35ceebf005e1240ad",
+      "size": 7342949,
+      "payload_requests_before_full_freeze": 0,
+      "header_bytes_before_header_gate": 0,
+      "rows_before_full_freeze": false,
+      "values_before_full_freeze": false
+    },
+    "trapping": {
+      "path": "Rodents/Portal_rodent_trapping.csv",
+      "git_blob": "e405c7669c9a25a9111527270cdaec7af26f31c7",
+      "size": 309178,
+      "expected_header": ["day","month","year","period","plot","sampled","effort","qcflag"]
+    },
+    "species": {
+      "path": "Rodents/Portal_rodent_species.csv",
+      "git_blob": "bcecdbeab3fb364a7712d17486fa12b5ceda835f",
+      "size": 4247,
+      "required_columns": ["speciescode","scientificname","taxa","commonname","censustarget","unidentified","rodent","granivore"]
+    },
+    "moon_dates": {
+      "path": "Rodents/moon_dates.csv",
+      "git_blob": "0e32369bfede619ba8b0eea952a3fcf77edb60ff",
+      "size": 17563
+    },
+    "geometry": {
+      "path": "SiteandMethods/Portal_UTMCoords.csv",
+      "git_blob": "fa96bd174b28767acb27758fddaca0b51676800f",
+      "size": 105729,
+      "expected_header": ["gps_num","plot","type","number","east","north","elev","hor_error","vert_error","flag","notes"]
+    },
+    "plot_history": {
+      "path": "SiteandMethods/Portal_plots.csv",
+      "git_blob": "d4502de80688bd42b52eee1f9e0b8bc429385178",
+      "size": 390214
+    },
+    "treatment_registry": {
+      "path": "SiteandMethods/Portal_plot_treatments.csv",
+      "git_blob": "deb0c0615291074d0c3f8c16f5b24d354017f6bd",
+      "size": 5455
+    },
+    "methods": {
+      "path": "SiteandMethods/Methods.md",
+      "git_blob": "c196c58d5a9a71685fe739ba9af127bed455197d",
+      "size": 37065
+    },
+    "rodent_readme": {
+      "path": "Rodents/README.md",
+      "git_blob": "1d8ad18094ef38e136759bf6fdb1c94d4e5feea3",
+      "size": 3797
+    }
+  },
+  "focal_species": {
+    "speciescode": "DM",
+    "scientificname": "Dipodomys merriami",
+    "commonname": "Merriam's kangaroo rat",
+    "required_registry_flags": {
+      "censustarget": 1,
+      "unidentified": 0,
+      "rodent": 1,
+      "granivore": 1
+    },
+    "selection_uses_response_prevalence": false,
+    "species_switching_after_response_access": false
+  },
+  "endpoint": {
+    "unit": "plot_period",
+    "response_definition": "recorded_detection_of_at_least_one_DM_capture_in_an_eligible_plot_period",
+    "surveyed_negative_definition": "eligible_plot_period_present_in_trapping_table_with_no_DM_capture_row",
+    "missing_or_unsampled_is_negative": false
+  },
+  "analysis_registry": {
+    "required_plot_ids": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
+    "plot_count": 24,
+    "response_rows_may_define_registry": false
+  },
+  "geometry_rule": {
+    "selected_type_token": "stake",
+    "coordinate_fields": ["east","north"],
+    "coordinate_reference": "UTM values as published in Portal_UTMCoords.csv; pairwise Euclidean distance used within one local study area",
+    "plot_coordinate": "arithmetic_centroid_of_all_valid_type_stake_coordinate_rows_for_plot",
+    "required_coordinate_rows_per_plot": 49,
+    "required_unique_coordinate_pairs_per_plot": 49,
+    "stake_number_label_uniqueness_required": false,
+    "fallback_to_corner_or_quadrat": false,
+    "lcc_targets": [0.25,0.5,0.75,0.9],
+    "minimum_distinct_positive_structural_thresholds": 3
+  },
+  "eligibility_rule": {
+    "period_strictly_positive": true,
+    "sampled_equals": 1,
+    "effort_strictly_positive": true,
+    "qcflag_equals": 1,
+    "off_protocol_negative_periods_excluded": true,
+    "response_values_may_not_modify_eligibility": true
+  },
+  "temporal_window_rule": {
+    "selection_source": "Portal_rodent_trapping.csv_only",
+    "calendar_year_complete_if": {
+      "all_24_plots_represented": true,
+      "minimum_eligible_periods_per_plot": 8,
+      "minimum_distinct_positive_periods_in_year": 8
+    },
+    "select": "latest_11_consecutive_complete_calendar_years",
+    "if_no_11_year_block": "terminal_stop",
+    "year_roles": {
+      "selected_year_1": "initialization_only_not_scored",
+      "selected_years_2_to_6": "calibration",
+      "selected_years_7_to_11": "five_primary_heldout_outer_years"
+    },
+    "within_year_order": "ascending_positive_period_code_then_trapping_date",
+    "post_response_time_window_repair": false
+  },
+  "gate0": {
+    "allowed_payloads": ["trapping","species","moon_dates","geometry","plot_history","treatment_registry","methods","rodent_readme"],
+    "forbidden_payloads": ["forbidden_response"],
+    "require_exact_upstream_byte_size": true,
+    "require_species_registry_match": true,
+    "require_geometry_pass": true,
+    "require_temporal_window_pass": true,
+    "require_treatment_linkage_for_selected_years": true,
+    "require_structural_ladder_pass": true
+  },
+  "response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "freeze_rule": "No response access, species switch, plot dropping, temporal-window repair, geometry-rule repair, threshold relaxation or world redesign is allowed based on Portal_rodent.csv outcomes."
+}
