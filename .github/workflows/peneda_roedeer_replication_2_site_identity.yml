@@ -1,0 +1,64 @@
+name: Peneda roe deer replication 2 site identity diagnostic
+
+on:
+  push:
+    branches:
+      - agent/peneda-roedeer-replication-2
+    paths:
+      - validation/peneda_roedeer_replication_2/site_identity_diagnostic.py
+      - validation/peneda_roedeer_replication_2/location_alias_diagnostic.py
+      - validation/peneda_roedeer_replication_2/source_contract.json
+      - .github/workflows/peneda_roedeer_replication_2_site_identity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile response-independent diagnostics
+        run: |
+          python -m py_compile validation/peneda_roedeer_replication_2/site_identity_diagnostic.py
+          python -m py_compile validation/peneda_roedeer_replication_2/location_alias_diagnostic.py
+      - name: Profile physical site identity
+        run: python validation/peneda_roedeer_replication_2/site_identity_diagnostic.py
+      - name: Test prospective leading-zero alias rule
+        run: python validation/peneda_roedeer_replication_2/location_alias_diagnostic.py
+      - name: Assert observation response stayed closed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for name in ('site_identity_diagnostic.json','location_alias_diagnostic.json'):
+              r=json.loads((Path('build/peneda_roedeer_replication_2')/name).read_text())
+              a=r['response_firewall']
+              assert a['observation_payload_requests']==0
+              assert a['observation_payload_bytes_opened']==0
+              assert a['observation_header_bytes_opened']==0
+              assert a['observation_rows_opened'] is False
+              assert a['observation_values_opened'] is False
+              assert a['model_fits']==0
+              assert a['heldout_scores']==0
+          alias=json.loads(Path('build/peneda_roedeer_replication_2/location_alias_diagnostic.json').read_text())
+          print(json.dumps({
+              'status':alias['status'],
+              'canonical_site_count':alias['canonical_site_count'],
+              'all_labels_match_regex':alias['all_labels_match_regex'],
+              'coordinate_conflict_count':alias['coordinate_conflict_count'],
+              'multi_label_group_count':alias['multi_label_group_count'],
+              'fingerprint':alias['fingerprint'],
+          },indent=2,sort_keys=True))
+          PY
+      - name: Upload site identity evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: peneda-roedeer-replication-2-site-identity
+          path: |
+            build/peneda_roedeer_replication_2/site_identity_diagnostic.json
+            build/peneda_roedeer_replication_2/location_alias_diagnostic.json
+          if-no-files-found: error
