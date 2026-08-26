@@ -1,0 +1,56 @@
+{
+  "schema": "eog.mount_st_helens_lupine_replication_2.terminal_availability_stop_certificate.v1",
+  "attempt_id": "mount_st_helens_lupinus_lepidus_plot_year_fresh_paired_v1",
+  "issue": 310,
+  "terminal_status": "stop_descriptor_continuous_availability_does_not_reproduce_published_plot_year_count",
+  "scientific_classification": "valid_pre_response_temporal_availability_stop_not_predictive_evidence",
+  "descriptor_hygiene": {
+    "raw_dictreader_plot_rows": 96,
+    "fully_blank_rows": 4,
+    "fully_blank_csv_lines": [94, 95, 96, 97],
+    "nonblank_unique_plot_rows": 92,
+    "duplicate_nonblank_plot_codes": 0,
+    "hygiene_fingerprint": "b7040e9e47aa0b0e65aaf9fa43811266fbc541282dd4ab77d6faf4a5ecca426c",
+    "hygiene_run_id": 32934688707,
+    "hygiene_job_id": 98073546085,
+    "hygiene_artifact_id": 9594422783,
+    "hygiene_artifact_digest": "sha256:d44a2ce2c8d54cbfe4567d3e76a7896d24b243fa54d7a62abc2b66286652cfb5"
+  },
+  "availability_gate": {
+    "plot_descriptor_sha256": "96e8fc6142685368dc7d72f2a63a030ca813c7c5d53e3cbe62ef3f5a57cbfc24",
+    "species_descriptor_sha256": "977794360c4230d0a1e6f9a7727c93013bade1a3a25a242e2181f405322bbf2f",
+    "plot_count_after_blank_row_hygiene": 92,
+    "first_year_min": 1980,
+    "last_year_max": 2009,
+    "descriptor_continuous_rule": "each integer calendar year from FIRST_YEAR through LAST_YEAR inclusive is eligible for that plot",
+    "descriptor_implied_plot_year_count": 2009,
+    "published_plot_year_count": 1743,
+    "excess_implied_plot_years": 266,
+    "exact_reproduction": false,
+    "reason": "FIRST_YEAR/LAST_YEAR do not identify the actual sampled-year calendar; 266 implied plot-years were not sampled. Recovering them from MSH_STRUCTURE_PLOT_YEAR.csv or MSH_SPECIES_PLOT_YEAR.csv would violate the response-independent availability gate.",
+    "gate0_run_id": 32934803393,
+    "gate0_job_id": 98073877392,
+    "gate0_head_sha": "e6a596ba80c3515e994ff0b526064a2ea6515a5c",
+    "gate0_fingerprint": "4b5ab354ceaf2f8e4d4c87d4e58d5d39691943291a3fa2a27ef93d25c993bf81",
+    "gate0_artifact_id": 9594460436,
+    "gate0_artifact_digest": "sha256:73c4326d090e6e1ee0005ed39b74dc92b8c47e6e2b65d48beb70367c9877b23d"
+  },
+  "response_firewall": {
+    "structure_payload_requests": 0,
+    "structure_payload_bytes_opened": 0,
+    "structure_header_bytes_opened": 0,
+    "structure_rows_opened": false,
+    "structure_values_opened": false,
+    "target_response_payload_requests": 0,
+    "target_response_payload_bytes_opened": 0,
+    "target_response_header_bytes_opened": 0,
+    "target_response_rows_opened": false,
+    "target_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "boundary": {
+    "post_stop_sampling_calendar_repair_from_biological_plot_year_files_allowed": false,
+    "endpoint_may_be_repaired_or_relabelled_as_fresh": false
+  }
+}
