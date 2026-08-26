@@ -1,0 +1,62 @@
+{
+  "schema": "eog.vermont_american_marten_replication_2.gate2_effort_geometry_contract.v1",
+  "attempt_id": "vermont_american_marten_camera_fresh_paired_v1",
+  "role": "response-independent site universe, public proxy geometry, and recorded-imaging site-week effort",
+  "site_registry": {
+    "source_file": "locations.csv",
+    "location_id_column": "pk_locationid",
+    "eligible_location_type_column": "location_type",
+    "eligible_location_type_exact": "monitoring_station",
+    "required_public_bbox_columns": ["lat_min", "lat_max", "long_min", "long_max"],
+    "expected_eligible_site_count_from_gate1": 70,
+    "proxy_coordinate_rule": {
+      "latitude": "(lat_min + lat_max) / 2",
+      "longitude": "(long_min + long_max) / 2",
+      "interpretation": "midpoint of public-release obscuration bounding box; not the exact camera coordinate"
+    },
+    "do_not_use_direct_lat_long": true,
+    "response_based_site_dropping": false
+  },
+  "effort_endpoint_universe": {
+    "media_file": "media.csv",
+    "visits_file": "visits.csv",
+    "join": [
+      "media.fk_visitid = visits.pk_visitid",
+      "visits.fk_locationid = locations.pk_locationid"
+    ],
+    "eligible_media_rule": "media row must join uniquely to a visit and to an eligible monitoring-station registry row, have parseable start_date, and not carry a source sb_exclude=true token",
+    "sb_exclude_false_tokens_casefolded": ["", "0", "false", "n", "no"],
+    "sb_exclude_true_tokens_casefolded": ["1", "true", "y", "yes"],
+    "unexpected_sb_exclude_token": "STOP",
+    "calendar_week_rule": "week_start = media.start_date minus weekday offset, Monday-based Gregorian date",
+    "eligible_site_week_rule": "at least one eligible label-free media row exists for that site and week",
+    "endpoint_interpretation": "future response is recorded American-marten detection conditional on at least one camera media event in the site-week; no-media weeks are outside the endpoint rather than treated as non-detections",
+    "use_media_filename_as_feature": false,
+    "use_media_filepath_as_feature": false,
+    "use_visits_track_sign_anywhere": false,
+    "use_any_biological_response_file": false
+  },
+  "structural_geometry": {
+    "distance": "Haversine on public proxy centers",
+    "earth_radius_km": 6371.0088,
+    "axis_id": "vermont_public_proxy_haversine_km",
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "threshold_algorithm": "existing eog.v2.world_scale_ladder.build_structural_scale_ladder",
+    "require_distinct_positive_thresholds_at_least": 3,
+    "thresholds_are": "response-blind analyst-choice structural scales, not calibrated biological dispersal distances"
+  },
+  "temporal_profile_only": {
+    "freeze_split_in_gate2": false,
+    "profile": ["eligible site-week count by calendar year", "eligible site count by calendar year", "media rows by calendar year", "earliest and latest eligible week", "site-week media-count distribution"],
+    "future_split_rule": "freeze chronological calibration/heldout years only after this response-independent effort profile and before any biological response header or row access"
+  },
+  "biological_response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
