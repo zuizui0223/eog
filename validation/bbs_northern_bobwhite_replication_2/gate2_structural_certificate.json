@@ -1,0 +1,43 @@
+{
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate2_structural_certificate.v1",
+  "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
+  "status": "gate2_pass_response_blind_structural_ladder",
+  "workflow_run_id": 32936260728,
+  "job_id": 98077931823,
+  "head_sha": "dcc18e54ee4f7f69dfc21651763fca360e20f86f",
+  "gate2_fingerprint": "b8aa74fafbf47257694f39a0ad5375eed4190e19edfa2a35d18ddfd064f0d26f",
+  "artifact": {
+    "id": 9594932406,
+    "name": "bbs-northern-bobwhite-replication-2-gate2",
+    "digest": "sha256:862afb83d021c0275f6b54c6e86a4eecf1b6eb1ffb4e900c3cb8a58324defcf1"
+  },
+  "registry": {
+    "route_count": 1880,
+    "registry_fingerprint": "40672b6433f130a667ed045c36399fe2987290f0cb50736d16577ba86f733386",
+    "node_id_fingerprint": "d29c960ec2bef6723e7ea4741ccb02a6089b1fd68db005fe968e0265bbb0e3e6"
+  },
+  "ladder": {
+    "axis_id": "bbs_route_start_haversine_km",
+    "declaration_fingerprint": "8c474b03ac4e9e637f1c2b9da44db906e74ea462d7e00f8d571e9b68406188b9",
+    "distance_matrix_fingerprint": "c7495ea913e53d6651197a5d212f8e1e9087b13c531afd654fae262750e8a2cd",
+    "ladder_fingerprint": "5673676e632a0fbe1c90101724d1755f3864bb99f9563df74c30730983e79b5b",
+    "distinct_positive_threshold_count": 4,
+    "levels": [
+      {"target_lcc_fraction": 0.25, "distance_threshold_km": 68.46561633549625, "achieved_lcc_fraction": 0.29095744680851066, "weak_component_count": 249, "isolated_node_fraction": 0.05797872340425532},
+      {"target_lcc_fraction": 0.5, "distance_threshold_km": 70.14051769532186, "achieved_lcc_fraction": 0.5037234042553191, "weak_component_count": 226, "isolated_node_fraction": 0.05106382978723404},
+      {"target_lcc_fraction": 0.75, "distance_threshold_km": 87.2062589690333, "achieved_lcc_fraction": 0.7579787234042553, "weak_component_count": 77, "isolated_node_fraction": 0.014893617021276596},
+      {"target_lcc_fraction": 0.9, "distance_threshold_km": 92.90915049714656, "achieved_lcc_fraction": 0.9005319148936171, "weak_component_count": 47, "isolated_node_fraction": 0.009574468085106383}
+    ]
+  },
+  "runtime": {"python": "3.12", "numpy": "2.3.5", "haversine_radius_km": 6371.0088},
+  "response_firewall": {
+    "avian_payload_requests": 0,
+    "avian_payload_bytes_opened": 0,
+    "avian_header_bytes_opened": 0,
+    "avian_rows_opened": false,
+    "avian_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "decision": "PASS: all four prospectively frozen LCC regimes are realized by distinct positive route-start Haversine thresholds; proceed to pre-response estimability and full scientific freeze"
+}
