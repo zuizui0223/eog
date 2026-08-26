@@ -16,7 +16,7 @@ BUILD = ROOT / "build" / "mount_st_helens_lupine_replication_2"
 BUILD.mkdir(parents=True, exist_ok=True)
 CONTRACT = json.loads((HERE / "source_contract.json").read_text())
 OUT = BUILD / "gate0_descriptor_only.json"
-UA = "EOG-Mount-St-Helens-descriptor-only/1.0"
+UA = "EOG-Mount-St-Helens-descriptor-only/2.0"
 
 
 def canonical(obj):
@@ -42,6 +42,14 @@ def get_bytes(url: str):
     return raw, final, ctype
 
 
+def row_has_any_value(row: dict) -> bool:
+    return any(
+        str(v).strip() != ""
+        for k, v in row.items()
+        if k is not None and v is not None
+    )
+
+
 def decode_csv(raw: bytes, label: str):
     text = None
     enc = None
@@ -61,10 +69,14 @@ def decode_csv(raw: bytes, label: str):
         delim = ","
     reader = csv.DictReader(io.StringIO(text), delimiter=delim)
     header = list(reader.fieldnames or [])
-    rows = list(reader)
+    raw_rows = list(reader)
     if not header:
         raise RuntimeError(f"{label} has no header")
-    return header, rows, enc, delim
+    # Audited source-hygiene rule: remove only rows for which every parsed field is blank.
+    # This rule was fixed after the descriptor-only diagnostic proved that the plot CSV's
+    # 96 DictReader rows comprise 92 unique data rows plus four fully blank physical rows.
+    rows = [row for row in raw_rows if row_has_any_value(row)]
+    return header, rows, enc, delim, len(raw_rows), len(raw_rows) - len(rows)
 
 
 def resolve_column(header, aliases, label):
@@ -163,7 +175,7 @@ def main():
     c = CONTRACT
     firewall = dict(c["response_firewall"])
     result = {
-        "schema": "eog.mount_st_helens_lupine_replication_2.gate0_descriptor_only.v1",
+        "schema": "eog.mount_st_helens_lupine_replication_2.gate0_descriptor_only.v2",
         "attempt_id": c["attempt_id"],
         "status": "engineering_failure_pre_response",
         "reason": None,
@@ -177,8 +189,8 @@ def main():
     try:
         plot_raw, plot_final, plot_type = get_bytes(c["archive"]["plot_descriptor_url"])
         species_raw, species_final, species_type = get_bytes(c["archive"]["species_descriptor_url"])
-        ph, prows, penc, pdelim = decode_csv(plot_raw, "plot descriptor")
-        sh, srows, senc, sdelim = decode_csv(species_raw, "species descriptor")
+        ph, prows, penc, pdelim, plot_raw_count, plot_blank_excluded = decode_csv(plot_raw, "plot descriptor")
+        sh, srows, senc, sdelim, species_raw_count, species_blank_excluded = decode_csv(species_raw, "species descriptor")
 
         result["plot_descriptor"] = {
             "url": c["archive"]["plot_descriptor_url"],
@@ -189,6 +201,8 @@ def main():
             "encoding": penc,
             "delimiter": pdelim,
             "header": ph,
+            "raw_dictreader_row_count": plot_raw_count,
+            "fully_blank_rows_excluded_by_audited_hygiene_rule": plot_blank_excluded,
             "row_count": len(prows),
         }
         result["species_descriptor"] = {
@@ -200,16 +214,18 @@ def main():
             "encoding": senc,
             "delimiter": sdelim,
             "header": sh,
+            "raw_dictreader_row_count": species_raw_count,
+            "fully_blank_rows_excluded_by_audited_hygiene_rule": species_blank_excluded,
             "row_count": len(srows),
         }
 
         if len(prows) != int(c["archive"]["published_plot_descriptor_rows"]):
-            result["status"] = "stop_plot_descriptor_row_count_not_reproduced"
-            result["reason"] = f"observed {len(prows)} plot rows, expected {c['archive']['published_plot_descriptor_rows']}"
+            result["status"] = "stop_plot_descriptor_row_count_not_reproduced_after_blank_row_hygiene"
+            result["reason"] = f"observed {len(prows)} nonblank plot rows, expected {c['archive']['published_plot_descriptor_rows']}"
             return finish(result)
         if len(srows) != int(c["archive"]["published_species_descriptor_rows"]):
-            result["status"] = "stop_species_descriptor_row_count_not_reproduced"
-            result["reason"] = f"observed {len(srows)} species rows, expected {c['archive']['published_species_descriptor_rows']}"
+            result["status"] = "stop_species_descriptor_row_count_not_reproduced_after_blank_row_hygiene"
+            result["reason"] = f"observed {len(srows)} nonblank species rows, expected {c['archive']['published_species_descriptor_rows']}"
             return finish(result)
 
         plot_code_col = resolve_column(ph, ["plot_code", "plotcode", "plot_id", "plotid"], "plot code")
@@ -222,7 +238,7 @@ def main():
         for r in prows:
             code = str(r.get(plot_code_col, "")).strip()
             if not code:
-                raise RuntimeError("blank plot code")
+                raise RuntimeError("blank plot code in nonblank descriptor row")
             first = to_int(r.get(first_col), f"{code} first year")
             last = to_int(r.get(last_col), f"{code} last year")
             if first < 1900 or last > 2100 or last < first:
@@ -297,7 +313,7 @@ def main():
             return finish(result)
 
         result["status"] = "gate0_pass_descriptor_registry_availability_focal_code_and_geometry"
-        result["reason"] = "two response-independent descriptor files reproduce the closed plot registry, exact published plot-year availability count, focal Lupinus code and >=3 spatial scales; target response and structural-summary plot-year files remain unopened"
+        result["reason"] = "audited blank-row hygiene leaves exactly 92 response-independent plots; descriptors reproduce the published plot-year availability count, resolve the frozen Lupinus code and provide >=3 spatial scales; target response and structural-summary plot-year files remain unopened"
         return finish(result)
     except Exception as exc:
         result["status"] = "engineering_failure_pre_response"
