@@ -1,0 +1,64 @@
+name: Elwha blacktail replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/elwha-blacktail-replication-2
+    paths:
+      - validation/elwha_blacktail_replication_2/**
+      - .github/workflows/elwha_blacktail_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile metadata-only gate
+        run: python -m py_compile validation/elwha_blacktail_replication_2/gate0_sciencebase_metadata.py
+      - name: Profile ScienceBase metadata only
+        id: gate
+        continue-on-error: true
+        run: python validation/elwha_blacktail_replication_2/gate0_sciencebase_metadata.py
+      - name: Assert attached data payload firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/elwha_blacktail_replication_2/gate0_sciencebase_metadata.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          assert a['data_file_payload_requests']==0
+          assert a['data_file_payload_bytes_opened']==0
+          assert a['data_file_header_bytes_opened']==0
+          assert a['data_rows_opened'] is False
+          assert a['data_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps({'status':r['status'],'fingerprint':r.get('fingerprint'),'top_item':r.get('top_item'),'children':r.get('children'),'flat_file_inventory':r.get('flat_file_inventory'),'response_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate0 metadata evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elwha-blacktail-replication-2-gate0
+          path: build/elwha_blacktail_replication_2/gate0_sciencebase_metadata.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/elwha_blacktail_replication_2/gate0_sciencebase_metadata.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate0 terminal status:', r['status'])
+          PY
