@@ -1,0 +1,66 @@
+name: Willamette red-legged frog replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/willamette-red-legged-frog-replication-2
+    paths:
+      - validation/willamette_red_legged_frog_replication_2/source_contract.json
+      - validation/willamette_red_legged_frog_replication_2/gate0_metadata_profile.py
+      - .github/workflows/willamette_red_legged_frog_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile metadata-only Gate0
+        run: python -m py_compile validation/willamette_red_legged_frog_replication_2/gate0_metadata_profile.py
+      - name: Run metadata-only ScienceBase profile
+        continue-on-error: true
+        run: python validation/willamette_red_legged_frog_replication_2/gate0_metadata_profile.py
+      - name: Assert attached-file payload firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/willamette_red_legged_frog_replication_2/gate0_metadata_profile.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r=json.loads(p.read_text())
+          assert r['all_attached_file_payload_requests']==0
+          assert r['all_attached_file_payload_bytes_opened']==0
+          a=r['biological_response_firewall']
+          assert a['response_payload_requests']==0
+          assert a['response_payload_bytes_opened']==0
+          assert a['response_headers_opened'] is False
+          assert a['response_rows_opened'] is False
+          assert a['response_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps(r,indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: willamette-red-legged-frog-replication-2-gate0
+          path: build/willamette_red_legged_frog_replication_2/gate0_metadata_profile.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/willamette_red_legged_frog_replication_2/gate0_metadata_profile.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate0 terminal status:',r['status'])
+          PY
