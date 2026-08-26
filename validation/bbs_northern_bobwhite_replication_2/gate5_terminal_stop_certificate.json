@@ -1,0 +1,42 @@
+{
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate5_terminal_stop_certificate.v1",
+  "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
+  "workflow_run_id": 32952826225,
+  "job_id": 98127892712,
+  "head_sha": "c2c2222c793b284c06c963dc9cca6abb6b36968e",
+  "status": "stop_pre_response_archive_metadata_unavailable",
+  "gate5_contract_sha256": "614c7d76e757e6be2b7321d7397e4726df8cfb2466095c9aee7e309ea7ab227e",
+  "gate5_result_fingerprint": "af729b084b49ed5605a78106f51ad22c19c6980df8eb14ad3f4d945872a086f1",
+  "paper_ready_binding": {
+    "verified_before_archive_range_attempt": true,
+    "binding_sha256": "be8c0d15239e38e095fd49dfa9a2aa3be2b4a1c267eb6a28e67473855becac8a",
+    "main_merge_commit": "38c4fe1b4ce893afc56d891192ecbe3b8689e575"
+  },
+  "frozen_archive": {
+    "name": "50-StopData.zip",
+    "size_bytes": 68998320,
+    "md5": "af3a5533a78a386760540f70d80cb240"
+  },
+  "terminal_transport_observation": {
+    "requested_role": "zip_eocd_zero_comment",
+    "requested_range_start": 68998298,
+    "requested_range_end": 68998319,
+    "expected_http_status": 206,
+    "observed_http_status": 200,
+    "content_range": null,
+    "response_body_bytes_opened": 0,
+    "reason": "The frozen ScienceBase endpoint ignored the bounded Range request. The predeclared gate forbids opening a full-body 200 response merely to recover ZIP metadata."
+  },
+  "response_firewall": {
+    "avian_member_payload_requests": 0,
+    "avian_member_payload_bytes_opened": 0,
+    "avian_header_bytes_opened": 0,
+    "avian_rows_opened": false,
+    "avian_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "predictive_evidence": "none",
+  "paper_role": "prospective candidate-exclusion / protocol-integrity evidence; not a negative Layer-B result",
+  "decision": "Terminal STOP for this fresh Northern Bobwhite attempt. Do not download the whole response archive, scan/decompress it, or weaken the range gate to rescue the endpoint."
+}
