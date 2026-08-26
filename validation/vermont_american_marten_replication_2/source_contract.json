@@ -1,0 +1,58 @@
+{
+  "schema": "eog.vermont_american_marten_replication_2.source_contract.v1",
+  "attempt_id": "vermont_american_marten_camera_fresh_paired_v1",
+  "issue": 304,
+  "sciencebase": {
+    "item_id": "663ce56cd34e77890839e1c8",
+    "doi": "10.5066/P14MFBJT",
+    "title": "Vermont Fish and Wildlife Department Volume 1 (2014 - 2022)",
+    "coverage_start": "2014-01-25",
+    "coverage_end": "2022-12-31",
+    "published_media_count": 41933
+  },
+  "focal_species": {
+    "scientific_name": "Martes americana",
+    "common_name": "American marten",
+    "selection_uses_release_response_prevalence": false,
+    "species_switching_after_any_biological_label_access": false
+  },
+  "prospective_data_roles": {
+    "response_independent_exact_names_if_present": [
+      "dictionary.csv",
+      "dbdictionary.csv",
+      "locations.csv",
+      "visits.csv",
+      "media.csv",
+      "taxa.csv",
+      "models.csv",
+      "librarylists.csv",
+      "librarylistitems.csv",
+      "medialists.csv",
+      "medialistitems.csv"
+    ],
+    "biological_response_exact_names_if_present": [
+      "annotations.csv",
+      "modeloutputs.csv",
+      "annotationverifications.csv",
+      "annotags.csv",
+      "modelverifications.csv"
+    ],
+    "media_role_reason": "USGS release documentation states media.csv stores filename and capture date/time metadata, while wildlife identifications are stored separately in annotations.csv and modeloutputs.csv. media.csv is therefore prospectively classified as label-free observation effort for this new attempt."
+  },
+  "gate0": {
+    "metadata_only": true,
+    "require_exact_item_id": true,
+    "require_title": true,
+    "require_physical_media_response_separation": true,
+    "no_file_downloads": true
+  },
+  "biological_response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
