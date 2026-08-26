@@ -5,6 +5,7 @@ on:
     branches:
       - agent/bbs-northern-bobwhite-replication-2
     paths:
+      - validation/bbs_northern_bobwhite_replication_2/paper_ready_binding.json
       - validation/bbs_northern_bobwhite_replication_2/gate4_prospective_estimability_contract.json
       - validation/bbs_northern_bobwhite_replication_2/gate4_prospective_estimability.py
       - tests/test_bbs_northern_bobwhite_gate4_estimability.py
