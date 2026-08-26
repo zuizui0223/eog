@@ -1,0 +1,65 @@
+name: Hog Island small mammal metadata-only screen
+
+on:
+  push:
+    branches:
+      - agent/hog-island-small-mammal-metadata-screen
+    paths:
+      - validation/hog_island_small_mammal_metadata_screen/**
+      - .github/workflows/hog_island_small_mammal_metadata_screen.yml
+
+permissions:
+  contents: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile metadata-only screen
+        run: python -m py_compile validation/hog_island_small_mammal_metadata_screen/metadata_screen.py
+      - name: Run PASTA metadata-only screen
+        id: screen
+        continue-on-error: true
+        run: python validation/hog_island_small_mammal_metadata_screen/metadata_screen.py
+      - name: Assert no data payload was opened
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/hog_island_small_mammal_metadata_screen/metadata_screen.json')
+          assert p.exists(), 'metadata evidence missing'
+          r = json.loads(p.read_text())
+          a = r['response_firewall']
+          assert a['data_entity_payload_requests'] == 0
+          assert a['data_entity_payload_bytes'] == 0
+          assert a['archive_requests'] == 0
+          assert a['capture_header_bytes'] == 0
+          assert a['capture_rows_opened'] is False
+          assert a['capture_values_opened'] is False
+          assert a['model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps({'status':r['status'],'package':r['package'],'entity_names':r['entity_names'],'eml_data_tables':r['eml_data_tables'],'role_diagnosis':r['role_diagnosis'],'response_firewall':a}, indent=2, sort_keys=True))
+          PY
+      - name: Upload metadata evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hog-island-small-mammal-metadata-screen
+          path: build/hog_island_small_mammal_metadata_screen/metadata_screen.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/hog_island_small_mammal_metadata_screen/metadata_screen.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Metadata screen terminal status:', r['status'])
+          PY
