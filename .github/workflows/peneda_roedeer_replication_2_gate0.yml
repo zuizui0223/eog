@@ -1,0 +1,62 @@
+name: Peneda roe deer replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/peneda-roedeer-replication-2
+    paths:
+      - validation/peneda_roedeer_replication_2/**
+      - .github/workflows/peneda_roedeer_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile response-free Gate0
+        run: python -m py_compile validation/peneda_roedeer_replication_2/gate0_response_free.py
+      - name: Run exact deployment-only Gate0
+        id: gate
+        continue-on-error: true
+        run: python validation/peneda_roedeer_replication_2/gate0_response_free.py
+      - name: Assert observation response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/peneda_roedeer_replication_2/gate0_response_free.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r=json.loads(p.read_text()); a=r['response_firewall']
+          assert a['observation_payload_requests']==0
+          assert a['observation_payload_bytes_opened']==0
+          assert a['observation_header_bytes_opened']==0
+          assert a['observation_rows_opened'] is False
+          assert a['observation_values_opened'] is False
+          assert a['model_fits']==0 and a['heldout_scores']==0
+          print(json.dumps({'status':r['status'],'fingerprint':r['fingerprint'],'deployments':r['deployments'],'geometry':r['geometry'],'temporal':r['temporal'],'response_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: peneda-roedeer-replication-2-gate0
+          path: build/peneda_roedeer_replication_2/gate0_response_free.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/peneda_roedeer_replication_2/gate0_response_free.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate0 terminal status:',r['status'])
+          PY
