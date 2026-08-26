@@ -86,10 +86,12 @@ def main():
             raise RuntimeError("dbdictionary payload MD5 mismatch")
         header, rows, enc, delim = d.decode(raw)
 
-        table_col = "database_tablename"
-        field_col = "table_field"
+        # Gate2 had already frozen the physical dictionary schema before Gate3 execution.
+        # Use those exact response-independent columns rather than the stale pre-Gate2 aliases.
+        table_col = "pk_tablename"
+        field_col = "pk_fieldname"
         if table_col not in header or field_col not in header:
-            raise RuntimeError(f"dictionary schema missing table/field columns: {header}")
+            raise RuntimeError(f"dictionary schema missing Gate2-confirmed table/field columns: {header}")
         table_counts = Counter(str(r.get(table_col) or "").strip() for r in rows)
         all_tables = sorted(k for k in table_counts if k)
         deployment_tables = [t for t in all_tables if "deploy" in t.lower() or "rutc" in t.lower()]
@@ -114,7 +116,6 @@ def main():
                 linkage_rows.append({"physical_line": i, "row": clean})
                 by_table_fields[table].append(field)
 
-        # Extract exact relation candidates using field names/descriptions only.
         relation_candidates = []
         for itemrow in linkage_rows:
             row = itemrow["row"]
