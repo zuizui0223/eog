@@ -1,0 +1,50 @@
+{
+  "schema": "eog.mount_st_helens_lupine_replication_2.source_contract.v1",
+  "attempt_id": "mount_st_helens_lupinus_lepidus_plot_year_fresh_paired_v1",
+  "issue": 310,
+  "archive": {
+    "landing_url": "https://esapubs.org/archive/ecol/E091/152/default.htm",
+    "paper_doi": "10.1890/09-2357.1",
+    "plot_descriptor_url": "https://esapubs.org/archive/ecol/E091/152/MSH_PLOT_DESCRIPTORS.csv",
+    "species_descriptor_url": "https://esapubs.org/archive/ecol/E091/152/MSH_SPECIES_DESCRIPTORS.csv",
+    "forbidden_structure_url": "https://esapubs.org/archive/ecol/E091/152/MSH_STRUCTURE_PLOT_YEAR.csv",
+    "forbidden_response_url": "https://esapubs.org/archive/ecol/E091/152/MSH_SPECIES_PLOT_YEAR.csv",
+    "published_plot_descriptor_rows": 92,
+    "published_species_descriptor_rows": 85,
+    "published_plot_year_rows": 1743,
+    "files_are_uncompressed_ascii_csv": true
+  },
+  "focal_species": {
+    "scientific_name": "Lupinus lepidus",
+    "selection_uses_target_response": false,
+    "selection_basis": "independent literature identifies prairie lupine as an early nitrogen-fixing pioneer central to Mount St. Helens primary succession",
+    "species_switching_after_any_descriptor_or_response_access": false
+  },
+  "gate0": {
+    "allowed_payloads": ["MSH_PLOT_DESCRIPTORS.csv", "MSH_SPECIES_DESCRIPTORS.csv"],
+    "forbidden_payloads": ["MSH_STRUCTURE_PLOT_YEAR.csv", "MSH_SPECIES_PLOT_YEAR.csv"],
+    "require_plot_rows": 92,
+    "require_species_descriptor_rows": 85,
+    "require_unique_plot_codes": true,
+    "require_valid_lon_lat": true,
+    "require_valid_first_last_year": true,
+    "require_continuous_descriptor_eligibility_count_equals_published_plot_year_rows": true,
+    "structural_lcc_targets": [0.25, 0.5, 0.75, 0.9],
+    "require_distinct_positive_structural_scales": 3,
+    "haversine_radius_km": 6371.0088
+  },
+  "response_firewall": {
+    "structure_payload_requests": 0,
+    "structure_payload_bytes_opened": 0,
+    "structure_header_bytes_opened": 0,
+    "structure_rows_opened": false,
+    "structure_values_opened": false,
+    "target_response_payload_requests": 0,
+    "target_response_payload_bytes_opened": 0,
+    "target_response_header_bytes_opened": 0,
+    "target_response_rows_opened": false,
+    "target_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
