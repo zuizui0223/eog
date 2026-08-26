@@ -41,11 +41,12 @@ def write(result):
 
 def main():
     result = {
-        "schema": "eog.vermont_american_marten_replication_2.gate4b_searchlist_membership.v1",
+        "schema": "eog.vermont_american_marten_replication_2.gate4b_searchlist_membership.v2",
         "attempt_id": gate1.CONTRACT["attempt_id"],
         "status": "engineering_failure_pre_response",
         "reason": None,
         "search_list_id": SEARCH_LIST_ID,
+        "observed_headers": {},
         "librarylist_row": None,
         "list_row": None,
         "librarylistitems_rows": [],
@@ -64,6 +65,7 @@ def main():
             raw, _ = gate1.fetch_allowed(item, name, gate1.ALLOWED[name])
             header, rows, _, _ = gate1.decode(raw, name)
             parsed[name] = (header, rows)
+            result["observed_headers"][name] = header
 
         ll_header, ll_rows = parsed["librarylists.csv"]
         lli_header, lli_rows = parsed["librarylistitems.csv"]
@@ -73,7 +75,7 @@ def main():
         _, taxa_rows = parsed["taxa.csv"]
 
         required = {
-            "librarylists.csv": ({"pk_librarylistid", "name", "description"}, set(ll_header)),
+            "librarylists.csv": ({"pk_librarylistid"}, set(ll_header)),
             "librarylistitems.csv": ({"pk_librarylistitemid", "item", "type", "fk_librarylistid"}, set(lli_header)),
             "lists.csv": ({"pk_listid", "name", "description"}, set(lists_header)),
             "listitems.csv": ({"fk_listid", "item", "description", "pk_listitemid"}, set(li_header)),
@@ -81,7 +83,7 @@ def main():
         for name, (need, have) in required.items():
             missing = need - have
             if missing:
-                raise RuntimeError(f"{name} missing expected columns {sorted(missing)}")
+                raise RuntimeError(f"{name} missing required columns {sorted(missing)}; observed={sorted(have)}")
 
         ll_matches = [clean(r) for r in ll_rows if str(r.get("pk_librarylistid") or "").strip() == SEARCH_LIST_ID]
         if len(ll_matches) != 1:
@@ -108,10 +110,9 @@ def main():
         focal_taxa = [clean(r) for r in taxa_rows if contains_focal(r)]
         result["focal_taxa_rows"] = focal_taxa
 
-        # We do not infer a cross-table mapping merely from a shared list ID.
-        # Direct library-list membership is established only if a librarylistitems row
-        # under sp_ch2021 itself names/identifies the focal taxon. Otherwise the gate
-        # records the controlled-list evidence but leaves absence semantics unresolved.
+        # Never infer direct library-search membership merely because the controlled
+        # list and library list share an ID. A future negative is admissible only if
+        # the response-independent librarylistitems rows themselves identify marten.
         direct = result["focal_librarylistitems_rows"]
         controlled = result["focal_listitems_rows"]
         result["membership_assessment"] = {
@@ -124,7 +125,7 @@ def main():
         }
         if len(direct) >= 1:
             result["status"] = "gate4b_direct_marten_search_list_membership_proven"
-            result["reason"] = "A response-independent librarylistitems row under sp_ch2021 directly identifies the focal marten taxon/search item; this can support future absence coverage rules"
+            result["reason"] = "A response-independent librarylistitems row under sp_ch2021 directly identifies the focal marten search item; future absence-coverage rules may use this list after response-schema freeze"
         elif len(controlled) >= 1:
             result["status"] = "stop_direct_search_list_membership_not_proven"
             result["reason"] = "The controlled list sp_ch2021 contains a marten item, but no response-independent librarylistitems row under sp_ch2021 directly identifies marten and no undocumented cross-table mapping is inferred; absence semantics remain unproven"
