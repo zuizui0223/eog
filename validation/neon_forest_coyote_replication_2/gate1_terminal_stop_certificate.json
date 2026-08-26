@@ -1,0 +1,54 @@
+{
+  "schema": "eog.neon_forest_coyote_replication_2.gate1_terminal_stop_certificate.v1",
+  "attempt_id": "neon_forest_coyote_camera_interval_fresh_paired_v1",
+  "status": "terminal_stop_no_candidate_bin_width_passed",
+  "reason": "The prospectively frozen response-independent availability gate required at least 30 subproject-year contexts in every required relative-time bin. The deployment registry contains only 19 subproject-year contexts in total, so no frozen candidate width can satisfy the gate. The context-count requirement is not relaxed after seeing this result.",
+  "deployment_registry": {
+    "deployment_count": 820,
+    "subproject_count": 17,
+    "subproject_year_context_count": 19,
+    "registry_fingerprint": "09ef7fcf892be388d18bd06ed9a57f042a3af4b4c7e8f50a1a226a7407d23df7",
+    "duration_days_min": 1.0,
+    "duration_days_median": 35.0,
+    "duration_days_max": 44.0
+  },
+  "frozen_time_gate": {
+    "candidate_width_days": [7,5,4,3],
+    "required_relative_bins": [1,2,3,4,5,6,7],
+    "per_required_bin_min_eligible_deployments": 300,
+    "per_required_bin_min_contexts": 30,
+    "per_required_bin_min_subprojects": 8,
+    "calibration_total_min_eligible_deployment_bins": 600,
+    "heldout_total_min_eligible_deployment_bins": 1200,
+    "post_result_bin_width_repair_allowed": false
+  },
+  "candidate_width_results": {
+    "7": {"calibration_total":1588,"heldout_total":1261,"max_context_count_any_required_bin":19,"late_bin6_contexts":6,"late_bin7_contexts":0,"pass":false},
+    "5": {"calibration_total":1613,"heldout_total":2623,"max_context_count_any_required_bin":19,"late_bin6_contexts":15,"late_bin7_contexts":15,"pass":false},
+    "4": {"calibration_total":1619,"heldout_total":2890,"max_context_count_any_required_bin":19,"late_bin6_contexts":18,"late_bin7_contexts":18,"pass":false},
+    "3": {"calibration_total":1625,"heldout_total":3168,"max_context_count_any_required_bin":19,"late_bin6_contexts":19,"late_bin7_contexts":19,"pass":false}
+  },
+  "diagnostic_note": "The auxiliary start_year field was separately diagnosed response-independently and ignored in favor of complete start_date.year. That parser diagnosis did not alter the frozen temporal eligibility thresholds and does not rescue the 30-context requirement.",
+  "gate1": {
+    "fingerprint": "25ef2f5a0a33e41b2f559ebbc1a80504e4a9ac9357e4eaadbabfb78175f4f9de",
+    "structural_ladder_executed": false,
+    "stop_precedes_structural_ladder": true
+  },
+  "audit": {
+    "workflow_run_id": 32930615453,
+    "job_id": 98061994993,
+    "head_sha": "d9d8787f5e6f59473d35bd7ab9c0956fa94055f0",
+    "artifact_id": 9593064443,
+    "artifact_digest": "sha256:005bede4345abf7002e0fab2a58ff03b9a1e1242011c464ba2053a87c9269d7d"
+  },
+  "response_firewall": {
+    "sequence_payload_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "prohibited_repair": "Do not lower the frozen minimum-context gate or reuse this coyote endpoint as a fresh paired endpoint."
+}
