@@ -1,0 +1,73 @@
+{
+  "schema": "eog.neon_forest_coyote_replication_2.gate1_time_geometry_contract.v1",
+  "attempt_id": "neon_forest_coyote_camera_interval_fresh_paired_v1",
+  "gate0_certificate": "validation/neon_forest_coyote_replication_2/gate0_source_profile_certificate.json",
+  "deployment_source": {
+    "record_id": 20826511,
+    "filename": "camera_trap_deployments.csv",
+    "expected_md5": "82537cdf0a586fa14c9a8b6afd7be470",
+    "exact_columns": {
+      "deployment_id": "deployment_id",
+      "longitude": "longitude",
+      "latitude": "latitude",
+      "start_date": "start_date",
+      "end_date": "end_date",
+      "camera_name": "camera_name",
+      "subproject_name": "subproject_name",
+      "start_year": "start_year"
+    },
+    "accepted_date_formats_in_order": ["%Y-%m-%d", "%Y/%m/%d", "%m/%d/%Y"],
+    "active_interval_semantics": "half-open [start_date, end_date); no response-derived effort repair"
+  },
+  "world_context": {
+    "context_key": ["subproject_name", "start_year"],
+    "cross_subproject_propagation": false,
+    "cross_year_propagation_within_subproject": false,
+    "node": "deployment_id",
+    "reason": "deployment-relative repeated intervals are contemporaneous only within the same subproject survey year"
+  },
+  "time_bin_selection": {
+    "candidate_width_days_descending": [7, 5, 4, 3],
+    "selection_rule": "choose the largest candidate width satisfying every frozen availability condition; if none satisfy, terminal STOP",
+    "anchor": "each deployment start_date independently",
+    "relative_bin_interval": "[start + (k-1)*width, start + k*width)",
+    "minimum_active_fraction_per_bin": 0.8,
+    "required_relative_bins": [1,2,3,4,5,6,7],
+    "roles": {
+      "1": "initialization_only_not_scored",
+      "2": "calibration",
+      "3": "calibration",
+      "4": "primary_heldout_1",
+      "5": "primary_heldout_2",
+      "6": "primary_heldout_3",
+      "7": "primary_heldout_4"
+    },
+    "per_required_bin_min_eligible_deployments": 300,
+    "per_required_bin_min_contexts": 30,
+    "per_required_bin_min_subprojects": 8,
+    "calibration_total_min_eligible_deployment_bins": 600,
+    "heldout_total_min_eligible_deployment_bins": 1200,
+    "post_result_bin_width_repair_allowed": false
+  },
+  "structural_ladder": {
+    "distance": "Haversine great-circle km, earth radius 6371.0088 km",
+    "edges_allowed_only_within_context": true,
+    "threshold_candidates": "all distinct positive pairwise distances within context",
+    "coverage_definition": "sum over contexts of each context largest-connected-component node count divided by total deployment nodes participating in contexts with at least one node",
+    "targets": [0.25,0.5,0.75,0.9],
+    "threshold_for_target": "smallest positive candidate threshold whose pooled within-context LCC coverage reaches target",
+    "minimum_distinct_positive_thresholds": 3,
+    "require_target_0_9_achieved": true,
+    "zero_distance_pairs": "connected at every positive threshold but never used as threshold candidates",
+    "post_result_threshold_repair_allowed": false
+  },
+  "response_firewall": {
+    "sequence_payload_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
