@@ -8,6 +8,7 @@ on:
       - validation/neon_forest_coyote_replication_2/gate0_source_profile_certificate.json
       - validation/neon_forest_coyote_replication_2/gate1_time_geometry_contract.json
       - validation/neon_forest_coyote_replication_2/gate1_time_geometry.py
+      - validation/neon_forest_coyote_replication_2/gate1_time_geometry_run.py
       - .github/workflows/neon_forest_coyote_replication_2_gate1.yml
 
 permissions:
@@ -22,11 +23,13 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile Gate1
-        run: python -m py_compile validation/neon_forest_coyote_replication_2/gate1_time_geometry.py
+        run: |
+          python -m py_compile validation/neon_forest_coyote_replication_2/gate1_time_geometry.py
+          python -m py_compile validation/neon_forest_coyote_replication_2/gate1_time_geometry_run.py
       - name: Run response-independent time and geometry gate
         id: gate
         continue-on-error: true
-        run: python validation/neon_forest_coyote_replication_2/gate1_time_geometry.py
+        run: python validation/neon_forest_coyote_replication_2/gate1_time_geometry_run.py
       - name: Assert sequence response firewall
         if: always()
         run: |
