@@ -1,0 +1,67 @@
+{
+  "schema": "eog.green_mountain_marten_replication_2.terminal_pre_response_paper_universe_stop.v1",
+  "attempt_id": "green_mountain_marten_camera_oof_fresh_paired_v1",
+  "status": "stop_paper_camera_universe_not_reproduced_response_closed",
+  "reason": "The exact response-independent ScienceBase release does not reproduce the paper's 2019-2021 238-camera / 40-unit survey universe. Across all years the release contains 141 set visits and only 49 response-independently paired set-to-pull assignments. Under the two natural December-April season-label conventions, the paper years 2019-2021 contain only one paired assignment (end-year convention) or zero (start-year convention), versus the required 238 camera placements. No explicit sample-unit identifier exists in the allowed locations/visits schema.",
+  "paper_requirements": {
+    "camera_placements": 238,
+    "sample_units": 40,
+    "units_by_field_season": [15, 19, 6],
+    "survey_days_per_unit": 15,
+    "nominal_cameras_per_unit": 6
+  },
+  "response_independent_release_profile": {
+    "locations_rows": 92,
+    "unique_locations": 92,
+    "public_bbox_rows": 91,
+    "visits_rows": 527,
+    "visit_type_counts": {"set": 141, "check": 337, "pull": 49},
+    "unique_equipment_ids": 87,
+    "paired_set_pull_assignments_all_years": 49,
+    "unpaired_set_count": 92,
+    "explicit_unit_id_column_present": false,
+    "paper_year_end_year_convention_assignments": {"2019": 1, "2020": 0, "2021": 0},
+    "paper_year_start_year_convention_assignments": {"2019": 0, "2020": 0, "2021": 0}
+  },
+  "gate0a": {
+    "status": "pass",
+    "workflow_run_id": 32861133725,
+    "job_id": 97845123083,
+    "artifact_id": 9568186137
+  },
+  "gate0b": {
+    "status": "pass",
+    "workflow_run_id": 32919731542,
+    "job_id": 98030764550,
+    "result_fingerprint": "d761f14dd3d9ffa3105b5c03014ba720c9e7acb5167eb3b82d603de304e871c7",
+    "artifact_id": 9589405790,
+    "artifact_digest": "sha256:da455dd9e4966ba6fc566cefea69662c957112ed5349f3031e4d084d372d9439"
+  },
+  "paper_universe_profile": {
+    "workflow_run_id": 32919975550,
+    "job_id": 98031482369,
+    "result_fingerprint": "bdbb18bfba90e5d2a1b52c904b8c559974efd2bd685367c57e5ba8db1d7a05b7",
+    "artifact_id": 9589493803,
+    "artifact_digest": "sha256:3f67303b6424d29e27ee49e8bd2cdd9c1865345590088e540a0055cd5266ed1e"
+  },
+  "track_sign_blacklist": {
+    "opaque_values_were_profiled_in_gate0b": true,
+    "taxa_mapping_opened": false,
+    "used_for_universe_or_species_or_model_decision": false,
+    "future_use_forbidden": true
+  },
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotations_header_opened": false,
+    "annotations_rows_opened": false,
+    "annotations_values_opened": false,
+    "media_payload_requests": 0,
+    "taxa_payload_requests": 0,
+    "modeloutputs_payload_requests": 0,
+    "photo_zip_payload_requests": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "terminal_rule": "Do not subset, regroup, decode track_sign, or open annotations to repair the paper universe. This candidate is not a fresh replication endpoint."
+}
