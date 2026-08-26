@@ -1,0 +1,35 @@
+name: Peneda roe deer site identity diagnostic
+
+on:
+  push:
+    branches:
+      - agent/peneda-roedeer-replication-2
+    paths:
+      - validation/peneda_roedeer_replication_2/site_identity_diagnostic.py
+      - .github/workflows/peneda_roedeer_site_identity_diagnostic.yml
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m py_compile validation/peneda_roedeer_replication_2/site_identity_diagnostic.py
+      - run: python validation/peneda_roedeer_replication_2/site_identity_diagnostic.py
+      - name: Assert observation firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/peneda_roedeer_replication_2/site_identity_diagnostic.json').read_text()); a=r['response_firewall']
+          assert a['observation_payload_requests']==0 and a['observation_payload_bytes_opened']==0 and a['observation_header_bytes_opened']==0
+          assert a['observation_rows_opened'] is False and a['observation_values_opened'] is False
+          print(json.dumps(r,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: peneda-roedeer-site-identity-diagnostic
+          path: build/peneda_roedeer_replication_2/site_identity_diagnostic.json
+          if-no-files-found: error
