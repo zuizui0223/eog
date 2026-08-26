@@ -1,0 +1,73 @@
+name: Green Mountain marten replication 2 paper-universe profile
+
+on:
+  push:
+    branches:
+      - agent/green-mountain-marten-replication-2
+    paths:
+      - validation/green_mountain_marten_replication_2/source_contract.json
+      - validation/green_mountain_marten_replication_2/gate0a_metadata_certificate.json
+      - validation/green_mountain_marten_replication_2/gate0b_response_free_certificate.json
+      - validation/green_mountain_marten_replication_2/paper_universe_profile.py
+      - .github/workflows/green_mountain_marten_replication_2_paper_universe.yml
+
+permissions:
+  contents: read
+
+jobs:
+  profile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile profile
+        run: python -m py_compile validation/green_mountain_marten_replication_2/paper_universe_profile.py
+      - name: Run response-free paper-universe profile
+        id: profile
+        continue-on-error: true
+        run: python validation/green_mountain_marten_replication_2/paper_universe_profile.py
+      - name: Assert biological response firewall and track-sign blacklist
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/green_mountain_marten_replication_2/paper_universe_profile.json')
+          assert p.exists(), 'profile evidence missing'
+          r=json.loads(p.read_text())
+          a=r['response_firewall']; b=r['blacklist']
+          assert a['annotations_payload_requests']==0
+          assert a['annotations_payload_bytes_opened']==0
+          assert a['annotations_header_opened'] is False
+          assert a['annotations_rows_opened'] is False
+          assert a['annotations_values_opened'] is False
+          assert a['media_payload_requests']==0
+          assert a['taxa_payload_requests']==0
+          assert a['modeloutputs_payload_requests']==0
+          assert a['photo_zip_payload_requests']==0
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          assert b['track_sign_value_accessed_by_this_script'] is False
+          assert b['taxa_mapping_opened'] is False
+          print(json.dumps({'status':r['status'],'profile':r['profile'],'blacklist':b,'response_firewall':a,'fingerprint':r['fingerprint']},indent=2,sort_keys=True))
+          PY
+      - name: Upload profile evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: green-mountain-marten-replication-2-paper-universe
+          path: build/green_mountain_marten_replication_2/paper_universe_profile.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/green_mountain_marten_replication_2/paper_universe_profile.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Profile terminal status:',r['status'])
+          PY
