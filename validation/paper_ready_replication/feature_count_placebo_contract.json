@@ -1,0 +1,70 @@
+{
+  "schema": "eog.paper_ready_replication.feature_count_placebo.v1",
+  "purpose": "Secondary reviewer-facing control for the third fresh endpoint: test whether the observed Layer-B gain can be explained merely by adding ten extra columns to the same learner.",
+  "primary_test_unchanged": {
+    "baseline_arm": "same_strong_conventional_learner_with_conventional_features_only",
+    "augmented_arm": "same_learner_plus_unchanged_symmetric_world_support_summary_v1",
+    "layer_b_feature_count": 10,
+    "placebo_can_change_primary_terminal_status": false
+  },
+  "placebo_arm": {
+    "learner": "identical_to_primary_baseline_and_augmented_learner",
+    "conventional_features": "identical_to_primary_arms",
+    "extra_feature_count": 10,
+    "extra_feature_source": "the_ten_real_layer_b_columns_after_response_independent_row_permutation",
+    "labels_used_to_generate_permutation": false,
+    "permutation_scope": "independently_within_each_outer_evaluation_partition_and_separately_for_training_and_heldout_rows",
+    "column_permutation": "each_of_the_ten_layer_b_columns_is_permuted_independently",
+    "preserves_column_marginal_values_within_partition": true,
+    "destroys_row_specific_layer_b_alignment": true,
+    "uses_future_response_values": false,
+    "uses_response_for_seed_or_order": false
+  },
+  "replicates": {
+    "count": 20,
+    "seeds": [
+      2026082601,
+      2026082602,
+      2026082603,
+      2026082604,
+      2026082605,
+      2026082606,
+      2026082607,
+      2026082608,
+      2026082609,
+      2026082610,
+      2026082611,
+      2026082612,
+      2026082613,
+      2026082614,
+      2026082615,
+      2026082616,
+      2026082617,
+      2026082618,
+      2026082619,
+      2026082620
+    ]
+  },
+  "evaluation": {
+    "same_calibration_and_heldout_split_as_primary": true,
+    "same_primary_metric": "binary_log_loss",
+    "same_outer_heldout_units_as_primary": true,
+    "report_placebo_macro_log_loss_for_each_seed": true,
+    "report_placebo_median_macro_log_loss": true,
+    "report_placebo_q25_q75_macro_log_loss": true,
+    "report_real_augmented_minus_placebo_median": true,
+    "report_fraction_of_placebo_replicates_beaten_by_real_augmented": true,
+    "formal_p_value": false
+  },
+  "interpretation": {
+    "if_real_layer_b_beats_most_placebos": "supports_that_row_specific_layer_b_structure_matters_beyond_feature_count_alone",
+    "if_real_layer_b_is_similar_to_placebos": "feature_count_or_random_partition_effect_remains_a_plausible_explanation_and_predictive_claim_must_be_narrowed",
+    "if_placebo_beats_real_layer_b": "do_not_rescue_tune; report_as_secondary_adverse_robustness_result"
+  },
+  "existing_endpoint_rule": {
+    "azores_and_louisiana_placebo_if_run_later": "post_hoc_robustness_only",
+    "may_upgrade_fresh_evidence": false,
+    "must_be_labeled_post_hoc_in_manuscript": true
+  },
+  "freeze_rule": "For the third fresh endpoint, this placebo rule, seeds, learner, partitioning and summaries must be fixed before response rows/values are opened. No placebo result may alter or replace the primary favorable/null/adverse decision rule."
+}
