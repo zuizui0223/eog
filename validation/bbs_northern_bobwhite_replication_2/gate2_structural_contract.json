@@ -1,0 +1,36 @@
+{
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate2_structural_contract.v1",
+  "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
+  "gate1_required": {
+    "status": "gate1_pass_response_independent_registry_effort_and_species",
+    "analysis_route_count": 1880,
+    "analysis_registry_fingerprint": "40672b6433f130a667ed045c36399fe2987290f0cb50736d16577ba86f733386",
+    "gate1_fingerprint": "76efcba11b59e0ad76f1e23d36aed4e73583534203dbbd1588a3809a3ece747e"
+  },
+  "geometry": {
+    "source": "Routes.csv route-start Latitude/Longitude for the exact Gate1 analysis registry",
+    "metric": "Haversine great-circle distance",
+    "earth_radius_km": 6371.0088,
+    "axis_id": "bbs_route_start_haversine_km",
+    "cross_state_edges_allowed": true,
+    "interpretation": "response-blind structural analyst-choice scales, not calibrated biological dispersal distances"
+  },
+  "structural_ladder": {
+    "target_largest_component_fractions": [0.25, 0.5, 0.75, 0.9],
+    "threshold_rule": "smallest observed pairwise distance at which the threshold graph reaches each declared LCC target",
+    "minimum_distinct_positive_thresholds": 3,
+    "require_nested_non_decreasing_thresholds": true,
+    "production_builder": "eog.v2.world_scale_ladder.build_structural_scale_ladder"
+  },
+  "allowed_payloads": ["Routes.csv", "Weather.csv"],
+  "forbidden_payloads": ["50-StopData.zip", "States.zip", "MigrantNonBreeder.zip"],
+  "response_firewall": {
+    "avian_payload_requests": 0,
+    "avian_payload_bytes_opened": 0,
+    "avian_header_bytes_opened": 0,
+    "avian_rows_opened": false,
+    "avian_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
