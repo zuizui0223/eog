@@ -1,7 +1,8 @@
 {
-  "schema": "eog.neon_forest_coyote_replication_2.gate1_time_geometry_contract.v2",
+  "schema": "eog.neon_forest_coyote_replication_2.gate1_time_geometry_contract.v3",
   "attempt_id": "neon_forest_coyote_camera_interval_fresh_paired_v1",
   "gate0_certificate": "validation/neon_forest_coyote_replication_2/gate0_source_profile_certificate.json",
+  "start_year_diagnostic_certificate": "validation/neon_forest_coyote_replication_2/start_year_diagnostic_certificate.json",
   "deployment_source": {
     "record_id": 20826511,
     "filename": "camera_trap_deployments.csv",
@@ -14,11 +15,12 @@
       "end_date": "end_date",
       "camera_name": "camera_name",
       "subproject_name": "subproject_name",
-      "start_year": "start_year"
+      "auxiliary_start_year": "start_year"
     },
     "accepted_date_formats_in_order": ["%Y-%m-%d", "%Y/%m/%d", "%m/%d/%Y"],
-    "canonical_year_rule": "use parsed start_date.year; auxiliary start_year is accepted only if it equals the four-digit year or its last two decimal digits",
-    "canonical_year_rule_fixed_after_response_independent_parser_diagnostic": true,
+    "canonical_year_rule": "parsed start_date.year is the sole canonical survey year",
+    "auxiliary_start_year_disposition": "ignore completely for context definition and scientific features; do not drop or alter deployments because of its token",
+    "diagnostic_basis": "all 820 start_date values are complete; auxiliary start_year is predominantly two-digit and has 13 token-0 rows whose canonical start_date year is 2019",
     "response_values_opened_when_rule_fixed": false,
     "active_interval_semantics": "half-open [start_date, end_date); no response-derived effort repair"
   },
