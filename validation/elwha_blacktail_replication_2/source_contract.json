@@ -1,0 +1,40 @@
+{
+  "schema": "eog.elwha_blacktail_replication_2.source_contract.v1",
+  "attempt_id": "elwha_blacktail_daily_detection_fresh_paired_v1",
+  "issue": 309,
+  "source": {
+    "doi": "10.5066/P1BJD7OH",
+    "sciencebase_item_id": "65dce343d34eb64889e197bb",
+    "published_camera_count": 30,
+    "published_reach_count": 3,
+    "published_trap_nights": 17037,
+    "published_start": "2021-07",
+    "published_end": "2023-07"
+  },
+  "focal_species": {
+    "scientific_name": "Odocoileus hemionus columbianus",
+    "common_name": "Columbian black-tailed deer",
+    "selection_uses_row_level_response": false,
+    "species_switching_after_any_response_access": false,
+    "basis": "independent ecological role of deer herbivory in plant succession of restored Elwha reservoir beds"
+  },
+  "gate0": {
+    "allowed_network": [
+      "ScienceBase top-level item JSON",
+      "ScienceBase one-level child-item listing",
+      "ScienceBase child-item JSON"
+    ],
+    "file_payload_gets_allowed": false,
+    "inspect_file_metadata_only": true,
+    "required_decision": "whether complete station/geometry/effort information is physically separable from daily mammal detections"
+  },
+  "response_firewall": {
+    "data_file_payload_requests": 0,
+    "data_file_payload_bytes_opened": 0,
+    "data_file_header_bytes_opened": 0,
+    "data_rows_opened": false,
+    "data_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
