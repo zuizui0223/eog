@@ -1,0 +1,41 @@
+{
+  "schema": "eog.hog_island_small_mammal_metadata_screen.source_contract.v1",
+  "candidate_role": "paper_ready_third_fresh_candidate_metadata_screen_only",
+  "source": {
+    "title": "Hog Island VA Small-Mammal Trapping 1989-2020",
+    "repository": "Environmental Data Initiative / PASTA+",
+    "doi": "10.6073/pasta/a867861ea3a9b5231da0ba339336dbec",
+    "published_version_label": 38
+  },
+  "independent_method_anchor": {
+    "study_system": "Hog Island, Virginia barrier island",
+    "observation_process": "Sherman live trapping",
+    "permanent_transects": 2,
+    "sampling_frequency": "semiannual",
+    "time_span": "1989-2020"
+  },
+  "screen": {
+    "allowed_http_requests": [
+      "PASTA Read Data Package From DOI resource map",
+      "PASTA Read Data Entity Names for resolved package id",
+      "PASTA Read package metadata EML only if needed to classify entity roles"
+    ],
+    "forbidden_http_requests": [
+      "any PASTA data entity payload",
+      "any archive ZIP",
+      "any capture row/header payload"
+    ],
+    "pass_condition": "metadata demonstrates that response-independent geometry and/or survey-effort entities are physically distinct from capture-response entity, or identifies stable external response-independent datasets sufficient to define registry/effort without opening capture rows",
+    "stop_condition": "package exposes only response-bearing data or metadata cannot establish a response-independent registry plus surveyed-negative effort semantics"
+  },
+  "response_firewall": {
+    "data_entity_payload_requests": 0,
+    "data_entity_payload_bytes": 0,
+    "archive_requests": 0,
+    "capture_header_bytes": 0,
+    "capture_rows_opened": false,
+    "capture_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
