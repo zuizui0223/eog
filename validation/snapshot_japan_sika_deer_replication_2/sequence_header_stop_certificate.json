@@ -1,0 +1,46 @@
+{
+  "schema": "eog.snapshot_japan_sika_deer_replication_2.sequence_header_stop_certificate.v1",
+  "attempt_id": "snapshot_japan_2023_sika_deer_fresh_paired_v1",
+  "status": "terminal_stop_sequence_header_contract_mismatch",
+  "reason": "The prospectively frozen exact 26-column sequence header did not match the physical response header. The contract explicitly forbids post-result schema repair, so the endpoint is terminally stopped before any sequence data row or value is opened.",
+  "frozen_expected_columns": [
+    "project_id","deployment_id","sequence_id","is_blank","identified_by","wi_taxon_id","class","order","family","genus","species","common_name","uncertainty","start_time","end_time","group_size","age","sex","animal_recognisable","individual_id","individual_animal_notes","behaviour","highlighted","markings","cv_confidence","licence"
+  ],
+  "observed_physical_columns": [
+    "project_id","deployment_id","sequence_id","is_blank","identified_by","wi_taxon_id","class","order","family","genus","species","common_name","uncertainty","start_time","end_time","group_size","age","sex","animal_recognizable","individual_id","individual_animal_notes","behavior","highlighted","markings","cv_confidence","license"
+  ],
+  "mismatching_positions": [
+    {"position_1_based":19,"expected":"animal_recognisable","observed":"animal_recognizable"},
+    {"position_1_based":22,"expected":"behaviour","observed":"behavior"},
+    {"position_1_based":26,"expected":"licence","observed":"license"}
+  ],
+  "header": {
+    "bytes_opened": 278,
+    "raw_header_sha256": "9dc37c1f3d81444493075bf38a4d9a3079dfc5e55be868f980a50e6fbcc06cb3",
+    "column_count": 26,
+    "content_disposition": "attachment;filename=\"oo_1165478.csv\"",
+    "content_type": "text/csv;charset=UTF-8",
+    "reported_content_length": 3757150,
+    "final_host": "binary.pensoft.net",
+    "encoding": "utf-8-sig",
+    "terminator": "CR"
+  },
+  "audit": {
+    "workflow_run_id": 32929791961,
+    "job_id": 98059705352,
+    "head_sha": "83f5a32897a175c3bff2a6d9183c6e95c3386da9",
+    "artifact_id": 9592790351,
+    "artifact_digest": "sha256:2c2107e18bd5741ed0b715eed76818a53a6026afca5113c8ef5a40ece3c9816c",
+    "header_gate_fingerprint": "45c7c081f65ec976e267ef2d08b0d0a782ba56e263dd3db236ad241b9220670a"
+  },
+  "response_firewall": {
+    "sequence_header_get_requests": 1,
+    "sequence_header_bytes_opened": 278,
+    "sequence_data_row_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "prohibited_repair": "Do not change the frozen British-spelling header contract to the observed American spellings and do not reuse this Snapshot Japan sika-deer endpoint as a fresh paired replication."
+}
