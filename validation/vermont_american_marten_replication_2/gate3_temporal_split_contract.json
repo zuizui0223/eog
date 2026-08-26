@@ -1,0 +1,28 @@
+{
+  "schema": "eog.vermont_american_marten_replication_2.gate3_temporal_split_contract.v1",
+  "attempt_id": "vermont_american_marten_camera_fresh_paired_v1",
+  "input_gate2_fingerprint": "4ed29612b20c1810c705ccd050ff1352a01894f8632b3305553b95be1a502e54",
+  "input_site_week_registry_fingerprint": "2c950a53f34ad37341279a2a5cdbcb79ea22c12609603f88a73580651afacc34",
+  "calibration": {
+    "rule": "week_start < 2018-01-01",
+    "reason": "chronological early-period calibration fixed from response-independent effort distribution"
+  },
+  "heldout": {
+    "rule": "week_start >= 2018-01-01",
+    "outer_unit": "calendar half-year of week_start: YYYYH1 for Jan-Jun, YYYYH2 for Jul-Dec",
+    "primary_unit_minimum_label_free_site_weeks": 50,
+    "below_minimum_disposition": "supplementary_only",
+    "require_primary_outer_units_at_least": 3,
+    "reason": "half-years preserve chronological separation while preventing the five-site-week 2021 effort gap from becoming a primary score merely because it is a calendar year"
+  },
+  "no_response_based_changes": true,
+  "biological_response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
