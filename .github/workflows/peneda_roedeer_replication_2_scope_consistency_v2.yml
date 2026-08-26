@@ -1,0 +1,61 @@
+name: Peneda roe deer replication 2 scope consistency v2
+
+on:
+  push:
+    branches:
+      - agent/peneda-roedeer-replication-2
+    paths:
+      - validation/peneda_roedeer_replication_2/site_scope_consistency_v2.py
+      - validation/peneda_roedeer_replication_2/source_contract.json
+      - .github/workflows/peneda_roedeer_replication_2_scope_consistency_v2.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile consistency diagnostic
+        run: python -m py_compile validation/peneda_roedeer_replication_2/site_scope_consistency_v2.py
+      - name: Run response-independent scope consistency v2
+        run: python validation/peneda_roedeer_replication_2/site_scope_consistency_v2.py
+      - name: Assert response firewall and algebra
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/peneda_roedeer_replication_2/site_scope_consistency_v2.json').read_text())
+          assert r['L_plus_nonL_rows']==331
+          assert r['coordinate_algebra_pass'] is True
+          a=r['response_firewall']
+          assert a['observation_payload_requests']==0
+          assert a['observation_payload_bytes_opened']==0
+          assert a['observation_header_bytes_opened']==0
+          assert a['observation_rows_opened'] is False
+          assert a['observation_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps({
+              'status':r['status'],
+              'L_row_count':r['L_row_count'],
+              'non_L_row_count':r['non_L_row_count'],
+              'unique_all_exact_coordinates':r['unique_all_exact_coordinates'],
+              'unique_L_exact_coordinates':r['unique_L_exact_coordinates'],
+              'unique_non_L_exact_coordinates':r['unique_non_L_exact_coordinates'],
+              'L_nonL_coordinate_overlap_count':r['L_nonL_coordinate_overlap_count'],
+              'canonical_L_group_count':r['canonical_L_group_count'],
+              'canonical_L_groups_with_multiple_coordinates':r['canonical_L_groups_with_multiple_coordinates'],
+              'fingerprint':r['fingerprint'],
+          },indent=2,sort_keys=True))
+          PY
+      - name: Upload consistency evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: peneda-roedeer-replication-2-scope-consistency-v2
+          path: build/peneda_roedeer_replication_2/site_scope_consistency_v2.json
+          if-no-files-found: error
