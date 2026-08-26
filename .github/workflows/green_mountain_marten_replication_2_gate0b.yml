@@ -1,0 +1,70 @@
+name: Green Mountain marten replication 2 Gate0b
+
+on:
+  push:
+    branches:
+      - agent/green-mountain-marten-replication-2
+    paths:
+      - validation/green_mountain_marten_replication_2/source_contract.json
+      - validation/green_mountain_marten_replication_2/gate0a_metadata_certificate.json
+      - validation/green_mountain_marten_replication_2/gate0b_response_free_profile.py
+      - .github/workflows/green_mountain_marten_replication_2_gate0b.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0b:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile response-free Gate0b
+        run: python -m py_compile validation/green_mountain_marten_replication_2/gate0b_response_free_profile.py
+      - name: Run response-free locations visits dictionary profile
+        id: gate
+        continue-on-error: true
+        run: python validation/green_mountain_marten_replication_2/gate0b_response_free_profile.py
+      - name: Assert biological response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/green_mountain_marten_replication_2/gate0b_response_free_profile.json')
+          assert p.exists(), 'Gate0b evidence missing'
+          r = json.loads(p.read_text())
+          a = r['response_firewall']
+          assert a['annotations_payload_requests'] == 0
+          assert a['annotations_payload_bytes_opened'] == 0
+          assert a['annotations_header_opened'] is False
+          assert a['annotations_rows_opened'] is False
+          assert a['annotations_values_opened'] is False
+          assert a['media_payload_requests'] == 0
+          assert a['taxa_payload_requests'] == 0
+          assert a['modeloutputs_payload_requests'] == 0
+          assert a['photo_zip_payload_requests'] == 0
+          assert a['model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          print(json.dumps({'status': r['status'], 'fingerprint': r['fingerprint'], 'response_firewall': a}, indent=2, sort_keys=True))
+          PY
+      - name: Upload Gate0b evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: green-mountain-marten-replication-2-gate0b
+          path: build/green_mountain_marten_replication_2/gate0b_response_free_profile.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/green_mountain_marten_replication_2/gate0b_response_free_profile.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate0b terminal status:', r['status'])
+          PY
