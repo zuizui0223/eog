@@ -1,0 +1,39 @@
+{
+  "schema": "eog.vermont_american_marten_replication_2.gate0_metadata_certificate.v1",
+  "attempt_id": "vermont_american_marten_camera_fresh_paired_v1",
+  "workflow_run_id": 32926317306,
+  "job_id": 98049841108,
+  "head_sha": "d2865e8ffb8feb848b27450bb950cfae871e9e2d",
+  "status": "gate0_metadata_only_pass",
+  "fingerprint": "5fda40f2f4ed2dbb45ba652115c5de71ed219e11ab80e3e031906ee8288cf2f3",
+  "response_independent": {
+    "dbdictionary.csv": {"size": 63883, "md5": "2d6fa7910d082c410265acf040c2471c"},
+    "locations.csv": {"size": 9155, "md5": "2ba4822f6c02d778e23a9987e3a1c6a7"},
+    "visits.csv": {"size": 53976, "md5": "5a6aff64183c00bfc143d538fb2deb3a"},
+    "media.csv": {"size": 4473662, "md5": "b49bc1dbeced620fc773d8bf3fd74124"},
+    "taxa.csv": {"size": 19788, "md5": "145aa5d0c85835311a2edbfc3ae6eb97"},
+    "models.csv": {"size": 445, "md5": "2bd258eaad1a27fe703d05a4c372b700"},
+    "librarylists.csv": {"size": 1977, "md5": "9ac8f4b0c91bd8abb2ff15f4e35d20a8"},
+    "librarylistitems.csv": {"size": 4084, "md5": "091cdc9226e7a9f33ab8a5c31b0d3f16"},
+    "medialists.csv": {"size": 821, "md5": "389ee5fbf964cb9118b8d61b16daf717"},
+    "medialistitems.csv": {"size": 1406, "md5": "df13a9de0bef2ce5a162206e41a557ce"},
+    "lists.csv": {"size": 3454, "md5": "c7bbed9c5125b9655a0f771eda1ee0d0"},
+    "listitems.csv": {"size": 19271, "md5": "51642cbbdc812792dc3f96dfd7fc2109"}
+  },
+  "biological_response": {
+    "annotations.csv": {"size": 3164559, "md5": "7f73273ab098cd720dbfa86b1df4169d"},
+    "annotationverifications.csv": {"size": 1307724, "md5": "a0440e95ebe10c768883ef368a0cd1f9"},
+    "annotags.csv": {"size": 642965, "md5": "c2e8ff1eb75b2fbb91bc82cb3769b99b"},
+    "modeloutputs.csv": {"size": 3706393, "md5": "0458c59762946ee613cb2a3e764eed80"},
+    "mediatags.csv": {"size": 32761, "md5": "9a4dcd3df5cc915aea94557c23b2dbd6", "role": "kept closed because tags may encode biological or post-review information"}
+  },
+  "biological_response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
