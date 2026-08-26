@@ -1,0 +1,71 @@
+name: NEON forest coyote replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/neon-forest-coyote-replication-2
+    paths:
+      - validation/neon_forest_coyote_replication_2/**
+      - .github/workflows/neon_forest_coyote_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile response-free Gate0
+        run: python -m py_compile validation/neon_forest_coyote_replication_2/gate0_source_profile.py
+      - name: Run exact response-free source profile
+        id: gate
+        continue-on-error: true
+        run: python validation/neon_forest_coyote_replication_2/gate0_source_profile.py
+      - name: Assert sequence response firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/neon_forest_coyote_replication_2/gate0_source_profile.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r = json.loads(p.read_text())
+          a = r['response_firewall']
+          assert a['sequence_payload_requests'] == 0
+          assert a['sequence_payload_bytes_opened'] == 0
+          assert a['sequence_header_bytes_opened'] == 0
+          assert a['sequence_rows_opened'] is False
+          assert a['sequence_values_opened'] is False
+          assert a['model_fits'] == 0
+          assert a['heldout_scores'] == 0
+          m = r.get('response_metadata_only', {})
+          if m:
+              assert m['payload_requests'] == 0
+              assert m['payload_bytes_opened'] == 0
+              assert m['header_bytes_opened'] == 0
+              assert m['rows_opened'] is False
+              assert m['values_opened'] is False
+          print(json.dumps({'status': r['status'], 'fingerprint': r['fingerprint'], 'response_metadata_only': m, 'response_firewall': a}, indent=2, sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: neon-forest-coyote-replication-2-gate0
+          path: build/neon_forest_coyote_replication_2/gate0_source_profile.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/neon_forest_coyote_replication_2/gate0_source_profile.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate0 terminal status:', r['status'])
+          PY
