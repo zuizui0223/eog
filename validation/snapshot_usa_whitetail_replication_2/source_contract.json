@@ -1,0 +1,39 @@
+{
+  "schema": "eog.snapshot_usa_whitetail_replication_2.source_contract.v1",
+  "attempt_id": "snapshot_usa_2019_2023_whitetail_fresh_transport_recheck_v1",
+  "issue": 307,
+  "dataset": {
+    "doi": "10.5061/dryad.k0p2ngfhn",
+    "expected_latest_update": "2025-04-10",
+    "deployment_file": "ssusa_finaldeployments.csv",
+    "response_file": "ssusa_finalsequences.csv",
+    "readme_file": "README.md",
+    "published_deployment_rows": 9694,
+    "published_sequence_rows": 987979,
+    "published_array_count": 263,
+    "years": [2019, 2020, 2021, 2022, 2023]
+  },
+  "focal_species": {
+    "scientific_name": "Odocoileus virginianus",
+    "common_name": "white-tailed deer",
+    "selection_uses_response_prevalence": false,
+    "species_switching_after_response_access": false
+  },
+  "gate0_transport": {
+    "metadata_only_first": true,
+    "allowed_payload_gets": ["ssusa_finaldeployments.csv"],
+    "forbidden_payload_gets": ["ssusa_finalsequences.csv", "full_dataset_archive"],
+    "deployment_transport": "current Dryad public landing-page file_stream route resolved from latest file metadata",
+    "single_current_transport_attempt": true,
+    "no_alternate_route_search_after_failure": true
+  },
+  "response_firewall": {
+    "sequence_payload_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
