@@ -1,0 +1,75 @@
+{
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate1_registry_effort_certificate.v1",
+  "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
+  "status": "gate1_pass_response_independent_registry_effort_and_species",
+  "workflow_run_id": 32936016714,
+  "job_id": 98077260366,
+  "head_sha": "c5c84eece64dfa5e56e9763de189410e956357a9",
+  "gate1_fingerprint": "76efcba11b59e0ad76f1e23d36aed4e73583534203dbbd1588a3809a3ece747e",
+  "artifact": {
+    "id": 9594854317,
+    "name": "bbs-northern-bobwhite-replication-2-gate1",
+    "digest": "sha256:002dc7b8d754df4eb1987570a9ad5d70a8418fb9a84f6eb69d17da83b593ee55"
+  },
+  "routes": {
+    "all_rows": 5845,
+    "usa_routes": 4458,
+    "usa_registry_fingerprint": "09380764e1466673ad03fbac782a8365c2872af157857262cf0b6b73cf3b7429"
+  },
+  "weather": {
+    "all_rows": 144146,
+    "frozen_quality_rule": {"CountryNum": 840, "RunType": 1, "QualityCurrentID": 1},
+    "quality_valid_modeled_route_years_before_repeated_filter": 24895,
+    "duplicate_quality_valid_route_years": 0,
+    "missing_route_keys": 0,
+    "year_counts_before_repeated_filter": {
+      "2014": 2288,
+      "2015": 2280,
+      "2016": 2363,
+      "2017": 2436,
+      "2018": 2436,
+      "2019": 2370,
+      "2021": 2215,
+      "2022": 2177,
+      "2023": 2115,
+      "2024": 2124,
+      "2025": 2091
+    }
+  },
+  "analysis_registry": {
+    "rule": "at least 3 quality-valid calibration years among 2015-2019 and at least 3 quality-valid heldout years among 2021-2025",
+    "route_count": 1880,
+    "quality_valid_route_years": 18336,
+    "initialization_2014_present_routes": 1515,
+    "registry_fingerprint": "40672b6433f130a667ed045c36399fe2987290f0cb50736d16577ba86f733386",
+    "year_counts": {
+      "2014": 1515,
+      "2015": 1588,
+      "2016": 1680,
+      "2017": 1772,
+      "2018": 1756,
+      "2019": 1726,
+      "2021": 1675,
+      "2022": 1691,
+      "2023": 1717,
+      "2024": 1641,
+      "2025": 1575
+    }
+  },
+  "focal_species_registry": {
+    "match_count": 1,
+    "AOU": "02890",
+    "English_Common_Name": "Northern Bobwhite",
+    "scientific_name": "Colinus virginianus"
+  },
+  "response_firewall": {
+    "avian_payload_requests": 0,
+    "avian_payload_bytes_opened": 0,
+    "avian_header_bytes_opened": 0,
+    "avian_rows_opened": false,
+    "avian_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "decision": "PASS: a large U.S. repeated-route universe, exact route-year effort eligibility and unique Northern Bobwhite species code are all fixed without avian count response access; proceed to response-blind structural geometry"
+}
