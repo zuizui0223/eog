@@ -1,0 +1,50 @@
+{
+  "schema": "eog.neon_forest_coyote_replication_2.source_contract.v1",
+  "attempt_id": "neon_forest_coyote_camera_interval_fresh_paired_v1",
+  "issue": 306,
+  "zenodo_record_id": 20826511,
+  "public_scope": "standardized camera trapping at 13 NEON forest subprojects plus four additional U.S. forest plots, 2015-2022",
+  "response_independent": {
+    "deployments": {
+      "filename": "camera_trap_deployments.csv",
+      "expected_md5": "82537cdf0a586fa14c9a8b6afd7be470"
+    },
+    "subprojects": {
+      "filename": "subproject_descriptions.csv",
+      "expected_md5": "be1502427995886ef1c64c10410d1ee2"
+    }
+  },
+  "forbidden_response": {
+    "filename": "camera_trap_sequences.csv",
+    "expected_md5": "7531a5b9fb3848ef33e162d5206a6f43",
+    "payload_requests_before_full_freeze": 0,
+    "payload_bytes_before_full_freeze": 0,
+    "header_bytes_before_header_gate": 0,
+    "rows_before_full_freeze": false,
+    "values_before_full_freeze": false
+  },
+  "focal_species": {
+    "scientific_name": "Canis latrans",
+    "common_name": "coyote",
+    "selection_uses_response_prevalence": false,
+    "species_switching_after_any_response_access": false,
+    "basis": "broad continental U.S. distribution, ecological relevance across forest systems, and suitability for terrestrial camera-trap detection"
+  },
+  "gate0": {
+    "metadata_only_for_response": true,
+    "download_only": ["camera_trap_deployments.csv", "subproject_descriptions.csv"],
+    "require_exact_three_frozen_file_identities": true,
+    "profile_response_independent_headers_and_rows": true,
+    "do_not_fix_temporal_bin_width_yet": true,
+    "do_not_allow_cross_subproject_propagation": true
+  },
+  "response_firewall": {
+    "sequence_payload_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
