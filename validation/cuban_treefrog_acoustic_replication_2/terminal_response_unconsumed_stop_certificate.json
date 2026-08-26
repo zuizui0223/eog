@@ -1,0 +1,49 @@
+{
+  "schema": "eog.cuban_treefrog_acoustic_replication_2.terminal_response_unconsumed_stop.v1",
+  "attempt_id": "cuban_treefrog_invasion_front_fresh_paired_v1",
+  "issue": 303,
+  "terminal_status": "stop_response_requires_forbidden_media_linkage",
+  "terminal_reason": "The response-independent database dictionary proves that both candidate biological response tables require media.csv to recover monitoring visit and capture time: annotations.fk_mediaid -> media.pk_mediaid; modeloutputs.fk_mediaid -> media.pk_mediaid; media.fk_visitid -> visits.pk_visitid; visits.fk_locationid -> locations.pk_locationid. Because media.csv was prospectively classified as response-bearing and forbidden at Gate0, opening it to repair response-to-site/time linkage is not admissible. The fresh endpoint is therefore stopped without opening any response-bearing payload.",
+  "gate0": {
+    "workflow_run_id": 32925911058,
+    "job_id": 98048638955,
+    "head_sha": "1852c1d0b88fe78778ec47c29ba56db62a0e1941",
+    "status": "gate0_response_free_profile_complete",
+    "profile_fingerprint": "d2f531d6ef04fa1b2daf926354c3c0616bd1c91a3712e83db47d0596ffab50ce",
+    "artifact_id": 9591483922,
+    "artifact_digest": "sha256:1a8aa35d5adcee0788e9858cfce9eea5902d93762b0e6f597e255d690e7801ce"
+  },
+  "response_independent_observations": {
+    "dbdictionary_rows": 391,
+    "locations_rows": 14,
+    "monitoring_location_rows_with_public_bbox_geometry": 13,
+    "visits_rows": 157,
+    "unique_visit_dates": 119,
+    "visit_types": ["check", "pull", "set"],
+    "location_geometry_note": "Exact lat/long were withheld in the public table, while 13 monitoring rows expose long_min/long_max/lat_min/lat_max bounding boxes; one additional non-monitoring/aggregate row lacks those public bounds. This was not the terminal reason because the response linkage gate failed first."
+  },
+  "proven_relationship_chain": [
+    "annotations.fk_mediaid -> media.pk_mediaid",
+    "modeloutputs.fk_mediaid -> media.pk_mediaid",
+    "media.fk_visitid -> visits.pk_visitid",
+    "media.start_date/start_time carry capture time",
+    "visits.fk_locationid -> locations.pk_locationid"
+  ],
+  "response_firewall": {
+    "media_payload_requests": 0,
+    "media_payload_bytes_opened": 0,
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "modeloutputs_payload_requests": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "other_response_payload_requests": 0,
+    "other_response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "freshness_disposition": "response_unconsumed_terminal_stop_do_not_repair_or_relabel_as_fresh",
+  "next_mainline_action": "Select another genuinely fresh heterogeneous ecosystem whose response table can be mapped to a response-independent site/time registry without opening a response-bearing linkage table."
+}
