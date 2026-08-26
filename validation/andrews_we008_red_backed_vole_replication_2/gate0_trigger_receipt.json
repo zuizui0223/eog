@@ -1,8 +1,9 @@
 {
-  "schema": "eog.andrews_we008_red_backed_vole_replication_2.gate0_trigger_receipt.v1",
+  "schema": "eog.andrews_we008_red_backed_vole_replication_2.gate0_trigger_receipt.v2",
   "issue": 315,
   "phase": "metadata_only_gate0",
   "scientific_design_changed": false,
+  "trigger_reason": "retrigger existing main Package checks after PR marked ready; no gate/science/source rule changed",
   "capture_response_payload_requests_before_trigger": 0,
   "capture_response_bytes_before_trigger": 0
 }
