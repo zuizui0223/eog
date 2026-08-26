@@ -9,6 +9,7 @@ from validation.bbs_northern_bobwhite_replication_2.gate5_archive_metadata impor
     ArchiveGateStop,
     FrozenRangeTransport,
     inspect_zip_metadata,
+    run,
 )
 
 
@@ -135,3 +136,19 @@ def test_contract_keeps_member_payload_header_rows_and_models_closed():
     assert firewall["avian_rows_opened"] is False
     assert firewall["model_fits"] == 0
     assert firewall["heldout_scores"] == 0
+
+
+def test_prerequisite_drift_writes_zero_request_engineering_artifact(tmp_path):
+    contract = json.loads(DEFAULT_CONTRACT.read_text(encoding="utf-8"))
+    contract["prerequisite_sha256"]["source_contract.json"] = "0" * 64
+    contract_path = tmp_path / "contract.json"
+    output_path = tmp_path / "result.json"
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+
+    result = run(contract_path, output_path)
+
+    assert result["status"] == "engineering_failure_pre_response"
+    assert "prerequisite SHA-256 drift" in result["reason"]
+    assert result["archive_metadata_requests"] == 0
+    assert result["archive_metadata_bytes_opened"] == 0
+    assert output_path.exists()

@@ -301,7 +301,9 @@ class FrozenRangeTransport:
 def _verify_prerequisites(contract: dict[str, object]) -> None:
     expected = contract["prerequisite_sha256"]
     for name, digest in expected.items():
-        actual = hashlib.sha256((HERE / name).read_bytes()).hexdigest()
+        actual = hashlib.sha256(
+            (HERE / name).read_text(encoding="utf-8").encode("utf-8")
+        ).hexdigest()
         if actual != digest:
             raise RuntimeError(f"prerequisite SHA-256 drift for {name}: {actual}")
 
@@ -311,7 +313,6 @@ def run(
     output_path: Path = DEFAULT_OUTPUT,
 ) -> dict[str, object]:
     contract = json.loads(contract_path.read_text(encoding="utf-8"))
-    _verify_prerequisites(contract)
     archive = contract["archive"]
     expected_size = int(archive["size_bytes"])
     transport = FrozenRangeTransport(
@@ -330,6 +331,7 @@ def run(
         "response_firewall": contract["response_firewall"],
     }
     try:
+        _verify_prerequisites(contract)
         inventory = inspect_zip_metadata(expected_size, transport.read)
         payload_intervals = [
             (int(member["payload_start"]), int(member["payload_end"]))

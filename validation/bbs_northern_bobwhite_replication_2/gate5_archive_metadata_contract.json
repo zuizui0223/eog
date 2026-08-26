@@ -2,10 +2,10 @@
   "schema": "eog.bbs_northern_bobwhite_replication_2.gate5_archive_metadata_contract.v1",
   "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
   "prerequisite_sha256": {
-    "source_contract.json": "8326a0e8949fddbe9a1e37bb17e02f5dffe2846acb31eab16401c2f1215c0d4e",
-    "gate0_metadata_certificate.json": "eb40250b0a091e790e2e0cb89b0c011547a24f245db823d08cf8287aa34ccd48",
-    "gate1_registry_effort_certificate.json": "81e9b96583936046d953c2d5b73205b037a8a3c78f9a22f7a5620848ebcef84f",
-    "gate2_structural_certificate.json": "539d368a8c69c484132129278f7d2b7da2f13141de239a94052880f4c8964839",
+    "source_contract.json": "6b9c6da2795f6aef9f6002bdf60a3f401a94c1499369ff5e0cb9aee4bc948206",
+    "gate0_metadata_certificate.json": "173f7f87359bb06cacde31e1fe1d0ca0004afa0e0296c4e9aa2a810d0bf088e6",
+    "gate1_registry_effort_certificate.json": "afd402529449a07d89948af968d614d5e2ad664e79e05b061863150a5d976917",
+    "gate2_structural_certificate.json": "263b1163152f72dd8faf1b833cc1633b46eaaa33d621097b965c9098cc7d2c75",
     "gate4_prospective_estimability_contract.json": "0267b100e137b50018bc36252ee91c2c0a6efa2ff734dd779b2e4d2500416cbc"
   },
   "gate4_required": {
