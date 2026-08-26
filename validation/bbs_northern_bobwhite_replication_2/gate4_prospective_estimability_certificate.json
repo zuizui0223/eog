@@ -1,0 +1,31 @@
+{
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate4_prospective_estimability_certificate.v1",
+  "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
+  "workflow_run_id": 32952826225,
+  "job_id": 98127892712,
+  "head_sha": "c2c2222c793b284c06c963dc9cca6abb6b36968e",
+  "status": "uncertain_pre_response",
+  "disposition": "continue_response_blind_exact_gate_required",
+  "contract_sha256": "43873c4fa46e173f8c05f0b21cfadd19a969f0630b6658c2dc3cf4588de41e0f",
+  "estimability_fingerprint": "9254f94658ada8cafa0c35caaab45145658643d243570b324e450237ec41dc7c",
+  "result_fingerprint": "69a354ece3b56c67ab1d1b2174af0969fdf0a5bf59eec3c40e1db5a4d4be7dff",
+  "required_exact_count_gate": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 4
+  },
+  "outcome_access_authorized": false,
+  "paper_ready_binding_verified_downstream_before_archive_range_attempt": true,
+  "response_firewall": {
+    "avian_payload_requests": 0,
+    "avian_payload_bytes_opened": 0,
+    "avian_header_bytes_opened": 0,
+    "avian_rows_opened": false,
+    "avian_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "decision": "The public literature does not provide endpoint-matched bounds for the frozen 2015-2019/2021-2025 route-year count gate. This is uncertainty, not failure; exact counts would have been required before any fit if response transport had remained admissible."
+}
