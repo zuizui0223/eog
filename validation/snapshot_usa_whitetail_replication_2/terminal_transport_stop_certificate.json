@@ -1,0 +1,58 @@
+{
+  "schema": "eog.snapshot_usa_whitetail_replication_2.terminal_transport_stop_certificate.v1",
+  "attempt_id": "snapshot_usa_2019_2023_whitetail_fresh_transport_recheck_v1",
+  "issue": 307,
+  "terminal_status": "stop_current_public_deployment_transport_unavailable",
+  "scientific_classification": "valid_pre_response_source_transport_stop_not_predictive_evidence",
+  "workflow": {
+    "run_id": 32933589560,
+    "job_id": 98070447504,
+    "head_sha": "5680ce083722e2d781667c8dc0557f30874ee438",
+    "conclusion": "success",
+    "note": "workflow success records the terminal scientific STOP rather than a transport PASS"
+  },
+  "dryad": {
+    "doi": "10.5061/dryad.k0p2ngfhn",
+    "version_number": 6,
+    "publication_date": "2025-04-10",
+    "last_modification_date": "2025-04-10",
+    "deployment": {
+      "path": "ssusa_finaldeployments.csv",
+      "file_id": 4016828,
+      "size": 1731332,
+      "digest_type": "sha-256",
+      "digest": "9e837bba556de86af5934abcb5d8a487206df2b340a8b28fa8cc135c7bb7ec56",
+      "attempted_public_route": "https://datadryad.org/downloads/file_stream/4016828",
+      "attempt_count": 1,
+      "result": "HTTP 403 Forbidden",
+      "payload_bytes_opened": 0
+    },
+    "forbidden_sequence_response": {
+      "path": "ssusa_finalsequences.csv",
+      "file_id": 4016829,
+      "size": 206672092,
+      "digest_type": "sha-256",
+      "digest": "8a442b130f11272c354de10ff97f69c65ae738a6514459f1431e963708011ded",
+      "payload_requests": 0,
+      "payload_bytes_opened": 0,
+      "header_bytes_opened": 0,
+      "rows_opened": false,
+      "values_opened": false
+    }
+  },
+  "execution_boundary": {
+    "model_fits": 0,
+    "heldout_scores": 0,
+    "registry_gate_reached": false,
+    "geometry_gate_reached": false,
+    "temporal_gate_reached": false,
+    "post_stop_transport_route_search_allowed": false,
+    "endpoint_may_be_repaired_or_relabelled_as_fresh": false
+  },
+  "gate0_result_fingerprint": "38d15fdb9c95049cee7585259a62904f25cfb31af1ce3bde5ba7ae47a42da8ea",
+  "artifact": {
+    "id": 9594052697,
+    "name": "snapshot-usa-whitetail-replication-2-gate0",
+    "digest": "sha256:451a8a580c4281a71857652371800bc6e17c6e3c06efa8ac2c742bcbb96de1f9"
+  }
+}
