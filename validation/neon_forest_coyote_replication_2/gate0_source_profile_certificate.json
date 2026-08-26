@@ -1,0 +1,55 @@
+{
+  "schema": "eog.neon_forest_coyote_replication_2.gate0_source_profile_certificate.v1",
+  "attempt_id": "neon_forest_coyote_camera_interval_fresh_paired_v1",
+  "status": "gate0_pass_source_separation_and_response_independent_profiles",
+  "gate0_fingerprint": "06a576252924aaff8cc2c0fbd3f8c1f80cbb6e67b50c29a7ab3dfbe1ba12531f",
+  "zenodo_record": {
+    "record_id": 20826511,
+    "metadata_bytes": 5481,
+    "file_keys": ["camera_trap_deployments.csv", "camera_trap_sequences.csv", "subproject_descriptions.csv"]
+  },
+  "deployments": {
+    "filename": "camera_trap_deployments.csv",
+    "size": 86395,
+    "md5": "82537cdf0a586fa14c9a8b6afd7be470",
+    "row_count": 820,
+    "unique_deployment_id_count": 820,
+    "unique_subproject_count": 17,
+    "unique_camera_name_count": 471,
+    "header": ["deployment_id","placename","longitude","latitude","start_date","end_date","camera_name","subproject_name","start_month","start_day","start_year","end_month","end_day","end_year"],
+    "required_fields_all_nonmissing": ["deployment_id","longitude","latitude","start_date","end_date","subproject_name"]
+  },
+  "subprojects": {
+    "filename": "subproject_descriptions.csv",
+    "size": 10529,
+    "md5": "be1502427995886ef1c64c10410d1ee2",
+    "row_count": 22,
+    "note": "This descriptive table does not define the deployment registry. Deployment subproject_name values are authoritative for Gate1 contexts; descriptive rows are optional context only and cannot add/drop deployments."
+  },
+  "response_metadata_only": {
+    "filename": "camera_trap_sequences.csv",
+    "size": 3382821,
+    "md5": "7531a5b9fb3848ef33e162d5206a6f43",
+    "payload_requests": 0,
+    "payload_bytes_opened": 0,
+    "header_bytes_opened": 0,
+    "rows_opened": false,
+    "values_opened": false
+  },
+  "audit": {
+    "workflow_run_id": 32930078459,
+    "job_id": 98060500563,
+    "head_sha": "d13be3e6f780f9c61fbac3e08c5d31af3a09519d",
+    "artifact_id": 9592887435,
+    "artifact_digest": "sha256:a99ec571bba163e9dc45d30fd5b654a5c2f076ad3dc4508c1ee649a5b4759ec0"
+  },
+  "response_firewall": {
+    "sequence_payload_requests": 0,
+    "sequence_payload_bytes_opened": 0,
+    "sequence_header_bytes_opened": 0,
+    "sequence_rows_opened": false,
+    "sequence_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
