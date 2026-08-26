@@ -1,0 +1,68 @@
+{
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate1_registry_effort_contract.v1",
+  "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
+  "allowed_payloads": {
+    "Routes.csv": {"size": 392008, "md5": "5fd8404fd91eb6cdbc3577542ea99380"},
+    "Weather.csv": {"size": 14126685, "md5": "8ba88dec90dd4b9df03bb2200c750bd6"},
+    "SpeciesList.csv": {"size": 73748, "md5": "ae778053cf2db6013f9a24d4e91cae98"}
+  },
+  "forbidden_payloads": ["50-StopData.zip", "States.zip", "MigrantNonBreeder.zip"],
+  "semantic_aliases": {
+    "routes": {
+      "country_num": ["CountryNum", "country_num"],
+      "state_num": ["StateNum", "state_num"],
+      "route": ["Route", "route"],
+      "latitude": ["Latitude", "latitude"],
+      "longitude": ["Longitude", "longitude"],
+      "bcr": ["BCR", "bcr"],
+      "route_type": ["RouteTypeID", "route_type_id", "RouteType"]
+    },
+    "weather": {
+      "route_data_id": ["RouteDataID", "route_data_id"],
+      "country_num": ["CountryNum", "country_num"],
+      "state_num": ["StateNum", "state_num"],
+      "route": ["Route", "route"],
+      "rpid": ["RPID", "rpid"],
+      "year": ["Year", "year"],
+      "observer": ["ObsN", "obs_n", "observer"],
+      "quality_current_id": ["QualityCurrentID", "quality_current_id"],
+      "run_type": ["RunType", "run_type"]
+    },
+    "species": {
+      "aou": ["AOU", "aou", "sp.bbs", "sp_bbs"],
+      "english": ["English_Common_Name", "english_common_name", "English", "english"],
+      "genus": ["Genus", "genus"],
+      "species": ["Species", "species"],
+      "scientific_name": ["Scientific_Name", "scientific_name"]
+    }
+  },
+  "eligibility": {
+    "usa_country_num": 840,
+    "acceptable_run_type": 1,
+    "acceptable_quality_current_id": 1,
+    "modeled_years": [2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024, 2025],
+    "initialization_year": 2014,
+    "calibration_years": [2015, 2016, 2017, 2018, 2019],
+    "heldout_years": [2021, 2022, 2023, 2024, 2025],
+    "minimum_quality_valid_calibration_years_per_route": 3,
+    "minimum_quality_valid_heldout_years_per_route": 3,
+    "minimum_analysis_routes": 100,
+    "duplicate_quality_valid_route_year_policy": "terminal_stop",
+    "route_coordinates_must_be_complete": true,
+    "route_key": ["country_num", "state_num", "route"]
+  },
+  "focal_species": {
+    "common_name": "Northern Bobwhite",
+    "scientific_name": "Colinus virginianus",
+    "require_exact_unique_registry_match": true
+  },
+  "response_firewall": {
+    "avian_payload_requests": 0,
+    "avian_payload_bytes_opened": 0,
+    "avian_header_bytes_opened": 0,
+    "avian_rows_opened": false,
+    "avian_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
