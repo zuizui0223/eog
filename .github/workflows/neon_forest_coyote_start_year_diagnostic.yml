@@ -1,0 +1,44 @@
+name: NEON forest coyote auxiliary year diagnostic
+
+on:
+  push:
+    branches:
+      - agent/neon-forest-coyote-replication-2
+    paths:
+      - validation/neon_forest_coyote_replication_2/start_year_diagnostic.py
+      - .github/workflows/neon_forest_coyote_start_year_diagnostic.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile diagnostic
+        run: python -m py_compile validation/neon_forest_coyote_replication_2/start_year_diagnostic.py
+      - name: Run response-independent auxiliary year diagnostic
+        run: python validation/neon_forest_coyote_replication_2/start_year_diagnostic.py
+      - name: Assert response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/neon_forest_coyote_replication_2/start_year_diagnostic.json').read_text())
+          a=r['response_firewall']
+          assert a['sequence_payload_requests']==0
+          assert a['sequence_payload_bytes_opened']==0
+          assert a['sequence_header_bytes_opened']==0
+          assert a['sequence_rows_opened'] is False
+          assert a['sequence_values_opened'] is False
+          print(json.dumps(r,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: neon-forest-coyote-start-year-diagnostic
+          path: build/neon_forest_coyote_replication_2/start_year_diagnostic.json
+          if-no-files-found: error
