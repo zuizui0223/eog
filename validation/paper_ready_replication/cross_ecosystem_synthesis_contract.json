@@ -1,0 +1,88 @@
+{
+  "schema": "eog.paper_ready_replication.cross_ecosystem_synthesis.v1",
+  "purpose": "Freeze the manuscript-level synthesis before a third fresh predictive endpoint is opened, so the paper-level claim is not redesigned after observing endpoint 3.",
+  "fresh_endpoint_unit": "ecosystem_endpoint",
+  "already_completed_fresh_endpoints": [
+    {
+      "name": "azores_yellow_eel_receiver_week",
+      "terminal_status": "favorable_complementary_added_value",
+      "baseline_macro_log_loss": 0.14227269867445852,
+      "augmented_macro_log_loss": 0.13228712656635494,
+      "augmented_minus_baseline": -0.00998557210810358,
+      "heldout_units_augmented_wins": 5,
+      "heldout_units_total": 5,
+      "once_only_run_id": 32807155541
+    },
+    {
+      "name": "southwest_louisiana_king_rail_site_occasion",
+      "terminal_status": "favorable_complementary_added_value",
+      "baseline_macro_log_loss": 0.2463173322,
+      "augmented_macro_log_loss": 0.2453455299,
+      "augmented_minus_baseline": -0.0009718023,
+      "heldout_units_augmented_wins": 7,
+      "heldout_units_total": 8,
+      "once_only_run_id": 32812052801
+    }
+  ],
+  "primary_cross_ecosystem_outputs": [
+    "terminal_status_for_each_fresh_endpoint",
+    "baseline_macro_log_loss_for_each_endpoint",
+    "augmented_macro_log_loss_for_each_endpoint",
+    "augmented_minus_baseline_absolute_log_loss_for_each_endpoint",
+    "relative_log_loss_change_for_each_endpoint",
+    "heldout_unit_augmented_win_count_for_each_endpoint"
+  ],
+  "relative_log_loss_change_definition": "(augmented_macro_log_loss - baseline_macro_log_loss) / baseline_macro_log_loss",
+  "aggregation_rules": {
+    "pool_row_level_predictions_across_ecosystems": false,
+    "hide_endpoint_heterogeneity_behind_one_pooled_score": false,
+    "primary_unit_is_individual_observation_row": false,
+    "primary_unit_is_ecosystem_endpoint": true,
+    "pooled_significance_test_predeclared": false,
+    "meta_analytic_effect_estimator_predeclared": false,
+    "therefore_no_pooled_p_value_or_claim_of_common_effect_is_allowed": true,
+    "descriptive_sign_concordance_across_fresh_endpoints_allowed": true
+  },
+  "endpoint_3_decision_mapping": {
+    "favorable_complementary_added_value": {
+      "paper_boundary": "multi_ecosystem_candidate_general_predictive_complement",
+      "allowed_claim": "predictive complementarity reproduced across three heterogeneous fresh ecosystem endpoints",
+      "forbidden_claims": [
+        "universal_superiority",
+        "guaranteed_improvement",
+        "standalone_layer_b_predictor",
+        "causal_identification",
+        "truth_of_exact_layer_a_world"
+      ]
+    },
+    "no_confirmed_complementary_added_value": {
+      "paper_boundary": "replicated_candidate_general_predictive_complement_with_explicit_heterogeneity",
+      "allowed_claim": "predictive complementarity is reproducible but context-dependent rather than uniform"
+    },
+    "adverse_complementary_added_value": {
+      "paper_boundary": "structural_diagnostic_plus_context_dependent_predictive_complement",
+      "allowed_claim": "Layer A remains a structural falsification framework; Layer B predictive value is not uniformly beneficial"
+    },
+    "pre_response_or_non_estimable_stop": {
+      "counts_as_predictive_replication": false,
+      "paper_role": "protocol_integrity_and_candidate_flow_only"
+    }
+  },
+  "manuscript_reporting_rules": {
+    "report_all_fresh_terminal_endpoints": true,
+    "report_all_pre_response_and_pre_row_stops_in_candidate_flow": true,
+    "stops_are_not_negative_layer_b_results": true,
+    "primary_metric": "binary_log_loss",
+    "show_each_heldout_unit_pair_when_available": true,
+    "state_observation_process_and_ecosystem_for_each_endpoint": true,
+    "separate_structural_falsification_from_predictive_complementarity": true,
+    "do_not_infer_mechanistic_truth_from_predictive_gain": true
+  },
+  "paper_figure_bindings": {
+    "figure_1": "two_layer_architecture",
+    "figure_2": "prospective_candidate_funnel_and_terminal_stops",
+    "figure_3": "endpoint_wise_paired_predictive_performance",
+    "figure_4": "layer_a_layer_b_decoupling_using_louisiana_world_falsification"
+  },
+  "freeze_rule": "This contract may not be changed in response to the outcome of the third fresh endpoint. Any later analytical extension must be labeled secondary/post-hoc unless independently prospectively frozen before a new response endpoint."
+}
