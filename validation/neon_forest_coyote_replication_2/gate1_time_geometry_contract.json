@@ -15,11 +15,12 @@
       "end_date": "end_date",
       "camera_name": "camera_name",
       "subproject_name": "subproject_name",
-      "auxiliary_start_year": "start_year"
+      "start_year": "start_year"
     },
     "accepted_date_formats_in_order": ["%Y-%m-%d", "%Y/%m/%d", "%m/%d/%Y"],
     "canonical_year_rule": "parsed start_date.year is the sole canonical survey year",
-    "auxiliary_start_year_disposition": "ignore completely for context definition and scientific features; do not drop or alter deployments because of its token",
+    "auxiliary_start_year_column": "start_year",
+    "auxiliary_start_year_disposition": "ignore completely for context definition and scientific features; do not drop deployments because of its token; execution adapter may replace it with canonical start_date.year solely to satisfy legacy internal parsing",
     "diagnostic_basis": "all 820 start_date values are complete; auxiliary start_year is predominantly two-digit and has 13 token-0 rows whose canonical start_date year is 2019",
     "response_values_opened_when_rule_fixed": false,
     "active_interval_semantics": "half-open [start_date, end_date); no response-derived effort repair"
