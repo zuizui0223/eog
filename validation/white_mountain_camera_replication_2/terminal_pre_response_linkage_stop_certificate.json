@@ -1,0 +1,37 @@
+{
+  "schema": "eog.white_mountain_camera_replication_2.terminal_pre_response_linkage_stop.v1",
+  "attempt_id": "white_mountain_nf_camera_2014_2024_fresh_paired_v1",
+  "status": "stop_linkage_requires_response_bearing_media_rows_response_closed",
+  "focal_species": "Alces alces",
+  "reason": "The response-independent release and dictionary establish annotations -> media -> visits -> locations semantically, but the concrete annotation-to-visit mapping requires media.csv row values (fk_visitid). Gate3 prospectively forbids opening media/annotations/taxa response payloads or headers, and no separately released response-independent deployment/media linkage table exists. Therefore the fresh endpoint cannot be constructed without consuming response-bearing linkage information before full freeze.",
+  "completed_pre_response_gates": {
+    "gate0": "response_free_gate0_pass",
+    "gate1": "pass_gate1_structure_time",
+    "gate2": "gate2_dictionary_semantics_profile_complete",
+    "gate3": "gate3_response_free_linkage_profile_complete"
+  },
+  "gate1_structural_scales_km": [5.970931701482, 10.859130335787, 13.275707221543],
+  "gate1_visited_location_count": 101,
+  "gate1_visit_state_violation_count": 57,
+  "gate3_result_fingerprint": "8c302ccb7f9c785672bceeb74a63fcb3b8ca28955a14431ce3c391d6707dc374",
+  "gate3_artifact_id": 9589814844,
+  "gate3_artifact_digest": "sha256:db438221f6eb1a16d39048a400a1655849ace00fd892ac27878cea208975f07d",
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotations_header_bytes_opened": 0,
+    "media_payload_requests": 0,
+    "media_payload_bytes_opened": 0,
+    "media_header_bytes_opened": 0,
+    "taxa_payload_requests": 0,
+    "taxa_payload_bytes_opened": 0,
+    "taxa_header_bytes_opened": 0,
+    "modeloutputs_payload_requests": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "photo_zip_payload_requests": 0,
+    "photo_zip_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "terminal_rule": "Do not open media.csv, annotations.csv, taxa.csv, collarmartens.csv, or use visits.track_sign to repair this candidate. White Mountain is not an admissible fresh replication endpoint."
+}
