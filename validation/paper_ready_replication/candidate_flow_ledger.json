@@ -1,0 +1,221 @@
+{
+  "schema": "eog.paper_ready_replication.candidate_flow_ledger.v1",
+  "purpose": "Freeze a manuscript-facing denominator for fresh predictive-complementarity candidate handling. STOPs document prospective protocol integrity and are not adverse Layer-B results.",
+  "fresh_predictive_results": [
+    {
+      "issue": 289,
+      "system": "Azores yellow eel telemetry",
+      "endpoint": "receiver-week recorded detection",
+      "observation_process": "acoustic telemetry",
+      "terminal_class": "predictive_result",
+      "terminal_status": "favorable_complementary_added_value",
+      "once_only_run_id": 32807155541,
+      "baseline_macro_log_loss": 0.14227269867445852,
+      "augmented_macro_log_loss": 0.13228712656635494,
+      "augmented_minus_baseline": -0.00998557210810358,
+      "augmented_heldout_wins": 5,
+      "heldout_units": 5
+    },
+    {
+      "issue": 292,
+      "system": "Southwest Louisiana King Rail",
+      "endpoint": "site-occasion recorded detection",
+      "observation_process": "passive acoustic monitoring",
+      "terminal_class": "predictive_result",
+      "terminal_status": "favorable_complementary_added_value",
+      "once_only_run_id": 32812052801,
+      "baseline_macro_log_loss": 0.2463173322,
+      "augmented_macro_log_loss": 0.2453455299,
+      "augmented_minus_baseline": -0.0009718023,
+      "augmented_heldout_wins": 7,
+      "heldout_units": 8,
+      "structural_note": "all six frozen local worlds were eventually falsified and only external_open survived"
+    }
+  ],
+  "fresh_candidate_stops": [
+    {
+      "issue": 293,
+      "system": "Bodie American pika",
+      "ecosystem_or_context": "terrestrial fragmented anthropogenic ore-dump metapopulation",
+      "terminal_stage": "geometry_registry",
+      "reason": "frozen 82-patch geometry not reproducible response-independently",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 294,
+      "system": "Åland Glanville fritillary",
+      "ecosystem_or_context": "island-fragmented dry-meadow metapopulation",
+      "terminal_stage": "temporal_registry",
+      "reason": "historical dynamic patch universe not identifiable from Patch data without response-bearing Locality Visit rows",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 295,
+      "system": "Fukushima wild boar",
+      "ecosystem_or_context": "terrestrial forest / abandonment-disturbance camera traps",
+      "terminal_stage": "source_transport",
+      "reason": "audited public JaLTER source transport unavailable from validation runtime",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 297,
+      "system": "Snapshot Japan sika deer",
+      "ecosystem_or_context": "standardized terrestrial camera-trap arrays",
+      "terminal_stage": "response_header",
+      "reason": "prospectively frozen exact sequence header mismatched three physical spellings; post-result alias repair forbidden",
+      "biological_response_access": "header_only",
+      "response_header_bytes_opened": 278,
+      "response_data_row_bytes_opened": 0,
+      "model_fits": 0,
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 298,
+      "system": "Guam Brown Treesnake",
+      "ecosystem_or_context": "terrestrial island invasive-predator trapping",
+      "terminal_stage": "geometry_registry",
+      "reason": "trap effort lacked an individual two-dimensional registry adequate for frozen structural worlds",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 299,
+      "system": "White Mountain National Forest camera traps",
+      "ecosystem_or_context": "temperate terrestrial forest camera monitoring",
+      "terminal_stage": "response_linkage",
+      "reason": "location/time linkage required response-bearing media rows",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 301,
+      "system": "Maine moose camera traps",
+      "ecosystem_or_context": "northern forest large-mammal camera monitoring",
+      "terminal_stage": "publication_registry_reproduction",
+      "reason": "public response-independent camera registry did not reproduce the paper-defined 84-camera universe",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 302,
+      "system": "Green Mountain American marten",
+      "ecosystem_or_context": "terrestrial forest camera survey",
+      "terminal_stage": "publication_registry_reproduction",
+      "reason": "paper-defined camera universe not reproduced response-independently",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 303,
+      "system": "Cuban Treefrog acoustic monitoring",
+      "ecosystem_or_context": "terrestrial invasive-amphibian acoustic monitoring",
+      "terminal_stage": "response_linkage",
+      "reason": "response linkage to site/time required a prospectively forbidden media table",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 304,
+      "system": "Vermont American marten",
+      "ecosystem_or_context": "terrestrial camera monitoring",
+      "terminal_stage": "surveyed_negative_semantics",
+      "reason": "direct search-list membership required for defensible recorded absence was not identifiable response-independently",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 305,
+      "system": "Willamette northern red-legged frog",
+      "ecosystem_or_context": "long-term terrestrial wetland amphibian monitoring",
+      "terminal_stage": "physical_source_separation",
+      "reason": "site/survey/response information was inseparable in the released workbook",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 306,
+      "system": "NEON forest coyote",
+      "ecosystem_or_context": "standardized multi-site forest camera trapping",
+      "terminal_stage": "temporal_context_estimability",
+      "reason": "frozen minimum of 30 subproject-year contexts exceeded the complete response-independent registry of 19 contexts",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 307,
+      "system": "Snapshot USA white-tailed deer",
+      "ecosystem_or_context": "continental standardized camera-trap arrays",
+      "terminal_stage": "source_transport",
+      "reason": "current individual Dryad deployment transport unavailable before deployment bytes",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 308,
+      "system": "Peneda-Gerês roe deer",
+      "ecosystem_or_context": "repeated terrestrial camera-grid monitoring",
+      "terminal_stage": "publication_registry_reproduction",
+      "reason": "prospectively frozen 64-grid identity not reproduced response-independently",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 309,
+      "system": "Elwha black-tailed deer",
+      "ecosystem_or_context": "post-dam-removal terrestrial camera monitoring",
+      "terminal_stage": "physical_source_separation",
+      "reason": "station registry was inseparable from daily response",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 310,
+      "system": "Mount St. Helens prairie lupine",
+      "ecosystem_or_context": "long-term volcanic succession permanent plots",
+      "terminal_stage": "temporal_registry",
+      "reason": "survey calendar was not identifiable from response-independent plot descriptors",
+      "biological_response_access": "none",
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 311,
+      "system": "BBS Northern Bobwhite",
+      "ecosystem_or_context": "continental terrestrial annual route survey",
+      "terminal_stage": "bounded_archive_transport",
+      "reason": "ScienceBase returned HTTP 200 rather than required 206 to the frozen EOCD Range request; response body was not opened",
+      "biological_response_access": "none",
+      "response_body_bytes_opened": 0,
+      "model_fits": 0,
+      "gate5_run_id": 32952826225,
+      "gate5_fingerprint": "af729b084b49ed5605a78106f51ad22c19c6980df8eb14ad3f4d945872a086f1",
+      "counts_as_predictive_evidence": false
+    }
+  ],
+  "administrative_exclusions": [
+    {
+      "issue": 296,
+      "reason": "accidental placeholder; not a scientific candidate"
+    },
+    {
+      "issue": 300,
+      "reason": "duplicate White Mountain candidate; not an additional scientific denominator unit"
+    }
+  ],
+  "reporting_rules": {
+    "show_successes_and_stops_in_same_candidate_flow": true,
+    "interpret_stop_as_adverse_layer_b_result": false,
+    "count_header_only_stop_as_predictive_test": false,
+    "count_administrative_duplicate_as_candidate": false,
+    "do_not_repair_and_relabel_terminal_fresh_attempts": true,
+    "candidate_flow_is_methods_integrity_evidence": true
+  },
+  "current_denominator_summary": {
+    "fresh_predictive_endpoints_with_scores": 2,
+    "fresh_candidate_stops_listed": 17,
+    "administrative_exclusions": 2,
+    "third_fresh_predictive_endpoint_still_required": true
+  }
+}
