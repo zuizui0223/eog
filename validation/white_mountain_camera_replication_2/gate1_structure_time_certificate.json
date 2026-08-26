@@ -1,0 +1,58 @@
+{
+  "schema": "eog.white_mountain_camera_replication_2.gate1_structure_time_certificate.v1",
+  "attempt_id": "white_mountain_nf_camera_2014_2024_fresh_paired_v1",
+  "status": "gate1_response_free_structure_and_visit_sequence_profile_complete",
+  "workflow": {
+    "run_id": 32920642563,
+    "job_id": 98033408881,
+    "head_sha": "71e6eb62d90b01468d9fea7537f4e6124b0ddc4f",
+    "result_fingerprint": "b49bb28ae0e986179613216ce9fb39537e6949275794e5f91be10218a3933b24",
+    "artifact_id": 9589708975,
+    "artifact_digest": "sha256:a24bc1d0e2d4e861153082bfd75525984a03bd2157280c1d11dc0f4d7260ce79"
+  },
+  "universe": {
+    "location_rows": 103,
+    "visited_location_count": 101,
+    "visited_location_ids_fingerprint": "2b0c3cc3c1a2ce2195ba13059c6ea40cf8d573314b3edec83ab4d8d1d2a4eb16",
+    "one_to_one_registry_pass": true
+  },
+  "geometry": {
+    "coordinate_rule": "midpoint of response-independent location bounds",
+    "midpoint_registry_fingerprint": "7c050df336e120b472c24808d69bfd23ab2a6009f6de0916eaec839ac8045824",
+    "structural_thresholds_km": [5.970931701482, 10.859130335787, 13.275707221543],
+    "distinct_positive_threshold_count": 3,
+    "pair_count": 5050
+  },
+  "visit_sequence": {
+    "visit_rows": 1095,
+    "visit_type_counts": {"set": 149, "check": 852, "pull": 94},
+    "set_interval_count_total": 149,
+    "set_interval_count_per_location_min": 1,
+    "set_interval_count_per_location_max": 3,
+    "strict_active_state_violation_count": 57,
+    "strict_active_state_violation_types": {
+      "ends_active_without_pull": 38,
+      "set_while_active": 18,
+      "pull_while_inactive": 1
+    },
+    "terminal_rule": "Gate1 does not repair or reinterpret the 57 strict state violations. Downstream eligibility must use only a prospectively frozen response-independent rule; otherwise STOP."
+  },
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotationverifications_payload_requests": 0,
+    "annotationverifications_payload_bytes_opened": 0,
+    "media_payload_requests": 0,
+    "media_payload_bytes_opened": 0,
+    "taxa_payload_requests": 0,
+    "taxa_payload_bytes_opened": 0,
+    "modeloutputs_payload_requests": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "photo_zip_payload_requests": 0,
+    "photo_zip_payload_bytes_opened": 0,
+    "other_response_payload_requests": 0,
+    "other_response_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
