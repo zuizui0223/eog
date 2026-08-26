@@ -1,0 +1,52 @@
+{
+  "schema": "eog.peneda_roedeer_replication_2.terminal_stop_certificate.v1",
+  "attempt_id": "peneda_roedeer_camera_interval_fresh_paired_v1",
+  "issue": 308,
+  "terminal_status": "stop_grid_cell_year_rule_does_not_reproduce_deployment_registry",
+  "fresh_endpoint_consumed": false,
+  "reason": "The prospectively frozen A-H x 1-8 plus _YYYY physical-site identity rule failed on the response-independent deployment payload. Four deployment labels are B9_2015, B9_2016, B9_2017 and B9_2019, while H2 is absent. The rule therefore matched 327/331 rows and reproduced only 63/64 expected A1-H8 base sites. The rule is not repaired post hoc even though official article XML independently documents a 64-camera grid.",
+  "source_identity": {
+    "paper_doi": "10.3897/BDJ.11.e99588",
+    "deployment_source_filename": "oo_789819.csv",
+    "deployment_binary_object_id": 789819,
+    "deployment_payload_sha256": "c80ad16f362a46c9ea67d8d19b5da1cb5967929ca7dd9ab9197d6cdb2305cf74",
+    "deployment_rows": 331,
+    "observation_source_filename": "oo_789818.csv",
+    "observation_binary_object_id": 789818
+  },
+  "authoritative_grid_gate": {
+    "run_id": 32932668657,
+    "job_id": 98067775421,
+    "head_sha": "2e893a780060d79453703338c9b559cd660a4d7b",
+    "fingerprint": "4a90a0f2bab14c97daaec8db15b2d2b4f7dadb2d5e4af2aeae7c2c63f5fc7a56",
+    "matched_rows": 327,
+    "unmatched_rows": 4,
+    "unmatched_labels": ["B9_2015", "B9_2016", "B9_2017", "B9_2019"],
+    "canonical_base_site_count": 63,
+    "expected_base_site_count": 64,
+    "missing_expected_base_site": "H2",
+    "duplicate_base_year_count": 0,
+    "matched_start_year_counts": {"2015": 57, "2016": 60, "2017": 54, "2018": 53, "2019": 56, "2020": 47},
+    "official_xml_has_64_and_grid": true,
+    "official_xml_has_camera_and_location_or_site": true,
+    "article_xml_sha256": "ab44454965f32bdaadaf6256a07e871434de2b41f737616ad260b2248189a469",
+    "artifact_id": 9593733394,
+    "artifact_name": "peneda-roedeer-replication-2-grid-identity",
+    "artifact_digest": "sha256:f088cdb08d95fb0ba9c126dc946561f6ddc9eaae272f892bf54db983e3331d91"
+  },
+  "earlier_invalid_site_certificate": {
+    "status": "revoked",
+    "revocation_schema": "eog.peneda_roedeer_replication_2.site_registry_certificate.v2_revocation",
+    "reason": "Earlier L-prefixed alias interpretation was disproved response-independently and must not be reused."
+  },
+  "response_firewall": {
+    "observation_payload_requests": 0,
+    "observation_payload_bytes_opened": 0,
+    "observation_header_bytes_opened": 0,
+    "observation_rows_opened": false,
+    "observation_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "boundary": "Do not repair B9/H2, relabel this attempt, or reuse it as a fresh Peneda endpoint. Replication #2 selection returns to a new response-unopened ecosystem/source."
+}
