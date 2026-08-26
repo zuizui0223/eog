@@ -1,0 +1,27 @@
+{
+  "schema": "eog.neon_forest_coyote_replication_2.start_year_diagnostic_certificate.v1",
+  "attempt_id": "neon_forest_coyote_camera_interval_fresh_paired_v1",
+  "status": "auxiliary_start_year_is_non_authoritative",
+  "deployment_rows": 820,
+  "deployment_md5": "82537cdf0a586fa14c9a8b6afd7be470",
+  "diagnostic_fingerprint": "299d0a906eaffd893b420be98320fc1f86084149f085e12d260e1b641b5c77a9",
+  "auxiliary_start_year_token_counts": {"0":13,"15":40,"16":19,"19":371,"20":1,"21":325,"22":51},
+  "canonical_start_date_year_counts": {"2015":40,"2016":19,"2019":384,"2020":1,"2021":325,"2022":51},
+  "diagnosis": "The auxiliary start_year field is a derived/non-authoritative convenience field: it is predominantly two-digit, and 13 records with canonical start_date year 2019 contain token 0. The full start_date is present on all 820 rows and is therefore the sole canonical source for survey year.",
+  "rule": "Ignore auxiliary start_year for context definition and all scientific features. Canonical year is parsed start_date.year only. No deployments are dropped because of auxiliary start_year tokens.",
+  "audit": {
+    "workflow_run_id": 32930496546,
+    "job_id": 98061662630,
+    "artifact_id": 9593023938,
+    "artifact_digest": "sha256:69cec5e124c47ad2b374539230462e017d5a2113db79e07e541a91790e30db36"
+  },
+  "response_firewall": {
+    "sequence_payload_requests":0,
+    "sequence_payload_bytes_opened":0,
+    "sequence_header_bytes_opened":0,
+    "sequence_rows_opened":false,
+    "sequence_values_opened":false,
+    "model_fits":0,
+    "heldout_scores":0
+  }
+}
