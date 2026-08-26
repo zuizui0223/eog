@@ -1,0 +1,57 @@
+{
+  "schema": "eog.white_mountain_camera_replication_2.gate2_dictionary_certificate.v1",
+  "attempt_id": "white_mountain_nf_camera_2014_2024_fresh_paired_v1",
+  "status": "gate2_dictionary_semantics_profile_complete_response_closed",
+  "workflow": {
+    "run_id": 32920751207,
+    "job_id": 98033711882,
+    "head_sha": "7f636464d3e86f3131d6b45f18df54b56d22ac41",
+    "result_fingerprint": "2119beab6e5c814e3fd7f4eea637562107380f628d47165696bba1a947ddbf0d",
+    "artifact_id": 9589742624,
+    "artifact_digest": "sha256:8eda2b4612aa946d733f060676d009867786ad2d2f331c8ed8c91ad5129b76fa"
+  },
+  "dictionary": {
+    "bytes": 63911,
+    "md5": "aa348a45e6d7ee9ab1509e2f36d37408",
+    "rows": 414,
+    "matching_rows": 88
+  },
+  "linkage_semantics": {
+    "annotations_primary_key": "annotations.pk_annotationid",
+    "annotations_to_media": "annotations.fk_mediaid -> media.pk_mediaid",
+    "annotations_to_taxa": "annotations.fk_taxaid -> taxa.pk_taxaid",
+    "annotations_to_equipment": "annotations.fk_equipmentid -> equipment.pk_equipmentid",
+    "media_to_visit": "media.fk_visitid -> visits.pk_visitid",
+    "media_to_equipment": "media.fk_equipmentid -> equipment.pk_equipmentid",
+    "taxa_primary_key": "taxa.pk_taxaid",
+    "taxa_name_fields": ["common_name", "genus", "species"],
+    "annotations_direct_visit_or_location_key_seen_in_dictionary": false,
+    "required_response_chain_if_physical_schemas_confirm": "annotations -> media -> visits -> locations, plus annotations -> taxa for focal taxon"
+  },
+  "forbidden_inference": [
+    "Do not treat an absent annotation as a negative until physical linkage and observation eligibility are prospectively closed.",
+    "Do not use visits.track_sign values.",
+    "Do not open collarmartens.csv as a repair source.",
+    "Do not open response rows until all linkage, eligibility, split, Layer A/B, evaluator and once-only rules are frozen."
+  ],
+  "response_firewall": {
+    "annotations_payload_requests": 0,
+    "annotations_payload_bytes_opened": 0,
+    "annotationverifications_payload_requests": 0,
+    "annotationverifications_payload_bytes_opened": 0,
+    "media_payload_requests": 0,
+    "media_payload_bytes_opened": 0,
+    "taxa_payload_requests": 0,
+    "taxa_payload_bytes_opened": 0,
+    "modeloutputs_payload_requests": 0,
+    "modeloutputs_payload_bytes_opened": 0,
+    "collarmartens_payload_requests": 0,
+    "collarmartens_payload_bytes_opened": 0,
+    "photo_zip_payload_requests": 0,
+    "photo_zip_payload_bytes_opened": 0,
+    "other_response_payload_requests": 0,
+    "other_response_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
