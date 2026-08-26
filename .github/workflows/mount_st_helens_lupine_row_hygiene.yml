@@ -1,0 +1,54 @@
+name: Mount St Helens lupine plot row hygiene
+
+on:
+  push:
+    branches:
+      - agent/mount-st-helens-lupine-replication-2
+    paths:
+      - validation/mount_st_helens_lupine_replication_2/plot_descriptor_row_hygiene.py
+      - .github/workflows/mount_st_helens_lupine_row_hygiene.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile descriptor hygiene diagnostic
+        run: python -m py_compile validation/mount_st_helens_lupine_replication_2/plot_descriptor_row_hygiene.py
+      - name: Inspect plot descriptor rows only
+        run: python validation/mount_st_helens_lupine_replication_2/plot_descriptor_row_hygiene.py
+      - name: Assert biological plot-year files stayed closed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/mount_st_helens_lupine_replication_2/plot_descriptor_row_hygiene.json')
+          assert p.exists()
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          assert a['structure_payload_requests']==0
+          assert a['structure_payload_bytes_opened']==0
+          assert a['structure_header_bytes_opened']==0
+          assert a['structure_rows_opened'] is False
+          assert a['structure_values_opened'] is False
+          assert a['target_response_payload_requests']==0
+          assert a['target_response_payload_bytes_opened']==0
+          assert a['target_response_header_bytes_opened']==0
+          assert a['target_response_rows_opened'] is False
+          assert a['target_response_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps({'status':r['status'],'fingerprint':r['fingerprint'],'row_hygiene':r['row_hygiene'],'response_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload row hygiene evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: mount-st-helens-lupine-row-hygiene
+          path: build/mount_st_helens_lupine_replication_2/plot_descriptor_row_hygiene.json
+          if-no-files-found: error
