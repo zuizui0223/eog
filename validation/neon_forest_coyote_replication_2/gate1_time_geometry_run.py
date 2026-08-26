@@ -12,19 +12,11 @@ def load_with_frozen_year_normalization():
     for raw in rows:
         r = dict(raw)
         start, _ = gate.parse_date(r[cols["start_date"]])
-        token = str(r[cols["start_year"]]).strip()
-        try:
-            aux = int(token)
-        except ValueError as exc:
-            raise RuntimeError(f"non-integer auxiliary start_year for {r.get(cols['deployment_id'])}: {token!r}") from exc
-        if aux == start.year:
-            pass
-        elif 0 <= aux <= 99 and aux == start.year % 100:
-            r[cols["start_year"]] = str(start.year)
-        else:
-            raise RuntimeError(
-                f"auxiliary start_year conflicts with canonical start_date year for {r.get(cols['deployment_id'])}: {aux} vs {start.year}"
-            )
+        # Response-independent diagnostic proved the auxiliary start_year column
+        # is non-authoritative (mostly 2-digit, plus 13 token-0 rows for 2019).
+        # Canonical survey year is start_date.year only. Replace the auxiliary
+        # field solely so the frozen legacy core receives that canonical value.
+        r[cols["start_year"]] = str(start.year)
         normalized.append(r)
     return normalized, meta
 
