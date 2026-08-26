@@ -1,0 +1,66 @@
+name: BBS Northern Bobwhite replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/bbs-northern-bobwhite-replication-2
+    paths:
+      - validation/bbs_northern_bobwhite_replication_2/**
+      - .github/workflows/bbs_northern_bobwhite_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile metadata-only Gate0
+        run: python -m py_compile validation/bbs_northern_bobwhite_replication_2/gate0_metadata_inventory.py
+      - name: Run ScienceBase metadata inventory
+        id: gate
+        continue-on-error: true
+        run: python validation/bbs_northern_bobwhite_replication_2/gate0_metadata_inventory.py
+      - name: Assert avian response and all file payloads stayed closed
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/bbs_northern_bobwhite_replication_2/gate0_metadata_inventory.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          assert r['file_payload_requests']==0
+          assert r['file_payload_bytes_opened']==0
+          assert a['avian_payload_requests']==0
+          assert a['avian_payload_bytes_opened']==0
+          assert a['avian_header_bytes_opened']==0
+          assert a['avian_rows_opened'] is False
+          assert a['avian_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps({'status':r['status'],'file_count':r.get('file_count'),'tentative_role_hits':r.get('tentative_role_hits'),'fingerprint':r['fingerprint'],'response_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbs-northern-bobwhite-replication-2-gate0
+          path: build/bbs_northern_bobwhite_replication_2/gate0_metadata_inventory.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/bbs_northern_bobwhite_replication_2/gate0_metadata_inventory.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate0 terminal status:',r['status'])
+          PY
