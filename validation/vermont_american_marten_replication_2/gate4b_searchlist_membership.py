@@ -41,7 +41,7 @@ def write(result):
 
 def main():
     result = {
-        "schema": "eog.vermont_american_marten_replication_2.gate4b_searchlist_membership.v2",
+        "schema": "eog.vermont_american_marten_replication_2.gate4b_searchlist_membership.v3",
         "attempt_id": gate1.CONTRACT["attempt_id"],
         "status": "engineering_failure_pre_response",
         "reason": None,
@@ -74,11 +74,13 @@ def main():
         _, dict_rows = parsed["dbdictionary.csv"]
         _, taxa_rows = parsed["taxa.csv"]
 
+        # These requirements now use the exact response-independent physical schemas
+        # observed in Gate4b v2. They cover only columns actually used by this gate.
         required = {
             "librarylists.csv": ({"pk_librarylistid"}, set(ll_header)),
-            "librarylistitems.csv": ({"pk_librarylistitemid", "item", "type", "fk_librarylistid"}, set(lli_header)),
-            "lists.csv": ({"pk_listid", "name", "description"}, set(lists_header)),
-            "listitems.csv": ({"fk_listid", "item", "description", "pk_listitemid"}, set(li_header)),
+            "librarylistitems.csv": ({"pk_librarylistitemid", "fk_librarylistid", "item", "description", "sort_order"}, set(lli_header)),
+            "lists.csv": ({"pk_listid", "core_list", "description"}, set(lists_header)),
+            "listitems.csv": ({"pk_listitemid", "fk_listid", "item", "description", "sort_order"}, set(li_header)),
         }
         for name, (need, have) in required.items():
             missing = need - have
