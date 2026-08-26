@@ -1,0 +1,65 @@
+name: Andrews WE008 red-backed vole replication 2 Gate0
+
+on:
+  push:
+    branches:
+      - agent/andrews-we008-red-backed-vole-replication-2
+    paths:
+      - validation/andrews_we008_red_backed_vole_replication_2/**
+      - .github/workflows/andrews_we008_red_backed_vole_replication_2_gate0.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile metadata-only Gate0
+        run: python -m py_compile validation/andrews_we008_red_backed_vole_replication_2/gate0_metadata_only.py
+      - name: Run metadata-only source separation gate
+        id: gate
+        continue-on-error: true
+        run: python validation/andrews_we008_red_backed_vole_replication_2/gate0_metadata_only.py
+      - name: Assert biological response stayed closed
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/andrews_we008_red_backed_vole_replication_2/gate0_metadata_only.json')
+          assert p.exists(), 'Gate0 evidence missing'
+          r=json.loads(p.read_text())
+          a=r['response_firewall']
+          assert a['capture_data_get_requests']==0
+          assert a['capture_payload_bytes_opened']==0
+          assert a['capture_header_bytes_opened']==0
+          assert a['capture_rows_opened'] is False
+          assert a['capture_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          assert r.get('head_checks', {}).get('forbidden_response_head_requests', 0)==0
+          print(json.dumps({'status':r['status'],'fingerprint':r.get('fingerprint'),'entities':r.get('entities',{}),'head_checks':r.get('head_checks',{}),'response_firewall':a},indent=2,sort_keys=True))
+          PY
+      - name: Upload Gate0 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: andrews-we008-red-backed-vole-replication-2-gate0
+          path: build/andrews_we008_red_backed_vole_replication_2/gate0_metadata_only.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/andrews_we008_red_backed_vole_replication_2/gate0_metadata_only.json').read_text())
+          if r['status'].startswith('engineering_failure'):
+              raise SystemExit(r['reason'])
+          print('Gate0 terminal status:', r['status'])
+          PY
