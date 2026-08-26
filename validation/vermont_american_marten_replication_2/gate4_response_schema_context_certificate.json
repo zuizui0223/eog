@@ -1,0 +1,55 @@
+{
+  "schema": "eog.vermont_american_marten_replication_2.gate4_response_schema_context_certificate.v1",
+  "attempt_id": "vermont_american_marten_camera_fresh_paired_v1",
+  "workflow_run_id": 32928638081,
+  "job_id": 98056447504,
+  "head_sha": "2845190170d5f6234d96e3f5e7546500e3a8e4dc",
+  "artifact": {
+    "id": 9592418066,
+    "name": "vermont-american-marten-replication-2-gate4",
+    "digest": "sha256:f4579a68a4bfed79d0f8fcb254c1566350893b2fceb587ee005c0e25b0cbd8fa"
+  },
+  "status": "gate4_response_schema_context_complete",
+  "fingerprint": "85537059892a97181fbe09c7cc9e8ddcec8bc407b889ae56b7988f4b5c634f41",
+  "response_schema_facts": {
+    "annotations": {
+      "pk_annotationid": "primary key",
+      "fk_mediaid": "foreign key to media.pk_mediaid",
+      "fk_searchlistid": "foreign key to librarylists.pk_librarylistid; identifies taxa searched for and is source-documented as important for verifying absence when the search list is a subset",
+      "fk_taxonid": "foreign key to taxa.pk_taxonid",
+      "box_fields": ["box_top", "box_left", "box_bottom", "box_right"]
+    },
+    "annotationverifications": {
+      "fk_annotationid": "foreign key to annotations",
+      "fk_librarylistitemid": "foreign key to librarylistitems",
+      "fields": ["pk_annotationverificationid", "fk_annotationid", "fk_librarylistitemid", "observations", "preference"]
+    }
+  },
+  "lookup_facts": {
+    "librarylists_header": ["pk_librarylistid", "name", "fk_projectid", "description"],
+    "librarylistitems_header": ["pk_librarylistitemid", "item", "type", "fk_librarylistid"],
+    "listitems_header": ["fk_listid", "item", "description", "pk_listitemid"],
+    "candidate_search_list": {
+      "pk_librarylistid": "sp_ch2021",
+      "name": "NEK mammals",
+      "description": "species searched for when manulaianotation of media from CH project was processed"
+    },
+    "controlled_list_marten_row": {
+      "fk_listid": "sp_ch2021",
+      "item": "marten",
+      "description": "Species:  marten",
+      "pk_listitemid": "257"
+    },
+    "automatic_direct_librarylistitem_taxon_fk_resolution": "not_applicable: librarylistitems carries item/type/fk_librarylistid, not fk_taxonid"
+  },
+  "open_question_before_response": "Prove response-independently whether library search list sp_ch2021 / NEK mammals contains the marten search item and establish the exact membership token/ID before any annotation header or row access.",
+  "biological_response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
