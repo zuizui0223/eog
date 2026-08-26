@@ -1,0 +1,45 @@
+{
+  "schema": "eog.elwha_blacktail_replication_2.terminal_source_separation_stop_certificate.v1",
+  "attempt_id": "elwha_blacktail_daily_detection_fresh_paired_v1",
+  "issue": 309,
+  "terminal_status": "stop_registry_geometry_and_response_not_physically_separable",
+  "scientific_classification": "valid_pre_response_source_separation_stop_not_predictive_evidence",
+  "sciencebase": {
+    "item_id": "65dce343d34eb64889e197bb",
+    "doi": "10.5066/P1BJD7OH",
+    "has_children": false,
+    "data_file_count": 1,
+    "data_file": {
+      "name": "ElwhaRiver_CameraTrapping.csv",
+      "size": 19643229,
+      "content_type": "text/csv",
+      "md5": "6ad700fda031671d8c376c9ce44c682a"
+    },
+    "metadata_file": {
+      "name": "ElwhaRiver_CameraTrapping.xml",
+      "size": 58285,
+      "content_type": "application/fgdc+xml",
+      "md5": "7300497b692c3b2b0ff7777f177e5c51"
+    }
+  },
+  "reason": "ScienceBase exposes one CSV data asset whose public description states that it contains both daily mammal detections and camera-station location information. No separate station/geometry/effort data asset or child item exists, so a closed response-independent registry cannot be constructed without opening the response-bearing CSV.",
+  "execution_boundary": {
+    "data_file_payload_requests": 0,
+    "data_file_payload_bytes_opened": 0,
+    "data_file_header_bytes_opened": 0,
+    "data_rows_opened": false,
+    "data_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0,
+    "post_stop_registry_reconstruction_from_response_allowed": false,
+    "endpoint_may_be_repaired_or_relabelled_as_fresh": false
+  },
+  "gate0": {
+    "run_id": 32933967009,
+    "job_id": 98071531408,
+    "head_sha": "78538f3e107cfc1a63aa2841602e74a8c737d3cd",
+    "fingerprint": "ea7c1a0fa9e825a865268a3f56826d6f4927bd3b89a44d07db301b5305ab3fe9",
+    "artifact_id": 9594187297,
+    "artifact_digest": "sha256:15f1056166eb65d4250307b0da4e681148bb9e0c6961fc484a1bdfe24c130d23"
+  }
+}
