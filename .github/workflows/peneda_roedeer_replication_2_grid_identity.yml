@@ -1,0 +1,58 @@
+name: Peneda roe deer replication 2 grid identity documentation gate
+
+on:
+  push:
+    branches:
+      - agent/peneda-roedeer-replication-2
+    paths:
+      - validation/peneda_roedeer_replication_2/grid_cell_identity_documentation_gate.py
+      - validation/peneda_roedeer_replication_2/source_contract.json
+      - .github/workflows/peneda_roedeer_replication_2_grid_identity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile grid identity gate
+        run: python -m py_compile validation/peneda_roedeer_replication_2/grid_cell_identity_documentation_gate.py
+      - name: Run grid identity and documentation gate
+        run: python validation/peneda_roedeer_replication_2/grid_cell_identity_documentation_gate.py
+      - name: Assert observation response stayed closed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/peneda_roedeer_replication_2/grid_cell_identity_documentation_gate.json').read_text())
+          a=r['response_firewall']
+          assert a['observation_payload_requests']==0
+          assert a['observation_payload_bytes_opened']==0
+          assert a['observation_header_bytes_opened']==0
+          assert a['observation_rows_opened'] is False
+          assert a['observation_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps({
+              'status':r['status'],
+              'matched_rows':r['grid_rule'].get('matched_rows'),
+              'canonical_base_site_count':r['grid_rule'].get('canonical_base_site_count'),
+              'duplicate_base_year_count':r['grid_rule'].get('duplicate_base_year_count'),
+              'start_year_counts':r['grid_rule'].get('start_year_counts'),
+              'base_sites_with_coordinate_changes':r['grid_rule'].get('base_sites_with_coordinate_changes'),
+              'has_64_and_grid':r['documentation'].get('has_64_and_grid'),
+              'has_camera_and_location_or_site':r['documentation'].get('has_camera_and_location_or_site'),
+              'fingerprint':r['fingerprint'],
+          },indent=2,sort_keys=True))
+          PY
+      - name: Upload grid identity evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: peneda-roedeer-replication-2-grid-identity
+          path: build/peneda_roedeer_replication_2/grid_cell_identity_documentation_gate.json
+          if-no-files-found: error
