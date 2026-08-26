@@ -1,0 +1,45 @@
+{
+  "schema": "eog.noaa_small_mesh_replication_3.pre_response_attempt_log.v1",
+  "attempt_id": "noaa_small_mesh_pandalus_borealis_station_year_fresh_v1",
+  "attempts": [
+    {
+      "sequence": 1,
+      "source_contract_fingerprint": "29cb0e1a8293f91a4d59a4e54067b6bf4c452ea0f940885403764efb22222208",
+      "status": "engineering_failure",
+      "failure": "InPort entity display declared 32 upper-case attributes, while the distributed Haul CSV exposed 33 lower-case columns in a different order and included stratum",
+      "catch_transport_status": 206,
+      "catch_content_range": "bytes 0-0/11881418",
+      "catch_bytes_opened": 0
+    },
+    {
+      "sequence": 2,
+      "source_contract_fingerprint": "3ab1ea5dc48c7492352fab214390af4aaf9d73c240b8df0102fd0e3ba6a61344",
+      "status": "engineering_failure",
+      "failure": "the prospective Haul join key was not unique in the distributed table",
+      "catch_transport_status": 206,
+      "catch_content_range": "bytes 0-0/11881418",
+      "catch_bytes_opened": 0
+    },
+    {
+      "sequence": 3,
+      "source_contract_fingerprint": "3ab1ea5dc48c7492352fab214390af4aaf9d73c240b8df0102fd0e3ba6a61344",
+      "status": "stop_analysis_registry_not_closed",
+      "failure": "61 duplicate Haul join keys and complete held-out GOA absence of the prospectively frozen STATIONID, NET_WIDTH, and NET_HEIGHT fields left zero admissible station-year nodes",
+      "catch_transport_status": 206,
+      "catch_content_range": "bytes 0-0/11881418",
+      "catch_bytes_opened": 0
+    }
+  ],
+  "cumulative_response_firewall": {
+    "catch_transport_requests": 3,
+    "catch_payload_bytes_opened": 0,
+    "catch_header_bytes_opened": 0,
+    "catch_rows_opened": false,
+    "catch_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "terminal": true,
+  "terminal_status": "stop_analysis_registry_not_closed",
+  "repair_or_substitution_allowed": false
+}
