@@ -1,0 +1,57 @@
+{
+  "schema": "eog.vermont_american_marten_replication_2.gate1_response_independent_certificate.v1",
+  "attempt_id": "vermont_american_marten_camera_fresh_paired_v1",
+  "workflow_run_id": 32926556992,
+  "job_id": 98050566540,
+  "head_sha": "ed22f54fab484df16d33befd6a01c0b68aef9f26",
+  "artifact": {
+    "id": 9591712591,
+    "name": "vermont-american-marten-replication-2-gate1",
+    "digest": "sha256:ddb648a803f74ec37b93cf8c23ce812650c588dae804ab9e8f53e7e3b7b1e6d8"
+  },
+  "status": "gate1_response_independent_profile_complete",
+  "fingerprint": "819f19adec8264cf962cddd237ed6172e03e26f4d4b9ec33653ed3bda715f2af",
+  "key_findings": {
+    "media": {
+      "row_count": 41933,
+      "header": ["pk_mediaid","media_type","filename","fk_visitid","start_date","start_time","filepath","sb_exclude","fk_sciencebaseid","filesize","timestamp"],
+      "unique_media_ids": 41933,
+      "unique_visit_ids": 258,
+      "role": "label-free recorded image timing/effort only"
+    },
+    "locations": {
+      "row_count": 71,
+      "unique_location_ids": 71,
+      "monitoring_station_rows_observed_pre_response": 70,
+      "direct_lat_long_complete_rows": 0,
+      "complete_public_bbox_rows_observed_pre_response": 70,
+      "geometry_note": "public release supplies obscured bounding boxes; future proxy coordinates must be defined response-independently"
+    },
+    "visits": {
+      "row_count": 429,
+      "unique_visit_ids": 429,
+      "unique_location_ids": 65,
+      "visit_types": ["set","check","pull"],
+      "track_sign_policy": "FORBIDDEN from eligibility, features, Layer A, Layer B, response parsing and scoring because Gate1 revealed that it contains biological track/sign information"
+    },
+    "focal_taxon_lookup": {
+      "pk_taxonid": "American Marten",
+      "scientific_name": "Martes americana",
+      "tsn": "180559"
+    },
+    "response_schema_information_from_dbdictionary": {
+      "annotations_fk_mediaid": "media.pk_mediaid",
+      "annotations_fk_taxonid": "taxa.pk_taxonid",
+      "annotations_fk_searchlistid_note": "search list is important for verifying absence when only a subset of taxa was searched"
+    }
+  },
+  "biological_response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
