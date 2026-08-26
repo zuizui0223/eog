@@ -1,0 +1,57 @@
+name: Peneda roe deer replication 2 site scope diagnostic
+
+on:
+  push:
+    branches:
+      - agent/peneda-roedeer-replication-2
+    paths:
+      - validation/peneda_roedeer_replication_2/site_scope_diagnostic.py
+      - validation/peneda_roedeer_replication_2/source_contract.json
+      - .github/workflows/peneda_roedeer_replication_2_site_scope.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile diagnostic
+        run: python -m py_compile validation/peneda_roedeer_replication_2/site_scope_diagnostic.py
+      - name: Run full deployment-only site-scope diagnostic
+        run: python validation/peneda_roedeer_replication_2/site_scope_diagnostic.py
+      - name: Assert observation response stayed closed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/peneda_roedeer_replication_2/site_scope_diagnostic.json').read_text())
+          a=r['response_firewall']
+          assert a['observation_payload_requests']==0
+          assert a['observation_payload_bytes_opened']==0
+          assert a['observation_header_bytes_opened']==0
+          assert a['observation_rows_opened'] is False
+          assert a['observation_values_opened'] is False
+          assert a['model_fits']==0
+          assert a['heldout_scores']==0
+          print(json.dumps({
+              'status':r['status'],
+              'unique_exact_coordinates':r['unique_exact_coordinates'],
+              'L_canonical_group_count':r['L_canonical_group_count'],
+              'non_L_row_count':r['non_L_row_count'],
+              'non_L_label_count':r['non_L_label_count'],
+              'coordinates_with_L_and_non_L_labels':r['coordinates_with_L_and_non_L_labels'],
+              'coordinates_without_any_L_label':r['coordinates_without_any_L_label'],
+              'fingerprint':r['fingerprint'],
+          },indent=2,sort_keys=True))
+          PY
+      - name: Upload diagnostic evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: peneda-roedeer-replication-2-site-scope
+          path: build/peneda_roedeer_replication_2/site_scope_diagnostic.json
+          if-no-files-found: error
