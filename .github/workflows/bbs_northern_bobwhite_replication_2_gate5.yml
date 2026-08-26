@@ -1,0 +1,82 @@
+name: BBS Northern Bobwhite replication 2 Gate5
+
+on:
+  push:
+    branches:
+      - agent/bbs-northern-bobwhite-replication-2
+    paths:
+      - validation/bbs_northern_bobwhite_replication_2/source_contract.json
+      - validation/bbs_northern_bobwhite_replication_2/gate0_metadata_certificate.json
+      - validation/bbs_northern_bobwhite_replication_2/gate1_registry_effort_certificate.json
+      - validation/bbs_northern_bobwhite_replication_2/gate2_structural_certificate.json
+      - validation/bbs_northern_bobwhite_replication_2/gate4_prospective_estimability_contract.json
+      - validation/bbs_northern_bobwhite_replication_2/gate4_prospective_estimability.py
+      - validation/bbs_northern_bobwhite_replication_2/gate5_archive_metadata_contract.json
+      - validation/bbs_northern_bobwhite_replication_2/gate5_archive_metadata.py
+      - tests/test_bbs_northern_bobwhite_gate5_archive_metadata.py
+      - .github/workflows/bbs_northern_bobwhite_replication_2_gate5.yml
+
+permissions:
+  contents: read
+
+jobs:
+  gate5:
+    runs-on: ubuntu-24.04
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile Gate4 and Gate5
+        run: |
+          python -m py_compile validation/bbs_northern_bobwhite_replication_2/gate4_prospective_estimability.py
+          python -m py_compile validation/bbs_northern_bobwhite_replication_2/gate5_archive_metadata.py
+      - name: Reproduce frozen Gate4 offline
+        run: python validation/bbs_northern_bobwhite_replication_2/gate4_prospective_estimability.py
+      - name: Inspect response ZIP container metadata only
+        id: gate5
+        continue-on-error: true
+        run: python validation/bbs_northern_bobwhite_replication_2/gate5_archive_metadata.py
+      - name: Assert response-member firewall
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('build/bbs_northern_bobwhite_replication_2/gate5_archive_metadata.json')
+          assert path.exists(), 'Gate5 evidence missing'
+          result = json.loads(path.read_text())
+          firewall = result['response_firewall']
+          assert firewall['avian_member_payload_requests'] == 0
+          assert firewall['avian_member_payload_bytes_opened'] == 0
+          assert firewall['avian_header_bytes_opened'] == 0
+          assert firewall['avian_rows_opened'] is False
+          assert firewall['avian_values_opened'] is False
+          assert firewall['model_fits'] == 0
+          assert firewall['heldout_scores'] == 0
+          print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+      - name: Upload Gate5 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbs-northern-bobwhite-replication-2-gate5
+          path: |
+            build/bbs_northern_bobwhite_replication_2/gate4_prospective_estimability.json
+            build/bbs_northern_bobwhite_replication_2/gate5_archive_metadata.json
+          if-no-files-found: error
+      - name: Propagate engineering failure only
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(Path('build/bbs_northern_bobwhite_replication_2/gate5_archive_metadata.json').read_text())
+          if result['status'] == 'engineering_failure_pre_response':
+              raise SystemExit(result['reason'])
+          print('Gate5 terminal status:', result['status'])
+          PY

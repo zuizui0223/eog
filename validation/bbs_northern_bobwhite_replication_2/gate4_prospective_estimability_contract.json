@@ -1,0 +1,51 @@
+{
+  "schema": "eog.bbs_northern_bobwhite_replication_2.gate4_prospective_estimability_contract.v1",
+  "attempt_id": "bbs_2026_northern_bobwhite_route_year_fresh_v1",
+  "declaration": {
+    "calibration_events": 10,
+    "calibration_non_events": 40,
+    "heldout_events": 10,
+    "heldout_non_events": 40,
+    "heldout_outer_units_with_both_classes": 4
+  },
+  "evidence": {
+    "source_label": "Cady, Davis and Fuhlendorf (2025), Northern Bobwhite Response to Drought is Biome-Specific, doi:10.1016/j.rama.2025.07.001",
+    "endpoint_definition_matches": false,
+    "response_rows_opened": false,
+    "intervals": {
+      "calibration_events": {"lower": null, "upper": null},
+      "calibration_non_events": {"lower": null, "upper": null},
+      "heldout_events": {"lower": null, "upper": null},
+      "heldout_non_events": {"lower": null, "upper": null},
+      "heldout_outer_units_with_both_classes": {"lower": null, "upper": null}
+    },
+    "context_only_not_endpoint_evidence": {
+      "reported_detected_route_count": 1956,
+      "reported_study_years": [1967, 2019],
+      "reason_not_mapped_to_frozen_intervals": "The paper reports routes with any Northern Bobwhite detection across its own North American biome study, not event/non-event counts for the frozen quality-valid U.S. route-year endpoint split into 2015-2019 calibration and 2021-2025 heldout years."
+    },
+    "note": "No response-independent publication supplies endpoint-matched lower or upper bounds for all five frozen route-year count quantities. The exact count gate remains mandatory inside the once-only runner before any fit or score."
+  },
+  "expected": {
+    "status": "uncertain_pre_response",
+    "disposition": "continue_response_blind_exact_gate_required",
+    "unresolved_keys": [
+      "calibration_events",
+      "calibration_non_events",
+      "heldout_events",
+      "heldout_non_events",
+      "heldout_outer_units_with_both_classes"
+    ],
+    "exact_count_gate_required": true,
+    "outcome_access_authorized": false
+  },
+  "response_firewall": {
+    "avian_payload_requests": 0,
+    "avian_payload_bytes_opened": 0,
+    "avian_header_bytes_opened": 0,
+    "avian_rows_opened": false,
+    "avian_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
