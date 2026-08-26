@@ -1,0 +1,40 @@
+{
+  "schema": "eog.vermont_american_marten_replication_2.terminal_pre_response_searchlist_stop_certificate.v1",
+  "attempt_id": "vermont_american_marten_camera_fresh_paired_v1",
+  "issue": 304,
+  "terminal_status": "stop_search_library_list_not_unique",
+  "terminal_reason": "The prospectively required direct library-search membership could not be established response-independently: librarylists.csv contains zero rows with pk_librarylistid=sp_ch2021. Although the same-ID controlled list evidence had shown a marten item, the frozen Gate4b rule explicitly prohibited inferring library-search membership solely from that cross-table coincidence. Absence semantics therefore remain unproven and biological response access is forbidden.",
+  "gate4b": {
+    "workflow_run_id": 32929100992,
+    "job_id": 98057754029,
+    "head_sha": "3d462513e098dece9a176fadb1fe75165c96131c",
+    "status": "stop_search_library_list_not_unique",
+    "fingerprint": "365d43ba477f7dce3cf1c690460a5ef929f2150c1bf2a095001db1114f8ec1f2",
+    "artifact": {
+      "id": 9592560556,
+      "name": "vermont-american-marten-replication-2-gate4b",
+      "digest": "sha256:5546a4fa7fcbb18de6a4063c8cea93cc34f1657bc3fd290a873131072cb13492"
+    }
+  },
+  "pre_response_successes_retained_as_audit_only": {
+    "gate1_response_independent_profile": "PASS",
+    "gate2_effort_geometry": "PASS: 70 monitoring stations, 2206 label-free site-weeks, four response-blind structural scales",
+    "gate3_temporal_split": "PASS: five primary heldout half-years",
+    "gate4_response_schema_context": "PASS"
+  },
+  "forbidden_repairs": [
+    "Do not reinterpret controlled listitems membership as direct library-search membership after this STOP.",
+    "Do not open annotations/modeloutputs to discover search coverage and then redefine negatives.",
+    "Do not relabel this endpoint as fresh in a later repaired attempt.",
+    "Do not drop uncovered site-weeks after response access."
+  ],
+  "biological_response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
