@@ -1,0 +1,57 @@
+{
+  "schema": "eog.vermont_american_marten_replication_2.gate2_effort_geometry_certificate.v1",
+  "attempt_id": "vermont_american_marten_camera_fresh_paired_v1",
+  "workflow_run_id": 32928364653,
+  "job_id": 98055680050,
+  "head_sha": "507ffd3b1d226cdf6ad1bdd9057269ffc1546820",
+  "artifact": {
+    "id": 9592326197,
+    "name": "vermont-american-marten-replication-2-gate2",
+    "digest": "sha256:d08a55915d87428f07a3aca7aabf869f0ff11c41e594d0d1d78ec2a3ebe9f162"
+  },
+  "status": "gate2_response_independent_effort_geometry_pass",
+  "fingerprint": "4ed29612b20c1810c705ccd050ff1352a01894f8632b3305553b95be1a502e54",
+  "site_registry": {
+    "eligible_monitoring_stations": 70,
+    "stations_with_at_least_one_eligible_media_week": 63,
+    "public_proxy_coordinate_rule": "midpoint of 0.05-degree public-release obscuration bbox; not exact camera coordinate",
+    "registry_fingerprint": "9874de195b11fd85e9bf02b14a0643e0dabe321793f375779fe3c79107842eb6"
+  },
+  "effort": {
+    "published_media_rows_reproduced": 41933,
+    "eligible_media_rows": 41933,
+    "excluded_media_rows": 0,
+    "eligible_site_weeks": 2206,
+    "eligible_site_week_registry_fingerprint": "2c950a53f34ad37341279a2a5cdbcb79ea22c12609603f88a73580651afacc34",
+    "week_rule": "Monday-based calendar week from label-free media.start_date",
+    "endpoint_boundary": "future response is American-marten recorded detection conditional on at least one camera media event in the site-week; no-media weeks are outside the endpoint"
+  },
+  "structural_ladder": {
+    "axis_id": "vermont_public_proxy_haversine_km",
+    "targets": [0.25, 0.5, 0.75, 0.9],
+    "thresholds_km": [7.100114377114664, 7.958224084558775, 9.39961150735943, 19.599795495096814],
+    "fingerprint": "dd3fd12a18bf6b02da4eac91e2b8773b7af0b29239071cb3d49c6fbb271612c3",
+    "distance_matrix_fingerprint": "290af6ced9e4c2787b02b015784e80b8873cb6a81c9d928564cce868a964390d",
+    "interpretation": "response-blind structural scales, not calibrated marten dispersal distances"
+  },
+  "temporal_effort": {
+    "earliest_week": "2014-01-20",
+    "latest_week": "2022-12-26",
+    "eligible_site_weeks_by_year": {"2014":60,"2015":54,"2016":172,"2017":395,"2018":617,"2019":100,"2021":5,"2022":803},
+    "eligible_sites_by_year": {"2014":8,"2015":8,"2016":23,"2017":14,"2018":18,"2019":17,"2021":5,"2022":46}
+  },
+  "leakage_exclusions": {
+    "visits.track_sign": "never used after Gate1 revealed biological track/sign content",
+    "media.filename": "not a feature",
+    "media.filepath": "not a feature"
+  },
+  "biological_response_firewall": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_headers_opened": false,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}
