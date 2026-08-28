@@ -192,6 +192,46 @@
       "gate5_run_id": 32952826225,
       "gate5_fingerprint": "af729b084b49ed5605a78106f51ad22c19c6980df8eb14ad3f4d945872a086f1",
       "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 314,
+      "system": "Portal Project Merriam's kangaroo rat",
+      "ecosystem_or_context": "long-term Chihuahuan Desert live trapping on permanent experimental plots",
+      "terminal_stage": "response_independent_calendar_value",
+      "reason": "the prospectively strict moon-calendar parser encountered period=NA before any capture-response access; the attempt was not repaired",
+      "biological_response_access": "none",
+      "response_payload_requests": 0,
+      "response_payload_bytes_opened": 0,
+      "response_header_bytes_opened": 0,
+      "response_rows_opened": 0,
+      "response_values_opened": 0,
+      "model_fits": 0,
+      "heldout_scores": 0,
+      "gate0_run_id": 32954719035,
+      "gate0_job_id": 98133741985,
+      "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 315,
+      "system": "H.J. Andrews California red-backed vole",
+      "ecosystem_or_context": "terrestrial young-forest thinning experiment with repeated live trapping",
+      "terminal_stage": "source_transport",
+      "reason": "the exact EML online byte URLs for response-independent effort entity 5 and geometry entity 10 returned HTTP 404 after HTTPS redirect",
+      "biological_response_access": "none",
+      "forbidden_response_head_requests": 0,
+      "response_payload_requests": 0,
+      "response_payload_bytes_opened": 0,
+      "response_header_bytes_opened": 0,
+      "response_rows_opened": 0,
+      "response_values_opened": 0,
+      "model_fits": 0,
+      "heldout_scores": 0,
+      "gate0_run_id": 33140901154,
+      "gate0_head_sha": "2f2ad647d89f9d7a5f2d0ba3f61923af4523a95c",
+      "gate0_artifact_id": 9673887693,
+      "gate0_artifact_digest": "sha256:6bd050214239995346836dc5c5ff9874525bc188d12564d2b59ebaaa22a4ec90",
+      "gate0_fingerprint": "2642d550130817740bef9343a2386f29e9429f6701f36b36876efb0bce97c358",
+      "counts_as_predictive_evidence": false
     }
   ],
   "administrative_exclusions": [
@@ -214,7 +254,7 @@
   },
   "current_denominator_summary": {
     "fresh_predictive_endpoints_with_scores": 2,
-    "fresh_candidate_stops_listed": 17,
+    "fresh_candidate_stops_listed": 19,
     "administrative_exclusions": 2,
     "third_fresh_predictive_endpoint_still_required": true
   }
