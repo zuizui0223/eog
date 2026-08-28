@@ -1,11 +1,43 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SCRIPT = ROOT / "validation" / "andrews_we008_red_backed_vole_replication_2" / "gate0_metadata_only.py"
+SPEC = importlib.util.spec_from_file_location("andrews_gate0_metadata_only", SCRIPT)
+assert SPEC and SPEC.loader
+GATE0 = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(GATE0)
+
+
+def test_andrews_gate0_matches_frozen_role_against_eml_entity_description():
+    xml = b"""<?xml version='1.0'?>
+    <eml>
+      <dataset>
+        <dataTable>
+          <entityName>WE00801</entityName>
+          <entityDescription>Small vertebrate captures</entityDescription>
+          <physical><objectName>WE00801.csv</objectName></physical>
+        </dataTable>
+      </dataset>
+    </eml>
+    """
+    tables = GATE0.parse_tables(xml)
+
+    selected = GATE0.select_entity(
+        tables,
+        {"ordinal": 1, "entity_name_contains": "Small vertebrate captures"},
+    )
+
+    assert selected["entity_name"] == "WE00801"
+    assert selected["entity_descriptions"] == ["Small vertebrate captures"]
 
 
 @pytest.mark.skipif(sys.version_info[:2] != (3, 12), reason="one audited external Gate0 run on Python 3.12 only")
@@ -16,8 +48,8 @@ def test_andrews_we008_metadata_only_gate0_preserves_response_firewall():
     It may read WE008 landing/EML metadata and HEAD response-independent effort/
     geometry entities. It must never HEAD/GET the capture-response entity.
     """
-    root = Path(__file__).resolve().parents[1]
-    script = root / "validation" / "andrews_we008_red_backed_vole_replication_2" / "gate0_metadata_only.py"
+    root = ROOT
+    script = SCRIPT
     result_path = root / "build" / "andrews_we008_red_backed_vole_replication_2" / "gate0_metadata_only.json"
 
     proc = subprocess.run([sys.executable, str(script)], cwd=root, text=True, capture_output=True, timeout=180)

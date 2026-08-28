@@ -102,6 +102,7 @@ def parse_tables(xml_raw: bytes):
     out = []
     for ordinal, table in enumerate(tables, start=1):
         entity_names = descendants_text(table, "entityName")
+        entity_descriptions = descendants_text(table, "entityDescription")
         object_names = descendants_text(table, "objectName")
         urls = descendants_text(table, "url")
         attrs = []
@@ -117,6 +118,7 @@ def parse_tables(xml_raw: bytes):
         out.append({
             "ordinal": ordinal,
             "entity_name": entity_names[0] if entity_names else None,
+            "entity_descriptions": entity_descriptions,
             "object_names": object_names,
             "online_urls": urls,
             "attribute_names": [a["name"] for a in attrs if a["name"]],
@@ -149,11 +151,13 @@ def select_entity(tables, spec):
         raise RuntimeError(f"entity ordinal {ordinal} not uniquely present")
     table = matches[0]
     wanted = spec["entity_name_contains"].lower()
-    observed = str(table.get("entity_name") or "").lower()
-    if wanted not in observed:
+    observed_fields = [table.get("entity_name"), *table.get("entity_descriptions", [])]
+    observed = [str(value or "").lower() for value in observed_fields]
+    if not any(wanted in value for value in observed):
         raise RuntimeError(
             f"entity {ordinal} name mismatch: expected substring {spec['entity_name_contains']!r}, "
-            f"observed {table.get('entity_name')!r}"
+            f"observed entityName={table.get('entity_name')!r}, "
+            f"entityDescription={table.get('entity_descriptions', [])!r}"
         )
     return table
 
@@ -260,6 +264,7 @@ def main():
                 {
                     "ordinal": t["ordinal"],
                     "entity_name": t["entity_name"],
+                    "entity_descriptions": t["entity_descriptions"],
                     "object_names": t["object_names"],
                     "attribute_names": t["attribute_names"],
                     "online_url_count": len(t["online_urls"]),
@@ -276,6 +281,7 @@ def main():
             result["entities"][role] = {
                 "ordinal": table["ordinal"],
                 "entity_name": table["entity_name"],
+                "entity_descriptions": table["entity_descriptions"],
                 "object_names": table["object_names"],
                 "attribute_names": table["attribute_names"],
                 "public_data_url": url,
