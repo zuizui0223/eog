@@ -10,11 +10,11 @@ There is **one scientific mainline**.
 
 Current empirical state:
 
-> **EOG-WF completed a prospectively gated independent heldout forecast on the Åland Glanville fritillary metapopulation. Exact world identity was adverse as a direct predictive representation.**
+> **The two-layer EOG-WF has two favorable, genuinely fresh paired heldout endpoints under the unchanged `symmetric_world_support_summary_v1`: Azores yellow eel telemetry and Southwest Louisiana King Rail passive acoustics. The supported boundary is `replicated_candidate_general_predictive_complement`.**
 
 Current product state:
 
-> **Exact world identity is retained as the latent sequential update/falsification state. The default prediction interface is now world-label-invariant and summarizes the surviving support set. Independent validation of this revised two-layer predictive head remains future work.**
+> **Exact world identity is retained as the latent sequential update/falsification state (Layer A), while the default predictive interface is the world-label-invariant surviving-support summary (Layer B). One valid third heterogeneous endpoint is still required before the paper-level synthesis is closed.**
 
 The repository does **not** claim generic predictive superiority over SDMs, metapopulation models, occupancy models, ensembles, or other strong comparators.
 
@@ -26,6 +26,10 @@ Canonical state:
 - validation protocol: [`docs/method_validation_protocol.md`](docs/method_validation_protocol.md)
 - response-blind world-scale design: [`docs/world_universe_scale_design.md`](docs/world_universe_scale_design.md)
 - progress ledger: [`docs/eog_v2_progress.md`](docs/eog_v2_progress.md)
+- active scientific issue and closure ledger: [issue #141](https://github.com/zuizui0223/eog/issues/141)
+- third-endpoint pre-response boundary: [`manuscript/third_fresh_endpoint_selection_boundary_2026-08-27.md`](manuscript/third_fresh_endpoint_selection_boundary_2026-08-27.md)
+- publication decision ladder and hard stop: [`manuscript/submission/eog_wf_publication_decision_ladder.md`](manuscript/submission/eog_wf_publication_decision_ladder.md)
+- manuscript candidate funnel: [`validation/paper_ready_replication/candidate_flow_ledger.json`](validation/paper_ready_replication/candidate_flow_ledger.json)
 - Glanville independent evidence: [`validation/glanville_eogwf/README.md`](validation/glanville_eogwf/README.md)
 - STOC independent evidence: [`validation/stoc_eogwf/README.md`](validation/stoc_eogwf/README.md)
 
@@ -161,7 +165,15 @@ Implementations:
 
 These APIs do not accept species-response vectors. Structurally derived thresholds remain analyst-choice scales unless externally biologically calibrated.
 
-## Frozen evidence ledger
+## Current fresh two-layer evidence
+
+- **Azores yellow eel telemetry** — favorable paired complementarity; augmented same-learner arm won 5/5 heldout blocks; authoritative once-only run `32807155541`.
+- **Southwest Louisiana King Rail passive acoustics** — favorable paired complementarity; augmented same-learner arm won 7/8 heldout occasions; authoritative once-only run `32812052801`.
+- **Endpoint 3** — not yet admitted. The current candidate-flow denominator contains two scored endpoints, 19 substantive pre-response/transport STOPs, and two administrative exclusions. STOPs are methods-integrity evidence, not adverse Layer-B results.
+
+The two favorable endpoints support a replicated candidate general predictive complement. They do not support universal superiority, standalone Layer-B prediction, causal identification, or the truth of an exact Layer-A world.
+
+## Historical evidence ledger
 
 - **A-Islands** — exploratory exact-world structural information; not independent confirmation; earlier predictive extension adverse.
 - **SIVFLORA** — independent pre-outcome non-estimable; not rescued.
@@ -194,7 +206,11 @@ The candidate contribution is narrower:
 
 Do not add another generic connectivity operator merely to make EOG more complex, and do not rerun Glanville with the new prediction summary as though it were independent confirmation.
 
-The next valid scientific milestone is a **fresh independent test of the two-layer EOG-WF architecture**, with the exact latent state, label-invariant prediction representation, external comparator, holdout design and adverse/null rules all frozen before response access.
+The next valid scientific milestone is **one** genuinely fresh heterogeneous test of the two-layer EOG-WF architecture. Before any response row is opened, source transport, registry and geometry, effort/surveyed-negative semantics, structural scales, holdout, the unchanged Layer B, the same-learner comparator, feature-count placebo, runtime, and once-only favorable/null/adverse rules must all be frozen.
+
+Existing terminal candidates must not be repaired, rerun, or relabeled. A source, transport, structural, or non-estimable STOP is not a scientific null or adverse result.
+
+**Hard stop:** once a valid third predictive endpoint reaches its frozen terminal decision, stop candidate hunting regardless of the outcome. Complete only the already-frozen cross-ecosystem synthesis, feature-count placebo interpretation, figures, evidence table, and submission package; then choose the journal route from the result. Do not add a fourth dataset to improve journal prestige.
 
 ## Package architecture
 
