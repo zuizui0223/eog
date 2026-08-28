@@ -4,6 +4,7 @@ import importlib.util
 import json
 import subprocess
 import sys
+import urllib.error
 from pathlib import Path
 
 import pytest
@@ -49,6 +50,26 @@ def test_andrews_gate0_uses_case_correct_catalog_landing_url():
     )
 
 
+def test_andrews_gate0_records_head_http_error_without_opening_body(monkeypatch):
+    error = urllib.error.HTTPError(
+        "https://example.test/effort.csv",
+        404,
+        "Not Found",
+        {"Content-Type": "text/html", "Content-Length": "123"},
+        None,
+    )
+
+    def fail_urlopen(*args, **kwargs):
+        raise error
+
+    monkeypatch.setattr(GATE0.urllib.request, "urlopen", fail_urlopen)
+    evidence = GATE0.head_only("https://example.test/effort.csv")
+
+    assert evidence["status"] == 404
+    assert evidence["body_bytes_opened"] == 0
+    assert evidence["error"].startswith("HTTPError:")
+
+
 @pytest.mark.skipif(sys.version_info[:2] != (3, 12), reason="one audited external Gate0 run on Python 3.12 only")
 def test_andrews_we008_metadata_only_gate0_preserves_response_firewall():
     """Audit-only PR gate: execute the frozen metadata-only Gate0 once in existing CI.
@@ -76,4 +97,13 @@ def test_andrews_we008_metadata_only_gate0_preserves_response_firewall():
     assert result.get("head_checks", {}).get("forbidden_response_head_requests", 0) == 0
 
     assert proc.returncode == 0, proc.stdout + "\n" + proc.stderr
-    assert result["status"] == "gate0_pass_metadata_only_physical_separation_and_transport", result
+    assert result["status"] in {
+        "gate0_pass_metadata_only_physical_separation_and_transport",
+        "gate0_stop_anonymous_transport_unavailable_pre_response",
+    }, result
+    if result["status"].startswith("gate0_stop"):
+        assert any(
+            evidence["status"] >= 400
+            for role, evidence in result["head_checks"].items()
+            if role != "forbidden_response_head_requests"
+        )

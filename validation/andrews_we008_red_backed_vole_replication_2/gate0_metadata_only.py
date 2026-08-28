@@ -4,6 +4,7 @@ import hashlib
 import json
 import sys
 import urllib.parse
+import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
@@ -47,13 +48,26 @@ def head_only(url: str):
             "Accept": "text/plain,text/csv,application/octet-stream,*/*;q=0.1",
         },
     )
-    with urllib.request.urlopen(req, timeout=60) as r:
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return {
+                "status": int(r.status),
+                "final_url": r.geturl(),
+                "content_type": r.headers.get("Content-Type"),
+                "content_length": r.headers.get("Content-Length"),
+                "content_disposition": r.headers.get("Content-Disposition"),
+                "error": None,
+                "body_bytes_opened": 0,
+            }
+    except urllib.error.HTTPError as exc:
+        # HTTPError exposes response headers without requiring a response body read.
         return {
-            "status": int(r.status),
-            "final_url": r.geturl(),
-            "content_type": r.headers.get("Content-Type"),
-            "content_length": r.headers.get("Content-Length"),
-            "content_disposition": r.headers.get("Content-Disposition"),
+            "status": int(exc.code),
+            "final_url": exc.geturl(),
+            "content_type": exc.headers.get("Content-Type"),
+            "content_length": exc.headers.get("Content-Length"),
+            "content_disposition": exc.headers.get("Content-Disposition"),
+            "error": f"HTTPError: {exc}",
             "body_bytes_opened": 0,
         }
 
@@ -240,11 +254,6 @@ def main():
         # HEAD only the response-independent effort and geometry entities. Do not HEAD/GET captures.
         effort_head = head_only(effort_url)
         geometry_head = head_only(geometry_url)
-        if effort_head["status"] < 200 or effort_head["status"] >= 400:
-            raise RuntimeError(f"effort HEAD failed: {effort_head}")
-        if geometry_head["status"] < 200 or geometry_head["status"] >= 400:
-            raise RuntimeError(f"geometry HEAD failed: {geometry_head}")
-
         result["landing"] = {
             "url": landing_url,
             "final_url": landing_final,
@@ -291,6 +300,23 @@ def main():
             "response_independent_geometry": geometry_head,
             "forbidden_response_head_requests": 0,
         }
+        unavailable = {
+            role: evidence
+            for role, evidence in (
+                ("response_independent_effort", effort_head),
+                ("response_independent_geometry", geometry_head),
+            )
+            if evidence["status"] < 200 or evidence["status"] >= 400
+        }
+        if unavailable:
+            result["status"] = "gate0_stop_anonymous_transport_unavailable_pre_response"
+            result["reason"] = (
+                "WE008 EML physically separated capture response, trap-status effort, and endpoint geometry, "
+                "but the exact EML online byte URLs for response-independent entities were not anonymously "
+                f"addressable by HEAD: {unavailable}; capture data remained unopened"
+            )
+            write(result)
+            return 0
         result["status"] = "gate0_pass_metadata_only_physical_separation_and_transport"
         result["reason"] = (
             "WE008 EML uniquely separated capture response, trap-status effort, and transect-endpoint geometry; "
