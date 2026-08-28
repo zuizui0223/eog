@@ -40,6 +40,15 @@ def test_andrews_gate0_matches_frozen_role_against_eml_entity_description():
     assert selected["entity_descriptions"] == ["Small vertebrate captures"]
 
 
+def test_andrews_gate0_uses_case_correct_catalog_landing_url():
+    contract = json.loads(
+        (ROOT / "validation" / "andrews_we008_red_backed_vole_replication_2" / "source_contract.json").read_text()
+    )
+    assert contract["source"]["landing_url"] == (
+        "https://andlter.forestry.oregonstate.edu/data/abstract.aspx?dbcode=WE008"
+    )
+
+
 @pytest.mark.skipif(sys.version_info[:2] != (3, 12), reason="one audited external Gate0 run on Python 3.12 only")
 def test_andrews_we008_metadata_only_gate0_preserves_response_firewall():
     """Audit-only PR gate: execute the frozen metadata-only Gate0 once in existing CI.

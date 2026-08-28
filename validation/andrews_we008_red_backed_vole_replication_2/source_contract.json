@@ -4,7 +4,7 @@
   "issue": 315,
   "source": {
     "dbcode": "WE008",
-    "landing_url": "https://andlter.forestry.oregonstate.edu/data/Abstract.aspx?dbcode=WE008",
+    "landing_url": "https://andlter.forestry.oregonstate.edu/data/abstract.aspx?dbcode=WE008",
     "expected_version": 9,
     "expected_title": "Ground-dwelling vertebrates, birds, habitat data on the Willamette National Forest, Oregon (Young Stand Thinning and Diversity Study), 1991-2012",
     "expected_stand_count": 16,
