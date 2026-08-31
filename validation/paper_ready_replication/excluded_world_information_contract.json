@@ -11,15 +11,18 @@
     "may_change_layer_a_layer_b_learner_split_thresholds_or_runtime": false
   },
   "freshness": {
-    "endpoint_3_is_prospective_before_response_rows": true,
+    "endpoint_3_analysis_specification_is_prospective_before_response_rows": true,
+    "outer_training_responses_may_be_used_only_after_once_only_access_under_the_frozen_split": true,
+    "heldout_outcomes_may_set_thresholds_or_strata": false,
     "azores_louisiana_reanalysis_is_post_hoc_only": true,
     "existing_endpoints_may_upgrade_fresh_claim": false
   },
-  "response_blind_quantities": {
+  "protected_quantities": {
     "local_uncertainty": {
       "quantity": "binary_entropy_of_baseline_probability",
       "formula": "-p*ln(p)-(1-p)*ln(1-p)",
-      "clip_epsilon": 1e-15
+      "clip_epsilon": 1e-15,
+      "baseline_probability_source": "frozen_baseline_learner_fitted_on_the_corresponding_outer_training_partition"
     },
     "world_contraction": "1-surviving_world_fraction",
     "world_disagreement_primary": "support_range",
@@ -27,11 +30,11 @@
     "structural_status": "excluded_in_all_worlds|robustly_supported|contingent"
   },
   "thresholds": {
-    "scope": "separately_within_each_outer_training_partition",
-    "local_uncertainty": "median_training_row_binary_entropy",
-    "world_disagreement": "median_training_row_support_range",
+    "scope": "separately_within_each_outer_training_partition_after_once_only_response_access",
+    "local_uncertainty": "median_outer_training_row_binary_entropy",
+    "world_disagreement": "median_outer_training_row_support_range",
     "ties": "high",
-    "heldout_rows_or_response_used": false,
+    "heldout_rows_or_outcomes_used": false,
     "rescue_rebinning_allowed": false
   },
   "heldout_strata": [
@@ -71,5 +74,5 @@
     "monotonic_contraction_gain_relation",
     "post_outcome_tuning"
   ],
-  "freeze_rule": "For endpoint 3 these formulas, training-only thresholds, strata and interpretations are fixed before response rows/values. The analysis is secondary and cannot rescue, overturn or redefine the primary prospective terminal status."
+  "freeze_rule": "For endpoint 3 these formulas, training-partition threshold rules, strata and interpretations are fixed before response rows/values. Threshold values are computed only from the corresponding outer training partition after authorized once-only access. The analysis is secondary and cannot rescue, overturn or redefine the primary prospective terminal status."
 }
