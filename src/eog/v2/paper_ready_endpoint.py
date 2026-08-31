@@ -1,9 +1,10 @@
 """Final response-blind binding gate for the third paper-ready EOG endpoint.
 
 This module does not select a dataset, inspect response values, fit a model, or add an
-ecological operator.  It binds already-existing validation objects so the third fresh
+ecological operator. It binds already-existing validation objects so the third fresh
 endpoint cannot reach its once-only runner with a detached decision rule, a changed
-Layer-B representation, or post-freeze paper-level synthesis/placebo contracts.
+Layer-B representation, or post-freeze synthesis, placebo, or excluded-world
+explanatory contracts.
 """
 from __future__ import annotations
 
@@ -23,6 +24,9 @@ FROZEN_CROSS_ECOSYSTEM_SYNTHESIS_FINGERPRINT = (
 FROZEN_FEATURE_COUNT_PLACEBO_FINGERPRINT = (
     "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd"
 )
+FROZEN_EXCLUDED_WORLD_INFORMATION_FINGERPRINT = (
+    "4fc5818c79cbe026e69f97f1eeb085ee46563e586349ca762b322f67201a08cd"
+)
 
 
 PaperReadyEndpoint3Status = Literal[
@@ -36,6 +40,7 @@ PaperReadyEndpoint3Status = Literal[
     "blocked_layer_b_binding",
     "blocked_cross_ecosystem_contract_drift",
     "blocked_feature_count_placebo_contract_drift",
+    "blocked_excluded_world_information_contract_drift",
     "blocked_missing_post_terminal_hard_stop",
 ]
 
@@ -74,6 +79,9 @@ class FrozenPaperReadyEndpoint3Boundary:
     attempt_id: str
     cross_ecosystem_synthesis_fingerprint: str
     feature_count_placebo_fingerprint: str
+    excluded_world_information_fingerprint: str = (
+        FROZEN_EXCLUDED_WORLD_INFORMATION_FINGERPRINT
+    )
     response_rows_opened: bool = False
     reuses_terminal_candidate: bool = False
     stop_candidate_hunting_after_predictive_terminal: bool = True
@@ -97,6 +105,14 @@ class FrozenPaperReadyEndpoint3Boundary:
                 "feature_count_placebo_fingerprint",
             ),
         )
+        object.__setattr__(
+            self,
+            "excluded_world_information_fingerprint",
+            _clean_required(
+                self.excluded_world_information_fingerprint,
+                "excluded_world_information_fingerprint",
+            ),
+        )
         _require_bool(self.response_rows_opened, "response_rows_opened")
         _require_bool(self.reuses_terminal_candidate, "reuses_terminal_candidate")
         _require_bool(
@@ -115,6 +131,9 @@ class FrozenPaperReadyEndpoint3Boundary:
                     self.cross_ecosystem_synthesis_fingerprint
                 ),
                 "feature_count_placebo_fingerprint": self.feature_count_placebo_fingerprint,
+                "excluded_world_information_fingerprint": (
+                    self.excluded_world_information_fingerprint
+                ),
                 "response_rows_opened": self.response_rows_opened,
                 "reuses_terminal_candidate": self.reuses_terminal_candidate,
                 "stop_candidate_hunting_after_predictive_terminal": (
@@ -151,8 +170,8 @@ def evaluate_paper_ready_endpoint_3_gate(
     """Bind every endpoint-3 paper boundary before once-only response access.
 
     This is deliberately downstream of the reusable metadata preflight and outcome-
-    access gates.  It verifies their identities rather than reimplementing their
-    scientific decisions.  A positive result authorizes only the already-approved
+    access gates. It verifies their identities rather than reimplementing their
+    scientific decisions. A positive result authorizes only the already-approved
     once-only exact-count-first runner; exact-count failure still stops with zero fits.
     """
 
@@ -223,6 +242,12 @@ def evaluate_paper_ready_endpoint_3_gate(
     ):
         status = "blocked_feature_count_placebo_contract_drift"
         reason = "the pre-endpoint feature-count placebo contract fingerprint changed"
+    elif (
+        boundary.excluded_world_information_fingerprint
+        != FROZEN_EXCLUDED_WORLD_INFORMATION_FINGERPRINT
+    ):
+        status = "blocked_excluded_world_information_contract_drift"
+        reason = "the pre-endpoint excluded-world explanatory contract fingerprint changed"
     elif not boundary.stop_candidate_hunting_after_predictive_terminal:
         status = "blocked_missing_post_terminal_hard_stop"
         reason = "endpoint 3 must freeze the stop on further dataset hunting after its terminal result"
