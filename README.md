@@ -208,6 +208,8 @@ Do not add another generic connectivity operator merely to make EOG more complex
 
 The next valid scientific milestone is **one** genuinely fresh heterogeneous test of the two-layer EOG-WF architecture. Before any response row is opened, source transport, registry and geometry, effort/surveyed-negative semantics, structural scales, holdout, the unchanged Layer B, the same-learner comparator, feature-count placebo, runtime, and once-only favorable/null/adverse rules must all be frozen.
 
+The final response-blind identity binding is executable through [`eog.v2.paper_ready_endpoint`](docs/paper_ready_endpoint_3_gate.md). A candidate-specific attempt must bind its actual preflight receipt, numeric predictive-decision declaration, unchanged Layer-B identity, once-only outcome-access receipt, frozen cross-ecosystem synthesis, frozen ten-feature placebo, and the post-terminal dataset-hunting hard stop before the endpoint-3 runner may begin.
+
 Existing terminal candidates must not be repaired, rerun, or relabeled. A source, transport, structural, or non-estimable STOP is not a scientific null or adverse result.
 
 **Hard stop:** once a valid third predictive endpoint reaches its frozen terminal decision, stop candidate hunting regardless of the outcome. Complete only the already-frozen cross-ecosystem synthesis, feature-count placebo interpretation, figures, evidence table, and submission package; then choose the journal route from the result. Do not add a fourth dataset to improve journal prestige.
