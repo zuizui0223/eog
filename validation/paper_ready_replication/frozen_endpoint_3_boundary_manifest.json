@@ -1,0 +1,27 @@
+{
+  "schema": "eog.paper_ready_replication.frozen_endpoint_3_boundary.v1",
+  "canonicalization": "utf8_json_sorted_keys_compact_separators_no_nan",
+  "contracts": {
+    "cross_ecosystem_synthesis": {
+      "path": "validation/paper_ready_replication/cross_ecosystem_synthesis_contract.json",
+      "schema": "eog.paper_ready_replication.cross_ecosystem_synthesis.v1",
+      "canonical_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02"
+    },
+    "feature_count_placebo": {
+      "path": "validation/paper_ready_replication/feature_count_placebo_contract.json",
+      "schema": "eog.paper_ready_replication.feature_count_placebo.v1",
+      "canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd"
+    }
+  },
+  "endpoint_3_rules": {
+    "fresh_predictive_endpoint_sequence_number": 3,
+    "terminal_candidate_reuse_allowed": false,
+    "response_rows_must_be_unopened_at_freeze": true,
+    "metrics_decision_must_bind_predictive_declaration": true,
+    "layer_b_identity_must_bind_predictive_declaration": true,
+    "placebo_may_change_primary_terminal_status": false,
+    "stop_candidate_hunting_after_predictive_terminal": true,
+    "fourth_dataset_for_journal_prestige_allowed": false,
+    "technical_or_source_stop_is_scientific_null_or_adverse": false
+  }
+}

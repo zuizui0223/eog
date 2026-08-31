@@ -3,7 +3,7 @@
 The facade is lazy so genetic, empirical-occurrence, directional-evidence, response
 firewall, response-header schema, response-token schema, response-row admissibility,
 candidate preflight, temporal source closure, prospective estimability, outcome-access
-authorization, predictive complementarity, and response-blind world-adequacy /
+authorization, paper-ready endpoint binding, predictive complementarity, and response-blind world-adequacy /
 scale-construction trees remain independent until accessed.
 """
 from __future__ import annotations
@@ -113,6 +113,15 @@ _OUTCOME_ACCESS_EXPORTS: Final[tuple[str, ...]] = (
     "evaluate_outcome_access_gate",
 )
 
+_PAPER_READY_ENDPOINT_EXPORTS: Final[tuple[str, ...]] = (
+    "FROZEN_CROSS_ECOSYSTEM_SYNTHESIS_FINGERPRINT",
+    "FROZEN_FEATURE_COUNT_PLACEBO_FINGERPRINT",
+    "PaperReadyEndpoint3Status",
+    "FrozenPaperReadyEndpoint3Boundary",
+    "PaperReadyEndpoint3GateResult",
+    "evaluate_paper_ready_endpoint_3_gate",
+)
+
 _PREDICTIVE_COMPLEMENTARITY_EXPORTS: Final[tuple[str, ...]] = (
     "ComplementarityStatus",
     "PredictiveComplementarityDeclaration",
@@ -172,6 +181,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     },
     **{name: "eog.v2.outcome_access" for name in _OUTCOME_ACCESS_EXPORTS},
     **{
+        name: "eog.v2.paper_ready_endpoint"
+        for name in _PAPER_READY_ENDPOINT_EXPORTS
+    },
+    **{
         name: "eog.v2.predictive_complementarity"
         for name in _PREDICTIVE_COMPLEMENTARITY_EXPORTS
     },
@@ -192,6 +205,7 @@ __all__ = [
     *_TEMPORAL_SOURCE_CLOSURE_EXPORTS,
     *_PROSPECTIVE_ESTIMABILITY_EXPORTS,
     *_OUTCOME_ACCESS_EXPORTS,
+    *_PAPER_READY_ENDPOINT_EXPORTS,
     *_PREDICTIVE_COMPLEMENTARITY_EXPORTS,
     *_WORLD_ADEQUACY_EXPORTS,
     *_WORLD_SCALE_EXPORTS,
