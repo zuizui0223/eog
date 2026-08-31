@@ -15,7 +15,7 @@
     "excluded_world_information_explanatory": {
       "path": "validation/paper_ready_replication/excluded_world_information_contract.json",
       "schema": "eog.paper_ready_replication.excluded_world_information_explanatory.v1",
-      "canonical_sha256": "4fc5818c79cbe026e69f97f1eeb085ee46563e586349ca762b322f67201a08cd"
+      "canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
     }
   },
   "endpoint_3_rules": {
