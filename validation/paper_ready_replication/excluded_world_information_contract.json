@@ -1,0 +1,78 @@
+{
+  "schema": "eog.paper_ready_replication.excluded_world_information_explanatory.v1",
+  "purpose": "Freeze a secondary endpoint-3 explanation before response access: test whether Layer-B gain is concentrated where local prediction is uncertain and surviving accessibility-compatible worlds disagree. This contract cannot alter the primary terminal status.",
+  "central_proposition": "Occurrences can carry predictive information through the accessibility-compatible worlds that prior observations exclude or retain, beyond local environmental viability.",
+  "primary_boundary": {
+    "test": "same_strong_learner_baseline_vs_same_learner_plus_symmetric_world_support_summary_v1",
+    "metric": "binary_log_loss",
+    "may_change_primary_status": false,
+    "may_change_promotion_mapping": false,
+    "may_select_candidate_or_endpoint": false,
+    "may_change_layer_a_layer_b_learner_split_thresholds_or_runtime": false
+  },
+  "freshness": {
+    "endpoint_3_analysis_specification_is_prospective_before_response_rows": true,
+    "outer_training_responses_may_be_used_only_after_once_only_access_under_the_frozen_split": true,
+    "heldout_outcomes_may_set_thresholds_or_strata": false,
+    "azores_louisiana_reanalysis_is_post_hoc_only": true,
+    "existing_endpoints_may_upgrade_fresh_claim": false
+  },
+  "protected_quantities": {
+    "local_uncertainty": {
+      "quantity": "binary_entropy_of_baseline_probability",
+      "formula": "-p*ln(p)-(1-p)*ln(1-p)",
+      "clip_epsilon": 1e-15,
+      "baseline_probability_source": "frozen_baseline_learner_fitted_on_the_corresponding_outer_training_partition"
+    },
+    "world_contraction": "1-surviving_world_fraction",
+    "world_disagreement_primary": "support_range",
+    "world_disagreement_secondary": "support_std",
+    "structural_status": "excluded_in_all_worlds|robustly_supported|contingent"
+  },
+  "thresholds": {
+    "scope": "separately_within_each_outer_training_partition_after_once_only_response_access",
+    "local_uncertainty": "median_outer_training_row_binary_entropy",
+    "world_disagreement": "median_outer_training_row_support_range",
+    "ties": "high",
+    "heldout_rows_or_outcomes_used": false,
+    "rescue_rebinning_allowed": false
+  },
+  "heldout_strata": [
+    "low_local_uncertainty_low_world_disagreement",
+    "low_local_uncertainty_high_world_disagreement",
+    "high_local_uncertainty_low_world_disagreement",
+    "high_local_uncertainty_high_world_disagreement"
+  ],
+  "report_per_outer_unit_and_stratum": [
+    "row_event_non_event_counts",
+    "baseline_mean_log_loss",
+    "augmented_mean_log_loss",
+    "augmented_minus_baseline_mean_log_loss"
+  ],
+  "report_per_outer_unit": [
+    "declared_and_surviving_world_counts",
+    "world_contraction_fraction",
+    "mean_support_range_and_std",
+    "contingent_row_fraction",
+    "paired_macro_log_losses_and_difference"
+  ],
+  "analysis_rules": {
+    "empty_or_single_class_strata": "retain_without_rebinning",
+    "formal_significance_test": false,
+    "pooled_cross_ecosystem_effect": false,
+    "gain_in_high_uncertainty_high_disagreement": "supports_but_does_not_prove_the_explanatory_proposition",
+    "pattern_absent_or_inconsistent": "primary_result_unchanged_and_explanatory_claim_narrowed",
+    "no_contraction_or_disagreement": "explanatory_uninformative_not_primary_null",
+    "real_layer_b_similar_to_placebo": "do_not_attribute_gain_to_excluded_world_structure"
+  },
+  "forbidden_inferences": [
+    "exact_mutual_information",
+    "causal_accessibility_effect",
+    "truth_of_exact_world",
+    "recovered_history",
+    "universal_superiority",
+    "monotonic_contraction_gain_relation",
+    "post_outcome_tuning"
+  ],
+  "freeze_rule": "For endpoint 3 these formulas, training-partition threshold rules, strata and interpretations are fixed before response rows/values. Threshold values are computed only from the corresponding outer training partition after authorized once-only access. The analysis is secondary and cannot rescue, overturn or redefine the primary prospective terminal status."
+}

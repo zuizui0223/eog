@@ -1,5 +1,5 @@
 {
-  "schema": "eog.paper_ready_replication.frozen_endpoint_3_boundary.v1",
+  "schema": "eog.paper_ready_replication.frozen_endpoint_3_boundary.v2",
   "canonicalization": "utf8_json_sorted_keys_compact_separators_no_nan",
   "contracts": {
     "cross_ecosystem_synthesis": {
@@ -11,6 +11,11 @@
       "path": "validation/paper_ready_replication/feature_count_placebo_contract.json",
       "schema": "eog.paper_ready_replication.feature_count_placebo.v1",
       "canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd"
+    },
+    "excluded_world_information_explanatory": {
+      "path": "validation/paper_ready_replication/excluded_world_information_contract.json",
+      "schema": "eog.paper_ready_replication.excluded_world_information_explanatory.v1",
+      "canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
     }
   },
   "endpoint_3_rules": {
@@ -20,6 +25,8 @@
     "metrics_decision_must_bind_predictive_declaration": true,
     "layer_b_identity_must_bind_predictive_declaration": true,
     "placebo_may_change_primary_terminal_status": false,
+    "excluded_world_explanatory_may_change_primary_terminal_status": false,
+    "existing_endpoint_reanalysis_may_upgrade_fresh_claim": false,
     "stop_candidate_hunting_after_predictive_terminal": true,
     "fourth_dataset_for_journal_prestige_allowed": false,
     "technical_or_source_stop_is_scientific_null_or_adverse": false
