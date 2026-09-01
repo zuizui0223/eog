@@ -2,7 +2,7 @@
   "schema": "eog.mica_muskrat_endpoint3.source_contract.v1",
   "attempt_id": "mica_muskrat_endpoint3_v1",
   "issue": 327,
-  "architecture_selection_sha256": "TO_BE_BOUND_BY_GATE0_TEST",
+  "architecture_selection_boundary_commit": "86ed07e18eba75a0ed62302fea4cb629f0bd9a76",
   "source": {
     "resource_key": "mica-agouti",
     "doi": "10.15468/5tb6ze",
