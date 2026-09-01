@@ -1,0 +1,17 @@
+{
+  "program_id": "niche-to-survey-four-chapter-v1",
+  "chapter_number": 3,
+  "repository": "zuizui0223/eog",
+  "chapter_title": "Distributional worlds and reachability",
+  "core_question": "Given supported local states and declared transition worlds, which distributional worlds remain compatible with evidence and what states are possible, robust, unresolved or reachable?",
+  "primary_output": "Compatible-world state, reachability and world-set forecasts",
+  "chooses_environmental_niche_drivers": false,
+  "measures_niche_thickness": false,
+  "active_paper_endpoint_3_hard_stop_unchanged": true,
+  "chapter_order": [
+    "1:sdmr:environmental_niche_driver_selection",
+    "2:odsp:multidimensional_niche_geometry",
+    "3:eog:distributional_worlds_and_reachability",
+    "4:acsp:survey_action"
+  ]
+}
