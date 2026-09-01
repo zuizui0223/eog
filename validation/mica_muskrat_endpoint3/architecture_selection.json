@@ -1,0 +1,60 @@
+{
+  "schema": "eog.mica_muskrat_endpoint3.architecture_selection.v1",
+  "program_id": "niche-to-survey-four-chapter-v1",
+  "chapter_code": "N3",
+  "chapter_question": "WHERE can it become real?",
+  "chapter_thought_ja": "住める場所と、辿り着ける場所は違う。",
+  "issue": 327,
+  "selection_date": "2026-09-01",
+  "selection_blinding": {
+    "biological_response_rows_opened": false,
+    "biological_response_bytes_opened": false,
+    "species_detection_counts_used": false,
+    "eog_scores_used": false,
+    "heldout_performance_used": false,
+    "basis": "response-blind measurement/source architecture only"
+  },
+  "frozen_candidate_universe": [
+    {
+      "candidate_id": "mica_muskrat_camtrap_dp",
+      "system": "MICA muskrat/coypu camera monitoring",
+      "source": "INBO IPT Camtrap DP",
+      "doi": "10.15468/5tb6ze",
+      "observation_process": "standardized terrestrial camera traps",
+      "architecture_strengths": [
+        "Camtrap DP separates deployment effort from animal observations by resource semantics",
+        "multi-year camera deployments with coordinates and start/end effort intervals",
+        "public stable IPT/GBIF identity",
+        "observation process is distinct from the two current favorable acoustic-telemetry/passive-acoustic endpoints"
+      ]
+    },
+    {
+      "candidate_id": "cassowary_range_wide_figshare_28050704",
+      "system": "Australian cassowary range-wide camera monitoring",
+      "source": "Figshare 28050704",
+      "observation_process": "terrestrial camera traps",
+      "architecture_limit": "analysis-ready response-independent repeated-node/effort closure is less directly standardized in source metadata"
+    },
+    {
+      "candidate_id": "norway_national_pam_zenodo_18452203",
+      "system": "Norway national passive acoustic monitoring",
+      "source": "Zenodo 10.5281/zenodo.18452203",
+      "observation_process": "passive acoustic monitoring",
+      "architecture_limit": "source separation is attractive but observation process is less heterogeneous relative to the already favorable King Rail endpoint"
+    }
+  ],
+  "selected_candidate_id": "mica_muskrat_camtrap_dp",
+  "selection_reason": "MICA has the strongest response-blind combination of standardized deployment/observation separation, explicit repeated camera effort, public coordinate geometry, multi-year coverage, stable public source identity, and observation-process heterogeneity. Selection does not use muskrat prevalence or any EOG outcome.",
+  "focal_taxon": {
+    "scientific_name": "Ondatra zibethicus",
+    "common_name": "muskrat",
+    "selection_rule": "first focal invasive mammal named by the MICA monitoring project/dataset title and objective; do not switch species after any response access"
+  },
+  "prospective_endpoint": "active location-week recorded muskrat detection",
+  "non_event_semantics": "adequately active camera-location week with no recorded muskrat detection under the frozen effort rule; not biological absence",
+  "calendar_split": {
+    "calibration": "ISO weeks with week start before 2022-01-01",
+    "heldout": "ISO weeks with week start on or after 2022-01-01"
+  },
+  "hard_stop": "a valid third predictive terminal result ends fresh endpoint development; no fourth endpoint"
+}
