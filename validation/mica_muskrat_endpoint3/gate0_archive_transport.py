@@ -339,7 +339,7 @@ def run(contract_path: Path = DEFAULT_CONTRACT, output_path: Path = DEFAULT_OUTP
         "observation_member_payload_bytes_opened": 0,
         "media_member_payload_bytes_opened": 0,
         "muskrat_response_rows_opened": 0,
-        "muskrat_response_values_opened": false if False else False,
+        "muskrat_response_values_opened": False,
         "model_fits": 0,
         "heldout_scores": 0,
         "counts_as_predictive_evidence": False,
