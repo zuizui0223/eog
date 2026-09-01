@@ -1,0 +1,92 @@
+name: MICA muskrat endpoint3 Gate0
+
+on:
+  pull_request:
+    paths:
+      - 'validation/mica_muskrat_endpoint3/architecture_selection.json'
+      - 'validation/mica_muskrat_endpoint3/source_contract.json'
+      - 'validation/mica_muskrat_endpoint3/gate0_archive_transport.py'
+      - 'validation/mica_muskrat_endpoint3/gate0_execution_authorization.json'
+      - 'tests/test_mica_muskrat_gate0.py'
+      - '.github/workflows/mica-muskrat-gate0.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Verify frozen Gate0 firewall without external data
+        run: python -m pytest tests/test_mica_muskrat_gate0.py
+      - name: Compile Gate0 implementation
+        run: python -m py_compile validation/mica_muskrat_endpoint3/gate0_archive_transport.py
+      - name: Verify authorization binding
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('validation/mica_muskrat_endpoint3')
+          auth=json.loads((root/'gate0_execution_authorization.json').read_text())
+          contract=json.loads((root/'source_contract.json').read_text())
+          assert auth['source_and_gate0_boundary_merge']=='1730db900f7899c42745171db1a0d1805bdb3e10'
+          assert auth['authorized_archive_url']==contract['source']['archive_url']
+          assert contract['transport_firewall']['require_http_206_for_every_range'] is True
+          assert contract['transport_firewall']['full_archive_download_forbidden'] is True
+          assert auth['post_gate0_retuning'] is False
+          PY
+
+  live-gate0:
+    needs: synthetic-boundary
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute bounded response-blind Gate0 once
+        run: |
+          mkdir -p gate0-output
+          python validation/mica_muskrat_endpoint3/gate0_archive_transport.py \
+            --output gate0-output/gate0_archive_transport_certificate.json \
+            > gate0-output/stdout.json \
+            2> gate0-output/stderr.txt
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('gate0-output/gate0_archive_transport_certificate.json').read_text())
+          assert r['status'] in {
+              'gate0_pass_archive_metadata',
+              'stop_pre_response_source_transport_or_container',
+          }
+          assert r['deployment_member_payload_bytes_opened']==0
+          assert r['observation_member_header_bytes_opened']==0
+          assert r['observation_member_payload_bytes_opened']==0
+          assert r['media_member_payload_bytes_opened']==0
+          assert r['muskrat_response_rows_opened']==0
+          assert r['muskrat_response_values_opened'] is False
+          assert r['model_fits']==0 and r['heldout_scores']==0
+          assert r['counts_as_predictive_evidence'] is False
+          if r['status']=='gate0_pass_archive_metadata':
+              assert set(r['selected_members']) == {
+                  'deployment_member','observation_member','media_member','datapackage_member'
+              }
+          print(r['status'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mica-muskrat-gate0-certificate
+          path: gate0-output/
+          if-no-files-found: error
+          retention-days: 30

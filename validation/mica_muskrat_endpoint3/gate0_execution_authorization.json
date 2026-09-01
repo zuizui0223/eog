@@ -1,0 +1,27 @@
+{
+  "schema": "eog.mica_muskrat_endpoint3.gate0_execution_authorization.v1",
+  "attempt_id": "mica_muskrat_endpoint3_v1",
+  "issue": 327,
+  "source_and_gate0_boundary_merge": "1730db900f7899c42745171db1a0d1805bdb3e10",
+  "authorized_archive_url": "https://ipt.inbo.be/archive.do?r=mica-agouti",
+  "authorized_operations": [
+    "HEAD request with zero response-body bytes",
+    "strict HTTP-206 bounded ZIP metadata ranges only",
+    "EOCD, central directory and local member-header/name metadata reads"
+  ],
+  "forbidden_operations": [
+    "full archive download",
+    "any ZIP member payload read",
+    "deployment CSV row read",
+    "observations/media/datapackage payload or header read",
+    "muskrat response access",
+    "model fitting or heldout scoring"
+  ],
+  "valid_gate0_terminal_statuses": [
+    "gate0_pass_archive_metadata",
+    "stop_pre_response_source_transport_or_container"
+  ],
+  "if_stop": "record as protocol-integrity evidence only; do not repair transport/member rules within this attempt",
+  "if_pass": "freeze exact member identities and a separate deployment-payload Gate1 contract before any member payload read",
+  "post_gate0_retuning": false
+}
