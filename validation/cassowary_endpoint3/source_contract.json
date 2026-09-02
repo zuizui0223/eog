@@ -1,0 +1,86 @@
+{
+  "schema": "eog.cassowary_endpoint3.source_contract.v1",
+  "attempt_id": "cassowary_endpoint3_v1",
+  "issue": 348,
+  "chapter": "N3",
+  "question": "WHERE can it become real?",
+  "source": {
+    "provider": "Figshare",
+    "article_id": 28050704,
+    "article_api_url": "https://api.figshare.com/v2/articles/28050704",
+    "expected_title": "Range-wide camera trapping to reveal cassowary habitat associations",
+    "required_primary_file_id": 51265058,
+    "additional_article_files_allowed": true,
+    "source_paper_doi": "10.1002/ece3.71464",
+    "source_paper_blind": false
+  },
+  "gate0_metadata_only": {
+    "allowed_requests": [
+      "GET Figshare article JSON metadata"
+    ],
+    "file_payload_requests": 0,
+    "file_payload_bytes": 0,
+    "response_header_bytes": 0,
+    "response_rows": 0,
+    "response_values": false,
+    "required_article_fields": [
+      "id",
+      "title",
+      "files"
+    ],
+    "required_selected_file_fields": [
+      "id",
+      "name",
+      "download_url",
+      "size"
+    ],
+    "checksum_fields_optional": [
+      "supplied_md5",
+      "computed_md5",
+      "md5"
+    ],
+    "selected_file_id_must_be_unique": true,
+    "no_file_substitution_after_live_metadata": true,
+    "no_schema_alias_repair_after_live_metadata": true
+  },
+  "prospective_endpoint": {
+    "taxon": "Casuarius casuarius",
+    "response_unit": "response-independent 3-km2 sampling unit x 5-day sampling occasion recorded cassowary detection",
+    "zero_semantics": "adequately surveyed sampling-unit occasion with no recorded cassowary detection under the later frozen effort rule; not biological absence, occupancy, abundance or density",
+    "calibration_campaign": "2019-04 through 2020-10",
+    "heldout_campaign": "2022-09 through 2023-03",
+    "campaign_reassignment_after_source_access_allowed": false,
+    "physical_schema_is_not_pre_guessed": true
+  },
+  "pre_response_gates": {
+    "sampling_unit_registry_and_geometry_must_be_response_independent": true,
+    "campaign_and_effort_semantics_must_be_response_independent": true,
+    "minimum_retained_spatial_nodes": 20,
+    "minimum_distinct_structural_scales_in_heldout": 3,
+    "lcc_targets": [
+      0.25,
+      0.50,
+      0.75,
+      0.90
+    ],
+    "deduplicate_identical_adjacency_worlds": true,
+    "external_open_world_required": true,
+    "heldout_5day_occasions_must_pass_frozen_estimability": true,
+    "response_rows_before_full_freeze": 0
+  },
+  "paper_ready_bindings": {
+    "cross_ecosystem_synthesis_canonical_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02",
+    "feature_count_placebo_canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd",
+    "excluded_world_information_canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
+  },
+  "hard_stop": {
+    "terminal_candidate_reuse_allowed": false,
+    "post_response_retuning_allowed": false,
+    "taxon_switch_allowed": false,
+    "campaign_switch_allowed": false,
+    "primary_file_switch_allowed": false,
+    "response_unit_switch_allowed": false,
+    "stop_candidate_hunting_after_valid_predictive_terminal": true,
+    "fourth_dataset_for_prestige_allowed": false
+  }
+}
