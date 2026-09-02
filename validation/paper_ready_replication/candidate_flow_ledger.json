@@ -232,6 +232,28 @@
       "gate0_artifact_digest": "sha256:6bd050214239995346836dc5c5ff9874525bc188d12564d2b59ebaaa22a4ec90",
       "gate0_fingerprint": "2642d550130817740bef9343a2386f29e9429f6701f36b36876efb0bce97c358",
       "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 327,
+      "system": "MICA muskrat camera monitoring",
+      "ecosystem_or_context": "multi-year terrestrial invasive-mammal camera monitoring",
+      "terminal_stage": "source_transport",
+      "reason": "body-free HEAD on the prospectively frozen IPT archive did not provide a positive Content-Length, so no bounded Range request was authorized",
+      "biological_response_access": "none",
+      "head_body_bytes_opened": 0,
+      "archive_metadata_range_requests": 0,
+      "archive_metadata_bytes_opened": 0,
+      "deployment_payload_bytes_opened": 0,
+      "observation_header_bytes_opened": 0,
+      "observation_payload_bytes_opened": 0,
+      "model_fits": 0,
+      "heldout_scores": 0,
+      "gate0_run_id": 33484335166,
+      "gate0_head_sha": "53e639a13ed9900f43730ae564d0578b1e5d6c7f",
+      "gate0_artifact_id": 9791158186,
+      "gate0_artifact_digest": "sha256:0658b3adad8a240b6008469dced18d3c1e7aebce99ee7bc2436632321c6978e3",
+      "execution_merge_commit": "3b7ab5754af26b961e3738ba146f9baa95e7c78d",
+      "counts_as_predictive_evidence": false
     }
   ],
   "administrative_exclusions": [
@@ -254,7 +276,7 @@
   },
   "current_denominator_summary": {
     "fresh_predictive_endpoints_with_scores": 2,
-    "fresh_candidate_stops_listed": 19,
+    "fresh_candidate_stops_listed": 20,
     "administrative_exclusions": 2,
     "third_fresh_predictive_endpoint_still_required": true
   }
