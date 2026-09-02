@@ -1,0 +1,73 @@
+{
+  "schema": "eog.loomis_snowshoe_hare_endpoint3.gate1a_header_contract.v1",
+  "attempt_id": "loomis_snowshoe_hare_endpoint3_v1",
+  "issue": 340,
+  "gate0_recording_merge": "8145d069f8dec727d5df8301d38a74edf77fed66",
+  "gate0_certificate_git_blob_sha1": "5d8408112fa494bce75fb33aba53f9f519007158",
+  "source_contract_git_blob_sha1": "38709da1a50c9b2c5ef285dd15bcfcacd16d1e72",
+  "stage": "Stage1A header-only physical schema evidence",
+  "allowed_files": [
+    {
+      "key": "camera_info_new.csv",
+      "size": 1545,
+      "checksum": "md5:ff3563cef53bb444cf53fb475754c8bb",
+      "url": "https://zenodo.org/api/records/21796558/files/camera_info_new.csv/content"
+    },
+    {
+      "key": "deployment_2022.csv",
+      "size": 3688,
+      "checksum": "md5:8f256bb6305fdc6c7f0297384fb36121",
+      "url": "https://zenodo.org/api/records/21796558/files/deployment_2022.csv/content"
+    },
+    {
+      "key": "deployment_2023.csv",
+      "size": 4552,
+      "checksum": "md5:b037f230512d3284d3a3bc47469619e2",
+      "url": "https://zenodo.org/api/records/21796558/files/deployment_2023.csv/content"
+    },
+    {
+      "key": "deployment_2024.csv",
+      "size": 5069,
+      "checksum": "md5:831230c774b7c5afa977e933e2164d63",
+      "url": "https://zenodo.org/api/records/21796558/files/deployment_2024.csv/content"
+    }
+  ],
+  "transport": {
+    "https_only": true,
+    "allowed_hosts": ["zenodo.org"],
+    "range_requests_only": true,
+    "require_http_206": true,
+    "http_200_behavior": "STOP before reading body",
+    "accept_encoding": "identity",
+    "one_byte_ranges_until_first_CR_or_LF": true,
+    "maximum_header_bytes_per_file": 4096,
+    "EOF_without_record_terminator": "STOP",
+    "full_file_download_forbidden": true
+  },
+  "semantic_roles_declared_before_header": [
+    "study site identity",
+    "physical camera/station identity",
+    "coordinate pair",
+    "deployment start",
+    "deployment end",
+    "campaign/year"
+  ],
+  "stage1a_outputs_allowed": [
+    "exact raw first physical record text",
+    "terminator type CR or LF",
+    "bytes consumed through first terminator",
+    "CSV column-name sequence parsed from the first physical record",
+    "request ledger and final host/status metadata"
+  ],
+  "stage1a_outputs_forbidden": [
+    "any second physical record or deployment data row",
+    "any detection-file header or payload",
+    "any species token, hare response, detection count or prevalence",
+    "any coordinate value, date value or effort value from data rows",
+    "any model fit or heldout score"
+  ],
+  "stage1b_rule": "After Stage1A is durably recorded, freeze exact physical field mappings using Stage1A header evidence only. Do not open deployment data rows until that mapping contract is merged.",
+  "post_header_semantic_rescue_with_row_values_allowed": false,
+  "post_header_detection_access_allowed": false,
+  "counts_as_predictive_evidence": false
+}
