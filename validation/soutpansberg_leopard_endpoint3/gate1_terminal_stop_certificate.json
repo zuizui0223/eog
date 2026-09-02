@@ -1,0 +1,71 @@
+{
+  "schema": "eog.soutpansberg_leopard_endpoint3.gate1_terminal_stop.v1",
+  "attempt_id": "soutpansberg_leopard_endpoint3_v1",
+  "issue": 335,
+  "chapter_code": "N3",
+  "spine_question": "WHERE can it become real?",
+  "terminal_status": "stop_pre_response_zip_transport_container_or_inventory",
+  "terminal_stage": "response_blind_zip_inventory",
+  "scientific_predictive_result": false,
+  "reason": "The prospectively required deployment survey set s01-s24 was not reproduced from bounded ZIP metadata: deployment_s03 was absent while the frozen denominator required all 24 surveys. Do not drop s03, repair the member rule, or relabel a 23-survey analysis as the same fresh attempt.",
+  "authoritative_execution": {
+    "workflow_run_id": 33596029399,
+    "head_sha": "ff0f779c426e1a4e9ebcb80dcfa1273d55c88928",
+    "run_number": 1,
+    "run_attempt": 1,
+    "artifact_id": 9833565084,
+    "artifact_name": "soutpansberg-leopard-gate1-recovery2-certificate",
+    "artifact_digest": "sha256:1e2b2e162ffb34c59d235396761794ee823971ea2a80953201118f11bc231f53",
+    "terminal_result_json_sha256": "8f063644ff88371a3676adb13c1209b9dfa371adce4cb1c83e5feff077cb05e7",
+    "result_fingerprint": "6894dc4b1c6a4d5ffb128b326ca4ec9c2b34e7c7c5ea945b29d6cf91782afddf"
+  },
+  "frozen_boundaries": {
+    "gate0_execution_merge": "99dce20bdcad561ae481aa84f534bd3c4c0a2417",
+    "gate1_contract_merge": "ff7e67713f53065549fb691ff440b8df4275a4fc",
+    "gate1_runner_commit": "a29ed015f3b1af17e2a5a153c257c2e0d28f63a2",
+    "expected_surveys": [
+      "s01", "s02", "s03", "s04", "s05", "s06", "s07", "s08", "s09", "s10", "s11", "s12",
+      "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s20", "s21", "s22", "s23", "s24"
+    ],
+    "post_inventory_repair_allowed": false
+  },
+  "observed_metadata_only_result": {
+    "deployment_surveys_found": [
+      "s01", "s02", "s04", "s05", "s06", "s07", "s08", "s09", "s10", "s11", "s12",
+      "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s20", "s21", "s22", "s23", "s24"
+    ],
+    "missing_required_deployment_survey": "s03",
+    "archive_metadata_request_count": 492,
+    "archive_metadata_bytes_opened": 48050,
+    "member_payload_bytes_opened": 0,
+    "deployment_payload_bytes_opened": 0,
+    "capture_header_bytes_opened": 0,
+    "capture_payload_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "technical_no_value_read_attempts": [
+    {
+      "workflow_run_id": 33595828335,
+      "head_sha": "92a52147468849127d90aaa949b0936f4ca4a680",
+      "reason": "shallow checkout could not resolve the frozen ancestor commit",
+      "live_gate1_started": false,
+      "external_range_requests": 0
+    },
+    {
+      "workflow_run_id": 33595945374,
+      "head_sha": "79858ee78172adc31705cd0b9ff7f9ca8d24f609",
+      "reason": "runner import failed before transport construction",
+      "external_range_requests": 0
+    }
+  ],
+  "interpretation": {
+    "counts_as_predictive_evidence": false,
+    "is_adverse_layer_b_result": false,
+    "is_source_or_protocol_integrity_evidence": true,
+    "third_fresh_predictive_endpoint_still_required": true
+  },
+  "next_action": "close this Soutpansberg attempt without repair; retain it in the manuscript candidate-flow denominator"
+}
