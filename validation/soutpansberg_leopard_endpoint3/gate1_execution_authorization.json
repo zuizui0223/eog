@@ -1,0 +1,20 @@
+{
+  "schema": "eog.soutpansberg_leopard_endpoint3.gate1_execution_authorization.v1",
+  "attempt_id": "soutpansberg_leopard_endpoint3_v1",
+  "gate1_contract_merge": "ff7e67713f53065549fb691ff440b8df4275a4fc",
+  "authorized_stage": "bounded_zip_metadata_only",
+  "authorized_url": "https://ndownloader.figshare.com/files/6906950",
+  "authorized_size_bytes": 467246,
+  "full_get_allowed": false,
+  "member_payload_bytes_allowed": 0,
+  "deployment_payload_bytes_allowed": 0,
+  "capture_header_bytes_allowed": 0,
+  "capture_payload_bytes_allowed": 0,
+  "response_rows_allowed": 0,
+  "model_fits_allowed": 0,
+  "valid_scientific_protocol_statuses": [
+    "gate1_zip_metadata_ready",
+    "stop_pre_response_zip_transport_container_or_inventory"
+  ],
+  "no_same_attempt_transport_or_inventory_rule_repair_after_live_gate": true
+}
