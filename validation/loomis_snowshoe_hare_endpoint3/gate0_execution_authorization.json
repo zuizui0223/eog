@@ -1,0 +1,20 @@
+{
+  "schema": "eog.loomis_snowshoe_hare_endpoint3.gate0_execution_authorization.v1",
+  "attempt_id": "loomis_snowshoe_hare_endpoint3_v1",
+  "issue": 340,
+  "source_boundary_merge": "d0163b3138ccaeb0a4da897e7189580210bea8a6",
+  "source_contract_git_blob_sha1": "38709da1a50c9b2c5ef285dd15bcfcacd16d1e72",
+  "authorized_branch": "execute/loomis-hare-gate0-metadata-v1",
+  "authorized_workflow_run_number": 1,
+  "authorized_workflow_run_attempt": 1,
+  "authorized_stage": "Zenodo record JSON metadata only",
+  "file_payload_requests_authorized": 0,
+  "deployment_header_bytes_authorized": 0,
+  "deployment_rows_authorized": 0,
+  "detection_header_bytes_authorized": 0,
+  "response_rows_authorized": 0,
+  "response_values_authorized": false,
+  "model_fits_authorized": 0,
+  "heldout_scores_authorized": 0,
+  "terminal_stop_is_predictive_evidence": false
+}
