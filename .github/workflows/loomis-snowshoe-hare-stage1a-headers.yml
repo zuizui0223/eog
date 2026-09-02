@@ -1,0 +1,86 @@
+name: Loomis snowshoe hare endpoint3 Stage1A headers
+
+on:
+  push:
+    branches:
+      - execute/loomis-hare-stage1a-headers-v1
+    paths:
+      - validation/loomis_snowshoe_hare_endpoint3/gate1a_execution_authorization.json
+      - .github/workflows/loomis-snowshoe-hare-stage1a-headers.yml
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: python -m pip install -U pytest
+      - name: Verify frozen Stage1A gate without external data
+        run: |
+          python -m pytest -q \
+            tests/test_loomis_snowshoe_hare_stage1a_header.py \
+            tests/test_loomis_snowshoe_hare_stage1a_contract.py \
+            tests/test_loomis_snowshoe_hare_stage1a_transport.py
+      - name: Compile live runner
+        run: python -m py_compile validation/loomis_snowshoe_hare_endpoint3/run_gate1a_headers.py
+      - name: Verify authorization binding
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x = json.loads(Path('validation/loomis_snowshoe_hare_endpoint3/gate1a_execution_authorization.json').read_text())
+          assert x['stage1a_contract_git_blob_sha1'] == '97c92e1fd20faf8ccce61b0ab7b42111c5743485'
+          assert x['stage1a_runner_git_blob_sha1'] == '95905c892a687bb8562d5ea1a76203d6bc44f311'
+          assert x['transport_merge_boundary'] == '5fe1f05e863e4be530a3edae1dcf37a9c956fc45'
+          assert x['authorized_branch'] == 'execute/loomis-hare-stage1a-headers-v1'
+          assert x['authorized_workflow_run_number'] == 1
+          assert x['authorized_workflow_run_attempt'] == 1
+          assert x['deployment_rows_authorized'] == 0
+          assert x['detection_header_bytes_authorized'] == 0
+          assert x['response_rows_authorized'] == 0
+          assert x['response_values_authorized'] is False
+          assert x['model_fits_authorized'] == 0
+          assert x['heldout_scores_authorized'] == 0
+          PY
+
+  live-stage1a:
+    needs: synthetic-boundary
+    if: ${{ github.run_number == 1 && github.run_attempt == 1 }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Execute bounded Stage1A headers once
+        run: python -m validation.loomis_snowshoe_hare_endpoint3.run_gate1a_headers
+      - name: Audit row/response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x = json.loads(Path('build/loomis_snowshoe_hare_endpoint3/stage1a_headers.json').read_text())
+          assert x['status'] in {'stage1a_headers_ready', 'stop_pre_row_header_transport_or_schema'}
+          assert x['deployment_rows_opened'] == 0
+          assert x['detection_header_bytes_opened'] == 0
+          assert x['detection_payload_bytes_opened'] == 0
+          assert x['response_rows_opened'] == 0
+          assert x['response_values_opened'] is False
+          assert x['model_fits'] == 0
+          assert x['heldout_scores'] == 0
+          assert x['counts_as_predictive_evidence'] is False
+          if x['status'] == 'stage1a_headers_ready':
+              assert len(x['files']) == 4
+              assert x['total_header_bytes_opened'] > 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: loomis-snowshoe-hare-stage1a-headers
+          path: build/loomis_snowshoe_hare_endpoint3/stage1a_headers.json
+          if-no-files-found: error
