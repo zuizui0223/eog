@@ -1,0 +1,30 @@
+{
+  "schema": "eog.loomis_snowshoe_hare_endpoint3.gate1a_execution_authorization.v1",
+  "attempt_id": "loomis_snowshoe_hare_endpoint3_v1",
+  "issue": 340,
+  "stage1a_contract_git_blob_sha1": "97c92e1fd20faf8ccce61b0ab7b42111c5743485",
+  "stage1a_runner_git_blob_sha1": "95905c892a687bb8562d5ea1a76203d6bc44f311",
+  "transport_merge_boundary": "5fe1f05e863e4be530a3edae1dcf37a9c956fc45",
+  "authorized_branch": "execute/loomis-hare-stage1a-headers-v1",
+  "authorized_workflow_run_number": 1,
+  "authorized_workflow_run_attempt": 1,
+  "authorized_files": [
+    "camera_info_new.csv",
+    "deployment_2022.csv",
+    "deployment_2023.csv",
+    "deployment_2024.csv"
+  ],
+  "authorized_content": "first physical record only, ending at first CR or LF",
+  "deployment_rows_authorized": 0,
+  "detection_header_bytes_authorized": 0,
+  "detection_payload_bytes_authorized": 0,
+  "response_rows_authorized": 0,
+  "response_values_authorized": false,
+  "model_fits_authorized": 0,
+  "heldout_scores_authorized": 0,
+  "valid_terminal_statuses": [
+    "stage1a_headers_ready",
+    "stop_pre_row_header_transport_or_schema"
+  ],
+  "terminal_stop_is_predictive_evidence": false
+}
