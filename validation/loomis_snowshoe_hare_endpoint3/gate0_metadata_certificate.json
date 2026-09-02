@@ -1,0 +1,79 @@
+{
+  "schema": "eog.loomis_snowshoe_hare_endpoint3.gate0_metadata_certificate.v1",
+  "attempt_id": "loomis_snowshoe_hare_endpoint3_v1",
+  "issue": 340,
+  "status": "gate0_metadata_ready",
+  "counts_as_predictive_evidence": false,
+  "source_boundary_merge": "d0163b3138ccaeb0a4da897e7189580210bea8a6",
+  "authorization_git_blob_sha1": "fb9ec6cd2e75d8943d2d35353248e617519719d1",
+  "authoritative_execution": {
+    "workflow_run_id": 33598612451,
+    "run_number": 1,
+    "run_attempt": 1,
+    "head_sha": "b07510acc5594682353d8b6fef90d2b757662f76",
+    "artifact_id": 9834296160,
+    "artifact_name": "loomis-snowshoe-hare-gate0-metadata",
+    "artifact_digest": "sha256:aa25b3c5bdcc736e33fdcd35892a5165f4bf095c381586b5eee3c0ada26d1daa"
+  },
+  "transport": {
+    "record_id": 21796558,
+    "metadata_requests": 1,
+    "metadata_bytes_opened": 12918,
+    "http_status": 200,
+    "content_type": "application/json",
+    "final_url": "https://zenodo.org/api/records/21796558"
+  },
+  "record_file_count": 26,
+  "required_file_count": 7,
+  "required_file_identities": [
+    {
+      "key": "camera_info_new.csv",
+      "size": 1545,
+      "checksum": "md5:ff3563cef53bb444cf53fb475754c8bb"
+    },
+    {
+      "key": "deployment_2022.csv",
+      "size": 3688,
+      "checksum": "md5:8f256bb6305fdc6c7f0297384fb36121"
+    },
+    {
+      "key": "deployment_2023.csv",
+      "size": 4552,
+      "checksum": "md5:b037f230512d3284d3a3bc47469619e2"
+    },
+    {
+      "key": "deployment_2024.csv",
+      "size": 5069,
+      "checksum": "md5:831230c774b7c5afa977e933e2164d63"
+    },
+    {
+      "key": "final_data_2022.csv",
+      "size": 7896368,
+      "checksum": "md5:ddeeb088f8d6d9ae8aabecf791da751c"
+    },
+    {
+      "key": "final_data_2023.csv",
+      "size": 18000535,
+      "checksum": "md5:e307ce31f3a0cba10c83d8da66d49451"
+    },
+    {
+      "key": "final_data_2024.csv",
+      "size": 15940773,
+      "checksum": "md5:bdea285c015d06b1c22811568a5353ed"
+    }
+  ],
+  "response_firewall": {
+    "file_payload_requests": 0,
+    "file_payload_bytes_opened": 0,
+    "deployment_header_bytes_opened": 0,
+    "deployment_rows_opened": 0,
+    "detection_header_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "result_fingerprint": "b73621d155951d8d18dc8c08c29b6e48b849b9f57a49e608b05b3dbe651c6c7f",
+  "next_authorized_stage": "freeze a separate header-only Stage-1 contract for camera_info_new.csv and deployment_2022/2023/2024.csv before opening any file payload",
+  "no_post_gate_role_substitution": true
+}
