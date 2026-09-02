@@ -1,0 +1,50 @@
+{
+  "schema": "eog.loomis_snowshoe_hare_endpoint3.stage1a_terminal_stop.v1",
+  "attempt_id": "loomis_snowshoe_hare_endpoint3_v1",
+  "issue": 340,
+  "terminal_status": "stop_pre_row_header_transport_or_schema",
+  "terminal_stage": "response_blind_physical_header_schema",
+  "reason": "deployment_2022.csv first physical header contains duplicate column names under the prospectively frozen Stage1A rule",
+  "counts_as_predictive_evidence": false,
+  "authoritative_execution": {
+    "workflow_run_id": 33601669468,
+    "run_number": 1,
+    "run_attempt": 1,
+    "head_sha": "8d9aa59dbd3274e9d9e83ddd54d28287c3d20840",
+    "artifact_id": 9835489897,
+    "artifact_name": "loomis-snowshoe-hare-stage1a-headers",
+    "artifact_digest": "sha256:8d105c8136aa8a0cf068d909beada5e6be5a5f9d50168ab2c3178fa90f59fe10"
+  },
+  "frozen_boundaries": {
+    "gate0_recording_merge": "8145d069f8dec727d5df8301d38a74edf77fed66",
+    "stage1a_contract_merge": "8294add6ce91769439228fccd876b164cc23a219",
+    "stage1a_transport_merge": "5fe1f05e863e4be530a3edae1dcf37a9c956fc45",
+    "stage1a_contract_git_blob_sha1": "97c92e1fd20faf8ccce61b0ab7b42111c5743485",
+    "stage1a_runner_git_blob_sha1": "95905c892a687bb8562d5ea1a76203d6bc44f311"
+  },
+  "response_firewall": {
+    "deployment_rows_opened": 0,
+    "detection_header_bytes_opened": 0,
+    "detection_payload_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "opened_content": "bounded first-physical-record header bytes only for response-independent Stage1A files up to the frozen schema STOP",
+  "not_opened": [
+    "any deployment data row",
+    "any final_data detection header or payload",
+    "any hare response row or value",
+    "any model fit or heldout score"
+  ],
+  "scientific_interpretation": "protocol-integrity/schema STOP only; neither favorable, null nor adverse Layer-B evidence",
+  "no_rescue": [
+    "do not deduplicate or rename duplicate physical columns after observing the header",
+    "do not inspect deployment row values to infer column meaning",
+    "do not apply Stage1B mapping to this stopped Loomis attempt",
+    "do not change parser, node identity, years, species, effort rule or source and relabel the same attempt fresh",
+    "do not open detection files for this attempt"
+  ],
+  "next_action": "close Loomis endpoint-3 attempt and continue only with a scientifically distinct, response-unconsumed candidate because the third scored predictive endpoint remains unresolved"
+}
