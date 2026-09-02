@@ -277,6 +277,30 @@
       "gate0_fingerprint": "243f1796127d49477852fb3a177e57a9de599f8357f81412f9871b5e07d4481a",
       "execution_merge_commit": "d7e43ad6102d5342f61112bf3b35e85b645c1732",
       "counts_as_predictive_evidence": false
+    },
+    {
+      "issue": 335,
+      "system": "Soutpansberg leopard repeated camera surveys",
+      "ecosystem_or_context": "multi-year terrestrial camera-trap array with repeated spatial capture-recapture surveys",
+      "terminal_stage": "response_blind_zip_inventory",
+      "reason": "bounded ZIP metadata reproduced only 23 of the prospectively required 24 deployment survey members; deployment_s03 was absent and the attempt was not repaired or reduced to a 23-survey endpoint",
+      "biological_response_access": "none",
+      "archive_metadata_range_requests": 492,
+      "archive_metadata_bytes_opened": 48050,
+      "member_payload_bytes_opened": 0,
+      "deployment_payload_bytes_opened": 0,
+      "capture_header_bytes_opened": 0,
+      "capture_payload_bytes_opened": 0,
+      "response_rows_opened": 0,
+      "response_values_opened": 0,
+      "model_fits": 0,
+      "heldout_scores": 0,
+      "gate1_run_id": 33596029399,
+      "gate1_head_sha": "ff0f779c426e1a4e9ebcb80dcfa1273d55c88928",
+      "gate1_artifact_id": 9833565084,
+      "gate1_artifact_digest": "sha256:1e2b2e162ffb34c59d235396761794ee823971ea2a80953201118f11bc231f53",
+      "gate1_result_fingerprint": "6894dc4b1c6a4d5ffb128b326ca4ec9c2b34e7c7c5ea945b29d6cf91782afddf",
+      "counts_as_predictive_evidence": false
     }
   ],
   "administrative_exclusions": [
@@ -299,7 +323,7 @@
   },
   "current_denominator_summary": {
     "fresh_predictive_endpoints_with_scores": 2,
-    "fresh_candidate_stops_listed": 21,
+    "fresh_candidate_stops_listed": 22,
     "administrative_exclusions": 2,
     "third_fresh_predictive_endpoint_still_required": true
   }

@@ -23,7 +23,7 @@ def test_candidate_flow_summary_matches_the_frozen_denominator():
 
     assert ledger["schema"] == "eog.paper_ready_replication.candidate_flow_ledger.v1"
     assert summary["fresh_predictive_endpoints_with_scores"] == len(results) == 2
-    assert summary["fresh_candidate_stops_listed"] == len(stops) == 21
+    assert summary["fresh_candidate_stops_listed"] == len(stops) == 22
     assert summary["administrative_exclusions"] == len(exclusions) == 2
     assert summary["third_fresh_predictive_endpoint_still_required"] is True
     assert len({row["issue"] for row in stops}) == len(stops)
@@ -85,4 +85,24 @@ def test_latest_gate0_stops_remain_response_unconsumed_and_non_scientific():
     )
     assert illinois["gate0_artifact_digest"] == (
         "sha256:42e54f11b0db49de7404942cef760cadcd099f30288a06d96dfd5e6da3cd6349"
+    )
+
+    soutpansberg = by_issue[335]
+    assert soutpansberg["terminal_stage"] == "response_blind_zip_inventory"
+    assert soutpansberg["gate1_run_id"] == 33596029399
+    assert soutpansberg["archive_metadata_range_requests"] == 492
+    assert soutpansberg["archive_metadata_bytes_opened"] == 48050
+    assert soutpansberg["member_payload_bytes_opened"] == 0
+    assert soutpansberg["deployment_payload_bytes_opened"] == 0
+    assert soutpansberg["capture_header_bytes_opened"] == 0
+    assert soutpansberg["capture_payload_bytes_opened"] == 0
+    assert soutpansberg["response_rows_opened"] == 0
+    assert soutpansberg["response_values_opened"] == 0
+    assert soutpansberg["model_fits"] == 0
+    assert soutpansberg["heldout_scores"] == 0
+    assert soutpansberg["gate1_result_fingerprint"] == (
+        "6894dc4b1c6a4d5ffb128b326ca4ec9c2b34e7c7c5ea945b29d6cf91782afddf"
+    )
+    assert soutpansberg["gate1_artifact_digest"] == (
+        "sha256:1e2b2e162ffb34c59d235396761794ee823971ea2a80953201118f11bc231f53"
     )
