@@ -1,0 +1,71 @@
+{
+  "schema": "eog.illinois_coyote_endpoint3.source_contract.v1",
+  "attempt_id": "illinois_coyote_endpoint3_v1",
+  "issue": 331,
+  "chapter_code": "N3",
+  "spine_question": "WHERE can it become real?",
+  "spine_thought_ja": "住める場所と、辿り着ける場所は違う。",
+  "selection_boundary": {
+    "candidate_universe": [
+      "Illinois statewide coyote camera monitoring — Dryad 10.5061/dryad.p8cz8wb5w",
+      "Trans-Pecos hooded skunk survey — Dryad 10.5061/dryad.j0zpc86t3",
+      "Toyama Asiatic black bear camera capture-recapture — Dryad 10.5061/dryad.ksn02v7bq"
+    ],
+    "selected": "Illinois statewide coyote camera monitoring",
+    "selection_basis": "response-blind source architecture: separate deployment/site/weekly effort/detection resources; 175-site statewide network; 28 weekly occasions; multiple study episodes; individually addressable small public files",
+    "response_count_used_for_selection": false,
+    "published_effect_direction_used_for_selection": false,
+    "source_paper_blindness_claimed": false,
+    "freshness_claim": "only the prospectively frozen EOG paired Layer-B heldout endpoint is fresh; published ecological associations are not used for EOG design"
+  },
+  "dryad": {
+    "doi": "10.5061/dryad.p8cz8wb5w",
+    "dataset_api": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.p8cz8wb5w",
+    "api_version_header": "2.1.0",
+    "anonymous_metadata_only": true,
+    "expected_exact_file_names": [
+      "Camera_Deployment_Data.csv",
+      "Camera_Site_Data.csv",
+      "Coyote_Detection_History.csv",
+      "Effort_DetVariable.csv",
+      "PRCP_DetVariable.csv",
+      "README.md",
+      "TMAX_DetVariable.csv",
+      "TMIN_DetVariable.csv"
+    ],
+    "expected_file_count": 8,
+    "no_post_metadata_file_aliases": true
+  },
+  "roles": {
+    "geometry_deployment": "Camera_Deployment_Data.csv",
+    "site_covariates": "Camera_Site_Data.csv",
+    "effort": "Effort_DetVariable.csv",
+    "weather_covariates": [
+      "PRCP_DetVariable.csv",
+      "TMAX_DetVariable.csv",
+      "TMIN_DetVariable.csv"
+    ],
+    "documentation": "README.md",
+    "forbidden_response_until_full_freeze": "Coyote_Detection_History.csv"
+  },
+  "stage0_allowed": [
+    "Dryad dataset metadata JSON",
+    "current-version metadata JSON",
+    "file-list metadata JSON",
+    "file names, IDs, sizes, digests, digest types, MIME types and official download links"
+  ],
+  "stage0_forbidden": [
+    "any file payload byte",
+    "any CSV header",
+    "any deployment row",
+    "any effort value",
+    "any coyote detection value",
+    "any model fit or heldout score"
+  ],
+  "paper_ready_bindings": {
+    "cross_ecosystem_synthesis_canonical_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02",
+    "feature_count_placebo_canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd",
+    "excluded_world_information_canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
+  },
+  "post_stop_retuning": false
+}
