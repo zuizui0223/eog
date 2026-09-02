@@ -23,7 +23,7 @@ def test_candidate_flow_summary_matches_the_frozen_denominator():
 
     assert ledger["schema"] == "eog.paper_ready_replication.candidate_flow_ledger.v1"
     assert summary["fresh_predictive_endpoints_with_scores"] == len(results) == 2
-    assert summary["fresh_candidate_stops_listed"] == len(stops) == 20
+    assert summary["fresh_candidate_stops_listed"] == len(stops) == 21
     assert summary["administrative_exclusions"] == len(exclusions) == 2
     assert summary["third_fresh_predictive_endpoint_still_required"] is True
     assert len({row["issue"] for row in stops}) == len(stops)
@@ -67,4 +67,22 @@ def test_latest_gate0_stops_remain_response_unconsumed_and_non_scientific():
     assert mica["heldout_scores"] == 0
     assert mica["gate0_artifact_digest"] == (
         "sha256:0658b3adad8a240b6008469dced18d3c1e7aebce99ee7bc2436632321c6978e3"
+    )
+
+    illinois = by_issue[331]
+    assert illinois["terminal_stage"] == "metadata_identity_or_transport"
+    assert illinois["gate0_run_id"] == 33581329294
+    assert illinois["metadata_only"] is True
+    assert illinois["file_payload_requests"] == 0
+    assert illinois["file_payload_bytes_opened"] == 0
+    assert illinois["response_header_bytes_opened"] == 0
+    assert illinois["response_rows_opened"] == 0
+    assert illinois["response_values_opened"] == 0
+    assert illinois["model_fits"] == 0
+    assert illinois["heldout_scores"] == 0
+    assert illinois["gate0_fingerprint"] == (
+        "243f1796127d49477852fb3a177e57a9de599f8357f81412f9871b5e07d4481a"
+    )
+    assert illinois["gate0_artifact_digest"] == (
+        "sha256:42e54f11b0db49de7404942cef760cadcd099f30288a06d96dfd5e6da3cd6349"
     )
