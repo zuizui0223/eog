@@ -1,0 +1,45 @@
+{
+  "schema": "eog.cassowary_endpoint3.gate0_terminal_stop.v1",
+  "attempt_id": "cassowary_endpoint3_v1",
+  "issue": 348,
+  "terminal_status": "stop_pre_response_metadata_identity_or_transport",
+  "terminal_stage": "metadata_identity",
+  "reason": "Figshare selected file id 51265058 occurs 0 times; expected exactly one",
+  "counts_as_predictive_evidence": false,
+  "authoritative_execution": {
+    "workflow_run_id": 33619907183,
+    "run_number": 1,
+    "run_attempt": 1,
+    "head_sha": "b28ecd4eddc39c8282f1130ccd86461f895b9124",
+    "artifact_id": 9842472471,
+    "artifact_name": "cassowary-gate0-metadata",
+    "artifact_digest": "sha256:8ae0b3eefbf6b0cadcd748e7490c1e8cac314fe6e0efdb5f3fdba47cafe6cf56",
+    "result_fingerprint": "a510722d09a12af76dba903620df6eb616141205a86310abeee7ad33b1967cf7"
+  },
+  "frozen_boundaries": {
+    "source_boundary_merge": "e783a89b0dcdf8c68161ec8dc45073d22b816d80",
+    "source_contract_git_blob_sha1": "294619df1e4ddf16d73bddec0c2f84ffacff69b7",
+    "metadata_evaluator_git_blob_sha1": "e52efaa086609e232df1f65710109ab2475b93ef",
+    "runner_git_blob_sha1": "d41221b2a22ff216bc4b87c670f3ed059ad607bd"
+  },
+  "opened_content": {
+    "metadata_request_count": 1,
+    "metadata_bytes_opened": 4999,
+    "file_payload_requests": 0,
+    "file_payload_bytes_opened": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_interpretation": "source-metadata identity STOP only; neither favorable, null nor adverse Layer-B evidence",
+  "no_rescue": [
+    "do not select a different Figshare file after observing live metadata",
+    "do not change the frozen primary file id 51265058 and relabel this attempt fresh",
+    "do not open any Figshare file payload for this attempt",
+    "do not switch taxon, campaigns or response unit within this attempt",
+    "do not count this STOP as predictive evidence"
+  ],
+  "next_action": "close cassowary endpoint-3 attempt and continue only with a scientifically distinct, response-unconsumed candidate because the third scored predictive endpoint remains unresolved"
+}
