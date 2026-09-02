@@ -1,0 +1,79 @@
+name: Illinois coyote endpoint3 Gate0 metadata
+
+on:
+  push:
+    branches:
+      - execute/illinois-coyote-gate0-metadata-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: python -m pip install -e . pytest
+      - name: Verify frozen metadata Gate0 without external data
+        run: pytest -q tests/test_illinois_coyote_endpoint3_gate0.py
+      - name: Verify execution authorization
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          auth = json.loads(Path('validation/illinois_coyote_endpoint3/gate0_execution_authorization.json').read_text())
+          assert auth['authorized_parent_merge'] == 'ce1c36b262f7047bbc2c8be8ca6761edd8267894'
+          assert auth['file_payload_requests_allowed'] == 0
+          assert auth['file_payload_bytes_allowed'] == 0
+          assert auth['csv_header_bytes_allowed'] == 0
+          assert auth['response_rows_allowed'] == 0
+          assert auth['response_values_allowed'] is False
+          assert auth['model_fits_allowed'] == 0
+          assert auth['heldout_scores_allowed'] == 0
+          PY
+      - name: Compile frozen runner
+        run: python -m py_compile validation/illinois_coyote_endpoint3/gate0_metadata.py
+
+  live-metadata-gate0:
+    needs: synthetic-boundary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Execute metadata-only Gate0 once
+        run: python validation/illinois_coyote_endpoint3/gate0_metadata.py
+      - name: Audit response and file-payload firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/illinois_coyote_endpoint3/gate0_metadata.json')
+          result = json.loads(p.read_text())
+          assert result['status'] in {
+              'gate0_metadata_ready',
+              'stop_pre_response_metadata_identity_or_transport',
+          }
+          assert result['metadata_only'] is True
+          assert result['file_payload_requests'] == 0
+          assert result['file_payload_bytes_opened'] == 0
+          assert result['response_header_bytes_opened'] == 0
+          assert result['response_rows_opened'] == 0
+          assert result['response_values_opened'] is False
+          assert result['model_fits'] == 0
+          assert result['heldout_scores'] == 0
+          assert result['counts_as_predictive_evidence'] is False
+          if result['status'] == 'gate0_metadata_ready':
+              assert result['file_count'] == 8
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: illinois-coyote-gate0-metadata
+          path: build/illinois_coyote_endpoint3/gate0_metadata.json
+          if-no-files-found: error
