@@ -1,0 +1,70 @@
+name: Soutpansberg leopard endpoint3 Gate0 metadata
+
+on:
+  push:
+    branches:
+      - execute/soutpansberg-leopard-gate0-metadata-v1
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: python -m pip install -U pip pytest
+      - name: Verify frozen metadata Gate0 without external data
+        run: pytest -q tests/test_soutpansberg_leopard_gate0_metadata.py
+      - name: Compile frozen runner
+        run: python -m py_compile validation/soutpansberg_leopard_endpoint3/gate0_figshare_metadata.py validation/soutpansberg_leopard_endpoint3/run_gate0_figshare_metadata.py
+      - name: Verify execution authorization
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('validation/soutpansberg_leopard_endpoint3/gate0_execution_authorization.json')
+          a=json.loads(p.read_text())
+          assert a['source_boundary_merge']=='c3d307689763629738929f11be126b9c3ab39d21'
+          assert a['allowed_live_request_count']==1
+          assert a['file_payload_requests_allowed']==0
+          assert a['response_rows_allowed']==0
+          assert a['model_fits_allowed']==0
+          PY
+
+  live-metadata-gate0:
+    needs: synthetic-boundary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute metadata-only Gate0 once
+        run: python validation/soutpansberg_leopard_endpoint3/run_gate0_figshare_metadata.py
+      - name: Audit file/response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/soutpansberg_leopard_endpoint3/gate0_metadata.json')
+          r=json.loads(p.read_text())
+          assert r['status'] in {'gate0_metadata_ready','stop_pre_response_metadata_identity_or_transport'}
+          assert r['file_payload_requests']==0
+          assert r['file_payload_bytes_opened']==0
+          assert r['response_header_bytes_opened']==0
+          assert r['response_rows_opened']==0
+          assert r['response_values_opened'] is False
+          assert r['model_fits']==0
+          assert r['heldout_scores']==0
+          assert r['counts_as_predictive_evidence'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: soutpansberg-leopard-gate0-metadata
+          path: build/soutpansberg_leopard_endpoint3/gate0_metadata.json
+          if-no-files-found: error
