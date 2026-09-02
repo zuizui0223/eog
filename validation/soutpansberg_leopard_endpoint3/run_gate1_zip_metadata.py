@@ -2,8 +2,14 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import sys
 
-from gate1_zip_metadata import (
+HERE = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from gate1_zip_metadata import (  # noqa: E402
     FrozenRangeTransport,
     Gate1Stop,
     evaluate_zip_metadata,
@@ -11,8 +17,6 @@ from gate1_zip_metadata import (
     terminal_stop_result,
 )
 
-HERE = Path(__file__).resolve().parent
-ROOT = Path(__file__).resolve().parents[2]
 AUTH_PATH = HERE / "gate1_execution_authorization.json"
 OUTPUT = ROOT / "build" / "soutpansberg_leopard_endpoint3" / "gate1_zip_metadata.json"
 
