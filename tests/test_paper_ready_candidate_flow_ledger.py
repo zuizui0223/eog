@@ -23,7 +23,7 @@ def test_candidate_flow_summary_matches_the_frozen_denominator():
 
     assert ledger["schema"] == "eog.paper_ready_replication.candidate_flow_ledger.v1"
     assert summary["fresh_predictive_endpoints_with_scores"] == len(results) == 2
-    assert summary["fresh_candidate_stops_listed"] == len(stops) == 22
+    assert summary["fresh_candidate_stops_listed"] == len(stops) == 23
     assert summary["administrative_exclusions"] == len(exclusions) == 2
     assert summary["third_fresh_predictive_endpoint_still_required"] is True
     assert len({row["issue"] for row in stops}) == len(stops)
@@ -105,4 +105,18 @@ def test_latest_gate0_stops_remain_response_unconsumed_and_non_scientific():
     )
     assert soutpansberg["gate1_artifact_digest"] == (
         "sha256:1e2b2e162ffb34c59d235396761794ee823971ea2a80953201118f11bc231f53"
+    )
+
+    loomis = by_issue[340]
+    assert loomis["terminal_stage"] == "response_blind_physical_header_schema"
+    assert loomis["stage1a_run_id"] == 33601669468
+    assert loomis["deployment_rows_opened"] == 0
+    assert loomis["detection_header_bytes_opened"] == 0
+    assert loomis["detection_payload_bytes_opened"] == 0
+    assert loomis["response_rows_opened"] == 0
+    assert loomis["response_values_opened"] is False
+    assert loomis["model_fits"] == 0
+    assert loomis["heldout_scores"] == 0
+    assert loomis["stage1a_artifact_digest"] == (
+        "sha256:8d105c8136aa8a0cf068d909beada5e6be5a5f9d50168ab2c3178fa90f59fe10"
     )
