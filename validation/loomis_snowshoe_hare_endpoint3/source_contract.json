@@ -1,0 +1,95 @@
+{
+  "schema": "eog.loomis_snowshoe_hare_endpoint3.source_contract.v1",
+  "attempt_id": "loomis_snowshoe_hare_endpoint3_v1",
+  "issue": 340,
+  "chapter": "N3",
+  "question": "WHERE can it become real?",
+  "source": {
+    "provider": "Zenodo",
+    "record_id": 21796558,
+    "record_api_url": "https://zenodo.org/api/records/21796558",
+    "doi": "10.5281/zenodo.21796558",
+    "publication_doi": "10.1016/j.ecolmodel.2026.111772",
+    "required_files": {
+      "camera_info_new.csv": "md5:ff3563cef53bb444cf53fb475754c8bb",
+      "deployment_2022.csv": "md5:8f256bb6305fdc6c7f0297384fb36121",
+      "deployment_2023.csv": "md5:b037f230512d3284d3a3bc47469619e2",
+      "deployment_2024.csv": "md5:831230c774b7c5afa977e933e2164d63",
+      "final_data_2022.csv": "md5:ddeeb088f8d6d9ae8aabecf791da751c",
+      "final_data_2023.csv": "md5:e307ce31f3a0cba10c83d8da66d49451",
+      "final_data_2024.csv": "md5:bdea285c015d06b1c22811568a5353ed"
+    },
+    "other_record_files_allowed": true
+  },
+  "gate0_metadata_only": {
+    "allowed_requests": ["GET Zenodo record JSON metadata"],
+    "file_payload_requests": 0,
+    "file_payload_bytes": 0,
+    "response_header_bytes": 0,
+    "response_rows": 0,
+    "response_values": false,
+    "required_record_fields": ["id", "files"],
+    "required_file_fields": ["key", "checksum", "size", "links"],
+    "require_exact_required_file_names_and_checksums": true,
+    "require_positive_file_sizes": true,
+    "require_https_file_links": true,
+    "no_schema_alias_repair_after_live_metadata": true
+  },
+  "prospective_endpoint": {
+    "taxon": "Lepus americanus",
+    "response_unit": "deployment-supported physical camera x ISO week recorded snowshoe-hare detection",
+    "zero_semantics": "adequately active camera-week with no hare detection row = surveyed recorded non-detection, not biological absence or density zero",
+    "calibration_years": [2022, 2023],
+    "heldout_years": [2024],
+    "heldout_replication_unit": "2024 ISO week",
+    "source_paper_blind": false,
+    "fresh_claim": "prospectively frozen EOG paired-complementarity endpoint only"
+  },
+  "stage1_header_only_if_gate0_passes": {
+    "allowed_files": [
+      "camera_info_new.csv",
+      "deployment_2022.csv",
+      "deployment_2023.csv",
+      "deployment_2024.csv"
+    ],
+    "allowed_content": "first physical record/header only",
+    "deployment_data_rows_allowed": 0,
+    "detection_header_bytes_allowed": 0,
+    "detection_payload_bytes_allowed": 0,
+    "required_semantic_roles_before_deployment_rows": [
+      "stable study-site identity",
+      "stable repeated within-site camera/station identity",
+      "coordinate pair",
+      "deployment start",
+      "deployment end",
+      "campaign/year"
+    ],
+    "post_row_coordinate_clustering_allowed": false,
+    "response_derived_node_matching_allowed": false
+  },
+  "deployment_geometry_rules_to_freeze_before_rows": {
+    "minimum_total_camera_nodes": 20,
+    "minimum_repeated_nodes_calibration_to_heldout": 15,
+    "active_camera_week_minimum_overlap_hours": 96,
+    "overlapping_deployments_effort_rule": "union intervals, do not double count",
+    "minimum_heldout_outer_weeks": 4,
+    "lcc_targets": [0.25, 0.50, 0.75, 0.90],
+    "minimum_distinct_response_blind_structural_scales": 3,
+    "deduplicate_identical_adjacency_worlds": true,
+    "external_open_world_required": true,
+    "response_derived_node_or_week_filtering": false
+  },
+  "paper_ready_bindings": {
+    "cross_ecosystem_synthesis_canonical_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02",
+    "feature_count_placebo_canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd",
+    "excluded_world_information_canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
+  },
+  "hard_stop": {
+    "terminal_candidate_reuse_allowed": false,
+    "post_response_retuning_allowed": false,
+    "species_switch_allowed": false,
+    "year_or_split_repair_allowed": false,
+    "stop_candidate_hunting_after_valid_predictive_terminal": true,
+    "fourth_dataset_for_prestige_allowed": false
+  }
+}
