@@ -1,0 +1,18 @@
+{
+  "schema": "eog.soutpansberg_leopard_endpoint3.gate0_execution_authorization.v1",
+  "attempt_id": "soutpansberg_leopard_endpoint3_v1",
+  "source_boundary_merge": "c3d307689763629738929f11be126b9c3ab39d21",
+  "authorized_stage": "figshare_article_metadata_only",
+  "allowed_live_request_count": 1,
+  "allowed_url": "https://api.figshare.com/v2/articles/4235546",
+  "file_payload_requests_allowed": 0,
+  "file_payload_bytes_allowed": 0,
+  "response_header_bytes_allowed": 0,
+  "response_rows_allowed": 0,
+  "model_fits_allowed": 0,
+  "valid_terminal_statuses": [
+    "gate0_metadata_ready",
+    "stop_pre_response_metadata_identity_or_transport"
+  ],
+  "no_same_attempt_parser_repair_after_live_metadata": true
+}
