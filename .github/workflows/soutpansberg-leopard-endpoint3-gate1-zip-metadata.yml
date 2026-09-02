@@ -1,0 +1,74 @@
+name: Soutpansberg leopard endpoint3 Gate1 ZIP metadata
+
+on:
+  push:
+    branches:
+      - execute/soutpansberg-leopard-gate1-zip-metadata-v1
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: python -m pip install -U pip pytest
+      - name: Verify frozen Gate1 without external archive access
+        run: pytest -q tests/test_soutpansberg_leopard_gate1_zip_metadata.py
+      - name: Compile frozen Gate1 runner
+        run: python -m py_compile validation/soutpansberg_leopard_endpoint3/gate1_zip_metadata.py validation/soutpansberg_leopard_endpoint3/run_gate1_zip_metadata.py
+      - name: Verify Gate1 execution authorization
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('validation/soutpansberg_leopard_endpoint3/gate1_execution_authorization.json').read_text())
+          assert a['gate1_contract_merge']=='ff7e67713f53065549fb691ff440b8df4275a4fc'
+          assert a['authorized_size_bytes']==467246
+          assert a['full_get_allowed'] is False
+          assert a['member_payload_bytes_allowed']==0
+          assert a['deployment_payload_bytes_allowed']==0
+          assert a['capture_header_bytes_allowed']==0
+          assert a['capture_payload_bytes_allowed']==0
+          assert a['response_rows_allowed']==0
+          assert a['model_fits_allowed']==0
+          PY
+
+  live-gate1:
+    needs: synthetic-boundary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute bounded ZIP metadata Gate1 once
+        run: python validation/soutpansberg_leopard_endpoint3/run_gate1_zip_metadata.py
+      - name: Audit member/response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/soutpansberg_leopard_endpoint3/gate1_zip_metadata.json')
+          r=json.loads(p.read_text())
+          assert r['status'] in {'gate1_zip_metadata_ready','stop_pre_response_zip_transport_container_or_inventory'}
+          assert r['member_payload_bytes_opened']==0
+          assert r['deployment_payload_bytes_opened']==0
+          assert r['capture_header_bytes_opened']==0
+          assert r['capture_payload_bytes_opened']==0
+          assert r['response_rows_opened']==0
+          assert r['response_values_opened'] is False
+          assert r['model_fits']==0
+          assert r['heldout_scores']==0
+          assert r['counts_as_predictive_evidence'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: soutpansberg-leopard-gate1-zip-metadata
+          path: build/soutpansberg_leopard_endpoint3/gate1_zip_metadata.json
+          if-no-files-found: error
