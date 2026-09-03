@@ -166,7 +166,7 @@ def test_serialized_empirical_permission_is_rederived_not_trusted():
         },
     )
 
-    with pytest.raises(ValueError, match="all independent gains > 0"):
+    with pytest.raises(ValueError, match="all supplied gains > 0"):
         inspect_n2_handoff_payload(payload)
 
 
