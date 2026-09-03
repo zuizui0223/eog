@@ -25,7 +25,13 @@ def test_candidate_flow_summary_matches_the_frozen_denominator():
     assert summary["fresh_predictive_endpoints_with_scores"] == len(results) == 2
     assert summary["fresh_candidate_stops_listed"] == len(stops) == 25
     assert summary["administrative_exclusions"] == len(exclusions) == 2
-    assert summary["third_fresh_predictive_endpoint_still_required"] is True
+    assert summary["third_fresh_predictive_endpoint_still_required"] is False
+    assert summary["third_predictive_endpoint_state"] == "unresolved_not_obtained"
+    assert summary["endpoint3_search_closed_without_score"] is True
+    assert summary["paper_development_closed_to_new_candidates"] is True
+    assert summary["search_closure_issue"] == 357
+    assert ledger["reporting_rules"]["no_new_candidates_after_search_closure"] is True
+    assert ledger["reporting_rules"]["third_endpoint_unresolved_is_not_null_or_adverse"] is True
     assert len({row["issue"] for row in stops}) == len(stops)
     assert all(row["counts_as_predictive_evidence"] is False for row in stops)
 
