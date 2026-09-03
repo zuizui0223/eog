@@ -41,6 +41,8 @@
       "checksum",
       "links"
     ],
+    "required_archive_link_key": "content",
+    "required_archive_download_scheme": "https",
     "checksum_format": "md5:<32 lowercase hexadecimal characters>",
     "archive_payload_requests": 0,
     "archive_payload_bytes": 0,
@@ -72,35 +74,11 @@
   "calendar_split": {
     "study_window": ["2022-04-01", "2022-06-30"],
     "primary_complete_iso_week_starts": [
-      "2022-04-04",
-      "2022-04-11",
-      "2022-04-18",
-      "2022-04-25",
-      "2022-05-02",
-      "2022-05-09",
-      "2022-05-16",
-      "2022-05-23",
-      "2022-05-30",
-      "2022-06-06",
-      "2022-06-13",
-      "2022-06-20"
+      "2022-04-04", "2022-04-11", "2022-04-18", "2022-04-25", "2022-05-02", "2022-05-09",
+      "2022-05-16", "2022-05-23", "2022-05-30", "2022-06-06", "2022-06-13", "2022-06-20"
     ],
-    "calibration_week_starts": [
-      "2022-04-04",
-      "2022-04-11",
-      "2022-04-18",
-      "2022-04-25",
-      "2022-05-02",
-      "2022-05-09"
-    ],
-    "heldout_week_starts": [
-      "2022-05-16",
-      "2022-05-23",
-      "2022-05-30",
-      "2022-06-06",
-      "2022-06-13",
-      "2022-06-20"
-    ],
+    "calibration_week_starts": ["2022-04-04", "2022-04-11", "2022-04-18", "2022-04-25", "2022-05-02", "2022-05-09"],
+    "heldout_week_starts": ["2022-05-16", "2022-05-23", "2022-05-30", "2022-06-06", "2022-06-13", "2022-06-20"],
     "partial_edge_dates_scored": false,
     "heldout_replication_unit": "ISO week",
     "heldout_denominator": 6
@@ -124,12 +102,7 @@
     "learner_family": "RandomForestClassifier",
     "same_learner_fit_split_both_arms": true,
     "baseline_roles": [
-      "released latitude and longitude",
-      "altitude",
-      "weekly temperature",
-      "weekly precipitation",
-      "weekly NDVI or vegetation covariates",
-      "calendar week-of-season"
+      "released latitude and longitude", "altitude", "weekly temperature", "weekly precipitation", "weekly NDVI or vegetation covariates", "calendar week-of-season"
     ],
     "exact_physical_baseline_columns_frozen_before_response": true,
     "augmented_only_difference": "unchanged symmetric_world_support_summary_v1",
