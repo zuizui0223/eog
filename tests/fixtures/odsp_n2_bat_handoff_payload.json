@@ -1,0 +1,66 @@
+{
+  "schema_id": "n2-to-n3-payload-v1",
+  "program_id": "niche-to-survey-four-chapter-v1",
+  "producer": {
+    "chapter": "N2",
+    "repository": "zuizui0223/odsp"
+  },
+  "evidence_id": "tadarida-teniotis-n2-terminal",
+  "axes": {
+    "base": [
+      {
+        "name": "x",
+        "semantic": "projected easting",
+        "units": "m",
+        "reference_frame": "EPSG:3035"
+      },
+      {
+        "name": "y",
+        "semantic": "projected northing",
+        "units": "m",
+        "reference_frame": "EPSG:3035"
+      }
+    ],
+    "added": [
+      {
+        "name": "z",
+        "semantic": "native GPS height above mean sea level",
+        "units": "m",
+        "reference_frame": "MSL"
+      }
+    ]
+  },
+  "handoff": {
+    "evidence_scope": "empirical",
+    "support_semantics": "species_support",
+    "axis_semantics_declared": true,
+    "prospective_source_boundary_frozen": true,
+    "thickness_estimable": true,
+    "transferability_category": "non_generalizing",
+    "handoff_category": "descriptive_projection_only",
+    "projection_summary_allowed": true,
+    "axis_resolved_state_allowed_for_method_testing": false,
+    "axis_resolved_species_state_allowed_for_empirical_n3": false,
+    "reason_codes": [
+      "independent_axis_resolved_organization_not_generalizing"
+    ]
+  },
+  "projection_summary": {
+    "H_Z_given_XY_nats": 1.3918623004770097,
+    "effective_vertical_states": 4.022333876564191
+  },
+  "transferability": {
+    "category": "non_generalizing",
+    "independent_gains": [
+      -0.43541033813280833,
+      -0.021938657402345435
+    ]
+  },
+  "provenance": {
+    "source_contract": "N2_BAT_THICKNESS_CONTRACT.json",
+    "decision_receipt": "N2_BAT_THICKNESS_TERMINAL_DECISION.json",
+    "source_fingerprint": null
+  },
+  "state_artifact": null,
+  "fingerprint": "c087b7eb8fdf053498cc4725acd9f861b09a113097a84f6d202a080a73fd6b89"
+}
