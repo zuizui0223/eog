@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 import hashlib
 import json
+import math
 import re
 from typing import Mapping
 
@@ -18,6 +19,13 @@ PROGRAM_ID = "niche-to-survey-four-chapter-v1"
 PRODUCER_REPOSITORY = "zuizui0223/odsp"
 
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+_ALLOWED_TRANSFERABILITY = {
+    "generalizing",
+    "mixed",
+    "non_generalizing",
+    "unavailable",
+    "not_tested",
+}
 
 
 @dataclass(frozen=True)
@@ -105,11 +113,40 @@ def _validate_artifact(
     axis_order = _list(artifact.get("axis_order"), name="state_artifact axis_order")
     if len(shape) != len(axis_names):
         raise ValueError("state_artifact shape rank must match declared axes")
-    if any(not isinstance(value, int) or isinstance(value, bool) or value <= 0 for value in shape):
+    if any(
+        not isinstance(value, int) or isinstance(value, bool) or value <= 0
+        for value in shape
+    ):
         raise ValueError("state_artifact shape must contain positive integers")
     if tuple(str(value) for value in axis_order) != axis_names:
         raise ValueError("state_artifact axis_order must match declared base+added axes")
     return uri, sha256
+
+
+def _validated_transferability_gains(
+    transferability: Mapping[str, object],
+    category: str,
+) -> tuple[float, ...]:
+    if category not in _ALLOWED_TRANSFERABILITY:
+        raise ValueError(f"unsupported transferability category: {category!r}")
+    raw = _list(transferability.get("independent_gains"), name="independent_gains")
+    gains: list[float] = []
+    for value in raw:
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            raise ValueError("independent_gains must contain numeric values")
+        number = float(value)
+        if not math.isfinite(number):
+            raise ValueError("independent_gains must be finite")
+        gains.append(number)
+
+    if category == "generalizing" and gains and not all(value > 0.0 for value in gains):
+        raise ValueError("generalizing transferability requires all supplied gains > 0")
+    if category == "non_generalizing" and gains and not all(value <= 0.0 for value in gains):
+        raise ValueError("non_generalizing transferability requires all supplied gains <= 0")
+    if category == "mixed":
+        if not gains or not (any(value > 0.0 for value in gains) and any(value <= 0.0 for value in gains)):
+            raise ValueError("mixed transferability requires both positive and non-positive gains")
+    return tuple(gains)
 
 
 def inspect_n2_handoff_payload(payload: Mapping[str, object]) -> N2PayloadIntake:
@@ -151,6 +188,7 @@ def inspect_n2_handoff_payload(payload: Mapping[str, object]) -> N2PayloadIntake
     handoff_category = _text(handoff.get("handoff_category"), name="handoff_category")
     if transferability.get("category") != transferability_category:
         raise ValueError("transferability category disagrees with handoff")
+    gains = _validated_transferability_gains(transferability, transferability_category)
 
     axis_semantics_declared = handoff.get("axis_semantics_declared") is True
     source_frozen = handoff.get("prospective_source_boundary_frozen") is True
@@ -197,9 +235,8 @@ def inspect_n2_handoff_payload(payload: Mapping[str, object]) -> N2PayloadIntake
             expected_semantics="empirical_species_support",
             axis_names=axis_names,
         )
-        gains = _list(transferability.get("independent_gains"), name="independent_gains")
-        if not gains or not all(isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0 for value in gains):
-            raise ValueError("empirical generalizing payload requires all independent gains > 0")
+        if not gains:
+            raise ValueError("empirical generalizing payload requires independent gains")
         accepted_empirical = True
 
     elif handoff_category == "known_truth_method_state_only":
