@@ -1,0 +1,46 @@
+{
+  "schema": "eog.norway_willow_warbler_endpoint3.gate0_terminal_stop.v1",
+  "attempt_id": "norway_willow_warbler_endpoint3_v1",
+  "issue": 353,
+  "terminal_status": "stop_pre_response_metadata_identity_or_transport",
+  "terminal_stage": "metadata_identity_or_interface",
+  "reason": "Zenodo archive links lacks non-empty string content under the prospectively frozen Gate0 metadata contract",
+  "counts_as_predictive_evidence": false,
+  "authoritative_execution": {
+    "workflow_run_id": 33707931673,
+    "run_number": 2,
+    "run_attempt": 1,
+    "head_sha": "c352c85f3599a97029eb063b6f8b3e3eaa7e57a7",
+    "artifact_id": 9875898760,
+    "artifact_name": "norway-willow-warbler-gate0-certificate",
+    "artifact_digest": "sha256:088d6cc9c9cfd45e7221ad8b6998e9c6e3ec637123c974a3a6460f9726c7e233",
+    "result_fingerprint": "e5db6337fe172fafb25bcbe3482572d2001ca70302671f2a5d308d2cf6d57c2e"
+  },
+  "frozen_boundaries": {
+    "source_contract_merge": "c352c85f3599a97029eb063b6f8b3e3eaa7e57a7",
+    "source_contract_git_blob_sha1": "1d80ccc0ff2a1bbd2ba30afff640d339addcdd93",
+    "authorization_sha256": "6e6e329e4aea165de98a35c2be84122da553010d1a1ff23b2dc2b18a226499cb"
+  },
+  "opened_content": {
+    "metadata_request_count": 1,
+    "metadata_bytes_opened": 9861,
+    "archive_payload_requests": 0,
+    "archive_payload_bytes_opened": 0,
+    "member_payload_requests": 0,
+    "member_payload_bytes_opened": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_interpretation": "source-metadata identity/interface STOP only; neither favorable, null nor adverse Layer-B evidence",
+  "no_rescue": [
+    "do not reinterpret or alias the missing archive links.content field after observing live metadata",
+    "do not switch Zenodo record, version, archive name or archive identity and relabel this attempt fresh",
+    "do not open the archive or any internal member for this attempt",
+    "do not switch taxon, BirdNET threshold, calendar split, effort rule or response unit within this attempt",
+    "do not count this STOP as predictive evidence"
+  ],
+  "next_action": "close Norway Willow Warbler endpoint-3 attempt and begin a scientifically distinct response-unconsumed candidate search because the third scored predictive endpoint remains unresolved"
+}
