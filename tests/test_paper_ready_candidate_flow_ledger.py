@@ -23,7 +23,7 @@ def test_candidate_flow_summary_matches_the_frozen_denominator():
 
     assert ledger["schema"] == "eog.paper_ready_replication.candidate_flow_ledger.v1"
     assert summary["fresh_predictive_endpoints_with_scores"] == len(results) == 2
-    assert summary["fresh_candidate_stops_listed"] == len(stops) == 23
+    assert summary["fresh_candidate_stops_listed"] == len(stops) == 24
     assert summary["administrative_exclusions"] == len(exclusions) == 2
     assert summary["third_fresh_predictive_endpoint_still_required"] is True
     assert len({row["issue"] for row in stops}) == len(stops)
@@ -119,4 +119,24 @@ def test_latest_gate0_stops_remain_response_unconsumed_and_non_scientific():
     assert loomis["heldout_scores"] == 0
     assert loomis["stage1a_artifact_digest"] == (
         "sha256:8d105c8136aa8a0cf068d909beada5e6be5a5f9d50168ab2c3178fa90f59fe10"
+    )
+
+    cassowary = by_issue[348]
+    assert cassowary["terminal_stage"] == "metadata_identity_or_transport"
+    assert cassowary["gate0_run_id"] == 33704514950
+    assert cassowary["metadata_only"] is True
+    assert cassowary["metadata_request_count"] == 1
+    assert cassowary["metadata_bytes_opened"] == 4999
+    assert cassowary["file_payload_requests"] == 0
+    assert cassowary["file_payload_bytes_opened"] == 0
+    assert cassowary["response_header_bytes_opened"] == 0
+    assert cassowary["response_rows_opened"] == 0
+    assert cassowary["response_values_opened"] is False
+    assert cassowary["model_fits"] == 0
+    assert cassowary["heldout_scores"] == 0
+    assert cassowary["gate0_fingerprint"] == (
+        "a510722d09a12af76dba903620df6eb616141205a86310abeee7ad33b1967cf7"
+    )
+    assert cassowary["gate0_artifact_digest"] == (
+        "sha256:c7eaec624c68b0444124af7d4a3f10202bb6e246a6b80e422333d6817a4bdb55"
     )
