@@ -39,7 +39,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Execute metadata-only Gate0 once
-        run: python validation/cassowary_endpoint3/gate0_live_metadata.py
+        run: python -m validation.cassowary_endpoint3.gate0_live_metadata
       - name: Audit response firewall
         run: |
           python - <<'PY'
