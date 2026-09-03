@@ -1,0 +1,28 @@
+{
+  "schema": "eog.sebms_ochlodes_endpoint3.gate0_execution_authorization.v1",
+  "attempt_id": "sebms_ochlodes_endpoint3_v1",
+  "issue": 358,
+  "source_contract_git_blob_sha": "5c330e70418b3d89e40c4a25f93669911ec49ab5",
+  "registry_evaluator_git_blob_sha": "4ba9e055a612786efe0423ebf84315860764f90a",
+  "authorized_url": "https://api.gbif.org/v1/dataset/be77e203-486c-4651-91b9-8347968b728c",
+  "allowed_final_host": "api.gbif.org",
+  "allowed_method": "GET",
+  "maximum_metadata_bytes": 2000000,
+  "authorized_external_requests": 1,
+  "dwca_payload_requests": 0,
+  "dwca_payload_bytes": 0,
+  "event_rows": 0,
+  "emof_rows": 0,
+  "occurrence_header_bytes": 0,
+  "occurrence_rows": 0,
+  "response_values": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "execute_live_only_after_merge_to_main": true,
+  "valid_terminal_statuses": [
+    "gate0_metadata_ready",
+    "stop_pre_response_metadata_identity_or_transport"
+  ],
+  "post_result_registry_schema_or_identity_repair_allowed": false,
+  "next_stage_requires_separate_frozen_contract": true
+}
