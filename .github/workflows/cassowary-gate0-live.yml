@@ -1,0 +1,65 @@
+name: Cassowary endpoint3 Gate0 live metadata
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'validation/cassowary_endpoint3/gate0_execution_authorization.json'
+      - 'validation/cassowary_endpoint3/gate0_live_metadata.py'
+      - '.github/workflows/cassowary-gate0-live.yml'
+  pull_request:
+    paths:
+      - 'validation/cassowary_endpoint3/gate0_execution_authorization.json'
+      - 'validation/cassowary_endpoint3/gate0_live_metadata.py'
+      - 'tests/test_cassowary_gate0_live.py'
+      - '.github/workflows/cassowary-gate0-live.yml'
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: python -m pip install -U pip pytest
+      - name: Verify metadata-only transport boundary
+        run: python -m pytest -q tests/test_cassowary_gate0_metadata.py tests/test_cassowary_gate0_live.py
+      - name: Compile live Gate0
+        run: python -m py_compile validation/cassowary_endpoint3/gate0_live_metadata.py
+
+  live-gate0:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: synthetic-boundary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Execute metadata-only Gate0 once
+        run: python validation/cassowary_endpoint3/gate0_live_metadata.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('validation/cassowary_endpoint3/gate0_live_metadata_certificate.json')
+          r = json.loads(p.read_text())
+          assert r['status'] in {'gate0_metadata_ready', 'stop_pre_response_metadata_identity_or_transport'}
+          assert r['file_payload_requests'] == 0
+          assert r['file_payload_bytes_opened'] == 0
+          assert r['response_header_bytes_opened'] == 0
+          assert r['response_rows_opened'] == 0
+          assert r['response_values_opened'] is False
+          assert r['model_fits'] == 0
+          assert r['heldout_scores'] == 0
+          assert r['counts_as_predictive_evidence'] is False
+          print(r['status'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cassowary-gate0-live-metadata-certificate
+          path: validation/cassowary_endpoint3/gate0_live_metadata_certificate.json
+          if-no-files-found: error
