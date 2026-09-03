@@ -1,0 +1,24 @@
+{
+  "schema": "eog.norway_willow_warbler_endpoint3.gate0_execution_authorization.v1",
+  "attempt_id": "norway_willow_warbler_endpoint3_v1",
+  "issue": 353,
+  "source_contract_git_blob_sha": "1d80ccc0ff2a1bbd2ba30afff640d339addcdd93",
+  "authorized_url": "https://zenodo.org/api/records/18452203",
+  "allowed_final_host": "zenodo.org",
+  "allowed_method": "GET",
+  "maximum_metadata_bytes": 2000000,
+  "authorized_external_requests": 1,
+  "archive_payload_requests": 0,
+  "archive_payload_bytes": 0,
+  "member_payload_requests": 0,
+  "response_header_bytes": 0,
+  "response_rows": 0,
+  "response_values": false,
+  "execute_live_only_after_merge_to_main": true,
+  "valid_terminal_statuses": [
+    "gate0_metadata_ready",
+    "stop_pre_response_metadata_identity_or_transport"
+  ],
+  "post_result_metadata_or_identity_repair_allowed": false,
+  "next_stage_requires_separate_frozen_contract": true
+}
