@@ -23,7 +23,7 @@ def test_candidate_flow_summary_matches_the_frozen_denominator():
 
     assert ledger["schema"] == "eog.paper_ready_replication.candidate_flow_ledger.v1"
     assert summary["fresh_predictive_endpoints_with_scores"] == len(results) == 2
-    assert summary["fresh_candidate_stops_listed"] == len(stops) == 24
+    assert summary["fresh_candidate_stops_listed"] == len(stops) == 25
     assert summary["administrative_exclusions"] == len(exclusions) == 2
     assert summary["third_fresh_predictive_endpoint_still_required"] is True
     assert len({row["issue"] for row in stops}) == len(stops)
@@ -139,4 +139,26 @@ def test_latest_gate0_stops_remain_response_unconsumed_and_non_scientific():
     )
     assert cassowary["gate0_artifact_digest"] == (
         "sha256:c7eaec624c68b0444124af7d4a3f10202bb6e246a6b80e422333d6817a4bdb55"
+    )
+
+    norway = by_issue[353]
+    assert norway["terminal_stage"] == "metadata_identity_or_interface"
+    assert norway["gate0_run_id"] == 33707931673
+    assert norway["metadata_only"] is True
+    assert norway["metadata_request_count"] == 1
+    assert norway["metadata_bytes_opened"] == 9861
+    assert norway["archive_payload_requests"] == 0
+    assert norway["archive_payload_bytes_opened"] == 0
+    assert norway["member_payload_requests"] == 0
+    assert norway["member_payload_bytes_opened"] == 0
+    assert norway["response_header_bytes_opened"] == 0
+    assert norway["response_rows_opened"] == 0
+    assert norway["response_values_opened"] is False
+    assert norway["model_fits"] == 0
+    assert norway["heldout_scores"] == 0
+    assert norway["gate0_fingerprint"] == (
+        "e5db6337fe172fafb25bcbe3482572d2001ca70302671f2a5d308d2cf6d57c2e"
+    )
+    assert norway["gate0_artifact_digest"] == (
+        "sha256:088d6cc9c9cfd45e7221ad8b6998e9c6e3ec637123c974a3a6460f9726c7e233"
     )
