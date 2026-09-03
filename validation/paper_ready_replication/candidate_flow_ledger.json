@@ -42,12 +42,18 @@
     "count_header_only_stop_as_predictive_test": false,
     "count_administrative_duplicate_as_candidate": false,
     "do_not_repair_and_relabel_terminal_fresh_attempts": true,
-    "candidate_flow_is_methods_integrity_evidence": true
+    "candidate_flow_is_methods_integrity_evidence": true,
+    "no_new_candidates_after_search_closure": true,
+    "third_endpoint_unresolved_is_not_null_or_adverse": true
   },
   "current_denominator_summary": {
     "fresh_predictive_endpoints_with_scores": 2,
     "fresh_candidate_stops_listed": 25,
     "administrative_exclusions": 2,
-    "third_fresh_predictive_endpoint_still_required": true
+    "third_fresh_predictive_endpoint_still_required": false,
+    "third_predictive_endpoint_state": "unresolved_not_obtained",
+    "endpoint3_search_closed_without_score": true,
+    "paper_development_closed_to_new_candidates": true,
+    "search_closure_issue": 357
   }
 }
