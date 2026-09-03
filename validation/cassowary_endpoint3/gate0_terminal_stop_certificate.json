@@ -1,0 +1,44 @@
+{
+  "schema": "eog.cassowary_endpoint3.gate0_terminal_stop.v1",
+  "attempt_id": "cassowary_endpoint3_v1",
+  "issue": 348,
+  "terminal_status": "stop_pre_response_metadata_identity_or_transport",
+  "scientific_terminal_decision": false,
+  "reason": "Figshare selected file id 51265058 occurs 0 times; expected exactly one",
+  "frozen_source_boundary_merge": "e783a89b0dcdf8c68161ec8dc45073d22b816d80",
+  "execution_authorization_merge": "21a8f3dc952de9e51917e1ae3fa71aac4ce89d75",
+  "technical_entry_fix_merge": "4b827248bbada6b8b79b9733df25f40dfb6e6ecb",
+  "authoritative_run": {
+    "run_id": 33704514950,
+    "run_attempt": 1,
+    "head_sha": "4b827248bbada6b8b79b9733df25f40dfb6e6ecb",
+    "artifact_id": 9874720120,
+    "artifact_name": "cassowary-gate0-live-metadata-certificate",
+    "artifact_digest": "sha256:c7eaec624c68b0444124af7d4a3f10202bb6e246a6b80e422333d6817a4bdb55"
+  },
+  "metadata_access": {
+    "request_count": 1,
+    "status": 200,
+    "final_host": "api.figshare.com",
+    "content_type": "application/json",
+    "metadata_bytes_opened": 4999
+  },
+  "response_firewall": {
+    "file_payload_requests": 0,
+    "file_payload_bytes_opened": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "counts_as_predictive_evidence": false,
+  "interpretation": "The prospectively frozen publication-linked Figshare file identity did not reproduce in the live article metadata. This is a pre-response source-identity STOP, not favorable, null or adverse Layer-B evidence.",
+  "no_rescue": [
+    "do not select a different Figshare file id after the live metadata result",
+    "do not use current file names or sizes to invent a replacement primary file within this attempt",
+    "do not open any Figshare file payload for this attempt",
+    "do not relabel this stopped attempt as a fresh predictive endpoint"
+  ],
+  "next_action": "close Issue 348, add this STOP to the manuscript candidate-flow denominator, and retain the requirement for a third genuinely fresh scored endpoint"
+}
