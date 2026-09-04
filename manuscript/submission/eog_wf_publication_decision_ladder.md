@@ -1,163 +1,145 @@
 # EOG-WF publication decision ladder
 
-Status checked: 2026-08-31.
+Status frozen: **2026-09-03**.
 
-This document is a **submission-strategy boundary only**. It does not alter any
-preregistered endpoint, favorable/null/adverse rule, source/estimability gate, frozen
-world universe, Layer-A semantics, Layer-B representation, or terminal scientific
-status.
+This document is a submission-strategy boundary only. It does not alter any frozen
+endpoint, source/estimability gate, world universe, Layer-A semantics, Layer-B
+representation or completed empirical result.
 
 It is separate from `journal_decision_tree.md`, which belongs to the earlier
 structural/island-isolation manuscript.
 
 ## Current scientific anchor
 
-The active EOG-WF mainline is currently at:
+The EOG-WF mainline closes at:
 
 `replicated_candidate_general_predictive_complement`
 
-Two genuinely fresh heterogeneous endpoints are favorable under the same two-layer
-architecture and unchanged `symmetric_world_support_summary_v1`:
+Two genuinely fresh heterogeneous endpoints reached valid favorable paired scores under
+the unchanged two-layer architecture and unchanged
+`symmetric_world_support_summary_v1`:
 
 1. Azores yellow eel telemetry;
 2. Southwest Louisiana King Rail passive acoustics.
 
-The paper-critical next step remains one more genuinely fresh heterogeneous endpoint
-under the already-frozen synthesis, placebo and excluded-world explanatory boundaries
-in issue #141. A pre-response/source/registry/non-estimable STOP is not a predictive
-negative and does not count as a third predictive replication.
+The manuscript candidate funnel closes with:
+
+- **2** fresh predictive endpoints with scores;
+- **25** protocol-integrity candidate STOPs;
+- **2** administrative exclusions.
+
+No third predictive endpoint was scored. Its state is
+`unresolved_not_obtained`, **not null and not adverse**.
+
+The prospectively declared MICA / Australian cassowary / Norway source-architecture
+shortlist is exhausted. Issue #357 freezes the anti-bias decision not to extend the
+search until a score appears.
 
 ## Publication principle
 
-Journal choice follows the **scientific claim actually supported after endpoint 3**. It
-must never be used to rescue, retune, relabel, selectively omit or add an endpoint.
+Journal choice follows the evidence actually obtained. It cannot authorize a new
+candidate, repair a terminal attempt, alter the endpoint, or reinterpret protocol STOPs
+as predictive outcomes.
 
-The highest journal route is attempted only when the result supports a broad ecological
-inference principle, not merely because three datasets are favorable.
+## Route A — Nature Ecology & Evolution
 
-## Route A — Nature Ecology & Evolution first challenge
+**Closed for this manuscript.**
 
-### Trigger
+The prospective Nature route required a valid favorable third heterogeneous predictive
+endpoint plus coherent endpoint-3 placebo/excluded-world evidence. No third endpoint was
+obtained under the frozen programme, so that trigger is not met.
 
-Submit first to **Nature Ecology & Evolution** only if all of the following hold
-prospectively without rescue tuning:
+This closure is not evidence against the broader ecological proposition. It is a claim-
+and-design boundary: the present paper does not have the replication structure that was
+predeclared for the Nature Ecology & Evolution challenge.
 
-- endpoint 3 reaches a valid predictive terminal decision and is favorable;
-- all three fresh systems used the unchanged Layer-B representation and a strong
-  same-learner baseline;
-- the systems are materially heterogeneous in ecology and observation process;
-- the frozen cross-ecosystem synthesis supports the interpretation that
-  accessibility/world-state information provides a non-redundant predictive axis beyond
-  local/site covariates;
-- the secondary ten-feature placebo does not make the real Layer-B gain look like a
-  generic dimensionality effect;
-- the fresh secondary excluded-world analysis is sufficiently coherent with the
-  proposition that occurrences can predict through the accessibility-compatible worlds
-  that prior observations exclude or retain;
-- the manuscript can be written around a general ecological statement rather than a
-  software architecture or catalogue of operators;
-- the wording remains below universal superiority, exact-mechanism truth, causal
-  identification or recovered dispersal history.
+Do not reopen candidate search to recover this route.
 
-Three favorable datasets alone are not the Nature threshold.
+## Route B — Methods in Ecology and Evolution
 
-### Intended claim level
+**Primary submission route.**
 
-The preferred high-level proposition is:
+The paper should center on a prospectively testable two-layer method and its complete
+evidence funnel:
 
-> Species occurrences can carry predictive information not only through local
-> environmental viability, but through the accessibility-compatible worlds that prior
-> observations exclude or retain.
+- exact compatible-world identity retained for sequential update/falsification in Layer A;
+- label-invariant surviving-world support summary used for prediction in Layer B;
+- same strong learner and same conventional features in both paired arms;
+- two genuinely fresh favorable paired endpoints reported separately;
+- explicit response-blind source, registry, effort, structural and once-only outcome gates;
+- all 25 protocol STOPs retained as methods-integrity evidence rather than hidden failures;
+- no pooled significance or universal-benefit claim;
+- no post-outcome world or endpoint redesign.
 
-The contribution is the ecological inference principle. EOG is its prospectively
-testable implementation.
+The supported paper-level statement is:
 
-The full manuscript frame is fixed in
-`manuscript/submission/nature_ecology_evolution_scientific_frame.md`.
+> A label-invariant summary of surviving accessibility-compatible worlds contained
+> non-redundant heldout predictive information beyond the same strong conventional
+> learner in two genuinely fresh heterogeneous observation systems.
 
-### Submission sequence after a qualifying result
-
-1. Nature Ecology & Evolution;
-2. Nature Communications only if editorial feedback indicates an important specialist
-   advance but insufficient field-wide breadth;
-3. Methods in Ecology and Evolution.
-
-Do not collect another favorable ecosystem merely to improve journal rank.
-
-## Route B — Methods in Ecology and Evolution main route
-
-Use **Methods in Ecology and Evolution** as the default strong route if endpoint 3 is:
-
-- favorable but the result is best framed as methodological rather than a field-wide
-  ecological principle;
-- favorable while the excluded-world uncertainty/disagreement pattern is absent or too
-  inconsistent for the Nature interpretation;
-- null, leaving two favorable systems and one neutral system;
-- heterogeneous in effect size but still supports a reproducible, auditable
-  predictive-complement framework;
-- adverse in a way that preserves a useful Layer-A structural/falsification method while
-  showing that Layer-B predictive value is context dependent.
-
-The paper then centers on a prospectively testable two-layer method:
-
-- exact compatible-world identity retained for sequential update/falsification;
-- label-invariant world-set summary used for prediction;
-- strong paired comparator;
-- once-only outcome access;
-- explicit favorable/null/adverse/non-estimable/STOP semantics;
-- no post-outcome world redesign.
-
-A null or adverse third predictive endpoint is not hidden. It becomes part of the
-method's applicability boundary.
+The paper must not claim universal superiority, standalone Layer-B superiority, causal
+identification, exact-world truth or recovered dispersal history.
 
 ## Route C — Ecography
 
-Use **Ecography** when the final manuscript is strongest as a biogeographic or
-spatiotemporal inference paper rather than a general methods paper, especially if
-endpoint 3 reveals interpretable context dependence in when accessibility-state
-information adds predictive value.
+Conditional fallback if the final manuscript is more naturally read as a
+biogeographic/spatiotemporal inference contribution than as a broadly reusable method.
 
-Do not force this route by making unsupported claims about movement mechanism or
-realized dispersal.
+Do not force this route by making unsupported movement-mechanism or realized-dispersal
+claims.
 
-## Source/non-estimable STOP route
+## Candidate-funnel interpretation
 
-A source, registry, geometry, temporal-context, structural-scale, or non-estimable STOP
-before the predictive endpoint:
+A source, registry, geometry, temporal-context, structural-scale, schema or estimability
+STOP before the predictive endpoint:
 
-- is methods-integrity evidence;
-- is not favorable, null, or adverse predictive evidence;
-- does not lower the journal target by itself;
-- does not authorize repair of the same consumed candidate;
-- permits continuation only to a scientifically distinct fresh endpoint if issue #141's
-  frozen rules allow it.
+- is protocol/method-integrity evidence;
+- is not favorable, null or adverse Layer-B evidence;
+- remains in the denominator;
+- cannot be repaired and relabeled as fresh;
+- cannot justify replacing the stopped system until a favorable result appears.
 
-The candidate funnel and STOP certificates belong in the paper and supplement
-regardless of final journal.
+The closed candidate funnel therefore contributes to the methodological story: strict
+prospective inference requires data interfaces that many otherwise attractive ecological
+datasets do not satisfy.
+
+## Endpoint-3 secondary contracts
+
+The pre-endpoint cross-ecosystem synthesis, ten-feature placebo and excluded-world
+explanatory contracts remain provenance of the attempted paper-ready design. Because no
+third response endpoint was opened:
+
+- they cannot create a third predictive replication;
+- they cannot upgrade the two-endpoint claim;
+- later Azores/Louisiana post-hoc robustness cannot substitute for the missing third
+  prospective endpoint.
 
 ## Development stop rule
 
-After a valid third fresh predictive terminal endpoint, frozen synthesis, placebo,
-excluded-world interpretation and paper figures are complete:
+Scientific candidate development is closed now, even though endpoint 3 was not scored.
+The stopping reason is prospective shortlist exhaustion plus the explicit anti-bias
+closure in Issue #357.
 
-- stop adding generic connectivity operators;
-- stop seeking extra favorable datasets for prestige;
-- freeze the claim at the predeclared endpoint-3 decision boundary;
-- move directly to manuscript and submission-package preparation.
+From this point:
+
+- do not add fresh candidates for this manuscript;
+- do not add generic connectivity operators;
+- do not repair consumed/stopped attempts;
+- do not add a prestige dataset after review or rejection;
+- keep the scientific status at `replicated_candidate_general_predictive_complement`;
+- move directly to manuscript figures, evidence tables and submission-package assembly.
 
 A journal rejection may motivate exposition, figure and positioning revisions, but must
-not reopen consumed scientific outcomes.
+not reopen scientific outcomes or dataset search.
 
-## Journal fit checked 2026-08-31
+## Submission preparation
 
-- Nature Ecology & Evolution: broad significant advances across ecology and evolution —
-  https://www.nature.com/natecolevol/aims
-- Nature Communications: important advances significant to specialists in a field —
-  https://www.nature.com/ncomms/ncomms/aims
-- Methods in Ecology and Evolution: development, analysis, dissemination and uptake of
-  ecological/evolutionary methods —
-  https://besjournals.onlinelibrary.wiley.com/hub/journal/2041210x/aims-and-scope/read-full-aims-and-scope
-- Ecography: theory/methodology for ecological and biodiversity patterns through space
-  and time — https://nsojournals.onlinelibrary.wiley.com/journal/16000587
+Main-text evidence should be organized around:
 
-Recheck live journal scope and article-type rules immediately before submission.
+1. architecture — local viability versus accessibility-compatible realization;
+2. prospective candidate funnel — 2 scored / 25 STOP / 2 administrative;
+3. paired performance — Azores and Louisiana separately;
+4. Layer-A / Layer-B decoupling — structural falsification is not the same claim as
+   predictive complementarity.
+
+Recheck live journal scope and article-type requirements immediately before submission.

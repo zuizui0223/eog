@@ -1,37 +1,51 @@
 # Environmental Occupancy Geometry (EOG)
 
-EOG is an auditable biogeographic inference and forecasting framework for asking a broader question than local suitability alone:
+EOG is Chapter **N3** of the fixed four-chapter programme:
 
-> **Given an observed distribution and a declared set of ecological and analytical worlds, which worlds remain compatible, what future/unsampled states do they support, and which predictions survive disagreement among those worlds?**
+> **WHERE can it become real?**  
+> **住める場所と、辿り着ける場所は違う。**
 
-## Current status
+It is an auditable biogeographic inference and forecasting framework for asking a broader question than local suitability alone:
+
+> Given an observed distribution and a declared set of ecological and analytical worlds, which worlds remain compatible, what future or unsampled states do they support, and which predictions survive disagreement among those worlds?
+
+## Current scientific status
 
 There is **one scientific mainline**.
 
-Current empirical state:
+Current EOG-WF status:
 
-> **The two-layer EOG-WF has two favorable, genuinely fresh paired heldout endpoints under the unchanged `symmetric_world_support_summary_v1`: Azores yellow eel telemetry and Southwest Louisiana King Rail passive acoustics. The supported boundary is `replicated_candidate_general_predictive_complement`.**
+`replicated_candidate_general_predictive_complement`
 
-Current product state:
+Two genuinely fresh heterogeneous paired endpoints reached valid favorable heldout results under the unchanged two-layer architecture and unchanged `symmetric_world_support_summary_v1`:
 
-> **Exact world identity is retained as the latent sequential update/falsification state (Layer A), while the default predictive interface is the world-label-invariant surviving-support summary (Layer B). One valid third heterogeneous endpoint is still required before the paper-level synthesis is closed.**
+1. **Azores yellow eel telemetry** — augmented same-learner arm won 5/5 heldout blocks; authoritative once-only run `32807155541`.
+2. **Southwest Louisiana King Rail passive acoustics** — augmented same-learner arm won 7/8 heldout occasions; authoritative once-only run `32812052801`.
+
+The paper-ready candidate search is now **closed without obtaining a third scored predictive endpoint**. The frozen manuscript funnel contains:
+
+- **2** fresh predictive endpoints with scores;
+- **25** protocol-integrity candidate STOPs;
+- **2** administrative exclusions.
+
+The third predictive replication is `unresolved_not_obtained` — **not null and not adverse**. The prospectively declared MICA / Australian cassowary / Norway shortlist was exhausted with all three attempts stopping before biological response/model scoring. Issue #357 freezes the decision not to continue screening datasets until a score appears.
+
+Exact world identity remains the latent sequential update/falsification state (**Layer A**). The default predictive interface remains the world-label-invariant surviving-support summary (**Layer B**).
 
 The repository does **not** claim generic predictive superiority over SDMs, metapopulation models, occupancy models, ensembles, or other strong comparators.
 
-Canonical state:
+Canonical current records:
 
+- chapter spine: [`N1_N4_SPINE.md`](N1_N4_SPINE.md)
+- chapter contract: [`CHAPTER_CONTRACT.json`](CHAPTER_CONTRACT.json)
 - scientific mainline: [`docs/development_mainline.md`](docs/development_mainline.md)
 - forecast algorithm: [`docs/worldset_forecast_algorithm.md`](docs/worldset_forecast_algorithm.md)
 - two-layer architecture: [`docs/two_layer_forecast_architecture.md`](docs/two_layer_forecast_architecture.md)
 - validation protocol: [`docs/method_validation_protocol.md`](docs/method_validation_protocol.md)
-- response-blind world-scale design: [`docs/world_universe_scale_design.md`](docs/world_universe_scale_design.md)
-- progress ledger: [`docs/eog_v2_progress.md`](docs/eog_v2_progress.md)
-- active scientific issue and closure ledger: [issue #141](https://github.com/zuizui0223/eog/issues/141)
-- third-endpoint pre-response boundary: [`manuscript/third_fresh_endpoint_selection_boundary_2026-08-27.md`](manuscript/third_fresh_endpoint_selection_boundary_2026-08-27.md)
-- publication decision ladder and hard stop: [`manuscript/submission/eog_wf_publication_decision_ladder.md`](manuscript/submission/eog_wf_publication_decision_ladder.md)
-- manuscript candidate funnel: [`validation/paper_ready_replication/candidate_flow_ledger.json`](validation/paper_ready_replication/candidate_flow_ledger.json)
-- Glanville independent evidence: [`validation/glanville_eogwf/README.md`](validation/glanville_eogwf/README.md)
-- STOC independent evidence: [`validation/stoc_eogwf/README.md`](validation/stoc_eogwf/README.md)
+- candidate funnel: [`validation/paper_ready_replication/candidate_flow_ledger.json`](validation/paper_ready_replication/candidate_flow_ledger.json)
+- endpoint-3 search closure: [`validation/paper_ready_replication/endpoint3_search_closure.json`](validation/paper_ready_replication/endpoint3_search_closure.json)
+- closure rationale: [`manuscript/submission/endpoint3_search_closure_2026-09-03.md`](manuscript/submission/endpoint3_search_closure_2026-09-03.md)
+- publication route: [`manuscript/submission/eog_wf_publication_decision_ladder.md`](manuscript/submission/eog_wf_publication_decision_ladder.md)
 
 ## Scientific center
 
@@ -42,7 +56,7 @@ EOG keeps four objects distinct:
 3. **distributional realizability** — compatible with observed positive states inside a declared world;
 4. **historical truth** — the actual route, sequence, ancestry, movement rate or demographic process in nature.
 
-Observed occurrences are positive realized evidence. They constrain admissible worlds but do not identify one true historical route.
+Observed occurrences are positive realized evidence. They can constrain a declared finite world set but do not, by themselves, identify one true historical route.
 
 For finite world universe `W` and positive evidence `O`:
 
@@ -50,9 +64,7 @@ For finite world universe `W` and positive evidence `O`:
 W(O) = {w in W : w is compatible with O}
 ```
 
-## EOG-WF
-
-The core loop is:
+## EOG-WF loop
 
 ```text
 positive observations
@@ -75,20 +87,13 @@ Static implementation:
 - `src/eog/v2/world_reconstruction.py`
 - `src/eog/v2/world_forecast.py`
 
-Repeated-transition implementation with changing current sources and frozen rules:
+Repeated-transition implementation:
 
 - `src/eog/v2/sequential_world_forecast.py`
 
-All remain lazily exposed through `eog.v2.reachability`.
+These remain lazily exposed through `eog.v2.reachability`.
 
-For the exhaustively retained compatible-world set, `possible` is the union of
-per-world reachable nodes, `robust` is their intersection, `unresolved` is the
-possible-minus-robust disagreement set, and `robustly unreachable` is the complement
-inside the declared node universe. `compare_world_flow_universes` verifies the exact
-set-inclusion contract when a fingerprint-preserving compatible-world universe is
-expanded; these labels remain conditional on the declared finite universe.
-
-## Two-layer prediction architecture
+## Two-layer architecture
 
 ### Layer A — exact latent/update state
 
@@ -99,15 +104,11 @@ EOG preserves exact world/rule IDs, fingerprints and per-world support for:
 - robust/contingent interpretation;
 - finite-universe falsification.
 
-Exact identity is therefore **not discarded**.
+Exact world identity is therefore retained even when it is not useful as a direct supervised feature.
 
 ### Layer B — label-invariant predictive representation
 
-Independent Glanville validation showed that exposing exact world labels directly to a supervised predictive model was adverse.
-
-The default prediction representation now uses:
-
-`src/eog/v2/world_predictive_summary.py`
+Independent Glanville validation showed that exposing arbitrary exact world labels directly to a supervised model was adverse. The predictive interface therefore uses `src/eog/v2/world_predictive_summary.py`.
 
 Version 1 returns ten symmetric world-set features per node/horizon:
 
@@ -118,68 +119,53 @@ Version 1 returns ten symmetric world-set features per node/horizon:
 - positive-support fraction;
 - support range.
 
-The numerical predictive representation is invariant to world ID renaming and member order. The exact upstream forecast fingerprint remains separately auditable.
+The numerical representation is invariant to world-ID renaming and member order while upstream exact-world provenance remains separately auditable. This is not a novelty claim for generic permutation-invariant summaries.
 
-This is **not** a novelty claim for permutation-invariant set functions or statistical summaries.
+## What the current fresh evidence supports
 
-## Independent Glanville result
+Supported:
 
-The Glanville system passed source/process, response-blind world-scale, structural-adequacy, temporal-split and response-balance gates before the authoritative heldout result was interpreted.
+> A label-invariant summary of surviving accessibility-compatible worlds contained non-redundant heldout predictive information beyond the same strong conventional learner in two genuinely fresh heterogeneous observation systems.
 
-Authoritative run: `32017872743`  
-Result fingerprint: `628511ac3f42fe108d334a6458428bbf56f3c3fea1e753b2bee8d980b3d84c33`
+Not supported:
 
-Primary macro-year binary log loss:
+- universal predictive superiority;
+- standalone Layer-B superiority;
+- a third-system replication;
+- causal identification;
+- truth of any exact Layer-A world;
+- recovered dispersal history;
+- confirmation of a particular movement/connectivity mechanism from a favorable Layer-B result.
 
-| model/representation | log loss |
-|---|---:|
-| **same-world symmetric compression** | **0.187983** |
-| random forest | 0.191725 |
-| IFM logistic | 0.200242 |
-| **exact world identity** | **0.230197** |
+The 25 protocol STOPs are not Layer-B failures. They document where strict prospective source, registry, effort, structural, schema or response-access requirements prevented a valid predictive test.
 
-Exact identity was worse than compression by `+0.042214` log-loss units and lost to compression in **6/6 heldout annual transitions**.
+## Publication and development boundary
 
-Frozen statuses:
+Scientific candidate development for this manuscript is **closed**.
 
-- `adverse_identity_predictive_value`
-- `adverse_external_predictive_added_value`
+The absence of a third score does not authorize more dataset hunting. Continuing after the frozen shortlist was exhausted would turn a bounded replication programme into open-ended data-availability selection.
 
-The exact rule state nevertheless eliminated four truncated structural worlds during calibration and retained the full exponential process world. This is why exact identity stays in Layer A even though direct identity features are removed from the default Layer-B interface.
+Primary submission target: **Methods in Ecology and Evolution**.
 
-The descriptive success of the frozen compression is **not** retroactive confirmation of external EOG superiority: that was not the prospectively declared external endpoint. The revised prediction head requires a fresh independent test.
+Conditional fallback: **Ecography** if the final paper is primarily biogeographic/spatiotemporal rather than methodological.
 
-## Prospective world-universe gates
+The Nature Ecology & Evolution route is closed for this manuscript because the prospectively required valid favorable third endpoint was not obtained. Do not reopen the science to recover a journal tier.
 
-STOC had previously shown that response-blind thresholds can still occupy the wrong structural scale. EOG therefore requires before response access:
+From this point:
 
-1. process/source-closure justification;
-2. externally calibrated process scales when defensible;
-3. otherwise response-blind structural scale ladders;
-4. response-blind structural adequacy certification.
+- do not add fresh candidates for this manuscript;
+- do not repair or rerun terminal candidates;
+- do not add a fourth/prestige dataset;
+- do not add generic connectivity operators;
+- do not use post-hoc Azores/Louisiana robustness to upgrade the claim;
+- move to manuscript figures, evidence tables and submission-package assembly.
 
-Implementations:
+The manuscript evidence spine is:
 
-- `src/eog/v2/world_scale_ladder.py`
-- `src/eog/v2/world_adequacy.py`
-
-These APIs do not accept species-response vectors. Structurally derived thresholds remain analyst-choice scales unless externally biologically calibrated.
-
-## Current fresh two-layer evidence
-
-- **Azores yellow eel telemetry** — favorable paired complementarity; augmented same-learner arm won 5/5 heldout blocks; authoritative once-only run `32807155541`.
-- **Southwest Louisiana King Rail passive acoustics** — favorable paired complementarity; augmented same-learner arm won 7/8 heldout occasions; authoritative once-only run `32812052801`.
-- **Endpoint 3** — not yet admitted. The current candidate-flow denominator contains two scored endpoints, 19 substantive pre-response/transport STOPs, and two administrative exclusions. STOPs are methods-integrity evidence, not adverse Layer-B results.
-
-The two favorable endpoints support a replicated candidate general predictive complement. They do not support universal superiority, standalone Layer-B prediction, causal identification, or the truth of an exact Layer-A world.
-
-## Historical evidence ledger
-
-- **A-Islands** — exploratory exact-world structural information; not independent confirmation; earlier predictive extension adverse.
-- **SIVFLORA** — independent pre-outcome non-estimable; not rescued.
-- **Azores** — independent pre-model non-estimable; not rescued.
-- **STOC** — independent world universe falsified before prediction; motivated structural scale/adequacy gates; not rescued.
-- **Glanville** — first completed independent heldout EOG-WF test; direct exact-identity prediction adverse; drives current two-layer architecture.
+1. **architecture** — local viability versus accessibility-compatible realization;
+2. **prospective funnel** — 2 scored / 25 protocol STOPs / 2 administrative exclusions;
+3. **paired performance** — Azores and Louisiana shown separately, without pooled significance;
+4. **Layer-A / Layer-B decoupling** — structural falsification and predictive complementarity are different inferential objects.
 
 ## What EOG does not claim as new
 
@@ -200,19 +186,7 @@ The prior-art boundary excludes generic novelty claims for:
 
 The candidate contribution is narrower:
 
-> **a prospectively source- and scale-certified set of biogeographic transition worlds is conditioned by positive evidence; exact identities remain auditable sequential update state; a label-invariant projection is used for prediction; later evidence contracts or falsifies the same frozen rule universe without post-outcome retuning.**
-
-## Development rule
-
-Do not add another generic connectivity operator merely to make EOG more complex, and do not rerun Glanville with the new prediction summary as though it were independent confirmation.
-
-The next valid scientific milestone is **one** genuinely fresh heterogeneous test of the two-layer EOG-WF architecture. Before any response row is opened, source transport, registry and geometry, effort/surveyed-negative semantics, structural scales, holdout, the unchanged Layer B, the same-learner comparator, feature-count placebo, runtime, and once-only favorable/null/adverse rules must all be frozen.
-
-The final response-blind identity binding is executable through [`eog.v2.paper_ready_endpoint`](docs/paper_ready_endpoint_3_gate.md). A candidate-specific attempt must bind its actual preflight receipt, numeric predictive-decision declaration, unchanged Layer-B identity, once-only outcome-access receipt, frozen cross-ecosystem synthesis, frozen ten-feature placebo, and the post-terminal dataset-hunting hard stop before the endpoint-3 runner may begin.
-
-Existing terminal candidates must not be repaired, rerun, or relabeled. A source, transport, structural, or non-estimable STOP is not a scientific null or adverse result.
-
-**Hard stop:** once a valid third predictive endpoint reaches its frozen terminal decision, stop candidate hunting regardless of the outcome. Complete only the already-frozen cross-ecosystem synthesis, feature-count placebo interpretation, figures, evidence table, and submission package; then choose the journal route from the result. Do not add a fourth dataset to improve journal prestige.
+> **A prospectively source- and scale-certified set of biogeographic transition worlds is conditioned by positive evidence; exact identities remain auditable sequential update state; a label-invariant projection is used for prediction; later evidence contracts or falsifies the same frozen rule universe without post-outcome retuning.**
 
 ## Package architecture
 

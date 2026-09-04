@@ -1,0 +1,62 @@
+{
+  "schema": "eog.paper_ready_replication.endpoint3_search_closure.v1",
+  "program_id": "niche-to-survey-four-chapter-v1",
+  "chapter_code": "N3",
+  "chapter_question": "WHERE can it become real?",
+  "issue": 357,
+  "boundary_main_commit": "6876a6b369d6f6ae3e39dd36feba509c9c43f056",
+  "scientific_status": "replicated_candidate_general_predictive_complement",
+  "evidence_at_closure": {
+    "fresh_predictive_endpoints_with_scores": 2,
+    "fresh_predictive_endpoint_issues": [289, 292],
+    "fresh_candidate_protocol_stops": 25,
+    "administrative_exclusions": 2,
+    "third_predictive_endpoint_scored": false,
+    "third_predictive_endpoint_status": "unresolved_not_obtained",
+    "stop_rows_count_as_predictive_evidence": false,
+    "frozen_shortlist_issues": [327, 348, 353],
+    "frozen_shortlist_exhausted": true,
+    "frozen_shortlist_all_stopped_before_predictive_scoring": true
+  },
+  "search_closure": {
+    "candidate_search_closed": true,
+    "new_fresh_candidates_allowed_for_this_manuscript": false,
+    "reason": "The prospectively declared MICA/cassowary/Norway shortlist is exhausted and the candidate funnel already contains 25 protocol-integrity STOPs. Continuing until a third score appears would convert a bounded replication programme into open-ended data-availability hunting.",
+    "third_endpoint_absence_is_null_result": false,
+    "third_endpoint_absence_is_adverse_result": false,
+    "protocol_stops_are_layer_b_failures": false,
+    "stopped_attempt_repair_allowed": false,
+    "prestige_driven_dataset_hunting_allowed": false,
+    "new_connectivity_operator_authorized": false
+  },
+  "claim_boundary": {
+    "keep_current_status": true,
+    "universal_predictive_superiority_claim_allowed": false,
+    "standalone_layer_b_superiority_claim_allowed": false,
+    "causal_identification_claim_allowed": false,
+    "exact_world_truth_claim_allowed": false,
+    "mechanism_confirmation_from_favorable_layer_b_claim_allowed": false,
+    "supported_statement": "A label-invariant summary of surviving accessibility-compatible worlds contained non-redundant heldout predictive information beyond the same strong conventional learner in two genuinely fresh heterogeneous observation systems."
+  },
+  "publication_route": {
+    "nature_ecology_and_evolution_trigger_open": false,
+    "nature_ecology_and_evolution_reason": "No valid third favorable predictive endpoint was obtained under the frozen endpoint-3 programme.",
+    "primary_target": "Methods in Ecology and Evolution",
+    "conditional_fallback": "Ecography",
+    "fallback_condition": "Use Ecography only if the final manuscript is primarily biogeographic/spatiotemporal rather than methodological.",
+    "journal_choice_may_reopen_science": false
+  },
+  "paper_transition": {
+    "scientific_development_complete": true,
+    "next_phase": "manuscript_and_submission_package_assembly",
+    "main_figure_roles": [
+      "N3 architecture: local viability plus accessibility-compatible world contraction and Layer-B compression",
+      "prospective validation funnel: 2 scored endpoints plus 25 protocol-integrity STOPs and 2 administrative exclusions",
+      "fresh paired performance: Azores and Louisiana shown separately without pooled significance",
+      "Layer-A and Layer-B decoupling: structural falsification versus predictive complementarity"
+    ],
+    "endpoint3_placebo_may_upgrade_claim": false,
+    "endpoint3_excluded_world_analysis_may_upgrade_claim": false,
+    "azores_louisiana_posthoc_robustness_may_upgrade_claim": false
+  }
+}
