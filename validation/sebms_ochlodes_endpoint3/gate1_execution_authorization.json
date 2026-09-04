@@ -1,0 +1,33 @@
+{
+  "schema": "eog.sebms_ochlodes_endpoint3.gate1_execution_authorization.v1",
+  "attempt_id": "sebms_ochlodes_endpoint3_v1",
+  "issue": 358,
+  "authorized_url": "https://www.gbif.se/ipt/archive.do?r=lu_sebms&v=1.12",
+  "allowed_final_hosts": ["www.gbif.se", "gbif.se"],
+  "gate0_pass_git_blob_sha": "a9ae2d14cc544ed51a055cf06dd7d8536dd21c9a",
+  "gate1_contract_git_blob_sha": "4dce1f8612ae3b24bef55f14610e93534c0e5cd7",
+  "gate1_evaluator_git_blob_sha": "d19a02953de862efe1a8b70c69f860f8907c2428",
+  "gate1_runner_git_blob_sha": "b100c3ad7fce9722c94a3b14758f2cd33890e931",
+  "reused_zip_inspector_git_blob_sha": "f6370d4104486b669eda022cc1eada1f991d4647",
+  "maximum_head_requests": 1,
+  "maximum_range_requests": 2048,
+  "maximum_single_metadata_range_bytes": 5000000,
+  "maximum_total_metadata_range_bytes": 10000000,
+  "maximum_meta_xml_compressed_bytes": 1000000,
+  "full_archive_get_allowed": false,
+  "event_member_payload_bytes_allowed": 0,
+  "emof_member_payload_bytes_allowed": 0,
+  "occurrence_member_header_bytes_allowed": 0,
+  "occurrence_member_payload_bytes_allowed": 0,
+  "response_rows_allowed": 0,
+  "response_values_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "execute_live_only_after_merge_to_main": true,
+  "valid_terminal_statuses": [
+    "gate1_dwca_metadata_ready",
+    "stop_pre_response_dwca_transport_container_or_metadata"
+  ],
+  "post_result_transport_parser_role_or_member_repair_allowed": false,
+  "next_stage_requires_separate_frozen_contract": true
+}
