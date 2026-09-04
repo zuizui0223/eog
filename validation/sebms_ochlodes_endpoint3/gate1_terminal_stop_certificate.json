@@ -1,0 +1,53 @@
+{
+  "schema": "eog.sebms_ochlodes_endpoint3.gate1_terminal_stop.v1",
+  "attempt_id": "sebms_ochlodes_endpoint3_v1",
+  "issue": 358,
+  "terminal_status": "stop_pre_response_dwca_transport_container_or_metadata",
+  "terminal_stage": "source_transport_dns",
+  "reason": "archive size Range probe unavailable: <urlopen error [Errno -3] Temporary failure in name resolution>",
+  "counts_as_predictive_evidence": false,
+  "authoritative_execution": {
+    "workflow_run_id": 33900956377,
+    "run_number": 2,
+    "run_attempt": 1,
+    "head_sha": "b7697a715b9cce3c68860b1bde6f2c0ed31da3f6",
+    "artifact_id": 9947622913,
+    "artifact_name": "sebms-ochlodes-stage1-dwca-metadata",
+    "artifact_digest": "sha256:c148687e14df799ca0c8b8c2d21959b0b51837e4cd88c3ecc216cc120dde8c5a",
+    "result_fingerprint": "5df113c4b257b3419f90a30be21c2d3955aa65380fd7714baea52e23072606f2"
+  },
+  "gate0_pass": {
+    "workflow_run_id": 33709185963,
+    "result_fingerprint": "9556b2f2690f22feb025461d4e6f1afc45e721f0f42089bce9f1d7db55473d94"
+  },
+  "opened_content": {
+    "head_requests": 1,
+    "head_body_bytes_opened": 0,
+    "range_probe_requests": 1,
+    "archive_metadata_range_requests": 1,
+    "archive_metadata_range_bytes_opened": 0,
+    "meta_xml_compressed_bytes_opened": 0,
+    "event_member_payload_bytes_opened": 0,
+    "emof_member_payload_bytes_opened": 0,
+    "occurrence_member_header_bytes_opened": 0,
+    "occurrence_member_payload_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "transport_evidence": {
+    "head_transport_error": "URLError",
+    "range_probe_status": null,
+    "range_probe_content_range": null,
+    "range_probe_bytes_opened": 0
+  },
+  "scientific_interpretation": "terminal pre-response source transport STOP only; neither favorable, null nor adverse Layer-B evidence",
+  "no_rescue": [
+    "do not rerun the same SeBMS v1.12 attempt after the terminal live transport result",
+    "do not substitute another IPT/GBIF archive endpoint or version within this attempt",
+    "do not open Event, ExtendedMeasurementOrFact or Occurrence member payloads",
+    "do not count the transport STOP as predictive evidence"
+  ],
+  "next_action": "close the SeBMS endpoint-3 attempt and continue only with a scientifically distinct response-unconsumed candidate because the third scored predictive endpoint remains unresolved"
+}
