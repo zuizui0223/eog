@@ -1,0 +1,139 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.source_contract.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "chapter": "N3",
+  "question": "WHERE can it become real?",
+  "selection_boundary": {
+    "selected_after_protocol_stops": 26,
+    "selection_basis": "response-blind source architecture, standardized monitoring design, independent coordinate registry and static GitHub blob transport",
+    "focal_response_file_content_opened_before_contract": false,
+    "focal_prevalence_used": false,
+    "eog_score_used": false
+  },
+  "source": {
+    "repository": "aterui/public-proj_fishery-stability",
+    "commit": "17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67",
+    "default_branch_at_selection": "master",
+    "coordinate_registry": {
+      "path": "data_raw/gis/site-coordinate_hogosuimen_terui-org-2019.csv",
+      "git_blob_sha1": "79e5cde422bfcda74d57069a8b947c3aad3c4710",
+      "size_bytes": 6034,
+      "raw_url": "https://raw.githubusercontent.com/aterui/public-proj_fishery-stability/17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67/data_raw/gis/site-coordinate_hogosuimen_terui-org-2019.csv"
+    },
+    "formatting_code": {
+      "path": "code/data_fmt_fishdata.R",
+      "git_blob_sha1": "dfa0dde1c33f0af1a0c112a72e7e9c03a52d9284",
+      "size_bytes": 4700,
+      "raw_url": "https://raw.githubusercontent.com/aterui/public-proj_fishery-stability/17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67/code/data_fmt_fishdata.R"
+    },
+    "forbidden_response_table": {
+      "path": "data_fmt/data_hkd_prtwsd_fmt.csv",
+      "git_blob_sha1": "d0544a56b168511fa2c85c4199372599922e5651",
+      "size_bytes": 6508582,
+      "payload_requests_before_final_response_authorization": 0,
+      "payload_bytes_before_final_response_authorization": 0
+    },
+    "source_paper_blind": false
+  },
+  "focal_taxon": {
+    "canonical_name": "Barbatula oreas",
+    "source_physical_latin_value": "Noemacheilus_barbatulus",
+    "published_normalization": "Noemacheilus_barbatulus -> Barbatula_oreas",
+    "selection_rule": "first of the four ecologically distinct riverine fishes listed in the independent 2018 branching-network paper after applying the authors' published taxonomy normalization",
+    "species_switch_allowed": false
+  },
+  "pre_response_registry": {
+    "required_columns_exact_order": ["ID", "river", "site", "longitude", "latitude", "source"],
+    "expected_physical_rows": 129,
+    "site_id_rule": "river concatenated directly with decimal site integer, with no separator",
+    "expected_missing_coordinate_site_ids": ["atsuta6", "kokamotsu4", "usubetsu4"],
+    "expected_valid_coordinate_nodes": 126,
+    "missing_coordinate_exclusion_is_response_independent": true,
+    "all_other_rows_must_have_finite_valid_lon_lat": true,
+    "duplicate_site_ids_allowed": false,
+    "manual_coordinate_repair_allowed": false
+  },
+  "response_endpoint": {
+    "unit": "valid-coordinate monitoring site x ever-recorded Barbatula oreas detection during the frozen 1999-2019 monitoring series",
+    "zero_semantics": "program-level recorded non-detection over the released monitoring period, not proof of biological or historical absence or inability to colonize",
+    "all_126_nodes_must_have_survey_representation_after_response_open": true,
+    "site_dropping_after_response_allowed": false
+  },
+  "heldout_split": {
+    "type": "response-independent five-fold spatial split",
+    "fold_rule": "((site_integer - 1) % 5) + 1",
+    "fold_ids": [1, 2, 3, 4, 5],
+    "all_folds_retained": true,
+    "response_stratification_or_reassignment_allowed": false,
+    "minimum_heldout_folds_with_both_classes": 4
+  },
+  "response_blind_world_geometry": {
+    "local_edge_scope": "same river only",
+    "local_cross_river_edges_allowed": false,
+    "distance_metric": "Haversine great-circle distance on released longitude/latitude",
+    "threshold_population": "all unordered same-river pairs among the 126 valid-coordinate nodes",
+    "threshold_quantiles": [0.25, 0.50, 0.75, 0.90],
+    "quantile_method": "linear interpolation identical to numpy.quantile(method='linear')",
+    "edge_rule": "undirected local edge when same-river Haversine distance <= frozen threshold",
+    "self_edges": false,
+    "deduplicate_identical_local_adjacency_worlds": true,
+    "minimum_distinct_positive_local_worlds": 3,
+    "external_open_required": true,
+    "external_open_semantics": "explicit permissive analytical alternative; unlike local worlds it may connect across watershed identity and must never be interpreted as a local movement graph",
+    "world_thresholds_must_be_frozen_before_response": true
+  },
+  "layer_a_static_fold_rule": {
+    "supported_by_existing_static_worldset_forecast": true,
+    "calibration_positive_occurrences": "all focal-positive calibration nodes in the current fold",
+    "fixed_source_rule": "within every river containing at least one calibration-positive occurrence, the calibration-positive node with the smallest site integer is the fixed source for that river; all remaining calibration-positive nodes are compatibility evidence",
+    "source_choice_rule_frozen_before_response": true,
+    "local_worlds_use_only_same_river_edges": true,
+    "external_open_is_explicitly_permissive": true,
+    "heldout_labels_enter_layer_a_before_scoring": false,
+    "exact_world_ids_supervised": false,
+    "if_no_calibration_positive_occurrence": "non_estimable_stop",
+    "if_no_world_survives": "universe_falsified_stop"
+  },
+  "conventional_baseline": {
+    "learner_family": "RandomForestClassifier",
+    "same_learner_fit_split_both_arms": true,
+    "features_frozen_from_coordinate_registry_only": [
+      "longitude",
+      "latitude",
+      "river one-hot encoding with lexicographically frozen category order",
+      "site_integer",
+      "within_river_site_rank_fraction",
+      "river_node_count",
+      "haversine_distance_to_river_centroid_km",
+      "nearest_same_river_neighbor_distance_km"
+    ],
+    "within_river_site_rank_fraction_rule": "zero when river has one node, otherwise zero-based rank by (site_integer, site_id) divided by river_node_count-1",
+    "river_centroid_rule": "arithmetic mean longitude and latitude of valid-coordinate nodes in the river, used only as a deterministic released-coordinate feature",
+    "nearest_neighbor_rule": "minimum Haversine distance to another valid node in same river; zero if river has one node",
+    "feature_selection_after_response_allowed": false,
+    "response_derived_sampling_history_features_allowed": false,
+    "augmented_only_difference": "unchanged symmetric_world_support_summary_v1",
+    "primary_metric": "binary log loss"
+  },
+  "response_parser_to_freeze_later": {
+    "expected_physical_roles_from_published_code": ["year", "river", "site", "genus", "latin", "abundance", "area"],
+    "focal_match_rule": "physical latin == Noemacheilus_barbatulus before published normalization",
+    "ever_detection_rule": "site is positive iff at least one frozen response row for the focal physical latin value has abundance > 0",
+    "no_alias_or_taxon_repair_after_response_open": true,
+    "not_authorized_yet": true
+  },
+  "paper_ready_bindings": {
+    "cross_ecosystem_synthesis_canonical_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02",
+    "feature_count_placebo_canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd",
+    "excluded_world_information_canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
+  },
+  "hard_stop": {
+    "source_commit_or_blob_switch_allowed": false,
+    "response_file_open_before_final_freeze_allowed": false,
+    "source_paper_response_dependent_site_filter_allowed": false,
+    "post_response_site_fold_world_or_feature_retuning_allowed": false,
+    "manual_gis_or_coordinate_repair_allowed": false,
+    "fourth_dataset_after_valid_third_predictive_terminal_allowed": false
+  }
+}
