@@ -1,0 +1,45 @@
+{
+  "schema": "eog.sebms_ochlodes_endpoint3.gate0_pass.v1",
+  "attempt_id": "sebms_ochlodes_endpoint3_v1",
+  "issue": 358,
+  "terminal_stage": "registry_metadata",
+  "status": "gate0_metadata_ready",
+  "authoritative_execution": {
+    "workflow_run_id": 33709185963,
+    "run_number": 2,
+    "run_attempt": 1,
+    "head_sha": "6a63c081f55129b83d1cc0bde756c377ed34d54d",
+    "artifact_id": 9876515071,
+    "artifact_name": "sebms-ochlodes-gate0-registry",
+    "artifact_digest": "sha256:4ac7eac5983992da0e6305352d0504e6924d998b36c913464a351a5a8be130c1",
+    "result_fingerprint": "9556b2f2690f22feb025461d4e6f1afc45e721f0f42089bce9f1d7db55473d94"
+  },
+  "identity": {
+    "dataset_key": "be77e203-486c-4651-91b9-8347968b728c",
+    "title": "Swedish Butterfly Monitoring Scheme (SeBMS)",
+    "doi": "10.15468/othndo",
+    "type": "SAMPLING_EVENT",
+    "registered_dwca_endpoint": "https://www.gbif.se/ipt/archive.do?r=lu_sebms",
+    "frozen_version_dwca_url": "https://www.gbif.se/ipt/archive.do?r=lu_sebms&v=1.12"
+  },
+  "opened_content": {
+    "registry_request_count": 1,
+    "registry_metadata_bytes_opened": 11084,
+    "dwca_payload_requests": 0,
+    "dwca_payload_bytes_opened": 0,
+    "event_rows_opened": 0,
+    "emof_rows_opened": 0,
+    "occurrence_header_bytes_opened": 0,
+    "occurrence_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "frozen_boundaries": {
+    "source_contract_git_blob_sha": "5c330e70418b3d89e40c4a25f93669911ec49ab5",
+    "registry_evaluator_git_blob_sha": "4ba9e055a612786efe0423ebf84315860764f90a",
+    "authorization_sha256": "4a3392aa53cdaca632c15b67d666cad23faaa40958da4b5c4940d25ac7dcc91f"
+  },
+  "scientific_interpretation": "response-blind source identity PASS only; no biological response or predictive evidence has been opened",
+  "next_action": "freeze and execute a separate bounded DwC-A container/meta.xml Stage1 before any Event, eMoF or Occurrence member payload access"
+}
