@@ -1,0 +1,83 @@
+{
+  "schema": "eog.sebms_ochlodes_endpoint3.gate1_dwca_metadata_contract.v1",
+  "attempt_id": "sebms_ochlodes_endpoint3_v1",
+  "issue": 358,
+  "gate0_pass": {
+    "workflow_run_id": 33709185963,
+    "head_sha": "6a63c081f55129b83d1cc0bde756c377ed34d54d",
+    "artifact_id": 9876515071,
+    "artifact_digest": "sha256:4ac7eac5983992da0e6305352d0504e6924d998b36c913464a351a5a8be130c1",
+    "result_fingerprint": "9556b2f2690f22feb025461d4e6f1afc45e721f0f42089bce9f1d7db55473d94",
+    "status": "gate0_metadata_ready"
+  },
+  "source": {
+    "archive_url": "https://www.gbif.se/ipt/archive.do?r=lu_sebms&v=1.12",
+    "allowed_final_hosts": ["www.gbif.se", "gbif.se"],
+    "allowed_archive_media_types": [
+      "application/zip",
+      "application/octet-stream",
+      "application/x-zip-compressed"
+    ],
+    "maximum_archive_size_bytes": 2000000000
+  },
+  "size_discovery": {
+    "policy": "one HEAD first; if no positive Content-Length or HEAD is unavailable/not supported, one GET Range bytes=0-0 fallback is allowed",
+    "maximum_head_requests": 1,
+    "maximum_range_probe_requests": 1,
+    "maximum_range_probe_body_bytes": 1,
+    "range_probe_requires_http_206": true,
+    "range_probe_requires_exact_content_range": true,
+    "no_full_get_fallback": true
+  },
+  "zip_metadata_boundary": {
+    "reused_inspector_path": "validation/mica_muskrat_endpoint3/gate0_archive_transport.py",
+    "reused_inspector_git_blob_sha": "f6370d4104486b669eda022cc1eada1f991d4647",
+    "classic_zero_comment_zip_required": true,
+    "zip64_allowed": false,
+    "multi_disk_allowed": false,
+    "encrypted_members_allowed": false,
+    "all_range_requests_require_http_206": true,
+    "all_range_requests_require_identity_encoding": true,
+    "metadata_ranges_may_not_overlap_any_member_payload": true
+  },
+  "meta_xml_boundary": {
+    "exact_member_name": "meta.xml",
+    "required_count": 1,
+    "allowed_compression_methods": [0, 8],
+    "maximum_compressed_bytes": 1000000,
+    "maximum_uncompressed_bytes": 2000000,
+    "verify_crc32": true,
+    "required_roles": {
+      "event_core": {"element": "core", "row_type_terminal_token": "Event"},
+      "extended_measurement_or_fact": {"element": "extension", "row_type_terminal_token": "ExtendedMeasurementOrFact"},
+      "occurrence": {"element": "extension", "row_type_terminal_token": "Occurrence"}
+    },
+    "each_role_must_resolve_exactly_once": true,
+    "each_role_location_must_resolve_to_exactly_one_zip_member": true,
+    "record_exact_row_type_uri_and_field_index_term_mapping": true,
+    "no_post_read_role_alias_or_member_substitution": true
+  },
+  "payload_firewall": {
+    "meta_xml_payload_allowed": true,
+    "event_member_payload_bytes_allowed": 0,
+    "emof_member_payload_bytes_allowed": 0,
+    "occurrence_member_header_bytes_allowed": 0,
+    "occurrence_member_payload_bytes_allowed": 0,
+    "response_rows_allowed": 0,
+    "response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "valid_terminal_statuses": [
+    "gate1_dwca_metadata_ready",
+    "stop_pre_response_dwca_transport_container_or_metadata"
+  ],
+  "no_repair": {
+    "archive_url_switch_allowed": false,
+    "full_archive_download_allowed": false,
+    "zip_parser_relaxation_after_live_read_allowed": false,
+    "meta_xml_role_alias_after_live_read_allowed": false,
+    "event_emof_occurrence_member_substitution_allowed": false,
+    "next_stage_requires_separate_frozen_contract": true
+  }
+}
