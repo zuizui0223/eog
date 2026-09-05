@@ -1,0 +1,177 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.final_endpoint_contract.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "purpose": "Prospectively freeze the full-response parser, static Layer-A construction, unchanged Layer-B representation, same-RF paired five-fold endpoint, estimability rules and terminal decision before any response data row or value is opened.",
+  "prerequisites": {
+    "pre_response_status": "pre_response_geometry_ready",
+    "pre_response_result_fingerprint": "04fdec6d61a2f0a59dc8813fe8fe7e162ea4293427a60b9addec64b9b1e01e4c",
+    "response_header_status": "response_header_ready",
+    "response_header_result_fingerprint": "fc19bcc0e17299ea7092d9ca49dd2b48f18f18b5c226777b2f81a25caf7fcbfc",
+    "response_header_physical_columns": ["year", "river", "site", "pass", "area", "area_unit", "latin", "abundance", "family", "genus", "c_name"],
+    "response_rows_opened_before_this_contract": 0,
+    "response_values_opened_before_this_contract": false,
+    "model_fits_before_this_contract": 0,
+    "heldout_scores_before_this_contract": 0
+  },
+  "source": {
+    "repository": "aterui/public-proj_fishery-stability",
+    "commit": "17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67",
+    "coordinate_registry": {
+      "path": "data_raw/gis/site-coordinate_hogosuimen_terui-org-2019.csv",
+      "git_blob_sha1": "79e5cde422bfcda74d57069a8b947c3aad3c4710",
+      "size_bytes": 6034,
+      "raw_url": "https://raw.githubusercontent.com/aterui/public-proj_fishery-stability/17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67/data_raw/gis/site-coordinate_hogosuimen_terui-org-2019.csv"
+    },
+    "response_table": {
+      "path": "data_fmt/data_hkd_prtwsd_fmt.csv",
+      "git_blob_sha1": "d0544a56b168511fa2c85c4199372599922e5651",
+      "size_bytes": 6508582,
+      "raw_url": "https://raw.githubusercontent.com/aterui/public-proj_fishery-stability/17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67/data_fmt/data_hkd_prtwsd_fmt.csv"
+    },
+    "maximum_live_gets": 2,
+    "source_switch_after_execution_allowed": false
+  },
+  "response_parser": {
+    "header_exact_order": ["year", "river", "site", "pass", "area", "area_unit", "latin", "abundance", "family", "genus", "c_name"],
+    "year_min": 1999,
+    "year_max": 2019,
+    "year_rule": "canonical base-10 integer with no surrounding whitespace",
+    "river_rule": "non-empty exact unpadded string",
+    "site_rule": "canonical positive base-10 integer; site_id is river concatenated directly with site integer",
+    "all_response_site_ids_must_belong_to_129_row_coordinate_registry": true,
+    "all_126_valid_coordinate_nodes_must_have_at_least_one_response_table_row": true,
+    "missing_coordinate_sites_remain_excluded_by_pre_response_rule": ["atsuta6", "kokamotsu4", "usubetsu4"],
+    "focal_physical_latin": "Noemacheilus_barbatulus",
+    "focal_canonical_name": "Barbatula oreas",
+    "focal_match_is_exact_case_sensitive": true,
+    "abundance_numeric_rule": "finite non-negative decimal numeric",
+    "abundance_missing_tokens": ["", "NA", "NaN"],
+    "abundance_missing_semantics": "contributes zero to ever-detection, matching the published sum(..., na.rm=TRUE) normalization boundary",
+    "other_invalid_abundance_token": "terminal_stop",
+    "ever_detection_rule": "site label is 1 iff at least one focal physical-latin row has numeric abundance > 0; otherwise 0 after survey representation is verified",
+    "pass_area_area_unit_family_genus_c_name_are_not_model_features": true,
+    "response_derived_effort_history_or_prevalence_feature_engineering_allowed": false,
+    "taxon_alias_repair_after_open_allowed": false,
+    "site_drop_after_open_allowed": false
+  },
+  "node_and_split": {
+    "valid_node_count": 126,
+    "node_registry_fingerprint": "71a0796370d866c8d63495d32d44995facf0ebb879a00645653ab12a26b2e62a",
+    "fold_assignment_fingerprint": "bb1976cd68a95aa51ad4f270817e6bc971f10121322f597cbc1795a01fba83d4",
+    "baseline_matrix_fingerprint": "d586a060cb3410e628d3d97367cab26404cc75e75780d8951c3657f43f3e789c",
+    "fold_rule": "((site_integer - 1) % 5) + 1",
+    "fold_ids": [1, 2, 3, 4, 5],
+    "fold_counts": {"1": 35, "2": 34, "3": 29, "4": 16, "5": 12},
+    "all_folds_scored": true,
+    "response_stratification_reassignment_or_dropping_allowed": false
+  },
+  "worlds": {
+    "world_count": 5,
+    "local_worlds": [
+      {"world_id": "same_river_q25", "threshold_km": 1.7046386031736964, "edge_count": 57, "graph_fingerprint": "b8070300519f5332c27e35e5c8e22a081323933b1821942e81b7f4ac0a1a248a"},
+      {"world_id": "same_river_q50", "threshold_km": 2.924936901303434, "edge_count": 114, "graph_fingerprint": "418ec839adf51c5a6dbc81765c4467f938dc409876c05edc3683879e4a1b98d6"},
+      {"world_id": "same_river_q75", "threshold_km": 5.015861944962153, "edge_count": 170, "graph_fingerprint": "d8ba321a092cd6ca90705460bb01f30ccc029c8d25c4d7546a863642472d9c0d"},
+      {"world_id": "same_river_q90", "threshold_km": 7.378739391414775, "edge_count": 204, "graph_fingerprint": "70efd64f7ac0c4ad397c6794d37cf76dd83d5e93eaca02c461052951faa05a9f"}
+    ],
+    "external_open": {"world_id": "external_open", "edge_count": 7875, "graph_fingerprint": "964b83d426ce5651cb8e447bb2f107bce775412d594c25790bb230c4f180d453"},
+    "operator_rule": "each frozen undirected graph edge becomes two directed DynamicReachabilityEdge values with all support components equal to 1.0; loss_support=1.0",
+    "local_edges_cross_river_allowed": false,
+    "external_open_is_complete_directed_graph_after_bidirectional_expansion": true,
+    "max_steps": 125,
+    "max_steps_semantics": "n_nodes-1 topological depth, not calibrated time",
+    "support_tolerance": 0.0,
+    "support_floor_for_reporting_only": 1e-12,
+    "forecast_reachability_threshold": 0.0,
+    "world_retuning_after_response_allowed": false
+  },
+  "layer_a": {
+    "type": "static finite-world positive-occurrence reconstruction independently inside each outer fold",
+    "heldout_labels_used_before_fold_scoring": false,
+    "full_calibration_occurrence_set": "all focal-positive nodes outside the current heldout fold",
+    "fixed_source_rule": "within each river represented among the current occurrence set, select the occurrence with the smallest site_integer, breaking impossible ties by site_id",
+    "remaining_occurrences_are_compatibility_evidence": true,
+    "training_row_cross_fit": "for every calibration training node, construct its Layer-B features from labels of all other calibration nodes only; operationally remove that node from the occurrence set before reconstruction, which changes the set only when the node is positive",
+    "training_positive_self_label_may_enter_own_layer_b_features": false,
+    "training_negative_self_label_may_enter_own_layer_b_features": false,
+    "heldout_row_layer_b_features": "one common reconstruction per fold using all calibration positives and zero heldout labels",
+    "exact_world_ids_supervised": false,
+    "minimum_occurrences_for_fixed_source_reconstruction": 2,
+    "at_least_one_non_source_occurrence_target_required": true,
+    "no_compatible_worlds_status": "universe_falsified_stop"
+  },
+  "layer_b": {
+    "representation": "symmetric_world_support_summary_v1",
+    "feature_count": 10,
+    "feature_names": ["surviving_world_fraction", "support_mean", "support_std", "support_min", "support_max", "support_q25", "support_q50", "support_q75", "positive_support_fraction", "support_range"],
+    "forecast_step": 125,
+    "unchanged_representation_required": true,
+    "exact_world_identity_columns_allowed": false
+  },
+  "baseline": {
+    "matrix_fingerprint": "d586a060cb3410e628d3d97367cab26404cc75e75780d8951c3657f43f3e789c",
+    "source": "coordinate registry only",
+    "features": ["longitude", "latitude", "site_integer", "within_river_site_rank_fraction", "river_node_count", "distance_to_river_centroid_km", "nearest_same_river_neighbor_distance_km", "river one-hot categories in frozen lexicographic order"],
+    "feature_selection_after_response_allowed": false,
+    "sampling_history_effort_abundance_or_taxon_features_allowed": false
+  },
+  "estimability": {
+    "minimum_total_positive_nodes": 10,
+    "minimum_total_negative_nodes": 40,
+    "minimum_calibration_positive_nodes_each_fold": 10,
+    "minimum_calibration_negative_nodes_each_fold": 40,
+    "minimum_heldout_folds_with_both_classes": 4,
+    "all_five_fold_log_losses_are_computed_with_labels_0_1_even_if_one_fold_is_single_class": true,
+    "minimum_occurrence_set_size_for_any_layer_b_reconstruction": 2,
+    "minimum_non_source_occurrence_targets_for_any_layer_b_reconstruction": 1,
+    "non_estimable_is_not_adverse_layer_b_evidence": true
+  },
+  "learner": {
+    "family": "sklearn.ensemble.RandomForestClassifier",
+    "n_estimators": 500,
+    "max_features": "sqrt",
+    "min_samples_leaf": 5,
+    "class_weight": null,
+    "random_state": 20260817,
+    "n_jobs": -1,
+    "same_hyperparameters_baseline_and_augmented": true,
+    "baseline_arm": "frozen coordinate-only baseline",
+    "augmented_arm": "same baseline columns plus unchanged 10 Layer-B columns",
+    "probability_clip_epsilon": 1e-6,
+    "primary_metric": "binary_log_loss",
+    "lower_is_better": true,
+    "no_hyperparameter_or_feature_tuning_after_response": true
+  },
+  "paired_decision": {
+    "outer_unit": "spatial_fold",
+    "expected_outer_unit_count": 5,
+    "favorable_min_augmented_wins": 4,
+    "adverse_min_baseline_wins": 4,
+    "tie_tolerance": 0.0,
+    "favorable_requires_augmented_macro_log_loss_lower_and_at_least_4_fold_wins": true,
+    "adverse_requires_baseline_macro_log_loss_lower_and_at_least_4_fold_wins": true,
+    "otherwise_status": "no_confirmed_complementary_added_value",
+    "valid_predictive_terminal_statuses": ["favorable_complementary_added_value", "adverse_complementary_added_value", "no_confirmed_complementary_added_value"],
+    "valid_predictive_terminal_immediately_stops_candidate_hunting": true
+  },
+  "implementation_bindings": {
+    "dynamic_island_reachability_git_blob_sha": "d3d57a8bef431c34f5d2c13e5e061ade40bcb64f",
+    "world_reconstruction_git_blob_sha": "00f846f3aa39cd21da3614112a75ea2c34e37756",
+    "world_forecast_git_blob_sha": "734d9ebc94c3793f78a6f2c4b59838cb26991e42",
+    "world_predictive_summary_git_blob_sha": "5acdf877b6a7a1538298da8610ff6e8575f50461",
+    "predictive_complementarity_git_blob_sha": "5fd6ae02004c48f655a9d392f723fd32afeaa663",
+    "pre_response_geometry_git_blob_sha": "d04568d2554faf33ff341c000797cfb9f6100512"
+  },
+  "paper_ready_bindings": {
+    "cross_ecosystem_synthesis_canonical_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02",
+    "feature_count_placebo_canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd",
+    "excluded_world_information_canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
+  },
+  "hard_stop": {
+    "source_taxon_endpoint_split_world_baseline_layer_b_learner_or_threshold_switch_after_execution_allowed": false,
+    "post_response_site_or_fold_drop_allowed": false,
+    "post_response_parser_alias_repair_allowed": false,
+    "fourth_dataset_after_valid_predictive_terminal_allowed": false,
+    "full_response_execute_branch": "execute/hokkaido-streamfish-final-endpoint-v1"
+  }
+}
