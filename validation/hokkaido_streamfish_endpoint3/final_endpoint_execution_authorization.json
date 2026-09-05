@@ -1,0 +1,42 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.final_endpoint_execution_authorization.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "source_contract_git_blob_sha": "89876d3e6912a60f1afe23ee75c0c84a6aa213ae",
+  "pre_response_pass_git_blob_sha": "dad0bba05787ed686c1095a642d956534e096bf7",
+  "response_header_pass_git_blob_sha": "f57fb1a6e0f969a802a4e3fc70253805e1e74db6",
+  "final_endpoint_contract_git_blob_sha": "356494bb16aefa72cd5bdaa412993d91b458850a",
+  "final_endpoint_declaration_git_blob_sha": "3b7d1a44129302972c9e739d40e414cb237270b1",
+  "final_endpoint_evaluator_git_blob_sha": "b225cf3d1c9e983473f62f2d8292fb8c9d3906ad",
+  "final_endpoint_runner_git_blob_sha": "ec449c5aedb30e2db3a44477c8c3b97bfb687b02",
+  "runtime_lock_git_blob_sha": "8cbcd13ad2005e0e03cd47f4a4093c533232ff79",
+  "pre_response_geometry_git_blob_sha": "d04568d2554faf33ff341c000797cfb9f6100512",
+  "dynamic_island_reachability_git_blob_sha": "d3d57a8bef431c34f5d2c13e5e061ade40bcb64f",
+  "world_reconstruction_git_blob_sha": "00f846f3aa39cd21da3614112a75ea2c34e37756",
+  "world_forecast_git_blob_sha": "734d9ebc94c3793f78a6f2c4b59838cb26991e42",
+  "world_predictive_summary_git_blob_sha": "5acdf877b6a7a1538298da8610ff6e8575f50461",
+  "predictive_complementarity_git_blob_sha": "5fd6ae02004c48f655a9d392f723fd32afeaa663",
+  "coordinate_url": "https://raw.githubusercontent.com/aterui/public-proj_fishery-stability/17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67/data_raw/gis/site-coordinate_hogosuimen_terui-org-2019.csv",
+  "response_url": "https://raw.githubusercontent.com/aterui/public-proj_fishery-stability/17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67/data_fmt/data_hkd_prtwsd_fmt.csv",
+  "authorized_external_gets": 2,
+  "coordinate_requests_allowed": 1,
+  "response_requests_allowed": 1,
+  "full_response_bytes_allowed": 6508582,
+  "post_execution_retry_or_source_switch_allowed": false,
+  "live_execute_branch": "execute/hokkaido-streamfish-final-endpoint-v1",
+  "live_trigger_marker": "validation/hokkaido_streamfish_endpoint3/final_endpoint_execute_once.json",
+  "accepted_predictive_terminal_statuses": [
+    "favorable_complementary_added_value",
+    "adverse_complementary_added_value",
+    "no_confirmed_complementary_added_value"
+  ],
+  "accepted_nonpredictive_terminal_statuses": [
+    "stop_full_response_transport_or_integrity",
+    "stop_full_response_schema_or_coverage",
+    "non_estimable_response_balance",
+    "non_estimable_layer_a_crossfit",
+    "universe_falsified_stop"
+  ],
+  "valid_predictive_terminal_immediately_stops_candidate_hunting": true,
+  "next_dataset_if_nonpredictive_stop_requires_new_issue_and_new_source_contract": true
+}
