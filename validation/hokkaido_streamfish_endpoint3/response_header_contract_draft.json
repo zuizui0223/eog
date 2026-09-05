@@ -1,0 +1,12 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.response_header_contract_draft.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "status": "not_authorized",
+  "purpose": "Placeholder only: response-header access remains forbidden until the pre-response geometry stage passes and a separate final response-header contract is frozen.",
+  "response_file": "data_fmt/data_hkd_prtwsd_fmt.csv",
+  "expected_physical_roles_from_published_code": ["year", "river", "site", "genus", "latin", "abundance", "area"],
+  "header_bytes_allowed_now": 0,
+  "row_bytes_allowed_now": 0,
+  "response_values_allowed_now": false
+}
