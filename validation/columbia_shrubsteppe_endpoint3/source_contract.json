@@ -1,0 +1,94 @@
+{
+  "schema": "eog.columbia_shrubsteppe_endpoint3.source_contract.v1",
+  "attempt_id": "columbia_shrubsteppe_endpoint3_v1",
+  "issue": 370,
+  "chapter": "N3",
+  "question": "WHERE can it become real?",
+  "selection_boundary": {
+    "selected_after_scientific_stops": 26,
+    "selected_after_administrative_exclusions": 3,
+    "fresh_predictive_endpoints_with_scores": 2,
+    "selection_basis": "response-blind Dryad metadata and README architecture only",
+    "detection_history_member_payload_opened_before_contract": false,
+    "camera_record_response_opened_before_contract": false,
+    "focal_prevalence_used": false,
+    "eog_score_used": false
+  },
+  "dryad": {
+    "doi": "10.5061/dryad.gf1vhhn0r",
+    "dataset_identifier_expected": "doi:10.5061/dryad.gf1vhhn0r",
+    "dataset_api": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.gf1vhhn0r",
+    "api_version_header": "2.1.0",
+    "expected_exact_file_names": [
+      "Code.zip",
+      "CSVs.zip",
+      "README.md",
+      "Raw_Data.zip"
+    ],
+    "expected_file_count": 4,
+    "publication_date_from_public_page": "2026-08-18",
+    "current_version_id_frozen_only_by_gate0": true,
+    "each_file_requires_positive_integer_size": true,
+    "each_file_requires_nonempty_digest_and_digest_type": true,
+    "file_payload_bytes_before_gate0_terminal": 0
+  },
+  "study_design_from_public_readme": {
+    "survey_years": [2021, 2022, 2023, 2024],
+    "reported_released_study_sites_before_private_land_exclusion_note": 155,
+    "private_land_sites_excluded_from_public_dataset": 5,
+    "mammal_detection_history_pattern": "*_dh.csv",
+    "mammal_detection_columns": ["A", "B", "C", "D"],
+    "mammal_detection_semantics": "binary recorded site use at spatially replicated cameras during approximately 30-day deployment",
+    "response_independent_problem_sheet_roles": [
+      "Station",
+      "Cameras",
+      "lat",
+      "long",
+      "Setup_date",
+      "Retrieval_date",
+      "Problem*_from",
+      "Problem*_to"
+    ],
+    "response_independent_effort_file": "Active_days_z",
+    "response_independent_site_covariate_file": "Mammal_site_covs_unstand",
+    "response_bearing_raw_role": "Camera Record Tables"
+  },
+  "focal_selection_rule": {
+    "when_applied": "after response-blind CSVs.zip member inventory and before any member payload",
+    "candidate_pattern": "lexicographically sorted basenames ending exactly _dh.csv inside the unique mammal detection-history directory",
+    "excluded_non_species_basenames": [
+      "Active_days_z",
+      "Cam_vis_z",
+      "Mammal_site_covs_unstand",
+      "Mammal_site_covs_z"
+    ],
+    "manual_species_choice_allowed": false,
+    "prevalence_or_source_model_result_allowed": false,
+    "selected_member_becomes_immutable": true
+  },
+  "staged_firewall": {
+    "gate0": "Dryad dataset/current-version/file-list metadata only",
+    "gate1": "bounded ZIP metadata inventory for CSVs.zip and Raw_Data.zip only",
+    "gate2": "response-independent site/coordinate/effort/covariate/code members only",
+    "gate3": "selected focal detection-history member header only",
+    "final": "selected focal detection-history payload exactly once after all prediction contracts are frozen",
+    "camera_record_table_payload_before_final_allowed": false,
+    "detection_history_payload_before_final_allowed": false
+  },
+  "hard_stop": {
+    "doi_or_version_switch_after_terminal_gate_allowed": false,
+    "file_identity_repair_after_gate0_allowed": false,
+    "archive_member_alias_repair_after_inventory_allowed": false,
+    "manual_species_switch_allowed": false,
+    "response_derived_site_or_effort_filter_allowed": false,
+    "missing_camera_effort_as_zero_allowed": false,
+    "post_response_split_world_feature_or_model_retuning_allowed": false,
+    "retry_after_full_focal_response_consumption_allowed": false,
+    "fourth_dataset_after_valid_third_predictive_terminal_allowed": false
+  },
+  "paper_ready_bindings": {
+    "cross_ecosystem_synthesis_canonical_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02",
+    "feature_count_placebo_canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd",
+    "excluded_world_information_canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
+  }
+}
