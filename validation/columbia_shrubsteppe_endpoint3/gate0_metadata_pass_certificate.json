@@ -1,0 +1,69 @@
+{
+  "schema": "eog.columbia_shrubsteppe_endpoint3.gate0_metadata_pass.v1",
+  "attempt_id": "columbia_shrubsteppe_endpoint3_v1",
+  "issue": 370,
+  "status": "gate0_metadata_ready",
+  "counts_as_predictive_evidence": false,
+  "authoritative_execution": {
+    "run_id": 33939169705,
+    "job_name": "live-gate0-once",
+    "head_sha": "41e43d18da5f74bb6cf4c697b538560e55ba8553",
+    "artifact_id": 9961207582,
+    "artifact_name": "columbia-shrubsteppe-gate0-metadata",
+    "artifact_digest": "sha256:430035a1802992f11ab7adc1fdc8d3dfa8e6dcd69f70d05ed79b3cb4a1739783",
+    "result_fingerprint": "a73d1e8613e25a6c164fccb5f7e418ed87a623e805384e70521095fca1b4278e"
+  },
+  "dryad": {
+    "dataset_identifier": "doi:10.5061/dryad.gf1vhhn0r",
+    "current_version_id": 458477,
+    "current_version_href": "/api/v2/versions/458477",
+    "file_manifest_fingerprint": "b79593557e9242ff5626793142830ad16b59472f771a8cc7d4509a0dc303fbc8",
+    "files": [
+      {
+        "path": "CSVs.zip",
+        "file_id": 4917780,
+        "size": 87041,
+        "digest": "3172038dd888e56ee2c96f7129c05fee5a15bfb90fab04cb9f23a2792d76cf6a",
+        "digest_type": "sha-256",
+        "download_href": "/api/v2/files/4917780/download"
+      },
+      {
+        "path": "Code.zip",
+        "file_id": 4917781,
+        "size": 36118,
+        "digest": "1da0b10395d28052cf8bcf6d8b48598bae5bc231b59a16c78ea2739f7eec9758",
+        "digest_type": "sha-256",
+        "download_href": "/api/v2/files/4917781/download"
+      },
+      {
+        "path": "README.md",
+        "file_id": 4917850,
+        "size": 24436,
+        "digest": "8805377e0363bdc7f6c3bc73cbcb60297163deb020a47756b537c617d0aa2cfb",
+        "digest_type": "sha-256",
+        "download_href": "/api/v2/files/4917850/download"
+      },
+      {
+        "path": "Raw_Data.zip",
+        "file_id": 4917782,
+        "size": 6538269,
+        "digest": "53593efcd2595ef3a6721927eb2deadb6185e97cd1df79136969b62d9434017d",
+        "digest_type": "sha-256",
+        "download_href": "/api/v2/files/4917782/download"
+      }
+    ]
+  },
+  "firewall_audit": {
+    "metadata_requests": 3,
+    "file_payload_requests": 0,
+    "file_payload_bytes_opened": 0,
+    "archive_member_bytes_opened": 0,
+    "detection_history_bytes_opened": 0,
+    "camera_record_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "next_gate": "freeze bounded Range-only ZIP metadata inventory for CSVs.zip and Raw_Data.zip before any member payload access"
+}
