@@ -21,7 +21,7 @@
   "images_values_allowed": false,
   "model_fits_allowed": 0,
   "heldout_scores_allowed": 0,
-  "source_contract_git_blob_sha": "6d5b3e176d0289038e52ec07bf4673e80ef21444",
+  "source_contract_git_blob_sha": "40c7beeb37774b8ed0aa198eeda9f9bafa5c3374",
   "gate0_evaluator_git_blob_sha": "295c90e14682829f95bb21aa6f488f25ef2d1811",
   "generic_problem_contract_git_blob_sha": "d032bbb53f2a61bb2f3354ca9576cdf3c19afdf2",
   "authoritative_output_filename": "gate0_pre_response_certificate.json",
