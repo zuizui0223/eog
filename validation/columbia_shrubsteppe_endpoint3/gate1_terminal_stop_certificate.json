@@ -1,0 +1,44 @@
+{
+  "schema": "eog.columbia_shrubsteppe_endpoint3.gate1_terminal_stop.v1",
+  "attempt_id": "columbia_shrubsteppe_endpoint3_v1",
+  "issue": 370,
+  "status": "stop_pre_response_zip_transport_or_inventory",
+  "terminal_stage": "response_blind_zip_presign_transport",
+  "reason": "Dryad public file_stream returned HTTP 403 on the first prospectively frozen presign request; response body was not opened and no alternative route, authentication mode, host broadening, archive interpretation, or focal selection repair was attempted.",
+  "counts_as_predictive_evidence": false,
+  "interpret_as_adverse_layer_b_result": false,
+  "authoritative_execution": {
+    "run_id": 33939691964,
+    "job_id": 101234603555,
+    "job_name": "live-gate1-once",
+    "head_sha": "9680fb5b2fd4696f645c804957a31ed9c799d2ab",
+    "artifact_id": 9961387609,
+    "artifact_name": "columbia-shrubsteppe-gate1-zip-inventory",
+    "artifact_digest": "sha256:795091a7fcc4be6361df6f48c2f631a32aa2babbbf2fda6c3d321a85b69c2320",
+    "result_fingerprint": "d07eaf7991ba9a65646315c8816332a4a559b878659bef6c1317a0dd327046be"
+  },
+  "transport_audit": {
+    "dryad_version_id": 458477,
+    "presign_requests": 1,
+    "first_presign_archive_role": "csvs",
+    "first_presign_url": "https://datadryad.org/downloads/file_stream/4917780",
+    "first_presign_http_status": 403,
+    "dryad_redirect_body_bytes_opened": 0,
+    "s3_range_requests": 0,
+    "archive_metadata_bytes_opened": 0,
+    "local_header_bytes_opened": 0,
+    "archive_member_payload_bytes_opened": 0,
+    "detection_history_payload_bytes_opened": 0,
+    "camera_record_payload_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "protocol_boundary": {
+    "post_result_transport_or_inventory_repair_allowed": false,
+    "retry_allowed": false,
+    "source_or_file_switch_allowed": false,
+    "next_action": "record as the 27th scientific protocol STOP, close Issue 370, and select a new response-unconsumed endpoint-3 candidate"
+  }
+}

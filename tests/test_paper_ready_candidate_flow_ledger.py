@@ -14,6 +14,12 @@ HOKKAIDO_CAPTURE_FAILURE = (
     / "hokkaido_streamfish_endpoint3"
     / "final_output_capture_failure_certificate.json"
 )
+COLUMBIA_GATE1_STOP = (
+    Path(__file__).resolve().parents[1]
+    / "validation"
+    / "columbia_shrubsteppe_endpoint3"
+    / "gate1_terminal_stop_certificate.json"
+)
 
 
 def _load_ledger():
@@ -29,7 +35,7 @@ def test_candidate_flow_summary_matches_the_frozen_denominator():
 
     assert ledger["schema"] == "eog.paper_ready_replication.candidate_flow_ledger.v1"
     assert summary["fresh_predictive_endpoints_with_scores"] == len(results) == 2
-    assert summary["fresh_candidate_stops_listed"] == len(stops) == 26
+    assert summary["fresh_candidate_stops_listed"] == len(stops) == 27
     assert summary["administrative_exclusions"] == len(exclusions) == 3
     assert summary["third_fresh_predictive_endpoint_still_required"] is True
     assert len({row["issue"] for row in stops}) == len(stops)
@@ -156,3 +162,35 @@ def test_latest_gate_stops_remain_response_unconsumed_and_non_scientific():
     assert sebms["gate1_artifact_digest"] == (
         "sha256:c148687e14df799ca0c8b8c2d21959b0b51837e4cd88c3ecc216cc120dde8c5a"
     )
+
+    columbia = by_issue[370]
+    assert columbia["terminal_stage"] == "response_blind_zip_presign_transport"
+    assert columbia["gate0_metadata_passed"] is True
+    assert columbia["gate1_run_id"] == 33939691964
+    assert columbia["gate1_job_id"] == 101234603555
+    assert columbia["presign_requests"] == 1
+    assert columbia["presign_http_status"] == 403
+    assert columbia["dryad_redirect_body_bytes_opened"] == 0
+    assert columbia["s3_range_requests"] == 0
+    assert columbia["archive_metadata_bytes_opened"] == 0
+    assert columbia["archive_member_payload_bytes_opened"] == 0
+    assert columbia["detection_history_payload_bytes_opened"] == 0
+    assert columbia["camera_record_payload_bytes_opened"] == 0
+    assert columbia["response_rows_opened"] == 0
+    assert columbia["response_values_opened"] is False
+    assert columbia["model_fits"] == columbia["heldout_scores"] == 0
+    assert columbia["gate1_fingerprint"] == (
+        "d07eaf7991ba9a65646315c8816332a4a559b878659bef6c1317a0dd327046be"
+    )
+    assert columbia["gate1_artifact_digest"] == (
+        "sha256:795091a7fcc4be6361df6f48c2f631a32aa2babbbf2fda6c3d321a85b69c2320"
+    )
+
+    certificate = json.loads(COLUMBIA_GATE1_STOP.read_text(encoding="utf-8"))
+    assert certificate["status"] == "stop_pre_response_zip_transport_or_inventory"
+    assert certificate["counts_as_predictive_evidence"] is False
+    assert certificate["transport_audit"]["first_presign_http_status"] == 403
+    assert certificate["transport_audit"]["dryad_redirect_body_bytes_opened"] == 0
+    assert certificate["transport_audit"]["s3_range_requests"] == 0
+    assert certificate["transport_audit"]["response_values_opened"] is False
+    assert certificate["protocol_boundary"]["retry_allowed"] is False
