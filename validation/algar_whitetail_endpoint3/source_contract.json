@@ -1,0 +1,187 @@
+{
+  "schema": "eog.algar_whitetail_endpoint3.source_contract.v1",
+  "attempt_id": "algar_whitetail_endpoint3_v1",
+  "issue": 378,
+  "chapter": "N3",
+  "question": "WHERE can it become real?",
+  "selection_boundary": {
+    "selected_after_scientific_stops": 28,
+    "selected_after_administrative_exclusions": 3,
+    "fresh_predictive_endpoints_with_scores": 2,
+    "generic_problem_contract_required": true,
+    "selection_basis": "response-blind standardized camera deployment architecture plus source tutorial focal-species and seven-day effort semantics",
+    "bundled_source_universe": "course documentation states bundled example data are a 38-of-73-site and 2-of-4-year subset of the Algar Restoration Project",
+    "prospective_pre_live_amendment": "minimum_unique_nodes corrected from impossible 50 to 30 before any Gate0 live execution or images.csv access",
+    "images_payload_opened_before_contract": false,
+    "images_header_opened_before_contract": false,
+    "focal_prevalence_used": false,
+    "eog_score_used": false
+  },
+  "source": {
+    "repository": "WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R",
+    "commit": "6b4170abbad9f7f7762ef6874e1246b28000f371",
+    "safe_files": {
+      "deployments": {
+        "path": "data/raw_data/example_data/deployments.csv",
+        "git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf",
+        "size_bytes": 24096,
+        "raw_url": "https://raw.githubusercontent.com/WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R/6b4170abbad9f7f7762ef6874e1246b28000f371/data/raw_data/example_data/deployments.csv"
+      },
+      "cameras": {
+        "path": "data/raw_data/example_data/cameras.csv",
+        "git_blob_sha1": "be9092f22e097c479a07610a31832ca170a527c4",
+        "size_bytes": 36910,
+        "raw_url": "https://raw.githubusercontent.com/WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R/6b4170abbad9f7f7762ef6874e1246b28000f371/data/raw_data/example_data/cameras.csv"
+      },
+      "projects": {
+        "path": "data/raw_data/example_data/projects.csv",
+        "git_blob_sha1": "dcf7e3e89952e3b50d8948dbb417e748483578d5",
+        "size_bytes": 1268,
+        "raw_url": "https://raw.githubusercontent.com/WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R/6b4170abbad9f7f7762ef6874e1246b28000f371/data/raw_data/example_data/projects.csv"
+      },
+      "local_covariate": {
+        "path": "data/raw_data/example_covariates/example_dataframe.csv",
+        "git_blob_sha1": "a623b04a10fd33e6e86d2fa462bece2180985c57",
+        "size_bytes": 1328,
+        "raw_url": "https://raw.githubusercontent.com/WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R/6b4170abbad9f7f7762ef6874e1246b28000f371/data/raw_data/example_covariates/example_dataframe.csv"
+      },
+      "common_names": {
+        "path": "data/raw_data/example_data/common_names.csv",
+        "git_blob_sha1": "0411ae97b2c33654e89781394b4d8ebc5337ccd5",
+        "size_bytes": 674,
+        "raw_url": "https://raw.githubusercontent.com/WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R/6b4170abbad9f7f7762ef6874e1246b28000f371/data/raw_data/example_data/common_names.csv"
+      }
+    },
+    "forbidden_response": {
+      "path": "data/raw_data/example_data/images.csv",
+      "git_blob_sha1": "be290cabe17b858ae6fc703e441b3dbc644d6eed",
+      "size_bytes": 3879838,
+      "raw_url": "https://raw.githubusercontent.com/WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R/6b4170abbad9f7f7762ef6874e1246b28000f371/data/raw_data/example_data/images.csv",
+      "requests_before_header_gate": 0,
+      "bytes_before_header_gate": 0
+    }
+  },
+  "source_identity": {
+    "project_id": "AlgarRestorationProject",
+    "project_short_name": "Algar",
+    "focal_common_name": "white-tailed deer",
+    "focal_species_identifier": "Odocoileus.virginianus",
+    "focal_rule": "exact species declared by the frozen source occupancy tutorial before constructing its site-by-occasion matrix; verified against frozen common_names.csv without opening images.csv",
+    "manual_species_switch_allowed": false
+  },
+  "safe_schema": {
+    "deployment_required_columns": [
+      "project_id", "deployment_id", "placename", "longitude", "latitude", "start_date", "end_date", "camera_functioning"
+    ],
+    "camera_required_columns": ["project_id", "camera_id", "camera_name"],
+    "project_required_columns": ["project_id", "project_name", "project_short_name"],
+    "local_covariate_exact_columns": ["placename", "line_of_sight_m"],
+    "common_names_exact_columns": ["common_name", "sp"],
+    "duplicate_physical_columns_allowed": false,
+    "post_live_aliasing_allowed": false
+  },
+  "deployment_registry": {
+    "project_filter": "project_id == AlgarRestorationProject",
+    "stable_node": "placename",
+    "coordinate_crs": 4326,
+    "coordinate_rule": "all finite longitude/latitude values for retained deployments of a placename must agree within 1e-9 decimal degrees",
+    "coverage_interval": "[start_date, end_date) in whole UTC-free calendar dates",
+    "valid_operational_status": "camera_functioning == Camera Functioning",
+    "missing_or_invalid_end_date_contributes_coverage": false,
+    "interval_union": "sort by start then end; merge intervals when next.start <= current.end, so adjacent replacement deployments remain continuous under half-open semantics",
+    "response_derived_site_dropping_allowed": false
+  },
+  "candidate_registry": {
+    "analysis_year": 2019,
+    "context_unit": "complete Monday-Sunday seven-day week",
+    "first_candidate_week_start": "2019-01-07",
+    "last_candidate_week_start": "2019-12-23",
+    "week_rule": "candidate iff all seven dates [Monday, Monday+7d) are covered by the response-independent union of valid operational deployment intervals",
+    "candidate_unit_id": "placename|YYYY-MM-DD where date is Monday week start",
+    "minimum_unique_nodes": 30,
+    "minimum_candidate_units": 200,
+    "minimum_distinct_contexts": 10,
+    "all_candidate_nodes_need_finite_coordinates": true,
+    "response_linkage_may_not_change_candidate_registry": true
+  },
+  "heldout_split": {
+    "unit": "placename",
+    "fold_rule": "1 + (big-endian integer from first 8 bytes of SHA-256(UTF-8 placename) modulo 5)",
+    "fold_ids": [1, 2, 3, 4, 5],
+    "all_weeks_from_a_placename_share_fold": true,
+    "all_folds_must_be_nonempty_before_response": true,
+    "response_stratification_or_reassignment_allowed": false
+  },
+  "world_geometry": {
+    "component_id": "AlgarRestorationProject",
+    "distance_metric": "Haversine great-circle distance on frozen WGS84 node coordinates",
+    "threshold_population": "all positive unordered pair distances among frozen candidate nodes",
+    "threshold_quantiles": [0.25, 0.50, 0.75, 0.90],
+    "quantile_method": "linear interpolation identical to numpy.quantile(method=linear)",
+    "edge_rule": "undirected edge when Haversine distance <= threshold",
+    "deduplicate_identical_local_adjacency_worlds": true,
+    "minimum_distinct_positive_local_worlds": 3,
+    "external_open_required": true,
+    "exact_world_ids_supervised": false
+  },
+  "baseline": {
+    "required_fields": [
+      {"name": "longitude", "kind": "numeric", "missing_policy": "forbid"},
+      {"name": "latitude", "kind": "numeric", "missing_policy": "forbid"},
+      {"name": "week_index", "kind": "numeric", "missing_policy": "forbid"}
+    ],
+    "optional_fields": [
+      {"name": "line_of_sight_m", "kind": "numeric", "missing_policy": "calibration_median_plus_indicator"}
+    ],
+    "calendar_encoding": "week_index is 0 for 2019-01-07 and increments by one for each Monday context",
+    "feature_selection_after_response_allowed": false,
+    "same_learner_both_arms": true,
+    "augmented_only_difference": "unchanged symmetric_world_support_summary_v1"
+  },
+  "observation_semantics": {
+    "effort_eligible_rule": "candidate unit exists only when its full seven-day interval is covered by frozen operational deployments",
+    "positive_rule": "at least one exact focal-species image record maps to candidate placename and week",
+    "negative_rule": "zero exact focal-species image records map to an otherwise eligible candidate placename and week",
+    "unsurveyed_rule": "an incomplete/nonoperational week is absent from the frozen candidate registry and is never encoded as zero",
+    "zero_interpretation": "recorded camera non-detection during a complete seven-day sampling occasion, not biological absence or inability to colonize"
+  },
+  "layer_a": {
+    "mode": "static world-set forecast evaluated separately for each frozen week context",
+    "calibration_positive_evidence": "focal-positive calibration nodes from the same week only",
+    "fixed_source_rule": "lexicographically first calibration-positive placename in the week is the fixed source; remaining positives are compatibility evidence",
+    "training_layer_b_self_exclusion_required": true,
+    "heldout_labels_enter_layer_a_before_scoring": false
+  },
+  "generic_adapter": {
+    "module": "eog.v2.problem_contract",
+    "must_emit": "NormalizedPreResponseProblem",
+    "response_locked_required": true,
+    "dataset_specific_logic_must_end_at_adapter_boundary": true,
+    "core_world_or_layer_b_changes_allowed": false
+  },
+  "gate0_firewall": {
+    "authorized_safe_file_gets": 5,
+    "allowed_host": "raw.githubusercontent.com",
+    "maximum_safe_file_bytes_total": 70000,
+    "images_requests": 0,
+    "images_header_bytes": 0,
+    "images_payload_bytes": 0,
+    "images_rows": 0,
+    "images_values": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "paper_ready_bindings": {
+    "cross_ecosystem_synthesis_canonical_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02",
+    "feature_count_placebo_canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd",
+    "excluded_world_information_canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
+  },
+  "hard_stop": {
+    "source_commit_or_blob_switch_allowed": false,
+    "response_open_before_separate_header_gate_allowed": false,
+    "manual_species_switch_allowed": false,
+    "post_response_registry_split_world_or_missingness_policy_retuning_allowed": false,
+    "retry_after_full_response_consumption_allowed": false,
+    "fourth_dataset_after_valid_third_predictive_terminal_allowed": false
+  }
+}

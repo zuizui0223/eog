@@ -1,0 +1,123 @@
+name: Algar white-tailed deer endpoint3 Gate0
+
+on:
+  pull_request:
+    paths:
+      - 'validation/algar_whitetail_endpoint3/**'
+      - 'tests/test_algar_whitetail_gate0_pre_response.py'
+      - '.github/workflows/algar-whitetail-gate0.yml'
+  push:
+    branches:
+      - 'execute/algar-whitetail-gate0-v1'
+    paths:
+      - 'validation/algar_whitetail_endpoint3/gate0_execute_once.json'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Verify Algar normalized response-blind Gate0
+        run: pytest -q tests/test_algar_whitetail_gate0_pre_response.py tests/test_v2_problem_contract.py
+      - name: Compile Algar Gate0 module
+        run: python -m py_compile validation/algar_whitetail_endpoint3/gate0_pre_response.py
+      - name: Verify authorization blobs and firewall
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          root = Path('validation/algar_whitetail_endpoint3')
+          auth = json.loads((root / 'gate0_execution_authorization.json').read_text())
+          assert auth['attempt_id'] == 'algar_whitetail_endpoint3_v1'
+          assert auth['issue'] == 378
+          assert auth['authorized_safe_file_gets'] == 5
+          assert auth['maximum_safe_file_bytes_total'] == 70000
+          assert auth['images_requests_allowed'] == 0
+          assert auth['images_header_bytes_allowed'] == 0
+          assert auth['images_payload_bytes_allowed'] == 0
+          assert auth['images_rows_allowed'] == 0
+          assert auth['images_values_allowed'] is False
+          assert auth['model_fits_allowed'] == auth['heldout_scores_allowed'] == 0
+          assert auth['live_execute_branch'] == 'execute/algar-whitetail-gate0-v1'
+          assert auth['authoritative_output_filename'] == 'gate0_pre_response_certificate.json'
+          bindings = {
+              'source_contract_git_blob_sha': root / 'source_contract.json',
+              'gate0_evaluator_git_blob_sha': root / 'gate0_pre_response.py',
+              'generic_problem_contract_git_blob_sha': Path('src/eog/v2/problem_contract.py'),
+          }
+          for key, path in bindings.items():
+              observed = subprocess.check_output(['git', 'hash-object', str(path)], text=True).strip()
+              assert observed == auth[key], (key, observed, auth[key])
+          PY
+      - name: Verify no live marker in proposal
+        if: ${{ github.event_name == 'pull_request' }}
+        run: test ! -e validation/algar_whitetail_endpoint3/gate0_execute_once.json
+
+  live-gate0-once:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/execute/algar-whitetail-gate0-v1' }}
+    needs: synthetic-boundary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install EOG without dependency mutation
+        run: python -m pip install -e . --no-deps
+      - name: Verify one-shot execute marker
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('validation/algar_whitetail_endpoint3/gate0_execute_once.json')
+          r = json.loads(p.read_text())
+          assert r == {
+              'attempt_id': 'algar_whitetail_endpoint3_v1',
+              'issue': 378,
+              'execute_once': True,
+              'authorization': 'gate0_execution_authorization.json'
+          }
+          PY
+      - name: Execute Algar safe-file Gate0 once
+        run: python -m validation.algar_whitetail_endpoint3.gate0_pre_response
+      - name: Audit terminal certificate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('validation/algar_whitetail_endpoint3/gate0_pre_response_certificate.json')
+          r = json.loads(p.read_text())
+          assert r['attempt_id'] == 'algar_whitetail_endpoint3_v1'
+          assert r['issue'] == 378
+          assert r['status'] in {'gate0_pre_response_ready', 'stop_pre_response_source_registry_or_geometry'}
+          assert 0 <= r['safe_file_requests'] <= 5
+          assert 0 <= r['safe_file_bytes_opened'] <= 70000
+          assert r['images_requests'] == 0
+          assert r['images_header_bytes_opened'] == 0
+          assert r['images_payload_bytes_opened'] == 0
+          assert r['images_rows_opened'] == 0
+          assert r['images_values_opened'] is False
+          assert r['model_fits'] == r['heldout_scores'] == 0
+          assert r['counts_as_predictive_evidence'] is False
+          if r['status'] == 'gate0_pre_response_ready':
+              assert r['candidate_node_count'] >= 30
+              assert r['candidate_unit_count'] >= 200
+              assert r['context_count'] >= 10
+              assert sorted(int(k) for k in r['site_fold_counts']) == [1, 2, 3, 4, 5]
+              assert r['normalized_problem']['response_locked'] is True
+              assert r['normalized_problem']['schema'] == 'eog.normalized_pre_response_problem.v1'
+              assert len(r['world_family']['local_worlds']) >= 3
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algar-whitetail-gate0-pre-response
+          path: validation/algar_whitetail_endpoint3/gate0_pre_response_certificate.json
+          if-no-files-found: error
