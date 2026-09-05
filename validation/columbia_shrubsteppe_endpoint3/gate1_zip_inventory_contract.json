@@ -37,7 +37,7 @@
     ],
     "range_status_required": 206,
     "content_encoding_required": "identity",
-    "suffix_window_bytes": 65557,
+    "suffix_window_bytes": 22,
     "maximum_central_directory_range_bytes": 2000000,
     "maximum_presign_requests_total": 2,
     "maximum_s3_range_requests_total": 4,
@@ -46,7 +46,8 @@
     "full_archive_get_allowed": false
   },
   "zip_inventory": {
-    "support_standard_zip_comment": true,
+    "support_standard_zip_comment": false,
+    "zip_comment_terminal_behavior": "STOP rather than widen the suffix read into possible compressed member payload",
     "support_multidisk": false,
     "support_zip64": false,
     "encrypted_members_allowed": false,
