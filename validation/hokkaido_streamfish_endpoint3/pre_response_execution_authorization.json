@@ -1,0 +1,26 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.pre_response_execution_authorization.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "source_contract_git_blob_sha": "89876d3e6912a60f1afe23ee75c0c84a6aa213ae",
+  "geometry_evaluator_git_blob_sha": "d04568d2554faf33ff341c000797cfb9f6100512",
+  "live_runner_git_blob_sha": "f354ecce3a61d0bca944166005c7388a09bc8955",
+  "allowed_live_sources": {
+    "coordinate_registry": "https://raw.githubusercontent.com/aterui/public-proj_fishery-stability/17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67/data_raw/gis/site-coordinate_hogosuimen_terui-org-2019.csv",
+    "formatting_code": "https://raw.githubusercontent.com/aterui/public-proj_fishery-stability/17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67/code/data_fmt_fishdata.R"
+  },
+  "authorized_external_gets": 2,
+  "response_table_requests_allowed": 0,
+  "response_table_bytes_allowed": 0,
+  "response_rows_allowed": 0,
+  "response_values_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "execute_live_only_after_merge_to_main": true,
+  "valid_terminal_statuses": [
+    "pre_response_geometry_ready",
+    "stop_pre_response_source_registry_or_geometry"
+  ],
+  "post_result_source_commit_blob_site_fold_world_or_feature_repair_allowed": false,
+  "next_response_stage_requires_separate_frozen_contract": true
+}
