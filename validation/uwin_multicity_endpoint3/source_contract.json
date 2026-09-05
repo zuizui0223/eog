@@ -1,0 +1,177 @@
+{
+  "schema": "eog.uwin_multicity_endpoint3.source_contract.v1",
+  "attempt_id": "uwin_multicity_endpoint3_v1",
+  "issue": 375,
+  "chapter": "N3",
+  "question": "WHERE can it become real?",
+  "selection_boundary": {
+    "selected_after_scientific_stops": 27,
+    "selected_after_administrative_exclusions": 3,
+    "fresh_predictive_endpoints_with_scores": 2,
+    "selection_basis": "response-blind public GitHub source architecture with physically separate site coordinates, site-season covariates, range availability and capture-history response",
+    "capture_history_payload_opened_before_contract": false,
+    "capture_history_header_opened_before_contract": false,
+    "focal_detection_prevalence_used": false,
+    "published_y_based_species_filter_used": false,
+    "eog_score_used": false
+  },
+  "source": {
+    "repository": "mfidino/uwin-luxury-effect",
+    "commit": "1a051d27ec2fc2ff123dbab9732eeb0a9109f1de",
+    "safe_files": {
+      "site_coordinates": {
+        "path": "data/cleaned_data/UWIN_site_coordinates.csv",
+        "git_blob_sha1": "96a47a938ff7af516138f74aa723473048793366",
+        "size_bytes": 37341,
+        "raw_url": "https://raw.githubusercontent.com/mfidino/uwin-luxury-effect/1a051d27ec2fc2ff123dbab9732eeb0a9109f1de/data/cleaned_data/UWIN_site_coordinates.csv"
+      },
+      "site_covariates": {
+        "path": "data/cleaned_data/covariates/site_covariates.csv",
+        "git_blob_sha1": "84253d41ccdf402d0708b56b65bba7a5ce29481c",
+        "size_bytes": 1075429,
+        "raw_url": "https://raw.githubusercontent.com/mfidino/uwin-luxury-effect/1a051d27ec2fc2ff123dbab9732eeb0a9109f1de/data/cleaned_data/covariates/site_covariates.csv"
+      },
+      "range_availability": {
+        "path": "data/cleaned_data/covariates/dist_city_to_species_edge.csv",
+        "git_blob_sha1": "b86ef57fe578830fe997ccfd9ba9458ed043943f",
+        "size_bytes": 11156,
+        "raw_url": "https://raw.githubusercontent.com/mfidino/uwin-luxury-effect/1a051d27ec2fc2ff123dbab9732eeb0a9109f1de/data/cleaned_data/covariates/dist_city_to_species_edge.csv"
+      },
+      "housing_cost": {
+        "path": "data/cleaned_data/covariates/cost_one_bedroom_apartment.csv",
+        "git_blob_sha1": "1a6f75a8e155b116a31b1e110d2432aaa421d961",
+        "size_bytes": 6338,
+        "raw_url": "https://raw.githubusercontent.com/mfidino/uwin-luxury-effect/1a051d27ec2fc2ff123dbab9732eeb0a9109f1de/data/cleaned_data/covariates/cost_one_bedroom_apartment.csv"
+      }
+    },
+    "forbidden_response": {
+      "path": "data/cleaned_data/full_capture_history.csv",
+      "git_blob_sha1": "14e43f7af987776c5949aa324c09c160b35b1253",
+      "size_bytes": 44054391,
+      "raw_url": "https://raw.githubusercontent.com/mfidino/uwin-luxury-effect/1a051d27ec2fc2ff123dbab9732eeb0a9109f1de/data/cleaned_data/full_capture_history.csv",
+      "requests_before_response_header_authorization": 0,
+      "bytes_before_response_header_authorization": 0
+    }
+  },
+  "city_codes": [
+    "atga", "autx", "chil", "deco", "edal", "foco", "icia", "inin", "jams", "maks",
+    "mawi", "occa", "phaz", "rony", "safl", "scut", "sewa", "slmo", "tawa", "wide"
+  ],
+  "safe_schema": {
+    "site_coordinates_required_columns": ["Site", "Long", "Lat", "Crs", "City"],
+    "site_covariates_required_columns": [
+      "Site", "City", "Season", "Building_age", "Impervious", "Income", "Ndvi", "Population_density", "Vacancy"
+    ],
+    "range_first_column_semantics": "species identifier stored in the first CSV column, whose header may be empty or a nonempty species label",
+    "range_city_columns_exact_set": [
+      "atga", "autx", "chil", "deco", "edal", "foco", "icia", "inin", "jams", "maks",
+      "mawi", "occa", "phaz", "rony", "safl", "scut", "sewa", "slmo", "tawa", "wide"
+    ],
+    "housing_cost_required_columns": ["City", "Season", "Price"],
+    "allow_additional_site_covariate_columns_but_ignore_them": true,
+    "duplicate_columns_allowed": false,
+    "manual_schema_aliasing_after_live_read_allowed": false
+  },
+  "focal_selection": {
+    "source": "range_availability only",
+    "in_range_rule": "finite city-range distance >= 0",
+    "score": "number of in-range cities among the frozen 20 city columns",
+    "selection": "maximum score, tie broken by lexicographically smallest exact species identifier",
+    "minimum_in_range_cities": 10,
+    "manual_species_switch_allowed": false,
+    "capture_history_prevalence_allowed": false,
+    "published_minimum_detection_filter_allowed": false
+  },
+  "candidate_registry": {
+    "row_unit": "unique City x Site x Season from site_covariates whose City is in the frozen focal species range",
+    "coordinate_key": ["City", "Site"],
+    "coordinate_crs_required": 4326,
+    "all_candidate_sites_must_join_uniquely_to_coordinates": true,
+    "duplicate_candidate_rows_allowed": false,
+    "site_or_season_dropping_after_response_allowed": false,
+    "minimum_unique_sites": 80,
+    "minimum_candidate_site_seasons": 200,
+    "season_pattern": "^(JA|AP|JU|OC)[0-9]{2}$"
+  },
+  "heldout_split": {
+    "unit": "site",
+    "site_key": "City|Site",
+    "fold_rule": "1 + (big-endian integer from first 8 bytes of SHA-256(UTF-8 City|Site) modulo 5)",
+    "fold_ids": [1, 2, 3, 4, 5],
+    "all_seasons_from_a_site_share_fold": true,
+    "all_folds_must_have_candidate_rows_before_response": true,
+    "response_stratification_or_reassignment_allowed": false,
+    "minimum_heldout_folds_with_both_classes_to_be_frozen_before_final": 4
+  },
+  "response_blind_world_geometry": {
+    "node_unit": "unique City x Site in the candidate registry",
+    "local_edge_scope": "same City only",
+    "cross_city_local_edges_allowed": false,
+    "distance_metric": "Haversine great-circle distance on released WGS84 longitude/latitude",
+    "threshold_population": "all positive unordered same-city pair distances among candidate nodes",
+    "threshold_quantiles": [0.25, 0.50, 0.75, 0.90],
+    "quantile_method": "linear interpolation identical to numpy.quantile(method='linear')",
+    "edge_rule": "undirected local edge when same-City Haversine distance <= frozen threshold",
+    "deduplicate_identical_local_adjacency_worlds": true,
+    "minimum_distinct_positive_local_worlds": 3,
+    "external_open_required": true,
+    "external_open_semantics": "explicit permissive analytical alternative and the only world allowed to bridge disconnected metropolitan components",
+    "world_thresholds_must_be_frozen_before_response": true
+  },
+  "baseline": {
+    "learner_family": "RandomForestClassifier",
+    "same_learner_fit_split_both_arms": true,
+    "frozen_roles": [
+      "longitude", "latitude", "City", "Season", "Building_age", "Impervious", "Income", "Ndvi", "Population_density", "Vacancy", "focal_city_range_distance"
+    ],
+    "housing_cost_rule": "include Price only if every unique candidate City x Season maps to exactly one finite housing-cost row; otherwise omit Price response-independently and record the omission at Gate0",
+    "categorical_encoding": "one-hot with lexicographically sorted observed categories frozen at Gate0",
+    "numeric_missingness": "STOP if any frozen baseline numeric role is missing or non-finite on a candidate row",
+    "feature_selection_after_response_allowed": false,
+    "augmented_only_difference": "unchanged symmetric_world_support_summary_v1",
+    "primary_metric": "binary log loss"
+  },
+  "layer_a": {
+    "mode": "static world-set forecast within heldout fold and Season",
+    "calibration_positive_evidence": "focal-positive calibration site-seasons from the same Season only",
+    "fixed_source_rule": "within each City containing calibration positives in that Season, lexicographically first positive Site is a fixed source and remaining positives are compatibility evidence",
+    "training_layer_b_self_exclusion_required": true,
+    "heldout_labels_enter_layer_a_before_scoring": false,
+    "exact_world_ids_supervised": false,
+    "external_open_is_explicitly_permissive": true
+  },
+  "response_endpoint": {
+    "unit": "candidate UWIN site-season x focal species recorded detection",
+    "effort_eligibility_rule": "J > 0",
+    "positive_rule": "Y > 0 and J > 0",
+    "negative_rule": "Y == 0 and J > 0",
+    "unsurveyed_rule": "J <= 0 or missing; never convert to zero",
+    "zero_semantics": "recorded non-detection during an operational camera deployment, not biological absence, historical absence, demographic nonuse or inability to colonize",
+    "Y_based_registry_or_feature_tuning_allowed": false
+  },
+  "gate0_firewall": {
+    "authorized_safe_file_gets": 4,
+    "allowed_host": "raw.githubusercontent.com",
+    "maximum_safe_file_bytes_total": 1200000,
+    "response_file_requests": 0,
+    "response_header_bytes": 0,
+    "response_payload_bytes": 0,
+    "response_rows": 0,
+    "response_values": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "paper_ready_bindings": {
+    "cross_ecosystem_synthesis_canonical_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02",
+    "feature_count_placebo_canonical_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd",
+    "excluded_world_information_canonical_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
+  },
+  "hard_stop": {
+    "source_commit_or_blob_switch_allowed": false,
+    "response_file_open_before_separate_header_gate_allowed": false,
+    "manual_species_or_city_switch_allowed": false,
+    "post_response_registry_split_world_or_feature_retuning_allowed": false,
+    "retry_after_full_response_consumption_allowed": false,
+    "fourth_dataset_after_valid_third_predictive_terminal_allowed": false
+  }
+}
