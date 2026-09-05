@@ -1,0 +1,44 @@
+{
+  "schema": "eog.uwin_multicity_endpoint3.gate0_terminal_stop.v1",
+  "attempt_id": "uwin_multicity_endpoint3_v1",
+  "issue": 375,
+  "status": "stop_pre_response_source_registry_or_geometry",
+  "terminal_stage": "response_independent_baseline_covariate_value",
+  "reason": "Ndvi for jams|ALP|JU16 is not numeric",
+  "counts_as_predictive_evidence": false,
+  "interpret_as_adverse_layer_b_result": false,
+  "retry_or_post_result_repair_allowed": false,
+  "authoritative_execution": {
+    "run_id": 33949107244,
+    "live_job_id": 101260451576,
+    "head_sha": "1f0aa7502421819dd9366e8a595a3485d070043d",
+    "artifact_id": 9964234521,
+    "artifact_name": "uwin-multicity-gate0-pre-response",
+    "artifact_digest": "sha256:6a448296a0a3f9068ee9a9c7d9ab51a303584119291b10bbbe198001e0a5af51",
+    "result_fingerprint": "7bc9f43ea492eed50bebd7e91f409acd7570837ec962a35c959f866368a0b4bd",
+    "contract_sha256": "77395fe68dd0bc8ebb688bb77f4c3bee0c5cb24bed6a15221b3319e354f0b024"
+  },
+  "source_audit": {
+    "source_repository": "mfidino/uwin-luxury-effect",
+    "source_commit": "1a051d27ec2fc2ff123dbab9732eeb0a9109f1de",
+    "safe_file_requests": 4,
+    "safe_file_bytes_opened": 1130264,
+    "safe_source_identity_checks_passed_before_value_stop": true
+  },
+  "response_firewall": {
+    "capture_history_requests": 0,
+    "capture_history_header_bytes_opened": 0,
+    "capture_history_payload_bytes_opened": 0,
+    "capture_history_rows_opened": 0,
+    "capture_history_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_interpretation": "The attempt stopped before biological response access because the prospectively frozen Gate0 treated every baseline numeric covariate as structurally mandatory. This is protocol-integrity evidence and reveals an adapter-generalization problem; it is not evidence against Layer B.",
+  "genericity_lesson": {
+    "structural_fields": "stable node identity, geometry/topology, context and effort eligibility should remain fail-closed",
+    "optional_baseline_fields": "future prospectively frozen adapters should distinguish optional predictive covariates from structural fields and use a fold-safe missingness policy rather than converting ordinary covariate missingness into a source/geometry STOP",
+    "retroactive_repair_of_issue_375": false
+  },
+  "next_gate": "none for Issue #375; record as the 28th scientific protocol STOP and use only a new response-unconsumed candidate for the third predictive endpoint"
+}
