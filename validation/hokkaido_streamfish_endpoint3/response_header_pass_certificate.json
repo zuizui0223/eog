@@ -1,0 +1,51 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.response_header_pass.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "status": "response_header_ready",
+  "terminal_stage": "response_header_only",
+  "authoritative_execution": {
+    "workflow_run_id": 33934291168,
+    "head_sha": "7306656b4bcf1af70792f793b2a493496d62a495",
+    "artifact_id": 9959635760,
+    "artifact_digest": "sha256:5363575343680b3233d9bd2d4a8bb62a5ab29e90f1e5f705abb96e4287a6f2a8",
+    "result_fingerprint": "fc19bcc0e17299ea7092d9ca49dd2b48f18f18b5c226777b2f81a25caf7fcbfc"
+  },
+  "source_commit": "17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67",
+  "response_file_git_blob_sha1": "d0544a56b168511fa2c85c4199372599922e5651",
+  "response_file_size_bytes": 6508582,
+  "range_request": "bytes=0-255",
+  "http_status": 206,
+  "content_range": "bytes 0-255/6508582",
+  "header_bytes_opened": 72,
+  "header_sha256": "3a920dbe72f2ed6d6e8d55d7370076f5379ff03eaf94d03d56ef9f0db6e23014",
+  "line_terminator": "LF",
+  "physical_columns": [
+    "year",
+    "river",
+    "site",
+    "pass",
+    "area",
+    "area_unit",
+    "latin",
+    "abundance",
+    "family",
+    "genus",
+    "c_name"
+  ],
+  "required_index_by_role": {
+    "year": 0,
+    "river": 1,
+    "site": 2,
+    "area": 4,
+    "latin": 6,
+    "abundance": 7,
+    "genus": 9
+  },
+  "response_data_row_bytes_opened": 0,
+  "response_rows_opened": 0,
+  "response_values_opened": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "counts_as_predictive_evidence": false
+}

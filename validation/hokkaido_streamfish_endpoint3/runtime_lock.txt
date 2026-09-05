@@ -1,0 +1,4 @@
+# Frozen before Hokkaido stream-fish full response rows/values are opened.
+# Changing these versions after outcome access is forbidden.
+numpy==2.1.3
+scikit-learn==1.5.2

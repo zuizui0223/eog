@@ -1,0 +1,65 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.final_endpoint_declaration.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "runtime": {
+    "python": "3.12",
+    "numpy": "2.1.3",
+    "scikit_learn": "1.5.2"
+  },
+  "paired_complementarity": {
+    "metric_name": "binary_log_loss",
+    "lower_is_better": true,
+    "expected_outer_unit_count": 5,
+    "favorable_min_augmented_wins": 4,
+    "adverse_min_baseline_wins": 4,
+    "tie_tolerance": 0.0,
+    "learner_fit_fingerprint": "3ffceb35fac30a5af91ce4f002eae9da23c92dc6fe26a247d7db9f783f385342",
+    "response_endpoint_fingerprint": "3fcae39d49c943a70e1419c1211cf9d2a7c7ea0f9e34d940af9051daa1e0f25c",
+    "split_fingerprint": "61f0e8757420db455bbf8981b1c626652c7285a699717578d10c30f4cb72ae99",
+    "external_feature_fingerprint": "d6069c8b00a9e178384eb97e34d1bab3e4f82190c546ff632376e008ba545c07",
+    "eog_feature_fingerprint": "d052bcfa6b87a93892ecf2ba775c65493b60108afda8f34d9628d13db657f7ca"
+  },
+  "exact_batch_first_passage_optimization": {
+    "purpose": "compute the unchanged EOG first-passage support for many cross-fit source sets without repeating target-by-target matrix propagation",
+    "operator_is_built_by_existing_build_dynamic_transition_operator": true,
+    "initial_matrix": "H_0 = identity(n_nodes)",
+    "recurrence": "H_t = Q @ H_(t-1), then set diag(H_t)=1 for t=1..max_steps",
+    "semantics": "H_t[s,j] is cumulative first-passage support for target j from unit source s within t steps under the same sub-stochastic Q; this is algebraically equivalent to target-absorbing summarize_first_passage",
+    "multiple_source_support": "equal-weight mean of source rows H_t[source_indices,:], with declared source-node columns set to 1.0 at every step to match WorldSetForecast source handling",
+    "compatibility_target_rule": "non-source occurrence target is supported iff the equal-weight final-step support is > support_tolerance=0",
+    "synthetic_equivalence_to_package_summarize_first_passage_required_before_live_execution": true,
+    "layer_b_projection_still_calls_existing_summarize_worldset_for_prediction": true,
+    "optimization_may_not_change_world_membership_feature_names_or_support_values": true
+  },
+  "learner_payload": {
+    "family": "sklearn.ensemble.RandomForestClassifier",
+    "n_estimators": 500,
+    "max_features": "sqrt",
+    "min_samples_leaf": 5,
+    "class_weight": null,
+    "random_state": 20260817,
+    "n_jobs": -1,
+    "probability_clip_epsilon": 1e-6
+  },
+  "response_endpoint_payload": {
+    "unit": "valid-coordinate monitoring site x ever-recorded Barbatula oreas detection during 1999-2019",
+    "source_blob": "d0544a56b168511fa2c85c4199372599922e5651",
+    "focal_physical_latin": "Noemacheilus_barbatulus",
+    "ever_detection": "any numeric abundance > 0"
+  },
+  "split_payload": {
+    "fold_rule": "((site_integer - 1) % 5) + 1",
+    "fold_assignment_fingerprint": "bb1976cd68a95aa51ad4f270817e6bc971f10121322f597cbc1795a01fba83d4",
+    "fold_ids": [1, 2, 3, 4, 5]
+  },
+  "external_feature_payload": {
+    "baseline_matrix_fingerprint": "d586a060cb3410e628d3d97367cab26404cc75e75780d8951c3657f43f3e789c",
+    "source": "coordinate_registry_only"
+  },
+  "eog_feature_payload": {
+    "representation": "symmetric_world_support_summary_v1",
+    "features": ["surviving_world_fraction", "support_mean", "support_std", "support_min", "support_max", "support_q25", "support_q50", "support_q75", "positive_support_fraction", "support_range"],
+    "forecast_step": 125
+  }
+}
