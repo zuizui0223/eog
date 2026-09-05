@@ -35,7 +35,7 @@ def test_candidate_flow_summary_matches_the_frozen_denominator():
 
     assert ledger["schema"] == "eog.paper_ready_replication.candidate_flow_ledger.v1"
     assert summary["fresh_predictive_endpoints_with_scores"] == len(results) == 2
-    assert summary["fresh_candidate_stops_listed"] == len(stops) == 27
+    assert summary["fresh_candidate_stops_listed"] == len(stops) == 28
     assert summary["administrative_exclusions"] == len(exclusions) == 3
     assert summary["third_fresh_predictive_endpoint_still_required"] is True
     assert len({row["issue"] for row in stops}) == len(stops)
