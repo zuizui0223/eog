@@ -1,0 +1,54 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.response_header_contract.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "pre_response_pass_git_blob_sha": "dad0bba05787ed686c1095a642d956534e096bf7",
+  "pre_response_result_fingerprint": "04fdec6d61a2f0a59dc8813fe8fe7e162ea4293427a60b9addec64b9b1e01e4c",
+  "source": {
+    "repository": "aterui/public-proj_fishery-stability",
+    "commit": "17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67",
+    "path": "data_fmt/data_hkd_prtwsd_fmt.csv",
+    "git_blob_sha1": "d0544a56b168511fa2c85c4199372599922e5651",
+    "size_bytes": 6508582,
+    "raw_url": "https://raw.githubusercontent.com/aterui/public-proj_fishery-stability/17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67/data_fmt/data_hkd_prtwsd_fmt.csv"
+  },
+  "transport": {
+    "method": "GET",
+    "range_start": 0,
+    "range_end": 255,
+    "required_http_status": 206,
+    "required_content_range": "bytes 0-255/6508582",
+    "allowed_final_url_must_equal_source_url": true,
+    "content_encoding": "identity",
+    "application_bytes_after_first_line_allowed": 0,
+    "full_body_fallback_allowed": false,
+    "range_expansion_after_result_allowed": false
+  },
+  "header_rule": {
+    "maximum_header_bytes_including_line_terminator": 256,
+    "line_terminators_allowed": ["LF", "CRLF"],
+    "utf8_bom_allowed": false,
+    "duplicate_columns_allowed": false,
+    "empty_columns_allowed": false,
+    "leading_or_trailing_column_whitespace_allowed": false,
+    "required_exact_tokens": ["year", "river", "site", "genus", "latin", "abundance", "area"],
+    "extra_unique_columns_allowed": true,
+    "required_tokens_must_each_occur_exactly_once": true,
+    "physical_order_is_frozen_from_header_result_for_later_parser": true,
+    "alias_repair_after_header_allowed": false
+  },
+  "firewall": {
+    "response_header_only": true,
+    "response_data_row_bytes_allowed": 0,
+    "response_rows_allowed": 0,
+    "response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0,
+    "counts_as_predictive_evidence": false
+  },
+  "valid_terminal_statuses": [
+    "response_header_ready",
+    "stop_pre_row_response_header_transport_or_schema"
+  ],
+  "next_full_response_stage_requires_separate_frozen_contract": true
+}
