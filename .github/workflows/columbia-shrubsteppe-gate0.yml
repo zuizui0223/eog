@@ -29,7 +29,7 @@ jobs:
         run: pytest -q tests/test_columbia_shrubsteppe_gate0_metadata.py
       - name: Compile Gate0 module
         run: python -m py_compile validation/columbia_shrubsteppe_endpoint3/gate0_metadata.py
-      - name: Verify authorization blobs and no proposal marker
+      - name: Verify authorization blobs
         run: |
           python - <<'PY'
           import json, subprocess
@@ -48,8 +48,10 @@ jobs:
           for key,path in bindings.items():
               observed=subprocess.check_output(['git','hash-object',str(path)],text=True).strip()
               assert observed==auth[key], (key, observed, auth[key])
-          assert not (root/'gate0_execute_once.json').exists()
           PY
+      - name: Verify no live marker in proposal
+        if: ${{ github.event_name == 'pull_request' }}
+        run: test ! -e validation/columbia_shrubsteppe_endpoint3/gate0_execute_once.json
 
   live-gate0-once:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/execute/columbia-shrubsteppe-gate0-v1' }}
