@@ -8,6 +8,12 @@ LEDGER = (
     / "paper_ready_replication"
     / "candidate_flow_ledger.json"
 )
+HOKKAIDO_CAPTURE_FAILURE = (
+    Path(__file__).resolve().parents[1]
+    / "validation"
+    / "hokkaido_streamfish_endpoint3"
+    / "final_output_capture_failure_certificate.json"
+)
 
 
 def _load_ledger():
@@ -24,10 +30,37 @@ def test_candidate_flow_summary_matches_the_frozen_denominator():
     assert ledger["schema"] == "eog.paper_ready_replication.candidate_flow_ledger.v1"
     assert summary["fresh_predictive_endpoints_with_scores"] == len(results) == 2
     assert summary["fresh_candidate_stops_listed"] == len(stops) == 26
-    assert summary["administrative_exclusions"] == len(exclusions) == 2
+    assert summary["administrative_exclusions"] == len(exclusions) == 3
     assert summary["third_fresh_predictive_endpoint_still_required"] is True
     assert len({row["issue"] for row in stops}) == len(stops)
     assert all(row["counts_as_predictive_evidence"] is False for row in stops)
+
+
+def test_hokkaido_response_consumed_capture_failure_is_administrative_only():
+    ledger = _load_ledger()
+    exclusions = {row["issue"]: row for row in ledger["administrative_exclusions"]}
+    hokkaido = exclusions[364]
+    assert hokkaido["classification"] == "response_consumed_output_capture_failure"
+    assert hokkaido["biological_response_access"] == "full_response_once"
+    assert hokkaido["full_response_execution_run_id"] == 33937721963
+    assert hokkaido["full_response_live_job_id"] == 101228856240
+    assert hokkaido["full_endpoint_step_conclusion"] == "success"
+    assert hokkaido["scientific_terminal_status_recoverable"] is False
+    assert hokkaido["counts_as_predictive_evidence"] is False
+    assert hokkaido["retry_allowed"] is False
+    assert 364 not in {row["issue"] for row in ledger["fresh_candidate_stops"]}
+
+    certificate = json.loads(HOKKAIDO_CAPTURE_FAILURE.read_text(encoding="utf-8"))
+    assert certificate["classification"] == "administrative_response_consumed_output_capture_failure"
+    assert certificate["fresh_attempt_consumed"] is True
+    assert certificate["scientific_terminal_status_recoverable"] is False
+    assert certificate["response_access"]["retry_allowed"] is False
+    assert certificate["capture_failure"]["runner_default_output_path"].endswith(
+        "final_endpoint_certificate.json"
+    )
+    assert certificate["capture_failure"]["workflow_audit_expected_path"].endswith(
+        "final_endpoint_result.json"
+    )
 
 
 def test_latest_gate_stops_remain_response_unconsumed_and_non_scientific():
@@ -88,6 +121,9 @@ def test_latest_gate_stops_remain_response_unconsumed_and_non_scientific():
     assert cassowary["metadata_bytes_opened"] == 4999
     assert cassowary["file_payload_bytes_opened"] == 0
     assert cassowary["response_values_opened"] is False
+    assert cassowary["gate0_artifact_digest"] == (
+        "sha256:c7eaec624c68b0444124af7d4a3f10202bb6e246a6b80e422333d6817a4bdb55"
+    )
 
     norway = by_issue[353]
     assert norway["terminal_stage"] == "metadata_identity_or_interface"

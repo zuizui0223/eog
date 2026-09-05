@@ -35,20 +35,22 @@
   ],
   "administrative_exclusions": [
     {"issue":296,"reason":"accidental placeholder; not a scientific candidate"},
-    {"issue":300,"reason":"duplicate White Mountain candidate; not an additional scientific denominator unit"}
+    {"issue":300,"reason":"duplicate White Mountain candidate; not an additional scientific denominator unit"},
+    {"issue":364,"system":"Hokkaido stream-fish — Barbatula oreas","classification":"response_consumed_output_capture_failure","reason":"the prospectively frozen full-response endpoint step completed successfully, but the runner wrote final_endpoint_certificate.json while the workflow audit and artifact upload expected final_endpoint_result.json; the ephemeral result was therefore not captured, its favorable/null/adverse status is unrecoverable, and a retry is forbidden after the full response was consumed","biological_response_access":"full_response_once","full_response_execution_run_id":33937721963,"full_response_live_job_id":101228856240,"full_endpoint_step_conclusion":"success","scientific_terminal_status_recoverable":false,"counts_as_predictive_evidence":false,"retry_allowed":false}
   ],
   "reporting_rules": {
     "show_successes_and_stops_in_same_candidate_flow": true,
     "interpret_stop_as_adverse_layer_b_result": false,
     "count_header_only_stop_as_predictive_test": false,
     "count_administrative_duplicate_as_candidate": false,
+    "count_response_consumed_capture_failure_as_predictive_test": false,
     "do_not_repair_and_relabel_terminal_fresh_attempts": true,
     "candidate_flow_is_methods_integrity_evidence": true
   },
   "current_denominator_summary": {
     "fresh_predictive_endpoints_with_scores": 2,
     "fresh_candidate_stops_listed": 26,
-    "administrative_exclusions": 2,
+    "administrative_exclusions": 3,
     "third_fresh_predictive_endpoint_still_required": true
   }
 }

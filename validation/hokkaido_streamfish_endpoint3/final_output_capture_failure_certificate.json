@@ -1,0 +1,51 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.final_output_capture_failure.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "classification": "administrative_response_consumed_output_capture_failure",
+  "counts_as_predictive_evidence": false,
+  "counts_as_scientific_protocol_stop": false,
+  "fresh_attempt_consumed": true,
+  "scientific_terminal_status_recoverable": false,
+  "authoritative_execution": {
+    "workflow_run_id": 33937721963,
+    "live_job_id": 101228856240,
+    "execute_branch": "execute/hokkaido-streamfish-final-endpoint-v1",
+    "execute_head_sha": "0ed215c4881ac99160598fff29d116e834d5de62",
+    "full_endpoint_step_conclusion": "success",
+    "full_endpoint_step_started_at": "2026-09-05T01:58:59Z",
+    "full_endpoint_step_completed_at": "2026-09-05T01:59:12Z",
+    "audit_step_conclusion": "failure"
+  },
+  "response_access": {
+    "full_response_get_authorized": 1,
+    "full_response_get_consumed": true,
+    "frozen_response_size_bytes": 6508582,
+    "frozen_response_git_blob_sha1": "d0544a56b168511fa2c85c4199372599922e5651",
+    "retry_allowed": false,
+    "source_switch_allowed": false
+  },
+  "capture_failure": {
+    "runner_default_output_path": "validation/hokkaido_streamfish_endpoint3/final_endpoint_certificate.json",
+    "workflow_audit_expected_path": "validation/hokkaido_streamfish_endpoint3/final_endpoint_result.json",
+    "failure_type": "filename_mismatch_after_successful_endpoint_execution",
+    "audit_exception": "FileNotFoundError",
+    "artifact_uploaded": false,
+    "runner_printed_scientific_result_to_stdout": false,
+    "ephemeral_runner_result_recoverable_after_job": false
+  },
+  "interpretation": {
+    "favorable_null_or_adverse_must_not_be_inferred": true,
+    "model_fit_count_must_not_be_inferred": true,
+    "heldout_score_count_must_not_be_inferred": true,
+    "candidate_must_not_be_rerun_as_fresh": true,
+    "candidate_must_not_be_counted_in_scored_endpoint_denominator": true,
+    "candidate_must_not_increment_scientific_stop_denominator": true,
+    "next_endpoint3_attempt_must_use_new_response_unconsumed_candidate": true
+  },
+  "evidence": {
+    "runner_default_output_source_blob": "ec449c5aedb30e2db3a44477c8c3b97bfb687b02",
+    "runner_default_output_constant": "DEFAULT_OUTPUT = HERE / final_endpoint_certificate.json",
+    "workflow_log_observed_missing_path": "validation/hokkaido_streamfish_endpoint3/final_endpoint_result.json"
+  }
+}
