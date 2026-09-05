@@ -40,5 +40,5 @@ def test_uwin_stop_certificate_preserves_no_repair_and_genericity_lesson():
     assert cert["response_firewall"]["capture_history_requests"] == 0
     assert cert["response_firewall"]["capture_history_values_opened"] is False
     assert cert["genericity_lesson"]["retroactive_repair_of_issue_375"] is False
-    assert "structural" in cert["genericity_lesson"]["structural_fields"]
+    assert "fail-closed" in cert["genericity_lesson"]["structural_fields"]
     assert "fold-safe" in cert["genericity_lesson"]["optional_baseline_fields"]
