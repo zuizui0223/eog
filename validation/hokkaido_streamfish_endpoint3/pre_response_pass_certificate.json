@@ -1,0 +1,36 @@
+{
+  "schema": "eog.hokkaido_streamfish_endpoint3.pre_response_pass.v1",
+  "attempt_id": "hokkaido_streamfish_endpoint3_v1",
+  "issue": 364,
+  "status": "pre_response_geometry_ready",
+  "terminal_stage": "pre_response_geometry",
+  "authoritative_execution": {
+    "workflow_run_id": 33933883727,
+    "head_sha": "5d304374c3059d15f11210760f38cdceaa770244",
+    "artifact_id": 9959493448,
+    "artifact_digest": "sha256:7e2693b36a2fbb3a526553c96ff0b4af1d38bc4510e4121fd666dca534eb9661",
+    "result_fingerprint": "04fdec6d61a2f0a59dc8813fe8fe7e162ea4293427a60b9addec64b9b1e01e4c"
+  },
+  "source_commit": "17a9ff57e6eaa5767eb291f4d0c4f3de20b43a67",
+  "nonresponse_source_bytes_opened": 10734,
+  "valid_node_count": 126,
+  "missing_coordinate_site_ids": ["atsuta6", "kokamotsu4", "usubetsu4"],
+  "fold_counts": {"1": 35, "2": 34, "3": 29, "4": 16, "5": 12},
+  "local_worlds": [
+    {"world_id": "same_river_q25", "threshold_km": 1.7046386031736964, "edge_count": 57, "graph_fingerprint": "b8070300519f5332c27e35e5c8e22a081323933b1821942e81b7f4ac0a1a248a"},
+    {"world_id": "same_river_q50", "threshold_km": 2.924936901303434, "edge_count": 114, "graph_fingerprint": "418ec839adf51c5a6dbc81765c4467f938dc409876c05edc3683879e4a1b98d6"},
+    {"world_id": "same_river_q75", "threshold_km": 5.015861944962153, "edge_count": 170, "graph_fingerprint": "d8ba321a092cd6ca90705460bb01f30ccc029c8d25c4d7546a863642472d9c0d"},
+    {"world_id": "same_river_q90", "threshold_km": 7.378739391414775, "edge_count": 204, "graph_fingerprint": "70efd64f7ac0c4ad397c6794d37cf76dd83d5e93eaca02c461052951faa05a9f"}
+  ],
+  "external_open_graph_fingerprint": "964b83d426ce5651cb8e447bb2f107bce775412d594c25790bb230c4f180d453",
+  "node_registry_fingerprint": "71a0796370d866c8d63495d32d44995facf0ebb879a00645653ab12a26b2e62a",
+  "fold_assignment_fingerprint": "bb1976cd68a95aa51ad4f270817e6bc971f10121322f597cbc1795a01fba83d4",
+  "baseline_matrix_fingerprint": "d586a060cb3410e628d3d97367cab26404cc75e75780d8951c3657f43f3e789c",
+  "response_table_requests": 0,
+  "response_table_bytes_opened": 0,
+  "response_rows_opened": 0,
+  "response_values_opened": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "counts_as_predictive_evidence": false
+}
