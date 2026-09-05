@@ -1,0 +1,84 @@
+{
+  "schema": "eog.columbia_shrubsteppe_endpoint3.gate1_zip_inventory_contract.v1",
+  "attempt_id": "columbia_shrubsteppe_endpoint3_v1",
+  "issue": 370,
+  "gate0_pass_git_blob_sha": "9b49652bb9bbd30ebb497f2a5b75db35d429fc24",
+  "gate0_result_fingerprint": "a73d1e8613e25a6c164fccb5f7e418ed87a623e805384e70521095fca1b4278e",
+  "dryad_version_id": 458477,
+  "archives": {
+    "csvs": {
+      "file_id": 4917780,
+      "name": "CSVs.zip",
+      "size": 87041,
+      "sha256": "3172038dd888e56ee2c96f7129c05fee5a15bfb90fab04cb9f23a2792d76cf6a",
+      "public_stream_url": "https://datadryad.org/downloads/file_stream/4917780"
+    },
+    "raw_data": {
+      "file_id": 4917782,
+      "name": "Raw_Data.zip",
+      "size": 6538269,
+      "sha256": "53593efcd2595ef3a6721927eb2deadb6185e97cd1df79136969b62d9434017d",
+      "public_stream_url": "https://datadryad.org/downloads/file_stream/4917782"
+    }
+  },
+  "transport": {
+    "dryad_redirect_status_allowed": [302, 303, 307, 308],
+    "dryad_redirect_body_bytes_allowed": 0,
+    "dryad_host": "datadryad.org",
+    "presigned_final_scheme": "https",
+    "presigned_final_hostname_suffix": ".amazonaws.com",
+    "required_presigned_query_keys": [
+      "X-Amz-Algorithm",
+      "X-Amz-Credential",
+      "X-Amz-Date",
+      "X-Amz-Expires",
+      "X-Amz-Signature",
+      "X-Amz-SignedHeaders"
+    ],
+    "range_status_required": 206,
+    "content_encoding_required": "identity",
+    "suffix_window_bytes": 22,
+    "maximum_central_directory_range_bytes": 2000000,
+    "maximum_presign_requests_total": 2,
+    "maximum_s3_range_requests_total": 4,
+    "maximum_external_requests_total": 6,
+    "http_200_range_fallback_allowed": false,
+    "full_archive_get_allowed": false
+  },
+  "zip_inventory": {
+    "support_standard_zip_comment": false,
+    "zip_comment_terminal_behavior": "STOP rather than widen the suffix read into possible compressed member payload",
+    "support_multidisk": false,
+    "support_zip64": false,
+    "encrypted_members_allowed": false,
+    "duplicate_member_names_allowed": false,
+    "local_header_reads_allowed": false,
+    "member_payload_reads_allowed": false,
+    "require_central_directory_adjacent_to_eocd": true
+  },
+  "focal_selection": {
+    "archive_role": "csvs",
+    "basename_suffix": "_dh.csv",
+    "require_all_matching_members_share_exactly_one_parent_directory": true,
+    "minimum_matching_members": 1,
+    "selection_order": "lexicographic basename, then full member name",
+    "select_index": 0,
+    "manual_choice_allowed": false,
+    "payload_access_before_selection_allowed": false
+  },
+  "firewall": {
+    "archive_member_payload_bytes_allowed": 0,
+    "local_header_bytes_allowed": 0,
+    "detection_history_payload_bytes_allowed": 0,
+    "camera_record_payload_bytes_allowed": 0,
+    "response_rows_allowed": 0,
+    "response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0,
+    "post_live_transport_or_inventory_repair_allowed": false
+  },
+  "terminal_statuses": {
+    "pass": "gate1_zip_inventory_ready",
+    "stop": "stop_pre_response_zip_transport_or_inventory"
+  }
+}
