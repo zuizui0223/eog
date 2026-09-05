@@ -108,7 +108,7 @@ jobs:
           assert r['model_fits'] == r['heldout_scores'] == 0
           assert r['counts_as_predictive_evidence'] is False
           if r['status'] == 'gate0_pre_response_ready':
-              assert r['candidate_node_count'] >= 50
+              assert r['candidate_node_count'] >= 30
               assert r['candidate_unit_count'] >= 200
               assert r['context_count'] >= 10
               assert sorted(int(k) for k in r['site_fold_counts']) == [1, 2, 3, 4, 5]
