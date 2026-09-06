@@ -1,0 +1,83 @@
+name: Record Leipzig final STOP bookkeeping
+
+on:
+  push:
+    branches:
+      - 'record/leipzig-final-stop-v1'
+    paths:
+      - '.github/workflows/record-leipzig-final-stop-bookkeeping.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply minimal ledger and denominator patch
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          ledger_path = Path('validation/paper_ready_replication/candidate_flow_ledger.json')
+          lines = ledger_path.read_text(encoding='utf-8').splitlines()
+          hits = [i for i, line in enumerate(lines) if '{"issue":381,' in line]
+          assert len(hits) == 1, hits
+          i = hits[0]
+          assert lines[i + 1].strip() == '],'
+          assert not lines[i].rstrip().endswith(',')
+          assert not any('{"issue":384,' in line for line in lines)
+          row = {
+              'issue': 384,
+              'system': 'Leipzig roe deer landscape camera detection',
+              'ecosystem_or_context': 'terrestrial peri-urban and agricultural landscape camera monitoring around Leipzig',
+              'terminal_stage': 'full_response_schema_or_linkage',
+              'reason': 'the once-only full response was consumed, but the frozen parser found focal eventStart outside the raw deployment interval at response row 1926; the attempt was not repaired by year rewriting, LE39 repair, interval widening, row dropping, species switching, or rerun',
+              'biological_response_access': 'full_response_once',
+              'response_bytes_opened': 2480328,
+              'safe_bytes_opened': 32930,
+              'full_response_consumed': True,
+              'gate_final_run_id': 34022855350,
+              'gate_final_job_id': 101458564307,
+              'gate_final_head_sha': 'ff381a603d8982f303ac0411ca30541f313108d7',
+              'gate_final_artifact_id': 9986083072,
+              'gate_final_artifact_digest': 'sha256:bda9e4081962295c3309d5fd1fad2e90b7a60510cd72a486a2ce130967eb1fd5',
+              'gate_final_fingerprint': 'aef1c9c82657c06d9522011bcf0c284653da80217ec38c3c2c64bd16aa33c5e7',
+              'retry_allowed': False,
+              'counts_as_predictive_evidence': False,
+          }
+          lines[i] = lines[i] + ','
+          lines.insert(i + 1, '    ' + json.dumps(row, ensure_ascii=False, separators=(',', ':')))
+          old = '    "fresh_candidate_stops_listed": 30,'
+          new = '    "fresh_candidate_stops_listed": 31,'
+          assert lines.count(old) == 1
+          lines[lines.index(old)] = new
+          ledger_path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+
+          needle = 'summary["fresh_candidate_stops_listed"] == len(stops) == 30'
+          replacement = 'summary["fresh_candidate_stops_listed"] == len(stops) == 31'
+          changed = 0
+          for path in Path('tests').glob('test_*.py'):
+              text = path.read_text(encoding='utf-8')
+              count = text.count(needle)
+              if count:
+                  path.write_text(text.replace(needle, replacement), encoding='utf-8')
+                  changed += count
+          assert changed >= 1, changed
+
+          parsed = json.loads(ledger_path.read_text(encoding='utf-8'))
+          assert len(parsed['fresh_candidate_stops']) == 31
+          assert parsed['fresh_candidate_stops'][-1]['issue'] == 384
+          assert parsed['current_denominator_summary']['fresh_candidate_stops_listed'] == 31
+          assert parsed['current_denominator_summary']['third_fresh_predictive_endpoint_still_required'] is True
+          PY
+      - name: Commit bookkeeping patch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add validation/paper_ready_replication/candidate_flow_ledger.json tests
+          git diff --cached --check
+          git commit -m 'Record Leipzig as 31st protocol STOP'
+          git push origin HEAD:record/leipzig-final-stop-v1
