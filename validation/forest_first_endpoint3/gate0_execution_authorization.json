@@ -1,0 +1,33 @@
+{
+  "schema": "eog.forest_first_endpoint3.gate0_execution_authorization.v1",
+  "attempt_id": "forest_first_endpoint3_v1",
+  "issue": 381,
+  "live_execute_branch": "execute/forest-first-gate0-v1",
+  "execute_once_marker": "validation/forest_first_endpoint3/gate0_execute_once.json",
+  "authorized_archive_url": "https://ipt.biodiversidad.co/sib/archive.do?r=panthera_camtrap-v2&v=3",
+  "authorized_final_hosts": ["ipt.biodiversidad.co"],
+  "authorized_size_probe": "bytes=0-0",
+  "authorized_metadata_ranges_after_probe": [
+    "exact final 22-byte zero-comment EOCD",
+    "exact EOCD-declared central-directory range"
+  ],
+  "maximum_external_requests": 3,
+  "maximum_archive_size_bytes": 2000000,
+  "maximum_central_directory_bytes": 524288,
+  "http_200_range_fallback_allowed": false,
+  "local_header_reads_allowed": false,
+  "member_payload_reads_allowed": false,
+  "observations_header_bytes_allowed": 0,
+  "observations_payload_bytes_allowed": 0,
+  "observations_rows_allowed": 0,
+  "observations_values_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "source_contract_git_blob_sha": "e25d28bf25df27c26218583a8da788af9169ce75",
+  "gate0_evaluator_git_blob_sha": "22f3868e557f5cebd64fb75d522e10c205e8e0b3",
+  "generic_problem_contract_git_blob_sha": "d032bbb53f2a61bb2f3354ca9576cdf3c19afdf2",
+  "authoritative_output_filename": "gate0_zip_inventory_certificate.json",
+  "no_live_execution_on_pull_request": true,
+  "no_post_stop_repair_or_rerun": true,
+  "next_gate_if_ready": "safe-member extraction of datapackage.json and deployments.csv only"
+}
