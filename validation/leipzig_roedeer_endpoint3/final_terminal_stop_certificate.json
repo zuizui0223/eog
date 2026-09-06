@@ -1,0 +1,33 @@
+{
+  "schema": "eog.leipzig_roedeer_endpoint3.final_terminal_stop.v1",
+  "attempt_id": "leipzig_roedeer_endpoint3_v1",
+  "issue": 384,
+  "status": "stop_full_response_schema_or_linkage",
+  "terminal_class": "protocol_or_estimability_stop",
+  "reason": "focal eventStart lies outside raw deployment interval at row 1926",
+  "counts_as_predictive_evidence": false,
+  "candidate_hunting_hard_stop": false,
+  "response_access": {
+    "biological_response_access": "full_response_once",
+    "response_bytes_opened": 2480328,
+    "safe_bytes_opened": 32930,
+    "retry_allowed": false,
+    "post_response_repair_or_retune_allowed": false
+  },
+  "authoritative_execution": {
+    "run_id": 34022855350,
+    "live_job_id": 101458564307,
+    "head_sha": "ff381a603d8982f303ac0411ca30541f313108d7",
+    "artifact_id": 9986083072,
+    "artifact_digest": "sha256:bda9e4081962295c3309d5fd1fad2e90b7a60510cd72a486a2ce130967eb1fd5",
+    "result_fingerprint": "aef1c9c82657c06d9522011bcf0c284653da80217ec38c3c2c64bd16aa33c5e7"
+  },
+  "protocol_boundary": {
+    "source_response_blob_sha1": "b4263a634d4bafdfe77ef4bef1fab24d45034cda",
+    "source_response_size_bytes": 2480328,
+    "focal_taxon": "Capreolus capreolus",
+    "no_year_rewrite_or_LE39_repair": true,
+    "no_species_site_fold_world_baseline_layer_b_learner_or_estimability_retune": true
+  },
+  "interpretation": "The once-only response was consumed and the frozen physical linkage contract failed before a valid paired predictive terminal was reached. This is a methods-integrity STOP, not favorable, null, or adverse Layer-B evidence."
+}
