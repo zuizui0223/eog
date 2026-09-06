@@ -1,0 +1,31 @@
+{
+  "schema": "eog.algar_whitetail_endpoint3.gate0_execution_authorization.v1",
+  "attempt_id": "algar_whitetail_endpoint3_v1",
+  "issue": 378,
+  "live_execute_branch": "execute/algar-whitetail-gate0-v1",
+  "execute_once_marker": "validation/algar_whitetail_endpoint3/gate0_execute_once.json",
+  "authorized_safe_file_gets": 5,
+  "authorized_host": "raw.githubusercontent.com",
+  "maximum_safe_file_bytes_total": 70000,
+  "authorized_safe_roles_in_order": [
+    "deployments",
+    "cameras",
+    "projects",
+    "local_covariate",
+    "common_names"
+  ],
+  "images_requests_allowed": 0,
+  "images_header_bytes_allowed": 0,
+  "images_payload_bytes_allowed": 0,
+  "images_rows_allowed": 0,
+  "images_values_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "source_contract_git_blob_sha": "40c7beeb37774b8ed0aa198eeda9f9bafa5c3374",
+  "gate0_evaluator_git_blob_sha": "295c90e14682829f95bb21aa6f488f25ef2d1811",
+  "generic_problem_contract_git_blob_sha": "d032bbb53f2a61bb2f3354ca9576cdf3c19afdf2",
+  "authoritative_output_filename": "gate0_pre_response_certificate.json",
+  "no_live_execution_on_pull_request": true,
+  "no_post_stop_repair_or_rerun": true,
+  "next_gate_if_ready": "separate images.csv header-only gate"
+}
