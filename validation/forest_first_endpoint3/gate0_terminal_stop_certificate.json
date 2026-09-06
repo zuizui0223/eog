@@ -1,0 +1,44 @@
+{
+  "schema": "eog.forest_first_endpoint3.gate0_terminal_stop_certificate.v1",
+  "attempt_id": "forest_first_endpoint3_v1",
+  "issue": 381,
+  "status": "stop_pre_response_zip_transport_or_inventory",
+  "classification": "response_blind_archive_range_transport_stop",
+  "reason": "the prospectively frozen Range bytes=0-0 archive size probe returned HTTP 200 rather than required HTTP 206; the response body was not opened and no alternate transport, full-body fallback, source/version switch, or rerun is allowed",
+  "authoritative_execution": {
+    "run_id": 34006584422,
+    "live_job_id": 101414854670,
+    "execute_head_sha": "41e8563da577182da605728f5feb37505c43ec15",
+    "artifact_id": 9981128987,
+    "artifact_digest": "sha256:30af4701ac2a54aefac33dea4221368995d17cc69d3b429cf2746376114982a4",
+    "result_fingerprint": "8d5361707550d92ba4895622b41f0b6edcc36063a57920b50351ccab909e39c6"
+  },
+  "transport_audit": {
+    "range_requests": 1,
+    "size_probe_status": 200,
+    "size_probe_content_range": null,
+    "final_host": "ipt.biodiversidad.co",
+    "archive_metadata_bytes_opened": 0,
+    "local_header_bytes_opened": 0,
+    "member_payload_bytes_opened": 0,
+    "datapackage_payload_bytes_opened": 0,
+    "deployments_payload_bytes_opened": 0,
+    "observations_header_bytes_opened": 0,
+    "observations_payload_bytes_opened": 0,
+    "observations_rows_opened": 0,
+    "observations_values_opened": false,
+    "media_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "protocol_boundary": {
+    "counts_as_predictive_evidence": false,
+    "retry_allowed": false,
+    "alternate_download_route_allowed": false,
+    "http_200_body_fallback_allowed": false,
+    "source_or_version_switch_allowed": false,
+    "interpret_as_adverse_layer_b_evidence": false,
+    "candidate_hunting_hard_stop": false
+  },
+  "next_action": "record as the 30th scientific/protocol STOP and continue only with a distinct response-unconsumed candidate"
+}
