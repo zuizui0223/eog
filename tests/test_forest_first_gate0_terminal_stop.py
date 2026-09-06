@@ -14,7 +14,7 @@ def test_forest_first_is_30th_response_unconsumed_protocol_stop():
     summary = ledger["current_denominator_summary"]
 
     assert summary["fresh_predictive_endpoints_with_scores"] == 2
-    assert summary["fresh_candidate_stops_listed"] == len(stops) == 30
+    assert summary["fresh_candidate_stops_listed"] == len(stops) == 31
     assert summary["administrative_exclusions"] == 3
     assert summary["third_fresh_predictive_endpoint_still_required"] is True
 
