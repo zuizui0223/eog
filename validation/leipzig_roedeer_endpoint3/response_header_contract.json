@@ -29,20 +29,20 @@
   "transport": {
     "method": "GET",
     "allowed_host": "raw.githubusercontent.com",
+    "persistent_connection_allowed": true,
     "content_encoding": "identity",
-    "first_range": "bytes=0-386",
-    "first_range_expected_length": 387,
-    "first_required_content_range": "bytes 0-386/2480328",
-    "second_range_only_if_first_ends_CR": "bytes=387-387",
-    "second_range_expected_length": 1,
-    "second_required_content_range": "bytes 387-387/2480328",
+    "range_unit_bytes": 1,
+    "first_offset": 0,
     "required_http_status": 206,
-    "allowed_final_url_must_equal_source_url": true,
-    "maximum_requests": 2,
+    "required_content_range_template": "bytes {offset}-{offset}/2480328",
+    "stop_condition": "stop immediately after the first LF byte is opened",
+    "maximum_requests": 388,
     "maximum_header_bytes_opened": 388,
     "response_data_row_bytes_allowed": 0,
     "full_body_fallback_allowed": false,
-    "range_expansion_allowed": false
+    "multi_byte_range_allowed": false,
+    "request_after_first_LF_allowed": false,
+    "redirect_following_allowed": false
   },
   "header_rule": {
     "line_terminators_allowed": ["LF", "CRLF"],
@@ -54,7 +54,8 @@
     "alias_or_spelling_repair_after_result_allowed": false,
     "extra_columns_allowed": false,
     "missing_columns_allowed": false,
-    "physical_order_frozen_for_final_parser": true
+    "physical_order_frozen_for_final_parser": true,
+    "maximum_header_bytes_including_terminator": 388
   },
   "firewall": {
     "response_header_only": true,
