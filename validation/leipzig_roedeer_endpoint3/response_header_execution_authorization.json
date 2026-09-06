@@ -1,0 +1,21 @@
+{
+  "schema": "eog.leipzig_roedeer_endpoint3.response_header_execution_authorization.v1",
+  "attempt_id": "leipzig_roedeer_endpoint3_v1",
+  "issue": 384,
+  "authorized_branch": "execute/leipzig-roedeer-gate1-header-v1",
+  "execute_once_marker": "validation/leipzig_roedeer_endpoint3/response_header_execute_once.json",
+  "gate0_pass_certificate_git_blob_sha1": "29c3762a20a1f28ee1f8c258a47d9f834e9e9b10",
+  "response_header_contract_git_blob_sha1": "3ce3cc318f0f2342fd9bf2af1d3b6b8f1282dd79",
+  "response_header_evaluator_git_blob_sha1": "6550affeae23442aa2b66e6daef090b112776da9",
+  "source_response_git_blob_sha1": "b4263a634d4bafdfe77ef4bef1fab24d45034cda",
+  "source_response_size_bytes": 2480328,
+  "maximum_one_byte_range_requests": 388,
+  "maximum_response_header_bytes_opened": 388,
+  "response_data_row_bytes_opened": 0,
+  "response_rows_opened": 0,
+  "response_values_opened": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "retry_after_terminal_result_allowed": false,
+  "alias_or_schema_repair_after_terminal_result_allowed": false
+}
