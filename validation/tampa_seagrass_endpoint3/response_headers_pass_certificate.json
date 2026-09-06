@@ -1,0 +1,44 @@
+{
+  "schema": "eog.tampa_seagrass_endpoint3.response_headers_pass_certificate.v1",
+  "attempt_id": "tampa_seagrass_endpoint3_v1",
+  "issue": 388,
+  "status": "response_headers_ready",
+  "authoritative_execution": {
+    "workflow_run_id": 34024152929,
+    "job_id": 101462138130,
+    "head_sha": "9deb8c968f9a3f77b0ad2b831ede39788cad0bda",
+    "artifact_id": 9986521567,
+    "artifact_name": "tampa-seagrass-response-headers",
+    "artifact_digest": "sha256:aba8a0b7669467e0d5c783f2bbec4f7f3be512f186aa17affe00ae6f67deafd1"
+  },
+  "result_fingerprint": "d9dfac34111a842f21feddf828bab4b6471a7ed91a61207cd1eb2c2aba96caea",
+  "occurrence": {
+    "source_git_blob_sha1": "d34aeb5aedb72459d1e04059629cb09450df929e",
+    "header_fingerprint": "35b0dff3928e8530fb9567d6011d65aee0b05c85b1e8198d1dcc821986ae1d1b",
+    "header_line_terminator": "LF",
+    "header_range_requests": 182,
+    "header_bytes_opened": 182,
+    "data_row_bytes_opened": 0,
+    "rows_opened": 0,
+    "values_opened": false
+  },
+  "emof": {
+    "source_git_blob_sha1": "e463046726080334637824555309fd89c7c447da",
+    "header_fingerprint": "cc877cb3fed49e5b9f0c1ca53e2565f4948337faf585eaafad69b416aa344c56",
+    "header_line_terminator": "LF",
+    "header_range_requests": 125,
+    "header_bytes_opened": 125,
+    "data_row_bytes_opened": 0,
+    "rows_opened": 0,
+    "values_opened": false
+  },
+  "total_header_range_requests": 307,
+  "total_header_bytes_opened": 307,
+  "response_data_row_bytes_opened": 0,
+  "response_rows_opened": 0,
+  "response_values_opened": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "counts_as_predictive_evidence": false,
+  "next_gate": "full_occurrence_response_once"
+}
