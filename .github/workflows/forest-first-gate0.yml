@@ -1,0 +1,130 @@
+name: Forest First endpoint3 Gate0
+
+on:
+  pull_request:
+    paths:
+      - 'validation/forest_first_endpoint3/**'
+      - 'tests/test_forest_first_gate0_zip_inventory.py'
+      - '.github/workflows/forest-first-gate0.yml'
+  push:
+    branches:
+      - 'execute/forest-first-gate0-v1'
+    paths:
+      - 'validation/forest_first_endpoint3/gate0_execute_once.json'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Verify bounded ZIP inventory boundary
+        run: pytest -q tests/test_forest_first_gate0_zip_inventory.py tests/test_v2_problem_contract.py
+      - name: Compile Forest First Gate0 module
+        run: python -m py_compile validation/forest_first_endpoint3/gate0_zip_inventory.py
+      - name: Verify authorization blobs and firewall
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          root = Path('validation/forest_first_endpoint3')
+          auth = json.loads((root / 'gate0_execution_authorization.json').read_text())
+          assert auth['attempt_id'] == 'forest_first_endpoint3_v1'
+          assert auth['issue'] == 381
+          assert auth['live_execute_branch'] == 'execute/forest-first-gate0-v1'
+          assert auth['authorized_size_probe'] == 'bytes=0-0'
+          assert auth['maximum_external_requests'] == 3
+          assert auth['http_200_range_fallback_allowed'] is False
+          assert auth['local_header_reads_allowed'] is False
+          assert auth['member_payload_reads_allowed'] is False
+          assert auth['observations_header_bytes_allowed'] == 0
+          assert auth['observations_payload_bytes_allowed'] == 0
+          assert auth['observations_rows_allowed'] == 0
+          assert auth['observations_values_allowed'] is False
+          assert auth['model_fits_allowed'] == auth['heldout_scores_allowed'] == 0
+          assert auth['authoritative_output_filename'] == 'gate0_zip_inventory_certificate.json'
+          bindings = {
+              'source_contract_git_blob_sha': root / 'source_contract.json',
+              'gate0_evaluator_git_blob_sha': root / 'gate0_zip_inventory.py',
+              'generic_problem_contract_git_blob_sha': Path('src/eog/v2/problem_contract.py'),
+          }
+          for key, path in bindings.items():
+              observed = subprocess.check_output(['git', 'hash-object', str(path)], text=True).strip()
+              assert observed == auth[key], (key, observed, auth[key])
+          PY
+      - name: Verify no live marker in proposal
+        if: ${{ github.event_name == 'pull_request' }}
+        run: test ! -e validation/forest_first_endpoint3/gate0_execute_once.json
+
+  live-gate0-once:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/execute/forest-first-gate0-v1' }}
+    needs: synthetic-boundary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install EOG without dependency mutation
+        run: python -m pip install -e . --no-deps
+      - name: Verify one-shot execute marker
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('validation/forest_first_endpoint3/gate0_execute_once.json')
+          r = json.loads(p.read_text())
+          assert r == {
+              'attempt_id': 'forest_first_endpoint3_v1',
+              'issue': 381,
+              'execute_once': True,
+              'authorization': 'gate0_execution_authorization.json'
+          }
+          PY
+      - name: Execute Forest First bounded ZIP Gate0 once
+        run: python -m validation.forest_first_endpoint3.gate0_zip_inventory
+      - name: Audit terminal certificate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('validation/forest_first_endpoint3/gate0_zip_inventory_certificate.json')
+          r = json.loads(p.read_text())
+          assert r['attempt_id'] == 'forest_first_endpoint3_v1'
+          assert r['issue'] == 381
+          assert r['status'] in {'gate0_zip_inventory_ready', 'stop_pre_response_zip_transport_or_inventory'}
+          assert 1 <= r['range_requests'] <= 3
+          assert 0 <= r['archive_metadata_bytes_opened'] <= 524311
+          assert r['local_header_bytes_opened'] == 0
+          assert r['member_payload_bytes_opened'] == 0
+          assert r['datapackage_payload_bytes_opened'] == 0
+          assert r['deployments_payload_bytes_opened'] == 0
+          assert r['observations_header_bytes_opened'] == 0
+          assert r['observations_payload_bytes_opened'] == 0
+          assert r['observations_rows_opened'] == 0
+          assert r['observations_values_opened'] is False
+          assert r['media_payload_bytes_opened'] == 0
+          assert r['model_fits'] == r['heldout_scores'] == 0
+          assert r['counts_as_predictive_evidence'] is False
+          if r['status'] == 'gate0_zip_inventory_ready':
+              assert r['range_requests'] == 3
+              assert r['archive_metadata_bytes_opened'] == 23 + r['inventory']['central_directory_size']
+              assert r['inventory']['zip_comment_size'] == 0
+              assert r['inventory']['local_header_bytes_opened'] == 0
+              assert r['inventory']['member_payload_bytes_opened'] == 0
+              assert set(r['required_members']) == {
+                  'datapackage.json', 'deployments.csv', 'observations.csv', 'media.csv'
+              }
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: forest-first-gate0-zip-inventory
+          path: validation/forest_first_endpoint3/gate0_zip_inventory_certificate.json
+          if-no-files-found: error

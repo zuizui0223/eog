@@ -1,0 +1,101 @@
+{
+  "schema": "eog.forest_first_endpoint3.source_contract.v1",
+  "attempt_id": "forest_first_endpoint3_v1",
+  "issue": 381,
+  "chapter": "N3",
+  "question": "WHERE can it become real?",
+  "selection_boundary": {
+    "selected_after_scientific_stops": 29,
+    "selected_after_administrative_exclusions": 3,
+    "fresh_predictive_endpoints_with_scores": 2,
+    "generic_problem_contract_required": true,
+    "archive_member_payload_opened_before_contract": false,
+    "observations_header_opened_before_contract": false,
+    "observations_values_opened_before_contract": false
+  },
+  "source": {
+    "dataset_name": "Monitoreo de mamíferos medianos y grandes en el área de influencia Forest First Colombia",
+    "publisher": "Fundación Panthera Colombia",
+    "format": "Camtrap DP",
+    "version": 3,
+    "published_version_date": "2025-07-28",
+    "gbif_uuid": "f0963153-077b-4676-a337-891a06fab52a",
+    "doi": "10.15468/bbbnwv",
+    "resource_url": "https://ipt.biodiversidad.co/sib/resource?r=panthera_camtrap-v2&request_locale=en&v=3",
+    "archive_url": "https://ipt.biodiversidad.co/sib/archive.do?r=panthera_camtrap-v2&v=3",
+    "allowed_final_hosts": ["ipt.biodiversidad.co"],
+    "published_design": {
+      "camera_traps": 64,
+      "deployment_records": 88,
+      "observation_records": 2257,
+      "media_records": 8349,
+      "camera_days": 5840,
+      "start_date": "2023-08-24",
+      "end_date": "2024-03-29",
+      "sampling_design": "systematicRandom"
+    }
+  },
+  "focal": {
+    "taxon": "Odocoileus cariacou",
+    "selection_rule": "prospectively frozen from the version-3 taxonomic scope without consulting detection frequency, prevalence, EOG scores, or source model results",
+    "manual_switch_allowed": false
+  },
+  "endpoint": {
+    "unit": "stable Forest First camera location",
+    "positive": "at least one released Odocoileus cariacou observation during frozen eligible camera effort",
+    "negative": "zero released focal observations during otherwise frozen eligible camera effort",
+    "zero_interpretation": "recorded non-detection during eligible camera effort, not biological absence, historical absence, or inability to colonize"
+  },
+  "future_gate1_registry": {
+    "prefer_nonempty_location_id": true,
+    "empty_location_id_fallback": "exact response-independent coordinate key only after exact reproducibility is proven",
+    "coordinate_averaging_allowed": false,
+    "coordinate_tolerance_rescue_allowed": false,
+    "response_derived_site_dropping_allowed": false,
+    "minimum_stable_locations": 40,
+    "minimum_eligible_effort_days_per_location": 45,
+    "holdout_unit": "stable location",
+    "fold_rule": "1 + (big-endian integer from first 8 bytes of SHA-256(UTF-8 stable location id) modulo 5)"
+  },
+  "world_family": {
+    "distance_metric": "Haversine great-circle distance on frozen WGS84 node coordinates",
+    "threshold_quantiles": [0.25, 0.50, 0.75, 0.90],
+    "deduplicate_identical_local_adjacency_worlds": true,
+    "minimum_distinct_positive_local_worlds": 3,
+    "external_open_required": true,
+    "layer_b": "symmetric_world_support_summary_v1"
+  },
+  "gate0": {
+    "mode": "bounded classic ZIP central-directory inventory",
+    "size_probe_range": "bytes=0-0",
+    "require_http_206": true,
+    "http_200_fallback_allowed": false,
+    "maximum_archive_size_bytes": 2000000,
+    "eocd_bytes": 22,
+    "zip_comment_allowed": false,
+    "zip64_allowed": false,
+    "multidisk_allowed": false,
+    "maximum_central_directory_bytes": 524288,
+    "required_unique_basenames": [
+      "datapackage.json",
+      "deployments.csv",
+      "observations.csv",
+      "media.csv"
+    ],
+    "local_header_reads_allowed": false,
+    "member_payload_reads_allowed": false,
+    "observations_header_bytes_allowed": 0,
+    "observations_payload_bytes_allowed": 0,
+    "observations_rows_allowed": 0,
+    "observations_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "hard_stop": {
+    "source_version_or_archive_switch_allowed": false,
+    "post_live_member_aliasing_allowed": false,
+    "zip_comment_or_zip64_fallback_allowed": false,
+    "full_archive_get_allowed": false,
+    "post_stop_repair_or_rerun_allowed": false
+  }
+}
