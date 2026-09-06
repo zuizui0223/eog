@@ -1,0 +1,45 @@
+{
+  "schema": "eog.leipzig_roedeer_endpoint3.gate0_execution_authorization.v1",
+  "attempt_id": "leipzig_roedeer_endpoint3_v1",
+  "issue": 384,
+  "source_contract_git_blob_sha": "128ed6723df8600d17bdd5c751a9a7f60bc5e03b",
+  "gate0_evaluator_git_blob_sha": "e38399d2e0f92e0f8911af4bcef3c2e180ea3f36",
+  "generic_problem_contract_git_blob_sha": "d032bbb53f2a61bb2f3354ca9576cdf3c19afdf2",
+  "authorized_safe_file_gets": 3,
+  "maximum_safe_file_bytes_total": 40000,
+  "authorized_safe_sources": {
+    "deployments": {
+      "path": "Data/deployments.csv",
+      "git_blob_sha1": "4eeb7b2a541e8232cddf451da32bb44befb0b527",
+      "size_bytes": 22206
+    },
+    "covariates": {
+      "path": "Data/covariate_estimation.csv",
+      "git_blob_sha1": "0ff15599d2523f55d4513e25895fb5ef12b5498f",
+      "size_bytes": 1928
+    },
+    "source_code": {
+      "path": "Code/Data_Preparation.R",
+      "git_blob_sha1": "b8d069d2e457b11d3344f830c7a86ad819c44c4b",
+      "size_bytes": 8796
+    }
+  },
+  "forbidden_response": {
+    "path": "Data/observations.csv",
+    "git_blob_sha1": "b4263a634d4bafdfe77ef4bef1fab24d45034cda",
+    "size_bytes": 2480328,
+    "requests_allowed": 0,
+    "header_bytes_allowed": 0,
+    "payload_bytes_allowed": 0,
+    "rows_allowed": 0,
+    "values_allowed": false
+  },
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "live_execute_branch": "execute/leipzig-roedeer-gate0-v1",
+  "execute_marker_path": "validation/leipzig_roedeer_endpoint3/gate0_execute_once.json",
+  "authoritative_output_filename": "gate0_pre_response_certificate.json",
+  "post_live_source_or_parser_repair_allowed": false,
+  "response_access_after_gate0_ready": "header-only gate must be separately frozen and authorized",
+  "retry_after_gate0_terminal_stop_allowed": false
+}
