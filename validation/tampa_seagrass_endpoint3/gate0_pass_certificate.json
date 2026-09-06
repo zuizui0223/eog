@@ -1,0 +1,56 @@
+{
+  "schema": "eog.tampa_seagrass_endpoint3.gate0_pass_certificate.v1",
+  "attempt_id": "tampa_seagrass_endpoint3_v1",
+  "issue": 388,
+  "status": "gate0_pre_response_ready",
+  "authoritative_execution": {
+    "workflow_run_id": 34023723427,
+    "job_id": 101460909293,
+    "head_sha": "702a1cabddc9384667d721a1ad5b932c2026bd88",
+    "artifact_id": 9986361240,
+    "artifact_name": "tampa-seagrass-gate0-pre-response",
+    "artifact_digest": "sha256:0860e262f5ce07baafdfd2ea2514bd94d1155b2a14a817a3e559acfd7f906240"
+  },
+  "gate0_result_fingerprint": "3f1936f04416fa369ff315d214db7690b6d0882d31a43d64dc496323a84f1159",
+  "normalized_problem_fingerprint": "ef752392449c002dd47d4f45168c5d04e145dcf022de1906d190ca7ab1a64fb7",
+  "source_fingerprint": "7ee3180f78f320ff71ad3e3c24eff65834d420287d3dee03565b1ed011f6ab77",
+  "split_fingerprint": "08d0f8a005023f96a18475af895f0055d40cab44a2cd7066cb7d2999465d52c5",
+  "world_family_fingerprint": "9aad5d1f338cb4ef2360e10d80841f713cab12742053d2770061a3acd4f994f8",
+  "candidate_registry_fingerprint": "4ac0c5416fd260f7ec55d8d1853266e83b633180e1cce64bbe3b7f835f51deb2",
+  "baseline_registry_fingerprint": "4a40f68c5f2867cec81097567306419b57344a8942fa41525ef0df683f7e2534",
+  "child_linkage_fingerprint": "7a1ba67d99480e7c35112fa841b06ebbc83cc3ae265056822e5f52bdaeb6d9e6",
+  "registry": {
+    "event_rows": 47346,
+    "parent_transect_events": 1497,
+    "child_point_events": 45849,
+    "ineligible_parent_events": 0,
+    "candidate_nodes": 71,
+    "candidate_units": 1497,
+    "contexts": 29,
+    "context_ids": ["1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025"],
+    "fold_node_counts": {"1": 14, "2": 14, "3": 16, "4": 14, "5": 13},
+    "fold_candidate_counts": {"1": 265, "2": 336, "3": 315, "4": 315, "5": 266}
+  },
+  "world_family": {
+    "metric": "haversine_km",
+    "pair_distance_count": 2485,
+    "local_thresholds_km": [14.910552760894076, 23.92945001793242, 34.70605518869811, 43.48070387866193],
+    "external_open": true
+  },
+  "firewall": {
+    "safe_file_requests": 1,
+    "safe_file_bytes_opened": 24654717,
+    "occurrence_requests": 0,
+    "occurrence_bytes_opened": 0,
+    "occurrence_rows_opened": 0,
+    "occurrence_values_opened": false,
+    "emof_requests": 0,
+    "emof_bytes_opened": 0,
+    "emof_rows_opened": 0,
+    "emof_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "counts_as_predictive_evidence": false,
+  "next_gate": "occurrence_and_emof_headers_only"
+}

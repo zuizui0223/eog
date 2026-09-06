@@ -1,0 +1,83 @@
+{
+  "schema": "eog.tampa_seagrass_endpoint3.response_headers_contract.v1",
+  "attempt_id": "tampa_seagrass_endpoint3_v1",
+  "issue": 388,
+  "gate0": {
+    "recording_merge": "13d51f6b3265a0981f9fb9ed74e2f655e0e5b756",
+    "pass_certificate_path": "validation/tampa_seagrass_endpoint3/gate0_pass_certificate.json",
+    "result_fingerprint": "3f1936f04416fa369ff315d214db7690b6d0882d31a43d64dc496323a84f1159",
+    "normalized_problem_fingerprint": "ef752392449c002dd47d4f45168c5d04e145dcf022de1906d190ca7ab1a64fb7"
+  },
+  "reference_provenance": {
+    "repository": "tbep-tech/obis-example",
+    "commit": "6c567beff95ea04f0e397101befb49d5233ace8f",
+    "code_path": "R/convert_to_dwc.R",
+    "code_git_blob_sha1": "efc8caded5df0eb6e9cab9167128c1496ada35eb",
+    "rule": "Exact physical output column order is prospectively derived from the pinned source conversion code select/transmute/bind_rows order before write_csv; no target response row/value was used."
+  },
+  "sources": {
+    "occurrence": {
+      "path": "dwc/occurrence.csv",
+      "git_blob_sha1": "d34aeb5aedb72459d1e04059629cb09450df929e",
+      "size_bytes": 12508487,
+      "raw_url": "https://raw.githubusercontent.com/tbep-tech/obis-example/6c567beff95ea04f0e397101befb49d5233ace8f/dwc/occurrence.csv",
+      "expected_header_ascii": "occurrenceID,eventID,basisOfRecord,occurrenceStatus,scientificName,scientificNameID,taxonRank,kingdom,phylum,class,order,family,genus,collectionCode,recordedBy,identificationRemarks",
+      "expected_header_bytes_without_terminator": 181,
+      "expected_tokens": ["occurrenceID","eventID","basisOfRecord","occurrenceStatus","scientificName","scientificNameID","taxonRank","kingdom","phylum","class","order","family","genus","collectionCode","recordedBy","identificationRemarks"],
+      "maximum_requests": 183,
+      "maximum_header_bytes_opened": 183
+    },
+    "emof": {
+      "path": "dwc/emof.csv",
+      "git_blob_sha1": "e463046726080334637824555309fd89c7c447da",
+      "size_bytes": 16449353,
+      "raw_url": "https://raw.githubusercontent.com/tbep-tech/obis-example/6c567beff95ea04f0e397101befb49d5233ace8f/dwc/emof.csv",
+      "expected_header_ascii": "eventID,occurrenceID,measurementType,measurementTypeID,measurementValue,measurementUnit,measurementUnitID,measurementRemarks",
+      "expected_header_bytes_without_terminator": 124,
+      "expected_tokens": ["eventID","occurrenceID","measurementType","measurementTypeID","measurementValue","measurementUnit","measurementUnitID","measurementRemarks"],
+      "maximum_requests": 126,
+      "maximum_header_bytes_opened": 126
+    }
+  },
+  "transport": {
+    "method": "GET",
+    "allowed_host": "raw.githubusercontent.com",
+    "persistent_connection_allowed": true,
+    "content_encoding": "identity",
+    "range_unit_bytes": 1,
+    "first_offset": 0,
+    "required_http_status": 206,
+    "stop_condition": "For each source independently, stop immediately after its first LF byte is opened.",
+    "total_maximum_requests": 309,
+    "total_maximum_header_bytes_opened": 309,
+    "response_data_row_bytes_allowed": 0,
+    "full_body_fallback_allowed": false,
+    "multi_byte_range_allowed": false,
+    "request_after_first_LF_allowed": false,
+    "redirect_following_allowed": false
+  },
+  "header_rule": {
+    "line_terminators_allowed": ["LF", "CRLF"],
+    "utf8_bom_allowed": false,
+    "duplicate_columns_allowed": false,
+    "empty_columns_allowed": false,
+    "leading_or_trailing_column_whitespace_allowed": false,
+    "exact_reference_headers_required": true,
+    "alias_or_spelling_repair_after_result_allowed": false,
+    "extra_columns_allowed": false,
+    "missing_columns_allowed": false,
+    "physical_order_frozen_for_final_parser": true
+  },
+  "firewall": {
+    "response_headers_only": true,
+    "occurrence_rows_allowed": 0,
+    "occurrence_values_allowed": false,
+    "emof_rows_allowed": 0,
+    "emof_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0,
+    "counts_as_predictive_evidence": false
+  },
+  "valid_terminal_statuses": ["response_headers_ready", "stop_pre_row_response_header_transport_or_schema"],
+  "next_full_response_stage_requires_separate_frozen_contract": true
+}
