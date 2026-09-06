@@ -1,0 +1,142 @@
+{
+  "schema": "eog.tampa_seagrass_endpoint3.source_contract.v1",
+  "attempt_id": "tampa_seagrass_endpoint3_v1",
+  "issue": 388,
+  "source": {
+    "repository": "tbep-tech/obis-example",
+    "commit": "6c567beff95ea04f0e397101befb49d5233ace8f",
+    "design_code_path": "R/convert_to_dwc.R",
+    "design_code_git_blob_sha1": "efc8caded5df0eb6e9cab9167128c1496ada35eb"
+  },
+  "safe_files": {
+    "event": {
+      "path": "dwc/event.csv",
+      "git_blob_sha1": "583b4d4e328290ab065346579eb4f29f03ea0f99",
+      "size_bytes": 24654717,
+      "url": "https://raw.githubusercontent.com/tbep-tech/obis-example/6c567beff95ea04f0e397101befb49d5233ace8f/dwc/event.csv"
+    }
+  },
+  "forbidden_response_files": {
+    "occurrence": {
+      "path": "dwc/occurrence.csv",
+      "git_blob_sha1": "d34aeb5aedb72459d1e04059629cb09450df929e",
+      "size_bytes": 12508487,
+      "requests_allowed_gate0": 0,
+      "bytes_allowed_gate0": 0
+    },
+    "emof": {
+      "path": "dwc/emof.csv",
+      "git_blob_sha1": "e463046726080334637824555309fd89c7c447da",
+      "size_bytes": 16449353,
+      "requests_allowed_gate0": 0,
+      "bytes_allowed_gate0": 0
+    }
+  },
+  "gate0_transport": {
+    "authorized_host": "raw.githubusercontent.com",
+    "authorized_safe_gets": 1,
+    "maximum_safe_bytes_total": 24654717,
+    "require_exact_byte_size": true,
+    "require_exact_git_blob_sha1": true,
+    "occurrence_requests": 0,
+    "occurrence_bytes": 0,
+    "emof_requests": 0,
+    "emof_bytes": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "event_header": [
+    "eventID",
+    "parentEventID",
+    "eventType",
+    "eventDate",
+    "year",
+    "month",
+    "day",
+    "decimalLatitude",
+    "decimalLongitude",
+    "geodeticDatum",
+    "minimumDepthInMeters",
+    "maximumDepthInMeters",
+    "country",
+    "countryCode",
+    "stateProvince",
+    "waterBody",
+    "locality",
+    "locationID",
+    "samplingProtocol",
+    "institutionCode",
+    "datasetName",
+    "datasetID",
+    "license",
+    "locationRemarks"
+  ],
+  "focal_taxon": {
+    "scientific_name": "Thalassia testudinum",
+    "response_independent_reason": "Pinned source conversion maps field label Thalassia to canonical Thalassia testudinum before occurrence output is built."
+  },
+  "candidate_registry": {
+    "parent_event_type": "Transect",
+    "child_event_type": "Point",
+    "node_id_field": "locationID on parent Transect event",
+    "candidate_unit": "one eligible parent Transect event",
+    "context": "survey year",
+    "candidate_key": ["locationID", "eventDate"],
+    "minimum_child_point_events_per_candidate": 3,
+    "require_unique_event_id": true,
+    "require_every_child_parent_link": true,
+    "require_parent_parent_event_id_empty": true,
+    "require_exact_stable_parent_coordinates_across_visits": true,
+    "require_stable_parent_water_body_across_visits": true,
+    "required_geodetic_datum": "EPSG:4326",
+    "minimum_unique_nodes": 30,
+    "minimum_candidate_units": 300,
+    "minimum_contexts": 10,
+    "required_folds": 5
+  },
+  "split": {
+    "unit": "stable transect locationID",
+    "rule": "1 + int(SHA256(locationID)[:16],16) % 5",
+    "response_stratification": false,
+    "reassignment_allowed": false
+  },
+  "world_family": {
+    "metric": "Haversine great-circle distance in km among unique stable parent-transect coordinates",
+    "quantiles": [0.25, 0.5, 0.75, 0.9],
+    "quantile_algorithm": "linear interpolation at position (n-1)*q on sorted positive pair distances",
+    "minimum_distinct_positive_local_worlds": 3,
+    "external_open_required": true
+  },
+  "baseline_fields": [
+    {"name": "longitude", "kind": "numeric", "missing_policy": "forbid"},
+    {"name": "latitude", "kind": "numeric", "missing_policy": "forbid"},
+    {"name": "survey_year", "kind": "numeric", "missing_policy": "forbid"},
+    {"name": "day_of_year", "kind": "numeric", "missing_policy": "forbid"},
+    {"name": "child_point_count", "kind": "numeric", "missing_policy": "forbid"},
+    {"name": "depth_min_m", "kind": "numeric", "missing_policy": "calibration_median_plus_indicator"},
+    {"name": "depth_median_m", "kind": "numeric", "missing_policy": "calibration_median_plus_indicator"},
+    {"name": "depth_max_m", "kind": "numeric", "missing_policy": "calibration_median_plus_indicator"},
+    {"name": "water_body", "kind": "categorical", "missing_policy": "forbid"}
+  ],
+  "observation_semantics": {
+    "effort_eligible_rule": "Parent Transect event exists in the frozen Event core and has at least three linked child Point events.",
+    "positive_rule": "At final response gate, at least one linked child Point event has occurrenceStatus=present and exact scientificName=Thalassia testudinum.",
+    "negative_rule": "Eligible parent Transect visit has no linked focal present occurrence after the complete frozen occurrence file is mapped.",
+    "unsurveyed_rule": "Parent events with fewer than three linked child Point events are not candidate units and never become zero.",
+    "zero_interpretation": "Recorded non-detection of the focal seagrass during an eligible completed transect visit, not biological or historical absence outside sampled points."
+  },
+  "generic_boundary": {
+    "required_schema": "eog.normalized_pre_response_problem.v1",
+    "generic_problem_contract_git_blob_sha1": "d032bbb53f2a61bb2f3354ca9576cdf3c19afdf2",
+    "response_locked": true,
+    "no_tampa_specific_behavior_in_layer_a_or_b": true
+  },
+  "frozen_paper_ready_bindings": {
+    "cross_ecosystem_synthesis_sha256": "1617b18b6b0c3e2797945c3d30111a4e3e6941a560a6b8a39b8d117e84c82b02",
+    "feature_count_placebo_sha256": "72129df202a4d8c0203b507f82c3cbc6c612feb028d12b6386dc39abde4de8cd",
+    "excluded_world_contract_sha256": "7f76113602346347829378c1daaf8a3f057d1ee6fe72f0141dc998b69966a53a"
+  },
+  "gate0_ready_status": "gate0_pre_response_ready",
+  "gate0_stop_status": "stop_pre_response_event_registry_geometry_or_schema",
+  "no_post_stop_repair_or_rerun": true
+}
