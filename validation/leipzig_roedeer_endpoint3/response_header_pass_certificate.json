@@ -1,0 +1,28 @@
+{
+  "schema": "eog.leipzig_roedeer_endpoint3.response_header_pass_certificate.v1",
+  "attempt_id": "leipzig_roedeer_endpoint3_v1",
+  "issue": 384,
+  "status": "response_header_ready",
+  "authoritative_execution": {
+    "workflow_run_id": 34008811857,
+    "job_id": 101420869508,
+    "head_sha": "dd8fe9dc4ea0203210eccfd7a6040c4c98dfa515",
+    "artifact_id": 9981807727,
+    "artifact_name": "leipzig-roedeer-response-header",
+    "artifact_digest": "sha256:930d03e31ec2e68b95cfce547ac73d43c0f35a921da6c005d001c72294d4d4ff"
+  },
+  "gate0_result_fingerprint": "cd34456362a1f35742f7158adb7acbbab928bf125ddd121db274b174fd51855d",
+  "response_header_result_fingerprint": "e3a9620c2e91ce239b160de1d01ed338b9c4f1f648f2ecb846a7b76b2b9558a8",
+  "header_fingerprint": "f00cd5e4e72191ee28276083933b10dc82b7927efd1a9e0fddf06ff76e53d79f",
+  "header_line_terminator": "LF",
+  "header_exact_order": ["observationID","deploymentID","mediaID","eventID","eventStart","eventEnd","observationLevel","observationType","cameraSetupType","scientificName","count","lifeStage","sex","behavior","individualID","individualPositionRadius","individualPositionAngle","individualSpeed","bboxX","bboxY","bboxWidth","bboxHeight","classificationMethod","classifiedBy","classificationTimestamp","classificationProbability","observationTags","observationComments"],
+  "response_header_range_requests": 387,
+  "response_header_bytes_opened": 387,
+  "response_data_row_bytes_opened": 0,
+  "response_rows_opened": 0,
+  "response_values_opened": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "counts_as_predictive_evidence": false,
+  "next_gate": "full_response_contract_freeze"
+}

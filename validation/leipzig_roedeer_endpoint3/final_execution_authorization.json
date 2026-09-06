@@ -1,0 +1,23 @@
+{
+  "schema": "eog.leipzig_roedeer_endpoint3.final_execution_authorization.v1",
+  "attempt_id": "leipzig_roedeer_endpoint3_v1",
+  "issue": 384,
+  "authorized_branch": "execute/leipzig-roedeer-final-v1",
+  "execute_once_marker": "validation/leipzig_roedeer_endpoint3/final_execute_once.json",
+  "gate0_pass_certificate_git_blob_sha1": "29c3762a20a1f28ee1f8c258a47d9f834e9e9b10",
+  "response_header_pass_certificate_git_blob_sha1": "5cc308933d4c632252e2a88aeb7b24cb74bd23c8",
+  "final_endpoint_contract_git_blob_sha1": "6be1ec7ce9127db8aeec0c4617d7e03ebe9bf4bd",
+  "final_endpoint_declaration_git_blob_sha1": "8e792a6edda25d859ca5258c80ec0b644b9dbaa1",
+  "final_endpoint_runner_git_blob_sha1": "cd67e918eb925f89cdbc4071eab623b12eb1ad20",
+  "feature_count_placebo_contract_git_blob_sha1": "cbc982fc6f23824a9de27c5377cac1d70be06849",
+  "source_response_git_blob_sha1": "b4263a634d4bafdfe77ef4bef1fab24d45034cda",
+  "source_response_size_bytes": 2480328,
+  "maximum_safe_gets_before_response": 3,
+  "maximum_full_response_gets": 1,
+  "output_path": "validation/leipzig_roedeer_endpoint3/final_endpoint_result.json",
+  "artifact_name": "leipzig-roedeer-final-endpoint",
+  "primary_model_fits_if_estimable": 10,
+  "placebo_model_fits_if_estimable": 100,
+  "retry_after_full_response_consumption_allowed": false,
+  "post_response_repair_retune_species_site_fold_world_baseline_layer_b_learner_estimability_or_placebo_change_allowed": false
+}

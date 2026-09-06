@@ -1,0 +1,146 @@
+name: Leipzig roe deer endpoint3 final
+
+on:
+  pull_request:
+    paths:
+      - 'validation/leipzig_roedeer_endpoint3/response_header_pass_certificate.json'
+      - 'validation/leipzig_roedeer_endpoint3/final_endpoint_contract.json'
+      - 'validation/leipzig_roedeer_endpoint3/final_endpoint_declaration.json'
+      - 'validation/leipzig_roedeer_endpoint3/final_execution_authorization.json'
+      - 'validation/leipzig_roedeer_endpoint3/final_endpoint.py'
+      - 'tests/test_leipzig_roedeer_final_endpoint.py'
+      - '.github/workflows/leipzig-roedeer-final-endpoint.yml'
+  push:
+    branches:
+      - 'execute/leipzig-roedeer-final-v1'
+    paths:
+      - 'validation/leipzig_roedeer_endpoint3/final_execute_once.json'
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen endpoint runtime
+        run: |
+          python -m pip install -e . --no-deps
+          python -m pip install pytest numpy==2.1.3 scikit-learn==1.5.2
+      - name: Verify final response-free contract and synthetic behavior
+        run: python -m pytest tests/test_leipzig_roedeer_final_endpoint.py -q
+      - name: Compile final runner
+        run: python -m py_compile validation/leipzig_roedeer_endpoint3/final_endpoint.py
+      - name: Verify authorization blobs and no response marker in proposal
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          root = Path('validation/leipzig_roedeer_endpoint3')
+          auth = json.loads((root / 'final_execution_authorization.json').read_text())
+          checks = {
+              'gate0_pass_certificate_git_blob_sha1': root / 'gate0_pass_certificate.json',
+              'response_header_pass_certificate_git_blob_sha1': root / 'response_header_pass_certificate.json',
+              'final_endpoint_contract_git_blob_sha1': root / 'final_endpoint_contract.json',
+              'final_endpoint_declaration_git_blob_sha1': root / 'final_endpoint_declaration.json',
+              'final_endpoint_runner_git_blob_sha1': root / 'final_endpoint.py',
+              'feature_count_placebo_contract_git_blob_sha1': Path('validation/paper_ready_replication/feature_count_placebo_contract.json'),
+          }
+          for field, path in checks.items():
+              actual = subprocess.check_output(['git','hash-object',str(path)], text=True).strip()
+              assert actual == auth[field], (field, actual, auth[field])
+          assert auth['source_response_git_blob_sha1'] == 'b4263a634d4bafdfe77ef4bef1fab24d45034cda'
+          assert auth['source_response_size_bytes'] == 2480328
+          assert auth['maximum_full_response_gets'] == 1
+          assert auth['primary_model_fits_if_estimable'] == 10
+          assert auth['placebo_model_fits_if_estimable'] == 100
+          assert not (root / 'final_execute_once.json').exists()
+          PY
+
+  live-final-once:
+    needs: synthetic-boundary
+    if: github.event_name == 'push' && github.ref == 'refs/heads/execute/leipzig-roedeer-final-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact frozen endpoint runtime
+        run: |
+          python -m pip install -e . --no-deps
+          python -m pip install numpy==2.1.3 scikit-learn==1.5.2
+      - name: Verify once-only marker and authorization
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          root = Path('validation/leipzig_roedeer_endpoint3')
+          marker = json.loads((root / 'final_execute_once.json').read_text())
+          assert marker == {
+              'attempt_id':'leipzig_roedeer_endpoint3_v1',
+              'issue':384,
+              'execute_once':True,
+              'authorization':'final_execution_authorization.json'
+          }
+          auth = json.loads((root / 'final_execution_authorization.json').read_text())
+          checks = {
+              'gate0_pass_certificate_git_blob_sha1': root / 'gate0_pass_certificate.json',
+              'response_header_pass_certificate_git_blob_sha1': root / 'response_header_pass_certificate.json',
+              'final_endpoint_contract_git_blob_sha1': root / 'final_endpoint_contract.json',
+              'final_endpoint_declaration_git_blob_sha1': root / 'final_endpoint_declaration.json',
+              'final_endpoint_runner_git_blob_sha1': root / 'final_endpoint.py',
+              'feature_count_placebo_contract_git_blob_sha1': Path('validation/paper_ready_replication/feature_count_placebo_contract.json'),
+          }
+          for field, path in checks.items():
+              actual = subprocess.check_output(['git','hash-object',str(path)], text=True).strip()
+              assert actual == auth[field]
+          PY
+      - name: Execute full response exactly once and score
+        run: python -m validation.leipzig_roedeer_endpoint3.final_endpoint
+      - name: Audit terminal result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('validation/leipzig_roedeer_endpoint3/final_endpoint_result.json')
+          r = json.loads(p.read_text())
+          predictive = {
+              'favorable_complementary_added_value',
+              'adverse_complementary_added_value',
+              'no_confirmed_complementary_added_value',
+          }
+          stops = {
+              'non_estimable_response_balance',
+              'non_estimable_layer_a_crossfit',
+              'universe_falsified_stop',
+              'stop_full_response_transport_or_integrity',
+              'stop_full_response_schema_or_linkage',
+          }
+          assert r['attempt_id'] == 'leipzig_roedeer_endpoint3_v1'
+          assert r['issue'] == 384
+          assert r['status'] in predictive | stops
+          if r['status'] in predictive:
+              assert r['terminal_class'] == 'predictive_result'
+              assert r['response_bytes_opened'] == 2480328
+              assert r['full_response_gets'] == 1
+              assert r['primary_model_fits'] == 10
+              assert r['placebo_model_fits'] == 100
+              assert r['model_fits_total'] == 110
+              assert r['heldout_scores'] == 5
+              assert r['counts_as_predictive_evidence'] is True
+              assert r['candidate_hunting_hard_stop'] is True
+              assert r['placebo']['secondary_only'] is True
+              assert r['placebo']['changes_primary_status'] is False
+          else:
+              assert r['terminal_class'] == 'protocol_or_estimability_stop'
+              assert r['counts_as_predictive_evidence'] is False
+              assert r['candidate_hunting_hard_stop'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: leipzig-roedeer-final-endpoint
+          path: validation/leipzig_roedeer_endpoint3/final_endpoint_result.json
+          if-no-files-found: error
