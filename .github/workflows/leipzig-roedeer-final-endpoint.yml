@@ -32,10 +32,10 @@ jobs:
         run: python -m pytest tests/test_leipzig_roedeer_final_endpoint.py -q
       - name: Compile final runner
         run: python -m py_compile validation/leipzig_roedeer_endpoint3/final_endpoint.py
-      - name: Verify authorization blobs and no response marker in proposal
+      - name: Verify authorization blobs and proposal marker boundary
         run: |
           python - <<'PY'
-          import json, subprocess
+          import json, os, subprocess
           from pathlib import Path
           root = Path('validation/leipzig_roedeer_endpoint3')
           auth = json.loads((root / 'final_execution_authorization.json').read_text())
@@ -55,7 +55,8 @@ jobs:
           assert auth['maximum_full_response_gets'] == 1
           assert auth['primary_model_fits_if_estimable'] == 10
           assert auth['placebo_model_fits_if_estimable'] == 100
-          assert not (root / 'final_execute_once.json').exists()
+          if os.environ['GITHUB_EVENT_NAME'] == 'pull_request':
+              assert not (root / 'final_execute_once.json').exists()
           PY
 
   live-final-once:
