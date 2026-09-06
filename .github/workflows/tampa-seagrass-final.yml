@@ -1,0 +1,187 @@
+name: Tampa seagrass endpoint3 final occurrence
+
+on:
+  pull_request:
+    paths:
+      - 'validation/tampa_seagrass_endpoint3/source_contract.json'
+      - 'validation/tampa_seagrass_endpoint3/gate0_pass_certificate.json'
+      - 'validation/tampa_seagrass_endpoint3/response_headers_pass_certificate.json'
+      - 'validation/tampa_seagrass_endpoint3/final_endpoint_contract.json'
+      - 'validation/tampa_seagrass_endpoint3/final_endpoint_declaration.json'
+      - 'validation/tampa_seagrass_endpoint3/final_execution_authorization.json'
+      - 'validation/tampa_seagrass_endpoint3/final_endpoint.py'
+      - 'validation/paper_ready_replication/feature_count_placebo_contract.json'
+      - 'tests/test_tampa_seagrass_final_endpoint.py'
+      - '.github/workflows/tampa-seagrass-final.yml'
+      - '.github/workflows/tampa-seagrass-gate1-headers.yml'
+  push:
+    branches:
+      - 'execute/tampa-seagrass-final-v1'
+    paths:
+      - 'validation/tampa_seagrass_endpoint3/final_execute_once.json'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen final test runtime
+        run: |
+          python -m pip install -e . --no-deps
+          python -m pip install numpy==2.1.3 scikit-learn==1.5.2 pytest
+      - name: Verify frozen runtime versions
+        run: |
+          python - <<'PY'
+          import numpy, sklearn
+          assert numpy.__version__ == '2.1.3', numpy.__version__
+          assert sklearn.__version__ == '1.5.2', sklearn.__version__
+          PY
+      - name: Verify Tampa final endpoint synthetic boundary
+        run: python -m pytest tests/test_tampa_seagrass_final_endpoint.py -q
+      - name: Compile Tampa final endpoint
+        run: python -m py_compile validation/tampa_seagrass_endpoint3/final_endpoint.py
+      - name: Verify final authorization blobs and response firewall
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          root = Path('validation/tampa_seagrass_endpoint3')
+          auth = json.loads((root / 'final_execution_authorization.json').read_text())
+          assert auth['attempt_id'] == 'tampa_seagrass_endpoint3_v1'
+          assert auth['issue'] == 388
+          assert auth['authorized_branch'] == 'execute/tampa-seagrass-final-v1'
+          assert auth['execute_once_marker'] == 'validation/tampa_seagrass_endpoint3/final_execute_once.json'
+          assert auth['source_event_git_blob_sha1'] == '583b4d4e328290ab065346579eb4f29f03ea0f99'
+          assert auth['source_event_size_bytes'] == 24654717
+          assert auth['source_occurrence_git_blob_sha1'] == 'd34aeb5aedb72459d1e04059629cb09450df929e'
+          assert auth['source_occurrence_size_bytes'] == 12508487
+          assert auth['source_emof_git_blob_sha1'] == 'e463046726080334637824555309fd89c7c447da'
+          assert auth['maximum_safe_event_gets_before_response'] == 1
+          assert auth['maximum_full_occurrence_gets'] == 1
+          assert auth['maximum_full_emof_gets'] == 0
+          assert auth['maximum_total_live_full_gets'] == 2
+          assert auth['output_path'] == 'validation/tampa_seagrass_endpoint3/final_endpoint_result.json'
+          assert auth['artifact_name'] == 'tampa-seagrass-final-endpoint'
+          assert auth['primary_model_fits_if_estimable'] == 10
+          assert auth['placebo_model_fits_if_estimable'] == 100
+          assert auth['maximum_model_fits_if_estimable'] == 110
+          assert auth['maximum_heldout_scores_if_estimable'] == 10
+          assert auth['retry_after_full_occurrence_consumption_allowed'] is False
+          assert auth['full_emof_payload_may_be_opened'] is False
+          bindings = {
+              'source_contract_git_blob_sha1': root / 'source_contract.json',
+              'gate0_pass_certificate_git_blob_sha1': root / 'gate0_pass_certificate.json',
+              'response_headers_pass_certificate_git_blob_sha1': root / 'response_headers_pass_certificate.json',
+              'final_endpoint_contract_git_blob_sha1': root / 'final_endpoint_contract.json',
+              'final_endpoint_declaration_git_blob_sha1': root / 'final_endpoint_declaration.json',
+              'final_endpoint_runner_git_blob_sha1': root / 'final_endpoint.py',
+              'feature_count_placebo_contract_git_blob_sha1': Path('validation/paper_ready_replication/feature_count_placebo_contract.json'),
+          }
+          for field, path in bindings.items():
+              actual = subprocess.check_output(['git','hash-object',str(path)], text=True).strip()
+              assert actual == auth[field], (field, actual, auth[field])
+          headers = json.loads((root / 'response_headers_pass_certificate.json').read_text())
+          assert headers['status'] == 'response_headers_ready'
+          assert headers['response_rows_opened'] == 0
+          assert headers['response_values_opened'] is False
+          assert headers['occurrence']['data_row_bytes_opened'] == 0
+          assert headers['emof']['data_row_bytes_opened'] == 0
+          assert not Path('.github/workflows/tampa-seagrass-gate1-headers.yml').exists()
+          PY
+      - name: Verify no live marker in proposal
+        if: ${{ github.event_name == 'pull_request' }}
+        run: test ! -e validation/tampa_seagrass_endpoint3/final_execute_once.json
+
+  live-final-once:
+    needs: synthetic-boundary
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/execute/tampa-seagrass-final-v1' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen final runtime
+        run: |
+          python -m pip install -e . --no-deps
+          python -m pip install numpy==2.1.3 scikit-learn==1.5.2
+      - name: Verify one-shot marker and authorization
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          root = Path('validation/tampa_seagrass_endpoint3')
+          marker = json.loads((root / 'final_execute_once.json').read_text())
+          assert marker == {
+              'attempt_id': 'tampa_seagrass_endpoint3_v1',
+              'issue': 388,
+              'execute_once': True,
+              'authorization': 'final_execution_authorization.json'
+          }
+          auth = json.loads((root / 'final_execution_authorization.json').read_text())
+          assert auth['authorized_branch'] == 'execute/tampa-seagrass-final-v1'
+          bindings = {
+              'source_contract_git_blob_sha1': root / 'source_contract.json',
+              'gate0_pass_certificate_git_blob_sha1': root / 'gate0_pass_certificate.json',
+              'response_headers_pass_certificate_git_blob_sha1': root / 'response_headers_pass_certificate.json',
+              'final_endpoint_contract_git_blob_sha1': root / 'final_endpoint_contract.json',
+              'final_endpoint_declaration_git_blob_sha1': root / 'final_endpoint_declaration.json',
+              'final_endpoint_runner_git_blob_sha1': root / 'final_endpoint.py',
+              'feature_count_placebo_contract_git_blob_sha1': Path('validation/paper_ready_replication/feature_count_placebo_contract.json'),
+          }
+          for field, path in bindings.items():
+              actual = subprocess.check_output(['git','hash-object',str(path)], text=True).strip()
+              assert actual == auth[field], (field, actual, auth[field])
+          assert auth['maximum_full_occurrence_gets'] == 1
+          assert auth['maximum_full_emof_gets'] == 0
+          assert auth['retry_after_full_occurrence_consumption_allowed'] is False
+          PY
+      - name: Execute Tampa final occurrence endpoint once
+        run: python -m validation.tampa_seagrass_endpoint3.final_endpoint
+      - name: Audit terminal final result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('validation/tampa_seagrass_endpoint3/final_endpoint_result.json')
+          r = json.loads(p.read_text())
+          assert r['attempt_id'] == 'tampa_seagrass_endpoint3_v1'
+          assert r['issue'] == 388
+          assert r['terminal_class'] in {'predictive_result','protocol_or_estimability_stop'}
+          assert r['emof_full_gets'] == 0
+          assert r['emof_full_bytes_opened'] == 0
+          assert 0 <= int(r.get('occurrence_full_gets', 0)) <= 1
+          predictive = {
+              'favorable_complementary_added_value',
+              'adverse_complementary_added_value',
+              'no_confirmed_complementary_added_value',
+          }
+          if r['terminal_class'] == 'predictive_result':
+              assert r['status'] in predictive
+              assert r['counts_as_predictive_evidence'] is True
+              assert r['candidate_hunting_hard_stop'] is True
+              assert r['candidate_unit_count'] == 1497
+              assert r['node_count'] == 71
+              assert r['primary_model_fits'] == 10
+              assert r['placebo_model_fits'] == 100
+              assert r['model_fits_total'] == 110
+              assert r['heldout_scores'] == 10
+              assert r['occurrence_full_gets'] == 1
+              assert r['occurrence_bytes_opened'] == 12508487
+          else:
+              assert r['counts_as_predictive_evidence'] is False
+              assert r['candidate_hunting_hard_stop'] is False
+              assert r['retry_after_occurrence_consumption_allowed'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tampa-seagrass-final-endpoint
+          path: validation/tampa_seagrass_endpoint3/final_endpoint_result.json
+          if-no-files-found: error
