@@ -1,0 +1,52 @@
+{
+  "schema": "eog.leipzig_roedeer_endpoint3.gate0_pass_certificate.v1",
+  "attempt_id": "leipzig_roedeer_endpoint3_v1",
+  "issue": 384,
+  "status": "gate0_pre_response_ready",
+  "authoritative_execution": {
+    "workflow_run_id": 34007980122,
+    "job_id": 101418757904,
+    "head_sha": "00a2a10260a675760598d3891b8be5ddc07265f0",
+    "artifact_id": 9981584555,
+    "artifact_name": "leipzig-roedeer-gate0-pre-response",
+    "artifact_digest": "sha256:5b777d57d590c31ebdcce0d9aaf12684224b6f57f8b62311d14fc57b451a942b"
+  },
+  "gate0_result_fingerprint": "cd34456362a1f35742f7158adb7acbbab928bf125ddd121db274b174fd51855d",
+  "normalized_problem_fingerprint": "896e5be4d880ea6554cb4c2e6a138c938cfc111ce517a196e12651e260f9aeb9",
+  "source_fingerprint": "82ec40debf3a822dc07f788acc975999da9191a526bf2f2477f38ef2a6c167fc",
+  "split_fingerprint": "2bc2bcc486e2f9978c106c04fdec24ee5b3fef950322a8f85861c7d70310f00e",
+  "world_family_fingerprint": "67ac2dae0816b19296b3902ae0c40888f6bf23b301f4159486f77ef2b396198c",
+  "baseline_fingerprint": "3bcd52a9d9d4608d8e2230e89cc2948e523a5b68e9fd3bb90cacb6aeb8ca403f",
+  "registry": {
+    "raw_deployments": 75,
+    "raw_locations": 75,
+    "retained_locations": 71,
+    "excluded_below_20_effort_days": 4,
+    "candidate_units": 71,
+    "covariate_rows": 75,
+    "site_fold_counts": {"1": 17, "2": 9, "3": 16, "4": 12, "5": 17},
+    "raw_start_year_counts": {"2020": 1, "2023": 1, "2024": 73},
+    "source_year_rewrite_applied": false,
+    "source_LE39_manual_repair_applied": false
+  },
+  "worlds": [
+    {"world_id": "haversine_q25", "threshold_km": 6.458201777927116, "edge_count": 622},
+    {"world_id": "haversine_q50", "threshold_km": 10.698534421647526, "edge_count": 1243},
+    {"world_id": "haversine_q75", "threshold_km": 15.219929829407809, "edge_count": 1864},
+    {"world_id": "haversine_q90", "threshold_km": 19.338968717397357, "edge_count": 2236},
+    {"world_id": "external_open", "edge_count": 2485}
+  ],
+  "firewall": {
+    "safe_file_requests": 3,
+    "safe_file_bytes_opened": 32930,
+    "observations_requests": 0,
+    "observations_header_bytes_opened": 0,
+    "observations_payload_bytes_opened": 0,
+    "observations_rows_opened": 0,
+    "observations_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "counts_as_predictive_evidence": false,
+  "next_gate": "observations_header_only"
+}
