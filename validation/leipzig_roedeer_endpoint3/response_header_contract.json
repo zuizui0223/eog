@@ -1,0 +1,70 @@
+{
+  "schema": "eog.leipzig_roedeer_endpoint3.response_header_contract.v1",
+  "attempt_id": "leipzig_roedeer_endpoint3_v1",
+  "issue": 384,
+  "gate0": {
+    "recording_merge": "159ba574f2a1ca9742bea913c3861059b72cb2a7",
+    "pass_certificate_path": "validation/leipzig_roedeer_endpoint3/gate0_pass_certificate.json",
+    "result_fingerprint": "cd34456362a1f35742f7158adb7acbbab928bf125ddd121db274b174fd51855d",
+    "normalized_problem_fingerprint": "896e5be4d880ea6554cb4c2e6a138c938cfc111ce517a196e12651e260f9aeb9"
+  },
+  "source": {
+    "repository": "nilsgmyrek/MasterThesis",
+    "commit": "ca60b078d5fde86a9982a89631681e815e1a3c13",
+    "path": "Data/observations.csv",
+    "git_blob_sha1": "b4263a634d4bafdfe77ef4bef1fab24d45034cda",
+    "size_bytes": 2480328,
+    "raw_url": "https://raw.githubusercontent.com/nilsgmyrek/MasterThesis/ca60b078d5fde86a9982a89631681e815e1a3c13/Data/observations.csv"
+  },
+  "reference_header": {
+    "provenance": "TDWG camtrap-dp official example/observations.csv at commit 8b2bf419250dd72d4913eaa49d38dec53b4a88e3, inspected before target header access",
+    "reference_repository": "tdwg/camtrap-dp",
+    "reference_commit": "8b2bf419250dd72d4913eaa49d38dec53b4a88e3",
+    "reference_path": "example/observations.csv",
+    "expected_header_ascii": "observationID,deploymentID,mediaID,eventID,eventStart,eventEnd,observationLevel,observationType,cameraSetupType,scientificName,count,lifeStage,sex,behavior,individualID,individualPositionRadius,individualPositionAngle,individualSpeed,bboxX,bboxY,bboxWidth,bboxHeight,classificationMethod,classifiedBy,classificationTimestamp,classificationProbability,observationTags,observationComments",
+    "expected_header_bytes_without_terminator": 386,
+    "expected_tokens": ["observationID","deploymentID","mediaID","eventID","eventStart","eventEnd","observationLevel","observationType","cameraSetupType","scientificName","count","lifeStage","sex","behavior","individualID","individualPositionRadius","individualPositionAngle","individualSpeed","bboxX","bboxY","bboxWidth","bboxHeight","classificationMethod","classifiedBy","classificationTimestamp","classificationProbability","observationTags","observationComments"],
+    "exact_physical_order_required": true
+  },
+  "transport": {
+    "method": "GET",
+    "allowed_host": "raw.githubusercontent.com",
+    "persistent_connection_allowed": true,
+    "content_encoding": "identity",
+    "range_unit_bytes": 1,
+    "first_offset": 0,
+    "required_http_status": 206,
+    "required_content_range_template": "bytes {offset}-{offset}/2480328",
+    "stop_condition": "stop immediately after the first LF byte is opened",
+    "maximum_requests": 388,
+    "maximum_header_bytes_opened": 388,
+    "response_data_row_bytes_allowed": 0,
+    "full_body_fallback_allowed": false,
+    "multi_byte_range_allowed": false,
+    "request_after_first_LF_allowed": false,
+    "redirect_following_allowed": false
+  },
+  "header_rule": {
+    "line_terminators_allowed": ["LF", "CRLF"],
+    "utf8_bom_allowed": false,
+    "duplicate_columns_allowed": false,
+    "empty_columns_allowed": false,
+    "leading_or_trailing_column_whitespace_allowed": false,
+    "exact_reference_header_required": true,
+    "alias_or_spelling_repair_after_result_allowed": false,
+    "extra_columns_allowed": false,
+    "missing_columns_allowed": false,
+    "physical_order_frozen_for_final_parser": true,
+    "maximum_header_bytes_including_terminator": 388
+  },
+  "firewall": {
+    "response_header_only": true,
+    "response_rows_allowed": 0,
+    "response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0,
+    "counts_as_predictive_evidence": false
+  },
+  "valid_terminal_statuses": ["response_header_ready", "stop_pre_row_response_header_transport_or_schema"],
+  "next_full_response_stage_requires_separate_frozen_contract": true
+}
