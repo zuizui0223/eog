@@ -13,10 +13,10 @@ def test_uwin_is_28th_response_unconsumed_protocol_stop():
     uwin = stops[375]
     summary = ledger["current_denominator_summary"]
 
-    assert summary["fresh_predictive_endpoints_with_scores"] == 2
+    assert summary["fresh_predictive_endpoints_with_scores"] == 3
     assert summary["fresh_candidate_stops_listed"] == len(stops) == 31
     assert summary["administrative_exclusions"] == 3
-    assert summary["third_fresh_predictive_endpoint_still_required"] is True
+    assert summary["third_fresh_predictive_endpoint_still_required"] is False
 
     assert uwin["terminal_stage"] == "response_independent_baseline_covariate_value"
     assert uwin["gate0_run_id"] == 33949107244

@@ -13,10 +13,10 @@ def test_algar_is_29th_response_unconsumed_protocol_stop():
     algar = stops[378]
     summary = ledger["current_denominator_summary"]
 
-    assert summary["fresh_predictive_endpoints_with_scores"] == 2
+    assert summary["fresh_predictive_endpoints_with_scores"] == 3
     assert summary["fresh_candidate_stops_listed"] == len(stops) == 31
     assert summary["administrative_exclusions"] == 3
-    assert summary["third_fresh_predictive_endpoint_still_required"] is True
+    assert summary["third_fresh_predictive_endpoint_still_required"] is False
 
     assert algar["terminal_stage"] == "response_independent_geometry_registry"
     assert algar["gate0_run_id"] == 34004544321

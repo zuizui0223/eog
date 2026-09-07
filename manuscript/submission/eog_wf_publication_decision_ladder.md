@@ -12,20 +12,19 @@ structural/island-isolation manuscript.
 
 ## Current scientific anchor
 
-The active EOG-WF mainline is currently at:
+The paper-ready EOG-WF fresh endpoint programme is closed at:
 
-`replicated_candidate_general_predictive_complement`
+`structural_diagnostic_plus_context_dependent_predictive_complement`
 
-Two genuinely fresh heterogeneous endpoints are favorable under the same two-layer
-architecture and unchanged `symmetric_world_support_summary_v1`:
+Three genuinely fresh heterogeneous paired endpoints reached valid predictive terminals under the same two-layer architecture and unchanged `symmetric_world_support_summary_v1`:
 
-1. Azores yellow eel telemetry;
-2. Southwest Louisiana King Rail passive acoustics.
+1. Azores yellow eel telemetry — favorable;
+2. Southwest Louisiana King Rail passive acoustics — favorable;
+3. Tampa Bay seagrass transect monitoring — adverse.
 
-The paper-critical next step remains one more genuinely fresh heterogeneous endpoint
-under the already-frozen synthesis, placebo and excluded-world explanatory boundaries
-in issue #141. A pre-response/source/registry/non-estimable STOP is not a predictive
-negative and does not count as a third predictive replication.
+Tampa's once-only endpoint produced baseline macro log loss `0.3377354` versus augmented `0.4387640` (delta `+0.1010287`), with the baseline arm winning 4/5 folds. The preregistered adverse branch is therefore applied without rescue tuning: Layer A remains a structural falsification framework, while Layer B predictive value is context dependent rather than uniformly beneficial.
+
+The Nature Ecology & Evolution trigger is closed. **Methods in Ecology and Evolution is now the primary submission route**, with Ecography retained only as a framing-dependent fallback. Candidate hunting is hard-stopped; no fourth dataset may be collected to improve journal rank.
 
 ## Publication principle
 
