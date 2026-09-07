@@ -1,0 +1,41 @@
+name: Tampa terminal bookkeeping once
+
+on:
+  push:
+    branches:
+      - 'record/tampa-seagrass-adverse-v1'
+    paths:
+      - 'tools/_tampa_terminal_bookkeeping_once.py'
+      - '.github/workflows/tampa-terminal-bookkeeping-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  record-once:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply frozen Tampa terminal bookkeeping
+        run: python tools/_tampa_terminal_bookkeeping_once.py
+      - name: Verify prospective synthesis contract still parses
+        run: python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('validation/paper_ready_replication/cross_ecosystem_synthesis_contract.json')
+          c = json.loads(p.read_text())
+          assert c['endpoint_3_decision_mapping']['adverse_complementary_added_value']['paper_boundary'] == 'structural_diagnostic_plus_context_dependent_predictive_complement'
+          PY
+      - name: Commit bookkeeping result and remove helper
+        run: |
+          git config user.name 'ZHANG RUIQI'
+          git config user.email 'rachelzhang0223@gmail.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Record Tampa adverse endpoint and hard-stop candidate hunting'
+          git push origin HEAD:record/tampa-seagrass-adverse-v1
