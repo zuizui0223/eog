@@ -18,10 +18,10 @@ def test_leipzig_is_full_response_consumed_protocol_stop():
     leipzig = stops[384]
     summary = ledger["current_denominator_summary"]
 
-    assert summary["fresh_predictive_endpoints_with_scores"] == 2
+    assert summary["fresh_predictive_endpoints_with_scores"] == 3
     assert summary["fresh_candidate_stops_listed"] == len(stops) == 31
     assert summary["administrative_exclusions"] == 3
-    assert summary["third_fresh_predictive_endpoint_still_required"] is True
+    assert summary["third_fresh_predictive_endpoint_still_required"] is False
 
     assert leipzig["terminal_stage"] == "full_response_schema_or_linkage"
     assert leipzig["biological_response_access"] == "full_response_once"

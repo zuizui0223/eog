@@ -10,11 +10,11 @@ There is **one scientific mainline**.
 
 Current empirical state:
 
-> **The two-layer EOG-WF has two favorable, genuinely fresh paired heldout endpoints under the unchanged `symmetric_world_support_summary_v1`: Azores yellow eel telemetry and Southwest Louisiana King Rail passive acoustics. The supported boundary is `replicated_candidate_general_predictive_complement`.**
+> **The paper-ready fresh programme is closed with three valid paired predictive endpoints under the unchanged `symmetric_world_support_summary_v1`: Azores yellow eel and Southwest Louisiana King Rail are favorable, while Tampa Bay seagrass is adverse. The preregistered endpoint-3 mapping therefore fixes the supported boundary at `structural_diagnostic_plus_context_dependent_predictive_complement`.**
 
 Current product state:
 
-> **Exact world identity is retained as the latent sequential update/falsification state (Layer A), while the default predictive interface is the world-label-invariant surviving-support summary (Layer B). One valid third heterogeneous endpoint is still required before the paper-level synthesis is closed.**
+> **Layer A remains the exact auditable world-compatibility / contraction / falsification state. Layer B remains the unchanged world-label-invariant support summary, but its added predictive value is explicitly context dependent rather than uniformly beneficial. Candidate hunting is hard-stopped after the valid Tampa endpoint.**
 
 The repository does **not** claim generic predictive superiority over SDMs, metapopulation models, occupancy models, ensembles, or other strong comparators.
 
@@ -167,11 +167,19 @@ These APIs do not accept species-response vectors. Structurally derived threshol
 
 ## Current fresh two-layer evidence
 
-- **Azores yellow eel telemetry** — favorable paired complementarity; augmented same-learner arm won 5/5 heldout blocks; authoritative once-only run `32807155541`.
-- **Southwest Louisiana King Rail passive acoustics** — favorable paired complementarity; augmented same-learner arm won 7/8 heldout occasions; authoritative once-only run `32812052801`.
-- **Endpoint 3** — not yet admitted. The current candidate-flow denominator contains two scored endpoints, 19 substantive pre-response/transport STOPs, and two administrative exclusions. STOPs are methods-integrity evidence, not adverse Layer-B results.
+- **Azores yellow eel telemetry** — favorable paired complementarity; baseline macro log loss `0.1422727`, augmented `0.1322871`, delta `-0.0099856`; augmented won 5/5 heldout blocks; run `32807155541`.
+- **Southwest Louisiana King Rail passive acoustics** — favorable paired complementarity; baseline `0.2463173`, augmented `0.2453455`, delta `-0.0009718`; augmented won 7/8 heldout occasions; run `32812052801`.
+- **Tampa Bay seagrass transect monitoring** — valid adverse endpoint 3; baseline `0.3377354`, augmented `0.4387640`, delta `+0.1010287` (~29.9% higher log loss); baseline won 4/5 folds; run `34028447227`. The 20-replicate ten-feature placebo median (`0.3361758`) also outperformed the real augmented arm.
 
-The two favorable endpoints support a replicated candidate general predictive complement. They do not support universal superiority, standalone Layer-B prediction, causal identification, or the truth of an exact Layer-A world.
+The manuscript-facing denominator is now **3 scored predictive endpoints / 31 scientific-protocol STOPs / 3 administrative exclusions**. STOPs remain methods-integrity evidence rather than negative Layer-B results.
+
+The preregistered adverse mapping fixes the product boundary at:
+
+`structural_diagnostic_plus_context_dependent_predictive_complement`
+
+This supports Layer A as a structural falsification framework and shows that Layer B can add predictive information in some systems but is not uniformly beneficial. It does not support universal superiority, a standalone Layer-B predictor, causal identification, or the truth of an exact Layer-A world.
+
+Candidate hunting is closed. No fourth dataset may be added to improve the apparent result or journal rank.
 
 ## Historical evidence ledger
 
@@ -204,15 +212,19 @@ The candidate contribution is narrower:
 
 ## Development rule
 
-Do not add another generic connectivity operator merely to make EOG more complex, and do not rerun Glanville with the new prediction summary as though it were independent confirmation.
+The paper-ready fresh replication programme is scientifically closed. A valid third predictive terminal was reached in Tampa Bay and was adverse under the frozen decision rule.
 
-The next valid scientific milestone is **one** genuinely fresh heterogeneous test of the two-layer EOG-WF architecture. Before any response row is opened, source transport, registry and geometry, effort/surveyed-negative semantics, structural scales, holdout, the unchanged Layer B, the same-learner comparator, feature-count placebo, runtime, and once-only favorable/null/adverse rules must all be frozen.
+Therefore:
 
-The final response-blind identity binding is executable through [`eog.v2.paper_ready_endpoint`](docs/paper_ready_endpoint_3_gate.md). A candidate-specific attempt must bind its actual preflight receipt, numeric predictive-decision declaration, unchanged Layer-B identity, once-only outcome-access receipt, frozen cross-ecosystem synthesis, frozen ten-feature placebo, and the post-terminal dataset-hunting hard stop before the endpoint-3 runner may begin.
+- do not search for a fourth or prestige-driven favorable dataset;
+- do not repair or rerun any consumed fresh endpoint;
+- do not add generic connectivity operators to rescue predictive performance;
+- keep Layer A and `symmetric_world_support_summary_v1` unchanged for the manuscript evidence;
+- complete the already-frozen cross-ecosystem synthesis, endpoint-wise performance figure, candidate-funnel evidence table, Methods/Results text, and submission package.
 
-Existing terminal candidates must not be repaired, rerun, or relabeled. A source, transport, structural, or non-estimable STOP is not a scientific null or adverse result.
+The observed product boundary is `structural_diagnostic_plus_context_dependent_predictive_complement`. The default strong submission route is **Methods in Ecology and Evolution**; the Nature Ecology & Evolution trigger is closed by the adverse third endpoint.
 
-**Hard stop:** once a valid third predictive endpoint reaches its frozen terminal decision, stop candidate hunting regardless of the outcome. Complete only the already-frozen cross-ecosystem synthesis, feature-count placebo interpretation, figures, evidence table, and submission package; then choose the journal route from the result. Do not add a fourth dataset to improve journal prestige.
+Public API/CLI/package-surface freeze follows manuscript scientific closure rather than reopening model development.
 
 ## Package architecture
 

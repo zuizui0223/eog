@@ -1,0 +1,76 @@
+{
+  "schema": "eog.tampa_seagrass_endpoint3.terminal_predictive_result_certificate.v1",
+  "attempt_id": "tampa_seagrass_endpoint3_v1",
+  "issue": 388,
+  "focal_taxon": "Thalassia testudinum",
+  "provenance": {
+    "once_only_run_id": 34028447227,
+    "live_job_id": 101477018912,
+    "execute_head_sha": "6ec7402751e8c17382558ed9332fc6ab9257d72d",
+    "artifact_id": 9988383179,
+    "artifact_name": "tampa-seagrass-final-endpoint",
+    "artifact_digest": "sha256:95aee0192537700f08ff07f7cffa8f64c2be73b13c76e5ec594bd3bdfb45044f",
+    "result_fingerprint": "7fae3383aae989dae1abac9051f138043a70ea0e37c71105362634c82449cfbc",
+    "paired_result_fingerprint": "e2472a918cfec2cbceb75de5c9c9614af7c0d7cbd2ce65d9ce592c1e945f371f"
+  },
+  "terminal_class": "predictive_result",
+  "terminal_status": "adverse_complementary_added_value",
+  "counts_as_predictive_evidence": true,
+  "candidate_hunting_hard_stop": true,
+  "primary": {
+    "baseline_macro_log_loss": 0.33773536863857834,
+    "augmented_macro_log_loss": 0.43876404318128526,
+    "augmented_minus_baseline": 0.10102867454270692,
+    "relative_log_loss_change": 0.2991356071173612,
+    "baseline_better_folds": 4,
+    "augmented_better_folds": 1,
+    "tied_folds": 0,
+    "heldout_folds_with_both_classes": 5,
+    "fold_augmented_minus_baseline": [
+      0.3475867430831058,
+      0.05472414563925099,
+      0.023266891514603927,
+      -0.0012178452431740872,
+      0.08078343771974805
+    ]
+  },
+  "endpoint_population": {
+    "candidate_unit_count": 1497,
+    "node_count": 71,
+    "positive_candidate_units": 927,
+    "negative_candidate_units": 570,
+    "ever_positive_nodes": 54
+  },
+  "response_access": {
+    "occurrence_full_gets": 1,
+    "occurrence_bytes_opened": 12508487,
+    "safe_event_bytes_opened": 24654717,
+    "emof_full_gets": 0,
+    "emof_full_bytes_opened": 0,
+    "primary_model_fits": 10,
+    "placebo_model_fits": 100,
+    "model_fits_total": 110,
+    "heldout_scores": 10,
+    "retry_allowed": false
+  },
+  "secondary_placebo": {
+    "secondary_only": true,
+    "changes_primary_status": false,
+    "replicates": 20,
+    "feature_count": 10,
+    "median_macro_log_loss": 0.33617575480692563,
+    "q25_macro_log_loss": 0.33533628142421457,
+    "q75_macro_log_loss": 0.3373586052296552,
+    "real_augmented_minus_placebo_median": 0.10258828837435963,
+    "fraction_placebo_replicates_beaten_by_real_augmented": 0.0,
+    "fingerprint": "15aeca5ceae9357e7abdf3c2c90a30a94e0ae24765941a9662ec4d49c5c86b17"
+  },
+  "predeclared_decision_application": {
+    "source_contract": "validation/paper_ready_replication/cross_ecosystem_synthesis_contract.json",
+    "observed_branch": "adverse_complementary_added_value",
+    "product_boundary": "structural_diagnostic_plus_context_dependent_predictive_complement",
+    "allowed_claim": "Layer A remains a structural falsification framework; Layer B predictive value is not uniformly beneficial",
+    "nature_ecology_evolution_trigger_open": false,
+    "primary_submission_route": "Methods in Ecology and Evolution"
+  }
+}

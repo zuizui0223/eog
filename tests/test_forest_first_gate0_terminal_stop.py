@@ -13,10 +13,10 @@ def test_forest_first_is_30th_response_unconsumed_protocol_stop():
     row = stops[381]
     summary = ledger["current_denominator_summary"]
 
-    assert summary["fresh_predictive_endpoints_with_scores"] == 2
+    assert summary["fresh_predictive_endpoints_with_scores"] == 3
     assert summary["fresh_candidate_stops_listed"] == len(stops) == 31
     assert summary["administrative_exclusions"] == 3
-    assert summary["third_fresh_predictive_endpoint_still_required"] is True
+    assert summary["third_fresh_predictive_endpoint_still_required"] is False
 
     assert row["terminal_stage"] == "response_blind_archive_range_transport"
     assert row["range_requests"] == 1

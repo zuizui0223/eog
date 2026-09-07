@@ -1,0 +1,70 @@
+{
+  "schema": "eog.paper_ready_replication.observed_endpoint3_synthesis.v1",
+  "prospective_contract": "validation/paper_ready_replication/cross_ecosystem_synthesis_contract.json",
+  "prospective_contract_must_remain_unchanged": true,
+  "fresh_endpoint_unit": "ecosystem_endpoint",
+  "endpoint_results": [
+    {
+      "issue": 289,
+      "name": "azores_yellow_eel_receiver_week",
+      "terminal_status": "favorable_complementary_added_value",
+      "baseline_macro_log_loss": 0.14227269867445852,
+      "augmented_macro_log_loss": 0.13228712656635494,
+      "augmented_minus_baseline": -0.00998557210810358,
+      "relative_log_loss_change": -0.07018614394144643,
+      "augmented_heldout_wins": 5,
+      "heldout_units": 5,
+      "once_only_run_id": 32807155541
+    },
+    {
+      "issue": 292,
+      "name": "southwest_louisiana_king_rail_site_occasion",
+      "terminal_status": "favorable_complementary_added_value",
+      "baseline_macro_log_loss": 0.2463173322,
+      "augmented_macro_log_loss": 0.2453455299,
+      "augmented_minus_baseline": -0.0009718023,
+      "relative_log_loss_change": -0.003945326507559504,
+      "augmented_heldout_wins": 7,
+      "heldout_units": 8,
+      "once_only_run_id": 32812052801
+    },
+    {
+      "issue": 388,
+      "system": "Tampa Bay seagrass transect monitoring",
+      "endpoint": "eligible parent Transect visit x recorded Thalassia testudinum detection among linked child Point events",
+      "observation_process": "long-term fixed-transect seagrass monitoring",
+      "terminal_class": "predictive_result",
+      "terminal_status": "adverse_complementary_added_value",
+      "once_only_run_id": 34028447227,
+      "baseline_macro_log_loss": 0.33773536863857834,
+      "augmented_macro_log_loss": 0.43876404318128526,
+      "augmented_minus_baseline": 0.10102867454270692,
+      "relative_log_loss_change": 0.2991356071173612,
+      "augmented_heldout_wins": 1,
+      "heldout_units": 5,
+      "candidate_unit_count": 1497,
+      "node_count": 71,
+      "candidate_hunting_hard_stop": true
+    }
+  ],
+  "observed_endpoint3_status": "adverse_complementary_added_value",
+  "predeclared_product_boundary_applied": "structural_diagnostic_plus_context_dependent_predictive_complement",
+  "allowed_claim": "Layer A remains a structural falsification framework; Layer B predictive value is not uniformly beneficial",
+  "forbidden_interpretations": [
+    "universal_predictive_superiority",
+    "guaranteed_layer_b_improvement",
+    "standalone_layer_b_prediction",
+    "causal_identification",
+    "truth_of_exact_layer_a_world"
+  ],
+  "aggregation": {
+    "pool_row_level_predictions_across_ecosystems": false,
+    "pooled_p_value_or_common_effect_claim": false,
+    "report_endpoint_heterogeneity_explicitly": true
+  },
+  "candidate_hunting_hard_stop": true,
+  "fourth_fresh_endpoint_allowed": false,
+  "primary_submission_route": "Methods in Ecology and Evolution",
+  "nature_ecology_evolution_trigger_open": false,
+  "next_phase": "manuscript figures, evidence table, methods/results text, and submission package"
+}
