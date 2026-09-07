@@ -24,13 +24,8 @@ jobs:
       - name: Apply frozen Tampa terminal bookkeeping
         run: python tools/_tampa_terminal_bookkeeping_once.py
       - name: Verify prospective synthesis contract still parses
-        run: python - <<'PY'
-          import json
-          from pathlib import Path
-          p = Path('validation/paper_ready_replication/cross_ecosystem_synthesis_contract.json')
-          c = json.loads(p.read_text())
-          assert c['endpoint_3_decision_mapping']['adverse_complementary_added_value']['paper_boundary'] == 'structural_diagnostic_plus_context_dependent_predictive_complement'
-          PY
+        run: >-
+          python -c "import json,pathlib; c=json.loads(pathlib.Path('validation/paper_ready_replication/cross_ecosystem_synthesis_contract.json').read_text()); assert c['endpoint_3_decision_mapping']['adverse_complementary_added_value']['paper_boundary']=='structural_diagnostic_plus_context_dependent_predictive_complement'"
       - name: Commit bookkeeping result and remove helper
         run: |
           git config user.name 'ZHANG RUIQI'
