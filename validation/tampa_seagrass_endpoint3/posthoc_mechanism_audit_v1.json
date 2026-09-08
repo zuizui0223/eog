@@ -1,0 +1,151 @@
+{
+  "schema": "eog.tampa_seagrass_endpoint3.posthoc_mechanism_audit.v1",
+  "purpose": "Diagnose structural properties of the already-consumed Tampa endpoint using only frozen contract/result/artifact evidence. This audit cannot change the primary endpoint class and is not a causal mechanism test.",
+  "attempt_id": "tampa_seagrass_endpoint3_v1",
+  "post_outcome": true,
+  "response_reopened": false,
+  "models_refit": 0,
+  "changes_primary_status": false,
+  "authorizes_rerun": false,
+  "causal_mechanism_identified": false,
+  "frozen_sources": {
+    "contract": "validation/tampa_seagrass_endpoint3/final_endpoint_contract.json",
+    "terminal_certificate": "validation/tampa_seagrass_endpoint3/terminal_predictive_result_certificate.json",
+    "authoritative_run": 34028447227,
+    "artifact_id": 9988383179,
+    "artifact_digest": "sha256:95aee0192537700f08ff07f7cffa8f64c2be73b13c76e5ec594bd3bdfb45044f"
+  },
+  "primary_result": {
+    "baseline_macro_log_loss": 0.33773536863857834,
+    "augmented_macro_log_loss": 0.43876404318128526,
+    "augmented_minus_baseline": 0.10102867454270692,
+    "relative_log_loss_change": 0.2991356071173612,
+    "fold_augmented_minus_baseline": [0.3475867430831058, 0.05472414563925099, 0.023266891514603927, -0.0012178452431740872, 0.08078343771974805]
+  },
+  "placebo_fact": {
+    "replicates": 20,
+    "feature_count": 10,
+    "median_macro_log_loss": 0.33617575480692563,
+    "real_augmented_minus_placebo_median": 0.10258828837435963,
+    "fraction_placebo_replicates_beaten_by_real_augmented": 0.0,
+    "supported_interpretation": "Adding ten columns alone is insufficient to explain the degradation; the frozen real row-feature association performed substantially worse than the matched-count permuted controls.",
+    "not_supported": "The placebo does not by itself identify which Layer-B mechanism caused harm."
+  },
+  "design_facts": {
+    "candidate_units": 1497,
+    "stable_nodes": 71,
+    "contexts": 29,
+    "contexts_range": "1997-2025",
+    "split": "five stable-node spatial folds; every visit from a node shares its fold",
+    "layer_a_type": "static finite-world node-level positive-occurrence reconstruction independently inside each spatial outer fold, reused across repeated candidate visits",
+    "training_generator": "for each calibration stable node remove that node from the calibration ever-positive occurrence set, construct one node vector, and reuse it across that node's calibration visits",
+    "heldout_generator": "one common fold-level reconstruction using all calibration ever-positive nodes; reuse each heldout node vector across its visits",
+    "generator_parity": false,
+    "source_policy": "lexicographically smallest nodeID in the reconstruction occurrence set is the sole fixed source",
+    "source_label_invariant": false,
+    "baseline_contains_spatial_coordinates": true
+  },
+  "fold_artifact_audit": [
+    {
+      "fold": 1,
+      "baseline_log_loss": 0.562995902134976,
+      "augmented_log_loss": 0.9105826452180817,
+      "delta": 0.3475867430831058,
+      "calibration_ever_positive_nodes": 45,
+      "source_id": "TBEP:seagrass:loc:S1T1",
+      "compatible_world_count": 5,
+      "compatible_world_ids": ["haversine_q25", "haversine_q50", "haversine_q75", "haversine_q90", "external_open"],
+      "heldout_feature_fingerprint": "ab5caf230683ca914ff124de6f2d0c8d55a6c42254b3488c35836e0d8522631c"
+    },
+    {
+      "fold": 2,
+      "baseline_log_loss": 0.33697557165364556,
+      "augmented_log_loss": 0.39169971729289654,
+      "delta": 0.05472414563925099,
+      "calibration_ever_positive_nodes": 46,
+      "source_id": "TBEP:seagrass:loc:S1T1",
+      "compatible_world_count": 5,
+      "compatible_world_ids": ["haversine_q25", "haversine_q50", "haversine_q75", "haversine_q90", "external_open"],
+      "heldout_feature_fingerprint": "ab5caf230683ca914ff124de6f2d0c8d55a6c42254b3488c35836e0d8522631c"
+    },
+    {
+      "fold": 3,
+      "baseline_log_loss": 0.2870539187974723,
+      "augmented_log_loss": 0.3103208103120762,
+      "delta": 0.023266891514603927,
+      "calibration_ever_positive_nodes": 38,
+      "source_id": "TBEP:seagrass:loc:S1T1",
+      "compatible_world_count": 5,
+      "compatible_world_ids": ["haversine_q25", "haversine_q50", "haversine_q75", "haversine_q90", "external_open"],
+      "heldout_feature_fingerprint": "ab5caf230683ca914ff124de6f2d0c8d55a6c42254b3488c35836e0d8522631c"
+    },
+    {
+      "fold": 4,
+      "baseline_log_loss": 0.2698042936229122,
+      "augmented_log_loss": 0.2685864483797381,
+      "delta": -0.0012178452431740872,
+      "calibration_ever_positive_nodes": 44,
+      "source_id": "TBEP:seagrass:loc:S1T10",
+      "compatible_world_count": 5,
+      "compatible_world_ids": ["haversine_q25", "haversine_q50", "haversine_q75", "haversine_q90", "external_open"],
+      "heldout_feature_fingerprint": "71a56e482c8f0ed2ae8f9d4b574b22a9d7c255a4160e35f3e970461b21482a40"
+    },
+    {
+      "fold": 5,
+      "baseline_log_loss": 0.23184715698388558,
+      "augmented_log_loss": 0.31263059470363364,
+      "delta": 0.08078343771974805,
+      "calibration_ever_positive_nodes": 43,
+      "source_id": "TBEP:seagrass:loc:S1T1",
+      "compatible_world_count": 5,
+      "compatible_world_ids": ["haversine_q25", "haversine_q50", "haversine_q75", "haversine_q90", "external_open"],
+      "heldout_feature_fingerprint": "ab5caf230683ca914ff124de6f2d0c8d55a6c42254b3488c35836e0d8522631c"
+    }
+  ],
+  "derived_noncausal_diagnostics": {
+    "all_five_worlds_compatible_in_every_fold": true,
+    "world_contraction_signal_in_heldout_layer_b": "none at the compatible-world membership level",
+    "same_heldout_feature_fingerprint_fold_count": 4,
+    "same_heldout_feature_fingerprint_folds": [1, 2, 3, 5],
+    "same_source_id_folds": [1, 2, 3, 5],
+    "fold_1_share_of_total_delta": 0.6880952257493463,
+    "mean_delta_excluding_fold_1": 0.03938915740760722,
+    "baseline_macro_excluding_fold_1": 0.2814202352644789,
+    "augmented_macro_excluding_fold_1": 0.32080939267208614,
+    "relative_change_excluding_fold_1": 0.13996561892782614,
+    "interpretation": "Fold 1 strongly amplifies the adverse macro result but is not sufficient to explain it; the remaining four folds are still worse on average."
+  },
+  "prioritized_mechanism_classes": [
+    {
+      "rank": 1,
+      "name": "static_state_plus_training_serving_generation_shift",
+      "evidence": "The contract uses node-static Layer B across repeated visits, but training vectors come from leave-whole-node-out reconstructions whereas heldout vectors come from a common full calibration reconstruction.",
+      "status": "strong structural diagnosis; causal contribution not yet isolated"
+    },
+    {
+      "rank": 2,
+      "name": "world_set_saturation_and_spatial_embedding",
+      "evidence": "All five worlds survive every fold and four folds have an identical heldout Layer-B feature fingerprint despite different ever-positive-node counts; baseline already contains longitude/latitude.",
+      "status": "strong structural diagnosis; redundancy/identity-proxy magnitude not yet quantified"
+    },
+    {
+      "rank": 3,
+      "name": "arbitrary_single_source_anchor_sensitivity",
+      "evidence": "The prediction-facing reconstruction uses the lexicographically smallest node as sole source; fold 4 changes source from S1T1 to S1T10 and is also the only fold with a different heldout feature fingerprint.",
+      "status": "mechanistically plausible; source intervention not yet tested"
+    },
+    {
+      "rank": 4,
+      "name": "fold_concentration",
+      "evidence": "Fold 1 accounts for 68.8% of total adverse delta, but excluding fold 1 leaves about 14.0% relative degradation.",
+      "status": "amplifier/instability, not a sufficient root cause"
+    }
+  ],
+  "forbidden_interpretations": [
+    "Tampa degradation is proven to be caused by node identity memorization",
+    "Tampa degradation is proven to be caused by spatial block cross-validation",
+    "Tampa degradation is proven to be caused by the seagrass ecology or transect design",
+    "The favorable Azores/Louisiana results prove sequential Layer B is universally beneficial",
+    "This posthoc audit may repair, rerun, or reclassify the frozen Tampa endpoint"
+  ]
+}

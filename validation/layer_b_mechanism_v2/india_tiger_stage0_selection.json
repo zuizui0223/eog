@@ -1,0 +1,87 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.india_tiger_stage0_selection.v1",
+  "purpose": "Response-blind selection of one new repeated-site system for a future mechanism-specific static-versus-sequential Layer-B test. This is not a fourth EOG-WF predictive endpoint.",
+  "selection_date": "2026-09-08",
+  "selected_before_response_access": true,
+  "counts_as_fresh_predictive_endpoint_for_closed_paper": false,
+  "may_change_closed_paper_claim": false,
+  "dataset": {
+    "title": "Ten year camera trap dataset of tigers in India",
+    "record_url": "https://zenodo.org/records/5573206",
+    "dataset_doi": "10.5061/dryad.bcc2fqzd2",
+    "focal_taxon": "Panthera tigris",
+    "published_version": "v1",
+    "response_independent_files": [
+      {
+        "name": "EECam_act.csv",
+        "role": "trap activity/effort by primary period",
+        "md5": "93c958bf9a150438d379a9f1e4e1cc59",
+        "published_size": "5.1 kB"
+      },
+      {
+        "name": "EEtraplocs.csv",
+        "role": "195 trap IDs with centered x/y coordinates in metres",
+        "md5": "e1a522dc2681371899ff3277361b965f",
+        "published_size": "5.8 kB"
+      },
+      {
+        "name": "ReadMeTigers.txt",
+        "role": "schema and primary-period metadata",
+        "md5": "8982e718365af1d2eef910a5ea9353d9",
+        "published_size": "2.1 kB"
+      }
+    ],
+    "forbidden_response_file_until_authorized": {
+      "name": "EERecords.csv",
+      "role": "individual tiger captures by trap, occasion and primary period",
+      "md5": "5775abe5e15d2392050cdfc5c59c99a1",
+      "published_size": "4.3 kB"
+    }
+  },
+  "response_blind_selection_reasons": [
+    "ten ordered primary periods support a sequential state-refresh test",
+    "195 trap locations provide a repeated spatial node registry",
+    "trap geometry is physically separate from tiger capture records",
+    "trap activity by primary period is physically separate from tiger capture records",
+    "the response file is small and separately addressable, permitting an exact once-only future firewall",
+    "no matching tiger/EEtraplocs/EECam_act system was found in the current eog repository"
+  ],
+  "stage0_allowed_actions": [
+    "fetch and checksum ReadMeTigers.txt",
+    "fetch and checksum EECam_act.csv",
+    "fetch and checksum EEtraplocs.csv",
+    "reproduce exact trap registry and active trap-by-period calendar",
+    "construct response-blind Euclidean geometry ladder from centered metre coordinates",
+    "freeze static and sequential feature-generation semantics",
+    "run synthetic/placeholder smoke with no EERecords.csv byte access"
+  ],
+  "stage0_forbidden_actions": [
+    "request EERecords.csv body bytes",
+    "preview EERecords.csv rows",
+    "select a tiger subset after seeing records",
+    "change the mechanism hypotheses based on response counts",
+    "use the system to improve the favorable/favorable/adverse paper denominator"
+  ],
+  "predeclared_mechanism_contrast": {
+    "common_node_universe": "trap IDs reproduced from EEtraplocs.csv and activity file before response",
+    "common_world_family": "response-blind Euclidean LCC threshold ladder plus external_open; exact thresholds frozen only after geometry file is opened",
+    "common_prediction_baseline": "same strong learner and same response-independent trap/period/effort features in all arms; exact fields frozen after Stage0 schema inspection",
+    "variant_static_matched": "one declared pre-target structural state is reused across later periods, with identical feature-generation function in fit and serve",
+    "variant_sequential_matched": "Layer A and prediction-facing state are refreshed after each revealed prior primary period and always computed before the current target outcome",
+    "variant_source_symmetric": "prediction-facing support aggregates across the declared current source set symmetrically; exact source IDs remain in Layer A",
+    "training_serving_generator_shift_arm": "diagnostic negative-control arm only; deliberately mismatched generation is not an eligible production representation"
+  },
+  "primary_mechanism_endpoints": [
+    "train/serve generator parity",
+    "within-trap Layer-B refresh fraction across primary periods",
+    "world-set contraction/saturation trajectory",
+    "source-label invariance",
+    "feature-vector uniqueness/redundancy relative to spatial node identity"
+  ],
+  "predictive_scores": {
+    "role": "secondary mechanism evidence only",
+    "cannot_reclassify_closed_eogwf": true,
+    "metric_family": "calibration-sensitive heldout log loss with paired unchanged learner; exact split/count rules to be frozen before EERecords.csv access"
+  },
+  "next_gate": "Stage0 geometry/effort acquisition only; EERecords.csv remains forbidden"
+}

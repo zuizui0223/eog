@@ -1,0 +1,76 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.cross_endpoint_design_recovery.v1",
+  "purpose": "Recover frozen design evidence needed to distinguish static from sequential Layer-B generation. This is archival/mechanistic evidence only and does not change the three-endpoint predictive closure.",
+  "changes_frozen_predictive_endpoint_statuses": false,
+  "authorizes_fourth_fresh_endpoint": false,
+  "endpoints": [
+    {
+      "name": "azores_yellow_eel_receiver_week",
+      "terminal_status": "favorable_complementary_added_value",
+      "baseline_macro_log_loss": 0.14227269867445852,
+      "augmented_macro_log_loss": 0.13228712656635494,
+      "augmented_minus_baseline": -0.00998557210810358,
+      "outer_units": "five heldout four-week calendar blocks",
+      "design_class": "sequential_temporally_refreshed_layer_a_b",
+      "layer_a_update": "for week t compute world support and Layer B from worlds surviving through t-1; update world survival only after week-t outcome",
+      "source_state": "release anchors and/or immediately previous-week observed receivers under two frozen source modes",
+      "layer_b_refresh": "computed before each current-week outcome from the current surviving-world/source state",
+      "training_serving_temporal_semantics": "same sequential pre-outcome construction principle across calibration and heldout weeks",
+      "frozen_evidence": {
+        "issue": 289,
+        "historical_pr": 290,
+        "historical_head_sha": "dff4554d1b95e6df1676ad09f0d80e94f40adff4",
+        "full_freeze_path": "validation/azores_yellow_eel_paired_complementarity/full_freeze_spec.json",
+        "full_freeze_git_blob_sha1": "db217191965979fcc4973b35c7763723296914be",
+        "authoritative_run": 32807155541
+      }
+    },
+    {
+      "name": "southwest_louisiana_king_rail_site_occasion",
+      "terminal_status": "favorable_complementary_added_value",
+      "baseline_macro_log_loss": 0.2463173321806268,
+      "augmented_macro_log_loss": 0.2453455298598494,
+      "augmented_minus_baseline": -0.0009718023207773985,
+      "outer_units": "eight chronological heldout sampling occasions",
+      "design_class": "sequential_temporally_refreshed_layer_a_b",
+      "layer_a_update": "predict each scored occasion from worlds surviving through the previous occasion; positive observations then contract the world set monotonically",
+      "source_state": "immediately previous observed sites and cumulative observed-history source modes plus external_open",
+      "layer_b_refresh": "computed before each current-occasion outcome from the current surviving-world/source state",
+      "training_serving_temporal_semantics": "same sequential pre-outcome construction principle through calibration and heldout occasions, with heldout state updated only after each prediction",
+      "frozen_evidence": {
+        "issue": 292,
+        "historical_commit": "92aacb1b35ac68463a2f0afb941996bfe5e2d8c6",
+        "full_freeze_path": "validation/louisiana_marsh_bird_replication_1/full_freeze_spec.json",
+        "full_freeze_git_blob_sha1": "82735314767a3b1d6d4906ce43ecddfcedcac2df",
+        "authoritative_run": 32812052801
+      }
+    },
+    {
+      "name": "tampa_bay_seagrass_transect_visit",
+      "terminal_status": "adverse_complementary_added_value",
+      "baseline_macro_log_loss": 0.33773536863857834,
+      "augmented_macro_log_loss": 0.43876404318128526,
+      "augmented_minus_baseline": 0.10102867454270692,
+      "outer_units": "five stable-node spatial folds",
+      "design_class": "static_node_reused_layer_a_b",
+      "layer_a_update": "one static finite-world node-level reconstruction per spatial outer fold, based on calibration nodes ever positive anywhere in 1997-2025",
+      "source_state": "lexicographically smallest nodeID in each reconstruction is the sole fixed source",
+      "layer_b_refresh": "same node-level Layer-B vector is reused across repeated visits/years of a node",
+      "training_serving_temporal_semantics": "training removes the focal stable node from the calibration ever-positive set before reconstruction; heldout uses one common reconstruction from all calibration ever-positive nodes",
+      "baseline_already_contains": ["longitude", "latitude", "survey_year", "day_of_year"],
+      "frozen_evidence": {
+        "issue": 388,
+        "contract_path": "validation/tampa_seagrass_endpoint3/final_endpoint_contract.json",
+        "contract_git_blob_sha1": "1f296914b194237e20116a2dbf54af899efc7a07",
+        "authoritative_run": 34028447227,
+        "artifact_id": 9988383179,
+        "artifact_digest": "sha256:95aee0192537700f08ff07f7cffa8f64c2be73b13c76e5ec594bd3bdfb45044f"
+      }
+    }
+  ],
+  "recovered_contrast": {
+    "statement": "The two favorable endpoints used sequential, context-refreshed Layer-A/Layer-B state with temporal heldout evaluation, whereas the adverse Tampa endpoint used a static node-level reconstruction reused across repeated visits and spatial node-block heldout evaluation.",
+    "causal_interpretation_allowed": false,
+    "use": "prioritize prospective mechanism tests and prediction-interface safeguards; do not retroactively reclassify endpoint outcomes"
+  }
+}
