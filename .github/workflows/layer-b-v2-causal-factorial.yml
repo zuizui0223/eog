@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install
-        run: pip install -e .
+        run: pip install -e . pytest scikit-learn
       - name: Contract regression tests
         run: pytest -q tests/test_layer_b_v2_causal_factorial_contract.py
       - name: Run frozen causal factorial
