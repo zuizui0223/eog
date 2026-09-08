@@ -76,11 +76,16 @@ def run_benchmark() -> dict[str, object]:
             np.median(clean_minus_baseline) < 0.0
         ),
     }
-    if not all(checks.values()):
-        raise AssertionError(f"predeclared causal-factorial check failed: {checks}")
+    scientific_status = (
+        "all_predeclared_checks_passed"
+        if all(checks.values())
+        else "partial_refutation_of_predeclared_mechanism_checks"
+    )
 
     return {
         "schema": "eog.layer_b_mechanism_v2.causal_factorial_result.v1",
+        "scientific_status": scientific_status,
+        "predeclared_checks_all_passed": bool(all(checks.values())),
         "execution": {
             "replicate_parallelism_only": True,
             "max_workers": max_workers,
@@ -104,7 +109,7 @@ def run_benchmark() -> dict[str, object]:
             )
             for key in sorted(reps[0]["cells"])
         },
-        "interpretation": "In this frozen synthetic known-truth system, each representation defect has a causal intervention effect on heldout transfer because all other data, outcomes, learner, baseline and split are paired and fixed. Effect magnitudes are benchmark-specific and cannot be assigned to Tampa.",
+        "interpretation": "The frozen experiment supports only the predeclared checks that evaluate true. A false check is retained as a refutation, not repaired. Effect magnitudes are benchmark-specific and cannot be assigned to Tampa.",
         "forbidden_interpretations": contract["forbidden_interpretations"],
     }
 
