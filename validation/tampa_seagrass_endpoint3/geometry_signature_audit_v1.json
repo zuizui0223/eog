@@ -1,0 +1,63 @@
+{
+  "schema": "eog.tampa_seagrass_endpoint3.geometry_signature_audit.v1",
+  "purpose": "Reconstruct the frozen heldout Layer-B geometry from the response-independent 71-node coordinate registry and frozen world family, conditioned only on source identities already recorded in the consumed result artifact. No biological response is reopened and no model is refit.",
+  "response_reopened": false,
+  "models_refit": 0,
+  "changes_primary_status": false,
+  "gate0_coordinate_source": {
+    "run": 34023723427,
+    "artifact_id": 9986361240,
+    "artifact_digest": "sha256:0860e262f5ce07baafdfd2ea2514bd94d1155b2a14a817a3e559acfd7f906240",
+    "node_count": 71
+  },
+  "frozen_world_family": {
+    "local_thresholds_km": [14.910552760894076, 23.92945001793242, 34.70605518869811, 43.48070387866193],
+    "external_open": true,
+    "max_steps": 70,
+    "support_tolerance": 0.0,
+    "forecast_reachability_threshold": 0.0,
+    "surviving_world_count_in_every_consumed_fold": 5,
+    "declared_world_count": 5
+  },
+  "reconstruction_checks": [
+    {
+      "source_id": "TBEP:seagrass:loc:S1T1",
+      "artifact_folds": [1, 2, 3, 5],
+      "reconstructed_feature_fingerprint": "ab5caf230683ca914ff124de6f2d0c8d55a6c42254b3488c35836e0d8522631c",
+      "artifact_feature_fingerprint": "ab5caf230683ca914ff124de6f2d0c8d55a6c42254b3488c35836e0d8522631c",
+      "exact_fingerprint_match": true,
+      "unique_node_feature_vectors": 71,
+      "node_count": 71,
+      "centered_feature_matrix_rank": 6,
+      "constant_feature_columns_zero_based": [0, 8],
+      "constant_feature_names": ["surviving_world_fraction", "positive_support_fraction"],
+      "minimum_pairwise_feature_vector_distance": 0.0019114597801694884,
+      "median_pairwise_feature_vector_distance": 0.2340474544249396
+    },
+    {
+      "source_id": "TBEP:seagrass:loc:S1T10",
+      "artifact_folds": [4],
+      "reconstructed_feature_fingerprint": "71a56e482c8f0ed2ae8f9d4b574b22a9d7c255a4160e35f3e970461b21482a40",
+      "artifact_feature_fingerprint": "71a56e482c8f0ed2ae8f9d4b574b22a9d7c255a4160e35f3e970461b21482a40",
+      "exact_fingerprint_match": true,
+      "unique_node_feature_vectors": 71,
+      "node_count": 71,
+      "centered_feature_matrix_rank": 6,
+      "constant_feature_columns_zero_based": [0, 8],
+      "constant_feature_names": ["surviving_world_fraction", "positive_support_fraction"],
+      "minimum_pairwise_feature_vector_distance": 0.002431314342397074,
+      "median_pairwise_feature_vector_distance": 0.22827068986095955
+    }
+  ],
+  "structural_interpretation": {
+    "established": [
+      "Once source identity and the fully surviving five-world family are fixed, the heldout Layer-B matrix is generated entirely from frozen geography/topology.",
+      "For both source identities observed across the five folds, all 71 stable nodes have distinct Layer-B vectors.",
+      "The surviving-world fraction and positive-support fraction are constant across all nodes; the remaining variation is a six-dimensional centered geometry signature.",
+      "The response-independent reconstruction reproduces the consumed artifact feature fingerprints exactly."
+    ],
+    "mechanism_implication": "The Tampa heldout Layer-B block is an injective node-level spatial signature under each observed source anchor, rather than a representation carrying fold-specific world-set contraction. Reusing that signature across repeated visits makes node identity/spatial geometry available to the augmented learner in an additional nonlinear encoding.",
+    "causal_claim_allowed": false,
+    "not_established": "This audit alone does not prove that the unique node signature caused the observed log-loss degradation; it identifies a concrete representation property to test prospectively."
+  }
+}
