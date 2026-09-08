@@ -1,0 +1,94 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.causal_factorial_result.v1",
+  "scientific_status": "partial_refutation_of_predeclared_mechanism_checks",
+  "predeclared_checks_all_passed": false,
+  "authoritative_execution": {
+    "workflow_name": "Layer-B v2 causal factorial",
+    "run_id": 34234088556,
+    "job_id": 102087229202,
+    "source_head_sha": "b5bd126066b89d0374f526cba369a241e86e45e1",
+    "benchmark_step_completed": true,
+    "post_benchmark_ci_failure_reason": "legacy result-validation step still required all predeclared checks to be true; benchmark result itself completed and was printed before that assertion"
+  },
+  "execution": {
+    "replicate_parallelism_only": true,
+    "max_workers": 4,
+    "canonical_cell_generator": "layer_b_v2_causal_factorial._build_replication"
+  },
+  "counts_as_fresh_predictive_endpoint": false,
+  "uses_biological_response": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "replicate_count": 64,
+  "primary_estimand": "paired within-replicate log-loss penalty under one-factor interventions",
+  "checks": {
+    "clean_augmented_median_better_than_baseline": true,
+    "full_defect_median_positive": true,
+    "generator_shift_median_positive": false,
+    "single_source_median_positive": true,
+    "static_reuse_median_positive": true
+  },
+  "clean_augmented_minus_baseline": {
+    "favorable_fraction": 1.0,
+    "mean": -0.14200169692246278,
+    "median": -0.13000392435844693
+  },
+  "effect_summaries": {
+    "full_defect": {
+      "mean_log_loss_penalty": 0.13797709508088055,
+      "median_log_loss_penalty": 0.13164318219857007,
+      "positive_replicate_fraction": 1.0,
+      "q025": 0.04970905915496811,
+      "q975": 0.26882110107963997
+    },
+    "generator_shift": {
+      "mean_log_loss_penalty": -0.0053229877953778326,
+      "median_log_loss_penalty": -0.005154220203264989,
+      "positive_replicate_fraction": 0.359375,
+      "q025": -0.045990664558779364,
+      "q975": 0.038487312445530636
+    },
+    "label_dependent_single_source": {
+      "mean_log_loss_penalty": 0.06024404429228762,
+      "median_log_loss_penalty": 0.0536614905915295,
+      "positive_replicate_fraction": 0.953125,
+      "q025": -0.005095265297626592,
+      "q975": 0.1486155107774685
+    },
+    "static_reuse": {
+      "mean_log_loss_penalty": 0.05095305377802942,
+      "median_log_loss_penalty": 0.048106900176689144,
+      "positive_replicate_fraction": 0.921875,
+      "q025": -0.009651178075656878,
+      "q975": 0.11600640572650905
+    }
+  },
+  "cell_macro_log_loss": {
+    "000": 0.6669136721203199,
+    "001": 0.7945233988237118,
+    "010": 0.8524495625872985,
+    "011": 0.8616787929257896,
+    "100": 0.777261691866036,
+    "101": 0.8243145805002376,
+    "110": 0.7478064357081344,
+    "111": 0.8048907672012005
+  },
+  "supported_interpretations": [
+    "Under the frozen synthetic known-truth design, replacing context-varying Layer-B state with a node-static reused state causally increased heldout log loss on the median replicate.",
+    "Under the frozen synthetic known-truth design, arbitrary label-dependent source encoding causally increased heldout log loss on the median replicate.",
+    "The three-defect combination causally increased heldout log loss in all 64 replicates.",
+    "The specified train-serving generator shift intervention did not have a positive median main effect and is therefore not independently supported as a degradation mechanism by this benchmark."
+  ],
+  "mechanism_priority_after_test": [
+    "static_repeated_state_under_dynamic_truth",
+    "arbitrary_label_dependent_single_source",
+    "interaction_or_combined_defect",
+    "training_serving_generator_shift_as_safeguard_not_independently_supported_cause"
+  ],
+  "interpretation": "The frozen experiment supports only the predeclared checks that evaluate true. The generator-shift check is retained as a refutation rather than repaired. Effect magnitudes are benchmark-specific and cannot be assigned to Tampa.",
+  "forbidden_interpretations": [
+    "Synthetic effect magnitudes estimate how much each mechanism caused Tampa's observed +0.1010287 log-loss delta",
+    "Passing parts of this benchmark proves Layer-B v2 improves prediction in real ecological systems",
+    "This benchmark authorizes a Tampa rerun or a fourth fresh EOG-WF endpoint",
+    "The benchmark changes the favorable/favorable/adverse empirical synthesis"
+  ]
+}
