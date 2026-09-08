@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILDER = ROOT / "manuscript/build_paper_ready_eogwf.py"
+COMMITTED = ROOT / "manuscript/paper_ready"
 
 
 def _sha256(path: Path) -> str:
@@ -127,3 +128,14 @@ def test_figures_and_manifest_are_deterministic_and_audited(tmp_path: Path) -> N
     }
     for name, digest in manifest["outputs"].items():
         assert digest == _sha256(first / name)
+
+
+def test_committed_paper_ready_assets_are_exact_builder_projection(tmp_path: Path) -> None:
+    output = tmp_path / "fresh"
+    subprocess.run([sys.executable, str(BUILDER), "--output-dir", str(output)], cwd=ROOT, check=True)
+    generated = {path.name: path for path in output.iterdir() if path.is_file()}
+    committed = {path.name: path for path in COMMITTED.iterdir() if path.is_file()}
+    assert committed.keys() == generated.keys()
+    assert len(committed) == 11
+    for name in sorted(generated):
+        assert committed[name].read_bytes() == generated[name].read_bytes(), name
