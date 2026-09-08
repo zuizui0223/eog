@@ -1,0 +1,73 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.prospective_upgrade_contract.v1",
+  "purpose": "Freeze the post-closure algorithm-upgrade boundary before any new mechanism-specific empirical outcome is used. The contract protects the closed EOG-WF paper while allowing a separate v2 mechanism programme.",
+  "paper_ready_eogwf_boundary_unchanged": true,
+  "existing_fresh_predictive_endpoint_count": 3,
+  "fourth_fresh_endpoint_authorized": false,
+  "existing_endpoint_reclassification_allowed": false,
+  "layer_a": {
+    "status": "unchanged",
+    "retain_exact_world_identity": true,
+    "retain_sequential_contraction_and_falsification": true,
+    "surviving_world_is_truth_claim": false
+  },
+  "prediction_eligibility_v2": {
+    "must_be_response_independent": true,
+    "require_train_serve_generator_parity": true,
+    "require_prediction_facing_source_label_invariance": true,
+    "repeated_measure_static_reuse_default": "structural_only_static_reuse",
+    "static_predictive_use_requires_explicit_preoutcome_opt_in": true,
+    "baseline_spatial_coordinate_overlap": "warning requiring a response-independent redundancy audit; not by itself a biological exclusion rule",
+    "failure_effect": "Layer A remains available; only default supervised Layer-B augmentation is withheld"
+  },
+  "source_symmetric_projection_v2_candidate": {
+    "status": "experimental_not_predictively_validated",
+    "principle": "retain exact source IDs in Layer A but aggregate prediction-facing support equally across the declared current source set before symmetric world summarization",
+    "source_order_invariant": true,
+    "source_label_invariant": true,
+    "world_order_invariant": true,
+    "world_label_invariant": true,
+    "may_upgrade_existing_endpoint_status": false
+  },
+  "mechanism_hypotheses": [
+    {
+      "id": "M1",
+      "name": "training_serving_generation_shift",
+      "prediction": "holding the underlying structural state fixed, matched feature generation should reduce train/serve representation discrepancy relative to leave-node-out training versus common-reconstruction serving"
+    },
+    {
+      "id": "M2",
+      "name": "static_node_signature",
+      "prediction": "a repeated-measure static representation can become a persistent node/spatial signature rather than a changing epistemic state; sequential refresh should reduce within-node constancy when evidence changes"
+    },
+    {
+      "id": "M3",
+      "name": "arbitrary_single_source_anchor",
+      "prediction": "lexicographic single-source projection can change under label renaming; source-symmetric v2 must remain numerically invariant to source order and label spelling"
+    },
+    {
+      "id": "M4",
+      "name": "world_set_saturation",
+      "prediction": "when the compatible world set never contracts, survival-fraction features provide no contraction signal; the system should report saturation rather than treating the feature block as evidence of dynamic world-set information"
+    },
+    {
+      "id": "M5",
+      "name": "fold_concentration",
+      "prediction": "outer-unit concentration may amplify an adverse macro score but is not a root-mechanism claim unless harm disappears outside the dominant unit"
+    }
+  ],
+  "next_confirmatory_tests": {
+    "phase_1": "response-independent known-truth and invariance benchmarks for generator parity, state refresh, source label invariance and world-set saturation",
+    "phase_2": "only after phase_1 is frozen, a scientifically separate prospective mechanism experiment may compare matched static versus sequential state generation",
+    "phase_2_counts_as_endpoint4_for_closed_paper": false,
+    "phase_2_may_change_closed_paper_claim": false,
+    "phase_2_requires_new_preoutcome_contract": true
+  },
+  "forbidden": [
+    "rerun Tampa with repaired features and relabel it independent",
+    "use Azores or Louisiana outcomes to tune v2 and then call the same endpoints prospective",
+    "claim sequential Layer B is generally beneficial from the two favorable endpoints",
+    "claim the Tampa harm mechanism is causally identified before a prospective mechanism test",
+    "change the frozen favorable/favorable/adverse synthesis"
+  ]
+}
