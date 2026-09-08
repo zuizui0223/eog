@@ -2,26 +2,36 @@
 
 ## Status
 
-This ledger tracks the **single active integrated method line**. Positive, adverse, blocked, null and non-estimable results remain evidence and are not retuned.
+This ledger tracks the **single integrated EOG-WF method line**.
 
-Current empirical phase:
+The prospective validation phase is now **closed**.
 
-> **first prospectively gated independent EOG-WF heldout forecast completed; exact world identity as a direct predictive representation was adverse.**
+Final empirical state:
 
-Current product phase:
+- fresh scored endpoints: **3**;
+- terminal pattern: **favorable / favorable / adverse**;
+- scientific/protocol STOPs: **31**;
+- administrative exclusions: **3**;
+- candidate hunting: **hard-stopped**;
+- fourth fresh endpoint: **not allowed**.
 
-> **exact world/rule identity remains the latent sequential update/falsification state; a world-label-invariant predictive projection is implemented and awaits fresh independent validation.**
+Final product state:
 
-Canonical documents:
+> **Exact world/rule identity remains the latent sequential update/falsification state (Layer A). The frozen world-label-invariant projection (Layer B) is retained as a context-dependent predictive complement, not a universally beneficial prediction product.**
 
-- [`worldset_forecast_algorithm.md`](worldset_forecast_algorithm.md)
-- [`two_layer_forecast_architecture.md`](two_layer_forecast_architecture.md)
-- [`method_validation_protocol.md`](method_validation_protocol.md)
-- [`world_universe_scale_design.md`](world_universe_scale_design.md)
+Canonical closure files:
+
+- [`../manuscript/paper_ready/submission_boundary.json`](../manuscript/paper_ready/submission_boundary.json)
+- [`../manuscript/paper_ready/methods_results_core.md`](../manuscript/paper_ready/methods_results_core.md)
+- [`../manuscript/paper_ready/fresh_endpoint_results.csv`](../manuscript/paper_ready/fresh_endpoint_results.csv)
+- [`../manuscript/paper_ready/candidate_flow_table.csv`](../manuscript/paper_ready/candidate_flow_table.csv)
+- [`development_mainline.md`](development_mainline.md)
+
+Any earlier wording saying that Layer B “awaits fresh independent validation” is historical and no longer describes the active state.
 
 ## Implemented architecture
 
-EOG v2 now includes:
+EOG v2 includes:
 
 - static/dynamic reachability;
 - inverse compatible-world reconstruction;
@@ -32,9 +42,11 @@ EOG v2 now includes:
 - changing-current-source sequential forecast with frozen rule identities;
 - response-blind structural scale ladders;
 - response-blind structural adequacy gates;
-- **world-label-invariant predictive summary over exact latent forecast state**.
+- world-label-invariant predictive summary over exact latent forecast state;
+- paired strong-learner complementarity evaluation;
+- schema-frozen, once-only outcome-access validation machinery.
 
-Main modules:
+Primary modules include:
 
 - `src/eog/v2/world_reconstruction.py`
 - `src/eog/v2/world_forecast.py`
@@ -42,10 +54,9 @@ Main modules:
 - `src/eog/v2/world_predictive_summary.py`
 - `src/eog/v2/world_scale_ladder.py`
 - `src/eog/v2/world_adequacy.py`
+- `src/eog/v2/predictive_complementarity.py`
 
-No new public facade was created. Prediction-facing APIs remain under `eog.v2.reachability`; prospective validation infrastructure remains under `eog.v2.validation`.
-
-## Two-layer product boundary
+## Final two-layer boundary
 
 ### Layer A — exact epistemic/update state
 
@@ -54,155 +65,146 @@ Keep exact world/rule identity for:
 - compatibility;
 - per-world support;
 - evidence-driven rule elimination;
-- possible/robust/unresolved finite-world interpretation;
-- finite-universe falsification.
+- possible / robust / unresolved finite-world interpretation;
+- finite-universe falsification;
+- sequential provenance.
 
-Known-truth tests and the independent Glanville rule history both support this role.
+Exact identities are not interpreted as historical truth and are not default supervised prediction columns.
 
 ### Layer B — label-invariant predictive state
 
-`world_predictive_summary.py` projects the exact state into ten symmetric features:
+The frozen `symmetric_world_support_summary_v1` contains ten symmetric features:
 
 1. surviving-world fraction;
 2. mean support;
 3. support SD;
-4. min;
-5. max;
+4. minimum;
+5. maximum;
 6. q25;
 7. q50;
 8. q75;
 9. positive-support fraction;
-10. range.
+10. support range.
 
-The feature representation is required to be invariant to world ID renaming and member order. Exact latent provenance remains separately fingerprinted.
+The representation is invariant to world-ID renaming and member order. Exact latent provenance remains separately fingerprinted.
 
-This is a product-interface revision, not a novelty claim for set summaries/permutation-invariant functions.
+This is a prediction interface, not a novelty claim for generic set summaries.
 
-## Validation ledger
+## Evidence trajectory
 
-### A-Islands
+### Glanville fritillary
 
-Exploratory exact-world structural distinction; not independent. Earlier predictive extension adverse.
+The first completed independent heldout forecast rejected exact world identity as the default supervised representation.
 
-### SIVFLORA
+Macro log loss:
 
-Independent pre-outcome non-estimable. Not rescued.
+- symmetric same-world compression: `0.187983`;
+- RF: `0.191725`;
+- IFM logistic: `0.200242`;
+- exact identity: `0.230197`.
 
-### Azores
+Exact identity lost to compression in `6/6` heldout transitions.
 
-Independent pre-model non-estimable. Not rescued.
+Retained conclusion:
 
-### STOC
+> exact world/rule identity is useful as an auditable latent state for sequential evidence update and falsification, not as a default supervised predictive encoding.
 
-First independent EOG-WF attempt. Response balance passed, but frozen world universe was falsified during calibration for 20/20 species before heldout prediction.
+### Tvärminne Daphnia
 
-This motivated:
+Layer B contained a small amount of non-redundant information beyond mean-only support but was substantially worse than the frozen strong RF.
 
-- source/process-closure gate;
-- response-blind scale construction;
-- structural adequacy gate.
+This fixed the subsequent question as **paired added value on top of the same strong learner**, rather than standalone EOG prediction.
 
-STOC remains frozen.
+### Fresh paired complementarity closure
 
-### Glanville fritillary — first completed independent heldout forecast
+#### Azores yellow eel telemetry
 
-System: Åland *Melitaea cinxia* regional patch metapopulation.
+- baseline: `0.1422727`;
+- augmented: `0.1322871`;
+- difference: `-0.0099856` (`-7.0%`);
+- wins: `5/5`;
+- status: **favorable**.
 
-Pre-response gates passed:
+#### Southwest Louisiana King Rail passive acoustics
 
-- source/schema/process closure;
-- 4,656-patch frozen node universe;
-- external 1-km mean-dispersal reference;
-- response-blind structural ladder;
-- structural adequacy;
-- annual split `1999→2000 ... 2011→2012` calibration and six final heldout transitions;
-- IFM/RF comparators;
-- exact-identity vs symmetric-compression endpoint;
-- response estimability;
-- synthetic runner smoke.
+- baseline: `0.2463173`;
+- augmented: `0.2453455`;
+- difference: `-0.0009718` (`-0.39%`);
+- wins: `7/8`;
+- status: **favorable**.
 
-A post-open schema correction filtered 755 survey rows / 417 historical IDs outside the frozen node universe. ID-only audit showed none had patch-area records, so the already-frozen finite-positive-area eligibility rule excluded them independently of population response. No world, split, response, metric or comparator changed.
+All six frozen local Layer-A worlds were nevertheless falsified and only `external_open` survived, demonstrating that structural falsification and predictive complementarity are distinct estimands.
 
-Authoritative run:
+#### Tampa Bay seagrass monitoring
 
-- workflow `32017872743`;
-- artifact `9284217174`;
-- result fingerprint `628511ac3f42fe108d334a6458428bbf56f3c3fea1e753b2bee8d980b3d84c33`;
-- calibration rows 35,217, positive colonisations 3,287;
-- heldout rows 18,918, positives 900;
-- six heldout annual transitions.
+- baseline: `0.3377354`;
+- augmented: `0.4387640`;
+- difference: `+0.1010287` (`+29.9%`);
+- wins: `1/5`;
+- status: **adverse**.
 
-Identity was independently estimable beyond the declared compression (`max residual SD = 0.81584`).
+Secondary feature-count placebo:
 
-Primary macro-year log loss:
+- 20 replicates × 10 features;
+- placebo median: `0.3361758`;
+- real augmentation beat `0%` of placebo replicates.
 
-| model | log loss |
-|---|---:|
-| **symmetric same-world compression** | **0.187983** |
-| RF | 0.191725 |
-| IFM logistic | 0.200242 |
-| **exact identity** | **0.230197** |
+The adverse result is retained and closes the general predictive-product escalation.
 
-Exact identity minus compression: **+0.042214**.
+## Closed scientific interpretation
 
-Identity beat compression: **0/6** years.
+Supported:
 
-Identity beat the best external model: **1/6** years.
+> **Layer A is an auditable structural compatibility/falsification framework. Layer B can provide additional heldout information in some systems, but its predictive added value is context dependent.**
 
-Frozen statuses:
+Rejected or not supported:
 
-- `adverse_identity_predictive_value`;
-- `adverse_external_predictive_added_value`.
+- exact identity as the default supervised representation;
+- Layer B as a superior standalone predictor;
+- uniform predictive improvement from Layer B;
+- causal identification from predictive gain;
+- unique historical-route recovery;
+- candidate continuation until a more favorable endpoint pattern appears.
 
-Rule contraction remained informative:
+Final product boundary:
 
-- three narrow structural worlds eliminated in `1999→2000`;
-- 6.418-km world eliminated in `2010→2011`;
-- full exponential process world survived into all heldout forecasts.
+`structural_diagnostic_plus_context_dependent_predictive_complement`
 
-Canonical evidence: [`../validation/glanville_eogwf/README.md`](../validation/glanville_eogwf/README.md).
+## Prospective funnel as evidence
 
-## Scientific consequence of Glanville
+The final fresh-validation denominator is:
 
-Rejected/narrowed claim:
+- **3** scored endpoints;
+- **31** scientific/protocol STOPs;
+- **3** administrative exclusions.
 
-> exact world labels should be the default supervised prediction representation.
+STOPs remain methods-integrity evidence. They are not adverse predictive outcomes, and they are not repaired post-outcome and promoted to independent confirmation.
 
-Retained claim:
+The validation machinery now includes physical-header identity, categorical token semantics, response firewalling, response-independent registry/geometry checks, source/process closure, structural adequacy, paired synthetic smoke, frozen runtime identity and once-only outcome authorization.
 
-> exact world/rule identity is an auditable latent state for sequential evidence update and falsification.
+## Current milestone
 
-Prospective product revision:
+The next valid step is **not another fresh independent system**.
 
-> prediction should consume a world-label-invariant representation of the surviving support set while exact identities remain behind that interface.
+The active sequence is:
 
-The Glanville compression descriptively had the best tested macro log loss, but external superiority of compression was **not** the prospectively frozen endpoint. It cannot be promoted to confirmed EOG superiority after the fact.
+1. synchronize status documentation with the frozen closure;
+2. write the EOG-WF Abstract, Introduction and Discussion within the frozen claim boundary;
+3. perform a one-time Methods in Ecology and Evolution desk-fit audit;
+4. freeze the submission/release package without changing the empirical denominator.
 
-## Current implementation gate
+The structural/island line remains separate and can resume after EOG-WF manuscript closure.
 
-`tests/test_world_predictive_summary.py` now checks:
+## Stop rules
 
-- frozen ten-feature surface;
-- invariance to world renaming;
-- invariance to member order;
-- horizon-specific projection;
-- compatibility with sequential changing-source forecasts;
-- no world IDs exposed as predictive columns.
+1. Do not add a fourth fresh endpoint.
+2. Do not rerun opened/stopped systems as independent confirmation.
+3. Preserve favorable, adverse, blocked, null/no-confirmed and non-estimable evidence.
+4. Do not expose arbitrary exact world labels as default supervised features.
+5. Do not change the paired learner or conventional feature set between baseline and augmentation.
+6. Do not identify a surviving world as historical truth.
+7. Do not claim universal robustness outside the declared finite-world certificate.
+8. Do not pool endpoint rows into a common-effect claim.
+9. Do not use post-closure analysis to change the prospectively fixed endpoint decision.
 
-Package-wide regression must remain green before PR #196 is ready.
-
-## Next scientific milestone
-
-Do **not** rerun Glanville with the revised prediction head and do not add a new connectivity primitive.
-
-The next valid step is a **fresh independent test of the two-layer architecture** with pre-response freeze of:
-
-1. source/process closure;
-2. world scale and structural adequacy;
-3. exact latent rule state;
-4. label-invariant predictive representation;
-5. strong external comparator;
-6. heldout design and metrics;
-7. adverse/null/no-added-value rules.
-
-If the revised head is null/adverse, preserve it and narrow the general prediction-product claim further.
+The active EOG v2 state is therefore **closed empirical validation plus manuscript preparation**, with Layer A retained as the scientific structural core and Layer B retained as a context-dependent predictive complement.

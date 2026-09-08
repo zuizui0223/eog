@@ -4,29 +4,36 @@
 
 This file is the **single source of truth for active scientific development**.
 
-Current empirical boundary:
+The fresh paired-complementarity validation line is now **closed**.
 
-> **Glanville rejected exact world IDs as direct supervised features. Tvärminne Daphnia showed that label-invariant Layer B contains small non-redundant information beyond mean support but is substantially worse than a strong frozen RF. Southern California giant kelp became the first post-#218 candidate to reach once-only outcome access, but it stopped before the exact count gate because the published metadata column schema disagreed with the physical CSV header. No fresh post-Daphnia system has yet completed the paired `strong learner` versus `same learner + Layer B` endpoint.**
+Frozen empirical boundary:
 
-Current method/product boundary:
+- fresh scored endpoints: **3**;
+- endpoint pattern: **favorable / favorable / adverse**;
+- scientific/protocol STOPs: **31**;
+- administrative exclusions: **3**;
+- fourth fresh endpoint allowed: **false**;
+- candidate hunting hard stop: **true**.
 
-> **Layer A is the exact sequential compatibility/contraction/falsification state. Layer B is a world-label-invariant diagnostic/complementary representation. Predictive value must now be earned as prospectively paired added value on top of an unchanged strong learner, not by replacing or weakening that learner.**
+Frozen product boundary:
 
-Current validation-interface boundary:
+> **Layer A remains an auditable structural compatibility / contraction / falsification framework. Layer B is a world-label-invariant, context-dependent predictive complement whose added value is not uniformly beneficial.**
 
-> **Physical response-header identity and categorical response-token handling are part of response semantics. A bounded first-record header must be checked against the frozen physical-column contract before row-level outcome access when source metadata can drift from the file; categorical normalization must likewise be declared and fingerprinted. Any unexpected post-open column or token stops the attempt and does not authorize parser repair and rerun.**
+Frozen submission boundary:
 
-Generic connectivity/operator growth remains stopped.
+- primary route: **Methods in Ecology and Evolution**;
+- Nature Ecology & Evolution escalation trigger: **closed**;
+- primary aggregation: **endpoint-wise; no row-level pooling or common-effect claim**.
 
-Canonical documents:
+Canonical closure assets:
 
-- [`worldset_forecast_algorithm.md`](worldset_forecast_algorithm.md)
-- [`two_layer_forecast_architecture.md`](two_layer_forecast_architecture.md)
-- [`method_validation_protocol.md`](method_validation_protocol.md)
-- [`predictive_complementarity_contract.md`](predictive_complementarity_contract.md)
-- [`outcome_access_gate.md`](outcome_access_gate.md)
-- [`response_header_schema_gate.md`](response_header_schema_gate.md)
-- [`response_token_schema_contract.md`](response_token_schema_contract.md)
+- [`../manuscript/paper_ready/submission_boundary.json`](../manuscript/paper_ready/submission_boundary.json)
+- [`../manuscript/paper_ready/methods_results_core.md`](../manuscript/paper_ready/methods_results_core.md)
+- [`../manuscript/paper_ready/fresh_endpoint_results.csv`](../manuscript/paper_ready/fresh_endpoint_results.csv)
+- [`../manuscript/paper_ready/candidate_flow_table.csv`](../manuscript/paper_ready/candidate_flow_table.csv)
+- [`../manuscript/paper_ready/generation_manifest.json`](../manuscript/paper_ready/generation_manifest.json)
+
+The previous state in which no fresh post-Daphnia paired endpoint had completed is historical and must not be used to reopen candidate search.
 
 ## Scientific center
 
@@ -43,7 +50,7 @@ For a finite declared universe `W` and evidence `O`:
 W(O) = {w in W : w is compatible with O}
 ```
 
-Observed positives constrain worlds but do not identify one true route/history.
+Observed positives constrain worlds but do not identify one true route or history.
 
 For exact finite worlds, EOG exposes:
 
@@ -52,33 +59,31 @@ For exact finite worlds, EOG exposes:
 - `unresolved` — possible but not robust;
 - `robustly_unreachable` — unreachable in every declared world.
 
-These are conditional on the declared universe. Expanding that universe may enlarge
-`possible` and shrink robust exclusion; adding possibilities cannot justify a stronger
-impossibility claim.
+These statements are conditional on the declared universe. Expanding the universe may enlarge `possible` and shrink robust exclusion; adding possibilities cannot justify a stronger impossibility claim.
 
-## Active two-layer architecture
+## Final two-layer architecture
 
 ### Layer A — exact scientific state
 
-Retain:
+Retain exact world/rule identity for:
 
-- exact world/rule IDs and fingerprints;
-- current source state;
+- compatibility;
 - per-world support;
-- surviving compatible rule set;
-- possible/robust/unresolved/excluded projections;
-- monotone sequential contraction;
-- finite-universe falsification.
+- evidence-driven rule elimination;
+- possible / robust / unresolved / excluded interpretation;
+- sequential contraction;
+- finite-universe falsification;
+- deterministic provenance and fingerprints.
 
-Exact identity is required to say which rule was eliminated. It is not historical truth.
+Exact identity is required to say which declared rule was eliminated. It is **not** historical truth and is **not** the default supervised prediction representation.
 
-### Layer B — label-invariant representation
+### Layer B — label-invariant predictive projection
 
 Production interface:
 
 `src/eog/v2/world_predictive_summary.py`
 
-Current v1 features per node/horizon:
+Frozen `symmetric_world_support_summary_v1` features per node/horizon:
 
 - surviving-world fraction;
 - support mean / SD / min / max;
@@ -86,9 +91,9 @@ Current v1 features per node/horizon:
 - positive-support fraction;
 - support range.
 
-World IDs remain in Layer A and are not default supervised columns.
+World IDs remain in Layer A and are not exposed as default supervised columns.
 
-### Prediction endpoint — paired complementarity
+### Predictive endpoint — paired complementarity
 
 Production evaluator:
 
@@ -103,258 +108,111 @@ strong learner + frozen conventional features
 with:
 
 ```text
-same learner + same features + frozen Layer B
+same learner + same conventional features + frozen Layer B
 ```
 
-Learner family, preprocessing, hyperparameters, external features, Layer B, response
-endpoint, split, metric and favourable/adverse thresholds must all be frozen before
-response access.
+Learner family, preprocessing, hyperparameters, external features, Layer B, response endpoint, split, metric and favorable/adverse rules are frozen before response access.
 
-## Independent evidence fixing the architecture
+The product question is deliberately narrow:
 
-### Glanville
+> **Does the frozen Layer-B representation add heldout information beyond the unchanged strong conventional learner in this endpoint?**
 
-Completed prospectively gated heldout forecast.
+It is not a claim that EOG universally improves prediction.
 
-Macro log loss:
+## Closed fresh endpoint evidence
 
-- same-world symmetric compression `0.187983`;
-- RF `0.191725`;
-- IFM logistic `0.200242`;
-- exact world identity `0.230197`.
+### Azores yellow eel telemetry
 
-Exact identity lost to compression in 6/6 heldout transitions. Frozen status:
-`adverse_identity_predictive_value`.
+- baseline macro log loss: `0.1422727`;
+- augmented macro log loss: `0.1322871`;
+- paired difference: `-0.0099856` (`-7.0%`);
+- augmented wins: `5/5` heldout blocks;
+- terminal class: **favorable**.
 
-Exact worlds still contracted during calibration, preserving their Layer-A scientific
-role.
+### Southwest Louisiana King Rail passive acoustics
 
-### Tvärminne Daphnia
+- baseline macro log loss: `0.2463173`;
+- augmented macro log loss: `0.2453455`;
+- paired difference: `-0.0009718` (`-0.39%`);
+- augmented wins: `7/8` heldout occasions;
+- terminal class: **favorable**.
 
-Completed fresh prospectively frozen heldout forecast.
+Independently, all six frozen local Layer-A worlds were eventually falsified and only `external_open` survived. This is the key decoupling example: a small predictive complement can coexist with strong structural falsification without identifying a local movement mechanism.
 
-- exact count gate: calibration `730 / 10,102`, heldout `258 / 4,502`;
-- four finite threshold worlds were eliminated at the first calibration update;
-- only `geo_exponential_full` survived.
+### Tampa Bay seagrass monitoring
 
-Layer B versus mean-only:
+- baseline macro log loss: `0.3377354`;
+- augmented macro log loss: `0.4387640`;
+- paired difference: `+0.1010287` (`+29.9%`);
+- augmented wins: `1/5` folds;
+- terminal class: **adverse**.
 
-- `0.285714` vs `0.287275` macro log loss;
-- delta `-0.001561`;
-- Layer B won 8/11 heldout years;
-- status `favorable_layer_b_predictive_value`.
+Secondary feature-count placebo:
 
-Layer B versus strong RF:
+- 20 replicates × 10 features;
+- placebo median macro log loss: `0.3361758`;
+- real Layer-B augmentation beat `0%` of placebo replicates.
 
-- RF `0.204084`;
-- Layer B `0.285714`;
-- Layer B won 0/11;
-- status `adverse_external_predictive_added_value`.
+The placebo does not rescue the adverse primary result.
 
-Therefore Layer B is supported as non-redundant information, not as a superior standalone
-prediction product.
+## Final interpretation
 
-## Post-#218 fresh complementarity ledger
+The three fresh endpoints are heterogeneous rather than uniformly favorable.
 
-The paired complementarity contract was merged in PR #218. Systems selected afterward
-have been screened without weakening that contract.
+Supported:
 
-### Snapshot Serengeti — STOP before response
+> **Layer A is an auditable structural compatibility / falsification state, and Layer B can contain non-redundant predictive information in some systems.**
 
-- 225 response-independent camera sites;
-- response remained unopened;
-- LCC 25/50/75/90% all collapsed at the same nearest-neighbour grid threshold;
-- distinct positive structural scales `1 < 3`.
+Not supported:
 
-Status: `gate0_stop_structural_scale_collapse`. PR #223 closed unmerged.
+- universal predictive superiority;
+- a standalone Layer-B predictor;
+- causal identification;
+- recovery of a unique dispersal history;
+- truth of an exact surviving Layer-A world;
+- continued candidate hunting to improve the endpoint pattern.
 
-### Chicago striped skunk — STOP before response
+The final product boundary is:
 
-Scientifically attractive because the published model explicitly separates local and
-long-distance colonization, but the complete skunk coordinate registry was not physically
-separate from response rows.
+`structural_diagnostic_plus_context_dependent_predictive_complement`
 
-An earlier response-free Chicago coordinate registry matched only 100/106 analysis sites.
-Six exact IDs were missing. No fuzzy alias repair was allowed.
+## Validation integrity boundary
 
-Status: `gate0_stop_external_registry_incomplete`. PR #225 closed unmerged.
+The final denominator is part of the method result:
 
-### Chicago coyote — pre-model STOP after sole response opening
+- **3** scored fresh endpoints;
+- **31** scientific/protocol STOPs;
+- **3** administrative exclusions.
 
-This candidate passed the strongest pre-response sequence so far:
+Pre-response and pre-model STOPs remain integrity evidence. They are not converted into favorable, null or adverse predictive results, and opened endpoints are not repaired and rerun as independent confirmation.
 
-- same immutable release separated site covariates, UTM coordinates and response;
-- 113/113 response-free exact registry match;
-- four distinct nested structural thresholds: approximately 3.078, 3.619, 4.792 and 5.230 km;
-- frozen 10 calibration + 5 heldout transitions;
-- same-RF paired complementarity design;
-- response-free smoke completed 2 fits and 10 synthetic heldout scores;
-- all 16 outcome-access freeze keys were present;
-- generic outcome-access gate authorized the once-only exact-count-first run.
+Physical response-header identity, categorical response-token semantics, registry identity, source/process closure, structural adequacy, exact runtime identity and the once-only outcome-access contract remain part of the reusable validation machinery.
 
-The sole response-capable run opened the frozen response and immediately encountered:
+## Active scientific milestone
 
-```text
-Week = "week1"
-```
+The active milestone is **manuscript closure**, not additional empirical search.
 
-while the frozen parser had declared `week 1` through `week 4`.
+In order:
 
-Execution stopped **before the exact count gate**:
+1. keep repository status documents synchronized with the frozen closure boundary;
+2. complete the EOG-WF Abstract, Introduction and Discussion inside `submission_boundary.json`;
+3. perform a one-time Methods in Ecology and Evolution desk-fit audit without changing the frozen empirical denominator;
+4. prepare tagged software/reproducibility release only after the manuscript text and figures are internally consistent.
 
-- exact count gate executed: false;
-- models fit: 0;
-- heldout scores: 0;
-- complementarity: not evaluated;
-- post-response redesign: none.
+The older structural/island manuscript line is a **separate scientific line** and must not be merged into EOG-WF merely to broaden the current paper.
 
-Status: `pre_model_response_schema_mismatch`. PR #227 closed unmerged.
+## Hard stop rules
 
-This is neither favourable nor adverse EOG evidence. The coyote endpoint is not rerun
-with a repaired parser and called independent.
+1. **Do not select a fourth fresh endpoint.**
+2. Do not rerun opened/stopped systems and relabel them independent confirmation.
+3. Do not add a favorable case to change the observed `favorable / favorable / adverse` pattern.
+4. Do not expose arbitrary exact world labels as default supervised features.
+5. Do not change learner family, hyperparameters or conventional features between paired fits.
+6. Do not identify a surviving world as historical truth.
+7. Do not claim universal robustness outside the declared finite-world certificate.
+8. Do not pool endpoint rows to manufacture a common-effect predictive claim.
+9. New response-independent synthetic exposition is allowed only when it clarifies an already-frozen method property; it cannot reopen or alter the empirical endpoint decision.
 
-### Southern California giant kelp — pre-model STOP after sole response opening
+The active mainline is therefore:
 
-This candidate became the first post-#218 system to pass the full response-blind sequence
-through once-only outcome authorization:
-
-- 469 fixed patches over 22 semi-annual periods;
-- response-independent geometry and response were physically separated;
-- structural gate, process/source mapping, prospective estimability, paired smoke and
-  16-key freeze ledger completed;
-- once-only run identity was fixed to run #1 / attempt #1.
-
-The metadata-derived response contract required:
-
-```text
-pixel_latitude, pixel_longitude
-```
-
-but the physical CSV header contained:
-
-```text
-patch_latitude, patch_longitude
-```
-
-The sole response-capable run therefore stopped during header comparison **before the
-exact count gate**:
-
-- exact count gate executed: false;
-- models fit: 0;
-- heldout scores: 0;
-- complementarity: not evaluated;
-- rerun performed: false;
-- post-response redesign: none.
-
-Status: `pre_model_physical_header_schema_mismatch`. PR #238 closed unmerged.
-
-This is neither favourable nor adverse EOG evidence. It demonstrates that published
-metadata identity is not sufficient to guarantee physical response-file schema identity.
-The giant-kelp endpoint is not repaired and rerun as independent evidence.
-
-## Response schema is now prospectively two-stage
-
-### Physical header gate
-
-Generic implementation:
-
-`src/eog/v2/response_header_schema.py`
-
-The existing bounded first-record firewall in `src/eog/v2/response_firewall.py` is used
-to verify physical column names before row-level outcome access. Missing/unexpected
-columns, duplicate/empty names or a frozen order mismatch fail closed.
-
-The physical header fingerprint is incorporated into the existing `response_semantics`
-freeze; the 16-key `FrozenOutcomeAccessContract` surface is not expanded.
-
-### Categorical token gate
-
-Generic implementation:
-
-`src/eog/v2/response_schema.py`
-
-For each categorical response field, a future attempt must freeze:
-
-- complete canonical values;
-- outer-whitespace stripping;
-- casefolding;
-- optional internal ASCII-whitespace removal.
-
-Canonical values that collide after normalization are invalid. Unknown values fail
-closed. No fuzzy matching or post-open aliases are allowed.
-
-The token schema fingerprint is also incorporated into the existing `response_semantics`
-freeze.
-
-## Required fresh validation sequence
-
-Before row-level response access:
-
-1. freeze immutable source and response identity;
-2. freeze full response-independent node registry / geometry;
-3. acquire only the bounded physical response header under the response firewall;
-4. verify/freeze physical response-column schema;
-5. freeze remaining response semantics including categorical token schema;
-6. establish process/source closure;
-7. pass response-blind structural-scale/adequacy gates;
-8. freeze Layer-A worlds and update policy;
-9. freeze unchanged Layer B;
-10. freeze strong learner, preprocessing and conventional features;
-11. freeze same-learner + Layer-B augmentation;
-12. freeze heldout outer units, count minima, metric and paired decision rule;
-13. run response-free synthetic smoke and freeze exact runtime/runner identity;
-14. pass the 16-key outcome-access authorization;
-15. open response once;
-16. revalidate the already-frozen physical header and apply the already-frozen token schema;
-17. run exact count gate before any fit;
-18. only if count gate passes, fit and score once.
-
-Any undeclared physical column or categorical token after step 15 stops the attempt before
-scientific scoring.
-
-## Fixed novelty boundary
-
-Do not claim generic novelty for:
-
-- threshold/percolation/MST machinery;
-- dynamic reachability;
-- least-cost, stepping-stone or circuit methods;
-- suitability + accessibility;
-- dynamic/mechanistic SDMs;
-- ensembles/model averaging;
-- permutation-invariant set summaries;
-- generic feature augmentation or stacking;
-- credal/imprecise prediction;
-- history matching/NROY;
-- Pareto/minimum-relaxation frontiers;
-- generic adaptive survey design;
-- generic schema normalization or header validation.
-
-The candidate EOG contribution remains the domain-specific composition:
-
-> **a prospectively source- and scale-certified finite world universe is conditioned by distribution evidence; exact world identities remain auditable sequential update/falsification state; a label-invariant projection exposes surviving world-set structure; later evidence contracts or falsifies the same frozen rule universe; and predictive added value is tested as a paired augmentation of a strong unchanged predictor under once-only, schema-frozen outcome access.**
-
-## Next scientific milestone
-
-Do not rerun coyote, giant kelp, Daphnia or earlier stopped systems as independent
-confirmation.
-
-After the generic bounded physical-header schema gate is merged, the next milestone is:
-
-> **select a genuinely fresh system, freeze physical response-column identity and categorical response-token semantics before row-level access, and complete the paired strong-learner complementarity endpoint once without redesign.**
-
-## Stop rules
-
-1. Preserve favourable, adverse, blocked, null/no-confirmed and non-estimable evidence.
-2. Do not rescue opened endpoints by header, parser, registry, scale or model redesign and relabel the rerun independent.
-3. Do not expose arbitrary exact world labels as default supervised features.
-4. Do not change learner family, hyperparameters or conventional features between paired fits.
-5. Do not tune Layer B on Daphnia outcomes and call it prospective.
-6. Do not call structural thresholds biological movement limits without calibration.
-7. Do not call survey non-detection latent biological absence without observation justification.
-8. Do not identify a surviving world as historical truth.
-9. Do not claim universal robustness outside the declared finite-world certificate.
-
-The active mainline is **schema-frozen prospective validation of EOG Layer B as
-complementary information to a strong predictor, while exact Layer A remains the
-scientific update/falsification core**.
+> **write and submit the closed EOG-WF result: exact Layer A for structural update/falsification, label-invariant Layer B as a context-dependent predictive complement, with favorable and adverse evidence preserved under the same prospective contract.**
