@@ -1,0 +1,70 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.causal_factorial_contract.v1",
+  "purpose": "Response-free known-truth intervention experiment to causally separate three representation defects observed in Tampa without reopening any ecological endpoint.",
+  "counts_as_fresh_predictive_endpoint": false,
+  "uses_biological_response": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "layer_a_modified": false,
+  "factors": [
+    "training_serving_generator_shift",
+    "static_repeated_state_under_dynamic_truth",
+    "label_dependent_single_source"
+  ],
+  "design": {
+    "factorial": "2^3 full factorial",
+    "replicates": 64,
+    "replicate_seeds": [1101,1102,1103,1104,1105,1106,1107,1108,1109,1110,1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126,1127,1128,1129,1130,1131,1132,1133,1134,1135,1136,1137,1138,1139,1140,1141,1142,1143,1144,1145,1146,1147,1148,1149,1150,1151,1152,1153,1154,1155,1156,1157,1158,1159,1160,1161,1162,1163,1164],
+    "node_count": 80,
+    "train_node_count": 60,
+    "heldout_node_count": 20,
+    "contexts_per_node": 16,
+    "train_context_count": 10,
+    "heldout_context_count": 6,
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "learner_hyperparameters": {
+      "n_estimators": 500,
+      "max_features": "sqrt",
+      "min_samples_leaf": 5,
+      "class_weight": null,
+      "random_state": 20260908,
+      "n_jobs": 1
+    },
+    "baseline_features": ["x", "y", "context_sin", "context_cos"],
+    "layer_b_feature_count": 10,
+    "primary_metric": "binary_log_loss",
+    "secondary_metric": "brier_score",
+    "probability_clip": 0.000001,
+    "split": "fixed first 60 nodes train, last 20 nodes heldout; first 10 contexts fitting, last 6 contexts scoring",
+    "same_outcome_realization_across_all_8_factor_cells_within_replicate": true,
+    "same_baseline_and_learner_across_all_factor_cells": true
+  },
+  "known_truth": {
+    "baseline_linear_predictor": "0.35*x - 0.25*y + 0.45*sin(context) - 0.20*cos(context)",
+    "dynamic_latent_state": "sin(1.7*x - 1.2*y + 0.65*context_phase) + 0.5*cos(0.8*x + 1.5*y - 0.35*context_phase)",
+    "outcome_linear_predictor": "baseline_linear_predictor + 1.20*dynamic_latent_state",
+    "clean_layer_b": "ten fixed nonlinear functions of the current dynamic_latent_state, x, y and context_phase; generated identically for train and heldout rows",
+    "static_reuse_intervention": "replace each node's current Layer-B rows by its mean Layer-B vector over fitting contexts, then reuse that vector for every context",
+    "generator_shift_intervention": "training Layer-B uses the selected representation unchanged; heldout Layer-B applies fixed affine/sign transform [z0,z1,...] -> [-z0, z1+1.5, -z2, z3+1.0, z4, -z5, z6+0.75, z7, -z8, z9+0.5]",
+    "single_source_intervention": "prediction-facing Layer-B receives a fixed node-label-dependent sign mask determined by whether the synthetic node label is lexicographically below N040; clean condition uses source-symmetric identity mask"
+  },
+  "estimands": {
+    "primary": "paired cell log-loss difference relative to the clean 000 cell within the same replicate",
+    "main_effect_generator_shift": "mean over matched cells of loss(factor G=1)-loss(G=0)",
+    "main_effect_static_reuse": "mean over matched cells of loss(S=1)-loss(S=0)",
+    "main_effect_single_source": "mean over matched cells of loss(A=1)-loss(A=0)",
+    "full_defect_penalty": "loss(111)-loss(000)",
+    "baseline_reference": "baseline RF log loss is reported but does not define mechanism success"
+  },
+  "predeclared_success_checks": {
+    "each_main_effect_median_log_loss_penalty_strictly_positive": true,
+    "full_defect_median_penalty_strictly_positive": true,
+    "clean_augmented_median_log_loss_below_baseline": true,
+    "no_claim_of_ecological_effect_size_transport": true
+  },
+  "forbidden_interpretations": [
+    "Synthetic effect magnitudes estimate how much each mechanism caused Tampa's observed +0.1010287 log-loss delta",
+    "Passing this benchmark proves Layer-B v2 improves prediction in real ecological systems",
+    "This benchmark authorizes a Tampa rerun or a fourth fresh EOG-WF endpoint",
+    "The benchmark changes the favorable/favorable/adverse empirical synthesis"
+  ]
+}
