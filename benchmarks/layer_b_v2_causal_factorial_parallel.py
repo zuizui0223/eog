@@ -1,7 +1,7 @@
 """Parallel execution wrapper for the frozen Layer-B v2 causal factorial.
 
 Scientific semantics are defined by causal_factorial_contract_v1.json and the canonical
-cell generator in layer_b_v2_causal_factorial.py.  This wrapper only distributes
+cell generator in layer_b_v2_causal_factorial.py. This wrapper only distributes
 independent replicate seeds across processes; it does not alter learner settings,
 random seeds, cells, outcomes, splits or estimands.
 """
@@ -14,7 +14,7 @@ from pathlib import Path
 
 import numpy as np
 
-from benchmarks.layer_b_v2_causal_factorial import (
+from layer_b_v2_causal_factorial import (
     CONTRACT,
     DEFAULT_OUTPUT,
     _build_replication,
@@ -84,7 +84,7 @@ def run_benchmark() -> dict[str, object]:
         "execution": {
             "replicate_parallelism_only": True,
             "max_workers": max_workers,
-            "canonical_cell_generator": "benchmarks.layer_b_v2_causal_factorial._build_replication",
+            "canonical_cell_generator": "layer_b_v2_causal_factorial._build_replication",
         },
         "counts_as_fresh_predictive_endpoint": False,
         "uses_biological_response": False,
