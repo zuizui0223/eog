@@ -1,0 +1,6 @@
+{
+  "schema": "eog.paper_ready_replication.manuscript_materialize_once.v1",
+  "source_branch": "paper/eog-wf-closure-v1",
+  "materialize": true,
+  "target_directory": "manuscript/paper_ready"
+}

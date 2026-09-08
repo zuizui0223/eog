@@ -1,0 +1,4 @@
+issue,system,endpoint,observation_process,terminal_status,baseline_macro_log_loss,augmented_macro_log_loss,augmented_minus_baseline,relative_log_loss_change,augmented_heldout_wins,heldout_units,once_only_run_id
+289,Azores yellow eel telemetry,receiver-week recorded detection,acoustic telemetry,favorable_complementary_added_value,0.14227269867445852,0.13228712656635494,-0.00998557210810358,-0.07018614394144643,5,5,32807155541
+292,Southwest Louisiana King Rail,site-occasion recorded detection,passive acoustic monitoring,favorable_complementary_added_value,0.2463173322,0.2453455299,-0.0009718023,-0.003945326507559504,7,8,32812052801
+388,Tampa Bay seagrass transect monitoring,eligible parent Transect visit x recorded Thalassia testudinum detection among linked child Point events,long-term fixed-transect seagrass monitoring,adverse_complementary_added_value,0.33773536863857834,0.43876404318128526,0.10102867454270692,0.2991356071173612,1,5,34028447227
