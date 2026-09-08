@@ -1,0 +1,57 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.india_tiger_stage0_transport_attempt.v1",
+  "issue": 401,
+  "purpose": "Record the first response-blind Stage0 source-transport attempt for the preselected India tiger mechanism system.",
+  "biological_response_access": "none",
+  "ee_records_body_bytes_requested": false,
+  "ee_records_preview_requested": false,
+  "full_dataset_archive_requested": false,
+  "allowed_metadata_recovered": {
+    "dryad_record": "https://datadryad.org/dataset/doi:10.5061/dryad.bcc2fqzd2",
+    "zenodo_record": "https://zenodo.org/records/5573206",
+    "readme_preview": true,
+    "readme_facts": {
+      "trap_count": 195,
+      "effort_matrix_dimensions_including_header": "196 x 11",
+      "trap_location_matrix_dimensions_including_header": "196 x 3",
+      "primary_period_count": 10,
+      "primary_period_days": [162, 127, 75, 197, 78, 118, 33, 39, 47, 54],
+      "trap_188_in_effort_file": false,
+      "coordinate_units": "centered metres"
+    }
+  },
+  "individual_file_identifiers": [
+    {
+      "name": "EECam_act.csv",
+      "dryad_file_stream_id": 1103796,
+      "published_md5": "93c958bf9a150438d379a9f1e4e1cc59",
+      "dryad_individual_download_result": "HTTP_403_FORBIDDEN",
+      "zenodo_individual_preview_result": "HTTP_429_TOO_MANY_REQUESTS",
+      "zenodo_individual_download_result": "HTTP_429_TOO_MANY_REQUESTS"
+    },
+    {
+      "name": "EEtraplocs.csv",
+      "dryad_file_stream_id": 1103795,
+      "published_md5": "e1a522dc2681371899ff3277361b965f",
+      "dryad_individual_download_result": "HTTP_403_FORBIDDEN",
+      "zenodo_individual_preview_result": "HTTP_429_TOO_MANY_REQUESTS",
+      "zenodo_individual_download_result": "HTTP_429_TOO_MANY_REQUESTS"
+    },
+    {
+      "name": "ReadMeTigers.txt",
+      "dryad_file_stream_id": 1103797,
+      "published_md5": "8982e718365af1d2eef910a5ea9353d9",
+      "dryad_individual_download_result": "HTTP_403_FORBIDDEN",
+      "zenodo_individual_preview_result": "SUCCESS"
+    }
+  ],
+  "stage0_result": "blocked_source_transport_before_geometry_bytes",
+  "geometry_registry_reproduced": false,
+  "effort_calendar_reproduced": false,
+  "structural_ladder_constructed": false,
+  "reason": "The allowed geometry and effort CSV bytes could not be acquired through either individual-file route in the current validation runtime. Download-all was deliberately not used because it would also acquire the prospectively forbidden EERecords.csv response file.",
+  "next_allowed_action": "retry only individual response-independent files in a future transport environment or obtain an exact independently hosted byte-identical copy verified against the frozen MD5 values; do not switch systems or download the full archive to bypass the firewall",
+  "candidate_switch_authorized": false,
+  "response_open_authorized": false,
+  "changes_closed_eogwf": false
+}
