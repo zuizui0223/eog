@@ -34,7 +34,19 @@ jobs:
           assert p['uses_biological_response'] is False
           assert p['changes_closed_eog_wf_synthesis'] is False
           assert p['execution']['replicate_parallelism_only'] is True
-          assert all(p['checks'].values())
+          expected = {
+              'generator_shift_median_positive',
+              'static_reuse_median_positive',
+              'single_source_median_positive',
+              'full_defect_median_positive',
+              'clean_augmented_median_better_than_baseline',
+          }
+          assert set(p['checks']) == expected
+          assert isinstance(p['predeclared_checks_all_passed'], bool)
+          assert p['scientific_status'] in {
+              'all_predeclared_checks_passed',
+              'partial_refutation_of_predeclared_mechanism_checks',
+          }
           PY
       - uses: actions/upload-artifact@v4
         with:
