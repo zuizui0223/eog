@@ -1,0 +1,39 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.known_truth_factorial_contract.v1",
+  "purpose": "Freeze a response-independent known-truth benchmark before implementing the benchmark runner. The benchmark tests representation contracts, not ecological predictive superiority.",
+  "created_after_tampa_endpoint_closure": true,
+  "uses_biological_response": false,
+  "counts_as_fresh_predictive_endpoint": false,
+  "can_change_frozen_eogwf_claim": false,
+  "factors": {
+    "state_refresh": ["static_reused", "sequential_context"],
+    "generator_parity": ["matched", "mismatched"],
+    "source_projection": ["label_dependent_single_source", "source_symmetric"],
+    "worldset_trajectory": ["saturated", "contracting", "falsified"]
+  },
+  "predeclared_expected_properties": [
+    "matched sequential source-symmetric design is eligible as a predictive-complement candidate, without any claim of benefit",
+    "mismatched train/serve generator is ineligible regardless of predictive score",
+    "static reused repeated-measure state is structural-only by default",
+    "label-dependent single-source projection is ineligible for the prediction-facing interface",
+    "source-symmetric projection is invariant to source order and source-ID spelling",
+    "a saturated world set has zero contraction events and full saturation fraction one",
+    "a contracting world set records eliminations without world return",
+    "a falsified world universe terminates at zero surviving worlds"
+  ],
+  "primary_outputs": [
+    "predictive_state_eligibility_status",
+    "generator_parity",
+    "state_refresh_fraction",
+    "source_label_invariance",
+    "worldset_contraction_event_count",
+    "worldset_saturation_fraction",
+    "terminal_universe_falsified"
+  ],
+  "forbidden": [
+    "tune synthetic parameters until a desired predictive score appears",
+    "use this benchmark to claim v2 improves real ecological prediction",
+    "use this benchmark to reclassify Tampa",
+    "count this benchmark as a fourth fresh endpoint"
+  ]
+}
