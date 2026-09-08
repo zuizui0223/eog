@@ -58,7 +58,8 @@ def test_shared_static_node_signature_cancels_exactly() -> None:
     base = summarize_contextual_innovation(reference, current)
 
     # Mimic an arbitrary node-static geometry/topology signature already present in
-    # both contexts.  The innovation transform must eliminate it exactly.
+    # both contexts. Algebraically it cancels exactly; binary floating arithmetic may
+    # differ at machine epsilon depending on addition/subtraction association.
     static_offset = np.arange(30, dtype=float).reshape(3, 10) / 100.0
     shifted_reference = replace(
         reference,
@@ -71,7 +72,7 @@ def test_shared_static_node_signature_cancels_exactly() -> None:
         feature_fingerprint="shifted-current",
     )
     shifted = summarize_contextual_innovation(shifted_reference, shifted_current)
-    assert np.array_equal(base.feature_matrix, shifted.feature_matrix)
+    np.testing.assert_allclose(base.feature_matrix, shifted.feature_matrix, rtol=0.0, atol=1e-15)
 
 
 def test_context_change_remains_nonzero() -> None:
