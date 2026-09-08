@@ -1,0 +1,55 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.contextual_innovation_contract.v1",
+  "purpose": "Define a minimal prediction-facing Layer-B v2 representation that removes node-static support signatures and retains only pre-outcome context-to-reference change.",
+  "scientific_status": "candidate_representation_not_predictively_validated",
+  "motivating_frozen_evidence": {
+    "tampa_posthoc": "static node-level Layer-B was reused across repeated visits and became a unique geometry/topology signature under a saturated world set",
+    "known_truth_factorial": "static repeated state had positive median log-loss penalty; arbitrary label-dependent source also harmed; generator-shift positive-median hypothesis was refuted"
+  },
+  "layer_a_modified": false,
+  "requires_source_symmetric_projection": true,
+  "input": {
+    "reference": "one source-symmetric prediction-facing summary computed from the declared initial pre-outcome context",
+    "current": "source-symmetric prediction-facing summary computed from evidence available strictly before the scored current context",
+    "required_node_identity": "exact same ordered node_ids",
+    "required_feature_identity": "exact same feature_names",
+    "required_representation": "source_symmetric_world_support_summary_v2_candidate"
+  },
+  "transform": {
+    "operation": "current_feature_matrix - reference_feature_matrix",
+    "feature_count": 10,
+    "feature_names": "prefix each source-symmetric feature with delta_from_reference__",
+    "reference_context_output": "all-zero matrix",
+    "static_offset_invariance": "adding the same arbitrary node-by-feature static offset to reference and current must leave output unchanged",
+    "world_or_source_label_invariance": "inherited from source-symmetric input; prediction fingerprint must not depend on source/world labels"
+  },
+  "prediction_semantics": {
+    "interpretation": "change in the prediction-facing world-set support state since a fixed pre-outcome reference, not absolute geometry, occupancy probability, movement probability, or world truth",
+    "current_outcome_access": "forbidden before current features are computed",
+    "reference_outcome_access": "reference must be fixed using only information admissible before the first scored context",
+    "standalone_predictor_claim": false,
+    "predictive_benefit_claim": false
+  },
+  "required_diagnostics": [
+    "changed_node_fraction",
+    "mean_absolute_innovation",
+    "max_absolute_innovation",
+    "exact_zero_matrix",
+    "reference_feature_fingerprint",
+    "current_feature_fingerprint",
+    "innovation_feature_fingerprint"
+  ],
+  "known_truth_tests": [
+    "identical static states map exactly to zero",
+    "shared node-static offsets cancel exactly",
+    "context-varying state produces nonzero innovation",
+    "node/feature mismatch fails closed",
+    "source/world renaming and ordering do not change innovation when source-symmetric inputs are equivalent"
+  ],
+  "forbidden_interpretations": [
+    "The innovation representation has been shown to improve prediction in Tampa or any fresh ecological endpoint",
+    "The transform changes or repairs the frozen Tampa result",
+    "The transform changes Layer A or the closed EOG-WF favorable/favorable/adverse synthesis",
+    "A zero innovation means ecological stasis rather than no change in the declared prediction-facing structural representation"
+  ]
+}
