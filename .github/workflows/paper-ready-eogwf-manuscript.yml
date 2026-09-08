@@ -8,10 +8,15 @@ on:
       - "validation/paper_ready_replication/**"
       - "validation/tampa_seagrass_endpoint3/terminal_predictive_result_certificate.json"
       - ".github/workflows/paper-ready-eogwf-manuscript.yml"
+  push:
+    branches:
+      - "paper/eog-wf-closure-v1"
+    paths:
+      - "validation/paper_ready_replication/manuscript_materialize_once.json"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-paper-assets:
@@ -60,6 +65,30 @@ jobs:
           }
           assert {p.name for p in root.iterdir()} == expected
           PY
+      - name: Materialize audited assets on one-shot push
+        if: github.event_name == 'push'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          marker = Path("validation/paper_ready_replication/manuscript_materialize_once.json")
+          payload = json.loads(marker.read_text())
+          assert payload == {
+              "schema": "eog.paper_ready_replication.manuscript_materialize_once.v1",
+              "source_branch": "paper/eog-wf-closure-v1",
+              "materialize": True,
+              "target_directory": "manuscript/paper_ready"
+          }
+          PY
+          rm -rf manuscript/paper_ready
+          mkdir -p manuscript/paper_ready
+          cp -a build/paper_ready_eogwf/. manuscript/paper_ready/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add manuscript/paper_ready
+          git diff --cached --exit-code && { echo "Expected generated manuscript asset changes"; exit 1; } || true
+          git commit -m "Materialize paper-ready EOG-WF manuscript assets"
+          git push origin HEAD:paper/eog-wf-closure-v1
       - uses: actions/upload-artifact@v4
         with:
           name: paper-ready-eogwf-manuscript
