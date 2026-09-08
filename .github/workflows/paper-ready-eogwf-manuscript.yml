@@ -1,0 +1,67 @@
+name: Paper-ready EOG-WF manuscript
+
+on:
+  pull_request:
+    paths:
+      - "manuscript/build_paper_ready_eogwf.py"
+      - "tests/test_paper_ready_eogwf_manuscript_builder.py"
+      - "validation/paper_ready_replication/**"
+      - "validation/tampa_seagrass_endpoint3/terminal_predictive_result_certificate.json"
+      - ".github/workflows/paper-ready-eogwf-manuscript.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-paper-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package and test dependency
+        run: |
+          python -m pip install -e . --no-deps
+          python -m pip install pytest
+      - name: Verify paper-ready builder
+        run: python -m pytest -q tests/test_paper_ready_eogwf_manuscript_builder.py
+      - name: Generate manuscript assets
+        run: python manuscript/build_paper_ready_eogwf.py --output-dir build/paper_ready_eogwf
+      - name: Audit generated boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("build/paper_ready_eogwf")
+          boundary = json.loads((root / "submission_boundary.json").read_text())
+          assert boundary["fresh_predictive_endpoints_with_scores"] == 3
+          assert boundary["favorable_endpoints"] == 2
+          assert boundary["adverse_endpoints"] == 1
+          assert boundary["scientific_protocol_stops"] == 31
+          assert boundary["administrative_exclusions"] == 3
+          assert boundary["candidate_hunting_hard_stop"] is True
+          assert boundary["fourth_fresh_endpoint_allowed"] is False
+          assert boundary["product_boundary"] == "structural_diagnostic_plus_context_dependent_predictive_complement"
+          assert boundary["primary_submission_route"] == "Methods in Ecology and Evolution"
+          expected = {
+              "README.md",
+              "candidate_flow_table.csv",
+              "candidate_funnel_summary.csv",
+              "figure_1_two_layer_architecture.svg",
+              "figure_2_candidate_funnel.svg",
+              "figure_3_endpoint_performance.svg",
+              "figure_4_louisiana_decoupling.svg",
+              "fresh_endpoint_results.csv",
+              "generation_manifest.json",
+              "methods_results_core.md",
+              "submission_boundary.json",
+          }
+          assert {p.name for p in root.iterdir()} == expected
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paper-ready-eogwf-manuscript
+          path: build/paper_ready_eogwf
+          if-no-files-found: error
