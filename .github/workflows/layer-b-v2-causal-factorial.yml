@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'benchmarks/layer_b_v2_causal_factorial.py'
+      - 'benchmarks/layer_b_v2_causal_factorial_parallel.py'
       - 'validation/layer_b_mechanism_v2/causal_factorial_contract_v1.json'
       - 'tests/test_layer_b_v2_causal_factorial_contract.py'
       - '.github/workflows/layer-b-v2-causal-factorial.yml'
@@ -22,7 +23,7 @@ jobs:
       - name: Contract regression tests
         run: pytest -q tests/test_layer_b_v2_causal_factorial_contract.py
       - name: Run frozen causal factorial
-        run: python benchmarks/layer_b_v2_causal_factorial.py
+        run: python benchmarks/layer_b_v2_causal_factorial_parallel.py
       - name: Validate result boundary
         run: |
           python - <<'PY'
@@ -32,6 +33,7 @@ jobs:
           assert p['counts_as_fresh_predictive_endpoint'] is False
           assert p['uses_biological_response'] is False
           assert p['changes_closed_eog_wf_synthesis'] is False
+          assert p['execution']['replicate_parallelism_only'] is True
           assert all(p['checks'].values())
           PY
       - uses: actions/upload-artifact@v4
