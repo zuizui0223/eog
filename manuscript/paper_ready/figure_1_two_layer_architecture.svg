@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="510" viewBox="0 0 1180 510">
+<rect width="100%" height="100%" fill="white"/>
+<text x="590.0" y="42" font-family="Arial, Helvetica, sans-serif" font-size="26" text-anchor="middle" font-weight="bold">EOG two-layer architecture</text>
+<text x="590.0" y="75" font-family="Arial, Helvetica, sans-serif" font-size="15" text-anchor="middle" font-weight="normal">Exact structural inference is kept separate from label-invariant predictive compression</text>
+<rect x="40" y="145" width="205" height="120" rx="10" fill="none" stroke="black" stroke-width="2"/>
+<text x="142.5" y="180" font-family="Arial, Helvetica, sans-serif" font-size="19" text-anchor="middle" font-weight="bold">Occurrence evidence</text>
+<text x="142.5" y="212" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="middle" font-weight="normal">positive realized records</text>
+<rect x="310" y="125" width="240" height="160" rx="10" fill="none" stroke="black" stroke-width="2"/>
+<text x="430.0" y="160" font-family="Arial, Helvetica, sans-serif" font-size="19" text-anchor="middle" font-weight="bold">Layer A</text>
+<text x="430.0" y="192" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="middle" font-weight="normal">exact compatible-world set</text>
+<text x="430.0" y="216" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="middle" font-weight="normal">contraction + falsification</text>
+<rect x="615" y="125" width="240" height="160" rx="10" fill="none" stroke="black" stroke-width="2"/>
+<text x="735.0" y="160" font-family="Arial, Helvetica, sans-serif" font-size="19" text-anchor="middle" font-weight="bold">Layer B</text>
+<text x="735.0" y="192" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="middle" font-weight="normal">10 symmetric support features</text>
+<text x="735.0" y="216" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="middle" font-weight="normal">world-label invariant</text>
+<rect x="920" y="145" width="220" height="120" rx="10" fill="none" stroke="black" stroke-width="2"/>
+<text x="1030.0" y="180" font-family="Arial, Helvetica, sans-serif" font-size="19" text-anchor="middle" font-weight="bold">Paired prediction</text>
+<text x="1030.0" y="212" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="middle" font-weight="normal">same strong learner</text>
+<text x="1030.0" y="236" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="middle" font-weight="normal">with vs without Layer B</text>
+<line x1="245" y1="205" x2="300" y2="205" stroke="black" stroke-width="2"/>
+<polygon points="300,199 310,205 300,211" fill="black"/>
+<line x1="550" y1="205" x2="605" y2="205" stroke="black" stroke-width="2"/>
+<polygon points="605,199 615,205 605,211" fill="black"/>
+<line x1="855" y1="205" x2="910" y2="205" stroke="black" stroke-width="2"/>
+<polygon points="910,199 920,205 910,211" fill="black"/>
+<text x="430" y="330" font-family="Arial, Helvetica, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Layer A claim</text>
+<text x="430" y="356" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="middle" font-weight="normal">which declared worlds survive or are falsified</text>
+<text x="735" y="330" font-family="Arial, Helvetica, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Layer B claim</text>
+<text x="735" y="356" font-family="Arial, Helvetica, sans-serif" font-size="14" text-anchor="middle" font-weight="normal">whether the frozen summary adds heldout information</text>
+<rect x="180" y="405" width="820" height="62" rx="8" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="6,5"/>
+<text x="590.0" y="431" font-family="Arial, Helvetica, sans-serif" font-size="16" text-anchor="middle" font-weight="bold">Observed cross-ecosystem boundary</text>
+<text x="590.0" y="454" font-family="Arial, Helvetica, sans-serif" font-size="15" text-anchor="middle" font-weight="normal">structural_diagnostic_plus_context_dependent_predictive_complement</text>
+</svg>

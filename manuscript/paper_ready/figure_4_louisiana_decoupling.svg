@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="440" viewBox="0 0 1120 440">
+<rect width="100%" height="100%" fill="white"/>
+<text x="560.0" y="42" font-family="Arial, Helvetica, sans-serif" font-size="26" text-anchor="middle" font-weight="bold">Layer A and Layer B answer different questions</text>
+<rect x="55" y="110" width="430" height="215" rx="12" fill="none" stroke="black" stroke-width="2"/>
+<text x="270" y="145" font-family="Arial, Helvetica, sans-serif" font-size="20" text-anchor="middle" font-weight="bold">Louisiana — Layer A</text>
+<text x="270" y="185" font-family="Arial, Helvetica, sans-serif" font-size="17" text-anchor="middle" font-weight="normal">6 frozen local worlds</text>
+<text x="270" y="220" font-family="Arial, Helvetica, sans-serif" font-size="16" text-anchor="middle" font-weight="normal">↓ later evidence</text>
+<text x="270" y="255" font-family="Arial, Helvetica, sans-serif" font-size="18" text-anchor="middle" font-weight="bold">0 local worlds survive</text>
+<text x="270" y="286" font-family="Arial, Helvetica, sans-serif" font-size="15" text-anchor="middle" font-weight="normal">external_open survives</text>
+<rect x="635" y="110" width="430" height="215" rx="12" fill="none" stroke="black" stroke-width="2"/>
+<text x="850" y="145" font-family="Arial, Helvetica, sans-serif" font-size="20" text-anchor="middle" font-weight="bold">Louisiana — Layer B</text>
+<text x="850" y="188" font-family="Arial, Helvetica, sans-serif" font-size="16" text-anchor="middle" font-weight="normal">baseline log loss = 0.2463173</text>
+<text x="850" y="220" font-family="Arial, Helvetica, sans-serif" font-size="16" text-anchor="middle" font-weight="normal">augmented log loss = 0.2453455</text>
+<text x="850" y="254" font-family="Arial, Helvetica, sans-serif" font-size="17" text-anchor="middle" font-weight="bold">Δ = -0.0009718; augmented wins 7/8</text>
+<text x="850" y="286" font-family="Arial, Helvetica, sans-serif" font-size="15" text-anchor="middle" font-weight="normal">small favorable predictive complement</text>
+<line x1="485" y1="217" x2="625" y2="217" stroke="black" stroke-width="2" stroke-dasharray="7,5"/>
+<text x="560.0" y="375" font-family="Arial, Helvetica, sans-serif" font-size="15" text-anchor="middle" font-weight="normal">Structural falsification does not imply that one local mechanism was confirmed; predictive complementarity is a separate heldout question.</text>
+</svg>

@@ -1,0 +1,15 @@
+{
+  "administrative_exclusions": 3,
+  "adverse_endpoints": 1,
+  "allowed_claim": "Layer A remains a structural falsification framework; Layer B predictive value is not uniformly beneficial",
+  "candidate_hunting_hard_stop": true,
+  "favorable_endpoints": 2,
+  "fourth_fresh_endpoint_allowed": false,
+  "fresh_predictive_endpoints_with_scores": 3,
+  "nature_ecology_evolution_trigger_open": false,
+  "primary_aggregation": "endpoint-wise; no row-level pooling or common-effect claim",
+  "primary_submission_route": "Methods in Ecology and Evolution",
+  "product_boundary": "structural_diagnostic_plus_context_dependent_predictive_complement",
+  "schema": "eog.paper_ready_eogwf_submission_boundary.v1",
+  "scientific_protocol_stops": 31
+}

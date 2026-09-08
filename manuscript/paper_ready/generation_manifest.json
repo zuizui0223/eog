@@ -1,0 +1,20 @@
+{
+  "inputs": {
+    "validation/paper_ready_replication/candidate_flow_ledger.json": "68255470dace9d1b2b422464efede910f395e9a3d4c642d37bfa2894a19e6dbc",
+    "validation/paper_ready_replication/observed_endpoint3_synthesis.json": "877d9477bfbc5c2376f94b2cb46dfff1447ba4c5dc1644d4997afd945643045d",
+    "validation/tampa_seagrass_endpoint3/terminal_predictive_result_certificate.json": "7af47511679ec7bb1b42dc0b8d35f10854db7adf341967a42a550e48f5b178d5"
+  },
+  "outputs": {
+    "README.md": "c88c544d258036abacde712d856e289404c0d5a310b00480a323f28f1ea1fc23",
+    "candidate_flow_table.csv": "d8c1ad61941113395aa71851d8e74aa772fd6c60b95937d4d8535868d5c63f83",
+    "candidate_funnel_summary.csv": "1e830a3bf6a4ebe15dff0b1d649ac4f4965c414098e17ceaa120b6545e8f0011",
+    "figure_1_two_layer_architecture.svg": "abc9f8c1282763c89a5d8c42c55d6826a20d760d71da523e0786946bcf136c41",
+    "figure_2_candidate_funnel.svg": "f004e27af3b74d500dd3c8d71f7e215c39b8f778de364b75b17125f44b3d0177",
+    "figure_3_endpoint_performance.svg": "95a1eb6de9596b3c6513581865cceac744caf8096f85d3b9c62b70b1b6703e2f",
+    "figure_4_louisiana_decoupling.svg": "b4e6682c55bce0810adf46f771a4eb9400cb38c6e1fbb3b89612973a546c374c",
+    "fresh_endpoint_results.csv": "a23a84c0a998565148f42be30f524997862fe5f71798ed69d615a5e2b9eec3ad",
+    "methods_results_core.md": "27da853564d8a3e945ba6a576506f942ab8bb806facb401454496eab9af42078",
+    "submission_boundary.json": "76eddfaeb226e033e0c3991be5e8ec4f9df65992de9d00a0dd2b86d968420c3c"
+  },
+  "schema": "eog.paper_ready_eogwf_generation_manifest.v1"
+}

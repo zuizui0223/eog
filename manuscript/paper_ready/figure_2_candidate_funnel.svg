@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="520" viewBox="0 0 1050 520">
+<rect width="100%" height="100%" fill="white"/>
+<text x="525.0" y="42" font-family="Arial, Helvetica, sans-serif" font-size="26" text-anchor="middle" font-weight="bold">Prospective validation funnel</text>
+<rect x="75" y="100" width="900" height="70" rx="9" fill="none" stroke="black" stroke-width="2"/>
+<text x="525.0" y="129" font-family="Arial, Helvetica, sans-serif" font-size="19" text-anchor="middle" font-weight="bold">37 handled records</text>
+<text x="525.0" y="152" font-family="Arial, Helvetica, sans-serif" font-size="13" text-anchor="middle" font-weight="normal">all candidate attempts plus administrative exclusions</text>
+<rect x="145" y="200" width="760" height="70" rx="9" fill="none" stroke="black" stroke-width="2"/>
+<text x="525.0" y="229" font-family="Arial, Helvetica, sans-serif" font-size="19" text-anchor="middle" font-weight="bold">34 scientific denominator units</text>
+<text x="525.0" y="252" font-family="Arial, Helvetica, sans-serif" font-size="13" text-anchor="middle" font-weight="normal">3 scored endpoints + 31 protocol STOPs</text>
+<rect x="230" y="300" width="300" height="75" rx="9" fill="none" stroke="black" stroke-width="2"/>
+<text x="380.0" y="329" font-family="Arial, Helvetica, sans-serif" font-size="19" text-anchor="middle" font-weight="bold">3 scored endpoints</text>
+<text x="380.0" y="352" font-family="Arial, Helvetica, sans-serif" font-size="13" text-anchor="middle" font-weight="normal">2 favorable, 1 adverse</text>
+<rect x="600" y="300" width="300" height="75" rx="9" fill="none" stroke="black" stroke-width="2"/>
+<text x="750.0" y="329" font-family="Arial, Helvetica, sans-serif" font-size="19" text-anchor="middle" font-weight="bold">31 protocol STOPs</text>
+<text x="750.0" y="352" font-family="Arial, Helvetica, sans-serif" font-size="13" text-anchor="middle" font-weight="normal">methods-integrity evidence, not negative results</text>
+<rect x="375" y="420" width="300" height="58" rx="9" fill="none" stroke="black" stroke-width="2"/>
+<text x="525.0" y="449" font-family="Arial, Helvetica, sans-serif" font-size="19" text-anchor="middle" font-weight="bold">3 administrative exclusions</text>
+<text x="525.0" y="472" font-family="Arial, Helvetica, sans-serif" font-size="13" text-anchor="middle" font-weight="normal">outside the scientific denominator</text>
+<line x1="525" y1="170" x2="525" y2="196" stroke="black" stroke-width="2"/><polygon points="519,190 525,200 531,190" fill="black"/>
+<line x1="525" y1="270" x2="385" y2="296" stroke="black" stroke-width="2"/><polygon points="391,289 385,300 397,297" fill="black"/>
+<line x1="525" y1="270" x2="750" y2="296" stroke="black" stroke-width="2"/><polygon points="739,296 750,300 742,291" fill="black"/>
+<line x1="525" y1="270" x2="525" y2="416" stroke="black" stroke-width="1.5" stroke-dasharray="5,4"/>
+</svg>
