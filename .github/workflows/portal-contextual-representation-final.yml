@@ -1,0 +1,76 @@
+name: Portal contextual representation final
+
+on:
+  pull_request:
+    paths:
+      - 'benchmarks/portal_contextual_representation_final.py'
+      - 'validation/contextual_representation_fresh_v1/portal_final_contract.json'
+      - '.github/workflows/portal-contextual-representation-final.yml'
+  push:
+    branches:
+      - 'execute/portal-contextual-final-v1'
+
+jobs:
+  proposal-safe:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen runtime
+        run: pip install -e . numpy==2.1.3 scikit-learn==1.5.2
+      - name: Compile and prove default path is response-safe
+        run: |
+          python -m py_compile benchmarks/portal_contextual_representation_final.py
+          python benchmarks/portal_contextual_representation_final.py
+          test ! -e build/portal_contextual_representation_final_result.json
+
+  live-final-once:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/execute/portal-contextual-final-v1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact frozen runtime
+        run: pip install -e . numpy==2.1.3 scikit-learn==1.5.2
+      - name: Verify execute-once marker
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          marker = json.loads(Path('validation/contextual_representation_fresh_v1/portal_execute_once.json').read_text())
+          assert marker == {
+            'schema': 'eog.contextual_representation_fresh_v1.execute_once',
+            'execute_once': True,
+            'final_contract_blob_sha': '326bbcab83258df818326eaa9d7138f5454e0159',
+            'response_blob_sha': 'daac4615a868339e3c1f77b35ceebf005e1240ad'
+          }
+          PY
+      - name: Run once-only biological response endpoint
+        run: python benchmarks/portal_contextual_representation_final.py --live
+      - name: Validate terminal boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/portal_contextual_representation_final_result.json').read_text())
+          assert p['response_consumed'] is True
+          assert p['changes_closed_eog_wf'] is False
+          assert p.get('counts_as_fourth_closed_endpoint', False) is False
+          assert p['terminal_class'] in {
+            'favorable_contextual_added_value',
+            'adverse_contextual_added_value',
+            'tie_contextual_added_value',
+            'stop_response_schema_mismatch',
+            'stop_response_estimability',
+            'stop_saturated_static_identity_signature'
+          }
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portal-contextual-representation-final
+          path: build/portal_contextual_representation_final_result.json
