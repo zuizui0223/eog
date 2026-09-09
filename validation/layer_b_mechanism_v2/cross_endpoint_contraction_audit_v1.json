@@ -1,0 +1,54 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.cross_endpoint_contraction_audit.v1",
+  "created_after_portal_outcome": true,
+  "purpose": "Audit whether the post-Portal hypothesis that contextual predictive value requires observed Layer-A world-set contraction is supported by already-frozen endpoints without reopening any consumed biological response.",
+  "closed_eog_wf_synthesis_changed": false,
+  "endpoints": [
+    {
+      "system": "Azores yellow eel telemetry",
+      "predictive_terminal": "favorable_complementary_added_value",
+      "primary_augmented_minus_baseline": -0.00998557210810358,
+      "layer_a_contraction_status": "not_recoverable_from_frozen_terminal_evidence",
+      "reason": "The frozen runner performed monotone weekly survival updates, but neither the authoritative terminal_result nor the committed fresh result certificate persisted the surviving-world trajectory. Recovering it now would require reopening the once-consumed raw detection response, which is forbidden.",
+      "raw_response_reopen_allowed": false,
+      "historical_contract_ref": "dff4554d1b95e6df1676ad09f0d80e94f40adff4:validation/azores_yellow_eel_paired_complementarity/full_freeze_spec.json",
+      "authoritative_run": 32807155541
+    },
+    {
+      "system": "Southwest Louisiana King Rail passive acoustics",
+      "predictive_terminal": "favorable_complementary_added_value",
+      "primary_augmented_minus_baseline": -0.0009718,
+      "layer_a_contraction_status": "contracted",
+      "terminal_structural_state": "all six frozen local worlds falsified; external_open only",
+      "raw_response_reopen_allowed": false
+    },
+    {
+      "system": "Tampa Bay seagrass monitoring",
+      "predictive_terminal": "adverse_complementary_added_value",
+      "primary_augmented_minus_baseline": 0.10102867454270692,
+      "layer_a_contraction_status": "fully_saturated",
+      "terminal_structural_state": "all five declared worlds survived every audited fold",
+      "raw_response_reopen_allowed": false
+    },
+    {
+      "system": "Portal Dipodomys merriami contextual-representation validation",
+      "predictive_terminal": "adverse_contextual_added_value",
+      "primary_augmented_minus_baseline": 0.03481146479645175,
+      "layer_a_contraction_status": "fully_saturated",
+      "terminal_structural_state": "zero contraction events; all four local worlds plus external_open survived",
+      "raw_response_reopen_allowed": false,
+      "authoritative_run": 34294382108
+    }
+  ],
+  "cross_endpoint_hypothesis_status": "not_identified",
+  "reason": "The two adverse systems with recoverable trajectories are saturated and Louisiana is favorable with contraction, but the strongest favorable Azores endpoint lacks a persisted trajectory. Therefore favorable=contraction/adverse=saturation cannot be asserted from the frozen empirical record.",
+  "required_future_contract_change": "Every future predictive endpoint must persist the exact ordered surviving-world counts and contraction events alongside the terminal predictive score, even when prediction is the primary endpoint.",
+  "next_test": "Use a response-free known-truth paired experiment to isolate whether past-evidence pruning of incompatible worlds improves the prediction-facing contextual representation relative to keeping all declared worlds, while holding the response realization, baseline, learner and split fixed.",
+  "forbidden_interpretations": [
+    "Azores had Layer-A contraction",
+    "Azores remained saturated",
+    "Contraction is empirically proven necessary for Layer-B predictive benefit",
+    "Portal is reclassified or rescued by this post-outcome hypothesis",
+    "The closed favorable/favorable/adverse EOG-WF synthesis is changed"
+  ]
+}

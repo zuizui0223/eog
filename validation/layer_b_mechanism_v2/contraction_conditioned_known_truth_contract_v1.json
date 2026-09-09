@@ -1,0 +1,76 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.contraction_conditioned_known_truth_contract.v1",
+  "purpose": "Response-free paired known-truth test of whether evidence-driven pruning of incompatible worlds improves the same source-symmetric sequential contextual representation relative to retaining all declared worlds.",
+  "frozen_before_runner": true,
+  "uses_biological_response": false,
+  "counts_as_fresh_predictive_endpoint": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "post_portal_hypothesis": true,
+  "design": {
+    "replicates": 64,
+    "replicate_seeds": [2101,2102,2103,2104,2105,2106,2107,2108,2109,2110,2111,2112,2113,2114,2115,2116,2117,2118,2119,2120,2121,2122,2123,2124,2125,2126,2127,2128,2129,2130,2131,2132,2133,2134,2135,2136,2137,2138,2139,2140,2141,2142,2143,2144,2145,2146,2147,2148,2149,2150,2151,2152,2153,2154,2155,2156,2157,2158,2159,2160,2161,2162,2163,2164],
+    "node_count": 60,
+    "context_count": 24,
+    "calibration_context_count": 16,
+    "heldout_context_count": 8,
+    "coordinate_domain": "independent uniform [0,1] x [0,1] per replicate",
+    "source_policy": "two response-independent anchor nodes (minimum-x and maximum-x) persist; previous-context positives are added as sources before the next forecast",
+    "world_thresholds": [0.08, 0.14, 0.22, 0.40],
+    "true_world_threshold": 0.22,
+    "world_support": "binary Euclidean reachability from the declared source set within threshold",
+    "response_truth": "outside true-world support probability is exactly 0; inside true-world support probability is sigmoid(-0.35 + 0.45*node_covariate + 0.30*sin(context_phase) - 0.15*cos(context_phase))",
+    "layer_a_update_order": "context t features use worlds surviving through t-1; after observing t positives, eliminate any world that failed to support at least one positive; eliminated worlds never return",
+    "conditioned_contextual_arm": "source-symmetric contextual summary using only evidence-compatible surviving worlds",
+    "uncontracted_contextual_arm": "same source-symmetric contextual summary using the full declared world set at every context, ignoring Layer-A elimination for prediction only",
+    "baseline_features": [
+      "node_x",
+      "node_y",
+      "node_covariate",
+      "context_sin",
+      "context_cos",
+      "previous_context_positive_for_node",
+      "cumulative_prior_positive_fraction_for_node",
+      "previous_context_global_positive_fraction"
+    ],
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "learner_hyperparameters": {
+      "n_estimators": 300,
+      "max_features": "sqrt",
+      "min_samples_leaf": 5,
+      "class_weight": null,
+      "random_state": 20260909,
+      "n_jobs": 1
+    },
+    "fit_policy": "fit each arm once on all calibration node-context rows; do not refit during heldout contexts",
+    "primary_metric": "macro binary log loss across the eight heldout contexts",
+    "secondary_metric": "macro Brier score across heldout contexts",
+    "same_response_realization_across_arms": true,
+    "same_baseline_learner_and_split_across_arms": true
+  },
+  "estimands": {
+    "primary": "conditioned_contextual_macro_log_loss minus uncontracted_contextual_macro_log_loss within replicate",
+    "secondary_conditioned_vs_baseline": "conditioned_contextual_macro_log_loss minus baseline_macro_log_loss",
+    "secondary_uncontracted_vs_baseline": "uncontracted_contextual_macro_log_loss minus baseline_macro_log_loss",
+    "mechanism": "whether response-history pruning of incompatible worlds improves the prediction-facing representation when source refresh, label invariance, outcomes, learner and baseline are held fixed"
+  },
+  "predeclared_checks": {
+    "median_primary_delta_strictly_negative": true,
+    "conditioned_beats_uncontracted_in_at_least_0_75_of_replicates": true,
+    "at_least_one_calibration_contraction_event_in_at_least_0_90_of_replicates": true,
+    "true_world_survives_through_calibration_in_all_replicates": true
+  },
+  "decision": {
+    "all_checks_pass": "known_truth_support_for_contraction_conditioning",
+    "any_check_fail": "known_truth_refutation_or_non_support_for_contraction_conditioning",
+    "production_gate_authorized_by_this_test_alone": false,
+    "next_if_supported": "freeze a fresh response-blind real-system test selected before biological response access and persist the full Layer-A trajectory",
+    "next_if_not_supported": "do not add a no-contraction predictive gate; move to a different response-independent explanation axis"
+  },
+  "forbidden_interpretations": [
+    "Synthetic effect magnitudes estimate Azores, Louisiana, Tampa or Portal effect sizes",
+    "Passing this benchmark proves contraction is necessary or sufficient in real ecological prediction",
+    "Passing authorizes reanalysis or rescue of Portal",
+    "Passing retroactively establishes that Azores contracted",
+    "This benchmark changes the closed EOG-WF empirical synthesis"
+  ]
+}
