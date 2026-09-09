@@ -1,0 +1,44 @@
+name: Selective Layer-B promotion known truth
+
+on:
+  pull_request:
+    paths:
+      - 'benchmarks/selective_layer_b_promotion_known_truth.py'
+      - 'validation/layer_b_mechanism_v2/selective_promotion_known_truth_contract_v1.json'
+      - 'tests/test_selective_layer_b_promotion_contract.py'
+      - '.github/workflows/selective-layer-b-promotion-known-truth.yml'
+  workflow_dispatch:
+
+jobs:
+  selective-promotion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: pip install -e . pytest scikit-learn
+      - name: Contract tests
+        run: pytest -q tests/test_selective_layer_b_promotion_contract.py
+      - name: Run frozen benchmark
+        run: python benchmarks/selective_layer_b_promotion_known_truth.py
+      - name: Validate boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/selective_layer_b_promotion_known_truth_result.json').read_text())
+          assert p['uses_biological_response'] is False
+          assert p['counts_as_fresh_predictive_endpoint'] is False
+          assert p['changes_closed_eog_wf_synthesis'] is False
+          assert p['scientific_status'] in {
+              'known_truth_support_for_calibration_only_selective_promotion',
+              'known_truth_refutation_or_non_support_for_selective_promotion',
+          }
+          assert isinstance(p['predeclared_checks_all_passed'], bool)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: selective-layer-b-promotion-known-truth
+          path: build/selective_layer_b_promotion_known_truth_result.json
