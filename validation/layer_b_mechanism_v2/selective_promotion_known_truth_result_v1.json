@@ -1,0 +1,64 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.selective_promotion_known_truth_result.v1",
+  "authoritative_run": 34314494573,
+  "authoritative_job": 102347758867,
+  "artifact_id": 10089620851,
+  "artifact_zip_sha256": "5ada26373222f68302fb818a52895510e2abe108e2ad8592882ad3817d45865e",
+  "uses_biological_response": false,
+  "counts_as_fresh_predictive_endpoint": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "replicate_count": 96,
+  "scientific_status": "known_truth_support_for_calibration_only_selective_promotion",
+  "predeclared_checks_all_passed": true,
+  "checks": {
+    "harmful_promotion_rate_at_most_0_25": true,
+    "helpful_promotion_rate_at_least_0_75": true,
+    "overall_mean_selective_loss_not_worse_than_always_augmented": true,
+    "overall_mean_selective_loss_not_worse_than_baseline": true,
+    "overall_median_oracle_regret_at_most_0_005": true
+  },
+  "regimes": {
+    "helpful_stable": {
+      "promotion_rate": 0.96875,
+      "selective_minus_baseline_mean": -0.09277262764383427,
+      "selective_minus_baseline_median": -0.09548084409626773,
+      "selective_oracle_regret_mean": 0.003966656559678372,
+      "selective_oracle_regret_median": 0.0
+    },
+    "neutral": {
+      "promotion_rate": 0.5,
+      "selective_minus_baseline_mean": 0.00048311102673270073,
+      "selective_minus_baseline_median": 0.0,
+      "selective_oracle_regret_mean": 0.003907343066830882,
+      "selective_oracle_regret_median": 0.0007120776956077157
+    },
+    "harmful_shift_visible_in_calibration": {
+      "promotion_rate": 0.0,
+      "selective_minus_baseline_mean": 0.0,
+      "selective_minus_baseline_median": 0.0,
+      "selective_minus_always_augmented_mean": -0.0387567176165073,
+      "selective_minus_always_augmented_median": -0.03668940348093058,
+      "selective_oracle_regret_mean": 0.0,
+      "selective_oracle_regret_median": 0.0
+    }
+  },
+  "overall": {
+    "mean_selective_macro_log_loss": 0.6415425813283422,
+    "mean_baseline_macro_log_loss": 0.6723057535340429,
+    "mean_always_augmented_macro_log_loss": 0.6529632559620625,
+    "selective_minus_baseline_mean": -0.03076317220570052,
+    "selective_minus_always_augmented_mean": -0.011420674633720276,
+    "selective_oracle_regret_mean": 0.0026246665421697513,
+    "selective_oracle_regret_median": 0.0,
+    "selective_oracle_regret_q975": 0.01348723002802614
+  },
+  "interpretation": "Calibration-only selection can identify stable Layer-B benefit and reject calibration-visible harm in this frozen heterogeneous known-truth benchmark without outer-heldout feedback. This supports testing selective promotion prospectively on a fresh real system, not production use or universal benefit.",
+  "next_required_step": "Freeze one genuinely fresh response-blind real ecological system with nested temporal calibration/inner-validation/outer-heldout splits, persist Layer-A trajectory, and execute once-only outer validation.",
+  "forbidden_interpretations": [
+    "This selector guarantees improvement on every real ecological system",
+    "Synthetic promotion rates estimate any prior EOG endpoint",
+    "Outer heldout outcomes may be used for model promotion",
+    "Portal may be rerun or rescued",
+    "The closed EOG-WF synthesis changes"
+  ]
+}
