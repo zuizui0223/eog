@@ -1,0 +1,102 @@
+{
+  "schema": "eog.contextual_representation_fresh_v1.portal_final_contract",
+  "prerequisite_stage0_result": "validation/contextual_representation_fresh_v1/portal_stage0_result.json",
+  "authoritative_response": {
+    "repository": "weecology/PortalData",
+    "path": "Rodents/Portal_rodent.csv",
+    "blob_sha": "daac4615a868339e3c1f77b35ceebf005e1240ad",
+    "single_full_blob_fetch_allowed": true,
+    "required_columns": ["period", "plot", "species"],
+    "negative_periods_forbidden": true
+  },
+  "focal_response": {
+    "species_code": "DM",
+    "scientific_name": "Dipodomys merriami",
+    "eligible_unit": "Stage0 sampled plot-period with sampled=1, effort>0, qcflag=1",
+    "binary_rule": "1 if one or more response rows have exact species=DM at same positive period and plot, else 0",
+    "duplicate_or_recapture_rows": "collapse to binary presence; never count abundance"
+  },
+  "temporal_protocol": {
+    "calibration_periods": [1, 405],
+    "heldout_periods": [406, 540],
+    "first_calibration_period": "initializes source set and is not used as a prediction-training row",
+    "forecast_semantics": "for period t, construct Layer A/B using only positives from periods < t; after scoring/observing t, update state before t+1",
+    "learner_refit_during_heldout": false
+  },
+  "worlds": {
+    "distance": "Euclidean metres between frozen plot centroids",
+    "local_threshold_m": [150.13742978753982, 223.77701121848878, 302.0682185573083, 379.785894482367],
+    "external_open": true,
+    "compatibility_rule": "a surviving local world is eliminated when a newly observed positive plot has zero support from every previously observed positive source plot under that threshold; external_open is never eliminated",
+    "support_rule": "binary source-to-node reachability within threshold; external_open support=1 for every source-node pair"
+  },
+  "contextual_representation": {
+    "implementation": "source_symmetric_world_support_summary_v2_candidate",
+    "refresh": "every period before outcome access",
+    "source_ids": "all distinct previously positive plots, equal source weighting",
+    "exact_world_ids_only_in_layer_a": true,
+    "prediction_world_label_invariant": true,
+    "prediction_source_label_invariant": true,
+    "saturated_static_identity_gate": "must not trigger"
+  },
+  "baseline_features": [
+    "effort",
+    "treatment one-hot",
+    "resourcetreatment one-hot",
+    "anttreatment one-hot",
+    "month_sin",
+    "month_cos",
+    "year_scaled",
+    "plot_centroid_east",
+    "plot_centroid_north"
+  ],
+  "learner": {
+    "family": "sklearn.ensemble.RandomForestClassifier",
+    "numpy": "2.1.3",
+    "scikit_learn": "1.5.2",
+    "n_estimators": 500,
+    "min_samples_leaf": 5,
+    "max_features": "sqrt",
+    "class_weight": null,
+    "random_state": 20260909,
+    "n_jobs": 1,
+    "paired_arms_identical_except_contextual_features": true
+  },
+  "estimability_minima": {
+    "calibration_positive_plot_periods": 100,
+    "calibration_negative_plot_periods": 100,
+    "heldout_positive_plot_periods": 30,
+    "heldout_negative_plot_periods": 30,
+    "heldout_periods_with_both_classes": 20
+  },
+  "primary": {
+    "metric": "macro binary log loss across heldout census periods",
+    "estimand": "augmented_minus_baseline",
+    "favorable": "delta < 0",
+    "adverse": "delta > 0",
+    "tie": "delta == 0"
+  },
+  "secondary": [
+    "macro Brier score difference",
+    "number of heldout periods won by augmented arm",
+    "Layer-A world contraction trajectory",
+    "saturated-static-identity audit"
+  ],
+  "hard_rules": {
+    "one_full_response_access": true,
+    "response_schema_mismatch_is_terminal_stop": true,
+    "estimability_failure_is_terminal_stop": true,
+    "post_response_parser_repair": false,
+    "post_response_taxon_change": false,
+    "post_response_world_retune": false,
+    "post_response_split_change": false,
+    "post_response_baseline_or_learner_change": false,
+    "post_response_candidate_switch_for_this_attempt": false
+  },
+  "interpretive_boundary": {
+    "known_truth_translation_supported_only_if": "the predeclared contextual augmented arm has lower primary macro heldout log loss than the unchanged baseline",
+    "adverse_result_means": "known-truth mechanism safeguards did not translate into predictive added value in this fresh real system under the frozen interface",
+    "does_not_change_closed_eog_wf": true,
+    "does_not_establish_universal_v2_superiority": true
+  }
+}
