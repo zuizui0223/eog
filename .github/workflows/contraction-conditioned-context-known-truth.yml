@@ -1,0 +1,45 @@
+name: Contraction-conditioned contextual known truth
+
+on:
+  pull_request:
+    paths:
+      - 'benchmarks/contraction_conditioned_context_known_truth.py'
+      - 'validation/layer_b_mechanism_v2/contraction_conditioned_known_truth_contract_v1.json'
+      - 'validation/layer_b_mechanism_v2/cross_endpoint_contraction_audit_v1.json'
+      - 'tests/test_contraction_conditioned_known_truth_contract.py'
+      - '.github/workflows/contraction-conditioned-context-known-truth.yml'
+  workflow_dispatch:
+
+jobs:
+  known-truth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: pip install -e . pytest scikit-learn
+      - name: Contract tests
+        run: pytest -q tests/test_contraction_conditioned_known_truth_contract.py
+      - name: Run frozen paired benchmark
+        run: python benchmarks/contraction_conditioned_context_known_truth.py
+      - name: Validate scientific boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/contraction_conditioned_context_known_truth_result.json').read_text())
+          assert p['uses_biological_response'] is False
+          assert p['counts_as_fresh_predictive_endpoint'] is False
+          assert p['changes_closed_eog_wf_synthesis'] is False
+          assert p['scientific_status'] in {
+              'known_truth_support_for_contraction_conditioning',
+              'known_truth_refutation_or_non_support_for_contraction_conditioning',
+          }
+          assert isinstance(p['predeclared_checks_all_passed'], bool)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: contraction-conditioned-context-known-truth
+          path: build/contraction_conditioned_context_known_truth_result.json
