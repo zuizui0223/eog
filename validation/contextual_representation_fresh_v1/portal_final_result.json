@@ -1,0 +1,57 @@
+{
+  "schema": "eog.contextual_representation_fresh_v1.portal_final_result_record.v1",
+  "authoritative_run": 34294382108,
+  "authoritative_job": 102287689782,
+  "artifact_id": 10082630749,
+  "artifact_zip_sha256": "4c9c7d2c86a938ac912236b7ba2e7d1c8fcb254fcfec661c61e679abde482d3f",
+  "execute_head": "ac00894946ca229469936a06692c0f6f4d238762",
+  "response_blob_sha": "daac4615a868339e3c1f77b35ceebf005e1240ad",
+  "response_consumed": true,
+  "counts_as_fourth_closed_endpoint": false,
+  "changes_closed_eog_wf": false,
+  "terminal_class": "adverse_contextual_added_value",
+  "known_truth_translation_supported": false,
+  "estimability": {
+    "calibration_positive_plot_periods": 4190,
+    "calibration_negative_plot_periods": 5320,
+    "heldout_positive_plot_periods": 1485,
+    "heldout_negative_plot_periods": 1568,
+    "heldout_periods_with_both_classes": 135
+  },
+  "primary": {
+    "baseline_macro_log_loss": 0.40928333029868325,
+    "augmented_macro_log_loss": 0.444094795095135,
+    "augmented_minus_baseline": 0.03481146479645175,
+    "relative_change": 0.08505468515184174
+  },
+  "secondary": {
+    "baseline_macro_brier": 0.11591549273427827,
+    "augmented_macro_brier": 0.12581689751153713,
+    "augmented_minus_baseline_brier": 0.009901404777258857,
+    "augmented_period_wins": 45,
+    "heldout_period_count": 135
+  },
+  "layer_a": {
+    "contraction_events": [],
+    "final_surviving_local_worlds": [0, 1, 2, 3],
+    "external_open_survives": true,
+    "worldset_fully_saturated": true
+  },
+  "signature_gate": {
+    "status": "no_exact_saturated_static_signature",
+    "predictive_use_allowed": true,
+    "all_repeated_entities_static": false,
+    "entity_signature_injective": false,
+    "worldset_fully_saturated": true
+  },
+  "interpretation_boundary": {
+    "supported": "The known-truth v2 safeguards removed the exact Tampa static/injective signature failure mode but did not translate into predictive added value in this fresh real system.",
+    "not_supported": [
+      "v2 source-symmetric sequential contextual representation universally improves prediction",
+      "lack of Layer-A contraction is proven to cause the adverse result",
+      "Portal can be repaired or rerun after response consumption",
+      "the closed EOG-WF favorable/favorable/adverse synthesis changes"
+    ],
+    "next_prospective_hypothesis": "A prediction-facing contextual world-support representation may require evidence-induced Layer-A world-set contraction during calibration; full saturation with support-geometry variation alone may be insufficient. This hypothesis is post-Portal and cannot reclassify this endpoint."
+  }
+}
