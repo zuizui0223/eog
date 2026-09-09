@@ -28,7 +28,8 @@
     "local_threshold_m": [150.13742978753982, 223.77701121848878, 302.0682185573083, 379.785894482367],
     "external_open": true,
     "compatibility_rule": "a surviving local world is eliminated when a newly observed positive plot has zero support from every previously observed positive source plot under that threshold; external_open is never eliminated",
-    "support_rule": "binary source-to-node reachability within threshold; external_open support=1 for every source-node pair"
+    "support_rule": "binary source-to-node reachability within threshold; external_open support=1 for every source-node pair",
+    "zero_source_rule": "before any prior positive source exists, local-world node support is 0 and external_open node support is 1; no local world is eliminated until the first positive source has been observed"
   },
   "contextual_representation": {
     "implementation": "source_symmetric_world_support_summary_v2_candidate",
@@ -39,17 +40,7 @@
     "prediction_source_label_invariant": true,
     "saturated_static_identity_gate": "must not trigger"
   },
-  "baseline_features": [
-    "effort",
-    "treatment one-hot",
-    "resourcetreatment one-hot",
-    "anttreatment one-hot",
-    "month_sin",
-    "month_cos",
-    "year_scaled",
-    "plot_centroid_east",
-    "plot_centroid_north"
-  ],
+  "baseline_features": ["effort","treatment one-hot","resourcetreatment one-hot","anttreatment one-hot","month_sin","month_cos","year_scaled","plot_centroid_east","plot_centroid_north"],
   "learner": {
     "family": "sklearn.ensemble.RandomForestClassifier",
     "numpy": "2.1.3",
@@ -76,12 +67,7 @@
     "adverse": "delta > 0",
     "tie": "delta == 0"
   },
-  "secondary": [
-    "macro Brier score difference",
-    "number of heldout periods won by augmented arm",
-    "Layer-A world contraction trajectory",
-    "saturated-static-identity audit"
-  ],
+  "secondary": ["macro Brier score difference","number of heldout periods won by augmented arm","Layer-A world contraction trajectory","saturated-static-identity audit"],
   "hard_rules": {
     "one_full_response_access": true,
     "response_schema_mismatch_is_terminal_stop": true,
