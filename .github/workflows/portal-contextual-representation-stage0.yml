@@ -1,0 +1,44 @@
+name: Portal contextual representation Stage0
+
+on:
+  pull_request:
+    paths:
+      - 'benchmarks/portal_contextual_representation_stage0.py'
+      - 'validation/contextual_representation_fresh_v1/portal_stage0_contract.json'
+      - '.github/workflows/portal-contextual-representation-stage0.yml'
+  workflow_dispatch:
+
+jobs:
+  stage0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: pip install -e .
+      - name: Assert response fetch absent from runner
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('benchmarks/portal_contextual_representation_stage0.py').read_text()
+          assert 'daac4615a868339e3c1f77b35ceebf005e1240ad' not in text
+          assert 'Portal_rodent.csv' not in text
+          PY
+      - name: Run response-blind Stage0
+        run: python benchmarks/portal_contextual_representation_stage0.py
+      - name: Validate boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/portal_contextual_representation_stage0_result.json').read_text())
+          assert p['uses_biological_response'] is False
+          assert p['response_blob_requested'] is False
+          assert p['counts_as_fourth_closed_endpoint'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portal-contextual-representation-stage0
+          path: build/portal_contextual_representation_stage0_result.json
