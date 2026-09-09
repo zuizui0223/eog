@@ -1,0 +1,36 @@
+{
+  "schema": "eog.contextual_representation_fresh_v1.portal_stage0_result",
+  "authoritative_run": 34293615957,
+  "authoritative_job": 102285322778,
+  "artifact_id": 10082301205,
+  "artifact_zip_sha256": "104e9c5c99d605f80267f042e49b6c318343d1e3b37bdd873c1d8a1bd4d29feb",
+  "uses_biological_response": false,
+  "response_blob_requested": false,
+  "counts_as_fourth_closed_endpoint": false,
+  "stage0_pass": true,
+  "checks": {
+    "baseline_materializable_without_response": true,
+    "exact_24_plot_centroids": true,
+    "focal_taxon_metadata_matches_dm": true,
+    "four_distinct_positive_geometry_worlds": true,
+    "ordered_75_25_split_with_20plus_heldout_periods": true,
+    "source_world_label_invariance_placeholder": true
+  },
+  "plot_count": 24,
+  "eligible_plot_period_rows": 12586,
+  "eligible_period_count": 540,
+  "train_period_count": 405,
+  "heldout_period_count": 135,
+  "train_period_minmax": [1, 405],
+  "heldout_period_minmax": [406, 540],
+  "split_cut_period": 406,
+  "geometry_threshold_m": {
+    "q25": 150.13742978753982,
+    "q50": 223.77701121848878,
+    "q75": 302.0682185573083,
+    "q90": 379.785894482367
+  },
+  "missing_treatment_rows": 0,
+  "missing_centroid_rows": 0,
+  "next_gate": "freeze exact response parser, class-count estimability minima and once-only outcome access"
+}
