@@ -1,0 +1,49 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.contraction_conditioned_known_truth_result.v1",
+  "authoritative_run": 34313781127,
+  "authoritative_job": 102345631763,
+  "artifact_id": 10089379527,
+  "artifact_zip_sha256": "2ef4fffee5f08f8e80aabb36ecdc71c8fcabaf4ebc05d04c02fbf1682944277e",
+  "uses_biological_response": false,
+  "counts_as_fresh_predictive_endpoint": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "replicate_count": 64,
+  "scientific_status": "known_truth_refutation_or_non_support_for_contraction_conditioning",
+  "predeclared_checks_all_passed": false,
+  "checks": {
+    "median_primary_delta_strictly_negative": false,
+    "conditioned_beats_uncontracted_in_at_least_0_75_of_replicates": false,
+    "at_least_one_calibration_contraction_event_in_at_least_0_90_of_replicates": true,
+    "true_world_survives_through_calibration_in_all_replicates": true
+  },
+  "primary_conditioned_minus_uncontracted": {
+    "mean": 0.0018924820431993668,
+    "median": 0.0022300447135553125,
+    "q025": -0.010016977803192911,
+    "q975": 0.012900167128207043,
+    "conditioned_win_fraction": 0.375
+  },
+  "secondary_conditioned_minus_baseline": {
+    "mean": -0.0087108693787793,
+    "median": -0.007685513206227179,
+    "favorable_fraction": 0.734375
+  },
+  "secondary_uncontracted_minus_baseline": {
+    "mean": -0.010603351421978666,
+    "median": -0.009403661366609306,
+    "favorable_fraction": 0.796875
+  },
+  "calibration_contraction_fraction": 1.0,
+  "median_calibration_contraction_event_count": 1.0,
+  "true_world_calibration_survival_fraction": 1.0,
+  "interpretation": "Evidence-driven Layer-A pruning occurred as designed but did not improve the prediction-facing contextual representation relative to retaining all declared worlds. Contraction is therefore not adopted as a predictive eligibility gate from this mechanism line.",
+  "next_algorithmic_consequence": "Stop searching for a response-independent structural property that guarantees predictive added value. Treat Layer B as an optional candidate representation and test a calibration-only selective-promotion rule that may choose baseline-only or baseline-plus-Layer-B before an untouched outer heldout endpoint.",
+  "forbidden_interpretations": [
+    "Contraction harms prediction universally",
+    "Uncontracted world mixtures are universally superior",
+    "Synthetic effect sizes estimate any empirical endpoint",
+    "Portal may be rerun or rescued",
+    "Azores contraction status has been recovered",
+    "The closed EOG-WF synthesis changes"
+  ]
+}
