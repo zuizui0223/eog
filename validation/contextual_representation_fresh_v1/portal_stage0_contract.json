@@ -1,0 +1,105 @@
+{
+  "schema": "eog.contextual_representation_fresh_v1.stage0_contract",
+  "purpose": "Fresh response-blind real-data validation of whether the v2 contextual EOG representation translates the known-truth mechanism diagnosis into heldout predictive improvement.",
+  "relationship_to_closed_eog_wf": {
+    "counts_as_fourth_closed_endpoint": false,
+    "changes_favorable_favorable_adverse": false,
+    "changes_submission_boundary": false,
+    "role": "post-closure algorithm-upgrade validation"
+  },
+  "dataset": {
+    "name": "Portal Project long-term rodent monitoring, Arizona",
+    "repository": "weecology/PortalData",
+    "selection_basis": "long repeated plot-by-time monitoring with response-independent trapping effort, plot treatment metadata and spatial coordinates physically separated from the rodent capture response",
+    "allowed_pre_response_files": {
+      "SiteandMethods/Portal_UTMCoords.csv": "fa96bd174b28767acb27758fddaca0b51676800f",
+      "SiteandMethods/Portal_plots.csv": "d4502de80688bd42b52eee1f9e0b8bc429385178",
+      "Rodents/Portal_rodent_trapping.csv": "e405c7669c9a25a9111527270cdaec7af26f31c7",
+      "Rodents/moon_dates.csv": "0e32369bfede619ba8b0eea952a3fcf77edb60ff",
+      "Rodents/Portal_rodent_species.csv": "bcecdbeab3fb364a7712d17486fa12b5ceda835f",
+      "Rodents/README.md": "1d8ad18094ef38e136759bf6fdb1c94d4e5feea3"
+    },
+    "forbidden_response_until_gate": {
+      "path": "Rodents/Portal_rodent.csv",
+      "blob_sha": "daac4615a868339e3c1f77b35ceebf005e1240ad"
+    }
+  },
+  "focal_taxon": {
+    "species_code": "DM",
+    "scientific_name": "Dipodomys merriami",
+    "selection_rule": "fixed from taxonomic metadata and site-study relevance before response access; no prevalence ranking"
+  },
+  "unit": {
+    "node": "experimental plot (1-24)",
+    "context": "positive census period",
+    "eligible_row": "Portal_rodent_trapping sampled=1, effort>0 and qcflag=1",
+    "response_after_authorization": "1 iff at least one DM capture occurs in the same positive period and plot; otherwise 0 for an eligible sampled plot-period"
+  },
+  "geometry": {
+    "node_coordinate": "mean easting/northing of type=corner records within plot",
+    "distance": "Euclidean metres in supplied UTM coordinates",
+    "local_worlds": "q25/q50/q75/q90 of nonzero pairwise plot-centroid distances computed response-blind",
+    "external_open": true
+  },
+  "layer_a": {
+    "update": "sequential by census period using calibration-period positives only",
+    "source_set": "plots positive for DM in prior authorized calibration contexts only",
+    "exact_world_identity_retained": true,
+    "world_truth_claim": false
+  },
+  "contextual_representation": {
+    "projection": "source-symmetric v2",
+    "refresh_policy": "sequential_context",
+    "source_label_invariant": true,
+    "world_label_invariant": true,
+    "saturated_static_identity_gate_required": true,
+    "generator_parity_required": true
+  },
+  "baseline": {
+    "learner": "RandomForestClassifier",
+    "paired_same_learner": true,
+    "features": [
+      "effort",
+      "plot treatment",
+      "resource treatment",
+      "ant treatment",
+      "month_sin",
+      "month_cos",
+      "year_scaled",
+      "plot_centroid_east",
+      "plot_centroid_north"
+    ],
+    "augmented_difference": "add contextual EOG representation only"
+  },
+  "split": {
+    "type": "ordered temporal",
+    "rule": "after Stage0 eligible positive census periods are enumerated response-blind, first 75% are calibration/training and final 25% are heldout scoring; boundary is frozen before Portal_rodent.csv access",
+    "no_row_level_random_split": true
+  },
+  "primary_metric": "macro heldout binary log loss by census period",
+  "secondary_metrics": ["Brier score", "heldout-period wins"],
+  "primary_estimand": "augmented minus baseline macro heldout log loss",
+  "terminal_rule": {
+    "favorable": "delta < 0",
+    "adverse": "delta > 0",
+    "tie": "delta == 0",
+    "no_post_response_retune": true
+  },
+  "stage0_gates_before_response": [
+    "exact allowed-file identity",
+    "24 plot centroid reconstruction",
+    "response-blind eligible census calendar",
+    "four distinct positive local geometry thresholds",
+    "ordered 75/25 split with at least 20 heldout census periods",
+    "baseline design fully materializable without response",
+    "contextual v2 projection passes source/world label invariance and saturated-static-identity safeguards on synthetic placeholder state"
+  ],
+  "forbidden_before_stage0_pass": [
+    "open, preview or download Portal_rodent.csv body",
+    "count DM positives",
+    "choose taxon by prevalence",
+    "retune worlds from response",
+    "change split after response",
+    "change learner or baseline after response"
+  ]
+}
