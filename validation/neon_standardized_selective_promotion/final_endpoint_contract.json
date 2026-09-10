@@ -1,0 +1,130 @@
+{
+  "schema": "eog.neon_standardized_selective_promotion.final_endpoint_contract.v1",
+  "attempt_id": "neon_standardized_selective_promotion_v1",
+  "purpose": "First fresh real-system test of calibration-only selective promotion after known-truth support.",
+  "frozen_before_biological_response": true,
+  "prerequisites": {
+    "gate0_run_id": 34466756995,
+    "gate0_job_id": 102837023761,
+    "gate0_artifact_id": 10147826361,
+    "gate0_artifact_sha256": "774da92f512d6700d7aea3a399c6f6f19a4fc7f1b1edfce352efef16ab0c90db",
+    "stage1_run_id": 34466864782,
+    "stage1_job_id": 102837363493,
+    "stage1_artifact_id": 10147869385,
+    "stage1_artifact_sha256": "51363abda27f3cfbee3ea04a08ad3dee2ea9a0ba7e543744fa23152cd29829fb",
+    "stage1_status": "stage1_response_blind_ready_for_endpoint_freeze",
+    "response_opened_before_contract": false
+  },
+  "authoritative_response": {
+    "zenodo_record": 20826511,
+    "file": "camera_trap_sequences.csv",
+    "size": 3382821,
+    "md5": "7531a5b9fb3848ef33e162d5206a6f43",
+    "single_full_get_allowed": true,
+    "no_header_probe_before_full_get": true
+  },
+  "focal_response": {
+    "scientific_name": "Odocoileus virginianus",
+    "common_name": "white-tailed deer",
+    "selection_basis": "fixed ecological target chosen before opening sequence response; no response prevalence, effect direction or model score used",
+    "eligible_unit": "one frozen deployment row",
+    "binary_rule": "1 if one or more sequence rows assigned to the exact focal taxon link to that deployment, else 0",
+    "duplicate_sequences": "collapse to deployment-level binary presence; never use abundance"
+  },
+  "temporal_protocol": {
+    "ordering_key": ["start_date", "deployment_id"],
+    "split_rule": "Sort all 820 frozen deployment rows by start_date then deployment_id. First 60% are inner-train, next 20% inner-validation, final 20% untouched outer-heldout; integer boundaries are floor(0.60*N) and floor(0.80*N).",
+    "state_availability_rule": "For a deployment starting at time t, EOG state may use only focal-positive source deployments whose end_date is strictly earlier than t. A deployment outcome enters state only after its end_date.",
+    "outer_learner_refit": false,
+    "outer_selection_feedback": false
+  },
+  "baseline": {
+    "features": [
+      "longitude",
+      "latitude",
+      "deployment_duration_days",
+      "start_month_sin",
+      "start_month_cos",
+      "subproject_name one-hot"
+    ],
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "hyperparameters": {
+      "n_estimators": 200,
+      "max_features": "sqrt",
+      "min_samples_leaf": 8,
+      "class_weight": null,
+      "random_state": 20260909,
+      "n_jobs": 1
+    }
+  },
+  "layer_b": {
+    "representation": "source_symmetric_world_support_summary_v2_candidate",
+    "nodes": "distinct deployment coordinates; each deployment row receives the feature vector at its own coordinate",
+    "distance": "haversine kilometres between frozen deployment coordinates",
+    "local_world_threshold_rule": "Compute nearest-neighbour distance for each distinct coordinate using only frozen deployment geometry. Use the 25th, 50th, 75th and 90th percentiles of strictly positive nearest-neighbour distances as four local reachability thresholds; add one external_open world.",
+    "world_compatibility": "A surviving local world is eliminated when a newly available positive source coordinate has zero support from every previously available positive source coordinate under that threshold. external_open is never eliminated.",
+    "support": "binary source-to-node reachability within threshold; external_open support=1",
+    "source_weighting": "all distinct previously available focal-positive source coordinates, equal source weighting",
+    "zero_source_rule": "local support=0 and external_open support=1 before the first available positive source; no local world is eliminated until at least two temporally ordered positive source coordinates exist",
+    "features_appended_to_baseline": [
+      "surviving_world_fraction",
+      "mean_support",
+      "support_sd",
+      "support_min",
+      "support_max",
+      "support_q25",
+      "support_median",
+      "support_q75",
+      "positive_support_fraction",
+      "support_range"
+    ],
+    "implementation_requirement": "prediction representation must be invariant to source labels and world labels"
+  },
+  "selection": {
+    "primary_metric": "macro binary log loss across subproject_name values represented in the scoring split; labels=[0,1] for each subproject",
+    "rule": "Fit baseline and augmented on inner-train only. Promote Layer B if and only if augmented inner-validation macro log loss is strictly lower than baseline inner-validation macro log loss. Otherwise select baseline-only.",
+    "final_fit": "After the promotion decision is frozen, refit baseline and augmented on inner-train plus inner-validation using unchanged hyperparameters; score baseline, always-augmented and the preselected arm on untouched outer-heldout exactly once.",
+    "outer_primary_estimand": "selected_arm_macro_log_loss minus baseline_macro_log_loss",
+    "secondary": [
+      "always_augmented minus baseline outer macro log loss",
+      "selected arm minus always-augmented outer macro log loss",
+      "selected regret to oracle",
+      "Brier score differences",
+      "world contraction trajectory"
+    ]
+  },
+  "estimability_minima": {
+    "inner_train_each_class": 10,
+    "inner_validation_each_class": 5,
+    "outer_each_class": 5,
+    "inner_validation_subprojects": 2,
+    "outer_subprojects": 2
+  },
+  "terminal_classes": {
+    "response_schema_or_identity_failure": "stop_response_schema_or_identity",
+    "focal_absent_or_estimability_failure": "stop_response_estimability",
+    "scored": [
+      "favorable_selective_added_value",
+      "null_selective_added_value",
+      "adverse_selective_added_value"
+    ]
+  },
+  "hard_rules": {
+    "one_response_get": true,
+    "post_response_taxon_change": false,
+    "post_response_split_change": false,
+    "post_response_world_retune": false,
+    "post_response_baseline_change": false,
+    "post_response_promotion_rule_change": false,
+    "post_response_parser_repair": false,
+    "candidate_switch_within_attempt": false
+  },
+  "interpretive_boundary": {
+    "counts_as_fresh_predictive_evidence_only_if_scored": true,
+    "favorable_means": "calibration-only selective promotion translated to lower untouched outer macro log loss than baseline in this fresh real system",
+    "null_means": "the frozen selector did not change untouched outer macro log loss relative to baseline",
+    "adverse_means": "the frozen selector produced higher untouched outer macro log loss than baseline in this fresh real system",
+    "does_not_establish_universal_layer_b_superiority": true,
+    "does_not_change_closed_eog_wf_synthesis": true
+  }
+}
