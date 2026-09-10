@@ -1,0 +1,40 @@
+{
+  "schema": "eog.neon_camera_selective_promotion.gate0_terminal_certificate.v1",
+  "attempt_id": "neon_camera_selective_promotion_v1",
+  "status": "gate0_metadata_ready_for_nonresponse_schema_freeze",
+  "authoritative_run": {
+    "run_id": 34469832438,
+    "job_id": 102846885552,
+    "head_sha": "812bfc7dd2a2235d17a13a50646903957206f00c",
+    "artifact_id": 10149041745,
+    "artifact_zip_sha256": "a815638df22619e22521ae61f21ca7febc9e8858a8f1e83db12b218cc4e3af8f"
+  },
+  "inventory": {
+    "camera_trap_deployments.csv": {
+      "id": "41a546a6-653c-4dd2-b733-64c9a30e13a6",
+      "size": 86395,
+      "checksum": "md5:82537cdf0a586fa14c9a8b6afd7be470"
+    },
+    "camera_trap_sequences.csv": {
+      "id": "e4755087-193d-4114-b06c-350286c41ae4",
+      "size": 3382821,
+      "checksum": "md5:7531a5b9fb3848ef33e162d5206a6f43"
+    },
+    "subproject_descriptions.csv": {
+      "id": "d1601e0b-5a76-4472-9a28-7f19622d3175",
+      "size": 10529,
+      "checksum": "md5:be1502427995886ef1c64c10410d1ee2"
+    }
+  },
+  "response_firewall": {
+    "file_payload_requests": 0,
+    "file_payload_bytes_opened": 0,
+    "csv_header_bytes_opened": 0,
+    "csv_rows_opened": 0,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "counts_as_predictive_evidence": false,
+  "next_gate": "Open only deployment/context payloads under a separately frozen Stage1 contract; camera_trap_sequences.csv remains forbidden."
+}
