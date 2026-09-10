@@ -1,0 +1,21 @@
+{
+  "schema": "eog.neon_standardized_selective_promotion.outer_prequential_clarification.v1",
+  "attempt_id": "neon_standardized_selective_promotion_v1",
+  "frozen_before_biological_response": true,
+  "status": "clarification_not_design_change",
+  "outer_evaluation": {
+    "mode": "chronological prequential prediction",
+    "ordering": "the frozen start_date then deployment_id order",
+    "state_access": "For each outer deployment starting at time t, Layer-B representation may use only focal-positive deployment outcomes whose end_date is strictly earlier than t, including outcomes from earlier outer deployments that have become available by then.",
+    "learner_refit_during_outer": false,
+    "promotion_redecision_during_outer": false,
+    "world_threshold_retuning_during_outer": false,
+    "performance_feedback_during_outer": false,
+    "aggregate_metric_access": "Generate every outer prediction in one deterministic prequential pass, then compute the aggregate outer metrics once after all predictions are fixed."
+  },
+  "consistency_with_final_contract": [
+    "state_availability_rule",
+    "outer_learner_refit=false",
+    "outer_selection_feedback=false"
+  ]
+}
