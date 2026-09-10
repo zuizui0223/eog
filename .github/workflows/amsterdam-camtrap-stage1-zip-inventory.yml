@@ -1,0 +1,53 @@
+name: Amsterdam Camtrap selective-promotion Stage1 ZIP inventory
+
+on:
+  push:
+    branches:
+      - fresh/amsterdam-camtrap-selective-promotion-v1
+    paths:
+      - validation/amsterdam_camtrap_selective_promotion/stage1_zip_inventory_contract.json
+      - validation/amsterdam_camtrap_selective_promotion/stage1_zip_inventory.py
+      - .github/workflows/amsterdam-camtrap-stage1-zip-inventory.yml
+
+permissions:
+  contents: read
+
+jobs:
+  stage1:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen archive-range boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/amsterdam_camtrap_selective_promotion/stage1_zip_inventory_contract.json').read_text())
+          assert p['authorized_access']['range'] == 'bytes=-33554432'
+          assert p['authorized_access']['max_bytes_read'] == 33554432
+          assert p['forbidden_before_next_contract']['full_archive_download'] is True
+          assert p['forbidden_before_next_contract']['observations_member_body'] is True
+          PY
+      - name: Execute ZIP central-directory Stage1
+        run: python validation/amsterdam_camtrap_selective_promotion/stage1_zip_inventory.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/amsterdam_camtrap_selective_promotion/stage1_zip_inventory.json').read_text())
+          assert p['status'] in {'stage1_zip_inventory_qualified','stop_pre_response_archive_range_or_inventory'}
+          assert p['archive_body_fully_downloaded'] is False
+          assert p['member_body_bytes_opened'] == 0
+          assert p['observation_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: amsterdam-camtrap-stage1-zip-inventory
+          path: build/amsterdam_camtrap_selective_promotion/stage1_zip_inventory.json
+          if-no-files-found: error
