@@ -1,0 +1,45 @@
+{
+  "schema": "eog.neon_standardized_selective_promotion.stage1_response_blind_contract.v1",
+  "attempt_id": "neon_standardized_selective_promotion_v1",
+  "gate0_evidence": {
+    "run_id": 34466756995,
+    "job_id": 102837023761,
+    "artifact_id": 10147826361,
+    "artifact_sha256": "774da92f512d6700d7aea3a399c6f6f19a4fc7f1b1edfce352efef16ab0c90db",
+    "status": "gate0_metadata_ready_for_deployment_schema_freeze"
+  },
+  "authorized_payloads": {
+    "camera_trap_deployments.csv": {
+      "md5": "82537cdf0a586fa14c9a8b6afd7be470",
+      "size": 86395,
+      "purpose": "freeze deployment identifiers, coordinates, start/end times, and response-independent effort geometry"
+    },
+    "subproject_descriptions.csv": {
+      "md5": "be1502427995886ef1c64c10410d1ee2",
+      "size": 10529,
+      "purpose": "freeze response-independent project/context labels"
+    }
+  },
+  "forbidden_payloads": {
+    "camera_trap_sequences.csv": {
+      "md5": "7531a5b9fb3848ef33e162d5206a6f43",
+      "size": 3382821,
+      "reason": "biological response remains sealed until target, split, baseline, EOG augmentation and promotion rule are frozen"
+    }
+  },
+  "stage1_allowed": [
+    "exactly one GET of camera_trap_deployments.csv",
+    "exactly one GET of subproject_descriptions.csv",
+    "parse all rows of those two response-independent files",
+    "summarize column names, row counts, identifier counts, coordinate coverage and temporal coverage"
+  ],
+  "stage1_forbidden": [
+    "any request to camera_trap_sequences.csv",
+    "any species name or sequence count from response payload",
+    "target selection using response prevalence",
+    "model fitting",
+    "heldout scoring"
+  ],
+  "next_if_ready": "freeze deterministic target-selection rule independent of response values, temporal inner/outer split, baseline, EOG candidate feature family and inner-calibration-only promotion rule before response access",
+  "post_stage1_retuning": false
+}
