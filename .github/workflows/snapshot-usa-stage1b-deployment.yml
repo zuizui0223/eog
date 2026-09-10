@@ -1,0 +1,58 @@
+name: Snapshot USA selective-promotion Stage1B deployment
+
+on:
+  push:
+    branches:
+      - fresh/snapshot-usa-selective-promotion-v1
+    paths:
+      - "validation/snapshot_usa_selective_promotion/stage1b_deployment_contract.json"
+      - "validation/snapshot_usa_selective_promotion/stage1b_deployment.py"
+      - ".github/workflows/snapshot-usa-stage1b-deployment.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stage1b:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify frozen deployment-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/snapshot_usa_selective_promotion/stage1b_deployment_contract.json').read_text())
+          assert p['deployment_payload_requests_allowed'] == 1
+          assert p['sequence_payload_requests_allowed'] == 0
+          assert p['sequence_header_bytes_allowed'] == 0
+          assert p['response_values_allowed'] is False
+          assert p['target_species_selection_allowed'] is False
+          assert p['model_fits_allowed'] == 0
+          assert p['heldout_scores_allowed'] == 0
+          PY
+      - name: Execute response-independent deployment qualification
+        run: python validation/snapshot_usa_selective_promotion/stage1b_deployment.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/snapshot_usa_selective_promotion/stage1b_deployment.json').read_text())
+          assert p['status'] in {'stage1b_deployment_qualified_and_focal_array_selected','stop_pre_response_deployment_transport_schema_or_structure'}
+          assert p['deployment_payload_requests'] <= 1
+          assert p['sequence_payload_requests'] == 0
+          assert p['sequence_header_bytes_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-usa-stage1b-deployment
+          path: build/snapshot_usa_selective_promotion/stage1b_deployment.json
+          if-no-files-found: error
