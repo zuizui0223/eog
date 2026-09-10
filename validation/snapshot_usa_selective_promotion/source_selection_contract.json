@@ -1,0 +1,89 @@
+{
+  "schema": "eog.snapshot_usa_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "snapshot_usa_selective_promotion_v1",
+  "scientific_role": "fresh real-system validation candidate for calibration-only selective Layer-B promotion",
+  "source_identity": {
+    "title": "SNAPSHOT USA 2019-2023: The first five years of data from a coordinated camera trap survey of the United States",
+    "doi": "10.5061/dryad.k0p2ngfhn",
+    "frozen_version_date": "2025-04-10",
+    "publicly_declared_current_files": [
+      ["README.md", "6.26 KB"],
+      ["ssusa_finaldeployments.csv", "1.73 MB"],
+      ["ssusa_finalsequences.csv", "206.67 MB"]
+    ],
+    "public_dataset_counts": {
+      "deployment_records": 9694,
+      "sequence_records": 987979,
+      "years": [2019, 2020, 2021, 2022, 2023],
+      "camera_trap_arrays": 263,
+      "arrays_surveyed_all_five_years_reported_by_paper": 42
+    }
+  },
+  "selection_boundary": {
+    "selected_before_any_Dryad_file_payload_access": true,
+    "selection_basis": [
+      "five annual survey years permit temporal inner/outer validation",
+      "deployment metadata and biological sequence response are physically separate files",
+      "deployment file contains year, array, site, deployment start/end, survey nights, coordinates and response-independent habitat/development/feature metadata",
+      "paper reports multiple arrays surveyed all five years, allowing response-blind focal-array selection"
+    ],
+    "target_species_selected": false,
+    "focal_array_selected": false,
+    "species_frequency_or_detection_values_used_for_selection": false,
+    "response_file_header_or_rows_opened": false
+  },
+  "gate0_public_metadata_boundary": {
+    "allowed_information": [
+      "Dryad landing-page metadata",
+      "current version date",
+      "public file names and file sizes",
+      "README prose shown directly on the public landing page"
+    ],
+    "allowed_live_operations": [
+      "one GET of the frozen Dryad landing/dataset metadata route selected before execution"
+    ],
+    "deployment_payload_requests_allowed": 0,
+    "sequence_payload_requests_allowed": 0,
+    "sequence_header_bytes_allowed": 0,
+    "response_values_allowed": false
+  },
+  "prospective_focal_array_rule": {
+    "may_use_only_deployment_payload_after_separate_authorization": true,
+    "eligible_array": "same normalized Camera_Trap_Array represented in all five years 2019-2023 with at least 7 distinct normalized Site_Name values in each year and positive Survey_Nights only",
+    "ranking": [
+      "maximize minimum annual distinct-site count across the five years",
+      "then maximize total Survey_Nights across all five years",
+      "then lexicographically smallest normalized Camera_Trap_Array"
+    ],
+    "no_response_based_array_choice": true
+  },
+  "prospective_temporal_split_rule": {
+    "calibration_years": [2019, 2020, 2021, 2022],
+    "outer_heldout_year": 2023,
+    "inner_train_years": [2019, 2020, 2021],
+    "inner_validation_year": 2022,
+    "outer_heldout_never_used_for_arm_selection": true
+  },
+  "selective_promotion_rule": {
+    "candidate_arms": ["baseline_only", "baseline_plus_layer_b"],
+    "promotion": "use baseline_plus_layer_b only if its frozen inner-validation macro binary log loss is strictly lower than baseline_only; otherwise use baseline_only",
+    "selection_uses_only_calibration_outcomes": true,
+    "after_selection": "freeze selected arm; refit according to frozen calibration policy; score untouched 2023 outer heldout once",
+    "layer_a_trajectory_persistence_required": true,
+    "outer_response_rerun_forbidden": true
+  },
+  "response_firewall": {
+    "ssusa_finalsequences_csv_payload_forbidden_until_full_freeze": true,
+    "ssusa_finalsequences_csv_header_forbidden_until_separate_header_contract": true,
+    "target_species_selection_before_response_header": true,
+    "model_fits_before_full_freeze": 0,
+    "heldout_scores_before_full_freeze": 0
+  },
+  "gate0_terminal_statuses": [
+    "gate0_public_metadata_qualified",
+    "stop_pre_response_metadata_identity_or_transport"
+  ],
+  "if_stop": "terminal pre-response STOP; do not change the selected metadata route or retry policy within this attempt",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
