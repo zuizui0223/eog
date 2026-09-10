@@ -1,0 +1,56 @@
+{
+  "schema": "eog.amsterdam_camtrap_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "amsterdam_camtrap_selective_promotion_v1",
+  "scientific_role": "fresh real-system validation candidate for calibration-only selective Layer-B promotion",
+  "source_identity": {
+    "title": "Repository of camera trap data recorded during three pilot studies of the Amsterdamse Waterleidingduinen",
+    "zenodo_record_id": 11440456,
+    "public_description_basis": "Three Camtrap DP pilot packages; two inside herbivore exclosures, third outside exclosures; Dama dama reported as most prevalent in the third pilot.",
+    "camtrap_dp_expected_roles": ["datapackage.json", "deployments.csv", "media.csv", "observations.csv"]
+  },
+  "selection_boundary": {
+    "selected_before_any_Zenodo_file_payload_access": true,
+    "focal_taxon_scientific_name": "Dama dama",
+    "focal_taxon_selection_basis": "public Zenodo description states European fallow deer was most prevalent in the third pilot conducted outside exclosures",
+    "target_pilot_rule": "select the unique Camtrap DP package whose package/project metadata identifies the outside-exclosure pilot; do not use observation counts or observation rows for pilot selection",
+    "response_values_used_for_selection": false,
+    "observation_header_or_rows_opened": false
+  },
+  "gate0_metadata_only": {
+    "allowed_live_operation": "one GET of https://zenodo.org/api/records/11440456",
+    "file_payload_requests_allowed": 0,
+    "file_payload_bytes_allowed": 0,
+    "csv_header_bytes_allowed": 0,
+    "observation_values_allowed": false,
+    "valid_terminal_statuses": ["gate0_metadata_ready_for_nonresponse_package_identification", "stop_pre_response_metadata_identity_or_transport"]
+  },
+  "future_nonresponse_boundary": {
+    "datapackage_json_may_be_opened_after_separate_contract": true,
+    "deployments_csv_may_be_opened_after_separate_contract": true,
+    "media_csv_forbidden_before_full_freeze": true,
+    "observations_csv_forbidden_before_full_freeze": true
+  },
+  "prospective_context_rule": {
+    "unit": "deployment-by-ISO-week eligible camera effort interval",
+    "time_basis": "deploymentStart/deploymentEnd only before response access",
+    "split_algorithm": "after eligible weekly contexts are enumerated from deployments only, order unique ISO weeks chronologically; earliest 60% inner_train, next 20% inner_validation, final 20% untouched_outer; floor boundaries are computed deterministically and frozen before observations access",
+    "minimum_unique_weeks": 15,
+    "minimum_deployments": 12
+  },
+  "selective_promotion_rule": {
+    "candidate_arms": ["baseline_only", "baseline_plus_contextual_layer_b"],
+    "promotion": "promote Layer B only if frozen inner-validation macro binary log loss is strictly lower than baseline-only; otherwise retain baseline-only",
+    "outer_heldout_never_used_for_arm_selection": true,
+    "selected_arm_refit_policy": "after inner selection, refit selected arm on inner_train plus inner_validation using the same frozen learner and score untouched outer once",
+    "layer_a_trajectory_persistence_required": true
+  },
+  "response_firewall": {
+    "observations_payload_forbidden_until_full_freeze": true,
+    "observations_header_forbidden_until_separate_schema_contract": true,
+    "model_fits_before_full_freeze": 0,
+    "heldout_scores_before_full_freeze": 0
+  },
+  "if_stop": "terminal pre-response STOP; no transport, pilot, focal-taxon or split rescue within this attempt",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
