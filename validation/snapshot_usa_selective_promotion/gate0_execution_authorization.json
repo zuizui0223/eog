@@ -1,0 +1,28 @@
+{
+  "schema": "eog.snapshot_usa_selective_promotion.gate0_execution_authorization.v1",
+  "attempt_id": "snapshot_usa_selective_promotion_v1",
+  "parent_source_contract_commit": "55a680f24af1ff5ae0c3d48afafddc619d6eead1",
+  "authorized_url": "https://datadryad.org/dataset/doi:10.5061/dryad.k0p2ngfhn",
+  "authorized_operation": "exactly one HTTP GET of the public dataset landing HTML",
+  "timeout_seconds": 45,
+  "redirects": "standard same-request HTTP redirects allowed",
+  "required_public_tokens": [
+    "SNAPSHOT USA 2019-2023",
+    "Apr 10, 2025",
+    "ssusa_finaldeployments.csv",
+    "ssusa_finalsequences.csv"
+  ],
+  "forbidden_operations": [
+    "Dryad API version discovery after execution starts",
+    "clicking or downloading any file",
+    "deployment payload read",
+    "sequence payload or header read",
+    "response value access",
+    "retry with alternate URL after terminal STOP"
+  ],
+  "deployment_payload_requests_allowed": 0,
+  "sequence_payload_requests_allowed": 0,
+  "response_values_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0
+}
