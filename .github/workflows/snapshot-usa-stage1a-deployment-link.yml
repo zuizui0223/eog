@@ -1,0 +1,54 @@
+name: Snapshot USA selective-promotion Stage1A deployment link
+
+on:
+  push:
+    branches:
+      - fresh/snapshot-usa-selective-promotion-v1
+    paths:
+      - "validation/snapshot_usa_selective_promotion/stage1a_deployment_link_contract.json"
+      - "validation/snapshot_usa_selective_promotion/stage1a_deployment_link.py"
+      - ".github/workflows/snapshot-usa-stage1a-deployment-link.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stage1a:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify frozen zero-payload boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/snapshot_usa_selective_promotion/stage1a_deployment_link_contract.json').read_text())
+          assert p['deployment_payload_requests_allowed'] == 0
+          assert p['sequence_payload_requests_allowed'] == 0
+          assert p['link_following_allowed'] is False
+          assert p['response_values_allowed'] is False
+          PY
+      - name: Recover exact deployment href from public landing only
+        run: python validation/snapshot_usa_selective_promotion/stage1a_deployment_link.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/snapshot_usa_selective_promotion/stage1a_deployment_link.json').read_text())
+          assert p['status'] in {'stage1a_deployment_link_frozen','stop_pre_response_deployment_link_identity_or_transport'}
+          assert p['deployment_payload_requests'] == 0
+          assert p['sequence_payload_requests'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-usa-stage1a-deployment-link
+          path: build/snapshot_usa_selective_promotion/stage1a_deployment_link.json
+          if-no-files-found: error
