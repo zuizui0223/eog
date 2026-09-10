@@ -1,0 +1,17 @@
+{
+  "schema": "eog.snapshot_usa_selective_promotion.stage1a_deployment_link_contract.v1",
+  "attempt_id": "snapshot_usa_selective_promotion_v1",
+  "parent_gate0_fingerprint": "c2fff010e0c27b14179069241af7b78ca34b59e64110e06f13c6a156064417dd",
+  "authorized_url": "https://datadryad.org/dataset/doi:10.5061/dryad.k0p2ngfhn",
+  "authorized_operation": "one GET of the already-qualified public landing HTML solely to extract the href associated with the exact visible filename ssusa_finaldeployments.csv",
+  "target_visible_filename": "ssusa_finaldeployments.csv",
+  "forbidden_target_filename": "ssusa_finalsequences.csv",
+  "deployment_payload_requests_allowed": 0,
+  "sequence_payload_requests_allowed": 0,
+  "response_values_allowed": false,
+  "link_following_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "if_unique_link_not_recoverable": "terminal pre-response transport-identity STOP; do not guess a download URL",
+  "counts_as_predictive_evidence": false
+}
