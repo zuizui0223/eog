@@ -1,0 +1,95 @@
+{
+  "schema": "eog.bbs_wild_turkey_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "bbs_wild_turkey_selective_promotion_v1",
+  "scientific_role": "fresh real-system validation of calibration-only selective Layer-B promotion after known-truth support",
+  "source_identity": {
+    "repository": "pwilliams0/Bird_biotic_homogenization",
+    "repository_ref": "main",
+    "survey_metadata_file": {
+      "path": "Data/BBS_surveys.csv",
+      "blob_sha": "bf82a3fce89aa1a6c86bc1669af6ff8a2bcc6d7e"
+    },
+    "response_file": {
+      "path": "Data/occur_breeding.csv",
+      "blob_sha": "bbc2af015dee7f124eb86cdb80692f436725441e"
+    },
+    "readme_file": {
+      "path": "README.md",
+      "blob_sha": "1d5082a5ef49da5d4418e4439b8c2a386dd38c83"
+    }
+  },
+  "response_blind_selection": {
+    "focal_taxon_common_name": "Wild Turkey",
+    "selection_basis": "README text identifies Wild Turkey among species with increasing occurrence; no response file header or rows used for focal selection",
+    "target_species_selected_before_response_payload": true,
+    "response_header_opened_before_full_freeze": false,
+    "response_rows_opened_before_full_freeze": false
+  },
+  "prospective_time_split": {
+    "inner_train_years": [1980, 2009],
+    "inner_validation_years": [2010, 2015],
+    "outer_heldout_years": [2016, 2022],
+    "interpretation": "inclusive year ranges",
+    "outer_heldout_never_used_for_arm_selection": true
+  },
+  "stage0_nonresponse_boundary": {
+    "allowed_payload": "Data/BBS_surveys.csv only",
+    "response_payload_requests_allowed": 0,
+    "response_header_bytes_allowed": 0,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0,
+    "allowed_operations": [
+      "verify frozen survey blob identity",
+      "parse survey rows",
+      "derive unique cell-year registry",
+      "derive response-independent cell centroids from Latitude/Longitude",
+      "verify temporal coverage and split support",
+      "derive four local-world distance thresholds by frozen pairwise-distance quantile rule"
+    ]
+  },
+  "geometry_rule": {
+    "node": "cell_id",
+    "coordinate": "mean Latitude/Longitude across survey rows within cell_id using only BBS_surveys.csv",
+    "local_world_threshold_quantiles": [0.2, 0.4, 0.6, 0.8],
+    "external_open_world": true,
+    "distance": "haversine_km"
+  },
+  "candidate_models": {
+    "learner": "RandomForestClassifier",
+    "baseline_predictors": [
+      "Latitude",
+      "Longitude",
+      "Year",
+      "First_year"
+    ],
+    "augmented": "same learner and baseline predictors plus source-symmetric sequential Layer-B contextual representation",
+    "layer_b_generation": "for year t, use only focal-taxon positive cell-years with year < t; no same-year or future response",
+    "source_selection": "source-symmetric; no lexicographic single-source anchor",
+    "layer_a_trajectory_persistence_required": true
+  },
+  "selective_promotion_rule": {
+    "inner_train": "fit baseline and augmented arms using 1980-2009 only",
+    "inner_validation": "score both arms on 2010-2015 only",
+    "promotion": "promote augmented only if inner-validation macro binary log loss is strictly lower than baseline; otherwise retain baseline",
+    "refit_after_selection": "refit selected arm on 1980-2015 calibration period under the same frozen specification",
+    "outer_score": "score 2016-2022 exactly once",
+    "outer_response_never_used_for_selection": true
+  },
+  "estimability_gates": {
+    "minimum_unique_cells_each_partition": 20,
+    "minimum_positive_rows_each_partition": 20,
+    "minimum_negative_rows_each_partition": 20,
+    "minimum_years_each_partition": 3
+  },
+  "forbidden_after_response_access": [
+    "change focal taxon",
+    "change year split",
+    "change geometry thresholds or their quantile algorithm",
+    "change learner family or hyperparameters to rescue outcome",
+    "change selector criterion",
+    "change response semantics",
+    "rerun outer heldout after terminal scoring"
+  ],
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
