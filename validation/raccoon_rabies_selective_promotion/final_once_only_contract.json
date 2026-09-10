@@ -1,0 +1,120 @@
+{
+  "schema": "eog.raccoon_rabies_selective_promotion.final_once_only_contract.v1",
+  "attempt_id": "raccoon_rabies_selective_promotion_v1",
+  "frozen_before_response_access": true,
+  "response": {
+    "file": "SurveillanceData.csv",
+    "exact_size": 4391345,
+    "md5": "3b4e34f30462176ceb73736da22b6290",
+    "single_full_payload_fetch_allowed": true,
+    "public_semantics": "rows provide raccoon rabies positive and negative surveillance counts by grid/site, season, year and surveillance method",
+    "required_fields_and_accepted_names": {
+      "site": ["Site", "site", "Grid", "GridID", "grid_id"],
+      "year": ["Year", "year"],
+      "season": ["Season", "season"],
+      "method": ["Method", "method", "SurveillanceMethod", "SurvMethod", "surveillance_method"],
+      "positive_count": ["Positive", "positive", "Pos", "pos", "PositiveCount", "NPos", "RabiesPositive"],
+      "negative_count": ["Negative", "negative", "Neg", "neg", "NegativeCount", "NNeg", "RabiesNegative"]
+    },
+    "schema_mismatch_is_terminal_stop": true
+  },
+  "response_unit": {
+    "unit": "site-year-season aggregated across surveillance methods",
+    "eligible": "total sampled raccoons (positive + negative) > 0",
+    "binary_outcome": "1 if summed positive_count > 0, otherwise 0",
+    "effort": "summed positive_count + negative_count",
+    "method_mix_features": "for each publicly described surveillance method column/category, proportion of sampled raccoons contributed by that method; category vocabulary is discovered only after response access and is represented deterministically by sorted method strings without outcome-based selection"
+  },
+  "partition": {
+    "unit": "site",
+    "hash": "int(SHA256(UTF8(str(site)))[:16],16) % 10",
+    "inner_train_bins": [0,1,2,3,4,5],
+    "inner_validation_bins": [6,7],
+    "outer_heldout_bins": [8,9],
+    "outer_outcomes_used_for_selection": false,
+    "site_never_crosses_partition": true
+  },
+  "chronology": {
+    "order": "ascending numeric year then deterministic normalized season order",
+    "season_order": ["spring-summer", "spring/summer", "spring", "summer", "fall-winter", "fall/winter", "fall", "winter"],
+    "unknown_season_string_rule": "lexicographic order after known normalized labels; no post-response edit",
+    "layer_b_sources_for_target": "positive eligible units from strictly earlier chronological contexts only"
+  },
+  "geometry": {
+    "source": "response-blind CovariateData.csv with 257 unique Site/Latitude/Longitude rows",
+    "distance": "haversine kilometres",
+    "local_thresholds": "q10,q25,q50,q75 of all finite nonzero pairwise site distances, calculated without response values",
+    "worlds": ["q10", "q25", "q50", "q75", "external_open"],
+    "external_open_support": 1
+  },
+  "baseline": {
+    "site_features": ["Longitude", "Latitude", "ORV", "Cult", "DFMF", "EVF", "Hay", "MedHi", "OpenLow", "WT"],
+    "context_features": ["year_scaled", "season_sin", "season_cos", "log1p_total_sampled"],
+    "method_mix": "all sorted method categories as proportions, fixed deterministically from the response schema/data after the single access; no feature selection by association with outcome"
+  },
+  "layer_b": {
+    "implementation": "source-symmetric world-support summary",
+    "feature_names": ["surviving_world_fraction", "support_mean", "support_std", "support_min", "support_max", "support_q25", "support_q50", "support_q75", "positive_support_fraction", "support_range"],
+    "source_weighting": "equal across eligible past positive source sites",
+    "source_label_invariant": true,
+    "world_label_invariant": true,
+    "static_reuse_across_contexts": false,
+    "no_positive_sources_rule": "all ten Layer-B features are zero",
+    "inner_validation_sources": "inner-train positive units from prior contexts only",
+    "outer_sources": "all calibration (inner-train + inner-validation) positive units from prior contexts only",
+    "outer_response_never_used_as_source": true
+  },
+  "learner": {
+    "family": "sklearn.ensemble.RandomForestClassifier",
+    "numpy": "2.1.3",
+    "scikit_learn": "1.5.2",
+    "n_estimators": 500,
+    "min_samples_leaf": 5,
+    "max_features": "sqrt",
+    "class_weight": null,
+    "random_state": 20260910,
+    "n_jobs": 1,
+    "paired_arms_identical_except_layer_b": true
+  },
+  "selector": {
+    "metric": "macro binary log loss across inner-validation sites",
+    "rule": "promote Layer B iff augmented inner-validation macro log loss is strictly lower than baseline",
+    "decision_before_outer_scoring": true,
+    "refit_after_selection": "refit both candidate arms on all calibration units, then score baseline, always-augmented and selected arm on untouched outer sites"
+  },
+  "estimability_minima": {
+    "inner_train_positive_units": 30,
+    "inner_train_negative_units": 30,
+    "inner_validation_positive_units": 10,
+    "inner_validation_negative_units": 10,
+    "outer_positive_units": 10,
+    "outer_negative_units": 10,
+    "inner_validation_sites_with_both_classes": 5,
+    "outer_sites_with_both_classes": 5
+  },
+  "primary": {
+    "metric": "macro binary log loss across outer-heldout sites",
+    "estimand": "selected_arm_minus_baseline",
+    "favorable_predictive_improvement": "delta < 0",
+    "protective_null": "delta == 0 because baseline was preselected",
+    "adverse_selective_promotion": "delta > 0",
+    "conservative_miss": "baseline preselected but always-augmented outer log loss is lower"
+  },
+  "hard_rules": {
+    "one_response_access": true,
+    "schema_or_estimability_failure_is_terminal": true,
+    "post_response_parser_repair": false,
+    "post_response_partition_change": false,
+    "post_response_baseline_change": false,
+    "post_response_layer_b_change": false,
+    "post_response_selector_change": false,
+    "post_response_threshold_retune": false,
+    "rerun_after_consumption": false
+  },
+  "interpretation": {
+    "known_truth_translation_supported_only_if": "selected arm has strictly lower outer macro log loss than baseline",
+    "protective_null": "selector transferred harm-avoidance but not real predictive improvement",
+    "closed_eog_wf_unchanged": true,
+    "no_universal_claim": true
+  }
+}

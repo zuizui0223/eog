@@ -1,0 +1,56 @@
+{
+  "schema": "eog.raccoon_rabies_selective_promotion.source_selection.v1",
+  "attempt_id": "raccoon_rabies_selective_promotion_v1",
+  "purpose": "Fresh response-blind real-system validation of calibration-only selective promotion without a post-response taxon-selection step.",
+  "source": {
+    "provider": "Zenodo mirror of Dryad dataset",
+    "zenodo_record_id": "5009339",
+    "dryad_doi": "10.5061/dryad.v23517k",
+    "title": "Not all surveillance data are created equal – a multi-method dynamic occupancy approach to determine rabies elimination from wildlife"
+  },
+  "independent_target_definition": {
+    "target": "raccoon rabies occurrence",
+    "unit_if_future_gates_pass": "site-season surveillance unit",
+    "binary_response": "1 when prospectively identified rabies-positive count for the site-season is greater than zero; 0 when sampled raccoons are present but positive count is zero",
+    "basis": "dataset description and associated study define the response as positive and negative raccoon rabies surveillance; no species-name choice will be made from response values"
+  },
+  "public_file_expectations": {
+    "CovariateData.csv": {
+      "role": "response-blind site geometry and site covariates",
+      "md5": "386c0498ace1dd9929c69119354dd7ae",
+      "approx_size_bytes": 27200
+    },
+    "SurveillanceData.csv": {
+      "role": "biological response plus survey effort; forbidden before final freeze",
+      "md5": "3b4e34f30462176ceb73736da22b6290",
+      "approx_size_bytes": 4400000
+    }
+  },
+  "gate0": {
+    "authorized": ["one Zenodo record-metadata GET", "file names, sizes, checksums and content links only"],
+    "file_payload_requests_allowed": 0,
+    "csv_header_bytes_allowed": 0,
+    "csv_rows_allowed": 0
+  },
+  "response_firewall": {
+    "SurveillanceData.csv_payload_allowed": false,
+    "SurveillanceData.csv_header_allowed": false,
+    "positive_negative_counts_allowed": false,
+    "season_year_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "scientific_boundary": {
+    "closed_eog_wf_unchanged": true,
+    "neon_stop_not_reclassified": true,
+    "selector_information_boundary": "inner calibration only",
+    "outer_heldout_feedback_for_selection": false,
+    "success_question": "Does the frozen calibration-only selector yield strictly lower untouched outer macro log loss than baseline in this genuinely new ecological surveillance system?"
+  },
+  "no_rescue": [
+    "Do not open SurveillanceData.csv before geometry, response parsing, partition, model, Layer-B and selector contracts are frozen.",
+    "Do not redefine the target after response access.",
+    "Do not change source version or substitute files after a live failure in this attempt.",
+    "Do not treat metadata/schema/estimability STOP as predictive evidence."
+  ]
+}

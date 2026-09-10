@@ -1,0 +1,16 @@
+name: Raccoon rabies selective-promotion once-only endpoint (consumed)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  consumed:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse re-execution
+        run: |
+          echo 'raccoon_rabies_selective_promotion_v1 is consumed; authoritative run 34471565927 ended in response-schema STOP.'
+          exit 1

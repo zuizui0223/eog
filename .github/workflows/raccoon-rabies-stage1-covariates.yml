@@ -1,0 +1,44 @@
+name: Raccoon rabies selective-promotion Stage1 covariates
+on:
+  push:
+    branches: [fresh/raccoon-rabies-selective-promotion-v1]
+    paths:
+      - 'validation/raccoon_rabies_selective_promotion/stage1_covariate_contract.json'
+      - 'validation/raccoon_rabies_selective_promotion/stage1_covariates.py'
+      - '.github/workflows/raccoon-rabies-stage1-covariates.yml'
+permissions:
+  contents: read
+jobs:
+  stage1:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Verify frozen Stage1 firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/raccoon_rabies_selective_promotion/stage1_covariate_contract.json').read_text())
+          assert p['forbidden_payload']['file']=='SurveillanceData.csv'
+          assert p['forbidden_payload']['requests_allowed']==0
+          assert p['modeling']['model_fits_allowed']==0
+          PY
+      - name: Execute covariate-only Stage1
+        run: python validation/raccoon_rabies_selective_promotion/stage1_covariates.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/raccoon_rabies_selective_promotion/stage1_covariates.json').read_text())
+          assert p['status'] in {'stage1_covariates_ready_for_final_freeze','stop_pre_response_covariate_schema_or_transport'}
+          assert p['response_requests']==0 and p['response_header_bytes_opened']==0 and p['response_rows_opened']==0
+          assert p['response_values_opened'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: raccoon-rabies-stage1-covariates
+          path: build/raccoon_rabies_selective_promotion/stage1_covariates.json
+          if-no-files-found: error

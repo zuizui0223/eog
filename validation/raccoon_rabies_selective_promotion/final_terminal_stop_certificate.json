@@ -1,0 +1,53 @@
+{
+  "schema": "eog.raccoon_rabies_selective_promotion.final_terminal_stop_certificate.v1",
+  "attempt_id": "raccoon_rabies_selective_promotion_v1",
+  "terminal_status": "stop_post_response_schema_mismatch",
+  "counts_as_predictive_evidence": false,
+  "known_truth_translation_to_real_improvement": "not_evaluated",
+  "authoritative_run": {
+    "run_id": 34471565927,
+    "job_id": 102852427685,
+    "head_sha": "1443d6691331bea28cb26428a22a06500094a32d",
+    "artifact_id": 10149731048,
+    "artifact_zip_sha256": "d8034e0a65b1572cd880dd466dec4e86454d553f4269557d9bfa45b23a99c859"
+  },
+  "response_access": {
+    "file": "SurveillanceData.csv",
+    "payload_requests": 1,
+    "payload_bytes_opened": 4391345,
+    "response_values_opened": true,
+    "attempt_consumed": true
+  },
+  "observed_header": [
+    "Site",
+    "Season",
+    "Year",
+    "Number of Samples",
+    "Number of rabies positive samples",
+    "Surveillance Method"
+  ],
+  "frozen_alias_resolution": {
+    "site": "Site",
+    "year": "Year",
+    "season": "Season",
+    "method": null,
+    "positive_count": null,
+    "negative_count": null
+  },
+  "reason": "The frozen accepted-name vocabulary did not contain the actual spaced column labels for Surveillance Method and Number of rabies positive samples, and the frozen design incorrectly assumed a separate negative-count field rather than deriving negatives as Number of Samples minus Number of rabies positive samples. Because the full response payload was already opened, repairing these aliases or response algebra would be post-response protocol repair and is forbidden.",
+  "modeling": {
+    "model_fits_completed": 0,
+    "promotion_decision_made": false,
+    "outer_scores_computed": false
+  },
+  "interpretation": "This is a consumed response-schema STOP, not favorable, protective-null, conservative-miss, or adverse selective-promotion evidence. The fresh real-system translation of the known-truth selector remains untested.",
+  "no_rescue": [
+    "do not add observed response column aliases within this attempt",
+    "do not redefine negative count as total samples minus positives within this attempt",
+    "do not rerun the consumed response endpoint",
+    "do not alter partition, Layer B, learner or selector",
+    "do not count this STOP as predictive evidence",
+    "do not alter the closed EOG-WF synthesis"
+  ],
+  "next_action": "For a genuinely new source only, require an independently published exact response header or data dictionary and freeze response algebra from that documentation before any response payload access."
+}
