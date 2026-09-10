@@ -1,0 +1,55 @@
+name: NEON camera selective-promotion Stage1 nonresponse
+
+on:
+  push:
+    branches:
+      - fresh/neon-camera-selective-promotion-v1
+    paths:
+      - 'validation/neon_camera_selective_promotion/stage1_nonresponse_contract.json'
+      - 'validation/neon_camera_selective_promotion/stage1_nonresponse.py'
+      - '.github/workflows/neon-camera-stage1-nonresponse.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  stage1:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen Stage1 boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/neon_camera_selective_promotion/stage1_nonresponse_contract.json').read_text())
+          assert set(p['authorized_payloads']) == {'camera_trap_deployments.csv','subproject_descriptions.csv'}
+          assert p['forbidden_payloads']['camera_trap_sequences.csv']['payload_requests_allowed'] == 0
+          assert p['forbidden_payloads']['camera_trap_sequences.csv']['header_bytes_allowed'] == 0
+          assert p['modeling_boundary']['model_fits_allowed'] == 0
+          assert p['modeling_boundary']['heldout_scores_allowed'] == 0
+          PY
+      - name: Execute nonresponse Stage1
+        run: python validation/neon_camera_selective_promotion/stage1_nonresponse.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/neon_camera_selective_promotion/stage1_nonresponse.json').read_text())
+          assert p['status'] in {'stage1_nonresponse_ready_for_target_and_split_freeze','stop_pre_response_nonresponse_schema_or_transport'}
+          assert p['response_file_requests'] == 0
+          assert p['response_header_bytes_opened'] == 0
+          assert p['response_rows_opened'] == 0
+          assert p['biological_response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: neon-camera-stage1-nonresponse
+          path: build/neon_camera_selective_promotion/stage1_nonresponse.json
+          if-no-files-found: error
