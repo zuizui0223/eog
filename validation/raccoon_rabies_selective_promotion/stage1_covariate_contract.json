@@ -1,0 +1,27 @@
+{
+  "schema": "eog.raccoon_rabies_selective_promotion.stage1_covariate_contract.v1",
+  "attempt_id": "raccoon_rabies_selective_promotion_v1",
+  "prerequisite": "gate0_metadata_ready_for_covariate_freeze",
+  "authorized_payload": {
+    "file": "CovariateData.csv",
+    "exact_size": 27157,
+    "md5": "386c0498ace1dd9929c69119354dd7ae",
+    "max_requests": 1,
+    "allowed_use": ["read schema and all rows", "recover site identifier, latitude, longitude and nonresponse site covariates", "compute response-blind geometry thresholds and site-hash partition feasibility"]
+  },
+  "forbidden_payload": {
+    "file": "SurveillanceData.csv",
+    "requests_allowed": 0,
+    "header_bytes_allowed": 0,
+    "rows_allowed": 0,
+    "positive_negative_values_allowed": false,
+    "season_year_values_allowed": false
+  },
+  "required_geometry_semantics": {
+    "site_id": "a stable site/grid identifier must exist",
+    "latitude": "numeric latitude must exist",
+    "longitude": "numeric longitude must exist"
+  },
+  "modeling": {"model_fits_allowed": 0, "heldout_scores_allowed": 0, "selector_allowed": false},
+  "no_rescue": ["STOP if exact file identity drifts", "STOP if required geometry columns cannot be identified without inspecting SurveillanceData.csv", "do not open SurveillanceData.csv in Stage1"]
+}
