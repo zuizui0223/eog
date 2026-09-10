@@ -1,0 +1,48 @@
+{
+  "schema": "eog.snapshot_usa_selective_promotion.stage1b_deployment_contract.v1",
+  "attempt_id": "snapshot_usa_selective_promotion_v1",
+  "parent_stage1a_fingerprint": "0af14f4bd6490045fdb40860265491dc6485cd71a0c833e4ac602d537a5ab970",
+  "authorized_deployment_url": "https://datadryad.org/downloads/file_stream/4016828",
+  "authorized_filename": "ssusa_finaldeployments.csv",
+  "authorized_operation": "exactly one full GET of the response-independent deployment CSV",
+  "deployment_payload_requests_allowed": 1,
+  "sequence_payload_requests_allowed": 0,
+  "sequence_header_bytes_allowed": 0,
+  "response_values_allowed": false,
+  "required_header": [
+    "Year","Project","Camera_Trap_Array","Site_Name","Deployment_ID","Start_Date","End_Date","Survey_Nights","Latitude","Longitude","Habitat","Development_Level","Feature_Type"
+  ],
+  "allowed_years": [2019,2020,2021,2022,2023],
+  "row_validity": {
+    "Year": "integer in allowed_years",
+    "Camera_Trap_Array": "non-empty after strip",
+    "Site_Name": "non-empty after strip",
+    "Deployment_ID": "non-empty after strip",
+    "Survey_Nights": "strictly positive finite number",
+    "Latitude": "finite number in [-90,90]",
+    "Longitude": "finite number in [-180,180]",
+    "Start_Date_End_Date": "ISO YYYY-MM-DD and End_Date >= Start_Date"
+  },
+  "focal_array_rule": {
+    "normalization": "strip surrounding whitespace; preserve case and internal characters",
+    "eligible": "array represented in every year 2019-2023 with >=7 distinct normalized Site_Name values in every year",
+    "rank_1": "descending minimum annual distinct-site count",
+    "rank_2": "descending total Survey_Nights across all rows and five years",
+    "rank_3": "ascending lexicographic normalized Camera_Trap_Array",
+    "select_exactly_one": true
+  },
+  "outputs_allowed": [
+    "deployment physical identity and MD5/SHA256",
+    "validated deployment row count",
+    "eligible-array count",
+    "selected focal array",
+    "selected array response-independent annual site counts, survey nights, dates, coordinates and structural metadata",
+    "fingerprints"
+  ],
+  "target_species_selection_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "if_no_unique_selected_array": "terminal pre-response structural STOP",
+  "next_if_pass": "freeze focal array, node identity/geometry, temporal observation grid, Layer-A worlds, baseline features, target species rule and response-header contract before any sequence bytes",
+  "counts_as_predictive_evidence": false
+}
