@@ -1,0 +1,30 @@
+{
+  "schema": "eog.aotus_selective_promotion.stage0_terminal_stop.v1",
+  "attempt_id": "aotus_selective_promotion_v1",
+  "terminal_status": "stop_pre_response_geometry_or_registry",
+  "reason": "Frozen nonresponse blobs contain only 5 distinct camera IDs and 5 coordinate-bearing tree nodes, below the prospectively frozen minimum of 12 distinct camera nodes.",
+  "nonresponse_evidence": {
+    "camera_dates_blob_sha": "0a8d94b01e12c45e1b0becc15bcf509fb844fdf9",
+    "tree_coordinates_blob_sha": "5da0d551ad13ed73ff40712c2fc4ada473ad75a8",
+    "distinct_camera_ids": 5,
+    "distinct_tree_nodes": 5,
+    "minimum_required_nodes": 12,
+    "deployment_period": ["2023-08-09", "2024-11-28"]
+  },
+  "response_firewall": {
+    "response_blob_sha": "961bc92f0d1e65a3146bd1ba15f0e9aeec3d2b32",
+    "response_blob_requests": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "counts_as_predictive_evidence": false,
+  "no_rescue": [
+    "do not lower the frozen 12-node minimum",
+    "do not invent additional spatial nodes from response data",
+    "do not open the Aotus detection blob within this attempt"
+  ],
+  "changes_closed_eog_wf_synthesis": false
+}
