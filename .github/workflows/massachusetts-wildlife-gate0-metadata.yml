@@ -1,0 +1,54 @@
+name: Massachusetts wildlife selective-promotion Gate0 metadata
+
+on:
+  push:
+    branches:
+      - fresh/massachusetts-wildlife-selective-promotion-v1
+    paths:
+      - "validation/massachusetts_wildlife_selective_promotion/**"
+      - "tests/test_massachusetts_wildlife_gate0.py"
+      - ".github/workflows/massachusetts-wildlife-gate0-metadata.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package and test runtime
+        run: python -m pip install -e . pytest
+      - name: Verify frozen response firewall
+        run: pytest -q tests/test_massachusetts_wildlife_gate0.py
+      - name: Execute metadata-only Gate0
+        run: python validation/massachusetts_wildlife_selective_promotion/gate0_metadata.py
+      - name: Audit zero-payload boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/massachusetts_wildlife_selective_promotion/gate0_metadata.json').read_text())
+          assert p['status'] in {
+              'gate0_metadata_ready_for_schema_freeze',
+              'stop_pre_response_metadata_identity_or_transport',
+          }
+          assert p['metadata_only'] is True
+          assert p['file_payload_requests'] == 0
+          assert p['file_payload_bytes_opened'] == 0
+          assert p['csv_header_bytes_opened'] == 0
+          assert p['csv_rows_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          assert p['counts_as_predictive_evidence'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: massachusetts-wildlife-gate0-metadata
+          path: build/massachusetts_wildlife_selective_promotion/gate0_metadata.json
+          if-no-files-found: error
