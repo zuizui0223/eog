@@ -1,0 +1,46 @@
+{
+  "schema": "eog.aotus_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "aotus_selective_promotion_v1",
+  "scientific_role": "fresh real-system screen for calibration-only selective promotion of EOG contextual representation",
+  "source_identity": {
+    "repository": "claudiavigan/Publication_Aotus",
+    "repository_default_branch": "main",
+    "study_title": "Flower feeding and reproductive timing in Spix's night monkeys (Aotus vociferans): evidence from arboreal camera traps",
+    "focal_taxon_scientific_name": "Aotus vociferans",
+    "nonresponse_blobs": {
+      "CameraTrapDates.csv": {"sha": "0a8d94b01e12c45e1b0becc15bcf509fb844fdf9", "size": 257},
+      "Trees_Reconyx.csv": {"sha": "5da0d551ad13ed73ff40712c2fc4ada473ad75a8", "size": 205}
+    },
+    "response_blob": {
+      "path": "data/raw/Aotus_Independent_detections_01.csv",
+      "sha": "961bc92f0d1e65a3146bd1ba15f0e9aeec3d2b32",
+      "size": 30719
+    }
+  },
+  "selection_boundary": {
+    "selected_before_response_blob_access": true,
+    "focal_taxon_basis": "README/manuscript title fixes Aotus vociferans independently of detection counts",
+    "response_blob_header_or_rows_opened": false,
+    "response_values_used_for_selection": false
+  },
+  "stage0_nonresponse_access": {
+    "authorized_blobs": ["0a8d94b01e12c45e1b0becc15bcf509fb844fdf9", "5da0d551ad13ed73ff40712c2fc4ada473ad75a8"],
+    "response_blob_requests_allowed": 0,
+    "response_header_bytes_allowed": 0,
+    "response_values_allowed": false,
+    "minimum_distinct_camera_nodes": 12,
+    "minimum_unique_iso_weeks": 15,
+    "minimum_positive_pairwise_distances": 20,
+    "required_pre_response_capabilities": ["stable camera/node identifiers", "deployment start/end intervals", "coordinates for camera/tree nodes"]
+  },
+  "prospective_if_qualified": {
+    "unit": "active camera-node by ISO week",
+    "split": "chronological unique weeks: earliest floor(60%) inner_train, next through floor(80%) inner_validation, latest 20% untouched outer",
+    "geometry_worlds": "20th/40th/60th/80th percentiles of positive pairwise Haversine distances plus external_open",
+    "selector": "promote baseline_plus_contextual_layer_b iff inner-validation macro binary log loss is strictly lower than baseline-only; otherwise retain baseline",
+    "response_access_requires_full_scientific_freeze_first": true
+  },
+  "if_stage0_stop": "terminal pre-response STOP; do not lower node/time minima or add new coordinate sources within this attempt",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
