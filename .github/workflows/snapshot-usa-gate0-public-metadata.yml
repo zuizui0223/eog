@@ -1,0 +1,57 @@
+name: Snapshot USA selective-promotion Gate0 public metadata
+
+on:
+  push:
+    branches:
+      - fresh/snapshot-usa-selective-promotion-v1
+    paths:
+      - "validation/snapshot_usa_selective_promotion/source_selection_contract.json"
+      - "validation/snapshot_usa_selective_promotion/gate0_execution_authorization.json"
+      - "validation/snapshot_usa_selective_promotion/gate0_public_metadata.py"
+      - ".github/workflows/snapshot-usa-gate0-public-metadata.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify frozen boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/snapshot_usa_selective_promotion/gate0_execution_authorization.json').read_text())
+          assert p['deployment_payload_requests_allowed'] == 0
+          assert p['sequence_payload_requests_allowed'] == 0
+          assert p['response_values_allowed'] is False
+          assert p['model_fits_allowed'] == 0
+          assert p['heldout_scores_allowed'] == 0
+          PY
+      - name: Execute one-shot public metadata Gate0
+        run: python validation/snapshot_usa_selective_promotion/gate0_public_metadata.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/snapshot_usa_selective_promotion/gate0_public_metadata.json').read_text())
+          assert p['status'] in {'gate0_public_metadata_qualified','stop_pre_response_metadata_identity_or_transport'}
+          assert p['deployment_payload_requests'] == 0
+          assert p['sequence_payload_requests'] == 0
+          assert p['sequence_header_bytes_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-usa-gate0-public-metadata
+          path: build/snapshot_usa_selective_promotion/gate0_public_metadata.json
+          if-no-files-found: error
