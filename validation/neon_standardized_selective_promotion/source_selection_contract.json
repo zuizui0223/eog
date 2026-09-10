@@ -1,0 +1,51 @@
+{
+  "schema": "eog.neon_standardized_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "neon_standardized_selective_promotion_v1",
+  "purpose": "fresh real-system validation of calibration-only selective Layer-B promotion",
+  "selection_boundary": {
+    "source": "Standardized camera trapping data from National Ecological Observatory Network (NEON) subprojects and other forest plots",
+    "zenodo_record": 20826511,
+    "zenodo_api": "https://zenodo.org/api/records/20826511",
+    "selection_basis": "public metadata exposes physically separate deployment, response-sequence, and subproject-description CSV files; deployment and response are not co-resident in one table",
+    "target_species_selected": false,
+    "response_counts_used_for_selection": false,
+    "published_effect_direction_used_for_selection": false
+  },
+  "publicly_observed_file_identity": {
+    "camera_trap_deployments.csv": {
+      "role": "response-independent geometry and deployment interval candidate",
+      "md5": "82537cdf0a586fa14c9a8b6afd7be470"
+    },
+    "camera_trap_sequences.csv": {
+      "role": "forbidden biological response before full endpoint freeze",
+      "md5": "7531a5b9fb3848ef33e162d5206a6f43"
+    },
+    "subproject_descriptions.csv": {
+      "role": "response-independent context candidate",
+      "md5": "be1502427995886ef1c64c10410d1ee2"
+    }
+  },
+  "gate0_metadata_only": {
+    "authorized_requests": 1,
+    "authorized_host": "zenodo.org",
+    "authorized_operation": "GET the frozen Zenodo record JSON only",
+    "csv_payload_requests_allowed": 0,
+    "csv_payload_bytes_allowed": 0,
+    "csv_header_bytes_allowed": 0,
+    "csv_rows_allowed": 0,
+    "biological_response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "future_design_boundary": {
+    "outer_heldout_must_be_once_only": true,
+    "promotion_rule_must_be_frozen_from_inner_calibration_only": true,
+    "response_target_and_split_must_be_frozen_before_camera_trap_sequences_payload": true,
+    "no_post_stop_transport_repair_within_attempt": true
+  },
+  "valid_gate0_terminal_statuses": [
+    "gate0_metadata_ready_for_deployment_schema_freeze",
+    "stop_pre_response_metadata_identity_or_transport"
+  ],
+  "counts_as_predictive_evidence": false
+}
