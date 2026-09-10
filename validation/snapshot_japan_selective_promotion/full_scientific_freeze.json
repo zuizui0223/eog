@@ -1,0 +1,103 @@
+{
+  "schema": "eog.snapshot_japan_selective_promotion.full_scientific_freeze.v1",
+  "attempt_id": "snapshot_japan_selective_promotion_v1",
+  "frozen_before_any_sequence_file_header_or_payload": true,
+  "focal_taxon": {"genus": "Sus", "species": "scrofa", "scientific_name": "Sus scrofa"},
+  "unit": "active deployment-ISO-week",
+  "response": {
+    "positive": "at least one sequence with genus exactly Sus and species exactly scrofa at that deployment in that ISO week",
+    "negative": "active deployment-week with no such sequence",
+    "interpretation": "recorded detection/non-detection under camera effort, not biological presence/absence"
+  },
+  "frozen_stage0": {
+    "run_id": 34474881155,
+    "job_id": 102863154662,
+    "deployment_rows": 90,
+    "unique_weeks": 18,
+    "inner_train_week_range": ["2023-08-21", "2023-10-23"],
+    "inner_validation_week_range": ["2023-10-30", "2023-11-20"],
+    "outer_week_range": ["2023-11-27", "2023-12-18"],
+    "active_unit_counts": {"inner_train": 768, "inner_validation": 165, "outer": 40},
+    "local_threshold_km": [147.37825155118338, 225.61579457798882, 420.35038580495046, 576.5385363840609],
+    "external_open": true,
+    "registry_fingerprint": "3307b917a4f800112bce2a3306f005a2591899cbb602e19a87172ceda10aa8ca",
+    "calendar_fingerprint": "65b1e3e3212d7894435718eb31b4b8cceca153d54165b8524b0647e4618551b8"
+  },
+  "baseline_features": {
+    "continuous": ["active_days_in_week", "latitude", "longitude", "chronological_week_index_scaled", "sin_iso_week", "cos_iso_week"],
+    "categorical": ["subproject_name"],
+    "categorical_encoding": "one-hot levels frozen from all deployment-only registry rows; no response-derived level filtering",
+    "missing_policy": "STOP if any required baseline value is unavailable for an eligible unit"
+  },
+  "layer_a": {
+    "declared_worlds": ["local_q20", "local_q40", "local_q60", "local_q80", "external_open"],
+    "initial_survivors": "all five worlds",
+    "state_before_week_t": "uses focal-positive source deployments observed only in weeks strictly earlier than t",
+    "local_world_compatibility_update": "after week t, retain a local world iff every focal-positive deployment newly observed in week t is within that world's frozen threshold of at least one previously accumulated focal-positive source deployment; when no prior source exists, initialize sources without pruning",
+    "external_open_survives": true,
+    "source_accumulation": "union of all focal-positive deployments through completed weeks",
+    "trajectory_certificate_required": true,
+    "exact_world_identity_not_interpreted_as_truth": true
+  },
+  "layer_b": {
+    "representation": "source-symmetric predictive support summary v2",
+    "for_each_week": "compute before seeing that week's response from accumulated prior positive sources and current surviving world set",
+    "source_order_invariant": true,
+    "world_label_invariant_prediction_surface": true,
+    "single_source_anchor_forbidden": true,
+    "static_reuse_across_weeks_forbidden": true,
+    "feature_count": 10,
+    "no_source_state": "constant no-source summary derived only from current surviving world count and external-open support",
+    "predictive_signature_gate": "apply existing v2 saturated-static-identity gate before fitting augmented arm; if blocked, terminal structural-only STOP, not predictive evidence"
+  },
+  "learner": {
+    "class": "sklearn.ensemble.RandomForestClassifier",
+    "n_estimators": 500,
+    "min_samples_leaf": 5,
+    "max_features": "sqrt",
+    "class_weight": null,
+    "random_state": 20260910,
+    "n_jobs": 1,
+    "probability_clip": 1e-06
+  },
+  "estimability_minima": {
+    "inner_train_positive_units": 25,
+    "inner_train_negative_units": 100,
+    "inner_validation_positive_units": 5,
+    "inner_validation_negative_units": 20,
+    "outer_positive_units": 3,
+    "outer_negative_units": 10,
+    "inner_validation_weeks_with_both_classes": 2,
+    "outer_weeks_with_both_classes": 1
+  },
+  "inner_selection": {
+    "fit": "fit baseline and augmented on inner_train only",
+    "score": "macro over inner-validation ISO weeks of binary log loss; within validation, contextual state may update only after each scored week using that completed week's response; learners do not refit",
+    "promotion_rule": "promote augmented iff augmented macro log loss is strictly less than baseline macro log loss",
+    "tie": "retain baseline",
+    "outer_never_used_for_selection": true
+  },
+  "outer_evaluation": {
+    "refit": "after selection, fit both baseline and always-augmented diagnostic models on inner_train plus inner_validation; selected policy uses the frozen selected arm",
+    "sequential_context": "outer week contextual representation may assimilate responses from earlier completed outer weeks only after those weeks are scored; no learner refit during outer",
+    "primary_score": "macro over outer ISO weeks of binary log loss",
+    "secondary_scores": ["pooled binary log loss", "Brier score", "week-level win counts"],
+    "score_once": true
+  },
+  "terminal_classification": {
+    "promoted_outer_favorable": "inner selector promotes augmented and augmented outer macro log loss < baseline outer macro log loss",
+    "promoted_outer_adverse": "inner selector promotes augmented and augmented outer macro log loss > baseline outer macro log loss",
+    "promoted_outer_tie": "inner selector promotes augmented and outer macro losses equal",
+    "baseline_retained_protective": "inner selector retains baseline and always-augmented outer macro log loss >= baseline outer macro log loss",
+    "baseline_retained_missed_benefit": "inner selector retains baseline but always-augmented outer macro log loss < baseline outer macro log loss",
+    "predictive_improvement_translation_supported": "true only for promoted_outer_favorable",
+    "selective_policy_protection_supported": "true only for baseline_retained_protective",
+    "automatic_layer_b_improvement_claim_allowed": false
+  },
+  "hard_boundaries": [
+    "No target, split, threshold, feature, learner, promotion rule, estimability minimum or terminal definition may change after response access.",
+    "No second response run or outer-score rerun is allowed.",
+    "A response-schema or estimability STOP is not predictive evidence.",
+    "This fresh selective-promotion validation does not reopen or alter the closed three-endpoint EOG-WF synthesis."
+  ]
+}
