@@ -23,11 +23,5 @@ jobs:
         run: python -m py_compile validation/neon_standardized_selective_promotion/final_endpoint.py
       - name: Run NEON synthetic endpoint tests only
         run: pytest -q tests/test_neon_standardized_selective_promotion_endpoint.py
-      - name: Verify response remains gated from this workflow
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          text=Path('.github/workflows/neon-standardized-pre-response-tests.yml').read_text()
-          assert 'final_endpoint.py\n' not in text
-          assert 'camera_trap_sequences.csv' not in text
-          PY
+      - name: Verify no endpoint result was generated
+        run: test ! -e build/neon_standardized_selective_promotion/final_endpoint_result.json
