@@ -1,0 +1,80 @@
+{
+  "schema": "eog.snapshot_japan_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "snapshot_japan_selective_promotion_v1",
+  "scientific_role": "fresh real-system validation of calibration-only selective promotion of EOG contextual representation",
+  "source_identity": {
+    "article_doi": "10.3897/BDJ.13.e141168",
+    "deployment_supplement_doi": "10.3897/BDJ.13.e141168.suppl1",
+    "deployment_zenodo_record_id": 15030965,
+    "deployment_file_name": "oo_1202827.csv",
+    "deployment_file_md5": "9ee54945758d9d146badd3aeb17a7923",
+    "response_supplement_doi": "10.3897/BDJ.13.e141168.suppl2",
+    "response_file_name": "oo_1165478.csv",
+    "public_counts": {
+      "deployments": 90,
+      "trap_nights": 6162,
+      "arrays": 9,
+      "sequence_rows_including_blanks_and_nontarget": 18027
+    }
+  },
+  "selection_boundary": {
+    "selected_before_any_response_payload_or_header_access": true,
+    "focal_taxon_genus": "Sus",
+    "focal_taxon_species": "scrofa",
+    "focal_taxon_scientific_name": "Sus scrofa",
+    "selection_basis": "The published article reports wild boar as the most detected non-human mammal: 2580 individual detections, present at 67 locations and all 9 arrays.",
+    "response_frequency_used_only_from_published_summary_not_sequence_payload": true,
+    "response_file_header_or_rows_opened": false
+  },
+  "published_response_semantics_frozen_before_payload": {
+    "join_key": "deployment_id",
+    "time_field": "start_time",
+    "blank_field": "is_blank",
+    "genus_field": "genus",
+    "species_field": "species",
+    "positive_definition": "eligible active deployment-ISO-week has at least one sequence whose genus is Sus and species is scrofa",
+    "negative_definition": "eligible active deployment-ISO-week has no such sequence; interpreted as no recorded detection under camera effort, not biological absence"
+  },
+  "stage0_deployment_only": {
+    "allowed_payload": "oo_1202827.csv only",
+    "response_payload_requests_allowed": 0,
+    "response_header_bytes_allowed": 0,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0,
+    "required_deployment_columns": ["deployment_id", "latitude", "longitude", "start_date", "end_date", "subproject_name"],
+    "minimum_deployments": 80,
+    "minimum_unique_iso_weeks": 10,
+    "minimum_active_deployments_per_split": 20
+  },
+  "prospective_temporal_split_rule": {
+    "unit": "active deployment by ISO week",
+    "week_enumeration": "derive all unique ISO weeks intersecting deployment start-end intervals using deployment payload only",
+    "ordering": "chronological",
+    "inner_train": "earliest floor(0.60 * n_unique_weeks) weeks",
+    "inner_validation": "next weeks through floor(0.80 * n_unique_weeks)",
+    "outer_heldout": "remaining latest weeks",
+    "outer_never_used_for_arm_selection": true
+  },
+  "geometry_world_rule": {
+    "node": "deployment_id with frozen latitude/longitude",
+    "distance": "haversine kilometres",
+    "four_local_thresholds": "20th, 40th, 60th, and 80th percentiles of positive pairwise inter-node distances, computed deployment-only and frozen before response access",
+    "external_open_world": true,
+    "no_response_derived_geometry_filtering": true
+  },
+  "selective_promotion_rule": {
+    "candidate_arms": ["baseline_only", "baseline_plus_contextual_layer_b"],
+    "promotion": "promote contextual Layer B only if frozen inner-validation macro binary log loss is strictly lower than baseline-only; otherwise retain baseline-only",
+    "selected_arm_refit": "refit selected arm on inner_train plus inner_validation under the same frozen learner, then score outer once",
+    "layer_a_trajectory_persistence_required": true,
+    "outer_response_rerun_forbidden": true
+  },
+  "response_firewall": {
+    "oo_1165478_csv_payload_forbidden_until_full_freeze": true,
+    "oo_1165478_csv_header_forbidden_until_separate_authorization": true,
+    "no_target_or_split_retuning_after_response_access": true
+  },
+  "if_stage0_stop": "terminal pre-response STOP; no source, target, split, transport or geometry rescue within this attempt",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
