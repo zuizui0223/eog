@@ -1,0 +1,50 @@
+name: NEON standardized selective-promotion Stage1 response-blind
+
+on:
+  push:
+    branches:
+      - fresh/neon-standardized-selective-promotion-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stage1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen Stage1 boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/neon_standardized_selective_promotion/stage1_response_blind_contract.json').read_text())
+          assert set(p['authorized_payloads']) == {'camera_trap_deployments.csv','subproject_descriptions.csv'}
+          assert set(p['forbidden_payloads']) == {'camera_trap_sequences.csv'}
+          assert p['post_stage1_retuning'] is False
+          PY
+      - name: Execute response-blind Stage1
+        run: python validation/neon_standardized_selective_promotion/stage1_response_blind.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/neon_standardized_selective_promotion/stage1_response_blind.json').read_text())
+          assert r['status'] in {'stage1_response_blind_ready_for_endpoint_freeze','stop_pre_response_stage1_transport_schema_or_geometry'}
+          assert r['response_payload_requests'] == 0
+          assert r['response_payload_bytes_opened'] == 0
+          assert r['biological_response_values_opened'] is False
+          assert r['model_fits'] == 0
+          assert r['heldout_scores'] == 0
+          assert r['counts_as_predictive_evidence'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: neon-standardized-stage1-response-blind
+          path: build/neon_standardized_selective_promotion/stage1_response_blind.json
+          if-no-files-found: error
