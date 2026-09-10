@@ -1,0 +1,55 @@
+name: Snapshot Japan selective-promotion Stage1 response identity
+
+on:
+  push:
+    branches:
+      - fresh/snapshot-japan-selective-promotion-v1
+    paths:
+      - validation/snapshot_japan_selective_promotion/stage1_response_identity_contract.json
+      - validation/snapshot_japan_selective_promotion/stage1_response_identity.py
+      - .github/workflows/snapshot-japan-stage1-response-identity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  stage1:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen metadata-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/snapshot_japan_selective_promotion/stage1_response_identity_contract.json').read_text())
+          a=p['authorized_access']
+          assert a['metadata_requests_max'] == 1
+          assert a['response_file_requests_allowed'] == 0
+          assert a['response_header_bytes_allowed'] == 0
+          assert a['response_payload_bytes_allowed'] == 0
+          PY
+      - name: Resolve frozen DOI metadata only
+        run: python validation/snapshot_japan_selective_promotion/stage1_response_identity.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/snapshot_japan_selective_promotion/stage1_response_identity.json').read_text())
+          assert p['status'] in {'stage1_response_identity_resolved','stop_pre_response_source_identity_or_transport'}
+          assert p['response_file_requests'] == 0
+          assert p['response_header_bytes_opened'] == 0
+          assert p['response_payload_bytes_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-japan-stage1-response-identity
+          path: build/snapshot_japan_selective_promotion/stage1_response_identity.json
+          if-no-files-found: error
