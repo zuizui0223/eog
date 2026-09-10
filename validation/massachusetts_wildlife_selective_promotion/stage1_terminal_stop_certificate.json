@@ -1,0 +1,50 @@
+{
+  "schema": "eog.massachusetts_wildlife_selective_promotion.stage1_terminal_stop.v1",
+  "attempt_id": "massachusetts_wildlife_selective_promotion_v1",
+  "status": "stop_pre_response_safe_effort_schema_contaminated_by_biological_response",
+  "terminal_stage": "dictionary_only_schema_audit",
+  "reason": "The only released table that links visit time, monitoring location and equipment is visits.csv, but the frozen dictionary also defines visits.track_sign as a comma-separated list of species whose tracks/signs were detected near the camera. Opening visits.csv would therefore open biological response values before target/split/model freeze, even if that column were ignored downstream.",
+  "authoritative_stage0": {
+    "run_id": 34452788388,
+    "job_id": 102792144919,
+    "artifact_id": 10142217859,
+    "artifact_zip_sha256": "c151dcd3aa16e64a8379db476ef932436d93ac4b03f53baf11151ac639d3b19c",
+    "gate0_fingerprint": "bd61b9cc06424397ed27e0b587b1cb783f03727ee238dce8761cf949954efaef"
+  },
+  "authoritative_stage1": {
+    "run_id": 34453095082,
+    "job_id": 102793121872,
+    "artifact_id": 10142327824,
+    "artifact_zip_sha256": "458104ecacc3072ebb11f518e4307b0d3683f34e01e6124895bba4423e746db3"
+  },
+  "dictionary_evidence": {
+    "dictionary_header": ["pk_tablename","pk_fieldname","core","var_type","not_null_clause","pk","foreign_key_table","foreign_key_field","on_update","on_delete","shiny_placeholder","shiny_input","default_value","fk_listid","sb_include","min","max","sort_order","description"],
+    "dictionary_row_count": 414,
+    "locations_geometry_fields": ["pk_locationid","spatial_geometry","location_type","lat","long","datum","x","y","epsg","long_min","long_max","lat_min","lat_max"],
+    "visits_required_safe_roles": ["pk_visitid","fk_locationid","fk_equipmentid","visit_type","visit_date","visit_time","device_status"],
+    "visits_forbidden_response_field": {
+      "field": "track_sign",
+      "description": "Comma-separated list of species for which tracks/signs were detected near the camera"
+    }
+  },
+  "response_firewall_at_stop": {
+    "annotations_csv_requests": 0,
+    "modeloutputs_csv_requests": 0,
+    "media_csv_requests": 0,
+    "locations_csv_requests": 0,
+    "visits_csv_requests": 0,
+    "taxa_csv_requests": 0,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "protocol_boundary": {
+    "column_ignore_or_posthoc_redaction_rescue_allowed": false,
+    "visits_payload_access_after_stop_allowed": false,
+    "target_species_selection_after_stop_allowed": false,
+    "retry_with_same_release_allowed": false,
+    "counts_as_predictive_evidence": false
+  },
+  "scientific_interpretation": "This is source-architecture/freshness evidence, not adverse Layer-B evidence. The response firewall worked by detecting a biological-response field embedded in the otherwise required effort/visit table before that payload was opened.",
+  "next_action": "select a new response-unconsumed source with physically separate geometry/effort and biological-response payloads"
+}
