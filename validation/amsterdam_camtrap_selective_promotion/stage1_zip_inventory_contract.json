@@ -1,0 +1,32 @@
+{
+  "schema": "eog.amsterdam_camtrap_selective_promotion.stage1_zip_inventory_contract.v1",
+  "attempt_id": "amsterdam_camtrap_selective_promotion_v1",
+  "frozen_archive": {
+    "key": "pilot3.zip",
+    "zenodo_file_id": "580331e7-1ab6-4e84-9565-ee5ef6334d3c",
+    "size_bytes": 9438070088,
+    "md5": "14904bac207dd861e502c984b34b9dca",
+    "content_url": "https://zenodo.org/api/records/11440456/files/580331e7-1ab6-4e84-9565-ee5ef6334d3c/content"
+  },
+  "authorized_access": {
+    "head_requests_max": 1,
+    "range_get_requests_max": 1,
+    "range": "bytes=-33554432",
+    "require_http_206": true,
+    "max_bytes_read": 33554432,
+    "purpose": "ZIP central-directory member-name inventory only"
+  },
+  "forbidden_before_next_contract": {
+    "full_archive_download": true,
+    "datapackage_member_body": true,
+    "deployments_member_body": true,
+    "media_member_body": true,
+    "observations_member_body": true,
+    "observation_values": true,
+    "model_fit": true,
+    "heldout_score": true
+  },
+  "required_member_roles": ["datapackage.json", "deployments.csv", "observations.csv"],
+  "if_range_unsupported_or_members_not_identified": "terminal pre-response STOP; do not increase range size or change archive route within this attempt",
+  "counts_as_predictive_evidence": false
+}
