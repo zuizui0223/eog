@@ -1,0 +1,62 @@
+{
+  "schema": "eog.neon_camera_selective_promotion.source_selection.v1",
+  "attempt_id": "neon_camera_selective_promotion_v1",
+  "purpose": "Fresh response-blind real-system validation of calibration-only selective promotion of EOG contextual Layer B.",
+  "source": {
+    "provider": "Zenodo",
+    "record_id": "20826511",
+    "doi": "10.5281/zenodo.20826511",
+    "title": "Standardized camera trapping data from National Ecological Observatory Network (NEON) subprojects and other forest plots.",
+    "published": "2026-06-24"
+  },
+  "public_file_expectations": {
+    "camera_trap_deployments.csv": {
+      "role": "geometry_and_effort_candidate",
+      "md5": "82537cdf0a586fa14c9a8b6afd7be470",
+      "approx_size_bytes": 86400
+    },
+    "camera_trap_sequences.csv": {
+      "role": "biological_response_candidate",
+      "md5": "7531a5b9fb3848ef33e162d5206a6f43",
+      "approx_size_bytes": 3400000
+    },
+    "subproject_descriptions.csv": {
+      "role": "nonresponse_context_candidate",
+      "md5": "be1502427995886ef1c64c10410d1ee2",
+      "approx_size_bytes": 10500
+    }
+  },
+  "gate0_metadata_only": {
+    "authorized_operations": [
+      "one Zenodo record metadata GET",
+      "read public file names, sizes, checksums, content links, record/version metadata"
+    ],
+    "file_payload_requests_allowed": 0,
+    "file_payload_bytes_allowed": 0,
+    "csv_header_bytes_allowed": 0,
+    "csv_rows_allowed": 0
+  },
+  "response_firewall": {
+    "camera_trap_sequences.csv_payload_open_allowed": false,
+    "camera_trap_sequences.csv_header_open_allowed": false,
+    "species_identity_or_counts_open_allowed": false,
+    "target_taxon_selection_allowed": false,
+    "outcome_prevalence_open_allowed": false,
+    "model_fit_allowed": false,
+    "heldout_score_allowed": false
+  },
+  "scientific_boundary": {
+    "closed_eog_wf_denominator_unchanged": true,
+    "this_attempt_is_not_a_fourth_closed_eog_wf_endpoint": true,
+    "validation_target": "Does calibration-only selective promotion transfer known-truth support into a fresh real ecological prediction without using outer-heldout outcomes for promotion?",
+    "primary_comparison_if_future_gates_pass": "baseline-only versus selectively promoted baseline-plus-contextual-Layer-B on untouched outer heldout",
+    "selector_information_boundary": "inner calibration only",
+    "outer_heldout_used_for_selection": false
+  },
+  "no_rescue": [
+    "Do not open camera_trap_sequences.csv before target, split, model, feature, and selector contracts are frozen.",
+    "Do not switch target taxon after any biological-response value is opened.",
+    "Do not change the source record/version or substitute another file after a failed live gate within this attempt.",
+    "Do not classify pre-response transport or schema failure as favorable, null, or adverse predictive evidence."
+  ]
+}
