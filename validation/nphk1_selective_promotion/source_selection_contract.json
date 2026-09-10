@@ -1,0 +1,46 @@
+{
+  "schema": "eog.nphk1_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "nphk1_selective_promotion_v1",
+  "scientific_role": "fresh real-system candidate for calibration-only selective promotion of EOG contextual representation",
+  "source_identity": {
+    "repository": "inbo/camera-trap-datasets",
+    "dataset_path": "datasets/nphk1",
+    "datapackage_blob_sha": "f758ee3882e600dd73999289dabe496d410fcf4d",
+    "dataset_doi": "10.15468/suawqp",
+    "title": "NPHK1 - Systematic random camera trap observations in National Park Hoge Kempen (Belgium)",
+    "public_monitoring_period": ["2017-05", "2020-05"],
+    "public_sampling_design": "40 approximately 1.5 km2 compartments; one random 300m-grid cell per compartment each month; cameras deployed for three consecutive weeks and relocated in the fourth week; 13 deployments per year"
+  },
+  "selection_boundary": {
+    "selected_before_any_observation_resource_payload_or_header_access": true,
+    "focal_taxon_scientific_name": "Sus scrofa",
+    "focal_taxon_common_name": "wild boar",
+    "focal_taxon_basis": "published NPHK camera-trap research explicitly studied wild boar space use; selection does not use counts from the newly published NPHK1 response resource",
+    "response_counts_used_for_selection": false
+  },
+  "stage0_metadata_access": {
+    "authorized_payload": "GitHub blob f758ee3882e600dd73999289dabe496d410fcf4d (datapackage.json) only",
+    "deployments_resource_payload_allowed": false,
+    "observations_resource_payload_allowed": false,
+    "observations_header_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0,
+    "required_metadata_roles": ["deployments", "observations"],
+    "minimum_declared_deployments_if_rowcount_available": 100
+  },
+  "prospective_if_qualified": {
+    "unit": "active stable location by ISO week",
+    "split": "chronological unique weeks: earliest 60% inner_train, next 20% inner_validation, latest 20% untouched outer",
+    "geometry_worlds": "20th/40th/60th/80th percentiles of positive pairwise Haversine distances plus external_open, from deployment resource only",
+    "selector": "promote baseline_plus_contextual_layer_b iff inner-validation macro binary log loss is strictly lower than baseline-only",
+    "layer_a_trajectory_persistence_required": true
+  },
+  "response_firewall": {
+    "observation_resource_forbidden_until_full_scientific_freeze": true,
+    "no_target_split_or_model_retuning_after_response_access": true,
+    "outer_response_rerun_forbidden": true
+  },
+  "if_stage0_stop": "terminal pre-response STOP; do not switch resource route or weaken metadata requirements within this attempt",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
