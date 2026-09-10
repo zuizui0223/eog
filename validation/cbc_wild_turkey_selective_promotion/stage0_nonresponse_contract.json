@@ -1,0 +1,32 @@
+{
+  "schema": "eog.cbc_wild_turkey_selective_promotion.stage0_nonresponse_contract.v1",
+  "attempt_id": "cbc_wild_turkey_selective_promotion_v1",
+  "input": {"repository": "pwilliams0/Bird_biotic_homogenization", "blob_sha": "a06a27aca69debb005d2850144d138a168e7c5fd", "path_label": "Data/CBC_surveys.csv"},
+  "authorized_access": {"survey_blob_gets": 1, "response_blob_gets": 0, "response_header_bytes": 0, "response_rows": 0},
+  "cell_year_aggregation": {
+    "key": ["cell_id", "Year"],
+    "Latitude": "arithmetic mean",
+    "Longitude": "arithmetic mean",
+    "total_hours": "sum; exported as effort_hours",
+    "survey_count": "row count"
+  },
+  "cell_centroid": {"key": "cell_id", "Latitude": "mean of cell-year Latitude", "Longitude": "mean of cell-year Longitude"},
+  "distance_worlds": {
+    "distance": "haversine_km using Earth radius 6371.0088 km",
+    "pair_set": "all unordered pairs of distinct cell centroids",
+    "quantiles": [0.2, 0.4, 0.6, 0.8],
+    "quantile_interpolation": "linear index=(n-1)*q",
+    "external_open_world": true
+  },
+  "temporal_partitions": {"inner_train": [1980, 2009], "inner_validation": [2010, 2015], "outer_heldout": [2016, 2022]},
+  "stage0_pass": {
+    "years_cover_all_partition_endpoints": true,
+    "minimum_unique_cells_each_partition": 20,
+    "minimum_cell_year_rows_each_partition": 100,
+    "all_four_distance_thresholds_strictly_increasing": true
+  },
+  "if_fail": "terminal pre-response STOP; no repair within this attempt",
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "counts_as_predictive_evidence": false
+}
