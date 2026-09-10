@@ -1,0 +1,27 @@
+{
+  "schema": "eog.neon_standardized_selective_promotion.response_schema_contract.v1",
+  "attempt_id": "neon_standardized_selective_promotion_v1",
+  "frozen_before_response": true,
+  "required_semantics": {
+    "deployment_id": {
+      "accepted_exact_headers": ["deployment_id", "deploymentID", "deploymentId"],
+      "selection_rule": "use the first accepted header in the listed order that exists exactly once"
+    },
+    "scientific_name": {
+      "accepted_exact_headers": ["scientific_name", "scientificName", "scientificname", "species", "taxon_name"],
+      "selection_rule": "use the first accepted header in the listed order that exists exactly once"
+    },
+    "common_name_optional": {
+      "accepted_exact_headers": ["common_name", "commonName", "commonname"],
+      "selection_rule": "optional fallback only when no accepted scientific-name value exactly matches the frozen scientific target"
+    }
+  },
+  "focal_matching": {
+    "scientific_exact_after_strip_casefold": "odocoileus virginianus",
+    "common_exact_after_strip_casefold_optional": ["white-tailed deer", "white tailed deer", "white-tailed deer (odocoileus virginianus)"],
+    "no_fuzzy_matching": true,
+    "no_taxon_remapping_after_response": true
+  },
+  "schema_failure": "If deployment-id or scientific-name semantics cannot be resolved by the frozen alias lists, stop_response_schema_or_identity. Do not patch or retry this attempt.",
+  "response_access_limit": "one full GET of the frozen camera_trap_sequences.csv only"
+}
