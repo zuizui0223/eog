@@ -1,0 +1,50 @@
+name: NEON camera selective-promotion Gate0 metadata
+
+on:
+  push:
+    branches:
+      - fresh/neon-camera-selective-promotion-v1
+    paths:
+      - 'validation/neon_camera_selective_promotion/source_selection_contract.json'
+      - 'validation/neon_camera_selective_promotion/gate0_metadata.py'
+      - 'tests/test_neon_camera_selective_promotion_gate0.py'
+      - '.github/workflows/neon-camera-gate0-metadata.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test runtime
+        run: python -m pip install pytest
+      - name: Verify frozen response firewall
+        run: pytest -q tests/test_neon_camera_selective_promotion_gate0.py
+      - name: Execute metadata-only Gate0
+        run: python validation/neon_camera_selective_promotion/gate0_metadata.py
+      - name: Audit zero-payload boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/neon_camera_selective_promotion/gate0_metadata.json').read_text())
+          assert p['status'] in {'gate0_metadata_ready_for_nonresponse_schema_freeze','stop_pre_response_metadata_identity_or_transport'}
+          assert p['file_payload_requests'] == 0
+          assert p['file_payload_bytes_opened'] == 0
+          assert p['csv_header_bytes_opened'] == 0
+          assert p['csv_rows_opened'] == 0
+          assert p['biological_response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          assert p['counts_as_predictive_evidence'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: neon-camera-gate0-metadata
+          path: build/neon_camera_selective_promotion/gate0_metadata.json
+          if-no-files-found: error

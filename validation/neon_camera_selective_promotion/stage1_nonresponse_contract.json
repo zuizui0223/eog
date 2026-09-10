@@ -1,0 +1,59 @@
+{
+  "schema": "eog.neon_camera_selective_promotion.stage1_nonresponse_contract.v1",
+  "attempt_id": "neon_camera_selective_promotion_v1",
+  "prerequisite_gate0_status": "gate0_metadata_ready_for_nonresponse_schema_freeze",
+  "authorized_payloads": {
+    "camera_trap_deployments.csv": {
+      "exact_size": 86395,
+      "md5": "82537cdf0a586fa14c9a8b6afd7be470",
+      "max_requests": 1,
+      "allowed_use": [
+        "read header and all rows",
+        "recover deployment identifiers, coordinates, start/end times, effort and subproject linkage",
+        "compute response-blind node/time registry and temporal support"
+      ]
+    },
+    "subproject_descriptions.csv": {
+      "exact_size": 10529,
+      "md5": "be1502427995886ef1c64c10410d1ee2",
+      "max_requests": 1,
+      "allowed_use": [
+        "read header and all rows",
+        "recover nonresponse subproject context and survey design metadata"
+      ]
+    }
+  },
+  "forbidden_payloads": {
+    "camera_trap_sequences.csv": {
+      "payload_requests_allowed": 0,
+      "header_bytes_allowed": 0,
+      "rows_allowed": 0,
+      "species_values_allowed": false,
+      "target_taxon_selection_allowed": false
+    }
+  },
+  "stage1_outputs_allowed": [
+    "column names and row counts for authorized files",
+    "deployment count",
+    "unique spatial node count",
+    "subproject count",
+    "deployment start/end date range",
+    "effort-duration distribution summary",
+    "coordinate completeness and duplicate-node diagnostics",
+    "candidate temporal split feasibility based only on deployment dates",
+    "candidate spatial geometry thresholds based only on coordinates"
+  ],
+  "modeling_boundary": {
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0,
+    "selector_fit_allowed": false,
+    "outer_heldout_definition_finalization_allowed": false,
+    "target_taxon_finalization_allowed": false
+  },
+  "no_rescue": [
+    "If either authorized payload checksum or size drifts, STOP this attempt.",
+    "If an authorized nonresponse table contains biological detection labels or species outcomes, STOP before using it further.",
+    "Do not open camera_trap_sequences.csv in Stage1.",
+    "Do not choose a focal species from any Stage1 result."
+  ]
+}

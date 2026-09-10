@@ -1,0 +1,16 @@
+name: NEON camera selective-promotion once-only endpoint (consumed)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  consumed:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refuse re-execution
+        run: |
+          echo 'neon_camera_selective_promotion_v1 is consumed; authoritative run 34470651728 ended in estimability STOP.'
+          exit 1
