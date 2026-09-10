@@ -1,0 +1,45 @@
+{
+  "schema": "eog.neon_camera_selective_promotion.final_terminal_stop_certificate.v1",
+  "attempt_id": "neon_camera_selective_promotion_v1",
+  "terminal_status": "stop_post_response_estimability_failure",
+  "counts_as_predictive_evidence": false,
+  "known_truth_translation_to_real_improvement": "not_evaluated",
+  "authoritative_run": {
+    "run_id": 34470651728,
+    "job_id": 102849510952,
+    "head_sha": "3adde3a9a74ea51545c2b769566b5a4b48ec794d",
+    "artifact_id": 10149367918,
+    "artifact_zip_sha256": "422586eb6ecbe8b212221c4565ae36f4855462ad4a3e33df6a7d88e8848556ba"
+  },
+  "response_access": {
+    "file": "camera_trap_sequences.csv",
+    "payload_requests": 1,
+    "payload_bytes_opened": 3382821,
+    "response_values_opened": true,
+    "attempt_consumed": true
+  },
+  "frozen_focal_taxon": {
+    "scientific_name": "Odocoileus virginianus",
+    "post_response_taxon_change_allowed": false
+  },
+  "estimability_result": {
+    "inner_train": {"n": 523, "positive": 0, "negative": 523, "subprojects": 11, "subprojects_with_both_classes": 0},
+    "inner_validation": {"n": 188, "positive": 0, "negative": 188, "subprojects": 4, "subprojects_with_both_classes": 0},
+    "outer": {"n": 109, "positive": 0, "negative": 109, "subprojects": 2, "subprojects_with_both_classes": 0}
+  },
+  "modeling": {
+    "model_fits_completed": 0,
+    "promotion_decision_made": false,
+    "outer_scores_computed": false
+  },
+  "interpretation": "The fresh source passed response-blind metadata and nonresponse geometry/effort gates, but the prospectively fixed focal taxon yielded zero positive eligible deployments under the frozen exact-name rule. The endpoint therefore stopped at estimability before model fitting. This is neither favorable nor adverse selective-promotion evidence and does not answer whether known-truth selective promotion transfers to real predictive improvement.",
+  "no_rescue": [
+    "do not change the focal taxon within this attempt",
+    "do not change scientific-name parsing or matching after response access",
+    "do not change the subproject partition",
+    "do not rerun this consumed response endpoint",
+    "do not count this STOP as predictive evidence",
+    "do not alter the closed EOG-WF synthesis"
+  ],
+  "next_action": "Select a genuinely new response-unconsumed source and improve pre-response target eligibility using only independently available species-scope metadata, never the endpoint response payload."
+}
