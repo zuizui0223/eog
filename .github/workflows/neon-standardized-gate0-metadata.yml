@@ -1,0 +1,59 @@
+name: NEON standardized selective-promotion Gate0 metadata
+
+on:
+  push:
+    branches:
+      - fresh/neon-standardized-selective-promotion-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/neon_standardized_selective_promotion/source_selection_contract.json').read_text())
+          g=p['gate0_metadata_only']
+          assert g['authorized_requests'] == 1
+          assert g['csv_payload_requests_allowed'] == 0
+          assert g['csv_payload_bytes_allowed'] == 0
+          assert g['csv_header_bytes_allowed'] == 0
+          assert g['csv_rows_allowed'] == 0
+          assert g['biological_response_values_allowed'] is False
+          assert p['selection_boundary']['target_species_selected'] is False
+          PY
+      - name: Execute metadata-only Gate0
+        run: python validation/neon_standardized_selective_promotion/gate0_metadata.py
+      - name: Audit zero-payload boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('build/neon_standardized_selective_promotion/gate0_metadata.json').read_text())
+          assert r['status'] in {'gate0_metadata_ready_for_deployment_schema_freeze','stop_pre_response_metadata_identity_or_transport'}
+          assert r['metadata_only'] is True
+          assert r['metadata_requests'] == 1
+          assert r['csv_payload_requests'] == 0
+          assert r['csv_payload_bytes_opened'] == 0
+          assert r['csv_header_bytes_opened'] == 0
+          assert r['csv_rows_opened'] == 0
+          assert r['biological_response_values_opened'] is False
+          assert r['model_fits'] == 0
+          assert r['heldout_scores'] == 0
+          assert r['counts_as_predictive_evidence'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: neon-standardized-gate0-metadata
+          path: build/neon_standardized_selective_promotion/gate0_metadata.json
+          if-no-files-found: error
