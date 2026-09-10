@@ -1,0 +1,63 @@
+{
+  "schema": "eog.cbc_wild_turkey_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "cbc_wild_turkey_selective_promotion_v1",
+  "scientific_role": "fresh real-system validation of calibration-only selective Layer-B promotion after known-truth support",
+  "source_identity": {
+    "repository": "pwilliams0/Bird_biotic_homogenization",
+    "repository_ref": "main",
+    "survey_metadata_file": {"path": "Data/CBC_surveys.csv", "blob_sha": "a06a27aca69debb005d2850144d138a168e7c5fd"},
+    "response_file": {"path": "Data/occur_winter.csv", "blob_sha": "edce82429adf9212cb9fbc7705b25fcadfe22e30"},
+    "readme_file": {"path": "README.md", "blob_sha": "1d5082a5ef49da5d4418e4439b8c2a386dd38c83"}
+  },
+  "response_blind_selection": {
+    "focal_taxon_common_name": "Wild Turkey",
+    "selection_basis": "README explicitly identifies Wild Turkey among species with increasing occurrence in the study; no occur_winter header or rows used",
+    "target_species_selected_before_response_payload": true,
+    "response_header_opened_before_full_freeze": false,
+    "response_rows_opened_before_full_freeze": false
+  },
+  "prospective_time_split": {
+    "inner_train_years": [1980, 2009],
+    "inner_validation_years": [2010, 2015],
+    "outer_heldout_years": [2016, 2022],
+    "interpretation": "inclusive year ranges",
+    "outer_heldout_never_used_for_arm_selection": true
+  },
+  "geometry_rule": {
+    "node": "cell_id if present in CBC_surveys.csv; otherwise frozen survey spatial key identified from nonresponse schema only",
+    "coordinate": "response-independent latitude/longitude fields from CBC_surveys.csv",
+    "local_world_threshold_quantiles": [0.2, 0.4, 0.6, 0.8],
+    "quantile_interpolation": "linear index=(n-1)*q",
+    "external_open_world": true,
+    "distance": "haversine_km"
+  },
+  "selective_promotion_rule": {
+    "candidate_arms": ["baseline_only", "baseline_plus_layer_b"],
+    "promotion": "promote augmented only if 2010-2015 inner-validation macro binary log loss is strictly lower than baseline",
+    "refit": "refit selected arm on 1980-2015 calibration",
+    "outer_score": "score 2016-2022 once",
+    "outer_response_never_used_for_selection": true
+  },
+  "response_firewall": {
+    "occur_winter_payload_forbidden_until_full_freeze": true,
+    "occur_winter_header_forbidden_until_separate_response_contract": true,
+    "model_fits_before_full_freeze": 0,
+    "heldout_scores_before_full_freeze": 0
+  },
+  "estimability_gates": {
+    "minimum_unique_nodes_each_partition": 20,
+    "minimum_positive_rows_each_partition": 20,
+    "minimum_negative_rows_each_partition": 20,
+    "minimum_years_each_partition": 3
+  },
+  "forbidden_after_response_access": [
+    "change focal taxon",
+    "change year split",
+    "change geometry rule",
+    "change learner or selector to rescue outcome",
+    "change response semantics",
+    "rerun outer heldout after terminal scoring"
+  ],
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
