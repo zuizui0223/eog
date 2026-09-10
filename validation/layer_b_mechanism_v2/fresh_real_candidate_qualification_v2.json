@@ -1,0 +1,64 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.fresh_real_candidate_qualification.v2",
+  "purpose": "Prevent consumption of a fresh response endpoint before source architecture, response semantics, target estimability, geometry and transport are independently qualified.",
+  "applies_to": "future fresh real-system tests of calibration-only selective promotion after known-truth support",
+  "required_before_response_payload_access": {
+    "source_identity": {
+      "exact_version_or_record_identity": true,
+      "exact_response_file_identity": true,
+      "response_file_checksum_or_equivalent_immutable_identifier": true,
+      "transport_route_live_qualified_without_response_payload": true
+    },
+    "response_semantics": {
+      "exact_header_from_independent_README_data_dictionary_or_publication": true,
+      "response_algebra_fully_defined_from_independent_documentation": true,
+      "join_keys_fully_defined": true,
+      "missing_value_semantics_defined": true,
+      "no_post_response_alias_discovery": true
+    },
+    "target": {
+      "target_definition_frozen": true,
+      "independent_evidence_target_occurs_in_the_dataset": true,
+      "independent_evidence_uses_no_endpoint_response_payload": true,
+      "target_change_after_response": false
+    },
+    "geometry_and_effort": {
+      "required_geometry_physically_separable_from_biological_response": true,
+      "required_effort_physically_separable_or_exactly_documented_without_response_values": true,
+      "minimum_unique_spatial_nodes": 50,
+      "station_or_node_level_coordinates_required": true,
+      "generalized_coordinates_that_collapse_many_nodes_to_fewer_than_50_unique_points": "reject_pre_response"
+    },
+    "validation_design": {
+      "partition_unit_and_algorithm_frozen": true,
+      "baseline_features_frozen": true,
+      "layer_b_generation_frozen": true,
+      "learner_and_hyperparameters_frozen": true,
+      "selector_rule_frozen": true,
+      "estimability_minima_frozen": true,
+      "outer_heldout_feedback_for_selection": false
+    }
+  },
+  "automatic_pre_response_rejects": [
+    "effort table contains biological detections needed for modeling",
+    "live source metadata/transport fails under the frozen route",
+    "exact response header or response algebra cannot be independently frozen",
+    "target inclusion is only assumed from ecological plausibility rather than independently documented",
+    "fewer than 50 unique public spatial nodes",
+    "required spatial nodes are collapsed to coarse site centroids",
+    "source has already been response-consumed by an EOG attempt"
+  ],
+  "lessons_fixed_from_consumed_or_stopped_attempts": {
+    "massachusetts_wildlife": "pre-response STOP because visits.csv mixed required effort/time information with track_sign biological detections",
+    "rhode_island_wildlife": "pre-response STOP because the prospectively frozen metadata request timed out; no retry allowed",
+    "neon_camera": "post-response estimability STOP because target inclusion was assumed but the frozen exact-name target produced zero eligible positives",
+    "raccoon_rabies": "post-response schema STOP because public prose was not sufficient to freeze exact spaced headers and negative-count algebra",
+    "uljin_korea": "pre-response reject before any EOG attempt because 82 stations are represented by only two public site-level generalized coordinate points"
+  },
+  "scientific_boundary": {
+    "closed_eog_wf_unchanged": true,
+    "qualification_failures_are_not_predictive_evidence": true,
+    "known_truth_selective_promotion_remains_supported_only_in_known_truth_until_a_fresh_real_scored_endpoint_finishes": true,
+    "do_not_lower_gate_to_obtain_a_scored_result": true
+  }
+}
