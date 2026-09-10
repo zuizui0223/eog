@@ -1,9 +1,6 @@
 name: NEON standardized selective-promotion Gate0 metadata
 
 on:
-  push:
-    branches:
-      - fresh/neon-standardized-selective-promotion-v1
   workflow_dispatch:
 
 permissions:

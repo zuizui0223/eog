@@ -1,9 +1,6 @@
 name: NEON standardized selective-promotion Stage1 response-blind
 
 on:
-  push:
-    branches:
-      - fresh/neon-standardized-selective-promotion-v1
   workflow_dispatch:
 
 permissions:
