@@ -1,0 +1,46 @@
+{
+  "schema": "eog.massachusetts_wildlife_selective_promotion.gate0_metadata_receipt.v1",
+  "attempt_id": "massachusetts_wildlife_selective_promotion_v1",
+  "status": "gate0_metadata_ready_for_schema_freeze",
+  "authoritative_ci": {
+    "run_id": 34452788388,
+    "job_id": 102792144919,
+    "artifact_id": 10142217859,
+    "artifact_zip_sha256": "c151dcd3aa16e64a8379db476ef932436d93ac4b03f53baf11151ac639d3b19c"
+  },
+  "gate0_result_fingerprint": "bd61b9cc06424397ed27e0b587b1cb783f03727ee238dce8761cf949954efaef",
+  "sciencebase_item_id": "6672de8dd34e84915adbb4f3",
+  "top_level_file_count": 21,
+  "files": [
+    ["Massachusetts Wildlife Monitoring Project (2022 - 2024).xml",110560,"d939e8f1ae9c60da9a45a6bc4f9d02fc"],
+    ["annotags.csv",1785820,"b4e2282a579315d58ec1e4680daee446"],
+    ["annotations.csv",9903325,"0c7ee268125a8c6b08717690e7bcaf94"],
+    ["dbdictionary.csv",68735,"2320bda9cbddaebf3c406c131eb569d5"],
+    ["equipment.csv",4186,"b49a6bf30d78b1249772c98c741acb33"],
+    ["equipmodels.csv",1279,"1378d84e937c512425eb30320356c8e0"],
+    ["librarylistitems.csv",4422,"23b7d3568b86e5fe90f9db9b91f7492f"],
+    ["librarylists.csv",1977,"9ac8f4b0c91bd8abb2ff15f4e35d20a8"],
+    ["listitems.csv",20375,"27cb5ce74c8e8cfb073cf15d8ad56cdb"],
+    ["lists.csv",3520,"36e28b47ce3ea485685ff1ed8abc16a5"],
+    ["locations.csv",10485,"2ed87fc7a38a44fb1cf238fa762b513b"],
+    ["media.csv",15461579,"8c87d0477a4949abf97c438e81f6eedf"],
+    ["medialistitems.csv",1406,"df13a9de0bef2ce5a162206e41a557ce"],
+    ["medialists.csv",821,"389ee5fbf964cb9118b8d61b16daf717"],
+    ["mediatags.csv",6332233,"9a15360cf3ab6f1d9441ec49785e8eff"],
+    ["modeloutputs.csv",12232526,"78f3885c24156ade097a1153f71e276f"],
+    ["models.csv",445,"2bd258eaad1a27fe703d05a4c372b700"],
+    ["people.csv",2380,"fc9156fba24b9f1bf69c69a5d8a249df"],
+    ["shinytable.csv",1307,"219e77c0c9603b7fd354505317673dd8"],
+    ["taxa.csv",19539,"127e78d049764119cea2ea8cb5376cb7"],
+    ["visits.csv",76625,"a1366cc4fe8aa57276441025578927b4"]
+  ],
+  "response_firewall_at_gate0": {
+    "file_payload_requests": 0,
+    "file_payload_bytes_opened": 0,
+    "csv_header_bytes_opened": 0,
+    "csv_rows_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  }
+}

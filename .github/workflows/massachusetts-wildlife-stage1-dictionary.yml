@@ -1,0 +1,65 @@
+name: Massachusetts wildlife selective-promotion Stage1 dictionary
+
+on:
+  push:
+    branches:
+      - fresh/massachusetts-wildlife-selective-promotion-v1
+    paths:
+      - "validation/massachusetts_wildlife_selective_promotion/stage1_dictionary_contract.json"
+      - "validation/massachusetts_wildlife_selective_promotion/stage1_dictionary.py"
+      - ".github/workflows/massachusetts-wildlife-stage1-dictionary.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stage1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify frozen Stage1 boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('validation/massachusetts_wildlife_selective_promotion/stage1_dictionary_contract.json').read_text())
+          assert p['authorized_file']['name'] == 'dbdictionary.csv'
+          assert p['dictionary_payload_requests_allowed'] == 1
+          assert p['all_other_file_payload_requests_allowed'] == 0
+          assert p['biological_response_payload_requests_allowed'] == 0
+          assert p['target_species_selection_allowed'] is False
+          assert p['location_or_visit_payload_access_allowed'] is False
+          assert p['model_fits_allowed'] == 0
+          assert p['heldout_scores_allowed'] == 0
+          PY
+      - name: Execute dictionary-only Stage1
+        run: python validation/massachusetts_wildlife_selective_promotion/stage1_dictionary.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/massachusetts_wildlife_selective_promotion/stage1_dictionary.json').read_text())
+          assert p['status'] in {
+              'stage1_dictionary_schema_ready',
+              'stop_pre_response_dictionary_transport_identity_or_schema',
+          }
+          assert p['other_file_payload_requests'] == 0
+          assert p['biological_response_payload_requests'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          assert p['counts_as_predictive_evidence'] is False
+          if p['status'] == 'stage1_dictionary_schema_ready':
+              assert p['dictionary_payload_requests'] == 1
+              assert p['dictionary_payload_bytes_opened'] == 68735
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: massachusetts-wildlife-stage1-dictionary
+          path: build/massachusetts_wildlife_selective_promotion/stage1_dictionary.json
+          if-no-files-found: error

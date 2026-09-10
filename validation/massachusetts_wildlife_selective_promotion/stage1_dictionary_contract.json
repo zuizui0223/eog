@@ -1,0 +1,46 @@
+{
+  "schema": "eog.massachusetts_wildlife_selective_promotion.stage1_dictionary_contract.v1",
+  "attempt_id": "massachusetts_wildlife_selective_promotion_v1",
+  "parent_gate0_fingerprint": "bd61b9cc06424397ed27e0b587b1cb783f03727ee238dce8761cf949954efaef",
+  "authorized_file": {
+    "name": "dbdictionary.csv",
+    "size": 68735,
+    "md5": "2320bda9cbddaebf3c406c131eb569d5",
+    "url": "https://www.sciencebase.gov/catalog/file/get/6672de8dd34e84915adbb4f3?f=__disk__68%2F1f%2F8b%2F681f8b5f48df7121e7b0de2311ace7bf7ad6f454"
+  },
+  "authorized_operation": "exactly one full GET of dbdictionary.csv for schema/relationship semantics only",
+  "dictionary_payload_requests_allowed": 1,
+  "all_other_file_payload_requests_allowed": 0,
+  "biological_response_payload_requests_allowed": 0,
+  "forbidden_files": [
+    "annotations.csv",
+    "annotags.csv",
+    "media.csv",
+    "mediatags.csv",
+    "modeloutputs.csv",
+    "all media binaries"
+  ],
+  "forbidden_information": [
+    "taxon occurrence values",
+    "species counts or frequencies",
+    "detection histories",
+    "annotation values",
+    "media capture rows",
+    "model output values"
+  ],
+  "allowed_output": [
+    "dictionary physical header",
+    "dictionary row count",
+    "table names named by the dictionary",
+    "field names and schema descriptions named by the dictionary",
+    "relationship/key semantics described by the dictionary"
+  ],
+  "target_species_selection_allowed": false,
+  "location_or_visit_payload_access_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "next_if_pass": "freeze response-independent locations/visits roles and exact schema-dependent safe-file contract before opening either payload",
+  "next_if_stop": "terminal pre-response STOP; no repair within this attempt",
+  "post_live_retuning": false,
+  "counts_as_predictive_evidence": false
+}

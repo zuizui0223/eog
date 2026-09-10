@@ -1,0 +1,76 @@
+{
+  "schema": "eog.massachusetts_wildlife_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "massachusetts_wildlife_selective_promotion_v1",
+  "scientific_role": "first fresh real-system validation of calibration-only selective Layer-B promotion after known-truth qualification",
+  "source_identity": {
+    "title": "Massachusetts Wildlife Monitoring Project (2022 - 2024)",
+    "doi": "10.5066/P13UNTFB",
+    "usgs_catalog_id": "USGS:6672de8dd34e84915adbb4f3",
+    "sciencebase_item_id": "6672de8dd34e84915adbb4f3",
+    "publication_date": "2024-07-05",
+    "coverage_start": "2022-04-20",
+    "coverage_end": "2024-04-29",
+    "declared_media_count_from_public_landing_metadata": 143321,
+    "license": "CC0 / U.S. public domain marking as reported by USGS"
+  },
+  "selection_boundary": {
+    "selected_before_any_file_payload_or_response_value_access": true,
+    "selection_basis": [
+      "multi-season camera-trap time series spanning approximately two years",
+      "public USGS release with explicit dictionary-mediated relational CSV architecture",
+      "public landing metadata states that media metadata and biological annotations/model outputs are separate CSV roles",
+      "sufficient temporal structure in principle for calibration, inner validation, and untouched outer heldout partitioning"
+    ],
+    "response_count_used_for_selection": false,
+    "species_frequency_used_for_selection": false,
+    "published_predictive_effect_direction_used_for_selection": false,
+    "no_target_species_selected_until_response-independent schema and station-time eligibility are frozen": true
+  },
+  "gate0_authorized_metadata_only": {
+    "allowed_hosts": [
+      "www.sciencebase.gov",
+      "data.usgs.gov",
+      "www.usgs.gov"
+    ],
+    "allowed_operations": [
+      "GET public landing/catalog metadata",
+      "GET ScienceBase item JSON metadata for the frozen item id",
+      "inspect only file and child-item metadata fields such as names, ids, sizes, digests, content types and download URLs"
+    ],
+    "file_payload_requests_allowed": 0,
+    "file_payload_bytes_allowed": 0,
+    "csv_header_bytes_allowed": 0,
+    "csv_rows_allowed": 0,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "response_firewall": {
+    "forbidden_until_full_freeze": [
+      "annotations.csv payload or header",
+      "modeloutputs.csv payload or header",
+      "media.csv payload or header",
+      "all image/video/audio media payloads",
+      "any species label, taxon annotation, detection count, capture-history value or model-output value"
+    ],
+    "dictionary_payload_allowed_at_gate0": false,
+    "deployment_or_location_payload_allowed_at_gate0": false,
+    "effort_payload_allowed_at_gate0": false,
+    "response_values_opened_before_contract": false
+  },
+  "future_selective_promotion_invariants": {
+    "outer_heldout_outcomes_must_never_participate_in_arm_selection": true,
+    "arm_selection_must_use_calibration_only_inner_temporal_validation": true,
+    "allowed_final_arms": ["baseline_only", "baseline_plus_layer_b"],
+    "selection_rule": "promote Layer B only if the prospectively frozen augmented arm has strictly lower inner-validation macro log loss than baseline",
+    "after_selection": "freeze selected arm, refit according to prospectively frozen policy using calibration only, then score untouched outer heldout once",
+    "layer_a_trajectory_persistence_required": true,
+    "consumed_outer_response_rerun_forbidden": true
+  },
+  "gate0_terminal_statuses": [
+    "gate0_metadata_ready_for_schema_freeze",
+    "stop_pre_response_metadata_identity_or_transport"
+  ],
+  "if_gate0_stop": "do not repair this attempt after observing the live Gate0 result; select a new response-unconsumed candidate",
+  "changes_closed_eog_wf_synthesis": false,
+  "counts_as_predictive_evidence": false
+}
