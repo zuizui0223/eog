@@ -1,0 +1,36 @@
+{
+  "schema": "eog.snapshot_japan_selective_promotion.stage1_response_identity_contract.v1",
+  "attempt_id": "snapshot_japan_selective_promotion_v1",
+  "frozen_stage0": {
+    "authoritative_run_id": 34474881155,
+    "authoritative_job_id": 102863154662,
+    "status": "stage0_deployment_qualified",
+    "deployment_md5": "9ee54945758d9d146badd3aeb17a7923",
+    "deployment_rows": 90,
+    "unique_week_count": 18,
+    "active_deployment_week_counts": {"inner_train": 768, "inner_validation": 165, "outer_heldout": 40},
+    "split_weeks": {
+      "inner_train": {"count": 10, "first": "2023-08-21", "last": "2023-10-23"},
+      "inner_validation": {"count": 4, "first": "2023-10-30", "last": "2023-11-20"},
+      "outer_heldout": {"count": 4, "first": "2023-11-27", "last": "2023-12-18"}
+    },
+    "distance_thresholds_km": [147.37825155118338, 225.61579457798882, 420.35038580495046, 576.5385363840609],
+    "registry_fingerprint": "3307b917a4f800112bce2a3306f005a2591899cbb602e19a87172ceda10aa8ca",
+    "active_calendar_fingerprint": "65b1e3e3212d7894435718eb31b4b8cceca153d54165b8524b0647e4618551b8"
+  },
+  "response_identity": {
+    "doi": "10.3897/BDJ.13.e141168.suppl2",
+    "expected_file_name": "oo_1165478.csv",
+    "published_description": "sequences.csv; 18027 sequences including blanks and detections of non-target taxa"
+  },
+  "authorized_access": {
+    "metadata_url": "https://api.datacite.org/dois/10.3897/BDJ.13.e141168.suppl2",
+    "metadata_requests_max": 1,
+    "response_file_requests_allowed": 0,
+    "response_header_bytes_allowed": 0,
+    "response_payload_bytes_allowed": 0
+  },
+  "required_metadata_result": "a stable public landing/distribution URL for the frozen supplement DOI, without opening the response file",
+  "if_stop": "terminal pre-response source-identity STOP; no alternate DOI resolver within this attempt",
+  "counts_as_predictive_evidence": false
+}
