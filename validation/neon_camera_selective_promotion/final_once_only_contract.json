@@ -1,0 +1,124 @@
+{
+  "schema": "eog.neon_camera_selective_promotion.final_once_only_contract.v1",
+  "attempt_id": "neon_camera_selective_promotion_v1",
+  "frozen_before_response_access": true,
+  "prerequisite_stage1_status": "stage1_nonresponse_ready_for_target_and_split_freeze",
+  "authoritative_response": {
+    "file": "camera_trap_sequences.csv",
+    "exact_size": 3382821,
+    "md5": "7531a5b9fb3848ef33e162d5206a6f43",
+    "single_full_payload_fetch_allowed": true,
+    "accepted_deployment_id_columns": ["deployment_id", "deploymentID"],
+    "accepted_scientific_name_columns": ["scientific_name", "scientificName", "species"],
+    "parser_mismatch_is_terminal_stop": true
+  },
+  "focal_response": {
+    "scientific_name": "Odocoileus virginianus",
+    "common_name": "white-tailed deer",
+    "selection_basis": "pre-response ecological breadth across US forest systems; not dataset prevalence",
+    "eligible_unit": "one deployment row with valid deployment_id, coordinates, start_date and end_date",
+    "binary_rule": "1 if at least one sequence row for the same deployment has exact scientific name Odocoileus virginianus; otherwise 0",
+    "abundance_or_sequence_count_used": false,
+    "post_response_taxon_change": false
+  },
+  "partition": {
+    "unit": "subproject_name",
+    "hash": "int(SHA256(UTF8(subproject_name))[:16],16) % 10",
+    "inner_train_bins": [0,1,2,3,4,5],
+    "inner_validation_bins": [6,7],
+    "outer_heldout_bins": [8,9],
+    "response_blind": true,
+    "outer_heldout_used_for_selection": false,
+    "partition_change_after_response": false
+  },
+  "baseline_features": [
+    "effort_duration_days",
+    "latitude",
+    "longitude",
+    "start_year_scaled",
+    "start_doy_sin",
+    "start_doy_cos"
+  ],
+  "worlds": {
+    "distance": "haversine kilometres between deployment coordinates",
+    "local_threshold_algorithm": "compute all finite pairwise distances among the 814 response-blind unique coordinate nodes; use empirical quantiles q10,q25,q50,q75 as four local thresholds, computed before reading response rows inside the once-only runner",
+    "external_open": true,
+    "support_rule": "for a positive source deployment and target deployment, local-world support is 1 if haversine distance <= that world's frozen threshold and 0 otherwise; external_open support is 1",
+    "survival_rule": "all declared worlds remain in the prediction-facing candidate for this cross-sectional endpoint; exact Layer-A world IDs remain upstream and are not labels",
+    "source_projection": "equal-weight source-symmetric aggregation across all positive source deployments available to the relevant fitting stage",
+    "source_label_invariant": true,
+    "world_label_invariant": true
+  },
+  "layer_b_generation": {
+    "implementation": "source_symmetric_world_support_summary_v2_candidate",
+    "inner_train_rows": "cross-fit by excluding the focal deployment from the positive source set if it is positive; all other inner-train positives may be sources",
+    "inner_validation_rows": "use inner-train positives only",
+    "outer_rows": "after promotion decision, use all calibration positives from inner-train plus inner-validation",
+    "outer_outcomes_used_to_generate_features": false,
+    "static_reuse_across_repeated_outcomes": false
+  },
+  "learner": {
+    "family": "sklearn.ensemble.RandomForestClassifier",
+    "scikit_learn": "1.5.2",
+    "numpy": "2.1.3",
+    "n_estimators": 500,
+    "min_samples_leaf": 5,
+    "max_features": "sqrt",
+    "class_weight": null,
+    "random_state": 20260910,
+    "n_jobs": 1,
+    "paired_arms_identical_except_layer_b": true
+  },
+  "selector": {
+    "metric": "macro binary log loss across inner-validation subprojects",
+    "rule": "promote Layer B if and only if augmented inner-validation macro log loss is strictly lower than baseline inner-validation macro log loss; otherwise select baseline-only",
+    "decision_frozen_before_outer_scoring": true,
+    "after_selection": "refit baseline and augmented candidate on full calibration (inner-train plus inner-validation); score baseline, always-augmented and preselected arm on untouched outer-heldout subprojects"
+  },
+  "estimability_minima": {
+    "inner_train_positive_deployments": 30,
+    "inner_train_negative_deployments": 30,
+    "inner_validation_positive_deployments": 10,
+    "inner_validation_negative_deployments": 10,
+    "outer_positive_deployments": 10,
+    "outer_negative_deployments": 10,
+    "inner_validation_subprojects_with_both_classes": 2,
+    "outer_subprojects_with_both_classes": 2
+  },
+  "primary": {
+    "metric": "macro binary log loss across outer-heldout subprojects",
+    "estimand": "selected_arm_minus_baseline",
+    "favorable_predictive_improvement": "delta < 0",
+    "protective_null": "delta == 0 because baseline was preselected",
+    "adverse_selective_promotion": "delta > 0",
+    "conservative_miss": "baseline was preselected but always-augmented outer log loss is lower than baseline"
+  },
+  "secondary": [
+    "inner-validation baseline and augmented macro log loss",
+    "promotion decision",
+    "outer always-augmented minus baseline",
+    "outer selected minus always-augmented",
+    "Brier score analogues",
+    "class counts and number of both-class subprojects per partition",
+    "local distance thresholds"
+  ],
+  "hard_rules": {
+    "one_full_response_access": true,
+    "response_schema_mismatch_is_terminal_stop": true,
+    "estimability_failure_is_terminal_stop": true,
+    "post_response_parser_repair": false,
+    "post_response_taxon_change": false,
+    "post_response_threshold_retune": false,
+    "post_response_split_change": false,
+    "post_response_baseline_or_learner_change": false,
+    "post_response_selector_change": false,
+    "post_response_candidate_switch_for_this_attempt": false
+  },
+  "interpretive_boundary": {
+    "known_truth_translation_to_real_improvement_supported_only_if": "preselected arm has strictly lower outer macro log loss than baseline",
+    "protective_null_means": "selector avoided forced Layer-B use but did not demonstrate real predictive improvement",
+    "adverse_means": "calibration-only selector promoted a representation that harmed untouched outer prediction",
+    "does_not_change_closed_eog_wf": true,
+    "does_not_establish_universal_selective_promotion": true
+  }
+}
