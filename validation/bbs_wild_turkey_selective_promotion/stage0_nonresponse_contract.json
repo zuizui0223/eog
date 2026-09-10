@@ -1,0 +1,49 @@
+{
+  "schema": "eog.bbs_wild_turkey_selective_promotion.stage0_nonresponse_contract.v1",
+  "attempt_id": "bbs_wild_turkey_selective_promotion_v1",
+  "input": {
+    "repository": "pwilliams0/Bird_biotic_homogenization",
+    "blob_sha": "bf82a3fce89aa1a6c86bc1669af6ff8a2bcc6d7e",
+    "path_label": "Data/BBS_surveys.csv"
+  },
+  "authorized_access": {
+    "survey_blob_gets": 1,
+    "response_blob_gets": 0,
+    "response_header_bytes": 0,
+    "response_rows": 0
+  },
+  "cell_year_aggregation": {
+    "key": ["cell_id", "Year"],
+    "Latitude": "arithmetic mean of finite values",
+    "Longitude": "arithmetic mean of finite values",
+    "First_year": "arithmetic mean of finite 0/1 values; exported as observer_first_year_fraction",
+    "survey_count": "row count per cell-year"
+  },
+  "cell_centroid": {
+    "key": "cell_id",
+    "Latitude": "arithmetic mean of cell-year Latitude",
+    "Longitude": "arithmetic mean of cell-year Longitude"
+  },
+  "distance_worlds": {
+    "distance": "haversine_km using Earth radius 6371.0088 km",
+    "pair_set": "all unordered pairs of distinct cell centroids",
+    "quantiles": [0.2, 0.4, 0.6, 0.8],
+    "quantile_interpolation": "linear, index=(n-1)*q, interpolate between floor and ceil",
+    "external_open_world": true
+  },
+  "temporal_partitions": {
+    "inner_train": [1980, 2009],
+    "inner_validation": [2010, 2015],
+    "outer_heldout": [2016, 2022]
+  },
+  "stage0_pass": {
+    "years_cover_all_partition_endpoints": true,
+    "minimum_unique_cells_each_partition": 20,
+    "minimum_cell_year_rows_each_partition": 100,
+    "all_four_distance_thresholds_strictly_increasing": true
+  },
+  "if_fail": "terminal pre-response STOP; no repair within this attempt",
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "counts_as_predictive_evidence": false
+}

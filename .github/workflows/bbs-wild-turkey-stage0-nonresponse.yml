@@ -1,0 +1,55 @@
+name: BBS Wild Turkey selective-promotion Stage0 nonresponse
+
+on:
+  push:
+    branches:
+      - fresh/bbs-wild-turkey-selective-promotion-v1
+    paths:
+      - 'validation/bbs_wild_turkey_selective_promotion/**'
+      - '.github/workflows/bbs-wild-turkey-stage0-nonresponse.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  stage0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/bbs_wild_turkey_selective_promotion/stage0_nonresponse_contract.json').read_text())
+          assert p['authorized_access']['survey_blob_gets'] == 1
+          assert p['authorized_access']['response_blob_gets'] == 0
+          assert p['authorized_access']['response_header_bytes'] == 0
+          assert p['authorized_access']['response_rows'] == 0
+          assert p['model_fits_allowed'] == 0
+          assert p['heldout_scores_allowed'] == 0
+          PY
+      - name: Execute response-blind Stage0
+        run: python validation/bbs_wild_turkey_selective_promotion/stage0_nonresponse.py
+      - name: Audit zero-response boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/bbs_wild_turkey_selective_promotion/stage0_nonresponse.json').read_text())
+          assert p['status'] in {'stage0_nonresponse_qualified','stop_pre_response_nonresponse_structure','stop_pre_response_nonresponse_transport_or_schema'}
+          assert p['response_blob_requests'] == 0
+          assert p['response_header_bytes_opened'] == 0
+          assert p['response_rows_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bbs-wild-turkey-stage0-nonresponse
+          path: build/bbs_wild_turkey_selective_promotion/stage0_nonresponse.json
+          if-no-files-found: error
