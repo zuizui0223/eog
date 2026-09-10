@@ -1,0 +1,31 @@
+{
+  "schema": "eog.rhode_island_wildlife_selective_promotion.gate0_terminal_stop.v1",
+  "attempt_id": "rhode_island_wildlife_selective_promotion_v1",
+  "status": "stop_pre_response_metadata_identity_or_transport",
+  "reason": "The single prospectively authorized GET of the frozen Zenodo record metadata timed out before metadata was received.",
+  "authoritative_ci": {
+    "run_id": 34453562015,
+    "job_id": 102794595169,
+    "artifact_id": 10142521566,
+    "artifact_zip_sha256": "e7cc7d34a9537245d2b8599e76a04946452046cc148131239e099d33436794e6"
+  },
+  "gate0_result_fingerprint": "8e25b9262804b6dadb297689be92a546afd9889c8a2edbcffa3a2dadc18f0c41",
+  "response_firewall_at_stop": {
+    "metadata_requests_completed": 0,
+    "zip_payload_requests": 0,
+    "zip_payload_bytes_opened": 0,
+    "csv_header_bytes_opened": 0,
+    "csv_rows_opened": 0,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "protocol_boundary": {
+    "retry_same_metadata_GET_allowed": false,
+    "change_timeout_or_transport_after_stop_allowed": false,
+    "open_ZIP_after_stop_allowed": false,
+    "counts_as_predictive_evidence": false
+  },
+  "scientific_interpretation": "Transport/protocol-integrity STOP only; it is not favorable, null or adverse evidence about Layer B or selective promotion.",
+  "next_action": "select a new response-unconsumed source and include transport stability in source qualification"
+}

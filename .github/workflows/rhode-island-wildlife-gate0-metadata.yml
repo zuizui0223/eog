@@ -1,0 +1,57 @@
+name: Rhode Island wildlife selective-promotion Gate0 metadata
+
+on:
+  push:
+    branches:
+      - fresh/rhode-island-wildlife-selective-promotion-v1
+    paths:
+      - "validation/rhode_island_wildlife_selective_promotion/source_selection_contract.json"
+      - "validation/rhode_island_wildlife_selective_promotion/gate0_metadata.py"
+      - ".github/workflows/rhode-island-wildlife-gate0-metadata.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify frozen response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/rhode_island_wildlife_selective_promotion/source_selection_contract.json').read_text())
+          assert p['gate0_metadata_only']['ZIP_payload_requests_allowed'] == 0
+          assert p['gate0_metadata_only']['ZIP_payload_bytes_allowed'] == 0
+          assert p['gate0_metadata_only']['CSV_header_bytes_allowed'] == 0
+          assert p['selection_boundary']['target_species_selected'] is False
+          assert p['future_archive_boundary']['full_ZIP_download_before_response_authorization'] is False
+          PY
+      - name: Execute metadata-only Gate0
+        run: python validation/rhode_island_wildlife_selective_promotion/gate0_metadata.py
+      - name: Audit zero-payload boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/rhode_island_wildlife_selective_promotion/gate0_metadata.json').read_text())
+          assert p['status'] in {'gate0_metadata_ready_for_zip_inventory_freeze','stop_pre_response_metadata_identity_or_transport'}
+          assert p['zip_payload_requests'] == 0
+          assert p['zip_payload_bytes_opened'] == 0
+          assert p['csv_header_bytes_opened'] == 0
+          assert p['csv_rows_opened'] == 0
+          assert p['biological_response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rhode-island-wildlife-gate0-metadata
+          path: build/rhode_island_wildlife_selective_promotion/gate0_metadata.json
+          if-no-files-found: error

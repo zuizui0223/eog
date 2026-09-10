@@ -1,0 +1,72 @@
+{
+  "schema": "eog.rhode_island_wildlife_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "rhode_island_wildlife_selective_promotion_v1",
+  "scientific_role": "fresh real-system validation candidate for calibration-only selective Layer-B promotion",
+  "source_identity": {
+    "title": "Data from: Rhode Island wildlife camera trap survey 2018 to 2023",
+    "zenodo_record_id": 14508932,
+    "zenodo_version": "v3",
+    "publication_date": "2024-12-17",
+    "public_landing_declared_files": [
+      {
+        "name": "DataS1.zip",
+        "size_approx_mb": 12.1,
+        "md5": "c66943e6c2a9aab0abce2a1eba8ce02e"
+      }
+    ],
+    "public_description_declared_members": {
+      "deployment": "RI_CameraSurvey_Deployments.csv",
+      "response": "RI_CameraSurvey_Detections.csv"
+    },
+    "public_description_roles": {
+      "RI_CameraSurvey_Deployments.csv": "camera operation start/end dates and coordinates for all cameras during each survey season",
+      "RI_CameraSurvey_Detections.csv": "animal detections with site/camera identifiers, species identification, date and time of detection"
+    }
+  },
+  "selection_boundary": {
+    "selected_before_any_ZIP_or_CSV_payload_access": true,
+    "selection_basis": [
+      "statewide camera survey spanning 2018 through 2023",
+      "public description explicitly separates deployment geometry/operation dates from animal detections",
+      "shared site/camera identifiers permit response-blind geometry/effort preparation before detection access",
+      "multi-year temporal coverage is suitable in principle for calibration, inner validation and untouched outer heldout"
+    ],
+    "species_counts_used_for_selection": false,
+    "detection_rows_used_for_selection": false,
+    "published_predictive_effect_direction_used_for_selection": false,
+    "target_species_selected": false
+  },
+  "gate0_metadata_only": {
+    "authorized_url": "https://zenodo.org/api/records/14508932",
+    "authorized_operations": [
+      "one GET of Zenodo record JSON metadata",
+      "inspect record identity, version metadata, file names, file sizes, checksums and file links"
+    ],
+    "ZIP_payload_requests_allowed": 0,
+    "ZIP_payload_bytes_allowed": 0,
+    "CSV_header_bytes_allowed": 0,
+    "CSV_rows_allowed": 0,
+    "biological_response_values_allowed": false
+  },
+  "future_archive_boundary": {
+    "full_ZIP_download_before_response_authorization": false,
+    "only_bounded_HTTP_Range_reads_for_ZIP_EOCD_central_directory_and_local_headers_may_be_authorized_after_gate0": true,
+    "deployment_member_payload_may_only_be_authorized_after_exact_member_identity_compression_and_byte_ranges_are_frozen": true,
+    "detection_member_compressed_or_uncompressed_payload_bytes_forbidden_until_full_prediction_freeze": true
+  },
+  "future_selective_promotion_invariants": {
+    "outer_heldout_outcomes_must_never_participate_in_arm_selection": true,
+    "arm_selection_must_use_calibration_only_inner_temporal_validation": true,
+    "allowed_final_arms": ["baseline_only", "baseline_plus_layer_b"],
+    "selection_rule": "promote Layer B only if the frozen augmented arm has strictly lower inner-validation macro log loss than baseline",
+    "layer_a_trajectory_persistence_required": true,
+    "outer_response_once_only_after_selected_arm_freeze": true
+  },
+  "gate0_terminal_statuses": [
+    "gate0_metadata_ready_for_zip_inventory_freeze",
+    "stop_pre_response_metadata_identity_or_transport"
+  ],
+  "if_gate0_stop": "terminal pre-response STOP; no repair within this attempt",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
