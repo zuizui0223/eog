@@ -1,0 +1,79 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.selective_promotion_known_truth_contract.v1",
+  "purpose": "Test whether calibration-only model selection can retain Layer-B benefit when it is stable while avoiding forced Layer-B use when calibration evidence indicates harm.",
+  "frozen_before_runner": true,
+  "uses_biological_response": false,
+  "counts_as_fresh_predictive_endpoint": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "depends_on_contraction_gate": false,
+  "regimes": {
+    "helpful_stable": {
+      "replicates": 32,
+      "seeds": [3101,3102,3103,3104,3105,3106,3107,3108,3109,3110,3111,3112,3113,3114,3115,3116,3117,3118,3119,3120,3121,3122,3123,3124,3125,3126,3127,3128,3129,3130,3131,3132],
+      "layer_b_response_coefficient": "1.20 in inner-train, inner-validation, and outer-heldout"
+    },
+    "neutral": {
+      "replicates": 32,
+      "seeds": [3201,3202,3203,3204,3205,3206,3207,3208,3209,3210,3211,3212,3213,3214,3215,3216,3217,3218,3219,3220,3221,3222,3223,3224,3225,3226,3227,3228,3229,3230,3231,3232],
+      "layer_b_response_coefficient": "0.0 throughout"
+    },
+    "harmful_shift_visible_in_calibration": {
+      "replicates": 32,
+      "seeds": [3301,3302,3303,3304,3305,3306,3307,3308,3309,3310,3311,3312,3313,3314,3315,3316,3317,3318,3319,3320,3321,3322,3323,3324,3325,3326,3327,3328,3329,3330,3331,3332],
+      "layer_b_response_coefficient": "+1.20 in inner-train; -1.20 in inner-validation and outer-heldout"
+    }
+  },
+  "design": {
+    "node_count": 100,
+    "context_count": 30,
+    "inner_train_contexts": [0,14],
+    "inner_validation_contexts": [15,22],
+    "outer_heldout_contexts": [23,29],
+    "baseline_features": ["x", "y", "context_sin", "context_cos"],
+    "layer_b_features": ["z", "z_squared", "sin_z", "cos_z"],
+    "node_covariates": "x,y independent uniform [-1,1]",
+    "contextual_latent_z": "sin(1.6*x - 1.1*y + 0.45*context_phase) + 0.45*cos(0.7*x + 1.3*y - 0.25*context_phase)",
+    "baseline_linear_predictor": "0.35*x - 0.30*y + 0.40*sin(context_phase) - 0.20*cos(context_phase)",
+    "response_probability": "sigmoid(baseline_linear_predictor + regime_coefficient(context)*z)",
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "learner_hyperparameters": {
+      "n_estimators": 200,
+      "max_features": "sqrt",
+      "min_samples_leaf": 8,
+      "class_weight": null,
+      "random_state": 20260909,
+      "n_jobs": 1
+    },
+    "primary_metric": "macro binary log loss across contexts",
+    "selection_rule": "Fit baseline and augmented on inner-train only. Promote Layer B if and only if augmented inner-validation macro log loss is strictly lower than baseline inner-validation macro log loss. Otherwise select baseline-only.",
+    "final_fit_rule": "After selection, refit baseline and augmented candidate models on the full calibration interval (inner-train plus inner-validation) using unchanged hyperparameters. Score baseline, always-augmented, and the preselected arm on untouched outer heldout contexts. The selection decision is not revisited.",
+    "no_outer_feedback": true
+  },
+  "estimands": {
+    "promotion_rate_by_regime": "fraction of replicates selecting augmented from inner validation",
+    "selective_outer_minus_baseline": "selected-arm outer macro log loss minus baseline outer macro log loss",
+    "selective_outer_minus_always_augmented": "selected-arm outer macro log loss minus always-augmented outer macro log loss",
+    "selective_regret_to_oracle": "selected-arm outer macro log loss minus min(baseline, always-augmented) outer macro log loss"
+  },
+  "predeclared_checks": {
+    "helpful_promotion_rate_at_least_0_75": true,
+    "harmful_promotion_rate_at_most_0_25": true,
+    "overall_median_oracle_regret_at_most_0_005": true,
+    "overall_mean_selective_loss_not_worse_than_always_augmented": true,
+    "overall_mean_selective_loss_not_worse_than_baseline": true
+  },
+  "decision": {
+    "all_checks_pass": "known_truth_support_for_calibration_only_selective_promotion",
+    "any_check_fail": "known_truth_refutation_or_non_support_for_selective_promotion",
+    "production_use_authorized_by_this_test_alone": false,
+    "next_if_supported": "freeze one fresh response-blind real-system outer endpoint with all split/selection rules fixed before response access",
+    "next_if_not_supported": "do not add adaptive promotion; retain structural-only default and optional externally validated Layer B"
+  },
+  "forbidden_interpretations": [
+    "This selector guarantees improvement on every real ecological system",
+    "Synthetic promotion rates estimate Azores, Louisiana, Tampa or Portal",
+    "Calibration selection may use outer heldout outcomes",
+    "Portal may be rerun or rescued",
+    "The closed EOG-WF synthesis changes"
+  ]
+}
