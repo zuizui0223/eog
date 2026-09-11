@@ -1,0 +1,85 @@
+name: NCRN final pre-response synthetic gate
+
+on:
+  push:
+    branches:
+      - research/layer-b-v2-single-fresh-endpoint-lock
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_final_once.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_geometry_worlds_frozen_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json'
+      - 'src/eog/v2/source_symmetric_predictive_summary.py'
+      - '.github/workflows/ncrn-final-pre-response.yml'
+  pull_request:
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_final_once.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_geometry_worlds_frozen_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json'
+      - 'src/eog/v2/source_symmetric_predictive_summary.py'
+      - '.github/workflows/ncrn-final-pre-response.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pre-response:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen dev dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Audit response firewall and frozen design
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          contract=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json').read_text())
+          src=Path('validation/layer_b_mechanism_v2/ncrn_final_once.py').read_text()
+          assert contract['frozen_before_any_response_payload_access'] is True
+          assert contract['response_payload_requests_before_freeze'] == 0
+          assert contract['response_open_authorized_by_this_contract_alone'] is False
+          assert contract['partition']['warmup_state_only'] == [2007]
+          assert contract['partition']['inner_train'] == [2008,2009,2010,2011]
+          assert contract['partition']['inner_validation'] == [2012,2013,2014,2015]
+          assert contract['partition']['outer_prequential'] == [2016,2017,2018,2019]
+          assert len(contract['baseline_features_in_order']) == 7
+          assert len(contract['layer_b']['feature_order']) == 10
+          assert src.count('r1_raw = get_bytes(RESPONSE_URL') == 1
+          assert '757399' not in src and '757400' not in src
+          assert 'AUTH_PATH.exists()' in src
+          assert '--synthetic' in src
+          PY
+      - name: Run response-free synthetic prequential validation
+        run: python validation/layer_b_mechanism_v2/ncrn_final_once.py --synthetic
+      - name: Audit synthetic receipt
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/layer_b_mechanism_v2/ncrn_final/final_result.json').read_text())
+          assert p['mode']=='synthetic'
+          assert p['status']=='synthetic_validation_pass'
+          assert p['response_payload_requests']==0
+          assert p['response_payload_bytes_opened']==0
+          assert p['response_values_opened'] is False
+          assert p['counts_as_predictive_evidence'] is False
+          assert len(p['layer_a_trajectory']) == 12
+          assert p['inner_validation']['selection_fingerprint_before_outer_scoring']
+          assert set(p['inner_validation']) >= {'baseline_macro_log_loss','augmented_macro_log_loss','promote_layer_b'}
+          assert set(p['outer']) >= {'baseline_macro_log_loss','always_augmented_macro_log_loss','selected_macro_log_loss','selected_minus_baseline'}
+          for year in range(2008,2020):
+              c=p['partition_counts'][str(year)]
+              assert c['positive']>=30 and c['negative']>=30 and c['unique_sites']>=50
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ncrn-final-pre-response-synthetic
+          path: build/layer_b_mechanism_v2/ncrn_final/final_result.json
+          if-no-files-found: error
