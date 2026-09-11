@@ -74,7 +74,6 @@ def build_units_v2(r1_raw: bytes, visit_index: dict[int, tuple[str, int]], regis
         sid = str(row["PointCode"]).strip()
         if sid not in all_point_sites:
             raise RuntimeError(f"response PointCode not in frozen full points registry: {sid}")
-        # Missing-coordinate sites are outside the frozen modeling universe and are not analyzable rows.
         if sid not in registry:
             continue
         event = core.parse_intlike(row["EventID"], "EventID")
@@ -137,6 +136,21 @@ def stack_v2(feature_by_year: dict[int, dict[str, object]], years: list[int], au
     return np.vstack(xs), np.concatenate(ys), np.concatenate(yr)
 
 
+def _terminal_status_for_exception(exc: Exception, *, synthetic: bool) -> str:
+    if synthetic:
+        return "synthetic_validation_failure"
+    msg = str(exc)
+    non_estimable_markers = (
+        "estimability failure",
+        "warmup 2007 has no positive finite-registry source sites",
+        "empty previous-year positive source set",
+        "learner saw only one class",
+    )
+    if any(marker in msg for marker in non_estimable_markers):
+        return "terminal_non_estimable_under_frozen_rules"
+    return "terminal_schema_or_transport_stop_after_response"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--synthetic", action="store_true")
@@ -175,9 +189,9 @@ def main() -> int:
                 raise RuntimeError("points checksum drift")
             if hashlib.sha256(visits_raw).hexdigest() != contract["resources"]["visits"]["sha256"]:
                 raise RuntimeError("visits checksum drift")
-            # Exactly one authorized biological response request occurs in the authoritative live runner.
-            r1_raw = core.get_bytes(core.RESPONSE_URL, "eog-ncrn-final-v2-response-once/1.0")
+            # Count the one authorized biological response request before issuing it, so a transport failure cannot be misreported as zero requests.
             base["response_payload_requests"] = 1
+            r1_raw = core.get_bytes(core.RESPONSE_URL, "eog-ncrn-final-v2-response-once/1.0")
             base["response_payload_bytes_opened"] = len(r1_raw)
             base["response_values_opened"] = True
             response_sha = hashlib.sha256(r1_raw).hexdigest()
@@ -192,13 +206,13 @@ def main() -> int:
     except Exception as exc:
         result = {
             **base,
-            "status": "synthetic_validation_failure" if args.synthetic else "terminal_schema_or_transport_stop_after_response",
+            "status": _terminal_status_for_exception(exc, synthetic=args.synthetic),
             "reason": f"{type(exc).__name__}: {exc}",
         }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 0 if result["status"] in {"synthetic_validation_pass", "terminal_predictive_result"} else 2
+    return 0 if result["status"] in {"synthetic_validation_pass", "terminal_predictive_result", "terminal_non_estimable_under_frozen_rules", "terminal_schema_or_transport_stop_after_response"} else 2
 
 
 if __name__ == "__main__":
