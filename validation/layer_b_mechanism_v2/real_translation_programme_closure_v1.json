@@ -1,0 +1,81 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.real_translation_programme_closure.v1",
+  "programme": "post_closure_layer_b_v2_real_translation",
+  "status": "closed_without_scored_fresh_real_predictive_endpoint",
+  "closed_eog_wf_synthesis_changed": false,
+  "counts_as_fourth_eog_wf_endpoint": false,
+  "candidate_hunting_hard_stop": true,
+  "known_truth_basis": {
+    "contract": "validation/layer_b_mechanism_v2/selective_promotion_known_truth_contract_v1.json",
+    "result": "validation/layer_b_mechanism_v2/selective_promotion_known_truth_result_v1.json",
+    "scientific_status": "known_truth_support_for_calibration_only_selective_promotion",
+    "interpretation": "Calibration-only selection is supported in the frozen synthetic known-truth benchmark, but this is not real-system predictive evidence."
+  },
+  "real_system_attempts": [
+    {
+      "candidate": "india_tiger",
+      "terminal_status": "terminal_pre_response_transport_stop",
+      "response_consumed": false,
+      "model_fits": 0,
+      "outer_scores": 0,
+      "counts_as_predictive_evidence": false,
+      "counts_as_biological_negative": false,
+      "ledger": "validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json"
+    },
+    {
+      "candidate": "illinois_coyote",
+      "terminal_status": "terminal_pre_response_transport_stop",
+      "response_consumed": false,
+      "model_fits": 0,
+      "outer_scores": 0,
+      "counts_as_predictive_evidence": false,
+      "counts_as_biological_negative": false,
+      "ledger": "validation/layer_b_mechanism_v2/illinois_coyote_qualification_v2_status_v1.json"
+    },
+    {
+      "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+      "terminal_status": "terminal_schema_or_transport_stop_after_response",
+      "terminal_reason": "response PointCode not in frozen full points registry: 2550",
+      "response_consumed": true,
+      "response_payload_requests": 1,
+      "response_payload_bytes_opened": 91825004,
+      "site_year_response_construction_completed": false,
+      "model_fits": 0,
+      "inner_selection_decisions": 0,
+      "outer_scores": 0,
+      "counts_as_predictive_evidence": false,
+      "counts_as_biological_negative": false,
+      "ledger": "validation/layer_b_mechanism_v2/ncrn_final_terminal_result_v1.json"
+    }
+  ],
+  "programme_estimand": {
+    "question": "Does calibration-only selective promotion of frozen Layer B improve an untouched outer endpoint in one genuinely fresh real ecological system?",
+    "answered": false,
+    "scored_fresh_real_endpoints": 0,
+    "favorable": 0,
+    "null_or_protective": 0,
+    "adverse": 0,
+    "reason_unanswered": "No real-system attempt reached model fitting plus untouched outer scoring under the frozen qualification and integrity rules."
+  },
+  "supported_claims_after_closure": [
+    "The synthetic known-truth benchmark supports calibration-only selective promotion under its frozen regimes.",
+    "The qualification-v2 and once-only machinery can terminate candidate attempts without converting transport/schema failure into biological evidence.",
+    "The NCRN one-shot attempt demonstrated the response-access firewall and post-open schema/domain integrity stop in an actual public ecological dataset."
+  ],
+  "unsupported_claims_after_closure": [
+    "Selective promotion improves prediction in fresh real ecological systems.",
+    "Selective promotion protects against harm in fresh real ecological systems.",
+    "The NCRN stop implies Layer B is beneficial, null, or harmful.",
+    "The post-closure programme changes the favorable/favorable/adverse EOG-WF denominator."
+  ],
+  "terminal_policy": {
+    "rerun_any_consumed_attempt_as_fresh_allowed": false,
+    "repair_ncrn_registry_after_response_allowed": false,
+    "discover_post_response_aliases_for_rescue_allowed": false,
+    "lower_qualification_v2_gates_allowed": false,
+    "hunt_replacement_candidate_inside_this_programme_allowed": false,
+    "future_real_test_requires_new_protocol_version": true,
+    "future_real_test_must_be_presented_as_rescue": false
+  },
+  "active_mainline_after_closure": "Return to the already frozen EOG-WF manuscript/release mainline. Any future Layer-B real translation is a new separately preregistered programme, not continuation or rescue of this one."
+}
