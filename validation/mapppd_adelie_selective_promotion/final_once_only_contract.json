@@ -1,0 +1,120 @@
+{
+  "schema": "eog.mapppd_adelie_selective_promotion.final_once_only_contract.v1",
+  "attempt_id": "mapppd_adelie_selective_promotion_v1",
+  "frozen_before_response_access": true,
+  "prerequisite_stage0": {
+    "run_id": 34547180670,
+    "job_id": 103102237516,
+    "artifact_id": 10179449991,
+    "artifact_zip_sha256": "f758c356af4e4b59b8d6a01d54abd919eb2ab471c993c1af6b2d96a4fdc32b5f",
+    "status": "stage0_sites_qualified",
+    "unique_valid_sites": 729,
+    "distance_thresholds_km": [278.7816351512362, 757.4193758937935, 2983.1278779719273, 4697.242272596555]
+  },
+  "authoritative_response": {
+    "repository": "CCheCastaldo/mapppdr",
+    "file": "data/penguin_obs.rda",
+    "git_blob_sha": "852cbf729bf03a5ab01bc0b008f0f18e05867cb6",
+    "git_blob_size_bytes": 61816,
+    "single_git_blob_get_allowed": true,
+    "required_columns": ["site_id", "species_id", "year", "type", "presence", "count"],
+    "schema_or_blob_identity_mismatch_is_terminal": true
+  },
+  "focal_response": {
+    "species_id": "ADPE",
+    "scientific_name": "Pygoscelis adeliae",
+    "unit": "site-year",
+    "eligible_row": "species_id == ADPE; site_id nonmissing; year integer; presence numeric and exactly 0 or 1",
+    "duplicate_site_year_aggregation": "1 if any eligible row has presence==1; 0 only if all eligible rows have presence==0",
+    "no_pseudoabsence": true,
+    "missing_presence_is_not_zero": true
+  },
+  "partition": {
+    "inner_train_years": [1980, 2000],
+    "inner_validation_years": [2001, 2010],
+    "outer_heldout_years": [2011, 2022],
+    "outer_outcomes_used_for_selection": false,
+    "no_post_response_partition_change": true
+  },
+  "geometry": {
+    "sites_blob_sha": "cf844c77521b5436dd1e6e7083311501c120d937",
+    "distance": "haversine_km",
+    "local_thresholds_km": [278.7816351512362, 757.4193758937935, 2983.1278779719273, 4697.242272596555],
+    "world_ids": ["q20", "q40", "q60", "q80", "external_open"],
+    "external_open_support": 1
+  },
+  "baseline": {
+    "unit_features": ["latitude", "longitude", "year_scaled"],
+    "year_scaled": "(year - 2001.0) / 12.0",
+    "no_response_derived_covariates": true
+  },
+  "layer_b": {
+    "implementation": "source-symmetric sequential world-support summary",
+    "feature_names": ["surviving_world_fraction", "support_mean", "support_std", "support_min", "support_max", "support_q25", "support_q50", "support_q75", "positive_support_fraction", "support_range"],
+    "source_weighting": "equal across eligible prior positive source sites",
+    "source_label_invariant": true,
+    "world_label_invariant": true,
+    "static_reuse_across_years": false,
+    "no_positive_sources_rule": "all ten Layer-B features are zero",
+    "training_row_rule": "for each inner-train site-year, sources are all eligible ADPE-positive site-years from strictly earlier years only",
+    "inner_validation_rule": "for each validation site-year, sources are eligible positives from strictly earlier years, including earlier validation years once observed; learner remains fitted only on inner train",
+    "outer_rule": "after selector is frozen and both candidate learners are refit on all calibration rows, each outer year is scored using positives from strictly earlier years only; after that year is scored its response may update state for the next outer year",
+    "target_site_may_also_be_prior_source": true
+  },
+  "learner": {
+    "family": "sklearn.ensemble.RandomForestClassifier",
+    "n_estimators": 500,
+    "min_samples_leaf": 5,
+    "max_features": "sqrt",
+    "class_weight": null,
+    "random_state": 20260910,
+    "n_jobs": 1,
+    "paired_arms_identical_except_layer_b": true
+  },
+  "selector": {
+    "metric": "macro binary log loss across eligible inner-validation years",
+    "eligible_macro_year": "year has at least one positive and at least one negative eligible site-year",
+    "rule": "promote Layer B iff augmented inner-validation macro log loss is strictly lower than baseline",
+    "decision_before_outer_scoring": true,
+    "refit_after_selection": "refit both candidate arms on all calibration rows through 2010, then sequentially score outer years without learner refitting"
+  },
+  "estimability_minima": {
+    "inner_train_positive_site_years": 30,
+    "inner_train_negative_site_years": 30,
+    "inner_validation_positive_site_years": 10,
+    "inner_validation_negative_site_years": 10,
+    "outer_positive_site_years": 10,
+    "outer_negative_site_years": 10,
+    "inner_validation_years_with_both_classes": 3,
+    "outer_years_with_both_classes": 3
+  },
+  "primary": {
+    "metric": "macro binary log loss across eligible outer years",
+    "estimand": "selected_arm_minus_baseline",
+    "favorable_predictive_improvement": "delta < 0",
+    "protective_null": "delta == 0 because baseline was selected and always-augmented is not better",
+    "conservative_miss": "delta == 0 because baseline was selected but always-augmented would have been better",
+    "adverse_selective_promotion": "delta > 0",
+    "all_terminal": true
+  },
+  "secondary": ["always_augmented_minus_baseline outer macro log loss", "macro Brier for baseline, always-augmented and selected arm", "promotion decision", "per-year log loss", "Layer-A/world-support trajectory summary"],
+  "hard_rules": {
+    "one_response_access": true,
+    "schema_or_estimability_failure_is_terminal": true,
+    "post_response_parser_repair": false,
+    "post_response_target_change": false,
+    "post_response_partition_change": false,
+    "post_response_baseline_change": false,
+    "post_response_layer_b_change": false,
+    "post_response_selector_change": false,
+    "post_response_estimability_change": false,
+    "post_response_threshold_retune": false,
+    "rerun_after_consumption": false
+  },
+  "interpretation": {
+    "known_truth_translation_supported_only_if": "selected arm has strictly lower outer macro log loss than baseline",
+    "protective_null_means": "selector transferred harm avoidance but not predictive improvement",
+    "closed_eog_wf_unchanged": true,
+    "no_universal_layer_b_claim": true
+  }
+}
