@@ -1,0 +1,65 @@
+{
+  "schema": "eog.mapppd_adelie_selective_promotion.source_contract.v1",
+  "attempt_id": "mapppd_adelie_selective_promotion_v1",
+  "scientific_question": "Does calibration-only selective promotion of the source-symmetric sequential EOG contextual representation improve untouched real ecological prediction relative to a frozen conventional baseline?",
+  "closed_eog_wf_unchanged": true,
+  "source": {
+    "repository": "CCheCastaldo/mapppdr",
+    "repository_ref": "main",
+    "documentation_commit_observed": "88c73a507e0921b2541c218c71eaf16721bc6502",
+    "sites_file": "data/sites.rda",
+    "sites_blob_sha": "cf844c77521b5436dd1e6e7083311501c120d937",
+    "response_file": "data/penguin_obs.rda",
+    "response_blob_sha": "852cbf729bf03a5ab01bc0b008f0f18e05867cb6",
+    "transport": "immutable GitHub git-blob API URLs"
+  },
+  "physical_response_separation": {
+    "sites_and_response_are_distinct_blobs": true,
+    "site_documentation": "R/sites.R and man/sites.Rd document site_id, site name/region and latitude/longitude as site information",
+    "response_documentation": "R/penguin_obs.R, man/penguin_obs.Rd and README document penguin_obs as counts and presence/absence observations, keyed by site_id and species_id with year/date fields"
+  },
+  "focal_taxon": {
+    "common_name": "Adelie penguin",
+    "species_id": "ADPE",
+    "scientific_name": "Pygoscelis adeliae",
+    "frozen_before_response_payload_access": true,
+    "independent_inclusion_evidence": "Package README/example and documentation show ADPE observations in penguin_obs; APBP description identifies Adelie among database species"
+  },
+  "published_response_semantics": {
+    "join_key": "site_id",
+    "species_key": "species_id",
+    "time_field": "year",
+    "presence_field": "presence",
+    "count_field": "count",
+    "target_rule": "species_id == 'ADPE'",
+    "eligible_response_rule": "rows for ADPE with nonmissing integer year and presence in {0,1}",
+    "binary_response_rule": "presence as published; no pseudoabsence construction",
+    "duplicate_site_year_rule": "if multiple eligible ADPE rows occur for one site-year, y=1 if any published presence==1, y=0 only if all eligible rows are 0",
+    "missing_rule": "missing presence/year/site_id is ineligible; no imputation"
+  },
+  "predeclared_temporal_partition": {
+    "inner_train": [1980, 2000],
+    "inner_validation": [2001, 2010],
+    "outer_heldout": [2011, 2022],
+    "reason": "fixed from independently published APBP historical coverage before response access",
+    "outer_feedback_forbidden": true
+  },
+  "prediction_design": {
+    "learner_family": "sklearn.ensemble.RandomForestClassifier",
+    "selector": "promote Layer B iff augmented inner-validation macro log loss is strictly lower than baseline; otherwise baseline-only",
+    "layer_b": "source-symmetric sequential contextual innovation representation using only eligible ADPE positives strictly before the scored year",
+    "static_reuse_forbidden": true,
+    "arbitrary_single_source_forbidden": true,
+    "layer_a_trajectory_must_be_persisted": true
+  },
+  "qualification_order": [
+    "Stage0 may open only the immutable sites blob and must verify >=50 unique valid site coordinates and four positive strictly increasing distance-world thresholds.",
+    "After Stage0, final response/model contract must be committed before penguin_obs payload access.",
+    "The response blob may then be opened exactly once; schema/estimability failure or a scored result is terminal."
+  ],
+  "stop_rules": {
+    "stage0_transport_schema_or_geometry_failure": "terminal pre-response STOP; no repair within this attempt",
+    "response_schema_or_estimability_failure": "terminal consumed STOP; no parser, target, partition or threshold repair",
+    "scored_result": "favorable, protective-null, conservative-miss or adverse are all terminal"
+  }
+}

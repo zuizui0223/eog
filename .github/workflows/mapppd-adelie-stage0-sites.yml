@@ -1,0 +1,59 @@
+name: MAPPPD Adelie selective-promotion Stage0 sites
+
+on:
+  push:
+    branches:
+      - fresh/mapppd-adelie-selective-promotion-v1
+    paths:
+      - 'validation/mapppd_adelie_selective_promotion/**'
+      - '.github/workflows/mapppd-adelie-stage0-sites.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  stage0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install RData reader
+        run: pip install pyreadr pandas
+      - name: Verify frozen response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/mapppd_adelie_selective_promotion/stage0_sites_contract.json').read_text())
+          assert p['frozen_before_runner'] is True
+          assert p['authorized_access']['sites_blob_gets'] == 1
+          assert p['authorized_access']['response_blob_gets'] == 0
+          assert p['authorized_access']['response_header_bytes'] == 0
+          assert p['authorized_access']['response_rows'] == 0
+          assert p['forbidden']['penguin_obs_access'] is True
+          assert p['forbidden']['model_fit'] is True
+          assert p['forbidden']['heldout_scoring'] is True
+          PY
+      - name: Execute sites-only Stage0
+        run: python validation/mapppd_adelie_selective_promotion/stage0_sites.py
+      - name: Audit zero-response boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/mapppd_adelie_selective_promotion/stage0_sites.json').read_text())
+          assert p['status'] in {'stage0_sites_qualified','stop_pre_response_sites_transport_schema_or_geometry'}
+          assert p['response_blob_gets'] == 0
+          assert p['response_header_bytes_opened'] == 0
+          assert p['response_rows_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mapppd-adelie-stage0-sites
+          path: build/mapppd_adelie_selective_promotion/stage0_sites.json
+          if-no-files-found: error
