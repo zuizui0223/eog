@@ -1,0 +1,71 @@
+name: India tiger DataONE Stage0 v2
+
+on:
+  push:
+    branches:
+      - research/layer-b-v2-single-fresh-endpoint-lock
+    paths:
+      - 'validation/layer_b_mechanism_v2/india_tiger_stage0_dataone_transport_v2.py'
+      - '.github/workflows/india-tiger-dataone-stage0-v2.yml'
+  pull_request:
+    paths:
+      - 'validation/layer_b_mechanism_v2/india_tiger_stage0_dataone_transport_v2.py'
+      - '.github/workflows/india-tiger-dataone-stage0-v2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  response-blind-transport:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify response firewall before transport
+        run: |
+          python - <<'PY'
+          import pathlib
+          src = pathlib.Path('validation/layer_b_mechanism_v2/india_tiger_stage0_dataone_transport_v2.py').read_text()
+          assert 'FORBIDDEN_RESPONSE = "EERecords.csv"' in src
+          assert 'response_payload_requests": 0' in src
+          assert 'response_bytes_opened": 0' in src
+          PY
+      - name: Execute DataONE response-blind transport
+        id: transport
+        continue-on-error: true
+        run: python validation/layer_b_mechanism_v2/india_tiger_stage0_dataone_transport_v2.py
+      - name: Audit terminal boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/layer_b_mechanism_v2/india_tiger_dataone_transport_v2/transport.json').read_text())
+          assert p['response_payload_requests'] == 0
+          assert p['response_bytes_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          assert p['response_open_authorized'] is False
+          assert p['forbidden_response']['resolved'] is False
+          assert p['forbidden_response']['downloaded'] is False
+          assert p['status'] in {
+              'stage0_response_blind_transport_qualified',
+              'stop_pre_response_dataone_transport_or_package_resolution',
+          }
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: india-tiger-dataone-stage0-v2
+          path: build/layer_b_mechanism_v2/india_tiger_dataone_transport_v2/
+          if-no-files-found: error
+      - name: Fail workflow if transport did not qualify
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/layer_b_mechanism_v2/india_tiger_dataone_transport_v2/transport.json').read_text())
+          if p['status'] != 'stage0_response_blind_transport_qualified':
+              raise SystemExit(p.get('error', p['status']))
+          PY
