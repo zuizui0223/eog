@@ -1,0 +1,99 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.illinois_coyote_stage0_selection.v1",
+  "purpose": "Move the single active Layer-B v2 slot to one response-unopened Illinois coyote system after the India tiger attempt closed at a terminal pre-response transport STOP.",
+  "selection_date": "2026-09-11",
+  "selected_before_response_payload_access": true,
+  "parallel_candidate_attempts_allowed": false,
+  "candidate_hunting_to_improve_result_allowed": false,
+  "counts_as_fourth_closed_eog_wf_endpoint": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "dataset": {
+    "title": "Camera trap detections and environmental covariates for modeling scale-dependent coyote (Canis latrans) site-use intensity across Illinois, USA (2021–2024)",
+    "doi": "10.5061/dryad.p8cz8wb5w",
+    "publisher": "Dryad",
+    "published_date": "2026-08-14",
+    "focal_taxon": "Canis latrans",
+    "publicly_documented_spatial_nodes": 175,
+    "publicly_documented_study_years": ["2021/22", "2022/23", "2023/24"],
+    "response_file": "Coyote_Detection_History.csv",
+    "response_independent_files_allowed_stage0": [
+      "README.md",
+      "Camera_Deployment_Data.csv",
+      "Effort_DetVariable.csv",
+      "Camera_Site_Data.csv"
+    ]
+  },
+  "response_firewall": {
+    "response_file_payload_requests_allowed_stage0": 0,
+    "response_file_header_bytes_allowed_stage0": 0,
+    "response_values_allowed_stage0": false,
+    "response_file_metadata_identity_may_be_read": true,
+    "full_dataset_archive_download_forbidden": true,
+    "model_fits_allowed_stage0": 0,
+    "inner_selection_allowed_stage0": false,
+    "outer_scores_allowed_stage0": 0
+  },
+  "independent_source_evidence": {
+    "dryad_record": {
+      "role": "source identity, file separation and README response semantics",
+      "facts": [
+        "dataset states 175 statewide camera-trap locations sampled during 2021-2024",
+        "Coyote_Detection_History.csv is listed separately from deployment, effort and site-covariate files",
+        "spatial unit is camera trap site and temporal unit is weekly repeated sampling occasion",
+        "README describes o1-o28 as coyote detections by camera-specific survey week and N/A as inactive occasion",
+        "README states the files are linked by a common site identifier"
+      ]
+    },
+    "journal_of_biogeography_2026": {
+      "doi": "10.1111/jbi.70344",
+      "role": "independent target inclusion and empirical support",
+      "facts": [
+        "analysis retained 164 cameras over 24 survey weeks after quality filtering",
+        "24,932 total trap nights were analyzed",
+        "3,324 independent coyote detections were reported",
+        "coyotes were detected at 162 camera sites (naive occupancy 0.99)"
+      ]
+    },
+    "integrative_zoology_2025": {
+      "doi": "10.1111/1749-4877.13000",
+      "role": "independent response-blind year-specific design evidence",
+      "facts": [
+        "46 cameras were deployed in 2021/22 and 54 cameras in 2022/23",
+        "the study explicitly treated study year as a temporal factor"
+      ]
+    }
+  },
+  "proposed_target_before_response": {
+    "grain": "active_camera_site_week",
+    "response": "binary weekly recorded coyote detection",
+    "positive_rule": "documented o1-o28 count > 0 for an active camera-week",
+    "negative_rule": "documented o1-o28 count == 0 for an active camera-week",
+    "inactive_rule": "README-documented N/A/inactive occasions are excluded, never converted to negatives",
+    "effort_role": "Effort_DetVariable.csv determines response-independent weekly camera activity/effort and is not a biological response table"
+  },
+  "prospective_nested_partition": {
+    "inner_train": "2021/22",
+    "inner_validation": "2022/23",
+    "untouched_outer": "2023/24",
+    "outer_feedback_for_selection": false,
+    "reason": "three chronologically ordered, independently documented survey years provide a natural nested temporal validation sequence"
+  },
+  "qualification_v2_status_at_selection": {
+    "source_identity": "metadata_gate_pending",
+    "response_semantics": "independent_README_support_present_but_exact_live_metadata_and_headers_must_be_frozen",
+    "target_inclusion": "independently_supported",
+    "partition_level_both_class_estimability": "not_yet_proven",
+    "geometry_and_effort": "response_independent_files_exist_but_live_transport_and_exact_registry_not_yet_qualified",
+    "validation_design": "partition_proposed_response_blind_but_executable_model_contract_not_yet_frozen",
+    "qualification_v2_complete": false,
+    "response_open_authorized": false
+  },
+  "automatic_stop_conditions": [
+    "Dryad live metadata or allowed nonresponse-file transport cannot be qualified reproducibly",
+    "exact response header/algebra/join/missing semantics cannot be frozen independently of Coyote_Detection_History.csv payload",
+    "fewer than 50 unique public station-level coordinates are reproduced",
+    "independent pre-response evidence cannot establish enough positive and negative active site-weeks in each inner-train, inner-validation and untouched-outer year for frozen estimability minima",
+    "study-year labels or deployment structure contradict the prospective three-year split"
+  ],
+  "next_gate": "response_blind_dryad_metadata_readme_deployment_effort_qualification_only"
+}
