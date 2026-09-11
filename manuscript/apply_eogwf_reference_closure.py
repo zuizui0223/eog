@@ -44,7 +44,7 @@ Shmueli, G. (2010). To explain or to predict? *Statistical Science*, 25, 289–3
 """
 
 CHECK_OLD = "- [ ] references are added for literature-positioning statements marked `[REF]`;"
-CHECK_NEW = "- [x] literature-positioning statements are supported by verified references and no `[REF]` markers remain;"
+CHECK_NEW = "- [x] literature-positioning statements are supported by verified references and no citation placeholders remain;"
 
 
 def replace_once(text: str, old: str, new: str, label: str) -> str:
