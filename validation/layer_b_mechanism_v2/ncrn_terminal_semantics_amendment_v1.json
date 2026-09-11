@@ -1,0 +1,14 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_terminal_semantics_amendment.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "attempt_id": "ncrn_redbellied_layer_b_v2_final_v1",
+  "frozen_before_any_response_payload_access": true,
+  "response_payload_requests_so_far": 0,
+  "response_payload_bytes_opened_so_far": 0,
+  "scientific_design_changed": false,
+  "gate_or_threshold_weakened": false,
+  "reason": "The final execution contract already specifies terminal_non_estimable_under_frozen_rules as the estimability failure_action and for an empty previous positive source set, while its terminal_classes list used the narrower legacy label outer_non_estimable_under_frozen_rules. This amendment makes the broader failure_action label authoritative without changing any minimum, feature, split, model, route, or world rule.",
+  "authoritative_non_estimability_terminal": "terminal_non_estimable_under_frozen_rules",
+  "superseded_terminal_alias": "outer_non_estimable_under_frozen_rules",
+  "interpretation": "A non-estimability terminal is not predictive evidence and is not a biological negative. No rescue, gate weakening, replacement candidate, or outer retry is allowed."
+}
