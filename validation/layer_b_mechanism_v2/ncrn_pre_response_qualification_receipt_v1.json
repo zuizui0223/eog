@@ -10,7 +10,8 @@
     "inner_selection_on_real_response": false,
     "outer_scores": 0
   },
-  "qualified_code_sha": "b5a8caab40368287299ad411b7384fac1d3590e4",
+  "qualified_code_sha": "19212606b25bf884cd1caaf281f686eb1b433d6d",
+  "qualified_code_change_boundary": "All scientific design, route, geometry, learner, selector, runner, one-shot live guard and authorization hash-manifest logic were frozen at this SHA. This receipt update changes evidence bookkeeping only.",
   "frozen_inputs": {
     "metadata_file_id": 756926,
     "metadata_sha256": "a6c2d29be41332e9b1a35bc2a4252ca4a43148e38579f2b79959d4b6709fcef3",
@@ -29,18 +30,20 @@
     "inner_validation": [2012,2013,2014,2015],
     "outer_prequential": [2016,2017,2018,2019]
   },
-  "successful_gates": {
-    "stage0": {"run_id": 34561635057, "conclusion": "success", "response_body_opened": false},
-    "geometry": {"run_id": 34561635073, "conclusion": "success", "response_body_opened": false},
-    "head_only_transport": {"run_id": 34561635074, "conclusion": "success", "response_body_opened": false},
-    "metadata_route_audit": {"run_id": 34561635089, "conclusion": "success", "response_body_opened": false},
-    "package_checks": {"run_id": 34561635087, "conclusion": "success", "python_versions": ["3.10","3.11","3.12"]},
-    "final_synthetic_runner": {
-      "run_id": 34561823625,
+  "successful_gates_at_qualified_code_sha": {
+    "stage0": {"run_id": 34562259350, "conclusion": "success", "response_body_opened": false},
+    "geometry": {"run_id": 34562259401, "conclusion": "success", "response_body_opened": false},
+    "head_only_transport": {"run_id": 34562259355, "conclusion": "success", "response_body_opened": false},
+    "metadata_route_audit": {"run_id": 34562259383, "conclusion": "success", "response_body_opened": false},
+    "package_checks": {"run_id": 34562259402, "conclusion": "success", "python_versions": ["3.10","3.11","3.12"], "topology_benchmark": "success"},
+    "final_synthetic_runner_push": {
+      "run_id": 34562256549,
       "conclusion": "success",
-      "artifact_id": 10184581034,
-      "artifact_digest": "sha256:30fb76677a3071193f15c87dec632c6edeb5e6914321081325c5fdaf56dddfbe",
+      "artifact_id": 10184737716,
+      "artifact_digest": "sha256:b44e3d35aff79f134ac206bf774fe6d3d2bf84110ff0552aca7522cf2d7dfa5d",
+      "hash_manifest_qualified_head_sha": "19212606b25bf884cd1caaf281f686eb1b433d6d",
       "response_payload_requests": 0,
+      "response_payload_bytes_opened": 0,
       "counts_as_predictive_evidence": false
     }
   },
@@ -51,7 +54,9 @@
     "warmup_amendment": "validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json",
     "runner_sync_amendment": "validation/layer_b_mechanism_v2/ncrn_final_runner_v2_amendment_v1.json",
     "terminal_semantics_amendment": "validation/layer_b_mechanism_v2/ncrn_terminal_semantics_amendment_v1.json",
-    "runner": "validation/layer_b_mechanism_v2/ncrn_final_once_v2.py"
+    "runner": "validation/layer_b_mechanism_v2/ncrn_final_once_v2.py",
+    "live_once_workflow": ".github/workflows/ncrn-final-live-once.yml",
+    "pre_response_gate": ".github/workflows/ncrn-final-pre-response.yml"
   },
   "qualification_decision": "fully_qualified_response_blind_pending_explicit_one_shot_authorization",
   "response_open_authorized_by_this_receipt": false,
