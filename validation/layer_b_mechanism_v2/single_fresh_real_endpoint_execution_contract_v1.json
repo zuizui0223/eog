@@ -16,10 +16,18 @@
     "gate_weakening_to_obtain_score_allowed": false,
     "response_consumed_system_reuse_as_fresh_allowed": false
   },
-  "active_candidate_lock": {
+  "prior_closed_candidate": {
     "candidate": "india_tiger",
-    "selection_contract": "validation/layer_b_mechanism_v2/india_tiger_stage0_selection.json",
-    "current_status": "preselected_response_unopened_not_yet_qualification_v2_complete",
+    "terminal_status": "terminal_pre_response_transport_stop",
+    "status_ledger": "validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json",
+    "response_consumed": false,
+    "counts_as_predictive_evidence": false,
+    "may_be_reopened_or_retried": false
+  },
+  "active_candidate_lock": {
+    "candidate": "illinois_coyote_2021_2024",
+    "selection_contract": "validation/layer_b_mechanism_v2/illinois_coyote_stage0_selection_v1.json",
+    "current_status": "selected_response_unopened_prequalification_in_progress",
     "response_open_authorized": false,
     "replacement_before_terminal_pre_response_disposition": false,
     "replacement_after_terminal_pre_response_failure": "allowed only as a single new active candidate, with no parallel candidates and no weakening of qualification v2"
