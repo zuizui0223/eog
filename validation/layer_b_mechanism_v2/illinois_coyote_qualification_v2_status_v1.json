@@ -1,0 +1,75 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.illinois_coyote_qualification_v2_status.v1",
+  "candidate": "illinois_coyote_2021_2024",
+  "terminal_status": "terminal_pre_response_transport_stop",
+  "candidate_attempt_closed": true,
+  "response_consumed": false,
+  "response_open_authorized": false,
+  "qualification_v2_complete": false,
+  "counts_as_predictive_evidence": false,
+  "counts_as_biological_negative": false,
+  "evidence_basis": [
+    "validation/layer_b_mechanism_v2/illinois_coyote_stage0_selection_v1.json",
+    "validation/layer_b_mechanism_v2/illinois_coyote_stage0_metadata_normalization_amendment_v1.json",
+    "GitHub Actions run 34555630907 / artifact 10182442103"
+  ],
+  "terminal_transport_evidence": {
+    "dryad_doi": "10.5061/dryad.p8cz8wb5w",
+    "dryad_version_number": 3,
+    "dryad_version_href": "/api/v2/versions/458048",
+    "dataset_title_normalized_and_verified": true,
+    "response_file": "Coyote_Detection_History.csv",
+    "response_file_id": "4914252",
+    "response_sha256": "799e53038d3429bf3a9e249f699c09b5e7002ef3584fcec1da28c6be54560849",
+    "response_size_bytes": 11176,
+    "response_metadata_read": true,
+    "response_payload_requests": 0,
+    "response_header_bytes_opened": 0,
+    "response_bytes_opened": 0,
+    "response_values_opened": false,
+    "first_allowed_nonresponse_file_transport": "file_id 4914246",
+    "allowed_transport_results": [
+      "Dryad API download endpoint HTTP 401 Unauthorized",
+      "Dryad file_stream endpoint HTTP 403 Forbidden",
+      "Dryad stash file_stream endpoint HTTP 403 Forbidden"
+    ],
+    "allowed_nonresponse_payloads_successfully_acquired": 0,
+    "model_fits": 0,
+    "inner_selection_decisions": 0,
+    "heldout_scores": 0
+  },
+  "amendment_boundary": {
+    "first_failure_was_presentational_title_markup_only": true,
+    "one_metadata_normalization_retry_was_authorized": true,
+    "normalization_changed_biology_or_prediction": false,
+    "retry_reached_substantive_transport_failure": true,
+    "further_retry_allowed": false
+  },
+  "status_by_gate": {
+    "source_identity": {
+      "record_and_response_metadata_identity": "pass",
+      "live_response_independent_file_transport": "terminal_fail",
+      "gate_status": "terminal_fail"
+    },
+    "response_semantics": {
+      "gate_status": "not_reached_beyond_public_metadata_before_terminal_transport_stop"
+    },
+    "target": {
+      "independent_target_inclusion": "documented",
+      "partition_level_both_class_support": "not_reached",
+      "gate_status": "not_reached_before_terminal_transport_stop"
+    },
+    "geometry_and_effort": {
+      "public_description": "175 statewide camera locations documented",
+      "exact_nonresponse_registry_reproduced": false,
+      "gate_status": "not_reached_executable_transport"
+    },
+    "validation_design": {
+      "proposed_nested_year_split": ["2021/22", "2022/23", "2023/24"],
+      "outer_feedback_for_selection": false,
+      "gate_status": "not_reached_before_terminal_transport_stop"
+    }
+  },
+  "scientific_interpretation": "This is a source/transport qualification failure only. It does not evaluate calibration-only selective Layer-B promotion and is not evidence for or against biological or predictive value.",
+  "next_gate": "release_single_active_slot_for_one_new_response_unopened_candidate_under_unchanged_qualification_v2"
+}
