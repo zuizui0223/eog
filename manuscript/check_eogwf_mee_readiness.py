@@ -28,10 +28,11 @@ def _section(text: str, heading: str, next_heading: str | None = None) -> str:
 def main() -> int:
     text = MANUSCRIPT.read_text(encoding="utf-8")
     boundary = json.loads(BOUNDARY.read_text(encoding="utf-8"))
-    abstract = _section(text, "## Abstract", "## Introduction")
+    abstract_block = _section(text, "## Abstract", "## Introduction")
+    abstract_core = abstract_block.split("**Data and code for peer review:**", 1)[0]
 
-    abstract_numbers = [bool(re.search(rf"(?m)^\*\*{i}\.\*\*", abstract)) for i in range(1, 5)]
-    abstract_word_count = len(WORD_RE.findall(abstract.split("**Keywords:**", 1)[0]))
+    abstract_numbers = [bool(re.search(rf"(?m)^\*\*{i}\.\*\*", abstract_core)) for i in range(1, 5)]
+    abstract_word_count = len(WORD_RE.findall(abstract_core))
     whole_word_count = len(WORD_RE.findall(text))
     ref_placeholders = text.count("[REF]")
     final_placeholders = len(re.findall(r"\[FINAL[^\]]*\]", text))
@@ -40,8 +41,13 @@ def main() -> int:
     data_code_pos = text.find("**Data and code for peer review:**")
     keywords_pos = text.find("**Keywords:**")
     intro_pos = text.find("## Introduction")
+    methods_pos = text.find("## Materials and Methods")
     benchmark_pos = text.find("### Deterministic known-truth method benchmark")
     results_pos = text.find("## Results")
+
+    keyword_match = re.search(r"(?m)^\*\*Keywords:\*\*\s*(.+)$", text)
+    keywords = [] if keyword_match is None else [x.strip() for x in keyword_match.group(1).split(";") if x.strip()]
+    keyword_sort = sorted(keywords, key=str.casefold)
 
     scientific_checks = {
         "closed_denominator_three": boundary.get("fresh_predictive_endpoints_with_scores") == 3,
@@ -49,9 +55,11 @@ def main() -> int:
         "candidate_hunting_hard_stop": boundary.get("candidate_hunting_hard_stop") is True,
         "abstract_numbered_1_to_4": all(abstract_numbers),
         "abstract_at_most_350_words": abstract_word_count <= 350,
-        "data_code_statement_after_abstract_before_intro": abstract_pos < data_code_pos < intro_pos,
-        "keywords_after_abstract_before_intro": abstract_pos < keywords_pos < intro_pos,
-        "known_truth_benchmark_before_empirical_results": 0 <= benchmark_pos < results_pos,
+        "mee_front_matter_order_abstract_data_code_keywords_intro": abstract_pos < data_code_pos < keywords_pos < intro_pos,
+        "keywords_at_most_eight": 1 <= len(keywords) <= 8,
+        "keywords_alphabetical": keywords == keyword_sort,
+        "materials_and_methods_heading_present": 0 <= methods_pos < results_pos,
+        "known_truth_benchmark_before_empirical_results": 0 <= methods_pos < benchmark_pos < results_pos,
         "no_reference_placeholders": ref_placeholders == 0,
         "references_section_present": "## References" in text,
         "word_count_at_most_8000": whole_word_count <= 8000,
@@ -63,13 +71,14 @@ def main() -> int:
     }
 
     result = {
-        "schema": "eog.eogwf_mee_submission_readiness.v1",
+        "schema": "eog.eogwf_mee_submission_readiness.v2",
         "manuscript": str(MANUSCRIPT.relative_to(ROOT)),
         "journal": "Methods in Ecology and Evolution",
         "article_type": "Research Article",
-        "word_count_method": "regex word tokens over the complete Markdown manuscript, including abstract, statements, captions/references if present and checklist",
+        "word_count_method": "regex word tokens over complete Markdown manuscript including abstract, statements, references and checklist",
         "whole_manuscript_word_count": whole_word_count,
         "abstract_word_count": abstract_word_count,
+        "keywords": keywords,
         "reference_placeholders": ref_placeholders,
         "final_placeholders": final_placeholders,
         "scientific_checks": scientific_checks,
