@@ -1,0 +1,59 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_final_terminal_result.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "attempt_id": "ncrn_redbellied_layer_b_v2_final_v1",
+  "authorization_commit_sha": "73736e1327f115e028cd9c62675feafc47cf0970",
+  "execution": {
+    "workflow_name": "NCRN final live once",
+    "run_id": 34562502975,
+    "job_id": 103147940569,
+    "run_attempt": 1,
+    "workflow_conclusion": "success",
+    "artifact_id": 10184824585,
+    "artifact_digest": "sha256:d09eed7d8054f27f689bdac2ecf6a90954632c8dd79ff05a91fb17745480e5e9"
+  },
+  "terminal": {
+    "status": "terminal_schema_or_transport_stop_after_response",
+    "reason": "RuntimeError: response PointCode not in frozen full points registry: 2550",
+    "failure_stage": "frozen exact response PointCode to pre-response points-registry integrity check during site-year response construction",
+    "first_reported_unmatched_point_code": "2550"
+  },
+  "response_consumption": {
+    "download_file_id": 757402,
+    "payload_requests": 1,
+    "payload_bytes_opened": 91825004,
+    "response_values_opened": true,
+    "response_consumed": true,
+    "second_request_allowed": false
+  },
+  "downstream_execution": {
+    "site_year_response_construction_completed": false,
+    "estimability_gate_evaluated_on_response": false,
+    "model_fits": 0,
+    "inner_selection_decisions": 0,
+    "outer_scoring_runs": 0,
+    "terminal_predictive_result": false,
+    "counts_as_predictive_evidence": false
+  },
+  "scientific_interpretation": {
+    "biological_negative": false,
+    "evidence_layer_b_harmful": false,
+    "evidence_layer_b_null": false,
+    "evidence_layer_b_beneficial": false,
+    "known_truth_selector_support_changed": false,
+    "closed_eog_wf_synthesis_changed": false,
+    "fresh_real_predictive_question_answered": false,
+    "interpretation": "The one-shot fresh real endpoint terminated on a preregistered schema/domain integrity condition after the response payload was opened but before any model fitting or heldout scoring. It is non-informative about biological predictive benefit or harm."
+  },
+  "post_terminal_policy": {
+    "rerun_this_attempt_allowed": false,
+    "reuse_this_response_system_as_fresh_allowed": false,
+    "post_response_alias_discovery_allowed": false,
+    "post_response_registry_repair_allowed": false,
+    "gate_weakening_allowed": false,
+    "candidate_hunting_within_this_locked_single_endpoint_programme_allowed": false,
+    "replacement_candidate_as_rescue_allowed": false,
+    "manual_workflow_rerun_allowed": false,
+    "future_separately_preregistered_programme": "not decided by this terminal ledger; any future real-system test must be a new protocol/version and cannot be presented as rescue of this attempt"
+  }
+}
