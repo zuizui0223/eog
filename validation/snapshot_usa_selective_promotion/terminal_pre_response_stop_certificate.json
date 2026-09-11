@@ -1,0 +1,42 @@
+{
+  "schema": "eog.snapshot_usa_selective_promotion.terminal_pre_response_stop_certificate.v1",
+  "attempt_id": "snapshot_usa_selective_promotion_v1",
+  "terminal_status": "stop_pre_response_deployment_transport_schema_or_structure",
+  "terminal_class": "pre_response_transport_stop",
+  "counts_as_predictive_evidence": false,
+  "counts_as_empirical_conclusion": false,
+  "empirical_ledger_increment": 0,
+  "response_consumed": false,
+  "response_values_opened": false,
+  "sequence_payload_requests": 0,
+  "sequence_header_bytes_opened": 0,
+  "deployment_payload_requests": 0,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "reason": "HTTP Error 403: Forbidden",
+  "authoritative_run": {
+    "run_id": 34454196324,
+    "job_id": 102796644160,
+    "source_branch": "fresh/snapshot-usa-selective-promotion-v1",
+    "source_head": "95111f39f24507558ed4c7de3b41e92c98a47424",
+    "artifact_id": 10142755954,
+    "artifact_digest": "sha256:72e6e1b48c1a46db2ed263fb8100b3a88058d7e6e64ac72b54356666780255c4",
+    "result_json_sha256": "58f66036a6a4a051e7b5de1b52b6ac29073bf6a470b866eefee69569ad2bfbc2",
+    "result_fingerprint": "4c98b01aa7172a16897f0c11e8b1b206a1ca03b23837c7d9f341f52f2bc0aa77"
+  },
+  "next_gate": "none; no deployment or selection repair within this attempt",
+  "claim_boundary": {
+    "predictive_result_reached": false,
+    "favorable_null_or_adverse_layer_b_evidence": false,
+    "response_firewall_intact": true,
+    "closed_eog_wf_unchanged": true,
+    "selective_promotion_real_translation_resolved": false
+  },
+  "prohibited_repairs": [
+    "retry or change the observed deployment transport route within this attempt",
+    "switch deployment file or source version after the STOP",
+    "open the sequence response payload",
+    "select a focal species or array using response values",
+    "treat this terminal STOP as predictive evidence"
+  ]
+}
