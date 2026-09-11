@@ -1,0 +1,29 @@
+{
+  "schema": "eog.mapppd_adelie_selective_promotion.stage0_sites_contract.v1",
+  "attempt_id": "mapppd_adelie_selective_promotion_v1",
+  "frozen_before_runner": true,
+  "authorized_access": {
+    "sites_blob_sha": "cf844c77521b5436dd1e6e7083311501c120d937",
+    "sites_blob_gets": 1,
+    "response_blob_gets": 0,
+    "response_header_bytes": 0,
+    "response_rows": 0
+  },
+  "required_site_columns": ["site_id", "latitude", "longitude"],
+  "qualification": {
+    "min_unique_valid_sites": 50,
+    "distance_metric": "haversine_km",
+    "distance_world_quantiles": [0.2, 0.4, 0.6, 0.8],
+    "require_four_strictly_increasing_positive_thresholds": true
+  },
+  "forbidden": {
+    "penguin_obs_access": true,
+    "response_header_access": true,
+    "response_values_access": true,
+    "target_prevalence_counting": true,
+    "model_fit": true,
+    "heldout_scoring": true,
+    "post_failure_geometry_repair": true
+  },
+  "terminal_states": ["stage0_sites_qualified", "stop_pre_response_sites_transport_schema_or_geometry"]
+}
