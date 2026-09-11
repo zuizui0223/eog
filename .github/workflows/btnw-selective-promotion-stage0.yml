@@ -1,0 +1,71 @@
+name: BTNW selective-promotion response-blind Stage0
+
+on:
+  push:
+    branches:
+      - fresh/btnw-selective-promotion-v1
+    paths:
+      - 'validation/btnw_selective_promotion/BTNW_STAGE0_EXECUTE_ONCE_V1'
+
+permissions:
+  contents: read
+
+jobs:
+  stage0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify exact Stage0 marker and response firewall
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          assert os.environ['GITHUB_REF_NAME'] == 'fresh/btnw-selective-promotion-v1'
+          marker=Path('validation/btnw_selective_promotion/BTNW_STAGE0_EXECUTE_ONCE_V1').read_text().strip()
+          assert marker == 'source_contract=170e708668d697cedf386ab6a8f7656eb8791315'
+          c=json.loads(Path('validation/btnw_selective_promotion/source_contract_v1.json').read_text())
+          assert c['frozen_before_any_endpoint_response_payload_access'] is True
+          assert c['response_opening_authorized_by_this_contract'] is False
+          a=c['stage0_authorized_access_only']
+          assert a['dryad_response_file_payload_gets'] == 0
+          assert a['dryad_response_file_payload_bytes'] == 0
+          assert a['response_headers_rows_values'] == 0
+          assert a['model_fits'] == 0
+          assert a['selector_decisions'] == 0
+          assert a['heldout_scores'] == 0
+          PY
+      - name: Compile Stage0 without access
+        run: python -m py_compile validation/btnw_selective_promotion/stage0_metadata_geometry.py
+      - name: Execute one response-blind metadata and geometry Stage0
+        run: python validation/btnw_selective_promotion/stage0_metadata_geometry.py
+      - name: Audit zero-response terminal boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/btnw_selective_promotion/stage0_metadata_geometry.json').read_text())
+          assert p['status'] in {'stage0_source_geometry_qualified_class_support_pending','stop_pre_response_metadata_identity_transport_or_geometry'}
+          assert p['response_payload_requests'] == 0
+          assert p['response_payload_bytes'] == 0
+          assert p['response_header_bytes'] == 0
+          assert p['response_rows'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['selector_decisions'] == 0
+          assert p['heldout_scores'] == 0
+          assert p['counts_as_predictive_evidence'] is False
+          assert p['counts_as_empirical_conclusion'] is False
+          if p['status'] == 'stage0_source_geometry_qualified_class_support_pending':
+              assert p['author_repository']['unique_valid_sites'] == 114
+              th=p['geometry']['local_thresholds_km']
+              assert len(th) == 4 and all(a < b for a,b in zip(th,th[1:]))
+              assert p['final_response_opening_authorized'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: btnw-selective-promotion-stage0
+          path: build/btnw_selective_promotion/stage0_metadata_geometry.json
+          if-no-files-found: error
