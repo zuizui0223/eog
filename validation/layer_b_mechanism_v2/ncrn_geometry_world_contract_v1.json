@@ -3,6 +3,7 @@
   "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
   "frozen_before_response_payload_access": true,
   "response_payload_requests_before_freeze": 0,
+  "pre_response_amendment": "validation/layer_b_mechanism_v2/ncrn_geometry_missing_coordinate_amendment_v1.json",
   "source": {
     "nps_reference": 2317363,
     "points_file_id": 757401,
@@ -14,17 +15,19 @@
   },
   "registry_rule": {
     "trim_site_id": true,
-    "require_nonempty_site_id": true,
-    "require_finite_coordinates": true,
+    "blank_site_id": "exclude before response; never recover from response",
+    "finite_coordinate_node_definition": "include a site only when at least one row has finite numeric Latitude and Longitude inside valid geographic ranges",
+    "missing_or_nonfinite_coordinate_row": "exclude from spatial registry; no imputation, snapping, borrowing or response-driven recovery",
     "require_latitude_range": [-90.0, 90.0],
     "require_longitude_range": [-180.0, 180.0],
-    "duplicate_site_id_rule": "all duplicate rows for the same Point_Name must have numerically identical latitude/longitude or the gate stops",
+    "duplicate_site_id_rule": "all finite coordinate rows for the same Point_Name must have numerically identical latitude/longitude or the gate stops",
+    "response_rows_outside_finite_registry": "exclude from all fit, inner-validation and outer-scoring datasets regardless of target value",
     "minimum_unique_sites": 50
   },
   "distance_rule": {
     "metric": "haversine_km",
     "earth_radius_km": 6371.0088,
-    "pair_set": "all unordered pairs of distinct unique Point_Name coordinates",
+    "pair_set": "all unordered pairs of distinct unique finite-coordinate Point_Name nodes",
     "world_threshold_quantiles": [0.2, 0.4, 0.6, 0.8],
     "quantile_algorithm": "sort finite positive pairwise distances; for q use index=(n-1)*q and linear interpolation between floor and ceil",
     "require_four_positive_strictly_increasing_thresholds": true
