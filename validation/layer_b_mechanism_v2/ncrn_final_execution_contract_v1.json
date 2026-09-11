@@ -1,0 +1,176 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_final_execution_contract.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "attempt_id": "ncrn_redbellied_layer_b_v2_final_v1",
+  "frozen_before_any_response_payload_access": true,
+  "response_payload_requests_before_freeze": 0,
+  "scientific_question": "Does a frozen cross-site EOG reachability/contraction representation add heldout predictive value beyond a strong response-history baseline, when calibration-only selection is allowed to reject Layer B before an untouched prequential outer period?",
+  "prerequisites": {
+    "single_endpoint_lock": "validation/layer_b_mechanism_v2/single_fresh_real_endpoint_execution_contract_v1.json",
+    "known_truth_selector_support": "validation/layer_b_mechanism_v2/selective_promotion_known_truth_result_v1.json",
+    "stage0_selection": "validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_selection_v1.json",
+    "response_route": "validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json",
+    "geometry_worlds": "validation/layer_b_mechanism_v2/ncrn_geometry_worlds_frozen_v1.json",
+    "finite_registry_estimability": "validation/layer_b_mechanism_v2/ncrn_finite_registry_estimability_certificate_v1.json",
+    "sequential_warmup": "validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json"
+  },
+  "resources": {
+    "points": {
+      "download_file_id": 757401,
+      "sha256": "14c9f311fa15e8c6d47d5ec6e0611e0b05932f16252eb2f733eb84f134ec9b4c"
+    },
+    "visits": {
+      "download_file_id": 757403,
+      "sha256": "a6b1c0b8c64451502ec609117a35d3621384091e73602059acb5203f2094edaf"
+    },
+    "response": {
+      "download_file_id": 757402,
+      "filename": "ncrn_birds_forest_R1_BirdDataStandard.csv",
+      "maximum_full_payload_requests": 1,
+      "post_open_alias_discovery_allowed": false
+    }
+  },
+  "target": {
+    "scientific_name_exact": "Melanerpes carolinus",
+    "grain": "finite-registry forest monitoring site-year",
+    "positive": "at least one target-positive eligible event in the site-year under the frozen R1 route algebra",
+    "negative": "eligible site-year with zero target-positive eligible events",
+    "no_eligible_event": "exclude, never code negative"
+  },
+  "finite_registry": {
+    "site_key": "Point_Name",
+    "response_site_key": "PointCode",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "unique_sites": 413,
+    "registry_sha256": "08bde71ef5daa23cb34094b4c61807c80ea75335f9c024c9fe432f2ce932e0e9",
+    "missing_coordinate_rows_excluded": 8,
+    "post_response_coordinate_imputation_allowed": false
+  },
+  "partition": {
+    "warmup_state_only": [2007],
+    "inner_train": [2008, 2009, 2010, 2011],
+    "inner_validation": [2012, 2013, 2014, 2015],
+    "outer_prequential": [2016, 2017, 2018, 2019],
+    "outer_used_for_selection": false,
+    "outer_used_for_model_refit": false,
+    "outer_state_update_after_own_prediction_allowed": true,
+    "outer_state_update_semantics": "After a year has been predicted and scored, that realized year may update only the frozen biological source/world state used for the next year's prediction; learner parameters and arm selection remain fixed."
+  },
+  "estimability_minima": {
+    "per_scored_year_positive_site_years": 30,
+    "per_scored_year_negative_site_years": 30,
+    "per_scored_year_unique_sites": 50,
+    "failure_action": "terminal_non_estimable_under_frozen_rules; do not tune, replace, or rescue"
+  },
+  "baseline_features_in_order": [
+    "latitude",
+    "longitude",
+    "year_offset_2007_over_12",
+    "previous_year_same_site_positive",
+    "cumulative_same_site_positive_fraction_before_year",
+    "cumulative_same_site_eligible_year_count_log1p",
+    "previous_year_network_positive_fraction"
+  ],
+  "baseline_feature_semantics": {
+    "latitude_longitude": "frozen finite-registry coordinates",
+    "year_offset_2007_over_12": "(year - 2007) / 12",
+    "previous_year_same_site_positive": "1 only if the same site was eligible and positive in year-1; otherwise 0",
+    "cumulative_same_site_positive_fraction_before_year": "positive eligible prior years / eligible prior years at the same site; 0 if no eligible prior year",
+    "cumulative_same_site_eligible_year_count_log1p": "log1p(number of eligible prior years at the same site)",
+    "previous_year_network_positive_fraction": "positive finite-registry eligible site-years / all finite-registry eligible site-years in year-1; 0 if the previous year has no eligible units"
+  },
+  "geometry_worlds": [
+    {"world_id": "distance_q20", "threshold_km": 27.633830147277926},
+    {"world_id": "distance_q40", "threshold_km": 45.78221740457255},
+    {"world_id": "distance_q60", "threshold_km": 74.0993502145765},
+    {"world_id": "distance_q80", "threshold_km": 104.41994761020693},
+    {"world_id": "external_open", "threshold_km": null}
+  ],
+  "layer_a_prequential_state": {
+    "initial_source_set_for_2008": "unique positive finite-registry sites in warmup year 2007",
+    "source_set_for_year_t_after_2008": "unique positive finite-registry sites in year t-1",
+    "initial_surviving_worlds_for_2008": "all five frozen worlds",
+    "world_compatibility_test_after_year_t": "For each currently surviving local distance world, every positive destination site in year t must be within that world's threshold of at least one source site from year t-1. If any positive destination is unreachable, that world is permanently eliminated. external_open always survives.",
+    "negative_site_years_falsify_worlds": false,
+    "world_revival_allowed": false,
+    "same_year_outcome_used_for_same_year_feature": false,
+    "empty_previous_positive_source_set": "terminal_non_estimable_under_frozen_rules"
+  },
+  "layer_b": {
+    "implementation": "src/eog/v2/source_symmetric_predictive_summary.py::summarize_source_symmetric_support",
+    "support_tensor_axes": ["source_site", "surviving_world", "destination_site"],
+    "local_support": "1 iff haversine(source,destination) <= frozen threshold; else 0",
+    "external_open_support": 1.0,
+    "source_weights": "equal across unique source sites",
+    "declared_world_count": 5,
+    "support_threshold": 0.0,
+    "feature_order": [
+      "surviving_world_fraction",
+      "support_mean",
+      "support_std",
+      "support_min",
+      "support_max",
+      "support_q25",
+      "support_q50",
+      "support_q75",
+      "positive_support_fraction",
+      "support_range"
+    ]
+  },
+  "learner": {
+    "class": "sklearn.ensemble.RandomForestClassifier",
+    "n_estimators": 200,
+    "max_features": "sqrt",
+    "min_samples_leaf": 8,
+    "class_weight": null,
+    "random_state": 20260909,
+    "n_jobs": 1,
+    "post_response_hyperparameter_tuning_allowed": false
+  },
+  "selection": {
+    "arms": ["baseline_only", "baseline_plus_frozen_layer_b"],
+    "fit_for_selection": "fit both arms on inner_train only",
+    "metric": "macro binary log loss with each validation year weighted equally",
+    "promotion_rule": "promote baseline_plus_frozen_layer_b iff augmented inner-validation macro log loss is strictly lower than baseline-only; ties retain baseline-only",
+    "outer_feedback_allowed": false,
+    "decision_revisited_after_outer": false
+  },
+  "final_fit_and_outer": {
+    "calibration_years": [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015],
+    "refit_both_candidate_arms_on_full_calibration": true,
+    "outer_learner_parameters_fixed_after_refit": true,
+    "outer_scoring_runs": 1,
+    "primary_metric": "macro binary log loss across 2016-2019 years",
+    "secondary_metric": "macro Brier score across 2016-2019 years",
+    "always_augmented_counterfactual_scored": true,
+    "selected_arm_score_reported_regardless_of_direction": true,
+    "post_outer_rescue_allowed": false
+  },
+  "terminal_classes": [
+    "selective_favorable",
+    "selective_protective_null",
+    "selective_conservative_miss",
+    "selective_adverse",
+    "outer_non_estimable_under_frozen_rules",
+    "terminal_schema_or_transport_stop_after_response"
+  ],
+  "response_open_authorized_by_this_contract_alone": false,
+  "authorization_requires": [
+    "pre-response synthetic runner validation success",
+    "static one-response-request firewall success",
+    "all branch package checks success",
+    "explicit immutable authorization receipt committed after those checks"
+  ],
+  "forbidden": [
+    "change response route or target after response access",
+    "add or remove baseline or Layer-B features after response access",
+    "change world thresholds or contraction rule after response access",
+    "use same-year target outcome in same-year predictors",
+    "use future validation or outer outcomes for earlier-year state",
+    "refit learner on outer outcomes",
+    "retry the outer endpoint to improve result",
+    "hunt a replacement candidate after a scored outer result",
+    "interpret a transport/schema/non-estimability stop as a biological negative"
+  ]
+}
