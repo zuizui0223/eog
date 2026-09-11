@@ -1,0 +1,23 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_final_runner_v2_amendment.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "frozen_before_any_response_payload_access": true,
+  "response_payload_requests_so_far": 0,
+  "trigger": "The first synthetic-only CI run exposed a lexical contract-sync failure: the final runner referenced the removed v1 key required_exact_columns_from_independent_metadata after the response-route contract had already been strengthened to v2 exact_header_from_independent_eml.",
+  "scientific_design_changed": false,
+  "gate_or_threshold_weakened": false,
+  "authoritative_runner": "validation/layer_b_mechanism_v2/ncrn_final_once_v2.py",
+  "superseded_nonexecuted_live_runner": "validation/layer_b_mechanism_v2/ncrn_final_once.py",
+  "required_syncs": [
+    "enforce the exact 60-column EML header in live mode",
+    "apply the route-v2 conservative event rule: event eligible iff at least one nonmissing ExcludeEvent flag exists and every present flag is 0",
+    "keep missing Incidental or ExcludeObservation from contributing positive evidence",
+    "reproduce the frozen geometry registry fingerprint with the same canonical JSON algorithm used by the geometry qualification runner"
+  ],
+  "response_firewall": {
+    "response_requests_before_amendment": 0,
+    "response_bytes_opened_before_amendment": 0,
+    "synthetic_failure_counts_as_predictive_evidence": false,
+    "live_response_open_authorized": false
+  }
+}
