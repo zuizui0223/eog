@@ -35,6 +35,12 @@
     "geometry_file": "Data/thinnedpoints.csv",
     "geometry_blob_sha": "b6205189225002a21fbc2cdb93adee18b7d04c85",
     "geometry_file_size_bytes": 5666,
+    "geometry_columns_exact": {
+      "site_id": "SS",
+      "longitude": "longitude",
+      "latitude": "latitude"
+    },
+    "geometry_alias_discovery_after_payload_access": false,
     "response_file_is_not_present_in_the_author_repository_tree": true
   },
   "geometry_world_rule": {
@@ -115,7 +121,7 @@
     "Dryad DOI resolves through the official API and exposes one current published version identity",
     "the version file manifest contains exactly one model_data.rds with immutable file metadata and digest or equivalent immutable identifier",
     "the response file is not downloaded or previewed",
-    "the pinned author-repository geometry blob decodes as exactly 114 unique valid site IDs with finite latitude/longitude",
+    "the pinned author-repository geometry blob decodes with exact columns SS/longitude/latitude as exactly 114 unique valid site IDs with finite coordinates",
     "geometry yields q20/q40/q60/q80 under the frozen linear-quantile rule and all four thresholds are positive and strictly increasing",
     "README/geometry identities match the pinned author repository commit",
     "no endpoint response bytes, headers, rows, values, models, selector decisions or heldout scores are opened"
