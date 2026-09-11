@@ -63,6 +63,10 @@ jobs:
           if parent != auth['qualified_parent_sha']:
               raise SystemExit(f'authorization parent mismatch: HEAD^={parent}, auth={auth["qualified_parent_sha"]}')
 
+          changed=subprocess.check_output(['git','diff','--name-only','HEAD^','HEAD'], text=True).splitlines()
+          if changed != [auth_rel]:
+              raise SystemExit(f'authorization commit must change exactly one file ({auth_rel}); got {changed}')
+
           prior_auth_history=subprocess.check_output(
               ['git','log','--format=%H','HEAD^','--',auth_rel], text=True
           ).strip()
