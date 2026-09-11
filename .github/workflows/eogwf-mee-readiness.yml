@@ -3,19 +3,29 @@ name: EOG-WF MEE readiness
 on:
   push:
     branches:
-      - manuscript/eogwf-mee-closure
+      - main
     paths:
+      - 'LICENSE'
+      - 'LICENSE.txt'
+      - 'LICENSE.md'
       - 'manuscript/EOG_WF_MANUSCRIPT_V1.md'
       - 'manuscript/EOG_WF_TITLE_PAGE.md'
       - 'manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md'
+      - 'manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json'
+      - 'manuscript/MEE_DESK_FIT_AUDIT_V2.md'
       - 'manuscript/check_eogwf_mee_readiness.py'
       - 'manuscript/paper_ready/submission_boundary.json'
       - '.github/workflows/eogwf-mee-readiness.yml'
   pull_request:
     paths:
+      - 'LICENSE'
+      - 'LICENSE.txt'
+      - 'LICENSE.md'
       - 'manuscript/EOG_WF_MANUSCRIPT_V1.md'
       - 'manuscript/EOG_WF_TITLE_PAGE.md'
       - 'manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md'
+      - 'manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json'
+      - 'manuscript/MEE_DESK_FIT_AUDIT_V2.md'
       - 'manuscript/check_eogwf_mee_readiness.py'
       - 'manuscript/paper_ready/submission_boundary.json'
       - '.github/workflows/eogwf-mee-readiness.yml'
