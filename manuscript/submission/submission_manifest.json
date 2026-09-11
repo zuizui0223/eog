@@ -1,6 +1,7 @@
 {
-  "schema_version": "eog_structural_submission_manifest_v3",
-  "submission_status": "HOLD_PENDING_ISLAND_RESULT_MANUSCRIPT_INCORPORATION_AND_HUMAN_RELEASE_GATES",
+  "schema_version": "eog_structural_submission_manifest_v4",
+  "submission_status": "SCIENTIFIC_CONTENT_CLOSED_PRESENTATION_RELEASE_AUTHOR_GATES_ACTIVE",
+  "paper_boundary": "manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json",
   "target_journal": "Ecological Informatics",
   "journal_decision_rule": {
     "robust_negative_C_minus_R3": "Journal of Biogeography",
@@ -9,7 +10,7 @@
   },
   "article_type": "Original Research Paper",
   "title": "When does landscape configuration add held-out information? An auditable reference-conditioned framework across islands and forest fragments",
-  "title_status": "revised_working_title_after_frozen_island_result",
+  "title_status": "scientifically_frozen_working_title_after_frozen_island_result",
   "main_manuscript": "manuscript/structural_reachability_manuscript.md",
   "highlights": "manuscript/structural_highlights.txt",
   "cover_letter": "manuscript/submission/cover_letter.md",
@@ -35,7 +36,7 @@
     "figures/output/figure_4_boundary.svg",
     "figures/output/figure_5_audit.svg"
   ],
-  "figure_status": "working_set_requires_island_strong-reference_panel_update_before_release",
+  "figure_status": "scientific_inputs_frozen_presentation_revision_required",
   "machine_readable_results": [
     "manuscript/result_tables/table_3_main_sensitivity_results.csv",
     "manuscript/result_tables/table_s1_applicability_accounting.csv",
@@ -67,17 +68,33 @@
     "result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
     "rerun_allowed": false
   },
+  "scientific_content_completed": [
+    "frozen adverse island C-R3 result incorporated in manuscript, result tables, highlights and cover letter without weakening R3 or retuning scales or taxa",
+    "Introduction and Discussion framed around reference-conditioned structural adequacy",
+    "original A-Islands positive conditional-ordering result and strong-reference adverse predictive result kept explicit and non-conflated",
+    "Tanzania retained as an external strong-reference adverse boundary with spatial-block uncertainty",
+    "closest-prior literature boundary incorporated",
+    "EOG-WF and structural-island empirical denominators separated by manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json"
+  ],
   "required_pre_submission_resolutions": [
-    "incorporate the frozen adverse island C-R3 result in manuscript, figures, result tables and cover letter without weakening R3 or retuning scales/taxa",
-    "rewrite the Introduction and Discussion around reference-conditioned structural adequacy rather than island-specific residual novelty",
-    "update the manuscript-facing result package so the original A-Islands positive conditional-ordering result and the new strong-reference adverse predictive result are both explicit and not conflated",
-    "complete final Ecological Informatics live-policy verification and final visual QA",
-    "replace <RELEASE_TAG> and <ARCHIVE_DOI> only after the revised scientific manuscript is frozen",
+    "revise Figure 1 to show declared reference -> held-out structural probe -> earned/adverse-or-redundant/indeterminate inference",
+    "revise the A-Islands result figure so conditional-concordance and strong-reference C-R3 log-loss results remain on distinct axes",
+    "add the R0/R1/R2/R3/C explanatory tier panel with C-R3 explicitly marked as the only primary extension contrast",
+    "rebuild and fingerprint the final figure set and complete Ecological Informatics display-size visual QA",
+    "create the tagged software release after the presentation state is frozen",
+    "reserve or mint the release archive DOI only after the final scientific/presentation package is frozen",
     "complete author_metadata.template.json with author-approved metadata and remove placeholders in the final submission record",
     "confirm author list, affiliations, corresponding author, contribution roles, funding, competing interests, originality and simultaneous-submission statements",
-    "recheck the selected journal's live generative-AI policy on submission day",
-    "confirm final figure file format/resolution requirements in the live submission system"
+    "approve the generative-AI disclosure with all authors",
+    "recheck Ecological Informatics live policy on the submission date and confirm article type, limits, figure formats, reference style, data/code requirements and declarations"
   ],
+  "non_overlap_with_eog_wf": {
+    "separate_empirical_denominator": true,
+    "uses_eog_wf_three_endpoint_denominator": false,
+    "uses_eog_wf_endpoints_as_replications": false,
+    "primary_estimand": "reference-conditioned incremental structural information",
+    "eog_wf_primary_estimand": "finite-world structural falsification plus separately tested prediction-facing complementarity"
+  },
   "prohibited_claims": [
     "EOG universally outperforms SDM",
     "connected frequency is a dispersal or colonisation probability",
@@ -87,6 +104,8 @@
     "EOG discovers stepping stones",
     "EOG is the first graph representation of island connectivity",
     "R3 causally explains the original A-Islands conditional-concordance signal",
-    "R3 universally outperforms simpler island-isolation references"
+    "R3 universally outperforms simpler island-isolation references",
+    "the original conditional-concordance and C-R3 log-loss increment are one common effect size",
+    "EOG-WF Layer A or Layer B endpoint results are additional replications of this paper"
   ]
 }
