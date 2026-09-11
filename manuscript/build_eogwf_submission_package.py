@@ -32,6 +32,9 @@ TREE_ROOTS = [
     "src/eog",
     "tests",
 ]
+EXCLUDED_SUFFIXES = {".pyc", ".pyo"}
+EXCLUDED_NAMES = {".DS_Store"}
+EXCLUDED_PARTS = {"__pycache__", ".pytest_cache"}
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -45,6 +48,15 @@ def git_head() -> str:
         ).strip()
     except Exception:
         return "unavailable"
+
+
+def is_package_source(path: Path) -> bool:
+    rel = path.relative_to(ROOT)
+    if any(part in EXCLUDED_PARTS for part in rel.parts):
+        return False
+    if path.name in EXCLUDED_NAMES or path.suffix in EXCLUDED_SUFFIXES:
+        return False
+    return path.is_file()
 
 
 def selected_files() -> list[Path]:
@@ -64,7 +76,7 @@ def selected_files() -> list[Path]:
         root = ROOT / rel
         if not root.is_dir():
             raise FileNotFoundError(f"required submission-package tree missing: {rel}")
-        paths.extend(p for p in root.rglob("*") if p.is_file())
+        paths.extend(p for p in root.rglob("*") if is_package_source(p))
 
     unique = {p.relative_to(ROOT).as_posix(): p for p in paths}
     return [unique[key] for key in sorted(unique)]
