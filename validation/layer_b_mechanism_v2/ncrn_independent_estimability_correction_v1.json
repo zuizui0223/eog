@@ -1,0 +1,32 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_independent_estimability_correction.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "frozen_before_any_response_payload_access": true,
+  "response_payload_requests_so_far": 0,
+  "reason": "The initial prescreen used the final 277-site network size for every year. The independent thesis states that 246 sites were monitored in 2007, 9 were added in 2008, and 22 were added in 2014, yielding 277 sites only from 2014 onward.",
+  "independent_publication_facts": {
+    "sites_2007": 246,
+    "sites_2008_through_2013": 255,
+    "sites_2014_through_2019": 277,
+    "red_bellied_yearly_detected_site_min": 123,
+    "red_bellied_yearly_detected_site_max": 205
+  },
+  "conservative_annual_class_lower_bounds": {
+    "positive_each_year": 123,
+    "negative_2007": 41,
+    "negative_2008_through_2013": 50,
+    "negative_2014_through_2019": 72,
+    "minimum_negative_across_frozen_years": 41
+  },
+  "frozen_estimability_minimum_each_partition": {
+    "positive_site_years": 30,
+    "negative_site_years": 30,
+    "result_after_correction": "still_passes_conservatively"
+  },
+  "scientific_effect": "Corrects the strength of the pre-response lower-bound certificate without changing the focal taxon, partitions, thresholds, learner, selector, or response route.",
+  "forbidden": [
+    "use the response payload to refine class counts",
+    "lower the 30/30 estimability gate",
+    "change partition boundaries because of this correction"
+  ]
+}
