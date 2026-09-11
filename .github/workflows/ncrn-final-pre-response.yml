@@ -6,7 +6,8 @@ on:
       - research/layer-b-v2-single-fresh-endpoint-lock
     paths:
       - 'validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json'
-      - 'validation/layer_b_mechanism_v2/ncrn_final_once.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_final_once_v2.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_final_runner_v2_amendment_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_geometry_worlds_frozen_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json'
@@ -15,7 +16,8 @@ on:
   pull_request:
     paths:
       - 'validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json'
-      - 'validation/layer_b_mechanism_v2/ncrn_final_once.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_final_once_v2.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_final_runner_v2_amendment_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_geometry_worlds_frozen_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json'
@@ -41,29 +43,36 @@ jobs:
           import json
           from pathlib import Path
           contract=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json').read_text())
-          src=Path('validation/layer_b_mechanism_v2/ncrn_final_once.py').read_text()
+          route=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json').read_text())
+          amendment=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_final_runner_v2_amendment_v1.json').read_text())
+          src=Path('validation/layer_b_mechanism_v2/ncrn_final_once_v2.py').read_text()
           assert contract['frozen_before_any_response_payload_access'] is True
           assert contract['response_payload_requests_before_freeze'] == 0
           assert contract['response_open_authorized_by_this_contract_alone'] is False
+          assert amendment['response_firewall']['response_requests_before_amendment'] == 0
+          assert amendment['authoritative_runner'].endswith('ncrn_final_once_v2.py')
+          assert route['schema'].endswith('v2')
+          assert len(route['exact_header_from_independent_eml']) == 60
           assert contract['partition']['warmup_state_only'] == [2007]
           assert contract['partition']['inner_train'] == [2008,2009,2010,2011]
           assert contract['partition']['inner_validation'] == [2012,2013,2014,2015]
           assert contract['partition']['outer_prequential'] == [2016,2017,2018,2019]
           assert len(contract['baseline_features_in_order']) == 7
           assert len(contract['layer_b']['feature_order']) == 10
-          assert src.count('r1_raw = get_bytes(RESPONSE_URL') == 1
+          assert src.count('r1_raw = core.get_bytes(core.RESPONSE_URL') == 1
           assert '757399' not in src and '757400' not in src
           assert 'AUTH_PATH.exists()' in src
           assert '--synthetic' in src
           PY
       - name: Run response-free synthetic prequential validation
-        run: python validation/layer_b_mechanism_v2/ncrn_final_once.py --synthetic
+        run: python validation/layer_b_mechanism_v2/ncrn_final_once_v2.py --synthetic
       - name: Audit synthetic receipt
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           p=json.loads(Path('build/layer_b_mechanism_v2/ncrn_final/final_result.json').read_text())
+          assert p['runner_version']=='ncrn_final_once_v2'
           assert p['mode']=='synthetic'
           assert p['status']=='synthetic_validation_pass'
           assert p['response_payload_requests']==0
@@ -80,6 +89,6 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: ncrn-final-pre-response-synthetic
+          name: ncrn-final-pre-response-synthetic-v2
           path: build/layer_b_mechanism_v2/ncrn_final/final_result.json
           if-no-files-found: error
