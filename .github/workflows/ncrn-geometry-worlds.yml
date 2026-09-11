@@ -1,0 +1,75 @@
+name: NCRN response-independent geometry worlds
+
+on:
+  push:
+    branches:
+      - research/layer-b-v2-single-fresh-endpoint-lock
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_geometry_world_contract_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_geometry_worlds.py'
+      - '.github/workflows/ncrn-geometry-worlds.yml'
+  pull_request:
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_geometry_world_contract_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_geometry_worlds.py'
+      - '.github/workflows/ncrn-geometry-worlds.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify zero-response geometry contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_geometry_world_contract_v1.json').read_text())
+          assert c['source']['points_file_id'] == 757401
+          assert c['frozen_before_response_payload_access'] is True
+          assert c['response_payload_requests_before_freeze'] == 0
+          assert c['world_family']['declared_world_count'] == 5
+          assert c['distance_rule']['world_threshold_quantiles'] == [0.2,0.4,0.6,0.8]
+          PY
+      - name: Derive response-independent geometry worlds
+        id: geometry
+        continue-on-error: true
+        run: python validation/layer_b_mechanism_v2/ncrn_geometry_worlds.py
+      - name: Audit geometry output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/layer_b_mechanism_v2/ncrn_geometry_worlds/geometry_worlds.json').read_text())
+          assert p['response_payload_requests']==0
+          assert p['response_bytes_opened']==0
+          assert p['response_values_opened'] is False
+          assert p['model_fits']==0 and p['heldout_scores']==0
+          assert p['response_open_authorized'] is False
+          assert p['status'] in {'geometry_worlds_qualified','terminal_pre_response_geometry_world_stop'}
+          if p['status']=='geometry_worlds_qualified':
+              assert p['unique_sites'] >= 50
+              assert p['declared_world_count'] == 5
+              vals=[x['threshold_km'] for x in p['worlds'][:4]]
+              assert all(vals[i] < vals[i+1] for i in range(3))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ncrn-geometry-worlds
+          path: build/layer_b_mechanism_v2/ncrn_geometry_worlds/geometry_worlds.json
+          if-no-files-found: error
+      - name: Require qualified worlds
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/layer_b_mechanism_v2/ncrn_geometry_worlds/geometry_worlds.json').read_text())
+          if p['status']!='geometry_worlds_qualified':
+              raise SystemExit(p.get('error',p['status']))
+          PY
