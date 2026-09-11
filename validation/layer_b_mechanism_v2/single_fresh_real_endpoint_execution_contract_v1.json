@@ -16,21 +16,30 @@
     "gate_weakening_to_obtain_score_allowed": false,
     "response_consumed_system_reuse_as_fresh_allowed": false
   },
-  "prior_closed_candidate": {
-    "candidate": "india_tiger",
-    "terminal_status": "terminal_pre_response_transport_stop",
-    "status_ledger": "validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json",
-    "response_consumed": false,
-    "counts_as_predictive_evidence": false,
-    "may_be_reopened_or_retried": false
-  },
+  "prior_closed_candidates": [
+    {
+      "candidate": "india_tiger",
+      "terminal_status": "terminal_pre_response_transport_stop",
+      "status_ledger": "validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json",
+      "response_consumed": false,
+      "counts_as_predictive_evidence": false,
+      "may_be_reopened_or_retried": false
+    },
+    {
+      "candidate": "illinois_coyote_2021_2024",
+      "terminal_status": "terminal_pre_response_transport_stop",
+      "status_ledger": "validation/layer_b_mechanism_v2/illinois_coyote_qualification_v2_status_v1.json",
+      "response_consumed": false,
+      "counts_as_predictive_evidence": false,
+      "may_be_reopened_or_retried": false
+    }
+  ],
   "active_candidate_lock": {
-    "candidate": "illinois_coyote_2021_2024",
-    "selection_contract": "validation/layer_b_mechanism_v2/illinois_coyote_stage0_selection_v1.json",
-    "current_status": "selected_response_unopened_prequalification_in_progress",
+    "candidate": null,
+    "current_status": "single_slot_free_response_blind_prescreening_only",
     "response_open_authorized": false,
-    "replacement_before_terminal_pre_response_disposition": false,
-    "replacement_after_terminal_pre_response_failure": "allowed only as a single new active candidate, with no parallel candidates and no weakening of qualification v2"
+    "new_candidate_may_be_locked_only_after": "public-documentation prescreen shows a plausible path through exact response semantics, stable individual-file transport, >=50 station-level coordinates, and partition-level both-class estimability without response payload access",
+    "parallel_prescreening_may_not_create_repository_attempts": true
   },
   "qualification_before_response": {
     "all_required_v2_checks_must_pass": true,
@@ -46,10 +55,7 @@
     "qualification_failure_counts_as_predictive_evidence": false
   },
   "inner_selection": {
-    "candidate_arms": [
-      "baseline_only",
-      "baseline_plus_frozen_layer_b"
-    ],
+    "candidate_arms": ["baseline_only", "baseline_plus_frozen_layer_b"],
     "inner_train_only_for_fitting_before_selection": true,
     "inner_validation_only_for_arm_selection": true,
     "metric": "macro_binary_log_loss",
@@ -64,12 +70,7 @@
     "same_frozen_learner_preprocessing_hyperparameters_and_feature_rules": true,
     "maximum_outer_scoring_runs": 1,
     "terminal_after_scoring": true,
-    "acceptable_terminal_scientific_outcomes": [
-      "selective_favorable",
-      "selective_null_or_negligible",
-      "selective_adverse",
-      "outer_non_estimable_under_frozen_rules"
-    ],
+    "acceptable_terminal_scientific_outcomes": ["selective_favorable", "selective_null_or_negligible", "selective_adverse", "outer_non_estimable_under_frozen_rules"],
     "post_outer_rescue_tuning_allowed": false
   },
   "claim_boundary": {
