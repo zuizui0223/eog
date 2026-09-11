@@ -30,6 +30,7 @@ def main() -> int:
     boundary = json.loads(BOUNDARY.read_text(encoding="utf-8"))
     abstract_block = _section(text, "## Abstract", "## Introduction")
     abstract_core = abstract_block.split("**Data and code for peer review:**", 1)[0]
+    methods_block = _section(text, "## Materials and Methods", "## Results")
 
     abstract_numbers = [bool(re.search(rf"(?m)^\*\*{i}\.\*\*", abstract_core)) for i in range(1, 5)]
     abstract_word_count = len(WORD_RE.findall(abstract_core))
@@ -65,13 +66,16 @@ def main() -> int:
         "word_count_at_most_8000": whole_word_count <= 8000,
     }
 
+    methods_lower = methods_block.casefold()
+    ai_disclosure_present = any(token in methods_lower for token in ("chatgpt", "large language model", "llm", "generative ai"))
     author_admin_checks = {
         "title_page_present": TITLE_PAGE.exists(),
         "final_archive_doi_placeholder_resolved": final_placeholders == 0,
+        "ai_llm_use_disclosure_present_in_methods": ai_disclosure_present,
     }
 
     result = {
-        "schema": "eog.eogwf_mee_submission_readiness.v2",
+        "schema": "eog.eogwf_mee_submission_readiness.v3",
         "manuscript": str(MANUSCRIPT.relative_to(ROOT)),
         "journal": "Methods in Ecology and Evolution",
         "article_type": "Research Article",
