@@ -8,20 +8,26 @@ on:
       - 'validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_final_once_v2.py'
       - 'validation/layer_b_mechanism_v2/ncrn_final_runner_v2_amendment_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_terminal_semantics_amendment_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_geometry_worlds_frozen_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_pre_response_qualification_receipt_v1.json'
       - 'src/eog/v2/source_symmetric_predictive_summary.py'
+      - '.github/workflows/ncrn-final-live-once.yml'
       - '.github/workflows/ncrn-final-pre-response.yml'
   pull_request:
     paths:
       - 'validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_final_once_v2.py'
       - 'validation/layer_b_mechanism_v2/ncrn_final_runner_v2_amendment_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_terminal_semantics_amendment_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_geometry_worlds_frozen_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_pre_response_qualification_receipt_v1.json'
       - 'src/eog/v2/source_symmetric_predictive_summary.py'
+      - '.github/workflows/ncrn-final-live-once.yml'
       - '.github/workflows/ncrn-final-pre-response.yml'
 
 permissions:
@@ -45,12 +51,16 @@ jobs:
           contract=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json').read_text())
           route=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json').read_text())
           amendment=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_final_runner_v2_amendment_v1.json').read_text())
+          terminal=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_terminal_semantics_amendment_v1.json').read_text())
           src=Path('validation/layer_b_mechanism_v2/ncrn_final_once_v2.py').read_text()
+          live=Path('.github/workflows/ncrn-final-live-once.yml').read_text()
           assert contract['frozen_before_any_response_payload_access'] is True
           assert contract['response_payload_requests_before_freeze'] == 0
           assert contract['response_open_authorized_by_this_contract_alone'] is False
           assert amendment['response_firewall']['response_requests_before_amendment'] == 0
           assert amendment['authoritative_runner'].endswith('ncrn_final_once_v2.py')
+          assert terminal['response_payload_requests_so_far'] == 0
+          assert terminal['authoritative_non_estimability_terminal'] == 'terminal_non_estimable_under_frozen_rules'
           assert route['schema'].endswith('v2')
           assert len(route['exact_header_from_independent_eml']) == 60
           assert contract['partition']['warmup_state_only'] == [2007]
@@ -63,6 +73,12 @@ jobs:
           assert '757399' not in src and '757400' not in src
           assert 'AUTH_PATH.exists()' in src
           assert '--synthetic' in src
+          assert "paths:\n      - 'validation/layer_b_mechanism_v2/ncrn_response_open_authorization_v1.json'" in live
+          assert "RUN_ATTEMPT: ${{ github.run_attempt }}" in live
+          assert "if os.environ['RUN_ATTEMPT'] != '1'" in live
+          assert "git','rev-parse','HEAD^" in live
+          assert "src.count('r1_raw = core.get_bytes(core.RESPONSE_URL') != 1" in live
+          assert 'manual_rerun_allowed' in live
           PY
       - name: Run response-free synthetic prequential validation
         run: python validation/layer_b_mechanism_v2/ncrn_final_once_v2.py --synthetic
