@@ -220,32 +220,65 @@ Canonical closure assets:
 
 Any future real-system Layer-B translation test must be a **new separately preregistered protocol/version**. It cannot be represented as rescue or continuation of this closed programme.
 
-## Active scientific milestone
+## EOG-WF submission lane — frozen science, parallel administration only
 
-The active milestone is **manuscript closure**, not additional empirical search.
+The EOG-WF scientific manuscript is closed and the deterministic submission-package builder is on `main`. Remaining EOG-WF work is limited to author/admin/release completion:
 
-In order:
+1. final title page / author metadata;
+2. review-ready archive or DOI/private-review link;
+3. author-approved AI/LLM disclosure.
 
-1. keep repository status documents synchronized with the frozen closure boundary;
-2. complete the EOG-WF Abstract, Introduction and Discussion inside `submission_boundary.json`;
-3. perform a one-time Methods in Ecology and Evolution desk-fit audit without changing the frozen empirical denominator;
-4. prepare tagged software/reproducibility release only after the manuscript text and figures are internally consistent.
+These items may proceed in parallel, but **they do not reopen scientific development, endpoint search, model fitting or claim expansion**.
 
-The older structural/island manuscript line is a **separate scientific line** and must not be merged into EOG-WF merely to broaden the current paper.
+## Active scientific milestone — structural/island second paper
+
+The active scientific-development line is now the separate structural/island manuscript governed by:
+
+- [`../manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json`](../manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json)
+- [`../manuscript/structural_reachability_manuscript.md`](../manuscript/structural_reachability_manuscript.md)
+- [`../manuscript/structural_submission_checklist.md`](../manuscript/structural_submission_checklist.md)
+- [`../manuscript/submission/submission_manifest.json`](../manuscript/submission/submission_manifest.json)
+
+Its scientific content is closed. The central claim is:
+
+> **Occurrence-conditioned landscape structure can retain held-out information under a restricted declared reference yet fail to add predictive value beyond a richer reference; structural adequacy must therefore be earned relative to the reference and endpoint being tested.**
+
+The empirical basis is separate from EOG-WF:
+
+- original A-Islands conditional ordering: positive under climatic support + nearest-source conditioning;
+- prospectively frozen A-Islands `C − R3`: adverse predictive increment;
+- Tanzania strong-reference test: adverse primary LOSO increment, spatial-block sensitivity uncertain.
+
+The active sequence is presentation/release only:
+
+1. revise Figure 1 around `declared reference -> held-out structural probe -> earned / adverse-or-redundant / indeterminate`;
+2. revise the A-Islands figure so the original conditional-concordance result and strong-reference `C − R3` result remain on distinct axes and cannot be read as one effect size;
+3. add the R0/R1/R2/R3/C explanatory tier panel, with `C − R3` marked as the only primary extension contrast;
+4. rebuild and fingerprint the final figure set and run display-size visual QA;
+5. freeze the structural-paper release/archive only after those presentation assets are final;
+6. complete author metadata, AI disclosure and submission-day Ecological Informatics policy verification.
+
+No new biological endpoint is needed or allowed to rescue the observed pattern.
 
 ## Hard stop rules
 
-1. **Do not select a fourth fresh endpoint.**
-2. Do not rerun opened/stopped systems and relabel them independent confirmation.
-3. Do not add a favorable case to change the observed `favorable / favorable / adverse` pattern.
-4. Do not expose arbitrary exact world labels as default supervised features.
-5. Do not change learner family, hyperparameters or conventional features between paired fits.
+1. **Do not select a fourth EOG-WF fresh endpoint.**
+2. Do not rerun opened/stopped EOG-WF systems and relabel them independent confirmation.
+3. Do not add a favorable case to change the EOG-WF `favorable / favorable / adverse` pattern.
+4. Do not expose arbitrary exact world labels as default supervised EOG-WF features.
+5. Do not change learner family, hyperparameters or conventional features between paired EOG-WF fits.
 6. Do not identify a surviving world as historical truth.
 7. Do not claim universal robustness outside the declared finite-world certificate.
-8. Do not pool endpoint rows to manufacture a common-effect predictive claim.
-9. New response-independent synthetic exposition is allowed only when it clarifies an already-frozen method property; it cannot reopen or alter the empirical endpoint decision.
+8. Do not pool EOG-WF endpoint rows to manufacture a common-effect predictive claim.
+9. New response-independent synthetic exposition may clarify an already-frozen method property but cannot reopen or alter an empirical endpoint decision.
 10. Do not repair or rerun the consumed NCRN attempt; any future Layer-B real translation requires a new protocol version.
+11. **Do not rerun the authoritative A-Islands strong-reference outcome.**
+12. Do not weaken R3, retune graph radii or change taxa after the A-Islands outcome.
+13. Do not add a favorable structural/island dataset to rescue the adverse strong-reference results.
+14. Do not pool the original A-Islands conditional-concordance estimand with the strong-reference log-loss increment as a common effect size.
+15. Do not reinterpret Tanzania spatial-block uncertainty as a resolved effect.
+16. Do not merge the structural/island empirical denominator into EOG-WF, or use EOG-WF endpoints as extra replications of the structural paper.
 
-The active mainline is therefore:
+The active scientific mainline is therefore:
 
-> **write and submit the closed EOG-WF result: exact Layer A for structural update/falsification, label-invariant Layer B as a context-dependent predictive complement, with favorable and adverse evidence preserved under the same prospective contract.**
+> **finish and submit the structural/island second paper as a reference-conditioned structural-adequacy result, while keeping the EOG-WF paper scientifically frozen and limited to its existing author/admin/release lane.**
