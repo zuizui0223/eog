@@ -14,10 +14,11 @@
     "nps_reference": 2317363,
     "issued": "2026-03-13",
     "monitoring_start": 2007,
-    "forest_response_resource": {
+    "initial_forest_response_resource": {
       "name": "ncrn_birds_forest_counts.csv",
       "download_file_id": 757399,
-      "payload_forbidden_until_all_qualification_v2_gates_pass": true
+      "status": "rejected_as_site_year_response_route_from_metadata_only_because_no_site_or_event_key",
+      "payload_opened": false
     },
     "stage0_allowed_resources": [
       {
@@ -36,7 +37,7 @@
         "role": "response-independent survey-visit calendar/effort and observation opportunity"
       }
     ],
-    "explicitly_forbidden_stage0_resources": [
+    "response_bearing_resources_unopened": [
       "ncrn_birds_forest_counts.csv",
       "ncrn_birds_forest_R1_BirdDataStandard.csv",
       "ncrn_birds_forest_fielddata.csv"
@@ -52,13 +53,23 @@
   },
   "independent_estimability_certificate_basis": {
     "publication": "Redmond 2023, Long-term landbird monitoring in the National Capital Region National Parks, University of Delaware MS thesis",
+    "correction_contract": "validation/layer_b_mechanism_v2/ncrn_independent_estimability_correction_v1.json",
     "study_years": [2007, 2019],
-    "forest_plot_count": 277,
+    "sites_by_period": {
+      "2007": 246,
+      "2008-2013": 255,
+      "2014-2019": 277
+    },
     "yearly_detected_site_count_min": 123,
     "yearly_detected_site_count_max": 205,
-    "yearly_positive_lower_bound": 123,
-    "yearly_negative_lower_bound": 72,
-    "derivation": "Across every year in the 13-year study, detected-site count lies in [123,205]; with 277 forest plots, positives are therefore >=123 and nondetected sites >=277-205=72 in each year.",
+    "conservative_yearly_positive_lower_bound": 123,
+    "conservative_yearly_negative_lower_bound_minimum": 41,
+    "negative_lower_bound_by_period": {
+      "2007": 41,
+      "2008-2013": 50,
+      "2014-2019": 72
+    },
+    "derivation": "The thesis reports 246 monitored sites in 2007, +9 sites from 2008, +22 more from 2014, and Red-bellied Woodpecker detections at 123-205 sites per year. Using the global maximum detection count of 205 conservatively yields annual nondetection lower bounds of 41, 50, and 72 in the three network-size periods; the positive lower bound is 123 in every year.",
     "uses_endpoint_response_payload": false
   },
   "prospective_nested_partition": {
@@ -71,7 +82,7 @@
       "negative_site_years": 30,
       "unique_spatial_nodes": 50
     },
-    "pre_response_reason": "All three chronological partitions lie inside the independently analyzed 2007-2019 period, for which annual detected-site counts imply both-class support far above the frozen minima in every constituent year."
+    "pre_response_reason": "Every constituent year in all three chronological partitions has an independent conservative positive lower bound >=123 and negative lower bound >=41, both above the frozen 30/30 class minima."
   },
   "response_firewall": {
     "counts_payload_requests_stage0": 0,
@@ -85,20 +96,20 @@
     "full_archive_or_joined_response_download_forbidden": true
   },
   "qualification_v2_status_at_selection": {
-    "source_identity": "public_NPS_reference_and_exact_resource_IDs_frozen_live_transport_pending",
-    "response_semantics": "metadata_XML_expected_to_supply_exact_schema_and_relations_pending_stage0_verification",
-    "target": "independent_target_and_both_class_support_prequalified",
-    "geometry_and_effort": "separate_points_and_visits_resources_frozen_live_verification_pending",
-    "validation_design": "nested_year_partitions_and_estimability_minima_frozen_learner_and_feature_contract_pending_after_nonresponse_schema",
+    "source_identity": "public_NPS_reference_and_exact_resource_IDs_frozen_stage0_live_transport_passed",
+    "response_semantics": "metadata_only_route_audit_identified_fielddata_and_R1_as_joinable; exact_single_route_selection_pending",
+    "target": "independent_target_and_both_class_support_prequalified_after_conservative_site-count_correction",
+    "geometry_and_effort": "separate_points_and_visits_live_transport_and_413_node_registry_passed",
+    "validation_design": "nested_year_partitions_and_estimability_minima_frozen; final learner_feature_world_contract_pending",
     "qualification_v2_complete": false,
     "response_open_authorized": false
   },
   "stage0_terminal_failures": [
     "any allowed individual NPS resource cannot be transported reproducibly under its frozen DownloadFile ID and Reference",
-    "metadata XML does not independently define the response entity, join keys, or missing/absence semantics strongly enough to derive site-year detection from counts plus visits",
+    "metadata XML does not independently define a response route with exact site/year/species semantics",
     "forest points do not reproduce at least 50 unique station-level latitude/longitude coordinates",
     "forest visits do not cover all frozen years 2007-2019 or do not independently define eligible survey opportunity",
     "resource identities or schema contradict the frozen target grain or partition"
   ],
-  "next_gate": "stage0_metadata_points_visits_only_response_payload_zero"
+  "next_gate": "freeze_one_metadata_documented_response_route_then_full_pre_response_execution_contract"
 }
