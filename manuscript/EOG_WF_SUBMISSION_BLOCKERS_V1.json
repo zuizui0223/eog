@@ -1,0 +1,51 @@
+{
+  "schema": "eog.eogwf_submission_blockers.v1",
+  "date": "2026-09-11",
+  "journal": "Methods in Ecology and Evolution",
+  "article_type": "Research Article",
+  "scientific_desk_fit_ready": true,
+  "scientific_blockers": [],
+  "empirical_denominator_frozen": {
+    "fresh_scored_endpoints": 3,
+    "pattern": ["favorable", "favorable", "adverse"],
+    "scientific_protocol_stops": 31,
+    "administrative_exclusions": 3,
+    "fourth_fresh_endpoint_allowed": false
+  },
+  "post_closure_layer_b_v2": {
+    "separate_from_eog_wf_denominator": true,
+    "fresh_real_scored_endpoints": 0,
+    "ncrn_terminal_status": "terminal_schema_or_transport_stop_after_response",
+    "may_be_added_as_endpoint_4": false
+  },
+  "remaining_submission_blockers": [
+    {
+      "id": "title_page_author_confirmation",
+      "type": "author_admin",
+      "requires_external_author_input": true,
+      "template": "manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md",
+      "completion_condition": "Create manuscript/EOG_WF_TITLE_PAGE.md only after all author, affiliation, corresponding-author, acknowledgement, contribution, funding, conflict and inclusion fields are confirmed."
+    },
+    {
+      "id": "review_archive_or_doi",
+      "type": "release_admin",
+      "requires_external_or_release_action": true,
+      "current_placeholder": "[FINAL ARCHIVE/DOI TO ADD]",
+      "completion_condition": "Fix a review-ready release/archive or suitable private peer-review repository and replace the manuscript placeholder with the final review-access statement."
+    },
+    {
+      "id": "ai_llm_disclosure_author_confirmation",
+      "type": "author_admin",
+      "requires_external_author_input": true,
+      "completion_condition": "Confirm the AI/LLM applications and versions actually used, the extent of code/text assistance, responsible author accountability and any required code annotations; then add the Methods disclosure and contribution statement."
+    }
+  ],
+  "forbidden_as_blocker_resolution": [
+    "add another fresh ecological endpoint",
+    "rerun opened or stopped candidates",
+    "change the favorable/favorable/adverse empirical pattern",
+    "fold the NCRN post-closure attempt into the EOG-WF denominator",
+    "weaken the closed claim boundary"
+  ],
+  "next_action": "Complete author/admin metadata and review-ready archive, then run the read-only MEE readiness audit and package the submission."
+}
