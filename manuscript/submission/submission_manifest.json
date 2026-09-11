@@ -1,6 +1,6 @@
 {
-  "schema_version": "eog_structural_submission_manifest_v4",
-  "submission_status": "SCIENTIFIC_CONTENT_CLOSED_PRESENTATION_RELEASE_AUTHOR_GATES_ACTIVE",
+  "schema_version": "eog_structural_submission_manifest_v5",
+  "submission_status": "SCIENTIFIC_CONTENT_CLOSED_PRESENTATION_V2_IMPLEMENTED_PENDING_QA_RELEASE_AUTHOR_GATES",
   "paper_boundary": "manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json",
   "target_journal": "Ecological Informatics",
   "journal_decision_rule": {
@@ -30,20 +30,20 @@
   "island_authoritative_provenance": "validation/aislands_isolation_adequacy_20260812/authoritative_execution_provenance.json",
   "island_outcome_qa": "validation/aislands_isolation_adequacy_20260812/authoritative_outcome_qa.json",
   "figure_files": [
-    "figures/output/figure_1_roles.svg",
-    "figures/output/figure_2_aislands.svg",
+    "figures/output/figure_1_reference_conditioned.svg",
+    "figures/output/figure_2_aislands_reference_conditioned.svg",
     "figures/output/figure_3_tanzania.svg",
     "figures/output/figure_4_boundary.svg",
     "figures/output/figure_5_audit.svg"
   ],
-  "figure_status": "scientific_inputs_frozen_presentation_revision_required",
+  "figure_status": "reference_conditioned_v2_renderers_implemented_pending_committed_output_sync_and_visual_qa",
   "machine_readable_results": [
     "manuscript/result_tables/table_3_main_sensitivity_results.csv",
     "manuscript/result_tables/table_s1_applicability_accounting.csv",
     "validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json",
     "validation/aislands_isolation_adequacy_20260812/authoritative_outcome_qa.json"
   ],
-  "offline_build_command": "python manuscript/build_structural_submission_package.py --output-dir build/structural_submission",
+  "offline_build_command": "python manuscript/build_structural_submission_package_v2.py --output-dir build/structural_submission_v2",
   "frozen_evidence": {
     "aislands_original_direction": "positive_added_ordering_information_conditional_on_support_and_nearest_source_distance",
     "aislands_original_conditional_concordance": 0.6177465917820878,
@@ -62,7 +62,7 @@
     "workflow_run_id": 31564146592,
     "workflow_run_attempt": 1,
     "trigger_commit": "a9329d929933c919fe6c1c03934f0314c40f5c50",
-    "primary_contrast": "candidate C minus reference R3 matched held-out log loss",
+    "primary_contrast": "candidate C minus reference R3 matched heldout log loss",
     "favourable_direction": "negative",
     "observed_primary_direction": "adverse_positive",
     "result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
@@ -74,13 +74,14 @@
     "original A-Islands positive conditional-ordering result and strong-reference adverse predictive result kept explicit and non-conflated",
     "Tanzania retained as an external strong-reference adverse boundary with spatial-block uncertainty",
     "closest-prior literature boundary incorporated",
-    "EOG-WF and structural-island empirical denominators separated by manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json"
+    "EOG-WF and structural-island empirical denominators separated by manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json",
+    "Figure 1 presentation v2 implemented as declared reference -> held-out structural probe -> earned/redundant/adverse/indeterminate",
+    "A-Islands presentation v2 implemented with restricted-reference conditional concordance and strong-reference C-R3 log-loss increment on distinct axes",
+    "R0/R1/R2/R3/C ladder implemented with C-R3 marked as the sole primary extension contrast"
   ],
   "required_pre_submission_resolutions": [
-    "revise Figure 1 to show declared reference -> held-out structural probe -> earned/adverse-or-redundant/indeterminate inference",
-    "revise the A-Islands result figure so conditional-concordance and strong-reference C-R3 log-loss results remain on distinct axes",
-    "add the R0/R1/R2/R3/C explanatory tier panel with C-R3 explicitly marked as the only primary extension contrast",
-    "rebuild and fingerprint the final figure set and complete Ecological Informatics display-size visual QA",
+    "generate and commit/fingerprint the reference-conditioned Figure 1 and A-Islands Figure 2 presentation assets from frozen inputs",
+    "complete Ecological Informatics display-size visual QA for typography, legends, panel labels and colour/grayscale legibility",
     "create the tagged software release after the presentation state is frozen",
     "reserve or mint the release archive DOI only after the final scientific/presentation package is frozen",
     "complete author_metadata.template.json with author-approved metadata and remove placeholders in the final submission record",
