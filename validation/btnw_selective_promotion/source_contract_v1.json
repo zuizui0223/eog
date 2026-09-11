@@ -1,0 +1,143 @@
+{
+  "schema": "eog.btnw_selective_promotion.source_contract.v1",
+  "attempt_id": "btnw_setophaga_selective_promotion_v1",
+  "frozen_before_any_endpoint_response_payload_access": true,
+  "scientific_question": "Does calibration-only selective promotion of the source-symmetric sequential EOG contextual representation improve untouched real ecological prediction relative to the same frozen conventional baseline?",
+  "closed_eog_wf_unchanged": true,
+  "qualification_contract": {
+    "path": "validation/layer_b_mechanism_v2/fresh_real_candidate_qualification_v2.json",
+    "main_sha_at_selection": "f294f0df6e0838d308e671363d789f5ed1c76ae9",
+    "gate_may_not_be_lowered_for_this_attempt": true
+  },
+  "candidate": {
+    "common_name": "Black-throated Green Warbler",
+    "scientific_name": "Setophaga virens",
+    "source_is_single_species": true,
+    "target_change_after_any_response_access": false,
+    "prior_eog_search_found_this_candidate": false
+  },
+  "published_dataset": {
+    "dryad_doi": "10.5061/dryad.95x69p8z6",
+    "published_date": "2025-10-17",
+    "response_file_name": "model_data.rds",
+    "response_file_size_as_publicly_listed": "132.40 KB",
+    "response_file_body_opened_by_this_attempt": false,
+    "response_file_header_opened_by_this_attempt": false,
+    "response_file_rows_or_values_opened_by_this_attempt": false,
+    "required_future_identity": "Dryad immutable version id plus file id and published digest/digestType (or equivalent immutable file identifier) must be frozen from metadata before response access"
+  },
+  "independent_documentation": {
+    "article_doi": "10.1093/ornithapp/duaf068",
+    "article_title": "Edge effects reduce persistence but not colonization in a declining Setophaga virens (Black-throated Green Warbler) population in Alberta's boreal forest",
+    "author_repository": "harttaylor/BTNW_DynamicOccupancy",
+    "author_repository_commit": "53112e6d4ead5cf3f20137ae8f94646c0d05bd4f",
+    "author_readme_blob_sha": "1384bca89467a523c570ea7b74e490fe5fe4458c",
+    "geometry_file": "Data/thinnedpoints.csv",
+    "geometry_blob_sha": "b6205189225002a21fbc2cdb93adee18b7d04c85",
+    "geometry_file_size_bytes": 5666,
+    "geometry_columns_exact": {
+      "site_id": "SS",
+      "longitude": "longitude",
+      "latitude": "latitude"
+    },
+    "geometry_alias_discovery_after_payload_access": false,
+    "response_file_is_not_present_in_the_author_repository_tree": true
+  },
+  "geometry_world_rule": {
+    "frozen_before_geometry_payload_access_by_this_attempt": true,
+    "distance": "haversine_km",
+    "earth_radius_km": 6371.0088,
+    "pairwise_pool": "all unordered distinct-site pairs among the 114 frozen site coordinates; discard only nonfinite or exactly zero distances",
+    "local_quantiles": [0.2, 0.4, 0.6, 0.8],
+    "quantile_method": "linear interpolation with h=(n-1)*q, lower=floor(h), upper=ceil(h), value=x[lower]+(h-lower)*(x[upper]-x[lower]) on sorted nonzero distances",
+    "world_ids": ["q20", "q40", "q60", "q80", "external_open"],
+    "external_open_support": 1,
+    "thresholds_must_be_positive_strictly_increasing": true,
+    "no_response_information": true
+  },
+  "response_semantics_frozen_from_independent_documentation": {
+    "survey_sites": 114,
+    "survey_years": 25,
+    "year_range": [1993, 2018],
+    "excluded_year": 2004,
+    "maximum_repeat_visits_per_site_year": 4,
+    "raw_detection_array_name": "y",
+    "raw_detection_values": {
+      "1": "species detected",
+      "0": "species not detected on a conducted visit",
+      "NA": "site/visit not surveyed"
+    },
+    "endpoint_unit": "site-year",
+    "binary_endpoint_rule": "1 if any conducted visit in that site-year has y==1; 0 if at least one visit was conducted and every conducted visit has y==0; ineligible if all visits are NA",
+    "stored_derived_indicator_name": "ind",
+    "stored_derived_indicator_documentation": "1 if species detected at least once that year, 0 if never detected",
+    "derive_endpoint_from_raw_y_not_from_latent_occupancy_z": true,
+    "latent_or_posterior_occupancy_is_not_the_endpoint_response": true,
+    "no_pseudoabsence": true,
+    "missing_is_not_zero": true
+  },
+  "independent_pre_response_class_support": {
+    "published_1993_occupied_sites": 77,
+    "published_1993_total_sites": 114,
+    "published_2018_occupied_sites": 32,
+    "published_2018_total_sites": 114,
+    "published_mean_detection_probability": 0.42,
+    "published_sampling_statement": "3-5 point-count visits per site per year; analysis uses up to four repeat visits per site-year",
+    "interpretation": "Independent publication evidence establishes a non-degenerate target with substantial occupied and unoccupied support at both ends of the 25-year record, unlike the MAPPPD extreme class-skew failure. These publication summaries are qualification evidence only and are not endpoint response values.",
+    "limitation": "Published occupancy summaries are not raw site-year detection counts. Therefore Stage0 may qualify source identity/geometry but final response access remains forbidden unless a pre-response audit accepts this evidence as compatible with the frozen per-partition estimability minima without inspecting model_data.rds."
+  },
+  "predeclared_temporal_partition": {
+    "rule": "chronological approximately 50/25/25 split of the 25 documented survey years, fixed without response values",
+    "inner_train_years": [1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2005],
+    "inner_validation_years": [2006, 2007, 2008, 2009, 2010, 2011],
+    "outer_heldout_years": [2012, 2013, 2014, 2015, 2016, 2017, 2018],
+    "outer_feedback_for_selector": false,
+    "partition_change_after_response": false
+  },
+  "estimability_minima_frozen_before_response": {
+    "inner_train_positive_site_years": 30,
+    "inner_train_negative_site_years": 30,
+    "inner_validation_positive_site_years": 10,
+    "inner_validation_negative_site_years": 10,
+    "outer_positive_site_years": 10,
+    "outer_negative_site_years": 10,
+    "inner_validation_years_with_both_classes": 3,
+    "outer_years_with_both_classes": 3
+  },
+  "stage0_authorized_access_only": {
+    "dryad_dataset_metadata_gets": 1,
+    "dryad_version_metadata_gets_max": 1,
+    "dryad_file_manifest_metadata_gets_max": 1,
+    "github_author_readme_blob_gets": 1,
+    "github_geometry_blob_gets": 1,
+    "dryad_response_file_payload_gets": 0,
+    "dryad_response_file_payload_bytes": 0,
+    "response_headers_rows_values": 0,
+    "model_fits": 0,
+    "selector_decisions": 0,
+    "heldout_scores": 0
+  },
+  "stage0_must_verify": [
+    "Dryad DOI resolves through the official API and exposes one current published version identity",
+    "the version file manifest contains exactly one model_data.rds with immutable file metadata and digest or equivalent immutable identifier",
+    "the response file is not downloaded or previewed",
+    "the pinned author-repository geometry blob decodes with exact columns SS/longitude/latitude as exactly 114 unique valid site IDs with finite coordinates",
+    "geometry yields q20/q40/q60/q80 under the frozen linear-quantile rule and all four thresholds are positive and strictly increasing",
+    "README/geometry identities match the pinned author repository commit",
+    "no endpoint response bytes, headers, rows, values, models, selector decisions or heldout scores are opened"
+  ],
+  "stage0_terminal_states": [
+    "stage0_source_geometry_qualified_class_support_pending",
+    "stage0_fully_pre_response_qualified",
+    "stop_pre_response_metadata_identity_transport_or_geometry"
+  ],
+  "response_opening_authorized_by_this_contract": false,
+  "final_endpoint_contract_may_be_created_only_if": "Stage0 is terminal-success and a separate pre-response class-support audit explicitly establishes compatibility with all frozen estimability minima for the predeclared partition without reading model_data.rds payload",
+  "scientific_boundary": {
+    "counts_as_predictive_evidence": false,
+    "counts_as_empirical_conclusion": false,
+    "changes_closed_eog_wf": false,
+    "does_not_rescue_or_reclassify_portal_or_mapppd": true,
+    "no_post_response_repair": true
+  }
+}
