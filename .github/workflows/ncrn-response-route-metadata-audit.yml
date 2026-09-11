@@ -1,0 +1,75 @@
+name: NCRN metadata-only response route audit
+
+on:
+  push:
+    branches:
+      - research/layer-b-v2-single-fresh-endpoint-lock
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_response_route_metadata_audit.py'
+      - '.github/workflows/ncrn-response-route-metadata-audit.yml'
+  pull_request:
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_response_route_metadata_audit.py'
+      - '.github/workflows/ncrn-response-route-metadata-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-route-audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify response firewall
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          src = Path('validation/layer_b_mechanism_v2/ncrn_response_route_metadata_audit.py').read_text()
+          assert 'response_payload_requests": 0' in src
+          assert 'counts_payload_requests": 0' in src
+          assert 'fielddata_payload_requests": 0' in src
+          assert 'R1_payload_requests": 0' in src
+          assert 'METADATA_URL' in src
+          PY
+      - name: Execute metadata-only route audit
+        id: audit
+        continue-on-error: true
+        run: python validation/layer_b_mechanism_v2/ncrn_response_route_metadata_audit.py
+      - name: Audit zero-response boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/layer_b_mechanism_v2/ncrn_response_route_metadata_audit/route_audit.json').read_text())
+          assert p['metadata_payload_requests'] == 1
+          assert p['response_payload_requests'] == 0
+          assert p['counts_payload_requests'] == 0
+          assert p['fielddata_payload_requests'] == 0
+          assert p['R1_payload_requests'] == 0
+          assert p['response_bytes_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          assert p['response_open_authorized'] is False
+          assert p['status'] in {
+              'metadata_response_route_candidates_identified',
+              'terminal_pre_response_response_semantics_stop',
+          }
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ncrn-response-route-metadata-audit
+          path: build/layer_b_mechanism_v2/ncrn_response_route_metadata_audit/route_audit.json
+          if-no-files-found: error
+      - name: Require at least one documented joinable route
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('build/layer_b_mechanism_v2/ncrn_response_route_metadata_audit/route_audit.json').read_text())
+          if p['status'] != 'metadata_response_route_candidates_identified':
+              raise SystemExit(p.get('error', p['status']))
+          PY
