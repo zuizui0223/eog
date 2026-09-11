@@ -26,6 +26,7 @@ OUTDIR = ROOT / "build" / "layer_b_mechanism_v2" / "ncrn_redbellied_stage0"
 OUTPUT = OUTDIR / "stage0_nonresponse.json"
 REFERENCE = 2317363
 BASE = "https://irma.nps.gov/DataStore/DownloadFile/{file_id}?Reference=2317363"
+AMENDMENT = "validation/layer_b_mechanism_v2/ncrn_pre_response_audit_corrections_v1.json"
 ALLOWED = {
     "metadata": (756926, "ncrn_birds_cumulative_through2025_metadata.xml"),
     "points": (757401, "ncrn_birds_forest_points.csv"),
@@ -43,7 +44,7 @@ def _get(url: str) -> tuple[bytes, str, str | None, str | None]:
     req = urllib.request.Request(
         url,
         headers={
-            "User-Agent": "eog-qualification-v2-response-blind/1",
+            "User-Agent": "eog-qualification-v2-response-blind/2",
             "Accept": "text/csv,application/xml,text/xml,text/plain,*/*",
         },
     )
@@ -160,38 +161,26 @@ def _site_key(points_header: list[str], visits_header: list[str], points_rows: l
     raise RuntimeError("no response-independent site key joins >=50 forest points to visits")
 
 
-def _extract_years(header: list[str], rows: list[dict[str, str]]) -> tuple[list[int], list[str]]:
-    candidate_columns = [h for h in header if "year" in h.lower() or "date" in h.lower()]
-    years = set()
-    used = []
-    for h in candidate_columns:
-        found = set()
-        for row in rows:
-            raw = str(row.get(h, "")).strip()
-            if not raw:
-                continue
-            m = re.search(r"\b(20\d{2}|19\d{2})\b", raw)
-            if m:
-                found.add(int(m.group(1)))
-                continue
-            for fmt in ("%m/%d/%Y", "%Y-%m-%d", "%m/%d/%y"):
-                try:
-                    found.add(datetime.strptime(raw, fmt).year)
-                    break
-                except ValueError:
-                    pass
-        if found:
-            years.update(found)
-            used.append(h)
-    if not years:
-        raise RuntimeError(f"could not derive visit years from nonresponse header {header}")
-    return sorted(years), used
+def _parse_event_year(raw: str) -> int | None:
+    raw = str(raw).strip()
+    if not raw:
+        return None
+    m = re.search(r"\b(20\d{2}|19\d{2})\b", raw)
+    if m:
+        return int(m.group(1))
+    for fmt in ("%m/%d/%Y", "%Y-%m-%d", "%m/%d/%y"):
+        try:
+            return datetime.strptime(raw, fmt).year
+        except ValueError:
+            pass
+    return None
 
 
 def main() -> int:
     OUTDIR.mkdir(parents=True, exist_ok=True)
     result = {
-        "schema": "eog.layer_b_mechanism_v2.ncrn_redbellied_stage0_nonresponse.v1",
+        "schema": "eog.layer_b_mechanism_v2.ncrn_redbellied_stage0_nonresponse.v2",
+        "pre_response_correction_amendment": AMENDMENT,
         "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
         "nps_reference": REFERENCE,
         "response_payload_requests": 0,
@@ -268,35 +257,28 @@ def main() -> int:
         if len(point_ids) < 50 or len(coords) < 50:
             raise RuntimeError(f"forest points yield only {len(point_ids)} site IDs / {len(coords)} unique coordinates")
 
-        years, year_columns = _extract_years(visits_header, visits_rows)
-        missing_years = sorted(FROZEN_YEARS - set(years))
+        if "EventDate" not in visits_header:
+            raise RuntimeError("forest visits lacks frozen survey-year source EventDate")
+        survey_years = set()
+        counts_by_year = Counter()
+        visit_site_ids = set()
+        for row in visits_rows:
+            sid = str(row.get(site_key, "")).strip()
+            if sid:
+                visit_site_ids.add(sid)
+            year = _parse_event_year(row.get("EventDate", ""))
+            if year is not None:
+                survey_years.add(year)
+                if sid in point_ids:
+                    counts_by_year[year] += 1
+        missing_years = sorted(FROZEN_YEARS - survey_years)
         if missing_years:
             raise RuntimeError(f"forest visits do not cover frozen years: {missing_years}")
-        visit_site_ids = {str(r.get(site_key, "")).strip() for r in visits_rows if str(r.get(site_key, "")).strip()}
         joined_sites = point_ids & visit_site_ids
         if len(joined_sites) < 50:
             raise RuntimeError(f"only {len(joined_sites)} point IDs are represented in forest visits")
 
-        counts_by_year = Counter()
-        for row in visits_rows:
-            sid = str(row.get(site_key, "")).strip()
-            if sid not in joined_sites:
-                continue
-            row_years = set()
-            for h in year_columns:
-                raw = str(row.get(h, "")).strip()
-                m = re.search(r"\b(20\d{2}|19\d{2})\b", raw)
-                if m:
-                    row_years.add(int(m.group(1)))
-                    continue
-                for fmt in ("%m/%d/%Y", "%Y-%m-%d", "%m/%d/%y"):
-                    try:
-                        row_years.add(datetime.strptime(raw, fmt).year)
-                        break
-                    except ValueError:
-                        pass
-            for year in row_years:
-                counts_by_year[year] += 1
+        export_years = sorted({y for y in (_parse_event_year(r.get("ExportDate", "")) for r in visits_rows) if y is not None}) if "ExportDate" in visits_header else []
 
         result["points"] = {
             "exact_header": points_header,
@@ -311,10 +293,11 @@ def main() -> int:
             "exact_header": visits_header,
             "row_count": len(visits_rows),
             "site_key": site_key,
-            "year_source_columns": year_columns,
-            "years": years,
+            "survey_year_source_column": "EventDate",
+            "survey_years": sorted(survey_years),
+            "export_years_provenance_only": export_years,
             "joined_unique_site_ids": len(joined_sites),
-            "visit_rows_by_year": {str(y): counts_by_year[y] for y in sorted(counts_by_year)},
+            "visit_rows_by_survey_year": {str(y): counts_by_year[y] for y in sorted(counts_by_year)},
         }
         result["status"] = "stage0_nonresponse_qualified_pending_exact_response_algebra_contract"
         result["source_identity_gate"] = "pass_fixed_reference_and_resource_ids_with_live_transport"
