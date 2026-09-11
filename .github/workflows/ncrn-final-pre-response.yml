@@ -74,9 +74,12 @@ jobs:
           assert 'AUTH_PATH.exists()' in src
           assert '--synthetic' in src
           assert "paths:\n      - 'validation/layer_b_mechanism_v2/ncrn_response_open_authorization_v1.json'" in live
+          assert 'fetch-depth: 0' in live
           assert 'RUN_ATTEMPT:' in live and 'github.run_attempt' in live
           assert "if os.environ['RUN_ATTEMPT'] != '1'" in live
           assert "git','rev-parse','HEAD^" in live
+          assert "git','log','--format=%H','HEAD^','--',auth_rel" in live
+          assert 'authorization path already existed in pre-authorization history' in live
           assert "src.count('r1_raw = core.get_bytes(core.RESPONSE_URL') != 1" in live
           assert 'manual_rerun_allowed' in live
           PY
