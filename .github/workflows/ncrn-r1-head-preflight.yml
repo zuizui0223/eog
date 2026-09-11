@@ -1,0 +1,75 @@
+name: NCRN R1 HEAD-only response transport preflight
+
+on:
+  push:
+    branches:
+      - research/layer-b-v2-single-fresh-endpoint-lock
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_r1_head_preflight.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json'
+      - '.github/workflows/ncrn-r1-head-preflight.yml'
+  pull_request:
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_r1_head_preflight.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json'
+      - '.github/workflows/ncrn-r1-head-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  head-only:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify HEAD-only firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json').read_text())
+          assert c['authoritative_response']['download_file_id'] == 757402
+          assert c['authoritative_response']['payload_requests_allowed_before_all_qualification_gates_pass'] == 0
+          assert c['authoritative_response']['header_bytes_allowed_before_all_qualification_gates_pass'] == 0
+          assert c['authoritative_response']['live_transport_preflight'].startswith('HEAD only')
+          src=Path('validation/layer_b_mechanism_v2/ncrn_r1_head_preflight.py').read_text()
+          assert "method='HEAD'" in src
+          assert "response_payload_requests': 0" in src
+          assert "response_body_bytes_opened': 0" in src
+          PY
+      - name: Execute HEAD-only preflight
+        id: preflight
+        continue-on-error: true
+        run: python validation/layer_b_mechanism_v2/ncrn_r1_head_preflight.py
+      - name: Audit zero-body boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/layer_b_mechanism_v2/ncrn_r1_head_preflight/head_preflight.json').read_text())
+          assert p['method']=='HEAD'
+          assert p['response_payload_requests']==0
+          assert p['response_body_bytes_opened']==0
+          assert p['response_header_bytes_opened']==0
+          assert p['response_values_opened'] is False
+          assert p['model_fits']==0 and p['heldout_scores']==0
+          assert p['response_open_authorized'] is False
+          assert p['status'] in {'head_only_response_transport_qualified','terminal_pre_response_r1_head_transport_stop'}
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ncrn-r1-head-preflight
+          path: build/layer_b_mechanism_v2/ncrn_r1_head_preflight/head_preflight.json
+          if-no-files-found: error
+      - name: Require transport qualification
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/layer_b_mechanism_v2/ncrn_r1_head_preflight/head_preflight.json').read_text())
+          if p['status']!='head_only_response_transport_qualified':
+              raise SystemExit(p.get('error',p['status']))
+          PY
