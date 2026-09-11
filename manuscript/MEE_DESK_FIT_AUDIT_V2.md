@@ -36,7 +36,7 @@ Reference-closure workflow evidence:
 - artifact: `10185289291`
 - artifact digest: `sha256:00680d0309bb5f96c644d79a81cd387ce661d103eff040cacca8e51d33334d7d`
 
-Current read-only readiness audit:
+Last fully recorded read-only readiness audit before the license-resolution commit:
 
 - workflow run: `34575834471`
 - job: `103187965069`
@@ -45,7 +45,7 @@ Current read-only readiness audit:
 - schema: `eog.eogwf_mee_submission_readiness.v4`
 - workflow conclusion: **success**
 
-Measured state:
+Measured scientific state:
 
 - Abstract word count: **343**;
 - complete Markdown manuscript word count under the repository checker: **3685**;
@@ -58,8 +58,7 @@ Measured state:
 - References section present: PASS;
 - manuscript under 8000 words: PASS;
 - scientific desk-fit ready: **true**;
-- unresolved scientific checks: **0**;
-- submission ready: **false**, because four author/release/legal gates remain unresolved.
+- unresolved scientific checks: **0**.
 
 The 3685 count is deliberately conservative because it includes the complete Markdown manuscript, including references and the submission-boundary checklist.
 
@@ -79,23 +78,21 @@ That risk has now been materially reduced without adding biological evidence:
 
 No empirical endpoint, score, direction or denominator was changed by these edits.
 
-## Remaining blockers are administrative/release/legal, not scientific
+## Open-source license gate — resolved
 
-The manuscript is **not submission-ready yet** because four items require author/external completion:
+The repository package metadata already declared `MIT` in `pyproject.toml`. On 2026-09-11 the author explicitly confirmed MIT as the intended repository license, and the full MIT license text was added at repository root as `LICENSE` with copyright notice `Copyright (c) 2026 ZHANG RUIQI`.
+
+The read-only readiness checker tracks `LICENSE`, `LICENSE.txt` or `LICENSE.md` as satisfying the open-source license-file gate. The CI workflow now also reruns when the license, blocker manifest or desk-fit audit changes.
+
+## Remaining blockers are administrative/release, not scientific
+
+The manuscript is **not submission-ready yet** because exactly three items require author/external completion:
 
 1. **Final title page.** Authors, affiliations, corresponding-author details, running headline, acknowledgements, author contributions, funding, competing interests and inclusion statement require author confirmation. The repository contains `manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md`; it must not be promoted to the final title page until confirmed.
 2. **Review-ready archive / DOI.** `[FINAL ARCHIVE/DOI TO ADD]` remains in the Data/Code statement. A release/archive or a suitable private peer-review repository must be fixed before upload.
 3. **AI/LLM disclosure.** Current MEE guidance requires transparent disclosure when LLMs are used in manuscript/code production, including the application/version and extent of use and author responsibility. The exact historical applications, versions and assisted portions must be confirmed by the authors before inserting the Methods disclosure and corresponding contribution statement.
-4. **Open-source license file.** `pyproject.toml` currently declares `MIT`, but no root `LICENSE`, `LICENSE.txt` or `LICENSE.md` file is present. MEE's code policy requires an accompanying open-source license. Authors must confirm the intended license before the repository release package is fixed; this audit does not create a legal license grant on their behalf.
 
-The v4 checker reports these exactly as:
-
-- `title_page_present = false`;
-- `final_archive_doi_placeholder_resolved = false`;
-- `ai_llm_use_disclosure_present_in_methods = false`;
-- `open_source_license_file_present = false`.
-
-None justify additional ecological analyses or another fresh endpoint.
+These blockers do not justify additional ecological analyses or another fresh endpoint.
 
 ## Submission boundary
 
@@ -115,4 +112,4 @@ The editor-facing answer to “what is the method?” is now concrete:
 
 > **EOG-WF is a two-layer ecological inference architecture that retains exact finite-world identities for auditable sequential compatibility and falsification, exposes only a label-invariant projection to prediction, and prospectively tests that projection as added information beyond an unchanged strong learner while retaining failed candidates in the validation denominator.**
 
-The next work is therefore **submission administration and reproducibility packaging**, not further scientific model development.
+The next work is therefore **author/title-page completion, AI/LLM disclosure confirmation and review-ready archive packaging**, not further scientific model development.
