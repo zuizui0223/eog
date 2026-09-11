@@ -16,6 +16,13 @@ REL_NEW = """EOG-WF is not presented as a replacement for species distribution m
 
 Nor does the novelty claim rest on any individual ingredient such as thresholded connectivity, path or network representations, permutation-invariant summaries, model combination or schema validation. Sensitivity of habitat-network predictions to dispersal thresholds is itself an established concern (Ortiz-Rodríguez et al., 2023). The contribution lies in the domain-specific combination of exact finite-world ecological falsification, strict separation of structural state from its prediction-facing compression, and a response-blind validation protocol that retains failed candidates in the denominator rather than repairing them away."""
 
+ABSTRACT_TAIL_OLD = """**Keywords:** ecological forecasting; falsification; reachability; prospective validation; model uncertainty; reproducibility; species distributions
+
+**Data and code for peer review:** all manuscript results are linked to immutable repository contracts, certificates, fingerprints and generated paper-ready assets. A review-ready release/archive should be fixed before submission. [FINAL ARCHIVE/DOI TO ADD]"""
+ABSTRACT_TAIL_NEW = """**Data and code for peer review:** all manuscript results are linked to immutable repository contracts, certificates, fingerprints and generated paper-ready assets. A review-ready release/archive should be fixed before submission. [FINAL ARCHIVE/DOI TO ADD]
+
+**Keywords:** ecological forecasting; falsification; model uncertainty; prospective validation; reachability; reproducibility; species distributions"""
+
 REFERENCES = """## References
 
 Barve, N., Barve, V., Jiménez-Valverde, A., Lira-Noriega, A., Maher, S.P., Peterson, A.T., Soberón, J. & Villalobos, F. (2011). The crucial role of the accessible area in ecological niche modeling and species distribution modeling. *Ecological Modelling*, 222, 1810–1819. https://doi.org/10.1016/j.ecolmodel.2011.02.011
@@ -51,11 +58,13 @@ def main() -> int:
     text = PATH.read_text(encoding="utf-8")
     if "## References" in text:
         raise RuntimeError("References section already exists; refuse second patch")
-    if text.count("[REF]") != 2:
-        raise RuntimeError(f"expected exactly two [REF] markers, got {text.count('[REF]')}")
+    if text.count("[REF]") != 4:
+        raise RuntimeError(f"expected exactly four [REF] strings including the checklist marker, got {text.count('[REF]')}")
 
     text = replace_once(text, INTRO_OLD, INTRO_NEW, "introduction reference patch")
     text = replace_once(text, REL_OLD, REL_NEW, "relationship reference patch")
+    text = replace_once(text, ABSTRACT_TAIL_OLD, ABSTRACT_TAIL_NEW, "MEE abstract-tail order patch")
+    text = replace_once(text, "## Methods", "## Materials and Methods", "MEE methods-heading patch")
     text = replace_once(text, CHECK_OLD, CHECK_NEW, "checklist reference patch")
     text = replace_once(text, "## Submission-boundary checklist", REFERENCES + "## Submission-boundary checklist", "references insertion")
 
