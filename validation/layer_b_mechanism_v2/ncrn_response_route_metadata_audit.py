@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -20,6 +21,7 @@ OUTDIR = ROOT / "build" / "layer_b_mechanism_v2" / "ncrn_response_route_metadata
 OUTPUT = OUTDIR / "route_audit.json"
 METADATA_URL = "https://irma.nps.gov/DataStore/DownloadFile/756926?Reference=2317363"
 EXPECTED_METADATA_SHA256 = "a6c2d29be41332e9b1a35bc2a4252ca4a43148e38579f2b79959d4b6709fcef3"
+AMENDMENT = "validation/layer_b_mechanism_v2/ncrn_pre_response_audit_corrections_v1.json"
 ROUTES = {
     "counts": {
         "filename": "ncrn_birds_forest_counts.csv",
@@ -37,7 +39,7 @@ ROUTES = {
 
 
 def _get(url: str) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": "eog-response-route-metadata-audit/1"})
+    req = urllib.request.Request(url, headers={"User-Agent": "eog-response-route-metadata-audit/2"})
     with urllib.request.urlopen(req, timeout=60) as r:
         return r.read()
 
@@ -90,10 +92,15 @@ def _find(tables: dict[str, dict], filename: str) -> dict:
     raise RuntimeError(f"metadata table missing for {filename}")
 
 
+def _norm(name: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", name.lower())
+
+
 def main() -> int:
     OUTDIR.mkdir(parents=True, exist_ok=True)
     result = {
-        "schema": "eog.layer_b_mechanism_v2.ncrn_response_route_metadata_audit.v1",
+        "schema": "eog.layer_b_mechanism_v2.ncrn_response_route_metadata_audit.v2",
+        "pre_response_correction_amendment": AMENDMENT,
         "metadata_payload_requests": 1,
         "response_payload_requests": 0,
         "counts_payload_requests": 0,
@@ -116,12 +123,12 @@ def main() -> int:
         for label, route in ROUTES.items():
             table = _find(tables, route["filename"])
             names = [a["name"] for a in table["attributes"]]
-            lowered = {n.lower(): n for n in names}
-            has_species = any(k in lowered for k in ("sppcode", "scientificname", "commonname"))
-            has_event = any("event" in n.lower() or "visit" in n.lower() for n in names)
-            has_site = any("point" in n.lower() or "site" in n.lower() or "grts" in n.lower() for n in names)
-            has_date = any("date" in n.lower() or "year" in n.lower() for n in names)
-            has_count = any(n.lower() in {"numind", "count", "abundance"} or "count" in n.lower() for n in names)
+            normalized = {_norm(n): n for n in names}
+            has_species = any(k in normalized for k in ("sppcode", "speciescode", "scientificname", "commonname", "aoucode"))
+            has_event = any("event" in _norm(n) or "visit" in _norm(n) for n in names)
+            has_site = any("point" in _norm(n) or "site" in _norm(n) or "grts" in _norm(n) for n in names)
+            has_date = any("date" in _norm(n) or "year" in _norm(n) for n in names)
+            has_count = any(_norm(n) in {"numind", "birdcount", "count", "abundance"} or "count" in _norm(n) for n in names)
             result["routes"][label] = {
                 "file_id": route["file_id"],
                 "filename": route["filename"],
