@@ -94,8 +94,10 @@ def test_ncrn_selection_is_response_blind_and_prequalified_for_both_classes():
     p = _load(NCRN_SELECTION)
     assert p['selected_before_response_payload_access'] is True
     assert p['parallel_candidate_attempts_allowed'] is False
-    assert p['source']['forest_response_resource']['name'] == 'ncrn_birds_forest_counts.csv'
-    assert p['source']['forest_response_resource']['download_file_id'] == 757399
+    initial = p['source']['initial_forest_response_resource']
+    assert initial['name'] == 'ncrn_birds_forest_counts.csv'
+    assert initial['download_file_id'] == 757399
+    assert initial['payload_opened'] is False
     f = p['response_firewall']
     assert f['counts_payload_requests_stage0'] == 0
     assert f['counts_header_bytes_stage0'] == 0
@@ -103,12 +105,12 @@ def test_ncrn_selection_is_response_blind_and_prequalified_for_both_classes():
     assert f['flattened_R1_payload_requests_stage0'] == 0
     assert f['fielddata_payload_requests_stage0'] == 0
     cert = p['independent_estimability_certificate_basis']
-    assert cert['forest_plot_count'] == 277
-    assert cert['yearly_positive_lower_bound'] == 123
-    assert cert['yearly_negative_lower_bound'] == 72
+    assert cert['sites_by_period'] == {'2007': 246, '2008-2013': 255, '2014-2019': 277}
+    assert cert['conservative_yearly_positive_lower_bound'] == 123
+    assert cert['conservative_yearly_negative_lower_bound_minimum'] == 41
     minima = p['prospective_nested_partition']['frozen_estimability_minima_per_partition']
-    assert cert['yearly_positive_lower_bound'] >= minima['positive_site_years']
-    assert cert['yearly_negative_lower_bound'] >= minima['negative_site_years']
+    assert cert['conservative_yearly_positive_lower_bound'] >= minima['positive_site_years']
+    assert cert['conservative_yearly_negative_lower_bound_minimum'] >= minima['negative_site_years']
     assert minima['unique_spatial_nodes'] == 50
     assert p['qualification_v2_status_at_selection']['qualification_v2_complete'] is False
     assert p['qualification_v2_status_at_selection']['response_open_authorized'] is False
