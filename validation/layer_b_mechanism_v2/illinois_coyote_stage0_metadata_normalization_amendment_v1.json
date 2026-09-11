@@ -1,0 +1,29 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.illinois_coyote_stage0_metadata_normalization_amendment.v1",
+  "purpose": "Record and freeze a response-independent metadata normalization after the first Illinois Stage0 run stopped solely because the Dryad REST title encodes the species name inside an HTML em tag.",
+  "first_run": {
+    "run_id": 34555499004,
+    "artifact_id": 10182391863,
+    "response_payload_requests": 0,
+    "response_header_bytes_opened": 0,
+    "response_bytes_opened": 0,
+    "response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0,
+    "raw_title": "Camera trap detections and environmental covariates for modeling scale-dependent coyote (<em>Canis latrans</em>) site-use intensity across Illinois, USA (2021–2024)",
+    "stopping_reason": "presentational HTML markup in otherwise matching public dataset title"
+  },
+  "amendment": {
+    "allowed_normalization": "strip HTML tags from Dryad title, unescape HTML entities, collapse whitespace, then require exact equality to the already frozen plain-text title",
+    "doi_unchanged": true,
+    "dataset_unchanged": true,
+    "focal_taxon_unchanged": true,
+    "response_file_unchanged": true,
+    "response_firewall_unchanged": true,
+    "partition_unchanged": true,
+    "qualification_thresholds_unchanged": true,
+    "biological_or_predictive_gate_weakened": false
+  },
+  "retry_authorization": "one Stage0 retry under the frozen metadata-only normalization; any subsequent substantive source/schema/transport/geometry failure is terminal for this Illinois attempt",
+  "response_open_authorized": false
+}

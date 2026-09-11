@@ -1,0 +1,24 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_finite_registry_estimability_certificate.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "frozen_before_any_response_payload_access": true,
+  "response_payload_requests_so_far": 0,
+  "inputs": {
+    "independent_annual_positive_lower_bound": 123,
+    "independent_annual_negative_lower_bound_minimum": 41,
+    "points_rows_excluded_for_missing_or_invalid_coordinates": 8,
+    "frozen_partition_minimum_positive": 30,
+    "frozen_partition_minimum_negative": 30
+  },
+  "worst_case_after_finite_coordinate_registry_restriction": {
+    "positive_lower_bound_if_all_8_excluded_sites_were_positive": 115,
+    "negative_lower_bound_if_all_8_excluded_sites_were_negative": 33,
+    "both_remain_above_frozen_minimum": true
+  },
+  "scope": "This certificate addresses only the pre-response compatibility of independent class support with the finite-coordinate registry. Exact post-response eligible-event exclusions remain subject to the unchanged 30/30 terminal estimability gate and cannot be repaired after response access.",
+  "forbidden": [
+    "use response values to identify which excluded sites carry which class",
+    "lower the 30/30 minima",
+    "restore missing-coordinate sites after response access"
+  ]
+}

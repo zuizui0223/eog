@@ -1,0 +1,21 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_geometry_missing_coordinate_amendment.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "frozen_before_any_response_payload_access": true,
+  "response_payload_requests_so_far": 0,
+  "trigger": "The first response-independent geometry run encountered the literal token NA in the public points table after Stage0 had already qualified 413 finite-coordinate sites from 421 rows.",
+  "allowed_fix": {
+    "registry_definition": "A modeling node is a trimmed nonempty Point_Name with finite numeric Latitude and Longitude in valid geographic ranges.",
+    "missing_coordinate_row": "exclude from the spatial registry before any response is opened; never impute, snap, borrow, or infer coordinates",
+    "response_rows_for_sites_outside_registry": "exclude from all model fitting, inner validation and outer scoring regardless of target value",
+    "duplicate_site_with_one_or_more_finite_rows": "include only if all finite coordinate pairs for that Point_Name are identical; otherwise terminal pre-response geometry STOP",
+    "minimum_unique_spatial_nodes_unchanged": 50
+  },
+  "forbidden": [
+    "use response occurrence to decide which missing-coordinate sites to retain",
+    "impute or snap coordinates after response access",
+    "lower the 50-node qualification minimum",
+    "change quantile levels or distance metric because of excluded rows"
+  ],
+  "scientific_effect": "Clarifies the response-independent registry universe only; does not use biological response and does not change the qualification threshold or world-quantile algorithm."
+}

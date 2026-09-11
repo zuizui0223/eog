@@ -1,0 +1,115 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_redbellied_stage0_selection.v1",
+  "purpose": "Lock the single active Layer-B v2 slot to the NPS NCRN forest-bird system only after public-documentation prescreening established a plausible path through transport, geometry, response semantics and partition-level both-class estimability without opening biological response bytes.",
+  "selection_date": "2026-09-11",
+  "selected_before_response_payload_access": true,
+  "parallel_candidate_attempts_allowed": false,
+  "candidate_hunting_to_improve_result_allowed": false,
+  "counts_as_fourth_closed_eog_wf_endpoint": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "source": {
+    "title": "National Capital Region Network Forest and Grassland Bird Monitoring Data Package - cumulative through 2025",
+    "publisher": "National Park Service",
+    "data_gov_identifier": "NPS_DataStore_2317363",
+    "nps_reference": 2317363,
+    "issued": "2026-03-13",
+    "monitoring_start": 2007,
+    "initial_forest_response_resource": {
+      "name": "ncrn_birds_forest_counts.csv",
+      "download_file_id": 757399,
+      "status": "rejected_as_site_year_response_route_from_metadata_only_because_no_site_or_event_key",
+      "payload_opened": false
+    },
+    "stage0_allowed_resources": [
+      {
+        "name": "ncrn_birds_cumulative_through2025_metadata.xml",
+        "download_file_id": 756926,
+        "role": "independent schema/data-dictionary and entity-relationship documentation"
+      },
+      {
+        "name": "ncrn_birds_forest_points.csv",
+        "download_file_id": 757401,
+        "role": "response-independent forest monitoring location registry and latitude/longitude"
+      },
+      {
+        "name": "ncrn_birds_forest_visits.csv",
+        "download_file_id": 757403,
+        "role": "response-independent survey-visit calendar/effort and observation opportunity"
+      }
+    ],
+    "response_bearing_resources_unopened": [
+      "ncrn_birds_forest_counts.csv",
+      "ncrn_birds_forest_R1_BirdDataStandard.csv",
+      "ncrn_birds_forest_fielddata.csv"
+    ]
+  },
+  "focal_target": {
+    "common_name": "Red-bellied Woodpecker",
+    "scientific_name": "Melanerpes carolinus",
+    "grain": "forest monitoring site-year",
+    "positive": "at least one documented Red-bellied Woodpecker detection during eligible forest bird surveys in that site-year",
+    "negative": "eligible forest monitoring site-year with survey opportunity but no Red-bellied Woodpecker detection",
+    "target_selected_from_independent_publication_before_response": true
+  },
+  "independent_estimability_certificate_basis": {
+    "publication": "Redmond 2023, Long-term landbird monitoring in the National Capital Region National Parks, University of Delaware MS thesis",
+    "correction_contract": "validation/layer_b_mechanism_v2/ncrn_independent_estimability_correction_v1.json",
+    "study_years": [2007, 2019],
+    "sites_by_period": {
+      "2007": 246,
+      "2008-2013": 255,
+      "2014-2019": 277
+    },
+    "yearly_detected_site_count_min": 123,
+    "yearly_detected_site_count_max": 205,
+    "conservative_yearly_positive_lower_bound": 123,
+    "conservative_yearly_negative_lower_bound_minimum": 41,
+    "negative_lower_bound_by_period": {
+      "2007": 41,
+      "2008-2013": 50,
+      "2014-2019": 72
+    },
+    "derivation": "The thesis reports 246 monitored sites in 2007, +9 sites from 2008, +22 more from 2014, and Red-bellied Woodpecker detections at 123-205 sites per year. Using the global maximum detection count of 205 conservatively yields annual nondetection lower bounds of 41, 50, and 72 in the three network-size periods; the positive lower bound is 123 in every year.",
+    "uses_endpoint_response_payload": false
+  },
+  "prospective_nested_partition": {
+    "inner_train_years": [2007, 2008, 2009, 2010, 2011],
+    "inner_validation_years": [2012, 2013, 2014, 2015],
+    "untouched_outer_years": [2016, 2017, 2018, 2019],
+    "outer_feedback_for_selection": false,
+    "frozen_estimability_minima_per_partition": {
+      "positive_site_years": 30,
+      "negative_site_years": 30,
+      "unique_spatial_nodes": 50
+    },
+    "pre_response_reason": "Every constituent year in all three chronological partitions has an independent conservative positive lower bound >=123 and negative lower bound >=41, both above the frozen 30/30 class minima."
+  },
+  "response_firewall": {
+    "counts_payload_requests_stage0": 0,
+    "counts_header_bytes_stage0": 0,
+    "counts_values_stage0": false,
+    "flattened_R1_payload_requests_stage0": 0,
+    "fielddata_payload_requests_stage0": 0,
+    "model_fits_stage0": 0,
+    "inner_selection_decisions_stage0": 0,
+    "outer_scores_stage0": 0,
+    "full_archive_or_joined_response_download_forbidden": true
+  },
+  "qualification_v2_status_at_selection": {
+    "source_identity": "public_NPS_reference_and_exact_resource_IDs_frozen_stage0_live_transport_passed",
+    "response_semantics": "metadata_only_route_audit_identified_fielddata_and_R1_as_joinable; exact_single_route_selection_pending",
+    "target": "independent_target_and_both_class_support_prequalified_after_conservative_site-count_correction",
+    "geometry_and_effort": "separate_points_and_visits_live_transport_and_413_node_registry_passed",
+    "validation_design": "nested_year_partitions_and_estimability_minima_frozen; final learner_feature_world_contract_pending",
+    "qualification_v2_complete": false,
+    "response_open_authorized": false
+  },
+  "stage0_terminal_failures": [
+    "any allowed individual NPS resource cannot be transported reproducibly under its frozen DownloadFile ID and Reference",
+    "metadata XML does not independently define a response route with exact site/year/species semantics",
+    "forest points do not reproduce at least 50 unique station-level latitude/longitude coordinates",
+    "forest visits do not cover all frozen years 2007-2019 or do not independently define eligible survey opportunity",
+    "resource identities or schema contradict the frozen target grain or partition"
+  ],
+  "next_gate": "freeze_one_metadata_documented_response_route_then_full_pre_response_execution_contract"
+}

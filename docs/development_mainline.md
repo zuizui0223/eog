@@ -188,6 +188,38 @@ Pre-response and pre-model STOPs remain integrity evidence. They are not convert
 
 Physical response-header identity, categorical response-token semantics, registry identity, source/process closure, structural adequacy, exact runtime identity and the once-only outcome-access contract remain part of the reusable validation machinery.
 
+## Post-closure Layer-B v2 real-translation programme
+
+A separate post-closure experiment asked whether the synthetic known-truth support for calibration-only selective promotion could translate into a genuinely fresh real ecological system. This programme is **not part of the three-endpoint EOG-WF denominator**.
+
+Frozen synthetic result:
+
+- `selective_promotion_known_truth_result_v1.json`: **known-truth support for calibration-only selective promotion**;
+- this remains synthetic mechanism evidence only, not real-system predictive evidence.
+
+Fresh-real attempts under unchanged `qualification v2`:
+
+- **India tiger** — terminal pre-response transport STOP; response unopened; no model fit or outer score;
+- **Illinois coyote** — terminal pre-response transport STOP; response unopened; no model fit or outer score;
+- **NCRN Red-bellied Woodpecker** — passed the complete response-blind qualification path and one-shot authorization, then terminated after the single response fetch because `PointCode="2550"` was absent from the frozen points registry.
+
+NCRN response consumption was exactly one request / `91,825,004` bytes. Site-year response construction did not complete; model fits = `0`; inner-selection decisions = `0`; outer-scoring runs = `0`; `counts_as_predictive_evidence = false`.
+
+Therefore the post-closure real-translation programme ends with:
+
+- scored fresh-real predictive endpoints: **0**;
+- Layer-B real selective-promotion benefit / protection / harm: **unanswered**;
+- known-truth selector support: **unchanged**;
+- closed EOG-WF synthesis: **unchanged**;
+- registry repair, alias discovery, rerun and replacement-candidate rescue: **forbidden**.
+
+Canonical closure assets:
+
+- [`../validation/layer_b_mechanism_v2/ncrn_final_terminal_result_v1.json`](../validation/layer_b_mechanism_v2/ncrn_final_terminal_result_v1.json)
+- [`../validation/layer_b_mechanism_v2/real_translation_programme_closure_v1.json`](../validation/layer_b_mechanism_v2/real_translation_programme_closure_v1.json)
+
+Any future real-system Layer-B translation test must be a **new separately preregistered protocol/version**. It cannot be represented as rescue or continuation of this closed programme.
+
 ## Active scientific milestone
 
 The active milestone is **manuscript closure**, not additional empirical search.
@@ -212,6 +244,7 @@ The older structural/island manuscript line is a **separate scientific line** an
 7. Do not claim universal robustness outside the declared finite-world certificate.
 8. Do not pool endpoint rows to manufacture a common-effect predictive claim.
 9. New response-independent synthetic exposition is allowed only when it clarifies an already-frozen method property; it cannot reopen or alter the empirical endpoint decision.
+10. Do not repair or rerun the consumed NCRN attempt; any future Layer-B real translation requires a new protocol version.
 
 The active mainline is therefore:
 

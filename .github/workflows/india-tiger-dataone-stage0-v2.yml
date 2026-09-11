@@ -1,0 +1,47 @@
+name: India tiger terminal pre-response STOP guard
+
+on:
+  push:
+    branches:
+      - research/layer-b-v2-single-fresh-endpoint-lock
+    paths:
+      - 'validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json'
+      - '.github/workflows/india-tiger-dataone-stage0-v2.yml'
+  pull_request:
+    paths:
+      - 'validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json'
+      - '.github/workflows/india-tiger-dataone-stage0-v2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  terminal-stop-guard:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify terminal response-blind disposition
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = json.loads(Path('validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json').read_text())
+          assert p['terminal_status'] == 'terminal_pre_response_transport_stop'
+          assert p['candidate_attempt_closed'] is True
+          assert p['response_consumed'] is False
+          assert p['response_open_authorized'] is False
+          assert p['qualification_v2_complete'] is False
+          assert p['counts_as_predictive_evidence'] is False
+          assert p['counts_as_biological_negative'] is False
+          t = p['terminal_transport_evidence']
+          assert t['forbidden_response_filename'] == 'EERecords.csv'
+          assert t['forbidden_response_queried'] is False
+          assert t['forbidden_response_resolved'] is False
+          assert t['forbidden_response_downloaded'] is False
+          assert t['response_payload_requests'] == 0
+          assert t['response_bytes_opened'] == 0
+          assert t['model_fits'] == 0
+          assert t['heldout_scores'] == 0
+          assert p['next_gate'].startswith('release_single_active_slot')
+          PY

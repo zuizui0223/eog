@@ -1,0 +1,88 @@
+name: NCRN Red-bellied Woodpecker response-blind Stage0
+
+on:
+  push:
+    branches:
+      - research/layer-b-v2-single-fresh-endpoint-lock
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_selection_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_nonresponse.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_pre_response_audit_corrections_v1.json'
+      - '.github/workflows/ncrn-redbellied-stage0-nonresponse.yml'
+  pull_request:
+    paths:
+      - 'validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_selection_v1.json'
+      - 'validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_nonresponse.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_pre_response_audit_corrections_v1.json'
+      - '.github/workflows/ncrn-redbellied-stage0-nonresponse.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  stage0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify zero-response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_selection_v1.json').read_text())
+          f=p['response_firewall']
+          initial=p['source']['initial_forest_response_resource']
+          assert initial['download_file_id'] == 757399
+          assert initial['payload_opened'] is False
+          assert f['counts_payload_requests_stage0'] == 0
+          assert f['counts_header_bytes_stage0'] == 0
+          assert f['counts_values_stage0'] is False
+          assert f['flattened_R1_payload_requests_stage0'] == 0
+          assert f['fielddata_payload_requests_stage0'] == 0
+          assert f['model_fits_stage0'] == 0
+          assert f['inner_selection_decisions_stage0'] == 0
+          assert f['outer_scores_stage0'] == 0
+          PY
+      - name: Execute metadata points visits Stage0
+        id: stage0
+        continue-on-error: true
+        run: python validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_nonresponse.py
+      - name: Audit response firewall and terminal class
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/layer_b_mechanism_v2/ncrn_redbellied_stage0/stage0_nonresponse.json').read_text())
+          assert p['response_payload_requests'] == 0
+          assert p['response_header_bytes_opened'] == 0
+          assert p['response_bytes_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['flattened_response_requests'] == 0
+          assert p['fielddata_requests'] == 0
+          assert p['model_fits'] == 0
+          assert p['inner_selection_decisions'] == 0
+          assert p['heldout_scores'] == 0
+          assert p['response_open_authorized'] is False
+          assert all(v['requested'] is False for v in p['forbidden_resources'].values())
+          assert p['status'] in {
+              'stage0_nonresponse_qualified_pending_exact_response_algebra_contract',
+              'terminal_pre_response_ncrn_stage0_stop',
+          }
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ncrn-redbellied-stage0-nonresponse
+          path: build/layer_b_mechanism_v2/ncrn_redbellied_stage0/stage0_nonresponse.json
+          if-no-files-found: error
+      - name: Require Stage0 qualification
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/layer_b_mechanism_v2/ncrn_redbellied_stage0/stage0_nonresponse.json').read_text())
+          if p['status'] != 'stage0_nonresponse_qualified_pending_exact_response_algebra_contract':
+              raise SystemExit(p.get('error', p['status']))
+          PY

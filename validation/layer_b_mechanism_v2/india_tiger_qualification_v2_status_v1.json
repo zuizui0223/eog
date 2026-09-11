@@ -1,0 +1,66 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.india_tiger_qualification_v2_status.v1",
+  "candidate": "india_tiger",
+  "attempt_role": "single active pre-response candidate for the post-closure Layer-B v2 prospective mechanism programme",
+  "terminal_status": "terminal_pre_response_transport_stop",
+  "response_consumed": false,
+  "response_open_authorized": false,
+  "qualification_v2_complete": false,
+  "counts_as_predictive_evidence": false,
+  "counts_as_biological_negative": false,
+  "candidate_attempt_closed": true,
+  "evidence_basis": [
+    "validation/layer_b_mechanism_v2/india_tiger_stage0_selection.json",
+    "validation/layer_b_mechanism_v2/india_tiger_stage0_transport_attempt_v1.json",
+    "validation/layer_b_mechanism_v2/fresh_real_candidate_qualification_v2.json",
+    "validation/layer_b_mechanism_v2/india_tiger_stage0_dataone_transport_v2.py",
+    "GitHub Actions run 34550076486 / artifact 10180444218"
+  ],
+  "terminal_transport_evidence": {
+    "dryad_individual_file_transport": "blocked_in_prior_stage0_attempt",
+    "zenodo_individual_file_transport": "rate_limited_in_prior_stage0_attempt",
+    "dataone_metadata_pid_title_verified": true,
+    "dataone_package_document_relationship": "absent",
+    "dataone_allowed_filename_lookup": "no_object",
+    "dataone_allowed_frozen_md5_lookup": "no_object",
+    "first_allowed_file_stopping_point": "EECam_act.csv",
+    "forbidden_response_filename": "EERecords.csv",
+    "forbidden_response_queried": false,
+    "forbidden_response_resolved": false,
+    "forbidden_response_downloaded": false,
+    "response_payload_requests": 0,
+    "response_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "status_by_gate": {
+    "source_identity": {
+      "exact_version_or_record_identity": "documented",
+      "exact_response_file_identity": "documented",
+      "response_file_checksum_or_equivalent_immutable_identifier": "documented",
+      "transport_route_live_qualified_without_response_payload": "failed_terminally_for_this_attempt",
+      "gate_status": "terminal_fail"
+    },
+    "response_semantics": {
+      "gate_status": "not_reached_before_terminal_transport_stop"
+    },
+    "target": {
+      "focal_taxon": "Panthera tigris",
+      "gate_status": "not_reached_before_terminal_transport_stop"
+    },
+    "geometry_and_effort": {
+      "documented_trap_count": 195,
+      "geometry_physically_separate_from_response": "documented",
+      "effort_physically_separate_from_response": "documented",
+      "geometry_bytes_acquired_and_checksum_verified": false,
+      "effort_bytes_acquired_and_checksum_verified": false,
+      "gate_status": "not_reached_executable_transport"
+    },
+    "validation_design": {
+      "outer_heldout_feedback_for_selection": false,
+      "gate_status": "not_reached_before_terminal_transport_stop"
+    }
+  },
+  "scientific_interpretation": "Unavailable response-independent transport is an infrastructure/source qualification failure, not evidence against Layer-B biology or predictive value.",
+  "next_gate": "release_single_active_slot_for_one_new_response_unopened_candidate_under_unchanged_qualification_v2"
+}
