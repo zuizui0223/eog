@@ -1,51 +1,32 @@
-name: MAPPPD Adelie selective-promotion final once-only
+name: MAPPPD Adelie consumed-endpoint guard
 
 on:
-  push:
-    branches:
-      - execute/mapppd-adelie-final-v1
+  pull_request:
     paths:
-      - 'validation/mapppd_adelie_selective_promotion/MAPPPD_ADELIE_EXECUTE_ONCE_V1'
+      - 'validation/mapppd_adelie_selective_promotion/**'
+      - '.github/workflows/mapppd-adelie-final-once.yml'
 
 permissions:
   contents: read
 
 jobs:
-  final:
+  consumed-guard:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Verify exact execute-once marker and branch
-        run: |
-          python - <<'PY'
-          import os
-          from pathlib import Path
-          assert os.environ['GITHUB_REF_NAME'] == 'execute/mapppd-adelie-final-v1'
-          p=Path('validation/mapppd_adelie_selective_promotion/MAPPPD_ADELIE_EXECUTE_ONCE_V1')
-          assert p.read_text().strip() == 'contract=915c41da393c7ec193df77993cc124fa1d43dd89'
-          PY
-      - name: Install frozen endpoint dependencies
-        run: |
-          pip install -e .
-          pip install pyreadr==0.5.6 scikit-learn==1.5.2 numpy==2.1.3 pandas==2.2.3
-      - name: Execute single authorized response access and endpoint
-        run: python benchmarks/mapppd_adelie_selective_promotion_final.py
-      - name: Require terminal boundary
+      - name: Verify consumed terminal certificate
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          p=json.loads(Path('build/mapppd_adelie_selective_promotion/final_result.json').read_text())
-          assert p['response_payload_requests'] in {0,1}
-          assert p['status'] in {'terminal_predictive_result','terminal_stop_after_or_before_response'}
-          if p['response_values_opened']:
-              assert p['response_payload_requests'] == 1
+          p=json.loads(Path('validation/mapppd_adelie_selective_promotion/final_terminal_stop_certificate.json').read_text())
+          assert p['terminal_status'] == 'consumed_estimability_stop'
+          assert p['response_consumed'] is True
+          assert p['response_payload_requests'] == 1
+          assert p['model_fits'] == 0
+          assert p['selector_decision_made'] is False
+          assert p['outer_scores'] == 0
+          assert p['authoritative_run']['run_id'] == 34547620159
+          assert p['authoritative_run']['artifact_id'] == 10179598049
+          assert p['failed_gate'] == 'inner_train_negative_site_years >= 30'
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mapppd-adelie-final-once
-          path: build/mapppd_adelie_selective_promotion/final_result.json
-          if-no-files-found: error

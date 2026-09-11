@@ -1,13 +1,6 @@
-name: MAPPPD Adelie final proposal-safe checks
+name: MAPPPD Adelie consumed proposal-surface guard
 
 on:
-  push:
-    branches:
-      - fresh/mapppd-adelie-selective-promotion-v1
-    paths:
-      - 'validation/mapppd_adelie_selective_promotion/final_once_only_contract.json'
-      - 'benchmarks/mapppd_adelie_selective_promotion_final.py'
-      - '.github/workflows/mapppd-adelie-final-*.yml'
   pull_request:
     paths:
       - 'validation/mapppd_adelie_selective_promotion/**'
@@ -18,38 +11,26 @@ permissions:
   contents: read
 
 jobs:
-  proposal-safe:
+  consumed-surface:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify frozen once-only contract
+      - name: Verify frozen historical contract and terminal receipt
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           c=json.loads(Path('validation/mapppd_adelie_selective_promotion/final_once_only_contract.json').read_text())
+          p=json.loads(Path('validation/mapppd_adelie_selective_promotion/final_terminal_stop_certificate.json').read_text())
           assert c['frozen_before_response_access'] is True
           assert c['authoritative_response']['git_blob_sha'] == '852cbf729bf03a5ab01bc0b008f0f18e05867cb6'
-          assert c['authoritative_response']['single_git_blob_get_allowed'] is True
-          assert c['focal_response']['species_id'] == 'ADPE'
-          assert c['partition']['inner_train_years'] == [1980,2000]
-          assert c['partition']['inner_validation_years'] == [2001,2010]
-          assert c['partition']['outer_heldout_years'] == [2011,2022]
-          assert c['selector']['decision_before_outer_scoring'] is True
-          assert c['hard_rules']['one_response_access'] is True
           assert c['hard_rules']['rerun_after_consumption'] is False
+          assert p['terminal_status'] == 'consumed_estimability_stop'
+          assert p['response_consumed'] is True
+          assert p['authoritative_run']['run_id'] == 34547620159
           PY
-      - name: Compile endpoint without executing it
+      - name: Compile historical runner without executing it
         run: python -m py_compile benchmarks/mapppd_adelie_selective_promotion_final.py
-      - name: Verify live workflow cannot run on proposal branch
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          t=Path('.github/workflows/mapppd-adelie-final-once.yml').read_text()
-          assert 'execute/mapppd-adelie-final-v1' in t
-          assert 'fresh/mapppd-adelie-selective-promotion-v1' not in t
-          assert 'MAPPPD_ADELIE_EXECUTE_ONCE_V1' in t
-          PY

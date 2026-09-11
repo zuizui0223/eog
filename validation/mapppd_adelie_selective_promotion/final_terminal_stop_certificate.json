@@ -1,0 +1,51 @@
+{
+  "schema": "eog.mapppd_adelie_selective_promotion.final_terminal_stop_certificate.v1",
+  "attempt_id": "mapppd_adelie_selective_promotion_v1",
+  "terminal_status": "consumed_estimability_stop",
+  "counts_as_predictive_evidence": false,
+  "response_consumed": true,
+  "response_payload_requests": 1,
+  "response_payload_bytes_opened": 61816,
+  "response_values_opened": true,
+  "model_fits": 0,
+  "selector_decision_made": false,
+  "outer_scores": 0,
+  "authoritative_run": {
+    "run_id": 34547620159,
+    "job_id": 103103540782,
+    "execute_head": "676e9f3624ad661b404e6d16a2842bb632ad3ee6",
+    "artifact_id": 10179598049,
+    "artifact_digest": "sha256:9d7a12bdfc333060d9ea397a380ca53301c420d95f3b5f193289dcfe593e4ef5"
+  },
+  "frozen_estimability_minima": {
+    "inner_train_positive_site_years": 30,
+    "inner_train_negative_site_years": 30,
+    "inner_validation_positive_site_years": 10,
+    "inner_validation_negative_site_years": 10,
+    "outer_positive_site_years": 10,
+    "outer_negative_site_years": 10,
+    "inner_validation_years_with_both_classes": 3,
+    "outer_years_with_both_classes": 3
+  },
+  "observed_partition_counts": {
+    "inner_train": {"n": 721, "positive": 711, "negative": 10, "years": 21, "years_with_both_classes": 8},
+    "inner_validation": {"n": 339, "positive": 323, "negative": 16, "years": 10, "years_with_both_classes": 10},
+    "outer": {"n": 403, "positive": 391, "negative": 12, "years": 12, "years_with_both_classes": 6}
+  },
+  "failed_gate": "inner_train_negative_site_years >= 30",
+  "interpretation": {
+    "predictive_result": false,
+    "favorable_or_adverse_layer_b_evidence": false,
+    "known_truth_translation_question_resolved": false,
+    "closed_eog_wf_unchanged": true,
+    "next_candidate_requirement": "Before admitting another fresh real selective-promotion endpoint, require independent pre-response evidence not only of focal-target inclusion but also of sufficient explicit negative/both-class support across the intended calibration and heldout structure."
+  },
+  "prohibited_repairs": [
+    "lower the negative-count threshold after observing this result",
+    "change focal species",
+    "change temporal partition",
+    "reinterpret missing presence as zero",
+    "change site-year aggregation",
+    "rerun the consumed response endpoint"
+  ]
+}
