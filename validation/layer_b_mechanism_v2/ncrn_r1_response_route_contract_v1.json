@@ -1,5 +1,5 @@
 {
-  "schema": "eog.layer_b_mechanism_v2.ncrn_r1_response_route_contract.v1",
+  "schema": "eog.layer_b_mechanism_v2.ncrn_r1_response_route_contract.v2",
   "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
   "frozen_before_response_payload_access": true,
   "response_payload_requests_before_freeze": 0,
@@ -10,22 +10,9 @@
     "metadata_sha256": "a6c2d29be41332e9b1a35bc2a4252ca4a43148e38579f2b79959d4b6709fcef3"
   },
   "route_comparison": {
-    "counts": {
-      "file_id": 757399,
-      "decision": "reject",
-      "reason": "EML schema has species and NumInd but no site or event key; cannot define the frozen site-year endpoint without post-response alias discovery"
-    },
-    "fielddata": {
-      "file_id": 757400,
-      "decision": "eligible_not_selected",
-      "reason": "EML schema has EventDate, Point_Name, species identity, Event_ID and Bird_Count, but does not expose the standardized event exclusion/no-observation fields available in R1"
-    },
-    "R1": {
-      "file_id": 757402,
-      "filename": "ncrn_birds_forest_R1_BirdDataStandard.csv",
-      "decision": "selected_unique_authoritative_response_route",
-      "reason": "EML independently documents a joined analysis-ready schema with PointCode, EventID, EventYear, EventDate, ScientificName, BirdCount, ExcludeEvent, NoObservations, Incidental and ExcludeObservation"
-    }
+    "counts": {"file_id": 757399, "decision": "reject", "reason": "EML schema has species and NumInd but no site or event key"},
+    "fielddata": {"file_id": 757400, "decision": "eligible_not_selected", "reason": "joinable but lacks the standardized exclusion/no-observation fields available in R1"},
+    "R1": {"file_id": 757402, "filename": "ncrn_birds_forest_R1_BirdDataStandard.csv", "decision": "selected_unique_authoritative_response_route", "reason": "independently documented joined analysis-ready schema with exact site, event, year, species and exclusion fields"}
   },
   "authoritative_response": {
     "nps_reference": 2317363,
@@ -35,19 +22,14 @@
     "payload_requests_allowed_before_all_qualification_gates_pass": 0,
     "header_bytes_allowed_before_all_qualification_gates_pass": 0,
     "live_transport_preflight": "HEAD only; no GET and no Range request",
+    "head_preflight_authoritative_run": 34557367875,
+    "head_preflight_status": "head_only_response_transport_qualified",
     "full_payload_fetch_budget_after_authorization": 1
   },
-  "required_exact_columns_from_independent_metadata": [
-    "PointCode",
-    "EventID",
-    "EventYear",
-    "EventDate",
-    "ScientificName",
-    "ExcludeEvent",
-    "NoObservations",
-    "Incidental",
-    "ExcludeObservation"
+  "exact_header_from_independent_eml": [
+    "GroupCode","GroupName","UnitCode","UnitName","SubUnitCode","SubUnitName","PointGroupCode","PointGroupName","PointCode","Latitude","Longitude","Datum","XYAccuracy","HabitatType","IsPointCUI","IsActive","EventID","EventYear","EventDate","StartTime","VisitNumber","ObserverID","RecorderID","SkyCondition","Wind","WindUnit","NoiseLevel","NoiseLevelUnit","Temp_Recorded","AirTemp","AirTempUnit","DPL","EventNotes","ExcludeEvent","ExcludeNote","NoObservations","ObservationID","SpeciesCode","CommonName","ScientificName","BirdCount","IdentificationMethod","DistanceType","Distance","DistanceUnit","IntervalObserved","IntervalLength","IntervalLengthUnit","FirstObservation","FirstThreeMinutes","FirstFiveMinutes","FlyoverObserved","Incidental","Juvenile","IsSpeciesCUI","CUISpeciesNote","ObservationNote","ExcludeObservation","ExcludeReason","ExportDate"
   ],
+  "header_rule": "The fetched CSV header must equal the 60-column EML order above exactly after UTF-8 BOM removal only; no alias, reordering, spelling repair or dropped/extra column is permitted after response access.",
   "target": {
     "scientific_name_exact": "Melanerpes carolinus",
     "common_name": "Red-bellied Woodpecker",
@@ -62,21 +44,23 @@
     "event_join_rule": "both must parse as finite integer-valued numbers and compare as integers; no alternative event-key discovery after response",
     "response_year": "EventYear",
     "nonresponse_year_source": "year parsed from EventDate",
-    "year_rule": "response EventYear must parse as an integer in 2007-2019 and equal the year of the matched nonresponse visit EventDate"
+    "year_rule": "EventYear must yield exactly one four-digit year in 2007-2019 and equal the matched nonresponse visit EventDate year"
   },
   "binary_flag_semantics": {
     "fields": ["ExcludeEvent", "Incidental", "ExcludeObservation", "NoObservations"],
     "accepted_nonmissing_values": [0, 1],
-    "non_integer_or_other_nonmissing_value": "terminal_schema_stop",
-    "missing_ExcludeEvent": "conservatively exclude that event from the eligible event universe",
-    "missing_Incidental": "conservatively exclude that observation from positive evidence",
-    "missing_ExcludeObservation": "conservatively exclude that observation from positive evidence",
-    "missing_NoObservations": "allowed because target absence is defined from the eligible visit universe rather than requiring an explicit zero row"
+    "numeric_forms_allowed": ["0", "1", "0.0", "1.0"],
+    "blank_or_standard_missing_tokens": ["", "NA", "N/A", "NaN", "null", "None"],
+    "other_nonmissing_value": "terminal_schema_stop",
+    "event_ExcludeEvent_rule": "collect all nonmissing ExcludeEvent flags for the matched event; event is eligible iff at least one flag is present and every present flag equals 0; any 1 or all-missing excludes the event",
+    "missing_Incidental": "exclude that observation from positive evidence",
+    "missing_ExcludeObservation": "exclude that observation from positive evidence",
+    "missing_NoObservations": "allowed because absence is derived from the eligible visit universe rather than an explicit zero row"
   },
   "site_year_algebra": {
-    "eligible_event": "a forest-visits Event_ID in years 2007-2019 with Point_Name in the qualified point registry, matched to at least one R1 row whose ExcludeEvent is exactly 0; events with no R1 match or only missing/1 ExcludeEvent are not eligible",
+    "eligible_event": "a frozen forest-visits Event_ID in 2007-2019, at a finite-coordinate Point_Name, exact-joined to R1 and satisfying the conservative event ExcludeEvent rule",
     "eligible_site_year": "Point_Name x EventDate-year with at least one eligible event",
-    "target_positive_event": "eligible event containing at least one R1 row with ScientificName exactly 'Melanerpes carolinus', ExcludeObservation=0 and Incidental=0; BirdCount magnitude is not required for binary presence",
+    "target_positive_event": "eligible event containing at least one R1 row with ScientificName exactly 'Melanerpes carolinus', ExcludeObservation exactly 0 and Incidental exactly 0; BirdCount magnitude is not required for binary presence",
     "target_positive_site_year": "eligible site-year with at least one target-positive event",
     "target_negative_site_year": "eligible site-year with zero target-positive events",
     "no_eligible_event": "excluded from modeling, never coded as negative",
@@ -84,13 +68,13 @@
     "BirdCount_missing": "does not negate an otherwise exact species detection because EML documents BirdCount may be permanently missing or not collected"
   },
   "integrity_stops_after_single_response_fetch": [
-    "required exact column missing or renamed",
-    "response PointCode cannot exact-join to the frozen point registry for analyzable rows",
+    "exact 60-column header mismatch",
+    "response PointCode cannot exact-join to the frozen finite-coordinate registry for analyzable rows",
     "EventID cannot be reconciled to the frozen visits registry under the frozen integer rule",
     "EventYear contradicts matched EventDate year",
     "binary exclusion flag contains an unexpected nonmissing token",
-    "frozen 30/30 estimability minima fail in any model-selection or outer partition"
+    "frozen 30/30 estimability minima fail in any selection or outer partition"
   ],
   "response_open_authorized_by_this_contract_alone": false,
-  "next_gate": "HEAD_only_response_route_transport_preflight_then_response_independent_geometry_and_full_execution_freeze"
+  "next_gate": "freeze_full_pre_response_execution_contract_and_validate_runner_without_response"
 }
