@@ -1,0 +1,110 @@
+{
+  "schema": "eog.structural_island_paper_boundary.v1",
+  "date": "2026-09-11",
+  "status": "scientific_content_closed_presentation_release_active",
+  "paper_identity": {
+    "working_title": "When does landscape configuration add held-out information? An auditable reference-conditioned framework across islands and forest fragments",
+    "target_journal": "Ecological Informatics",
+    "article_type": "Original Research Paper"
+  },
+  "core_question": "After a declared reference model has already represented local support, source proximity and generic landscape context, does occurrence-conditioned landscape configuration retain additional held-out information?",
+  "central_claim": "Structural information is reference-conditioned: an occurrence-conditioned landscape signal can be detectable under a restricted reference yet fail to provide incremental held-out predictive value beyond a richer reference. Therefore structural adequacy must be earned relative to an explicitly declared reference and endpoint.",
+  "empirical_systems": {
+    "aislands_original": {
+      "taxa": 886,
+      "islands": 842,
+      "estimable_taxa": 845,
+      "estimand": "conditional ordering beyond climatic support and nearest outer-training source distance",
+      "mean_conditional_concordance": 0.6177465917820878,
+      "bootstrap_95_ci": [0.609, 0.627],
+      "direction": "positive_structural_ordering_under_restricted_reference"
+    },
+    "aislands_strong_reference": {
+      "taxa": 886,
+      "estimand": "paired held-out log-loss increment of species-conditioned EOG connected frequency beyond frozen R3",
+      "candidate_minus_reference_log_loss": 0.003485181598265469,
+      "bootstrap_95_ci": [0.0024664225728659645, 0.004508216483355693],
+      "species_favourable": 341,
+      "species_adverse": 545,
+      "direction": "adverse_incremental_predictive_effect_beyond_R3",
+      "result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a"
+    },
+    "tanzania": {
+      "taxa": 60,
+      "estimand": "paired held-out log-loss increment beyond patch area, training-selected matrix-aware current flow and nearest training source",
+      "primary_loso_increment": 0.032113119,
+      "primary_direction": "adverse_incremental_loso_beyond_strong_reference",
+      "spatial_block_direction": "uncertain_interval_crosses_zero",
+      "result_fingerprint": "6b555c28d61d3f39b9e672f5a97250de6870301871cf3e60378e97863cd109e4"
+    }
+  },
+  "reference_conditioning_rule": {
+    "restricted_reference_result_may_support": "conditional structural ordering at that declared reference depth",
+    "strong_reference_result_required_for": "incremental predictive-value claims beyond a richer reference",
+    "different_endpoints_may_not_be_pooled_as_one_effect_size": true,
+    "adverse_or_null_strong_reference_result_is_a_valid_structural_adequacy_output": true
+  },
+  "non_overlap_with_eog_wf_paper": {
+    "eog_wf_boundary_file": "manuscript/paper_ready/submission_boundary.json",
+    "shared_framework_code_allowed": true,
+    "shared_name_EOG_allowed": true,
+    "structural_paper_empirical_denominator_is_separate": true,
+    "structural_paper_does_not_use_eog_wf_three_endpoint_denominator": true,
+    "structural_paper_does_not_claim_layer_b_context_dependent_complementarity_as_its_primary_result": true,
+    "structural_paper_does_not_claim_finite_world_sequential_falsification_as_its_primary_contribution": true,
+    "eog_wf_endpoints_not_empirical_evidence_for_this_paper": [
+      "Azores yellow eel telemetry",
+      "Southwest Louisiana King Rail passive acoustics",
+      "Tampa Bay seagrass monitoring"
+    ],
+    "eog_wf_structural_examples_not_replications_for_this_paper": [
+      "STOC",
+      "Glanville fritillary"
+    ],
+    "ncrn_post_closure_programme_excluded": true
+  },
+  "allowed_claims": [
+    "Occurrence-conditioned landscape configuration retained conditional incidence-ordering information beyond climatic support and nearest-source distance in the original A-Islands benchmark.",
+    "The original A-Islands signal did not earn a general incremental predictive claim beyond the prospectively frozen richer R3 reference.",
+    "Tanzania independently showed that the same class of structural addition was not universally additive beyond a matrix-aware strong reference.",
+    "Structural information must be interpreted relative to an explicitly declared reference and endpoint.",
+    "EOG connected frequency is a structural robustness summary over declared graph scenarios, not a colonisation or dispersal probability."
+  ],
+  "prohibited_claims": [
+    "EOG universally outperforms SDMs or connectivity models",
+    "connected frequency estimates realised movement, dispersal or colonisation probability",
+    "the paper discovers that island isolation is multidimensional",
+    "the paper discovers stepping stones or graph connectivity",
+    "R3 causally explains the original A-Islands conditional-concordance signal",
+    "R3 universally outperforms simpler island-isolation references",
+    "Tanzania establishes universal superiority of current flow",
+    "cross-system differences identify a causal mechanism",
+    "A-Islands conditional concordance and strong-reference log-loss increment are one common effect size",
+    "EOG-WF Layer A or Layer B endpoint results are additional empirical replications of this paper"
+  ],
+  "scientific_hard_stops": [
+    "do not rerun the authoritative A-Islands strong-reference outcome",
+    "do not weaken R3 after outcome access",
+    "do not retune graph radii or taxa to rescue the island result",
+    "do not add a favourable dataset to improve the paper direction",
+    "do not reinterpret Tanzania spatial-block uncertainty as a resolved effect",
+    "do not merge this paper into EOG-WF to broaden either claim"
+  ],
+  "canonical_files": {
+    "manuscript": "manuscript/structural_reachability_manuscript.md",
+    "checklist": "manuscript/structural_submission_checklist.md",
+    "submission_manifest": "manuscript/submission/submission_manifest.json",
+    "cover_letter": "manuscript/submission/cover_letter.md",
+    "highlights": "manuscript/structural_highlights.txt",
+    "submission_builder": "manuscript/build_structural_submission_package.py"
+  },
+  "remaining_work": [
+    "revise Figure 1 around declared reference -> held-out structural probe -> earned/adverse/indeterminate inference",
+    "revise A-Islands figure to show the original conditional-ordering and strong-reference predictive endpoints on distinct axes",
+    "add the R0/R1/R2/R3/C explanatory reference-tier panel with C-R3 marked as the only primary extension contrast",
+    "rebuild final figures and run visual QA",
+    "freeze software release and archive DOI after presentation state is final",
+    "complete author metadata and author-approved generative-AI disclosure",
+    "perform submission-day Ecological Informatics policy verification"
+  ]
+}
