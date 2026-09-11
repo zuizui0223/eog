@@ -1,0 +1,74 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.single_fresh_real_endpoint_execution_contract.v1",
+  "purpose": "Concentrate the post-closure Layer-B v2 prospective programme on one genuinely fresh real system that fully passes qualification v2 before any biological response payload is opened, then execute calibration-only inner selection followed by exactly one untouched outer endpoint.",
+  "scientific_scope": {
+    "separate_from_closed_eog_wf": true,
+    "changes_closed_eog_wf_synthesis": false,
+    "counts_as_fourth_eog_wf_endpoint": false,
+    "known_truth_support_prerequisite": "validation/layer_b_mechanism_v2/selective_promotion_known_truth_result_v1.json",
+    "qualification_prerequisite": "validation/layer_b_mechanism_v2/fresh_real_candidate_qualification_v2.json"
+  },
+  "execution_budget": {
+    "maximum_active_real_systems": 1,
+    "maximum_scored_outer_endpoints": 1,
+    "parallel_candidate_attempts_allowed": false,
+    "candidate_hunting_to_improve_result_allowed": false,
+    "gate_weakening_to_obtain_score_allowed": false,
+    "response_consumed_system_reuse_as_fresh_allowed": false
+  },
+  "active_candidate_lock": {
+    "candidate": "india_tiger",
+    "selection_contract": "validation/layer_b_mechanism_v2/india_tiger_stage0_selection.json",
+    "current_status": "preselected_response_unopened_not_yet_qualification_v2_complete",
+    "response_open_authorized": false,
+    "replacement_before_terminal_pre_response_disposition": false,
+    "replacement_after_terminal_pre_response_failure": "allowed only as a single new active candidate, with no parallel candidates and no weakening of qualification v2"
+  },
+  "qualification_before_response": {
+    "all_required_v2_checks_must_pass": true,
+    "source_identity_must_pass": true,
+    "response_semantics_must_pass": true,
+    "target_estimability_must_pass": true,
+    "geometry_and_effort_must_pass": true,
+    "validation_design_must_pass": true,
+    "independent_both_class_support_required": true,
+    "minimum_unique_spatial_nodes": 50,
+    "live_response_route_must_be_qualified_without_response_payload": true,
+    "qualification_failure_action": "terminal_pre_response_stop_for_that_attempt",
+    "qualification_failure_counts_as_predictive_evidence": false
+  },
+  "inner_selection": {
+    "candidate_arms": [
+      "baseline_only",
+      "baseline_plus_frozen_layer_b"
+    ],
+    "inner_train_only_for_fitting_before_selection": true,
+    "inner_validation_only_for_arm_selection": true,
+    "metric": "macro_binary_log_loss",
+    "promotion_rule": "promote baseline_plus_frozen_layer_b if and only if its frozen inner-validation macro binary log loss is strictly lower than baseline_only; otherwise retain baseline_only",
+    "outer_feedback_for_selection": false,
+    "selection_decision_revisited_after_outer": false
+  },
+  "outer_endpoint": {
+    "untouched_before_selection": true,
+    "score_after_selection_only": true,
+    "refit_on_full_calibration_after_selection": true,
+    "same_frozen_learner_preprocessing_hyperparameters_and_feature_rules": true,
+    "maximum_outer_scoring_runs": 1,
+    "terminal_after_scoring": true,
+    "acceptable_terminal_scientific_outcomes": [
+      "selective_favorable",
+      "selective_null_or_negligible",
+      "selective_adverse",
+      "outer_non_estimable_under_frozen_rules"
+    ],
+    "post_outer_rescue_tuning_allowed": false
+  },
+  "claim_boundary": {
+    "primary_question": "Does calibration-only inner selection translate known-truth selective-promotion support into heldout benefit or harm avoidance in one genuinely fresh real ecological system?",
+    "one_real_system_can_establish_universal_benefit": false,
+    "one_real_system_can_change_closed_eog_wf_pattern": false,
+    "outer_result_must_be_reported_regardless_of_direction": true,
+    "qualification_or_transport_stop_is_not_a_biological_negative": true
+  }
+}
