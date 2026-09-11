@@ -68,14 +68,17 @@ def main() -> int:
 
     methods_lower = methods_block.casefold()
     ai_disclosure_present = any(token in methods_lower for token in ("chatgpt", "large language model", "llm", "generative ai"))
+    license_paths = [ROOT / "LICENSE", ROOT / "LICENSE.txt", ROOT / "LICENSE.md"]
+    open_source_license_file_present = any(path.is_file() and path.stat().st_size > 0 for path in license_paths)
     author_admin_checks = {
         "title_page_present": TITLE_PAGE.exists(),
         "final_archive_doi_placeholder_resolved": final_placeholders == 0,
         "ai_llm_use_disclosure_present_in_methods": ai_disclosure_present,
+        "open_source_license_file_present": open_source_license_file_present,
     }
 
     result = {
-        "schema": "eog.eogwf_mee_submission_readiness.v3",
+        "schema": "eog.eogwf_mee_submission_readiness.v4",
         "manuscript": str(MANUSCRIPT.relative_to(ROOT)),
         "journal": "Methods in Ecology and Evolution",
         "article_type": "Research Article",
