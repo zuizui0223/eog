@@ -1,0 +1,44 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_response_open_authorization.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "attempt_id": "ncrn_redbellied_layer_b_v2_final_v1",
+  "response_open_authorized": true,
+  "one_shot": true,
+  "qualified_parent_sha": "1eedd5b2cc1fc21d13c71f6cc17d270213988dc8",
+  "qualification_basis": {
+    "pre_response_receipt": "validation/layer_b_mechanism_v2/ncrn_pre_response_qualification_receipt_v1.json",
+    "final_push_synthetic_run_id": 34562391526,
+    "final_push_synthetic_artifact_id": 10184785404,
+    "final_push_synthetic_artifact_digest": "sha256:544ce27e0c258261f0133652def7b480efbe307f8471f0f8ee5a92ea62094e24",
+    "stage0_run_id": 34562394546,
+    "geometry_run_id": 34562394569,
+    "head_only_transport_run_id": 34562394574,
+    "metadata_route_audit_run_id": 34562394576,
+    "package_checks_run_id": 34562394568,
+    "all_required_gates_passed": true
+  },
+  "response_download_file_id": 757402,
+  "maximum_full_payload_requests": 1,
+  "pre_authorization_response_payload_requests": 0,
+  "pre_authorization_response_payload_bytes_opened": 0,
+  "manual_rerun_allowed": false,
+  "post_outer_rescue_allowed": false,
+  "replacement_candidate_after_scored_outer_allowed": false,
+  "frozen_file_sha256": {
+    ".github/workflows/ncrn-final-live-once.yml": "13d4abdf4ca2def1208c971fa2bdcf390f01fd59caf9460e3414c10321f76bb6",
+    "src/eog/v2/source_symmetric_predictive_summary.py": "6fb3d425a6c9454d65db2401ebab4c413966b2c9788d8bdc5b9a1aa8ea61e683",
+    "validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json": "14242339ade33a29af8b85e45f78bbb1ee1f872e4fd352d1a87e5ab14176ee51",
+    "validation/layer_b_mechanism_v2/ncrn_final_once_v2.py": "e2a1063af9981bfedddab90c94b52fde96af9ef1a67aec08b831ebd2a49d6b1b",
+    "validation/layer_b_mechanism_v2/ncrn_final_runner_v2_amendment_v1.json": "965791c1bc8c11d634ccb562e9785074c2085b6aed53bbb6fb2ac94b70b9c966",
+    "validation/layer_b_mechanism_v2/ncrn_geometry_worlds_frozen_v1.json": "b40040ceec709dd5684c6f50b2c908bfafce97ce96ab1c86793e811006a18e68",
+    "validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json": "f7bb4f5121aaa8b4681707a16828669a97921c624ce58a47f4315004d4ee3c6c",
+    "validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json": "c005cc86a47dc4541ba620e9fc974081239234dd874509e87e62125c990a080c",
+    "validation/layer_b_mechanism_v2/ncrn_terminal_semantics_amendment_v1.json": "b4535d74d6f2187cb9089c91aeb8287c6a277b022ab9d01ea0191578630656fc"
+  },
+  "scientific_commitment": {
+    "outer_result_reported_regardless_of_direction": true,
+    "qualification_or_schema_or_transport_stop_not_interpreted_as_biological_negative": true,
+    "closed_eog_wf_synthesis_unchanged": true,
+    "candidate_hunting_hard_stop": true
+  }
+}
