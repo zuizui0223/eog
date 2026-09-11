@@ -48,11 +48,13 @@ jobs:
           assert p['model_fits'] == 0
           assert p['heldout_scores'] == 0
           assert p['response_open_authorized'] is False
+          assert p['forbidden_response']['queried'] is False
           assert p['forbidden_response']['resolved'] is False
           assert p['forbidden_response']['downloaded'] is False
           assert p['status'] in {
               'stage0_response_blind_transport_qualified',
               'stop_pre_response_dataone_transport_or_package_resolution',
+              'terminal_pre_response_transport_stop_after_final_dataone_diagnostic',
           }
           PY
       - uses: actions/upload-artifact@v4
