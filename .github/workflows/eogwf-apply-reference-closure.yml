@@ -1,0 +1,47 @@
+name: EOG-WF apply reference closure once
+
+on:
+  push:
+    branches:
+      - manuscript/eogwf-mee-closure
+    paths:
+      - 'manuscript/apply_eogwf_reference_closure.py'
+      - '.github/workflows/eogwf-apply-reference-closure.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: manuscript/eogwf-mee-closure
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply exact reference patch
+        run: python manuscript/apply_eogwf_reference_closure.py
+      - name: Run MEE readiness checker
+        run: python manuscript/check_eogwf_mee_readiness.py
+      - name: Verify patch scope
+        run: |
+          python - <<'PY'
+          import subprocess
+          changed=subprocess.check_output(['git','diff','--name-only'], text=True).splitlines()
+          assert changed == ['manuscript/EOG_WF_MANUSCRIPT_V1.md'], changed
+          PY
+      - name: Commit patched manuscript
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add manuscript/EOG_WF_MANUSCRIPT_V1.md
+          git commit -m 'Close EOG-WF literature placeholders'
+          git push origin HEAD:manuscript/eogwf-mee-closure
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eogwf-mee-readiness-after-reference-closure
+          path: build/eogwf_mee_submission_readiness.json
+          if-no-files-found: error
