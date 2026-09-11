@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / 'validation/layer_b_mechanism_v2/single_fresh_real_endpoint_execution_contract_v1.json'
 INDIA_STATUS = ROOT / 'validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json'
 ILLINOIS_STATUS = ROOT / 'validation/layer_b_mechanism_v2/illinois_coyote_qualification_v2_status_v1.json'
+NCRN_SELECTION = ROOT / 'validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_selection_v1.json'
 QUALIFICATION = ROOT / 'validation/layer_b_mechanism_v2/fresh_real_candidate_qualification_v2.json'
 
 
@@ -21,9 +22,10 @@ def test_single_active_system_and_one_outer_endpoint_only():
     assert budget['parallel_candidate_attempts_allowed'] is False
     assert budget['candidate_hunting_to_improve_result_allowed'] is False
     assert budget['gate_weakening_to_obtain_score_allowed'] is False
-    assert p['active_candidate_lock']['candidate'] is None
-    assert p['active_candidate_lock']['current_status'] == 'single_slot_free_response_blind_prescreening_only'
-    assert p['active_candidate_lock']['response_open_authorized'] is False
+    active = p['active_candidate_lock']
+    assert active['candidate'] == 'ncrn_red_bellied_woodpecker_2007_2019'
+    assert active['selection_contract'].endswith('ncrn_redbellied_stage0_selection_v1.json')
+    assert active['response_open_authorized'] is False
 
 
 def test_all_qualification_v2_domains_are_required_before_response():
@@ -88,7 +90,31 @@ def test_illinois_coyote_is_terminal_and_never_consumed_response():
     assert p['amendment_boundary']['further_retry_allowed'] is False
 
 
-def test_closed_candidate_ledgers_match_free_slot_contract():
+def test_ncrn_selection_is_response_blind_and_prequalified_for_both_classes():
+    p = _load(NCRN_SELECTION)
+    assert p['selected_before_response_payload_access'] is True
+    assert p['parallel_candidate_attempts_allowed'] is False
+    assert p['source']['forest_response_resource']['name'] == 'ncrn_birds_forest_counts.csv'
+    assert p['source']['forest_response_resource']['download_file_id'] == 757399
+    f = p['response_firewall']
+    assert f['counts_payload_requests_stage0'] == 0
+    assert f['counts_header_bytes_stage0'] == 0
+    assert f['counts_values_stage0'] is False
+    assert f['flattened_R1_payload_requests_stage0'] == 0
+    assert f['fielddata_payload_requests_stage0'] == 0
+    cert = p['independent_estimability_certificate_basis']
+    assert cert['forest_plot_count'] == 277
+    assert cert['yearly_positive_lower_bound'] == 123
+    assert cert['yearly_negative_lower_bound'] == 72
+    minima = p['prospective_nested_partition']['frozen_estimability_minima_per_partition']
+    assert cert['yearly_positive_lower_bound'] >= minima['positive_site_years']
+    assert cert['yearly_negative_lower_bound'] >= minima['negative_site_years']
+    assert minima['unique_spatial_nodes'] == 50
+    assert p['qualification_v2_status_at_selection']['qualification_v2_complete'] is False
+    assert p['qualification_v2_status_at_selection']['response_open_authorized'] is False
+
+
+def test_closed_candidate_ledgers_match_active_slot_contract():
     p = _load(CONTRACT)
     closed = {x['candidate']: x for x in p['prior_closed_candidates']}
     assert set(closed) == {'india_tiger', 'illinois_coyote_2021_2024'}
