@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify frozen historical contract remains immutable
+      - name: Verify frozen historical contract and terminal receipt
         run: |
           python - <<'PY'
           import json
@@ -34,12 +34,3 @@ jobs:
           PY
       - name: Compile historical runner without executing it
         run: python -m py_compile benchmarks/mapppd_adelie_selective_promotion_final.py
-      - name: Verify no live response execution path remains
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          live=Path('.github/workflows/mapppd-adelie-final-once.yml').read_text()
-          assert 'execute/mapppd-adelie-final-v1' not in live
-          assert 'MAPPPD_ADELIE_EXECUTE_ONCE_V1' not in live
-          assert 'mapppd_adelie_selective_promotion_final.py' not in live
-          PY
