@@ -7,11 +7,13 @@ on:
     paths:
       - 'validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_selection_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_nonresponse.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_pre_response_audit_corrections_v1.json'
       - '.github/workflows/ncrn-redbellied-stage0-nonresponse.yml'
   pull_request:
     paths:
       - 'validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_selection_v1.json'
       - 'validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_nonresponse.py'
+      - 'validation/layer_b_mechanism_v2/ncrn_pre_response_audit_corrections_v1.json'
       - '.github/workflows/ncrn-redbellied-stage0-nonresponse.yml'
 
 permissions:
@@ -32,7 +34,9 @@ jobs:
           from pathlib import Path
           p=json.loads(Path('validation/layer_b_mechanism_v2/ncrn_redbellied_stage0_selection_v1.json').read_text())
           f=p['response_firewall']
-          assert p['source']['forest_response_resource']['download_file_id'] == 757399
+          initial=p['source']['initial_forest_response_resource']
+          assert initial['download_file_id'] == 757399
+          assert initial['payload_opened'] is False
           assert f['counts_payload_requests_stage0'] == 0
           assert f['counts_header_bytes_stage0'] == 0
           assert f['counts_values_stage0'] is False
