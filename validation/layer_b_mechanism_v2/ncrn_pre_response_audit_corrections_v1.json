@@ -1,0 +1,38 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_pre_response_audit_corrections.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "frozen_before_any_response_payload_access": true,
+  "response_payload_requests_so_far": 0,
+  "response_header_bytes_opened_so_far": 0,
+  "response_values_opened_so_far": false,
+  "corrections": [
+    {
+      "id": "route_attribute_name_normalization",
+      "problem": "Metadata route audit compared species-name fields after lowercasing only, so Scientific_Name and Common_Name in fielddata were not recognized even though the independent EML schema explicitly documents them.",
+      "allowed_fix": "Normalize metadata attribute names by removing non-alphanumeric characters after lowercasing before semantic flag checks.",
+      "scientific_effect": "May expand the set of metadata-documented joinable routes; cannot inspect or rank routes using response values."
+    },
+    {
+      "id": "survey_year_source_fix",
+      "problem": "Stage0 summarized years from every column containing date/year, so ExportDate=2026 was mixed into survey-year counts.",
+      "allowed_fix": "Use EventDate only as the survey-year source; report ExportDate separately as provenance metadata.",
+      "scientific_effect": "Does not change the frozen 2007-2019 partition or any biological endpoint; it only corrects response-independent visit-calendar reporting."
+    }
+  ],
+  "authorized_replay": {
+    "metadata_resource_id": 756926,
+    "points_resource_id": 757401,
+    "visits_resource_id": 757403,
+    "same_fixed_nonresponse_resources_only": true,
+    "counts_resource_id_757399_requests_allowed": 0,
+    "fielddata_resource_id_757400_requests_allowed": 0,
+    "R1_resource_id_757402_requests_allowed": 0
+  },
+  "forbidden": [
+    "change focal taxon",
+    "change 2007-2011 / 2012-2015 / 2016-2019 partition",
+    "change estimability minima",
+    "read any response-bearing CSV to choose between fielddata and R1",
+    "use biological values to repair response algebra"
+  ]
+}
