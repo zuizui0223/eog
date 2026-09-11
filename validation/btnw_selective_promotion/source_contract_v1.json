@@ -37,6 +37,18 @@
     "geometry_file_size_bytes": 5666,
     "response_file_is_not_present_in_the_author_repository_tree": true
   },
+  "geometry_world_rule": {
+    "frozen_before_geometry_payload_access_by_this_attempt": true,
+    "distance": "haversine_km",
+    "earth_radius_km": 6371.0088,
+    "pairwise_pool": "all unordered distinct-site pairs among the 114 frozen site coordinates; discard only nonfinite or exactly zero distances",
+    "local_quantiles": [0.2, 0.4, 0.6, 0.8],
+    "quantile_method": "linear interpolation with h=(n-1)*q, lower=floor(h), upper=ceil(h), value=x[lower]+(h-lower)*(x[upper]-x[lower]) on sorted nonzero distances",
+    "world_ids": ["q20", "q40", "q60", "q80", "external_open"],
+    "external_open_support": 1,
+    "thresholds_must_be_positive_strictly_increasing": true,
+    "no_response_information": true
+  },
   "response_semantics_frozen_from_independent_documentation": {
     "survey_sites": 114,
     "survey_years": 25,
@@ -104,7 +116,7 @@
     "the version file manifest contains exactly one model_data.rds with immutable file metadata and digest or equivalent immutable identifier",
     "the response file is not downloaded or previewed",
     "the pinned author-repository geometry blob decodes as exactly 114 unique valid site IDs with finite latitude/longitude",
-    "geometry yields at least four positive strictly increasing response-independent distance thresholds",
+    "geometry yields q20/q40/q60/q80 under the frozen linear-quantile rule and all four thresholds are positive and strictly increasing",
     "README/geometry identities match the pinned author repository commit",
     "no endpoint response bytes, headers, rows, values, models, selector decisions or heldout scores are opened"
   ],
