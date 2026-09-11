@@ -1,0 +1,40 @@
+name: EOG-WF MEE readiness
+
+on:
+  push:
+    branches:
+      - manuscript/eogwf-mee-closure
+    paths:
+      - 'manuscript/EOG_WF_MANUSCRIPT_V1.md'
+      - 'manuscript/EOG_WF_TITLE_PAGE.md'
+      - 'manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md'
+      - 'manuscript/check_eogwf_mee_readiness.py'
+      - 'manuscript/paper_ready/submission_boundary.json'
+      - '.github/workflows/eogwf-mee-readiness.yml'
+  pull_request:
+    paths:
+      - 'manuscript/EOG_WF_MANUSCRIPT_V1.md'
+      - 'manuscript/EOG_WF_TITLE_PAGE.md'
+      - 'manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md'
+      - 'manuscript/check_eogwf_mee_readiness.py'
+      - 'manuscript/paper_ready/submission_boundary.json'
+      - '.github/workflows/eogwf-mee-readiness.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  readiness:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run scientific and submission readiness audit
+        run: python manuscript/check_eogwf_mee_readiness.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eogwf-mee-readiness
+          path: build/eogwf_mee_submission_readiness.json
+          if-no-files-found: error
