@@ -14,13 +14,13 @@
 
 **4.** The strongest supported result is therefore not general predictive benefit. EOG provides an auditable finite-world compatibility, contraction and falsification framework coupled to an explicit prospective validation denominator. The frozen Layer-B compression can contain additional heldout information in some systems but can also cause substantial predictive degradation; its usefulness must be established separately in each application. Structural compatibility and predictive value are distinct estimands and are allowed to disagree.
 
-**Keywords:** ecological forecasting; falsification; reachability; prospective validation; model uncertainty; reproducibility; species distributions
-
 **Data and code for peer review:** all manuscript results are linked to immutable repository contracts, certificates, fingerprints and generated paper-ready assets. A review-ready release/archive should be fixed before submission. [FINAL ARCHIVE/DOI TO ADD]
+
+**Keywords:** ecological forecasting; falsification; model uncertainty; prospective validation; reachability; reproducibility; species distributions
 
 ## Introduction
 
-Ecological prediction and ecological explanation are often asked to operate on the same spatial observations, but success at one task does not guarantee success at the other. A model may predict heldout observations well while leaving the underlying distribution-forming process weakly identified; conversely, new evidence may eliminate structural or mechanistic hypotheses without yielding a better forecasting representation. [REF] This distinction becomes especially important when distributions are represented by several plausible reachability or accessibility rules rather than by one fitted mechanism.
+Ecological prediction and ecological explanation are often asked to operate on the same spatial observations, but success at one task does not guarantee success at the other. A model may predict heldout observations well while leaving the underlying distribution-forming process weakly identified; conversely, new evidence may eliminate structural or mechanistic hypotheses without yielding a better forecasting representation (Shmueli, 2010; Houlahan et al., 2017). This distinction becomes especially important when distributions are represented by several plausible reachability or accessibility rules rather than by one fitted mechanism.
 
 EOG starts from a deliberately finite declared universe of candidate worlds. Each world encodes a frozen support or reachability rule. For evidence set `O`, Layer A retains the exact compatible subset `W(O)`. New positive evidence may leave that set unchanged, contract it by eliminating particular worlds, or falsify the entire declared universe. Exact identity matters here because a statement such as “rule X was eliminated by transition t” is impossible after identity has been discarded. At the same time, survival of a world does **not** establish that world as historical truth: several worlds can remain observationally compatible and the true process may lie outside the declared universe.
 
@@ -32,7 +32,7 @@ A second problem concerns validation itself. Added-value results are easy to ove
 
 The primary aim of this study is consequently twofold but asymmetric. First, we ask whether finite-world structural compatibility and falsification operate as an auditable ecological inference state in known-truth and real applications. Second, as a deliberately harder product test, we ask whether a frozen label-invariant compression of that state adds heldout information to an **unchanged strong conventional learner**. We did not require the second result to be favorable in order to retain the first. The fresh predictive series was prospectively closed after the third valid scored endpoint, and a fourth endpoint selected to improve the observed pattern is forbidden.
 
-## Methods
+## Materials and Methods
 
 ### Layer A — exact finite-world compatibility and falsification
 
@@ -132,9 +132,9 @@ This separation also clarifies what remains untested or unidentified. The closed
 
 ### Relationship to existing ecological prediction methods
 
-EOG-WF is not presented as a replacement for species distribution models, dynamic occupancy models, mechanistic range models, landscape connectivity methods or generic ensemble learning. [REF] Those methods can estimate local occurrence support, occupancy dynamics, dispersal processes, connectivity or predictive combinations directly. EOG instead asks whether a declared finite set of structural worlds remains compatible with accumulating distribution evidence and preserves exact provenance when worlds are eliminated.
+EOG-WF is not presented as a replacement for species distribution models, dynamic occupancy models, mechanistic range models, landscape connectivity methods or generic ensemble learning. Accessibility constraints, occupied-source proximity, habitat-network occurrence models and suitability-derived connectivity are already established components of ecological prediction (Prugh, 2009; Barve et al., 2011; Schooley & Branch, 2011; Ortiz-Rodríguez et al., 2019; Nelli et al., 2022). Those methods can estimate local occurrence support, occupancy dynamics, dispersal processes, connectivity or predictive combinations directly. EOG instead asks whether a declared finite set of structural worlds remains compatible with accumulating distribution evidence and preserves exact provenance when worlds are eliminated.
 
-Nor does the novelty claim rest on generic threshold graphs, percolation, minimum-cost paths, permutation-invariant summaries, stacking, model averaging or schema validation. [REF] The contribution lies in the domain-specific combination of exact finite-world ecological falsification, strict separation of structural state from its prediction-facing compression, and a response-blind validation protocol that retains failed candidates in the denominator rather than repairing them away.
+Nor does the novelty claim rest on any individual ingredient such as thresholded connectivity, path or network representations, permutation-invariant summaries, model combination or schema validation. Sensitivity of habitat-network predictions to dispersal thresholds is itself an established concern (Ortiz-Rodríguez et al., 2023). The contribution lies in the domain-specific combination of exact finite-world ecological falsification, strict separation of structural state from its prediction-facing compression, and a response-blind validation protocol that retains failed candidates in the denominator rather than repairing them away.
 
 ### Limitations
 
@@ -154,6 +154,24 @@ EOG's strongest supported contribution is an **auditable finite-world structural
 
 The resulting product boundary is conservative. Layer A can be used for declared-world compatibility, sequential contraction and finite-universe falsification without assuming that Layer B will improve a conventional predictor. Any predictive use of a compressed world-set representation requires its own prospective validation.
 
+## References
+
+Barve, N., Barve, V., Jiménez-Valverde, A., Lira-Noriega, A., Maher, S.P., Peterson, A.T., Soberón, J. & Villalobos, F. (2011). The crucial role of the accessible area in ecological niche modeling and species distribution modeling. *Ecological Modelling*, 222, 1810–1819. https://doi.org/10.1016/j.ecolmodel.2011.02.011
+
+Houlahan, J.E., McKinney, S.T., Anderson, T.M. & McGill, B.J. (2017). The priority of prediction in ecological understanding. *Oikos*, 126, 1–7. https://doi.org/10.1111/oik.03726
+
+Nelli, L., Schehl, B., Stewart, R.A., Scott, C., Ferguson, S., MacMillan, S. & McCafferty, D.J. (2022). Predicting habitat suitability and connectivity for management and conservation of urban wildlife: A real-time web application for grassland water voles. *Journal of Applied Ecology*, 59, 1072–1085. https://doi.org/10.1111/1365-2664.14118
+
+Ortiz-Rodríguez, D.O., Guisan, A., Holderegger, R. & van Strien, M.J. (2019). Predicting species occurrences with habitat network models. *Ecology and Evolution*, 9, 10457–10471. https://doi.org/10.1002/ece3.5567
+
+Ortiz-Rodríguez, D.O., Guisan, A. & van Strien, M.J. (2023). Sensitivity of habitat network models to changes in maximum dispersal distance. *PLoS ONE*, 18, e0293966. https://doi.org/10.1371/journal.pone.0293966
+
+Prugh, L.R. (2009). An evaluation of patch connectivity measures. *Ecological Applications*, 19, 1300–1310. https://doi.org/10.1890/08-1524.1
+
+Schooley, R.L. & Branch, L.C. (2011). Habitat quality of source patches and connectivity in fragmented landscapes. *Biodiversity and Conservation*, 20, 1611–1623. https://doi.org/10.1007/s10531-011-0049-5
+
+Shmueli, G. (2010). To explain or to predict? *Statistical Science*, 25, 289–310. https://doi.org/10.1214/10-STS330
+
 ## Submission-boundary checklist
 
 Before submission, confirm that the manuscript still satisfies all of the following:
@@ -170,5 +188,5 @@ Before submission, confirm that the manuscript still satisfies all of the follow
 - [ ] Louisiana decoupling is described as structural falsification plus a very small predictive gain, not mechanistic validation;
 - [ ] Tampa placebo is secondary and only weakens the feature-count explanation;
 - [ ] Tampa degradation mechanism remains explicitly unidentified in the closed study;
-- [ ] references are added for literature-positioning statements marked `[REF]`;
+- [x] literature-positioning statements are supported by verified references and no citation placeholders remain;
 - [ ] final archive/DOI, title page, author contributions, AI-use disclosure and journal-specific format are checked on the submission date.
