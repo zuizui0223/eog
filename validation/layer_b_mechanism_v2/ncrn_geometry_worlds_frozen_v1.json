@@ -1,0 +1,30 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_geometry_worlds_frozen.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "frozen_before_response_payload_access": true,
+  "authoritative_run": 34557775308,
+  "artifact_id": 10183189379,
+  "artifact_zip_sha256": "d16dfd966100d24943053b7e37e5edea7512011544b761b2a12fc16ec9506638",
+  "response_payload_requests": 0,
+  "response_bytes_opened": 0,
+  "response_values_opened": false,
+  "points_sha256": "14c9f311fa15e8c6d47d5ec6e0611e0b05932f16252eb2f733eb84f134ec9b4c",
+  "registry_sha256": "08bde71ef5daa23cb34094b4c61807c80ea75335f9c024c9fe432f2ce932e0e9",
+  "points_row_count": 421,
+  "finite_coordinate_rows": 413,
+  "excluded_missing_or_invalid_coordinate_rows": 8,
+  "unique_sites": 413,
+  "unique_coordinate_pairs": 413,
+  "positive_pairwise_distance_count": 85078,
+  "pairwise_distance_min_km": 0.24931325340741178,
+  "pairwise_distance_max_km": 181.4638995659257,
+  "worlds": [
+    {"world_id": "distance_q20", "quantile": 0.2, "threshold_km": 27.633830147277926},
+    {"world_id": "distance_q40", "quantile": 0.4, "threshold_km": 45.78221740457255},
+    {"world_id": "distance_q60", "quantile": 0.6, "threshold_km": 74.0993502145765},
+    {"world_id": "distance_q80", "quantile": 0.8, "threshold_km": 104.41994761020693},
+    {"world_id": "external_open", "quantile": null, "threshold_km": null}
+  ],
+  "status": "geometry_worlds_qualified_and_frozen",
+  "post_response_threshold_change_allowed": false
+}
