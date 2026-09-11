@@ -1,73 +1,47 @@
-name: India tiger DataONE Stage0 v2
+name: India tiger terminal pre-response STOP guard
 
 on:
   push:
     branches:
       - research/layer-b-v2-single-fresh-endpoint-lock
     paths:
-      - 'validation/layer_b_mechanism_v2/india_tiger_stage0_dataone_transport_v2.py'
+      - 'validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json'
       - '.github/workflows/india-tiger-dataone-stage0-v2.yml'
   pull_request:
     paths:
-      - 'validation/layer_b_mechanism_v2/india_tiger_stage0_dataone_transport_v2.py'
+      - 'validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json'
       - '.github/workflows/india-tiger-dataone-stage0-v2.yml'
 
 permissions:
   contents: read
 
 jobs:
-  response-blind-transport:
+  terminal-stop-guard:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Verify response firewall before transport
-        run: |
-          python - <<'PY'
-          import pathlib
-          src = pathlib.Path('validation/layer_b_mechanism_v2/india_tiger_stage0_dataone_transport_v2.py').read_text()
-          assert 'FORBIDDEN_RESPONSE = "EERecords.csv"' in src
-          assert 'response_payload_requests": 0' in src
-          assert 'response_bytes_opened": 0' in src
-          PY
-      - name: Execute DataONE response-blind transport
-        id: transport
-        continue-on-error: true
-        run: python validation/layer_b_mechanism_v2/india_tiger_stage0_dataone_transport_v2.py
-      - name: Audit terminal boundary
+      - name: Verify terminal response-blind disposition
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          p = json.loads(Path('build/layer_b_mechanism_v2/india_tiger_dataone_transport_v2/transport.json').read_text())
-          assert p['response_payload_requests'] == 0
-          assert p['response_bytes_opened'] == 0
-          assert p['response_values_opened'] is False
-          assert p['model_fits'] == 0
-          assert p['heldout_scores'] == 0
+
+          p = json.loads(Path('validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json').read_text())
+          assert p['terminal_status'] == 'terminal_pre_response_transport_stop'
+          assert p['candidate_attempt_closed'] is True
+          assert p['response_consumed'] is False
           assert p['response_open_authorized'] is False
-          assert p['forbidden_response']['queried'] is False
-          assert p['forbidden_response']['resolved'] is False
-          assert p['forbidden_response']['downloaded'] is False
-          assert p['status'] in {
-              'stage0_response_blind_transport_qualified',
-              'stop_pre_response_dataone_transport_or_package_resolution',
-              'terminal_pre_response_transport_stop_after_final_dataone_diagnostic',
-          }
-          PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: india-tiger-dataone-stage0-v2
-          path: build/layer_b_mechanism_v2/india_tiger_dataone_transport_v2/
-          if-no-files-found: error
-      - name: Fail workflow if transport did not qualify
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p = json.loads(Path('build/layer_b_mechanism_v2/india_tiger_dataone_transport_v2/transport.json').read_text())
-          if p['status'] != 'stage0_response_blind_transport_qualified':
-              raise SystemExit(p.get('error', p['status']))
+          assert p['qualification_v2_complete'] is False
+          assert p['counts_as_predictive_evidence'] is False
+          assert p['counts_as_biological_negative'] is False
+          t = p['terminal_transport_evidence']
+          assert t['forbidden_response_filename'] == 'EERecords.csv'
+          assert t['forbidden_response_queried'] is False
+          assert t['forbidden_response_resolved'] is False
+          assert t['forbidden_response_downloaded'] is False
+          assert t['response_payload_requests'] == 0
+          assert t['response_bytes_opened'] == 0
+          assert t['model_fits'] == 0
+          assert t['heldout_scores'] == 0
+          assert p['next_gate'].startswith('release_single_active_slot')
           PY
