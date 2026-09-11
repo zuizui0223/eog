@@ -20,6 +20,8 @@
       "target_definition_frozen": true,
       "independent_evidence_target_occurs_in_the_dataset": true,
       "independent_evidence_uses_no_endpoint_response_payload": true,
+      "independent_pre_response_evidence_of_both_positive_and_negative_target_support": true,
+      "independent_pre_response_evidence_class_support_is_compatible_with_the_frozen_estimability_minima_across_intended_calibration_and_heldout_structure": true,
       "target_change_after_response": false
     },
     "geometry_and_effort": {
@@ -44,6 +46,7 @@
     "live source metadata/transport fails under the frozen route",
     "exact response header or response algebra cannot be independently frozen",
     "target inclusion is only assumed from ecological plausibility rather than independently documented",
+    "target is documented as present but independent information does not establish enough explicit negative/both-class support for the frozen estimability minima",
     "fewer than 50 unique public spatial nodes",
     "required spatial nodes are collapsed to coarse site centroids",
     "source has already been response-consumed by an EOG attempt"
@@ -53,7 +56,8 @@
     "rhode_island_wildlife": "pre-response STOP because the prospectively frozen metadata request timed out; no retry allowed",
     "neon_camera": "post-response estimability STOP because target inclusion was assumed but the frozen exact-name target produced zero eligible positives",
     "raccoon_rabies": "post-response schema STOP because public prose was not sufficient to freeze exact spaced headers and negative-count algebra",
-    "uljin_korea": "pre-response reject before any EOG attempt because 82 stations are represented by only two public site-level generalized coordinate points"
+    "uljin_korea": "pre-response reject before any EOG attempt because 82 stations are represented by only two public site-level generalized coordinate points",
+    "mapppd_adelie": "post-response estimability STOP despite strong target inclusion evidence because explicit presence/absence was extremely positive-skewed: inner train had 711 positive and only 10 negative site-years versus the frozen minimum of 30 negatives. Target inclusion alone is therefore insufficient; both-class support must be independently qualified before response consumption."
   },
   "scientific_boundary": {
     "closed_eog_wf_unchanged": true,
