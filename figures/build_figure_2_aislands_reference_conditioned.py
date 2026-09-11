@@ -82,8 +82,8 @@ def validate() -> dict:
     assert strong["result_fingerprint"] == EXPECTED_STRONG_FINGERPRINT
     assert strong["taxa_estimable"] == 886
     assert strong["primary"]["favourable_direction"] == "negative"
+    assert strong["primary"]["contrast"] == "C_minus_R3_matched_heldout_log_loss"
     assert contract["schema_version"] == "eog_aislands_isolation_adequacy_v1_3"
-    assert contract["primary_contrast"] == "candidate C minus reference R3 matched heldout log loss"
     assert list(contract["reference_tiers"]) == ["R0", "R1", "R2", "R3", "C"]
     assert boundary["schema"] == "eog.structural_island_paper_boundary.v1"
     counts = original_direction_counts()
@@ -117,7 +117,6 @@ def render(data: dict) -> str:
         parts.append(f'<rect class="panel" x="{x}" y="{y}" width="{w}" height="{h}" rx="16"/>')
         parts.append(text(x+18, y+28, label, size=17, weight=700))
 
-    # A reference ladder
     ax, ay, aw, ah = panels["A"]
     parts.append(text(ax+52, ay+30, "Prospectively declared reference ladder", size=19, weight=700))
     ladder = [
@@ -141,7 +140,6 @@ def render(data: dict) -> str:
         yy += 137
     parts.append(text(ax+aw/2, ay+785, "Primary extension contrast: C − R3 only", size=15, weight=700, anchor="middle", fill="#b94a48"))
 
-    # B original endpoint
     bx, by, bw, bh = panels["B"]
     parts.append(text(bx+52, by+30, "Restricted reference: conditional ordering", size=19, weight=700))
     parts.append(text(bx+52, by+58, "Reference: climatic support + nearest outer-training source distance", size=14, fill="#526070"))
@@ -159,10 +157,9 @@ def render(data: dict) -> str:
     parts.append(f'<line class="ci" x1="{xmap(lo,left,right,lo_axis,hi_axis)}" y1="{yaxis}" x2="{xmap(hi,left,right,lo_axis,hi_axis)}" y2="{yaxis}"/>')
     parts.append(f'<circle cx="{xmap(eff,left,right,lo_axis,hi_axis)}" cy="{yaxis}" r="8" fill="#2f855a"/>')
     parts.append(text(right-5, by+128, f"mean concordance = {eff:.3f}  [{lo:.3f}, {hi:.3f}]", size=14, anchor="end", weight=700))
-    parts.append(text(right-5, by+158, f"845 estimable taxa; null = 0.5", size=13, anchor="end", fill="#526070"))
+    parts.append(text(right-5, by+158, "845 estimable taxa; null = 0.5", size=13, anchor="end", fill="#526070"))
     parts.append(text(right-5, by+184, "Interpretation: structure retains conditional ordering information", size=13, anchor="end", fill="#2f855a", weight=700))
 
-    # C rich reference endpoint
     cx, cy, cw, ch = panels["C"]
     parts.append(text(cx+52, cy+30, "Rich R3 reference: incremental predictive value", size=19, weight=700))
     parts.append(text(cx+52, cy+58, "Primary endpoint: matched held-out log loss, C − R3; negative favours EOG", size=14, fill="#526070"))
@@ -183,11 +180,9 @@ def render(data: dict) -> str:
     parts.append(text(right-5, cy+158, "886 estimable taxa; 4,231 / 4,430 folds evaluable", size=13, anchor="end", fill="#526070"))
     parts.append(text(right-5, cy+184, "Interpretation: adverse incremental predictive effect beyond R3", size=13, anchor="end", fill="#b94a48", weight=700))
 
-    # D species direction counts
     dx, dy, dw, dh = panels["D"]
     parts.append(text(dx+52, dy+30, "Species-level direction", size=19, weight=700))
     maxw = dw-110
-    # Original
     total_o = counts["above"] + counts["equal"] + counts["below"] + counts["not_estimable"]
     parts.append(text(dx+45, dy+72, "Original conditional-concordance endpoint", size=13, weight=700))
     xx = dx+45; yy = dy+90
@@ -195,7 +190,6 @@ def render(data: dict) -> str:
         ww = maxw*count/total_o
         parts.append(f'<rect x="{xx}" y="{yy}" width="{ww}" height="28" fill="{fill}"/>'); xx += ww
     parts.append(text(dx+45, dy+136, f"above 0.5: {counts['above']} | equal: {counts['equal']} | below: {counts['below']} | N/E: {counts['not_estimable']}", size=11, fill="#526070"))
-    # Strong
     fav = strong["primary"]["species_favourable_negative"]; adv = strong["primary"]["species_adverse_positive"]; total_s=fav+adv
     parts.append(text(dx+45, dy+185, "Strong-reference C − R3 endpoint", size=13, weight=700))
     xx=dx+45; yy=dy+203
@@ -204,7 +198,6 @@ def render(data: dict) -> str:
         parts.append(f'<rect x="{xx}" y="{yy}" width="{ww}" height="28" fill="{fill}"/>'); xx += ww
     parts.append(text(dx+45, dy+249, f"favourable: {fav} | adverse: {adv}", size=11, fill="#526070"))
 
-    # E inference boundary
     ex, ey, ew, eh = panels["E"]
     parts.append(text(ex+52, ey+30, "What the pair of results establishes", size=19, weight=700))
     lines = [
