@@ -1,0 +1,33 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.ncrn_sequential_warmup_amendment.v1",
+  "candidate": "ncrn_red_bellied_woodpecker_2007_2019",
+  "frozen_before_any_response_payload_access": true,
+  "response_payload_requests_so_far": 0,
+  "reason": "The source-symmetric sequential Layer-B representation requires a nonempty prior source state. Using 2007 as state initialization ensures every scored year is represented strictly from earlier outcomes rather than same-year information.",
+  "original_partition": {
+    "inner_train": [2007, 2008, 2009, 2010, 2011],
+    "inner_validation": [2012, 2013, 2014, 2015],
+    "outer": [2016, 2017, 2018, 2019]
+  },
+  "frozen_sequential_partition": {
+    "warmup_state_only": [2007],
+    "inner_train": [2008, 2009, 2010, 2011],
+    "inner_validation": [2012, 2013, 2014, 2015],
+    "untouched_outer": [2016, 2017, 2018, 2019]
+  },
+  "warmup_semantics": {
+    "2007_used_for_model_fit": false,
+    "2007_used_for_inner_selection_score": false,
+    "2007_used_for_outer_score": false,
+    "2007_positive_finite_registry_sites_initialize_source_set_for_2008": true,
+    "all_five_declared_worlds_alive_before_2008": true,
+    "every_scored_year_t_layer_b_uses_only_target_outcomes_from_years_less_than_t": true
+  },
+  "estimability_effect": "No weakening: each scored constituent year retains independent pre-response positive >=115 and negative >=33 after worst-case finite-registry restriction, above the frozen 30/30 partition minima.",
+  "forbidden": [
+    "use any 2008-or-later outcome to define 2008 features",
+    "move the warmup boundary after response access",
+    "use outer outcomes to refit the learner or revisit arm selection",
+    "lower estimability minima because one training year was reassigned to warmup"
+  ]
+}
