@@ -1,0 +1,28 @@
+{
+  "schema": "eog.snapshot_japan_2023_selective_promotion.stage1_response_route.v1",
+  "attempt_id": "snapshot_japan_2023_wild_boar_selective_promotion_v1",
+  "frozen_before_runner": true,
+  "authorized_access": {
+    "landing_page_url": "https://bdj.pensoft.net/article/141168/element/5/11978224/",
+    "max_landing_page_gets": 1,
+    "response_payload_gets": 0,
+    "response_header_requests": 0,
+    "response_bytes": 0
+  },
+  "required_public_identity": {
+    "supplement_doi": "10.3897/BDJ.13.e141168.suppl2",
+    "published_file_name": "oo_1165478.csv",
+    "published_display_name": "bdj-13-e141168-s002.csv",
+    "role": "sequences.csv / occurrences"
+  },
+  "qualification": "Landing HTML must expose exactly one response-download href attributable to the published supplementary file identity; no response request may be made.",
+  "forbidden": {
+    "response_payload_access": true,
+    "response_header_access": true,
+    "response_schema_discovery_from_payload": true,
+    "model_fit": true,
+    "heldout_scoring": true,
+    "post_failure_route_repair": true
+  },
+  "terminal_states": ["stage1_response_route_qualified", "stop_pre_response_route_metadata"]
+}
