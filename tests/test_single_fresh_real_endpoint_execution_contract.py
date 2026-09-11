@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / 'validation/layer_b_mechanism_v2/single_fresh_real_endpoint_execution_contract_v1.json'
 INDIA_STATUS = ROOT / 'validation/layer_b_mechanism_v2/india_tiger_qualification_v2_status_v1.json'
-ILLINOIS_SELECTION = ROOT / 'validation/layer_b_mechanism_v2/illinois_coyote_stage0_selection_v1.json'
+ILLINOIS_STATUS = ROOT / 'validation/layer_b_mechanism_v2/illinois_coyote_qualification_v2_status_v1.json'
 QUALIFICATION = ROOT / 'validation/layer_b_mechanism_v2/fresh_real_candidate_qualification_v2.json'
 
 
@@ -21,7 +21,8 @@ def test_single_active_system_and_one_outer_endpoint_only():
     assert budget['parallel_candidate_attempts_allowed'] is False
     assert budget['candidate_hunting_to_improve_result_allowed'] is False
     assert budget['gate_weakening_to_obtain_score_allowed'] is False
-    assert p['active_candidate_lock']['candidate'] == 'illinois_coyote_2021_2024'
+    assert p['active_candidate_lock']['candidate'] is None
+    assert p['active_candidate_lock']['current_status'] == 'single_slot_free_response_blind_prescreening_only'
     assert p['active_candidate_lock']['response_open_authorized'] is False
 
 
@@ -53,8 +54,7 @@ def test_inner_selection_cannot_see_outer_and_outer_is_once_only():
     assert outer['post_outer_rescue_tuning_allowed'] is False
 
 
-def test_india_tiger_is_terminal_and_never_consumed_response():
-    p = _load(INDIA_STATUS)
+def _assert_terminal_unconsumed_status(p):
     assert p['terminal_status'] == 'terminal_pre_response_transport_stop'
     assert p['candidate_attempt_closed'] is True
     assert p['response_consumed'] is False
@@ -62,6 +62,11 @@ def test_india_tiger_is_terminal_and_never_consumed_response():
     assert p['qualification_v2_complete'] is False
     assert p['counts_as_predictive_evidence'] is False
     assert p['counts_as_biological_negative'] is False
+
+
+def test_india_tiger_is_terminal_and_never_consumed_response():
+    p = _load(INDIA_STATUS)
+    _assert_terminal_unconsumed_status(p)
     t = p['terminal_transport_evidence']
     assert t['response_payload_requests'] == 0
     assert t['response_bytes_opened'] == 0
@@ -70,21 +75,26 @@ def test_india_tiger_is_terminal_and_never_consumed_response():
     assert t['forbidden_response_downloaded'] is False
 
 
-def test_illinois_selection_is_response_blind_and_not_yet_authorized():
-    p = _load(ILLINOIS_SELECTION)
-    assert p['selected_before_response_payload_access'] is True
-    assert p['parallel_candidate_attempts_allowed'] is False
-    assert p['dataset']['response_file'] == 'Coyote_Detection_History.csv'
-    firewall = p['response_firewall']
-    assert firewall['response_file_payload_requests_allowed_stage0'] == 0
-    assert firewall['response_file_header_bytes_allowed_stage0'] == 0
-    assert firewall['response_values_allowed_stage0'] is False
-    assert firewall['outer_scores_allowed_stage0'] == 0
-    q = p['qualification_v2_status_at_selection']
-    assert q['qualification_v2_complete'] is False
-    assert q['response_open_authorized'] is False
-    assert p['prospective_nested_partition']['untouched_outer'] == '2023/24'
-    assert p['prospective_nested_partition']['outer_feedback_for_selection'] is False
+def test_illinois_coyote_is_terminal_and_never_consumed_response():
+    p = _load(ILLINOIS_STATUS)
+    _assert_terminal_unconsumed_status(p)
+    t = p['terminal_transport_evidence']
+    assert t['response_file'] == 'Coyote_Detection_History.csv'
+    assert t['response_payload_requests'] == 0
+    assert t['response_header_bytes_opened'] == 0
+    assert t['response_bytes_opened'] == 0
+    assert t['response_values_opened'] is False
+    assert t['allowed_nonresponse_payloads_successfully_acquired'] == 0
+    assert p['amendment_boundary']['further_retry_allowed'] is False
+
+
+def test_closed_candidate_ledgers_match_free_slot_contract():
+    p = _load(CONTRACT)
+    closed = {x['candidate']: x for x in p['prior_closed_candidates']}
+    assert set(closed) == {'india_tiger', 'illinois_coyote_2021_2024'}
+    assert all(x['terminal_status'] == 'terminal_pre_response_transport_stop' for x in closed.values())
+    assert all(x['response_consumed'] is False for x in closed.values())
+    assert all(x['may_be_reopened_or_retried'] is False for x in closed.values())
 
 
 def test_closed_eog_wf_boundary_is_not_reopened():
