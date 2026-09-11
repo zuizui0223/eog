@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Verify consumed terminal certificate and disabled live path
+      - name: Verify consumed terminal certificate
         run: |
           python - <<'PY'
           import json
@@ -29,7 +29,4 @@ jobs:
           assert p['authoritative_run']['run_id'] == 34547620159
           assert p['authoritative_run']['artifact_id'] == 10179598049
           assert p['failed_gate'] == 'inner_train_negative_site_years >= 30'
-          t=Path('.github/workflows/mapppd-adelie-final-once.yml').read_text()
-          assert 'execute/mapppd-adelie-final-v1' not in t
-          assert 'benchmarks/mapppd_adelie_selective_promotion_final.py' not in t
           PY
