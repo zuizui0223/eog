@@ -30,11 +30,20 @@ The current EOG-WF draft now matches the important scientific presentation requi
 
 ## Automated manuscript audit
 
-Authoritative readiness artifact from the successful reference-closure workflow:
+Reference-closure workflow evidence:
 
 - workflow run: `34563881236`
 - artifact: `10185289291`
 - artifact digest: `sha256:00680d0309bb5f96c644d79a81cd387ce661d103eff040cacca8e51d33334d7d`
+
+Current read-only readiness audit:
+
+- workflow run: `34575325740`
+- job: `103186366597`
+- artifact: `10189400010`
+- artifact digest: `sha256:13206b5d90119fa7169086a9d6b31061616d7e22d8aa37006488ecb48e6afd5e`
+- schema: `eog.eogwf_mee_submission_readiness.v3`
+- workflow conclusion: **success**
 
 Measured state:
 
@@ -48,7 +57,8 @@ Measured state:
 - unresolved literature placeholders: **0**;
 - References section present: PASS;
 - manuscript under 8000 words: PASS;
-- scientific desk-fit ready: **true**.
+- scientific desk-fit ready: **true**;
+- submission ready: **false**, only because three author/admin gates remain unresolved.
 
 The 3685 count is deliberately conservative because it includes the complete Markdown manuscript, including references and the submission-boundary checklist.
 
@@ -75,6 +85,12 @@ The manuscript is **not submission-ready yet** because three items require autho
 1. **Final title page.** Authors, affiliations, corresponding-author details, running headline, acknowledgements, author contributions, funding, competing interests and inclusion statement require author confirmation. The repository contains `manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md`; it must not be promoted to the final title page until confirmed.
 2. **Review-ready archive / DOI.** `[FINAL ARCHIVE/DOI TO ADD]` remains in the Data/Code statement. A release/archive or a suitable private peer-review repository must be fixed before upload.
 3. **AI/LLM disclosure.** Current MEE guidance requires transparent disclosure when LLMs are used in manuscript/code production, including the application/version and extent of use and author responsibility. The exact historical applications, versions and assisted portions must be confirmed by the authors before inserting the Methods disclosure and corresponding contribution statement.
+
+The v3 checker reports these exactly as:
+
+- `title_page_present = false`;
+- `final_archive_doi_placeholder_resolved = false`;
+- `ai_llm_use_disclosure_present_in_methods = false`.
 
 These blockers do not justify additional ecological analyses or another fresh endpoint.
 
