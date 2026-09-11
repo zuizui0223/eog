@@ -1,0 +1,35 @@
+{
+  "schema": "eog.snapshot_japan_2023_selective_promotion.stage0_deployments.v1",
+  "attempt_id": "snapshot_japan_2023_wild_boar_selective_promotion_v1",
+  "frozen_before_runner": true,
+  "authorized_access": {
+    "url": "https://zenodo.org/api/records/15030965/files/oo_1202827.csv/content",
+    "expected_md5": "9ee54945758d9d146badd3aeb17a7923",
+    "max_get_requests": 1,
+    "response_file_requests": 0,
+    "response_header_bytes": 0,
+    "response_rows": 0
+  },
+  "required_columns": ["deployment_id", "latitude", "longitude", "start_date", "end_date"],
+  "qualification": {
+    "min_unique_deployments": 50,
+    "min_unique_coordinates": 50,
+    "min_total_active_deployment_days": 1000,
+    "partition_fractions": [0.6, 0.2, 0.2],
+    "min_unique_deployments_each_partition": 50,
+    "distance_world_quantiles": [0.2, 0.4, 0.6, 0.8],
+    "distance_metric": "haversine_km",
+    "require_four_strictly_increasing_positive_thresholds": true
+  },
+  "partition_algorithm": "Enumerate eligible deployment-local-days from each inclusive start_date..end_date interval. Sort unique local dates. Choose earliest pair of calendar cut dates minimizing absolute deviation from 60/20/20 fractions of active deployment-day rows, subject to >=50 unique deployments represented in each partition. If no pair satisfies this, STOP.",
+  "forbidden": {
+    "response_file_access": true,
+    "response_header_access": true,
+    "taxon_count_recalculation": true,
+    "post_failure_url_repair": true,
+    "split_repair_after_stage0": true,
+    "model_fit": true,
+    "heldout_scoring": true
+  },
+  "terminal_states": ["stage0_deployments_qualified", "stop_pre_response_transport_identity_or_structure"]
+}

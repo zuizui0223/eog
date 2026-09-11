@@ -1,0 +1,56 @@
+name: Snapshot Japan 2023 selective-promotion Stage1 response route
+
+on:
+  push:
+    branches:
+      - fresh/snapshot-japan-2023-selective-promotion-v1
+    paths:
+      - 'validation/snapshot_japan_2023_selective_promotion/stage1_response_route_contract.json'
+      - 'validation/snapshot_japan_2023_selective_promotion/stage1_response_route.py'
+      - '.github/workflows/snapshot-japan-stage1-response-route.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  stage1:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen metadata-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/snapshot_japan_2023_selective_promotion/stage1_response_route_contract.json').read_text())
+          assert p['frozen_before_runner'] is True
+          assert p['authorized_access']['max_landing_page_gets'] == 1
+          assert p['authorized_access']['response_payload_gets'] == 0
+          assert p['authorized_access']['response_header_requests'] == 0
+          assert p['authorized_access']['response_bytes'] == 0
+          assert p['forbidden']['response_payload_access'] is True
+          PY
+      - name: Resolve response route without opening response
+        run: python validation/snapshot_japan_2023_selective_promotion/stage1_response_route.py
+      - name: Audit response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/snapshot_japan_2023_selective_promotion/stage1_response_route.json').read_text())
+          assert p['status'] in {'stage1_response_route_qualified','stop_pre_response_route_metadata'}
+          assert p['response_payload_gets'] == 0
+          assert p['response_header_requests'] == 0
+          assert p['response_bytes_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-japan-stage1-response-route
+          path: build/snapshot_japan_2023_selective_promotion/stage1_response_route.json
+          if-no-files-found: error

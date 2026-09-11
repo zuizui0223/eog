@@ -1,0 +1,57 @@
+name: Snapshot Japan 2023 selective-promotion Stage0 deployments
+
+on:
+  push:
+    branches:
+      - fresh/snapshot-japan-2023-selective-promotion-v1
+    paths:
+      - 'validation/snapshot_japan_2023_selective_promotion/**'
+      - '.github/workflows/snapshot-japan-stage0-deployments.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  stage0:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/snapshot_japan_2023_selective_promotion/stage0_deployments_contract.json').read_text())
+          assert p['frozen_before_runner'] is True
+          assert p['authorized_access']['max_get_requests'] == 1
+          assert p['authorized_access']['response_file_requests'] == 0
+          assert p['authorized_access']['response_header_bytes'] == 0
+          assert p['authorized_access']['response_rows'] == 0
+          assert p['forbidden']['response_file_access'] is True
+          assert p['forbidden']['model_fit'] is True
+          assert p['forbidden']['heldout_scoring'] is True
+          PY
+      - name: Execute deployment-only Stage0
+        run: python validation/snapshot_japan_2023_selective_promotion/stage0_deployments.py
+      - name: Audit zero-response boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/snapshot_japan_2023_selective_promotion/stage0_deployments.json').read_text())
+          assert p['status'] in {'stage0_deployments_qualified','stop_pre_response_transport_identity_or_structure'}
+          assert p['response_file_requests'] == 0
+          assert p['response_header_bytes_opened'] == 0
+          assert p['response_rows_opened'] == 0
+          assert p['response_values_opened'] is False
+          assert p['model_fits'] == 0
+          assert p['heldout_scores'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-japan-stage0-deployments
+          path: build/snapshot_japan_2023_selective_promotion/stage0_deployments.json
+          if-no-files-found: error

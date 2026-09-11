@@ -1,0 +1,73 @@
+{
+  "schema": "eog.snapshot_japan_2023_selective_promotion.source_contract.v1",
+  "attempt_id": "snapshot_japan_2023_wild_boar_selective_promotion_v1",
+  "scientific_question": "Does calibration-only selective promotion of the source-symmetric sequential EOG contextual representation improve untouched real ecological prediction relative to the frozen conventional baseline?",
+  "closed_eog_wf_unchanged": true,
+  "dataset": {
+    "title": "Snapshot Japan 2023: the first camera trap dataset under a globally standardised protocol in Japan",
+    "publication_doi": "10.3897/BDJ.13.e141168",
+    "temporal_coverage_public_description": "August 2023 to December 2023",
+    "public_effort_trap_nights": 6162,
+    "public_location_count": 90,
+    "public_array_count": 9
+  },
+  "focal_taxon": {
+    "common_name": "Wild Boar",
+    "genus": "Sus",
+    "species": "scrofa",
+    "frozen_before_response_payload_access": true,
+    "independent_public_inclusion_evidence": {
+      "individual_detections": 2580,
+      "arrays": 9,
+      "locations": 67,
+      "source": "published Table 1 in the data paper"
+    }
+  },
+  "physical_response_separation": {
+    "deployments_file": "oo_1202827.csv",
+    "deployments_supplement_doi": "10.3897/BDJ.13.e141168.suppl1",
+    "deployments_zenodo_record": 15030965,
+    "deployments_md5": "9ee54945758d9d146badd3aeb17a7923",
+    "response_file": "oo_1165478.csv",
+    "response_role": "sequences.csv / occurrences",
+    "response_supplement_doi": "10.3897/BDJ.13.e141168.suppl2",
+    "response_payload_access_before_final_contract": false
+  },
+  "independently_published_response_schema": {
+    "join_key": "deployment_id",
+    "response_time": "start_time",
+    "taxon_fields": ["genus", "species", "common_name"],
+    "blank_field": "is_blank",
+    "count_field": "group_size",
+    "target_rule": "genus == 'Sus' AND species == 'scrofa'",
+    "binary_response_rule": "for each active deployment-day, y=1 iff at least one target sequence has start_time on that local calendar day; otherwise y=0",
+    "missing_value_rule": "missing or malformed deployment_id/start_time rows are ineligible; no imputation; blank/non-target sequences do not create positives"
+  },
+  "qualification_order": [
+    "Stage0 may access deployments payload only and must verify immutable identity, >=50 unique coordinates, active-date coverage, and materializable temporal blocks.",
+    "Only after Stage0 qualification may a final contract freeze exact temporal partition, baseline, worlds, Layer B, learner, selector, estimability minima, and once-only response route.",
+    "Only then may the response file be opened once."
+  ],
+  "candidate_partition_rule_before_stage0": {
+    "unit": "local calendar day",
+    "timezone": "Asia/Tokyo",
+    "rule": "After Stage0 reveals deployment-only active-day support, choose the earliest chronological cutpoints that allocate approximately 60% / 20% / 20% of eligible active deployment-days to inner-train / inner-validation / outer-heldout, subject to each partition retaining at least 50 unique deployments; cutpoints are then frozen before response access.",
+    "outer_feedback_forbidden": true
+  },
+  "prediction_design_fixed_now": {
+    "learner_family": "RandomForestClassifier",
+    "selector": "promote contextual arm iff inner-validation macro log loss is strictly lower than baseline; otherwise baseline-only",
+    "outer_heldout_used_for_selection": false,
+    "layer_b": "source-symmetric sequential contextual innovation representation using only target positives strictly before the scored day",
+    "static_reuse_forbidden": true,
+    "arbitrary_single_source_forbidden": true,
+    "layer_a_trajectory_must_be_persisted": true
+  },
+  "stop_rules": {
+    "transport_or_identity_failure": "terminal pre-response STOP; no route repair within this attempt",
+    "nonresponse_structure_failure": "terminal pre-response STOP; no split/threshold rescue within this attempt",
+    "response_schema_failure_after_open": "terminal consumed STOP; no parser repair",
+    "estimability_failure_after_open": "terminal consumed STOP; no focal-taxon substitution",
+    "scored_result": "favorable, tie, or adverse are all terminal"
+  }
+}
