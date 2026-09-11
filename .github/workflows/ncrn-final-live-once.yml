@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -36,7 +36,8 @@ jobs:
           if os.environ['RUN_ATTEMPT'] != '1':
               raise SystemExit('manual or automatic workflow rerun is forbidden before any response request')
 
-          auth_path=Path('validation/layer_b_mechanism_v2/ncrn_response_open_authorization_v1.json')
+          auth_rel='validation/layer_b_mechanism_v2/ncrn_response_open_authorization_v1.json'
+          auth_path=Path(auth_rel)
           if not auth_path.exists():
               raise SystemExit('authorization receipt missing')
           auth=json.loads(auth_path.read_text())
@@ -61,6 +62,12 @@ jobs:
           parent=subprocess.check_output(['git','rev-parse','HEAD^'], text=True).strip()
           if parent != auth['qualified_parent_sha']:
               raise SystemExit(f'authorization parent mismatch: HEAD^={parent}, auth={auth["qualified_parent_sha"]}')
+
+          prior_auth_history=subprocess.check_output(
+              ['git','log','--format=%H','HEAD^','--',auth_rel], text=True
+          ).strip()
+          if prior_auth_history:
+              raise SystemExit('authorization path already existed in pre-authorization history; a second response-opening run is forbidden')
 
           required_hashes=auth['frozen_file_sha256']
           for path, expected in required_hashes.items():
