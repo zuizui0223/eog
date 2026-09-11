@@ -58,7 +58,7 @@ Measured state:
 - References section present: PASS;
 - manuscript under 8000 words: PASS;
 - scientific desk-fit ready: **true**;
-- submission ready: **false**, only because three author/admin gates remain unresolved.
+- submission ready: **false**, because author/release/legal gates remain unresolved.
 
 The 3685 count is deliberately conservative because it includes the complete Markdown manuscript, including references and the submission-boundary checklist.
 
@@ -78,21 +78,16 @@ That risk has now been materially reduced without adding biological evidence:
 
 No empirical endpoint, score, direction or denominator was changed by these edits.
 
-## Remaining blockers are administrative, not scientific
+## Remaining blockers are administrative/release/legal, not scientific
 
-The manuscript is **not submission-ready yet** because three items require author/external completion:
+The manuscript is **not submission-ready yet** because four items require author/external completion:
 
 1. **Final title page.** Authors, affiliations, corresponding-author details, running headline, acknowledgements, author contributions, funding, competing interests and inclusion statement require author confirmation. The repository contains `manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md`; it must not be promoted to the final title page until confirmed.
 2. **Review-ready archive / DOI.** `[FINAL ARCHIVE/DOI TO ADD]` remains in the Data/Code statement. A release/archive or a suitable private peer-review repository must be fixed before upload.
 3. **AI/LLM disclosure.** Current MEE guidance requires transparent disclosure when LLMs are used in manuscript/code production, including the application/version and extent of use and author responsibility. The exact historical applications, versions and assisted portions must be confirmed by the authors before inserting the Methods disclosure and corresponding contribution statement.
+4. **Open-source license file.** `pyproject.toml` currently declares `MIT`, but no root `LICENSE`, `LICENSE.txt` or `LICENSE.md` file is present. MEE's code policy requires an accompanying open-source license. Authors must confirm the intended license before the repository release package is fixed; this audit does not create a legal license grant on their behalf.
 
-The v3 checker reports these exactly as:
-
-- `title_page_present = false`;
-- `final_archive_doi_placeholder_resolved = false`;
-- `ai_llm_use_disclosure_present_in_methods = false`.
-
-These blockers do not justify additional ecological analyses or another fresh endpoint.
+The repository readiness checker tracks these as author/release/legal gates. None justify additional ecological analyses or another fresh endpoint.
 
 ## Submission boundary
 
