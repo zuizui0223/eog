@@ -78,6 +78,8 @@ jobs:
           assert 'RUN_ATTEMPT:' in live and 'github.run_attempt' in live
           assert "if os.environ['RUN_ATTEMPT'] != '1'" in live
           assert "git','rev-parse','HEAD^" in live
+          assert "git','diff','--name-only','HEAD^','HEAD" in live
+          assert 'authorization commit must change exactly one file' in live
           assert "git','log','--format=%H','HEAD^','--',auth_rel" in live
           assert 'authorization path already existed in pre-authorization history' in live
           assert "src.count('r1_raw = core.get_bytes(core.RESPONSE_URL') != 1" in live
@@ -106,8 +108,41 @@ jobs:
               c=p['partition_counts'][str(year)]
               assert c['positive']>=30 and c['negative']>=30 and c['unique_sites']>=50
           PY
+      - name: Freeze authorization hash manifest
+        env:
+          QUALIFIED_HEAD_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          paths=[
+            'validation/layer_b_mechanism_v2/ncrn_final_execution_contract_v1.json',
+            'validation/layer_b_mechanism_v2/ncrn_r1_response_route_contract_v1.json',
+            'validation/layer_b_mechanism_v2/ncrn_geometry_worlds_frozen_v1.json',
+            'validation/layer_b_mechanism_v2/ncrn_sequential_warmup_amendment_v1.json',
+            'validation/layer_b_mechanism_v2/ncrn_final_runner_v2_amendment_v1.json',
+            'validation/layer_b_mechanism_v2/ncrn_terminal_semantics_amendment_v1.json',
+            'validation/layer_b_mechanism_v2/ncrn_final_once_v2.py',
+            'src/eog/v2/source_symmetric_predictive_summary.py',
+            '.github/workflows/ncrn-final-live-once.yml',
+          ]
+          manifest={
+            'schema':'eog.layer_b_mechanism_v2.ncrn_authorization_hash_manifest.v1',
+            'qualified_head_sha':os.environ['QUALIFIED_HEAD_SHA'],
+            'response_payload_requests':0,
+            'response_payload_bytes_opened':0,
+            'frozen_file_sha256':{p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths},
+          }
+          out=Path('build/layer_b_mechanism_v2/ncrn_final/pre_response_hash_manifest.json')
+          out.write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(manifest,sort_keys=True))
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: ncrn-final-pre-response-synthetic-v2
-          path: build/layer_b_mechanism_v2/ncrn_final/final_result.json
+          path: |
+            build/layer_b_mechanism_v2/ncrn_final/final_result.json
+            build/layer_b_mechanism_v2/ncrn_final/pre_response_hash_manifest.json
           if-no-files-found: error
