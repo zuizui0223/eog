@@ -9,6 +9,8 @@ import math
 from collections import defaultdict
 from pathlib import Path
 
+import numpy as np
+
 import ncrn_final_once as core
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -118,6 +120,23 @@ def build_units_v2(r1_raw: bytes, visit_index: dict[int, tuple[str, int]], regis
     return dict(units)
 
 
+def stack_v2(feature_by_year: dict[int, dict[str, object]], years: list[int], augmented: bool):
+    """NumPy-2.5-compatible implementation of the frozen stacking algebra."""
+    xs: list[np.ndarray] = []
+    ys: list[np.ndarray] = []
+    yr: list[np.ndarray] = []
+    for year in years:
+        f = feature_by_year[year]
+        x = np.asarray(f["baseline"], float)
+        if augmented:
+            x = np.column_stack([x, np.asarray(f["layer_b"], float)])
+        y = np.asarray(f["y"], int)
+        xs.append(x)
+        ys.append(y)
+        yr.append(np.full(len(y), year, dtype=int))
+    return np.vstack(xs), np.concatenate(ys), np.concatenate(yr)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--synthetic", action="store_true")
@@ -126,6 +145,7 @@ def main() -> int:
     route = json.loads(ROUTE_PATH.read_text())
     core.build_registry = build_registry_v2
     core.build_units = build_units_v2
+    core.stack = stack_v2
     base = {
         "schema": "eog.layer_b_mechanism_v2.ncrn_final_result.v2",
         "runner_version": "ncrn_final_once_v2",
