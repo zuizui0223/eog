@@ -1,0 +1,79 @@
+{
+  "schema": "eog.layer_b_mechanism_v2.india_tiger_qualification_v2_status.v1",
+  "candidate": "india_tiger",
+  "attempt_role": "single active pre-response candidate for the post-closure Layer-B v2 prospective mechanism programme",
+  "response_consumed": false,
+  "response_open_authorized": false,
+  "qualification_v2_complete": false,
+  "evidence_basis": [
+    "validation/layer_b_mechanism_v2/india_tiger_stage0_selection.json",
+    "validation/layer_b_mechanism_v2/india_tiger_stage0_transport_attempt_v1.json",
+    "validation/layer_b_mechanism_v2/fresh_real_candidate_qualification_v2.json"
+  ],
+  "status_by_gate": {
+    "source_identity": {
+      "exact_version_or_record_identity": "documented",
+      "exact_response_file_identity": "documented",
+      "response_file_checksum_or_equivalent_immutable_identifier": "documented",
+      "transport_route_live_qualified_without_response_payload": "blocked",
+      "gate_status": "not_passed"
+    },
+    "response_semantics": {
+      "exact_header_from_independent_README_data_dictionary_or_publication": "not_yet_evidenced",
+      "response_algebra_fully_defined_from_independent_documentation": "not_yet_frozen",
+      "join_keys_fully_defined": "not_yet_frozen",
+      "missing_value_semantics_defined": "not_yet_frozen",
+      "no_post_response_alias_discovery": "required",
+      "gate_status": "not_passed"
+    },
+    "target": {
+      "focal_taxon": "Panthera tigris",
+      "target_definition_frozen": "not_yet_complete",
+      "independent_evidence_target_occurs_in_dataset": "documented_by_response_independent_dataset_metadata",
+      "independent_pre_response_positive_support": "documented",
+      "independent_pre_response_negative_support": "not_yet_evidenced_at_frozen_modeling_grain",
+      "class_support_compatible_with_estimability_minima_across_partitions": "not_yet_evidenced",
+      "gate_status": "not_passed"
+    },
+    "geometry_and_effort": {
+      "documented_trap_count": 195,
+      "geometry_physically_separate_from_response": "documented",
+      "effort_physically_separate_from_response": "documented",
+      "geometry_bytes_acquired_and_checksum_verified": false,
+      "effort_bytes_acquired_and_checksum_verified": false,
+      "exact_unique_coordinate_registry_reproduced": false,
+      "minimum_unique_spatial_nodes_executable_check": "not_yet_run",
+      "gate_status": "not_passed"
+    },
+    "validation_design": {
+      "ordered_primary_periods": 10,
+      "partition_unit_and_algorithm_frozen": "not_yet_complete",
+      "baseline_features_frozen": "not_yet_complete",
+      "layer_b_generation_frozen": "mechanism semantics predeclared_but_final_executable_contract_not_yet_complete",
+      "learner_and_hyperparameters_frozen": "not_yet_complete",
+      "selector_rule_frozen": "global selective-promotion rule available_but_candidate-specific executable contract_not_yet_complete",
+      "estimability_minima_frozen": "not_yet_complete",
+      "outer_heldout_feedback_for_selection": false,
+      "gate_status": "not_passed"
+    }
+  },
+  "blocking_reasons": [
+    "response-independent geometry and effort files have not been transported and verified under the frozen individual-file firewall",
+    "exact response header/algebra/join/missing-value semantics are not independently frozen",
+    "explicit negative-class support and partition-level both-class estimability have not been independently established before response access",
+    "candidate-specific nested split, baseline, learner/hyperparameters and estimability minima are not yet fully executable and frozen"
+  ],
+  "allowed_next_actions": [
+    "retry only the frozen response-independent individual files or obtain byte-identical independently hosted copies verified against the frozen MD5 values",
+    "recover exact response schema and algebra from response-independent documentation only",
+    "establish both-class and partition-level estimability from independent pre-response evidence only",
+    "freeze the complete candidate-specific nested inner-train / inner-validation / outer-heldout execution contract before any EERecords.csv payload access"
+  ],
+  "forbidden_next_actions": [
+    "request or preview EERecords.csv while any qualification-v2 gate is incomplete",
+    "download a mixed full archive that would consume the response as a transport workaround",
+    "open additional parallel candidate attempts while India tiger remains the active unresolved candidate",
+    "weaken both-class, node-count, transport, schema or outer-firewall requirements to force a score"
+  ],
+  "next_gate": "qualification_v2_all_pass_or_terminal_pre_response_stop"
+}
