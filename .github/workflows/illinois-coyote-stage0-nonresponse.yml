@@ -1,81 +1,44 @@
-name: Illinois coyote response-blind Stage0
+name: Illinois coyote terminal pre-response STOP guard
 
 on:
   push:
     branches:
       - research/layer-b-v2-single-fresh-endpoint-lock
     paths:
-      - 'validation/layer_b_mechanism_v2/illinois_coyote_stage0_selection_v1.json'
-      - 'validation/layer_b_mechanism_v2/illinois_coyote_stage0_nonresponse.py'
+      - 'validation/layer_b_mechanism_v2/illinois_coyote_qualification_v2_status_v1.json'
       - '.github/workflows/illinois-coyote-stage0-nonresponse.yml'
   pull_request:
     paths:
-      - 'validation/layer_b_mechanism_v2/illinois_coyote_stage0_selection_v1.json'
-      - 'validation/layer_b_mechanism_v2/illinois_coyote_stage0_nonresponse.py'
+      - 'validation/layer_b_mechanism_v2/illinois_coyote_qualification_v2_status_v1.json'
       - '.github/workflows/illinois-coyote-stage0-nonresponse.yml'
 
 permissions:
   contents: read
 
 jobs:
-  stage0:
+  terminal-stop-guard:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Verify response firewall before any live access
+      - name: Verify terminal response-blind disposition
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          p = json.loads(Path('validation/layer_b_mechanism_v2/illinois_coyote_stage0_selection_v1.json').read_text())
-          f = p['response_firewall']
-          assert p['dataset']['response_file'] == 'Coyote_Detection_History.csv'
-          assert f['response_file_payload_requests_allowed_stage0'] == 0
-          assert f['response_file_header_bytes_allowed_stage0'] == 0
-          assert f['response_values_allowed_stage0'] is False
-          assert f['full_dataset_archive_download_forbidden'] is True
-          assert f['model_fits_allowed_stage0'] == 0
-          assert f['inner_selection_allowed_stage0'] is False
-          assert f['outer_scores_allowed_stage0'] == 0
-          PY
-      - name: Execute response-blind nonresponse Stage0
-        id: stage0
-        continue-on-error: true
-        run: python validation/layer_b_mechanism_v2/illinois_coyote_stage0_nonresponse.py
-      - name: Audit response firewall and terminal status
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p = json.loads(Path('build/layer_b_mechanism_v2/illinois_coyote_stage0/stage0_nonresponse.json').read_text())
-          assert p['response_file'] == 'Coyote_Detection_History.csv'
-          assert p['response_payload_requests'] == 0
-          assert p['response_header_bytes_opened'] == 0
-          assert p['response_bytes_opened'] == 0
-          assert p['response_values_opened'] is False
-          assert p['model_fits'] == 0
-          assert p['inner_selection_decisions'] == 0
-          assert p['heldout_scores'] == 0
+          p = json.loads(Path('validation/layer_b_mechanism_v2/illinois_coyote_qualification_v2_status_v1.json').read_text())
+          assert p['terminal_status'] == 'terminal_pre_response_transport_stop'
+          assert p['candidate_attempt_closed'] is True
+          assert p['response_consumed'] is False
           assert p['response_open_authorized'] is False
-          assert p['status'] in {
-              'stage0_nonresponse_qualified_pending_independent_both_class_gate',
-              'terminal_pre_response_stage0_nonresponse_stop',
-          }
-          PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: illinois-coyote-stage0-nonresponse
-          path: build/layer_b_mechanism_v2/illinois_coyote_stage0/stage0_nonresponse.json
-          if-no-files-found: error
-      - name: Require Stage0 qualification for this active attempt
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p = json.loads(Path('build/layer_b_mechanism_v2/illinois_coyote_stage0/stage0_nonresponse.json').read_text())
-          if p['status'] != 'stage0_nonresponse_qualified_pending_independent_both_class_gate':
-              raise SystemExit(p.get('error', p['status']))
+          assert p['qualification_v2_complete'] is False
+          assert p['counts_as_predictive_evidence'] is False
+          assert p['counts_as_biological_negative'] is False
+          t = p['terminal_transport_evidence']
+          assert t['response_file'] == 'Coyote_Detection_History.csv'
+          assert t['response_payload_requests'] == 0
+          assert t['response_header_bytes_opened'] == 0
+          assert t['response_bytes_opened'] == 0
+          assert t['response_values_opened'] is False
+          assert t['allowed_nonresponse_payloads_successfully_acquired'] == 0
+          assert p['amendment_boundary']['further_retry_allowed'] is False
           PY
