@@ -1,0 +1,97 @@
+name: EOG-WF submission package
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'LICENSE'
+      - 'README.md'
+      - 'pyproject.toml'
+      - 'docs/development_mainline.md'
+      - 'manuscript/EOG_WF_MANUSCRIPT_V1.md'
+      - 'manuscript/EOG_WF_KNOWN_TRUTH_BENCHMARK_V1.md'
+      - 'manuscript/EOG_WF_TITLE_PAGE.md'
+      - 'manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md'
+      - 'manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json'
+      - 'manuscript/MEE_DESK_FIT_AUDIT_V2.md'
+      - 'manuscript/build_eogwf_submission_package.py'
+      - 'manuscript/check_eogwf_mee_readiness.py'
+      - 'manuscript/build_paper_ready_eogwf.py'
+      - 'manuscript/paper_ready/**'
+      - 'src/eog/**'
+      - 'tests/**'
+      - '.github/workflows/eogwf-submission-package.yml'
+  pull_request:
+    paths:
+      - 'LICENSE'
+      - 'README.md'
+      - 'pyproject.toml'
+      - 'docs/development_mainline.md'
+      - 'manuscript/EOG_WF_MANUSCRIPT_V1.md'
+      - 'manuscript/EOG_WF_KNOWN_TRUTH_BENCHMARK_V1.md'
+      - 'manuscript/EOG_WF_TITLE_PAGE.md'
+      - 'manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md'
+      - 'manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json'
+      - 'manuscript/MEE_DESK_FIT_AUDIT_V2.md'
+      - 'manuscript/build_eogwf_submission_package.py'
+      - 'manuscript/check_eogwf_mee_readiness.py'
+      - 'manuscript/build_paper_ready_eogwf.py'
+      - 'manuscript/paper_ready/**'
+      - 'src/eog/**'
+      - 'tests/**'
+      - '.github/workflows/eogwf-submission-package.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build deterministic review-prep package
+        run: python manuscript/build_eogwf_submission_package.py --mode review-prep
+      - name: Audit receipt and final-mode gate
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          import zipfile
+          from pathlib import Path
+
+          blockers=json.loads(Path('manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json').read_text())
+          receipt=json.loads(Path('build/eogwf_submission_package/submission_package_receipt.json').read_text())
+          expected=[item['id'] for item in blockers['remaining_submission_blockers']]
+          assert receipt['scientific_desk_fit_ready'] is True
+          assert receipt['remaining_submission_blocker_ids']==expected
+          assert receipt['remaining_submission_blocker_count']==len(expected)
+          with zipfile.ZipFile('build/eogwf_submission_package/eogwf_submission_package.zip') as zf:
+              names=set(zf.namelist())
+              assert 'LICENSE' in names
+              assert 'manuscript/EOG_WF_MANUSCRIPT_V1.md' in names
+              assert 'manuscript/paper_ready/submission_boundary.json' in names
+              assert 'submission_package_manifest.json' in names
+              assert not any('__pycache__' in name or name.endswith(('.pyc','.pyo')) for name in names)
+
+          proc=subprocess.run([
+              'python','manuscript/build_eogwf_submission_package.py',
+              '--mode','final','--output-dir','build/eogwf_submission_package_final_gate'
+          ])
+          if expected:
+              assert proc.returncode != 0, 'final mode must stay closed while blockers remain'
+          else:
+              assert proc.returncode == 0, 'final mode must open after all blockers are resolved'
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eogwf-submission-review-package
+          path: |
+            build/eogwf_submission_package/eogwf_submission_package.zip
+            build/eogwf_submission_package/submission_package_receipt.json
+          if-no-files-found: error
