@@ -38,6 +38,13 @@
       "type": "author_admin",
       "requires_external_author_input": true,
       "completion_condition": "Confirm the AI/LLM applications and versions actually used, the extent of code/text assistance, responsible author accountability and any required code annotations; then add the Methods disclosure and contribution statement."
+    },
+    {
+      "id": "open_source_license_file_confirmation",
+      "type": "release_legal",
+      "requires_external_author_input": true,
+      "observed_state": "pyproject.toml declares MIT but repository root has no LICENSE, LICENSE.txt or LICENSE.md file",
+      "completion_condition": "Authors confirm the intended open-source license and add the corresponding full license text file at repository root before the review package is fixed."
     }
   ],
   "forbidden_as_blocker_resolution": [
@@ -47,5 +54,5 @@
     "fold the NCRN post-closure attempt into the EOG-WF denominator",
     "weaken the closed claim boundary"
   ],
-  "next_action": "Complete author/admin metadata and review-ready archive, then run the read-only MEE readiness audit and package the submission."
+  "next_action": "Complete author/admin metadata, AI disclosure, license confirmation and review-ready archive, then run the read-only MEE readiness audit and package the submission."
 }
