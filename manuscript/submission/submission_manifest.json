@@ -89,8 +89,8 @@
   ],
   "required_pre_submission_resolutions": [
     "complete Ecological Informatics display-size visual QA for typography, legends, panel labels and colour/grayscale legibility",
-    "create the tagged software release after the presentation state is frozen",
-    "reserve or mint the release archive DOI only after the final scientific/presentation package is frozen",
+    "create tagged software release <RELEASE_TAG> after the presentation state is frozen",
+    "reserve or mint release archive DOI <ARCHIVE_DOI> only after the final scientific/presentation package is frozen",
     "complete author_metadata.template.json with author-approved metadata and remove placeholders in the final submission record",
     "confirm author list, affiliations, corresponding author, contribution roles, funding, competing interests, originality and simultaneous-submission statements",
     "approve the generative-AI disclosure with all authors",
