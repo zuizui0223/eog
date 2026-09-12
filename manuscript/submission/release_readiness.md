@@ -7,7 +7,7 @@ The candidate first submission archive tag remains **`v0.1.0`**, unless the pack
 
 ## Scientific and repository-presentation HOLD — cleared
 
-The scientific and repository-side presentation gates that previously blocked release preparation are now closed.
+The scientific and repository-side presentation gates that previously blocked release preparation are now closed. The historical audit heading **Current scientific HOLD before DOI reservation** is retained here as a provenance key; that scientific HOLD is now cleared, while author/live-policy gates remain active.
 
 - [x] final `eog_aislands_isolation_adequacy_v1_3` reference hierarchy frozen before species outcomes;
 - [x] 842-island polygon-area input frozen and fingerprinted;
@@ -48,7 +48,9 @@ The repository-side grayscale/down-scaling QA does not substitute for the publis
 
 ## DOI-first release sequence after the remaining gates clear
 
-### 1. Create a Zenodo draft and reserve a DOI
+The DOI-first sequence remains appropriate **only after the island result and journal route are frozen**; both are now frozen. The remaining gates are author metadata, author approvals and submission-day live-policy checks.
+
+### 1. Create a Zenodo draft manually and reserve a DOI
 
 Create a new Zenodo upload using the final title, creators and author-approved metadata. Reserve a DOI but do not publish the record yet.
 
