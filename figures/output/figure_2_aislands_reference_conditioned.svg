@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" role="img" aria-labelledby="title desc">
+<title id="title">A-Islands results at two declared reference depths</title>
+<desc id="desc">The figure separates the original conditional-concordance endpoint under a restricted reference from the prospectively frozen log-loss increment beyond the richer R3 reference. A reference ladder shows R0 through C. The two effect axes are intentionally different and are not pooled.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif}.panel{fill:#fff;stroke:#cbd5e1;stroke-width:2}.axis{stroke:#475569;stroke-width:1.5}.grid{stroke:#e2e8f0;stroke-width:1}.zero{stroke:#64748b;stroke-width:2;stroke-dasharray:6 5}.ci{stroke:#172033;stroke-width:4}.small{font-size:13px}.body{font-size:15px}.head{font-size:28px;font-weight:700}.sub{font-size:19px;font-weight:700}</style>
+<rect width="1600" height="1080" fill="#f8fafc"/>
+<text x="60" y="52" font-family="Arial,Helvetica,sans-serif" font-size="29" font-weight="700" text-anchor="start" fill="#172033">Figure 2 | A-Islands: the structural conclusion changes with reference depth</text>
+<text x="60" y="84" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start" fill="#526070">Restricted-reference ordering and rich-reference predictive increment are distinct estimands and remain on separate axes.</text>
+<rect class="panel" x="55" y="120" width="450" height="825" rx="16"/>
+<text x="73" y="148" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" text-anchor="start" fill="#172033">A</text>
+<rect class="panel" x="535" y="120" width="1010" height="245" rx="16"/>
+<text x="553" y="148" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" text-anchor="start" fill="#172033">B</text>
+<rect class="panel" x="535" y="390" width="1010" height="245" rx="16"/>
+<text x="553" y="418" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" text-anchor="start" fill="#172033">C</text>
+<rect class="panel" x="535" y="660" width="490" height="285" rx="16"/>
+<text x="553" y="688" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" text-anchor="start" fill="#172033">D</text>
+<rect class="panel" x="1055" y="660" width="490" height="285" rx="16"/>
+<text x="1073" y="688" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" text-anchor="start" fill="#172033">E</text>
+<text x="107" y="150" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="700" text-anchor="start" fill="#172033">Prospectively declared reference ladder</text>
+<rect x="100" y="205" width="360" height="103" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="120" y="233" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="start" fill="#94a3b8">R0</text>
+<text x="170" y="233" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" text-anchor="start" fill="#172033">climate</text>
+<text x="120" y="262" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#526070">5 CHELSA predictors</text>
+<line x1="280.0" y1="308" x2="280.0" y2="332" stroke="#94a3b8" stroke-width="3"/>
+<polygon points="280.0,334 272.0,322 288.0,322" fill="#94a3b8"/>
+<rect x="100" y="342" width="360" height="103" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="120" y="370" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="start" fill="#94a3b8">R1</text>
+<text x="170" y="370" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" text-anchor="start" fill="#172033">+ recipient geometry</text>
+<text x="120" y="399" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#526070">area + mainland distance + nearest source</text>
+<line x1="280.0" y1="445" x2="280.0" y2="469" stroke="#94a3b8" stroke-width="3"/>
+<polygon points="280.0,471 272.0,459 288.0,459" fill="#94a3b8"/>
+<rect x="100" y="479" width="360" height="103" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="120" y="507" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="start" fill="#94a3b8">R2</text>
+<text x="170" y="507" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" text-anchor="start" fill="#172033">+ species-source pressure</text>
+<text x="120" y="536" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#526070">unweighted + source-area weighted</text>
+<line x1="280.0" y1="582" x2="280.0" y2="606" stroke="#94a3b8" stroke-width="3"/>
+<polygon points="280.0,608 272.0,596 288.0,596" fill="#94a3b8"/>
+<rect x="100" y="616" width="360" height="103" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="120" y="644" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="start" fill="#94a3b8">R3</text>
+<text x="170" y="644" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" text-anchor="start" fill="#172033">+ generic landscape context</text>
+<text x="120" y="673" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#526070">surrounding landmass + generic stepping stones / network position</text>
+<line x1="280.0" y1="719" x2="280.0" y2="743" stroke="#94a3b8" stroke-width="3"/>
+<polygon points="280.0,745 272.0,733 288.0,733" fill="#94a3b8"/>
+<rect x="100" y="753" width="360" height="103" rx="14" fill="#eef6ff" stroke="#4f79a7" stroke-width="2"/>
+<text x="120" y="781" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="start" fill="#4f79a7">C</text>
+<text x="170" y="781" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" text-anchor="start" fill="#172033">+ species-conditioned EOG</text>
+<text x="120" y="810" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#526070">geography-only connected frequency</text>
+<text x="280.0" y="905" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="700" text-anchor="middle" fill="#b94a48">Primary extension contrast: C − R3 only</text>
+<text x="587" y="150" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="700" text-anchor="start" fill="#172033">Restricted reference: conditional ordering</text>
+<text x="587" y="178" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="400" text-anchor="start" fill="#526070">Reference: climatic support + nearest outer-training source distance</text>
+<line class="grid" x1="721.1111111111112" y1="225" x2="721.1111111111112" y2="308"/>
+<text x="721.1111111111112" y="330" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">0.50</text>
+<line class="grid" x1="903.3333333333335" y1="225" x2="903.3333333333335" y2="308"/>
+<text x="903.3333333333335" y="330" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">0.54</text>
+<line class="grid" x1="1085.5555555555552" y1="225" x2="1085.5555555555552" y2="308"/>
+<text x="1085.5555555555552" y="330" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">0.58</text>
+<line class="grid" x1="1267.7777777777778" y1="225" x2="1267.7777777777778" y2="308"/>
+<text x="1267.7777777777778" y="330" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">0.62</text>
+<line class="grid" x1="1450.0" y1="225" x2="1450.0" y2="308"/>
+<text x="1450.0" y="330" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">0.66</text>
+<line class="zero" x1="721.1111111111112" y1="225" x2="721.1111111111112" y2="308"/>
+<line class="ci" x1="1216.2116652584755" y1="265" x2="1299.413607797449" y2="265"/>
+<circle cx="1257.5122514517332" cy="265" r="8" fill="#2f855a"/>
+<text x="1445" y="248" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" text-anchor="end" fill="#172033">mean concordance = 0.618  [0.609, 0.627]</text>
+<text x="1445" y="278" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" text-anchor="end" fill="#526070">845 estimable taxa; null = 0.5</text>
+<text x="1445" y="304" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="end" fill="#2f855a">Interpretation: structure retains conditional ordering information</text>
+<text x="587" y="420" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="700" text-anchor="start" fill="#172033">Rich R3 reference: incremental predictive value</text>
+<text x="587" y="448" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="400" text-anchor="start" fill="#526070">Primary endpoint: matched held-out log loss, C − R3; negative favours EOG</text>
+<line class="grid" x1="630.0" y1="495" x2="630.0" y2="578"/>
+<text x="630.0" y="600" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">-0.004</text>
+<line class="grid" x1="766.6666666666666" y1="495" x2="766.6666666666666" y2="578"/>
+<text x="766.6666666666666" y="600" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">-0.002</text>
+<line class="grid" x1="903.3333333333333" y1="495" x2="903.3333333333333" y2="578"/>
+<text x="903.3333333333333" y="600" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">+0.000</text>
+<line class="grid" x1="1040.0" y1="495" x2="1040.0" y2="578"/>
+<text x="1040.0" y="600" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">+0.002</text>
+<line class="grid" x1="1176.6666666666665" y1="495" x2="1176.6666666666665" y2="578"/>
+<text x="1176.6666666666665" y="600" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">+0.004</text>
+<line class="grid" x1="1313.3333333333335" y1="495" x2="1313.3333333333335" y2="578"/>
+<text x="1313.3333333333335" y="600" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">+0.006</text>
+<line class="grid" x1="1450.0" y1="495" x2="1450.0" y2="578"/>
+<text x="1450.0" y="600" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="middle" fill="#526070">+0.008</text>
+<line class="zero" x1="903.3333333333333" y1="495" x2="903.3333333333333" y2="578"/>
+<line class="ci" x1="1071.8722091458408" y1="535" x2="1211.3947930293057" y2="535"/>
+<circle cx="1141.487409214807" cy="535" r="8" fill="#b94a48"/>
+<text x="1445" y="518" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" text-anchor="end" fill="#172033">C − R3 = +0.00349  [+0.00247, +0.00451]</text>
+<text x="1445" y="548" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" text-anchor="end" fill="#526070">886 estimable taxa; 4,231 / 4,430 folds evaluable</text>
+<text x="1445" y="574" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="end" fill="#b94a48">Interpretation: adverse incremental predictive effect beyond R3</text>
+<text x="587" y="690" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="700" text-anchor="start" fill="#172033">Species-level direction</text>
+<text x="580" y="732" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" fill="#172033">Original conditional-concordance endpoint</text>
+<rect x="580" y="750" width="288.21670428893907" height="28" fill="#2f855a"/>
+<rect x="868.2167042889391" y="750" width="18.013544018058692" height="28" fill="#94a3b8"/>
+<rect x="886.2302483069979" y="750" width="56.18510158013544" height="28" fill="#b94a48"/>
+<rect x="942.4153498871333" y="750" width="17.584650112866818" height="28" fill="#e2e8f0"/>
+<text x="580" y="796" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="start" fill="#526070">above 0.5: 672 | equal: 42 | below: 131 | N/E: 41</text>
+<text x="580" y="845" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" fill="#172033">Strong-reference C − R3 endpoint</text>
+<rect x="580" y="863" width="146.2528216704289" height="28" fill="#2f855a"/>
+<rect x="726.2528216704288" y="863" width="233.7471783295711" height="28" fill="#b94a48"/>
+<text x="580" y="909" font-family="Arial,Helvetica,sans-serif" font-size="11" font-weight="400" text-anchor="start" fill="#526070">favourable: 341 | adverse: 545</text>
+<text x="1107" y="690" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="700" text-anchor="start" fill="#172033">What the pair of results establishes</text>
+<circle cx="1110" cy="731" r="14" fill="#334155"/>
+<text x="1110" y="736" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">1</text>
+<text x="1137" y="736" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#334155">The restricted-reference result earns a narrow structural-ordering claim.</text>
+<circle cx="1110" cy="780" r="14" fill="#334155"/>
+<text x="1110" y="785" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">2</text>
+<text x="1137" y="785" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#334155">That signal does not survive as an incremental predictive gain beyond R3.</text>
+<circle cx="1110" cy="829" r="14" fill="#334155"/>
+<text x="1110" y="834" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">3</text>
+<text x="1137" y="834" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#334155">The endpoints differ; they are not pooled or compared as one effect size.</text>
+<circle cx="1110" cy="878" r="14" fill="#334155"/>
+<text x="1110" y="883" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#fff">4</text>
+<text x="1137" y="883" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#334155">Reference depth is part of the estimand, not a nuisance detail.</text>
+<text x="1300.0" y="923" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#526070">No movement / dispersal / colonisation probability is inferred.</text>
+<text x="800" y="1018" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="middle" fill="#172033">Positive under a restricted reference ≠ generally useful beyond a richer reference</text>
+</svg>

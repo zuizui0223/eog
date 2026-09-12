@@ -1,0 +1,11 @@
+{
+  "accessibility_sha256": "22f867955b874a362032ff871cdfe9ee5234612f692a3cd621dd344a989a3bc5",
+  "boundary_schema": "eog.structural_island_paper_boundary.v1",
+  "caption_sha256": "7578ac0b718e990b215e407eacec8ceebd3ff25447b918b4acedfa97d17f7675",
+  "causal_sequence_claim": false,
+  "conceptual_only": true,
+  "movement_probability": false,
+  "schema": "eog.structural_figure1_reference_conditioned.v1",
+  "separate_from_eog_wf_empirical_denominator": true,
+  "svg_sha256": "4f49a5e23fafd630c38e215453ea15457f1d0ab465efa141ab754dbe5223d126"
+}

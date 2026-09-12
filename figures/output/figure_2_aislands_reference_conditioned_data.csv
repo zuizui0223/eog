@@ -1,0 +1,3 @@
+endpoint,estimand,estimate,ci_low,ci_high,favourable_direction,interpretation
+original_restricted_reference,conditional_concordance,0.617746591782,0.608680609447,0.626944450492,above_0.5,positive_structural_ordering
+strong_R3,C_minus_R3_log_loss,0.003485181598,0.002466422573,0.004508216483,negative,adverse_incremental_predictive_effect

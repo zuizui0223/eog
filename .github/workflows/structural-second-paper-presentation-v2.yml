@@ -1,0 +1,66 @@
+name: Structural second-paper presentation v2
+
+on:
+  pull_request:
+    paths:
+      - 'manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json'
+      - 'manuscript/submission/submission_manifest.json'
+      - 'manuscript/build_structural_submission_package_v2.py'
+      - 'figures/build_figure_1_reference_conditioned.py'
+      - 'figures/build_figure_2_aislands_reference_conditioned.py'
+      - 'validation/aislands_isolation_adequacy_20260812/**'
+      - 'benchmarks/aislands_authoritative_expected.json'
+      - 'benchmarks/aislands_structural_species_expected.csv'
+      - 'tests/test_structural_second_paper_presentation_v2.py'
+      - '.github/workflows/structural-second-paper-presentation-v2.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json'
+      - 'manuscript/submission/submission_manifest.json'
+      - 'manuscript/build_structural_submission_package_v2.py'
+      - 'figures/build_figure_1_reference_conditioned.py'
+      - 'figures/build_figure_2_aislands_reference_conditioned.py'
+      - 'validation/aislands_isolation_adequacy_20260812/**'
+      - 'benchmarks/aislands_authoritative_expected.json'
+      - 'benchmarks/aislands_structural_species_expected.csv'
+      - 'tests/test_structural_second_paper_presentation_v2.py'
+      - '.github/workflows/structural-second-paper-presentation-v2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  presentation-v2:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install package and test dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Run second-paper presentation regression tests
+        run: pytest -q tests/test_structural_second_paper_presentation_v2.py
+      - name: Build structural submission package v2
+        run: python manuscript/build_structural_submission_package_v2.py --output-dir build/structural_submission_v2
+      - name: Audit v2 package boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('build/structural_submission_v2/submission_package_manifest_v2.json')
+          x = json.loads(p.read_text())
+          assert x['schema'] == 'eog.structural_submission_package.v3'
+          assert x['scientific_evidence_rebuilt_by_v1_builder'] is True
+          assert x['metrics_share_axis_in_aislands_figure'] is False
+          assert x['eog_wf_empirical_denominator_included'] is False
+          assert x['canonical_submission_figures']['figure_1'].endswith('figure_1_reference_conditioned.svg')
+          assert x['canonical_submission_figures']['figure_2'].endswith('figure_2_aislands_reference_conditioned.svg')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: structural-second-paper-presentation-v2
+          path: build/structural_submission_v2
+          if-no-files-found: error

@@ -1,0 +1,20 @@
+{
+  "accessibility_sha256": "890370ef4267a1aca6e9a5946e12d2d08effd1ad45192d5eb48fa78b8936fb47",
+  "caption_sha256": "3dc8fe935ecc25ae312d8ea4efd4f19b1641e4923f86a98e10b159a09cdea02e",
+  "common_effect_claim": false,
+  "data_sha256": "51c125327cbb8cf6ed9152c00d76bc30718902458c3bbbfa5ca9291c42750c6a",
+  "metrics_share_axis": false,
+  "movement_probability": false,
+  "original_direction_counts": {
+    "above": 672,
+    "below": 131,
+    "equal": 42,
+    "not_estimable": 41
+  },
+  "original_species_sha256": "aca305054d9d14935803f53fc5edb9dc46228c0a6badc00c810bcc8552a1c488",
+  "original_summary_sha256": "724d5a7a5bae346f84d229d281fdecc257feb65d2f5b4f2291f4c6edc664ee6c",
+  "schema": "eog.structural_figure2_aislands_reference_conditioned.v1",
+  "strong_contract_schema": "eog_aislands_isolation_adequacy_v1_3",
+  "strong_result_fingerprint": "5c9b1594b29d362e5983484614a49d530797d06e826c0b96a3e8442a6b6b493a",
+  "svg_sha256": "e401ab9aa0df3d152145d7afd00e7b9e2aaaf728ae42ff2fc8d16ddb0403fc69"
+}

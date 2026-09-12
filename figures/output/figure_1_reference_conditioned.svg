@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Reference-conditioned structural adequacy framework</title>
+<desc id="desc">A declared reference is frozen first. A held-out structural probe is then added without held-out labels entering feature construction. The increment is interpreted as earned, redundant or adverse, or indeterminate. The framework does not treat the structural probe as movement probability.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif}.box{fill:#fff;stroke:#cbd5e1;stroke-width:2}.stage{font-size:23px;font-weight:700}.body{font-size:16px}.small{font-size:13px}.arrow{stroke:#64748b;stroke-width:4;fill:none}.divider{stroke:#cbd5e1;stroke-width:2}</style>
+<rect width="1600" height="900" fill="#f8fafc"/>
+<text x="65" y="60" font-size="30" font-weight="700" text-anchor="start" fill="#172033"><tspan x="65" dy="0">Figure 1 | Structural information is conditional on the declared reference</tspan></text>
+<text x="65" y="96" font-size="17" font-weight="400" text-anchor="start" fill="#526070"><tspan x="65" dy="0">The same structural feature can earn an increment under one reference and fail under a richer one.</tspan></text>
+<rect class="box" x="70" y="165" width="420" height="390" rx="20"/>
+<rect class="box" x="590" y="165" width="420" height="390" rx="20"/>
+<rect class="box" x="1110" y="165" width="420" height="390" rx="20"/>
+<text x="100" y="215" font-size="23" font-weight="700" text-anchor="start" fill="#172033"><tspan x="100" dy="0">1  Declare the reference R</tspan></text>
+<text x="100" y="259" font-size="16" font-weight="400" text-anchor="start" fill="#172033"><tspan x="100" dy="0">Represent information that already belongs</tspan><tspan x="100" dy="22">in the comparator before asking what</tspan><tspan x="100" dy="22">structure adds.</tspan></text>
+<rect x="100" y="331" width="360" height="54" rx="10" fill="#f1f5f9"/>
+<text x="115" y="353" font-size="14" font-weight="700" text-anchor="start" fill="#172033"><tspan x="115" dy="0">Local support</tspan></text>
+<text x="115" y="372" font-size="12" font-weight="400" text-anchor="start" fill="#526070"><tspan x="115" dy="0">climate / habitat / recipient state</tspan></text>
+<rect x="100" y="397" width="360" height="54" rx="10" fill="#f1f5f9"/>
+<text x="115" y="419" font-size="14" font-weight="700" text-anchor="start" fill="#172033"><tspan x="115" dy="0">Direct source context</tspan></text>
+<text x="115" y="438" font-size="12" font-weight="400" text-anchor="start" fill="#526070"><tspan x="115" dy="0">nearest source / multi-source pressure</tspan></text>
+<rect x="100" y="463" width="360" height="54" rx="10" fill="#f1f5f9"/>
+<text x="115" y="485" font-size="14" font-weight="700" text-anchor="start" fill="#172033"><tspan x="115" dy="0">Generic landscape context</tspan></text>
+<text x="115" y="504" font-size="12" font-weight="400" text-anchor="start" fill="#526070"><tspan x="115" dy="0">area / mainland isolation / stepping stones / network position</tspan></text>
+<rect x="100" y="529" width="360" height="54" rx="10" fill="#f1f5f9"/>
+<text x="115" y="551" font-size="14" font-weight="700" text-anchor="start" fill="#172033"><tspan x="115" dy="0">Landscape-specific reference</tspan></text>
+<text x="115" y="570" font-size="12" font-weight="400" text-anchor="start" fill="#526070"><tspan x="115" dy="0">e.g. matrix-aware current flow when available</tspan></text>
+<text x="620" y="215" font-size="23" font-weight="700" text-anchor="start" fill="#172033"><tspan x="620" dy="0">2  Add the held-out structural probe C</tspan></text>
+<text x="620" y="259" font-size="16" font-weight="400" text-anchor="start" fill="#172033"><tspan x="620" dy="0">Construct the occurrence-conditioned</tspan><tspan x="620" dy="22">structural feature only from outer-training</tspan><tspan x="620" dy="22">information under predeclared graph</tspan><tspan x="620" dy="22">assumptions.</tspan></text>
+<rect x="660" y="350" width="280" height="120" rx="18" fill="#eef6ff" stroke="#4f79a7" stroke-width="2"/>
+<text x="800.0" y="387" font-size="19" font-weight="700" text-anchor="middle" fill="#172033"><tspan x="800.0" dy="0">EOG connected frequency</tspan></text>
+<text x="800.0" y="419" font-size="14" font-weight="400" text-anchor="middle" fill="#526070"><tspan x="800.0" dy="0">share of frozen graph scenarios</tspan></text>
+<text x="800.0" y="443" font-size="14" font-weight="400" text-anchor="middle" fill="#526070"><tspan x="800.0" dy="0">linking target to training-presence anchors</tspan></text>
+<text x="632" y="510" font-size="14" font-weight="700" text-anchor="start" fill="#334155"><tspan x="632" dy="0">Held-out labels do not define anchors, scales,</tspan><tspan x="632" dy="19">graph choices or predictor construction.</tspan></text>
+<text x="1140" y="215" font-size="23" font-weight="700" text-anchor="start" fill="#172033"><tspan x="1140" dy="0">3  Score C relative to R</tspan></text>
+<text x="1140" y="257" font-size="16" font-weight="400" text-anchor="start" fill="#172033"><tspan x="1140" dy="0">Use the same held-out units and the predeclared endpoint.</tspan></text>
+<rect x="1140" y="320" width="360" height="67" rx="12" fill="#e8f5ee" stroke="#2f855a" stroke-width="2"/>
+<text x="1158" y="346" font-size="14" font-weight="700" text-anchor="start" fill="#2f855a"><tspan x="1158" dy="0">EARNED</tspan></text>
+<text x="1158" y="369" font-size="12" font-weight="400" text-anchor="start" fill="#334155"><tspan x="1158" dy="0">C improves the declared held-out endpoint</tspan></text>
+<rect x="1140" y="398" width="360" height="67" rx="12" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+<text x="1158" y="424" font-size="14" font-weight="700" text-anchor="start" fill="#64748b"><tspan x="1158" dy="0">REDUNDANT / NULL</tspan></text>
+<text x="1158" y="447" font-size="12" font-weight="400" text-anchor="start" fill="#334155"><tspan x="1158" dy="0">C adds no supported increment beyond R</tspan></text>
+<rect x="1140" y="476" width="360" height="67" rx="12" fill="#fff1f2" stroke="#b94a48" stroke-width="2"/>
+<text x="1158" y="502" font-size="14" font-weight="700" text-anchor="start" fill="#b94a48"><tspan x="1158" dy="0">ADVERSE</tspan></text>
+<text x="1158" y="525" font-size="12" font-weight="400" text-anchor="start" fill="#334155"><tspan x="1158" dy="0">C worsens the declared held-out endpoint</tspan></text>
+<rect x="1140" y="554" width="360" height="67" rx="12" fill="#fff8e8" stroke="#b7791f" stroke-width="2"/>
+<text x="1158" y="580" font-size="14" font-weight="700" text-anchor="start" fill="#b7791f"><tspan x="1158" dy="0">INDETERMINATE</tspan></text>
+<text x="1158" y="603" font-size="12" font-weight="400" text-anchor="start" fill="#334155"><tspan x="1158" dy="0">reference or estimability gate fails</tspan></text>
+<path class="arrow" d="M 500 360 L 570 360"/>
+<polygon points="570,360 552,349 552,371" fill="#64748b"/>
+<path class="arrow" d="M 1020 360 L 1090 360"/>
+<polygon points="1090,360 1072,349 1072,371" fill="#64748b"/>
+<line class="divider" x1="70" y1="625" x2="1530" y2="625"/>
+<text x="800" y="670" font-size="20" font-weight="700" text-anchor="middle" fill="#172033"><tspan x="800" dy="0">Interpretation boundary</tspan></text>
+<text x="800" y="708" font-size="17" font-weight="700" text-anchor="middle" fill="#172033"><tspan x="800" dy="0">A positive structural signal under a restricted reference does not imply predictive gain beyond a richer reference.</tspan></text>
+<text x="800" y="744" font-size="16" font-weight="400" text-anchor="middle" fill="#526070"><tspan x="800" dy="0">Connected frequency is a structural robustness summary — not a dispersal, movement or colonisation probability.</tspan></text>
+<text x="800" y="808" font-size="14" font-weight="400" text-anchor="middle" fill="#526070"><tspan x="800" dy="0">This paper asks when structure earns an increment. The separate EOG-WF paper asks a different finite-world falsification / prediction-interface question.</tspan></text>
+</svg>
