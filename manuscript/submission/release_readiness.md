@@ -3,7 +3,7 @@
 Verification date: **2026-09-12**
 
 Repository package version: **0.1.0** (`pyproject.toml`).  
-Candidate first submission archive tag: **`v0.1.0`**, unless the package version is deliberately changed before release.
+The candidate first submission archive tag remains **`v0.1.0`**, unless the package version is deliberately changed before release.
 
 ## Scientific and repository-presentation HOLD — cleared
 
@@ -51,6 +51,11 @@ The repository-side grayscale/down-scaling QA does not substitute for the publis
 ### 1. Create a Zenodo draft and reserve a DOI
 
 Create a new Zenodo upload using the final title, creators and author-approved metadata. Reserve a DOI but do not publish the record yet.
+
+Official Zenodo references retained by the release audit:
+
+- https://help.zenodo.org/docs/deposit/describe-records/reserve-doi/
+- https://help.zenodo.org/docs/deposit/create-new-upload/
 
 ### 2. Finalize identifiers in the repository
 
@@ -107,4 +112,4 @@ Only then mark release/DOI items complete in `manuscript/structural_submission_c
 
 ## Tooling boundary
 
-The connected GitHub tooling can inspect and modify repository files, branches, PRs, issues and CI, but the currently exposed actions do **not** include GitHub Release creation. No Zenodo connector is installed. DOI reservation/publication and final GitHub Release creation therefore remain manual gates and must not be reported as complete until the public records exist.
+The connected GitHub tooling can inspect and modify repository files, branches, PRs, issues and CI, but it does not expose GitHub Release creation. No Zenodo connector is installed. DOI reservation/publication and final GitHub Release creation therefore remain manual gates and must not be reported as complete until the public records exist.
