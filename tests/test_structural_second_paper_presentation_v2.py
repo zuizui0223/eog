@@ -16,6 +16,13 @@ def load_module(relative: str, name: str):
     return module
 
 
+def assert_committed_assets_match(assets: dict[str, str]) -> None:
+    for relative, text in assets.items():
+        path = ROOT / relative
+        assert path.is_file(), f"generated presentation asset is not committed: {relative}"
+        assert path.read_text(encoding="utf-8") == text, f"committed presentation asset drift: {relative}"
+
+
 def test_second_paper_boundary_is_separate_from_eog_wf():
     boundary = json.loads((ROOT / "manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json").read_text())
     assert boundary["status"] == "scientific_content_closed_presentation_release_active"
@@ -30,6 +37,7 @@ def test_reference_conditioned_figure1_is_deterministic_and_bounded():
     a = module.build_assets()
     b = module.build_assets()
     assert a == b
+    assert_committed_assets_match(a)
     svg = a["figures/output/figure_1_reference_conditioned.svg"]
     meta = json.loads(a["figures/output/figure_1_reference_conditioned_metadata.json"])
     assert "Declare the reference R" in svg
@@ -45,6 +53,7 @@ def test_aislands_dual_endpoint_figure_keeps_metrics_separate():
     a = module.build_assets()
     b = module.build_assets()
     assert a == b
+    assert_committed_assets_match(a)
     svg = a["figures/output/figure_2_aislands_reference_conditioned.svg"]
     meta = json.loads(a["figures/output/figure_2_aislands_reference_conditioned_metadata.json"])
     assert "Restricted reference: conditional ordering" in svg
