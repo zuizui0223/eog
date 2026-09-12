@@ -1,6 +1,6 @@
 {
   "schema_version": "eog_structural_submission_manifest_v5",
-  "submission_status": "SCIENTIFIC_AND_PRESENTATION_CONTENT_CLOSED_RELEASE_AUTHOR_POLICY_GATES_ACTIVE",
+  "submission_status": "SCIENTIFIC_PRESENTATION_AND_REPOSITORY_VISUAL_QA_CLOSED_RELEASE_AUTHOR_POLICY_GATES_ACTIVE",
   "paper_boundary": "manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json",
   "target_journal": "Ecological Informatics",
   "journal_decision_rule": {
@@ -21,6 +21,7 @@
   "live_policy_verification": "manuscript/submission/live_policy_verification_2026-08-12.md",
   "release_readiness": "manuscript/submission/release_readiness.md",
   "figure_qa": "manuscript/submission/figure_qa.md",
+  "repository_visual_qa_receipt": "manuscript/submission/STRUCTURAL_VISUAL_QA_RECEIPT_2026-09-12.md",
   "supplementary_materials_list": "manuscript/submission/supplementary_materials.md",
   "novelty_strategy": "manuscript/submission/novelty_submission_strategy_2026-08-12.md",
   "island_preoutcome_contract": "validation/aislands_isolation_adequacy_20260812/preoutcome_contract.json",
@@ -37,11 +38,11 @@
     "figures/output/figure_5_audit.svg"
   ],
   "presentation_v2_fingerprints": {
-    "figure_1_sha256": "4f49a5e2dba5391fd30d44e5b1c1632087350458612d5ab9678a3734804ea554",
+    "figure_1_sha256": "4f49a5e23fafd630c38e215453ea15457f1d0ab465efa141ab754dbe5223d126",
     "figure_2_sha256": "e401ab9aa0df3d152145d7afd00e7b9e2aaaf728ae42ff2fc8d16ddb0403fc69",
     "figure_2_data_sha256": "51c125327cbb8cf6ed9152c00d76bc30718902458c3bbbfa5ca9291c42750c6a"
   },
-  "figure_status": "reference_conditioned_v2_assets_committed_fingerprinted_and_regeneration_sync_tested; final journal-display visual QA remains open",
+  "figure_status": "reference_conditioned_v2_assets_committed_fingerprinted_and_regeneration_sync_tested; repository-side 1200px/800px and grayscale QA passed; submission-day publisher conversion QA remains open",
   "machine_readable_results": [
     "manuscript/result_tables/table_3_main_sensitivity_results.csv",
     "manuscript/result_tables/table_s1_applicability_accounting.csv",
@@ -85,10 +86,11 @@
     "A-Islands presentation v2 implemented with restricted-reference conditional concordance and strong-reference C-R3 log-loss increment on distinct axes",
     "R0/R1/R2/R3/C ladder implemented with C-R3 marked as the sole primary extension contrast",
     "reference-conditioned Figure 1 and Figure 2 assets, captions, accessibility text and data sidecar committed and fingerprinted",
-    "presentation-v2 renderers are deterministic and committed outputs are regression-tested against regeneration"
+    "presentation-v2 renderers are deterministic and committed outputs are regression-tested against regeneration",
+    "repository-side five-figure visual QA passed at 1200px and 800px widths plus 800px grayscale rendering without clipping, overlap or colour-only sign interpretation"
   ],
   "required_pre_submission_resolutions": [
-    "complete Ecological Informatics display-size visual QA for typography, legends, panel labels and colour/grayscale legibility",
+    "confirm the live Ecological Informatics accepted vector/raster formats, DPI and physical-size requirements and inspect the publisher-rendered submission preview",
     "create tagged software release <RELEASE_TAG> after the presentation state is frozen",
     "reserve or mint release archive DOI <ARCHIVE_DOI> only after the final scientific/presentation package is frozen",
     "complete author_metadata.template.json with author-approved metadata and remove placeholders in the final submission record",
