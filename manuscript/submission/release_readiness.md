@@ -1,46 +1,37 @@
 # Structural manuscript release readiness
 
-Verification date: **2026-08-12**
+Verification date: **2026-09-12**
 
-Repository package version: **0.1.0** (`pyproject.toml`).
+Repository package version: **0.1.0** (`pyproject.toml`).  
+Candidate first submission archive tag: **`v0.1.0`**, unless the package version is deliberately changed before release.
 
-At the time of the release audit, the GitHub repository had no existing tags and no existing GitHub releases. The candidate first submission archive tag remains **`v0.1.0`**, provided no intervening versioning decision changes the package version.
+## Scientific and repository-presentation HOLD — cleared
 
-## Current scientific HOLD before DOI reservation
-
-The DOI/release sequence is **not yet active**. The project has selected a prospectively frozen A-Islands island-isolation adequacy test before final submission positioning.
-
-Do not reserve the final Zenodo DOI, create the final tag or treat the current manuscript as a release candidate until all of the following scientific gates are complete:
+The scientific and repository-side presentation gates that previously blocked release preparation are now closed.
 
 - [x] final `eog_aislands_isolation_adequacy_v1_3` reference hierarchy frozen before species outcomes;
 - [x] 842-island polygon-area input frozen and fingerprinted;
 - [x] Natural Earth v5.1.1 continental-mainland geometry frozen and fingerprinted;
 - [x] 842-island mainland-distance input frozen and fingerprinted;
-- [ ] island-isolation adequacy outcome executed exactly once;
-- [ ] raw matched held-out predictions, applicability, species summaries, uncertainty and result fingerprint frozen;
-- [ ] result incorporated without weakening R3 or retuning graph scales/taxa;
-- [ ] journal route selected by the predeclared `C − R3` decision rule;
-- [ ] final title, manuscript, figures and reference ledger rewritten for that route.
+- [x] island-isolation adequacy outcome executed exactly once;
+- [x] raw matched held-out predictions, applicability, species summaries, uncertainty and result fingerprint frozen;
+- [x] adverse `C − R3` result incorporated without weakening R3 or retuning graph scales/taxa;
+- [x] journal route selected by the predeclared decision rule: **Ecological Informatics**;
+- [x] manuscript framing rewritten around reference-conditioned structural adequacy;
+- [x] Figure 1 reference-conditioned inference diagram committed and fingerprinted;
+- [x] Figure 2 shows restricted-reference conditional concordance and strong-reference `C − R3` log-loss increment on separate axes;
+- [x] R0/R1/R2/R3/C ladder is explicit and `C − R3` remains the sole primary extension contrast;
+- [x] presentation-v2 renderers regenerate the committed Figure 1/2 assets exactly;
+- [x] repository-side visual QA completed at 1200 px and 800 px widths plus 800 px grayscale rendering, with no clipping/overlap or colour-only sign interpretation detected;
+- [x] structural submission package v2 rebuilds the frozen scientific evidence and overlays only the presentation-v2 assets.
 
-The original authoritative A-Islands and Tanzania outcomes remain frozen throughout.
+Canonical presentation QA receipt:
 
-## Why the DOI is still reserved before the final tag — after the scientific HOLD clears
+`manuscript/submission/STRUCTURAL_VISUAL_QA_RECEIPT_2026-09-12.md`
 
-The final submission manuscript should cite the archive DOI, but a source file cannot contain the SHA of the commit that contains itself: changing the file to add that SHA creates a different commit. EOG therefore uses two separate provenance mechanisms:
+## Human/live-policy gates still blocking DOI reservation and final release
 
-1. the manuscript-facing Data/Code Availability statement contains the stable release tag and archive DOI;
-2. `submission_package_manifest.json`, generated from the final checkout, records the exact source Git commit automatically.
-
-Zenodo supports reserving a DOI while an upload remains a draft, allowing the DOI to be inserted into files before publication. Therefore the DOI-first sequence remains appropriate **only after the island result and journal route are frozen**.
-
-Official Zenodo documentation used by the project:
-
-- `https://help.zenodo.org/docs/deposit/describe-records/reserve-doi/`
-- `https://help.zenodo.org/docs/deposit/create-new-upload/`
-
-## Human/live-policy gates before reserving the DOI
-
-After the scientific HOLD clears, also require:
+Do **not** reserve/publish the final Zenodo record or create the final `v0.1.0` tag until these are resolved:
 
 - [ ] author list and affiliations fixed;
 - [ ] corresponding-author details fixed;
@@ -49,15 +40,17 @@ After the scientific HOLD clears, also require:
 - [ ] competing-interests statement approved;
 - [ ] ethics/permit relevance checked;
 - [ ] originality / simultaneous-submission statement approved;
-- [ ] generative-AI disclosure reviewed against the **selected journal's** live policy;
-- [ ] selected journal's live Guide for Authors checked in a normal browser;
-- [ ] final figure file-format/resolution and visual-QA requirements checked.
+- [ ] generative-AI disclosure approved by all authors;
+- [ ] current Ecological Informatics Guide for Authors checked on the submission date;
+- [ ] live accepted vector/raster formats, physical-size/DPI requirements and final publisher-rendered preview checked.
 
-## Preferred DOI-first release sequence after all gates clear
+The repository-side grayscale/down-scaling QA does not substitute for the publisher-rendered submission preview.
 
-### 1. Create a Zenodo draft manually and reserve a DOI
+## DOI-first release sequence after the remaining gates clear
 
-Create a new Zenodo upload using the final title, creators and resource metadata. Do not publish it yet. Reserve a DOI and keep the draft.
+### 1. Create a Zenodo draft and reserve a DOI
+
+Create a new Zenodo upload using the final title, creators and author-approved metadata. Reserve a DOI but do not publish the record yet.
 
 ### 2. Finalize identifiers in the repository
 
@@ -66,13 +59,11 @@ In `manuscript/submission/data_code_availability.md` replace:
 - `<RELEASE_TAG>` → `v0.1.0`;
 - `<ARCHIVE_DOI>` → the reserved Zenodo DOI.
 
-Do not add a hard-coded release-commit placeholder. The package manifest records the exact final commit automatically.
-
 Any `CITATION.cff` or `.zenodo.json` creators/affiliations must come from author-approved metadata rather than Git history.
 
-### 3. Merge the identifier-only release PR
+### 3. Merge an identifier-only release change
 
-Require all repository CI to pass. The PR must not alter:
+Require repository CI to pass. The identifier-only change must not alter:
 
 - original A-Islands frozen result/direction;
 - Tanzania frozen result/direction/fingerprint;
@@ -85,28 +76,22 @@ Require all repository CI to pass. The PR must not alter:
 Run:
 
 ```bash
-python manuscript/build_structural_submission_package.py --output-dir build/structural_submission
+python manuscript/build_structural_submission_package_v2.py --output-dir build/structural_submission_v2
 ```
 
-The builder must be extended before release to package and validate the final island-extension evidence in addition to the original A-Islands/Tanzania evidence.
-
-Require the generated package manifest to record the exact final `source_commit` and every authoritative result fingerprint.
+The v2 package rebuilds/validates the frozen scientific evidence, uses the committed reference-conditioned Figure 1/2 presentation assets, and records exact source provenance in its generated manifest.
 
 ### 5. Require final CI green
 
-The normal package matrix, original benchmark/audit workflows and the final island-extension verification workflow must all be green at the release-candidate commit.
+Require the normal package matrix and the structural second-paper presentation/package workflow to pass at the release-candidate commit.
 
 ### 6. Create tag and GitHub Release
 
 Create tag **`v0.1.0`** at exactly the verified release-candidate commit and create the GitHub Release from that tag.
 
-The current GitHub connector does not expose release creation, so this step remains a deliberate manual/UI or authenticated CLI/API gate.
-
 ### 7. Publish the exact archive through the reserved Zenodo draft
 
-Upload/archive the exact source release plus the final submission package or declared archival contents, verify creators/title/metadata and publish.
-
-The published DOI must equal the DOI already inserted into the repository manuscript files.
+Upload/archive the exact source release plus the declared final submission package, verify creators/title/metadata, and publish. The published DOI must equal the DOI already inserted in the repository.
 
 ### 8. Verify public provenance
 
@@ -122,4 +107,4 @@ Only then mark release/DOI items complete in `manuscript/structural_submission_c
 
 ## Tooling boundary
 
-The connected GitHub app can inspect and modify repository files, branches, PRs, issues and CI, but it does not expose GitHub Release creation. No Zenodo connector is installed. DOI reservation/publication and final GitHub Release creation therefore remain manual gates and must not be reported as complete until the public records exist.
+The connected GitHub tooling can inspect and modify repository files, branches, PRs, issues and CI, but the currently exposed actions do **not** include GitHub Release creation. No Zenodo connector is installed. DOI reservation/publication and final GitHub Release creation therefore remain manual gates and must not be reported as complete until the public records exist.
