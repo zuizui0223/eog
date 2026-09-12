@@ -3,7 +3,7 @@
 ## Current journal decision state
 
 **Scientific route selected: _Ecological Informatics_, Original Research Paper.**  
-**Submission remains on HOLD for the remaining presentation, author, live-policy and release gates. The adverse A-Islands strong-reference result is already incorporated into the manuscript-facing scientific package.**
+**Scientific content, presentation-v2 figures and repository-side visual QA are closed. Submission remains on HOLD only for author metadata/approvals, release/archive, and submission-day live-policy/publisher-preview gates.**
 
 The prospectively frozen A-Islands strong-reference test was executed exactly once. Its primary `C − R3` log-loss difference was **+0.0034852** (species bootstrap 95% **+0.0024664 to +0.0045082**; 341 species favourable, 545 adverse). Negative had been predeclared as favourable to EOG, so the observed result is adverse. The predeclared journal rule therefore selects *Ecological Informatics*, not *Journal of Biogeography*.
 
@@ -11,7 +11,7 @@ This result does not erase the original A-Islands conditional-concordance result
 
 ## Submission-blocking gates
 
-The paper is **not ready to submit or release** until every blocking item below is complete.
+The paper is **not ready to submit or release** until every remaining author/release/live-policy item below is complete.
 
 ### Scientific content already secured
 
@@ -56,25 +56,26 @@ The paper is **not ready to submit or release** until every blocking item below 
 
 ### Figures and machine-readable manuscript evidence
 
-- [x] Existing Figure 1–5 assets rebuild from committed frozen inputs.
+- [x] Existing Figure 1–5 scientific inputs rebuild from committed frozen evidence.
 - [x] Existing plotting sidecars and Table 3/Table S1 remain machine-readable.
 - [x] Existing figure contracts prohibit realised-movement/colonisation claims.
-- [ ] Figure 1 revised to show `declared reference → held-out structural probe → residual / adverse-or-redundant / indeterminate` rather than presenting EOG as another connectivity index.
-- [ ] A-Islands result figure reports **both** the original conditional-ordering result and the prospectively frozen strong-reference `C − R3` result, with distinct axes/labels so incompatible estimands are not visually compared as one effect size.
-- [ ] Reference-tier panel reports R0/R1/R2/R3/C as explanatory context and marks `C − R3` as the only primary extension contrast.
+- [x] Figure 1 revised to show `declared reference → held-out structural probe → residual / adverse-or-redundant / indeterminate` rather than presenting EOG as another connectivity index.
+- [x] A-Islands result figure reports **both** the original conditional-ordering result and the prospectively frozen strong-reference `C − R3` result, with distinct axes/labels so incompatible estimands are not visually compared as one effect size.
+- [x] Reference-tier panel reports R0/R1/R2/R3/C as explanatory context and marks `C − R3` as the only primary extension contrast.
 - [x] Tanzania retained as the external strong-reference boundary, with its spatial-block uncertainty visible in the manuscript/figure package.
 - [x] Final tables include 886/886 estimable species, 4231/4430 evaluable folds, 199 5/5 class-count failures, 712,515 held-out predictions and the new result fingerprint.
-- [ ] Final revised figures generated from frozen extension artifacts with fresh sync/fingerprint tests.
-- [ ] Final visual QA at Ecological Informatics display size: typography, legends, panel labels, grayscale/colour-vision legibility and required file format/resolution.
+- [x] Final revised Figure 1/2 assets generated from frozen inputs, committed, fingerprinted and guarded by regeneration-equality tests.
+- [x] Repository-side visual QA completed at 1200 px and 800 px widths plus 800 px grayscale rendering; no clipping/overlap or colour-only sign interpretation was detected. Receipt: `manuscript/submission/STRUCTURAL_VISUAL_QA_RECEIPT_2026-09-12.md`.
+- [ ] Submission-day publisher visual QA: confirm live Ecological Informatics file formats, physical size/DPI and publisher-rendered single-/double-column preview.
 
 ### Reproducibility release
 
-- [ ] Tagged software release created.
+- [ ] Tagged software release `v0.1.0` created.
 - [ ] Release commit matches final revised manuscript/code state.
-- [ ] Zenodo/archive DOI reserved/minted only after the revised scientific package is frozen.
+- [ ] Zenodo/archive DOI reserved/minted after author/live-policy gates clear.
 - [ ] Frozen original benchmarks plus island-extension contracts, geographic fingerprints, raw authoritative outcome artifact, summaries, sidecars and submission manifest archived with the release.
 - [x] Reproducibility environment boundary documented for the submission package.
-- [x] Clean-checkout submission-package command verifies manuscript-facing projections including the new island result while never rerunning the one-time biological outcome.
+- [x] Clean-checkout submission-package v2 command verifies manuscript-facing projections including the new island result while never rerunning the one-time biological outcome.
 - [ ] Canonical original A-Islands, new A-Islands strong-reference and Tanzania fingerprints reproduced from the final release package.
 - [ ] CI/repository and release DOI resolve from the archived version.
 
@@ -86,6 +87,7 @@ The paper is **not ready to submit or release** until every blocking item below 
 - [x] Cover letter rewritten around the positive conditional-ordering result plus adverse strong-reference tests, not a universal EOG improvement claim.
 - [x] Data/Code Availability updated to include authoritative island outcome fingerprint/provenance; only final release tag/DOI placeholders remain.
 - [x] Supplementary materials updated to archive the pre-outcome contract, one-time execution provenance, raw prediction/fold/species outputs by artifact identity and explanatory tier QA.
+- [x] Author metadata template synchronized to the final working title while preserving unapproved author fields as placeholders.
 - [ ] Author list, affiliations, corresponding author and contributions finalized and approved by all authors.
 - [x] Generative-AI declaration draft aligned with the current Elsevier journal-wide policy and placed as a separate declaration requirement immediately before References.
 - [ ] Generative-AI disclosure approved by all authors.
@@ -96,11 +98,12 @@ The paper is **not ready to submit or release** until every blocking item below 
 - [ ] Competing-interests statement confirmed by all authors.
 - [ ] Ethics/permit relevance confirmed for any directly contributed field data.
 - [ ] Originality and simultaneous-submission statement confirmed by all authors.
+- [ ] Creator order and software citation metadata approved for the release/archive record.
 
 ### Final live-policy verification
 
 - [x] Current Elsevier journal-wide generative-AI policy independently verified on 2026-08-12 and reflected in `manuscript/submission/declarations.md` and `manuscript/submission/live_policy_verification_2026-08-12.md`.
-- [ ] Re-open the current *Ecological Informatics* journal-specific Guide for Authors in a normal browser on the actual submission date; automated retrieval remains HTTP 403.
+- [ ] Re-open the current *Ecological Informatics* journal-specific Guide for Authors in a normal browser on the actual submission date.
 - [ ] Confirm journal-specific article type, word/abstract/keyword limits, figure formats, reference style, data/code requirements, anonymisation model and required declarations.
 
 ### Claim guard
@@ -123,4 +126,4 @@ The following shorthand is explicitly prohibited because it exceeds the evidence
 
 ## Current stop/go rule
 
-**GO for presentation-only figure revision and final submission-package QA for Ecological Informatics. Do not rerun the authoritative island analysis, weaken R3, tune graph scales/taxa, or add a favourable dataset to rescue the island claim. HOLD DOI reservation and journal submission until the remaining figure, author, journal-specific policy and release gates are complete.**
+**Scientific and repository-presentation work is closed. Do not rerun the authoritative island analysis, weaken R3, tune graph scales/taxa, or add a favourable dataset. HOLD DOI reservation, final tag/release and journal submission until author metadata/approvals and submission-day Ecological Informatics policy/publisher-preview gates are complete.**
