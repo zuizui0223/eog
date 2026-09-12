@@ -1,0 +1,37 @@
+{
+  "schema": "eog.louisiana_marsh_bird_kira_header_certificate.v1",
+  "replication_id": "southwest_louisiana_secretive_marsh_birds_heterogeneous_replication_1",
+  "status": "selected_response_header_schema_pass",
+  "authoritative_run": {
+    "workflow_run_id": 32810626279,
+    "job_id": 97689136607,
+    "head_sha": "15fde68e381334f9eb5123bf2a64e31411ac3860",
+    "artifact_id": 9549662481,
+    "artifact_zip_sha256": "cf6f37ea65348e89fa05aac97b03f5b4aeaebaed4d38e4e42f77234f3881a2d4"
+  },
+  "selected_response": {
+    "file": "KIRA.csv",
+    "metadata_md5": "3c959681e26599ea2a19030b7507837f",
+    "metadata_size_bytes": 2619,
+    "transport_content_length": 2619,
+    "terminator": "CR",
+    "bytes_consumed_including_terminator": 56,
+    "header_sha256": "072351af0017d24e63cab7c0905698915cabfb24f95ad7614679c1d79747b7f8",
+    "physical_header": ["Site","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],
+    "sampling_period_mapping": "exact literal bijection 1..20"
+  },
+  "result_fingerprint": "6defd03992ed825a6f9bb795237c6aaf577542a19ab574fbf6fd735316aab7d9",
+  "response_firewall": {
+    "selected_response_header_requests": 1,
+    "selected_response_header_bytes_opened": 56,
+    "selected_response_payload_requests": 0,
+    "selected_response_payload_bytes_opened": 0,
+    "selected_response_rows_opened": false,
+    "selected_response_values_opened": false,
+    "unselected_species_payload_requests": 0,
+    "unselected_species_payload_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_boundary": "This certificate validates only physical response schema. It does not authorize row-level access. Row token grammar, endpoint semantics, Layer A worlds, unchanged Layer B, baseline features, learner, count gate, metric and terminal decision must be frozen before KIRA rows are opened."
+}

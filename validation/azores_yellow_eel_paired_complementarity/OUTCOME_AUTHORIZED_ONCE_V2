@@ -1,0 +1,23 @@
+{
+  "schema": "eog.azores_yellow_eel_outcome_authorization_marker.v2",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "marker_version": 2,
+  "authorization_reason": "v1 marker terminated before response access because a manually committed Stage1 SHA-256 fingerprint was truncated; authoritative Stage1 CI and the v1 runner independently agree on the corrected 64-character fingerprint",
+  "v1_terminal_run_id": 32800352646,
+  "v1_terminal_job_id": 97659833895,
+  "v1_response_payload_requests": 0,
+  "v1_response_payload_bytes_opened": 0,
+  "v1_response_rows_opened": false,
+  "offline_reauthorization_run_id": 32805628565,
+  "offline_reauthorization_job_id": 97675072484,
+  "authorization_fingerprint": "fbfb042c6b57802de16a27074d6d0e1ee54f3020f56634266eddf9d684057d36",
+  "full_freeze_spec_sha256": "ca779d1a46c247a69553818dbb633c791c9ddeb8247c1f2c4603e624f46eccef",
+  "outcome_runner_git_blob_sha": "514c1982d9b155f32c1493b58a684a7e1074116e",
+  "runner_core_git_blob_sha": "de4a2ee730d0a253479505c54101b5bff16011c1",
+  "authorization_git_blob_sha": "abf249b556000faa6971133baaa31c0ebd946b2f",
+  "synthetic_smoke_certificate_git_blob_sha": "3b1dd1aaad155ddcde6ee3b58145c2827324114d",
+  "stage1_certificate_git_blob_sha": "dc678ce7605dd11f77de9b8f67f9ee9451553b4d",
+  "full_freeze_spec_git_blob_sha": "db217191965979fcc4973b35c7763723296914be",
+  "v1_failure_certificate_git_blob_sha": "3ff27e5bc6bbcf50653db8e4a4739be5f607c141",
+  "execution_rule": "this marker authorizes exactly one v2 workflow run; regardless of terminal result, do not rerun this marker"
+}

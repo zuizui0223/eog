@@ -1,0 +1,95 @@
+{
+  "schema": "eog.fresh_paired_result_certificate.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "status": "favorable_complementary_added_value",
+  "scientific_role": "first genuinely fresh post-Daphnia paired predictive-complementarity endpoint",
+  "authoritative_ci": {
+    "workflow": "Azores yellow eel once-only outcome gate",
+    "run_id": 32807155541,
+    "job_id": 97679387755,
+    "head_sha": "26daa7c3cfbb30efaee384b76447fe3e68bcd2ae",
+    "run_number": 4,
+    "conclusion": "success"
+  },
+  "response_consumption": {
+    "response_consumed": true,
+    "rerun_forbidden": true,
+    "response_payload_requests": 1,
+    "response_payload_bytes_opened": 159622396,
+    "response_rows_opened": true,
+    "response_values_opened": true,
+    "raw_data_rows_seen": 1216321,
+    "response_md5": "20253e15293f8f06472f393f050f7c4a",
+    "response_size": 159622396
+  },
+  "response_audit": {
+    "admissible_detection_rows": 1065585,
+    "excluded_non_target_tag": 30070,
+    "excluded_outside_eligible_receiver_week": 119125,
+    "excluded_public_false_pair_rule": 1495,
+    "excluded_public_project_rule": 46,
+    "positive_receiver_weeks": 222,
+    "negative_receiver_weeks": 200,
+    "prepared_receiver_week_rows": 422
+  },
+  "exact_count_gate": {
+    "passed": true,
+    "calibration_events": 129,
+    "calibration_non_events": 109,
+    "heldout_events": 93,
+    "heldout_non_events": 91,
+    "primary_outer_units_with_both_classes": 5
+  },
+  "paired_design": {
+    "baseline_feature_count": 24,
+    "layer_b_feature_count": 10,
+    "same_learner_both_arms": true,
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "primary_metric": "binary_log_loss",
+    "primary_outer_unit_count": 5,
+    "favorable_min_augmented_wins": 3,
+    "predictive_complementarity_declaration_fingerprint": "363a4a04a81b66ac51fb0f00782889bae8e8cef3b2c8460ee62ea960450bc883"
+  },
+  "primary_scores": [
+    {"outer_unit_id": "block_1", "baseline_score": 0.019577251092366604, "augmented_score": 0.01498569880335877},
+    {"outer_unit_id": "block_2", "baseline_score": 0.14430236376490865, "augmented_score": 0.14413071081195333},
+    {"outer_unit_id": "block_3", "baseline_score": 0.10959598629456425, "augmented_score": 0.10872715596837065},
+    {"outer_unit_id": "block_4", "baseline_score": 0.2148450923903874, "augmented_score": 0.20790103015601466},
+    {"outer_unit_id": "block_5", "baseline_score": 0.22304279983006567, "augmented_score": 0.18569103709207727}
+  ],
+  "primary_result": {
+    "baseline_macro_score": 0.14227269867445852,
+    "augmented_macro_score": 0.13228712656635494,
+    "augmented_minus_baseline": -0.00998557210810358,
+    "augmented_better_outer_units": 5,
+    "baseline_better_outer_units": 0,
+    "tied_outer_units": 0,
+    "paired_status": "favorable_complementary_added_value",
+    "paired_result_fingerprint": "f3499b89b614e119af3643633d15976c217e364f007f3c4bf96ce252681235a5",
+    "paired_score_fingerprint": "9e0e9dfed27d050d10d6823156a614a5d626a0636c4b83b5ccc5957b92e81f51"
+  },
+  "supplementary_all_heldout": {
+    "baseline_log_loss": 0.1457711011756535,
+    "augmented_log_loss": 0.13307770029957144
+  },
+  "terminal_result_fingerprint": "ec6c91d7e3014cbf075236d9281521dd3d060a41976a61105c043ddf2804c129",
+  "artifact": {
+    "artifact_id": 9548570072,
+    "artifact_name": "azores-yellow-eel-once-only-v4-terminal",
+    "artifact_zip_sha256": "a66a240111289165c8a443df7443d56cc8a4dc13e72b892921dd5746c5366397",
+    "size_in_bytes": 1349
+  },
+  "frozen_product_boundary": {
+    "layer_b_status": "candidate_general_predictive_complement",
+    "supported_claim": "the unchanged label-invariant Layer B supplied non-redundant predictive information beyond the same strong conventional learner on this genuinely fresh aquatic telemetry endpoint",
+    "unsupported_claims": [
+      "universal predictive superiority",
+      "standalone Layer B predictor",
+      "causal mechanism",
+      "truth of any exact Layer A world",
+      "general product readiness before heterogeneous replication"
+    ],
+    "layer_a_status": "retain exact sequential update, contraction, and falsification role",
+    "next_required_scientific_step": "replicate the same frozen paired question in at least two to three heterogeneous ecosystems before API/CLI/package freeze"
+  }
+}

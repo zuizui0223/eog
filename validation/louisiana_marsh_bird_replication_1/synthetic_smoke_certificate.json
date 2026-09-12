@@ -1,0 +1,39 @@
+{
+  "schema": "eog.louisiana_marsh_bird_synthetic_smoke_certificate.v1",
+  "attempt_id": "southwest_louisiana_king_rail_site_occasion_fresh_paired_v1",
+  "status": "synthetic_end_to_end_smoke_pass",
+  "scientific_evidential_value": false,
+  "authoritative_ci": {
+    "workflow": "Louisiana marsh-bird replication 1 synthetic smoke",
+    "run_id": 32811173384,
+    "job_id": 97690660723,
+    "head_sha": "ab4f0c91ee7d84269c692c3b897a375854df431d",
+    "conclusion": "success",
+    "artifact_id": 9549839080,
+    "artifact_zip_sha256": "627ee0b87ad510f3b78c1e97d2e7b2a9d3d9374e1872de1e69688371eff5a9a9"
+  },
+  "smoke_fingerprint": "8d3acc0d20dc43370f0120d97bc77a0a766c4465cd6ec96cd53793824f9a8784",
+  "synthetic_site_count": 33,
+  "synthetic_label_count": 660,
+  "prepared_row_count": 627,
+  "conventional_feature_count": 34,
+  "layer_b_feature_count": 10,
+  "model_fit_count": 2,
+  "paired_outer_unit_count": 8,
+  "synthetic_count_gate": {
+    "calibration_events": 83,
+    "calibration_non_events": 280,
+    "heldout_events": 62,
+    "heldout_non_events": 202,
+    "primary_outer_units_with_both_classes": 8,
+    "passed": true
+  },
+  "synthetic_paired_status": "adverse_complementary_added_value",
+  "synthetic_paired_status_has_scientific_meaning": false,
+  "response_boundary": {
+    "KIRA_full_payload_requests": 0,
+    "KIRA_full_payload_bytes_opened": 0,
+    "KIRA_rows_opened": false,
+    "KIRA_values_opened": false
+  }
+}
