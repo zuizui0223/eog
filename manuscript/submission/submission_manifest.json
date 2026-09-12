@@ -1,6 +1,6 @@
 {
   "schema_version": "eog_structural_submission_manifest_v5",
-  "submission_status": "SCIENTIFIC_CONTENT_CLOSED_PRESENTATION_V2_IMPLEMENTED_PENDING_QA_RELEASE_AUTHOR_GATES",
+  "submission_status": "SCIENTIFIC_AND_PRESENTATION_CONTENT_CLOSED_RELEASE_AUTHOR_POLICY_GATES_ACTIVE",
   "paper_boundary": "manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json",
   "target_journal": "Ecological Informatics",
   "journal_decision_rule": {
@@ -36,12 +36,18 @@
     "figures/output/figure_4_boundary.svg",
     "figures/output/figure_5_audit.svg"
   ],
-  "figure_status": "reference_conditioned_v2_renderers_implemented_pending_committed_output_sync_and_visual_qa",
+  "presentation_v2_fingerprints": {
+    "figure_1_sha256": "4f49a5e2dba5391fd30d44e5b1c1632087350458612d5ab9678a3734804ea554",
+    "figure_2_sha256": "e401ab9aa0df3d152145d7afd00e7b9e2aaaf728ae42ff2fc8d16ddb0403fc69",
+    "figure_2_data_sha256": "51c125327cbb8cf6ed9152c00d76bc30718902458c3bbbfa5ca9291c42750c6a"
+  },
+  "figure_status": "reference_conditioned_v2_assets_committed_fingerprinted_and_regeneration_sync_tested; final journal-display visual QA remains open",
   "machine_readable_results": [
     "manuscript/result_tables/table_3_main_sensitivity_results.csv",
     "manuscript/result_tables/table_s1_applicability_accounting.csv",
     "validation/aislands_isolation_adequacy_20260812/authoritative_outcome.json",
-    "validation/aislands_isolation_adequacy_20260812/authoritative_outcome_qa.json"
+    "validation/aislands_isolation_adequacy_20260812/authoritative_outcome_qa.json",
+    "figures/output/figure_2_aislands_reference_conditioned_data.csv"
   ],
   "offline_build_command": "python manuscript/build_structural_submission_package_v2.py --output-dir build/structural_submission_v2",
   "frozen_evidence": {
@@ -77,10 +83,11 @@
     "EOG-WF and structural-island empirical denominators separated by manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json",
     "Figure 1 presentation v2 implemented as declared reference -> held-out structural probe -> earned/redundant/adverse/indeterminate",
     "A-Islands presentation v2 implemented with restricted-reference conditional concordance and strong-reference C-R3 log-loss increment on distinct axes",
-    "R0/R1/R2/R3/C ladder implemented with C-R3 marked as the sole primary extension contrast"
+    "R0/R1/R2/R3/C ladder implemented with C-R3 marked as the sole primary extension contrast",
+    "reference-conditioned Figure 1 and Figure 2 assets, captions, accessibility text and data sidecar committed and fingerprinted",
+    "presentation-v2 renderers are deterministic and committed outputs are regression-tested against regeneration"
   ],
   "required_pre_submission_resolutions": [
-    "generate and commit/fingerprint the reference-conditioned Figure 1 and A-Islands Figure 2 presentation assets from frozen inputs",
     "complete Ecological Informatics display-size visual QA for typography, legends, panel labels and colour/grayscale legibility",
     "create the tagged software release after the presentation state is frozen",
     "reserve or mint the release archive DOI only after the final scientific/presentation package is frozen",
