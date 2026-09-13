@@ -208,4 +208,4 @@ The next valid work is therefore to finish the structural/island presentation as
 8. Do not pool endpoint rows into a common-effect claim.
 9. Do not use post-closure analysis to change the prospectively fixed endpoint decision.
 
-The active EOG v2 state is therefore **closed empirical validation plus manuscript preparation**, with Layer A retained as the scientific structural core and Layer B retained as a context-dependent predictive complement.
+The active EOG v2 state is therefore **closed empirical validation plus author/admin/release completion**, with Layer A retained as the scientific structural core and Layer B retained as a context-dependent predictive complement.
