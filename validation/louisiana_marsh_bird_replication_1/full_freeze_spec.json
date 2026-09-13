@@ -1,0 +1,210 @@
+{
+  "schema": "eog.louisiana_marsh_bird_full_freeze.v1",
+  "attempt_id": "southwest_louisiana_king_rail_site_occasion_fresh_paired_v1",
+  "source_identity": {
+    "dataset_doi": "10.5066/P9RRIIR2",
+    "sciencebase_item_id": "5ecf119d82ce30fd980854bd",
+    "sciencebase_item_metadata_sha256": "2db954c702a4e5b9b0b34dc3ff3e59a83bfe1cf67e9df2f2772a423269aba6bc",
+    "sites_file": ["Sites.csv", "b2c125a786a222ebea5a4cdd5627306e", 1866],
+    "samples_file": ["Samples.csv", "b719dc436a7fbbfdc2a1add11de2347a", 463],
+    "response_file": ["KIRA.csv", "3c959681e26599ea2a19030b7507837f", 2619],
+    "focal_species": ["King Rail", "Rallus elegans", "KIRA"],
+    "unselected_species_payloads_forbidden": true
+  },
+  "response_identity": {
+    "physical_header": ["Site","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],
+    "physical_terminator": "CR",
+    "header_bytes_opened": 56,
+    "header_sha256": "072351af0017d24e63cab7c0905698915cabfb24f95ad7614679c1d79747b7f8",
+    "header_certificate_fingerprint": "6defd03992ed825a6f9bb795237c6aaf577542a19ab574fbf6fd735316aab7d9",
+    "header_certificate_ci_run": 32810626279,
+    "header_certificate_ci_job": 97689136607,
+    "rows_opened_before_freeze": false,
+    "values_opened_before_freeze": false
+  },
+  "node_geometry": {
+    "node_rule": "all 33 physical rows of Sites.csv; response may not filter the node registry",
+    "node_count": 33,
+    "node_id_field": "Site",
+    "latitude_field": "Latitude",
+    "longitude_field": "Longitude",
+    "static_covariates": ["Marsh", "Habitat"],
+    "distance_metric": "haversine_km",
+    "earth_radius_km": 6371.0088,
+    "site_registry_fingerprint": "c6a4c8dcf458dca881d6e8c67c51b6910fd055d089df563210ee575db8f3b131",
+    "distance_matrix_fingerprint": "a5b1e432f024812592037da94b73103b046ddf97d7817a58f0e158cd6aa198ac"
+  },
+  "response_semantics": {
+    "endpoint": "site-occasion observed King Rail detection",
+    "positive_label": "KIRA.csv cell token 1 at a frozen site and frozen sampling occasion",
+    "negative_label": "KIRA.csv cell token 0; interpreted only as observed non-detection under the released acoustic sampling design, never biological absence",
+    "unavailable_tokens_case_sensitive": ["", "NA", "NaN", "NAN", "NULL"],
+    "unavailable_action": "exclude only that site-occasion from model/count risk sets; do not convert to zero",
+    "unexpected_response_token": "terminal_pre_model_response_token_failure",
+    "site_column": "Site",
+    "required_site_registry": "exactly the 33 frozen Sites.csv IDs, each exactly once; duplicate, missing, or unexpected site is terminal",
+    "sampling_period_columns": "exact literal columns 1 through 20 mapped bijectively to Samples.csv Sample Period",
+    "row_width": 21,
+    "no_additional_cleaning_after_rows_open": true,
+    "species_switch_after_any_KIRA_row_access": false
+  },
+  "temporal_split": {
+    "prediction_sequence_rule": "sort Samples.csv by parsed Date ascending; break exact date ties by numeric Sample Period",
+    "chronological_sample_period_order": [1,2,3,4,5,6,7,8,9,10,11,12,17,13,18,14,19,15,20,16],
+    "initialization_only_sample_period": 1,
+    "initialization_date": "2012-02-13",
+    "scored_calibration_sample_periods": [2,3,4,5,6,7,8,9,10,11,12],
+    "calibration_scored_occasion_count": 11,
+    "calibration_scored_range": ["2012-02-20", "2012-04-30"],
+    "heldout_sample_periods_chronological": [17,13,18,14,19,15,20,16],
+    "heldout_occasion_count": 8,
+    "heldout_range": ["2012-05-04", "2012-05-28"],
+    "primary_outer_units": ["period_17","period_13","period_18","period_14","period_19","period_15","period_20","period_16"],
+    "maximum_calibration_rows": 363,
+    "maximum_heldout_rows": 264,
+    "fit_policy_temporal_boundary": "initialize lag/source state from period 1; build sequential calibration features for periods 2-12; fit once after calibration; predict heldout occasions sequentially without refitting while updating only lag/Layer-A state after each heldout label is revealed"
+  },
+  "count_gate": {
+    "must_be_first_outcome_dependent_operation_after_full_response_parse_and_frozen_token_exclusions": true,
+    "initialization_period_excluded_from_count_gate": true,
+    "calibration_events_min": 10,
+    "calibration_non_events_min": 40,
+    "heldout_events_min": 10,
+    "heldout_non_events_min": 40,
+    "primary_outer_units_with_both_classes_min": 4,
+    "count_failure": "terminal_zero_model_fits_zero_scores"
+  },
+  "process_source": {
+    "interpretation": "within-season observed-detection persistence/spatial-source possibility hypotheses; not claims of dispersal or true occupancy",
+    "initialization": "period 1 observed positive sites seed previous and historical observed-source sets but are not scored and do not eliminate worlds",
+    "local_world_source_modes": ["immediate_previous_observed", "cumulative_observed_history"],
+    "immediate_previous_observed": "sources are sites with positive labels in the immediately previous chronological sampling occasion",
+    "cumulative_observed_history": "sources are the union of sites with at least one positive label in any earlier chronological sampling occasion",
+    "external_open_world": "one conservative universal-source possibility supports every frozen site at every scored occasion because the 33-site survey does not close immigration or unobserved local persistence",
+    "external_open_world_is_truth_claim": false
+  },
+  "world_scale": {
+    "geometry_thresholds_km": [2.728021756372908, 2.976793133666009, 17.008648432743254],
+    "deduplicated_geometry_world_count": 3,
+    "local_source_mode_count": 2,
+    "local_world_count": 6,
+    "external_open_world_count": 1,
+    "declared_world_count": 7,
+    "local_one_step_support": "source site itself plus every frozen site within the world's Haversine threshold",
+    "external_open_support": "1 for every frozen site",
+    "structural_ladder_fingerprint": "4c8e4ce50dd05788bc2311318a6473d736351f11217545ccd8e3b870b29dd2de"
+  },
+  "structural_adequacy": {
+    "min_largest_weak_component_fraction": 0.9,
+    "max_isolated_node_fraction": 0.05,
+    "require_at_least_one_geometry_world_pass": true,
+    "most_spanning_geometry_threshold_km": 17.008648432743254,
+    "most_spanning_achieved_lcc": 1.0,
+    "most_spanning_isolated_node_fraction": 0.0,
+    "most_spanning_world_passed": true,
+    "gate1_fingerprint": "4f3dd443ba06bbd0d2bd8a47ead538700522df4df58eb58d2afd8577e3428586"
+  },
+  "layer_a_rules": {
+    "prediction_update_order": "for scored occasion t compute support and Layer B from worlds surviving through t-1 and source sets using only earlier labels; only after predictions/features for t exist may t labels update world survival and lag state for t+1",
+    "positive_falsification": "a surviving local world is eliminated if any eligible positive site at occasion t is unsupported by that local world's pre-outcome support",
+    "negative_falsification": "none; observed non-detection never eliminates a world",
+    "unavailable_falsification": "none; unavailable site-occasion cells are ignored for world contraction",
+    "external_open_world": "never eliminated by positive observations because it prospectively supports every frozen site",
+    "contraction": "monotone; eliminated local worlds never return",
+    "all_local_worlds_eliminated": "continue with the external-open world and record local-mechanism falsification; do not redesign worlds",
+    "exact_world_identity_retained_only_in_layer_a": true
+  },
+  "layer_b_representation": {
+    "representation_name": "symmetric_world_support_summary_v1",
+    "feature_names": ["surviving_world_fraction", "support_mean", "support_std", "support_min", "support_max", "support_q25", "support_q50", "support_q75", "positive_support_fraction", "support_range"],
+    "support_value": "binary world support 0/1 for each frozen site across the currently surviving seven-world universe or its contracted subset",
+    "computed_before_current_occasion_outcome_update": true,
+    "exact_world_ids_exposed_as_supervised_features": false
+  },
+  "comparators": {
+    "baseline": "frozen RandomForestClassifier on conventional_feature_names only",
+    "augmented": "same RandomForestClassifier on identical conventional_feature_names followed by unchanged ten-feature Layer B",
+    "only_allowed_arm_difference": "Layer-B feature block",
+    "conventional_feature_names": [
+      "occasion_index", "occasion_index_squared", "day_of_year_sin", "day_of_year_cos",
+      "longitude_centered_km", "latitude_centered_km", "precipitation", "min_air_temp",
+      "marsh_Brackish", "marsh_Fresh", "marsh_Intermediate", "marsh_Salt",
+      "habitat_Brackish_Salt_Marsh", "habitat_Fresh_Intermediate_Marsh",
+      "degree_geo1", "degree_geo2", "degree_geo3",
+      "previous_occasion_detected", "occasions_since_last_detection", "cumulative_prior_detected_occasions",
+      "previous_occasion_detected_site_count",
+      "previous_source_count_geo1", "previous_source_count_geo2", "previous_source_count_geo3",
+      "previous_source_exposure_geo1", "previous_source_exposure_geo2", "previous_source_exposure_geo3",
+      "cumulative_prior_global_detected_site_occasions",
+      "historical_source_count_geo1", "historical_source_count_geo2", "historical_source_count_geo3",
+      "historical_source_exposure_geo1", "historical_source_exposure_geo2", "historical_source_exposure_geo3"
+    ]
+  },
+  "preprocessing_model_fit": {
+    "runtime": {"python": "3.12", "numpy": "2.3.5", "scikit_learn": "1.8.0", "scipy": "1.18.1", "joblib": "1.5.3", "threadpoolctl": "3.6.0"},
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "hyperparameters": {"n_estimators": 1000, "max_features": "sqrt", "min_samples_leaf": 10, "class_weight": null, "random_state": 20260825, "n_jobs": 1},
+    "fit_policy": "fit exactly once per arm after all scored calibration features have been generated sequentially; no tuning; no heldout refit",
+    "occasion_index": "zero-based index in the full chronological 20-occasion sequence",
+    "day_of_year_cycle": "sin/cos of 2*pi*(day_of_year-1)/365.2425",
+    "coordinate_center": "mean latitude and longitude of all 33 frozen sites; longitude converted with cos(mean latitude)*111.32 km/degree and latitude with 110.574 km/degree",
+    "static_categorical_encoding": "six fixed binary indicators exactly matching the four observed Marsh categories and two observed Habitat categories from Gate1; no learned encoder",
+    "degree_geok": "number of other frozen sites within geometry threshold k",
+    "previous_occasion_detected": "previous chronological occasion label for focal site when eligible; if previous cell unavailable, 0",
+    "occasions_since_last_detection": "current occasion index minus most recent prior positive chronological index; if never previously positive, current occasion index+1",
+    "cumulative_prior_detected_occasions": "count of earlier positive labels for focal site",
+    "previous_occasion_detected_site_count": "count of positive frozen sites in immediately previous chronological occasion, ignoring unavailable cells",
+    "previous_source_count_geok": "count of immediately previous positive source sites at distance <= threshold k from focal site, including focal site when previously positive",
+    "previous_source_exposure_geok": "sum exp(-distance/threshold k) over immediately previous positive source sites",
+    "historical_source_count_geok": "count of distinct sites ever positive before current occasion at distance <= threshold k from focal site",
+    "historical_source_exposure_geok": "sum exp(-distance/threshold k) over distinct historically positive source sites",
+    "cumulative_prior_global_detected_site_occasions": "sum of all eligible positive site-occasion labels strictly before current occasion",
+    "feature_missingness": "no response-independent conventional feature may be missing or non-finite; any such condition is terminal before model fit"
+  },
+  "metrics_decision": {
+    "primary_metric": "binary_log_loss",
+    "probability_clip": 0.000001,
+    "lower_is_better": true,
+    "primary_outer_unit_count": 8,
+    "favorable_min_augmented_wins": 5,
+    "adverse_min_baseline_wins": 5,
+    "tie_tolerance": 0.0,
+    "primary_macro": "unweighted mean of the eight heldout sampling-occasion log losses",
+    "pooled_heldout_log_loss": "descriptive only and cannot override the paired primary status",
+    "terminal_statuses": ["favorable_complementary_added_value", "adverse_complementary_added_value", "no_confirmed_complementary_added_value"]
+  },
+  "runtime_runner": {
+    "response_access": "after authorization, exactly one full HTTP GET of KIRA.csv in addition to the already completed bounded header request",
+    "response_identity_check": "verify immutable ScienceBase metadata name/size/md5 before GET, require Content-Length 2619 when advertised, and compute MD5 over the sole full response GET; mismatch stops",
+    "raw_response_persistence": "do not commit or persist KIRA.csv; parse the single in-memory payload once into the frozen 33x20 token matrix",
+    "execution_order": [
+      "verify frozen certificates/full-freeze/code identities and authorization",
+      "reconstruct and fingerprint response-independent Sites/Samples geometry and temporal state",
+      "single full KIRA response GET and MD5 verification",
+      "parse exact 33-site x 20-period response under frozen token grammar",
+      "exact count gate as first outcome-dependent calculation beyond parsing/token exclusion",
+      "initialize source/lag state from period 1 without scoring or world elimination",
+      "generate sequential calibration Layer A/Layer B and conventional features for periods 2-12",
+      "fit same frozen RF once in baseline and augmented arms",
+      "predict eight heldout occasions sequentially without refit, updating lag/world state only after each occasion prediction",
+      "score eight primary outer units",
+      "evaluate frozen paired complementarity declaration",
+      "write exactly one terminal result"
+    ],
+    "rerun_after_any_response_row_open": false
+  },
+  "non_estimable_stop": {
+    "prospective_status_before_rows": "uncertain_pre_response",
+    "reason": "no response-independent published aggregate exactly supplies the frozen King Rail site-occasion calibration/heldout event counts and both-class outer-unit count",
+    "exact_count_gate_required": true,
+    "terminal_zero_fit_conditions": [
+      "response MD5 mismatch",
+      "response site registry/schema/token failure",
+      "exact count gate failure",
+      "calibration response has fewer than two classes",
+      "non-finite conventional or Layer-B feature"
+    ],
+    "no_candidate_specific_rescue": true,
+    "no_species_switch_after_KIRA_access": true
+  }
+}

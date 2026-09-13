@@ -1,0 +1,48 @@
+{
+  "schema": "eog.azores_yellow_eel_once_only_v1_pre_response_failure_certificate.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "authoritative_ci": {
+    "workflow": "Azores yellow eel once-only outcome gate",
+    "run_id": 32800352646,
+    "job_id": 97659833895,
+    "head_sha": "cdf6b93e2f33b3d5c0387bd2079b1f0f8bcef5ff",
+    "run_number": 1,
+    "conclusion": "failure"
+  },
+  "status": "terminal_pre_response_certificate_transcription_failure",
+  "marker_v1_consumed": true,
+  "failure": {
+    "runner_status": "terminal_pre_response_availability_failure",
+    "runner_reason": "receiver-week availability fingerprint changed",
+    "authoritative_stage1_log_availability_fingerprint": "4bb9c7dc564f04287454a31c88cd5022231231f7093ae6973c1e46a0e83e2f2f",
+    "committed_stage1_certificate_before_fix": "4bb9c7dc564f04287454a31c88cd5022231231f7093ae6973c1e46a0e83e2f",
+    "committed_value_length": 62,
+    "required_sha256_length": 64,
+    "diagnosis": "manual Stage1 certificate transcription omitted the final two hex characters; the once-only runner recomputed the same 64-character value recorded by the original Stage1 CI and stopped before response access"
+  },
+  "original_stage1_authoritative_ci": {
+    "run_id": 32796706825,
+    "job_id": 97649400724,
+    "availability_fingerprint": "4bb9c7dc564f04287454a31c88cd5022231231f7093ae6973c1e46a0e83e2f2f"
+  },
+  "response_firewall_at_terminal": {
+    "response_payload_requests": 0,
+    "response_payload_bytes_opened": 0,
+    "response_rows_opened": false,
+    "response_values_opened": false,
+    "raw_data_rows_seen": 0,
+    "model_fits": 0,
+    "primary_outer_units_scored": 0
+  },
+  "terminal_artifact": {
+    "artifact_id": 9546267245,
+    "artifact_name": "azores-yellow-eel-once-only-terminal",
+    "artifact_zip_sha256": "e3b734d9dce1075823057d2540b8ae1fb5b3cc0e387eebbff5a52149512b2b9b"
+  },
+  "repair_boundary": {
+    "response_was_opened": false,
+    "scientific_freeze_changed": false,
+    "allowed_repair": "correct evidence transcription to the already-recorded authoritative Stage1 value, regenerate pre-response authorization, and use a new marker identity",
+    "forbidden": "rerun v1 marker or change endpoint, split, features, learner, worlds, thresholds, count minima, or decision rule"
+  }
+}

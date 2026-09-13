@@ -1,0 +1,88 @@
+{
+  "schema": "eog.louisiana_marsh_bird_fresh_paired_result_certificate.v1",
+  "attempt_id": "southwest_louisiana_king_rail_site_occasion_fresh_paired_v1",
+  "status": "favorable_complementary_added_value",
+  "heterogeneous_replication_index": 1,
+  "authoritative_once_only_ci": {
+    "workflow": "Louisiana King Rail once-only outcome gate",
+    "run_id": 32812052801,
+    "job_id": 97693121784,
+    "run_number": 1,
+    "run_attempt": 1,
+    "head_sha": "92aacb1b35ac68463a2f0afb941996bfe5e2d8c6",
+    "conclusion": "success",
+    "artifact_id": 9550126100,
+    "artifact_zip_sha256": "8f9b1649ac8312a9d096518c2a0e34c2d8d7802e78a0fb437d3371414e619930"
+  },
+  "authorization": {
+    "authorization_fingerprint": "53c7f2bc4bfd6970adba3fe9a03df1feaeae042ac1dd1d6680ab5dec12ee5232",
+    "full_freeze_spec_sha256": "cac01c5755ec4e775c58fad71f657256f11139fe53fef4bde04ad0b6fa51192c",
+    "predictive_complementarity_declaration_fingerprint": "d97a7062f71d1c2f6aab73bbef77d13737cb00a5c93f524d5c07e85657b26d8e",
+    "rerun_permitted": false
+  },
+  "response_access": {
+    "selected_response": "KIRA.csv",
+    "header_bytes_previously_opened": 56,
+    "full_payload_requests": 1,
+    "full_payload_bytes_opened": 2619,
+    "full_response_md5": "3c959681e26599ea2a19030b7507837f",
+    "physical_response_rows_seen": 33,
+    "response_rows_opened": true,
+    "response_values_opened": true,
+    "unselected_species_payload_requests": 0,
+    "unselected_species_payload_bytes_opened": 0,
+    "raw_response_persisted": false
+  },
+  "exact_count_gate": {
+    "executed_before_any_model_fit_or_score": true,
+    "calibration_events": 12,
+    "calibration_non_events": 127,
+    "heldout_events": 22,
+    "heldout_non_events": 137,
+    "primary_outer_units_with_both_classes": 7,
+    "passed": true
+  },
+  "paired_result": {
+    "baseline_macro_log_loss": 0.2463173321806268,
+    "augmented_macro_log_loss": 0.2453455298598494,
+    "augmented_minus_baseline_macro": -0.0009718023207773985,
+    "relative_macro_log_loss_reduction": 0.00394532677671318,
+    "augmented_better_outer_units": 7,
+    "baseline_better_outer_units": 1,
+    "tied_outer_units": 0,
+    "heldout_outer_units_scored": 8,
+    "pooled_baseline_log_loss": 0.2628009498149805,
+    "pooled_augmented_log_loss": 0.2620606266985234,
+    "predictive_complementarity_result_fingerprint": "7c300c468f94763217b53cb1a8ca0422f2494dc287a7f924dba0e4182a11e1a8"
+  },
+  "layer_a_terminal_state": {
+    "final_surviving_world_ids": ["external_open"],
+    "all_six_local_worlds_eliminated": true,
+    "eliminated_local_worlds": [
+      "geo1::cumulative_observed_history",
+      "geo1::immediate_previous_observed",
+      "geo2::cumulative_observed_history",
+      "geo2::immediate_previous_observed",
+      "geo3::cumulative_observed_history",
+      "geo3::immediate_previous_observed"
+    ],
+    "interpretation": "The frozen local spatial/source mechanism family was fully falsified by observed positives. The favorable paired result therefore cannot be interpreted as evidence that any frozen local world was the true King Rail process. It is evidence only that the pre-outcome contraction/support-summary trajectory added predictive information to the same strong conventional learner."
+  },
+  "scientific_boundary": {
+    "supported": [
+      "On this fresh King Rail site-occasion endpoint, unchanged symmetric_world_support_summary_v1 added prospectively confirmed predictive value to the same strong Random Forest baseline.",
+      "The favorable direction independently reproduced the earlier Azores result in a different taxon, monitoring modality, site geometry, temporal design and response process.",
+      "Layer A retained a falsification role even while Layer B supplied small complementary predictive value."
+    ],
+    "not_supported": [
+      "universal predictive superiority",
+      "standalone Layer-B prediction without a strong conventional learner",
+      "truth of any eliminated local world",
+      "causal King Rail movement or occupancy mechanism",
+      "equating acoustic non-detection with biological absence"
+    ],
+    "product_boundary_after_replication_1": "replicated_candidate_general_predictive_complement",
+    "next_required_evidence": "At least one more genuinely heterogeneous fresh replication should be completed before freezing the general product/API boundary. Prefer a terrestrial or island/fragmented system distinct from both Azores telemetry and Louisiana passive-acoustic wetland monitoring."
+  },
+  "terminal_result_fingerprint": "b2447f99e1a88fcc8a9860a481458e3c329596c5a431e66378f867378252c8ed"
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "eog.azores_yellow_eel_synthetic_smoke_certificate.v1",
+  "attempt_id": "azores_yellow_eel_receiver_week_fresh_paired_v1",
+  "authoritative_ci": {
+    "workflow": "Audited comparative runner",
+    "run_id": 32799941228,
+    "job_id": 97658682145,
+    "head_sha": "c63119081cab2b9871f02382e6dc4bab948b285c",
+    "conclusion": "success"
+  },
+  "status": "synthetic_pre_response_runner_pass",
+  "synthetic_only": true,
+  "runtime": {
+    "python": "3.12",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.8.0"
+  },
+  "prepared_rows": 490,
+  "conventional_feature_count": 24,
+  "layer_b_feature_count": 10,
+  "count_gate": {
+    "calibration_events": 39,
+    "calibration_non_events": 221,
+    "heldout_events": 35,
+    "heldout_non_events": 195,
+    "primary_outer_units_with_both_classes": 5,
+    "passed": true
+  },
+  "paired_outer_unit_count": 5,
+  "paired_status": "adverse_complementary_added_value",
+  "paired_result_fingerprint": "f71feab55087b298676d9817d3201e2117756e86286565993ff8ec624b0e02f9",
+  "interpretation": "Synthetic status has no scientific evidential meaning; it verifies only that the frozen count-gate, Layer-A contraction, unchanged Layer-B summary, exact runtime, same-RF paired fitting and five-block evaluator execute end to end.",
+  "response_rows_opened": false,
+  "response_values_opened": false
+}
