@@ -184,16 +184,17 @@ The validation machinery now includes physical-header identity, categorical toke
 
 ## Current milestone
 
-The next valid step is **not another fresh independent system**.
+The EOG-WF scientific line is **closed**. It is not awaiting another fresh system, new model fit, claim expansion, or scientific manuscript development.
 
-The active sequence is:
+Remaining EOG-WF work is limited to author/admin/release completion:
 
-1. synchronize status documentation with the frozen closure;
-2. write the EOG-WF Abstract, Introduction and Discussion within the frozen claim boundary;
-3. perform a one-time Methods in Ecology and Evolution desk-fit audit;
-4. freeze the submission/release package without changing the empirical denominator.
+1. final title page / author metadata;
+2. review-ready archive or DOI/private-review link;
+3. author-approved AI/LLM disclosure.
 
-The structural/island line remains separate and can resume after EOG-WF manuscript closure.
+The active scientific-development line is the separate **structural/island second paper**. Its scientific content is also closed; the active sequence is presentation/release only, governed by `development_mainline.md` and the structural-paper boundary/checklist assets.
+
+The next valid work is therefore to finish the structural/island presentation assets, freeze that release/archive, and complete submission administration without reopening either empirical denominator.
 
 ## Stop rules
 
@@ -207,4 +208,4 @@ The structural/island line remains separate and can resume after EOG-WF manuscri
 8. Do not pool endpoint rows into a common-effect claim.
 9. Do not use post-closure analysis to change the prospectively fixed endpoint decision.
 
-The active EOG v2 state is therefore **closed empirical validation plus manuscript preparation**, with Layer A retained as the scientific structural core and Layer B retained as a context-dependent predictive complement.
+The active EOG v2 state is therefore **closed empirical validation plus author/admin/release completion**, with Layer A retained as the scientific structural core and Layer B retained as a context-dependent predictive complement.
