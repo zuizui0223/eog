@@ -184,16 +184,17 @@ The validation machinery now includes physical-header identity, categorical toke
 
 ## Current milestone
 
-The next valid step is **not another fresh independent system**.
+The EOG-WF scientific line is **closed**. It is not awaiting another fresh system, new model fit, claim expansion, or scientific manuscript development.
 
-The active sequence is:
+Remaining EOG-WF work is limited to author/admin/release completion:
 
-1. synchronize status documentation with the frozen closure;
-2. write the EOG-WF Abstract, Introduction and Discussion within the frozen claim boundary;
-3. perform a one-time Methods in Ecology and Evolution desk-fit audit;
-4. freeze the submission/release package without changing the empirical denominator.
+1. final title page / author metadata;
+2. review-ready archive or DOI/private-review link;
+3. author-approved AI/LLM disclosure.
 
-The structural/island line remains separate and can resume after EOG-WF manuscript closure.
+The active scientific-development line is the separate **structural/island second paper**. Its scientific content is also closed; the active sequence is presentation/release only, governed by `development_mainline.md` and the structural-paper boundary/checklist assets.
+
+The next valid work is therefore to finish the structural/island presentation assets, freeze that release/archive, and complete submission administration without reopening either empirical denominator.
 
 ## Stop rules
 
