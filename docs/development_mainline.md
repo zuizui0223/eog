@@ -2,7 +2,7 @@
 
 ## Status
 
-This file is the **single source of truth for active scientific development**.
+This file is the **single source of truth for the current scientific and release mainline**.
 
 The fresh paired-complementarity validation line is now **closed**.
 
@@ -230,16 +230,16 @@ The EOG-WF scientific manuscript is closed and the deterministic submission-pack
 
 These items may proceed in parallel, but **they do not reopen scientific development, endpoint search, model fitting or claim expansion**.
 
-## Active scientific milestone — structural/island second paper
+## Structural/island submission lane — science and presentation closed
 
-The active scientific-development line is now the separate structural/island manuscript governed by:
+The separate structural/island manuscript is governed by:
 
 - [`../manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json`](../manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json)
 - [`../manuscript/structural_reachability_manuscript.md`](../manuscript/structural_reachability_manuscript.md)
 - [`../manuscript/structural_submission_checklist.md`](../manuscript/structural_submission_checklist.md)
 - [`../manuscript/submission/submission_manifest.json`](../manuscript/submission/submission_manifest.json)
 
-Its scientific content is closed. The central claim is:
+Its scientific content, presentation-v2 figures, deterministic figure rebuilds/fingerprints, and repository-side display-size visual QA are closed. The central claim is:
 
 > **Occurrence-conditioned landscape structure can retain held-out information under a restricted declared reference yet fail to add predictive value beyond a richer reference; structural adequacy must therefore be earned relative to the reference and endpoint being tested.**
 
@@ -249,16 +249,24 @@ The empirical basis is separate from EOG-WF:
 - prospectively frozen A-Islands `C − R3`: adverse predictive increment;
 - Tanzania strong-reference test: adverse primary LOSO increment, spatial-block sensitivity uncertain.
 
-The active sequence is presentation/release only:
+Completed presentation work:
 
-1. revise Figure 1 around `declared reference -> held-out structural probe -> earned / adverse-or-redundant / indeterminate`;
-2. revise the A-Islands figure so the original conditional-concordance result and strong-reference `C − R3` result remain on distinct axes and cannot be read as one effect size;
-3. add the R0/R1/R2/R3/C explanatory tier panel, with `C − R3` marked as the only primary extension contrast;
-4. rebuild and fingerprint the final figure set and run display-size visual QA;
-5. freeze the structural-paper release/archive only after those presentation assets are final;
-6. complete author metadata, AI disclosure and submission-day Ecological Informatics policy verification.
+1. Figure 1 now frames `declared reference -> held-out structural probe -> earned / adverse-or-redundant / indeterminate`;
+2. the A-Islands figure keeps the original conditional-concordance result and strong-reference `C − R3` result on distinct axes;
+3. the R0/R1/R2/R3/C explanatory tier panel is explicit, with `C − R3` as the only primary extension contrast;
+4. final revised figure assets rebuild deterministically and are fingerprinted;
+5. repository-side visual QA has passed at 1200 px, 800 px and 800 px grayscale.
 
-No new biological endpoint is needed or allowed to rescue the observed pattern.
+Remaining work is release/admin/live-policy only:
+
+1. finalize author list, affiliations, corresponding author, contributions, funding, competing interests, ethics/permit relevance, originality confirmation and release creator order;
+2. approve the generative-AI disclosure;
+3. create the tagged software release `v0.1.0` only after those author gates are complete;
+4. reproduce the canonical A-Islands original, A-Islands strong-reference and Tanzania fingerprints from the final release package;
+5. reserve/mint the archive DOI and verify archived CI/repository links;
+6. on submission day, re-check the live Ecological Informatics Guide for Authors and publisher-rendered figure preview.
+
+No new biological endpoint is needed or allowed to rescue the observed pattern. Post-closure exploratory synthetic or prediction-safety work is not a dependency of either current manuscript and must remain separate unless a future development line explicitly reopens it.
 
 ## Hard stop rules
 
@@ -279,6 +287,6 @@ No new biological endpoint is needed or allowed to rescue the observed pattern.
 15. Do not reinterpret Tanzania spatial-block uncertainty as a resolved effect.
 16. Do not merge the structural/island empirical denominator into EOG-WF, or use EOG-WF endpoints as extra replications of the structural paper.
 
-The active scientific mainline is therefore:
+The current mainline is therefore:
 
-> **finish and submit the structural/island second paper as a reference-conditioned structural-adequacy result, while keeping the EOG-WF paper scientifically frozen and limited to its existing author/admin/release lane.**
+> **keep both scientific stories frozen, complete the shared author/admin/release gates, then submit the structural/island paper to Ecological Informatics and the EOG-WF paper to Methods in Ecology and Evolution without reopening endpoint search or method expansion.**
