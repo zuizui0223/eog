@@ -1,135 +1,73 @@
-# Shared author/admin confirmation packet
+# EOG-WF author/admin confirmation packet
 
-This file consolidates the remaining **author-controlled** submission gates for the two scientifically closed EOG manuscripts. It is a completion interface only; it does not authorize any new analysis, endpoint, model change, claim expansion, release, DOI minting, or journal submission.
+This file now applies **only to EOG-WF**. The Structural/reference-adequacy manuscript has moved to the canonical repository `zuizui0223/Structural`; its author metadata, declarations, release and submission administration must be completed there.
 
-Current manuscript lanes:
+EOG-WF remains scientifically closed. This packet does not authorize any new endpoint, model fit, claim expansion, release, DOI minting or journal submission.
 
-- **EOG-WF** — target: *Methods in Ecology and Evolution*; science closed; remaining blockers are final title-page/author metadata, review archive or DOI/private-review link, and author-approved AI/LLM disclosure.
-- **Structural/island paper** — target: *Ecological Informatics*; science, presentation-v2 figures, deterministic rebuild/fingerprints, and repository-side visual QA closed; remaining gates are author approvals, release/archive, and submission-day live-policy/publisher-preview checks.
+## Required author-controlled fields
 
-Do not infer author-controlled fields from Git history, affiliations, repository ownership, or prior drafts. Complete them only from explicit author confirmation.
+Provide the final EOG-WF author order and, for each author:
 
-## A. Shared author identity and order
+- full publication name;
+- ORCID, or `none`;
+- affiliation ID(s);
+- approved CRediT roles;
+- whether the author is corresponding author.
 
-Provide the final author order exactly as it should appear on both manuscripts, or explicitly state where the two manuscripts differ.
-
-For each author:
-
-- Full publication name:
-- ORCID, or `none`:
-- Affiliation ID(s):
-- CRediT roles approved by that author:
-- Corresponding author: `yes` / `no`:
-
-For each affiliation:
-
-- Affiliation ID:
-- Institution:
-- Department/unit, if applicable:
-- City:
-- Country:
-- Postal address if required for the corresponding author:
+For each affiliation provide institution, department/unit if applicable, city, country and any postal address required for the corresponding author.
 
 Corresponding-author contact:
 
-- Name:
-- Email:
-- Postal address if required:
+- name;
+- email;
+- postal address if required.
 
-## B. Funding
+## Funding
 
-List every grant, fellowship, institutional award, or other financial support that contributed to either manuscript. If there was none, explicitly state `No external or dedicated funding to declare` only if all authors agree that this is accurate.
+List every grant, fellowship, institutional award or other financial support that contributed to EOG-WF. If none, use `No external or dedicated funding to declare` only after author confirmation.
 
-For each source:
+## Competing interests
 
-- Funder:
-- Grant/award number, or `none`:
-- Recipient:
-- Applies to: `both` / `EOG-WF only` / `structural-island only`:
-
-## C. Competing interests
-
-Approve one of the following:
+Approve either:
 
 - `The authors declare no competing interests.`
-- Replacement disclosure: [AUTHOR-APPROVED TEXT]
+- or an author-approved replacement disclosure.
 
-All authors must confirm the selected statement.
+## Ethics / permits
 
-## D. Ethics, permits, and directly contributed field data
+Confirm any fieldwork, animal-use, collection-permit or institutional ethics statement required by data directly contributed by the authors. Otherwise state `none required` after author review.
 
-The structural manuscript currently states that it analyses archived occurrence, environmental, landscape, and derived computational data and does not report a new human-participant experiment. Authors must still confirm whether any directly contributed field data require animal-use, collection-permit, institutional ethics, or other permit language.
+## Originality / simultaneous submission
 
-Choose one:
-
-- `No additional ethics or permit statement is required for directly contributed data.`
-- Required statement: [AUTHOR-APPROVED TEXT]
-
-For EOG-WF, provide any separate ethics/permit statement if required by the underlying contributed data; otherwise state `none required` after author review.
-
-## E. Originality and simultaneous submission
-
-Confirm whether all authors approve the following statement for each manuscript at submission time:
+Confirm whether all authors approve:
 
 > This manuscript is original, has not been published previously, and is not under consideration for publication elsewhere.
 
-- EOG-WF: `approved` / replacement text
-- Structural/island: `approved` / replacement text
+## AI / LLM disclosure
 
-## F. Generative-AI / LLM disclosure
+Confirm:
 
-### Structural/island draft to approve or correct
+- application/provider;
+- model/version if known;
+- approximate period of use;
+- assistance categories, including code review/generation, reproducibility checks, literature triage, manuscript organization, language editing or other;
+- any manuscript/code portions requiring specific annotation;
+- responsible author accepting accountability for review of AI-assisted code/text.
 
-Current repository draft:
+Do not reconstruct these values from repository history.
 
-> During the preparation of this work, the authors used ChatGPT (OpenAI) to assist with code review, reproducibility checks, literature triage, manuscript organization, and language editing. After using this service, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
-
-Choose one:
-
-- `approve structural draft as written`
-- `replace with:` [AUTHOR-APPROVED TEXT]
-
-Also confirm that the submitted figures remain deterministic code-generated figures rather than generative-AI artwork.
-
-### EOG-WF disclosure inputs
-
-The EOG-WF readiness gate additionally requires explicit author confirmation of the actual AI/LLM applications and versions used and the extent of assistance. Do not reconstruct this from repository history.
+## EOG-WF title-page fields
 
 Provide:
 
-- Application/provider:
-- Model/version if known:
-- Approximate period of use:
-- Assistance categories: code review / code generation / reproducibility checks / literature triage / manuscript organization / language editing / other:
-- Any manuscript or code portions requiring specific annotation:
-- Responsible author who accepts accountability for review of AI-assisted code/text:
+- running headline, maximum 45 characters;
+- acknowledgements;
+- MEE inclusion statement or instruction to draft it after the live policy check;
+- final author/affiliation/corresponding-author metadata.
 
-If multiple applications/models were used, provide one entry per application/model.
+The final `manuscript/EOG_WF_TITLE_PAGE.md` must not be created until these fields are explicitly confirmed.
 
-## G. Structural/island release metadata
-
-Confirm before the tagged `v0.1.0` release and archive record are created:
-
-- Creator order for software/archive metadata:
-- Software citation metadata approved by all authors: `yes` / `no`:
-- Any authors who should not appear as software/archive creators:
-
-The release and DOI remain on HOLD until the author gates in this packet are complete.
-
-## H. EOG-WF title-page-only items
-
-Provide:
-
-- Running headline, maximum 45 characters:
-- Acknowledgements:
-- MEE inclusion statement required at submission stage, or author instruction to draft it after the live journal-policy check:
-- Any author/affiliation difference from the structural/island paper:
-
-The final `manuscript/EOG_WF_TITLE_PAGE.md` must not be created until all required author-controlled fields are confirmed.
-
-## I. One-response completion block
-
-Authors may return the following block in one response. Preserve `UNKNOWN` where a coauthor still needs to approve something; do not guess.
+## One-response completion block
 
 ```text
 AUTHOR ORDER:
@@ -156,38 +94,26 @@ COMPETING INTERESTS:
 ...
 
 ETHICS / PERMITS:
-EOG-WF: ...
-Structural/island: ...
+...
 
 ORIGINALITY / SIMULTANEOUS SUBMISSION:
-EOG-WF: approved / ...
-Structural/island: approved / ...
+approved / ...
 
 AI / LLM:
-Structural draft: approve as written / replace with ...
-EOG-WF applications/models/versions and extent: ...
+Applications/models/versions and extent: ...
 Responsible author: ...
-Figures are not generative-AI artwork: yes / no
 
-STRUCTURAL RELEASE METADATA:
-Creator order: ...
-Software citation metadata approved: yes / no
-
-EOG-WF TITLE-PAGE ITEMS:
+TITLE-PAGE ITEMS:
 Running headline: ...
 Acknowledgements: ...
 Inclusion statement: ...
-Author/affiliation differences: none / ...
 ```
 
 ## After author confirmation
 
-Repository-side sequence is fixed:
+1. write the final EOG-WF author metadata/title-page/disclosure files;
+2. run EOG-WF readiness and package checks;
+3. fix the review archive or DOI/private-review link;
+4. build the final EOG-WF submission package.
 
-1. write the final author metadata/title-page/declaration files without changing scientific content;
-2. run package/readiness checks;
-3. create the tagged `v0.1.0` release after author gates clear;
-4. reproduce the canonical release fingerprints from the final package;
-5. create/fix the review archive or DOI and replace release placeholders;
-6. perform submission-day live journal-policy and publisher-preview checks;
-7. build the final submission packages.
+Structural release/submission work is outside this repository's active mainline.
