@@ -192,9 +192,9 @@ Remaining EOG-WF work is limited to author/admin/release completion:
 2. review-ready archive or DOI/private-review link;
 3. author-approved AI/LLM disclosure.
 
-The active scientific-development line is the separate **structural/island second paper**. Its scientific content is also closed; the active sequence is presentation/release only, governed by `development_mainline.md` and the structural-paper boundary/checklist assets.
+The Structural/reference-adequacy paper has moved to the standalone canonical repository `zuizui0223/Structural`. Structural manuscript, release and author/admin work must not continue from this EOG repository; retained Structural files here are migration provenance only.
 
-The next valid work is therefore to finish the structural/island presentation assets, freeze that release/archive, and complete submission administration without reopening either empirical denominator.
+The next valid work in this repository is therefore limited to EOG-WF author/admin/release completion without reopening its empirical denominator.
 
 ## Stop rules
 
