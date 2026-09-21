@@ -230,43 +230,21 @@ The EOG-WF scientific manuscript is closed and the deterministic submission-pack
 
 These items may proceed in parallel, but **they do not reopen scientific development, endpoint search, model fitting or claim expansion**.
 
-## Structural/island submission lane — science and presentation closed
+## Structural paper moved to standalone repository
 
-The separate structural/island manuscript is governed by:
+The Structural/reference-adequacy paper now has a separate canonical repository:
 
-- [`../manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json`](../manuscript/STRUCTURAL_ISLAND_PAPER_BOUNDARY_V1.json)
-- [`../manuscript/structural_reachability_manuscript.md`](../manuscript/structural_reachability_manuscript.md)
-- [`../manuscript/structural_submission_checklist.md`](../manuscript/structural_submission_checklist.md)
-- [`../manuscript/submission/submission_manifest.json`](../manuscript/submission/submission_manifest.json)
+- `https://github.com/zuizui0223/Structural`
 
-Its scientific content, presentation-v2 figures, deterministic figure rebuilds/fingerprints, and repository-side display-size visual QA are closed. The central claim is:
+Its A-Islands and Tanzania empirical denominator, manuscript, figures, submission assets, release administration and Structural↔EGWE methodological framing are maintained there.
 
-> **Occurrence-conditioned landscape structure can retain held-out information under a restricted declared reference yet fail to add predictive value beyond a richer reference; structural adequacy must therefore be earned relative to the reference and endpoint being tested.**
+The Structural files retained in this EOG repository are **historical migration provenance only**, pinned by the standalone migration record to EOG commit `d7d18be0d34ba28065a947df59338e4d660a4b4c`. Do not continue Structural analysis, figure development, release preparation, author administration or journal submission from this repository.
 
-The empirical basis is separate from EOG-WF:
+The scientific separation remains strict:
 
-- original A-Islands conditional ordering: positive under climatic support + nearest-source conditioning;
-- prospectively frozen A-Islands `C − R3`: adverse predictive increment;
-- Tanzania strong-reference test: adverse primary LOSO increment, spatial-block sensitivity uncertain.
-
-Completed presentation work:
-
-1. Figure 1 now frames `declared reference -> held-out structural probe -> earned / adverse-or-redundant / indeterminate`;
-2. the A-Islands figure keeps the original conditional-concordance result and strong-reference `C − R3` result on distinct axes;
-3. the R0/R1/R2/R3/C explanatory tier panel is explicit, with `C − R3` as the only primary extension contrast;
-4. final revised figure assets rebuild deterministically and are fingerprinted;
-5. repository-side visual QA has passed at 1200 px, 800 px and 800 px grayscale.
-
-Remaining work is release/admin/live-policy only:
-
-1. finalize author list, affiliations, corresponding author, contributions, funding, competing interests, ethics/permit relevance, originality confirmation and release creator order;
-2. approve the generative-AI disclosure;
-3. create the tagged software release `v0.1.0` only after those author gates are complete;
-4. reproduce the canonical A-Islands original, A-Islands strong-reference and Tanzania fingerprints from the final release package;
-5. reserve/mint the archive DOI and verify archived CI/repository links;
-6. on submission day, re-check the live Ecological Informatics Guide for Authors and publisher-rendered figure preview.
-
-No new biological endpoint is needed or allowed to rescue the observed pattern. Post-closure exploratory synthetic or prediction-safety work is not a dependency of either current manuscript and must remain separate unless a future development line explicitly reopens it.
+- EOG-WF uses its frozen three-endpoint denominator: Azores / Louisiana / Tampa;
+- Structural uses A-Islands original + A-Islands strong-reference + Tanzania;
+- neither programme supplies extra replications for the other.
 
 ## Hard stop rules
 
@@ -280,13 +258,7 @@ No new biological endpoint is needed or allowed to rescue the observed pattern. 
 8. Do not pool EOG-WF endpoint rows to manufacture a common-effect predictive claim.
 9. New response-independent synthetic exposition may clarify an already-frozen method property but cannot reopen or alter an empirical endpoint decision.
 10. Do not repair or rerun the consumed NCRN attempt; any future Layer-B real translation requires a new protocol version.
-11. **Do not rerun the authoritative A-Islands strong-reference outcome.**
-12. Do not weaken R3, retune graph radii or change taxa after the A-Islands outcome.
-13. Do not add a favorable structural/island dataset to rescue the adverse strong-reference results.
-14. Do not pool the original A-Islands conditional-concordance estimand with the strong-reference log-loss increment as a common effect size.
-15. Do not reinterpret Tanzania spatial-block uncertainty as a resolved effect.
-16. Do not merge the structural/island empirical denominator into EOG-WF, or use EOG-WF endpoints as extra replications of the structural paper.
 
-The current mainline is therefore:
+The current EOG mainline is therefore:
 
-> **keep both scientific stories frozen, complete the shared author/admin/release gates, then submit the structural/island paper to Ecological Informatics and the EOG-WF paper to Methods in Ecology and Evolution without reopening endpoint search or method expansion.**
+> **keep EOG-WF scientifically frozen, complete only its author/admin/release gates, and submit it to Methods in Ecology and Evolution without reopening endpoint search or method expansion. Structural work belongs exclusively in the standalone Structural repository.**
