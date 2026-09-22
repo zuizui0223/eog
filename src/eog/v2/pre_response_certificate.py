@@ -235,6 +235,7 @@ class PreResponseCertificate:
     effort_context_fingerprint: str | None
     observation_contract_fingerprint: str | None
     predictive_state_fingerprint: str | None
+    predictive_evaluation_fingerprint: str | None
     structural_status: str
     effort_status: str
     observation_status: str
@@ -257,6 +258,7 @@ def freeze_pre_response_certificate(
     effort_ledger: EffortContextLedger | None = None,
     observation_contract: BinaryObservationContract | None = None,
     predictive_state: PredictiveStateEligibility | None = None,
+    predictive_evaluation_fingerprint: str | None = None,
 ) -> PreResponseCertificate:
     """Join source, normalized-problem and gate identities without biological outcomes."""
 
@@ -354,6 +356,17 @@ def freeze_pre_response_certificate(
         predictive_fingerprint = predictive_state.fingerprint
         predictive_allowed = predictive_state.predictive_use_allowed
 
+    if predictive_evaluation_fingerprint is None:
+        evaluation_fingerprint = None
+    else:
+        evaluation_fingerprint = str(predictive_evaluation_fingerprint).strip().lower()
+        if len(evaluation_fingerprint) != 64 or any(
+            char not in "0123456789abcdef" for char in evaluation_fingerprint
+        ):
+            raise ValueError(
+                "predictive_evaluation_fingerprint must be a 64-character hexadecimal digest"
+            )
+
     payload = {
         "schema": "eog.pre_response_certificate.v1",
         "node_ids": list(normalized_problem.node_ids),
@@ -366,6 +379,7 @@ def freeze_pre_response_certificate(
         "effort_context_fingerprint": effort_fingerprint,
         "observation_contract_fingerprint": observation_fingerprint,
         "predictive_state_fingerprint": predictive_fingerprint,
+        "predictive_evaluation_fingerprint": evaluation_fingerprint,
         "structural_status": structural_status,
         "effort_status": effort_status,
         "observation_status": observation_status,
@@ -376,6 +390,7 @@ def freeze_pre_response_certificate(
             and effort_ledger is not None
             and observation_contract is not None
             and predictive_allowed is True
+            and evaluation_fingerprint is not None
         ),
         "predictive_use_allowed": predictive_allowed,
     }
@@ -389,6 +404,7 @@ def freeze_pre_response_certificate(
         effort_context_fingerprint=effort_fingerprint,
         observation_contract_fingerprint=observation_fingerprint,
         predictive_state_fingerprint=predictive_fingerprint,
+        predictive_evaluation_fingerprint=evaluation_fingerprint,
         structural_status=structural_status,
         effort_status=effort_status,
         observation_status=observation_status,
