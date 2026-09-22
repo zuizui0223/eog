@@ -12,8 +12,6 @@ import csv
 import hashlib
 import io
 import json
-from typing import Sequence
-
 from eog.v2.schema_adapter import FrozenSchemaResolution, SchemaAliasContract
 
 
