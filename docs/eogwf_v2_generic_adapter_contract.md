@@ -314,16 +314,51 @@ Predictive outcome access requires four independently frozen layers:
 The command writes the complete joined certificate, layer fingerprints, denominator
 counts and a final result fingerprint.
 
+## Cross-system real portability boundary
+
+The manifest surface is now exercised on two heterogeneous real systems without opening
+their biological outcomes.
+
+### Southwest Louisiana passive acoustics
+
+`benchmarks/louisiana_manifest_v2_portability_replay.py` reconstructs the frozen
+33-site x 20-occasion pre-response state. The manifest path reproduces the bespoke v2
+translation fingerprints for the shared coordinate, effort/context, world-family,
+observation and predictive-state layers. Its sequential source-set design remains a
+`predictive_complement_candidate`.
+
+### Tampa Bay seagrass transects
+
+`benchmarks/tampa_manifest_v2_portability_replay.py` reconstructs the authoritative
+Gate0 state from the response-unopened artifact: 71 nodes, 1497 candidate visits and 29
+contexts. All four frozen local geometry worlds are structurally connected, so Layer A
+remains structurally admissible. The same manifest path nevertheless reproduces the
+existing response-free `ineligible_generation_shift` predictive-state fingerprint for
+the historical static Tampa Layer-B design.
+
+`benchmarks/eogwf_v2_manifest_cross_system_replay.py` fixes the portability result:
+
+> the same pre-response contract supports system-specific prediction decisions.
+
+Generality therefore does not mean that Layer B is forced into every supervised model.
+It means heterogeneous monitoring systems enter the same auditable contract and can
+legitimately leave it at different product boundaries.
+
 ## Next development step
 
-The next task is no longer to build adapter machinery. It is to validate portability of
-this manifest surface against existing response-free evidence.
+The adapter/manifest portability problem is now sufficiently resolved for a new
+scientific test. The next development line should freeze a **new, independently selected
+real system** before its focal outcomes are accessed, compile it through the manifest
+surface, and obey the gate it receives:
 
-First reproduce the Louisiana real pre-response translation and the Tampa prospective
-prediction gate through manifests rather than bespoke Python benchmark runners. If both
-replays agree fingerprint-for-fingerprint on the contract layers they share, the generic
-adapter boundary is ready for a new separately preregistered real-system translation
-test.
+- if prediction-ineligible, stop Layer-B predictive scoring and retain structural use;
+- if prediction-eligible, run one separately preregistered paired complementarity test;
+- accept favorable, null or adverse outer results without retuning the gate.
 
-That future real test must be a new protocol/version. It cannot reopen, repair or count
-as rescue of any closed EOG-WF endpoint.
+The purpose of that future test is no longer to show that the software can ingest another
+dataset. It is to test whether the response-independent eligibility boundary has real
+selective value: retaining useful Layer-B opportunities while preventing Tampa-like
+harm.
+
+That future test must use a new protocol/version and cannot reopen, repair or count as
+rescue of any closed EOG-WF endpoint.
