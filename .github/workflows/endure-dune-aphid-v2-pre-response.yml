@@ -1,0 +1,133 @@
+name: Endure fresh EOG-WF v2 pre-response gates
+
+on:
+  push:
+    branches:
+      - agent/endure-dune-aphid-v2-prospective
+    paths:
+      - validation/endure_dune_aphid_selective_promotion/gate0_execute_once.json
+
+permissions:
+  contents: read
+
+jobs:
+  live-pre-response-once:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: python -m pip install -e . --no-deps
+
+      - name: Verify one-time authorization bindings
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+
+          root = Path("validation/endure_dune_aphid_selective_promotion")
+          marker = json.loads((root / "gate0_execute_once.json").read_text())
+          assert marker == {
+              "attempt_id": "endure_dune_aphid_selective_promotion_v1",
+              "execute_once": True,
+              "authorization": "gate0_execution_authorization.json",
+          }
+
+          auth = json.loads((root / marker["authorization"]).read_text())
+          bindings = {
+              "source_selection_contract_git_blob_sha1": root / "source_selection_contract.json",
+              "gate0_metadata_git_blob_sha1": root / "gate0_metadata.py",
+              "gate1_zip_inventory_git_blob_sha1": root / "gate1_zip_inventory.py",
+          }
+          for field, path in bindings.items():
+              actual = subprocess.check_output(
+                  ["git", "hash-object", str(path)], text=True
+              ).strip()
+              assert actual == auth[field], (field, actual, auth[field])
+          PY
+
+      - name: Execute metadata Gate0 exactly once
+        run: python -m validation.endure_dune_aphid_selective_promotion.gate0_metadata
+
+      - name: Inspect Gate0 and conditionally execute ZIP inventory Gate1
+        run: |
+          python - <<'PY'
+          import json, subprocess, sys
+          from pathlib import Path
+
+          root = Path("validation/endure_dune_aphid_selective_promotion")
+          gate0 = json.loads((root / "gate0_metadata_certificate.json").read_text())
+
+          assert gate0["archive_requests"] == 0
+          assert gate0["archive_bytes_opened"] == 0
+          assert gate0["event_member_bytes_opened"] == 0
+          assert gate0["occurrence_member_bytes_opened"] == 0
+          assert gate0["occurrence_rows_opened"] == 0
+          assert gate0["biological_response_values_opened"] is False
+          assert gate0["model_fits"] == gate0["heldout_scores"] == 0
+          assert gate0["counts_as_predictive_evidence"] is False
+
+          if gate0["status"] == "gate0_metadata_ready_for_zip_inventory":
+              subprocess.check_call(
+                  [
+                      sys.executable,
+                      "-m",
+                      "validation.endure_dune_aphid_selective_promotion.gate1_zip_inventory",
+                  ]
+              )
+          else:
+              print(json.dumps({"terminal_gate0": gate0["status"]}, sort_keys=True))
+          PY
+
+      - name: Verify no biological response payload was opened
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("validation/endure_dune_aphid_selective_promotion")
+          gate0 = json.loads((root / "gate0_metadata_certificate.json").read_text())
+
+          gate1_path = root / "gate1_zip_inventory_certificate.json"
+          if gate1_path.exists():
+              gate1 = json.loads(gate1_path.read_text())
+              assert gate1["local_header_bytes_opened"] == 0
+              assert gate1["member_payload_bytes_opened"] == 0
+              assert gate1["event_member_bytes_opened"] == 0
+              assert gate1["occurrence_member_bytes_opened"] == 0
+              assert gate1["occurrence_rows_opened"] == 0
+              assert gate1["biological_response_values_opened"] is False
+              assert gate1["model_fits"] == gate1["heldout_scores"] == 0
+              assert gate1["counts_as_predictive_evidence"] is False
+
+          print(
+              json.dumps(
+                  {
+                      "gate0_status": gate0["status"],
+                      "gate0_fingerprint": gate0["fingerprint"],
+                      "gate1_status": (
+                          None
+                          if not gate1_path.exists()
+                          else json.loads(gate1_path.read_text())["status"]
+                      ),
+                  },
+                  sort_keys=True,
+              )
+          )
+          PY
+
+      - name: Upload pre-response certificates
+        uses: actions/upload-artifact@v4
+        with:
+          name: endure-dune-aphid-v2-pre-response
+          path: |
+            validation/endure_dune_aphid_selective_promotion/gate0_metadata_certificate.json
+            validation/endure_dune_aphid_selective_promotion/gate1_zip_inventory_certificate.json
+          if-no-files-found: warn
