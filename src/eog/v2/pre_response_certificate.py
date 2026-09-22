@@ -143,14 +143,22 @@ def freeze_adapter_source_provenance(
 def fingerprint_world_family(
     node_ids: Sequence[str],
     world_adjacencies: Mapping[str, np.ndarray],
+    *,
+    world_semantics: Mapping[str, object] | None = None,
 ) -> str:
-    """Fingerprint the exact declared world matrices in one frozen node order."""
+    """Fingerprint exact world geometry plus optional rule/update semantics."""
 
     ids = tuple(_text(value, "node_id") for value in node_ids)
     if not ids or len(ids) != len(set(ids)):
         raise ValueError("node_ids must be non-empty and unique")
     if not world_adjacencies:
         raise ValueError("world_adjacencies must not be empty")
+
+    if world_semantics is not None:
+        if set(world_semantics) != set(world_adjacencies):
+            raise ValueError(
+                "world_semantics keys must exactly equal world_adjacencies keys"
+            )
 
     worlds: list[dict[str, object]] = []
     for world_id in sorted(world_adjacencies):
@@ -168,12 +176,15 @@ def fingerprint_world_family(
             {
                 "world_id": name,
                 "adjacency": matrix.tolist(),
+                "semantics": (
+                    None if world_semantics is None else world_semantics[world_id]
+                ),
             }
         )
 
     return _sha256(
         {
-            "schema": "eog.world_family_identity.v1",
+            "schema": "eog.world_family_identity.v2",
             "node_ids": list(ids),
             "worlds": worlds,
         }
@@ -189,6 +200,7 @@ class PreResponseCertificate:
     normalized_problem_fingerprint: str
     world_family_fingerprint: str
     structural_gate_fingerprint: str
+    structural_world_ids: tuple[str, ...]
     effort_context_fingerprint: str | None
     observation_contract_fingerprint: str | None
     predictive_state_fingerprint: str | None
@@ -209,6 +221,8 @@ def freeze_pre_response_certificate(
     coordinate_registry: CoordinateRegistryAudit,
     structural_gate: WorldUniverseStructuralGate,
     world_adjacencies: Mapping[str, np.ndarray],
+    world_semantics: Mapping[str, object] | None = None,
+    structural_world_ids: Sequence[str] | None = None,
     effort_ledger: EffortContextLedger | None = None,
     observation_contract: BinaryObservationContract | None = None,
     predictive_state: PredictiveStateEligibility | None = None,
@@ -241,14 +255,29 @@ def freeze_pre_response_certificate(
     world_family_fingerprint = fingerprint_world_family(
         normalized_problem.node_ids,
         world_adjacencies,
+        world_semantics=world_semantics,
     )
     if world_family_fingerprint != normalized_problem.world_family_fingerprint:
         raise ValueError(
             "declared world family differs from normalized problem world_family_fingerprint"
         )
+    if structural_world_ids is None:
+        structural_ids = tuple(sorted(world_adjacencies))
+    else:
+        structural_ids = tuple(_text(value, "structural_world_id") for value in structural_world_ids)
+        if not structural_ids or len(structural_ids) != len(set(structural_ids)):
+            raise ValueError("structural_world_ids must be non-empty and unique")
+        missing_structural = sorted(set(structural_ids) - set(world_adjacencies))
+        if missing_structural:
+            raise ValueError(
+                f"structural_world_ids reference undeclared worlds: {missing_structural!r}"
+            )
+    structural_adjacencies = {
+        world_id: world_adjacencies[world_id] for world_id in structural_ids
+    }
     reconstructed_audit = audit_world_universe_structure(
         normalized_problem.node_ids,
-        world_adjacencies,
+        structural_adjacencies,
         horizon=structural_gate.audit.horizon,
     )
     if reconstructed_audit.fingerprint != structural_gate.audit.fingerprint:
@@ -302,6 +331,7 @@ def freeze_pre_response_certificate(
         "world_family_fingerprint": world_family_fingerprint,
         "coordinate_registry_fingerprint": coordinate_registry.fingerprint,
         "structural_gate_fingerprint": reconstructed_gate.fingerprint,
+        "structural_world_ids": list(structural_ids),
         "effort_context_fingerprint": effort_fingerprint,
         "observation_contract_fingerprint": observation_fingerprint,
         "predictive_state_fingerprint": predictive_fingerprint,
@@ -324,6 +354,7 @@ def freeze_pre_response_certificate(
         normalized_problem_fingerprint=normalized_problem.fingerprint,
         world_family_fingerprint=world_family_fingerprint,
         structural_gate_fingerprint=reconstructed_gate.fingerprint,
+        structural_world_ids=structural_ids,
         effort_context_fingerprint=effort_fingerprint,
         observation_contract_fingerprint=observation_fingerprint,
         predictive_state_fingerprint=predictive_fingerprint,
