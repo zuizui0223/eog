@@ -14,6 +14,10 @@ def test_integrated_generality_known_truth_path():
     assert result["predictive_state"]["tampa_like_status"] == "ineligible_generation_shift"
     assert result["pre_response_certificate"]["safe_status"] == "structural_ready"
     assert (
+        result["pre_response_certificate"]["safe_effort_status"]
+        == "response_independent_effort_declared"
+    )
+    assert (
         result["pre_response_certificate"]["safe_observation_status"]
         == "complete_source_zero"
     )
