@@ -16,6 +16,7 @@ from typing import Mapping, Sequence
 import numpy as np
 
 from eog.v2.coordinate_registry import CoordinateRegistryAudit
+from eog.v2.observation_process import BinaryObservationContract
 from eog.v2.predictive_state_gate import PredictiveStateEligibility
 from eog.v2.problem_contract import NormalizedPreResponseProblem
 from eog.v2.schema_adapter import FrozenSchemaResolution
@@ -187,8 +188,10 @@ class PreResponseCertificate:
     normalized_problem_fingerprint: str
     world_family_fingerprint: str
     structural_gate_fingerprint: str
+    observation_contract_fingerprint: str | None
     predictive_state_fingerprint: str | None
     structural_status: str
+    observation_status: str
     predictive_status: str
     structural_response_access_allowed: bool
     predictive_outcome_access_allowed: bool
@@ -203,6 +206,7 @@ def freeze_pre_response_certificate(
     coordinate_registry: CoordinateRegistryAudit,
     structural_gate: WorldUniverseStructuralGate,
     world_adjacencies: Mapping[str, np.ndarray],
+    observation_contract: BinaryObservationContract | None = None,
     predictive_state: PredictiveStateEligibility | None = None,
 ) -> PreResponseCertificate:
     """Join source, normalized-problem and gate identities without biological outcomes."""
@@ -259,6 +263,13 @@ def freeze_pre_response_certificate(
     structural_status = (
         "structural_ready" if reconstructed_gate.passed else "stop_structural_adequacy"
     )
+    if observation_contract is None:
+        observation_status = "not_declared"
+        observation_fingerprint = None
+    else:
+        observation_status = observation_contract.mode
+        observation_fingerprint = observation_contract.fingerprint
+
     if predictive_state is None:
         predictive_status = "not_declared"
         predictive_fingerprint = None
@@ -276,12 +287,16 @@ def freeze_pre_response_certificate(
         "world_family_fingerprint": world_family_fingerprint,
         "coordinate_registry_fingerprint": coordinate_registry.fingerprint,
         "structural_gate_fingerprint": reconstructed_gate.fingerprint,
+        "observation_contract_fingerprint": observation_fingerprint,
         "predictive_state_fingerprint": predictive_fingerprint,
         "structural_status": structural_status,
+        "observation_status": observation_status,
         "predictive_status": predictive_status,
         "structural_response_access_allowed": bool(reconstructed_gate.passed),
         "predictive_outcome_access_allowed": bool(
-            reconstructed_gate.passed and predictive_allowed is True
+            reconstructed_gate.passed
+            and observation_contract is not None
+            and predictive_allowed is True
         ),
         "predictive_use_allowed": predictive_allowed,
     }
@@ -291,12 +306,16 @@ def freeze_pre_response_certificate(
         normalized_problem_fingerprint=normalized_problem.fingerprint,
         world_family_fingerprint=world_family_fingerprint,
         structural_gate_fingerprint=reconstructed_gate.fingerprint,
+        observation_contract_fingerprint=observation_fingerprint,
         predictive_state_fingerprint=predictive_fingerprint,
         structural_status=structural_status,
+        observation_status=observation_status,
         predictive_status=predictive_status,
         structural_response_access_allowed=bool(reconstructed_gate.passed),
         predictive_outcome_access_allowed=bool(
-            reconstructed_gate.passed and predictive_allowed is True
+            reconstructed_gate.passed
+            and observation_contract is not None
+            and predictive_allowed is True
         ),
         predictive_use_allowed=predictive_allowed,
         fingerprint=_sha256(payload),
