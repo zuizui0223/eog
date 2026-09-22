@@ -31,6 +31,7 @@ from eog.v2.problem_contract import (
     freeze_pre_response_problem,
 )
 from eog.v2.schema_adapter import SchemaAliasContract, SchemaRole
+from eog.v2.tabular_adapter import parse_response_blind_csv
 from eog.v2.world_adequacy import (
     StructuralAdequacyDeclaration,
     apply_structural_adequacy_gate,
@@ -57,15 +58,17 @@ def run_benchmark() -> dict[str, object]:
         ),
         allow_unmapped_columns=True,
     )
-    resolution = schema.resolve(("site_id", "x_wgs84", "y_wgs84", "safe_note"))
-    raw_rows = (
-        {"site_id": "A", "x_wgs84": 0.000, "y_wgs84": 0.0, "safe_note": "r1"},
-        {"site_id": "A", "x_wgs84": 0.004, "y_wgs84": 0.0, "safe_note": "r2"},
-        {"site_id": "B", "x_wgs84": 1.000, "y_wgs84": 0.0, "safe_note": "r3"},
-        {"site_id": "C", "x_wgs84": 2.000, "y_wgs84": 0.0, "safe_note": "r4"},
-        {"site_id": "D", "x_wgs84": 5.000, "y_wgs84": 0.0, "safe_note": "r5"},
+    source_bytes = (
+        b"site_id,x_wgs84,y_wgs84,safe_note\n"
+        b"A,0.000,0.0,r1\n"
+        b"A,0.004,0.0,r2\n"
+        b"B,1.000,0.0,r3\n"
+        b"C,2.000,0.0,r4\n"
+        b"D,5.000,0.0,r5\n"
     )
-    canonical = resolution.canonicalize_records(raw_rows)
+    table = parse_response_blind_csv(source_bytes, schema_contract=schema)
+    resolution = table.schema_resolution
+    canonical = table.records()
 
     coordinate_audit = audit_coordinate_registry(
         tuple(
@@ -132,7 +135,6 @@ def run_benchmark() -> dict[str, object]:
     )
 
     world_family_fingerprint = fingerprint_world_family(node_ids, worlds)
-    source_bytes = json.dumps(raw_rows, sort_keys=True).encode("utf-8")
     source_provenance = freeze_adapter_source_provenance(
         artifacts=(SourceArtifactIdentity.from_bytes("safe_source", source_bytes),),
         schema_resolution=resolution,
@@ -203,6 +205,8 @@ def run_benchmark() -> dict[str, object]:
             "contract_fingerprint": schema.fingerprint,
             "resolution_fingerprint": resolution.fingerprint,
             "physical_header_fingerprint": resolution.physical_header_fingerprint,
+            "tabular_source_fingerprint": table.fingerprint,
+            "canonical_rows_fingerprint": table.canonical_rows_fingerprint,
             "mapping": resolution.mapping,
         },
         "coordinate_registry": {
