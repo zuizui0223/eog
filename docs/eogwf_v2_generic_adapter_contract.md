@@ -129,9 +129,42 @@ Thus v2 genericity is deliberately layered:
 1. source portability through schema aliases;
 2. registry portability through frozen coordinate tolerance;
 3. structural eligibility through response-blind scale and adequacy checks;
-4. prediction safety through response-independent Layer-B eligibility.
+4. executable negative/zero semantics through a frozen observation contract;
+5. prediction safety through response-independent Layer-B eligibility.
 
 None of these layers implies predictive superiority.
+
+## Observation-process boundary
+
+Module:
+
+src/eog/v2/observation_process.py
+
+The response-facing contract has two explicit modes after effort-eligible candidate units
+have already been frozen.
+
+### explicit_binary_tokens
+
+Every eligible unit must be explicitly mapped to positive, negative or unavailable.
+Missing response rows never become zero. The frozen Louisiana King Rail acoustic matrix
+fits this mode because its response contract defines exact 1, 0 and unavailable tokens.
+
+### complete_source_zero
+
+Eligible units not mapped to a focal positive may become recorded non-detections only
+after the caller explicitly certifies that the complete response source was parsed.
+Azores yellow-eel receiver-weeks and Tampa seagrass transect visits fit this mode under
+their frozen contracts.
+
+The response-free replay:
+
+benchmarks/observation_process_contract_replay.py
+
+reads only the three frozen contract documents and maps telemetry, passive acoustics and
+transect monitoring onto these two modes. No response rows are opened.
+
+This layer does not infer biological absence. It only makes the sampling-process meaning
+of zero executable and auditable.
 
 ## Joined pre-response certificate
 
@@ -147,13 +180,15 @@ The certificate binds:
 - NormalizedPreResponseProblem identity;
 - exact declared world-family fingerprint;
 - re-applied structural adequacy gate;
+- machine-readable binary observation contract when predictive scoring is intended;
 - optional prediction-facing eligibility result.
 
 Structural response access and predictive outcome access are separate decisions. A
 Tampa-like Layer-B design can therefore remain available for Layer-A structural work
 while being blocked from predictive scoring. Conversely, structural inadequacy blocks
 response access even when the prediction-facing representation would otherwise be
-eligible.
+eligible. Even a structurally adequate, prediction-eligible design cannot open a
+predictive outcome unless its machine-readable observation contract is already frozen.
 
 ## Integrated known-truth path
 
@@ -225,15 +260,22 @@ Those remain scientific or protocol boundaries.
 
 ## Next development step
 
-The adapter/provenance/certificate path now exists. The next development increment should
-therefore target a second major source of bespoke validation code: observation-process
-normalization.
+Schema, tabular parsing, coordinate registry, observation semantics, structural
+adequacy and prediction eligibility now have reusable contracts.
 
-Specifically, define a small generic effort/context contract that can represent repeated
-camera, acoustic, telemetry and transect occasions without teaching the EOG core any
-dataset-specific response syntax. It must keep surveyed-negative semantics explicit and
-must never infer absence from a missing row.
+The remaining genericity gap is **candidate-unit construction itself**: camera deployment
+intervals, acoustic occasions, telemetry receiver activity and transect completeness are
+still normalized by dataset-specific code before reaching NormalizedPreResponseProblem.
 
-Only after that contract is exercised by response-free replays from at least two distinct
-monitoring modalities should v2 attempt a new independently preregistered real-system
-translation test.
+The next increment should therefore define a minimal effort/context ledger whose only
+job is to certify which node-context units were genuinely surveyed. It must allow
+modality-specific effort calculations upstream but expose one common output:
+
+node_id + context_id + eligibility + provenance
+
+It must not infer effort from focal detections and must keep unsurveyed units outside the
+binary endpoint.
+
+After that ledger is exercised response-blind on at least two different modalities, v2
+will have a credible generic adapter path suitable for a new separately preregistered
+real-system validation.
