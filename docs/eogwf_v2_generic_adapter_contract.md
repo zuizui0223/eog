@@ -177,6 +177,7 @@ The certificate binds:
 - exact response-independent source artifact identities;
 - schema-resolution fingerprint;
 - coordinate-registry fingerprint;
+- response-independent effort/context ledger fingerprint when predictive scoring is intended;
 - NormalizedPreResponseProblem identity;
 - exact declared world-family fingerprint;
 - re-applied structural adequacy gate;
@@ -203,8 +204,10 @@ strict CSV bytes
     -> predeclared schema aliases
     -> canonical records
     -> bounded coordinate drift
+    -> response-independent effort/context ledger
     -> content-addressed source provenance
     -> normalized problem
+    -> machine-readable observation contract
     -> structural scale ladder
     -> structural adequacy
     -> prediction-facing eligibility
@@ -258,24 +261,42 @@ It does not:
 
 Those remain scientific or protocol boundaries.
 
+## Effort/context boundary
+
+Module:
+
+src/eog/v2/effort_context.py
+
+Raw effort calculations remain modality-specific, but their output now enters one common
+ledger:
+
+node_id + context_id + fold + eligibility + evidence provenance
+
+The ledger rejects focal-response-derived evidence sources, preserves unsurveyed units
+outside CandidateUnit, and fingerprints the full surveyed/unsurveyed denominator.
+
+benchmarks/effort_context_known_truth.py demonstrates the same interface for telemetry
+active-effort and transect-completeness examples without biological outcomes.
+
+The joined pre-response certificate now verifies that its CandidateUnit set is exactly
+the one emitted by the frozen effort ledger. Predictive outcome access therefore requires
+all of:
+
+1. structurally adequate declared worlds;
+2. response-independent effort/candidate ledger;
+3. frozen machine-readable observation semantics;
+4. prediction-facing Layer-B eligibility.
+
 ## Next development step
 
-Schema, tabular parsing, coordinate registry, observation semantics, structural
-adequacy and prediction eligibility now have reusable contracts.
+The generic pre-response contract is now complete enough to expose as a user-facing
+adapter surface. The next increment should be a small manifest/CLI that reads a declared
+safe-source configuration and emits the same content-addressed pre-response certificate
+without requiring a bespoke endpoint runner.
 
-The remaining genericity gap is **candidate-unit construction itself**: camera deployment
-intervals, acoustic occasions, telemetry receiver activity and transect completeness are
-still normalized by dataset-specific code before reaching NormalizedPreResponseProblem.
+That interface should remain declarative: it may choose existing schema, coordinate,
+effort, observation and structural policies, but it must not invent aliases, tolerances,
+surveyed negatives or Layer-B promotion rules.
 
-The next increment should therefore define a minimal effort/context ledger whose only
-job is to certify which node-context units were genuinely surveyed. It must allow
-modality-specific effort calculations upstream but expose one common output:
-
-node_id + context_id + eligibility + provenance
-
-It must not infer effort from focal detections and must keep unsurveyed units outside the
-binary endpoint.
-
-After that ledger is exercised response-blind on at least two different modalities, v2
-will have a credible generic adapter path suitable for a new separately preregistered
-real-system validation.
+Only after that CLI/manifest reproduces the integrated known-truth path should v2 open a
+new separately preregistered real-system translation test.
