@@ -175,6 +175,38 @@ def _load_table(
     return value, path, raw, table
 
 
+def _coerce_evidence_value(value: object, kind: str, label: str) -> object:
+    text = str(value)
+    if kind == "string":
+        return text
+    if kind == "int":
+        try:
+            result = int(text)
+        except ValueError as exc:
+            raise ValueError(f"{label} is not an integer") from exc
+        if str(result) != text and text != f"+{result}":
+            raise ValueError(f"{label} is not a canonical integer")
+        return result
+    if kind == "float":
+        try:
+            result = float(text)
+        except ValueError as exc:
+            raise ValueError(f"{label} is not numeric") from exc
+        if not np.isfinite(result):
+            raise ValueError(f"{label} is not finite")
+        return result
+    if kind == "bool":
+        if text == "true":
+            return True
+        if text == "false":
+            return False
+        raise ValueError(f"{label} must be exact token 'true' or 'false'")
+    raise ValueError(
+        f"{label} has unsupported evidence type {kind!r}; "
+        "use string, int, float, or bool"
+    )
+
+
 def _parse_bool_token(
     token: object,
     *,
@@ -290,6 +322,18 @@ def _effort_ledger(
         raise ValueError(
             f"effort evidence_fields are not canonical roles: {sorted(unknown_evidence)!r}"
         )
+    evidence_types_raw = effort_config.get("evidence_types", {})
+    evidence_types_map = _mapping(evidence_types_raw, "effort_table.evidence_types")
+    unknown_type_fields = set(evidence_types_map) - set(evidence_fields)
+    if unknown_type_fields:
+        raise ValueError(
+            "effort evidence_types reference fields outside evidence_fields: "
+            f"{sorted(unknown_type_fields)!r}"
+        )
+    evidence_types = {
+        field: str(evidence_types_map.get(field, "string"))
+        for field in evidence_fields
+    }
 
     records = table.records()
     context_values = {_text(row["context_id"], "effort context_id") for row in records}
@@ -307,7 +351,14 @@ def _effort_ledger(
 
     rows: list[EffortContextRow] = []
     for index, record in enumerate(records, start=1):
-        evidence_payload = {field: record.get(field) for field in evidence_fields}
+        evidence_payload = {
+            field: _coerce_evidence_value(
+                record.get(field),
+                evidence_types[field],
+                f"effort row {index} evidence field {field}",
+            )
+            for field in evidence_fields
+        }
         eligible = _parse_bool_token(
             record["eligible"],
             true_tokens=true_tokens,
@@ -333,7 +384,6 @@ def _effort_ledger(
                 evidence_summary=json.dumps(
                     evidence_payload,
                     sort_keys=True,
-                    separators=(",", ":"),
                     ensure_ascii=True,
                 ),
                 evidence_fingerprint=evidence_fingerprint(evidence_payload),
