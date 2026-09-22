@@ -1,3 +1,4 @@
+import hashlib
 import json
 import sys
 
@@ -263,3 +264,83 @@ def test_manifest_rejects_string_boolean_instead_of_json_boolean(tmp_path):
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
     with pytest.raises(TypeError, match="must be a JSON boolean"):
         compile_pre_response_manifest_file(manifest_path)
+
+
+
+def _freeze_expected_identities(manifest_path):
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["artifact_identity_policy"] = {"require_expected_identity": True}
+    for section in ("registry_table", "effort_table", "world_family"):
+        path = manifest_path.parent / manifest[section]["path"]
+        raw = path.read_bytes()
+        manifest[section]["expected_identity"] = {
+            "sha256": hashlib.sha256(raw).hexdigest(),
+            "bytes": len(raw),
+        }
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    return manifest
+
+
+def test_strict_artifact_identity_accepts_exact_frozen_bytes(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    _freeze_expected_identities(manifest_path)
+    result = compile_pre_response_manifest_file(manifest_path)
+    assert result["artifact_identity_policy"]["require_expected_identity"] is True
+    assert all(
+        item["declared"] is True and item["matched"] is True
+        for item in result["artifact_identities"].values()
+    )
+
+
+def test_strict_artifact_identity_requires_all_three_safe_inputs(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    manifest = _freeze_expected_identities(manifest_path)
+    del manifest["effort_table"]["expected_identity"]
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(
+        ValueError,
+        match="effort_table.expected_identity is required",
+    ):
+        compile_pre_response_manifest_file(manifest_path)
+
+
+def test_artifact_identity_stops_same_size_content_drift(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    _freeze_expected_identities(manifest_path)
+    registry = tmp_path / "registry.csv"
+    raw = registry.read_bytes()
+    changed = raw.replace(b"A,0,0,c", b"Z,0,0,c", 1)
+    assert len(changed) == len(raw)
+    registry.write_bytes(changed)
+    with pytest.raises(ValueError, match="registry_table SHA-256 drift"):
+        compile_pre_response_manifest_file(manifest_path)
+
+
+def test_artifact_identity_stops_byte_size_drift(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    _freeze_expected_identities(manifest_path)
+    effort = tmp_path / "effort.csv"
+    effort.write_bytes(effort.read_bytes() + b"\n")
+    with pytest.raises(ValueError, match="effort_table byte-size drift"):
+        compile_pre_response_manifest_file(manifest_path)
+
+
+def test_same_bytes_from_different_local_path_keep_certificate_identity(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    _freeze_expected_identities(manifest_path)
+    left = compile_pre_response_manifest_file(manifest_path)
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    source = tmp_path / "registry.csv"
+    copied = tmp_path / "cached_registry.csv"
+    copied.write_bytes(source.read_bytes())
+    manifest["registry_table"]["path"] = copied.name
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    right = compile_pre_response_manifest_file(manifest_path)
+
+    assert left["manifest_fingerprint"] != right["manifest_fingerprint"]
+    assert (
+        left["fingerprints"]["source_provenance"]
+        == right["fingerprints"]["source_provenance"]
+    )
+    assert left["fingerprints"]["certificate"] == right["fingerprints"]["certificate"]
