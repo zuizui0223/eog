@@ -97,15 +97,25 @@ class AdapterSourceProvenance:
     """Frozen source-side provenance consumed by NormalizedPreResponseProblem."""
 
     artifacts: tuple[SourceArtifactIdentity, ...]
-    schema_resolution_fingerprint: str
+    schema_resolution_fingerprints: tuple[tuple[str, str], ...]
     coordinate_registry_fingerprint: str
     fingerprint: str
+
+    @property
+    def schema_resolution_fingerprint(self) -> str:
+        """Backward-compatible accessor for single-schema adapters."""
+        if len(self.schema_resolution_fingerprints) != 1:
+            raise ValueError(
+                "multiple schema resolutions are frozen; use schema_resolution_fingerprints"
+            )
+        return self.schema_resolution_fingerprints[0][1]
 
 
 def freeze_adapter_source_provenance(
     *,
     artifacts: Sequence[SourceArtifactIdentity],
-    schema_resolution: FrozenSchemaResolution,
+    schema_resolution: FrozenSchemaResolution | None = None,
+    schema_resolutions: Mapping[str, FrozenSchemaResolution] | None = None,
     coordinate_registry: CoordinateRegistryAudit,
 ) -> AdapterSourceProvenance:
     values = tuple(artifacts)
@@ -118,6 +128,27 @@ def freeze_adapter_source_provenance(
         raise ValueError("source artifact IDs must be unique")
 
     ordered = tuple(sorted(values, key=lambda artifact: artifact.artifact_id))
+
+    resolved_schemas: dict[str, FrozenSchemaResolution] = {}
+    if schema_resolution is not None:
+        resolved_schemas["primary"] = schema_resolution
+    if schema_resolutions is not None:
+        for schema_id, resolution in schema_resolutions.items():
+            key = _text(schema_id, "schema_id")
+            if key in resolved_schemas:
+                raise ValueError(f"duplicate schema resolution id: {key!r}")
+            if not isinstance(resolution, FrozenSchemaResolution):
+                raise TypeError(
+                    "schema_resolutions values must be FrozenSchemaResolution"
+                )
+            resolved_schemas[key] = resolution
+    if not resolved_schemas:
+        raise ValueError("at least one frozen schema resolution is required")
+    schema_fingerprints = tuple(
+        (schema_id, resolved_schemas[schema_id].fingerprint)
+        for schema_id in sorted(resolved_schemas)
+    )
+
     payload = {
         "schema": "eog.adapter_source_provenance.v1",
         "artifacts": [
@@ -129,12 +160,12 @@ def freeze_adapter_source_provenance(
             }
             for artifact in ordered
         ],
-        "schema_resolution_fingerprint": schema_resolution.fingerprint,
+        "schema_resolution_fingerprints": [list(value) for value in schema_fingerprints],
         "coordinate_registry_fingerprint": coordinate_registry.fingerprint,
     }
     return AdapterSourceProvenance(
         artifacts=ordered,
-        schema_resolution_fingerprint=schema_resolution.fingerprint,
+        schema_resolution_fingerprints=schema_fingerprints,
         coordinate_registry_fingerprint=coordinate_registry.fingerprint,
         fingerprint=_sha256(payload),
     )
