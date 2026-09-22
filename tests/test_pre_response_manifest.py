@@ -344,3 +344,96 @@ def test_same_bytes_from_different_local_path_keep_certificate_identity(tmp_path
         == right["fingerprints"]["source_provenance"]
     )
     assert left["fingerprints"]["certificate"] == right["fingerprints"]["certificate"]
+
+
+
+def _convert_fixture_to_generated_worlds(manifest_path, *, strict_identity=False):
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["world_family"] = {
+        "artifact_id": "generated_worlds",
+        "horizon": 2,
+        "generator": {
+            "type": "coordinate_threshold_worlds_v1",
+            "metric": "euclidean",
+            "construction_mode": "declared_thresholds",
+            "thresholds": [
+                {"world_id": "near", "threshold": 1.1},
+                {"world_id": "far", "threshold": 2.1},
+            ],
+            "threshold_semantics_key": "distance_threshold",
+            "local_semantics": {"operator": "symmetric_unit_support"},
+            "include_external_open": True,
+            "external_open_world_id": "external_open",
+            "external_open_semantics": {"supports_every_node": True},
+        },
+    }
+    if strict_identity:
+        manifest["artifact_identity_policy"] = {"require_expected_identity": True}
+        for section in ("registry_table", "effort_table"):
+            path = manifest_path.parent / manifest[section]["path"]
+            raw = path.read_bytes()
+            manifest[section]["expected_identity"] = {
+                "sha256": hashlib.sha256(raw).hexdigest(),
+                "bytes": len(raw),
+            }
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    return manifest
+
+
+def test_manifest_can_generate_worlds_from_frozen_coordinates(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    _convert_fixture_to_generated_worlds(manifest_path)
+    result = compile_pre_response_manifest_file(manifest_path)
+
+    assert result["inputs"]["world_family_path"] is None
+    build = result["inputs"]["world_family_build"]
+    assert build["mode"] == "generated"
+    assert len(build["generator_fingerprint"]) == 64
+    assert len(build["distance_matrix_fingerprint"]) == 64
+    assert build["geometry_thresholds"] == [1.1, 2.1]
+    assert result["counts"]["declared_world_count"] == 3
+    assert result["counts"]["structural_world_count"] == 2
+    assert result["statuses"]["structural"] == "structural_ready"
+
+
+def test_strict_identity_requires_external_inputs_but_generated_world_is_derived(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    _convert_fixture_to_generated_worlds(manifest_path, strict_identity=True)
+    result = compile_pre_response_manifest_file(manifest_path)
+
+    assert result["artifact_identity_policy"]["require_expected_identity"] is True
+    assert result["artifact_identities"]["registry"]["matched"] is True
+    assert result["artifact_identities"]["effort"]["matched"] is True
+    world_identity = result["artifact_identities"]["world_family"]
+    assert world_identity["derived"] is True
+    assert world_identity["declared"] is False
+    assert world_identity["matched"] is None
+    assert len(world_identity["generator_fingerprint"]) == 64
+
+
+def test_generated_world_family_is_deterministic(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    _convert_fixture_to_generated_worlds(manifest_path)
+    left = compile_pre_response_manifest_file(manifest_path)
+    right = compile_pre_response_manifest_file(manifest_path)
+
+    assert left["fingerprints"]["world_family"] == right["fingerprints"]["world_family"]
+    assert (
+        left["inputs"]["world_family_build"]["generator_fingerprint"]
+        == right["inputs"]["world_family_build"]["generator_fingerprint"]
+    )
+    assert left["fingerprints"]["certificate"] == right["fingerprints"]["certificate"]
+
+
+def test_world_family_must_choose_exactly_one_file_or_generator(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["world_family"]["generator"] = {
+        "type": "coordinate_threshold_worlds_v1",
+        "metric": "euclidean",
+        "construction_mode": "declared_thresholds",
+        "thresholds": [{"world_id": "w", "threshold": 1.0}],
+    }
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(ValueError, match="exactly one of path or generator"):
+        compile_pre_response_manifest_file(manifest_path)
