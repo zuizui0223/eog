@@ -16,6 +16,7 @@ from typing import Mapping, Sequence
 import numpy as np
 
 from eog.v2.coordinate_registry import CoordinateRegistryAudit
+from eog.v2.effort_context import EffortContextLedger
 from eog.v2.observation_process import BinaryObservationContract
 from eog.v2.predictive_state_gate import PredictiveStateEligibility
 from eog.v2.problem_contract import NormalizedPreResponseProblem
@@ -188,9 +189,11 @@ class PreResponseCertificate:
     normalized_problem_fingerprint: str
     world_family_fingerprint: str
     structural_gate_fingerprint: str
+    effort_context_fingerprint: str | None
     observation_contract_fingerprint: str | None
     predictive_state_fingerprint: str | None
     structural_status: str
+    effort_status: str
     observation_status: str
     predictive_status: str
     structural_response_access_allowed: bool
@@ -206,6 +209,7 @@ def freeze_pre_response_certificate(
     coordinate_registry: CoordinateRegistryAudit,
     structural_gate: WorldUniverseStructuralGate,
     world_adjacencies: Mapping[str, np.ndarray],
+    effort_ledger: EffortContextLedger | None = None,
     observation_contract: BinaryObservationContract | None = None,
     predictive_state: PredictiveStateEligibility | None = None,
 ) -> PreResponseCertificate:
@@ -263,6 +267,17 @@ def freeze_pre_response_certificate(
     structural_status = (
         "structural_ready" if reconstructed_gate.passed else "stop_structural_adequacy"
     )
+    if effort_ledger is None:
+        effort_status = "not_declared"
+        effort_fingerprint = None
+    else:
+        if effort_ledger.candidate_units != normalized_problem.candidate_units:
+            raise ValueError(
+                "effort ledger candidate units differ from normalized problem"
+            )
+        effort_status = "response_independent_effort_declared"
+        effort_fingerprint = effort_ledger.fingerprint
+
     if observation_contract is None:
         observation_status = "not_declared"
         observation_fingerprint = None
@@ -287,14 +302,17 @@ def freeze_pre_response_certificate(
         "world_family_fingerprint": world_family_fingerprint,
         "coordinate_registry_fingerprint": coordinate_registry.fingerprint,
         "structural_gate_fingerprint": reconstructed_gate.fingerprint,
+        "effort_context_fingerprint": effort_fingerprint,
         "observation_contract_fingerprint": observation_fingerprint,
         "predictive_state_fingerprint": predictive_fingerprint,
         "structural_status": structural_status,
+        "effort_status": effort_status,
         "observation_status": observation_status,
         "predictive_status": predictive_status,
         "structural_response_access_allowed": bool(reconstructed_gate.passed),
         "predictive_outcome_access_allowed": bool(
             reconstructed_gate.passed
+            and effort_ledger is not None
             and observation_contract is not None
             and predictive_allowed is True
         ),
@@ -306,14 +324,17 @@ def freeze_pre_response_certificate(
         normalized_problem_fingerprint=normalized_problem.fingerprint,
         world_family_fingerprint=world_family_fingerprint,
         structural_gate_fingerprint=reconstructed_gate.fingerprint,
+        effort_context_fingerprint=effort_fingerprint,
         observation_contract_fingerprint=observation_fingerprint,
         predictive_state_fingerprint=predictive_fingerprint,
         structural_status=structural_status,
+        effort_status=effort_status,
         observation_status=observation_status,
         predictive_status=predictive_status,
         structural_response_access_allowed=bool(reconstructed_gate.passed),
         predictive_outcome_access_allowed=bool(
             reconstructed_gate.passed
+            and effort_ledger is not None
             and observation_contract is not None
             and predictive_allowed is True
         ),
