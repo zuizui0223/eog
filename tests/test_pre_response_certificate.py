@@ -488,3 +488,48 @@ def test_structural_adequacy_can_exclude_external_open_world_from_gate():
     assert certificate.structural_status == "stop_structural_adequacy"
     assert certificate.structural_world_ids == ("local",)
     assert certificate.structural_response_access_allowed is False
+
+
+
+def test_source_provenance_supports_multiple_safe_schemas_order_invariant():
+    site_resolution = SchemaAliasContract(
+        roles=(SchemaRole("node_id", ("Site",)),)
+    ).resolve(("Site",))
+    sample_resolution = SchemaAliasContract(
+        roles=(SchemaRole("context_id", ("Sample Period",)),)
+    ).resolve(("Sample Period",))
+    coordinate = audit_coordinate_registry(
+        (CoordinateObservation("A", 0.0, 0.0),),
+        CoordinateRegistryPolicy(
+            tolerance=0.0,
+            units="native",
+            representative_policy="median",
+        ),
+    )
+    artifacts = (
+        SourceArtifactIdentity.from_bytes("sites", b"sites"),
+        SourceArtifactIdentity.from_bytes("samples", b"samples"),
+    )
+    left = freeze_adapter_source_provenance(
+        artifacts=artifacts,
+        schema_resolutions={
+            "sites": site_resolution,
+            "samples": sample_resolution,
+        },
+        coordinate_registry=coordinate,
+    )
+    right = freeze_adapter_source_provenance(
+        artifacts=artifacts[::-1],
+        schema_resolutions={
+            "samples": sample_resolution,
+            "sites": site_resolution,
+        },
+        coordinate_registry=coordinate,
+    )
+    assert left.fingerprint == right.fingerprint
+    assert left.schema_resolution_fingerprints == (
+        ("samples", sample_resolution.fingerprint),
+        ("sites", site_resolution.fingerprint),
+    )
+    with pytest.raises(ValueError, match="multiple schema resolutions"):
+        _ = left.schema_resolution_fingerprint
