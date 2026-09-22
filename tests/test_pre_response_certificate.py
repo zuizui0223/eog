@@ -8,6 +8,12 @@ from eog.v2.coordinate_registry import (
     CoordinateRegistryPolicy,
     audit_coordinate_registry,
 )
+from eog.v2.effort_context import (
+    EffortContextRow,
+    EffortEligibilityPolicy,
+    evidence_fingerprint,
+    freeze_effort_context_ledger,
+)
 from eog.v2.observation_process import BinaryObservationContract
 from eog.v2.pre_response_certificate import (
     SourceArtifactIdentity,
@@ -30,6 +36,33 @@ from eog.v2.world_adequacy import (
     apply_structural_adequacy_gate,
     audit_world_universe_structure,
 )
+
+
+def _effort_for(problem):
+    return freeze_effort_context_ledger(
+        node_ids=problem.node_ids,
+        context_ids=problem.context_ids,
+        rows=tuple(
+            EffortContextRow(
+                unit_id=unit.unit_id,
+                node_id=unit.node_id,
+                context_id=unit.context_id,
+                fold=unit.fold,
+                eligible=True,
+                evidence_summary="frozen test effort",
+                evidence_fingerprint=evidence_fingerprint(
+                    {"unit_id": unit.unit_id, "eligible": True}
+                ),
+            )
+            for unit in problem.candidate_units
+        ),
+        policy=EffortEligibilityPolicy(
+            unit_definition="node x context",
+            eligibility_rule="frozen test effort marks unit surveyed",
+            unsurveyed_rule="unsurveyed units are outside endpoint",
+            evidence_source="response_independent_effort",
+        ),
+    )
 
 
 def _observation():
@@ -187,6 +220,7 @@ def test_safe_predictive_design_is_certified_separately_from_structural_readines
         coordinate_registry=coordinate,
         structural_gate=gate,
         world_adjacencies=worlds,
+        effort_ledger=_effort_for(problem),
         observation_contract=_observation(),
         predictive_state=safe,
     )
@@ -205,6 +239,7 @@ def test_tampa_like_predictive_state_does_not_block_layer_a_response_access():
         coordinate_registry=coordinate,
         structural_gate=gate,
         world_adjacencies=worlds,
+        effort_ledger=_effort_for(problem),
         observation_contract=_observation(),
         predictive_state=unsafe,
     )
@@ -222,6 +257,7 @@ def test_structural_failure_blocks_response_access_even_with_safe_predictive_des
         coordinate_registry=coordinate,
         structural_gate=gate,
         world_adjacencies=worlds,
+        effort_ledger=_effort_for(problem),
         observation_contract=_observation(),
         predictive_state=safe,
     )
@@ -307,6 +343,7 @@ def test_declared_world_family_must_match_normalized_problem():
             coordinate_registry=coordinate,
             structural_gate=gate,
             world_adjacencies=altered,
+            effort_ledger=_effort_for(problem),
             observation_contract=_observation(),
             predictive_state=safe,
         )
@@ -343,9 +380,29 @@ def test_predictive_outcome_access_requires_machine_readable_observation_contrac
         coordinate_registry=coordinate,
         structural_gate=gate,
         world_adjacencies=worlds,
+        effort_ledger=_effort_for(problem),
         predictive_state=safe,
     )
     assert certificate.structural_response_access_allowed is True
+    assert certificate.effort_status == "response_independent_effort_declared"
     assert certificate.observation_status == "not_declared"
+    assert certificate.predictive_use_allowed is True
+    assert certificate.predictive_outcome_access_allowed is False
+
+
+def test_predictive_outcome_access_requires_response_independent_effort_ledger():
+    source, coordinate, problem, gate, safe, _, worlds = _fixture()
+    certificate = freeze_pre_response_certificate(
+        source_provenance=source,
+        normalized_problem=problem,
+        coordinate_registry=coordinate,
+        structural_gate=gate,
+        world_adjacencies=worlds,
+        observation_contract=_observation(),
+        predictive_state=safe,
+    )
+    assert certificate.structural_response_access_allowed is True
+    assert certificate.effort_status == "not_declared"
+    assert certificate.observation_status == "complete_source_zero"
     assert certificate.predictive_use_allowed is True
     assert certificate.predictive_outcome_access_allowed is False
