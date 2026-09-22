@@ -25,6 +25,7 @@ import hashlib
 import json
 from typing import Literal, Sequence
 
+from eog.v2.effort_context import EffortContextLedger
 from eog.v2.problem_contract import NormalizedPreResponseProblem
 
 
@@ -113,10 +114,16 @@ class BinaryObservationEndpoint:
 
     rows: tuple[BinaryObservationRow, ...]
     unavailable_unit_ids: tuple[str, ...]
+    initialization_rows: tuple[BinaryObservationRow, ...]
+    initialization_unavailable_unit_ids: tuple[str, ...]
     positive_count: int
     negative_count: int
     unavailable_count: int
     candidate_unit_count: int
+    initialization_positive_count: int
+    initialization_negative_count: int
+    initialization_unavailable_count: int
+    initialization_unit_count: int
     contract_fingerprint: str
     normalized_problem_fingerprint: str
     response_source_complete: bool
@@ -130,6 +137,14 @@ class BinaryObservationEndpoint:
     def scored_unit_ids(self) -> tuple[str, ...]:
         return tuple(row.unit_id for row in self.rows)
 
+    @property
+    def initialization_labels(self) -> tuple[int, ...]:
+        return tuple(row.label for row in self.initialization_rows)
+
+    @property
+    def initialization_unit_ids(self) -> tuple[str, ...]:
+        return tuple(row.unit_id for row in self.initialization_rows)
+
 
 def materialize_binary_observation(
     problem: NormalizedPreResponseProblem,
@@ -138,6 +153,10 @@ def materialize_binary_observation(
     positive_unit_ids: Sequence[str],
     explicit_negative_unit_ids: Sequence[str] = (),
     unavailable_unit_ids: Sequence[str] = (),
+    effort_ledger: EffortContextLedger | None = None,
+    initialization_positive_unit_ids: Sequence[str] = (),
+    initialization_explicit_negative_unit_ids: Sequence[str] = (),
+    initialization_unavailable_unit_ids: Sequence[str] = (),
     response_source_complete: bool = False,
 ) -> BinaryObservationEndpoint:
     """Map response-derived unit IDs onto the already-frozen candidate universe.
@@ -151,9 +170,42 @@ def materialize_binary_observation(
 
     candidate_order = tuple(unit.unit_id for unit in problem.candidate_units)
     candidate_set = set(candidate_order)
+
+    if effort_ledger is None:
+        initialization_order: tuple[str, ...] = ()
+        initialization_metadata: dict[str, object] = {}
+        if (
+            initialization_positive_unit_ids
+            or initialization_explicit_negative_unit_ids
+            or initialization_unavailable_unit_ids
+        ):
+            raise ValueError(
+                "initialization response IDs require a frozen effort_ledger"
+            )
+    else:
+        if effort_ledger.candidate_units != problem.candidate_units:
+            raise ValueError(
+                "effort ledger candidate units differ from normalized problem"
+            )
+        initialization_order = effort_ledger.initialization_unit_ids
+        row_by_id = {row.unit_id: row for row in effort_ledger.rows}
+        initialization_metadata = {
+            unit_id: row_by_id[unit_id] for unit_id in initialization_order
+        }
     positive = _unique_ids(positive_unit_ids, "positive_unit_ids")
     negative = _unique_ids(explicit_negative_unit_ids, "explicit_negative_unit_ids")
     unavailable = _unique_ids(unavailable_unit_ids, "unavailable_unit_ids")
+    initialization_positive = _unique_ids(
+        initialization_positive_unit_ids, "initialization_positive_unit_ids"
+    )
+    initialization_negative = _unique_ids(
+        initialization_explicit_negative_unit_ids,
+        "initialization_explicit_negative_unit_ids",
+    )
+    initialization_unavailable = _unique_ids(
+        initialization_unavailable_unit_ids,
+        "initialization_unavailable_unit_ids",
+    )
 
     for label, values in (
         ("positive", positive),
@@ -164,15 +216,42 @@ def materialize_binary_observation(
         if unknown:
             raise ValueError(f"{label} response IDs are outside the frozen candidate universe: {unknown!r}")
 
+    initialization_set = set(initialization_order)
+    for label, values in (
+        ("initialization positive", initialization_positive),
+        ("initialization negative", initialization_negative),
+        ("initialization unavailable", initialization_unavailable),
+    ):
+        unknown = sorted(set(values) - initialization_set)
+        if unknown:
+            raise ValueError(
+                f"{label} response IDs are outside the frozen initialization universe: {unknown!r}"
+            )
+
     positive_set = set(positive)
     negative_set = set(negative)
     unavailable_set = set(unavailable)
+    initialization_positive_set = set(initialization_positive)
+    initialization_negative_set = set(initialization_negative)
+    initialization_unavailable_set = set(initialization_unavailable)
     if positive_set & negative_set:
         raise ValueError("positive and explicit-negative unit sets overlap")
     if positive_set & unavailable_set:
         raise ValueError("positive and unavailable unit sets overlap")
     if negative_set & unavailable_set:
         raise ValueError("explicit-negative and unavailable unit sets overlap")
+    if initialization_positive_set & initialization_negative_set:
+        raise ValueError(
+            "initialization positive and explicit-negative unit sets overlap"
+        )
+    if initialization_positive_set & initialization_unavailable_set:
+        raise ValueError(
+            "initialization positive and unavailable unit sets overlap"
+        )
+    if initialization_negative_set & initialization_unavailable_set:
+        raise ValueError(
+            "initialization explicit-negative and unavailable unit sets overlap"
+        )
 
     if contract.mode == "explicit_binary_tokens":
         if response_source_complete:
@@ -186,17 +265,36 @@ def materialize_binary_observation(
                 "explicit_binary_tokens requires every frozen candidate unit to be "
                 f"positive, negative or unavailable; missing {missing!r}"
             )
+        initialization_classified = (
+            initialization_positive_set
+            | initialization_negative_set
+            | initialization_unavailable_set
+        )
+        initialization_missing = sorted(
+            initialization_set - initialization_classified
+        )
+        if initialization_missing:
+            raise ValueError(
+                "explicit_binary_tokens requires every frozen initialization unit "
+                "to be positive, negative or unavailable; missing "
+                f"{initialization_missing!r}"
+            )
     else:
-        if negative:
+        if negative or initialization_negative:
             raise ValueError(
                 "complete_source_zero derives negatives from the eligible universe; "
-                "explicit_negative_unit_ids must be empty"
+                "explicit negative unit IDs must be empty"
             )
         if not response_source_complete:
             raise ValueError(
                 "complete_source_zero requires explicit response_source_complete=True"
             )
         negative_set = candidate_set - positive_set - unavailable_set
+        initialization_negative_set = (
+            initialization_set
+            - initialization_positive_set
+            - initialization_unavailable_set
+        )
 
     unit_by_id = {unit.unit_id: unit for unit in problem.candidate_units}
     rows: list[BinaryObservationRow] = []
@@ -226,19 +324,76 @@ def materialize_binary_observation(
             )
         )
 
+    initialization_rows: list[BinaryObservationRow] = []
+    for unit_id in initialization_order:
+        if unit_id in initialization_unavailable_set:
+            continue
+        label = 1 if unit_id in initialization_positive_set else 0
+        if (
+            contract.mode == "explicit_binary_tokens"
+            and unit_id not in initialization_negative_set
+            and label == 0
+        ):
+            raise RuntimeError(
+                "unclassified initialization explicit-token unit escaped validation"
+            )
+        unit = initialization_metadata[unit_id]
+        row_payload = {
+            "unit_id": unit.unit_id,
+            "node_id": unit.node_id,
+            "context_id": unit.context_id,
+            "fold": int(unit.fold),
+            "label": label,
+            "partition": "initialization_only",
+            "contract_fingerprint": contract.fingerprint,
+        }
+        initialization_rows.append(
+            BinaryObservationRow(
+                unit_id=unit.unit_id,
+                node_id=unit.node_id,
+                context_id=unit.context_id,
+                fold=int(unit.fold),
+                label=label,
+                fingerprint=_sha256(row_payload),
+            )
+        )
+
     positive_count = sum(row.label == 1 for row in rows)
     negative_count = sum(row.label == 0 for row in rows)
     unavailable_sorted = tuple(
         unit_id for unit_id in candidate_order if unit_id in unavailable_set
     )
+    initialization_positive_count = sum(
+        row.label == 1 for row in initialization_rows
+    )
+    initialization_negative_count = sum(
+        row.label == 0 for row in initialization_rows
+    )
+    initialization_unavailable_sorted = tuple(
+        unit_id
+        for unit_id in initialization_order
+        if unit_id in initialization_unavailable_set
+    )
     payload = {
         "schema": "eog.binary_observation_endpoint.v1",
         "rows": [(row.unit_id, row.label, row.fingerprint) for row in rows],
         "unavailable_unit_ids": list(unavailable_sorted),
+        "initialization_rows": [
+            (row.unit_id, row.label, row.fingerprint) for row in initialization_rows
+        ],
+        "initialization_unavailable_unit_ids": list(
+            initialization_unavailable_sorted
+        ),
         "positive_count": positive_count,
         "negative_count": negative_count,
         "unavailable_count": len(unavailable_sorted),
         "candidate_unit_count": len(candidate_order),
+        "initialization_positive_count": initialization_positive_count,
+        "initialization_negative_count": initialization_negative_count,
+        "initialization_unavailable_count": len(
+            initialization_unavailable_sorted
+        ),
+        "initialization_unit_count": len(initialization_order),
         "contract_fingerprint": contract.fingerprint,
         "normalized_problem_fingerprint": problem.fingerprint,
         "response_source_complete": bool(response_source_complete),
@@ -246,10 +401,18 @@ def materialize_binary_observation(
     return BinaryObservationEndpoint(
         rows=tuple(rows),
         unavailable_unit_ids=unavailable_sorted,
+        initialization_rows=tuple(initialization_rows),
+        initialization_unavailable_unit_ids=initialization_unavailable_sorted,
         positive_count=positive_count,
         negative_count=negative_count,
         unavailable_count=len(unavailable_sorted),
         candidate_unit_count=len(candidate_order),
+        initialization_positive_count=initialization_positive_count,
+        initialization_negative_count=initialization_negative_count,
+        initialization_unavailable_count=len(
+            initialization_unavailable_sorted
+        ),
+        initialization_unit_count=len(initialization_order),
         contract_fingerprint=contract.fingerprint,
         normalized_problem_fingerprint=problem.fingerprint,
         response_source_complete=bool(response_source_complete),
