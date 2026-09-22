@@ -287,16 +287,43 @@ all of:
 3. frozen machine-readable observation semantics;
 4. prediction-facing Layer-B eligibility.
 
+## Declarative manifest / CLI surface
+
+The user-facing compiler is now:
+
+- `src/eog/v2/pre_response_manifest.py`
+- `eog-v2-pre-response-freeze`
+
+It reads only response-independent registry, effort/context and declared world-family
+files plus an explicit JSON manifest. The compiler reuses the same schema, coordinate,
+effort, observation, structural and predictive-state contracts described above. It does
+not parse focal biological responses or invent any missing policy.
+
+All referenced files must be relative to the manifest directory and remain inside that
+directory tree. Manifest booleans must be JSON booleans rather than truthy strings.
+Unknown effort tokens, undeclared aliases, coordinate drift, world-node mismatch and
+failed adequacy remain terminal.
+
+Predictive outcome access requires four independently frozen layers:
+
+1. structural adequacy;
+2. response-independent effort/candidate identity;
+3. machine-readable observation semantics;
+4. prediction-state eligibility plus a predictive-evaluation contract fingerprint.
+
+The command writes the complete joined certificate, layer fingerprints, denominator
+counts and a final result fingerprint.
+
 ## Next development step
 
-The generic pre-response contract is now complete enough to expose as a user-facing
-adapter surface. The next increment should be a small manifest/CLI that reads a declared
-safe-source configuration and emits the same content-addressed pre-response certificate
-without requiring a bespoke endpoint runner.
+The next task is no longer to build adapter machinery. It is to validate portability of
+this manifest surface against existing response-free evidence.
 
-That interface should remain declarative: it may choose existing schema, coordinate,
-effort, observation and structural policies, but it must not invent aliases, tolerances,
-surveyed negatives or Layer-B promotion rules.
+First reproduce the Louisiana real pre-response translation and the Tampa prospective
+prediction gate through manifests rather than bespoke Python benchmark runners. If both
+replays agree fingerprint-for-fingerprint on the contract layers they share, the generic
+adapter boundary is ready for a new separately preregistered real-system translation
+test.
 
-Only after that CLI/manifest reproduces the integrated known-truth path should v2 open a
-new separately preregistered real-system translation test.
+That future real test must be a new protocol/version. It cannot reopen, repair or count
+as rescue of any closed EOG-WF endpoint.

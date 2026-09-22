@@ -28,8 +28,56 @@ def occurrence_validate_main() -> int | None:
     return main()
 
 
+def pre_response_freeze_main() -> int:
+    """Compile a declarative safe-source manifest into a pre-response certificate."""
+    import argparse
+    import json
+    from pathlib import Path
+
+    from .pre_response_manifest import compile_pre_response_manifest_file
+
+    parser = argparse.ArgumentParser(
+        prog="eog-v2-pre-response-freeze",
+        description=(
+            "Compile response-independent registry/effort/world inputs and frozen "
+            "policies into one content-addressed EOG-WF v2 pre-response certificate."
+        ),
+    )
+    parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="replace an existing output file",
+    )
+    args = parser.parse_args()
+
+    output = args.output.resolve()
+    if output.exists() and not args.force:
+        parser.error(f"output already exists: {output}; pass --force to replace it")
+
+    result = compile_pre_response_manifest_file(args.manifest)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        json.dumps(result, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    print(
+        json.dumps(
+            {
+                "status": result["statuses"],
+                "result_fingerprint": result["result_fingerprint"],
+                "output": str(output),
+            },
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 __all__ = [
     "genetic_validate_main",
     "occurrence_freeze_main",
     "occurrence_validate_main",
+    "pre_response_freeze_main",
 ]
