@@ -24,6 +24,7 @@ EffortEvidenceSource = Literal[
     "response_independent_effort",
     "response_independent_design",
 ]
+EffortAnalysisRole = Literal["scored", "initialization_only", "unsurveyed"]
 
 
 def _sha256(payload: object) -> str:
@@ -92,6 +93,7 @@ class EffortContextRow:
     eligible: bool
     evidence_summary: str
     evidence_fingerprint: str
+    analysis_role: EffortAnalysisRole | None = None
 
     def __post_init__(self) -> None:
         for field in ("unit_id", "node_id", "context_id", "evidence_summary"):
@@ -100,6 +102,18 @@ class EffortContextRow:
                 object.__setattr__(self, field, value)
         if isinstance(self.fold, bool) or not isinstance(self.fold, int) or self.fold <= 0:
             raise ValueError("fold must be a positive integer")
+        role = self.analysis_role
+        if role is None:
+            role = "scored" if self.eligible else "unsurveyed"
+            object.__setattr__(self, "analysis_role", role)
+        if role not in {"scored", "initialization_only", "unsurveyed"}:
+            raise ValueError("unsupported effort analysis_role")
+        if self.eligible and role == "unsurveyed":
+            raise ValueError("eligible effort rows cannot use unsurveyed analysis_role")
+        if (not self.eligible) and role != "unsurveyed":
+            raise ValueError(
+                "ineligible effort rows must use unsurveyed analysis_role"
+            )
         fingerprint = str(self.evidence_fingerprint).strip().lower()
         if len(fingerprint) != 64 or any(
             char not in "0123456789abcdef" for char in fingerprint
@@ -117,8 +131,11 @@ class EffortContextLedger:
 
     rows: tuple[EffortContextRow, ...]
     candidate_units: tuple[CandidateUnit, ...]
+    initialization_unit_ids: tuple[str, ...]
     unsurveyed_unit_ids: tuple[str, ...]
     candidate_count: int
+    initialization_count: int
+    surveyed_count: int
     unsurveyed_count: int
     node_count: int
     context_count: int
@@ -179,11 +196,17 @@ def freeze_effort_context_ledger(
             fold=row.fold,
         )
         for row in ordered
-        if row.eligible
+        if row.analysis_role == "scored"
     )
     if not candidate_units:
-        raise ValueError("effort ledger contains no eligible candidate units")
-    unsurveyed = tuple(row.unit_id for row in ordered if not row.eligible)
+        raise ValueError("effort ledger contains no scored candidate units")
+    initialization = tuple(
+        row.unit_id for row in ordered if row.analysis_role == "initialization_only"
+    )
+    unsurveyed = tuple(
+        row.unit_id for row in ordered if row.analysis_role == "unsurveyed"
+    )
+    surveyed_count = len(candidate_units) + len(initialization)
 
     payload = {
         "schema": "eog.effort_context_ledger.v1",
@@ -197,19 +220,24 @@ def freeze_effort_context_ledger(
                 "context_id": row.context_id,
                 "fold": row.fold,
                 "eligible": bool(row.eligible),
+                "analysis_role": row.analysis_role,
                 "evidence_summary": row.evidence_summary,
                 "evidence_fingerprint": row.evidence_fingerprint,
             }
             for row in ordered
         ],
         "candidate_unit_ids": [unit.unit_id for unit in candidate_units],
+        "initialization_unit_ids": list(initialization),
         "unsurveyed_unit_ids": list(unsurveyed),
     }
     return EffortContextLedger(
         rows=ordered,
         candidate_units=candidate_units,
+        initialization_unit_ids=initialization,
         unsurveyed_unit_ids=unsurveyed,
         candidate_count=len(candidate_units),
+        initialization_count=len(initialization),
+        surveyed_count=surveyed_count,
         unsurveyed_count=len(unsurveyed),
         node_count=len(nodes),
         context_count=len(contexts),
