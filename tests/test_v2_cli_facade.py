@@ -8,6 +8,7 @@ EXPECTED_V2_SCRIPTS = {
     "eog-v2-genetic-validate": "eog.v2.cli:genetic_validate_main",
     "eog-v2-occurrence-freeze": "eog.v2.cli:occurrence_freeze_main",
     "eog-v2-occurrence-validate": "eog.v2.cli:occurrence_validate_main",
+    "eog-v2-pre-response-freeze": "eog.v2.cli:pre_response_freeze_main",
 }
 
 
@@ -33,4 +34,5 @@ def test_cli_facade_keeps_commands_explicit_and_small():
         "genetic_validate_main",
         "occurrence_freeze_main",
         "occurrence_validate_main",
+        "pre_response_freeze_main",
     ]
