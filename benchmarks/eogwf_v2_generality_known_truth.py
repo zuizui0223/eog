@@ -15,6 +15,7 @@ from eog.v2.coordinate_registry import (
     CoordinateRegistryPolicy,
     audit_coordinate_registry,
 )
+from eog.v2.observation_process import BinaryObservationContract
 from eog.v2.pre_response_certificate import (
     SourceArtifactIdentity,
     fingerprint_world_family,
@@ -140,6 +141,14 @@ def run_benchmark() -> dict[str, object]:
         schema_resolution=resolution,
         coordinate_registry=coordinate_audit,
     )
+    observation_contract = BinaryObservationContract(
+        mode="complete_source_zero",
+        endpoint_name="synthetic detection",
+        positive_semantics="at least one focal event",
+        negative_semantics="eligible unit with no focal event after complete source",
+        unavailable_semantics="outside frozen scored universe",
+        zero_interpretation="recorded non-detection only",
+    )
     problem = freeze_pre_response_problem(
         node_ids=node_ids,
         component_ids=tuple("synthetic_component" for _ in node_ids),
@@ -171,6 +180,7 @@ def run_benchmark() -> dict[str, object]:
         coordinate_registry=coordinate_audit,
         structural_gate=structural_gate,
         world_adjacencies=worlds,
+        observation_contract=observation_contract,
         predictive_state=safe_design,
     )
     tampa_like_certificate = freeze_pre_response_certificate(
@@ -179,6 +189,7 @@ def run_benchmark() -> dict[str, object]:
         coordinate_registry=coordinate_audit,
         structural_gate=structural_gate,
         world_adjacencies=worlds,
+        observation_contract=observation_contract,
         predictive_state=tampa_like_design,
     )
 
@@ -225,8 +236,13 @@ def run_benchmark() -> dict[str, object]:
             "fingerprint": source_provenance.fingerprint,
             "artifact_count": len(source_provenance.artifacts),
         },
+        "observation_contract": {
+            "mode": observation_contract.mode,
+            "fingerprint": observation_contract.fingerprint,
+        },
         "pre_response_certificate": {
             "safe_status": safe_certificate.structural_status,
+            "safe_observation_status": safe_certificate.observation_status,
             "safe_predictive_status": safe_certificate.predictive_status,
             "safe_structural_response_access_allowed": (
                 safe_certificate.structural_response_access_allowed
