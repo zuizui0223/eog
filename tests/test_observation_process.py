@@ -1,5 +1,11 @@
 import pytest
 
+from eog.v2.effort_context import (
+    EffortContextRow,
+    EffortEligibilityPolicy,
+    evidence_fingerprint,
+    freeze_effort_context_ledger,
+)
 from eog.v2.observation_process import (
     BinaryObservationContract,
     materialize_binary_observation,
@@ -103,7 +109,7 @@ def test_complete_source_zero_derives_only_after_completeness_confirmation():
 
 
 def test_complete_source_mode_rejects_explicit_negative_ids():
-    with pytest.raises(ValueError, match="explicit_negative_unit_ids must be empty"):
+    with pytest.raises(ValueError, match="explicit negative unit IDs must be empty"):
         materialize_binary_observation(
             _problem(),
             _complete_source(),
@@ -164,3 +170,122 @@ def test_materialization_is_deterministic_and_candidate_ordered():
     assert left.fingerprint == right.fingerprint
     assert left.scored_unit_ids == ("A|t1", "B|t1", "A|t2", "B|t2")
     assert left.labels == (1, 0, 0, 1)
+
+
+
+def _problem_with_initialization():
+    problem = freeze_pre_response_problem(
+        node_ids=("A", "B"),
+        component_ids=("c", "c"),
+        context_ids=("t0", "t1"),
+        candidate_units=(
+            CandidateUnit("A|t1", "A", "t1", 1),
+            CandidateUnit("B|t1", "B", "t1", 1),
+        ),
+        observation_semantics=ObservationSemantics(
+            effort_eligible_rule="all rows are surveyed",
+            positive_rule="declared downstream",
+            negative_rule="declared downstream",
+            unsurveyed_rule="not present",
+            zero_interpretation="recorded non-detection only",
+        ),
+        baseline_fields=(),
+        split_fingerprint="split",
+        world_family_fingerprint="worlds",
+        source_fingerprint="source",
+    )
+    rows = (
+        EffortContextRow(
+            unit_id="A|t0",
+            node_id="A",
+            context_id="t0",
+            fold=1,
+            eligible=True,
+            analysis_role="initialization_only",
+            evidence_summary="surveyed initialization",
+            evidence_fingerprint=evidence_fingerprint({"A|t0": True}),
+        ),
+        EffortContextRow(
+            unit_id="B|t0",
+            node_id="B",
+            context_id="t0",
+            fold=1,
+            eligible=True,
+            analysis_role="initialization_only",
+            evidence_summary="surveyed initialization",
+            evidence_fingerprint=evidence_fingerprint({"B|t0": True}),
+        ),
+        EffortContextRow(
+            unit_id="A|t1",
+            node_id="A",
+            context_id="t1",
+            fold=1,
+            eligible=True,
+            evidence_summary="surveyed scored",
+            evidence_fingerprint=evidence_fingerprint({"A|t1": True}),
+        ),
+        EffortContextRow(
+            unit_id="B|t1",
+            node_id="B",
+            context_id="t1",
+            fold=1,
+            eligible=True,
+            evidence_summary="surveyed scored",
+            evidence_fingerprint=evidence_fingerprint({"B|t1": True}),
+        ),
+    )
+    ledger = freeze_effort_context_ledger(
+        node_ids=("A", "B"),
+        context_ids=("t0", "t1"),
+        rows=rows,
+        policy=EffortEligibilityPolicy(
+            unit_definition="node x context",
+            eligibility_rule="all fixture rows surveyed",
+            unsurveyed_rule="none",
+            evidence_source="response_independent_design",
+        ),
+    )
+    return problem, ledger
+
+
+def test_initialization_labels_are_materialized_but_not_scored():
+    problem, ledger = _problem_with_initialization()
+    endpoint = materialize_binary_observation(
+        problem,
+        _explicit(),
+        positive_unit_ids=("A|t1",),
+        explicit_negative_unit_ids=("B|t1",),
+        effort_ledger=ledger,
+        initialization_positive_unit_ids=("B|t0",),
+        initialization_explicit_negative_unit_ids=("A|t0",),
+    )
+    assert endpoint.scored_unit_ids == ("A|t1", "B|t1")
+    assert endpoint.labels == (1, 0)
+    assert endpoint.initialization_unit_ids == ("A|t0", "B|t0")
+    assert endpoint.initialization_labels == (0, 1)
+    assert endpoint.initialization_positive_count == 1
+    assert endpoint.initialization_negative_count == 1
+
+
+def test_initialization_explicit_tokens_must_be_complete():
+    problem, ledger = _problem_with_initialization()
+    with pytest.raises(ValueError, match="every frozen initialization unit"):
+        materialize_binary_observation(
+            problem,
+            _explicit(),
+            positive_unit_ids=("A|t1",),
+            explicit_negative_unit_ids=("B|t1",),
+            effort_ledger=ledger,
+            initialization_positive_unit_ids=("B|t0",),
+        )
+
+
+def test_initialization_ids_require_effort_ledger():
+    with pytest.raises(ValueError, match="require a frozen effort_ledger"):
+        materialize_binary_observation(
+            _problem(),
+            _explicit(),
+            positive_unit_ids=("A|t1",),
+            explicit_negative_unit_ids=("B|t1", "A|t2", "B|t2"),
+            initialization_positive_unit_ids=("A|t0",),
+        )
