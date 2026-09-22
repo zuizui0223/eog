@@ -28,8 +28,16 @@ def occurrence_validate_main() -> int | None:
     return main()
 
 
+def pre_response_certify_main() -> int:
+    """Build a generic response-locked pre-response certificate from a manifest."""
+    from .pre_response_manifest_cli import main
+
+    return main()
+
+
 __all__ = [
     "genetic_validate_main",
     "occurrence_freeze_main",
     "occurrence_validate_main",
+    "pre_response_certify_main",
 ]
