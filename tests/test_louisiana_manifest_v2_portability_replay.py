@@ -6,6 +6,9 @@ def test_louisiana_manifest_reproduces_shared_generic_contract_layers():
     assert result["uses_biological_response"] is False
     assert result["reruns_frozen_endpoint"] is False
     assert result["counts_as_predictive_evidence"] is False
+    assert result["world_family_generated"] is True
+    assert result["external_artifact_identities_all_matched"] is True
+    assert len(result["generated_geometry_thresholds_km"]) == 3
     assert all(result["shared_layer_fingerprint_matches"].values())
     assert result["counts"]["node_count"] == 33
     assert result["counts"]["context_count"] == 20

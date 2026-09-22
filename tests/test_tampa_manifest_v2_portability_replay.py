@@ -7,6 +7,8 @@ def test_tampa_manifest_preserves_structural_use_but_withholds_prediction():
     assert result["uses_observed_tampa_predictive_score"] is False
     assert result["reruns_frozen_endpoint"] is False
     assert result["counts_as_predictive_evidence"] is False
+    assert result["world_family_generated"] is True
+    assert result["external_artifact_identities_all_matched"] is True
 
     assert result["counts"] == {
         "node_count": 71,

@@ -314,6 +314,37 @@ Predictive outcome access requires four independently frozen layers:
 The command writes the complete joined certificate, layer fingerprints, denominator
 counts and a final result fingerprint.
 
+### Declarative world generation
+
+A manifest may either provide an explicit frozen world-matrix JSON file or generate the
+geometry directly from the frozen coordinate registry. Exactly one path is allowed.
+
+The coordinate generator supports two response-blind construction modes:
+
+1. `declared_thresholds` — apply analyst-declared metric thresholds exactly;
+2. `structural_lcc_ladder` — use prospectively declared largest-component targets and
+   the existing `world_scale_ladder.py` algorithm to find the minimum nested thresholds.
+
+Supported distance metrics are `haversine_km` and `euclidean`.
+
+The LCC ladder is a **structural bracketing device**, not an estimator of biological
+dispersal distance. No occurrence, positive/negative endpoint or heldout predictive score
+enters threshold construction.
+
+One geometry may be declaratively replicated across exact Layer-A source/rule variants.
+A single variant is marked as the structural representative so repeated copies of the
+same graph do not manufacture extra structural evidence. An optional `external_open`
+world remains explicit.
+
+Generated worlds are derived artifacts. Their identity is fixed by:
+
+- the frozen registry bytes and coordinate audit;
+- the complete generator declaration;
+- the generator fingerprint;
+- the deterministic derived world-family bytes.
+
+This removes dataset-specific N x N matrix-building scripts from the adapter boundary.
+
 ### Transport-independent content identity
 
 Acquisition transport is deliberately separated from scientific source identity.
@@ -322,9 +353,12 @@ A manifest may enable:
 
 `artifact_identity_policy.require_expected_identity = true`
 
-and declare an exact SHA-256 plus byte count for each of the three safe inputs:
-registry, effort/context and world family. In this mode all three identities are required
-and verified before the corresponding source can contribute to the certificate.
+and declare an exact SHA-256 plus byte count for each external safe input. Registry and
+effort/context inputs are external and therefore require exact identities in strict mode.
+An explicit world-family file is also external and requires an identity. A generated
+world family is derived from already frozen coordinates plus the manifest declaration,
+so it is bound by its deterministic generator fingerprint rather than a separate
+transport identity.
 
 This changes the failure boundary from:
 
@@ -352,16 +386,19 @@ their biological outcomes.
 `benchmarks/louisiana_manifest_v2_portability_replay.py` reconstructs the frozen
 33-site x 20-occasion pre-response state. The manifest path reproduces the bespoke v2
 translation fingerprints for the shared coordinate, effort/context, world-family,
-observation and predictive-state layers. The replay also requires exact content identity
-for all three manifest inputs. Its sequential source-set design remains a
+observation and predictive-state layers. The replay requires exact identities for its
+external registry/effort inputs and now generates the three deduplicated Haversine
+geometry scales directly from the frozen LCC targets. Its sequential source-set design
+remains a
 `predictive_complement_candidate`.
 
 ### Tampa Bay seagrass transects
 
 `benchmarks/tampa_manifest_v2_portability_replay.py` reconstructs the authoritative
 Gate0 state from the response-unopened artifact: 71 nodes, 1497 candidate visits and 29
-contexts. The replay verifies exact content identity for its registry, effort and world
-inputs. All four frozen local geometry worlds are structurally connected, so Layer A
+contexts. The replay verifies exact content identity for its external registry/effort
+inputs and generates the four already-frozen Haversine threshold worlds directly from
+the manifest. All four frozen local geometry worlds are structurally connected, so Layer A
 remains structurally admissible. The same manifest path nevertheless reproduces the
 existing response-free `ineligible_generation_shift` predictive-state fingerprint for
 the historical static Tampa Layer-B design.

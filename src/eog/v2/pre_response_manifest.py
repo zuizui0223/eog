@@ -52,6 +52,7 @@ from eog.v2.world_adequacy import (
     apply_structural_adequacy_gate,
     audit_world_universe_structure,
 )
+from eog.v2.world_manifest_generator import generate_coordinate_world_family
 
 
 MANIFEST_SCHEMA = "eog.pre_response_manifest.v1"
@@ -535,6 +536,174 @@ def _load_world_family(
     return path, raw, worlds, semantics, structural_ids, horizon, identity
 
 
+def _generate_world_family(
+    config: Mapping[str, object],
+    node_ids: Sequence[str],
+    coordinates: Mapping[str, tuple[float, float]],
+):
+    generator = _mapping(config.get("generator"), "world_family.generator")
+    generator_type = _text(
+        generator.get("type"),
+        "world_family.generator.type",
+    )
+    if generator_type != "coordinate_threshold_worlds_v1":
+        raise ValueError(
+            "world_family.generator.type must be 'coordinate_threshold_worlds_v1'"
+        )
+
+    construction_mode = _text(
+        generator.get("construction_mode"),
+        "world_family.generator.construction_mode",
+    )
+    threshold_specs: tuple[Mapping[str, object], ...] = ()
+    target_lcc: tuple[float, ...] = ()
+    if construction_mode == "declared_thresholds":
+        threshold_specs = tuple(
+            _mapping(value, f"world threshold {index}")
+            for index, value in enumerate(
+                _sequence(
+                    generator.get("thresholds"),
+                    "world_family.generator.thresholds",
+                )
+            )
+        )
+    elif construction_mode == "structural_lcc_ladder":
+        target_lcc = tuple(
+            float(value)
+            for value in _sequence(
+                generator.get("target_lcc_fractions"),
+                "world_family.generator.target_lcc_fractions",
+            )
+        )
+    else:
+        raise ValueError(
+            "world_family.generator.construction_mode must be "
+            "declared_thresholds or structural_lcc_ladder"
+        )
+
+    variants_raw = generator.get("variants", [])
+    variants = tuple(
+        _mapping(value, f"world variant {index}")
+        for index, value in enumerate(
+            _sequence(variants_raw, "world_family.generator.variants")
+        )
+    )
+
+    generated = generate_coordinate_world_family(
+        node_ids,
+        coordinates,
+        metric=_text(generator.get("metric"), "world_family.generator.metric"),
+        construction_mode=construction_mode,
+        threshold_specs=threshold_specs,
+        axis_id=(
+            None
+            if generator.get("axis_id") is None
+            else _text(generator.get("axis_id"), "world_family.generator.axis_id")
+        ),
+        target_lcc_fractions=target_lcc,
+        world_id_prefix=str(generator.get("world_id_prefix", "local_geo")),
+        deduplicate_identical_thresholds=_boolean(
+            generator.get("deduplicate_identical_thresholds", True),
+            "world_family.generator.deduplicate_identical_thresholds",
+        ),
+        threshold_semantics_key=str(
+            generator.get("threshold_semantics_key", "geometry_threshold")
+        ),
+        local_semantics=(
+            None
+            if generator.get("local_semantics") is None
+            else _mapping(
+                generator.get("local_semantics"),
+                "world_family.generator.local_semantics",
+            )
+        ),
+        variants=variants,
+        structural_variant_id=(
+            None
+            if generator.get("structural_variant_id") is None
+            else _text(
+                generator.get("structural_variant_id"),
+                "world_family.generator.structural_variant_id",
+            )
+        ),
+        include_external_open=_boolean(
+            generator.get("include_external_open", False),
+            "world_family.generator.include_external_open",
+        ),
+        external_open_world_id=str(
+            generator.get("external_open_world_id", "external_open")
+        ),
+        external_open_semantics=(
+            None
+            if generator.get("external_open_semantics") is None
+            else _mapping(
+                generator.get("external_open_semantics"),
+                "world_family.generator.external_open_semantics",
+            )
+        ),
+    )
+
+    try:
+        horizon = int(config.get("horizon"))
+    except (TypeError, ValueError) as exc:
+        raise ValueError("world_family.horizon must be a positive integer") from exc
+    if horizon <= 0:
+        raise ValueError("world_family.horizon must be a positive integer")
+
+    document = {
+        "schema": "eog.generated_world_family.v1",
+        "node_ids": list(generated.node_ids),
+        "worlds": {
+            world_id: np.asarray(generated.worlds[world_id], dtype=int).tolist()
+            for world_id in sorted(generated.worlds)
+        },
+        "world_semantics": {
+            world_id: generated.world_semantics[world_id]
+            for world_id in sorted(generated.world_semantics)
+        },
+        "structural_world_ids": list(generated.structural_world_ids),
+        "generator_fingerprint": generated.generator_fingerprint,
+        "distance_matrix_fingerprint": generated.distance_matrix_fingerprint,
+    }
+    raw = (
+        json.dumps(
+            document,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+            allow_nan=False,
+        )
+        + "\n"
+    ).encode("utf-8")
+    identity = _verify_expected_identity(
+        config,
+        raw,
+        label="world_family",
+        required=False,
+    )
+    identity = {
+        **identity,
+        "derived": True,
+        "generator_fingerprint": generated.generator_fingerprint,
+        "distance_matrix_fingerprint": generated.distance_matrix_fingerprint,
+    }
+    return (
+        None,
+        raw,
+        generated.worlds,
+        generated.world_semantics,
+        generated.structural_world_ids,
+        horizon,
+        identity,
+        {
+            "mode": "generated",
+            "generator_fingerprint": generated.generator_fingerprint,
+            "distance_matrix_fingerprint": generated.distance_matrix_fingerprint,
+            "geometry_thresholds": list(generated.geometry_thresholds),
+        },
+    )
+
+
 def _observation_contract(payload: object) -> BinaryObservationContract:
     value = _mapping(payload, "observation_contract")
     return BinaryObservationContract(
@@ -662,39 +831,53 @@ def compile_pre_response_manifest(
     )
 
     world_cfg = _mapping(manifest.get("world_family"), "world_family")
-    world_path_value = world_cfg.get("path")
-    # World node order is part of the declared geometry identity.
-    world_path = _resolve_relative(base_dir, world_path_value, "world_family.path")
-    world_doc = json.loads(world_path.read_text(encoding="utf-8"))
-    world_node_ids = tuple(
-        _text(value, "world family node_id")
-        for value in _sequence(
-            _mapping(world_doc, "world family document").get("node_ids"),
-            "world family node_ids",
+    has_world_path = world_cfg.get("path") is not None
+    has_world_generator = world_cfg.get("generator") is not None
+    if has_world_path == has_world_generator:
+        raise ValueError(
+            "world_family must declare exactly one of path or generator"
         )
-    )
-    if set(world_node_ids) != set(coordinate_audit.coordinates):
-        raise ValueError("world family node set differs from coordinate registry")
+
+    # CoordinateRegistryAudit has a canonical sorted node order. Generated and explicit
+    # world families are both normalized to that order before any scientific state is built.
+    world_node_ids = tuple(node.node_id for node in coordinate_audit.nodes)
 
     effort_ledger, context_order, effort_policy = _effort_ledger(
         effort_cfg,
         effort_table,
         node_ids=world_node_ids,
     )
-    (
-        world_path,
-        world_bytes,
-        worlds,
-        world_semantics,
-        structural_world_ids,
-        horizon,
-        world_identity,
-    ) = _load_world_family(
-        base_dir,
-        manifest.get("world_family"),
-        world_node_ids,
-        require_expected_identity=require_expected_identity,
-    )
+    if has_world_path:
+        (
+            world_path,
+            world_bytes,
+            worlds,
+            world_semantics,
+            structural_world_ids,
+            horizon,
+            world_identity,
+        ) = _load_world_family(
+            base_dir,
+            manifest.get("world_family"),
+            world_node_ids,
+            require_expected_identity=require_expected_identity,
+        )
+        world_build = {"mode": "explicit_file"}
+    else:
+        (
+            world_path,
+            world_bytes,
+            worlds,
+            world_semantics,
+            structural_world_ids,
+            horizon,
+            world_identity,
+            world_build,
+        ) = _generate_world_family(
+            world_cfg,
+            world_node_ids,
+            coordinate_audit.coordinates,
+        )
 
     source_artifacts = (
         SourceArtifactIdentity.from_bytes(
@@ -819,7 +1002,12 @@ def compile_pre_response_manifest(
         "inputs": {
             "registry_path": str(registry_path.relative_to(base_dir.resolve())),
             "effort_path": str(effort_path.relative_to(base_dir.resolve())),
-            "world_family_path": str(world_path.relative_to(base_dir.resolve())),
+            "world_family_path": (
+                None
+                if world_path is None
+                else str(world_path.relative_to(base_dir.resolve()))
+            ),
+            "world_family_build": world_build,
         },
         "artifact_identity_policy": {
             "require_expected_identity": require_expected_identity,

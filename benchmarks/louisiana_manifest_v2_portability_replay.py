@@ -25,84 +25,15 @@ from benchmarks.louisiana_real_pre_response_v2_translation import (
     HISTORICAL_SITE_REGISTRY_FINGERPRINT,
     SAMPLE_ROWS,
     SITE_ROWS,
-    _deduplicated_geometry,
-    _haversine_distance_matrix,
     run_replay as run_bespoke_replay,
 )
 from eog.v2.pre_response_manifest import compile_pre_response_manifest_file
-from eog.v2.world_scale_ladder import (
-    StructuralScaleLadderDeclaration,
-    build_structural_scale_ladder,
-)
 
 
 def _csv_text(header, rows):
     lines = [",".join(header)]
     lines.extend(",".join(str(value) for value in row) for row in rows)
     return "\n".join(lines) + "\n"
-
-
-def _build_worlds():
-    site_records = tuple(
-        {
-            "node_id": row[0],
-            "latitude": row[1],
-            "longitude": row[2],
-            "marsh": row[3],
-            "habitat": row[4],
-        }
-        for row in SITE_ROWS
-    )
-    node_ids = tuple(row["node_id"] for row in site_records)
-    distances = _haversine_distance_matrix(site_records)
-    ladder = build_structural_scale_ladder(
-        node_ids,
-        distances,
-        StructuralScaleLadderDeclaration(
-            axis_id="southwest_louisiana_marsh_site_haversine_km",
-            target_largest_component_fractions=(0.25, 0.50, 0.75, 0.90),
-        ),
-    )
-    geometry = _deduplicated_geometry(ladder, distances)
-    thresholds = tuple(item[0] for item in geometry)
-    if len(thresholds) != 3 or not np.allclose(
-        thresholds,
-        EXPECTED_DISTINCT_THRESHOLDS_KM,
-        rtol=0.0,
-        atol=1e-9,
-    ):
-        raise AssertionError("Louisiana geometry threshold drift")
-
-    worlds = {}
-    semantics = {}
-    structural_ids = []
-    for index, (threshold, adjacency) in enumerate(geometry, start=1):
-        for source_mode in (
-            "immediate_previous_observed",
-            "cumulative_observed_history",
-        ):
-            world_id = f"local_geo{index}::{source_mode}"
-            worlds[world_id] = adjacency.astype(int).tolist()
-            semantics[world_id] = {
-                "kind": "local",
-                "geometry_threshold_km": float(threshold),
-                "source_mode": source_mode,
-                "positive_falsification": "unsupported_positive_eliminates_world",
-                "negative_falsification": "none",
-            }
-        structural_ids.append(
-            f"local_geo{index}::immediate_previous_observed"
-        )
-    external = np.ones((len(node_ids), len(node_ids)), dtype=int)
-    np.fill_diagonal(external, 0)
-    worlds["external_open"] = external.tolist()
-    semantics["external_open"] = {
-        "kind": "external_open",
-        "supports_every_frozen_site": True,
-        "positive_falsification": "never",
-        "negative_falsification": "none",
-    }
-    return node_ids, worlds, semantics, structural_ids
 
 
 def _effort_rows(node_ids):
@@ -157,7 +88,7 @@ def _effort_rows(node_ids):
 
 
 def _manifest(tmp_path: Path) -> Path:
-    node_ids, worlds, semantics, structural_ids = _build_worlds()
+    node_ids = tuple(row[0] for row in SITE_ROWS)
     effort_header, effort_rows, context_order = _effort_rows(node_ids)
 
     (tmp_path / "sites.csv").write_text(
@@ -171,21 +102,6 @@ def _manifest(tmp_path: Path) -> Path:
         _csv_text(effort_header, effort_rows),
         encoding="utf-8",
     )
-    (tmp_path / "worlds.json").write_text(
-        json.dumps(
-            {
-                "schema": "eog.louisiana_manifest_worlds.v1",
-                "node_ids": list(node_ids),
-                "worlds": worlds,
-                "world_semantics": semantics,
-                "structural_world_ids": structural_ids,
-            },
-            indent=2,
-            sort_keys=True,
-        ),
-        encoding="utf-8",
-    )
-
     manifest = {
         "schema": "eog.pre_response_manifest.v1",
         "registry_table": {
@@ -257,9 +173,44 @@ def _manifest(tmp_path: Path) -> Path:
             },
         },
         "world_family": {
-            "path": "worlds.json",
-            "artifact_id": "declared_world_family",
+            "artifact_id": "generated_world_family",
             "horizon": 1,
+            "generator": {
+                "type": "coordinate_threshold_worlds_v1",
+                "metric": "haversine_km",
+                "construction_mode": "structural_lcc_ladder",
+                "axis_id": "southwest_louisiana_marsh_site_haversine_km",
+                "target_lcc_fractions": [0.25, 0.50, 0.75, 0.90],
+                "world_id_prefix": "local_geo",
+                "deduplicate_identical_thresholds": True,
+                "threshold_semantics_key": "geometry_threshold_km",
+                "local_semantics": {
+                    "positive_falsification": "unsupported_positive_eliminates_world",
+                    "negative_falsification": "none"
+                },
+                "variants": [
+                    {
+                        "variant_id": "immediate_previous_observed",
+                        "semantics": {
+                            "source_mode": "immediate_previous_observed"
+                        }
+                    },
+                    {
+                        "variant_id": "cumulative_observed_history",
+                        "semantics": {
+                            "source_mode": "cumulative_observed_history"
+                        }
+                    }
+                ],
+                "structural_variant_id": "immediate_previous_observed",
+                "include_external_open": True,
+                "external_open_world_id": "external_open",
+                "external_open_semantics": {
+                    "supports_every_frozen_site": True,
+                    "positive_falsification": "never",
+                    "negative_falsification": "none"
+                }
+            }
         },
         "structural_adequacy": {
             "min_largest_weak_component_fraction": 0.90,
@@ -309,7 +260,6 @@ def _manifest(tmp_path: Path) -> Path:
     for section, filename in (
         ("registry_table", "sites.csv"),
         ("effort_table", "effort.csv"),
-        ("world_family", "worlds.json"),
     ):
         raw = (tmp_path / filename).read_bytes()
         manifest[section]["expected_identity"] = {
@@ -353,6 +303,13 @@ def run_replay() -> dict[str, object]:
     matches = {name: left == right for name, (left, right) in shared.items()}
     if not all(matches.values()):
         raise AssertionError({"shared_layer_matches": matches, "shared": shared})
+    if not np.allclose(
+        manifest["inputs"]["world_family_build"]["geometry_thresholds"],
+        EXPECTED_DISTINCT_THRESHOLDS_KM,
+        rtol=0.0,
+        atol=1e-9,
+    ):
+        raise AssertionError("generated Louisiana threshold ladder drift")
 
     counts = manifest["counts"]
     if (
@@ -379,9 +336,15 @@ def run_replay() -> dict[str, object]:
         "shared_layer_fingerprint_matches": matches,
         "counts": counts,
         "statuses": manifest["statuses"],
-        "artifact_identities_all_matched": all(
-            item["matched"] is True
-            for item in manifest["artifact_identities"].values()
+        "external_artifact_identities_all_matched": all(
+            manifest["artifact_identities"][name]["matched"] is True
+            for name in ("registry", "effort")
+        ),
+        "world_family_generated": (
+            manifest["artifact_identities"]["world_family"]["derived"] is True
+        ),
+        "generated_geometry_thresholds_km": (
+            manifest["inputs"]["world_family_build"]["geometry_thresholds"]
         ),
         "manifest_result_fingerprint": manifest["result_fingerprint"],
         "interpretation": (

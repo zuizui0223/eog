@@ -21,7 +21,6 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import zlib
 
-import numpy as np
 
 from benchmarks.tampa_predictive_state_v2_translation import (
     run_replay as run_predictive_gate_replay,
@@ -57,55 +56,6 @@ def _csv_text(header, rows) -> str:
     writer.writerow(header)
     writer.writerows(rows)
     return stream.getvalue()
-
-
-def _haversine_matrix(node_rows) -> np.ndarray:
-    radius_km = 6371.0088
-    lat = np.radians(np.asarray([float(row["latitude"]) for row in node_rows]))
-    lon = np.radians(np.asarray([float(row["longitude"]) for row in node_rows]))
-    dlat = lat[:, None] - lat[None, :]
-    dlon = lon[:, None] - lon[None, :]
-    a = np.sin(dlat / 2) ** 2 + (
-        np.cos(lat[:, None]) * np.cos(lat[None, :]) * np.sin(dlon / 2) ** 2
-    )
-    a = np.clip(a, 0.0, 1.0)
-    return 2 * radius_km * np.arcsin(np.sqrt(a))
-
-
-def _build_world_document(payload):
-    nodes = payload["node_coordinates"]
-    node_ids = [row["node_id"] for row in nodes]
-    distances = _haversine_matrix(nodes)
-    thresholds = tuple(payload["world_family"]["local_thresholds_km"])
-    world_ids = ("haversine_q25", "haversine_q50", "haversine_q75", "haversine_q90")
-    worlds = {}
-    semantics = {}
-    for world_id, threshold in zip(world_ids, thresholds, strict=True):
-        adjacency = distances <= float(threshold) + 1e-12
-        np.fill_diagonal(adjacency, False)
-        worlds[world_id] = adjacency.astype(int).tolist()
-        semantics[world_id] = {
-            "kind": "local",
-            "geometry_threshold_km": float(threshold),
-            "operator_rule": (
-                "undirected threshold edge becomes two directed unit-support edges"
-            ),
-        }
-
-    external = np.ones((len(node_ids), len(node_ids)), dtype=int)
-    np.fill_diagonal(external, 0)
-    worlds["external_open"] = external.tolist()
-    semantics["external_open"] = {
-        "kind": "external_open",
-        "supports_every_frozen_site": True,
-    }
-    return {
-        "schema": "eog.tampa_manifest_worlds.v1",
-        "node_ids": node_ids,
-        "worlds": worlds,
-        "world_semantics": semantics,
-        "structural_world_ids": list(world_ids),
-    }
 
 
 def _write_manifest(tmp_path: Path, payload) -> Path:
@@ -155,12 +105,6 @@ def _write_manifest(tmp_path: Path, payload) -> Path:
             ),
             effort_rows,
         ),
-        encoding="utf-8",
-    )
-
-    world_document = _build_world_document(payload)
-    (tmp_path / "worlds.json").write_text(
-        json.dumps(world_document, indent=2, sort_keys=True),
         encoding="utf-8",
     )
 
@@ -227,9 +171,42 @@ def _write_manifest(tmp_path: Path, payload) -> Path:
             },
         },
         "world_family": {
-            "path": "worlds.json",
-            "artifact_id": "tampa_declared_world_family",
+            "artifact_id": "tampa_generated_world_family",
             "horizon": 70,
+            "generator": {
+                "type": "coordinate_threshold_worlds_v1",
+                "metric": "haversine_km",
+                "construction_mode": "declared_thresholds",
+                "thresholds": [
+                    {
+                        "world_id": "haversine_q25",
+                        "threshold": payload["world_family"]["local_thresholds_km"][0]
+                    },
+                    {
+                        "world_id": "haversine_q50",
+                        "threshold": payload["world_family"]["local_thresholds_km"][1]
+                    },
+                    {
+                        "world_id": "haversine_q75",
+                        "threshold": payload["world_family"]["local_thresholds_km"][2]
+                    },
+                    {
+                        "world_id": "haversine_q90",
+                        "threshold": payload["world_family"]["local_thresholds_km"][3]
+                    }
+                ],
+                "threshold_semantics_key": "geometry_threshold_km",
+                "local_semantics": {
+                    "operator_rule": (
+                        "undirected threshold edge becomes two directed unit-support edges"
+                    )
+                },
+                "include_external_open": True,
+                "external_open_world_id": "external_open",
+                "external_open_semantics": {
+                    "supports_every_frozen_site": True
+                }
+            }
         },
         "structural_adequacy": {
             "min_largest_weak_component_fraction": 1.0,
@@ -263,7 +240,6 @@ def _write_manifest(tmp_path: Path, payload) -> Path:
     for section, filename in (
         ("registry_table", "registry.csv"),
         ("effort_table", "effort.csv"),
-        ("world_family", "worlds.json"),
     ):
         raw = (tmp_path / filename).read_bytes()
         manifest[section]["expected_identity"] = {
@@ -359,9 +335,12 @@ def run_replay() -> dict[str, object]:
         "fold_node_counts": node_counts,
         "fold_candidate_counts": candidate_counts,
         "statuses": statuses,
-        "artifact_identities_all_matched": all(
-            item["matched"] is True
-            for item in manifest["artifact_identities"].values()
+        "external_artifact_identities_all_matched": all(
+            manifest["artifact_identities"][name]["matched"] is True
+            for name in ("registry", "effort")
+        ),
+        "world_family_generated": (
+            manifest["artifact_identities"]["world_family"]["derived"] is True
         ),
         "predictive_state_fingerprint_matches_existing_v2_replay": True,
         "manifest_result_fingerprint": manifest["result_fingerprint"],
