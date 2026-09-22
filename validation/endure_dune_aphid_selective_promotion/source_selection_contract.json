@@ -1,0 +1,147 @@
+{
+  "schema": "eog.endure_dune_aphid_selective_promotion.source_selection_contract.v1",
+  "attempt_id": "endure_dune_aphid_selective_promotion_v1",
+  "scientific_role": "new independently selected real-system validation of the EOG-WF v2 response-independent eligibility boundary",
+  "source_identity": {
+    "gbif_dataset_key": "24ce30dc-f5df-4236-a05c-7e9231ef7f71",
+    "doi": "10.15468/xx2gcp",
+    "title": "Endure – standardised invertebrate sampling in coastal blond dunes from the 2-seas region",
+    "publisher": "Ghent University",
+    "dataset_class": "sampling_event",
+    "ipt_resource_key": "endure-invertebrate-sampling-occurrences",
+    "frozen_public_version": "1.8",
+    "frozen_publication_date": "2026-08-10",
+    "metadata_url": "https://api.gbif.org/v1/dataset/24ce30dc-f5df-4236-a05c-7e9231ef7f71",
+    "archive_url": "https://ipt.biodiversity.be/archive.do?r=endure-invertebrate-sampling-occurrences",
+    "allowed_archive_hosts": [
+      "ipt.biodiversity.be"
+    ]
+  },
+  "response_independent_design_basis": {
+    "geography": "North-France, South-UK, Belgium and the Netherlands along the North Sea-Channel coast",
+    "temporal_extent": [
+      "2017-07-04",
+      "2019-09-17"
+    ],
+    "published_sampling_unit_count": 638,
+    "biogeographic_sector_count": 6,
+    "sampling_unit": "one marram-grass tussock sample",
+    "protocol": [
+      "15 seconds sweep-netting in and above the tussock",
+      "5 minutes manual collection at the base of the tussock"
+    ],
+    "event_core_publicly_declared_fields": [
+      "eventID",
+      "eventDate",
+      "samplingProtocol",
+      "sampleSizeValue",
+      "sampleSizeUnit",
+      "countryCode",
+      "decimalLongitude",
+      "decimalLatitude",
+      "coordinateUncertaintyInMeters"
+    ],
+    "occurrence_extension_publicly_declared_fields": [
+      "occurrenceID",
+      "eventID",
+      "occurrenceStatus",
+      "individualCount",
+      "scientificName",
+      "taxonRank"
+    ]
+  },
+  "focal_endpoint_selection": {
+    "scientific_name": "Metopolophium sabihae",
+    "rank": "species",
+    "biological_rationale_source": {
+      "title": "Aphids on Ammophila arenaria in Belgium: first reports, phenology and host range expansion",
+      "year": 2010,
+      "doi": "10.26496/bjz.2010.192"
+    },
+    "rationale": "pre-existing literature independently documents this aphid on marram grass; selection is based on host association rather than the Endure occurrence table",
+    "future_name_matching_rule": "after response authorization, normalize scientificName to leading genus plus specific epithet and require exact binomial Metopolophium sabihae; no post-open species switch",
+    "target_selected_before_archive_payload_access": true,
+    "endures_species_counts_used_for_selection": false,
+    "endures_occurrence_rows_used_for_selection": false,
+    "endures_presence_or_absence_used_for_selection": false,
+    "endures_prevalence_used_for_selection": false
+  },
+  "prospective_endpoint": {
+    "candidate_unit": "eligible leaf sampling event from the frozen Event core",
+    "positive_rule": "after full occurrence-extension authorization, at least one present occurrence assigned to normalized binomial Metopolophium sabihae links to the event",
+    "negative_rule": "after complete occurrence-extension parsing, an otherwise eligible event with no present focal occurrence is a recorded non-detection only",
+    "zero_interpretation": "sampled-event non-detection, never biological absence outside the sampled tussock",
+    "observation_mode": "complete_source_zero",
+    "no_response_derived_candidate_filtering": true
+  },
+  "prospective_split_and_evaluation": {
+    "outer_unit": "countryCode",
+    "expected_outer_country_codes_from_public_metadata": [
+      "BE",
+      "FR",
+      "GB",
+      "NL"
+    ],
+    "minimum_outer_units_with_both_classes": 3,
+    "calibration_min_positive": 10,
+    "calibration_min_negative": 40,
+    "heldout_min_positive": 10,
+    "heldout_min_negative": 40,
+    "primary_metric": "binary_log_loss",
+    "secondary_metric": "brier_score",
+    "paired_arms": [
+      "baseline_only",
+      "baseline_plus_layer_b"
+    ],
+    "decision_rule": "favorable only if augmented has lower macro log loss than baseline and no outer-country log-loss degradation exceeds the prospectively frozen guardrail; otherwise null/adverse as frozen later before response open",
+    "response_stratified_split_or_reassignment_allowed": false
+  },
+  "prospective_v2_design": {
+    "world_generation": "response-blind structural_lcc_ladder from frozen eligible-event coordinates; targets and adequacy thresholds must be frozen after Event-core Gate2 and before occurrence member access",
+    "prediction_facing_source_policy": "source-symmetric calibration-positive source set; arbitrary single-source labels forbidden",
+    "train_serve_generator_policy": "one generator contract for calibration cross-fit and heldout serving; no Tampa-style train/serve generator shift",
+    "static_state_policy": "static geography alone is not sufficient for promotion; prediction-facing state must depend on the frozen calibration-positive source set",
+    "outer_outcomes_for_gate_selection": false
+  },
+  "gate0_metadata_only": {
+    "maximum_metadata_bytes": 1048576,
+    "authorized_url": "https://api.gbif.org/v1/dataset/24ce30dc-f5df-4236-a05c-7e9231ef7f71",
+    "archive_requests_allowed": 0,
+    "archive_bytes_allowed": 0,
+    "event_member_bytes_allowed": 0,
+    "occurrence_member_bytes_allowed": 0,
+    "occurrence_rows_allowed": 0,
+    "biological_response_values_allowed": false
+  },
+  "gate1_archive_inventory": {
+    "only_if_gate0_ready": true,
+    "maximum_archive_size_bytes": 31457280,
+    "maximum_central_directory_bytes": 1048576,
+    "required_unique_basenames": [
+      "meta.xml",
+      "eml.xml"
+    ],
+    "allowed_operations": [
+      "one exact one-byte HTTP Range archive size probe",
+      "bounded final EOCD read",
+      "bounded central-directory read"
+    ],
+    "local_header_bytes_allowed": 0,
+    "member_payload_bytes_allowed": 0,
+    "occurrence_member_payload_bytes_allowed": 0
+  },
+  "future_gates": {
+    "gate2": "open only meta.xml under frozen member byte identity to bind Event-core and Occurrence-extension member names and schemas",
+    "gate3": "open only Event-core member, build response-independent registry/effort manifest, and compile the v2 eligibility gate",
+    "response_gate": "only if all pre-response gates pass and prediction-facing design is eligible; then freeze exact occurrence parser/count gate/evaluation before any occurrence payload byte"
+  },
+  "terminal_policy": {
+    "any_pre_response_stop_is_terminal_for_this_attempt": true,
+    "no_alias_repair_after_gate": true,
+    "no_transport_fallback_after_gate": true,
+    "no_focal_species_switch_after_gate0": true,
+    "no_retry_after_occurrence_payload_access": true
+  },
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
