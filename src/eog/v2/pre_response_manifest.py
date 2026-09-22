@@ -112,6 +112,63 @@ def _resolve_relative(base_dir: Path, value: object, label: str) -> Path:
     return resolved
 
 
+def _verify_expected_identity(
+    config: Mapping[str, object],
+    raw: bytes,
+    *,
+    label: str,
+    required: bool,
+) -> dict[str, object]:
+    identity_raw = config.get("expected_identity")
+    actual_sha256 = hashlib.sha256(raw).hexdigest()
+    actual_bytes = len(raw)
+    if identity_raw is None:
+        if required:
+            raise ValueError(
+                f"{label}.expected_identity is required by artifact_identity_policy"
+            )
+        return {
+            "declared": False,
+            "actual_sha256": actual_sha256,
+            "actual_bytes": actual_bytes,
+            "matched": None,
+        }
+
+    identity = _mapping(identity_raw, f"{label}.expected_identity")
+    expected_sha256 = _text(
+        identity.get("sha256"),
+        f"{label}.expected_identity.sha256",
+    ).lower()
+    if len(expected_sha256) != 64 or any(
+        character not in "0123456789abcdef" for character in expected_sha256
+    ):
+        raise ValueError(
+            f"{label}.expected_identity.sha256 must be a 64-character hex digest"
+        )
+    expected_bytes_raw = identity.get("bytes")
+    if isinstance(expected_bytes_raw, bool) or not isinstance(expected_bytes_raw, int):
+        raise TypeError(f"{label}.expected_identity.bytes must be an integer")
+    if expected_bytes_raw < 0:
+        raise ValueError(f"{label}.expected_identity.bytes must be non-negative")
+
+    if actual_bytes != expected_bytes_raw:
+        raise ValueError(
+            f"{label} byte-size drift: {actual_bytes} != {expected_bytes_raw}"
+        )
+    if actual_sha256 != expected_sha256:
+        raise ValueError(
+            f"{label} SHA-256 drift: {actual_sha256} != {expected_sha256}"
+        )
+    return {
+        "declared": True,
+        "expected_sha256": expected_sha256,
+        "expected_bytes": expected_bytes_raw,
+        "actual_sha256": actual_sha256,
+        "actual_bytes": actual_bytes,
+        "matched": True,
+    }
+
+
 def _schema_contract(payload: object) -> SchemaAliasContract:
     value = _mapping(payload, "schema contract")
     roles_raw = _sequence(value.get("roles"), "schema roles")
@@ -163,16 +220,23 @@ def _load_table(
     payload: object,
     *,
     label: str,
+    require_expected_identity: bool,
 ):
     value = _mapping(payload, label)
     path = _resolve_relative(base_dir, value.get("path"), f"{label}.path")
     raw = path.read_bytes()
+    identity = _verify_expected_identity(
+        value,
+        raw,
+        label=label,
+        required=require_expected_identity,
+    )
     table = parse_response_blind_csv(
         raw,
         schema_contract=_schema_contract(value.get("schema")),
         policy=_csv_policy(value.get("csv_policy")),
     )
-    return value, path, raw, table
+    return value, path, raw, table, identity
 
 
 def _coerce_evidence_value(value: object, kind: str, label: str) -> object:
@@ -415,10 +479,22 @@ def _effort_ledger(
     return ledger, context_order, policy
 
 
-def _load_world_family(base_dir: Path, payload: object, node_ids: Sequence[str]):
+def _load_world_family(
+    base_dir: Path,
+    payload: object,
+    node_ids: Sequence[str],
+    *,
+    require_expected_identity: bool,
+):
     value = _mapping(payload, "world_family")
     path = _resolve_relative(base_dir, value.get("path"), "world_family.path")
     raw = path.read_bytes()
+    identity = _verify_expected_identity(
+        value,
+        raw,
+        label="world_family",
+        required=require_expected_identity,
+    )
     try:
         data = json.loads(raw.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
@@ -456,7 +532,7 @@ def _load_world_family(base_dir: Path, payload: object, node_ids: Sequence[str])
         raise ValueError("world_family.horizon must be a positive integer") from exc
     if horizon <= 0:
         raise ValueError("world_family.horizon must be a positive integer")
-    return path, raw, worlds, semantics, structural_ids, horizon
+    return path, raw, worlds, semantics, structural_ids, horizon, identity
 
 
 def _observation_contract(payload: object) -> BinaryObservationContract:
@@ -543,15 +619,42 @@ def compile_pre_response_manifest(
     if manifest.get("schema") != MANIFEST_SCHEMA:
         raise ValueError(f"manifest schema must be {MANIFEST_SCHEMA!r}")
 
-    registry_cfg, registry_path, registry_bytes, registry_table = _load_table(
+    identity_policy_raw = manifest.get(
+        "artifact_identity_policy",
+        {"require_expected_identity": False},
+    )
+    identity_policy = _mapping(
+        identity_policy_raw,
+        "artifact_identity_policy",
+    )
+    require_expected_identity = _boolean(
+        identity_policy.get("require_expected_identity", False),
+        "artifact_identity_policy.require_expected_identity",
+    )
+
+    (
+        registry_cfg,
+        registry_path,
+        registry_bytes,
+        registry_table,
+        registry_identity,
+    ) = _load_table(
         base_dir,
         manifest.get("registry_table"),
         label="registry_table",
+        require_expected_identity=require_expected_identity,
     )
-    effort_cfg, effort_path, effort_bytes, effort_table = _load_table(
+    (
+        effort_cfg,
+        effort_path,
+        effort_bytes,
+        effort_table,
+        effort_identity,
+    ) = _load_table(
         base_dir,
         manifest.get("effort_table"),
         label="effort_table",
+        require_expected_identity=require_expected_identity,
     )
     coordinate_audit, component_by_node = _registry_state(
         registry_cfg,
@@ -585,7 +688,13 @@ def compile_pre_response_manifest(
         world_semantics,
         structural_world_ids,
         horizon,
-    ) = _load_world_family(base_dir, manifest.get("world_family"), world_node_ids)
+        world_identity,
+    ) = _load_world_family(
+        base_dir,
+        manifest.get("world_family"),
+        world_node_ids,
+        require_expected_identity=require_expected_identity,
+    )
 
     source_artifacts = (
         SourceArtifactIdentity.from_bytes(
@@ -711,6 +820,14 @@ def compile_pre_response_manifest(
             "registry_path": str(registry_path.relative_to(base_dir.resolve())),
             "effort_path": str(effort_path.relative_to(base_dir.resolve())),
             "world_family_path": str(world_path.relative_to(base_dir.resolve())),
+        },
+        "artifact_identity_policy": {
+            "require_expected_identity": require_expected_identity,
+        },
+        "artifact_identities": {
+            "registry": registry_identity,
+            "effort": effort_identity,
+            "world_family": world_identity,
         },
         "counts": {
             "node_count": len(world_node_ids),

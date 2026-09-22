@@ -253,7 +253,7 @@ It does not:
 - change observation semantics;
 - invent surveyed negatives;
 - infer missing temporal registries;
-- bypass unavailable source transport;
+- make an unavailable source magically available;
 - rescue a world universe that fails structural adequacy;
 - turn reachability into occupancy;
 - promote Layer B after seeing predictive outcomes;
@@ -314,6 +314,34 @@ Predictive outcome access requires four independently frozen layers:
 The command writes the complete joined certificate, layer fingerprints, denominator
 counts and a final result fingerprint.
 
+### Transport-independent content identity
+
+Acquisition transport is deliberately separated from scientific source identity.
+
+A manifest may enable:
+
+`artifact_identity_policy.require_expected_identity = true`
+
+and declare an exact SHA-256 plus byte count for each of the three safe inputs:
+registry, effort/context and world family. In this mode all three identities are required
+and verified before the corresponding source can contribute to the certificate.
+
+This changes the failure boundary from:
+
+`the frozen HTTP request must behave in one exact way`
+
+to:
+
+`the bytes used by the scientific contract must equal the prospectively frozen bytes`.
+
+The same bytes may therefore arrive from an official URL, an archive mirror, or an
+authorized local cache without changing source provenance or certificate identity.
+Different bytes fail closed even when their filename, URL or row schema still looks
+plausible.
+
+This does **not** authorize post-response source substitution. Expected content identity
+must be frozen before focal outcome access.
+
 ## Cross-system real portability boundary
 
 The manifest surface is now exercised on two heterogeneous real systems without opening
@@ -324,14 +352,16 @@ their biological outcomes.
 `benchmarks/louisiana_manifest_v2_portability_replay.py` reconstructs the frozen
 33-site x 20-occasion pre-response state. The manifest path reproduces the bespoke v2
 translation fingerprints for the shared coordinate, effort/context, world-family,
-observation and predictive-state layers. Its sequential source-set design remains a
+observation and predictive-state layers. The replay also requires exact content identity
+for all three manifest inputs. Its sequential source-set design remains a
 `predictive_complement_candidate`.
 
 ### Tampa Bay seagrass transects
 
 `benchmarks/tampa_manifest_v2_portability_replay.py` reconstructs the authoritative
 Gate0 state from the response-unopened artifact: 71 nodes, 1497 candidate visits and 29
-contexts. All four frozen local geometry worlds are structurally connected, so Layer A
+contexts. The replay verifies exact content identity for its registry, effort and world
+inputs. All four frozen local geometry worlds are structurally connected, so Layer A
 remains structurally admissible. The same manifest path nevertheless reproduces the
 existing response-free `ineligible_generation_shift` predictive-state fingerprint for
 the historical static Tampa Layer-B design.
