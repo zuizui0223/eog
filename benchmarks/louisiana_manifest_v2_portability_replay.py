@@ -12,6 +12,7 @@ where the two paths share an estimand.
 from __future__ import annotations
 
 from datetime import datetime
+import hashlib
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -304,6 +305,18 @@ def _manifest(tmp_path: Path) -> Path:
             {"name": "habitat", "kind": "categorical", "missing_policy": "forbid"},
         ],
     }
+    manifest["artifact_identity_policy"] = {"require_expected_identity": True}
+    for section, filename in (
+        ("registry_table", "sites.csv"),
+        ("effort_table", "effort.csv"),
+        ("world_family", "worlds.json"),
+    ):
+        raw = (tmp_path / filename).read_bytes()
+        manifest[section]["expected_identity"] = {
+            "sha256": hashlib.sha256(raw).hexdigest(),
+            "bytes": len(raw),
+        }
+
     path = tmp_path / "manifest.json"
     path.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
     return path
@@ -366,6 +379,10 @@ def run_replay() -> dict[str, object]:
         "shared_layer_fingerprint_matches": matches,
         "counts": counts,
         "statuses": manifest["statuses"],
+        "artifact_identities_all_matched": all(
+            item["matched"] is True
+            for item in manifest["artifact_identities"].values()
+        ),
         "manifest_result_fingerprint": manifest["result_fingerprint"],
         "interpretation": (
             "The declarative manifest compiler reproduces the same response-independent "
