@@ -25,7 +25,7 @@ def run_replay() -> dict[str, object]:
     contract = json.loads(FROZEN_CONTRACT.read_text(encoding="utf-8"))
 
     historical = dict(result["schema_adapter"]["mapping"])
-    declared = tuple(contract["source"]["declared_nonresponse_columns"])
+    declared = tuple(contract["metadata_only_eligibility"]["declared_nonresponse_columns"])
     if "X_WGS84" not in declared or "Y_WGS84" not in declared:
         raise AssertionError("frozen STOC contract no longer contains uppercase coordinates")
     if historical != {"x_wgs84": "X_WGS84", "y_wgs84": "Y_WGS84"}:
