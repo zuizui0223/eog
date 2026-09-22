@@ -415,6 +415,7 @@ def freeze_pre_response_certificate(
             and effort_ledger is not None
             and observation_contract is not None
             and predictive_allowed is True
+            and evaluation_fingerprint is not None
         ),
         predictive_use_allowed=predictive_allowed,
         fingerprint=_sha256(payload),
