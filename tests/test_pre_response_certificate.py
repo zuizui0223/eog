@@ -240,7 +240,9 @@ def test_coordinate_registry_must_cover_same_nodes():
             representative_policy="median",
         ),
     )
-    with pytest.raises(ValueError, match="coordinate registry node set"):
+    with pytest.raises(
+        ValueError, match="coordinate registry differs from the audit frozen"
+    ):
         freeze_pre_response_certificate(
             source_provenance=source,
             normalized_problem=problem,
