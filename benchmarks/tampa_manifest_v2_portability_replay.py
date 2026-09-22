@@ -259,6 +259,18 @@ def _write_manifest(tmp_path: Path, payload) -> Path:
         },
         "baseline_fields": list(payload["baseline_fields"]),
     }
+    manifest["artifact_identity_policy"] = {"require_expected_identity": True}
+    for section, filename in (
+        ("registry_table", "registry.csv"),
+        ("effort_table", "effort.csv"),
+        ("world_family", "worlds.json"),
+    ):
+        raw = (tmp_path / filename).read_bytes()
+        manifest[section]["expected_identity"] = {
+            "sha256": hashlib.sha256(raw).hexdigest(),
+            "bytes": len(raw),
+        }
+
     path = tmp_path / "manifest.json"
     path.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
     return path
@@ -347,6 +359,10 @@ def run_replay() -> dict[str, object]:
         "fold_node_counts": node_counts,
         "fold_candidate_counts": candidate_counts,
         "statuses": statuses,
+        "artifact_identities_all_matched": all(
+            item["matched"] is True
+            for item in manifest["artifact_identities"].values()
+        ),
         "predictive_state_fingerprint_matches_existing_v2_replay": True,
         "manifest_result_fingerprint": manifest["result_fingerprint"],
         "interpretation": (
