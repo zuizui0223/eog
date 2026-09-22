@@ -225,6 +225,18 @@ def run_replay() -> dict[str, object]:
             target_largest_component_fractions=(0.25, 0.50, 0.75, 0.90),
         ),
     )
+    if ladder.distance_matrix_fingerprint != HISTORICAL_DISTANCE_MATRIX_FINGERPRINT:
+        raise AssertionError(
+            (
+                ladder.distance_matrix_fingerprint,
+                HISTORICAL_DISTANCE_MATRIX_FINGERPRINT,
+            )
+        )
+    if ladder.fingerprint != HISTORICAL_STRUCTURAL_LADDER_FINGERPRINT:
+        raise AssertionError(
+            (ladder.fingerprint, HISTORICAL_STRUCTURAL_LADDER_FINGERPRINT)
+        )
+
     geometry = _deduplicated_geometry(ladder, distances)
     observed_thresholds = tuple(value[0] for value in geometry)
     if len(observed_thresholds) != 3 or not np.allclose(
@@ -483,6 +495,8 @@ def run_replay() -> dict[str, object]:
             "distinct_geometry_thresholds_km": list(observed_thresholds),
             "structural_world_ids": list(certificate.structural_world_ids),
             "world_family_fingerprint_v2": world_family_fingerprint,
+            "distance_matrix_fingerprint_matches_historical": True,
+            "structural_ladder_fingerprint_matches_historical": True,
             "structural_gate_passed": structural_gate.passed,
         },
         "observation": {
