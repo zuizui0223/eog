@@ -254,3 +254,12 @@ def test_cli_refuses_overwrite_without_force(tmp_path, monkeypatch):
     with pytest.raises(SystemExit):
         pre_response_freeze_main()
     assert output.read_text(encoding="utf-8") == "existing"
+
+
+def test_manifest_rejects_string_boolean_instead_of_json_boolean(tmp_path):
+    manifest_path = _write_fixture(tmp_path)
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["predictive_state"]["source_label_invariant"] = "false"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(TypeError, match="must be a JSON boolean"):
+        compile_pre_response_manifest_file(manifest_path)
