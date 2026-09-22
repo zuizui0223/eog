@@ -58,6 +58,18 @@ biological response access.
 It records separate contract, physical-header and semantic-resolution fingerprints so
 interoperability and exact provenance are not conflated.
 
+A strict physical CSV layer now sits immediately above this contract:
+
+- src/eog/v2/tabular_adapter.py
+- explicit UTF-8/BOM policy;
+- duplicate-header rejection;
+- exact row-width checks;
+- no implicit cell stripping or imputation;
+- canonical row fingerprints derived from the frozen schema resolution.
+
+This replaces repeated dataset-specific combinations of CSV parsing, required-column
+checks and in-memory renaming without weakening the response firewall.
+
 ## Coordinate-registry boundary
 
 Module:
@@ -121,6 +133,28 @@ Thus v2 genericity is deliberately layered:
 
 None of these layers implies predictive superiority.
 
+## Joined pre-response certificate
+
+Module:
+
+src/eog/v2/pre_response_certificate.py
+
+The certificate binds:
+
+- exact response-independent source artifact identities;
+- schema-resolution fingerprint;
+- coordinate-registry fingerprint;
+- NormalizedPreResponseProblem identity;
+- exact declared world-family fingerprint;
+- re-applied structural adequacy gate;
+- optional prediction-facing eligibility result.
+
+Structural response access and predictive outcome access are separate decisions. A
+Tampa-like Layer-B design can therefore remain available for Layer-A structural work
+while being blocked from predictive scoring. Conversely, structural inadequacy blocks
+response access even when the prediction-facing representation would otherwise be
+eligible.
+
 ## Integrated known-truth path
 
 Benchmark:
@@ -130,12 +164,16 @@ benchmarks/eogwf_v2_generality_known_truth.py
 The benchmark uses no biological response. It verifies one complete generic pre-response
 path:
 
-predeclared schema aliases
+strict CSV bytes
+    -> predeclared schema aliases
     -> canonical records
     -> bounded coordinate drift
+    -> content-addressed source provenance
+    -> normalized problem
     -> structural scale ladder
     -> structural adequacy
     -> prediction-facing eligibility
+    -> joined pre-response certificate
 
 The safe sequential/source-symmetric design reaches predictive_complement_candidate,
 while a Tampa-like train/serve-mismatched static design is stopped before any outcome is
@@ -143,6 +181,32 @@ needed.
 
 This benchmark is representation and protocol evidence only. It does not count as a new
 fresh endpoint and cannot modify the frozen manuscript conclusion.
+
+## Historical STOP replays
+
+Two response-free replays define what genericity is and is not allowed to rescue.
+
+### STOC schema replay
+
+benchmarks/stoc_schema_contract_replay.py
+
+The frozen STOC failure recorded lowercase x_wgs84 / y_wgs84 in the physical file while
+the predeclared interface used uppercase X_WGS84 / Y_WGS84. The generic exact-alias
+contract reproduces that mapping without opening biological responses or changing any
+world definition. This is interface variation that v2 should absorb prospectively.
+
+### Algar coordinate replay
+
+benchmarks/algar_coordinate_contract_replay.py
+
+The frozen Algar safe deployment source contains ALG069 at longitude -113.5075 in one
+deployment and -112.5074726 in later deployments at the same latitude. This is roughly a
+one-degree longitude discontinuity, not numerical rounding. The frozen 1e-9-degree rule
+fails, but so does a much looser 0.01-degree rule; accepting the node requires roughly one
+full degree of tolerance.
+
+Therefore v2 must preserve this STOP. Genericity means removing harmless interface
+brittleness, not making registry contradictions disappear.
 
 ## What this development line still does not repair
 
@@ -161,9 +225,15 @@ Those remain scientific or protocol boundaries.
 
 ## Next development step
 
-The next increment should make adapter provenance itself a first-class content-addressed
-bundle so schema resolution, coordinate audit, observation semantics, source bytes and
-normalized-problem identity can be checked with one generic pre-response certificate.
+The adapter/provenance/certificate path now exists. The next development increment should
+therefore target a second major source of bespoke validation code: observation-process
+normalization.
 
-Only after that common certificate exists should v2 attempt a new independently
-preregistered real-system translation test.
+Specifically, define a small generic effort/context contract that can represent repeated
+camera, acoustic, telemetry and transect occasions without teaching the EOG core any
+dataset-specific response syntax. It must keep surveyed-negative semantics explicit and
+must never infer absence from a missing row.
+
+Only after that contract is exercised by response-free replays from at least two distinct
+monitoring modalities should v2 attempt a new independently preregistered real-system
+translation test.
