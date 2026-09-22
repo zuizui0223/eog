@@ -342,7 +342,7 @@ def _effort_ledger(
         rows=tuple(rows),
         policy=policy,
     )
-    return ledger, context_order
+    return ledger, context_order, policy
 
 
 def _load_world_family(base_dir: Path, payload: object, node_ids: Sequence[str]):
@@ -493,7 +493,7 @@ def compile_pre_response_manifest(
     if set(world_node_ids) != set(coordinate_audit.coordinates):
         raise ValueError("world family node set differs from coordinate registry")
 
-    effort_ledger, context_order = _effort_ledger(
+    effort_ledger, context_order, effort_policy = _effort_ledger(
         effort_cfg,
         effort_table,
         node_ids=world_node_ids,
@@ -550,7 +550,7 @@ def compile_pre_response_manifest(
         context_ids=context_order,
         candidate_units=effort_ledger.candidate_units,
         observation_semantics=ObservationSemantics(
-            effort_eligible_rule=effort_ledger.rows[0].evidence_summary
+            effort_eligible_rule=effort_policy.eligibility_rule
             if manifest.get("observation_semantics") is None
             else _text(
                 _mapping(
