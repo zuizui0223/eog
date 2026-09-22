@@ -7,9 +7,20 @@ def test_integrated_generality_known_truth_path():
     assert result["counts_as_predictive_evidence"] is False
     assert result["coordinate_registry"]["status"] == "within_frozen_tolerance"
     assert result["structural_scale"]["adequacy_passed"] is True
+    assert result["effort_context"]["candidate_count"] == 4
+    assert result["effort_context"]["unsurveyed_count"] == 0
+    assert result["observation_contract"]["mode"] == "complete_source_zero"
     assert result["predictive_state"]["safe_status"] == "predictive_complement_candidate"
     assert result["predictive_state"]["tampa_like_status"] == "ineligible_generation_shift"
     assert result["pre_response_certificate"]["safe_status"] == "structural_ready"
+    assert (
+        result["pre_response_certificate"]["safe_observation_status"]
+        == "complete_source_zero"
+    )
+    assert (
+        result["pre_response_certificate"]["safe_predictive_outcome_access_allowed"]
+        is True
+    )
     assert (
         result["pre_response_certificate"]["safe_predictive_status"]
         == "predictive_complement_candidate"
