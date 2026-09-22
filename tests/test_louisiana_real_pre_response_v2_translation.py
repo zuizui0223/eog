@@ -28,6 +28,8 @@ def test_real_louisiana_pre_response_registry_translates_to_generic_v2():
         17.008648432743254,
     ]
     assert len(result["worlds"]["structural_world_ids"]) == 3
+    assert result["worlds"]["distance_matrix_fingerprint_matches_historical"] is True
+    assert result["worlds"]["structural_ladder_fingerprint_matches_historical"] is True
     assert result["worlds"]["structural_gate_passed"] is True
 
     assert result["observation"]["mode"] == "explicit_binary_tokens"
