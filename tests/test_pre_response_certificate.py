@@ -8,6 +8,7 @@ from eog.v2.coordinate_registry import (
     CoordinateRegistryPolicy,
     audit_coordinate_registry,
 )
+from eog.v2.observation_process import BinaryObservationContract
 from eog.v2.pre_response_certificate import (
     SourceArtifactIdentity,
     fingerprint_world_family,
@@ -29,6 +30,17 @@ from eog.v2.world_adequacy import (
     apply_structural_adequacy_gate,
     audit_world_universe_structure,
 )
+
+
+def _observation():
+    return BinaryObservationContract(
+        mode="complete_source_zero",
+        endpoint_name="synthetic detection",
+        positive_semantics="at least one focal event",
+        negative_semantics="eligible unit with no focal event after complete source",
+        unavailable_semantics="outside frozen scored universe",
+        zero_interpretation="recorded non-detection only",
+    )
 
 
 def _fixture(*, source_fingerprint_override=None, structural_pass=True):
@@ -175,6 +187,7 @@ def test_safe_predictive_design_is_certified_separately_from_structural_readines
         coordinate_registry=coordinate,
         structural_gate=gate,
         world_adjacencies=worlds,
+        observation_contract=_observation(),
         predictive_state=safe,
     )
     assert certificate.structural_status == "structural_ready"
@@ -192,6 +205,7 @@ def test_tampa_like_predictive_state_does_not_block_layer_a_response_access():
         coordinate_registry=coordinate,
         structural_gate=gate,
         world_adjacencies=worlds,
+        observation_contract=_observation(),
         predictive_state=unsafe,
     )
     assert certificate.structural_response_access_allowed is True
@@ -208,6 +222,7 @@ def test_structural_failure_blocks_response_access_even_with_safe_predictive_des
         coordinate_registry=coordinate,
         structural_gate=gate,
         world_adjacencies=worlds,
+        observation_contract=_observation(),
         predictive_state=safe,
     )
     assert certificate.structural_status == "stop_structural_adequacy"
@@ -226,6 +241,7 @@ def test_normalized_problem_must_reference_exact_source_provenance():
             coordinate_registry=coordinate,
             structural_gate=gate,
             world_adjacencies=worlds,
+            observation_contract=_observation(),
             predictive_state=safe,
         )
 
@@ -249,6 +265,7 @@ def test_coordinate_registry_must_cover_same_nodes():
             coordinate_registry=coordinate,
             structural_gate=gate,
             world_adjacencies=worlds,
+            observation_contract=_observation(),
             predictive_state=safe,
         )
 
@@ -273,6 +290,7 @@ def test_coordinate_audit_must_match_source_provenance_fingerprint():
             coordinate_registry=coordinate,
             structural_gate=gate,
             world_adjacencies=worlds,
+            observation_contract=_observation(),
             predictive_state=safe,
         )
 
@@ -289,6 +307,7 @@ def test_declared_world_family_must_match_normalized_problem():
             coordinate_registry=coordinate,
             structural_gate=gate,
             world_adjacencies=altered,
+            observation_contract=_observation(),
             predictive_state=safe,
         )
 
@@ -311,5 +330,22 @@ def test_structural_gate_is_reapplied_not_trusted_by_stored_pass_flag():
             coordinate_registry=coordinate,
             structural_gate=tampered_gate,
             world_adjacencies=worlds,
+            observation_contract=_observation(),
             predictive_state=safe,
         )
+
+
+def test_predictive_outcome_access_requires_machine_readable_observation_contract():
+    source, coordinate, problem, gate, safe, _, worlds = _fixture()
+    certificate = freeze_pre_response_certificate(
+        source_provenance=source,
+        normalized_problem=problem,
+        coordinate_registry=coordinate,
+        structural_gate=gate,
+        world_adjacencies=worlds,
+        predictive_state=safe,
+    )
+    assert certificate.structural_response_access_allowed is True
+    assert certificate.observation_status == "not_declared"
+    assert certificate.predictive_use_allowed is True
+    assert certificate.predictive_outcome_access_allowed is False
