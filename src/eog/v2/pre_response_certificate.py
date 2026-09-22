@@ -97,15 +97,25 @@ class AdapterSourceProvenance:
     """Frozen source-side provenance consumed by NormalizedPreResponseProblem."""
 
     artifacts: tuple[SourceArtifactIdentity, ...]
-    schema_resolution_fingerprint: str
+    schema_resolution_fingerprints: tuple[tuple[str, str], ...]
     coordinate_registry_fingerprint: str
     fingerprint: str
+
+    @property
+    def schema_resolution_fingerprint(self) -> str:
+        """Backward-compatible accessor for single-schema adapters."""
+        if len(self.schema_resolution_fingerprints) != 1:
+            raise ValueError(
+                "multiple schema resolutions are frozen; use schema_resolution_fingerprints"
+            )
+        return self.schema_resolution_fingerprints[0][1]
 
 
 def freeze_adapter_source_provenance(
     *,
     artifacts: Sequence[SourceArtifactIdentity],
-    schema_resolution: FrozenSchemaResolution,
+    schema_resolution: FrozenSchemaResolution | None = None,
+    schema_resolutions: Mapping[str, FrozenSchemaResolution] | None = None,
     coordinate_registry: CoordinateRegistryAudit,
 ) -> AdapterSourceProvenance:
     values = tuple(artifacts)
@@ -118,6 +128,27 @@ def freeze_adapter_source_provenance(
         raise ValueError("source artifact IDs must be unique")
 
     ordered = tuple(sorted(values, key=lambda artifact: artifact.artifact_id))
+
+    resolved_schemas: dict[str, FrozenSchemaResolution] = {}
+    if schema_resolution is not None:
+        resolved_schemas["primary"] = schema_resolution
+    if schema_resolutions is not None:
+        for schema_id, resolution in schema_resolutions.items():
+            key = _text(schema_id, "schema_id")
+            if key in resolved_schemas:
+                raise ValueError(f"duplicate schema resolution id: {key!r}")
+            if not isinstance(resolution, FrozenSchemaResolution):
+                raise TypeError(
+                    "schema_resolutions values must be FrozenSchemaResolution"
+                )
+            resolved_schemas[key] = resolution
+    if not resolved_schemas:
+        raise ValueError("at least one frozen schema resolution is required")
+    schema_fingerprints = tuple(
+        (schema_id, resolved_schemas[schema_id].fingerprint)
+        for schema_id in sorted(resolved_schemas)
+    )
+
     payload = {
         "schema": "eog.adapter_source_provenance.v1",
         "artifacts": [
@@ -129,12 +160,12 @@ def freeze_adapter_source_provenance(
             }
             for artifact in ordered
         ],
-        "schema_resolution_fingerprint": schema_resolution.fingerprint,
+        "schema_resolution_fingerprints": [list(value) for value in schema_fingerprints],
         "coordinate_registry_fingerprint": coordinate_registry.fingerprint,
     }
     return AdapterSourceProvenance(
         artifacts=ordered,
-        schema_resolution_fingerprint=schema_resolution.fingerprint,
+        schema_resolution_fingerprints=schema_fingerprints,
         coordinate_registry_fingerprint=coordinate_registry.fingerprint,
         fingerprint=_sha256(payload),
     )
@@ -143,14 +174,22 @@ def freeze_adapter_source_provenance(
 def fingerprint_world_family(
     node_ids: Sequence[str],
     world_adjacencies: Mapping[str, np.ndarray],
+    *,
+    world_semantics: Mapping[str, object] | None = None,
 ) -> str:
-    """Fingerprint the exact declared world matrices in one frozen node order."""
+    """Fingerprint exact world geometry plus optional rule/update semantics."""
 
     ids = tuple(_text(value, "node_id") for value in node_ids)
     if not ids or len(ids) != len(set(ids)):
         raise ValueError("node_ids must be non-empty and unique")
     if not world_adjacencies:
         raise ValueError("world_adjacencies must not be empty")
+
+    if world_semantics is not None:
+        if set(world_semantics) != set(world_adjacencies):
+            raise ValueError(
+                "world_semantics keys must exactly equal world_adjacencies keys"
+            )
 
     worlds: list[dict[str, object]] = []
     for world_id in sorted(world_adjacencies):
@@ -168,12 +207,15 @@ def fingerprint_world_family(
             {
                 "world_id": name,
                 "adjacency": matrix.tolist(),
+                "semantics": (
+                    None if world_semantics is None else world_semantics[world_id]
+                ),
             }
         )
 
     return _sha256(
         {
-            "schema": "eog.world_family_identity.v1",
+            "schema": "eog.world_family_identity.v2",
             "node_ids": list(ids),
             "worlds": worlds,
         }
@@ -189,9 +231,11 @@ class PreResponseCertificate:
     normalized_problem_fingerprint: str
     world_family_fingerprint: str
     structural_gate_fingerprint: str
+    structural_world_ids: tuple[str, ...]
     effort_context_fingerprint: str | None
     observation_contract_fingerprint: str | None
     predictive_state_fingerprint: str | None
+    predictive_evaluation_fingerprint: str | None
     structural_status: str
     effort_status: str
     observation_status: str
@@ -209,9 +253,12 @@ def freeze_pre_response_certificate(
     coordinate_registry: CoordinateRegistryAudit,
     structural_gate: WorldUniverseStructuralGate,
     world_adjacencies: Mapping[str, np.ndarray],
+    world_semantics: Mapping[str, object] | None = None,
+    structural_world_ids: Sequence[str] | None = None,
     effort_ledger: EffortContextLedger | None = None,
     observation_contract: BinaryObservationContract | None = None,
     predictive_state: PredictiveStateEligibility | None = None,
+    predictive_evaluation_fingerprint: str | None = None,
 ) -> PreResponseCertificate:
     """Join source, normalized-problem and gate identities without biological outcomes."""
 
@@ -241,14 +288,29 @@ def freeze_pre_response_certificate(
     world_family_fingerprint = fingerprint_world_family(
         normalized_problem.node_ids,
         world_adjacencies,
+        world_semantics=world_semantics,
     )
     if world_family_fingerprint != normalized_problem.world_family_fingerprint:
         raise ValueError(
             "declared world family differs from normalized problem world_family_fingerprint"
         )
+    if structural_world_ids is None:
+        structural_ids = tuple(sorted(world_adjacencies))
+    else:
+        structural_ids = tuple(_text(value, "structural_world_id") for value in structural_world_ids)
+        if not structural_ids or len(structural_ids) != len(set(structural_ids)):
+            raise ValueError("structural_world_ids must be non-empty and unique")
+        missing_structural = sorted(set(structural_ids) - set(world_adjacencies))
+        if missing_structural:
+            raise ValueError(
+                f"structural_world_ids reference undeclared worlds: {missing_structural!r}"
+            )
+    structural_adjacencies = {
+        world_id: world_adjacencies[world_id] for world_id in structural_ids
+    }
     reconstructed_audit = audit_world_universe_structure(
         normalized_problem.node_ids,
-        world_adjacencies,
+        structural_adjacencies,
         horizon=structural_gate.audit.horizon,
     )
     if reconstructed_audit.fingerprint != structural_gate.audit.fingerprint:
@@ -294,6 +356,17 @@ def freeze_pre_response_certificate(
         predictive_fingerprint = predictive_state.fingerprint
         predictive_allowed = predictive_state.predictive_use_allowed
 
+    if predictive_evaluation_fingerprint is None:
+        evaluation_fingerprint = None
+    else:
+        evaluation_fingerprint = str(predictive_evaluation_fingerprint).strip().lower()
+        if len(evaluation_fingerprint) != 64 or any(
+            char not in "0123456789abcdef" for char in evaluation_fingerprint
+        ):
+            raise ValueError(
+                "predictive_evaluation_fingerprint must be a 64-character hexadecimal digest"
+            )
+
     payload = {
         "schema": "eog.pre_response_certificate.v1",
         "node_ids": list(normalized_problem.node_ids),
@@ -302,9 +375,11 @@ def freeze_pre_response_certificate(
         "world_family_fingerprint": world_family_fingerprint,
         "coordinate_registry_fingerprint": coordinate_registry.fingerprint,
         "structural_gate_fingerprint": reconstructed_gate.fingerprint,
+        "structural_world_ids": list(structural_ids),
         "effort_context_fingerprint": effort_fingerprint,
         "observation_contract_fingerprint": observation_fingerprint,
         "predictive_state_fingerprint": predictive_fingerprint,
+        "predictive_evaluation_fingerprint": evaluation_fingerprint,
         "structural_status": structural_status,
         "effort_status": effort_status,
         "observation_status": observation_status,
@@ -315,6 +390,7 @@ def freeze_pre_response_certificate(
             and effort_ledger is not None
             and observation_contract is not None
             and predictive_allowed is True
+            and evaluation_fingerprint is not None
         ),
         "predictive_use_allowed": predictive_allowed,
     }
@@ -324,9 +400,11 @@ def freeze_pre_response_certificate(
         normalized_problem_fingerprint=normalized_problem.fingerprint,
         world_family_fingerprint=world_family_fingerprint,
         structural_gate_fingerprint=reconstructed_gate.fingerprint,
+        structural_world_ids=structural_ids,
         effort_context_fingerprint=effort_fingerprint,
         observation_contract_fingerprint=observation_fingerprint,
         predictive_state_fingerprint=predictive_fingerprint,
+        predictive_evaluation_fingerprint=evaluation_fingerprint,
         structural_status=structural_status,
         effort_status=effort_status,
         observation_status=observation_status,
