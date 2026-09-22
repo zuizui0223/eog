@@ -367,6 +367,15 @@ def freeze_pre_response_certificate(
                 "predictive_evaluation_fingerprint must be a 64-character hexadecimal digest"
             )
 
+    structural_access_allowed = bool(reconstructed_gate.passed)
+    predictive_access_allowed = bool(
+        structural_access_allowed
+        and effort_ledger is not None
+        and observation_contract is not None
+        and predictive_allowed is True
+        and evaluation_fingerprint is not None
+    )
+
     payload = {
         "schema": "eog.pre_response_certificate.v1",
         "node_ids": list(normalized_problem.node_ids),
@@ -384,14 +393,8 @@ def freeze_pre_response_certificate(
         "effort_status": effort_status,
         "observation_status": observation_status,
         "predictive_status": predictive_status,
-        "structural_response_access_allowed": bool(reconstructed_gate.passed),
-        "predictive_outcome_access_allowed": bool(
-            reconstructed_gate.passed
-            and effort_ledger is not None
-            and observation_contract is not None
-            and predictive_allowed is True
-            and evaluation_fingerprint is not None
-        ),
+        "structural_response_access_allowed": structural_access_allowed,
+        "predictive_outcome_access_allowed": predictive_access_allowed,
         "predictive_use_allowed": predictive_allowed,
     }
     return PreResponseCertificate(
@@ -409,14 +412,8 @@ def freeze_pre_response_certificate(
         effort_status=effort_status,
         observation_status=observation_status,
         predictive_status=predictive_status,
-        structural_response_access_allowed=bool(reconstructed_gate.passed),
-        predictive_outcome_access_allowed=bool(
-            reconstructed_gate.passed
-            and effort_ledger is not None
-            and observation_contract is not None
-            and predictive_allowed is True
-            and evaluation_fingerprint is not None
-        ),
+        structural_response_access_allowed=structural_access_allowed,
+        predictive_outcome_access_allowed=predictive_access_allowed,
         predictive_use_allowed=predictive_allowed,
         fingerprint=_sha256(payload),
     )
