@@ -17,7 +17,7 @@ def _policy():
     )
 
 
-def _row(unit, node, context, eligible, evidence, fold=1):
+def _row(unit, node, context, eligible, evidence, fold=1, analysis_role=None):
     return EffortContextRow(
         unit_id=unit,
         node_id=node,
@@ -26,6 +26,7 @@ def _row(unit, node, context, eligible, evidence, fold=1):
         eligible=eligible,
         evidence_summary=str(evidence),
         evidence_fingerprint=evidence_fingerprint(evidence),
+        analysis_role=analysis_role,
     )
 
 
@@ -50,6 +51,8 @@ def test_ledger_projects_only_eligible_rows_to_candidate_units():
     assert tuple(unit.unit_id for unit in ledger.candidate_units) == ("A|t1", "B|t1")
     assert ledger.unsurveyed_unit_ids == ("A|t2", "B|t2")
     assert ledger.candidate_count == 2
+    assert ledger.initialization_count == 0
+    assert ledger.surveyed_count == 2
     assert ledger.unsurveyed_count == 2
 
 
@@ -82,8 +85,8 @@ def test_ledger_rejects_unknown_node_or_context():
         )
 
 
-def test_ledger_requires_at_least_one_eligible_unit():
-    with pytest.raises(ValueError, match="no eligible candidate units"):
+def test_ledger_requires_at_least_one_scored_unit():
+    with pytest.raises(ValueError, match="no scored candidate units"):
         freeze_effort_context_ledger(
             node_ids=("A",),
             context_ids=("t1",),
@@ -142,3 +145,48 @@ def test_ledger_is_order_invariant_for_same_unit_evidence():
         policy=_policy(),
     )
     assert left.fingerprint == right.fingerprint
+
+
+def test_initialization_only_units_are_surveyed_but_not_scored_candidates():
+    ledger = freeze_effort_context_ledger(
+        node_ids=("A",),
+        context_ids=("t0", "t1"),
+        rows=(
+            _row(
+                "A|t0",
+                "A",
+                "t0",
+                True,
+                {"surveyed": True},
+                analysis_role="initialization_only",
+            ),
+            _row("A|t1", "A", "t1", True, {"surveyed": True}),
+        ),
+        policy=_policy(),
+    )
+    assert ledger.initialization_unit_ids == ("A|t0",)
+    assert tuple(unit.unit_id for unit in ledger.candidate_units) == ("A|t1",)
+    assert ledger.initialization_count == 1
+    assert ledger.candidate_count == 1
+    assert ledger.surveyed_count == 2
+
+
+def test_effort_role_and_eligibility_must_be_consistent():
+    with pytest.raises(ValueError, match="eligible effort rows cannot use unsurveyed"):
+        _row(
+            "A|t0",
+            "A",
+            "t0",
+            True,
+            {"surveyed": True},
+            analysis_role="unsurveyed",
+        )
+    with pytest.raises(ValueError, match="ineligible effort rows must use unsurveyed"):
+        _row(
+            "A|t0",
+            "A",
+            "t0",
+            False,
+            {"surveyed": False},
+            analysis_role="initialization_only",
+        )
