@@ -70,10 +70,18 @@ def _sha256(payload: object) -> str:
 
 
 def _text(value: object, label: str) -> str:
+    if value is None:
+        raise ValueError(f"{label} must be non-empty")
     result = str(value).strip()
     if not result:
         raise ValueError(f"{label} must be non-empty")
     return result
+
+
+def _boolean(value: object, label: str) -> bool:
+    if not isinstance(value, bool):
+        raise TypeError(f"{label} must be a JSON boolean")
+    return value
 
 
 def _mapping(value: object, label: str) -> Mapping[str, object]:
@@ -118,12 +126,18 @@ def _schema_contract(payload: object) -> SchemaAliasContract:
             SchemaRole(
                 role=_text(row.get("role"), f"schema role {index} name"),
                 aliases=aliases,
-                required=bool(row.get("required", True)),
+                required=_boolean(
+                    row.get("required", True),
+                    f"schema role {index} required",
+                ),
             )
         )
     return SchemaAliasContract(
         roles=tuple(roles),
-        allow_unmapped_columns=bool(value.get("allow_unmapped_columns", True)),
+        allow_unmapped_columns=_boolean(
+            value.get("allow_unmapped_columns", True),
+            "schema allow_unmapped_columns",
+        ),
     )
 
 
@@ -133,8 +147,14 @@ def _csv_policy(payload: object | None) -> StrictCSVPolicy:
     value = _mapping(payload, "csv_policy")
     return StrictCSVPolicy(
         encoding=str(value.get("encoding", "utf-8")),
-        allow_utf8_bom=bool(value.get("allow_utf8_bom", False)),
-        require_data_rows=bool(value.get("require_data_rows", True)),
+        allow_utf8_bom=_boolean(
+            value.get("allow_utf8_bom", False),
+            "csv_policy.allow_utf8_bom",
+        ),
+        require_data_rows=_boolean(
+            value.get("require_data_rows", True),
+            "csv_policy.require_data_rows",
+        ),
     )
 
 
@@ -414,7 +434,10 @@ def _predictive_state(payload: object | None):
         return None
     value = _mapping(payload, "predictive_state")
     design = PredictiveStateDesign(
-        repeated_measure_endpoint=bool(value.get("repeated_measure_endpoint")),
+        repeated_measure_endpoint=_boolean(
+            value.get("repeated_measure_endpoint"),
+            "predictive repeated_measure_endpoint",
+        ),
         train_generator_id=_text(
             value.get("train_generator_id"), "predictive train_generator_id"
         ),
@@ -423,11 +446,18 @@ def _predictive_state(payload: object | None):
         ),
         refresh_policy=str(value.get("refresh_policy")),
         source_policy=_text(value.get("source_policy"), "predictive source_policy"),
-        source_label_invariant=bool(value.get("source_label_invariant")),
-        baseline_contains_spatial_coordinates=bool(
-            value.get("baseline_contains_spatial_coordinates", False)
+        source_label_invariant=_boolean(
+            value.get("source_label_invariant"),
+            "predictive source_label_invariant",
         ),
-        static_predictive_opt_in=bool(value.get("static_predictive_opt_in", False)),
+        baseline_contains_spatial_coordinates=_boolean(
+            value.get("baseline_contains_spatial_coordinates", False),
+            "predictive baseline_contains_spatial_coordinates",
+        ),
+        static_predictive_opt_in=_boolean(
+            value.get("static_predictive_opt_in", False),
+            "predictive static_predictive_opt_in",
+        ),
     )
     return evaluate_predictive_state_design(design)
 
@@ -598,8 +628,9 @@ def compile_pre_response_manifest(
         min_median_horizon_reachable_fraction=adequacy_raw.get(
             "min_median_horizon_reachable_fraction"
         ),
-        require_at_least_one_world_pass=bool(
-            adequacy_raw.get("require_at_least_one_world_pass", True)
+        require_at_least_one_world_pass=_boolean(
+            adequacy_raw.get("require_at_least_one_world_pass", True),
+            "structural_adequacy.require_at_least_one_world_pass",
         ),
     )
     structural_gate = apply_structural_adequacy_gate(structural_audit, adequacy)
