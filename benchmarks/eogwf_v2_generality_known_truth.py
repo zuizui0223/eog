@@ -205,6 +205,7 @@ def run_benchmark() -> dict[str, object]:
         effort_ledger=effort_ledger,
         observation_contract=observation_contract,
         predictive_state=safe_design,
+        predictive_evaluation_fingerprint="b" * 64,
     )
     tampa_like_certificate = freeze_pre_response_certificate(
         source_provenance=source_provenance,
@@ -215,6 +216,7 @@ def run_benchmark() -> dict[str, object]:
         effort_ledger=effort_ledger,
         observation_contract=observation_contract,
         predictive_state=tampa_like_design,
+        predictive_evaluation_fingerprint="b" * 64,
     )
 
     assert resolution.mapping["x"] == "x_wgs84"
@@ -269,6 +271,7 @@ def run_benchmark() -> dict[str, object]:
             "mode": observation_contract.mode,
             "fingerprint": observation_contract.fingerprint,
         },
+        "predictive_evaluation_fingerprint": "b" * 64,
         "pre_response_certificate": {
             "safe_status": safe_certificate.structural_status,
             "safe_effort_status": safe_certificate.effort_status,
