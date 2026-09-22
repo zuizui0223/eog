@@ -15,6 +15,12 @@ from eog.v2.coordinate_registry import (
     CoordinateRegistryPolicy,
     audit_coordinate_registry,
 )
+from eog.v2.effort_context import (
+    EffortContextRow,
+    EffortEligibilityPolicy,
+    evidence_fingerprint,
+    freeze_effort_context_ledger,
+)
 from eog.v2.observation_process import BinaryObservationContract
 from eog.v2.pre_response_certificate import (
     SourceArtifactIdentity,
@@ -27,7 +33,6 @@ from eog.v2.predictive_state_gate import (
     evaluate_predictive_state_design,
 )
 from eog.v2.problem_contract import (
-    CandidateUnit,
     ObservationSemantics,
     freeze_pre_response_problem,
 )
@@ -141,6 +146,31 @@ def run_benchmark() -> dict[str, object]:
         schema_resolution=resolution,
         coordinate_registry=coordinate_audit,
     )
+    effort_rows = tuple(
+        EffortContextRow(
+            unit_id=f"{node}|t0",
+            node_id=node,
+            context_id="t0",
+            fold=1 + (index % 2),
+            eligible=True,
+            evidence_summary="synthetic response-independent survey effort",
+            evidence_fingerprint=evidence_fingerprint(
+                {"node_id": node, "context_id": "t0", "eligible": True}
+            ),
+        )
+        for index, node in enumerate(node_ids)
+    )
+    effort_ledger = freeze_effort_context_ledger(
+        node_ids=node_ids,
+        context_ids=("t0",),
+        rows=effort_rows,
+        policy=EffortEligibilityPolicy(
+            unit_definition="node x context",
+            eligibility_rule="synthetic response-independent effort marks unit surveyed",
+            unsurveyed_rule="unsurveyed units are outside the endpoint",
+            evidence_source="response_independent_effort",
+        ),
+    )
     observation_contract = BinaryObservationContract(
         mode="complete_source_zero",
         endpoint_name="synthetic detection",
@@ -153,15 +183,7 @@ def run_benchmark() -> dict[str, object]:
         node_ids=node_ids,
         component_ids=tuple("synthetic_component" for _ in node_ids),
         context_ids=("t0",),
-        candidate_units=tuple(
-            CandidateUnit(
-                unit_id=f"{node}|t0",
-                node_id=node,
-                context_id="t0",
-                fold=1 + (index % 2),
-            )
-            for index, node in enumerate(node_ids)
-        ),
+        candidate_units=effort_ledger.candidate_units,
         observation_semantics=ObservationSemantics(
             effort_eligible_rule="all synthetic candidate units are effort eligible",
             positive_rule="not opened in this response-independent benchmark",
@@ -236,6 +258,11 @@ def run_benchmark() -> dict[str, object]:
             "fingerprint": source_provenance.fingerprint,
             "artifact_count": len(source_provenance.artifacts),
         },
+        "effort_context": {
+            "candidate_count": effort_ledger.candidate_count,
+            "unsurveyed_count": effort_ledger.unsurveyed_count,
+            "fingerprint": effort_ledger.fingerprint,
+        },
         "observation_contract": {
             "mode": observation_contract.mode,
             "fingerprint": observation_contract.fingerprint,
@@ -272,9 +299,10 @@ def run_benchmark() -> dict[str, object]:
         },
         "interpretation": (
             "A predeclared physical-schema alias, bounded coordinate drift, "
-            "content-addressed source provenance, response-blind structural scale "
-            "bracket, structural adequacy gate, and prediction-facing eligibility "
-            "decision can be evaluated in one generic pre-response path without "
+            "content-addressed source provenance, response-independent effort ledger, "
+            "frozen observation semantics, response-blind structural scale bracket, "
+            "structural adequacy gate, and prediction-facing eligibility decision can "
+            "be evaluated in one generic pre-response path without "
             "biological outcomes."
         ),
     }
