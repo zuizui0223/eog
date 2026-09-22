@@ -220,16 +220,23 @@ def _load_table(
     payload: object,
     *,
     label: str,
+    require_expected_identity: bool,
 ):
     value = _mapping(payload, label)
     path = _resolve_relative(base_dir, value.get("path"), f"{label}.path")
     raw = path.read_bytes()
+    identity = _verify_expected_identity(
+        value,
+        raw,
+        label=label,
+        required=require_expected_identity,
+    )
     table = parse_response_blind_csv(
         raw,
         schema_contract=_schema_contract(value.get("schema")),
         policy=_csv_policy(value.get("csv_policy")),
     )
-    return value, path, raw, table
+    return value, path, raw, table, identity
 
 
 def _coerce_evidence_value(value: object, kind: str, label: str) -> object:
@@ -472,10 +479,22 @@ def _effort_ledger(
     return ledger, context_order, policy
 
 
-def _load_world_family(base_dir: Path, payload: object, node_ids: Sequence[str]):
+def _load_world_family(
+    base_dir: Path,
+    payload: object,
+    node_ids: Sequence[str],
+    *,
+    require_expected_identity: bool,
+):
     value = _mapping(payload, "world_family")
     path = _resolve_relative(base_dir, value.get("path"), "world_family.path")
     raw = path.read_bytes()
+    identity = _verify_expected_identity(
+        value,
+        raw,
+        label="world_family",
+        required=require_expected_identity,
+    )
     try:
         data = json.loads(raw.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
@@ -513,7 +532,7 @@ def _load_world_family(base_dir: Path, payload: object, node_ids: Sequence[str])
         raise ValueError("world_family.horizon must be a positive integer") from exc
     if horizon <= 0:
         raise ValueError("world_family.horizon must be a positive integer")
-    return path, raw, worlds, semantics, structural_ids, horizon
+    return path, raw, worlds, semantics, structural_ids, horizon, identity
 
 
 def _observation_contract(payload: object) -> BinaryObservationContract:
@@ -613,27 +632,29 @@ def compile_pre_response_manifest(
         "artifact_identity_policy.require_expected_identity",
     )
 
-    registry_cfg, registry_path, registry_bytes, registry_table = _load_table(
+    (
+        registry_cfg,
+        registry_path,
+        registry_bytes,
+        registry_table,
+        registry_identity,
+    ) = _load_table(
         base_dir,
         manifest.get("registry_table"),
         label="registry_table",
+        require_expected_identity=require_expected_identity,
     )
-    effort_cfg, effort_path, effort_bytes, effort_table = _load_table(
+    (
+        effort_cfg,
+        effort_path,
+        effort_bytes,
+        effort_table,
+        effort_identity,
+    ) = _load_table(
         base_dir,
         manifest.get("effort_table"),
         label="effort_table",
-    )
-    registry_identity = _verify_expected_identity(
-        registry_cfg,
-        registry_bytes,
-        label="registry_table",
-        required=require_expected_identity,
-    )
-    effort_identity = _verify_expected_identity(
-        effort_cfg,
-        effort_bytes,
-        label="effort_table",
-        required=require_expected_identity,
+        require_expected_identity=require_expected_identity,
     )
     coordinate_audit, component_by_node = _registry_state(
         registry_cfg,
@@ -667,12 +688,12 @@ def compile_pre_response_manifest(
         world_semantics,
         structural_world_ids,
         horizon,
-    ) = _load_world_family(base_dir, manifest.get("world_family"), world_node_ids)
-    world_identity = _verify_expected_identity(
-        world_cfg,
-        world_bytes,
-        label="world_family",
-        required=require_expected_identity,
+        world_identity,
+    ) = _load_world_family(
+        base_dir,
+        manifest.get("world_family"),
+        world_node_ids,
+        require_expected_identity=require_expected_identity,
     )
 
     source_artifacts = (
