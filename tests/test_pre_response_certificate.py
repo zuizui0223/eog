@@ -38,6 +38,9 @@ from eog.v2.world_adequacy import (
 )
 
 
+EVALUATION_FP = "a" * 64
+
+
 def _effort_for(problem):
     return freeze_effort_context_ledger(
         node_ids=problem.node_ids,
@@ -223,6 +226,7 @@ def test_safe_predictive_design_is_certified_separately_from_structural_readines
         effort_ledger=_effort_for(problem),
         observation_contract=_observation(),
         predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
     )
     assert certificate.structural_status == "structural_ready"
     assert certificate.structural_response_access_allowed is True
@@ -260,6 +264,7 @@ def test_structural_failure_blocks_response_access_even_with_safe_predictive_des
         effort_ledger=_effort_for(problem),
         observation_contract=_observation(),
         predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
     )
     assert certificate.structural_status == "stop_structural_adequacy"
     assert certificate.structural_response_access_allowed is False
@@ -279,6 +284,7 @@ def test_normalized_problem_must_reference_exact_source_provenance():
             world_adjacencies=worlds,
             observation_contract=_observation(),
             predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
         )
 
 
@@ -303,6 +309,7 @@ def test_coordinate_registry_must_cover_same_nodes():
             world_adjacencies=worlds,
             observation_contract=_observation(),
             predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
         )
 
 
@@ -328,6 +335,7 @@ def test_coordinate_audit_must_match_source_provenance_fingerprint():
             world_adjacencies=worlds,
             observation_contract=_observation(),
             predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
         )
 
 
@@ -346,6 +354,7 @@ def test_declared_world_family_must_match_normalized_problem():
             effort_ledger=_effort_for(problem),
             observation_contract=_observation(),
             predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
         )
 
 
@@ -369,6 +378,7 @@ def test_structural_gate_is_reapplied_not_trusted_by_stored_pass_flag():
             world_adjacencies=worlds,
             observation_contract=_observation(),
             predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
         )
 
 
@@ -382,6 +392,7 @@ def test_predictive_outcome_access_requires_machine_readable_observation_contrac
         world_adjacencies=worlds,
         effort_ledger=_effort_for(problem),
         predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
     )
     assert certificate.structural_response_access_allowed is True
     assert certificate.effort_status == "response_independent_effort_declared"
@@ -400,6 +411,7 @@ def test_predictive_outcome_access_requires_response_independent_effort_ledger()
         world_adjacencies=worlds,
         observation_contract=_observation(),
         predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
     )
     assert certificate.structural_response_access_allowed is True
     assert certificate.effort_status == "not_declared"
@@ -484,6 +496,7 @@ def test_structural_adequacy_can_exclude_external_open_world_from_gate():
         structural_world_ids=("local",),
         observation_contract=_observation(),
         predictive_state=safe,
+        predictive_evaluation_fingerprint=EVALUATION_FP,
     )
     assert certificate.structural_status == "stop_structural_adequacy"
     assert certificate.structural_world_ids == ("local",)
@@ -533,3 +546,38 @@ def test_source_provenance_supports_multiple_safe_schemas_order_invariant():
     )
     with pytest.raises(ValueError, match="multiple schema resolutions"):
         _ = left.schema_resolution_fingerprint
+
+
+
+def test_predictive_outcome_access_requires_frozen_evaluation_identity():
+    source, coordinate, problem, gate, safe, _, worlds = _fixture()
+    certificate = freeze_pre_response_certificate(
+        source_provenance=source,
+        normalized_problem=problem,
+        coordinate_registry=coordinate,
+        structural_gate=gate,
+        world_adjacencies=worlds,
+        effort_ledger=_effort_for(problem),
+        observation_contract=_observation(),
+        predictive_state=safe,
+    )
+    assert certificate.structural_response_access_allowed is True
+    assert certificate.predictive_use_allowed is True
+    assert certificate.predictive_evaluation_fingerprint is None
+    assert certificate.predictive_outcome_access_allowed is False
+
+
+def test_predictive_evaluation_identity_must_be_sha256():
+    source, coordinate, problem, gate, safe, _, worlds = _fixture()
+    with pytest.raises(ValueError, match="64-character hexadecimal"):
+        freeze_pre_response_certificate(
+            source_provenance=source,
+            normalized_problem=problem,
+            coordinate_registry=coordinate,
+            structural_gate=gate,
+            world_adjacencies=worlds,
+            effort_ledger=_effort_for(problem),
+            observation_contract=_observation(),
+            predictive_state=safe,
+            predictive_evaluation_fingerprint="not-a-digest",
+        )
