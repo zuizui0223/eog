@@ -202,6 +202,7 @@ def run_benchmark() -> dict[str, object]:
         coordinate_registry=coordinate_audit,
         structural_gate=structural_gate,
         world_adjacencies=worlds,
+        effort_ledger=effort_ledger,
         observation_contract=observation_contract,
         predictive_state=safe_design,
     )
@@ -211,6 +212,7 @@ def run_benchmark() -> dict[str, object]:
         coordinate_registry=coordinate_audit,
         structural_gate=structural_gate,
         world_adjacencies=worlds,
+        effort_ledger=effort_ledger,
         observation_contract=observation_contract,
         predictive_state=tampa_like_design,
     )
@@ -269,6 +271,7 @@ def run_benchmark() -> dict[str, object]:
         },
         "pre_response_certificate": {
             "safe_status": safe_certificate.structural_status,
+            "safe_effort_status": safe_certificate.effort_status,
             "safe_observation_status": safe_certificate.observation_status,
             "safe_predictive_status": safe_certificate.predictive_status,
             "safe_structural_response_access_allowed": (
