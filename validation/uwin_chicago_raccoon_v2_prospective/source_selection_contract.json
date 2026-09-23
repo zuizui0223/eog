@@ -1,0 +1,78 @@
+{
+  "schema": "eog.uwin_chicago_raccoon_v2_prospective.source_selection.v1",
+  "attempt_id": "uwin_chicago_raccoon_v2_prospective_v1",
+  "scientific_role": "new independently selected real-system validation after transport-qualified source screening",
+  "source_identity": {
+    "repository": "urbanwildlifeinstitute/UWIN_tutorials",
+    "commit": "fedf7eccc92d13bce8019f4e05c30a48626dc337",
+    "response_path": "UWIN_workshop_series/week3_static occupancy/chicago_raccoon.csv",
+    "response_git_blob_sha1": "8b4dc701ce29e423aa287d773a5d639aacfcff23",
+    "response_byte_count": 19744,
+    "covariate_path": "UWIN_workshop_series/week3_static occupancy/Chicago_NLCD_landcover.csv",
+    "covariate_git_blob_sha1": "18c2ae35887ae30812d4cb5f3528008044617ee3",
+    "covariate_byte_count": 13748,
+    "acquisition_route": "GitHub blob fetch at frozen commit; response and covariate files are individually addressable"
+  },
+  "prelock_transport_qualification": {
+    "status": "ready_for_candidate_lock",
+    "route_type": "separate_safe_assets",
+    "rationale": "source files are individually addressable Git blobs; candidate registry/covariates do not require opening an archive containing unrelated response payloads",
+    "response_bytes_opened_for_transport_qualification": 0
+  },
+  "endpoint": {
+    "focal_taxon": "Raccoon",
+    "focal_taxon_selection_basis": "the public tutorial dataset itself is explicitly a single-species Chicago raccoon occupancy teaching dataset; no species choice is made from prevalence ranking",
+    "season": "Season 1",
+    "season_start": "2019-07-01",
+    "season_end": "2019-07-31",
+    "candidate_site_definition": "exact Site identifier in the frozen raccoon table",
+    "response_occasions": "Day_1 through Day_31",
+    "positive_token": "1",
+    "negative_token": "0",
+    "unavailable_token": "NA",
+    "zero_interpretation": "survey-day non-detection at a camera site, not biological absence",
+    "observation_mode": "explicit_binary_tokens",
+    "no_response_stratified_site_selection": true
+  },
+  "pre_response_known_architecture": {
+    "response_table_rows_excluding_notes_and_header": 170,
+    "expected_site_rows": 170,
+    "coordinate_fields": [
+      "UTMNorth",
+      "UTMEast",
+      "UTMZone"
+    ],
+    "public_landcover_table_rows_excluding_header": 119,
+    "landcover_fields": [
+      "water",
+      "lawn_grass",
+      "urban",
+      "forest",
+      "shrub",
+      "herbaceous",
+      "wetland",
+      "ag"
+    ]
+  },
+  "prospective_gates": {
+    "gate0": "verify frozen source blobs and parse only non-Day columns plus covariate table; build coordinate/site registry and candidate-day effort universe without opening Day_1..Day_31 values",
+    "gate1": "compile response-independent v2 manifest, structural worlds, candidate preflight and prediction-state eligibility",
+    "response_gate": "only if Gate0/Gate1 pass, freeze exact response parser/count thresholds/evaluation before opening any Day_* token"
+  },
+  "predictive_design": {
+    "outer_unit": "prospectively generated spatial fold from coordinates only; no response-stratified reassignment",
+    "layer_b_source_policy": "source-symmetric calibration-positive source set",
+    "train_serve_generator_policy": "same sequential preoutcome generator contract for calibration cross-fit and heldout serving",
+    "baseline_spatial_coordinates": true,
+    "primary_metric": "binary_log_loss",
+    "secondary_metric": "brier_score"
+  },
+  "terminal_policy": {
+    "pre_response_stop_terminal": true,
+    "response_open_before_authorization_forbidden": true,
+    "post_open_site_or_species_switch_forbidden": true,
+    "response_stratified_fold_repair_forbidden": true
+  },
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
