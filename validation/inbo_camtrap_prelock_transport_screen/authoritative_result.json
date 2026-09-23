@@ -1,0 +1,64 @@
+{
+  "schema": "eog.inbo_camtrap_prelock_transport_screen.authoritative_result.v1",
+  "screen_id": "inbo_camtrap_prelock_transport_screen_v1",
+  "status": "completed_no_transport_qualified_sources",
+  "execution": {
+    "workflow_run_id": 35823578005,
+    "workflow_job_id": 107060419337,
+    "execution_head_sha": "815db1fc2ec6164f8a8770ca309f9ac7744845e2",
+    "artifact_id": 10734456130,
+    "artifact_digest": "sha256:41220e9637e4ded06fb5c949df8808643147953d4777f4abf39f9ab6742e2ac8"
+  },
+  "result_fingerprint": "4ab6ab8c3207a78e0bfaacaf050d76b5dc1375e6fe9d08db6e3d33f48ba7e5ce",
+  "candidate_locked": false,
+  "focal_species_selected": false,
+  "biological_response_values_opened": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "qualified_source_ids": [],
+  "sources": [
+    {
+      "source_id": "nphk1",
+      "doi": "10.15468/suawqp",
+      "status": "transport_unqualified_prelock",
+      "transport_status": "stop_no_response_blind_transport_route",
+      "transport_fingerprint": "51dca9aa8c46a4ad8fdf65a9e39555a9317f5f344e8a686e38852ae5d01fa27a",
+      "result_fingerprint": "4ee0d895b32f8f6d5723975a87982ed05e0a576a1e47d525d2835883eb2039e4",
+      "head": {
+        "http_status": 200,
+        "content_length": null,
+        "bytes_opened": 0
+      },
+      "range_probe": {
+        "http_status": 200,
+        "content_range": null,
+        "bytes_opened": 0
+      },
+      "response_member_payload_bytes_opened": 0,
+      "disposition": "reject_before_candidate_lock"
+    },
+    {
+      "source_id": "gmu8_leuven",
+      "doi": "10.15468/4u3wm4",
+      "status": "transport_unqualified_prelock",
+      "transport_status": "stop_no_response_blind_transport_route",
+      "transport_fingerprint": "168c44a26de7b9d1af0634864375d5cbd2cc6a29c833d7c5346d22f750675ab2",
+      "result_fingerprint": "58f4730b55c742ecedde8c8e96b3463eb2809ec0e82d7049b581538bbe97b856",
+      "head": {
+        "http_status": 200,
+        "content_length": null,
+        "bytes_opened": 0
+      },
+      "range_probe": {
+        "http_status": 200,
+        "content_range": null,
+        "bytes_opened": 0
+      },
+      "response_member_payload_bytes_opened": 0,
+      "disposition": "reject_before_candidate_lock"
+    }
+  ],
+  "interpretation": "Both strong ecological designs are excluded before fresh candidate lock because no declared response-blind mixed-archive transport route reached deployments.csv. This is infrastructure/source qualification evidence, not biological or predictive evidence.",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
