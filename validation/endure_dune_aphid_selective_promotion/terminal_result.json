@@ -1,0 +1,53 @@
+{
+  "schema": "eog.endure_dune_aphid_selective_promotion.terminal_result.v1",
+  "attempt_id": "endure_dune_aphid_selective_promotion_v1",
+  "programme_role": "new separately preregistered real-system test after generic manifest portability validation",
+  "status": "terminal_pre_response_archive_transport_stop",
+  "terminal_stage": "response_blind_archive_size_probe",
+  "terminal_reason": "the prospectively frozen Range bytes=0-0 archive size probe returned HTTP 200 rather than required 206; response body was not opened",
+  "gate0": {
+    "status": "gate0_metadata_ready_for_zip_inventory",
+    "fingerprint": "928639f64b1382d0728a1e63fefe3ee17384548e908c431a6a8a633f0e70f572",
+    "metadata_bytes_opened": 11521,
+    "metadata_request_count": 1
+  },
+  "gate1": {
+    "status": "stop_pre_response_zip_transport_or_inventory",
+    "fingerprint": "6cd668677a1a8823173f38cbc9b402423c9ef4484bc2fa1430a6d24ecd1b7121",
+    "range_requests": 1,
+    "size_probe_http_status": 200,
+    "archive_metadata_bytes_opened": 0,
+    "local_header_bytes_opened": 0,
+    "member_payload_bytes_opened": 0
+  },
+  "response_firewall": {
+    "event_member_bytes_opened": 0,
+    "occurrence_member_bytes_opened": 0,
+    "occurrence_rows_opened": 0,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "execution": {
+    "workflow_run_id": 35803515353,
+    "workflow_job_id": 106999015514,
+    "execution_head_sha": "08977e2e80c056b20ebe7f05530b36f63b2a6d4b",
+    "artifact_id": 10726532521,
+    "artifact_digest": "sha256:ee9c9e9acb78f3f3753d2fb8d561722f192bed9f55642d5be247ec52f5aff587"
+  },
+  "scientific_interpretation": {
+    "counts_as_predictive_evidence": false,
+    "counts_as_biological_negative": false,
+    "layer_b_predictive_eligibility_reached": false,
+    "selective_promotion_test_answered": false,
+    "closed_eog_wf_synthesis_changed": false,
+    "interpretation": "This is a pre-response transport failure under the frozen attempt, not evidence for or against Layer B, the focal aphid, or the ecological hypothesis."
+  },
+  "terminal_policy": {
+    "rerun_this_attempt_allowed": false,
+    "switch_transport_within_attempt_allowed": false,
+    "relax_206_requirement_within_attempt_allowed": false,
+    "focal_species_switch_allowed": false,
+    "future_test_requires_new_protocol_version": true
+  }
+}

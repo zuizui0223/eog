@@ -1,0 +1,35 @@
+{
+  "archive_bytes_opened": 0,
+  "archive_requests": 0,
+  "attempt_id": "endure_dune_aphid_selective_promotion_v1",
+  "biological_response_values_opened": false,
+  "contract_sha256": "f7de4f6b4a7ce1bfe05cfc78a8b7d1716f17bd320386066112be3a90f2561362",
+  "counts_as_predictive_evidence": false,
+  "event_member_bytes_opened": 0,
+  "fingerprint": "928639f64b1382d0728a1e63fefe3ee17384548e908c431a6a8a633f0e70f572",
+  "heldout_scores": 0,
+  "metadata_bytes_opened": 11521,
+  "metadata_request_count": 1,
+  "metadata_sha256": "5466b5b184adaef8046fb2ca9a7020132baacb80e4ea4aaaa33a209e0ef33363",
+  "model_fits": 0,
+  "next_gate": "bounded ZIP EOCD and central-directory inventory only; do not open local headers or member payloads",
+  "occurrence_member_bytes_opened": 0,
+  "occurrence_rows_opened": 0,
+  "schema": "eog.endure_dune_aphid_selective_promotion.gate0_metadata.v1",
+  "source_identity": {
+    "archive_url": "https://ipt.biodiversity.be/archive.do?r=endure-invertebrate-sampling-occurrences",
+    "dataset_type": "SAMPLING_EVENT",
+    "doi": "10.15468/xx2gcp",
+    "endpoint_urls": [
+      "https://ipt.biodiversity.be/archive.do?r=endure-invertebrate-sampling-occurrences",
+      "https://ipt.biodiversity.be/eml.do?r=endure-invertebrate-sampling-occurrences"
+    ],
+    "gbif_dataset_key": "24ce30dc-f5df-4236-a05c-7e9231ef7f71",
+    "metadata_license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+    "metadata_modified": "2026-08-10T09:43:31.556+00:00",
+    "metadata_pub_date": "2026-08-10T00:00:00.000+00:00",
+    "metadata_publishing_organization_key": "05c249d0-dfa0-11d8-b22e-b8a03c50a862",
+    "title": "Endure – standardised invertebrate sampling in coastal blond dunes from the 2-seas region"
+  },
+  "status": "gate0_metadata_ready_for_zip_inventory"
+}
