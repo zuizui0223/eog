@@ -1,0 +1,38 @@
+{
+  "schema": "eog.endure_dune_aphid_selective_promotion.gate0_execution_authorization.v1",
+  "attempt_id": "endure_dune_aphid_selective_promotion_v1",
+  "authorization_scope": [
+    "one GBIF dataset metadata GET under Gate0",
+    "if and only if Gate0 passes, one strict archive one-byte Range size probe",
+    "if and only if size probe passes, bounded classic ZIP EOCD and central-directory reads"
+  ],
+  "forbidden_during_authorized_run": [
+    "local ZIP header bytes",
+    "archive member payload bytes",
+    "meta.xml payload bytes",
+    "eml.xml payload bytes",
+    "Event core payload bytes",
+    "Occurrence extension payload bytes",
+    "biological response rows or values",
+    "model fitting",
+    "heldout scoring"
+  ],
+  "source_selection_contract_git_blob_sha1": "7f43d1cf617ce150911dabe4c1a7fbf10c9b282f",
+  "gate0_metadata_git_blob_sha1": "429ad610fb84acb732c8d391512bf88a8f291a38",
+  "gate1_zip_inventory_git_blob_sha1": "01a3e5995a4e6b95e51d2e55a882c3f985bce75a",
+  "unit_test_evidence": {
+    "pr_number": 446,
+    "verified_head_sha_before_authorization": "ce1fe12960bf82ad4a3cfa7ffedc0ab0c544b960",
+    "package_checks": "success",
+    "submission_package": "success"
+  },
+  "execution_policy": {
+    "execute_once": true,
+    "gate1_only_if_gate0_ready": true,
+    "any_pre_response_stop_is_terminal": true,
+    "repair_or_rerun_after_stop_allowed": false,
+    "focal_species_switch_allowed": false
+  },
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
