@@ -1,0 +1,30 @@
+{
+  "schema": "eog.inbo_camtrap_prelock_transport_screen.execution_authorization.v1",
+  "screen_id": "inbo_camtrap_prelock_transport_screen_v1",
+  "scope": [
+    "NPHK1 and GMU8_LEUVEN source transport qualification before candidate lock",
+    "HEAD and/or one-byte Range archive-size discovery",
+    "classic ZIP EOCD and central-directory inventory",
+    "deployments.csv safe-member extraction only"
+  ],
+  "forbidden": [
+    "observations.csv payload bytes",
+    "species values",
+    "focal-species selection",
+    "candidate lock",
+    "model fitting",
+    "heldout scoring"
+  ],
+  "source_screen_contract_git_blob_sha1": "e40a9c95b23f8c392a5f502761ac6e2d352741ca",
+  "screen_script_git_blob_sha1": "a6bed6d222825ccf287caca093f360424f55ce79",
+  "http_range_transport_git_blob_sha1": "7d387fb3fc0af3ba052fa376af0103965263afc3",
+  "zip_safe_member_git_blob_sha1": "c600644d556d178ee753cb69b2e81f5efd4fd1c8",
+  "ci_evidence": {
+    "verified_head_sha": "089af11c347e8416ba8ee19829c987349e35fa5d",
+    "package_checks": "success",
+    "submission_package": "success"
+  },
+  "execute_once": true,
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}

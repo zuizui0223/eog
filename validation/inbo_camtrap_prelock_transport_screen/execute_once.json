@@ -1,0 +1,5 @@
+{
+  "screen_id": "inbo_camtrap_prelock_transport_screen_v1",
+  "execute_once": true,
+  "authorization": "execution_authorization.json"
+}

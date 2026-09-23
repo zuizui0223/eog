@@ -1,0 +1,75 @@
+{
+  "schema": "eog.inbo_camtrap_prelock_transport_screen.v1",
+  "purpose": "screen public INBO Camtrap DP sources for response-blind safe-member transport before any fresh EOG-WF candidate lock",
+  "scientific_boundary": {
+    "candidate_locked": false,
+    "focal_species_selected": false,
+    "response_outcomes_authorized": false,
+    "observations_member_payload_bytes_allowed": 0,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "declared_transport_routes": [
+    "HEAD Content-Length followed by exact bounded Range reads",
+    "if HEAD cannot bind size, exact one-byte Range probe followed by exact bounded Range reads"
+  ],
+  "safe_member": {
+    "basename": "deployments.csv",
+    "maximum_compressed_bytes": 10485760,
+    "maximum_uncompressed_bytes": 52428800
+  },
+  "response_member": {
+    "basename": "observations.csv",
+    "payload_access_allowed": false
+  },
+  "archive_bounds": {
+    "maximum_archive_size_bytes": 524288000,
+    "maximum_central_directory_bytes": 4194304
+  },
+  "sources": [
+    {
+      "source_id": "nphk1",
+      "gbif_dataset_key": "50cebe49-559b-42e8-955d-1df120b03f89",
+      "doi": "10.15468/suawqp",
+      "title": "NPHK1 - Systematic random camera trap observations in National Park Hoge Kempen (Belgium)",
+      "archive_url": "https://ipt.inbo.be/archive.do?r=nphk1",
+      "allowed_hosts": [
+        "ipt.inbo.be"
+      ],
+      "prior_public_design": {
+        "monitoring_period": "2017-05 to 2020-05",
+        "compartments": 40,
+        "deployment_design": "one randomly selected grid cell per compartment per month; approximately three-week deployment and monthly relocation"
+      }
+    },
+    {
+      "source_id": "gmu8_leuven",
+      "gbif_dataset_key": "c9cbc586-660e-4d89-ba14-0000c5770de1",
+      "doi": "10.15468/4u3wm4",
+      "title": "GMU8_LEUVEN - Camera trap observations in natural habitats south of Leuven (Belgium)",
+      "archive_url": "https://ipt.inbo.be/archive.do?r=gmu8_leuven",
+      "allowed_hosts": [
+        "ipt.inbo.be"
+      ],
+      "prior_public_design": {
+        "monitoring_start": "2018-03",
+        "camera_count": 32,
+        "deployment_design": "cameras relocated monthly; each selected grid cell monitored once in winter and once in summer"
+      }
+    }
+  ],
+  "screen_decision": {
+    "transport_qualified_if": [
+      "archive size is safely bound without full-body fallback",
+      "EOCD and central directory pass classic-ZIP checks",
+      "deployments.csv resolves uniquely",
+      "observations.csv resolves uniquely without payload read",
+      "deployments.csv safe member is extracted and CRC/SHA verified",
+      "observations payload bytes remain zero"
+    ],
+    "source_not_candidate_if_transport_unqualified": true,
+    "source_selection_after_screen_may_use_only_response_independent_deployment_architecture": true
+  },
+  "changes_closed_eog_wf_synthesis": false,
+  "counts_as_predictive_evidence": false
+}
