@@ -1,0 +1,95 @@
+name: INBO Camtrap pre-lock transport screen
+
+on:
+  push:
+    branches:
+      - agent/inbo-camtrap-prelock-transport-screen
+    paths:
+      - validation/inbo_camtrap_prelock_transport_screen/execute_once.json
+
+permissions:
+  contents: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: python -m pip install -e . --no-deps
+
+      - name: Verify pre-lock execution authorization
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          root = Path("validation/inbo_camtrap_prelock_transport_screen")
+          marker = json.loads((root / "execute_once.json").read_text())
+          assert marker["screen_id"] == "inbo_camtrap_prelock_transport_screen_v1"
+          assert marker["execute_once"] is True
+
+          auth = json.loads((root / marker["authorization"]).read_text())
+          bindings = {
+              "source_screen_contract_git_blob_sha1": root / "source_screen_contract.json",
+              "screen_script_git_blob_sha1": root / "screen.py",
+          }
+          for field, path in bindings.items():
+              actual = subprocess.check_output(
+                  ["git", "hash-object", str(path)], text=True
+              ).strip()
+              assert actual == auth[field], (field, actual, auth[field])
+          PY
+
+      - name: Run response-blind transport screen
+        run: python -m validation.inbo_camtrap_prelock_transport_screen.screen
+
+      - name: Verify response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path(
+              "validation/inbo_camtrap_prelock_transport_screen/"
+              "prelock_transport_screen_result.json"
+          )
+          result = json.loads(path.read_text())
+          assert result["candidate_locked"] is False
+          assert result["focal_species_selected"] is False
+          assert result["biological_response_values_opened"] is False
+          assert result["model_fits"] == 0
+          assert result["heldout_scores"] == 0
+          assert result["counts_as_predictive_evidence"] is False
+
+          for item in result["results"]:
+              assert item["candidate_locked"] is False
+              assert item["focal_species_selected"] is False
+              assert item["response_member_payload_bytes_opened"] == 0
+              assert item["biological_response_values_opened"] is False
+              assert item["model_fits"] == 0
+              assert item["heldout_scores"] == 0
+              if item["status"] == "transport_qualified_prelock":
+                  assert item["response_member"]["payload_bytes_opened"] == 0
+
+          print(json.dumps({
+              "qualified_source_ids": result["qualified_source_ids"],
+              "fingerprint": result["fingerprint"],
+          }, sort_keys=True))
+          PY
+
+      - name: Upload pre-lock screen result
+        uses: actions/upload-artifact@v4
+        with:
+          name: inbo-camtrap-prelock-transport-screen
+          path: validation/inbo_camtrap_prelock_transport_screen/prelock_transport_screen_result.json
+          if-no-files-found: error
