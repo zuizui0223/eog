@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
+from eog.v2.http_range_transport import HttpTransportLedgerRow
 from validation.inbo_camtrap_prelock_transport_screen.screen import (
     run,
     screen_source,
@@ -53,23 +54,17 @@ class FakeTransport:
 
     def read_range(self, start, end, role):
         self.ledger.append(
-            type(
-                "Row",
-                (),
-                {
-                    "role": role,
-                    "method": "GET",
-                    "start": start,
-                    "end": end,
-                    "status": 206,
-                    "final_host": "example.org",
-                    "content_range": (
-                        f"bytes {start}-{end}/{len(self.payload)}"
-                    ),
-                    "content_length": str(end - start + 1),
-                    "bytes_opened": end - start + 1,
-                },
-            )()
+            HttpTransportLedgerRow(
+                role=role,
+                method="GET",
+                start=start,
+                end=end,
+                status=206,
+                final_host="example.org",
+                content_range=f"bytes {start}-{end}/{len(self.payload)}",
+                content_length=str(end - start + 1),
+                bytes_opened=end - start + 1,
+            )
         )
         return self.payload[start : end + 1]
 
