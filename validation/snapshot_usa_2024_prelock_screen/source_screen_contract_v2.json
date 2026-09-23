@@ -1,0 +1,70 @@
+{
+  "schema": "eog.snapshot_usa_2024_prelock_screen.v2",
+  "screen_id": "snapshot_usa_2024_prelock_screen_v2",
+  "parent_v1_result": "v1_authoritative_result.json",
+  "change_from_v1": "replace anonymous-401 REST file download with the public Dryad landing-page file_stream route derived from the same repository file ID; scientific source identity remains Dryad byte size + SHA-256",
+  "source_identity": {
+    "doi": "10.5061/dryad.bnzs7h4qf",
+    "encoded_doi": "doi%3A10.5061%2Fdryad.bnzs7h4qf",
+    "title": "Data from: SNAPSHOT USA 2024: Year 6 of the coordinated national camera trap survey of the United States",
+    "api_dataset_url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.bnzs7h4qf"
+  },
+  "safe_file": {
+    "path": "ssusa_2024_deployments.csv",
+    "maximum_bytes": 2097152,
+    "public_route_template": "https://datadryad.org/stash/downloads/file_stream/{file_id}"
+  },
+  "response_file": {
+    "path": "ssusa_2024_sequences.csv",
+    "payload_requests_allowed": 0,
+    "payload_bytes_allowed": 0
+  },
+  "metadata_bounds": {
+    "maximum_json_bytes": 2097152,
+    "maximum_files_per_version": 100
+  },
+  "predeclared_node_definition": {
+    "stable_node_key": [
+      "Project",
+      "Camera_Trap_Array",
+      "Site_Name"
+    ],
+    "coordinate_fields": [
+      "Latitude",
+      "Longitude"
+    ],
+    "outer_unit": "State",
+    "effort_field": "Survey_Nights"
+  },
+  "response_independent_architecture_minima": {
+    "minimum_unique_nodes": 1000,
+    "minimum_outer_units": 20,
+    "minimum_repeated_nodes": 100,
+    "minimum_arrays": 100,
+    "require_all_nodes_single_coordinate_pair": true,
+    "require_positive_survey_nights": true
+  },
+  "access_sequence": [
+    "GET Dryad dataset metadata JSON",
+    "GET latest version metadata JSON",
+    "GET latest version file metadata JSON",
+    "derive public file_stream URL from safe file self ID",
+    "GET only the public deployments file",
+    "verify byte count and SHA-256 against Dryad file metadata",
+    "parse deployments only"
+  ],
+  "forbidden": [
+    "REST API safe-file download retry",
+    "response file download request",
+    "sequence payload byte",
+    "species value",
+    "focal-species selection",
+    "fresh candidate lock",
+    "model fit",
+    "heldout score"
+  ],
+  "candidate_locked": false,
+  "focal_species_selected": false,
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
