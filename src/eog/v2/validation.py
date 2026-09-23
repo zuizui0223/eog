@@ -2,7 +2,7 @@
 
 The facade is lazy so genetic, empirical-occurrence, directional-evidence, response
 firewall, response-header schema, response-token schema, response-row admissibility,
-candidate preflight, source-transport preflight, temporal source closure, prospective estimability, outcome-access
+candidate preflight, source-discovery firewall, source-transport preflight, temporal source closure, prospective estimability, outcome-access
 authorization, paper-ready endpoint binding, predictive complementarity, and response-blind world-adequacy /
 scale-construction trees remain independent until accessed.
 """
@@ -85,6 +85,14 @@ _CANDIDATE_PREFLIGHT_EXPORTS: Final[tuple[str, ...]] = (
     "CandidatePreflightEvidence",
     "CandidatePreflightResult",
     "evaluate_candidate_preflight",
+)
+
+_SOURCE_DISCOVERY_FIREWALL_EXPORTS: Final[tuple[str, ...]] = (
+    "DiscoveryClass",
+    "SourceDescriptor",
+    "DiscoveryClassification",
+    "classify_source_descriptor",
+    "classify_discovery_batch",
 )
 
 _SOURCE_TRANSPORT_PREFLIGHT_EXPORTS: Final[tuple[str, ...]] = (
@@ -180,6 +188,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     },
     **{name: "eog.v2.candidate_preflight" for name in _CANDIDATE_PREFLIGHT_EXPORTS},
     **{
+        name: "eog.v2.source_discovery_firewall"
+        for name in _SOURCE_DISCOVERY_FIREWALL_EXPORTS
+    },
+    **{
         name: "eog.v2.source_transport_preflight"
         for name in _SOURCE_TRANSPORT_PREFLIGHT_EXPORTS
     },
@@ -214,6 +226,7 @@ __all__ = [
     *_RESPONSE_SCHEMA_EXPORTS,
     *_RESPONSE_ROW_ADMISSIBILITY_EXPORTS,
     *_CANDIDATE_PREFLIGHT_EXPORTS,
+    *_SOURCE_DISCOVERY_FIREWALL_EXPORTS,
     *_SOURCE_TRANSPORT_PREFLIGHT_EXPORTS,
     *_TEMPORAL_SOURCE_CLOSURE_EXPORTS,
     *_PROSPECTIVE_ESTIMABILITY_EXPORTS,
