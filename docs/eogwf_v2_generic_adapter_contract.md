@@ -345,6 +345,36 @@ Generated worlds are derived artifacts. Their identity is fixed by:
 
 This removes dataset-specific N x N matrix-building scripts from the adapter boundary.
 
+### Transport qualification before candidate lock
+
+Transport-independent content identity solves a different problem from transport
+availability. Exact bytes can be scientifically stable while the route needed to reach
+those bytes is unusable under the response firewall.
+
+New real-system protocols should therefore run
+`src/eog/v2/source_transport_preflight.py` before locking the fresh candidate.
+
+The qualification result is intentionally provider-agnostic:
+
+- a physically separate safe registry/effort file may qualify;
+- a mixed archive may qualify through bounded inventory;
+- a public member inventory may qualify;
+- another prospectively declared response-blind route may qualify.
+
+At least one route must actually reach the required safe material with focal response
+payload bytes still at zero. HTTP mechanics such as 200 versus 206 stay in the route
+audit rather than becoming part of the ecological estimand.
+
+The Endure coastal-dune aphid attempt exposed this distinction. Dataset metadata passed,
+but its single frozen mixed-archive Range route returned HTTP 200 to the one-byte probe.
+The attempt correctly terminated with zero archive/member/response bytes opened. The new
+preflight would classify the same source as transport-unqualified **before** candidate
+lock. Louisiana and Tampa remain transport-qualified because their response-independent
+safe sources were physically accessible without focal response access.
+
+This is not permission to retry a stopped attempt. Endure remains terminal under its
+frozen protocol. The new rule applies only to future protocol versions.
+
 ### Transport-independent content identity
 
 Acquisition transport is deliberately separated from scientific source identity.
@@ -413,10 +443,22 @@ legitimately leave it at different product boundaries.
 
 ## Next development step
 
-The adapter/manifest portability problem is now sufficiently resolved for a new
-scientific test. The next development line should freeze a **new, independently selected
-real system** before its focal outcomes are accessed, compile it through the manifest
-surface, and obey the gate it receives:
+The Endure attempt showed that manifest portability alone is not enough: transport
+capability must also be qualified before a source becomes the active fresh scientific
+candidate.
+
+Future real-system protocol versions should therefore use this order:
+
+1. metadata identity;
+2. response-blind transport qualification;
+3. candidate lock;
+4. registry / effort / structural manifest compilation;
+5. prediction-facing eligibility;
+6. only then, if eligible, one preregistered paired predictive test.
+
+After transport qualification passes, freeze a **new, independently selected real
+system** before its focal outcomes are accessed, compile it through the manifest surface,
+and obey the gate it receives:
 
 - if prediction-ineligible, stop Layer-B predictive scoring and retain structural use;
 - if prediction-eligible, run one separately preregistered paired complementarity test;

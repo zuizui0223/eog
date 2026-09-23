@@ -18,6 +18,16 @@ def declaration() -> CandidatePreflightDeclaration:
     )
 
 
+def transport_declaration() -> CandidatePreflightDeclaration:
+    return CandidatePreflightDeclaration(
+        attempt_id="fresh-system-transport-v1",
+        minimum_nodes=40,
+        minimum_outer_units=6,
+        minimum_repeated_nodes=30,
+        require_response_blind_transport_qualification=True,
+    )
+
+
 def registry_declaration() -> CandidatePreflightDeclaration:
     return CandidatePreflightDeclaration(
         attempt_id="fresh-system-registry-v1",
@@ -257,3 +267,63 @@ def test_validation_facade_exports_preflight_without_root_widening():
     import eog.v2 as v2
 
     assert "CandidatePreflightDeclaration" not in v2.__all__
+
+
+
+def test_required_transport_unknown_is_incomplete_before_candidate_lock():
+    result = evaluate_candidate_preflight(
+        transport_declaration(),
+        complete_evidence(
+            response_blind_transport_qualified=None,
+            transport_qualification_fingerprint=None,
+        ),
+    )
+    assert result.status == "incomplete_response_blind_metadata"
+    assert result.ready is False
+    assert result.missing_metadata == (
+        "response_blind_transport_qualified",
+        "transport_qualification_fingerprint",
+    )
+
+
+def test_required_transport_known_unqualified_is_hard_stop():
+    result = evaluate_candidate_preflight(
+        transport_declaration(),
+        complete_evidence(
+            response_blind_transport_qualified=False,
+            transport_qualification_fingerprint="endure-range-stop-fingerprint",
+        ),
+    )
+    assert result.status == "stop_response_blind_transport_unqualified"
+    assert result.ready is False
+    assert "reject before candidate lock" in result.reason
+
+
+def test_required_transport_qualified_reaches_geometry_gate():
+    result = evaluate_candidate_preflight(
+        transport_declaration(),
+        complete_evidence(
+            response_blind_transport_qualified=True,
+            transport_qualification_fingerprint="safe-route-fingerprint",
+        ),
+    )
+    assert result.status == "ready_for_geometry_gate"
+    assert result.ready is True
+    assert result.missing_metadata == ()
+
+
+def test_transport_requirement_changes_declaration_and_evidence_identity():
+    base = declaration()
+    transport = transport_declaration()
+    no_transport = complete_evidence()
+    with_transport = complete_evidence(
+        response_blind_transport_qualified=True,
+        transport_qualification_fingerprint="route-fingerprint",
+    )
+    assert base.fingerprint != transport.fingerprint
+    assert no_transport.fingerprint != with_transport.fingerprint
+
+
+def test_transport_boolean_type_fails_closed():
+    with pytest.raises(TypeError, match="response_blind_transport_qualified must be bool"):
+        complete_evidence(response_blind_transport_qualified=1)

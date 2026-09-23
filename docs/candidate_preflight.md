@@ -17,7 +17,8 @@ Each attempt prospectively declares its own minima with `CandidatePreflightDecla
 - minimum number of nodes repeated across time;
 - whether response-independent coordinate geometry is required;
 - whether geometry and response must be physically separable;
-- optionally, whether a **closed analysis registry** is required before the geometry gate.
+- optionally, whether a **closed analysis registry** is required before the geometry gate;
+- optionally, whether at least one response-blind safe-source transport route must be live-qualified before candidate lock.
 
 There are deliberately no universal EOG node-count or time-series cutoffs in this module.
 
@@ -31,7 +32,9 @@ There are deliberately no universal EOG node-count or time-series cutoffs in thi
 - whether the geometry registry is already closed on the intended analysis-node universe;
 - known node / outer-unit / repeated-node counts;
 - broad layout design;
-- whether response bytes or rows have already been opened.
+- whether response bytes or rows have already been opened;
+- whether response-blind source transport has already been qualified;
+- the fingerprint of the transport-qualification evidence.
 
 Unknown metadata is represented as `None`; it is never silently treated as a pass.
 
@@ -60,6 +63,45 @@ When required:
 - `analysis_registry_closed=False` → `stop_analysis_registry_not_closed`;
 - `analysis_registry_closed=True` → this requirement is satisfied, but the actual geometry must still pass the structural gate.
 
+## Response-blind transport qualification
+
+New fresh real-system attempts should qualify source transport **before** the system is
+locked as the active scientific candidate.
+
+`src/eog/v2/source_transport_preflight.py` records prospectively declared acquisition
+routes such as:
+
+- physically separate safe registry / effort files;
+- bounded mixed-archive inventory;
+- a published member inventory;
+- another explicitly declared response-blind route.
+
+The gate asks only whether at least one route has actually demonstrated access to the
+required safe inputs while focal response payload bytes remain zero. It does **not**
+promote a particular HTTP status code, URL shape or hosting provider into an ecological
+criterion.
+
+A failed route can coexist with a different qualified route when both routes were
+declared before candidate lock. For example, a server ignoring a Range request does not
+invalidate the dataset if an independent predeclared safe inventory route already
+qualifies. Conversely, a mixed archive with no response-blind inventory route is rejected
+before it consumes the fresh scientific attempt.
+
+For candidates that set
+`require_response_blind_transport_qualification=True`:
+
+- unknown transport status -> `incomplete_response_blind_metadata`;
+- known unqualified transport -> `stop_response_blind_transport_unqualified`;
+- qualified transport -> this requirement is satisfied and the candidate may proceed to
+  the geometry gate.
+
+The Endure coastal-dune aphid attempt illustrates the reason for this boundary. Its
+frozen mixed-archive Range probe returned HTTP 200 rather than the attempt-specific
+required 206, and correctly stopped with zero archive/member/response bytes opened.
+Under the new preflight that transport fact would reject the source **before** focal
+candidate lock, rather than consuming a scientific attempt and then discovering an
+interface limitation.
+
 ## Geometry schema boundary
 
 Geometry is response-blind. Therefore candidate preflight should freeze the **source identity and coordinate semantics**, not guess an exact physical header when external metadata do not provide one.
@@ -76,6 +118,7 @@ Hard STOP statuses include:
 - `stop_inseparable_geometry_response`;
 - `stop_no_response_independent_coordinate_geometry`;
 - `stop_analysis_registry_not_closed`;
+- `stop_response_blind_transport_unqualified`;
 - `stop_insufficient_nodes`;
 - `stop_insufficient_outer_units`;
 - `stop_insufficient_repeated_nodes`.
@@ -128,4 +171,4 @@ Candidate preflight does not replace:
 - the 16-key once-only outcome-access contract;
 - paired predictive-complementarity evaluation.
 
-It only ensures that a candidate is worth entering those more expensive stages while response content is still untouched.
+It only ensures that a candidate is worth entering those more expensive stages while response content is still untouched. For new real-system protocols, transport qualification should be completed before the candidate is counted as the active fresh attempt.
