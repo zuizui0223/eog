@@ -1,0 +1,35 @@
+{
+  "schema": "eog.snapshot_usa_2024_prelock_screen.authoritative_result.v2",
+  "screen_id": "snapshot_usa_2024_prelock_screen_v2",
+  "status": "source_screen_stop_prelock",
+  "reason": "dryad_public_safe_deployments_file returned HTTP 403",
+  "execution": {
+    "workflow_run_id": 35824844819,
+    "workflow_job_id": 107064230933,
+    "execution_head_sha": "9e7682e680c3e981c670c99a1d64c76a0a86f130",
+    "artifact_id": 10734513196,
+    "artifact_digest": "sha256:974789d203a83ab6b5eaa1259fb53ddc56bc70ff58a8a2b4e9bcf98be8848341"
+  },
+  "fingerprint": "fda3df7d1f8aa1c1062c17ba0dba7790dd947f158c9ffbe37720acece8e12345",
+  "metadata": {
+    "dataset_status": 200,
+    "latest_version_status": 200,
+    "files_status": 200,
+    "metadata_bytes_opened": 13644
+  },
+  "safe_download_route": {
+    "route_template": "https://datadryad.org/stash/downloads/file_stream/{file_id}",
+    "result": "HTTP 403",
+    "payload_bytes_opened": 0
+  },
+  "response_file_requests": 0,
+  "response_file_payload_bytes_opened": 0,
+  "biological_response_values_opened": false,
+  "focal_species_selected": false,
+  "candidate_locked": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "disposition": "v2 route unqualified; permit a separately versioned pre-lock transport route screen because candidate lock and focal selection have not occurred",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
