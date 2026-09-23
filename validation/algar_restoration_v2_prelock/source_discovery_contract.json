@@ -1,0 +1,91 @@
+{
+  "schema": "eog.algar_restoration_v2_prelock.source_discovery_contract.v1",
+  "screen_id": "algar_restoration_v2_prelock_v1",
+  "scientific_role": "fresh real-system candidate discovery before focal response selection",
+  "source_repository": {
+    "repository": "WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R",
+    "commit": "6b4170abbad9f7f7762ef6874e1246b28000f371"
+  },
+  "metadata_only_discovery": {
+    "required_roles": [
+      "registry_effort"
+    ],
+    "sources": [
+      {
+        "source_id": "algar_deployments",
+        "role": "registry_effort",
+        "path": "data/raw_data/example_data/deployments.csv",
+        "git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf",
+        "byte_count": 24096,
+        "declared_schema_fields": [
+          "project_id",
+          "deployment_id",
+          "placename",
+          "longitude",
+          "latitude",
+          "start_date",
+          "end_date",
+          "feature_type"
+        ],
+        "classification_expected": "safe_candidate"
+      },
+      {
+        "source_id": "algar_projects",
+        "role": "metadata",
+        "path": "data/raw_data/example_data/projects.csv",
+        "git_blob_sha1": "dcf7e3e89952e3b50d8948dbb417e748483578d5",
+        "byte_count": 1266,
+        "declared_schema_fields": [
+          "project_id",
+          "project_name",
+          "project_objectives",
+          "project_sensor_layout",
+          "project_stratification",
+          "data_citation"
+        ],
+        "classification_expected": "safe_candidate"
+      },
+      {
+        "source_id": "algar_future_response",
+        "role": "future_response",
+        "path_pattern": "data/processed_data/*observations.csv or *detections.csv",
+        "declared_schema_fields": [
+          "species",
+          "count"
+        ],
+        "classification_expected": "response_bearing",
+        "content_open_allowed": false
+      }
+    ]
+  },
+  "safe_architecture_known_before_response": {
+    "deployment_rows": 114,
+    "approximate_unique_placenames": 38,
+    "approximate_unique_exact_coordinates": 39,
+    "repeated_deployments_per_location": true,
+    "deployment_period": "2018 onward in the example project",
+    "project_design": "stratified camera-trap study of medium-large bodied mammal habitat use in relation to seismic-line restoration treatments and controls"
+  },
+  "gate0_plan": {
+    "allowed_content": [
+      "algar_deployments",
+      "algar_projects"
+    ],
+    "forbidden_content": [
+      "algar_future_response"
+    ],
+    "build": "canonical location registry from placename + coordinates; response-independent daily/weekly effort ledger from deployment start/end; structural world ladder from coordinates",
+    "minimum_nodes": 30,
+    "minimum_repeated_nodes": 30,
+    "require_closed_analysis_registry": true,
+    "require_response_blind_transport_qualification": true
+  },
+  "focal_response_policy": {
+    "focal_species_selected": false,
+    "focal_species_selection_deferred_until": "independent external ecological rationale is frozen without opening project species list/detections",
+    "project_species_list_open_before_selection_forbidden": true,
+    "detections_open_before_response_authorization_forbidden": true
+  },
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
