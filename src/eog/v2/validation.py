@@ -95,6 +95,13 @@ _SOURCE_DISCOVERY_FIREWALL_EXPORTS: Final[tuple[str, ...]] = (
     "classify_discovery_batch",
 )
 
+_SOURCE_DISCOVERY_GATE_EXPORTS: Final[tuple[str, ...]] = (
+    "DiscoveryRoleRequirement",
+    "DiscoverySource",
+    "DiscoveryGateResult",
+    "evaluate_discovery_gate",
+)
+
 _SOURCE_TRANSPORT_PREFLIGHT_EXPORTS: Final[tuple[str, ...]] = (
     "TransportRouteType",
     "TransportQualificationStatus",
@@ -192,6 +199,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         for name in _SOURCE_DISCOVERY_FIREWALL_EXPORTS
     },
     **{
+        name: "eog.v2.source_discovery_gate"
+        for name in _SOURCE_DISCOVERY_GATE_EXPORTS
+    },
+    **{
         name: "eog.v2.source_transport_preflight"
         for name in _SOURCE_TRANSPORT_PREFLIGHT_EXPORTS
     },
@@ -227,6 +238,7 @@ __all__ = [
     *_RESPONSE_ROW_ADMISSIBILITY_EXPORTS,
     *_CANDIDATE_PREFLIGHT_EXPORTS,
     *_SOURCE_DISCOVERY_FIREWALL_EXPORTS,
+    *_SOURCE_DISCOVERY_GATE_EXPORTS,
     *_SOURCE_TRANSPORT_PREFLIGHT_EXPORTS,
     *_TEMPORAL_SOURCE_CLOSURE_EXPORTS,
     *_PROSPECTIVE_ESTIMABILITY_EXPORTS,
