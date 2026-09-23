@@ -1,0 +1,121 @@
+name: SNAPSHOT USA 2024 pre-lock source screen v3
+
+on:
+  push:
+    branches:
+      - agent/snapshot-usa-2024-prelock-screen
+    paths:
+      - validation/snapshot_usa_2024_prelock_screen/execute_v3_once.json
+
+permissions:
+  contents: read
+
+jobs:
+  screen-v3:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: python -m pip install -e . --no-deps
+
+      - name: Verify v3 pre-lock authorization
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          root = Path("validation/snapshot_usa_2024_prelock_screen")
+          marker = json.loads((root / "execute_v3_once.json").read_text())
+          assert marker == {
+              "screen_id": "snapshot_usa_2024_prelock_screen_v3",
+              "execute_once": True,
+              "authorization": "execution_authorization_v3.json",
+          }
+          auth = json.loads((root / marker["authorization"]).read_text())
+          bindings = {
+              "source_screen_contract_v3_git_blob_sha1": (
+                  root / "source_screen_contract_v3.json"
+              ),
+              "screen_v3_git_blob_sha1": root / "screen_v3.py",
+              "dryad_public_file_git_blob_sha1": Path(
+                  "src/eog/v2/dryad_public_file.py"
+              ),
+              "source_transport_preflight_git_blob_sha1": Path(
+                  "src/eog/v2/source_transport_preflight.py"
+              ),
+              "candidate_preflight_git_blob_sha1": Path(
+                  "src/eog/v2/candidate_preflight.py"
+              ),
+          }
+          for field, path in bindings.items():
+              actual = subprocess.check_output(
+                  ["git", "hash-object", str(path)], text=True
+              ).strip()
+              assert actual == auth[field], (field, actual, auth[field])
+          PY
+
+      - name: Run SNAPSHOT USA v3 current public route screen
+        run: python -m validation.snapshot_usa_2024_prelock_screen.screen_v3
+
+      - name: Verify response firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path(
+                  "validation/snapshot_usa_2024_prelock_screen/"
+                  "prelock_screen_v3_result.json"
+              ).read_text()
+          )
+          assert result["candidate_locked"] is False
+          assert result["focal_species_selected"] is False
+          assert result["response_file_requests"] == 0
+          assert result["response_file_payload_bytes_opened"] == 0
+          assert result["biological_response_values_opened"] is False
+          assert result["model_fits"] == 0
+          assert result["heldout_scores"] == 0
+          assert result["counts_as_predictive_evidence"] is False
+
+          print(json.dumps({
+              "status": result["status"],
+              "fingerprint": result["fingerprint"],
+              "candidate_preflight": (
+                  None if "candidate_preflight" not in result
+                  else result["candidate_preflight"]["status"]
+              ),
+              "nodes": (
+                  None if "deployment_audit" not in result
+                  else result["deployment_audit"]["unique_stable_node_count"]
+              ),
+              "repeated_nodes": (
+                  None if "deployment_audit" not in result
+                  else result["deployment_audit"]["repeated_stable_node_count"]
+              ),
+              "states": (
+                  None if "deployment_audit" not in result
+                  else result["deployment_audit"]["unique_outer_state_count"]
+              ),
+              "arrays": (
+                  None if "deployment_audit" not in result
+                  else result["deployment_audit"]["unique_array_count"]
+              ),
+          }, sort_keys=True))
+          PY
+
+      - name: Upload v3 pre-lock screen result
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-usa-2024-prelock-screen-v3
+          path: validation/snapshot_usa_2024_prelock_screen/prelock_screen_v3_result.json
+          if-no-files-found: error
