@@ -1,0 +1,34 @@
+{
+  "schema": "eog.uwin_chicago_raccoon_v2_prospective.terminal_result.v1",
+  "attempt_id": "uwin_chicago_raccoon_v2_prospective_v1",
+  "status": "terminal_response_firewall_violation_before_gate0",
+  "terminal_stage": "post_selection_pre_gate0",
+  "reason": "after freezing the UWIN Chicago raccoon source-selection contract, an auxiliary UWIN captures.csv file containing biological species occurrence rows was opened while searching for an independent coordinate registry; this violated the frozen no-response-before-authorization boundary",
+  "opened_material": {
+    "repository": "urbanwildlifeinstitute/UWIN_tutorials",
+    "commit": "fedf7eccc92d13bce8019f4e05c30a48626dc337",
+    "path": "UWIN_workshop_series/week6_spatial_mapping/data/captures.csv",
+    "git_blob_sha1": "94438e408b27e4b92a0f1da127018cf1bea654f9",
+    "biological_content_present": true,
+    "focal_taxon_rows_visible": true
+  },
+  "not_opened": {
+    "frozen_chicago_raccoon_day_matrix_after_selection": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "scientific_interpretation": {
+    "counts_as_predictive_evidence": false,
+    "counts_as_biological_negative": false,
+    "layer_b_eligibility_reached": false,
+    "fresh_endpoint_answered": false,
+    "changes_closed_eog_wf_synthesis": false,
+    "interpretation": "protocol contamination only; no ecological or predictive conclusion may be drawn"
+  },
+  "terminal_policy": {
+    "rerun_this_attempt_allowed": false,
+    "switch_to_auxiliary_coordinates_allowed": false,
+    "repair_after_open_allowed": false,
+    "future_test_requires_new_independent_protocol_and_source": true
+  }
+}
