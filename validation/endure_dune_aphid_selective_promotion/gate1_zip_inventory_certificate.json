@@ -1,0 +1,32 @@
+{
+  "archive_metadata_bytes_opened": 0,
+  "attempt_id": "endure_dune_aphid_selective_promotion_v1",
+  "biological_response_values_opened": false,
+  "contract_sha256": "f7de4f6b4a7ce1bfe05cfc78a8b7d1716f17bd320386066112be3a90f2561362",
+  "counts_as_predictive_evidence": false,
+  "event_member_bytes_opened": 0,
+  "fingerprint": "6cd668677a1a8823173f38cbc9b402423c9ef4484bc2fa1430a6d24ecd1b7121",
+  "gate0_fingerprint": "928639f64b1382d0728a1e63fefe3ee17384548e908c431a6a8a633f0e70f572",
+  "heldout_scores": 0,
+  "local_header_bytes_opened": 0,
+  "member_payload_bytes_opened": 0,
+  "model_fits": 0,
+  "next_gate": "none; terminal for this attempt and no repair/rerun",
+  "occurrence_member_bytes_opened": 0,
+  "occurrence_rows_opened": 0,
+  "range_ledger": [
+    {
+      "bytes_opened": 0,
+      "content_range": null,
+      "end": 0,
+      "final_host": "ipt.biodiversity.be",
+      "role": "archive_size_probe",
+      "start": 0,
+      "status": 200
+    }
+  ],
+  "range_requests": 1,
+  "reason": "archive size probe returned HTTP 200; body was not opened",
+  "schema": "eog.endure_dune_aphid_selective_promotion.gate1_zip_inventory.v1",
+  "status": "stop_pre_response_zip_transport_or_inventory"
+}
