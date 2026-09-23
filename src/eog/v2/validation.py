@@ -95,6 +95,12 @@ _SOURCE_DISCOVERY_FIREWALL_EXPORTS: Final[tuple[str, ...]] = (
     "classify_discovery_batch",
 )
 
+_GIT_BLOB_IDENTITY_EXPORTS: Final[tuple[str, ...]] = (
+    "GitBlobIdentity",
+    "git_blob_sha1",
+    "verify_expected_git_blob",
+)
+
 _SOURCE_DISCOVERY_GATE_EXPORTS: Final[tuple[str, ...]] = (
     "DiscoveryRoleRequirement",
     "DiscoverySource",
@@ -199,6 +205,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         for name in _SOURCE_DISCOVERY_FIREWALL_EXPORTS
     },
     **{
+        name: "eog.v2.git_blob_identity"
+        for name in _GIT_BLOB_IDENTITY_EXPORTS
+    },
+    **{
         name: "eog.v2.source_discovery_gate"
         for name in _SOURCE_DISCOVERY_GATE_EXPORTS
     },
@@ -238,6 +248,7 @@ __all__ = [
     *_RESPONSE_ROW_ADMISSIBILITY_EXPORTS,
     *_CANDIDATE_PREFLIGHT_EXPORTS,
     *_SOURCE_DISCOVERY_FIREWALL_EXPORTS,
+    *_GIT_BLOB_IDENTITY_EXPORTS,
     *_SOURCE_DISCOVERY_GATE_EXPORTS,
     *_SOURCE_TRANSPORT_PREFLIGHT_EXPORTS,
     *_TEMPORAL_SOURCE_CLOSURE_EXPORTS,
