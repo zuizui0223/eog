@@ -1,0 +1,35 @@
+{
+  "schema": "eog.snapshot_usa_2024_prelock_screen.execution_authorization.v2",
+  "screen_id": "snapshot_usa_2024_prelock_screen_v2",
+  "parent_v1_result": "v1_authoritative_result.json",
+  "scope": [
+    "Dryad dataset/version/file metadata GETs",
+    "derive anonymous public file_stream route from repository file ID",
+    "download and parse ssusa_2024_deployments.csv only",
+    "verify safe-file size and SHA-256 against Dryad metadata",
+    "response-independent transport and source-architecture preflight"
+  ],
+  "forbidden": [
+    "REST API safe-file download retry",
+    "ssusa_2024_sequences.csv download request",
+    "sequence payload byte",
+    "species value",
+    "focal-species selection",
+    "fresh candidate lock",
+    "model fitting",
+    "heldout scoring"
+  ],
+  "source_screen_contract_v2_git_blob_sha1": "700af7c71770ac6d14155c617c5b52caa7c705a1",
+  "screen_v2_git_blob_sha1": "e4036acab53fea32e086c4f8d80dced41208385e",
+  "dryad_public_file_git_blob_sha1": "e86d096f8ca3a4bcc7c3ccb3aeb98e8ef2ebb0df",
+  "source_transport_preflight_git_blob_sha1": "6ea66568a9ebec429cc6dfd36360402e69acb0f5",
+  "candidate_preflight_git_blob_sha1": "f42bb0dc16aa1ce3139d4049e77168fe8b27d830",
+  "ci_evidence": {
+    "verified_head_sha": "f53a4e042f6425d41b09fa46407d56cc74594890",
+    "package_checks": "success",
+    "submission_package": "success"
+  },
+  "execute_once": true,
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
