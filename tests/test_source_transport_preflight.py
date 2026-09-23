@@ -143,3 +143,15 @@ def test_transport_result_is_order_invariant():
     left = evaluate_source_transport_qualification((a, b))
     right = evaluate_source_transport_qualification((b, a))
     assert left.fingerprint == right.fingerprint
+
+
+
+def test_validation_facade_exports_transport_preflight():
+    from eog.v2 import validation
+    from eog.v2.source_transport_preflight import (
+        TransportRouteEvidence as Route,
+        evaluate_source_transport_qualification as evaluate,
+    )
+
+    assert validation.TransportRouteEvidence is Route
+    assert validation.evaluate_source_transport_qualification is evaluate
