@@ -61,7 +61,7 @@ def test_mixed_archive_range_failure_is_transport_unqualified_not_biological():
     assert result.status == "stop_no_response_blind_transport_route"
     assert result.ready is False
     assert result.response_payload_bytes_opened == 0
-    assert "response-blind transport route" in result.reason
+    assert "reject the candidate before scientific attempt lock" in result.reason
 
 
 def test_one_failed_route_does_not_poison_an_independently_qualified_route():
