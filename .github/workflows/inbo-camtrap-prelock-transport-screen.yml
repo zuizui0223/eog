@@ -42,6 +42,8 @@ jobs:
           bindings = {
               "source_screen_contract_git_blob_sha1": root / "source_screen_contract.json",
               "screen_script_git_blob_sha1": root / "screen.py",
+              "http_range_transport_git_blob_sha1": Path("src/eog/v2/http_range_transport.py"),
+              "zip_safe_member_git_blob_sha1": Path("src/eog/v2/zip_safe_member.py"),
           }
           for field, path in bindings.items():
               actual = subprocess.check_output(
