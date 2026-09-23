@@ -1,0 +1,5 @@
+{
+  "screen_id": "algar_restoration_v2_prelock_v1",
+  "execute_once": true,
+  "authorization": "gate0_execution_authorization.json"
+}
