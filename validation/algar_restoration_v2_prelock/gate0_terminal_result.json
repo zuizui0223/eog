@@ -1,0 +1,34 @@
+{
+  "schema": "eog.algar_restoration_v2_prelock.gate0_terminal_result.v1",
+  "screen_id": "algar_restoration_v2_prelock_v1",
+  "status": "terminal_safe_source_identity_mismatch_before_parse",
+  "terminal_stage": "safe_source_fetch_identity_check",
+  "reason": "frozen projects.csv byte_count was 1266 but the authoritative raw GitHub blob at the frozen source commit returned 1267 bytes; workflow stopped before parsing either safe source into Gate0",
+  "execution": {
+    "workflow_run_id": 35879711035,
+    "workflow_job_id": 107244712936,
+    "execution_head_sha": "db03d62ef6e81163e59b299fadced0c4dd239de8"
+  },
+  "firewall": {
+    "focal_species_selected": false,
+    "response_paths_opened": [],
+    "response_rows_opened": false,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "interpretation": {
+    "counts_as_predictive_evidence": false,
+    "counts_as_biological_negative": false,
+    "candidate_preflight_reached": false,
+    "geometry_gate_reached": false,
+    "changes_closed_eog_wf_synthesis": false,
+    "note": "This is a frozen safe-source identity/serialization mismatch, not an ecological result. The attempt is not repaired or rerun."
+  },
+  "terminal_policy": {
+    "rerun_allowed": false,
+    "byte_count_repair_within_attempt_allowed": false,
+    "response_access_allowed": false,
+    "future_attempt_requires_new_protocol_version": true
+  }
+}
