@@ -20,6 +20,7 @@ CandidatePreflightStatus = Literal[
     "stop_inseparable_geometry_response",
     "stop_no_response_independent_coordinate_geometry",
     "stop_analysis_registry_not_closed",
+    "stop_response_blind_transport_unqualified",
     "stop_insufficient_nodes",
     "stop_insufficient_outer_units",
     "stop_insufficient_repeated_nodes",
@@ -106,6 +107,7 @@ class CandidatePreflightDeclaration:
     require_separate_geometry_and_response: bool = True
     require_coordinate_geometry: bool = True
     require_closed_analysis_registry: bool = False
+    require_response_blind_transport_qualification: bool = False
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "attempt_id", _clean_required(self.attempt_id, "attempt_id"))
@@ -133,6 +135,10 @@ class CandidatePreflightDeclaration:
             self.require_closed_analysis_registry,
             "require_closed_analysis_registry",
         )
+        _require_bool(
+            self.require_response_blind_transport_qualification,
+            "require_response_blind_transport_qualification",
+        )
 
     @property
     def fingerprint(self) -> str:
@@ -145,6 +151,9 @@ class CandidatePreflightDeclaration:
                 "require_separate_geometry_and_response": self.require_separate_geometry_and_response,
                 "require_coordinate_geometry": self.require_coordinate_geometry,
                 "require_closed_analysis_registry": self.require_closed_analysis_registry,
+                "require_response_blind_transport_qualification": (
+                    self.require_response_blind_transport_qualification
+                ),
             }
         )
 
@@ -173,6 +182,8 @@ class CandidatePreflightEvidence:
     repeated_node_count: int | None
     layout_design: LayoutDesign = "unknown"
     analysis_registry_closed: bool | None = None
+    response_blind_transport_qualified: bool | None = None
+    transport_qualification_fingerprint: str | None = None
     response_rows_opened: bool = False
     response_bytes_opened: bool = False
     note: str = ""
@@ -221,6 +232,22 @@ class CandidatePreflightEvidence:
             "analysis_registry_closed",
             _optional_bool(self.analysis_registry_closed, "analysis_registry_closed"),
         )
+        object.__setattr__(
+            self,
+            "response_blind_transport_qualified",
+            _optional_bool(
+                self.response_blind_transport_qualified,
+                "response_blind_transport_qualified",
+            ),
+        )
+        object.__setattr__(
+            self,
+            "transport_qualification_fingerprint",
+            _clean_optional(
+                self.transport_qualification_fingerprint,
+                "transport_qualification_fingerprint",
+            ),
+        )
         _require_bool(self.response_rows_opened, "response_rows_opened")
         _require_bool(self.response_bytes_opened, "response_bytes_opened")
         if not isinstance(self.note, str):
@@ -256,6 +283,12 @@ class CandidatePreflightEvidence:
                 "repeated_node_count": self.repeated_node_count,
                 "layout_design": self.layout_design,
                 "analysis_registry_closed": self.analysis_registry_closed,
+                "response_blind_transport_qualified": (
+                    self.response_blind_transport_qualified
+                ),
+                "transport_qualification_fingerprint": (
+                    self.transport_qualification_fingerprint
+                ),
                 "response_rows_opened": self.response_rows_opened,
                 "response_bytes_opened": self.response_bytes_opened,
                 "note": self.note,
@@ -300,6 +333,16 @@ def evaluate_candidate_preflight(
         missing.append("coordinate_geometry_present")
     if declaration.require_closed_analysis_registry and evidence.analysis_registry_closed is None:
         missing.append("analysis_registry_closed")
+    if (
+        declaration.require_response_blind_transport_qualification
+        and evidence.response_blind_transport_qualified is None
+    ):
+        missing.append("response_blind_transport_qualified")
+    if (
+        declaration.require_response_blind_transport_qualification
+        and evidence.transport_qualification_fingerprint is None
+    ):
+        missing.append("transport_qualification_fingerprint")
     if evidence.node_count is None:
         missing.append("node_count")
     if evidence.outer_unit_count is None:
@@ -330,6 +373,15 @@ def evaluate_candidate_preflight(
         reason = (
             "response-blind metadata shows that the available geometry registry is not already "
             "closed one-to-one on the intended analysis nodes under a prospectively declared rule"
+        )
+    elif (
+        declaration.require_response_blind_transport_qualification
+        and evidence.response_blind_transport_qualified is False
+    ):
+        status = "stop_response_blind_transport_unqualified"
+        reason = (
+            "no response-blind transport route has been qualified for the required "
+            "safe registry/effort inputs; reject before candidate lock"
         )
     elif evidence.node_count is not None and evidence.node_count < declaration.minimum_nodes:
         status = "stop_insufficient_nodes"
