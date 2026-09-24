@@ -65,14 +65,6 @@ def evaluate(contract: dict[str, object], raw: dict[str, bytes]) -> dict[str, ob
                 ),
                 "registry_effort",
             ),
-            DiscoverySource(
-                SourceDescriptor(
-                    "projects",
-                    safe["projects"]["path"],
-                    ("project_id", "project_name", "project_sensor_layout"),
-                ),
-                "metadata",
-            ),
         ),
         (DiscoveryRoleRequirement("registry_effort"),),
     )
