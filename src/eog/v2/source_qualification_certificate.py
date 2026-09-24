@@ -68,7 +68,7 @@ def freeze_source_qualification_certificate(
             for source_id, fingerprint in source_identity_fingerprints.items()
         )
     )
-    if not identities:
+    if discovery.ready_for_safe_content_open and not identities:
         raise ValueError("at least one source identity fingerprint is required")
     if any(not source_id for source_id, _ in identities):
         raise ValueError("source identity IDs must be non-empty")
