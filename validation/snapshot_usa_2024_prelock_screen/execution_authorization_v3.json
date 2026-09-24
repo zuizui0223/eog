@@ -1,0 +1,21 @@
+{
+  "schema": "eog.snapshot_usa_2024_prelock_screen.authorization.v3",
+  "screen_id": "snapshot_usa_2024_prelock_screen_v3",
+  "source_screen_contract_v3_git_blob_sha1": "b7b5d36e82974a0d35ddb967d5a07e6446dc1fdf",
+  "screen_v3_git_blob_sha1": "7d1b8c2d2977c31af29cce692033e4ae9e7ac317",
+  "dryad_public_file_git_blob_sha1": "e86d096f8ca3a4bcc7c3ccb3aeb98e8ef2ebb0df",
+  "source_transport_preflight_git_blob_sha1": "6ea66568a9ebec429cc6dfd36360402e69acb0f5",
+  "candidate_preflight_git_blob_sha1": "f42bb0dc16aa1ce3139d4049e77168fe8b27d830",
+  "predecessor_results": [
+    "v1_authoritative_result.json",
+    "v2_authoritative_result.json"
+  ],
+  "transport_route": "https://datadryad.org/downloads/file_stream/{file_id}",
+  "candidate_locked": false,
+  "focal_species_selected": false,
+  "response_file_requests_allowed": 0,
+  "response_file_payload_bytes_allowed": 0,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "execute_once": true
+}
