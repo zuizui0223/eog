@@ -1,0 +1,47 @@
+{
+  "schema": "eog.snapshot_usa_2024_prelock_screen.authoritative_result.v3",
+  "screen_id": "snapshot_usa_2024_prelock_screen_v3",
+  "status": "source_screen_stop_prelock",
+  "reason": "dryad_public_safe_deployments_file returned HTTP 403",
+  "execution": {
+    "workflow_run_id": 36013450383,
+    "workflow_job_id": 107679768039,
+    "artifact_id": 10813093888,
+    "artifact_digest": "sha256:2042d642fd2df30cb8ee7b6bbe568ae8f56aa379e9f6e411b7c25dce79d8a9d4"
+  },
+  "metadata": {
+    "dataset_status": 200,
+    "version_id": 445070,
+    "latest_version_status": 200,
+    "files_status": 200,
+    "metadata_bytes_opened": 13878
+  },
+  "safe_download_route": {
+    "route_template": "https://datadryad.org/downloads/file_stream/{file_id}",
+    "result": "HTTP 403",
+    "payload_bytes_opened": 0
+  },
+  "predecessor_routes": [
+    {
+      "version": "v1",
+      "route": "Dryad REST API stash:download",
+      "result": "HTTP 401"
+    },
+    {
+      "version": "v2",
+      "route": "https://datadryad.org/stash/downloads/file_stream/{file_id}",
+      "result": "HTTP 403"
+    }
+  ],
+  "response_file_requests": 0,
+  "response_file_payload_bytes_opened": 0,
+  "biological_response_values_opened": false,
+  "focal_species_selected": false,
+  "candidate_locked": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "fingerprint": "3a55b7e084d326f0a98dc46382758f11ed732de5f337b6a666695123b11d6e73",
+  "disposition": "three predeclared Dryad safe-file routes failed before candidate lock; stop route hunting and reject this source architecture for fresh EOG-WF validation",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}

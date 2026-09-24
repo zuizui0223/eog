@@ -1,0 +1,35 @@
+{
+  "schema": "eog.snapshot_usa_2024_prelock_screen.v1_authoritative_result",
+  "screen_id": "snapshot_usa_2024_prelock_screen_v1",
+  "status": "source_screen_stop_prelock",
+  "reason": "dryad_safe_deployments_file returned HTTP 401",
+  "execution": {
+    "workflow_run_id": 35824271200,
+    "workflow_job_id": 107062490795,
+    "execution_head_sha": "f4ceebac66d0cb7d2e2c96985a110db05b611b26",
+    "artifact_id": 10734467314,
+    "artifact_digest": "sha256:5876ffd4d8853b2d56327f2667b728dd34b10b5ca00a367dfdd7a890dffd3bcf"
+  },
+  "fingerprint": "e8a4d14683e52a5ab38b0fd97833c7a8c5462471bc432a5cc35103f44fb714b9",
+  "metadata": {
+    "dataset_status": 200,
+    "latest_version_status": 200,
+    "files_status": 200,
+    "metadata_and_safe_bytes_opened_before_download_attempt": 13644
+  },
+  "safe_download_route": {
+    "route": "Dryad REST API stash:download",
+    "result": "HTTP 401",
+    "payload_bytes_opened": 0
+  },
+  "response_file_requests": 0,
+  "response_file_payload_bytes_opened": 0,
+  "biological_response_values_opened": false,
+  "focal_species_selected": false,
+  "candidate_locked": false,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "disposition": "transport route unqualified; permit separately versioned pre-lock transport route screening before candidate lock",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
