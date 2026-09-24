@@ -1,0 +1,82 @@
+{
+  "schema": "eog.algar_restoration_v4_predictive_evaluation.contract.v1",
+  "attempt_id": "algar_restoration_v4_predictive_endpoint_v1",
+  "activation_condition": "response transport, payload identity, schema parser, and estimability gates must all pass",
+  "frozen_geometry": {
+    "outer_unit": "balanced_spatial_fold",
+    "outer_unit_count": 4,
+    "fold_counts": [
+      9,
+      10,
+      9,
+      10
+    ],
+    "response_stratified_reassignment_allowed": false,
+    "candidate_unit_count": 75,
+    "node_count": 38,
+    "preresponse_certificate_fingerprint": "a459c83c71e7cb73b227a7fd04c24cce36c5a6ec708e22bb1a5f6d1a556908e5"
+  },
+  "baseline_encoding": {
+    "numeric": [
+      "longitude",
+      "latitude"
+    ],
+    "categorical": {
+      "feature_type": [
+        "HumanUse",
+        "NatRegen",
+        "Offline"
+      ],
+      "phase": [
+        "phase2",
+        "phase3"
+      ]
+    },
+    "encoding": "full one-hot indicator per frozen categorical level; no response-derived categories",
+    "missing_values_allowed": false
+  },
+  "learner": {
+    "family": "sklearn.ensemble.RandomForestClassifier",
+    "n_estimators": 500,
+    "max_features": "sqrt",
+    "min_samples_leaf": 5,
+    "class_weight": null,
+    "random_state": 20260817,
+    "n_jobs": -1,
+    "same_hyperparameters_baseline_and_augmented": true,
+    "probability_clip_epsilon": 0.000001,
+    "no_hyperparameter_or_feature_tuning_after_response": true
+  },
+  "arms": {
+    "baseline": "frozen encoded longitude + latitude + feature_type + phase",
+    "augmented": "exact same baseline columns plus source_symmetric_world_support_summary_v2_candidate",
+    "exact_world_identity_columns_allowed": false,
+    "arbitrary_single_source_columns_allowed": false
+  },
+  "layer_b": {
+    "representation": "source_symmetric_world_support_summary_v2_candidate",
+    "state_refresh": "sequential_context",
+    "world_family": "five frozen local worlds plus external_open",
+    "source_policy": "all eligible prior calibration-positive nodes aggregated symmetrically",
+    "heldout_history_used": false,
+    "calibration_self_history_removed": true
+  },
+  "metrics": {
+    "primary": "binary_log_loss",
+    "secondary": "brier_score",
+    "lower_is_better": true,
+    "aggregation": "unweighted macro mean across outer folds"
+  },
+  "paired_decision": {
+    "favorable_requires_augmented_macro_log_loss_lower": true,
+    "adverse_requires_baseline_macro_log_loss_lower": true,
+    "minimum_directional_fold_wins": 3,
+    "tie_tolerance": 0,
+    "favorable_status": "favorable_complementary_added_value",
+    "adverse_status": "adverse_complementary_added_value",
+    "otherwise_status": "no_confirmed_complementary_added_value"
+  },
+  "model_runs_if_estimable": "one paired outer-fold evaluation only",
+  "payload_requests_allowed_now": 0,
+  "counts_as_predictive_evidence": false
+}
