@@ -103,5 +103,18 @@
   "next_if_sufficient": "freeze exact documented response parser/join/taxon mapping, class-count gate, and paired predictive evaluation before first response CSV payload request",
   "next_if_insufficient": "STOP predictive endpoint before response payload",
   "counts_as_predictive_evidence": false,
-  "changes_closed_eog_wf_synthesis": false
+  "changes_closed_eog_wf_synthesis": false,
+  "known_roster_paths": [
+    "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "BirdFuncDat.csv",
+    "JPE_Beirne_et_al_2021_README.txt",
+    "MamFuncDat.csv",
+    "Raw_station_data_JPE_Beirne_et_al_2021.csv",
+    "Species_comon_names_JPE_Beirne_et_al_2021.csv",
+    "XData_JPE_Beirne_et_al_2021.csv",
+    "YData_JPE_Beirne_et_al_2021.csv",
+    "YData_dataframe_format_JPE_Beirne_et_al_2021.csv",
+    "monthly_counts_JPE_Beirne_et_al_2021.csv",
+    "total_observations_JPE_Beirne_et_al_2021.csv"
+  ]
 }
