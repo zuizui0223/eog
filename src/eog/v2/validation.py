@@ -174,6 +174,13 @@ _WORLD_ADEQUACY_EXPORTS: Final[tuple[str, ...]] = (
     "apply_structural_adequacy_gate",
 )
 
+_BALANCED_SPATIAL_FOLDS_EXPORTS: Final[tuple[str, ...]] = (
+    "SpatialFoldMetric",
+    "SpatialFoldSplit",
+    "BalancedSpatialFolds",
+    "build_balanced_spatial_folds",
+)
+
 _ADEQUACY_COMPLETE_LADDER_EXPORTS: Final[tuple[str, ...]] = (
     "AdequacyCompleteLadderPlan",
     "plan_adequacy_complete_lcc_targets",
@@ -249,6 +256,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     },
     **{name: "eog.v2.world_adequacy" for name in _WORLD_ADEQUACY_EXPORTS},
     **{
+        name: "eog.v2.balanced_spatial_folds"
+        for name in _BALANCED_SPATIAL_FOLDS_EXPORTS
+    },
+    **{
         name: "eog.v2.adequacy_complete_ladder"
         for name in _ADEQUACY_COMPLETE_LADDER_EXPORTS
     },
@@ -276,6 +287,7 @@ __all__ = [
     *_PAPER_READY_ENDPOINT_EXPORTS,
     *_PREDICTIVE_COMPLEMENTARITY_EXPORTS,
     *_WORLD_ADEQUACY_EXPORTS,
+    *_BALANCED_SPATIAL_FOLDS_EXPORTS,
     *_ADEQUACY_COMPLETE_LADDER_EXPORTS,
     *_WORLD_SCALE_EXPORTS,
 ]
