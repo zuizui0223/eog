@@ -1,0 +1,52 @@
+{
+  "schema": "eog.algar_restoration_v3_preresponse.authoritative_result.v1",
+  "attempt_id": "algar_restoration_v3_preresponse_v1",
+  "status": "preresponse_manifest_ready",
+  "execution": {
+    "workflow_run_id": 35978639119,
+    "workflow_job_id": 107564982861,
+    "artifact_id": 10799411725,
+    "artifact_digest": "sha256:0f27d0333693d5c5d836fbd787f20206bb749dc2b1af6744b53c3b73761baa5f"
+  },
+  "response_firewall": {
+    "focal_species_selected": false,
+    "response_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0,
+    "predictive_evaluation_frozen": false
+  },
+  "folds": {
+    "fold_counts": [
+      9,
+      10,
+      9,
+      10
+    ]
+  },
+  "counts": {
+    "node_count": 38,
+    "context_count": 3,
+    "initialization_count": 38,
+    "scored_candidate_count": 75,
+    "unsurveyed_count": 1,
+    "declared_world_count": 6,
+    "structural_world_count": 5
+  },
+  "statuses": {
+    "structural": "structural_ready",
+    "effort": "response_independent_effort_declared",
+    "observation": "complete_source_zero",
+    "predictive": "predictive_complement_candidate",
+    "predictive_use_allowed": true,
+    "predictive_outcome_access_allowed": false,
+    "structural_response_access_allowed": true
+  },
+  "fingerprints": {
+    "certificate": "a459c83c71e7cb73b227a7fd04c24cce36c5a6ec708e22bb1a5f6d1a556908e5",
+    "result": "1e47828a2b660883ecd7cf60341ef36a5e0f9c471c3ae8909d7c72b1fa8c693b",
+    "structural_gate": "5d36e3a67c731e1ba841019ce0e44cc44d721aa6963ef91051cc15d85c15dbe6"
+  },
+  "interpretation": "First response-unopened Algar v3 state to pass source qualification, finite-n structural adequacy, response-independent effort/context, balanced spatial folds, and prediction-facing Layer-B eligibility. Predictive outcome access remains closed because focal endpoint and evaluation contract are not frozen.",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
