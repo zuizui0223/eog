@@ -1,0 +1,11 @@
+{
+  "schema": "eog.algar_restoration_v2_source_qualification.authorization.v2",
+  "attempt_id": "algar_restoration_v2_source_qualification_v2",
+  "contract_git_blob_sha1": "d5a5ae3c46b977571a301ba9fe3d63a927007e6e",
+  "evaluator_git_blob_sha1": "c444fe173f1931cc6163a711d8378ea5727d7b2d",
+  "authorized_safe_source_git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf",
+  "response_files_authorized": [],
+  "focal_species_selected": false,
+  "candidate_locked": false,
+  "execute_once": true
+}
