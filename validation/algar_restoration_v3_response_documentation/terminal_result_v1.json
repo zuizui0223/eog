@@ -1,0 +1,23 @@
+{
+  "schema": "eog.algar_restoration_v3_response_documentation.terminal_result.v1",
+  "attempt_id": "algar_restoration_v3_response_documentation_v1",
+  "status": "terminal_documentation_transport_stop",
+  "execution": {
+    "workflow_run_id": 35989827649,
+    "workflow_job_id": 107600988724,
+    "artifact_id": 10804060727,
+    "artifact_digest": "sha256:ffe6307fb499dc9eef963f9459d16f92cf7972efebcf92f32590b2d7e15f4787"
+  },
+  "reason": "Dryad public file_stream route returned HTTP 403 before the README payload was opened",
+  "firewall": {
+    "documentation_payload_bytes_opened": 0,
+    "response_csv_payload_requests": 0,
+    "response_csv_payload_bytes_opened": 0,
+    "biological_response_values_opened": false,
+    "focal_taxon_locked": "Rangifer tarandus caribou",
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "interpretation": "transport failure only; README content was not observed and no response schema or biological result was learned",
+  "next_protocol": "v1.1 may use the public Dryad preview endpoint for the same frozen README file ID; no response CSV route may be opened"
+}
