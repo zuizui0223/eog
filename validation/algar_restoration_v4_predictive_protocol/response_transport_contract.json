@@ -1,0 +1,28 @@
+{
+  "schema": "eog.algar_restoration_v4_response_transport.contract.v1",
+  "attempt_id": "algar_restoration_v4_predictive_endpoint_v1",
+  "response_file": {
+    "path": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "file_id": 1008032,
+    "version_id": 139736,
+    "expected_size": 1740410,
+    "sha256": "acdd851cb6b44db29853031a897dce503f9acc727e17ab43e2ee4892fa57df0c"
+  },
+  "routes": [
+    {
+      "route_id": "dryad_api_download",
+      "url": "https://datadryad.org/api/v2/files/1008032/download",
+      "provenance": "exact download_href from frozen Dryad v3 file metadata"
+    },
+    {
+      "route_id": "dryad_public_file_stream",
+      "url": "https://datadryad.org/stash/downloads/file_stream/1008032",
+      "provenance": "public file_stream route derived before v4 from immutable Dryad file ID"
+    }
+  ],
+  "method": "HEAD only",
+  "response_payload_bytes_allowed": 0,
+  "next_if_ready": "freeze one-shot bounded GET authorization using only qualified predeclared route(s)",
+  "next_if_stop": "terminal v4 predictive endpoint before response payload",
+  "counts_as_predictive_evidence": false
+}
