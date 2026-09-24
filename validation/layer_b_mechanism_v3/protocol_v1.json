@@ -1,0 +1,86 @@
+{
+  "schema": "eog.layer_b_mechanism_v3.protocol.v1",
+  "programme": "layer_b_mechanism_v3_representation_contract",
+  "frozen_date": "2026-09-25",
+  "purpose": "Prospectively separate Layer-B world-set information from known v1 prediction-interface defects without reopening any consumed EOG-WF endpoint.",
+  "scientific_separation": {
+    "post_closure_research": true,
+    "changes_closed_eog_wf_synthesis": false,
+    "counts_as_fourth_eog_wf_endpoint": false,
+    "consumed_endpoint_rescoring_allowed": false,
+    "consumed_response_reopening_allowed": false,
+    "future_real_system_requires_separate_preregistration": true
+  },
+  "representation": {
+    "upstream_source_aggregation": "equal-weight mean across the declared source set inside each surviving world",
+    "source_label_invariant": true,
+    "world_label_invariant": true,
+    "feature_representation": "compact_source_symmetric_world_support_summary_v3_candidate",
+    "feature_names": [
+      "surviving_world_fraction",
+      "support_mean",
+      "support_std",
+      "support_min"
+    ],
+    "deterministic_expansions_forbidden": [
+      "support_range",
+      "simultaneous min/q25/q50/q75/max order-statistic expansion",
+      "duplicate algebraic transforms of the same small world-support vector"
+    ],
+    "larger_world_universe_requires_independent_scientific_justification": true
+  },
+  "learner_seed_contract": {
+    "require_multiple_primary_seeds": true,
+    "same_seed_sequence_baseline_and_augmented": true,
+    "learner_seeds": [
+      2026092501,
+      2026092502,
+      2026092503,
+      2026092504,
+      2026092505,
+      2026092506,
+      2026092507,
+      2026092508,
+      2026092509,
+      2026092510
+    ],
+    "report": [
+      "baseline score by seed",
+      "augmented score by seed",
+      "paired delta by seed",
+      "mean delta",
+      "median delta",
+      "augmented win fraction"
+    ],
+    "placebo_may_not_receive_richer_learner_seed_treatment_than_primary": true
+  },
+  "placebo_contract": {
+    "independent_column_permutation_allowed": false,
+    "admissible_modes": [
+      "joint_row",
+      "group_vector"
+    ],
+    "repeated_static_node_state_preferred_mode": "group_vector",
+    "sequential_state_unit_must_be_declared_before_outcome_access": true,
+    "permutation_seeds": [
+      2026092521,
+      2026092522,
+      2026092523,
+      2026092524,
+      2026092525,
+      2026092526,
+      2026092527,
+      2026092528,
+      2026092529,
+      2026092530
+    ],
+    "preserve_cross_column_joint_structure": true
+  },
+  "mechanism_claim_boundary": {
+    "tampa_adverse_status_remains_frozen": true,
+    "tampa_cause_identified": false,
+    "v3_improvement_would_not_retroactively_rescue_tampa": true,
+    "primary_current_claim": "Known v1 representation defects are sufficient to require a new prospective mechanism test before predictive gain or harm is attributed to world-set information itself."
+  },
+  "current_status": "outcome_free_implementation_contract"
+}
