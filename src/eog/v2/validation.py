@@ -95,6 +95,15 @@ _SOURCE_DISCOVERY_FIREWALL_EXPORTS: Final[tuple[str, ...]] = (
     "classify_discovery_batch",
 )
 
+_DRYAD_METADATA_EXPORTS: Final[tuple[str, ...]] = (
+    "DryadVersionIdentity",
+    "DryadFileIdentity",
+    "select_latest_public_submitted_version",
+    "resolve_dryad_file_identity",
+    "resolve_dryad_file_roster",
+    "verify_dryad_file_bytes",
+)
+
 _GIT_BLOB_IDENTITY_EXPORTS: Final[tuple[str, ...]] = (
     "GitBlobIdentity",
     "git_blob_sha1",
@@ -222,6 +231,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         for name in _SOURCE_DISCOVERY_FIREWALL_EXPORTS
     },
     **{
+        name: "eog.v2.dryad_metadata"
+        for name in _DRYAD_METADATA_EXPORTS
+    },
+    **{
         name: "eog.v2.git_blob_identity"
         for name in _GIT_BLOB_IDENTITY_EXPORTS
     },
@@ -277,6 +290,7 @@ __all__ = [
     *_RESPONSE_ROW_ADMISSIBILITY_EXPORTS,
     *_CANDIDATE_PREFLIGHT_EXPORTS,
     *_SOURCE_DISCOVERY_FIREWALL_EXPORTS,
+    *_DRYAD_METADATA_EXPORTS,
     *_GIT_BLOB_IDENTITY_EXPORTS,
     *_SOURCE_DISCOVERY_GATE_EXPORTS,
     *_SOURCE_QUALIFICATION_CERTIFICATE_EXPORTS,
