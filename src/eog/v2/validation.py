@@ -122,6 +122,12 @@ _SOURCE_QUALIFICATION_CERTIFICATE_EXPORTS: Final[tuple[str, ...]] = (
     "freeze_source_qualification_certificate",
 )
 
+_RESPONSE_TRANSPORT_PREFLIGHT_EXPORTS: Final[tuple[str, ...]] = (
+    "ResponseTransportRouteEvidence",
+    "ResponseTransportQualification",
+    "evaluate_response_transport",
+)
+
 _SOURCE_TRANSPORT_PREFLIGHT_EXPORTS: Final[tuple[str, ...]] = (
     "TransportRouteType",
     "TransportQualificationStatus",
@@ -247,6 +253,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         for name in _SOURCE_QUALIFICATION_CERTIFICATE_EXPORTS
     },
     **{
+        name: "eog.v2.response_transport_preflight"
+        for name in _RESPONSE_TRANSPORT_PREFLIGHT_EXPORTS
+    },
+    **{
         name: "eog.v2.source_transport_preflight"
         for name in _SOURCE_TRANSPORT_PREFLIGHT_EXPORTS
     },
@@ -294,6 +304,7 @@ __all__ = [
     *_GIT_BLOB_IDENTITY_EXPORTS,
     *_SOURCE_DISCOVERY_GATE_EXPORTS,
     *_SOURCE_QUALIFICATION_CERTIFICATE_EXPORTS,
+    *_RESPONSE_TRANSPORT_PREFLIGHT_EXPORTS,
     *_SOURCE_TRANSPORT_PREFLIGHT_EXPORTS,
     *_TEMPORAL_SOURCE_CLOSURE_EXPORTS,
     *_PROSPECTIVE_ESTIMABILITY_EXPORTS,
