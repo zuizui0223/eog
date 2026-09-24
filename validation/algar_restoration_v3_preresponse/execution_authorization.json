@@ -1,0 +1,20 @@
+{
+  "schema": "eog.algar_restoration_v3_preresponse.authorization.v1",
+  "attempt_id": "algar_restoration_v3_preresponse_v1",
+  "preresponse_contract_git_blob_sha1": "cdb66d68b4bd30b44bc4fc14320b936e177bcf3f",
+  "builder_git_blob_sha1": "fc33d05e4fabb0e4ec120cb490ccdccfd2dd2aba",
+  "balanced_spatial_folds_git_blob_sha1": "54fee6b5e410c5328da969be87aab4ce9d3181b2",
+  "source_qualification_contract_git_blob_sha1": "d5a5ae3c46b977571a301ba9fe3d63a927007e6e",
+  "source_qualification_evaluator_git_blob_sha1": "2191dc0fba82fb9f83fcc129a9d48575e038cfe7",
+  "pre_response_manifest_git_blob_sha1": "17248585ce7fc2c5844a9eb6003eac9068924a32",
+  "predictive_state_gate_git_blob_sha1": "318c4efd326d5e82eb8ef6a5b5e0b4df3fb9f58f",
+  "effort_context_git_blob_sha1": "de04183fee7e1e941feff0772d1f8466d5a08caf",
+  "safe_deployments_git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf",
+  "response_files_authorized": [],
+  "focal_species_selected": false,
+  "predictive_evaluation_frozen": false,
+  "response_bytes_allowed": 0,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "execute_once": true
+}

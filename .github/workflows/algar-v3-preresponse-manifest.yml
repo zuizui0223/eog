@@ -1,0 +1,153 @@
+name: Algar v3 response-blind pre-response manifest
+
+on:
+  push:
+    branches:
+      - agent/algar-v3-preresponse-manifest
+    paths:
+      - validation/algar_restoration_v3_preresponse/execute_once.json
+
+permissions:
+  contents: read
+
+jobs:
+  manifest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package with declared dependencies
+        run: python -m pip install -e .
+
+      - name: Verify frozen response-blind authorization
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+
+          root=Path("validation/algar_restoration_v3_preresponse")
+          marker=json.loads((root/"execute_once.json").read_text())
+          auth=json.loads((root/marker["authorization"]).read_text())
+          bindings={
+              "preresponse_contract_git_blob_sha1":root/"preresponse_contract.json",
+              "builder_git_blob_sha1":root/"build_manifest.py",
+              "balanced_spatial_folds_git_blob_sha1":Path("src/eog/v2/balanced_spatial_folds.py"),
+              "source_qualification_contract_git_blob_sha1":Path("validation/algar_restoration_v2_source_qualification/source_qualification_contract.json"),
+              "source_qualification_evaluator_git_blob_sha1":Path("validation/algar_restoration_v2_source_qualification/evaluate.py"),
+              "pre_response_manifest_git_blob_sha1":Path("src/eog/v2/pre_response_manifest.py"),
+              "predictive_state_gate_git_blob_sha1":Path("src/eog/v2/predictive_state_gate.py"),
+              "effort_context_git_blob_sha1":Path("src/eog/v2/effort_context.py"),
+          }
+          for field,path in bindings.items():
+              actual=subprocess.check_output(["git","hash-object",str(path)],text=True).strip()
+              assert actual==auth[field],(field,actual,auth[field])
+          assert auth["response_files_authorized"]==[]
+          assert auth["focal_species_selected"] is False
+          assert auth["predictive_evaluation_frozen"] is False
+          assert auth["response_bytes_allowed"]==0
+          PY
+
+      - name: Fetch exact frozen safe deployments blob only
+        run: |
+          python - <<'PY'
+          import json, urllib.request
+          from pathlib import Path
+          from eog.v2.git_blob_identity import verify_expected_git_blob
+
+          root=Path("validation/algar_restoration_v3_preresponse")
+          auth=json.loads((root/"execution_authorization.json").read_text())
+          repo="WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R"
+          commit="6b4170abbad9f7f7762ef6874e1246b28000f371"
+          path="data/raw_data/example_data/deployments.csv"
+          url=f"https://raw.githubusercontent.com/{repo}/{commit}/{path}"
+          request=urllib.request.Request(url,headers={"User-Agent":"EOG-WF-v3-preresponse/1.0"})
+          with urllib.request.urlopen(request,timeout=60) as response:
+              body=response.read()
+          verify_expected_git_blob(body,expected_git_blob_sha1=auth["safe_deployments_git_blob_sha1"])
+          Path("/tmp/algar_deployments.csv").write_bytes(body)
+          PY
+
+      - name: Build folds effort manifest and Layer-B eligibility
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from validation.algar_restoration_v3_preresponse.build_manifest import build_preresponse
+
+          root=Path("validation/algar_restoration_v3_preresponse")
+          contract=json.loads((root/"preresponse_contract.json").read_text())
+          source=json.loads(Path("validation/algar_restoration_v2_source_qualification/source_qualification_contract.json").read_text())
+          generated=root/"generated"
+          result=build_preresponse(
+              contract,
+              source,
+              Path("/tmp/algar_deployments.csv").read_bytes(),
+              output_dir=generated,
+          )
+
+          assert result["response_bytes_opened"]==0
+          assert result["focal_species_selected"] is False
+          assert result["model_fits"]==0
+          assert result["heldout_scores"]==0
+          assert sorted(result["folds"]["fold_counts"])==[9,9,10,10]
+
+          manifest=result["manifest_result"]
+          assert manifest["counts"]=={
+              "node_count":38,
+              "context_count":3,
+              "scored_candidate_count":75,
+              "initialization_count":38,
+              "unsurveyed_count":1,
+              "declared_world_count":6,
+              "structural_world_count":5,
+          }
+          assert manifest["statuses"]["structural"]=="structural_ready"
+          assert manifest["statuses"]["effort"]=="response_independent_effort_declared"
+          assert manifest["statuses"]["observation"]=="complete_source_zero"
+          assert manifest["statuses"]["predictive"]=="predictive_complement_candidate"
+          assert manifest["statuses"]["predictive_use_allowed"] is True
+          assert manifest["statuses"]["predictive_outcome_access_allowed"] is False
+
+          (root/"preresponse_result.json").write_text(
+              json.dumps(result,indent=2,sort_keys=True)+"\n",
+              encoding="utf-8",
+          )
+          print(json.dumps({
+              "status":result["status"],
+              "fold_counts":result["folds"]["fold_counts"],
+              "counts":manifest["counts"],
+              "statuses":manifest["statuses"],
+              "certificate_fingerprint":manifest["fingerprints"]["certificate"],
+              "result_fingerprint":manifest["result_fingerprint"],
+          },sort_keys=True))
+          PY
+
+      - name: Verify no response authorization was created
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("validation/algar_restoration_v3_preresponse")
+          result=json.loads((root/"preresponse_result.json").read_text())
+          assert result["response_bytes_opened"]==0
+          assert result["focal_species_selected"] is False
+          assert result["counts_as_predictive_evidence"] is False
+          assert result["manifest_result"]["statuses"]["predictive_outcome_access_allowed"] is False
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algar-v3-preresponse-manifest
+          path: |
+            validation/algar_restoration_v3_preresponse/preresponse_result.json
+            validation/algar_restoration_v3_preresponse/generated/registry.csv
+            validation/algar_restoration_v3_preresponse/generated/effort.csv
+            validation/algar_restoration_v3_preresponse/generated/manifest.json
+          if-no-files-found: error
