@@ -1,0 +1,16 @@
+{
+  "schema": "eog.algar_restoration_v3_geometry.authorization.v1_1",
+  "attempt_id": "algar_restoration_v3_adequacy_complete_geometry_v1",
+  "execution_version": "v1_1",
+  "predecessor_execution_failure": "execution_failure_v1.json",
+  "geometry_contract_git_blob_sha1": "9761913f34c71f375b9ab1baa6f327ad52b0ff25",
+  "evaluator_git_blob_sha1": "c2f955ac48b5d8aa22f81c531f33ca63860652b8",
+  "safe_deployments_git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf",
+  "scientific_contract_changed": false,
+  "evaluator_changed": false,
+  "execution_environment_change": "install declared project dependencies instead of --no-deps",
+  "response_files_authorized": [],
+  "focal_species_selected": false,
+  "execute_once": true,
+  "terminal_on_structural_stop": true
+}

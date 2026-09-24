@@ -1,0 +1,31 @@
+{
+  "schema": "eog.algar_restoration_v3_geometry.execution_failure.v1",
+  "attempt_id": "algar_restoration_v3_adequacy_complete_geometry_v1",
+  "status": "technical_environment_failure_before_geometry_evaluation",
+  "execution": {
+    "workflow_run_id": 35973710255,
+    "workflow_job_id": 107549104151,
+    "execution_head_sha": "7b5941b75fe582d4b7256e92795422641638e023"
+  },
+  "failure": {
+    "stage": "import_before_geometry_evaluation",
+    "exception": "ModuleNotFoundError: No module named 'numpy'",
+    "cause": "workflow installed the package with --no-deps even though world_adequacy imports numpy"
+  },
+  "scientific_state": {
+    "source_blob_verified": true,
+    "geometry_evaluation_started": false,
+    "structural_gate_answered": false,
+    "focal_species_selected": false,
+    "response_bytes_opened": 0,
+    "model_fits": 0,
+    "heldout_scores": 0,
+    "counts_as_predictive_evidence": false
+  },
+  "rerun_policy": {
+    "scientific_contract_changes_allowed": false,
+    "evaluator_changes_allowed": false,
+    "execution_environment_fix_allowed": true,
+    "new_execution_authorization_required": true
+  }
+}

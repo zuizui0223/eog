@@ -1,0 +1,85 @@
+name: Algar v3 adequacy-complete geometry v1.2
+
+on:
+  push:
+    branches:
+      - agent/algar-restoration-v3-adequacy-complete
+    paths:
+      - validation/algar_restoration_v3_geometry/execute_once_v1_2.json
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package with declared dependencies
+        run: python -m pip install -e .
+
+      - name: Verify v1.2 authorization
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          root=Path("validation/algar_restoration_v3_geometry")
+          marker=json.loads((root/"execute_once_v1_2.json").read_text())
+          auth=json.loads((root/marker["authorization"]).read_text())
+          assert auth["evaluator_changed"] is False
+          for field,path in {
+            "geometry_contract_git_blob_sha1":root/"geometry_contract_v1_2.json",
+            "evaluator_git_blob_sha1":root/"evaluate_geometry.py",
+          }.items():
+            actual=subprocess.check_output(["git","hash-object",str(path)],text=True).strip()
+            assert actual==auth[field],(field,actual,auth[field])
+          PY
+
+      - name: Fetch exact safe deployments blob
+        run: |
+          python - <<'PY'
+          import json,urllib.request
+          from pathlib import Path
+          from eog.v2.git_blob_identity import verify_expected_git_blob
+          root=Path("validation/algar_restoration_v3_geometry")
+          auth=json.loads((root/"execution_authorization_v1_2.json").read_text())
+          repo="WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R"
+          commit="6b4170abbad9f7f7762ef6874e1246b28000f371"
+          path="data/raw_data/example_data/deployments.csv"
+          url=f"https://raw.githubusercontent.com/{repo}/{commit}/{path}"
+          with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"EOG-WF-v3-safe/1.2"}),timeout=60) as response:
+              body=response.read()
+          verify_expected_git_blob(body,expected_git_blob_sha1=auth["safe_deployments_git_blob_sha1"])
+          Path("/tmp/algar_deployments.csv").write_bytes(body)
+          PY
+
+      - name: Evaluate adequacy-complete structural worlds
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from validation.algar_restoration_v3_geometry.evaluate_geometry import run_geometry
+          g=json.loads(Path("validation/algar_restoration_v3_geometry/geometry_contract_v1_2.json").read_text())
+          s=json.loads(Path("validation/algar_restoration_v2_source_qualification/source_qualification_contract.json").read_text())
+          result=run_geometry(g,s,Path("/tmp/algar_deployments.csv").read_bytes())
+          assert result["response_bytes_opened"]==0
+          assert result["focal_species_selected"] is False
+          assert result["model_fits"]==result["heldout_scores"]==0
+          Path("validation/algar_restoration_v3_geometry/geometry_result_v1_2.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          print(json.dumps({
+              "status":result["status"],
+              "plan":result["adequacy_complete_plan"],
+              "gate":result["structural_gate"],
+          },sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algar-v3-adequacy-complete-geometry-v1-2
+          path: validation/algar_restoration_v3_geometry/geometry_result_v1_2.json
+          if-no-files-found: error

@@ -1,0 +1,74 @@
+{
+  "schema": "eog.algar_restoration_v3_geometry.authoritative_result.v1_2",
+  "attempt_id": "algar_restoration_v3_adequacy_complete_geometry_v1_2",
+  "status": "structural_ready",
+  "execution": {
+    "workflow_run_id": 35976181147,
+    "workflow_job_id": 107557105530,
+    "artifact_id": 10797918554,
+    "artifact_digest": "sha256:2d57f77d07cc49343ee71568e02cd71341c1ac7034db9dbf0ba4e068cdbe2b04"
+  },
+  "candidate_locked": true,
+  "focal_species_selected": false,
+  "response_bytes_opened": 0,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "node_count": 38,
+  "adequacy_complete_plan": {
+    "fingerprint": "d07a5259a8a2a540573b27e34627a0628b8235180490d097302ab216e941fdb3",
+    "declared_targets": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "required_lcc_targets": [
+      0.9210526315789473,
+      0.9736842105263158
+    ],
+    "completed_targets": [
+      0.25,
+      0.5,
+      0.75,
+      0.9,
+      0.9210526315789473,
+      0.9736842105263158
+    ],
+    "max_isolated_nodes": 1
+  },
+  "world_family": {
+    "fingerprint": "d40279d1a92f505c41a1a7fb9def9218be20905528a57c956684b3a003b7f727",
+    "distance_matrix_fingerprint": "6202153e7253e58c62ae9f1291a5e035070cc561f6dca17b01f0324a432205c2",
+    "geometry_thresholds_km": [
+      2.6071569972311113,
+      3.1908956346650883,
+      3.810423352109427,
+      4.167226248032928,
+      4.841415137542297
+    ],
+    "structural_world_ids": [
+      "local_geo1",
+      "local_geo2",
+      "local_geo3",
+      "local_geo4",
+      "local_geo5"
+    ]
+  },
+  "structural_gate": {
+    "passed": true,
+    "fingerprint": "5d36e3a67c731e1ba841019ce0e44cc44d721aa6963ef91051cc15d85c15dbe6",
+    "passing_world_ids": [
+      "local_geo5"
+    ],
+    "final_passing_world": {
+      "world_id": "local_geo5",
+      "largest_weak_component_fraction": 0.9736842105263158,
+      "isolated_node_fraction": 0.02631578947368421,
+      "median_horizon_reachable_fraction": 0.15789473684210525,
+      "directed_edge_count": 188
+    }
+  },
+  "interpretation": "Response-blind structural PASS under the separately frozen adequacy-complete v3 protocol. No focal species or biological response was opened. This is method-development continuation on the same response-unopened Algar source, not a new independent ecological replication.",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
