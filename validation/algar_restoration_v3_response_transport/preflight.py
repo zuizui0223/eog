@@ -18,7 +18,7 @@ DEFAULT_CONTRACT=HERE/"transport_contract.json"
 DEFAULT_OUTPUT=HERE/"transport_result.json"
 
 
-def _head(url:str,expected_size:int)->ResponseTransportRouteEvidence:
+def _head(route_id:str,url:str,expected_size:int)->ResponseTransportRouteEvidence:
     request=urllib.request.Request(
         url,
         method="HEAD",
@@ -32,7 +32,7 @@ def _head(url:str,expected_size:int)->ResponseTransportRouteEvidence:
         response=urllib.request.urlopen(request,timeout=90)
     except urllib.error.HTTPError as exc:
         return ResponseTransportRouteEvidence(
-            route_id="",
+            route_id=route_id,
             url=url,
             expected_size=expected_size,
             status=int(exc.code),
@@ -43,7 +43,7 @@ def _head(url:str,expected_size:int)->ResponseTransportRouteEvidence:
         )
     except (OSError,urllib.error.URLError) as exc:
         return ResponseTransportRouteEvidence(
-            route_id="",
+            route_id=route_id,
             url=url,
             expected_size=expected_size,
             status=None,
@@ -64,7 +64,7 @@ def _head(url:str,expected_size:int)->ResponseTransportRouteEvidence:
                 content_length=int(text)
             else:
                 return ResponseTransportRouteEvidence(
-                    route_id="",
+                    route_id=route_id,
                     url=url,
                     expected_size=expected_size,
                     status=status,
@@ -75,7 +75,7 @@ def _head(url:str,expected_size:int)->ResponseTransportRouteEvidence:
                 )
         if response.headers.get("Content-Encoding","identity").casefold()!="identity":
             return ResponseTransportRouteEvidence(
-                route_id="",
+                route_id=route_id,
                 url=url,
                 expected_size=expected_size,
                 status=status,
@@ -85,7 +85,7 @@ def _head(url:str,expected_size:int)->ResponseTransportRouteEvidence:
                 error="unexpected content encoding",
             )
     return ResponseTransportRouteEvidence(
-        route_id="",
+        route_id=route_id,
         url=url,
         expected_size=expected_size,
         status=status,
@@ -106,17 +106,10 @@ def run(
 
     routes=[]
     for route in contract["routes"]:
-        evidence=_head(str(route["url"]),expected_size)
-        # Replace the placeholder route ID while preserving the body-free evidence.
-        evidence=ResponseTransportRouteEvidence(
-            route_id=str(route["route_id"]),
-            url=evidence.url,
-            expected_size=evidence.expected_size,
-            status=evidence.status,
-            final_url=evidence.final_url,
-            content_length=evidence.content_length,
-            payload_bytes_opened=evidence.payload_bytes_opened,
-            error=evidence.error,
+        evidence=_head(
+            str(route["route_id"]),
+            str(route["url"]),
+            expected_size,
         )
         routes.append(evidence)
 
