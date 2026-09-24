@@ -1,0 +1,107 @@
+{
+  "schema": "eog.algar_restoration_v3_response_documentation.contract.v1_2",
+  "attempt_id": "algar_restoration_v3_response_documentation_v1_2",
+  "predecessors": [
+    {
+      "attempt_id": "algar_restoration_v3_response_documentation_v1",
+      "status": "terminal_documentation_transport_stop",
+      "route": "https://datadryad.org/stash/downloads/file_stream/1008041",
+      "response_csv_payload_bytes_opened": 0
+    },
+    {
+      "attempt_id": "algar_restoration_v3_response_documentation_v1_1",
+      "status": "stop_documentation_preview_gate",
+      "route": "https://datadryad.org/data_file/preview/1008041",
+      "reason": "HTTP 406 before README preview content",
+      "response_csv_payload_bytes_opened": 0
+    }
+  ],
+  "scientific_contract_unchanged": true,
+  "focal_taxon": {
+    "common_name": "woodland caribou",
+    "scientific_name": "Rangifer tarandus caribou",
+    "selection_locked_before_documentation": true,
+    "no_switch_after_documentation": true
+  },
+  "authorized_documentation_file": {
+    "path": "JPE_Beirne_et_al_2021_README.txt",
+    "file_id": 1008041,
+    "version_id": 139736,
+    "size": 1987,
+    "digest_type": "sha-256",
+    "digest": "0d17dbc5d03cd1126890ef96147b15e3f93c84cb60fafe244e58106b8c16868d",
+    "api_download_url": "https://datadryad.org/api/v2/files/1008041/download",
+    "maximum_bytes": 1988
+  },
+  "alternate_route_evidence": {
+    "repository": "Lakens/cooper-bes-validation-manuscript",
+    "commit": "7da8dd1d5655ccbe978f63fd99700704b6ddd9e2",
+    "manifest_path": "manuscript/data/manifests/10_1111_1365_2664_14020.manifest.json",
+    "manifest_git_blob_sha1": "d7ce4ba22930f09fe79d324795050ec6801ffa07",
+    "observed_download_status": "downloaded",
+    "observed_file_url": "https://datadryad.org/api/v2/files/1008041/download",
+    "observed_file_size": 1987
+  },
+  "candidate_response_file": {
+    "path": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "file_id": 1008032,
+    "version_id": 139736,
+    "size": 1740410,
+    "sha256": "acdd851cb6b44db29853031a897dce503f9acc727e17ab43e2ee4892fa57df0c",
+    "response_preview_requests_allowed": 0,
+    "response_payload_requests_allowed": 0
+  },
+  "documentation_questions": {
+    "event_or_detection_role": [
+      "detection",
+      "detections",
+      "observation",
+      "observations",
+      "independent",
+      "30min",
+      "30 min"
+    ],
+    "station_or_node_field": [
+      "station",
+      "site",
+      "camera",
+      "location",
+      "placename"
+    ],
+    "date_or_time_field": [
+      "date",
+      "time",
+      "datetime",
+      "timestamp",
+      "year",
+      "month",
+      "day"
+    ],
+    "species_or_taxon_field": [
+      "species",
+      "taxon",
+      "common name",
+      "scientific name"
+    ]
+  },
+  "pass_rule": "target response filename must be documented and every documentation question must have at least one matched term in the target file documentation block; otherwise STOP before response CSV payload",
+  "extraction_policy": {
+    "save_full_documentation_text": false,
+    "numeric_redaction": true,
+    "maximum_saved_lines_per_file": 4
+  },
+  "authorization": {
+    "readme_api_requests_allowed": 1,
+    "readme_payload_bytes_allowed": 1988,
+    "response_csv_preview_requests_allowed": 0,
+    "response_csv_payload_requests_allowed": 0,
+    "response_csv_payload_bytes_allowed": 0,
+    "biological_response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "next_if_sufficient": "freeze exact documented response parser/join/taxon mapping, class-count gate, and paired predictive evaluation before first response CSV payload request",
+  "next_if_insufficient": "STOP predictive endpoint before response payload",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
