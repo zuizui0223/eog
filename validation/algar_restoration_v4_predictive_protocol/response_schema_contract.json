@@ -1,0 +1,80 @@
+{
+  "schema": "eog.algar_restoration_v4_response_schema.contract.v1",
+  "attempt_id": "algar_restoration_v4_predictive_endpoint_v1",
+  "response_file": {
+    "path": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "dryad_version_id": 139736,
+    "dryad_file_id": 1008032,
+    "size": 1740410,
+    "sha256": "acdd851cb6b44db29853031a897dce503f9acc727e17ab43e2ee4892fa57df0c"
+  },
+  "public_generation_code_evidence": {
+    "independent_minutes": 30,
+    "semantics": [
+      "img_sub is grouped by deployment_id and sp before independence intervals are calculated",
+      "ind_dat is one row per unique event_id",
+      "ind_dat is filtered to known active camera days using substr(timestamp,1,10) plus placename",
+      "ind_dat$sp is exported directly after factor conversion",
+      "write.csv(ind_dat, ...30min_independent_detections.csv) occurs without a select or rename step"
+    ]
+  },
+  "csv_contract": {
+    "encoding": "utf-8-sig",
+    "delimiter": ",",
+    "required_literal_columns": [
+      "deployment_id",
+      "placename",
+      "timestamp",
+      "sp"
+    ],
+    "additional_columns_allowed": true,
+    "additional_columns_used_for_prediction": false,
+    "duplicate_header_policy": "terminal_schema_stop",
+    "missing_required_column_policy": "terminal_schema_stop_no_alias_repair",
+    "blank_required_value_policy": "terminal_row_schema_stop_for_rows_considered_for_locked_candidate_universe"
+  },
+  "focal_taxon": {
+    "management_label": "woodland caribou",
+    "management_scientific_name": "Rangifer tarandus caribou",
+    "response_field": "sp",
+    "exact_response_token": "Rangifer.tarandus",
+    "token_evidence": "public Algar common_names.csv and activity code",
+    "normalization": "strip outer whitespace only; case-sensitive exact match",
+    "aliases_allowed": false,
+    "subspecies_claim_from_response_token": false
+  },
+  "candidate_join": {
+    "deployment_field": "deployment_id",
+    "placename_field": "placename",
+    "deployment_join": "exact stripped deployment_id to the frozen 114-deployment safe source",
+    "placename_check": "exact stripped placename must equal the node_id attached to the matched frozen deployment",
+    "phase_assignment": "phase1/phase2/phase3 inherited solely from the frozen response-independent deployment ordering",
+    "rows_with_deployment_id_not_in_locked_114": "outside candidate universe and ignored",
+    "rows_for_unsurveyed_unit": "ignored and never scored",
+    "post_open_crosswalk_or_alias_allowed": false
+  },
+  "timestamp_validation": {
+    "field": "timestamp",
+    "required_prefix": "first 10 characters must parse as ISO YYYY-MM-DD",
+    "rule": "date.fromisoformat(timestamp[0:10])",
+    "matched_deployment_sanity_check": "response date must lie between frozen start_date and end_date inclusive for the matched deployment; otherwise terminal row-schema stop",
+    "phase_assignment_uses_timestamp": false
+  },
+  "event_semantics": {
+    "one_row_per_independent_event": true,
+    "independence_minutes": 30,
+    "initialization_positive": "phase1 node is positive iff at least one matched exact caribou event exists",
+    "scored_positive": "eligible phase2/phase3 unit is positive iff at least one matched exact caribou event exists",
+    "scored_negative": "eligible phase2/phase3 unit with zero matched exact caribou events is a recorded camera non-detection under complete-source-zero",
+    "response_count_used_for_label": false,
+    "biological_absence_claim": false
+  },
+  "source_completeness_justification": {
+    "basis": "public generation code writes the complete independent-event table after filtering detections to known active camera days; frozen effort ledger independently enumerates surveyed candidate units",
+    "zero_rule": "eligible candidate unit absent from focal-taxon independent-event rows is zero/non-detection",
+    "completeness_failure_policy": "terminal_stop_if_payload/header evidence contradicts required generator contract"
+  },
+  "payload_requests_allowed_now": 0,
+  "no_post_open_schema_repair": true,
+  "counts_as_predictive_evidence": false
+}
