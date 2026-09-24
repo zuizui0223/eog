@@ -109,7 +109,7 @@ def _validated_nodes(
             if not -90.0 <= y <= 90.0:
                 raise ValueError("latitude must lie in [-90, 90]")
         result.append(_Node(node_id=node_id, x=x, y=y))
-    return tuple(result)
+    return tuple(sorted(result, key=lambda node: node.node_id))
 
 
 def _axis_values(
