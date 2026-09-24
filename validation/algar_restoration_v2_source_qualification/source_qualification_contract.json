@@ -1,0 +1,66 @@
+{
+  "schema": "eog.algar_restoration_v2_source_qualification.v2",
+  "attempt_id": "algar_restoration_v2_source_qualification_v2",
+  "relationship_to_prior_attempt": "new protocol version after v1 stopped before parsing safe sources; no focal species or biological response was opened in v1",
+  "source": {
+    "repository": "WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R",
+    "commit": "6b4170abbad9f7f7762ef6874e1246b28000f371",
+    "safe_sources": [
+      {
+        "source_id": "deployments",
+        "path": "data/raw_data/example_data/deployments.csv",
+        "git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf",
+        "role": "registry_effort"
+      }
+    ]
+  },
+  "discovery": {
+    "required_roles": [
+      "registry_effort"
+    ],
+    "response_path_tokens": [
+      "observation",
+      "observations",
+      "detection",
+      "detections",
+      "species",
+      "capture",
+      "captures"
+    ],
+    "focal_species_selected": false
+  },
+  "registry_policy": {
+    "node_id": "placename",
+    "coordinate_fields": [
+      "longitude",
+      "latitude"
+    ],
+    "repeated_deployments_required": true,
+    "representative_coordinate_policy": "strict_mode_per_placename",
+    "strict_mode_rule": "a coordinate pair must have a unique highest deployment count and support >= 2/3 of deployments for that placename; otherwise STOP",
+    "rationale": "response-independent robust handling of repeated deployment coordinates; no biological response is used",
+    "minimum_nodes": 30,
+    "minimum_repeated_nodes": 30
+  },
+  "outer_split_policy": {
+    "outer_unit_count": 4,
+    "construction": "response-blind spatial folds generated from canonical coordinates after source qualification and frozen before response access",
+    "response_stratified_reassignment": false
+  },
+  "candidate_preflight": {
+    "require_separate_geometry_and_response": true,
+    "require_coordinate_geometry": true,
+    "require_closed_analysis_registry": true,
+    "require_response_blind_transport_qualification": true
+  },
+  "response_firewall": {
+    "focal_species_selected": false,
+    "response_files_open_allowed": false,
+    "biological_response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "next_if_qualified": "freeze canonical 38-node registry, response-blind spatial outer folds, effort contexts and v2 manifest/structural worlds before any focal response selection",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}

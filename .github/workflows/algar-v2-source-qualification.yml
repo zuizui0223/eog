@@ -1,0 +1,92 @@
+name: Algar v2 pre-lock source qualification
+
+on:
+  push:
+    branches:
+      - agent/algar-restoration-v2-source-qualification
+    paths:
+      - validation/algar_restoration_v2_source_qualification/execute_once.json
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e . --no-deps
+
+      - name: Verify authorization
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          root=Path("validation/algar_restoration_v2_source_qualification")
+          marker=json.loads((root/"execute_once.json").read_text())
+          auth=json.loads((root/marker["authorization"]).read_text())
+          for field,path in {
+            "contract_git_blob_sha1":root/"source_qualification_contract.json",
+            "evaluator_git_blob_sha1":root/"evaluate.py",
+          }.items():
+            actual=subprocess.check_output(["git","hash-object",str(path)],text=True).strip()
+            assert actual==auth[field],(field,actual,auth[field])
+          PY
+
+      - name: Fetch exact frozen safe Git blob only
+        run: |
+          python - <<'PY'
+          import json, urllib.request
+          from pathlib import Path
+          from eog.v2.git_blob_identity import verify_expected_git_blob
+          root=Path("validation/algar_restoration_v2_source_qualification")
+          c=json.loads((root/"source_qualification_contract.json").read_text())
+          row=c["source"]["safe_sources"][0]
+          url=("https://raw.githubusercontent.com/"+c["source"]["repository"]+"/"+
+               c["source"]["commit"]+"/"+row["path"].replace(" ","%20"))
+          req=urllib.request.Request(url,headers={"User-Agent":"EOG-WF-v2-safe-source/2.0"})
+          with urllib.request.urlopen(req,timeout=60) as response:
+              body=response.read()
+          identity=verify_expected_git_blob(body,expected_git_blob_sha1=row["git_blob_sha1"])
+          Path("/tmp/algar_deployments.csv").write_bytes(body)
+          Path("/tmp/algar_identity.json").write_text(json.dumps({
+              "git_blob_sha1":identity.git_blob_sha1,
+              "raw_byte_count":identity.raw_byte_count,
+              "raw_sha256":identity.raw_sha256,
+              "fingerprint":identity.fingerprint,
+          },sort_keys=True))
+          PY
+
+      - name: Compile joined source qualification
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from validation.algar_restoration_v2_source_qualification.evaluate import evaluate
+          root=Path("validation/algar_restoration_v2_source_qualification")
+          c=json.loads((root/"source_qualification_contract.json").read_text())
+          result=evaluate(c,{"deployments":Path("/tmp/algar_deployments.csv").read_bytes()})
+          assert result["candidate_locked"] is False
+          assert result["focal_species_selected"] is False
+          assert result["response_bytes_opened"]==0
+          assert result["model_fits"]==result["heldout_scores"]==0
+          (root/"source_qualification_result.json").write_text(
+              json.dumps(result,indent=2,sort_keys=True)+"\n"
+          )
+          print(json.dumps({
+              "status":result["status"],
+              "candidate_lock_allowed":result["candidate_lock_allowed"],
+              "registry":result["registry"],
+              "certificate_fingerprint":result["certificate_fingerprint"],
+          },sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algar-v2-source-qualification
+          path: validation/algar_restoration_v2_source_qualification/source_qualification_result.json
+          if-no-files-found: error
