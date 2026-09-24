@@ -170,3 +170,16 @@ def test_identity_for_response_bearing_or_unclassified_source_fails_closed():
         assert "not authorized as safe" in str(exc)
     else:
         raise AssertionError("extra source identity should fail closed")
+
+
+
+def test_discovery_stop_can_be_certified_without_opening_or_binding_source_bytes():
+    result = freeze_source_qualification_certificate(
+        discovery=discovery(False),
+        source_identity_fingerprints={},
+        transport=transport(False),
+        candidate_preflight=candidate(False),
+    )
+    assert result.status == "stop_discovery"
+    assert result.candidate_lock_allowed is False
+    assert result.source_identity_fingerprints == ()
