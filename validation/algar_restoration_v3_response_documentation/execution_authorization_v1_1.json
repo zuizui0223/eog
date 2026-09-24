@@ -1,0 +1,19 @@
+{
+  "schema": "eog.algar_restoration_v3_response_documentation.authorization.v1_1",
+  "attempt_id": "algar_restoration_v3_response_documentation_v1_1",
+  "predecessor_terminal_result": "validation/algar_restoration_v3_response_documentation/terminal_result_v1.json",
+  "documentation_contract_git_blob_sha1": "2dd9bb94414b6790f07270ccea15372b120ee9c3",
+  "documentation_preview_gate_git_blob_sha1": "973fd3e454d7912ef5a618b38c553d72f3d2d365",
+  "focal_taxon_selection_git_blob_sha1": "20f7f09ea9b167d7b8ea9411e3e44f9ec41bb779",
+  "readme_file_id": 1008041,
+  "preview_url": "https://datadryad.org/data_file/preview/1008041",
+  "readme_preview_requests_allowed": 1,
+  "response_csv_preview_requests_allowed": 0,
+  "response_csv_payload_requests_allowed": 0,
+  "response_csv_payload_bytes_allowed": 0,
+  "focal_species_locked": true,
+  "focal_species": "Rangifer tarandus caribou",
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "execute_once": true
+}
