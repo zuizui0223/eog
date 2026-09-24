@@ -375,6 +375,21 @@ safe sources were physically accessible without focal response access.
 This is not permission to retry a stopped attempt. Endure remains terminal under its
 frozen protocol. The new rule applies only to future protocol versions.
 
+### Repository-backed raw blob identity
+
+For Git-backed prospective sources, the primary source identity is now the Git blob
+object ID computed from the **exact raw bytes**. Raw byte count and SHA-256 are derived
+from those same verified bytes rather than copied independently from a text/API view.
+
+This matters because repository APIs may decode text or normalize presentation details
+that are not identical to the raw blob representation. The Algar safe-source attempt
+exposed this failure mode: a frozen API-view length of 1266 bytes disagreed with the
+1267-byte raw Git blob, so the attempt correctly stopped before parsing. Future protocol
+versions should freeze the blob SHA first and derive byte count only after verifying the
+raw bytes against that blob identity.
+
+The canonical helper is `src/eog/v2/git_blob_identity.py`.
+
 ### Transport-independent content identity
 
 Acquisition transport is deliberately separated from scientific source identity.
