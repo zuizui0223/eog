@@ -86,11 +86,12 @@ The read-only readiness checker tracks `LICENSE`, `LICENSE.txt` or `LICENSE.md` 
 
 ## Remaining blockers are administrative/release, not scientific
 
-The manuscript is **not submission-ready yet** because exactly three items require author/external completion:
+The manuscript is **not submission-ready yet** because exactly two items still require author confirmation:
 
 1. **Final title page.** Authors, affiliations, corresponding-author details, running headline, acknowledgements, author contributions, funding, competing interests and inclusion statement require author confirmation. The repository contains `manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md`; it must not be promoted to the final title page until confirmed.
-2. **Review-ready archive / DOI.** `[FINAL ARCHIVE/DOI TO ADD]` remains in the Data/Code statement. A release/archive or a suitable private peer-review repository must be fixed before upload.
-3. **AI/LLM disclosure.** Current MEE guidance requires transparent disclosure when LLMs are used in manuscript/code production, including the application/version and extent of use and author responsibility. The exact historical applications, versions and assisted portions must be confirmed by the authors before inserting the Methods disclosure and corresponding contribution statement.
+2. **AI/LLM disclosure.** Current MEE guidance requires transparent disclosure when LLMs are used in manuscript/code production, including the application/version and extent of use and author responsibility. The exact historical applications, versions and assisted portions must be confirmed by the authors before inserting the Methods disclosure and corresponding contribution statement.
+
+The **review-ready archive gate is resolved** with the immutable public repository snapshot at commit `91125ae68004f298fcd45027566506772a3688d5`: https://github.com/zuizui0223/eog/tree/91125ae68004f298fcd45027566506772a3688d5. The deterministic review package built from that commit has archive SHA-256 `6fbb6c8e30b010e5fb0ffc1197f626c0e46ee74897ce5ba1cfbd61e4bc6f8b00`.
 
 These blockers do not justify additional ecological analyses or another fresh endpoint.
 
@@ -112,4 +113,4 @@ The editor-facing answer to “what is the method?” is now concrete:
 
 > **EOG-WF is a two-layer ecological inference architecture that retains exact finite-world identities for auditable sequential compatibility and falsification, exposes only a label-invariant projection to prediction, and prospectively tests that projection as added information beyond an unchanged strong learner while retaining failed candidates in the validation denominator.**
 
-The next work is therefore **author/title-page completion, AI/LLM disclosure confirmation and review-ready archive packaging**, not further scientific model development.
+The next work is therefore **author/title-page completion and AI/LLM disclosure confirmation**, followed by the final submission-package build; scientific development remains closed.
