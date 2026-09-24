@@ -1,0 +1,32 @@
+{
+  "schema": "eog.algar_restoration_v3_geometry.execution_failure.v1_1",
+  "attempt_id": "algar_restoration_v3_adequacy_complete_geometry_v1",
+  "execution_version": "v1_1",
+  "status": "derived_expectation_mismatch_before_world_generation",
+  "execution": {
+    "workflow_run_id": 35975964802,
+    "workflow_job_id": 107556394878,
+    "execution_head_sha": "13944cb0aeb19f9a62c5b71df006930e7a417a6a"
+  },
+  "failure": {
+    "stage": "finite_n_plan_expectation_check_before_world_generation",
+    "observed_issue": "contract expected only the 37/38 isolation-implied target, but min LCC >=0.90 also discretizes to ceil(0.90*38)/38 = 35/38",
+    "world_generation_started": false,
+    "structural_gate_answered": false
+  },
+  "scientific_state": {
+    "adequacy_declaration_changed": false,
+    "node_universe_changed": false,
+    "response_bytes_opened": 0,
+    "focal_species_selected": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "next_execution_policy": {
+    "correct_only_the_deterministic_expected_finite_n_completion": true,
+    "change_adequacy_thresholds": false,
+    "change_evaluator": false,
+    "response_access": false,
+    "new_execution_authorization_required": true
+  }
+}
