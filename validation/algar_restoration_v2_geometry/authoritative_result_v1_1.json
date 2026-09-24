@@ -1,0 +1,47 @@
+{
+  "schema": "eog.algar_restoration_v2_geometry.authoritative_result.v1_1",
+  "attempt_id": "algar_restoration_v2_geometry_v1_1",
+  "status": "stop_structural_adequacy",
+  "execution": {
+    "workflow_run_id": 35961481631,
+    "workflow_job_id": 107510798752,
+    "artifact_id": 10792656448,
+    "artifact_digest": "sha256:ada41323acf068664a212154360cdd7bc44c130051856f2b0d986a787d269dfd"
+  },
+  "candidate_locked": true,
+  "focal_species_selected": false,
+  "response_bytes_opened": 0,
+  "model_fits": 0,
+  "node_count": 38,
+  "world_family": {
+    "fingerprint": "bd116ca4e787ee0247e6e4b0916b6600ceea49795a7d3ea5267e9a7539a802f2",
+    "distance_matrix_fingerprint": "6202153e7253e58c62ae9f1291a5e035070cc561f6dca17b01f0324a432205c2",
+    "geometry_thresholds_km": [
+      2.6071569972311113,
+      3.1908956346650883,
+      3.810423352109427,
+      4.167226248032928
+    ]
+  },
+  "structural_gate": {
+    "fingerprint": "ee00a02f60604cf63b4637423e4d67199cf58e4dd7d0af73ffdc74101c07852e",
+    "passed": false,
+    "passing_world_ids": [],
+    "final_world": {
+      "world_id": "local_geo4",
+      "largest_weak_component_fraction": 0.9473684210526315,
+      "isolated_node_fraction": 0.05263157894736842,
+      "directed_edge_count": 142
+    },
+    "failed_boundary": "max_isolated_node_fraction <= 0.05; local_geo4 has 2/38 isolated nodes = 0.0526316"
+  },
+  "interpretation": "Response-blind structural STOP. No focal species or biological response was opened. The 0.90 LCC ladder target was not sufficient to include a world capable of satisfying the separately frozen <=0.05 isolated-node criterion at n=38; this exposes a generic finite-n ladder/adequacy compatibility issue rather than a biological negative.",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "terminal_policy": {
+    "retune_this_attempt": false,
+    "add_world_after_result": false,
+    "response_access": false,
+    "future_protocol_requires_adequacy_complete_world_design": true
+  }
+}
