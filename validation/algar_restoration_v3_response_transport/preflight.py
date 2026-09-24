@@ -99,6 +99,8 @@ def _head(route_id:str,url:str,expected_size:int)->ResponseTransportRouteEvidenc
 def run(
     contract_path:Path=DEFAULT_CONTRACT,
     output_path:Path=DEFAULT_OUTPUT,
+    *,
+    head_fn=_head,
 )->dict[str,object]:
     contract=json.loads(contract_path.read_text(encoding="utf-8"))
     response=contract["response_file"]
@@ -106,7 +108,7 @@ def run(
 
     routes=[]
     for route in contract["routes"]:
-        evidence=_head(
+        evidence=head_fn(
             str(route["route_id"]),
             str(route["url"]),
             expected_size,
