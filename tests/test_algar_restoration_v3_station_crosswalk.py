@@ -91,7 +91,7 @@ def test_safe_file_digest_must_match_before_csv_parse():
     contract["safe_dryad_file"]["digest"] = "0" * 64
 
     try:
-        evaluate_station_crosswalk(contract, raw, ("ALG001",) * 38)
+        evaluate_station_crosswalk(contract, raw, _locked())
     except ValueError as exc:
         assert "digest drift" in str(exc)
     else:
