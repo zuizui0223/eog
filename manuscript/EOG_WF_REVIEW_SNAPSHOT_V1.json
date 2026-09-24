@@ -1,0 +1,34 @@
+{
+  "schema": "eog.eogwf_review_snapshot.v1",
+  "date": "2026-09-25",
+  "repository": "zuizui0223/eog",
+  "visibility": "public",
+  "immutable_review_commit": "91125ae68004f298fcd45027566506772a3688d5",
+  "review_url": "https://github.com/zuizui0223/eog/tree/91125ae68004f298fcd45027566506772a3688d5",
+  "submission_workflow": {
+    "workflow_run_id": 36018663222,
+    "workflow_job_id": 107697637587,
+    "artifact_id": 10815971361,
+    "artifact_name": "eogwf-submission-review-package",
+    "artifact_expires_at": "2026-12-23T15:14:10Z",
+    "package_archive_sha256": "6fbb6c8e30b010e5fb0ffc1197f626c0e46ee74897ce5ba1cfbd61e4bc6f8b00",
+    "package_manifest_sha256": "0a4463ea37799a16654cc5dfb8913981f5bc6ebe7cc0b86eadc6513b5e9af4f4",
+    "actions_artifact_upload_digest": "aed5a186e3c824a3be49d44361d17e31513e3393d6cfc8bb0770fc82bbd95265"
+  },
+  "release_boundary": {
+    "scientific_content_frozen": true,
+    "fresh_scored_endpoints": 3,
+    "endpoint_pattern": [
+      "favorable",
+      "favorable",
+      "adverse"
+    ],
+    "fourth_endpoint_allowed": false,
+    "candidate_hunting_hard_stop": true
+  },
+  "remaining_author_admin_blockers": [
+    "title_page_author_confirmation",
+    "ai_llm_disclosure_author_confirmation"
+  ],
+  "note": "The immutable Git commit permalink is the durable peer-review repository snapshot. The Actions artifact is a reproducibility receipt and convenience bundle, not the primary durable review link."
+}

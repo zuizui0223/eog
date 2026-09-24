@@ -222,11 +222,12 @@ Any future real-system Layer-B translation test must be a **new separately prere
 
 ## EOG-WF submission lane — frozen science, parallel administration only
 
-The EOG-WF scientific manuscript is closed and the deterministic submission-package builder is on `main`. Remaining EOG-WF work is limited to author/admin/release completion:
+The EOG-WF scientific manuscript is closed and the deterministic submission-package builder is on `main`. Remaining EOG-WF work is limited to author/admin completion:
 
 1. final title page / author metadata;
-2. review-ready archive or DOI/private-review link;
-3. author-approved AI/LLM disclosure.
+2. author-approved AI/LLM disclosure.
+
+The review-ready repository gate is resolved by the immutable public snapshot at commit `91125ae68004f298fcd45027566506772a3688d5`.
 
 These items may proceed in parallel, but **they do not reopen scientific development, endpoint search, model fitting or claim expansion**.
 

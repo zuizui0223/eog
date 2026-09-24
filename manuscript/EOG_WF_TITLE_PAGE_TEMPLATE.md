@@ -31,7 +31,7 @@ Environmental Occupancy Geometry: auditable finite-world falsification with a pr
 
 ## Data availability
 
-[INSERT FINAL REVIEW/ARCHIVE STATEMENT AFTER REVIEW-READY RELEASE OR PRIVATE REVIEW ARCHIVE IS FIXED]
+Peer-review code and data snapshot: https://github.com/zuizui0223/eog/tree/91125ae68004f298fcd45027566506772a3688d5
 
 ## Conflict of interest
 

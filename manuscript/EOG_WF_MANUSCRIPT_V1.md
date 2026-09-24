@@ -14,7 +14,7 @@
 
 **4.** The strongest supported result is therefore not general predictive benefit. EOG provides an auditable finite-world compatibility, contraction and falsification framework coupled to an explicit prospective validation denominator. The frozen Layer-B compression can contain additional heldout information in some systems but can also cause substantial predictive degradation; its usefulness must be established separately in each application. Structural compatibility and predictive value are distinct estimands and are allowed to disagree.
 
-**Data and code for peer review:** all manuscript results are linked to immutable repository contracts, certificates, fingerprints and generated paper-ready assets. A review-ready release/archive should be fixed before submission. [FINAL ARCHIVE/DOI TO ADD]
+**Data and code for peer review:** all manuscript results are linked to immutable repository contracts, certificates, fingerprints and generated paper-ready assets. The immutable public review snapshot is the EOG repository at commit `91125ae68004f298fcd45027566506772a3688d5`: https://github.com/zuizui0223/eog/tree/91125ae68004f298fcd45027566506772a3688d5.
 
 **Keywords:** ecological forecasting; falsification; model uncertainty; prospective validation; reachability; reproducibility; species distributions
 

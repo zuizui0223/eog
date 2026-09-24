@@ -186,11 +186,12 @@ The validation machinery now includes physical-header identity, categorical toke
 
 The EOG-WF scientific line is **closed**. It is not awaiting another fresh system, new model fit, claim expansion, or scientific manuscript development.
 
-Remaining EOG-WF work is limited to author/admin/release completion:
+Remaining EOG-WF work is limited to author/admin completion:
 
 1. final title page / author metadata;
-2. review-ready archive or DOI/private-review link;
-3. author-approved AI/LLM disclosure.
+2. author-approved AI/LLM disclosure.
+
+The immutable public review snapshot is fixed at EOG commit `91125ae68004f298fcd45027566506772a3688d5`.
 
 The Structural/reference-adequacy paper has moved to the standalone canonical repository `zuizui0223/Structural`. Structural manuscript, release and author/admin work must not continue from this EOG repository; retained Structural files here are migration provenance only.
 
