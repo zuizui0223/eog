@@ -108,7 +108,10 @@ def evaluate(contract: dict[str, object], raw: dict[str, bytes]) -> dict[str, ob
             }
         )
 
-    repeated = sum(len(pairs) > 1 for pairs in grouped.values())
+    repeated = sum(
+        place in canonical and len(pairs) > 1
+        for place, pairs in grouped.items()
+    )
     transport = evaluate_source_transport_qualification(
         (
             TransportRouteEvidence(
