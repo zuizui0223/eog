@@ -21,6 +21,7 @@ eog-v2-genetic-validate = "eog.v2.cli:genetic_validate_main"
 eog-v2-occurrence-freeze = "eog.v2.cli:occurrence_freeze_main"
 eog-v2-occurrence-validate = "eog.v2.cli:occurrence_validate_main"
 eog-v2-pre-response-freeze = "eog.v2.cli:pre_response_freeze_main"
+eog-v2-source-qualify = "eog.v2.cli:source_qualify_main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "pandas>=2", "pyshp==2.3.1", "scikit-learn==1.5.2"]
