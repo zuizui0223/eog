@@ -1,0 +1,82 @@
+name: Algar v3 README preview gate v1.1
+
+on:
+  push:
+    branches:
+      - agent/algar-v3-response-documentation
+    paths:
+      - validation/algar_restoration_v3_response_documentation/execute_once_v1_1.json
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: python -m pip install -e . --no-deps
+
+      - name: Verify v1.1 authorization
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          root=Path("validation/algar_restoration_v3_response_documentation")
+          marker=json.loads((root/"execute_once_v1_1.json").read_text())
+          auth=json.loads((root/marker["authorization"]).read_text())
+          for field,path in {
+              "documentation_contract_git_blob_sha1":root/"documentation_contract_v1_1.json",
+              "documentation_preview_gate_git_blob_sha1":root/"documentation_preview_gate.py",
+              "focal_taxon_selection_git_blob_sha1":Path("validation/algar_restoration_v3_response_roster/focal_taxon_selection.json"),
+          }.items():
+              actual=subprocess.check_output(["git","hash-object",str(path)],text=True).strip()
+              assert actual==auth[field],(field,actual,auth[field])
+          assert auth["readme_preview_requests_allowed"]==1
+          assert auth["response_csv_preview_requests_allowed"]==0
+          assert auth["response_csv_payload_requests_allowed"]==0
+          assert auth["response_csv_payload_bytes_allowed"]==0
+          assert auth["focal_species_locked"] is True
+          PY
+
+      - name: Open README preview only
+        run: python -m validation.algar_restoration_v3_response_documentation.documentation_preview_gate
+
+      - name: Verify response CSV firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(
+              Path("validation/algar_restoration_v3_response_documentation/documentation_result_v1_1.json").read_text()
+          )
+          assert result["response_csv_preview_requests"]==0
+          assert result["response_csv_payload_requests"]==0
+          assert result["response_csv_payload_bytes_opened"]==0
+          assert result["biological_response_values_opened"] is False
+          assert result["model_fits"]==result["heldout_scores"]==0
+          print(json.dumps({
+              "status":result["status"],
+              "response_filename_documented":result.get("response_filename_documented"),
+              "preview_text_lines":(
+                  None if "preview_audit" not in result
+                  else result["preview_audit"]["preview_text_lines"]
+              ),
+              "fingerprint":result["fingerprint"],
+          },sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algar-v3-response-documentation-v1-1
+          path: validation/algar_restoration_v3_response_documentation/documentation_result_v1_1.json
+          if-no-files-found: error
