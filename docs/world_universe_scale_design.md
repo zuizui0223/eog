@@ -152,3 +152,20 @@ Do not:
 - reopen a failed independent dataset with a redesigned ladder and call it independent confirmation.
 
 The purpose of this layer is to make the **next** independent EOG-WF test structurally eligible before its ecological response is opened.
+
+
+## Finite-n adequacy completeness
+
+Future protocols must make the structural ladder capable of testing its own adequacy
+declaration before the world family is frozen. `plan_adequacy_complete_lcc_targets(...)`
+converts continuous criteria to attainable finite-node targets and augments the declared
+LCC ladder where necessary.
+
+Algar v2 exposed the issue response-blindly. With 38 locked nodes, isolated <= 0.05
+permits at most floor(0.05 * 38) = 1 isolated node. A sufficient LCC target is therefore
+37/38 = 0.973684..., while the frozen ladder ended at 0.90. Its widest world reached
+36/38 = 0.94737 with 2/38 = 0.05263 isolated nodes and correctly STOPPED.
+
+Algar is not retuned. The completion rule applies only to future protocol versions.
+Median horizon-reachability is not implied by LCC size and remains an independent
+world-design requirement.
