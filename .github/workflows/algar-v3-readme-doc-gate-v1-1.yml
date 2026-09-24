@@ -1,0 +1,77 @@
+name: Algar v3 README documentation gate v1.1
+
+on:
+  push:
+    branches:
+      - agent/algar-v3-readme-doc-gate
+    paths:
+      - validation/algar_restoration_v3_readme_gate/execute_once_v1_1.json
+
+permissions:
+  contents: read
+
+jobs:
+  readme:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package
+        run: python -m pip install -e . --no-deps
+
+      - name: Verify v1.1 authorization
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          root=Path("validation/algar_restoration_v3_readme_gate")
+          marker=json.loads((root/"execute_once_v1_1.json").read_text())
+          auth=json.loads((root/marker["authorization"]).read_text())
+          assert auth["scientific_contract_changed"] is False
+          for field,path in {
+              "readme_contract_git_blob_sha1":root/"readme_contract_v1_1.json",
+              "readme_evaluator_git_blob_sha1":root/"readme_gate_v1_1.py",
+              "focal_taxon_selection_git_blob_sha1":Path("validation/algar_restoration_v3_response_roster/focal_taxon_selection.json"),
+              "roster_authoritative_result_git_blob_sha1":Path("validation/algar_restoration_v3_response_roster/authoritative_result.json"),
+          }.items():
+              actual=subprocess.check_output(["git","hash-object",str(path)],text=True).strip()
+              assert actual==auth[field],(field,actual,auth[field])
+          assert auth["response_csv_payload_requests_allowed"]==0
+          assert auth["focal_taxon_change_allowed"] is False
+          PY
+
+      - name: Open README documentation with complete byte ledger
+        run: python -m validation.algar_restoration_v3_readme_gate.readme_gate_v1_1
+
+      - name: Verify no response CSV payload
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path("validation/algar_restoration_v3_readme_gate/readme_gate_result_v1_1.json").read_text())
+          assert result["response_csv_payload_requests"]==0
+          assert result["response_csv_payload_bytes_opened"]==0
+          assert result["biological_response_values_opened"] is False
+          assert result["focal_taxon_changed"] is False
+          assert result["model_fits"]==result["heldout_scores"]==0
+          print(json.dumps({
+              "status":result["status"],
+              "reason":result.get("reason"),
+              "documentation_payload_bytes_opened":result["documentation_payload_bytes_opened"],
+              "question_support":result.get("question_support"),
+              "target_section":result.get("target_section"),
+              "request_ledger":result.get("request_ledger"),
+              "fingerprint":result["fingerprint"],
+          },sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algar-v3-readme-documentation-gate-v1-1
+          path: validation/algar_restoration_v3_readme_gate/readme_gate_result_v1_1.json
+          if-no-files-found: error
