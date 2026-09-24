@@ -1,0 +1,33 @@
+{
+  "schema": "eog.algar_restoration_v3_station_crosswalk.authorization.v1_1",
+  "attempt_id": "algar_restoration_v3_station_crosswalk_v1",
+  "execution_version": "v1_1",
+  "predecessor_execution_failure": "execution_failure_v1.json",
+  "crosswalk_contract_git_blob_sha1": "4b93250a66a6b2d53327f8c8ac1f436a62fb2607",
+  "crosswalk_evaluator_git_blob_sha1": "ffe2333f82963e07cffa43d80995919839908848",
+  "dryad_metadata_git_blob_sha1": "6f909482cac2b8345274272db06cd07e10b19552",
+  "git_blob_identity_git_blob_sha1": "51dacd951099c424ce1f3dc97a188d102c8426a9",
+  "safe_file_content_identity": {
+    "file_id": 1008040,
+    "version_id": 139736,
+    "size": 6002,
+    "sha256": "2a41a85b8a4ea6415bd63a4f7e7f8240e99a44407a81d60d3c23cfadcab8f106"
+  },
+  "transport_override": {
+    "from_failed_route": "https://datadryad.org/stash/downloads/file_stream/1008040",
+    "to_current_public_route": "https://datadryad.org/downloads/file_stream/1008040",
+    "scientific_contract_changed": false,
+    "evaluator_changed": false,
+    "content_identity_changed": false
+  },
+  "authorized_dryad_file_ids": [
+    1008040
+  ],
+  "response_file_payload_requests_allowed": 0,
+  "biological_response_values_allowed": false,
+  "focal_species": "Rangifer tarandus caribou",
+  "focal_taxon_change_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "execute_once": true
+}
