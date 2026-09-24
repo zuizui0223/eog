@@ -1,0 +1,19 @@
+{
+  "schema": "eog.algar_restoration_v3_station_crosswalk.authorization.v1",
+  "attempt_id": "algar_restoration_v3_station_crosswalk_v1",
+  "crosswalk_contract_git_blob_sha1": "4b93250a66a6b2d53327f8c8ac1f436a62fb2607",
+  "crosswalk_evaluator_git_blob_sha1": "ffe2333f82963e07cffa43d80995919839908848",
+  "dryad_metadata_git_blob_sha1": "6f909482cac2b8345274272db06cd07e10b19552",
+  "git_blob_identity_git_blob_sha1": "51dacd951099c424ce1f3dc97a188d102c8426a9",
+  "authorized_dryad_file_ids": [
+    1008040
+  ],
+  "response_file_payload_requests_allowed": 0,
+  "response_file_payload_bytes_allowed": 0,
+  "biological_response_values_allowed": false,
+  "focal_species": "Rangifer tarandus caribou",
+  "focal_taxon_change_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "execute_once": true
+}

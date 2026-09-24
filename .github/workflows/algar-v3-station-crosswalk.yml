@@ -1,0 +1,140 @@
+name: Algar v3 Dryad station crosswalk
+
+on:
+  push:
+    branches:
+      - agent/algar-v3-station-crosswalk-v1
+    paths:
+      - validation/algar_restoration_v3_station_crosswalk/execute_once.json
+
+permissions:
+  contents: read
+
+jobs:
+  crosswalk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: python -m pip install -e . --no-deps
+
+      - name: Verify one-time authorization
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          root=Path("validation/algar_restoration_v3_station_crosswalk")
+          marker=json.loads((root/"execute_once.json").read_text())
+          auth=json.loads((root/marker["authorization"]).read_text())
+          bindings={
+              "crosswalk_contract_git_blob_sha1":root/"crosswalk_contract.json",
+              "crosswalk_evaluator_git_blob_sha1":root/"evaluate_crosswalk.py",
+              "dryad_metadata_git_blob_sha1":Path("src/eog/v2/dryad_metadata.py"),
+              "git_blob_identity_git_blob_sha1":Path("src/eog/v2/git_blob_identity.py"),
+          }
+          for field,path in bindings.items():
+              actual=subprocess.check_output(["git","hash-object",str(path)],text=True).strip()
+              assert actual==auth[field],(field,actual,auth[field])
+          assert auth["authorized_dryad_file_ids"]==[1008040]
+          assert auth["response_file_payload_requests_allowed"]==0
+          assert auth["biological_response_values_allowed"] is False
+          PY
+
+      - name: Fetch exact safe files only
+        run: |
+          python - <<'PY'
+          import csv,json,urllib.request
+          from io import StringIO
+          from pathlib import Path
+          from eog.v2.git_blob_identity import verify_expected_git_blob
+
+          root=Path("validation/algar_restoration_v3_station_crosswalk")
+          contract=json.loads((root/"crosswalk_contract.json").read_text())
+          auth=json.loads((root/"execution_authorization.json").read_text())
+
+          source=contract["locked_registry_source"]
+          source_url=(
+              "https://raw.githubusercontent.com/"
+              +source["repository"]+"/"+source["commit"]+"/"
+              +source["path"].replace(" ","%20")
+          )
+          req=urllib.request.Request(source_url,headers={"User-Agent":"EOG-WF-v3-crosswalk/1.0"})
+          with urllib.request.urlopen(req,timeout=60) as response:
+              deployments=response.read()
+          verify_expected_git_blob(
+              deployments,
+              expected_git_blob_sha1=source["git_blob_sha1"],
+          )
+          reader=csv.DictReader(StringIO(deployments.decode("utf-8-sig")))
+          locked=sorted({str(row["placename"]).strip() for row in reader if str(row["placename"]).strip()})
+          assert len(locked)==source["expected_locked_node_count"]
+          Path("/tmp/locked_nodes.json").write_text(json.dumps(locked))
+
+          safe=contract["safe_dryad_file"]
+          req=urllib.request.Request(
+              safe["public_download_url"],
+              headers={"User-Agent":"EOG-WF-v3-crosswalk/1.0","Accept-Encoding":"identity"},
+          )
+          with urllib.request.urlopen(req,timeout=60) as response:
+              body=response.read(int(safe["maximum_bytes"])+1)
+          assert len(body)<=int(safe["maximum_bytes"])
+          Path("/tmp/raw_station.csv").write_bytes(body)
+          PY
+
+      - name: Evaluate safe station crosswalk
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from validation.algar_restoration_v3_station_crosswalk.evaluate_crosswalk import evaluate_station_crosswalk
+
+          root=Path("validation/algar_restoration_v3_station_crosswalk")
+          contract=json.loads((root/"crosswalk_contract.json").read_text())
+          locked=json.loads(Path("/tmp/locked_nodes.json").read_text())
+          result=evaluate_station_crosswalk(
+              contract,
+              Path("/tmp/raw_station.csv").read_bytes(),
+              locked,
+          )
+          assert result["response_bearing_file_requests"]==0
+          assert result["response_bearing_file_payload_bytes_opened"]==0
+          assert result["biological_response_values_opened"] is False
+          assert result["focal_taxon_change_allowed"] is False
+          assert result["model_fits"]==result["heldout_scores"]==0
+
+          (root/"station_crosswalk_result.json").write_text(
+              json.dumps(result,indent=2,sort_keys=True)+"\n",
+              encoding="utf-8",
+          )
+          print(json.dumps({
+              "status":result["status"],
+              "header":result["header"],
+              "row_count":result["row_count"],
+              "candidate_identifier_columns":result["candidate_identifier_columns"],
+              "coordinate_columns":result["coordinate_columns"],
+              "forbidden_biological_columns":result["forbidden_biological_columns"],
+              "join_ready_columns":result["join_ready_columns"],
+              "column_audits":[{
+                  "column":row["column"],
+                  "distinct_value_count":row["distinct_value_count"],
+                  "overlap_locked_count":row["overlap_locked_count"],
+                  "missing_locked_ids":row["missing_locked_ids"],
+                  "extra_value_count":len(row["extra_values"]),
+              } for row in result["column_audits"]],
+              "fingerprint":result["fingerprint"],
+          },sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algar-v3-dryad-station-crosswalk
+          path: validation/algar_restoration_v3_station_crosswalk/station_crosswalk_result.json
+          if-no-files-found: error

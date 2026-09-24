@@ -1,0 +1,76 @@
+{
+  "schema": "eog.algar_restoration_v3_station_crosswalk.contract.v1",
+  "attempt_id": "algar_restoration_v3_station_crosswalk_v1",
+  "predecessor": {
+    "dryad_roster_status": "dryad_response_roster_resolved_metadata_only",
+    "dryad_roster_fingerprint": "659d06bb388ccbc56b5823f4b12a024d8608224715c0eae63bdb6309b75cac16",
+    "dryad_version_id": 139736,
+    "dryad_version_number": 3,
+    "preresponse_certificate_fingerprint": "a459c83c71e7cb73b227a7fd04c24cce36c5a6ec708e22bb1a5f6d1a556908e5"
+  },
+  "safe_dryad_file": {
+    "path": "Raw_station_data_JPE_Beirne_et_al_2021.csv",
+    "file_id": 1008040,
+    "version_id": 139736,
+    "size": 6002,
+    "digest_type": "sha-256",
+    "digest": "2a41a85b8a4ea6415bd63a4f7e7f8240e99a44407a81d60d3c23cfadcab8f106",
+    "self_href": "/api/v2/files/1008040",
+    "download_href": "/api/v2/files/1008040/download",
+    "public_download_url": "https://datadryad.org/stash/downloads/file_stream/1008040",
+    "maximum_bytes": 7000,
+    "roster_classification": "safe_candidate"
+  },
+  "locked_registry_source": {
+    "repository": "WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R",
+    "commit": "6b4170abbad9f7f7762ef6874e1246b28000f371",
+    "path": "data/raw_data/example_data/deployments.csv",
+    "git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf",
+    "expected_locked_node_count": 38
+  },
+  "parser_policy": {
+    "csv_encoding": "utf-8-sig",
+    "candidate_identifier_name_tokens": ["station", "site", "location", "placename", "camera"],
+    "coordinate_name_tokens": ["longitude", "latitude", "lon", "lat", "easting", "northing", "utm"],
+    "output_allowed": [
+      "header",
+      "row_count",
+      "candidate_identifier_columns",
+      "coordinate_columns",
+      "distinct candidate identifier values",
+      "overlap counts and exact ID sets against locked 38-node registry"
+    ],
+    "biological_species_or_detection_columns_must_be_absent": true,
+    "forbidden_header_tokens": [
+      "species",
+      "scientificname",
+      "taxon",
+      "occurrence",
+      "detection",
+      "detected",
+      "presence",
+      "absence",
+      "individualcount",
+      "count",
+      "response",
+      "outcome"
+    ]
+  },
+  "response_firewall": {
+    "authorized_dryad_file_ids": [1008040],
+    "response_bearing_file_ids_forbidden": [1008034, 1008035],
+    "ambiguous_file_ids_forbidden": [1008032, 1008033, 1008031, 1008036, 1008038, 1008037, 1008030],
+    "file_payload_requests_allowed": 1,
+    "biological_response_values_allowed": false,
+    "focal_species": "Rangifer tarandus caribou",
+    "focal_taxon_change_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "decision_rule": {
+    "join_ready_if": "at least one candidate identifier column has exact value overlap with all 38 locked node IDs and forbidden biological header tokens are absent",
+    "otherwise": "stop_response_blind_station_crosswalk; do not open any response file"
+  },
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}

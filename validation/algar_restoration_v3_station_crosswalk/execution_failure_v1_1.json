@@ -1,0 +1,27 @@
+{
+  "schema": "eog.algar_restoration_v3_station_crosswalk.execution_failure.v1_1",
+  "attempt_id": "algar_restoration_v3_station_crosswalk_v1",
+  "execution_version": "v1_1",
+  "status": "technical_safe_file_transport_failure_before_crosswalk_evaluation",
+  "execution": {
+    "workflow_run_id": 35989948222,
+    "workflow_job_id": 107601379415,
+    "execution_head_sha": "94739668f2921a6ca472147375ba3f81f9ff4ea7"
+  },
+  "transport": {
+    "route": "https://datadryad.org/downloads/file_stream/1008040",
+    "result": "HTTP 403",
+    "safe_file_payload_bytes_opened": 0
+  },
+  "scientific_state": {
+    "crosswalk_evaluation_started": false,
+    "response_bearing_file_requests": 0,
+    "response_bearing_file_payload_bytes_opened": 0,
+    "biological_response_values_opened": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "disposition": "second content-identical public transport route failed; stop route hunting within this crosswalk attempt",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "eog.algar_restoration_v3_station_crosswalk.execution_failure.v1",
+  "attempt_id": "algar_restoration_v3_station_crosswalk_v1",
+  "execution_version": "v1",
+  "status": "technical_safe_file_transport_failure_before_crosswalk_evaluation",
+  "execution": {
+    "workflow_run_id": 35989637460,
+    "workflow_job_id": 107600382234,
+    "execution_head_sha": "15ad289329e442cd5d074e9b1419c336f220dd43"
+  },
+  "failure": {
+    "stage": "authorized_safe_dryad_file_transport",
+    "route": "https://datadryad.org/stash/downloads/file_stream/1008040",
+    "result": "HTTP 403 after redirect",
+    "safe_file_payload_verified": false,
+    "crosswalk_evaluation_started": false
+  },
+  "response_firewall": {
+    "response_bearing_file_requests": 0,
+    "response_bearing_file_payload_bytes_opened": 0,
+    "biological_response_values_opened": false,
+    "focal_species": "Rangifer tarandus caribou",
+    "focal_taxon_change_allowed": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "rerun_policy": {
+    "scientific_contract_changes_allowed": false,
+    "evaluator_changes_allowed": false,
+    "content_identity_changes_allowed": false,
+    "transport_route_update_allowed": true,
+    "rationale": "source identity is content-addressed and acquisition transport is explicitly separable from scientific identity",
+    "new_execution_authorization_required": true
+  },
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
