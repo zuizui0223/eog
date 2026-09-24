@@ -181,7 +181,7 @@ def compile_source_qualification_manifest(
         node_count=evidence_raw.get("node_count"),
         outer_unit_count=evidence_raw.get("outer_unit_count"),
         repeated_node_count=evidence_raw.get("repeated_node_count"),
-        layout_design=str(evidence_raw.get("layout_design", "general")),
+        layout_design=str(evidence_raw.get("layout_design", "unknown")),
         analysis_registry_closed=evidence_raw.get("analysis_registry_closed"),
         response_blind_transport_qualified=evidence_raw.get(
             "response_blind_transport_qualified"
