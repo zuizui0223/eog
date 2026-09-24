@@ -19,8 +19,9 @@ def test_documentation_gate_opens_only_readme_and_keeps_response_locked(tmp_path
     raw = (
         "Algar dataset documentation\n"
         "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv: "
-        "independent detections\n"
-        "Columns: station, species, datetime\n"
+        "independent detections from 73 cameras\n"
+        "Columns: station, species, datetime, 123 observations\n"
+        "YData_JPE_Beirne_et_al_2021.csv: species response matrix\n"
     ).encode("utf-8")
     doc = contract["authorized_documentation_file"]
     doc["size"] = len(raw)
@@ -44,8 +45,15 @@ def test_documentation_gate_opens_only_readme_and_keeps_response_locked(tmp_path
         }
 
     result = run(contract_path, output_path, fetcher=fetcher)
-    assert result["status"] == "documentation_opened_verified_response_still_locked"
+    assert result["status"] == "documentation_opened_sanitized_response_still_locked"
     assert result["response_filename_documented"] is True
+    assert "documentation_text" not in result
+    assert result["full_documentation_text_persisted"] is False
+    assert result["numeric_biological_summaries_persisted"] is False
+    saved = "\n".join(result["response_role_lines_sanitized"])
+    assert "73" not in saved
+    assert "123" not in saved
+    assert "<n>" in saved
     assert result["response_file_payload_requests"] == 0
     assert result["response_file_payload_bytes_opened"] == 0
     assert result["biological_response_values_opened"] is False
