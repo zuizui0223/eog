@@ -11,12 +11,6 @@
         "path": "data/raw_data/example_data/deployments.csv",
         "git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf",
         "role": "registry_effort"
-      },
-      {
-        "source_id": "projects",
-        "path": "data/raw_data/example_data/projects.csv",
-        "git_blob_sha1": "dcf7e3e89952e3b50d8948dbb417e748483578d5",
-        "role": "metadata"
       }
     ]
   },
