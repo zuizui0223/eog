@@ -1,0 +1,43 @@
+{
+  "schema": "eog.algar_restoration_v4_estimability.contract.v1",
+  "attempt_id": "algar_restoration_v4_predictive_endpoint_v1",
+  "denominator": {
+    "node_count": 38,
+    "initialization_units": 38,
+    "scored_candidate_units": 75,
+    "outer_folds": 4,
+    "fold_node_counts": [
+      9,
+      10,
+      9,
+      10
+    ]
+  },
+  "minima": {
+    "minimum_total_positive_scored_units": 10,
+    "minimum_total_negative_scored_units": 20,
+    "minimum_calibration_positive_scored_units_each_fold": 5,
+    "minimum_calibration_negative_scored_units_each_fold": 10,
+    "minimum_heldout_folds_with_both_classes": 3,
+    "minimum_calibration_initialization_positive_nodes_each_fold": 5,
+    "minimum_layer_b_source_nodes": 2,
+    "minimum_non_source_positive_targets": 1
+  },
+  "sequential_state": {
+    "phase2_state_uses": "phase1 calibration-positive nodes only; heldout-node phase1 labels are never used for heldout phase2 prediction",
+    "phase3_state_uses": "phase1 plus phase2 calibration-positive evidence only; heldout-node phase1/phase2 labels are never used for heldout phase3 prediction",
+    "calibration_training_crossfit": "for each calibration row, remove that node's own response history from the source/evidence set before generating its Layer-B features",
+    "train_serve_generator_parity_required": true,
+    "source_label_invariance_required": true
+  },
+  "non_estimable_policy": {
+    "terminal_status": "non_estimable_response_balance_or_state",
+    "counts_as_adverse_layer_b_evidence": false,
+    "response_derived_fold_reassignment": false,
+    "response_derived_candidate_drop": false,
+    "threshold_relaxation_after_open": false,
+    "model_fits_allowed_if_failed": 0
+  },
+  "payload_requests_allowed_now": 0,
+  "counts_as_predictive_evidence": false
+}
