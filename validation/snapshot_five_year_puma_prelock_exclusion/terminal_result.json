@@ -1,0 +1,27 @@
+{
+  "schema": "eog.snapshot_five_year_puma_prelock_exclusion.v1",
+  "source_repository": "mercermargaret/snapshot_chapter",
+  "source_branch": "main",
+  "status": "excluded_prelock_response_content_retrieved_during_discovery",
+  "candidate_locked": false,
+  "scientific_attempt_started": false,
+  "incident": {
+    "requested_path": "data/encounter_histories.csv",
+    "intended_action": "retrieve file metadata only",
+    "actual_connector_behavior": "contents request returned decoded CSV content rather than metadata JSON",
+    "response_payload_retrieved": true,
+    "response_file_size_from_prior_directory_metadata": 185730,
+    "response_values_analyzed": false,
+    "response_values_reported": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "disposition": {
+    "source_may_not_be_used_for_fresh_confirmatory_endpoint_in_this_protocol": true,
+    "no_prevalence_or_class_counts_may_be_derived_from_opened_content": true,
+    "next_candidate_discovery_rule": "response-bearing paths may appear only in directory metadata; never call contents/fetch_file/fetch_blob on them before authorization"
+  },
+  "counts_as_predictive_evidence": false,
+  "counts_as_biological_negative": false,
+  "changes_closed_eog_wf_synthesis": false
+}
