@@ -1,13 +1,17 @@
 {
   "schema": "eog.eogwf_submission_blockers.v1",
-  "date": "2026-09-11",
+  "date": "2026-09-25",
   "journal": "Methods in Ecology and Evolution",
   "article_type": "Research Article",
   "scientific_desk_fit_ready": true,
   "scientific_blockers": [],
   "empirical_denominator_frozen": {
     "fresh_scored_endpoints": 3,
-    "pattern": ["favorable", "favorable", "adverse"],
+    "pattern": [
+      "favorable",
+      "favorable",
+      "adverse"
+    ],
     "scientific_protocol_stops": 31,
     "administrative_exclusions": 3,
     "fourth_fresh_endpoint_allowed": false
@@ -23,6 +27,15 @@
       "id": "open_source_license_file_confirmation",
       "resolution": "MIT confirmed by author and full MIT license text added at repository root as LICENSE",
       "path": "LICENSE"
+    },
+    {
+      "id": "review_archive_or_doi",
+      "resolution": "Resolved with a public immutable GitHub commit permalink for peer review, pinned to EOG commit 91125ae68004f298fcd45027566506772a3688d5. The deterministic review package generated from that commit is recorded by workflow run 36018663222 with archive SHA-256 6fbb6c8e30b010e5fb0ffc1197f626c0e46ee74897ce5ba1cfbd61e4bc6f8b00 and manifest SHA-256 0a4463ea37799a16654cc5dfb8913981f5bc6ebe7cc0b86eadc6513b5e9af4f4.",
+      "review_url": "https://github.com/zuizui0223/eog/tree/91125ae68004f298fcd45027566506772a3688d5",
+      "workflow_run_id": 36018663222,
+      "workflow_artifact_id": 10815971361,
+      "review_package_archive_sha256": "6fbb6c8e30b010e5fb0ffc1197f626c0e46ee74897ce5ba1cfbd61e4bc6f8b00",
+      "review_package_manifest_sha256": "0a4463ea37799a16654cc5dfb8913981f5bc6ebe7cc0b86eadc6513b5e9af4f4"
     }
   ],
   "remaining_submission_blockers": [
@@ -32,13 +45,6 @@
       "requires_external_author_input": true,
       "template": "manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md",
       "completion_condition": "Create manuscript/EOG_WF_TITLE_PAGE.md only after all author, affiliation, corresponding-author, acknowledgement, contribution, funding, conflict and inclusion fields are confirmed."
-    },
-    {
-      "id": "review_archive_or_doi",
-      "type": "release_admin",
-      "requires_external_or_release_action": true,
-      "current_placeholder": "[FINAL ARCHIVE/DOI TO ADD]",
-      "completion_condition": "Fix a review-ready release/archive or suitable private peer-review repository and replace the manuscript placeholder with the final review-access statement."
     },
     {
       "id": "ai_llm_disclosure_author_confirmation",
@@ -54,5 +60,5 @@
     "fold the NCRN post-closure attempt into the EOG-WF denominator",
     "weaken the closed claim boundary"
   ],
-  "next_action": "Complete author/title-page metadata and AI disclosure, then fix the review-ready archive or DOI and package the submission."
+  "next_action": "Obtain author confirmation for final title-page metadata and AI/LLM disclosure, then build the final EOG-WF submission package."
 }
