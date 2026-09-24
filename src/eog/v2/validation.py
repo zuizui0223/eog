@@ -174,6 +174,11 @@ _WORLD_ADEQUACY_EXPORTS: Final[tuple[str, ...]] = (
     "apply_structural_adequacy_gate",
 )
 
+_ADEQUACY_COMPLETE_LADDER_EXPORTS: Final[tuple[str, ...]] = (
+    "AdequacyCompleteLadderPlan",
+    "plan_adequacy_complete_lcc_targets",
+)
+
 _WORLD_SCALE_EXPORTS: Final[tuple[str, ...]] = (
     "StructuralScaleLadderDeclaration",
     "StructuralScaleLevel",
@@ -243,6 +248,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         for name in _PREDICTIVE_COMPLEMENTARITY_EXPORTS
     },
     **{name: "eog.v2.world_adequacy" for name in _WORLD_ADEQUACY_EXPORTS},
+    **{
+        name: "eog.v2.adequacy_complete_ladder"
+        for name in _ADEQUACY_COMPLETE_LADDER_EXPORTS
+    },
     **{name: "eog.v2.world_scale_ladder" for name in _WORLD_SCALE_EXPORTS},
 }
 
@@ -267,6 +276,7 @@ __all__ = [
     *_PAPER_READY_ENDPOINT_EXPORTS,
     *_PREDICTIVE_COMPLEMENTARITY_EXPORTS,
     *_WORLD_ADEQUACY_EXPORTS,
+    *_ADEQUACY_COMPLETE_LADDER_EXPORTS,
     *_WORLD_SCALE_EXPORTS,
 ]
 
