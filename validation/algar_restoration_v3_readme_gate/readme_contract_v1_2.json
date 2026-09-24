@@ -1,0 +1,72 @@
+{
+  "schema": "eog.algar_restoration_v3_readme_documentation_gate.contract.v1_2",
+  "attempt_id": "algar_restoration_v3_readme_documentation_gate_v1_2",
+  "predecessors": [
+    {
+      "version": "v1",
+      "status": "technical_documentation_transport_accounting_failure",
+      "response_csv_payload_bytes_opened": 0
+    },
+    {
+      "version": "v1_1",
+      "status": "stop_readme_transport_v1_1",
+      "reason": "stash file_stream route returned HTTP 403",
+      "documentation_payload_bytes_opened": 0,
+      "response_csv_payload_bytes_opened": 0
+    }
+  ],
+  "scientific_contract_unchanged": true,
+  "transport_change_only": true,
+  "alternate_route_evidence": {
+    "repository": "Lakens/cooper-bes-validation-manuscript",
+    "commit": "7da8dd1d5655ccbe978f63fd99700704b6ddd9e2",
+    "manifest_path": "manuscript/data/manifests/10_1111_1365_2664_14020.manifest.json",
+    "manifest_git_blob_sha1": "TODO",
+    "observed_record": {
+      "file_name": "JPE_Beirne_et_al_2021_README.txt",
+      "file_url": "https://datadryad.org/api/v2/files/1008041/download",
+      "file_size": 1987,
+      "data_type": "documentation",
+      "downloaded": true,
+      "status": "downloaded"
+    }
+  },
+  "authorized_documentation_file": {
+    "path": "JPE_Beirne_et_al_2021_README.txt",
+    "file_id": 1008041,
+    "dryad_version_id": 139736,
+    "size": 1987,
+    "sha256": "0d17dbc5d03cd1126890ef96147b15e3f93c84cb60fafe244e58106b8c16868d",
+    "api_download_url": "https://datadryad.org/api/v2/files/1008041/download"
+  },
+  "transport_accounting": {
+    "get_requests_allowed": 1,
+    "get_maximum_bytes": 1988,
+    "redirect_allowed_within_https": true,
+    "every_request_must_record_status_final_url_content_length_encoding_and_bytes_opened": true,
+    "body_must_not_be_read_if_http_status_is_not_200": true
+  },
+  "documentation_extraction": {
+    "target_response_file": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "target_questions": [
+      "Does README explicitly identify the 30-minute independent file as detection/event data?",
+      "Does README document a station/node field that can join to the locked Algar placename registry?",
+      "Does README document a date/time field that can assign rows to frozen deployment phases?",
+      "Does README document a species/taxon field or code mapping sufficient to freeze woodland caribou matching without opening a response CSV?"
+    ],
+    "pass_rule": "all four questions must be supported explicitly by README text; otherwise STOP before response CSV payload access",
+    "no_alias_discovery_after_response_open": true
+  },
+  "response_firewall": {
+    "focal_taxon": "Rangifer tarandus caribou",
+    "focal_taxon_change_allowed": false,
+    "response_csv_payload_requests_allowed": 0,
+    "response_csv_payload_bytes_allowed": 0,
+    "biological_response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "next_if_pass": "freeze exact documented response schema/join/taxon mapping and estimability/evaluation contract before first response CSV payload request",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
