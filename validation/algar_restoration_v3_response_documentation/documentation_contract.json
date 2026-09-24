@@ -1,0 +1,58 @@
+{
+  "schema": "eog.algar_restoration_v3_response_documentation.contract.v1",
+  "attempt_id": "algar_restoration_v3_response_documentation_v1",
+  "predecessor": {
+    "dryad_roster_status": "dryad_response_roster_resolved_metadata_only",
+    "dryad_roster_fingerprint": "659d06bb388ccbc56b5823f4b12a024d8608224715c0eae63bdb6309b75cac16",
+    "dryad_version_id": 139736,
+    "dryad_version_number": 3,
+    "preresponse_certificate_fingerprint": "a459c83c71e7cb73b227a7fd04c24cce36c5a6ec708e22bb1a5f6d1a556908e5",
+    "predictive_status": "predictive_complement_candidate",
+    "predictive_outcome_access_allowed": false
+  },
+  "focal_taxon": {
+    "common_name": "woodland caribou",
+    "scientific_name": "Rangifer tarandus caribou",
+    "selection_locked_before_documentation": true,
+    "focal_taxon_selection_path": "validation/algar_restoration_v3_response_roster/focal_taxon_selection.json",
+    "no_switch_after_documentation": true
+  },
+  "authorized_documentation_file": {
+    "path": "JPE_Beirne_et_al_2021_README.txt",
+    "file_id": 1008041,
+    "version_id": 139736,
+    "size": 1987,
+    "digest_type": "sha-256",
+    "digest": "0d17dbc5d03cd1126890ef96147b15e3f93c84cb60fafe244e58106b8c16868d",
+    "public_download_url": "https://datadryad.org/stash/downloads/file_stream/1008041",
+    "maximum_bytes": 4096
+  },
+  "candidate_response_file_from_metadata": {
+    "path": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "file_id": 1008032,
+    "version_id": 139736,
+    "size": 1740410,
+    "digest_type": "sha-256",
+    "digest": "acdd851cb6b44db29853031a897dce503f9acc727e17ab43e2ee4892fa57df0c",
+    "payload_access_allowed": false
+  },
+  "authorization": {
+    "documentation_payload_requests_allowed": 1,
+    "documentation_payload_bytes_allowed": 4096,
+    "response_csv_payload_requests_allowed": 0,
+    "response_csv_payload_bytes_allowed": 0,
+    "biological_response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "extraction_goal": [
+    "identify documented role of Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "identify documented columns/field semantics sufficient to predeclare node/time/taxon parsing if present",
+    "identify whether README documents species coding or links to a separate mapping file",
+    "do not infer missing schema from filenames if README does not support it"
+  ],
+  "next_if_documentation_sufficient": "freeze immutable response file, exact header/token/join contract, caribou taxon matching rule, post-response class-count gate, and paired predictive evaluation before response CSV payload access",
+  "next_if_documentation_insufficient": "STOP predictive endpoint before response payload; do not open ambiguous response-supporting files to discover schema",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
