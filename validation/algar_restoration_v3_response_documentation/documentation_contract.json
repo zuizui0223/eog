@@ -54,5 +54,33 @@
   "next_if_documentation_sufficient": "freeze immutable response file, exact header/token/join contract, caribou taxon matching rule, post-response class-count gate, and paired predictive evaluation before response CSV payload access",
   "next_if_documentation_insufficient": "STOP predictive endpoint before response payload; do not open ambiguous response-supporting files to discover schema",
   "counts_as_predictive_evidence": false,
-  "changes_closed_eog_wf_synthesis": false
+  "changes_closed_eog_wf_synthesis": false,
+  "known_roster_paths": [
+    "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "BirdFuncDat.csv",
+    "JPE_Beirne_et_al_2021_README.txt",
+    "MamFuncDat.csv",
+    "Raw_station_data_JPE_Beirne_et_al_2021.csv",
+    "Species_comon_names_JPE_Beirne_et_al_2021.csv",
+    "XData_JPE_Beirne_et_al_2021.csv",
+    "YData_JPE_Beirne_et_al_2021.csv",
+    "YData_dataframe_format_JPE_Beirne_et_al_2021.csv",
+    "monthly_counts_JPE_Beirne_et_al_2021.csv",
+    "total_observations_JPE_Beirne_et_al_2021.csv"
+  ],
+  "extraction_policy": {
+    "save_full_documentation_text": false,
+    "allowed_output": [
+      "README byte identity",
+      "nonempty line count",
+      "sanitized lines mentioning a frozen roster filename",
+      "sanitized immediately following line for each filename mention",
+      "sanitized column/schema lines only when adjacent to a filename mention",
+      "booleans indicating whether specific filenames are documented"
+    ],
+    "numeric_redaction": "replace every decimal/integer token outside exact frozen filenames with <n>",
+    "maximum_saved_lines_per_file": 3,
+    "no_class_counts_for_estimability": true,
+    "no_response_values": true
+  }
 }
