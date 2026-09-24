@@ -1,0 +1,42 @@
+{
+  "schema": "eog.algar_restoration_v3_response_transport_preflight.contract.v1",
+  "attempt_id": "algar_restoration_v3_predictive_endpoint_v1",
+  "response_file": {
+    "path": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "dryad_version_id": 139736,
+    "dryad_file_id": 1008032,
+    "expected_size": 1740410,
+    "sha256": "acdd851cb6b44db29853031a897dce503f9acc727e17ab43e2ee4892fa57df0c",
+    "metadata_download_href": "/api/v2/files/1008032/download"
+  },
+  "routes": [
+    {
+      "route_id": "dryad_api_download",
+      "url": "https://datadryad.org/api/v2/files/1008032/download",
+      "provenance": "exact stash:download href from frozen Dryad v3 file metadata"
+    },
+    {
+      "route_id": "dryad_public_file_stream",
+      "url": "https://datadryad.org/stash/downloads/file_stream/1008032",
+      "provenance": "public file_stream route derived from immutable Dryad file ID"
+    }
+  ],
+  "qualification": {
+    "method": "HEAD only",
+    "payload_bytes_allowed": 0,
+    "qualified_if": "HTTPS HEAD completes with 2xx/3xx final response and any explicit Content-Length equals frozen file size",
+    "fallback_order": "not scientifically meaningful; all predeclared routes are independently audited",
+    "response_get_requests_allowed": 0
+  },
+  "predecessor": {
+    "preresponse_certificate_fingerprint": "a459c83c71e7cb73b227a7fd04c24cce36c5a6ec708e22bb1a5f6d1a556908e5",
+    "roster_fingerprint": "659d06bb388ccbc56b5823f4b12a024d8608224715c0eae63bdb6309b75cac16",
+    "focal_taxon": "Rangifer tarandus caribou",
+    "response_token": "Rangifer.tarandus",
+    "schema_documentation_source": "public Algar generation code; response payload unopened"
+  },
+  "next_if_ready": "freeze final parser, count/estimability gate, evaluation contract and one-shot bounded payload authorization",
+  "next_if_stop": "terminal predictive endpoint before response payload; no transport substitution after this frozen preflight",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
