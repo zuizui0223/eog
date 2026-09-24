@@ -113,7 +113,8 @@ Inclusion statement: ...
 
 1. write the final EOG-WF author metadata/title-page/disclosure files;
 2. run EOG-WF readiness and package checks;
-3. fix the review archive or DOI/private-review link;
-4. build the final EOG-WF submission package.
+3. build the final EOG-WF submission package.
+
+The peer-review repository snapshot is already fixed at EOG commit `91125ae68004f298fcd45027566506772a3688d5`.
 
 Structural release/submission work is outside this repository's active mainline.
