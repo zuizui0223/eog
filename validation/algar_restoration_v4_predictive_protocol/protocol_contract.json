@@ -1,0 +1,76 @@
+{
+  "schema": "eog.algar_restoration_v4_predictive_protocol.contract.v1",
+  "attempt_id": "algar_restoration_v4_predictive_endpoint_v1",
+  "relationship_to_v3": {
+    "v3_status": "closed_at_response_documentation_boundary",
+    "main_closure_commit": "3bc4262cf4dc7574233c1200884e1a675c7d07ab",
+    "v3_response_csv_payload_bytes_opened": 0,
+    "v3_predictive_scores": 0,
+    "rule": "v4 is a separately frozen prospective protocol version; v3 remains terminal and is not reclassified or rescued",
+    "independent_ecological_replication": false
+  },
+  "inherited_response_independent_state": {
+    "source_qualification_certificate_fingerprint": "b5a636b65496089466ae7c3d47429e4e4dad2a1d0eb7eae57e00a18cd85bf712",
+    "structural_gate_fingerprint": "5d36e3a67c731e1ba841019ce0e44cc44d721aa6963ef91051cc15d85c15dbe6",
+    "preresponse_certificate_fingerprint": "a459c83c71e7cb73b227a7fd04c24cce36c5a6ec708e22bb1a5f6d1a556908e5",
+    "preresponse_result_fingerprint": "1e47828a2b660883ecd7cf60341ef36a5e0f9c471c3ae8909d7c72b1fa8c693b",
+    "node_count": 38,
+    "scored_candidate_units": 75,
+    "initialization_units": 38,
+    "unsurveyed_units": 1,
+    "outer_fold_counts": [
+      9,
+      10,
+      9,
+      10
+    ],
+    "layer_b_status": "predictive_complement_candidate"
+  },
+  "new_response_independent_schema_evidence": {
+    "repository": "WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R",
+    "commit": "6b4170abbad9f7f7762ef6874e1246b28000f371",
+    "role": "public generation/analysis code for the same Algar camera-trap project",
+    "evidence_blobs": [
+      {
+        "path": "12-on_your_own.Rmd",
+        "git_blob_sha1": "5d90a479c87ae87443ab220de1d6a9f7d49b7ab5"
+      },
+      {
+        "path": "03-error-checking.Rmd",
+        "git_blob_sha1": "50764d271951c979081fdb42ea3ea8b0c36728f8"
+      },
+      {
+        "path": "09-activity.Rmd",
+        "git_blob_sha1": "67831d5b372c2ec822d53fba3dab3eca2635b855"
+      },
+      {
+        "path": "data/raw_data/example_data/common_names.csv",
+        "git_blob_sha1": "0411ae97b2c33654e89781394b4d8ebc5337ccd5"
+      }
+    ]
+  },
+  "stages": [
+    "body_free_response_transport_preflight",
+    "freeze_one_shot_response_payload_authorization_only_if_transport_ready",
+    "verify_payload_size_and_sha256",
+    "apply_frozen_required_columns_join_taxon_and_complete_source_zero_parser",
+    "apply_frozen_estimability_gate_before_model_fit",
+    "if_estimable_run_exactly_one paired baseline_vs_layer_b evaluation"
+  ],
+  "terminal_policy": {
+    "no_response_file_switch": true,
+    "no_focal_taxon_switch": true,
+    "no_header_alias_repair_after_payload_open": true,
+    "no_response_derived_fold_reassignment": true,
+    "no_response_derived_candidate_drop": true,
+    "no_estimability_threshold_relaxation": true,
+    "no_model_or_hyperparameter_tuning": true,
+    "any_transport_or_schema_or_estimability_stop_is_terminal": true
+  },
+  "response_payload_requests_allowed_now": 0,
+  "response_payload_bytes_opened": 0,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
