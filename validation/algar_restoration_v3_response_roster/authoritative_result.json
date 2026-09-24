@@ -1,0 +1,116 @@
+{
+  "schema": "eog.algar_restoration_v3_dryad_response_roster.authoritative_result.v1",
+  "attempt_id": "algar_restoration_v3_dryad_response_roster_v1",
+  "status": "dryad_response_roster_resolved_metadata_only",
+  "execution": {
+    "workflow_run_id": 35988219618,
+    "workflow_job_id": 107595804719,
+    "artifact_id": 10803540612,
+    "artifact_digest": "sha256:399c20736c66a593d01d29d419a1d4db0db5201d8f6816f80cf038c12637dbc0"
+  },
+  "dataset": {
+    "doi": "10.5061/dryad.8pk0p2nnz",
+    "title": "Multispecies modelling reveals potential for habitat restoration to re-establish boreal vertebrate community dynamics",
+    "publication_date": "2021-09-13",
+    "version_id": 139736,
+    "version_number": 3,
+    "version_status": "submitted",
+    "visibility": "public",
+    "version_last_modification_date": "2021-09-14"
+  },
+  "roster_fingerprint": "659d06bb388ccbc56b5823f4b12a024d8608224715c0eae63bdb6309b75cac16",
+  "metadata_requests": 3,
+  "metadata_bytes_opened": 19987,
+  "file_payload_requests": 0,
+  "file_payload_bytes_opened": 0,
+  "focal_species_selected_at_execution": false,
+  "files": [
+    {
+      "path": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+      "file_id": 1008032,
+      "size": 1740410,
+      "sha256": "acdd851cb6b44db29853031a897dce503f9acc727e17ab43e2ee4892fa57df0c",
+      "classification": "ambiguous_do_not_open"
+    },
+    {
+      "path": "BirdFuncDat.csv",
+      "file_id": 1008033,
+      "size": 2199507,
+      "sha256": "fda23864ebab5620d3e07ccc22b263c10b8a607be6131be5253f089432893a0f",
+      "classification": "ambiguous_do_not_open"
+    },
+    {
+      "path": "JPE_Beirne_et_al_2021_README.txt",
+      "file_id": 1008041,
+      "size": 1987,
+      "sha256": "0d17dbc5d03cd1126890ef96147b15e3f93c84cb60fafe244e58106b8c16868d",
+      "classification": "ambiguous_do_not_open"
+    },
+    {
+      "path": "MamFuncDat.csv",
+      "file_id": 1008031,
+      "size": 579026,
+      "sha256": "c8912079a5c7c1ec0a318931359cd755a9277bd4fc7f9a7e082297e0415053b7",
+      "classification": "ambiguous_do_not_open"
+    },
+    {
+      "path": "Raw_station_data_JPE_Beirne_et_al_2021.csv",
+      "file_id": 1008040,
+      "size": 6002,
+      "sha256": "2a41a85b8a4ea6415bd63a4f7e7f8240e99a44407a81d60d3c23cfadcab8f106",
+      "classification": "safe_candidate"
+    },
+    {
+      "path": "Species_comon_names_JPE_Beirne_et_al_2021.csv",
+      "file_id": 1008034,
+      "size": 345,
+      "sha256": "342fdf71f95019c41acc50425995629edf904a24703342405a9ce0ba874f6c8a",
+      "classification": "response_bearing"
+    },
+    {
+      "path": "XData_JPE_Beirne_et_al_2021.csv",
+      "file_id": 1008036,
+      "size": 46014,
+      "sha256": "80d1a3b682fcf94f68d7510f4d1d8e429efd8c1dbd4ec11caa8c6002dc180803",
+      "classification": "ambiguous_do_not_open"
+    },
+    {
+      "path": "YData_JPE_Beirne_et_al_2021.csv",
+      "file_id": 1008038,
+      "size": 19438,
+      "sha256": "964db21dd28c6c227b972504aec4059374fd732b8a37988d23426de1d391f2b0",
+      "classification": "ambiguous_do_not_open"
+    },
+    {
+      "path": "YData_dataframe_format_JPE_Beirne_et_al_2021.csv",
+      "file_id": 1008037,
+      "size": 33333,
+      "sha256": "14f098f34e986d5ff837eab0200d37bdbe371788ebcae987c30f3ac8fd0d0f2e",
+      "classification": "ambiguous_do_not_open"
+    },
+    {
+      "path": "monthly_counts_JPE_Beirne_et_al_2021.csv",
+      "file_id": 1008030,
+      "size": 185579,
+      "sha256": "2f61278b76efefd6b236fb4a81cdaee11c704bebefa962674fe93f082a8a69de",
+      "classification": "ambiguous_do_not_open"
+    },
+    {
+      "path": "total_observations_JPE_Beirne_et_al_2021.csv",
+      "file_id": 1008035,
+      "size": 4634,
+      "sha256": "84f52c1932f0411070d07bd1ebe177ce8f9934801f17c71ae5a59b60f3f21641",
+      "classification": "response_bearing"
+    }
+  ],
+  "response_bearing_paths": [
+    "Species_comon_names_JPE_Beirne_et_al_2021.csv",
+    "total_observations_JPE_Beirne_et_al_2021.csv"
+  ],
+  "safe_candidate_paths": [
+    "Raw_station_data_JPE_Beirne_et_al_2021.csv"
+  ],
+  "next_gate": "documentation-only README gate to resolve file roles without opening any response CSV; focal woodland caribou selection is frozen independently and may not be changed based on roster or future payload",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}

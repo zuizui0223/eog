@@ -1,0 +1,80 @@
+name: Algar v3 Dryad response roster metadata-only
+
+on:
+  push:
+    branches:
+      - agent/algar-v3-dryad-response-roster
+    paths:
+      - validation/algar_restoration_v3_response_roster/execute_once.json
+
+permissions:
+  contents: read
+
+jobs:
+  roster:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: python -m pip install -e . --no-deps
+
+      - name: Verify metadata-only authorization
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          root=Path("validation/algar_restoration_v3_response_roster")
+          marker=json.loads((root/"execute_once.json").read_text())
+          auth=json.loads((root/marker["authorization"]).read_text())
+          for field,path in {
+              "roster_contract_git_blob_sha1":root/"roster_contract.json",
+              "roster_evaluator_git_blob_sha1":root/"dryad_roster.py",
+              "dryad_metadata_git_blob_sha1":Path("src/eog/v2/dryad_metadata.py"),
+              "source_discovery_firewall_git_blob_sha1":Path("src/eog/v2/source_discovery_firewall.py"),
+          }.items():
+              actual=subprocess.check_output(["git","hash-object",str(path)],text=True).strip()
+              assert actual==auth[field],(field,actual,auth[field])
+          assert auth["file_payload_requests_allowed"]==0
+          assert auth["file_payload_bytes_allowed"]==0
+          assert auth["focal_species_selected"] is False
+          PY
+
+      - name: Fetch Dryad dataset/version/file metadata only
+        run: python -m validation.algar_restoration_v3_response_roster.dryad_roster
+
+      - name: Verify response payload firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(
+              Path("validation/algar_restoration_v3_response_roster/dryad_roster_result.json").read_text()
+          )
+          assert result["file_payload_requests"]==0
+          assert result["file_payload_bytes_opened"]==0
+          assert result["biological_response_values_opened"] is False
+          assert result["focal_species_selected"] is False
+          assert result["model_fits"]==result["heldout_scores"]==0
+          print(json.dumps({
+              "status":result["status"],
+              "file_count":result.get("file_count"),
+              "response_bearing_paths":result.get("response_bearing_paths"),
+              "safe_candidate_paths":result.get("safe_candidate_paths"),
+              "ambiguous_do_not_open_paths":result.get("ambiguous_do_not_open_paths"),
+              "fingerprint":result["fingerprint"],
+          },sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algar-v3-dryad-response-roster
+          path: validation/algar_restoration_v3_response_roster/dryad_roster_result.json
+          if-no-files-found: error

@@ -1,0 +1,40 @@
+{
+  "schema": "eog.algar_restoration_v3_focal_taxon_selection.v1",
+  "attempt_id": "algar_restoration_v3_predictive_endpoint_v1",
+  "focal_taxon": {
+    "common_name": "woodland caribou",
+    "scientific_name": "Rangifer tarandus caribou",
+    "rank": "subspecies",
+    "no_switch_after_selection": true
+  },
+  "selection_basis": {
+    "response_independent": true,
+    "dryad_file_payloads_used": false,
+    "dryad_species_counts_used": false,
+    "dryad_prevalence_used": false,
+    "model_outputs_used": false,
+    "rationale": "The Algar restoration and wildlife-monitoring programme was established in the Algar caribou herd range to assess seismic-line restoration for caribou habitat and to monitor caribou together with predators and competitors. The focal taxon is therefore chosen from the management objective, not from realized detections.",
+    "independent_sources": [
+      {
+        "title": "Woodland caribou (Rangifer tarandus caribou): recovery strategy progress report 2012 to 2017",
+        "publisher": "Environment and Climate Change Canada",
+        "url": "https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/recovery-strategies/woodland-caribou-report-2012-2017.html"
+      },
+      {
+        "title": "The Algar Wildlife Monitoring Project",
+        "publisher": "WildCAM",
+        "url": "https://wildcams.ca/projects/the-algar-seismic-restoration-monitoring-project/"
+      }
+    ]
+  },
+  "response_token_mapping": {
+    "status": "not_yet_frozen",
+    "rule": "freeze exact schema/token mapping from response-independent documentation or metadata before any Dryad response-file payload request; no post-open alias discovery",
+    "taxon_change_allowed": false
+  },
+  "predictive_evaluation_frozen": false,
+  "response_payload_requests": 0,
+  "response_payload_bytes_opened": 0,
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}

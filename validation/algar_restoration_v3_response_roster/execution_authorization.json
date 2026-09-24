@@ -1,0 +1,16 @@
+{
+  "schema": "eog.algar_restoration_v3_dryad_response_roster.authorization.v1",
+  "attempt_id": "algar_restoration_v3_dryad_response_roster_v1",
+  "roster_contract_git_blob_sha1": "1fb081ac5f19b920cd9745fcc7f39daa0775f0d4",
+  "roster_evaluator_git_blob_sha1": "77096180e7bc57ea5be977872aa3054b188b5e88",
+  "dryad_metadata_git_blob_sha1": "6f909482cac2b8345274272db06cd07e10b19552",
+  "source_discovery_firewall_git_blob_sha1": "be59ec960395c98d21b70479b59b73df8fe96528",
+  "doi": "10.5061/dryad.8pk0p2nnz",
+  "file_payload_requests_allowed": 0,
+  "file_payload_bytes_allowed": 0,
+  "focal_species_selected": false,
+  "biological_response_values_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "execute_once": true
+}

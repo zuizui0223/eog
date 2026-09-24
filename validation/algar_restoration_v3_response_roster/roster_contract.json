@@ -1,0 +1,37 @@
+{
+  "schema": "eog.algar_restoration_v3_dryad_response_roster.contract.v1",
+  "attempt_id": "algar_restoration_v3_dryad_response_roster_v1",
+  "predecessor": {
+    "preresponse_status": "preresponse_manifest_ready",
+    "preresponse_certificate_fingerprint": "a459c83c71e7cb73b227a7fd04c24cce36c5a6ec708e22bb1a5f6d1a556908e5",
+    "preresponse_result_fingerprint": "1e47828a2b660883ecd7cf60341ef36a5e0f9c471c3ae8909d7c72b1fa8c693b",
+    "predictive_status": "predictive_complement_candidate",
+    "predictive_outcome_access_allowed": false
+  },
+  "dryad": {
+    "doi": "10.5061/dryad.8pk0p2nnz",
+    "api_dataset_url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.8pk0p2nnz",
+    "api_base_url": "https://datadryad.org",
+    "expected_publication_title_substring": "Multispecies modelling reveals potential for habitat restoration to re-establish boreal vertebrate community dynamics",
+    "maximum_json_bytes_per_request": 2097152,
+    "maximum_file_pages": 20,
+    "maximum_files": 2000
+  },
+  "metadata_only_authorization": {
+    "dataset_metadata_requests_allowed": 1,
+    "version_metadata_requests_allowed": 1,
+    "file_roster_metadata_requests_allowed_max": 20,
+    "file_payload_requests_allowed": 0,
+    "file_payload_bytes_allowed": 0,
+    "biological_response_values_allowed": false
+  },
+  "classification": {
+    "use_source_discovery_firewall": true,
+    "response_bearing_paths_may_be_listed_but_not_opened": true,
+    "ambiguous_paths_may_be_listed_but_not_opened": true,
+    "no_focal_species_selection_from_file_sizes_or_file_counts": true
+  },
+  "next_if_roster_resolved": "freeze one immutable response file identity plus independently justified focal taxon, exact parser/join semantics, class-count gate, and predictive evaluation contract before any response payload request",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
