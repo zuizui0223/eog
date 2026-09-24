@@ -1,0 +1,116 @@
+{
+  "schema": "eog.algar_restoration_v3_code_documented_response_schema.v1",
+  "attempt_id": "algar_restoration_v3_predictive_endpoint_v1",
+  "documentation_basis": {
+    "repository": "WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R",
+    "commit": "6b4170abbad9f7f7762ef6874e1246b28000f371",
+    "files": [
+      {
+        "path": "12-on_your_own.Rmd",
+        "git_blob_sha1": "5d90a479c87ae87443ab220de1d6a9f7d49b7ab5",
+        "supports": [
+          "independent <- 30",
+          "ind_dat is written directly as the independent detections CSV",
+          "ind_dat uses literal placename and timestamp to restrict detections to active camera days",
+          "ind_dat uses literal sp as the species field",
+          "independent events are grouped by deployment_id and sp"
+        ]
+      },
+      {
+        "path": "03-error-checking.Rmd",
+        "git_blob_sha1": "50764d271951c979081fdb42ea3ea8b0c36728f8",
+        "supports": [
+          "ind_dat is one row per independent event after duplicate event_id removal",
+          "ind_dat$sp is explicitly converted to factor before export",
+          "active-day filter is paste(substr(timestamp,1,10), placename)",
+          "ind_dat is exported without a select/rename step"
+        ]
+      },
+      {
+        "path": "09-activity.Rmd",
+        "git_blob_sha1": "67831d5b372c2ec822d53fba3dab3eca2635b855",
+        "supports": [
+          "caribou is selected by literal token Rangifer.tarandus from field sp"
+        ]
+      },
+      {
+        "path": "data/raw_data/example_data/common_names.csv",
+        "git_blob_sha1": "0411ae97b2c33654e89781394b4d8ebc5337ccd5",
+        "supports": [
+          "common name caribou maps to sp token Rangifer.tarandus"
+        ]
+      }
+    ]
+  },
+  "paper_semantics": {
+    "doi": "10.1111/1365-2664.14020",
+    "supports": [
+      "raw detections were aggregated into independent detections using a 30-minute same-species same-station rule",
+      "model response was station_time by species independent-detection counts",
+      "six-month seasons were summer April-September and winter October-March",
+      "station-time periods below 30 camera-days were excluded in the original published analysis"
+    ],
+    "note": "paper semantics support the interpretation of the public generation code but do not supply exact CSV header names"
+  },
+  "frozen_response_parser": {
+    "candidate_response_path": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "dryad_version_id": 139736,
+    "dryad_file_id": 1008032,
+    "size": 1740410,
+    "sha256": "acdd851cb6b44db29853031a897dce503f9acc727e17ab43e2ee4892fa57df0c",
+    "csv_encoding": "utf-8-sig",
+    "delimiter": ",",
+    "required_literal_columns": [
+      "placename",
+      "timestamp",
+      "sp"
+    ],
+    "additional_columns_policy": "allowed_but_ignored_unless separately frozen before response access",
+    "duplicate_header_policy": "terminal_stop",
+    "missing_required_column_policy": "terminal_stop_no_alias_repair",
+    "node_join": {
+      "response_field": "placename",
+      "candidate_field": "node_id",
+      "normalization": "exact string after outer whitespace strip only",
+      "unmatched_response_nodes": "outside locked candidate universe and ignored",
+      "post_open_crosswalk_allowed": false
+    },
+    "time_join": {
+      "response_field": "timestamp",
+      "required_date_prefix_format": "YYYY-MM-DD in first 10 characters",
+      "parser_rule": "date.fromisoformat(timestamp[0:10])",
+      "candidate_interval_fields": [
+        "start_date",
+        "end_date"
+      ],
+      "interval_rule": "inclusive start_date <= response_date <= end_date",
+      "justification": "public generation code builds active-day lookup with seq(start_date,end_date,by='days') and filters independent detections by date-prefix plus placename",
+      "ambiguous_or_unparseable_timestamp_policy": "terminal_stop"
+    },
+    "taxon_match": {
+      "response_field": "sp",
+      "exact_token": "Rangifer.tarandus",
+      "token_normalization": "outer whitespace strip only; case-sensitive exact match",
+      "aliases_allowed": false,
+      "management_focal_label": "woodland caribou",
+      "scientific_management_label": "Rangifer tarandus caribou",
+      "response_taxonomic_resolution": "species token Rangifer.tarandus; response table is not claimed to encode subspecies"
+    },
+    "event_semantics": {
+      "one_row_per_independent_event": true,
+      "independence_minutes": 30,
+      "positive_rule": "eligible node-context is positive iff at least one exact Rangifer.tarandus independent-event row maps to it",
+      "negative_rule": "eligible node-context with zero mapped exact Rangifer.tarandus events is a recorded non-detection under complete-source-zero",
+      "initialization_rule": "phase1 response is used only for pre-phase2 source initialization and is never scored",
+      "scored_contexts": [
+        "phase2",
+        "phase3"
+      ],
+      "unsurveyed_unit": "ALG027|phase3"
+    }
+  },
+  "response_payload_bytes_opened": 0,
+  "no_post_open_schema_repair": true,
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
