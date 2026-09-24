@@ -1,0 +1,48 @@
+{
+  "schema": "eog.algar_restoration_v2_source_qualification.authoritative_result.v2",
+  "attempt_id": "algar_restoration_v2_source_qualification_v2",
+  "execution": {
+    "workflow_run_id": 35960823829,
+    "workflow_job_id": 107508813367,
+    "artifact_id": 10792265815,
+    "artifact_digest": "sha256:09c5fb09833a54c92f9543a8282ce2d36daae71cbd1b26d233766b49cc98cc3b"
+  },
+  "status": "ready_for_candidate_lock",
+  "candidate_lock_allowed": true,
+  "candidate_locked": false,
+  "focal_species_selected": false,
+  "response_bytes_opened": 0,
+  "model_fits": 0,
+  "heldout_scores": 0,
+  "certificate_fingerprint": "b5a636b65496089466ae7c3d47429e4e4dad2a1d0eb7eae57e00a18cd85bf712",
+  "raw_identity": {
+    "git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf",
+    "raw_byte_count": 24096,
+    "raw_sha256": "f5b7fe65172956becd40538611d62e0dc4b7456a7d6d705c643de2e70a23fb2c",
+    "fingerprint": "ee8a290db5b962543f2d46b2c90bcfd66f62915dda93af450f2ee3c28d6f4d9d"
+  },
+  "registry": {
+    "deployment_count": 114,
+    "canonical_node_count": 38,
+    "repeated_node_count": 38,
+    "registry_closed": true,
+    "exceptional_coordinate_resolution": {
+      "placename": "ALG069",
+      "coordinate_variant_count": 2,
+      "deployment_count": 3,
+      "modal_support": 0.6666666666666666,
+      "unique_mode": true,
+      "accepted": true,
+      "canonical_longitude": -112.5074726,
+      "canonical_latitude": 56.49351647
+    }
+  },
+  "layers": {
+    "discovery": "ready_for_declared_safe_content_open",
+    "transport": "ready_for_candidate_lock",
+    "candidate_preflight": "ready_for_geometry_gate"
+  },
+  "interpretation": "First new real-system source in the post-hardening programme to obtain candidate_lock_allowed=true without opening focal biological response. This is source qualification only, not predictive evidence.",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
