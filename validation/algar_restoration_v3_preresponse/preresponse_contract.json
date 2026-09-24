@@ -1,0 +1,112 @@
+{
+  "schema": "eog.algar_restoration_v3_preresponse.contract.v1",
+  "attempt_id": "algar_restoration_v3_preresponse_v1",
+  "predecessor": {
+    "structural_protocol": "algar_restoration_v3_adequacy_complete_geometry_v1_2",
+    "structural_status": "structural_ready",
+    "source_qualification_certificate_fingerprint": "b5a636b65496089466ae7c3d47429e4e4dad2a1d0eb7eae57e00a18cd85bf712",
+    "structural_gate_fingerprint": "5d36e3a67c731e1ba841019ce0e44cc44d721aa6963ef91051cc15d85c15dbe6",
+    "world_family_fingerprint": "d40279d1a92f505c41a1a7fb9def9218be20905528a57c956684b3a003b7f727",
+    "response_bytes_opened": 0
+  },
+  "source": {
+    "repository": "WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R",
+    "commit": "6b4170abbad9f7f7762ef6874e1246b28000f371",
+    "deployments_path": "data/raw_data/example_data/deployments.csv",
+    "deployments_git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf"
+  },
+  "spatial_outer_folds": {
+    "n_folds": 4,
+    "algorithm": "balanced_recursive_spatial_median_v1",
+    "metric": "lonlat",
+    "rule": "repeatedly split the largest node group at its response-independent coordinate median on the axis with the larger spatial span; fold IDs follow binary split path order",
+    "ecological_interpretation": "evaluation partitions only; never ecological barriers/worlds",
+    "response_stratification_allowed": false
+  },
+  "effort_context": {
+    "context_order": [
+      "phase1",
+      "phase2",
+      "phase3"
+    ],
+    "phase_assignment": "within each placename, sort the three frozen deployments by start_date ascending",
+    "phase1_role": "initialization_only",
+    "phase2_role": "scored",
+    "phase3_role": "scored_if_start_and_end_dates_are_valid_otherwise_unsurveyed",
+    "eligibility_rule": "deployment has parseable start_date and end_date and end_date > start_date",
+    "expected_initialization_count": 38,
+    "expected_scored_candidate_count": 75,
+    "expected_unsurveyed_count": 1,
+    "expected_unsurveyed_unit_id": "ALG027|phase3",
+    "response_used": false
+  },
+  "world_family": {
+    "metric": "haversine_km",
+    "construction_mode": "declared_thresholds",
+    "local_thresholds_km": [
+      {
+        "world_id": "local_geo1",
+        "threshold": 2.6071569972311113
+      },
+      {
+        "world_id": "local_geo2",
+        "threshold": 3.1908956346650883
+      },
+      {
+        "world_id": "local_geo3",
+        "threshold": 3.810423352109427
+      },
+      {
+        "world_id": "local_geo4",
+        "threshold": 4.167226248032928
+      },
+      {
+        "world_id": "local_geo5",
+        "threshold": 4.841415137542297
+      }
+    ],
+    "include_external_open": true,
+    "external_open_world_id": "external_open",
+    "horizon": 1
+  },
+  "structural_adequacy": {
+    "min_largest_weak_component_fraction": 0.9,
+    "max_isolated_node_fraction": 0.05,
+    "require_at_least_one_world_pass": true
+  },
+  "observation_contract": {
+    "mode": "complete_source_zero",
+    "endpoint_name": "Algar placename x deployment phase focal-taxon recorded detection",
+    "positive_semantics": "after a separately authorized complete response source is frozen, at least one focal-taxon detection linked to the eligible node-context",
+    "negative_semantics": "after complete authorized response parsing, an otherwise eligible node-context with no focal-taxon detection is a recorded camera non-detection only",
+    "unavailable_semantics": "response-independent unsurveyed node-contexts are outside the scored endpoint",
+    "zero_interpretation": "surveyed camera non-detection, never biological absence outside the sampled deployment"
+  },
+  "predictive_state": {
+    "repeated_measure_endpoint": true,
+    "refresh_policy": "sequential_context",
+    "train_generator_id": "algar_v3_sequential_preoutcome",
+    "serve_generator_id": "algar_v3_sequential_preoutcome",
+    "source_policy": "all previously observed positive nodes aggregated symmetrically",
+    "source_label_invariant": true,
+    "baseline_contains_spatial_coordinates": true,
+    "static_predictive_opt_in": false,
+    "expected_status": "predictive_complement_candidate",
+    "representation": "source_symmetric_world_support_summary_v2_candidate"
+  },
+  "predictive_evaluation": {
+    "frozen": false,
+    "outcome_access_allowed": false,
+    "reason": "focal endpoint and immutable public response source are not yet frozen"
+  },
+  "response_firewall": {
+    "focal_species_selected": false,
+    "response_source_payload_authorized": false,
+    "response_bytes_allowed": 0,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "next_if_manifest_pass": "metadata-only resolve immutable Dryad response file roster, then freeze one focal endpoint/evaluation/count gate before any response payload access",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
