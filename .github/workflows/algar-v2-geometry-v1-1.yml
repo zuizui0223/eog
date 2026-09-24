@@ -1,0 +1,79 @@
+name: Algar v2 response-blind geometry gate v1.1
+
+on:
+  push:
+    branches:
+      - agent/algar-restoration-v2-geometry-gate
+    paths:
+      - validation/algar_restoration_v2_geometry/execute_once_v1_1.json
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install explicit geometry runtime
+        run: |
+          python -m pip install numpy
+          python -m pip install -e . --no-deps
+
+      - name: Verify authorization
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          root=Path("validation/algar_restoration_v2_geometry")
+          marker=json.loads((root/"execute_once_v1_1.json").read_text())
+          auth=json.loads((root/marker["authorization"]).read_text())
+          for field,path in {
+            "geometry_contract_git_blob_sha1":root/"geometry_contract_v1_1.json",
+            "geometry_evaluator_git_blob_sha1":root/"evaluate_geometry.py",
+          }.items():
+            actual=subprocess.check_output(["git","hash-object",str(path)],text=True).strip()
+            assert actual==auth[field],(field,actual,auth[field])
+          PY
+
+      - name: Fetch exact locked safe source
+        run: |
+          python - <<'PY'
+          import json,urllib.request
+          from pathlib import Path
+          from eog.v2.git_blob_identity import verify_expected_git_blob
+          root=Path("validation/algar_restoration_v2_geometry")
+          c=json.loads((root/"geometry_contract_v1_1.json").read_text())
+          s=c["safe_source"]
+          url=("https://raw.githubusercontent.com/"+s["repository"]+"/"+s["commit"]+"/"+s["deployments_path"].replace(" ","%20"))
+          with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"EOG-WF-v2-geometry/1.1"}),timeout=60) as response:
+              body=response.read()
+          verify_expected_git_blob(body,expected_git_blob_sha1=s["deployments_git_blob_sha1"])
+          Path("/tmp/algar_deployments.csv").write_bytes(body)
+          PY
+
+      - name: Run frozen structural geometry gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from validation.algar_restoration_v2_geometry.evaluate_geometry import run_geometry
+          root=Path("validation/algar_restoration_v2_geometry")
+          geometry=json.loads((root/"geometry_contract_v1_1.json").read_text())
+          source=json.loads(Path("validation/algar_restoration_v2_source_qualification/source_qualification_contract.json").read_text())
+          result=run_geometry(geometry,source,Path("/tmp/algar_deployments.csv").read_bytes())
+          assert result["response_bytes_opened"]==0
+          assert result["focal_species_selected"] is False
+          (root/"geometry_result_v1_1.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(result,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: algar-v2-response-blind-geometry-v1-1
+          path: validation/algar_restoration_v2_geometry/geometry_result_v1_1.json
+          if-no-files-found: error

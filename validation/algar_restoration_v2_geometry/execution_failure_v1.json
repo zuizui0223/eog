@@ -1,0 +1,15 @@
+{
+  "schema": "eog.algar_restoration_v2_geometry.execution_failure.v1",
+  "attempt_id": "algar_restoration_v2_geometry_v1",
+  "status": "technical_environment_failure_before_geometry_evaluation",
+  "workflow_run_id": 35961292851,
+  "workflow_job_id": 107510228702,
+  "reason": "workflow installed the package with --no-deps and numpy was unavailable when importing response-blind world_adequacy; geometry generation/audit never started",
+  "safe_source_verified": true,
+  "response_bytes_opened": 0,
+  "focal_species_selected": false,
+  "model_fits": 0,
+  "scientific_gate_answered": false,
+  "retry_same_execution": false,
+  "next_protocol": "algar_restoration_v2_geometry_v1_1 with explicit runtime dependency installation; geometry contract itself unchanged"
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "eog.algar_restoration_v2_geometry_gate.v1",
+  "attempt_id": "algar_restoration_v2",
+  "candidate_lock": {
+    "locked": true,
+    "source_qualification_certificate_fingerprint": "b5a636b65496089466ae7c3d47429e4e4dad2a1d0eb7eae57e00a18cd85bf712",
+    "source_qualification_status": "ready_for_candidate_lock",
+    "locked_node_universe_count": 38,
+    "focal_species_selected": false
+  },
+  "safe_source": {
+    "repository": "WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R",
+    "commit": "6b4170abbad9f7f7762ef6874e1246b28000f371",
+    "deployments_path": "data/raw_data/example_data/deployments.csv",
+    "deployments_git_blob_sha1": "0c178f132fedbc9b4e1d9eae842ff5c3a816cfaf"
+  },
+  "geometry": {
+    "metric": "haversine_km",
+    "construction_mode": "structural_lcc_ladder",
+    "axis_id": "algar_camera_location_haversine_km",
+    "target_lcc_fractions": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "world_id_prefix": "local_geo",
+    "deduplicate_identical_thresholds": true,
+    "horizon": 1
+  },
+  "structural_adequacy": {
+    "min_largest_weak_component_fraction": 0.9,
+    "max_isolated_node_fraction": 0.05,
+    "require_at_least_one_world_pass": true
+  },
+  "outer_split": {
+    "fold_count": 4,
+    "freeze_after_geometry_pass": true,
+    "response_stratification_forbidden": true
+  },
+  "response_firewall": {
+    "focal_species_selected": false,
+    "response_files_open_allowed": false,
+    "response_bytes_allowed": 0,
+    "model_fits_allowed": 0
+  },
+  "next_if_pass": "freeze response-blind 4-fold spatial partition and deployment-derived effort/context ledger, then compile the v2 pre-response manifest before focal endpoint selection",
+  "counts_as_predictive_evidence": false
+}
