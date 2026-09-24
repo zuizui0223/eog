@@ -84,6 +84,12 @@ def freeze_source_qualification_certificate(
 
     safe_source_ids = set(discovery.safe_source_ids)
     identity_ids = {source_id for source_id, _ in identities}
+    extra_identity = identity_ids - safe_source_ids
+    if extra_identity:
+        raise ValueError(
+            "raw identity fingerprints were supplied for sources not authorized as safe "
+            f"by discovery: {sorted(extra_identity)!r}"
+        )
     missing_identity = safe_source_ids - identity_ids
     if missing_identity:
         raise ValueError(
