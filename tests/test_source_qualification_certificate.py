@@ -94,7 +94,7 @@ def test_all_prelock_layers_ready_allow_candidate_lock():
 def test_discovery_stop_dominates_downstream_ready_layers():
     result = freeze_source_qualification_certificate(
         discovery=discovery(False),
-        source_identity_fingerprints={"registry": "a" * 64},
+        source_identity_fingerprints={},
         transport=transport(),
         candidate_preflight=candidate(),
     )
@@ -142,20 +142,31 @@ def test_safe_discovery_source_requires_bound_raw_identity():
 def test_certificate_is_deterministic_under_identity_mapping_order():
     left = freeze_source_qualification_certificate(
         discovery=discovery(),
-        source_identity_fingerprints={
-            "registry": "a" * 64,
-            "extra": "b" * 64,
-        },
+        source_identity_fingerprints={"registry": "a" * 64},
         transport=transport(),
         candidate_preflight=candidate(),
     )
     right = freeze_source_qualification_certificate(
         discovery=discovery(),
-        source_identity_fingerprints={
-            "extra": "b" * 64,
-            "registry": "a" * 64,
-        },
+        source_identity_fingerprints=dict(reversed(list(identities().items()))),
         transport=transport(),
         candidate_preflight=candidate(),
     )
     assert left.fingerprint == right.fingerprint
+
+
+def test_identity_for_response_bearing_or_unclassified_source_fails_closed():
+    try:
+        freeze_source_qualification_certificate(
+            discovery=discovery(),
+            source_identity_fingerprints={
+                "registry": "a" * 64,
+                "response": "b" * 64,
+            },
+            transport=transport(),
+            candidate_preflight=candidate(),
+        )
+    except ValueError as exc:
+        assert "not authorized as safe" in str(exc)
+    else:
+        raise AssertionError("extra source identity should fail closed")
