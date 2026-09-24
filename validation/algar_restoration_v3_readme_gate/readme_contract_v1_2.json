@@ -21,7 +21,7 @@
     "repository": "Lakens/cooper-bes-validation-manuscript",
     "commit": "7da8dd1d5655ccbe978f63fd99700704b6ddd9e2",
     "manifest_path": "manuscript/data/manifests/10_1111_1365_2664_14020.manifest.json",
-    "manifest_git_blob_sha1": "TODO",
+    "manifest_git_blob_sha1": "d7ce4ba22930f09fe79d324795050ec6801ffa07",
     "observed_record": {
       "file_name": "JPE_Beirne_et_al_2021_README.txt",
       "file_url": "https://datadryad.org/api/v2/files/1008041/download",
