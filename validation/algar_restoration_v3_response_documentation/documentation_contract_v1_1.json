@@ -1,0 +1,49 @@
+{
+  "schema": "eog.algar_restoration_v3_response_documentation.contract.v1_1",
+  "attempt_id": "algar_restoration_v3_response_documentation_v1_1",
+  "predecessor": {
+    "attempt_id": "algar_restoration_v3_response_documentation_v1",
+    "status": "terminal_documentation_transport_stop",
+    "reason": "public file_stream returned HTTP 403 before README payload"
+  },
+  "frozen_documentation_identity": {
+    "path": "JPE_Beirne_et_al_2021_README.txt",
+    "file_id": 1008041,
+    "version_id": 139736,
+    "repository_sha256": "0d17dbc5d03cd1126890ef96147b15e3f93c84cb60fafe244e58106b8c16868d"
+  },
+  "preview_route": {
+    "url": "https://datadryad.org/data_file/preview/1008041",
+    "maximum_html_bytes": 32768,
+    "expected_preview_filename": "JPE_Beirne_et_al_2021_README.txt",
+    "expected_preview_type": "txt"
+  },
+  "focal_taxon": {
+    "common_name": "woodland caribou",
+    "scientific_name": "Rangifer tarandus caribou",
+    "selection_locked_before_preview": true,
+    "no_switch_after_preview": true
+  },
+  "candidate_response_file": {
+    "path": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "file_id": 1008032,
+    "version_id": 139736,
+    "size": 1740410,
+    "sha256": "acdd851cb6b44db29853031a897dce503f9acc727e17ab43e2ee4892fa57df0c",
+    "preview_requests_allowed": 0,
+    "payload_requests_allowed": 0
+  },
+  "authorization": {
+    "readme_preview_requests_allowed": 1,
+    "response_csv_preview_requests_allowed": 0,
+    "response_csv_payload_requests_allowed": 0,
+    "biological_response_values_allowed": false,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "sufficiency_rule": "README preview must explicitly describe the 30-minute independent-detections file and enough column/field semantics to freeze a parser/join without opening response CSV; otherwise STOP",
+  "next_if_sufficient": "freeze response parser/join/token matching, class-count gate and paired predictive evaluation before response payload access",
+  "next_if_insufficient": "STOP predictive endpoint before response payload",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}
