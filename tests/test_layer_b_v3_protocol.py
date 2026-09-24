@@ -1,13 +1,32 @@
+import hashlib
 import json
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PROTOCOL = ROOT / "validation" / "layer_b_mechanism_v3" / "protocol_v1.json"
+BASE = ROOT / "validation" / "layer_b_mechanism_v3"
+PROTOCOL = BASE / "protocol_v1.json"
+LOCK = BASE / "protocol_lock_v1.json"
 
 
 def _load():
     return json.loads(PROTOCOL.read_text(encoding="utf-8"))
+
+
+def _git_blob_sha1(path):
+    raw = path.read_bytes()
+    return hashlib.sha1(f"blob {len(raw)}\0".encode("ascii") + raw).hexdigest()
+
+
+def test_v3_protocol_blob_is_locked_before_any_response_or_model_fit():
+    lock = json.loads(LOCK.read_text(encoding="utf-8"))
+    assert lock["protocol_git_blob_sha1"] == _git_blob_sha1(PROTOCOL)
+    assert lock["lock_state"] == "frozen_outcome_free"
+    assert lock["consumed_endpoint_rescoring_allowed"] is False
+    assert lock["consumed_response_reopening_allowed"] is False
+    assert lock["biological_response_payload_requests"] == 0
+    assert lock["model_fits"] == 0
+    assert lock["outer_scores"] == 0
 
 
 def test_v3_protocol_cannot_reopen_closed_eogwf_endpoints():
