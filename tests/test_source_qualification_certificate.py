@@ -129,12 +129,12 @@ def test_safe_discovery_source_requires_bound_raw_identity():
     try:
         freeze_source_qualification_certificate(
             discovery=discovery(),
-            source_identity_fingerprints={"other": "b" * 64},
+            source_identity_fingerprints={},
             transport=transport(),
             candidate_preflight=candidate(),
         )
     except ValueError as exc:
-        assert "missing raw identity fingerprints" in str(exc)
+        assert "at least one source identity fingerprint" in str(exc)
     else:
         raise AssertionError("missing safe-source identity should fail closed")
 
