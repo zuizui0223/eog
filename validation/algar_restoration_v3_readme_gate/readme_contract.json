@@ -1,0 +1,57 @@
+{
+  "schema": "eog.algar_restoration_v3_readme_documentation_gate.contract.v1",
+  "attempt_id": "algar_restoration_v3_readme_documentation_gate_v1",
+  "predecessor": {
+    "roster_status": "dryad_response_roster_resolved_metadata_only",
+    "roster_fingerprint": "659d06bb388ccbc56b5823f4b12a024d8608224715c0eae63bdb6309b75cac16",
+    "dryad_version_id": 139736,
+    "dryad_version_number": 3,
+    "focal_taxon": {
+      "common_name": "woodland caribou",
+      "scientific_name": "Rangifer tarandus caribou",
+      "no_switch_after_selection": true
+    }
+  },
+  "authorized_documentation_file": {
+    "path": "JPE_Beirne_et_al_2021_README.txt",
+    "file_id": 1008041,
+    "size": 1987,
+    "sha256": "0d17dbc5d03cd1126890ef96147b15e3f93c84cb60fafe244e58106b8c16868d",
+    "public_url": "https://datadryad.org/stash/downloads/file_stream/1008041",
+    "mime_type": "text/plain"
+  },
+  "forbidden_payloads": {
+    "response_csv_files": [
+      "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+      "YData_JPE_Beirne_et_al_2021.csv",
+      "YData_dataframe_format_JPE_Beirne_et_al_2021.csv",
+      "monthly_counts_JPE_Beirne_et_al_2021.csv",
+      "total_observations_JPE_Beirne_et_al_2021.csv",
+      "Species_comon_names_JPE_Beirne_et_al_2021.csv"
+    ],
+    "file_payload_requests_allowed": 1,
+    "allowed_payload_path": "JPE_Beirne_et_al_2021_README.txt",
+    "biological_response_csv_payload_bytes_allowed": 0
+  },
+  "documentation_extraction": {
+    "target_response_file": "Algar_2015_2019_30min_Independent_JPE_Beirne_et_al_2021.csv",
+    "target_questions": [
+      "Does README explicitly identify the 30-minute independent file as detection/event data?",
+      "Does README document a station/node field that can join to the locked Algar placename registry?",
+      "Does README document a date/time field that can assign rows to frozen deployment phases?",
+      "Does README document a species/taxon field or code mapping sufficient to freeze woodland caribou matching without opening a response CSV?"
+    ],
+    "pass_rule": "all four questions must be supported explicitly by README text; otherwise STOP before response CSV payload access",
+    "no_alias_discovery_after_response_open": true
+  },
+  "response_firewall": {
+    "focal_taxon_frozen": true,
+    "response_csv_payload_requests_allowed": 0,
+    "response_csv_payload_bytes_allowed": 0,
+    "model_fits_allowed": 0,
+    "heldout_scores_allowed": 0
+  },
+  "next_if_pass": "freeze immutable response-file identity, exact parser/join/taxon mapping, class-count estimability gate, and predictive evaluation contract before first response CSV payload request",
+  "counts_as_predictive_evidence": false,
+  "changes_closed_eog_wf_synthesis": false
+}

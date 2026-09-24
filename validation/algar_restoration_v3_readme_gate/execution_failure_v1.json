@@ -1,0 +1,32 @@
+{
+  "schema": "eog.algar_restoration_v3_readme_documentation_gate.execution_failure.v1",
+  "attempt_id": "algar_restoration_v3_readme_documentation_gate_v1",
+  "status": "technical_documentation_transport_accounting_failure",
+  "execution": {
+    "workflow_run_id": 35992227268,
+    "workflow_job_id": 107608777545,
+    "execution_head_sha": "1eedbe33fa8f70056db80404367b5f50e74d0696"
+  },
+  "observed": {
+    "evaluator_status": "stop_readme_documentation_gate",
+    "reported_documentation_payload_bytes_opened": 0,
+    "response_csv_payload_requests": 0,
+    "response_csv_payload_bytes_opened": 0,
+    "focal_taxon_changed": false,
+    "model_fits": 0,
+    "heldout_scores": 0
+  },
+  "defect": "the v1 _fetch_exact helper raises on HTTP/size/encoding failures before returning a byte ledger; if bytes were read before a size mismatch, the outer result still reports zero, so the exact documentation-byte consumption cannot be reconstructed from the authoritative log",
+  "scientific_state": {
+    "readme_schema_question_answered": false,
+    "response_csv_opened": false,
+    "predictive_endpoint_answered": false,
+    "counts_as_predictive_evidence": false
+  },
+  "terminal_policy": {
+    "rerun_v1_allowed": false,
+    "response_csv_access_allowed": false,
+    "new_documentation_execution_version_required": true,
+    "v1_1_may_change_transport_accounting_only": true
+  }
+}

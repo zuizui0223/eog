@@ -1,0 +1,17 @@
+{
+  "schema": "eog.algar_restoration_v3_readme_documentation_gate.authorization.v1_1",
+  "attempt_id": "algar_restoration_v3_readme_documentation_gate_v1_1",
+  "predecessor_failure": "execution_failure_v1.json",
+  "readme_contract_git_blob_sha1": "47cf942c542f7e4363c8a2b8145d5012900287b2",
+  "readme_evaluator_git_blob_sha1": "34171e9c0b9f91a946bd46051be3d923aaa68e4a",
+  "focal_taxon_selection_git_blob_sha1": "20f7f09ea9b167d7b8ea9411e3e44f9ec41bb779",
+  "roster_authoritative_result_git_blob_sha1": "f41acbf60861f05b798668d034143f03fee2f3b9",
+  "scientific_contract_changed": false,
+  "authorized_documentation_file_id": 1008041,
+  "readme_head_requests_allowed": 1,
+  "readme_get_requests_allowed": 1,
+  "response_csv_payload_requests_allowed": 0,
+  "response_csv_payload_bytes_allowed": 0,
+  "focal_taxon_change_allowed": false,
+  "execute_once": true
+}

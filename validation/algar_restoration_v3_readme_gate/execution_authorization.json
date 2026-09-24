@@ -1,0 +1,21 @@
+{
+  "schema": "eog.algar_restoration_v3_readme_documentation_gate.authorization.v1",
+  "attempt_id": "algar_restoration_v3_readme_documentation_gate_v1",
+  "readme_contract_git_blob_sha1": "bd5737c5a2bf217613ca9c01688528d5c190a896",
+  "readme_evaluator_git_blob_sha1": "0385c5a9318af05cd893da23b725ddeeb5e9183a",
+  "focal_taxon_selection_git_blob_sha1": "20f7f09ea9b167d7b8ea9411e3e44f9ec41bb779",
+  "roster_authoritative_result_git_blob_sha1": "f41acbf60861f05b798668d034143f03fee2f3b9",
+  "authorized_documentation_file": {
+    "file_id": 1008041,
+    "path": "JPE_Beirne_et_al_2021_README.txt",
+    "size": 1987,
+    "sha256": "0d17dbc5d03cd1126890ef96147b15e3f93c84cb60fafe244e58106b8c16868d"
+  },
+  "documentation_payload_requests_allowed": 1,
+  "response_csv_payload_requests_allowed": 0,
+  "response_csv_payload_bytes_allowed": 0,
+  "focal_taxon_change_allowed": false,
+  "model_fits_allowed": 0,
+  "heldout_scores_allowed": 0,
+  "execute_once": true
+}
