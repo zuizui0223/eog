@@ -12,10 +12,10 @@ RUNNER_PATH = (
     ROOT
     / "validation"
     / "world_survival_regime_v2"
-    / "run_neon_small_mammal_response_once_v2_2.py"
+    / "run_neon_small_mammal_response_once_v2_3.py"
 )
 
-spec = importlib.util.spec_from_file_location("neon_response_v2_2_runner", RUNNER_PATH)
+spec = importlib.util.spec_from_file_location("neon_response_v2_3_runner", RUNNER_PATH)
 assert spec is not None and spec.loader is not None
 runner = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
@@ -204,3 +204,16 @@ def test_less_than_two_positive_nodes_is_non_estimable_not_falsified():
     result = runner.observed_site_result(geometry, {"a"})
     assert result["status"] == "response_consumed_non_estimable_positive_support"
     assert result["counts_as_scored_system"] is False
+
+
+def test_actual_frozen_response_protocol_passes_runner_schema_validation():
+    import json
+
+    protocol_path = (
+        ROOT
+        / "validation"
+        / "world_survival_regime_v2"
+        / "neon_small_mammal_response_protocol_v2_1.json"
+    )
+    protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
+    runner.validate_response_protocol_contract(protocol)
