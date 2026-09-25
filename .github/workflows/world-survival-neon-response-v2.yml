@@ -35,13 +35,13 @@ jobs:
           from pathlib import Path
 
           base = Path("validation/world_survival_regime_v2")
-          protocol_path = base / "neon_small_mammal_response_protocol_v2.json"
-          runner_path = base / "run_neon_small_mammal_response_once_v2.py"
+          protocol_path = base / "neon_small_mammal_response_protocol_v2_1.json"
+          runner_path = base / "run_neon_small_mammal_response_once_v2_1.py"
           protocol_lock = json.loads(
-              (base / "neon_small_mammal_response_protocol_lock_v2.json").read_text()
+              (base / "neon_small_mammal_response_protocol_lock_v2_1.json").read_text()
           )
           auth = json.loads(
-              (base / "neon_small_mammal_response_execution_authorization_v2.json").read_text()
+              (base / "neon_small_mammal_response_execution_authorization_v2_1.json").read_text()
           )
           forecast_lock = json.loads(
               (base / "neon_small_mammal_forecast_lock_v2.json").read_text()
@@ -121,7 +121,7 @@ jobs:
           NEON_API_TOKEN: ${{ secrets.NEON_API_TOKEN }}
         run: |
           set +e
-          python validation/world_survival_regime_v2/run_neon_small_mammal_response_once_v2.py
+          python validation/world_survival_regime_v2/run_neon_small_mammal_response_once_v2_1.py
           code=$?
           echo "runner_exit_code=$code" >> "$GITHUB_OUTPUT"
           exit 0
