@@ -98,7 +98,7 @@ class MetacommunityConnectivityResult:
     best_species_ids: tuple[str, ...]
     emergent_connectivity_gain: float
     strict_emergent_world_fraction: float
-    cross_species_rescue_fraction: float
+    cross_species_rescue_fraction: float | None
     dominance_coverage: float
     fingerprint: str
 
@@ -200,7 +200,7 @@ def calculate_metacommunity_connectivity(
     rescue_fraction = (
         rescue_numerator / rescue_denominator
         if rescue_denominator
-        else 0.0
+        else None
     )
 
     dominance = float(np.max(species_counts) / guild_count)
@@ -234,7 +234,9 @@ def calculate_metacommunity_connectivity(
         best_species_ids=best_species,
         emergent_connectivity_gain=float(emergent_gain),
         strict_emergent_world_fraction=float(strict_fraction),
-        cross_species_rescue_fraction=float(rescue_fraction),
+        cross_species_rescue_fraction=(
+            None if rescue_fraction is None else float(rescue_fraction)
+        ),
         dominance_coverage=dominance,
         fingerprint=_canonical_sha256(payload),
     )
@@ -378,6 +380,9 @@ def assemblage_row_permutation_null(
 class AggregateEmergenceTest:
     site_count: int
     positive_null_adjusted_site_count: int
+    negative_null_adjusted_site_count: int
+    tie_count: int
+    sign_test_denominator: int
     median_observed_gain: float
     median_null_adjusted_gain: float
     one_sided_sign_test_p: float
@@ -393,7 +398,7 @@ def aggregate_emergence_test(
     minimum_sites: int = 8,
     alpha: float = 0.05,
 ) -> AggregateEmergenceTest:
-    """One-sided exact sign test; zero/tied adjusted effects count as non-positive."""
+    """One-sided exact sign test with exact-zero adjusted effects excluded as ties."""
 
     observed = np.asarray(tuple(float(v) for v in observed_gains), dtype=float)
     adjusted = np.asarray(tuple(float(v) for v in null_adjusted_gains), dtype=float)
@@ -403,10 +408,17 @@ def aggregate_emergence_test(
         raise ValueError("gains must be finite")
     n = int(observed.size)
     positives = int(np.sum(adjusted > 0.0))
-    p = float(
-        sum(
-            math.comb(n, k) * (0.5 ** n)
-            for k in range(positives, n + 1)
+    negatives = int(np.sum(adjusted < 0.0))
+    ties = int(n - positives - negatives)
+    sign_n = positives + negatives
+    p = (
+        1.0
+        if sign_n == 0
+        else float(
+            sum(
+                math.comb(sign_n, k) * (0.5 ** sign_n)
+                for k in range(positives, sign_n + 1)
+            )
         )
     )
     median_observed = float(np.median(observed))
@@ -420,6 +432,9 @@ def aggregate_emergence_test(
     payload = {
         "site_count": n,
         "positive_null_adjusted_site_count": positives,
+        "negative_null_adjusted_site_count": negatives,
+        "tie_count": ties,
+        "sign_test_denominator": sign_n,
         "median_observed_gain": median_observed,
         "median_null_adjusted_gain": median_adjusted,
         "one_sided_sign_test_p": p,
@@ -431,6 +446,9 @@ def aggregate_emergence_test(
     return AggregateEmergenceTest(
         site_count=n,
         positive_null_adjusted_site_count=positives,
+        negative_null_adjusted_site_count=negatives,
+        tie_count=ties,
+        sign_test_denominator=sign_n,
         median_observed_gain=median_observed,
         median_null_adjusted_gain=median_adjusted,
         one_sided_sign_test_p=p,
