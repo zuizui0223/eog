@@ -1,0 +1,19 @@
+{
+  "schema": "eog.neon_metacommunity_connectivity.response_authorization.v1",
+  "programme": "neon_metacommunity_connectivity_v1",
+  "authorization_state": "pending_ci_before_arm",
+  "response_protocol_blob_sha1": "8b5e74b5640a142120222c7b6873392d5afaaac7",
+  "response_runner_blob_sha1": "f2d450411e82458c08a73d160d3eb53ff7cc337c",
+  "roster_result_fingerprint": "896983e857178c62a649f995003617f06020440a49c7a51164d0a6ca67d3ea05",
+  "roster_artifact_digest": "sha256:e10394a28b701ff44390e9b2744a0698de8309d450369b1fdc7f4ed14b075740",
+  "token_secret_name": "NEON_API_TOKEN",
+  "maximum_authenticated_query_requests": 1,
+  "expected_output": "validation/neon_metacommunity_connectivity_v1/response_result_v1.json",
+  "artifact_name": "neon-metacommunity-connectivity-response-v1",
+  "rerun_after_authenticated_query_starts": false,
+  "retry_after_response_file_download_starts": false,
+  "post_response_site_repair_allowed": false,
+  "post_response_metric_change_allowed": false,
+  "model_fits_authorized": 0,
+  "authorization_consumed": false
+}
