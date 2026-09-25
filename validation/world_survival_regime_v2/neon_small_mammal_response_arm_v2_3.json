@@ -1,0 +1,16 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.response_arm.v2_3",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "armed": true,
+  "armed_date": "2026-09-25",
+  "response_protocol_blob_sha1": "8157959cd6e17c6c9510e8b79ed1916a5cdd780c",
+  "response_runner_blob_sha1": "a6bacbcf61c3cf5f7094fb6d5703a779b0ec1706",
+  "prerequisite_forecast_result_fingerprint": "fd01994faad99100907a3d11869fd956f89be09cb79bac844c0d0adf71ba6fd9",
+  "predecessor_v2_1_response_endpoint_requests": 0,
+  "predecessor_v2_2_response_endpoint_requests": 0,
+  "maximum_authenticated_data_query_requests": 1,
+  "rerun_after_authenticated_query_starts": false,
+  "expected_artifact_name": "world-survival-neon-small-mammal-response-v2-3",
+  "model_fits_authorized": 0,
+  "post_response_rule_change_authorized": false
+}
