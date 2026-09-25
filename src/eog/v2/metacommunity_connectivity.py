@@ -288,12 +288,26 @@ def assemblage_row_permutation_null(
             np.any(permuted, axis=1),
             guild_mask,
         )
-        perm_result = calculate_metacommunity_connectivity(
-            world_adjacencies,
-            permuted,
-            species_ids=species_ids,
+        species_counts = np.sum(permuted, axis=0).astype(int)
+        eligible = np.flatnonzero(species_counts >= 2)
+        max_species_fraction = 0.0
+        for species_index in eligible:
+            species_mask = permuted[:, int(species_index)]
+            survival_count = 0
+            for world_id in sorted(world_adjacencies):
+                graph = _adjacency(
+                    world_adjacencies[world_id],
+                    permuted.shape[0],
+                    str(world_id),
+                )
+                if one_step_survives(graph, species_mask):
+                    survival_count += 1
+            fraction = survival_count / len(world_adjacencies)
+            if fraction > max_species_fraction:
+                max_species_fraction = fraction
+        null_gains.append(
+            observed.community_survival_fraction - max_species_fraction
         )
-        null_gains.append(perm_result.emergent_connectivity_gain)
 
     null_array = np.asarray(null_gains, dtype=float)
     median = float(np.median(null_array))
