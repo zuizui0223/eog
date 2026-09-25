@@ -1,10 +1,10 @@
 {
   "schema": "eog.world_survival_identifiability.asset_receipt.v1",
-  "workflow_run_id": 36116574858,
-  "workflow_head_sha": "d767ee37000f5bb810ee9b5763b2120ba5a45eed",
-  "artifact_id": 10855467119,
+  "workflow_run_id": 36116993652,
+  "workflow_head_sha": "cff6f5bea70ee632294dbdef9e5155ff15b44a57",
+  "artifact_id": 10855650903,
   "artifact_name": "world-survival-identifiability-paper-assets-v1",
-  "artifact_digest": "sha256:911181edaf7279bab855fdc815e38b5d34ea6bc2f214b801d2386dc3d2975ba1",
+  "artifact_digest": "sha256:85d7189bb53000d8cd61c41a63488982913234f4d408bfaba24ab370d6e77e68",
   "visual_qa": "passed",
   "files": {
     "figure_1_adequacy_vs_survival.svg": "83b97b596204461f57ec22bbb70f97e7f8345b5abd0e6ce60eeffbab68cf183e",
