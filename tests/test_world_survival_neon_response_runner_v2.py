@@ -12,10 +12,10 @@ RUNNER_PATH = (
     ROOT
     / "validation"
     / "world_survival_regime_v2"
-    / "run_neon_small_mammal_response_once_v2.py"
+    / "run_neon_small_mammal_response_once_v2_1.py"
 )
 
-spec = importlib.util.spec_from_file_location("neon_response_v2_runner", RUNNER_PATH)
+spec = importlib.util.spec_from_file_location("neon_response_v2_1_runner", RUNNER_PATH)
 assert spec is not None and spec.loader is not None
 runner = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
