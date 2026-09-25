@@ -476,8 +476,8 @@ def update_positive_nodes(
     node_set = set(geometries[site_code]["node_ids"])
     for record in reader:
         row_counts[site_code] += 1
-        trap_status = str(record.get("trapStatus", ""))
-        if "capture" not in trap_status.lower():
+        trap_status = str(record.get("trapStatus", "")).strip().lower()
+        if "capture" not in trap_status or "no capture" in trap_status:
             continue
         taxon_id = str(record.get("taxonID", "")).strip()
         if taxon_id not in target_taxon_ids:
