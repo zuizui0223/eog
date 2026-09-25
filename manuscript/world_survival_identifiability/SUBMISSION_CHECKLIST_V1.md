@@ -26,12 +26,12 @@
 - [x] figure plan
 - [x] literature positioning
 - [x] journal-fit audit
-- [ ] final bibliography metadata verification
-- [ ] figure rendering
-- [ ] supplement tables
-- [ ] cover letter
+- [x] final bibliography metadata verification
+- [x] figure rendering
+- [x] supplement tables
+- [x] cover letter
 - [ ] author/title-page metadata
-- [ ] data/code availability statement
+- [x] data/code availability statement
 - [ ] conflict/funding/AI disclosure as required by target journal
 
 ## Frozen numbers to verify in every derived document
