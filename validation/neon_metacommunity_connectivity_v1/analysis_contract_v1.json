@@ -63,5 +63,10 @@
     "change 999 replicates or the seed rule after response",
     "drop scored sites based on effect direction",
     "promote secondary correlations to primary after response"
-  ]
+  ],
+  "state": "post_response_non_authoritative_draft",
+  "authoritative_for_consumed_endpoint": false,
+  "authoritative_analysis_file": "validation/neon_metacommunity_connectivity_v1/analysis_implementation_v1.json",
+  "authoritative_analysis_module_blob_sha1": "a09ecd84d965ab4d2d0161f0567a8367ec7fec21",
+  "note": "This file was created after the once-only response run and does not alter or rescore the consumed endpoint. The response lock and pre-response analysis_implementation_v1.json are authoritative."
 }
