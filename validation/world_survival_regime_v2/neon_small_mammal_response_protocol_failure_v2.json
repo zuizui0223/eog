@@ -1,0 +1,17 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.response_protocol_failure.v2",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "status": "falsified_by_pre_response_unit_test",
+  "response_endpoint_requests": 0,
+  "biological_response_bytes_opened": 0,
+  "model_fits": 0,
+  "failure_code": "ambiguous_capture_substring_semantics",
+  "failing_rule": "case-insensitive substring 'capture' occurs in trapStatus",
+  "counterexample": "0 - no capture",
+  "consequence": "The frozen v2 response protocol and its unused once-only authorization must not be executed.",
+  "successor_requirement": "Freeze an explicit exclusion for the phrase 'no capture' before any biological response access.",
+  "changes_forecast_lock": false,
+  "changes_site_roster": false,
+  "changes_target_guild": false,
+  "changes_world_rule": false
+}

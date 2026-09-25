@@ -1,0 +1,136 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.forecast_lock.v2",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "workflow_run_id": 36079248090,
+  "workflow_head_sha": "f5b407f6ac48cd9f7a3771189dbff64006b83af1",
+  "artifact_id": 10841231911,
+  "artifact_digest": "sha256:bb871ddb2e7ed14605d8c485cd2146ad79b59df016bc035819aa99149bee87d0",
+  "result_fingerprint": "fd01994faad99100907a3d11869fd956f89be09cb79bac844c0d0adf71ba6fd9",
+  "forecast_locked_system_count": 16,
+  "registry_drift_stop_count": 0,
+  "response_endpoint_requests": 0,
+  "biological_response_bytes_opened": 0,
+  "model_fits": 0,
+  "regime_counts": {
+    "contracting": 16,
+    "falsified_universe": 0,
+    "saturated": 0
+  },
+  "interpretation": "All 16 fixed NEON sites are prospectively predicted contracting. This class concentration is not a reason to retune the frozen v2 rule; biological response must test it as frozen.",
+  "systems": [
+    [
+      "ABBY",
+      3,
+      "contracting",
+      0.6666666666666666,
+      "27db51b96b8e33b3bf6fb17a5c2e3f26bc7938613fe362b1d63ce4ad501a91f8"
+    ],
+    [
+      "BARR",
+      4,
+      "contracting",
+      0.5,
+      "25561f32f861324a703a001df119b94accf5bb728e22cb796e91938730c36ffc"
+    ],
+    [
+      "BART",
+      4,
+      "contracting",
+      0.5,
+      "d4707d38639f0fe8273c2c54423a5e584a258c0867c208ab3ff53929efa246f2"
+    ],
+    [
+      "BLAN",
+      4,
+      "contracting",
+      0.5,
+      "5e3dbce5752661330c1c40cc72181271d5762218b11bec05c7cfa273d1257998"
+    ],
+    [
+      "BONA",
+      4,
+      "contracting",
+      0.25,
+      "6fd81988ef62746afb9daaff6eeeb592a3e6c715b12c5d42d7d515ca85535678"
+    ],
+    [
+      "CLBJ",
+      3,
+      "contracting",
+      0.6666666666666666,
+      "427c2b561ba411c30d2ea78dacdb92f7b21d62b74ac76c5c12aa1ff03391e27d"
+    ],
+    [
+      "CPER",
+      3,
+      "contracting",
+      0.3333333333333333,
+      "6469939e365e1e8a5052db5f103bf460e0bcf5e4d0d5844098d40a89e0989715"
+    ],
+    [
+      "DCFS",
+      3,
+      "contracting",
+      0.6666666666666666,
+      "fa1433ad91c38347d54d3d71db3caf863dff789b65de0984d757e1370bed8f07"
+    ],
+    [
+      "DEJU",
+      3,
+      "contracting",
+      0.6666666666666666,
+      "6a132226b58de23a1997eb2f2070b3ed48c4b8ef146c515d40486a65d55dfed3"
+    ],
+    [
+      "DELA",
+      4,
+      "contracting",
+      0.5,
+      "556ed7c6bc2d31215aa5b3caf8077a61b5271970ba76c948674e153832acab8c"
+    ],
+    [
+      "DSNY",
+      3,
+      "contracting",
+      0.3333333333333333,
+      "2458feb0e999454aec3724baf87ff7b6f3f3f6d5f154398a3427817d5bfd11ac"
+    ],
+    [
+      "GRSM",
+      3,
+      "contracting",
+      0.6666666666666666,
+      "05efe9ca5d008ad8a59bc3cbe1a9ba01467bbd963b435a10ab5e99c1f1818603"
+    ],
+    [
+      "GUAN",
+      4,
+      "contracting",
+      0.5,
+      "3c9ddbfcb6890342c231163f4aae3e23eafcc494c55f4bf85e298c6b7d18f44b"
+    ],
+    [
+      "HARV",
+      3,
+      "contracting",
+      0.3333333333333333,
+      "13b97264e432eba2dac64d1b1b6784276f1d41b11137a4ab42ea0cfb14ca6f5c"
+    ],
+    [
+      "HEAL",
+      4,
+      "contracting",
+      0.5,
+      "4c5b104774c403386f0208902f8c4c7d0c021ac2b61d34b5b814c10c2373308e"
+    ],
+    [
+      "JERC",
+      3,
+      "contracting",
+      0.6666666666666666,
+      "07d5c262b3ad70e082b4ada974374dc9c10aa0b04f87982996a9cff4e5efc8a0"
+    ]
+  ],
+  "post_forecast_rule_changes_allowed": false,
+  "response_access_requires_separate_once_only_authorization": true
+}

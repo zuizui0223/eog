@@ -1,0 +1,76 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.programme_closure.v2_3",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "closure_date": "2026-09-25",
+  "response_lock": "validation/world_survival_regime_v2/neon_small_mammal_response_lock_v2_3.json",
+  "terminal_status": "closed_after_once_only_response",
+  "response_reexecution_allowed": false,
+  "fixed_site_count": 16,
+  "scored_site_count": 9,
+  "stopped_site_count": 7,
+  "forecast": {
+    "all_sites_predicted": "contracting",
+    "predicted_regime_counts": {
+      "contracting": 16,
+      "falsified_universe": 0,
+      "saturated": 0
+    },
+    "forecast_mean_survival_fraction_scored": 0.5185185185185185
+  },
+  "observed_scored": {
+    "regime_counts": {
+      "contracting": 2,
+      "falsified_universe": 0,
+      "saturated": 7
+    },
+    "observed_mean_survival_fraction": 0.9351851851851851,
+    "exact_regime_match_count": 2,
+    "exact_regime_match_fraction": 0.2222222222222222,
+    "simple_chance_reference": 0.3333333333333333,
+    "one_sided_binomial_upper_tail_vs_fixed_reference": 0.8569323781943813,
+    "mean_absolute_survival_fraction_error": 0.4166666666666667,
+    "all_observed_survival_fractions_exceeded_forecast": true
+  },
+  "scored_sites": {
+    "matching": [
+      "DELA",
+      "DSNY"
+    ],
+    "mismatching_saturated": [
+      "ABBY",
+      "BARR",
+      "BLAN",
+      "CPER",
+      "DCFS",
+      "GRSM",
+      "GUAN"
+    ]
+  },
+  "response_consumed_stops": {
+    "count": 7,
+    "reason": "unknown positive trap coordinates outside the frozen response-blind registry",
+    "sites": [
+      "BART",
+      "BONA",
+      "CLBJ",
+      "DEJU",
+      "HARV",
+      "HEAL",
+      "JERC"
+    ],
+    "reclassification_or_registry_repair_allowed": false
+  },
+  "primary_conclusion": {
+    "supported": "The prospectively frozen response-blind whole-network structural rule did not successfully forecast later falsifiable-world survival regimes in the fixed NEON programme and systematically underpredicted world survival among scored sites.",
+    "failed_hypothesis": "Response-blind whole-network structural adequacy plus the one-step horizon-realization ratio is sufficient to anticipate whether a finite world universe will falsify, contract, or saturate after positive evidence.",
+    "endpoint_regime_anomaly_resolution": "The finite-world framework is not intrinsically restricted to endpoint outcomes: two independently scored sites produced genuine intermediate contraction. However, saturation dominated seven of nine scored sites."
+  },
+  "not_supported": [
+    "retuning the horizon-realization cutoff",
+    "claiming all finite-world systems are inherently saturated",
+    "assigning a biological regime to any of the seven registry-mismatch sites",
+    "generalizing this guild-level NEON endpoint to taxon-level systems without a new protocol",
+    "using the result to alter the closed EOG-WF Layer-B predictive conclusion"
+  ],
+  "next_theoretical_question": "Whether survival regime is identifiable from response-blind global graph structure at all when compatibility depends on the unknown placement of positive nodes."
+}
