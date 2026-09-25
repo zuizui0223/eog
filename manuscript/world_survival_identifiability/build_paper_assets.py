@@ -240,7 +240,11 @@ def main() -> None:
     }
     for path in [*assets.keys(),*supplement]:
         raw=path.read_bytes()
-        manifest["files"][str(path.relative_to(ROOT))]={
+        try:
+            manifest_key = str(path.relative_to(ROOT))
+        except ValueError:
+            manifest_key = f"generated/{path.name}"
+        manifest["files"][manifest_key]={
             "bytes":len(raw),
             "sha256":sha256_bytes(raw),
         }
