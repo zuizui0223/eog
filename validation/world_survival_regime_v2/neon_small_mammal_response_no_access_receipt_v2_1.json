@@ -1,0 +1,22 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.response_access_receipt.v2_1",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "workflow_run_id": 36106929027,
+  "workflow_head_sha": "8c226556b75184e0c383028f9a01d0a1c64edd9b",
+  "run_status": "completed",
+  "run_conclusion": "failure",
+  "stop_stage": "require_neon_api_token_before_response_access",
+  "arm_verified": true,
+  "authorization_verified": true,
+  "prior_response_artifact_absent": true,
+  "neon_api_token_present": false,
+  "biological_response_runner_executed": false,
+  "authenticated_data_query_requests": 0,
+  "biological_response_file_requests": 0,
+  "biological_response_bytes_opened": 0,
+  "model_fits": 0,
+  "scientific_status": "not_started_due_to_missing_authentication_secret",
+  "authorization_consumed": false,
+  "rerun_allowed_after_secret_configuration": true,
+  "note": "No authenticated data query started, so the once-only biological response authorization remains unconsumed."
+}
