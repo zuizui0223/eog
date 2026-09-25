@@ -1,0 +1,26 @@
+{
+  "schema": "eog.world_survival_identifiability.asset_receipt.v1",
+  "workflow_run_id": 36116993652,
+  "workflow_head_sha": "cff6f5bea70ee632294dbdef9e5155ff15b44a57",
+  "artifact_id": 10855650903,
+  "artifact_name": "world-survival-identifiability-paper-assets-v1",
+  "artifact_digest": "sha256:85d7189bb53000d8cd61c41a63488982913234f4d408bfaba24ab370d6e77e68",
+  "visual_qa": "passed",
+  "files": {
+    "figure_1_adequacy_vs_survival.svg": "83b97b596204461f57ec22bbb70f97e7f8345b5abd0e6ce60eeffbab68cf183e",
+    "figure_2_neon_validation.svg": "a7e163dff1ed5582cda8de1958ff223b53a1a6298265e784011e24730883afb9",
+    "figure_3_identifiability_witness.svg": "a6162067a9f86e0775eed5f7e005a75a9c140f8e33ede34d453e8ea0bb5780b0",
+    "table_s1_scored_sites.csv": "585dab4535c8141f76cd7dbee93e0ea44c412beb995a427a0df6d13417894215",
+    "table_s2_response_consumed_stops.csv": "d0d074707fb397ac8d4244277601effac0258d531977364fdd318f0c0e850092"
+  },
+  "frozen_values": {
+    "fixed_sites": 16,
+    "scored_sites": 9,
+    "stopped_sites": 7,
+    "exact_matches": 2,
+    "observed_saturated": 7,
+    "observed_contracting": 2,
+    "observed_falsified": 0,
+    "mean_absolute_survival_fraction_error": 0.4166666666666667
+  }
+}

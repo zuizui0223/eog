@@ -1,0 +1,48 @@
+{
+  "schema": "eog.world_survival_identifiability.submission_boundary.v1",
+  "scientific_state": "closed",
+  "eog_wf_changed": false,
+  "structural_repo_changed": false,
+  "empirical_programme": "NEON small-mammal fixed 16-site world-survival regime programme",
+  "theoretical_programme": "one-step positive-set survival identifiability boundary",
+  "main_contribution": "A response-blind finite-world adequacy certificate does not generally imply predictable later contraction; the empirical rule failed prospectively and the one-step observation rule admits a graph-only non-identifiability witness.",
+  "empirical_denominator": {
+    "fixed_sites": 16,
+    "scored_sites": 9,
+    "response_consumed_integrity_stops": 7
+  },
+  "primary_result": {
+    "exact_match_count": 2,
+    "exact_match_fraction": 0.2222222222222222,
+    "fixed_simple_reference": 0.3333333333333333,
+    "one_sided_upper_tail_p": 0.8569323781943813,
+    "mean_absolute_survival_fraction_error": 0.4166666666666667
+  },
+  "stop_rules": [
+    "No cutoff retuning on consumed outcomes.",
+    "No registry repair or reclassification of the seven stopped sites.",
+    "No additional candidate search to improve accuracy.",
+    "No taxon-level promotion of the guild endpoint.",
+    "No change to the closed EOG-WF conclusion."
+  ],
+  "next_allowed_work": [
+    "manuscript editing",
+    "figure construction from frozen data",
+    "literature positioning",
+    "journal fit assessment",
+    "non-response-dependent theoretical exposition"
+  ],
+  "next_forbidden_work": [
+    "new biological response access under this programme",
+    "new NEON site scoring",
+    "post-outcome threshold search",
+    "replacement candidates"
+  ],
+  "journal_route": {
+    "primary": "Ecological Modelling",
+    "secondary": "Methods in Ecology and Evolution",
+    "fallback": "Ecological Informatics",
+    "frozen_date": "2026-09-25",
+    "rationale": "The paper is primarily an ecological modelling and systems-inference boundary supported by prospective empirical falsification and a formal identifiability witness, rather than a new predictive algorithm."
+  }
+}

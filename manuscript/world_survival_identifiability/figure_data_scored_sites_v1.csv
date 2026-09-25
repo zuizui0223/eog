@@ -1,0 +1,10 @@
+site,predicted_survival_fraction,observed_survival_fraction,predicted_regime,observed_regime,exact_match,positive_nodes
+ABBY,0.6666666666666666,1.0,contracting,saturated,false,427
+BARR,0.5,1.0,contracting,saturated,false,33
+BLAN,0.5,1.0,contracting,saturated,false,169
+CPER,0.3333333333333333,1.0,contracting,saturated,false,455
+DCFS,0.6666666666666666,1.0,contracting,saturated,false,294
+DELA,0.5,0.75,contracting,contracting,true,226
+DSNY,0.3333333333333333,0.6666666666666666,contracting,contracting,true,283
+GRSM,0.6666666666666666,1.0,contracting,saturated,false,57
+GUAN,0.5,1.0,contracting,saturated,false,196
