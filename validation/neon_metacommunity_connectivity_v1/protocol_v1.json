@@ -1,0 +1,189 @@
+{
+  "schema": "eog.neon_metacommunity_connectivity.protocol.v1",
+  "programme": "neon_metacommunity_connectivity_v1",
+  "frozen_date": "2026-09-25",
+  "state": "frozen_before_fresh_site_roster_and_biological_response",
+  "ecological_question": "Does spatial turnover among small-mammal species create community-level spatial continuity that is absent from any single species?",
+  "primary_hypothesis": {
+    "name": "emergent_community_connectivity",
+    "statement": "Across fresh NEON sites, community-level world survival exceeds the best single-species survival because different local species assemblages occupy complementary positions in space.",
+    "site_effect": "community_survival_fraction - max_species_survival_fraction",
+    "primary_null": "whole observed local assemblages are permuted among the fixed guild-positive nodes, preserving the guild-positive node set, every species occupancy count, the multiset of node richness values, and within-node species co-occurrence vectors",
+    "null_replicates": 999,
+    "null_seed_rule": "integer from first 8 hex digits of sha256('neon_metacommunity_connectivity_v1|'+site_code)",
+    "site_null_adjusted_effect": "observed emergent_connectivity_gain - median(null emergent_connectivity_gain)",
+    "aggregate_test": "one-sided exact sign test of null-adjusted site effects > 0 against probability 0.5",
+    "minimum_scored_sites": 8,
+    "confirmatory_support_if": [
+      "at least 8 scored sites",
+      "median observed emergent_connectivity_gain > 0",
+      "one-sided exact sign-test p < 0.05 for positive null-adjusted site effects"
+    ]
+  },
+  "mechanistic_secondary": {
+    "strict_emergent_world_fraction": "fraction of distinct worlds in which the guild survives but no eligible single species survives",
+    "cross_species_rescue_fraction": "among guild-positive node x surviving-world targets, fraction having at least one guild-positive neighbour but no neighbour sharing any species with the target node",
+    "dominance_coverage": "maximum across species of occupied guild-positive nodes divided by total guild-positive nodes",
+    "expected_pattern": "emergent connectivity should increase with cross-species rescue and decrease with dominance coverage",
+    "association_test": "Spearman rank correlation across scored sites, reported as secondary and not used to rescue the primary decision"
+  },
+  "literature_boundary": {
+    "relation_to_spatial_insurance": "Conceptually related to spatial insurance and compositional compensation, but the endpoint here is spatial occupancy/connectivity rather than ecosystem-function stability.",
+    "novelty_not_claimed": [
+      "metacommunity theory",
+      "species turnover",
+      "spatial insurance",
+      "beta diversity",
+      "dispersal-constrained distribution modelling"
+    ]
+  },
+  "data_source": {
+    "provider": "NSF NEON",
+    "product_code": "DP1.10072.001",
+    "product_name": "Small mammal box trapping",
+    "release": "RELEASE-2026",
+    "taxonomy_type": "SMALL_MAMMAL"
+  },
+  "fresh_site_selection": {
+    "excluded_consumed_sites": [
+      "ABBY",
+      "BARR",
+      "BART",
+      "BLAN",
+      "BONA",
+      "CLBJ",
+      "CPER",
+      "DCFS",
+      "DEJU",
+      "DELA",
+      "DSNY",
+      "GRSM",
+      "GUAN",
+      "HARV",
+      "HEAL",
+      "JERC"
+    ],
+    "excluded_design_contaminated_sites": [
+      {
+        "site_code": "KONZ",
+        "reason": "NEON tutorial response summaries were viewed during study design"
+      },
+      {
+        "site_code": "SCBI",
+        "reason": "NEON tutorial response summaries were viewed during study design"
+      },
+      {
+        "site_code": "UNDE",
+        "reason": "NEON tutorial response summaries were viewed during study design"
+      }
+    ],
+    "ordering": "siteCode ascending",
+    "response_blind_eligibility": [
+      "site listed for DP1.10072.001 RELEASE-2026",
+      "at least 20 geolocatable non-X mammal trap nodes",
+      "node registry has no duplicate IDs",
+      "all retained node coordinates finite",
+      "adequacy-complete one-step world family passes the frozen LCC/isolation gate"
+    ],
+    "target_site_count": 16,
+    "selection": "scan siteCode ascending after exclusions and take the first 16 response-blind eligible sites",
+    "replacement_after_response_access": false
+  },
+  "node_registry": {
+    "unit": "individual mammal trap named location",
+    "discovery": "recursive NEON site location hierarchy plus GraphQL findLocations",
+    "non_x_trap_regex": "^[A-Z0-9]{4}_.+\\.mammalGrid\\.mam\\.[A-WYZ][0-9]+$",
+    "x_coordinate_policy": "trap coordinates containing X are prospectively excluded because the official NEON geolocation implementation treats them as uncertain locations",
+    "minimum_nodes": 20,
+    "geometry_metric": "haversine_km"
+  },
+  "world_family": {
+    "base_lcc_targets": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "adequacy_complete_planner": "plan_adequacy_complete_lcc_targets",
+    "exact_adjacency_deduplication": true,
+    "structural_horizon": 1,
+    "adequacy": {
+      "min_largest_weak_component_fraction": 0.9,
+      "max_isolated_node_fraction": 0.05,
+      "min_median_horizon_reachable_fraction": null,
+      "require_at_least_one_world_pass": true
+    },
+    "external_open": false,
+    "all_canonical_worlds_falsifiable": true
+  },
+  "target_taxa": {
+    "include_if": {
+      "dwc:taxonRank": "species",
+      "taxonProtocolCategory": "target"
+    },
+    "design_contamination_exclusions": [
+      {
+        "scientific_name": "Peromyscus leucopus",
+        "reason": "public species-level response summaries were exposed during earlier design work"
+      },
+      {
+        "scientific_name": "Peromyscus maniculatus",
+        "reason": "public species-level response summaries were exposed during earlier design work"
+      }
+    ],
+    "response_unit": "ever-positive non-X trap by species across RELEASE-2026"
+  },
+  "site_response_estimability": {
+    "minimum_guild_positive_nodes": 20,
+    "minimum_species_with_at_least_two_positive_nodes": 2,
+    "unknown_non_x_positive_node_action": "response-consumed site STOP with no registry repair",
+    "x_coordinate_positive_rows": "excluded prospectively from spatial analysis and counted separately",
+    "site_replacement_after_response": false
+  },
+  "survival_rules": {
+    "community_positive_set": "union of all eligible target-species positive nodes",
+    "species_positive_set": "positive nodes for one eligible target species",
+    "one_step_compatibility": "every positive target node has at least one positive peer node connected by an admitted canonical-world edge",
+    "community_survival_fraction": "surviving canonical worlds / distinct canonical worlds",
+    "species_survival_fraction": "same fraction calculated separately for each species with at least two positive nodes",
+    "max_species_survival_fraction": "maximum over eligible species with at least two positive nodes"
+  },
+  "assemblage_permutation_null": {
+    "permutation_unit": "entire species-incidence row attached to a guild-positive node",
+    "permute_among": "fixed guild-positive nodes within site",
+    "preserves": [
+      "guild-positive node set",
+      "species occupancy frequencies",
+      "multiset of node richness values",
+      "within-node species co-occurrence vectors"
+    ],
+    "changes": "spatial assignment of local assemblages to guild-positive node coordinates",
+    "replicates": 999,
+    "no_permutation_of_negative_nodes": true
+  },
+  "response_firewall": {
+    "biological_response_endpoint_requests_at_freeze": 0,
+    "biological_response_bytes_opened_at_freeze": 0,
+    "response_access_requires_frozen_fresh_site_roster": true,
+    "response_access_requires_frozen_per_site_world_fingerprints": true,
+    "response_access_requires_once_only_authorization": true,
+    "no_response_reuse_from_consumed_16_site_programme": true
+  },
+  "failure_conditions": [
+    "fewer than 8 scored fresh sites",
+    "median emergent connectivity gain <= 0",
+    "one-sided sign-test p >= 0.05 for positive null-adjusted site effects",
+    "community continuity is explainable by one widespread species at most sites",
+    "row-permutation null reproduces the observed emergent connectivity gains"
+  ],
+  "forbidden": [
+    "use any of the consumed 16 NEON sites as confirmatory evidence",
+    "include KONZ, SCBI, or UNDE",
+    "retune world thresholds after fresh response access",
+    "change the target guild after fresh response access",
+    "repair unknown non-X positive nodes after response access",
+    "change permutation replicates or seed rule after response access",
+    "add sites until the sign test becomes significant",
+    "reinterpret the previous world-survival forecast failure as confirmatory evidence for this ecological hypothesis"
+  ]
+}
