@@ -65,6 +65,26 @@ def one_step_survives(adjacency: np.ndarray, positive_mask: np.ndarray) -> bool:
     return bool(np.all(np.sum(induced, axis=1) >= 1))
 
 
+def _neighbor_lists(adjacency: np.ndarray) -> tuple[np.ndarray, ...]:
+    graph = np.asarray(adjacency, dtype=bool)
+    return tuple(np.flatnonzero(graph[index, :]) for index in range(graph.shape[0]))
+
+
+def _one_step_survives_neighbors(
+    neighbours: tuple[np.ndarray, ...],
+    positive_mask: np.ndarray,
+) -> bool:
+    mask = np.asarray(positive_mask, dtype=bool)
+    indices = np.flatnonzero(mask)
+    if indices.size < 2:
+        return False
+    for index in indices:
+        peer_indices = neighbours[int(index)]
+        if peer_indices.size == 0 or not bool(np.any(mask[peer_indices])):
+            return False
+    return True
+
+
 @dataclass(frozen=True)
 class MetacommunityConnectivityResult:
     world_ids: tuple[str, ...]
@@ -268,6 +288,10 @@ def assemblage_row_permutation_null(
         )
         for world_id in world_ids
     }
+    neighbour_lists = {
+        world_id: _neighbor_lists(graphs[world_id])
+        for world_id in world_ids
+    }
 
     guild_mask = np.any(matrix, axis=1)
     positive_indices = np.flatnonzero(guild_mask)
@@ -304,7 +328,10 @@ def assemblage_row_permutation_null(
             species_mask = permuted[:, int(species_index)]
             survival_count = 0
             for world_id in world_ids:
-                if one_step_survives(graphs[world_id], species_mask):
+                if _one_step_survives_neighbors(
+                    neighbour_lists[world_id],
+                    species_mask,
+                ):
                     survival_count += 1
             fraction = survival_count / len(world_ids)
             if fraction > max_species_fraction:
