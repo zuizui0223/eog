@@ -2,6 +2,11 @@ name: World survival NEON response v2 once
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - agent/world-survival-neon-mammal-v2
+    paths:
+      - "validation/world_survival_regime_v2/neon_small_mammal_response_arm_v2_1.json"
 
 concurrency:
   group: world-survival-neon-response-v2-once
@@ -26,6 +31,27 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e .
+
+      - name: Verify arm record
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          arm_path = Path(
+              "validation/world_survival_regime_v2/"
+              "neon_small_mammal_response_arm_v2_1.json"
+          )
+          arm = json.loads(arm_path.read_text())
+          assert arm["armed"] is True
+          assert arm["response_protocol_blob_sha1"] == "8157959cd6e17c6c9510e8b79ed1916a5cdd780c"
+          assert arm["response_runner_blob_sha1"] == "fdb6e56ca15e7cdd22e57e60aa98d3386a9b9084"
+          assert arm["prerequisite_forecast_result_fingerprint"] == (
+              "fd01994faad99100907a3d11869fd956f89be09cb79bac844c0d0adf71ba6fd9"
+          )
+          assert arm["maximum_authenticated_data_query_requests"] == 1
+          assert arm["rerun_after_authenticated_query_starts"] is False
+          PY
 
       - name: Verify frozen response authorization
         run: |
