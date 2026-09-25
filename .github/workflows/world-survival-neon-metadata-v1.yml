@@ -1,0 +1,86 @@
+name: World survival NEON metadata v1
+
+on:
+  push:
+    branches:
+      - agent/world-survival-neon-mammal-funnel-v1
+    paths:
+      - "validation/world_survival_regime_v1/neon_small_mammal_protocol_v1.json"
+      - "validation/world_survival_regime_v1/neon_small_mammal_protocol_lock_v1.json"
+      - "validation/world_survival_regime_v1/capture_neon_small_mammal_metadata.py"
+      - "src/eog/v2/world_survival_regime.py"
+      - "src/eog/v2/world_adequacy.py"
+      - "src/eog/v2/adequacy_complete_ladder.py"
+      - "src/eog/v2/world_scale_ladder.py"
+      - ".github/workflows/world-survival-neon-metadata-v1.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: world-survival-neon-metadata-v1
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install EOG
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+      - name: Verify protocol lock before network access
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          base = Path("validation/world_survival_regime_v1")
+          protocol = base / "neon_small_mammal_protocol_v1.json"
+          lock = json.loads(
+              (base / "neon_small_mammal_protocol_lock_v1.json").read_text()
+          )
+          raw = protocol.read_bytes()
+          blob = hashlib.sha1(
+              f"blob {len(raw)}\0".encode("ascii") + raw
+          ).hexdigest()
+          assert blob == lock["protocol_git_blob_sha1"]
+          assert lock["lock_state"] == "frozen_before_metadata_capture"
+          assert lock["biological_response_endpoint_requests"] == 0
+          assert lock["biological_response_bytes_opened"] == 0
+          assert lock["model_fits"] == 0
+          PY
+      - name: Capture response-blind NEON metadata and freeze forecasts
+        run: python validation/world_survival_regime_v1/capture_neon_small_mammal_metadata.py
+      - name: Verify result remained response blind
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path(
+              "validation/world_survival_regime_v1/"
+              "neon_small_mammal_metadata_capture_result_v1.json"
+          )
+          result = json.loads(path.read_text())
+          assert result["response_endpoint_requests"] == 0
+          assert result["biological_response_bytes_opened"] == 0
+          assert result["model_fits"] == 0
+          assert result["forecast_locked_system_count"] >= 1
+          for row in result["systems"]:
+              assert row["response_opened"] is False
+              assert row["model_fits"] == 0
+          PY
+      - name: Upload frozen metadata result
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-survival-neon-small-mammal-metadata-v1
+          path: validation/world_survival_regime_v1/neon_small_mammal_metadata_capture_result_v1.json
+          if-no-files-found: error

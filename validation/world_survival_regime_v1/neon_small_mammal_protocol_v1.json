@@ -1,0 +1,124 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.protocol.v1",
+  "programme": "world_survival_regime_neon_small_mammal_v1",
+  "parent_forecast_protocol": "validation/world_survival_regime_v1/protocol_v1.json",
+  "frozen_date": "2026-09-25",
+  "current_stage": "metadata_capture_not_started",
+  "source": {
+    "provider": "NSF NEON",
+    "product_code": "DP1.10072.001",
+    "product_name": "Small mammal box trapping",
+    "release": "RELEASE-2026",
+    "response_independent_endpoints": [
+      "/api/v0/products/DP1.10072.001?release=RELEASE-2026",
+      "/api/v0/taxonomy?taxonTypeCode=SMALL_MAMMAL&verbose=true&offset=0&limit=1000",
+      "/api/v0/sites/{siteCode}?release=RELEASE-2026",
+      "/api/v0/locations/{siteCode}?hierarchy=true",
+      "/graphql findLocations for already enumerated named locations"
+    ],
+    "forbidden_before_forecast_lock": [
+      "/api/v0/data/*",
+      "/api/v0/data/query*",
+      "download URLs returned by a data endpoint",
+      "mam_pertrapnight payload or header",
+      "mam_perplotnight payload or header"
+    ]
+  },
+  "candidate_sites": {
+    "extraction": "siteCodes listed as available for the frozen product release",
+    "sort": "siteCode ascending",
+    "maximum_sites": 16,
+    "selection": "take first 16 eligible siteCodes after response-independent metadata checks",
+    "no_replacement_after_response_open": true,
+    "pre_response_stop_does_not_authorize_sort_or_rule_change": true
+  },
+  "node_registry": {
+    "unit": "individual mammal trap named location",
+    "discovery": "recursive site location hierarchy",
+    "trap_name_regex": "^[A-Z0-9]{4}_.+\\\\.mammalGrid\\\\.mam\\\\.[A-Z][0-9]+$",
+    "coordinates": "NEON named-location decimal latitude/longitude obtained by GraphQL findLocations",
+    "minimum_nodes": 20,
+    "duplicate_node_ids": "stop",
+    "missing_or_nonfinite_coordinates": "stop",
+    "coordinate_history": "current named-location coordinate only; no biological response used",
+    "geometry_metric": "haversine_km"
+  },
+  "response_target": {
+    "level": "protocol-defined target-small-mammal guild",
+    "taxonomy_source": "NEON SMALL_MAMMAL taxonomy endpoint captured before biological response",
+    "include_if": {
+      "dwc:taxonRank": "species",
+      "taxonProtocolCategory": "target"
+    },
+    "design_contamination_exclusions": [
+      {
+        "scientific_name": "Peromyscus leucopus",
+        "reason": "public capture-distribution counts were exposed during source-design web audit before this protocol was frozen"
+      },
+      {
+        "scientific_name": "Peromyscus maniculatus",
+        "reason": "public capture-distribution counts were exposed during source-design web audit before this protocol was frozen"
+      }
+    ],
+    "primary_positive_definition": "trap is ever-positive if at least one capture record across the frozen release has a taxonID in the frozen eligible target-taxon set",
+    "negative_records_used_for_world_elimination": false,
+    "minimum_positive_nodes": 2,
+    "insufficient_positive_nodes_status": "response_consumed_non_estimable_positive_support"
+  },
+  "worlds": {
+    "base_lcc_targets": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "adequacy_complete": true,
+    "adequacy": {
+      "min_largest_weak_component_fraction": 0.9,
+      "max_isolated_node_fraction": 0.05,
+      "min_median_horizon_reachable_fraction": null,
+      "require_at_least_one_world_pass": true
+    },
+    "horizon": "node_count_minus_1",
+    "world_family": "primary geography ladder only",
+    "external_open": false,
+    "all_worlds_falsifiable": true
+  },
+  "forecast": {
+    "score": "median_horizon_reachable_fraction / largest_weak_component_fraction",
+    "cutoff": 0.5,
+    "mapping": {
+      "zero_predicted_survivors": "falsified_universe",
+      "partial_predicted_survivors": "contracting",
+      "all_predicted_survivors": "saturated"
+    },
+    "freeze_before_data_endpoint_access": true
+  },
+  "observation": {
+    "source_policy": "self_excluded peer-positive nodes",
+    "final_world_compatibility": "each world survives iff every ever-positive trap has positive support from the other ever-positive traps within horizon",
+    "context_sequence_primary": false,
+    "primary_regime_from_final_falsifiable_world_fraction": true
+  },
+  "aggregation": {
+    "primary_unit": "NEON site",
+    "maximum_scored_systems": 16,
+    "primary": "exact three-state regime match fraction",
+    "simple_chance_reference": 0.3333333333333333,
+    "secondary": [
+      "predicted survival fraction",
+      "observed survival fraction",
+      "absolute survival-fraction error",
+      "observed regime prevalence"
+    ],
+    "sites_share_protocol_and_taxonomic_guild": true
+  },
+  "integrity": {
+    "metadata_requests_allowed_before_forecast": true,
+    "biological_response_requests_before_forecast_lock": 0,
+    "model_fits": 0,
+    "log_loss_used": false,
+    "prior_eogwf_stopped_systems_reused": false,
+    "prior_consumed_systems_reused": false
+  }
+}
