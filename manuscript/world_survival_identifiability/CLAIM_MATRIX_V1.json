@@ -1,0 +1,41 @@
+{
+  "schema": "eog.world_survival_identifiability.claim_matrix.v1",
+  "manuscript": "Structural testability does not imply predictable contraction in finite ecological world sets",
+  "primary_claim": "Structural adequacy of a finite declared world universe can be audited without biological responses, but later evidence-driven world survival is not generally identifiable from global response-blind graph structure alone because compatibility depends on positive-node placement.",
+  "supported": [
+    {
+      "claim": "The prospectively frozen NEON structure-only regime rule failed.",
+      "evidence": "2/9 exact regime matches; seven saturated and two contracting scored sites; one-sided upper-tail p versus fixed one-third reference = 0.8569323781943813."
+    },
+    {
+      "claim": "The frozen rule systematically underpredicted world survival among scored NEON sites.",
+      "evidence": "All nine scored sites had observed surviving-world fractions above their frozen forecasts; mean observed fraction 0.9351851851851851 versus mean forecast 0.5185185185185185."
+    },
+    {
+      "claim": "Finite-world updating is not intrinsically restricted to endpoint outcomes.",
+      "evidence": "DELA retained 3/4 distinct worlds and DSNY retained 2/3."
+    },
+    {
+      "claim": "For exactly two positives on any nonempty, noncomplete undirected world graph, both survival and failure are possible with the same graph and positive-set size.",
+      "evidence": "Adjacent-pair versus non-adjacent-pair witness theorem; synthetic tests in test_world_survival_identifiability.py."
+    },
+    {
+      "claim": "Structural adequacy and later contraction are distinct inferential objects.",
+      "evidence": "Adequacy is computed before response access from graph properties; survival is evaluated after positive-node placement is revealed."
+    }
+  ],
+  "prohibited": [
+    "The 0.5 cutoff should be retuned on the consumed NEON outcome.",
+    "The seven registry-mismatch sites can be repaired and scored inside the same programme.",
+    "All finite-world systems are inherently saturated.",
+    "A graph-only structural summary universally predicts later survival regime.",
+    "The NEON guild result is a taxon-level validation.",
+    "A surviving world is the true historical dispersal process.",
+    "This programme alters the closed EOG-WF Layer-B predictive conclusion."
+  ],
+  "interpretation_boundary": {
+    "adequacy": "Response-blind structural certificate about whether the declared finite world family is testable at declared scales.",
+    "survival": "Response-conditioned compatibility state after positive observations are located on the graph.",
+    "prediction": "Requires additional assumptions about positive-node placement if attempted probabilistically."
+  }
+}
