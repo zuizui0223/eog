@@ -10,5 +10,10 @@
   "rerun_after_authenticated_query_starts": false,
   "expected_artifact_name": "world-survival-neon-small-mammal-response-v2",
   "model_fits_authorized": 0,
-  "post_response_rule_change_authorized": false
+  "post_response_rule_change_authorized": false,
+  "authentication_retry_after_no_access": true,
+  "prior_no_access_workflow_run_id": 36106929027,
+  "prior_no_access_authenticated_query_requests": 0,
+  "prior_no_access_biological_response_bytes_opened": 0,
+  "authentication_retry_index": 1
 }
