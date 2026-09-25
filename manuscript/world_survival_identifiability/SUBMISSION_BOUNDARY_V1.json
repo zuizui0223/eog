@@ -37,5 +37,12 @@
     "new NEON site scoring",
     "post-outcome threshold search",
     "replacement candidates"
-  ]
+  ],
+  "journal_route": {
+    "primary": "Ecological Modelling",
+    "secondary": "Methods in Ecology and Evolution",
+    "fallback": "Ecological Informatics",
+    "frozen_date": "2026-09-25",
+    "rationale": "The paper is primarily an ecological modelling and systems-inference boundary supported by prospective empirical falsification and a formal identifiability witness, rather than a new predictive algorithm."
+  }
 }
