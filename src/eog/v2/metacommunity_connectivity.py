@@ -259,6 +259,15 @@ def assemblage_row_permutation_null(
         matrix,
         species_ids=species_ids,
     )
+    world_ids = tuple(sorted(str(value).strip() for value in world_adjacencies))
+    graphs = {
+        world_id: _adjacency(
+            world_adjacencies[world_id],
+            matrix.shape[0],
+            world_id,
+        )
+        for world_id in world_ids
+    }
 
     guild_mask = np.any(matrix, axis=1)
     positive_indices = np.flatnonzero(guild_mask)
@@ -294,15 +303,10 @@ def assemblage_row_permutation_null(
         for species_index in eligible:
             species_mask = permuted[:, int(species_index)]
             survival_count = 0
-            for world_id in sorted(world_adjacencies):
-                graph = _adjacency(
-                    world_adjacencies[world_id],
-                    permuted.shape[0],
-                    str(world_id),
-                )
-                if one_step_survives(graph, species_mask):
+            for world_id in world_ids:
+                if one_step_survives(graphs[world_id], species_mask):
                     survival_count += 1
-            fraction = survival_count / len(world_adjacencies)
+            fraction = survival_count / len(world_ids)
             if fraction > max_species_fraction:
                 max_species_fraction = fraction
         null_gains.append(
