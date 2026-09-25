@@ -53,7 +53,7 @@ EOG differs in object and contract, not in the generic logic of ruling out alter
 
 Ecological methodology already advocates formalizing multiple candidate hypotheses before
 data collection and asking whether their predicted observation patterns are sufficiently
-distinct to support inference. Betini et al. (2020) explicitly frame pre-data modelling
+distinct to support inference. Yanco et al. (2020) explicitly frame pre-data modelling
 as a way to diagnose degeneracy and identifiability among ecological hypotheses.
 
 Therefore the manuscript must not claim novelty for:
@@ -165,11 +165,15 @@ the declared observation rule.
 - Elith J, Leathwick JR. 2009. Species Distribution Models: Ecological Explanation and
   Prediction Across Space and Time. Annual Review of Ecology, Evolution, and Systematics.
   DOI 10.1146/annurev.ecolsys.110308.120159.
+- Barve N et al. 2011. The crucial role of the accessible area in ecological niche
+  modeling and species distribution modeling. Ecological Modelling 222:1810-1819.
+  DOI 10.1016/j.ecolmodel.2011.02.011.
 - Williamson D, Goldstein M, Allison L, et al. 2013. History matching for exploring and
   reducing climate model parameter space using observations and a large perturbed
   physics ensemble. Climate Dynamics. DOI 10.1007/s00382-013-1896-4.
-- Betini GS and colleagues. 2020. A modern method of multiple working hypotheses to
-  improve inference in ecology. Royal Society Open Science.
+- Yanco SW, McDevitt A, Trueman CN, Hartley L, Wunder MB. 2020. A modern method of
+  multiple working hypotheses to improve inference in ecology. Royal Society Open Science
+  7:200231. DOI 10.1098/rsos.200231.
 - Pham HV, Tsai FTC. 2016. Optimal observation network design for conceptual model
   discrimination and uncertainty reduction. Water Resources Research 52:1245-1264.
   DOI 10.1002/2015WR017474.
