@@ -1,0 +1,84 @@
+name: NEON metacommunity fresh roster v1
+
+on:
+  push:
+    branches:
+      - agent/neon-metacommunity-connectivity-v1
+    paths:
+      - "validation/neon_metacommunity_connectivity_v1/protocol_v1.json"
+      - "validation/neon_metacommunity_connectivity_v1/protocol_lock_v1.json"
+      - "validation/neon_metacommunity_connectivity_v1/capture_fresh_roster.py"
+      - ".github/workflows/neon-metacommunity-fresh-roster-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install EOG
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+      - name: Verify frozen protocol before metadata access
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          base = Path("validation/neon_metacommunity_connectivity_v1")
+          protocol = base / "protocol_v1.json"
+          lock = json.loads((base / "protocol_lock_v1.json").read_text())
+          raw = protocol.read_bytes()
+          blob = hashlib.sha1(
+              f"blob {len(raw)}\0".encode("ascii") + raw
+          ).hexdigest()
+          assert blob == lock["protocol_git_blob_sha1"]
+          assert lock["lock_state"] == "frozen_before_fresh_site_roster_and_biological_response"
+          assert lock["fresh_site_roster_captured"] is False
+          assert lock["biological_response_endpoint_requests"] == 0
+          assert lock["biological_response_bytes_opened"] == 0
+          PY
+      - name: Capture response-blind fresh roster
+        id: capture
+        run: |
+          set +e
+          python validation/neon_metacommunity_connectivity_v1/capture_fresh_roster.py
+          code=$?
+          echo "runner_exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Verify response remained unopened
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path(
+              "validation/neon_metacommunity_connectivity_v1/"
+              "fresh_roster_result_v1.json"
+          )
+          result = json.loads(path.read_text())
+          assert result["response_endpoint_requests"] == 0
+          assert result["biological_response_bytes_opened"] == 0
+          assert result["model_fits"] == 0
+          PY
+      - name: Upload frozen roster
+        uses: actions/upload-artifact@v4
+        with:
+          name: neon-metacommunity-fresh-roster-v1
+          path: validation/neon_metacommunity_connectivity_v1/fresh_roster_result_v1.json
+          if-no-files-found: error
+      - name: Propagate roster failure after artifact capture
+        run: |
+          code="${{ steps.capture.outputs.runner_exit_code }}"
+          if [ "$code" != "0" ]; then
+            exit "$code"
+          fi

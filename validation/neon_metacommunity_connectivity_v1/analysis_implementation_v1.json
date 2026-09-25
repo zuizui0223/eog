@@ -1,0 +1,38 @@
+{
+  "schema": "eog.neon_metacommunity_connectivity.analysis_implementation.v1",
+  "programme": "neon_metacommunity_connectivity_v1",
+  "frozen_date": "2026-09-25",
+  "state": "frozen_before_biological_response",
+  "implementation_module": "src/eog/v2/metacommunity_connectivity.py",
+  "primary_site_effect": "community_survival_fraction - max_species_survival_fraction",
+  "species_eligibility_for_max": "species with at least two positive non-X trap nodes",
+  "guild_union_includes": "all eligible target taxa, including taxa observed at only one non-X node",
+  "strict_emergent_world": "guild survives and no species with at least two positive nodes survives that canonical world",
+  "cross_species_rescue_target": "guild-positive node in a guild-surviving world that has positive neighbours but none sharing any species with the target node",
+  "permutation": {
+    "unit": "complete local species-incidence row",
+    "support": "guild-positive nodes only",
+    "replicates": 999,
+    "site_seed_rule": "first 8 hex digits of sha256('neon_metacommunity_connectivity_v1|'+site_code)",
+    "upper_tail_p": "(1 + number(null_gain >= observed_gain)) / 1000",
+    "preserves": [
+      "guild-positive node set",
+      "species column sums",
+      "multiset of positive-node row sums",
+      "full within-node co-occurrence row vectors"
+    ]
+  },
+  "aggregate_primary": {
+    "minimum_sites": 8,
+    "null_adjusted_positive_if": "> 0",
+    "exact_zero_treatment": "counts as non-positive",
+    "sign_test_null_probability": 0.5,
+    "alternative": "greater",
+    "alpha": 0.05,
+    "support_requires": [
+      "median observed emergent connectivity gain > 0",
+      "one-sided exact sign-test p < 0.05"
+    ]
+  },
+  "no_post_response_changes": true
+}

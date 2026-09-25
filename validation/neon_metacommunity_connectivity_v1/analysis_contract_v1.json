@@ -1,0 +1,72 @@
+{
+  "schema": "eog.neon_metacommunity_connectivity.analysis_contract.v1",
+  "programme": "neon_metacommunity_connectivity_v1",
+  "frozen_date": "2026-09-25",
+  "roster_result_fingerprint": "896983e857178c62a649f995003617f06020440a49c7a51164d0a6ca67d3ea05",
+  "site_metrics": {
+    "community_survival_fraction": "number of distinct canonical worlds surviving the guild-positive node set divided by distinct canonical world count",
+    "species_survival_fraction": "same quantity for each frozen target species; species with fewer than 2 retained positive nodes have survival fraction 0",
+    "max_species_survival_fraction": "maximum species survival fraction across all frozen target taxa",
+    "emergent_connectivity_gain": "community_survival_fraction - max_species_survival_fraction",
+    "strict_emergent_world_fraction": "distinct canonical worlds where the guild survives and zero frozen target species survive, divided by distinct canonical world count",
+    "dominance_coverage": "maximum retained positive-node count of any target species divided by guild-positive node count"
+  },
+  "cross_species_rescue": {
+    "denominator": "all guild-positive target-node x canonical-world pairs for worlds in which the guild survives",
+    "numerator": "pairs where the target has at least one adjacent guild-positive peer but no adjacent guild-positive peer sharing any target species with the target node",
+    "fraction": "numerator / denominator",
+    "empty_denominator": "null"
+  },
+  "permutation_null": {
+    "replicates": 999,
+    "seed_rule": "integer represented by first 8 hex digits of sha256('neon_metacommunity_connectivity_v1|'+site_code)",
+    "permutation": "permute complete nonempty species-incidence row vectors among the fixed guild-positive node coordinates within each site",
+    "preserves": [
+      "guild-positive node coordinates",
+      "species positive-node counts",
+      "multiset of node species richness",
+      "within-node co-occurrence row vectors"
+    ],
+    "recomputed_per_replicate": [
+      "each species survival fraction",
+      "maximum species survival fraction",
+      "emergent_connectivity_gain"
+    ],
+    "community_survival_fraction": "held fixed because the guild-positive node set is unchanged",
+    "null_center": "median permuted emergent_connectivity_gain",
+    "null_adjusted_effect": "observed emergent_connectivity_gain - null_center",
+    "site_empirical_upper_tail": "(1 + count(null_gain >= observed_gain)) / (replicates + 1)"
+  },
+  "aggregate_primary": {
+    "scored_site_requirement": 8,
+    "site_sign": "positive if null_adjusted_effect > 0; negative if < 0; tie if exactly 0",
+    "ties": "excluded from the exact sign-test denominator and reported separately",
+    "test": "one-sided exact binomial sign test with H0 probability positive = 0.5",
+    "support_if": [
+      "at least 8 scored sites",
+      "median observed emergent_connectivity_gain > 0",
+      "one-sided exact sign-test p < 0.05"
+    ]
+  },
+  "secondary_associations": {
+    "variables": [
+      "cross_species_rescue_fraction vs emergent_connectivity_gain",
+      "dominance_coverage vs emergent_connectivity_gain"
+    ],
+    "statistic": "Spearman rank correlation across scored sites",
+    "role": "mechanistic secondary; cannot rescue failed primary"
+  },
+  "forbidden": [
+    "switch from max species to mean species after response",
+    "change tie handling after response",
+    "change the null permutation unit after response",
+    "change 999 replicates or the seed rule after response",
+    "drop scored sites based on effect direction",
+    "promote secondary correlations to primary after response"
+  ],
+  "state": "post_response_non_authoritative_draft",
+  "authoritative_for_consumed_endpoint": false,
+  "authoritative_analysis_file": "validation/neon_metacommunity_connectivity_v1/analysis_implementation_v1.json",
+  "authoritative_analysis_module_blob_sha1": "a09ecd84d965ab4d2d0161f0567a8367ec7fec21",
+  "note": "This file was created after the once-only response run and does not alter or rescore the consumed endpoint. The response lock and pre-response analysis_implementation_v1.json are authoritative."
+}

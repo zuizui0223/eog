@@ -1,0 +1,142 @@
+{
+  "schema": "eog.neon_metacommunity_connectivity.response_protocol.v1",
+  "programme": "neon_metacommunity_connectivity_v1",
+  "frozen_date": "2026-09-25",
+  "state": "frozen_before_biological_response_access",
+  "prerequisite_roster_result_fingerprint": "896983e857178c62a649f995003617f06020440a49c7a51164d0a6ca67d3ea05",
+  "fixed_site_codes": [
+    "JORN",
+    "KONA",
+    "LAJA",
+    "LENO",
+    "MLBS",
+    "MOAB",
+    "NIWO",
+    "NOGP",
+    "OAES",
+    "ONAQ",
+    "ORNL",
+    "OSBS",
+    "RMNP",
+    "SERC",
+    "SJER",
+    "SOAP"
+  ],
+  "authentication": {
+    "token_environment_variable": "NEON_API_TOKEN",
+    "token_header": "X-API-Token",
+    "token_must_not_be_committed": true
+  },
+  "response_query": {
+    "method": "POST",
+    "endpoint": "https://data.neonscience.org/api/v0/data/query",
+    "body": {
+      "productCode": "DP1.10072.001",
+      "siteCodes": [
+        "JORN",
+        "KONA",
+        "LAJA",
+        "LENO",
+        "MLBS",
+        "MOAB",
+        "NIWO",
+        "NOGP",
+        "OAES",
+        "ONAQ",
+        "ORNL",
+        "OSBS",
+        "RMNP",
+        "SERC",
+        "SJER",
+        "SOAP"
+      ],
+      "startDateMonth": "2010-01",
+      "endDateMonth": "2026-09",
+      "release": "RELEASE-2026",
+      "package": "basic",
+      "includeProvisional": false
+    },
+    "maximum_authenticated_query_requests": 1,
+    "no_fallback_release": true,
+    "no_fallback_package": true
+  },
+  "target_taxonomy": {
+    "fingerprint": "9f249c9ee66393ed1e06bbf1ac91fc26dbc3c471ebfb66a199bfa9cb2574238a",
+    "expected_target_taxon_count": 132,
+    "include_rank": "species",
+    "include_protocol_category": "target",
+    "excluded_scientific_names": [
+      "Peromyscus leucopus",
+      "Peromyscus maniculatus"
+    ]
+  },
+  "file_selection": {
+    "table": "mam_pertrapnight",
+    "suffix": ".csv",
+    "require_md5": true,
+    "verify_size": true,
+    "verify_md5": true,
+    "no_other_tables": true
+  },
+  "required_columns": [
+    "namedLocation",
+    "trapCoordinate",
+    "trapStatus",
+    "taxonID"
+  ],
+  "capture_semantics": {
+    "normalized_status": "strip and lowercase trapStatus",
+    "positive_if_all": [
+      "status contains capture",
+      "status does not contain no capture",
+      "taxonID belongs to frozen target set"
+    ],
+    "node_key": "namedLocation + '.' + trapCoordinate"
+  },
+  "uncertain_coordinate_policy": {
+    "x_coordinate_if": "uppercase trapCoordinate contains X",
+    "action": "exclude row prospectively from all spatial metrics; count excluded target-positive rows and distinct X node labels",
+    "rationale": "official NEON small-mammal geolocation implementation does not geolocate X trap coordinates"
+  },
+  "registry_integrity": {
+    "unknown_non_x_positive_node": "response-consumed site STOP",
+    "registry_repair_allowed": false,
+    "site_replacement_allowed": false
+  },
+  "site_estimability": {
+    "minimum_guild_positive_nodes": 20,
+    "minimum_species_with_at_least_two_positive_nodes": 2
+  },
+  "ecological_metrics": {
+    "primary_site_effect": "community_survival_fraction - max_species_survival_fraction",
+    "strict_emergent_world_fraction": true,
+    "cross_species_rescue_fraction": true,
+    "dominance_coverage": true
+  },
+  "permutation_null": {
+    "implementation": "assemblage_row_permutation_null",
+    "replicates": 999,
+    "seed_rule": "deterministic_site_seed('neon_metacommunity_connectivity_v1', site_code)",
+    "null_adjusted_effect": "observed emergent gain - median null emergent gain",
+    "site_upper_tail_p": "(1 + count(null_gain >= observed_gain)) / 1000"
+  },
+  "aggregate_primary": {
+    "minimum_scored_sites": 8,
+    "positive_site_if": "null_adjusted_effect > 0",
+    "zero_effect_counts_as": "non-positive",
+    "test": "one-sided exact sign test versus p=0.5",
+    "alpha": 0.05,
+    "support_requires": [
+      "median observed emergent connectivity gain > 0",
+      "sign-test p < 0.05"
+    ]
+  },
+  "integrity": {
+    "biological_response_endpoint_requests_at_freeze": 0,
+    "biological_response_bytes_opened_at_freeze": 0,
+    "model_fits": 0,
+    "rerun_after_authenticated_query_starts": false,
+    "post_response_metric_changes": false,
+    "post_response_site_changes": false
+  }
+}
