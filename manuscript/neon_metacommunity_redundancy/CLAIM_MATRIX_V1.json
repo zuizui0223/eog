@@ -1,0 +1,43 @@
+{
+  "schema": "eog.neon_metacommunity_redundancy.claim_matrix.v1",
+  "primary_claim": "Across 16 fresh NEON small-mammal sites, pooled community spatial continuity was redundant with individual-species continuity rather than emergent from species turnover.",
+  "supported": [
+    {
+      "claim": "No positive emergent connectivity gain occurred.",
+      "evidence": "0/16 sites had community survival fraction greater than the best single species; median gain = 0."
+    },
+    {
+      "claim": "No strict emergent world occurred.",
+      "evidence": "At no site did the guild survive a canonical world that every eligible individual species failed."
+    },
+    {
+      "claim": "At least one individual species survived every distinct canonical world at every fresh site.",
+      "evidence": "best single-species survival fraction = 1.0 at 16/16 sites."
+    },
+    {
+      "claim": "Cross-species-only local support was rare.",
+      "evidence": "median 0.002685; mean 0.01025; maximum 0.06607."
+    },
+    {
+      "claim": "Dominance coverage was often high.",
+      "evidence": "median 0.8349; 10/16 sites >= 0.8; range 0.501-0.982."
+    },
+    {
+      "claim": "Pooling can reduce continuity.",
+      "evidence": "ORNL community survival = 0.25 versus best species = 1.0; emergent gain = -0.75."
+    }
+  ],
+  "prohibited": [
+    "Species turnover creates emergent spatial continuity in the consumed programme.",
+    "The species with highest node coverage is necessarily the best world-survival species.",
+    "High richness causes spatial continuity.",
+    "The pattern proves species sorting, mass effects, habitat filtering or dispersal mechanism.",
+    "The result generalizes beyond the fixed NEON target-small-mammal system without new validation.",
+    "Post-response alternative tie handling may rescore or alter the consumed primary endpoint."
+  ],
+  "terminology": {
+    "redundancy": "community spatial world survival is already matched by one or more individual species",
+    "strict_emergence": "guild survives a canonical world while all individual eligible species fail it",
+    "weakest_link_effect": "pooling taxa adds positive nodes that can invalidate worlds under an all-positive support criterion"
+  }
+}
