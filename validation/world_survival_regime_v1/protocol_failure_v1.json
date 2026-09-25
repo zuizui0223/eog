@@ -1,0 +1,27 @@
+{
+  "schema": "eog.world_survival_regime.protocol_failure.v1",
+  "programme": "world_survival_regime_forecast_v1",
+  "status": "falsified_before_biological_response",
+  "discovered_during": "response-blind NEON metadata/geometry execution",
+  "biological_response_payload_requests": 0,
+  "model_fits": 0,
+  "scored_systems": 0,
+  "failure_code": "n_minus_1_horizon_makes_three_class_forecast_structurally_incomplete",
+  "proof": [
+    "For an undirected graph, horizon n-1 reaches the entire connected component of each node.",
+    "If the largest component fraction L exceeds 0.5, a strict majority of nodes have horizon-reachable fraction L, so the median horizon-reachable fraction is L.",
+    "The v1 horizon-realization ratio is therefore exactly 1 for every world with LCC fraction greater than 0.5.",
+    "An adequacy-complete ladder containing a 0.75, 0.90, or higher LCC world must therefore predict at least one world survives at any cutoff <= 1.",
+    "Consequently falsified_universe cannot be predicted under the frozen v1 horizon/world-construction contract even though it is an allowed scientific outcome."
+  ],
+  "secondary_failure": "LCC target levels can collapse to identical adjacency operators, and counting those duplicate operators as distinct worlds weights the survival fraction by labels rather than distinct structural hypotheses.",
+  "consequence": "Do not use protocol_v1 for biological response validation. Preserve it as a failed pre-response method attempt.",
+  "successor_requirements": [
+    "new protocol version",
+    "response remains unopened",
+    "one-transition horizon justified from the operator semantics rather than desired class balance",
+    "deduplicate identical adjacency operators before survival fractions are computed",
+    "forecast rule frozen before successor forecasts are calculated",
+    "no historical EOG-WF outcome used to tune successor cutoffs"
+  ]
+}
