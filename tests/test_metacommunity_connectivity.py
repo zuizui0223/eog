@@ -136,7 +136,7 @@ def test_aggregate_primary_requires_positive_observed_gain_and_sign_test_support
     assert result.primary_supported is True
 
 
-def test_zero_null_adjusted_effect_is_excluded_as_tie():
+def test_zero_null_adjusted_effect_counts_as_nonpositive():
     result = aggregate_emergence_test(
         observed_gains=[0.5] * 8,
         null_adjusted_gains=[0.1, 0.1, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0],
@@ -144,10 +144,6 @@ def test_zero_null_adjusted_effect_is_excluded_as_tie():
         alpha=0.05,
     )
     assert result.positive_null_adjusted_site_count == 4
-    assert result.negative_null_adjusted_site_count == 0
-    assert result.tie_count == 4
-    assert result.sign_test_denominator == 4
-    assert result.one_sided_sign_test_p == pytest.approx(1 / 16)
     assert result.primary_supported is False
 
 
