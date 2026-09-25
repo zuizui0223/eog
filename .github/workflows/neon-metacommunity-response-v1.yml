@@ -42,6 +42,8 @@ jobs:
           lock = json.loads((base / "response_protocol_lock_v1.json").read_text())
           protocol = base / "response_protocol_v1.json"
           runner = base / "run_response_once.py"
+          analysis_module = Path("src/eog/v2/metacommunity_connectivity.py")
+          analysis_contract = base / "analysis_implementation_v1.json"
 
           def blob_sha(path):
               raw = path.read_bytes()
@@ -55,8 +57,12 @@ jobs:
           assert blob_sha(protocol) == lock["protocol_git_blob_sha1"]
           assert blob_sha(protocol) == auth["response_protocol_blob_sha1"]
           assert blob_sha(runner) == auth["response_runner_blob_sha1"]
+          assert blob_sha(analysis_module) == auth["analysis_module_blob_sha1"]
+          assert blob_sha(analysis_contract) == auth["analysis_contract_blob_sha1"]
           assert arm["response_protocol_blob_sha1"] == auth["response_protocol_blob_sha1"]
           assert arm["response_runner_blob_sha1"] == auth["response_runner_blob_sha1"]
+          assert arm["analysis_module_blob_sha1"] == auth["analysis_module_blob_sha1"]
+          assert arm["analysis_contract_blob_sha1"] == auth["analysis_contract_blob_sha1"]
           assert arm["roster_result_fingerprint"] == auth["roster_result_fingerprint"]
           assert auth["maximum_authenticated_query_requests"] == 1
           assert auth["rerun_after_authenticated_query_starts"] is False
