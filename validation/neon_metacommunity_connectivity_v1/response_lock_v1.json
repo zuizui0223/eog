@@ -1,0 +1,83 @@
+{
+  "schema": "eog.neon_metacommunity_connectivity.response_lock.v1",
+  "programme": "neon_metacommunity_connectivity_v1",
+  "workflow_run_id": 36120032663,
+  "workflow_head_sha": "5b28ff60c586626b07223fe25eeb7669522ac072",
+  "artifact_id": 10856684688,
+  "artifact_digest": "sha256:8d7a05733f94432bc843a2502428ad455c24448bae995380f8aeffd366c4e18f",
+  "result_fingerprint": "c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860",
+  "status": "completed_scored_metacommunity_programme",
+  "response_consumption": {
+    "authenticated_query_requests": 1,
+    "response_query_bytes_opened": 5081163,
+    "response_file_requests": 639,
+    "biological_response_bytes_opened": 299965029,
+    "selected_response_file_count": 639,
+    "model_fits": 0
+  },
+  "denominator": {
+    "fixed_sites": 16,
+    "scored_sites": 16,
+    "response_consumed_stops": 0
+  },
+  "primary": {
+    "median_emergent_connectivity_gain": 0,
+    "positive_null_adjusted_site_count": 0,
+    "site_count": 16,
+    "one_sided_sign_test_p": 1,
+    "median_null_adjusted_gain": 0,
+    "primary_supported": false,
+    "interpretation": "The preregistered species-turnover hypothesis is rejected. Spatial rearrangement of complete local assemblages under the fixed-margin null does not reduce the explanatory sufficiency of individual species."
+  },
+  "ecological_pattern": {
+    "community_survival_fraction_median": 1,
+    "community_survival_fraction_mean": 0.953125,
+    "sites_with_community_survival_fraction_1": 15,
+    "sites_with_best_species_survival_fraction_1": 16,
+    "sites_with_positive_emergent_gain": 0,
+    "sites_with_negative_emergent_gain": 1,
+    "negative_gain_site": "ORNL",
+    "ORNL_community_survival_fraction": 0.25,
+    "ORNL_best_species_survival_fraction": 1,
+    "strict_emergent_world_fraction_positive_sites": 0,
+    "cross_species_rescue_fraction_median": 0.002685173977948,
+    "cross_species_rescue_fraction_mean": 0.010250295863984321,
+    "cross_species_rescue_fraction_max": 0.06606606606606606,
+    "dominance_coverage_median": 0.8348873744302341,
+    "dominance_coverage_range": [
+      0.5009861932938856,
+      0.9821428571428571
+    ],
+    "sites_with_dominance_coverage_at_least_0_8": 10,
+    "observed_target_species_count_median": 7,
+    "observed_target_species_count_range": [
+      2,
+      16
+    ],
+    "species_with_two_positive_nodes_median": 6,
+    "best_species_count_median": 2,
+    "best_species_count_range": [
+      1,
+      8
+    ]
+  },
+  "conclusion_boundary": {
+    "supported": [
+      "Across all 16 fresh sites, at least one individual target species survived every distinct canonical world.",
+      "Pooling species never increased surviving-world fraction above the best individual species.",
+      "No strict emergent world was observed in which the guild survived but every eligible individual species failed.",
+      "Cross-species-only local support occurred at low frequency but did not create additional system-level world survival.",
+      "At ORNL, pooling taxa reduced world survival from 1.0 for the best individual species to 0.25 for the guild under the frozen all-positive support rule."
+    ],
+    "not_supported": [
+      "Species turnover creates emergent community-level spatial continuity in this programme.",
+      "High taxonomic richness implies emergent connectivity.",
+      "The most abundant or most spatially widespread species is necessarily the same species as the best world-survival species.",
+      "The observed pattern establishes dispersal mechanisms or causal habitat filtering.",
+      "The result may be retuned by changing world thresholds, target taxa, null model, or site roster."
+    ]
+  },
+  "rerun_allowed": false,
+  "response_repair_allowed": false,
+  "post_response_rule_change_allowed": false
+}
