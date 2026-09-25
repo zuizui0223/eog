@@ -1,0 +1,155 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.response_protocol.v2_1",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "frozen_date": "2026-09-25",
+  "state": "frozen_before_biological_response_access",
+  "predecessor": {
+    "protocol": "validation/world_survival_regime_v2/neon_small_mammal_response_protocol_v2.json",
+    "failure": "validation/world_survival_regime_v2/neon_small_mammal_response_protocol_failure_v2.json",
+    "biological_response_endpoint_requests": 0,
+    "biological_response_bytes_opened": 0
+  },
+  "only_change_from_v2": "capture status requires the token capture and explicitly excludes the phrase no capture",
+  "unchanged": {
+    "prerequisite_forecast_result_fingerprint": "fd01994faad99100907a3d11869fd956f89be09cb79bac844c0d0adf71ba6fd9",
+    "fixed_site_codes": [
+      "ABBY",
+      "BARR",
+      "BART",
+      "BLAN",
+      "BONA",
+      "CLBJ",
+      "CPER",
+      "DCFS",
+      "DEJU",
+      "DELA",
+      "DSNY",
+      "GRSM",
+      "GUAN",
+      "HARV",
+      "HEAL",
+      "JERC"
+    ],
+    "forecast_regime_counts": {
+      "contracting": 16,
+      "falsified_universe": 0,
+      "saturated": 0
+    },
+    "productCode": "DP1.10072.001",
+    "release": "RELEASE-2026",
+    "package": "basic",
+    "target_taxonomy_fingerprint": "9f249c9ee66393ed1e06bbf1ac91fc26dbc3c471ebfb66a199bfa9cb2574238a",
+    "target_taxon_count": 132,
+    "target_exclusions": [
+      "Peromyscus leucopus",
+      "Peromyscus maniculatus"
+    ],
+    "compatibility_max_steps": 1,
+    "source_policy": "self_excluded_peer_positive_sources",
+    "survival_denominator": "distinct canonical falsifiable adjacency operators only"
+  },
+  "authentication": {
+    "token_environment_variable": "NEON_API_TOKEN",
+    "token_header": "X-API-Token",
+    "token_must_not_be_committed": true,
+    "missing_token_action": "terminal no-access infrastructure stop"
+  },
+  "response_query": {
+    "method": "POST",
+    "endpoint": "https://data.neonscience.org/api/v0/data/query",
+    "body": {
+      "productCode": "DP1.10072.001",
+      "siteCodes": [
+        "ABBY",
+        "BARR",
+        "BART",
+        "BLAN",
+        "BONA",
+        "CLBJ",
+        "CPER",
+        "DCFS",
+        "DEJU",
+        "DELA",
+        "DSNY",
+        "GRSM",
+        "GUAN",
+        "HARV",
+        "HEAL",
+        "JERC"
+      ],
+      "startDateMonth": "2010-01",
+      "endDateMonth": "2026-09",
+      "release": "RELEASE-2026",
+      "package": "basic",
+      "includeProvisional": false
+    },
+    "maximum_query_requests": 1,
+    "no_fallback_release": true,
+    "no_fallback_package": true,
+    "no_site_replacement": true
+  },
+  "file_selection": {
+    "include_if_all": [
+      "filename contains mam_pertrapnight",
+      "filename ends with .csv"
+    ],
+    "require_md5_from_query": true,
+    "verify_md5_after_download": true,
+    "download_each_selected_file_at_most_once": true,
+    "no_other_product_table_download": true,
+    "no_perplotnight_download": true
+  },
+  "required_columns": [
+    "namedLocation",
+    "trapCoordinate",
+    "trapStatus",
+    "taxonID"
+  ],
+  "no_header_alias_discovery": true,
+  "row_semantics": {
+    "normalized_status": "strip and lowercase trapStatus",
+    "capture_if_all": [
+      "normalized status contains the token capture",
+      "normalized status does not contain the phrase no capture"
+    ],
+    "target_capture_if": "capture_if and taxonID is in the frozen eligible target-taxon set",
+    "node_key": "namedLocation + '.' + trapCoordinate",
+    "unknown_positive_node_action": "site-level response-consumed registry-mismatch STOP; do not expand registry",
+    "negative_or_noncapture_rows_eliminate_worlds": false
+  },
+  "site_estimability": {
+    "minimum_ever_positive_nodes": 2,
+    "failure_status": "response_consumed_non_estimable_positive_support",
+    "no_replacement_site": true
+  },
+  "observed_world_rule": {
+    "horizon_steps": 1,
+    "source_policy": "self_excluded peer-positive nodes",
+    "canonical_world_survives_if": "every ever-positive node has at least one other ever-positive node connected by a canonical-world admitted edge",
+    "survival_denominator": "distinct canonical falsifiable adjacency operators only",
+    "regime_mapping": {
+      "zero": "falsified_universe",
+      "partial": "contracting",
+      "all": "saturated"
+    }
+  },
+  "scoring": {
+    "primary_per_site": "predicted three-state regime equals observed three-state regime",
+    "aggregate_primary": "exact-match fraction across estimable fixed sites",
+    "simple_chance_reference": 0.3333333333333333,
+    "secondary": [
+      "absolute error in distinct-world survival fraction",
+      "observed regime prevalence",
+      "number of non-estimable fixed sites"
+    ],
+    "all_contracting_forecast_note": "All 16 site forecasts were frozen as contracting before biological response. No class-balancing retuning is allowed."
+  },
+  "integrity": {
+    "biological_response_endpoint_requests_at_freeze": 0,
+    "biological_response_bytes_opened_at_freeze": 0,
+    "model_fits": 0,
+    "response_runner_must_be_blob_locked_before_authorization": true,
+    "response_execution_requires_explicit_once_only_authorization": true,
+    "post_response_rule_change": false
+  }
+}
