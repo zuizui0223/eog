@@ -1,0 +1,55 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.pre_response_stop.v1",
+  "programme": "world_survival_regime_neon_small_mammal_v1",
+  "status": "terminal_pre_response_method_stop",
+  "stage": "response_blind_metadata_and_forecast_audit",
+  "response_opened": false,
+  "response_endpoint_requests": 0,
+  "biological_response_bytes_opened": 0,
+  "model_fits": 0,
+  "scored_systems": 0,
+  "metadata_workflow_run_id": 36078201514,
+  "metadata_artifact_id": 10840941059,
+  "metadata_result_fingerprint": "8e490fc2a1d8cb05a14975f6baa97288e80076e4366fc4db092e8c85d14f7341",
+  "observed_response_blind_facts": {
+    "selected_sites": 16,
+    "adequacy_passed_sites": 16,
+    "v1_forecast_counts": {
+      "saturated": 15,
+      "contracting": 1,
+      "falsified_universe": 0
+    },
+    "every_site_had_duplicate_structural_thresholds": true,
+    "distinct_threshold_count_range": [
+      3,
+      4
+    ],
+    "declared_ladder_target_count": 5
+  },
+  "failure": {
+    "code": "closure_horizon_forecast_degeneracy_and_duplicate_world_weighting",
+    "summary": "The frozen v1 graph-closure horizon and undirected LCC ladder make high-LCC worlds survive by construction, while repeated target levels can encode identical adjacency operators as multiple worlds.",
+    "proof": [
+      "With an undirected graph and horizon n-1, a node reaches every node in its connected component.",
+      "If largest_weak_component_fraction L is greater than 0.5, more than half of nodes lie in that component, so median_horizon_reachable_fraction equals L.",
+      "Therefore horizon_realization_ratio = median_horizon_reachable_fraction / L equals 1 for every such world.",
+      "The frozen adequacy-complete ladder includes targets 0.75, 0.90 and approximately 0.95, so at least one high-LCC world must be predicted to survive; falsified_universe is not a reachable prediction class under this v1 construction.",
+      "In the captured NEON geometries, only 3 or 4 distinct thresholds occurred for 5 declared target levels, so identical or effectively identical structural operators were also counted multiple times in the survival fraction."
+    ],
+    "consequence": "The v1 forecast is not a valid three-class prospective regime test for this world-construction/horizon combination. Biological response must remain unopened."
+  },
+  "interpretation": {
+    "changes_closed_eog_wf": false,
+    "counts_as_negative_biological_result": false,
+    "counts_as_predictive_validation": false,
+    "counts_as_pre_response_method_falsification": true,
+    "v1_forecasts_must_not_be_compared_to_neon_response": true
+  },
+  "next_protocol_requirements": [
+    "Use a new protocol version rather than altering the frozen v1 protocol.",
+    "Use a finite one-transition structural horizon for both the response-blind forecast and the positive-occurrence compatibility rule, with scientific justification independent of desired forecast class balance.",
+    "Deduplicate identical structural adjacency operators before computing the falsifiable-world survival denominator.",
+    "Reuse the frozen 16-site roster and node-registry fingerprints; do not select a new candidate family in response to this method STOP.",
+    "Freeze the new rule before computing any new regime forecasts and before any biological response endpoint access."
+  ]
+}
