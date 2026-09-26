@@ -1,0 +1,47 @@
+{
+  "schema": "eog.conditional_structural_value.real_v3.programme_closure.v1",
+  "programme": "conditional_structural_value_real_translation_v3",
+  "status": "closed_without_scored_fresh_real_endpoint",
+  "finite_roster": "validation/conditional_structural_value_real_v3/finite_candidate_roster_v1.json",
+  "candidate_hunting_hard_stop": true,
+  "third_candidate_allowed": false,
+  "closed_eog_wf_synthesis_changed": false,
+  "known_truth_result": {
+    "path": "validation/conditional_structural_value/known_truth_2x2_result_v1.json",
+    "status": "known_truth_support_for_reference_saturation_and_response_alignment_as_causal_moderators",
+    "remains_supported": true
+  },
+  "attempts": [
+    {
+      "candidate": "wildintel_ictpr1d1_camtrapdp_v1",
+      "terminal": "stop_pre_response_source_architecture",
+      "response_consumed": false,
+      "predictive_score": false,
+      "receipt": "validation/conditional_structural_value_real_v3/candidate1_terminal_receipt_v1.json"
+    },
+    {
+      "candidate": "muntjac_antwerp_ipt_camtrapdp_v2",
+      "terminal": "stop_pre_response_archive_architecture",
+      "response_consumed": false,
+      "predictive_score": false,
+      "receipt": "validation/conditional_structural_value_real_v3/candidate2_terminal_receipt_v1.json"
+    }
+  ],
+  "empirical_moderator_question": {
+    "answered": false,
+    "scored_fresh_real_endpoints": 0,
+    "reason": "Both prospectively finite candidates stopped before biological response access or scoring."
+  },
+  "supported_after_closure": [
+    "The known-truth 2x2 causally supports reference saturation and response alignment as moderators under the frozen generator.",
+    "Historical real systems show favorable and adverse structural increments consistent with context dependence.",
+    "The fresh-real v3 firewall preserved a zero-response-access boundary for both candidate stops."
+  ],
+  "unsupported_after_closure": [
+    "The two moderators explain the historical real-system signs.",
+    "The known-truth moderator pattern transfers to a fresh real ecological endpoint.",
+    "Either v3 candidate is biologically negative.",
+    "A third candidate may be added to rescue the v3 programme."
+  ],
+  "next_scientific_action": "Do not continue candidate hunting in v3. Treat the conditional-structural-value paper as known-truth causal mechanism plus bounded historical ecological synthesis unless an independently motivated future dataset/programme exists for reasons external to this result."
+}
