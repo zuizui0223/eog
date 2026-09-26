@@ -21,10 +21,14 @@ def test_muntjac_stage0_opens_no_member_body():
     assert a["observations_body_reads"]==0
     assert a["deployments_body_reads"]==0
     assert a["archive_tail_range_gets_max"]==1
+    assert p["stage0_gates"]["central_directory_must_contain_exactly_one_each"] == [
+        "datapackage.json","deployments.csv","observations.csv"
+    ]
 
 def test_runner_only_reads_page_head_and_archive_tail():
     text=RUNNER.read_text()
     assert "zipfile.ZipFile" not in text
-    assert "observations.csv" in text
-    assert "deployments.csv" in text
+    assert 'c["stage0_gates"]["central_directory_must_contain_exactly_one_each"]' in text
+    assert 'Request(url,method="HEAD"' in text
+    assert '"Range":range_value' in text
     assert "PK\\x01\\x02" in text
