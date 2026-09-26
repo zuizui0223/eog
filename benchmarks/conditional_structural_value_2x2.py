@@ -13,6 +13,8 @@ within replicate.
 from __future__ import annotations
 
 import json
+import os
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -150,9 +152,17 @@ def _summary(values: np.ndarray) -> dict:
     }
 
 
+def _replicate_task(payload: tuple[int, dict]) -> dict:
+    seed, contract = payload
+    return _replicate(int(seed), contract)
+
+
 def run_benchmark() -> dict:
     contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
-    reps = [_replicate(int(seed), contract) for seed in contract["design"]["replicate_seeds"]]
+    payloads = [(int(seed), contract) for seed in contract["design"]["replicate_seeds"]]
+    workers = min(4, os.cpu_count() or 1)
+    with ProcessPoolExecutor(max_workers=workers) as executor:
+        reps = list(executor.map(_replicate_task, payloads))
 
     keys = ["weak_refreshed", "weak_static", "strong_refreshed", "strong_static"]
     added = {
