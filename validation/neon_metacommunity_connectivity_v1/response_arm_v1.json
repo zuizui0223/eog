@@ -1,0 +1,15 @@
+{
+  "schema": "eog.neon_metacommunity_connectivity.response_arm.v1",
+  "programme": "neon_metacommunity_connectivity_v1",
+  "armed": true,
+  "armed_date": "2026-09-25",
+  "response_protocol_blob_sha1": "8b5e74b5640a142120222c7b6873392d5afaaac7",
+  "response_runner_blob_sha1": "f2d450411e82458c08a73d160d3eb53ff7cc337c",
+  "analysis_module_blob_sha1": "a09ecd84d965ab4d2d0161f0567a8367ec7fec21",
+  "analysis_contract_blob_sha1": "b7da808e0f25038cac1a4f5a0aceaeb2bd767211",
+  "roster_result_fingerprint": "896983e857178c62a649f995003617f06020440a49c7a51164d0a6ca67d3ea05",
+  "maximum_authenticated_query_requests": 1,
+  "rerun_after_authenticated_query_starts": false,
+  "expected_artifact_name": "neon-metacommunity-connectivity-response-v1",
+  "post_response_rule_change_authorized": false
+}

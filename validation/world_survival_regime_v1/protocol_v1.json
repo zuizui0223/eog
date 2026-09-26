@@ -1,0 +1,108 @@
+{
+  "schema": "eog.world_survival_regime_forecast.protocol.v1",
+  "programme": "world_survival_regime_forecast_v1",
+  "frozen_date": "2026-09-25",
+  "status": "prediction_rule_frozen_before_candidate_roster_or_response_access",
+  "scientific_question": "Can response-blind world-universe structure predict whether falsifiable worlds will all fail, partly contract, or all survive after positive occurrence evidence is opened?",
+  "separation": {
+    "changes_closed_eog_wf": false,
+    "reopens_stoc": false,
+    "reopens_southwest_louisiana": false,
+    "reopens_tampa": false,
+    "historical_systems_used_to_fit_rule": false,
+    "layer_b_predictive_endpoint": false
+  },
+  "world_construction": {
+    "base_lcc_targets": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "adequacy_complete_planner": "plan_adequacy_complete_lcc_targets",
+    "finite_n_completion_required": true,
+    "adequacy_declaration": {
+      "min_largest_weak_component_fraction": 0.9,
+      "max_isolated_node_fraction": 0.05,
+      "min_median_horizon_reachable_fraction": null,
+      "require_at_least_one_world_pass": true
+    },
+    "structural_horizon_rule": "node_count_minus_1",
+    "structural_horizon_is_biological_time_claim": false,
+    "retain_primary_only_worlds": true
+  },
+  "prediction_rule": {
+    "module": "src/eog/v2/world_survival_regime.py",
+    "per_world_score": "median_horizon_reachable_fraction / largest_weak_component_fraction",
+    "score_name": "horizon_realization_ratio",
+    "horizon_realization_cutoff": 0.5,
+    "cutoff_fit_to_historical_outcomes": false,
+    "world_predicted_survives_if": "horizon_realization_ratio >= 0.5",
+    "system_predicted_survival_fraction": "predicted surviving falsifiable worlds / declared falsifiable worlds",
+    "regime_mapping": {
+      "0": "falsified_universe",
+      "1": "saturated",
+      "(0,1)": "contracting"
+    },
+    "alternative_cutoff_search_after_response": false,
+    "additional_structural_features_may_change_primary_call": false
+  },
+  "denominator": {
+    "primary_worlds": "falsifiable worlds only",
+    "non_falsifiable_sentinels_excluded": true,
+    "rationale": "A prospectively universal sentinel such as external_open cannot be eliminated and would make falsified_universe impossible by construction.",
+    "non_falsifiable_world_ids_must_be_declared_before_response": true
+  },
+  "response_contract": {
+    "required_primary_response": "stable node identity plus ever-positive focal-taxon indicator",
+    "minimum_ever_positive_nodes": 2,
+    "default_source_policy": "self_excluded_peer_positive_sources",
+    "arbitrary_lexicographic_single_source_forbidden": true,
+    "negative_observations_eliminate_worlds": false,
+    "response_opening": "once-only after forecast fingerprint is frozen"
+  },
+  "observed_regime": {
+    "initial_state_must_contain_all_declared_worlds": true,
+    "surviving_sets_must_contract_monotonically": true,
+    "primary_final_fraction_denominator": "falsifiable worlds only",
+    "record_contraction_event_count": true,
+    "record_contraction_context_positions_when_response_independent_context_order_exists": true,
+    "temporal_contexts_required": false
+  },
+  "endpoints": {
+    "primary": [
+      "system-level exact three-state regime match",
+      "aggregate exact-match fraction"
+    ],
+    "chance_reference": 0.3333333333333333,
+    "chance_reference_interpretation": "fixed simple three-label reference; empirical class prevalence must also be reported",
+    "secondary": [
+      "predicted survival fraction",
+      "observed survival fraction",
+      "absolute survival-fraction error",
+      "contraction event count",
+      "contraction context positions when available",
+      "observed class prevalence"
+    ]
+  },
+  "failure_conditions": [
+    "exact-match performance not distinguishable from fixed 1/3 reference",
+    "adequacy-complete real systems still yield only endpoint regimes",
+    "adequacy-complete ladders cannot be constructed broadly",
+    "contracting regimes occur but the frozen v1 rule systematically misses them"
+  ],
+  "forbidden": [
+    "retune the 0.5 cutoff after any candidate response is opened",
+    "count external_open or another non-falsifiable sentinel in the primary survival denominator",
+    "use horizon reachability both as an adequacy-gate criterion and as the v1 regime predictor",
+    "add predictive learner performance to the primary endpoint",
+    "repair a consumed system and relabel it prospective validation",
+    "select candidates because their responses are known to create a missing regime"
+  ],
+  "access_counters_at_freeze": {
+    "candidate_roster_captured": false,
+    "biological_response_payload_requests": 0,
+    "model_fits": 0,
+    "scored_systems": 0
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.protocol.v2",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "frozen_date": "2026-09-25",
+  "current_stage": "v2_forecast_not_computed",
+  "generic_forecast_protocol": "validation/world_survival_regime_v2/protocol_v2.json",
+  "response_blind_roster_lock": "validation/world_survival_regime_v2/neon_small_mammal_roster_lock_v2.json",
+  "predecessor": {
+    "programme": "world_survival_regime_neon_small_mammal_v1",
+    "terminal_status": "pre_response_method_stop",
+    "biological_response_opened": false,
+    "failure": "graph-closure horizon degeneracy plus duplicate structural-world weighting"
+  },
+  "source": {
+    "provider": "NSF NEON",
+    "product_code": "DP1.10072.001",
+    "release": "RELEASE-2026",
+    "metadata_refetch_allowed_only_for_registry_identity_verification": true,
+    "data_endpoint_access_before_v2_forecast_lock": false
+  },
+  "candidate_roster": {
+    "fixed_site_codes": [
+      "ABBY",
+      "BARR",
+      "BART",
+      "BLAN",
+      "BONA",
+      "CLBJ",
+      "CPER",
+      "DCFS",
+      "DEJU",
+      "DELA",
+      "DSNY",
+      "GRSM",
+      "GUAN",
+      "HARV",
+      "HEAL",
+      "JERC"
+    ],
+    "add_sites_after_v1_metadata": false,
+    "drop_sites_based_on_v2_forecast": false,
+    "reorder_sites": false
+  },
+  "registry_verification": {
+    "require_exact_node_count_match": true,
+    "require_exact_node_registry_fingerprint_match": true,
+    "mismatch_action": "terminal pre-response registry-drift stop for the affected site; no replacement"
+  },
+  "worlds": {
+    "base_lcc_targets": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "finite_n_adequacy_completion": true,
+    "exact_adjacency_deduplication": true,
+    "adequacy": {
+      "min_largest_weak_component_fraction": 0.9,
+      "max_isolated_node_fraction": 0.05,
+      "min_median_horizon_reachable_fraction": null,
+      "require_at_least_one_world_pass": true
+    },
+    "external_open": false,
+    "all_canonical_worlds_falsifiable": true
+  },
+  "forecast": {
+    "structural_horizon": 1,
+    "score": "median_one_step_reachable_fraction / largest_weak_component_fraction",
+    "cutoff": 0.5,
+    "cutoff_changed_after_v1_failure": false,
+    "cutoff_changed_after_neon_v1_metadata": false,
+    "canonical_world_weight": 1,
+    "duplicate_alias_extra_weight": 0,
+    "forecast_must_be_frozen_before_response": true
+  },
+  "target_response": {
+    "guild": "NEON target small-mammal species",
+    "taxonomy_rank": "species",
+    "taxonProtocolCategory": "target",
+    "design_contamination_exclusions": [
+      "Peromyscus leucopus",
+      "Peromyscus maniculatus"
+    ],
+    "positive_unit": "individual mammal trap ever-positive for any eligible guild taxon in RELEASE-2026",
+    "minimum_positive_nodes": 2,
+    "source_policy": "self_excluded_peer_positive_sources",
+    "compatibility_max_steps": 1,
+    "negative_records_eliminate_worlds": false
+  },
+  "response_firewall": {
+    "biological_response_payload_requests_at_freeze": 0,
+    "model_fits": 0,
+    "response_access_requires_all_eligible_site_forecast_fingerprints_locked": true,
+    "response_access_requires_new_once_only_authorization": true
+  },
+  "endpoint": {
+    "primary_unit": "NEON site",
+    "primary": "exact three-state regime match",
+    "aggregate": "exact-match fraction across fixed eligible sites",
+    "simple_chance_reference": 0.3333333333333333,
+    "secondary": [
+      "survival-fraction absolute error",
+      "observed regime prevalence"
+    ]
+  },
+  "forbidden": [
+    "change cutoff after v2 forecasts",
+    "change site roster after v2 forecasts",
+    "change target guild after v2 forecasts",
+    "use v1 forecast balance to tune v2",
+    "open biological response before v2 forecast lock",
+    "count duplicate adjacency aliases as separate worlds",
+    "replace a registry-drift site with another site"
+  ]
+}

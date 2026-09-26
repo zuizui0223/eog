@@ -1,0 +1,180 @@
+name: World survival NEON response v2 once
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/world-survival-neon-mammal-v2
+    paths:
+      - "validation/world_survival_regime_v2/neon_small_mammal_response_arm_v2_1.json"
+
+concurrency:
+  group: world-survival-neon-response-v2-once
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  response:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install EOG
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Verify arm record
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          arm_path = Path(
+              "validation/world_survival_regime_v2/"
+              "neon_small_mammal_response_arm_v2_1.json"
+          )
+          arm = json.loads(arm_path.read_text())
+          assert arm["armed"] is True
+          assert arm["response_protocol_blob_sha1"] == "8157959cd6e17c6c9510e8b79ed1916a5cdd780c"
+          assert arm["response_runner_blob_sha1"] == "fdb6e56ca15e7cdd22e57e60aa98d3386a9b9084"
+          assert arm["prerequisite_forecast_result_fingerprint"] == (
+              "fd01994faad99100907a3d11869fd956f89be09cb79bac844c0d0adf71ba6fd9"
+          )
+          assert arm["maximum_authenticated_data_query_requests"] == 1
+          assert arm["rerun_after_authenticated_query_starts"] is False
+          PY
+
+      - name: Verify frozen response authorization
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          base = Path("validation/world_survival_regime_v2")
+          protocol_path = base / "neon_small_mammal_response_protocol_v2_1.json"
+          runner_path = base / "run_neon_small_mammal_response_once_v2_1.py"
+          protocol_lock = json.loads(
+              (base / "neon_small_mammal_response_protocol_lock_v2_1.json").read_text()
+          )
+          auth = json.loads(
+              (base / "neon_small_mammal_response_execution_authorization_v2_1.json").read_text()
+          )
+          forecast_lock = json.loads(
+              (base / "neon_small_mammal_forecast_lock_v2.json").read_text()
+          )
+
+          def blob_sha(path):
+              raw = path.read_bytes()
+              return hashlib.sha1(
+                  f"blob {len(raw)}\0".encode("ascii") + raw
+              ).hexdigest()
+
+          assert auth["authorization_state"] == (
+              "authorized_once_only_biological_response_execution"
+          )
+          assert auth["authorization_consumed"] is False
+          assert blob_sha(protocol_path) == protocol_lock["protocol_git_blob_sha1"]
+          assert blob_sha(protocol_path) == auth["response_protocol_blob_sha1"]
+          assert blob_sha(runner_path) == auth["response_runner_blob_sha1"]
+          assert (
+              forecast_lock["result_fingerprint"]
+              == auth["prerequisite_forecast_result_fingerprint"]
+          )
+          assert auth["maximum_authenticated_data_query_requests"] == 1
+          assert auth["rerun_after_authenticated_query_starts"] is False
+          assert auth["model_fits_authorized"] == 0
+          PY
+
+      - name: Reject any second response execution
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+
+          repo = os.environ["GITHUB_REPOSITORY"]
+          token = os.environ["GITHUB_TOKEN"]
+          name = "world-survival-neon-small-mammal-response-v2"
+          url = (
+              f"https://api.github.com/repos/{repo}/actions/artifacts?"
+              + urllib.parse.urlencode({"name": name, "per_page": 100})
+          )
+          request = urllib.request.Request(
+              url,
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Accept": "application/vnd.github+json",
+                  "X-GitHub-Api-Version": "2022-11-28",
+              },
+          )
+          with urllib.request.urlopen(request, timeout=30) as response:
+              payload = json.loads(response.read().decode("utf-8"))
+          existing = [
+              row for row in payload.get("artifacts", [])
+              if not bool(row.get("expired", False))
+          ]
+          if existing:
+              raise SystemExit(
+                  "response artifact already exists; once-only authorization is consumed"
+              )
+          PY
+
+      - name: Require NEON API token before response access
+        env:
+          NEON_API_TOKEN: ${{ secrets.NEON_API_TOKEN }}
+        run: |
+          if [ -z "$NEON_API_TOKEN" ]; then
+            echo "::error::Repository Actions secret NEON_API_TOKEN is not configured."
+            exit 3
+          fi
+
+      - name: Execute once-only biological response
+        id: execute
+        env:
+          NEON_API_TOKEN: ${{ secrets.NEON_API_TOKEN }}
+        run: |
+          set +e
+          python validation/world_survival_regime_v2/run_neon_small_mammal_response_once_v2_1.py
+          code=$?
+          echo "runner_exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Require terminal result file
+        if: always() && steps.execute.outcome == 'success'
+        run: |
+          test -s validation/world_survival_regime_v2/neon_small_mammal_response_result_v2.json
+
+      - name: Upload immutable response result
+        if: always() && steps.execute.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-survival-neon-small-mammal-response-v2
+          path: validation/world_survival_regime_v2/neon_small_mammal_response_result_v2.json
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Propagate scientific runner failure after artifact capture
+        if: always() && steps.execute.outcome == 'success'
+        run: |
+          code="${{ steps.execute.outputs.runner_exit_code }}"
+          if [ -z "$code" ]; then
+            echo "::error::Runner exit code was not captured."
+            exit 4
+          fi
+          if [ "$code" != "0" ]; then
+            echo "::error::Response runner terminated with status $code; artifact was preserved and rerun is forbidden if the authenticated query started."
+            exit "$code"
+          fi

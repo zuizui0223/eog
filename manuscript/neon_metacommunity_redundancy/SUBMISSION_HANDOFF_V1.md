@@ -1,0 +1,74 @@
+# Oikos submission handoff — NEON metacommunity redundancy v1
+
+## Article
+
+**Working title:** Species pooling does not create emergent spatial continuity in NEON small-mammal metacommunities
+
+**Primary target:** Oikos
+
+## Scientific state
+
+Closed.
+
+Authoritative files:
+- `MANUSCRIPT_V1.md`
+- `CLAIM_MATRIX_V1.json`
+- `SUBMISSION_BOUNDARY_V1.json`
+- `site_metrics_v1.csv`
+- `best_species_frequency_v1.csv`
+
+## Confirmatory result
+
+Across 16 prospectively fresh NEON small-mammal sites:
+
+- 0/16 sites had positive emergent connectivity gain;
+- median emergent gain = 0;
+- preregistered one-sided sign-test P = 1.0;
+- 0/16 sites contained a strict emergent world;
+- best single-species survival fraction = 1.0 at 16/16 sites;
+- cross-species-only rescue was rare (median 0.002685);
+- pooling reduced world survival at ORNL (0.25 vs 1.0; gain -0.75).
+
+The paper therefore reports **species redundancy of spatial continuity**, not a failed search for complementarity.
+
+## Submission framing
+
+Lead with the ecological question:
+
+> Does species turnover create community-level spatial continuity that no individual species can provide?
+
+Answer:
+
+> Not in these 16 fresh small-mammal systems. Spatial continuity was already matched by one or more constituent species at every site, and pooling could even reduce continuity by adding unsupported peripheral occurrences.
+
+Do not lead with EOG, endpoint auditing, or a method-validation narrative.
+
+## Hard claim boundary
+
+Do not claim:
+- that spatial insurance theory is false;
+- that richness causes redundancy;
+- that the highest-coverage species is necessarily the best world-survival species;
+- that the result identifies dispersal, habitat filtering, mass effects, or species sorting;
+- that the result generalizes beyond the fixed NEON target-small-mammal system;
+- that exploratory richness associations are confirmatory.
+
+## Remaining submission work
+
+Scientific analysis:
+- [x] closed
+- [x] claim matrix frozen
+- [x] journal route selected
+- [x] literature positioning prepared
+- [x] paper-asset builder present
+
+Production:
+- [ ] render and inspect final Figures 1-4
+- [ ] write final figure captions/accessibility text into the submission package
+- [ ] title page / author order / affiliations
+- [ ] cover letter
+- [ ] funding / acknowledgements / conflicts / data-code statement
+- [ ] permanent archive DOI
+- [ ] final journal formatting pass
+
+No new ecological endpoint hunting is authorized for this paper.

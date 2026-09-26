@@ -1,0 +1,13 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.response_protocol_lock.v2",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "protocol_path": "validation/world_survival_regime_v2/neon_small_mammal_response_protocol_v2.json",
+  "protocol_git_blob_sha1": "dbb2915929f8faffb9c911baa1f38b8fd312c3b2",
+  "lock_state": "frozen_before_biological_response_access",
+  "prerequisite_forecast_result_fingerprint": "fd01994faad99100907a3d11869fd956f89be09cb79bac844c0d0adf71ba6fd9",
+  "biological_response_endpoint_requests": 0,
+  "biological_response_bytes_opened": 0,
+  "model_fits": 0,
+  "rerun_after_response_query_allowed": false,
+  "protocol_changes_after_response_allowed": false
+}

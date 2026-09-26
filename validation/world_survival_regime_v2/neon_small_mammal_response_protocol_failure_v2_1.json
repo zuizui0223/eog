@@ -1,0 +1,23 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.response_protocol_failure.v2_1",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "workflow_run_id": 36109177802,
+  "workflow_head_sha": "822e235063e250b2597e9966a5d4c399cac2f1ee",
+  "terminal_artifact_id": 10852581224,
+  "terminal_artifact_digest": "sha256:040efded4e28a6fd12899dcaa910a533fd340c4cc78e17ba92482571acfed9b8",
+  "terminal_result_fingerprint": "76c7e852d054cd189e5087c34d0e2416657d1223f957ead76939860044fc4a7f",
+  "status": "terminal_pre_response_failure",
+  "failure_code": "response_protocol_schema_path_mismatch",
+  "failure_detail": "runner expected prerequisite_forecast_result_fingerprint at top level; v2.1 protocol stores it under unchanged",
+  "response_endpoint_requests": 0,
+  "response_query_bytes_opened": 0,
+  "response_file_requests": 0,
+  "biological_response_bytes_opened": 0,
+  "model_fits": 0,
+  "authorization_consumed": false,
+  "scientific_rules_changed": false,
+  "forecast_lock_changed": false,
+  "target_guild_changed": false,
+  "capture_semantics_changed": false,
+  "successor_requirement": "new runner/protocol authorization version may fix only the protocol field access path before any biological response request"
+}

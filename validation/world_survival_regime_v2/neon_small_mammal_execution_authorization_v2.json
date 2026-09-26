@@ -1,0 +1,22 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.execution_authorization.v2",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "authorization_state": "authorized_response_blind_forecast_only",
+  "protocol_blob_sha1": "791a9603542dec749fabb617a96c1d9a638ad23f",
+  "runner_blob_sha1": "e6d99fc0e23bd7034a32d9c96ebe4231a8450b62",
+  "roster_source_result_fingerprint": "8e490fc2a1d8cb05a14975f6baa97288e80076e4366fc4db092e8c85d14f7341",
+  "allowed_network_scope": [
+    "NEON location hierarchy metadata for the fixed 16 sites",
+    "NEON GraphQL findLocations for trap names already enumerated from those hierarchies"
+  ],
+  "forbidden_network_scope": [
+    "/api/v0/data/*",
+    "/api/v0/data/query*",
+    "biological response file URLs",
+    "capture payload or capture header"
+  ],
+  "expected_output": "validation/world_survival_regime_v2/neon_small_mammal_forecast_result_v2.json",
+  "biological_response_payload_requests_authorized": 0,
+  "model_fits_authorized": 0,
+  "post_forecast_rule_change_authorized": false
+}

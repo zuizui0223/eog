@@ -1,0 +1,12 @@
+{
+  "schema": "eog.world_survival_regime_forecast.protocol_lock.v1",
+  "programme": "world_survival_regime_forecast_v1",
+  "protocol_path": "validation/world_survival_regime_v1/protocol_v1.json",
+  "protocol_git_blob_sha1": "cfbc8aa4f1bfd20300bfd07dc0e26cce2b94a01a",
+  "lock_state": "frozen_before_candidate_roster_or_response_access",
+  "candidate_roster_captured": false,
+  "biological_response_payload_requests": 0,
+  "model_fits": 0,
+  "scored_systems": 0,
+  "cutoff_changes_allowed_after_response": false
+}

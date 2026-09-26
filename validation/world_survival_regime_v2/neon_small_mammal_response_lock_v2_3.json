@@ -1,0 +1,226 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.response_lock.v2_3",
+  "programme": "world_survival_regime_neon_small_mammal_v2",
+  "workflow_run_id": 36109877019,
+  "workflow_head_sha": "05bc8fc242578bd8194655dfa3a63d8456492fe3",
+  "artifact_id": 10852622750,
+  "artifact_digest": "sha256:e486700dccacb39889c0965a77aac8a942bca49a111ea76a93e96216f2feb43a",
+  "result_fingerprint": "7e826d46adf4313bbb736a8ecf6b48b316006cd7d6fb663d5ebadf9b0554aabb",
+  "status": "completed_scored_regime_programme",
+  "response_consumption": {
+    "authenticated_data_query_requests": 1,
+    "response_query_bytes_opened": 4811898,
+    "response_file_requests": 605,
+    "biological_response_bytes_opened": 283386654,
+    "selected_response_file_count": 605,
+    "model_fits": 0
+  },
+  "fixed_site_count": 16,
+  "scored_site_count": 9,
+  "stopped_site_count": 7,
+  "forecast_regime_counts": {
+    "contracting": 16,
+    "falsified_universe": 0,
+    "saturated": 0
+  },
+  "observed_regime_counts_scored": {
+    "contracting": 2,
+    "falsified_universe": 0,
+    "saturated": 7
+  },
+  "primary": {
+    "exact_regime_match_count": 2,
+    "exact_regime_match_fraction": 0.2222222222222222,
+    "simple_chance_reference": 0.3333333333333333,
+    "one_sided_binomial_upper_tail_vs_fixed_reference": 0.8569323781943813,
+    "interpretation": "The frozen rule does not outperform the predeclared simple three-label reference. Because all site forecasts were contracting, exact-match fraction is numerically the observed contracting prevalence among scored sites and should not be interpreted as a general classifier-accuracy estimate."
+  },
+  "secondary": {
+    "mean_absolute_survival_fraction_error": 0.4166666666666667,
+    "all_scored_sites_observed_fraction_exceeded_forecast": true,
+    "observed_minus_forecast_mean": 0.4166666666666667,
+    "observed_mean_survival_fraction": 0.9351851851851851,
+    "forecast_mean_survival_fraction": 0.5185185185185185,
+    "posthoc_pearson_r": 0.4886363636363637,
+    "posthoc_pearson_p": 0.18196140125254484,
+    "posthoc_spearman_rho": 0.4757512855624099,
+    "posthoc_spearman_p": 0.19550692913163872
+  },
+  "scored_sites": [
+    {
+      "site": "ABBY",
+      "positive_nodes": 427,
+      "predicted_fraction": 0.6666666666666666,
+      "observed_fraction": 1,
+      "predicted_regime": "contracting",
+      "observed_regime": "saturated",
+      "exact_match": false
+    },
+    {
+      "site": "BARR",
+      "positive_nodes": 33,
+      "predicted_fraction": 0.5,
+      "observed_fraction": 1,
+      "predicted_regime": "contracting",
+      "observed_regime": "saturated",
+      "exact_match": false
+    },
+    {
+      "site": "BLAN",
+      "positive_nodes": 169,
+      "predicted_fraction": 0.5,
+      "observed_fraction": 1,
+      "predicted_regime": "contracting",
+      "observed_regime": "saturated",
+      "exact_match": false
+    },
+    {
+      "site": "CPER",
+      "positive_nodes": 455,
+      "predicted_fraction": 0.3333333333333333,
+      "observed_fraction": 1,
+      "predicted_regime": "contracting",
+      "observed_regime": "saturated",
+      "exact_match": false
+    },
+    {
+      "site": "DCFS",
+      "positive_nodes": 294,
+      "predicted_fraction": 0.6666666666666666,
+      "observed_fraction": 1,
+      "predicted_regime": "contracting",
+      "observed_regime": "saturated",
+      "exact_match": false
+    },
+    {
+      "site": "DELA",
+      "positive_nodes": 226,
+      "predicted_fraction": 0.5,
+      "observed_fraction": 0.75,
+      "predicted_regime": "contracting",
+      "observed_regime": "contracting",
+      "exact_match": true
+    },
+    {
+      "site": "DSNY",
+      "positive_nodes": 283,
+      "predicted_fraction": 0.3333333333333333,
+      "observed_fraction": 0.6666666666666666,
+      "predicted_regime": "contracting",
+      "observed_regime": "contracting",
+      "exact_match": true
+    },
+    {
+      "site": "GRSM",
+      "positive_nodes": 57,
+      "predicted_fraction": 0.6666666666666666,
+      "observed_fraction": 1,
+      "predicted_regime": "contracting",
+      "observed_regime": "saturated",
+      "exact_match": false
+    },
+    {
+      "site": "GUAN",
+      "positive_nodes": 196,
+      "predicted_fraction": 0.5,
+      "observed_fraction": 1,
+      "predicted_regime": "contracting",
+      "observed_regime": "saturated",
+      "exact_match": false
+    }
+  ],
+  "response_consumed_stops": [
+    {
+      "site": "BART",
+      "status": "registry_mismatch_unknown_positive_node",
+      "unknown_positive_nodes": 2,
+      "known_positive_nodes": 501,
+      "examples": [
+        "BART_007.mammalGrid.mam.XX",
+        "BART_084.mammalGrid.mam.JX"
+      ]
+    },
+    {
+      "site": "BONA",
+      "status": "registry_mismatch_unknown_positive_node",
+      "unknown_positive_nodes": 6,
+      "known_positive_nodes": 575,
+      "examples": [
+        "BONA_004.mammalGrid.mam.GX",
+        "BONA_004.mammalGrid.mam.IX",
+        "BONA_004.mammalGrid.mam.XX"
+      ]
+    },
+    {
+      "site": "CLBJ",
+      "status": "registry_mismatch_unknown_positive_node",
+      "unknown_positive_nodes": 3,
+      "known_positive_nodes": 399,
+      "examples": [
+        "CLBJ_041.mammalGrid.mam.GX",
+        "CLBJ_041.mammalGrid.mam.X10",
+        "CLBJ_041.mammalGrid.mam.X3"
+      ]
+    },
+    {
+      "site": "DEJU",
+      "status": "registry_mismatch_unknown_positive_node",
+      "unknown_positive_nodes": 1,
+      "known_positive_nodes": 481,
+      "examples": [
+        "DEJU_017.mammalGrid.mam.XX"
+      ]
+    },
+    {
+      "site": "HARV",
+      "status": "registry_mismatch_unknown_positive_node",
+      "unknown_positive_nodes": 3,
+      "known_positive_nodes": 479,
+      "examples": [
+        "HARV_010.mammalGrid.mam.XX",
+        "HARV_021.mammalGrid.mam.IX",
+        "HARV_023.mammalGrid.mam.XX"
+      ]
+    },
+    {
+      "site": "HEAL",
+      "status": "registry_mismatch_unknown_positive_node",
+      "unknown_positive_nodes": 3,
+      "known_positive_nodes": 473,
+      "examples": [
+        "HEAL_032.mammalGrid.mam.XX",
+        "HEAL_033.mammalGrid.mam.XX",
+        "HEAL_034.mammalGrid.mam.XX"
+      ]
+    },
+    {
+      "site": "JERC",
+      "status": "registry_mismatch_unknown_positive_node",
+      "unknown_positive_nodes": 5,
+      "known_positive_nodes": 596,
+      "examples": [
+        "JERC_002.mammalGrid.mam.XX",
+        "JERC_005.mammalGrid.mam.XX",
+        "JERC_009.mammalGrid.mam.HX"
+      ]
+    }
+  ],
+  "integrity": {
+    "authorization_consumed": true,
+    "rerun_allowed": false,
+    "response_repair_allowed": false,
+    "registry_repair_allowed": false,
+    "stopped_sites_may_not_be_reclassified": true,
+    "stopped_sites_do_not_count_as_regime_outcomes": true,
+    "closed_eog_wf_unchanged": true
+  },
+  "scientific_boundary": {
+    "supported": "In this fixed 16-site NEON programme, response-blind whole-network structural summaries did not successfully forecast the later falsifiable-world survival regime; among scored sites the rule systematically underpredicted world survival.",
+    "not_supported": [
+      "structural adequacy alone predicts epistemic contraction",
+      "the one-step horizon-realization ratio is a generally calibrated survival-regime predictor",
+      "the seven registry-mismatch sites have any particular biological regime",
+      "this result changes the closed EOG-WF Layer-B predictive conclusion"
+    ]
+  }
+}

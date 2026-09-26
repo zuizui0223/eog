@@ -1,0 +1,105 @@
+{
+  "schema": "eog.world_survival_regime_forecast.protocol.v2",
+  "programme": "world_survival_regime_forecast_v2",
+  "frozen_date": "2026-09-25",
+  "status": "frozen_before_any_v2_candidate_forecast_or_biological_response",
+  "predecessor": {
+    "protocol": "validation/world_survival_regime_v1/protocol_v1.json",
+    "failure_record": "validation/world_survival_regime_v1/protocol_failure_v1.json",
+    "failure_code": "n_minus_1_horizon_makes_three_class_forecast_structurally_incomplete"
+  },
+  "changes_from_v1": [
+    "structural and occurrence-compatibility horizon is exactly one admitted transition",
+    "exactly identical adjacency operators are deduplicated before audit and survival-fraction calculation"
+  ],
+  "unchanged_from_v1": [
+    "horizon-realization score definition",
+    "horizon-realization cutoff = 0.5",
+    "three-state regime mapping",
+    "LCC/isolation adequacy declaration",
+    "adequacy-complete ladder planning",
+    "falsifiable-world-only survival denominator",
+    "self-excluded peer-positive source symmetry",
+    "no negative-observation world elimination"
+  ],
+  "scientific_rationale": {
+    "one_step_horizon": "A declared graph edge is the elemental transition admitted by a structural world. One-step support therefore measures local transition opportunity without collapsing the graph to connected-component closure.",
+    "cutoff": "The 0.5 majority criterion is carried unchanged from v1 and is not retuned to the response-blind NEON forecast distribution or any biological outcome.",
+    "deduplication": "Two labels with exactly the same admitted-edge adjacency encode one structural hypothesis and must receive one denominator weight."
+  },
+  "world_construction": {
+    "base_lcc_targets": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "adequacy_complete_planner": "plan_adequacy_complete_lcc_targets",
+    "finite_n_completion_required": true,
+    "exact_adjacency_deduplication_required": true,
+    "canonical_duplicate_id_rule": "lexicographically smallest world ID within each exact adjacency group",
+    "retain_alias_group_for_audit": true,
+    "adequacy_declaration": {
+      "min_largest_weak_component_fraction": 0.9,
+      "max_isolated_node_fraction": 0.05,
+      "min_median_horizon_reachable_fraction": null,
+      "require_at_least_one_world_pass": true
+    }
+  },
+  "forecast": {
+    "module": "src/eog/v2/world_survival_regime_v2.py",
+    "structural_horizon": 1,
+    "score": "median_horizon_reachable_fraction / largest_weak_component_fraction",
+    "cutoff": 0.5,
+    "cutoff_changed_from_v1": false,
+    "cutoff_fit_to_candidate_geometry": false,
+    "cutoff_fit_to_historical_outcomes": false,
+    "world_predicted_survives_if": "horizon_realization_ratio >= 0.5",
+    "regime_mapping": {
+      "0": "falsified_universe",
+      "1": "saturated",
+      "(0,1)": "contracting"
+    },
+    "alternative_cutoff_search_after_forecast_or_response": false
+  },
+  "response_compatibility": {
+    "max_steps": 1,
+    "source_policy": "self_excluded_peer_positive_sources",
+    "world_survives_if": "every ever-positive target has positive one-step support from at least one other ever-positive peer under the canonical distinct world",
+    "minimum_ever_positive_nodes": 2,
+    "negative_observations_eliminate_worlds": false
+  },
+  "denominator": {
+    "primary_worlds": "distinct falsifiable adjacency operators only",
+    "non_falsifiable_sentinels_excluded": true,
+    "duplicate_aliases_have_zero_extra_weight": true
+  },
+  "endpoints": {
+    "primary": [
+      "system-level exact three-state regime match",
+      "aggregate exact-match fraction"
+    ],
+    "simple_chance_reference": 0.3333333333333333,
+    "secondary": [
+      "predicted distinct-world survival fraction",
+      "observed distinct-world survival fraction",
+      "absolute survival-fraction error",
+      "observed regime prevalence"
+    ]
+  },
+  "integrity": {
+    "biological_response_payload_requests_at_freeze": 0,
+    "candidate_forecasts_computed_under_v2_at_freeze": 0,
+    "model_fits": 0,
+    "no_v1_response_opened": true,
+    "no_historical_eogwf_outcome_used_to_tune_v2": true
+  },
+  "forbidden": [
+    "change the 0.5 cutoff after seeing v2 candidate forecasts",
+    "change the 0.5 cutoff after biological response access",
+    "restore n-1 graph-closure horizon inside this protocol version",
+    "count duplicate adjacency labels as separate worlds",
+    "select a new candidate family merely to obtain all three predicted classes",
+    "reuse a consumed EOG-WF system as prospective validation"
+  ]
+}

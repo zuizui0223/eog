@@ -1,0 +1,97 @@
+{
+  "schema": "eog.world_survival_regime.neon_small_mammal.response_blind_roster_lock.v2",
+  "source_programme": "world_survival_regime_neon_small_mammal_v1",
+  "source_workflow_run_id": 36078201514,
+  "source_artifact_id": 10840941059,
+  "source_artifact_digest": "sha256:59972c9171687bd2e793825f723ab4a0afae3054521440cc2849ec9eaf6be084",
+  "source_result_fingerprint": "8e490fc2a1d8cb05a14975f6baa97288e80076e4366fc4db092e8c85d14f7341",
+  "response_opened_in_source_programme": false,
+  "product_metadata_fingerprint": "72057a476a16113f9b394baa4881077c1690eb6f685603e83a2744721b3c3992",
+  "taxonomy_metadata_fingerprint": "9f249c9ee66393ed1e06bbf1ac91fc26dbc3c471ebfb66a199bfa9cb2574238a",
+  "site_order": [
+    "ABBY",
+    "BARR",
+    "BART",
+    "BLAN",
+    "BONA",
+    "CLBJ",
+    "CPER",
+    "DCFS",
+    "DEJU",
+    "DELA",
+    "DSNY",
+    "GRSM",
+    "GUAN",
+    "HARV",
+    "HEAL",
+    "JERC"
+  ],
+  "site_node_registry": {
+    "ABBY": [
+      800,
+      "59b901a416d381102301b97d7c9e394eb7637963a69571953d8029698e04fb41"
+    ],
+    "BARR": [
+      1000,
+      "77bf9235f2749cf05d2b30bdfc0c565e83cd9adb0eb33542c0bac2c19df8544e"
+    ],
+    "BART": [
+      600,
+      "f91a9dd6f031be6470b029a1d824d1058e61ca71011a49fd0b5835cdb2e3c0fe"
+    ],
+    "BLAN": [
+      500,
+      "46f65c902473a4735245b219648224cf577a280081fa17440f75ddc3129ffc11"
+    ],
+    "BONA": [
+      900,
+      "d81ab8876b39e9c81be2155c745e71afd7d3920c359f3320ea6098292be33ae8"
+    ],
+    "CLBJ": [
+      800,
+      "4938f275f01eac5e9c79e30b578a3f61f484cf678451489ac0ecbb2076c7d4c1"
+    ],
+    "CPER": [
+      900,
+      "5888d0d893f4ed25bcccbd993e27cf2d77c47093e065a0a73c6d8bb3fcd8a337"
+    ],
+    "DCFS": [
+      600,
+      "b14a54003a1ba13a7db2e451e98c1e535a7540199f2e97b234cd1381055ce231"
+    ],
+    "DEJU": [
+      600,
+      "49cce799ef4ef3794aa5de8da4a6bf5480015abfa4611180c850a4e604849885"
+    ],
+    "DELA": [
+      400,
+      "0db0da3accc3f80b0df2561be281057f6ac30cdd79994ba65dde3fe9c56d5f79"
+    ],
+    "DSNY": [
+      1100,
+      "5be786cc47512664a2c5287a4c8f5b73982a84634898316ed3a852c1ddacf237"
+    ],
+    "GRSM": [
+      1100,
+      "a4a0cd5ca66cbf3b6773f96a7ec210f3d987bc2b885d28567763667d4c8c7455"
+    ],
+    "GUAN": [
+      600,
+      "61d6dceac966557565b5ad32f47d2bcc3322a320d28a63102cfbf6980fc05bb1"
+    ],
+    "HARV": [
+      1000,
+      "dd41e161b4b6c0a241ce8fed9e3784a24e4a3dd110f6615d3dd21704acab41b5"
+    ],
+    "HEAL": [
+      800,
+      "fc7a25840e09bf7e44f37a0574ea01a4b996c4b9b28db34ac4245431f7c40cfd"
+    ],
+    "JERC": [
+      800,
+      "61539612fd5c1702820df45cd97d6530b2232f401bababbdf9e540eb3ddc76a1"
+    ]
+  },
+  "v2_candidate_family_change_allowed": false,
+  "biological_response_payload_requests": 0
+}
