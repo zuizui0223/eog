@@ -1,0 +1,51 @@
+name: Conditional structural value real v3 — MUNTJAC Stage0
+
+on:
+  push:
+    branches:
+      - research/conditional-structural-value-real-v3-candidate2-muntjac
+    paths:
+      - 'validation/conditional_structural_value_real_v3/**'
+      - 'tests/test_conditional_structural_value_real_v3_muntjac_stage0.py'
+      - '.github/workflows/conditional-structural-value-real-v3-muntjac-stage0.yml'
+  pull_request:
+    paths:
+      - 'validation/conditional_structural_value_real_v3/**'
+      - 'tests/test_conditional_structural_value_real_v3_muntjac_stage0.py'
+      - '.github/workflows/conditional-structural-value-real-v3-muntjac-stage0.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  stage0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Contract tests
+        run: pip install pytest && pytest -q tests/test_conditional_structural_value_real_v3_muntjac_stage0.py
+      - name: Execute bounded response-blind archive screen
+        run: python validation/conditional_structural_value_real_v3/muntjac_stage0_archive_screen.py
+      - name: Audit firewall
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/conditional_structural_value_real_v3/muntjac_stage0_result.json').read_text())
+          assert p['full_archive_downloaded'] is False
+          assert p['member_body_bytes_opened']==0
+          assert p['observations_body_bytes_opened']==0
+          assert p['deployments_body_bytes_opened']==0
+          assert p['response_values_opened'] is False
+          assert p['model_fits']==0
+          assert p['heldout_scores']==0
+          assert p['status'] in {'stage0_archive_architecture_qualified','stop_pre_response_archive_architecture'}
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: conditional-structural-value-real-v3-muntjac-stage0
+          path: build/conditional_structural_value_real_v3/muntjac_stage0_result.json
+          if-no-files-found: error
