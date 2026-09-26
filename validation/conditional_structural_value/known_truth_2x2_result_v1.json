@@ -1,0 +1,93 @@
+{
+  "schema": "eog.conditional_structural_value.known_truth_2x2_result.v1",
+  "authoritative_run": 36228651966,
+  "authoritative_job": 108367420067,
+  "artifact_id": 10901995603,
+  "artifact_digest": "sha256:1082795111c32980c39d3bede2afc7061380f539d1fbef24e2a035423f8f7a3e",
+  "authoritative_head_sha": "1262e8c3600a52b6eb0efcd3ace75dfb3deeeace",
+  "uses_biological_response": false,
+  "counts_as_fresh_predictive_endpoint": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "replicate_count": 64,
+  "all_predeclared_checks_passed": true,
+  "scientific_status": "known_truth_support_for_reference_saturation_and_response_alignment_as_causal_moderators",
+  "cell_added_value_log_loss": {
+    "weak_refreshed": {
+      "mean": -0.1796131681555442,
+      "median": -0.17959340310795274,
+      "q025": -0.2938430400288116,
+      "q975": -0.0685568285146769,
+      "favorable_fraction": 0.984375,
+      "positive_fraction": 0.015625
+    },
+    "strong_refreshed": {
+      "mean": 0.00786395751835197,
+      "median": 0.0069708491389307015,
+      "q025": -0.01975459206718952,
+      "q975": 0.04017013737689926,
+      "favorable_fraction": 0.328125,
+      "positive_fraction": 0.671875
+    },
+    "weak_static": {
+      "mean": 0.042532143601100456,
+      "median": 0.039367827948420864,
+      "q025": -0.032027073306560086,
+      "q975": 0.12150846964858739,
+      "favorable_fraction": 0.046875,
+      "positive_fraction": 0.953125
+    },
+    "strong_static": {
+      "mean": 0.049989254214440684,
+      "median": 0.04625664075350333,
+      "q025": -0.0004788551935540086,
+      "q975": 0.12370521763968084,
+      "favorable_fraction": 0.03125,
+      "positive_fraction": 0.96875
+    }
+  },
+  "moderation_estimands": {
+    "reference_saturation_strong_minus_weak_under_refreshed": {
+      "mean": 0.18747712567389618,
+      "median": 0.18797312999886712,
+      "q025": 0.08586800681192373,
+      "q975": 0.2921251586271813,
+      "positive_fraction": 1
+    },
+    "response_alignment_static_minus_refreshed_under_weak_reference": {
+      "mean": 0.22214531175664468,
+      "median": 0.22241834005277877,
+      "q025": 0.09713999793239908,
+      "q975": 0.3576877650729545,
+      "positive_fraction": 1
+    },
+    "joint_strong_static_minus_weak_refreshed": {
+      "mean": 0.22960242236998488,
+      "median": 0.22750449842065923,
+      "q025": 0.07994328303595685,
+      "q975": 0.4107374512240332,
+      "positive_fraction": 0.984375
+    }
+  },
+  "median_cell_ranking_best_to_worst": [
+    "weak_refreshed",
+    "strong_refreshed",
+    "weak_static",
+    "strong_static"
+  ],
+  "checks": {
+    "weak_refreshed_median_added_value_strictly_negative": true,
+    "weak_refreshed_favorable_fraction_at_least_0_90": true,
+    "saturation_moderation_median_strictly_positive": true,
+    "saturation_moderation_positive_fraction_at_least_0_80": true,
+    "alignment_moderation_median_strictly_positive": true,
+    "alignment_moderation_positive_fraction_at_least_0_80": true,
+    "weak_refreshed_is_best_median_cell": true
+  },
+  "interpretation": "Under the frozen known-truth generator, structural augmentation adds substantial heldout information when the baseline omits the generating structural state and the structural representation is refreshed to the response context. Its incremental value collapses when the reference already contains the generating structural signal, and static reuse under dynamic truth reverses the benefit. These are causal synthetic moderator results, not explanations assigned to historical ecological endpoint signs.",
+  "forbidden_interpretations": [
+    "Synthetic effect magnitudes estimate A-Islands, Tanzania, Azores, Louisiana or Tampa effect sizes",
+    "Passing proves the moderators explain the historical cross-system signs",
+    "Passing authorizes rescue or rerun of any consumed empirical endpoint",
+    "Passing changes the closed EOG-WF denominator"
+  ]
+}
