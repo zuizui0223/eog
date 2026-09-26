@@ -1,0 +1,17 @@
+site_code,guild_positive_node_count,observed_target_species_count,species_with_two_positive_nodes,community_survival_fraction,max_species_survival_fraction,emergent_connectivity_gain,strict_emergent_world_fraction,cross_species_rescue_fraction,dominance_coverage,null_adjusted_gain,site_upper_tail_p,best_species_count,best_species_names
+JORN,590,16,15,1.0,1.0,0.0,0.0,0.0,0.8525423728813559,0.0,1.0,8,Chaetodipus eremicus;Chaetodipus penicillatus;Dipodomys merriami;Dipodomys ordii;Dipodomys spectabilis;Onychomys arenicola;Perognathus flavus;Reithrodontomys megalotis
+KONA,269,6,6,1.0,1.0,0.0,0.0,0.009913258983890954,0.7174721189591078,0.0,1.0,3,Chaetodipus hispidus;Microtus ochrogaster;Sigmodon hispidus
+LAJA,280,2,2,1.0,1.0,0.0,0.0,0.0,0.9821428571428571,0.0,1.0,1,Mus musculus
+LENO,149,4,4,1.0,1.0,0.0,0.0,0.0016778523489932886,0.8926174496644296,0.0,1.0,2,Peromyscus gossypinus;Sigmodon hispidus
+MLBS,120,6,6,1.0,1.0,0.0,0.0,0.027777777777777776,0.5333333333333333,0.0,1.0,2,Ochrotomys nuttalli;Synaptomys cooperi
+MOAB,604,14,11,1.0,1.0,0.0,0.0,0.0027593818984547464,0.6473509933774835,0.0,1.0,4,Dipodomys ordii;Neotoma lepida;Onychomys leucogaster;Peromyscus boylii
+NIWO,176,6,6,1.0,1.0,0.0,0.0,0.01893939393939394,0.8806818181818182,0.0,1.0,1,Microtus longicaudus
+NOGP,383,9,7,1.0,1.0,0.0,0.0,0.0026109660574412533,0.8172323759791122,0.0,1.0,2,Microtus ochrogaster;Microtus pennsylvanicus
+OAES,638,11,11,1.0,1.0,0.0,0.0,0.0,0.6661442006269592,0.0,1.0,5,Chaetodipus hispidus;Neotoma floridana;Onychomys leucogaster;Reithrodontomys fulvescens;Sigmodon hispidus
+ONAQ,803,12,9,1.0,1.0,0.0,0.0,0.0,0.8841843088418431,0.0,1.0,5,Dipodomys microps;Lemmiscus curtatus;Neotoma lepida;Perognathus parvus;Reithrodontomys megalotis
+ORNL,86,5,4,0.25,1.0,-0.75,0.0,0.011627906976744186,0.8953488372093024,0.0,1.0,3,Ochrotomys nuttalli;Oryzomys palustris;Reithrodontomys humulis
+OSBS,507,8,6,1.0,1.0,0.0,0.0,0.0,0.5009861932938856,0.0,1.0,2,Peromyscus gossypinus;Peromyscus polionotus
+RMNP,111,8,7,1.0,1.0,0.0,0.0,0.06606606606606606,0.8108108108108109,0.0,1.0,1,Peromyscus nasutus
+SERC,52,3,2,1.0,1.0,0.0,0.0,0.019230769230769232,0.9423076923076923,0.0,1.0,2,Microtus pinetorum;Mus musculus
+SJER,534,9,7,1.0,1.0,0.0,0.0,0.0,0.6179775280898876,0.0,1.0,5,Chaetodipus californicus;Mus musculus;Peromyscus boylii;Peromyscus truei;Reithrodontomys megalotis
+SOAP,294,5,5,1.0,1.0,0.0,0.0,0.003401360544217687,0.9081632653061225,0.0,1.0,2,Chaetodipus californicus;Peromyscus boylii

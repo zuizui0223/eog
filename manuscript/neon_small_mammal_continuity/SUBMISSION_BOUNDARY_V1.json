@@ -1,0 +1,73 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.submission_boundary.v1",
+  "scientific_state": "closed",
+  "source_response_lock": "validation/neon_metacommunity_connectivity_v1/response_lock_v1.json",
+  "source_result_fingerprint": "c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860",
+  "authoritative_analysis_module_blob_sha1": "a09ecd84d965ab4d2d0161f0567a8367ec7fec21",
+  "empirical_denominator": {
+    "fixed_sites": 16,
+    "scored_sites": 16,
+    "stops": 0
+  },
+  "confirmatory_result": {
+    "median_emergent_connectivity_gain": 0,
+    "positive_null_adjusted_sites": 0,
+    "sign_test_p": 1,
+    "strict_emergent_world_positive_sites": 0,
+    "pooling_improved_sites": 0,
+    "pooling_reduced_sites": 1
+  },
+  "ecological_pattern": {
+    "community_survival_one_sites": 15,
+    "best_species_survival_one_sites": 16,
+    "cross_species_rescue_median": 0.002685173977948,
+    "dominance_coverage_median": 0.8348873744302341,
+    "dominance_coverage_ge_0_8_sites": 10,
+    "ORNL": {
+      "community_survival_fraction": 0.25,
+      "best_species_survival_fraction": 1,
+      "emergent_gain": -0.75
+    },
+    "identity_redundancy": {
+      "sites_with_multiple_individually_continuous_species": 13,
+      "unique_individually_continuous_species": 32,
+      "maximum_recurrence_of_any_species_across_sites": 3,
+      "median_individually_continuous_species_count": 2,
+      "range_individually_continuous_species_count": [
+        1,
+        8
+      ],
+      "median_fraction_of_eligible_species_individually_continuous": 0.4772727272727273
+    }
+  },
+  "exploratory_only": {
+    "richness_vs_individually_saturated_species_count": {
+      "spearman_rho": 0.6679521422189312,
+      "p": 0.004686103495701227
+    },
+    "richness_vs_dominance_coverage": {
+      "spearman_rho": -0.594242986378081,
+      "p": 0.01520545042566037
+    },
+    "richness_vs_cross_species_rescue_fraction": {
+      "spearman_rho": -0.3900728594029439,
+      "p": 0.13526979303997025
+    },
+    "richness_vs_continuous_fraction_among_eligible_species": {
+      "spearman_rho": -0.1594957245108836,
+      "p": 0.5551712625854661
+    }
+  },
+  "journal_route": {
+    "primary": "Oikos",
+    "secondary": "Journal of Animal Ecology",
+    "fallback": "Ecography"
+  },
+  "hard_stops": [
+    "no new response access",
+    "no site additions or replacements",
+    "no change to the consumed tie rule",
+    "no threshold or guild retuning",
+    "no promotion of exploratory richness associations to confirmatory results"
+  ]
+}

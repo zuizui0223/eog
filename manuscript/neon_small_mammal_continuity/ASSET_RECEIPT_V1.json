@@ -1,0 +1,24 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.paper_asset_receipt.v1",
+  "workflow_run_id": 36228655664,
+  "workflow_head_sha": "9fae4895ff651186bbcfaeed714e1ec67ccf61e2",
+  "artifact_id": 10902015968,
+  "artifact_name": "neon-small-mammal-continuity-paper-assets-v1",
+  "artifact_digest": "sha256:27b7db108847f19495a2aea9bfbd79cdf0772bcef7bbb2486c8b1bea15604d41",
+  "asset_builder": "manuscript/neon_small_mammal_continuity/build_paper_assets.py",
+  "source_response_lock": "validation/neon_metacommunity_connectivity_v1/response_lock_v1.json",
+  "source_programme_closure": "validation/neon_metacommunity_connectivity_v1/programme_closure_v1.json",
+  "visual_qa_status": "builder and file-existence CI passed; final journal-layout rendering remains production-only",
+  "frozen_values": {
+    "fixed_sites": 16,
+    "scored_sites": 16,
+    "positive_emergent_gain_sites": 0,
+    "community_survival_one_sites": 15,
+    "best_species_survival_one_sites": 16,
+    "strict_emergent_world_positive_sites": 0,
+    "ORNL_community_survival_fraction": 0.25,
+    "ORNL_best_species_survival_fraction": 1,
+    "sites_with_multiple_individually_continuous_species": 13,
+    "unique_individually_continuous_species": 32
+  }
+}
