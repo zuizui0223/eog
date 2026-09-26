@@ -167,3 +167,69 @@ Not allowed now:
 - mobility or life history explains the endpoint signs;
 - effect sizes from concordance and log loss are directly comparable;
 - structural accessibility is universally beneficial or harmful.
+
+
+## Known-truth moderator test — result
+
+The preregistered response-free 2×2 known-truth experiment crossed reference saturation with response alignment across 64 paired replicates. All seven predeclared checks passed.
+
+### Weak reference + refreshed structural state
+
+When the baseline omitted the generating structural state and the structural representation tracked the current context:
+
+- mean augmented-minus-baseline log loss = **-0.17961**;
+- median = **-0.17959**;
+- 63/64 replicates were favorable (0.9844).
+
+This was the best median cell, as predicted before opening.
+
+### Reference saturation
+
+Adding the exact generating structural state to the reference removed the incremental advantage of the refreshed structural representation.
+
+Under the strong reference, refreshed augmentation had:
+
+- mean added value = **+0.00786**;
+- median = **+0.00697**;
+- favorable fraction = 0.3281.
+
+The within-replicate saturation moderation,
+`added_value(strong, refreshed) - added_value(weak, refreshed)`,
+had:
+
+- mean **+0.18748**;
+- median **+0.18797**;
+- 64/64 positive;
+- 2.5-97.5% quantiles **[+0.08587, +0.29213]**.
+
+Thus, under known truth, structural added value causally shrinks when the reference already contains the relevant structural information.
+
+### Response alignment
+
+Under the weak reference, replacing the context-refreshed representation with a node-level state averaged over fitting contexts reversed the benefit:
+
+- static-reused mean added value = **+0.04253**;
+- median = **+0.03937**;
+- favorable fraction = 0.0469.
+
+The within-replicate alignment moderation,
+`added_value(weak, static) - added_value(weak, refreshed)`,
+had:
+
+- mean **+0.22215**;
+- median **+0.22242**;
+- 64/64 positive;
+- 2.5-97.5% quantiles **[+0.09714, +0.35769]**.
+
+This independently reproduces the earlier static-reuse mechanism result in a factorial explicitly paired with reference saturation.
+
+### Updated scientific position
+
+The known-truth evidence now supports two causal moderators:
+
+1. **Residual structural novelty:** structural augmentation loses value when the reference already contains the generating structural signal.
+2. **Response alignment:** structural augmentation loses value when a changing structural state is replaced by a static representation reused across response contexts.
+
+The historical ecological systems remain observational examples, not causal assignments. A-Islands/Tanzania and Azores/Louisiana/Tampa are consistent with these moderators, but the historical sign differences are not claimed to be caused by them.
+
+The next empirical step is therefore narrower than generic candidate hunting: a future separately preregistered real-data programme should classify candidate systems on these two axes **before** response opening and test whether the predicted sign pattern transfers.
