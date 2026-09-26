@@ -1,0 +1,35 @@
+{
+  "schema": "eog.conditional_structural_value.real_v3.muntjac_stage0_terminal_receipt.v1",
+  "candidate_id": "muntjac_antwerp_ipt_camtrapdp_v2",
+  "attempt_id": "conditional_structural_value_real_v3_candidate2",
+  "terminal_status": "stop_pre_response_archive_architecture",
+  "authoritative_run": 36238170682,
+  "authoritative_job": 108393675043,
+  "head_sha": "2a80a8bc7b18278c57d06c9fc041c9b3abbc7f8c",
+  "result_fingerprint": "fb8d4df465dd56fe8d8229dfb824e3cdbd5eb88774a4f4a09bba7cc41c0ceb4e",
+  "terminal_reason": "deployment count not reproduced at frozen required scale by the one-shot Stage0 resource-page parser; parsed count=8",
+  "data_access": {
+    "resource_page_gets": 1,
+    "archive_head_requests": 0,
+    "archive_tail_range_gets": 0,
+    "full_archive_downloaded": false,
+    "member_body_bytes_opened": 0,
+    "deployments_body_bytes_opened": 0,
+    "observations_body_bytes_opened": 0,
+    "response_values_opened": false
+  },
+  "downstream": {
+    "model_fits": 0,
+    "heldout_scores": 0,
+    "counts_as_predictive_evidence": false,
+    "counts_as_biological_negative": false
+  },
+  "policy": {
+    "retry_same_candidate": false,
+    "parser_repair_and_retry": false,
+    "route_change": false,
+    "third_candidate": false,
+    "v3_candidate_hunting_hard_stop": true
+  },
+  "interpretation": "Candidate 2 terminated before archive or response-member access. The v3 finite candidate roster is exhausted. This does not test structural added value."
+}
