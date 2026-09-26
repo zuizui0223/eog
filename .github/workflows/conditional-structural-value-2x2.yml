@@ -1,0 +1,40 @@
+name: Conditional structural value 2x2 known truth
+
+on:
+  pull_request:
+    paths:
+      - 'validation/conditional_structural_value/known_truth_2x2_contract_v1.json'
+      - 'benchmarks/conditional_structural_value_2x2.py'
+      - 'tests/test_conditional_structural_value_2x2.py'
+      - '.github/workflows/conditional-structural-value-2x2.yml'
+  push:
+    branches:
+      - paper/conditional-structural-value-v1
+    paths:
+      - 'validation/conditional_structural_value/known_truth_2x2_contract_v1.json'
+      - 'benchmarks/conditional_structural_value_2x2.py'
+      - 'tests/test_conditional_structural_value_2x2.py'
+      - '.github/workflows/conditional-structural-value-2x2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install benchmark dependencies
+        run: pip install numpy scikit-learn pytest
+      - name: Audit frozen contract
+        run: pytest -q tests/test_conditional_structural_value_2x2.py
+      - name: Run frozen 2x2 known-truth benchmark
+        run: python benchmarks/conditional_structural_value_2x2.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: conditional-structural-value-2x2-result
+          path: build/conditional_structural_value/known_truth_2x2_result.json
+          if-no-files-found: error

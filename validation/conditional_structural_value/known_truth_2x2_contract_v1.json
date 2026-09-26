@@ -1,0 +1,159 @@
+{
+  "schema": "eog.conditional_structural_value.known_truth_2x2_contract.v1",
+  "purpose": "Response-free known-truth experiment to causally test two proposed moderators of structural predictive added value: reference saturation and response-aligned refreshing.",
+  "frozen_before_runner": true,
+  "uses_biological_response": false,
+  "counts_as_fresh_predictive_endpoint": false,
+  "changes_closed_eog_wf_synthesis": false,
+  "historical_systems_not_reanalyzed": true,
+  "factors": {
+    "reference_saturation": {
+      "levels": {
+        "weak": "baseline contains only local x/y and context sin/cos",
+        "strong": "baseline additionally contains the exact current structural latent state used by the generating process"
+      },
+      "causal_question": "Does structural augmentation lose incremental value when the reference already contains the relevant structural information?"
+    },
+    "response_alignment": {
+      "levels": {
+        "refreshed": "Layer-B representation uses the current context-specific structural latent state",
+        "static_reused": "Layer-B representation for each node is averaged over fitting contexts and reused across all contexts"
+      },
+      "causal_question": "Does a static representation lose value when structural truth changes across response contexts?"
+    }
+  },
+  "design": {
+    "factorial": "2 x 2 full factorial",
+    "replicates": 64,
+    "replicate_seeds": [
+      3101,
+      3102,
+      3103,
+      3104,
+      3105,
+      3106,
+      3107,
+      3108,
+      3109,
+      3110,
+      3111,
+      3112,
+      3113,
+      3114,
+      3115,
+      3116,
+      3117,
+      3118,
+      3119,
+      3120,
+      3121,
+      3122,
+      3123,
+      3124,
+      3125,
+      3126,
+      3127,
+      3128,
+      3129,
+      3130,
+      3131,
+      3132,
+      3133,
+      3134,
+      3135,
+      3136,
+      3137,
+      3138,
+      3139,
+      3140,
+      3141,
+      3142,
+      3143,
+      3144,
+      3145,
+      3146,
+      3147,
+      3148,
+      3149,
+      3150,
+      3151,
+      3152,
+      3153,
+      3154,
+      3155,
+      3156,
+      3157,
+      3158,
+      3159,
+      3160,
+      3161,
+      3162,
+      3163,
+      3164
+    ],
+    "node_count": 80,
+    "train_node_count": 60,
+    "heldout_node_count": 20,
+    "contexts_per_node": 20,
+    "train_context_count": 12,
+    "heldout_context_count": 8,
+    "weak_baseline_features": [
+      "x",
+      "y",
+      "context_sin",
+      "context_cos"
+    ],
+    "strong_baseline_addition": [
+      "current_structural_latent_state"
+    ],
+    "layer_b_feature_count": 8,
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "learner_hyperparameters": {
+      "n_estimators": 400,
+      "max_features": "sqrt",
+      "min_samples_leaf": 5,
+      "class_weight": null,
+      "random_state": 20260926,
+      "n_jobs": 1
+    },
+    "primary_metric": "binary_log_loss",
+    "secondary_metric": "brier_score",
+    "probability_clip": 0.000001,
+    "split": "first 60 nodes x first 12 contexts fit; last 20 nodes x last 8 contexts score",
+    "same_outcome_realization_across_all_cells_within_replicate": true,
+    "same_coordinates_contexts_and_learner_across_cells": true
+  },
+  "known_truth": {
+    "local_linear_predictor": "0.30*x - 0.20*y + 0.35*sin(context) - 0.15*cos(context)",
+    "structural_latent_state": "sin(1.5*x - 1.1*y + 0.70*context_phase) + 0.55*cos(0.9*x + 1.4*y - 0.40*context_phase)",
+    "outcome_linear_predictor": "local_linear_predictor + 1.35*structural_latent_state",
+    "refreshed_layer_b": "eight fixed nonlinear transforms of current structural_latent_state, x, y and context phase",
+    "static_reuse_intervention": "for each node, average its refreshed Layer-B vector across the 12 fitting contexts and reuse this vector in every context",
+    "strong_reference_intervention": "append the exact current structural_latent_state to the conventional baseline; this deliberately saturates the reference with the generating structural signal"
+  },
+  "cell_estimand": "augmented minus matched baseline log loss within the same reference-saturation level and replicate; negative values favor structural augmentation",
+  "primary_estimands": {
+    "weak_refreshed_added_value": "added value under weak baseline and refreshed Layer B",
+    "saturation_moderation": "added_value(strong,refreshed) - added_value(weak,refreshed); positive means benefit shrinks when reference is saturated",
+    "alignment_moderation": "added_value(weak,static_reused) - added_value(weak,refreshed); positive means benefit shrinks under static reuse",
+    "joint_boundary": "compare weak+refreshed with strong+static_reused"
+  },
+  "predeclared_checks": {
+    "weak_refreshed_median_added_value_strictly_negative": true,
+    "weak_refreshed_favorable_fraction_at_least_0_90": true,
+    "saturation_moderation_median_strictly_positive": true,
+    "saturation_moderation_positive_fraction_at_least_0_80": true,
+    "alignment_moderation_median_strictly_positive": true,
+    "alignment_moderation_positive_fraction_at_least_0_80": true,
+    "weak_refreshed_is_best_median_cell": true
+  },
+  "interpretation_if_all_checks_pass": "known_truth_support_for_reference_saturation_and_response_alignment_as_causal_moderators",
+  "interpretation_if_any_check_fail": "known_truth_partial_support_or_refutation; do not retune the generator or thresholds to force the two-moderator story",
+  "forbidden_interpretations": [
+    "Synthetic effect magnitudes estimate A-Islands, Tanzania, Azores, Louisiana or Tampa effect sizes",
+    "Passing proves the moderators explain the historical cross-system signs",
+    "Passing authorizes rescue or rerun of any consumed empirical endpoint",
+    "Passing changes the closed EOG-WF denominator",
+    "Failing authorizes changing the frozen generating truth or success thresholds"
+  ]
+}

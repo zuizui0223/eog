@@ -1,0 +1,74 @@
+{
+  "schema": "eog.conditional_structural_value.hypothesis_contract.v1",
+  "status": "prospective_moderator_hypothesis_frozen_after_closed_cross_system_synthesis",
+  "historical_endpoints_are_already_consumed": true,
+  "historical_synthesis_is_confirmatory_for_moderators": false,
+  "hypothesis": {
+    "name": "conditional_structural_added_value",
+    "statement": "The incremental value of structural accessibility increases when structural information remains novel relative to the frozen reference model and when the structural representation is updated at the spatiotemporal scale of the response.",
+    "moderators": [
+      {
+        "id": "reference_saturation",
+        "low": "reference lacks explicit landscape-specific connectivity/path/resistance representation beyond local environment and simple source distance",
+        "high": "reference contains an explicit landscape-specific connectivity/path/current-flow/resistance representation frozen without heldout leakage"
+      },
+      {
+        "id": "response_alignment",
+        "aligned": "structural state is recomputed prospectively before each response unit using only information available before that unit",
+        "misaligned": "a static structural representation is reused across response occasions whose ecological state may change"
+      }
+    ]
+  },
+  "closed_evidence": [
+    {
+      "system": "A-Islands",
+      "role": "supports_residual_structural_novelty",
+      "metric": "conditional_concordance",
+      "value": 0.6177466,
+      "n_taxa": 845
+    },
+    {
+      "system": "Tanzania forest fragments",
+      "role": "boundary_under_strong_structural_reference",
+      "metric": "candidate_minus_reference_macro_log_loss",
+      "value": 0.032113119,
+      "n_species": 60
+    },
+    {
+      "system": "Azores yellow eel",
+      "role": "favorable_refreshed_representation",
+      "metric": "augmented_minus_baseline_macro_log_loss",
+      "value": -0.00998557210810358,
+      "heldout_units": 5
+    },
+    {
+      "system": "Southwest Louisiana King Rail",
+      "role": "small_favorable_refreshed_representation",
+      "metric": "augmented_minus_baseline_macro_log_loss",
+      "value": -0.0009718023207773985,
+      "heldout_units": 8
+    },
+    {
+      "system": "Tampa Bay seagrass",
+      "role": "adverse_static_reused_representation",
+      "metric": "augmented_minus_baseline_macro_log_loss",
+      "value": 0.10102867454270692,
+      "heldout_units": 5
+    }
+  ],
+  "prospective_test": {
+    "classification_timing": "before_response_opening",
+    "outcome": "candidate_minus_reference heldout predictive loss under a common endpoint-specific loss metric",
+    "primary_prediction": "benefit concentrated in low-reference-saturation plus response-aligned endpoints",
+    "endpoint_reclassification_after_outcome": false,
+    "rescue_tuning": false,
+    "minimum_design_goal": "obtain representation across the two moderator axes rather than maximizing endpoint count"
+  },
+  "prohibited": [
+    "claim that historical five-system contrast causally identifies either moderator",
+    "compare A-Islands concordance magnitude directly with log-loss deltas",
+    "infer mobility or life-history causation from endpoint signs",
+    "retroactively alter any closed endpoint classification",
+    "select future endpoints after viewing predictive outcomes"
+  ]
+}
