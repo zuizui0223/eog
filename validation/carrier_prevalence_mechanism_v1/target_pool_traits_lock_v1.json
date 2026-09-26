@@ -1,0 +1,175 @@
+{
+  "biological_response_bytes_opened": 0,
+  "combine_exact_match_count": 119,
+  "combine_unmatched_species": [
+    "Alexandromys oeconomus",
+    "Clethrionomys gapperi",
+    "Clethrionomys rutilus",
+    "Liomys irroratus",
+    "Mictomys borealis",
+    "Napaeozapus abietorum",
+    "Perognathus alticolus",
+    "Perognathus mollipilosus",
+    "Zapus luteus",
+    "Zapus montanus",
+    "Zapus oregonus",
+    "Zapus pacificus",
+    "Zapus saltator"
+  ],
+  "fingerprint": "8f1ee0b6a2d85c1d85b53b55aaefe6a02f40e8b748e13be9e4f9502ebe28346b",
+  "neon_target_taxon_count": 132,
+  "neon_taxonomy_fingerprint": "9f249c9ee66393ed1e06bbf1ac91fc26dbc3c471ebfb66a199bfa9cb2574238a",
+  "response_endpoint_requests": 0,
+  "schema": "neon.combine_target_pool_traits.v1",
+  "source": {
+    "database": "COMBINE",
+    "figshare_doi": "10.6084/m9.figshare.13028255.v4",
+    "imputed_file_id": "27703266",
+    "imputed_sha256": "b576cfd9f12b1441eb564bbf7acb65f06e676108aa0651aed9594585e7ff65f9",
+    "publication_doi": "10.1002/ecy.3344",
+    "reported_file_id": "27703263",
+    "reported_sha256": "14ace2dff03b71c20dc923a9eb293aaadc29934e21c6f11fa30d1b70e5abab92",
+    "rule": "exact IUCN-2020 binomial match; reported preferred; imputed used only when reported is missing; unmatched taxa remain unmatched"
+  },
+  "status": "response_blind_trait_pool_frozen_candidate",
+  "trait_coverage": {
+    "activity_cycle": {
+      "imputed": 3,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 116
+    },
+    "adult_mass_g": {
+      "imputed": 0,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 119
+    },
+    "density_n_km2": {
+      "imputed": 0,
+      "missing": 57,
+      "nonmissing": 75,
+      "reported": 75
+    },
+    "det_diet_breadth_n": {
+      "imputed": 8,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 111
+    },
+    "det_fruit": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "det_inv": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "det_nect": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "det_plantother": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "det_scav": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "det_seed": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "det_vect": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "det_vend": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "det_vfish": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "det_vunk": {
+      "imputed": 0,
+      "missing": 21,
+      "nonmissing": 111,
+      "reported": 111
+    },
+    "dispersal_km": {
+      "imputed": 0,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 119
+    },
+    "dphy_invertebrate": {
+      "imputed": 0,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 119
+    },
+    "dphy_plant": {
+      "imputed": 0,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 119
+    },
+    "dphy_vertebrate": {
+      "imputed": 0,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 119
+    },
+    "fossoriality": {
+      "imputed": 66,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 53
+    },
+    "habitat_breadth_n": {
+      "imputed": 0,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 119
+    },
+    "home_range_km2": {
+      "imputed": 0,
+      "missing": 57,
+      "nonmissing": 75,
+      "reported": 75
+    },
+    "social_group_n": {
+      "imputed": 0,
+      "missing": 105,
+      "nonmissing": 27,
+      "reported": 27
+    },
+    "trophic_level": {
+      "imputed": 0,
+      "missing": 13,
+      "nonmissing": 119,
+      "reported": 119
+    }
+  }
+}

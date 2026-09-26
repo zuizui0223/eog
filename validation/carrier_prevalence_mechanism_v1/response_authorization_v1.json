@@ -1,0 +1,28 @@
+{
+  "authorization_consumed": false,
+  "authorization_state": "authorized_once_only_biological_response_execution",
+  "expected_output": "results/carrier_prevalence_response_v1.json",
+  "fingerprint": "5e2f28d6b9305b11c5b0b7d1eeb95533dbec6b3c7e113724b83b83b03ffcecf2",
+  "fixed_site_count": 11,
+  "fresh_roster_fingerprint": "47f00a68496275dbfc34961d525ce86f1c86840094e37459cdfa048485ae22ff",
+  "maximum_authenticated_query_requests": 1,
+  "post_response_metric_change_allowed": false,
+  "post_response_site_repair_allowed": false,
+  "programme": "carrier_prevalence_mechanism_v1",
+  "required_file_sha256": {
+    "capture_carrier_prevalence_fresh_roster_v1.py": "b3f0e918a84df705c20d9d03807b28bdc29389b926e110946d28d899a8929935",
+    "combine_target_pool_traits_v1.csv": "1099236474c0861c191e5ae2c465223c90ed355d20ced1ed34f52598667b4f15",
+    "count_conditioned_carrier_null_v1.py": "f40a8722281b9ae07f15debaff44052889fa65fc57deec1a56cd3e9af9e09f8e",
+    "fresh_roster_lock_v1.json": "7b6acbf758914c5e1751584594843b37360c6ec42dc2b1a33a9f70124bd531c9",
+    "protocol_v1.json": "7d6790c1f9fd012cfe6632df0206ee5ccac648061b2e0e3cc454b73e8ec50f17",
+    "response_protocol_v1.json": "8abab8a1f151f9a2f344227343f408504e6fb86c0e98d8a40edbe9377c5a5548",
+    "run_carrier_prevalence_response_once_v1.py": "684486347deed5c17c0d6d5fc1a236f0780bad64708f7701593439ba92197ccf",
+    "target_pool_traits_lock_v1.json": "4cdbbc3a8f52f9f237953dcc43bdc548b6fb9fc55417449e11ab83a989a95df8"
+  },
+  "rerun_after_authenticated_query_starts": false,
+  "response_protocol_fingerprint": "c099bab737c6a7057ac32d7c9252ff7297868e87edf1437c70d3749706764e1f",
+  "schema": "neon.carrier_prevalence_mechanism.response_authorization.v1",
+  "target_pool_traits_fingerprint": "8f1ee0b6a2d85c1d85b53b55aaefe6a02f40e8b748e13be9e4f9502ebe28346b",
+  "token_secret_name": "NEON_API_TOKEN"
+}
+

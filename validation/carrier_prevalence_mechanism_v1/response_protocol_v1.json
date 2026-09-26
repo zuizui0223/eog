@@ -1,0 +1,183 @@
+{
+  "aggregate_test": {
+    "minimum_scored_sites": 6,
+    "otherwise": "retain prevalence-only explanation as sufficient at the declared resolution; do not retune null or thresholds",
+    "support_spatial_organization_if": [
+      "at least 6 scored fresh sites",
+      "median site effect > 0",
+      "one-sided exact sign-test p < 0.05"
+    ],
+    "test": "one-sided exact sign test of site effects > 0 against probability 0.5"
+  },
+  "authentication": {
+    "token_environment_variable": "NEON_API_TOKEN",
+    "token_header": "X-API-Token",
+    "token_must_not_be_committed": true
+  },
+  "capture_semantics": {
+    "node_key": "namedLocation + '.' + trapCoordinate",
+    "normalized_status": "strip and lowercase trapStatus",
+    "positive_if_all": [
+      "status contains capture",
+      "status does not contain no capture",
+      "taxonID belongs to frozen target set"
+    ]
+  },
+  "count_conditioned_null": {
+    "conditioning": [
+      "site",
+      "frozen trap-neighbourhood world family",
+      "species observed positive-node count k",
+      "guild-positive node set"
+    ],
+    "randomization": "sample k nodes uniformly without replacement from the frozen guild-positive node set",
+    "replicates": 999,
+    "seed_rule": "first 16 hex digits of sha256('carrier_prevalence_mechanism_v1|'+site_code+'|'+scientific_name)",
+    "species_carrier_excess": "observed carrier indicator - expected carrier probability",
+    "species_expected_carrier_probability": "fraction of count-conditioned random placements satisfying every site adjacency criterion"
+  },
+  "expected_target_taxon_count": 132,
+  "file_selection": {
+    "no_other_tables": true,
+    "require_md5": true,
+    "suffix": ".csv",
+    "table": "mam_pertrapnight",
+    "verify_md5": true,
+    "verify_size": true
+  },
+  "fingerprint": "c099bab737c6a7057ac32d7c9252ff7297868e87edf1437c70d3749706764e1f",
+  "fixed_site_codes": [
+    "SRER",
+    "STEI",
+    "STER",
+    "TALL",
+    "TEAK",
+    "TOOL",
+    "TREE",
+    "UKFS",
+    "WOOD",
+    "WREF",
+    "YELL"
+  ],
+  "fresh_roster_fingerprint": "47f00a68496275dbfc34961d525ce86f1c86840094e37459cdfa048485ae22ff",
+  "integrity": {
+    "biological_response_bytes_opened_at_freeze": 0,
+    "biological_response_endpoint_requests_at_freeze": 0,
+    "model_fits": 0,
+    "post_response_metric_changes": false,
+    "post_response_site_changes": false,
+    "rerun_after_authenticated_query_starts": false
+  },
+  "programme": "carrier_prevalence_mechanism_v1",
+  "registry_integrity": {
+    "registry_repair_allowed": false,
+    "site_replacement_allowed": false,
+    "unknown_non_x_positive_node": "response-consumed site STOP"
+  },
+  "required_columns": [
+    "namedLocation",
+    "trapCoordinate",
+    "trapStatus",
+    "taxonID"
+  ],
+  "response_query": {
+    "body": {
+      "endDateMonth": "2026-09",
+      "includeProvisional": false,
+      "package": "basic",
+      "productCode": "DP1.10072.001",
+      "release": "RELEASE-2026",
+      "siteCodes": [
+        "SRER",
+        "STEI",
+        "STER",
+        "TALL",
+        "TEAK",
+        "TOOL",
+        "TREE",
+        "UKFS",
+        "WOOD",
+        "WREF",
+        "YELL"
+      ],
+      "startDateMonth": "2010-01"
+    },
+    "endpoint": "https://data.neonscience.org/api/v0/data/query",
+    "maximum_authenticated_query_requests": 1,
+    "method": "POST",
+    "no_fallback_package": true,
+    "no_fallback_release": true
+  },
+  "schema": "neon.carrier_prevalence_mechanism.response_protocol.v1",
+  "secondary_grid_conditioned_null": {
+    "additive_decomposition": {
+      "between_grid_allocation_component": "grid-conditioned expected carrier probability - site-wide count-conditioned expected carrier probability",
+      "identity": "site-wide species_carrier_excess = between_grid_allocation_component + within_grid_organization_component",
+      "site_summary": "mean each component across eligible species; report the exact reconstruction error, which must be numerically zero apart from floating-point tolerance",
+      "within_grid_organization_component": "observed carrier indicator - grid-conditioned expected carrier probability"
+    },
+    "causal_boundary": "grid identity is a spatial stratum and potential habitat proxy, not a measured habitat variable; a habitat mechanism would require independently measured environmental covariates",
+    "conditioning": [
+      "site",
+      "frozen trap-neighbourhood world family",
+      "guild-positive node set",
+      "species observed positive-node count separately within each grid"
+    ],
+    "grid_id_rule": "for each frozen trap node, grid_id is the node label with the final '.<trapCoordinate>' segment removed",
+    "interpretation": {
+      "both_sitewide_and_grid_conditioned_positive": "within-grid spatial organization contributes beyond prevalence and observed grid allocation",
+      "primary_sitewide_near_zero": "occupied-node prevalence is sufficient at the declared site-wide scale; do not use the grid-conditioned result to rescue the primary",
+      "primary_sitewide_positive_but_grid_conditioned_near_zero": "the extra continuity is largely attributable to between-grid allocation, consistent with coarse habitat/grid filtering rather than within-grid clustering"
+    },
+    "randomization": "within each grid used by the species, sample the observed number of positive nodes uniformly without replacement from guild-positive nodes in that same grid; union sampled nodes across grids",
+    "replicates": 999,
+    "seed_rule": "first 16 hex digits of sha256('carrier_prevalence_mechanism_v1|grid|'+site_code+'|'+scientific_name)",
+    "site_effect": "mean species_grid_conditioned_carrier_excess across eligible species",
+    "species_grid_conditioned_carrier_excess": "observed carrier indicator - expected carrier probability under the grid-conditioned null",
+    "status": "predeclared mechanistic decomposition; cannot rescue or alter primary site-wide count-conditioned result"
+  },
+  "secondary_predeclared": {
+    "analysis_rule": {
+      "across_site_summary": "median of estimable within-site Spearman rho values and counts of positive/zero/negative site rhos",
+      "inference": "descriptive secondary only; no trait p-value can rescue or alter the primary count-conditioned result",
+      "join_rule": "exact scientific-name match to the response-blind frozen COMBINE target-pool table; no post-response synonym rescue",
+      "missing_data": "complete cases per trait within site; no imputation beyond values already frozen in the COMBINE table before response",
+      "outcome": "species_carrier_excess after conditioning on observed positive-node count",
+      "traits": [
+        "adult_mass_g",
+        "dispersal_km",
+        "habitat_breadth_n",
+        "det_diet_breadth_n",
+        "home_range_km2",
+        "density_n_km2",
+        "trophic_level"
+      ],
+      "unit": "site x eligible species",
+      "within_site_statistic": "Spearman rho between trait and species_carrier_excess when >=3 matched eligible species have nonmissing trait values and both variables vary"
+    },
+    "manual_trophic_groups": "used only for interpretation and cross-trophic description, not for the primary test",
+    "standardized_external_traits": [
+      "COMBINE adult_mass_g",
+      "COMBINE dispersal_km",
+      "COMBINE habitat_breadth_n",
+      "COMBINE det_diet_breadth_n",
+      "COMBINE home_range_km2",
+      "COMBINE density_n_km2",
+      "COMBINE trophic_level"
+    ],
+    "status": "secondary; no secondary result can rescue a failed primary hypothesis",
+    "trait_question": "Do external species traits explain carrier excess after occupied-node count has already been conditioned out?"
+  },
+  "site_estimability": {
+    "minimum_eligible_species_with_at_least_two_positive_nodes": 2,
+    "minimum_guild_positive_nodes": 20,
+    "non_estimable_action": "retain site in fixed denominator, report response-consumed non-estimable stop, do not replace"
+  },
+  "state": "frozen_before_biological_response_access",
+  "target_pool_traits_fingerprint": "8f1ee0b6a2d85c1d85b53b55aaefe6a02f40e8b748e13be9e4f9502ebe28346b",
+  "taxonomy_metadata_fingerprint": "9f249c9ee66393ed1e06bbf1ac91fc26dbc3c471ebfb66a199bfa9cb2574238a",
+  "uncertain_coordinate_policy": {
+    "action": "exclude row prospectively from all spatial metrics; count excluded target-positive rows and distinct X node labels",
+    "x_coordinate_if": "uppercase trapCoordinate contains X"
+  }
+}
