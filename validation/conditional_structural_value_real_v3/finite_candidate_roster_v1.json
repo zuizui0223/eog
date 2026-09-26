@@ -1,0 +1,31 @@
+{
+  "schema": "eog.conditional_structural_value.real_v3.finite_candidate_roster.v1",
+  "frozen_date": "2026-09-26",
+  "purpose": "Prevent open-ended candidate hunting in the fresh real-data translation of the conditional structural-value hypothesis.",
+  "maximum_candidates": 2,
+  "ordered_candidates": [
+    {
+      "order": 1,
+      "candidate_id": "wildintel_ictpr1d1_camtrapdp_v1",
+      "status": "terminal_pre_response_stop",
+      "receipt": "validation/conditional_structural_value_real_v3/candidate1_terminal_receipt_v1.json",
+      "response_consumed": false
+    },
+    {
+      "order": 2,
+      "candidate_id": "muntjac_antwerp_ipt_camtrapdp_v2",
+      "status": "active_stage0",
+      "source": "https://ipt.inbo.be/resource?r=muntjac_antwerp",
+      "prior_eog_use": false,
+      "response_consumed": false
+    }
+  ],
+  "hard_stop": {
+    "after_candidate2_terminal": true,
+    "third_candidate_allowed": false,
+    "candidate_replacement_after_candidate2_stop": false,
+    "gate_weakening": false,
+    "same_candidate_retry_after_terminal": false
+  },
+  "interpretation": "The roster is finite by design. Failure of both candidates closes real-data v3 without a scored endpoint; it does not justify further searching."
+}
