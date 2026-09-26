@@ -1,0 +1,64 @@
+{
+  "schema": "eog.conditional_structural_value.real_v3.muntjac_stage0_contract.v1",
+  "candidate_id": "muntjac_antwerp_ipt_camtrapdp_v2",
+  "attempt_id": "conditional_structural_value_real_v3_candidate2",
+  "selected_before_any_data_package_member_body_access": true,
+  "source_identity": {
+    "resource_page": "https://ipt.inbo.be/resource?r=muntjac_antwerp&request_locale=en",
+    "archive_url": "https://ipt.inbo.be/archive.do?r=muntjac_antwerp",
+    "gbif_doi": "10.15468/gn87d6",
+    "dataset_title": "MUNTJAC_ANTWERP - Camera trap observations of Chinese muntjac in forested areas near Antwerp (Belgium)",
+    "current_public_version_expected": 2,
+    "independently_reported_deployment_count": 457,
+    "format": "Camtrap DP"
+  },
+  "ecological_selection": {
+    "focal_taxon": "Muntiacus reevesi",
+    "selection_basis": "Dataset title/description is explicitly a Chinese muntjac monitoring programme; no observations member or target counts are used for selection.",
+    "response_aligned_design_relevance": "Number of cameras varies by forest area and year; repeated deployments permit a context-updated structural representation if nonresponse architecture qualifies."
+  },
+  "authorized_stage0_access": {
+    "resource_page_gets_max": 1,
+    "archive_head_requests_max": 1,
+    "archive_tail_range_gets_max": 1,
+    "archive_tail_range": "bytes=-2097152",
+    "max_archive_bytes_read": 2097152,
+    "full_archive_download": false,
+    "member_body_reads": 0,
+    "observations_body_reads": 0,
+    "deployments_body_reads": 0
+  },
+  "stage0_gates": {
+    "resource_page_must_identify_title": true,
+    "resource_page_must_identify_camtrap_dp": true,
+    "resource_page_must_report_at_least_deployments": 400,
+    "archive_head_or_range_must_expose_stable_size": true,
+    "range_request_must_return_206": true,
+    "central_directory_must_contain_exactly_one_each": [
+      "datapackage.json",
+      "deployments.csv",
+      "observations.csv"
+    ]
+  },
+  "if_pass": {
+    "status": "stage0_archive_architecture_qualified",
+    "next_gate": "Freeze bounded member-level range extraction for datapackage.json and deployments.csv only; observations.csv remains unopened."
+  },
+  "if_fail": {
+    "status": "stop_pre_response_archive_architecture",
+    "retry": false,
+    "route_change": false,
+    "tail_range_expansion": false,
+    "third_candidate": false
+  },
+  "forbidden": [
+    "download the full data package at Stage0",
+    "read any ZIP member body at Stage0",
+    "open observations.csv",
+    "open deployments.csv",
+    "select a different focal species",
+    "increase the tail range after failure",
+    "switch to a different MUNTJAC_ANTWERP version after failure",
+    "add a third candidate if this attempt stops"
+  ]
+}

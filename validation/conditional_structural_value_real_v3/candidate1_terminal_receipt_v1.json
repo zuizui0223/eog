@@ -1,0 +1,31 @@
+{
+  "schema": "eog.conditional_structural_value.real_v3.stage0_terminal_receipt.v1",
+  "candidate_id": "wildintel_ictpr1d1_camtrapdp_v1",
+  "attempt_id": "conditional_structural_value_real_v3_candidate1",
+  "terminal_status": "stop_pre_response_source_architecture",
+  "authoritative_run": 36229489112,
+  "authoritative_job": 108369803352,
+  "head_sha": "9c0b3549b3dfe8541bebf1f2be2492c84342d371",
+  "result_fingerprint": "9debed8a57c381ae7bcaa3d7a6e454533568c0559c25edd37095fb0b68feec31",
+  "terminal_reason": "complete deployments 1 < frozen minimum 50",
+  "response_access": {
+    "response_file_gets": 0,
+    "response_header_bytes_opened": 0,
+    "response_rows_opened": 0,
+    "response_values_opened": false
+  },
+  "downstream": {
+    "model_fits": 0,
+    "heldout_scores": 0,
+    "counts_as_predictive_evidence": false,
+    "counts_as_biological_negative": false
+  },
+  "policy": {
+    "retry_same_candidate": false,
+    "relax_complete_deployment_gate": false,
+    "reinterpret_missing_deployment_end": false,
+    "change_frozen_revision": false,
+    "next_candidate_requires_new_frozen_attempt": true
+  },
+  "interpretation": "Source-architecture qualification failed before biological response access. This is infrastructure evidence only and does not bear on structural added value."
+}

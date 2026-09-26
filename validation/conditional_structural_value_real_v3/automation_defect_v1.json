@@ -1,0 +1,39 @@
+{
+  "schema": "eog.conditional_structural_value.real_v3.automation_defect.v1",
+  "discovered": "2026-09-26",
+  "defect": "Terminal Stage0 workflows also listened to pull_request events. Opening archival PR #483 re-triggered both terminal candidates once after their authoritative terminal runs.",
+  "scientific_effect": "none",
+  "biological_response_effect": "none",
+  "non_authoritative_duplicate_runs": [
+    {
+      "candidate": "wildintel_ictpr1d1_camtrapdp_v1",
+      "run_id": 36238250432,
+      "job_id": 108393888524,
+      "terminal_status": "stop_pre_response_source_architecture",
+      "result_fingerprint": "9debed8a57c381ae7bcaa3d7a6e454533568c0559c25edd37095fb0b68feec31",
+      "response_file_gets": 0,
+      "response_values_opened": false
+    },
+    {
+      "candidate": "muntjac_antwerp_ipt_camtrapdp_v2",
+      "run_id": 36238250418,
+      "job_id": 108393888474,
+      "terminal_status": "stop_pre_response_archive_architecture",
+      "result_fingerprint": "fb8d4df465dd56fe8d8229dfb824e3cdbd5eb88774a4f4a09bba7cc41c0ceb4e",
+      "member_body_bytes_opened": 0,
+      "deployments_body_bytes_opened": 0,
+      "observations_body_bytes_opened": 0,
+      "response_values_opened": false
+    }
+  ],
+  "authoritative_runs_unchanged": [
+    36229489112,
+    36238170682
+  ],
+  "remediation": [
+    "PR #483 closed without merge.",
+    "Clean archival branch rebuilt from main without either executable Stage0 workflow.",
+    "Duplicate runs are excluded from scientific evidence and do not alter terminal receipts."
+  ],
+  "future_rule": "Terminal candidate workflows must not be merged as active pull_request/push triggers; preserve runner and contract for audit but archive execution wiring."
+}
