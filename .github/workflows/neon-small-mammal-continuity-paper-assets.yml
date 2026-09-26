@@ -1,0 +1,45 @@
+name: NEON small-mammal continuity paper assets
+
+on:
+  push:
+    branches:
+      - paper/neon-small-mammal-continuity-v1
+    paths:
+      - "manuscript/neon_small_mammal_continuity/**"
+      - "validation/neon_metacommunity_connectivity_v1/response_lock_v1.json"
+      - "validation/neon_metacommunity_connectivity_v1/programme_closure_v1.json"
+      - ".github/workflows/neon-small-mammal-continuity-paper-assets.yml"
+  pull_request:
+    paths:
+      - "manuscript/neon_small_mammal_continuity/**"
+      - "validation/neon_metacommunity_connectivity_v1/response_lock_v1.json"
+      - "validation/neon_metacommunity_connectivity_v1/programme_closure_v1.json"
+      - ".github/workflows/neon-small-mammal-continuity-paper-assets.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-paper-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build deterministic continuity paper assets
+        run: python manuscript/neon_small_mammal_continuity/build_paper_assets.py
+      - name: Verify generated assets
+        run: |
+          test -s manuscript/neon_small_mammal_continuity/generated/figure_1_conceptual_outcomes.svg
+          test -s manuscript/neon_small_mammal_continuity/generated/figure_2_community_vs_species.svg
+          test -s manuscript/neon_small_mammal_continuity/generated/figure_3_exploratory_redundancy.svg
+          test -s manuscript/neon_small_mammal_continuity/generated/figure_4_ornl_weakest_link.svg
+          test -s manuscript/neon_small_mammal_continuity/generated/asset_manifest_v1.json
+      - name: Upload continuity paper assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: neon-small-mammal-continuity-paper-assets-v1
+          path: manuscript/neon_small_mammal_continuity/generated/
+          if-no-files-found: error
