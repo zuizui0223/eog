@@ -1,0 +1,82 @@
+{
+  "schema": "eog.conditional_structural_value.real_v3.stage0_source_contract.v1",
+  "programme": "conditional_structural_value_real_translation_v3",
+  "candidate_id": "wildintel_ictpr1d1_camtrapdp_v1",
+  "selection_date": "2026-09-26",
+  "selected_before_any_observations_payload_access": true,
+  "relationship_to_prior_programmes": {
+    "new_protocol_version": true,
+    "rescue_of_prior_eog_wf": false,
+    "rescue_of_layer_b_v2_real_translation": false,
+    "changes_closed_eog_wf_synthesis": false,
+    "historical_consumed_or_stopped_candidates_not_reused": true
+  },
+  "source": {
+    "platform": "Hugging Face datasets",
+    "repository": "wildintelproject/ictpr1d1",
+    "frozen_revision": "2bd4cf88147b079ee41ad2f03e535414916acb2e",
+    "dataset_card": "https://huggingface.co/datasets/wildintelproject/ictpr1d1",
+    "license": "CC-BY-4.0",
+    "format": "Camtrap DP 1.0 family",
+    "nonresponse_files": [
+      "datapackage.json",
+      "deployments.csv",
+      "checksums-sha256.txt"
+    ],
+    "response_file": "observations.csv"
+  },
+  "selection_basis": {
+    "dataset_card_declares_camtrap_dp": true,
+    "deployments_and_observations_are_separate_files": true,
+    "checksum_manifest_declared": true,
+    "no_species_or_response_value_used_for_candidate_selection": true,
+    "purpose": "screen a source architecture that avoids the mixed-archive and response-linkage failures common in prior programmes"
+  },
+  "authorized_stage0_access": {
+    "max_get_requests": 3,
+    "allowed_files": [
+      "datapackage.json",
+      "deployments.csv",
+      "checksums-sha256.txt"
+    ],
+    "response_file_gets": 0,
+    "response_header_bytes": 0,
+    "response_rows": 0,
+    "response_values": false
+  },
+  "stage0_gates": {
+    "exact_revision_urls_required": true,
+    "camtrap_dp_resources_must_include": [
+      "deployments",
+      "observations"
+    ],
+    "checksum_manifest_must_name": [
+      "deployments.csv",
+      "observations.csv"
+    ],
+    "deployments_checksum_must_match": true,
+    "minimum_complete_deployments": 50,
+    "minimum_unique_coordinates": 50,
+    "minimum_temporal_weeks": 12,
+    "minimum_active_deployments_per_time_third": 20,
+    "deployment_start_and_end_required_for_complete_deployment": true
+  },
+  "if_pass": {
+    "status": "stage0_source_architecture_qualified",
+    "next_gate": "freeze metadata-only target-selection and response-semantics contract before any observations.csv access"
+  },
+  "if_fail": {
+    "status": "stop_pre_response_source_architecture",
+    "repair_within_attempt": false,
+    "candidate_replacement_within_this_attempt": false,
+    "counts_as_predictive_evidence": false
+  },
+  "prohibited": [
+    "open observations.csv at Stage0",
+    "inspect observations.csv header at Stage0",
+    "select focal species from observation counts",
+    "weaken node or temporal minima after Stage0",
+    "change frozen Hugging Face revision after a Stage0 failure",
+    "treat Stage0 failure as biological or predictive evidence"
+  ]
+}
