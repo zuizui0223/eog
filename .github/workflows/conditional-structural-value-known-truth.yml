@@ -1,0 +1,42 @@
+name: Conditional structural value known-truth factorial
+
+on:
+  pull_request:
+    paths:
+      - 'validation/conditional_structural_value/known_truth_factorial_contract_v1.json'
+      - 'benchmarks/conditional_structural_value_known_truth_v1.py'
+      - 'tests/test_conditional_structural_value_known_truth_v1.py'
+      - '.github/workflows/conditional-structural-value-known-truth.yml'
+  workflow_dispatch:
+
+jobs:
+  known-truth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: pip install -e . pytest scikit-learn
+      - name: Contract tests
+        run: pytest -q tests/test_conditional_structural_value_known_truth_v1.py
+      - name: Run frozen 2x2 factorial
+        run: python benchmarks/conditional_structural_value_known_truth_v1.py
+      - name: Verify result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('build/conditional_structural_value_known_truth_v1.json').read_text())
+          assert p['uses_biological_response'] is False
+          assert p['counts_as_fresh_predictive_endpoint'] is False
+          assert p['changes_closed_eog_wf_synthesis'] is False
+          assert p['replicate_count'] == 64
+          assert p['predeclared_checks_all_passed'] is True
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: conditional-structural-value-known-truth-v1
+          path: build/conditional_structural_value_known_truth_v1.json
+          if-no-files-found: error
