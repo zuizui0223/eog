@@ -75,7 +75,7 @@ def test_oikos_submission_audit_has_only_admin_or_packaging_blockers():
     assert audit["current_status"]["science_closed"] is True
     assert audit["current_status"]["abstract_within_limit"] is True
     assert audit["current_status"]["reviewer_data_code_anonymous_package"] == (
-        "generated_and_identity_scanned"
+        "generated_identity_scanned_and_artifact_locked"
     )
     assert audit["current_status"]["initial_submission_science_files"] == "ready"
 
