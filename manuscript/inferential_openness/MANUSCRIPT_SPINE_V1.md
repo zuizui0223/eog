@@ -8,6 +8,8 @@
 
 Public availability is not the same as inferential readiness.
 
+This is a downstream, claim-specific concept rather than an alternative to FAIR data practice. FAIR asks whether digital resources are findable, accessible, interoperable and reusable. Inferential openness asks whether a particular data–claim pairing contains the registry, linkage, semantic and calibration states required to authorize that claim. A dataset may therefore be reusable for one ecological question yet unresolved for another.
+
 Across a prospectively governed ecological workflow, candidate systems can fail before any predictive or biological endpoint is legally interpretable because the released evidence does not reproduce the source identity, registry, geometry, temporal denominator, response linkage, negative-state semantics, or calibration required by the claim.
 
 This paper measures those barriers with a finite denominator rather than collecting anecdotal examples.
