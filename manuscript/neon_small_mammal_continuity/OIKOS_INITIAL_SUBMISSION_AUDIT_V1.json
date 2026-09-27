@@ -44,16 +44,28 @@
     "ai_disclosure_draft_prepared": true,
     "title_page_template_prepared": true,
     "figures_and_captions_prepared": true,
-    "reviewer_data_code_anonymous_package": "not_yet_archived_or_uploaded",
+    "reviewer_data_code_anonymous_package": "generated_and_identity_scanned",
     "permanent_archive_doi": "pending",
     "author_list": "pending",
     "affiliations": "pending",
-    "corresponding_author_orcid": "pending"
+    "corresponding_author_orcid": "pending",
+    "reviewer_bundle_inner_sha256": "41fe03588203aced89ea0f54dd8fdff370012c023053c3049b783ea0e515d4c1",
+    "initial_submission_science_files": "ready"
   },
   "hard_stops": [
     "Do not place author names, affiliations, ORCID, personal email or public identity-bearing repository links in the blinded main text.",
     "Do not reopen biological response access or alter the scientific denominator for submission formatting.",
     "Do not submit until a reviewer-accessible data/code package is prepared without compromising double-blind review.",
     "Do not treat the public GitHub repository alone as the final permanent data/code archive."
+  ],
+  "remaining_blockers": [
+    "final author list and affiliations",
+    "one corresponding author with ORCID in ScholarOne",
+    "final funding and acknowledgement statements",
+    "final conflict-of-interest declaration",
+    "human-approved AI/LLM disclosure",
+    "upload anonymous reviewer data/code package or create private-for-review repository link",
+    "permanent archive DOI required no later than acceptance/publication stage",
+    "format blinded main text as single-column double-spaced with page and continuous line numbers for upload"
   ]
 }
