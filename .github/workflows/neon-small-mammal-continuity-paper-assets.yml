@@ -28,6 +28,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install submission PDF dependency
+        run: python -m pip install reportlab
       - name: Build deterministic continuity paper assets
         run: python manuscript/neon_small_mammal_continuity/build_paper_assets.py
       - name: Verify generated assets
@@ -39,10 +41,13 @@ jobs:
           test -s manuscript/neon_small_mammal_continuity/generated/asset_manifest_v1.json
       - name: Build anonymous reviewer data-code bundle
         run: python manuscript/neon_small_mammal_continuity/build_anonymous_review_bundle.py
+      - name: Build blinded Oikos main-text PDF
+        run: python manuscript/neon_small_mammal_continuity/build_oikos_blinded_pdf.py
       - name: Verify anonymous reviewer bundle
         run: |
           test -s manuscript/neon_small_mammal_continuity/generated/anonymous_review_data_code_v1.zip
           test -s manuscript/neon_small_mammal_continuity/generated/anonymous_review_bundle_receipt_v1.json
+          test -s manuscript/neon_small_mammal_continuity/generated/OIKOS_BLINDED_MAIN_V1.pdf
       - name: Upload continuity paper assets
         uses: actions/upload-artifact@v4
         with:
