@@ -1,0 +1,46 @@
+{
+  "schema": "eog.inferential_openness.cross_project_evidence_ledger.v1",
+  "frozen_sources": {
+    "eog": {
+      "repository": "zuizui0223/eog",
+      "main_sha": "5506a015b80eb9094e38fbec16a5de43d37cc82f",
+      "candidate_flow": "manuscript/paper_ready/candidate_flow_table.csv",
+      "funnel_summary": "manuscript/paper_ready/candidate_funnel_summary.csv",
+      "ledger": "validation/paper_ready_replication/candidate_flow_ledger.json"
+    },
+    "284b": {
+      "repository": "zuizui0223/284b",
+      "main_sha": "b6f183ee1731b04965bdf20742779dd8ee326753",
+      "architecture_screen": "legacy/pre_level_a_focus/results/product_b_level_c_source_architecture_hard_stop_v3.json",
+      "calibration_audit": "legacy/pre_level_a_focus/results/product_b_level_c_candidate_specific_calibration_audit_v5.json"
+    }
+  },
+  "eog_denominator": {
+    "scored_predictive_endpoints": 3,
+    "scientific_protocol_stops": 31,
+    "administrative_exclusions": 3,
+    "scientific_attempts": 34,
+    "stop_fraction_within_declared_workflow": 0.9117647058823529,
+    "representative_sample_of_ecological_datasets": false
+  },
+  "eog_grouped_barriers": {
+    "transport_or_source_identity": 11,
+    "registry_geometry_or_time": 10,
+    "separation_linkage_or_schema": 8,
+    "semantic_or_covariate_validity": 2
+  },
+  "level_c_284b": {
+    "candidates_screened": 12,
+    "architecture_qualified": 2,
+    "candidate_specific_calibration_passed": 0,
+    "focal_hard_endpoints_opened": 0,
+    "interpretation": "negative-state calibration unavailable; no biological negative conclusion"
+  },
+  "prohibited_claims": [
+    "31/34 estimates the prevalence of unusable ecological data",
+    "STOP equals adverse ecological evidence",
+    "public data generally cannot support ecological inference",
+    "Cremastra or Belonocnema violate the proposed dependency",
+    "administrative exclusions belong in the scientific denominator"
+  ]
+}
