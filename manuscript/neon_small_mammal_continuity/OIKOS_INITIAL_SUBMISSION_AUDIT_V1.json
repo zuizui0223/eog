@@ -44,18 +44,21 @@
     "ai_disclosure_draft_prepared": true,
     "title_page_template_prepared": true,
     "figures_and_captions_prepared": true,
-    "reviewer_data_code_anonymous_package": "generated_and_identity_scanned",
+    "reviewer_data_code_anonymous_package": "generated_identity_scanned_and_artifact_locked",
     "permanent_archive_doi": "pending",
     "author_list": "pending",
     "affiliations": "pending",
     "corresponding_author_orcid": "pending",
-    "reviewer_bundle_inner_sha256": "41fe03588203aced89ea0f54dd8fdff370012c023053c3049b783ea0e515d4c1",
+    "reviewer_bundle_inner_sha256": "6f2c20618c1ff98b207aee98d246bc549bb4ccac61ff5c6dcdf1549c6f2f7f4e",
     "initial_submission_science_files": "ready",
     "blinded_main_pdf": "generated_and_visual_qa_passed",
-    "blinded_main_pdf_sha256": "1ceffc4ce5afb9a139f27a8afffc7f074d4f7fe26d885919a8036e57d44d2a4a",
-    "blinded_main_pdf_pages": 10,
+    "blinded_main_pdf_sha256": "dbd28ade798f575737fb862162d66d1d50dd02408acd1422c5cc41eac796dca4",
+    "blinded_main_pdf_pages": 9,
     "references_integrated": true,
-    "figure_captions_integrated": true
+    "figure_captions_integrated": true,
+    "blinded_main_pdf_final_line_number": 253,
+    "high_resolution_figures": "four_1961px_pngs_generated",
+    "upload_map_prepared": true
   },
   "hard_stops": [
     "Do not place author names, affiliations, ORCID, personal email or public identity-bearing repository links in the blinded main text.",
@@ -63,14 +66,16 @@
     "Do not submit until a reviewer-accessible data/code package is prepared without compromising double-blind review.",
     "Do not treat the public GitHub repository alone as the final permanent data/code archive."
   ],
-  "remaining_blockers": [
-    "final author list and affiliations",
-    "one corresponding author with ORCID in ScholarOne",
+  "remaining_initial_submission_inputs": [
+    "final author order and affiliations for the separate title page",
+    "corresponding-author postal/contact details and ORCID in ScholarOne",
     "final funding and acknowledgement statements",
     "final conflict-of-interest declaration",
     "human-approved AI/LLM disclosure",
-    "upload anonymous reviewer data/code package or create private-for-review repository link",
-    "permanent archive DOI required no later than acceptance/publication stage",
-    "format blinded main text as single-column double-spaced with page and continuous line numbers for upload"
+    "upload the already-generated anonymous reviewer data/code ZIP during submission",
+    "complete remaining ScholarOne metadata"
+  ],
+  "post_acceptance_requirement": [
+    "deposit the final necessary data/code package in a permanent public repository and insert its persistent identifier/DOI"
   ]
 }
