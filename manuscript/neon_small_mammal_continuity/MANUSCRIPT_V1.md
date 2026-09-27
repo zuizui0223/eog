@@ -12,7 +12,7 @@ Species turnover can allow taxa to occupy complementary parts of heterogeneous l
 
 ## 1. Introduction
 
-Ecologists often expect species turnover to create complementarity across heterogeneous landscapes. Different taxa can dominate different environments, and their spatial replacement can stabilize ecosystem properties across space. This logic underlies spatial-insurance theory and more broadly the metacommunity idea that regional biodiversity can maintain properties that no local population can provide alone.
+Ecologists often expect species turnover to create complementarity across heterogeneous landscapes. Different taxa can dominate different environments, and their spatial replacement can stabilize ecosystem properties across space. This logic underlies spatial-insurance theory (Loreau et al. 2003) and more broadly the metacommunity view that local environmental conditions, species interactions and regional movement jointly shape community structure (Thompson et al. 2020).
 
 A similar intuition can be applied to spatial occurrence patterns. If individual species occupy different parts of a landscape, pooling them might fill gaps in species-specific distributions and create a community-level pattern that is more spatially continuous than any one species. This possibility matters for community connectivity, biodiversity monitoring and conservation planning, because community-level maps are often constructed by aggregating species whose individual spatial structures differ.
 
@@ -26,7 +26,7 @@ The design distinguishes three ecological outcomes. A positive gain beyond the p
 
 ### 2.1 Prospective fresh-site design
 
-The analysis was preregistered before biological response access. We used NEON Small mammal box trapping, DP1.10072.001, RELEASE-2026. Sixteen sites used in an earlier methodological programme were excluded, as were three sites whose public response summaries had been viewed during study design.
+The analysis was preregistered before biological response access. We used the NSF National Ecological Observatory Network (NEON) Small mammal box trapping data product, DP1.10072.001, RELEASE-2026 (NEON 2026). Sixteen sites used in an earlier methodological programme were excluded, as were three sites whose public response summaries had been viewed during study design.
 
 All remaining sites were ordered by site code. Site selection used only product metadata, trap locations and geometry. The first 16 sites passing the response-blind structural criteria were fixed: JORN, KONA, LAJA, LENO, MLBS, MOAB, NIWO, NOGP, OAES, ONAQ, ORNL, OSBS, RMNP, SERC, SJER and SOAP.
 
@@ -134,7 +134,7 @@ Exploratorily, richness increased the absolute number of individually continuous
 
 Our prospective test rejected a simple but intuitive metacommunity hypothesis. Pooling species did not create spatial continuity beyond that already achieved by individual small-mammal species. Across 16 fresh NEON sites, at least one constituent species was fully continuous across every declared spatial neighbourhood scale, and no site showed a positive emergent gain.
 
-This result distinguishes redundancy from complementarity. Spatial-insurance arguments emphasize compensation among species occupying different environmental or spatial contexts. We found little evidence for that mechanism in the continuity endpoint tested here. Heterospecific-only neighbourhood rescue existed, but it was rare and never created a spatial scale at which the community succeeded while all individual species failed.
+This result distinguishes redundancy from complementarity. Spatial-insurance arguments emphasize compensation among species or local communities occupying different environmental or spatial contexts (Loreau et al. 2003, Lamy et al. 2019, Hammond et al. 2020). We found little evidence for that mechanism in the continuity endpoint tested here. Heterospecific-only neighbourhood rescue existed, but it was rare and never created a spatial scale at which the community succeeded while all individual species failed.
 
 Instead, community continuity was individually sufficient and often occupancy-redundant. The median site contained two species that each independently satisfied all continuity scales; 13 of 16 sites contained at least two, and the role was distributed across 32 species. This suggests a different route by which biodiversity can make a community-level spatial property robust: not by stitching together mutually incomplete species distributions, but by providing multiple taxa that can each independently span the relevant spatial neighbourhoods.
 
@@ -162,17 +162,24 @@ Not supported:
 - continuity fraction is a direct dispersal-rate or gene-flow measure;
 - the result generalizes outside NEON target small mammals without new validation.
 
-## 6. Figure plan
+## 6. Figure captions
 
-Figure 1 — Competing ecological mechanisms.
-Panel A: turnover complementarity, where species-specific gaps are filled by other taxa and pooled continuity exceeds every species.
-Panel B: single-species sufficiency/redundancy, where one or more species independently span the spatial neighbourhoods.
-Panel C: pooling penalty, where adding isolated occurrences reduces pooled continuity.
+**Figure 1. Competing mechanisms of community spatial continuity.** Three possible effects of pooling species on a spatial continuity criterion. (a) Complementarity: different species occupy complementary locations so the pooled community is continuous across a spatial world that no single species can satisfy. (b) Occupancy-continuity redundancy: one or more constituent species independently satisfy the same continuity criterion as the pooled community, so taxonomic pooling adds no spatial-world survival. (c) Pooling penalty: the best species is continuous, but adding spatially restricted occurrences from other taxa introduces unsupported positive locations and reduces pooled continuity. In the fresh NEON programme, the confirmatory result was redundancy at 15 sites, a pooling penalty at ORNL, and no site with positive emergent connectivity gain.
 
-Figure 2 — Fresh 16-site confirmatory result.
-For each site, paired community and best-species continuity fractions. Fifteen sites overlap at 1.0; ORNL shows community 0.25 versus best species 1.0.
+**Figure 2. Community versus best-species continuity across 16 fresh NEON sites.** Pooled-community and maximum single-species spatial-world survival fractions at the 16 prospectively fixed sites. Open points represent the best individual target species and filled points represent the pooled target-species community. At 15 sites both values were 1.0. At ORNL the best individual species survived every canonical world whereas the pooled community survived 0.25 of worlds. No site showed a pooled survival fraction greater than the best constituent species.
 
-Figure 3 — Richness and continuity redundancy.
-Target-species richness versus number of individually fully continuous species, explicitly labelled exploratory/post hoc. A second panel shows richness versus dominance coverage.
+**Figure 3. Exploratory richness and redundancy patterns.** Post hoc site-level associations used to characterize the redundancy pattern after the confirmatory turnover hypothesis had been closed. (a) Target-species richness versus the number of individually fully continuous species (Spearman rho = 0.668, p = 0.0047). (b) Richness versus dominance coverage (rho = -0.594, p = 0.015). (c) Richness versus cross-species rescue fraction (rho = -0.390, p = 0.135). These associations are exploratory only and do not alter the preregistered primary result. A frozen identity audit additionally showed that 13 of 16 sites contained multiple individually fully continuous species, involving 32 species across sites, while richness was not positively associated with the fraction of eligible species that were fully continuous (rho = -0.159, p = 0.555).
 
-Supplementary Figure S1 — Cross-species rescue fraction by site.
+**Figure 4. ORNL pooling penalty.** ORNL illustrates that taxonomic aggregation can reduce continuity under an all-positive support rule. The best individual species survival fraction was 1.0, whereas the pooled target-species community survived only 0.25 of canonical worlds. Ochrotomys nuttalli, Oryzomys palustris and Reithrodontomys humulis were tied as best-survival species at ORNL. Pooling adds positive occurrences from additional taxa, and those added locations must also possess supported neighbours; spatially restricted occurrences can therefore eliminate worlds that remain valid for a more coherent constituent species.
+
+## References
+
+Hammond, M., Loreau, M., de Mazancourt, C. and Gonzalez, A. 2020. Disentangling local, metapopulation, and cross-community sources of stabilization and asynchrony in metacommunities. – Ecosphere 11: e03078. https://doi.org/10.1002/ecs2.3078
+
+Lamy, T., Wang, S., Renard, D., Lafferty, K. D., Reed, D. C. and Miller, R. J. 2019. Species insurance trumps spatial insurance in stabilizing biomass of a marine macroalgal metacommunity. – Ecology 100: e02719. https://doi.org/10.1002/ecy.2719
+
+Loreau, M., Mouquet, N. and Gonzalez, A. 2003. Biodiversity as spatial insurance in heterogeneous landscapes. – Proc. Natl Acad. Sci. USA 100: 12765–12770. https://doi.org/10.1073/pnas.2235465100
+
+NEON. 2026. Small mammal box trapping (DP1.10072.001), RELEASE-2026. – National Ecological Observatory Network. https://doi.org/10.48443/A83H-TB34
+
+Thompson, P. L. et al. 2020. A process-based metacommunity framework linking local and regional scale community ecology. – Ecol. Lett. https://doi.org/10.1111/ele.13568
