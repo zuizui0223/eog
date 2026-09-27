@@ -87,6 +87,17 @@ For communication, these 31 stops can be grouped without changing the original t
 
 The grouped counts sum exactly to 31.
 
+### Response-access localization
+
+The STOP ledger also localizes how early the pipeline failed:
+
+- **29/31 STOPs (93.5%)** occurred with no biological response access;
+- **1/31** stopped after response-header access only;
+- **1/31** stopped after one full-response opening because the frozen deployment/response linkage failed;
+- therefore **30/31 STOPs occurred before any biological response row value was used for a scored endpoint**.
+
+This matters for interpretation. The dominant observed bottleneck was not poor model performance after analysis; it was the inability to reconstruct a claim-ready source/registry/linkage architecture before biological response opening.
+
 ## Empirical audit 2 — 284b calibration boundary
 
 EOG asks whether a public system can be reconstructed into a valid scored prediction endpoint.
@@ -206,7 +217,7 @@ Five layers from source transport to calibrated biological state.
 - 31 STOP
 - 3 scored endpoints
 
-Show the 31 STOPs by the four grouped barrier layers, with the original fine labels in Supplement.
+Show the 31 STOPs by the four grouped barrier layers, with the original fine labels in Supplement. Add a response-access inset: 29 no response, 1 header-only, 1 full-response-before-terminal-stop.
 
 ### Figure 3 — where STOPs occur before response
 Candidate flow by response access:
