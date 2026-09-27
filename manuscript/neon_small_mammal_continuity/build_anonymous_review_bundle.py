@@ -12,7 +12,6 @@ OUT = LANE / "generated"
 ZIP_PATH = OUT / "anonymous_review_data_code_v1.zip"
 
 FILES = (
-    "pyproject.toml",
     "src/eog/v2/metacommunity_connectivity.py",
     "src/eog/v2/adequacy_complete_ladder.py",
     "src/eog/v2/world_adequacy.py",
@@ -113,12 +112,24 @@ def main() -> None:
         }
 
     readme = review_readme().encode("utf-8")
+    requirements = b"numpy>=1.24\npytest>=8\n"
+    manifest["generated_files"] = {
+        "README_REVIEW.md": {
+            "sha256": hashlib.sha256(readme).hexdigest(),
+            "bytes": len(readme),
+        },
+        "requirements_review.txt": {
+            "sha256": hashlib.sha256(requirements).hexdigest(),
+            "bytes": len(requirements),
+        },
+    }
     manifest_raw = (
         json.dumps(manifest, indent=2, sort_keys=True) + "\n"
     ).encode("utf-8")
 
     with zipfile.ZipFile(ZIP_PATH, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("README_REVIEW.md", readme)
+        archive.writestr("requirements_review.txt", requirements)
         archive.writestr("BUNDLE_MANIFEST_V1.json", manifest_raw)
         for relative, path in resolved:
             archive.write(path, arcname=relative)
@@ -128,7 +139,7 @@ def main() -> None:
         "zip_name": ZIP_PATH.name,
         "zip_sha256": sha256(ZIP_PATH),
         "zip_bytes": ZIP_PATH.stat().st_size,
-        "file_count": len(FILES) + 2,
+        "file_count": len(FILES) + 3,
         "double_blind_identity_scan": "passed",
         "contains_raw_neon_response_files": False,
         "contains_api_token": False,
