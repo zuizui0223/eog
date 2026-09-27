@@ -1,0 +1,5 @@
+barrier_layer,count,percent_of_31_stop,examples,interpretation
+transport_or_source_identity,11,35.4839,"source_transport; metadata_identity_or_transport; archive-range/presign/DNS","Declared source/version could not be retrieved or identified under the frozen route"
+registry_geometry_or_time,10,32.2581,"publication_registry_reproduction; geometry_registry; temporal_registry; calendar/context estimability","Opportunity/site/time denominator could not be reconstructed response-blind"
+separation_linkage_or_schema,8,25.8065,"physical_source_separation; response_linkage; response_header; zip inventory; full-response schema/linkage","Response architecture could not be separated and linked to declared units under the frozen contract"
+semantic_or_covariate_validity,2,6.4516,"surveyed_negative_semantics; response_independent_baseline_covariate_value","Observed zero/covariate state could not be assigned the biological meaning required by the endpoint"
