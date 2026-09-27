@@ -1,0 +1,66 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.identity_redundancy_audit.v1",
+  "source_result_fingerprint": "c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860",
+  "source_scope": "frozen once-only response artifact; no new biological response access",
+  "site_count": 16,
+  "sites_with_at_least_two_individually_continuous_species": 13,
+  "sites_with_exactly_one_individually_continuous_species": 3,
+  "individually_continuous_species_count_median": 2,
+  "individually_continuous_species_count_range": [
+    1,
+    8
+  ],
+  "unique_individually_continuous_species_across_sites": 32,
+  "maximum_site_recurrence_of_any_species": 3,
+  "species_at_maximum_recurrence": [
+    "Mus musculus",
+    "Peromyscus boylii",
+    "Reithrodontomys megalotis",
+    "Sigmodon hispidus"
+  ],
+  "continuous_fraction_among_eligible_species_median": 0.4772727272727273,
+  "continuous_fraction_among_eligible_species_range": [
+    0.14285714285714285,
+    1
+  ],
+  "richness_vs_continuous_fraction_among_eligible_species": {
+    "spearman_rho": -0.1594957245108836,
+    "p": 0.5551712625854661
+  },
+  "interpretation": "Continuity redundancy is not attributable to one continent-wide best species. Thirteen of sixteen sites contain multiple individually continuous species, and 32 species appear as best-survival species across sites. Richness increases the absolute count of individually continuous species, while the fraction of eligible species that are individually continuous shows no positive richness trend.",
+  "confirmatory_status": "posthoc_descriptive_only; cannot alter the frozen confirmatory rejection of turnover-generated connectivity",
+  "best_species_frequency": {
+    "Mus musculus": 3,
+    "Peromyscus boylii": 3,
+    "Reithrodontomys megalotis": 3,
+    "Sigmodon hispidus": 3,
+    "Chaetodipus californicus": 2,
+    "Chaetodipus hispidus": 2,
+    "Dipodomys ordii": 2,
+    "Microtus ochrogaster": 2,
+    "Neotoma lepida": 2,
+    "Ochrotomys nuttalli": 2,
+    "Onychomys leucogaster": 2,
+    "Peromyscus gossypinus": 2,
+    "Chaetodipus eremicus": 1,
+    "Chaetodipus penicillatus": 1,
+    "Dipodomys merriami": 1,
+    "Dipodomys microps": 1,
+    "Dipodomys spectabilis": 1,
+    "Lemmiscus curtatus": 1,
+    "Microtus longicaudus": 1,
+    "Microtus pennsylvanicus": 1,
+    "Microtus pinetorum": 1,
+    "Neotoma floridana": 1,
+    "Onychomys arenicola": 1,
+    "Oryzomys palustris": 1,
+    "Perognathus flavus": 1,
+    "Perognathus parvus": 1,
+    "Peromyscus nasutus": 1,
+    "Peromyscus polionotus": 1,
+    "Peromyscus truei": 1,
+    "Reithrodontomys fulvescens": 1,
+    "Reithrodontomys humulis": 1,
+    "Synaptomys cooperi": 1
+  }
+}

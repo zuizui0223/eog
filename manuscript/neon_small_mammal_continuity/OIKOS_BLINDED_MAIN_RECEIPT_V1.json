@@ -1,0 +1,36 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.oikos_blinded_main_receipt.v1",
+  "workflow_run_id": 36301933396,
+  "workflow_head_sha": "41541eac9fd89cc295e30e43895a62843120124c",
+  "paper_assets_artifact_id": 10925797449,
+  "paper_assets_artifact_digest": "sha256:36eda81b61d1407d9c5b4a5feb4f982fcbae19f4db62602e703a8359ba34ac71",
+  "pdf_name": "OIKOS_BLINDED_MAIN_V1.pdf",
+  "pdf_sha256": "dbd28ade798f575737fb862162d66d1d50dd02408acd1422c5cc41eac796dca4",
+  "pdf_bytes": 21811,
+  "pages": 9,
+  "page_size": "A4 595x842 pt",
+  "final_continuous_line_number": 253,
+  "formatting": {
+    "single_column": true,
+    "double_spaced": true,
+    "page_numbers": true,
+    "continuous_line_numbers": true,
+    "author_metadata_blank": true,
+    "title_present": true,
+    "abstract_within_300_words": true,
+    "keywords_present": true,
+    "references_present": true,
+    "figure_captions_present": true
+  },
+  "visual_qa": {
+    "rendered_dpi": 150,
+    "inspected_pages": [
+      1,
+      5,
+      9
+    ],
+    "clipping_detected": false,
+    "overlap_detected": false,
+    "broken_glyphs_detected": false
+  }
+}
