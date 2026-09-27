@@ -42,6 +42,17 @@
 - [x] immutable paper-asset artifact receipt
 - [x] figure captions and accessibility text
 - [x] data/code availability draft
+- [x] abstract shortened to 246 words (Oikos limit 300)
+- [x] keywords added
+- [x] verified references integrated into blinded main text
+- [x] final Figure 1-4 captions integrated into blinded main text
+- [x] Oikos significance statement prepared
+- [x] Oikos title-page template prepared
+- [x] conflict / ethics / funding / acknowledgements / CRediT template prepared
+- [x] AI/LLM disclosure draft prepared
+- [x] anonymous reviewer data/code ZIP generated and identity-scanned
+- [x] blinded A4 PDF generated with double spacing, page numbers and continuous line numbers
+- [x] blinded PDF visual QA passed on rendered pages
 
 ## Remaining author/admin inputs
 
@@ -52,7 +63,9 @@
 - [ ] conflicts of interest declaration
 - [ ] journal-required AI/LLM disclosure
 - [ ] permanent archive DOI for final manuscript commit
-- [ ] final Oikos formatting / submission-system metadata
+- [ ] upload anonymous reviewer data/code ZIP to ScholarOne or a private-for-review repository
+- [ ] permanent archive DOI for final accepted data/code package
+- [ ] final ScholarOne submission-system metadata
 
 ## Hard stop
 
