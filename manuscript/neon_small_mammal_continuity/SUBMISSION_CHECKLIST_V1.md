@@ -53,6 +53,10 @@
 - [x] anonymous reviewer data/code ZIP generated and identity-scanned
 - [x] blinded A4 PDF generated with double spacing, page numbers and continuous line numbers
 - [x] blinded PDF visual QA passed on rendered pages
+- [x] blinded PDF current artifact receipt refreshed
+- [x] four 1961px submission figure PNGs generated
+- [x] anonymous reviewer ZIP current artifact receipt refreshed
+- [x] ScholarOne upload map prepared
 
 ## Remaining author/admin inputs
 
