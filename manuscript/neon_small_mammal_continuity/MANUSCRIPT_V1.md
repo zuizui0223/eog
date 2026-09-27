@@ -182,4 +182,4 @@ Loreau, M., Mouquet, N. and Gonzalez, A. 2003. Biodiversity as spatial insurance
 
 NEON. 2026. Small mammal box trapping (DP1.10072.001), RELEASE-2026. – National Ecological Observatory Network. https://doi.org/10.48443/A83H-TB34
 
-Thompson, P. L. et al. 2020. A process-based metacommunity framework linking local and regional scale community ecology. – Ecol. Lett. https://doi.org/10.1111/ele.13568
+Thompson, P. L., Guzman, L. M., De Meester, L., Horváth, Z., Ptacnik, R., Vanschoenwinkel, B., Viana, D. S. and Chase, J. M. 2020. A process-based metacommunity framework linking local and regional scale community ecology. – Ecol. Lett. 23: 1314–1329. https://doi.org/10.1111/ele.13568
