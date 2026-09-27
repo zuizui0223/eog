@@ -140,25 +140,11 @@ We do not infer dispersal mechanisms from these occurrence patterns. The continu
 
 The strongest conclusion is narrower but positive. In these fresh small-mammal communities, community-level spatial continuity was a redundant property of constituent species: every site had at least one independently continuous species, most had several, and the identity of those species changed among sites. Turnover among spatially incomplete species was not required to generate the observed community continuity.
 
-## 5. Claim boundary
+## Data availability
 
-Supported:
-- all 16 fresh sites contained at least one individually fully continuous target species;
-- pooling species did not increase continuity at any site;
-- no strict turnover-generated continuity was observed;
-- heterospecific-only rescue was rare and local;
-- taxonomic pooling reduced continuity at one site;
-- occupancy-continuity redundancy was widespread: 13/16 sites had multiple independently continuous species, involving 32 species across the full site set;
-- exploratory richness patterns favor accumulation of redundant continuity providers over turnover complementarity.
+The primary data are the NSF National Ecological Observatory Network Small mammal box trapping data product DP1.10072.001, RELEASE-2026 (NEON 2026). An anonymized code and derived-data package sufficient to inspect the confirmatory analysis and regenerate manuscript figures and tables is provided with the submission for peer review. Raw NEON response files are not redistributed. Upon acceptance, the final analysis code and derived data required to reproduce the reported results will be deposited in a permanent public repository with a persistent identifier.
 
-Not supported:
-- species turnover is generally unimportant to metacommunities;
-- the best continuity species is always the numerically dominant species;
-- the post hoc richness-redundancy association is causal;
-- continuity fraction is a direct dispersal-rate or gene-flow measure;
-- the result generalizes outside NEON target small mammals without new validation.
-
-## 6. Figure captions
+## Figure captions
 
 **Figure 1. Competing mechanisms of community spatial continuity.** Three possible effects of pooling species on a spatial continuity criterion. (a) Complementarity: different species occupy complementary locations so the pooled community is continuous across a spatial world that no single species can satisfy. (b) Occupancy-continuity redundancy: one or more constituent species independently satisfy the same continuity criterion as the pooled community, so taxonomic pooling adds no spatial-world survival. (c) Pooling penalty: the best species is continuous, but adding spatially restricted occurrences from other taxa introduces unsupported positive locations and reduces pooled continuity. In the fresh NEON programme, the confirmatory result was redundancy at 15 sites, a pooling penalty at ORNL, and no site with positive emergent connectivity gain.
 
