@@ -1,0 +1,23 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.anonymous_review_bundle_receipt.v1",
+  "workflow_run_id": 36301270997,
+  "workflow_head_sha": "4e12d29b620f3a1ab9511733375896ce963339cd",
+  "outer_artifact_id": 10925248626,
+  "outer_artifact_name": "neon-small-mammal-continuity-anonymous-review-v1",
+  "outer_artifact_digest": "sha256:6567c4c88db688109a416ed7aa51c19e45bc2cd316b0513e2c01a0c81339654b",
+  "inner_zip_name": "anonymous_review_data_code_v1.zip",
+  "inner_zip_sha256": "41fe03588203aced89ea0f54dd8fdff370012c023053c3049b783ea0e515d4c1",
+  "inner_zip_bytes": 56124,
+  "file_count": 23,
+  "manual_identity_scan": {
+    "author_name_found": false,
+    "email_found": false,
+    "orcid_found": false,
+    "github_owner_link_found": false,
+    "note": "At-sign matches were Python decorators only."
+  },
+  "contains_api_token": false,
+  "contains_raw_neon_response_files": false,
+  "review_use": "Ready to upload to ScholarOne as an additional file for review, or to a private-for-peer-review repository.",
+  "publication_use": "Not a permanent publication archive; final accepted data/code requires a persistent public repository identifier."
+}
