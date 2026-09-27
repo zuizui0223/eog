@@ -1,0 +1,25 @@
+{
+  "schema": "eog.inferential_openness.funnel_metrics.v1",
+  "scientific_candidate_attempts": 34,
+  "scored_predictive_endpoints": 3,
+  "scientific_protocol_stops": 31,
+  "administrative_exclusions": 3,
+  "stop_response_access": {
+    "no_biological_response_access": 29,
+    "header_only": 1,
+    "full_response_once_before_terminal_schema_or_linkage_stop": 1
+  },
+  "derived": {
+    "stop_fraction_before_any_biological_response": 0.9354838709677419,
+    "stop_fraction_before_any_response_row_value": 0.967741935483871,
+    "scored_fraction_within_scientific_workflow": 0.08823529411764706
+  },
+  "grouped_barriers": {
+    "transport_or_source_identity": 11,
+    "registry_geometry_or_time": 10,
+    "separation_linkage_or_schema": 8,
+    "semantic_or_covariate_validity": 2
+  },
+  "interpretation": "Most STOPs occurred before biological response values were opened. This localizes the dominant barrier in the workflow to source/registry/linkage readiness rather than poor predictive performance.",
+  "sampling_boundary": "The 34 attempts are a prospectively governed workflow denominator, not a random sample of ecological datasets."
+}
