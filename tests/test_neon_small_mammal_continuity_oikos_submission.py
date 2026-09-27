@@ -79,7 +79,7 @@ def test_oikos_submission_audit_has_only_admin_or_packaging_blockers():
     )
     assert audit["current_status"]["initial_submission_science_files"] == "ready"
 
-    blockers = " ".join(audit["remaining_blockers"]).lower()
+    blockers = " ".join(audit["remaining_initial_submission_inputs"]).lower()
     assert "author" in blockers
     assert "orcid" in blockers
     assert "funding" in blockers
