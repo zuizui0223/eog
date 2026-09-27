@@ -37,9 +37,23 @@ jobs:
           test -s manuscript/neon_small_mammal_continuity/generated/figure_3_exploratory_redundancy.svg
           test -s manuscript/neon_small_mammal_continuity/generated/figure_4_ornl_weakest_link.svg
           test -s manuscript/neon_small_mammal_continuity/generated/asset_manifest_v1.json
+      - name: Build anonymous reviewer data-code bundle
+        run: python manuscript/neon_small_mammal_continuity/build_anonymous_review_bundle.py
+      - name: Verify anonymous reviewer bundle
+        run: |
+          test -s manuscript/neon_small_mammal_continuity/generated/anonymous_review_data_code_v1.zip
+          test -s manuscript/neon_small_mammal_continuity/generated/anonymous_review_bundle_receipt_v1.json
       - name: Upload continuity paper assets
         uses: actions/upload-artifact@v4
         with:
           name: neon-small-mammal-continuity-paper-assets-v1
           path: manuscript/neon_small_mammal_continuity/generated/
+          if-no-files-found: error
+      - name: Upload anonymous reviewer bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: neon-small-mammal-continuity-anonymous-review-v1
+          path: |
+            manuscript/neon_small_mammal_continuity/generated/anonymous_review_data_code_v1.zip
+            manuscript/neon_small_mammal_continuity/generated/anonymous_review_bundle_receipt_v1.json
           if-no-files-found: error
