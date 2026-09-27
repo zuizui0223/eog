@@ -200,9 +200,9 @@ def figure3_exploratory(rows: list[dict[str, str]], closure: dict) -> str:
     post=closure["posthoc_mechanism"]
     _scatter_panel(
         parts,45,85,390,500,richness,saturated,labels,
-        "A  Richness → redundant species",
+        "A  Richness → continuous species",
         "observed target-species richness",
-        "individually saturated species count",
+        "individually fully continuous species",
         f'post hoc Spearman rho={post["richness_vs_individually_saturated_species_count"]["spearman_rho"]:.3f}, p={post["richness_vs_individually_saturated_species_count"]["p"]:.4f}'
     )
     _scatter_panel(
