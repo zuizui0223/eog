@@ -1,0 +1,82 @@
+{
+  "schema": "eog.known_truth_bam_direct_evidence.protocol.v2_2",
+  "status": "frozen_before_implementation",
+  "parent_v2_1": {
+    "result_fingerprint": "dbfd0c09b492c1e53914ddfdfe392c765df6da98a43e105245767c24c75ad9b3",
+    "key_result": "0/64 truth unique from positives, 2/64 with complete negatives, 6/64 after exact movement timing despite orthogonal A/B/M activation",
+    "rule": "v2.1 is immutable; v2.2 only adds new evidence channels"
+  },
+  "scientific_question": "Which direct axis-specific observations are sufficient to collapse the residual BAM equivalence classes left by complete occurrence, perfect-negative and movement-timing evidence?",
+  "evidence_semantics": {
+    "direct_A": "Independent abiotic-state observation at a node: whether the focal species is physiologically/experimentally viable there when B and M are held out of the measurement.",
+    "direct_B": "Independent biotic-permissibility observation at a node: whether the local partner/antagonist configuration permits the focal species when A and M are held out of the measurement.",
+    "direct_M": "Exact source-conditioned first-arrival timing already defined in v2.1; no new M evidence is invented in v2.2."
+  },
+  "evidence_ladder": [
+    "E0 complete positive occurrences only",
+    "E1 E0 + perfect surveyed negatives (complete G)",
+    "E2 E1 + exact first-arrival times on truth-positive nodes",
+    "E3 E2 + direct A-state observations",
+    "E4 E3 + direct B-state observations"
+  ],
+  "unit_of_identification": {
+    "world_identity": "Exact candidate parameter tuple; reported but not the primary endpoint because different parameter tuples can induce identical A/B/M states on a finite landscape.",
+    "bam_state_identity": "Primary endpoint. Two worlds are BAM-state equivalent only if A set, B set, M set, and first-arrival vector are identical.",
+    "rationale": "Do not label parameter aliases as biological non-identifiability when they are observationally and mechanistically identical on the declared finite landscape."
+  },
+  "direct_measurement_policy": {
+    "full_axis_endpoint": "Expose the complete truth A or B state across all 21 nodes to measure the maximum information available from that axis.",
+    "minimal_targeted_endpoint": "Greedily choose diagnostic nodes that maximally split the current compatible BAM-state classes; ties resolved lexicographically and frozen before reading the next axis.",
+    "no_outcome_tuning": true
+  },
+  "primary_hypotheses": [
+    {
+      "id": "DE_H1_state_equivalence_honesty",
+      "claim": "No evidence ladder can distinguish candidate worlds that are identical in A, B, M and arrival state; these parameter aliases must remain one BAM-state equivalence class.",
+      "failure_rule": "Any split within an exact BAM-state equivalence class refutes H1."
+    },
+    {
+      "id": "DE_H2_direct_A_contraction",
+      "claim": "When residual E2-compatible BAM states differ in A, complete direct-A observations eliminate every state whose A set differs from truth.",
+      "failure_rule": "Any A-mismatched state surviving complete A evidence refutes H2."
+    },
+    {
+      "id": "DE_H3_direct_B_contraction",
+      "claim": "After E3, complete direct-B observations eliminate every residual state whose B set differs from truth.",
+      "failure_rule": "Any B-mismatched state surviving complete B evidence refutes H3."
+    },
+    {
+      "id": "DE_H4_complete_axis_state_recovery",
+      "claim": "After complete G, M timing, A and B evidence, the compatible set collapses to the exact truth BAM-state equivalence class for every eligible truth.",
+      "failure_rule": "Any non-equivalent BAM state surviving E4 refutes H4."
+    },
+    {
+      "id": "DE_H5_targeted_measurement_efficiency",
+      "claim": "A finite targeted set of direct A/B node measurements can reproduce the full-axis BAM-state contraction for every eligible truth whose residual ambiguity is axis-separable.",
+      "failure_rule": "Report rather than force success: cases requiring all nodes or remaining unresolved are retained."
+    }
+  ],
+  "primary_outputs": [
+    "exact_parameter_alias_count",
+    "exact_bam_state_equivalence_class_distribution",
+    "bam_state_unique_fraction_E0",
+    "bam_state_unique_fraction_E1",
+    "bam_state_unique_fraction_E2",
+    "bam_state_unique_fraction_E3",
+    "bam_state_unique_fraction_E4",
+    "parameter_unique_fraction_E4",
+    "minimal_direct_A_measurements_distribution",
+    "minimal_direct_B_measurements_distribution",
+    "minimal_total_A_B_measurements_distribution",
+    "residual_nonidentifiable_cases_after_E4",
+    "DE_H1-H5 verdicts"
+  ],
+  "forbidden_after_results": [
+    "change the 64-world v2.1 universe",
+    "change A/B/M definitions",
+    "change direct A/B truth states",
+    "drop parameter aliases from reporting",
+    "count parameter aliases as distinct biological mechanisms in the primary endpoint",
+    "add a new evidence channel after E4 to rescue a failed H4"
+  ]
+}
