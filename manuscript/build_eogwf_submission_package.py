@@ -9,11 +9,23 @@ import subprocess
 import zipfile
 from pathlib import Path
 
+try:
+    from manuscript.build_eogwf_author_admin import validate_admin_receipt
+except ModuleNotFoundError:
+    from build_eogwf_author_admin import validate_admin_receipt
+
 ROOT = Path(__file__).resolve().parents[1]
 BLOCKERS = ROOT / "manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json"
-MANUSCRIPT = ROOT / "manuscript/EOG_WF_MANUSCRIPT_V1.md"
+MANUSCRIPT_SOURCE = ROOT / "manuscript/EOG_WF_MANUSCRIPT_V1.md"
+FINAL_MANUSCRIPT = ROOT / "manuscript/EOG_WF_MANUSCRIPT_FINAL.md"
 FINAL_TITLE_PAGE = ROOT / "manuscript/EOG_WF_TITLE_PAGE.md"
 TITLE_TEMPLATE = ROOT / "manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md"
+AI_DISCLOSURE = ROOT / "manuscript/EOG_WF_AI_LLM_DISCLOSURE.md"
+ADMIN_RECEIPT = ROOT / "manuscript/EOG_WF_AUTHOR_ADMIN_APPROVAL_RECEIPT.json"
+AUTHOR_ADMIN_BLOCKER_IDS = {
+    "title_page_author_confirmation",
+    "ai_llm_disclosure_author_confirmation",
+}
 
 STATIC_FILES = [
     "LICENSE",
@@ -23,7 +35,11 @@ STATIC_FILES = [
     "manuscript/EOG_WF_MANUSCRIPT_V1.md",
     "manuscript/EOG_WF_KNOWN_TRUTH_BENCHMARK_V1.md",
     "manuscript/MEE_DESK_FIT_AUDIT_V2.md",
+    "manuscript/EOG_WF_MEE_LIVE_POLICY_VERIFICATION_2026-09-29.md",
     "manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json",
+    "manuscript/EOG_WF_AUTHOR_ADMIN_CONFIRMATION.template.json",
+    "manuscript/AUTHOR_ADMIN_CONFIRMATION_PACKET.md",
+    "manuscript/build_eogwf_author_admin.py",
     "manuscript/check_eogwf_mee_readiness.py",
     "manuscript/build_paper_ready_eogwf.py",
 ]
@@ -59,7 +75,7 @@ def is_package_source(path: Path) -> bool:
     return path.is_file()
 
 
-def selected_files() -> list[Path]:
+def selected_files(mode: str, admin_receipt_valid: bool) -> list[Path]:
     paths: list[Path] = []
     for rel in STATIC_FILES:
         path = ROOT / rel
@@ -67,10 +83,30 @@ def selected_files() -> list[Path]:
             raise FileNotFoundError(f"required submission-package file missing: {rel}")
         paths.append(path)
 
-    title = FINAL_TITLE_PAGE if FINAL_TITLE_PAGE.is_file() else TITLE_TEMPLATE
-    if not title.is_file():
-        raise FileNotFoundError("neither final nor template EOG-WF title page exists")
-    paths.append(title)
+    if mode == "final":
+        if not admin_receipt_valid:
+            raise RuntimeError(
+                "final submission package requires a valid author-admin approval receipt"
+            )
+        for path in (
+            FINAL_TITLE_PAGE,
+            FINAL_MANUSCRIPT,
+            AI_DISCLOSURE,
+            ADMIN_RECEIPT,
+        ):
+            if not path.is_file():
+                raise FileNotFoundError(
+                    f"required author-admin finalization file missing: "
+                    f"{path.relative_to(ROOT)}"
+                )
+            paths.append(path)
+    else:
+        title = FINAL_TITLE_PAGE if FINAL_TITLE_PAGE.is_file() else TITLE_TEMPLATE
+        if not title.is_file():
+            raise FileNotFoundError(
+                "neither final nor template EOG-WF title page exists"
+            )
+        paths.append(title)
 
     for rel in TREE_ROOTS:
         root = ROOT / rel
@@ -95,17 +131,42 @@ def write_deterministic_zip(package_root: Path, zip_path: Path) -> None:
 def build(output_dir: Path, mode: str) -> dict:
     blockers = json.loads(BLOCKERS.read_text(encoding="utf-8"))
     remaining = blockers.get("remaining_submission_blockers", [])
-    blocker_ids = [item["id"] for item in remaining]
+    canonical_blocker_ids = [item["id"] for item in remaining]
+    admin_receipt_valid = validate_admin_receipt(
+        ADMIN_RECEIPT,
+        title_path=FINAL_TITLE_PAGE,
+        ai_path=AI_DISCLOSURE,
+        manuscript_path=FINAL_MANUSCRIPT,
+    )
+    effective_blocker_ids = [
+        blocker_id
+        for blocker_id in canonical_blocker_ids
+        if not (
+            admin_receipt_valid
+            and blocker_id in AUTHOR_ADMIN_BLOCKER_IDS
+        )
+    ]
 
-    if mode == "final" and remaining:
+    if mode == "final" and effective_blocker_ids:
         raise RuntimeError(
             "final submission package forbidden while blockers remain: "
-            + ", ".join(blocker_ids)
+            + ", ".join(effective_blocker_ids)
         )
-    if mode == "final" and not FINAL_TITLE_PAGE.is_file():
-        raise RuntimeError("final submission package requires manuscript/EOG_WF_TITLE_PAGE.md")
-    if mode == "final" and "[FINAL ARCHIVE/DOI TO ADD]" in MANUSCRIPT.read_text(encoding="utf-8"):
-        raise RuntimeError("final submission package forbidden while archive/DOI placeholder remains")
+    if mode == "final" and not admin_receipt_valid:
+        raise RuntimeError(
+            "final submission package requires a valid author-admin approval receipt"
+        )
+    manuscript_for_submission = (
+        FINAL_MANUSCRIPT if admin_receipt_valid else MANUSCRIPT_SOURCE
+    )
+    if (
+        mode == "final"
+        and "[FINAL ARCHIVE/DOI TO ADD]"
+        in manuscript_for_submission.read_text(encoding="utf-8")
+    ):
+        raise RuntimeError(
+            "final submission package forbidden while archive/DOI placeholder remains"
+        )
 
     if output_dir.exists():
         shutil.rmtree(output_dir)
@@ -113,7 +174,7 @@ def build(output_dir: Path, mode: str) -> dict:
     package_root.mkdir(parents=True)
 
     hashes: dict[str, str] = {}
-    for src in selected_files():
+    for src in selected_files(mode, admin_receipt_valid):
         rel = src.relative_to(ROOT)
         dst = package_root / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
@@ -126,10 +187,17 @@ def build(output_dir: Path, mode: str) -> dict:
         "mode": mode,
         "git_head": git_head(),
         "scientific_desk_fit_ready": blockers.get("scientific_desk_fit_ready") is True,
-        "remaining_submission_blocker_ids": blocker_ids,
-        "remaining_submission_blocker_count": len(blocker_ids),
+        "canonical_submission_blocker_ids": canonical_blocker_ids,
+        "remaining_submission_blocker_ids": effective_blocker_ids,
+        "remaining_submission_blocker_count": len(effective_blocker_ids),
+        "author_admin_approval_receipt_valid": admin_receipt_valid,
         "final_title_page_present": FINAL_TITLE_PAGE.is_file(),
-        "archive_doi_placeholder_present": "[FINAL ARCHIVE/DOI TO ADD]" in MANUSCRIPT.read_text(encoding="utf-8"),
+        "final_manuscript_present": FINAL_MANUSCRIPT.is_file(),
+        "ai_llm_disclosure_present": AI_DISCLOSURE.is_file(),
+        "archive_doi_placeholder_present": (
+            "[FINAL ARCHIVE/DOI TO ADD]"
+            in manuscript_for_submission.read_text(encoding="utf-8")
+        ),
         "included_files": hashes,
     }
     manifest_path = package_root / "submission_package_manifest.json"
@@ -145,10 +213,12 @@ def build(output_dir: Path, mode: str) -> dict:
         "archive": zip_path.name,
         "archive_sha256": sha256_bytes(zip_path.read_bytes()),
         "manifest_sha256": sha256_bytes(manifest_bytes),
-        "remaining_submission_blocker_ids": blocker_ids,
-        "remaining_submission_blocker_count": len(blocker_ids),
+        "canonical_submission_blocker_ids": canonical_blocker_ids,
+        "remaining_submission_blocker_ids": effective_blocker_ids,
+        "remaining_submission_blocker_count": len(effective_blocker_ids),
+        "author_admin_approval_receipt_valid": admin_receipt_valid,
         "scientific_desk_fit_ready": manifest["scientific_desk_fit_ready"],
-        "submission_ready": mode == "final" and not blocker_ids,
+        "submission_ready": mode == "final" and not effective_blocker_ids,
     }
     receipt_path = output_dir / "submission_package_receipt.json"
     receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
