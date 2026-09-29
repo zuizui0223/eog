@@ -506,6 +506,13 @@ def validate_admin_receipt(
     return all(expected.get(key) == value for key, value in observed.items())
 
 
+def _display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def build(
     input_path: Path = DEFAULT_INPUT,
     title_output: Path = DEFAULT_TITLE,
@@ -558,10 +565,10 @@ def build(
 
     return {
         "status": "author_admin_outputs_generated",
-        "title_page": str(title_output.relative_to(ROOT)),
-        "ai_llm_disclosure": str(ai_output.relative_to(ROOT)),
-        "final_manuscript": str(manuscript_output.relative_to(ROOT)),
-        "approval_receipt": str(receipt_output.relative_to(ROOT)),
+        "title_page": _display_path(title_output),
+        "ai_llm_disclosure": _display_path(ai_output),
+        "final_manuscript": _display_path(manuscript_output),
+        "approval_receipt": _display_path(receipt_output),
         "author_count": len(validated["authors"]),
         "corresponding_author_id": validated["corresponding_author_id"],
     }
