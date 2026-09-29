@@ -8,7 +8,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "manuscript" / "bam_identifiability" / "figure_data"
 
 
@@ -30,21 +30,45 @@ def figure2(output_dir: Path):
     y = [int(row["compatible_world_count"]) for row in rows]
     labels = [row["scenario"] for row in rows]
 
-    fig, ax = plt.subplots(figsize=(7.4, 5.2))
+    fig, ax = plt.subplots(figsize=(7.6, 5.4))
     ax.scatter(x, y, s=70)
+
+    grouped = {}
     for xi, yi, label in zip(x, y, labels):
-        ax.annotate(label, (xi, yi), xytext=(5, 5), textcoords="offset points", fontsize=8)
+        grouped.setdefault((xi, yi), []).append(label)
+
+    offsets = {
+        (33, 32): (8, -18),
+        (40, 8): (8, 8),
+        (67, 8): (8, 8),
+        (96, 4): (-128, 10),
+    }
+    for (xi, yi), group in sorted(grouped.items()):
+        label = " / ".join(value.replace("_", " ") for value in group)
+        dx, dy = offsets.get((xi, yi), (6, 6))
+        ax.annotate(
+            label,
+            (xi, yi),
+            xytext=(dx, dy),
+            textcoords="offset points",
+            fontsize=8.5,
+            ha="left",
+            va="center",
+        )
+
     ax.set_xlabel("Complete positive support size")
     ax.set_ylabel("Compatible candidate worlds")
-    ax.set_title("Stronger restriction can increase positive-only ambiguity")
+    ax.set_ylim(2, 35)
+    ax.set_title("Stronger restriction can increase positive-only ambiguity", pad=34)
     ax.text(
-        0.02,
-        0.98,
+        0.5,
+        1.015,
         "Exact audit: 304/304 strict support-inclusion pairs obeyed\n"
         "R1 ⊂ R2 ⇒ C(R1) ⊇ C(R2); violations = 0",
         transform=ax.transAxes,
-        va="top",
-        fontsize=9,
+        ha="center",
+        va="bottom",
+        fontsize=8.5,
     )
     save(fig, output_dir, "Figure2_restrictiveness_ambiguity")
 
@@ -59,16 +83,17 @@ def figure3(output_dir: Path):
     ax.set_ylim(0, 810)
     ax.set_ylabel("Uniquely identified BAM states (of 768)")
     ax.set_xlabel("Evidence stage")
-    ax.set_title("Progressive evidence contracts BAM survivor fibers")
+    ax.set_title("Progressive evidence contracts BAM survivor fibers", pad=28)
     for x, y in zip(labels, counts):
         ax.annotate(str(y), (x, y), xytext=(0, 7), textcoords="offset points", ha="center", fontsize=8)
     ax.text(
-        0.02,
-        0.95,
+        0.5,
+        1.015,
         "Predeclared 'M always last' claim: REFUTED",
         transform=ax.transAxes,
-        va="top",
-        fontsize=9,
+        ha="center",
+        va="bottom",
+        fontsize=8.5,
     )
     save(fig, output_dir, "Figure3_evidence_ladder")
 
@@ -82,7 +107,7 @@ def figure4(output_dir: Path):
     bars = ax.bar(labels, compatible)
     ax.set_ylabel("Median compatible worlds at horizon 40")
     ax.set_xlabel("Known-truth stochastic scenario")
-    ax.set_title("Independent stochastic challenge preserves non-identification")
+    ax.set_title("Independent stochastic challenge preserves non-identification", pad=42)
     ax.tick_params(axis="x", rotation=30)
     for bar, value in zip(bars, compatible):
         ax.annotate(
@@ -94,13 +119,14 @@ def figure4(output_dir: Path):
             fontsize=8,
         )
     ax.text(
-        0.02,
-        0.97,
+        0.5,
+        1.015,
         "384/384 eligible runs; truth-retention failures = 0; API parity mismatches = 0\n"
         "unordered-history strict improvements = 0/384; unique truth recovery = 0",
         transform=ax.transAxes,
-        va="top",
-        fontsize=8.5,
+        ha="center",
+        va="bottom",
+        fontsize=8.2,
     )
     save(fig, output_dir, "Figure4_independent_stochastic")
 
@@ -118,16 +144,17 @@ def figure5(output_dir: Path):
     ax.bar([x + width / 2 for x in positions], temporal, width, label="First-occurrence time")
     ax.set_xticks(positions, labels, rotation=30, ha="right")
     ax.set_ylabel("Median compatible worlds at horizon 40")
-    ax.set_title("Time-stamped occurrence history refines static support")
+    ax.set_title("Time-stamped occurrence history refines static support", pad=42)
     ax.legend()
     ax.text(
-        0.02,
-        0.97,
+        0.5,
+        1.015,
         "8 static classes → 20 temporal classes; 19/48 static M-equivalent pairs split\n"
         "strict temporal contraction in 256/384 runs; unique truth recovery remained 0",
         transform=ax.transAxes,
-        va="top",
-        fontsize=8.5,
+        ha="center",
+        va="bottom",
+        fontsize=8.2,
     )
     save(fig, output_dir, "Figure5_temporal_information")
 
