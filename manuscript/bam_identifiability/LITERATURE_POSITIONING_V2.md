@@ -74,6 +74,29 @@ DOI: 10.1016/j.ecolind.2018.03.043.
 
 Therefore "absence adds BAM information" is not itself a contribution.
 
+### Beale et al. 2014 — BAM-based covariate attribution
+
+Beale et al. developed a statistical framework explicitly linked to BAM for
+quantifying covariate associations with species distributions. The paper notes
+that identifying the precise cause of presence or absence at a given location is
+challenging and that estimated A/B effects depend on the measured covariates.
+
+Reference:
+Beale, C.M. et al. (2014). A new statistical framework for the quantification
+of covariate associations with species distributions. Methods in Ecology and
+Evolution. DOI: 10.1111/2041-210X.12174.
+
+Therefore do not claim novelty for:
+
+- BAM-based attribution of distributional drivers;
+- estimating the contribution of abiotic/biotic covariates;
+- recognizing that the precise cause of occupancy at a site can be difficult to
+  identify.
+
+The narrower distinction is that the present work characterizes the exact finite
+set of BAM worlds compatible with an evidence contract rather than estimating a
+relative covariate contribution.
+
 ## 2. Equifinality and pattern-to-process non-identification are established general problems
 
 Ecology and environmental modelling already recognize that multiple processes or
