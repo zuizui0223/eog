@@ -24,10 +24,16 @@ jobs:
         run: |
           python benchmarks/run_known_truth_bam_v2_2.py \
             --output build/known_truth_bam_v2_2/result_v2_2.json
+      - name: Run parameter-alias audit
+        run: |
+          python benchmarks/audit_known_truth_bam_v2_2_aliases.py \
+            --output build/known_truth_bam_v2_2/parameter_alias_audit_result_v2_2.json
       - name: Verify focused tests
         run: python -m pytest tests/test_known_truth_bam_v2_2.py -q
       - uses: actions/upload-artifact@v4
         with:
           name: known-truth-bam-v2-2
-          path: build/known_truth_bam_v2_2/result_v2_2.json
+          path: |
+            build/known_truth_bam_v2_2/result_v2_2.json
+            build/known_truth_bam_v2_2/parameter_alias_audit_result_v2_2.json
           if-no-files-found: error
