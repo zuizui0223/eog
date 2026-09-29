@@ -1,0 +1,99 @@
+{
+  "schema": "eog.joint_ecology_observation.protocol.v2_7",
+  "status": "frozen_before_implementation",
+  "parent": {
+    "bam_v2_1_result_fingerprint": "dbfd0c09b492c1e53914ddfdfe392c765df6da98a43e105245767c24c75ad9b3",
+    "observation_v2_6_result_fingerprint": "3e5187088b74a443471c79743d78fc86c02a5d87565f3f51fb0f081669c46091",
+    "rule": "Both parent results remain immutable."
+  },
+  "question": "How does uncertainty in the observation process change which BAM ecological worlds can be exactly falsified by the same survey history?",
+  "finite_world_construction": {
+    "ecological_worlds": "The frozen 64 BAM v2.1 worlds.",
+    "target_node_rule": "Among landscape nodes, choose the lexicographically first node maximizing min(number of ecological worlds with target in G, number with target outside G).",
+    "ecological_truth_rule": "Choose the lexicographically first ecological world with target absent, focal source retained, and at least two occupied nodes.",
+    "observation_worlds": [
+      {
+        "id": "perfect",
+        "p": 1,
+        "q": 0
+      },
+      {
+        "id": "imperfect",
+        "p": 0.75,
+        "q": 0
+      }
+    ],
+    "observation_truth": "perfect",
+    "observed_history": {
+      "surveys": 4,
+      "detections": 0
+    },
+    "joint_world": "(ecological_world, observation_world)"
+  },
+  "observation_universes": {
+    "strict": [
+      "perfect"
+    ],
+    "broad": [
+      "perfect",
+      "imperfect"
+    ]
+  },
+  "calibration_evidence": {
+    "type": "idealized direct observation-process calibration",
+    "outcome_under_truth": "p=1.0",
+    "effect": "retain only joint worlds whose observation-world p equals the calibrated value",
+    "boundary": "This is an identifiability upper-bound calibration channel, not a claim that p is known exactly in field surveys."
+  },
+  "hypotheses": [
+    {
+      "id": "J1_joint_factorization",
+      "claim": "A joint world is compatible exactly when the observed detection history has positive probability under the observation process conditional on the ecological world's target state.",
+      "rule": "Any mismatch between direct probability calculation and joint compatibility refutes J1."
+    },
+    {
+      "id": "J2_observation_uncertainty_resurrects_ecological_worlds",
+      "claim": "For the frozen all-zero history, broadening the observation universe from perfect detection to include p=0.75 strictly increases the ecological-world projection by retaining target-present worlds that perfect detection excludes.",
+      "rule": "Failure of strict subset expansion refutes J2."
+    },
+    {
+      "id": "J3_calibration_restores_ecological_falsification",
+      "claim": "Starting from the broad joint universe, direct calibration to p=1 removes the imperfect-detection joint worlds and restores exactly the same ecological-world projection as the strict universe, without collecting a new focal ecological observation.",
+      "rule": "Any projection mismatch between calibrated-broad and strict refutes J3."
+    },
+    {
+      "id": "J4_more_nondetections_do_not_replace_calibration",
+      "claim": "With p=0.75 retained as admissible, finite all-zero histories at n=1,2,4,8 all leave at least one target-present ecological world compatible.",
+      "rule": "Any finite n in the frozen set eliminating every target-present ecological world under the broad universe refutes J4."
+    },
+    {
+      "id": "J5_observation_world_expansion_is_ecologically_monotone",
+      "claim": "Expanding the admissible observation-world set cannot remove an ecological world from the projected compatible set.",
+      "rule": "Any ecological survivor under a narrower observation universe that disappears after expansion refutes J5."
+    },
+    {
+      "id": "J6_calibration_can_dominate_more_same_type_data",
+      "claim": "In the frozen case, four additional nondetections (n=8 total) do not shrink the broad ecological projection to the strict projection, whereas p=1 calibration does.",
+      "rule": "If n=8 broad projection equals strict, or calibrated projection does not equal strict, J6 is refuted."
+    }
+  ],
+  "outputs": [
+    "selected_target_node",
+    "target_present_world_count",
+    "target_absent_world_count",
+    "truth_ecological_world_id",
+    "strict_joint_survivors",
+    "broad_joint_survivors",
+    "strict_ecological_projection",
+    "broad_ecological_projection",
+    "calibrated_ecological_projection",
+    "ecological_projection_by_nondetection_count",
+    "J1-J6 verdicts"
+  ],
+  "claim_boundary": [
+    "Ecological falsification is robust only after quantifying over the declared observation-world universe.",
+    "A world excluded under one observation model may become compatible when observation uncertainty is expanded.",
+    "Calibration can change the interpretation of already-collected observations without changing ecological truth.",
+    "The result remains conditional on finite ecological and observation world universes."
+  ]
+}
