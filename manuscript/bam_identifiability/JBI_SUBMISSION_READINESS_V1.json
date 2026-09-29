@@ -1,0 +1,65 @@
+{
+  "schema": "eog.bam_inverse_identifiability.jbi_submission_readiness.v1",
+  "manuscript": "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md",
+  "scientific_state": "frozen_from_merged_known_truth_mainline",
+  "journal_route": {
+    "primary": "Journal of Biogeography",
+    "article_type": "Research Article",
+    "rationale": "biogeographic inverse-identifiability theory is the scientific center; EOG v3 remains implementation rather than title-level novelty"
+  },
+  "validated_artifact": {
+    "workflow_run_id": 36622841063,
+    "artifact_id": 11058976872,
+    "artifact_digest": "sha256:99328c3f18c61855b7156c9b66d0c206791b396ffe524e4308f465db39d0b35f",
+    "jbi_readiness_fingerprint": "12f4542ec61d9f479fd402ab6ef08ad7e5ea6c7aff2b3488f09efb23c5555ca5",
+    "manuscript_audit_fingerprint": "dad9a66ff70d851af1a0de879e1a4bec16358a3dad9e72067b2a24c327c0d1bb"
+  },
+  "format_metrics": {
+    "title_chars": 111,
+    "running_title_chars": 30,
+    "structured_abstract_words": 265,
+    "keywords": 8,
+    "manuscript_words_approx": 4502,
+    "main_figures": 6
+  },
+  "completed": [
+    "exact BAM inverse-fiber theory",
+    "12-system deterministic generality / 768 truths",
+    "independent stochastic generator / 384 runs",
+    "304-pair restrictiveness audit",
+    "temporal evidence analysis",
+    "8-landscape stochastic panel with 2 retained DESIGN_STOP systems",
+    "exact targeted-measurement audit",
+    "prior-art boundary and core bibliography",
+    "citation-ready JBI-structured manuscript",
+    "source-fingerprinted figure data",
+    "reproducible Figure 1-6 builder",
+    "reviewer defense matrix",
+    "manuscript audit CI",
+    "JBI format readiness CI"
+  ],
+  "remaining_scientific_decision": {
+    "named_species_empirical_illustration": {
+      "required_for_current_theory_claim": false,
+      "status": "optional_unresolved",
+      "rule": "Do not add opportunistically. Add only under a separately frozen evidence contract if it materially strengthens the inverse-identifiability argument."
+    }
+  },
+  "remaining_submission_tasks": [
+    "visual editorial pass on generated Figures 1-6",
+    "final exhaustive literature/reference formatting pass",
+    "prepare anonymized review repository/link for code and frozen outputs",
+    "prepare separate author/title-page metadata",
+    "prepare JBI cover letter",
+    "prepare biosketch and required author statements",
+    "replace review-repository wording with permanent public archive/DOI at acceptance"
+  ],
+  "claim_boundary": [
+    "surviving world is not historical truth",
+    "positive occurrence completeness does not imply process recovery",
+    "complete realised G does not imply unique BAM decomposition",
+    "programme-specific measurement bounds are not universal constants",
+    "EOG-WF predictive complementarity is excluded from this manuscript"
+  ],
+  "status": "SCIENTIFICALLY_READY_FOR_INTERNAL_REVIEW"
+}
