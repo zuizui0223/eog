@@ -1,0 +1,38 @@
+{
+  "schema": "eog.known_truth_bam_orthogonal.residual_ambiguity_audit.v2_1",
+  "status": "frozen_before_audit_execution",
+  "primary_result_fingerprint": "dbfd0c09b492c1e53914ddfdfe392c765df6da98a43e105245767c24c75ad9b3",
+  "role": "post-result descriptive audit; cannot change H1-H6 verdicts",
+  "question": "After positive, perfect-negative and temporal evidence, which BAM axes remain variable among compatible worlds?",
+  "evidence_levels": [
+    "positive_only",
+    "positive_plus_perfect_negative",
+    "positive_negative_temporal"
+  ],
+  "per_truth_outputs": [
+    "compatible_world_count",
+    "distinct_A_count",
+    "distinct_B_count",
+    "distinct_M_distance_count",
+    "distinct_M_barrier_count",
+    "distinct_M_horizon_count",
+    "A_unresolved",
+    "B_unresolved",
+    "M_unresolved",
+    "residual_axis_pattern"
+  ],
+  "aggregate_outputs": [
+    "fraction_A_unresolved_by_evidence",
+    "fraction_B_unresolved_by_evidence",
+    "fraction_M_unresolved_by_evidence",
+    "residual_axis_pattern_counts_by_evidence",
+    "median_compatible_world_count_by_evidence"
+  ],
+  "interpretation_rule": "An axis is unresolved when more than one value of that declared axis remains among worlds compatible with the same truth evidence. This is a decomposition ambiguity, not parameter-estimation uncertainty.",
+  "forbidden": [
+    "change candidate world grid",
+    "change evidence definitions",
+    "drop difficult truth worlds",
+    "reinterpret audit as a new confirmatory test"
+  ]
+}
