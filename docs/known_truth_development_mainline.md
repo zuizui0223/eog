@@ -207,7 +207,155 @@ v2.9 solved the finite decision tree exactly.
 
 The first CI run failed because child-node replanning incorrectly required action mappings to contain *exactly* the reduced active hypothesis set. This was corrected to allow parent-universe mappings while reading only active hypotheses. The rerun passed the independent brute-force depth check.
 
-## 10. Computational language decision
+## 10. Independent stochastic generator: restriction can increase ambiguity
+
+The deterministic BAM results were then challenged with an **independent stochastic
+metapopulation generator** implemented outside the EOG reconstruction modules.
+
+Across 384/384 eligible stochastic runs:
+
+- true-world retention failures: **0**;
+- EOG API parity mismatches: **0**;
+- positive-superset ceiling violations: **0**;
+- omitted-truth witness-criterion mismatches: **0**;
+- unique truth recovery at horizon 40: **0 in every truth scenario**.
+
+Two stronger hypotheses were refuted.
+
+First, the preregistered expectation that every structurally distinct truth would
+realize a positive witness failed for the joint A+B+M truth. Its complete positive
+support contained only 33 nodes and was a subset of every candidate reachable set, so
+even complete positive observation eliminated **0/32** candidates.
+
+Second, unordered accumulated positive history was never strictly more discriminating
+than the final snapshot in any of the 384 runs.
+
+This exposed an exact set-theoretic principle. If complete positive supports satisfy
+
+[
+R_1 subset R_2,
+]
+
+then the compatible-world sets obey
+
+[
+C(R_1) supseteq C(R_2).
+]
+
+The restrictiveness audit checked **304/304** strict support-inclusion pairs with zero
+violations. The most jointly constrained A+B+M support was therefore also the most
+ambiguous in the frozen universe.
+
+So stronger ecological restriction does **not** imply easier mechanism identification
+from positive occurrences. It can do the opposite.
+
+## 11. Time-stamped occurrence history recovers information that unordered history loses
+
+The failure of unordered accumulated history did not imply that temporal information
+was useless.
+
+When first-occurrence time was retained:
+
+- static support classes: **8**;
+- temporal signature classes: **20**;
+- static M-equivalent pairs: **48**;
+- pairs split by temporal signatures: **19**;
+- stochastic runs with strict temporal contraction: **256/384**.
+
+Truth retention remained exact, but unique truth recovery was still **0** in every
+scenario.
+
+Thus the relevant distinction is:
+
+> unordered occurrence accumulation can be redundant, while time-stamped occurrence
+> history is a genuinely different evidence class that can recover movement
+> distinctions.
+
+## 12. The stochastic principles generalize across preregistered landscapes
+
+A later frozen panel contained eight landscapes spanning open-smooth, barrier-gap,
+environmental-bottleneck and joint-fragmented structures.
+
+Two joint-fragmented landscapes failed response-free activation gates and remained
+**DESIGN_STOP**. They were not repaired or replaced.
+
+The remaining six landscapes contributed **1,152** eligible stochastic runs.
+
+Across every eligible landscape:
+
+- truth retention failures: **0**;
+- restrictiveness-nesting violations: **0**;
+- static compatible-set expansion violations: **0**;
+- independent evaluator parity mismatches: **0/72 audits**;
+- joint A+B+M limitation remained maximally ambiguous;
+- temporal signatures refined static support classes;
+- at least one realized temporal strict-gain run occurred;
+- non-identification persisted at horizon 40.
+
+All frozen U1-U8 claims were supported in the eligible panel.
+
+The two DESIGN_STOP landscapes remain part of the denominator and are evidence that
+the validation protocol can reject a virtual system before outcome scoring.
+
+## 13. Deterministic BAM generality and exact evidence bounds
+
+A separate deterministic panel used **12/12 activation-qualified systems** and
+**768 truth cases**.
+
+Unique BAM-state recovery across the frozen evidence ladder was:
+
+| evidence level | unique truths |
+|---|---:|
+| complete positives | **0 / 768** |
+| complete realized G | 25 / 768 |
+| + occupied-node arrival | 159 / 768 |
+| + direct A | 275 / 768 |
+| + direct B | 565 / 768 |
+| + direct M accessibility | **768 / 768** |
+| + full M arrival | **768 / 768** |
+
+The positive-only zero bound generalized to all 12 systems.
+
+However, the predeclared claim that **M must always be the final bottleneck** was
+refuted: at least one system already reached complete BAM-state identification before
+direct M evidence was added.
+
+Exact targeted-measurement audits across all 768 truths found maximum requirements of:
+
+- direct A: **1 node**;
+- direct B: **2 nodes**;
+- joint A+B: **3 nodes**;
+- direct M accessibility: **2 nodes**;
+- additional full-arrival timing after M state: **0 nodes**.
+
+These are finite-universe existence bounds, not claims that those measurements are
+always feasible in real field systems.
+
+## 14. Formal identifiability boundary
+
+The simulation sequence is now accompanied by finite-set identities rather than only
+empirical benchmark results.
+
+For a declared truth world, the verified theory separates:
+
+1. **positive-only compatibility** — the survivor fiber is exactly the set of worlds
+   whose realized support contains the observed truth support;
+2. **complete perfect presence/absence** — survivors are exactly the worlds with the
+   same realized support;
+3. **direct A/B/M evidence** — later evidence levels are successive state-equality
+   fibers;
+4. **complete BAM-state evidence** — survivors are the BAM-state equivalence class,
+   which need not be a unique parameter label;
+5. **targeted measurement design** — finding a minimal direct-measurement set is an
+   exact finite hitting-set problem.
+
+The exact hitting-set audit passed all **768** truth cases with zero failures.
+
+This is the central conceptual correction to “recover the true process”: the inferential
+object is a sequence of **evidence fibers over a declared finite universe**, and a
+singleton is justified only when the relevant fiber is actually unique.
+
+## 15. Computational language decision
 
 The original witness factorial required **75.865 s** in the straightforward Python implementation, crossing the provisional 60 s threshold for considering C++.
 
