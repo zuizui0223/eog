@@ -1,6 +1,6 @@
 {
   "schema": "eog.known_truth_programme_manifest.v1",
-  "status": "expanded_through_generality_and_theory_pending_integrated_v3_public_engine",
+  "status": "closed_through_integrated_v3_public_engine",
   "relation_to_eog_wf": "separate post-closure known-truth programme; does not alter the frozen EOG-WF 3/31/3 empirical denominator",
   "stages": [
     {
@@ -128,6 +128,22 @@
         "M_tau_joint": 2
       },
       "audit": "12 systems, 768 truth cases, zero failures; greedy stage minima matched exact solutions, with joint A+B separately optimized"
+    },
+    {
+      "stage": "eog_v3_public_joint_world_engine",
+      "result_fingerprint": "073bcdf0e0e1761e6b5af077f9ffbfc79aeadb59b1c5aee4dd4ab6c4bbc23dab",
+      "parent_results": {
+        "joint_v2_7": "085587287263d5ebb4016455ac74406b14979e7de25e57e12b8a607becd5cd1d",
+        "robust_v2_8": "a459ebd6bdde502c5d86aad7baf37443d17d1156fb358a373c5429c5c94115f8",
+        "adaptive_v2_9": "19e441e930c1c3fc116780fa8bfb4b09c178e69c4379a1ef69e47f5b13218822"
+      },
+      "core_result": "one generic public API reproduces joint ecological-observation filtering, exact robust minimum evidence-set design, adaptive worst-case depth 2, repeat-first depth 3, and fail-closed direct-channel ablations; packaged JSON CLI examples are verified",
+      "public_commands": [
+        "eog-v3-joint-evaluate",
+        "eog-v3-plan-evidence",
+        "eog-v3-plan-adaptive"
+      ],
+      "relation_to_eog_wf": "post-closure API only; EOG-WF 3/31/3 denominator and manuscript result unchanged"
     }
   ],
   "strongest_supported_claim": "EOG is a finite-world falsification and evidence-design framework: evidence eliminates only worlds it contains valid witnesses against; observational equivalence remains explicit; support nesting can make stronger ecological restriction more ambiguous under positive-only data; temporal, direct-mechanism, calibration and intervention evidence can be selected adaptively to activate differences among survivors.",
@@ -145,7 +161,11 @@
     "Finite declared ecological and observation world universes only.",
     "Surviving worlds are compatible explanations, not certified historical truth.",
     "Hard falsification requires zero compatibility across all admissible observation worlds.",
+    "Positive-only process identification is limited by support nesting; stronger ecological restriction can increase ambiguity.",
+    "Time-stamped evidence, direct mechanism measurements, calibration and interventions are distinct evidence classes.",
     "Evidence/intervention libraries must be declared before outcome-dependent selection.",
-    "If a library cannot separate survivors, return unresolved rather than inventing post hoc evidence."
+    "If a library cannot separate survivors, return unresolved rather than inventing post hoc evidence.",
+    "Adaptive planning is exact only over the declared finite action library and possible-outcome supports.",
+    "The public v3 API is post-closure and does not alter the EOG-WF empirical denominator."
   ]
 }
