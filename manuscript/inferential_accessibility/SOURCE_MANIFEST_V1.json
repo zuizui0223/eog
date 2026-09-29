@@ -1,0 +1,58 @@
+{
+  "schema": "eog.inferential_accessibility.source_manifest.v1",
+  "frozen_date": "2026-09-29",
+  "eog": {
+    "repository": "zuizui0223/eog",
+    "ref": "main",
+    "candidate_flow": {
+      "path": "manuscript/paper_ready/candidate_flow_table.csv",
+      "git_blob_sha1": "966837585d3c98bc3e488581a6061109078aa8e8"
+    },
+    "candidate_funnel": {
+      "path": "manuscript/paper_ready/candidate_funnel_summary.csv",
+      "git_blob_sha1": "17f4685d097d16050c20060e562edda5848f6292"
+    },
+    "frozen_counts": {
+      "scored_predictive_endpoints": 3,
+      "scientific_protocol_stops": 31,
+      "administrative_exclusions": 3,
+      "scientific_denominator": 34,
+      "scored_fraction": 0.08823529411764706
+    }
+  },
+  "level_c": {
+    "repository": "zuizui0223/284b",
+    "ref": "main",
+    "architecture_screen": {
+      "path": "legacy/pre_level_a_focus/results/product_b_level_c_source_architecture_hard_stop_v3.json",
+      "git_blob_sha1": "8e2994744b0289d1d4ca9a1228658ab7dac86bee",
+      "screened_candidates": 12,
+      "architecture_qualified": 2
+    },
+    "source_qualification": {
+      "path": "legacy/pre_level_a_focus/results/product_b_level_c_source_qualification_v3.json",
+      "git_blob_sha1": "52426ea9712d25e1c7415afd02ec591c2d3158cd",
+      "candidates": 2,
+      "hard_endpoint_opening_authorized": 0
+    },
+    "calibration_audit": {
+      "path": "legacy/pre_level_a_focus/results/product_b_level_c_candidate_specific_calibration_audit_v5.json",
+      "git_blob_sha1": "1ea03bd1bf8c576c522f15328f6c66220de19c74",
+      "candidates_passing_all_calibration_gates": 0
+    },
+    "raw_reconstruction": {
+      "path": "legacy/pre_level_a_focus/results/product_b_level_c_raw_calibration_reconstruction_v6.json",
+      "git_blob_sha1": "d1e1b73e09bd11c8ac63240382be357d46dc37ef",
+      "candidates_passing_reconstruction": 0
+    },
+    "functional_pool_design": {
+      "path": "legacy/pre_level_a_focus/docs/product_b_level_c_functional_pool_v2_hard_stop.md",
+      "git_blob_sha1": "dbf447a48eba1f482c04b37717dbc1809923f3ef"
+    }
+  },
+  "boundary": {
+    "no_new_candidate_search": true,
+    "no_new_response_opening": true,
+    "stops_are_not_biological_negatives": true
+  }
+}
