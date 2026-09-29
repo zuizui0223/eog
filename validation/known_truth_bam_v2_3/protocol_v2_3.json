@@ -1,0 +1,66 @@
+{
+  "schema": "eog.known_truth_bam_direct_movement.protocol.v2_3",
+  "status": "frozen_before_implementation",
+  "parent_v2_2": {
+    "result_fingerprint": "6146e61c3352b293fcf5542972369511c9c88c2a3de89e23909dd6a8da14dcc0",
+    "residual_nonidentifiable_cases_after_E4": 43,
+    "rule": "v2.2 is immutable; v2.3 only adds independent M evidence"
+  },
+  "scientific_question": "Does direct source-conditioned movement evidence resolve the BAM-state ambiguity that remains after complete G, perfect negatives, occupied-node arrival timing, and direct A/B observations?",
+  "evidence_ladder": [
+    "E4 = v2.2 complete G + perfect negatives + occupied-node arrival + complete A + complete B",
+    "E5 = E4 + complete direct M accessibility over all nodes",
+    "E6 = E5 + complete direct first-arrival state over all nodes"
+  ],
+  "direct_M_semantics": {
+    "accessibility": "Independent observation that a node is reachable from the declared source under the movement process, irrespective of A, B, or realised occupancy.",
+    "arrival": "Independent movement-state observation returning exact first-arrival step, or inaccessible, for each node.",
+    "examples": "Idealised analogues include controlled translocation, telemetry, dispersal tracking, or known movement-network experiments; this simulation does not claim real datasets provide perfect M observations."
+  },
+  "primary_hypotheses": [
+    {
+      "id": "DM_H1_M_accessibility_contraction",
+      "claim": "Complete direct M-accessibility observations eliminate every E4-compatible BAM state whose M set differs from truth.",
+      "failure_rule": "Any M-mismatched BAM state surviving E5 refutes H1."
+    },
+    {
+      "id": "DM_H2_M_arrival_contraction",
+      "claim": "Complete direct first-arrival observations eliminate every E5-compatible BAM state whose movement-arrival vector differs from truth.",
+      "failure_rule": "Any arrival-mismatched BAM state surviving E6 refutes H2."
+    },
+    {
+      "id": "DM_H3_complete_BAM_state_recovery",
+      "claim": "E6 collapses the compatible set to the exact truth BAM-state equivalence class for every eligible truth.",
+      "failure_rule": "Any non-equivalent BAM state surviving E6 refutes H3."
+    },
+    {
+      "id": "DM_H4_parameter_alias_honesty",
+      "claim": "Worlds with identical A, B, M and arrival state remain unresolved parameter aliases even after E6.",
+      "failure_rule": "Splitting an exact BAM-state alias class refutes H4."
+    },
+    {
+      "id": "DM_H5_targeted_M_efficiency",
+      "claim": "A deterministic finite set of diagnostic M-state node observations can reproduce the complete E6 BAM-state contraction.",
+      "failure_rule": "Any case where targeted observations fail to reproduce E6 refutes H5; required measurement count is reported without thresholding."
+    }
+  ],
+  "primary_outputs": [
+    "bam_state_unique_fraction_E4",
+    "bam_state_unique_fraction_E5",
+    "bam_state_unique_fraction_E6",
+    "parameter_unique_fraction_E6",
+    "residual_nonidentifiable_cases_after_E6",
+    "minimal_direct_M_accessibility_measurements_distribution",
+    "minimal_direct_M_arrival_measurements_distribution",
+    "minimal_total_M_measurements_distribution",
+    "diagnostic_M_node_frequency",
+    "DM_H1-H5 verdicts"
+  ],
+  "forbidden_after_results": [
+    "change the v2.1 candidate universe",
+    "change A/B evidence from v2.2",
+    "redefine M after seeing E5/E6",
+    "drop exact BAM-state aliases from the compatible set",
+    "treat perfect M observations as automatically available in real data"
+  ]
+}
