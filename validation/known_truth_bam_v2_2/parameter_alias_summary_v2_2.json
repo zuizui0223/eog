@@ -1,0 +1,23 @@
+{
+  "schema": "eog.known_truth_bam_direct_evidence.parameter_alias_summary.v2_2",
+  "primary_result_fingerprint": "5912231d6b8d04fd1cbb3540bf137562c394aca9fc40069486d6350ee7fff9f0",
+  "workflow_run_id": 36544778474,
+  "artifact_id": 11021339253,
+  "artifact_digest": "sha256:681266749e75a98610f976a6b1dcdaed1be2fbbd77b5648a3e8ca5ae44ccd5e2",
+  "candidate_world_count": 64,
+  "number_of_complete_state_equivalence_classes": 48,
+  "class_size_distribution": {
+    "1": 32,
+    "2": 16
+  },
+  "alias_axis_pattern_counts": {
+    "P": 8,
+    "H": 8
+  },
+  "world_fraction_in_noninjective_classes": 0.5,
+  "interpretation": {
+    "P": "Eight duplicate classes differ only in barrier permeability. In those process contexts, opening versus closing the barrier does not change the realised full M state/arrival pattern.",
+    "H": "Eight duplicate classes differ only in movement horizon. The reachable/arrival state has already saturated by horizon 3, so horizon 8 adds no observable state difference.",
+    "conclusion": "The final 50% parameter non-identification after complete A/B/M state evidence is entirely inactive-M-parameter aliasing in this frozen grid, not residual A/B state ambiguity."
+  }
+}
