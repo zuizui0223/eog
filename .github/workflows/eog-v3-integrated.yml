@@ -1,0 +1,53 @@
+name: EOG v3 integrated known-truth mainline
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/v3/**"
+      - "validation/eog_v3_joint_world_engine/**"
+      - "benchmarks/run_eog_v3_integrated_validation.py"
+      - "tests/test_v3_integrated_mainline.py"
+      - "examples/eog_v3/**"
+      - "schemas/eog_v3_joint_input.schema.json"
+      - ".github/workflows/eog-v3-integrated.yml"
+      - "pyproject.toml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Run integrated frozen validation
+        run: |
+          python benchmarks/run_eog_v3_integrated_validation.py \
+            --output build/eog_v3_integrated/integrated_result_v1.json
+      - name: Verify focused tests
+        run: python -m pytest tests/test_v3_integrated_mainline.py -q
+      - name: Run packaged CLI examples
+        run: |
+          eog-v3-joint-evaluate \
+            --input examples/eog_v3/joint_evaluation_input.json \
+            --output build/eog_v3_integrated/example_evaluation.json
+          eog-v3-plan-evidence \
+            --input examples/eog_v3/evidence_planning_input.json \
+            --output build/eog_v3_integrated/example_plan.json \
+            --objective ecological
+          eog-v3-plan-adaptive \
+            --input examples/eog_v3/evidence_planning_input.json \
+            --output build/eog_v3_integrated/example_adaptive.json
+          python -c 'import json,pathlib; e=json.loads(pathlib.Path("build/eog_v3_integrated/example_evaluation.json").read_text()); p=json.loads(pathlib.Path("build/eog_v3_integrated/example_plan.json").read_text()); a=json.loads(pathlib.Path("build/eog_v3_integrated/example_adaptive.json").read_text()); assert e["surviving_joint_world_ids"] == ["eco_absent::imperfect","eco_absent::perfect","eco_present::imperfect"]; assert p["best_action_ids"] == ["gold_standard_target_state"]; assert a["minimum_robust_set_size"] == 2; assert a["adaptive_worst_case_depth"] == 2'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-v3-integrated
+          path: |
+            build/eog_v3_integrated/integrated_result_v1.json
+            build/eog_v3_integrated/example_evaluation.json
+            build/eog_v3_integrated/example_plan.json
+            build/eog_v3_integrated/example_adaptive.json
+          if-no-files-found: error
