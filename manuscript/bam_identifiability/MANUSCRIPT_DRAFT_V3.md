@@ -24,7 +24,7 @@ The same realised intersection can be produced by multiple BAM decompositions. A
 
 This distinction separates fitting a distribution from identifying the mechanisms that generated it. A model may reproduce G accurately while remaining unresolved about A, B or M. Selecting one best-fitting mechanism can therefore convert lack of information into apparent certainty. We treat inverse BAM inference as a finite partial-identification problem: instead of asking which candidate world is best, we ask which declared worlds remain compatible with a specified evidence contract.
 
-This survivor set, or evidence fiber, is the primary inferential object. The formulation has three consequences. First, exact non-identification can be stated without arbitrary score thresholds. Second, different evidence types can be compared by how they contract the same finite survivor set. Third, the residual ambiguity can be converted into a diagnostic-measurement problem. Optimal model-discrimination experiments are a long-standing statistical topic (Atkinson & Cox, 1974), including adaptive designs in ecology (Papanikolaou et al., 2023); here the narrower contribution is to derive the BAM-specific survivor fiber to which such evidence design should be applied.
+This survivor set, or evidence fiber, is the primary inferential object (Fig. 1). The formulation has three consequences. First, exact non-identification can be stated without arbitrary score thresholds. Second, different evidence types can be compared by how they contract the same finite survivor set. Third, the residual ambiguity can be converted into a diagnostic-measurement problem. Optimal model-discrimination experiments are a long-standing statistical topic (Atkinson & Cox, 1974), including adaptive designs in ecology (Papanikolaou et al., 2023); here the narrower contribution is to derive the BAM-specific survivor fiber to which such evidence design should be applied.
 
 We address four questions:
 
@@ -289,7 +289,7 @@ Across 768 deterministic truths, the number of uniquely identified BAM states wa
 
 The survivor fibers contracted monotonically by construction and by audit.
 
-The preregistered claim that movement would always be the final identification bottleneck was refuted: at least one system had already reached complete BAM-state identification before direct M evidence was added.
+The preregistered claim that movement would always be the final identification bottleneck was refuted: at least one system had already reached complete BAM-state identification before direct M evidence was added (Fig. 3).
 
 ### 4.4 Stronger ecological restriction increased positive-only ambiguity
 
@@ -303,7 +303,7 @@ C(R_1) \supseteq C(R_2).
 
 The most jointly constrained A+B+M support was also among the most ambiguous because its small realised support was contained in many more permissive candidate worlds.
 
-This result reverses a common intuition that a more strongly constrained organism should necessarily reveal its mechanism more clearly from occurrence pattern alone.
+This result reverses a common intuition that a more strongly constrained organism should necessarily reveal its mechanism more clearly from occurrence pattern alone (Fig. 2).
 
 ### 4.5 Independent stochastic generation reproduced the core logic and refuted stronger expectations
 
@@ -320,7 +320,7 @@ Two stronger preregistered expectations failed.
 
 First, structural differences did not guarantee a realised positive witness. A jointly constrained A+B+M truth produced a complete positive support contained in every candidate reachable set, so complete positive observation eliminated no candidate.
 
-Second, unordered accumulated positive history was never strictly more discriminating than the final positive snapshot in the frozen stochastic runs.
+Second, unordered accumulated positive history was never strictly more discriminating than the final positive snapshot in the frozen stochastic runs (Fig. 4).
 
 ### 4.6 First-occurrence timing recovered information that unordered history lost
 
@@ -331,7 +331,7 @@ Retaining first-occurrence time refined:
 
 Temporal information strictly contracted the compatible set in 256/384 stochastic runs.
 
-However, unique truth recovery remained zero. Time therefore supplied genuinely new movement information without guaranteeing complete inverse identification.
+However, unique truth recovery remained zero. Time therefore supplied genuinely new movement information without guaranteeing complete inverse identification (Fig. 5).
 
 ### 4.7 The stochastic principles generalized across landscapes
 
@@ -360,7 +360,7 @@ Across the 768 deterministic truths, the maximum exact number of targeted measur
 - direct M accessibility: 2 nodes;
 - additional full-arrival timing after M state: 0 nodes.
 
-These values are programme-specific existence bounds. They do not imply that equivalent measurements are always feasible in real field systems.
+These values are programme-specific existence bounds. They do not imply that equivalent measurements are always feasible in real field systems (Fig. 6).
 
 ## 5. Discussion
 
