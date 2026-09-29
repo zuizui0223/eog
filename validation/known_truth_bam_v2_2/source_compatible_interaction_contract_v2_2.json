@@ -1,0 +1,72 @@
+{
+  "schema": "eog.known_truth_bam.source_compatible_interaction_contract.v2_2",
+  "status": "frozen_before_implementation",
+  "parent_v2_1_result_fingerprint": "a6919870f85820c851d2e1ae9c1122e5bbeabd5bdfa89a23733805c6d4fc21e4",
+  "purpose": "Ensure positive biotic dependence is represented as an eligible truth mechanism, not only as a restrictive false-world contrast.",
+  "change_from_v2_1": {
+    "only_scientific_change": "partner auxiliary-species process",
+    "partner": {
+      "source_id": "r1c0",
+      "niche_center": [
+        0.24,
+        0.575
+      ],
+      "niche_radius": [
+        0.2,
+        0.1
+      ],
+      "step_radius": 1.01,
+      "barrier_permeable": true,
+      "horizon": 8
+    },
+    "antagonist": "unchanged from v2.1",
+    "focal_A": "unchanged from v2.1",
+    "focal_M": "unchanged from v2.1 amendment v2_1_1",
+    "evidence_ladder": "unchanged"
+  },
+  "pre_scoring_gates": {
+    "partner_fraction_range": [
+      0.2,
+      0.8
+    ],
+    "antagonist_fraction_range": [
+      0.2,
+      0.8
+    ],
+    "focal_source_in_partner": true,
+    "required_truth_B_modes": [
+      "none",
+      "obligate_partner",
+      "antagonist_exclusion",
+      "partner_and_antagonist"
+    ],
+    "required_truth_A_modes": [
+      "A_narrow",
+      "A_broad"
+    ],
+    "required_truth_M_modes": [
+      "M_short_closed_h2",
+      "M_long_closed_h2",
+      "M_long_open_h2",
+      "M_short_open_h8",
+      "M_long_open_h8"
+    ],
+    "retain_v2_1_axis_activation_gates": true,
+    "failure_action": "ACTIVATION_STOP"
+  },
+  "additional_preregistered_tests": [
+    {
+      "id": "BAM_H7_positive_partner_dependence_nonidentifiability",
+      "claim": "When obligate-partner truth is nested inside an otherwise identical no-B world, positive occurrences alone cannot establish the partner dependence."
+    },
+    {
+      "id": "BAM_H8_perfect_negative_partner_rescue",
+      "claim": "Under the perfect-detection equilibrium contract, diagnostic negatives outside the partner-limited truth can eliminate the corresponding no-B superset world whenever that world predicts extra occupied nodes."
+    }
+  ],
+  "interpretation_boundary": [
+    "H7 is a statement about insufficiency of positive-only evidence, not absence of a true interaction.",
+    "H8 depends on perfect detection/equilibrium and is not automatically transferable to presence-only empirical data.",
+    "One-way interaction dependence is modeled; reciprocal eco-evolutionary feedback is outside v2.2."
+  ]
+}
