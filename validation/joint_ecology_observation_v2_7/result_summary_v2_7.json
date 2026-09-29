@@ -9,41 +9,40 @@
   "result_fingerprint": "085587287263d5ebb4016455ac74406b14979e7de25e57e12b8a607becd5cd1d",
   "selected_target_node": "r1c3",
   "ecological_world_count": 64,
-  "target_state_counts": {
-    "present": 16,
-    "absent": 48
-  },
+  "target_present_world_count": 16,
+  "target_absent_world_count": 48,
   "truth_ecological_world_id": "A_broad|B_obligate_partner|M_D1.01_P0_H3",
   "truth_target_present": false,
   "observed_history": {
     "surveys": 4,
     "detections": 0
   },
-  "strict_observation_universe": [
-    "perfect:p=1,q=0"
-  ],
-  "broad_observation_universe": [
-    "perfect:p=1,q=0",
-    "imperfect:p=0.75,q=0"
-  ],
   "strict": {
+    "observation_worlds": [
+      "perfect"
+    ],
     "ecological_projection_count": 48,
     "joint_survivor_count": 48
   },
   "broad": {
+    "observation_worlds": [
+      "perfect",
+      "imperfect"
+    ],
     "ecological_projection_count": 64,
     "joint_survivor_count": 112,
     "resurrected_ecological_world_count": 16
   },
-  "calibrated_to_p1": {
+  "calibrated": {
+    "calibrated_p": 1,
     "ecological_projection_count": 48,
-    "equals_strict": true
+    "matches_strict": true
   },
-  "target_present_survivors_after_all_zero_history": {
-    "n1": 16,
-    "n2": 16,
-    "n4": 16,
-    "n8": 16
+  "target_present_survivors_by_nondetection_count": {
+    "1": 16,
+    "2": 16,
+    "4": 16,
+    "8": 16
   },
   "verdicts": {
     "J1_joint_factorization": "SUPPORTED",
@@ -54,8 +53,8 @@
     "J6_calibration_can_dominate_more_same_type_data": "SUPPORTED"
   },
   "interpretation": {
-    "main": "Ecological-world falsification is conditional on the admissible observation-process universe. A BAM world excluded under perfect detection can become compatible when imperfect detection is admitted.",
-    "calibration": "Observation-process calibration can contract ecological hypotheses using already-collected ecological observations; in the frozen case p=1 calibration removed all 16 resurrected present worlds without a new focal observation.",
-    "repeated_data": "More finite nondetections did not replace calibration because p=0.75 retained nonzero all-zero-history probability for every finite n."
+    "main": "Ecological falsification depends on the admissible observation-process universe. The same focal ecological history can exclude 16 target-present ecological worlds under perfect detection yet retain all of them once imperfect detection is admitted.",
+    "calibration": "Observation-process calibration can restore ecological falsification without collecting a new focal ecological observation.",
+    "same_type_data": "Finite additional nondetections cannot replace calibration when p<1 remains admissible, because target-present joint worlds retain positive probability."
   }
 }
