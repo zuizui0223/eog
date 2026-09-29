@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -11,6 +12,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "manuscript/EOG_WF_AUTHOR_ADMIN_CONFIRMATION.json"
 DEFAULT_TITLE = ROOT / "manuscript/EOG_WF_TITLE_PAGE.md"
 DEFAULT_AI = ROOT / "manuscript/EOG_WF_AI_LLM_DISCLOSURE.md"
+DEFAULT_MANUSCRIPT_SOURCE = ROOT / "manuscript/EOG_WF_MANUSCRIPT_V1.md"
+DEFAULT_MANUSCRIPT_FINAL = ROOT / "manuscript/EOG_WF_MANUSCRIPT_FINAL.md"
+DEFAULT_RECEIPT = ROOT / "manuscript/EOG_WF_AUTHOR_ADMIN_APPROVAL_RECEIPT.json"
 
 EXPECTED_SCHEMA = "eog.eogwf_author_admin_confirmation.v1"
 EXPECTED_TITLE = (
@@ -445,21 +449,119 @@ def render_ai_disclosure(validated: Mapping[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def render_final_manuscript(
+    validated: Mapping[str, Any],
+    source_text: str,
+) -> str:
+    marker = "## Results"
+    if marker not in source_text:
+        raise AuthorAdminError("source manuscript lacks Results heading")
+    if "### AI / LLM use in manuscript preparation" in source_text:
+        raise AuthorAdminError("source manuscript already contains the admin AI disclosure section")
+
+    disclosure = validated["ai"]["final_methods_disclosure"]
+    block = (
+        "### AI / LLM use in manuscript preparation\n\n"
+        + disclosure
+        + "\n\n"
+    )
+    return source_text.replace(marker, block + marker, 1)
+
+
+def _sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def _sha256_file(path: Path) -> str:
+    return _sha256_bytes(path.read_bytes())
+
+
+def validate_admin_receipt(
+    receipt_path: Path = DEFAULT_RECEIPT,
+    *,
+    title_path: Path = DEFAULT_TITLE,
+    ai_path: Path = DEFAULT_AI,
+    manuscript_path: Path = DEFAULT_MANUSCRIPT_FINAL,
+) -> bool:
+    if not receipt_path.is_file():
+        return False
+    if not title_path.is_file() or not ai_path.is_file() or not manuscript_path.is_file():
+        return False
+    try:
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return False
+    if receipt.get("schema") != "eog.eogwf_author_admin_approval_receipt.v1":
+        return False
+    if receipt.get("all_author_admin_confirmations_complete") is not True:
+        return False
+    expected = receipt.get("outputs")
+    if not isinstance(expected, Mapping):
+        return False
+    observed = {
+        "title_page_sha256": _sha256_file(title_path),
+        "ai_llm_disclosure_sha256": _sha256_file(ai_path),
+        "final_manuscript_sha256": _sha256_file(manuscript_path),
+    }
+    return all(expected.get(key) == value for key, value in observed.items())
+
+
 def build(
     input_path: Path = DEFAULT_INPUT,
     title_output: Path = DEFAULT_TITLE,
     ai_output: Path = DEFAULT_AI,
+    manuscript_source: Path = DEFAULT_MANUSCRIPT_SOURCE,
+    manuscript_output: Path = DEFAULT_MANUSCRIPT_FINAL,
+    receipt_output: Path = DEFAULT_RECEIPT,
 ) -> dict[str, object]:
-    data = json.loads(input_path.read_text(encoding="utf-8"))
+    raw_confirmation = input_path.read_bytes()
+    data = json.loads(raw_confirmation.decode("utf-8"))
     validated = validate_confirmation(_mapping(data, "confirmation"))
-    title_text = render_title_page(validated)
-    ai_text = render_ai_disclosure(validated)
-    title_output.write_text(title_text + "\n", encoding="utf-8")
-    ai_output.write_text(ai_text + "\n", encoding="utf-8")
+    title_text = render_title_page(validated) + "\n"
+    ai_text = render_ai_disclosure(validated) + "\n"
+    source_text = manuscript_source.read_text(encoding="utf-8")
+    final_manuscript = render_final_manuscript(validated, source_text)
+    if not final_manuscript.endswith("\n"):
+        final_manuscript += "\n"
+
+    title_output.write_text(title_text, encoding="utf-8")
+    ai_output.write_text(ai_text, encoding="utf-8")
+    manuscript_output.write_text(final_manuscript, encoding="utf-8")
+
+    receipt = {
+        "schema": "eog.eogwf_author_admin_approval_receipt.v1",
+        "status": "author_admin_confirmed",
+        "journal": EXPECTED_JOURNAL,
+        "article_type": EXPECTED_ARTICLE_TYPE,
+        "manuscript_title": EXPECTED_TITLE,
+        "confirmation_sha256": _sha256_bytes(raw_confirmation),
+        "author_count": len(validated["authors"]),
+        "corresponding_author_id": validated["corresponding_author_id"],
+        "all_author_admin_confirmations_complete": True,
+        "outputs": {
+            "title_page_sha256": _sha256_bytes(title_text.encode("utf-8")),
+            "ai_llm_disclosure_sha256": _sha256_bytes(ai_text.encode("utf-8")),
+            "final_manuscript_sha256": _sha256_bytes(final_manuscript.encode("utf-8")),
+        },
+    }
+    receipt_output.write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    if not validate_admin_receipt(
+        receipt_output,
+        title_path=title_output,
+        ai_path=ai_output,
+        manuscript_path=manuscript_output,
+    ):
+        raise AuthorAdminError("generated author-admin approval receipt failed verification")
+
     return {
         "status": "author_admin_outputs_generated",
         "title_page": str(title_output.relative_to(ROOT)),
         "ai_llm_disclosure": str(ai_output.relative_to(ROOT)),
+        "final_manuscript": str(manuscript_output.relative_to(ROOT)),
+        "approval_receipt": str(receipt_output.relative_to(ROOT)),
         "author_count": len(validated["authors"]),
         "corresponding_author_id": validated["corresponding_author_id"],
     }
@@ -470,8 +572,30 @@ def main() -> int:
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--title-output", type=Path, default=DEFAULT_TITLE)
     parser.add_argument("--ai-output", type=Path, default=DEFAULT_AI)
+    parser.add_argument(
+        "--manuscript-source",
+        type=Path,
+        default=DEFAULT_MANUSCRIPT_SOURCE,
+    )
+    parser.add_argument(
+        "--manuscript-output",
+        type=Path,
+        default=DEFAULT_MANUSCRIPT_FINAL,
+    )
+    parser.add_argument(
+        "--receipt-output",
+        type=Path,
+        default=DEFAULT_RECEIPT,
+    )
     args = parser.parse_args()
-    result = build(args.input, args.title_output, args.ai_output)
+    result = build(
+        args.input,
+        args.title_output,
+        args.ai_output,
+        args.manuscript_source,
+        args.manuscript_output,
+        args.receipt_output,
+    )
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
 
