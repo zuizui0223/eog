@@ -1,0 +1,59 @@
+{
+  "schema": "eog.robust_finite_evidence_design.summary.v2_7",
+  "protocol_commit": "6eaa5665787ecceda5ca7689de3b80005d7ef82a",
+  "executed_commit": "d14966a1fbdd2a170a458d2ca27177674c67d489",
+  "workflow_run_id": 36551338663,
+  "workflow_conclusion": "success",
+  "artifact_id": 11024897100,
+  "artifact_digest": "sha256:49c50bddc0d1449f03db8f7348c436f2debf93f6bc1f4ed8fc61df91fd92cca1",
+  "result_fingerprint": "aa8315b2a96339f76e03b30506a91ff72b36f0f5a33a75f47236388573a5af31",
+  "deterministic_reference": {
+    "regime": "perfect_n1",
+    "split_counts": {
+      "H_long_corridor_challenge": 8,
+      "P_barrier_challenge": 8,
+      "repeat_passive_state": 0
+    },
+    "minimum_separating_set": [
+      "H_long_corridor_challenge",
+      "P_barrier_challenge"
+    ],
+    "minimum_set_size": 2,
+    "insufficient_library": false
+  },
+  "imperfect_detection": {
+    "regimes": [
+      "n=1",
+      "n=8"
+    ],
+    "P_split_count": 0,
+    "H_split_count": 0,
+    "minimum_separating_set": null,
+    "insufficient_library": true,
+    "support_overlap": "true-positive count support contains 0; true-negative support contains 0"
+  },
+  "false_positive_allowed": {
+    "regimes": [
+      "n=1",
+      "n=8"
+    ],
+    "P_split_count": 0,
+    "H_split_count": 0,
+    "minimum_separating_set": null,
+    "insufficient_library": true,
+    "support_overlap": "true-negative count support includes the fully positive count; true-positive support includes it"
+  },
+  "observation_uncertainty_monotonicity_violations": 0,
+  "verdicts": {
+    "R1_perfect_reduces_to_deterministic": "SUPPORTED",
+    "R2_imperfect_detection_blocks_exact_split": "SUPPORTED",
+    "R3_false_positive_blocks_exact_split": "SUPPORTED",
+    "R4_observation_uncertainty_cannot_improve_exact_design": "SUPPORTED",
+    "R5_fail_closed_under_unobservable_intervention": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "An intervention that separates latent biological outcomes is not automatically an exact discriminator. It is usable for hard falsification only when the observation process makes the competing observed-outcome supports disjoint.",
+    "finite_repetition": "Increasing finite survey replication from 1 to 8 changes likelihood weights but does not restore exact separation under p<1 or q>0.",
+    "planner_boundary": "Observation uncertainty can turn an otherwise sufficient intervention library into an explicitly insufficient one."
+  }
+}
