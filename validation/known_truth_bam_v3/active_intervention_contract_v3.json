@@ -1,0 +1,81 @@
+{
+  "schema": "eog.known_truth_bam.active_intervention_contract.v3",
+  "status": "frozen_before_implementation",
+  "parent_v2_2_result_fingerprint": "5bf2ead314b8711e8fe48dd396f1398c092581313cba6a0fecc06821ca92e36b",
+  "scientific_question": "Can response-blind, hypothesis-discriminating interventions resolve BAM mechanism equivalence classes that remain after complete spatial occupancy and temporal movement evidence?",
+  "starting_evidence": "Use the frozen v2.2 world definitions and the passive evidence state after positive occurrences + perfect negatives + temporal arrival evidence.",
+  "intervention_library": [
+    {
+      "id": "A_transplant_challenge",
+      "axis": "A",
+      "outcome": "binary survival under direct transplant with B standardized permissive and M bypassed",
+      "prediction_rule": "A_broad=survive; A_narrow=fail"
+    },
+    {
+      "id": "B_partner_removal",
+      "axis": "B_partner",
+      "outcome": "binary focal persistence after partner/resource removal under standardized A/M and antagonist absent",
+      "prediction_rule": "obligate_partner or partner_and_antagonist=fail; otherwise=persist"
+    },
+    {
+      "id": "B_antagonist_addition",
+      "axis": "B_antagonist",
+      "outcome": "binary focal persistence after antagonist addition under standardized A/M and partner present",
+      "prediction_rule": "antagonist_exclusion or partner_and_antagonist=fail; otherwise=persist"
+    },
+    {
+      "id": "M_arrival_probe",
+      "axis": "M",
+      "outcome": "first-arrival step or unreachable at a declared target under movement-only conditions with A/B standardized permissive",
+      "candidate_targets": "all non-source landscape nodes",
+      "prediction_rule": "use each BAM world's frozen M first_arrival_steps"
+    }
+  ],
+  "selection_rule": {
+    "truth_blind": true,
+    "current_candidates_only": true,
+    "score": "partition entropy of predicted intervention outcomes",
+    "tie_break": "intervention id then target node id lexicographic",
+    "repeat_until": "one world remains or no intervention partitions the current compatible set",
+    "reuse_intervention": false
+  },
+  "primary_hypotheses": [
+    {
+      "id": "I1_truth_retention",
+      "claim": "The true BAM world is never removed by correctly generated intervention outcomes."
+    },
+    {
+      "id": "I2_axis_orthogonality",
+      "claim": "A transplant outcome depends only on A label, partner removal only on partner-dependence bit, antagonist addition only on antagonist-exclusion bit, and movement probes only on M."
+    },
+    {
+      "id": "I3_monotone_contraction",
+      "claim": "Every informative selected intervention weakly contracts the compatible-world set and no selected intervention increases it."
+    },
+    {
+      "id": "I4_full_panel_identifiability",
+      "claim": "If two candidate worlds have distinct complete intervention signatures, the full intervention panel separates them."
+    },
+    {
+      "id": "I5_active_design_matches_signature_limit",
+      "claim": "Greedy truth-blind intervention selection contracts each truth case to exactly its complete-intervention signature equivalence class."
+    }
+  ],
+  "outputs": [
+    "unique_truth_fraction_before_intervention",
+    "unique_truth_fraction_after_active_intervention",
+    "median_interventions_to_terminal",
+    "max_interventions_to_terminal",
+    "terminal_signature_equivalence_class_size_distribution",
+    "selected_intervention_frequency",
+    "axis_order_frequency",
+    "truth_retention_failures",
+    "selection_truth_leakage_checks"
+  ],
+  "claim_boundary": [
+    "Interventions are idealized known-truth probes and establish an identifiability upper bound, not field feasibility.",
+    "A/M are standardized or bypassed in B probes by design; B/M are standardized or bypassed in A probes. This deliberate intervention isolates causal axes.",
+    "Movement probes test declared M dynamics, not demographic establishment.",
+    "If complete signatures remain non-unique, do not add ad hoc probes after results; report the residual equivalence."
+  ]
+}
