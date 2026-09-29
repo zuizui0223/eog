@@ -67,6 +67,23 @@
     "acknowledgements_approved": false,
     "running_headline_approved": false,
     "final_title_page_approved": false,
-    "final_ai_llm_disclosure_approved": false
+    "final_ai_llm_disclosure_approved": false,
+    "third_party_data_reuse_approved": false
+  },
+  "third_party_data_reuse": {
+    "confirmed_by_all_authors": false,
+    "publicly_available_or_permission_obtained_confirmed": false,
+    "statement": null
+  },
+  "affiliation_entry_requirements": {
+    "required_fields": [
+      "id",
+      "institution",
+      "department_or_null",
+      "city",
+      "country",
+      "postal_address"
+    ],
+    "note": "Methods in Ecology and Evolution requests institutions and addresses on the separate title page."
   }
 }
