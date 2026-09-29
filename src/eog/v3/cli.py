@@ -6,6 +6,12 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .adaptive import (
+    adaptive_forced_first_depth,
+    plan_robust_evidence_set,
+    solve_adaptive_evidence_policy,
+)
+
 from .joint_world_engine import (
     EcologicalWorld,
     EvidenceEvent,
@@ -246,4 +252,74 @@ def plan_evidence_main() -> int:
     return 0
 
 
-__all__ = ["joint_evaluate_main", "plan_evidence_main"]
+__all__ = ["joint_evaluate_main", "plan_evidence_main", "plan_adaptive_main"]
+
+
+def plan_adaptive_main() -> int:
+    parser = argparse.ArgumentParser(prog="eog-v3-plan-adaptive")
+    parser.add_argument("--input", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--force", action="store_true")
+    args = parser.parse_args()
+
+    try:
+        payload = _load_json(args.input)
+        evaluation = evaluate_joint_worlds(
+            _parse_ecological_worlds(payload),
+            _parse_observation_worlds(payload),
+            _parse_evidence_events(payload),
+        )
+        action_supports = _parse_action_supports(payload)
+        robust = plan_robust_evidence_set(evaluation, action_supports)
+        adaptive = solve_adaptive_evidence_policy(evaluation, action_supports)
+        forced_first = {
+            action_id: adaptive_forced_first_depth(
+                evaluation,
+                action_supports,
+                action_id,
+            )
+            for action_id in sorted(action_supports)
+        }
+        output = {
+            "schema": "eog.v3.adaptive_evidence_plan.v1",
+            "evaluation_fingerprint": evaluation.fingerprint,
+            "active_joint_world_ids": list(evaluation.surviving_joint_world_ids),
+            "minimum_robust_separating_set": (
+                None
+                if robust.minimum_robust_separating_set is None
+                else list(robust.minimum_robust_separating_set)
+            ),
+            "minimum_robust_set_size": robust.minimum_robust_set_size,
+            "all_pairs_robustly_separated": robust.all_pairs_robustly_separated,
+            "insufficient_action_library": robust.insufficient_action_library,
+            "adaptive_resolvable": adaptive.resolvable,
+            "adaptive_worst_case_depth": adaptive.worst_case_depth,
+            "adaptive_optimal_first_actions": list(
+                adaptive.optimal_first_actions
+            ),
+            "adaptive_canonical_first_action": (
+                adaptive.canonical_first_action
+            ),
+            "forced_first_action_depths": forced_first,
+            "robust_plan_fingerprint": robust.fingerprint,
+            "adaptive_policy_fingerprint": adaptive.fingerprint,
+        }
+        _write_json(args.output, output, force=args.force)
+    except (KeyError, TypeError, ValueError, FileExistsError) as exc:
+        parser.error(str(exc))
+
+    print(
+        json.dumps(
+            {
+                "minimum_robust_set_size": robust.minimum_robust_set_size,
+                "adaptive_resolvable": adaptive.resolvable,
+                "adaptive_worst_case_depth": adaptive.worst_case_depth,
+                "adaptive_optimal_first_actions": list(
+                    adaptive.optimal_first_actions
+                ),
+                "output": str(args.output.resolve()),
+            },
+            sort_keys=True,
+        )
+    )
+    return 0
