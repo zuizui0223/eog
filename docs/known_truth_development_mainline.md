@@ -367,16 +367,64 @@ Therefore:
 
 Python remains the scientific reference implementation. C++ should be reconsidered only if later finite-world universes exceed the optimized Python/bitset envelope.
 
+## 16. EOG v3 public joint-world engine
+
+The validated post-closure algorithms are now exposed through one domain-agnostic
+public surface rather than as separate benchmark-only modules.
+
+EOG v3 represents
+
+[
+W_J = W_E 	imes W_O,
+]
+
+where (W_E) is the declared finite ecological-world universe and (W_O) is the
+declared finite observation-process universe.
+
+An evidence event removes a joint world only when its observed outcome lies outside
+that joint world's declared support. Ecological and observation conclusions are then
+projections of the surviving joint set.
+
+The integrated v3 regression reproduces the canonical frozen results:
+
+- strict perfect-detection case: **48 joint / 48 ecological survivors**;
+- broad perfect + imperfect case: **112 joint / 64 ecological survivors**;
+- perfect-detection calibration: **48 joint / 48 ecological survivors**;
+- robust split counts on the three active joint hypotheses: **0, 0, 2, 2**;
+- exact minimum robust evidence set: **calibration + direct state assay**, size **2**;
+- minimum adaptive worst-case depth: **2**;
+- repeat-survey-first worst-case depth: **3**;
+- removing either direct channel: exact worst-case resolution **unavailable**.
+
+The public commands are:
+
+```text
+eog-v3-joint-evaluate
+eog-v3-plan-evidence
+eog-v3-plan-adaptive
+```
+
+Their JSON examples are executed inside CI after package installation.
+
+Integrated v3 result fingerprint:
+
+`073bcdf0e0e1761e6b5af077f9ffbfc79aeadb59b1c5aee4dd4ab6c4bbc23dab`
+
+The v3 API is a product consolidation of frozen post-closure results. It is **not** a
+new EOG-WF empirical endpoint and does not modify the MEE manuscript result.
+
 ## Current product definition
 
 The post-closure known-truth line now supports the following workflow:
 
 [
-\text{declare finite worlds}
+\text{declare ecological + observation worlds}
 \rightarrow
 \text{observe}
 \rightarrow
-\text{falsify incompatible worlds}
+\text{contract the joint world set}
+\rightarrow
+\text{project ecological / observation uncertainty}
 \rightarrow
 \text{retain unresolved equivalence}
 \rightarrow
