@@ -1,0 +1,81 @@
+{
+  "schema": "eog.known_truth_programme_manifest.v1",
+  "status": "closed_through_v2_9_for_current_simulation_sequence",
+  "relation_to_eog_wf": "separate post-closure known-truth programme; does not alter the frozen EOG-WF 3/31/3 empirical denominator",
+  "stages": [
+    {
+      "stage": "v1_known_truth_biogeography",
+      "canonical_result_fingerprint": "4b4ccf41052ccc09609ad81f33e10d34919199c4af45104bc4d901893b858f04",
+      "factorial_result_fingerprint": "b1a2df3a6b1708b533f1f2c2d573eb9802f3a18d8bcada3e55e37124918d533b",
+      "core_result": "canonical falsification logic works when positive witnesses exist, but complete positive occurrence data uniquely identify 0/64 truth processes in the frozen factorial because every truth has an observationally equivalent or positive-superset alternative"
+    },
+    {
+      "stage": "v1_fast_replay",
+      "result_fingerprint": "b1a2df3a6b1708b533f1f2c2d573eb9802f3a18d8bcada3e55e37124918d533b",
+      "reference_runtime_seconds": 75.8651858,
+      "fast_runtime_seconds": 1.4368249579999954,
+      "speedup": 52.80057628286271,
+      "cpp_backend_needed_now": false
+    },
+    {
+      "stage": "v2_1_orthogonal_BAM",
+      "result_fingerprint": "dbfd0c09b492c1e53914ddfdfe392c765df6da98a43e105245767c24c75ad9b3",
+      "core_result": "A, B and M all independently generate witnesses, yet unique truth recovery is 0/64 from positives, 2/64 with perfect negatives, and 6/64 with exact occupied-node arrival times"
+    },
+    {
+      "stage": "v2_2_direct_BAM_state",
+      "result_fingerprint": "5912231d6b8d04fd1cbb3540bf137562c394aca9fc40069486d6350ee7fff9f0",
+      "core_result": "complete idealized A+B+M state evidence identifies 32/64 parameter worlds; the remaining ambiguity is inactive movement-parameter aliasing"
+    },
+    {
+      "stage": "v2_3_interventions",
+      "result_fingerprint": "654ec11ce21455989b399c7668f06595cd499b5acb347b78bdc17582f92960f2",
+      "core_result": "targeted P and H interventions split all 16 passive alias classes and make all 64 frozen parameter worlds injective"
+    },
+    {
+      "stage": "v2_4_falsification_driven_design",
+      "result_fingerprint": "c7107f1511fd7b5542da3f7c501d99f0b8cebe00feec0348ca4d60d510a75b12",
+      "core_result": "exact minimum separating design is the two interventions P barrier challenge + H long-corridor challenge"
+    },
+    {
+      "stage": "v2_5_generic_evidence_design",
+      "result_fingerprint": "a2365bcd014ebbe2722f8c04a3df0f149a4eb6af2fcf97b27cf11435721d8abd",
+      "core_result": "the planner generalizes beyond BAM, fails closed when the evidence library is insufficient, and replans exactly after world contraction"
+    },
+    {
+      "stage": "v2_6_observation_process",
+      "result_fingerprint": "3e5187088b74a443471c79743d78fc86c02a5d87565f3f51fb0f081669c46091",
+      "core_result": "finite nondetection under p<1 changes likelihood but never exact possibility; false-positive observation worlds also remove hard-positive exclusion"
+    },
+    {
+      "stage": "v2_7_joint_ecology_observation",
+      "result_fingerprint": "085587287263d5ebb4016455ac74406b14979e7de25e57e12b8a607becd5cd1d",
+      "core_result": "at target r1c3, perfect detection leaves 48/64 ecological worlds while admitting p=0.75 resurrects all 16 target-present worlds to 64/64; p=1 calibration restores 48 without a new focal observation"
+    },
+    {
+      "stage": "v2_8_robust_set_valued_design",
+      "result_fingerprint": "a459ebd6bdde502c5d86aad7baf37443d17d1156fb358a373c5429c5c94115f8",
+      "core_result": "repeat surveys robustly split 0/3 active joint-hypothesis pairs; direct calibration and direct state assay split 2/3 each; minimum worst-case robust nonadaptive set has size 2"
+    },
+    {
+      "stage": "v2_9_adaptive_evidence_tree",
+      "result_fingerprint": "19e441e930c1c3fc116780fa8bfb4b09c178e69c4379a1ef69e47f5b13218822",
+      "core_result": "minimum worst-case adaptive depth is 2, repeat-first depth is 3, known truth absent::p1 resolves in one calibration action, and removing either direct channel makes worst-case exact resolution impossible"
+    }
+  ],
+  "strongest_supported_claim": "EOG is best treated as a finite-world falsification and evidence-design framework: observations eliminate only worlds they contain valid witnesses against; unresolved worlds remain explicit; targeted calibration or intervention can be selected to activate differences among survivors.",
+  "refuted_or_rejected_claims": [
+    "Enough positive occurrences generally recover the true generating process.",
+    "A complete realised distribution map uniquely identifies the BAM decomposition.",
+    "Complete passive A/B/M state observation necessarily identifies generating parameter values.",
+    "More finite nondetections can substitute for detection calibration when imperfect detection remains admissible.",
+    "A C++ rewrite is currently necessary for the frozen simulation workload."
+  ],
+  "product_boundary": [
+    "Finite declared ecological and observation world universes only.",
+    "Surviving worlds are compatible explanations, not certified historical truth.",
+    "Hard falsification requires zero compatibility across all admissible observation worlds.",
+    "Evidence/intervention libraries must be declared before outcome-dependent selection.",
+    "If a library cannot separate survivors, return unresolved rather than inventing post hoc evidence."
+  ]
+}
