@@ -85,5 +85,11 @@
       "postal_address"
     ],
     "note": "Methods in Ecology and Evolution requests institutions and addresses on the separate title page."
+  },
+  "submission_declarations": {
+    "all_authors_and_relevant_institutions_approve_submission": false,
+    "all_entitled_authors_included": false,
+    "all_necessary_acknowledgements_made": false,
+    "legal_and_ethics_requirements_confirmed": false
   }
 }
