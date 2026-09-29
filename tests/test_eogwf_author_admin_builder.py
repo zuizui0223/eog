@@ -78,6 +78,12 @@ def confirmed_payload():
                 "for reuse or were used with the required permission."
             ),
         },
+        "submission_declarations": {
+            "all_authors_and_relevant_institutions_approve_submission": True,
+            "all_entitled_authors_included": True,
+            "all_necessary_acknowledgements_made": True,
+            "legal_and_ethics_requirements_confirmed": True,
+        },
         "inclusion_statement": {
             "approved_by_all_authors": True,
             "statement": "Author-approved inclusion statement.",
