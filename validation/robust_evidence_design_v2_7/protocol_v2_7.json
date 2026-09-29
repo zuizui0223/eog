@@ -1,0 +1,112 @@
+{
+  "schema": "eog.robust_finite_evidence_design.protocol.v2_7",
+  "status": "frozen_before_implementation",
+  "parents": {
+    "generic_design_v2_5": "a2365bcd014ebbe2722f8c04a3df0f149a4eb6af2fcf97b27cf11435721d8abd",
+    "observation_boundary_v2_6": "3e5187088b74a443471c79743d78fc86c02a5d87565f3f51fb0f081669c46091",
+    "rule": "Both parent results remain immutable."
+  },
+  "question": "When a candidate intervention predicts different biological outcomes across worlds, does observation-process uncertainty still permit exact discrimination?",
+  "robust_discrimination_rule": "An evidence channel robustly separates two worlds only when their sets of possible observed outcomes are disjoint across the full admissible observation-process universe.",
+  "bam_intervention_fixture": {
+    "ecological_worlds": 64,
+    "passive_unresolved_pairs": 16,
+    "deterministic_interventions": [
+      "P_barrier_challenge",
+      "H_long_corridor_challenge",
+      "repeat_passive_state"
+    ],
+    "deterministic_parent_result": "P and H each split 8 pairs; together they separate all 64 worlds."
+  },
+  "observation_regimes": [
+    {
+      "id": "perfect",
+      "observation_worlds": [
+        {
+          "p": 1,
+          "q": 0
+        }
+      ],
+      "surveys": [
+        1
+      ],
+      "expectation": "binary true outcomes map to disjoint observed outcome sets"
+    },
+    {
+      "id": "imperfect_detection",
+      "observation_worlds": [
+        {
+          "p": 1,
+          "q": 0
+        },
+        {
+          "p": 0.75,
+          "q": 0
+        }
+      ],
+      "surveys": [
+        1,
+        8
+      ],
+      "expectation": "true-positive intervention outcome admits all-zero history under p=0.75, overlapping true-negative outcome"
+    },
+    {
+      "id": "false_positive_allowed",
+      "observation_worlds": [
+        {
+          "p": 1,
+          "q": 0
+        },
+        {
+          "p": 1,
+          "q": 0.01
+        }
+      ],
+      "surveys": [
+        1,
+        8
+      ],
+      "expectation": "true-negative intervention outcome can produce positive detections under q>0, overlapping true-positive outcome"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "R1_perfect_reduces_to_deterministic",
+      "claim": "Under p=1,q=0, robust evidence design exactly reproduces the deterministic v2.5 BAM planner.",
+      "rule": "Any mismatch in pair split counts or minimum design refutes R1."
+    },
+    {
+      "id": "R2_imperfect_detection_blocks_exact_split",
+      "claim": "For every finite survey count in the protocol, admitting any p<1 causes binary presence/absence outcome supports to overlap, so neither P nor H challenge robustly separates its deterministic alias pairs.",
+      "rule": "Any robust split under the imperfect-detection regime refutes R2."
+    },
+    {
+      "id": "R3_false_positive_blocks_exact_split",
+      "claim": "For every finite survey count in the protocol, admitting q>0 causes positive/negative outcome supports to overlap, so neither P nor H challenge robustly separates its deterministic alias pairs.",
+      "rule": "Any robust split under the false-positive regime refutes R3."
+    },
+    {
+      "id": "R4_observation_uncertainty_cannot_improve_exact_design",
+      "claim": "Expanding the admissible observation-process universe cannot increase robust split counts or reduce the exact minimum separating-set size.",
+      "rule": "Any broader observation universe with stronger exact discrimination refutes R4."
+    },
+    {
+      "id": "R5_fail_closed_under_unobservable_intervention",
+      "claim": "When every useful intervention has overlapping observed-outcome supports for at least one unresolved pair, the robust planner returns insufficient_library rather than using the latent biological outcome as if observed.",
+      "rule": "Returning a separating set in such a regime refutes R5."
+    }
+  ],
+  "outputs": [
+    "possible_observed_outcome_sets_by_true_binary_state",
+    "robust_split_counts_by_regime_and_n",
+    "robust_minimum_separating_set_by_regime_and_n",
+    "insufficient_library_by_regime_and_n",
+    "R1-R5 verdicts"
+  ],
+  "boundaries": [
+    "The planner separates worlds on observable outcomes, not latent biological outcomes.",
+    "No probability threshold turns overlapping support into exact separation.",
+    "Larger n may change likelihood weights but cannot remove support overlap at finite n when p<1 or q>0.",
+    "This is an exact/falsification planner; probabilistic expected-information design is a separate future product."
+  ]
+}
