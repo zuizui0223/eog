@@ -1,0 +1,144 @@
+{
+  "schema": "eog.known_truth_bam_orthogonal.protocol.v2_1",
+  "status": "frozen_before_implementation",
+  "parent_v2": {
+    "result_fingerprint": "c8f5a6c99627a786a06f4e298b2b7045a728907fe985119b402d16c8d4196d43",
+    "design_adequacy": "failed for full BAM claim because partner occupied 21/21 nodes and A-only witnesses were absent",
+    "rule": "v2 result remains immutable; v2.1 is a new orthogonal-activation experiment"
+  },
+  "landscape": {
+    "width": 7,
+    "height": 3,
+    "spike_col": 3,
+    "spike_amount": 0.45,
+    "barrier_col": 4,
+    "barrier_gap_rows": [],
+    "focal_source": "r1c0"
+  },
+  "A": {
+    "center": [
+      0.45,
+      0.52
+    ],
+    "narrow_radius": [
+      0.35,
+      0.2
+    ],
+    "broad_radius": [
+      0.5,
+      0.3
+    ],
+    "labels": [
+      "A_narrow",
+      "A_broad"
+    ]
+  },
+  "B": {
+    "partner": {
+      "source": "r1c0",
+      "center": [
+        0.42,
+        0.55
+      ],
+      "radius": [
+        0.35,
+        0.2
+      ],
+      "step_radius": 1.01,
+      "barrier_permeable": true,
+      "horizon": 8,
+      "expected_occupancy_fraction_range": [
+        0.2,
+        0.8
+      ]
+    },
+    "antagonist": {
+      "source": "r1c6",
+      "center": [
+        0.62,
+        0.45
+      ],
+      "radius": [
+        0.2,
+        0.15
+      ],
+      "step_radius": 1.01,
+      "barrier_permeable": true,
+      "horizon": 8,
+      "expected_occupancy_fraction_range": [
+        0.2,
+        0.8
+      ]
+    },
+    "modes": [
+      "none",
+      "obligate_partner",
+      "antagonist_exclusion",
+      "partner_and_antagonist"
+    ]
+  },
+  "M": {
+    "step_radius": [
+      1.01,
+      2.01
+    ],
+    "barrier_permeable": [
+      false,
+      true
+    ],
+    "horizon": [
+      3,
+      8
+    ],
+    "full_factorial": true,
+    "expected_world_count_per_A_B_combination": 8
+  },
+  "activation_gates": [
+    "partner occupancy fraction >0.20 and <0.80",
+    "antagonist occupancy fraction >0.20 and <0.80",
+    "at least one A-only positive-witness pair",
+    "at least one partner-B-only positive-witness pair",
+    "at least one antagonist-B-only positive-witness pair",
+    "at least one M-distance-only positive-witness pair",
+    "at least one M-barrier-only positive-witness pair",
+    "at least one same-final-G pair with different movement arrival times",
+    "at least one positive-superset false world with a diagnostic perfect-negative witness"
+  ],
+  "gate_rule": "All activation gates must PASS before BAM H1-H6 scoring. If any gate fails, terminate v2.1 as DESIGN_STOP; parameter tuning after BAM scoring is forbidden.",
+  "hypotheses": [
+    "BAM_H1_truth_retention",
+    "BAM_H2_axis_witness_attribution",
+    "BAM_H3_intersection_nonidentifiability",
+    "BAM_H4_positive_superset_ceiling",
+    "BAM_H5_perfect_negative_rescue",
+    "BAM_H6_temporal_M_rescue"
+  ],
+  "evidence_ladder": [
+    "complete positive occurrence state",
+    "complete positive state + perfect surveyed negatives",
+    "complete presence/absence + exact known-truth first-arrival times on occupied nodes"
+  ],
+  "primary_question": "Does orthogonal activation of A, partner-B, antagonist-B, distance-M and barrier-M change which BAM mechanisms are identifiable under each evidence layer?",
+  "required_outputs": [
+    "activation_gate_receipt",
+    "candidate_world_count",
+    "eligible_truth_worlds",
+    "axis_witness_counts",
+    "exact_G_equivalence_class_distribution",
+    "fraction_truth_unique_positive_only",
+    "fraction_truth_unique_with_negatives",
+    "fraction_truth_unique_with_temporal_evidence",
+    "negative_rescue_fraction",
+    "temporal_M_rescue_fraction",
+    "H1-H6 verdicts"
+  ],
+  "forbidden_after_scoring": [
+    "change partner or antagonist niches",
+    "change A niche radii",
+    "change M grid",
+    "restore barrier gap",
+    "remove truth cases with large equivalence classes",
+    "drop any activation category",
+    "reinterpret perfect negatives as realistic presence-only evidence"
+  ]
+}
