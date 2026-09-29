@@ -5,7 +5,10 @@ import json
 import re
 from pathlib import Path
 
-from build_eogwf_author_admin import validate_admin_receipt
+try:
+    from manuscript.build_eogwf_author_admin import validate_admin_receipt
+except ModuleNotFoundError:
+    from build_eogwf_author_admin import validate_admin_receipt
 
 ROOT = Path(__file__).resolve().parents[1]
 MANUSCRIPT_SOURCE = ROOT / "manuscript/EOG_WF_MANUSCRIPT_V1.md"
