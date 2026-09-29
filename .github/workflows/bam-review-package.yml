@@ -53,8 +53,9 @@ jobs:
         run: python -m pip install "matplotlib>=3.8"
 
       - name: Build anonymous peer-review package
-        run: |
-          python manuscript/bam_identifiability/build_review_package_v1.py             --output-dir build/bam_review_package
+        run: >
+          python manuscript/bam_identifiability/build_review_package_v1.py
+          --output-dir build/bam_review_package
 
       - name: Inspect archive receipt
         run: |
@@ -62,13 +63,13 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          p=Path("build/bam_review_package/bam_inverse_identifiability_review_receipt.json")
-          r=json.loads(p.read_text())
-          assert r["anonymous_review"] is True
-          assert r["reproducible_bundle"] is True
-          assert r["privacy_findings"] == []
-          assert r["file_count"] > 40
-          assert len(r["zip_sha256"]) == 64
+          path = Path("build/bam_review_package/bam_inverse_identifiability_review_receipt.json")
+          receipt = json.loads(path.read_text())
+          assert receipt["anonymous_review"] is True
+          assert receipt["reproducible_bundle"] is True
+          assert receipt["privacy_findings"] == []
+          assert receipt["file_count"] > 40
+          assert len(receipt["zip_sha256"]) == 64
           PY
 
       - name: Extract anonymous bundle into clean review workspace
@@ -83,20 +84,15 @@ jobs:
 
       - name: Run focused tests using only extracted review bundle
         working-directory: build/reviewer_workspace
+        env:
+          PYTHONPATH: ".:benchmarks"
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          manifest=json.loads(
-              Path("manuscript/bam_identifiability/REVIEW_PACKAGE_MANIFEST_V2.json").read_text()
-          ) if Path("manuscript/bam_identifiability/REVIEW_PACKAGE_MANIFEST_V2.json").exists() else None
-          # The source manifest itself is intentionally not required inside the anonymous
-          # package; use the frozen command from README_REPRODUCTION.md below.
-          PY
           python -m pytest             tests/test_world_reconstruction.py             tests/test_known_truth_bam.py             tests/test_known_truth_bam_v2_1.py             tests/test_known_truth_bam_direct_evidence.py             tests/test_known_truth_bam_direct_movement.py             tests/test_known_truth_bam_generality.py             tests/test_independent_stochastic_bam_v3.py             tests/test_multilandscape_stochastic_bam_v4.py             tests/test_bam_identifiability_theory.py             tests/test_bam_targeted_measurement_audit.py             -q
 
       - name: Rebuild Figures 1-6 using only extracted review bundle
         working-directory: build/reviewer_workspace
+        env:
+          PYTHONPATH: ".:benchmarks"
         run: |
           rm -rf build/bam_identifiability_figures
           python manuscript/bam_identifiability/figures/build_quantitative_figures_v2.py
