@@ -33,8 +33,8 @@ def _save(fig, name: str):
 def figure1_conceptual():
     from matplotlib.patches import FancyArrowPatch, Rectangle
 
-    fig, ax = plt.subplots(figsize=(10.5, 4.8))
-    ax.set_xlim(0, 10.5)
+    fig, ax = plt.subplots(figsize=(11.8, 5.2))
+    ax.set_xlim(0, 11.8)
     ax.set_ylim(0, 5.0)
     ax.axis("off")
 
@@ -70,16 +70,16 @@ def figure1_conceptual():
     ax.text(4.55, 0.45, "one distribution  →  a survivor fiber", fontsize=9)
 
     # Panel C: evidence contracts the fiber.
-    ax.text(8.65, 4.55, "C  Evidence fibers", fontweight="bold")
+    ax.text(8.75, 4.55, "C  Evidence fibers", fontweight="bold")
     stages = [
-        (8.75, 3.6, 1.15, "S0\npositives"),
-        (8.9, 2.75, 0.85, "S1\nfull G"),
-        (9.05, 1.9, 0.55, "S2+\ntime / A / B / M"),
-        (9.18, 1.05, 0.3, "target\nfiber"),
+        (8.9, 3.55, 1.65, "S0  positives"),
+        (9.05, 2.70, 1.35, "S1  complete G"),
+        (9.20, 1.85, 1.05, "S2+  time / A / B / M"),
+        (9.35, 1.00, 0.75, "target fiber"),
     ]
     for x, y, width, label in stages:
         ax.add_patch(Rectangle((x, y), width, 0.55, fill=False, linewidth=1.2))
-        ax.text(x + width / 2, y + 0.275, label, ha="center", va="center", fontsize=7)
+        ax.text(x + width / 2, y + 0.275, label, ha="center", va="center", fontsize=7.5)
     for (x1, y1, w1, _), (x2, y2, w2, _) in zip(stages, stages[1:]):
         ax.add_patch(
             FancyArrowPatch(
@@ -89,7 +89,7 @@ def figure1_conceptual():
                 mutation_scale=10,
             )
         )
-    ax.text(8.7, 0.45, "valid evidence contracts or preserves", fontsize=8)
+    ax.text(8.9, 0.42, "valid evidence contracts or preserves the fiber", fontsize=8.5)
 
     fig.suptitle(
         "Forward BAM generates distributions; inverse BAM returns evidence-compatible worlds",
@@ -103,19 +103,47 @@ def figure2_restrictiveness():
     y = [int(row["compatible_world_count"]) for row in rows]
     labels = [row["scenario"] for row in rows]
 
-    fig, ax = plt.subplots(figsize=(7.0, 5.0))
+    fig, ax = plt.subplots(figsize=(7.6, 5.4))
     ax.scatter(x, y)
+
+    # Several frozen truth scenarios have exactly identical coordinates.
+    # Combine those labels rather than jittering data values.
+    grouped = {}
     for xi, yi, label in zip(x, y, labels, strict=True):
-        ax.annotate(label, (xi, yi), xytext=(5, 5), textcoords="offset points")
+        grouped.setdefault((xi, yi), []).append(label)
+
+    offsets = {
+        (33, 32): (8, -18),
+        (40, 8): (8, 8),
+        (67, 8): (8, 8),
+        (96, 4): (-128, 10),
+    }
+    for (xi, yi), group in sorted(grouped.items()):
+        clean = [value.replace("_", " ") for value in group]
+        label = " / ".join(clean)
+        dx, dy = offsets.get((xi, yi), (6, 6))
+        ax.annotate(
+            label,
+            (xi, yi),
+            xytext=(dx, dy),
+            textcoords="offset points",
+            fontsize=8.5,
+            ha="left",
+            va="center",
+        )
+
     ax.set_xlabel("Complete positive support size")
     ax.set_ylabel("Compatible candidate worlds")
-    ax.set_title("Stronger restriction can increase positive-only ambiguity")
+    ax.set_ylim(2, 35)
+    ax.set_title("Stronger restriction can increase positive-only ambiguity", pad=28)
     ax.text(
-        0.02,
-        0.97,
-        "304/304 strict support inclusions obeyed inverse survivor ordering",
+        0.5,
+        1.015,
+        "304/304 strict support inclusions obeyed the inverse survivor ordering",
         transform=ax.transAxes,
-        va="top",
+        ha="center",
+        va="bottom",
+        fontsize=8.5,
     )
     _save(fig, "F2_restrictiveness_ambiguity")
 
@@ -131,7 +159,7 @@ def figure3_evidence_ladder():
     ax.set_ylim(0, total * 1.08)
     ax.set_xlabel("Evidence stage")
     ax.set_ylabel("Uniquely identified BAM states")
-    ax.set_title("Progressive evidence contracts the BAM survivor fiber")
+    ax.set_title("Progressive evidence contracts the BAM survivor fiber", pad=28)
     for bar, count in zip(bars, counts, strict=True):
         ax.text(
             bar.get_x() + bar.get_width() / 2,
@@ -142,11 +170,13 @@ def figure3_evidence_ladder():
             fontsize=8,
         )
     ax.text(
-        0.02,
-        0.96,
+        0.5,
+        1.015,
         "Predeclared claim 'M is always the final bottleneck' was REFUTED",
         transform=ax.transAxes,
-        va="top",
+        ha="center",
+        va="bottom",
+        fontsize=8.5,
     )
     _save(fig, "F3_evidence_ladder")
 
@@ -180,7 +210,7 @@ def figure4_stochastic_challenge():
         fontsize=8,
     )
     ax.set_ylabel("Median compatible worlds at horizon 40")
-    ax.set_title("Independent stochastic BAM challenge")
+    ax.set_title("Independent stochastic BAM challenge", pad=42)
     for bar, support in zip(bars, supports, strict=True):
         ax.text(
             bar.get_x() + bar.get_width() / 2,
@@ -191,13 +221,14 @@ def figure4_stochastic_challenge():
             fontsize=7,
         )
     ax.text(
-        0.02,
-        0.96,
+        0.5,
+        1.015,
         "Truth-retention failures = 0; API parity mismatches = 0\n"
-        "Positive-witness universality REFUTED; unordered-history strict gain REFUTED",
+        "Positive-witness universality and unordered-history strict gain were REFUTED",
         transform=ax.transAxes,
-        va="top",
-        fontsize=8,
+        ha="center",
+        va="bottom",
+        fontsize=8.2,
     )
     _save(fig, "F4_independent_stochastic_challenge")
 
@@ -216,16 +247,17 @@ def figure5_temporal():
     ax.set_xticks(positions)
     ax.set_xticklabels([value.replace("_", "\n") for value in labels], fontsize=8)
     ax.set_ylabel("Median compatible worlds at horizon 40")
-    ax.set_title("Time-stamped positive evidence recovers movement information")
+    ax.set_title("Time-stamped positive evidence recovers movement information", pad=42)
     ax.legend()
     ax.text(
-        0.02,
-        0.96,
+        0.5,
+        1.015,
         "Static classes 8 → temporal classes 20\n"
         "19/48 static M-equivalent pairs split; strict gain in 256/384 runs",
         transform=ax.transAxes,
-        va="top",
-        fontsize=8,
+        ha="center",
+        va="bottom",
+        fontsize=8.2,
     )
     _save(fig, "F5_temporal_information")
 
