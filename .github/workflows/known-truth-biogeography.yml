@@ -24,10 +24,16 @@ jobs:
         run: |
           python benchmarks/run_known_truth_biogeography_v1.py \
             --output build/known_truth_biogeography/canonical_result_v1.json
+      - name: Run frozen witness-complexity factorial
+        run: |
+          python benchmarks/run_known_truth_witness_factorial_v1.py \
+            --output build/known_truth_biogeography/witness_factorial_result_v1.json
       - name: Verify focused tests
         run: python -m pytest tests/test_known_truth_biogeography.py -q
       - uses: actions/upload-artifact@v4
         with:
           name: known-truth-biogeography-v1
-          path: build/known_truth_biogeography/canonical_result_v1.json
+          path: |
+            build/known_truth_biogeography/canonical_result_v1.json
+            build/known_truth_biogeography/witness_factorial_result_v1.json
           if-no-files-found: error
