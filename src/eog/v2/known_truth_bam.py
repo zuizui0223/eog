@@ -621,7 +621,16 @@ def run_bam_factorial_v2() -> dict[str, object]:
                 h2_axis_mismatches += 1
             axes = tuple(axis for axis in ("A", "B", "M") if witnesses[axis])
             if axes:
-                axis_counts["".join(axes)] += 1
+                key = {
+                    ("A",): "A_only",
+                    ("B",): "B_only",
+                    ("M",): "M_only",
+                    ("A", "B"): "AB",
+                    ("A", "M"): "AM",
+                    ("B", "M"): "BM",
+                    ("A", "B", "M"): "ABM",
+                }[axes]
+                axis_counts[key] += 1
             if _is_subset(truth.occupied_mask, false_world.occupied_mask):
                 if eliminated:
                     h4_superset_violations += 1
