@@ -1,0 +1,77 @@
+{
+  "schema": "eog.v3.joint_world_engine.protocol.v1",
+  "status": "frozen_before_implementation",
+  "parent_results": {
+    "bam_v2_1": "dbfd0c09b492c1e53914ddfdfe392c765df6da98a43e105245767c24c75ad9b3",
+    "generic_design_v2_5": "a2365bcd014ebbe2722f8c04a3df0f149a4eb6af2fcf97b27cf11435721d8abd",
+    "detection_v2_6": "3e5187088b74a443471c79743d78fc86c02a5d87565f3f51fb0f081669c46091",
+    "joint_v2_7": "085587287263d5ebb4016455ac74406b14979e7de25e57e12b8a607becd5cd1d",
+    "stochastic_design_v2_8": "0a254d507dec2edbb35d3716c4928cc82a8bb608f38c6abb00269a9d12f1fcbb"
+  },
+  "goal": "Unify exact finite ecological-world falsification, observation-process uncertainty, projection, and next-evidence design in one domain-agnostic API.",
+  "model": {
+    "ecological_world": "finite mapping target_id -> latent ecological state label",
+    "observation_world": "finite mapping channel_id × ecological_state -> finite possible outcome set",
+    "joint_world": "Cartesian product ecological_world × observation_world",
+    "evidence_event": "(target_id, channel_id, observed_outcome)",
+    "compatibility": "joint world survives iff every observed outcome belongs to its declared support set",
+    "ecological_projection": "unique ecological worlds represented among surviving joint worlds",
+    "observation_projection": "unique observation worlds represented among surviving joint worlds"
+  },
+  "planner": {
+    "action": "finite support set of possible outcomes for every currently surviving joint world",
+    "metrics": [
+      "guaranteed joint-pair splits",
+      "worst-case surviving joint worlds",
+      "worst-case surviving ecological worlds"
+    ],
+    "objective": [
+      "joint",
+      "ecological"
+    ],
+    "fail_closed": "If no candidate action strictly improves the chosen worst-case objective, best_action is null."
+  },
+  "hypotheses": [
+    {
+      "id": "V3_1_reproduce_joint_v27",
+      "claim": "A generic v3 adapter exactly reproduces the frozen v2.7 strict/broad/calibrated ecological projections and survivor counts.",
+      "rule": "Any count or world-set mismatch refutes V3_1."
+    },
+    {
+      "id": "V3_2_reproduce_stochastic_v28",
+      "claim": "The v3 planner exactly reproduces v2.8 action metrics and objective-specific winners.",
+      "rule": "Any action metric or winner mismatch refutes V3_2."
+    },
+    {
+      "id": "V3_3_evidence_update_monotonicity",
+      "claim": "Appending evidence to a fixed joint universe cannot increase the surviving joint set or either projection.",
+      "rule": "Any expansion after an evidence update refutes V3_3."
+    },
+    {
+      "id": "V3_4_observation_universe_expansion",
+      "claim": "Holding ecological worlds and evidence fixed, expanding the declared observation-world universe cannot remove an ecological survivor and may add survivors.",
+      "rule": "Any survivor loss after universe expansion refutes V3_4."
+    },
+    {
+      "id": "V3_5_fail_closed_action_choice",
+      "claim": "If every candidate action has the same worst-case value as the current state for the chosen objective, v3 returns no preferred action.",
+      "rule": "Any forced recommendation refutes V3_5."
+    }
+  ],
+  "outputs": [
+    "joint_survivors",
+    "ecological_projection",
+    "observation_projection",
+    "universe_falsified",
+    "action_rankings",
+    "best_action_by_objective",
+    "fingerprints"
+  ],
+  "boundaries": [
+    "No claim that the finite ecological universe contains truth.",
+    "No hard falsification from nonzero-probability histories.",
+    "No hidden prior over worlds.",
+    "Action ranking is objective-specific and robust-support based.",
+    "v3 is an API consolidation; parent scientific results are not reinterpreted."
+  ]
+}
