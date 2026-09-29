@@ -1,0 +1,64 @@
+{
+  "schema": "eog.bam_identifiability.figure_data_manifest.v2",
+  "manuscript": "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V2.md",
+  "sources": [
+    {
+      "file": "validation/known_truth_bam_v3/result_summary_v3.json",
+      "fingerprint": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415",
+      "outputs": [
+        "F3_evidence_ladder.csv"
+      ]
+    },
+    {
+      "file": "validation/restrictiveness_ambiguity_v3_1/audit_summary_v3_1.json",
+      "fingerprint": "ae797daf732af37740408fd5ca3cb4eb1c02f5345b9ffea651fbec5d05d79b2c",
+      "outputs": [
+        "F2_restrictiveness_scenarios.csv"
+      ],
+      "exact_support_inclusion_pairs": 304,
+      "nesting_violations": 0,
+      "descriptive_pearson_r": -0.6716589543962691
+    },
+    {
+      "file": "validation/independent_stochastic_temporal_v3_2/result_summary_v3_2.json",
+      "fingerprint": "c1fd0014bf1ddc0f61af7a08dafb13e005f3a80e99693ddde328e06364b9c9f9",
+      "outputs": [
+        "F5_temporal_scenarios.csv"
+      ],
+      "static_support_classes": 8,
+      "temporal_signature_classes": 20,
+      "static_M_equivalent_pairs": 48,
+      "realised_temporal_split_pairs": 19,
+      "temporal_strict_gain_runs": 256,
+      "planned_runs": 384
+    },
+    {
+      "file": "validation/multilandscape_stochastic_bam_v4/result_summary_v4.json",
+      "fingerprint": "9c08962ea6a94ebc1869eb5a578749af5ed78989a210b9d40278ea04ac67038c",
+      "outputs": [
+        "S_multilandscape.csv"
+      ],
+      "planned_landscapes": 8,
+      "eligible_landscapes": 6,
+      "design_stops": 2,
+      "eligible_stochastic_runs": 1152
+    },
+    {
+      "file": "validation/bam_identifiability_theory_v1/targeted_measurement_exact_audit_summary_v1.json",
+      "fingerprint": "cc7f6ed6f51da660aeeb8cff421504ab0b6c6bcae7a86cdd78c7acf15a44afdd",
+      "outputs": [
+        "F6_exact_measurement_distribution.csv"
+      ],
+      "truth_cases": 768,
+      "failures": 0,
+      "exact_maximum_measurements": {
+        "A": 1,
+        "B": 2,
+        "AB_joint": 3,
+        "M": 2,
+        "tau": 0,
+        "M_tau_joint": 2
+      }
+    }
+  ]
+}
