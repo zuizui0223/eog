@@ -1,0 +1,129 @@
+{
+  "schema": "eog.known_truth_bam_generality.protocol.v3",
+  "status": "frozen_before_implementation",
+  "parent_v2_3": {
+    "result_fingerprint": "39ff1da52bfaf029d67cedb9faaaf6fcf575e5d1b62952c938f5a5a06f15e954",
+    "key_result": "In one 7x3 orthogonally activated system, BAM-state uniqueness was 0% at E0, 32.8125% at E4 and 100% at E5; targeted direct-A+B required <=3 nodes and direct-M accessibility <=2 nodes.",
+    "rule": "v2.3 is immutable; v3 tests whether those local bounds generalize."
+  },
+  "finite_system_roster": {
+    "system_ids": [
+      "S00_7x3_closed",
+      "S01_7x3_gap",
+      "S02_7x3_closed",
+      "S03_7x3_gap",
+      "S04_7x3_closed",
+      "S05_7x3_gap",
+      "S06_9x5_closed",
+      "S07_9x5_gap",
+      "S08_9x5_closed",
+      "S09_9x5_gap",
+      "S10_9x5_closed",
+      "S11_9x5_gap"
+    ],
+    "deterministic_seed_by_system": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "no_replacement": true,
+    "environment_generator": "2-D gradient + row structure + deterministic seeded local heterogeneity",
+    "barrier_policy": "closed systems have no gap; gap systems have one middle-row gap",
+    "candidate_worlds_per_system": 64
+  },
+  "BAM_generation": {
+    "A": "Two source-containing focal abiotic niche breadths generated from the focal source environment.",
+    "B": "Four interaction modes from independently generated partner and antagonist virtual species, each with its own A∩M state.",
+    "M": "2 dispersal radii × 2 barrier-permeability states × 2 finite horizons.",
+    "realised_truth": "G=A∩B∩M",
+    "state_identity": "A set + B set + M set + complete first-arrival vector"
+  },
+  "pre_scoring_activation_gate": {
+    "per_system": [
+      "partner occupancy fraction >0.15 and <0.85",
+      "antagonist occupancy fraction >0.15 and <0.85",
+      "at least one A-only positive witness pair",
+      "at least one B-only positive witness pair",
+      "at least one M-only positive witness pair",
+      "at least one exact-G equivalence pair",
+      "at least one positive-superset / diagnostic-negative pair"
+    ],
+    "terminal_rule": "A system failing any gate is DESIGN_STOP and remains in the denominator. No parameter repair or replacement."
+  },
+  "evidence_ladder": [
+    "E0 complete positive occurrence state",
+    "E1 E0 + complete perfect surveyed negatives",
+    "E2 E1 + exact arrival time on truth-positive nodes",
+    "E3 E2 + complete direct A state",
+    "E4 E3 + complete direct B state",
+    "E5 E4 + complete direct M accessibility",
+    "E6 E5 + complete direct M first-arrival state"
+  ],
+  "preregistered_generality_claims": [
+    {
+      "id": "G1_positive_zero_bound",
+      "claim": "The v2.3 result that positive occurrences alone uniquely identify 0% of BAM truths generalizes to every scored v3 system.",
+      "decision_rule": "SUPPORTED only if every scored system has BAM-state unique fraction E0=0. Any truth uniquely identified at E0 REFUTES this universal bound."
+    },
+    {
+      "id": "G2_M_final_bottleneck",
+      "claim": "The v2.3 pattern E4<1 and E5=1 generalizes to every scored system: direct M accessibility is always the final missing evidence required for BAM-state recovery.",
+      "decision_rule": "SUPPORTED only if every scored system has E4<1 and E5=1. Any system violating either condition REFUTES the universal claim."
+    },
+    {
+      "id": "G3_AB_three_node_bound",
+      "claim": "The v2.3 targeted direct-A+B bound of at most 3 nodes generalizes to every eligible truth in every scored v3 system.",
+      "decision_rule": "SUPPORTED only if max targeted A+B node count <=3 across the full scored denominator; one truth requiring >3 refutes G3."
+    },
+    {
+      "id": "G4_M_two_node_bound",
+      "claim": "The v2.3 targeted direct-M accessibility bound of at most 2 nodes generalizes to every eligible truth in every scored v3 system.",
+      "decision_rule": "SUPPORTED only if max targeted M-accessibility node count <=2; one truth requiring >2 refutes G4."
+    },
+    {
+      "id": "G5_complete_state_recovery",
+      "claim": "After complete A, B, M accessibility and full M arrival evidence (E6), every scored truth collapses to its exact BAM-state equivalence class.",
+      "decision_rule": "Any non-equivalent BAM state surviving E6 refutes G5."
+    },
+    {
+      "id": "G6_monotone_evidence_ladder",
+      "claim": "BAM-state identification fraction is non-decreasing from E0 through E6 in every scored system.",
+      "decision_rule": "Any decrease refutes G6."
+    }
+  ],
+  "primary_outputs": [
+    "12-system roster with PASS/DESIGN_STOP",
+    "scored_system_count",
+    "eligible_truth_count",
+    "per-system BAM-state unique fractions E0-E6",
+    "pooled BAM-state unique fractions E0-E6",
+    "per-system and pooled exact-G equivalence distributions",
+    "targeted A+B node-count distribution",
+    "targeted M-accessibility node-count distribution",
+    "targeted M-arrival node-count distribution",
+    "axis-witness composition",
+    "G1-G6 verdicts"
+  ],
+  "forbidden_after_results": [
+    "replace a DESIGN_STOP system",
+    "change seeds",
+    "change grid dimensions",
+    "change evidence ordering",
+    "relax activation gates",
+    "drop a scored system that refutes a v2.3 bound",
+    "retune A/B/M generator after scoring"
+  ],
+  "language": {
+    "reference": "Python bitset/state-set implementation",
+    "cpp_rule": "No C++ port in v3 unless optimized Python system sweep itself exceeds 60 seconds CI wall-clock. Scientific definitions remain in Python."
+  }
+}
