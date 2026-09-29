@@ -1,0 +1,74 @@
+{
+  "schema": "eog.known_truth_bam.source_compatible_summary.v2_2",
+  "protocol_commit": "f145e789a96e75ca53da603730382aeed1de560f",
+  "biotic_overlap_amendment_commit": "e85d8237d6c99af8d0426d1fc63934c48716ec63",
+  "executed_commit": "d5223a850aae60dc193ab1f1d53b24b64a598a96",
+  "workflow_run_id": 36541943011,
+  "artifact_id": 11020183737,
+  "artifact_digest": "sha256:2bf9e1ebac6a38acb37c6eef043dce01c505a916af4cb414ac165c2b522e5f6a",
+  "result_fingerprint": "5bf2ead314b8711e8fe48dd396f1398c092581313cba6a0fecc06821ca92e36b",
+  "status": "SCORED",
+  "activation_audit": {
+    "partner_fraction": 0.42857142857142855,
+    "antagonist_fraction": 0.5714285714285714,
+    "focal_source_in_partner": true,
+    "biotic_masks_pairwise_distinct": true,
+    "eligible_truth_counts_by_A": {
+      "A_broad": 20,
+      "A_narrow": 20
+    },
+    "eligible_truth_counts_by_B": {
+      "none": 10,
+      "obligate_partner": 10,
+      "antagonist_exclusion": 10,
+      "partner_and_antagonist": 10
+    },
+    "eligible_truth_counts_by_M": {
+      "M_short_closed_h2": 8,
+      "M_long_closed_h2": 8,
+      "M_long_open_h2": 8,
+      "M_short_open_h8": 8,
+      "M_long_open_h8": 8
+    },
+    "witness_counts": {
+      "A_only": 3,
+      "B_partner_only": 12,
+      "B_antagonist_only": 12,
+      "M_distance_only": 5,
+      "M_barrier_only": 1
+    },
+    "same_g_different_arrival_pairs": 82,
+    "positive_superset_negative_witness_pairs": 541
+  },
+  "candidate_world_count": 40,
+  "eligible_truth_worlds": 40,
+  "truth_retention_failures": 0,
+  "fraction_truth_unique_positive_only": 0,
+  "fraction_truth_unique_with_negatives": 0.075,
+  "fraction_truth_unique_with_temporal_evidence": 0.2,
+  "negative_rescue_fraction": 1,
+  "temporal_M_rescue_fraction": 1,
+  "partner_dependency_diagnostic_cases": 7,
+  "partner_no_B_survives_positive": 7,
+  "partner_no_B_eliminated_by_negatives": 7,
+  "antagonist_dependency_diagnostic_cases": 10,
+  "antagonist_no_B_survives_positive": 10,
+  "antagonist_no_B_eliminated_by_negatives": 10,
+  "verdicts": {
+    "BAM_H1_truth_retention": "SUPPORTED",
+    "BAM_H2_axis_witness_attribution": "SUPPORTED",
+    "BAM_H3_intersection_nonidentifiability": "SUPPORTED",
+    "BAM_H4_positive_superset_ceiling": "SUPPORTED",
+    "BAM_H5_perfect_negative_rescue": "SUPPORTED",
+    "BAM_H6_temporal_M_rescue": "SUPPORTED",
+    "BAM_H7_positive_partner_dependence_nonidentifiability": "SUPPORTED",
+    "BAM_H8_perfect_negative_partner_rescue": "SUPPORTED"
+  },
+  "central_interpretation": [
+    "Positive occurrence evidence can falsify under-permissive A, B or M worlds only when a positive witness falls outside the candidate world.",
+    "Positive-only evidence cannot establish restrictive causal mechanisms against more permissive supersets: obligate-partner truth and antagonist-exclusion truth were each compatible with the corresponding no-B world in every diagnostic case.",
+    "Perfect surveyed negatives eliminated every diagnostic positive-superset world under the idealized equilibrium/perfect-detection contract, but full BAM truth was unique in only 7.5% of truth cases.",
+    "Temporal arrival evidence eliminated every equal-G world whose M arrival times differed, but full BAM truth was unique in only 20% of cases.",
+    "Therefore recovering the realised occupied set, and even recovering movement timing, does not generally identify the full A/B/M decomposition."
+  ]
+}
