@@ -1,0 +1,102 @@
+{
+  "schema": "eog.multilandscape_independent_stochastic_bam.summary.v4",
+  "source_workflow_run_id": 36553986196,
+  "artifact_id": 11027380279,
+  "artifact_digest": "sha256:ac50fbccf90dec942d5ec35efbbcc514e2aaddb1f82315dd0881ed8d3f30340e",
+  "result_fingerprint": "9c08962ea6a94ebc1869eb5a578749af5ed78989a210b9d40278ea04ac67038c",
+  "planned_landscape_count": 8,
+  "eligible_landscape_count": 6,
+  "design_stop_count": 2,
+  "planned_stochastic_runs": 1536,
+  "eligible_stochastic_runs": 1152,
+  "truth_retention_failures": 0,
+  "nesting_monotonicity_violations": 0,
+  "static_expansion_violations": 0,
+  "api_parity_audits": 72,
+  "api_parity_mismatches": 0,
+  "design_stops": [
+    {
+      "landscape_id": "joint_fragmented_s0",
+      "reasons": [
+        "candidate_build_failure",
+        "candidate_world_count_not_32",
+        "truth_missing:A_narrow|B_none|M_long_open",
+        "truth_missing:A_narrow|B_partner_and_antagonist|M_short_closed"
+      ],
+      "build_failure_count": 16
+    },
+    {
+      "landscape_id": "joint_fragmented_s1",
+      "reasons": [
+        "species_source_not_eligible"
+      ]
+    }
+  ],
+  "eligible_landscapes": [
+    {
+      "landscape_id": "open_smooth_s0",
+      "family": "open_smooth",
+      "temporal_strict_gain_runs": 128,
+      "temporal_nonidentified_h40_runs": 192,
+      "joint_ABM_static_median_h40": 32,
+      "joint_ABM_temporal_median_h40": 32
+    },
+    {
+      "landscape_id": "open_smooth_s1",
+      "family": "open_smooth",
+      "temporal_strict_gain_runs": 128,
+      "temporal_nonidentified_h40_runs": 192,
+      "joint_ABM_static_median_h40": 32,
+      "joint_ABM_temporal_median_h40": 32
+    },
+    {
+      "landscape_id": "barrier_gap_s0",
+      "family": "barrier_gap",
+      "temporal_strict_gain_runs": 150,
+      "temporal_nonidentified_h40_runs": 192,
+      "joint_ABM_static_median_h40": 32,
+      "joint_ABM_temporal_median_h40": 32
+    },
+    {
+      "landscape_id": "barrier_gap_s1",
+      "family": "barrier_gap",
+      "temporal_strict_gain_runs": 136,
+      "temporal_nonidentified_h40_runs": 192,
+      "joint_ABM_static_median_h40": 32,
+      "joint_ABM_temporal_median_h40": 32
+    },
+    {
+      "landscape_id": "bottleneck_s0",
+      "family": "bottleneck",
+      "temporal_strict_gain_runs": 128,
+      "temporal_nonidentified_h40_runs": 192,
+      "joint_ABM_static_median_h40": 32,
+      "joint_ABM_temporal_median_h40": 32
+    },
+    {
+      "landscape_id": "bottleneck_s1",
+      "family": "bottleneck",
+      "temporal_strict_gain_runs": 128,
+      "temporal_nonidentified_h40_runs": 192,
+      "joint_ABM_static_median_h40": 32,
+      "joint_ABM_temporal_median_h40": 32
+    }
+  ],
+  "temporal_strict_gain_runs_total": 798,
+  "temporal_nonidentified_h40_runs_total": 1152,
+  "verdicts": {
+    "U1_truth_retention": "SUPPORTED",
+    "U2_positive_contraction_monotonicity": "SUPPORTED",
+    "U3_restrictiveness_nesting": "SUPPORTED",
+    "U4_joint_limitation_ambiguity": "SUPPORTED",
+    "U5_temporal_signature_refinement": "SUPPORTED",
+    "U6_realised_temporal_gain": "SUPPORTED",
+    "U7_nonidentification_persists": "SUPPORTED",
+    "U8_independent_evaluator_parity": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "Across all six activation-eligible landscapes, joint A+B+M limitation remained maximally ambiguous under positive evidence, temporal signatures refined static support, and non-identification persisted.",
+    "integrity": "Two preregistered fragmented landscapes failed response-free design gates and remained DESIGN_STOP rather than being replaced or repaired.",
+    "temporal": "Every eligible landscape contained realized runs in which time-stamped evidence strictly contracted the static compatible-world set, but no eligible run achieved universal truth identification at horizon 40."
+  }
+}
