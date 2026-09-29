@@ -1,0 +1,17 @@
+evidence_axis,measurement_count,truth_cases
+A,0,304
+A,1,464
+B,0,422
+B,1,273
+B,2,73
+AB_joint,0,206
+AB_joint,1,323
+AB_joint,2,191
+AB_joint,3,48
+M,0,565
+M,1,200
+M,2,3
+tau,0,768
+M_tau_joint,0,565
+M_tau_joint,1,200
+M_tau_joint,2,3
