@@ -36,6 +36,12 @@
       "workflow_artifact_id": 10815971361,
       "review_package_archive_sha256": "6fbb6c8e30b010e5fb0ffc1197f626c0e46ee74897ce5ba1cfbd61e4bc6f8b00",
       "review_package_manifest_sha256": "0a4463ea37799a16654cc5dfb8913981f5bc6ebe7cc0b86eadc6513b5e9af4f4"
+    },
+    {
+      "id": "live_mee_policy_verification_2026_09_29",
+      "resolution": "Current Methods in Ecology and Evolution author guidelines, title-page requirements, AI/LLM Methods disclosure rule, code-license policy, inclusion/submission confirmations and 2026 ethics update were rechecked on 2026-09-29. No new scientific blocker was identified; author-controlled confirmation remains required.",
+      "path": "manuscript/EOG_WF_MEE_LIVE_POLICY_VERIFICATION_2026-09-29.md",
+      "checked_date": "2026-09-29"
     }
   ],
   "remaining_submission_blockers": [
