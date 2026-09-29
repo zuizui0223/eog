@@ -276,7 +276,7 @@ def figure6_measurement_bounds():
     bars = ax.bar(labels, values)
     ax.set_ylim(0, max(values) + 1)
     ax.set_ylabel("Maximum exact targeted measurements")
-    ax.set_title("Programme-specific diagnostic measurement bounds")
+    ax.set_title("Programme-specific diagnostic measurement bounds", pad=34)
     for bar, value in zip(bars, values, strict=True):
         ax.text(
             bar.get_x() + bar.get_width() / 2,
@@ -286,12 +286,13 @@ def figure6_measurement_bounds():
             va="bottom",
         )
     ax.text(
-        0.02,
-        0.96,
+        0.5,
+        1.015,
         "12 systems · 768 truths · exact hitting-set audit · 0 failures",
         transform=ax.transAxes,
-        va="top",
-        fontsize=8,
+        ha="center",
+        va="bottom",
+        fontsize=8.2,
     )
     _save(fig, "F6_targeted_measurement_bounds")
 
