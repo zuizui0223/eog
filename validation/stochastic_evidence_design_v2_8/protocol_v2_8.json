@@ -1,0 +1,86 @@
+{
+  "schema": "eog.stochastic_evidence_design.protocol.v2_8",
+  "status": "frozen_before_implementation",
+  "parent_v2_7": {
+    "result_fingerprint": "085587287263d5ebb4016455ac74406b14979e7de25e57e12b8a607becd5cd1d",
+    "current_joint_survivors": 112,
+    "current_ecological_projection": 64,
+    "target_present_ecological_worlds": 16,
+    "target_absent_ecological_worlds": 48,
+    "rule": "v2.7 result remains immutable"
+  },
+  "question": "When candidate evidence actions have stochastic outcomes, which action is most informative depends on whether the inferential target is the joint ecology-observation world or only the ecological-world projection.",
+  "candidate_actions": [
+    {
+      "id": "repeat_4_same_protocol",
+      "type": "stochastic survey",
+      "outcome": "detection count k in {0,1,2,3,4}",
+      "support_rule": "k has positive Binomial probability under the joint world's ecological target state and observation world",
+      "expected_guaranteed_joint_pair_splits": 0,
+      "expected_worst_case_joint_survivors": 112,
+      "expected_worst_case_ecological_survivors": 64
+    },
+    {
+      "id": "calibrate_detection_world",
+      "type": "idealized observation-process calibration",
+      "outcome": "perfect or imperfect",
+      "support_rule": "deterministic observation-world identity",
+      "expected_guaranteed_joint_pair_splits": 3072,
+      "expected_worst_case_joint_survivors": 64,
+      "expected_worst_case_ecological_survivors": 64
+    },
+    {
+      "id": "gold_standard_target_state",
+      "type": "idealized focal state assay",
+      "outcome": "present or absent",
+      "support_rule": "deterministic ecological target state",
+      "expected_guaranteed_joint_pair_splits": 1536,
+      "expected_worst_case_joint_survivors": 96,
+      "expected_worst_case_ecological_survivors": 48
+    }
+  ],
+  "metrics": {
+    "guaranteed_joint_pair_splits": "Number of active joint-world pairs whose possible outcome supports are disjoint.",
+    "worst_case_joint_survivors": "Maximum number of active joint worlds compatible with any possible action outcome.",
+    "worst_case_ecological_survivors": "Maximum number of distinct ecological worlds in the projection after any possible action outcome."
+  },
+  "hypotheses": [
+    {
+      "id": "S1_support_disjointness",
+      "claim": "Two joint worlds are guaranteed to be separated by an action if and only if their possible outcome supports are disjoint.",
+      "rule": "Any mismatch between support intersection and guaranteed-pair classification refutes S1."
+    },
+    {
+      "id": "S2_frozen_action_values",
+      "claim": "In the frozen 112-world state, repeat_4_same_protocol has 0 guaranteed joint-pair splits and worst cases 112 joint / 64 ecological; calibration has 3072 splits and worst cases 64 joint / 64 ecological; gold-standard state has 1536 splits and worst cases 96 joint / 48 ecological.",
+      "rule": "Any count mismatch refutes S2."
+    },
+    {
+      "id": "S3_objective_dependent_choice",
+      "claim": "Calibration is the unique best action under worst-case joint-world survivor count, while gold-standard state measurement is the unique best action under worst-case ecological-world survivor count.",
+      "rule": "Any tie or different winner refutes S3."
+    },
+    {
+      "id": "S4_more_same_type_data_is_robustly_dominated",
+      "claim": "repeat_4_same_protocol is no better than both alternatives on guaranteed pair splits and both worst-case survivor metrics, and strictly worse on at least one metric against each alternative.",
+      "rule": "Failure of this Pareto-dominance relation refutes S4."
+    }
+  ],
+  "outputs": [
+    "active_joint_world_count",
+    "active_ecological_world_count",
+    "action_outcome_supports",
+    "guaranteed_joint_pair_splits",
+    "worst_case_joint_survivors",
+    "worst_case_ecological_survivors",
+    "best_action_joint_objective",
+    "best_action_ecological_objective",
+    "S1-S4 verdicts"
+  ],
+  "boundary": [
+    "These are robust support-based criteria, not expected utilities.",
+    "No prior probability over joint worlds is assumed.",
+    "Calibration and gold-standard assays are idealized evidence channels.",
+    "The planner may return different best actions for different inferential targets."
+  ]
+}
