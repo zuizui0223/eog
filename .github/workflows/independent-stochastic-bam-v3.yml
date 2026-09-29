@@ -1,0 +1,33 @@
+name: Independent stochastic BAM v3
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/independent_stochastic_bam_generator.py"
+      - "benchmarks/run_independent_stochastic_bam_v3.py"
+      - "validation/independent_stochastic_bam_v3/**"
+      - "tests/test_independent_stochastic_bam_v3.py"
+      - ".github/workflows/independent-stochastic-bam-v3.yml"
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Verify generator independence
+        run: python -m pytest tests/test_independent_stochastic_bam_v3.py -q
+      - name: Run frozen independent stochastic BAM validation
+        run: |
+          python benchmarks/run_independent_stochastic_bam_v3.py \
+            --output build/independent_stochastic_bam_v3/result_v3.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: independent-stochastic-bam-v3
+          path: build/independent_stochastic_bam_v3/result_v3.json
+          if-no-files-found: error

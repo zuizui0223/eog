@@ -1,0 +1,201 @@
+{
+  "schema": "eog.multilandscape_independent_stochastic_bam.protocol.v4",
+  "status": "frozen_before_generator_implementation",
+  "parents": {
+    "stochastic_v3": "bc558d10073133510f1b47b5651f6694d53f04771e757e9d8d9716ada72b18bf",
+    "restrictiveness_v3_1": "ae797daf732af37740408fd5ca3cb4eb1c02f5345b9ffea651fbec5d05d79b2c",
+    "temporal_v3_2": "c1fd0014bf1ddc0f61af7a08dafb13e005f3a80e99693ddde328e06364b9c9f9",
+    "rule": "All parent results remain immutable."
+  },
+  "goal": "Test whether the stochastic BAM falsification boundaries found in one landscape survive across a finite preregistered panel of heterogeneous landscapes.",
+  "generator_independence": {
+    "path": "benchmarks/independent_multilandscape_bam_generator_v4.py",
+    "forbidden_imports": [
+      "eog",
+      "eog.v2",
+      "dynamic_island_reachability",
+      "world_reconstruction"
+    ],
+    "implementation": "NumPy + Python standard library only"
+  },
+  "landscape_panel": [
+    {
+      "id": "open_smooth_s0",
+      "family": "open_smooth",
+      "env_seed": 0,
+      "bottleneck_amplitude": 0,
+      "environmental_noise_sd": 0.03,
+      "barrier": "none"
+    },
+    {
+      "id": "open_smooth_s1",
+      "family": "open_smooth",
+      "env_seed": 1,
+      "bottleneck_amplitude": 0,
+      "environmental_noise_sd": 0.03,
+      "barrier": "none"
+    },
+    {
+      "id": "barrier_gap_s0",
+      "family": "barrier_gap",
+      "env_seed": 2,
+      "bottleneck_amplitude": 0.2,
+      "environmental_noise_sd": 0.04,
+      "barrier_col": 7,
+      "barrier_gap_row": 2
+    },
+    {
+      "id": "barrier_gap_s1",
+      "family": "barrier_gap",
+      "env_seed": 3,
+      "bottleneck_amplitude": 0.2,
+      "environmental_noise_sd": 0.04,
+      "barrier_col": 7,
+      "barrier_gap_row": 5
+    },
+    {
+      "id": "bottleneck_s0",
+      "family": "bottleneck",
+      "env_seed": 4,
+      "bottleneck_amplitude": 0.5,
+      "environmental_noise_sd": 0.05,
+      "barrier": "none"
+    },
+    {
+      "id": "bottleneck_s1",
+      "family": "bottleneck",
+      "env_seed": 5,
+      "bottleneck_amplitude": 0.5,
+      "environmental_noise_sd": 0.05,
+      "barrier": "none"
+    },
+    {
+      "id": "joint_fragmented_s0",
+      "family": "joint_fragmented",
+      "env_seed": 6,
+      "bottleneck_amplitude": 0.5,
+      "environmental_noise_sd": 0.06,
+      "barrier_col": 7,
+      "barrier_gap_row": 3
+    },
+    {
+      "id": "joint_fragmented_s1",
+      "family": "joint_fragmented",
+      "env_seed": 7,
+      "bottleneck_amplitude": 0.5,
+      "environmental_noise_sd": 0.06,
+      "barrier_col": 7,
+      "barrier_gap_row": 4
+    }
+  ],
+  "fixed_dimensions": {
+    "width": 12,
+    "height": 8,
+    "node_count": 96
+  },
+  "associates": {
+    "rule": "Partner and antagonist are independently simulated for each landscape using landscape-specific deterministic SHA-256 seeds.",
+    "steps": 30,
+    "no_replacement_on_degeneracy": true
+  },
+  "candidate_universe": {
+    "A": [
+      "A_narrow",
+      "A_broad"
+    ],
+    "B": [
+      "none",
+      "obligate_partner",
+      "antagonist_exclusion",
+      "partner_and_antagonist"
+    ],
+    "M": [
+      "short_closed",
+      "short_open",
+      "long_closed",
+      "long_open"
+    ],
+    "total_worlds_per_landscape": 32
+  },
+  "truth_scenarios": [
+    "A_limited",
+    "partner_limited",
+    "antagonist_limited",
+    "distance_limited",
+    "barrier_limited",
+    "joint_ABM"
+  ],
+  "stochastic_execution": {
+    "replicates_per_truth_per_landscape": 32,
+    "horizons": [
+      10,
+      40
+    ],
+    "planned_runs_per_landscape": 192,
+    "total_planned_runs": 1536,
+    "perfect_positive_detection": true,
+    "absence_used": false,
+    "design_stop": "A landscape is retained as DESIGN_STOP if associate degeneracy, invalid focal source, missing truth world, or generator/evaluator structural mismatch occurs. No replacement landscape is allowed."
+  },
+  "hypotheses": [
+    {
+      "id": "U1_truth_retention",
+      "claim": "Across every eligible landscape, replicate and horizon, the declared truth world is retained.",
+      "rule": "Any truth elimination anywhere refutes U1."
+    },
+    {
+      "id": "U2_positive_contraction_monotonicity",
+      "claim": "Within every stochastic run, the unordered positive compatible set at horizon 40 is a subset of or equal to that at horizon 10.",
+      "rule": "Any world-set expansion refutes U2."
+    },
+    {
+      "id": "U3_restrictiveness_nesting",
+      "claim": "Within every eligible landscape, all strict complete-support inclusions obey R1⊂R2 => C(R1)⊇C(R2).",
+      "rule": "Any inclusion monotonicity violation refutes U3."
+    },
+    {
+      "id": "U4_joint_limitation_ambiguity",
+      "claim": "In every eligible landscape, the complete-positive compatible-world count for joint_ABM is at least as large as the compatible-world count for each of the five single/partial limitation truth scenarios.",
+      "rule": "One eligible landscape where joint_ABM is less ambiguous than any comparator refutes U4."
+    },
+    {
+      "id": "U5_temporal_signature_refinement",
+      "claim": "In every eligible landscape, retaining candidate earliest-arrival signatures creates strictly more candidate equivalence classes than static reachable support alone.",
+      "rule": "One eligible landscape with no strict class refinement refutes U5."
+    },
+    {
+      "id": "U6_realised_temporal_gain",
+      "claim": "In every eligible landscape, at least one frozen stochastic run has fewer time-stamped-positive compatible worlds than unordered-positive compatible worlds.",
+      "rule": "One eligible landscape with zero strict temporal-gain runs refutes U6."
+    },
+    {
+      "id": "U7_nonidentification_persists",
+      "claim": "In every eligible landscape, at least one horizon-40 stochastic run remains non-identifiable under time-stamped positive evidence.",
+      "rule": "One landscape with unique recovery in every horizon-40 run refutes U7."
+    },
+    {
+      "id": "U8_independent_evaluator_parity",
+      "claim": "For every audited representative case with >=2 occurrences, cached set evaluation exactly matches EOG reconstruct_compatible_worlds.",
+      "rule": "Any mismatch refutes U8."
+    }
+  ],
+  "primary_outputs": [
+    "eligible_landscapes_and_design_stops",
+    "truth_retention_failures",
+    "static_expansion_violations",
+    "nesting_monotonicity_violations_by_landscape",
+    "complete_positive_compatible_count_by_truth_and_landscape",
+    "static_vs_temporal_signature_class_count_by_landscape",
+    "temporal_strict_gain_runs_by_landscape",
+    "temporal_nonidentified_h40_runs_by_landscape",
+    "EOG_API_parity_audits_and_mismatches",
+    "U1-U8 verdicts"
+  ],
+  "claim_boundary": [
+    "Eight preregistered landscapes are a finite generality panel, not a random sample of all ecological landscapes.",
+    "Landscape-level hypothesis failure is retained rather than averaged away.",
+    "Positive-only evidence does not treat stochastic non-occurrence as absence.",
+    "Temporal evidence uses only first positive occurrence and one-sided earliest-arrival falsification.",
+    "No landscape or parameter is tuned after scoring."
+  ]
+}

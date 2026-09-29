@@ -1,0 +1,67 @@
+{
+  "schema": "eog.independent_stochastic_temporal.protocol.v3_2",
+  "status": "frozen_before_temporal_evaluation",
+  "parents": {
+    "stochastic_v3": "bc558d10073133510f1b47b5651f6694d53f04771e757e9d8d9716ada72b18bf",
+    "restrictiveness_audit_v3_1": "ae797daf732af37740408fd5ca3cb4eb1c02f5345b9ffea651fbec5d05d79b2c",
+    "motivation": "v3 S7 was refuted because unordered accumulated occurrence history never eliminated more worlds than the final snapshot; v3.1 showed all four M settings collapse within each static A×B support class."
+  },
+  "fixed_generator": "Exactly the frozen independent stochastic BAM v3 generator, landscape, associates, candidate grid, six truth scenarios, 64 replicates and 40-step histories.",
+  "temporal_evidence_rule": {
+    "observed": "For every node observed by horizon h, retain its first stochastic occurrence step t_obs.",
+    "candidate": "For every candidate world, compute its earliest structurally possible arrival step t_min from the declared source using the EOG transition operator.",
+    "compatibility": "Candidate remains compatible when t_min <= t_obs for every observed node. Earlier candidate arrival is allowed because stochastic colonisation can be delayed; later candidate arrival than observed is impossible.",
+    "absence": "Never used."
+  },
+  "hypotheses": [
+    {
+      "id": "T1_temporal_truth_retention",
+      "claim": "The frozen truth world is retained in every eligible replicate/horizon under the one-sided earliest-arrival rule.",
+      "rule": "One truth elimination refutes T1."
+    },
+    {
+      "id": "T2_temporal_refines_static_positive",
+      "claim": "Time-stamped positive evidence can only contract or preserve the compatible set obtained from the same unordered accumulated positives.",
+      "rule": "Any temporal-compatible world absent from the static-compatible set refutes T2."
+    },
+    {
+      "id": "T3_temporal_strict_gain",
+      "claim": "At least one frozen stochastic run has a strictly smaller temporal-compatible set than its unordered accumulated-positive compatible set.",
+      "rule": "No strict gain anywhere refutes T3."
+    },
+    {
+      "id": "T4_movement_erasure_is_partly_reversed_by_time",
+      "claim": "The 8 static support-equivalence classes of size four are refined into more than 8 structural temporal-signature classes when earliest arrival is retained.",
+      "rule": "Eight or fewer temporal-signature classes refute T4."
+    },
+    {
+      "id": "T5_temporal_witness_realization",
+      "claim": "At least one pair of static-support-equivalent M worlds is empirically separated by an observed early positive occurrence in at least one frozen stochastic run.",
+      "rule": "Zero realised temporal separation of every static M-equivalent pair refutes T5."
+    },
+    {
+      "id": "T6_temporal_does_not_force_universal_identification",
+      "claim": "At least one horizon-40 stochastic run remains non-identifiable after temporal positive evidence.",
+      "rule": "Unique recovery in all eligible horizon-40 runs refutes T6."
+    }
+  ],
+  "outputs": [
+    "candidate_static_support_class_count",
+    "candidate_temporal_signature_class_count",
+    "truth_retention_failures",
+    "temporal_expansion_violations",
+    "temporal_strict_gain_runs",
+    "static_M_equivalent_pairs",
+    "realised_temporal_split_pairs",
+    "compatible_world_count_by_scenario_and_horizon_static_vs_temporal",
+    "unique_truth_fraction_static_vs_temporal",
+    "T1-T6 verdicts"
+  ],
+  "boundaries": [
+    "The protocol is a successor motivated by the frozen S7 refutation; it does not retroactively change S7.",
+    "Observed late arrival cannot falsify a faster world.",
+    "Only an occurrence earlier than a candidate's minimum possible arrival is a temporal positive witness.",
+    "No non-detection or extinction time is used as negative evidence.",
+    "Temporal compatibility remains conditional on the finite candidate universe."
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "schema": "eog.independent_stochastic_temporal.summary.v3_2",
+  "protocol_commit": "205fd14c250f5bfc512b260f48501852e0e09497",
+  "executed_commit": "a18223340dec2b9d1c69d4043e85f735fc49f645",
+  "workflow_run_id": 36553226058,
+  "workflow_conclusion": "success",
+  "artifact_id": 11025443671,
+  "artifact_digest": "sha256:c819d2e3fe77edeee4479f5418bc71e234f1a804f2d19b297cfdddc00a530e8e",
+  "result_fingerprint": "c1fd0014bf1ddc0f61af7a08dafb13e005f3a80e99693ddde328e06364b9c9f9",
+  "candidate_world_count": 32,
+  "static_support_classes": {
+    "count": 8,
+    "class_size_distribution": {
+      "4": 8
+    }
+  },
+  "temporal_signature_classes": {
+    "count": 20,
+    "class_size_distribution": {
+      "1": 8,
+      "2": 12
+    }
+  },
+  "static_M_equivalent_pair_count": 48,
+  "realised_temporal_split_pair_count": 19,
+  "planned_runs": 384,
+  "truth_retention_failures": 0,
+  "temporal_expansion_violations": 0,
+  "temporal_strict_gain_runs": 256,
+  "median_h40_compatible_world_count": {
+    "static": {
+      "A_limited": 8,
+      "partner_limited": 8,
+      "antagonist_limited": 8,
+      "distance_limited": 4,
+      "barrier_limited": 4,
+      "joint_ABM": 32
+    },
+    "temporal": {
+      "A_limited": 4,
+      "partner_limited": 2,
+      "antagonist_limited": 4,
+      "distance_limited": 4,
+      "barrier_limited": 2,
+      "joint_ABM": 32
+    }
+  },
+  "unique_truth_fraction_h40": {
+    "static": {
+      "A_limited": 0,
+      "partner_limited": 0,
+      "antagonist_limited": 0,
+      "distance_limited": 0,
+      "barrier_limited": 0,
+      "joint_ABM": 0
+    },
+    "temporal": {
+      "A_limited": 0,
+      "partner_limited": 0,
+      "antagonist_limited": 0,
+      "distance_limited": 0,
+      "barrier_limited": 0,
+      "joint_ABM": 0
+    }
+  },
+  "temporal_nonidentified_h40_runs_by_scenario": {
+    "A_limited": 64,
+    "partner_limited": 64,
+    "antagonist_limited": 64,
+    "distance_limited": 64,
+    "barrier_limited": 64,
+    "joint_ABM": 64
+  },
+  "verdicts": {
+    "T1_temporal_truth_retention": "SUPPORTED",
+    "T2_temporal_refines_static_positive": "SUPPORTED",
+    "T3_temporal_strict_gain": "SUPPORTED",
+    "T4_movement_erasure_is_partly_reversed_by_time": "SUPPORTED",
+    "T5_temporal_witness_realization": "SUPPORTED",
+    "T6_temporal_does_not_force_universal_identification": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "Temporal order contains movement information that unordered positive history discards. Retaining first-occurrence time refined 8 static support classes into 20 temporal signatures and yielded strict contraction in 256/384 stochastic runs.",
+    "boundary": "Temporal positive evidence did not uniquely recover the true world in any run. It recovers some M distinctions but cannot resolve all A/B equivalence or the maximally restrictive joint_ABM ambiguity.",
+    "joint_ABM": "The joint_ABM truth remained compatible with all 32 worlds under both static and temporal positive evidence at horizon 40.",
+    "distinction": "The frozen v3 S7 refutation remains valid: unordered accumulated history gave zero strict gain. v3.2 establishes that time-stamped history is a different, informative evidence class."
+  }
+}
