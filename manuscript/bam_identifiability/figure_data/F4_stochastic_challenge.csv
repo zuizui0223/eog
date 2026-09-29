@@ -1,0 +1,7 @@
+scenario,structural_reachable_count,median_compatible_world_count_h40,strict_contraction_runs,nonidentified_h40_runs,unique_truth_fraction_h40
+A_limited,67,8,64,64,0
+partner_limited,67,8,64,64,0
+antagonist_limited,40,8,64,64,0
+distance_limited,96,4,64,64,0
+barrier_limited,96,4,64,64,0
+joint_ABM,33,32,0,64,0
