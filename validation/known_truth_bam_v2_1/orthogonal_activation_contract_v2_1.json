@@ -1,0 +1,142 @@
+{
+  "schema": "eog.known_truth_bam.orthogonal_activation_contract.v2_1",
+  "status": "frozen_before_implementation",
+  "parent_v2_result_fingerprint": "c8f5a6c99627a786a06f4e298b2b7045a728907fe985119b402d16c8d4196d43",
+  "purpose": "Repeat the BAM evidence ladder only after independently activating A, positive-B, negative-B, distance-M and barrier-M contrasts in the virtual ecology.",
+  "fixed_landscape": {
+    "width": 7,
+    "height": 3,
+    "temperature_gradient": "same deterministic gradient as known_truth_biogeography.make_gradient_landscape",
+    "environmental_spike": {
+      "column": 3,
+      "amount": 0.45
+    },
+    "hard_barrier": {
+      "column": 4,
+      "gap_rows": []
+    }
+  },
+  "fixed_auxiliary_species": {
+    "partner": {
+      "source_id": "r1c2",
+      "niche_center": [
+        0.35,
+        0.54
+      ],
+      "niche_radius": [
+        0.18,
+        0.15
+      ],
+      "step_radius": 1.01,
+      "barrier_permeable": true,
+      "horizon": 8
+    },
+    "antagonist": {
+      "source_id": "r1c5",
+      "niche_center": [
+        0.61,
+        0.43
+      ],
+      "niche_radius": [
+        0.14,
+        0.12
+      ],
+      "step_radius": 1.01,
+      "barrier_permeable": true,
+      "horizon": 8
+    }
+  },
+  "focal_A": {
+    "narrow": {
+      "center": [
+        0.45,
+        0.5
+      ],
+      "radius": [
+        0.35,
+        0.2
+      ]
+    },
+    "broad": {
+      "center": [
+        0.45,
+        0.5
+      ],
+      "radius": [
+        0.8,
+        0.5
+      ]
+    }
+  },
+  "focal_B_modes": [
+    "none",
+    "obligate_partner",
+    "antagonist_exclusion",
+    "partner_and_antagonist"
+  ],
+  "focal_M": {
+    "short_closed_h3": {
+      "step_radius": 1.01,
+      "barrier_permeable": false,
+      "horizon": 3
+    },
+    "short_open_h8": {
+      "step_radius": 1.01,
+      "barrier_permeable": true,
+      "horizon": 8
+    },
+    "long_closed_h3": {
+      "step_radius": 2.01,
+      "barrier_permeable": false,
+      "horizon": 3
+    },
+    "long_open_h8": {
+      "step_radius": 2.01,
+      "barrier_permeable": true,
+      "horizon": 8
+    }
+  },
+  "focal_source_id": "r1c0",
+  "activation_gates": {
+    "partner_occupancy_fraction": [
+      0.2,
+      0.8
+    ],
+    "antagonist_occupancy_fraction": [
+      0.2,
+      0.8
+    ],
+    "required_nonempty_witness_classes": [
+      "A_only",
+      "B_partner_only",
+      "B_antagonist_only",
+      "M_distance_only",
+      "M_barrier_only"
+    ],
+    "required_same_G_different_arrival_pair": true,
+    "required_positive_superset_negative_witness_pair": true,
+    "failure_action": "STOP before BAM_H1-H6 scoring; do not alter fixed parameters in this protocol version"
+  },
+  "scoring_hypotheses": [
+    "BAM_H1_truth_retention",
+    "BAM_H2_axis_witness_attribution",
+    "BAM_H3_intersection_nonidentifiability",
+    "BAM_H4_positive_superset_ceiling",
+    "BAM_H5_perfect_negative_rescue",
+    "BAM_H6_temporal_M_rescue"
+  ],
+  "additional_questions": [
+    "Does complete presence/absence identify G while leaving A/B/M decomposition non-identifiable?",
+    "How much does temporal evidence reduce residual M ambiguity after G is known exactly?",
+    "Are positive-interaction dependence and antagonist exclusion asymmetric under positive-only evidence?"
+  ],
+  "prohibited_after_activation_or_scoring": [
+    "change auxiliary species parameters",
+    "change A niche parameters",
+    "change M parameters",
+    "change barrier geometry",
+    "drop a failed axis gate",
+    "merge partner and antagonist into one B score",
+    "treat an activation STOP as a hypothesis failure"
+  ]
+}
