@@ -181,6 +181,46 @@ This supports Layer A as a structural falsification framework and shows that Lay
 
 Candidate hunting is closed. No fourth dataset may be added to improve the apparent result or journal rank.
 
+## EOG v3 post-closure joint-world engine
+
+A separate post-closure experimental API is being developed without reopening the
+frozen EOG-WF empirical programme.
+
+EOG v3 keeps two finite uncertainty axes explicit:
+
+```text
+ecological worlds × observation-process worlds
+                    ↓ evidence
+           surviving joint worlds
+                    ↓
+      ecological / observation projections
+                    ↓
+       next-evidence action planning
+```
+
+This line was motivated by known-truth BAM simulations showing that complete
+occurrence data need not identify the generating A/B/M decomposition, and by
+observation-process simulations showing that imperfect detection can prevent exact
+ecological falsification even after repeated nondetection.
+
+Public experimental commands:
+
+```bash
+eog-v3-joint-evaluate \
+  --input examples/eog_v3/joint_evaluation_input.json \
+  --output joint_result.json
+
+eog-v3-plan-evidence \
+  --input examples/eog_v3/evidence_planning_input.json \
+  --output evidence_plan.json \
+  --objective ecological
+```
+
+See [`docs/eog_v3_joint_world_engine.md`](docs/eog_v3_joint_world_engine.md).
+
+**Boundary:** EOG v3 is not part of the frozen three-endpoint EOG-WF manuscript
+denominator and does not alter the current MEE submission result.
+
 ## Historical evidence ledger
 
 - **A-Islands** — exploratory exact-world structural information; not independent confirmation; earlier predictive extension adverse.
