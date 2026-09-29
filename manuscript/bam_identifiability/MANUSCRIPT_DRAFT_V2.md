@@ -10,11 +10,11 @@ The resulting inferential object is therefore not a selected “true process” 
 
 ## 1. Introduction
 
-Species distributions are often used to reason backward from pattern to process. An observed range can motivate claims about climatic tolerance, dependence on interacting species, dispersal limitation or barriers to movement. The Biotic–Abiotic–Movement (BAM) framework makes the forward logic explicit: a realised geographic distribution is shaped by abiotic conditions, biotic permissibility and accessibility. In its simplest set representation,
+Species distributions are often used to reason backward from pattern to process. An observed range can motivate claims about climatic tolerance, dependence on interacting species, dispersal limitation or barriers to movement. The Biotic–Abiotic–Movement (BAM) framework makes the forward logic explicit: a realised geographic distribution is shaped by abiotic conditions, biotic permissibility and accessibility (Soberón & Peterson, 2005; Soberón & Nakamura, 2009). In its simplest set representation,
 
-[
-G = A cap B cap M.
-]
+$$
+G = A \\cap B \\cap M.
+$$
 
 BAM is therefore naturally generative. Given A, B, M and an initial state, one asks what distribution follows.
 
@@ -22,9 +22,9 @@ The inverse problem is different. Given an observed distribution, which combinat
 
 This many-to-one structure creates a distinction between fitting a distribution and identifying the mechanisms that generated it. A model may reproduce G well while remaining unresolved about A, B or M. Selecting one best-fitting mechanism can therefore convert lack of information into apparent certainty.
 
-Existing BAM work establishes the forward framework, dynamic process representations and the possibility of confounding among ecological components. Virtual-species studies likewise provide known causal systems for evaluating ecological models. Our goal is narrower: to characterize the inverse information content of occurrence evidence itself.
+Existing BAM work establishes the forward framework, dynamic process representations and the possibility of confounding among ecological components (Soberón & Osorio-Olvera, 2023). Virtual-species studies likewise provide known causal systems for evaluating ecological models (Saupe et al., 2012). More generally, ecology already recognizes equifinality and degenerate pattern–process relationships as limits on mechanistic inference (Yanco et al., 2020; Lotterhos et al., 2022). Our goal is narrower: to characterize the inverse information content of occurrence evidence itself.
 
-We treat inverse BAM inference as a finite partial-identification problem. Instead of asking which candidate world is best, we ask which declared worlds remain compatible with a specific evidence contract. This survivor set, or evidence fiber, is the primary inferential object. The formulation has three advantages. First, exact non-identification can be stated without relying on arbitrary score thresholds. Second, different evidence types can be compared by how they contract the same finite survivor set. Third, remaining ambiguity can be converted directly into a diagnostic-measurement problem: which additional observations would distinguish the surviving alternatives?
+We treat inverse BAM inference as a finite partial-identification problem. Instead of asking which candidate world is best, we ask which declared worlds remain compatible with a specific evidence contract. This survivor set, or evidence fiber, is the primary inferential object. The formulation has three advantages. First, exact non-identification can be stated without relying on arbitrary score thresholds. Second, different evidence types can be compared by how they contract the same finite survivor set. Third, remaining ambiguity can be converted directly into a diagnostic-measurement problem: which additional observations would distinguish the surviving alternatives? Model-discrimination experiment design is established in statistics and ecology (Atkinson & Cox, 1974; Papanikolaou et al., 2023); our contribution is to derive the BAM-specific survivor fiber to which such design can be applied.
 
 We address four questions.
 
@@ -39,21 +39,21 @@ We answer these questions with exact finite-set identities and a preregistered k
 
 ### 2.1 Finite BAM worlds
 
-Let X be a finite node universe. Each candidate world (win W) has:
+Let X be a finite node universe. Each candidate world $w\\in W$ has:
 
-- abiotic support (A_wsubseteq X);
-- biotic permissibility (B_wsubseteq X);
-- movement accessibility (M_wsubseteq X);
-- movement first-arrival state (	au_w);
-- optional parameter labels (	heta_w).
+- abiotic support $A_w\\subseteq X$;
+- biotic permissibility $B_w\\subseteq X$;
+- movement accessibility $M_w\\subseteq X$;
+- movement first-arrival state $\\t\\tau_w$;
+- optional parameter labels $\\t\\theta_w$.
 
 The realised distribution is
 
-[
-G_w=A_wcap B_wcap M_w.
-]
+$$
+G_w=A_w\\cap B_w\\cap M_w.
+$$
 
-Let (w_*) be the generating truth.
+Let $w_*$ be the generating truth.
 
 The inverse problem is evaluated relative to the declared finite candidate universe W. Surviving worlds are evidence-compatible explanations inside W; survival does not establish historical truth.
 
@@ -62,25 +62,25 @@ The inverse problem is evaluated relative to the declared finite candidate unive
 Suppose every truly occupied node is observed and no absence information is available. A candidate survives iff it contains every observed positive:
 
 [
-S_0(w_*)=
+S_0$w_*$=
 {win W:G_*subseteq G_w}.
 ]
 
 This immediately gives the positive-superset ceiling. If
 
-[
-G_*subseteq G_w,
-]
+$$
+G_*\\subseteq G_w,
+$$
 
-then no valid positive occurrence sampled from (G_*) can eliminate w. This is not a finite-sample limitation. It remains true under complete positive observation.
+then no valid positive occurrence sampled from $G_*$ can eliminate w. This is not a finite-sample limitation. It remains true under complete positive observation.
 
 ### 2.3 Complete perfect presence/absence
 
 If every node in X is surveyed perfectly, positives imply
 
-[
-G_*subseteq G_w
-]
+$$
+G_*\\subseteq G_w
+$$
 
 and negatives imply
 
@@ -91,7 +91,7 @@ G_wsubseteq G_*.
 Therefore
 
 [
-S_1(w_*)=
+S_1$w_*$=
 {win W:G_w=G_*}.
 ]
 
@@ -103,46 +103,39 @@ We condition the same survivor set on increasingly direct evidence.
 
 Occupied-node movement timing:
 
-[
-S_2=
-{win S_1:
-	au_w|_{G_*}=	au_*|_{G_*}}.
-]
+$$
+S_2=\\{w\\in S_1:\\t\\tau_w|_{G_*}=\\t\\tau_*|_{G_*}\\}.
+$$
 
 Direct abiotic state:
 
-[
-S_3=
-{win S_2:A_w=A_*}.
-]
+$$
+S_3=\\{w\\in S_2:A_w=A_*\\}.
+$$
 
 Direct biotic state:
 
-[
-S_4=
-{win S_3:B_w=B_*}.
-]
+$$
+S_4=\\{w\\in S_3:B_w=B_*\\}.
+$$
 
 Direct movement accessibility:
 
-[
-S_5=
-{win S_4:M_w=M_*}.
-]
+$$
+S_5=\\{w\\in S_4:M_w=M_*\\}.
+$$
 
 Complete movement-arrival state:
 
-[
-S_6=
-{win S_5:	au_w=	au_*}.
-]
+$$
+S_6=\\{w\\in S_5:\\t\\tau_w=\\t\\tau_*\\}.
+$$
 
 Hence
 
-[
-S_6subseteq S_5subseteq S_4subseteq
-S_3subseteq S_2subseteq S_1subseteq S_0.
-]
+$$
+S_6\\subseteq S_5\\subseteq S_4\\subseteq S_3\\subseteq S_2\\subseteq S_1\\subseteq S_0.
+$$
 
 Valid additional evidence can contract or preserve the survivor fiber, but cannot restore a contradicted world.
 
@@ -150,12 +143,9 @@ Valid additional evidence can contract or preserve the survivor fiber, but canno
 
 Two parameter worlds are BAM-state equivalent when
 
-[
-A_w=A_*,
-quad B_w=B_*,
-quad M_w=M_*,
-quad 	au_w=	au_*.
-]
+$$
+A_w=A_*,\\quad B_w=B_*,\\quad M_w=M_*,\\quad \\t\\tau_w=\\t\\tau_*.
+$$
 
 At E6, the survivor set is exactly the BAM-state equivalence class of truth. Multiple parameter labels can therefore remain even after the complete finite BAM state is identified.
 
@@ -169,35 +159,33 @@ This distinction separates:
 
 Let R denote complete positive support and define the compatible set
 
-[
-C(R)={w:Rsubseteq G_w}.
-]
+$$
+C(R)=\\{w:R\\subseteq G_w\\}.
+$$
 
 If
 
-[
-R_1subset R_2,
-]
+$$
+R_1\\subset R_2,
+$$
 
 then any world containing (R_2) also contains (R_1). Therefore
 
-[
-C(R_1)supseteq C(R_2).
-]
+$$
+C(R_1)\\supseteq C(R_2).
+$$
 
 A narrower positive support cannot have fewer compatible positive-superset worlds. Stronger ecological restriction can therefore increase, rather than decrease, ambiguity under positive-only inference.
 
 ### 2.7 Targeted measurements as a finite hitting-set problem
 
-Let S be the current survivor set and T the target fiber to retain. Each possible direct measurement m eliminates a finite subset (D_msubseteq S).
+Let S be the current survivor set and T the target fiber to retain. Each possible direct measurement m eliminates a finite subset $D_m\\subseteq S$.
 
 A measurement set Q reproduces T exactly when no measurement contradicts T and the eliminated subsets cover every nuisance world:
 
-[
-Ssetminus T
-subseteq
-igcup_{min Q}D_m.
-]
+$$
+S\\setminus T\\subseteq\\bigcup_{m\\in Q}D_m.
+$$
 
 The smallest such Q is an exact finite hitting-set problem. This converts residual non-identification into a diagnostic design problem.
 
@@ -224,9 +212,9 @@ A larger factorial then tested the stronger claim that complete positive occurre
 
 The focal realised state was generated as
 
-[
-G=Acap Bcap M.
-]
+$$
+G=A\\cap B\\cap M.
+$$
 
 A was an explicit virtual abiotic niche. B was derived from independently generated partner and antagonist distributions. M was source-conditioned accessibility under distance, barriers and finite movement horizon.
 
@@ -308,9 +296,9 @@ In the initial 64-case factorial, complete positive occurrence coverage uniquely
 
 The same result generalized across the 12 deterministic systems:
 
-[
+$$
 0/768
-]
+$$
 
 truth BAM states were uniquely identified at E0.
 
@@ -360,11 +348,9 @@ The preregistered claim that movement would always be the final identification b
 
 The independent stochastic audit contained 304 strict positive-support inclusions. All 304/304 obeyed the exact inverse ordering:
 
-[
-R_1subset R_2
-Rightarrow
-C(R_1)supseteq C(R_2).
-]
+$$
+R_1\\subset R_2\\Rightarrow C(R_1)\\supseteq C(R_2).
+$$
 
 The most jointly constrained A+B+M support was also among the most ambiguous because its small realised support was contained in many more permissive candidate worlds.
 
@@ -496,3 +482,24 @@ A species distribution is a compressed outcome of multiple ecological processes.
 In finite BAM worlds, complete positive occurrence evidence identifies exactly a positive-support fiber, not necessarily the generating mechanism. Complete presence/absence identifies the realised intersection G, not necessarily its decomposition. Stronger ecological restriction can increase positive-only ambiguity, while temporal and direct mechanism evidence can contract the survivor fiber when they expose differences among surviving worlds.
 
 The practical consequence is a shift from selecting the most plausible single process to characterizing what the current evidence actually distinguishes and designing the next observation around what remains unresolved.
+
+
+## References
+
+Atkinson, A.C. & Cox, D.R. (1974). Planning experiments for discriminating between models. *Journal of the Royal Statistical Society: Series B*, 36, 321–334. https://doi.org/10.1111/j.2517-6161.1974.tb01010.x
+
+Bariotakis, M. & Pirintsos, S.A. (2018). Mapping absences within the BAM concept: Towards a new generation of ecological and environmental indicators. *Ecological Indicators*, 90, 564–568. https://doi.org/10.1016/j.ecolind.2018.03.043
+
+Lotterhos, K.E., Fitzpatrick, M.C. & Blackmon, H. (2022). Simulation tests of methods in evolution, ecology, and systematics: Pitfalls, progress, and principles. *Annual Review of Ecology, Evolution, and Systematics*, 53, 113–136. https://doi.org/10.1146/annurev-ecolsys-102320-093722
+
+Papanikolaou, N.E. et al. (2023). Adaptive experimental design produces superior and more efficient estimates of predator functional response. *PLOS ONE*, 18, e0288445. https://doi.org/10.1371/journal.pone.0288445
+
+Saupe, E.E. et al. (2012). Variation in niche and distribution model performance: The need for a priori assessment of key causal factors. *Ecological Modelling*, 237–238, 11–22. https://doi.org/10.1016/j.ecolmodel.2012.04.001
+
+Soberón, J. & Nakamura, M. (2009). Niches and distributional areas: Concepts, methods, and assumptions. *Proceedings of the National Academy of Sciences*, 106(Suppl. 2), 19644–19650. https://doi.org/10.1073/pnas.0901637106
+
+Soberón, J. & Osorio-Olvera, L. (2023). A dynamic theory of the area of distribution. *Journal of Biogeography*, 50, 1037–1048. https://doi.org/10.1111/jbi.14587
+
+Soberón, J. & Peterson, A.T. (2005). Interpretation of models of fundamental ecological niches and species' distributional areas. *Biodiversity Informatics*, 2. https://doi.org/10.17161/bi.v2i0.4
+
+Yanco, S.W. et al. (2020). A modern method of multiple working hypotheses to improve inference in ecology. *Royal Society Open Science*, 7, 200231. https://doi.org/10.1098/rsos.200231
