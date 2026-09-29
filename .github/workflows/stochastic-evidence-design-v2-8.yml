@@ -1,0 +1,33 @@
+name: Stochastic evidence design v2.8
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/v2/stochastic_evidence_design.py"
+      - "validation/stochastic_evidence_design_v2_8/**"
+      - "benchmarks/run_stochastic_evidence_design_v2_8.py"
+      - "tests/test_stochastic_evidence_design.py"
+      - ".github/workflows/stochastic-evidence-design-v2-8.yml"
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Run frozen stochastic evidence-design benchmark
+        run: |
+          python benchmarks/run_stochastic_evidence_design_v2_8.py \
+            --output build/stochastic_evidence_design_v2_8/result_v2_8.json
+      - name: Verify focused tests
+        run: python -m pytest tests/test_stochastic_evidence_design.py -q
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stochastic-evidence-design-v2-8
+          path: build/stochastic_evidence_design_v2_8/result_v2_8.json
+          if-no-files-found: error
