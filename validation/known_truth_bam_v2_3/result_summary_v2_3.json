@@ -1,0 +1,42 @@
+{
+  "schema": "eog.known_truth_bam_intervention.summary.v2_3",
+  "protocol_commit": "9625011d4c0fe572f2d0756a5117c0495ca30518",
+  "executed_commit": "da89ea908a9612f9e28f5fcc61107b68f5fa81a7",
+  "workflow_run_id": 36547312136,
+  "workflow_conclusion": "success",
+  "artifact_id": 11023360709,
+  "artifact_digest": "sha256:17603e578c1738ed6af612f046f0ad380b828bd3dbdac3a4e69e2316ebc9eb24",
+  "result_fingerprint": "654ec11ce21455989b399c7668f06595cd499b5acb347b78bdc17582f92960f2",
+  "candidate_world_count": 64,
+  "passive_equivalence_classes": 48,
+  "passive_class_size_distribution": {
+    "1": 32,
+    "2": 16
+  },
+  "alias_classes": {
+    "P_only": 8,
+    "H_only": 8
+  },
+  "intervention_results": {
+    "P_alias_classes_split": "8/8",
+    "H_alias_classes_split": "8/8",
+    "axis_specificity_violations": 0,
+    "intervention_augmented_classes": 64,
+    "intervention_augmented_class_size_distribution": {
+      "1": 64
+    },
+    "world_fraction_uniquely_identified": 1
+  },
+  "verdicts": {
+    "I1_P_alias_activation": "SUPPORTED",
+    "I2_H_alias_activation": "SUPPORTED",
+    "I3_axis_specificity": "SUPPORTED",
+    "I4_full_parameter_recovery": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "The residual v2.2 parameter ambiguity was not irreducible. It came from movement parameters that were inactive under the passive landscape. Axis-specific interventions activated those parameters and made the finite 64-world universe injective.",
+    "P": "A one-step standardized barrier-crossing challenge distinguished all eight P-only alias classes.",
+    "H": "A long barrier-free corridor distinguished all eight H-only alias classes.",
+    "principle": "More passive observation cannot identify a parameter that does not alter the observed state; a targeted intervention can if it makes competing parameter values imply different outcomes."
+  }
+}
