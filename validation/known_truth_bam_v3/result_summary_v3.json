@@ -1,0 +1,52 @@
+{
+  "schema": "eog.known_truth_bam.active_intervention_summary.v3",
+  "protocol_commit": "b61b9957e3600df8f8e51de9f24febb15bd88cf3",
+  "executed_commit": "d086ea1827f4960171a922f191823aeac4f8273c",
+  "workflow_run_id": 36542679699,
+  "artifact_id": 11020289402,
+  "artifact_digest": "sha256:7fc7b289a8bcf7d5f57caba50ccbbe6e644d54c9e782695048b7199601b90cbd",
+  "result_fingerprint": "69705469859702099c7ed57986b0d661106a9e5555348fd5c526e358bcbe5358",
+  "candidate_world_count": 40,
+  "distinct_complete_intervention_signatures": 40,
+  "unique_truth_fraction_before_intervention": 0.2,
+  "unique_truth_fraction_after_active_intervention": 1,
+  "median_interventions_to_terminal": 2.5,
+  "max_interventions_to_terminal": 4,
+  "terminal_signature_equivalence_class_size_distribution": {
+    "1": 40
+  },
+  "truth_retention_failures": 0,
+  "monotonicity_failures": 0,
+  "signature_limit_failures": 0,
+  "axis_first_frequency": {
+    "A": 29,
+    "M": 3
+  },
+  "selected_intervention_frequency": {
+    "A_transplant_challenge": 29,
+    "B_partner_removal": 19,
+    "M_arrival_probe:r0c2": 6,
+    "M_arrival_probe:r0c4": 17,
+    "M_arrival_probe:r1c4": 14
+  },
+  "verdicts": {
+    "I1_truth_retention": "SUPPORTED",
+    "I2_axis_orthogonality": "SUPPORTED",
+    "I3_monotone_contraction": "SUPPORTED",
+    "I4_full_panel_identifiability": "SUPPORTED",
+    "I5_active_design_matches_signature_limit": "SUPPORTED"
+  },
+  "interpretation": [
+    "Passive spatial and temporal evidence left 80% of BAM truths non-unique.",
+    "The complete orthogonal intervention signatures were unique for all 40 candidate BAM worlds.",
+    "A truth-blind greedy selector reached the exact complete-signature equivalence class in every truth case and identified all 40 truths.",
+    "No true world was eliminated and every intervention sequence contracted monotonically.",
+    "The result is an idealized experimental-identifiability upper bound, not a claim that these manipulations are equally feasible in field ecology."
+  ],
+  "language_performance": {
+    "bam_v2_2_protocol_runtime_step": "<1 s in GitHub Actions after environment install",
+    "bam_v3_protocol_runtime_step": "~1 s in GitHub Actions after environment install",
+    "cpp_required_now": false,
+    "recommendation": "Keep Python as scientific reference. Current BAM set/bitmask implementation is fast enough; consider C++ only for much larger graphs/world universes after profiling."
+  }
+}
