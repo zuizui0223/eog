@@ -470,7 +470,7 @@ Yanco, S.W., McDevitt, A., Trueman, C.N., Hartley, L. & Wunder, M.B. (2020). A m
 
 ## Data Accessibility Statement
 
-All code, frozen simulation protocols, result summaries and source-fingerprinted figure tables required to reproduce the analyses are assembled into a self-contained anonymized peer-review archive. The review archive includes a minimal installable package, focused reproduction tests and the Figure 1–6 builder, and will be supplied with the submission for double-anonymous review. A permanent public archive and DOI will replace the review-only archive reference in the accepted version.
+All code, frozen simulation protocols, result summaries and source-fingerprinted figure tables required to reproduce the analyses are assembled into a self-contained anonymized review repository and peer-review archive. The review package includes a minimal installable package, focused reproduction tests and the Figure 1–6 builder, and will be supplied with the submission for double-anonymous review. A permanent public archive and DOI will replace the review-only archive reference in the accepted version.
 
 ## Figure legends
 
