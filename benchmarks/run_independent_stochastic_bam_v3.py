@@ -10,7 +10,7 @@ import sys
 
 import numpy as np
 
-from benchmarks.independent_stochastic_bam_generator import (
+from independent_stochastic_bam_generator import (
     abiotic_mask as generator_abiotic_mask,
     candidate_parameter_grid,
     make_landscape,
