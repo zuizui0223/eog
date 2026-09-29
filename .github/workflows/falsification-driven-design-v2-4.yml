@@ -1,0 +1,33 @@
+name: Falsification-driven experiment design v2.4
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/v2/falsification_driven_design.py"
+      - "validation/falsification_driven_design_v2_4/**"
+      - "benchmarks/run_falsification_driven_design_v2_4.py"
+      - "tests/test_falsification_driven_design.py"
+      - ".github/workflows/falsification-driven-design-v2-4.yml"
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Run frozen finite intervention planner
+        run: |
+          python benchmarks/run_falsification_driven_design_v2_4.py \
+            --output build/falsification_driven_design_v2_4/result_v2_4.json
+      - name: Verify focused tests
+        run: python -m pytest tests/test_falsification_driven_design.py -q
+      - uses: actions/upload-artifact@v4
+        with:
+          name: falsification-driven-design-v2-4
+          path: build/falsification_driven_design_v2_4/result_v2_4.json
+          if-no-files-found: error
