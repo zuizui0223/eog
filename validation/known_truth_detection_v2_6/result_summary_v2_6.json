@@ -7,35 +7,6 @@
   "artifact_id": 11024054768,
   "artifact_digest": "sha256:d794ebb52bfa7777be2afef405bd4a17075ed5847bfb0482fbf9749e6cdb48f4",
   "result_fingerprint": "3e5187088b74a443471c79743d78fc86c02a5d87565f3f51fb0f081669c46091",
-  "illustrative_all_zero_probabilities": {
-    "p=0.25,n=8": 0.1001129150390625,
-    "p=0.50,n=8": 0.00390625,
-    "p=0.75,n=8": 0.0000152587890625,
-    "p=1.00,n=1": 0
-  },
-  "robust_boundaries": {
-    "strict_negative_worlds": [
-      "p=1,q=0"
-    ],
-    "all_zero_falsifies": [
-      "present"
-    ],
-    "expanded_negative_worlds": [
-      "p=1,q=0",
-      "p=0.75,q=0"
-    ],
-    "all_zero_falsifies_after_expansion": [],
-    "strict_positive_worlds": [
-      "q=0 only"
-    ],
-    "one_detection_falsifies": [
-      "absent"
-    ],
-    "expanded_positive_worlds": [
-      "includes q=0.01"
-    ],
-    "one_detection_falsifies_after_expansion": []
-  },
   "failure_counts": {
     "O1": 0,
     "O2": 0,
@@ -43,6 +14,20 @@
     "O4": 0,
     "O5": 0
   },
+  "all_zero_examples": {
+    "p_0_25_n_8": 0.1001129150390625,
+    "p_0_5_n_8": 0.00390625,
+    "p_0_75_n_8": 0.0000152587890625,
+    "p_1_n_8": 0
+  },
+  "strict_negative_falsified_states": [
+    "present"
+  ],
+  "expanded_negative_falsified_states": [],
+  "strict_positive_falsified_states": [
+    "absent"
+  ],
+  "expanded_positive_falsified_states": [],
   "verdicts": {
     "O1_imperfect_nondetection_not_hard_absence": "SUPPORTED",
     "O2_perfect_detection_hard_negative": "SUPPORTED",
@@ -51,9 +36,9 @@
     "O5_observation_world_expansion_weakens_or_preserves_falsification": "SUPPORTED"
   },
   "interpretation": {
-    "main": "Exact ecological falsification requires an observation contract that makes the contradictory observation impossible, not merely unlikely.",
-    "nondetection": "For every finite survey count and every p<1, all-zero detection remains possible under true presence.",
-    "positive": "A detection is a hard positive witness only when all admissible observation worlds exclude false positives.",
-    "universe_expansion": "Adding plausible observation-process worlds can only weaken or preserve robust hard exclusions."
+    "main": "Exact falsification must be conditioned jointly on ecological state and an admissible observation-process universe.",
+    "nondetection": "For any finite survey count and p<1, repeated nondetection lowers likelihood but never makes presence impossible.",
+    "positive": "A detection hard-falsifies absence only when all admissible observation worlds have q=0.",
+    "robustness": "Expanding the observation-world universe can only weaken or preserve robust hard falsification."
   }
 }
