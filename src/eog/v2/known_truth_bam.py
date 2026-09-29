@@ -516,7 +516,7 @@ def _bam_world_grid(
 ) -> tuple[BAMWorld, ...]:
     worlds: list[BAMWorld] = []
     a_specs = (
-        ("A_narrow", (0.57, 0.55), (0.42, 0.35)),
+        ("A_narrow", (0.57, 0.55), (0.45, 0.35)),
         ("A_broad", (0.57, 0.55), (1.30, 0.70)),
     )
     b_modes: tuple[BMode, ...] = (
