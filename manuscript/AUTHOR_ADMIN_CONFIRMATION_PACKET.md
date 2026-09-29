@@ -4,6 +4,22 @@ This file now applies **only to EOG-WF**. The Structural/reference-adequacy manu
 
 EOG-WF remains scientifically closed. This packet does not authorize any new endpoint, model fit, claim expansion, release, DOI minting or journal submission.
 
+## Automated completion path
+
+The remaining author/admin work now has one machine-readable source of truth.
+
+1. Copy `manuscript/EOG_WF_AUTHOR_ADMIN_CONFIRMATION.template.json` to `manuscript/EOG_WF_AUTHOR_ADMIN_CONFIRMATION.json`.
+2. Fill only author-controlled fields and set approval booleans to `true` only after the relevant authors have explicitly confirmed them.
+3. Run `python manuscript/build_eogwf_author_admin.py`.
+4. The builder fails closed unless every required author/admin field is confirmed. On success it writes:
+   - `manuscript/EOG_WF_TITLE_PAGE.md`;
+   - `manuscript/EOG_WF_AI_LLM_DISCLOSURE.md`;
+   - `manuscript/EOG_WF_MANUSCRIPT_FINAL.md`, which is the frozen scientific manuscript plus the author-approved AI/LLM Methods disclosure;
+   - `manuscript/EOG_WF_AUTHOR_ADMIN_APPROVAL_RECEIPT.json`, with hashes of all three outputs.
+5. Run `python manuscript/check_eogwf_mee_readiness.py`, then `python manuscript/build_eogwf_submission_package.py --mode final`.
+
+Do **not** edit `EOG_WF_SUBMISSION_BLOCKERS_V1.json` by hand. The final package builder resolves the two author/admin blockers only when the approval receipt exists and its output hashes verify.
+
 ## Required author-controlled fields
 
 Provide the final EOG-WF author order and, for each author:
