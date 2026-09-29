@@ -1,0 +1,34 @@
+{
+  "schema": "eog.bam_inverse_identifiability.review_package_receipt.v2",
+  "branch_head_sha": "7116a75206b4188d5f449392965dfcefd3199888",
+  "workflow_run_id": 36626477126,
+  "workflow_job_id": 109604644555,
+  "workflow_conclusion": "success",
+  "artifact_id": 11060247487,
+  "artifact_digest": "sha256:1529d1b057ff125347a50aed265d75a74ff8224b31e453c79a6e5ba9afdf9b39",
+  "archive": {
+    "file_name": "bam_inverse_identifiability_anonymous_review.zip",
+    "file_count": 62,
+    "zip_sha256": "f70933d29f6309591b60e2c9c23b004158c3417590b3801196f5fe0dda4a9f9c",
+    "anonymous_review": true,
+    "privacy_findings": [],
+    "deterministic_zip": true
+  },
+  "isolated_reproduction": {
+    "clean_workspace_extract": "PASS",
+    "editable_install_from_archive_only": "PASS",
+    "focused_tests_from_archive_only": "PASS",
+    "figure_1_to_6_rebuild_from_archive_only": "PASS"
+  },
+  "checks": [
+    "email scan PASS",
+    "ORCID scan PASS",
+    "repository-owner token scan PASS",
+    "local absolute path scan PASS",
+    "author/title-page/cover-letter exclusion PASS",
+    "focused BAM/world-reconstruction tests PASS",
+    "Figure 1-6 isolated rebuild PASS"
+  ],
+  "submission_role": "anonymous double-review code/data archive; permanent public archive/DOI to replace review-only archive reference at acceptance",
+  "scientific_boundary": "packaging/reproducibility only; no change to frozen BAM results or claims"
+}
