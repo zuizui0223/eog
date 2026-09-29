@@ -33,6 +33,9 @@ STATIC_FILES = [
     "manuscript/EOG_WF_KNOWN_TRUTH_BENCHMARK_V1.md",
     "manuscript/MEE_DESK_FIT_AUDIT_V2.md",
     "manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json",
+    "manuscript/EOG_WF_AUTHOR_ADMIN_CONFIRMATION.template.json",
+    "manuscript/AUTHOR_ADMIN_CONFIRMATION_PACKET.md",
+    "manuscript/build_eogwf_author_admin.py",
     "manuscript/check_eogwf_mee_readiness.py",
     "manuscript/build_paper_ready_eogwf.py",
 ]
