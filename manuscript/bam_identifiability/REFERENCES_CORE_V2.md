@@ -9,12 +9,14 @@ DOI: 10.17161/bi.v2i0.4.
 
 Soberón, J. & Nakamura, M. (2009).
 Niches and distributional areas: Concepts, methods, and assumptions.
-Proceedings of the National Academy of Sciences.
+Proceedings of the National Academy of Sciences 106(Suppl. 2):19644–19650.
+DOI: 10.1073/pnas.0901637106.
 Use for niche/distribution conceptual distinctions.
 
 Elith, J. & Leathwick, J.R. (2009).
 Species Distribution Models: Ecological Explanation and Prediction Across Space and Time.
-Annual Review of Ecology, Evolution, and Systematics.
+Annual Review of Ecology, Evolution, and Systematics 40:677–697.
+DOI: 10.1146/annurev.ecolsys.110308.120159.
 Use for the broad SDM prediction/explanation context.
 
 Peterson, A.T., Papeş, M. & Soberón, J. (2015).
@@ -38,7 +40,7 @@ configurations are prior art.
 
 Soberón, J. & Osorio-Olvera, L. (2023).
 A dynamic theory of the area of distribution.
-Journal of Biogeography 50.
+Journal of Biogeography 50(6):1037–1048.
 DOI: 10.1111/jbi.14587.
 
 Use explicitly to acknowledge:
