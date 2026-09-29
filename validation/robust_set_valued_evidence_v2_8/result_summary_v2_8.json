@@ -1,0 +1,49 @@
+{
+  "schema": "eog.robust_set_valued_evidence_design.summary.v2_8",
+  "protocol_commit": "6e0d49a748c8081f86c3889cdba0ad80cfe8ca1e",
+  "executed_commit": "c39ca0ea78aac6923a4cb21f100a13bf3d081a89",
+  "workflow_run_id": 36559842715,
+  "workflow_conclusion": "success",
+  "artifact_id": 11028283523,
+  "artifact_digest": "sha256:340dd453bc2374189e963fcd98eed8ae6b28d1d659fc4e28a7eaa17a396382d3",
+  "result_fingerprint": "a459ebd6bdde502c5d86aad7baf37443d17d1156fb358a373c5429c5c94115f8",
+  "plan_fingerprint": "486436ca8c6c8190b985d25aa24dec1b4d651030408118d25e7cb9bfb9a6c3c3",
+  "active_joint_hypotheses": [
+    "absent::p1",
+    "absent::p075",
+    "present::p075"
+  ],
+  "unresolved_pair_count": 3,
+  "robust_split_pair_count_by_action": {
+    "direct_detection_calibration": 2,
+    "direct_target_state_assay": 2,
+    "repeat_four_surveys": 0,
+    "repeat_one_survey": 0
+  },
+  "minimum_robust_separating_set": [
+    "direct_detection_calibration",
+    "direct_target_state_assay"
+  ],
+  "minimum_robust_set_size": 2,
+  "known_truth": {
+    "hypothesis": "absent::p1",
+    "calibration_outcome": 1,
+    "survivors_after_calibration": [
+      "absent::p1"
+    ],
+    "realized_actions_to_identify": 1
+  },
+  "verdicts": {
+    "R1_disjoint_support_criterion": "SUPPORTED",
+    "R2_more_surveys_have_no_guaranteed_split": "SUPPORTED",
+    "R3_direct_channels_each_split_two_pairs": "SUPPORTED",
+    "R4_minimum_robust_design": "SUPPORTED",
+    "R5_truth_conditional_adaptive_shortcut": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "Guarantee-style evidence design depends on outcome-support separation, not on likelihood magnitude.",
+    "repeated_surveys": "Finite repeat surveys have no worst-case separating power here because zero detections remain possible under the imperfect-detection present hypothesis.",
+    "calibration": "Direct p calibration and direct biological-state assay are complementary robust separators.",
+    "adaptivity": "A worst-case nonadaptive design may require two actions even when a realized calibration outcome collapses the active set after one action."
+  }
+}
