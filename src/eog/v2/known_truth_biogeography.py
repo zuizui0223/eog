@@ -517,3 +517,357 @@ def run_canonical_known_truth_benchmark() -> dict[str, object]:
     }
     payload["fingerprint"] = _sha256(payload)
     return payload
+
+
+def exact_minimum_positive_witness_set(
+    truth_world: FiniteWorld,
+    candidate_worlds: Sequence[FiniteWorld],
+    *,
+    max_steps: int,
+) -> tuple[str, ...] | None:
+    """Return an exact minimum positive witness set, or None if truth is not identifiable."""
+
+    false_worlds = tuple(world for world in candidate_worlds if world.world_id != truth_world.world_id)
+    if not false_worlds:
+        return ()
+
+    truth_reach = set(
+        forward_reachable_configuration(truth_world, max_steps=max_steps).reachable_ids
+    )
+    false_reach = [
+        set(forward_reachable_configuration(world, max_steps=max_steps).reachable_ids)
+        for world in false_worlds
+    ]
+    full_mask = (1 << len(false_worlds)) - 1
+    node_masks: list[tuple[str, int]] = []
+    source_set = set(truth_world.source_ids)
+    for node_id in truth_world.operator.node_ids:
+        if node_id not in truth_reach or node_id in source_set:
+            continue
+        mask = 0
+        for idx, reached in enumerate(false_reach):
+            if node_id not in reached:
+                mask |= 1 << idx
+        if mask:
+            node_masks.append((node_id, mask))
+
+    coverable = 0
+    for _, mask in node_masks:
+        coverable |= mask
+    if coverable != full_mask:
+        return None
+
+    best: dict[int, tuple[str, ...]] = {0: ()}
+    for node_id, node_mask in node_masks:
+        prior = list(best.items())
+        for mask, chosen in prior:
+            updated = mask | node_mask
+            candidate = (*chosen, node_id)
+            incumbent = best.get(updated)
+            if incumbent is None or (len(candidate), candidate) < (len(incumbent), incumbent):
+                best[updated] = candidate
+    return best[full_mask]
+
+
+def _factorial_processes() -> tuple[VirtualProcess, ...]:
+    rows: list[VirtualProcess] = []
+    for niche_radius_temp in (0.5, 1.5):
+        for dispersal_radius in (1.01, 2.01):
+            for environmental_transition_limit in (0.25, 1.0):
+                for barrier_permeable in (False, True):
+                    world_id = (
+                        f"n{niche_radius_temp:.2f}_"
+                        f"d{dispersal_radius:.2f}_"
+                        f"e{environmental_transition_limit:.2f}_"
+                        f"b{int(barrier_permeable)}"
+                    )
+                    rows.append(
+                        VirtualProcess(
+                            world_id=world_id,
+                            source_id="r1c0",
+                            niche_center=(0.6, 0.6),
+                            niche_radius=(niche_radius_temp, 1.5),
+                            dispersal_radius=dispersal_radius,
+                            environmental_transition_limit=environmental_transition_limit,
+                            barrier_permeable=barrier_permeable,
+                            max_steps=8,
+                        )
+                    )
+    return tuple(rows)
+
+
+def _factorial_landscapes() -> tuple[tuple[str, VirtualLandscape], ...]:
+    return (
+        (
+            "continuous",
+            make_gradient_landscape(spike_col=3, spike_amount=0.0, barrier_col=None),
+        ),
+        (
+            "environmental_bottleneck",
+            make_gradient_landscape(spike_col=3, spike_amount=0.75, barrier_col=None),
+        ),
+        (
+            "hard_barrier",
+            make_gradient_landscape(spike_col=3, spike_amount=0.0, barrier_col=4),
+        ),
+        (
+            "combined_bottleneck",
+            make_gradient_landscape(spike_col=3, spike_amount=0.75, barrier_col=4),
+        ),
+    )
+
+
+def run_witness_factorial_benchmark() -> dict[str, object]:
+    """Execute the preregistered witness-complexity factorial."""
+
+    import time
+
+    started = time.perf_counter()
+    coverages = (0.1, 0.25, 0.5, 1.0)
+    replicates = 32
+    processes = _factorial_processes()
+
+    eligible_cases = 0
+    truth_retention_failures = 0
+    f1_mismatches = 0
+    f2_monotonicity_violations = 0
+    f3_equivalence_violations = 0
+    f4_boundary_violations = 0
+    exact_identifiable = 0
+    equivalent_cases = 0
+    omitted_falsified = 0
+    omitted_survived = 0
+    omitted_with_superset = 0
+    omitted_with_superset_survived = 0
+    witness_histogram: dict[str, int] = {}
+    identification_counts = {str(value): 0 for value in coverages}
+    identification_denominators = {str(value): 0 for value in coverages}
+    case_rows: list[dict[str, object]] = []
+
+    for landscape_id, landscape in _factorial_landscapes():
+        worlds_by_id: dict[str, FiniteWorld] = {}
+        for process in processes:
+            try:
+                worlds_by_id[process.world_id] = build_virtual_world(landscape, process)
+            except ValueError:
+                continue
+        worlds = tuple(worlds_by_id[key] for key in sorted(worlds_by_id))
+        if len(worlds) < 2:
+            continue
+
+        reachable_by_world = {
+            world.world_id: set(
+                forward_reachable_configuration(world, max_steps=8).reachable_ids
+            )
+            for world in worlds
+        }
+
+        for truth in worlds:
+            truth_reach = reachable_by_world[truth.world_id]
+            if len(truth_reach) < 2:
+                continue
+            eligible_cases += 1
+            false_worlds = tuple(world for world in worlds if world.world_id != truth.world_id)
+            equivalent_false = tuple(
+                world.world_id
+                for world in false_worlds
+                if reachable_by_world[world.world_id] == truth_reach
+            )
+            if equivalent_false:
+                equivalent_cases += 1
+
+            minimum_witness = exact_minimum_positive_witness_set(
+                truth,
+                worlds,
+                max_steps=8,
+            )
+            if minimum_witness is None:
+                witness_histogram["unidentifiable"] = witness_histogram.get("unidentifiable", 0) + 1
+            else:
+                exact_identifiable += 1
+                key = str(len(minimum_witness))
+                witness_histogram[key] = witness_histogram.get(key, 0) + 1
+
+            full_occurrences = _ordered_subset(landscape.node_ids, truth_reach)
+            full_reconstruction = reconstruct_compatible_worlds(
+                worlds,
+                full_occurrences,
+                max_steps=8,
+            )
+            expected_full = tuple(
+                world.world_id
+                for world in worlds
+                if set(full_occurrences).issubset(reachable_by_world[world.world_id])
+            )
+            if full_reconstruction.compatible_world_ids != expected_full:
+                f1_mismatches += 1
+            if truth.world_id not in full_reconstruction.compatible_world_ids:
+                truth_retention_failures += 1
+            if equivalent_false and not set(equivalent_false).issubset(
+                full_reconstruction.compatible_world_ids
+            ):
+                f3_equivalence_violations += 1
+
+            omitted_worlds = false_worlds
+            omitted_reconstruction = reconstruct_compatible_worlds(
+                omitted_worlds,
+                full_occurrences,
+                max_steps=8,
+            )
+            expected_omitted = tuple(
+                world.world_id
+                for world in omitted_worlds
+                if set(full_occurrences).issubset(reachable_by_world[world.world_id])
+            )
+            if omitted_reconstruction.compatible_world_ids != expected_omitted:
+                f4_boundary_violations += 1
+            if omitted_reconstruction.compatible_world_ids:
+                omitted_survived += 1
+            else:
+                omitted_falsified += 1
+            superset_exists = any(
+                truth_reach.issubset(reachable_by_world[world.world_id])
+                for world in omitted_worlds
+            )
+            if superset_exists:
+                omitted_with_superset += 1
+                if omitted_reconstruction.compatible_world_ids:
+                    omitted_with_superset_survived += 1
+                else:
+                    f4_boundary_violations += 1
+
+            for replicate in range(replicates):
+                identified_sequence: list[bool] = []
+                seed_prefix = f"{landscape_id}|{truth.world_id}|{replicate}"
+                full_non_source = [node for node in full_occurrences if node != truth.source_ids[0]]
+                seed = int(hashlib.sha256(seed_prefix.encode("utf-8")).hexdigest()[:16], 16)
+                rng = np.random.default_rng(seed)
+                shuffled = list(full_non_source)
+                rng.shuffle(shuffled)
+
+                for coverage in coverages:
+                    count = (
+                        len(shuffled)
+                        if coverage >= 1.0
+                        else max(1, int(math.ceil(coverage * len(shuffled))))
+                    )
+                    sampled = _ordered_subset(
+                        landscape.node_ids,
+                        (truth.source_ids[0], *shuffled[:count]),
+                    )
+                    reconstruction = reconstruct_compatible_worlds(
+                        worlds,
+                        sampled,
+                        max_steps=8,
+                    )
+                    expected = tuple(
+                        world.world_id
+                        for world in worlds
+                        if set(sampled).issubset(reachable_by_world[world.world_id])
+                    )
+                    if reconstruction.compatible_world_ids != expected:
+                        f1_mismatches += 1
+                    if truth.world_id not in reconstruction.compatible_world_ids:
+                        truth_retention_failures += 1
+                    identified = reconstruction.compatible_world_ids == (truth.world_id,)
+                    identified_sequence.append(identified)
+                    key = str(coverage)
+                    identification_denominators[key] += 1
+                    if identified:
+                        identification_counts[key] += 1
+
+                if any(
+                    earlier and not later
+                    for earlier, later in zip(identified_sequence, identified_sequence[1:])
+                ):
+                    f2_monotonicity_violations += 1
+
+            case_rows.append(
+                {
+                    "landscape_id": landscape_id,
+                    "truth_world_id": truth.world_id,
+                    "truth_reachable_count": len(truth_reach),
+                    "full_compatible_count": len(full_reconstruction.compatible_world_ids),
+                    "equivalent_false_world_count": len(equivalent_false),
+                    "minimum_positive_witness_count": (
+                        None if minimum_witness is None else len(minimum_witness)
+                    ),
+                    "omitted_truth_compatible_count": len(
+                        omitted_reconstruction.compatible_world_ids
+                    ),
+                    "omitted_truth_falsified": (
+                        len(omitted_reconstruction.compatible_world_ids) == 0
+                    ),
+                    "omitted_truth_superset_candidate_exists": superset_exists,
+                }
+            )
+
+    identification_rate = {
+        key: (
+            0.0
+            if identification_denominators[key] == 0
+            else identification_counts[key] / identification_denominators[key]
+        )
+        for key in identification_counts
+    }
+    runtime_seconds = time.perf_counter() - started
+    verdicts = {
+        "F1_witness_criterion": "SUPPORTED" if f1_mismatches == 0 else "REFUTED",
+        "F2_sampling_monotonicity": (
+            "SUPPORTED" if f2_monotonicity_violations == 0 else "REFUTED"
+        ),
+        "F3_equivalence_ceiling": (
+            "SUPPORTED" if f3_equivalence_violations == 0 else "REFUTED"
+        ),
+        "F4_omitted_truth_not_guaranteed": (
+            "BOUNDARY_CONFIRMED"
+            if (
+                f4_boundary_violations == 0
+                and omitted_survived > 0
+                and omitted_falsified > 0
+            )
+            else "NOT_CONFIRMED"
+        ),
+    }
+    result: dict[str, object] = {
+        "schema": "eog.known_truth_biogeography.witness_factorial_result.v1",
+        "eligible_exact_cases": eligible_cases,
+        "process_worlds_per_landscape": len(processes),
+        "sampling_replicates_per_case": replicates,
+        "sampling_coverages": list(coverages),
+        "truth_retention_failures": truth_retention_failures,
+        "f1_criterion_mismatches": f1_mismatches,
+        "f2_monotonicity_violations": f2_monotonicity_violations,
+        "f3_equivalence_violations": f3_equivalence_violations,
+        "f4_boundary_violations": f4_boundary_violations,
+        "identifiable_at_full_coverage_fraction": (
+            0.0 if eligible_cases == 0 else exact_identifiable / eligible_cases
+        ),
+        "observational_equivalence_fraction": (
+            0.0 if eligible_cases == 0 else equivalent_cases / eligible_cases
+        ),
+        "minimum_positive_witness_count_distribution": witness_histogram,
+        "identification_rate_by_sampling_coverage": identification_rate,
+        "omitted_truth_falsification_fraction": (
+            0.0
+            if eligible_cases == 0
+            else omitted_falsified / eligible_cases
+        ),
+        "omitted_truth_survival_fraction": (
+            0.0
+            if eligible_cases == 0
+            else omitted_survived / eligible_cases
+        ),
+        "omitted_truth_survival_with_superset_fraction": (
+            0.0
+            if omitted_with_superset == 0
+            else omitted_with_superset_survived / omitted_with_superset
+        ),
+        "runtime_seconds": runtime_seconds,
+        "verdicts": verdicts,
+        "cases": case_rows,
+    }
+    fingerprint_payload = dict(result)
+    fingerprint_payload["runtime_seconds"] = None
+    result["fingerprint"] = _sha256(fingerprint_payload)
+    return result
