@@ -1,0 +1,61 @@
+{
+  "schema": "eog.known_truth_bam.factorial_summary.v2",
+  "protocol_commit": "4138d60ca37b106a8a65b41de1d6f75bfea8ad96",
+  "executed_commit": "ff33cc9b39add6389d32bfd2dcb60d0ade631758",
+  "workflow_run_id": 36540648033,
+  "workflow_conclusion": "success",
+  "artifact_id": 11020201850,
+  "artifact_digest": "sha256:41ee1117e4366629b0d301cead53badbb66b9c9e82b62d3d28eff71437133a56",
+  "result_fingerprint": "c8f5a6c99627a786a06f4e298b2b7045a728907fe985119b402d16c8d4196d43",
+  "candidate_world_count": 32,
+  "eligible_truth_worlds": 32,
+  "truth_retention_failures": 0,
+  "axis_witness_mismatches": 0,
+  "equivalence_violations": 0,
+  "positive_superset_violations": 0,
+  "negative_rescue_failures": 0,
+  "temporal_rescue_failures": 0,
+  "fraction_truth_unique_positive_only": 0,
+  "fraction_truth_unique_with_negatives": 0,
+  "fraction_truth_unique_with_temporal_evidence": 0,
+  "positive_superset_survivors": 656,
+  "negative_rescuable_supersets": 336,
+  "negative_rescued_supersets": 336,
+  "negative_rescue_fraction": 1,
+  "temporal_rescuable_equal_G_worlds": 32,
+  "temporal_rescued_equal_G_worlds": 32,
+  "temporal_M_rescue_fraction": 1,
+  "axis_witness_counts": {
+    "A_only": 0,
+    "B_only": 176,
+    "M_only": 80,
+    "AB": 0,
+    "AM": 0,
+    "BM": 80,
+    "ABM": 0
+  },
+  "exact_G_equivalence_class_size_range": [
+    4,
+    16
+  ],
+  "partner_occupied_node_count": 21,
+  "landscape_node_count": 21,
+  "antagonist_occupied_node_count": 18,
+  "verdicts": {
+    "BAM_H1_truth_retention": "SUPPORTED",
+    "BAM_H2_axis_witness_attribution": "SUPPORTED",
+    "BAM_H3_intersection_nonidentifiability": "SUPPORTED",
+    "BAM_H4_positive_superset_ceiling": "SUPPORTED",
+    "BAM_H5_perfect_negative_rescue": "SUPPORTED",
+    "BAM_H6_temporal_M_rescue": "SUPPORTED"
+  },
+  "design_adequacy_audit": {
+    "full_BAM_claim_authorized": false,
+    "reason": [
+      "required partner occupied all 21/21 nodes, so obligate_partner was identical to B=none",
+      "A-only positive witness count was 0, so abiotic contrast was not independently exercised by the positive-occurrence factorial",
+      "the v2 factorial therefore strongly exercised antagonistic B and M, but did not provide orthogonal activation of all A/B/M axes"
+    ],
+    "next_protocol_required": "orthogonal BAM activation v2.1 with pre-result axis-activation gates"
+  }
+}
