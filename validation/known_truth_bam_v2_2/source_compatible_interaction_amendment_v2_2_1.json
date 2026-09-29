@@ -1,0 +1,22 @@
+{
+  "schema": "eog.known_truth_bam.source_compatible_interaction_amendment.v2_2_1",
+  "status": "frozen_before_implementation_and_before_any_v2_2_result",
+  "parent_contract_commit": "f145e789a96e75ca53da603730382aeed1de560f",
+  "reason": "The unchanged v2.1 antagonist would be disjoint from the new source-compatible partner, making partner_and_antagonist identical to obligate_partner. Amend antagonist parameters before implementation so positive and negative biotic interactions overlap spatially and their conjunction is a distinct B state.",
+  "antagonist": {
+    "source_id": "r1c5",
+    "niche_center": [
+      0.5,
+      0.48
+    ],
+    "niche_radius": [
+      0.25,
+      0.15
+    ],
+    "step_radius": 1.01,
+    "barrier_permeable": true,
+    "horizon": 8
+  },
+  "required_additional_gate": "biotic masks for none, obligate_partner, antagonist_exclusion and partner_and_antagonist must be pairwise distinct",
+  "all_other_v2_2_fields_unchanged": true
+}
