@@ -8,6 +8,8 @@ on:
       - "benchmarks/run_eog_v3_joint_world_engine.py"
       - "tests/test_v3_joint_world_engine.py"
       - "tests/test_v3_cli.py"
+      - "examples/eog_v3/**"
+      - "schemas/eog_v3_joint_input.schema.json"
       - ".github/workflows/eog-v3-joint-world-engine.yml"
   workflow_dispatch:
 
@@ -27,8 +29,21 @@ jobs:
             --output build/eog_v3_joint_world_engine/result_v1.json
       - name: Verify focused tests
         run: python -m pytest tests/test_v3_joint_world_engine.py tests/test_v3_cli.py -q
+      - name: Run packaged CLI examples
+        run: |
+          eog-v3-joint-evaluate \
+            --input examples/eog_v3/joint_evaluation_input.json \
+            --output build/eog_v3_joint_world_engine/example_evaluation.json
+          eog-v3-plan-evidence \
+            --input examples/eog_v3/evidence_planning_input.json \
+            --output build/eog_v3_joint_world_engine/example_plan.json \
+            --objective ecological
+          python -c 'import json,pathlib; e=json.loads(pathlib.Path("build/eog_v3_joint_world_engine/example_evaluation.json").read_text()); p=json.loads(pathlib.Path("build/eog_v3_joint_world_engine/example_plan.json").read_text()); assert e["surviving_joint_world_ids"] == ["eco_absent::imperfect","eco_absent::perfect","eco_present::imperfect"]; assert p["best_action_ids"] == ["gold_standard_target_state"]; assert not p["fail_closed_no_improvement"]'
       - uses: actions/upload-artifact@v4
         with:
           name: eog-v3-joint-world-engine
-          path: build/eog_v3_joint_world_engine/result_v1.json
+          path: |
+            build/eog_v3_joint_world_engine/result_v1.json
+            build/eog_v3_joint_world_engine/example_evaluation.json
+            build/eog_v3_joint_world_engine/example_plan.json
           if-no-files-found: error
