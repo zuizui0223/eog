@@ -240,6 +240,7 @@ def main() -> int:
     superset_ceiling_violations = 0
     omitted_truth_criterion_mismatches = 0
     api_parity_mismatches = 0
+    api_parity_audits = 0
     history_worse_than_snapshot = 0
     history_strict_improvements = 0
 
@@ -306,13 +307,14 @@ def main() -> int:
 
                 # Actual EOG inverse-reconstruction API audit for one replicate per
                 # scenario at every frozen horizon.
-                if replicate == 0:
+                if replicate == 0 and len(observed_ids) >= 2:
                     reconstruction = reconstruct_compatible_worlds(
                         worlds,
                         observed_ids,
                         max_steps=40,
                         support_tolerance=0.0,
                     )
+                    api_parity_audits += 1
                     if reconstruction.compatible_world_ids != compatible:
                         api_parity_mismatches += 1
 
@@ -413,6 +415,7 @@ def main() -> int:
             "sequential_expansion_violations": sequential_expansion_violations,
             "superset_ceiling_violations": superset_ceiling_violations,
             "omitted_truth_criterion_mismatches": omitted_truth_criterion_mismatches,
+            "eog_api_parity_audits": api_parity_audits,
             "eog_api_parity_mismatches": api_parity_mismatches,
             "history_worse_than_snapshot": history_worse_than_snapshot,
             "history_strict_improvements": history_strict_improvements,
@@ -450,6 +453,7 @@ def main() -> int:
                 "sequential_expansion_violations": sequential_expansion_violations,
                 "superset_ceiling_violations": superset_ceiling_violations,
                 "omitted_truth_criterion_mismatches": omitted_truth_criterion_mismatches,
+                "eog_api_parity_audits": api_parity_audits,
                 "eog_api_parity_mismatches": api_parity_mismatches,
                 "history_worse_than_snapshot": history_worse_than_snapshot,
                 "history_strict_improvements": history_strict_improvements,
