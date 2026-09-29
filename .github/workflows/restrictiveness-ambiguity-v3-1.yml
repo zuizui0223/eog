@@ -1,0 +1,38 @@
+name: Restrictiveness-ambiguity audit v3.1
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/audit_restrictiveness_ambiguity_v3_1.py"
+      - "validation/restrictiveness_ambiguity_v3_1/**"
+      - ".github/workflows/restrictiveness-ambiguity-v3-1.yml"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Run frozen posthoc mechanism audit
+        run: |
+          python benchmarks/audit_restrictiveness_ambiguity_v3_1.py \
+            --output build/restrictiveness_ambiguity_v3_1/audit_result_v3_1.json
+      - name: Require zero nesting-monotonicity violations
+        run: |
+          python - <<'PY'
+          import json
+          p="build/restrictiveness_ambiguity_v3_1/audit_result_v3_1.json"
+          d=json.load(open(p))
+          assert d["nesting_monotonicity_violations"] == 0
+          assert d["theorem_audit"]["supported_in_all_strict_inclusion_pairs"] is True
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: restrictiveness-ambiguity-v3-1
+          path: build/restrictiveness_ambiguity_v3_1/audit_result_v3_1.json
+          if-no-files-found: error
