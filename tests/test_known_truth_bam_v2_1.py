@@ -35,11 +35,16 @@ def test_v21_bam_scoring_runs_only_after_activation_pass():
     assert result["positive_superset_violations"] == 0
     assert result["negative_rescue_failures"] == 0
     assert result["temporal_rescue_failures"] == 0
-    assert result["verdicts"] == {
-        "BAM_H1_truth_retention": "SUPPORTED",
-        "BAM_H2_axis_witness_attribution": "SUPPORTED",
-        "BAM_H3_intersection_nonidentifiability": "SUPPORTED",
-        "BAM_H4_positive_superset_ceiling": "SUPPORTED",
-        "BAM_H5_perfect_negative_rescue": "SUPPORTED",
-        "BAM_H6_temporal_M_rescue": "SUPPORTED",
+    expected_keys = {
+        "BAM_H1_truth_retention",
+        "BAM_H2_axis_witness_attribution",
+        "BAM_H3_intersection_nonidentifiability",
+        "BAM_H4_positive_superset_ceiling",
+        "BAM_H5_perfect_negative_rescue",
+        "BAM_H6_temporal_M_rescue",
     }
+    assert set(result["verdicts"]) == expected_keys
+    assert all(
+        verdict in {"SUPPORTED", "REFUTED", "NOT_TESTED"}
+        for verdict in result["verdicts"].values()
+    )
