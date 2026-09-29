@@ -26,7 +26,7 @@ Species distributions are routinely used to reason backward from pattern to proc
 G = A \cap B \cap M.
 \]
 
-BAM is therefore naturally generative. Given A, B, M and an initial state, one asks what distribution follows. Dynamic BAM models make this forward process explicit through movement, niche and interaction dynamics, and prior work already recognizes that movement and niche effects can become difficult to disentangle (Soberón & Osorio-Olvera, 2023). Virtual-species studies likewise use known causal ecological configurations to evaluate distribution-model behavior (Saupe et al., 2012).
+BAM is therefore naturally generative. Given A, B, M and an initial state, one asks what distribution follows. Dynamic BAM models make this forward process explicit through movement, niche and interaction dynamics, and prior work already recognizes that movement and niche effects can become difficult to disentangle (Soberón & Osorio-Olvera, 2023). BAM has also been used to quantify the spatial association of biotic and abiotic covariates with species distributions, while emphasizing that measured associations depend on the covariates and observation model available (Beale et al., 2014). Virtual-species studies likewise use known causal ecological configurations to evaluate distribution-model behavior (Saupe et al., 2012). More broadly, species-distribution research has long distinguished predictive performance from ecological explanation and contrasted correlative with mechanistic inference (Elith & Leathwick, 2009; Peterson et al., 2015).
 
 The inverse problem is different. Given an observed distribution, which combinations of A, B and M are actually identified? Multiple mechanisms generating the same observable pattern are a general problem in ecology and environmental modelling, often discussed as equifinality, model non-identifiability or degenerate process–pattern relationships (Beven & Freer, 2001; Yanco et al., 2020; Lotterhos et al., 2022). Our contribution is not to rediscover that general fact. We instead ask what the equivalence relation is exactly for BAM under explicit evidence contracts.
 
@@ -447,6 +447,8 @@ The practical consequence is a shift from selecting the most plausible single pr
 Atkinson, A.C. & Cox, D.R. (1974). Planning Experiments for Discriminating between Models. *Journal of the Royal Statistical Society: Series B* 36:321–334. https://doi.org/10.1111/j.2517-6161.1974.tb01010.x
 
 Bariotakis, M. & Pirintsos, S.A. (2018). Mapping absences within the BAM concept: Towards a new generation of ecological and environmental indicators. *Ecological Indicators* 90:564–568. https://doi.org/10.1016/j.ecolind.2018.03.043
+
+Beale, C.M., Brewer, M.J. & Lennon, J.J. (2014). A new statistical framework for the quantification of covariate associations with species distributions. *Methods in Ecology and Evolution* 5:421–432. https://doi.org/10.1111/2041-210X.12174
 
 Beven, K. & Freer, J. (2001). Equifinality, data assimilation, and uncertainty estimation in mechanistic modelling of complex environmental systems using the GLUE methodology. *Journal of Hydrology* 249:11–29. https://doi.org/10.1016/S0022-1694(01)00421-8
 
