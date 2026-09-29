@@ -1,0 +1,25 @@
+{
+  "fingerprint": "4b4ccf41052ccc09609ad81f33e10d34919199c4af45104bc4d901893b858f04",
+  "h1_prefix_count": 14,
+  "h2_compatible_world_ids": [
+    "truth_open"
+  ],
+  "h3_compatible_world_ids": [],
+  "h4_compatible_world_ids": [
+    "long_step",
+    "short_step"
+  ],
+  "h5_compatible_world_ids": [],
+  "landscape_fingerprint": "6557e345fff9bf744bd240034c4b5ba1642d581cbcf612f37fe6b0215be9c224",
+  "schema": "eog.known_truth_biogeography.canonical_result.v1",
+  "verdicts": {
+    "H1_truth_retention": "SUPPORTED",
+    "H2_discriminating_contraction": "SUPPORTED",
+    "H3_omitted_truth_falsification": "SUPPORTED",
+    "H4_nonidentification_honesty": "SUPPORTED",
+    "H5_observation_error_boundary": "BOUNDARY_CONFIRMED"
+  },
+  "witnesses": [
+    "r2c6"
+  ]
+}
