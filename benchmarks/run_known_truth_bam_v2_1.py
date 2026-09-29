@@ -22,20 +22,30 @@ def main() -> int:
         json.dumps(result, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    summary_keys = (
-        "status",
-        "candidate_world_count",
-        "eligible_truth_worlds",
-        "fraction_truth_unique_positive_only",
-        "fraction_truth_unique_with_negatives",
-        "fraction_truth_unique_with_temporal_evidence",
-        "negative_rescue_fraction",
-        "temporal_M_rescue_fraction",
-        "axis_witness_counts",
-        "verdicts",
-        "fingerprint",
+    print(
+        json.dumps(
+            {
+                key: result.get(key)
+                for key in (
+                    "status",
+                    "scoring_performed",
+                    "candidate_world_count",
+                    "eligible_truth_worlds",
+                    "fraction_truth_unique_positive_only",
+                    "fraction_truth_unique_with_negatives",
+                    "fraction_truth_unique_with_temporal_evidence",
+                    "negative_rescue_fraction",
+                    "temporal_M_rescue_fraction",
+                    "verdicts",
+                    "fingerprint",
+                )
+                if key in result
+            },
+            indent=2,
+            sort_keys=True,
+        )
     )
-    print(json.dumps({k: result.get(k) for k in summary_keys}, indent=2, sort_keys=True))
+    print(json.dumps({"activation": result["activation"]}, indent=2, sort_keys=True))
     return 0
 
 
