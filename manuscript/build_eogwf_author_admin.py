@@ -244,6 +244,21 @@ def validate_confirmation(data: Mapping[str, Any]) -> dict[str, Any]:
         "third_party_data_reuse.statement",
     )
 
+    submission_declarations = _mapping(
+        data.get("submission_declarations"),
+        "submission_declarations",
+    )
+    for key in (
+        "all_authors_and_relevant_institutions_approve_submission",
+        "all_entitled_authors_included",
+        "all_necessary_acknowledgements_made",
+        "legal_and_ethics_requirements_confirmed",
+    ):
+        _true(
+            submission_declarations.get(key),
+            f"submission_declarations.{key}",
+        )
+
     inclusion = _mapping(data.get("inclusion_statement"), "inclusion_statement")
     _true(
         inclusion.get("approved_by_all_authors"),
@@ -326,6 +341,15 @@ def validate_confirmation(data: Mapping[str, Any]) -> dict[str, Any]:
         "ethics_statement": ethics_statement,
         "inclusion_statement": inclusion_statement,
         "third_party_data_statement": third_party_data_statement,
+        "submission_declarations": {
+            key: True
+            for key in (
+                "all_authors_and_relevant_institutions_approve_submission",
+                "all_entitled_authors_included",
+                "all_necessary_acknowledgements_made",
+                "legal_and_ethics_requirements_confirmed",
+            )
+        },
         "ai": {
             "application": application,
             "provider": provider,
