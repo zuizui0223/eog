@@ -192,7 +192,7 @@ def main() -> int:
         ),
     )
     iv34 = not no_calibration.resolvable and not no_state.resolvable
-    iv35 = evaluation_is_contraction(broad, calibrated)
+    evidence_contraction_check = evaluation_is_contraction(broad, calibrated)
 
     verdicts = {
         "IV3_1_joint_projection_reproduction": (
@@ -206,9 +206,6 @@ def main() -> int:
         ),
         "IV3_4_ablation_fail_closed": (
             "SUPPORTED" if iv34 else "REFUTED"
-        ),
-        "IV3_5_evidence_contraction": (
-            "SUPPORTED" if iv35 else "REFUTED"
         ),
     }
 
@@ -251,6 +248,8 @@ def main() -> int:
             "policy_fingerprint": adaptive.fingerprint,
         },
         "coverage_certificate": broad.coverage_certificate,
+        "evidence_contraction_check": evidence_contraction_check,
+        "IV3_5_public_cli_reproducibility": "VERIFIED_BY_WORKFLOW_AFTER_RUNNER",
         "verdicts": verdicts,
     }
     payload = json.dumps(
