@@ -22,3 +22,14 @@ jobs:
         run: python -m pip install -e .[dev]
       - name: Verify BAM identifiability theorems
         run: python -m pytest tests/test_bam_identifiability_theory.py -q
+      - name: Run exact targeted-measurement audit
+        run: |
+          python benchmarks/run_bam_targeted_measurement_audit.py \
+            --output build/bam_identifiability_theory/targeted_measurement_exact_audit_v1.json
+      - name: Verify exact measurement audit
+        run: python -m pytest tests/test_bam_targeted_measurement_audit.py -q
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-identifiability-theory-v1
+          path: build/bam_identifiability_theory/targeted_measurement_exact_audit_v1.json
+          if-no-files-found: error
