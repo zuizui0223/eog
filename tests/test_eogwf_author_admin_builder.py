@@ -43,6 +43,7 @@ def confirmed_payload():
                 "department": "Department of Ecology",
                 "city": "Example City",
                 "country": "Exampleland",
+                "postal_address": "1 Example Road, Example City",
             }
         ],
         "corresponding_author": {
@@ -68,6 +69,14 @@ def confirmed_payload():
             "approved_by_all_authors": True,
             "not_published_previously_confirmed": True,
             "not_under_consideration_elsewhere_confirmed": True,
+        },
+        "third_party_data_reuse": {
+            "confirmed_by_all_authors": True,
+            "publicly_available_or_permission_obtained_confirmed": True,
+            "statement": (
+                "All third-party datasets used in the work are publicly available "
+                "for reuse or were used with the required permission."
+            ),
         },
         "inclusion_statement": {
             "approved_by_all_authors": True,
@@ -109,6 +118,7 @@ def confirmed_payload():
             "running_headline_approved": True,
             "final_title_page_approved": True,
             "final_ai_llm_disclosure_approved": True,
+            "third_party_data_reuse_approved": True,
         },
     }
 
