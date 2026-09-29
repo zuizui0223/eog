@@ -1,0 +1,45 @@
+{
+  "schema": "eog.bam_inverse_identifiability.review_package_manifest.v1",
+  "status": "template_before_private_review_archive",
+  "manuscript": "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md",
+  "anonymous_review": true,
+  "include": [
+    "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md",
+    "manuscript/bam_identifiability/FIGURE_CAPTIONS_V2.md",
+    "manuscript/bam_identifiability/figure_data/",
+    "manuscript/bam_identifiability/figures/build_quantitative_figures_v2.py",
+    "manuscript/bam_identifiability/CLAIM_LEDGER_V2.md",
+    "validation/known_truth_bam_v3/protocol_v3.json",
+    "validation/known_truth_bam_v3/result_summary_v3.json",
+    "validation/independent_stochastic_bam_v3/protocol_v3.json",
+    "validation/independent_stochastic_bam_v3/result_summary_v3.json",
+    "validation/restrictiveness_ambiguity_v3_1/audit_contract_v3_1.json",
+    "validation/restrictiveness_ambiguity_v3_1/audit_summary_v3_1.json",
+    "validation/independent_stochastic_temporal_v3_2/protocol_v3_2.json",
+    "validation/independent_stochastic_temporal_v3_2/result_summary_v3_2.json",
+    "validation/multilandscape_stochastic_bam_v4/protocol_v4.json",
+    "validation/multilandscape_stochastic_bam_v4/result_summary_v4.json",
+    "validation/bam_identifiability_theory_v1/protocol_v1.json",
+    "validation/bam_identifiability_theory_v1/targeted_measurement_exact_audit_summary_v1.json",
+    "src/eog/v2/",
+    "src/eog/v3/",
+    "benchmarks/",
+    "tests/"
+  ],
+  "exclude_author_identifying": [
+    "title-page files",
+    "author-admin confirmation files",
+    "cover letter",
+    "personal email addresses",
+    "author ORCIDs",
+    "non-anonymized acknowledgements where identity is revealing"
+  ],
+  "required_checks": [
+    "all manuscript-facing numeric claims trace to frozen result fingerprints",
+    "figure inputs trace to FIGURE_DATA_MANIFEST_V2.json",
+    "all reviewer-facing code required by manuscript is present",
+    "review package contains no private credentials or tokens",
+    "review package contains no author-identifying title-page metadata",
+    "private review URL inserted into submission-facing Data Accessibility Statement only after archive creation"
+  ]
+}
