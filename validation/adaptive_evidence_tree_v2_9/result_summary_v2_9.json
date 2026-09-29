@@ -1,0 +1,63 @@
+{
+  "schema": "eog.adaptive_set_valued_evidence_tree.summary.v2_9",
+  "protocol_commit": "dfbec7191ce16bd7d96e572501a2af07b56d94a6",
+  "executed_commit": "2a43d87417ef2220c7ac39a75af7b056efee8141",
+  "workflow_run_id": 36560382617,
+  "workflow_conclusion": "success",
+  "artifact_id": 11028344164,
+  "artifact_digest": "sha256:6e5029d3e25b6c9ddb68970153d933b8839e80ab5d3416f24051c012e49ead17",
+  "result_fingerprint": "19e441e930c1c3fc116780fa8bfb4b09c178e69c4379a1ef69e47f5b13218822",
+  "policy_fingerprint": "6a20e2efe9aedb1a2d88bbb930a35f53c836e68677d30d7735c3081b42151b80",
+  "active_hypotheses": [
+    "absent::p1",
+    "absent::p075",
+    "present::p075"
+  ],
+  "minimum_worst_case_depth": 2,
+  "optimal_first_actions": [
+    "direct_detection_calibration",
+    "direct_target_state_assay"
+  ],
+  "canonical_first_action": "direct_detection_calibration",
+  "first_action_worst_case_depths": {
+    "direct_detection_calibration": 2,
+    "direct_target_state_assay": 2,
+    "repeat_four_surveys": 3,
+    "repeat_one_survey": 3
+  },
+  "known_truth": {
+    "hypothesis": "absent::p1",
+    "realized_depth": 1,
+    "realized_path": [
+      {
+        "action_id": "direct_detection_calibration",
+        "outcome": 1,
+        "after_hypotheses": [
+          "absent::p1"
+        ]
+      }
+    ]
+  },
+  "ablations": {
+    "without_calibration": {
+      "resolvable": false,
+      "worst_case_depth": null
+    },
+    "without_state_assay": {
+      "resolvable": false,
+      "worst_case_depth": null
+    }
+  },
+  "verdicts": {
+    "A1_exact_adaptive_recursion": "SUPPORTED",
+    "A2_optimal_worst_case_depth": "SUPPORTED",
+    "A3_repeat_first_is_worse": "SUPPORTED",
+    "A4_known_truth_realized_depth": "SUPPORTED",
+    "A5_direct_channels_are_jointly_necessary_for_worst_case_resolution": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "Adaptive replanning distinguishes worst-case experimental burden from the realized path. The guaranteed design requires two complementary direct channels, but favorable calibration outcomes can terminate after one action.",
+    "repeated_surveys": "Repeat-survey-first policies are strictly worse in worst-case depth because a zero-detection branch preserves all active hypotheses.",
+    "fail_closed": "If either direct calibration or direct state measurement is unavailable, no finite sequence in the frozen remaining action library guarantees exact identification."
+  }
+}
