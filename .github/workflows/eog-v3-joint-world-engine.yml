@@ -28,7 +28,7 @@ jobs:
           python benchmarks/run_eog_v3_joint_world_engine.py \
             --output build/eog_v3_joint_world_engine/result_v1.json
       - name: Verify focused tests
-        run: python -m pytest tests/test_v3_joint_world_engine.py tests/test_v3_cli.py -q
+        run: python -m pytest tests/test_v3_joint_world_engine.py tests/test_v3_cli.py tests/test_v3_examples.py -q
       - name: Run packaged CLI examples
         run: |
           eog-v3-joint-evaluate \
