@@ -1,0 +1,59 @@
+name: BAM anonymous review package
+
+on:
+  pull_request:
+    paths:
+      - "manuscript/bam_identifiability/REVIEW_PACKAGE_MANIFEST_V2.json"
+      - "manuscript/bam_identifiability/build_review_package_v1.py"
+      - "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md"
+      - "manuscript/bam_identifiability/figure_data/**"
+      - "manuscript/bam_identifiability/figures/**"
+      - "validation/known_truth_bam_v3/**"
+      - "validation/independent_stochastic_bam_v3/**"
+      - "validation/restrictiveness_ambiguity_v3_1/**"
+      - "validation/independent_stochastic_temporal_v3_2/**"
+      - "validation/multilandscape_stochastic_bam_v4/**"
+      - "validation/bam_identifiability_theory_v1/**"
+      - "src/eog/v2/known_truth_bam_generality.py"
+      - "src/eog/v2/bam_identifiability_theory.py"
+      - "src/eog/v2/bam_targeted_measurement_audit.py"
+      - "src/eog/v3/joint_world_engine.py"
+      - "benchmarks/**"
+      - "tests/**"
+      - ".github/workflows/bam-review-package.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install figure dependency
+        run: python -m pip install "matplotlib>=3.8"
+      - name: Build anonymous peer-review package
+        run: |
+          python manuscript/bam_identifiability/build_review_package_v1.py \
+            --output-dir build/bam_review_package
+      - name: Inspect archive contents
+        run: |
+          unzip -l build/bam_review_package/bam_inverse_identifiability_anonymous_review.zip
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("build/bam_review_package/bam_inverse_identifiability_review_receipt.json")
+          r=json.loads(p.read_text())
+          assert r["anonymous_review"] is True
+          assert r["privacy_findings"] == []
+          assert r["file_count"] > 20
+          assert len(r["zip_sha256"]) == 64
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-anonymous-review-package
+          path: |
+            build/bam_review_package/bam_inverse_identifiability_anonymous_review.zip
+            build/bam_review_package/bam_inverse_identifiability_review_receipt.json
+          if-no-files-found: error
