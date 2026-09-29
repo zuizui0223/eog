@@ -177,16 +177,17 @@ def figure6(output_dir: Path):
         bottoms = [a + b for a, b in zip(bottoms, values)]
     ax.set_xticks(positions, ["A", "B", "A+B jointly", "M accessibility"])
     ax.set_ylabel("Truth cases (of 768)")
-    ax.set_title("Exact targeted diagnostic-measurement requirements")
+    ax.set_title("Exact targeted diagnostic-measurement requirements", pad=34)
     ax.legend(title="Exact minimum")
     ax.text(
-        0.02,
-        0.97,
-        "Programme-wide maxima: A=1, B=2, A+B=3, M=2 nodes\n"
-        "Exact hitting-set audit failures = 0/768",
+        0.5,
+        1.015,
+        "Programme-wide maxima: A=1, B=2, A+B=3, M=2 nodes; "
+        "exact hitting-set audit failures = 0/768",
         transform=ax.transAxes,
-        va="top",
-        fontsize=8.5,
+        ha="center",
+        va="bottom",
+        fontsize=8.2,
     )
     save(fig, output_dir, "Figure6_diagnostic_measurements")
 
