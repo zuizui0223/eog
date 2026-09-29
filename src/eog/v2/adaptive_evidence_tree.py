@@ -62,9 +62,11 @@ def _normalize_fixture(
     hypothesis_set = set(hypotheses)
     for action_id in actions:
         rows = possible_outcomes_by_action[action_id]
-        if set(rows) != hypothesis_set:
+        missing = hypothesis_set.difference(rows)
+        if missing:
             raise ValueError(
-                f"action {action_id!r} must define outcomes for every hypothesis"
+                f"action {action_id!r} is missing outcomes for active hypotheses: "
+                f"{sorted(missing)}"
             )
         normalized[action_id] = {}
         for hypothesis_id in hypotheses:
