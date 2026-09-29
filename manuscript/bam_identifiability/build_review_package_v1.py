@@ -94,7 +94,7 @@ No author/title-page metadata or public repository owner identifier is included.
 
 ## Focused tests
 
-    python -m pytest {test_command} -q
+    PYTHONPATH=.:benchmarks python -m pytest {test_command} -q
 
 ## Rebuild Figures 1-6
 
