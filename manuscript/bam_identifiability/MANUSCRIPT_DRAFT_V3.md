@@ -440,7 +440,7 @@ Bariotakis, M. & Pirintsos, S.A. (2018). Mapping absences within the BAM concept
 
 Beven, K. & Freer, J. (2001). Equifinality, data assimilation, and uncertainty estimation in mechanistic modelling of complex environmental systems using the GLUE methodology. *Journal of Hydrology* 249:11–29. https://doi.org/10.1016/S0022-1694(01)00421-8
 
-Elith, J. & Leathwick, J.R. (2009). Species Distribution Models: Ecological Explanation and Prediction Across Space and Time. *Annual Review of Ecology, Evolution, and Systematics* 40:677–697.
+Elith, J. & Leathwick, J.R. (2009). Species Distribution Models: Ecological Explanation and Prediction Across Space and Time. *Annual Review of Ecology, Evolution, and Systematics* 40:677–697. https://doi.org/10.1146/annurev.ecolsys.110308.120159
 
 Lotterhos, K.E., Fitzpatrick, M.C. & Blackmon, H. (2022). Simulation Tests of Methods in Evolution, Ecology, and Systematics: Pitfalls, Progress, and Principles. *Annual Review of Ecology, Evolution, and Systematics* 53:113–136. https://doi.org/10.1146/annurev-ecolsys-102320-093722
 
@@ -450,9 +450,9 @@ Peterson, A.T., Papeş, M. & Soberón, J. (2015). Mechanistic and Correlative Mo
 
 Saupe, E.E. et al. (2012). Variation in niche and distribution model performance: The need for a priori assessment of key causal factors. *Ecological Modelling* 237–238:11–22. https://doi.org/10.1016/j.ecolmodel.2012.04.001
 
-Soberón, J. & Nakamura, M. (2009). Niches and distributional areas: Concepts, methods, and assumptions. *Proceedings of the National Academy of Sciences* 106:19644–19650.
+Soberón, J. & Nakamura, M. (2009). Niches and distributional areas: Concepts, methods, and assumptions. *Proceedings of the National Academy of Sciences* 106(Suppl. 2):19644–19650. https://doi.org/10.1073/pnas.0901637106
 
-Soberón, J. & Osorio-Olvera, L. (2023). A dynamic theory of the area of distribution. *Journal of Biogeography* 50. https://doi.org/10.1111/jbi.14587
+Soberón, J. & Osorio-Olvera, L. (2023). A dynamic theory of the area of distribution. *Journal of Biogeography* 50(6):1037–1048. https://doi.org/10.1111/jbi.14587
 
 Soberón, J. & Peterson, A.T. (2005). Interpretation of Models of Fundamental Ecological Niches and Species' Distributional Areas. *Biodiversity Informatics* 2. https://doi.org/10.17161/bi.v2i0.4
 
