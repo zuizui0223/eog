@@ -5,9 +5,14 @@ import json
 import re
 from pathlib import Path
 
+from build_eogwf_author_admin import validate_admin_receipt
+
 ROOT = Path(__file__).resolve().parents[1]
-MANUSCRIPT = ROOT / "manuscript/EOG_WF_MANUSCRIPT_V1.md"
+MANUSCRIPT_SOURCE = ROOT / "manuscript/EOG_WF_MANUSCRIPT_V1.md"
+FINAL_MANUSCRIPT = ROOT / "manuscript/EOG_WF_MANUSCRIPT_FINAL.md"
 TITLE_PAGE = ROOT / "manuscript/EOG_WF_TITLE_PAGE.md"
+AI_DISCLOSURE = ROOT / "manuscript/EOG_WF_AI_LLM_DISCLOSURE.md"
+ADMIN_RECEIPT = ROOT / "manuscript/EOG_WF_AUTHOR_ADMIN_APPROVAL_RECEIPT.json"
 BOUNDARY = ROOT / "manuscript/paper_ready/submission_boundary.json"
 OUT = ROOT / "build/eogwf_mee_submission_readiness.json"
 
@@ -26,7 +31,14 @@ def _section(text: str, heading: str, next_heading: str | None = None) -> str:
 
 
 def main() -> int:
-    text = MANUSCRIPT.read_text(encoding="utf-8")
+    admin_receipt_valid = validate_admin_receipt(
+        ADMIN_RECEIPT,
+        title_path=TITLE_PAGE,
+        ai_path=AI_DISCLOSURE,
+        manuscript_path=FINAL_MANUSCRIPT,
+    )
+    manuscript_path = FINAL_MANUSCRIPT if admin_receipt_valid else MANUSCRIPT_SOURCE
+    text = manuscript_path.read_text(encoding="utf-8")
     boundary = json.loads(BOUNDARY.read_text(encoding="utf-8"))
     abstract_block = _section(text, "## Abstract", "## Introduction")
     abstract_core = abstract_block.split("**Data and code for peer review:**", 1)[0]
@@ -71,15 +83,25 @@ def main() -> int:
     license_paths = [ROOT / "LICENSE", ROOT / "LICENSE.txt", ROOT / "LICENSE.md"]
     open_source_license_file_present = any(path.is_file() and path.stat().st_size > 0 for path in license_paths)
     author_admin_checks = {
-        "title_page_present": TITLE_PAGE.exists(),
+        "author_admin_approval_receipt_valid": admin_receipt_valid,
+        "title_page_present": admin_receipt_valid and TITLE_PAGE.exists(),
+        "final_manuscript_present": admin_receipt_valid and FINAL_MANUSCRIPT.exists(),
+        "ai_llm_disclosure_audit_file_present": (
+            admin_receipt_valid and AI_DISCLOSURE.exists()
+        ),
         "final_archive_doi_placeholder_resolved": final_placeholders == 0,
-        "ai_llm_use_disclosure_present_in_methods": ai_disclosure_present,
+        "ai_llm_use_disclosure_present_in_methods": (
+            admin_receipt_valid and ai_disclosure_present
+        ),
         "open_source_license_file_present": open_source_license_file_present,
     }
 
     result = {
-        "schema": "eog.eogwf_mee_submission_readiness.v4",
-        "manuscript": str(MANUSCRIPT.relative_to(ROOT)),
+        "schema": "eog.eogwf_mee_submission_readiness.v5",
+        "manuscript": str(manuscript_path.relative_to(ROOT)),
+        "author_admin_receipt": (
+            str(ADMIN_RECEIPT.relative_to(ROOT)) if admin_receipt_valid else None
+        ),
         "journal": "Methods in Ecology and Evolution",
         "article_type": "Research Article",
         "word_count_method": "regex word tokens over complete Markdown manuscript including abstract, statements, references and checklist",
