@@ -63,6 +63,15 @@ Confirm whether all authors approve:
 
 Confirm that every third-party dataset used by EOG-WF is either publicly available for reuse or was used with the required permission, and provide the author-approved statement for the title page/submission record.
 
+## Final MEE submission declarations
+
+Confirm all four items required by the current submission form:
+
+- all authors and relevant institutions approve submission;
+- all persons entitled to authorship are included;
+- all necessary acknowledgements have been made;
+- the work complies with applicable legal and ethical requirements.
+
 ## AI / LLM disclosure
 
 Confirm:
@@ -122,6 +131,12 @@ approved / ...
 THIRD-PARTY DATA REUSE:
 publicly available or permission obtained: yes / ...
 Statement: ...
+
+FINAL MEE SUBMISSION DECLARATIONS:
+All authors/institutions approve: yes / ...
+All entitled authors included: yes / ...
+All necessary acknowledgements made: yes / ...
+Legal/ethical requirements confirmed: yes / ...
 
 AI / LLM:
 Applications/models/versions and extent: ...
