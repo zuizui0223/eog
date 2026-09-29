@@ -295,11 +295,11 @@ The preregistered claim that movement would always be the final identification b
 
 The independent stochastic audit contained 304 strict positive-support inclusions. All 304/304 obeyed the exact inverse ordering:
 
-[
-R_1subset R_2
-Rightarrow
-C(R_1)supseteq C(R_2).
-]
+\[
+R_1 \subset R_2
+\Rightarrow
+C(R_1) \supseteq C(R_2).
+\]
 
 The most jointly constrained A+B+M support was also among the most ambiguous because its small realised support was contained in many more permissive candidate worlds.
 
