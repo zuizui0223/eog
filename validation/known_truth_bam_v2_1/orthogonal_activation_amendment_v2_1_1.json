@@ -1,0 +1,49 @@
+{
+  "schema": "eog.known_truth_bam.orthogonal_activation_amendment.v2_1_1",
+  "parent_contract_commit": "55c5cefcd1e0031b79bfb91ec3c5c619a8c2a18b",
+  "status": "frozen_before_implementation_and_before_any_v2_1_result",
+  "reason": "The original four M settings did not contain a clean same-horizon barrier-only contrast. Replace only the M grid before implementation so distance, barrier and arrival-time contrasts are independently testable.",
+  "supersedes_focal_M_only": true,
+  "focal_M": {
+    "short_closed_h2": {
+      "step_radius": 1.01,
+      "barrier_permeable": false,
+      "horizon": 2
+    },
+    "long_closed_h2": {
+      "step_radius": 2.01,
+      "barrier_permeable": false,
+      "horizon": 2
+    },
+    "long_open_h2": {
+      "step_radius": 2.01,
+      "barrier_permeable": true,
+      "horizon": 2
+    },
+    "short_open_h8": {
+      "step_radius": 1.01,
+      "barrier_permeable": true,
+      "horizon": 8
+    },
+    "long_open_h8": {
+      "step_radius": 2.01,
+      "barrier_permeable": true,
+      "horizon": 8
+    }
+  },
+  "preregistered_pair_semantics": {
+    "M_distance_only": [
+      "long_closed_h2",
+      "short_closed_h2"
+    ],
+    "M_barrier_only": [
+      "long_open_h2",
+      "long_closed_h2"
+    ],
+    "M_temporal_equal_final": [
+      "long_open_h8",
+      "short_open_h8"
+    ]
+  },
+  "all_other_parent_contract_fields_unchanged": true
+}
