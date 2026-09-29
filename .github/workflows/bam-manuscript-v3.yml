@@ -23,15 +23,22 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
-        run: python -m pip install -e .[dev]
+        run: |
+          python -m pip install -e .[dev]
+          python -m pip install matplotlib>=3.8
       - name: Run manuscript audit
         run: |
           python benchmarks/check_bam_manuscript_v3.py \
             --output build/bam_manuscript_v3/MANUSCRIPT_AUDIT_V3.json
       - name: Verify manuscript tests
         run: python -m pytest tests/test_bam_manuscript_v3.py -q
+      - name: Build quantitative figures
+        run: python manuscript/bam_identifiability/figures/build_quantitative_figures_v2.py
       - uses: actions/upload-artifact@v4
         with:
           name: bam-manuscript-v3-audit
-          path: build/bam_manuscript_v3/MANUSCRIPT_AUDIT_V3.json
+          path: |
+            build/bam_manuscript_v3/MANUSCRIPT_AUDIT_V3.json
+            build/bam_identifiability_figures/*.svg
+            build/bam_identifiability_figures/*.pdf
           if-no-files-found: error
