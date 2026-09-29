@@ -1,0 +1,43 @@
+{
+  "schema": "eog.stochastic_evidence_design.summary.v2_8",
+  "protocol_commit": "adcb1807ad030de8a4e27843f1c7257b2c0ef3f2",
+  "executed_commit": "39b498e91687f54854073c79566a789b28761e56",
+  "workflow_run_id": 36561630337,
+  "workflow_conclusion": "success",
+  "artifact_id": 11030870450,
+  "artifact_digest": "sha256:51805987965b5ce2a9ed111b8d800013ffe3d759830d59339e0ee9ef9ea4b8ef",
+  "result_fingerprint": "0a254d507dec2edbb35d3716c4928cc82a8bb608f38c6abb00269a9d12f1fcbb",
+  "active_joint_world_count": 112,
+  "active_ecological_world_count": 64,
+  "selected_target_node": "r1c3",
+  "actions": {
+    "calibrate_detection_world": {
+      "guaranteed_joint_pair_splits": 3072,
+      "worst_case_joint_survivors": 64,
+      "worst_case_ecological_survivors": 64
+    },
+    "gold_standard_target_state": {
+      "guaranteed_joint_pair_splits": 1536,
+      "worst_case_joint_survivors": 96,
+      "worst_case_ecological_survivors": 48
+    },
+    "repeat_4_same_protocol": {
+      "guaranteed_joint_pair_splits": 0,
+      "worst_case_joint_survivors": 112,
+      "worst_case_ecological_survivors": 64
+    }
+  },
+  "best_action_joint_objective": "calibrate_detection_world",
+  "best_action_ecological_objective": "gold_standard_target_state",
+  "verdicts": {
+    "S1_support_disjointness": "SUPPORTED",
+    "S2_frozen_action_values": "SUPPORTED",
+    "S3_objective_dependent_choice": "SUPPORTED",
+    "S4_more_same_type_data_is_robustly_dominated": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "The best next evidence depends on the inferential target. Observation-process calibration best reduces worst-case joint ecology-observation ambiguity, while direct state measurement best reduces worst-case ecological ambiguity.",
+    "repeated_sampling": "More samples of the same imperfect protocol are robustly dominated in this frozen case because their outcome support overlaps every target-state alternative after the initial nondetections.",
+    "product_implication": "Evidence planning must declare whether the target is ecological-world identification, observation-world identification, or joint-world identification before ranking candidate measurements."
+  }
+}
