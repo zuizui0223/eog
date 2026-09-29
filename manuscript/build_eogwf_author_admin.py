@@ -135,6 +135,10 @@ def _validate_authors(data: Mapping[str, Any]) -> tuple[list[dict[str, Any]], di
                 row.get("country"),
                 f"affiliations[{index}].country",
             ),
+            "postal_address": _text(
+                row.get("postal_address"),
+                f"affiliations[{index}].postal_address",
+            ),
         }
 
     known_affiliations = set(affiliations)
@@ -223,6 +227,23 @@ def validate_confirmation(data: Mapping[str, Any]) -> dict[str, Any]:
     ):
         _true(originality.get(key), f"originality_and_submission.{key}")
 
+    third_party = _mapping(
+        data.get("third_party_data_reuse"),
+        "third_party_data_reuse",
+    )
+    _true(
+        third_party.get("confirmed_by_all_authors"),
+        "third_party_data_reuse.confirmed_by_all_authors",
+    )
+    _true(
+        third_party.get("publicly_available_or_permission_obtained_confirmed"),
+        "third_party_data_reuse.publicly_available_or_permission_obtained_confirmed",
+    )
+    third_party_data_statement = _text(
+        third_party.get("statement"),
+        "third_party_data_reuse.statement",
+    )
+
     inclusion = _mapping(data.get("inclusion_statement"), "inclusion_statement")
     _true(
         inclusion.get("approved_by_all_authors"),
@@ -286,6 +307,7 @@ def validate_confirmation(data: Mapping[str, Any]) -> dict[str, Any]:
         "running_headline_approved",
         "final_title_page_approved",
         "final_ai_llm_disclosure_approved",
+        "third_party_data_reuse_approved",
     ):
         _true(confirmations.get(key), f"confirmations.{key}")
 
@@ -303,6 +325,7 @@ def validate_confirmation(data: Mapping[str, Any]) -> dict[str, Any]:
         "competing_statement": competing_statement,
         "ethics_statement": ethics_statement,
         "inclusion_statement": inclusion_statement,
+        "third_party_data_statement": third_party_data_statement,
         "ai": {
             "application": application,
             "provider": provider,
@@ -352,7 +375,7 @@ def render_title_page(validated: Mapping[str, Any]) -> str:
         parts = [row["institution"]]
         if row["department"]:
             parts.append(row["department"])
-        parts.extend([row["city"], row["country"]])
+        parts.extend([row["city"], row["country"], row["postal_address"]])
         lines.append(f"- {affiliation_id}: " + ", ".join(parts))
 
     corresponding = validated["author_by_id"][validated["corresponding_author_id"]]
@@ -389,6 +412,10 @@ def render_title_page(validated: Mapping[str, Any]) -> str:
             "https://github.com/zuizui0223/eog/tree/"
             "91125ae68004f298fcd45027566506772a3688d5"
         ),
+        "",
+        "## Data sources and reuse",
+        "",
+        validated["third_party_data_statement"],
         "",
         "## Conflict of interest",
         "",
