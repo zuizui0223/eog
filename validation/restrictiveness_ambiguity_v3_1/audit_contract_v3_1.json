@@ -1,0 +1,30 @@
+{
+  "schema": "eog.restrictiveness_ambiguity_audit.v3_1",
+  "status": "posthoc_mechanism_audit_frozen_before_full_universe_execution",
+  "motivation": {
+    "parent_result_fingerprint": "bc558d10073133510f1b47b5651f6694d53f04771e757e9d8d9716ada72b18bf",
+    "observed_boundary": "joint_ABM produced zero contraction in 64/64 stochastic runs even after all 33 structurally reachable positive nodes were observed.",
+    "rule": "No generator, candidate-world, associate, or observation parameter may be changed in this audit."
+  },
+  "theorem_to_audit": {
+    "statement": "For positive-only complete support R, C(R)={w: R is a subset of R_w}. Therefore if R1 is a subset of R2, then C(R1) is a superset of C(R2), so |C(R1)| >= |C(R2)|.",
+    "interpretation": "Within a fixed finite candidate universe, making a true ecological support more restrictive cannot improve positive-only world identification relative to a support superset."
+  },
+  "outputs": [
+    "reachable_support_size_for_all_32_worlds",
+    "complete_positive_compatible_world_count_for_all_32_worlds",
+    "number_of_strict_support_inclusion_pairs",
+    "nesting_monotonicity_violations",
+    "support_equivalence_class_distribution",
+    "maximally_ambiguous_worlds",
+    "minimally_ambiguous_worlds",
+    "six_frozen_truth_scenario_positions",
+    "support_size_vs_ambiguity_correlation"
+  ],
+  "boundaries": [
+    "This is a post hoc mechanism diagnosis motivated by the frozen v3 S4 refutation.",
+    "The nesting monotonicity is a finite-set identity, not an empirical law claimed for arbitrary model universes.",
+    "Cardinality alone does not determine ambiguity; set inclusion is the exact ordering.",
+    "No surviving world is promoted to causal or historical truth."
+  ]
+}

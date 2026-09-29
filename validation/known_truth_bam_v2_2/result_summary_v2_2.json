@@ -1,0 +1,31 @@
+{
+  "schema": "eog.known_truth_bam_direct_evidence.summary.v2_2",
+  "protocol_commit": "6e6c354cab3b3a8930443247d88484628c64e905",
+  "executed_commit": "b6d5d3791747b8abe2641bbdaca61bffafa8fe50",
+  "workflow_run_id": 36544160628,
+  "workflow_conclusion": "success",
+  "artifact_id": 11021727402,
+  "artifact_digest": "sha256:738a5c1902691f5c11a4800ce6f7e74b8373ecba33bbc375874654fd7032eb06",
+  "result_fingerprint": "5912231d6b8d04fd1cbb3540bf137562c394aca9fc40069486d6350ee7fff9f0",
+  "eligible_truth_worlds": 64,
+  "unique_truth_fractions": {
+    "baseline": 0.09375,
+    "A_direct": 0.125,
+    "B_direct": 0.109375,
+    "M_direct": 0.140625,
+    "AB_direct": 0.140625,
+    "AM_direct": 0.28125,
+    "BM_direct": 0.25,
+    "ABM_direct": 0.5
+  },
+  "complete_state_equivalence_class_size_distribution": {
+    "1": 32,
+    "2": 32
+  },
+  "verdicts": {
+    "D1_axis_exactness": "SUPPORTED",
+    "D2_combined_state_ceiling": "SUPPORTED",
+    "D3_unique_state_recovery": "SUPPORTED"
+  },
+  "interpretation": "Direct mechanism evidence improves identifiability, especially combinations involving M, but complete A+B+M state evidence still identifies only half of truth parameter worlds because 32/64 truths have a second candidate with the same complete BAM state tuple. The remaining ambiguity is parameter-to-state aliasing rather than missing distributional evidence."
+}

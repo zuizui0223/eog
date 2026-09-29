@@ -1,0 +1,46 @@
+{
+  "schema": "eog.v3.integrated_joint_engine_validation.protocol.v1",
+  "status": "frozen_before_integrated_v3_validation",
+  "parent_results": {
+    "joint_v2_7": "085587287263d5ebb4016455ac74406b14979e7de25e57e12b8a607becd5cd1d",
+    "robust_v2_8": "a459ebd6bdde502c5d86aad7baf37443d17d1156fb358a373c5429c5c94115f8",
+    "adaptive_v2_9": "19e441e930c1c3fc116780fa8bfb4b09c178e69c4379a1ef69e47f5b13218822",
+    "bam_generality_v3": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415",
+    "stochastic_multilandscape_v4": "9c08962ea6a94ebc1869eb5a578749af5ed78989a210b9d40278ea04ac67038c"
+  },
+  "goal": "Validate one public EOG v3 surface for joint ecological-observation filtering, robust finite evidence-set design, adaptive replanning, and fail-closed behavior without altering any frozen parent result.",
+  "hypotheses": [
+    {
+      "id": "IV3_1_joint_projection_reproduction",
+      "claim": "The generic v3 joint-world engine reproduces the frozen v2.7 strict=48, broad joint=112/ecological=64, and calibrated ecological=48 results.",
+      "rule": "Any survivor count or ecological projection mismatch refutes IV3_1."
+    },
+    {
+      "id": "IV3_2_robust_design_reproduction",
+      "claim": "On the frozen three-hypothesis v2.8 fixture, v3 reproduces robust split counts 0,0,2,2 and exact minimum separating set {direct_detection_calibration,direct_target_state_assay}.",
+      "rule": "Any split-count or minimum-set mismatch refutes IV3_2."
+    },
+    {
+      "id": "IV3_3_adaptive_tree_reproduction",
+      "claim": "On the same fixture, v3 reproduces adaptive worst-case depth 2, the two direct channels as optimal first actions, and repeat-first depth 3.",
+      "rule": "Any depth or optimal-action mismatch refutes IV3_3."
+    },
+    {
+      "id": "IV3_4_ablation_fail_closed",
+      "claim": "Removing either direct channel makes exact worst-case adaptive resolution impossible, matching v2.9.",
+      "rule": "A resolvable ablation refutes IV3_4."
+    },
+    {
+      "id": "IV3_5_public_cli_reproducibility",
+      "claim": "Packaged v3 CLI examples execute successfully and emit deterministic fingerprinted JSON with the declared survivor/best-action outputs.",
+      "rule": "Any CLI execution or output mismatch refutes IV3_5."
+    }
+  ],
+  "boundaries": [
+    "v3 is a public API consolidation, not a new empirical endpoint.",
+    "EOG-WF 3/31/3 remains unchanged.",
+    "Surviving joint worlds are compatible hypotheses, not certified truth.",
+    "Adaptive planning is exact only over the supplied finite action library and outcome supports.",
+    "No hidden prior or expected utility is introduced."
+  ]
+}

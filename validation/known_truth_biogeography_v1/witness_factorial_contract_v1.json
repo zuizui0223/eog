@@ -1,0 +1,113 @@
+{
+  "schema": "eog.known_truth_biogeography.witness_factorial_contract.v1",
+  "status": "frozen_before_factorial_implementation",
+  "relation_to_canonical": "post-canonical preregistered expansion; H1-H4 thresholds from protocol_v1 remain unchanged",
+  "purpose": "Quantify when positive occurrences can identify a known virtual process and when alternative processes are observationally indistinguishable.",
+  "landscape_families": [
+    {
+      "id": "continuous",
+      "spike_amount": 0,
+      "barrier": false
+    },
+    {
+      "id": "environmental_bottleneck",
+      "spike_amount": 0.75,
+      "barrier": false
+    },
+    {
+      "id": "hard_barrier",
+      "spike_amount": 0,
+      "barrier": true
+    },
+    {
+      "id": "combined_bottleneck",
+      "spike_amount": 0.75,
+      "barrier": true
+    }
+  ],
+  "process_grid": {
+    "niche_radius_temperature": [
+      0.5,
+      1.5
+    ],
+    "dispersal_radius": [
+      1.01,
+      2.01
+    ],
+    "environmental_transition_limit": [
+      0.25,
+      1
+    ],
+    "barrier_permeable": [
+      false,
+      true
+    ],
+    "total_worlds_per_landscape": 16,
+    "source_id": "r1c0",
+    "max_steps": 8
+  },
+  "exact_cases": "Each of the 16 process worlds is treated once as truth within each of 4 landscapes, subject only to source viability and >=2 reachable states.",
+  "sampling": {
+    "positive_coverage": [
+      0.1,
+      0.25,
+      0.5,
+      1
+    ],
+    "replicates_per_coverage": 32,
+    "seed_rule": "deterministic SHA-256 derived from landscape_id, truth_world_id, coverage and replicate index",
+    "source_always_observed": true,
+    "false_positives": false
+  },
+  "preregistered_hypotheses": [
+    {
+      "id": "F1_witness_criterion",
+      "claim": "A true world is uniquely identifiable from positive occurrences if and only if the observed positive set intersects the truth-only witness set of every false candidate world.",
+      "test": "Exact set comparison against EOG compatible-world output for every factorial replicate.",
+      "failure_rule": "Any mismatch refutes the criterion implementation."
+    },
+    {
+      "id": "F2_sampling_monotonicity",
+      "claim": "With noiseless positive sampling and truth included, increasing positive-occurrence coverage cannot reduce the probability of unique truth identification when sampling is coupled by nested positive sets.",
+      "test": "Use nested deterministic sampling order within each replicate; identification indicator must be non-decreasing across coverage levels.",
+      "failure_rule": "Any 1->0 transition refutes F2."
+    },
+    {
+      "id": "F3_equivalence_ceiling",
+      "claim": "If at least one false world has the same reachable positive state as truth, full positive observation cannot uniquely identify truth.",
+      "test": "At coverage=1.0, every exact reachable-set equivalent false world must remain compatible.",
+      "failure_rule": "Any equivalent false world eliminated by positive-only compatibility refutes F3."
+    },
+    {
+      "id": "F4_omitted_truth_not_guaranteed",
+      "claim": "Omitting the true world is not guaranteed to falsify the candidate universe; a false candidate that contains all true positive states can remain compatible.",
+      "test": "Remove truth, expose the complete true positive state, and classify whether the remaining universe falsifies or survives.",
+      "interpretation": "This is a boundary hypothesis. Both outcomes are expected across cases; the required result is that survival occurs whenever a remaining candidate is a positive-state superset of truth and falsification occurs only when every remaining candidate has a positive witness against it."
+    }
+  ],
+  "primary_outputs": [
+    "eligible_exact_cases",
+    "identifiable_at_full_coverage_fraction",
+    "minimum_positive_witness_count_distribution",
+    "observational_equivalence_fraction",
+    "identification_rate_by_sampling_coverage",
+    "nested_sampling_monotonicity_violations",
+    "truth_retention_failures",
+    "omitted_truth_falsification_fraction",
+    "omitted_truth_survival_with_superset_fraction",
+    "runtime_seconds"
+  ],
+  "language_boundary": {
+    "reference": "Python",
+    "cpp_trigger": "same as protocol_v1: >60 s CI wall-clock or >1 GiB peak memory at target workload",
+    "no_cpp_before_trigger": true
+  },
+  "forbidden_after_results": [
+    "change process grid",
+    "change coverage levels",
+    "drop a landscape family because it is hard to identify",
+    "exclude observationally equivalent worlds from the denominator",
+    "change nested sampling rule to improve monotonicity",
+    "port to C++ solely because Python result is scientifically unfavorable"
+  ]
+}

@@ -1,0 +1,35 @@
+name: Multilandscape stochastic BAM v4
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/independent_multilandscape_bam_generator_v4.py"
+      - "benchmarks/run_multilandscape_stochastic_bam_v4.py"
+      - "validation/multilandscape_stochastic_bam_v4/**"
+      - "tests/test_multilandscape_stochastic_bam_v4.py"
+      - ".github/workflows/multilandscape-stochastic-bam-v4.yml"
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Verify independent generator contract
+        run: |
+          PYTHONPATH=benchmarks python -m pytest \
+            tests/test_multilandscape_stochastic_bam_v4.py -q
+      - name: Run frozen multilandscape panel
+        run: |
+          python benchmarks/run_multilandscape_stochastic_bam_v4.py \
+            --output build/multilandscape_stochastic_bam_v4/result_v4.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: multilandscape-stochastic-bam-v4
+          path: build/multilandscape_stochastic_bam_v4/result_v4.json
+          if-no-files-found: error

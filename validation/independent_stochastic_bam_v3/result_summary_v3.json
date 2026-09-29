@@ -1,0 +1,80 @@
+{
+  "schema": "eog.independent_stochastic_bam.summary.v3",
+  "protocol_commit": "361b5505d464361713f78c2599188f1eecc59da6",
+  "executed_commit": "4d564fbe54bead4fa5acb0bd807cfd8388249a08",
+  "workflow_run_id": 36552342741,
+  "workflow_conclusion": "success",
+  "artifact_id": 11025571157,
+  "artifact_digest": "sha256:3f5667d1bb352c92934952a9d7aadd78a9aa67ca681b4d16e36310083f2cb083",
+  "result_fingerprint": "bc558d10073133510f1b47b5651f6694d53f04771e757e9d8d9716ada72b18bf",
+  "status": "SCORED",
+  "generator_independence": "PASS",
+  "planned_runs": 384,
+  "eligible_runs": 384,
+  "design_stops": 0,
+  "partner_occupied_count": 67,
+  "antagonist_occupied_count": 55,
+  "candidate_world_count": 32,
+  "truth_retention_failures": 0,
+  "sequential_expansion_violations": 0,
+  "superset_ceiling_violations": 0,
+  "omitted_truth_criterion_mismatches": 0,
+  "eog_api_parity_audits": 24,
+  "eog_api_parity_mismatches": 0,
+  "history_worse_than_snapshot": 0,
+  "history_strict_improvements": 0,
+  "median_compatible_world_count_h40": {
+    "A_limited": 8,
+    "partner_limited": 8,
+    "antagonist_limited": 8,
+    "distance_limited": 4,
+    "barrier_limited": 4,
+    "joint_ABM": 32
+  },
+  "truth_structural_reachable_count": {
+    "A_limited": 67,
+    "partner_limited": 67,
+    "antagonist_limited": 40,
+    "distance_limited": 96,
+    "barrier_limited": 96,
+    "joint_ABM": 33
+  },
+  "strict_contraction_runs_by_scenario": {
+    "A_limited": 64,
+    "partner_limited": 64,
+    "antagonist_limited": 64,
+    "distance_limited": 64,
+    "barrier_limited": 64,
+    "joint_ABM": 0
+  },
+  "nonidentified_h40_runs_by_scenario": {
+    "A_limited": 64,
+    "partner_limited": 64,
+    "antagonist_limited": 64,
+    "distance_limited": 64,
+    "barrier_limited": 64,
+    "joint_ABM": 64
+  },
+  "unique_truth_fraction_h40": {
+    "A_limited": 0,
+    "partner_limited": 0,
+    "antagonist_limited": 0,
+    "distance_limited": 0,
+    "barrier_limited": 0,
+    "joint_ABM": 0
+  },
+  "verdicts": {
+    "S1_true_world_retention": "SUPPORTED",
+    "S2_sequential_contraction_monotonicity": "SUPPORTED",
+    "S3_positive_superset_ceiling": "SUPPORTED",
+    "S4_stochastic_witness_realization": "REFUTED",
+    "S5_nonidentification_persists": "SUPPORTED",
+    "S6_omitted_truth_witness_criterion": "SUPPORTED",
+    "S7_history_not_worse_than_final_snapshot": "REFUTED"
+  },
+  "diagnosis": {
+    "S4": "joint_ABM is structurally most restrictive: its complete truth support has 33 nodes and is a subset of every one of the 32 candidate reachable sets. Positive observations therefore contain no false-world witness even after all 33 reachable nodes are observed.",
+    "S7": "Accumulated histories reached the complete structural truth support in every scenario by horizon 40, but the extra historical positives never crossed an additional candidate-world boundary beyond those already represented in the final snapshot. History was never worse, but strict improvement was 0/384.",
+    "key_principle": "Under complete positive-only evidence, a more restrictive truth support can be compatible with more permissive alternative worlds. Strong ecological limitation can therefore increase mechanism ambiguity rather than decrease it."
+  }
+}

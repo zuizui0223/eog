@@ -1,0 +1,64 @@
+{
+  "ecological_worlds": [
+    {
+      "world_id": "eco_absent",
+      "state_by_target": {
+        "site": "absent"
+      }
+    },
+    {
+      "world_id": "eco_present",
+      "state_by_target": {
+        "site": "present"
+      }
+    }
+  ],
+  "observation_worlds": [
+    {
+      "world_id": "perfect",
+      "supports": [
+        {
+          "channel_id": "survey",
+          "ecological_state": "absent",
+          "possible_outcomes": [
+            "zero"
+          ]
+        },
+        {
+          "channel_id": "survey",
+          "ecological_state": "present",
+          "possible_outcomes": [
+            "positive"
+          ]
+        }
+      ]
+    },
+    {
+      "world_id": "imperfect",
+      "supports": [
+        {
+          "channel_id": "survey",
+          "ecological_state": "absent",
+          "possible_outcomes": [
+            "zero"
+          ]
+        },
+        {
+          "channel_id": "survey",
+          "ecological_state": "present",
+          "possible_outcomes": [
+            "zero",
+            "positive"
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence_events": [
+    {
+      "target_id": "site",
+      "channel_id": "survey",
+      "observed_outcome": "zero"
+    }
+  ]
+}

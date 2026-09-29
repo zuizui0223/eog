@@ -1,0 +1,48 @@
+{
+  "schema": "eog.known_truth_bam_orthogonal.residual_ambiguity_summary.v2_1",
+  "primary_result_fingerprint": "dbfd0c09b492c1e53914ddfdfe392c765df6da98a43e105245767c24c75ad9b3",
+  "workflow_run_id": 36543847553,
+  "artifact_id": 11021926689,
+  "artifact_digest": "sha256:f7d12b3d0f6105746a90b2f61e3f35f611d770fab1848768b36bd16c9a66f8c2",
+  "aggregate": {
+    "positive_only": {
+      "A_unresolved_fraction": 0.75,
+      "B_unresolved_fraction": 0.90625,
+      "M_unresolved_fraction": 1,
+      "median_compatible_worlds": 64,
+      "patterns": {
+        "ABM": 45,
+        "AM": 3,
+        "BM": 13,
+        "M": 3
+      }
+    },
+    "positive_plus_perfect_negative": {
+      "A_unresolved_fraction": 0.703125,
+      "B_unresolved_fraction": 0.8125,
+      "M_unresolved_fraction": 0.96875,
+      "median_compatible_worlds": 39,
+      "patterns": {
+        "ABM": 39,
+        "AM": 6,
+        "BM": 13,
+        "M": 4,
+        "none": 2
+      }
+    },
+    "positive_negative_temporal": {
+      "A_unresolved_fraction": 0.703125,
+      "B_unresolved_fraction": 0.8125,
+      "M_unresolved_fraction": 0.875,
+      "median_compatible_worlds": 18,
+      "patterns": {
+        "ABM": 39,
+        "AM": 4,
+        "BM": 13,
+        "A": 2,
+        "none": 6
+      }
+    }
+  },
+  "interpretation": "Negative evidence removes over-permissive occupancy worlds and temporal evidence removes some movement alternatives, but most truth cases remain jointly ambiguous in A, B and M. Additional distributional sampling is not the natural next evidence layer; direct mechanism-specific evidence is."
+}

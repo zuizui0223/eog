@@ -1,0 +1,106 @@
+{
+  "schema": "eog.robust_set_valued_evidence_design.protocol.v2_8",
+  "status": "frozen_before_implementation",
+  "parent_v2_7": {
+    "result_fingerprint": "085587287263d5ebb4016455ac74406b14979e7de25e57e12b8a607becd5cd1d",
+    "selected_target_node": "r1c3",
+    "strict_projection_count": 48,
+    "broad_projection_count": 64,
+    "resurrected_present_worlds": 16,
+    "rule": "v2.7 result is immutable."
+  },
+  "goal": "Extend finite evidence design to stochastic future observations by representing each action as a set of possible outcomes under each joint ecological-observation hypothesis.",
+  "reduced_joint_hypothesis_fixture": {
+    "ecological_state": [
+      "absent",
+      "present"
+    ],
+    "detection_process": [
+      {
+        "id": "p1",
+        "p": 1,
+        "q": 0
+      },
+      {
+        "id": "p075",
+        "p": 0.75,
+        "q": 0
+      }
+    ],
+    "prior_observation": {
+      "surveys": 4,
+      "detections": 0
+    },
+    "active_after_prior": [
+      "absent::p1",
+      "absent::p075",
+      "present::p075"
+    ],
+    "excluded_after_prior": [
+      "present::p1"
+    ]
+  },
+  "action_library": [
+    {
+      "id": "repeat_one_survey",
+      "semantics": "One additional focal survey; outcome is detection count 0 or 1 when each has positive probability."
+    },
+    {
+      "id": "repeat_four_surveys",
+      "semantics": "Four additional focal surveys; outcome is total detections 0..4 with positive probability."
+    },
+    {
+      "id": "direct_detection_calibration",
+      "semantics": "Idealized direct readout of p; deterministic outcome 1.0 or 0.75."
+    },
+    {
+      "id": "direct_target_state_assay",
+      "semantics": "Idealized direct readout of biological target state; deterministic absent or present."
+    }
+  ],
+  "robust_separation_definition": "An action robustly separates two active joint hypotheses iff their possible outcome sets are disjoint.",
+  "minimum_design_definition": "Exact smallest action subset such that every active unresolved hypothesis pair is robustly separated by at least one selected action.",
+  "hypotheses": [
+    {
+      "id": "R1_disjoint_support_criterion",
+      "claim": "Robust pair separation is equivalent to disjoint possible outcome sets for at least one selected action.",
+      "rule": "Any mismatch between pair-cover result and augmented set-valued injectivity refutes R1."
+    },
+    {
+      "id": "R2_more_surveys_have_no_guaranteed_split",
+      "claim": "Under the frozen active joint set, repeat_one_survey and repeat_four_surveys robustly split zero unresolved pairs because absent/q=0 outcomes overlap the imperfect-detection present outcomes at zero detections.",
+      "rule": "Any robust pair split by either repeat-survey action refutes R2."
+    },
+    {
+      "id": "R3_direct_channels_each_split_two_pairs",
+      "claim": "direct_detection_calibration robustly splits exactly two of three active pairs, and direct_target_state_assay robustly splits exactly two of three.",
+      "rule": "Any count mismatch refutes R3."
+    },
+    {
+      "id": "R4_minimum_robust_design",
+      "claim": "The exact minimum robust separating set is {direct_detection_calibration, direct_target_state_assay}, of size 2.",
+      "rule": "Any size-1 robust separating design, any different size-2 minimum, or failure of the declared pair to separate all active hypotheses refutes R4."
+    },
+    {
+      "id": "R5_truth_conditional_adaptive_shortcut",
+      "claim": "For the frozen known truth absent::p1, observing the direct p=1 calibration outcome after the prior nondetection history leaves a single compatible joint hypothesis, so the realized adaptive path can terminate after one action even though the worst-case nonadaptive robust design has size 2.",
+      "rule": "If p=1 calibration leaves more than one active hypothesis for the known truth, or if the worst-case minimum is not 2, R5 is refuted."
+    }
+  ],
+  "outputs": [
+    "active_joint_hypotheses",
+    "unresolved_pair_count",
+    "possible_outcomes_by_action_and_hypothesis",
+    "robust_split_pair_count_by_action",
+    "minimum_robust_separating_set",
+    "minimum_robust_set_size",
+    "known_truth_after_calibration",
+    "R1-R5 verdicts"
+  ],
+  "claim_boundary": [
+    "Set-valued support gives guarantee-style separation, not expected information gain.",
+    "Actions with overlapping possible outcomes may still be useful probabilistically but are not robust separators.",
+    "Direct calibration and direct state assay are idealized upper-bound evidence channels.",
+    "All claims are conditional on the frozen reduced joint hypothesis universe."
+  ]
+}

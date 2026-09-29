@@ -1,0 +1,33 @@
+name: Known-truth detection boundary v2.6
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/v2/known_truth_detection.py"
+      - "validation/known_truth_detection_v2_6/**"
+      - "benchmarks/run_known_truth_detection_v2_6.py"
+      - "tests/test_known_truth_detection.py"
+      - ".github/workflows/known-truth-detection-v2-6.yml"
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Run frozen observation-process boundary
+        run: |
+          python benchmarks/run_known_truth_detection_v2_6.py \
+            --output build/known_truth_detection_v2_6/result_v2_6.json
+      - name: Verify focused tests
+        run: python -m pytest tests/test_known_truth_detection.py -q
+      - uses: actions/upload-artifact@v4
+        with:
+          name: known-truth-detection-v2-6
+          path: build/known_truth_detection_v2_6/result_v2_6.json
+          if-no-files-found: error

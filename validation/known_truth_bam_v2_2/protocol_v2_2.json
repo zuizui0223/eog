@@ -1,0 +1,60 @@
+{
+  "schema": "eog.known_truth_bam_direct_evidence.protocol.v2_2",
+  "status": "frozen_before_implementation",
+  "parent_v2_1": {
+    "result_fingerprint": "dbfd0c09b492c1e53914ddfdfe392c765df6da98a43e105245767c24c75ad9b3",
+    "residual_audit": "Most truths remain A/B/M ambiguous after complete presence/absence plus occupied-node arrival times.",
+    "rule": "v2.1 results remain immutable."
+  },
+  "question": "Which direct mechanism-specific evidence is required to resolve residual BAM decomposition ambiguity?",
+  "direct_evidence_definitions": {
+    "A_direct": "Complete idealized abiotic-permissibility state: candidate A mask must equal truth A mask.",
+    "B_direct": "Complete idealized biotic-permissibility state: candidate B mask must equal truth B mask.",
+    "M_direct": "Complete idealized movement state: candidate M mask and full first-arrival vector must equal truth M state.",
+    "note": "These are mechanistic identifiability upper bounds, not realistic field-data claims."
+  },
+  "baseline_evidence": "positive + perfect negative + occupied-node temporal arrival from v2.1",
+  "evidence_additions": [
+    "baseline + A_direct",
+    "baseline + B_direct",
+    "baseline + M_direct",
+    "baseline + A_direct + B_direct",
+    "baseline + A_direct + M_direct",
+    "baseline + B_direct + M_direct",
+    "baseline + A_direct + B_direct + M_direct"
+  ],
+  "hypotheses": [
+    {
+      "id": "D1_axis_exactness",
+      "claim": "Adding a direct axis state eliminates exactly those baseline-compatible worlds whose declared state on that axis differs from truth.",
+      "rule": "Any mismatch between exact axis-state equality and compatibility refutes D1."
+    },
+    {
+      "id": "D2_combined_state_ceiling",
+      "claim": "Even complete direct A/B/M state evidence cannot distinguish candidate worlds that induce exactly the same A mask, B mask, M mask and full arrival vector.",
+      "rule": "A unique claim inside a duplicate complete-state equivalence class refutes D2."
+    },
+    {
+      "id": "D3_unique_state_recovery",
+      "claim": "A truth world is uniquely identified by complete direct A/B/M state evidence if and only if its complete BAM state tuple is unique in the candidate universe.",
+      "rule": "Any disagreement between state-tuple uniqueness and final identification refutes D3."
+    }
+  ],
+  "primary_outputs": [
+    "fraction_truth_unique_baseline",
+    "fraction_truth_unique_after_A_direct",
+    "fraction_truth_unique_after_B_direct",
+    "fraction_truth_unique_after_M_direct",
+    "fraction_truth_unique_after_AB_direct",
+    "fraction_truth_unique_after_AM_direct",
+    "fraction_truth_unique_after_BM_direct",
+    "fraction_truth_unique_after_ABM_direct",
+    "complete_state_equivalence_class_size_distribution",
+    "D1-D3 verdicts"
+  ],
+  "claim_boundary": [
+    "Direct axis evidence is idealized and used only to diagnose identifiability limits.",
+    "Do not interpret complete A/B/M state maps as routinely observable ecological data.",
+    "Do not infer parameter values uniquely when multiple parameterizations induce the same state tuple."
+  ]
+}

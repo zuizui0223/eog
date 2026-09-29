@@ -1,0 +1,97 @@
+{
+  "schema": "eog.v3.public_api_contract.v1",
+  "status": "experimental_post_closure",
+  "canonical_branch": "development/eog-v3-known-truth-mainline",
+  "scientific_boundary": {
+    "reopens_eog_wf": false,
+    "changes_eog_wf_denominator": false,
+    "changes_mee_manuscript_claim_boundary": false,
+    "role": "post-closure finite-world falsification and adaptive evidence-design API"
+  },
+  "python_surface": {
+    "module": "eog.v3",
+    "exported_symbols": [
+      "ActionRanking",
+      "ActionSupports",
+      "EcologicalWorld",
+      "EvidenceEvent",
+      "JointEvidencePlan",
+      "JointMember",
+      "JointWorldEvaluation",
+      "ObservationSupport",
+      "ObservationWorld",
+      "adaptive_forced_first_depth",
+      "evaluate_joint_worlds",
+      "evaluation_is_contraction",
+      "plan_next_evidence_action",
+      "plan_robust_evidence_set",
+      "solve_adaptive_evidence_policy"
+    ]
+  },
+  "cli_surface": [
+    {
+      "command": "eog-v3-joint-evaluate",
+      "required_args": [
+        "--input",
+        "--output"
+      ],
+      "optional_args": [
+        "--force"
+      ],
+      "output_schema": "eog.v3.joint_evaluation.v1"
+    },
+    {
+      "command": "eog-v3-plan-evidence",
+      "required_args": [
+        "--input",
+        "--output",
+        "--objective"
+      ],
+      "objective_values": [
+        "joint",
+        "ecological"
+      ],
+      "optional_args": [
+        "--force"
+      ],
+      "output_schema": "eog.v3.evidence_plan.v1"
+    },
+    {
+      "command": "eog-v3-plan-adaptive",
+      "required_args": [
+        "--input",
+        "--output"
+      ],
+      "optional_args": [
+        "--force"
+      ],
+      "output_schema": "eog.v3.adaptive_evidence_plan.v1"
+    }
+  ],
+  "packaged_inputs": {
+    "schema_path": "schemas/eog_v3_joint_input.schema.json",
+    "examples": [
+      "examples/eog_v3/joint_evaluation_input.json",
+      "examples/eog_v3/evidence_planning_input.json"
+    ]
+  },
+  "exact_semantics": [
+    "Joint worlds are the declared finite Cartesian product of ecological and observation worlds.",
+    "A joint world survives iff every observed outcome belongs to its declared support.",
+    "Ecological and observation conclusions are projections of surviving joint worlds.",
+    "Hard finite-universe falsification requires zero surviving joint worlds.",
+    "Robust evidence design uses declared finite outcome-support sets rather than hidden priors.",
+    "Adaptive evidence planning minimizes worst-case additional actions over the surviving joint set.",
+    "Insufficient action libraries remain explicitly unresolved rather than forcing a recommendation."
+  ],
+  "validation": {
+    "integrated_result_fingerprint": "073bcdf0e0e1761e6b5af077f9ffbfc79aeadb59b1c5aee4dd4ab6c4bbc23dab",
+    "integrated_workflow": ".github/workflows/eog-v3-integrated.yml",
+    "packaged_examples_verified": true
+  },
+  "compatibility_policy": {
+    "current_status": "experimental",
+    "breaking_changes_before_first_v3_release": true,
+    "after_first_v3_release": "public symbol, CLI, or JSON-schema changes require a versioned contract"
+  }
+}

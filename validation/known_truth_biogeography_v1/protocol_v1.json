@@ -1,0 +1,93 @@
+{
+  "schema": "eog.known_truth_biogeography.protocol.v1",
+  "status": "frozen_before_benchmark_implementation",
+  "scientific_question": "Can occurrence-conditioned finite-world reconstruction correctly retain, eliminate, falsify, or leave unresolved candidate distribution-forming processes when the true virtual process is known?",
+  "scope": {
+    "separate_from_eog_wf": true,
+    "changes_closed_eog_wf_denominator": false,
+    "biological_response_data_used": false,
+    "target": "method falsification under known-truth virtual biogeography"
+  },
+  "reference_implementation": {
+    "language": "Python",
+    "reason": "reuse exact EOG finite-world operators and fingerprints; keep one auditable implementation before performance optimization",
+    "cpp_port_trigger": {
+      "allowed_only_after_profile": true,
+      "trigger": "reference benchmark target workload exceeds 60 seconds wall-clock on CI or 1 GiB peak memory",
+      "equivalence_requirement": "C++ backend must reproduce all frozen Python fixture classifications and compatible-world sets before use"
+    }
+  },
+  "virtual_system": {
+    "landscape": "finite 2-D grid with explicit coordinates and deterministic environmental fields",
+    "niche": "declared virtual niche determining viable states",
+    "process_axes": [
+      "geographic step limit",
+      "environmental transition limit",
+      "barrier permeability",
+      "niche breadth",
+      "source location",
+      "finite propagation horizon"
+    ],
+    "truth_generation": "simulate reachable occupied states from one declared true process",
+    "observation_generation": "sample positive occurrences from true reachable states; primary tests use no false positives",
+    "candidate_worlds": "finite predeclared alternatives generated from the same process grammar"
+  },
+  "primary_hypotheses": [
+    {
+      "id": "H1_truth_retention",
+      "claim": "When the exact true process is included in the candidate universe and observations contain only true positive occurrences, EOG never eliminates the true world at any sequential observation prefix.",
+      "decision_rule": "SUPPORTED only if 100% of eligible exact benchmark cases retain the true world at every prefix; one counterexample REFUTES the claim for the declared benchmark universe."
+    },
+    {
+      "id": "H2_discriminating_contraction",
+      "claim": "When every false candidate has at least one predeclared positive witness occurrence reachable under truth but unsupported by that false candidate, the complete witness set eliminates every false candidate while retaining truth.",
+      "decision_rule": "SUPPORTED only if 100% of eligible exact benchmark cases end with exactly the true world; one counterexample REFUTES the claim."
+    },
+    {
+      "id": "H3_omitted_truth_falsification",
+      "claim": "When truth is omitted and the predeclared witness set contains at least one true occurrence unsupported by each candidate world, EOG falsifies the entire declared candidate universe.",
+      "decision_rule": "SUPPORTED only if 100% of eligible exact benchmark cases end with zero compatible worlds; one counterexample REFUTES the claim."
+    },
+    {
+      "id": "H4_nonidentification_honesty",
+      "claim": "When two or more candidate worlds are observationally equivalent over every available positive occurrence, EOG does not identify a unique world.",
+      "decision_rule": "SUPPORTED only if 100% of equivalent cases remain non-identifiable; any unique-world declaration REFUTES the claim."
+    }
+  ],
+  "secondary_boundary_hypothesis": {
+    "id": "H5_observation_error_boundary",
+    "claim": "False-positive occurrence contamination can invalidate naive positive-only finite-world falsification when observation error is not represented in the declared worlds.",
+    "purpose": "boundary diagnosis, not a requirement for H1-H4",
+    "outputs": [
+      "true-world false-elimination rate by contamination level",
+      "false universe-falsification rate",
+      "compatible-set size"
+    ]
+  },
+  "canonical_scenario_families": [
+    "continuous_environmental_bridge",
+    "environmental_bottleneck",
+    "hard_geographic_barrier",
+    "stepping_stone",
+    "long_distance_jump",
+    "observational_equivalence",
+    "truth_omitted"
+  ],
+  "primary_outputs": [
+    "truth_retained",
+    "compatible_world_ids_by_prefix",
+    "false_worlds_eliminated",
+    "final_identifiable",
+    "universe_falsified",
+    "witness_count_to_decision",
+    "coverage_certificate",
+    "scenario_fingerprint"
+  ],
+  "prohibited_after_results": [
+    "change H1-H4 decision thresholds",
+    "remove a failing canonical scenario",
+    "add only favorable scenarios to restore support",
+    "reinterpret zero compatible worlds as unrestricted biological impossibility",
+    "claim a surviving world is the unique historical truth outside the declared finite universe"
+  ]
+}

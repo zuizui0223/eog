@@ -181,6 +181,76 @@ This supports Layer A as a structural falsification framework and shows that Lay
 
 Candidate hunting is closed. No fourth dataset may be added to improve the apparent result or journal rank.
 
+## Post-closure known-truth programme and EOG v3
+
+A separate simulation/theory programme is developed **outside the frozen EOG-WF
+empirical denominator**. It does not add a fourth endpoint or change the MEE
+submission claim.
+
+The current known-truth result is:
+
+> **Occurrence data are useful for finite-world falsification, but even complete
+> positive distributions need not identify the generating A/B/M mechanism. EOG
+> therefore keeps unresolved worlds explicit and uses their differences to design
+> the next observation, calibration or intervention.**
+
+Key frozen results include:
+
+- complete positive occurrences uniquely identified **0/64** truths in the first BAM factorial;
+- after orthogonal A/B/M activation, unique recovery remained **0/64** from positives,
+  **2/64** with perfect negatives and **6/64** with occupied-node arrival times;
+- across **12 deterministic systems / 768 truths**, positive-only BAM-state uniqueness
+  remained **0/768**;
+- an independent stochastic generator reproduced non-identification and showed that
+  stronger joint A+B+M restriction can create **more**, not less, positive-only ambiguity;
+- time-stamped occurrence history can refine static support, while unordered accumulated
+  positive history need not;
+- imperfect detection is an explicit observation-world axis: finite nondetection at
+  `p < 1` is low-probability evidence, not exact absence;
+- exact finite evidence design can return a minimum discriminating intervention set,
+  or fail closed when the declared evidence library is insufficient;
+- adaptive planning separates worst-case experimental burden from the realized path.
+
+### Experimental EOG v3 API
+
+EOG v3 represents:
+
+```text
+ecological worlds × observation-process worlds
+                    ↓ evidence
+           surviving joint worlds
+                    ↓
+ ecological / observation projections
+                    ↓
+ robust or adaptive next-evidence design
+```
+
+Commands:
+
+```bash
+eog-v3-joint-evaluate \
+  --input examples/eog_v3/joint_evaluation_input.json \
+  --output joint_result.json
+
+eog-v3-plan-evidence \
+  --input examples/eog_v3/evidence_planning_input.json \
+  --output evidence_plan.json \
+  --objective ecological
+
+eog-v3-plan-adaptive \
+  --input examples/eog_v3/evidence_planning_input.json \
+  --output adaptive_plan.json
+```
+
+Canonical post-closure state:
+
+- [`docs/known_truth_development_mainline.md`](docs/known_truth_development_mainline.md)
+- [`validation/known_truth_programme_manifest_v1.json`](validation/known_truth_programme_manifest_v1.json)
+- [`docs/eog_v3_joint_world_engine.md`](docs/eog_v3_joint_world_engine.md)
+
+**Boundary:** surviving v3 worlds are compatible hypotheses inside declared finite
+ecological/observation universes. They are not certified historical truth.
+
 ## Historical evidence ledger
 
 - **A-Islands** — exploratory exact-world structural information; not independent confirmation; earlier predictive extension adverse.

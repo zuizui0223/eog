@@ -1,0 +1,21 @@
+{
+  "schema": "eog.known_truth_bam_direct_evidence.parameter_alias_audit.v2_2",
+  "status": "frozen_before_audit_execution",
+  "primary_result_fingerprint": "5912231d6b8d04fd1cbb3540bf137562c394aca9fc40069486d6350ee7fff9f0",
+  "role": "post-result descriptive audit; cannot alter D1-D3",
+  "question": "Which declared BAM parameter axes differ among candidate worlds that induce exactly the same complete A/B/M state tuple?",
+  "grouping_key": "(A mask, B mask, M accessibility mask, full M first-arrival vector)",
+  "compared_axes": [
+    "abiotic_label",
+    "biotic_mode",
+    "movement_step_radius",
+    "movement_barrier_permeability",
+    "movement_horizon"
+  ],
+  "outputs": [
+    "number_of_equivalence_classes",
+    "class_size_distribution",
+    "alias_axis_pattern_counts",
+    "world_fraction_in_noninjective_classes"
+  ]
+}

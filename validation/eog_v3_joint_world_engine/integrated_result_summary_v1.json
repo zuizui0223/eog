@@ -1,0 +1,81 @@
+{
+  "schema": "eog.v3.integrated_joint_engine.summary.v1",
+  "protocol_commit": "1c9fb35313645aef632818238078fad5cef57d1c",
+  "validated_head_sha": "4b1c97c186067d5aa0d7e089f5a3458a969794a7",
+  "workflow_run_id": 36574051398,
+  "workflow_conclusion": "success",
+  "artifact_id": 11035338851,
+  "artifact_digest": "sha256:9e94bc314a8b2cc5725fd22c4793b8071d21bcde0d5741c58133166cf3ad2f7a",
+  "result_fingerprint": "073bcdf0e0e1761e6b5af077f9ffbfc79aeadb59b1c5aee4dd4ab6c4bbc23dab",
+  "parent_fingerprints": {
+    "joint_v2_7": "085587287263d5ebb4016455ac74406b14979e7de25e57e12b8a607becd5cd1d",
+    "robust_v2_8": "a459ebd6bdde502c5d86aad7baf37443d17d1156fb358a373c5429c5c94115f8",
+    "adaptive_v2_9": "19e441e930c1c3fc116780fa8bfb4b09c178e69c4379a1ef69e47f5b13218822"
+  },
+  "joint_projection": {
+    "strict_joint_survivors": 48,
+    "strict_ecological_survivors": 48,
+    "broad_joint_survivors": 112,
+    "broad_ecological_survivors": 64,
+    "calibrated_joint_survivors": 48,
+    "calibrated_ecological_survivors": 48
+  },
+  "robust_design": {
+    "active_joint_hypotheses": [
+      "absent::p075",
+      "absent::p1",
+      "present::p075"
+    ],
+    "split_counts": {
+      "direct_detection_calibration": 2,
+      "direct_target_state_assay": 2,
+      "repeat_four_surveys": 0,
+      "repeat_one_survey": 0
+    },
+    "minimum_robust_separating_set": [
+      "direct_detection_calibration",
+      "direct_target_state_assay"
+    ],
+    "minimum_robust_set_size": 2,
+    "plan_fingerprint": "486436ca8c6c8190b985d25aa24dec1b4d651030408118d25e7cb9bfb9a6c3c3"
+  },
+  "adaptive_design": {
+    "resolvable": true,
+    "worst_case_depth": 2,
+    "optimal_first_actions": [
+      "direct_detection_calibration",
+      "direct_target_state_assay"
+    ],
+    "canonical_first_action": "direct_detection_calibration",
+    "forced_first_action_depths": {
+      "direct_detection_calibration": 2,
+      "direct_target_state_assay": 2,
+      "repeat_four_surveys": 3,
+      "repeat_one_survey": 3
+    },
+    "without_calibration_resolvable": false,
+    "without_state_assay_resolvable": false,
+    "policy_fingerprint": "6a20e2efe9aedb1a2d88bbb930a35f53c836e68677d30d7735c3081b42151b80"
+  },
+  "public_cli": {
+    "commands": [
+      "eog-v3-joint-evaluate",
+      "eog-v3-plan-evidence",
+      "eog-v3-plan-adaptive"
+    ],
+    "packaged_examples_verified": true
+  },
+  "coverage_certificate": "exact_exhaustive_finite_ecology_observation_product",
+  "verdicts": {
+    "IV3_1_joint_projection_reproduction": "SUPPORTED",
+    "IV3_2_robust_design_reproduction": "SUPPORTED",
+    "IV3_3_adaptive_tree_reproduction": "SUPPORTED",
+    "IV3_4_ablation_fail_closed": "SUPPORTED",
+    "IV3_5_public_cli_reproducibility": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "One public v3 surface now reproduces the frozen joint-world filtering, robust minimum evidence-set design, and adaptive decision-tree results without changing any parent scientific outcome.",
+    "fail_closed": "When required direct evidence channels are removed, exact worst-case adaptive resolution remains unavailable rather than being forced.",
+    "product_boundary": "This is a post-closure finite-world API consolidation and does not alter the EOG-WF empirical denominator or manuscript claim."
+  }
+}

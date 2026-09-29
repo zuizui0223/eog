@@ -1,0 +1,77 @@
+{
+  "schema": "eog.known_truth_observation_process.protocol.v2_6",
+  "status": "frozen_before_implementation",
+  "parent_v2_5": {
+    "result_fingerprint": "a2365bcd014ebbe2722f8c04a3df0f149a4eb6af2fcf97b27cf11435721d8abd",
+    "rule": "v2.5 evidence-design results are immutable."
+  },
+  "scientific_question": "Which occurrence/non-detection observations are exact falsifiers once imperfect detection and false-positive observation processes are made explicit?",
+  "ecological_state": {
+    "Z1": "biological state present/occupied",
+    "Z0": "biological state absent/unoccupied"
+  },
+  "observation_world": {
+    "detection_probability_p": [
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "false_positive_probability_q": [
+      0,
+      0.01
+    ],
+    "repeated_surveys_n": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "conditional_model": {
+      "present": "detections ~ Binomial(n,p)",
+      "absent": "detections ~ Binomial(n,q)"
+    },
+    "exact_compatibility": "A biological state is compatible with an observation world when the exact observation history has probability > 0."
+  },
+  "primary_hypotheses": [
+    {
+      "id": "O1_imperfect_nondetection_not_hard_absence",
+      "claim": "For every finite n and every p<1, an all-zero detection history remains possible when the species is truly present, so it cannot exactly falsify presence.",
+      "rule": "Any p<1,n case assigning zero probability to all-zero history under Z=1 refutes O1."
+    },
+    {
+      "id": "O2_perfect_detection_hard_negative",
+      "claim": "When p=1 and q=0, an all-zero history is impossible under presence and therefore is a valid exact negative witness.",
+      "rule": "Any n>=1 case retaining Z=1 after all-zero history under p=1 refutes O2."
+    },
+    {
+      "id": "O3_more_nondetections_change_weight_not_possibility",
+      "claim": "For 0<p<1, increasing n reduces the probability of all-zero history under presence monotonically but never makes it impossible at finite n.",
+      "rule": "Any non-monotone increase or exact zero probability at finite n refutes O3."
+    },
+    {
+      "id": "O4_false_positive_breaks_hard_positive",
+      "claim": "A positive detection exactly falsifies absence only when every admissible observation world has q=0; if any admissible q>0, absence remains possible.",
+      "rule": "Any robust hard-positive claim with an admissible q>0 refutes O4."
+    },
+    {
+      "id": "O5_observation_world_expansion_weakens_or_preserves_falsification",
+      "claim": "Expanding the admissible observation-process universe cannot create a new robust hard falsification; it can only preserve or remove one.",
+      "rule": "Any expansion from a stricter to broader p/q universe that creates a robust hard exclusion refutes O5."
+    }
+  ],
+  "primary_outputs": [
+    "all_zero_probability_by_p_n",
+    "hard_negative_cases",
+    "hard_positive_cases",
+    "robust_state_compatibility_by_observation_world_set",
+    "monotonicity_violations",
+    "O1-O5 verdicts"
+  ],
+  "claim_boundary": [
+    "Likelihood differences are not converted into arbitrary hard-falsification thresholds.",
+    "Exact falsification means zero probability under every admissible observation world.",
+    "Perfect detection is an idealized calibration condition, not assumed for real ecological surveys.",
+    "This protocol addresses observation-process identifiability, not ecological process truth."
+  ]
+}

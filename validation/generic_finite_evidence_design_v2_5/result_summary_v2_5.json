@@ -1,0 +1,60 @@
+{
+  "schema": "eog.generic_finite_evidence_design.summary.v2_5",
+  "protocol_commit": "e6d8ca90a53c36ba64821705d0581829d891642f",
+  "executed_commit": "1eca366c2111bc1a8cb92c9a7194b5000a9a6326",
+  "workflow_run_id": 36550447749,
+  "workflow_conclusion": "success",
+  "artifact_id": 11024356484,
+  "artifact_digest": "sha256:2dbd9034f46ddea9202f7e6b157d1c388106589e730dd8e68636df2a30169554",
+  "result_fingerprint": "a2365bcd014ebbe2722f8c04a3df0f149a4eb6af2fcf97b27cf11435721d8abd",
+  "generic_plan_fingerprint": "1719954fe6f27554f2b74ac7ddbc428f39dc8fa44603167d8fb89ab4939a5303",
+  "world_count": 64,
+  "full": {
+    "unresolved_pair_count": 16,
+    "split_counts": {
+      "H_long_corridor_challenge": 8,
+      "P_barrier_challenge": 8,
+      "repeat_passive_state": 0
+    },
+    "minimum_separating_set": [
+      "H_long_corridor_challenge",
+      "P_barrier_challenge"
+    ],
+    "minimum_set_size": 2
+  },
+  "insufficient_library": {
+    "evidence_ids": [
+      "P_barrier_challenge",
+      "repeat_passive_state"
+    ],
+    "minimum_separating_set": null,
+    "insufficient_library": true,
+    "final_class_size_distribution": {
+      "1": 48,
+      "2": 8
+    }
+  },
+  "contracted_world_set": {
+    "active_world_count": 56,
+    "unresolved_pair_count": 8,
+    "minimum_separating_set": [
+      "H_long_corridor_challenge"
+    ],
+    "minimum_set_size": 1,
+    "all_worlds_separated": true
+  },
+  "monotone_evidence_addition_violations": 0,
+  "coverage_certificate": "exact_exhaustive_finite_evidence_subset_search",
+  "verdicts": {
+    "G1_reproduce_v2_4": "SUPPORTED",
+    "G2_fail_closed_when_library_insufficient": "SUPPORTED",
+    "G3_replan_after_world_contraction": "SUPPORTED",
+    "G4_monotone_evidence_addition": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "Falsification-driven evidence design is not BAM-specific. The same exact planner can operate on any finite world signatures and preregistered evidence-outcome library.",
+    "fail_closed": "When the supplied evidence library cannot separate all surviving worlds, the planner returns no separating set and preserves explicit residual equivalence classes.",
+    "sequential": "After evidence contracts the compatible world set, the exact next design is recomputed only on survivors; in the frozen example the minimum design shrank from two interventions to one.",
+    "monotonicity": "Appending evidence refined or preserved existing equivalence classes and never merged previously separated worlds."
+  }
+}

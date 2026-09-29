@@ -1,0 +1,33 @@
+name: Known-truth BAM v2.3 interventions
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/v2/known_truth_bam_v2_3.py"
+      - "validation/known_truth_bam_v2_3/**"
+      - "benchmarks/run_known_truth_bam_v2_3.py"
+      - "tests/test_known_truth_bam_v2_3.py"
+      - ".github/workflows/known-truth-bam-v2-3.yml"
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Run frozen intervention benchmark
+        run: |
+          python benchmarks/run_known_truth_bam_v2_3.py \
+            --output build/known_truth_bam_v2_3/result_v2_3.json
+      - name: Verify focused tests
+        run: python -m pytest tests/test_known_truth_bam_v2_3.py -q
+      - uses: actions/upload-artifact@v4
+        with:
+          name: known-truth-bam-v2-3
+          path: build/known_truth_bam_v2_3/result_v2_3.json
+          if-no-files-found: error

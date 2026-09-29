@@ -1,0 +1,64 @@
+{
+  "schema": "eog.known_truth_bam_orthogonal.summary.v2_1",
+  "protocol_commit": "11f6b38cfca7eeac57dd5f635f97aa9dbd734d10",
+  "executed_commit": "65df810a845a271f912313b4a52aaf6148385c63",
+  "workflow_run_id": 36543539813,
+  "workflow_conclusion": "success",
+  "artifact_id": 11021686283,
+  "artifact_digest": "sha256:c249ee046a654bfd441f426eea90f7a57e060932a130d9fa11ff0c2fdd81ba9c",
+  "result_fingerprint": "dbfd0c09b492c1e53914ddfdfe392c765df6da98a43e105245767c24c75ad9b3",
+  "status": "SCORED",
+  "candidate_world_count": 64,
+  "eligible_truth_worlds": 64,
+  "activation": {
+    "status": "PASS",
+    "partner_fraction": 0.7142857142857143,
+    "antagonist_fraction": 0.42857142857142855,
+    "A_only_pairs": 16,
+    "partner_B_only_pairs": 11,
+    "antagonist_B_only_pairs": 6,
+    "M_distance_only_pairs": 7,
+    "M_barrier_only_pairs": 12,
+    "same_G_different_arrival_pairs": 812,
+    "positive_superset_negative_witness_pairs": 1097,
+    "fingerprint": "be5063c83e9f969bb9a3284e0fbe9fb3e23460a367869f2d6fbca13911108b49"
+  },
+  "correctness": {
+    "truth_retention_failures": 0,
+    "axis_witness_mismatches": 0,
+    "equivalence_violations": 0,
+    "positive_superset_violations": 0,
+    "negative_rescue_failures": 0,
+    "temporal_rescue_failures": 0
+  },
+  "identifiability": {
+    "fraction_truth_unique_positive_only": 0,
+    "fraction_truth_unique_with_negatives": 0.03125,
+    "fraction_truth_unique_with_temporal_evidence": 0.09375
+  },
+  "rescue": {
+    "negative_rescue_opportunities": 1097,
+    "negative_rescue_fraction": 1,
+    "temporal_rescue_opportunities": 812,
+    "temporal_M_rescue_fraction": 1
+  },
+  "axis_witness_counts": {
+    "A_only": 179,
+    "B_only": 307,
+    "M_only": 207,
+    "AB": 193,
+    "AM": 53,
+    "BM": 309,
+    "ABM": 87,
+    "none": 2697
+  },
+  "verdicts": {
+    "BAM_H1_truth_retention": "SUPPORTED",
+    "BAM_H2_axis_witness_attribution": "SUPPORTED",
+    "BAM_H3_intersection_nonidentifiability": "SUPPORTED",
+    "BAM_H4_positive_superset_ceiling": "SUPPORTED",
+    "BAM_H5_perfect_negative_rescue": "SUPPORTED",
+    "BAM_H6_temporal_M_rescue": "SUPPORTED"
+  },
+  "central_interpretation": "Orthogonal activation confirms that A, B and M can each generate independent falsifying witnesses, yet the true BAM decomposition remains overwhelmingly non-identifiable even under complete state observation and exact movement timing because different A/B/M decompositions can induce the same realised occupied set and movement-consistent history."
+}

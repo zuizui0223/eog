@@ -1,0 +1,17 @@
+{
+  "schema": "eog.known_truth_biogeography.result_receipt.v1",
+  "generated_from_commit": "30919ffd8686ab4b9c0f2bf7b3bdaefd1f5fee33",
+  "protocol_commit": "21e9aea296db3e46dc563ed83b5ec66fa385af66",
+  "workflow_run_id": 36538686839,
+  "workflow_conclusion": "success",
+  "artifact_id": 11019801265,
+  "artifact_digest": "sha256:ed30f9a8c93e4a2ccb85f53f219820db400d42059633d61244b9c922cfa5ff5e",
+  "result_fingerprint": "4b4ccf41052ccc09609ad81f33e10d34919199c4af45104bc4d901893b858f04",
+  "primary_verdicts": {
+    "H1_truth_retention": "SUPPORTED",
+    "H2_discriminating_contraction": "SUPPORTED",
+    "H3_omitted_truth_falsification": "SUPPORTED",
+    "H4_nonidentification_honesty": "SUPPORTED"
+  },
+  "boundary_verdict": "H5_observation_error_boundary=BOUNDARY_CONFIRMED"
+}

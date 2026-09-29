@@ -1,0 +1,76 @@
+{
+  "schema": "eog.bam_identifiability_theory.protocol.v1",
+  "status": "frozen_before_theorem_module",
+  "empirical_parent": {
+    "v3_result_fingerprint": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415",
+    "pooled_unique_fraction": {
+      "E0": 0,
+      "E1": 0.032552083333333336,
+      "E2": 0.20703125,
+      "E3": 0.3580729166666667,
+      "E4": 0.7356770833333334,
+      "E5": 1,
+      "E6": 1
+    },
+    "rule": "Theory must explain the empirical evidence ladder without changing the frozen simulation results."
+  },
+  "objects": {
+    "X": "finite node universe",
+    "world": "w=(A_w,B_w,M_w,tau_w,theta_w), where A,B,M are subsets of X, tau is movement first-arrival state, and theta may contain parameter labels",
+    "realised_distribution": "G_w=A_w∩B_w∩M_w",
+    "bam_state_equivalence": "w~v iff A_w=A_v, B_w=B_v, M_w=M_v, and tau_w=tau_v"
+  },
+  "evidence_levels": {
+    "E0": "complete positive occurrence set G* only",
+    "E1": "complete presence/absence map: positives G*, negatives X\\G*",
+    "E2": "E1 + tau restricted to G*",
+    "E3": "E2 + complete A* state",
+    "E4": "E3 + complete B* state",
+    "E5": "E4 + complete M* accessibility state",
+    "E6": "E5 + complete tau* over X"
+  },
+  "theorem_targets": [
+    {
+      "id": "T1_positive_survivor_characterization",
+      "statement": "S0(w*)={w: G*⊆G_w}.",
+      "corollary": "Any positive-superset world with G*⊆G_w is impossible to falsify using positive occurrences alone, even under complete sampling of G*."
+    },
+    {
+      "id": "T2_complete_map_fiber",
+      "statement": "S1(w*)={w: G_w=G*}.",
+      "corollary": "Complete perfect presence/absence identifies the realised distribution G but not necessarily its A/B/M decomposition."
+    },
+    {
+      "id": "T3_progressive_projection_fibers",
+      "statement": "Each later evidence level intersects the previous survivor set with equality constraints on the newly observed state component: tau|G*, A, B, M, then full tau."
+    },
+    {
+      "id": "T4_monotone_contraction",
+      "statement": "S6⊆S5⊆S4⊆S3⊆S2⊆S1⊆S0."
+    },
+    {
+      "id": "T5_complete_BAM_state_fiber",
+      "statement": "S6(w*) equals the exact BAM-state equivalence class [w*]; parameter aliases with identical A,B,M,tau cannot be separated by any E0-E6 evidence."
+    },
+    {
+      "id": "T6_identifiability_criterion",
+      "statement": "BAM-state identification at an evidence level occurs iff all surviving worlds belong to one BAM-state equivalence class."
+    },
+    {
+      "id": "T7_diagnostic_measurement_hitting_set",
+      "statement": "Given a current survivor set S and target fiber T⊆S, a set of direct measurements identifies T iff it hits the disagreement set of every candidate in S\\T; the minimum diagnostic design is a finite hitting-set problem."
+    }
+  ],
+  "implementation_checks": [
+    "construct survivor sets from pure finite-set state objects independent of simulation generator",
+    "verify T1-T6 exhaustively for every pair of worlds in small finite universes",
+    "verify exact diagnostic hitting-set solver against brute-force subset enumeration on small fixtures",
+    "compare exact diagnostic counts with the existing greedy targeted designs; do not call greedy counts minimal unless equality is verified"
+  ],
+  "claim_boundary": [
+    "The theorems are conditional on the declared finite candidate universe and evidence semantics.",
+    "They do not prove that real ecological A, B, M or tau are perfectly observable.",
+    "They do not imply that a surviving world is historical truth.",
+    "They establish information/identifiability limits, not causal identification from occurrence data."
+  ]
+}

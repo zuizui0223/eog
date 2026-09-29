@@ -1,0 +1,70 @@
+{
+  "schema": "eog.generic_finite_evidence_design.protocol.v2_5",
+  "status": "frozen_before_implementation",
+  "parent_v2_4": {
+    "result_fingerprint": "c7107f1511fd7b5542da3f7c501d99f0b8cebe00feec0348ca4d60d510a75b12",
+    "minimum_design": [
+      "H_long_corridor_challenge",
+      "P_barrier_challenge"
+    ],
+    "minimum_design_size": 2,
+    "rule": "v2.4 result is immutable; v2.5 generalizes the planner API without altering the frozen BAM result."
+  },
+  "goal": "Generalize falsification-driven evidence design from the fixed BAM intervention library to any finite world set and any predeclared observation/intervention library.",
+  "generic_inputs": {
+    "world_ids": "finite unique world identifiers",
+    "current_signature_by_world": "the evidence-equivalence signature already known for each world",
+    "candidate_evidence_library": "finite mapping evidence_id -> predicted outcome by world",
+    "optional_active_world_ids": "subset of currently surviving worlds; default is the full finite universe"
+  },
+  "generic_outputs": [
+    "active_world_ids",
+    "unresolved_world_pairs",
+    "per-evidence split count",
+    "per-evidence residual class structure",
+    "exact minimum separating evidence set or null",
+    "minimum set size or null",
+    "all active worlds separated boolean",
+    "certificate/fingerprint"
+  ],
+  "hypotheses": [
+    {
+      "id": "G1_reproduce_v2_4",
+      "claim": "The generic API reproduces every frozen v2.4 planner output on the BAM intervention library.",
+      "rule": "Any mismatch in unresolved pairs, intervention split counts, minimum set, or final classes refutes G1."
+    },
+    {
+      "id": "G2_fail_closed_when_library_insufficient",
+      "claim": "If the evidence library cannot split every unresolved world pair, the generic API returns no minimum separating set and retains explicit unresolved classes.",
+      "rule": "Returning a separating set when uncovered pairs remain refutes G2."
+    },
+    {
+      "id": "G3_replan_after_world_contraction",
+      "claim": "After a finite compatible-world set contracts, planning on the surviving subset yields the exact minimum design for that subset without using eliminated worlds.",
+      "rule": "Any dependence on eliminated worlds or mismatch with exhaustive subset search refutes G3."
+    },
+    {
+      "id": "G4_monotone_evidence_addition",
+      "claim": "Adding a new declared evidence channel cannot merge two worlds that were already separated by the previous evidence signature.",
+      "rule": "Any increase in equivalence-class size after appending evidence refutes G4."
+    }
+  ],
+  "insufficiency_fixture": {
+    "evidence_library": [
+      "P_barrier_challenge",
+      "repeat_passive_state"
+    ],
+    "expected": "H-only passive alias pairs remain uncovered; minimum separating set is null."
+  },
+  "contracted_fixture": {
+    "active_world_policy": "Select the first lexicographically ordered world from each P-only passive alias pair plus all passive singletons; exclude the paired P-alias mate.",
+    "expected": "The remaining unresolved aliases are H-only; exact minimum separating set is {H_long_corridor_challenge}."
+  },
+  "implementation_boundary": [
+    "No BAM-specific logic in the generic planner module.",
+    "No probability model is required.",
+    "No evidence channel may be invented after outcomes.",
+    "If the supplied library is insufficient, return unresolved rather than weakening the target.",
+    "The planner certifies separation only inside the supplied finite world universe."
+  ]
+}

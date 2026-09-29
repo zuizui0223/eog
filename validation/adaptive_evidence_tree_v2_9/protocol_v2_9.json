@@ -1,0 +1,70 @@
+{
+  "schema": "eog.adaptive_set_valued_evidence_tree.protocol.v2_9",
+  "status": "frozen_before_implementation",
+  "parent_v2_8": {
+    "result_fingerprint": "a459ebd6bdde502c5d86aad7baf37443d17d1156fb358a373c5429c5c94115f8",
+    "active_hypotheses": [
+      "absent::p1",
+      "absent::p075",
+      "present::p075"
+    ],
+    "minimum_nonadaptive_robust_design": [
+      "direct_detection_calibration",
+      "direct_target_state_assay"
+    ],
+    "minimum_nonadaptive_size": 2,
+    "rule": "v2.8 results are immutable."
+  },
+  "goal": "Find an exact adaptive evidence policy that chooses the next action after each realized outcome, minimizing worst-case actions needed to isolate the active finite hypothesis.",
+  "planner_contract": {
+    "action_reuse": false,
+    "hypothesis_update": "After observing outcome y from action a, retain exactly hypotheses whose possible-outcome set for a contains y.",
+    "objective": "minimize worst-case number of additional actions until one hypothesis remains",
+    "unresolved_terminal": "If >1 hypotheses remain and no remaining action can guarantee eventual singleton resolution, return unresolved rather than forcing a decision.",
+    "tie_break": "return all optimal first actions; canonical policy chooses lexicographically first optimal action."
+  },
+  "hypotheses": [
+    {
+      "id": "A1_exact_adaptive_recursion",
+      "claim": "The recursive policy value equals exhaustive enumeration of all remaining action/outcome branches for the frozen finite fixture.",
+      "rule": "Any depth or terminal-status mismatch refutes A1."
+    },
+    {
+      "id": "A2_optimal_worst_case_depth",
+      "claim": "The minimum worst-case identification depth is 2 actions, with exactly two optimal first actions: direct_detection_calibration and direct_target_state_assay.",
+      "rule": "Any different depth or optimal-first-action set refutes A2."
+    },
+    {
+      "id": "A3_repeat_first_is_worse",
+      "claim": "Choosing repeat_one_survey or repeat_four_surveys first has worst-case depth 3 because a zero-detection outcome preserves all three active hypotheses before the two direct channels are still needed.",
+      "rule": "Any repeat-first worst-case depth other than 3 refutes A3."
+    },
+    {
+      "id": "A4_known_truth_realized_depth",
+      "claim": "For known truth absent::p1, the canonical calibration-first policy observes p=1 and terminates after exactly one action.",
+      "rule": "Any additional action requirement or wrong terminal hypothesis refutes A4."
+    },
+    {
+      "id": "A5_direct_channels_are_jointly_necessary_for_worst_case_resolution",
+      "claim": "Removing either direct_detection_calibration or direct_target_state_assay makes exact worst-case singleton identification impossible with the remaining finite action library.",
+      "rule": "Any finite worst-case resolving policy after removing either direct channel refutes A5."
+    }
+  ],
+  "outputs": [
+    "minimum_worst_case_depth",
+    "optimal_first_actions",
+    "canonical_first_action",
+    "first_action_worst_case_depths",
+    "known_truth_realized_path",
+    "known_truth_realized_depth",
+    "ablation_without_calibration_status",
+    "ablation_without_state_assay_status",
+    "A1-A5 verdicts"
+  ],
+  "boundary": [
+    "Worst-case set-valued planning is guarantee-oriented and does not optimize expected information gain.",
+    "An adaptive branch may terminate earlier than the worst-case depth.",
+    "Finite action libraries may be insufficient; unresolved is a valid terminal result.",
+    "Idealized direct channels remain upper-bound evidence types."
+  ]
+}

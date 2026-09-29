@@ -1,0 +1,55 @@
+{
+  "schema": "eog.known_truth_bam_direct_movement.summary.v2_3",
+  "protocol_commit": "0d4fce4309a9d8465004ff228457af95150c53ac",
+  "executed_commit": "972e87c1b4d0fb9164d8385f27b87439cb9ca658",
+  "workflow_run_id": 36546191853,
+  "workflow_conclusion": "success",
+  "artifact_id": 11022531843,
+  "artifact_digest": "sha256:67f5da8a6d76798fa15f2ef990d095b6dd70756419a0e41a68749f6178678cef",
+  "result_fingerprint": "39ff1da52bfaf029d67cedb9faaaf6fcf575e5d1b62952c938f5a5a06f15e954",
+  "candidate_world_count": 64,
+  "eligible_truth_worlds": 64,
+  "exact_bam_state_count": 48,
+  "bam_state_unique_fraction": {
+    "E4_complete_G_negative_time_A_B": 0.328125,
+    "E5_plus_direct_M_accessibility": 1,
+    "E6_plus_full_M_arrival": 1
+  },
+  "parameter_unique_fraction_E6": 0.5,
+  "residual_nonidentifiable_cases_after_E6": 0,
+  "direct_M_measurements": {
+    "accessibility_distribution": {
+      "0": 21,
+      "1": 36,
+      "2": 7
+    },
+    "arrival_distribution": {
+      "0": 64
+    },
+    "total_distribution": {
+      "0": 21,
+      "1": 36,
+      "2": 7
+    },
+    "diagnostic_accessibility_node_frequency": {
+      "r0c3": 18,
+      "r0c4": 20,
+      "r0c6": 12
+    }
+  },
+  "correctness": {
+    "M_accessibility_failures": 0,
+    "M_arrival_failures": 0,
+    "complete_BAM_state_recovery_failures": 0,
+    "parameter_alias_split_violations": 0,
+    "targeted_M_reproduction_failures": 0
+  },
+  "verdicts": {
+    "DM_H1_M_accessibility_contraction": "SUPPORTED",
+    "DM_H2_M_arrival_contraction": "SUPPORTED",
+    "DM_H3_complete_BAM_state_recovery": "SUPPORTED",
+    "DM_H4_parameter_alias_honesty": "SUPPORTED",
+    "DM_H5_targeted_M_efficiency": "SUPPORTED"
+  },
+  "central_interpretation": "After orthogonal A/B/M activation, complete occurrence information plus direct A and B still leaves most BAM states unresolved. The missing information is independent movement accessibility outside the realised occupied set. In this frozen 64-world universe, at most two targeted direct-M accessibility observations recover the exact finite-landscape BAM state for every truth; exact parameter labels remain unresolved when they induce identical BAM states."
+}

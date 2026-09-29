@@ -1,0 +1,57 @@
+{
+  "schema": "eog.known_truth_biogeography.witness_factorial_summary.v1",
+  "source_commit": "627ebb747dcdb8e133596270e55d61388f08aad0",
+  "protocol_commit": "2c8657ffc204db77c95daef362bb7941f6b2b0e9",
+  "workflow_run_id": 36539274309,
+  "workflow_conclusion": "success",
+  "artifact_id": 11020020367,
+  "artifact_digest": "sha256:74800b8674e83de15cc666e701e386ebc1cf60bd077d4766e4b8e6ef231bb4ff",
+  "full_result_fingerprint": "b1a2df3a6b1708b533f1f2c2d573eb9802f3a18d8bcada3e55e37124918d533b",
+  "runtime_seconds": 75.8651858,
+  "eligible_exact_cases": 64,
+  "process_worlds_per_landscape": 16,
+  "sampling_replicates_per_case": 32,
+  "sampling_coverages": [
+    0.1,
+    0.25,
+    0.5,
+    1
+  ],
+  "truth_retention_failures": 0,
+  "f1_criterion_mismatches": 0,
+  "f2_monotonicity_violations": 0,
+  "f3_equivalence_violations": 0,
+  "f4_boundary_violations": 0,
+  "identifiable_at_full_coverage_fraction": 0,
+  "observational_equivalence_fraction": 1,
+  "minimum_positive_witness_count_distribution": {
+    "unidentifiable": 64
+  },
+  "identification_rate_by_sampling_coverage": {
+    "0.1": 0,
+    "0.25": 0,
+    "0.5": 0,
+    "1.0": 0
+  },
+  "omitted_truth_falsification_fraction": 0,
+  "omitted_truth_survival_fraction": 1,
+  "omitted_truth_survival_with_superset_fraction": 1,
+  "verdicts": {
+    "F1_witness_criterion": "SUPPORTED",
+    "F2_sampling_monotonicity": "SUPPORTED",
+    "F3_equivalence_ceiling": "SUPPORTED",
+    "F4_omitted_truth_not_guaranteed": "NOT_CONFIRMED"
+  },
+  "interpretation": {
+    "strong_true_process_recovery_claim": "REFUTED in this frozen factorial: no truth was uniquely identifiable even with complete positive occurrence coverage.",
+    "reason": "Every truth case had at least one observationally equivalent or positive-state-superset false world, so positive occurrences supplied no witness capable of eliminating all alternatives.",
+    "finite_world_falsification_claim": "Conditionally supported: canonical cases show falsification when positive witnesses exist, while the factorial shows those witnesses need not exist.",
+    "f4_note": "The factorial did not contain a no-superset omitted-truth case, so the full two-sided F4 boundary was not exercised; only the survival branch was observed."
+  },
+  "language_decision": {
+    "cpp_trigger_exceeded": true,
+    "trigger_seconds": 60,
+    "observed_seconds": 75.8651858,
+    "recommendation": "C++ backend is now permitted for larger sweeps, but first remove redundant repeated first-passage calculations in Python; keep Python as the audited reference implementation."
+  }
+}

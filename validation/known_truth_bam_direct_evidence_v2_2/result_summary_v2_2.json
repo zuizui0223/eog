@@ -1,0 +1,63 @@
+{
+  "schema": "eog.known_truth_bam_direct_evidence.summary.v2_2",
+  "protocol_commit": "b62bb85afb84256b56bf668ded290e81c00d90a5",
+  "executed_commit": "7383ea2cc7f1449483150d574153eb2f0ba32a7d",
+  "workflow_run_id": 36545810188,
+  "workflow_conclusion": "success",
+  "artifact_id": 11022496530,
+  "artifact_digest": "sha256:28abad0fb186506e1a18d52692a17bb4125675383b5a0c4bcbe07947a257b66a",
+  "result_fingerprint": "6146e61c3352b293fcf5542972369511c9c88c2a3de89e23909dd6a8da14dcc0",
+  "candidate_world_count": 64,
+  "eligible_truth_worlds": 64,
+  "exact_bam_state_count": 48,
+  "exact_parameter_alias_count": 16,
+  "bam_state_alias_class_size_distribution": {
+    "1": 32,
+    "2": 16
+  },
+  "identification": {
+    "E0_positive_only": 0,
+    "E1_complete_G_with_perfect_negatives": 0.03125,
+    "E2_E1_plus_arrival_on_occupied_nodes": 0.09375,
+    "E3_E2_plus_complete_A": 0.125,
+    "E4_E3_plus_complete_B": 0.328125,
+    "parameter_unique_E4": 0.140625
+  },
+  "direct_measurement_counts": {
+    "A": {
+      "0": 19,
+      "1": 45
+    },
+    "B": {
+      "0": 12,
+      "1": 31,
+      "2": 21
+    },
+    "total": {
+      "0": 6,
+      "1": 19,
+      "2": 18,
+      "3": 21
+    }
+  },
+  "residual_nonidentifiable_cases_after_E4": 43,
+  "correctness": {
+    "state_equivalence_split_violations": 0,
+    "direct_A_failures": 0,
+    "direct_B_failures": 0,
+    "targeted_measurement_reproduction_failures": 0
+  },
+  "verdicts": {
+    "DE_H1_state_equivalence_honesty": "SUPPORTED",
+    "DE_H2_direct_A_contraction": "SUPPORTED",
+    "DE_H3_direct_B_contraction": "SUPPORTED",
+    "DE_H4_complete_axis_state_recovery": "REFUTED",
+    "DE_H5_targeted_measurement_efficiency": "SUPPORTED"
+  },
+  "interpretation": {
+    "primary": "Direct A and B measurements substantially contract the BAM state set but do not recover the full BAM state in most cases.",
+    "evidence_gain": "BAM-state uniqueness rises from 6/64 after complete G plus occupied-node arrival timing to 8/64 after direct A and 21/64 after direct B.",
+    "remaining_boundary": "43/64 truths remain BAM-state non-identifiable because M accessibility/arrival outside realised occupied G is not directly observed.",
+    "targeted_measurement_result": "At most one A node and at most two B nodes reproduce the complete-axis A/B contraction in this finite universe."
+  }
+}
