@@ -1,15 +1,14 @@
 {
   "schema": "eog.bam_inverse_identifiability.review_package_receipt.v2",
-  "branch_head_sha": "7116a75206b4188d5f449392965dfcefd3199888",
-  "workflow_run_id": 36626477126,
-  "workflow_job_id": 109604644555,
+  "branch_head_sha": "585f8fc2fba4f72e9268e81e85dd7fe154dc3e17",
+  "workflow_run_id": 36627138397,
   "workflow_conclusion": "success",
-  "artifact_id": 11060247487,
-  "artifact_digest": "sha256:1529d1b057ff125347a50aed265d75a74ff8224b31e453c79a6e5ba9afdf9b39",
+  "artifact_id": 11061310897,
+  "artifact_digest": "sha256:3211e4e5459bd95a5ef5c736a2b6eca0b670b268613ee012deac98305c31fe7b",
   "archive": {
     "file_name": "bam_inverse_identifiability_anonymous_review.zip",
     "file_count": 62,
-    "zip_sha256": "f70933d29f6309591b60e2c9c23b004158c3417590b3801196f5fe0dda4a9f9c",
+    "zip_sha256": "db3b9f0b7d5d2af81040aa50552dad1cb79104b912e835c9f32edf6f3ed469e5",
     "anonymous_review": true,
     "privacy_findings": [],
     "deterministic_zip": true
@@ -20,6 +19,14 @@
     "focused_tests_from_archive_only": "PASS",
     "figure_1_to_6_rebuild_from_archive_only": "PASS"
   },
+  "visual_editorial_review": {
+    "figure_1": "PASS after overlap/layout correction",
+    "figure_2": "PASS",
+    "figure_3": "PASS",
+    "figure_4": "PASS",
+    "figure_5": "PASS",
+    "figure_6": "PASS"
+  },
   "checks": [
     "email scan PASS",
     "ORCID scan PASS",
@@ -27,7 +34,8 @@
     "local absolute path scan PASS",
     "author/title-page/cover-letter exclusion PASS",
     "focused BAM/world-reconstruction tests PASS",
-    "Figure 1-6 isolated rebuild PASS"
+    "Figure 1-6 isolated rebuild PASS",
+    "Figure 1-6 visual editorial pass PASS"
   ],
   "submission_role": "anonymous double-review code/data archive; permanent public archive/DOI to replace review-only archive reference at acceptance",
   "scientific_boundary": "packaging/reproducibility only; no change to frozen BAM results or claims"
