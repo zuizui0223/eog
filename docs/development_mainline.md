@@ -247,6 +247,28 @@ The scientific separation remains strict:
 - Structural uses A-Islands original + A-Islands strong-reference + Tanzania;
 - neither programme supplies extra replications for the other.
 
+## Open PR lane map — 2026-09-29
+
+Open pull requests are **not** additional EOG-WF replication unless explicitly stated. The current map is:
+
+- **PR #486 — inferential accessibility**: separate ecological-informatics paper using the frozen EOG STOP denominator plus the separate 284b Level-C ledger. It does not reopen EOG-WF outcomes.
+- **PR #482 — NEON small-mammal continuity**: separate ecological paper. Its metacommunity endpoint and manuscript are outside the EOG-WF 3/31/3 denominator.
+- **PR #479 — NEON metacommunity connectivity**: underlying prospective empirical branch for the #482 paper lane; keep as branch-level scientific provenance.
+- **PR #478 — world-survival identifiability**: separate methods paper built from the closed NEON world-survival programme; not an EOG-WF endpoint extension.
+- **PR #475 — NEON regime candidate funnel**: historical response-blind roster/geometry provenance from the earlier regime programme. It is not the active EOG-WF lane.
+- **PR #473 — Layer-B v3 representation contract**: post-closure outcome-free mechanism experiment. It cannot reinterpret Azores, Louisiana, or Tampa and cannot count as endpoint 4.
+- **PR #445 — separate fresh-real v2 protocol**: preserved as a draft, separately preregistered future protocol. It is not authorized as continuation of the closed EOG-WF series.
+- **PRs #432–#434 — deferred experiments**: post-closure theory/safety/offset work; none is required for EOG-WF submission or current release readiness.
+
+Recently closed as superseded/redundant:
+
+- **PR #398** — old MEE manuscript shell; replaced by the current frozen manuscript, paper-ready bundle, live-policy check and submission builder on `main`.
+- **PR #474** — v1 survival-regime protocol; superseded by v2.
+- **PR #476** and **#477** — v2 intermediate protocol/empirical branches fully carried forward into #478.
+- **PR #485** — inferential-openness draft superseded by the more explicit #486 inferential-accessibility lane.
+
+Therefore an open PR must not be interpreted as permission to reopen EOG-WF science. The only active EOG-WF submission task remains author/admin completion.
+
 ## Hard stop rules
 
 1. **Do not select a fourth EOG-WF fresh endpoint.**
