@@ -1,0 +1,24 @@
+name: BAM identifiability theory
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/v2/bam_identifiability_theory.py"
+      - "validation/bam_identifiability_theory_v1/**"
+      - "tests/test_bam_identifiability_theory.py"
+      - "docs/bam_identifiability_theory_v1.md"
+      - ".github/workflows/bam-identifiability-theory.yml"
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Verify BAM identifiability theorems
+        run: python -m pytest tests/test_bam_identifiability_theory.py -q
