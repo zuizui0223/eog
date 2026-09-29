@@ -1,0 +1,83 @@
+{
+  "schema": "eog.known_truth_bam_intervention.protocol.v2_3",
+  "status": "frozen_before_implementation",
+  "parent_v2_2": {
+    "result_fingerprint": "5912231d6b8d04fd1cbb3540bf137562c394aca9fc40069486d6350ee7fff9f0",
+    "parameter_alias_summary": "32/64 parameter worlds are in non-injective complete-state classes; 8 duplicate classes vary only barrier permeability P and 8 vary only movement horizon H.",
+    "rule": "v2.2 state-identifiability and alias results are immutable."
+  },
+  "question": "Can finite, axis-specific interventions activate movement parameters that are structurally unidentifiable under passive BAM observations?",
+  "principle": "A parameter that does not change any currently observed state is not identifiable from more passive observations of that same state. Identification requires an intervention that makes alternative parameter values imply different observables.",
+  "frozen_interventions": [
+    {
+      "id": "P_barrier_challenge",
+      "target_axis": "barrier_permeability_P",
+      "design": "Reset a standardized propagule source to r1c3 on the left side of a hard barrier at column 4 in the canonical 7x3 landscape; observe one-step reachability of r1c4.",
+      "fixed_conditions": {
+        "source_id": "r1c3",
+        "target_id": "r1c4",
+        "horizon": 1,
+        "barrier_col": 4,
+        "barrier_gap_rows": []
+      },
+      "rationale": "Both frozen dispersal radii exceed distance(r1c3,r1c4)=1, and all candidate H values exceed one step, so only P should determine crossing."
+    },
+    {
+      "id": "H_long_corridor_challenge",
+      "target_axis": "movement_horizon_H",
+      "design": "Place a standardized source at r1c0 in a 9x3 barrier-free corridor and observe whether r1c8 is reachable by the declared horizon.",
+      "fixed_conditions": {
+        "width": 9,
+        "height": 3,
+        "source_id": "r1c0",
+        "target_id": "r1c8",
+        "barrier_col": null
+      },
+      "rationale": "For D=1.01 the target requires 8 steps; for D=2.01 it requires 4 steps. Therefore H=3 cannot reach the target while H=8 can, regardless of P."
+    }
+  ],
+  "primary_hypotheses": [
+    {
+      "id": "I1_P_alias_activation",
+      "claim": "Every v2.2 complete-state alias class varying only P is split by the frozen barrier challenge.",
+      "rule": "Any P-only alias pair with identical barrier-challenge outcome refutes I1."
+    },
+    {
+      "id": "I2_H_alias_activation",
+      "claim": "Every v2.2 complete-state alias class varying only H is split by the frozen long-corridor challenge.",
+      "rule": "Any H-only alias pair with identical long-corridor outcome refutes I2."
+    },
+    {
+      "id": "I3_axis_specificity",
+      "claim": "The P challenge is invariant to H within otherwise matched worlds, and the H challenge is invariant to P within otherwise matched worlds.",
+      "rule": "Any non-target-axis dependence under the frozen challenge definitions refutes I3."
+    },
+    {
+      "id": "I4_full_parameter_recovery",
+      "claim": "Appending both intervention outcomes to the complete passive BAM state tuple makes all 64 frozen parameter worlds injective.",
+      "rule": "Any intervention-augmented equivalence class of size >1 refutes I4."
+    }
+  ],
+  "controls": [
+    "Re-observing the same passive complete A/B/M state without intervention must leave the v2.2 48 equivalence classes unchanged.",
+    "Interventions operate on M only and must not be interpreted as evidence about A or B."
+  ],
+  "primary_outputs": [
+    "number_of_passive_equivalence_classes",
+    "P_only_alias_classes",
+    "H_only_alias_classes",
+    "P_alias_classes_split",
+    "H_alias_classes_split",
+    "axis_specificity_violations",
+    "number_of_intervention_augmented_classes",
+    "intervention_augmented_class_size_distribution",
+    "world_fraction_uniquely_identified_after_intervention",
+    "I1-I4 verdicts"
+  ],
+  "claim_boundary": [
+    "These are idealized mechanism-activation experiments, not passive occurrence inference.",
+    "The result is conditional on the finite candidate parameter grid.",
+    "An intervention can identify only parameters that causally change its declared outcome.",
+    "Do not generalize barrier or horizon intervention success to A/B parameters."
+  ]
+}
