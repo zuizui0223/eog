@@ -30,7 +30,7 @@ Provide the final EOG-WF author order and, for each author:
 - approved CRediT roles;
 - whether the author is corresponding author.
 
-For each affiliation provide institution, department/unit if applicable, city, country and any postal address required for the corresponding author.
+For each affiliation provide institution, department/unit if applicable, city, country and the institutional postal address required on the MEE title page.
 
 Corresponding-author contact:
 
@@ -58,6 +58,10 @@ Confirm any fieldwork, animal-use, collection-permit or institutional ethics sta
 Confirm whether all authors approve:
 
 > This manuscript is original, has not been published previously, and is not under consideration for publication elsewhere.
+
+## Third-party data reuse
+
+Confirm that every third-party dataset used by EOG-WF is either publicly available for reuse or was used with the required permission, and provide the author-approved statement for the title page/submission record.
 
 ## AI / LLM disclosure
 
@@ -114,6 +118,10 @@ ETHICS / PERMITS:
 
 ORIGINALITY / SIMULTANEOUS SUBMISSION:
 approved / ...
+
+THIRD-PARTY DATA REUSE:
+publicly available or permission obtained: yes / ...
+Statement: ...
 
 AI / LLM:
 Applications/models/versions and extent: ...
