@@ -74,7 +74,7 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.pytest.ini_options]
-pythonpath = ["."]
+pythonpath = [".", "benchmarks"]
 """
 
 
