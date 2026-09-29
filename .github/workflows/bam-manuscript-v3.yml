@@ -1,0 +1,37 @@
+name: BAM inverse-identifiability manuscript v3
+
+on:
+  pull_request:
+    paths:
+      - "manuscript/bam_identifiability/**"
+      - "benchmarks/check_bam_manuscript_v3.py"
+      - "tests/test_bam_manuscript_v3.py"
+      - ".github/workflows/bam-manuscript-v3.yml"
+      - "validation/known_truth_bam_v3/**"
+      - "validation/restrictiveness_ambiguity_v3_1/**"
+      - "validation/independent_stochastic_temporal_v3_2/**"
+      - "validation/multilandscape_stochastic_bam_v4/**"
+      - "validation/bam_identifiability_theory_v1/**"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Run manuscript audit
+        run: |
+          python benchmarks/check_bam_manuscript_v3.py \
+            --output build/bam_manuscript_v3/MANUSCRIPT_AUDIT_V3.json
+      - name: Verify manuscript tests
+        run: python -m pytest tests/test_bam_manuscript_v3.py -q
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-manuscript-v3-audit
+          path: build/bam_manuscript_v3/MANUSCRIPT_AUDIT_V3.json
+          if-no-files-found: error
