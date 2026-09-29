@@ -16,6 +16,7 @@ FINAL_MANUSCRIPT = ROOT / "manuscript/EOG_WF_MANUSCRIPT_FINAL.md"
 TITLE_PAGE = ROOT / "manuscript/EOG_WF_TITLE_PAGE.md"
 AI_DISCLOSURE = ROOT / "manuscript/EOG_WF_AI_LLM_DISCLOSURE.md"
 ADMIN_RECEIPT = ROOT / "manuscript/EOG_WF_AUTHOR_ADMIN_APPROVAL_RECEIPT.json"
+LIVE_POLICY = ROOT / "manuscript/EOG_WF_MEE_LIVE_POLICY_VERIFICATION_2026-09-29.md"
 BOUNDARY = ROOT / "manuscript/paper_ready/submission_boundary.json"
 OUT = ROOT / "build/eogwf_mee_submission_readiness.json"
 
@@ -97,6 +98,9 @@ def main() -> int:
             admin_receipt_valid and ai_disclosure_present
         ),
         "open_source_license_file_present": open_source_license_file_present,
+        "live_mee_policy_verification_present": (
+            LIVE_POLICY.is_file() and LIVE_POLICY.stat().st_size > 0
+        ),
     }
 
     result = {
