@@ -7,19 +7,31 @@
     "article_type": "Research Article",
     "rationale": "biogeographic inverse-identifiability theory is the scientific center; EOG v3 remains implementation rather than title-level novelty"
   },
-  "validated_artifact": {
-    "workflow_run_id": 36622841063,
-    "artifact_id": 11058976872,
-    "artifact_digest": "sha256:99328c3f18c61855b7156c9b66d0c206791b396ffe524e4308f465db39d0b35f",
-    "jbi_readiness_fingerprint": "12f4542ec61d9f479fd402ab6ef08ad7e5ea6c7aff2b3488f09efb23c5555ca5",
+  "validated_manuscript_artifact": {
+    "source_branch_head": "585f8fc2fba4f72e9268e81e85dd7fe154dc3e17",
+    "workflow_run_id": 36627138396,
+    "artifact_id": 11060433355,
+    "artifact_digest": "sha256:d519df3c474c35e2f53671c65fb9e6d65a83433cd828b9f95f2d516adba63866",
+    "jbi_readiness_fingerprint": "f77df144f64cf53988a0fcee424342d088985fd0194c0b5b6dd09c16850c0f31",
     "manuscript_audit_fingerprint": "dad9a66ff70d851af1a0de879e1a4bec16358a3dad9e72067b2a24c327c0d1bb"
+  },
+  "validated_anonymous_review_archive": {
+    "workflow_run_id": 36627138397,
+    "artifact_id": 11061310897,
+    "artifact_digest": "sha256:3211e4e5459bd95a5ef5c736a2b6eca0b670b268613ee012deac98305c31fe7b",
+    "zip_sha256": "db3b9f0b7d5d2af81040aa50552dad1cb79104b912e835c9f32edf6f3ed469e5",
+    "file_count": 62,
+    "privacy_findings": 0,
+    "isolated_install": "PASS",
+    "focused_tests": "PASS",
+    "isolated_figure_rebuild": "PASS"
   },
   "format_metrics": {
     "title_chars": 111,
     "running_title_chars": 30,
     "structured_abstract_words": 265,
     "keywords": 8,
-    "manuscript_words_approx": 4502,
+    "manuscript_words_approx": 4611,
     "main_figures": 6
   },
   "completed": [
@@ -30,29 +42,35 @@
     "temporal evidence analysis",
     "8-landscape stochastic panel with 2 retained DESIGN_STOP systems",
     "exact targeted-measurement audit",
-    "prior-art boundary and core bibliography",
+    "prior-art boundary including BAM covariate-attribution literature",
+    "citation/reference crosswalk with zero missing or uncited references",
     "citation-ready JBI-structured manuscript",
     "source-fingerprinted figure data",
     "reproducible Figure 1-6 builder",
+    "Figure 1-6 visual editorial pass",
     "reviewer defense matrix",
     "manuscript audit CI",
-    "JBI format readiness CI"
+    "JBI format readiness CI",
+    "cover letter below 100 words",
+    "Data Accessibility Statement aligned to anonymous review archive",
+    "self-contained anonymized review archive",
+    "anonymous archive privacy scan",
+    "anonymous archive isolated install and focused-test reproduction",
+    "anonymous archive isolated Figure 1-6 reproduction"
   ],
   "remaining_scientific_decision": {
     "named_species_empirical_illustration": {
       "required_for_current_theory_claim": false,
-      "status": "optional_unresolved",
+      "status": "not_required_for_submission",
       "rule": "Do not add opportunistically. Add only under a separately frozen evidence contract if it materially strengthens the inverse-identifiability argument."
     }
   },
   "remaining_submission_tasks": [
-    "visual editorial pass on generated Figures 1-6",
-    "final exhaustive literature/reference formatting pass",
-    "prepare anonymized review repository/link for code and frozen outputs",
-    "prepare separate author/title-page metadata",
-    "prepare JBI cover letter",
-    "prepare biosketch and required author statements",
-    "replace review-repository wording with permanent public archive/DOI at acceptance"
+    "upload/attach the validated anonymous review archive through the journal submission route or an anonymous/private review repository",
+    "complete separate author/title-page metadata",
+    "complete author-approved AI/LLM disclosure if applicable",
+    "complete Author Contributions, Funding, Acknowledgements, Conflicts of Interest and biosketch",
+    "replace review-only archive wording with a permanent public archive/DOI at acceptance"
   ],
   "claim_boundary": [
     "surviving world is not historical truth",
@@ -61,5 +79,5 @@
     "programme-specific measurement bounds are not universal constants",
     "EOG-WF predictive complementarity is excluded from this manuscript"
   ],
-  "status": "SCIENTIFICALLY_READY_FOR_INTERNAL_REVIEW"
+  "status": "READY_FOR_SUBMISSION_ADMIN"
 }
