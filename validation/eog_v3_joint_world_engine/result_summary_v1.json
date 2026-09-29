@@ -1,0 +1,40 @@
+{
+  "schema": "eog.v3.joint_world_engine.summary.v1",
+  "protocol_commit": "d0dd7c03b487955cfe63cb4b5b9fe7824df7f5d3",
+  "executed_commit": "86429a5ce6e4cf583312211fe30b9460cb9a914f",
+  "workflow_run_id": 36562242000,
+  "workflow_conclusion": "success",
+  "artifact_id": 11030062774,
+  "artifact_digest": "sha256:027233e61dff7ab527ac65bbc104a67f7045e15ec42f871bf5cb2f76149849f6",
+  "result_fingerprint": "fbabf1af57a684331eb7094481402bd63cc9fdf753c4b9accb7bfa83673bfccf",
+  "reproduction": {
+    "strict_joint_survivor_count": 48,
+    "broad_joint_survivor_count": 112,
+    "strict_ecological_projection_count": 48,
+    "broad_ecological_projection_count": 64,
+    "calibrated_ecological_projection_count": 48
+  },
+  "planning": {
+    "best_action_joint_objective": [
+      "calibrate_detection_world"
+    ],
+    "best_action_ecological_objective": [
+      "gold_standard_target_state"
+    ],
+    "fail_closed_joint": true,
+    "fail_closed_ecological": true
+  },
+  "coverage_certificate": "exact_exhaustive_finite_ecology_observation_product",
+  "verdicts": {
+    "V3_1_reproduce_joint_v27": "SUPPORTED",
+    "V3_2_reproduce_stochastic_v28": "SUPPORTED",
+    "V3_3_evidence_update_monotonicity": "SUPPORTED",
+    "V3_4_observation_universe_expansion": "SUPPORTED",
+    "V3_5_fail_closed_action_choice": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "EOG v3 consolidates ecological-world uncertainty, observation-process uncertainty, exact falsification, projection, and robust next-evidence ranking in one finite-world API.",
+    "separation": "The engine keeps ecological and observation uncertainty separate; ecological conclusions are projections of surviving joint worlds rather than assumptions about a single observation model.",
+    "planning": "Evidence actions are ranked against an explicitly declared inferential target. No action is recommended when none strictly improves the chosen worst-case target."
+  }
+}
