@@ -24,6 +24,24 @@ Mechanistic and Correlative Models of Ecological Niches.
 European Journal of Ecology.
 DOI: 10.1515/eje-2015-0014.
 
+## BAM covariate-association inference
+
+Beale, C.M. et al. (2014).
+A new statistical framework for the quantification of covariate associations with species distributions.
+Methods in Ecology and Evolution 5.
+DOI: 10.1111/2041-210X.12174.
+
+This is close prior art because it explicitly builds on BAM to quantify minimum
+abiotic/biotic covariate associations while acknowledging that the precise cause
+of presence or absence at a location is difficult to identify.
+
+Use it to sharpen the gap:
+
+- the present manuscript is not the first BAM-based attempt to attribute distribution;
+- it does not estimate relative covariate importance;
+- it instead derives exact finite compatibility fibers and identifies when no
+  occurrence-based attribution is possible even with complete data.
+
 ## Known-truth BAM / virtual species
 
 Saupe, E.E., Barve, V., Myers, C.E., Soberón, J., Barve, N., Hensz, C.M.,
