@@ -13,6 +13,13 @@ on:
       - 'manuscript/EOG_WF_KNOWN_TRUTH_BENCHMARK_V1.md'
       - 'manuscript/EOG_WF_TITLE_PAGE.md'
       - 'manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md'
+      - 'manuscript/EOG_WF_AUTHOR_ADMIN_CONFIRMATION.template.json'
+      - 'manuscript/EOG_WF_AUTHOR_ADMIN_CONFIRMATION.json'
+      - 'manuscript/EOG_WF_AUTHOR_ADMIN_APPROVAL_RECEIPT.json'
+      - 'manuscript/EOG_WF_AI_LLM_DISCLOSURE.md'
+      - 'manuscript/EOG_WF_MANUSCRIPT_FINAL.md'
+      - 'manuscript/AUTHOR_ADMIN_CONFIRMATION_PACKET.md'
+      - 'manuscript/build_eogwf_author_admin.py'
       - 'manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json'
       - 'manuscript/MEE_DESK_FIT_AUDIT_V2.md'
       - 'manuscript/build_eogwf_submission_package.py'
@@ -32,6 +39,13 @@ on:
       - 'manuscript/EOG_WF_KNOWN_TRUTH_BENCHMARK_V1.md'
       - 'manuscript/EOG_WF_TITLE_PAGE.md'
       - 'manuscript/EOG_WF_TITLE_PAGE_TEMPLATE.md'
+      - 'manuscript/EOG_WF_AUTHOR_ADMIN_CONFIRMATION.template.json'
+      - 'manuscript/EOG_WF_AUTHOR_ADMIN_CONFIRMATION.json'
+      - 'manuscript/EOG_WF_AUTHOR_ADMIN_APPROVAL_RECEIPT.json'
+      - 'manuscript/EOG_WF_AI_LLM_DISCLOSURE.md'
+      - 'manuscript/EOG_WF_MANUSCRIPT_FINAL.md'
+      - 'manuscript/AUTHOR_ADMIN_CONFIRMATION_PACKET.md'
+      - 'manuscript/build_eogwf_author_admin.py'
       - 'manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json'
       - 'manuscript/MEE_DESK_FIT_AUDIT_V2.md'
       - 'manuscript/build_eogwf_submission_package.py'
@@ -67,8 +81,20 @@ jobs:
 
           blockers=json.loads(Path('manuscript/EOG_WF_SUBMISSION_BLOCKERS_V1.json').read_text())
           receipt=json.loads(Path('build/eogwf_submission_package/submission_package_receipt.json').read_text())
-          expected=[item['id'] for item in blockers['remaining_submission_blockers']]
+          canonical=[item['id'] for item in blockers['remaining_submission_blockers']]
+          admin_ids={
+              'title_page_author_confirmation',
+              'ai_llm_disclosure_author_confirmation',
+          }
+          expected=[
+              blocker_id for blocker_id in canonical
+              if not (
+                  receipt['author_admin_approval_receipt_valid']
+                  and blocker_id in admin_ids
+              )
+          ]
           assert receipt['scientific_desk_fit_ready'] is True
+          assert receipt['canonical_submission_blocker_ids']==canonical
           assert receipt['remaining_submission_blocker_ids']==expected
           assert receipt['remaining_submission_blocker_count']==len(expected)
           with zipfile.ZipFile('build/eogwf_submission_package/eogwf_submission_package.zip') as zf:
