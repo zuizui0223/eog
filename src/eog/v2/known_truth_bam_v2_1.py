@@ -483,7 +483,7 @@ def run_bam_v21() -> dict[str, object]:
                 "AM": "AM",
                 "BM": "BM",
                 "ABM": "ABM",
-                "": "none",
+                "none": "none",
             }[label]
             axis_counts[key] += 1
             eliminated = false_world.world_id not in positive.compatible_world_ids
