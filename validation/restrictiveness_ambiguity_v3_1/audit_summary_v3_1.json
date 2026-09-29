@@ -1,0 +1,68 @@
+{
+  "schema": "eog.restrictiveness_ambiguity_audit.summary.v3_1",
+  "audit_contract_commit": "caedc60f7a4001c7af0120556b00ab8255eeaaf0",
+  "executed_commit": "304e20c15b5c70b94d524b9ee817d6ae788f1bef",
+  "workflow_run_id": 36552779020,
+  "workflow_conclusion": "success",
+  "artifact_id": 11025368208,
+  "artifact_digest": "sha256:f2dbe963dca9d6dbfe775c9c408e3f4f4e0bdaa4b50e7cf17d0b4e10ab114692",
+  "result_fingerprint": "ae797daf732af37740408fd5ca3cb4eb1c02f5345b9ffea651fbec5d05d79b2c",
+  "candidate_world_count": 32,
+  "strict_support_inclusion_pair_count": 304,
+  "nesting_monotonicity_violations": 0,
+  "support_equivalence_class_count": 8,
+  "support_equivalence_class_size_distribution": {
+    "4": 8
+  },
+  "support_size_vs_ambiguity_pearson_r": -0.6716589543962691,
+  "maximum_ambiguity": {
+    "count": 32,
+    "worlds": [
+      "A_narrow|B_partner_and_antagonist|M_long_closed",
+      "A_narrow|B_partner_and_antagonist|M_long_open",
+      "A_narrow|B_partner_and_antagonist|M_short_closed",
+      "A_narrow|B_partner_and_antagonist|M_short_open"
+    ]
+  },
+  "minimum_ambiguity": {
+    "count": 4,
+    "worlds": [
+      "A_broad|B_none|M_long_closed",
+      "A_broad|B_none|M_long_open",
+      "A_broad|B_none|M_short_closed",
+      "A_broad|B_none|M_short_open"
+    ]
+  },
+  "frozen_truth_scenarios": {
+    "joint_ABM": {
+      "support_size": 33,
+      "compatible_world_count": 32
+    },
+    "antagonist_limited": {
+      "support_size": 40,
+      "compatible_world_count": 8
+    },
+    "A_limited": {
+      "support_size": 67,
+      "compatible_world_count": 8
+    },
+    "partner_limited": {
+      "support_size": 67,
+      "compatible_world_count": 8
+    },
+    "distance_limited": {
+      "support_size": 96,
+      "compatible_world_count": 4
+    },
+    "barrier_limited": {
+      "support_size": 96,
+      "compatible_world_count": 4
+    }
+  },
+  "interpretation": {
+    "exact": "For all 304 strict support-inclusion pairs, the narrower support had an equal-or-larger complete-positive compatible-world set.",
+    "movement_erasure": "All 32 worlds collapsed into eight reachable-support classes of size four. In this frozen landscape the four M settings are invisible to complete static positive support once A and B are fixed.",
+    "paradox": "Joint A+B+M limitation created the smallest frozen truth support and the largest ambiguity. More ecological restriction can therefore reduce positive-only process identifiability.",
+    "boundary": "Cardinality is descriptive; set inclusion is the exact ordering behind the result."
+  }
+}
