@@ -1,0 +1,72 @@
+{
+  "schema": "eog.eogwf_author_admin_confirmation.v1",
+  "manuscript": {
+    "title": "Environmental Occupancy Geometry: auditable finite-world falsification with a prospectively stress-tested prediction interface",
+    "journal": "Methods in Ecology and Evolution",
+    "article_type": "Research Article",
+    "running_headline_suggestion": "Environmental Occupancy Geometry",
+    "review_snapshot_commit": "91125ae68004f298fcd45027566506772a3688d5",
+    "review_snapshot_url": "https://github.com/zuizui0223/eog/tree/91125ae68004f298fcd45027566506772a3688d5"
+  },
+  "authors": [],
+  "affiliations": [],
+  "corresponding_author": {
+    "author_id": null,
+    "email": null,
+    "postal_address": null
+  },
+  "running_headline": null,
+  "acknowledgements": null,
+  "funding": {
+    "confirmed_by_all_authors": false,
+    "statement": null
+  },
+  "competing_interests": {
+    "confirmed_by_all_authors": false,
+    "statement": null
+  },
+  "ethics_and_permits": {
+    "reviewed_by_all_authors": false,
+    "statement": null
+  },
+  "originality_and_submission": {
+    "approved_by_all_authors": false,
+    "not_published_previously_confirmed": false,
+    "not_under_consideration_elsewhere_confirmed": false
+  },
+  "inclusion_statement": {
+    "approved_by_all_authors": false,
+    "statement": null
+  },
+  "ai_llm": {
+    "application": "ChatGPT",
+    "provider": "OpenAI",
+    "model_or_version": null,
+    "approximate_period": null,
+    "assistance_categories": [
+      "code review and generation",
+      "reproducibility checks",
+      "literature triage",
+      "manuscript organization",
+      "language editing"
+    ],
+    "other_assistance": null,
+    "specific_code_or_text_annotations": null,
+    "responsible_author_id": null,
+    "final_methods_disclosure": null,
+    "contribution_statement": null,
+    "reviewed_by_all_authors": false,
+    "author_accountability_confirmed": false,
+    "live_journal_policy_checked": false
+  },
+  "confirmations": {
+    "author_order_approved": false,
+    "affiliations_approved": false,
+    "corresponding_author_approved": false,
+    "credit_roles_approved": false,
+    "acknowledgements_approved": false,
+    "running_headline_approved": false,
+    "final_title_page_approved": false,
+    "final_ai_llm_disclosure_approved": false
+  }
+}
