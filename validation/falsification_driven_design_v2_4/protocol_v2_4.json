@@ -1,0 +1,70 @@
+{
+  "schema": "eog.falsification_driven_experiment_design.protocol.v2_4",
+  "status": "frozen_before_implementation",
+  "parent_v2_3": {
+    "result_fingerprint": "654ec11ce21455989b399c7668f06595cd499b5acb347b78bdc17582f92960f2",
+    "passive_classes": 48,
+    "candidate_worlds": 64,
+    "residual_alias_pairs": 16,
+    "P_challenge_split_classes": 8,
+    "H_challenge_split_classes": 8,
+    "rule": "v2.3 results are immutable"
+  },
+  "goal": "Convert finite-world ambiguity into an explicit experiment-design problem: choose the smallest admissible intervention set that separates all currently passive-equivalent worlds, or report that the intervention library is insufficient.",
+  "fixed_information": {
+    "passive_signature": "complete BAM state tuple (A mask, B mask, M mask, full M first-arrival vector)",
+    "unresolved_unit": "unordered world pair sharing the same passive signature",
+    "intervention_library": [
+      {
+        "id": "P_barrier_challenge",
+        "outcome": "binary barrier-crossing response from v2.3"
+      },
+      {
+        "id": "H_long_corridor_challenge",
+        "outcome": "binary long-corridor target reachability from v2.3"
+      },
+      {
+        "id": "repeat_passive_state",
+        "outcome": "the already-known passive state signature; expected to split zero unresolved pairs"
+      }
+    ]
+  },
+  "planner_contract": {
+    "ranking_metric": "number of currently unresolved world pairs split by the intervention",
+    "secondary_metric": "largest residual equivalence-class size after adding the intervention",
+    "minimum_set_solver": "exact exhaustive subset search over the finite intervention library",
+    "no_probability_or_utility_weighting": true
+  },
+  "hypotheses": [
+    {
+      "id": "E1_pair_cover_equivalence",
+      "claim": "A selected intervention set identifies every world within the passive finite universe if and only if every passive-unresolved world pair differs on at least one selected intervention outcome.",
+      "rule": "Any disagreement between pair coverage and augmented-signature injectivity refutes E1."
+    },
+    {
+      "id": "E2_current_library_structure",
+      "claim": "In the frozen v2.3 universe, P_barrier_challenge and H_long_corridor_challenge each split exactly 8 of the 16 passive-unresolved pairs, while repeat_passive_state splits 0.",
+      "rule": "Any count mismatch refutes E2."
+    },
+    {
+      "id": "E3_minimum_design",
+      "claim": "The exact minimum intervention set that makes all 64 frozen worlds uniquely identifiable is {P_barrier_challenge, H_long_corridor_challenge}, of size 2.",
+      "rule": "Any smaller separating set, any different size-2 separating set, or failure of this set to separate all worlds refutes E3."
+    }
+  ],
+  "outputs": [
+    "passive_unresolved_pair_count",
+    "per_intervention_split_pair_count",
+    "per_intervention_residual_class_structure",
+    "ranked_interventions",
+    "minimum_separating_set",
+    "minimum_set_size",
+    "all_worlds_separated",
+    "E1-E3 verdicts"
+  ],
+  "boundary": [
+    "The planner optimizes separation inside a declared finite world universe; it does not prove that the universe contains biological truth.",
+    "The intervention library must be declared before outcome-dependent selection.",
+    "A non-separating library must return unresolved rather than inventing a new intervention after seeing outcomes."
+  ]
+}
