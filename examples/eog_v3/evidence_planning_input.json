@@ -1,0 +1,99 @@
+{
+  "ecological_worlds": [
+    {
+      "world_id": "eco_absent",
+      "state_by_target": {
+        "site": "absent"
+      }
+    },
+    {
+      "world_id": "eco_present",
+      "state_by_target": {
+        "site": "present"
+      }
+    }
+  ],
+  "observation_worlds": [
+    {
+      "world_id": "perfect",
+      "supports": [
+        {
+          "channel_id": "survey",
+          "ecological_state": "absent",
+          "possible_outcomes": [
+            "zero"
+          ]
+        },
+        {
+          "channel_id": "survey",
+          "ecological_state": "present",
+          "possible_outcomes": [
+            "positive"
+          ]
+        }
+      ]
+    },
+    {
+      "world_id": "imperfect",
+      "supports": [
+        {
+          "channel_id": "survey",
+          "ecological_state": "absent",
+          "possible_outcomes": [
+            "zero"
+          ]
+        },
+        {
+          "channel_id": "survey",
+          "ecological_state": "present",
+          "possible_outcomes": [
+            "zero",
+            "positive"
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence_events": [
+    {
+      "target_id": "site",
+      "channel_id": "survey",
+      "observed_outcome": "zero"
+    }
+  ],
+  "action_supports": {
+    "calibrate_detection_world": {
+      "eco_absent::imperfect": [
+        "imperfect"
+      ],
+      "eco_absent::perfect": [
+        "perfect"
+      ],
+      "eco_present::imperfect": [
+        "imperfect"
+      ]
+    },
+    "gold_standard_target_state": {
+      "eco_absent::imperfect": [
+        "absent"
+      ],
+      "eco_absent::perfect": [
+        "absent"
+      ],
+      "eco_present::imperfect": [
+        "present"
+      ]
+    },
+    "repeat_same_information": {
+      "eco_absent::imperfect": [
+        "same"
+      ],
+      "eco_absent::perfect": [
+        "same"
+      ],
+      "eco_present::imperfect": [
+        "same"
+      ]
+    }
+  }
+}
