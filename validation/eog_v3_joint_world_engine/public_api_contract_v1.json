@@ -1,0 +1,87 @@
+{
+  "schema": "eog.v3.public_api_contract.v1",
+  "status": "experimental_post_closure",
+  "scientific_boundary": {
+    "reopens_eog_wf": false,
+    "changes_three_endpoint_denominator": false,
+    "changes_layer_a_claims": false,
+    "changes_layer_b_claims": false,
+    "intended_role": "post-closure finite joint-world falsification and evidence-design API"
+  },
+  "python_surface": {
+    "module": "eog.v3",
+    "exported_symbols": [
+      "ActionRanking",
+      "EcologicalWorld",
+      "EvidenceEvent",
+      "JointEvidencePlan",
+      "JointMember",
+      "JointWorldEvaluation",
+      "ObservationSupport",
+      "ObservationWorld",
+      "evaluate_joint_worlds",
+      "evaluation_is_contraction",
+      "plan_next_evidence_action"
+    ]
+  },
+  "cli_surface": [
+    {
+      "command": "eog-v3-joint-evaluate",
+      "required_args": [
+        "--input",
+        "--output"
+      ],
+      "optional_args": [
+        "--force"
+      ],
+      "output_schema": "eog.v3.joint_evaluation.v1"
+    },
+    {
+      "command": "eog-v3-plan-evidence",
+      "required_args": [
+        "--input",
+        "--output",
+        "--objective"
+      ],
+      "objective_values": [
+        "joint",
+        "ecological"
+      ],
+      "optional_args": [
+        "--force"
+      ],
+      "output_schema": "eog.v3.evidence_plan.v1"
+    }
+  ],
+  "json_inputs": {
+    "schema_path": "schemas/eog_v3_joint_input.schema.json",
+    "runnable_examples": [
+      "examples/eog_v3/joint_evaluation_input.json",
+      "examples/eog_v3/evidence_planning_input.json"
+    ]
+  },
+  "exact_semantics": [
+    "Joint worlds are the declared finite Cartesian product of ecological worlds and observation worlds.",
+    "A joint world survives iff every observed outcome belongs to the declared support for the relevant channel and ecological state.",
+    "Ecological and observation conclusions are projections of surviving joint worlds.",
+    "Hard universe falsification requires zero surviving joint worlds.",
+    "Evidence actions are ranked using support-based guaranteed pair separation and worst-case survivor counts.",
+    "Action choice is objective-specific.",
+    "If no supplied action strictly improves the selected worst-case objective, no best action is returned."
+  ],
+  "validation": {
+    "scientific_result_fingerprint": "fbabf1af57a684331eb7094481402bd63cc9fdf753c4b9accb7bfa83673bfccf",
+    "required_tests": [
+      "tests/test_v3_joint_world_engine.py",
+      "tests/test_v3_cli.py",
+      "tests/test_v3_examples.py",
+      "tests/test_v3_public_api.py"
+    ],
+    "required_workflow": ".github/workflows/eog-v3-joint-world-engine.yml"
+  },
+  "compatibility_policy": {
+    "current_status": "experimental",
+    "breaking_changes_allowed_before_first_v3_release": true,
+    "after_first_v3_release": "schema or public symbol changes require a versioned contract"
+  }
+}
