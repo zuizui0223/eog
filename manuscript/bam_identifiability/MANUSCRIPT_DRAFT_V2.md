@@ -13,7 +13,7 @@ The resulting inferential object is therefore not a selected “true process” 
 Species distributions are often used to reason backward from pattern to process. An observed range can motivate claims about climatic tolerance, dependence on interacting species, dispersal limitation or barriers to movement. The Biotic–Abiotic–Movement (BAM) framework makes the forward logic explicit: a realised geographic distribution is shaped by abiotic conditions, biotic permissibility and accessibility (Soberón & Peterson, 2005; Soberón & Nakamura, 2009). In its simplest set representation,
 
 $$
-G = A \\cap B \\cap M.
+G = A \cap B \cap M.
 $$
 
 BAM is therefore naturally generative. Given A, B, M and an initial state, one asks what distribution follows.
@@ -39,18 +39,18 @@ We answer these questions with exact finite-set identities and a preregistered k
 
 ### 2.1 Finite BAM worlds
 
-Let X be a finite node universe. Each candidate world $w\\in W$ has:
+Let X be a finite node universe. Each candidate world $w\in W$ has:
 
-- abiotic support $A_w\\subseteq X$;
-- biotic permissibility $B_w\\subseteq X$;
-- movement accessibility $M_w\\subseteq X$;
-- movement first-arrival state $\\t\\tau_w$;
-- optional parameter labels $\\t\\theta_w$.
+- abiotic support $A_w\subseteq X$;
+- biotic permissibility $B_w\subseteq X$;
+- movement accessibility $M_w\subseteq X$;
+- movement first-arrival state $\t\tau_w$;
+- optional parameter labels $\t\theta_w$.
 
 The realised distribution is
 
 $$
-G_w=A_w\\cap B_w\\cap M_w.
+G_w=A_w\cap B_w\cap M_w.
 $$
 
 Let $w_*$ be the generating truth.
@@ -69,7 +69,7 @@ S_0$w_*$=
 This immediately gives the positive-superset ceiling. If
 
 $$
-G_*\\subseteq G_w,
+G_*\subseteq G_w,
 $$
 
 then no valid positive occurrence sampled from $G_*$ can eliminate w. This is not a finite-sample limitation. It remains true under complete positive observation.
@@ -79,7 +79,7 @@ then no valid positive occurrence sampled from $G_*$ can eliminate w. This is no
 If every node in X is surveyed perfectly, positives imply
 
 $$
-G_*\\subseteq G_w
+G_*\subseteq G_w
 $$
 
 and negatives imply
@@ -104,37 +104,37 @@ We condition the same survivor set on increasingly direct evidence.
 Occupied-node movement timing:
 
 $$
-S_2=\\{w\\in S_1:\\t\\tau_w|_{G_*}=\\t\\tau_*|_{G_*}\\}.
+S_2=\{w\in S_1:\t\tau_w|_{G_*}=\t\tau_*|_{G_*}\}.
 $$
 
 Direct abiotic state:
 
 $$
-S_3=\\{w\\in S_2:A_w=A_*\\}.
+S_3=\{w\in S_2:A_w=A_*\}.
 $$
 
 Direct biotic state:
 
 $$
-S_4=\\{w\\in S_3:B_w=B_*\\}.
+S_4=\{w\in S_3:B_w=B_*\}.
 $$
 
 Direct movement accessibility:
 
 $$
-S_5=\\{w\\in S_4:M_w=M_*\\}.
+S_5=\{w\in S_4:M_w=M_*\}.
 $$
 
 Complete movement-arrival state:
 
 $$
-S_6=\\{w\\in S_5:\\t\\tau_w=\\t\\tau_*\\}.
+S_6=\{w\in S_5:\t\tau_w=\t\tau_*\}.
 $$
 
 Hence
 
 $$
-S_6\\subseteq S_5\\subseteq S_4\\subseteq S_3\\subseteq S_2\\subseteq S_1\\subseteq S_0.
+S_6\subseteq S_5\subseteq S_4\subseteq S_3\subseteq S_2\subseteq S_1\subseteq S_0.
 $$
 
 Valid additional evidence can contract or preserve the survivor fiber, but cannot restore a contradicted world.
@@ -144,7 +144,7 @@ Valid additional evidence can contract or preserve the survivor fiber, but canno
 Two parameter worlds are BAM-state equivalent when
 
 $$
-A_w=A_*,\\quad B_w=B_*,\\quad M_w=M_*,\\quad \\t\\tau_w=\\t\\tau_*.
+A_w=A_*,\quad B_w=B_*,\quad M_w=M_*,\quad \t\tau_w=\t\tau_*.
 $$
 
 At E6, the survivor set is exactly the BAM-state equivalence class of truth. Multiple parameter labels can therefore remain even after the complete finite BAM state is identified.
@@ -160,31 +160,31 @@ This distinction separates:
 Let R denote complete positive support and define the compatible set
 
 $$
-C(R)=\\{w:R\\subseteq G_w\\}.
+C(R)=\{w:R\subseteq G_w\}.
 $$
 
 If
 
 $$
-R_1\\subset R_2,
+R_1\subset R_2,
 $$
 
 then any world containing (R_2) also contains (R_1). Therefore
 
 $$
-C(R_1)\\supseteq C(R_2).
+C(R_1)\supseteq C(R_2).
 $$
 
 A narrower positive support cannot have fewer compatible positive-superset worlds. Stronger ecological restriction can therefore increase, rather than decrease, ambiguity under positive-only inference.
 
 ### 2.7 Targeted measurements as a finite hitting-set problem
 
-Let S be the current survivor set and T the target fiber to retain. Each possible direct measurement m eliminates a finite subset $D_m\\subseteq S$.
+Let S be the current survivor set and T the target fiber to retain. Each possible direct measurement m eliminates a finite subset $D_m\subseteq S$.
 
 A measurement set Q reproduces T exactly when no measurement contradicts T and the eliminated subsets cover every nuisance world:
 
 $$
-S\\setminus T\\subseteq\\bigcup_{m\\in Q}D_m.
+S\setminus T\subseteq\bigcup_{m\in Q}D_m.
 $$
 
 The smallest such Q is an exact finite hitting-set problem. This converts residual non-identification into a diagnostic design problem.
@@ -213,7 +213,7 @@ A larger factorial then tested the stronger claim that complete positive occurre
 The focal realised state was generated as
 
 $$
-G=A\\cap B\\cap M.
+G=A\cap B\cap M.
 $$
 
 A was an explicit virtual abiotic niche. B was derived from independently generated partner and antagonist distributions. M was source-conditioned accessibility under distance, barriers and finite movement horizon.
@@ -349,7 +349,7 @@ The preregistered claim that movement would always be the final identification b
 The independent stochastic audit contained 304 strict positive-support inclusions. All 304/304 obeyed the exact inverse ordering:
 
 $$
-R_1\\subset R_2\\Rightarrow C(R_1)\\supseteq C(R_2).
+R_1\subset R_2\Rightarrow C(R_1)\supseteq C(R_2).
 $$
 
 The most jointly constrained A+B+M support was also among the most ambiguous because its small realised support was contained in many more permissive candidate worlds.
