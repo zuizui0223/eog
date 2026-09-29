@@ -1,6 +1,6 @@
 {
   "schema": "eog.known_truth_programme_manifest.v1",
-  "status": "closed_through_v2_9_for_current_simulation_sequence",
+  "status": "expanded_through_generality_and_theory_pending_integrated_v3_public_engine",
   "relation_to_eog_wf": "separate post-closure known-truth programme; does not alter the frozen EOG-WF 3/31/3 empirical denominator",
   "stages": [
     {
@@ -61,15 +61,85 @@
       "stage": "v2_9_adaptive_evidence_tree",
       "result_fingerprint": "19e441e930c1c3fc116780fa8bfb4b09c178e69c4379a1ef69e47f5b13218822",
       "core_result": "minimum worst-case adaptive depth is 2, repeat-first depth is 3, known truth absent::p1 resolves in one calibration action, and removing either direct channel makes worst-case exact resolution impossible"
+    },
+    {
+      "stage": "independent_stochastic_bam_v3",
+      "result_fingerprint": "bc558d10073133510f1b47b5651f6694d53f04771e757e9d8d9716ada72b18bf",
+      "workload": "384/384 eligible stochastic runs; 32 candidate worlds; six truth scenarios; independent NumPy/stdlib generator",
+      "core_result": "truth retention, sequential contraction, positive-superset ceiling and omitted-truth witness logic were reproduced with zero EOG API parity mismatches; stochastic witness realization and strict benefit of unordered accumulated history were refuted; unique truth recovery remained 0 in every scenario",
+      "refuted_claims": [
+        "Every structurally distinct BAM truth will realize a positive witness against some false candidate.",
+        "Accumulating unordered positive history must be strictly more discriminating than the final snapshot."
+      ]
+    },
+    {
+      "stage": "restrictiveness_ambiguity_v3_1",
+      "result_fingerprint": "ae797daf732af37740408fd5ca3cb4eb1c02f5345b9ffea651fbec5d05d79b2c",
+      "core_result": "304/304 strict support-inclusion pairs obeyed the inverse survivor-set ordering: narrower positive support had equal-or-larger compatible-world sets; joint A+B+M limitation produced the smallest frozen support and maximum ambiguity",
+      "exact_principle": "if R1 is a strict subset of R2, then C(R1) is a superset of or equal to C(R2) for complete positive-only compatibility inside the same candidate universe"
+    },
+    {
+      "stage": "independent_stochastic_temporal_v3_2",
+      "result_fingerprint": "c1fd0014bf1ddc0f61af7a08dafb13e005f3a80e99693ddde328e06364b9c9f9",
+      "core_result": "retaining first-occurrence time refined eight static support classes into 20 temporal signature classes and strictly contracted the compatible set in 256/384 stochastic runs, while unique truth recovery remained 0 in all scenarios",
+      "boundary": "time-stamped history is an informative evidence class; unordered accumulated history was not"
+    },
+    {
+      "stage": "multilandscape_stochastic_bam_v4",
+      "result_fingerprint": "9c08962ea6a94ebc1869eb5a578749af5ed78989a210b9d40278ea04ac67038c",
+      "workload": "eight preregistered landscapes; six eligible; two DESIGN_STOP; 1152 eligible stochastic runs",
+      "core_result": "U1-U8 all supported across every activation-eligible landscape: truth retention, positive contraction and restrictiveness nesting held; joint_ABM remained maximally ambiguous; temporal signatures refined static classes and yielded realized strict gain in every eligible landscape; non-identification persisted; evaluator parity had zero mismatches",
+      "integrity": "two joint_fragmented landscapes remained DESIGN_STOP rather than being repaired or replaced"
+    },
+    {
+      "stage": "deterministic_BAM_generality_v3",
+      "result_fingerprint": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415",
+      "workload": "12/12 activation-qualified deterministic systems; 768 truth cases; zero DESIGN_STOP; 3.77 s optimized Python runtime",
+      "unique_state_counts": {
+        "E0_positive_only": 0,
+        "E1_complete_G": 25,
+        "E2_plus_occupied_arrival": 159,
+        "E3_plus_direct_A": 275,
+        "E4_plus_direct_B": 565,
+        "E5_plus_direct_M_accessibility": 768,
+        "E6_plus_full_M_arrival": 768
+      },
+      "core_result": "positive-only uniqueness remained 0/768 and the evidence ladder was monotone; complete BAM-state evidence recovered all 768 state-equivalence classes",
+      "refuted_claim": "M is always the final identification bottleneck; at least one system was already fully identified at E4 before direct M evidence"
+    },
+    {
+      "stage": "finite_BAM_identifiability_theory_v1",
+      "exact_audit_result_fingerprint": "cc7f6ed6f51da660aeeb8cff421504ab0b6c6bcae7a86cdd78c7acf15a44afdd",
+      "theory": [
+        "positive-only survivor set is exactly the worlds whose realized support contains the truth support",
+        "perfect complete presence/absence leaves the realized-support equality fiber",
+        "later evidence levels are successive state-equality fibers",
+        "survivor sets contract monotonically as evidence is appended",
+        "complete A/B/M/full-arrival evidence leaves the BAM-state equivalence class",
+        "state identifiability is equivalence-class uniqueness rather than parameter-label uniqueness",
+        "targeted direct measurement is a finite hitting-set problem"
+      ],
+      "exact_measurement_bounds": {
+        "A": 1,
+        "B": 2,
+        "AB_joint": 3,
+        "M": 2,
+        "tau": 0,
+        "M_tau_joint": 2
+      },
+      "audit": "12 systems, 768 truth cases, zero failures; greedy stage minima matched exact solutions, with joint A+B separately optimized"
     }
   ],
-  "strongest_supported_claim": "EOG is best treated as a finite-world falsification and evidence-design framework: observations eliminate only worlds they contain valid witnesses against; unresolved worlds remain explicit; targeted calibration or intervention can be selected to activate differences among survivors.",
+  "strongest_supported_claim": "EOG is a finite-world falsification and evidence-design framework: evidence eliminates only worlds it contains valid witnesses against; observational equivalence remains explicit; support nesting can make stronger ecological restriction more ambiguous under positive-only data; temporal, direct-mechanism, calibration and intervention evidence can be selected adaptively to activate differences among survivors.",
   "refuted_or_rejected_claims": [
     "Enough positive occurrences generally recover the true generating process.",
     "A complete realised distribution map uniquely identifies the BAM decomposition.",
     "Complete passive A/B/M state observation necessarily identifies generating parameter values.",
     "More finite nondetections can substitute for detection calibration when imperfect detection remains admissible.",
-    "A C++ rewrite is currently necessary for the frozen simulation workload."
+    "A C++ rewrite is currently necessary for the frozen simulation workload.",
+    "Stronger joint A+B+M ecological limitation should make the generating mechanism easier to identify from positive occurrences.",
+    "Unordered accumulated positive history must be more discriminating than the final positive snapshot.",
+    "Movement information is always the final BAM-state identification bottleneck."
   ],
   "product_boundary": [
     "Finite declared ecological and observation world universes only.",
