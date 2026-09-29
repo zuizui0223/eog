@@ -1,0 +1,51 @@
+{
+  "schema": "eog.falsification_driven_experiment_design.summary.v2_4",
+  "protocol_commit": "0407fd5b3b653089831c8348451c24d2027a76aa",
+  "executed_commit": "54258f7279ffc09c469fecfa46e7fcd316380fa6",
+  "workflow_run_id": 36547851435,
+  "workflow_conclusion": "success",
+  "artifact_id": 11023775004,
+  "artifact_digest": "sha256:3e6fc089756fc80a3fd809cfe99bf5b6fd427846bd9279ca58c559ea1f9b28e6",
+  "result_fingerprint": "c7107f1511fd7b5542da3f7c501d99f0b8cebe00feec0348ca4d60d510a75b12",
+  "world_count": 64,
+  "passive_unresolved_pair_count": 16,
+  "intervention_split_counts": {
+    "H_long_corridor_challenge": 8,
+    "P_barrier_challenge": 8,
+    "repeat_passive_state": 0
+  },
+  "single_intervention_residual_structure": {
+    "H_long_corridor_challenge": {
+      "singleton_classes": 48,
+      "doubleton_classes": 8
+    },
+    "P_barrier_challenge": {
+      "singleton_classes": 48,
+      "doubleton_classes": 8
+    },
+    "repeat_passive_state": {
+      "singleton_classes": 32,
+      "doubleton_classes": 16
+    }
+  },
+  "minimum_separating_set": [
+    "H_long_corridor_challenge",
+    "P_barrier_challenge"
+  ],
+  "minimum_set_size": 2,
+  "final_class_size_distribution": {
+    "1": 64
+  },
+  "all_worlds_separated": true,
+  "pair_cover_mismatches": 0,
+  "verdicts": {
+    "E1_pair_cover_equivalence": "SUPPORTED",
+    "E2_current_library_structure": "SUPPORTED",
+    "E3_minimum_design": "SUPPORTED"
+  },
+  "interpretation": {
+    "main": "Once EOG exposes the surviving finite-world ambiguity, the next evidence problem can be solved exactly as a pair-separation problem over a preregistered intervention library.",
+    "negative_control": "Repeating the already-known passive state contributes zero discrimination.",
+    "product_boundary": "The planner can certify when an intervention library is sufficient to separate the current finite world set and can return unresolved when it is not."
+  }
+}
