@@ -1,0 +1,53 @@
+{
+  "schema": "eog.known_truth_bam_generality.summary.v3",
+  "protocol_commit": "6b46e33e80383dcd64b9f479d7ba6ae20ed0d103",
+  "executed_commit": "a3c70fa5fbf68db1e6618ee385895a0f087a0551",
+  "workflow_run_id": 36546901284,
+  "workflow_conclusion": "success",
+  "artifact_id": 11023001714,
+  "artifact_digest": "sha256:376c4e7c0fb1a0c0bc3fdcdf77c0f699ce286580e10cd3525770f2de93f22565",
+  "result_fingerprint": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415",
+  "runtime_seconds": 3.768811335999999,
+  "system_roster_size": 12,
+  "scored_system_count": 12,
+  "design_stop_count": 0,
+  "eligible_truth_count": 768,
+  "pooled_bam_state_unique_fraction": {
+    "E0_positive_only": 0,
+    "E1_complete_G": 0.032552083333333336,
+    "E2_plus_occupied_arrival": 0.20703125,
+    "E3_plus_direct_A": 0.3580729166666667,
+    "E4_plus_direct_B": 0.7356770833333334,
+    "E5_plus_direct_M_accessibility": 1,
+    "E6_plus_full_M_arrival": 1
+  },
+  "pooled_unique_counts": {
+    "E0": 0,
+    "E1": 25,
+    "E2": 159,
+    "E3": 275,
+    "E4": 565,
+    "E5": 768,
+    "E6": 768
+  },
+  "correctness": {
+    "all_scored_correctness_checks_zero": true
+  },
+  "verdicts": {
+    "G1_positive_zero_bound": "SUPPORTED",
+    "G2_M_final_bottleneck": "REFUTED",
+    "G3_AB_three_node_bound": "SUPPORTED",
+    "G4_M_two_node_bound": "SUPPORTED",
+    "G5_complete_state_recovery": "SUPPORTED",
+    "G6_monotone_evidence_ladder": "SUPPORTED"
+  },
+  "interpretation": {
+    "G1": "Across all 12 independently generated, activation-qualified systems, complete positive occurrence data uniquely identified 0/768 BAM truths.",
+    "G2": "Direct M was not universally the final bottleneck. At least one scored system reached 100% BAM-state identification already at E4 after complete G, occupied-node timing, direct A and direct B.",
+    "G3": "The v2.3 local bound generalized: no truth required more than three targeted direct A+B node measurements to reproduce full A/B contraction.",
+    "G4": "The v2.3 local bound generalized: no truth required more than two targeted direct-M accessibility measurements; most systems required at most one.",
+    "G5": "Complete A/B/M state evidence recovered the exact BAM-state equivalence class for every scored truth.",
+    "G6": "Information addition was monotone in every scored system.",
+    "language": "Optimized Python completed the 12-system, 768-truth sweep in 3.77 s, below the frozen 60 s C++ trigger. C++ is not needed for the current simulation line."
+  }
+}
