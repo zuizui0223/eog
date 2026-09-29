@@ -29,6 +29,74 @@ def _save(fig, name: str):
     plt.close(fig)
 
 
+
+def figure1_conceptual():
+    from matplotlib.patches import FancyArrowPatch, Rectangle
+
+    fig, ax = plt.subplots(figsize=(10.5, 4.8))
+    ax.set_xlim(0, 10.5)
+    ax.set_ylim(0, 5.0)
+    ax.axis("off")
+
+    # Panel A: forward BAM.
+    ax.text(0.4, 4.55, "A  Forward BAM", fontweight="bold")
+    forward_boxes = [
+        (0.5, 3.1, 1.2, 0.7, "A"),
+        (0.5, 2.1, 1.2, 0.7, "B"),
+        (0.5, 1.1, 1.2, 0.7, "M"),
+    ]
+    for x, y, w, h, label in forward_boxes:
+        ax.add_patch(Rectangle((x, y), w, h, fill=False, linewidth=1.5))
+        ax.text(x + w / 2, y + h / 2, label, ha="center", va="center", fontsize=12)
+    ax.text(2.05, 2.45, "intersection", ha="center", va="center", fontsize=9)
+    ax.add_patch(FancyArrowPatch((1.75, 2.45), (2.75, 2.45), arrowstyle="->", mutation_scale=12))
+    ax.add_patch(Rectangle((2.8, 2.05), 1.2, 0.8, fill=False, linewidth=1.5))
+    ax.text(3.4, 2.45, "G", ha="center", va="center", fontsize=12)
+    ax.text(0.55, 0.45, "mechanisms  →  realised distribution", fontsize=9)
+
+    # Panel B: inverse ambiguity.
+    ax.text(4.35, 4.55, "B  Inverse BAM", fontweight="bold")
+    ax.add_patch(Rectangle((4.55, 2.05), 1.2, 0.8, fill=False, linewidth=1.5))
+    ax.text(5.15, 2.45, "observed G", ha="center", va="center", fontsize=11)
+    ax.add_patch(FancyArrowPatch((5.8, 2.45), (6.55, 2.45), arrowstyle="->", mutation_scale=12))
+    worlds = [
+        (6.65, 3.2, "w1: A1,B1,M1"),
+        (6.65, 2.3, "w2: A2,B1,M2"),
+        (6.65, 1.4, "w3: A1,B2,M3"),
+    ]
+    for x, y, label in worlds:
+        ax.add_patch(Rectangle((x, y), 1.75, 0.55, fill=False, linewidth=1.2))
+        ax.text(x + 0.875, y + 0.275, label, ha="center", va="center", fontsize=8)
+    ax.text(4.55, 0.45, "one distribution  →  a survivor fiber", fontsize=9)
+
+    # Panel C: evidence contracts the fiber.
+    ax.text(8.65, 4.55, "C  Evidence fibers", fontweight="bold")
+    stages = [
+        (8.75, 3.6, 1.15, "S0\npositives"),
+        (8.9, 2.75, 0.85, "S1\nfull G"),
+        (9.05, 1.9, 0.55, "S2+\ntime / A / B / M"),
+        (9.18, 1.05, 0.3, "target\nfiber"),
+    ]
+    for x, y, width, label in stages:
+        ax.add_patch(Rectangle((x, y), width, 0.55, fill=False, linewidth=1.2))
+        ax.text(x + width / 2, y + 0.275, label, ha="center", va="center", fontsize=7)
+    for (x1, y1, w1, _), (x2, y2, w2, _) in zip(stages, stages[1:]):
+        ax.add_patch(
+            FancyArrowPatch(
+                (x1 + w1 / 2, y1),
+                (x2 + w2 / 2, y2 + 0.55),
+                arrowstyle="->",
+                mutation_scale=10,
+            )
+        )
+    ax.text(8.7, 0.45, "valid evidence contracts or preserves", fontsize=8)
+
+    fig.suptitle(
+        "Forward BAM generates distributions; inverse BAM returns evidence-compatible worlds",
+        y=0.99,
+    )
+    _save(fig, "F1_forward_inverse_bam")
+
 def figure2_restrictiveness():
     rows = _read_csv("F2_restrictiveness_scenarios.csv")
     x = [int(row["support_size"]) for row in rows]
@@ -197,6 +265,7 @@ def figure6_measurement_bounds():
 
 
 def main() -> int:
+    figure1_conceptual()
     figure2_restrictiveness()
     figure3_evidence_ladder()
     figure4_stochastic_challenge()
