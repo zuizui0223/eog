@@ -1,0 +1,17 @@
+{
+  "schema": "eog.known_truth_biogeography.fast_backend_result_summary.v1",
+  "reference_result_fingerprint": "b1a2df3a6b1708b533f1f2c2d573eb9802f3a18d8bcada3e55e37124918d533b",
+  "fast_result_fingerprint": "b1a2df3a6b1708b533f1f2c2d573eb9802f3a18d8bcada3e55e37124918d533b",
+  "reference_fingerprint_match": true,
+  "reference_runtime_seconds": 75.8651858,
+  "fast_runtime_seconds": 1.4368249579999954,
+  "speedup": 52.80057628286271,
+  "workflow_run_id": 36544511440,
+  "artifact_id": 11021308778,
+  "artifact_digest": "sha256:048319fc9ac807f7ffd4fd8d106e15c72a8944f74ace62ac62bdda5083bf2a21",
+  "decision": {
+    "cpp_backend_needed_now": false,
+    "reason": "The exact frozen scientific result is reproduced by Python integer-bitset subset evaluation in 1.44 s, far below the preregistered 60 s trigger.",
+    "architecture": "Keep Python as scientific reference and use cached reachable-set/bitset operations for repeated simulation sweeps."
+  }
+}
