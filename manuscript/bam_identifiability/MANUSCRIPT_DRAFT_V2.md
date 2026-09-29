@@ -22,7 +22,7 @@ The inverse problem is different. Given an observed distribution, which combinat
 
 This many-to-one structure creates a distinction between fitting a distribution and identifying the mechanisms that generated it. A model may reproduce G well while remaining unresolved about A, B or M. Selecting one best-fitting mechanism can therefore convert lack of information into apparent certainty.
 
-Existing BAM work establishes the forward framework, dynamic process representations and the possibility of confounding among ecological components (Soberón & Osorio-Olvera, 2023). Virtual-species studies likewise provide known causal systems for evaluating ecological models (Saupe et al., 2012). More generally, ecology already recognizes equifinality and degenerate pattern–process relationships as limits on mechanistic inference (Yanco et al., 2020; Lotterhos et al., 2022). Our goal is narrower: to characterize the inverse information content of occurrence evidence itself.
+Existing BAM work establishes the forward framework, dynamic process representations and the possibility of confounding among ecological components (Soberón & Osorio-Olvera, 2023). BAM has also been used to quantify covariate associations with distributions while recognizing that the precise cause of occupancy at individual locations may remain difficult to identify (Beale et al., 2014). Virtual-species studies likewise provide known causal systems for evaluating ecological models (Saupe et al., 2012). More generally, ecology already recognizes equifinality and degenerate pattern–process relationships as limits on mechanistic inference (Yanco et al., 2020; Lotterhos et al., 2022). Our goal is narrower: to characterize the inverse information content of occurrence evidence itself.
 
 We treat inverse BAM inference as a finite partial-identification problem. Instead of asking which candidate world is best, we ask which declared worlds remain compatible with a specific evidence contract. This survivor set, or evidence fiber, is the primary inferential object. The formulation has three advantages. First, exact non-identification can be stated without relying on arbitrary score thresholds. Second, different evidence types can be compared by how they contract the same finite survivor set. Third, remaining ambiguity can be converted directly into a diagnostic-measurement problem: which additional observations would distinguish the surviving alternatives? Model-discrimination experiment design is established in statistics and ecology (Atkinson & Cox, 1974; Papanikolaou et al., 2023); our contribution is to derive the BAM-specific survivor fiber to which such design can be applied.
 
@@ -483,6 +483,8 @@ The practical consequence is a shift from selecting the most plausible single pr
 
 
 ## References
+
+Beale, C.M. et al. (2014). A new statistical framework for the quantification of covariate associations with species distributions. *Methods in Ecology and Evolution*. https://doi.org/10.1111/2041-210X.12174
 
 Atkinson, A.C. & Cox, D.R. (1974). Planning experiments for discriminating between models. *Journal of the Royal Statistical Society: Series B*, 36, 321–334. https://doi.org/10.1111/j.2517-6161.1974.tb01010.x
 
