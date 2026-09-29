@@ -7,6 +7,7 @@ on:
       - "validation/eog_v3_joint_world_engine/**"
       - "benchmarks/run_eog_v3_integrated_validation.py"
       - "tests/test_v3_integrated_mainline.py"
+      - "tests/test_v3_public_api.py"
       - "examples/eog_v3/**"
       - "schemas/eog_v3_joint_input.schema.json"
       - ".github/workflows/eog-v3-integrated.yml"
@@ -28,7 +29,7 @@ jobs:
           python benchmarks/run_eog_v3_integrated_validation.py \
             --output build/eog_v3_integrated/integrated_result_v1.json
       - name: Verify focused tests
-        run: python -m pytest tests/test_v3_integrated_mainline.py -q
+        run: python -m pytest tests/test_v3_integrated_mainline.py tests/test_v3_public_api.py -q
       - name: Run packaged CLI examples
         run: |
           eog-v3-joint-evaluate \
