@@ -439,6 +439,45 @@ The post-closure known-truth line now supports the following workflow:
 
 The product is therefore better described as a **falsification-driven evidence and experiment design framework** than as a conventional distribution predictor or true-process selector.
 
+## 17. BAM inverse-identifiability paper lane
+
+The exact finite-set theory and frozen known-truth programme are now assembled as a
+separate biogeographic inverse-identifiability manuscript and merged to `main` via
+PR #518.
+
+The paper's inferential object is not a recovered “true BAM process”. It is the exact
+survivor fiber of declared BAM worlds still compatible with the available evidence.
+
+Frozen submission-facing evidence includes:
+
+- 12/12 deterministic activation-qualified systems / 768 truths;
+- complete-positive unique BAM-state recovery: 0/768;
+- complete realised-G recovery: 25/768;
+- + occupied arrival: 159/768;
+- + direct A: 275/768;
+- + direct B: 565/768;
+- + direct M accessibility: 768/768;
+- 384 eligible runs from an independently implemented stochastic generator;
+- 304/304 strict support-inclusion pairs obeying inverse survivor ordering;
+- 8 preregistered stochastic landscapes, 6 eligible and 2 retained DESIGN_STOP;
+- exact targeted-measurement bounds audited over all 768 deterministic truths.
+
+The preregistered claim that M is always the final identifiability bottleneck was
+refuted and remains refuted.
+
+Canonical manuscript:
+`manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md`.
+
+Primary route:
+**Journal of Biogeography — Research Article**.
+
+Current readiness:
+`manuscript/bam_identifiability/JBI_SUBMISSION_READINESS_V1.json` =
+`READY_FOR_SUBMISSION_ADMIN`.
+
+A named-species empirical illustration is not required for the current theory claim and
+must not be added opportunistically.
+
 ## Hard claim boundary
 
 Do not claim:

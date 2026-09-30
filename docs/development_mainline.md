@@ -247,7 +247,34 @@ The scientific separation remains strict:
 - Structural uses A-Islands original + A-Islands strong-reference + Tanzania;
 - neither programme supplies extra replications for the other.
 
-## Open PR lane map — 2026-09-29
+## Post-closure BAM inverse-identifiability paper lane — merged 2026-09-30
+
+PR #518 was merged to `main` at commit `560c4e0054a3c9331dff1ea8267b8c559451c9aa`.
+
+This is a **separate post-closure theory/simulation paper lane**. It does not reopen the
+frozen EOG-WF empirical denominator, does not add a fourth predictive endpoint, and does
+not change the favorable / favorable / adverse synthesis.
+
+Canonical scientific state:
+
+- inverse target: the exact finite survivor fiber of BAM worlds compatible with the declared evidence;
+- complete positive distributions do not uniquely identify the generating BAM state in the frozen known-truth panels;
+- direct and temporal evidence contract survivor fibers monotonically;
+- complete BAM-state evidence terminates at the BAM-state equivalence class rather than automatically at a unique parameter label;
+- exact targeted diagnostic measurement is represented as a finite hitting-set problem over the residual fiber.
+
+Canonical manuscript:
+
+- `manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md`
+- primary route: **Journal of Biogeography — Research Article**
+- readiness: `READY_FOR_SUBMISSION_ADMIN`
+- validated anonymous review bundle: isolated install PASS, focused tests PASS, Figure 1–6 rebuild PASS, privacy findings 0.
+
+No named-species illustration is required for the current theory claim. Do not add one
+opportunistically. Remaining work is submission administration, not new scientific
+endpoint search.
+
+## Open PR lane map — 2026-09-30
 
 Open pull requests are **not** additional EOG-WF replication unless explicitly stated. The current map is:
 
@@ -261,6 +288,8 @@ Open pull requests are **not** additional EOG-WF replication unless explicitly s
 - **PRs #432–#434 — deferred experiments**: post-closure theory/safety/offset work; none is required for EOG-WF submission or current release readiness.
 
 Recently closed as superseded/redundant:
+
+- **PR #518** — BAM inverse-identifiability paper lane; merged after all manuscript, figure, review-package and package checks passed. Separate JBI route; does not alter EOG-WF.
 
 - **PR #398** — old MEE manuscript shell; replaced by the current frozen manuscript, paper-ready bundle, live-policy check and submission builder on `main`.
 - **PR #474** — v1 survival-regime protocol; superseded by v2.
