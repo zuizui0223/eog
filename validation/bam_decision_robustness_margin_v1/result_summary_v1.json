@@ -1,0 +1,258 @@
+{
+  "schema": "eog.bam_decision_robustness_margin.result_summary.v1",
+  "status": "completed_preregistered_robustness_audit",
+  "protocol": "validation/bam_decision_robustness_margin_v1/protocol_v1.json",
+  "protocol_commit": "85c8034bd89b80657e34d2b3d3c04a1d9bdaceac",
+  "parent_result": "validation/bam_counterfactual_identifiability_v1/result_summary_v1.json",
+  "parent_result_fingerprint": "77314699090fd3b0a19066363eab0589c3a0c89ac41aabbce49873c84b468172",
+  "authoritative_run": 36669307476,
+  "authoritative_job": 109740667478,
+  "executed_head": "398fbc30a8fe912d8e5f7bcbf35eb6e6b8cfe219",
+  "artifact_id": 11077279261,
+  "artifact_digest": "sha256:38163eafd3438c575c31473511b3f24d261697d68d41e5779ada7e1da805c0c4",
+  "result_fingerprint": "ffd0d11bbe75d4e27cc8918ab77a95e991ab52b43bd39ee83ce81b8a3bd52050",
+  "truth_count": 768,
+  "unique_E1_fiber_count": 129,
+  "theorem_verification": {
+    "small_universe_exhaustive_tests": "PASS",
+    "complete_decomposition_closure_and_margin_violations": 0,
+    "status": "PASS"
+  },
+  "by_axis": {
+    "A": {
+      "declared_universe": {
+        "identified_truths": 652,
+        "unresolved_truths": 116,
+        "proper_G_identified_truths": 618,
+        "full_G_identified_truths": 34
+      },
+      "proper_G_completion_margin": {
+        "distribution": {
+          "1": 439,
+          "2": 153,
+          "3": 3,
+          "4": 4,
+          "7": 3,
+          "8": 6,
+          "9": 4,
+          "13": 6
+        },
+        "margin_1_count": 439,
+        "margin_1_fraction": 0.7103559870550162,
+        "median": 1.0,
+        "mean": 1.5420711974110033,
+        "maximum": 13
+      },
+      "by_current_decision": {
+        "false": {
+          "truth_count_including_full_G": 516,
+          "finite_margin_count": 482,
+          "margin_distribution": {
+            "1": 342,
+            "2": 140
+          },
+          "median": 1.0,
+          "mean": 1.2904564315352698,
+          "maximum": 2
+        },
+        "true": {
+          "truth_count": 136,
+          "margin_distribution": {
+            "1": 97,
+            "2": 13,
+            "3": 3,
+            "4": 4,
+            "7": 3,
+            "8": 6,
+            "9": 4,
+            "13": 6
+          },
+          "median": 1.0,
+          "mean": 2.4338235294117645,
+          "maximum": 13
+        }
+      },
+      "unique_fiber": {
+        "identified_fibers": 119,
+        "median_margin": 2.0,
+        "mean_margin": 1.9907407407407407,
+        "maximum": 13
+      }
+    },
+    "B": {
+      "declared_universe": {
+        "identified_truths": 705,
+        "unresolved_truths": 63,
+        "proper_G_identified_truths": 671,
+        "full_G_identified_truths": 34
+      },
+      "proper_G_completion_margin": {
+        "distribution": {
+          "1": 263,
+          "2": 119,
+          "3": 60,
+          "4": 10,
+          "5": 26,
+          "6": 35,
+          "7": 62,
+          "9": 3,
+          "10": 34,
+          "11": 3,
+          "12": 8,
+          "13": 14,
+          "14": 4,
+          "15": 12,
+          "17": 4,
+          "21": 4,
+          "23": 2,
+          "24": 4,
+          "26": 2,
+          "29": 2
+        },
+        "margin_1_count": 263,
+        "margin_1_fraction": 0.3919523099850969,
+        "median": 2.0,
+        "mean": 4.192250372578242,
+        "maximum": 29
+      },
+      "by_current_decision": {
+        "false": {
+          "truth_count_including_full_G": 311,
+          "finite_margin_count": 277,
+          "margin_distribution": {
+            "1": 202,
+            "2": 75
+          },
+          "median": 1.0,
+          "mean": 1.2707581227436824,
+          "maximum": 2
+        },
+        "true": {
+          "truth_count": 394,
+          "margin_distribution": {
+            "1": 61,
+            "2": 44,
+            "3": 60,
+            "4": 10,
+            "5": 26,
+            "6": 35,
+            "7": 62,
+            "9": 3,
+            "10": 34,
+            "11": 3,
+            "12": 8,
+            "13": 14,
+            "14": 4,
+            "15": 12,
+            "17": 4,
+            "21": 4,
+            "23": 2,
+            "24": 4,
+            "26": 2,
+            "29": 2
+          },
+          "median": 5.0,
+          "mean": 6.246192893401015,
+          "maximum": 29
+        }
+      },
+      "unique_fiber": {
+        "identified_fibers": 124,
+        "median_margin": 2.0,
+        "mean_margin": 4.646017699115045,
+        "maximum": 29
+      }
+    },
+    "M": {
+      "declared_universe": {
+        "identified_truths": 732,
+        "unresolved_truths": 36,
+        "proper_G_identified_truths": 698,
+        "full_G_identified_truths": 34
+      },
+      "proper_G_completion_margin": {
+        "distribution": {
+          "1": 281,
+          "2": 163,
+          "3": 38,
+          "4": 28,
+          "5": 24,
+          "6": 27,
+          "7": 52,
+          "8": 16,
+          "9": 23,
+          "10": 4,
+          "11": 14,
+          "13": 9,
+          "16": 7,
+          "18": 4,
+          "25": 6,
+          "31": 2
+        },
+        "margin_1_count": 281,
+        "margin_1_fraction": 0.40257879656160456,
+        "median": 2.0,
+        "mean": 3.6117478510028653,
+        "maximum": 31
+      },
+      "by_current_decision": {
+        "false": {
+          "truth_count_including_full_G": 355,
+          "finite_margin_count": 321,
+          "margin_distribution": {
+            "1": 225,
+            "2": 96
+          },
+          "median": 1.0,
+          "mean": 1.2990654205607477,
+          "maximum": 2
+        },
+        "true": {
+          "truth_count": 377,
+          "margin_distribution": {
+            "1": 56,
+            "2": 67,
+            "3": 38,
+            "4": 28,
+            "5": 24,
+            "6": 27,
+            "7": 52,
+            "8": 16,
+            "9": 23,
+            "10": 4,
+            "11": 14,
+            "13": 9,
+            "16": 7,
+            "18": 4,
+            "25": 6,
+            "31": 2
+          },
+          "median": 4.0,
+          "mean": 5.5809018567639255,
+          "maximum": 31
+        }
+      },
+      "unique_fiber": {
+        "identified_fibers": 126,
+        "median_margin": 2.0,
+        "mean_margin": 4.452173913043478,
+        "maximum": 31
+      }
+    }
+  },
+  "main_findings": [
+    "Every declared-universe identified release decision with proper G becomes unresolved under unrestricted same-G BAM decomposition closure.",
+    "Declared-universe decision identification therefore depends on restrictions placed on admissible A/B/M state families; it is never an unconditional consequence of current G alone except when G fills the node universe.",
+    "The nearest opposite-decision completion is often close: margin 1 for 439/618 proper-G A decisions, 263/671 B decisions and 281/698 M decisions.",
+    "No-expansion conclusions were especially fragile in the frozen panel: every finite no-expansion margin was 1 or 2.",
+    "Expansion conclusions could have much larger margins because every existing outside-G release witness must be removed to reverse the decision; maxima were 13 for A, 29 for B and 31 for M.",
+    "This produces an exact witness asymmetry: creating one new release witness can reverse no-expansion, whereas reversing expansion requires destroying all current release witnesses."
+  ],
+  "claim_boundary": [
+    "Completion margin is logical sensitivity to undeclared same-G decompositions, not a probability or ecological-plausibility score.",
+    "Unrestricted decomposition closure is a stress-test envelope, not a recommended ecological candidate universe.",
+    "The Phase-II finite-universe decision-identification counts remain exact conditional on their declared universe.",
+    "Large margins do not prove the omitted completions are biologically implausible; small margins do not prove they are plausible.",
+    "The results do not establish generic novelty for robust decision analysis or structural uncertainty."
+  ]
+}
