@@ -1,0 +1,19 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.gate3_auth_compatibility_note.v1",
+  "classification": "pre_RDS_repository_credential_compatibility_fix",
+  "reason": "the first one-shot draft recognized only DRYAD_TOKEN while the repository already standardizes DRYAD_API_TOKEN, DRYAD_ACCESS_TOKEN, or OAuth client credentials",
+  "accepted_credentials": [
+    "DRYAD_TOKEN",
+    "DRYAD_API_TOKEN",
+    "DRYAD_ACCESS_TOKEN",
+    "DRYAD_CLIENT_ID + DRYAD_CLIENT_SECRET"
+  ],
+  "oauth_helper": "eog.tanzania_source_acquisition._oauth_token",
+  "RDS_payload_bytes_opened_before_change": 0,
+  "ecological_response_values_opened_before_change": false,
+  "scientific_rules_changed": false,
+  "A_rules_changed": false,
+  "M_rules_changed": false,
+  "cohort_rule_changed": false,
+  "endpoint_changed": false
+}
