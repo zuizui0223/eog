@@ -1,0 +1,16 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.gate3_version_archive_note.v1",
+  "classification": "pre_RDS_transport_route_extension",
+  "rationale": "the repository already has a verified precedent where a frozen Dryad version archive is anonymously downloadable even when dataset/file API downloads require authentication",
+  "route_order": [
+    "anonymous frozen version archive /api/v2/versions/454877/download",
+    "existing repository credential conventions for exact individual files"
+  ],
+  "acceptance_rule": "anonymous archive accepted only if all 10 Gate0-pinned files match exact basename roster, byte size, and SHA256; otherwise terminal stop after payload access",
+  "RDS_payload_bytes_opened_before_change": 0,
+  "ecological_response_values_opened_before_change": false,
+  "scientific_rules_changed": false,
+  "world_roster_changed": false,
+  "cohort_rule_changed": false,
+  "endpoint_changed": false
+}
