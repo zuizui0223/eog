@@ -478,6 +478,80 @@ Current readiness:
 A named-species empirical illustration is not required for the current theory claim and
 must not be added opportunistically.
 
+## 18. Target-specific counterfactual identifiability
+
+A separately preregistered successor then asked whether BAM-state nonidentification is
+necessarily relevant to the ecological target being acted on.
+
+The protocol was frozen at commit
+`fad0a6e931bac9012fb978d293dadac4d041d012` before implementation/scoring and reused
+the unchanged 12-system / 768-truth deterministic panel.
+
+Current evidence was fixed at complete perfect current (G) (E1). Three idealised
+counterfactual probes were declared:
+
+- release A: (B\cap M);
+- release B: (A\cap M);
+- release M: (A\cap B).
+
+The probes are mechanism thought experiments, not literal management interventions.
+
+The result exposed a strong target-identifiability hierarchy:
+
+- full BAM state identified: **25/768 (3.3%)**;
+- joint exact three-probe counterfactual signature identified: **174/768 (22.7%)**;
+- all three binary release decisions identified: **636/768 (82.8%)**.
+
+Among the **743** truths whose BAM state remained unresolved after complete current
+(G):
+
+- **149** were invariant across all three exact counterfactual maps;
+- **462** had at least one exact-map disagreement but no disagreement in any of the
+  three binary release decisions;
+- **132** retained at least one binary decision disagreement.
+
+Thus mechanism ambiguity, exact counterfactual ambiguity and decision ambiguity are
+different inferential states.
+
+The same finite direct-measurement library established the exact target-coarsening
+contract:
+
+[
+b(\text{binary decision})
+\le
+b(\text{exact counterfactual map})
+\le
+b(\text{full BAM state})
+]
+
+with **0/2304 probe-level violations**.
+
+Strict binary-decision measurement savings relative to full BAM-state recovery occurred
+for **730/768** A-release truths, **738/768** B-release truths and **741/768** M-release
+truths.
+
+The formal reason is target refinement. If (T=f\circ U), every world disagreeing
+with truth on the coarser target (T) is also discordant on the finer target (U).
+Therefore a measurement set that resolves (U) is automatically sufficient for (T),
+while the converse need not hold.
+
+This changes the development target again:
+
+> **Do not automatically collect evidence until the BAM mechanism is uniquely
+> recovered. Collect enough evidence to place the surviving world fiber inside one
+> equivalence class of the ecological target that matters.**
+
+Canonical successor assets:
+
+- `validation/bam_counterfactual_identifiability_v1/protocol_v1.json`;
+- `validation/bam_counterfactual_identifiability_v1/result_summary_v1.json`;
+- `docs/bam_counterfactual_identifiability_v1_result.md`;
+- `docs/bam_target_identifiability_theory_v1.md`;
+- `manuscript/bam_counterfactual_identifiability/MANUSCRIPT_SPINE_V1.md`.
+
+This programme is separate from the frozen JBI BAM inverse-identifiability manuscript
+and does not alter its submission claims.
+
 ## Hard claim boundary
 
 Do not claim:

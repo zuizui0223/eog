@@ -1,0 +1,89 @@
+{
+  "schema": "eog.bam_counterfactual_identifiability.protocol.v1",
+  "status": "frozen_before_implementation_and_scoring",
+  "parent_programme": {
+    "bam_identifiability_manuscript": "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md",
+    "deterministic_generality_result": "validation/known_truth_bam_v3/result_summary_v3.json",
+    "deterministic_generality_fingerprint": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415",
+    "relationship": "separate post-manuscript development; must not alter or rescue the frozen BAM inverse-identifiability paper"
+  },
+  "scientific_question": "When a complete current realised distribution G leaves multiple BAM worlds compatible, when does that mechanism ambiguity matter for counterfactual ecological forecasts or decisions, and how much evidence is actually required to resolve the decision rather than the full mechanism?",
+  "world_universe": {
+    "systems": "the already frozen 12 deterministic activation-qualified systems from known_truth_bam_v3",
+    "truth_cases": 768,
+    "current_evidence": "E1: complete perfect current presence/absence, so the survivor fiber is exactly all declared worlds with G_w = G_truth",
+    "no_new_system_search": true,
+    "no_post_score_replacement": true
+  },
+  "counterfactual_probes": {
+    "release_A": "remove the abiotic constraint while retaining B and M; G_cf = B ∩ M",
+    "release_B": "remove the biotic constraint while retaining A and M; G_cf = A ∩ M",
+    "release_M": "remove the accessibility constraint while retaining A and B; G_cf = A ∩ B",
+    "interpretation": "idealised mechanism probes, not literal field management recommendations"
+  },
+  "targets": {
+    "full_bam_state": "(A, B, M, complete movement-arrival state tau)",
+    "exact_counterfactual_map": "the exact finite-node G_cf under one frozen release probe",
+    "binary_release_decision": "whether the release probe expands occupied support beyond current G"
+  },
+  "evidence_library": {
+    "channels": [
+      "direct A state at one node",
+      "direct B state at one node",
+      "direct M accessibility at one node",
+      "direct movement-arrival state tau at one node"
+    ],
+    "semantics": "truth-relative exact finite measurements; a selected measurement eliminates worlds whose declared state disagrees with the observed truth value",
+    "optimization": "exact minimum set cover over worlds whose target differs from the truth target"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_counterfactual_divergence_exists",
+      "statement": "Among E1 BAM-state-nonidentified truth cases, at least one survivor fiber contains two worlds with different exact counterfactual maps under at least one release probe.",
+      "failure_rule": "REFUTED if every E1 nonidentified fiber is counterfactually invariant under all three probes."
+    },
+    {
+      "id": "H2_harmless_nonidentification_exists",
+      "statement": "At least one E1 BAM-state-nonidentified truth case is nevertheless invariant for all three binary release decisions.",
+      "failure_rule": "REFUTED if every E1 nonidentified truth has at least one binary release-decision disagreement."
+    },
+    {
+      "id": "H3_target_coarsening_burden_monotonicity",
+      "statement": "For every truth/probe with finite exact designs, minimum measurement burden obeys binary-decision burden <= exact-counterfactual-map burden <= full-BAM-state burden.",
+      "failure_rule": "Any violation is a theorem/implementation failure and stops interpretation."
+    },
+    {
+      "id": "H4_strict_decision_saving_exists",
+      "statement": "At least one truth/probe requires strictly fewer direct measurements to fix the binary release decision than to identify the full BAM state.",
+      "failure_rule": "REFUTED if no strict saving occurs."
+    }
+  ],
+  "secondary_outputs": [
+    "fraction of E1 truth cases with BAM-state nonidentification",
+    "per-probe exact counterfactual divergence rate",
+    "per-probe binary decision divergence rate",
+    "joint three-probe counterfactual signature class count",
+    "distribution of minimum target-specific measurement counts",
+    "frequency and magnitude of decision-focused measurement savings"
+  ],
+  "stop_rules": [
+    "Do not add a named species after seeing synthetic results.",
+    "Do not replace or tune the 12 frozen systems after scoring.",
+    "Do not call axis release a realistic climate, interaction or corridor intervention; it is an idealised finite-world probe.",
+    "Do not claim novelty for generic model discrimination, value of information, set cover, hitting set or optimal experimental design.",
+    "Do not claim that a robust decision identifies the true BAM mechanism.",
+    "Do not alter the frozen JBI BAM manuscript with these results."
+  ],
+  "novelty_boundary": {
+    "not_claimed_new": [
+      "BAM itself",
+      "generic equifinality or identifiability",
+      "optimal experimental design",
+      "model discrimination",
+      "value of information",
+      "decision-focused learning",
+      "set cover or hitting-set algorithms"
+    ],
+    "candidate_contribution": "Within an occurrence-conditioned finite BAM survivor fiber, distinguish mechanism ambiguity that is counterfactually consequential from ambiguity that is irrelevant to a declared ecological intervention/decision, and compute the exact evidence burden needed for the decision target rather than for full process recovery."
+  }
+}
