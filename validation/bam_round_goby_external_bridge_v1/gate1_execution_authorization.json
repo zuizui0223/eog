@@ -1,0 +1,20 @@
+{
+  "schema": "eog.bam_round_goby_external_bridge.gate1_authorization.v1",
+  "status": "authorized",
+  "gate0_certificate_fingerprint": "ed95b0dff6e417da887e0e881d82077ba3b791bffa82a282f362c80ca7237b0b",
+  "gate0_run_id": 36741762450,
+  "gate0_artifact_id": 11109838746,
+  "allowed_reads": {
+    "README.txt": "full text allowed because it is source documentation, not focal response rows",
+    "Upstream_data_noNAs_2025_noElectro.csv": "header line only",
+    "Date_of_Invasion.csv": "header line only"
+  },
+  "forbidden_reads": [
+    "any data row from Upstream_data_noNAs_2025_noElectro.csv",
+    "any data row from Date_of_Invasion.csv",
+    "any LR*.csv data row",
+    "any response-derived output in Rmd execution"
+  ],
+  "transport_rule": "CSV header requests must use HTTP Range and require 206 before any bytes are read; fail closed otherwise",
+  "next_gate": "freeze exact parser/schema and response-independent site/world construction after Gate1 output is committed"
+}

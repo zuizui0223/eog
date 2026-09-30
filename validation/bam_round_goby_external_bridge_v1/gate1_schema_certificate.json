@@ -1,0 +1,19 @@
+{
+  "fingerprint": "e14c9e8078d164566993840f65b450b7d0a8778c263ee25d73e3a33cb5fdbbc8",
+  "gate0_fingerprint": "ed95b0dff6e417da887e0e881d82077ba3b791bffa82a282f362c80ca7237b0b",
+  "model_fits": 0,
+  "reason": "Upstream_data_noNAs_2025_noElectro.csv byte Range 132 returned HTTP 429, require 206",
+  "response_data_row_bytes_opened": 0,
+  "response_rows_opened": 0,
+  "retry_or_transport_repair_allowed": false,
+  "schema": "eog.bam_round_goby_external_bridge.gate1_schema.v1",
+  "status": "stop_gate1_transport_or_schema",
+  "authoritative_execution": {
+    "run_id": 36742299280,
+    "job_id": 109979522098,
+    "head_sha": "afadda5953795435829c989add140259a91cbf7f",
+    "artifact_id": 11110054736,
+    "artifact_digest": "sha256:b8b91e7402f70a5654bb6cf79c0964d772d6728c96931eee73ffa954785899a1"
+  },
+  "interpretation": "administrative source-transport stop before any response row; not ecological falsification and not empirical BAM evidence"
+}

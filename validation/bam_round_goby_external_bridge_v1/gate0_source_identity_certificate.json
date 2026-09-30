@@ -1,0 +1,31 @@
+{
+  "file_count": 10,
+  "file_payload_requests": 0,
+  "files": [
+    {"md5":"bcbeaf78630d89b9fa14353e89b69fb0","name":"Date_of_Invasion.csv","size_bytes":2024},
+    {"md5":"6cc5da9897b56ea70ab39432367029bb","name":"LR10.csv","size_bytes":2044},
+    {"md5":"f42b93b871d4757e6107f3efcc28fc49","name":"LR11A.csv","size_bytes":1961},
+    {"md5":"b732f866c5937a925bf366804848c0ba","name":"LR12.csv","size_bytes":2190},
+    {"md5":"6585d9108980a0a87db8af056fad8df6","name":"LR2.csv","size_bytes":1101},
+    {"md5":"27c7ec04e89549aaf3734456ddfa0f3a","name":"Multiple Linear Regressions.Rmd","size_bytes":17522},
+    {"md5":"da58554084553988b1b1242ba11ba468","name":"README.txt","size_bytes":8443},
+    {"md5":"d50cdd6fba146690354f9f96075fcf3d","name":"Rate_of_Invasion.Rmd","size_bytes":7605},
+    {"md5":"550e60c9ecabdb357ff1924544260167","name":"Upstream_data_noNAs_2025_noElectro.csv","size_bytes":21336},
+    {"md5":"eaa1f161f7bfdfbed223d981a34f7834","name":"Within Site Models.Rmd","size_bytes":13506}
+  ],
+  "fingerprint": "ed95b0dff6e417da887e0e881d82077ba3b791bffa82a282f362c80ca7237b0b",
+  "metadata_only": true,
+  "next_authorized_stage": "Gate1 README/header schema only after Gate0 certificate is committed",
+  "record_id": 19621892,
+  "response_payload_bytes_opened": 0,
+  "schema": "eog.bam_round_goby_external_bridge.gate0_source_identity.v1",
+  "status": "source_identity_ready",
+  "title": "A secondary upstream invasion of round goby in the Great Lakes Basin over fourteen years following a dam removal",
+  "authoritative_execution": {
+    "run_id": 36741762450,
+    "job_id": 109977645339,
+    "head_sha": "a2f145d4655aa7f8f2d607770e081f2c17c34cd0",
+    "artifact_id": 11109838746,
+    "artifact_digest": "sha256:b942d793d8b153b04a3a7ae036a7d5fdf9a94e3cdf23306a6c0eb5bb006d21ab"
+  }
+}
