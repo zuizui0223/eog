@@ -366,25 +366,39 @@ def habitat_support_by_node(
     return result
 
 
-def _period_node_registry(
+def _union_node_registry(
+    habitat: pd.DataFrame,
+) -> dict[str, PhysicalNode]:
+    h = validate_habitat_frame(habitat)
+    registry: dict[str, PhysicalNode] = {}
+    for row in h.to_dict("records"):
+        node = _physical_node_from_row(row)
+        incumbent = registry.get(node.node_id)
+        if incumbent is not None and incumbent != node:
+            raise BridgeSchemaStop(f"physical node identity drift: {node.node_id}")
+        registry[node.node_id] = node
+    return registry
+
+
+def _stream_barrier_state(
     habitat: pd.DataFrame,
     period: str,
-) -> dict[str, dict[str, object]]:
+) -> dict[tuple[str, str], int]:
     h = validate_habitat_frame(habitat)
     p = _canonical_period(period)
     subset = h.loc[h["period"] == p]
-    registry: dict[str, dict[str, object]] = {}
-    for row in subset.to_dict("records"):
-        node = _physical_node_from_row(row)
-        if node.node_id in registry:
+    states: dict[tuple[str, str], int] = {}
+    for (pair_id, stream_name), rows in subset.groupby(
+        ["pair_id", "Stream.Name"],
+        sort=True,
+    ):
+        values = sorted(set(int(value) for value in rows["barrier"]))
+        if len(values) != 1:
             raise BridgeSchemaStop(
-                f"duplicate physical node within period {p}: {node.node_id}"
+                f"barrier state varies within stream-period: {pair_id}|{stream_name}|{p}"
             )
-        registry[node.node_id] = {
-            "node": node,
-            "barrier": _canonical_barrier(row["barrier"]),
-        }
-    return registry
+        states[(str(pair_id), str(stream_name))] = values[0]
+    return states
 
 
 def build_period_graph(
@@ -393,13 +407,15 @@ def build_period_graph(
     *,
     barrier_open: bool,
 ) -> dict[str, frozenset[str]]:
-    registry = _period_node_registry(habitat, period)
+    # Physical topology is the union of all sampled nodes across periods.  A site is
+    # not removed from the movement graph merely because it was not sampled in the
+    # target period.
+    registry = _union_node_registry(habitat)
+    barrier_state = _stream_barrier_state(habitat, period)
     adjacency: dict[str, set[str]] = {node_id: set() for node_id in registry}
 
     by_stream_position: dict[tuple[str, str, str], list[PhysicalNode]] = {}
-    for item in registry.values():
-        node = item["node"]
-        assert isinstance(node, PhysicalNode)
+    for node in registry.values():
         by_stream_position.setdefault(
             (node.pair_id, node.stream_name, node.position),
             [],
@@ -407,6 +423,8 @@ def build_period_graph(
 
     for nodes in by_stream_position.values():
         by_segment = {node.segment: node for node in nodes}
+        if len(by_segment) != len(nodes):
+            raise BridgeSchemaStop("duplicate segment in physical stream-side topology")
         for segment, node in by_segment.items():
             nxt = by_segment.get(segment + 1)
             if nxt is not None:
@@ -414,8 +432,8 @@ def build_period_graph(
                 adjacency[nxt.node_id].add(node.node_id)
 
     stream_keys = {
-        (item["node"].pair_id, item["node"].stream_name)
-        for item in registry.values()
+        (node.pair_id, node.stream_name)
+        for node in registry.values()
     }
     for pair_id, stream_name in stream_keys:
         up_id = PhysicalNode(pair_id, stream_name, "upstream", 1).node_id
@@ -423,16 +441,12 @@ def build_period_graph(
         if up_id not in registry or down_id not in registry:
             continue
 
-        barrier_values = {
-            int(registry[node_id]["barrier"])
-            for node_id in registry
-            if node_id.startswith(f"{pair_id}|{stream_name}|")
-        }
-        if len(barrier_values) != 1:
+        key = (pair_id, stream_name)
+        if key not in barrier_state:
             raise BridgeSchemaStop(
-                f"barrier state varies within stream-period: {pair_id}|{stream_name}"
+                f"stream lacks target-period barrier state: {pair_id}|{stream_name}|{period}"
             )
-        barrier = next(iter(barrier_values))
+        barrier = barrier_state[key]
         if barrier == 0 or barrier_open:
             adjacency[up_id].add(down_id)
             adjacency[down_id].add(up_id)
