@@ -627,6 +627,108 @@ Show the three transformations with:
 - minimum parameter/combined assay burden;
 - S11 dormant climate alias as a worked impossibility example.
 
+## Observation-process uncertainty in target-aware evidence
+
+Phase VI treated parameter assays as exact.  Phase VII adds a finite assay-observation
+world axis and asks whether the target-specific evidence certificate survives uncertain
+measurement semantics.
+
+The joint hypotheses are
+
+[
+W_J = W_E \times W_O,
+]
+
+with the future decision depending only on (W_E).
+
+Two observation worlds were frozen:
+
+- calibrated;
+- systematically miscalibrated.
+
+The systematic world adds +1 to ordinal codes and flips binary codes.
+
+This is a deterministic stress test, not a laboratory error model.
+
+### Repetition is not calibration
+
+For a fixed systematic observation world,
+
+[
+y=g_o(x)
+]
+
+and a repeated same assay returns
+
+[
+(y,y).
+]
+
+The second representation is one-to-one with the first, so it cannot add robust pair
+separation.  The audit found **0 violations** across all scored field/fiber checks.
+
+### Calibration necessity exists
+
+Among future-target-unresolved unique fibers, assay-only robust separation was
+impossible in:
+
+- climate: **2/18**;
+- biotic stress: **2/43**;
+- barrier restoration: **3/6**.
+
+All seven were restored by admitting assay-process calibration.  The complete
+calibrated action library resolved **67/67** scored fibers.
+
+### The S11 prediction was refuted
+
+The preregistered S11 climate prediction expected the exact minimum robust design
+
+[
+\{\text{calibration},A\_level\}.
+]
+
+Instead the exact minimum was
+
+[
+\{A\_level, antagonist\_excluded\}.
+]
+
+Size remained 2, but calibration was unnecessary.
+
+The pair remains sufficient across both observation worlds because its **joint assay
+signature** never collides across opposite climate-decision classes.
+
+This yields an important refinement:
+
+> **future-target identification need not identify either the ecological parameter
+> world or the observation-process world.**
+
+A multivariate assay pattern can be target-self-calibrating even when assay-world
+identity remains unresolved.
+
+### Three observation regimes
+
+The frozen panel contains:
+
+1. assay-only robust separation;
+2. calibration useful but not strictly required for solvability;
+3. calibration-required robust separation.
+
+The relevant field-design question is therefore not simply “how many replicates?” but
+
+> which evidence channels jointly separate target-discordant ecological × observation
+> worlds?
+
+### Figure 9 — Observation-process routing
+
+Show:
+
+- the two assay worlds;
+- repeat-same-assay as a no-gain negative control;
+- calibration-required fibers by transformation;
+- the S11 refutation, contrasting the preregistered calibration+A-level expectation
+  with the observed A-level+antagonist-excluded self-calibrating minimum.
+
 ## Strong claim boundary
 
 Do not claim:
@@ -648,13 +750,20 @@ Do claim, conditional on the frozen universe:
 - unresolved BAM worlds should be retained until they become irrelevant to the target
   or are separated by target-discriminating evidence.
 
-## Next validation after the universe-robustness core is frozen
+## Next validation after assay-process routing
 
-Do **not** add more parameter levels to make Phase IV look more or less robust.
+Do **not** add another deterministic coding rule to make Phase VII look more or less
+favorable.
 
-Phase IV structured the **admissible world universe**, but the target itself is still an
-idealised axis-release probe.  The next independent extension should instead freeze the
-counterfactual transformation before scoring—for example a defined climate shift, a
-partner/antagonist range change, or a corridor/barrier change—and then ask whether the
-same mechanism → forecast → decision identifiability hierarchy and nested-universe
-robustness profile persist.
+The remaining abstraction is that the assay observation worlds are deterministic.
+A genuinely new successor should freeze a **stochastic observation-process universe**
+before scoring—for example finite misclassification/detection kernels—and ask whether:
+
+- repeated independent measurements can now add robust or probabilistic information;
+- target-self-calibrating multichannel designs survive stochastic overlap;
+- calibration remains necessary in the fibers that required it under systematic bias;
+- adaptive evidence selection can stop once the future target, rather than the assay
+  world or parameter world, is sufficiently resolved.
+
+That is a separate programme.  It must not reinterpret the frozen Phase-VII
+systematic-bias result.
