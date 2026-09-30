@@ -1,0 +1,77 @@
+{
+  "schema": "eog.bam_penobscot_external_bridge.gate1_schema_contract_draft.v1",
+  "status": "not_authorized_until_gate0_pass_certificate_is_committed",
+  "purpose": "Freeze schema-inspection semantics before any PRRP data-file payload is opened.",
+  "gate0_prerequisite": {
+    "required_status": "archive_architecture_ready",
+    "certificate_path": "validation/bam_penobscot_external_bridge_v1/gate0_archive_architecture_certificate.json",
+    "fingerprint": null
+  },
+  "file_selection_rules": {
+    "FishCommunity": {
+      "required_exact_file": "Penobscot Fish Data 2010 to 2012.accdb",
+      "other_data_files_allowed": false
+    },
+    "FishPassage-Upstream": {
+      "required_exact_file": "ARRA ZYDLEWSKI PIT DATA.accdb",
+      "other_data_files_allowed": false
+    },
+    "FishPassage-System-wide": {
+      "rule": "inspect every listed non-PDF non-log data file; do not choose among multiple files by content"
+    },
+    "Geomorphology": {
+      "rule": "inspect every listed non-PDF non-log data file; do not choose among multiple files by content"
+    },
+    "WaterQuality": {
+      "rule": "inspect every listed non-PDF non-log data file; do not choose among multiple files by content"
+    }
+  },
+  "allowed_operations": {
+    "accdb_or_mdb": [
+      "download the exact frozen file after Gate0 PASS",
+      "verify size/hash when metadata are available",
+      "list Access table names",
+      "extract table schema/column names and types only"
+    ],
+    "csv_or_tsv": [
+      "read physical header row only",
+      "do not read the first data row"
+    ],
+    "xlsx_or_xls": [
+      "list sheet names",
+      "read header row only from each sheet",
+      "do not read the first data row"
+    ],
+    "documentation": [
+      "record filenames and sizes only in Gate1",
+      "do not use report results to choose variables or worlds"
+    ]
+  },
+  "forbidden_operations": [
+    "export any Access table row",
+    "read any fish abundance/presence value",
+    "read any post-removal focal response value",
+    "fit any model",
+    "choose a table because it contains favorable focal response",
+    "drop a module because its schema is inconvenient",
+    "alter focal species, B proxy, time periods or world rules"
+  ],
+  "schema_gate_outputs": [
+    "exact selected file roster",
+    "file type",
+    "table/sheet names",
+    "column names and declared types",
+    "whether a deterministic reach/site/year linkage is possible without reading focal response values",
+    "whether predeclared A/B/M variable classes can be instantiated"
+  ],
+  "terminal_rules": {
+    "unsupported_file_type": "STOP",
+    "missing required FishCommunity or FishPassage file": "STOP",
+    "no deterministic cross-module reach key visible from schema": "STOP",
+    "A modules expose no numeric physical/water-quality fields": "STOP",
+    "no year field in fish/community schema": "STOP",
+    "no taxon/species identity field in fish/community schema": "STOP",
+    "no response-data repair after schema failure": "STOP"
+  },
+  "next_stage_if_pass": "freeze exact column bindings, reach linkage, A standardization/centrality formula, B parser/cutoffs, M graph representation and output schema before reading any focal response row"
+}
