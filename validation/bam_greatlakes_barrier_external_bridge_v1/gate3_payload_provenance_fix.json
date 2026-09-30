@@ -1,0 +1,11 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.gate3_payload_provenance_fix.v1",
+  "classification": "pre_RDS_fail_closed_provenance_correction",
+  "problem": "post-HTTP-200 archive/file integrity failures could previously reach the catch block before caller counters were incremented",
+  "correction": "ExecutionStop now carries payload request/byte counts; any failure after payload access records bytes>0 and retry_allowed=false",
+  "RDS_payload_bytes_opened_before_change": 0,
+  "ecological_response_values_opened_before_change": false,
+  "scientific_rules_changed": false,
+  "cohort_rule_changed": false,
+  "endpoint_changed": false
+}
