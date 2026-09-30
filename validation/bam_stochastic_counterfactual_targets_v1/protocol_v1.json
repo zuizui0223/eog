@@ -1,0 +1,105 @@
+{
+  "schema": "eog.bam_stochastic_counterfactual_targets.protocol.v1",
+  "status": "frozen_before_implementation_and_scoring",
+  "parent_programmes": {
+    "independent_stochastic_bam_v3": {
+      "result": "validation/independent_stochastic_bam_v3/result_summary_v3.json",
+      "fingerprint": "bc558d10073133510f1b47b5651f6694d53f04771e757e9d8d9716ada72b18bf"
+    },
+    "structured_counterfactuals_v1": {
+      "result": "validation/bam_structured_counterfactuals_v1/result_summary_v1.json",
+      "fingerprint": "f502fb647ba4666f5c40ddbd5639123f3e0296fe492dd97a1ec19ec246531cb1"
+    },
+    "relationship": "independent stochastic target-generalization audit; no prior result is altered"
+  },
+  "scientific_question": "When positive occurrence evidence leaves multiple stochastic BAM worlds compatible, can the conditional stochastic counterfactual forecast distribution or a coarser decision target nevertheless be identified?",
+  "generator_independence": {
+    "base_generator": "benchmarks/independent_stochastic_bam_generator.py",
+    "new_counterfactual_module": "benchmarks/independent_stochastic_counterfactual_generator_v1.py",
+    "forbidden_imports_in_generator": ["eog", "eog.v2", "dynamic_island_reachability", "world_reconstruction"],
+    "rule": "counterfactual forecast targets are generated from NumPy/Python-standard-library code only; EOG is not used to construct target outcomes"
+  },
+  "frozen_current_runs": {
+    "landscape": "unchanged independent stochastic BAM v3 12x8 landscape",
+    "candidate_worlds": 32,
+    "truth_scenarios": 6,
+    "replicates_per_truth": 64,
+    "total_runs": 384,
+    "current_history_steps": 40,
+    "current_evidence": "accumulated positive occurrence IDs through horizon 40; unobserved cells are not used as absence evidence for survivor-set construction",
+    "forecast_initial_state": "the run's observed final occupied snapshot at step 40; this state initializes the counterfactual transition but does not retroactively eliminate candidates by its zero entries"
+  },
+  "one_step_forecast_contract": {
+    "purpose": "avoid Monte Carlo comparison noise by evaluating the exact conditional one-step transition distribution",
+    "source_treatment": "after the current time, the historical founding source is not forced immortal; it follows the same transformed eligibility and persistence rule as any other occupied node",
+    "ineligible_node": "occupancy probability 0",
+    "currently_occupied_eligible_node": "occupancy probability equals the frozen focal persistence probability 0.86",
+    "currently_unoccupied_eligible_node": "occupancy probability 1-(1-beta)^k with beta=0.48 and k occupied accessible neighbours in the current snapshot",
+    "conditional_distribution": "independent Bernoulli product over nodes given the current snapshot, represented exactly for this audit by the ordered vector of node occupancy probabilities",
+    "probability_comparison": "round each probability to 12 decimal places before equality testing"
+  },
+  "counterfactuals": {
+    "climate_shift": {
+      "operator": "temperature +0.08 and moisture -0.04 for focal A only; frozen current associate masks and movement parameters retained",
+      "decision": "expected occupied-node count under the counterfactual is strictly lower than the same world's untransformed one-step expectation by more than 1e-12"
+    },
+    "biotic_stress": {
+      "operator": "one 4-neighbour erosion of the frozen current partner mask plus one 4-neighbour dilation of the frozen current antagonist mask; same focal A and M",
+      "decision": "expected occupied-node count is strictly lower than the same world's untransformed one-step expectation by more than 1e-12"
+    },
+    "barrier_restoration": {
+      "operator": "force barrier_permeable=true while retaining the same focal A, B, dispersal radius and stochastic demographic parameters",
+      "decision": "expected occupied-node count is strictly higher than the same world's untransformed one-step expectation by more than 1e-12"
+    }
+  },
+  "targets": {
+    "parameter_world": "candidate scenario_id",
+    "exact_stochastic_forecast": "ordered 96-node conditional occupancy-probability vector under the frozen counterfactual",
+    "binary_decision": "transformation-specific expected-occupancy decrease/increase relative to the candidate world's own untransformed one-step forecast"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_target_hierarchy",
+      "statement": "For every run and transformation, binary-decision identification is at least as coarse as exact stochastic-forecast identification, which is at least as coarse as parameter-world identification.",
+      "failure_rule": "Any violation is a target-definition or implementation failure and stops interpretation."
+    },
+    {
+      "id": "H2_decision_without_world_identification",
+      "statement": "For each transformation, at least one run with multiple surviving parameter worlds nevertheless has an identified binary stochastic counterfactual decision.",
+      "failure_rule": "REFUTED separately for any transformation without such a run."
+    },
+    {
+      "id": "H3_exact_forecast_without_world_identification",
+      "statement": "For at least one transformation, at least one run with multiple surviving parameter worlds has an identical exact stochastic counterfactual probability vector across all survivors.",
+      "failure_rule": "REFUTED if no transformation shows this."
+    },
+    {
+      "id": "H4_counterfactual_disagreement_exists",
+      "statement": "For each transformation, at least one nonidentified run contains surviving worlds that disagree on the binary stochastic counterfactual decision.",
+      "failure_rule": "REFUTED separately for any transformation without disagreement."
+    },
+    {
+      "id": "H5_truth_consistency",
+      "statement": "Whenever a target is identified across survivors, the identified exact forecast or binary decision equals the generating truth world's target because the truth world is retained.",
+      "failure_rule": "Any mismatch is an implementation/inference failure."
+    }
+  ],
+  "primary_outputs": [
+    "parameter-world, exact stochastic forecast and binary decision identification counts across 384 runs",
+    "counts by truth scenario and transformation",
+    "decision-without-world-identification counts",
+    "exact-forecast-without-world-identification counts",
+    "binary disagreement counts among survivor sets",
+    "truth-consistency failures",
+    "target-hierarchy violations"
+  ],
+  "stop_rules": [
+    "Do not change the one-step horizon after scoring.",
+    "Do not change climate deltas, biotic stress morphology or barrier operator after scoring.",
+    "Do not increase stochastic replicate count or select runs based on target results.",
+    "Do not use unobserved current cells as absence evidence for survivor-set construction.",
+    "Do not interpret one-step synthetic probabilities as calibrated forecasts for a named species.",
+    "Do not alter Phase I-V results or the frozen EOG-WF/BAM manuscripts."
+  ],
+  "candidate_contribution": "Extend occurrence-conditioned BAM target identifiability from deterministic counterfactual maps to exact conditional stochastic forecast distributions, separating parameter-world identity, predictive-distribution identity and decision identity under an independently implemented stochastic generator."
+}
