@@ -1,10 +1,10 @@
 {
   "schema": "eog.bam_greatlakes_barrier_external_bridge.gate2_execution_contract_draft.v1",
-  "status": "not_authorized_until_gate1_pass_certificate_is_committed",
+  "status": "authorized_for_once_only_rds_execution",
   "gate1_prerequisite": {
     "certificate_path": "validation/bam_greatlakes_barrier_external_bridge_v1/gate1_readme_certificate.json",
     "required_status": "readme_schema_ready",
-    "fingerprint": null
+    "fingerprint": "fac4115880dce1fcad3a8f7a0bb2e2ba109e0afcf62caefa6fabbcdf24791a57"
   },
   "frozen_files": {
     "habitat": {
