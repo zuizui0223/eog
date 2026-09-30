@@ -603,6 +603,65 @@ Canonical assets:
 - `docs/bam_decision_robustness_margin_v1.md`;
 - `docs/bam_decision_robustness_margin_v1_result.md`.
 
+## 20. Ecological parameter-neighbourhood robustness
+
+The unrestricted same-(G) completion margin is a logical stress test.  Phase IV
+therefore inserted a preregistered ecological parameter neighbourhood between the
+original world family and complete decomposition closure.
+
+Each of the 12 frozen systems was expanded from 64 to **2,592** BAM parameter worlds
+using only pre-score rules:
+
+- A niche-breadth extrapolation by one discrete level on either side;
+- partner and antagonist one-shell erosion/base/dilation;
+- one additional M dispersal-radius level;
+- one extra-long M horizon.
+
+All original worlds were required to embed exactly.  Counterexamples were required to
+reproduce the exact current (G).
+
+The preregistered results were:
+
+- H1 one-step fragility: **SUPPORTED**;
+- H2 nontrivial robustness: **SUPPORTED**;
+- H3 irrelevant-axis invariance: **SUPPORTED** with zero violations;
+- H4 directional margin asymmetry: **REFUTED**.
+
+Identification across nested universes became:
+
+| target | original | structured expansion | complete same-G closure |
+|---|---:|---:|---:|
+| release A | 652 | 646 | 34 |
+| release B | 705 | 693 | 34 |
+| release M | 732 | 691 | 34 |
+
+Thus the structured neighbourhood retained 99.1%, 98.3% and 94.4% of the respective
+declared-universe certificates even though unrestricted same-(G) completion destroys
+every nontrivial certificate.
+
+Finite structured counterexamples occurred in only:
+
+- A: 6 truth cases / 1 unique fiber, all distance 3;
+- B: 12 truth cases / 3 unique fibers, distances 2–3;
+- M: 41 truth cases / 5 unique fibers, distances 1–4.
+
+The scientific output is therefore a **nested-universe robustness profile**:
+
+> **identified in the original world family; retained or lost in a preregistered
+> ecological neighbourhood; and eventually unresolved or retained under complete
+> logical closure.**
+
+Do not promote “no counterexample in the 2,592-world lattice” to universal ecological
+robustness.  It is robustness only to the frozen expansion operators.
+
+Canonical Phase-IV assets:
+
+- `validation/bam_ecological_expansion_margin_v1/protocol_v1.json`;
+- `validation/bam_ecological_expansion_margin_v1/result_summary_v1.json`;
+- `docs/bam_ecological_expansion_margin_v1.md`;
+- `docs/bam_ecological_expansion_margin_v1_result.md`;
+- `docs/bam_nested_universe_target_identifiability_v1.md`.
+
 ## Hard claim boundary
 
 Do not claim:

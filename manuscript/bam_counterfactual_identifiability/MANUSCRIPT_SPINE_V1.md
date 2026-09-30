@@ -283,6 +283,125 @@ The candidate contribution must therefore remain BAM-specific:
 This combination, rather than generic prediction-under-nonidentifiability or generic
 robust decision theory, is the novelty target.
 
+## Structured ecological universe expansion
+
+Phase III used complete same-(G) decomposition closure as a worst-case logical
+envelope.  Phase IV inserts a prospectively frozen ecological parameter neighbourhood
+between the original 64-world universe and that complete closure.
+
+Each deterministic system is expanded to **2,592** parameter worlds using only levels
+frozen before scoring:
+
+- A: one niche-breadth level beyond each side of the narrow/broad pair;
+- B: partner and antagonist one-shell erosion/base/dilation while retaining the four
+  original interaction modes;
+- M: one additional dispersal-radius level and one extra-long movement horizon.
+
+The original 64 worlds must embed exactly.  For each E1 survivor fiber, only expanded
+worlds with exactly the same current (G) may challenge the binary release decision.
+
+Distance is unit-weight Manhattan distance in the frozen ecological parameter
+coordinates, not cell-level Hamming distance.
+
+### Phase-IV preregistered result
+
+H1 one-step fragility: **SUPPORTED**.  
+H2 nontrivial robustness: **SUPPORTED**.  
+H3 irrelevant-axis invariance: **SUPPORTED**, zero violations.  
+H4 directional median asymmetry: **REFUTED**.
+
+No operator was added after H4 failed.
+
+### Nested-universe erosion
+
+The same binary target is now evaluated over three nested universe levels:
+
+[
+W_0(G)
+subset
+W_1(G)
+subset
+mathcal C(G),
+]
+
+where (W_0) is the original 64-world family, (W_1) is the same-(G) subset of the
+2,592-world ecological expansion lattice, and (mathcal C(G)) is unrestricted
+same-(G) binary decomposition closure.
+
+Identification counts were:
+
+| target | (W_0) original | (W_1) ecological expansion | (mathcal C(G)) complete closure |
+|---|---:|---:|---:|
+| release A | **652** | **646** | **34** |
+| release B | **705** | **693** | **34** |
+| release M | **732** | **691** | **34** |
+
+Thus the structured expansion retained:
+
+- **99.1%** of A-release certificates;
+- **98.3%** of B-release certificates;
+- **94.4%** of M-release certificates.
+
+The complete closure retains only the 34 full-(G) truth cases, where there is no
+outside node to become newly occupied.
+
+This gives the paper a stronger and safer result:
+
+> **logical same-(G) counterexamples can be ubiquitous even when counterexamples are
+> rare inside the first preregistered ecological parameter neighbourhood.  A BAM
+> decision certificate therefore needs a world-universe robustness profile, not merely
+> an identified/unidentified label.**
+
+### Structured counterexamples
+
+Within (W_1):
+
+- A release: only **6/652** identified truth cases acquired a counterexample, all at
+  ecological distance 3;
+- B release: **12/705**, at distances 2–3;
+- M release: **41/732**, at distances 1–4.
+
+At unique-fiber level the corresponding counterexample counts were only **1/119**,
+**3/124** and **5/126** identified fibers.
+
+The one-step fragility signal occurred only for M release.
+
+### H4 refutation is informative
+
+The predeclared directional-asymmetry hypothesis was not supported.
+
+Finite ecological counterexamples were instead segregated by target:
+
+- A: all finite flips started from no-expansion;
+- B: all finite flips started from no-expansion;
+- M: all finite flips started from expansion.
+
+Therefore the bit-level witness asymmetry from unrestricted completion does not dictate
+the direction of fragility under a restricted ecological operator family.
+
+This result must remain a refutation rather than being repaired with additional
+post-score operators.
+
+## Exact nested-universe theorem
+
+For fixed evidence (e), target (T), and nested universes (W_0subseteq W_1),
+
+[
+S(e;W_0)subseteq S(e;W_1)
+]
+
+and therefore
+
+[
+T(S(e;W_0))subseteq T(S(e;W_1)).
+]
+
+Universe expansion can preserve or destroy target identification, but cannot resolve
+existing target disagreement by itself.
+
+The 64 → 2,592 → complete-closure sequence is the frozen BAM demonstration of this
+elementary exact rule.
+
 ## Strong claim boundary
 
 Do not claim:
@@ -304,16 +423,13 @@ Do claim, conditional on the frozen universe:
 - unresolved BAM worlds should be retained until they become irrelevant to the target
   or are separated by target-discriminating evidence.
 
-## Next validation after this paper core is frozen
+## Next validation after the universe-robustness core is frozen
 
-Do **not** add another arbitrary synthetic system to improve the counts.
+Do **not** add more parameter levels to make Phase IV look more or less robust.
 
-The next independent extension should replace idealised release probes with
-prospectively frozen ecological perturbations, for example:
-
-- a defined abiotic/climate shift acting on A;
-- a partner/antagonist perturbation acting on B;
-- a corridor/barrier/translocation perturbation acting on M.
-
-The key test is whether the target-specific identifiability hierarchy persists when the
-counterfactual is biologically structured rather than an axis deletion.
+Phase IV structured the **admissible world universe**, but the target itself is still an
+idealised axis-release probe.  The next independent extension should instead freeze the
+counterfactual transformation before scoring—for example a defined climate shift, a
+partner/antagonist range change, or a corridor/barrier change—and then ask whether the
+same mechanism → forecast → decision identifiability hierarchy and nested-universe
+robustness profile persist.

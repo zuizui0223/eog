@@ -1,0 +1,98 @@
+{
+  "schema": "eog.bam_ecological_expansion_margin.protocol.v1",
+  "status": "frozen_before_implementation_and_scoring",
+  "parent_programmes": {
+    "target_identifiability": {
+      "result": "validation/bam_counterfactual_identifiability_v1/result_summary_v1.json",
+      "fingerprint": "77314699090fd3b0a19066363eab0589c3a0c89ac41aabbce49873c84b468172"
+    },
+    "logical_completion_margin": {
+      "result": "validation/bam_decision_robustness_margin_v1/result_summary_v1.json",
+      "fingerprint": "ffd0d11bbe75d4e27cc8918ab77a95e991ab52b43bd39ee83ce81b8a3bd52050"
+    },
+    "relationship": "Phase-IV ecological-structure audit; no prior frozen result is altered or reclassified"
+  },
+  "scientific_question": "How many prospectively defined ecological parameter-neighbourhood steps beyond the declared finite BAM family are required before a same-G world can reverse a currently identified binary release decision?",
+  "fixed_systems": {
+    "source": "the unchanged 12 deterministic activation-qualified systems / 768 truth cases",
+    "current_evidence": "E1 complete perfect current distribution G",
+    "declared_survivor_fiber": "all original 64 BAM worlds with G_w = G_truth",
+    "no_new_landscape_search": true,
+    "no_post_score_parameter_tuning": true
+  },
+  "expanded_parameter_lattice": {
+    "A": {
+      "declared_levels": [0, 1],
+      "expanded_levels": [-1, 0, 1, 2],
+      "semantics": "abiotic niche-radius ladder around the frozen common center; level 0=narrow, 1=broad, -1 and 2 are one linear extrapolation step beyond the declared radii",
+      "construction": "r_-1=max(epsilon, r_narrow-(r_broad-r_narrow)); r_2=r_broad+(r_broad-r_narrow)",
+      "epsilon": 0.05
+    },
+    "B": {
+      "declared_interaction_bits": "partner requirement on/off x antagonist exclusion on/off; all four combinations are already declared",
+      "associate_range_levels": [-1, 0, 1],
+      "partner_semantics": "-1 one 4-neighbour erosion shell, 0 frozen partner range, +1 one 4-neighbour dilation shell",
+      "antagonist_semantics": "-1 one 4-neighbour erosion shell, 0 frozen antagonist range, +1 one 4-neighbour dilation shell",
+      "boundary_rule": "erosion requires all in-grid 4-neighbours to remain occupied; outside-grid locations are not treated as evidence of absence"
+    },
+    "M": {
+      "step_radius_levels": [1.01, 2.01, 3.01],
+      "declared_step_radius_levels": [1.01, 2.01],
+      "horizon_levels": "short, long, extra_long where extra_long=long+landscape_width",
+      "declared_horizon_levels": "short and long",
+      "barrier_permeability": [false, true],
+      "note": "barrier permeability remains binary because both states are already declared; Phase IV expands dispersal radius and movement horizon only"
+    }
+  },
+  "distance": {
+    "name": "ecological_parameter_lattice_distance",
+    "definition": "minimum Manhattan distance from an expanded BAM world to any original same-G E1 survivor in coordinates [A_level, partner_interaction_bit, antagonist_interaction_bit, partner_range_level, antagonist_range_level, dispersal_radius_level, barrier_bit, horizon_level]",
+    "weights": "all coordinate steps weight 1",
+    "rule": "original declared levels have range perturbation coordinates 0; expanded A/D/H levels and B associate-range shells add positive distance"
+  },
+  "same_G_requirement": "expanded counterexample worlds are eligible only if A intersect B intersect M equals the exact current G of the E1 fiber",
+  "targets": {
+    "release_A": "binary expansion of B intersect M beyond current G",
+    "release_B": "binary expansion of A intersect M beyond current G",
+    "release_M": "binary expansion of A intersect B beyond current G"
+  },
+  "primary_estimand": "for each declared-universe decision-identified E1 fiber and release target, the minimum ecological_parameter_lattice_distance to an expanded same-G world with the opposite binary decision; null if no opposite world exists inside the frozen expanded lattice",
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_one_step_fragility_exists",
+      "statement": "At least one declared-universe identified binary release decision is reversed by an eligible same-G expanded world at ecological distance 1.",
+      "failure_rule": "REFUTED if every identified decision has ecological margin >1 or no counterexample in the frozen expanded lattice."
+    },
+    {
+      "id": "H2_nontrivial_robustness_exists",
+      "statement": "At least one declared-universe identified decision has ecological margin >=2 or remains unflipped within the entire frozen expanded lattice.",
+      "failure_rule": "REFUTED if every identified decision flips at distance 1."
+    },
+    {
+      "id": "H3_irrelevant_axis_invariance",
+      "statement": "Changing only the released axis cannot change its own release target: release-A targets are invariant to A-only changes, release-B to B-only changes, and release-M to M-only changes.",
+      "failure_rule": "Any violation is an implementation/theory failure and stops interpretation."
+    },
+    {
+      "id": "H4_directional_margin_asymmetry",
+      "statement": "Among proper-G identified decisions with finite ecological margins, median margin for current expansion=True exceeds median margin for current expansion=False for at least two of the three release targets.",
+      "failure_rule": "REFUTED otherwise; retain the measured direction without rescue."
+    }
+  ],
+  "secondary_outputs": [
+    "margin distribution by release target and current decision",
+    "nearest-flip operator coordinates and which ecological dimensions moved",
+    "fraction of decisions with no counterexample inside the frozen ecological lattice",
+    "comparison to unrestricted logical completion margin as descriptive only",
+    "truth-weighted and unique-fiber-weighted summaries"
+  ],
+  "stop_rules": [
+    "Do not change operator levels after scoring.",
+    "Do not add corridor, climate or interaction operators after seeing which axis is weak.",
+    "Do not interpret linear A-radius extrapolation, one-shell associate range changes or D/H extensions as calibrated real-species perturbations.",
+    "Do not call the expanded lattice exhaustive ecological plausibility.",
+    "Do not claim generic novelty for scenario ensembles, sensitivity analysis, robust decision making or parameter-space neighbourhood search.",
+    "Do not alter the frozen JBI BAM manuscript, EOG-WF denominator, Phase-II result or Phase-III result."
+  ],
+  "candidate_contribution": "An occurrence-conditioned BAM robustness margin measured in prospectively declared ecological parameter space rather than arbitrary A/B/M bit space, with exact attribution of which ecological assumption dimensions must leave the original world family before a counterfactual decision changes."
+}
