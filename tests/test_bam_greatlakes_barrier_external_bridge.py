@@ -128,7 +128,8 @@ def test_species_bridge_uses_heldout_positive_as_world_witness():
         for row in result.heldout_witness_rows
         if row["node_id"] == "1|BarrierCreek|upstream|1"
     )
-    assert crossing["eliminated_world_count"] > 0
+    assert crossing["individually_eliminated_world_count"] > 0
+    assert crossing["calibration_survivor_count"] == 35
 
 
 def test_period_sampling_omission_does_not_remove_physical_movement_node():
@@ -144,3 +145,19 @@ def test_period_sampling_omission_does_not_remove_physical_movement_node():
     graph = build_period_graph(habitat, "2023", barrier_open=True)
     assert "1|BarrierCreek|downstream|2" in graph
     assert "1|BarrierCreek|downstream|1" in graph["1|BarrierCreek|downstream|2"]
+
+
+def test_heldout_per_node_elimination_is_order_invariant():
+    habitat = validate_habitat_frame(_habitat())
+    catch = validate_catch_frame(_catch())
+    joined = join_catch_to_habitat(catch, habitat)
+    scaling = fit_habitat_scaling(habitat)
+
+    result1 = evaluate_species(joined, habitat, scaling, "Species alpha")
+
+    # Row ordering cannot alter node-specific or joint heldout falsification.
+    shuffled = joined.sample(frac=1.0, random_state=7).reset_index(drop=True)
+    result2 = evaluate_species(shuffled, habitat, scaling, "Species alpha")
+
+    assert result1.heldout_witness_rows == result2.heldout_witness_rows
+    assert result1.final_survivor_world_ids == result2.final_survivor_world_ids
