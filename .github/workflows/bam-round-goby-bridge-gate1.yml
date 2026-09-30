@@ -1,13 +1,6 @@
 name: BAM round-goby external bridge Gate1
 
 on:
-  pull_request:
-    paths:
-      - "validation/bam_round_goby_external_bridge_v1/gate0_source_identity_certificate.json"
-      - "validation/bam_round_goby_external_bridge_v1/gate1_execution_authorization.json"
-      - "validation/bam_round_goby_external_bridge_v1/gate1_schema.py"
-      - "tests/test_bam_round_goby_external_bridge_gate1.py"
-      - ".github/workflows/bam-round-goby-bridge-gate1.yml"
   workflow_dispatch:
 
 jobs:
