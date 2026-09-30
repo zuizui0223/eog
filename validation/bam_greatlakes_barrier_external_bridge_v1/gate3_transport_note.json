@@ -1,0 +1,18 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.gate3_transport_note.v1",
+  "classification": "pre_RDS_transport_hardening",
+  "reason": "current Dryad API file-byte download requires bearer authentication and may redirect to object storage",
+  "changes": [
+    "require DRYAD_TOKEN preflight before any RDS payload request",
+    "strip Authorization on cross-host redirects",
+    "write explicit zero-byte administrative STOP when token is absent or invalid"
+  ],
+  "RDS_payload_bytes_opened_before_change": 0,
+  "ecological_response_values_opened_before_change": false,
+  "A_rules_changed": false,
+  "M_rules_changed": false,
+  "B_scope_changed": false,
+  "cohort_rule_changed": false,
+  "endpoint_changed": false,
+  "RDS_parser_semantics_changed": false
+}
