@@ -1,0 +1,92 @@
+{
+  "schema": "eog.bam_stochastic_assay_allocation.protocol.v1",
+  "status": "frozen_before_implementation_and_scoring",
+  "parent_programme": {
+    "stochastic_assay_risk_result": "validation/bam_stochastic_assay_risk_v1/result_summary_v1.json",
+    "fingerprint": "545fad056cdfe3f93eca3e1a973560aeb67c605cb0ae8508ff6fc75c01b09121",
+    "relationship": "Phase-IX assay-subset allocation successor; Phase-VIII fixed-field repeat results remain immutable"
+  },
+  "scientific_question": "Are the exact-robust assay fields selected under Phase VII also efficient for the Phase-VIII stochastic 5 percent pairwise-risk objective, or can the same future target be resolved with fewer noisy assay readings by changing the field subset before replication?",
+  "fixed_objects": {
+    "ecological_universe": "W1 preregistered 2,592-world ecological lattice",
+    "transformations": ["climate_shift", "biotic_stress", "barrier_restoration"],
+    "scored_units": "the same 67 future-target-unresolved W1 fibers from Phases VII-VIII",
+    "assay_quality_worlds": {
+      "moderate_accuracy": 0.7,
+      "high_accuracy": 0.9
+    },
+    "error_kernel": "unchanged Phase-VIII symmetric categorical full-support iid kernel",
+    "risk_metric": "unchanged worst target-discordant pair BC/2",
+    "risk_threshold": 0.05,
+    "repeat_cap": 30,
+    "quality_calibration": "excluded from the primary allocation search because Phase VIII showed zero repeat-depth or total-action savings under the frozen worst-pair criterion"
+  },
+  "candidate_fields": [
+    "A_level",
+    "partner_required",
+    "antagonist_excluded",
+    "partner_range_level",
+    "antagonist_range_level",
+    "dispersal_radius_level",
+    "barrier_permeable",
+    "horizon_level"
+  ],
+  "three_designs": {
+    "frozen_phase_viii": "use exactly the Phase-VII canonical ecological assay fields and the Phase-VIII minimum equal repeat depth",
+    "canonical_subset_reoptimized": "search every non-empty subset of the frozen Phase-VII canonical assay fields; every selected field receives the same iid repeat depth n=1..30",
+    "global_field_reoptimized": "search every non-empty subset of all eight frozen W1 parameter fields; every selected field receives the same iid repeat depth n=1..30"
+  },
+  "objective": {
+    "primary": "minimize total noisy assay readings = number_of_selected_fields * repeat_depth subject to worst target-discordant pair BC/2 <= 0.05",
+    "tie_break": "minimum total readings, then fewer distinct fields, then smaller repeat depth, then lexicographically ordered field tuple",
+    "no_field_specific_repeat_counts": true
+  },
+  "exact_search": "enumerate every candidate field subset. For a fixed subset, compute the worst one-repeat Bhattacharyya affinity; because every selected field is repeated the same n times independently, the worst affinity at depth n is the nth power of the one-repeat worst affinity, so the smallest feasible n<=30 is exact for that subset.",
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_canonical_subset_saving_exists",
+      "statement": "At least one fiber reaches the frozen 5 percent pairwise bound with strictly fewer total noisy readings after reoptimizing over subsets of its Phase-VII canonical fields.",
+      "failure_rule": "REFUTED if every canonical field is needed at the Phase-VIII reading cost in every fiber."
+    },
+    {
+      "id": "H2_global_field_saving_exists",
+      "statement": "At least one fiber has a strictly lower total noisy-reading cost under the all-eight-field search than under the frozen Phase-VIII design.",
+      "failure_rule": "REFUTED if global field reoptimization never improves total reading cost."
+    },
+    {
+      "id": "H3_noncanonical_field_gain_exists",
+      "statement": "At least one fiber is strictly cheaper under all-eight-field reoptimization than under canonical-subset reoptimization, implying that a field excluded from the exact-robust Phase-VII minimum becomes useful for the stochastic risk objective.",
+      "failure_rule": "REFUTED if the all-field search never strictly improves on the best subset of Phase-VII fields."
+    },
+    {
+      "id": "H4_target_specific_design_differs",
+      "statement": "At least one stochastic risk-optimal field subset differs from the Phase-VII exact-robust canonical ecological field set.",
+      "failure_rule": "REFUTED if every risk-optimal design uses exactly the Phase-VII ecological field set."
+    }
+  ],
+  "secondary_outputs": [
+    "total-reading savings by transformation",
+    "optimal field-count and repeat-depth distributions",
+    "frequency of each field in the lexicographically canonical risk-optimal design",
+    "S11 dormant-climate optimal subset and cost",
+    "fibers where deterministic exact-robust and stochastic risk-optimal field sets coincide"
+  ],
+  "stop_rules": [
+    "Do not change the 5 percent threshold, quality worlds, error kernels or repeat cap after scoring.",
+    "Do not introduce field-specific unequal replication in this phase.",
+    "Do not change the future target or W1 world universe.",
+    "Do not add a new assay field after observing the allocation results.",
+    "Do not interpret unit reading count as real field, laboratory, monetary, temporal or ethical cost.",
+    "Do not alter Phase-I through Phase-VIII results."
+  ],
+  "novelty_boundary": {
+    "not_claimed_new": [
+      "optimal experimental design",
+      "feature selection",
+      "replicate allocation",
+      "Bhattacharyya affinity",
+      "integer or subset optimization"
+    ],
+    "candidate_contribution": "A BAM-specific demonstration that the evidence set minimizing exact finite-world target ambiguity need not be the evidence set minimizing repeated noisy-assay burden for the same occurrence-conditioned future ecological target."
+  }
+}
