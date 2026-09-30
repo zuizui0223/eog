@@ -1,0 +1,120 @@
+{
+  "schema": "eog.bam_joint_uncertainty_lattice.result_summary.v1",
+  "status": "completed_preregistered_joint_uncertainty_audit",
+  "protocol": "validation/bam_joint_uncertainty_lattice_v1/protocol_v1.json",
+  "protocol_commit": "d220bcb421abd596aaee0733e0241c44d835d679",
+  "authoritative_run": 36729442392,
+  "authoritative_job": 109934818938,
+  "executed_head": "1ccce3895ba67ea131f41f8aac51974ed1c522ae",
+  "artifact_id": 11105045837,
+  "artifact_digest": "sha256:0c095524bae7bc6d201ef39802c5a49dbedc3186660fb71b4b0db801084642cc",
+  "result_fingerprint": "7dd641878ae21212de5ab9af54593498d1decae379a514346579de5642d107d9",
+  "design": {
+    "systems": 12,
+    "unique_current_G_fibers_per_target": 129,
+    "transformations": 3,
+    "fiber_transformation_rows": 387,
+    "joint_levels": ["W0O0", "W0O1", "W1O0", "W1O1"],
+    "action_library_size": 9,
+    "new_ecological_or_observation_models_added": 0
+  },
+  "predeclared_verdicts": {
+    "H1_nested_joint_burden_monotonicity": "SUPPORTED",
+    "H2_joint_uncertainty_interaction_exists": "SUPPORTED",
+    "H3_ecological_expansion_can_create_calibration_need": "SUPPORTED",
+    "H4_complete_joint_library_resolves_all": "SUPPORTED"
+  },
+  "global_results": {
+    "monotonicity_violations": 0,
+    "strict_joint_interaction_fiber_target_rows": 51,
+    "ecological_expansion_created_calibration_need_rows": 9,
+    "W1O1_complete_library_failures": 0
+  },
+  "by_transformation": {
+    "climate_shift": {
+      "unique_fibers": 129,
+      "burden_distribution": {
+        "W0O0": {"0": 115, "1": 14},
+        "W0O1": {"0": 115, "2": 14},
+        "W1O0": {"0": 111, "1": 18},
+        "W1O1": {"0": 111, "2": 18}
+      },
+      "truth_weighted_burden_distribution": {
+        "W0O0": {"0": 646, "1": 122},
+        "W0O1": {"0": 646, "2": 122},
+        "W1O0": {"0": 636, "1": 132},
+        "W1O1": {"0": 636, "2": 132}
+      },
+      "ecological_only_burden_increase_fibers": 4,
+      "observation_only_burden_increase_fibers": 14,
+      "strict_joint_interaction_fibers": 4,
+      "strict_joint_interaction_truth_weight": 10,
+      "ecological_expansion_created_calibration_need_fibers": 2,
+      "ecological_expansion_created_calibration_need_truth_weight": 33,
+      "W1O1_calibration_required_for_minimum_fibers": 2,
+      "W1O1_complete_library_failures": 0
+    },
+    "biotic_stress": {
+      "unique_fibers": 129,
+      "burden_distribution": {
+        "W0O0": {"0": 112, "1": 15, "2": 2},
+        "W0O1": {"0": 112, "2": 15, "3": 2},
+        "W1O0": {"0": 86, "1": 17, "2": 18, "3": 3, "4": 5},
+        "W1O1": {"0": 86, "2": 17, "3": 18, "4": 3, "5": 5}
+      },
+      "truth_weighted_burden_distribution": {
+        "W0O0": {"0": 603, "1": 151, "2": 14},
+        "W0O1": {"0": 603, "2": 151, "3": 14},
+        "W1O0": {"0": 498, "1": 41, "2": 146, "3": 21, "4": 62},
+        "W1O1": {"0": 498, "2": 41, "3": 146, "4": 21, "5": 62}
+      },
+      "ecological_only_burden_increase_fibers": 43,
+      "observation_only_burden_increase_fibers": 17,
+      "strict_joint_interaction_fibers": 43,
+      "strict_joint_interaction_truth_weight": 270,
+      "ecological_expansion_created_calibration_need_fibers": 4,
+      "ecological_expansion_created_calibration_need_truth_weight": 44,
+      "W1O1_calibration_required_for_minimum_fibers": 4,
+      "W1O1_complete_library_failures": 0
+    },
+    "barrier_restoration": {
+      "unique_fibers": 129,
+      "burden_distribution": {
+        "W0O0": {"0": 127, "1": 1, "2": 1},
+        "W0O1": {"0": 127, "2": 1, "3": 1},
+        "W1O0": {"0": 123, "1": 1, "2": 2, "3": 1, "4": 2},
+        "W1O1": {"0": 123, "2": 1, "3": 2, "4": 2, "5": 1}
+      },
+      "truth_weighted_burden_distribution": {
+        "W0O0": {"0": 744, "1": 4, "2": 20},
+        "W0O1": {"0": 744, "2": 4, "3": 20},
+        "W1O0": {"0": 700, "1": 9, "2": 44, "3": 4, "4": 11},
+        "W1O1": {"0": 700, "2": 9, "3": 44, "4": 12, "5": 3}
+      },
+      "ecological_only_burden_increase_fibers": 5,
+      "observation_only_burden_increase_fibers": 2,
+      "strict_joint_interaction_fibers": 4,
+      "strict_joint_interaction_truth_weight": 40,
+      "ecological_expansion_created_calibration_need_fibers": 3,
+      "ecological_expansion_created_calibration_need_truth_weight": 36,
+      "W1O1_calibration_required_for_minimum_fibers": 3,
+      "W1O1_complete_library_failures": 0
+    }
+  },
+  "main_findings": [
+    "Exact target-level evidence burden was monotone under both ecological-world expansion and assay-observation-world expansion, with zero violations across all 387 fiber-transformation rows.",
+    "Ecological and observation uncertainty interacted at the evidence-design level: 51/387 rows had W1O1 burden strictly larger than both W1O0 and W0O1 burdens.",
+    "The interaction was especially pervasive for biotic stress: all 43 W1 target-unresolved biotic-stress fibers showed a strict joint burden increment.",
+    "Ecological universe expansion created a new need for explicit assay-process calibration in nine rows: two climate, four biotic-stress and three barrier-restoration fibers.",
+    "Most strict joint interactions did not require explicit calibration; additional assay channels could instead provide target-level self-calibration.",
+    "The complete frozen nine-action library robustly resolved every W1O1 future binary target.",
+    "The correct robustness object is therefore a joint-universe evidence profile, not a certificate computed under ecological uncertainty or observation uncertainty in isolation."
+  ],
+  "claim_boundary": [
+    "The systematic assay world remains a synthetic deterministic miscoding fixture.",
+    "Strict joint interaction is an exact finite-set burden contrast, not a generic statistical interaction parameter.",
+    "Action counts are combinatorial information counts rather than monetary, temporal, logistical or ethical field costs.",
+    "The result combines already frozen universes and transformations; it does not establish robustness to undeclared ecological or observation processes.",
+    "No generic novelty is claimed for robust design under joint model and measurement uncertainty."
+  ]
+}

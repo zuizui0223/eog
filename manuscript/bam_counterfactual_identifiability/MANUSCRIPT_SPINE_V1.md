@@ -820,6 +820,64 @@ Show the Phase-VII / Phase-VIII contrast:
 - calibration helps systematic-bias fibers but not the Phase-VIII same-quality
   bottleneck.
 
+## Joint ecological-observation uncertainty
+
+The evidence-design result must ultimately be stated over a joint uncertainty universe,
+not separately over ecological alternatives and measurement processes.
+
+Phase IX therefore crossed the frozen ecological universes (W_0\subset W_1) with the
+frozen systematic-assay universes (O_0\subset O_1), using the same nine-action
+library.
+
+Across 129 current-G fibers and three structured future targets:
+
+- exact burden monotonicity violations: **0/387**;
+- strict joint uncertainty interactions: **51/387**;
+- new calibration requirements created by ecological expansion: **9/387**;
+- unresolved W1O1 targets under the complete action library: **0/387**.
+
+The interaction contrast is
+
+[
+I
+=
+b(W_1,O_1)
+-
+\max\{b(W_1,O_0),b(W_0,O_1)\}.
+]
+
+(I>0) occurred in:
+
+- 4 climate fibers;
+- 43 biotic-stress fibers;
+- 4 barrier-restoration fibers.
+
+This gives the successor paper a more precise robustness statement:
+
+> **A target certificate and its evidence burden are properties of the joint ecological
+> × observation universe.  An observation ambiguity that is harmless in a narrow
+> ecological family can become decision-relevant after ecological expansion, while
+> multichannel target signatures can sometimes remove that burden without explicitly
+> identifying the observation process.**
+
+This is the point where the finite-world programme closes its internal uncertainty
+accounting loop:
+
+[
+\text{occurrence evidence}
+\rightarrow
+\text{ecological survivor fiber}
+\rightarrow
+\text{future target}
+\rightarrow
+\text{observation-process crossing}
+\rightarrow
+\text{target-aware robust evidence design}.
+]
+
+Do not claim generic novelty for joint robust design under model and measurement
+uncertainty.  The candidate contribution remains BAM-specific and occurrence-conditioned.
+
 ## Strong claim boundary
 
 Do not claim:
