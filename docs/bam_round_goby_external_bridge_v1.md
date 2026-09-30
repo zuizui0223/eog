@@ -50,3 +50,26 @@ The endpoint is whether real heldout positives:
    records were opened.
 
 A negative or null result is retained.
+
+
+## Terminal status
+
+Gate0 passed source identity with all 10 files matching the frozen Zenodo roster and
+checksums.
+
+Gate1 then stopped before any response row was opened.  The one-byte physical-header
+firewall reached byte 132 of `Upstream_data_noNAs_2025_noElectro.csv`, at which point
+Zenodo returned HTTP 429 rather than the required 206 response.
+
+Frozen terminal accounting:
+
+- response data-row bytes opened: **0**;
+- response rows opened: **0**;
+- model fits: **0**;
+- retry / alternate transport repair: **not allowed**.
+
+This is an administrative transport stop, not ecological falsification and not evidence
+for or against the BAM finite-world framework.
+
+The candidate remains useful for motivating the empirical architecture, but it is not
+continued as a validation endpoint.
