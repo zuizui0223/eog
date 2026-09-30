@@ -1,0 +1,38 @@
+name: BAM Great Lakes barrier bridge once-only execution
+
+on:
+  pull_request:
+    paths:
+      - "validation/bam_greatlakes_barrier_external_bridge_v1/gate1_readme_certificate.json"
+      - "validation/bam_greatlakes_barrier_external_bridge_v1/gate2_execution_contract_draft.json"
+      - "validation/bam_greatlakes_barrier_external_bridge_v1/run_external_bridge_once.py"
+      - "validation/bam_greatlakes_barrier_external_bridge_v1/gate3_transport_note.json"
+      - "tests/test_bam_greatlakes_barrier_gate3.py"
+      - ".github/workflows/bam-greatlakes-barrier-execute-once.yml"
+  workflow_dispatch:
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    env:
+      DRYAD_TOKEN: ${{ secrets.DRYAD_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python package
+        run: python -m pip install -e .[dev]
+      - name: Install base R reader
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends r-base-core
+      - name: Test once-only execution boundary
+        run: python -m pytest tests/test_bam_greatlakes_barrier_gate3.py -q
+      - name: Execute frozen external bridge once
+        run: python -m validation.bam_greatlakes_barrier_external_bridge_v1.run_external_bridge_once
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-greatlakes-barrier-external-bridge-result
+          path: validation/bam_greatlakes_barrier_external_bridge_v1/external_bridge_result_v1.json
+          if-no-files-found: error
