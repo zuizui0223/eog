@@ -140,42 +140,24 @@ def run() -> dict[str, object]:
             if len(world.occupied_ids) >= 2 and source_id in world.occupied_ids
         )
 
+        truths_by_G = {}
         for truth in eligible_truths:
-            G = int(truth.occupied_mask)
+            truths_by_G.setdefault(int(truth.occupied_mask), []).append(truth)
+
+        # Cache every expensive object once per same-G W1 fiber. Across a system,
+        # each expanded variant belongs to exactly one G fiber, so BAM-state and
+        # structured-counterfactual reconstruction is performed once per variant.
+        fiber_cache = {}
+        for G in sorted(truths_by_G):
             survivors = tuple(
                 row for row in lattice if int(row.occupied_mask) == G
             )
             survivor_ids = tuple(row.variant_id for row in survivors)
-            truth_variant = by_coords[declared_world_coordinates(system, truth)]
-            if int(truth_variant.occupied_mask) != G:
-                raise RuntimeError("embedded truth variant does not reproduce truth G")
-
-            # Parameter evidence is cheap to construct and is required for every truth.
-            # Present-state signatures/libraries are built lazily only when a target is
-            # not already E1-identified and the complete-state sufficiency question is
-            # actually relevant.
-            parameter_library = parameter_measurements(
-                survivors,
-                survivor_ids,
-                truth_variant.variant_id,
-            )
-            state_by_id = None
-            state_library = None
-
-            parameter_world_target = full_parameter_world_target(
-                survivors,
-                survivor_ids,
-            )
-            world_plan = exact_minimum_truth_target_measurements(
-                survivor_ids,
-                truth_variant.variant_id,
-                parameter_world_target,
-                parameter_library,
-            )
-            if world_plan.minimum_size is None:
-                raise RuntimeError("complete parameter library failed to identify W1 truth world")
-
-            transformation_rows = {}
+            state_by_id = {
+                row.variant_id: expanded_variant_bam_state_key(system, row)
+                for row in survivors
+            }
+            targets = {}
             for transformation in TRANSFORMATIONS:
                 outcomes = {
                     row.variant_id: expanded_variant_counterfactual(
@@ -183,14 +165,58 @@ def run() -> dict[str, object]:
                     )
                     for row in survivors
                 }
-                exact_target = {
-                    world_id: outcome.counterfactual_G
-                    for world_id, outcome in outcomes.items()
+                targets[transformation] = {
+                    "exact": {
+                        world_id: outcome.counterfactual_G
+                        for world_id, outcome in outcomes.items()
+                    },
+                    "binary": {
+                        world_id: outcome.binary_decision
+                        for world_id, outcome in outcomes.items()
+                    },
                 }
-                binary_target = {
-                    world_id: outcome.binary_decision
-                    for world_id, outcome in outcomes.items()
-                }
+            fiber_cache[G] = {
+                "survivors": survivors,
+                "survivor_ids": survivor_ids,
+                "state_by_id": state_by_id,
+                "parameter_world_target": full_parameter_world_target(
+                    survivors, survivor_ids
+                ),
+                "targets": targets,
+            }
+
+        for truth in eligible_truths:
+            G = int(truth.occupied_mask)
+            fiber = fiber_cache[G]
+            survivors = fiber["survivors"]
+            survivor_ids = fiber["survivor_ids"]
+            state_by_id = fiber["state_by_id"]
+            truth_variant = by_coords[declared_world_coordinates(system, truth)]
+            if int(truth_variant.occupied_mask) != G:
+                raise RuntimeError("embedded truth variant does not reproduce truth G")
+
+            parameter_library = parameter_measurements(
+                survivors,
+                survivor_ids,
+                truth_variant.variant_id,
+            )
+            state_library = None
+
+            world_plan = exact_minimum_truth_target_measurements(
+                survivor_ids,
+                truth_variant.variant_id,
+                fiber["parameter_world_target"],
+                parameter_library,
+            )
+            if world_plan.minimum_size is None:
+                raise RuntimeError(
+                    "complete parameter library failed to identify W1 truth world"
+                )
+
+            transformation_rows = {}
+            for transformation in TRANSFORMATIONS:
+                exact_target = fiber["targets"][transformation]["exact"]
+                binary_target = fiber["targets"][transformation]["binary"]
 
                 exact_parameter = exact_minimum_truth_target_measurements(
                     survivor_ids,
@@ -211,11 +237,6 @@ def run() -> dict[str, object]:
                 if exact_already:
                     exact_state_sufficient = True
                 else:
-                    if state_by_id is None:
-                        state_by_id = {
-                            row.variant_id: expanded_variant_bam_state_key(system, row)
-                            for row in survivors
-                        }
                     exact_state_sufficient, _ = _complete_state_sufficient(
                         state_by_id,
                         truth_variant.variant_id,
@@ -225,20 +246,12 @@ def run() -> dict[str, object]:
                 if binary_already:
                     binary_state_sufficient = True
                 else:
-                    if state_by_id is None:
-                        state_by_id = {
-                            row.variant_id: expanded_variant_bam_state_key(system, row)
-                            for row in survivors
-                        }
                     binary_state_sufficient, _ = _complete_state_sufficient(
                         state_by_id,
                         truth_variant.variant_id,
                         binary_target,
                     )
 
-                # Combined target cardinality is needed only for the binary target.
-                # If E1 already identifies the target it is zero. If one parameter
-                # assay suffices, no union with state evidence can improve below one.
                 if binary_already:
                     binary_combined_size = 0
                 elif binary_parameter.minimum_size == 1:
