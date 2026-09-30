@@ -1,0 +1,122 @@
+{
+  "schema": "eog.bam_penobscot_external_bridge.source_protocol.v1",
+  "status": "frozen_before_prrp_data_file_payload_access",
+  "scientific_role": "retrospective_external_bridge_not_fresh_confirmatory_evidence",
+  "freshness_boundary": {
+    "published_2018_and_2023_aggregate_results_seen": true,
+    "prrp_raw_fish_database_payload_opened_in_this_bridge_before_freeze": false,
+    "prrp_raw_passage_database_payload_opened_in_this_bridge_before_freeze": false,
+    "may_be_called_fresh_or_independent_confirmatory": false,
+    "permitted_claim": "external real-system BAM feasibility, falsification and target-identifiability bridge only"
+  },
+  "source": {
+    "archive_name": "Penobscot River Restoration Project Ecological Monitoring Data",
+    "archive_url": "https://apps-nefsc.fisheries.noaa.gov/prrp/",
+    "data_index_url": "https://apps-nefsc.fisheries.noaa.gov/prrp/Data/",
+    "archive_version_seen": "v0.33 2026-01-13",
+    "required_modules": [
+      "FishCommunity",
+      "FishPassage-Upstream",
+      "FishPassage-System-wide",
+      "Geomorphology",
+      "WaterQuality"
+    ],
+    "known_response_file_from_directory_metadata": "Penobscot Fish Data 2010 to 2012.accdb",
+    "known_upstream_passage_file_from_directory_metadata": "ARRA ZYDLEWSKI PIT DATA.accdb",
+    "source_switch_after_payload_access_allowed": false
+  },
+  "real_system": {
+    "watershed": "Penobscot River, Maine, USA",
+    "intervention_sequence": [
+      {"year": 2012, "action": "Great Works Dam removal"},
+      {"year": 2013, "action": "Veazie Dam removal"},
+      {"year": 2016, "action": "Howland Dam decommissioning and bypass/fishway"}
+    ],
+    "fish_monitoring_periods": {
+      "pre_restoration": [2010, 2012],
+      "immediate_post": [2014, 2016],
+      "extended_post": [2019, 2021]
+    },
+    "focal_taxon": {
+      "common_name": "alewife",
+      "scientific_name": "Alosa pseudoharengus",
+      "selection_basis": "predeclared diadromous restoration target; retrospective bridge acknowledges published aggregate alosine response is already known"
+    },
+    "biotic_proxy_taxon": {
+      "common_name": "smallmouth bass",
+      "scientific_name": "Micropterus dolomieu",
+      "role": "predeclared resident predatory/community-state proxy; both B orientations retained and no causal interaction sign is assumed"
+    }
+  },
+  "BAM_mapping": {
+    "A": {
+      "source_modules": ["Geomorphology", "WaterQuality"],
+      "variable_selection_rule": "after schema-only gate, use every numeric reach-level physical/water-quality field that can be linked to fish reaches without using focal fish values; exclude identifiers, timestamps, file provenance and fish-response fields",
+      "world_rule": "derive nested multivariate support envelopes at fixed 50, 75 and 90 percent central-distance cutoffs plus unrestricted A; exact distance/standardization rule must be committed before fish-response rows are parsed"
+    },
+    "B": {
+      "source_module": "FishCommunity",
+      "proxy": "Micropterus dolomieu abundance or presence at the same reach/time, using pre-restoration years only for baseline state",
+      "world_rule": "retain unrestricted B plus both low-proxy-permissive and high-proxy-permissive orientations at frozen q33 and q67 cutoffs",
+      "claim_boundary": "B is a finite biotic-state proxy, not proof of competition or facilitation"
+    },
+    "M": {
+      "source_modules": ["FishPassage-Upstream", "FishPassage-System-wide"],
+      "network": "river reach connectivity constrained by named dam/passability state",
+      "worlds": [
+        "pre-restoration barrier configuration",
+        "Great Works removed",
+        "Great Works + Veazie removed",
+        "Great Works + Veazie removed + Howland bypassed",
+        "explicit fully open permissive reference"
+      ],
+      "no_rate_tuning_from_focal_post_restoration_response": true
+    }
+  },
+  "evidence_and_time_contract": {
+    "calibration": "2010-2012 focal-positive reach observations only",
+    "heldout_1": "2014-2016 focal-positive reach observations",
+    "heldout_2": "2019-2021 focal-positive reach observations",
+    "hard_ecological_witness": "positive focal observation only",
+    "nondetection_as_hard_absence": false,
+    "world_survival": "a declared world survives when every calibration focal-positive reach is in A intersect B intersect M under the relevant intervention state",
+    "heldout_use": "post-restoration positives may only contract/falsify the calibration-surviving world set after parser and world roster are frozen"
+  },
+  "bridge_endpoints": {
+    "primary": [
+      "survivor-fiber contraction from pre-restoration calibration to immediate-post positives",
+      "additional contraction from immediate-post to extended-post positives",
+      "count of worlds falsified by each new positive reach"
+    ],
+    "target_identifiability": [
+      "whether calibration survivors unanimously permit focal access to each post-restoration reach",
+      "whether any unanimous no-access certificate is falsified by a later focal-positive observation"
+    ],
+    "not_primary": [
+      "reproducing published ordination or abundance trends",
+      "AUC",
+      "log loss",
+      "causal estimate of dam removal",
+      "validation by nondetection"
+    ]
+  },
+  "gates": [
+    "Gate0: archive directory architecture only; no data-file download",
+    "Gate1: README/report metadata and database schema/table names only; no fish observation rows",
+    "Gate2: freeze reach registry linkage, A variables, M graph construction and B parser before focal rows",
+    "Gate3: open 2010-2012 calibration rows and contract worlds",
+    "Gate4: once-only 2014-2016 positive falsification audit",
+    "Gate5: once-only 2019-2021 positive falsification audit"
+  ],
+  "hard_stops": [
+    "do not change focal taxon",
+    "do not change pre/immediate/extended time periods",
+    "do not choose B orientation from published or observed association sign",
+    "do not tune M from focal recolonization speed",
+    "do not select A variables using focal response",
+    "do not discard reaches that falsify worlds",
+    "do not call this analysis fresh or independent confirmatory evidence",
+    "do not use published aggregate fish-response direction as an endpoint"
+  ],
+  "success_definition": "success means the real Penobscot archive can instantiate response-independent finite A/B/M worlds and later positive observations can audit/falsify them under the frozen protocol; favorable biological direction is not required"
+}
