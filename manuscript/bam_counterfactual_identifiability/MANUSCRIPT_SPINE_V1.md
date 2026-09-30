@@ -2,7 +2,7 @@
 
 ## Working title
 
-**Mechanism identifiability is not decision identifiability: counterfactual sufficiency in finite BAM worlds**
+**From mechanism ambiguity to decision robustness: target sufficiency and universe fragility in finite BAM worlds**
 
 ## Separation from the first BAM paper
 
@@ -21,10 +21,7 @@ as the starting point but has a different estimand and result.
 
 ## One-sentence claim
 
-> **A current distribution can leave its generating BAM mechanism strongly
-> nonidentified while still identifying a declared counterfactual decision; evidence
-> should therefore be collected until the decision target is identified, not
-> automatically until the entire mechanism is recovered.**
+> **Occurrence-equivalent BAM worlds can remain mechanistically unresolved while agreeing on a declared counterfactual target, but that agreement is conditional on the declared world family; exact target-specific evidence burdens and completion margins separate decision sufficiency from universe-boundary fragility.**
 
 ## Core questions
 
@@ -198,6 +195,93 @@ decisions.
 
 One example for each of the three nonidentification classes, using the exact frozen
 finite worlds.
+
+## Universe-boundary stress test
+
+The Phase-II decision result is conditional on the declared finite BAM universe.
+
+Define the complete same-current-distribution completion set
+
+[
+\mathcal C(G)=\{(A,B,M):A\cap B\cap M=G\}.
+]
+
+For every proper (G\subset X), this complete decomposition set contains both binary
+outcomes for each single-axis release.  Therefore no nontrivial binary release decision
+is identified by current (G) **without restrictions on the admissible A/B/M family**.
+
+To quantify that dependence rather than hide it, define the completion flip margin
+
+[
+\rho_T(S)
+=
+\min_{w\in S,\,v\in\mathcal C(G):T(v)\neq T(w)}
+d_H(w,v),
+]
+
+for a target-identified survivor fiber (S), where (d_H) counts A/B/M node-state
+changes.
+
+The preregistered Phase-III audit found:
+
+| release | proper-G identified truths | margin 1 | median | maximum |
+|---|---:|---:|---:|---:|
+| A | 618 | 439 | 1 | 13 |
+| B | 671 | 263 | 2 | 29 |
+| M | 698 | 281 | 2 | 31 |
+
+Thus some declared-universe decisions are extremely close to an omitted counterexample,
+while others require many coordinated axis-state changes to reverse.
+
+### Witness asymmetry
+
+For a current expansion decision, every outside-(G) node in the released map is a
+witness. Reversing the decision requires eliminating all such witnesses, so the exact
+margin is the number of existing witnesses.
+
+For a current no-expansion decision, only one new outside-(G) witness is required.
+The nearest reversal is therefore local and, in the frozen panel, every finite
+no-expansion margin was 1 or 2.
+
+This asymmetry is a more specific result than generic decision robustness: the geometry
+of the BAM intersection determines how a release claim can fail under same-G universe
+completion.
+
+## Prior-art correction
+
+The paper must **not** claim as a general discovery that poorly identified mechanisms
+can still yield useful predictions or decisions.
+
+That principle is established outside biogeography.  Examples include work on
+prediction uncertainty in sloppy/non-identifiable biological models and explicit
+methods for making predictions with poorly identified models:
+
+- Brown et al. (2014), prediction uncertainty under parameter uncertainty;
+- Simpson & Maclaren (2024), *Making Predictions Using Poorly Identified Mathematical
+  Models*, Bulletin of Mathematical Biology, DOI 10.1007/s11538-024-01294-0;
+- Grabowski et al. (2023), *Predictive power of non-identifiable models*.
+
+Likewise, target-aware information collection and robust decisions under structural
+uncertainty are established in conservation/adaptive-management literature:
+
+- Bolam et al. (2019), Value of Information for conservation decisions,
+  DOI 10.1111/brv.12471;
+- Raymond et al. (2020), SDM + Value of Information,
+  DOI 10.1111/1365-2664.13580;
+- Rozowski & Fackler (2025), adaptive management under structural uncertainty,
+  DOI 10.1111/2041-210X.70137;
+- Liu, Maini & Baker (2026), optimal experiment design for parameter identifiability
+  and model discrimination, DOI 10.1016/j.mbs.2026.109710.
+
+The candidate contribution must therefore remain BAM-specific:
+
+> **start from an occurrence-conditioned same-(G) survivor fiber; distinguish BAM
+> mechanism, exact counterfactual and decision equivalence; compute the exact evidence
+> burden for the target; then quantify how far that target certificate is from an
+> undeclared same-(G) decomposition that reverses it.**
+
+This combination, rather than generic prediction-under-nonidentifiability or generic
+robust decision theory, is the novelty target.
 
 ## Strong claim boundary
 
