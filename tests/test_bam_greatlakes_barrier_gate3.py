@@ -1,11 +1,15 @@
+import io
 import os
+import zipfile
 
 import pytest
 
 from validation.bam_greatlakes_barrier_external_bridge_v1.run_external_bridge_once import (
     ExecutionStop,
     configured_dryad_token,
+    download_bound_file,
     load_authorized_contract,
+    try_anonymous_version_archive,
     verify_dryad_token,
 )
 
@@ -51,3 +55,59 @@ def test_legacy_bridge_token_remains_accepted(monkeypatch):
     token, mode = configured_dryad_token()
     assert token == "legacy-fixture-token"
     assert mode == "legacy_dryad_token"
+
+
+class _FakeResponse:
+    def __init__(self, body: bytes, status: int = 200):
+        self._body = body
+        self.status = status
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def read(self, n: int = -1) -> bytes:
+        return self._body if n < 0 else self._body[:n]
+
+
+class _FakeOpener:
+    def __init__(self, response):
+        self.response = response
+
+    def open(self, request, timeout=0):
+        return self.response
+
+
+def test_bad_http200_archive_records_payload_bytes_and_forbids_zero_byte_retry(monkeypatch):
+    import validation.bam_greatlakes_barrier_external_bridge_v1.run_external_bridge_once as mod
+
+    gate0, _, contract = load_authorized_contract()
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr("unexpected.txt", b"payload")
+    payload = buffer.getvalue()
+    monkeypatch.setattr(mod, "_OPENER", _FakeOpener(_FakeResponse(payload)))
+
+    with pytest.raises(ExecutionStop) as caught:
+        try_anonymous_version_archive(gate0, contract)
+    assert caught.value.payload_requests == 1
+    assert caught.value.payload_bytes_opened == len(payload)
+    assert caught.value.payload_bytes_opened > 0
+
+
+def test_checksum_bound_file_size_drift_records_opened_bytes(monkeypatch):
+    import validation.bam_greatlakes_barrier_external_bridge_v1.run_external_bridge_once as mod
+
+    monkeypatch.setattr(mod, "_OPENER", _FakeOpener(_FakeResponse(b"x")))
+    spec = {
+        "path": "fixture.rds",
+        "download_api_path": "/api/v2/files/1/download",
+        "size_bytes": 2,
+        "sha256": "0" * 64,
+    }
+    with pytest.raises(ExecutionStop) as caught:
+        download_bound_file(spec, "fixture-token")
+    assert caught.value.payload_requests == 1
+    assert caught.value.payload_bytes_opened == 1
