@@ -9,7 +9,7 @@
   "canonical": {
     "pull_request": 518,
     "branch": "paper/bam-inverse-identifiability-v2",
-    "audited_head_sha": "7116a75206b4188d5f449392965dfcefd3199888",
+    "audited_head_sha": "3661a6c1c9653ae37a06602cb4ac6dfac6276bf3",
     "manuscript": "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md"
   },
   "scientific_blockers": [],
@@ -78,28 +78,28 @@
   },
   "current_receipts": {
     "manuscript_v3": {
-      "workflow_run_id": 36626477007,
-      "artifact_id": 11061196414,
-      "artifact_digest": "sha256:988cf86062641cefa2a9583e4b9274c64ae1f7d43c970dbcf0ff9ffe50799109"
+      "workflow_run_id": 36658724393,
+      "artifact_id": 11073670784,
+      "artifact_digest": "sha256:9bc6dc2ee4e43332a4a8bd0fe3a1306081d781270430930be245c7fcddc48bb4"
     },
     "manuscript_v2_numeric_audit": {
-      "workflow_run_id": 36626477029,
-      "artifact_id": 11061166588,
-      "artifact_digest": "sha256:db1bece05ecbb0f7fe84acd107b79882683e01510ce53cdb04b8b803d6effc38"
+      "workflow_run_id": 36658724533,
+      "artifact_id": 11073561008,
+      "artifact_digest": "sha256:789f9626c51baa5295e2d734f39202e90c32c656f63cfffd8e16aebe0ef98340"
     },
     "figures": {
-      "workflow_run_id": 36626477189,
-      "artifact_id": 11060547181,
-      "artifact_digest": "sha256:95de4f0087ce5a36f79e4797f7dc14c8ba368ebec1834154222d9d08c2cccf1b"
+      "workflow_run_id": 36658724433,
+      "artifact_id": 11073545936,
+      "artifact_digest": "sha256:312d03ddb540959b14082bb0a09cf0059331123b9077ed8a1b67849a911ecbbd"
     },
     "anonymous_review_package": {
-      "workflow_run_id": 36626477126,
-      "artifact_id": 11060247487,
-      "artifact_digest": "sha256:1529d1b057ff125347a50aed265d75a74ff8224b31e453c79a6e5ba9afdf9b39",
-      "inner_zip_sha256": "f70933d29f6309591b60e2c9c23b004158c3417590b3801196f5fe0dda4a9f9c"
+      "workflow_run_id": 36658724507,
+      "artifact_id": 11073238349,
+      "artifact_digest": "sha256:4dad559ae861805835d0de188eeb168f91dccf36d72de3c9d62522f5f7f978b4",
+      "inner_zip_sha256": "716f8a36b3323251137270a877046cf46188318412565f8c1f87f23cebb23bfc"
     },
     "package_checks": {
-      "workflow_run_id": 36626477005,
+      "workflow_run_id": 36658724490,
       "conclusion": "success"
     }
   },
