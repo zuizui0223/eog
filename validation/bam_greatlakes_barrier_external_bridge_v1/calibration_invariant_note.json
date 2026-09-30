@@ -1,0 +1,13 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.calibration_invariant_note.v1",
+  "status": "frozen_before_RDS_payload_access",
+  "invariant": "every eligible species must retain all 35 A/M worlds after 90s positive conditioning",
+  "reason": [
+    "each 90s focal-positive node is an A anchor, so its minimum A distance is zero under every non-open A threshold",
+    "each 90s focal-positive node is an M source, so it is reachable at step zero under every M horizon/barrier world",
+    "open A and open_all M are permissive by definition"
+  ],
+  "consequence": "calibration is conditioning/world construction, not empirical world contraction; all empirical contraction claims are reserved for 2023 positive witnesses",
+  "failure_rule": "if any eligible species has calibration_survivor_world_count != 35, stop as implementation/contract failure before interpreting heldout results",
+  "RDS_payload_bytes_opened_before_note": 0
+}
