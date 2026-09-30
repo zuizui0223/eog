@@ -839,6 +839,69 @@ Canonical Phase-VI assets:
 Evidence-channel cardinalities remain synthetic information counts, not field-cost
 estimates.
 
+## 23. Assay-process uncertainty and target self-calibration
+
+Phase VI assumed exact parameter assays.  Phase VII crossed each W1 ecological survivor
+fiber with two frozen assay-observation worlds:
+
+- calibrated coding;
+- systematic deterministic miscoding.
+
+The future ecological decision depends on the ecological world only; assay-world
+identity is nuisance uncertainty.
+
+The frozen action library contained one assay for each of the eight W1 parameter
+coordinates, a same-assay repeated action, and one idealized assay-process calibration.
+
+Across **67** future-target-unresolved W1 fibers:
+
+- repeat-same-assay robust pair-coverage violations: **0**;
+- assay-only robust impossibility occurred in **2 climate**, **2 biotic-stress**, and
+  **3 barrier-restoration** fibers;
+- every assay-only impossible fiber became solvable when calibration was admitted;
+- complete calibrated-library failures: **0/67**.
+
+Thus repeated observation of the same deterministically biased channel does not replace
+observation-process calibration.
+
+However, the preregistered S11 climate prediction was **refuted**.
+
+The expected exact minimum was
+
+`{assay_process_calibration, assay:A_level}`.
+
+The actual exact minimum was
+
+`{assay:A_level, assay:antagonist_excluded}`.
+
+It remained sufficient even when the calibration action was unavailable.
+
+Therefore explicit observation-world identification is not always necessary.  Multiple
+assay channels can be **target-self-calibrating**: their joint observed signature can
+separate every target-discordant ecological/observation joint hypothesis while the
+assay-process world itself remains unresolved.
+
+This creates a second evidence-routing layer:
+
+1. determine whether the future target is unresolved ecologically;
+2. determine which ecological evidence class can separate the target;
+3. audit whether the chosen evidence is interpretable across the admitted observation
+   worlds;
+4. if a multichannel target-self-calibrating design exists, explicit calibration is
+   unnecessary for that target;
+5. otherwise observation-process calibration is required.
+
+Canonical assets:
+
+- `validation/bam_future_assay_observation_v1/protocol_v1.json`;
+- `validation/bam_future_assay_observation_v1/result_summary_v1.json`;
+- `docs/bam_future_assay_observation_v1.md`;
+- `docs/bam_future_assay_observation_v1_result.md`;
+- `docs/bam_future_assay_observation_theory_v1.md`.
+
+The observation worlds are synthetic deterministic coding processes.  No claim is made
+about independent random measurement error or real assay cost.
+
 ## Hard claim boundary
 
 Do not claim:

@@ -1,0 +1,235 @@
+{
+  "schema": "eog.bam_future_assay_observation.result_summary.v1",
+  "status": "completed_preregistered_assay_observation_stress_test",
+  "protocol": "validation/bam_future_assay_observation_v1/protocol_v1.json",
+  "parent_result": {
+    "path": "validation/bam_future_target_evidence_v1/result_summary_v1.json",
+    "fingerprint": "b87bfa721e21acfdc0a03239b0ed556f77bd77e3ee49f25c11d56ece02b8db58"
+  },
+  "authoritative_run": 36719085599,
+  "authoritative_job": 109899267676,
+  "executed_head": "49aeb7980a8ab27f4af9bb47cf75996e1a952eea",
+  "artifact_id": 11097243602,
+  "artifact_digest": "sha256:b6f793668d98f6f5e2c0b44c459625c85a07f4fd496ff102151a4fac6d492d85",
+  "result_fingerprint": "3bed33f39d2c8845cb52989855f2ab024327464870224a11568ebb7436bbe332",
+  "scored_unresolved_fiber_count": 67,
+  "repeat_equivalence_violations": 0,
+  "predeclared_verdicts": {
+    "H1_repeat_same_assay_no_extra_robust_split": "SUPPORTED",
+    "H2_calibration_necessity_exists": "SUPPORTED",
+    "H3_S11_climate_minimum": "REFUTED",
+    "H4_calibration_plus_assays_restores_all": "SUPPORTED"
+  },
+  "by_transformation": {
+    "climate_shift": {
+      "unresolved_unique_fibers": 18,
+      "truth_weighted_unresolved_cases": 132,
+      "assay_only_robust_solvable_fibers": 16,
+      "assay_only_robust_impossible_fibers": 2,
+      "assay_only_robust_impossible_truth_weight": 33,
+      "calibration_restored_fibers": 2,
+      "calibration_failed_fibers": 0,
+      "calibration_in_canonical_minimum_fibers": 2,
+      "calibration_in_canonical_minimum_truth_weight": 33,
+      "assay_only_minimum_size_distribution": {
+        "2": 16
+      },
+      "robust_minimum_size_distribution": {
+        "2": 18
+      },
+      "robust_minimum_size_mean": 2.0,
+      "robust_minimum_size_median": 2.0,
+      "canonical_minimum_action_frequency": {
+        "assay:A_level": 18,
+        "assay:antagonist_excluded": 14,
+        "assay:barrier_permeable": 2,
+        "assay_process_calibration": 2
+      }
+    },
+    "biotic_stress": {
+      "unresolved_unique_fibers": 43,
+      "truth_weighted_unresolved_cases": 270,
+      "assay_only_robust_solvable_fibers": 41,
+      "assay_only_robust_impossible_fibers": 2,
+      "assay_only_robust_impossible_truth_weight": 27,
+      "calibration_restored_fibers": 2,
+      "calibration_failed_fibers": 0,
+      "calibration_in_canonical_minimum_fibers": 4,
+      "calibration_in_canonical_minimum_truth_weight": 44,
+      "assay_only_minimum_size_distribution": {
+        "2": 16,
+        "3": 17,
+        "4": 3,
+        "5": 5
+      },
+      "robust_minimum_size_distribution": {
+        "2": 17,
+        "3": 18,
+        "4": 3,
+        "5": 5
+      },
+      "robust_minimum_size_mean": 2.9069767441860463,
+      "robust_minimum_size_median": 3.0,
+      "canonical_minimum_action_frequency": {
+        "assay:A_level": 15,
+        "assay:antagonist_excluded": 33,
+        "assay:antagonist_range_level": 15,
+        "assay:barrier_permeable": 6,
+        "assay:dispersal_radius_level": 8,
+        "assay:partner_range_level": 14,
+        "assay:partner_required": 30,
+        "assay_process_calibration": 4
+      }
+    },
+    "barrier_restoration": {
+      "unresolved_unique_fibers": 6,
+      "truth_weighted_unresolved_cases": 68,
+      "assay_only_robust_solvable_fibers": 3,
+      "assay_only_robust_impossible_fibers": 3,
+      "assay_only_robust_impossible_truth_weight": 36,
+      "calibration_restored_fibers": 3,
+      "calibration_failed_fibers": 0,
+      "calibration_in_canonical_minimum_fibers": 3,
+      "calibration_in_canonical_minimum_truth_weight": 36,
+      "assay_only_minimum_size_distribution": {
+        "3": 1,
+        "4": 2
+      },
+      "robust_minimum_size_distribution": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "robust_minimum_size_mean": 3.5,
+      "robust_minimum_size_median": 3.5,
+      "canonical_minimum_action_frequency": {
+        "assay:antagonist_excluded": 6,
+        "assay:antagonist_range_level": 2,
+        "assay:dispersal_radius_level": 4,
+        "assay:horizon_level": 4,
+        "assay:partner_required": 2,
+        "assay_process_calibration": 3
+      }
+    }
+  },
+  "calibration_required_examples": [
+    {
+      "transformation": "climate_shift",
+      "system_id": "S04_7x3_closed",
+      "G_mask": 115586,
+      "W1_same_G_variants": 441,
+      "truth_weight": 24,
+      "canonical_calibrated_minimum": [
+        "assay:A_level",
+        "assay_process_calibration"
+      ]
+    },
+    {
+      "transformation": "climate_shift",
+      "system_id": "S10_9x5_closed",
+      "G_mask": 1032809356814,
+      "W1_same_G_variants": 280,
+      "truth_weight": 9,
+      "canonical_calibrated_minimum": [
+        "assay:A_level",
+        "assay_process_calibration"
+      ]
+    },
+    {
+      "transformation": "biotic_stress",
+      "system_id": "S04_7x3_closed",
+      "G_mask": 115586,
+      "truth_weight": 24,
+      "canonical_calibrated_minimum": [
+        "assay:antagonist_excluded",
+        "assay:antagonist_range_level",
+        "assay:partner_range_level",
+        "assay:partner_required",
+        "assay_process_calibration"
+      ]
+    },
+    {
+      "transformation": "biotic_stress",
+      "system_id": "S10_9x5_closed",
+      "G_mask": 1032809356815,
+      "truth_weight": 3,
+      "canonical_calibrated_minimum": [
+        "assay:antagonist_excluded",
+        "assay_process_calibration"
+      ]
+    },
+    {
+      "transformation": "barrier_restoration",
+      "system_id": "S04_7x3_closed",
+      "G_mask": 115586,
+      "truth_weight": 24,
+      "canonical_calibrated_minimum": [
+        "assay:antagonist_excluded",
+        "assay:antagonist_range_level",
+        "assay_process_calibration"
+      ]
+    },
+    {
+      "transformation": "barrier_restoration",
+      "system_id": "S10_9x5_closed",
+      "G_mask": 1032809356814,
+      "truth_weight": 9,
+      "canonical_calibrated_minimum": [
+        "assay:antagonist_excluded",
+        "assay_process_calibration"
+      ]
+    },
+    {
+      "transformation": "barrier_restoration",
+      "system_id": "S10_9x5_closed",
+      "G_mask": 1032809356815,
+      "truth_weight": 3,
+      "canonical_calibrated_minimum": [
+        "assay:antagonist_excluded",
+        "assay:dispersal_radius_level",
+        "assay:horizon_level",
+        "assay:partner_required",
+        "assay_process_calibration"
+      ]
+    }
+  ],
+  "S11_dormant_climate": {
+    "system_id": "S11_9x5_gap",
+    "G_mask": 2138792820255,
+    "G_count": 29,
+    "truth_multiplicity": 2,
+    "W1_same_G_variants": 36,
+    "joint_hypothesis_count": 72,
+    "binary_target_values": [false, true],
+    "target_discordant_pair_count": 1296,
+    "assay_only_minimum": [
+      "assay:A_level",
+      "assay:antagonist_excluded"
+    ],
+    "assay_only_minimum_size": 2,
+    "repeat_same_assay_changes_sufficiency": false,
+    "calibration_plus_assays_minimum": [
+      "assay:A_level",
+      "assay:antagonist_excluded"
+    ],
+    "calibration_in_minimum": false,
+    "H3_interpretation": "The preregistered expectation that explicit calibration was necessary was false. A two-field assay signature robustly separates climate target classes across both admitted assay-process worlds without identifying or calibrating the assay world itself."
+  },
+  "main_findings": [
+    "Repeating the same deterministic systematically biased assay twice changed robust target-pair coverage in 0 scored field-by-fiber audits.",
+    "Explicit assay-process calibration was genuinely necessary for some future-target fibers: 2 climate fibers, 2 biotic-stress fibers and 3 barrier-restoration fibers had no robust assay-only solution but became solvable with calibration.",
+    "The complete calibrated action library resolved every one of the 67 future-target-unresolved W1 fibers.",
+    "H3 was refuted: the S11 dormant-climate fiber did not require explicit calibration. The exact robust minimum was A_level plus antagonist_excluded, size 2, both with and without the calibration action available.",
+    "Multiple assay channels can therefore provide implicit target-level self-calibration: their joint observed signature can separate target classes across observation worlds even when no single assay is robust and the observation-process identity itself remains unresolved.",
+    "Calibration can still be useful even when not strictly necessary for solvability: in the frozen biotic-stress panel it appeared in four canonical robust minima although only two fibers were assay-only impossible."
+  ],
+  "claim_boundary": [
+    "The systematically_miscalibrated observation world is a synthetic deterministic coding-bias fixture, not a calibrated laboratory error model.",
+    "The self-calibration result concerns target separation under a fixed finite observation-world universe; it does not imply that two assays estimate real-world bias parameters.",
+    "Repeated-assay equivalence applies to repeated deterministic measurements under the same systematic observation world, not independent random error.",
+    "Action count is a combinatorial information count, not monetary, logistical, temporal or ethical field cost.",
+    "Canonical assay frequency is not a causal-importance ranking.",
+    "The result does not alter Phase-I through Phase-VI, EOG-WF, or the frozen first BAM inverse-identifiability paper."
+  ]
+}
