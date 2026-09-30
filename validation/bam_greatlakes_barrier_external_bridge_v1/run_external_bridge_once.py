@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from collections import Counter
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -15,6 +16,7 @@ import shutil
 import subprocess
 import tempfile
 from typing import Any
+import zipfile
 from urllib.parse import urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
@@ -37,6 +39,7 @@ from eog.v2.bam_greatlakes_barrier_external_bridge import (
 
 
 HERE = Path(__file__).resolve().parent
+GATE0 = HERE / "gate0_dryad_identity_certificate.json"
 GATE1 = HERE / "gate1_readme_certificate.json"
 CONTRACT = HERE / "gate2_execution_contract_draft.json"
 OUTPUT = HERE / "external_bridge_result_v1.json"
@@ -130,19 +133,120 @@ def canonical_sha256(value: object) -> str:
     ).hexdigest()
 
 
-def load_authorized_contract() -> tuple[dict[str, Any], dict[str, Any]]:
+def load_authorized_contract() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    if not GATE0.exists():
+        raise ExecutionStop("Gate0 PASS certificate is not committed")
     if not GATE1.exists():
         raise ExecutionStop("Gate1 PASS certificate is not committed")
+    gate0 = json.loads(GATE0.read_text(encoding="utf-8"))
     gate1 = json.loads(GATE1.read_text(encoding="utf-8"))
     contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
+    if gate0.get("status") != "dryad_source_identity_ready":
+        raise ExecutionStop("Gate0 is not PASS")
     if gate1.get("status") != "readme_schema_ready":
         raise ExecutionStop("Gate1 is not PASS")
+    if gate1.get("gate0_fingerprint") != gate0.get("fingerprint"):
+        raise ExecutionStop("Gate1 is not bound to the committed Gate0 certificate")
     if contract.get("status") != "authorized_for_once_only_rds_execution":
         raise ExecutionStop("Gate2 execution contract is not authorized")
     expected = contract["gate1_prerequisite"]["fingerprint"]
     if not expected or expected != gate1.get("fingerprint"):
         raise ExecutionStop("Gate1 fingerprint mismatch")
-    return gate1, contract
+    return gate0, gate1, contract
+
+
+def _verify_archive_member(
+    archive: zipfile.ZipFile,
+    member_name: str,
+    expected_size: int,
+    expected_sha256: str,
+) -> bytes:
+    body = archive.read(member_name)
+    if len(body) != int(expected_size):
+        raise ExecutionStop(
+            f"version archive size drift for {member_name}: "
+            f"expected {expected_size}, got {len(body)}"
+        )
+    sha = hashlib.sha256(body).hexdigest()
+    if sha != str(expected_sha256):
+        raise ExecutionStop(
+            f"version archive sha256 drift for {member_name}: "
+            f"expected {expected_sha256}, got {sha}"
+        )
+    return body
+
+
+def try_anonymous_version_archive(
+    gate0: dict[str, Any],
+    contract: dict[str, Any],
+) -> tuple[bytes, bytes, int] | None:
+    """Try the frozen Dryad version archive before requiring credentials.
+
+    Any HTTP/auth failure before a 200 response returns None without opening RDS bytes.
+    A successful archive response is accepted only after every Gate0 file matches the
+    frozen size and SHA256; otherwise execution stops terminally after payload access.
+    """
+
+    version_id = int(gate0["version_id"])
+    request = Request(
+        BASE + f"/api/v2/versions/{version_id}/download",
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "application/zip",
+            "Accept-Encoding": "identity",
+        },
+        method="GET",
+    )
+    try:
+        with _OPENER.open(request, timeout=90) as response:
+            if int(response.status) != 200:
+                return None
+            max_bytes = sum(int(row["size_bytes"]) for row in gate0["files"]) + 5_000_000
+            archive_bytes = response.read(max_bytes + 1)
+    except Exception:
+        return None
+
+    if len(archive_bytes) > max_bytes:
+        raise ExecutionStop("Dryad version archive exceeded frozen safety ceiling")
+    try:
+        archive = zipfile.ZipFile(io.BytesIO(archive_bytes))
+    except zipfile.BadZipFile as exc:
+        raise ExecutionStop(
+            "Dryad version archive returned non-ZIP payload after HTTP 200"
+        ) from exc
+
+    by_basename: dict[str, str] = {}
+    for info in archive.infolist():
+        if info.is_dir():
+            continue
+        basename = Path(info.filename).name
+        if basename in by_basename:
+            raise ExecutionStop(
+                f"duplicate basename in Dryad version archive: {basename}"
+            )
+        by_basename[basename] = info.filename
+
+    expected_names = {str(row["path"]) for row in gate0["files"]}
+    if set(by_basename) != expected_names:
+        raise ExecutionStop(
+            "Dryad version archive roster drift: "
+            f"missing={sorted(expected_names-set(by_basename))}, "
+            f"unexpected={sorted(set(by_basename)-expected_names)}"
+        )
+
+    verified: dict[str, bytes] = {}
+    for row in gate0["files"]:
+        name = str(row["path"])
+        verified[name] = _verify_archive_member(
+            archive,
+            by_basename[name],
+            int(row["size_bytes"]),
+            str(row["sha256"]),
+        )
+
+    habitat_name = str(contract["frozen_files"]["habitat"]["path"])
+    catch_name = str(contract["frozen_files"]["catch"]["path"])
+    return verified[habitat_name], verified[catch_name], len(archive_bytes)
 
 
 def download_bound_file(spec: dict[str, Any], token: str) -> bytes:
@@ -371,17 +475,24 @@ def main() -> int:
     payload_bytes_opened = 0
     values_parsed = False
     try:
-        gate1, contract = load_authorized_contract()
-        token, auth_mode = verify_dryad_token()
+        gate0, gate1, contract = load_authorized_contract()
         habitat_spec = contract["frozen_files"]["habitat"]
         catch_spec = contract["frozen_files"]["catch"]
 
-        habitat_body = download_bound_file(habitat_spec, token)
-        payload_requests += 1
-        payload_bytes_opened += len(habitat_body)
-        catch_body = download_bound_file(catch_spec, token)
-        payload_requests += 1
-        payload_bytes_opened += len(catch_body)
+        anonymous_archive = try_anonymous_version_archive(gate0, contract)
+        if anonymous_archive is not None:
+            habitat_body, catch_body, archive_bytes_opened = anonymous_archive
+            payload_requests += 1
+            payload_bytes_opened += archive_bytes_opened
+            auth_mode = "anonymous_verified_version_archive"
+        else:
+            token, auth_mode = verify_dryad_token()
+            habitat_body = download_bound_file(habitat_spec, token)
+            payload_requests += 1
+            payload_bytes_opened += len(habitat_body)
+            catch_body = download_bound_file(catch_spec, token)
+            payload_requests += 1
+            payload_bytes_opened += len(catch_body)
 
         habitat = rds_bytes_to_frame(
             habitat_body,
