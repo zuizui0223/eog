@@ -208,6 +208,103 @@ def exact_future_target_evidence_plan(
     )
 
 
+
+def exact_minimum_truth_target_measurement_size(
+    survivor_ids: Sequence[str],
+    truth_world_id: str,
+    target_by_world: Mapping[str, Hashable],
+    measurements: Sequence[DiagnosticMeasurement],
+) -> int | None:
+    """Exact minimum measurement cardinality using antichain breadth-first search.
+
+    This solver returns only the minimum number of channels, not a canonical channel
+    identity.  At a fixed depth, a coverage mask that is a subset of another mask can
+    be discarded exactly: every future union reachable from the smaller mask is also
+    reachable from the larger mask with the same number of additional measurements.
+
+    Measurement masks that are themselves strict subsets of another single measurement
+    are likewise cardinality-dominated and may be removed.  The search is therefore
+    exact for minimum cardinality while avoiding the much larger provenance-carrying DP
+    used when lexicographically canonical measurement IDs are required.
+    """
+
+    survivors = tuple(sorted(set(str(value) for value in survivor_ids)))
+    if not survivors:
+        raise ValueError("survivor_ids must be non-empty")
+    if truth_world_id not in survivors:
+        raise ValueError("truth_world_id must be a current survivor")
+    missing = set(survivors).difference(target_by_world)
+    if missing:
+        raise ValueError(f"target_by_world missing survivors: {sorted(missing)}")
+
+    truth_target = target_by_world[truth_world_id]
+    nuisance = tuple(
+        world_id
+        for world_id in survivors
+        if target_by_world[world_id] != truth_target
+    )
+    if not nuisance:
+        return 0
+
+    index = {world_id: i for i, world_id in enumerate(nuisance)}
+    full_mask = (1 << len(nuisance)) - 1
+    raw_masks: set[int] = set()
+    for measurement in measurements:
+        if truth_world_id in measurement.eliminated_world_ids:
+            raise ValueError(
+                f"measurement {measurement.measurement_id!r} eliminates the truth"
+            )
+        mask = 0
+        for world_id in measurement.eliminated_world_ids:
+            if world_id in index:
+                mask |= 1 << index[world_id]
+        if mask:
+            raw_masks.add(mask)
+
+    coverable = 0
+    for mask in raw_masks:
+        coverable |= mask
+    if coverable != full_mask:
+        return None
+
+    # Keep only single-measurement maximal coverage masks. Equal cost + superset
+    # coverage always dominates a subset for cardinality optimization.
+    maximal_measurements: list[int] = []
+    for mask in sorted(raw_masks, key=lambda value: (-value.bit_count(), -value)):
+        if any(mask | kept == kept for kept in maximal_measurements):
+            continue
+        maximal_measurements.append(mask)
+
+    if any(mask == full_mask for mask in maximal_measurements):
+        return 1
+
+    frontier: set[int] = {0}
+    for depth in range(1, len(maximal_measurements) + 1):
+        candidates = {
+            covered | measurement_mask
+            for covered in frontier
+            for measurement_mask in maximal_measurements
+        }
+        if full_mask in candidates:
+            return depth
+
+        # All candidates have equal depth. Retain only maximal coverage masks.
+        next_frontier: list[int] = []
+        for mask in sorted(
+            candidates,
+            key=lambda value: (-value.bit_count(), -value),
+        ):
+            if any(mask | kept == kept for kept in next_frontier):
+                continue
+            next_frontier.append(mask)
+
+        new_frontier = set(next_frontier)
+        if new_frontier == frontier:
+            break
+        frontier = new_frontier
+
+    return None
+
 def full_parameter_world_target(
     variants: Sequence[ExpandedBAMVariant],
     survivor_variant_ids: Sequence[str],
