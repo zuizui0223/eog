@@ -17,6 +17,7 @@ from eog.v2.bam_counterfactual_identifiability import (
 )
 from eog.v2.bam_future_target_evidence import (
     current_state_measurements,
+    exact_minimum_truth_target_measurement_size,
     full_parameter_world_target,
     parameter_measurements,
 )
@@ -70,6 +71,15 @@ def _plan_row(plan):
             else list(plan.minimum_measurement_ids)
         ),
         "target_already_identified": bool(plan.target_already_identified),
+    }
+
+
+def _size_row(size):
+    return {
+        "sufficient": size is not None,
+        "minimum_size": size,
+        "minimum_measurement_ids": None,
+        "target_already_identified": size == 0,
     }
 
 
@@ -163,7 +173,7 @@ def run() -> dict[str, object]:
                     for world_id, outcome in outcomes.items()
                 }
 
-                exact_state = exact_minimum_truth_target_measurements(
+                exact_state_size = exact_minimum_truth_target_measurement_size(
                     survivor_ids,
                     truth_variant.variant_id,
                     exact_target,
@@ -175,13 +185,13 @@ def run() -> dict[str, object]:
                     exact_target,
                     parameter_library,
                 )
-                exact_combined = exact_minimum_truth_target_measurements(
+                exact_combined_size = exact_minimum_truth_target_measurement_size(
                     survivor_ids,
                     truth_variant.variant_id,
                     exact_target,
                     combined_library,
                 )
-                binary_state = exact_minimum_truth_target_measurements(
+                binary_state_size = exact_minimum_truth_target_measurement_size(
                     survivor_ids,
                     truth_variant.variant_id,
                     binary_target,
@@ -193,7 +203,7 @@ def run() -> dict[str, object]:
                     binary_target,
                     parameter_library,
                 )
-                binary_combined = exact_minimum_truth_target_measurements(
+                binary_combined_size = exact_minimum_truth_target_measurement_size(
                     survivor_ids,
                     truth_variant.variant_id,
                     binary_target,
@@ -216,14 +226,14 @@ def run() -> dict[str, object]:
                     "binary_target_class_count": len(set(binary_target.values())),
                     "truth_binary_value": bool(binary_target[truth_variant.variant_id]),
                     "exact_map": {
-                        "state_only": _plan_row(exact_state),
+                        "state_only": _size_row(exact_state_size),
                         "parameter_only": _plan_row(exact_parameter),
-                        "combined": _plan_row(exact_combined),
+                        "combined": _size_row(exact_combined_size),
                     },
                     "binary_decision": {
-                        "state_only": _plan_row(binary_state),
+                        "state_only": _size_row(binary_state_size),
                         "parameter_only": _plan_row(binary_parameter),
-                        "combined": _plan_row(binary_combined),
+                        "combined": _size_row(binary_combined_size),
                     },
                 }
 
@@ -238,9 +248,9 @@ def run() -> dict[str, object]:
                             "truth_variant_id": truth_variant.variant_id,
                             "survivor_count": len(survivors),
                             "binary_target_class_count": len(set(binary_target.values())),
-                            "state_only": _plan_row(binary_state),
+                            "state_only": _size_row(binary_state_size),
                             "parameter_only": _plan_row(binary_parameter),
-                            "combined": _plan_row(binary_combined),
+                            "combined": _size_row(binary_combined_size),
                         }
                     )
 
