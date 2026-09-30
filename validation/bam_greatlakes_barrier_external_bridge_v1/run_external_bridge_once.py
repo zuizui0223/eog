@@ -21,6 +21,10 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 import numpy as np
 import pandas as pd
 
+from eog.tanzania_source_acquisition import (
+    SourceContractError,
+    _oauth_token,
+)
 from eog.v2.bam_greatlakes_barrier_external_bridge import (
     BridgeSchemaStop,
     calibration_species,
@@ -57,12 +61,39 @@ class _DropAuthOnCrossHostRedirect(HTTPRedirectHandler):
 _OPENER = build_opener(_DropAuthOnCrossHostRedirect())
 
 
-def verify_dryad_token() -> str:
-    token = os.environ.get("DRYAD_TOKEN", "").strip()
+def configured_dryad_token() -> tuple[str, str]:
+    """Resolve credentials using the repository-wide Dryad conventions.
+
+    Accepted sources, in order:
+    1. legacy DRYAD_TOKEN used by the first bridge draft;
+    2. DRYAD_API_TOKEN / DRYAD_ACCESS_TOKEN;
+    3. DRYAD_CLIENT_ID + DRYAD_CLIENT_SECRET via the existing OAuth helper.
+
+    No RDS request occurs here.
+    """
+
+    legacy = os.environ.get("DRYAD_TOKEN", "").strip()
+    if legacy:
+        return legacy, "legacy_dryad_token"
+
+    try:
+        token, mode = _oauth_token(os.environ, timeout=60)
+    except SourceContractError as exc:
+        raise ExecutionStop(
+            f"Dryad credential resolution failed before RDS payload access: {exc}"
+        ) from exc
+
     if not token:
         raise ExecutionStop(
-            "DRYAD_TOKEN is absent; stop before any RDS payload request"
+            "Dryad credentials are absent; expected DRYAD_API_TOKEN, "
+            "DRYAD_ACCESS_TOKEN, DRYAD_CLIENT_ID+DRYAD_CLIENT_SECRET, "
+            "or legacy DRYAD_TOKEN; stop before any RDS payload request"
         )
+    return token, mode
+
+
+def verify_dryad_token() -> tuple[str, str]:
+    token, auth_mode = configured_dryad_token()
     request = Request(
         BASE + "/api/v2/test",
         headers={
@@ -83,7 +114,7 @@ def verify_dryad_token() -> str:
         raise ExecutionStop(
             f"Dryad token preflight failed before RDS payload access: {exc}"
         ) from exc
-    return token
+    return token, auth_mode
 
 
 def canonical_sha256(value: object) -> str:
@@ -341,7 +372,7 @@ def main() -> int:
     values_parsed = False
     try:
         gate1, contract = load_authorized_contract()
-        token = verify_dryad_token()
+        token, auth_mode = verify_dryad_token()
         habitat_spec = contract["frozen_files"]["habitat"]
         catch_spec = contract["frozen_files"]["catch"]
 
@@ -370,6 +401,7 @@ def main() -> int:
         result["rds_payload_requests"] = payload_requests
         result["rds_payload_bytes_opened"] = payload_bytes_opened
         result["rds_values_parsed"] = values_parsed
+        result["dryad_auth_mode"] = auth_mode
     except Exception as exc:
         result = {
             "schema": "eog.bam_greatlakes_barrier_external_bridge.result.v1",
