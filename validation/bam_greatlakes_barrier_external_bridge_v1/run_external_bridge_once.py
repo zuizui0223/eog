@@ -30,6 +30,7 @@ from eog.tanzania_source_acquisition import (
 )
 from eog.v2.bam_greatlakes_barrier_external_bridge import (
     BridgeSchemaStop,
+    all_worlds,
     calibration_species,
     evaluate_species,
     fit_habitat_scaling,
@@ -452,6 +453,74 @@ def execute_bridge(
     status_counts = dict(
         sorted(Counter(row["status"] for row in species_rows).items())
     )
+
+    species_with_heldout_positive = sum(
+        row["heldout_positive_node_count"] > 0 for row in species_rows
+    )
+    species_with_contraction = sum(
+        (row["heldout_eliminated_world_count"] or 0) > 0
+        for row in species_rows
+    )
+    species_with_complete_falsification = sum(
+        row["status"] == "heldout_falsified_all_calibration_worlds"
+        for row in species_rows
+    )
+
+    witness_rows_flat = [
+        witness
+        for species_row in species_rows
+        for witness in species_row["heldout_witness_rows"]
+    ]
+    witness_elimination_fractions = [
+        float(witness["individually_eliminated_world_fraction"])
+        for witness in witness_rows_flat
+    ]
+    axis_failure_counts = {"A": 0, "M": 0, "AM": 0}
+    for witness in witness_rows_flat:
+        for axis in axis_failure_counts:
+            axis_failure_counts[axis] += int(
+                witness["eliminated_by_axis"].get(axis, 0)
+            )
+
+    world_stats = {
+        world.world_id: {
+            "calibration_surviving_species": 0,
+            "heldout_falsified_species": 0,
+            "final_surviving_species": 0,
+        }
+        for world in all_worlds()
+    }
+    for species_row in species_rows:
+        species_result = evaluate_species(
+            joined=joined,
+            habitat=habitat,
+            scaling=scaling,
+            species=species_row["species"],
+        )
+        calibration_ids = set(species_result.calibration_world_ids)
+        final_ids = set(species_result.final_survivor_world_ids)
+        for world_id in calibration_ids:
+            world_stats[world_id]["calibration_surviving_species"] += 1
+            if world_id in final_ids:
+                world_stats[world_id]["final_surviving_species"] += 1
+            else:
+                world_stats[world_id]["heldout_falsified_species"] += 1
+
+    world_report = []
+    for world_id in sorted(world_stats):
+        row = world_stats[world_id]
+        denominator = int(row["calibration_surviving_species"])
+        final_count = int(row["final_surviving_species"])
+        world_report.append(
+            {
+                "world_id": world_id,
+                **row,
+                "final_species_survival_fraction_given_calibration": (
+                    None if denominator == 0 else final_count / denominator
+                ),
+            }
+        )
+
     result_payload: dict[str, Any] = {
         "schema": "eog.bam_greatlakes_barrier_external_bridge.result.v1",
         "status": "completed_retrospective_external_AM_bridge",
@@ -460,13 +529,21 @@ def execute_bridge(
         ),
         "eligible_species_count": len(species_rows),
         "status_counts": status_counts,
-        "species_with_any_heldout_contraction": sum(
-            (row["heldout_eliminated_world_count"] or 0) > 0
-            for row in species_rows
+        "species_with_heldout_positive_witness": species_with_heldout_positive,
+        "species_with_any_heldout_contraction": species_with_contraction,
+        "species_with_any_heldout_contraction_fraction_all_eligible": (
+            species_with_contraction / len(species_rows)
         ),
-        "species_with_complete_heldout_falsification": sum(
-            row["status"] == "heldout_falsified_all_calibration_worlds"
-            for row in species_rows
+        "species_with_any_heldout_contraction_fraction_with_heldout_positive": (
+            None
+            if species_with_heldout_positive == 0
+            else species_with_contraction / species_with_heldout_positive
+        ),
+        "species_with_complete_heldout_falsification": (
+            species_with_complete_falsification
+        ),
+        "species_with_complete_heldout_falsification_fraction_all_eligible": (
+            species_with_complete_falsification / len(species_rows)
         ),
         "species_retaining_multiple_worlds_after_all_positive_evidence": sum(
             row["final_survivor_world_count"] > 1
@@ -483,6 +560,38 @@ def execute_bridge(
                 None if not contraction_fractions else float(np.max(contraction_fractions))
             ),
         },
+        "heldout_witness_summary": {
+            "total_positive_witness_nodes": len(witness_rows_flat),
+            "witnesses_eliminating_at_least_one_world": sum(
+                int(witness["individually_eliminated_world_count"]) > 0
+                for witness in witness_rows_flat
+            ),
+            "witnesses_eliminating_all_calibration_worlds": sum(
+                int(witness["calibration_survivor_count"]) > 0
+                and int(witness["individually_eliminated_world_count"])
+                == int(witness["calibration_survivor_count"])
+                for witness in witness_rows_flat
+            ),
+            "eliminated_world_fraction_distribution": {
+                "minimum": (
+                    None
+                    if not witness_elimination_fractions
+                    else float(np.min(witness_elimination_fractions))
+                ),
+                "median": (
+                    None
+                    if not witness_elimination_fractions
+                    else float(np.median(witness_elimination_fractions))
+                ),
+                "maximum": (
+                    None
+                    if not witness_elimination_fractions
+                    else float(np.max(witness_elimination_fractions))
+                ),
+            },
+            "world_by_witness_axis_failure_counts": axis_failure_counts,
+        },
+        "world_compatibility_report": world_report,
         "habitat_scaling": {
             "fields": [
                 "width","max_depth","prop_clay","prop_silt","prop_sand",
