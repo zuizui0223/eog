@@ -1,0 +1,56 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.gate1.v1",
+  "status": "readme_schema_ready",
+  "gate0_fingerprint": "d40720d00a6632e7bb43a444e83ca1c6a9afd50fa1b42851083952c8c9e1a3d6",
+  "verification_transport": "public_Dryad_dataset_landing_page_rendered_README",
+  "source_url": "https://datadryad.org/dataset/doi%3A10.5061/dryad.gb5mkkx5s",
+  "verification_date": "2026-10-01",
+  "exact_README_file_bytes_downloaded": false,
+  "gate0_README_sha256_remains_pinned": "19868ec36824bfa2db6575de71248f9427871726e9791309895d02f5d112bb7c",
+  "required_file_names_confirmed": [
+    "hab_variables.rds",
+    "pooled_catch_effort_by_species.rds"
+  ],
+  "required_habitat_columns_confirmed": [
+    "period",
+    "pair_id",
+    "Stream.Name",
+    "barrier",
+    "position",
+    "segment",
+    "width",
+    "max_depth",
+    "prop_clay",
+    "prop_silt",
+    "prop_sand",
+    "prop_gravel",
+    "prop_boulder"
+  ],
+  "required_catch_columns_confirmed": [
+    "pair_id",
+    "pair_id_num",
+    "Year",
+    "Stream.Name",
+    "stream_id",
+    "barrier",
+    "position",
+    "segment",
+    "survey_length",
+    "species",
+    "total_caught",
+    "yearBuilt",
+    "barrierAgeAtSample",
+    "period"
+  ],
+  "period_semantics_confirmed": {
+    "catch": "period indicates 1996/1997 ('90s') or 2023",
+    "habitat": "period indicates 1996/97 or 2023"
+  },
+  "rds_payload_requests": 0,
+  "rds_payload_bytes_opened": 0,
+  "ecological_response_values_opened": false,
+  "model_fits": 0,
+  "interpretation": "documentation-only schema PASS; exact raw RDS schema remains subject to the frozen Gate3 parser and will STOP on any mismatch",
+  "next_authorized_stage": "authorize frozen RDS parser and once-only execution contract",
+  "fingerprint": "fac4115880dce1fcad3a8f7a0bb2e2ba109e0afcf62caefa6fabbcdf24791a57"
+}
