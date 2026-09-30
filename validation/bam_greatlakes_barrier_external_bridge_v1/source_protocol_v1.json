@@ -38,9 +38,21 @@
     "heldout_zero_positive_species": "retain with status no_heldout_positive_witness; do not drop"
   },
   "physical_node": {
-    "key": ["pair_id", "Stream.Name", "position", "segment"],
+    "key": [
+      "pair_id",
+      "Stream.Name",
+      "position",
+      "segment"
+    ],
     "period_is_not_part_of_physical_identity": true,
-    "habitat_join_key": ["period", "pair_id", "Stream.Name", "barrier", "position", "segment"],
+    "habitat_join_key": [
+      "period",
+      "pair_id",
+      "Stream.Name",
+      "barrier",
+      "position",
+      "segment"
+    ],
     "duplicate_habitat_key": "terminal_stop",
     "unknown_or_missing_position_or_segment": "terminal_stop"
   },
@@ -63,27 +75,43 @@
     "global_scaling": "using all 90s habitat nodes only, center each field by its median and divide by IQR; zero/nonfinite IQR is terminal_stop",
     "distance": "L-infinity distance in the seven-field scaled habitat space",
     "threshold_population": "all unordered pairwise habitat distances among distinct 90s physical nodes",
-    "threshold_quantiles": [0.25, 0.50, 0.75, 0.90],
+    "threshold_quantiles": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
     "quantile_method": "linear interpolation identical to numpy.quantile(method='linear')",
     "species_support_rule": "a node-period is A-compatible at threshold q iff its habitat vector lies within q of at least one 90s calibration-positive node for that species",
     "open_world": "A_open permits every node-period",
     "response_independence": "thresholds/scaling use habitat registry only; species positives enter only as frozen support anchors after all thresholds are fixed"
   },
   "M_axis": {
-    "graph_nodes": "physical nodes keyed by stream, position and segment",
+    "graph_nodes": "union of all physical nodes appearing in either period; sampling absence in a period must not remove a physical movement node",
     "within_side_edges": "undirected edges between consecutive segment numbers within the same stream and same upstream/downstream position",
     "cross_reference_location": "if barrier=0 for the target period, connect upstream segment 1 and downstream segment 1",
     "barrier_worlds": [
       "M_barrier_closed: if barrier=1, no edge crosses between upstream segment 1 and downstream segment 1",
       "M_barrier_open: connect upstream segment 1 and downstream segment 1 regardless of barrier=1"
     ],
-    "horizon_steps": [1, 2, 5],
+    "horizon_steps": [
+      1,
+      2,
+      5
+    ],
     "open_world": "M_open_all uses M_barrier_open with unrestricted graph-step horizon",
     "calibration_sources": "all 90s positive physical nodes for the focal species",
-    "species_response_used_to_tune_edges_or_horizons": false
+    "species_response_used_to_tune_edges_or_horizons": false,
+    "period_barrier_state": "for each stream and target period, infer the unique barrier dummy from all sampled rows in that stream-period; missing or conflicting stream-period barrier state is terminal_stop"
   },
   "world_product": {
-    "A_levels": ["q25", "q50", "q75", "q90", "open"],
+    "A_levels": [
+      "q25",
+      "q50",
+      "q75",
+      "q90",
+      "open"
+    ],
     "M_levels": [
       "barrier_closed_h1",
       "barrier_closed_h2",
@@ -93,7 +121,9 @@
       "barrier_open_h5",
       "open_all"
     ],
-    "B_level": ["unrestricted"],
+    "B_level": [
+      "unrestricted"
+    ],
     "maximum_worlds_per_species": 35,
     "calibration_compatibility": "positive-only containment: every 90s positive physical node must satisfy A and M in the 90s state",
     "calibration_nondetection_as_hard_absence": false
@@ -133,5 +163,15 @@
     "do not call this fresh or independent confirmatory evidence",
     "do not use article aggregate effects as the bridge target"
   ],
-  "success_definition": "successful bridge means a real repeated fish-survey dataset can instantiate a frozen finite A/M world family and later positive observations can either preserve or falsify worlds without post-response retuning; favorable contraction is not required"
+  "success_definition": "successful bridge means a real repeated fish-survey dataset can instantiate a frozen finite A/M world family and later positive observations can either preserve or falsify worlds without post-response retuning; favorable contraction is not required",
+  "protocol_amendment": {
+    "classification": "pre_payload_response_independent_M_graph_correction",
+    "reason": "period-specific sampled-node graphs would confound sampling omission with physical movement accessibility",
+    "data_payload_bytes_opened": 0,
+    "ecological_response_values_opened": false,
+    "correction": "build graph topology on the union of physical nodes across both periods while using target-period barrier state for the cross-location edge",
+    "A_rules_changed": false,
+    "cohort_rule_changed": false,
+    "heldout_endpoint_changed": false
+  }
 }
