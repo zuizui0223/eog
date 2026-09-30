@@ -6,9 +6,11 @@ from eog.v2.bam_future_assay_observation import (
     PARAMETER_FIELDS,
     build_action_supports,
     build_joint_hypotheses,
+    exact_minimum_deterministic_target_design,
     exact_minimum_robust_target_design,
     observed_assay_code,
     repeat_equivalence_violations,
+    repeat_equivalence_violations_deterministic,
 )
 
 
@@ -95,3 +97,28 @@ def test_full_action_library_can_target_decision_without_world_identification():
     assert plan.all_target_pairs_separated
     assert set(plan.minimum_action_ids or ()) <= set(actions)
     assert len(PARAMETER_FIELDS) == 8
+
+
+def test_deterministic_fast_path_matches_pair_cover_solver():
+    variants = (
+        _variant("a", EcologicalCoordinates(0, 0, 0, 0, 0, 0, 0, 0)),
+        _variant("b", EcologicalCoordinates(1, 0, 0, 0, 0, 0, 0, 0)),
+        _variant("c", EcologicalCoordinates(1, 1, 0, 0, 0, 0, 0, 0)),
+    )
+    target = {"a": False, "b": True, "c": True}
+    hypotheses = build_joint_hypotheses(variants, target)
+    actions = build_action_supports(variants, hypotheses)
+
+    slow = exact_minimum_robust_target_design(hypotheses, actions)
+    fast = exact_minimum_deterministic_target_design(hypotheses, actions)
+
+    assert fast.target_discordant_pair_count == slow.target_discordant_pair_count
+    assert fast.minimum_action_ids == slow.minimum_action_ids
+    assert fast.minimum_size == slow.minimum_size
+    assert fast.all_target_pairs_separated == slow.all_target_pairs_separated
+    assert {
+        row.action_id: row.robust_split_target_pair_count for row in fast.rankings
+    } == {
+        row.action_id: row.robust_split_target_pair_count for row in slow.rankings
+    }
+    assert repeat_equivalence_violations_deterministic(hypotheses, actions) == 0
