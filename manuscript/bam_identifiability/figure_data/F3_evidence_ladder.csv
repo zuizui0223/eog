@@ -1,0 +1,8 @@
+stage,label,unique_count,total,fraction
+E0,complete positives,0,768,0
+E1,complete realised G,25,768,0.032552083333333336
+E2,+ occupied-node arrival,159,768,0.20703125
+E3,+ direct A,275,768,0.3580729166666667
+E4,+ direct B,565,768,0.7356770833333334
+E5,+ direct M accessibility,768,768,1
+E6,+ full M arrival,768,768,1

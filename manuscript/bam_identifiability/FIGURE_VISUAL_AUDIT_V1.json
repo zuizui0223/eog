@@ -1,0 +1,36 @@
+{
+  "schema": "eog.bam_inverse_identifiability.figure_visual_audit.v1",
+  "source_branch_head": "585f8fc2fba4f72e9268e81e85dd7fe154dc3e17",
+  "canonical_review_workflow_run_id": 36627138397,
+  "canonical_review_artifact_id": 11061310897,
+  "figure_workflow_run_id": 36627138577,
+  "figure_workflow_artifact_id": 11060857872,
+  "status": "PASS",
+  "figures": {
+    "F1": {
+      "status": "PASS",
+      "note": "Forward intersection label moved clear of B box; S2+ and target-fiber labels now contained within evidence-fiber boxes."
+    },
+    "F2": {
+      "status": "PASS",
+      "note": "No clipping or label collision; restrictiveness-ambiguity contrast legible."
+    },
+    "F3": {
+      "status": "PASS",
+      "note": "Evidence ladder counts and refuted-bottleneck annotation legible."
+    },
+    "F4": {
+      "status": "PASS",
+      "note": "Scenario labels, support annotations and joint-ABM contrast legible."
+    },
+    "F5": {
+      "status": "PASS",
+      "note": "Static versus first-occurrence comparison legible; legend clear."
+    },
+    "F6": {
+      "status": "PASS",
+      "note": "Programme-specific exact measurement maxima legible and unclipped."
+    }
+  },
+  "boundary": "visual/editorial review only; no scientific values changed"
+}

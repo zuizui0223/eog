@@ -1,0 +1,137 @@
+{
+  "schema": "eog.bam_inverse_identifiability.jbi_submission_blockers.v1",
+  "status": "SCIENTIFIC_AND_TECHNICAL_READY_AWAITING_AUTHOR_ADMIN_AND_REVIEW_URL",
+  "target": {
+    "journal": "Journal of Biogeography",
+    "article_type": "Research Article",
+    "double_anonymous_review": true
+  },
+  "canonical": {
+    "pull_request": 518,
+    "branch": "paper/bam-inverse-identifiability-v2",
+    "audited_head_sha": "3661a6c1c9653ae37a06602cb4ac6dfac6276bf3",
+    "manuscript": "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md"
+  },
+  "scientific_blockers": [],
+  "technical_blockers": [],
+  "resolved": {
+    "exact_inverse_BAM_theory": true,
+    "deterministic_generality": {
+      "systems": 12,
+      "truth_cases": 768,
+      "positive_only_unique": "0/768",
+      "result_fingerprint": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415"
+    },
+    "independent_stochastic_validation": {
+      "runs": 384,
+      "truth_retention_failures": 0,
+      "api_parity_mismatches": 0,
+      "result_fingerprint": "bc558d10073133510f1b47b5651f6694d53f04771e757e9d8d9716ada72b18bf"
+    },
+    "restrictiveness_ambiguity": {
+      "strict_support_inclusion_pairs": 304,
+      "violations": 0,
+      "result_fingerprint": "ae797daf732af37740408fd5ca3cb4eb1c02f5345b9ffea651fbec5d05d79b2c"
+    },
+    "temporal_evidence": {
+      "strict_gain_runs": "256/384",
+      "result_fingerprint": "c1fd0014bf1ddc0f61af7a08dafb13e005f3a80e99693ddde328e06364b9c9f9"
+    },
+    "multilandscape_generality": {
+      "planned_landscapes": 8,
+      "eligible_landscapes": 6,
+      "design_stops": 2,
+      "eligible_runs": 1152,
+      "result_fingerprint": "9c08962ea6a94ebc1869eb5a578749af5ed78989a210b9d40278ea04ac67038c"
+    },
+    "exact_measurement_audit": {
+      "truth_cases": 768,
+      "failures": 0,
+      "maxima": {
+        "A": 1,
+        "B": 2,
+        "AB_joint": 3,
+        "M": 2
+      },
+      "result_fingerprint": "cc7f6ed6f51da660aeeb8cff421504ab0b6c6bcae7a86cdd78c7acf15a44afdd"
+    },
+    "current_JBI_policy_verified": "2026-09-30",
+    "manuscript_numeric_audit": "PASS",
+    "manuscript_prior_art_boundary": "PASS",
+    "figure_visual_editorial_pass": "PASS",
+    "anonymous_review_package": {
+      "reproducible_bundle": true,
+      "privacy_findings": 0,
+      "file_count": 62,
+      "focused_tests_from_extracted_bundle": "PASS",
+      "figures_rebuilt_from_extracted_bundle": "PASS"
+    },
+    "python_package_matrix": {
+      "python_3_10": "PASS",
+      "python_3_11": "PASS",
+      "python_3_12": "PASS"
+    },
+    "named_species_empirical_illustration": {
+      "required": false,
+      "decision": "not_required_for_current_theory_claim"
+    }
+  },
+  "current_receipts": {
+    "manuscript_v3": {
+      "workflow_run_id": 36658724393,
+      "artifact_id": 11073670784,
+      "artifact_digest": "sha256:9bc6dc2ee4e43332a4a8bd0fe3a1306081d781270430930be245c7fcddc48bb4"
+    },
+    "manuscript_v2_numeric_audit": {
+      "workflow_run_id": 36658724533,
+      "artifact_id": 11073561008,
+      "artifact_digest": "sha256:789f9626c51baa5295e2d734f39202e90c32c656f63cfffd8e16aebe0ef98340"
+    },
+    "figures": {
+      "workflow_run_id": 36658724433,
+      "artifact_id": 11073545936,
+      "artifact_digest": "sha256:312d03ddb540959b14082bb0a09cf0059331123b9077ed8a1b67849a911ecbbd"
+    },
+    "anonymous_review_package": {
+      "workflow_run_id": 36658724507,
+      "artifact_id": 11073238349,
+      "artifact_digest": "sha256:4dad559ae861805835d0de188eeb168f91dccf36d72de3c9d62522f5f7f978b4",
+      "inner_zip_sha256": "716f8a36b3323251137270a877046cf46188318412565f8c1f87f23cebb23bfc"
+    },
+    "package_checks": {
+      "workflow_run_id": 36658724490,
+      "conclusion": "success"
+    }
+  },
+  "external_author_blockers": [
+    {
+      "id": "author_title_metadata",
+      "required": "Final author order, full publication names, affiliations, ORCIDs where used, and corresponding-author details."
+    },
+    {
+      "id": "author_statements",
+      "required": "Author-approved CRediT contributions, funding, competing interests, acknowledgements and any required biosketch."
+    },
+    {
+      "id": "ai_disclosure",
+      "required": "Author-approved generative-AI disclosure with tool/provider/model if known, use period, purposes, verification process and responsibility statement."
+    },
+    {
+      "id": "private_review_url",
+      "required": "Upload the reproducible anonymous review zip to an anonymized private peer-review repository/Dryad workflow and provide the reviewer URL."
+    },
+    {
+      "id": "final_author_approval",
+      "required": "All authors approve the manuscript, title, abstract, cover letter, author order, declarations and submission."
+    }
+  ],
+  "post_acceptance_only": [
+    "Replace private review URL with permanent public archive/DOI as required by the journal."
+  ],
+  "hard_stop": [
+    "Do not add a named-species empirical illustration opportunistically to improve apparent publishability.",
+    "Do not alter frozen known-truth denominators or replace DESIGN_STOP systems.",
+    "Do not broaden novelty to BAM, equifinality, virtual species, model discrimination or hitting-set methods generally.",
+    "Do not certify a surviving world as historical truth."
+  ]
+}

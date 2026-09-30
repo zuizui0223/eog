@@ -1,0 +1,40 @@
+{
+  "schema": "eog.bam_inverse_identifiability.manuscript_audit_receipt.v3",
+  "manuscript": "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V3.md",
+  "audited_head_sha": "4cc04ac49ac18207868eeb9dc8e04d992f5d7e19",
+  "workflow_run_id": 36621937622,
+  "workflow_conclusion": "success",
+  "artifact_id": 11058616435,
+  "artifact_digest": "sha256:cd163beb9a6988b55fa85eb1e42316d8650f4524e85f6610645a05cb6a6c849e",
+  "manuscript_audit_fingerprint": "dad9a66ff70d851af1a0de879e1a4bec16358a3dad9e72067b2a24c327c0d1bb",
+  "audit_status": "PASS",
+  "quantitative_figure_files": [
+    "F2_restrictiveness_ambiguity.svg",
+    "F2_restrictiveness_ambiguity.pdf",
+    "F3_evidence_ladder.svg",
+    "F3_evidence_ladder.pdf",
+    "F4_independent_stochastic_challenge.svg",
+    "F4_independent_stochastic_challenge.pdf",
+    "F5_temporal_information.svg",
+    "F5_temporal_information.pdf",
+    "F6_targeted_measurement_bounds.svg",
+    "F6_targeted_measurement_bounds.pdf"
+  ],
+  "source_fingerprints": {
+    "deterministic_v3": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415",
+    "restrictiveness_v3_1": "ae797daf732af37740408fd5ca3cb4eb1c02f5345b9ffea651fbec5d05d79b2c",
+    "temporal_v3_2": "c1fd0014bf1ddc0f61af7a08dafb13e005f3a80e99693ddde328e06364b9c9f9",
+    "multilandscape_v4": "9c08962ea6a94ebc1869eb5a578749af5ed78989a210b9d40278ea04ac67038c",
+    "targeted_measurement_exact": "cc7f6ed6f51da660aeeb8cff421504ab0b6c6bcae7a86cdd78c7acf15a44afdd"
+  },
+  "checks": {
+    "deterministic_evidence_ladder": true,
+    "restrictiveness_audit": true,
+    "temporal_audit": true,
+    "multilandscape_denominator": true,
+    "exact_measurement_bounds": true,
+    "prior_art_boundary": true,
+    "eog_wf_separation": true,
+    "math_surface": true
+  }
+}

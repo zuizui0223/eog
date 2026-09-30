@@ -1,0 +1,9 @@
+landscape_id,family,status,temporal_strict_gain_runs,temporal_nonidentified_h40_runs,joint_ABM_static_median_h40,joint_ABM_temporal_median_h40
+open_smooth_s0,open_smooth,eligible,128,192,32,32
+open_smooth_s1,open_smooth,eligible,128,192,32,32
+barrier_gap_s0,barrier_gap,eligible,150,192,32,32
+barrier_gap_s1,barrier_gap,eligible,136,192,32,32
+bottleneck_s0,bottleneck,eligible,128,192,32,32
+bottleneck_s1,bottleneck,eligible,128,192,32,32
+joint_fragmented_s0,joint_fragmented,DESIGN_STOP,,,,,
+joint_fragmented_s1,joint_fragmented,DESIGN_STOP,,,,,

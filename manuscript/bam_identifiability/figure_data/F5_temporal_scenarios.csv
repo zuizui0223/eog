@@ -1,0 +1,7 @@
+scenario,static_median_compatible,temporal_median_compatible,static_unique_fraction,temporal_unique_fraction
+A_limited,8,4,0,0
+partner_limited,8,2,0,0
+antagonist_limited,8,4,0,0
+distance_limited,4,4,0,0
+barrier_limited,4,2,0,0
+joint_ABM,32,32,0,0

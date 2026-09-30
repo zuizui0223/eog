@@ -1,0 +1,63 @@
+{
+  "schema": "eog.bam_inverse_identifiability.jbi_author_admin_confirmation.v1",
+  "manuscript": {
+    "title": "Distributions are lossy intersections: exact identifiability limits for abiotic, biotic and movement mechanisms",
+    "running_title": "Inverse BAM identifiability",
+    "journal": "Journal of Biogeography",
+    "article_type": "Research Article"
+  },
+  "authors": [],
+  "affiliations": [],
+  "corresponding_author": {
+    "author_id": null,
+    "email": null,
+    "postal_address": null
+  },
+  "acknowledgements": null,
+  "funding": {
+    "statement": null,
+    "confirmed_by_all_authors": false
+  },
+  "competing_interests": {
+    "statement": null,
+    "confirmed_by_all_authors": false
+  },
+  "originality_and_submission": {
+    "manuscript_not_published_elsewhere_confirmed": false,
+    "manuscript_not_under_consideration_elsewhere_confirmed": false,
+    "all_authors_approve_submission": false,
+    "all_entitled_authors_included": false
+  },
+  "ai_llm": {
+    "used": true,
+    "tool_provider": "ChatGPT / OpenAI",
+    "model_or_version": null,
+    "period": null,
+    "purposes": [],
+    "verification_process": null,
+    "privacy_confidentiality_statement": null,
+    "responsible_author_id": null,
+    "anonymous_manuscript_disclosure": null,
+    "all_authors_approve_disclosure": false
+  },
+  "biosketch": {
+    "text": null,
+    "approved": false
+  },
+  "review_archive": {
+    "validated_receipt": "manuscript/bam_identifiability/REVIEW_PACKAGE_RECEIPT_V2.json",
+    "authors_confirm_archive_can_be_supplied_for_review": false
+  },
+  "confirmations": {
+    "author_order_approved": false,
+    "affiliations_approved": false,
+    "corresponding_author_approved": false,
+    "credit_roles_approved": false,
+    "acknowledgements_approved": false,
+    "funding_approved": false,
+    "competing_interests_approved": false,
+    "cover_letter_approved": false,
+    "title_page_approved": false,
+    "manuscript_approved_for_submission": false
+  }
+}

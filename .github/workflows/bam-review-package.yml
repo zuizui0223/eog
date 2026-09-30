@@ -1,0 +1,112 @@
+name: BAM anonymous review package
+
+on:
+  pull_request:
+    paths:
+      - "manuscript/bam_identifiability/REVIEW_PACKAGE_MANIFEST_V2.json"
+      - "manuscript/bam_identifiability/build_review_package_v1.py"
+      - "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V4_JBI.md"
+      - "manuscript/bam_identifiability/figure_data/**"
+      - "manuscript/bam_identifiability/figures/**"
+      - "validation/known_truth_programme_manifest_v1.json"
+      - "validation/known_truth_bam_v3/**"
+      - "validation/independent_stochastic_bam_v3/**"
+      - "validation/restrictiveness_ambiguity_v3_1/**"
+      - "validation/independent_stochastic_temporal_v3_2/**"
+      - "validation/multilandscape_stochastic_bam_v4/**"
+      - "validation/bam_identifiability_theory_v1/**"
+      - "src/eog/dynamic_island_reachability.py"
+      - "src/eog/v2/occurrence_constraints.py"
+      - "src/eog/v2/world_reconstruction.py"
+      - "src/eog/v2/known_truth_biogeography.py"
+      - "src/eog/v2/known_truth_bam*.py"
+      - "src/eog/v2/bam_identifiability_theory.py"
+      - "src/eog/v2/bam_targeted_measurement_audit.py"
+      - "benchmarks/independent_stochastic_bam_generator.py"
+      - "benchmarks/independent_multilandscape_bam_generator_v4.py"
+      - "benchmarks/run_known_truth_bam_v3.py"
+      - "benchmarks/run_independent_stochastic_bam_v3.py"
+      - "benchmarks/audit_restrictiveness_ambiguity_v3_1.py"
+      - "benchmarks/run_independent_stochastic_temporal_v3_2.py"
+      - "benchmarks/run_multilandscape_stochastic_bam_v4.py"
+      - "benchmarks/run_bam_targeted_measurement_audit.py"
+      - "tests/test_world_reconstruction.py"
+      - "tests/test_known_truth_bam*.py"
+      - "tests/test_independent_stochastic_bam_v3.py"
+      - "tests/test_multilandscape_stochastic_bam_v4.py"
+      - "tests/test_bam_identifiability_theory.py"
+      - "tests/test_bam_targeted_measurement_audit.py"
+      - ".github/workflows/bam-review-package.yml"
+  workflow_dispatch:
+
+jobs:
+  build-and-reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install figure dependency for package construction
+        run: python -m pip install "matplotlib>=3.8"
+
+      - name: Build anonymous peer-review package
+        run: >
+          python manuscript/bam_identifiability/build_review_package_v1.py
+          --output-dir build/bam_review_package
+
+      - name: Inspect archive receipt
+        run: |
+          unzip -l build/bam_review_package/bam_inverse_identifiability_anonymous_review.zip
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("build/bam_review_package/bam_inverse_identifiability_review_receipt.json")
+          receipt = json.loads(path.read_text())
+          assert receipt["anonymous_review"] is True
+          assert receipt["reproducible_bundle"] is True
+          assert receipt["privacy_findings"] == []
+          assert receipt["file_count"] > 40
+          assert len(receipt["zip_sha256"]) == 64
+          PY
+
+      - name: Extract anonymous bundle into clean review workspace
+        run: |
+          rm -rf build/reviewer_workspace
+          mkdir -p build/reviewer_workspace
+          unzip -q             build/bam_review_package/bam_inverse_identifiability_anonymous_review.zip             -d build/reviewer_workspace
+
+      - name: Install only from extracted review bundle
+        working-directory: build/reviewer_workspace
+        run: python -m pip install -e ".[review]"
+
+      - name: Run focused tests using only extracted review bundle
+        working-directory: build/reviewer_workspace
+        env:
+          PYTHONPATH: ".:benchmarks"
+        run: |
+          python -m pytest             tests/test_world_reconstruction.py             tests/test_known_truth_bam.py             tests/test_known_truth_bam_v2_1.py             tests/test_known_truth_bam_direct_evidence.py             tests/test_known_truth_bam_direct_movement.py             tests/test_known_truth_bam_generality.py             tests/test_independent_stochastic_bam_v3.py             tests/test_multilandscape_stochastic_bam_v4.py             tests/test_bam_identifiability_theory.py             tests/test_bam_targeted_measurement_audit.py             -q
+
+      - name: Rebuild Figures 1-6 using only extracted review bundle
+        working-directory: build/reviewer_workspace
+        env:
+          PYTHONPATH: ".:benchmarks"
+        run: |
+          rm -rf build/bam_identifiability_figures
+          python manuscript/bam_identifiability/figures/build_quantitative_figures_v2.py
+          test -s build/bam_identifiability_figures/F1_forward_inverse_bam.svg
+          test -s build/bam_identifiability_figures/F2_restrictiveness_ambiguity.svg
+          test -s build/bam_identifiability_figures/F3_evidence_ladder.svg
+          test -s build/bam_identifiability_figures/F4_independent_stochastic_challenge.svg
+          test -s build/bam_identifiability_figures/F5_temporal_information.svg
+          test -s build/bam_identifiability_figures/F6_targeted_measurement_bounds.svg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-anonymous-review-package
+          path: |
+            build/bam_review_package/bam_inverse_identifiability_anonymous_review.zip
+            build/bam_review_package/bam_inverse_identifiability_review_receipt.json
+          if-no-files-found: error

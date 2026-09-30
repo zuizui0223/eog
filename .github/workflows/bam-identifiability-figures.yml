@@ -1,0 +1,36 @@
+name: BAM inverse-identifiability figures
+
+on:
+  pull_request:
+    paths:
+      - "scripts/build_bam_identifiability_figures.py"
+      - "manuscript/bam_identifiability/figure_data/**"
+      - ".github/workflows/bam-identifiability-figures.yml"
+  workflow_dispatch:
+
+jobs:
+  figures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install figure dependency
+        run: python -m pip install "matplotlib>=3.8"
+      - name: Build figures
+        run: |
+          python scripts/build_bam_identifiability_figures.py \
+            --output-dir build/bam_identifiability_figures
+      - name: Verify outputs
+        run: |
+          test -s build/bam_identifiability_figures/Figure2_restrictiveness_ambiguity.svg
+          test -s build/bam_identifiability_figures/Figure3_evidence_ladder.svg
+          test -s build/bam_identifiability_figures/Figure4_independent_stochastic.svg
+          test -s build/bam_identifiability_figures/Figure5_temporal_information.svg
+          test -s build/bam_identifiability_figures/Figure6_diagnostic_measurements.svg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-inverse-identifiability-figures
+          path: build/bam_identifiability_figures/
+          if-no-files-found: error

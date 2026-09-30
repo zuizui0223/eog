@@ -1,0 +1,120 @@
+{
+  "schema": "eog.bam_inverse_identifiability.manuscript_claims.v2",
+  "manuscript": "manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V2.md",
+  "source_claims": [
+    {
+      "id": "deterministic_generality",
+      "source": "validation/known_truth_bam_v3/result_summary_v3.json",
+      "fingerprint": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415",
+      "assertions": {
+        "system_roster_size": 12,
+        "scored_system_count": 12,
+        "design_stop_count": 0,
+        "eligible_truth_count": 768,
+        "pooled_unique_counts.E0": 0,
+        "pooled_unique_counts.E1": 25,
+        "pooled_unique_counts.E2": 159,
+        "pooled_unique_counts.E3": 275,
+        "pooled_unique_counts.E4": 565,
+        "pooled_unique_counts.E5": 768,
+        "pooled_unique_counts.E6": 768,
+        "verdicts.G2_M_final_bottleneck": "REFUTED"
+      },
+      "required_manuscript_strings": [
+        "0/768",
+        "25 / 768",
+        "159 / 768",
+        "275 / 768",
+        "565 / 768",
+        "768 / 768"
+      ]
+    },
+    {
+      "id": "restrictiveness_ambiguity",
+      "source": "validation/restrictiveness_ambiguity_v3_1/audit_summary_v3_1.json",
+      "fingerprint": "ae797daf732af37740408fd5ca3cb4eb1c02f5345b9ffea651fbec5d05d79b2c",
+      "assertions": {
+        "strict_support_inclusion_pair_count": 304,
+        "nesting_monotonicity_violations": 0,
+        "frozen_truth_scenarios.joint_ABM.support_size": 33,
+        "frozen_truth_scenarios.joint_ABM.compatible_world_count": 32
+      },
+      "required_manuscript_strings": [
+        "304/304",
+        "R_1\\subset R_2",
+        "C(R_1)\\supseteq C(R_2)"
+      ]
+    },
+    {
+      "id": "temporal_evidence",
+      "source": "validation/independent_stochastic_temporal_v3_2/result_summary_v3_2.json",
+      "fingerprint": "c1fd0014bf1ddc0f61af7a08dafb13e005f3a80e99693ddde328e06364b9c9f9",
+      "assertions": {
+        "candidate_world_count": 32,
+        "static_support_classes.count": 8,
+        "temporal_signature_classes.count": 20,
+        "static_M_equivalent_pair_count": 48,
+        "realised_temporal_split_pair_count": 19,
+        "planned_runs": 384,
+        "temporal_strict_gain_runs": 256,
+        "truth_retention_failures": 0
+      },
+      "required_manuscript_strings": [
+        "8 static support classes",
+        "20 temporal signature classes",
+        "48 static M-equivalent pairs",
+        "19 were split",
+        "256/384"
+      ]
+    },
+    {
+      "id": "multilandscape",
+      "source": "validation/multilandscape_stochastic_bam_v4/result_summary_v4.json",
+      "fingerprint": "9c08962ea6a94ebc1869eb5a578749af5ed78989a210b9d40278ea04ac67038c",
+      "assertions": {
+        "planned_landscape_count": 8,
+        "eligible_landscape_count": 6,
+        "design_stop_count": 2,
+        "eligible_stochastic_runs": 1152,
+        "truth_retention_failures": 0,
+        "nesting_monotonicity_violations": 0,
+        "api_parity_mismatches": 0,
+        "temporal_nonidentified_h40_runs_total": 1152
+      },
+      "required_manuscript_strings": [
+        "eight preregistered landscapes",
+        "six activation-eligible",
+        "two DESIGN_STOP",
+        "1,152"
+      ]
+    },
+    {
+      "id": "targeted_measurement",
+      "source": "validation/bam_identifiability_theory_v1/targeted_measurement_exact_audit_summary_v1.json",
+      "fingerprint": "cc7f6ed6f51da660aeeb8cff421504ab0b6c6bcae7a86cdd78c7acf15a44afdd",
+      "assertions": {
+        "systems_scored": 12,
+        "truth_cases": 768,
+        "failures": 0,
+        "exact_maximum_measurements.A": 1,
+        "exact_maximum_measurements.B": 2,
+        "exact_maximum_measurements.AB_joint": 3,
+        "exact_maximum_measurements.M": 2,
+        "exact_maximum_measurements.tau": 0
+      },
+      "required_manuscript_strings": [
+        "direct A: 1 node",
+        "direct B: 2 nodes",
+        "joint A+B: 3 nodes",
+        "direct M accessibility: 2 nodes"
+      ]
+    }
+  ],
+  "forbidden_unqualified_phrases": [
+    "proves the true process",
+    "recovers the true process in general",
+    "universal identifiability",
+    "first ever",
+    "first demonstration of equifinality"
+  ]
+}

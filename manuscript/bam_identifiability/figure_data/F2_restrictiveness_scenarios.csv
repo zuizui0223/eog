@@ -1,0 +1,7 @@
+scenario,support_size,compatible_world_count
+joint_ABM,33,32
+antagonist_limited,40,8
+A_limited,67,8
+partner_limited,67,8
+distance_limited,96,4
+barrier_limited,96,4

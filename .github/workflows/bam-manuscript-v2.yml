@@ -1,0 +1,39 @@
+name: BAM inverse-identifiability manuscript v2
+
+on:
+  pull_request:
+    paths:
+      - "manuscript/bam_identifiability/**"
+      - "validation/known_truth_bam_v3/**"
+      - "validation/restrictiveness_ambiguity_v3_1/**"
+      - "validation/independent_stochastic_temporal_v3_2/**"
+      - "validation/multilandscape_stochastic_bam_v4/**"
+      - "validation/bam_identifiability_theory_v1/**"
+      - ".github/workflows/bam-manuscript-v2.yml"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Audit manuscript numeric claims against frozen sources
+        run: |
+          python manuscript/bam_identifiability/check_manuscript_v2.py \
+            --output build/bam_manuscript_v2/MANUSCRIPT_NUMERIC_AUDIT_V2.json
+      - name: Check required manuscript assets
+        run: |
+          test -s manuscript/bam_identifiability/MANUSCRIPT_DRAFT_V2_1.md
+          test -s manuscript/bam_identifiability/CLAIM_LEDGER_V2.md
+          test -s manuscript/bam_identifiability/LITERATURE_POSITIONING_V2.md
+          test -s manuscript/bam_identifiability/REFERENCES_CORE_V2.md
+          test -s manuscript/bam_identifiability/FIGURE_PLAN_V2.md
+          test -s manuscript/bam_identifiability/figure_data/FIGURE_DATA_MANIFEST_V2.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-manuscript-v2-audit
+          path: build/bam_manuscript_v2/MANUSCRIPT_NUMERIC_AUDIT_V2.json
+          if-no-files-found: error
