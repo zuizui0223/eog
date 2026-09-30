@@ -1,0 +1,153 @@
+{
+  "schema": "eog.bam_ecological_expansion_margin.result_summary.v1",
+  "status": "completed_preregistered_structured_universe_audit",
+  "protocol": "validation/bam_ecological_expansion_margin_v1/protocol_v1.json",
+  "protocol_commit": "12585d5e9710deb81631da27ab7c4cea43ce9aeb",
+  "parent_target_result": {
+    "path": "validation/bam_counterfactual_identifiability_v1/result_summary_v1.json",
+    "fingerprint": "77314699090fd3b0a19066363eab0589c3a0c89ac41aabbce49873c84b468172"
+  },
+  "parent_logical_completion_result": {
+    "path": "validation/bam_decision_robustness_margin_v1/result_summary_v1.json",
+    "fingerprint": "ffd0d11bbe75d4e27cc8918ab77a95e991ab52b43bd39ee83ce81b8a3bd52050"
+  },
+  "authoritative_run": 36670497439,
+  "authoritative_job": 109744249623,
+  "executed_head": "50a587ed6c44257e1d055b71fa3d74d48b0d4ff6",
+  "artifact_id": 11077806908,
+  "artifact_digest": "sha256:75e50554321688ac88941d325985b6a9eb9bfafd0cf2fa64810a2e3aabea0905",
+  "result_fingerprint": "58b8412f7167672c37cd8a2e4b310362335adc71edccbd3f1c824fee23b90ade",
+  "design": {
+    "systems": 12,
+    "truth_cases": 768,
+    "unique_E1_fibers": 129,
+    "expanded_worlds_per_system": 2592,
+    "original_worlds_per_system": 64,
+    "same_G_counterexample_required": true,
+    "ecological_parameter_distance": "unit-weight Manhattan distance over preregistered A/B/M parameter-neighbourhood coordinates"
+  },
+  "predeclared_verdicts": {
+    "H1_one_step_fragility_exists": "SUPPORTED",
+    "H2_nontrivial_robustness_exists": "SUPPORTED",
+    "H3_irrelevant_axis_invariance": "SUPPORTED",
+    "H4_directional_margin_asymmetry": "REFUTED"
+  },
+  "irrelevant_axis_invariance_violations": 0,
+  "nested_universe_identifiability": {
+    "A": {
+      "declared_64_world_universe_identified": 652,
+      "structured_2592_world_same_G_expansion_identified": 646,
+      "complete_same_G_decomposition_closure_identified": 34,
+      "structured_retention_fraction_of_declared_identified": 0.9907975460122699,
+      "proper_G_declared_identified": 618,
+      "proper_G_structured_identified": 612
+    },
+    "B": {
+      "declared_64_world_universe_identified": 705,
+      "structured_2592_world_same_G_expansion_identified": 693,
+      "complete_same_G_decomposition_closure_identified": 34,
+      "structured_retention_fraction_of_declared_identified": 0.9829787234042553,
+      "proper_G_declared_identified": 671,
+      "proper_G_structured_identified": 659
+    },
+    "M": {
+      "declared_64_world_universe_identified": 732,
+      "structured_2592_world_same_G_expansion_identified": 691,
+      "complete_same_G_decomposition_closure_identified": 34,
+      "structured_retention_fraction_of_declared_identified": 0.9439890710382514,
+      "proper_G_declared_identified": 698,
+      "proper_G_structured_identified": 657
+    }
+  },
+  "finite_structured_counterexamples": {
+    "A": {
+      "truths": 6,
+      "unique_fibers": 1,
+      "margin_distribution": {"3": 6},
+      "current_decision_false": 6,
+      "current_decision_true": 0,
+      "no_counterexample_in_frozen_lattice": 646
+    },
+    "B": {
+      "truths": 12,
+      "unique_fibers": 3,
+      "margin_distribution": {"2": 8, "3": 4},
+      "current_decision_false": 12,
+      "current_decision_true": 0,
+      "no_counterexample_in_frozen_lattice": 693
+    },
+    "M": {
+      "truths": 41,
+      "unique_fibers": 5,
+      "margin_distribution": {"1": 24, "2": 14, "4": 3},
+      "current_decision_false": 0,
+      "current_decision_true": 41,
+      "no_counterexample_in_frozen_lattice": 691
+    }
+  },
+  "truth_weighted_structured_margin": {
+    "A": {
+      "finite_margin_count": 6,
+      "median": 3.0,
+      "mean": 3.0,
+      "maximum": 3,
+      "margin_1_count": 0
+    },
+    "B": {
+      "finite_margin_count": 12,
+      "median": 2.0,
+      "mean": 2.3333333333333335,
+      "maximum": 3,
+      "margin_1_count": 0
+    },
+    "M": {
+      "finite_margin_count": 41,
+      "median": 1.0,
+      "mean": 1.5609756097560976,
+      "maximum": 4,
+      "margin_1_count": 24
+    }
+  },
+  "unique_fiber_structured_margin": {
+    "A": {
+      "declared_identified_fibers": 119,
+      "finite_counterexample_fibers": 1,
+      "no_counterexample_fibers": 118,
+      "margin_distribution": {"3": 1}
+    },
+    "B": {
+      "declared_identified_fibers": 124,
+      "finite_counterexample_fibers": 3,
+      "no_counterexample_fibers": 121,
+      "margin_distribution": {"2": 1, "3": 2}
+    },
+    "M": {
+      "declared_identified_fibers": 126,
+      "finite_counterexample_fibers": 5,
+      "no_counterexample_fibers": 121,
+      "margin_distribution": {"1": 1, "2": 3, "4": 1}
+    }
+  },
+  "H4_refutation_detail": {
+    "reason": "Finite structured counterexamples were directionally separated by target rather than showing the preregistered cross-direction median pattern.",
+    "A": "all 6 finite counterexamples started from current decision=false; none from true",
+    "B": "all 12 finite counterexamples started from current decision=false; none from true",
+    "M": "all 41 finite counterexamples started from current decision=true; none from false",
+    "rule": "No new operator is added to rescue the preregistered directional-asymmetry hypothesis."
+  },
+  "main_findings": [
+    "Logical same-G fragility and structured ecological-neighbourhood fragility are sharply different.",
+    "Most decisions identified in the original 64-world universe remained identified after expansion to the preregistered 2,592-world ecological lattice: 99.1 percent for A-release, 98.3 percent for B-release and 94.4 percent for M-release.",
+    "Under complete unrestricted same-G decomposition closure, only the 34 full-G truth cases remain trivially identified for each release target.",
+    "The resulting identifiability erosion ladder is 652 to 646 to 34 for A, 705 to 693 to 34 for B and 732 to 691 to 34 for M.",
+    "H4 was refuted rather than repaired: the finite ecological counterexamples were target- and direction-specific.",
+    "World-universe robustness must therefore report both the declared universe and the expansion operator family, not only a scalar identified/unidentified label."
+  ],
+  "claim_boundary": [
+    "The structured lattice is a preregistered synthetic ecological neighbourhood, not an exhaustive or calibrated plausibility region.",
+    "No-counterexample within the lattice means robust to this frozen expansion only; it does not prove robustness to all biologically plausible worlds.",
+    "The complete same-G closure is a logical envelope and includes ecologically implausible states.",
+    "The 64-world, 2,592-world and complete-closure results are nested conditional certificates, not competing estimates of one probability.",
+    "The result does not alter the frozen BAM inverse-identifiability manuscript or EOG-WF empirical programme."
+  ]
+}
