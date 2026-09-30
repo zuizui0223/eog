@@ -1,6 +1,6 @@
 {
   "schema": "eog.bam_structured_counterfactuals.protocol.v1",
-  "status": "frozen_before_implementation_and_scoring",
+  "status": "amended_before_implementation_and_scoring",
   "parent_programmes": {
     "target_identifiability": {
       "result": "validation/bam_counterfactual_identifiability_v1/result_summary_v1.json",
@@ -43,19 +43,25 @@
     }
   },
   "targets": {
-    "mechanism": "current BAM state equivalence",
+    "parameter_world": "exact declared parameter-world identity (world ID in W0; full ecological parameter coordinates in W1)",
+    "current_bam_state": "current A/B/M plus movement-arrival tau equivalence",
     "exact_counterfactual": "exact finite-node G_cf for each frozen transformation",
-    "binary_decision": "the transformation-specific loss/gain target above"
+    "binary_decision": "the transformation-specific loss/gain target"
   },
   "predeclared_hypotheses": [
     {
       "id": "H1_target_hierarchy_persists",
-      "statement": "For every transformation and universe level, binary-decision identification count is at least exact-counterfactual-map identification count, which is at least full current BAM-state identification count evaluated in the same current survivor fiber.",
+      "statement": "For every transformation and universe level, binary-decision identification count is at least exact-counterfactual-map identification count, which is at least exact parameter-world identification count.",
       "failure_rule": "Any violation is a target-definition or implementation failure and stops interpretation."
     },
     {
+      "id": "H1b_dormant_alias_activation_exists",
+      "statement": "At least one truth that is identified at the current BAM-state level nevertheless has an unresolved exact or binary structured-counterfactual target because current-state-equivalent parameter worlds respond differently after transformation.",
+      "failure_rule": "REFUTED if no current-BAM-state-identified fiber is reopened by any frozen structured transformation."
+    },
+    {
       "id": "H2_decision_without_mechanism_exists",
-      "statement": "For each of the three structured transformations in W0, at least one BAM-state-nonidentified truth nevertheless has an identified binary decision.",
+      "statement": "For each of the three structured transformations in W0, at least one parameter-world-nonidentified truth nevertheless has an identified binary decision.",
       "failure_rule": "REFUTED separately for any transformation without such a case."
     },
     {
@@ -65,7 +71,7 @@
     },
     {
       "id": "H4_nontrivial_robust_decisions_exist",
-      "statement": "For every transformation, at least one BAM-state-nonidentified binary decision remains identified after expansion from W0 to W1.",
+      "statement": "For every transformation, at least one parameter-world-nonidentified binary decision remains identified after expansion from W0 to W1.",
       "failure_rule": "REFUTED separately for any transformation without such a case."
     }
   ],
@@ -93,5 +99,11 @@
       "prediction under parameter nonidentifiability"
     ],
     "candidate_contribution": "Within an occurrence-conditioned BAM inverse survivor fiber, test target-specific identifiability under explicit ecological transformations and track whether the target certificate survives a preregistered expansion of the admissible BAM world family."
+  },
+  "protocol_amendment": {
+    "reason": "Pre-implementation design audit: structured transformations can reactivate parameter aliases that share the same current A/B/M/tau state, so counterfactual targets are not guaranteed to be deterministic functions of current BAM-state equivalence.",
+    "outcome_scoring_seen": false,
+    "implementation_started": false,
+    "correction": "Use exact parameter-world identity as the finest target for the guaranteed target-coarsening hierarchy; retain current BAM-state identification as a separate diagnostic and preregister dormant-alias activation."
   }
 }
