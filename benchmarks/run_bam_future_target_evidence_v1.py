@@ -22,6 +22,7 @@ from eog.v2.bam_future_target_evidence import (
     parameter_measurements,
 )
 from eog.v2.bam_structured_counterfactuals import (
+    expanded_variant_bam_state_key,
     expanded_variant_counterfactual,
 )
 from eog.v2.known_truth_bam_generality import (
@@ -83,6 +84,27 @@ def _size_row(size):
     }
 
 
+def _complete_state_sufficient(
+    state_by_id,
+    truth_variant_id,
+    target_by_world,
+):
+    truth_target = target_by_world[truth_variant_id]
+    if len(set(target_by_world.values())) == 1:
+        return True, True
+    truth_state = state_by_id[truth_variant_id]
+    same_state_ids = [
+        world_id
+        for world_id, state in state_by_id.items()
+        if state == truth_state
+    ]
+    sufficient = all(
+        target_by_world[world_id] == truth_target
+        for world_id in same_state_ids
+    )
+    return sufficient, False
+
+
 def run() -> dict[str, object]:
     protocol = json.loads(PROTOCOL.read_text(encoding="utf-8"))
     if protocol["status"] != "frozen_before_implementation_and_scoring":
@@ -128,20 +150,17 @@ def run() -> dict[str, object]:
             if int(truth_variant.occupied_mask) != G:
                 raise RuntimeError("embedded truth variant does not reproduce truth G")
 
-            # Evidence libraries are target-independent. Build them once per truth/fiber
-            # rather than reconstructing current BAM state for every target.
-            state_library = current_state_measurements(
-                system,
-                survivors,
-                survivor_ids,
-                truth_variant.variant_id,
-            )
+            # Parameter evidence is cheap to construct and is required for every truth.
+            # Present-state signatures/libraries are built lazily only when a target is
+            # not already E1-identified and the complete-state sufficiency question is
+            # actually relevant.
             parameter_library = parameter_measurements(
                 survivors,
                 survivor_ids,
                 truth_variant.variant_id,
             )
-            combined_library = (*state_library, *parameter_library)
+            state_by_id = None
+            state_library = None
 
             parameter_world_target = full_parameter_world_target(
                 survivors,
@@ -173,29 +192,11 @@ def run() -> dict[str, object]:
                     for world_id, outcome in outcomes.items()
                 }
 
-                exact_state_size = exact_minimum_truth_target_measurement_size(
-                    survivor_ids,
-                    truth_variant.variant_id,
-                    exact_target,
-                    state_library,
-                )
                 exact_parameter = exact_minimum_truth_target_measurements(
                     survivor_ids,
                     truth_variant.variant_id,
                     exact_target,
                     parameter_library,
-                )
-                exact_combined_size = exact_minimum_truth_target_measurement_size(
-                    survivor_ids,
-                    truth_variant.variant_id,
-                    exact_target,
-                    combined_library,
-                )
-                binary_state_size = exact_minimum_truth_target_measurement_size(
-                    survivor_ids,
-                    truth_variant.variant_id,
-                    binary_target,
-                    state_library,
                 )
                 binary_parameter = exact_minimum_truth_target_measurements(
                     survivor_ids,
@@ -203,12 +204,59 @@ def run() -> dict[str, object]:
                     binary_target,
                     parameter_library,
                 )
-                binary_combined_size = exact_minimum_truth_target_measurement_size(
-                    survivor_ids,
-                    truth_variant.variant_id,
-                    binary_target,
-                    combined_library,
-                )
+
+                exact_already = len(set(exact_target.values())) == 1
+                binary_already = len(set(binary_target.values())) == 1
+
+                if exact_already:
+                    exact_state_sufficient = True
+                else:
+                    if state_by_id is None:
+                        state_by_id = {
+                            row.variant_id: expanded_variant_bam_state_key(system, row)
+                            for row in survivors
+                        }
+                    exact_state_sufficient, _ = _complete_state_sufficient(
+                        state_by_id,
+                        truth_variant.variant_id,
+                        exact_target,
+                    )
+
+                if binary_already:
+                    binary_state_sufficient = True
+                else:
+                    if state_by_id is None:
+                        state_by_id = {
+                            row.variant_id: expanded_variant_bam_state_key(system, row)
+                            for row in survivors
+                        }
+                    binary_state_sufficient, _ = _complete_state_sufficient(
+                        state_by_id,
+                        truth_variant.variant_id,
+                        binary_target,
+                    )
+
+                # Combined target cardinality is needed only for the binary target.
+                # If E1 already identifies the target it is zero. If one parameter
+                # assay suffices, no union with state evidence can improve below one.
+                if binary_already:
+                    binary_combined_size = 0
+                elif binary_parameter.minimum_size == 1:
+                    binary_combined_size = 1
+                else:
+                    if state_library is None:
+                        state_library = current_state_measurements(
+                            system,
+                            survivors,
+                            survivor_ids,
+                            truth_variant.variant_id,
+                        )
+                    binary_combined_size = exact_minimum_truth_target_measurement_size(
+                        survivor_ids,
+                        truth_variant.variant_id,
+                        binary_target,
+                        (*state_library, *parameter_library),
+                    )
 
                 if not binary_parameter.evidence_library_sufficient:
                     raise RuntimeError(
@@ -226,12 +274,22 @@ def run() -> dict[str, object]:
                     "binary_target_class_count": len(set(binary_target.values())),
                     "truth_binary_value": bool(binary_target[truth_variant.variant_id]),
                     "exact_map": {
-                        "state_only": _size_row(exact_state_size),
+                        "state_only": {
+                            "sufficient": exact_state_sufficient,
+                            "minimum_size": 0 if exact_already else None,
+                            "minimum_measurement_ids": None,
+                            "target_already_identified": exact_already,
+                        },
                         "parameter_only": _plan_row(exact_parameter),
-                        "combined": _size_row(exact_combined_size),
+                        "combined": None,
                     },
                     "binary_decision": {
-                        "state_only": _size_row(binary_state_size),
+                        "state_only": {
+                            "sufficient": binary_state_sufficient,
+                            "minimum_size": 0 if binary_already else None,
+                            "minimum_measurement_ids": None,
+                            "target_already_identified": binary_already,
+                        },
                         "parameter_only": _plan_row(binary_parameter),
                         "combined": _size_row(binary_combined_size),
                     },
@@ -248,7 +306,12 @@ def run() -> dict[str, object]:
                             "truth_variant_id": truth_variant.variant_id,
                             "survivor_count": len(survivors),
                             "binary_target_class_count": len(set(binary_target.values())),
-                            "state_only": _size_row(binary_state_size),
+                            "state_only": {
+                                "sufficient": binary_state_sufficient,
+                                "minimum_size": 0 if binary_already else None,
+                                "minimum_measurement_ids": None,
+                                "target_already_identified": binary_already,
+                            },
                             "parameter_only": _plan_row(binary_parameter),
                             "combined": _size_row(binary_combined_size),
                         }
