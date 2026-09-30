@@ -9,6 +9,7 @@ decision need not be separated.
 """
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 from itertools import combinations
 from typing import Hashable, Mapping, Sequence
