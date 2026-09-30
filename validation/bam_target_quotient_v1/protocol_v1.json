@@ -1,0 +1,56 @@
+{
+  "schema": "eog.bam_target_quotient.protocol.v1",
+  "status": "frozen_before_computation",
+  "programme_role": "Phase-X capstone synthesis; no new ecological world, transformation, observation process, assay channel or outcome is introduced",
+  "parent_results": {
+    "structured_counterfactuals": "f502fb647ba4666f5c40ddbd5639123f3e0296fe492dd97a1ec19ec246531cb1",
+    "future_target_evidence": "b87bfa721e21acfdc0a03239b0ed556f77bd77e3ee49f25c11d56ece02b8db58",
+    "joint_uncertainty_lattice": "7dd641878ae21212de5ab9af54593498d1decae379a514346579de5642d107d9"
+  },
+  "scientific_question": "What is the coarsest exact representation of occurrence-compatible W1 BAM worlds that preserves a declared future target, and how does that target quotient relate to the complete current BAM-state partition?",
+  "fixed_universe": {
+    "systems": 12,
+    "W1_worlds_per_system": 2592,
+    "same_G_fibers": 129,
+    "transformations": ["climate_shift", "biotic_stress", "barrier_restoration"]
+  },
+  "partitions": {
+    "parameter_world": "singleton partition of W1 same-G variants",
+    "current_state": "equivalence by complete current A/B/M/tau state",
+    "exact_future_map": "equivalence by transformation-specific exact counterfactual G_cf",
+    "binary_decision": "equivalence by transformation-specific binary decision",
+    "joint_exact_suite": "equivalence by the tuple of all three exact future maps",
+    "joint_decision_suite": "equivalence by the tuple of all three binary future decisions"
+  },
+  "refinement_convention": "P refines Q iff every P block is contained in one Q block; P therefore retains at least as much distinction as Q",
+  "required_invariants": [
+    "parameter_world refines every other partition",
+    "each exact_future_map partition refines its binary_decision partition",
+    "joint_exact_suite refines each exact_future_map partition",
+    "joint_decision_suite refines each binary_decision partition",
+    "joint_exact_suite refines joint_decision_suite"
+  ],
+  "descriptive_endpoints": [
+    "current_state versus each binary_decision relation: equal / current_state_refines / decision_refines / incomparable",
+    "current_state versus joint_decision_suite relation",
+    "block counts for every partition",
+    "parameter-to-target compression ratio",
+    "fraction of fibers where complete current state is sufficient for each future target",
+    "fraction of fibers where future decision distinguishes dormant aliases inside one current-state class",
+    "worked examples for both over-detailed current state and under-detailed current state"
+  ],
+  "interpretation": {
+    "target_sufficient_quotient": "the equivalence classes induced by the declared target; identifying a class is sufficient for that target even if parameter-world identity remains unresolved",
+    "current_state_over_detailed": "current_state strictly refines target partition, so some current-state distinctions are irrelevant to the target",
+    "current_state_under_detailed": "current_state does not refine target partition, so at least one current-state alias class contains multiple future target values",
+    "incomparable": "both unnecessary current-state distinctions and dormant target-relevant aliases occur in the same fiber"
+  },
+  "claim_boundary": [
+    "Partition identities are elementary finite-set mathematics and are not claimed as new mathematics.",
+    "This phase is a synthesis of already frozen W1 results, not a fresh independent validation.",
+    "Block-count compression is not statistical dimension reduction and does not assign probabilities.",
+    "No claim is made that one quotient is sufficient for undeclared future targets.",
+    "The purpose is to define the exact inferential object to carry into external empirical validation."
+  ],
+  "stop_rule": "After Phase X, do not add further synthetic BAM worlds or transformations to improve the quotient pattern; the next scientific validation must use an independently fixed external ecological system or transformation contract."
+}
