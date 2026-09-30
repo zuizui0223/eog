@@ -9,12 +9,14 @@ from __future__ import annotations
 from collections import Counter
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 from typing import Any
-from urllib.request import Request, urlopen
+from urllib.parse import urlparse
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 import numpy as np
 import pandas as pd
@@ -40,6 +42,48 @@ USER_AGENT = "EOG-GreatLakes-AM-Bridge-OnceOnly/1.0"
 
 class ExecutionStop(RuntimeError):
     pass
+
+
+class _DropAuthOnCrossHostRedirect(HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        redirected = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if redirected is None:
+            return None
+        if urlparse(req.full_url).netloc != urlparse(newurl).netloc:
+            redirected.remove_header("Authorization")
+        return redirected
+
+
+_OPENER = build_opener(_DropAuthOnCrossHostRedirect())
+
+
+def verify_dryad_token() -> str:
+    token = os.environ.get("DRYAD_TOKEN", "").strip()
+    if not token:
+        raise ExecutionStop(
+            "DRYAD_TOKEN is absent; stop before any RDS payload request"
+        )
+    request = Request(
+        BASE + "/api/v2/test",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "User-Agent": USER_AGENT,
+            "Accept": "application/json",
+        },
+        method="GET",
+    )
+    try:
+        with _OPENER.open(request, timeout=60) as response:
+            if int(response.status) != 200:
+                raise ExecutionStop(
+                    f"Dryad token preflight returned HTTP {response.status}"
+                )
+            response.read(4096)
+    except Exception as exc:
+        raise ExecutionStop(
+            f"Dryad token preflight failed before RDS payload access: {exc}"
+        ) from exc
+    return token
 
 
 def canonical_sha256(value: object) -> str:
@@ -70,16 +114,17 @@ def load_authorized_contract() -> tuple[dict[str, Any], dict[str, Any]]:
     return gate1, contract
 
 
-def download_bound_file(spec: dict[str, Any]) -> bytes:
+def download_bound_file(spec: dict[str, Any], token: str) -> bytes:
     request = Request(
         BASE + str(spec["download_api_path"]),
         headers={
+            "Authorization": f"Bearer {token}",
             "User-Agent": USER_AGENT,
             "Accept-Encoding": "identity",
         },
         method="GET",
     )
-    with urlopen(request, timeout=90) as response:
+    with _OPENER.open(request, timeout=90) as response:
         if int(response.status) != 200:
             raise ExecutionStop(
                 f"{spec['path']} download returned HTTP {response.status}"
@@ -291,27 +336,57 @@ def execute_bridge(
 
 
 def main() -> int:
-    gate1, contract = load_authorized_contract()
-    habitat_spec = contract["frozen_files"]["habitat"]
-    catch_spec = contract["frozen_files"]["catch"]
+    payload_requests = 0
+    payload_bytes_opened = 0
+    values_parsed = False
+    try:
+        gate1, contract = load_authorized_contract()
+        token = verify_dryad_token()
+        habitat_spec = contract["frozen_files"]["habitat"]
+        catch_spec = contract["frozen_files"]["catch"]
 
-    habitat_body = download_bound_file(habitat_spec)
-    catch_body = download_bound_file(catch_spec)
+        habitat_body = download_bound_file(habitat_spec, token)
+        payload_requests += 1
+        payload_bytes_opened += len(habitat_body)
+        catch_body = download_bound_file(catch_spec, token)
+        payload_requests += 1
+        payload_bytes_opened += len(catch_body)
 
-    habitat = rds_bytes_to_frame(
-        habitat_body,
-        contract["rds_parser"]["habitat_exact_columns"],
-    )
-    catch = rds_bytes_to_frame(
-        catch_body,
-        contract["rds_parser"]["catch_exact_columns"],
-    )
-    result = execute_bridge(habitat, catch)
-    result["gate1_fingerprint"] = gate1["fingerprint"]
-    result["source_files"] = {
-        "habitat_sha256": habitat_spec["sha256"],
-        "catch_sha256": catch_spec["sha256"],
-    }
+        habitat = rds_bytes_to_frame(
+            habitat_body,
+            contract["rds_parser"]["habitat_exact_columns"],
+        )
+        catch = rds_bytes_to_frame(
+            catch_body,
+            contract["rds_parser"]["catch_exact_columns"],
+        )
+        values_parsed = True
+        result = execute_bridge(habitat, catch)
+        result["gate1_fingerprint"] = gate1["fingerprint"]
+        result["source_files"] = {
+            "habitat_sha256": habitat_spec["sha256"],
+            "catch_sha256": catch_spec["sha256"],
+        }
+        result["rds_payload_requests"] = payload_requests
+        result["rds_payload_bytes_opened"] = payload_bytes_opened
+        result["rds_values_parsed"] = values_parsed
+    except Exception as exc:
+        result = {
+            "schema": "eog.bam_greatlakes_barrier_external_bridge.result.v1",
+            "status": "stop_before_or_during_once_only_execution",
+            "reason": str(exc),
+            "rds_payload_requests": payload_requests,
+            "rds_payload_bytes_opened": payload_bytes_opened,
+            "rds_values_parsed": values_parsed,
+            "model_fits": 0,
+            "retry_allowed": payload_bytes_opened == 0,
+            "scientific_effect": (
+                "none_pre_response_transport_stop"
+                if payload_bytes_opened == 0
+                else "terminal_partial_payload_stop_no_rerun"
+            ),
+        }
+
     result["fingerprint"] = canonical_sha256(
         {key: value for key, value in result.items() if key != "fingerprint"}
     )
