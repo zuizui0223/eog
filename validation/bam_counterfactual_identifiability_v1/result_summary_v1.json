@@ -1,0 +1,191 @@
+{
+  "schema": "eog.bam_counterfactual_identifiability.result_summary.v1",
+  "status": "completed_preregistered_known_truth_benchmark",
+  "protocol": "validation/bam_counterfactual_identifiability_v1/protocol_v1.json",
+  "protocol_commit": "fad0a6e931bac9012fb978d293dadac4d041d012",
+  "parent_result": "validation/known_truth_bam_v3/result_summary_v3.json",
+  "parent_result_fingerprint": "7bbc2683dee1f277474995e84d44a2b840abc4d57e429276880233bea5225415",
+  "authoritative_run": 36668189863,
+  "authoritative_job": 109737296684,
+  "executed_head": "62ed089b48653845e6e8ee9ad3143e8e4ed7ac6b",
+  "artifact_id": 11076812787,
+  "artifact_digest": "sha256:af45c87a8c49f7dd56f8c78bb17e974c2d64c8c51d56092479e3d9a4451d0a44",
+  "result_fingerprint": "77314699090fd3b0a19066363eab0589c3a0c89ac41aabbce49873c84b468172",
+  "design": {
+    "systems": 12,
+    "truth_cases": 768,
+    "current_evidence": "complete perfect current distribution G (E1)",
+    "counterfactual_probes": [
+      "release_A: B intersect M",
+      "release_B: A intersect M",
+      "release_M: A intersect B"
+    ],
+    "targets": [
+      "full BAM state",
+      "exact counterfactual occupied map",
+      "binary release-expands-current-support decision"
+    ]
+  },
+  "identifiability_hierarchy": {
+    "full_bam_state_identified": {
+      "count": 25,
+      "denominator": 768,
+      "fraction": 0.032552083333333336
+    },
+    "joint_three_probe_exact_counterfactual_signature_identified": {
+      "count": 174,
+      "denominator": 768,
+      "fraction": 0.2265625
+    },
+    "all_three_binary_release_decisions_identified": {
+      "count": 636,
+      "denominator": 768,
+      "fraction": 0.828125
+    },
+    "at_least_one_binary_release_decision_unresolved": {
+      "count": 132,
+      "denominator": 768,
+      "fraction": 0.171875
+    }
+  },
+  "among_743_bam_state_nonidentified_truths": {
+    "exact_maps_invariant_and_all_binary_decisions_invariant": {
+      "count": 149,
+      "fraction": 0.20053835800807537
+    },
+    "at_least_one_exact_map_divergent_but_all_binary_decisions_invariant": {
+      "count": 462,
+      "fraction": 0.6218034993270525
+    },
+    "at_least_one_binary_release_decision_divergent": {
+      "count": 132,
+      "fraction": 0.17765814266487215
+    },
+    "at_least_one_exact_counterfactual_divergent": {
+      "count": 594,
+      "fraction": 0.7994616419919246
+    }
+  },
+  "exact_divergence_pattern_among_nonidentified": {
+    "none": 149,
+    "A": 15,
+    "B": 201,
+    "M": 202,
+    "AB": 51,
+    "AM": 24,
+    "BM": 36,
+    "ABM": 65
+  },
+  "binary_divergence_pattern_among_nonidentified": {
+    "none": 611,
+    "A": 33,
+    "M": 16,
+    "AB": 63,
+    "AM": 20
+  },
+  "full_bam_state_measurement_burden": {
+    "distribution": {
+      "0": 25,
+      "1": 232,
+      "2": 313,
+      "3": 150,
+      "4": 48
+    },
+    "mean": 1.953125,
+    "median": 2.0
+  },
+  "by_release_axis": {
+    "A": {
+      "exact_map_identified": 613,
+      "exact_map_divergent": 155,
+      "binary_decision_identified": 652,
+      "binary_decision_divergent": 116,
+      "exact_map_minimum_measurements": {
+        "0": 613,
+        "1": 139,
+        "2": 16
+      },
+      "binary_decision_minimum_measurements": {
+        "0": 652,
+        "1": 112,
+        "2": 4
+      },
+      "mean_exact_map_burden": 0.22265625,
+      "mean_binary_decision_burden": 0.15625,
+      "strict_exact_map_saving_vs_full_bam_state": 709,
+      "strict_binary_decision_saving_vs_full_bam_state": 730
+    },
+    "B": {
+      "exact_map_identified": 415,
+      "exact_map_divergent": 353,
+      "binary_decision_identified": 705,
+      "binary_decision_divergent": 63,
+      "exact_map_minimum_measurements": {
+        "0": 415,
+        "1": 199,
+        "2": 151,
+        "3": 3
+      },
+      "binary_decision_minimum_measurements": {
+        "0": 705,
+        "1": 63
+      },
+      "mean_exact_map_burden": 0.6640625,
+      "mean_binary_decision_burden": 0.08203125,
+      "strict_exact_map_saving_vs_full_bam_state": 603,
+      "strict_binary_decision_saving_vs_full_bam_state": 738
+    },
+    "M": {
+      "exact_map_identified": 441,
+      "exact_map_divergent": 327,
+      "binary_decision_identified": 732,
+      "binary_decision_divergent": 36,
+      "exact_map_minimum_measurements": {
+        "0": 441,
+        "1": 204,
+        "2": 118,
+        "3": 5
+      },
+      "binary_decision_minimum_measurements": {
+        "0": 732,
+        "1": 34,
+        "2": 2
+      },
+      "mean_exact_map_burden": 0.5924479166666666,
+      "mean_binary_decision_burden": 0.049479166666666664,
+      "strict_exact_map_saving_vs_full_bam_state": 644,
+      "strict_binary_decision_saving_vs_full_bam_state": 741
+    }
+  },
+  "joint_three_probe_exact_signature_class_count_distribution": {
+    "1": 174,
+    "2": 122,
+    "3": 211,
+    "4": 119,
+    "5": 78,
+    "6": 46,
+    "9": 18
+  },
+  "predeclared_verdicts": {
+    "H1_counterfactual_divergence_exists": "SUPPORTED",
+    "H2_harmless_nonidentification_exists": "SUPPORTED",
+    "H3_target_coarsening_burden_monotonicity": "SUPPORTED",
+    "H4_strict_decision_saving_exists": "SUPPORTED"
+  },
+  "H3_monotonicity_violations": 0,
+  "interpretation": [
+    "Mechanism nonidentification and decision nonidentification are distinct inferential states.",
+    "Complete current G identified the full BAM state in only 25/768 truths, but all three frozen binary release decisions were already identified in 636/768 truths.",
+    "Among 743 mechanism-nonidentified truths, 462 had exact counterfactual-map disagreement while retaining agreement on all three binary release decisions.",
+    "Only 132/743 mechanism-nonidentified truths were decision-relevant under at least one frozen binary release probe.",
+    "Under the shared direct-measurement library, target-specific evidence burden never exceeded the burden for the finer target: binary decision <= exact counterfactual map <= full BAM state.",
+    "The result supports target-specific identifiability analysis rather than treating full process recovery as a prerequisite for every ecological decision."
+  ],
+  "claim_boundary": [
+    "The three release probes are idealised finite-world mechanism probes, not literal climate, interaction-removal or corridor management interventions.",
+    "Counts and burden bounds are conditional on the frozen 12-system candidate universes and direct-measurement library.",
+    "A decision-identified fiber does not identify the historical BAM mechanism.",
+    "The result does not establish generic value-of-information or experimental-design theory.",
+    "The result does not alter the frozen JBI BAM inverse-identifiability manuscript or EOG-WF empirical denominator."
+  ]
+}
