@@ -1,0 +1,54 @@
+{
+  "schema": "eog.bam_decision_robustness_margin.protocol.v1",
+  "status": "frozen_before_implementation_and_scoring",
+  "parent_programme": {
+    "counterfactual_result": "validation/bam_counterfactual_identifiability_v1/result_summary_v1.json",
+    "counterfactual_result_fingerprint": "77314699090fd3b0a19066363eab0589c3a0c89ac41aabbce49873c84b468172",
+    "relationship": "successor robustness audit; does not alter the frozen Phase-II result"
+  },
+  "scientific_question": "When a binary BAM counterfactual decision is identified inside the declared finite candidate universe, how strongly does that conclusion depend on excluding nearby same-G BAM decompositions from the world universe?",
+  "objects": {
+    "current_distribution": "G=A intersect B intersect M",
+    "same_G_completion_universe": "C(G) = all binary triples (A,B,M) on the same finite node set satisfying A intersect B intersect M = G",
+    "release_A_decision": "1 if (B intersect M) contains any node outside G, else 0",
+    "release_B_decision": "1 if (A intersect M) contains any node outside G, else 0",
+    "release_M_decision": "1 if (A intersect B) contains any node outside G, else 0",
+    "axis_state_distance": "Hamming distance across all 3 x |X| binary A/B/M node states",
+    "completion_flip_margin": "minimum axis-state Hamming distance from any current E1 survivor to any same-G completion with the opposite binary release decision; 0 when the current E1 survivor fiber is already decision-divergent"
+  },
+  "theorem_targets": [
+    {
+      "id": "C1_complete_decomposition_closure",
+      "statement": "For any finite X and proper current distribution G subset X, the complete same-G decomposition universe C(G) contains both binary outcomes for every single-axis release decision.",
+      "corollary": "No nontrivial single-axis binary release decision is identified from G alone under unrestricted BAM decomposition completion."
+    },
+    {
+      "id": "C2_single_world_flip_margin",
+      "statement": "For an identified release-axis decision, the exact nearest opposite-decision same-G completion has a closed-form Hamming margin: if release already expands, one edit is required for each outside-G node in the released map; if it does not expand, minimize over outside-G nodes the edits needed to set the two retained axes to 1 and the released axis to 0."
+    },
+    {
+      "id": "C3_fiber_margin",
+      "statement": "For a decision-identified E1 survivor fiber, the world-universe robustness margin is the minimum single-world flip margin over its survivors. The decision is stable to arbitrary same-G completion additions at Hamming radius strictly below this margin and can be reversed at the margin."
+    }
+  ],
+  "verification": {
+    "small_universe_exhaustion": "exhaustively enumerate every A/B/M decomposition for finite fixtures up to three nodes and verify C1-C3 against brute force",
+    "frozen_benchmark": "apply the exact margin to the unchanged 12-system / 768-truth E1 survivor fibers from Phase II"
+  },
+  "primary_outputs": [
+    "identified versus unresolved binary decisions by release axis",
+    "completion flip-margin distribution for every identified binary decision",
+    "fraction of identified decisions with margin 1, 2, 3, or larger",
+    "maximum and median margin by axis",
+    "fraction of declared-universe identified decisions that are nontrivial and therefore become unresolved under complete decomposition closure"
+  ],
+  "interpretation_rule": "The completion margin measures logical dependence on the declared BAM world-family boundary. It does not assign probability or ecological plausibility to undeclared completions.",
+  "stop_rules": [
+    "Do not label arbitrary same-G completions ecologically plausible.",
+    "Do not reinterpret the Phase-II 82.8 percent decision-identification result as invalid; it remains exact conditional on its declared universe.",
+    "Do not tune the 12 systems, E1 fibers, release targets or distance metric after scoring.",
+    "Do not add a named species to rescue or strengthen a margin pattern.",
+    "Do not claim novelty for generic robust decision making, structural uncertainty, imprecise probability or model-set sensitivity."
+  ],
+  "candidate_contribution": "An exact BAM-specific robustness certificate for how far a declared occurrence-conditioned survivor fiber is from an undeclared same-G decomposition that reverses a counterfactual ecological decision."
+}
