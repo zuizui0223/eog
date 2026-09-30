@@ -12,9 +12,13 @@ from eog.v2.bam_ecological_expansion_margin import (
     build_expanded_ecological_lattice,
     declared_world_coordinates,
 )
+from eog.v2.bam_counterfactual_identifiability import (
+    exact_minimum_truth_target_measurements,
+)
 from eog.v2.bam_future_target_evidence import (
-    exact_future_target_evidence_plan,
-    parameter_target_plan,
+    current_state_measurements,
+    full_parameter_world_target,
+    parameter_measurements,
 )
 from eog.v2.bam_structured_counterfactuals import (
     expanded_variant_counterfactual,
@@ -114,10 +118,30 @@ def run() -> dict[str, object]:
             if int(truth_variant.occupied_mask) != G:
                 raise RuntimeError("embedded truth variant does not reproduce truth G")
 
-            world_plan = parameter_target_plan(
+            # Evidence libraries are target-independent. Build them once per truth/fiber
+            # rather than reconstructing current BAM state for every target.
+            state_library = current_state_measurements(
+                system,
                 survivors,
                 survivor_ids,
                 truth_variant.variant_id,
+            )
+            parameter_library = parameter_measurements(
+                survivors,
+                survivor_ids,
+                truth_variant.variant_id,
+            )
+            combined_library = (*state_library, *parameter_library)
+
+            parameter_world_target = full_parameter_world_target(
+                survivors,
+                survivor_ids,
+            )
+            world_plan = exact_minimum_truth_target_measurements(
+                survivor_ids,
+                truth_variant.variant_id,
+                parameter_world_target,
+                parameter_library,
             )
             if world_plan.minimum_size is None:
                 raise RuntimeError("complete parameter library failed to identify W1 truth world")
@@ -139,27 +163,49 @@ def run() -> dict[str, object]:
                     for world_id, outcome in outcomes.items()
                 }
 
-                exact_plan = exact_future_target_evidence_plan(
-                    system,
-                    survivors,
+                exact_state = exact_minimum_truth_target_measurements(
                     survivor_ids,
                     truth_variant.variant_id,
                     exact_target,
+                    state_library,
                 )
-                binary_plan = exact_future_target_evidence_plan(
-                    system,
-                    survivors,
+                exact_parameter = exact_minimum_truth_target_measurements(
+                    survivor_ids,
+                    truth_variant.variant_id,
+                    exact_target,
+                    parameter_library,
+                )
+                exact_combined = exact_minimum_truth_target_measurements(
+                    survivor_ids,
+                    truth_variant.variant_id,
+                    exact_target,
+                    combined_library,
+                )
+                binary_state = exact_minimum_truth_target_measurements(
                     survivor_ids,
                     truth_variant.variant_id,
                     binary_target,
+                    state_library,
+                )
+                binary_parameter = exact_minimum_truth_target_measurements(
+                    survivor_ids,
+                    truth_variant.variant_id,
+                    binary_target,
+                    parameter_library,
+                )
+                binary_combined = exact_minimum_truth_target_measurements(
+                    survivor_ids,
+                    truth_variant.variant_id,
+                    binary_target,
+                    combined_library,
                 )
 
-                if not binary_plan.parameter_only.evidence_library_sufficient:
+                if not binary_parameter.evidence_library_sufficient:
                     raise RuntimeError(
                         f"parameter library failed binary target: {spec.system_id} "
                         f"{truth.world_id} {transformation}"
                     )
-                if not exact_plan.parameter_only.evidence_library_sufficient:
+                if not exact_parameter.evidence_library_sufficient:
                     raise RuntimeError(
                         f"parameter library failed exact target: {spec.system_id} "
                         f"{truth.world_id} {transformation}"
@@ -170,14 +216,14 @@ def run() -> dict[str, object]:
                     "binary_target_class_count": len(set(binary_target.values())),
                     "truth_binary_value": bool(binary_target[truth_variant.variant_id]),
                     "exact_map": {
-                        "state_only": _plan_row(exact_plan.state_only),
-                        "parameter_only": _plan_row(exact_plan.parameter_only),
-                        "combined": _plan_row(exact_plan.combined),
+                        "state_only": _plan_row(exact_state),
+                        "parameter_only": _plan_row(exact_parameter),
+                        "combined": _plan_row(exact_combined),
                     },
                     "binary_decision": {
-                        "state_only": _plan_row(binary_plan.state_only),
-                        "parameter_only": _plan_row(binary_plan.parameter_only),
-                        "combined": _plan_row(binary_plan.combined),
+                        "state_only": _plan_row(binary_state),
+                        "parameter_only": _plan_row(binary_parameter),
+                        "combined": _plan_row(binary_combined),
                     },
                 }
 
@@ -192,9 +238,9 @@ def run() -> dict[str, object]:
                             "truth_variant_id": truth_variant.variant_id,
                             "survivor_count": len(survivors),
                             "binary_target_class_count": len(set(binary_target.values())),
-                            "state_only": _plan_row(binary_plan.state_only),
-                            "parameter_only": _plan_row(binary_plan.parameter_only),
-                            "combined": _plan_row(binary_plan.combined),
+                            "state_only": _plan_row(binary_state),
+                            "parameter_only": _plan_row(binary_parameter),
+                            "combined": _plan_row(binary_combined),
                         }
                     )
 
