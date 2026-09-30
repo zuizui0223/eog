@@ -8,18 +8,18 @@
     "rationale": "biogeographic inverse-identifiability theory is the scientific center; EOG v3 remains implementation rather than title-level novelty"
   },
   "validated_manuscript_artifact": {
-    "source_branch_head": "585f8fc2fba4f72e9268e81e85dd7fe154dc3e17",
-    "workflow_run_id": 36627138396,
-    "artifact_id": 11060433355,
-    "artifact_digest": "sha256:d519df3c474c35e2f53671c65fb9e6d65a83433cd828b9f95f2d516adba63866",
+    "source_branch_head": "3661a6c1c9653ae37a06602cb4ac6dfac6276bf3",
+    "workflow_run_id": 36658724393,
+    "artifact_id": 11073670784,
+    "artifact_digest": "sha256:9bc6dc2ee4e43332a4a8bd0fe3a1306081d781270430930be245c7fcddc48bb4",
     "jbi_readiness_fingerprint": "f77df144f64cf53988a0fcee424342d088985fd0194c0b5b6dd09c16850c0f31",
     "manuscript_audit_fingerprint": "dad9a66ff70d851af1a0de879e1a4bec16358a3dad9e72067b2a24c327c0d1bb"
   },
   "validated_anonymous_review_archive": {
-    "workflow_run_id": 36627138397,
-    "artifact_id": 11061310897,
-    "artifact_digest": "sha256:3211e4e5459bd95a5ef5c736a2b6eca0b670b268613ee012deac98305c31fe7b",
-    "zip_sha256": "db3b9f0b7d5d2af81040aa50552dad1cb79104b912e835c9f32edf6f3ed469e5",
+    "workflow_run_id": 36658724507,
+    "artifact_id": 11073238349,
+    "artifact_digest": "sha256:4dad559ae861805835d0de188eeb168f91dccf36d72de3c9d62522f5f7f978b4",
+    "zip_sha256": "716f8a36b3323251137270a877046cf46188318412565f8c1f87f23cebb23bfc",
     "file_count": 62,
     "privacy_findings": 0,
     "isolated_install": "PASS",
