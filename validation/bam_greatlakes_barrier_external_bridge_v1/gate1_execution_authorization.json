@@ -1,0 +1,54 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.gate1_authorization.v1",
+  "status": "authorized",
+  "gate0_fingerprint": "d40720d00a6632e7bb43a444e83ca1c6a9afd50fa1b42851083952c8c9e1a3d6",
+  "gate0_run_id": 36745236710,
+  "gate0_artifact_id": 11111842998,
+  "allowed_payload": {
+    "README.md": "full text only"
+  },
+  "forbidden_payload": [
+    "hab_variables.rds",
+    "pooled_catch_effort_by_species.rds",
+    "all Stan files",
+    "oikos_data_anlaysis.R"
+  ],
+  "readme_expectations": {
+    "required_file_names": [
+      "hab_variables.rds",
+      "pooled_catch_effort_by_species.rds"
+    ],
+    "required_habitat_columns": [
+      "period",
+      "pair_id",
+      "Stream.Name",
+      "barrier",
+      "position",
+      "segment",
+      "width",
+      "max_depth",
+      "prop_clay",
+      "prop_silt",
+      "prop_sand",
+      "prop_gravel",
+      "prop_boulder"
+    ],
+    "required_catch_columns": [
+      "pair_id",
+      "Year",
+      "Stream.Name",
+      "barrier",
+      "position",
+      "segment",
+      "survey_length",
+      "species",
+      "total_caught",
+      "period"
+    ],
+    "required_period_tokens": [
+      "90s",
+      "2023"
+    ]
+  },
+  "next_stage_if_pass": "freeze exact RDS parser and bridge execution contract before any RDS payload access"
+}
