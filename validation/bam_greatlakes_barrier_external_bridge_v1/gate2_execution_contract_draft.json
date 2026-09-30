@@ -1,0 +1,152 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.gate2_execution_contract_draft.v1",
+  "status": "not_authorized_until_gate1_pass_certificate_is_committed",
+  "gate1_prerequisite": {
+    "certificate_path": "validation/bam_greatlakes_barrier_external_bridge_v1/gate1_readme_certificate.json",
+    "required_status": "readme_schema_ready",
+    "fingerprint": null
+  },
+  "frozen_files": {
+    "habitat": {
+      "path": "hab_variables.rds",
+      "size_bytes": 22735,
+      "sha256": "4e9c15e8eab521eeb1397ccd99eb485506619da634955e0144969bf35dbb3ffc",
+      "download_api_path": "/api/v2/files/4883239/download"
+    },
+    "catch": {
+      "path": "pooled_catch_effort_by_species.rds",
+      "size_bytes": 47086,
+      "sha256": "e299d189f9daeea32b3a4980ab4bad1df0fc65195abe85d86f50ddecd383b0e6",
+      "download_api_path": "/api/v2/files/4883241/download"
+    }
+  },
+  "rds_parser": {
+    "implementation": "base R readRDS via Rscript; no project R analysis code is executed",
+    "required_object_type": "data.frame or subclass accepted by is.data.frame",
+    "temporary_transport": "write.table UTF-8 TSV in a private temporary directory; temporary row-level exports are deleted before exit and are never uploaded",
+    "habitat_exact_columns": [
+      "period",
+      "pair_id",
+      "Stream.Name",
+      "barrier",
+      "position",
+      "segment",
+      "width",
+      "max_depth",
+      "prop_clay",
+      "prop_silt",
+      "prop_sand",
+      "prop_gravel",
+      "prop_boulder"
+    ],
+    "catch_exact_columns": [
+      "pair_id",
+      "pair_id_num",
+      "Year",
+      "Stream.Name",
+      "stream_id",
+      "barrier",
+      "position",
+      "segment",
+      "survey_length",
+      "species",
+      "total_caught",
+      "yearBuilt",
+      "barrierAgeAtSample",
+      "period"
+    ],
+    "extra_or_missing_column": "terminal_stop",
+    "period_values": {
+      "habitat": [
+        "90s",
+        "2023"
+      ],
+      "catch": [
+        "90s",
+        "2023"
+      ]
+    },
+    "year_period_consistency": {
+      "2023": [
+        2023
+      ],
+      "90s": [
+        1996,
+        1997
+      ]
+    }
+  },
+  "engine_binding": {
+    "path": "src/eog/v2/bam_greatlakes_barrier_external_bridge.py",
+    "git_blob_sha": "2a6c0aa4c4e63ed06e354e4c066537b5265367a1",
+    "world_count": 35,
+    "A_levels": [
+      "q25",
+      "q50",
+      "q75",
+      "q90",
+      "open"
+    ],
+    "M_levels": [
+      "barrier_closed_h1",
+      "barrier_closed_h2",
+      "barrier_closed_h5",
+      "barrier_open_h1",
+      "barrier_open_h2",
+      "barrier_open_h5",
+      "open_all"
+    ],
+    "B_level": "unrestricted"
+  },
+  "cohort": {
+    "eligibility": "every species with >=2 distinct 90s positive physical nodes",
+    "species_order": "lexicographic after exact README-defined species strings are stripped",
+    "heldout_zero_positive_species": "retain and report",
+    "post_open_species_selection_or_exclusion_allowed": false
+  },
+  "once_only_execution_order": [
+    "download and verify both frozen RDS files",
+    "parse both complete RDS objects with the frozen parser",
+    "validate exact schemas and year/period consistency",
+    "construct response-independent habitat scaling and thresholds",
+    "join catch to habitat under frozen keys",
+    "derive the full eligible species cohort from 90s positives only",
+    "for each eligible species evaluate all 35 worlds on 90s positives",
+    "without retuning evaluate all 2023 positive physical nodes as hard witnesses",
+    "write summary certificate only; do not persist raw parsed rows"
+  ],
+  "primary_outputs": [
+    "eligible species count",
+    "per-species calibration-positive physical-node count",
+    "per-species heldout-positive physical-node count",
+    "per-species calibration survivor-world count",
+    "per-species final survivor-world count",
+    "per-heldout-positive number/fraction of calibration survivors falsified",
+    "per-heldout-positive A/M/AM witness attribution"
+  ],
+  "secondary_outputs": [
+    "species with no heldout positive witnesses",
+    "species with any heldout contraction",
+    "species with complete heldout falsification of calibration survivor fiber",
+    "species retaining multiple worlds after all positive evidence",
+    "aggregate distribution of survivor contraction fractions"
+  ],
+  "terminal_rules": {
+    "file checksum or size drift": "STOP",
+    "RDS object not data.frame": "STOP",
+    "schema mismatch": "STOP",
+    "year-period inconsistency": "STOP",
+    "duplicate habitat join key": "STOP",
+    "catch row without habitat match": "STOP",
+    "invalid habitat IQR": "STOP",
+    "post-response world or cohort retuning": "PROHIBITED"
+  },
+  "claim_boundary": [
+    "retrospective external bridge, not fresh confirmatory evidence",
+    "primary empirical scope is A/M with B unrestricted",
+    "positive records are hard witnesses; 2023 nondetections are not absences",
+    "survivor contraction is not causal effect size of dams",
+    "species with stronger contraction are not ranked as more barrier-sensitive"
+  ],
+  "authorization_amendment_rule": "after Gate1 PASS, only status and Gate1 fingerprint may be filled; no other field may change before RDS payload access"
+}
