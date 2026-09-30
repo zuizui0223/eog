@@ -129,3 +129,18 @@ def test_species_bridge_uses_heldout_positive_as_world_witness():
         if row["node_id"] == "1|BarrierCreek|upstream|1"
     )
     assert crossing["eliminated_world_count"] > 0
+
+
+def test_period_sampling_omission_does_not_remove_physical_movement_node():
+    habitat = _habitat()
+    # Remove one 2023 sampled row, leaving the physical site documented in the 90s.
+    keep = ~(
+        (habitat["period"] == "2023")
+        & (habitat["Stream.Name"] == "BarrierCreek")
+        & (habitat["position"] == "downstream")
+        & (habitat["segment"] == 2)
+    )
+    habitat = habitat.loc[keep].reset_index(drop=True)
+    graph = build_period_graph(habitat, "2023", barrier_open=True)
+    assert "1|BarrierCreek|downstream|2" in graph
+    assert "1|BarrierCreek|downstream|1" in graph["1|BarrierCreek|downstream|2"]
