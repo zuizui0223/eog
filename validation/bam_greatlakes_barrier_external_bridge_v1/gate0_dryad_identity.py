@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import re
 from typing import Any
 from urllib.parse import quote
 from urllib.request import Request, urlopen
@@ -80,6 +81,28 @@ def _embedded_list(payload: dict[str, Any], rel: str) -> list[dict[str, Any]]:
     return rows
 
 
+_VERSION_SELF_RE = re.compile(r"^/api/v2/versions/(?P<id>[1-9][0-9]*)$")
+
+
+def _version_id(version: dict[str, Any]) -> int:
+    raw = version.get("id")
+    if isinstance(raw, int) and raw > 0:
+        return raw
+    links = version.get("_links")
+    if not isinstance(links, dict):
+        raise Gate0Stop("Dryad version item missing _links")
+    self_link = links.get("self")
+    if not isinstance(self_link, dict):
+        raise Gate0Stop("Dryad version item missing self link")
+    href = self_link.get("href")
+    if not isinstance(href, str):
+        raise Gate0Stop("Dryad version self link is not a string")
+    match = _VERSION_SELF_RE.fullmatch(href)
+    if match is None:
+        raise Gate0Stop(f"unexpected Dryad version self href: {href!r}")
+    return int(match.group("id"))
+
+
 def evaluate(
     dataset: dict[str, Any],
     versions_payload: dict[str, Any],
@@ -103,9 +126,7 @@ def evaluate(
             f"expected exactly one published Dryad version, found {len(versions)}"
         )
     version = versions[0]
-    version_id = version.get("id")
-    if not isinstance(version_id, int):
-        raise Gate0Stop("Dryad version id is not an integer")
+    version_id = _version_id(version)
 
     files = _embedded_list(files_payload, "stash:files")
     by_name: dict[str, dict[str, Any]] = {}
@@ -189,9 +210,12 @@ def main() -> int:
     dataset = _get_json(dataset_path)
     versions_payload = _get_json(versions_path)
     versions = _embedded_list(versions_payload, "stash:versions")
-    if len(versions) != 1 or not isinstance(versions[0].get("id"), int):
-        raise Gate0Stop("cannot resolve exact single Dryad version before files request")
-    version_id = int(versions[0]["id"])
+    if len(versions) != 1:
+        raise Gate0Stop(
+            f"cannot resolve exact single Dryad version before files request: "
+            f"found {len(versions)}"
+        )
+    version_id = _version_id(versions[0])
     files_payload = _get_json(f"/api/v2/versions/{version_id}/files")
 
     result = evaluate(dataset, versions_payload, files_payload, protocol)
