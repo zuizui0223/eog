@@ -1,0 +1,33 @@
+name: BAM stochastic counterfactual targets v1
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/independent_stochastic_counterfactual_generator_v1.py"
+      - "benchmarks/run_bam_stochastic_counterfactual_targets_v1.py"
+      - "tests/test_bam_stochastic_counterfactual_targets.py"
+      - "validation/bam_stochastic_counterfactual_targets_v1/**"
+      - ".github/workflows/bam-stochastic-counterfactual-targets-v1.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Verify independent stochastic counterfactual generator
+        run: python -m pytest tests/test_bam_stochastic_counterfactual_targets.py -q
+      - name: Run frozen 384-run stochastic target audit
+        run: |
+          python benchmarks/run_bam_stochastic_counterfactual_targets_v1.py \
+            --output build/bam_stochastic_counterfactual_targets_v1/result_v1.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-stochastic-counterfactual-targets-v1
+          path: build/bam_stochastic_counterfactual_targets_v1/result_v1.json
+          if-no-files-found: error
