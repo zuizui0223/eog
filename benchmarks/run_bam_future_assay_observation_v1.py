@@ -15,8 +15,8 @@ from eog.v2.bam_future_assay_observation import (
     PARAMETER_FIELDS,
     build_action_supports,
     build_joint_hypotheses,
-    exact_minimum_robust_target_design,
-    repeat_equivalence_violations,
+    exact_minimum_deterministic_target_design,
+    repeat_equivalence_violations_deterministic,
 )
 from eog.v2.bam_structured_counterfactuals import (
     expanded_variant_counterfactual,
@@ -132,25 +132,25 @@ def run() -> dict[str, object]:
 
                 hypotheses = build_joint_hypotheses(variants, target)
                 actions = build_action_supports(variants, hypotheses)
-                violations = repeat_equivalence_violations(hypotheses, actions)
+                violations = repeat_equivalence_violations_deterministic(hypotheses, actions)
                 repeat_violations += violations
 
-                assay_only = exact_minimum_robust_target_design(
+                assay_only = exact_minimum_deterministic_target_design(
                     hypotheses,
                     actions,
                     available_action_ids=assay_ids,
                 )
-                assay_repeat = exact_minimum_robust_target_design(
+                assay_repeat = exact_minimum_deterministic_target_design(
                     hypotheses,
                     actions,
                     available_action_ids=assay_repeat_ids,
                 )
-                calibrated = exact_minimum_robust_target_design(
+                calibrated = exact_minimum_deterministic_target_design(
                     hypotheses,
                     actions,
                     available_action_ids=calibrated_ids,
                 )
-                full = exact_minimum_robust_target_design(
+                full = exact_minimum_deterministic_target_design(
                     hypotheses,
                     actions,
                     available_action_ids=full_ids,
