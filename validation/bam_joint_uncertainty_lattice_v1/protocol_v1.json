@@ -1,0 +1,96 @@
+{
+  "schema": "eog.bam_joint_uncertainty_lattice.protocol.v1",
+  "status": "frozen_before_implementation_and_scoring",
+  "parent_programmes": {
+    "structured_future_targets": {
+      "result": "validation/bam_structured_counterfactuals_v1/result_summary_v1.json",
+      "fingerprint": "f502fb647ba4666f5c40ddbd5639123f3e0296fe492dd97a1ec19ec246531cb1"
+    },
+    "future_target_evidence": {
+      "result": "validation/bam_future_target_evidence_v1/result_summary_v1.json",
+      "fingerprint": "b87bfa721e21acfdc0a03239b0ed556f77bd77e3ee49f25c11d56ece02b8db58"
+    },
+    "assay_observation": {
+      "result": "validation/bam_future_assay_observation_v1/result_summary_v1.json",
+      "fingerprint": "3bed33f39d2c8845cb52989855f2ab024327464870224a11568ebb7436bbe332"
+    },
+    "stochastic_assay_risk": {
+      "result": "validation/bam_stochastic_assay_risk_v1/result_summary_v1.json",
+      "fingerprint": "545fad056cdfe3f93eca3e1a973560aeb67c605cb0ae8508ff6fc75c01b09121"
+    },
+    "relationship": "Phase-IX joint-universe synthesis; no new ecological transformation, parameter level, assay field, or error process is introduced"
+  },
+  "scientific_question": "How does exact future-target evidence burden change when ecological-world uncertainty and assay-observation-process uncertainty are expanded separately and jointly, using only previously frozen BAM worlds, targets and deterministic systematic-assay worlds?",
+  "fixed_components": {
+    "systems": 12,
+    "truth_cases": 768,
+    "transformations": ["climate_shift", "biotic_stress", "barrier_restoration"],
+    "ecological_universes": {
+      "W0": "original 64-world family embedded exactly in W1",
+      "W1": "preregistered 2,592-world ecological lattice"
+    },
+    "observation_universes": {
+      "O0": ["calibrated"],
+      "O1": ["calibrated", "systematically_miscalibrated"]
+    },
+    "action_library": [
+      "assay:A_level",
+      "assay:partner_required",
+      "assay:antagonist_excluded",
+      "assay:partner_range_level",
+      "assay:antagonist_range_level",
+      "assay:dispersal_radius_level",
+      "assay:barrier_permeable",
+      "assay:horizon_level",
+      "assay_process_calibration"
+    ],
+    "repeat_actions": "excluded from Phase-IX optimization because Phase-VII proved exact partition equivalence to the corresponding single deterministic assay"
+  },
+  "joint_levels": {
+    "W0O0": "W0 x calibrated-only",
+    "W0O1": "W0 x {calibrated, systematically_miscalibrated}",
+    "W1O0": "W1 x calibrated-only",
+    "W1O1": "W1 x {calibrated, systematically_miscalibrated}"
+  },
+  "analysis_unit": "unique current-G fiber per system and transformation; target-identified fibers have exact burden 0",
+  "target": "structured transformation-specific binary future decision; ecological and observation-world identities are nuisance unless needed to separate target values",
+  "burden": "exact minimum number of frozen deterministic assay/calibration actions required to robustly separate every target-discordant joint hypothesis; infinity if the fixed action library is insufficient",
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_nested_joint_burden_monotonicity",
+      "statement": "For every fiber and transformation, W0O0 burden <= W0O1 burden <= W1O1 burden and W0O0 burden <= W1O0 burden <= W1O1 burden, treating insufficiency as infinity.",
+      "failure_rule": "Any violation is an implementation/theory failure and stops interpretation."
+    },
+    {
+      "id": "H2_joint_uncertainty_interaction_exists",
+      "statement": "At least one fiber has W1O1 burden strictly greater than max(W1O0 burden, W0O1 burden), so the combined uncertainty expansion requires more evidence than either single-axis expansion alone.",
+      "failure_rule": "REFUTED if no strict combined increment occurs."
+    },
+    {
+      "id": "H3_ecological_expansion_can_create_calibration_need",
+      "statement": "At least one fiber is solvable without assay-process calibration in W0O1 but every exact W1O1 minimum includes assay_process_calibration.",
+      "failure_rule": "REFUTED if ecological universe expansion never creates a new calibration requirement."
+    },
+    {
+      "id": "H4_complete_joint_library_resolves_all",
+      "statement": "Every W1O1 future binary target is robustly solvable by the frozen nine-action library.",
+      "failure_rule": "Any W1O1 fiber remaining unresolved refutes H4."
+    }
+  ],
+  "secondary_outputs": [
+    "burden distribution at all four joint levels by transformation",
+    "counts of ecological-only, observation-only and joint burden increases",
+    "strict interaction fibers and worked examples",
+    "new-calibration-need fibers created by W0 to W1 expansion",
+    "truth-weighted projection of unique-fiber results",
+    "target-identification erosion before any new action is taken"
+  ],
+  "claim_boundary": [
+    "This is an exact finite-universe synthesis, not a general theorem that ecological and observation uncertainty interact in all systems.",
+    "The systematic miscoding world is synthetic and deterministic.",
+    "Action cardinality is a combinatorial information count, not field cost.",
+    "No new ecological scenario or observation model is selected after seeing Phase-I through Phase-VIII results.",
+    "Do not claim generic novelty for robust design under joint model and observation uncertainty."
+  ],
+  "candidate_contribution": "An occurrence-conditioned BAM joint-uncertainty lattice that attributes future-target evidence burden to ecological-world expansion, observation-process expansion, and their interaction while preserving exact target-level rather than world-level resolution."
+}
