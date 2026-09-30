@@ -1,0 +1,120 @@
+{
+  "schema": "eog.bam_round_goby_external_bridge.source_protocol.v1",
+  "status": "frozen_before_local_data_payload_access",
+  "scientific_role": "retrospective_external_bridge_not_fresh_confirmatory_evidence",
+  "freshness_boundary": {
+    "paper_abstract_and_aggregate_results_seen": true,
+    "species_specific_model_coefficients_seen": true,
+    "raw_zenodo_csv_payload_opened_in_this_bridge_before_freeze": false,
+    "may_be_called_fresh_or_response_blind": false,
+    "permitted_claim": "external real-system feasibility and falsification bridge only"
+  },
+  "source": {
+    "title": "A secondary upstream invasion of round goby in the Great Lakes Basin over fourteen years following a dam removal",
+    "zenodo_record_id": 19621892,
+    "doi": "10.5281/zenodo.19621892",
+    "article_doi": "10.1016/j.jenvman.2026.130223",
+    "record_created": "2026-04-17",
+    "record_modified": "2026-04-17",
+    "files_seen_from_metadata": [
+      {"name":"Date_of_Invasion.csv","size_kb":2.0,"md5":"bcbeaf78630d89b9fa14353e89b69fb0"},
+      {"name":"LR10.csv","size_kb":2.0,"md5":"6cc5da9897b56ea70ab39432367029bb"},
+      {"name":"LR11A.csv","size_kb":2.0,"md5":"f42b93b871d4757e6107f3efcc28fc49"},
+      {"name":"LR12.csv","size_kb":2.2,"md5":"b732f866c5937a925bf366804848c0ba"},
+      {"name":"LR2.csv","size_kb":1.1,"md5":"6585d9108980a0a87db8af056fad8df6"},
+      {"name":"Multiple Linear Regressions.Rmd","size_kb":17.5,"md5":"27c7ec04e89549aaf3734456ddfa0f3a"},
+      {"name":"Rate_of_Invasion.Rmd","size_kb":7.6,"md5":"d50cdd6fba146690354f9f96075fcf3d"},
+      {"name":"README.txt","size_kb":8.4,"md5":"da58554084553988b1b1242ba11ba468"},
+      {"name":"Upstream_data_noNAs_2025_noElectro.csv","size_kb":21.3,"md5":"550e60c9ecabdb357ff1924544260167"},
+      {"name":"Within Site Models.Rmd","size_kb":13.5,"md5":"eaa1f161f7bfdf223d981a34f7834"}
+    ],
+    "source_switch_after_payload_access_allowed": false
+  },
+  "real_system": {
+    "watershed": "Rouge River, Michigan, USA",
+    "intervention": "Wayne Road Dam removal",
+    "monitoring_period": [2012,2025],
+    "focal_taxon": {
+      "common_name": "round goby",
+      "scientific_name": "Neogobius melanostomus"
+    },
+    "biotic_axis_taxon": {
+      "common_name": "johnny darter",
+      "scientific_name": "Etheostoma nigrum",
+      "role": "predeclared biotic-state proxy; no claim that association alone proves competition"
+    }
+  },
+  "BAM_mapping": {
+    "A": {
+      "response_independent_candidate_site_variables": [
+        "modeled July water temperature",
+        "baseflow",
+        "percent gravel",
+        "percent cobble"
+      ],
+      "rule": "use all four declared abiotic/habitat variables; do not select variables using focal response coefficients",
+      "world_construction": "derive nested site-support envelopes from response-independent site covariates using fixed 25/50/75/90 percent empirical centrality cutoffs after header/schema gate; exact formula must be committed before focal response rows are parsed"
+    },
+    "B": {
+      "variable": "johnny darter relative abundance",
+      "temporal_rule": "construct site B states only from records dated no later than 2018",
+      "worlds": "for q25/q50/q75 baseline cutoffs include both low-permissive and high-permissive orientations plus unrestricted B",
+      "reason_for_both_orientations": "prevents using already-known published association sign to choose the B direction"
+    },
+    "M": {
+      "anchor": "Wayne Road Dam / downstream invasion origin",
+      "variables": [
+        "river distance from Wayne Road Dam",
+        "calendar year after 2012"
+      ],
+      "worlds": "derive movement-rate levels only from response-independent site river-distance spacing quantiles; add explicit unrestricted-open world",
+      "barrier_semantics": "dam-removal intervention opens the upstream route; no additional unverified barrier world may be inserted after response access"
+    }
+  },
+  "time_split": {
+    "calibration_years": [2012,2018],
+    "heldout_years": [2019,2025],
+    "split_selected_from_calendar_only": true,
+    "retuning_after_payload_access_allowed": false
+  },
+  "evidence_contract": {
+    "calibration_occurrence_evidence": "round-goby positive records in 2012-2018 only",
+    "calibration_nondetection_as_hard_absence": false,
+    "compatibility_rule": "positive-only containment: a world survives only if every calibration positive is allowed by A intersect B intersect M at that record year",
+    "heldout_use": "2019-2025 focal positive records are used only after the world universe and parser are frozen",
+    "heldout_negative_claim": "program-level nondetection must not be promoted to biological absence without a separately frozen observation-process contract"
+  },
+  "external_bridge_endpoints": {
+    "primary": "heldout positive falsification: number and fraction of calibration-surviving worlds eliminated by each newly observed 2019-2025 positive",
+    "secondary": [
+      "survivor-fiber contraction through heldout time",
+      "whether all calibration survivors agree on site-by-2025 ecological reachability before heldout opening",
+      "whether any unanimous negative ecological certificate is falsified by a later positive record"
+    ],
+    "not_primary": [
+      "predictive AUC",
+      "log loss",
+      "paper-model coefficient recovery",
+      "claim that nondetection validates predicted absence"
+    ]
+  },
+  "gates": [
+    "Gate0: record/file identity and md5/size verification only",
+    "Gate1: README and CSV header/schema only; no response rows",
+    "Gate2: response-independent site/covariate registry and exact A/M world construction",
+    "Gate3: freeze focal/community parser, B baseline rule, world product, stop rules and output schema",
+    "Gate4: open 2012-2018 calibration rows and contract worlds",
+    "Gate5: once-only open/use of 2019-2025 heldout focal positives for falsification audit"
+  ],
+  "hard_stops": [
+    "do not change focal species",
+    "do not change 2018/2019 split",
+    "do not select A variables by published significance",
+    "do not choose B orientation from published sign",
+    "do not tune M speed levels from round-goby observed invasion speed",
+    "do not drop sites because they falsify worlds",
+    "do not call this bridge independent or fresh confirmatory evidence",
+    "do not use aggregate published effects as a benchmark target"
+  ],
+  "success_definition": "successful bridge means the declared real data can instantiate and falsify finite A/B/M worlds under the frozen rules; a favorable biological direction is not required"
+}
