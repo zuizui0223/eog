@@ -9,6 +9,7 @@ from eog.v2.bam_ecological_expansion_margin import (
 from eog.v2.bam_future_target_evidence import (
     PARAMETER_FIELDS,
     exact_future_target_evidence_plan,
+    exact_minimum_truth_target_measurement_size,
     parameter_measurements,
     parameter_target_plan,
 )
@@ -111,3 +112,26 @@ def test_target_specific_parameter_design_can_be_smaller_than_world_identificati
     assert target_plan.minimum_measurement_ids == ("param:A_level",)
     assert target_plan.minimum_size == 1
     assert world_plan.minimum_size == 2
+
+
+def test_fast_cardinality_solver_matches_canonical_exact_solver():
+    truth = EcologicalCoordinates(0, 0, 0, 0, 0, 0, 0, 0)
+    v1 = EcologicalCoordinates(1, 0, 0, 0, 0, 0, 0, 0)
+    v2 = EcologicalCoordinates(0, 1, 0, 0, 0, 0, 0, 0)
+    v3 = EcologicalCoordinates(1, 1, 0, 0, 0, 0, 0, 0)
+    variants = (
+        _variant("truth", truth),
+        _variant("v1", v1),
+        _variant("v2", v2),
+        _variant("v3", v3),
+    )
+    ids = tuple(row.variant_id for row in variants)
+    measurements = parameter_measurements(variants, ids, "truth")
+    target = {"truth": False, "v1": True, "v2": True, "v3": True}
+    canonical = exact_minimum_truth_target_measurements(
+        ids, "truth", target, measurements
+    )
+    fast = exact_minimum_truth_target_measurement_size(
+        ids, "truth", target, measurements
+    )
+    assert canonical.minimum_size == fast == 2
