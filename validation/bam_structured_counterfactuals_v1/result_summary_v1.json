@@ -1,0 +1,151 @@
+{
+  "schema": "eog.bam_structured_counterfactuals.result_summary.v1",
+  "status": "completed_preregistered_structured_counterfactual_audit",
+  "protocol": "validation/bam_structured_counterfactuals_v1/protocol_v1.json",
+  "protocol_chronology": {
+    "initial_freeze_commit": "d776e013be4dff11e4380ef8d59a09ee893031f3",
+    "pre_implementation_amendment_commit": "aba42db77c7135d9f7bfba85b30e42920c5cffdb",
+    "amendment_reason": "Structured transformations may reactivate parameter aliases with identical current BAM state; the guaranteed hierarchy therefore uses parameter-world identity as the finest target."
+  },
+  "parent_target_result_fingerprint": "77314699090fd3b0a19066363eab0589c3a0c89ac41aabbce49873c84b468172",
+  "parent_ecological_expansion_fingerprint": "58b8412f7167672c37cd8a2e4b310362335adc71edccbd3f1c824fee23b90ade",
+  "authoritative_run": 36671298135,
+  "authoritative_job": 109746652897,
+  "executed_head": "2e4b2d56270ac7bfc1a77e0ee33876238be14d4e",
+  "artifact_id": 11078605793,
+  "artifact_digest": "sha256:6ffd073329e8c4656ee3061ba976517798e6d637be941386da4f3c60bdd5c0a0",
+  "result_fingerprint": "f502fb647ba4666f5c40ddbd5639123f3e0296fe492dd97a1ec19ec246531cb1",
+  "truth_count": 768,
+  "unique_E1_fiber_count": 129,
+  "hierarchy_violations": 0,
+  "predeclared_verdicts": {
+    "H1_target_hierarchy_persists": "SUPPORTED",
+    "H1b_dormant_alias_activation_exists": "SUPPORTED",
+    "H2_decision_without_mechanism_exists": {
+      "climate_shift": "SUPPORTED",
+      "biotic_stress": "SUPPORTED",
+      "barrier_restoration": "SUPPORTED"
+    },
+    "H3_ecological_universe_expansion_can_remove_decision_certificate": "SUPPORTED",
+    "H4_nontrivial_robust_decisions_exist": {
+      "climate_shift": "SUPPORTED",
+      "biotic_stress": "SUPPORTED",
+      "barrier_restoration": "SUPPORTED"
+    }
+  },
+  "identification_counts": {
+    "W0": {
+      "parameter_world_identified": 13,
+      "current_bam_state_identified": 25,
+      "climate_shift": {
+        "exact_map_identified": 622,
+        "binary_decision_identified": 646,
+        "parameter_nonidentified_but_binary_identified": 633
+      },
+      "biotic_stress": {
+        "exact_map_identified": 558,
+        "binary_decision_identified": 603,
+        "parameter_nonidentified_but_binary_identified": 590
+      },
+      "barrier_restoration": {
+        "exact_map_identified": 604,
+        "binary_decision_identified": 744,
+        "parameter_nonidentified_but_binary_identified": 731
+      }
+    },
+    "W1": {
+      "parameter_world_identified": 0,
+      "current_bam_state_identified": 8,
+      "climate_shift": {
+        "exact_map_identified": 610,
+        "binary_decision_identified": 636,
+        "parameter_nonidentified_but_binary_identified": 636
+      },
+      "biotic_stress": {
+        "exact_map_identified": 442,
+        "binary_decision_identified": 498,
+        "parameter_nonidentified_but_binary_identified": 498
+      },
+      "barrier_restoration": {
+        "exact_map_identified": 604,
+        "binary_decision_identified": 700,
+        "parameter_nonidentified_but_binary_identified": 700
+      }
+    }
+  },
+  "W0_to_W1_binary_certificate_erosion": {
+    "climate_shift": {
+      "W0_identified": 646,
+      "retained_in_W1": 636,
+      "lost_in_W1": 10,
+      "retention_fraction": 0.9845201238390093
+    },
+    "biotic_stress": {
+      "W0_identified": 603,
+      "retained_in_W1": 498,
+      "lost_in_W1": 105,
+      "retention_fraction": 0.8258706467661692
+    },
+    "barrier_restoration": {
+      "W0_identified": 744,
+      "retained_in_W1": 700,
+      "lost_in_W1": 44,
+      "retention_fraction": 0.9408602150537635
+    }
+  },
+  "W0_to_W1_exact_map_erosion": {
+    "climate_shift": {
+      "W0_identified": 622,
+      "W1_identified": 610,
+      "lost": 12
+    },
+    "biotic_stress": {
+      "W0_identified": 558,
+      "W1_identified": 442,
+      "lost": 116
+    },
+    "barrier_restoration": {
+      "W0_identified": 604,
+      "W1_identified": 604,
+      "lost": 0
+    }
+  },
+  "dormant_alias_activation": {
+    "W0": {
+      "climate_shift_fibers": 0,
+      "biotic_stress_fibers": 0,
+      "barrier_restoration_fibers": 0
+    },
+    "W1": {
+      "climate_shift_fibers": 1,
+      "biotic_stress_fibers": 0,
+      "barrier_restoration_fibers": 0
+    },
+    "example": {
+      "system_id": "S11_9x5_gap",
+      "G_mask": 2138792820255,
+      "G_count": 29,
+      "truth_multiplicity": 2,
+      "W1_same_G_parameter_worlds": 36,
+      "current_bam_state_classes": 1,
+      "climate_shift_exact_map_classes": 2,
+      "climate_shift_binary_classes": 2,
+      "binary_values": [false, true]
+    }
+  },
+  "main_findings": [
+    "The parameter-world to exact-counterfactual to binary-decision target hierarchy held with zero violations in both W0 and W1.",
+    "Current BAM-state identity is not a sufficient generic surrogate for future-response identity: one W1 climate fiber had a single current A/B/M/tau state but split into two exact and binary climate responses.",
+    "Decision without parameter-world identification was common for all three structured transformations in both universes.",
+    "Expanding the admissible ecological world family removed real decision certificates for all three transformations: 10 climate, 105 biotic-stress and 44 barrier-restoration truth cases.",
+    "Many decision certificates nevertheless survived W1: 636 climate, 498 biotic-stress and 700 barrier-restoration truth cases despite zero parameter-world-identified W1 truths.",
+    "Biotic-stress decisions were most sensitive to W0-to-W1 universe expansion in this frozen synthetic design, retaining 82.6 percent of W0 binary certificates versus 98.5 percent for climate and 94.1 percent for barrier restoration."
+  ],
+  "claim_boundary": [
+    "The climate, biotic-stress and barrier-restoration operators are synthetic transformations, not calibrated management or climate scenarios.",
+    "Current-state-identical parameter worlds can respond differently only because the transformation depends on latent parameter semantics not fully captured by the current BAM-state projection.",
+    "Counts are conditional on the frozen 12 systems, W0/W1 world families and transformation definitions.",
+    "The results do not imply that parameter identity is generally required for robust ecological decisions.",
+    "The results do not alter the frozen BAM inverse-identifiability manuscript or EOG-WF empirical programme."
+  ]
+}

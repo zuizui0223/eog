@@ -402,6 +402,142 @@ existing target disagreement by itself.
 The 64 → 2,592 → complete-closure sequence is the frozen BAM demonstration of this
 elementary exact rule.
 
+## Structured ecological counterfactuals
+
+Phase V replaced the idealised axis-release target with three transformations frozen
+before implementation:
+
+1. **climate shift** — temperature +0.08 and moisture -0.04, recomputing A under each
+   world's niche parameters;
+2. **biotic stress** — one additional partner-range erosion and antagonist-range
+   dilation under the world's existing interaction mode;
+3. **barrier restoration** — recompute M with the same dispersal radius and horizon but
+   barrier permeability forced true.
+
+These remain synthetic fixtures, but they test whether the target-identifiability result
+depends on using axis deletion as the counterfactual.
+
+### Pre-implementation correction
+
+Before implementation, the protocol was amended because a structured transformation
+can reactivate **parameter aliases** that have the same current A/B/M/tau state.
+
+Therefore two different maps must be kept distinct:
+
+[
+\theta\rightarrow C_{current}(\theta)
+]
+
+and
+
+[
+\theta\rightarrow F_{counterfactual}(\theta)\rightarrow D(\theta).
+]
+
+The future transformation need not factor through current BAM state.
+
+The guaranteed target hierarchy is therefore
+
+[
+\text{parameter world}
+\rightarrow
+\text{exact future map}
+\rightarrow
+\text{binary decision},
+]
+
+not parameter world → current BAM state → future decision.
+
+### W0 results
+
+In the original 64-world universe:
+
+- parameter world identified: **13/768**;
+- current BAM state identified: **25/768**.
+
+Yet target identification was:
+
+| transformation | exact future map | binary decision |
+|---|---:|---:|
+| climate shift | **622** | **646** |
+| biotic stress | **558** | **603** |
+| barrier restoration | **604** | **744** |
+
+Thus parameter-world nonidentification coexisted with binary decision identification in
+633, 590 and 731 truth cases respectively.
+
+### W1 results
+
+After expansion to the 2,592-world ecological lattice:
+
+- parameter-world identified: **0/768**;
+- current BAM-state identified: **8/768**.
+
+Yet binary decisions remained identified in:
+
+- climate: **636/768**;
+- biotic stress: **498/768**;
+- barrier restoration: **700/768**.
+
+This is a direct structured-counterfactual replication of the target-specific
+identifiability result.
+
+### Universe expansion removes real target certificates
+
+W0 → W1 binary certificate erosion was:
+
+| transformation | W0 identified | retained W1 | lost |
+|---|---:|---:|---:|
+| climate | 646 | **636** | **10** |
+| biotic stress | 603 | **498** | **105** |
+| barrier restoration | 744 | **700** | **44** |
+
+The biotic-stress target was most sensitive in this frozen synthetic design.  This is
+not a universal A/B/M ranking.
+
+### Dormant parameter reactivation
+
+One W1 climate fiber gives a concrete counterexample to “identify current mechanism
+state, then forecast.”
+
+System `S11_9x5_gap`:
+
+- current (G): 29 nodes;
+- truth multiplicity: 2;
+- same-G W1 parameter worlds: 36;
+- current A/B/M/tau classes: **1**;
+- climate-shift exact-map classes: **2**;
+- climate net-loss decision classes: **2**.
+
+Thus current BAM-state identity can be insufficient for a future target when parameter
+differences are dormant under present conditions but active under intervention.
+
+### New stopping rule
+
+For a declared decision target (D), the relevant stopping condition remains
+
+[
+|D(S)|=1.
+]
+
+Current-state identity can be unnecessary if (D) is already invariant, or
+insufficient if dormant parameter aliases split under the transformation.
+
+This makes target-specific survivor-fiber analysis more than a rephrasing of current
+mechanism identification.
+
+## Updated figure plan
+
+### Figure 6 — Universe erosion under structured transformations
+
+For climate, biotic stress and barrier restoration, show W0 versus W1 exact-map and
+binary-decision identification counts.
+
+### Figure 7 — Dormant alias reactivation
+
+Show the S11 same-current-state fiber splitting into two climate future maps and two
+binary loss classes.
+
 ## Strong claim boundary
 
 Do not claim:

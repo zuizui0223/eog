@@ -1,0 +1,109 @@
+{
+  "schema": "eog.bam_structured_counterfactuals.protocol.v1",
+  "status": "amended_before_implementation_and_scoring",
+  "parent_programmes": {
+    "target_identifiability": {
+      "result": "validation/bam_counterfactual_identifiability_v1/result_summary_v1.json",
+      "fingerprint": "77314699090fd3b0a19066363eab0589c3a0c89ac41aabbce49873c84b468172"
+    },
+    "ecological_universe_expansion": {
+      "result": "validation/bam_ecological_expansion_margin_v1/result_summary_v1.json",
+      "fingerprint": "58b8412f7167672c37cd8a2e4b310362335adc71edccbd3f1c824fee23b90ade"
+    },
+    "relationship": "Phase-V target-generalization audit; prior axis-release results remain frozen"
+  },
+  "scientific_question": "Does the separation between mechanism identifiability, exact counterfactual-map identifiability and decision identifiability persist when the counterfactual is a prospectively frozen ecological transformation rather than deletion of one BAM axis?",
+  "fixed_systems": {
+    "systems": 12,
+    "truth_cases": 768,
+    "current_evidence": "E1 complete perfect current distribution G",
+    "universes": {
+      "W0": "original 64-world BAM family",
+      "W1": "preregistered 2,592-world ecological expansion lattice from Phase IV, filtered to exact same current G for each fiber"
+    }
+  },
+  "counterfactuals": {
+    "climate_shift": {
+      "operator": "recompute A under node environments shifted by temperature +0.08 and moisture -0.04; keep each world's niche center/radius, B and M unchanged",
+      "exact_target": "counterfactual occupied map G_cf",
+      "binary_target": "net_range_loss = |G_cf| < |G_current|",
+      "note": "synthetic climate perturbation, not calibrated to a real emissions scenario"
+    },
+    "biotic_stress": {
+      "operator": "apply one additional 4-neighbour erosion to the world's current partner range and one additional 4-neighbour dilation to its current antagonist range; recompute B under the same interaction-mode bits; keep A and M unchanged",
+      "exact_target": "counterfactual occupied map G_cf",
+      "binary_target": "range_loss = G_cf is a strict subset of G_current",
+      "note": "synthetic associate-range stress, not a calibrated demographic interaction model"
+    },
+    "barrier_restoration": {
+      "operator": "recompute M with the world's same dispersal radius and movement horizon but barrier_permeable forced true; keep A and B unchanged",
+      "exact_target": "counterfactual occupied map G_cf",
+      "binary_target": "range_gain = G_cf contains at least one node outside G_current",
+      "note": "idealised barrier removal/restoration transformation"
+    }
+  },
+  "targets": {
+    "parameter_world": "exact declared parameter-world identity (world ID in W0; full ecological parameter coordinates in W1)",
+    "current_bam_state": "current A/B/M plus movement-arrival tau equivalence",
+    "exact_counterfactual": "exact finite-node G_cf for each frozen transformation",
+    "binary_decision": "the transformation-specific loss/gain target"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_target_hierarchy_persists",
+      "statement": "For every transformation and universe level, binary-decision identification count is at least exact-counterfactual-map identification count, which is at least exact parameter-world identification count.",
+      "failure_rule": "Any violation is a target-definition or implementation failure and stops interpretation."
+    },
+    {
+      "id": "H1b_dormant_alias_activation_exists",
+      "statement": "At least one truth that is identified at the current BAM-state level nevertheless has an unresolved exact or binary structured-counterfactual target because current-state-equivalent parameter worlds respond differently after transformation.",
+      "failure_rule": "REFUTED if no current-BAM-state-identified fiber is reopened by any frozen structured transformation."
+    },
+    {
+      "id": "H2_decision_without_mechanism_exists",
+      "statement": "For each of the three structured transformations in W0, at least one parameter-world-nonidentified truth nevertheless has an identified binary decision.",
+      "failure_rule": "REFUTED separately for any transformation without such a case."
+    },
+    {
+      "id": "H3_ecological_universe_expansion_can_remove_decision_certificate",
+      "statement": "For at least one transformation, at least one binary decision identified in W0 becomes unresolved in W1.",
+      "failure_rule": "REFUTED if no structured transformation loses any W0 binary certificate under W1."
+    },
+    {
+      "id": "H4_nontrivial_robust_decisions_exist",
+      "statement": "For every transformation, at least one parameter-world-nonidentified binary decision remains identified after expansion from W0 to W1.",
+      "failure_rule": "REFUTED separately for any transformation without such a case."
+    }
+  ],
+  "primary_outputs": [
+    "mechanism/exact-map/binary-decision identification counts in W0 and W1",
+    "W0 decision certificates lost under W1",
+    "W0 decision certificates retained under W1",
+    "same-G fiber target-class distributions for each transformation",
+    "examples of mechanism-unresolved but decision-identified fibers and fibers whose decision changes under W1"
+  ],
+  "stop_rules": [
+    "Do not change the climate deltas after scoring.",
+    "Do not add or remove B stress operations after scoring.",
+    "Do not change barrier restoration from forced permeability after scoring.",
+    "Do not add additional counterfactuals to rescue a refuted hypothesis.",
+    "Do not call these three transformations calibrated real-species scenarios.",
+    "Do not alter the frozen Phase-I through Phase-IV results or manuscripts."
+  ],
+  "novelty_boundary": {
+    "not_claimed_new": [
+      "climate-change SDM projections",
+      "biotic-interaction scenario modelling",
+      "barrier-removal or connectivity scenarios",
+      "structural uncertainty or scenario ensembles",
+      "prediction under parameter nonidentifiability"
+    ],
+    "candidate_contribution": "Within an occurrence-conditioned BAM inverse survivor fiber, test target-specific identifiability under explicit ecological transformations and track whether the target certificate survives a preregistered expansion of the admissible BAM world family."
+  },
+  "protocol_amendment": {
+    "reason": "Pre-implementation design audit: structured transformations can reactivate parameter aliases that share the same current A/B/M/tau state, so counterfactual targets are not guaranteed to be deterministic functions of current BAM-state equivalence.",
+    "outcome_scoring_seen": false,
+    "implementation_started": false,
+    "correction": "Use exact parameter-world identity as the finest target for the guaranteed target-coarsening hierarchy; retain current BAM-state identification as a separate diagnostic and preregister dormant-alias activation."
+  }
+}
