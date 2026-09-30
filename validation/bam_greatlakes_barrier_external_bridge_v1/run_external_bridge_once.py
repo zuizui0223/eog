@@ -17,6 +17,7 @@ import subprocess
 import tempfile
 from typing import Any
 import zipfile
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
@@ -48,7 +49,16 @@ USER_AGENT = "EOG-GreatLakes-AM-Bridge-OnceOnly/1.0"
 
 
 class ExecutionStop(RuntimeError):
-    pass
+    def __init__(
+        self,
+        message: str,
+        *,
+        payload_requests: int = 0,
+        payload_bytes_opened: int = 0,
+    ) -> None:
+        super().__init__(message)
+        self.payload_requests = int(payload_requests)
+        self.payload_bytes_opened = int(payload_bytes_opened)
 
 
 class _DropAuthOnCrossHostRedirect(HTTPRedirectHandler):
@@ -198,51 +208,75 @@ def try_anonymous_version_archive(
         method="GET",
     )
     try:
-        with _OPENER.open(request, timeout=90) as response:
-            if int(response.status) != 200:
-                return None
-            max_bytes = sum(int(row["size_bytes"]) for row in gate0["files"]) + 5_000_000
-            archive_bytes = response.read(max_bytes + 1)
-    except Exception:
+        response = _OPENER.open(request, timeout=90)
+    except (HTTPError, URLError, TimeoutError, OSError):
+        # Transport/auth failure before a successful payload response is a zero-byte
+        # route miss; credential-bound exact-file acquisition may still be attempted.
         return None
 
+    with response:
+        if int(response.status) != 200:
+            return None
+        max_bytes = sum(int(row["size_bytes"]) for row in gate0["files"]) + 5_000_000
+        try:
+            archive_bytes = response.read(max_bytes + 1)
+        except Exception as exc:
+            raise ExecutionStop(
+                "Dryad version archive read failed after HTTP 200; terminal no-rerun",
+                payload_requests=1,
+                payload_bytes_opened=1,
+            ) from exc
+
     if len(archive_bytes) > max_bytes:
-        raise ExecutionStop("Dryad version archive exceeded frozen safety ceiling")
+        raise ExecutionStop(
+            "Dryad version archive exceeded frozen safety ceiling",
+            payload_requests=1,
+            payload_bytes_opened=len(archive_bytes),
+        )
+
     try:
         archive = zipfile.ZipFile(io.BytesIO(archive_bytes))
-    except zipfile.BadZipFile as exc:
-        raise ExecutionStop(
-            "Dryad version archive returned non-ZIP payload after HTTP 200"
-        ) from exc
 
-    by_basename: dict[str, str] = {}
-    for info in archive.infolist():
-        if info.is_dir():
-            continue
-        basename = Path(info.filename).name
-        if basename in by_basename:
+        by_basename: dict[str, str] = {}
+        for info in archive.infolist():
+            if info.is_dir():
+                continue
+            basename = Path(info.filename).name
+            if basename in by_basename:
+                raise ExecutionStop(
+                    f"duplicate basename in Dryad version archive: {basename}"
+                )
+            by_basename[basename] = info.filename
+
+        expected_names = {str(row["path"]) for row in gate0["files"]}
+        if set(by_basename) != expected_names:
             raise ExecutionStop(
-                f"duplicate basename in Dryad version archive: {basename}"
+                "Dryad version archive roster drift: "
+                f"missing={sorted(expected_names-set(by_basename))}, "
+                f"unexpected={sorted(set(by_basename)-expected_names)}"
             )
-        by_basename[basename] = info.filename
 
-    expected_names = {str(row["path"]) for row in gate0["files"]}
-    if set(by_basename) != expected_names:
+        verified: dict[str, bytes] = {}
+        for row in gate0["files"]:
+            name = str(row["path"])
+            verified[name] = _verify_archive_member(
+                archive,
+                by_basename[name],
+                int(row["size_bytes"]),
+                str(row["sha256"]),
+            )
+    except Exception as exc:
+        if isinstance(exc, ExecutionStop):
+            message = str(exc)
+        elif isinstance(exc, zipfile.BadZipFile):
+            message = "Dryad version archive returned non-ZIP payload after HTTP 200"
+        else:
+            message = f"Dryad version archive verification failed: {exc}"
         raise ExecutionStop(
-            "Dryad version archive roster drift: "
-            f"missing={sorted(expected_names-set(by_basename))}, "
-            f"unexpected={sorted(set(by_basename)-expected_names)}"
-        )
-
-    verified: dict[str, bytes] = {}
-    for row in gate0["files"]:
-        name = str(row["path"])
-        verified[name] = _verify_archive_member(
-            archive,
-            by_basename[name],
-            int(row["size_bytes"]),
-            str(row["sha256"]),
-        )
+            message,
+            payload_requests=1,
+            payload_bytes_opened=len(archive_bytes),
+        ) from exc
 
     habitat_name = str(contract["frozen_files"]["habitat"]["path"])
     catch_name = str(contract["frozen_files"]["catch"]["path"])
@@ -267,12 +301,16 @@ def download_bound_file(spec: dict[str, Any], token: str) -> bytes:
         body = response.read(int(spec["size_bytes"]) + 1)
     if len(body) != int(spec["size_bytes"]):
         raise ExecutionStop(
-            f"{spec['path']} size drift: expected {spec['size_bytes']}, got {len(body)}"
+            f"{spec['path']} size drift: expected {spec['size_bytes']}, got {len(body)}",
+            payload_requests=1,
+            payload_bytes_opened=len(body),
         )
     sha = hashlib.sha256(body).hexdigest()
     if sha != str(spec["sha256"]):
         raise ExecutionStop(
-            f"{spec['path']} sha256 drift: expected {spec['sha256']}, got {sha}"
+            f"{spec['path']} sha256 drift: expected {spec['sha256']}, got {sha}",
+            payload_requests=1,
+            payload_bytes_opened=len(body),
         )
     return body
 
@@ -514,6 +552,9 @@ def main() -> int:
         result["rds_values_parsed"] = values_parsed
         result["dryad_auth_mode"] = auth_mode
     except Exception as exc:
+        if isinstance(exc, ExecutionStop):
+            payload_requests += exc.payload_requests
+            payload_bytes_opened += exc.payload_bytes_opened
         result = {
             "schema": "eog.bam_greatlakes_barrier_external_bridge.result.v1",
             "status": "stop_before_or_during_once_only_execution",
