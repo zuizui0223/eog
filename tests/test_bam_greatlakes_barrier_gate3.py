@@ -11,8 +11,10 @@ from validation.bam_greatlakes_barrier_external_bridge_v1.run_external_bridge_on
 
 
 def test_gate2_contract_is_authorized_and_bound_to_gate1():
-    gate1, contract = load_authorized_contract()
+    gate0, gate1, contract = load_authorized_contract()
+    assert gate0["status"] == "dryad_source_identity_ready"
     assert gate1["status"] == "readme_schema_ready"
+    assert gate1["gate0_fingerprint"] == gate0["fingerprint"]
     assert contract["status"] == "authorized_for_once_only_rds_execution"
     assert contract["gate1_prerequisite"]["fingerprint"] == gate1["fingerprint"]
     assert contract["engine_binding"]["world_count"] == 35
