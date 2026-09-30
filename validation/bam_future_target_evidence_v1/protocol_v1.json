@@ -1,0 +1,87 @@
+{
+  "schema": "eog.bam_future_target_evidence.protocol.v1",
+  "status": "frozen_before_implementation_and_scoring",
+  "parent_programme": {
+    "structured_counterfactual_result": "validation/bam_structured_counterfactuals_v1/result_summary_v1.json",
+    "fingerprint": "f502fb647ba4666f5c40ddbd5639123f3e0296fe492dd97a1ec19ec246531cb1",
+    "relationship": "Phase-VI target-aware evidence-design successor; no prior result is altered"
+  },
+  "scientific_question": "When a structured future target is unresolved inside a same-G BAM survivor fiber, can current-state measurements resolve it, or is parameter-sensitive evidence required because dormant aliases share the same present A/B/M/tau state?",
+  "fixed_universe": {
+    "systems": 12,
+    "truth_cases": 768,
+    "world_family": "W1 preregistered 2,592-world ecological expansion lattice",
+    "current_evidence": "complete current distribution G only (E1)",
+    "transformations": ["climate_shift", "biotic_stress", "barrier_restoration"]
+  },
+  "targets": {
+    "exact_future_map": "transformation-specific exact counterfactual G_cf",
+    "binary_future_decision": "transformation-specific net loss / loss / gain target",
+    "parameter_world": "exact W1 ecological parameter-coordinate identity"
+  },
+  "evidence_libraries": {
+    "current_state": {
+      "channels": [
+        "A state at one node",
+        "B state at one node",
+        "M accessibility at one node",
+        "movement first-arrival tau at one node"
+      ],
+      "semantics": "truth-relative exact present-state measurements"
+    },
+    "parameter": {
+      "channels": [
+        "A niche-breadth level",
+        "partner requirement bit",
+        "antagonist exclusion bit",
+        "partner range level",
+        "antagonist range level",
+        "dispersal-radius level",
+        "barrier-permeability bit",
+        "movement-horizon level"
+      ],
+      "semantics": "truth-relative exact parameter-coordinate assays in the frozen W1 lattice"
+    },
+    "combined": "union of current-state and parameter channels"
+  },
+  "optimization": "for each original truth embedded in W1 and each target, solve the exact minimum truth-relative measurement set that eliminates every same-G W1 survivor with a target value different from truth; same-target worlds need not be eliminated",
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_state_only_insufficiency_exists",
+      "statement": "At least one unresolved structured future decision cannot be resolved by any complete library of current-state A/B/M/tau measurements.",
+      "failure_rule": "REFUTED if current-state evidence is sufficient for every unresolved future decision."
+    },
+    {
+      "id": "H2_parameter_rescue_all",
+      "statement": "Every structured future binary decision unresolved at E1 is resolvable by the complete frozen parameter-coordinate library.",
+      "failure_rule": "Any unresolved case after all eight exact parameter coordinates is an implementation/target-definition failure and stops interpretation."
+    },
+    {
+      "id": "H3_target_specific_saving_exists",
+      "statement": "For each of the three transformations, at least one truth requires fewer parameter-coordinate assays to identify the binary future decision than to identify the exact parameter world.",
+      "failure_rule": "REFUTED separately for a transformation without any strict saving."
+    },
+    {
+      "id": "H4_dormant_alias_requires_parameter_evidence",
+      "statement": "The preregistered S11 climate dormant-alias fiber remains unresolved under the complete current-state library but becomes resolvable under the parameter or combined library.",
+      "failure_rule": "REFUTED if the S11 fiber is state-resolvable or parameter evidence cannot resolve it."
+    }
+  ],
+  "secondary_outputs": [
+    "state-only insufficiency counts by transformation and target",
+    "minimum parameter-assay count distributions",
+    "minimum combined-library count distributions",
+    "full parameter-world identification assay burden",
+    "frequency of parameter coordinates appearing in at least one lexicographically canonical exact minimum target-specific design",
+    "worked S11 dormant-alias evidence design"
+  ],
+  "cost_boundary": "Each evidence channel has unit combinatorial cost only for exact finite-set comparison. Channel counts are not claimed to equal monetary, logistical, temporal or ethical field costs.",
+  "stop_rules": [
+    "Do not add new evidence channels after scoring.",
+    "Do not change transformation definitions or W1 lattice.",
+    "Do not collapse parameter assays and state measurements into a field-cost claim.",
+    "Do not add an assay solely to rescue a refuted hypothesis.",
+    "Do not alter Phase-I through Phase-V manuscripts or frozen results."
+  ],
+  "candidate_contribution": "Target-aware evidence design over occurrence-conditioned BAM survivor fibers, explicitly distinguishing present-state measurements from latent-parameter measurements when future ecological transformations reactivate dormant aliases."
+}

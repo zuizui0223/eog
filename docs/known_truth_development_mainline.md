@@ -752,6 +752,93 @@ generate more favorable examples.
 The next substantive validation requires an independently fixed ecological
 transformation contract rather than another outcome-chosen synthetic operator.
 
+## 22. Future-target evidence routing
+
+Phase VI asked what should be measured **now** when the scientific target is a future
+structured decision rather than complete recovery of the present BAM mechanism or W1
+parameter world.
+
+The frozen W1 evidence libraries were separated into:
+
+- present-state channels: node-level A, B, M and movement-arrival tau;
+- latent-parameter channels: the eight W1 ecological coordinates.
+
+For truth \(\theta_*\), current-state alias class
+
+[
+A_C(\theta_*)
+=
+\{\theta\in S:C(\theta)=C(\theta_*)\},
+]
+
+and future target \(T\), complete present-state evidence is sufficient if and only if
+
+[
+|T(A_C(\theta_*))|=1.
+]
+
+If target values differ inside the complete current-state class, no amount of additional
+evidence of the same A/B/M/tau state type can resolve the future target.  The evidence
+class itself is insufficient.
+
+The preregistered 768-truth W1 audit found:
+
+### Climate shift
+
+- binary target already identified from G: **636**;
+- unresolved: **132**;
+- state-resolvable: **122**;
+- state-only impossible: **10**;
+- every unresolved decision resolved by exactly **one A-level assay**.
+
+### Biotic stress
+
+- binary target already identified from G: **498**;
+- unresolved: **270**;
+- state-resolvable: **270/270**;
+- state-only impossible: **0**;
+- parameter-only designs required two assays in 110 truths, but the combined library
+  resolved all 270 with one channel.
+
+### Barrier restoration
+
+- binary target already identified from G: **700**;
+- unresolved: **68**;
+- state-resolvable: **58**;
+- state-only impossible: **10**;
+- parameter designs required one assay in 61 truths and two in 7.
+
+For exact future maps, state-only impossibility occurred in 10 climate truths,
+0 biotic-stress truths and **88 barrier-restoration truths**.
+
+Full W1 parameter-world identification required a median of **5** exact parameter
+assays and up to 7.  In contrast, every frozen binary target required at most two
+parameter assays, and every truth under all three transformations showed a strict
+parameter-assay saving relative to full world identification.
+
+The preregistered S11 climate dormant-alias fiber supplied the clean impossibility case:
+36 same-G W1 worlds share one complete current A/B/M/tau state, but the climate
+decision splits in two.  Present-state evidence is therefore insufficient by theorem;
+one **A-level** parameter assay resolves the decision for both original truth worlds.
+
+The evidence-design rule is now:
+
+> **Before ranking more measurements, test whether the proposed evidence class can
+> separate the future-target disagreement at all.  If target-discordant worlds are
+> current-state aliases, route evidence collection to a parameter-sensitive or
+> transformation-sensitive channel rather than collecting more present-state data.**
+
+Canonical Phase-VI assets:
+
+- `validation/bam_future_target_evidence_v1/protocol_v1.json`;
+- `validation/bam_future_target_evidence_v1/result_summary_v1.json`;
+- `docs/bam_future_target_evidence_v1.md`;
+- `docs/bam_future_target_evidence_v1_result.md`;
+- `docs/bam_future_target_evidence_theory_v1.md`.
+
+Evidence-channel cardinalities remain synthetic information counts, not field-cost
+estimates.
+
 ## Hard claim boundary
 
 Do not claim:

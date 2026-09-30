@@ -538,6 +538,95 @@ binary-decision identification counts.
 Show the S11 same-current-state fiber splitting into two climate future maps and two
 binary loss classes.
 
+## Evidence routing for structured future targets
+
+Phase V showed that current BAM-state identity need not determine a future response.
+Phase VI turns that observation into an evidence-design problem.
+
+Two evidence classes are kept distinct:
+
+1. **present-state evidence** — node-level A/B/M/tau;
+2. **latent-parameter evidence** — exact W1 ecological coordinates.
+
+For a truth parameter world \(\theta_*\), present-state evidence can resolve a future
+target \(T\) exactly if and only if target values are constant inside the truth's
+complete current-state alias class.
+
+This produces an evidence-routing gate before ordinary measurement ranking:
+
+[
+\text{future target unresolved}
+\rightarrow
+\begin{cases}
+\text{state-resolvable}, & |T(A_C)|=1,\\
+\text{parameter/challenge evidence required}, & |T(A_C)|>1.
+\end{cases}
+]
+
+### Frozen Phase-VI result
+
+| target | E1 unresolved | state-resolvable | state-impossible |
+|---|---:|---:|---:|
+| climate binary | 132 | 122 | **10** |
+| biotic-stress binary | 270 | **270** | 0 |
+| barrier-restoration binary | 68 | 58 | **10** |
+
+For exact future maps the state-impossible counts were 10, 0 and **88** respectively.
+
+The complete parameter library resolved every frozen target.
+
+Full W1 parameter-world identity required a median of **5** parameter assays
+(maximum 7), while binary decisions required:
+
+- climate: at most 1;
+- biotic stress: at most 2 parameter assays, or one channel with the combined library;
+- barrier restoration: at most 2.
+
+Strict parameter-assay savings versus full parameter-world recovery occurred for
+**768/768 truths under every transformation**.
+
+### Dormant-alias evidence routing
+
+The S11 climate fiber makes the logic concrete.
+
+All 36 same-G worlds share one complete present A/B/M/tau state.  Nevertheless climate
+net-loss has two values.  Therefore no present-state measurement can solve the target.
+
+For both original truth worlds, the canonical minimum parameter design is:
+
+`A_level`
+
+alone.
+
+This is stronger than saying “parameter uncertainty matters.”  It identifies the
+failure mode of the evidence class and gives an exact alternate channel.
+
+### Interpretation
+
+The field-design implication is not “measure parameters instead of states.”
+
+The three transformations show all three possibilities:
+
+- present-state evidence can be enough;
+- parameter evidence can be necessary;
+- mixing evidence classes can reduce the number of required channels.
+
+The correct order is therefore:
+
+1. declare the future target;
+2. inspect target disagreement inside the current survivor fiber;
+3. test whether the intended evidence class can separate that disagreement;
+4. only then optimize the smallest admissible design.
+
+### Figure 8 — Evidence routing
+
+Show the three transformations with:
+
+- E1-unresolved decision count;
+- state-resolvable versus state-impossible split;
+- minimum parameter/combined assay burden;
+- S11 dormant climate alias as a worked impossibility example.
+
 ## Strong claim boundary
 
 Do not claim:
