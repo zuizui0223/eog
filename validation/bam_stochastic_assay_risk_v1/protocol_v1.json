@@ -1,0 +1,111 @@
+{
+  "schema": "eog.bam_stochastic_assay_risk.protocol.v1",
+  "status": "frozen_before_implementation_and_scoring",
+  "parent_programme": {
+    "assay_observation_result": "validation/bam_future_assay_observation_v1/result_summary_v1.json",
+    "fingerprint": "3bed33f39d2c8845cb52989855f2ab024327464870224a11568ebb7436bbe332",
+    "relationship": "Phase-VIII stochastic-observation successor; Phase-VII systematic-bias results remain immutable"
+  },
+  "scientific_question": "When parameter assays have independent random full-support error rather than fixed systematic miscoding, how does repeated measurement change target distinguishability, and when does explicit assay-quality calibration reduce the repeat burden for the Phase-VII target-specific assay design?",
+  "fixed_ecological_design": {
+    "systems": 12,
+    "world_family": "W1 preregistered 2,592-world ecological lattice",
+    "current_evidence": "complete current G",
+    "transformations": ["climate_shift", "biotic_stress", "barrier_restoration"],
+    "scored_units": "the same 67 W1 fibers with unresolved binary future target used in Phase VII",
+    "assay_fields": "the lexicographically canonical assay fields from the Phase-VII complete deterministic action-library minimum for each fiber; the field set is recomputed from the frozen Phase-VII algorithm before stochastic scoring"
+  },
+  "stochastic_assay_worlds": [
+    {
+      "id": "moderate_accuracy",
+      "p_correct": 0.7
+    },
+    {
+      "id": "high_accuracy",
+      "p_correct": 0.9
+    }
+  ],
+  "error_kernel": {
+    "type": "symmetric categorical full-support",
+    "rule": "for a field with K frozen coordinate levels, observe the true code with p_correct and each of the K-1 other codes with probability (1-p_correct)/(K-1)",
+    "repeats": "iid conditional on ecological world, field and global assay-quality world",
+    "global_quality_world": "one of the two quality worlds applies to all selected assays and repeats"
+  },
+  "field_domains": {
+    "A_level": [-1, 0, 1, 2],
+    "partner_required": [0, 1],
+    "antagonist_excluded": [0, 1],
+    "partner_range_level": [-1, 0, 1],
+    "antagonist_range_level": [-1, 0, 1],
+    "dispersal_radius_level": [0, 1, 2],
+    "barrier_permeable": [0, 1],
+    "horizon_level": [0, 1, 2]
+  },
+  "quality_calibration": {
+    "action": "idealized direct assay-quality calibration",
+    "outcome": "moderate_accuracy versus high_accuracy",
+    "cost": 1,
+    "effect_on_pairwise_affinity": "joint hypotheses with different quality worlds become perfectly separated; same-quality pairs are unaffected"
+  },
+  "probabilistic_metric": {
+    "name": "worst target-discordant pair Bhattacharyya error upper bound",
+    "single_assay_affinity": "BC(P,Q)=sum_y sqrt(P(y)Q(y))",
+    "independent_product": "affinities multiply across fields and iid repeats",
+    "pairwise_error_bound": "equal-prior binary pairwise Bayes error is at most BC/2",
+    "threshold": 0.05,
+    "repeat_depths": "integer n from 1 through 30; every selected Phase-VII assay field is observed n iid times",
+    "important_boundary": "this is a pairwise sufficient error bound, not a global posterior probability or a guarantee for one multiclass decision rule"
+  },
+  "exact_robust_boundary": "because every stochastic categorical kernel has full support and every target-discordant ecological pair occurs under the same quality world, no finite repeat depth can create support-disjoint exact robust separation",
+  "cost_comparison": {
+    "without_quality_calibration": "n times number_of_selected_assay_fields",
+    "with_quality_calibration": "n times number_of_selected_assay_fields + 1",
+    "unit": "synthetic action count only"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_exact_robustness_remains_impossible",
+      "statement": "Every scored target-unresolved fiber retains at least one same-quality target-discordant joint pair with overlapping full support at every finite repeat depth.",
+      "failure_rule": "Any finite-repeat exact support separation refutes H1 or exposes an implementation error."
+    },
+    {
+      "id": "H2_repetition_reduces_pairwise_risk",
+      "statement": "At least one scored fiber has worst-pair BC/2 above 0.05 at n=1 and at or below 0.05 at some n<=30 using its frozen Phase-VII assay fields.",
+      "failure_rule": "REFUTED if no fiber crosses the threshold by repetition."
+    },
+    {
+      "id": "H3_calibrated_design_reaches_threshold_all",
+      "statement": "For every scored fiber, the frozen Phase-VII assay fields plus assay-quality calibration reach worst-pair BC/2 <=0.05 by n<=30.",
+      "failure_rule": "Any fiber failing the threshold at n=30 refutes H3."
+    },
+    {
+      "id": "H4_quality_calibration_saves_cost_exists",
+      "statement": "At least one scored fiber has a strictly lower total synthetic action count to reach the 0.05 bound when quality calibration is included.",
+      "failure_rule": "REFUTED if calibration never lowers total action count."
+    }
+  ],
+  "secondary_outputs": [
+    "minimum repeat depth with and without quality calibration by transformation",
+    "total action-count distributions under both designs",
+    "fibers where no-calibration fails by n=30",
+    "S11 dormant-climate repeat depth and quality-calibration effect",
+    "worst-pair identity and whether the bottleneck is same-quality or cross-quality"
+  ],
+  "stop_rules": [
+    "Do not change p_correct values, 0.05 threshold, repeat cap or field domains after scoring.",
+    "Do not optimize a new assay field set after seeing stochastic results; use the frozen Phase-VII canonical fields.",
+    "Do not reinterpret BC/2 as an exact misclassification probability or global decision guarantee.",
+    "Do not call the symmetric categorical kernels calibrated real assay models.",
+    "Do not alter Phase-I through Phase-VII results."
+  ],
+  "novelty_boundary": {
+    "not_claimed_new": [
+      "Bhattacharyya distance or affinity",
+      "iid error reduction by replication",
+      "measurement-error models",
+      "sequential or repeated testing",
+      "calibration under misclassification"
+    ],
+    "candidate_contribution": "An occurrence-conditioned BAM evidence-routing audit that explicitly separates exact finite-world robustness from risk-bounded repeated measurement for a prospectively frozen future ecological target."
+  }
+}

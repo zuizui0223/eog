@@ -729,6 +729,97 @@ Show:
 - the S11 refutation, contrasting the preregistered calibration+A-level expectation
   with the observed A-level+antagonist-excluded self-calibrating minimum.
 
+## Stochastic assay error: robustness is not low risk
+
+Phase VIII replaces the fixed systematic observation world with two iid
+full-support categorical assay-quality worlds while freezing the Phase-VII assay
+fields.
+
+This creates a necessary distinction between:
+
+- **exact robustness** — target-discordant hypotheses have disjoint possible-outcome
+  support;
+- **risk-bounded distinguishability** — overlapping distributions are sufficiently
+  separated under a declared probabilistic criterion.
+
+### Exact robustness remains unavailable
+
+Under full-support categorical error, every finite observation sequence has positive
+probability under each same-quality hypothesis.
+
+Therefore finite repetition cannot make target-discordant same-quality hypotheses
+support-disjoint.
+
+The Phase-VIII result was **0/67** finite-repeat exact robust separations.
+
+### Repetition nevertheless reduces risk
+
+For Bhattacharyya affinity,
+
+[
+BC(P^{\otimes n},Q^{\otimes n})=BC(P,Q)^n.
+]
+
+The frozen criterion used the equal-prior pairwise error upper bound
+
+[
+P_e^*\le BC/2
+]
+
+and threshold **0.05**.
+
+All 67 fibers crossed that bound within 30 repeats:
+
+| transformation | repeat depth |
+|---|---:|
+| climate | **8 in 18/18 fibers** |
+| biotic stress | **27 in 43/43** |
+| barrier restoration | **11 in 1/6; 27 in 5/6** |
+
+The same result must not be called exact identification.
+
+### Quality calibration did not help the worst pair
+
+The preregistered calibration-cost-saving hypothesis was **REFUTED**.
+
+Quality calibration changed the minimum repeat depth in **0/67** fibers and yielded
+strict total synthetic action-cost savings in **0/67**.
+
+At the stopping depth, every worst target-discordant pair was inside one common quality
+world.
+
+Hence quality calibration removed the wrong uncertainty dimension for the frozen
+worst-pair objective.
+
+### S11 climate
+
+The frozen fields were `A_level` and `antagonist_excluded`.
+
+- one read per field: worst (BC/2=0.3646);
+- eight reads per field: worst (BC/2=0.03995);
+- no-calibration synthetic count: 16;
+- quality-calibration count: 17;
+- exact robust separation: still impossible.
+
+The observation-process story is therefore not “more data solves uncertainty.”
+
+It is:
+
+> **the value of repetition versus calibration depends on the observation process and
+> on whether the requested guarantee is hard support exclusion or bounded stochastic
+> risk.**
+
+### Figure 10 — Robustness versus risk
+
+Show the Phase-VII / Phase-VIII contrast:
+
+- systematic miscoding: repeat partition unchanged;
+- iid random error: BC overlap contracts with (n);
+- exact robustness stays false;
+- 5% pairwise bound is crossed;
+- calibration helps systematic-bias fibers but not the Phase-VIII same-quality
+  bottleneck.
+
 ## Strong claim boundary
 
 Do not claim:
@@ -750,20 +841,24 @@ Do claim, conditional on the frozen universe:
 - unresolved BAM worlds should be retained until they become irrelevant to the target
   or are separated by target-discriminating evidence.
 
-## Next validation after assay-process routing
+## Next validation after stochastic assay-risk separation
 
-Do **not** add another deterministic coding rule to make Phase VII look more or less
-favorable.
+Do **not** tune the 0.7/0.9 quality worlds, 5% threshold, or repeat cap after the
+Phase-VIII result.
 
-The remaining abstraction is that the assay observation worlds are deterministic.
-A genuinely new successor should freeze a **stochastic observation-process universe**
-before scoring—for example finite misclassification/detection kernels—and ask whether:
+The next methodological question is no longer whether repetition can reduce a frozen
+pairwise bound.  It is whether **adaptive evidence routing** can use realized noisy
+outcomes to choose the next assay or stop once the future target—not the full
+parameter or observation world—is sufficiently resolved.
 
-- repeated independent measurements can now add robust or probabilistic information;
-- target-self-calibrating multichannel designs survive stochastic overlap;
-- calibration remains necessary in the fibers that required it under systematic bias;
-- adaptive evidence selection can stop once the future target, rather than the assay
-  world or parameter world, is sufficiently resolved.
+Any such successor must freeze:
 
-That is a separate programme.  It must not reinterpret the frozen Phase-VII
-systematic-bias result.
+- the stochastic assay kernels;
+- the target-risk criterion;
+- the admissible action costs;
+- the stopping rule;
+
+before observing adaptive-policy performance.
+
+It remains a separate synthetic programme and must not be used to reinterpret the
+frozen Phase-VII systematic-bias or Phase-VIII fixed-repeat results.

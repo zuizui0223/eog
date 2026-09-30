@@ -1,0 +1,142 @@
+{
+  "schema": "eog.bam_stochastic_assay_risk.result_summary.v1",
+  "status": "completed_preregistered_stochastic_assay_risk_audit",
+  "protocol": "validation/bam_stochastic_assay_risk_v1/protocol_v1.json",
+  "protocol_commit": "a61740c21ce2ec4f92ed858a3106ca0c42e65db5",
+  "parent_result": {
+    "path": "validation/bam_future_assay_observation_v1/result_summary_v1.json",
+    "fingerprint": "3bed33f39d2c8845cb52989855f2ab024327464870224a11568ebb7436bbe332"
+  },
+  "authoritative_run": 36721046768,
+  "authoritative_job": 109905960456,
+  "executed_head": "e911f11fc6b76b0848e5cb5823434ab5aabfe347",
+  "artifact_id": 11099281233,
+  "artifact_digest": "sha256:5522f4d860255b4b232d2d170b04ebe47a4740c93d5a6378598923abe2baa480",
+  "result_fingerprint": "545fad056cdfe3f93eca3e1a973560aeb67c605cb0ae8508ff6fc75c01b09121",
+  "design": {
+    "scored_unresolved_fibers": 67,
+    "quality_worlds": {
+      "moderate_accuracy": 0.7,
+      "high_accuracy": 0.9
+    },
+    "error_kernel": "symmetric categorical full-support iid error conditional on ecological world, field and global assay-quality world",
+    "pairwise_risk_metric": "equal-prior binary pairwise Bayes error upper bound <= BC/2",
+    "risk_threshold": 0.05,
+    "repeat_cap": 30,
+    "assay_fields": "frozen Phase-VII canonical ecological assay fields for each fiber"
+  },
+  "predeclared_verdicts": {
+    "H1_exact_robustness_remains_impossible": "SUPPORTED",
+    "H2_repetition_reduces_pairwise_risk": "SUPPORTED",
+    "H3_calibrated_design_reaches_threshold_all": "SUPPORTED",
+    "H4_quality_calibration_saves_cost_exists": "REFUTED"
+  },
+  "finite_repeat_exact_robust_separation_count": 0,
+  "by_transformation": {
+    "climate_shift": {
+      "unresolved_unique_fibers": 18,
+      "truth_weighted_cases": 132,
+      "selected_field_count_distribution": {
+        "1": 2,
+        "2": 16
+      },
+      "n1_above_threshold_then_repetition_crosses_fibers": 18,
+      "no_calibration_min_repeat_distribution": {
+        "8": 18
+      },
+      "quality_calibration_min_repeat_distribution": {
+        "8": 18
+      },
+      "no_calibration_fail_by_repeat_cap": 0,
+      "quality_calibration_fail_by_repeat_cap": 0,
+      "calibration_strict_total_cost_saving_fibers": 0,
+      "no_calibration_same_quality_bottleneck_at_minimum": 18,
+      "no_calibration_cross_quality_bottleneck_at_minimum": 0
+    },
+    "biotic_stress": {
+      "unresolved_unique_fibers": 43,
+      "truth_weighted_cases": 270,
+      "selected_field_count_distribution": {
+        "1": 1,
+        "2": 17,
+        "3": 18,
+        "4": 3,
+        "5": 4
+      },
+      "n1_above_threshold_then_repetition_crosses_fibers": 43,
+      "no_calibration_min_repeat_distribution": {
+        "27": 43
+      },
+      "quality_calibration_min_repeat_distribution": {
+        "27": 43
+      },
+      "no_calibration_fail_by_repeat_cap": 0,
+      "quality_calibration_fail_by_repeat_cap": 0,
+      "calibration_strict_total_cost_saving_fibers": 0,
+      "no_calibration_same_quality_bottleneck_at_minimum": 43,
+      "no_calibration_cross_quality_bottleneck_at_minimum": 0
+    },
+    "barrier_restoration": {
+      "unresolved_unique_fibers": 6,
+      "truth_weighted_cases": 68,
+      "selected_field_count_distribution": {
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 3
+      },
+      "n1_above_threshold_then_repetition_crosses_fibers": 6,
+      "no_calibration_min_repeat_distribution": {
+        "11": 1,
+        "27": 5
+      },
+      "quality_calibration_min_repeat_distribution": {
+        "11": 1,
+        "27": 5
+      },
+      "no_calibration_fail_by_repeat_cap": 0,
+      "quality_calibration_fail_by_repeat_cap": 0,
+      "calibration_strict_total_cost_saving_fibers": 0,
+      "no_calibration_same_quality_bottleneck_at_minimum": 6,
+      "no_calibration_cross_quality_bottleneck_at_minimum": 0
+    }
+  },
+  "S11_dormant_climate": {
+    "system_id": "S11_9x5_gap",
+    "G_mask": 2138792820255,
+    "G_count": 29,
+    "W1_same_G_variants": 36,
+    "selected_assay_fields": [
+      "A_level",
+      "antagonist_excluded"
+    ],
+    "selected_field_count": 2,
+    "n1_no_calibration": {
+      "worst_bhattacharyya_affinity": 0.7291502622129182,
+      "worst_pair_error_upper_bound": 0.3645751311064591,
+      "worst_pair_quality_relation": "same_quality"
+    },
+    "minimum_repeat_no_calibration": 8,
+    "minimum_repeat_with_quality_calibration": 8,
+    "minimum_bound": 0.039949035161021884,
+    "no_calibration_total_action_count": 16,
+    "quality_calibration_total_action_count": 17,
+    "finite_repeat_exact_robust_separation": false
+  },
+  "main_findings": [
+    "Full-support stochastic assay error preserves overlap between same-quality target-discordant hypotheses at every finite repeat depth, so exact support-based robust separation occurred in 0/67 fibers.",
+    "Independent repetition nevertheless reduced the worst target-discordant pair Bhattacharyya error upper bound below 0.05 in every frozen fiber by n<=30.",
+    "The required repeat burden was target-structured: climate required 8 repeats in every fiber, biotic stress required 27 in every fiber, and barrier restoration required 11 repeats in one fiber and 27 in five.",
+    "Quality calibration did not reduce the minimum repeat depth in any fiber and produced zero strict total synthetic action-cost savings.",
+    "H4 was refuted because the limiting pair at the threshold was always a same-quality pair, specifically within-quality ecological target ambiguity rather than uncertainty over which quality world applied.",
+    "Phase VII and Phase VIII therefore expose different observational failure modes: fixed systematic miscoding can make explicit calibration structurally necessary, whereas iid full-support random error can be reduced probabilistically by replication while never restoring exact finite-world robustness."
+  ],
+  "claim_boundary": [
+    "The 0.7/0.9 quality worlds and symmetric categorical kernels are synthetic fixtures, not calibrated assay models.",
+    "BC/2 is a pairwise upper bound under equal priors, not an exact multiclass decision error or posterior probability.",
+    "Finite-repeat exact robustness and probabilistic low-risk distinguishability are different inferential claims and must not be conflated.",
+    "Synthetic action counts are not monetary, temporal, logistical or ethical field costs.",
+    "Quality calibration is idealized and its lack of benefit here follows the frozen worst-pair criterion; it is not a general claim that assay calibration is useless.",
+    "The result does not alter Phase-I through Phase-VII or any frozen EOG-WF/BAM manuscript."
+  ]
+}
