@@ -1,0 +1,29 @@
+name: BAM round-goby external bridge Gate0
+
+on:
+  pull_request:
+    paths:
+      - "validation/bam_round_goby_external_bridge_v1/**"
+      - "tests/test_bam_round_goby_external_bridge_gate0.py"
+      - ".github/workflows/bam-round-goby-bridge-gate0.yml"
+  workflow_dispatch:
+
+jobs:
+  gate0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test fail-closed Gate0
+        run: python -m pytest tests/test_bam_round_goby_external_bridge_gate0.py -q
+      - name: Verify live Zenodo metadata only
+        run: python -m validation.bam_round_goby_external_bridge_v1.gate0_source_identity
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-round-goby-bridge-gate0
+          path: validation/bam_round_goby_external_bridge_v1/gate0_source_identity_certificate.json
+          if-no-files-found: error
