@@ -17,23 +17,66 @@
     "record_created": "2026-04-17",
     "record_modified": "2026-04-17",
     "files_seen_from_metadata": [
-      {"name":"Date_of_Invasion.csv","size_kb":2.0,"md5":"bcbeaf78630d89b9fa14353e89b69fb0"},
-      {"name":"LR10.csv","size_kb":2.0,"md5":"6cc5da9897b56ea70ab39432367029bb"},
-      {"name":"LR11A.csv","size_kb":2.0,"md5":"f42b93b871d4757e6107f3efcc28fc49"},
-      {"name":"LR12.csv","size_kb":2.2,"md5":"b732f866c5937a925bf366804848c0ba"},
-      {"name":"LR2.csv","size_kb":1.1,"md5":"6585d9108980a0a87db8af056fad8df6"},
-      {"name":"Multiple Linear Regressions.Rmd","size_kb":17.5,"md5":"27c7ec04e89549aaf3734456ddfa0f3a"},
-      {"name":"Rate_of_Invasion.Rmd","size_kb":7.6,"md5":"d50cdd6fba146690354f9f96075fcf3d"},
-      {"name":"README.txt","size_kb":8.4,"md5":"da58554084553988b1b1242ba11ba468"},
-      {"name":"Upstream_data_noNAs_2025_noElectro.csv","size_kb":21.3,"md5":"550e60c9ecabdb357ff1924544260167"},
-      {"name":"Within Site Models.Rmd","size_kb":13.5,"md5":"eaa1f161f7bfdf223d981a34f7834"}
+      {
+        "name": "Date_of_Invasion.csv",
+        "size_kb": 2,
+        "md5": "bcbeaf78630d89b9fa14353e89b69fb0"
+      },
+      {
+        "name": "LR10.csv",
+        "size_kb": 2,
+        "md5": "6cc5da9897b56ea70ab39432367029bb"
+      },
+      {
+        "name": "LR11A.csv",
+        "size_kb": 2,
+        "md5": "f42b93b871d4757e6107f3efcc28fc49"
+      },
+      {
+        "name": "LR12.csv",
+        "size_kb": 2.2,
+        "md5": "b732f866c5937a925bf366804848c0ba"
+      },
+      {
+        "name": "LR2.csv",
+        "size_kb": 1.1,
+        "md5": "6585d9108980a0a87db8af056fad8df6"
+      },
+      {
+        "name": "Multiple Linear Regressions.Rmd",
+        "size_kb": 17.5,
+        "md5": "27c7ec04e89549aaf3734456ddfa0f3a"
+      },
+      {
+        "name": "Rate_of_Invasion.Rmd",
+        "size_kb": 7.6,
+        "md5": "d50cdd6fba146690354f9f96075fcf3d"
+      },
+      {
+        "name": "README.txt",
+        "size_kb": 8.4,
+        "md5": "da58554084553988b1b1242ba11ba468"
+      },
+      {
+        "name": "Upstream_data_noNAs_2025_noElectro.csv",
+        "size_kb": 21.3,
+        "md5": "550e60c9ecabdb357ff1924544260167"
+      },
+      {
+        "name": "Within Site Models.Rmd",
+        "size_kb": 13.5,
+        "md5": "eaa1f161f7bfdfbed223d981a34f7834"
+      }
     ],
     "source_switch_after_payload_access_allowed": false
   },
   "real_system": {
     "watershed": "Rouge River, Michigan, USA",
     "intervention": "Wayne Road Dam removal",
-    "monitoring_period": [2012,2025],
+    "monitoring_period": [
+      2012,
+      2025
+    ],
     "focal_taxon": {
       "common_name": "round goby",
       "scientific_name": "Neogobius melanostomus"
@@ -72,8 +115,14 @@
     }
   },
   "time_split": {
-    "calibration_years": [2012,2018],
-    "heldout_years": [2019,2025],
+    "calibration_years": [
+      2012,
+      2018
+    ],
+    "heldout_years": [
+      2019,
+      2025
+    ],
     "split_selected_from_calendar_only": true,
     "retuning_after_payload_access_allowed": false
   },
@@ -116,5 +165,20 @@
     "do not call this bridge independent or fresh confirmatory evidence",
     "do not use aggregate published effects as a benchmark target"
   ],
-  "success_definition": "successful bridge means the declared real data can instantiate and falsify finite A/B/M worlds under the frozen rules; a favorable biological direction is not required"
+  "success_definition": "successful bridge means the declared real data can instantiate and falsify finite A/B/M worlds under the frozen rules; a favorable biological direction is not required",
+  "protocol_amendment": {
+    "classification": "gate0_metadata_transcription_correction_before_any_file_payload_access",
+    "trigger": "live Zenodo API metadata checksum comparison",
+    "failed_run": 36741574526,
+    "failed_job": 109977011657,
+    "field": "source.files_seen_from_metadata[Within Site Models.Rmd].md5",
+    "frozen_value": "eaa1f161f7bfdf223d981a34f7834",
+    "live_metadata_value": "eaa1f161f7bfdfbed223d981a34f7834",
+    "correction": "replace the mistyped frozen checksum with the live Zenodo metadata checksum",
+    "response_payload_bytes_opened": 0,
+    "file_payload_requests": 0,
+    "ecological_world_rules_changed": false,
+    "temporal_split_changed": false,
+    "endpoint_changed": false
+  }
 }
