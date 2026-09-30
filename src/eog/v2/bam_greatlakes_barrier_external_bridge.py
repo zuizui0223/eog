@@ -593,23 +593,34 @@ def evaluate_species(
         if all(a.get(node, False) and m.get(node, False) for node in calibration_nodes):
             calibration_survivors.append(world)
 
+    # Heldout node-specific falsification is always measured against the same frozen
+    # calibration survivor set.  This makes the primary endpoint invariant to the
+    # arbitrary order in which heldout positive nodes are listed.
+    support_2023: dict[str, tuple[dict[str, bool], dict[str, bool]]] = {}
+    for world in calibration_survivors:
+        support_2023[world.world_id] = (
+            habitat_support_by_node(
+                joined, species, scaling, world.A_level, "2023"
+            ),
+            movement_support_by_node(
+                habitat, calibration_nodes, world.M_level, "2023"
+            ),
+        )
+
     witness_rows = []
-    active = {world.world_id: world for world in calibration_survivors}
+    final_survivors = {
+        world.world_id for world in calibration_survivors
+    }
     for node_id in heldout_nodes:
         eliminated = []
         by_axis = {"A": 0, "M": 0, "AM": 0}
-        for world_id, world in tuple(active.items()):
-            a = habitat_support_by_node(
-                joined, species, scaling, world.A_level, "2023"
-            )
-            m = movement_support_by_node(
-                habitat, calibration_nodes, world.M_level, "2023"
-            )
+        for world in calibration_survivors:
+            a, m = support_2023[world.world_id]
             a_ok = bool(a.get(node_id, False))
             m_ok = bool(m.get(node_id, False))
             if a_ok and m_ok:
                 continue
-            eliminated.append(world_id)
+            eliminated.append(world.world_id)
             if not a_ok and not m_ok:
                 by_axis["AM"] += 1
             elif not a_ok:
@@ -617,15 +628,21 @@ def evaluate_species(
             else:
                 by_axis["M"] += 1
 
-        for world_id in eliminated:
-            active.pop(world_id, None)
+        final_survivors.difference_update(eliminated)
         witness_rows.append(
             {
                 "node_id": node_id,
-                "survivors_before": len(active) + len(eliminated),
-                "eliminated_world_count": len(eliminated),
+                "calibration_survivor_count": len(calibration_survivors),
+                "individually_eliminated_world_count": len(eliminated),
+                "individually_eliminated_world_fraction": (
+                    0.0
+                    if not calibration_survivors
+                    else len(eliminated) / len(calibration_survivors)
+                ),
                 "eliminated_by_axis": by_axis,
-                "survivors_after": len(active),
+                "individual_survivors_after_node": (
+                    len(calibration_survivors) - len(eliminated)
+                ),
             }
         )
 
@@ -636,6 +653,6 @@ def evaluate_species(
         calibration_world_ids=tuple(
             sorted(world.world_id for world in calibration_survivors)
         ),
-        final_survivor_world_ids=tuple(sorted(active)),
+        final_survivor_world_ids=tuple(sorted(final_survivors)),
         heldout_witness_rows=tuple(witness_rows),
     )
