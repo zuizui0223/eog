@@ -986,6 +986,91 @@ Canonical Phase-VIII assets:
 The 5% value is a preregistered pairwise sufficient error bound, not a statement of
 95% posterior certainty or a universal ecological decision threshold.
 
+## 25. Ecological and observation uncertainty interact at the evidence-design level
+
+Phase IX combined two previously frozen uncertainty axes without adding a new ecological
+scenario or observation process:
+
+- ecological world family: (W_0\subset W_1);
+- assay-observation family: (O_0\subset O_1).
+
+The four joint levels were
+
+[
+W_0O_0,quad W_0O_1,quad W_1O_0,quad W_1O_1.
+]
+
+The target remained the structured future binary ecological decision.  Ecological-world
+and observation-world identities were nuisance uncertainty.
+
+The fixed action library contained the eight Phase-VI parameter assays plus explicit
+assay-process calibration.
+
+Across **387 = 129 current-G fibers × 3 structured targets**:
+
+- joint burden monotonicity violations: **0**;
+- strict joint interactions: **51**;
+- ecological expansion creating a new calibration requirement: **9**;
+- W1O1 complete-library failures: **0**.
+
+A strict joint interaction was defined as
+
+[
+b(W_1,O_1)
+>
+\max\{b(W_1,O_0),b(W_0,O_1)\}.
+]
+
+Counts were:
+
+- climate: **4/129**;
+- biotic stress: **43/129**;
+- barrier restoration: **4/129**.
+
+Thus the evidence burden of the combined joint universe could exceed the burden induced
+by either ecological-world expansion or observation-process expansion alone.
+
+The strongest target-specific pattern was biotic stress: every one of the **43 W1
+target-unresolved unique fibers** had a strict joint burden increment.
+
+Ecological expansion also changed whether explicit assay-process calibration was
+target-relevant.  No W0O1 exact minimum required calibration, but W1O1 required
+calibration in every minimum-size design for:
+
+- 2 climate fibers;
+- 4 biotic-stress fibers;
+- 3 barrier-restoration fibers.
+
+So calibration need is not an intrinsic property of an assay in isolation.  It can be
+activated by broadening the ecological alternative set.
+
+However, only 9 of the 51 strict joint interactions required explicit calibration.
+Most combined burden increases were handled by adding assay channels whose joint
+signature self-calibrated the target.
+
+The mainline evidence-routing object is therefore now fully joint:
+
+[
+W_E\times W_O
+\rightarrow
+\text{target-discordant joint hypotheses}
+\rightarrow
+\text{evidence-class feasibility}
+\rightarrow
+\text{exact minimum target design}.
+]
+
+Canonical Phase-IX assets:
+
+- `validation/bam_joint_uncertainty_lattice_v1/protocol_v1.json`;
+- `validation/bam_joint_uncertainty_lattice_v1/result_summary_v1.json`;
+- `docs/bam_joint_uncertainty_lattice_v1.md`;
+- `docs/bam_joint_uncertainty_lattice_v1_result.md`;
+- `docs/bam_joint_uncertainty_theory_v1.md`.
+
+No claim is made that the synthetic systematic assay world is a calibrated laboratory
+error model or that action cardinality is field cost.
+
 ## Hard claim boundary
 
 Do not claim:
