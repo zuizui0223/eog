@@ -16,6 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DRYAD_TOKEN: ${{ secrets.DRYAD_TOKEN }}
+      DRYAD_API_TOKEN: ${{ secrets.DRYAD_API_TOKEN }}
+      DRYAD_ACCESS_TOKEN: ${{ secrets.DRYAD_ACCESS_TOKEN }}
+      DRYAD_CLIENT_ID: ${{ secrets.DRYAD_CLIENT_ID }}
+      DRYAD_CLIENT_SECRET: ${{ secrets.DRYAD_CLIENT_SECRET }}
+      DRYAD_TOKEN_URL: ${{ secrets.DRYAD_TOKEN_URL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
