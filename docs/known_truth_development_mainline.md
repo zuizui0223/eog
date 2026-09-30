@@ -902,6 +902,90 @@ Canonical assets:
 The observation worlds are synthetic deterministic coding processes.  No claim is made
 about independent random measurement error or real assay cost.
 
+## 24. Stochastic assay error separates exact robustness from risk reduction
+
+Phase VII studied fixed systematic miscoding.  Phase VIII froze a different
+observation process: iid full-support categorical assay error under two global quality
+worlds, with `p_correct=0.7` or `0.9`.
+
+The ecological W1 fibers, three structured future targets and Phase-VII canonical
+assay fields were left unchanged.
+
+Two inferential claims were deliberately separated.
+
+### Exact finite-world robustness
+
+Because every stochastic assay code has positive probability under every true code,
+same-quality target-discordant hypotheses retain overlapping support after any finite
+number of iid repeats.
+
+The audit found:
+
+- scored future-target-unresolved fibers: **67**;
+- finite-repeat exact robust separation: **0/67**.
+
+Thus repetition does not turn full-support random error into hard falsification.
+
+### Risk-bounded distinguishability
+
+The stochastic endpoint was instead the worst target-discordant pair Bhattacharyya
+upper bound
+
+[
+P_e^* \le BC/2.
+]
+
+The preregistered threshold was `BC/2 <= 0.05`, with repeat depth capped at 30.
+
+Every frozen fiber crossed the bound:
+
+- climate: **8 repeats** in 18/18 fibers;
+- biotic stress: **27 repeats** in 43/43;
+- barrier restoration: **11 repeats** in 1/6 and **27 repeats** in 5/6.
+
+For S11 climate, the two Phase-VII fields
+`A_level + antagonist_excluded` moved from a one-read worst bound of **0.3646** to
+**0.03995** after eight repeats per field.
+
+### Quality calibration hypothesis refuted
+
+H4 predicted that idealized assay-quality calibration would strictly reduce total
+synthetic action count for at least one fiber.
+
+It did not.
+
+- strict calibration cost savings: **0/67**;
+- repeat depth with and without quality calibration was identical in every fiber;
+- the limiting pair at the stopping depth was same-quality in **67/67** fibers.
+
+Therefore quality calibration could not improve the worst-pair criterion: it removes
+cross-quality ambiguity, while the active bottleneck was already ecological
+target disagreement inside one quality world.
+
+The preregistered H4 is **REFUTED** and remains refuted.
+
+### Observation-process contrast
+
+The mainline now distinguishes:
+
+1. **fixed systematic miscoding** — repetition can be exactly redundant and explicit
+   calibration can be structurally necessary;
+2. **iid full-support random error** — repetition can reduce stochastic overlap
+   exponentially but cannot restore exact support-disjoint robustness;
+3. **quality calibration** — useful for the chosen worst-pair target only when
+   cross-quality ambiguity is actually limiting.
+
+Canonical Phase-VIII assets:
+
+- `validation/bam_stochastic_assay_risk_v1/protocol_v1.json`;
+- `validation/bam_stochastic_assay_risk_v1/result_summary_v1.json`;
+- `docs/bam_stochastic_assay_risk_v1.md`;
+- `docs/bam_stochastic_assay_risk_v1_result.md`;
+- `docs/bam_stochastic_assay_risk_theory_v1.md`.
+
+The 5% value is a preregistered pairwise sufficient error bound, not a statement of
+95% posterior certainty or a universal ecological decision threshold.
+
 ## Hard claim boundary
 
 Do not claim:
