@@ -173,5 +173,18 @@
     "A_rules_changed": false,
     "cohort_rule_changed": false,
     "heldout_endpoint_changed": false
+  },
+  "gate0_metadata_schema_amendment": {
+    "classification": "pre_payload_Dryad_v2_1_schema_correction",
+    "failed_run": 36744944850,
+    "failed_job": 109986859568,
+    "reason": "version-list item exposed internal version ID through _links.self rather than the assumed top-level id field",
+    "correction": "parse only the documented exact self-link form /api/v2/versions/<positive integer>",
+    "data_file_payload_requests": 0,
+    "data_file_payload_bytes_opened": 0,
+    "ecological_response_values_opened": false,
+    "A_M_rules_changed": false,
+    "cohort_rule_changed": false,
+    "endpoint_changed": false
   }
 }
