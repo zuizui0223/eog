@@ -1,0 +1,16 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.gate1_transport_note.v1",
+  "classification": "pre_RDS_documentation_transport_substitution",
+  "reason": "Dryad file-byte download route may require bearer authentication, while the public Dryad dataset landing page renders the README documentation needed by Gate1",
+  "replacement_scope": "README schema/period documentation only",
+  "exact_README_file_bytes_downloaded": false,
+  "RDS_payload_requests": 0,
+  "RDS_payload_bytes_opened": 0,
+  "ecological_response_values_opened": false,
+  "A_rules_changed": false,
+  "M_rules_changed": false,
+  "cohort_rule_changed": false,
+  "heldout_endpoint_changed": false,
+  "gate0_file_identity_or_checksums_changed": false,
+  "source_url": "https://datadryad.org/dataset/doi%3A10.5061/dryad.gb5mkkx5s"
+}
