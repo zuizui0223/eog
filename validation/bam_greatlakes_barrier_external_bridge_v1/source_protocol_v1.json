@@ -1,0 +1,190 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.source_protocol.v1",
+  "status": "frozen_before_dryad_data_payload_access",
+  "scientific_role": "retrospective_external_AM_subfamily_bridge_not_fresh_confirmatory_evidence",
+  "freshness_boundary": {
+    "dataset_landing_page_and_abstract_seen": true,
+    "aggregate_article_results_seen": true,
+    "raw_RDS_payload_opened_in_this_bridge_before_freeze": false,
+    "may_be_called_fresh_or_independent_confirmatory": false,
+    "permitted_claim": "real-system external feasibility/falsification bridge for an A/M subfamily of finite BAM worlds"
+  },
+  "source": {
+    "title": "Data and code from: A framework for investigating fish population density responses to habitat fragmentation",
+    "doi": "10.5061/dryad.gb5mkkx5s",
+    "repository": "Dryad",
+    "published": "2026-07-27",
+    "required_files": [
+      "README.md",
+      "hab_variables.rds",
+      "pooled_catch_effort_by_species.rds"
+    ],
+    "required_file_names_frozen_before_metadata_gate": true,
+    "file_ids_checksums_and_exact_sizes": "discover and freeze from Dryad API metadata only at Gate0; no data payload access",
+    "source_switch_after_data_payload_access_allowed": false
+  },
+  "real_system": {
+    "region": "24 Great Lakes tributaries",
+    "design": "barrier-stream/reference-stream pairs with sites upstream and downstream of low-head dams or corresponding reference locations",
+    "periods": {
+      "calibration": "1996/1997 ('90s')",
+      "heldout": "2023"
+    },
+    "sampling": "most streams have three sites above and three below the barrier, or corresponding locations in the reference stream; fish collected with backpack electrofishing"
+  },
+  "cohort": {
+    "rule": "after calibration payload opening, include every species with at least two distinct 90s positive physical sites; no species may be selected or removed using 2023 response, published effect sign, model coefficient, or favorable EOG result",
+    "expected_article_scale": "29 modeled species is contextual only and is not an eligibility target",
+    "heldout_zero_positive_species": "retain with status no_heldout_positive_witness; do not drop"
+  },
+  "physical_node": {
+    "key": [
+      "pair_id",
+      "Stream.Name",
+      "position",
+      "segment"
+    ],
+    "period_is_not_part_of_physical_identity": true,
+    "habitat_join_key": [
+      "period",
+      "pair_id",
+      "Stream.Name",
+      "barrier",
+      "position",
+      "segment"
+    ],
+    "duplicate_habitat_key": "terminal_stop",
+    "unknown_or_missing_position_or_segment": "terminal_stop"
+  },
+  "B_axis": {
+    "primary_state": "unrestricted at every physical node",
+    "reason": "the released dataset does not provide a predeclared causal biotic-interaction variable suitable for a defensible B constraint",
+    "community_derived_B_allowed_in_primary": false,
+    "claim": "this bridge validates an A/M subfamily of BAM; it is not evidence that empirical B has been measured"
+  },
+  "A_axis": {
+    "habitat_fields": [
+      "width",
+      "max_depth",
+      "prop_clay",
+      "prop_silt",
+      "prop_sand",
+      "prop_gravel",
+      "prop_boulder"
+    ],
+    "global_scaling": "using all 90s habitat nodes only, center each field by its median and divide by IQR; zero/nonfinite IQR is terminal_stop",
+    "distance": "L-infinity distance in the seven-field scaled habitat space",
+    "threshold_population": "all unordered pairwise habitat distances among distinct 90s physical nodes",
+    "threshold_quantiles": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "quantile_method": "linear interpolation identical to numpy.quantile(method='linear')",
+    "species_support_rule": "a node-period is A-compatible at threshold q iff its habitat vector lies within q of at least one 90s calibration-positive node for that species",
+    "open_world": "A_open permits every node-period",
+    "response_independence": "thresholds/scaling use habitat registry only; species positives enter only as frozen support anchors after all thresholds are fixed"
+  },
+  "M_axis": {
+    "graph_nodes": "union of all physical nodes appearing in either period; sampling absence in a period must not remove a physical movement node",
+    "within_side_edges": "undirected edges between consecutive segment numbers within the same stream and same upstream/downstream position",
+    "cross_reference_location": "if barrier=0 for the target period, connect upstream segment 1 and downstream segment 1",
+    "barrier_worlds": [
+      "M_barrier_closed: if barrier=1, no edge crosses between upstream segment 1 and downstream segment 1",
+      "M_barrier_open: connect upstream segment 1 and downstream segment 1 regardless of barrier=1"
+    ],
+    "horizon_steps": [
+      1,
+      2,
+      5
+    ],
+    "open_world": "M_open_all uses M_barrier_open with unrestricted graph-step horizon",
+    "calibration_sources": "all 90s positive physical nodes for the focal species",
+    "species_response_used_to_tune_edges_or_horizons": false,
+    "period_barrier_state": "for each stream and target period, infer the unique barrier dummy from all sampled rows in that stream-period; missing or conflicting stream-period barrier state is terminal_stop"
+  },
+  "world_product": {
+    "A_levels": [
+      "q25",
+      "q50",
+      "q75",
+      "q90",
+      "open"
+    ],
+    "M_levels": [
+      "barrier_closed_h1",
+      "barrier_closed_h2",
+      "barrier_closed_h5",
+      "barrier_open_h1",
+      "barrier_open_h2",
+      "barrier_open_h5",
+      "open_all"
+    ],
+    "B_level": [
+      "unrestricted"
+    ],
+    "maximum_worlds_per_species": 35,
+    "calibration_compatibility": "positive-only containment: every 90s positive physical node must satisfy A and M in the 90s state",
+    "calibration_nondetection_as_hard_absence": false
+  },
+  "heldout_contract": {
+    "response": "2023 species total_caught > 0 at a physical node",
+    "positive_only_hard_witness": true,
+    "nondetection_as_absence": false,
+    "primary_endpoint": "for each species and each 2023 positive node, exact number/fraction of calibration-surviving worlds falsified because A or M excludes that positive",
+    "secondary": [
+      "survivor-fiber contraction from all heldout positives",
+      "A-versus-M witness attribution for falsified worlds",
+      "species retained with zero heldout positives",
+      "whether any species remains nonidentified after complete heldout positive evidence"
+    ],
+    "not_endpoints": [
+      "published barrier-effect coefficient replication",
+      "AUC",
+      "log loss",
+      "negative-site accuracy",
+      "ranking species by favorable result"
+    ]
+  },
+  "stages": [
+    "Gate0 Dryad metadata identity: DOI/title/required file names; freeze file IDs/checksums/exact sizes; zero data bytes",
+    "Gate1 README full text only; verify documented schemas and period semantics; zero RDS data bytes",
+    "Gate2 freeze RDS parser, exact join keys, A/M constructor, cohort and output schema",
+    "Gate3 once-only open both required RDS data payloads; parse complete data; execute calibration then heldout-positive falsification without retuning"
+  ],
+  "hard_stops": [
+    "do not add a community-derived B constraint after data access",
+    "do not select a focal species based on effect or EOG result",
+    "do not change A fields or threshold quantiles after RDS access",
+    "do not change M horizons, graph edges, or barrier semantics after RDS access",
+    "do not promote 2023 nondetection to biological absence",
+    "do not change 90s/2023 split",
+    "do not call this fresh or independent confirmatory evidence",
+    "do not use article aggregate effects as the bridge target"
+  ],
+  "success_definition": "successful bridge means a real repeated fish-survey dataset can instantiate a frozen finite A/M world family and later positive observations can either preserve or falsify worlds without post-response retuning; favorable contraction is not required",
+  "protocol_amendment": {
+    "classification": "pre_payload_response_independent_M_graph_correction",
+    "reason": "period-specific sampled-node graphs would confound sampling omission with physical movement accessibility",
+    "data_payload_bytes_opened": 0,
+    "ecological_response_values_opened": false,
+    "correction": "build graph topology on the union of physical nodes across both periods while using target-period barrier state for the cross-location edge",
+    "A_rules_changed": false,
+    "cohort_rule_changed": false,
+    "heldout_endpoint_changed": false
+  },
+  "gate0_metadata_schema_amendment": {
+    "classification": "pre_payload_Dryad_v2_1_schema_correction",
+    "failed_run": 36744944850,
+    "failed_job": 109986859568,
+    "reason": "version-list item exposed internal version ID through _links.self rather than the assumed top-level id field",
+    "correction": "parse only the documented exact self-link form /api/v2/versions/<positive integer>",
+    "data_file_payload_requests": 0,
+    "data_file_payload_bytes_opened": 0,
+    "ecological_response_values_opened": false,
+    "A_M_rules_changed": false,
+    "cohort_rule_changed": false,
+    "endpoint_changed": false
+  }
+}
