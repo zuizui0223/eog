@@ -11,6 +11,10 @@ on:
       - ".github/workflows/bam-greatlakes-barrier-execute-once.yml"
   workflow_dispatch:
 
+concurrency:
+  group: bam-greatlakes-once-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   execute:
     runs-on: ubuntu-latest
