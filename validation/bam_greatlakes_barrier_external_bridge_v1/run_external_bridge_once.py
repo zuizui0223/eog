@@ -409,6 +409,7 @@ def execute_bridge(
         raise ExecutionStop("no species satisfy frozen calibration eligibility")
 
     species_rows = []
+    species_objects = {}
     contraction_fractions = []
     for species in species_names:
         result = evaluate_species(
@@ -418,6 +419,13 @@ def execute_bridge(
             species=species,
         )
         calibration_count = len(result.calibration_world_ids)
+        if calibration_count != 35:
+            raise ExecutionStop(
+                f"calibration compatibility invariant failed for {species!r}: "
+                f"expected all 35 anchored/source-conditioned worlds, got "
+                f"{calibration_count}"
+            )
+        species_objects[species] = result
         final_count = len(result.final_survivor_world_ids)
         eliminated = calibration_count - final_count
         contraction = _safe_fraction(eliminated, calibration_count)
@@ -491,12 +499,7 @@ def execute_bridge(
         for world in all_worlds()
     }
     for species_row in species_rows:
-        species_result = evaluate_species(
-            joined=joined,
-            habitat=habitat,
-            scaling=scaling,
-            species=species_row["species"],
-        )
+        species_result = species_objects[species_row["species"]]
         calibration_ids = set(species_result.calibration_world_ids)
         final_ids = set(species_result.final_survivor_world_ids)
         for world_id in calibration_ids:
@@ -528,6 +531,15 @@ def execute_bridge(
             "retrospective_external_AM_subfamily_bridge_not_fresh_confirmatory_evidence"
         ),
         "eligible_species_count": len(species_rows),
+        "calibration_world_compatibility_invariant": {
+            "expected_worlds_per_eligible_species": 35,
+            "all_eligible_species_passed": True,
+            "interpretation": (
+                "A is anchored and M is sourced by 90s positives; calibration "
+                "conditions the declared 35-world fiber rather than selecting a "
+                "post hoc subset. Only heldout positive evidence can contract it."
+            ),
+        },
         "status_counts": status_counts,
         "species_with_heldout_positive_witness": species_with_heldout_positive,
         "species_with_any_heldout_contraction": species_with_contraction,
