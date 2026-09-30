@@ -1,0 +1,186 @@
+{
+  "schema": "eog.bam_future_target_evidence.result_summary.v1",
+  "status": "completed_preregistered_target_aware_evidence_audit",
+  "protocol": "validation/bam_future_target_evidence_v1/protocol_v1.json",
+  "protocol_commit": "f362a2c5387f32ad05485d9df59642fbf9cc2691",
+  "parent_result": {
+    "path": "validation/bam_structured_counterfactuals_v1/result_summary_v1.json",
+    "fingerprint": "f502fb647ba4666f5c40ddbd5639123f3e0296fe492dd97a1ec19ec246531cb1"
+  },
+  "authoritative_run": 36676214445,
+  "authoritative_job": 109761642521,
+  "executed_head": "380d0052709e986510adcd4b1621af6825add4c9",
+  "artifact_id": 11079936691,
+  "artifact_digest": "sha256:bc3cb116322698ae8aeb62b50dec6b4e2cdf45ded7e2677d4e161966fe1cad28",
+  "result_fingerprint": "b87bfa721e21acfdc0a03239b0ed556f77bd77e3ee49f25c11d56ece02b8db58",
+  "truth_count": 768,
+  "S11_dormant_climate_truth_matches": 2,
+  "predeclared_verdicts": {
+    "H1_state_only_insufficiency_exists": "SUPPORTED",
+    "H2_parameter_rescue_all": "SUPPORTED",
+    "H3_target_specific_saving_exists": {
+      "climate_shift": "SUPPORTED",
+      "biotic_stress": "SUPPORTED",
+      "barrier_restoration": "SUPPORTED"
+    },
+    "H4_dormant_alias_requires_parameter_evidence": "SUPPORTED"
+  },
+  "parameter_world_identification": {
+    "minimum_parameter_assay_distribution": {
+      "1": 2,
+      "2": 13,
+      "3": 59,
+      "4": 180,
+      "5": 233,
+      "6": 223,
+      "7": 58
+    },
+    "mean": 4.9921875,
+    "median": 5.0,
+    "maximum": 7
+  },
+  "by_transformation": {
+    "climate_shift": {
+      "binary": {
+        "already_identified_at_E1": 636,
+        "unresolved_at_E1": 132,
+        "state_only_resolvable": 122,
+        "state_only_insufficient": 10,
+        "parameter_library_failures": 0,
+        "minimum_parameter_assay_distribution": {
+          "0": 636,
+          "1": 132
+        },
+        "minimum_combined_channel_distribution": {
+          "0": 636,
+          "1": 132
+        },
+        "strict_parameter_assay_saving_vs_world_identification": 768
+      },
+      "exact_map": {
+        "state_only_insufficient": 10,
+        "minimum_parameter_assay_distribution": {
+          "0": 610,
+          "1": 146,
+          "2": 12
+        }
+      },
+      "canonical_minimum_parameter_frequency": {
+        "param:A_level": 132
+      }
+    },
+    "biotic_stress": {
+      "binary": {
+        "already_identified_at_E1": 498,
+        "unresolved_at_E1": 270,
+        "state_only_resolvable": 270,
+        "state_only_insufficient": 0,
+        "parameter_library_failures": 0,
+        "minimum_parameter_assay_distribution": {
+          "0": 498,
+          "1": 160,
+          "2": 110
+        },
+        "minimum_combined_channel_distribution": {
+          "0": 498,
+          "1": 270
+        },
+        "strict_parameter_assay_saving_vs_world_identification": 768
+      },
+      "exact_map": {
+        "state_only_insufficient": 0,
+        "minimum_parameter_assay_distribution": {
+          "0": 442,
+          "1": 186,
+          "2": 117,
+          "3": 21,
+          "4": 2
+        }
+      },
+      "canonical_minimum_parameter_frequency": {
+        "param:A_level": 21,
+        "param:antagonist_excluded": 127,
+        "param:antagonist_range_level": 65,
+        "param:partner_range_level": 107,
+        "param:partner_required": 60
+      }
+    },
+    "barrier_restoration": {
+      "binary": {
+        "already_identified_at_E1": 700,
+        "unresolved_at_E1": 68,
+        "state_only_resolvable": 58,
+        "state_only_insufficient": 10,
+        "parameter_library_failures": 0,
+        "minimum_parameter_assay_distribution": {
+          "0": 700,
+          "1": 61,
+          "2": 7
+        },
+        "minimum_combined_channel_distribution": {
+          "0": 700,
+          "1": 61,
+          "2": 7
+        },
+        "strict_parameter_assay_saving_vs_world_identification": 768
+      },
+      "exact_map": {
+        "state_only_insufficient": 88,
+        "minimum_parameter_assay_distribution": {
+          "0": 604,
+          "1": 7,
+          "2": 56,
+          "3": 58,
+          "4": 28,
+          "5": 15
+        }
+      },
+      "canonical_minimum_parameter_frequency": {
+        "param:antagonist_excluded": 28,
+        "param:antagonist_range_level": 16,
+        "param:barrier_permeable": 5,
+        "param:dispersal_radius_level": 14,
+        "param:horizon_level": 10,
+        "param:partner_range_level": 2
+      }
+    }
+  },
+  "S11_dormant_climate_evidence": [
+    {
+      "truth_world_id": "A_broad|B_none|M_D2.01_P0_H3",
+      "truth_variant_id": "A1|Bpr0ae0_ps0_as0|Md1p0h0",
+      "survivor_count": 36,
+      "binary_target_class_count": 2,
+      "state_only_sufficient": false,
+      "minimum_parameter_assays": ["param:A_level"],
+      "minimum_parameter_assay_count": 1,
+      "minimum_combined_channel_count": 1
+    },
+    {
+      "truth_world_id": "A_broad|B_none|M_D2.01_P1_H3",
+      "truth_variant_id": "A1|Bpr0ae0_ps0_as0|Md1p1h0",
+      "survivor_count": 36,
+      "binary_target_class_count": 2,
+      "state_only_sufficient": false,
+      "minimum_parameter_assays": ["param:A_level"],
+      "minimum_parameter_assay_count": 1,
+      "minimum_combined_channel_count": 1
+    }
+  ],
+  "main_findings": [
+    "Complete present-state A/B/M/tau evidence is not generically sufficient for a structured future target: 10 climate and 10 barrier-restoration binary truth cases remained unresolved even under the complete current-state library.",
+    "The complete eight-coordinate parameter library resolved every frozen structured future binary and exact-map target.",
+    "Target-specific parameter evidence was strictly cheaper in channel count than exact W1 parameter-world identification for every truth and every transformation in the frozen benchmark.",
+    "Full parameter-world identification required a median of five parameter assays, whereas climate binary decisions required at most one, biotic-stress binary decisions at most two parameter assays and barrier-restoration binary decisions at most two.",
+    "For climate, every E1-unresolved binary decision had the same canonical one-assay solution: A niche-breadth level.",
+    "For biotic stress, complete present-state evidence was sufficient for every E1-unresolved binary decision, and the combined evidence library reduced all 270 unresolved decisions to one additional channel even though parameter-only designs required two assays in 110 truths.",
+    "The preregistered S11 dormant climate fiber remained impossible to resolve with any present-state A/B/M/tau measurement but was resolved by one A-level parameter assay."
+  ],
+  "claim_boundary": [
+    "Evidence-channel cardinality is a finite information count, not monetary, logistical, temporal or ethical field cost.",
+    "Canonical minimum parameter frequencies are discriminative properties of the frozen finite universe and must not be interpreted as causal importance rankings.",
+    "Exact parameter assays are synthetic known-truth evidence channels; real field proxies would require independent calibration.",
+    "The result does not imply that present-state measurements are generally inferior to parameter evidence; biotic stress provides the opposite example in this frozen design.",
+    "The result does not alter Phase-I through Phase-V or the frozen EOG-WF and first BAM inverse-identifiability manuscripts."
+  ]
+}
