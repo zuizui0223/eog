@@ -33,7 +33,10 @@ def _fixture():
     versions = {
         "_embedded": {
             "stash:versions": [
-                {"id": 456, "versionNumber": 1}
+                {
+                    "versionNumber": 1,
+                    "_links": {"self": {"href": "/api/v2/versions/456"}}
+                }
             ]
         }
     }
@@ -79,7 +82,20 @@ def test_gate0_fails_closed_on_multiple_versions():
     dataset, versions, files, protocol = _fixture()
     versions = copy.deepcopy(versions)
     versions["_embedded"]["stash:versions"].append(
-        {"id": 999, "versionNumber": 2}
+        {
+            "versionNumber": 2,
+            "_links": {"self": {"href": "/api/v2/versions/999"}}
+        }
     )
     with pytest.raises(Gate0Stop, match="exactly one"):
+        evaluate(dataset, versions, files, protocol)
+
+
+def test_gate0_fails_closed_on_unparseable_version_self_link():
+    dataset, versions, files, protocol = _fixture()
+    versions = copy.deepcopy(versions)
+    versions["_embedded"]["stash:versions"][0]["_links"]["self"]["href"] = (
+        "/api/v2/versions/not-an-id"
+    )
+    with pytest.raises(Gate0Stop, match="version self href"):
         evaluate(dataset, versions, files, protocol)
