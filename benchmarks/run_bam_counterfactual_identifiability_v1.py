@@ -59,7 +59,7 @@ def run() -> dict[str, object]:
         raise RuntimeError("counterfactual protocol is not frozen")
 
     parent = json.loads(PARENT_RESULT.read_text(encoding="utf-8"))
-    if parent.get("fingerprint") != EXPECTED_PARENT_FINGERPRINT:
+    if parent.get("result_fingerprint") != EXPECTED_PARENT_FINGERPRINT:
         raise RuntimeError("frozen deterministic BAM parent fingerprint mismatch")
 
     axes = ("A", "B", "M")
