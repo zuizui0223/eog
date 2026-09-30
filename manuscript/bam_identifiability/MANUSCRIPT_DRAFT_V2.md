@@ -24,7 +24,7 @@ This many-to-one structure creates a distinction between fitting a distribution 
 
 Existing BAM work establishes the forward framework, dynamic process representations and the possibility of confounding among ecological components (Soberón & Osorio-Olvera, 2023). BAM has also been used to quantify covariate associations with distributions while recognizing that the precise cause of occupancy at individual locations may remain difficult to identify (Beale et al., 2014). Virtual-species studies likewise provide known causal systems for evaluating ecological models (Saupe et al., 2012). More generally, ecology already recognizes equifinality and degenerate pattern–process relationships as limits on mechanistic inference (Yanco et al., 2020; Lotterhos et al., 2022). Our goal is narrower: to characterize the inverse information content of occurrence evidence itself.
 
-We treat inverse BAM inference as a finite partial-identification problem. Instead of asking which candidate world is best, we ask which declared worlds remain compatible with a specific evidence contract. This survivor set, or evidence fiber, is the primary inferential object. The formulation has three advantages. First, exact non-identification can be stated without relying on arbitrary score thresholds. Second, different evidence types can be compared by how they contract the same finite survivor set. Third, remaining ambiguity can be converted directly into a diagnostic-measurement problem: which additional observations would distinguish the surviving alternatives? Model-discrimination experiment design is established in statistics and ecology (Atkinson & Cox, 1974; Papanikolaou et al., 2023); our contribution is to derive the BAM-specific survivor fiber to which such design can be applied.
+We treat inverse BAM inference as a finite partial-identification problem. Instead of asking which candidate world is best, we ask which declared worlds remain compatible with a specific evidence contract. This survivor set, or evidence fiber, is the primary inferential object. The formulation has three advantages. First, exact non-identification can be stated without relying on arbitrary score thresholds. Second, different evidence types can be compared by how they contract the same finite survivor set. Third, remaining ambiguity can be converted directly into a diagnostic-measurement problem: which additional A, B or M observations would distinguish the surviving alternatives? Experimental design for discriminating competing models is itself long-standing (Atkinson & Cox 1974) and has modern ecological applications (Papanikolaou et al. 2023); here it enters only after the BAM-specific survivor fiber has been derived. Model-discrimination experiment design is established in statistics and ecology (Atkinson & Cox, 1974; Papanikolaou et al., 2023); our contribution is to derive the BAM-specific survivor fiber to which such design can be applied.
 
 We address four questions.
 
@@ -449,7 +449,7 @@ This is especially important when downstream ecological interpretation is mechan
 
 ### 5.6 Ambiguity can guide evidence collection
 
-The hitting-set formulation gives non-identification an operational consequence.
+Using experiments to discriminate competing models is not new (Atkinson & Cox 1974), and adaptive ecological experiment design can improve model discrimination and parameter estimation (Papanikolaou et al. 2023). The contribution here is narrower: once the BAM inverse survivor fiber has been made explicit, its unresolved contrasts define a finite diagnostic-measurement problem. The hitting-set formulation gives that BAM-specific non-identification an operational consequence.
 
 Once the current survivor fiber is known, the next useful measurement is one that eliminates one or more surviving alternatives while retaining the target state. The exact finite design asks for the smallest set of measurements whose disagreement patterns cover all nuisance worlds.
 
@@ -467,7 +467,7 @@ The software is an implementation of the survivor-fiber logic. It is not the pri
 
 All exact statements are conditional on declared finite world and evidence universes.
 
-The simulations do not imply that real A, B, M or movement states are directly observable without error. Perfect negatives and direct mechanism measurements are idealized evidence contracts used to establish identifiability boundaries.
+The simulations do not imply that real A, B, M or movement states are directly observable without error. Reliable absences are themselves difficult to establish, and BAM absence patterns can arise from A, B, M or combinations of them (Bariotakis & Pirintsos 2018). Perfect negatives and direct mechanism measurements are therefore idealized evidence contracts used to establish identifiability boundaries.
 
 The numerical targeted-measurement bounds are properties of the frozen simulation programme, not universal constants.
 
