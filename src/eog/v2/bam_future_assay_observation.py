@@ -346,3 +346,200 @@ def repeat_equivalence_violations(
         if one != repeated:
             violations += 1
     return violations
+
+
+def _singleton_outcome(
+    support: Sequence[str] | set[str] | frozenset[str],
+) -> str:
+    values = tuple(support)
+    if len(values) != 1:
+        raise ValueError("deterministic fast path requires singleton action supports")
+    return str(values[0])
+
+
+def _normalized_singleton_partition(
+    action_support: Mapping[str, Sequence[str] | set[str] | frozenset[str]],
+    joint_ids: Sequence[str],
+) -> tuple[int, ...]:
+    labels: dict[str, int] = {}
+    signature: list[int] = []
+    for joint_id in joint_ids:
+        value = _singleton_outcome(action_support[joint_id])
+        if value not in labels:
+            labels[value] = len(labels)
+        signature.append(labels[value])
+    return tuple(signature)
+
+
+def repeat_equivalence_violations_deterministic(
+    hypotheses: Sequence[JointAssayHypothesis],
+    action_supports: Mapping[str, Mapping[str, frozenset[str]]],
+) -> int:
+    """Fast exact H1 audit for deterministic assay outcomes.
+
+    Two actions have identical robust pair coverage iff they induce the same partition
+    of the joint-hypothesis set.  The repeated assay maps code -> code|code, which is a
+    one-to-one recoding under the frozen systematic observation world.
+    """
+
+    joint_ids = tuple(sorted(row.joint_id for row in hypotheses))
+    violations = 0
+    for field in PARAMETER_FIELDS:
+        one = _normalized_singleton_partition(
+            action_supports[f"assay:{field}"],
+            joint_ids,
+        )
+        repeated = _normalized_singleton_partition(
+            action_supports[f"repeat2:{field}"],
+            joint_ids,
+        )
+        if one != repeated:
+            violations += 1
+    return violations
+
+
+def exact_minimum_deterministic_target_design(
+    hypotheses: Sequence[JointAssayHypothesis],
+    action_supports: Mapping[
+        str,
+        Mapping[str, Sequence[str] | set[str] | frozenset[str]],
+    ],
+    *,
+    available_action_ids: Sequence[str] | None = None,
+) -> RobustFutureTargetPlan:
+    """Exact minimum target design for deterministic singleton action outcomes.
+
+    This is mathematically equivalent to covering all target-discordant hypothesis
+    pairs, but avoids explicitly materializing O(n^2) pairs.  A selected action set is
+    sufficient iff every joint hypothesis sharing the same combined observed signature
+    also shares the same future target.
+
+    Actions that induce exactly the same hypothesis partition are interchangeable for
+    every possible combination; only the lexicographically first representative is
+    retained.  In the frozen Phase-VII library this removes repeat2 duplicates while
+    preserving the exact minimum cardinality and lexicographic tie rule.
+    """
+
+    rows = tuple(hypotheses)
+    if not rows:
+        raise ValueError("hypotheses must be non-empty")
+    by_id = {row.joint_id: row for row in rows}
+    if len(by_id) != len(rows):
+        raise ValueError("joint hypothesis IDs must be unique")
+    joint_ids = tuple(sorted(by_id))
+
+    selected_ids = (
+        tuple(sorted(action_supports))
+        if available_action_ids is None
+        else tuple(sorted(set(str(value) for value in available_action_ids)))
+    )
+    missing_actions = set(selected_ids).difference(action_supports)
+    if missing_actions:
+        raise ValueError(f"unknown actions: {sorted(missing_actions)}")
+
+    # Validate singleton deterministic supports and exact hypothesis coverage.
+    outcome_by_action: dict[str, dict[str, str]] = {}
+    for action_id in selected_ids:
+        support = action_supports[action_id]
+        if set(support) != set(joint_ids):
+            raise ValueError(
+                f"action {action_id!r} must cover exact joint hypothesis universe"
+            )
+        outcome_by_action[action_id] = {
+            joint_id: _singleton_outcome(support[joint_id])
+            for joint_id in joint_ids
+        }
+
+    target_counts = Counter(by_id[joint_id].future_target for joint_id in joint_ids)
+    n = len(joint_ids)
+    total_pairs = n * (n - 1) // 2
+    same_target_pairs = sum(count * (count - 1) // 2 for count in target_counts.values())
+    discordant_pair_count = total_pairs - same_target_pairs
+
+    if discordant_pair_count == 0:
+        return RobustFutureTargetPlan(
+            joint_hypothesis_ids=joint_ids,
+            target_discordant_pair_count=0,
+            rankings=(),
+            minimum_action_ids=(),
+            minimum_size=0,
+            all_target_pairs_separated=True,
+            insufficient_action_library=False,
+        )
+
+    rankings_list: list[RobustTargetActionRanking] = []
+    for action_id in selected_ids:
+        grouped: dict[str, Counter[Hashable]] = {}
+        for joint_id in joint_ids:
+            outcome = outcome_by_action[action_id][joint_id]
+            grouped.setdefault(outcome, Counter())[
+                by_id[joint_id].future_target
+            ] += 1
+
+        unresolved = 0
+        for counts in grouped.values():
+            group_n = sum(counts.values())
+            group_pairs = group_n * (group_n - 1) // 2
+            same = sum(count * (count - 1) // 2 for count in counts.values())
+            unresolved += group_pairs - same
+        split = discordant_pair_count - unresolved
+        rankings_list.append(
+            RobustTargetActionRanking(
+                action_id=action_id,
+                robust_split_target_pair_count=split,
+                unresolved_target_pair_count=unresolved,
+            )
+        )
+    rankings = tuple(
+        sorted(
+            rankings_list,
+            key=lambda row: (-row.robust_split_target_pair_count, row.action_id),
+        )
+    )
+
+    # Deduplicate actions by the exact partition they induce.  Partition labels are
+    # normalized so one-to-one recodings such as code -> code|code collapse exactly.
+    partition_to_id: dict[tuple[int, ...], str] = {}
+    for action_id in selected_ids:
+        partition = _normalized_singleton_partition(
+            action_supports[action_id],
+            joint_ids,
+        )
+        incumbent = partition_to_id.get(partition)
+        if incumbent is None or action_id < incumbent:
+            partition_to_id[partition] = action_id
+    canonical_ids = tuple(sorted(partition_to_id.values()))
+
+    def sufficient(combo: Sequence[str]) -> bool:
+        signature_targets: dict[tuple[str, ...], Hashable] = {}
+        for joint_id in joint_ids:
+            signature = tuple(
+                outcome_by_action[action_id][joint_id]
+                for action_id in combo
+            )
+            target = by_id[joint_id].future_target
+            incumbent = signature_targets.get(signature)
+            if incumbent is None:
+                signature_targets[signature] = target
+            elif incumbent != target:
+                return False
+        return True
+
+    minimum: tuple[str, ...] | None = None
+    for size in range(1, len(canonical_ids) + 1):
+        for combo in combinations(canonical_ids, size):
+            if sufficient(combo):
+                minimum = tuple(combo)
+                break
+        if minimum is not None:
+            break
+
+    return RobustFutureTargetPlan(
+        joint_hypothesis_ids=joint_ids,
+        target_discordant_pair_count=discordant_pair_count,
+        rankings=rankings,
+        minimum_action_ids=minimum,
+        minimum_size=None if minimum is None else len(minimum),
+        all_target_pairs_separated=minimum is not None,
+        insufficient_action_library=minimum is None,
+    )
