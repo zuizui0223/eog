@@ -1,30 +1,11 @@
 name: BAM Great Lakes barrier bridge Gate0
 
 on:
-  pull_request:
-    paths:
-      - "validation/bam_greatlakes_barrier_external_bridge_v1/source_protocol_v1.json"
-      - "validation/bam_greatlakes_barrier_external_bridge_v1/gate0_dryad_identity.py"
-      - "tests/test_bam_greatlakes_barrier_gate0.py"
-      - ".github/workflows/bam-greatlakes-barrier-gate0.yml"
   workflow_dispatch:
 
+# Consumed prospective gate. Kept only for explicit reproduction; no automatic reruns.
 jobs:
-  gate0:
+  archived:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install
-        run: python -m pip install -e .[dev]
-      - name: Test fail-closed Dryad metadata gate
-        run: python -m pytest tests/test_bam_greatlakes_barrier_gate0.py -q
-      - name: Execute metadata-only Gate0
-        run: python -m validation.bam_greatlakes_barrier_external_bridge_v1.gate0_dryad_identity
-      - uses: actions/upload-artifact@v4
-        with:
-          name: bam-greatlakes-barrier-gate0
-          path: validation/bam_greatlakes_barrier_external_bridge_v1/gate0_dryad_identity_certificate.json
-          if-no-files-found: error
+      - run: echo "Consumed gate; use frozen certificate in validation/."
