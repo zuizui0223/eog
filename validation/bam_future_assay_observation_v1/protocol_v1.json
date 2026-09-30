@@ -1,0 +1,102 @@
+{
+  "schema": "eog.bam_future_assay_observation.protocol.v1",
+  "status": "frozen_before_implementation_and_scoring",
+  "parent_programme": {
+    "future_target_evidence_result": "validation/bam_future_target_evidence_v1/result_summary_v1.json",
+    "fingerprint": "b87bfa721e21acfdc0a03239b0ed556f77bd77e3ee49f25c11d56ece02b8db58",
+    "relationship": "Phase-VII observation-process stress test; Phase-VI perfect-assay results remain immutable"
+  },
+  "scientific_question": "When Phase-VI parameter assays are themselves subject to an unknown systematic observation process, which future-target evidence certificates remain robust, when is assay-process calibration required, and can repeated use of the same biased assay substitute for calibration?",
+  "fixed_ecological_universe": {
+    "systems": 12,
+    "truth_cases": 768,
+    "world_family": "W1 preregistered 2,592-world ecological lattice",
+    "current_evidence": "complete current G",
+    "transformations": ["climate_shift", "biotic_stress", "barrier_restoration"],
+    "analysis_units": "unique same-G W1 fibers with more than one binary future-target class; truth-weighted summaries may be derived afterward"
+  },
+  "parameter_assays": {
+    "fields": [
+      "A_level",
+      "partner_required",
+      "antagonist_excluded",
+      "partner_range_level",
+      "antagonist_range_level",
+      "dispersal_radius_level",
+      "barrier_permeable",
+      "horizon_level"
+    ],
+    "ordinal_fields": [
+      "A_level",
+      "partner_range_level",
+      "antagonist_range_level",
+      "dispersal_radius_level",
+      "horizon_level"
+    ],
+    "binary_fields": [
+      "partner_required",
+      "antagonist_excluded",
+      "barrier_permeable"
+    ]
+  },
+  "assay_observation_worlds": [
+    {
+      "id": "calibrated",
+      "ordinal_mapping": "observed=true integer code",
+      "binary_mapping": "observed=true 0/1 code"
+    },
+    {
+      "id": "systematically_miscalibrated",
+      "ordinal_mapping": "observed=true integer code + 1; off-scale integer outputs are retained rather than clipped",
+      "binary_mapping": "observed=1-true"
+    }
+  ],
+  "action_library": {
+    "parameter_assay": "one observation of a declared parameter field under the unknown global assay-observation world",
+    "repeat_same_assay_twice": "two repeated observations of the same field under the same global systematic assay world; represented as the ordered pair of the deterministic coded outcome",
+    "assay_process_calibration": "idealized direct calibration that deterministically reports calibrated versus systematically_miscalibrated"
+  },
+  "joint_hypotheses": "same-G ecological W1 variant x assay-observation world",
+  "target": "transformation-specific binary future decision projected from ecological variant; assay world is nuisance uncertainty",
+  "robust_separation": "two target-discordant joint hypotheses are robustly separated by an action iff their possible outcome sets are disjoint",
+  "minimum_design": "exact smallest action subset that robustly separates every pair of active joint hypotheses with different binary future-target values; same-target pairs need not be separated",
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_repeat_same_assay_no_extra_robust_split",
+      "statement": "For every parameter field and every scored fiber, repeating the same deterministic systematically biased assay twice robustly separates exactly the same target-discordant joint-hypothesis pairs as one assay.",
+      "failure_rule": "Any pair-cover difference is an implementation/theory failure and stops interpretation."
+    },
+    {
+      "id": "H2_calibration_necessity_exists",
+      "statement": "At least one future-target-unresolved fiber has no robust parameter-assay-only design under the two admitted assay worlds but has a finite robust design when assay-process calibration is added.",
+      "failure_rule": "REFUTED if every unresolved target is robustly solvable without calibration or remains unsolvable even with calibration."
+    },
+    {
+      "id": "H3_S11_climate_minimum",
+      "statement": "For the frozen S11 dormant-climate fiber, the exact minimum robust target design is {assay_process_calibration, assay:A_level}, size 2; repeated A_level assays without calibration are insufficient.",
+      "failure_rule": "Any different exact minimum, size, or repeat-only sufficiency refutes H3."
+    },
+    {
+      "id": "H4_calibration_plus_assays_restores_all",
+      "statement": "Every scored future-target-unresolved W1 fiber is robustly separable by the frozen action library when assay-process calibration is available.",
+      "failure_rule": "Any fiber remaining target-unresolved under the complete calibrated action library refutes H4."
+    }
+  ],
+  "secondary_outputs": [
+    "exact robust minimum action-size distribution by transformation",
+    "fraction of unresolved fibers requiring calibration",
+    "assay-only robust-solvable versus robust-impossible fibers",
+    "fields appearing in lexicographically canonical robust minimum designs",
+    "truth-weighted projection of fiber-level results",
+    "comparison to Phase-VI perfect-assay target burden as descriptive only"
+  ],
+  "claim_boundary": [
+    "Systematic coding bias is a synthetic observation-process fixture, not a calibrated laboratory error model.",
+    "The calibration action is an idealized upper-bound channel.",
+    "Robust separation is support-based guarantee logic, not expected information gain or probabilistic optimal design.",
+    "Repeated-assay equivalence applies to a fixed systematic observation world and must not be generalized to independent random measurement error.",
+    "Do not claim generic novelty for measurement-error correction, calibration, robust experimental design or partial identification under misclassification.",
+    "Do not alter Phase-I through Phase-VI or the frozen EOG-WF and first BAM manuscripts."
+  ],
+  "candidate_contribution": "BAM-specific target-aware evidence routing over occurrence-conditioned future-target survivor fibers when ecological-world uncertainty is crossed explicitly with an assay-observation-process universe."
+}
