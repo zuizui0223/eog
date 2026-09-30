@@ -662,6 +662,96 @@ Canonical Phase-IV assets:
 - `docs/bam_ecological_expansion_margin_v1_result.md`;
 - `docs/bam_nested_universe_target_identifiability_v1.md`.
 
+## 21. Structured future targets and dormant parameter reactivation
+
+The next preregistered phase replaced axis-release targets with three frozen ecological
+transformations:
+
+- climate shift: temperature +0.08, moisture -0.04;
+- biotic stress: one additional partner erosion + antagonist dilation;
+- barrier restoration: force movement barrier permeability true.
+
+Before implementation, the protocol was amended to recognize that future targets need
+not factor through current BAM-state equivalence.  A parameter alias can be dormant
+today but activated by intervention.
+
+The guaranteed hierarchy was therefore defined as:
+
+[
+\text{parameter identity}
+\rightarrow
+\text{exact counterfactual map}
+\rightarrow
+\text{binary decision}.
+]
+
+This hierarchy had zero violations.
+
+### W0 — original 64-world universe
+
+- parameter-world identified: **13/768**;
+- current BAM state identified: **25/768**.
+
+Target identification:
+
+| transformation | exact map | binary decision |
+|---|---:|---:|
+| climate | 622 | 646 |
+| biotic stress | 558 | 603 |
+| barrier restoration | 604 | 744 |
+
+### W1 — 2,592-world ecological universe
+
+- parameter-world identified: **0/768**;
+- current BAM state identified: **8/768**.
+
+Target identification:
+
+| transformation | exact map | binary decision |
+|---|---:|---:|
+| climate | 610 | 636 |
+| biotic stress | 442 | 498 |
+| barrier restoration | 604 | 700 |
+
+W0 binary certificates lost after W1 expansion:
+
+- climate: **10**;
+- biotic stress: **105**;
+- barrier restoration: **44**.
+
+Yet large target-identified sets remained despite complete parameter-world
+nonidentification in W1.
+
+One W1 climate fiber in `S11_9x5_gap` demonstrated dormant alias reactivation:
+36 same-G parameter worlds shared one complete current A/B/M/tau state but split into
+two climate future maps and two net-loss decision classes.
+
+The current mainline therefore distinguishes:
+
+1. parameter-world identity;
+2. current BAM-state identity;
+3. exact future-map identity under a declared transformation;
+4. decision identity under that transformation.
+
+These are not interchangeable inferential targets.
+
+Canonical Phase-V assets:
+
+- `validation/bam_structured_counterfactuals_v1/protocol_v1.json`;
+- `validation/bam_structured_counterfactuals_v1/result_summary_v1.json`;
+- `docs/bam_structured_counterfactuals_v1.md`;
+- `docs/bam_structured_counterfactuals_v1_result.md`;
+- `docs/bam_current_vs_future_identifiability_v1.md`.
+
+### Development stop for synthetic operator proliferation
+
+The synthetic mainline has now answered the planned target-identifiability questions.
+Do not add further climate deltas, interaction shells or movement operators merely to
+generate more favorable examples.
+
+The next substantive validation requires an independently fixed ecological
+transformation contract rather than another outcome-chosen synthetic operator.
+
 ## Hard claim boundary
 
 Do not claim:
