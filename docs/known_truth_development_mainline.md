@@ -552,6 +552,57 @@ Canonical successor assets:
 This programme is separate from the frozen JBI BAM inverse-identifiability manuscript
 and does not alter its submission claims.
 
+## 19. Decision certificates are conditional on the BAM world-family boundary
+
+The target-specific Phase-II result was then stress-tested against unrestricted same-G
+BAM decomposition completion.
+
+For
+
+[
+\mathcal C(G)=\{(A,B,M):A\cap B\cap M=G\},
+]
+
+every proper current distribution (G\subset X) admits both binary outcomes under
+each single-axis release.  Therefore a release decision can be identified from current
+(G) only because the declared BAM family excludes some same-G decompositions.
+
+The successor does not treat those omitted decompositions as biologically plausible.
+Instead it measures their exact logical distance from the current survivor fiber.
+
+Completion flip margin is Hamming distance across A/B/M node states to the nearest
+same-G completion with the opposite binary decision.
+
+The frozen 12-system / 768-truth audit found, among proper-G decisions already
+identified in the declared universe:
+
+- release A: 618 truths; median margin **1**, maximum **13**, margin 1 in **439**;
+- release B: 671 truths; median margin **2**, maximum **29**, margin 1 in **263**;
+- release M: 698 truths; median margin **2**, maximum **31**, margin 1 in **281**.
+
+All exact theorem and benchmark checks passed with zero violations.
+
+A directional asymmetry follows from the BAM set structure.
+
+For an expansion decision, every node in the released support outside (G) is an
+existing witness and all such witnesses must be destroyed to reverse the decision.
+
+For a no-expansion decision, creating one new outside-(G) witness is enough.  In the
+frozen panel, every finite no-expansion margin was 1 or 2.
+
+The mainline claim is therefore now explicitly conditional:
+
+> **target identification is certified inside a declared BAM world universe; the
+> completion margin quantifies how much the same-G world-family boundary must be relaxed
+> before that target certificate can fail.**
+
+Canonical assets:
+
+- `validation/bam_decision_robustness_margin_v1/protocol_v1.json`;
+- `validation/bam_decision_robustness_margin_v1/result_summary_v1.json`;
+- `docs/bam_decision_robustness_margin_v1.md`;
+- `docs/bam_decision_robustness_margin_v1_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:
