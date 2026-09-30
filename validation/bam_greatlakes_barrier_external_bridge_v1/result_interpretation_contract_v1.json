@@ -1,0 +1,68 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.result_interpretation_contract.v1",
+  "status": "frozen_before_RDS_payload_access",
+  "unit_of_analysis": {
+    "species": "every species satisfying the frozen >=2 distinct 90s-positive-node rule",
+    "witness": "every 2023 positive physical node for each eligible species",
+    "world": "all 35 frozen A/M worlds; no world may be dropped by post-response preference"
+  },
+  "primary_denominators": [
+    "all eligible species",
+    "all eligible species with >=1 heldout positive witness",
+    "all heldout positive physical-node witnesses across eligible species",
+    "all 35 declared A/M worlds within each eligible species"
+  ],
+  "species_terminal_classes": {
+    "no_heldout_positive_witness": "eligible from 90s calibration but no 2023 positive node; retained in denominator and not treated as support or refutation",
+    "heldout_positive_no_contraction": "at least one 2023 positive witness but none eliminates a calibration-surviving world",
+    "heldout_contracted_survivor_fiber": "at least one but not all calibration-surviving worlds eliminated by 2023 positives",
+    "heldout_falsified_all_calibration_worlds": "2023 positive evidence eliminates every calibration-surviving world; declared A/M universe is falsified for that species"
+  },
+  "primary_report": [
+    "eligible species count",
+    "species count in every terminal class",
+    "species with any heldout contraction / all eligible species",
+    "species with any heldout contraction / species with heldout positives",
+    "species with complete universe falsification / all eligible species",
+    "species retaining >1 worlds after all positive evidence",
+    "median/min/max heldout contraction fraction across eligible species with a nonzero calibration survivor denominator"
+  ],
+  "witness_report": [
+    "total heldout positive witness nodes",
+    "number/fraction of witnesses eliminating >=1 world",
+    "number/fraction of witnesses eliminating all calibration-surviving worlds",
+    "distribution of individually eliminated world fractions",
+    "A-only, M-only, and joint A+M failure counts summed over frozen world-by-witness comparisons"
+  ],
+  "world_report": [
+    "for each of 35 world IDs: number of eligible species for which it survives calibration",
+    "for each world ID: number of those species in which heldout positives falsify it",
+    "for each world ID: final species-survival fraction conditional on calibration survival",
+    "do not rank worlds as biologically true; report only compatibility/falsification frequency"
+  ],
+  "interpretation_rules": [
+    "any contraction is evidence that later positive observations contain information capable of eliminating at least one predeclared ecological world",
+    "no contraction is a valid null result and does not justify changing A thresholds or M horizons",
+    "complete world-set falsification indicates inadequate declared A/M universe for that species, not failure of the positive witness",
+    "persistent multiple survivors after all positives is empirical nonidentification conditional on this A/M universe",
+    "axis attribution labels which declared constraint excluded the positive; it is not causal decomposition of the observed population response",
+    "species-to-species contraction differences are not a sensitivity ranking"
+  ],
+  "prohibited_post_result_actions": [
+    "remove species with null/adverse outcomes",
+    "change >=2 calibration-positive eligibility",
+    "add A thresholds",
+    "add M horizons",
+    "change barrier graph",
+    "reinterpret nondetection as hard absence",
+    "add a community-derived B axis",
+    "switch to a favored species",
+    "replace primary denominator by only contracting species"
+  ],
+  "manuscript_role": {
+    "favorable": "real positive observations can contract/falsify a frozen finite A/M world set; use as retrospective bridge only",
+    "null": "the frozen real A/M world set was not discriminated by heldout positives; retain as informative limit",
+    "universe_falsified": "positive evidence rejects the declared real-system world family; use as a falsification example rather than repair",
+    "freshness": "none of these outcomes are fresh confirmatory evidence because article-level aggregate results were known before bridge design"
+  }
+}
