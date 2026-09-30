@@ -1,0 +1,105 @@
+{
+  "api_version_requested": "2.1.0",
+  "data_file_payload_bytes_opened": 0,
+  "data_file_payload_requests": 0,
+  "dataset_id": 189591,
+  "doi": "10.5061/dryad.gb5mkkx5s",
+  "file_count": 10,
+  "files": [
+    {
+      "download_api_path": "/api/v2/files/4883247/download",
+      "file_api_path": "/api/v2/files/4883247",
+      "path": "README.md",
+      "required_for_bridge": true,
+      "sha256": "19868ec36824bfa2db6575de71248f9427871726e9791309895d02f5d112bb7c",
+      "size_bytes": 4534
+    },
+    {
+      "download_api_path": "/api/v2/files/4883233/download",
+      "file_api_path": "/api/v2/files/4883233",
+      "path": "h_pop_dy_pois_2_habitat.stan",
+      "required_for_bridge": false,
+      "sha256": "22400242575fd2db6d0515613568efbaff0ab5a390891b0279ac557ee5bf5deb",
+      "size_bytes": 3335
+    },
+    {
+      "download_api_path": "/api/v2/files/4883234/download",
+      "file_api_path": "/api/v2/files/4883234",
+      "path": "h_pop_dy_pois_2_habitat_onePeriod.stan",
+      "required_for_bridge": false,
+      "sha256": "4fb57dd373ac7b1f6e04e192b89a97be98ee7efc8bfaf8671847303562aaf9be",
+      "size_bytes": 3131
+    },
+    {
+      "download_api_path": "/api/v2/files/4883235/download",
+      "file_api_path": "/api/v2/files/4883235",
+      "path": "h_pop_dy_pois_3_habitat.stan",
+      "required_for_bridge": false,
+      "sha256": "39e9a969271ea43dff04a28bcd07c946b9abff0a6600c871bdfa44155f0e2101",
+      "size_bytes": 2677
+    },
+    {
+      "download_api_path": "/api/v2/files/4883236/download",
+      "file_api_path": "/api/v2/files/4883236",
+      "path": "h_pop_dy_pois_3_habitat_onePeriod.stan",
+      "required_for_bridge": false,
+      "sha256": "ed1b033fd79b451b9f302ec61182851c290a4aa6921939b09f320a6f1dd30ce4",
+      "size_bytes": 2536
+    },
+    {
+      "download_api_path": "/api/v2/files/4883237/download",
+      "file_api_path": "/api/v2/files/4883237",
+      "path": "h_pop_dy_pois_4_habitat.stan",
+      "required_for_bridge": false,
+      "sha256": "53d4383080f2cf716dda74daa876322086fd00bb673388d9d4a4580d2f50dbfa",
+      "size_bytes": 2354
+    },
+    {
+      "download_api_path": "/api/v2/files/4883238/download",
+      "file_api_path": "/api/v2/files/4883238",
+      "path": "h_pop_dy_pois_4_habitat_onePeriod.stan",
+      "required_for_bridge": false,
+      "sha256": "5171bddb27458f159e8fc17e23f6ef30318986415cf354d3d7d77a9cbbdf62ae",
+      "size_bytes": 2215
+    },
+    {
+      "download_api_path": "/api/v2/files/4883239/download",
+      "file_api_path": "/api/v2/files/4883239",
+      "path": "hab_variables.rds",
+      "required_for_bridge": true,
+      "sha256": "4e9c15e8eab521eeb1397ccd99eb485506619da634955e0144969bf35dbb3ffc",
+      "size_bytes": 22735
+    },
+    {
+      "download_api_path": "/api/v2/files/4883240/download",
+      "file_api_path": "/api/v2/files/4883240",
+      "path": "oikos_data_anlaysis.R",
+      "required_for_bridge": false,
+      "sha256": "0beb3d5c351de08c38d31c196a0ca564163064d75c450f50e3e96c94e78a2557",
+      "size_bytes": 17862
+    },
+    {
+      "download_api_path": "/api/v2/files/4883241/download",
+      "file_api_path": "/api/v2/files/4883241",
+      "path": "pooled_catch_effort_by_species.rds",
+      "required_for_bridge": true,
+      "sha256": "e299d189f9daeea32b3a4980ab4bad1df0fc65195abe85d86f50ddecd383b0e6",
+      "size_bytes": 47086
+    }
+  ],
+  "fingerprint": "d40720d00a6632e7bb43a444e83ca1c6a9afd50fa1b42851083952c8c9e1a3d6",
+  "model_fits": 0,
+  "next_authorized_stage": "README-only Gate1",
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.gate0.v1",
+  "status": "dryad_source_identity_ready",
+  "title": "Data and code from: A framework for investigating fish population density responses to habitat fragmentation",
+  "version_id": 454877,
+  "version_number": 3,
+  "authoritative_execution": {
+    "run_id": 36745236710,
+    "job_id": 109989632437,
+    "head_sha": "17e3c40028aa7a8c993c8217ca1f1ffd61c76584",
+    "artifact_id": 11111842998,
+    "artifact_digest": "sha256:6dd6b6e89f7954444b30c0bc94737135756d70e14843ede4b037edd9f1bbff3a"
+  }
+}
