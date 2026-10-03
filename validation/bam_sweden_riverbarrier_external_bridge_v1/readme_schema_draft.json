@@ -1,0 +1,47 @@
+{
+  "schema": "eog.bam_sweden_riverbarrier_external_bridge.readme_schema_draft.v1",
+  "status": "not_authorized_until_gate0_pass",
+  "source_url": "https://datadryad.org/dataset/doi%3A10.5061/dryad.05qfttf9z",
+  "documentation_basis": "public Dryad README rendered on dataset landing page",
+  "gate0_fingerprint": null,
+  "required_files_confirmed": [
+    "README.md",
+    "rawdf.csv"
+  ],
+  "rawdf_columns_confirmed_from_readme": [
+    "XKOORLOK",
+    "YKOORLOK",
+    "unique_frag",
+    "riverID",
+    "year",
+    "ÖringTOT_mean",
+    "Elrit_mean",
+    "Gädda_mean"
+  ],
+  "variable_semantics": {
+    "XKOORLOK": "X coordinate in RT90 of site",
+    "YKOORLOK": "Y coordinate in RT90 of site",
+    "unique_frag": "unique identifier for all fragments",
+    "riverID": "river/catchment identifier",
+    "year": "sampled year",
+    "ÖringTOT_mean": "mean density of brown trout per 100m2",
+    "Elrit_mean": "mean density of Eurasian minnow per 100m2",
+    "Gädda_mean": "mean density of northern pike per 100m2"
+  },
+  "study_metadata_used_for_calendar_freeze": {
+    "reported_temporal_span": [1951, 2021],
+    "reported_sampling_concentration": "90 percent of sampling occasions occurred after 1988",
+    "bridge_split": {
+      "calibration": [1988, 2004],
+      "heldout": [2005, 2021]
+    }
+  },
+  "explicit_nonuse": [
+    "all_data_synchrony.csv",
+    "published synchrony coefficients",
+    "population performance tables"
+  ],
+  "rawdf_payload_requests": 0,
+  "rawdf_payload_bytes_opened": 0,
+  "next_stage_if_authorized": "once-only checksum-bound rawdf.csv execution under frozen exact schema"
+}
