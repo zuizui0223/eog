@@ -1,0 +1,56 @@
+{
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.terminal_closure.v1",
+  "status": "terminal_no_rerun",
+  "authoritative_execution": {
+    "run_id": 36792320740,
+    "head_sha": "674f427bbfbb3be828fca9ad211274e51ae16c52",
+    "artifact_id": 11132259192,
+    "artifact_digest": "sha256:d71a1dd085ee41c90383138ba4d6e9f68257a06f9b7621af1b3f7d9e3a5a3631",
+    "result_fingerprint": "c872fca044145bab6e7b09831ec27e7bc61992b55c68e3358c50158ffa2ce948"
+  },
+  "terminal_stage": "once_only_RDS_schema_validation",
+  "payload_access": {
+    "version_archive_requests": 1,
+    "bytes_opened": 110096,
+    "raw_RDS_payload_was_opened": true,
+    "RDS_objects_were_deserialized_for_schema_validation": true,
+    "biological_analysis_reached": false,
+    "model_fits": 0
+  },
+  "schema_failure": {
+    "table": "pooled_catch_effort_by_species.rds",
+    "expected_exact_columns": [
+      "pair_id","pair_id_num","Year","Stream.Name","stream_id","barrier",
+      "position","segment","survey_length","species","total_caught",
+      "yearBuilt","barrierAgeAtSample","period"
+    ],
+    "observed_exact_columns": [
+      "pair_id","Year","Stream.Name","stream_id","barrier","position",
+      "segment","nrecords","survey_length","species","total_caught",
+      "yearBuilt","barrierAgeAtSample","period","pair_id_num"
+    ],
+    "differences": [
+      "observed schema contains undeclared column nrecords",
+      "pair_id_num appears at the end rather than the frozen second position"
+    ]
+  },
+  "interpretation": {
+    "counts_as_empirical_BAM_evidence": false,
+    "counts_as_successful_real_system_bridge": false,
+    "counts_as_transport_stop": false,
+    "classification": "response_payload_consumed_schema_stop",
+    "why_no_retry": "the once-only raw payload was already opened; changing the parser or expected schema after seeing the physical schema would violate the frozen protocol",
+    "rds_values_parsed_field_note": "the authoritative result's rds_values_parsed=false means the scientific bridge analysis was not reached; the RDS objects were nevertheless deserialized to validate physical schema"
+  },
+  "prohibited_followup": [
+    "do not accept nrecords post hoc",
+    "do not reorder expected catch columns and rerun",
+    "do not drop nrecords and rerun",
+    "do not reuse this opened endpoint as fresh confirmatory evidence"
+  ],
+  "permitted_followup": [
+    "retain the terminal stop as audit evidence",
+    "use the failure to improve schema-first acquisition rules only for a genuinely independent future source",
+    "continue empirical bridging with another source whose physical schema can be frozen before response payload opening"
+  ]
+}
