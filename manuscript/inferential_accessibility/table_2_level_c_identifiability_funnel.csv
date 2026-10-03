@@ -1,0 +1,6 @@
+stage,denominator,passed,next_state
+Level-C v3 architecture screen,12,2,source qualification
+relation/event/function source materialization,2,2,negative-state adequacy check
+hard functional-absence qualification,2,0,unresolved
+candidate-specific calibration audit,2,0,new calibration measurement required
+existing raw/supplementary reconstruction,2,0,new calibration measurement required
