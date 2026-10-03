@@ -1,0 +1,60 @@
+{
+  "schema": "eog.original_idea_future_proof_evidence.result_summary.v9",
+  "status": "completed_preregistered_future_proof_evidence_panel",
+  "protocol": "validation/eog_original_idea_future_proof_evidence_v9/protocol_v9.json",
+  "protocol_commit": "d239c0e924658dd0578e83ee956914cae18ef6a7",
+  "authoritative_run": 37155957605,
+  "authoritative_artifact_id": 11285751505,
+  "authoritative_artifact_digest": "sha256:d31beca2705fdaf83d29eccca8561561e975f42a67af5775d0cf5857846ef0bb",
+  "result_fingerprint": "1d8ffcc5ce2ba50dd1b362eb6cd0ec9af5c5d5d72d0ee06af92103cc3aa8d4dd",
+  "row_count": 384,
+  "eligible_row_count": 272,
+  "non_estimable_row_count": 112,
+  "predeclared_verdicts": {
+    "F1_truth_consistent_evidence_never_shortens_certificate_lifetime": "SUPPORTED",
+    "F2_future_only_evidence_value_exists": "SUPPORTED",
+    "F3_current_contraction_and_future_proofing_choose_different_actions": "SUPPORTED",
+    "F4_barrier_or_analyst_validation_can_be_future_proof_optimal": "SUPPORTED",
+    "F5_source_measurement_can_be_future_proof_optimal": "SUPPORTED",
+    "F6_evidence_can_immortalize_threatened_certificates": "SUPPORTED",
+    "F7_future_proof_action_is_not_one_fixed_measurement": "SUPPORTED"
+  },
+  "future_proof_optimal_action_counts": {
+    "S_source": 94,
+    "B_barrier": 91,
+    "R_analyst": 87
+  },
+  "objective_divergence": {
+    "current_vs_future_optimal_action_disagreement_rows": 178,
+    "zero_current_contraction_positive_future_value_rows": 205,
+    "zero_current_effect_future_optimal_rows": 178
+  },
+  "mean_current_contraction_by_action": {
+    "S_source": 0.49295780812324935,
+    "B_barrier": 0.0,
+    "R_analyst": 0.0
+  },
+  "mean_future_lifetime_gain_by_action": {
+    "S_source": 0.049550507986884464,
+    "B_barrier": 0.1169360382828947,
+    "R_analyst": 0.09717406383352206
+  },
+  "certificate_effect": {
+    "immortalized_certificate_total": 1585,
+    "lifetime_monotonicity_violation_count": 0
+  },
+  "interpretation": [
+    "Evidence that is redundant for the current B0 survivor fiber can still have substantial value for future robustness because it excludes threatening worlds from future admissible expansion.",
+    "Barrier validation and analyst-rule validation had zero current B0 contraction by construction but positive future-lifetime value in 205/272 rows.",
+    "The diagnostic action maximizing immediate current-world contraction differed from the action maximizing future certificate lifetime in 178/272 rows.",
+    "Future-proof optimal actions were heterogeneous: source 94 rows, barrier 91, analyst rule 87.",
+    "A single truth-consistent diagnostic converted 1,585 threatened certificates from finite lifetime to K=0 full-pool survival across the frozen panel.",
+    "EOG evidence design therefore has at least two distinct objectives: identify the current state and future-proof a target certificate against declared world-universe growth."
+  ],
+  "claim_boundary": [
+    "The three diagnostics have unit conceptual cost only and are not field-cost-equivalent.",
+    "Future-proof value is conditional on the frozen v8 all-source candidate growth pool.",
+    "Analyst-rule validation is a model/representation diagnostic rather than a literal ecological field measurement.",
+    "The result is a truth-path known-truth leverage audit, not expected pre-outcome utility."
+  ]
+}
