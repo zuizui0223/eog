@@ -1,0 +1,98 @@
+{
+  "schema": "eog.original_idea_evidence_target_boundaries.protocol.v6",
+  "status": "frozen_before_evidence_boundary_benchmark_implementation_and_scoring",
+  "parent_v5": {
+    "result": "validation/eog_original_idea_directed_temporal_flow_v5/result_summary_v5.json",
+    "fingerprint": "9b70d4bc4a64c6a6dc90a17360b096ac2c87aba045c3ebcae11ae3dff0ddad1d",
+    "key_result": "directionality changed both source/history and reachability-envelope information, whereas temporal order further contracted world/source identity but did not add full-coverage robust-impossibility recovery"
+  },
+  "scientific_question": "Which evidence channels merely distinguish worlds inside the same reachability target class, and which cross a target-equivalence boundary and change the ecological possibility/impossibility envelope?",
+  "analysis_base": {
+    "landscapes": "the exact 384 v5 latent landscapes and directed candidate-world universes",
+    "eligibility": "reuse v5 eligible rows",
+    "baseline_evidence": "all truth-positive non-source nodes as unordered directed-static positive evidence",
+    "candidate_worlds": "source x barrier-level x analyst-rule directed worlds that survive the full static positive set"
+  },
+  "targets": {
+    "world_identity": "exact candidate source x barrier x analyst world",
+    "source_identity": "candidate source node",
+    "reachability_class": "exact directed reachable-node set of the candidate world",
+    "robust_impossibility_envelope": "locally permissive nodes unreachable in every surviving world"
+  },
+  "frozen_additional_evidence_channels": {
+    "T_temporal": "all full-positive anchors must be reached by candidate directed BFS depth <= their truth directed BFS depth",
+    "S_source": "candidate source must equal the known-truth source",
+    "B_barrier": "candidate barrier-density level must equal the known-truth barrier level",
+    "R_analyst": "candidate analyst rule must equal relative_edge_q70"
+  },
+  "subset_audit": "evaluate all 16 subsets of {T_temporal,S_source,B_barrier,R_analyst} against the same full-positive baseline survivor fiber",
+  "single_channel_classification": {
+    "redundant": "survivor-world count unchanged",
+    "identity_only": "world count decreases but exact reachability-class count and robust-impossibility envelope are unchanged",
+    "target_refining": "exact reachability-class count decreases but robust-impossibility envelope is unchanged",
+    "envelope_changing": "robust-impossibility envelope strictly grows"
+  },
+  "evidence_burden": {
+    "reachability_target_burden": "minimum number of additional evidence channels needed so every survivor has the truth world's exact reachable set",
+    "full_world_burden": "minimum number of additional evidence channels needed to leave exactly the truth world",
+    "cost": "unit combinatorial channel count only"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "E1_target_burden_never_exceeds_world_burden",
+      "statement": "For every eligible row, minimum reachability-target evidence burden is <= minimum full-world evidence burden.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "E2_strict_target_specific_saving_exists",
+      "statement": "At least one eligible row requires strictly fewer additional channels to identify the truth reachability class than to identify the full truth world.",
+      "failure_rule": "REFUTED if burdens are equal in every row."
+    },
+    {
+      "id": "E3_temporal_identity_without_envelope_change_exists",
+      "statement": "At least one row has temporal evidence that contracts the survivor-world fiber while leaving the robust-impossibility envelope unchanged.",
+      "failure_rule": "REFUTED if every temporal world contraction also changes robust impossibility."
+    },
+    {
+      "id": "E4_source_evidence_can_cross_envelope_boundary",
+      "statement": "At least one row gains at least one robustly impossible locally permissive node after truth-source evidence is added.",
+      "failure_rule": "REFUTED if source evidence never enlarges robust impossibility."
+    },
+    {
+      "id": "E5_barrier_or_analyst_evidence_can_cross_envelope_boundary",
+      "statement": "At least one of the direct barrier-state or analyst-rule channels is envelope-changing in at least one eligible row.",
+      "failure_rule": "REFUTED if neither channel ever changes robust impossibility."
+    },
+    {
+      "id": "E6_direct_world_coordinates_identify_the_world",
+      "statement": "The combined S_source + B_barrier + R_analyst evidence leaves exactly one candidate world in every eligible row.",
+      "failure_rule": "Any violation is an implementation/world-definition failure."
+    },
+    {
+      "id": "E7_evidence_channels_are_target_heterogeneous",
+      "statement": "Across the four single channels and all eligible rows, at least three of the four classification categories occur.",
+      "failure_rule": "REFUTED if evidence effects collapse to fewer than three categories."
+    }
+  ],
+  "secondary_outputs": [
+    "classification frequencies for T/S/B/R channels",
+    "distribution of target-specific versus full-world minimum burdens",
+    "fraction of rows where baseline full positives already identify the reachability class",
+    "fraction where temporal evidence changes reachability-class count without changing robust impossibility",
+    "canonical minimum evidence subset for target and world identity",
+    "overlap between source-identification gain and robust-impossibility gain"
+  ],
+  "claim_boundary": [
+    "Direct source/barrier/analyst observations are known-truth diagnostic channels, not claims that these variables are easy to measure in nature.",
+    "Unit channel count is not field cost.",
+    "Reachability-class identification is target-specific and does not establish historical truth.",
+    "Evidence categories are conditional on the frozen directed candidate-world universe."
+  ],
+  "stop_rules": [
+    "Do not add a fifth evidence channel after scoring.",
+    "Do not change channel semantics after scoring.",
+    "Do not weight evidence channels after scoring.",
+    "Do not replace the exact reachability-set target with a favorable coarser target after scoring.",
+    "Failed hypotheses remain failed."
+  ]
+}
