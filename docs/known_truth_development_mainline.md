@@ -1141,6 +1141,78 @@ The two failed bridges are useful as acquisition-method audit evidence, but they
 support, refute, or estimate the frequency of the synthetic BAM target-identifiability
 phenomena.
 
+## 27. Phase-X capstone: carry forward target quotients, not a selected world
+
+The synthetic finite-world programme is closed by a partition synthesis over the
+already frozen W1 universes and three structured future targets.
+
+For a declared target (T),
+
+[
+w\sim_T v
+\iff
+T(w)=T(v).
+]
+
+The induced equivalence classes are the **target-sufficient quotient**.  Worlds inside
+one quotient block are interchangeable for that target only.
+
+The frozen Phase-X audit covered **129 same-current-G fibers** and introduced no new
+worlds, transformations, observation processes or assay channels.
+
+Required finite-partition invariants had **0 violations**.
+
+For the binary future decisions:
+
+- climate shift: current BAM state sufficient in **125/129** fibers;
+- biotic stress: **129/129**;
+- barrier restoration: **125/129**.
+
+For the joint three-decision target suite:
+
+- current state sufficient: **121/129**;
+- current state insufficient: **8/129**;
+- relation to current-state partition:
+  - current state strictly refines target: **108**;
+  - equal: **13**;
+  - incomparable: **7**;
+  - joint decision strictly refines current state: **1**.
+
+Thus complete current mechanism state is usually more detailed than required, but is
+not universally sufficient for future targets.
+
+The joint decision quotient contained only 1–5 target classes per fiber and compressed
+the W1 parameter-world family by:
+
+- mean: **77.35×**;
+- median: **48×**;
+- maximum: **972×**.
+
+The inferential object carried into empirical work is therefore:
+
+> **the surviving quotient class of all ecological worlds that are equivalent for the
+> declared target suite, not one promoted “true” BAM world.**
+
+Authoritative Phase-X evidence:
+
+- run: `36731482509`;
+- artifact: `11104198510`;
+- artifact digest:
+  `sha256:02a54d0f39cc016798c4bb687c04902249eba7bdb94fa8f996b26554b46a40aa`;
+- result fingerprint:
+  `9383832f16ca0bcf9ee658554342ee8fbcf1bda2703ea2d639e4e0a14fa1f151`.
+
+Canonical assets:
+
+- `src/eog/v2/bam_target_quotient.py`;
+- `validation/bam_target_quotient_v1/protocol_v1.json`;
+- `validation/bam_target_quotient_v1/result_summary_v1.json`;
+- `docs/bam_target_quotient_v1.md`.
+
+The protocol stop rule is now binding: **do not add further synthetic BAM worlds or
+transformations to improve the quotient pattern.**  New validation must come from a
+separately fixed external ecological system or transformation contract.
+
 ## Hard claim boundary
 
 Do not claim:
