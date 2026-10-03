@@ -1,0 +1,97 @@
+{
+  "schema": "eog.original_idea_evidence_target_boundaries.result_summary.v6",
+  "status": "completed_preregistered_evidence_target_boundary_panel",
+  "protocol": "validation/eog_original_idea_evidence_target_boundaries_v6/protocol_v6.json",
+  "protocol_commit": "7fa1ced1abc5b8e674548fd1ce9ef2dce94dc79c",
+  "authoritative_run": 37129290724,
+  "authoritative_artifact_id": 11275684522,
+  "authoritative_artifact_digest": "sha256:a3e053d1392471a8c582ce6adfaf308266fecb15da0accfde4225e3678fd9290",
+  "result_fingerprint": "ee1fba42ae957707138b17fbc429b40b8b012c43a4fd0a14023ab669d71bffc6",
+  "row_count": 384,
+  "eligible_row_count": 272,
+  "non_estimable_row_count": 112,
+  "predeclared_verdicts": {
+    "E1_target_burden_never_exceeds_world_burden": "SUPPORTED",
+    "E2_strict_target_specific_saving_exists": "SUPPORTED",
+    "E3_temporal_identity_without_envelope_change_exists": "SUPPORTED",
+    "E4_source_evidence_can_cross_envelope_boundary": "SUPPORTED",
+    "E5_barrier_or_analyst_evidence_can_cross_envelope_boundary": "SUPPORTED",
+    "E6_direct_world_coordinates_identify_the_world": "SUPPORTED",
+    "E7_evidence_channels_are_target_heterogeneous": "SUPPORTED"
+  },
+  "baseline": {
+    "reachability_target_already_identified_count": 17,
+    "reachability_target_already_identified_fraction": 0.0625
+  },
+  "burdens": {
+    "target_burden_distribution": {
+      "0": 17,
+      "1": 106,
+      "2": 116,
+      "3": 33
+    },
+    "world_burden_distribution": {
+      "0": 8,
+      "1": 55,
+      "2": 135,
+      "3": 74
+    },
+    "median_target_burden": 2.0,
+    "median_world_burden": 2.0,
+    "strict_target_saving_rows": 97,
+    "target_gt_world_violation_count": 0
+  },
+  "single_channel_classification_counts": {
+    "T_temporal": {
+      "redundant": 202,
+      "identity_only": 53,
+      "target_refining": 17,
+      "envelope_changing": 0
+    },
+    "S_source": {
+      "redundant": 53,
+      "identity_only": 18,
+      "target_refining": 182,
+      "envelope_changing": 19
+    },
+    "B_barrier": {
+      "redundant": 74,
+      "identity_only": 53,
+      "target_refining": 12,
+      "envelope_changing": 133
+    },
+    "R_analyst": {
+      "redundant": 112,
+      "identity_only": 19,
+      "target_refining": 26,
+      "envelope_changing": 115
+    }
+  },
+  "single_channel_target_effects": {
+    "temporal_world_contraction_without_robust_gain_rows": 70,
+    "source_envelope_change_rows": 19,
+    "barrier_envelope_change_rows": 133,
+    "analyst_envelope_change_rows": 115,
+    "global_categories_observed": [
+      "redundant",
+      "identity_only",
+      "target_refining",
+      "envelope_changing"
+    ]
+  },
+  "direct_world_coordinate_failure_count": 0,
+  "interpretation": [
+    "Evidence channels are heterogeneous with respect to the ecological target: eliminating more worlds is not equivalent to changing the reachability envelope.",
+    "Temporal arrival-order evidence never changed the robust-impossibility envelope in any eligible row, even though it contracted world identity in 70 rows.",
+    "Barrier-state and analyst-rule evidence were the most frequent envelope-changing channels in the frozen panel.",
+    "Source identity primarily refined exact reachability target classes and only occasionally changed robust impossibility.",
+    "Target-specific evidence burden never exceeded full-world burden and was strictly smaller in 97/272 eligible rows.",
+    "The original EOG evidence-design question should therefore be framed relative to the target boundary a measurement can cross, not simply how many worlds it eliminates."
+  ],
+  "claim_boundary": [
+    "Direct source/barrier/analyst channels are known-truth diagnostic measurements, not assertions of field measurability.",
+    "Unit evidence-channel count is not monetary or logistical field cost.",
+    "Reachability-class identification does not identify historical truth.",
+    "The channel-effect frequencies are properties of the frozen directed candidate-world generator."
+  ]
+}
