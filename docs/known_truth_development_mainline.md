@@ -1445,6 +1445,162 @@ The protocol stop rule is now binding: **do not add further synthetic BAM worlds
 transformations to improve the quotient pattern.**  New validation must come from a
 separately fixed external ecological system or transformation contract.
 
+## Original-EOG virtual-world mainline — v4 to v8
+
+After the v1 canonical archetypes, v2 randomized generality and v3 analyst-world
+sensitivity, the active programme tested the original EOG claims more directly.
+
+### v4 — positive occurrences contain reachability information, but not all kinds of information
+
+Across 314 eligible randomized landscapes, the same positive points were compared as:
+
+- local viability evidence only;
+- reachability witnesses under candidate source × barrier × analyst worlds.
+
+Reachability-aware conditioning contracted the candidate-world universe strongly.
+
+Mean surviving-world fractions at full positive coverage were **0.447**, versus 1.0
+under local-viability-only interpretation.
+
+Spatial arrangement mattered when observations were sparse:
+
+- 211/314 rows differed between clustered and dispersed designs;
+- dispersed anchors retained fewer worlds on average at 25% and 50% coverage.
+
+But complete static positive coverage still identified neither world nor source:
+
+- median surviving worlds: **104**;
+- median surviving sources: **30**;
+- exact world recovery: **0/314**;
+- exact source recovery: **0/314**.
+
+The preregistered expectation that more positive occurrences would increasingly recover
+robust impossibility was **REFUTED**.  Robust-impossibility recovery remained exactly
+**0.393854** from 10% through 100% coverage.
+
+Post-result diagnosis showed why: additional static positives reduced barrier/analyst
+uncertainty but left source count unchanged in **314/314** rows.
+
+### v5 — directionality and temporal order recover different information
+
+The undirected-source alias from v4 was challenged with a frozen directed-flow
+generator and arrival-order evidence.
+
+Directionality reduced source aliasing and broke the v4 static plateau in spatial
+reachability information.
+
+Temporal positive order further contracted world/source identity, but did **not**
+increase the full-coverage spatial robust-impossibility envelope.
+
+Thus evidence about **history identity** and evidence about **spatial possibility
+envelopes** are distinct.
+
+### v6 — unconditional impossibility superiority was refuted
+
+With fixed 25% occurrence evidence, the candidate universe was expanded:
+
+- U0: source uncertainty only;
+- U1: + barrier uncertainty;
+- U2: + analyst-rule uncertainty.
+
+Universal certificates eroded monotonically with zero soundness violations.
+
+However, the predeclared claim that robust-impossible certificates would persist better
+than robust-reachable certificates was strongly **REFUTED**:
+
+- robust-reachable retention U0→U2: **96.1%**;
+- robust-impossible retention: **64.8%**;
+- impossible minus reachable: **−31.3 percentage points**.
+
+The reverse direction held in every barrier-density, autocorrelation and neighbourhood
+stratum in the secondary diagnostic.
+
+Therefore:
+
+> **impossibility is not intrinsically more robust than possibility.**
+
+### v7 — the missing qualifier is world-expansion direction
+
+Candidate worlds were classified relative to each surviving source reference world by
+reachable-set inclusion.
+
+Exact protections:
+
+- restrictive same-source additions caused **0** robust-impossibility violations;
+- permissive same-source additions caused **0** robust-reachability violations.
+
+The opposite certificate classes were vulnerable:
+
+- restrictive worlds erased **81** robust-reachability certificates;
+- permissive worlds erased **1,445** robust-impossibility certificates.
+
+The v6 asymmetry was explained by candidate-universe composition:
+
+- permissive added worlds: **1,583**;
+- restrictive: **151**;
+- equivalent: **1,315**;
+- incomparable: **82**.
+
+Incomparable/equivalent worlds added extra fragility in 11 rows, and newly admitted
+source hypotheses in 8 rows.
+
+The corrected rule is:
+
+> **restrictive expansion protects impossibility; permissive expansion protects
+> reachability, conditional on a fixed surviving source set.**
+
+### v8 — robustness becomes an exact world-growth survival curve
+
+v8 grew the compatible world universe one world at a time in uniformly random order.
+
+For a certificate exposed to N possible added worlds, K of which threaten it, the exact
+expected first-failure draw is:
+
+[
+(N+1)/(K+1).
+]
+
+All seven preregistered lifetime hypotheses were supported.
+
+Under the full all-source growth pool:
+
+- robust-reachable mean normalized lifetime: **0.974**;
+- robust-impossible mean normalized lifetime: **0.715**;
+- full-pool survival: 96.1% versus 64.8%.
+
+Exact directional protection became infinite-in-pool lifetime:
+
+- every robust-impossible certificate survived complete restrictive same-source growth;
+- every robust-reachable certificate survived complete permissive same-source growth.
+
+Additional fragility:
+
+- equivalent/incomparable same-source worlds shortened lifetime for **959**
+  certificates;
+- newly admitted source worlds shortened lifetime for **376** certificates.
+
+### Current corrected original-EOG principle
+
+The early intuition "impossibility is more robust" is too broad.
+
+The supported form is:
+
+> **A universal certificate is only as robust as the declared direction of future
+> world expansion.  Under restrictive same-source expansion, impossibility is protected.
+> Under permissive same-source expansion, reachability is protected.  Mixed,
+> incomparable or new-source expansion gives each certificate an exact finite threat
+> count and therefore a world-growth survival curve.**
+
+This is now the active known-truth foundation for EOG robustness.
+
+Canonical assets:
+
+- `validation/eog_original_idea_occurrence_information_v4/`;
+- `validation/eog_original_idea_directed_temporal_flow_v5/`;
+- `validation/eog_original_idea_world_universe_v6/`;
+- `validation/eog_original_idea_expansion_direction_v7/`;
+- `validation/eog_original_idea_world_growth_v8/`.
+
 ## Hard claim boundary
 
 Do not claim:
