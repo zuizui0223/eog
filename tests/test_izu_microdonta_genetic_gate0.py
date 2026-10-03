@@ -58,8 +58,10 @@ def test_row_count_must_remain_exactly_125():
         validate_registry_rows(REQUIRED_COLUMNS, _rows()[:-1])
 
 
-def test_site_coordinate_drift_stops():
+def test_within_site_individual_coordinate_variation_is_aggregated_response_free():
     rows = _rows()
-    rows[1]["latitude"] = 33.123
-    with pytest.raises(IzuRegistryStop, match="site coordinate drift"):
-        validate_registry_rows(REQUIRED_COLUMNS, rows)
+    rows[1]["latitude"] = 33.9
+    result = validate_registry_rows(REQUIRED_COLUMNS, rows)
+    assert result["status"] == "response_free_registry_ready"
+    assert "Izu_Oshima|site_1" in result["site_centroids"]
+    assert result["island_centroids"]["Izu_Oshima"]["site_count"] == 1
