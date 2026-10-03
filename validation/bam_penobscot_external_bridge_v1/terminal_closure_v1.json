@@ -1,0 +1,24 @@
+{
+  "schema": "eog.bam_penobscot_external_bridge.terminal_closure.v1",
+  "status": "terminal_gate0_no_payload_stop",
+  "authoritative_execution": {
+    "run_id": 36790584188,
+    "head_sha": "619ecf66850090a8b41b8f9e777dbd3661446237",
+    "artifact_id": 11133221183,
+    "artifact_digest": "sha256:92a6ab7927ce79f53991a2b71b86715d49ed2ba6a2760b29414129fa647296c5",
+    "result_fingerprint": "2f64cc1792492c3b1d460fe3079dec4ee95b6822f9edba60838b474c3f054292"
+  },
+  "terminal_stage": "response_blind_archive_architecture",
+  "reason": "the exact predeclared upstream fish-passage database file was absent from the live FishPassage-Upstream directory index",
+  "payload_access": {
+    "directory_html_only": true,
+    "data_file_requests": 0,
+    "data_file_payload_bytes_opened": 0,
+    "fish_response_rows_opened": 0,
+    "model_fits": 0
+  },
+  "scientific_effect": "none",
+  "counts_as_empirical_BAM_evidence": false,
+  "repair_or_source_switch_allowed": false,
+  "permitted_followup": "select a genuinely independent future source under a new frozen protocol; do not repair this candidate"
+}
