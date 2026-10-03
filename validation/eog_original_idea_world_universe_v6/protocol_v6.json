@@ -10,7 +10,7 @@
   "latent_landscapes": {
     "reuse": "the exact 384 v5 directed-flow latent rows, A/B fields, geographic neighbourhoods, barrier draws, analyst rules, outlet flow field and truth source",
     "eligibility": "reuse the v5 eligibility condition of at least four non-source truth-reachable nodes",
-    "evidence": "complete static truth-positive occurrence coverage; source identity remains unobserved"
+    "evidence": "25 percent dispersed-farthest-first truth-positive occurrence coverage, using the already frozen v4 sampling rule; source identity remains unobserved"
   },
   "nested_candidate_universes": {
     "U0_source_only": "every A/B-permissive candidate source under the truth row's barrier-density level and relative_edge_q70 analyst rule",
@@ -18,13 +18,13 @@
     "U2_plus_analyst": "every candidate source x all three barrier levels x all three frozen analyst environmental rules",
     "nesting": "U0 subset U1 subset U2 exactly"
   },
-  "world_compatibility": "a candidate directed world survives when every complete truth-positive non-source occurrence is reachable from that candidate source",
+  "world_compatibility": "a candidate directed world survives when every frozen 25 percent dispersed positive anchor is reachable from that candidate source",
   "node_status_within_survivors": {
     "robust_reachable": "node reachable from the candidate source in every surviving world",
     "contingent": "node reachable in some but not all surviving worlds",
     "robust_impossible": "node unreachable in every surviving world"
   },
-  "certificate_population": "all locally A/B-permissive nodes excluding the observed truth-positive anchors and truth source",
+  "certificate_population": "all locally A/B-permissive nodes excluding the frozen observed 25 percent positive anchors and the truth source; this retains both unobserved truth-reachable and truth-unreachable nodes for certificate comparison",
   "primary_outputs": [
     "survivor-world count at U0, U1 and U2",
     "surviving-source count at U0, U1 and U2",
@@ -92,5 +92,14 @@
     "Do not remove nodes with inconvenient certificate behavior.",
     "Do not redefine the certificate population after scoring.",
     "If C4 is refuted, retain the refutation and do not search for a different expansion order."
-  ]
+  ],
+  "preimplementation_amendment": {
+    "classification": "preimplementation_estimand_repair_before_any_v6_scoring",
+    "reason": "complete positive coverage would remove all unobserved truth-reachable nodes from the certificate population, making robust-reachable versus robust-impossible persistence incomparable",
+    "replacement_evidence": "25 percent dispersed-farthest-first positives using the already frozen v4 sampling design",
+    "ecological_worlds_changed": false,
+    "candidate_universe_levels_changed": false,
+    "hypotheses_changed": false,
+    "scoring_seen_before_amendment": false
+  }
 }
