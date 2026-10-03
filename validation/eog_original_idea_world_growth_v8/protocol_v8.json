@@ -24,7 +24,8 @@
     "simulation_required": false,
     "exact_lifetime_calculation": "for a baseline certificate with N candidate additions and K threatening additions that would destroy the certificate, expected first-failure draw is (N+1)/(K+1) when K>0; if K=0 the certificate survives the complete pool",
     "survival_probability_after_m_additions": "choose(N-K,m)/choose(N,m) for m<=N-K, else 0; K=0 gives survival probability 1 for all m",
-    "normalized_expected_lifetime": "expected first-failure draw divided by N when K>0; 1.0 for certificates surviving the full pool"
+    "normalized_expected_lifetime": "expected first-failure draw divided by N when K>0; 1.0 for certificates surviving the full pool",
+    "fraction_to_draw_count": "for reporting survival at fraction f, m = min(N, ceil(f*N)); when N=0, survival is 1.0"
   },
   "certificate_threat_definition": {
     "baseline_robust_reachable": "an added world threatens the certificate when that node is unreachable in the added world",
@@ -93,5 +94,13 @@
     "Do not introduce weighted world-addition probabilities after scoring.",
     "Do not replace exact combinatorial lifetime with a favorable simulated ordering.",
     "Failed directional lifetime hypotheses remain failed."
-  ]
+  ],
+  "preimplementation_amendment": {
+    "classification": "preimplementation_reporting_precision_amendment",
+    "reason": "the frozen protocol named 10/25/50/75/100 percent survival outputs but had not fixed the integer draw-count rule",
+    "rule_added": "m=min(N,ceil(f*N)); N=0 gives survival 1.0",
+    "hypotheses_changed": false,
+    "growth_pools_changed": false,
+    "scoring_seen_before_amendment": false
+  }
 }
