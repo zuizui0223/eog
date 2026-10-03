@@ -1,0 +1,92 @@
+{
+  "schema": "eog.original_idea_randomized_virtual_worlds.result_summary.v2",
+  "status": "completed_preregistered_randomized_generality_panel",
+  "protocol": "validation/eog_original_idea_virtual_worlds_v2/protocol_v2.json",
+  "protocol_commit": "f9b63f39b327ef551aaa3f6114edc6fd3051ab87",
+  "authoritative_run": 37124686227,
+  "authoritative_artifact_id": 11273644569,
+  "authoritative_artifact_digest": "sha256:7b86aa2a3328bf0de1d246c0a8277807200fa3d1c14cd8deb85b2b347283e91b",
+  "result_fingerprint": "9f5e08eb87517727ba0a84923b2dac5f102f4e4f43976af208f0200ca4630451",
+  "row_count": 384,
+  "predeclared_verdicts": {
+    "G1_barriers_increase_viable_unreachable_fraction": "SUPPORTED",
+    "G2_low_autocorrelation_increases_pathwise_IBE_failures": "REFUTED",
+    "G3_sparse_neighbourhood_increases_critical_stepping_stones": "SUPPORTED",
+    "G4_wider_neighbourhood_increases_single_node_route_robustness": "SUPPORTED",
+    "G5_static_history_aliasing_is_common": "SUPPORTED",
+    "G6_temporal_positive_evidence_contracts_source_history_aliases": "SUPPORTED",
+    "G7_impossibility_has_multiple_mechanistic_rescue_classes": "SUPPORTED",
+    "G8_world_expansion_monotonicity": "SUPPORTED"
+  },
+  "headline_contrasts": {
+    "barrier_effect": {
+      "mean_viable_unreachable_barrier_0.05": 0.2583404138805322,
+      "mean_viable_unreachable_barrier_0.35": 0.5829002694887206,
+      "difference": 0.32455985560818845,
+      "all_four_autocorrelation_x_neighbourhood_strata_nondecreasing": true
+    },
+    "autocorrelation_pathwise_IBE": {
+      "low_mean_blocked_fraction": 0.05196122329897753,
+      "high_mean_blocked_fraction": 0.23154541342061777,
+      "difference_low_minus_high": -0.17958419012164023,
+      "direction": "opposite_to_preregistered_G2"
+    },
+    "stepping_stone_criticality": {
+      "rook_mean": 0.3593210856722213,
+      "queen_mean": 0.22870785029985022,
+      "difference_rook_minus_queen": 0.1306132353723711
+    },
+    "single_node_route_robustness": {
+      "rook_mean": 0.4869595765740647,
+      "queen_mean": 0.5363159628703794,
+      "difference_queen_minus_rook": 0.049356386296314725
+    },
+    "history_aliasing": {
+      "median_static_source_alias_count": 21.0
+    },
+    "temporal_contraction": {
+      "eligible_rows": 355,
+      "median_contraction_fraction": 0.8148148148148149
+    },
+    "minimal_rescue_counts": {
+      "barrier_only": 1687,
+      "environment_only": 805,
+      "either_single_axis": 825,
+      "both_barrier_and_environment": 623,
+      "not_rescued_by_edge_relaxation": 897
+    },
+    "world_expansion_monotonicity_violations": 0
+  },
+  "G2_stratum_diagnostic": {
+    "queen_barrier_0.05_high_minus_low": 0.070618,
+    "queen_barrier_0.20_high_minus_low": 0.117535,
+    "queen_barrier_0.35_high_minus_low": 0.118374,
+    "rook_barrier_0.05_high_minus_low": 0.292709,
+    "rook_barrier_0.20_high_minus_low": 0.272619,
+    "rook_barrier_0.35_high_minus_low": 0.205650,
+    "all_six_strata_reverse_the_preregistered_direction": true
+  },
+  "post_result_generator_scale_diagnostic": {
+    "classification": "secondary_mechanism_diagnostic_not_a_retest_of_G2",
+    "mean_environment_edge_q70": {
+      "low_rook": 1.520888,
+      "low_queen": 1.531416,
+      "high_rook": 0.123886,
+      "high_queen": 0.142221
+    },
+    "interpretation": "The relative within-landscape q70 traversability rule produces a much tighter absolute environmental edge tolerance after smoothing. The G2 reversal therefore exposes sensitivity to how environmental continuity is operationalized, not simply an autocorrelation main effect."
+  },
+  "interpretation": [
+    "Barriers strongly and monotonically increased the fraction of locally permissive nodes that were unreachable.",
+    "Sparse rook neighbourhoods created more critical stepping-stone dependence, while queen neighbourhoods increased single-node route robustness.",
+    "Static source-history ambiguity was large: the median alias count was 21.",
+    "Time-stamped positive constraints strongly contracted source-history ambiguity, with median contraction 0.815 among eligible rows.",
+    "Unreachable targets had heterogeneous minimal rescue mechanisms: barrier-only, environment-only, either-axis, jointly-required, and non-edge-rescuable cases all occurred.",
+    "The sole preregistered directional refutation, G2, reveals that an analyst's relative environmental-threshold rule can reverse an intuitive autocorrelation expectation."
+  ],
+  "claim_boundary": [
+    "Frequencies are properties of the frozen generator, not nature.",
+    "The post-result G2 scale diagnostic does not repair or reclassify G2; G2 remains REFUTED.",
+    "The q70 threshold sensitivity motivates an analyst-world uncertainty experiment as a new question rather than a rerun."
+  ]
+}
