@@ -1,0 +1,118 @@
+{
+  "schema": "eog.original_idea_occurrence_information.protocol.v4",
+  "status": "frozen_before_occurrence_information_benchmark_implementation_and_scoring",
+  "parents": {
+    "randomized_ecological_worlds_v2": {
+      "result": "validation/eog_original_idea_virtual_worlds_v2/result_summary_v2.json",
+      "fingerprint": "9f5e08eb87517727ba0a84923b2dac5f102f4e4f43976af208f0200ca4630451"
+    },
+    "analyst_worlds_v3": {
+      "result": "validation/eog_original_idea_analyst_worlds_v3/result_summary_v3.json",
+      "fingerprint": "d6f19f8e57f58965a3487c278de0507499faaf9c326a06ad556a47dd855ee9f9"
+    }
+  },
+  "scientific_question": "How much information do sparse positive occurrence anchors contain about reachability worlds beyond local viability alone, and how does that information depend on the spatial arrangement of the observed occurrences?",
+  "latent_landscapes": {
+    "reuse": "exact v2 7x7 generators, factor levels, seeds, A/B permissibility, geographic graphs and edge-uniform barrier draws",
+    "truth_rows": 384,
+    "truth_world": "relative_edge_q70 at the v2 row's own barrier-density level and the original v2 truth source"
+  },
+  "candidate_world_universe_per_latent_landscape": {
+    "sources": "every A/B-permissive node is admitted as a candidate source; truth source is not revealed by the occurrence evidence",
+    "barrier_levels": [0.05, 0.20, 0.35],
+    "analyst_environment_rules": [
+      "relative_edge_q70",
+      "absolute_raw_0.5",
+      "standardized_sd_1.0"
+    ],
+    "cartesian_product": "candidate source x barrier level x analyst rule",
+    "A_and_B": "shared latent permissibility field across candidate worlds",
+    "world_compatibility": "every observed positive anchor must be reachable from the candidate source under that candidate barrier/rule world"
+  },
+  "observation_contract": {
+    "truth_positive_pool": "all non-source nodes reachable in the frozen truth world",
+    "source_identity_is_observed": false,
+    "eligibility": "truth positive pool must contain at least four non-source nodes; otherwise the row is non-estimable and retained as such",
+    "coverage_fractions": [0.10, 0.25, 0.50, 1.00],
+    "anchor_count_rule": "max(1, ceil(fraction * truth_positive_pool_size)); counts are identical across sampling designs within a row/fraction",
+    "sampling_designs": {
+      "clustered_near_source": "order truth-positive nodes by truth-world BFS depth, then Euclidean distance to truth source, then node ID",
+      "dispersed_farthest_first": "first choose the truth-positive node farthest in Euclidean distance from truth source; then greedily choose the node maximizing its minimum Euclidean distance to already chosen anchors; ties by node ID"
+    },
+    "nested_anchor_sets": true
+  },
+  "comparison": {
+    "local_viability_only": "because every truth-positive anchor is A/B-permissive and candidate worlds share A/B, local-only evidence retains the complete candidate source x barrier x analyst universe",
+    "reachability_aware": "retain only candidate worlds in which every observed positive anchor is reachable from that world's candidate source"
+  },
+  "primary_outputs": [
+    "candidate-world count before occurrence conditioning",
+    "survivor-world count and fraction by coverage and sampling design",
+    "surviving candidate-source count",
+    "surviving barrier-level count",
+    "surviving analyst-rule count",
+    "robustly unreachable locally-permissive nodes across the surviving world set",
+    "truth-unreachable locally-permissive nodes",
+    "robust-impossibility recovery fraction",
+    "truth-reachable false robust-exclusion count",
+    "full-positive exact-world uniqueness",
+    "full-positive source uniqueness"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "O1_reachability_evidence_adds_information_beyond_local_viability",
+      "statement": "For both sampling designs, pooled mean survivor-world fraction under reachability-aware conditioning is <1 at every nonzero coverage level.",
+      "failure_rule": "REFUTED separately for any design/coverage level whose pooled mean survivor fraction is not <1."
+    },
+    {
+      "id": "O2_more_positive_anchors_contract_worlds_monotonically",
+      "statement": "Within every eligible row and sampling design, survivor-world count is nonincreasing as the nested positive-anchor set grows.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "O3_spatial_arrangement_changes_information",
+      "statement": "At equal anchor counts, at least one eligible row has different survivor-world counts under clustered and dispersed sampling.",
+      "failure_rule": "REFUTED if spatial arrangement never changes survivor contraction."
+    },
+    {
+      "id": "O4_dispersed_anchors_are_more_discriminating_on_average",
+      "statement": "At 25% and 50% coverage, pooled mean survivor-world fraction is lower for dispersed-farthest-first anchors than for clustered-near-source anchors.",
+      "failure_rule": "REFUTED separately at either coverage if the dispersed-minus-clustered contrast is >=0."
+    },
+    {
+      "id": "O5_robust_impossibility_recovery_increases_with_occurrence_coverage",
+      "statement": "For each sampling design, pooled mean robust-impossibility recovery fraction is nondecreasing with coverage and is strictly larger at full coverage than at 10% coverage.",
+      "failure_rule": "REFUTED separately for any design if monotonicity fails or the endpoint contrast is nonpositive."
+    },
+    {
+      "id": "O6_robust_impossibility_is_sound_when_truth_world_is_retained",
+      "statement": "No truth-reachable locally-permissive node is ever classified robustly unreachable across the surviving candidate worlds.",
+      "failure_rule": "Any false robust exclusion is an implementation/theory failure."
+    },
+    {
+      "id": "O7_full_positive_occurrences_need_not_identify_one_history",
+      "statement": "Across eligible rows under full positive coverage, median surviving candidate-world count is >1 and median surviving candidate-source count is >1 for at least one of the two sampling designs.",
+      "failure_rule": "REFUTED if full positive coverage typically collapses both world and source identity to singletons under both designs."
+    }
+  ],
+  "secondary_outputs": [
+    "fraction of rows with exact truth-world recovery",
+    "fraction with exact truth-source recovery",
+    "survivor contraction attributable to source, barrier or analyst-rule elimination",
+    "relationship between truth reachable-component size and survivor contraction",
+    "relationship between route redundancy and occurrence information content"
+  ],
+  "claim_boundary": [
+    "Occurrence-information frequencies are properties of the frozen synthetic generator and candidate-world family.",
+    "Candidate-source contraction is not ancestry inference.",
+    "Robustly unreachable means unreachable in every surviving declared world, not universally impossible in nature.",
+    "The dispersed versus clustered comparison is a synthetic survey-information experiment, not a field sampling recommendation without external cost and detectability models."
+  ],
+  "stop_rules": [
+    "Do not change coverage fractions after scoring.",
+    "Do not change candidate source, barrier or analyst-rule universe after scoring.",
+    "Do not add another sampling design to rescue O4.",
+    "Do not tune the minimum eligible positive-pool size after scoring.",
+    "Directional failures remain failures."
+  ]
+}
