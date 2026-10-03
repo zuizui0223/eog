@@ -2,8 +2,8 @@
 
 ## Status
 
-This is the active post-closure method-development direction after the finite-BAM and
-target-quotient programmes.
+This is a supporting relational/history subsystem for the active virtual-world programme.
+It is not the current scientific mainline by itself.
 
 It does not reopen the frozen EOG-WF three-endpoint manuscript denominator and does not
 change any historical empirical result.
@@ -213,10 +213,9 @@ probability, dispersal probability or demographic connectivity.
 The contribution is to retain a set of admissible distribution-forming histories and
 report which relational properties survive disagreement among those histories.
 
-## Development stop
+## Development boundary
 
-Do not create another BAM factorial or synthetic ecological transformation to improve a
-pattern already established in the closed known-truth programme.
-
-New work must either expose an existing relational/history quantity through the unified
-EOG interface or test that quantity against an independent external evidence class.
+The relational/history API is used when a virtual-world hypothesis requires route,
+source, first-passage, stepping-stone, bottleneck or temporal-order quantities.  New
+work is authorized only through the active original-EOG virtual-world protocol or a
+separately frozen successor protocol.
