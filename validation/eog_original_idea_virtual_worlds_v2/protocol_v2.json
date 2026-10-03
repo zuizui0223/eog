@@ -1,0 +1,120 @@
+{
+  "schema": "eog.original_idea_randomized_virtual_worlds.protocol.v2",
+  "status": "frozen_before_randomized_generator_implementation_and_scoring",
+  "parent_v1": {
+    "result": "validation/eog_original_idea_virtual_worlds_v1/result_summary_v1.json",
+    "fingerprint": "b77f824ff94282952acce502c5a60f3d82f147a1fbcb7b9150e867092702f44b",
+    "role": "canonical existence/mechanism validation only"
+  },
+  "scientific_question": "Across randomized spatial BAM/reachability worlds, under which landscape conditions do the original EOG phenomena become common, rare, or observationally ambiguous?",
+  "design": {
+    "grid": "7x7 fixed node lattice",
+    "replicates_per_factor_cell": 32,
+    "fixed_seed_base": 20261003,
+    "factorial": {
+      "environmental_autocorrelation": ["low", "high"],
+      "barrier_density": [0.05, 0.20, 0.35],
+      "geographic_neighbourhood": ["rook", "queen"]
+    },
+    "total_factor_cells": 12,
+    "total_replicates": 384,
+    "source_count": 1
+  },
+  "world_generation": {
+    "environment": {
+      "low_autocorrelation": "iid standard normal node field",
+      "high_autocorrelation": "same seeded iid field followed by four fixed rook-neighbour averaging passes with self weight 1",
+      "A_viability": "abs(environment - median(environment)) <= empirical 70th percentile absolute deviation"
+    },
+    "B_permissibility": {
+      "construction": "independent seeded node field; exclude the highest 10 percent as antagonistic/nonpermissive",
+      "role": "fixed nuisance biotic holes; not a scored factor"
+    },
+    "geographic_graph": {
+      "rook": "orthogonal adjacent grid cells",
+      "queen": "orthogonal plus diagonal adjacent grid cells"
+    },
+    "environmental_edge_rule": "edge allowed only when absolute environmental difference <= empirical 70th percentile of differences over the full geographic-edge set",
+    "barrier_rule": "each undirected geographic edge independently blocked with the preregistered barrier-density probability using the replicate RNG",
+    "source": "one uniformly sampled A-and-B permissive node from the largest geographically connected permissive component before environmental/barrier edge filtering",
+    "truth_graph": "geographic adjacency AND endpoint A/B permissibility AND environmental-edge continuity AND barrier-open state"
+  },
+  "primary_metrics": [
+    "fraction of A/B-permissive nodes that are unreachable from truth source",
+    "fraction of endpoint-environment-similar geographically reachable targets blocked only after pathwise environmental continuity is enforced",
+    "number and fraction of single-node critical stepping stones whose removal reduces the truth reachable set",
+    "fraction of truth-reachable targets robust to every single non-source node knockout",
+    "static source-history alias count: number of nodes in the final truth component that would generate the same unlimited undirected reachable component",
+    "temporal source-history contraction after fixed early-positive constraints derived from truth BFS depths",
+    "minimal-rescue category for each truth-unreachable A/B-permissive target"
+  ],
+  "minimal_rescue_categories": [
+    "barrier_only",
+    "environment_only",
+    "either_single_axis",
+    "both_barrier_and_environment",
+    "not_rescued_by_edge_relaxation"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "G1_barriers_increase_viable_unreachable_fraction",
+      "statement": "Within each autocorrelation x neighbourhood stratum, mean viable-unreachable fraction is nondecreasing from barrier density 0.05 to 0.20 to 0.35, with a strictly larger pooled mean at 0.35 than 0.05.",
+      "failure_rule": "REFUTED if monotonicity fails in any stratum or the pooled endpoint contrast is nonpositive."
+    },
+    {
+      "id": "G2_low_autocorrelation_increases_pathwise_IBE_failures",
+      "statement": "Pooled endpoint-similar/pathwise-blocked fraction is larger under low than high environmental autocorrelation.",
+      "failure_rule": "REFUTED if the pooled mean difference low-high is <=0."
+    },
+    {
+      "id": "G3_sparse_neighbourhood_increases_critical_stepping_stones",
+      "statement": "Pooled critical-stepping-stone fraction is larger under rook than queen neighbourhoods.",
+      "failure_rule": "REFUTED if rook-queen mean difference is <=0."
+    },
+    {
+      "id": "G4_wider_neighbourhood_increases_single_node_route_robustness",
+      "statement": "Pooled fraction of reachable targets robust to every single-node knockout is larger under queen than rook neighbourhoods.",
+      "failure_rule": "REFUTED if queen-rook mean difference is <=0."
+    },
+    {
+      "id": "G5_static_history_aliasing_is_common",
+      "statement": "Median static source-history alias count is >1 across the full randomized panel.",
+      "failure_rule": "REFUTED if median alias count <=1."
+    },
+    {
+      "id": "G6_temporal_positive_evidence_contracts_source_history_aliases",
+      "statement": "Among replicates with static alias count >1 and at least one usable early-positive temporal constraint, median temporal contraction fraction is >0.",
+      "failure_rule": "REFUTED if median contraction <=0 or no eligible replicates exist."
+    },
+    {
+      "id": "G7_impossibility_has_multiple_mechanistic_rescue_classes",
+      "statement": "Across the frozen panel, at least one unreachable target occurs in each of barrier_only, environment_only, and both_barrier_and_environment minimal-rescue categories.",
+      "failure_rule": "REFUTED for any missing required category; do not add worlds or alter thresholds."
+    },
+    {
+      "id": "G8_world_expansion_monotonicity",
+      "statement": "For every replicate, removing one or more constraints can only expand the reachable set; no relaxation may create a new unreachable node.",
+      "failure_rule": "Any violation is an implementation/theory failure and stops interpretation."
+    }
+  ],
+  "temporal_constraint_rule": {
+    "candidate_source_hypotheses": "every node in the truth final reachable component",
+    "early_positive_nodes": "up to the lexicographically first three truth nodes at BFS depth 1, 2 and 3, one per available depth",
+    "candidate_source_compatibility": "candidate BFS distance to each early-positive node must be <= its truth BFS depth",
+    "contraction": "1 - temporal-compatible-source-count / static-alias-count",
+    "no_source_identity_observation": true
+  },
+  "claim_boundary": [
+    "Randomized frequencies describe the frozen synthetic generator, not nature.",
+    "Barrier density and autocorrelation are experimental factors, not fitted ecological parameters.",
+    "Static source alias count in an undirected connected component is a history-identifiability diagnostic, not ancestry inference.",
+    "Minimal rescue class is a mechanistic counterfactual within the generator, not a management recommendation."
+  ],
+  "stop_rules": [
+    "Do not change factorial levels after scoring.",
+    "Do not alter the 70 percent viability or environmental-edge quantiles after scoring.",
+    "Do not increase replicate count after seeing marginal hypotheses.",
+    "Do not add a rescue category after seeing results.",
+    "Failed directional hypotheses remain failed."
+  ]
+}

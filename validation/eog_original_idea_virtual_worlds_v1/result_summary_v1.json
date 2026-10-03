@@ -1,0 +1,76 @@
+{
+  "schema": "eog.original_idea_virtual_worlds.result_summary.v1",
+  "status": "completed_preregistered_canonical_archetype_validation",
+  "protocol": "validation/eog_original_idea_virtual_worlds_v1/protocol_v1.json",
+  "protocol_commit": "3c93b06911f19d5f01f1b2618e4b49abe663a49a",
+  "authoritative_run": 37124144303,
+  "authoritative_artifact_id": 11274288686,
+  "authoritative_artifact_digest": "sha256:fb8f47643b2a131726f71949bfb8277279816dc1b1b10f4c6428946337cb9978",
+  "result_fingerprint": "b77f824ff94282952acce502c5a60f3d82f147a1fbcb7b9150e867092702f44b",
+  "predeclared_verdicts": {
+    "H1_viability_not_reachability": "SUPPORTED",
+    "H2_pathwise_IBE_matters": "SUPPORTED",
+    "H3_stepping_stones_change_reachability": "SUPPORTED",
+    "H4_bottleneck_and_route_redundancy_are_distinct": "SUPPORTED",
+    "H5_occurrences_do_not_identify_unique_history": "SUPPORTED",
+    "H6_temporal_evidence_contracts_history_fiber": "SUPPORTED",
+    "H7_robust_impossibility_is_monotone_under_world_expansion": "SUPPORTED"
+  },
+  "archetype_results": {
+    "V1_suitable_but_unreachable": {
+      "target_locally_viable_in_all_worlds": true,
+      "barrier_open_reachable": true,
+      "barrier_closed_reachable": false
+    },
+    "V2_endpoint_match_intermediate_gap": {
+      "endpoint_environmental_distance": 0.0,
+      "intermediate_environmental_gap": 10.0,
+      "endpoint_only_reachable": true,
+      "pathwise_reachable": false
+    },
+    "V3_stepping_stone": {
+      "without_step_reachable": false,
+      "with_step_reachable": true,
+      "with_step_first_arrival_depth": 2
+    },
+    "V4_bottleneck_vs_redundancy": {
+      "bottleneck_path_count": 1,
+      "redundant_path_count": 2,
+      "bottleneck_after_critical_node_knockout_reachable": false,
+      "redundant_after_same_node_knockout_reachable": true
+    },
+    "V5_same_distribution_different_history": {
+      "static_occurrence_set": ["S", "T"],
+      "compatible_history_count": 2,
+      "direct_history_first_arrival": 1,
+      "stepping_history_first_arrival": 2
+    },
+    "V6_static_alias_temporal_split": {
+      "static_compatible_history_count": 2,
+      "temporal_compatible_history_count": 1,
+      "contraction_fraction": 0.5,
+      "eliminated_history": "slow_history"
+    },
+    "H7_world_expansion_monotonicity": {
+      "before_possible": ["S", "U"],
+      "after_possible": ["S", "U", "T"],
+      "before_robustly_unreachable": ["T"],
+      "after_robustly_unreachable": [],
+      "gained_possible": ["T"],
+      "lost_robustly_unreachable": ["T"],
+      "monotonicity_holds": true
+    }
+  },
+  "interpretation": [
+    "The canonical virtual worlds recover every predeclared qualitative distinction from the original EOG idea.",
+    "The result is an existence / mechanism-validation result, not a general-frequency estimate.",
+    "Local viability, reachability, pathwise environmental continuity, stepping-stone dependence, route redundancy, history non-identification and temporal contraction are empirically separable estimands inside controlled virtual worlds.",
+    "The next valid step is randomized generality over the same mechanisms rather than adding more hand-crafted favorable archetypes."
+  ],
+  "claim_boundary": [
+    "Synthetic support does not establish empirical prevalence.",
+    "All seven favorable verdicts are expected to be easier in canonical archetypes than in randomized landscapes.",
+    "No unique historical route is inferred from occurrence compatibility.",
+    "BAM is used as a mechanism/world generator rather than as the sole scientific endpoint."
+  ]
+}
