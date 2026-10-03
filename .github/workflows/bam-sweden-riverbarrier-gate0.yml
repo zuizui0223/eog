@@ -8,6 +8,10 @@ on:
       - ".github/workflows/bam-sweden-riverbarrier-gate0.yml"
   workflow_dispatch:
 
+concurrency:
+  group: bam-sweden-riverbarrier-gate0-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   gate0:
     runs-on: ubuntu-latest
