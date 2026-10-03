@@ -1,0 +1,112 @@
+{
+  "schema": "eog.original_idea_set_valued_forecast.protocol.v8",
+  "status": "frozen_before_set_valued_forecast_implementation_and_scoring",
+  "parent_v7": {
+    "result": "validation/eog_original_idea_expansion_direction_v7/result_summary_v7.json",
+    "fingerprint": "bd9611507d4697bad704d53e2a4a248c3a62d000022108bde89d3175b471d8b7",
+    "role": "v7 establishes how world-universe direction changes certificate persistence; v8 keeps the full directed candidate universe and asks how to carry its future uncertainty forward without selecting one world"
+  },
+  "scientific_question": "Can future distribution uncertainty be represented as an exact set of world-specific reachable configurations whose lower/upper envelope remains truth-sound and contracts monotonically as temporal positive evidence accumulates?",
+  "latent_worlds": {
+    "reuse": "the exact v5 directed 7x7 latent rows, truth source/outlet flow field, A/B permissibility, three barrier levels and three analyst environmental rules",
+    "candidate_worlds": "every A/B-permissive candidate source x three barrier levels x three analyst rules",
+    "truth_world": "directed relative_edge_q70 world at the truth row's barrier level and frozen truth source"
+  },
+  "forecast_time_design": {
+    "truth_max_depth": "maximum directed BFS depth among truth-reachable nodes",
+    "eligibility": "truth max depth >=3 and at least one non-source truth-positive node before the terminal frontier",
+    "forecast_horizon_H": "truth max depth",
+    "future_target": "the binary node membership configuration reachable from a candidate source within H directed graph steps",
+    "truth_future_configuration": "truth-world nodes with truth BFS depth <=H"
+  },
+  "nested_temporal_evidence": {
+    "source_identity_observed": false,
+    "level_early": "truth-positive nodes with BFS depth <= max(1, floor((H-1)/3))",
+    "level_mid": "truth-positive nodes with BFS depth <= max(level_early_cutoff, floor(2*(H-1)/3))",
+    "level_prefrontier": "all truth-positive nodes with BFS depth <= H-1",
+    "compatibility": "candidate world survives when every observed node is reachable with candidate BFS distance <= its truth BFS depth",
+    "duplicates": "nested levels with identical cutoff are collapsed before scoring but retain their declared label mapping"
+  },
+  "set_valued_forecast": {
+    "per_world_configuration": "set of locally A/B-permissive nodes with candidate directed BFS distance <=H",
+    "configuration_set": "all distinct per-world future configurations among survivors",
+    "lower_envelope": "intersection of survivor future configurations",
+    "upper_envelope": "union of survivor future configurations",
+    "contingent_future_nodes": "upper minus lower",
+    "world_support_fraction": "fraction of survivor worlds whose future configuration contains the node; descriptive world frequency, explicitly not a calibrated probability"
+  },
+  "point_collapse_comparator": {
+    "rule": "majority future configuration: predict node reachable when world_support_fraction >=0.5",
+    "role": "diagnostic comparator showing what can be lost by collapsing a set-valued forecast to one deterministic configuration",
+    "probability_claim": false
+  },
+  "primary_outputs": [
+    "survivor-world count by temporal evidence level",
+    "distinct future-configuration count",
+    "lower-envelope node count",
+    "upper-envelope node count",
+    "contingent-future node count/fraction",
+    "truth nodes outside upper envelope",
+    "lower-envelope nodes absent from truth",
+    "majority point-forecast node error count",
+    "rows where world identity contracts but forecast envelope does not",
+    "rows where forecast envelope strictly contracts"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "F1_truth_future_is_always_inside_worldset_envelope",
+      "statement": "At every eligible row and evidence level, the truth future configuration contains the lower envelope and is contained by the upper envelope.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "F2_nested_evidence_monotonically_contracts_forecast_uncertainty",
+      "statement": "Within every eligible row, survivor-world count, distinct future-configuration count and contingent-future node count are all nonincreasing as temporal evidence accumulates.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "F3_world_identity_can_contract_without_envelope_contraction",
+      "statement": "At least one eligible row has a strict survivor-world reduction between nested evidence levels while contingent-future node count remains unchanged.",
+      "failure_rule": "REFUTED if every strict world contraction also shrinks the nodewise forecast envelope."
+    },
+    {
+      "id": "F4_temporal_evidence_can_shrink_the_forecast_envelope",
+      "statement": "At least one eligible row has a strict reduction in contingent-future node count between nested evidence levels.",
+      "failure_rule": "REFUTED if no forecast envelope ever contracts."
+    },
+    {
+      "id": "F5_point_collapse_can_be_wrong_when_set_forecast_is_sound",
+      "statement": "At least one eligible row/evidence level has a nonzero majority point-forecast node error while the set-valued envelope remains truth-sound.",
+      "failure_rule": "REFUTED if majority collapse is always exactly correct."
+    },
+    {
+      "id": "F6_prefrontier_evidence_need_not_identify_one_future_configuration",
+      "statement": "At least one eligible row retains more than one distinct future configuration after all truth positives through H-1 are supplied.",
+      "failure_rule": "REFUTED if prefrontier evidence always collapses the future-configuration set to one."
+    },
+    {
+      "id": "F7_worldset_width_is_not_equivalent_to_world_count",
+      "statement": "At least one nested evidence transition changes survivor-world count without changing contingent-future node count, and at least one transition changes contingent-future node count by a different proportion than survivor-world count.",
+      "failure_rule": "REFUTED if forecast width is perfectly determined by survivor-world count across all transitions."
+    }
+  ],
+  "secondary_outputs": [
+    "distribution of world_support_fraction on contingent nodes",
+    "relation between configuration-set size and nodewise envelope width",
+    "majority error by environmental autocorrelation, neighbourhood and barrier density",
+    "rows with singleton nodewise envelope but multiple world identities",
+    "rows with multiple configurations but zero majority error"
+  ],
+  "claim_boundary": [
+    "World-support fraction is not a posterior probability because candidate worlds are not probability-weighted.",
+    "Graph depth H is structural propagation depth, not calibrated time.",
+    "Envelope coverage is conditional on truth-world retention and the declared finite candidate universe.",
+    "The majority comparator is a deterministic collapse diagnostic, not a proposed optimal predictor."
+  ],
+  "stop_rules": [
+    "Do not change H or temporal evidence cutoffs after scoring.",
+    "Do not add world weights after scoring.",
+    "Do not replace the majority comparator after seeing its error rate.",
+    "Do not drop rows with wide forecast envelopes.",
+    "Failed F3-F7 hypotheses remain failed."
+  ]
+}
