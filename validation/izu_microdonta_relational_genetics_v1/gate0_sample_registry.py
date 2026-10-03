@@ -45,6 +45,13 @@ PRIMARY_ISLANDS = (
     "Shikinejima",
     "Kozushima",
 )
+EXPECTED_ISLAND_SAMPLE_COUNTS = {
+    "Izu_Oshima": 47,
+    "Toshima": 38,
+    "Niijima": 23,
+    "Shikinejima": 5,
+    "Kozushima": 12,
+}
 ISLAND_ALIASES = {
     "Izu_Oshima": {
         "izu_oshima",
@@ -187,6 +194,12 @@ def validate_registry_rows(
     if too_small:
         raise IzuRegistryStop(
             f"every primary island needs at least two leaf samples: {too_small}"
+        )
+
+    if island_counts != EXPECTED_ISLAND_SAMPLE_COUNTS:
+        raise IzuRegistryStop(
+            "response-free island sample counts do not match frozen 2026 field identity: "
+            f"expected={EXPECTED_ISLAND_SAMPLE_COUNTS}, observed={island_counts}"
         )
 
     site_counts: dict[str, int] = {}
