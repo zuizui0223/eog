@@ -2,6 +2,7 @@ import pytest
 
 from validation.izu_microdonta_relational_genetics_v1.gate0_sample_registry import (
     IzuRegistryStop,
+    EXPECTED_ISLAND_SAMPLE_COUNTS,
     PRIMARY_ISLANDS,
     REQUIRED_COLUMNS,
     validate_registry_rows,
@@ -11,9 +12,8 @@ from validation.izu_microdonta_relational_genetics_v1.gate0_sample_registry impo
 def _rows():
     rows = []
     sample = 1
-    # 25 per island -> exactly 125 response-free fixture rows.
     for island_index, island in enumerate(PRIMARY_ISLANDS):
-        for i in range(25):
+        for i in range(EXPECTED_ISLAND_SAMPLE_COUNTS[island]):
             rows.append(
                 {
                     "sample_id": f"S{sample:03d}",
@@ -65,3 +65,10 @@ def test_within_site_individual_coordinate_variation_is_aggregated_response_free
     assert result["status"] == "response_free_registry_ready"
     assert "Izu_Oshima|site_1" in result["site_centroids"]
     assert result["island_centroids"]["Izu_Oshima"]["site_count"] == 1
+
+
+def test_response_free_island_sample_count_identity_is_exact():
+    rows = _rows()
+    rows[0]["island"] = "Toshima"
+    with pytest.raises(IzuRegistryStop, match="island sample counts"):
+        validate_registry_rows(REQUIRED_COLUMNS, rows)
