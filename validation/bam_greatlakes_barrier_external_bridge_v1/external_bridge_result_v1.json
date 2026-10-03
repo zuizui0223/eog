@@ -1,0 +1,12 @@
+{
+  "fingerprint": "c872fca044145bab6e7b09831ec27e7bc61992b55c68e3358c50158ffa2ce948",
+  "model_fits": 0,
+  "rds_payload_bytes_opened": 110096,
+  "rds_payload_requests": 1,
+  "rds_values_parsed": false,
+  "reason": "RDS schema mismatch: expected=['pair_id', 'pair_id_num', 'Year', 'Stream.Name', 'stream_id', 'barrier', 'position', 'segment', 'survey_length', 'species', 'total_caught', 'yearBuilt', 'barrierAgeAtSample', 'period'], observed=['pair_id', 'Year', 'Stream.Name', 'stream_id', 'barrier', 'position', 'segment', 'nrecords', 'survey_length', 'species', 'total_caught', 'yearBuilt', 'barrierAgeAtSample', 'period', 'pair_id_num']",
+  "retry_allowed": false,
+  "schema": "eog.bam_greatlakes_barrier_external_bridge.result.v1",
+  "scientific_effect": "terminal_partial_payload_stop_no_rerun",
+  "status": "stop_before_or_during_once_only_execution"
+}
