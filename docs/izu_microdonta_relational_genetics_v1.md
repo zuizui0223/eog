@@ -39,3 +39,18 @@ not beyond IBD.
 
 The Izu test can be genuinely prospective because the leaf samples exist while the
 MIG-seq2/FST response has not yet been generated or viewed.
+
+
+## Primary population unit frozen before genetics
+
+The primary genetic unit is now fixed at the five islands, yielding ten unordered
+population pairs.
+
+Individual field sites remain in the registry for provenance and for constructing
+response-free spatial relations, but site-level genetic grouping cannot replace the
+island-level primary endpoint after genotype access.  This is especially important for
+Niijima, where several field sites were sampled.
+
+The next required object is a 125-row response-free sample registry with sample ID,
+island, site ID, coordinates and leaf-availability status.  No genotype-derived field
+is permitted in that registry.
