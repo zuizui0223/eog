@@ -1,0 +1,105 @@
+{
+  "schema": "eog.original_idea_world_universe_certificate_persistence.protocol.v6",
+  "status": "frozen_before_universe_expansion_benchmark_implementation_and_scoring",
+  "parent_v5": {
+    "result": "validation/eog_original_idea_directed_temporal_flow_v5/result_summary_v5.json",
+    "fingerprint": "9b70d4bc4a64c6a6dc90a17360b096ac2c87aba045c3ebcae11ae3dff0ddad1d",
+    "key_result": "directionality reduced source aliasing and increased robust-impossibility recovery, while temporal evidence further reduced world/source identity without increasing full-coverage robust-impossibility recovery"
+  },
+  "scientific_question": "As the declared virtual-world universe is expanded while the occurrence evidence is held fixed, which universal relation certificates persist, and is robust impossibility more persistent than robust reachability?",
+  "latent_landscapes": {
+    "reuse": "the exact 384 v5 directed-flow latent rows, A/B fields, geographic neighbourhoods, barrier draws, analyst rules, outlet flow field and truth source",
+    "eligibility": "reuse the v5 eligibility condition of at least four non-source truth-reachable nodes",
+    "evidence": "25 percent dispersed-farthest-first truth-positive occurrence coverage, using the already frozen v4 sampling rule; source identity remains unobserved"
+  },
+  "nested_candidate_universes": {
+    "U0_source_only": "every A/B-permissive candidate source under the truth row's barrier-density level and relative_edge_q70 analyst rule",
+    "U1_plus_barrier": "every candidate source x all three frozen barrier levels under relative_edge_q70",
+    "U2_plus_analyst": "every candidate source x all three barrier levels x all three frozen analyst environmental rules",
+    "nesting": "U0 subset U1 subset U2 exactly"
+  },
+  "world_compatibility": "a candidate directed world survives when every frozen 25 percent dispersed positive anchor is reachable from that candidate source",
+  "node_status_within_survivors": {
+    "robust_reachable": "node reachable from the candidate source in every surviving world",
+    "contingent": "node reachable in some but not all surviving worlds",
+    "robust_impossible": "node unreachable in every surviving world"
+  },
+  "certificate_population": "all locally A/B-permissive nodes excluding the frozen observed 25 percent positive anchors and the truth source; this retains both unobserved truth-reachable and truth-unreachable nodes for certificate comparison",
+  "primary_outputs": [
+    "survivor-world count at U0, U1 and U2",
+    "surviving-source count at U0, U1 and U2",
+    "robust-reachable, contingent and robust-impossible node counts at each universe",
+    "U0 robust-reachable certificate retention in U1 and U2",
+    "U0 robust-impossible certificate retention in U1 and U2",
+    "certificate losses caused by barrier-world expansion",
+    "additional certificate losses caused by analyst-world expansion",
+    "truth-soundness of all universal certificates",
+    "full-U2 contingent-node fraction"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "C1_universe_expansion_only_erodes_universal_certificates",
+      "statement": "For every eligible row, each U0 robust-reachable or robust-impossible certificate either persists or becomes contingent as the universe expands; no node contingent at a smaller universe may become newly robust-reachable or newly robust-impossible solely because worlds are added.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "C2_barrier_expansion_erodes_some_certificates",
+      "statement": "At least one eligible row loses at least one U0 universal certificate when expanding from U0 to U1.",
+      "failure_rule": "REFUTED if barrier-world expansion never changes any U0 universal node status."
+    },
+    {
+      "id": "C3_analyst_expansion_erodes_additional_certificates",
+      "statement": "At least one eligible row loses at least one universal certificate when expanding from U1 to U2.",
+      "failure_rule": "REFUTED if analyst-world expansion never changes any U1 universal node status."
+    },
+    {
+      "id": "C4_impossibility_certificates_are_more_persistent_than_reachability_certificates",
+      "statement": "Across all eligible U0 node certificates, pooled retention from U0 to U2 is strictly larger for robust-impossible certificates than for robust-reachable certificates.",
+      "failure_rule": "REFUTED if impossible-certificate retention minus reachable-certificate retention is <=0."
+    },
+    {
+      "id": "C5_some_certificates_survive_full_world_expansion",
+      "statement": "The pooled U2 result contains at least one robust-reachable and at least one robust-impossible unobserved locally-permissive node.",
+      "failure_rule": "REFUTED if either universal category is globally empty at U2."
+    },
+    {
+      "id": "C6_full_world_expansion_preserves_truth_soundness",
+      "statement": "At every nested universe, no truth-reachable node is classified robust-impossible and no truth-unreachable node is classified robust-reachable.",
+      "failure_rule": "Any false universal certificate is an implementation/theory failure."
+    },
+    {
+      "id": "C7_world_expansion_creates_contingency",
+      "statement": "Pooled mean contingent-node fraction is strictly larger at U2 than at U0.",
+      "failure_rule": "REFUTED if U2-minus-U0 pooled mean contingent fraction is <=0."
+    }
+  ],
+  "secondary_outputs": [
+    "certificate persistence by environmental autocorrelation, neighbourhood and truth barrier density",
+    "whether U0 certificate type predicts which uncertainty axis destroys it",
+    "relationship between truth DAG branching/redundancy and certificate persistence",
+    "survivor-world contraction versus certificate persistence",
+    "rows with zero surviving universal statements after full expansion"
+  ],
+  "claim_boundary": [
+    "Certificate persistence is conditional on the frozen candidate-world expansion path.",
+    "Robust-impossible means unreachable in every surviving declared world, not universally impossible in nature.",
+    "Robust-reachable means reachable in every surviving declared world, not guaranteed demographic connectivity.",
+    "A favorable C4 would support only this generator-level asymmetry, not a universal theorem that impossibility is always more robust than possibility."
+  ],
+  "stop_rules": [
+    "Do not change the nested universe definitions after scoring.",
+    "Do not add a fourth analyst rule or barrier level after scoring.",
+    "Do not remove nodes with inconvenient certificate behavior.",
+    "Do not redefine the certificate population after scoring.",
+    "If C4 is refuted, retain the refutation and do not search for a different expansion order."
+  ],
+  "preimplementation_amendment": {
+    "classification": "preimplementation_estimand_repair_before_any_v6_scoring",
+    "reason": "complete positive coverage would remove all unobserved truth-reachable nodes from the certificate population, making robust-reachable versus robust-impossible persistence incomparable",
+    "replacement_evidence": "25 percent dispersed-farthest-first positives using the already frozen v4 sampling design",
+    "ecological_worlds_changed": false,
+    "candidate_universe_levels_changed": false,
+    "hypotheses_changed": false,
+    "scoring_seen_before_amendment": false
+  }
+}
