@@ -1,0 +1,58 @@
+{
+  "schema": "eog.original_idea_target_aware_evidence_planning.result_summary.v7",
+  "status": "completed_preregistered_target_aware_adaptive_planning_panel",
+  "protocol": "validation/eog_original_idea_target_aware_evidence_planning_v7/protocol_v7.json",
+  "protocol_commit": "fed067831ced69ced323294a6b71f08940fe32ed",
+  "authoritative_run": 37129971565,
+  "authoritative_artifact_id": 11276238543,
+  "authoritative_artifact_digest": "sha256:9aa6ee69ba0d264495663843c8a1f5cf9d848dfd6c1fe890b43c751112101974",
+  "result_fingerprint": "d0a67ee7a81753aa128cf7c28d40bc9b9550af832a658af5e801f92c00131a05",
+  "row_count": 384,
+  "eligible_row_count": 272,
+  "non_estimable_row_count": 112,
+  "predeclared_verdicts": {
+    "P1_target_planning_depth_never_exceeds_world_planning_depth": "SUPPORTED",
+    "P2_strict_adaptive_target_saving_exists": "SUPPORTED",
+    "P3_target_and_world_planners_choose_different_first_actions": "SUPPORTED",
+    "P4_target_planner_first_action_is_target_superior_somewhere": "SUPPORTED",
+    "P5_target_planning_is_not_one_fixed_measurement_order": "SUPPORTED",
+    "P6_complete_three_action_library_resolves_every_target": "SUPPORTED",
+    "P7_target_planner_can_stop_with_history_unresolved": "SUPPORTED"
+  },
+  "adaptive_depths": {
+    "target_worst_case_distribution": {"0":17,"1":84,"2":106,"3":65},
+    "world_worst_case_distribution": {"0":8,"1":47,"2":121,"3":96},
+    "target_truth_path_distribution": {"0":17,"1":94,"2":121,"3":40},
+    "world_truth_path_distribution": {"0":8,"1":52,"2":124,"3":88},
+    "mean_target_worst_case_depth": 1.8051470588235294,
+    "mean_world_worst_case_depth": 2.1213235294117645,
+    "strict_target_saving_rows": 76,
+    "target_gt_world_violation_count": 0
+  },
+  "first_action": {
+    "target_optimal_counts": {
+      "S_source": 201,
+      "B_barrier": 37,
+      "R_analyst": 17
+    },
+    "rows_with_different_target_vs_world_first_action": 24,
+    "rows_where_target_first_has_strictly_better_target_split": 23
+  },
+  "target_stopping": {
+    "rows_stopping_with_multiple_worlds": 90,
+    "rows_stopping_with_multiple_sources": 18,
+    "rows_stopping_with_multiple_worlds_and_sources": 18,
+    "target_resolution_failures": 0
+  },
+  "interpretation": [
+    "Target-aware adaptive planning never required more worst-case diagnostic actions than full-world identification and strictly saved actions in 76/272 eligible rows.",
+    "The target-aware and world-aware planners chose different first actions in 24 rows, and in 23 of those the target-aware first action gave a strictly better worst-case split of reachability target classes.",
+    "Source identity was the most frequent target-optimal first action, but barrier and analyst-rule measurements were also optimal, so the planner is not a fixed measurement order.",
+    "The target-aware planner stopped with multiple worlds in 90 rows and with multiple worlds plus multiple sources in 18 rows, demonstrating that ecological target identification can legitimately leave history unresolved."
+  ],
+  "claim_boundary": [
+    "The three diagnostic actions are known-truth categorical measurements with unit cost, not field-cost-equivalent observations.",
+    "Worst-case adaptive depth is a finite decision-tree quantity, not expected information gain.",
+    "Target identification does not imply historical-world or source identity."
+  ]
+}
