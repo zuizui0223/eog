@@ -1,0 +1,111 @@
+{
+  "schema": "eog.original_idea_world_universe_certificate_persistence.result_summary.v6",
+  "status": "completed_preregistered_world_universe_expansion_panel",
+  "protocol": "validation/eog_original_idea_world_universe_v6/protocol_v6.json",
+  "protocol_initial_commit": "8b3c8898121a0949735ddf71e59732cd5f34ce35",
+  "protocol_preimplementation_amendment_commit": "7c0877c9af4bb62d7a71df26c06567b28682e48c",
+  "authoritative_run": 37129343540,
+  "authoritative_artifact_id": 11275853071,
+  "authoritative_artifact_digest": "sha256:c1dccb50c7491c85b9a526ea8a308b9fe73a7e9a5dcd2218318dfba101e169b9",
+  "result_fingerprint": "79af87ec0a0a9576b4a7178b21763c6c1167274d17d50e2e74249cfd1a3fa250",
+  "row_count": 384,
+  "eligible_row_count": 272,
+  "non_estimable_row_count": 112,
+  "evidence_fraction": 0.25,
+  "predeclared_verdicts": {
+    "C1_universe_expansion_only_erodes_universal_certificates": "SUPPORTED",
+    "C2_barrier_expansion_erodes_some_certificates": "SUPPORTED",
+    "C3_analyst_expansion_erodes_additional_certificates": "SUPPORTED",
+    "C4_impossibility_certificates_are_more_persistent_than_reachability_certificates": "REFUTED",
+    "C5_some_certificates_survive_full_world_expansion": "SUPPORTED",
+    "C6_full_world_expansion_preserves_truth_soundness": "SUPPORTED",
+    "C7_world_expansion_creates_contingency": "SUPPORTED"
+  },
+  "certificate_persistence": {
+    "U0_robust_reachable_total": 2628,
+    "U0_robust_reachable_retained_U2": 2525,
+    "robust_reachable_retention_fraction": 0.960806697108067,
+    "U0_robust_impossible_total": 4167,
+    "U0_robust_impossible_retained_U2": 2700,
+    "robust_impossible_retention_fraction": 0.6479481641468683,
+    "impossible_minus_reachable_retention": -0.3128585329611987
+  },
+  "universe_expansion": {
+    "barrier_expansion_certificate_loss_rows": 152,
+    "analyst_expansion_certificate_loss_rows": 143,
+    "mean_contingent_fraction": {
+      "U0_source_only": 0.027649682036091774,
+      "U1_plus_barrier": 0.16628566509869425,
+      "U2_plus_analyst": 0.2466371684410092
+    },
+    "U2_minus_U0_mean_contingent_fraction": 0.21898748640491741,
+    "monotonicity_violations": 0,
+    "false_universal_certificates": 0
+  },
+  "U2_certificate_totals": {
+    "robust_reachable": 2525,
+    "robust_impossible": 2700
+  },
+  "post_result_stratified_diagnostic": {
+    "classification": "secondary_diagnostic_not_a_retest_of_C4",
+    "truth_barrier_density": {
+      "0.05": {
+        "robust_reachable_retention": 0.9605263157894737,
+        "robust_impossible_retention": 0.8171509567682494,
+        "impossible_minus_reachable": -0.14337535902122422
+      },
+      "0.20": {
+        "robust_reachable_retention": 0.9637002341920374,
+        "robust_impossible_retention": 0.6191108161911082,
+        "impossible_minus_reachable": -0.34458941800092924
+      },
+      "0.35": {
+        "robust_reachable_retention": 0.9564315352697096,
+        "robust_impossible_retention": 0.49159327461969576,
+        "impossible_minus_reachable": -0.4648382606500138
+      }
+    },
+    "environmental_autocorrelation": {
+      "low": {
+        "robust_reachable_retention": 0.9541697971450037,
+        "robust_impossible_retention": 0.8047389205792014,
+        "impossible_minus_reachable": -0.14943087656580234
+      },
+      "high": {
+        "robust_reachable_retention": 0.9676175790285274,
+        "robust_impossible_retention": 0.4586864406779661,
+        "impossible_minus_reachable": -0.5089311383505613
+      }
+    },
+    "geographic_neighbourhood": {
+      "rook": {
+        "robust_reachable_retention": 0.963758389261745,
+        "robust_impossible_retention": 0.7397827211588205,
+        "impossible_minus_reachable": -0.22397566810292446
+      },
+      "queen": {
+        "robust_reachable_retention": 0.9596388741370154,
+        "robust_impossible_retention": 0.5684870188003581,
+        "impossible_minus_reachable": -0.3911518553366573
+      }
+    },
+    "row_level_direction_when_both_certificate_types_exist": {
+      "reachable_more_persistent_rows": 169,
+      "impossible_more_persistent_rows": 26,
+      "equal_rows": 61,
+      "rows_missing_one_certificate_type": 16
+    }
+  },
+  "interpretation": [
+    "Expanding the declared world universe monotonically eroded universal certificates and increased contingency, with zero soundness violations.",
+    "The original directional intuition C4 was strongly refuted: robust reachability certificates survived the frozen world expansion much more often than robust impossibility certificates.",
+    "The reversal occurred within every barrier-density, autocorrelation and neighbourhood stratum in the secondary diagnostic.",
+    "Robust impossibility is therefore not intrinsically more stable than robust possibility; persistence depends on the direction and content of the admitted world expansion.",
+    "A meaningful robustness statement must report the world-universe expansion path rather than labeling impossibility itself as inherently robust."
+  ],
+  "claim_boundary": [
+    "The C4 refutation is conditional on the frozen U0 -> U1 -> U2 expansion path.",
+    "The secondary stratum diagnostic does not reclassify C4; C4 remains REFUTED.",
+    "Universal certificates remain finite-world statements rather than universal ecological truths."
+  ]
+}
