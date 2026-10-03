@@ -1,0 +1,76 @@
+{
+  "schema": "eog.original_idea_analyst_worlds.protocol.v3",
+  "status": "frozen_before_analyst_rule_benchmark_implementation_and_scoring",
+  "parent_v2": {
+    "result": "validation/eog_original_idea_virtual_worlds_v2/result_summary_v2.json",
+    "fingerprint": "9f5e08eb87517727ba0a84923b2dac5f102f4e4f43976af208f0200ca4630451",
+    "G2_status": "REFUTED",
+    "rule": "G2 remains refuted regardless of v3 outcome; v3 is a new analyst-world sensitivity question"
+  },
+  "scientific_question": "Which reachability and impossibility conclusions survive when the same latent ecological landscape is translated into traversability using different response-independent analyst rules?",
+  "ecological_worlds": "reuse the exact 384 v2 ecological factor rows and deterministic base seeds without changing A, B, geographic neighbourhood, barrier draws, source rule or factor levels",
+  "analyst_worlds": [
+    {
+      "id": "relative_edge_q70",
+      "rule": "edge permitted when absolute environmental difference is <= the within-landscape 70th percentile of geographic-edge differences",
+      "relationship_to_v2": "exact frozen v2 rule"
+    },
+    {
+      "id": "absolute_raw_0.5",
+      "rule": "edge permitted when absolute environmental difference is <= 0.5 in the latent generator's raw environmental units",
+      "interpretation": "fixed ecological tolerance that does not rescale with landscape smoothness"
+    },
+    {
+      "id": "standardized_sd_1.0",
+      "rule": "standardize the node environmental field by its landscape SD and permit an edge when absolute standardized difference is <= 1.0",
+      "interpretation": "fixed standardized tolerance"
+    }
+  ],
+  "outputs": [
+    "per-rule reachable set",
+    "per-target analyst-world status: reachable_in_all / contingent / unreachable_in_all",
+    "fraction of locally permissive targets contingent across analyst rules",
+    "single-rule versus three-rule robust-impossibility erosion",
+    "barrier-density effect within each analyst rule",
+    "low-versus-high autocorrelation pathwise-blocked contrast within each analyst rule"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "A1_analyst_rule_disagreement_exists",
+      "statement": "At least one locally permissive source-target classification is contingent across the three analyst worlds.",
+      "failure_rule": "REFUTED if all three rules give identical reachability for every target in all 384 rows."
+    },
+    {
+      "id": "A2_analyst_universe_expansion_weakens_certificates_monotonically",
+      "statement": "Expanding from the frozen q70 analyst world to all three analyst worlds may gain possible targets and lose robust possible/impossible certificates, but may not create a new robust impossibility for a target that q70 allowed.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "A3_autocorrelation_conclusion_is_rule_sensitive",
+      "statement": "The sign of the low-minus-high autocorrelation contrast in pathwise-blocked fraction differs for at least two analyst rules.",
+      "failure_rule": "REFUTED if all three rules give the same contrast sign or zero-equivalent direction."
+    },
+    {
+      "id": "A4_barrier_effect_is_robust_across_analyst_rules",
+      "statement": "For each analyst rule, pooled mean viable-unreachable fraction is larger at barrier density 0.35 than at 0.05.",
+      "failure_rule": "REFUTED if any analyst rule has a nonpositive high-minus-low barrier contrast."
+    },
+    {
+      "id": "A5_some_relations_remain_robust_despite_analyst_uncertainty",
+      "statement": "At least one non-source locally permissive target is reachable under all three analyst rules and at least one is unreachable under all three rules somewhere in the panel.",
+      "failure_rule": "REFUTED if either robust category is globally empty."
+    }
+  ],
+  "claim_boundary": [
+    "The three analyst rules are declared sensitivity worlds, not claims that one is ecologically correct.",
+    "Rule disagreement is epistemic/analytical uncertainty, not biological stochasticity.",
+    "v3 does not reclassify the refuted v2 G2 hypothesis.",
+    "The absolute 0.5 and standardized 1.0 thresholds are frozen generic sensitivity scales, not fitted dispersal or niche parameters."
+  ],
+  "stop_rules": [
+    "Do not change the three analyst rules after scoring.",
+    "Do not add a fourth rule to obtain sign disagreement.",
+    "Do not retune the absolute or standardized tolerances after scoring.",
+    "Do not drop a rule because it behaves poorly."
+  ]
+}
