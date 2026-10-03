@@ -21,6 +21,111 @@ The scientific center is now:
 
 > **EOG does not need to recover one “true” process from occurrence data. It should eliminate finite declared worlds only when the available evidence contains a valid witness against them, preserve observationally equivalent worlds as unresolved, and use the remaining ambiguity to design the next discriminating observation, calibration, or intervention.**
 
+## Active original-EOG virtual-world result
+
+The active programme now has three frozen stages.
+
+### v1 — canonical mechanism separation
+
+Six hand-built archetypes and one universe-expansion audit tested the original EOG
+distinctions directly.
+
+All seven predeclared hypotheses were supported:
+
+- local viability did not imply reachability;
+- endpoint environmental similarity could hide an impossible intermediate path;
+- a stepping stone could create reachability without changing endpoints;
+- bottleneck and redundant-route worlds could realize the same endpoint occurrences;
+- one final occurrence set could admit multiple histories;
+- temporal positive evidence could contract static history ambiguity;
+- world-universe expansion weakened robust impossibility monotonically.
+
+This is an existence/mechanism result, not a prevalence estimate.
+
+### v2 — randomized ecological generality
+
+The same ideas were tested in **384 randomized 7×7 landscapes** crossing:
+
+- environmental autocorrelation: low / high;
+- barrier density: 0.05 / 0.20 / 0.35;
+- geographic neighbourhood: rook / queen;
+- 32 replicates per factor cell.
+
+Seven of eight preregistered hypotheses were supported.
+
+Key results:
+
+- viable-but-unreachable fraction increased from **0.258** at barrier 0.05 to
+  **0.583** at barrier 0.35, monotonically in all four autocorrelation × neighbourhood
+  strata;
+- critical stepping-stone fraction: rook **0.359**, queen **0.229**;
+- single-node route robustness: rook **0.487**, queen **0.536**;
+- median static source-history alias count: **21**;
+- median temporal contraction of source-history aliases: **0.815** among 355 eligible
+  rows;
+- minimal rescue classes all occurred: barrier-only 1,687; environment-only 805;
+  either single axis 825; both required 623; not edge-rescued 897;
+- world-expansion monotonicity violations: **0**.
+
+The preregistered autocorrelation hypothesis G2 was **REFUTED in the opposite
+direction**:
+
+- low autocorrelation pathwise-blocked fraction: **0.052**;
+- high autocorrelation: **0.232**.
+
+The refutation remains part of the result.
+
+### v3 — analyst-world uncertainty
+
+v3 held the latent ecological landscapes fixed and varied only the response-independent
+rule translating environmental difference into edge traversability:
+
+- within-landscape q70;
+- absolute raw tolerance 0.5;
+- standardized 1 SD tolerance.
+
+All five preregistered analyst-world hypotheses were supported.
+
+Across the 384 landscapes:
+
+- mean analyst-contingent target fraction: **0.366**;
+- contingent target classifications: **4,143**;
+- robustly reachable classifications across all three analyst rules: **3,777**;
+- robustly impossible classifications across all three analyst rules: **3,414**;
+- analyst-universe monotonicity violations: **0**.
+
+The autocorrelation conclusion changed sign by analyst rule:
+
+- q70 low-minus-high: **−0.180**;
+- absolute 0.5: **+0.634**;
+- standardized 1 SD: **+0.213**.
+
+By contrast, the high-minus-low barrier-density effect remained positive under every
+analyst rule:
+
+- q70: **+0.325**;
+- absolute 0.5: **+0.155**;
+- standardized 1 SD: **+0.256**.
+
+This is the original EOG robustness distinction in explicit known truth:
+
+> **some conclusions are contingent on how the analyst constructs the world, while
+> others survive disagreement across both ecological and analytical worlds.**
+
+Canonical assets:
+
+- `validation/eog_original_idea_virtual_worlds_v1/`;
+- `validation/eog_original_idea_virtual_worlds_v2/`;
+- `validation/eog_original_idea_analyst_worlds_v3/`;
+- `docs/eog_original_idea_virtual_worlds_v1_result.md`;
+- `docs/eog_original_idea_virtual_worlds_v2_result.md`;
+- `docs/eog_original_idea_analyst_worlds_v3_result.md`.
+
+The next scientific question is no longer whether these mechanisms can be constructed.
+It is how much **information sparse occurrence anchors carry about world compatibility
+and robust impossibility**, and how that information depends on the spatial arrangement
+of the observed occurrences.
+
 ## 1. What was directly refuted
 
 The first large known-truth factorial falsified the strong recovery idea.
