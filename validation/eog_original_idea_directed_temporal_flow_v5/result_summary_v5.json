@@ -1,0 +1,98 @@
+{
+  "schema": "eog.original_idea_directed_temporal_flow.result_summary.v5",
+  "status": "completed_preregistered_directed_temporal_flow_panel",
+  "protocol": "validation/eog_original_idea_directed_temporal_flow_v5/protocol_v5.json",
+  "protocol_commit": "6148903c25afc9c8e4b2f823d42559621eaf8010",
+  "authoritative_run": 37128695030,
+  "authoritative_artifact_id": 11276121433,
+  "authoritative_artifact_digest": "sha256:13af563375cc2dab60010b26e5c518ccfc0ebd73af994734990656f3d4b05dd2",
+  "result_fingerprint": "9b70d4bc4a64c6a6dc90a17360b096ac2c87aba045c3ebcae11ae3dff0ddad1d",
+  "row_count": 384,
+  "eligible_row_count": 272,
+  "non_estimable_row_count": 112,
+  "predeclared_verdicts": {
+    "D1_truth_flow_creates_asymmetric_occurrence_relations": "SUPPORTED",
+    "D2_direction_breaks_the_v4_impossibility_plateau": "SUPPORTED",
+    "D3_direction_reduces_source_aliasing": "SUPPORTED",
+    "D4_temporal_order_contracts_directed_static_worlds": "SUPPORTED",
+    "D5_temporal_order_adds_robust_impossibility_information": "REFUTED",
+    "D6_temporal_order_reduces_source_aliasing": "SUPPORTED",
+    "D7_truth_retention_and_impossibility_soundness": "SUPPORTED"
+  },
+  "truth_flow_asymmetry": {
+    "rows_with_any_asymmetric_pair": 272,
+    "eligible_row_fraction": 1.0,
+    "mean_asymmetric_pair_fraction": 0.8062372025788603
+  },
+  "robust_impossibility_recovery_means": {
+    "undirected_static": {
+      "0.10": 0.1910900732767802,
+      "0.25": 0.1910900732767802,
+      "0.50": 0.1910900732767802,
+      "1.00": 0.1910900732767802
+    },
+    "directed_static": {
+      "0.10": 0.604713901226073,
+      "0.25": 0.6504473020085215,
+      "0.50": 0.6545399679210403,
+      "1.00": 0.6551793541102986
+    },
+    "directed_temporal": {
+      "0.10": 0.6061702808793835,
+      "0.25": 0.6510866881977799,
+      "0.50": 0.6551793541102986,
+      "1.00": 0.6551793541102986
+    }
+  },
+  "source_aliasing": {
+    "mean_full_undirected_static": 27.139705882352942,
+    "mean_full_directed_static": 2.1544117647058822,
+    "mean_full_directed_temporal": 2.0551470588235294,
+    "directed_minus_undirected": -24.985294117647058,
+    "temporal_minus_directed_static": -0.09926470588235281,
+    "exact_source_recovery_counts": {
+      "undirected_static": 0,
+      "directed_static": 53,
+      "directed_temporal": 71
+    }
+  },
+  "world_aliasing": {
+    "median_full_survivor_world_count": {
+      "undirected_static": 119.0,
+      "directed_static": 6.0,
+      "directed_temporal": 6.0
+    },
+    "exact_world_recovery_counts": {
+      "undirected_static": 0,
+      "directed_static": 8,
+      "directed_temporal": 10
+    },
+    "temporal_contract_rows": 70,
+    "mean_full_temporal_minus_static_survivor_fraction": -0.003352350403889485
+  },
+  "predeclared_contrasts": {
+    "D2_directed_full_minus_10pct_recovery": 0.05046545288422555,
+    "D3_directed_minus_undirected_full_source_count": -24.985294117647058,
+    "D4_temporal_minus_static_full_survivor_fraction": -0.003352350403889485,
+    "D5_temporal_minus_static_full_recovery": 0.0,
+    "D6_temporal_minus_static_full_source_count": -0.09926470588235281
+  },
+  "soundness": {
+    "false_robust_exclusions": 0,
+    "truth_retention_failures": 0,
+    "nested_evidence_monotonicity_violations": 0
+  },
+  "interpretation": [
+    "Restoring directionality fundamentally changed what positive occurrences could identify: source aliasing collapsed and robust-impossibility recovery increased with coverage.",
+    "All eligible truth worlds contained asymmetric ordered occurrence relations, with mean asymmetric-pair fraction 0.806.",
+    "Temporal arrival-depth evidence further contracted world/source identity and increased exact source recovery from 53 to 71 rows.",
+    "The preregistered D5 hypothesis was refuted: at full positive coverage temporal evidence did not add any robust-impossibility recovery beyond directed static evidence.",
+    "This separates two kinds of information: evidence can refine which source/history world is compatible without changing the spatial reachability envelope shared by the survivors.",
+    "The next virtual-world question should explicitly distinguish world-identity information from envelope-changing information."
+  ],
+  "claim_boundary": [
+    "The outlet-directed field is synthetic and not a calibrated dispersal direction.",
+    "Arrival depth is graph depth rather than chronological time.",
+    "The D5 refutation is retained and not rescued by changing timing semantics."
+  ]
+}
