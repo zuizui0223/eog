@@ -96,7 +96,12 @@ For exact finite worlds, EOG exposes:
 - `unresolved` — possible but not robust;
 - `robustly_unreachable` — unreachable in every declared world.
 
-These statements are conditional on the declared universe. Expanding the universe may enlarge `possible` and shrink robust exclusion; adding possibilities cannot justify a stronger impossibility claim.
+These statements are conditional on the declared universe. Expanding a fixed survivor
+universe cannot manufacture a new universal certificate; it can only preserve or erode
+one.  The v6-v8 known-truth programme further shows that certificate persistence depends
+on **expansion direction**: restrictive same-source additions protect robust
+impossibility, permissive same-source additions protect robust reachability, while
+mixed/incomparable/new-source additions can erode either class.
 
 ## Final two-layer architecture
 
@@ -348,6 +353,12 @@ Therefore an open PR must not be interpreted as permission to reopen EOG-WF scie
 9. New response-independent synthetic exposition may clarify an already-frozen method property but cannot reopen or alter an empirical endpoint decision.
 10. Do not repair or rerun the consumed NCRN attempt; any future Layer-B real translation requires a new protocol version.
 
-The current EOG mainline is therefore:
+The repository therefore has two non-competing active lanes:
 
-> **keep EOG-WF scientifically frozen, complete only its author/admin/release gates, and submit it to Methods in Ecology and Evolution without reopening endpoint search or method expansion. Structural work belongs exclusively in the standalone Structural repository.**
+1. **EOG-WF submission lane** — scientifically frozen; complete author/admin/release
+   gates and submit without reopening endpoint search.
+2. **post-closure known-truth method-development lane** — test the original EOG ideas
+   in preregistered BAM/reachability virtual worlds.  The current result is the
+   direction-conditioned certificate / world-growth survival principle from v6-v8.
+
+Structural work remains exclusively in the standalone Structural repository.
