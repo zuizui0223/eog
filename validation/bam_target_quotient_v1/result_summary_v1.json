@@ -1,0 +1,73 @@
+{
+  "schema": "eog.bam_target_quotient.result_summary.v1",
+  "status": "completed_frozen_capstone_synthesis",
+  "protocol": "validation/bam_target_quotient_v1/protocol_v1.json",
+  "authoritative_run": 36731482509,
+  "authoritative_artifact_id": 11104198510,
+  "authoritative_artifact_digest": "sha256:02a54d0f39cc016798c4bb687c04902249eba7bdb94fa8f996b26554b46a40aa",
+  "result_fingerprint": "9383832f16ca0bcf9ee658554342ee8fbcf1bda2703ea2d639e4e0a14fa1f151",
+  "fiber_count": 129,
+  "required_invariant_violation_count": 0,
+  "by_transformation": {
+    "climate_shift": {
+      "current_state_sufficient_for_binary_fibers": 125,
+      "current_state_insufficient_for_binary_fibers": 4,
+      "current_vs_binary_relation_counts": {
+        "current_state_refines": 118,
+        "decision_refines": 1,
+        "equal": 7,
+        "incomparable": 3
+      }
+    },
+    "biotic_stress": {
+      "current_state_sufficient_for_binary_fibers": 129,
+      "current_state_insufficient_for_binary_fibers": 0,
+      "current_vs_binary_relation_counts": {
+        "current_state_refines": 116,
+        "equal": 13
+      }
+    },
+    "barrier_restoration": {
+      "current_state_sufficient_for_binary_fibers": 125,
+      "current_state_insufficient_for_binary_fibers": 4,
+      "current_vs_binary_relation_counts": {
+        "current_state_refines": 118,
+        "equal": 7,
+        "incomparable": 4
+      }
+    }
+  },
+  "joint_decision_suite": {
+    "current_state_sufficient_fibers": 121,
+    "current_state_insufficient_fibers": 8,
+    "current_vs_joint_relation_counts": {
+      "current_state_refines": 108,
+      "equal": 13,
+      "incomparable": 7,
+      "joint_decision_refines": 1
+    },
+    "joint_decision_block_distribution": {
+      "1": 70,
+      "2": 53,
+      "3": 3,
+      "4": 1,
+      "5": 2
+    },
+    "compression_factor_mean": 77.35038759689922,
+    "compression_factor_median": 48.0,
+    "compression_factor_maximum": 972.0
+  },
+  "interpretation": [
+    "The target quotient is the coarsest exact finite representation sufficient for the declared target and is not a claim of parameter-world recovery.",
+    "Complete current BAM-state identity is usually over-detailed for the frozen future decision targets.",
+    "Current-state identity is nevertheless insufficient for the joint future-decision suite in 8/129 fibers, so present mechanism state is not a universal sufficient representation.",
+    "The joint decision quotient compresses same-G W1 parameter worlds by a median factor of 48 and up to 972 in the frozen programme."
+  ],
+  "claim_boundary": [
+    "Finite partition algebra is elementary and is not claimed as new mathematics.",
+    "This is a synthesis of already frozen W1 results, not independent validation.",
+    "Compression factors are finite-world class ratios, not statistical dimension reduction.",
+    "No quotient is asserted sufficient for undeclared future targets.",
+    "After this capstone, no further synthetic BAM worlds or transformations are authorized to improve the pattern."
+  ]
+}
