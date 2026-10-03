@@ -35,6 +35,12 @@ _NETWORK_EXPORTS: Final[tuple[str, ...]] = (
     "evaluate_bridge_node_importance",
 )
 
+_HISTORY_EXPORTS: Final[tuple[str, ...]] = (
+    "OccurrencePairRelation",
+    "OccurrenceRelationGraph",
+    "summarize_occurrence_relations",
+)
+
 _WORLD_EXPORTS: Final[tuple[str, ...]] = (
     "FiniteWorld",
     "FiniteWorldReconstruction",
@@ -138,6 +144,7 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.dynamic_island_reachability" for name in _DYNAMIC_EXPORTS},
     **{name: "eog.island_state_layers" for name in _STATE_LAYER_EXPORTS},
     **{name: "eog.reachability_network_diagnostics" for name in _NETWORK_EXPORTS},
+    **{name: "eog.v2.distributional_history" for name in _HISTORY_EXPORTS},
     **{name: "eog.v2.world_reconstruction" for name in _WORLD_EXPORTS},
     **{name: "eog.v2.world_forecast" for name in _FORECAST_EXPORTS},
     **{name: "eog.v2.world_predictive_summary" for name in _PREDICTIVE_SUMMARY_EXPORTS},
@@ -168,6 +175,7 @@ __all__ = [
     *_NETWORK_EXPORTS,
     *_PRESENTATION_EXPORTS,
     *_SYNTHETIC_EXPORTS,
+    *_HISTORY_EXPORTS,
     *_WORLD_EXPORTS,
     *_FORECAST_EXPORTS,
     *_PREDICTIVE_SUMMARY_EXPORTS,
