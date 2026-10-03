@@ -1,0 +1,106 @@
+{
+  "schema": "eog.original_idea_future_proof_evidence.protocol.v9",
+  "status": "frozen_before_future_proof_evidence_implementation_and_scoring",
+  "parents": {
+    "world_growth_v8": {
+      "result": "validation/eog_original_idea_world_growth_v8/result_summary_v8.json",
+      "fingerprint": "e8353f5a5f15a885e05f334174cfdb1e80bd58f0e67c23c0a92c2c7525a7fd05",
+      "key_result": "certificate lifetime under future world growth is determined by threat count and expansion direction"
+    },
+    "target_aware_planner_v7": {
+      "result": "validation/eog_original_idea_target_aware_evidence_planning_v7/result_summary_v7.json",
+      "fingerprint": "d0a67ee7a81753aa128cf7c28d40bc9b9550af832a658af5e801f92c00131a05",
+      "key_result": "evidence should be selected relative to the ecological target rather than complete world identity"
+    }
+  },
+  "scientific_question": "Can a diagnostic measurement have little or no value for reducing the current survivor-world fiber yet have high value for protecting current ecological certificates against future expansion of the admitted world universe?",
+  "analysis_base": {
+    "rows": "exact 272 eligible v8 rows",
+    "occurrence_evidence": "frozen 25 percent dispersed positive anchors",
+    "current_universe_B0": "reference q70 truth-barrier world for every baseline-compatible source",
+    "future_growth_universe": "the v8 all_source_full compatible candidate pool",
+    "baseline_certificates": "all B0 robust-reachable and robust-impossible unobserved locally permissive nodes"
+  },
+  "diagnostic_actions": {
+    "S_source": {
+      "truth_outcome": "truth source",
+      "current_effect": "retain only B0 worlds with truth source",
+      "future_effect": "retain only future candidate worlds with truth source"
+    },
+    "B_barrier": {
+      "truth_outcome": "truth barrier-density level",
+      "current_effect": "B0 is unchanged because every B0 reference world already uses the truth barrier level",
+      "future_effect": "retain only future candidate worlds with truth barrier level"
+    },
+    "R_analyst": {
+      "truth_outcome": "relative_edge_q70",
+      "current_effect": "B0 is unchanged because every B0 reference world already uses q70",
+      "future_effect": "retain only future candidate worlds using q70"
+    }
+  },
+  "action_objectives": {
+    "current_contraction": "fraction of B0 worlds eliminated by the truth-consistent action outcome",
+    "future_proofing": "mean normalized expected world-growth lifetime across the baseline universal certificates after filtering both B0 and the all-source future growth pool by the truth-consistent action outcome",
+    "immortalization": "number of baseline certificates whose threat count changes from K>0 before the action to K=0 after the action",
+    "tie_break_order": ["S_source", "B_barrier", "R_analyst"]
+  },
+  "lifetime_rule": "reuse exact v8 threat-count lifetime: K=0 gives normalized lifetime 1; otherwise ((N+1)/(K+1))/N for N future additions",
+  "predeclared_hypotheses": [
+    {
+      "id": "F1_truth_consistent_evidence_never_shortens_certificate_lifetime",
+      "statement": "For every baseline certificate and each of the three actions, normalized future world-growth lifetime after the truth-consistent action is >= its pre-action lifetime.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "F2_future_only_evidence_value_exists",
+      "statement": "At least one row has B_barrier or R_analyst with zero current B0 contraction but a strictly positive mean future-lifetime gain.",
+      "failure_rule": "REFUTED if every zero-current-contraction action also has zero future-proofing value."
+    },
+    {
+      "id": "F3_current_contraction_and_future_proofing_choose_different_actions",
+      "statement": "At least one row has a different tie-broken optimal action for current B0 contraction versus mean future certificate lifetime.",
+      "failure_rule": "REFUTED if the two objectives always select the same action."
+    },
+    {
+      "id": "F4_barrier_or_analyst_validation_can_be_future_proof_optimal",
+      "statement": "At least one eligible row selects B_barrier or R_analyst as the future-proof-optimal action.",
+      "failure_rule": "REFUTED if S_source is always future-proof optimal."
+    },
+    {
+      "id": "F5_source_measurement_can_be_future_proof_optimal",
+      "statement": "At least one eligible row selects S_source as the future-proof-optimal action.",
+      "failure_rule": "REFUTED if source evidence is never future-proof optimal."
+    },
+    {
+      "id": "F6_evidence_can_immortalize_threatened_certificates",
+      "statement": "At least one truth-consistent action converts at least one baseline certificate from K>0 to K=0 under its filtered future growth pool.",
+      "failure_rule": "REFUTED if no threatened certificate can be fully protected by any single action."
+    },
+    {
+      "id": "F7_future_proof_action_is_not_one_fixed_measurement",
+      "statement": "Across eligible rows, at least two of S_source, B_barrier and R_analyst occur as the future-proof-optimal action.",
+      "failure_rule": "REFUTED if one action is always optimal."
+    }
+  ],
+  "secondary_outputs": [
+    "mean lifetime gain by action",
+    "immortalized certificate count by action",
+    "current contraction by action",
+    "rows where a zero-current-effect action is future-proof optimal",
+    "agreement with the older reachability-target adaptive planner first action",
+    "factor-stratified future-proof action frequencies"
+  ],
+  "claim_boundary": [
+    "Actions are known-truth diagnostic interventions with unit conceptual cost, not field-cost-equivalent measurements.",
+    "Future-proof value is conditional on the frozen v8 candidate growth pool.",
+    "An action that filters future analyst worlds may represent model validation rather than a literal ecological field measurement.",
+    "Truth-path leverage is a known-truth diagnostic quantity, not an expected pre-outcome utility."
+  ],
+  "stop_rules": [
+    "Do not change the action library after scoring.",
+    "Do not replace mean normalized lifetime with a favorable alternative objective after scoring.",
+    "Do not add action weights after scoring.",
+    "Do not change the frozen B0 or future growth pool after scoring.",
+    "Failed objective-divergence hypotheses remain failed."
+  ]
+}
