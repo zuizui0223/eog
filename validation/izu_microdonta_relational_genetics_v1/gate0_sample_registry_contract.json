@@ -42,7 +42,14 @@
       "structure_cluster",
       "admixture",
       "migration_rate"
-    ]
+    ],
+    "expected_island_sample_counts": {
+      "Izu_Oshima": 47,
+      "Toshima": 38,
+      "Niijima": 23,
+      "Shikinejima": 5,
+      "Kozushima": 12
+    }
   },
   "island_mapping": {
     "accepted_canonical_labels": {
@@ -94,7 +101,8 @@
     "unknown_island": "STOP",
     "missing_coordinate": "STOP",
     "row_count_not_125": "STOP",
-    "genetic_response_column_present": "STOP"
+    "genetic_response_column_present": "STOP",
+    "island_sample_count_mismatch": "STOP"
   },
   "population_rule": {
     "primary_pair_count_if_gate_passes": 10,
@@ -129,6 +137,20 @@
       "primary_population_unit_changed": false,
       "five_island_roster_changed": false,
       "pair_universe_changed": false
+    },
+    {
+      "classification": "response_free_existing_sample_count_identity",
+      "source": "pre-genetic field/project record",
+      "counts": {
+        "Izu_Oshima": 47,
+        "Toshima": 38,
+        "Niijima": 23,
+        "Shikinejima": 5,
+        "Kozushima": 12
+      },
+      "total": 125,
+      "genetic_response_generated_or_viewed": false,
+      "scientific_predictor_tuning": false
     }
   ],
   "next_authorized_stage": "freeze IBD, IBE, transition-world family and occurrence-relation predictors from the passed response-free registry; genotype processing remains forbidden"
