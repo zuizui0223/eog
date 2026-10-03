@@ -128,6 +128,60 @@ local support / viability
 The target quotient is downstream of the history representation. It is not a
 replacement for it.
 
+## Existing relation-level empirical evidence
+
+The relational programme is not starting from zero, but its evidence boundary is mixed.
+
+### Zhoushan pond frog — independent exact genetic validation
+
+A fully response-free predictor artifact was frozen before empirical pairwise FST was
+computed for 27 populations / 351 pairs.
+
+Results:
+
+- IBD pooled LOPO MSE: 0.00996365409;
+- IBD + EOG: 0.00965827101;
+- secondary IBD + EOG minus IBD: -0.00030538308;
+- IBD + EOG improved 17/27 held-out populations.
+
+However, the predeclared Gabriel current-flow strong reference performed much worse than
+simple IBD, and the primary current-flow + EOG comparison was adverse in pooled error.
+The frozen dataset status is therefore indeterminate_strong_reference_failure, not an
+EOG promotion success.
+
+### Ryukyu mangrove — retrospective published-binary FST sensitivity
+
+This endpoint is not prospective and uses the published FST < 0.1 binary figure
+encoding.
+
+Results:
+
+- current-flow + EOG minus current-flow log loss: -0.02669024763;
+- IBD + EOG minus IBD log loss: +0.00051818443.
+
+Thus the frozen EOG relation can contain information absent from one graph-aware
+reference while adding essentially nothing beyond simple geographic distance in the
+same retrospective endpoint.
+
+### Current relation-level evidence boundary
+
+The empirical signal is therefore reference-dependent.
+
+Supported:
+
+- EOG-R can encode between-population information not identical to straight-line
+  distance or one conventional graph representation.
+
+Not established:
+
+- consistent added genetic information beyond both IBD and a strong well-performing
+  connectivity reference;
+- migration direction;
+- unique historical route;
+- demographic connectivity.
+
+A genuinely prospective genetic test remains open.
+
 ## Validation strategy
 
 The next scientific validation should not ask whether another synthetic BAM factorial
