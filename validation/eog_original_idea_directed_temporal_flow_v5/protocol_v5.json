@@ -1,0 +1,120 @@
+{
+  "schema": "eog.original_idea_directed_temporal_flow.protocol.v5",
+  "status": "frozen_before_directed_temporal_benchmark_implementation_and_scoring",
+  "parent_v4": {
+    "result": "validation/eog_original_idea_occurrence_information_v4/result_summary_v4.json",
+    "fingerprint": "ed47a7510aa6e30bb080b46ca6db88d2e02797488f5c6c2034b29c08d77059c4",
+    "key_refutation": "O5 robust-impossibility recovery remained exactly flat from 10 percent to full positive coverage in all 314 eligible static undirected rows"
+  },
+  "scientific_question": "Does restoring directional flow and temporal arrival-order information convert additional positive occurrences into new source discrimination and new robust-impossibility information that static undirected reachability could not recover?",
+  "latent_landscapes": {
+    "reuse": "exact v2 7x7 latent A/B fields, geographic neighbourhoods, edge-uniform barrier draws, factor levels and replicate seeds",
+    "truth_rows": 384,
+    "barrier_levels": [0.05, 0.20, 0.35],
+    "analyst_environment_rules": [
+      "relative_edge_q70",
+      "absolute_raw_0.5",
+      "standardized_sd_1.0"
+    ]
+  },
+  "flow_field": {
+    "outlet_corner": "one of the four grid corners selected by a stable response-independent hash of replicate, autocorrelation and neighbourhood; constant across barrier levels for the same latent base",
+    "flow_potential": "squared Euclidean distance from the outlet corner",
+    "directed_edge_rule": "after geographic, A/B, environmental and barrier filtering, orient each edge from larger flow potential toward smaller flow potential; equal-potential edges, if any, remain bidirectional",
+    "truth_source": "A/B-permissive node in the largest geographic permissive component with maximum flow potential; ties by node ID",
+    "interpretation": "synthetic downstream flow coordinate, not calibrated hydrology"
+  },
+  "candidate_worlds": {
+    "candidate_sources": "every A/B-permissive node",
+    "barrier_levels": [0.05, 0.20, 0.35],
+    "analyst_rules": [
+      "relative_edge_q70",
+      "absolute_raw_0.5",
+      "standardized_sd_1.0"
+    ],
+    "two_parallel_universes": {
+      "undirected": "same filtered edges treated symmetrically",
+      "directed": "same filtered edges oriented by the frozen flow field"
+    },
+    "truth_world": "directed relative_edge_q70 world at the row's barrier level and frozen upstream truth source"
+  },
+  "positive_observation_design": {
+    "truth_positive_pool": "all non-source nodes reachable in the directed truth world",
+    "eligibility": "at least four non-source truth-reachable nodes",
+    "coverage_fractions": [0.10, 0.25, 0.50, 1.00],
+    "spatial_order": "reuse the v4 dispersed-farthest-first rule as a frozen observation design; v5 does not retest whether dispersed beats clustered",
+    "source_identity_observed": false
+  },
+  "temporal_evidence": {
+    "truth_arrival_depth": "shortest directed graph distance from truth source",
+    "candidate_compatibility": "for each observed positive anchor, candidate directed shortest-path distance must be finite and <= the anchor's truth arrival depth",
+    "semantics": "reached-by-depth upper bound; propagation depth is structural, not calendar time",
+    "persistence_or_exact_occupancy_time_claim": false
+  },
+  "primary_outputs": [
+    "undirected static survivor-world and candidate-source counts by occurrence coverage",
+    "directed static survivor-world and candidate-source counts by occurrence coverage",
+    "directed temporal survivor-world and candidate-source counts by occurrence coverage",
+    "robust-impossibility recovery fraction for all three inference regimes",
+    "false robust-exclusion count",
+    "truth-world ordered-pair reachability asymmetry",
+    "full-positive exact world/source recovery rates"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "D1_truth_flow_creates_asymmetric_occurrence_relations",
+      "statement": "At least 80 percent of eligible directed truth worlds contain at least one unordered pair of truth-reachable nodes for which exactly one of i->j or j->i is reachable.",
+      "failure_rule": "REFUTED if the proportion is <0.80."
+    },
+    {
+      "id": "D2_direction_breaks_the_v4_impossibility_plateau",
+      "statement": "In the directed static candidate universe, pooled mean robust-impossibility recovery is nondecreasing with positive coverage and strictly larger at full coverage than at 10 percent coverage.",
+      "failure_rule": "REFUTED if monotonicity fails or full-minus-10-percent is <=0."
+    },
+    {
+      "id": "D3_direction_reduces_source_aliasing",
+      "statement": "At full positive coverage, pooled mean surviving candidate-source count is lower in the directed static universe than in the matched undirected universe.",
+      "failure_rule": "REFUTED if directed-minus-undirected mean source count is >=0."
+    },
+    {
+      "id": "D4_temporal_order_contracts_directed_static_worlds",
+      "statement": "At full positive coverage, temporal arrival-depth constraints strictly reduce survivor-world count in at least one eligible row and pooled mean temporal survivor fraction is lower than directed-static survivor fraction.",
+      "failure_rule": "REFUTED if no row contracts or the pooled mean contrast is nonnegative."
+    },
+    {
+      "id": "D5_temporal_order_adds_robust_impossibility_information",
+      "statement": "At full positive coverage, pooled mean robust-impossibility recovery is larger under directed temporal evidence than under directed static positive evidence.",
+      "failure_rule": "REFUTED if temporal-minus-static recovery is <=0."
+    },
+    {
+      "id": "D6_temporal_order_reduces_source_aliasing",
+      "statement": "At full positive coverage, pooled mean surviving candidate-source count is lower under directed temporal evidence than under directed static evidence.",
+      "failure_rule": "REFUTED if temporal-minus-static mean source count is >=0."
+    },
+    {
+      "id": "D7_truth_retention_and_impossibility_soundness",
+      "statement": "Across all eligible rows, regimes and coverage levels, the truth world survives and no truth-reachable locally permissive node is classified robustly unreachable.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    }
+  ],
+  "secondary_outputs": [
+    "fraction of rows with exact source recovery after directed full positives",
+    "fraction with exact source recovery after temporal evidence",
+    "median world/source survivor counts in all regimes",
+    "relationship between directional asymmetry and temporal contraction",
+    "comparison of v4 undirected plateau with the matched v5 undirected control"
+  ],
+  "claim_boundary": [
+    "The outlet-directed flow field is a synthetic mechanism probe, not a claim about real river or wind direction.",
+    "Arrival depth is graph depth, not years or generations.",
+    "Candidate-source contraction is not ancestry inference.",
+    "Any break of the v4 plateau is conditional on the frozen directed generator and does not establish empirical prevalence."
+  ],
+  "stop_rules": [
+    "Do not change the outlet rule after scoring.",
+    "Do not add a second directional field to rescue failed hypotheses.",
+    "Do not change temporal upper-bound semantics after scoring.",
+    "Do not add clustered sampling back into v5 after seeing results.",
+    "Failed directional hypotheses remain failed."
+  ]
+}
