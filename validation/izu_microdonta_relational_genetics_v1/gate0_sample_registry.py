@@ -190,24 +190,36 @@ def validate_registry_rows(
         )
 
     site_counts: dict[str, int] = {}
-    site_coordinates: dict[str, tuple[float, float, str]] = {}
+    site_members: dict[str, list[CanonicalSample]] = {}
     for row in canonical:
         key = f"{row.island}|{row.site_id}"
         site_counts[key] = site_counts.get(key, 0) + 1
-        coordinate = (row.latitude, row.longitude, row.island)
-        incumbent = site_coordinates.get(key)
-        if incumbent is not None and incumbent != coordinate:
-            raise IzuRegistryStop(
-                f"site coordinate drift inside registry: {key}"
-            )
-        site_coordinates[key] = coordinate
+        site_members.setdefault(key, []).append(row)
+
+    site_centroids = {
+        key: {
+            "island": rows[0].island,
+            "latitude": sum(row.latitude for row in rows) / len(rows),
+            "longitude": sum(row.longitude for row in rows) / len(rows),
+        }
+        for key, rows in sorted(site_members.items())
+    }
 
     centroids = {}
     for island in PRIMARY_ISLANDS:
-        island_rows = [row for row in canonical if row.island == island]
+        island_sites = [
+            value
+            for value in site_centroids.values()
+            if value["island"] == island
+        ]
+        if not island_sites:
+            raise IzuRegistryStop(f"island has no response-free sites: {island}")
         centroids[island] = {
-            "latitude": sum(row.latitude for row in island_rows) / len(island_rows),
-            "longitude": sum(row.longitude for row in island_rows) / len(island_rows),
+            "latitude": sum(value["latitude"] for value in island_sites)
+            / len(island_sites),
+            "longitude": sum(value["longitude"] for value in island_sites)
+            / len(island_sites),
+            "site_count": len(island_sites),
         }
 
     pair_ids = []
@@ -239,6 +251,7 @@ def validate_registry_rows(
         "primary_pair_ids": pair_ids,
         "island_sample_counts": island_counts,
         "site_sample_counts": dict(sorted(site_counts.items())),
+        "site_centroids": site_centroids,
         "island_centroids": centroids,
         "genetic_response_columns_present": False,
         "genetic_response_opened": False,
