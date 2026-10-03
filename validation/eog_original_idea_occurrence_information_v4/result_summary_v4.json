@@ -1,0 +1,72 @@
+{
+  "schema": "eog.original_idea_occurrence_information.result_summary.v4",
+  "status": "completed_preregistered_occurrence_information_panel",
+  "protocol": "validation/eog_original_idea_occurrence_information_v4/protocol_v4.json",
+  "protocol_commit": "d4569024df012fe12a215204995c4e04ff584aa5",
+  "authoritative_run": 37127943381,
+  "authoritative_artifact_id": 11274564403,
+  "authoritative_artifact_digest": "sha256:3432d1cc7432142e73de6af72be1967ea73acc9475734db4845ef7524257823c",
+  "result_fingerprint": "ed47a7510aa6e30bb080b46ca6db88d2e02797488f5c6c2034b29c08d77059c4",
+  "row_count": 384,
+  "eligible_row_count": 314,
+  "non_estimable_row_count": 70,
+  "predeclared_verdicts": {
+    "O1_reachability_evidence_adds_information_beyond_local_viability": "SUPPORTED",
+    "O2_more_positive_anchors_contract_worlds_monotonically": "SUPPORTED",
+    "O3_spatial_arrangement_changes_information": "SUPPORTED",
+    "O4_dispersed_anchors_are_more_discriminating_on_average": "SUPPORTED",
+    "O5_robust_impossibility_recovery_increases_with_occurrence_coverage": "REFUTED",
+    "O6_robust_impossibility_is_sound_when_truth_world_is_retained": "SUPPORTED",
+    "O7_full_positive_occurrences_need_not_identify_one_history": "SUPPORTED"
+  },
+  "mean_survivor_world_fraction": {
+    "clustered_near_source": {
+      "0.10": 0.5801899351854893,
+      "0.25": 0.5372210572057315,
+      "0.50": 0.5015978258051014,
+      "1.00": 0.446579511940883
+    },
+    "dispersed_farthest_first": {
+      "0.10": 0.49641829867080156,
+      "0.25": 0.47026426067017885,
+      "0.50": 0.4561815874298606,
+      "1.00": 0.446579511940883
+    }
+  },
+  "spatial_arrangement": {
+    "rows_with_different_survivor_count": 211,
+    "dispersed_minus_clustered_at_0.25": -0.0669567965355527,
+    "dispersed_minus_clustered_at_0.50": -0.04541623837524078
+  },
+  "robust_impossibility": {
+    "mean_recovery_fraction_all_coverages_both_designs": 0.39385418697881336,
+    "false_robust_exclusions": 0,
+    "post_result_plateau_diagnostic": {
+      "classification": "secondary_structural_diagnostic_not_a_retest_of_O5",
+      "eligible_rows_with_constant_recovery_fraction_across_all_coverages_clustered": 314,
+      "eligible_rows_with_constant_recovery_fraction_across_all_coverages_dispersed": 314,
+      "rows_where_survivor_world_count_still_shrank_from_10pct_to_full_clustered": 221,
+      "rows_where_survivor_world_count_still_shrank_from_10pct_to_full_dispersed": 114,
+      "interpretation": "additional positives often eliminated candidate source/barrier/analyst worlds without enlarging the set of nodes unreachable in every surviving undirected world"
+    }
+  },
+  "full_positive_coverage": {
+    "median_survivor_world_count": 104.0,
+    "median_surviving_source_count": 30.0,
+    "exact_world_recovery_count": 0,
+    "exact_source_recovery_count": 0
+  },
+  "interpretation": [
+    "Reachability-aware positive occurrences carried substantial information that local A/B viability alone could not provide.",
+    "Spatially dispersed anchors were more discriminating than clustered anchors at equal counts in the preregistered 25 percent and 50 percent contrasts.",
+    "Complete positive occurrence coverage still left severe world and source ambiguity.",
+    "The predeclared expectation that more positive anchors would recover progressively more robust impossibility was refuted: robust-impossibility recovery plateaued immediately in every eligible row.",
+    "The v4 refutation points to a structural limitation of static undirected connectivity worlds: more occurrence anchors can reduce world identity without necessarily changing the union of reachable components.",
+    "The next valid virtual-world question is whether directed movement and temporal flow break this plateau and make occurrence order informative about source and impossibility."
+  ],
+  "claim_boundary": [
+    "The candidate-source universe is synthetic and the source counts are not ancestry probabilities.",
+    "The dispersed-anchor advantage is an information result under equal synthetic point counts, not a field sampling recommendation.",
+    "The O5 plateau is specific to this frozen static undirected candidate-world family and is not asserted as universal."
+  ]
+}
