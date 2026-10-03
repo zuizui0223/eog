@@ -1071,6 +1071,76 @@ Canonical Phase-IX assets:
 No claim is made that the synthetic systematic assay world is a calibrated laboratory
 error model or that action cardinality is field cost.
 
+## 26. Real-system bridge status: two fail-closed stops, no empirical BAM result yet
+
+The finite-world BAM programme has now attempted two retrospective real-system bridges.
+Neither may be counted as empirical support for the synthetic identifiability results.
+
+### Round-goby / Rouge River
+
+The round-goby bridge passed source identity Gate0 but stopped at the response-blind
+header/schema stage when Zenodo byte-range transport returned HTTP 429.
+
+- response data-row bytes opened: **0**;
+- model fits: **0**;
+- scientific classification: administrative transport stop;
+- retry/transport repair: prohibited by the frozen contract.
+
+This candidate was merged as a terminal audit at `7fd5140cec644855c576748f83fba996e9fdde32`.
+
+### Great Lakes low-head-dam fish A/M bridge
+
+A second bridge used a checksum-pinned Dryad dataset with a frozen 35-world A/M family
+and B explicitly unrestricted.
+
+Gate0 source identity passed with zero data payload bytes.  The once-only execution then
+opened the verified Dryad version archive (**110,096 bytes**) and reached physical RDS
+schema validation.
+
+The catch RDS failed the frozen exact schema:
+
+- an undeclared `nrecords` column was present;
+- `pair_id_num` occurred in a different physical column position.
+
+Because the raw once-only payload had already been opened, parser repair and rerun are
+forbidden.
+
+Authoritative execution:
+
+- run: `36792320740`;
+- artifact: `11132259192`;
+- artifact digest:
+  `sha256:d71a1dd085ee41c90383138ba4d6e9f68257a06f9b7621af1b3f7d9e3a5a3631`;
+- result fingerprint:
+  `c872fca044145bab6e7b09831ec27e7bc61992b55c68e3358c50158ffa2ce948`;
+- model fits: **0**;
+- BAM survivor scoring: **not reached**;
+- retry: **forbidden**.
+
+The raw result field `rds_values_parsed=false` means that the scientific bridge
+analysis was not reached.  It does **not** mean the response-bearing RDS was never
+opened: the RDS objects were deserialized to validate their physical schema.
+
+Canonical terminal assets:
+
+- `validation/bam_greatlakes_barrier_external_bridge_v1/external_bridge_result_v1.json`;
+- `validation/bam_greatlakes_barrier_external_bridge_v1/terminal_closure_v1.json`;
+- `docs/bam_greatlakes_barrier_external_bridge_terminal_result.md`.
+
+### Current empirical boundary
+
+The empirical state is therefore:
+
+> **zero completed real-system BAM survivor-fiber validations.**
+
+The next real-system attempt must improve the source-acquisition contract, not loosen a
+failed parser.  In particular, physical response-file schema must be independently
+knowable and frozen before response-bearing payload bytes are consumed.
+
+The two failed bridges are useful as acquisition-method audit evidence, but they do not
+support, refute, or estimate the frequency of the synthetic BAM target-identifiability
+phenomena.
+
 ## Hard claim boundary
 
 Do not claim:
