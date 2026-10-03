@@ -1,0 +1,102 @@
+{
+  "schema": "eog.original_idea_reachability_envelope_quotient.protocol.v6",
+  "status": "frozen_before_envelope_quotient_implementation_and_scoring",
+  "parent_v5": {
+    "result": "validation/eog_original_idea_directed_temporal_flow_v5/result_summary_v5.json",
+    "fingerprint": "9b70d4bc4a64c6a6dc90a17360b096ac2c87aba045c3ebcae11ae3dff0ddad1d",
+    "key_result": "temporal evidence contracted world/source identity but did not increase full-coverage robust-impossibility recovery"
+  },
+  "scientific_question": "Which evidence channels merely distinguish compatible world identities inside the same reachability envelope, and which channels cross a reachability-equivalence boundary and change the possible/impossible spatial target?",
+  "baseline": {
+    "latent_worlds": "exact v5 directed candidate source x barrier x analyst-rule universes",
+    "evidence": "full dispersed positive occurrence set without arrival-depth constraints",
+    "eligibility": "same v5 rows with at least four non-source truth-reachable nodes",
+    "truth_world_retained": true
+  },
+  "equivalence_targets": {
+    "world_identity": "exact source x barrier x analyst-rule world ID",
+    "source_identity": "candidate source node",
+    "reachability_class": "two worlds are equivalent when their directed reachable node sets are exactly equal",
+    "survivor_envelope": "union of reachable node sets over the currently surviving worlds",
+    "robust_impossibility": "A/B-permissive nodes outside the survivor envelope"
+  },
+  "truth_relative_evidence_actions": {
+    "temporal_depth": "apply full truth reached-by-depth upper bounds as frozen in v5",
+    "source_assay": "retain only worlds with the frozen truth source",
+    "barrier_assay": "retain only worlds with the truth barrier-density level",
+    "analyst_rule_assay": "retain only worlds with the truth relative_edge_q70 analyst rule"
+  },
+  "action_subsets": "evaluate all 16 subsets of the four actions including the empty baseline; action semantics are fixed and order-independent intersections",
+  "per_subset_outputs": [
+    "survivor-world count",
+    "surviving-source count",
+    "distinct reachability-class count",
+    "survivor-envelope node count",
+    "robust-impossibility node count",
+    "world contraction from baseline",
+    "envelope contraction from baseline",
+    "false robust-exclusion count"
+  ],
+  "evidence_classification": {
+    "no_effect": "world count unchanged",
+    "identity_only": "world count decreases but survivor envelope is unchanged",
+    "envelope_changing": "survivor envelope loses at least one node"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "Q1_reachability_quotient_compresses_world_identity",
+      "statement": "At baseline full positives, median survivor-world count divided by distinct reachability-class count is >1.",
+      "failure_rule": "REFUTED if the median compression ratio is <=1."
+    },
+    {
+      "id": "Q2_identity_only_evidence_exists",
+      "statement": "At least one truth-relative action in at least one eligible row eliminates worlds while leaving the survivor reachability envelope unchanged.",
+      "failure_rule": "REFUTED if every world-contractive action also changes the envelope."
+    },
+    {
+      "id": "Q3_envelope_changing_evidence_exists",
+      "statement": "At least one truth-relative action in at least one eligible row removes at least one node from the survivor reachability envelope.",
+      "failure_rule": "REFUTED if no action ever changes the envelope."
+    },
+    {
+      "id": "Q4_temporal_evidence_is_mostly_identity_only_at_full_coverage",
+      "statement": "Among rows where temporal_depth contracts the baseline world set, at least 90 percent have zero envelope contraction.",
+      "failure_rule": "REFUTED if the fraction is <0.90."
+    },
+    {
+      "id": "Q5_world_elimination_is_not_a_sufficient_proxy_for_envelope_information",
+      "statement": "At least one eligible row contains two single actions A and B such that A eliminates more worlds than B but A yields fewer newly robust-impossible nodes than B.",
+      "failure_rule": "REFUTED if world-elimination ranking never disagrees with envelope-gain ranking."
+    },
+    {
+      "id": "Q6_target_specific_evidence_can_be_cheaper_than_world_identification",
+      "statement": "Among rows where exact world identification is possible using the frozen action library, median minimum action count needed to reproduce the all-actions reachability envelope is strictly smaller than median minimum action count needed to identify the exact truth world.",
+      "failure_rule": "REFUTED if the median target-specific saving is nonpositive."
+    },
+    {
+      "id": "Q7_nested_evidence_preserves_truth_and_sound_impossibility",
+      "statement": "For every action subset, the truth world survives, survivor envelopes can only contract as actions are added, and no truth-reachable node becomes robustly impossible.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    }
+  ],
+  "secondary_outputs": [
+    "identity-only / envelope-changing frequency by evidence channel",
+    "mean envelope gain by source/barrier/rule/temporal action",
+    "minimum action sets for exact world identity",
+    "minimum action sets for maximal reachability-envelope contraction",
+    "rows where source information changes history identity but not spatial envelope",
+    "rows where barrier or analyst-rule calibration changes the spatial envelope"
+  ],
+  "claim_boundary": [
+    "Reachability equivalence is target-specific: worlds in one class may differ for route, timing or another future target.",
+    "Direct source/barrier/rule assays are idealized known-truth evidence channels.",
+    "A smaller envelope-target design does not identify the true mechanism world.",
+    "Action cardinality is an information count, not empirical field cost."
+  ],
+  "stop_rules": [
+    "Do not add evidence actions after scoring.",
+    "Do not redefine reachability equivalence after scoring.",
+    "Do not drop temporal evidence because v5 showed zero aggregate envelope gain.",
+    "Do not change the all-actions target after scoring."
+  ]
+}
