@@ -1,0 +1,111 @@
+{
+  "schema": "eog.original_idea_virtual_worlds.protocol.v1",
+  "status": "frozen_before_benchmark_implementation_and_scoring",
+  "scientific_role": "known_truth_validation_of_original_EOG_hypotheses_using_BAM_and_reachability_virtual_worlds",
+  "core_question": "Can the original EOG claims about viability, reachability, occurrence-to-occurrence connection, pathwise environmental continuity, barriers, stepping stones, bottlenecks, alternative distribution histories, and robust impossibility be recovered under known truth without forcing a unique history?",
+  "not_the_question": [
+    "how many BAM decompositions exist for their own sake",
+    "whether finite partition algebra is novel",
+    "whether another synthetic BAM factorial improves the previous target-quotient pattern"
+  ],
+  "world_components": {
+    "A": "local abiotic viability",
+    "B": "optional biotic permissibility",
+    "M": "source-conditioned movement accessibility",
+    "E_path": "pathwise environmental continuity / IBE-like traversability",
+    "G_geo": "geographic distance / IBD-like movement cost",
+    "H": "directed transition-history structure including sources, stepping stones, branching and bottlenecks",
+    "O": "observed occurrence anchors"
+  },
+  "canonical_virtual_archetypes": [
+    {
+      "id": "V1_suitable_but_unreachable",
+      "purpose": "separate local viability from reachability",
+      "truth_contrast": "same local A at target, different M because a barrier disconnects the target"
+    },
+    {
+      "id": "V2_endpoint_match_intermediate_gap",
+      "purpose": "test pathwise IBE rather than endpoint-only environmental similarity",
+      "truth_contrast": "source and target environments are similar but every continuous path crosses an environmentally nonviable intermediate state"
+    },
+    {
+      "id": "V3_stepping_stone",
+      "purpose": "test whether an intermediate occurrence can make a route possible when direct movement is impossible",
+      "truth_contrast": "same endpoints; one world contains a viable stepping stone and one does not"
+    },
+    {
+      "id": "V4_bottleneck_vs_redundancy",
+      "purpose": "test route redundancy and vulnerability to one critical edge/node",
+      "truth_contrast": "same observed endpoint set; one world has a single bottleneck, another has two independent routes"
+    },
+    {
+      "id": "V5_same_distribution_different_history",
+      "purpose": "test set-valued world reconstruction instead of unique history recovery",
+      "truth_contrast": "two source/branching histories yield the same final occurrence set G but different source attribution / first-passage structure"
+    },
+    {
+      "id": "V6_static_alias_temporal_split",
+      "purpose": "test whether time-stamped occurrence history contracts static ambiguity",
+      "truth_contrast": "worlds share final G but differ in admissible arrival order"
+    }
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "H1_viability_not_reachability",
+      "statement": "At least one target is locally viable in every candidate world but reachable only in a strict subset of worlds.",
+      "failure_rule": "REFUTED if local viability always implies reachability in all canonical archetypes."
+    },
+    {
+      "id": "H2_pathwise_IBE_matters",
+      "statement": "Endpoint environmental similarity alone can misclassify a source-target pair as connectable when every admissible path contains an environmental bottleneck.",
+      "failure_rule": "REFUTED if endpoint-only and pathwise-environmental rules never disagree in V2."
+    },
+    {
+      "id": "H3_stepping_stones_change_reachability",
+      "statement": "A predeclared stepping stone can convert an otherwise unreachable source-target pair into a reachable pair without changing endpoint local viability.",
+      "failure_rule": "REFUTED if V3 reachability is invariant to the stepping-stone state."
+    },
+    {
+      "id": "H4_bottleneck_and_route_redundancy_are_distinct",
+      "statement": "Two worlds can support the same observed occurrences while differing in edge/node knockout sensitivity and route redundancy.",
+      "failure_rule": "REFUTED if V4 worlds with the same observed support have identical knockout and redundancy signatures."
+    },
+    {
+      "id": "H5_occurrences_do_not_identify_unique_history",
+      "statement": "At least one final occurrence set is compatible with multiple source/branching histories that differ in source attribution or first-passage structure.",
+      "failure_rule": "REFUTED if every canonical final G identifies one history world."
+    },
+    {
+      "id": "H6_temporal_evidence_contracts_history_fiber",
+      "statement": "Time-stamped positive occurrence order strictly contracts at least one static-compatible history fiber while retaining the true world.",
+      "failure_rule": "REFUTED if temporal positive evidence never contracts static ambiguity."
+    },
+    {
+      "id": "H7_robust_impossibility_is_monotone_under_world_expansion",
+      "statement": "When the candidate-world universe is expanded, robustly impossible occurrence relations can only be lost, never newly created, while possible relations can only be gained.",
+      "failure_rule": "Any violation is an implementation/theory failure and stops interpretation."
+    }
+  ],
+  "primary_outputs": [
+    "local-viability state by node/world",
+    "source-target reachability by world",
+    "pathwise environmental bottleneck witness",
+    "stepping-stone dependence",
+    "route-count / edge-knockout / node-knockout redundancy signature",
+    "source attribution by world",
+    "first-passage depth by world",
+    "static survivor-history fiber",
+    "temporal survivor-history fiber",
+    "robust / contingent / impossible occurrence-pair relation matrix",
+    "nested-world-universe monotonicity audit"
+  ],
+  "success_definition": "The programme succeeds if the original EOG claims are either supported or falsified under known truth with explicit counterexamples and without promoting one compatible history to truth.",
+  "stop_rules": [
+    "Do not add archetypes after scoring to rescue a failed hypothesis.",
+    "Do not tune barriers, stepping-stone states, environmental gaps or timing after scoring.",
+    "Do not claim that synthetic support establishes empirical truth.",
+    "Do not collapse multiple compatible histories into one best route.",
+    "Do not replace this programme with BAM decomposition counting alone.",
+    "Do not use the frozen EOG-WF empirical denominator to tune these virtual worlds."
+  ]
+}
