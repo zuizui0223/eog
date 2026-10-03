@@ -1,0 +1,92 @@
+{
+  "schema": "eog.original_idea_expansion_direction.result_summary.v7",
+  "status": "completed_preregistered_expansion_direction_panel",
+  "protocol": "validation/eog_original_idea_expansion_direction_v7/protocol_v7.json",
+  "protocol_commit": "4c6439f67415b828c6f073a54d208435bf8f8c19",
+  "authoritative_run": 37129997317,
+  "authoritative_artifact_id": 11275819435,
+  "authoritative_artifact_digest": "sha256:b6d73316ded4339cd665de2350226b56917de971c8400ea191ddbe8cc9ad5b69",
+  "result_fingerprint": "bd9611507d4697bad704d53e2a4a248c3a62d000022108bde89d3175b471d8b7",
+  "row_count": 384,
+  "eligible_row_count": 272,
+  "non_estimable_row_count": 112,
+  "predeclared_verdicts": {
+    "E1_restrictive_expansion_protects_impossibility": "SUPPORTED",
+    "E2_permissive_expansion_protects_reachability": "SUPPORTED",
+    "E3_restrictive_worlds_can_erode_reachability": "SUPPORTED",
+    "E4_permissive_worlds_can_erode_impossibility": "SUPPORTED",
+    "E5_directional_mixed_expansion_can_erode_both_certificate_types": "SUPPORTED",
+    "E6_incomparable_worlds_add_certificate_fragility": "SUPPORTED",
+    "E7_new_source_hypotheses_add_certificate_fragility": "SUPPORTED",
+    "E8_truth_soundness": "SUPPORTED"
+  },
+  "compatible_added_world_class_totals": {
+    "restrictive": 151,
+    "permissive": 1583,
+    "equivalent": 1315,
+    "incomparable": 82
+  },
+  "exact_protection": {
+    "restrictive_impossible_protection_violations": 0,
+    "permissive_reachable_protection_violations": 0,
+    "false_universal_certificates": 0,
+    "monotonicity_violations": 0
+  },
+  "certificate_losses_relative_to_B0": {
+    "restrictive_only": {
+      "robust_reachable_lost": 81,
+      "robust_impossible_lost": 0,
+      "rows_with_reachable_loss": 46,
+      "rows_with_impossible_loss": 0
+    },
+    "permissive_only": {
+      "robust_reachable_lost": 0,
+      "robust_impossible_lost": 1445,
+      "rows_with_reachable_loss": 0,
+      "rows_with_impossible_loss": 193
+    },
+    "directional_mixed": {
+      "robust_reachable_lost": 81,
+      "robust_impossible_lost": 1445,
+      "rows_with_reachable_loss": 46,
+      "rows_with_impossible_loss": 193
+    },
+    "same_source_full": {
+      "robust_reachable_lost": 99,
+      "robust_impossible_lost": 1445,
+      "rows_with_reachable_loss": 57,
+      "rows_with_impossible_loss": 193
+    },
+    "all_source_full": {
+      "robust_reachable_lost": 103,
+      "robust_impossible_lost": 1467,
+      "rows_with_reachable_loss": 59,
+      "rows_with_impossible_loss": 193
+    }
+  },
+  "additional_fragility": {
+    "rows_with_extra_loss_from_incomparable_or_equivalent_worlds": 11,
+    "same_source_full_minus_directional_mixed": {
+      "additional_reachable_certificate_loss": 18,
+      "additional_impossible_certificate_loss": 0
+    },
+    "rows_with_extra_loss_from_new_sources": 8,
+    "all_source_full_minus_same_source_full": {
+      "additional_reachable_certificate_loss": 4,
+      "additional_impossible_certificate_loss": 22
+    }
+  },
+  "interpretation": [
+    "The unconditional v6 asymmetry is explained by expansion direction: restrictive additions protected every baseline robust-impossible certificate, whereas permissive additions protected every baseline robust-reachable certificate.",
+    "The opposite certificate class was genuinely vulnerable: restrictive worlds erased 81 robust-reachability certificates and permissive worlds erased 1,445 robust-impossibility certificates.",
+    "The frozen candidate expansion was strongly skewed toward permissive worlds, with 1,583 permissive versus 151 restrictive additions, explaining why impossibility looked much less persistent in v6.",
+    "Incomparable worlds and newly admitted source hypotheses added further fragility but were secondary to the directional effect.",
+    "Reverse-impossibility reasoning is therefore robust only relative to a declared uncertainty family whose future additions are guaranteed not to be more permissive than the certified worlds."
+  ],
+  "claim_boundary": [
+    "Restrictive/permissive are reachable-set inclusion classes, not claims of ecological plausibility.",
+    "The exact E1/E2 protections assume the source set is fixed to baseline-surviving sources.",
+    "Allowing new source hypotheses can add both kinds of fragility.",
+    "The result gives a condition for certificate persistence, not a universal priority for impossibility over possibility."
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "schema": "eog.original_idea_expansion_direction.protocol.v7",
+  "status": "frozen_before_directional_expansion_benchmark_implementation_and_scoring",
+  "parent_v6": {
+    "result": "validation/eog_original_idea_world_universe_v6/result_summary_v6.json",
+    "fingerprint": "79af87ec0a0a9576b4a7178b21763c6c1167274d17d50e2e74249cfd1a3fa250",
+    "key_refutation": "robust-reachable certificate retention was 0.961 while robust-impossible retention was 0.648 under the mixed U0->U2 expansion"
+  },
+  "scientific_question": "Is certificate asymmetry controlled by the direction of world expansion rather than by possibility versus impossibility intrinsically, and how much extra fragility comes from admitting new source hypotheses?",
+  "latent_rows": {
+    "reuse": "exact v6 eligible rows and the same 25 percent dispersed positive-occurrence anchors",
+    "reference_world_per_source": "directed relative_edge_q70 world at the truth row's barrier-density level",
+    "baseline_surviving_sources": "candidate sources whose reference world survives the frozen positive anchors"
+  },
+  "candidate_parameter_worlds": {
+    "for_each_baseline_source": "all directed combinations of the three frozen barrier levels and three frozen analyst environmental rules",
+    "classification_relative_to_that_source_reference_world": {
+      "restrictive": "candidate reachable set is a strict subset of the reference reachable set",
+      "permissive": "candidate reachable set is a strict superset of the reference reachable set",
+      "equivalent": "candidate reachable set equals the reference reachable set",
+      "incomparable": "neither reachable set contains the other"
+    },
+    "compatibility": "only candidate worlds satisfying the same frozen positive anchors enter an expansion universe"
+  },
+  "expansion_universes": {
+    "B0_reference": "the surviving reference world for every baseline surviving source",
+    "B_restrictive": "B0 plus all compatible restrictive worlds for baseline sources",
+    "B_permissive": "B0 plus all compatible permissive worlds for baseline sources",
+    "B_directional_mixed": "B0 plus all compatible restrictive and permissive worlds, excluding incomparable worlds",
+    "B_same_source_full": "B0 plus all compatible parameter worlds for baseline sources, including incomparable/equivalent worlds",
+    "B_all_source_full": "the v6 U2 universe after occurrence conditioning, which additionally admits parameter worlds from sources whose reference world did not survive B0"
+  },
+  "certificate_population": "the exact v6 unobserved locally A/B-permissive node population for the row",
+  "primary_outputs": [
+    "counts of restrictive, permissive, equivalent and incomparable compatible added worlds",
+    "robust-reachable and robust-impossible certificate retention in each expansion universe",
+    "rows where restrictive expansion erodes reachability",
+    "rows where permissive expansion erodes impossibility",
+    "theorem violations for protected certificate classes",
+    "additional certificate erosion caused by incomparable worlds",
+    "additional certificate erosion caused by admitting new source hypotheses"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "E1_restrictive_expansion_protects_impossibility",
+      "statement": "For every eligible row, every B0 robust-impossible certificate remains robust-impossible under B_restrictive.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "E2_permissive_expansion_protects_reachability",
+      "statement": "For every eligible row, every B0 robust-reachable certificate remains robust-reachable under B_permissive.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "E3_restrictive_worlds_can_erode_reachability",
+      "statement": "At least one eligible row loses at least one B0 robust-reachable certificate under B_restrictive.",
+      "failure_rule": "REFUTED if restrictive expansion never erodes robust reachability."
+    },
+    {
+      "id": "E4_permissive_worlds_can_erode_impossibility",
+      "statement": "At least one eligible row loses at least one B0 robust-impossible certificate under B_permissive.",
+      "failure_rule": "REFUTED if permissive expansion never erodes robust impossibility."
+    },
+    {
+      "id": "E5_directional_mixed_expansion_can_erode_both_certificate_types",
+      "statement": "Across the frozen panel, B_directional_mixed erodes at least one robust-reachable and at least one robust-impossible B0 certificate.",
+      "failure_rule": "REFUTED separately if either certificate class never erodes."
+    },
+    {
+      "id": "E6_incomparable_worlds_add_certificate_fragility",
+      "statement": "At least one row loses an additional B0 universal certificate when expanding from B_directional_mixed to B_same_source_full.",
+      "failure_rule": "REFUTED if incomparable/equivalent additions never create extra certificate loss."
+    },
+    {
+      "id": "E7_new_source_hypotheses_add_certificate_fragility",
+      "statement": "At least one row loses an additional B0 universal certificate when expanding from B_same_source_full to B_all_source_full.",
+      "failure_rule": "REFUTED if admitting worlds from newly compatible sources never creates extra certificate loss."
+    },
+    {
+      "id": "E8_truth_soundness",
+      "statement": "No expansion universe creates a robust-impossible certificate on a truth-reachable node or a robust-reachable certificate on a truth-unreachable node.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    }
+  ],
+  "theoretical_expectation": {
+    "restrictive_protection": "a restrictive world for an already-surviving source cannot reach a node that its reference world could not reach, so it cannot destroy a B0 robust-impossible certificate",
+    "permissive_protection": "a permissive world for an already-surviving source contains that source's reference reachable set, so it cannot destroy a B0 robust-reachable certificate",
+    "scope": "these protections apply only while source identity set is fixed and added worlds are ordered by reachable-set inclusion"
+  },
+  "claim_boundary": [
+    "The direction labels are set-inclusion relations among reachable sets, not value judgments about ecological realism.",
+    "A protected certificate remains conditional on the declared source set and parameter-world family.",
+    "E1/E2 are finite-set consequences; novelty is not claimed for the set theory.",
+    "The ecological contribution is the explicit condition under which reverse-impossibility reasoning is or is not robust in EOG world expansion."
+  ],
+  "stop_rules": [
+    "Do not change the reachable-set inclusion definitions after scoring.",
+    "Do not reclassify incomparable worlds after seeing certificate losses.",
+    "Do not change the frozen v6 evidence anchors.",
+    "Do not choose a different source-freezing rule after scoring.",
+    "Failed E3-E7 hypotheses remain failed."
+  ]
+}
