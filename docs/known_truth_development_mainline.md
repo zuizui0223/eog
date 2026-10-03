@@ -2,6 +2,19 @@
 
 ## Current position
 
+**Active mainline update:** the known-truth programme now uses BAM and related virtual
+worlds to test the original EOG ideas, rather than treating BAM identifiability as the
+scientific endpoint by itself.
+
+The newly frozen v1 programme asks whether controlled worlds recover the original
+distinctions among local viability, reachability, pathwise environmental continuity,
+stepping stones, bottlenecks, alternative histories, temporal evidence and robust
+impossibility.  The previous BAM phases remain frozen evidence and provide reusable
+world/evidence machinery.
+
+Canonical active protocol:
+`validation/eog_original_idea_virtual_worlds_v1/protocol_v1.json`.
+
 This programme is a **separate post-closure simulation line**. It does not reopen or alter the frozen EOG-WF empirical 3/31/3 denominator.
 
 The scientific center is now:
