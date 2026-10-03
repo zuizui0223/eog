@@ -5,8 +5,13 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import sys
 
 import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from benchmarks.run_eog_original_idea_virtual_worlds_v2 import (
     AUTOCORR_LEVELS,
@@ -19,7 +24,6 @@ from benchmarks.run_eog_original_idea_virtual_worlds_v2 import (
 )
 
 
-ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL = ROOT / "validation/eog_original_idea_analyst_worlds_v3/protocol_v3.json"
 RULES = ("relative_edge_q70", "absolute_raw_0.5", "standardized_sd_1.0")
 
