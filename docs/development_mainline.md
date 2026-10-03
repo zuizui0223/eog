@@ -39,26 +39,38 @@ The previous state in which no fresh post-Daphnia paired endpoint had completed 
 
 The frozen three-endpoint EOG-WF manuscript line remains closed and unchanged.
 
-Active method development has returned to the distributional-watershed / relational
-history architecture. The canonical design is
-docs/eog_distributional_history_mainline_v1.md.
+**Active method development now uses BAM and related finite virtual worlds as an
+experimental laboratory for the original EOG ideas.**
 
-The top-level EOG object is no longer a BAM decomposition. EOG carries forward:
+The question is not BAM combinatorics for its own sake.  The virtual-world programme
+tests, under known truth, whether the original EOG distinctions actually hold:
 
-- compatible transition worlds;
-- per-world dynamic flow;
-- occurrence-to-occurrence reachability relations;
-- first-passage depth uncertainty;
-- branching / confluence / bottleneck structure;
-- temporal world reconstruction;
-- IBD / IBE / EOG-R comparison for independent genetic validation.
+- local viability versus reachability;
+- endpoint environmental similarity versus pathwise environmental continuity;
+- stepping-stone dependence;
+- bottleneck versus redundant routes;
+- multiple source/branching histories producing the same observed distribution;
+- static occurrence equivalence versus temporal-history discrimination;
+- robust impossibility under expansion of the declared world universe.
 
-BAM remains a frozen optional mechanism-coordinate and diagnostic layer. Its known-truth
-non-identification and target-quotient results remain valid, but no new BAM factorial or
-synthetic transformation is authorized as the active mainline.
+Canonical active protocol:
 
-The next preferred validation is independent relation-level evidence, especially
-genetic differentiation against frozen geographic, environmental and EOG-R distances.
+- `validation/eog_original_idea_virtual_worlds_v1/protocol_v1.json`
+
+Canonical benchmark:
+
+- `benchmarks/run_eog_original_idea_virtual_worlds_v1.py`
+
+BAM remains central as the A/B/M mechanism coordinate system used to build controlled
+known-truth worlds, but the outputs may include route, source, first passage, stepping
+stones, bottlenecks and temporal order whenever those are the original EOG quantity
+being tested.
+
+The relational-history API remains available as one measurement surface for these
+virtual-world experiments.  It is **not** the active programme by itself.
+
+Empirical bridge hunting is paused while this known-truth programme is the scientific
+mainline.  Existing empirical stops remain frozen audit evidence and are not repaired.
 
 ## Scientific center
 
