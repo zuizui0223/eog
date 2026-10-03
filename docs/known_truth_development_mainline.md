@@ -126,6 +126,120 @@ It is how much **information sparse occurrence anchors carry about world compati
 and robust impossibility**, and how that information depends on the spatial arrangement
 of the observed occurrences.
 
+## Original-EOG virtual-world progression v4-v7
+
+### v4 — what information is hidden in occurrence positions?
+
+With candidate source × barrier × analyst worlds sharing the same local A/B
+permissibility, treating occurrences only as locally viable points retained the entire
+world universe.
+
+Treating the same points as **must-have-been-reachable** evidence contracted it.
+
+Mean survivor-world fraction under dispersed anchors fell from **0.496 at 10% positive
+coverage** to **0.447 at complete positive coverage**. Spatial arrangement mattered in
+211/314 eligible landscapes.
+
+But complete static positives still left:
+
+- median surviving worlds: **104**;
+- median surviving sources: **30**;
+- exact world recovery: **0/314**;
+- exact source recovery: **0/314**.
+
+The preregistered expectation that more positives would recover more robust impossibility
+was **REFUTED**. Robust-impossibility recovery stayed exactly **0.393854** at every
+coverage level in both sampling designs.
+
+The diagnostic showed why: static undirected positives contracted barrier/analyst
+identity but did not contract source identity or the union reachability envelope.
+
+### v5 — directionality and temporal order
+
+The same landscape worlds were then given a frozen synthetic downstream direction.
+
+Directionality broke the v4 plateau:
+
+- robust-impossibility recovery, directed static:
+  - 10%: **0.605**;
+  - full positives: **0.655**;
+- full-coverage surviving source count:
+  - undirected: **27.14**;
+  - directed static: **2.15**;
+  - directed temporal: **2.06**;
+- exact source recovery:
+  - undirected: **0/272**;
+  - directed static: **53/272**;
+  - directed temporal: **71/272**.
+
+Temporal order further reduced source/history identity, but its preregistered claim of
+additional full-coverage robust-impossibility recovery was **REFUTED**: directed static
+and directed temporal both ended at **0.655179**.
+
+This separated **world/history identity information** from **reachability-envelope
+information**.
+
+### v6 — direct test of "impossibility is more robust"
+
+Holding 25% positive evidence fixed, the candidate universe was expanded from source
+uncertainty to barrier uncertainty to analyst-rule uncertainty.
+
+Universal certificates eroded monotonically with zero soundness violations.
+
+But the central directional claim was **REFUTED**:
+
+- robust-reachable retention U0→U2: **96.1%**;
+- robust-impossible retention: **64.8%**.
+
+Thus impossibility was not intrinsically the more persistent certificate.
+
+### v7 — the missing condition is expansion direction
+
+v7 classified same-source parameter worlds by reachable-set inclusion relative to the
+reference world.
+
+All eight preregistered hypotheses were supported.
+
+Exact protection rules:
+
+- restrictive additions caused **0** robust-impossibility violations;
+- permissive additions caused **0** robust-reachability violations.
+
+Observed opposite-class losses:
+
+- restrictive-only: **81 reachability certificates lost, 0 impossibility**;
+- permissive-only: **0 reachability, 1,445 impossibility certificates lost**.
+
+The frozen candidate pool contained:
+
+- 1,583 permissive worlds;
+- 151 restrictive;
+- 1,315 equivalent;
+- 82 incomparable.
+
+So v6's apparent fragility of impossibility was explained by a world expansion heavily
+skewed toward permissive worlds.
+
+The corrected original-EOG principle is:
+
+> **A robust-impossible statement is protected under restrictive world expansion, not
+> under arbitrary expansion. A robust-reachable statement is protected under
+> permissive expansion.**
+
+This protection assumes the source-hypothesis set is fixed. Incomparable worlds and
+newly admitted source hypotheses can add further fragility.
+
+Canonical v4-v7 assets:
+
+- `validation/eog_original_idea_occurrence_information_v4/`;
+- `validation/eog_original_idea_directed_temporal_flow_v5/`;
+- `validation/eog_original_idea_world_universe_v6/`;
+- `validation/eog_original_idea_expansion_direction_v7/`.
+
+The next untested original idea is the **set-valued forecast**: whether uncertainty
+across surviving worlds should be carried as a forecast envelope rather than collapsed
+to one point estimate, and how that envelope contracts as evidence removes worlds.
+
 ## 1. What was directly refuted
 
 The first large known-truth factorial falsified the strong recovery idea.
