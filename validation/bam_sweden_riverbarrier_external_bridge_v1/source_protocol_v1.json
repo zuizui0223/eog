@@ -1,0 +1,161 @@
+{
+  "schema": "eog.bam_sweden_riverbarrier_external_bridge.source_protocol.v1",
+  "status": "frozen_before_dryad_data_payload_access",
+  "scientific_role": "retrospective_external_M_subfamily_bridge_not_fresh_confirmatory_evidence",
+  "freshness_boundary": {
+    "dataset_landing_page_readme_and_published_aggregate_results_seen": true,
+    "raw_csv_payload_opened_in_this_bridge_before_freeze": false,
+    "may_be_called_fresh_or_independent_confirmatory": false,
+    "permitted_claim": "real-system external feasibility/falsification bridge for an M-only finite BAM subfamily"
+  },
+  "source": {
+    "title": "Barriers decouple population dynamics of riverine fish, and asynchrony of subpopulations promotes stability within fragments",
+    "doi": "10.5061/dryad.05qfttf9z",
+    "repository": "Dryad",
+    "published": "2025-04-15",
+    "required_files": ["README.md", "rawdf.csv"],
+    "explicitly_not_used_in_primary_bridge": [
+      "all_data_synchrony.csv",
+      "pop_perf_trout.csv",
+      "pop_perf_minnow.csv",
+      "pop_perf_pike.csv",
+      "synchrony_final.R"
+    ],
+    "reason_for_excluding_all_data_synchrony": "its site-pair roster and synchrony columns arise from response-dependent temporal/positive-density filtering in the published analysis; primary M geometry must be derived only from rawdf site coordinates, river IDs and frozen fragment IDs",
+    "source_switch_after_payload_access_allowed": false
+  },
+  "real_system": {
+    "region": "24 Swedish river catchments",
+    "study_time_span_context": [1951, 2021],
+    "response_independent_analysis_window": {
+      "start": 1988,
+      "end": 2021,
+      "reason": "README reports 90 percent of sampling occasions occurred after 1988; use two equal 17-year calendar blocks without reading density values"
+    },
+    "calibration_years": [1988, 2004],
+    "heldout_years": [2005, 2021],
+    "species_cohort": [
+      {
+        "scientific_name": "Salmo trutta",
+        "common_name": "brown trout",
+        "density_column": "ÖringTOT_mean"
+      },
+      {
+        "scientific_name": "Phoxinus phoxinus",
+        "common_name": "Eurasian minnow",
+        "density_column": "Elrit_mean"
+      },
+      {
+        "scientific_name": "Esox lucius",
+        "common_name": "northern pike",
+        "density_column": "Gädda_mean"
+      }
+    ],
+    "species_switch_or_selection_after_payload_access_allowed": false
+  },
+  "BAM_scope": {
+    "A": {
+      "state": "unrestricted",
+      "reason": "rawdf does not contain a frozen independent abiotic-habitat panel suitable for a defensible A constraint"
+    },
+    "B": {
+      "state": "unrestricted",
+      "reason": "no predeclared causal biotic interaction variable is available in the raw time-series table"
+    },
+    "M": {
+      "physical_site_key": ["riverID", "XKOORLOK", "YKOORLOK"],
+      "fragment_field": "unique_frag",
+      "site_registry_rule": "a physical site must map to one riverID and one unique_frag across all rows; drift is terminal_stop",
+      "coordinate_system_context": "RT90 coordinates as documented by README",
+      "distance": "Euclidean distance in released XKOORLOK/YKOORLOK coordinates",
+      "threshold_population": "all unordered distinct physical-site pairs within the same riverID, independent of fish density",
+      "threshold_quantiles": [0.25, 0.50, 0.75, 0.90],
+      "quantile_method": "linear interpolation identical to numpy.quantile(method='linear')",
+      "worlds": [
+        "M_closed_q25",
+        "M_closed_q50",
+        "M_closed_q75",
+        "M_closed_q90",
+        "M_open_q25",
+        "M_open_q50",
+        "M_open_q75",
+        "M_open_q90",
+        "M_open_all"
+      ],
+      "closed_edge_rule": "same riverID, Euclidean distance <= frozen threshold, and same unique_frag",
+      "open_edge_rule": "same riverID and Euclidean distance <= frozen threshold regardless of unique_frag",
+      "open_all_rule": "all physical sites within the same riverID are mutually connected",
+      "calibration_sources": "all calibration-positive physical sites for the species",
+      "reachability_semantics": "undirected graph reachability from calibration sources with no additional graph-step horizon",
+      "barrier_effect_claim": "world labels encode alternative connectivity assumptions only; survivor contraction is not a causal dam-effect estimate"
+    }
+  },
+  "raw_csv_schema": {
+    "file": "rawdf.csv",
+    "README_exact_columns": [
+      "XKOORLOK",
+      "YKOORLOK",
+      "unique_frag",
+      "riverID",
+      "year",
+      "ÖringTOT_mean",
+      "Elrit_mean",
+      "Gädda_mean"
+    ],
+    "extra_or_missing_column": "terminal_stop",
+    "exact_order_required": true,
+    "year_rule": "finite integer",
+    "coordinate_rule": "finite numeric",
+    "riverID_rule": "nonempty canonical string",
+    "unique_frag_rule": "nonempty canonical string",
+    "density_rule": "numeric >=0 or missing; missing is unknown and never a positive or hard absence",
+    "duplicate_site_year_rule": "terminal_stop"
+  },
+  "evidence_contract": {
+    "positive_definition": "finite species density > 0",
+    "zero_semantics": "recorded zero density is not used as a hard ecological absence",
+    "missing_semantics": "unknown; contributes no witness",
+    "calibration_eligibility": "species retained in cohort; bridge is estimable only if it has at least two distinct calibration-positive physical sites",
+    "calibration_world_invariant": "every estimable species must retain all 9 M worlds because calibration positives are movement sources; violation is implementation_stop",
+    "heldout_hard_witness": "every 2005-2021 positive physical site",
+    "heldout_endpoint": "a frozen M world is falsified for that species if a heldout positive site is not graph-reachable from any calibration-positive source",
+    "heldout_zero_positive_species": "retain with status no_heldout_positive_witness"
+  },
+  "primary_outputs": [
+    "per-species calibration-positive site count",
+    "per-species heldout-positive site count",
+    "per-species final surviving M-world count",
+    "per-heldout-positive number/fraction of the 9 worlds falsified",
+    "barrier-closed versus barrier-open attribution of eliminated worlds"
+  ],
+  "secondary_outputs": [
+    "species retaining multiple M worlds after all heldout positives",
+    "world-level number of species surviving heldout evidence",
+    "distribution of heldout witness elimination fractions"
+  ],
+  "not_endpoints": [
+    "published synchrony coefficients",
+    "portfolio effect",
+    "population stability or trajectory",
+    "AUC",
+    "log loss",
+    "negative-site accuracy",
+    "ranking species by barrier sensitivity"
+  ],
+  "gates": [
+    "Gate0 Dryad metadata identity: DOI/title/file roster; freeze file IDs/checksums/sizes; zero data payload bytes",
+    "Gate1 documentation-only README schema confirmation; zero rawdf bytes",
+    "Gate2 freeze exact CSV parser, M constructor, output schema and once-only execution contract",
+    "Gate3 once-only open rawdf.csv, validate exact physical schema, construct M worlds from geometry/fragment columns, then evaluate calibration and heldout positives without retuning"
+  ],
+  "hard_stops": [
+    "do not use all_data_synchrony.csv in primary bridge world construction",
+    "do not alter the 1988-2004 / 2005-2021 split after payload access",
+    "do not add or remove species after payload access",
+    "do not change distance thresholds or barrier/open semantics after payload access",
+    "do not reinterpret zeros as biological absence",
+    "do not repair physical CSV schema after response payload opening",
+    "do not call this fresh or independent confirmatory evidence"
+  ],
+  "success_definition": "success means the three predeclared species can be evaluated under the frozen 9-world M family and later positive observations either preserve or falsify worlds without post-response retuning; favorable contraction is not required"
+}
