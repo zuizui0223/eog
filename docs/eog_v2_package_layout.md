@@ -10,7 +10,7 @@ This package layout does not alter, rerun, rescue or reinterpret frozen results,
 
 Root `eog` remains the frozen v0.1 compatibility API. Prospective work is grouped behind three explicit lazy scientific facades:
 
-- `eog.v2.reachability` — forward transition/flow, static and temporal compatible-world reconstruction, world-indexed support sets, minimum-relaxation/frontier diagnostics, basin merge, positive survey discrimination and temporal transition-landscape summaries;
+- `eog.v2.reachability` — forward transition/flow, static and temporal compatible-world reconstruction, occurrence-to-occurrence relation summaries, world-indexed support sets, minimum-relaxation/frontier diagnostics, basin merge, positive survey discrimination and temporal transition-landscape summaries;
 - `eog.v2.traversability` — geographic/environmental/barrier transition constraints and pathwise ecological continuity;
 - `eog.v2.validation` — independent occurrence, genetic and directional-evidence validation;
 - `eog.v2.cli` — console-script routing only.

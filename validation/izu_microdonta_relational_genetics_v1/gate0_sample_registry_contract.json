@@ -1,0 +1,157 @@
+{
+  "schema": "eog.izu_microdonta_relational_genetics.gate0_sample_registry_contract.v1",
+  "status": "frozen_before_sample_registry_import_and_before_MIGseq2",
+  "primary_population_unit": {
+    "level": "island",
+    "population_ids": [
+      "Izu_Oshima",
+      "Toshima",
+      "Niijima",
+      "Shikinejima",
+      "Kozushima"
+    ],
+    "reason": "the biological design is an island-series comparison and island-level grouping can be fixed before genotype information; genetic response may not redefine populations"
+  },
+  "secondary_site_level": {
+    "role": "descriptive_secondary_only",
+    "eligibility": "site IDs must exist in the response-free 2026 registry before any genotype processing",
+    "may_not_replace_primary_after_genetic_access": true
+  },
+  "expected_registry": {
+    "row_count": 125,
+    "one_row_per_individual": true,
+    "required_columns": [
+      "sample_id",
+      "island",
+      "site_id",
+      "latitude",
+      "longitude",
+      "leaf_available"
+    ],
+    "optional_response_free_columns": [
+      "collection_date",
+      "field_individual_id",
+      "flower_measurement_id"
+    ],
+    "forbidden_columns_before_predictor_freeze": [
+      "genotype",
+      "allele",
+      "snp",
+      "fst",
+      "heterozygosity",
+      "structure_cluster",
+      "admixture",
+      "migration_rate"
+    ],
+    "expected_island_sample_counts": {
+      "Izu_Oshima": 47,
+      "Toshima": 38,
+      "Niijima": 23,
+      "Shikinejima": 5,
+      "Kozushima": 12
+    }
+  },
+  "island_mapping": {
+    "accepted_canonical_labels": {
+      "Izu_Oshima": [
+        "伊豆大島",
+        "大島",
+        "Izu Oshima",
+        "Oshima"
+      ],
+      "Toshima": [
+        "利島",
+        "Toshima"
+      ],
+      "Niijima": [
+        "新島",
+        "Niijima"
+      ],
+      "Shikinejima": [
+        "式根島",
+        "Shikinejima"
+      ],
+      "Kozushima": [
+        "神津島",
+        "Kozushima",
+        "Kozu"
+      ]
+    },
+    "exactly_five_primary_islands_required": true,
+    "island_switch_or_drop_allowed": false
+  },
+  "integrity_rules": {
+    "sample_id_unique_nonempty": true,
+    "site_id_nonempty": true,
+    "coordinates_finite": true,
+    "latitude_range": [
+      -90,
+      90
+    ],
+    "longitude_range": [
+      -180,
+      180
+    ],
+    "leaf_available_must_be_true_for_primary_genetic_registry": true,
+    "every_primary_island_must_have_at_least_two_samples": true,
+    "site_coordinate_exact_match_required": false,
+    "site_coordinate_rule": "individual coordinates may vary within a predeclared site_id; derive one response-free site centroid as the arithmetic mean of individual coordinates",
+    "island_centroid_rule": "equal-weight arithmetic mean of response-free site centroids within each island; do not weight by number of sampled individuals per site",
+    "duplicate_sample_id": "STOP",
+    "unknown_island": "STOP",
+    "missing_coordinate": "STOP",
+    "row_count_not_125": "STOP",
+    "genetic_response_column_present": "STOP",
+    "island_sample_count_mismatch": "STOP"
+  },
+  "population_rule": {
+    "primary_pair_count_if_gate_passes": 10,
+    "all_ten_unordered_island_pairs_retained": true,
+    "sample_imbalance_does_not_change_population_definition": true,
+    "population_drop_after_genotype_access": "PROHIBITED except a separately frozen pre-genotype QC failure rule"
+  },
+  "site_rule": {
+    "site_identity_role": "site identities are preserved for provenance and future relation construction",
+    "Niijima_multiple_sites": "retained as distinct site IDs in registry but pooled to Niijima for the primary genetic endpoint",
+    "site_level_genetic_contrasts": "not part of the primary promotion decision"
+  },
+  "output_if_pass": [
+    "canonical 125-row response-free registry fingerprint",
+    "island sample counts",
+    "site sample counts",
+    "response-free site centroids",
+    "five island centroids computed with equal site weights",
+    "ten frozen primary island-pair IDs"
+  ],
+  "pre_genetic_amendments": [
+    {
+      "classification": "JSON_contract_syntax_correction",
+      "reason": "site_rule contained a keyless string and was therefore not machine-parseable",
+      "genetic_response_generated_or_viewed": false,
+      "scientific_rule_changed": false
+    },
+    {
+      "classification": "response_free_sampling_geometry_correction",
+      "reason": "requiring exact coordinate identity within site_id would confuse within-site individual GPS variation with registry drift and would sample-size-weight island centroids",
+      "genetic_response_generated_or_viewed": false,
+      "primary_population_unit_changed": false,
+      "five_island_roster_changed": false,
+      "pair_universe_changed": false
+    },
+    {
+      "classification": "response_free_existing_sample_count_identity",
+      "source": "pre-genetic field/project record",
+      "counts": {
+        "Izu_Oshima": 47,
+        "Toshima": 38,
+        "Niijima": 23,
+        "Shikinejima": 5,
+        "Kozushima": 12
+      },
+      "total": 125,
+      "genetic_response_generated_or_viewed": false,
+      "scientific_predictor_tuning": false
+    }
+  ],
+  "next_authorized_stage": "freeze IBD, IBE, transition-world family and occurrence-relation predictors from the passed response-free registry; genotype processing remains forbidden"
+}

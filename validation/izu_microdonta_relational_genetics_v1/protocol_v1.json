@@ -1,0 +1,72 @@
+{
+  "schema": "eog.izu_microdonta_relational_genetics.protocol.v1",
+  "status": "frozen_before_MIGseq2_genetic_response_generation",
+  "scientific_role": "prospective_independent_relation_level_genetic_validation",
+  "system": {
+    "taxon": "Campanula microdonta",
+    "common_name": "シマホタルブクロ",
+    "sampling_year": 2026,
+    "islands": [
+      "伊豆大島",
+      "利島",
+      "新島",
+      "式根島",
+      "神津島"
+    ],
+    "collected_individuals": 125,
+    "collected_flowers": 218,
+    "leaf_samples_available": true,
+    "genetic_response_status_at_freeze": "not_generated_not_viewed",
+    "planned_genotyping": "MIG-seq2 pilot / genome-wide SNP workflow"
+  },
+  "primary_question": "Does a response-blind EOG reachability relation among sampled island populations explain neutral genetic differentiation beyond geographic isolation and environmental difference?",
+  "anti_leakage": {
+    "MIGseq2_or_SNP_data_may_not_be_used_to_build_or_tune_EOG": true,
+    "pairwise_FST_may_not_be_computed_before_predictor_freeze": true,
+    "PST_morphology_may_not_tune_reachability_worlds": true,
+    "published_or_prior_genetic_structure_may_not_choose_edges_or_thresholds": true,
+    "species_or_island_switch_after_genetic_access_allowed": false
+  },
+  "pre_genetic_gates": [
+    "Gate0 freeze exact 125-sample registry, island labels and response-free coordinates",
+    "Gate1 freeze geographic and environmental distance matrices",
+    "Gate2 freeze declared EOG transition-world family and occurrence relation graph",
+    "Gate3 freeze genetic predictor artifact, pair ordering, model ladder and fingerprints",
+    "Gate4 only after Gates0-3 are immutable, begin MIG-seq2 / SNP response generation"
+  ],
+  "predictor_requirements": {
+    "IBD": "pairwise geographic distance among frozen population units",
+    "IBE": "pairwise environmental distance from a response-free frozen environmental representation",
+    "EOG_relation": "reachability distance or relation summary derived only from frozen occurrence anchors and transition worlds",
+    "strong_reference": "a response-free graph/connectivity reference fixed before genetic response; if its own structural adequacy gate fails before response, the dataset stops rather than substituting a post-response reference"
+  },
+  "population_unit_rule": {
+    "primary_unit": "must be frozen from sample metadata before any genotype access",
+    "allowed_choices": [
+      "island-level population",
+      "predeclared field-site population when response-free sample counts support it"
+    ],
+    "choice_may_not_use_genetic_variation": true,
+    "minimum_sample_size_rule": "must be declared from sample metadata before genotype access"
+  },
+  "genetic_response": {
+    "primary": "neutral pairwise FST from quality-filtered genome-wide SNPs",
+    "locus_filtering": "must be frozen before pairwise FST values are inspected",
+    "response_transform": "must be frozen before pairwise FST values are inspected",
+    "migration_direction": "not tested by symmetric FST"
+  },
+  "validation_design": {
+    "pairwise_nonindependence": "hold out all pairs involving one population unit together",
+    "primary_contrast": "strong_reference_plus_EOG minus strong_reference heldout error",
+    "secondary_contrast": "IBD_plus_IBE_plus_EOG minus IBD_plus_IBE heldout error",
+    "favorable_direction": "lower heldout error with EOG",
+    "reference_failure_rule": "if the predeclared strong reference is structurally or operationally invalid, retain an indeterminate reference-failure status and do not rescue using a post-response comparator"
+  },
+  "claim_boundary": [
+    "This test evaluates relation-level information, not historical-route truth.",
+    "A favorable result does not identify migration direction or ancestry.",
+    "A null/adverse result does not invalidate all EOG transition worlds.",
+    "Morphological PST and pollination results are outside the primary genetic-response endpoint."
+  ],
+  "next_authorized_action": "freeze response-free sample/population registry and EOG predictor construction before any MIG-seq2 genotype processing"
+}

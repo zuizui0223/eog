@@ -23,6 +23,9 @@ def test_new_prospective_reachability_apis_stay_on_explicit_facade():
         "RelaxationFrontier",
         "ReconstructionUpdate",
         "PositiveOccurrenceSurveyRanking",
+        "OccurrencePairRelation",
+        "OccurrenceRelationGraph",
+        "summarize_occurrence_relations",
         "forward_reachable_configuration",
         "reconstruct_compatible_worlds",
         "build_world_flow_set",
@@ -68,6 +71,7 @@ def test_new_prospective_reachability_apis_stay_on_explicit_facade():
 
 def test_v2_facades_keep_estimands_separated():
     assert hasattr(reachability, "summarize_first_passage")
+    assert hasattr(reachability, "summarize_occurrence_relations")
     assert hasattr(reachability, "reconstruct_compatible_worlds")
     assert hasattr(reachability, "build_world_flow_set")
     assert hasattr(reachability, "compare_world_flow_universes")

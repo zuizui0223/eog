@@ -35,6 +35,31 @@ Canonical closure assets:
 
 The previous state in which no fresh post-Daphnia paired endpoint had completed is historical and must not be used to reopen candidate search.
 
+## Post-closure active method architecture
+
+The frozen three-endpoint EOG-WF manuscript line remains closed and unchanged.
+
+Active method development has returned to the distributional-watershed / relational
+history architecture. The canonical design is
+docs/eog_distributional_history_mainline_v1.md.
+
+The top-level EOG object is no longer a BAM decomposition. EOG carries forward:
+
+- compatible transition worlds;
+- per-world dynamic flow;
+- occurrence-to-occurrence reachability relations;
+- first-passage depth uncertainty;
+- branching / confluence / bottleneck structure;
+- temporal world reconstruction;
+- IBD / IBE / EOG-R comparison for independent genetic validation.
+
+BAM remains a frozen optional mechanism-coordinate and diagnostic layer. Its known-truth
+non-identification and target-quotient results remain valid, but no new BAM factorial or
+synthetic transformation is authorized as the active mainline.
+
+The next preferred validation is independent relation-level evidence, especially
+genetic differentiation against frozen geographic, environmental and EOG-R distances.
+
 ## Scientific center
 
 EOG keeps four objects separate:

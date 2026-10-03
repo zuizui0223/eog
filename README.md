@@ -21,6 +21,7 @@ The repository does **not** claim generic predictive superiority over SDMs, meta
 Canonical state:
 
 - scientific mainline: [`docs/development_mainline.md`](docs/development_mainline.md)
+- active post-closure method architecture: docs/eog_distributional_history_mainline_v1.md
 - forecast algorithm: [`docs/worldset_forecast_algorithm.md`](docs/worldset_forecast_algorithm.md)
 - two-layer architecture: [`docs/two_layer_forecast_architecture.md`](docs/two_layer_forecast_architecture.md)
 - validation protocol: [`docs/method_validation_protocol.md`](docs/method_validation_protocol.md)
@@ -43,6 +44,8 @@ EOG keeps four objects distinct:
 4. **historical truth** — the actual route, sequence, ancestry, movement rate or demographic process in nature.
 
 Observed occurrences are positive realized evidence. They constrain admissible worlds but do not identify one true historical route.
+
+The active post-closure EOG method architecture treats relations between occurrences as first-class outputs. For each ordered occurrence pair, EOG can summarize whether reachability is robust, world-dependent or excluded across the compatible world set, and whether first-arrival graph depth is fixed or unresolved. BAM remains an optional mechanism-diagnostic coordinate system rather than the top-level EOG representation.
 
 For finite world universe `W` and positive evidence `O`:
 
