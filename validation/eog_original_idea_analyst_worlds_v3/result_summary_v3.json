@@ -1,0 +1,56 @@
+{
+  "schema": "eog.original_idea_analyst_worlds.result_summary.v3",
+  "status": "completed_preregistered_analyst_world_sensitivity_panel",
+  "protocol": "validation/eog_original_idea_analyst_worlds_v3/protocol_v3.json",
+  "authoritative_run": 37125307917,
+  "authoritative_artifact_id": 11274605892,
+  "authoritative_artifact_digest": "sha256:da3960d5fba4856eb915c12aec87127780fe4b7b93c433084e5fe33a381732e7",
+  "result_fingerprint": "d6f19f8e57f58965a3487c278de0507499faaf9c326a06ad556a47dd855ee9f9",
+  "row_count": 384,
+  "analyst_rules": [
+    "relative_edge_q70",
+    "absolute_raw_0.5",
+    "standardized_sd_1.0"
+  ],
+  "predeclared_verdicts": {
+    "A1_analyst_rule_disagreement_exists": "SUPPORTED",
+    "A2_analyst_universe_expansion_weakens_certificates_monotonically": "SUPPORTED",
+    "A3_autocorrelation_conclusion_is_rule_sensitive": "SUPPORTED",
+    "A4_barrier_effect_is_robust_across_analyst_rules": "SUPPORTED",
+    "A5_some_relations_remain_robust_despite_analyst_uncertainty": "SUPPORTED"
+  },
+  "aggregate": {
+    "mean_contingent_target_fraction": 0.36586458343678824,
+    "total_contingent_target_classifications": 4143,
+    "total_robust_reachable_target_classifications": 3777,
+    "total_robust_impossible_target_classifications": 3414,
+    "total_gained_possible_vs_q70": 1423,
+    "total_lost_q70_robust_reachable": 2720,
+    "total_lost_q70_robust_impossible": 1423,
+    "analyst_universe_monotonicity_violations": 0
+  },
+  "autocorrelation_contrasts": {
+    "relative_edge_q70_low_minus_high": -0.17958419012164023,
+    "absolute_raw_0.5_low_minus_high": 0.6343005657053645,
+    "standardized_sd_1.0_low_minus_high": 0.21347930270772333,
+    "sign_reversal_across_analyst_rules": true
+  },
+  "barrier_contrasts_high_0.35_minus_low_0.05": {
+    "relative_edge_q70": 0.32455985560818845,
+    "absolute_raw_0.5": 0.15512698933421398,
+    "standardized_sd_1.0": 0.25592027889784946,
+    "all_positive": true
+  },
+  "interpretation": [
+    "More than one third of locally permissive target classifications were analyst-world contingent in the frozen panel.",
+    "The environmental-autocorrelation conclusion reversed sign across response-independent traversability rules, showing that the analyst translation from environmental difference to edge traversability can dominate the qualitative conclusion.",
+    "The barrier-density effect remained positive under all three analyst rules, providing an example of a conclusion robust to analyst uncertainty.",
+    "Expanding the analyst-world universe gained possible targets and eroded q70-only robust certificates with zero monotonicity violations.",
+    "The original EOG distinction between natural-world uncertainty and analyst-world uncertainty is therefore operationally measurable in known-truth landscapes."
+  ],
+  "claim_boundary": [
+    "The three analyst rules are sensitivity worlds, not estimates of one true ecological threshold.",
+    "The v2 G2 hypothesis remains refuted; v3 explains rule sensitivity but does not reclassify it.",
+    "The 36.6 percent contingent fraction is a property of this frozen generator and rule set, not an ecological prevalence estimate."
+  ]
+}
