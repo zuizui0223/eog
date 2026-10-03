@@ -1,0 +1,56 @@
+{
+  "schema": "eog.bam_sweden_riverbarrier_external_bridge.execution_contract_draft.v1",
+  "status": "not_authorized_until_gate0_and_documentation_schema_pass",
+  "source_protocol": "validation/bam_sweden_riverbarrier_external_bridge_v1/source_protocol_v1.json",
+  "gate0_certificate": {
+    "path": "validation/bam_sweden_riverbarrier_external_bridge_v1/gate0_dryad_identity_certificate.json",
+    "required_status": "dryad_source_identity_ready",
+    "fingerprint": null
+  },
+  "documentation_schema_certificate": {
+    "required_status": "readme_schema_ready",
+    "fingerprint": null
+  },
+  "frozen_parser": {
+    "file": "rawdf.csv",
+    "exact_columns": [
+      "XKOORLOK",
+      "YKOORLOK",
+      "unique_frag",
+      "riverID",
+      "year",
+      "ÖringTOT_mean",
+      "Elrit_mean",
+      "Gädda_mean"
+    ],
+    "encoding": "UTF-8",
+    "delimiter": ",",
+    "extra_or_missing_column": "terminal_stop",
+    "column_order_drift": "terminal_stop"
+  },
+  "engine_binding": {
+    "path": "src/eog/v2/bam_sweden_riverbarrier_external_bridge.py",
+    "world_count": 9,
+    "species_count": 3,
+    "calibration_years": [1988, 2004],
+    "heldout_years": [2005, 2021],
+    "A": "unrestricted",
+    "B": "unrestricted"
+  },
+  "once_only_execution": [
+    "download checksum-bound rawdf.csv only",
+    "verify exact size and SHA256",
+    "parse complete CSV under frozen exact schema",
+    "validate site/fragment/year/density invariants",
+    "derive geometry thresholds from site registry only",
+    "execute all three species under the same frozen 9-world family",
+    "write summary result only; do not persist row-level raw data"
+  ],
+  "terminal_rules": {
+    "download or checksum mismatch": "STOP",
+    "schema mismatch": "STOP_NO_RERUN_AFTER_PAYLOAD",
+    "invalid site/fragment/year/density invariant": "STOP_NO_RERUN_AFTER_PAYLOAD",
+    "post-payload parser or world repair": "PROHIBITED"
+  },
+  "authorization_amendment_rule": "after Gate0 and documentation PASS, only status, certificate fingerprints, and checksum-bound rawdf file metadata may be filled; no scientific rule may change"
+}
