@@ -1,0 +1,105 @@
+{
+  "schema": "eog.original_idea_target_aware_evidence_planning.protocol.v7",
+  "status": "frozen_before_adaptive_planner_implementation_and_scoring",
+  "parent_v6": {
+    "result": "validation/eog_original_idea_evidence_target_boundaries_v6/result_summary_v6.json",
+    "fingerprint": "ee1fba42ae957707138b17fbc429b40b8b012c43a4fd0a14023ab669d71bffc6",
+    "key_result": "evidence channels affected world identity, exact reachability classes and robust-impossibility envelopes differently; target burden was strictly lower than full-world burden in 97/272 eligible rows"
+  },
+  "scientific_question": "If the ecological goal is to identify the truth reachability class rather than the complete generating world, does target-aware adaptive evidence selection choose different measurements and stop earlier than world-identity-oriented evidence selection?",
+  "analysis_base": {
+    "landscapes": "reuse the exact 272 v6 eligible full-positive directed-static survivor fibers",
+    "baseline": "full truth-positive occurrence evidence only; no temporal evidence added before planning",
+    "target": "truth world's exact directed reachable-node set",
+    "world_identity": "exact source x barrier-level x analyst-rule candidate world"
+  },
+  "adaptive_actions": {
+    "S_source": {
+      "outcome_by_world": "candidate source node"
+    },
+    "B_barrier": {
+      "outcome_by_world": "candidate barrier-density level"
+    },
+    "R_analyst": {
+      "outcome_by_world": "candidate analyst traversability rule"
+    }
+  },
+  "excluded_action": {
+    "T_temporal": "not included in v7 because the frozen v6 temporal channel is a composite truth-relative arrival-depth constraint rather than one pre-outcome categorical measurement; adding a new temporal outcome model would be a new question"
+  },
+  "planning_objective": {
+    "target_planner": "exact adaptive decision tree minimizing worst-case number of remaining actions until every surviving world belongs to one exact reachability class",
+    "world_planner": "exact adaptive decision tree minimizing worst-case number of remaining actions until one candidate world remains",
+    "action_cost": 1,
+    "tie_break_order": ["S_source", "B_barrier", "R_analyst"],
+    "outcomes": "all categorical outcomes represented among the current survivor worlds",
+    "truth_path": "after the tree is frozen from the current survivor state, follow the outcome corresponding to the known truth world"
+  },
+  "primary_outputs": [
+    "target-optimal worst-case adaptive depth",
+    "world-optimal worst-case adaptive depth",
+    "target-optimal first action",
+    "world-optimal first action",
+    "truth-path action sequence and depth under each policy",
+    "remaining world/source count when target planner stops",
+    "worst-case target-class count after each candidate first action"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "P1_target_planning_depth_never_exceeds_world_planning_depth",
+      "statement": "For every eligible row, exact worst-case adaptive depth to identify the reachability target is <= exact worst-case adaptive depth to identify the complete world.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "P2_strict_adaptive_target_saving_exists",
+      "statement": "At least one eligible row has strictly smaller target-optimal worst-case depth than world-optimal worst-case depth.",
+      "failure_rule": "REFUTED if depths are equal in every row."
+    },
+    {
+      "id": "P3_target_and_world_planners_choose_different_first_actions",
+      "statement": "At least one row with unresolved target and unresolved world has different target-optimal and world-optimal first actions.",
+      "failure_rule": "REFUTED if first actions always agree."
+    },
+    {
+      "id": "P4_target_planner_first_action_is_target_superior_somewhere",
+      "statement": "At least one row where the first actions differ has a strictly smaller worst-case remaining reachability-class count under the target planner's first action than under the world planner's first action.",
+      "failure_rule": "REFUTED if every first-action disagreement is target-equivalent."
+    },
+    {
+      "id": "P5_target_planning_is_not_one_fixed_measurement_order",
+      "statement": "Across eligible rows with unresolved target, at least two of S_source, B_barrier and R_analyst occur as target-optimal first actions.",
+      "failure_rule": "REFUTED if one action is always selected first."
+    },
+    {
+      "id": "P6_complete_three_action_library_resolves_every_target",
+      "statement": "Every eligible row has finite target-optimal adaptive depth <=3.",
+      "failure_rule": "Any unresolved target after all three channels is an implementation/world-definition failure."
+    },
+    {
+      "id": "P7_target_planner_can_stop_with_history_unresolved",
+      "statement": "At least one row reaches a single reachability target class while retaining more than one candidate world and more than one candidate source on the realized truth path.",
+      "failure_rule": "REFUTED if target identification always implies full world or source identity."
+    }
+  ],
+  "secondary_outputs": [
+    "distribution of target and world adaptive depths",
+    "first-action frequency by ecological factor stratum",
+    "truth-path depth comparison between target and world planners",
+    "fraction of rows where target identification stops with multiple worlds",
+    "fraction of rows where target identification stops with multiple sources",
+    "action-outcome branching factors"
+  ],
+  "claim_boundary": [
+    "The three actions are known-truth categorical diagnostics, not field-cost-equivalent measurements.",
+    "Worst-case adaptive depth is a finite decision-tree quantity, not expected information gain.",
+    "Target-aware stopping does not identify historical truth when multiple source/world hypotheses remain.",
+    "Planner frequencies are conditional on the frozen v6 directed candidate-world universe."
+  ],
+  "stop_rules": [
+    "Do not add temporal evidence as a fourth action after scoring.",
+    "Do not change tie-break order after scoring.",
+    "Do not introduce action weights after scoring.",
+    "Do not replace worst-case depth with expected depth after scoring.",
+    "Failed planner hypotheses remain failed."
+  ]
+}

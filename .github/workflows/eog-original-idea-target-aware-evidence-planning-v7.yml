@@ -1,0 +1,36 @@
+name: Original EOG target-aware evidence planning v7
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_target_aware_evidence_planning_v7/**"
+      - "benchmarks/run_eog_original_idea_target_aware_evidence_planning_v7.py"
+      - "tests/test_eog_original_idea_target_aware_evidence_planning_v7.py"
+      - ".github/workflows/eog-original-idea-target-aware-evidence-planning-v7.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: original-eog-target-aware-planning-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test adaptive planning invariants
+        run: python -m pytest tests/test_eog_original_idea_target_aware_evidence_planning_v7.py -q
+      - name: Run frozen target-aware planning benchmark
+        run: |
+          python benchmarks/run_eog_original_idea_target_aware_evidence_planning_v7.py \
+            --output build/eog_original_idea_target_aware_evidence_planning_v7/result_v7.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-original-idea-target-aware-evidence-planning-v7
+          path: build/eog_original_idea_target_aware_evidence_planning_v7/result_v7.json
+          if-no-files-found: error
