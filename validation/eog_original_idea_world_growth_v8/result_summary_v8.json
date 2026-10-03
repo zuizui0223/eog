@@ -1,0 +1,101 @@
+{
+  "schema": "eog.original_idea_world_growth_survival.result_summary.v8",
+  "status": "completed_preregistered_random_world_growth_panel",
+  "protocol": "validation/eog_original_idea_world_growth_v8/protocol_v8.json",
+  "protocol_initial_commit": "fc287dd3cd8cea496d3feb3ca9c60597e87c7893",
+  "protocol_preimplementation_reporting_amendment_commit": "f9ad242f95d0d1d87cad7d90733ace703f5d6414",
+  "authoritative_run": 37154861727,
+  "authoritative_artifact_id": 11284514985,
+  "authoritative_artifact_digest": "sha256:290f7bc69f2e4d070bbf3f1f87771ed26a7498fbd7d4614adcf9c1e580a7f5de",
+  "result_fingerprint": "e8353f5a5f15a885e05f334174cfdb1e80bd58f0e67c23c0a92c2c7525a7fd05",
+  "row_count": 384,
+  "eligible_row_count": 272,
+  "certificate_count": 6795,
+  "predeclared_verdicts": {
+    "L1_directional_protection_is_lifetime_infinite_within_pool": "SUPPORTED",
+    "L2_opposite_direction_creates_finite_lifetimes": "SUPPORTED",
+    "L3_mixed_growth_reproduces_v6_asymmetry": "SUPPORTED",
+    "L4_incomparable_worlds_can_shorten_certificate_lifetime": "SUPPORTED",
+    "L5_new_source_worlds_can_shorten_certificate_lifetime": "SUPPORTED",
+    "L6_survival_curves_are_monotone": "SUPPORTED",
+    "L7_threat_count_exactly_predicts_endpoint_persistence": "SUPPORTED"
+  },
+  "exact_protection": {
+    "restrictive_impossibility_violation_count": 0,
+    "permissive_reachability_violation_count": 0
+  },
+  "opposite_direction_vulnerability": {
+    "restrictive_pool_threatened_reachable_certificates": 81,
+    "permissive_pool_threatened_impossible_certificates": 1445
+  },
+  "full_growth_lifetime": {
+    "robust_reachable": {
+      "certificate_count": 2628,
+      "K0_count": 2525,
+      "K0_fraction": 0.960806697108067,
+      "mean_normalized_expected_lifetime": 0.9737833951081635,
+      "median_normalized_expected_lifetime": 1.0,
+      "mean_survival_probability": {
+        "0.10": 0.9786749061797835,
+        "0.25": 0.9715556252917358,
+        "0.50": 0.9651586507431044,
+        "0.75": 0.9616907004665534,
+        "1.00": 0.960806697108067
+      }
+    },
+    "robust_impossible": {
+      "certificate_count": 4167,
+      "K0_count": 2700,
+      "K0_fraction": 0.6479481641468683,
+      "mean_normalized_expected_lifetime": 0.7152478920263369,
+      "median_normalized_expected_lifetime": 1.0,
+      "mean_survival_probability": {
+        "0.10": 0.7350085426408871,
+        "0.25": 0.6831132430175995,
+        "0.50": 0.6577641423147591,
+        "0.75": 0.6489686211556651,
+        "1.00": 0.6479481641468683
+      }
+    },
+    "impossible_minus_reachable_mean_normalized_lifetime": -0.2585355030818266
+  },
+  "growth_pool_details": {
+    "restrictive_same_source": {
+      "robust_impossible_mean_lifetime": 1.0,
+      "robust_reachable_mean_lifetime": 0.9833329558358097
+    },
+    "permissive_same_source": {
+      "robust_reachable_mean_lifetime": 1.0,
+      "robust_impossible_mean_lifetime": 0.7301549052000759
+    },
+    "directional_same_source": {
+      "robust_reachable_mean_lifetime": 0.9809902781085376,
+      "robust_impossible_mean_lifetime": 0.7290686845811657
+    },
+    "same_source_full": {
+      "robust_reachable_mean_lifetime": 0.97499268668001,
+      "robust_impossible_mean_lifetime": 0.7239614489201547
+    },
+    "all_source_full": {
+      "robust_reachable_mean_lifetime": 0.9737833951081635,
+      "robust_impossible_mean_lifetime": 0.7152478920263369
+    }
+  },
+  "additional_fragility": {
+    "certificates_with_shorter_lifetime_after_incomparable_or_equivalent_worlds": 959,
+    "certificates_with_shorter_lifetime_after_new_source_worlds": 376
+  },
+  "interpretation": [
+    "Certificate persistence under progressive world growth is determined exactly by the number of threatening worlds in the frozen candidate pool.",
+    "Restrictive same-source growth gave every robust-impossible certificate full-pool survival, whereas permissive same-source growth gave every robust-reachable certificate full-pool survival.",
+    "The opposite-direction certificate classes had finite expected lifetimes for 81 reachability certificates and 1,445 impossibility certificates.",
+    "The v6 endpoint asymmetry is recovered dynamically: under all-source growth robust-impossible certificates have much shorter mean normalized lifetime than robust-reachable certificates.",
+    "Incomparable worlds and newly admitted sources further shorten lifetime for substantial subsets of certificates.",
+    "The original EOG idea of asking what remains invariant as the world universe grows can therefore be quantified as an exact finite survival curve rather than a single binary robustness label."
+  ],
+  "claim_boundary": [
+    "World-growth draw order is uniform over a frozen finite pool and is not ecological time.",
+    "Normalized lifetime is a robustness index, not a probability of real-world persistence.",
+    "The result remains conditional on the declared candidate pool and occurrence evidence."
+  ]
+}
