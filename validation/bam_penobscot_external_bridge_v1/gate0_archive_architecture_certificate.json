@@ -1,0 +1,11 @@
+{
+  "data_file_payload_bytes_opened": 0,
+  "data_file_requests": 0,
+  "fingerprint": "2f64cc1792492c3b1d460fe3079dec4ee95b6822f9edba60838b474c3f054292",
+  "fish_response_rows_opened": 0,
+  "model_fits": 0,
+  "reason": "expected upstream passage database missing: ARRA ZYDLEWSKI PIT DATA.accdb",
+  "retry_or_source_switch_allowed": false,
+  "schema": "eog.bam_penobscot_external_bridge.gate0_archive_architecture.v1",
+  "status": "stop_gate0_archive_architecture"
+}
