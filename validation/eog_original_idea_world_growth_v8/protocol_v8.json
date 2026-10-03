@@ -1,0 +1,97 @@
+{
+  "schema": "eog.original_idea_world_growth_survival.protocol.v8",
+  "status": "frozen_before_world_growth_benchmark_implementation_and_scoring",
+  "parent_v7": {
+    "result": "validation/eog_original_idea_expansion_direction_v7/result_summary_v7.json",
+    "fingerprint": "bd9611507d4697bad704d53e2a4a248c3a62d000022108bde89d3175b471d8b7",
+    "key_result": "restrictive same-source additions exactly protected robust impossibility, permissive same-source additions exactly protected robust reachability, while the opposite certificate types were vulnerable"
+  },
+  "scientific_question": "As a compatible virtual-world universe grows one world at a time in random order, how long do robust reachability and robust-impossibility certificates survive, and how is certificate lifetime determined by the composition of the admitted world pool?",
+  "latent_rows": {
+    "reuse": "exact v7 eligible rows and the same frozen 25 percent dispersed positive-occurrence anchors",
+    "baseline_universe": "v7 B0_reference surviving reference world for each baseline-compatible source",
+    "certificate_population": "exact v7 unobserved locally A/B-permissive node population"
+  },
+  "growth_pools": {
+    "restrictive_same_source": "all compatible same-source worlds classified restrictive relative to their source reference world",
+    "permissive_same_source": "all compatible same-source worlds classified permissive",
+    "directional_same_source": "all compatible same-source restrictive plus permissive worlds",
+    "same_source_full": "all compatible same-source worlds outside B0, including equivalent and incomparable worlds",
+    "all_source_full": "all compatible worlds outside B0, including worlds from newly admitted sources"
+  },
+  "growth_process": {
+    "sampling": "uniform random permutation without replacement within the frozen growth pool",
+    "simulation_required": false,
+    "exact_lifetime_calculation": "for a baseline certificate with N candidate additions and K threatening additions that would destroy the certificate, expected first-failure draw is (N+1)/(K+1) when K>0; if K=0 the certificate survives the complete pool",
+    "survival_probability_after_m_additions": "choose(N-K,m)/choose(N,m) for m<=N-K, else 0; K=0 gives survival probability 1 for all m",
+    "normalized_expected_lifetime": "expected first-failure draw divided by N when K>0; 1.0 for certificates surviving the full pool"
+  },
+  "certificate_threat_definition": {
+    "baseline_robust_reachable": "an added world threatens the certificate when that node is unreachable in the added world",
+    "baseline_robust_impossible": "an added world threatens the certificate when that node is reachable in the added world"
+  },
+  "primary_outputs": [
+    "N and K for every baseline certificate under every growth pool",
+    "fraction of certificates with K=0",
+    "mean and median normalized expected lifetime for each certificate type and growth pool",
+    "survival probability at 10, 25, 50, 75 and 100 percent of pool growth",
+    "certificate type x growth-pool lifetime contrast",
+    "extra lifetime loss from incomparable/equivalent worlds",
+    "extra lifetime loss from new-source worlds"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "L1_directional_protection_is_lifetime_infinite_within_pool",
+      "statement": "Every baseline robust-impossible certificate has K=0 under restrictive_same_source, and every baseline robust-reachable certificate has K=0 under permissive_same_source.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "L2_opposite_direction_creates_finite_lifetimes",
+      "statement": "At least one baseline robust-reachable certificate has K>0 under restrictive_same_source and at least one baseline robust-impossible certificate has K>0 under permissive_same_source.",
+      "failure_rule": "REFUTED separately if either vulnerability class is absent."
+    },
+    {
+      "id": "L3_mixed_growth_reproduces_v6_asymmetry",
+      "statement": "Under all_source_full growth, pooled mean normalized expected lifetime is strictly lower for robust-impossible than for robust-reachable certificates.",
+      "failure_rule": "REFUTED if impossible minus reachable mean normalized lifetime is >=0."
+    },
+    {
+      "id": "L4_incomparable_worlds_can_shorten_certificate_lifetime",
+      "statement": "At least one certificate has lower normalized expected lifetime in same_source_full than in directional_same_source.",
+      "failure_rule": "REFUTED if equivalent/incomparable additions never reduce lifetime."
+    },
+    {
+      "id": "L5_new_source_worlds_can_shorten_certificate_lifetime",
+      "statement": "At least one certificate has lower normalized expected lifetime in all_source_full than in same_source_full.",
+      "failure_rule": "REFUTED if admitting new-source worlds never reduces lifetime."
+    },
+    {
+      "id": "L6_survival_curves_are_monotone",
+      "statement": "For every certificate and growth pool, exact survival probability is nonincreasing with the number of added worlds and endpoint survival at 100 percent equals the K=0 indicator.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "L7_threat_count_exactly_predicts_endpoint_persistence",
+      "statement": "For every certificate and growth pool, the certificate persists after complete pool expansion if and only if K=0.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    }
+  ],
+  "secondary_outputs": [
+    "certificate lifetime by truth barrier density, environmental autocorrelation and neighbourhood",
+    "relationship between baseline route redundancy and threat count",
+    "distribution of threatening-world classes for each certificate type",
+    "rows where a certificate survives same-source growth but fails after new-source admission"
+  ],
+  "claim_boundary": [
+    "World-growth lifetime is defined over random orderings of a frozen finite candidate pool, not calendar time.",
+    "Normalized lifetime is a robustness index, not ecological persistence probability.",
+    "Uniform random ordering is an experimental device for comparing candidate-pool composition.",
+    "The result remains conditional on the declared growth pool and occurrence evidence."
+  ],
+  "stop_rules": [
+    "Do not change the growth pools after scoring.",
+    "Do not introduce weighted world-addition probabilities after scoring.",
+    "Do not replace exact combinatorial lifetime with a favorable simulated ordering.",
+    "Failed directional lifetime hypotheses remain failed."
+  ]
+}
