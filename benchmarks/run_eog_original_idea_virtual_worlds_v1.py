@@ -281,15 +281,30 @@ def V6_static_alias_temporal_split():
 
 
 def H7_world_expansion_monotonicity():
-    nodes = ("S", "T")
-    closed = FiniteWorld("closed", _operator(nodes, ()), ("S",))
-    open_world = FiniteWorld("open", _operator(nodes, (("S", "T"),)), ("S",))
+    nodes = ("S", "U", "T")
+    closed = FiniteWorld(
+        "closed",
+        _operator(nodes, (("S", "U"),)),
+        ("S",),
+    )
+    open_world = FiniteWorld(
+        "open",
+        _operator(nodes, (("S", "U"), ("U", "T"))),
+        ("S",),
+    )
 
-    before_r = reconstruct_compatible_worlds((closed,), ("S",), max_steps=1)
+    # S and U are the shared positive anchors.  T is an unsampled candidate node.
+    # Adding the permissive world may make T possible, but cannot create a new robust
+    # impossibility.
+    before_r = reconstruct_compatible_worlds(
+        (closed,),
+        ("S", "U"),
+        max_steps=2,
+    )
     after_r = reconstruct_compatible_worlds(
         (closed, open_world),
-        ("S",),
-        max_steps=1,
+        ("S", "U"),
+        max_steps=2,
     )
     before = build_world_flow_set(before_r, (closed,))
     after = build_world_flow_set(after_r, (closed, open_world))
