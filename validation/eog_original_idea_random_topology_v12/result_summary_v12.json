@@ -1,0 +1,98 @@
+{
+  "schema": "eog.original_idea_random_static_equivalent_topology.result_summary.v12",
+  "status": "completed_preregistered_random_topology_generality_panel",
+  "protocol": "validation/eog_original_idea_random_topology_v12/protocol_v12.json",
+  "authoritative_run": 37176297082,
+  "authoritative_artifact_id": 11293486933,
+  "authoritative_artifact_digest": "sha256:4a7e7f996d7b3ef2768c537bb7a12a22d3cefc2a2067b06e7d1f896545f12ba1",
+  "result_fingerprint": "c46247958fa5fbd7482b9feb99b6b2e280ff06771eb1019680e91af6e5bcd4aa",
+  "row_count": 144,
+  "active_node_counts": [8, 12, 16],
+  "replicates_per_size": 48,
+  "worlds_per_row": 12,
+  "predeclared_verdicts": {
+    "R1_static_nodewise_equivalence_is_exact": "SUPPORTED",
+    "R2_random_topologies_usually_differ_in_pairwise_relations": "SUPPORTED",
+    "R3_random_topologies_usually_differ_in_first_passage": "SUPPORTED",
+    "R4_random_topologies_usually_differ_in_intervention_response": "SUPPORTED",
+    "R5_edge_richness_increases_knockout_robustness": "SUPPORTED",
+    "R6_edge_richness_shortens_first_passage": "SUPPORTED",
+    "R7_relational_targets_induce_different_quotients": "SUPPORTED",
+    "R8_complete_static_occurrence_map_does_not_identify_random_topology": "SUPPORTED"
+  },
+  "by_active_node_count": {
+    "8": {
+      "rows": 48,
+      "all_rows_distinct_edge_topologies": true,
+      "relation_target_classes": {"11": 8, "12": 40},
+      "first_passage_target_classes": {"11": 8, "12": 40},
+      "intervention_target_classes": {"8": 1, "9": 6, "10": 15, "11": 20, "12": 6},
+      "median_relation_quotient_compression": 1.0,
+      "median_first_passage_quotient_compression": 1.0,
+      "median_intervention_quotient_compression": 1.3333333333333333
+    },
+    "12": {
+      "rows": 48,
+      "all_rows_distinct_edge_topologies": true,
+      "relation_target_classes": {"12": 48},
+      "first_passage_target_classes": {"12": 48},
+      "intervention_target_classes": {"9": 2, "10": 10, "11": 21, "12": 15},
+      "median_relation_quotient_compression": 1.0,
+      "median_first_passage_quotient_compression": 1.0,
+      "median_intervention_quotient_compression": 1.0909090909090908
+    },
+    "16": {
+      "rows": 48,
+      "all_rows_distinct_edge_topologies": true,
+      "relation_target_classes": {"12": 48},
+      "first_passage_target_classes": {"12": 48},
+      "intervention_target_classes": {"9": 5, "10": 9, "11": 13, "12": 21},
+      "median_relation_quotient_compression": 1.0,
+      "median_first_passage_quotient_compression": 1.0,
+      "median_intervention_quotient_compression": 1.0909090909090908
+    }
+  },
+  "edge_richness_gradients": {
+    "extra_edge_probability_0.00": {
+      "mean_edge_count": 11.0,
+      "mean_first_passage_depth": 2.2629950296616963,
+      "mean_knockout_retained_fraction": 0.8801587162770425,
+      "mean_critical_node_count": 5.0
+    },
+    "extra_edge_probability_0.10": {
+      "mean_edge_count": 17.04398148148148,
+      "mean_first_passage_depth": 1.9232904441237777,
+      "mean_knockout_retained_fraction": 0.933181472874835,
+      "mean_critical_node_count": 3.0949074074074074
+    },
+    "extra_edge_probability_0.25": {
+      "mean_edge_count": 25.944444444444443,
+      "mean_first_passage_depth": 1.6499418791085458,
+      "mean_knockout_retained_fraction": 0.9685888761177361,
+      "mean_critical_node_count": 1.6481481481481481
+    },
+    "extra_edge_probability_0.50": {
+      "mean_edge_count": 41.1087962962963,
+      "mean_first_passage_depth": 1.3680154721821387,
+      "mean_knockout_retained_fraction": 0.9911423709367433,
+      "mean_critical_node_count": 0.5856481481481481
+    }
+  },
+  "pooled_spearman": {
+    "edge_count_vs_knockout_retained_fraction": 0.7499528475510406,
+    "edge_count_vs_mean_first_passage_depth": -0.4050532183364031
+  },
+  "interpretation": [
+    "Static A/B/M/G and nodewise marginal scores remained exactly identical across 12 random topology worlds per replicate.",
+    "Random topologies usually produced distinct pairwise relation, first-passage and intervention signatures despite identical static maps.",
+    "At 12 and 16 active nodes, pairwise relation and first-passage signatures identified all 12 topology worlds in every replicate.",
+    "Intervention response remained more compressed than relation/first-passage, especially at 8 active nodes.",
+    "Increasing extra-edge probability increased knockout robustness and shortened source first-passage depth.",
+    "The topology-sensitive information gap between static maps and relational targets is therefore not an artifact of the four hand-built v10 topologies."
+  ],
+  "claim_boundary": [
+    "Random topology worlds remain controlled synthetic mechanisms, not fitted dispersal networks.",
+    "The result establishes static-map information insufficiency for the frozen relational targets, not empirical superiority over real SDMs.",
+    "Pairwise relation and first-passage becoming topology-identifying at larger node counts is conditional on the frozen random DAG generator."
+  ]
+}

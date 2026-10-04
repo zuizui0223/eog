@@ -1,0 +1,36 @@
+name: Original EOG random topology v12
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_random_topology_v12/**"
+      - "benchmarks/run_eog_original_idea_random_topology_v12.py"
+      - "tests/test_eog_original_idea_random_topology_v12.py"
+      - ".github/workflows/eog-original-idea-random-topology-v12.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: original-eog-random-topology-v12-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test random-topology invariants
+        run: python -m pytest tests/test_eog_original_idea_random_topology_v12.py -q
+      - name: Run frozen random-topology benchmark
+        run: |
+          python benchmarks/run_eog_original_idea_random_topology_v12.py \
+            --output build/eog_original_idea_random_topology_v12/result_v12.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-original-idea-random-topology-v12
+          path: build/eog_original_idea_random_topology_v12/result_v12.json
+          if-no-files-found: error
