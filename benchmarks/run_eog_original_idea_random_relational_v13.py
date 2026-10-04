@@ -225,17 +225,14 @@ def _pair_cover_solver(full_mask, rows):
     return rows, min_additional
 
 
-def _minimum_cardinality(full_mask, rows):
-    if full_mask == 0:
-        return 0
-    _, min_additional = _pair_cover_solver(full_mask, rows)
-    return int(min_additional(0))
-
-
-def _canonical_minimum_ids(full_mask, rows, minimum_size):
+def _canonical_minimum_ids(
+    full_mask,
+    ordered,
+    min_additional,
+    minimum_size,
+):
     if minimum_size == 0:
         return ()
-    ordered, min_additional = _pair_cover_solver(full_mask, rows)
 
     @lru_cache(maxsize=None)
     def search(start, remaining, covered):
@@ -261,47 +258,23 @@ def _canonical_minimum_ids(full_mask, rows, minimum_size):
     return tuple(result)
 
 
-def _minimum_with_cross_family(full_mask, rows, minimum_size, same_family):
+def _cross_family_minimum_exists(
+    ordered,
+    min_additional,
+    minimum_size,
+    same_family,
+):
     if minimum_size in (None, 0) or same_family is None:
         return False
-    ordered = tuple(sorted(rows, key=lambda row: row["feature_id"]))
-
-    bit_to_indices = {}
-    bit = 0
-    while (1 << bit) <= full_mask:
-        if full_mask & (1 << bit):
-            bit_to_indices[bit] = tuple(
-                i
-                for i, row in enumerate(ordered)
-                if int(row["mask"]) & (1 << bit)
-            )
-        bit += 1
-
-    @lru_cache(maxsize=None)
-    def min_cross(covered, used_cross):
-        if covered == full_mask:
-            return 0 if used_cross else 10**9
-        uncovered_bits = [
-            bit
-            for bit in bit_to_indices
-            if not (covered & (1 << bit))
-        ]
-        chosen_bit = min(
-            uncovered_bits,
-            key=lambda b: (len(bit_to_indices[b]), b),
-        )
-        best = 10**9
-        for i in bit_to_indices[chosen_bit]:
-            updated = covered | int(ordered[i]["mask"])
-            value = 1 + min_cross(
-                updated,
-                used_cross or ordered[i]["family"] != same_family,
-            )
-            if value < best:
-                best = value
-        return best
-
-    return min_cross(0, False) == int(minimum_size)
+    # If one cross-family feature is fixed first, the same exact DP gives the
+    # minimum additional measurements needed.  Because the unrestricted optimum is
+    # already minimum_size, equality identifies an exact minimum containing a
+    # cross-family measurement.
+    return any(
+        row["family"] != same_family
+        and 1 + int(min_additional(int(row["mask"]))) == int(minimum_size)
+        for row in ordered
+    )
 
 
 def _minimum_design(row, target):
@@ -338,8 +311,14 @@ def _minimum_design(row, target):
         }
 
     dedup = _dedup_coverages(coverage_rows)
-    minimum = _minimum_cardinality(full_mask, dedup)
-    ids = _canonical_minimum_ids(full_mask, dedup, minimum)
+    ordered, min_additional = _pair_cover_solver(full_mask, dedup)
+    minimum = int(min_additional(0))
+    ids = _canonical_minimum_ids(
+        full_mask,
+        ordered,
+        min_additional,
+        minimum,
+    )
     families = tuple(features[feature_id]["family"] for feature_id in ids)
 
     same_family = {
@@ -348,9 +327,9 @@ def _minimum_design(row, target):
         "intervention": "KO",
         "critical_node_count": "KO",
     }.get(target)
-    cross_exists = _minimum_with_cross_family(
-        full_mask,
-        dedup,
+    cross_exists = _cross_family_minimum_exists(
+        ordered,
+        min_additional,
         minimum,
         same_family,
     )
