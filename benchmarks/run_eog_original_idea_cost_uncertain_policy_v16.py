@@ -89,18 +89,28 @@ def _prune(options):
         if incumbent is None or option.serialization < incumbent.serialization:
             by_cost[option.costs] = option
 
+    # Exact incremental Pareto scan.
+    #
+    # Sort by total cost first.  A later vector can never dominate an earlier kept
+    # vector: strict componentwise dominance would imply a strictly smaller total
+    # cost.  Therefore we only need to ask whether an already-kept Pareto vector
+    # dominates the new candidate, instead of comparing every candidate with every
+    # other row.
     rows = tuple(
         sorted(
             by_cost.values(),
-            key=lambda option: (option.costs, option.serialization),
+            key=lambda option: (
+                sum(option.costs),
+                option.costs,
+                option.serialization,
+            ),
         )
     )
     keep = []
     for candidate in rows:
         if any(
             _dominates(other.costs, candidate.costs)
-            for other in rows
-            if other is not candidate
+            for other in keep
         ):
             continue
         keep.append(candidate)
@@ -125,14 +135,16 @@ def _action_outcome_masks(action_partitions):
 
 
 def _prune_vectors(vectors):
-    rows = tuple(sorted(set(tuple(int(v) for v in row) for row in vectors)))
+    # Same exact incremental Pareto scan as _prune, without policy strings.
+    rows = tuple(
+        sorted(
+            set(tuple(int(v) for v in row) for row in vectors),
+            key=lambda row: (sum(row), row),
+        )
+    )
     keep = []
     for candidate in rows:
-        if any(
-            _dominates(other, candidate)
-            for other in rows
-            if other != candidate
-        ):
+        if any(_dominates(other, candidate) for other in keep):
             continue
         keep.append(candidate)
     return tuple(keep)
