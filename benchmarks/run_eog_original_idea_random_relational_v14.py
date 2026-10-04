@@ -71,25 +71,29 @@ def _target_adaptive_solver(target_partition, action_partitions):
     def members(mask):
         return tuple(i for i in range(n_worlds) if mask & (1 << i))
 
+    target_masks_by_class = defaultdict(int)
+    for i, target_class in enumerate(target_partition):
+        target_masks_by_class[target_class] |= 1 << i
+    target_masks = tuple(target_masks_by_class.values())
+
+    action_outcome_masks = {}
+    for action_id in action_ids:
+        groups = defaultdict(int)
+        for i, outcome_class in enumerate(action_partitions[action_id]):
+            groups[outcome_class] |= 1 << i
+        action_outcome_masks[action_id] = tuple(groups.values())
+
     @lru_cache(maxsize=None)
     def identified(mask):
-        classes = {
-            target_partition[i]
-            for i in range(n_worlds)
-            if mask & (1 << i)
-        }
-        return len(classes) <= 1
+        return any((mask & ~target_mask) == 0 for target_mask in target_masks)
 
     @lru_cache(maxsize=None)
     def action_children(mask, action_id):
-        groups = defaultdict(int)
-        partition = action_partitions[action_id]
-        for i in range(n_worlds):
-            if mask & (1 << i):
-                groups[partition[i]] |= 1 << i
         return tuple(
-            child_mask
-            for _, child_mask in sorted(groups.items(), key=lambda item: item[0])
+            child
+            for outcome_mask in action_outcome_masks[action_id]
+            for child in (mask & outcome_mask,)
+            if child
         )
 
     @lru_cache(maxsize=None)
@@ -125,13 +129,11 @@ def _target_adaptive_solver(target_partition, action_partitions):
         return (True, best_depth, optimal[0], optimal)
 
     def child_for_truth(mask, action_id, truth_index):
-        partition = action_partitions[action_id]
-        truth_value = partition[truth_index]
-        child = 0
-        for i in range(n_worlds):
-            if mask & (1 << i) and partition[i] == truth_value:
-                child |= 1 << i
-        return child
+        truth_bit = 1 << truth_index
+        for outcome_mask in action_outcome_masks[action_id]:
+            if outcome_mask & truth_bit:
+                return mask & outcome_mask
+        raise RuntimeError("truth outcome mask missing")
 
     def realized_path(truth_index):
         mask = full_mask
