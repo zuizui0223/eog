@@ -240,6 +240,74 @@ The next untested original idea is the **set-valued forecast**: whether uncertai
 across surviving worlds should be carried as a forecast envelope rather than collapsed
 to one point estimate, and how that envelope contracts as evidence removes worlds.
 
+## Original-EOG virtual-world mainline — v10 marginal/topology separation
+
+v10 directly tested the old EOG contrast between a flat nodewise distribution map and a
+flow-structured landscape.
+
+Across **192** preregistered replicates with 6, 10 or 14 active nodes, four transition
+topologies were constructed:
+
+- chain;
+- star;
+- balanced branching;
+- redundant.
+
+Within each replicate the worlds had exactly the same:
+
+- A mask;
+- B mask;
+- M accessibility mask;
+- realised G;
+- continuous nodewise marginal-score vector.
+
+Only the internal transition topology changed.
+
+All eight preregistered hypotheses were supported with zero failures.
+
+The static representation therefore collapsed worlds that differed in:
+
+- directed occurrence-to-occurrence relation structure;
+- source-to-node first-passage depth;
+- single-node knockout response;
+- critical-node count.
+
+For 14 active nodes:
+
+- mean chain-versus-star pairwise-relation Hamming distance: **78**;
+- mean first-passage depth: chain **7.0**, branching **2.38**, star **1.0**,
+  redundant **1.0**;
+- mean critical-node count: chain **12**, branching **6**, star **0**,
+  redundant **0**;
+- mean post-knockout retained fraction: chain **0.538**, branching **0.893**,
+  star/redundant **1.000**.
+
+Thus the BAM M mask correctly records which nodes are accessible from the source, but
+does not identify the transition topology inside that accessible set.
+
+The active EOG distinction is now explicit:
+
+> **nodewise equivalence does not imply relational, historical or intervention
+> equivalence.**
+
+A static raster/BAM representation may be sufficient for nodewise targets while being
+information-theoretically insufficient for topology-sensitive targets.
+
+Canonical v10 assets:
+
+- `validation/eog_original_idea_marginal_topology_v10/protocol_v10.json`;
+- `validation/eog_original_idea_marginal_topology_v10/result_summary_v10.json`;
+- `docs/eog_original_idea_marginal_topology_v10.md`;
+- `docs/eog_original_idea_marginal_topology_v10_result.md`;
+- `benchmarks/run_eog_original_idea_marginal_topology_v10.py`.
+
+Authoritative result fingerprint:
+`d6cf5404bfb8e7a4eb9efba26f3f7e19fe8b9b6c7fb2c28e6c2989e64879f669`.
+
+The next question is not whether topology matters.  v10 has established that it can.
+The next question is **how much relational information is minimally sufficient for a
+declared topology-sensitive target**.
+
 ## 1. What was directly refuted
 
 The first large known-truth factorial falsified the strong recovery idea.
