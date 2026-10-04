@@ -1,0 +1,106 @@
+{
+  "schema": "eog.original_idea_random_relational_adaptive.protocol.v14",
+  "status": "frozen_before_adaptive_relational_implementation_and_scoring",
+  "parent_v13": {
+    "result": "validation/eog_original_idea_random_relational_v13/result_summary_v13.json",
+    "fingerprint": "2fdf9f7e2c7634f5bf481fb4c1efff651864ea8292b0635c708608cb4ebd5b45",
+    "key_result": "all declared topology-sensitive targets were exactly resolvable in 144 twelve-world random panels, usually with three and occasionally four fixed REL/FP/KO measurements"
+  },
+  "scientific_question": "Can exact outcome-adaptive relational measurement reduce the information burden for topology-sensitive ecological targets relative to the best fixed nonadaptive measurement panel in random static-equivalent worlds?",
+  "analysis_base": {
+    "rows": 144,
+    "worlds_per_row": 12,
+    "active_node_counts": [8, 12, 16],
+    "worlds": "exact frozen v12 random static-equivalent topology worlds",
+    "targets": [
+      "pairwise_relation",
+      "first_passage",
+      "intervention",
+      "critical_node_count",
+      "full_topology_identity",
+      "joint_relational_suite"
+    ],
+    "atomic_measurements": "exact unchanged v13 REL, FP and KO measurements only",
+    "no_new_measurement_types": true
+  },
+  "adaptive_planner": {
+    "state": "current surviving subset of the 12 topology worlds",
+    "target_stop_rule": "stop as soon as all surviving worlds share the declared target value; full world identity is not required unless the target is full_topology_identity",
+    "action_outcome": "the exact deterministic v13 measurement value in the realized world",
+    "transition": "retain worlds with the observed measurement value",
+    "objective": "minimize worst-case number of additional measurements to target identification",
+    "exact_solver": "memoized recursion over active-world subsets; actions that do not split the current subset are skipped",
+    "tie_rule": "lexicographically smallest action ID among equal worst-case depths",
+    "repeated_action_rule": "no explicit remaining-action state is needed because a deterministic action already observed on a branch is constant within that child subset and cannot split it again"
+  },
+  "nonadaptive_reference": "the exact fixed minimum measurement count already frozen in v13 for the same row and target",
+  "secondary_uniform_world_summary": {
+    "definition": "mean realized depth of the canonical worst-case-optimal adaptive policy when each of the 12 declared worlds is counted once with equal weight",
+    "claim_boundary": "descriptive finite-panel average only; not an ecological prior or expected utility"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "A1_adaptive_worst_case_never_exceeds_fixed_minimum",
+      "statement": "For every row and target, exact adaptive worst-case depth is <= the v13 exact fixed nonadaptive minimum measurement count.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "A2_strict_adaptive_worst_case_saving_exists",
+      "statement": "At least one row-target combination has adaptive worst-case depth strictly smaller than its v13 fixed minimum.",
+      "failure_rule": "REFUTED if adaptive and fixed worst-case burdens are identical everywhere."
+    },
+    {
+      "id": "A3_adaptive_realized_paths_save_measurements",
+      "statement": "For each of pairwise_relation, first_passage and intervention, at least one row has canonical-policy mean realized depth strictly below the fixed minimum.",
+      "failure_rule": "REFUTED separately for any target lacking such a row."
+    },
+    {
+      "id": "A4_target_adaptive_depth_never_exceeds_full_topology_depth",
+      "statement": "Within every row, adaptive worst-case depth for pairwise_relation, first_passage, intervention and critical_node_count is <= adaptive depth for full_topology_identity.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "A5_narrow_target_adaptive_saving_vs_topology_exists",
+      "statement": "For intervention or critical_node_count, at least one row has adaptive worst-case depth strictly below full_topology_identity depth.",
+      "failure_rule": "REFUTED if neither narrow target ever saves a worst-case measurement."
+    },
+    {
+      "id": "A6_outcome_dependent_replanning_exists",
+      "statement": "At least one row-target optimal adaptive tree chooses different second actions after different first-action outcomes.",
+      "failure_rule": "REFUTED if every exact optimal policy is effectively one fixed measurement order."
+    },
+    {
+      "id": "A7_no_universal_first_relational_measurement",
+      "statement": "Across row-target canonical adaptive policies, more than one distinct first action ID occurs.",
+      "failure_rule": "REFUTED if one fixed measurement is canonical first everywhere."
+    },
+    {
+      "id": "A8_full_topology_remains_exactly_adaptively_resolvable",
+      "statement": "Every row resolves all 12 topology identities under the unchanged REL/FP/KO library.",
+      "failure_rule": "REFUTED if any row is adaptively unresolved for full topology identity."
+    }
+  ],
+  "secondary_outputs": [
+    "adaptive worst-case depth distributions by target and active-node count",
+    "fixed-minus-adaptive worst-case saving distributions",
+    "canonical-policy uniform-world mean realized depths",
+    "first-action frequency and family composition",
+    "number of branching policies and branch-specific second-action diversity",
+    "rows where target planner stops with multiple topology worlds",
+    "relationship between v13 fixed burden and adaptive saving"
+  ],
+  "claim_boundary": [
+    "Adaptive depths are finite decision-tree information counts, not field sampling costs.",
+    "The equal-world mean realized depth is not an ecological probability model.",
+    "Outcome-adaptive target identification does not imply historical truth when multiple worlds share the target.",
+    "No novelty is claimed for generic adaptive decision trees; the ecological question is how much relational evidence the EOG topology targets require."
+  ],
+  "stop_rules": [
+    "Do not add raw-edge queries after scoring.",
+    "Do not add measurement families beyond REL/FP/KO.",
+    "Do not change action costs after scoring.",
+    "Do not switch from worst-case to expected-depth optimization after scoring.",
+    "Do not drop rows where adaptation gives no saving.",
+    "Failed A2/A3/A5/A6 hypotheses remain failed."
+  ]
+}
