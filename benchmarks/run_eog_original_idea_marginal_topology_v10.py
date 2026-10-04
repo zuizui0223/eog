@@ -164,6 +164,12 @@ def _mean_retained_fraction(active, intervention_signature):
     return float(np.mean([value / denom for value in intervention_signature]))
 
 
+def _hamming(left, right):
+    if len(left) != len(right):
+        raise ValueError("signatures must have equal length")
+    return sum(a != b for a, b in zip(left, right, strict=True))
+
+
 def _evaluate(active_n, replicate):
     active, outside, all_nodes, scores = _world_nodes(active_n, replicate)
 
@@ -221,6 +227,16 @@ def _evaluate(active_n, replicate):
     }
     topology_fps = {row["edge_fingerprint"] for row in worlds.values()}
 
+    relation_hamming = {}
+    topology_list = list(TOPOLOGIES)
+    for i, left in enumerate(topology_list):
+        for right in topology_list[i + 1 :]:
+            key = f"{left}__vs__{right}"
+            relation_hamming[key] = _hamming(
+                worlds[left]["pairwise_relation_signature"],
+                worlds[right]["pairwise_relation_signature"],
+            )
+
     return {
         "active_node_count": active_n,
         "replicate": replicate,
@@ -236,6 +252,7 @@ def _evaluate(active_n, replicate):
             - worlds["chain"]["mean_knockout_retained_fraction"]
         ),
         "relation_refines_static": len(relation_fps) > 1,
+        "pairwise_relation_hamming": relation_hamming,
         "worlds": worlds,
     }
 
@@ -291,6 +308,21 @@ def run():
             "mean_distinct_relation_signatures": _mean(
                 row["distinct_relation_signature_count"] for row in subset
             ),
+            "relation_signature_count_distribution": {
+                str(value): sum(
+                    row["distinct_relation_signature_count"] == value
+                    for row in subset
+                )
+                for value in sorted(
+                    {row["distinct_relation_signature_count"] for row in subset}
+                )
+            },
+            "mean_pairwise_relation_hamming": {
+                pair: _mean(
+                    row["pairwise_relation_hamming"][pair] for row in subset
+                )
+                for pair in sorted(subset[0]["pairwise_relation_hamming"])
+            },
             "mean_distinct_first_passage_signatures": _mean(
                 row["distinct_first_passage_signature_count"] for row in subset
             ),
@@ -304,6 +336,13 @@ def run():
             "mean_critical_node_count": {
                 topology: _mean(
                     row["worlds"][topology]["critical_node_count"]
+                    for row in subset
+                )
+                for topology in TOPOLOGIES
+            },
+            "mean_knockout_retained_fraction": {
+                topology: _mean(
+                    row["worlds"][topology]["mean_knockout_retained_fraction"]
                     for row in subset
                 )
                 for topology in TOPOLOGIES
