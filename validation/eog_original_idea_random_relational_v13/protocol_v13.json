@@ -1,0 +1,107 @@
+{
+  "schema": "eog.original_idea_random_relational_sufficiency.protocol.v13",
+  "status": "frozen_before_random_relational_sufficiency_implementation_and_scoring",
+  "parent_v12": {
+    "result": "validation/eog_original_idea_random_topology_v12/result_summary_v12.json",
+    "fingerprint": "c46247958fa5fbd7482b9feb99b6b2e280ff06771eb1019680e91af6e5bcd4aa",
+    "key_result": "12 random topology worlds with identical static A/B/M/G/marginal maps usually differed in pairwise relations, first-passage and intervention targets"
+  },
+  "parent_v11": {
+    "result": "validation/eog_original_idea_target_relational_v11/result_summary_v11.json",
+    "fingerprint": "89de41a67ec521c7cabcee5cb72c9f93634efaab0e2ffec348bef9a547f5619e",
+    "key_result": "in four hand-designed topology worlds, narrow targets required only one or two relational measurements while the joint target became topology-identifying"
+  },
+  "scientific_question": "How much atomic relational information is actually required to identify topology-sensitive ecological targets in random static-equivalent transition worlds, and was the very low v11 burden specific to the four archetypes?",
+  "analysis_base": {
+    "rows": 144,
+    "worlds_per_row": 12,
+    "active_node_counts": [8, 12, 16],
+    "worlds": "exact frozen v12 random topology worlds; no new ecological worlds generated",
+    "static_nodewise_representation": "identical within each row and excluded from optimization because v12 proved it non-discriminating"
+  },
+  "targets": {
+    "pairwise_relation": "complete ordered active-node reachability signature",
+    "first_passage": "complete source-to-active-node shortest-path depth vector",
+    "intervention": "complete single-node knockout retained-reachability vector",
+    "critical_node_count": "count of non-source nodes whose knockout disconnects another active node",
+    "full_topology_identity": "v12 edge-fingerprint identity",
+    "joint_relational_suite": "tuple(pairwise_relation, first_passage, intervention)"
+  },
+  "atomic_measurements": {
+    "REL": "one ordered-pair reachability bit",
+    "FP": "one source-to-node first-passage depth",
+    "KO": "one single-node knockout retained-reachability count",
+    "raw_edge_queries": "forbidden"
+  },
+  "exact_optimization": {
+    "rule": "a measurement set is target-sufficient when any worlds sharing its joint measurement signature also share the target value",
+    "method": "deduplicate measurements by induced partition of the 12 worlds, then exact minimum-cardinality search over partition combinations",
+    "tie_rule": "lexicographically smallest measurement-ID tuple among exact minima",
+    "cost": "unit conceptual measurement count only",
+    "infeasible": "retain as unresolved; do not add measurement types"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "S1_all_declared_targets_are_resolvable",
+      "statement": "Every row's pairwise-relation, first-passage, intervention, critical-node-count, full-topology and joint-relational targets are resolvable by the complete REL/FP/KO library.",
+      "failure_rule": "REFUTED separately for any target family with at least one unresolved row."
+    },
+    {
+      "id": "S2_random_worlds_break_the_v11_one_measurement_shortcut",
+      "statement": "For both first-passage and intervention targets, the pooled median exact minimum measurement count across v12 rows is strictly greater than 1.",
+      "failure_rule": "REFUTED separately for either target whose median minimum is <=1."
+    },
+    {
+      "id": "S3_intervention_is_informationally_coarser_than_pairwise_relation",
+      "statement": "Across rows, pooled mean exact minimum measurement count is strictly lower for intervention than for pairwise relation.",
+      "failure_rule": "REFUTED if intervention-minus-relation mean burden is >=0."
+    },
+    {
+      "id": "S4_target_class_count_predicts_measurement_burden",
+      "statement": "Across row-target combinations for pairwise relation, first passage and intervention, Spearman correlation between target-class count and exact minimum measurement count is strictly positive.",
+      "failure_rule": "REFUTED if pooled Spearman correlation is <=0."
+    },
+    {
+      "id": "S5_joint_target_requires_at_least_as_much_information_as_each_component",
+      "statement": "For every row, joint-relational-suite minimum measurement count is >= the minimum for pairwise relation, first passage and intervention individually.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "S6_cross_family_measurements_remain_useful_in_random_topologies",
+      "statement": "At least one row-target exact minimum has an equally small representative using a measurement family different from the semantic target family.",
+      "failure_rule": "REFUTED if cross-family exact minima disappear completely."
+    },
+    {
+      "id": "S7_full_topology_can_be_identified_without_raw_edge_queries",
+      "statement": "Every row's 12 edge-topology identities are resolvable by REL/FP/KO measurements without direct edge-list observation.",
+      "failure_rule": "REFUTED if any row remains topology-unresolved."
+    },
+    {
+      "id": "S8_no_single_relational_measurement_is_universally_first",
+      "statement": "Across rows and targets, canonical exact minima contain more than one distinct first measurement ID.",
+      "failure_rule": "REFUTED if one fixed atomic measurement is always canonical first."
+    }
+  ],
+  "secondary_outputs": [
+    "minimum measurement-count distributions by active-node count and target",
+    "target-class count distributions and compression relative to 12 topology identities",
+    "canonical measurement-family composition",
+    "cross-family minimum frequency",
+    "burden by extra-edge density characteristics of the row",
+    "fraction of atomic library needed by each target",
+    "rows where joint target and full-topology target have the same minimum design"
+  ],
+  "claim_boundary": [
+    "Exact measurement counts are conceptual information counts, not field sampling costs.",
+    "The 12-world random panels are controlled DAG ensembles rather than empirical dispersal networks.",
+    "A target-sufficient measurement set is only sufficient for the declared target.",
+    "No novelty is claimed for finite partition refinement or exact combinatorial search."
+  ],
+  "stop_rules": [
+    "Do not add edge-list queries after scoring.",
+    "Do not change measurement costs after scoring.",
+    "Do not drop rows with high burden.",
+    "Do not reduce the target suite after scoring.",
+    "If S2 or S3 is refuted, retain the refutation rather than reverting to the four-archetype panel."
+  ]
+}
