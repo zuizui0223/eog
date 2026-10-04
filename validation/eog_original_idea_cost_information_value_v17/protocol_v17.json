@@ -1,0 +1,132 @@
+{
+  "schema": "eog.original_idea_cost_information_value.protocol.v17",
+  "status": "frozen_before_cost_information_value_implementation_and_scoring",
+  "parent_v16": {
+    "result": "validation/eog_original_idea_cost_uncertain_policy_v16/result_summary_v16.json",
+    "fingerprint": "41ba3c29e1adb71ed2c832ec1e7f10955ac88c6567c29ce6f9c4b1d9ed6eafd4",
+    "key_result": "all 864 row-targets had positive irreducible regret when one adaptive policy had to be shared across all four frozen cost worlds"
+  },
+  "scientific_question": "How much exact decision value is gained by learning part or all of the measurement-cost world before ecological evidence collection, and which cost information is most valuable for which ecological targets?",
+  "analysis_base": {
+    "rows": 144,
+    "targets": [
+      "pairwise_relation",
+      "first_passage",
+      "intervention",
+      "critical_node_count",
+      "full_topology_identity",
+      "joint_relational_suite"
+    ],
+    "ecological_worlds": "unchanged 12-world random-topology panels from v12-v16",
+    "measurements": "unchanged REL, FP and KO actions",
+    "cost_worlds": {
+      "equal": {"REL": 1, "FP": 1, "KO": 1},
+      "KO_expensive": {"REL": 1, "FP": 1, "KO": 3},
+      "FP_expensive": {"REL": 1, "FP": 3, "KO": 1},
+      "REL_expensive": {"REL": 3, "FP": 1, "KO": 1}
+    }
+  },
+  "cost_information_actions": {
+    "perfect_cost_world_information": {
+      "outcomes": [
+        ["equal"],
+        ["KO_expensive"],
+        ["FP_expensive"],
+        ["REL_expensive"]
+      ],
+      "accounting": "gross value only; no calibration cost is assumed",
+      "break_even_value": "the maximum calibration cost that could be paid before perfect cost-world information ceases to improve minimax regret"
+    },
+    "binary_family_diagnostics": {
+      "is_KO_expensive": {
+        "yes": ["KO_expensive"],
+        "no": ["equal", "FP_expensive", "REL_expensive"]
+      },
+      "is_FP_expensive": {
+        "yes": ["FP_expensive"],
+        "no": ["equal", "KO_expensive", "REL_expensive"]
+      },
+      "is_REL_expensive": {
+        "yes": ["REL_expensive"],
+        "no": ["equal", "KO_expensive", "FP_expensive"]
+      }
+    },
+    "cost_learning_occurs_before_ecological_measurement": true,
+    "diagnostic_costs_are_not_assumed": true
+  },
+  "exact_value_definition": {
+    "baseline": "v16 minimum achievable maximum regret across all four cost worlds",
+    "after_information": "for each diagnostic outcome subset, choose the exact adaptive ecological policy minimizing maximum regret only over the remaining cost worlds; take the worst residual regret across diagnostic outcomes",
+    "gross_information_value": "baseline minimum maximum regret minus post-information worst residual regret",
+    "break_even_calibration_cost": "equal to gross information value in the same synthetic cost units",
+    "perfect_information_post_regret": 0
+  },
+  "solver_reuse": {
+    "root_policy_frontier": "reuse the exact undominated four-cost policy vectors from the v16 dynamic programme",
+    "why_exact": "a policy vector dominated componentwise across all four cost worlds cannot become optimal for any subset of those worlds",
+    "new_ecological_policy_search": "none beyond evaluating the frozen exact v16 frontier under cost-world subsets"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "V1_perfect_cost_information_has_positive_value_everywhere",
+      "statement": "Every one of the 864 row-targets has strictly positive perfect-cost-information value.",
+      "failure_rule": "REFUTED if any row-target has zero value."
+    },
+    {
+      "id": "V2_one_binary_cost_diagnostic_has_positive_value_somewhere",
+      "statement": "At least one row-target has strictly positive gross information value for at least one of the three family-expensive diagnostics.",
+      "failure_rule": "REFUTED if all three diagnostics have zero value everywhere."
+    },
+    {
+      "id": "V3_no_single_binary_cost_diagnostic_is_universally_best",
+      "statement": "Across row-targets with positive binary-diagnostic value, more than one diagnostic identity is canonically best.",
+      "failure_rule": "REFUTED if one diagnostic is best everywhere."
+    },
+    {
+      "id": "V4_partial_cost_information_can_recover_all_perfect_information_value",
+      "statement": "At least one row-target has a binary family diagnostic whose post-information worst residual regret is zero.",
+      "failure_rule": "REFUTED if every binary diagnostic leaves positive residual regret everywhere."
+    },
+    {
+      "id": "V5_partial_information_is_strictly_incomplete_somewhere",
+      "statement": "At least one row-target has positive perfect-information value but every binary diagnostic retains positive worst residual regret.",
+      "failure_rule": "REFUTED if one binary diagnostic always recovers the full perfect-information value."
+    },
+    {
+      "id": "V6_cost_information_value_depends_on_ecological_target",
+      "statement": "Mean perfect-information value or the distribution of best binary diagnostic differs across at least two declared ecological targets.",
+      "failure_rule": "REFUTED if all six targets have identical value and diagnostic summaries."
+    },
+    {
+      "id": "V7_information_never_has_negative_gross_value",
+      "statement": "No perfect or binary cost-information action increases the exact minimum worst-case regret.",
+      "failure_rule": "Any negative value is an implementation/theory failure."
+    },
+    {
+      "id": "V8_cost_information_subseries_stop",
+      "statement": "v17 reports the exact value/break-even threshold without adding any fifth cost world, post-score cost ratio or empirical budget interpretation.",
+      "failure_rule": "Any such expansion invalidates the v17 closure claim."
+    }
+  ],
+  "secondary_outputs": [
+    "perfect-information break-even calibration-cost distribution by target",
+    "gross value distribution for each binary diagnostic",
+    "canonical best binary diagnostic counts by target",
+    "fraction of perfect-information value captured by the best binary diagnostic",
+    "row-targets where cost information changes the preferred ecological policy family",
+    "relationship between v16 Pareto-frontier size and cost-information value"
+  ],
+  "claim_boundary": [
+    "Information values are in synthetic relative-cost units, not money, time or field effort.",
+    "Perfect cost-world information is an oracle calibration thought experiment.",
+    "Binary family diagnostics are abstract cost-information channels and are not yet concrete field procedures.",
+    "The purpose is to close the synthetic cost-world subseries, not to optimize real survey budgets."
+  ],
+  "stop_rules": [
+    "Do not add a fifth cost world.",
+    "Do not assign an arbitrary calibration price after seeing information values.",
+    "Do not replace minimax regret with expected regret after scoring.",
+    "Do not add another cost diagnostic to rescue V3-V5.",
+    "After v17, stop synthetic cost-world variants."
+  ]
+}
