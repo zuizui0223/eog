@@ -229,6 +229,7 @@ def _evaluate_row(active_n, replicate):
     action_partitions, family_by_id = _canonical_actions(features)
 
     fixed_cache = {}
+    adaptive_cache = {}
     targets = {}
     for target in TARGETS:
         target_values = _target_values(v12, target)
@@ -239,11 +240,13 @@ def _evaluate_row(active_n, replicate):
             features,
             fixed_cache,
         )
-        adaptive = _target_adaptive_solver(
-            target_partition,
-            action_partitions,
-            fixed_upper_bound=fixed["minimum_size"],
-        )
+        if target_partition not in adaptive_cache:
+            adaptive_cache[target_partition] = _target_adaptive_solver(
+                target_partition,
+                action_partitions,
+                fixed_upper_bound=fixed["minimum_size"],
+            )
+        adaptive = adaptive_cache[target_partition]
         if not adaptive["resolvable"]:
             fixed_min = fixed["minimum_size"]
             if fixed_min is not None:
