@@ -20,35 +20,77 @@
     "ecological_worlds": "unchanged 12-world random-topology panels from v12-v16",
     "measurements": "unchanged REL, FP and KO actions",
     "cost_worlds": {
-      "equal": {"REL": 1, "FP": 1, "KO": 1},
-      "KO_expensive": {"REL": 1, "FP": 1, "KO": 3},
-      "FP_expensive": {"REL": 1, "FP": 3, "KO": 1},
-      "REL_expensive": {"REL": 3, "FP": 1, "KO": 1}
+      "equal": {
+        "REL": 1,
+        "FP": 1,
+        "KO": 1
+      },
+      "KO_expensive": {
+        "REL": 1,
+        "FP": 1,
+        "KO": 3
+      },
+      "FP_expensive": {
+        "REL": 1,
+        "FP": 3,
+        "KO": 1
+      },
+      "REL_expensive": {
+        "REL": 3,
+        "FP": 1,
+        "KO": 1
+      }
     }
   },
   "cost_information_actions": {
     "perfect_cost_world_information": {
       "outcomes": [
-        ["equal"],
-        ["KO_expensive"],
-        ["FP_expensive"],
-        ["REL_expensive"]
+        [
+          "equal"
+        ],
+        [
+          "KO_expensive"
+        ],
+        [
+          "FP_expensive"
+        ],
+        [
+          "REL_expensive"
+        ]
       ],
       "accounting": "gross value only; no calibration cost is assumed",
       "break_even_value": "the maximum calibration cost that could be paid before perfect cost-world information ceases to improve minimax regret"
     },
     "binary_family_diagnostics": {
       "is_KO_expensive": {
-        "yes": ["KO_expensive"],
-        "no": ["equal", "FP_expensive", "REL_expensive"]
+        "yes": [
+          "KO_expensive"
+        ],
+        "no": [
+          "equal",
+          "FP_expensive",
+          "REL_expensive"
+        ]
       },
       "is_FP_expensive": {
-        "yes": ["FP_expensive"],
-        "no": ["equal", "KO_expensive", "REL_expensive"]
+        "yes": [
+          "FP_expensive"
+        ],
+        "no": [
+          "equal",
+          "KO_expensive",
+          "REL_expensive"
+        ]
       },
       "is_REL_expensive": {
-        "yes": ["REL_expensive"],
-        "no": ["equal", "KO_expensive", "FP_expensive"]
+        "yes": [
+          "REL_expensive"
+        ],
+        "no": [
+          "equal",
+          "KO_expensive",
+          "FP_expensive"
+        ]
       }
     },
     "cost_learning_occurs_before_ecological_measurement": true,
@@ -59,7 +101,8 @@
     "after_information": "for each diagnostic outcome subset, choose the exact adaptive ecological policy minimizing maximum regret only over the remaining cost worlds; take the worst residual regret across diagnostic outcomes",
     "gross_information_value": "baseline minimum maximum regret minus post-information worst residual regret",
     "break_even_calibration_cost": "equal to gross information value in the same synthetic cost units",
-    "perfect_information_post_regret": 0
+    "perfect_information_post_regret": 0,
+    "canonical_best_binary_diagnostic_tie_rule": "smaller post-information worst residual regret, then lexicographically smaller diagnostic ID"
   },
   "solver_reuse": {
     "root_policy_frontier": "reuse the exact undominated four-cost policy vectors from the v16 dynamic programme",
@@ -128,5 +171,11 @@
     "Do not replace minimax regret with expected regret after scoring.",
     "Do not add another cost diagnostic to rescue V3-V5.",
     "After v17, stop synthetic cost-world variants."
-  ]
+  ],
+  "preimplementation_amendment": {
+    "classification": "preimplementation_tie_rule_completion_before_any_v17_scoring",
+    "reason": "best binary diagnostic identity requires a deterministic tie rule",
+    "scientific_estimand_changed": false,
+    "scoring_seen_before_amendment": false
+  }
 }
