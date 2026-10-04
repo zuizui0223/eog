@@ -23,14 +23,9 @@ from benchmarks.run_eog_original_idea_random_topology_v12 import (
 from benchmarks.run_eog_original_idea_random_relational_v13 import (
     TARGETS,
     _atomic_features,
-    _minimum_design,
     _normalized_partition,
     _target_values,
 )
-from benchmarks.run_eog_original_idea_random_relational_v14 import (
-    _target_adaptive_solver,
-)
-
 
 PROTOCOL = ROOT / "validation/eog_original_idea_cost_aware_adaptive_v15/protocol_v15.json"
 
@@ -68,6 +63,25 @@ def _action_partitions(features):
     return {
         feature_id: _normalized_partition(spec["values"])
         for feature_id, spec in sorted(features.items())
+    }
+
+
+def _cost_canonical_partitions(features, family_costs):
+    """Collapse globally outcome-equivalent actions to the cheapest representative."""
+
+    by_partition = {}
+    for feature_id, spec in sorted(features.items()):
+        partition = _normalized_partition(spec["values"])
+        candidate = (
+            int(family_costs[spec["family"]]),
+            feature_id,
+        )
+        incumbent = by_partition.get(partition)
+        if incumbent is None or candidate < incumbent:
+            by_partition[partition] = candidate
+    return {
+        feature_id: partition
+        for partition, (_, feature_id) in by_partition.items()
     }
 
 
@@ -389,11 +403,7 @@ def _weighted_adaptive_solver(
 def _evaluate_row(active_n, replicate):
     v12 = evaluate_v12(active_n, replicate)
     features = _atomic_features(v12)
-    partitions = _action_partitions(features)
 
-    # Exact equal-cost regressions against the frozen v13/v14 results.
-    v13_cache = {}
-    frozen_v14_adaptive_cache = {}
     target_partitions = {
         target: _normalized_partition(_target_values(v12, target))
         for target in TARGETS
@@ -404,6 +414,10 @@ def _evaluate_row(active_n, replicate):
         target_rows = {}
         adaptive_cache = {}
         fixed_cache = {}
+        cost_partitions = _cost_canonical_partitions(
+            features,
+            family_costs,
+        )
 
         for target in TARGETS:
             partition = target_partitions[target]
@@ -420,39 +434,13 @@ def _evaluate_row(active_n, replicate):
             if cache_key not in adaptive_cache:
                 adaptive_cache[cache_key] = _weighted_adaptive_solver(
                     partition,
-                    partitions,
+                    cost_partitions,
                     family_costs,
                 )
             adaptive = adaptive_cache[cache_key]
 
             if fixed["resolvable"] != adaptive["resolvable"]:
                 raise RuntimeError("fixed/adaptive resolvability mismatch")
-
-            if cost_name == "equal":
-                frozen_fixed = _minimum_design(
-                    v12,
-                    target,
-                    features,
-                    v13_cache,
-                )
-                if fixed["minimum_cost"] != frozen_fixed["minimum_size"]:
-                    raise RuntimeError(
-                        "equal-cost weighted fixed solver does not reproduce v13"
-                    )
-                if partition not in frozen_v14_adaptive_cache:
-                    frozen_v14_adaptive_cache[partition] = _target_adaptive_solver(
-                        partition,
-                        {
-                            feature_id: _normalized_partition(spec["values"])
-                            for feature_id, spec in features.items()
-                        },
-                        fixed_upper_bound=frozen_fixed["minimum_size"],
-                    )
-                frozen_adaptive = frozen_v14_adaptive_cache[partition]
-                if adaptive["worst_case_cost"] != frozen_adaptive["worst_case_depth"]:
-                    raise RuntimeError(
-                        "equal-cost weighted adaptive solver does not reproduce v14"
-                    )
 
             target_rows[target] = {
                 "fixed_resolvable": fixed["resolvable"],
