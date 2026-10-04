@@ -277,79 +277,114 @@ def _cross_family_minimum_exists(
     )
 
 
-def _minimum_design(row, target):
-    features = _atomic_features(row)
+def _minimum_design(row, target, features, partition_cache):
     target_partition = _normalized_partition(_target_values(row, target))
-    discordant = _discordant_pairs(target_partition)
-    full_mask = (1 << len(discordant)) - 1
+    cache_key = target_partition
 
-    if not discordant:
-        return {
-            "target_class_count": 1,
-            "target_discordant_pair_count": 0,
-            "minimum_size": 0,
-            "canonical_measurement_ids": [],
-            "canonical_families": [],
-            "cross_family_minimum_exists": False,
-            "complete_library_sufficient": True,
-        }
+    if cache_key not in partition_cache:
+        discordant = _discordant_pairs(target_partition)
+        full_mask = (1 << len(discordant)) - 1
 
-    coverage_rows = _feature_coverages(features, discordant)
-    union_mask = 0
-    for item in coverage_rows:
-        union_mask |= int(item["mask"])
-    sufficient = union_mask == full_mask
-    if not sufficient:
-        return {
-            "target_class_count": len(set(target_partition)),
-            "target_discordant_pair_count": len(discordant),
-            "minimum_size": None,
-            "canonical_measurement_ids": None,
-            "canonical_families": None,
-            "cross_family_minimum_exists": False,
-            "complete_library_sufficient": False,
-        }
+        if not discordant:
+            partition_cache[cache_key] = {
+                "target_class_count": 1,
+                "target_discordant_pair_count": 0,
+                "minimum_size": 0,
+                "canonical_measurement_ids": (),
+                "canonical_families": (),
+                "complete_library_sufficient": True,
+                "ordered": (),
+                "min_additional": None,
+            }
+        else:
+            coverage_rows = _feature_coverages(features, discordant)
+            union_mask = 0
+            for item in coverage_rows:
+                union_mask |= int(item["mask"])
+            sufficient = union_mask == full_mask
 
-    dedup = _dedup_coverages(coverage_rows)
-    ordered, min_additional = _pair_cover_solver(full_mask, dedup)
-    minimum = int(min_additional(0))
-    ids = _canonical_minimum_ids(
-        full_mask,
-        ordered,
-        min_additional,
-        minimum,
-    )
-    families = tuple(features[feature_id]["family"] for feature_id in ids)
+            if not sufficient:
+                partition_cache[cache_key] = {
+                    "target_class_count": len(set(target_partition)),
+                    "target_discordant_pair_count": len(discordant),
+                    "minimum_size": None,
+                    "canonical_measurement_ids": None,
+                    "canonical_families": None,
+                    "complete_library_sufficient": False,
+                    "ordered": (),
+                    "min_additional": None,
+                }
+            else:
+                dedup = _dedup_coverages(coverage_rows)
+                ordered, min_additional = _pair_cover_solver(full_mask, dedup)
+                minimum = int(min_additional(0))
+                ids = _canonical_minimum_ids(
+                    full_mask,
+                    ordered,
+                    min_additional,
+                    minimum,
+                )
+                families = tuple(
+                    features[feature_id]["family"] for feature_id in ids
+                )
+                partition_cache[cache_key] = {
+                    "target_class_count": len(set(target_partition)),
+                    "target_discordant_pair_count": len(discordant),
+                    "minimum_size": minimum,
+                    "canonical_measurement_ids": ids,
+                    "canonical_families": families,
+                    "complete_library_sufficient": True,
+                    "ordered": ordered,
+                    "min_additional": min_additional,
+                }
 
-    same_family = {
-        "pairwise_relation": "REL",
-        "first_passage": "FP",
-        "intervention": "KO",
-        "critical_node_count": "KO",
-    }.get(target)
-    cross_exists = _cross_family_minimum_exists(
-        ordered,
-        min_additional,
-        minimum,
-        same_family,
-    )
+    base = partition_cache[cache_key]
+    if not base["complete_library_sufficient"]:
+        cross_exists = False
+    else:
+        same_family = {
+            "pairwise_relation": "REL",
+            "first_passage": "FP",
+            "intervention": "KO",
+            "critical_node_count": "KO",
+        }.get(target)
+        cross_exists = _cross_family_minimum_exists(
+            base["ordered"],
+            base["min_additional"],
+            base["minimum_size"],
+            same_family,
+        )
 
     return {
-        "target_class_count": len(set(target_partition)),
-        "target_discordant_pair_count": len(discordant),
-        "minimum_size": minimum,
-        "canonical_measurement_ids": list(ids),
-        "canonical_families": list(families),
+        "target_class_count": base["target_class_count"],
+        "target_discordant_pair_count": base["target_discordant_pair_count"],
+        "minimum_size": base["minimum_size"],
+        "canonical_measurement_ids": (
+            None
+            if base["canonical_measurement_ids"] is None
+            else list(base["canonical_measurement_ids"])
+        ),
+        "canonical_families": (
+            None
+            if base["canonical_families"] is None
+            else list(base["canonical_families"])
+        ),
         "cross_family_minimum_exists": cross_exists,
-        "complete_library_sufficient": True,
+        "complete_library_sufficient": base["complete_library_sufficient"],
     }
 
 
 def _evaluate_row(active_n, replicate):
     row = evaluate_v12(active_n, replicate)
     features = _atomic_features(row)
+    partition_cache = {}
     targets = {
-        target: _minimum_design(row, target)
+        target: _minimum_design(
+            row,
+            target,
+            features,
+            partition_cache,
+        )
         for target in TARGETS
     }
     return {
