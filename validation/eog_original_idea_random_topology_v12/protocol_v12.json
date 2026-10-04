@@ -1,0 +1,102 @@
+{
+  "schema": "eog.original_idea_random_static_equivalent_topology.protocol.v12",
+  "status": "frozen_before_random_topology_benchmark_implementation_and_scoring",
+  "parent_v10": {
+    "result": "validation/eog_original_idea_marginal_topology_v10/result_summary_v10.json",
+    "fingerprint": "d6cf5404bfb8e7a4eb9efba26f3f7e19fe8b9b6c7fb2c28e6c2989e64879f669",
+    "key_result": "four hand-designed transition topologies with identical A/B/M/G and marginal maps differed in relation, first-passage and intervention targets in 192/192 replicates"
+  },
+  "parent_v11": {
+    "result": "validation/eog_original_idea_target_relational_v11/result_summary_v11.json",
+    "fingerprint": "89de41a67ec521c7cabcee5cb72c9f93634efaab0e2ffec348bef9a547f5619e",
+    "key_result": "narrow relational targets could be resolved with one or two measurements, while the combined relational suite became topology-identifying"
+  },
+  "scientific_question": "Does static nodewise equivalence continue to hide substantial topology-sensitive ecological variation when transition graphs are randomly generated rather than chosen as chain/star/tree archetypes?",
+  "panel": {
+    "active_node_counts": [8, 12, 16],
+    "replicates_per_size": 48,
+    "row_count": 144,
+    "topology_worlds_per_row": 12,
+    "outside_locally_viable_nodes": 4,
+    "static_state": "A and B permissive at all nodes; M and G equal to the same active-node mask in every topology world; continuous nodewise marginal-score vector fixed within row"
+  },
+  "random_topology_generator": {
+    "seed_base": 20261212,
+    "active_label_order": "one response-independent shuffled active-node label set per row with source S fixed",
+    "per_world_topological_order": "independent deterministic permutation of non-source active nodes with S first",
+    "reachability_backbone": "for each non-source node in topological order, choose one parent uniformly from earlier nodes, creating a rooted arborescence and guaranteeing identical M accessibility",
+    "extra_edge_probability_schedule": [0.0, 0.10, 0.25, 0.50],
+    "worlds_per_extra_edge_level": 3,
+    "extra_edges": "each absent forward edge consistent with the world-specific topological order is added independently using the frozen extra-edge probability",
+    "duplicate_edge_topology": "if duplicate edge sets occur within a row, retain them and report the duplicate count rather than regenerating after scoring"
+  },
+  "targets": {
+    "pairwise_relation": "ordered active-node reachability matrix",
+    "first_passage": "source-to-node shortest-path depth vector",
+    "intervention": "reachable-active-node count after each non-source node knockout",
+    "critical_node_count": "number of non-source nodes whose removal disconnects at least one additional active node"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "R1_static_nodewise_equivalence_is_exact",
+      "statement": "All 12 topology worlds in every row share one identical A/B/M/G/marginal representation.",
+      "failure_rule": "Any violation is an implementation failure."
+    },
+    {
+      "id": "R2_random_topologies_usually_differ_in_pairwise_relations",
+      "statement": "At least 95 percent of rows contain more than one pairwise-relation target class.",
+      "failure_rule": "REFUTED if the eligible-row fraction is <0.95."
+    },
+    {
+      "id": "R3_random_topologies_usually_differ_in_first_passage",
+      "statement": "At least 95 percent of rows contain more than one first-passage target class.",
+      "failure_rule": "REFUTED if the eligible-row fraction is <0.95."
+    },
+    {
+      "id": "R4_random_topologies_usually_differ_in_intervention_response",
+      "statement": "At least 95 percent of rows contain more than one intervention target class.",
+      "failure_rule": "REFUTED if the eligible-row fraction is <0.95."
+    },
+    {
+      "id": "R5_edge_richness_increases_knockout_robustness",
+      "statement": "Across all generated worlds, Spearman correlation between edge count and mean single-node-knockout retained fraction is strictly positive.",
+      "failure_rule": "REFUTED if the pooled Spearman correlation is <=0."
+    },
+    {
+      "id": "R6_edge_richness_shortens_first_passage",
+      "statement": "Across all generated worlds, Spearman correlation between edge count and mean source first-passage depth is strictly negative.",
+      "failure_rule": "REFUTED if the pooled Spearman correlation is >=0."
+    },
+    {
+      "id": "R7_relational_targets_induce_different_quotients",
+      "statement": "At least half of rows have non-identical equivalence partitions for pairwise relation, first-passage and intervention targets.",
+      "failure_rule": "REFUTED if fewer than 50 percent of rows show target-partition disagreement."
+    },
+    {
+      "id": "R8_complete_static_occurrence_map_does_not_identify_random_topology",
+      "statement": "No row has only one distinct edge-topology identity while all 12 worlds share the complete static G mask; rows with duplicate random edge sets are allowed, but every row must retain at least two distinct edge topologies.",
+      "failure_rule": "REFUTED if any row collapses to one edge topology."
+    }
+  ],
+  "secondary_outputs": [
+    "distinct topology and target-class count distributions",
+    "target quotient compression ratios relative to distinct edge topology count",
+    "critical-node count by extra-edge probability",
+    "knockout robustness by extra-edge probability",
+    "first-passage depth by extra-edge probability",
+    "frequency of duplicate random edge topologies"
+  ],
+  "claim_boundary": [
+    "The random DAG generator is a controlled topology ensemble, not a fitted dispersal model.",
+    "Pooled correlations are generator-level structural associations, not empirical ecological effect sizes.",
+    "Static equivalence is imposed by construction to test information sufficiency.",
+    "The 95-percent generality thresholds are preregistered for this frozen ensemble only."
+  ],
+  "stop_rules": [
+    "Do not change the 95-percent thresholds after scoring.",
+    "Do not change the extra-edge schedule after scoring.",
+    "Do not regenerate duplicate worlds after seeing target results.",
+    "Do not drop active-node sizes that weaken a hypothesis.",
+    "Failed R2-R8 hypotheses remain failed."
+  ]
+}
