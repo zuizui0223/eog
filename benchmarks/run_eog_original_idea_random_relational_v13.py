@@ -258,27 +258,55 @@ def _canonical_minimum_ids(full_mask, rows, minimum_size):
 def _minimum_with_cross_family(full_mask, rows, minimum_size, same_family):
     if minimum_size in (None, 0) or same_family is None:
         return False
-    ordered = tuple(sorted(rows, key=lambda row: row["feature_id"]))
-    masks = tuple(int(row["mask"]) for row in ordered)
-    cross = tuple(row["family"] != same_family for row in ordered)
 
-    @lru_cache(maxsize=None)
-    def search(start, remaining, covered, used_cross):
-        if remaining == 0:
-            return covered == full_mask and used_cross
-        if len(ordered) - start < remaining:
-            return False
-        for i in range(start, len(ordered) - remaining + 1):
-            if search(
-                i + 1,
-                remaining - 1,
-                covered | masks[i],
-                used_cross or cross[i],
-            ):
-                return True
-        return False
+    # Exact depth-limited bitmask DP.  The previous combinatorial DFS enumerated
+    # feature-ID combinations even when they induced the same coverage state.
+    # Here states are only (covered target-discordant pairs, cross-family-used).
+    # At a fixed depth, an inclusion-superset state with the same flag dominates a
+    # subset state.  A cross-used superset also dominates a non-cross subset because
+    # the objective explicitly requires at least one cross-family measurement.
+    states_false = {0}
+    states_true = set()
 
-    return bool(search(0, int(minimum_size), 0, False))
+    for depth in range(1, int(minimum_size) + 1):
+        next_false = set()
+        next_true = set()
+        for covered in states_false:
+            for row in rows:
+                updated = covered | int(row["mask"])
+                if row["family"] != same_family:
+                    next_true.add(updated)
+                else:
+                    next_false.add(updated)
+        for covered in states_true:
+            for row in rows:
+                next_true.add(covered | int(row["mask"]))
+
+        if full_mask in next_true:
+            return depth == int(minimum_size)
+
+        def antichain(masks):
+            ordered_masks = sorted(masks, key=lambda m: (-m.bit_count(), m))
+            kept = []
+            for mask in ordered_masks:
+                if any(mask | other == other for other in kept):
+                    continue
+                kept.append(mask)
+            return set(kept)
+
+        next_true = antichain(next_true)
+        next_false = antichain(next_false)
+        if next_true:
+            next_false = {
+                mask
+                for mask in next_false
+                if not any(mask | other == other for other in next_true)
+            }
+
+        states_false = next_false
+        states_true = next_true
+
+    return False
 
 
 def _minimum_design(row, target):
