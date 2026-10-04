@@ -1,0 +1,106 @@
+{
+  "schema": "eog.original_idea_marginal_topology_equivalence.protocol.v10",
+  "status": "frozen_before_topology_equivalence_benchmark_implementation_and_scoring",
+  "scientific_question": "Can static nodewise BAM/raster representations be identical while distribution-forming topology, occurrence-to-occurrence relations, first-passage structure and intervention sensitivity differ?",
+  "scientific_motivation": "Directly test the original EOG contrast between a flat cellwise distribution surface and a relational, flow-structured landscape.",
+  "virtual_world_panel": {
+    "active_node_counts": [6, 10, 14],
+    "replicates_per_size": 64,
+    "replicate_count": 192,
+    "node_universe": "active nodes plus four locally viable but movement-inaccessible outside nodes",
+    "shared_nodewise_state": {
+      "A": "all nodes locally abiotic-permissive",
+      "B": "all nodes biotically permissive",
+      "M": "the same active-node accessibility mask in every topology world",
+      "G": "A intersect B intersect M, therefore the same active-node occurrence mask in every topology world",
+      "static_marginal_score": "one deterministic response-independent score per node, identical across topology worlds and generated from seed 20261201 + active_node_count*1000 + replicate"
+    },
+    "topology_worlds": {
+      "chain": "source -> v1 -> v2 -> ... through every active node",
+      "star": "source -> every other active node",
+      "balanced_branching": "source-rooted balanced binary tree over the same active nodes",
+      "redundant": "balanced branching backbone plus all source-to-active edges and deterministic cross-branch forward edges generated before scoring"
+    },
+    "label_randomization": "active non-source node labels are deterministically shuffled by replicate before constructing all four topologies; all worlds in a replicate share the same shuffled active-node set"
+  },
+  "cellwise_representation": {
+    "features": ["A mask", "B mask", "M mask", "G mask", "static marginal score vector"],
+    "topology_edges_included": false,
+    "source_to_node_first_passage_included": false,
+    "pairwise_occurrence_relation_matrix_included": false,
+    "knockout_response_included": false
+  },
+  "topology_sensitive_targets": {
+    "pairwise_relation_signature": "directed reachability among all ordered active-node pairs",
+    "first_passage_signature": "source-to-node shortest directed path depth",
+    "route_redundancy_signature": "number of active non-source nodes retaining source reachability after each single non-source node knockout",
+    "critical_node_count": "number of non-source nodes whose removal makes at least one other active node unreachable",
+    "intervention_signature": "vector of reachable active-node counts after every single non-source node knockout"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "M1_static_BAM_and_marginal_maps_are_exactly_identical",
+      "statement": "Within every replicate, all four topology worlds have identical A, B, M, G and static marginal-score vectors.",
+      "failure_rule": "Any violation is an implementation failure and stops interpretation."
+    },
+    {
+      "id": "M2_pairwise_relation_structure_is_not_identified_by_the_static_map",
+      "statement": "Every eligible replicate contains at least two distinct ordered-pair reachability signatures among the four topology worlds.",
+      "failure_rule": "REFUTED if any replicate has one common relation signature across all four worlds."
+    },
+    {
+      "id": "M3_first_passage_structure_is_not_identified_by_the_static_map",
+      "statement": "Every eligible replicate contains at least two distinct source-first-passage signatures among the four topology worlds.",
+      "failure_rule": "REFUTED if any replicate has one common first-passage signature across all four worlds."
+    },
+    {
+      "id": "M4_knockout_response_is_not_identified_by_the_static_map",
+      "statement": "Every eligible replicate contains at least two distinct single-node intervention signatures among the four topology worlds.",
+      "failure_rule": "REFUTED if any replicate has one common intervention signature across all four worlds."
+    },
+    {
+      "id": "M5_redundant_topology_is_more_knockout_robust_than_chain",
+      "statement": "For every replicate, the mean fraction of active nodes retained after single non-source node knockout is strictly larger in the redundant world than in the chain world.",
+      "failure_rule": "REFUTED if any replicate fails the strict directional comparison."
+    },
+    {
+      "id": "M6_static_representation_collapses_target_distinct_worlds",
+      "statement": "In every replicate, the equivalence class induced by the complete static cellwise representation contains worlds with at least two distinct values for every topology-sensitive target family: relation, first-passage and intervention.",
+      "failure_rule": "REFUTED separately if any target family is constant within the four-world static equivalence class for any replicate."
+    },
+    {
+      "id": "M7_static_occurrence_completeness_does_not_resolve_topology",
+      "statement": "Even when the complete active-node G mask is observed, all four worlds remain statically indistinguishable while at least one topology-sensitive target differs.",
+      "failure_rule": "Any replicate in which complete G identifies topology refutes the claim."
+    },
+    {
+      "id": "M8_relational_information_strictly_refines_the_static_equivalence_class",
+      "statement": "Adding the pairwise relation signature splits the static four-world equivalence class in every replicate.",
+      "failure_rule": "REFUTED if the relation signature never partitions the static class in any replicate."
+    }
+  ],
+  "primary_outputs": [
+    "number of distinct topology-sensitive target signatures per static-equivalence class",
+    "pairwise relation Hamming distance between topology worlds",
+    "first-passage depth differences",
+    "single-node knockout retained-reachability fractions",
+    "critical-node counts",
+    "static-equivalence class size before and after adding relational information"
+  ],
+  "theoretical_boundary": {
+    "statement": "A deterministic target that differs among worlds with identical cellwise representations cannot be identified from that representation alone.",
+    "novelty_claim": "none for the generic marginal-versus-joint information theorem; the ecological test concerns which distributional-history quantities BAM/raster node masks discard"
+  },
+  "claim_boundary": [
+    "The four topology classes are controlled virtual mechanisms, not estimates of real dispersal networks.",
+    "Static marginal equivalence does not imply that ordinary SDMs literally estimate the frozen synthetic marginal score used here.",
+    "A successful result establishes information insufficiency of nodewise representation for the declared topology targets, not empirical superiority of EOG in a real system."
+  ],
+  "stop_rules": [
+    "Do not change topology classes after scoring.",
+    "Do not change active-node counts or replicate number after scoring.",
+    "Do not add a topology-sensitive feature to the static representation after scoring.",
+    "Do not remove a topology target that fails to differ.",
+    "Any failed M2-M8 direction remains failed."
+  ]
+}
