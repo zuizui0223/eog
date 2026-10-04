@@ -1,0 +1,75 @@
+{
+  "schema": "eog.original_idea_target_relational_sufficiency.result_summary.v11",
+  "status": "completed_preregistered_minimal_relational_synthesis",
+  "protocol": "validation/eog_original_idea_target_relational_v11/protocol_v11.json",
+  "protocol_commit": "283f10ae8e6d673076bb81043f1b20f4779de2e8",
+  "authoritative_run": 37175905205,
+  "authoritative_artifact_id": 11293501418,
+  "authoritative_artifact_digest": "sha256:3f2e7dd38cd9faf9f1fa058122e658378916c3242230d9add369704e418df896",
+  "result_fingerprint": "89de41a67ec521c7cabcee5cb72c9f93634efaab0e2ffec348bef9a547f5619e",
+  "row_count": 192,
+  "predeclared_verdicts": {
+    "Q1_each_target_is_resolvable_by_declared_relational_measurements": "SUPPORTED",
+    "Q2_target_specific_minima_are_strict_compressions": "SUPPORTED",
+    "Q3_full_topology_identity_is_not_required_for_first_passage_or_intervention": "SUPPORTED",
+    "Q4_relational_targets_have_different_information_requirements": "SUPPORTED",
+    "Q5_cross_family_measurements_can_be_sufficient": "SUPPORTED",
+    "Q6_joint_relational_suite_is_resolvable_without_edge_identity": "SUPPORTED",
+    "Q7_joint_target_can_leave_full_topology_unresolved": "REFUTED",
+    "Q8_no_single_fixed_measurement_is_universally_optimal": "SUPPORTED"
+  },
+  "target_results": {
+    "first_passage": {
+      "target_class_count": 3,
+      "minimum_measurement_count": 1,
+      "canonical_family": ["FP"],
+      "cross_family_minimum_exists_rows": 192
+    },
+    "intervention": {
+      "target_class_count": 3,
+      "minimum_measurement_count": 1,
+      "canonical_family": ["FP"],
+      "cross_family_minimum_exists_rows": 192
+    },
+    "critical_node_count": {
+      "target_class_count": 3,
+      "minimum_measurement_count": 1,
+      "canonical_family": ["FP"]
+    },
+    "pairwise_relation": {
+      "target_class_count_distribution": {"3":6,"4":186},
+      "minimum_measurement_count": 2,
+      "canonical_family": ["REL","FP"],
+      "cross_family_minimum_exists_rows": 192
+    },
+    "joint_relational_suite": {
+      "target_class_count": 4,
+      "minimum_measurement_count": 2,
+      "canonical_family": ["REL","FP"],
+      "rows_leaving_full_topology_unresolved": 0
+    }
+  },
+  "heterogeneity": {
+    "rows_with_different_target_minima": 192,
+    "distinct_canonical_first_measurement_count": 26,
+    "most_common_first_passage_measurements": {
+      "FP:N01":145,
+      "FP:N02":41,
+      "FP:N03":6
+    }
+  },
+  "interpretation": [
+    "Static nodewise information was insufficient, but full edge topology was not necessary for single relational targets.",
+    "First-passage, intervention response and critical-node count each collapsed the four topology worlds into only three target classes and required one relational measurement in every row.",
+    "A single first-passage measurement was the canonical minimum not only for first-passage itself but also for intervention and critical-node-count targets in this controlled topology family.",
+    "Pairwise relation structure required two measurements in every row, canonically one REL bit plus one FP depth.",
+    "The combined relation + first-passage + intervention suite required two measurements but induced four target classes in every row, thereby refuting Q7: asking all relational questions together recovered full topology identity across the four archetypes.",
+    "Target-specific compression is therefore strongest when the ecological question is narrow; combining multiple relational targets can eliminate the compression advantage."
+  ],
+  "claim_boundary": [
+    "Unit measurement counts are conceptual information counts rather than real sampling costs.",
+    "Cross-family sufficiency is conditional on the v10 four-topology archetypes and labeled-node design.",
+    "Q7 remains refuted: the combined relational suite did not leave topology identity unresolved.",
+    "The result motivates target-specific relational summaries rather than one universal connectivity statistic."
+  ]
+}
