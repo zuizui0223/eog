@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter, defaultdict
+from concurrent.futures import ProcessPoolExecutor
 from functools import lru_cache
 import hashlib
 import json
@@ -489,6 +490,10 @@ def _evaluate_row(active_n, replicate):
     }
 
 
+def _evaluate_row_from_args(args):
+    return _evaluate_row(*args)
+
+
 def _mean(values):
     vals = [float(v) for v in values]
     return None if not vals else float(np.mean(vals))
@@ -508,11 +513,21 @@ def run():
     ):
         raise RuntimeError("v15 protocol is not frozen")
 
-    rows = [
-        _evaluate_row(active_n, replicate)
+    tasks = [
+        (active_n, replicate)
         for active_n in ACTIVE_SIZES
         for replicate in range(REPLICATES)
     ]
+    # Row evaluations are independent. executor.map preserves input order, so
+    # parallel execution changes runtime only, not result ordering or fingerprint.
+    with ProcessPoolExecutor(max_workers=4) as executor:
+        rows = list(
+            executor.map(
+                _evaluate_row_from_args,
+                tasks,
+                chunksize=1,
+            )
+        )
     if len(rows) != 144:
         raise RuntimeError("expected 144 frozen rows")
 
