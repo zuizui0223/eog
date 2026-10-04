@@ -3,6 +3,7 @@ from benchmarks.run_eog_original_idea_cost_uncertain_policy_v16 import (
     _dominates,
     _policy_frontier,
     _prune,
+    _prune_vectors,
 )
 
 
@@ -42,3 +43,31 @@ def test_small_fixture_has_exact_cost_blind_frontier_and_nonnegative_regret():
         cost >= lower
         for cost, lower in zip(selected.costs, oracle, strict=True)
     )
+
+
+def test_incremental_vector_prune_matches_bruteforce_dominance():
+    vectors = (
+        (0, 4, 4, 4),
+        (1, 1, 5, 5),
+        (1, 2, 2, 5),
+        (2, 2, 2, 2),
+        (3, 2, 2, 2),
+        (4, 4, 0, 4),
+        (4, 4, 4, 0),
+        (2, 3, 1, 3),
+        (2, 3, 1, 3),
+    )
+    expected = tuple(
+        sorted(
+            {
+                vector
+                for vector in vectors
+                if not any(
+                    other != vector and _dominates(other, vector)
+                    for other in vectors
+                )
+            },
+            key=lambda row: (sum(row), row),
+        )
+    )
+    assert _prune_vectors(vectors) == expected
