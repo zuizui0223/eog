@@ -1890,6 +1890,56 @@ Canonical assets for this evidence-planning sequence:
 - `validation/eog_original_idea_random_relational_v14/`;
 - `validation/eog_original_idea_cost_aware_adaptive_v15/`.
 
+## Original-EOG virtual-world mainline — v16 cost-uncertain adaptive evidence
+
+v15 assumed that the relative costs of REL, FP and KO measurements were known before
+evidence collection. v16 removed that assumption and required one adaptive policy tree
+to be used across four frozen synthetic cost worlds.
+
+Across 144 random-topology rows × six ecological targets = **864 row-targets**:
+
+- exact cost-blind resolution failures: **0**;
+- negative-regret violations relative to cost-specific oracles: **0**;
+- row-targets with positive irreducible cross-cost regret: **864/864**;
+- zero-regret common policies: **0/864**;
+- minimax-regret policy strictly better than equal-cost commitment: **821/864**;
+- canonical first-action changes relative to equal-cost oracle: **322/864**;
+- rows where a narrow intervention/critical-node target remained cheaper than full
+  topology identity: **52/144**.
+
+The preregistered U4 coexistence hypothesis was **REFUTED**:
+
+> there was no row-target with one policy simultaneously oracle-optimal in all four
+> cost worlds.
+
+Thus cost uncertainty changes not only total acquisition burden but the evidence path
+itself.  The selected cost-blind policies used more than one first-action family:
+
+- FP: **802**;
+- REL: **49**;
+- KO: **13**.
+
+The active evidence-design object is now:
+
+> **surviving ecological worlds × declared ecological target × outcome uncertainty ×
+> cost-world uncertainty.**
+
+Canonical v16 assets:
+
+- `validation/eog_original_idea_cost_uncertain_policy_v16/protocol_v16.json`;
+- `validation/eog_original_idea_cost_uncertain_policy_v16/result_summary_v16.json`;
+- `docs/eog_original_idea_cost_uncertain_policy_v16.md`;
+- `docs/eog_original_idea_cost_uncertain_policy_v16_result.md`;
+- `benchmarks/run_eog_original_idea_cost_uncertain_policy_v16.py`.
+
+Authoritative result fingerprint:
+`41ba3c29e1adb71ed2c832ec1e7f10955ac88c6567c29ce6f9c4b1d9ed6eafd4`.
+
+The next and final question for this evidence-planning subseries is whether explicitly
+learning the cost world before ecological measurement can recover enough value to
+justify the calibration step.  After that test, further synthetic cost-world variants
+should stop.
+
 ## Hard claim boundary
 
 Do not claim:

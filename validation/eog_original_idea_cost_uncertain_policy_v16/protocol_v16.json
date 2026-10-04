@@ -1,0 +1,119 @@
+{
+  "schema": "eog.original_idea_cost_uncertain_policy.protocol.v16",
+  "status": "frozen_before_cost_uncertain_policy_implementation_and_scoring",
+  "parent_v15": {
+    "result": "validation/eog_original_idea_cost_aware_adaptive_v15/result_summary_v15.json",
+    "fingerprint": "700f0bc17b47c9225a1d3420360df649761900722325e8a03133cb2d156ebc87",
+    "key_result": "cost-world-specific adaptive policies remained exact and cost-efficient, but changing only REL/FP/KO family costs changed canonical first actions 1023 times"
+  },
+  "scientific_question": "If the analyst does not know which predeclared measurement-cost world will apply, can one cost-blind adaptive relational policy remain exact with low regret across all cost worlds?",
+  "analysis_base": {
+    "rows": 144,
+    "worlds_per_row": 12,
+    "targets": [
+      "pairwise_relation",
+      "first_passage",
+      "intervention",
+      "critical_node_count",
+      "full_topology_identity",
+      "joint_relational_suite"
+    ],
+    "measurements": "unchanged REL, FP and KO atomic actions from v13-v15",
+    "cost_worlds": {
+      "equal": {"REL": 1, "FP": 1, "KO": 1},
+      "KO_expensive": {"REL": 1, "FP": 1, "KO": 3},
+      "FP_expensive": {"REL": 1, "FP": 3, "KO": 1},
+      "REL_expensive": {"REL": 3, "FP": 1, "KO": 1}
+    }
+  },
+  "policy_information": {
+    "observed": "measurement outcomes and the resulting surviving ecological-world subset",
+    "not_observed": "which measurement-cost world is operative",
+    "cost_world_learning": false,
+    "same_policy_tree_required_across_all_four_cost_worlds": true
+  },
+  "oracle_reference": {
+    "definition": "for each row, target and cost world, use the exact v15 adaptive minimum worst-case cost when that cost world is known in advance",
+    "role": "cost-specific lower bound used only to calculate regret"
+  },
+  "cost_blind_policy": {
+    "tree_cost_vector": "for each policy tree, one worst-case total cost is computed under each of the four cost worlds",
+    "regret_vector": "policy worst-case cost in cost world c minus the v15 cost-world-specific oracle minimum for c",
+    "primary_objective": "minimize maximum absolute regret across the four cost worlds",
+    "tie_rules": [
+      "smaller maximum regret",
+      "smaller sum of regrets",
+      "smaller maximum total cost",
+      "lexicographically smallest canonical policy serialization"
+    ],
+    "exact_solver": "enumerate exact adaptive policy cost vectors by dynamic programming over survivor subsets and prune componentwise dominated vectors before root minimax-regret selection"
+  },
+  "comparators": {
+    "equal_cost_commitment": "the canonical v15 equal-cost optimal adaptive tree, evaluated unchanged under all four cost worlds",
+    "cost_world_oracles": "the four v15 cost-specific adaptive optima"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "U1_cost_blind_policy_resolves_all_targets_exactly",
+      "statement": "Every row-target combination has at least one exact adaptive tree whose action choices are independent of cost-world identity.",
+      "failure_rule": "Any unresolved row-target combination refutes U1."
+    },
+    {
+      "id": "U2_cost_specific_oracles_are_lower_bounds",
+      "statement": "For every selected cost-blind policy and cost world, its worst-case total cost is >= the v15 oracle optimum for that same row, target and cost world.",
+      "failure_rule": "Any negative regret is an implementation/theory failure."
+    },
+    {
+      "id": "U3_irreducible_cost_world_regret_exists",
+      "statement": "At least one row-target combination has minimum achievable maximum regret >0 when one policy must be shared across all four cost worlds.",
+      "failure_rule": "REFUTED if a zero-regret common policy exists for every row-target."
+    },
+    {
+      "id": "U4_zero_regret_common_policies_also_exist",
+      "statement": "At least one row-target combination has a single exact adaptive policy that is simultaneously oracle-optimal in all four cost worlds.",
+      "failure_rule": "REFUTED if every row-target has positive irreducible regret."
+    },
+    {
+      "id": "U5_minimax_regret_beats_equal_cost_commitment_somewhere",
+      "statement": "At least one row-target combination has strictly lower maximum cross-cost regret under the minimax-regret policy than under committing to the v15 equal-cost optimal policy.",
+      "failure_rule": "REFUTED if equal-cost commitment is minimax-regret optimal everywhere."
+    },
+    {
+      "id": "U6_cost_uncertainty_changes_first_measurement",
+      "statement": "At least one row-target minimax-regret policy has a different canonical first action from the v15 equal-cost oracle policy.",
+      "failure_rule": "REFUTED if the canonical first action never changes."
+    },
+    {
+      "id": "U7_narrow_targets_can_be_cheaper_under_cost_uncertainty",
+      "statement": "At least one row has minimax-regret policy maximum total cost for intervention or critical_node_count strictly below that for full_topology_identity.",
+      "failure_rule": "REFUTED if full topology is never more costly under the robust cost-blind policy."
+    },
+    {
+      "id": "U8_no_universal_first_action_under_cost_uncertainty",
+      "statement": "Across the 144 rows and declared targets, more than one canonical first action appears among minimax-regret policies.",
+      "failure_rule": "REFUTED if one action is canonical first everywhere."
+    }
+  ],
+  "secondary_outputs": [
+    "distribution of minimum maximum regret by target",
+    "fraction of row-targets with zero regret",
+    "cost-world regret vectors of selected policies",
+    "first-action and first-family frequencies",
+    "maximum total-cost overhead relative to knowing the cost world",
+    "rows where cost uncertainty changes measurement count as well as measurement family",
+    "Pareto-frontier size of undominated cost vectors at the root"
+  ],
+  "claim_boundary": [
+    "The four cost worlds remain synthetic analyst scenarios rather than field budgets.",
+    "Minimax regret is one robust-choice criterion and is not claimed as universally optimal for field design.",
+    "The solver is generic finite decision-tree optimization; the ecological contribution is the robustness of EOG relational evidence recommendations to cost-world uncertainty.",
+    "No fifth cost world or post-score cost calibration is allowed."
+  ],
+  "stop_rules": [
+    "Do not change regret from absolute to relative after scoring.",
+    "Do not add priors over cost worlds after scoring.",
+    "Do not change the four v15 cost worlds.",
+    "Do not replace minimax regret with expected cost after scoring.",
+    "Failed U3-U8 directions remain failed."
+  ]
+}
