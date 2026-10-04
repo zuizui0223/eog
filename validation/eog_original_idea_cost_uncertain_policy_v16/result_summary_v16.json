@@ -1,0 +1,86 @@
+{
+  "schema": "eog.original_idea_cost_uncertain_policy.result_summary.v16",
+  "status": "completed_preregistered_cost_uncertain_policy_panel",
+  "protocol": "validation/eog_original_idea_cost_uncertain_policy_v16/protocol_v16.json",
+  "authoritative_run": 37205953953,
+  "authoritative_artifact_id": 11305864610,
+  "authoritative_artifact_digest": "sha256:f2b20fa067b1cb8e335012b1f2bccc6f5c75cf406e69c233ab939f83d7bdc73a",
+  "result_fingerprint": "41ba3c29e1adb71ed2c832ec1e7f10955ac88c6567c29ce6f9c4b1d9ed6eafd4",
+  "row_count": 144,
+  "row_target_count": 864,
+  "predeclared_verdicts": {
+    "U1_cost_blind_policy_resolves_all_targets_exactly": "SUPPORTED",
+    "U2_cost_specific_oracles_are_lower_bounds": "SUPPORTED",
+    "U3_irreducible_cost_world_regret_exists": "SUPPORTED",
+    "U4_zero_regret_common_policies_also_exist": "REFUTED",
+    "U5_minimax_regret_beats_equal_cost_commitment_somewhere": "SUPPORTED",
+    "U6_cost_uncertainty_changes_first_measurement": "SUPPORTED",
+    "U7_narrow_targets_can_be_cheaper_under_cost_uncertainty": "SUPPORTED",
+    "U8_no_universal_first_action_under_cost_uncertainty": "SUPPORTED"
+  },
+  "global_results": {
+    "unresolved_row_target_count": 0,
+    "negative_regret_count": 0,
+    "positive_irreducible_regret_row_target_count": 864,
+    "zero_regret_row_target_count": 0,
+    "strict_minimax_improvement_vs_equal_commitment_count": 821,
+    "first_action_change_vs_equal_count": 322,
+    "narrow_target_max_cost_saving_row_count": 52,
+    "canonical_first_action_count": 35,
+    "canonical_first_family_counts": {
+      "FP": 802,
+      "KO": 13,
+      "REL": 49
+    }
+  },
+  "by_target": {
+    "pairwise_relation": {
+      "mean_minimum_max_regret": 2.013888888888889,
+      "zero_regret_rows": 0,
+      "strict_improvement_vs_equal_commitment_rows": 143,
+      "first_action_change_vs_equal_rows": 67
+    },
+    "first_passage": {
+      "mean_minimum_max_regret": 2.013888888888889,
+      "zero_regret_rows": 0,
+      "strict_improvement_vs_equal_commitment_rows": 143,
+      "first_action_change_vs_equal_rows": 66
+    },
+    "intervention": {
+      "mean_minimum_max_regret": 2.0,
+      "zero_regret_rows": 0,
+      "strict_improvement_vs_equal_commitment_rows": 136,
+      "first_action_change_vs_equal_rows": 35
+    },
+    "critical_node_count": {
+      "mean_minimum_max_regret": 2.048611111111111,
+      "zero_regret_rows": 0,
+      "strict_improvement_vs_equal_commitment_rows": 113,
+      "first_action_change_vs_equal_rows": 20
+    },
+    "full_topology_identity": {
+      "mean_minimum_max_regret": 2.013888888888889,
+      "zero_regret_rows": 0,
+      "strict_improvement_vs_equal_commitment_rows": 143,
+      "first_action_change_vs_equal_rows": 67
+    },
+    "joint_relational_suite": {
+      "mean_minimum_max_regret": 2.013888888888889,
+      "zero_regret_rows": 0,
+      "strict_improvement_vs_equal_commitment_rows": 143,
+      "first_action_change_vs_equal_rows": 67
+    }
+  },
+  "interpretation": [
+    "A single cost-blind adaptive policy can resolve every frozen target exactly, but no row-target admits one policy that is simultaneously oracle-optimal in all four cost worlds.",
+    "Cost-world uncertainty therefore creates irreducible evidence-planning regret even when ecological-world uncertainty and the action library are fixed.",
+    "Minimax-regret adaptation improves over blindly committing to the equal-cost oracle in 821/864 row-target combinations.",
+    "The first measurement changes under cost uncertainty in 322/864 row-targets, so cost-world uncertainty can change not only total expenditure but the evidence path itself.",
+    "Target specificity still matters under cost uncertainty: 52/144 rows have a narrow intervention or critical-node target with lower maximum total cost than full topology identity."
+  ],
+  "claim_boundary": [
+    "The four cost worlds are synthetic analyst scenarios, not empirical field budgets.",
+    "Absolute minimax regret is one robust decision criterion rather than a universally optimal choice rule.",
+    "The result establishes cost-world sensitivity of finite EOG evidence policies, not a claim about real monetary or logistical costs."
+  ]
+}
