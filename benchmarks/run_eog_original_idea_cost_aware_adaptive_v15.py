@@ -393,6 +393,7 @@ def _evaluate_row(active_n, replicate):
 
     # Exact equal-cost regressions against the frozen v13/v14 results.
     v13_cache = {}
+    frozen_v14_adaptive_cache = {}
     target_partitions = {
         target: _normalized_partition(_target_values(v12, target))
         for target in TARGETS
@@ -438,14 +439,16 @@ def _evaluate_row(active_n, replicate):
                     raise RuntimeError(
                         "equal-cost weighted fixed solver does not reproduce v13"
                     )
-                frozen_adaptive = _target_adaptive_solver(
-                    partition,
-                    {
-                        feature_id: _normalized_partition(spec["values"])
-                        for feature_id, spec in features.items()
-                    },
-                    fixed_upper_bound=frozen_fixed["minimum_size"],
-                )
+                if partition not in frozen_v14_adaptive_cache:
+                    frozen_v14_adaptive_cache[partition] = _target_adaptive_solver(
+                        partition,
+                        {
+                            feature_id: _normalized_partition(spec["values"])
+                            for feature_id, spec in features.items()
+                        },
+                        fixed_upper_bound=frozen_fixed["minimum_size"],
+                    )
+                frozen_adaptive = frozen_v14_adaptive_cache[partition]
                 if adaptive["worst_case_cost"] != frozen_adaptive["worst_case_depth"]:
                     raise RuntimeError(
                         "equal-cost weighted adaptive solver does not reproduce v14"
