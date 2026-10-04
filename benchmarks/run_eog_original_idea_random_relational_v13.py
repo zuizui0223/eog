@@ -181,56 +181,61 @@ def _dedup_coverages(rows):
     return canonical
 
 
-def _remove_dominated_for_cardinality(rows):
-    # For minimum cardinality only, a coverage mask contained in another single
-    # measurement mask can never improve the optimum.
-    unique = {}
-    for row in rows:
-        unique.setdefault(int(row["mask"]), row)
-    masks = sorted(unique, key=lambda m: (-m.bit_count(), m))
-    kept = []
-    for mask in masks:
-        if any(mask | other == other for other in kept):
-            continue
-        kept.append(mask)
-    return tuple(unique[mask] for mask in kept)
+def _pair_cover_solver(full_mask, rows):
+    rows = tuple(sorted(rows, key=lambda row: row["feature_id"]))
+    if full_mask == 0:
+        return rows, lambda covered: 0
+
+    bit_to_indices = {}
+    bit = 0
+    while (1 << bit) <= full_mask:
+        if full_mask & (1 << bit):
+            bit_to_indices[bit] = tuple(
+                i
+                for i, row in enumerate(rows)
+                if int(row["mask"]) & (1 << bit)
+            )
+            if not bit_to_indices[bit]:
+                raise RuntimeError("uncovered target-discordant pair")
+        bit += 1
+
+    @lru_cache(maxsize=None)
+    def min_additional(covered):
+        if covered == full_mask:
+            return 0
+        uncovered_bits = [
+            bit
+            for bit in bit_to_indices
+            if not (covered & (1 << bit))
+        ]
+        chosen_bit = min(
+            uncovered_bits,
+            key=lambda b: (len(bit_to_indices[b]), b),
+        )
+        best = None
+        for i in bit_to_indices[chosen_bit]:
+            updated = covered | int(rows[i]["mask"])
+            value = 1 + min_additional(updated)
+            if best is None or value < best:
+                best = value
+        if best is None:
+            raise RuntimeError("target cover unexpectedly infeasible")
+        return best
+
+    return rows, min_additional
 
 
 def _minimum_cardinality(full_mask, rows):
     if full_mask == 0:
         return 0
-    reduced = _remove_dominated_for_cardinality(rows)
-    current = {0}
-    for depth in range(1, len(reduced) + 1):
-        next_masks = set()
-        for state in current:
-            for row in reduced:
-                updated = state | int(row["mask"])
-                if updated == full_mask:
-                    return depth
-                next_masks.add(updated)
-
-        # Retain only inclusion-maximal coverage states at this depth.
-        ordered = sorted(next_masks, key=lambda m: (-m.bit_count(), m))
-        antichain = []
-        for mask in ordered:
-            if any(mask | other == other for other in antichain):
-                continue
-            antichain.append(mask)
-        current = set(antichain)
-    return None
+    _, min_additional = _pair_cover_solver(full_mask, rows)
+    return int(min_additional(0))
 
 
 def _canonical_minimum_ids(full_mask, rows, minimum_size):
     if minimum_size == 0:
         return ()
-    ordered = tuple(sorted(rows, key=lambda row: row["feature_id"]))
-    masks = tuple(int(row["mask"]) for row in ordered)
-    ids = tuple(row["feature_id"] for row in ordered)
-
-    suffix_union = [0] * (len(ordered) + 1)
-    for i in range(len(ordered) - 1, -1, -1):
-        suffix_union[i] = suffix_union[i + 1] | masks[i]
+    ordered, min_additional = _pair_cover_solver(full_mask, rows)
 
     @lru_cache(maxsize=None)
     def search(start, remaining, covered):
@@ -238,15 +243,16 @@ def _canonical_minimum_ids(full_mask, rows, minimum_size):
             return () if covered == full_mask else None
         if len(ordered) - start < remaining:
             return None
-        if (covered | suffix_union[start]) != full_mask:
-            return None
 
-        max_i = len(ordered) - remaining
-        for i in range(start, max_i + 1):
-            updated = covered | masks[i]
+        for i in range(start, len(ordered) - remaining + 1):
+            updated = covered | int(ordered[i]["mask"])
+            if updated == covered:
+                continue
+            if min_additional(updated) > remaining - 1:
+                continue
             tail = search(i + 1, remaining - 1, updated)
             if tail is not None:
-                return (ids[i], *tail)
+                return (ordered[i]["feature_id"], *tail)
         return None
 
     result = search(0, int(minimum_size), 0)
@@ -258,55 +264,44 @@ def _canonical_minimum_ids(full_mask, rows, minimum_size):
 def _minimum_with_cross_family(full_mask, rows, minimum_size, same_family):
     if minimum_size in (None, 0) or same_family is None:
         return False
+    ordered = tuple(sorted(rows, key=lambda row: row["feature_id"]))
 
-    # Exact depth-limited bitmask DP.  The previous combinatorial DFS enumerated
-    # feature-ID combinations even when they induced the same coverage state.
-    # Here states are only (covered target-discordant pairs, cross-family-used).
-    # At a fixed depth, an inclusion-superset state with the same flag dominates a
-    # subset state.  A cross-used superset also dominates a non-cross subset because
-    # the objective explicitly requires at least one cross-family measurement.
-    states_false = {0}
-    states_true = set()
+    bit_to_indices = {}
+    bit = 0
+    while (1 << bit) <= full_mask:
+        if full_mask & (1 << bit):
+            bit_to_indices[bit] = tuple(
+                i
+                for i, row in enumerate(ordered)
+                if int(row["mask"]) & (1 << bit)
+            )
+        bit += 1
 
-    for depth in range(1, int(minimum_size) + 1):
-        next_false = set()
-        next_true = set()
-        for covered in states_false:
-            for row in rows:
-                updated = covered | int(row["mask"])
-                if row["family"] != same_family:
-                    next_true.add(updated)
-                else:
-                    next_false.add(updated)
-        for covered in states_true:
-            for row in rows:
-                next_true.add(covered | int(row["mask"]))
+    @lru_cache(maxsize=None)
+    def min_cross(covered, used_cross):
+        if covered == full_mask:
+            return 0 if used_cross else 10**9
+        uncovered_bits = [
+            bit
+            for bit in bit_to_indices
+            if not (covered & (1 << bit))
+        ]
+        chosen_bit = min(
+            uncovered_bits,
+            key=lambda b: (len(bit_to_indices[b]), b),
+        )
+        best = 10**9
+        for i in bit_to_indices[chosen_bit]:
+            updated = covered | int(ordered[i]["mask"])
+            value = 1 + min_cross(
+                updated,
+                used_cross or ordered[i]["family"] != same_family,
+            )
+            if value < best:
+                best = value
+        return best
 
-        if full_mask in next_true:
-            return depth == int(minimum_size)
-
-        def antichain(masks):
-            ordered_masks = sorted(masks, key=lambda m: (-m.bit_count(), m))
-            kept = []
-            for mask in ordered_masks:
-                if any(mask | other == other for other in kept):
-                    continue
-                kept.append(mask)
-            return set(kept)
-
-        next_true = antichain(next_true)
-        next_false = antichain(next_false)
-        if next_true:
-            next_false = {
-                mask
-                for mask in next_false
-                if not any(mask | other == other for other in next_true)
-            }
-
-        states_false = next_false
-        states_true = next_true
-
-    return False
+    return min_cross(0, False) == int(minimum_size)
 
 
 def _minimum_design(row, target):
