@@ -124,6 +124,20 @@ def _action_outcome_masks(action_partitions):
     return out
 
 
+def _prune_vectors(vectors):
+    rows = tuple(sorted(set(tuple(int(v) for v in row) for row in vectors)))
+    keep = []
+    for candidate in rows:
+        if any(
+            _dominates(other, candidate)
+            for other in rows
+            if other != candidate
+        ):
+            continue
+        keep.append(candidate)
+    return tuple(keep)
+
+
 def _policy_frontier(target_partition, action_partitions):
     n_worlds = len(target_partition)
     if n_worlds != 12:
@@ -150,8 +164,7 @@ def _policy_frontier(target_partition, action_partitions):
 
     @lru_cache(maxsize=None)
     def representatives(mask):
-        # Globally/dynamically equivalent actions with the same cost vector are exact
-        # substitutes. Keep the lexicographically first representative.
+        # Exact substitutes under every cost world are collapsed.
         by_key = {}
         for action_id in action_ids:
             state_children = children(mask, action_id)
@@ -163,61 +176,47 @@ def _policy_frontier(target_partition, action_partitions):
                 by_key[key] = action_id
         return tuple(sorted(by_key.values()))
 
-    def combine_children(child_masks):
-        partial = (PolicyOption((0, 0, 0, 0), "", None),)
-        for child_mask in child_masks:
-            child_frontier = frontier(child_mask)
-            if not child_frontier:
-                return ()
-            candidates = []
-            for left in partial:
-                for right in child_frontier:
-                    costs = tuple(
-                        max(a, b)
-                        for a, b in zip(left.costs, right.costs, strict=True)
-                    )
-                    piece = f"{child_mask}:{right.serialization}"
-                    serialization = (
-                        piece
-                        if not left.serialization
-                        else left.serialization + "|" + piece
-                    )
-                    candidates.append(
-                        PolicyOption(costs, serialization, None)
-                    )
-            partial = _prune(candidates)
-        return partial
-
     @lru_cache(maxsize=None)
     def frontier(mask):
         if identified(mask):
-            return (PolicyOption((0, 0, 0, 0), "STOP", None),)
+            return ((0, 0, 0, 0),)
 
-        candidates = []
+        all_candidates = []
         for action_id in representatives(mask):
             state_children = children(mask, action_id)
-            child_options = combine_children(state_children)
-            action_costs = _cost_vector(action_id)
-            for child_option in child_options:
-                costs = tuple(
+
+            # The parent worst-case vector uses componentwise maxima over child
+            # policy vectors. Carry only undominated max vectors while folding
+            # children, avoiding policy-string Cartesian expansion.
+            partial = ((0, 0, 0, 0),)
+            feasible = True
+            for child in state_children:
+                child_frontier = frontier(child)
+                if not child_frontier:
+                    feasible = False
+                    break
+                combined = (
+                    tuple(
+                        max(a, b)
+                        for a, b in zip(left, right, strict=True)
+                    )
+                    for left in partial
+                    for right in child_frontier
+                )
+                partial = _prune_vectors(combined)
+            if not feasible:
+                continue
+
+            action_cost = _cost_vector(action_id)
+            all_candidates.extend(
+                tuple(
                     a + b
-                    for a, b in zip(
-                        action_costs,
-                        child_option.costs,
-                        strict=True,
-                    )
+                    for a, b in zip(action_cost, child_max, strict=True)
                 )
-                serialization = (
-                    f"{action_id}{{{child_option.serialization}}}"
-                )
-                candidates.append(
-                    PolicyOption(
-                        costs=costs,
-                        serialization=serialization,
-                        first_action=action_id,
-                    )
-                )
-        return _prune(candidates)
+                for child_max in partial
+            )
+
+        return _prune_vectors(all_candidates)
 
     root = frontier(full_mask)
     if not root:
@@ -230,33 +229,131 @@ def _policy_frontier(target_partition, action_partitions):
         }
 
     oracle_costs = tuple(
-        min(option.costs[i] for option in root)
+        min(vector[i] for vector in root)
         for i in range(len(COST_NAMES))
     )
 
-    def regret(option):
+    def regret(vector):
         return tuple(
             value - oracle
             for value, oracle in zip(
-                option.costs,
+                vector,
                 oracle_costs,
                 strict=True,
             )
         )
 
-    selected = min(
-        root,
-        key=lambda option: (
-            max(regret(option)),
-            sum(regret(option)),
-            max(option.costs),
-            option.serialization,
-        ),
+    objective_prefix = min(
+        (
+            max(regret(vector)),
+            sum(regret(vector)),
+            max(vector),
+        )
+        for vector in root
+    )
+    selected_vectors = tuple(
+        vector
+        for vector in root
+        if (
+            max(regret(vector)),
+            sum(regret(vector)),
+            max(vector),
+        )
+        == objective_prefix
     )
 
-    # Reconstruct the v15 canonical equal-cost tree: scalar equal-cost optimum with
-    # lexicographic action tie-breaking at each surviving state.  Evaluate that same
-    # tree under all four cost worlds.
+    @lru_cache(maxsize=None)
+    def reconstruct(mask, desired):
+        desired = tuple(desired)
+        if identified(mask):
+            if desired != (0, 0, 0, 0):
+                return None
+            return ("STOP", None)
+
+        candidates = []
+        for action_id in representatives(mask):
+            action_cost = _cost_vector(action_id)
+            residual = tuple(
+                value - cost
+                for value, cost in zip(desired, action_cost, strict=True)
+            )
+            if any(value < 0 for value in residual):
+                continue
+
+            state_children = children(mask, action_id)
+            child_frontiers = [frontier(child) for child in state_children]
+
+            # Enumerate only child-vector combinations that do not exceed the
+            # required componentwise maximum.  This is used for final tree
+            # reconstruction only, not during the main frontier DP.
+            choices = []
+
+            def visit(index, current_max, selected):
+                if index == len(state_children):
+                    if current_max == residual:
+                        choices.append(tuple(selected))
+                    return
+                for vector in child_frontiers[index]:
+                    updated = tuple(
+                        max(a, b)
+                        for a, b in zip(current_max, vector, strict=True)
+                    )
+                    if any(
+                        value > limit
+                        for value, limit in zip(updated, residual, strict=True)
+                    ):
+                        continue
+                    visit(index + 1, updated, [*selected, vector])
+
+            visit(0, (0, 0, 0, 0), [])
+            for vectors in choices:
+                child_serials = []
+                valid = True
+                for child, vector in zip(
+                    state_children,
+                    vectors,
+                    strict=True,
+                ):
+                    built = reconstruct(child, vector)
+                    if built is None:
+                        valid = False
+                        break
+                    child_serials.append((child, built[0]))
+                if not valid:
+                    continue
+                serialization = (
+                    f"{action_id}{{"
+                    + "|".join(
+                        f"{child}:{serial}"
+                        for child, serial in child_serials
+                    )
+                    + "}"
+                )
+                candidates.append((serialization, action_id))
+
+        if not candidates:
+            return None
+        return min(candidates)
+
+    selected_options = []
+    for vector in selected_vectors:
+        built = reconstruct(full_mask, vector)
+        if built is None:
+            raise RuntimeError("could not reconstruct selected Pareto policy")
+        selected_options.append(
+            PolicyOption(
+                costs=vector,
+                serialization=built[0],
+                first_action=built[1],
+            )
+        )
+    selected = min(
+        selected_options,
+        key=lambda option: option.serialization,
+    )
+
+    # Reconstruct the canonical v15 equal-cost tree separately so the v16
+    # comparator matches the original local lexicographic tie rule.
     equal_index = COST_INDEX["equal"]
 
     @lru_cache(maxsize=None)
@@ -348,8 +445,6 @@ def _policy_frontier(target_partition, action_partitions):
 
     equal_commitment = equal_tree(full_mask)
 
-    # Exact consistency: the Pareto frontier must reproduce every v15 cost-world
-    # oracle optimum.
     if equal_commitment.costs[equal_index] != oracle_costs[equal_index]:
         raise RuntimeError("equal-cost canonical tree does not match root oracle")
 
@@ -360,7 +455,6 @@ def _policy_frontier(target_partition, action_partitions):
         "selected": selected,
         "equal_commitment": equal_commitment,
     }
-
 
 def _evaluate_row(active_n, replicate):
     v12 = evaluate_v12(active_n, replicate)
