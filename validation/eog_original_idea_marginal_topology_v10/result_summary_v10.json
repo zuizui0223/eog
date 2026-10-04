@@ -1,0 +1,71 @@
+{
+  "schema": "eog.original_idea_marginal_topology_equivalence.result_summary.v10",
+  "status": "completed_preregistered_static_map_topology_panel",
+  "protocol": "validation/eog_original_idea_marginal_topology_v10/protocol_v10.json",
+  "protocol_commit": "825377284db8bf583aa86e318666759708395457",
+  "authoritative_run": 37175455880,
+  "authoritative_artifact_id": 11293126161,
+  "authoritative_artifact_digest": "sha256:90465bc60968c341561c1995a120c52f181b9c50c014b14a6cadd200509d5e5d",
+  "result_fingerprint": "d6cf5404bfb8e7a4eb9efba26f3f7e19fe8b9b6c7fb2c28e6c2989e64879f669",
+  "row_count": 192,
+  "active_node_counts": [6,10,14],
+  "replicates_per_size": 64,
+  "predeclared_verdicts": {
+    "M1_static_BAM_and_marginal_maps_are_exactly_identical": "SUPPORTED",
+    "M2_pairwise_relation_structure_is_not_identified_by_the_static_map": "SUPPORTED",
+    "M3_first_passage_structure_is_not_identified_by_the_static_map": "SUPPORTED",
+    "M4_knockout_response_is_not_identified_by_the_static_map": "SUPPORTED",
+    "M5_redundant_topology_is_more_knockout_robust_than_chain": "SUPPORTED",
+    "M6_static_representation_collapses_target_distinct_worlds": "SUPPORTED",
+    "M7_static_occurrence_completeness_does_not_resolve_topology": "SUPPORTED",
+    "M8_relational_information_strictly_refines_the_static_equivalence_class": "SUPPORTED"
+  },
+  "failure_counts": {
+    "M1":0,"M2":0,"M3":0,"M4":0,"M5":0,
+    "M6_relation":0,"M6_first_passage":0,"M6_intervention":0,
+    "M7":0,"M8":0
+  },
+  "by_active_node_count": {
+    "6": {
+      "relation_signature_count_distribution":{"3":6,"4":58},
+      "mean_distinct_first_passage_signatures":3.0,
+      "mean_distinct_intervention_signatures":3.0,
+      "mean_first_passage_depth":{"chain":3.0,"star":1.0,"balanced_branching":1.6,"redundant":1.0},
+      "mean_knockout_retained_fraction":{"chain":0.6,"star":1.0,"balanced_branching":0.88,"redundant":1.0},
+      "mean_critical_node_count":{"chain":4.0,"star":0.0,"balanced_branching":2.0,"redundant":0.0},
+      "mean_relation_hamming":{"chain_vs_star":10.0,"chain_vs_branching":7.0,"star_vs_branching":3.0}
+    },
+    "10": {
+      "relation_signature_count_distribution":{"4":64},
+      "mean_distinct_first_passage_signatures":3.0,
+      "mean_distinct_intervention_signatures":3.0,
+      "mean_first_passage_depth":{"chain":5.0,"star":1.0,"balanced_branching":2.111111111111111,"redundant":1.0},
+      "mean_knockout_retained_fraction":{"chain":0.5555555555555555,"star":1.0,"balanced_branching":0.8765432098765433,"redundant":1.0},
+      "mean_critical_node_count":{"chain":8.0,"star":0.0,"balanced_branching":4.0,"redundant":0.0},
+      "mean_relation_hamming":{"chain_vs_star":36.0,"chain_vs_branching":26.0,"star_vs_branching":10.0}
+    },
+    "14": {
+      "relation_signature_count_distribution":{"4":64},
+      "mean_distinct_first_passage_signatures":3.0,
+      "mean_distinct_intervention_signatures":3.0,
+      "mean_first_passage_depth":{"chain":7.0,"star":1.0,"balanced_branching":2.3846153846153846,"redundant":1.0},
+      "mean_knockout_retained_fraction":{"chain":0.5384615384615384,"star":1.0,"balanced_branching":0.893491124260355,"redundant":1.0},
+      "mean_critical_node_count":{"chain":12.0,"star":0.0,"balanced_branching":6.0,"redundant":0.0},
+      "mean_relation_hamming":{"chain_vs_star":78.0,"chain_vs_branching":60.0,"star_vs_branching":18.0}
+    }
+  },
+  "interpretation": [
+    "The complete static cellwise representation A/B/M/G plus a continuous marginal score vector was exactly identical across four topology worlds in every replicate.",
+    "Despite that static equivalence, pairwise occurrence relations, first-passage depths and single-node intervention responses differed in every replicate.",
+    "For 10 active nodes the chain and star worlds differed in 36 ordered-pair reachability entries on average; for 14 active nodes the difference rose to 78.",
+    "Single-node knockout robustness differed strongly despite identical M masks: at 14 active nodes the chain retained 0.538 of remaining active nodes on average while star and redundant worlds retained 1.0.",
+    "The BAM accessibility mask records which nodes are reachable from the source, but not how that accessibility is organized internally.",
+    "A nodewise marginal/raster representation is therefore insufficient for topology-sensitive questions even under complete occurrence-map knowledge."
+  ],
+  "claim_boundary": [
+    "The generic fact that equal marginals need not determine joint/topological structure is not claimed as new mathematics.",
+    "The ecological contribution is to show exactly which EOG distribution-history targets are discarded by a nodewise BAM/raster representation in controlled known-truth worlds.",
+    "The controlled chain/star/tree/redundant topologies are experimental archetypes rather than estimates of real dispersal networks.",
+    "This result does not by itself establish predictive superiority over empirical SDMs."
+  ]
+}
