@@ -1,0 +1,118 @@
+{
+  "schema": "eog.original_idea_random_relational_sufficiency.result_summary.v13",
+  "status": "completed_preregistered_random_relational_sufficiency_panel",
+  "protocol": "validation/eog_original_idea_random_relational_v13/protocol_v13.json",
+  "authoritative_run": 37179930150,
+  "authoritative_artifact_id": 11294382898,
+  "authoritative_artifact_digest": "sha256:2b6dbd9546bc34c947a80f3785355b2a98786d8b340627659a56b947413079ba",
+  "result_fingerprint": "2fdf9f7e2c7634f5bf481fb4c1efff651864ea8292b0635c708608cb4ebd5b45",
+  "row_count": 144,
+  "worlds_per_row": 12,
+  "active_node_counts": [8, 12, 16],
+  "predeclared_verdicts": {
+    "S1_all_declared_targets_are_resolvable": "SUPPORTED",
+    "S2_random_worlds_break_the_v11_one_measurement_shortcut": "SUPPORTED",
+    "S3_intervention_is_informationally_coarser_than_pairwise_relation": "SUPPORTED",
+    "S4_target_class_count_predicts_measurement_burden": "SUPPORTED",
+    "S5_joint_target_requires_at_least_as_much_information_as_each_component": "SUPPORTED",
+    "S6_cross_family_measurements_remain_useful_in_random_topologies": "SUPPORTED",
+    "S7_full_topology_can_be_identified_without_raw_edge_queries": "SUPPORTED",
+    "S8_no_single_relational_measurement_is_universally_first": "SUPPORTED"
+  },
+  "unresolved_by_target": {
+    "pairwise_relation": 0,
+    "first_passage": 0,
+    "intervention": 0,
+    "critical_node_count": 0,
+    "full_topology_identity": 0,
+    "joint_relational_suite": 0
+  },
+  "minimum_measurement_burden": {
+    "pairwise_relation": {
+      "mean": 3.263888888888889,
+      "median": 3.0,
+      "distribution": {"3": 106, "4": 38}
+    },
+    "first_passage": {
+      "mean": 3.263888888888889,
+      "median": 3.0,
+      "distribution": {"3": 106, "4": 38}
+    },
+    "intervention": {
+      "mean": 3.1041666666666665,
+      "median": 3.0,
+      "distribution": {"2": 4, "3": 121, "4": 19}
+    },
+    "critical_node_count": {
+      "mean": 2.9027777777777777,
+      "median": 3.0,
+      "distribution": {"2": 16, "3": 126, "4": 2}
+    },
+    "full_topology_identity": {
+      "mean": 3.263888888888889,
+      "median": 3.0,
+      "distribution": {"3": 106, "4": 38}
+    },
+    "joint_relational_suite": {
+      "mean": 3.263888888888889,
+      "median": 3.0,
+      "distribution": {"3": 106, "4": 38}
+    }
+  },
+  "by_active_node_count": {
+    "8": {
+      "pairwise_relation_mean": 3.6875,
+      "first_passage_mean": 3.6875,
+      "intervention_mean": 3.375,
+      "critical_node_count_mean": 3.0
+    },
+    "12": {
+      "pairwise_relation_mean": 3.0833333333333335,
+      "first_passage_mean": 3.0833333333333335,
+      "intervention_mean": 2.9791666666666665,
+      "critical_node_count_mean": 2.8958333333333335
+    },
+    "16": {
+      "pairwise_relation_mean": 3.0208333333333335,
+      "first_passage_mean": 3.0208333333333335,
+      "intervention_mean": 2.9583333333333335,
+      "critical_node_count_mean": 2.8125
+    }
+  },
+  "cross_family_minimum_rows": {
+    "pairwise_relation": 144,
+    "first_passage": 141,
+    "intervention": 144,
+    "critical_node_count": 143
+  },
+  "target_class_count_vs_minimum_burden_spearman": 0.08011401878634992,
+  "joint_burden_monotonicity_violation_count": 0,
+  "distinct_canonical_first_measurement_count": 11,
+  "distinct_canonical_first_measurements": [
+    "FP:N01",
+    "FP:N02",
+    "FP:N03",
+    "FP:N04",
+    "FP:N05",
+    "FP:N06",
+    "FP:N07",
+    "FP:N08",
+    "FP:N09",
+    "FP:N13",
+    "KO:N01"
+  ],
+  "interpretation": [
+    "The one-measurement shortcuts of the four hand-designed topology archetypes do not generalize to the 12-world random panels; typical exact target resolution requires three relational measurements.",
+    "Nevertheless, a very small relational subset resolves topology-sensitive targets despite complete static nodewise equivalence across all 12 worlds.",
+    "Full topology identity itself is recoverable with only three or four REL/FP/KO measurements and no raw-edge query in every row.",
+    "Intervention response is slightly coarser than complete pairwise relation structure, requiring fewer measurements on average.",
+    "Cross-family exact minima are common, so the most useful measurement family need not match the semantic target family.",
+    "No single relational measurement is universally first; evidence design is world-set and target dependent."
+  ],
+  "claim_boundary": [
+    "Measurement counts are conceptual information counts, not field costs.",
+    "The 12-world panels are controlled DAG ensembles rather than empirical dispersal networks.",
+    "Full topology recovery from a few relational measurements is conditional on this finite candidate universe and does not imply that arbitrary real networks are identifiable from three observations.",
+    "The next valid question is adaptive evidence design: whether outcome-dependent sequential measurement can reduce expected or worst-case burden relative to one fixed nonadaptive panel."
+  ]
+}
