@@ -1,0 +1,36 @@
+name: Original EOG marginal-topology equivalence v10
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_marginal_topology_v10/**"
+      - "benchmarks/run_eog_original_idea_marginal_topology_v10.py"
+      - "tests/test_eog_original_idea_marginal_topology_v10.py"
+      - ".github/workflows/eog-original-idea-marginal-topology-v10.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: original-eog-marginal-topology-v10-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test marginal-topology invariants
+        run: python -m pytest tests/test_eog_original_idea_marginal_topology_v10.py -q
+      - name: Run frozen marginal-topology benchmark
+        run: |
+          python benchmarks/run_eog_original_idea_marginal_topology_v10.py \
+            --output build/eog_original_idea_marginal_topology_v10/result_v10.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-original-idea-marginal-topology-v10
+          path: build/eog_original_idea_marginal_topology_v10/result_v10.json
+          if-no-files-found: error
