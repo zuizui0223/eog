@@ -1,0 +1,36 @@
+name: Original EOG cost-aware adaptive v15
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_cost_aware_adaptive_v15/**"
+      - "benchmarks/run_eog_original_idea_cost_aware_adaptive_v15.py"
+      - "tests/test_eog_original_idea_cost_aware_adaptive_v15.py"
+      - ".github/workflows/eog-original-idea-cost-aware-adaptive-v15.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: original-eog-cost-aware-v15-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test cost-aware adaptive invariants
+        run: python -m pytest tests/test_eog_original_idea_cost_aware_adaptive_v15.py -q
+      - name: Run frozen cost-aware adaptive benchmark
+        run: |
+          python benchmarks/run_eog_original_idea_cost_aware_adaptive_v15.py \
+            --output build/eog_original_idea_cost_aware_adaptive_v15/result_v15.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-original-idea-cost-aware-adaptive-v15
+          path: build/eog_original_idea_cost_aware_adaptive_v15/result_v15.json
+          if-no-files-found: error
