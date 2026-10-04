@@ -61,10 +61,17 @@ def _canonical_actions(features):
     return action_partitions, family_by_id
 
 
-def _target_adaptive_solver(target_partition, action_partitions):
+def _target_adaptive_solver(
+    target_partition,
+    action_partitions,
+    *,
+    fixed_upper_bound,
+):
     n_worlds = len(target_partition)
     if n_worlds != 12:
         raise RuntimeError("v14 requires exactly 12 worlds")
+    if fixed_upper_bound is None:
+        raise RuntimeError("adaptive solver requires a finite v13 fixed upper bound")
     full_mask = (1 << n_worlds) - 1
     action_ids = tuple(sorted(action_partitions))
 
@@ -97,36 +104,41 @@ def _target_adaptive_solver(target_partition, action_partitions):
         )
 
     @lru_cache(maxsize=None)
-    def solve(mask):
+    def can_resolve(mask, depth):
         if identified(mask):
-            return (True, 0, None, ())
-        best_depth = None
-        best_actions = []
+            return True
+        if depth <= 0:
+            return False
         for action_id in action_ids:
             children = action_children(mask, action_id)
             if len(children) <= 1:
                 continue
-            child_depths = []
-            valid = True
-            for child in children:
-                ok, depth, _, _ = solve(child)
-                if not ok or depth is None:
-                    valid = False
-                    break
-                child_depths.append(depth)
-            if not valid:
-                continue
-            depth = 1 + max(child_depths)
-            if best_depth is None or depth < best_depth:
-                best_depth = depth
-                best_actions = [action_id]
-            elif depth == best_depth:
-                best_actions.append(action_id)
+            if all(can_resolve(child, depth - 1) for child in children):
+                return True
+        return False
 
-        if best_depth is None:
-            return (False, None, None, ())
-        optimal = tuple(sorted(best_actions))
-        return (True, best_depth, optimal[0], optimal)
+    @lru_cache(maxsize=None)
+    def minimum_depth(mask):
+        if identified(mask):
+            return 0
+        for depth in range(1, int(fixed_upper_bound) + 1):
+            if can_resolve(mask, depth):
+                return depth
+        return None
+
+    @lru_cache(maxsize=None)
+    def optimal_actions(mask):
+        depth = minimum_depth(mask)
+        if depth is None or depth == 0:
+            return ()
+        rows = []
+        for action_id in action_ids:
+            children = action_children(mask, action_id)
+            if len(children) <= 1:
+                continue
+            if all(can_resolve(child, depth - 1) for child in children):
+                rows.append(action_id)
+        return tuple(sorted(rows))
 
     def child_for_truth(mask, action_id, truth_index):
         truth_bit = 1 << truth_index
@@ -139,9 +151,11 @@ def _target_adaptive_solver(target_partition, action_partitions):
         mask = full_mask
         path = []
         while not identified(mask):
-            ok, depth, action_id, optimal = solve(mask)
-            if not ok or depth is None or action_id is None:
+            depth = minimum_depth(mask)
+            optimal = optimal_actions(mask)
+            if depth is None or not optimal:
                 raise RuntimeError("adaptive policy unresolved on realized path")
+            action_id = optimal[0]
             child = child_for_truth(mask, action_id, truth_index)
             if child == mask:
                 raise RuntimeError("canonical adaptive action failed to contract state")
@@ -157,8 +171,8 @@ def _target_adaptive_solver(target_partition, action_partitions):
             mask = child
         return tuple(path), mask
 
-    ok, worst_depth, first_action, optimal_first = solve(full_mask)
-    if not ok or worst_depth is None:
+    worst_depth = minimum_depth(full_mask)
+    if worst_depth is None:
         return {
             "resolvable": False,
             "worst_case_depth": None,
@@ -172,6 +186,9 @@ def _target_adaptive_solver(target_partition, action_partitions):
             "terminal_world_count_mean": None,
         }
 
+    optimal_first = optimal_actions(full_mask)
+    first_action = optimal_first[0] if optimal_first else None
+
     realized_depths = []
     terminal_counts = []
     for truth_index in range(n_worlds):
@@ -184,9 +201,9 @@ def _target_adaptive_solver(target_partition, action_partitions):
         for child in action_children(full_mask, first_action):
             if identified(child):
                 continue
-            ok_child, _, second, _ = solve(child)
-            if ok_child and second is not None:
-                second_actions.add(second)
+            child_optimal = optimal_actions(child)
+            if child_optimal:
+                second_actions.add(child_optimal[0])
 
     return {
         "resolvable": True,
@@ -205,7 +222,6 @@ def _target_adaptive_solver(target_partition, action_partitions):
         ),
         "terminal_world_count_mean": float(np.mean(terminal_counts)),
     }
-
 
 def _evaluate_row(active_n, replicate):
     v12 = evaluate_v12(active_n, replicate)
@@ -226,6 +242,7 @@ def _evaluate_row(active_n, replicate):
         adaptive = _target_adaptive_solver(
             target_partition,
             action_partitions,
+            fixed_upper_bound=fixed["minimum_size"],
         )
         if not adaptive["resolvable"]:
             fixed_min = fixed["minimum_size"]
