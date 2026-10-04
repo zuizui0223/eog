@@ -1726,6 +1726,170 @@ Canonical assets:
 - `validation/eog_original_idea_expansion_direction_v7/`;
 - `validation/eog_original_idea_world_growth_v8/`.
 
+## Original-EOG virtual-world mainline — v9 to v15
+
+The v4-v8 sequence established what occurrence evidence constrains and how universal
+certificates survive world growth.  v9-v15 then asked what evidence should be collected
+when static maps are insufficient.
+
+### v9 — current identification and future-proofing are different objectives
+
+A measurement can be redundant for the current survivor fiber yet valuable because it
+excludes worlds that would threaten the certificate if admitted later.
+
+Across 272 eligible rows:
+
+- current-optimal versus future-proof-optimal action differed in **178** rows;
+- **205** rows contained an action with zero current contraction but positive future
+  certificate-lifetime value;
+- future-proof optimum was heterogeneous:
+  - source: 94 rows;
+  - barrier: 91;
+  - analyst rule: 87;
+- one truth-consistent diagnostic converted **1,585** threatened certificates to
+  full-pool survival.
+
+Thus "what best identifies the current world?" and "what best protects the future
+claim?" are distinct experimental-design questions.
+
+### v10 — equal static A/B/M/G does not imply equal distributional structure
+
+Four controlled transition topologies were constructed with exactly identical:
+
+- A;
+- B;
+- M accessibility mask;
+- final G;
+- nodewise continuous marginal score vector.
+
+Yet pairwise relations, first-passage depth and knockout response differed in every one
+of **192** replicates.
+
+At 14 active nodes:
+
+- chain versus star relation Hamming difference: **78** ordered pairs on average;
+- chain knockout retained fraction: **0.538**;
+- star/redundant: **1.0**.
+
+So a static raster or BAM accessibility mask records which nodes are reachable, but not
+how the realised accessibility is internally organized.
+
+### v11 — only target-relevant relational evidence is needed
+
+In the four-topology system:
+
+- first-passage target: one measurement;
+- intervention target: one;
+- critical-node count: one;
+- pairwise relation structure: two.
+
+The combined relational suite required two measurements but became topology-identifying,
+refuting the preregistered expectation that the joint target would still leave full
+topology unresolved.
+
+The compression advantage therefore depends on keeping the ecological target narrow.
+
+### v12 — topology information gap generalizes to random networks
+
+Across **144** panels, each containing **12 random topology worlds** with identical
+static A/B/M/G and marginal maps:
+
+- pairwise relation and first-passage usually distinguished the topology worlds;
+- at 12 and 16 active nodes they identified all 12 worlds in every replicate;
+- richer edge networks had greater knockout robustness
+  (Spearman edge count vs retained fraction **0.750**);
+- richer networks had shorter first-passage depth
+  (Spearman **−0.405**).
+
+The topology-sensitive information loss is therefore not an artifact of chain/star
+examples.
+
+### v13 — a few relational measurements can resolve topology-sensitive targets
+
+Using REL, FP and KO measurements on the unchanged random 12-world panels:
+
+- every declared target was exactly resolvable;
+- typical minimum burden was **3** measurements;
+- pairwise relation / first passage / full topology: mean **3.264**;
+- intervention: **3.104**;
+- critical-node count: **2.903**.
+
+The hand-built v11 one-measurement shortcut did not generalize, but the required
+relational subset remained very small.
+
+### v14 — outcome-adaptive evidence saves measurements
+
+Exact sequential policies were allowed to choose the next REL/FP/KO measurement after
+seeing the previous outcome.
+
+Across 144 rows:
+
+- adaptive worst-case never exceeded the best fixed-panel burden;
+- strict worst-case saving occurred in **262 row-target** combinations;
+- branching / outcome-dependent replanning occurred in **131/144** rows;
+- realized-path savings occurred in almost every row for relation, first-passage and
+  intervention targets.
+
+For pairwise relation:
+
+- fixed mean minimum: **3.264**;
+- adaptive worst case: **2.986**;
+- realized adaptive depth: **2.541**.
+
+Thus EOG evidence design is naturally sequential rather than one fixed survey panel.
+
+### v15 — the best next measurement depends on the analyst cost world
+
+v15 assigned four prospectively frozen relative-cost worlds to the same REL/FP/KO
+library:
+
+- equal cost;
+- KO expensive;
+- FP expensive;
+- REL expensive.
+
+All eight preregistered hypotheses were supported.
+
+Exact checks:
+
+- adaptive-worst-case > fixed-cost violations: **0**;
+- target-specific cost > full-topology cost violations: **0**;
+- unresolved row-target-cost combinations: **0**.
+
+Changing only the cost world changed the canonical first action **1,023** times.
+
+Making one measurement family three times as expensive removed that family entirely
+from canonical first-action choices:
+
+- REL: 8 -> 0;
+- FP: 852 -> 0;
+- KO: 4 -> 0.
+
+Rows with at least one strict adaptive worst-case saving:
+
+- equal: **91/144**;
+- KO expensive: **80/144**;
+- FP expensive: **141/144**;
+- REL expensive: **88/144**.
+
+The active next-measurement object is therefore conditional on three things:
+
+> **surviving worlds × declared ecological target × measurement-cost world.**
+
+The synthetic cost values are not field budgets.  The next valid question is whether
+one policy can remain acceptable when the cost world itself is uncertain rather than
+known beforehand.
+
+Canonical assets for this evidence-planning sequence:
+
+- `validation/eog_original_idea_future_proof_evidence_v9/`;
+- `validation/eog_original_idea_marginal_topology_v10/`;
+- `validation/eog_original_idea_target_relational_v11/`;
+- `validation/eog_original_idea_random_topology_v12/`;
+- `validation/eog_original_idea_random_relational_v13/`;
+- `validation/eog_original_idea_random_relational_v14/`;
+- `validation/eog_original_idea_cost_aware_adaptive_v15/`.
+
 ## Hard claim boundary
 
 Do not claim:
