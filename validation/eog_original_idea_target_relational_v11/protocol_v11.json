@@ -1,0 +1,98 @@
+{
+  "schema": "eog.original_idea_target_relational_sufficiency.protocol.v11",
+  "status": "frozen_before_minimal_relational_synthesis_implementation_and_scoring",
+  "parent_v10": {
+    "result": "validation/eog_original_idea_marginal_topology_v10/result_summary_v10.json",
+    "fingerprint": "d6cf5404bfb8e7a4eb9efba26f3f7e19fe8b9b6c7fb2c28e6c2989e64879f669",
+    "key_result": "identical A/B/M/G and nodewise marginal maps hid different pairwise relations, first-passage histories and knockout responses in 192/192 replicates"
+  },
+  "scientific_question": "Once static nodewise representation is known to be insufficient, what is the exact minimum relational information needed to identify each declared topology-sensitive ecological target?",
+  "analysis_base": {
+    "rows": 192,
+    "worlds_per_row": 4,
+    "topology_worlds": ["chain", "star", "balanced_branching", "redundant"],
+    "no_new_ecological_worlds": true
+  },
+  "targets": {
+    "pairwise_relation": "complete directed reachability signature among ordered active-node pairs",
+    "first_passage": "source-to-active-node shortest-path depth signature",
+    "intervention": "reachable-active-node count after every single non-source node knockout",
+    "critical_node_count": "number of non-source nodes whose removal disconnects at least one additional active node",
+    "joint_relational_suite": "tuple(pairwise_relation, first_passage, intervention)"
+  },
+  "atomic_relational_measurements": {
+    "REL": "one ordered-pair reachability bit rel:<source>-><target>",
+    "FP": "one source-to-node first-passage depth fp:<target>",
+    "KO": "one single-node knockout retained-count ko:<removed_node>",
+    "static_nodewise_features": "not included in optimization because v10 proved them exactly constant across the four worlds"
+  },
+  "exact_sufficiency_rule": "a selected feature set is sufficient for target T when any two worlds with identical selected-feature signatures also have identical T values",
+  "optimization": {
+    "method": "exact minimum-cardinality search after deduplicating atomic measurements that induce the same partition of the four worlds",
+    "tie_rule": "lexicographically smallest measurement-ID tuple among minimum-cardinality solutions",
+    "feature_cost": "unit conceptual count only"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "Q1_each_target_is_resolvable_by_declared_relational_measurements",
+      "statement": "Every row's pairwise-relation, first-passage, intervention and critical-node-count targets are exactly resolvable by the complete REL/FP/KO measurement library.",
+      "failure_rule": "REFUTED separately for any target family with at least one unresolved row."
+    },
+    {
+      "id": "Q2_target_specific_minima_are_strict_compressions",
+      "statement": "For every row and each of pairwise-relation, first-passage and intervention targets, the exact minimum measurement count is strictly smaller than the total number of available atomic relational measurements.",
+      "failure_rule": "REFUTED separately if any target/row requires the entire atomic library."
+    },
+    {
+      "id": "Q3_full_topology_identity_is_not_required_for_first_passage_or_intervention",
+      "statement": "In every row, both the first-passage target and intervention target induce fewer equivalence classes than the four full topology identities.",
+      "failure_rule": "REFUTED separately if either target has four classes in any row."
+    },
+    {
+      "id": "Q4_relational_targets_have_different_information_requirements",
+      "statement": "At least one row has different exact minimum measurement counts or different canonical minimum feature sets for pairwise-relation, first-passage and intervention targets.",
+      "failure_rule": "REFUTED if all three target families always have identical minima and canonical feature sets."
+    },
+    {
+      "id": "Q5_cross_family_measurements_can_be_sufficient",
+      "statement": "At least one row has a minimum target design that uses an atomic measurement from a different semantic family than the target itself, for example KO evidence identifying a first-passage target or REL evidence identifying an intervention target.",
+      "failure_rule": "REFUTED if every minimum design always uses only same-family measurements."
+    },
+    {
+      "id": "Q6_joint_relational_suite_is_resolvable_without_edge_identity",
+      "statement": "Every row's joint relational suite is resolvable by REL/FP/KO measurements even though no raw edge-list observation is supplied.",
+      "failure_rule": "REFUTED if any row's joint suite remains unresolved."
+    },
+    {
+      "id": "Q7_joint_target_can_leave_full_topology_unresolved",
+      "statement": "At least one row has fewer joint-relational-suite target classes than the four distinct edge-topology worlds.",
+      "failure_rule": "REFUTED if the joint target always identifies all four topology worlds."
+    },
+    {
+      "id": "Q8_no_single_fixed_measurement_is_universally_optimal",
+      "statement": "Across rows and target families, the lexicographically canonical exact minimum designs use more than one distinct first measurement ID.",
+      "failure_rule": "REFUTED if one fixed measurement is always the canonical first measurement."
+    }
+  ],
+  "secondary_outputs": [
+    "target-class count distributions",
+    "minimum measurement-count distributions by target",
+    "measurement-family composition of canonical minima",
+    "cross-family minimum-design frequency",
+    "rows where target resolution leaves two or more topology worlds equivalent",
+    "joint-suite compression relative to full edge identity"
+  ],
+  "claim_boundary": [
+    "Atomic measurement counts are conceptual information counts, not field-cost-equivalent operations.",
+    "The exact minima are conditional on the four v10 topology archetypes and their labeled nodes.",
+    "A target-sufficient relational summary is not a claim that omitted topology is biologically irrelevant for every other question.",
+    "The programme does not claim novelty for finite partition refinement or exact set-cover search."
+  ],
+  "stop_rules": [
+    "Do not add atomic measurement types after scoring.",
+    "Do not remove a target family after scoring.",
+    "Do not assign post hoc unequal costs to rescue a preferred measurement family.",
+    "Do not use raw edge-list queries in v11.",
+    "Failed Q1-Q8 claims remain failed."
+  ]
+}

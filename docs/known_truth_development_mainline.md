@@ -308,6 +308,63 @@ The next question is not whether topology matters.  v10 has established that it 
 The next question is **how much relational information is minimally sufficient for a
 declared topology-sensitive target**.
 
+## Original-EOG virtual-world mainline — v11 target-relational sufficiency
+
+v10 showed that identical static A/B/M/G/marginal maps can hide different topology.
+v11 asked how much relational information must be added for a declared ecological
+target.
+
+The exact atomic library contained:
+
+- one ordered-pair reachability bit;
+- one source-to-node first-passage depth;
+- one single-node knockout retained-count.
+
+For each of the 192 v10 static-equivalence classes, exact minimum feature subsets were
+computed.
+
+Seven of eight preregistered hypotheses were supported.
+
+Results:
+
+- first-passage target: **3 classes**, exact minimum **1 measurement** in 192/192 rows;
+- intervention target: **3 classes**, exact minimum **1**;
+- critical-node-count target: **3 classes**, exact minimum **1**;
+- pairwise-relation target: **3 or 4 classes**, exact minimum **2**;
+- joint relation + first-passage + intervention target: **4 classes**, exact minimum
+  **2**.
+
+Cross-family sufficiency occurred in every row for the three principal target families.
+In particular, the canonical intervention minimum was one **first-passage** measurement
+rather than a knockout measurement in 192/192 rows.
+
+The main correction was Q7, which was **REFUTED**:
+
+> the joint relational suite identified all four topology worlds in 192/192 rows.
+
+Thus the target-quotient principle has a sharp boundary.  A narrow ecological target
+can justify stopping with unresolved topology, but a sufficiently rich bundle of
+relational targets can itself become world-identifying.
+
+The current EOG representation rule is therefore:
+
+> **static nodewise state -> declared target -> minimum target-sufficient relational
+> information -> stop unless the target suite itself requires full topology identity.**
+
+Canonical assets:
+
+- `validation/eog_original_idea_target_relational_v11/protocol_v11.json`;
+- `validation/eog_original_idea_target_relational_v11/result_summary_v11.json`;
+- `docs/eog_original_idea_target_relational_v11.md`;
+- `docs/eog_original_idea_target_relational_v11_result.md`.
+
+Authoritative fingerprint:
+`89de41a67ec521c7cabcee5cb72c9f93634efaab0e2ffec348bef9a547f5619e`.
+
+The next valid test is generality beyond the four hand-designed topology archetypes:
+randomly generate many static-equivalent transition graphs and ask whether the
+target-specific compression and cross-family sufficiency persist.
+
 ## 1. What was directly refuted
 
 The first large known-truth factorial falsified the strong recovery idea.
