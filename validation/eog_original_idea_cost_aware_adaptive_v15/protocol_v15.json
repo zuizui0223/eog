@@ -1,0 +1,118 @@
+{
+  "schema": "eog.original_idea_cost_aware_adaptive.protocol.v15",
+  "status": "frozen_before_cost_aware_adaptive_implementation_and_scoring",
+  "parent_v14": {
+    "result": "validation/eog_original_idea_random_relational_v14/result_summary_v14.json",
+    "fingerprint": "c3e3f69cefffb90b0fd67b7b9eb2e5f4787b2f2ac9cfffdf701887cf4763d330",
+    "key_result": "exact outcome-adaptive REL/FP/KO trees weakly dominated the best fixed equal-cost panels, with strict worst-case savings in 262 row-target combinations and widespread branch-specific replanning"
+  },
+  "scientific_question": "Does target-aware adaptive relational evidence remain advantageous when relational measurement families have different predeclared costs, and do analyst choices about evidence cost change which measurement should be taken first?",
+  "analysis_base": {
+    "rows": 144,
+    "worlds_per_row": 12,
+    "active_node_counts": [8, 12, 16],
+    "worlds": "exact frozen v12 random static-equivalent topology worlds",
+    "targets": [
+      "pairwise_relation",
+      "first_passage",
+      "intervention",
+      "critical_node_count",
+      "full_topology_identity",
+      "joint_relational_suite"
+    ],
+    "atomic_measurements": "exact unchanged v13/v14 REL, FP and KO measurements",
+    "no_new_measurement_types": true
+  },
+  "cost_worlds": {
+    "equal": {"REL": 1, "FP": 1, "KO": 1},
+    "KO_expensive": {"REL": 1, "FP": 1, "KO": 3},
+    "FP_expensive": {"REL": 1, "FP": 3, "KO": 1},
+    "REL_expensive": {"REL": 3, "FP": 1, "KO": 1}
+  },
+  "cost_semantics": {
+    "unit": "synthetic relative information/acquisition cost",
+    "not_field_cost": true,
+    "family_from_action_id": "REL:* -> REL, FP:* -> FP, KO:* -> KO",
+    "additivity": "total path cost is the sum of action-family costs along that branch",
+    "no_outcome_dependent_cost": true
+  },
+  "fixed_reference": {
+    "definition": "minimum total cost of one nonadaptive set of measurements sufficient to identify the target for every world in the row",
+    "tie_rule": "minimum total cost, then fewer measurements, then lexicographically smallest sorted action tuple"
+  },
+  "adaptive_planner": {
+    "state": "current surviving subset of worlds",
+    "target_stop_rule": "stop when all surviving worlds share the declared target value",
+    "objective": "minimize worst-case remaining total cost under the current cost world",
+    "transition": "after an action outcome, retain worlds with that exact deterministic measurement value",
+    "tie_rule": "minimum worst-case cost, then lexicographically smallest action ID",
+    "repeated_action_rule": "an already observed deterministic action cannot split its child state again"
+  },
+  "secondary_realized_summary": {
+    "definition": "mean realized total cost of the canonical worst-case-cost-optimal adaptive policy when each of the 12 declared worlds is counted once",
+    "claim_boundary": "descriptive finite-panel average, not an ecological prior"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "C1_adaptive_worst_case_cost_never_exceeds_fixed_cost",
+      "statement": "For every row, target and cost world, exact adaptive worst-case total cost is <= the exact minimum fixed-panel total cost.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "C2_strict_adaptive_cost_saving_exists_in_every_cost_world",
+      "statement": "Each of the four cost worlds has at least one row-target combination with adaptive worst-case cost strictly below the best fixed-panel cost.",
+      "failure_rule": "REFUTED separately for any cost world without a strict saving."
+    },
+    {
+      "id": "C3_cost_world_changes_optimal_first_measurement",
+      "statement": "At least one row-target combination has a different canonical first action under two predeclared cost worlds.",
+      "failure_rule": "REFUTED if canonical first action is invariant to all cost worlds everywhere."
+    },
+    {
+      "id": "C4_expensive_family_is_used_less_often_first",
+      "statement": "For each family X in {REL,FP,KO}, making X expensive strictly reduces the pooled frequency with which an X action is canonical first relative to the equal-cost world.",
+      "failure_rule": "REFUTED separately for any family without a strict decrease."
+    },
+    {
+      "id": "C5_target_specific_cost_never_exceeds_topology_identity_cost",
+      "statement": "For every row and cost world, adaptive worst-case cost for pairwise_relation, first_passage, intervention and critical_node_count is <= full_topology_identity cost.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "C6_narrow_target_cost_saving_vs_topology_exists",
+      "statement": "For every cost world, at least one row has intervention or critical_node_count adaptive worst-case cost strictly below full_topology_identity cost.",
+      "failure_rule": "REFUTED separately for a cost world without such a row."
+    },
+    {
+      "id": "C7_cost_aware_policy_remains_outcome_adaptive",
+      "statement": "Every cost world has at least one row-target policy choosing different second actions after different first-action outcomes.",
+      "failure_rule": "REFUTED separately if a cost world reduces every optimal policy to one fixed order."
+    },
+    {
+      "id": "C8_all_targets_remain_exactly_resolvable",
+      "statement": "Every row-target-cost-world combination remains exactly resolvable using only the unchanged REL/FP/KO library.",
+      "failure_rule": "Any unresolved combination refutes C8."
+    }
+  ],
+  "secondary_outputs": [
+    "fixed and adaptive total-cost distributions by target and cost world",
+    "mean realized adaptive total cost",
+    "first-action and first-family frequencies by cost world",
+    "policy changes across cost worlds",
+    "measurement-count versus measurement-cost tradeoffs",
+    "rows where the cheapest policy uses more measurements than the equal-cost minimum"
+  ],
+  "claim_boundary": [
+    "Cost worlds are analyst sensitivity scenarios, not calibrated field budgets.",
+    "A cost-optimal synthetic policy is not automatically a practical sampling protocol.",
+    "Generic cost-sensitive decision trees are not claimed as new; the ecological question is whether EOG relational evidence recommendations are robust to plausible cost ordering.",
+    "No post-score cost tuning is allowed."
+  ],
+  "stop_rules": [
+    "Do not change 1-versus-3 family costs after scoring.",
+    "Do not add a fifth cost world after scoring.",
+    "Do not make costs target-specific after scoring.",
+    "Do not replace worst-case cost with expected cost after scoring.",
+    "Failed C2-C7 directions remain failed."
+  ]
+}

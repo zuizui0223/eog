@@ -1,0 +1,87 @@
+{
+  "schema": "eog.original_idea_cost_aware_adaptive.result_summary.v15",
+  "status": "completed_preregistered_cost_aware_adaptive_panel",
+  "protocol": "validation/eog_original_idea_cost_aware_adaptive_v15/protocol_v15.json",
+  "authoritative_run": 37193176787,
+  "authoritative_artifact_id": 11300468964,
+  "authoritative_artifact_digest": "sha256:486a28b4159f2a46ab826c20c7ad436d23c68571167fa8a4052a80108e741333",
+  "result_fingerprint": "700f0bc17b47c9225a1d3420360df649761900722325e8a03133cb2d156ebc87",
+  "row_count": 144,
+  "predeclared_verdicts": {
+    "C1_adaptive_worst_case_cost_never_exceeds_fixed_cost": "SUPPORTED",
+    "C2_strict_adaptive_cost_saving_exists_in_every_cost_world": "SUPPORTED",
+    "C3_cost_world_changes_optimal_first_measurement": "SUPPORTED",
+    "C4_expensive_family_is_used_less_often_first": "SUPPORTED",
+    "C5_target_specific_cost_never_exceeds_topology_identity_cost": "SUPPORTED",
+    "C6_narrow_target_cost_saving_vs_topology_exists": "SUPPORTED",
+    "C7_cost_aware_policy_remains_outcome_adaptive": "SUPPORTED",
+    "C8_all_targets_remain_exactly_resolvable": "SUPPORTED"
+  },
+  "exact_checks": {
+    "adaptive_worst_case_cost_violation_count": 0,
+    "target_specific_cost_vs_topology_violation_count": 0,
+    "unresolved_row_target_cost_world_combinations": 0,
+    "canonical_first_action_changes_vs_equal_cost": 1023
+  },
+  "family_cost_sensitivity": {
+    "REL": {
+      "equal_cost_canonical_first_count": 8,
+      "REL_expensive_canonical_first_count": 0
+    },
+    "FP": {
+      "equal_cost_canonical_first_count": 852,
+      "FP_expensive_canonical_first_count": 0
+    },
+    "KO": {
+      "equal_cost_canonical_first_count": 4,
+      "KO_expensive_canonical_first_count": 0
+    }
+  },
+  "cost_world_summary": {
+    "equal": {
+      "rows_with_any_strict_worst_case_saving": 91,
+      "rows_with_branching_policy": 131,
+      "rows_with_narrow_target_saving_vs_topology": 75
+    },
+    "KO_expensive": {
+      "rows_with_any_strict_worst_case_saving": 80,
+      "rows_with_branching_policy": 130,
+      "rows_with_narrow_target_saving_vs_topology": 53
+    },
+    "FP_expensive": {
+      "rows_with_any_strict_worst_case_saving": 141,
+      "rows_with_branching_policy": 143,
+      "rows_with_narrow_target_saving_vs_topology": 25
+    },
+    "REL_expensive": {
+      "rows_with_any_strict_worst_case_saving": 88,
+      "rows_with_branching_policy": 129,
+      "rows_with_narrow_target_saving_vs_topology": 67
+    }
+  },
+  "selected_target_costs": {
+    "equal": {
+      "pairwise_relation": {"mean_fixed": 3.263888888888889, "mean_adaptive_worst": 2.986111111111111, "mean_realized_adaptive": 2.5410879629629632},
+      "intervention": {"mean_fixed": 3.1041666666666665, "mean_adaptive_worst": 2.8333333333333335, "mean_realized_adaptive": 2.4328703703703707},
+      "critical_node_count": {"mean_fixed": 2.9027777777777777, "mean_adaptive_worst": 2.4652777777777777, "mean_realized_adaptive": 2.1649305555555554}
+    },
+    "FP_expensive": {
+      "pairwise_relation": {"mean_fixed": 4.013888888888889, "mean_adaptive_worst": 3.048611111111111, "mean_realized_adaptive": 2.829282407407407},
+      "intervention": {"mean_fixed": 3.7777777777777777, "mean_adaptive_worst": 2.9791666666666665, "mean_realized_adaptive": 2.5943287037037037},
+      "critical_node_count": {"mean_fixed": 3.298611111111111, "mean_adaptive_worst": 2.8680555555555554, "mean_realized_adaptive": 2.423032407407407}
+    }
+  },
+  "interpretation": [
+    "Outcome-adaptive relational evidence remains advantageous when REL, FP and KO families have unequal predeclared costs.",
+    "The optimal first measurement is not an intrinsic property of the ecological target: it changes when the analyst changes the relative cost assigned to measurement families.",
+    "Making a measurement family expensive completely removed that family from canonical first-action choices in the frozen panel.",
+    "Target-specific stopping remains valuable under every cost world; intervention and critical-node targets can cost less than full topology identity.",
+    "Cost-aware policies remain genuinely outcome-adaptive rather than collapsing to one fixed order.",
+    "The EOG recommendation 'what should be measured next?' is therefore conditional on three declared objects: surviving worlds, target, and measurement-cost world."
+  ],
+  "claim_boundary": [
+    "The 1-versus-3 costs are synthetic relative costs, not calibrated field budgets.",
+    "Cost-aware adaptive planning uses generic finite decision-tree optimization and is not claimed as new mathematics.",
+    "The ecological contribution is that EOG relational evidence recommendations are demonstrably cost-world dependent even when worlds, targets and measurements are otherwise frozen."
+  ]
+}
