@@ -104,15 +104,25 @@ def _target_adaptive_solver(
         )
 
     @lru_cache(maxsize=None)
+    def state_action_representatives(mask):
+        by_children = {}
+        for action_id in action_ids:
+            children = tuple(sorted(action_children(mask, action_id)))
+            if len(children) <= 1:
+                continue
+            incumbent = by_children.get(children)
+            if incumbent is None or action_id < incumbent:
+                by_children[children] = action_id
+        return tuple(sorted(by_children.values()))
+
+    @lru_cache(maxsize=None)
     def can_resolve(mask, depth):
         if identified(mask):
             return True
         if depth <= 0:
             return False
-        for action_id in action_ids:
+        for action_id in state_action_representatives(mask):
             children = action_children(mask, action_id)
-            if len(children) <= 1:
-                continue
             if all(can_resolve(child, depth - 1) for child in children):
                 return True
         return False
@@ -132,10 +142,8 @@ def _target_adaptive_solver(
         if depth is None or depth == 0:
             return ()
         rows = []
-        for action_id in action_ids:
+        for action_id in state_action_representatives(mask):
             children = action_children(mask, action_id)
-            if len(children) <= 1:
-                continue
             if all(can_resolve(child, depth - 1) for child in children):
                 rows.append(action_id)
         return tuple(sorted(rows))
