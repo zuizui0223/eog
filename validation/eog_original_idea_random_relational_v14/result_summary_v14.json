@@ -1,0 +1,104 @@
+{
+  "schema": "eog.original_idea_random_relational_adaptive.result_summary.v14",
+  "status": "completed_preregistered_adaptive_relational_panel",
+  "protocol": "validation/eog_original_idea_random_relational_v14/protocol_v14.json",
+  "protocol_commit": "df0cad2b88ea1f8f2cbfc8b972138b8823679952",
+  "authoritative_run": 37188024227,
+  "authoritative_artifact_id": 11297587974,
+  "authoritative_artifact_digest": "sha256:715800e3c475dad2550925cfcdacf51f3998cf4930b1043f1811f131af525552",
+  "result_fingerprint": "c3e3f69cefffb90b0fd67b7b9eb2e5f4787b2f2ac9cfffdf701887cf4763d330",
+  "row_count": 144,
+  "predeclared_verdicts": {
+    "A1_adaptive_worst_case_never_exceeds_fixed_minimum": "SUPPORTED",
+    "A2_strict_adaptive_worst_case_saving_exists": "SUPPORTED",
+    "A3_adaptive_realized_paths_save_measurements": "SUPPORTED",
+    "A4_target_adaptive_depth_never_exceeds_full_topology_depth": "SUPPORTED",
+    "A5_narrow_target_adaptive_saving_vs_topology_exists": "SUPPORTED",
+    "A6_outcome_dependent_replanning_exists": "SUPPORTED",
+    "A7_no_universal_first_relational_measurement": "SUPPORTED",
+    "A8_full_topology_remains_exactly_adaptively_resolvable": "SUPPORTED"
+  },
+  "global_results": {
+    "adaptive_worst_case_violation_count": 0,
+    "strict_worst_case_saving_row_target_count": 262,
+    "narrow_target_worst_case_saving_vs_full_topology_row_count": 75,
+    "branching_policy_row_count": 131,
+    "distinct_canonical_first_action_count": 24,
+    "unresolved_full_topology_row_count": 0
+  },
+  "realized_saving_rows": {
+    "pairwise_relation": 143,
+    "first_passage": 143,
+    "intervention": 141
+  },
+  "by_target": {
+    "pairwise_relation": {
+      "mean_fixed_minimum": 3.263888888888889,
+      "mean_adaptive_worst_case": 2.986111111111111,
+      "mean_canonical_policy_realized_depth": 2.5410879629629632,
+      "strict_worst_case_saving_rows": 40,
+      "branching_policy_rows": 106
+    },
+    "first_passage": {
+      "mean_fixed_minimum": 3.263888888888889,
+      "mean_adaptive_worst_case": 2.986111111111111,
+      "mean_canonical_policy_realized_depth": 2.5358796296296298,
+      "strict_worst_case_saving_rows": 40,
+      "branching_policy_rows": 106
+    },
+    "intervention": {
+      "mean_fixed_minimum": 3.1041666666666665,
+      "mean_adaptive_worst_case": 2.8333333333333335,
+      "mean_canonical_policy_realized_depth": 2.4328703703703707,
+      "strict_worst_case_saving_rows": 39,
+      "branching_policy_rows": 106
+    },
+    "critical_node_count": {
+      "mean_fixed_minimum": 2.9027777777777777,
+      "mean_adaptive_worst_case": 2.4652777777777777,
+      "mean_canonical_policy_realized_depth": 2.1649305555555554,
+      "strict_worst_case_saving_rows": 63,
+      "branching_policy_rows": 123
+    },
+    "full_topology_identity": {
+      "mean_fixed_minimum": 3.263888888888889,
+      "mean_adaptive_worst_case": 2.986111111111111,
+      "mean_canonical_policy_realized_depth": 2.5410879629629632,
+      "strict_worst_case_saving_rows": 40,
+      "branching_policy_rows": 106
+    },
+    "joint_relational_suite": {
+      "mean_fixed_minimum": 3.263888888888889,
+      "mean_adaptive_worst_case": 2.986111111111111,
+      "mean_canonical_policy_realized_depth": 2.5410879629629632,
+      "strict_worst_case_saving_rows": 40,
+      "branching_policy_rows": 106
+    }
+  },
+  "adaptive_worst_case_distributions": {
+    "pairwise_relation": {"2": 2, "3": 142},
+    "first_passage": {"2": 2, "3": 142},
+    "intervention": {"2": 24, "3": 120},
+    "critical_node_count": {"2": 77, "3": 67},
+    "full_topology_identity": {"2": 2, "3": 142},
+    "joint_relational_suite": {"2": 2, "3": 142}
+  },
+  "canonical_first_action_diversity": {
+    "distinct_action_count": 24,
+    "families_seen": ["FP", "KO", "REL"],
+    "interpretation": "No single relational measurement is universally optimal as the first action across row-target states."
+  },
+  "interpretation": [
+    "Outcome-adaptive relational measurement weakly dominated the exact best fixed panel in worst-case depth in every row-target combination.",
+    "Strict worst-case savings occurred in 262 row-target combinations, while realized-path savings occurred in almost every row for pairwise relation, first-passage and intervention targets.",
+    "Branch-specific replanning occurred widely, so the optimal policy is not merely one fixed ordering disguised as a tree.",
+    "Narrow ecological targets can stop earlier than full topology identity, preserving the target-specific philosophy developed earlier in the finite-world programme.",
+    "Even full topology identity remained exactly resolvable under the unchanged REL/FP/KO library, so the adaptive savings are not produced by relaxing correctness."
+  ],
+  "claim_boundary": [
+    "Adaptive depths are conceptual finite-world information counts, not field costs.",
+    "Uniform-world realized depth is descriptive and not an ecological prior.",
+    "The adaptive solver is generic decision-tree machinery; the ecological result concerns the relational measurements required by EOG topology-sensitive targets.",
+    "The result remains conditional on the frozen 12-world candidate topology panels and REL/FP/KO action library."
+  ]
+}
