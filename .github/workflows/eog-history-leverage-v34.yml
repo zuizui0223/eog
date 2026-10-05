@@ -1,0 +1,37 @@
+name: EOG history leverage v34
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/run_eog_history_level_leverage_v34.py"
+      - "docs/eog_history_level_leverage_v34.md"
+      - "validation/eog_history_level_leverage_v34/**"
+      - "tests/test_eog_history_level_leverage_v34.py"
+      - ".github/workflows/eog-history-leverage-v34.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: eog-history-leverage-v34-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test v34 leverage helpers
+        run: python -m pytest tests/test_eog_history_level_leverage_v34.py -q
+      - name: Run frozen v34 leverage test
+        run: |
+          python benchmarks/run_eog_history_level_leverage_v34.py \
+            --output build/eog_history_level_leverage_v34/result_v34.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-history-leverage-v34
+          path: build/eog_history_level_leverage_v34/result_v34.json
+          if-no-files-found: error

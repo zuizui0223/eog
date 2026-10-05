@@ -1,0 +1,60 @@
+{
+  "schema": "eog.history_level_leverage.protocol.v34",
+  "status": "frozen_before_v34_scoring",
+  "source_system": "v28_microbiome",
+  "response": {
+    "target": "v31_identity_stripped_rank_abundance",
+    "construction": "sort_five_bias_corrected_fungal_proportions_descending_within_plant",
+    "distance": "bray_curtis",
+    "treatment_independent_response": true
+  },
+  "full_baseline": {
+    "n": 233,
+    "authoritative_E": 0.14860894599445995,
+    "authoritative_permutation_p": 0.0001
+  },
+  "histories": [
+    "Alternaria",
+    "Aureobasidium",
+    "Cladosporium",
+    "Dioszegia",
+    "Fusarium"
+  ],
+  "leave_one_history_out": {
+    "reduced": "Genotype",
+    "full": "Genotype + Treatment + Genotype:Treatment",
+    "shuffle": "Treatment_within_Genotype",
+    "permutations": 9999,
+    "seed": 20261005,
+    "statistic": "D_h_equals_E_full_minus_E_without_h"
+  },
+  "prospective_prediction": {
+    "statement": "D_Alternaria_positive_and_largest_of_five",
+    "minimum_magnitude": null
+  },
+  "secondary_binary": {
+    "history": "Alternaria_vs_all_other_histories",
+    "panel": "all_233_plants",
+    "reduced": "Genotype",
+    "full": "Genotype + binary_history + Genotype:binary_history",
+    "permutations": 9999,
+    "seed": 20261005
+  },
+  "gates": [
+    "reproduce_v31_full_rank_E",
+    "source_blobs_and_common_panel_unchanged",
+    "each_deletion_removes_exactly_one_history_level",
+    "remaining_history_increment_identifiable",
+    "generic_fast_observed_R2_match_each_panel"
+  ],
+  "exposure_boundary": {
+    "v33_Alternaria_mapping_clue_known": true,
+    "leave_one_out_scores_seen_before_freeze": false,
+    "binary_score_seen_before_freeze": false
+  },
+  "claim_boundary": [
+    "no_sole_driver_claim_without_zero_residual_memory",
+    "no_mechanism_identification",
+    "no_cross_system_generality"
+  ]
+}

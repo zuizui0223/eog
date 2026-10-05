@@ -2981,6 +2981,63 @@ Canonical v33 assets:
 - `docs/eog_role_mapping_specificity_v33.md`;
 - `docs/eog_role_mapping_specificity_v33_result.md`.
 
+## Original-EOG empirical mainline — v34 history-level leverage
+
+v33 refuted the interpretation that the full first-arriver-role mapping explains the
+microbiome storage channel, but all five highest-scoring placebo mappings preserved
+`Alternaria -> Alternaria`.  v34 prospectively tested that clue with the Treatment-
+independent v31 rank-abundance response.
+
+The authoritative v31 full-panel architecture-memory baseline reproduced exactly:
+
+- n = **233**;
+- E = **+0.1486**;
+- p = **0.0001**.
+
+Leave-one-history-out leverage was defined as:
+
+[
+D_h = E_{mathrm{full}} - E_{-!h}.
+]
+
+Results:
+
+- **Alternaria**: D = **+0.0611**, E_without = **+0.0875**, p = **0.0086**;
+- **Cladosporium**: D = **+0.0264**, E_without = **+0.1222**, p = **0.0018**;
+- Aureobasidium: D = **−0.0088**;
+- Fusarium: D = **−0.0229**;
+- Dioszegia: D = **−0.0336**.
+
+The frozen prediction that Alternaria would have the largest positive leverage was
+**supported**.
+
+A secondary full-panel Alternaria-versus-rest contrast retained:
+
+- E = **+0.0803**;
+- p = **0.0004**.
+
+### Corrected biological conclusion
+
+Alternaria has disproportionate leverage on identity-free abundance-architecture memory,
+but it is not the sole source of that memory.  Removing all Alternaria-history plants still
+leaves significant retained history among the remaining four treatments.
+
+The supported statement is therefore:
+
+> **Architecture-level assembly memory is distributed but highly uneven across randomized
+> histories; in the v28 microbiome, the Alternaria arrival history contributes the largest
+> prospective deletion leverage.**
+
+This replaces the broader v32 role-symmetry explanation with a narrower, directly tested
+history-heterogeneity result.  The ecological interaction mechanism remains unresolved.
+
+Canonical v34 assets:
+
+- `validation/eog_history_level_leverage_v34/protocol_v34.json`;
+- `validation/eog_history_level_leverage_v34/result_summary_v34.json`;
+- `docs/eog_history_level_leverage_v34.md`;
+- `docs/eog_history_level_leverage_v34_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:
