@@ -1,0 +1,84 @@
+{
+  "schema": "eog.original_idea_history_observability.result_summary.v22",
+  "status": "completed_preregistered_history_observability_panel",
+  "protocol": "validation/eog_original_idea_history_observability_v22/protocol_v22.json",
+  "authoritative_run": 37261490070,
+  "authoritative_artifact_id": 11324282807,
+  "authoritative_artifact_digest": "sha256:fe74470d84018941a9fe180218c281effa67cea1e0b577ccb8a86e874e776129",
+  "result_fingerprint": "3436235e0cc96b14088c27377a79b057b1018c74e71edbd48bac0a83e8a9e9dd",
+  "row_count": 384,
+  "eligible_row_count": 384,
+  "design_row_count": 768,
+  "predeclared_verdicts": {
+    "Q1_equilibrium_occupancy_snapshot_has_zero_history_information": "SUPPORTED",
+    "Q2_post_activation_transients_can_identify_history": "SUPPORTED",
+    "Q3_dispersed_sources_make_history_more_observable": "REFUTED",
+    "Q4_provenance_target_is_never_harder_than_full_history_identity": "SUPPORTED",
+    "Q5_target_compression_saves_snapshots_somewhere": "SUPPORTED",
+    "Q6_one_post_activation_snapshot_is_sometimes_sufficient": "SUPPORTED",
+    "Q7_history_can_remain_observationally_unresolved": "SUPPORTED",
+    "Q8_later_snapshots_are_not_monotonically_more_informative": "SUPPORTED"
+  },
+  "summary_by_design": {
+    "clustered": {
+      "full_history_identifiable_rows": 231,
+      "full_history_unresolved_rows": 153,
+      "mean_full_history_minimum_snapshots_among_identifiable": 1.0,
+      "provenance_identifiable_rows": 239,
+      "mean_provenance_minimum_snapshots_among_identifiable": 0.9163179916317992,
+      "one_snapshot_full_history_rows": 231,
+      "zero_snapshot_provenance_rows": 20,
+      "canonical_full_history_minimum_time_counts": {
+        "4": 231,
+        "5": 0,
+        "6": 0,
+        "8": 0
+      }
+    },
+    "dispersed": {
+      "full_history_identifiable_rows": 348,
+      "full_history_unresolved_rows": 36,
+      "mean_full_history_minimum_snapshots_among_identifiable": 1.0,
+      "provenance_identifiable_rows": 383,
+      "mean_provenance_minimum_snapshots_among_identifiable": 0.370757180156658,
+      "one_snapshot_full_history_rows": 348,
+      "zero_snapshot_provenance_rows": 241,
+      "canonical_full_history_minimum_time_counts": {
+        "4": 348,
+        "5": 0,
+        "6": 0,
+        "8": 0
+      }
+    }
+  },
+  "global_results": {
+    "equilibrium_snapshot_violation_count": 0,
+    "dispersed_minus_clustered_mean_minimum_snapshot_count": 0.0,
+    "target_burden_violation_count": 0,
+    "strict_provenance_target_saving_design_rows": 261,
+    "one_snapshot_full_history_identification_design_rows": 579,
+    "full_history_unresolved_design_rows": 189,
+    "earlier_snapshot_resolves_while_t8_fails_design_rows": 428
+  },
+  "post_result_diagnostic": {
+    "classification": "secondary_diagnostic_not_a_retest_of_Q3",
+    "clustered_full_history_identification_rate": 0.6015625,
+    "dispersed_full_history_identification_rate": 0.90625,
+    "interpretation": "Q3 failed because every identifiable full-history case required exactly one snapshot in both source geometries. Dispersed placement increased the fraction of histories that were observable, not the minimum snapshot count conditional on observability."
+  },
+  "interpretation": [
+    "Equilibrium occupancy had exactly zero activation-history information by construction and audit.",
+    "Post-activation transient occupancy could identify exact source-activation history in a large subset of landscapes.",
+    "Dispersed source placement did not reduce the minimum snapshot burden conditional on identifiability, refuting Q3; instead it greatly increased the probability that history was identifiable at all.",
+    "The provenance-class target was never harder than full history identity and required fewer snapshots in 261 design-rows.",
+    "A single t4 snapshot was sufficient in all 579 design-rows where full history was identifiable from the frozen library.",
+    "Full activation history remained unresolved in 189 design-rows even after all four transient snapshots.",
+    "Later snapshots were not monotonically more informative: in 428 design-rows an earlier snapshot resolved history while t8 alone did not."
+  ],
+  "claim_boundary": [
+    "Snapshots are complete structural occupancy maps, not imperfect field surveys.",
+    "Snapshot time is graph-step time rather than calibrated calendar time.",
+    "History identifiability is limited to the three frozen activation schedules.",
+    "The Q3 refutation is retained and is not rescued by the post-result identification-rate diagnostic."
+  ]
+}
