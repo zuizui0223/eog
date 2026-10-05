@@ -1,0 +1,52 @@
+{
+  "schema": "eog.reef_fish_history_retention.candidate_screen.v30",
+  "status": "candidate_passed_scientific_and_rights_screen_metadata_probe_pending",
+  "source": {
+    "article_doi": "10.1007/s00442-009-1554-z",
+    "bcodmo_dataset_id": 726890,
+    "related_dataset_ids": [
+      726929,
+      727007,
+      726945
+    ],
+    "license": "CC-BY-4.0",
+    "response_values_accessed_for_v30": false
+  },
+  "published_design": {
+    "experimental_unit": "patch_reef",
+    "habitat_complexity_levels": 2,
+    "competitor_conditions": [
+      "absent",
+      "simultaneous",
+      "prior_5d"
+    ],
+    "primary_history_levels": [
+      "simultaneous",
+      "prior_5d"
+    ],
+    "temporal_blocks": 2,
+    "replicates_per_treatment_per_block": 5,
+    "focal_fish_per_reef": 3,
+    "observation_days": 5
+  },
+  "declared_primary_targets": [
+    "focal_survival",
+    "aggression_against_focal"
+  ],
+  "excluded_primary_history_control": "competitor_absent",
+  "known_before_scoring": [
+    "arrival timing affects published survival",
+    "arrival timing affects published aggression",
+    "published survival-aggression relationship"
+  ],
+  "unresolved_before_protocol": [
+    "erddap_dataset_identifier",
+    "exact_column_names",
+    "reef_identifier",
+    "exact_block_encoding",
+    "exact_habitat_encoding",
+    "exact_survival_representation",
+    "exact_aggression_representation",
+    "permutation_strata"
+  ]
+}
