@@ -6,6 +6,8 @@ import hashlib
 import io
 import json
 from pathlib import Path
+import re
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -29,35 +31,51 @@ def _sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def _search_dataset() -> tuple[str, bytes]:
-    query = urllib.parse.quote(TARGET_BCODMO_ID)
-    url = (
-        f"{ERDDAP}/search/index.csv"
-        f"?page=1&itemsPerPage=1000&searchFor={query}"
-    )
-    payload = _get(url)
-    rows = list(csv.DictReader(io.StringIO(payload.decode("utf-8-sig"))))
-    matches = []
-    for row in rows:
-        text = " ".join(str(value or "") for value in row.values())
-        if TARGET_BCODMO_ID in text:
-            matches.append(row)
-    ids = []
-    for row in matches:
-        for key, value in row.items():
-            if key and key.lower().replace(" ", "") in {"datasetid","dataset_id"}:
-                if value:
-                    ids.append(value)
-    ids = sorted(set(ids))
+def _resolve_metadata_source() -> tuple[str, bytes, dict]:
     preferred = f"bcodmo_dataset_{TARGET_BCODMO_ID}"
-    if preferred in ids:
-        return preferred, payload
-    if len(ids) == 1:
-        return ids[0], payload
-    raise RuntimeError(
-        "could not uniquely resolve ERDDAP dataset for BCO-DMO 726890: "
-        + json.dumps({"ids": ids, "matches": matches}, sort_keys=True)
-    )
+    info_url = f"{ERDDAP}/info/{preferred}/index.csv"
+    try:
+        payload = _get(info_url)
+        return preferred, payload, {
+            "mode": "direct_erddap_info",
+            "info_url": info_url,
+        }
+    except urllib.error.HTTPError as error:
+        if error.code != 404:
+            raise
+
+    # Older BCO-DMO datasets may not be exposed in the current ERDDAP catalog.
+    # Fall back to the public BCO-DMO metadata page/API without requesting data rows.
+    api_url = f"https://www.bco-dmo.org/api/dataset/{TARGET_BCODMO_ID}"
+    try:
+        api_payload = _get(api_url)
+        text = api_payload.decode("utf-8", errors="replace")
+        return "", api_payload, {
+            "mode": "bcodmo_public_api",
+            "api_url": api_url,
+            "content_type": "json_or_metadata",
+            "text_preview": text[:2000],
+        }
+    except urllib.error.HTTPError as api_error:
+        if api_error.code not in {403, 404}:
+            raise
+
+    page_url = f"https://www.bco-dmo.org/dataset/{TARGET_BCODMO_ID}"
+    page_payload = _get(page_url)
+    page_text = page_payload.decode("utf-8", errors="replace")
+    hrefs = sorted(set(re.findall(r'href=[\"\\\']([^\"\\\']+)[\"\\\']', page_text)))
+    csv_links = [
+        href for href in hrefs
+        if ".csv" in href.lower()
+        or "datadocs.bco-dmo.org" in href.lower()
+        or "erddap" in href.lower()
+    ]
+    return "", page_payload, {
+        "mode": "bcodmo_dataset_page",
+        "page_url": page_url,
+        "candidate_data_links": csv_links,
+        "page_sha256": _sha256(page_payload),
+    }
 
 
 def _parse_info(payload: bytes) -> dict:
@@ -94,10 +112,15 @@ def _parse_info(payload: bytes) -> dict:
 
 
 def run() -> dict:
-    dataset_id, search_payload = _search_dataset()
-    info_url = f"{ERDDAP}/info/{dataset_id}/index.csv"
-    info_payload = _get(info_url)
-    parsed = _parse_info(info_payload)
+    dataset_id, metadata_payload, resolution = _resolve_metadata_source()
+    if resolution["mode"] == "direct_erddap_info":
+        parsed = _parse_info(metadata_payload)
+    else:
+        parsed = {
+            "variables": [],
+            "global_attributes": {},
+            "variable_attributes": {},
+        }
     names = [item["name"] for item in parsed["variables"]]
     lowered = {name.lower(): name for name in names}
 
@@ -120,10 +143,9 @@ def run() -> dict:
         "schema":"eog.reef_fish_history_retention.metadata_probe.v30",
         "status":"metadata_materialized_before_response_access",
         "bcodmo_dataset_id":int(TARGET_BCODMO_ID),
-        "erddap_dataset_id":dataset_id,
-        "search_sha256":_sha256(search_payload),
-        "info_sha256":_sha256(info_payload),
-        "info_url":info_url,
+        "erddap_dataset_id": dataset_id or None,
+        "metadata_source_resolution": resolution,
+        "metadata_payload_sha256": _sha256(metadata_payload),
         "metadata":parsed,
         "semantic_candidates":candidates,
         "response_rows_accessed":False,
