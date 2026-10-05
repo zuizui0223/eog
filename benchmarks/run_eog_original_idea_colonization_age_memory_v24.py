@@ -144,16 +144,17 @@ def _evaluate_design(graph, sources, design):
         node for node in sorted(equilibrium_union)
         if node not in source_set
     )
-    if not non_source_nodes:
-        return {
-            "design": design,
-            "eligible": False,
-        }
-
-    common_horizon = max(
-        int(histories[name]["first_arrival"][node])
-        for name in histories
-        for node in non_source_nodes
+    # v23 scored source-only equilibrium unions as valid design rows.  Preserve
+    # those rows here: with no non-source node the first-arrival and age maps are empty
+    # for every history, so they correctly contain no additional history information.
+    common_horizon = (
+        max(
+            int(histories[name]["first_arrival"][node])
+            for name in histories
+            for node in non_source_nodes
+        )
+        if non_source_nodes
+        else None
     )
 
     provenance_by_history = {
@@ -264,6 +265,8 @@ def _evaluate_design(graph, sources, design):
         ),
         "first_arrival_disagreement_fraction": (
             first_arrival_disagreement_nodes / len(non_source_nodes)
+            if non_source_nodes
+            else 0.0
         ),
         "unique_origin_node_count": unique_origin_nodes,
         "confluence_node_count": confluence_nodes,
