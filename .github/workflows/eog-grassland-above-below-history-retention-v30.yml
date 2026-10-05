@@ -1,0 +1,37 @@
+name: Original EOG grassland above-below retention v30
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/run_eog_grassland_above_below_history_retention_v30.py"
+      - "tests/test_eog_grassland_above_below_history_retention_v30.py"
+      - "validation/eog_grassland_above_below_history_retention_v30/**"
+      - "docs/eog_grassland_above_below_history_retention_v30.md"
+      - ".github/workflows/eog-grassland-above-below-history-retention-v30.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: eog-grassland-above-below-v30-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-and-score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test frozen scorer
+        run: python -m pytest tests/test_eog_grassland_above_below_history_retention_v30.py -q
+      - name: Run frozen v30 benchmark
+        run: |
+          python benchmarks/run_eog_grassland_above_below_history_retention_v30.py \
+            --output build/eog_grassland_above_below_history_retention_v30/result_v30.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-grassland-above-below-history-retention-v30
+          path: build/eog_grassland_above_below_history_retention_v30/result_v30.json
+          if-no-files-found: error

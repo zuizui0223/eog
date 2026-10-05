@@ -1,0 +1,115 @@
+{
+  "schema": "eog.grassland_above_below_history_retention.result_summary.v30",
+  "status": "completed_frozen_external_benchmark",
+  "authoritative_run": 37288341858,
+  "authoritative_artifact_id": 11335900414,
+  "authoritative_artifact_digest": "sha256:33eb4cc20e89a7cdf7405f72fa37582511f95477852205f42e96d7a69e8b4fb8",
+  "result_fingerprint": "272dc58ef05977ce990811809b44c94889a0c68339b4a7ba93c615a239cd6a59",
+  "source": {
+    "repository": "BenjaminDelory/PE_Rhizobox_2017_data",
+    "pinned_commit": "438f028fb2e1713a9e253be9e07df0833b491f47",
+    "license": "GPL-3.0"
+  },
+  "primary_panel": {
+    "n": 19,
+    "history_counts": {
+      "F-first": 6,
+      "G-first": 7,
+      "L-first": 6
+    }
+  },
+  "model": {
+    "reduced": "1 + Replicate",
+    "full": "1 + Replicate + History",
+    "permutation": "History within Replicate",
+    "permutations": 9999,
+    "seed": 20261005
+  },
+  "primary": {
+    "shoot_functional_group_composition": {
+      "partial_r2": 0.9528990745351011,
+      "null_mean": 0.16657257363467387,
+      "null_median": 0.14954548620817307,
+      "null_sd": 0.10253307311714761,
+      "null_q025": 0.027078752744594474,
+      "null_q975": 0.42144583022365356,
+      "excess_over_null_median": 0.803353588326928,
+      "permutation_p": 0.0001
+    },
+    "root_vertical_distribution": {
+      "partial_r2": 0.1853032061145299,
+      "null_mean": 0.1668819556413918,
+      "null_median": 0.1509405942528815,
+      "null_sd": 0.09390254810622876,
+      "null_q025": 0.028650257557061163,
+      "null_q975": 0.37470317405459913,
+      "excess_over_null_median": 0.03436261186164841,
+      "permutation_p": 0.3765
+    },
+    "delta_E_shoot_minus_root": 0.7689909764652796
+  },
+  "scalar_sensitivities": {
+    "total_shoot_biomass": {
+      "partial_r2": 0.23495723414042213,
+      "null_median": 0.14020288406896328,
+      "excess_over_null_median": 0.09475435007145885,
+      "permutation_p": 0.2562
+    },
+    "root_mean_depth": {
+      "partial_r2": 0.4049635015090686,
+      "null_median": 0.12874039607987495,
+      "excess_over_null_median": 0.2762231054291937,
+      "permutation_p": 0.0767
+    }
+  },
+  "source_outlier_sensitivity_without_Rz137": {
+    "n": 18,
+    "shoot_functional_group_composition": {
+      "partial_r2": 0.9450132060768676,
+      "null_median": 0.16501087571076947,
+      "excess_over_null_median": 0.7800023303660981,
+      "permutation_p": 0.0003
+    },
+    "root_vertical_distribution": {
+      "partial_r2": 0.1785001106328643,
+      "null_median": 0.16315403070584078,
+      "excess_over_null_median": 0.015346079927023526,
+      "permutation_p": 0.4461
+    },
+    "delta_E_shoot_minus_root": 0.7646562504390746,
+    "total_shoot_biomass": {
+      "partial_r2": 0.1730536657912748,
+      "null_median": 0.15994741920260494,
+      "excess_over_null_median": 0.013106246588669851,
+      "permutation_p": 0.4637
+    },
+    "root_mean_depth": {
+      "partial_r2": 0.6689857654081198,
+      "null_median": 0.1316492201558181,
+      "excess_over_null_median": 0.5373365452523018,
+      "permutation_p": 0.0071
+    }
+  },
+  "independent_exact_audit": {
+    "unique_within_block_labelings": 31104,
+    "shoot_excess_over_exact_null_median": 0.8041686317759396,
+    "root_excess_over_exact_null_median": 0.033703694167234705,
+    "delta_E": 0.7704649376087048,
+    "shoot_exact_p": 0.00006429834431763383,
+    "root_exact_p": 0.3755023308149815
+  },
+  "interpretation": [
+    "Manipulated functional-group arrival history remained extremely strongly encoded in final aboveground functional-group composition.",
+    "The complete six-layer root-biomass distribution retained little history beyond its blocked permutation baseline.",
+    "Total shoot biomass retained far less history than shoot composition, indicating that identity structure rather than aggregate productivity carries the strongest aboveground memory.",
+    "Root mean depth is a source-data-sensitive scalar summary and is not the primary belowground result.",
+    "v28 and v30 independently support target-specific ecological retention of assembly history."
+  ],
+  "claim_boundary": [
+    "external benchmark, not discovery of grassland priority effects",
+    "do not claim absence of belowground effects",
+    "do not claim failure to replicate the source root-depth result",
+    "do not infer causal mediation",
+    "do not claim a universal monotonic attenuation law from two systems"
+  ]
+}
