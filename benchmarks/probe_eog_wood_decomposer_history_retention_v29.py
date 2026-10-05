@@ -213,16 +213,52 @@ def _preview_columns(file_id: int, filename: str) -> dict:
             "bytes": len(payload),
             "payload_sha256": _sha256(payload),
         }
+    table_rows = []
+    for row_html in re.findall(
+        r"<tr>(.*?)</tr>", text, flags=re.DOTALL | re.IGNORECASE
+    )[1:]:
+        cells = [
+            html.unescape(re.sub(r"<[^>]+>", "", value)).strip()
+            for value in re.findall(
+                r"<td>(.*?)</td>", row_html, flags=re.DOTALL | re.IGNORECASE
+            )
+        ]
+        if len(cells) == len(headers):
+            table_rows.append(dict(zip(headers, cells, strict=True)))
+    design_columns = [
+        column
+        for column in headers
+        if DESIGN_RE.search(column)
+        and column not in {"Sample_ID"}
+    ]
+    design_levels = {
+        column: sorted(
+            {
+                row[column]
+                for row in table_rows
+                if row.get(column, "").strip() != ""
+            }
+        )
+        for column in design_columns
+    }
+    sample_id_examples = [
+        row.get("Sample_ID", "")
+        for row in table_rows[:5]
+        if row.get("Sample_ID", "")
+    ]
     return {
         "filename": filename,
         "file_id": file_id,
         "status": "header_recovered_from_official_preview",
         "columns": headers,
+        "design_levels_in_preview": design_levels,
+        "sample_id_examples": sample_id_examples,
+        "preview_row_count": len(table_rows),
         "content_type": content_type,
         "final_url": final_url,
         "bytes": len(payload),
         "payload_sha256": _sha256(payload),
-        "preview_values_discarded_without_scoring": True,
+        "preview_outcome_values_discarded_without_scoring": True,
     }
 
 
