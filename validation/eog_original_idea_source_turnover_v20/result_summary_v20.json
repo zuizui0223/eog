@@ -1,0 +1,127 @@
+{
+  "schema": "eog.original_idea_source_turnover.result_summary.v20",
+  "status": "completed_preregistered_source_turnover_panel",
+  "protocol": "validation/eog_original_idea_source_turnover_v20/protocol_v20.json",
+  "authoritative_run": 37252676696,
+  "authoritative_job": 111583338511,
+  "authoritative_artifact_id": 11321427773,
+  "authoritative_artifact_digest": "sha256:33683defb2e172ee4ea73f6aff84cb807e0d3557e21252d2300b1997f50ab1b3",
+  "result_fingerprint": "39d9ab48d9260f325eb802abcbf237e451e36128208148b079735237221f30ad",
+  "row_count": 384,
+  "eligible_row_count": 384,
+  "estimable_design_row_count": {
+    "clustered": 384,
+    "dispersed": 384
+  },
+  "predeclared_verdicts": {
+    "T1_restoring_source_count_does_not_restore_one_unique_function": "SUPPORTED",
+    "T2_dispersed_replacement_maximizes_coverage_on_average": "SUPPORTED",
+    "T3_clustered_replacement_maximizes_overlap_on_average": "SUPPORTED",
+    "T4_clustered_replacement_maximizes_source_loss_insurance_on_average": "SUPPORTED",
+    "T5_replacement_can_overshoot_original_coverage": "SUPPORTED",
+    "T6_source_count_recovery_does_not_guarantee_full_coverage_recovery": "SUPPORTED",
+    "T7_coverage_insurance_tradeoff_reappears_after_turnover": "SUPPORTED",
+    "T8_replacement_source_count_is_exactly_three": "SUPPORTED"
+  },
+  "global_counts": {
+    "design_rows": 768,
+    "arrangement_difference_design_rows": 718,
+    "replacement_strategy_cases": 2304,
+    "coverage_overshoot_strategy_cases": 407,
+    "all_three_strategies_below_original_design_rows": 352,
+    "post_turnover_coverage_insurance_tradeoff_design_rows": 370,
+    "replacement_invariant_violations": 0
+  },
+  "starting_clustered_network": {
+    "mean_original_coverage": 0.44734300409019284,
+    "mean_post_loss_coverage": 0.36611577858851313,
+    "mean_original_overlap": 0.7114754561443757,
+    "mean_post_loss_overlap": 0.5827299863643535,
+    "mean_original_worst_source_loss_retention": 0.7860990645861232,
+    "mean_post_loss_worst_source_loss_retention": 0.6594664229977522,
+    "replacement_profiles": {
+      "local_near_lost": {
+        "mean_coverage": 0.4406679852745685,
+        "mean_coverage_recovery_fraction": 1.1173555631970224,
+        "mean_multi_source_overlap": 0.5947683435916601,
+        "mean_worst_source_loss_retention": 0.7119854123457804,
+        "mean_insurance_recovery_fraction": 0.9319726788730481,
+        "full_coverage_recovery_rows": 137,
+        "coverage_overshoot_rows": 67
+      },
+      "clustered_near_survivors": {
+        "mean_coverage": 0.4150165453065486,
+        "mean_coverage_recovery_fraction": 0.8050365851632276,
+        "mean_multi_source_overlap": 0.6435304939887391,
+        "mean_worst_source_loss_retention": 0.7356234619594408,
+        "mean_insurance_recovery_fraction": 0.9955838858304085,
+        "full_coverage_recovery_rows": 99,
+        "coverage_overshoot_rows": 49
+      },
+      "dispersed_far_from_survivors": {
+        "mean_coverage": 0.44605311338671755,
+        "mean_coverage_recovery_fraction": 1.8245948071567877,
+        "mean_multi_source_overlap": 0.4882878367464542,
+        "mean_worst_source_loss_retention": 0.6659881769871908,
+        "mean_insurance_recovery_fraction": 0.9646529518734613,
+        "full_coverage_recovery_rows": 275,
+        "coverage_overshoot_rows": 142
+      }
+    },
+    "dispersed_minus_clustered_replacement_coverage": 0.03103656808016897,
+    "clustered_minus_dispersed_replacement_overlap": 0.15524265724228486,
+    "clustered_minus_dispersed_replacement_insurance": 0.06963528497225002
+  },
+  "starting_dispersed_network": {
+    "mean_original_coverage": 0.5143130902540771,
+    "mean_post_loss_coverage": 0.2196666686197697,
+    "mean_original_overlap": 0.14558414269689143,
+    "mean_post_loss_overlap": 0.06401276355894922,
+    "mean_original_worst_source_loss_retention": 0.42442121667175187,
+    "mean_post_loss_worst_source_loss_retention": 0.36984108083179296,
+    "replacement_profiles": {
+      "local_near_lost": {
+        "mean_coverage": 0.47167812117718483,
+        "mean_coverage_recovery_fraction": 0.9343501974957182,
+        "mean_multi_source_overlap": 0.153986662363807,
+        "mean_worst_source_loss_retention": 0.44208622187335966,
+        "mean_insurance_recovery_fraction": 1.0857433788230433,
+        "full_coverage_recovery_rows": 78,
+        "coverage_overshoot_rows": 62
+      },
+      "clustered_near_survivors": {
+        "mean_coverage": 0.3120179609990337,
+        "mean_coverage_recovery_fraction": 0.5401381646900729,
+        "mean_multi_source_overlap": 0.2999070239122201,
+        "mean_worst_source_loss_retention": 0.5528972565627622,
+        "mean_insurance_recovery_fraction": 1.6454587564516325,
+        "full_coverage_recovery_rows": 45,
+        "coverage_overshoot_rows": 32
+      },
+      "dispersed_far_from_survivors": {
+        "mean_coverage": 0.4233604753212042,
+        "mean_coverage_recovery_fraction": 0.7939546207663551,
+        "mean_multi_source_overlap": 0.12808802716671916,
+        "mean_worst_source_loss_retention": 0.4508063702640282,
+        "mean_insurance_recovery_fraction": 1.1768158540266997,
+        "full_coverage_recovery_rows": 82,
+        "coverage_overshoot_rows": 55
+      }
+    },
+    "dispersed_minus_clustered_replacement_coverage": 0.11134251432217046,
+    "clustered_minus_dispersed_replacement_overlap": 0.17181899674550097,
+    "clustered_minus_dispersed_replacement_insurance": 0.10209088629873403
+  },
+  "interpretation": [
+    "Restoring source count after loss did not restore one unique distributional function: replacement placement changed coverage in 718/768 design-rows.",
+    "Dispersed replacement increased coverage, whereas clustered-near-survivor replacement increased overlap and source-loss insurance, reproducing the v18 coverage-insurance tradeoff after turnover.",
+    "Source replacement could overcompensate for loss: 407/2304 strategy-cases exceeded the original pre-loss coverage.",
+    "Conversely, in 352/768 design-rows all three replacement rules still failed to restore original coverage despite returning the network to exactly three sources.",
+    "The functional effect of source turnover therefore depends on source identity and geometry, not source count alone."
+  ],
+  "claim_boundary": [
+    "The turnover experiment is structural reachability on a static graph, not demographic extinction, colonization success or ecological succession.",
+    "Replacement strategies are synthetic geometry rules, not management prescriptions.",
+    "Coverage recovery is not abundance recovery or long-term persistence."
+  ]
+}
