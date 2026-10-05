@@ -1,0 +1,63 @@
+{
+  "schema": "eog.arrival_role_symmetry.result_summary.v32",
+  "status": "completed_frozen_role_alignment_test",
+  "authoritative_run": 37297553717,
+  "authoritative_artifact_id": 11340091871,
+  "authoritative_artifact_digest": "sha256:173a17701ab6f6242db578dbf18e0076e2d19d8b8efff2f0f2e5527f7676a2c2",
+  "result_fingerprint": "76b0d7587aec54ea0cefe1873ce4b170b8cdfd74cf3d582703bbf8772f4d1647",
+  "prospective_prediction": {
+    "statement": "role_fraction_v28_greater_than_role_fraction_v30",
+    "verdict": "SUPPORTED",
+    "difference": 4.742073443631362
+  },
+  "v28_microbiome": {
+    "labeled_E": 0.14671055322130347,
+    "rank_E": 0.14860894599445995,
+    "role_aligned_R2": 0.9458780399251487,
+    "role_aligned_null_median": 0.21457310357755463,
+    "role_aligned_E": 0.7313049363475941,
+    "role_aligned_p": 0.0001,
+    "role_gain_over_rank": 0.5826959903531341,
+    "role_fraction_of_labeled": 4.984678472614492,
+    "first_arriver_share_means": {
+      "Alternaria": 0.778343533867781,
+      "Aureobasidium": 0.030527540748993897,
+      "Cladosporium": 0.09034390008359741,
+      "Dioszegia": 0.0465467497792051,
+      "Fusarium": 0.1787715702665597
+    }
+  },
+  "v30_grassland": {
+    "labeled_E": 0.8033535883269286,
+    "rank_E": 0.19489762057975615,
+    "role_aligned_R2": 0.33724665372868645,
+    "role_aligned_null_median": 0.1423490331489303,
+    "role_aligned_E": 0.19489762057975615,
+    "role_aligned_p": 0.0769,
+    "role_gain_over_rank": 0,
+    "role_fraction_of_labeled": 0.2426050289831302,
+    "first_arriver_share_means": {
+      "F-first": 0.7157936532414594,
+      "G-first": 0.6720333799047186,
+      "L-first": 0.8170755727787794
+    }
+  },
+  "gates": {
+    "v28_labeled_reproduced": true,
+    "v28_rank_reproduced": true,
+    "v30_labeled_reproduced": true,
+    "v30_rank_reproduced": true,
+    "raw_multisets_preserved": true
+  },
+  "interpretation": [
+    "The prospective cross-system role-fraction prediction was supported.",
+    "In the microbiome, aligning all communities by the first-arriver role greatly increased retained-history excess, revealing strong colonist-specific differences in how first arrival is expressed structurally.",
+    "In the grassland, role alignment added no information beyond rank abundance: role-aligned and rank-abundance targets were exactly identical under the frozen representation.",
+    "The v31 storage-mode contrast is therefore consistent with strong asymmetry in first-arriver effectiveness among fungal identities versus a more role-symmetric first-mover-dominance pattern among grassland functional groups."
+  ],
+  "claim_boundary": [
+    "Role alignment does not directly identify niche preemption versus niche modification.",
+    "Do not call either whole system universally symmetric or asymmetric.",
+    "Species-specific variation in priority-effect strength is established in prior literature; v32 links that variation to the present-state storage channel."
+  ]
+}

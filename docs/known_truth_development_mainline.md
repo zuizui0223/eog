@@ -2871,6 +2871,77 @@ Canonical v31 assets:
 - `docs/eog_identity_storage_rank_abundance_v31.md`;
 - `docs/eog_identity_storage_rank_abundance_v31_result.md`.
 
+## Original-EOG empirical mainline — v32 assembly-role symmetry
+
+v31 showed that assembly history is not stored in one universal component of present
+community structure. v32 prospectively tested whether this cross-system storage difference
+is associated with how similarly different identities express the ecological role of
+arriving first.
+
+The role-aligned representation placed the experimentally first-arriving identity in the
+first coordinate and sorted all remaining abundances, preserving the same raw values and
+dimensions while removing absolute identity.
+
+The prospective prediction was supported:
+
+- role_fraction(v28 microbiome) = **4.985**;
+- role_fraction(v30 grassland) = **0.243**.
+
+### Microbiome
+
+Role-aligned retained-history excess:
+
+- E = **+0.7313**;
+- p = **0.0001**.
+
+First-arriver final abundance share varied strongly by fungal identity:
+
+- Alternaria **0.778**;
+- Fusarium **0.179**;
+- Cladosporium **0.090**;
+- Dioszegia **0.047**;
+- Aureobasidium **0.031**.
+
+Thus first arrival is expressed very differently depending on which fungus occupies that
+role.
+
+### Grassland
+
+Role-aligned retention was exactly identical to the fully rank-sorted v31 target:
+
+- E = **+0.1949**;
+- p = **0.0769**.
+
+First-arriver final biomass shares were all high:
+
+- F-first **0.716**;
+- G-first **0.672**;
+- L-first **0.817**.
+
+Knowing which abundance belonged to the first-arriver role added no information beyond
+unlabeled rank abundance.
+
+### Updated biological conclusion
+
+The current mainline is:
+
+> **The present-state storage channel of assembly history tracks how interchangeable
+> identities are in the first-arriver role. Strongly identity-dependent first-arriver
+> effectiveness can write history into abundance architecture itself, whereas a more
+> interchangeable first-mover role stores history mainly in which identity occupies that
+> role.**
+
+This connects the EOG storage result to established theory on symmetric niche preemption
+and species-specific variation in priority-effect strength. It does not establish which
+mechanism (preemption versus modification) caused either empirical pattern.
+
+Canonical v32 assets:
+
+- `validation/eog_arrival_role_symmetry_v32/protocol_v32.json`;
+- `validation/eog_arrival_role_symmetry_v32/result_summary_v32.json`;
+- `docs/eog_arrival_role_symmetry_v32.md`;
+- `docs/eog_arrival_role_symmetry_v32_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:
