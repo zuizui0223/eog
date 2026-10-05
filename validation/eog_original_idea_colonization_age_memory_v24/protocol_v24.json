@@ -1,0 +1,97 @@
+{
+  "schema": "eog.original_idea_colonization_age_memory.protocol.v24",
+  "status": "frozen_before_colonization_age_benchmark_implementation_and_scoring",
+  "parents": {
+    "v21_source_history_memory": {
+      "fingerprint": "40d349a8b134c72add0cd4aeb757b569654d45a519c2efcfe9114a1584dfdd25"
+    },
+    "v23_provenance_observability": {
+      "fingerprint": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244",
+      "key_residual": "81/768 design rows remain unresolved for exact activation history after complete occupancy plus equilibrium-provenance evidence"
+    }
+  },
+  "scientific_question": "Can identical equilibrium occupancy and identical equilibrium source provenance still hide different colonization-age states, and does first-arrival timing recover ecologically relevant history left invisible by occupancy and provenance?",
+  "latent_rows": {
+    "reuse": "the exact 384 v21-v23 directed landscapes, clustered/dispersed three-source sets and three frozen activation histories",
+    "design_rows": 768
+  },
+  "state_targets": {
+    "equilibrium_occupancy": "final union of nodes reachable from the three sources",
+    "equilibrium_provenance": "complete non-source earliest-origin source-set map",
+    "first_arrival_map": "complete non-source map of minimum activation_time(source)+directed_BFS_distance(source,node)",
+    "colonization_age_map": "at a common row/design horizon T*, age(node)=T*-first_arrival(node), where T* is the maximum finite first-arrival time across all three histories and all non-source equilibrium nodes",
+    "exact_activation_history": "identity of H_anchor_first, H_second_first or H_third_first"
+  },
+  "source_node_rule": "source nodes are excluded from first-arrival and colonization-age targets so activation time cannot be read directly from the source itself",
+  "primary_subset": "all design rows are scored, with preregistered focus on the 81 v23 combined-full-history-unresolved rows",
+  "primary_outputs": [
+    "equivalence-class count of histories under provenance map",
+    "equivalence-class count under first-arrival map",
+    "equivalence-class count under colonization-age map",
+    "number of v23 residual design rows with hidden first-arrival disagreement",
+    "number of v23 residual rows whose exact history becomes identifiable from the complete first-arrival map",
+    "number remaining exact-history unresolved even under complete first-arrival map",
+    "unique-origin versus confluence node fractions with history-dependent first-arrival time",
+    "rows where provenance map is invariant but first-arrival map differs"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "A1_occupancy_and_provenance_can_hide_colonization_age_memory",
+      "statement": "At least one v23 combined-history-unresolved design row has different non-source first-arrival maps among its observationally aliased activation histories.",
+      "failure_rule": "REFUTED if every v23 residual alias also has an identical first-arrival map."
+    },
+    {
+      "id": "A2_first_arrival_rescues_some_v23_residual_histories",
+      "statement": "At least one v23 combined-history-unresolved design row becomes exactly activation-history-identifiable from the complete non-source first-arrival map.",
+      "failure_rule": "REFUTED if first-arrival state never resolves a v23 residual history."
+    },
+    {
+      "id": "A3_first_arrival_does_not_always_identify_exact_history",
+      "statement": "At least one design row remains non-identifiable for exact activation history even after the complete non-source first-arrival map is known.",
+      "failure_rule": "REFUTED if complete first-arrival maps identify all histories everywhere."
+    },
+    {
+      "id": "A4_provenance_equivalence_does_not_imply_age_equivalence",
+      "statement": "At least one pair of activation histories shares the complete equilibrium provenance map but differs in complete first-arrival/colonization-age map.",
+      "failure_rule": "REFUTED if provenance equivalence always implies age equivalence."
+    },
+    {
+      "id": "A5_unique_origin_zones_can_retain_age_memory",
+      "statement": "At least one static unique-origin non-source node has invariant source provenance but different first-arrival time across activation histories.",
+      "failure_rule": "REFUTED if all unique-origin nodes are history-invariant in first-arrival time."
+    },
+    {
+      "id": "A6_confluence_zones_can_retain_age_memory",
+      "statement": "At least one static confluence non-source node has different first-arrival time across activation histories.",
+      "failure_rule": "REFUTED if confluence nodes never carry age memory."
+    },
+    {
+      "id": "A7_first_arrival_target_is_no_finer_than_exact_history",
+      "statement": "For every design row, the number of first-arrival-map equivalence classes is <= the number of exact activation histories.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "A8_final_occupancy_can_forget_history_while_age_state_remembers_it",
+      "statement": "At least one design row has identical equilibrium occupancy across histories and positive first-arrival-map disagreement fraction.",
+      "failure_rule": "REFUTED if age-state disagreement never persists after occupancy convergence."
+    }
+  ],
+  "secondary_outputs": [
+    "clustered versus dispersed contrast in first-arrival disagreement fraction",
+    "fraction of provenance-invariant rows with age-memory",
+    "relationship between v21 provenance disagreement and v24 age disagreement",
+    "relationship between v22/v23 observability status and age-map equivalence class count"
+  ],
+  "claim_boundary": [
+    "First-arrival time is structural graph-step time, not calibrated calendar age.",
+    "Colonization-age maps are derived known-truth state variables, not directly observed demographic age.",
+    "A hidden age difference is not evidence of demographic or evolutionary legacy unless a later model explicitly links age to a consequence.",
+    "v24 does not add extinction, abundance or persistence dynamics."
+  ],
+  "stop_rules": [
+    "Do not include source-node activation times after scoring.",
+    "Do not add a new consequence model after scoring to force age relevance.",
+    "Do not change the common-horizon definition after scoring.",
+    "Failed A1-A8 hypotheses remain failed."
+  ]
+}
