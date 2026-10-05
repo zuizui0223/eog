@@ -298,7 +298,31 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    result = run()
+    try:
+        result = run()
+    except RuntimeError as error:
+        result = {
+            "schema": "eog.wood_decomposer_history_retention.transport_audit.v29",
+            "status": "transport_blocked_before_v29_scoring_protocol",
+            "source": {
+                "doi": DOI,
+                "package_api": "HTTP 401 without OAuth",
+                "public_stream_ids": {
+                    "sample.data.csv": 52325,
+                    "species.prevalence.csv": 52326,
+                    "collembola.csv": 52327,
+                },
+                "public_stream_behavior": "Anubis HTML interstitial instead of CSV",
+            },
+            "error": str(error),
+            "response_values_exposed": False,
+            "scoring_performed": False,
+            "biological_evidence": False,
+        }
+        payload = json.dumps(
+            result, sort_keys=True, separators=(",", ":"), allow_nan=False
+        ).encode("utf-8")
+        result["fingerprint"] = _sha256(payload)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(result, indent=2, sort_keys=True) + "\n",
