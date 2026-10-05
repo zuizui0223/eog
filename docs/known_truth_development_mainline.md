@@ -2502,6 +2502,73 @@ Canonical v26 assets:
 - `docs/eog_original_idea_history_to_state_process_family_v26.md`;
 - `docs/eog_original_idea_history_to_state_process_family_v26_result.md`.
 
+## Original-EOG empirical mainline — v27 Catano history-retention audit
+
+v26 motivated an external ecological benchmark asking how much manipulated assembly
+history is retained by different declared present-state targets under one inferential
+contract.
+
+Before raw scoring, v27 froze the Catano et al. tallgrass-prairie restoration experiment
+as an external benchmark and implemented reusable target-retention statistics.
+
+### Inferential core implemented
+
+The v27 branch added:
+
+- scalar nested-model partial R² for history after nuisance time;
+- distance-based nested-model partial R² for multivariate targets;
+- whole-plot history-label permutation;
+- explicit rejection of within-plot inconsistent history labels;
+- plot × observation-year aggregation as the primary scalar analysis unit.
+
+These statistics were implemented and unit-tested before any v27 effect was calculated.
+
+### Source audit produced a pre-scoring STOP
+
+The public source contains a scalar table with:
+
+- **144** subplot rows;
+- **18** randomized restoration plots;
+- **3** establishment-year treatments (2014, 2015, 2016);
+- **2** observation years (2019, 2020);
+- exactly **4** subplots per plot-year.
+
+Thus scalar targets are structurally materializable without treating subplots as
+independent treatment replicates.
+
+However, the deposited species- and trait-NMDS products contain no restoration-plot or
+subplot identifiers. They therefore cannot support the frozen plot-blocked multivariate
+estimand without guessing row linkage.
+
+Independently, the source README states that the deposited data are provided to reproduce
+the publication and are not for other purposes without written author consent. EOG v27
+is a new reanalysis, so no retention effect was calculated.
+
+### Correct interpretation
+
+v27 is an **administrative / inferential STOP**, not adverse biological evidence.
+
+It establishes an empirical precondition for the EOG history-retention programme:
+
+> **A public target is usable for an auditable history-retention benchmark only if both
+> reuse permission and the experimental-unit identity required by the inferential
+> contract survive publication.**
+
+Do not repair the candidate by pseudo-replicating subplots, reconstructing missing plot
+IDs from row order, or ignoring the explicit data-use statement.
+
+Canonical v27 assets:
+
+- `validation/eog_original_idea_empirical_history_retention_v27/protocol_v27.json`;
+- `validation/eog_original_idea_empirical_history_retention_v27/result_summary_v27.json`;
+- `docs/eog_original_idea_empirical_history_retention_v27.md`;
+- `docs/eog_original_idea_empirical_history_retention_v27_result.md`;
+- `src/eog/history_retention.py`;
+- `tests/test_history_retention.py`.
+
+The next real-data candidate must be screened for explicit independent-reuse permission
+and preserved experimental-unit identifiers before it is frozen.
+
 ## Hard claim boundary
 
 Do not claim:
