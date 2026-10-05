@@ -28,6 +28,13 @@ Reuse the frozen v28 common panel and bias-corrected five-taxon representation. 
 
 Reuse the frozen v30 primary panel and three-functional-group shoot biomass. Mapping: F-first→Forbs, G-first→Grasses, L-first→Legumes. Use n=19, block=Replicate, history=Treatment, Bray-Curtis, the frozen Replicate + History model, 9,999 within-Replicate permutations, seed 20261005.
 
+
+## Randomization target contract
+
+The role-aligned response is constructed once from the **actual randomized arrival-history assignment**. During null calibration, that observed role-aligned response is held fixed and only the history labels are shuffled under the original v28/v30 blocked randomization rule.
+
+The scorer must **not** reselect a different first-arriver coordinate after each permuted label. Doing so would change both predictor and response and would no longer calibrate the observed treatment-specific role outcome.
+
 ## Primary statistics
 
 E_role = observed role-aligned partial R² minus median(role-aligned null partial R²).
