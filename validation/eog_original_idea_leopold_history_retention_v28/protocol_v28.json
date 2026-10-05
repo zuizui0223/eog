@@ -1,0 +1,122 @@
+{
+  "schema": "eog.original_idea_leopold_history_retention.protocol.v28",
+  "status": "frozen_before_v28_target_scoring",
+  "benchmark_type": "external_empirical_target_specific_history_retention",
+  "source": {
+    "repository": "dleopold/Populus_priorityEffects",
+    "pinned_commit": "d8082daabfccccf3bcbdd631b4438f44c04014c1",
+    "license_file": "LICENSE.md",
+    "license": "MIT",
+    "dryad_doi": "10.5061/dryad.7p2cv",
+    "blobs": {
+      "sample_metadata": "dcdc54ff26013714ab29ddce77211ac3b0043938",
+      "otu_table": "8784a02f7617a7cc207e3da8c7798753d082a4b6",
+      "bias": "45167a953653e7706e8a515516309bc6afec4cf5",
+      "rust_measurements": "a98138a2355f72b6946ba34138696d971c2cab37"
+    }
+  },
+  "history": {
+    "variable": "Treatment",
+    "levels": [
+      "Alternaria",
+      "Aureobasidium",
+      "Cladosporium",
+      "Dioszegia",
+      "Fusarium"
+    ]
+  },
+  "context": {
+    "primary_factor": "Genotype",
+    "region": "descriptive_only"
+  },
+  "common_panel": {
+    "experimental_unit": "plant",
+    "community_timepoint": 1,
+    "samp_type": "Experiment",
+    "exact_tp1_to_plant_rule": "remove_terminal_.TP1_only",
+    "require_otu_sample": true,
+    "require_rust_plant": true,
+    "require_genotype": true,
+    "no_approximate_join": true
+  },
+  "primary_targets": [
+    {
+      "id": "fungal_community_composition",
+      "type": "distance",
+      "taxa": [
+        "Alternaria",
+        "Aureobasidium",
+        "Cladosporium",
+        "Dioszegia",
+        "Fusarium"
+      ],
+      "correction": "divide_named_taxon_counts_by_frozen_Bhat",
+      "zero_rule": "structural_zero_stays_zero",
+      "normalization": "within_five_taxa_sum_to_one",
+      "distance": "bray_curtis"
+    },
+    {
+      "id": "rust_lesion_fraction",
+      "type": "scalar",
+      "aggregation": "sum_Lesion_cm2_over_sum_Leaf_cm2_by_plant",
+      "transformation": "none"
+    }
+  ],
+  "secondary_targets": [
+    {
+      "id": "first_colonist_proportional_abundance",
+      "type": "scalar",
+      "source": "corrected_five_taxon_composition",
+      "definition": "proportion_of_taxon_named_by_Treatment"
+    }
+  ],
+  "estimand": {
+    "name": "context_aware_history_retention",
+    "reduced_model": "1 + Genotype",
+    "full_model": "1 + Genotype + Treatment + Genotype:Treatment",
+    "scalar": "nested_partial_R2",
+    "distance": "gower_centered_nested_partial_R2",
+    "formula": "(SSres_reduced-SSres_full)/SSres_reduced"
+  },
+  "randomization": {
+    "unit": "plant",
+    "shuffle": "Treatment_within_Genotype",
+    "permutations": 9999,
+    "seed": 20261005,
+    "diagnostic_not_binary_gate": true
+  },
+  "sensitivities": [
+    "raw_count_five_taxon_composition",
+    "exclude_published_outlier_G4.T2.R5.TP1",
+    "composition_all_structurally_eligible_TP1",
+    "East_West_descriptive_summary"
+  ],
+  "prescore_exposure": {
+    "structural_facts_seen": {
+      "eligible_tp1_metadata_rows": 252,
+      "genotype_count": 12,
+      "treatment_count": 5,
+      "tp1_base_ids_unique": true,
+      "tp1_base_ids_with_rust": 237
+    },
+    "outcome_scores_seen": false
+  },
+  "stop_rules": [
+    "pinned_source_blob_missing",
+    "otu_sample_join_not_exact",
+    "tp1_base_plant_not_unique",
+    "rust_leaf_aggregation_ambiguous",
+    "conflicting_genotype_or_treatment_within_plant",
+    "fewer_than_three_treatments_after_common_filter",
+    "focal_taxon_missing_from_otu",
+    "history_increment_not_identifiable",
+    "outcome_informed_extra_filter_required"
+  ],
+  "claim_boundary": [
+    "external benchmark not fresh discovery of priority effects",
+    "do not infer true historical trajectory",
+    "do not equate larger retention with biological importance",
+    "do not force parametric equality test across target-specific R2 geometries",
+    "do not interpret low target retention as absence of ecological history"
+  ]
+}
