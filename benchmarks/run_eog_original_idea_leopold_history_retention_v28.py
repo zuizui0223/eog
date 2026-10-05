@@ -209,8 +209,9 @@ def permutation_profile(
         "rust_lesion": partial_scalar_fast(rust, genotype, treatment),
     }
     exceed = {key: 0 for key in observed}
+    null_values = {key: np.empty(PERMUTATIONS, dtype=float) for key in observed}
     rng = np.random.default_rng(SEED)
-    for _ in range(PERMUTATIONS):
+    for permutation_index in range(PERMUTATIONS):
         permuted = permute_within_genotype(treatment, genotype, rng)
         stats = {
             "community_corrected": partial_distance_fast(
@@ -220,17 +221,30 @@ def permutation_profile(
             "rust_lesion": partial_scalar_fast(rust, genotype, permuted),
         }
         for key, value in stats.items():
+            null_values[key][permutation_index] = value
             if value >= observed[key] - 1e-12:
                 exceed[key] += 1
-    return {
-        key: {
+
+    result = {}
+    for key in observed:
+        values = null_values[key]
+        median = float(np.median(values))
+        result[key] = {
             "partial_r2": observed[key],
             "permutation_p": (exceed[key] + 1) / (PERMUTATIONS + 1),
             "permutations": PERMUTATIONS,
             "seed": SEED,
+            "null_mean": float(np.mean(values)),
+            "null_median": median,
+            "null_sd": float(np.std(values, ddof=1)),
+            "null_q025": float(np.quantile(values, 0.025)),
+            "null_q975": float(np.quantile(values, 0.975)),
+            "excess_over_null_median": float(observed[key] - median),
+            "calibration_role": (
+                "summary_of_predeclared_permutation_diagnostic_not_new_primary_estimand"
+            ),
         }
-        for key in observed
-    }
+    return result
 
 
 def build_inputs(source: dict[str, bytes], manifest: dict) -> dict:
