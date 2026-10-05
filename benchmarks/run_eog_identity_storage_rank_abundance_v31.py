@@ -8,8 +8,12 @@ from pathlib import Path
 
 import numpy as np
 
-import run_eog_original_idea_leopold_history_retention_v28 as v28
-import run_eog_grassland_above_below_history_retention_v30 as v30
+try:
+    from benchmarks import run_eog_original_idea_leopold_history_retention_v28 as v28
+    from benchmarks import run_eog_grassland_above_below_history_retention_v30 as v30
+except ModuleNotFoundError:
+    import run_eog_original_idea_leopold_history_retention_v28 as v28
+    import run_eog_grassland_above_below_history_retention_v30 as v30
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL = ROOT / "validation/eog_identity_storage_rank_abundance_v31/protocol_v31.json"
