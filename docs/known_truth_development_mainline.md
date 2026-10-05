@@ -1940,6 +1940,58 @@ learning the cost world before ecological measurement can recover enough value t
 justify the calibration step.  After that test, further synthetic cost-world variants
 should stop.
 
+## Original-EOG virtual-world mainline — v17 cost-information closure
+
+v17 completed the synthetic cost-world subseries.
+
+It asked how much exact decision value is gained by learning part or all of the
+measurement-cost world before ecological evidence collection.
+
+Across **864 row-targets**:
+
+- perfect cost-world information had strictly positive value in **864/864**;
+- best binary cost information had positive value in **836/864**;
+- one binary diagnostic recovered the full perfect-information value in **783/864**;
+- every binary diagnostic remained incomplete in **81/864**;
+- negative information values: **0**.
+
+Canonical best one-bit diagnostic:
+
+- is FP expensive?: **834**;
+- is KO expensive?: **16**;
+- is REL expensive?: **14**.
+
+The mean perfect-information value across the six ecological targets was about
+**2.02 synthetic relative-cost units**.
+
+Target dependence remained real.  The mean fraction of perfect-information value
+captured by the best binary diagnostic was:
+
+- pairwise relation: **0.962**;
+- first passage: **0.972**;
+- intervention: **0.920**;
+- critical-node count: **0.853**;
+- full topology identity: **0.962**;
+- joint relational suite: **0.962**.
+
+Thus learning the cost world can be valuable, and coarse information often recovers
+most of that value, but the relevant cost information depends on the ecological target.
+
+The synthetic cost-world subseries is now closed.
+
+Do **not** add a fifth cost world, another post-result cost ratio, another cost
+diagnostic or an arbitrary synthetic calibration price.
+
+Canonical assets:
+
+- `validation/eog_original_idea_cost_information_value_v17/protocol_v17.json`;
+- `validation/eog_original_idea_cost_information_value_v17/result_summary_v17.json`;
+- `docs/eog_original_idea_cost_information_value_v17.md`;
+- `docs/eog_original_idea_cost_information_value_v17_result.md`.
+
+The next active virtual-world problem must return to an unresolved ecological property
+of EOG rather than extending measurement-cost uncertainty.
+
 ## Hard claim boundary
 
 Do not claim:

@@ -1,0 +1,36 @@
+name: Original EOG cost-information value v17
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_cost_information_value_v17/**"
+      - "benchmarks/run_eog_original_idea_cost_information_value_v17.py"
+      - "tests/test_eog_original_idea_cost_information_value_v17.py"
+      - ".github/workflows/eog-original-idea-cost-information-v17.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: original-eog-cost-information-v17-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test cost-information invariants
+        run: python -m pytest tests/test_eog_original_idea_cost_information_value_v17.py -q
+      - name: Run frozen cost-information benchmark
+        run: |
+          python benchmarks/run_eog_original_idea_cost_information_value_v17.py \
+            --output build/eog_original_idea_cost_information_value_v17/result_v17.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-original-idea-cost-information-value-v17
+          path: build/eog_original_idea_cost_information_value_v17/result_v17.json
+          if-no-files-found: error
