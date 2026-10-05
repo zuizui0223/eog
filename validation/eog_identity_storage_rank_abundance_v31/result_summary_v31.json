@@ -1,0 +1,55 @@
+{
+  "schema": "eog.identity_storage_rank_abundance.result_summary.v31",
+  "status": "completed_frozen_derived_target_test",
+  "authoritative_run": 37296204849,
+  "authoritative_artifact_id": 11339351017,
+  "authoritative_artifact_digest": "sha256:7b13fb6cf3090eb26fa6f9d01f343571112345e7e3d49dafd201658ff8761adb",
+  "result_fingerprint": "82a84ac84133f3a7eb45e29acb276ae64bc61f520ec5682fd56cf8c2a4a8f9ee",
+  "primary_hypothesis": {
+    "prediction": "identity_storage_gap_positive_in_both_systems",
+    "verdict": "REFUTED"
+  },
+  "systems": {
+    "v28_microbiome": {
+      "n": 233,
+      "dimensions": 5,
+      "labeled_E": 0.14671055322130347,
+      "rank_abundance_E": 0.14860894599445995,
+      "identity_storage_gap": -0.001898392773156482,
+      "rank_fraction_of_labeled_E": 1.0129397151839028,
+      "rank_permutation_p": 0.0001,
+      "shannon_E": 0.2523232845572084,
+      "shannon_permutation_p": 0.0001
+    },
+    "v30_grassland": {
+      "n": 19,
+      "dimensions": 3,
+      "labeled_E": 0.8033535883269286,
+      "rank_abundance_E": 0.19489762057975615,
+      "identity_storage_gap": 0.6084559677471725,
+      "rank_fraction_of_labeled_E": 0.2426050289831302,
+      "rank_permutation_p": 0.0769,
+      "shannon_E": 0.3799895733770569,
+      "shannon_permutation_p": 0.0235
+    }
+  },
+  "gates": {
+    "v28_labeled_result_reproduced": true,
+    "v30_labeled_result_reproduced": true,
+    "same_dimensions_before_after_identity_stripping": true,
+    "same_raw_values_before_after_identity_stripping": true
+  },
+  "interpretation": [
+    "A universal identity-storage hypothesis was refuted.",
+    "In the v28 microbiome, removing fungal taxon labels did not reduce null-calibrated history retention; rank-abundance shape retained essentially all of the labeled-composition signal.",
+    "In the v30 grassland, removing functional-group labels removed about three quarters of the labeled-composition retained-history excess.",
+    "Assembly history can therefore be encoded through different present-state channels across systems: abundance architecture in one system and identity-to-rank assignment in another.",
+    "Shannon entropy retained significant history in both systems, confirming that identity-free abundance structure can itself carry historical information."
+  ],
+  "claim_boundary": [
+    "Do not claim a universal identity-storage law.",
+    "Do not claim identity is irrelevant in the microbiome; v31 only shows that identity labels were unnecessary for retaining the tested history signal.",
+    "Do not claim grassland history is purely identity-based; rank abundance and Shannon entropy still retained nonzero history.",
+    "Do not present v31 as first discovery of functional convergence or compositional contingency."
+  ]
+}
