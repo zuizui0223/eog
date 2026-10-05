@@ -84,6 +84,23 @@ Therefore:
 Any analysis that treats the 144 subplots as 144 independent treatment replicates is
 invalid for the primary benchmark.
 
+### Primary aggregation
+
+Before computing any retention statistic, aggregate subplot-level responses to one
+declared response per **plot × observation-year**.
+
+- scalar targets: arithmetic mean across available subplots within plot-year after the
+  declared published-scale transformation rule is fixed;
+- species composition: aggregate cover/abundance within plot-year using the source
+  dataset's additive representation, then construct Bray–Curtis distances;
+- trait composition: aggregate the declared community-weighted trait state within
+  plot-year, then construct Euclidean distances.
+
+The primary analysis therefore has the restoration plot, observed in 2019 and 2020, as
+the repeated ecological unit. Missing subplots are not replaced. A plot-year with no
+valid materialization for a target is missing for that target; history labels are never
+reassigned.
+
 ## Primary estimand
 
 For each target k, estimate
