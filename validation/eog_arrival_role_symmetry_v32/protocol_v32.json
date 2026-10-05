@@ -51,5 +51,11 @@
     "not direct test of niche_preemption_vs_modification",
     "not universal classification of systems as symmetric_or_asymmetric",
     "not first demonstration of species_specific_priority_effect_strength"
-  ]
+  ],
+  "randomization_target_contract": {
+    "role_aligned_response": "constructed_once_from_actual_randomized_history_assignment",
+    "during_permutation": "hold_role_aligned_response_fixed_and_shuffle_history_labels_only",
+    "prohibited": "do_not_reselect_first_arriver_coordinate_under_permuted_labels",
+    "rationale": "the role-aligned outcome is a treatment-specific observed response; redefining it during permutation would move both predictor and response"
+  }
 }
