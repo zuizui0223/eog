@@ -1,0 +1,83 @@
+{
+  "schema": "eog.role_mapping_specificity.protocol.v33",
+  "status": "frozen_before_v33_placebo_mapping_scoring",
+  "purpose": "audit_treatment_dependent_role_alignment_specificity",
+  "systems": {
+    "v28_microbiome": {
+      "histories": [
+        "Alternaria",
+        "Aureobasidium",
+        "Cladosporium",
+        "Dioszegia",
+        "Fusarium"
+      ],
+      "identities": [
+        "Alternaria",
+        "Aureobasidium",
+        "Cladosporium",
+        "Dioszegia",
+        "Fusarium"
+      ],
+      "mapping_space": "all_bijections",
+      "mapping_count": 120,
+      "correct_mapping": "identity",
+      "target": "mapped_coordinate_first_then_remaining_values_sorted_descending",
+      "distance": "bray_curtis",
+      "model": "Genotype + Treatment + Genotype:Treatment vs Genotype",
+      "primary_statistic": "observed_partial_R2",
+      "primary_prediction": {
+        "correct_minus_mapping_median": "positive",
+        "exact_upper_tail_mapping_probability_max": 0.05
+      }
+    },
+    "v30_grassland": {
+      "histories": [
+        "F-first",
+        "G-first",
+        "L-first"
+      ],
+      "identities": [
+        "Forbs",
+        "Grasses",
+        "Legumes"
+      ],
+      "mapping_space": "all_bijections",
+      "mapping_count": 6,
+      "correct_mapping": {
+        "F-first": "Forbs",
+        "G-first": "Grasses",
+        "L-first": "Legumes"
+      },
+      "target": "mapped_coordinate_first_then_remaining_values_sorted_descending",
+      "distance": "bray_curtis",
+      "model": "Replicate + History vs Replicate",
+      "role": "descriptive_specificity_audit_no_binary_gate"
+    }
+  },
+  "exact_mapping_tail": "count_R2_greater_or_equal_correct_divided_by_total_mappings",
+  "diagnostics": [
+    "mapping_median_R2",
+    "mapping_min_R2",
+    "mapping_max_R2",
+    "correct_minus_mapping_median",
+    "correct_mapping_rank_descending",
+    "exact_upper_tail_mapping_probability",
+    "top_five_v28_mappings",
+    "all_v30_mappings"
+  ],
+  "gates": [
+    "reproduce_v32_v28_correct_role_R2",
+    "reproduce_v32_v30_correct_role_R2",
+    "preserve_exact_row_abundance_multisets_for_every_mapping",
+    "enumerate_exactly_120_and_6_unique_bijections"
+  ],
+  "exposure_boundary": {
+    "v32_correct_mapping_results_known": true,
+    "incorrect_mapping_scores_seen_before_freeze": false
+  },
+  "claim_boundary": [
+    "mapping_probability_is_specificity_comparison_not_causal_randomization_p",
+    "no_direct_mechanism_identification",
+    "no_universal_law_from_two_systems"
+  ]
+}
