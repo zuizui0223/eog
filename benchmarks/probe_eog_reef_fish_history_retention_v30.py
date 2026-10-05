@@ -114,10 +114,48 @@ def _extract_api_schema(payload: bytes) -> dict:
                 )
 
     walk(data, [])
+
+    parameter_nodes = []
+    graph = data.get("@graph", []) if isinstance(data, dict) else []
+    for wrapper in graph:
+        if not isinstance(wrapper, dict):
+            continue
+        for node_id, node in wrapper.items():
+            if "dataset-parameter/" not in str(node_id):
+                continue
+            literals = []
+            def collect_literals(value, path):
+                if isinstance(value, dict):
+                    if "@value" in value and isinstance(value["@value"], (str, int, float)):
+                        literals.append(
+                            {
+                                "path": "/".join(path + ["@value"]),
+                                "value": str(value["@value"]),
+                            }
+                        )
+                    for key, item in value.items():
+                        if key != "@value":
+                            collect_literals(item, path + [str(key)])
+                elif isinstance(value, list):
+                    for i, item in enumerate(value):
+                        collect_literals(item, path + [str(i)])
+                elif isinstance(value, (str, int, float)):
+                    literals.append(
+                        {"path": "/".join(path), "value": str(value)}
+                    )
+            collect_literals(node, [])
+            parameter_nodes.append(
+                {
+                    "id": str(node_id),
+                    "literals": literals,
+                }
+            )
+
     return {
         "urls": sorted(urls),
         "relevant_literals": relevant[:500],
         "jsonld_predicates": sorted(key_names),
+        "dataset_parameters": parameter_nodes,
     }
 
 
