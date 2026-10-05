@@ -1,0 +1,115 @@
+{
+  "schema": "eog.original_idea_empirical_history_retention.protocol.v27",
+  "status": "frozen_before_raw_data_download_and_scoring",
+  "benchmark_type": "external_empirical_demonstration_not_fresh_confirmation",
+  "source": {
+    "citation": "Catano CP, Groves AM, Brudvig LA. 2023. Community assembly history alters relationships between biodiversity and ecosystem functions during restoration. Ecology 104:e3910.",
+    "article_doi": "10.1002/ecy.3910",
+    "data_doi": "10.5281/zenodo.7120895",
+    "raw_data_accessed_for_v27": false,
+    "published_headline_outcomes_seen": true
+  },
+  "scope": {
+    "observation_years": [
+      2019,
+      2020
+    ],
+    "history_variable": "establishment_year_treatment",
+    "history_levels": [
+      2014,
+      2015,
+      2016
+    ],
+    "treatment_unit": "restoration_plot",
+    "subplot_is_independent_history_replicate": false
+  },
+  "targets": [
+    {
+      "id": "species_composition",
+      "type": "multivariate",
+      "distance": "bray_curtis"
+    },
+    {
+      "id": "trait_composition",
+      "type": "multivariate",
+      "distance": "euclidean"
+    },
+    {
+      "id": "species_diversity",
+      "type": "scalar"
+    },
+    {
+      "id": "functional_dispersion",
+      "type": "scalar"
+    },
+    {
+      "id": "anpp",
+      "type": "scalar"
+    },
+    {
+      "id": "decomposition_rate",
+      "type": "scalar"
+    },
+    {
+      "id": "floral_resource_production",
+      "type": "scalar"
+    }
+  ],
+  "primary_estimand": {
+    "name": "target_specific_history_retention",
+    "symbol": "R_k",
+    "scalar_definition": "partial_R2_of_establishment_year_after_observation_year",
+    "multivariate_definition": "partial_PERMANOVA_R2_of_establishment_year_after_observation_year",
+    "common_interpretation": "fraction_of_declared_target_variation_attributable_to_manipulated_history_under_frozen_representation"
+  },
+  "inference_contract": {
+    "resampling_unit": "plot",
+    "permutation_unit": "plot",
+    "keep_subplot_and_repeated_year_rows_grouped_with_plot": true,
+    "bootstrap": "plot_blocked",
+    "primary_binary_significance_gate": false,
+    "report_point_estimate": true,
+    "report_interval": true,
+    "report_permutation_diagnostic_when_valid": true
+  },
+  "sensitivities": [
+    "2019_only",
+    "2020_only",
+    "declared_published_transform_vs_raw_scale_descriptive"
+  ],
+  "exposure_boundary": {
+    "already_seen": [
+      "history treatment design",
+      "species and trait trajectories exist",
+      "ANPP endpoint",
+      "decomposition endpoint",
+      "floral-resource endpoint",
+      "published ANPP and floral-resource history effects",
+      "published weak/unclear decomposition history effect",
+      "published history-dependent BEF conclusion"
+    ],
+    "not_yet_scored": [
+      "raw row-level values",
+      "EOG R_k values",
+      "plot-blocked bootstrap intervals",
+      "EOG target ranking",
+      "EOG target-rank sensitivity"
+    ]
+  },
+  "stops": [
+    "ambiguous_plot_identity",
+    "ambiguous_history_assignment",
+    "ambiguous_many_to_many_target_linkage",
+    "outcome_informed_filter_needed",
+    "required_target_representation_not_reconstructable",
+    "fewer_than_two_history_levels_after_required_filter",
+    "published_processing_not_reproducible_enough_to_define_target"
+  ],
+  "claim_boundary": [
+    "external benchmark only; not fresh confirmation of published endpoint directions",
+    "do not infer unique assembly history",
+    "do not equate low retention with absence of ecological memory in general",
+    "do not treat subplots as independent history replicates",
+    "do not add targets after scoring"
+  ]
+}
