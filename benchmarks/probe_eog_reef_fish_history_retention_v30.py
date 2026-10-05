@@ -164,7 +164,7 @@ def _parameter_metadata_from_ids(api_schema: dict | None) -> list[dict]:
         return []
     ids = []
     for url in api_schema.get("urls", []):
-        match = re.search(r"dataset-parameter/(\\d+)", url)
+        match = re.search(r"dataset-parameter/(\d+)", url)
         if match:
             ids.append(match.group(1))
     output = []
