@@ -425,17 +425,58 @@ survive an equally complex placebo-mapping control.
 
 That negative result protects the central claim from becoming a just-so story.
 
+## v34 — history-level leverage within the microbiome
+
+v33 left one prospective clue: every top-five placebo mapping preserved
+`Alternaria -> Alternaria`.
+
+v34 tested that clue without any Treatment-dependent response transformation, using the
+same identity-free rank-abundance response from v31.
+
+The frozen leave-one-history-out prediction was supported.
+
+Full five-history architecture memory:
+
+- E = **+0.1486**, p = **0.0001**.
+
+Deletion leverage:
+
+- Alternaria: **D = +0.0611**, remaining E = **+0.0875**, p = **0.0086**;
+- Cladosporium: **D = +0.0264**;
+- Aureobasidium: **D = −0.0088**;
+- Fusarium: **D = −0.0229**;
+- Dioszegia: **D = −0.0336**.
+
+Alternaria-versus-rest alone retained:
+
+- E = **+0.0803**;
+- p = **0.0004**.
+
+Thus the microbiome's abundance-architecture memory is **distributed but uneven**.
+Alternaria has the largest prospective deletion leverage, yet significant memory persists
+after Alternaria is removed.
+
+This is the current mechanism-facing result.
+
+It is narrower than v32 and survives a Treatment-independent response test.
+
 ## Decisive next evidence
 
 Do not add an arbitrary third case yet.
 
-The next analysis should test the post-v33 leverage clue prospectively:
+v34 has now answered the post-v33 leverage question: architecture memory is distributed
+but strongly uneven, with Alternaria showing the largest deletion leverage.
 
-> **Is the microbiome architecture-memory result distributed across fungal histories, or
-> is it dominated by one exceptional arrival history such as Alternaria?**
+The next analysis should therefore decompose **what component of identity-free abundance
+architecture Alternaria changes**.
 
-A frozen leave-one-history-out test can answer this using the existing randomized
-experiment without redefining the response after seeing the outcome.
+The cleanest prospective decomposition is:
 
-Only after that should the project decide whether a third system is needed for
-mechanistic generalization.
+1. rank-1 dominance (largest abundance share);
+2. the normalized shape of ranks 2-5 after removing rank 1.
+
+This keeps the response identity-free and avoids Treatment-conditioned coordinate
+selection. It can determine whether the Alternaria leverage is primarily a dominance
+effect or whether history also restructures the lower-rank abundance architecture.
+
+A third system is not yet the next priority.
