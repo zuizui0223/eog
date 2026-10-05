@@ -222,6 +222,201 @@ def partial_r2_distance(
     )
 
 
+
+def _factorial_design_matrices(
+    context: np.ndarray,
+    history: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return nested reduced/full design matrices for context * history.
+
+    Reduced: 1 + context
+    Full:    1 + context + history + context:history
+
+    Reference-cell dummy coding is used only to construct the column spaces; the
+    retention statistic depends on the nested projection spaces, not coefficient
+    parameterization.
+    """
+
+    context_dummy = _dummy_matrix(context, name="context")
+    history_dummy = _dummy_matrix(history, name="history")
+    reduced_columns: list[np.ndarray] = [np.ones(context.size, dtype=float)]
+    reduced_columns.extend(
+        context_dummy[:, index] for index in range(context_dummy.shape[1])
+    )
+    reduced = np.column_stack(reduced_columns)
+
+    full_columns = list(reduced_columns)
+    full_columns.extend(
+        history_dummy[:, index] for index in range(history_dummy.shape[1])
+    )
+    for context_index in range(context_dummy.shape[1]):
+        for history_index in range(history_dummy.shape[1]):
+            full_columns.append(
+                context_dummy[:, context_index] * history_dummy[:, history_index]
+            )
+    full = np.column_stack(full_columns)
+
+    reduced_rank = int(np.linalg.matrix_rank(reduced))
+    full_rank = int(np.linalg.matrix_rank(full))
+    if full_rank <= reduced_rank:
+        raise ValueError(
+            "history increment is not identifiable beyond the context-only model"
+        )
+    return reduced, full
+
+
+def partial_r2_scalar_factorial(
+    target: Sequence[float],
+    history: Sequence[object],
+    context: Sequence[object],
+) -> HistoryRetentionResult:
+    """Return context-aware history retention for a scalar target.
+
+    The reduced model is 1 + context and the full model is
+    1 + context + history + context:history.
+    """
+
+    y = _numeric(target, name="target")
+    h, c = _validate_factors(history, context, n_rows=y.size)
+    reduced, full = _factorial_design_matrices(c, h)
+    beta_reduced = np.linalg.lstsq(reduced, y, rcond=None)[0]
+    beta_full = np.linalg.lstsq(full, y, rcond=None)[0]
+    reduced_sse = float(np.sum((y - reduced @ beta_reduced) ** 2))
+    full_sse = float(np.sum((y - full @ beta_full) ** 2))
+    return _nested_partial_r2_from_sse(
+        reduced_sse,
+        full_sse,
+        n_rows=y.size,
+        history_levels=len(_levels(h)),
+    )
+
+
+def partial_r2_distance_factorial(
+    distance: Sequence[Sequence[float]],
+    history: Sequence[object],
+    context: Sequence[object],
+) -> HistoryRetentionResult:
+    """Return context-aware history retention for a distance target."""
+
+    d = np.asarray(distance, dtype=float)
+    if d.ndim != 2 or d.shape[0] != d.shape[1] or d.shape[0] < 2:
+        raise ValueError("distance must be a square matrix with at least two rows")
+    if not np.all(np.isfinite(d)):
+        raise ValueError("distance must contain only finite values")
+    if np.any(d < -1e-12):
+        raise ValueError("distance cannot contain negative values")
+    if not np.allclose(d, d.T, atol=1e-10, rtol=0.0):
+        raise ValueError("distance must be symmetric")
+    if not np.allclose(np.diag(d), 0.0, atol=1e-10, rtol=0.0):
+        raise ValueError("distance diagonal must be zero")
+
+    h, c = _validate_factors(history, context, n_rows=d.shape[0])
+    reduced, full = _factorial_design_matrices(c, h)
+
+    n = d.shape[0]
+    centering = np.eye(n) - np.ones((n, n), dtype=float) / n
+    gower = -0.5 * centering @ (d ** 2) @ centering
+    h_reduced = _projection(reduced)
+    h_full = _projection(full)
+    identity = np.eye(n)
+
+    reduced_residual_ss = float(np.trace((identity - h_reduced) @ gower))
+    history_ss = float(np.trace((h_full - h_reduced) @ gower))
+    full_residual_ss = reduced_residual_ss - history_ss
+
+    tolerance = 1e-9
+    if reduced_residual_ss < -tolerance:
+        raise ValueError("distance geometry yields negative reduced residual SS")
+    if history_ss < -tolerance:
+        raise ValueError("distance geometry yields negative history SS")
+    if full_residual_ss < -tolerance:
+        raise ValueError("distance geometry yields negative full residual SS")
+
+    return _nested_partial_r2_from_sse(
+        max(0.0, reduced_residual_ss),
+        max(0.0, full_residual_ss),
+        n_rows=n,
+        history_levels=len(_levels(h)),
+    )
+
+
+def _permuted_within_strata(
+    history: np.ndarray,
+    strata: np.ndarray,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    if history.size != strata.size:
+        raise ValueError("history and strata must have the same row count")
+    permuted = history.copy()
+    for level in _levels(strata):
+        indexes = np.flatnonzero(strata == level)
+        values = permuted[indexes].copy()
+        rng.shuffle(values)
+        permuted[indexes] = values
+    return permuted
+
+
+def permutation_partial_r2_scalar_factorial(
+    target: Sequence[float],
+    history: Sequence[object],
+    context: Sequence[object],
+    *,
+    permutations: int = 999,
+    seed: int = 20261005,
+) -> PermutationResult:
+    """Permute history within context strata for a scalar factorial target."""
+
+    if permutations < 1:
+        raise ValueError("permutations must be at least one")
+    y = _numeric(target, name="target")
+    h, c = _validate_factors(history, context, n_rows=y.size)
+    observed = partial_r2_scalar_factorial(y, h, c).partial_r2
+    rng = np.random.default_rng(seed)
+    exceed = 0
+    for _ in range(permutations):
+        permuted = _permuted_within_strata(h, c, rng)
+        statistic = partial_r2_scalar_factorial(y, permuted, c).partial_r2
+        if statistic >= observed - 1e-12:
+            exceed += 1
+    return PermutationResult(
+        observed_partial_r2=observed,
+        p_value=(exceed + 1) / (permutations + 1),
+        permutations=int(permutations),
+        seed=int(seed),
+    )
+
+
+def permutation_partial_r2_distance_factorial(
+    distance: Sequence[Sequence[float]],
+    history: Sequence[object],
+    context: Sequence[object],
+    *,
+    permutations: int = 999,
+    seed: int = 20261005,
+) -> PermutationResult:
+    """Permute history within context strata for a distance factorial target."""
+
+    if permutations < 1:
+        raise ValueError("permutations must be at least one")
+    d = np.asarray(distance, dtype=float)
+    if d.ndim != 2:
+        raise ValueError("distance must be two-dimensional")
+    h, c = _validate_factors(history, context, n_rows=d.shape[0])
+    observed = partial_r2_distance_factorial(d, h, c).partial_r2
+    rng = np.random.default_rng(seed)
+    exceed = 0
+    for _ in range(permutations):
+        permuted = _permuted_within_strata(h, c, rng)
+        statistic = partial_r2_distance_factorial(d, permuted, c).partial_r2
+        if statistic >= observed - 1e-12:
+            exceed += 1
+    return PermutationResult(
+        observed_partial_r2=observed,
+        p_value=(exceed + 1) / (permutations + 1),
+        permutations=int(permutations),
+        seed=int(seed),
+    )
+
 def _plot_history(
     history: np.ndarray,
     plot_ids: np.ndarray,
