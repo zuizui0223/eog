@@ -33,3 +33,12 @@ def test_source_nodes_are_excluded_from_age_target_population():
     for design in ("clustered", "dispersed"):
         drow = row["designs"][design]
         assert drow["equilibrium_non_source_node_count"] >= 0
+
+
+def test_empty_non_source_age_target_is_valid_empty_state():
+    from benchmarks.run_eog_original_idea_colonization_age_memory_v24 import (
+        _age_target,
+        _first_arrival_target,
+    )
+    assert _first_arrival_target((), {}) == ()
+    assert _age_target((), {}, None) == ()
