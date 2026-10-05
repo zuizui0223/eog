@@ -2669,86 +2669,146 @@ The next ecological question is whether history attenuation from community state
 function recurs in independently licensed assembly-history systems, or whether some
 systems retain or regain historical information at the functional level.
 
-## Original-EOG empirical mainline — v28 target-specific history retention
+## Original-EOG empirical mainline — v30 independent grassland replication
 
-v26 showed in known truth that present ecological targets can retain different projections
-of the same hidden colonization history. v27 attempted an external grassland benchmark
-but stopped before biological scoring because independent reuse was restricted and the
-deposited multivariate products had lost the experimental-unit identity required by the
-frozen inferential contract.
+v28 established one real-system target-specific retention profile: manipulated fungal
+arrival history remained clearly above its genotype-stratified null in community
+composition but was near its null baseline in the aggregate host disease target.
 
-v28 therefore used the independently published Leopold & Busby (2020) randomized fungal
-arrival-order experiment, whose public source repository has an explicit MIT license and
-retains plant-level treatment, community and rust-state identities.
+v30 asked whether that structure was peculiar to one microbiome experiment. It used a
+different research group, a grassland rhizobox experiment and an independently licensed
+raw-data repository.
 
-The frozen common panel contained **233 plants**, **12 host genotypes**, **5 manipulated
-arrival-order treatments**, and all **60 genotype × treatment cells**.
+### Frozen primary panel
 
-The history estimand compared:
+The v30 primary panel used only directional arrival-history treatments:
 
-- reduced: `1 + Genotype`;
-- full: `1 + Genotype + Treatment + Genotype:Treatment`.
+- F-first;
+- G-first;
+- L-first.
 
-Treatment labels were randomized within genotype for **9,999** frozen permutations.
+Exact shoot/root matching yielded **19 rhizoboxes**:
 
-### Fungal community retained a strong history signal beyond the null baseline
+- F-first = **6**;
+- G-first = **7**;
+- L-first = **6**.
 
-For bias-corrected five-taxon Bray–Curtis composition:
+Replicate was retained as the randomization block. History labels were shuffled within
+replicate for **9,999** frozen permutations.
 
-- partial history R² = **0.3697**;
-- permutation-null median = **0.2230**;
-- excess over null median = **+0.1467**;
+Both primary targets used the same nested model:
+
+- reduced: `1 + Replicate`;
+- full: `1 + Replicate + History`.
+
+The primary comparison was prospectively defined as null-calibrated retained-history
+excess:
+
+[
+E = R^2_{mathrm{observed}} - mathrm{median}(R^2_{mathrm{null}}).
+]
+
+### Aboveground functional-group identity retained nearly all history
+
+For final Forbs/Grasses/Legumes shoot-biomass composition:
+
+- partial R² = **0.9529**;
+- null median = **0.1495**;
+- retained-history excess (E) = **+0.8034**;
 - permutation p = **0.0001**.
 
-The raw-count sensitivity remained above null:
+An independent post-freeze enumeration of all **31,104** unique within-block history-label
+configurations gave almost identical values: (E=+0.8042), exact p ≈ **0.000064**.
 
-- partial R² = **0.3104**;
-- null-median excess = **+0.0890**;
-- p = **0.0121**.
+### Full vertical root distribution retained little history beyond null
 
-Removing the source paper's published outlier gave corrected composition R² = **0.3716**.
-Using all structurally eligible TP1 community samples rather than the matched rust panel
-gave R² = **0.3364**.
+For the six-layer root-biomass distribution:
 
-### Aggregate rust state was close to its high-dimensional null baseline
+- partial R² = **0.1853**;
+- null median = **0.1509**;
+- retained-history excess (E) = **+0.0344**;
+- permutation p = **0.3765**.
 
-For plant-level rust lesion fraction:
+The frozen cross-target contrast was therefore:
 
-- partial history R² = **0.2300**;
-- permutation-null median = **0.2147**;
-- excess over null median = **+0.0153**;
-- permutation p = **0.3893**.
+[
+Delta E =
+E_{mathrm{shoot composition}}
+-
+E_{mathrm{root distribution}}
+=
+mathbf{+0.7690}.
+]
 
-The raw 0.23 value therefore cannot be interpreted as strong retained history by itself.
-The genotype × treatment expansion adds 48 identifiable history dimensions, so substantial
-apparent explained variance occurs even after within-genotype treatment randomization.
+The complete-enumeration audit gave (Delta E approx +0.7705).
 
-### Empirical conclusion
+### Identity memory is not equivalent to productivity memory
 
-The v28 result is not a new discovery of priority effects; the source study already
-established arrival-order effects on community composition and host function.
+Total shoot biomass showed:
 
-The EOG-specific result is:
+- partial R² = **0.2350**;
+- null median = **0.1402**;
+- excess = **+0.0948**;
+- p = **0.2562**.
 
-> **the same manipulated assembly history, evaluated on the same experimental plants
-> under one genotype-aware retention contract, remains strongly above null in fungal
-> community composition while becoming almost indistinguishable from the permutation
-> baseline in the aggregate downstream disease-state target.**
+Thus the exceptionally strong aboveground memory is concentrated in **which functional
+group contributes biomass**, not simply in how much total biomass is produced.
 
-Thus the current mainline distinguishes:
+### Root-depth sensitivity remains source-data dependent
 
-> **history memory → history observability → target-specific ecological retention →
-> null-calibrated attenuation across ecological states.**
+Biomass-weighted root mean depth had:
 
-This is one external system and does not establish a universal attenuation law.
+- partial R² = **0.4050**;
+- excess = **+0.2762**;
+- p = **0.0767**.
 
-Canonical v28 assets:
+The source paper excluded Rz 137 because of a possible root-layer encoding problem.
+The predeclared v30 sensitivity removing Rz 137 leaves the primary composition-versus-full-
+root-distribution contrast unchanged ((Delta E=+0.7647)) but makes root mean depth much
+stronger (R² = **0.6690**, excess **+0.5373**, p = **0.0071**).
 
-- `validation/eog_original_idea_leopold_history_retention_v28/protocol_v28.json`;
-- `validation/eog_original_idea_leopold_history_retention_v28/common_panel_manifest_v28.json`;
-- `validation/eog_original_idea_leopold_history_retention_v28/result_summary_v28.json`;
-- `docs/eog_original_idea_leopold_history_retention_v28.md`;
-- `docs/eog_original_idea_leopold_history_retention_v28_result.md`.
+Therefore the root-mean-depth result is not promoted to the primary claim.
+
+### Cross-system result after v28 + v30
+
+Two independently published manipulated systems now support the same narrower proposition:
+
+- v28: fungal community excess **+0.1467** versus rust-state excess **+0.0153**;
+- v30: shoot-composition excess **+0.8034** versus full-root-distribution excess
+  **+0.0344**.
+
+The supported empirical statement is now:
+
+> **Assembly history is not written uniformly into the present.  On the same
+> experimental units, a history signal can remain strong in community identity
+> structure while becoming weak or nearly null in another ecological state.**
+
+This is stronger than “priority effects exist” and different from simply showing that
+history influences multiple endpoints.
+
+It does **not** yet establish a universal monotonic loss of historical information across
+levels of organization. Two systems can establish cross-system recurrence, not a law.
+
+The next conceptual question is therefore:
+
+> **What property of a present-state target determines how much assembly-history
+> information it preserves?**
+
+The v26 known-truth result points to alignment between hidden historical contrasts and the
+state partition induced by the target. The empirical v28/v30 results are consistent with
+that idea: state variables closely aligned with community identity retain strong history,
+whereas aggregate or transformed targets retain much less.
+
+That alignment interpretation is now a cross-system hypothesis to test, not a completed
+general theorem.
+
+Canonical v30 assets:
+
+- `validation/eog_grassland_above_below_history_retention_v30/protocol_v30.json`;
+- `validation/eog_grassland_above_below_history_retention_v30/result_summary_v30.json`;
+- `docs/eog_grassland_above_below_history_retention_v30.md`;
+- `docs/eog_grassland_above_below_history_retention_v30_result.md`;
+- `benchmarks/run_eog_grassland_above_below_history_retention_v30.py`.
 
 ## Hard claim boundary
 
