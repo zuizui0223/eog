@@ -1,0 +1,104 @@
+{
+  "schema": "eog.original_idea_leopold_history_retention.result_summary.v28",
+  "status": "completed_external_target_specific_history_retention",
+  "authoritative_run": 37276170197,
+  "authoritative_artifact_id": 11330736048,
+  "authoritative_artifact_digest": "sha256:3a9e989e79d72428b00b1ca45583e893a584fad56c992e618ed6ced739f9c38c",
+  "result_fingerprint": "60d32bf5daf49cb33f6c6989fd64ee7f0b74d544d0b3441e99d8605ba0b9b302",
+  "source_commit": "d8082daabfccccf3bcbdd631b4438f44c04014c1",
+  "common_panel": {
+    "n": 233,
+    "genotypes": 12,
+    "treatments": 5,
+    "occupied_genotype_treatment_cells": 60
+  },
+  "model": {
+    "reduced": "1 + Genotype",
+    "full": "1 + Genotype + Treatment + Genotype:Treatment",
+    "incremental_history_rank": 48,
+    "permutation": "Treatment within Genotype",
+    "permutations": 9999,
+    "seed": 20261005
+  },
+  "primary": {
+    "fungal_community_composition": {
+      "partial_r2": 0.36971495498702,
+      "null_mean": 0.22416179869939692,
+      "null_median": 0.22300440176571654,
+      "null_q025": 0.17263883264920848,
+      "null_q975": 0.28014708141160527,
+      "null_sd": 0.02766199099708374,
+      "excess_over_null_median": 0.14671055322130347,
+      "permutation_p": 0.0001
+    },
+    "rust_lesion_fraction": {
+      "partial_r2": 0.23004179500416794,
+      "null_mean": 0.2188463161570902,
+      "null_median": 0.21474811658479337,
+      "null_q025": 0.12383960968853544,
+      "null_q975": 0.33528614699136844,
+      "null_sd": 0.054181458609862766,
+      "excess_over_null_median": 0.015293678419374568,
+      "permutation_p": 0.3893
+    }
+  },
+  "secondary": {
+    "first_colonist_proportional_abundance": {
+      "partial_r2": 0.9694232544591574,
+      "permutation_p": null,
+      "role": "positive_control_target_definition_depends_on_treatment"
+    }
+  },
+  "sensitivities": {
+    "raw_count_composition": {
+      "partial_r2": 0.3104251929446492,
+      "null_median": 0.2214542641253621,
+      "excess_over_null_median": 0.08897092881928712,
+      "permutation_p": 0.0121
+    },
+    "published_outlier_exclusion": {
+      "n": 232,
+      "community_corrected_partial_r2": 0.3716490260000452,
+      "community_raw_partial_r2": 0.3154813451085329,
+      "rust_lesion_partial_r2": 0.23225230729634902,
+      "first_colonist_partial_r2": 0.9694753151280536
+    },
+    "composition_all_structurally_eligible_tp1": {
+      "n": 248,
+      "partial_r2": 0.336393103044017
+    },
+    "by_region_descriptive": {
+      "East": {
+        "n": 99,
+        "community_corrected_partial_r2": 0.4387496572476222,
+        "rust_lesion_partial_r2": 0.2579192020285697
+      },
+      "West": {
+        "n": 134,
+        "community_corrected_partial_r2": 0.3212868221291319,
+        "rust_lesion_partial_r2": 0.08629387351749554
+      }
+    }
+  },
+  "gates": {
+    "source_blobs_verified": true,
+    "protocol_frozen_before_scoring": true,
+    "common_panel_frozen_before_scoring": true,
+    "history_retention_tests_passed": true,
+    "generic_fast_composition_match": true,
+    "generic_fast_rust_match": true
+  },
+  "interpretation": [
+    "Manipulated arrival history remained substantially above its genotype-stratified permutation baseline in fungal community composition.",
+    "The aggregate rust-lesion history-retention statistic was close to its permutation baseline despite a raw partial R2 of about 0.23.",
+    "The contrast supports target-specific attenuation of historical information in this experiment, not absence of genotype-specific disease effects.",
+    "Raw explained variance from a high-dimensional history-by-context model requires null calibration before it is interpreted as retained ecological memory."
+  ],
+  "claim_boundary": [
+    "External benchmark, not discovery of priority effects.",
+    "Do not claim arrival order has no effect on rust disease.",
+    "Do not infer causal mediation from composition to disease.",
+    "Do not generalize attenuation beyond this experiment without independent systems.",
+    "Do not treat first-colonist proportional abundance as an exchangeable independent endpoint."
+  ]
+}
