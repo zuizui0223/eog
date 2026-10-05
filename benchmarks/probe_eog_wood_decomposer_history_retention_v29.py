@@ -31,21 +31,132 @@ def _sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def _download() -> bytes:
+def _request(url: str) -> tuple[bytes, dict[str, str], str]:
     request = urllib.request.Request(
-        DOWNLOAD_URL,
-        headers={"User-Agent": "EOG-v29-schema-probe/1.0"},
+        url,
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 (X11; Linux x86_64) "
+                "AppleWebKit/537.36 Chrome/140 Safari/537.36 "
+                "EOG-v29-schema-probe/1.0"
+            ),
+            "Accept": "*/*",
+            "Accept-Language": "en-US,en;q=0.9",
+        },
     )
     with urllib.request.urlopen(request, timeout=120) as response:
         payload = response.read()
-        content_type = response.headers.get("Content-Type", "")
-    if not payload:
-        raise RuntimeError("Dryad download returned empty payload")
-    if "zip" not in content_type.lower() and not payload.startswith(b"PK"):
-        raise RuntimeError(
-            f"Dryad download is not a zip archive: content-type={content_type!r}"
-        )
-    return payload
+        headers = {key.lower(): value for key, value in response.headers.items()}
+        final_url = response.geturl()
+    return payload, headers, final_url
+
+
+def _extract_stream_urls(landing: str, landing_url: str) -> dict[str, str]:
+    normalized = html.unescape(landing)
+    normalized = normalized.replace("\\/", "/").replace("\\u002F", "/")
+    result: dict[str, str] = {}
+    for filename in EXPECTED_FILES:
+        positions = [m.start() for m in re.finditer(re.escape(filename), normalized)]
+        candidates: list[tuple[int, str]] = []
+        for position in positions:
+            start = max(0, position - 2500)
+            end = min(len(normalized), position + 2500)
+            window = normalized[start:end]
+            for match in re.finditer(
+                r"(?:https?://datadryad\.org)?(?:/stash)?/downloads/file_stream/\d+",
+                window,
+            ):
+                url = match.group(0)
+                if url.startswith("/"):
+                    url = "https://datadryad.org" + url
+                distance = abs((start + match.start()) - position)
+                candidates.append((distance, url))
+        if candidates:
+            result[filename] = min(candidates, key=lambda item: item[0])[1]
+    return result
+
+
+def _download_files() -> tuple[dict[str, bytes], dict]:
+    # First try the documented package API. Dryad currently may require auth for this
+    # route, so a 401/403 is a transport condition rather than a dataset failure.
+    try:
+        archive, headers, final_url = _request(DOWNLOAD_URL)
+        content_type = headers.get("content-type", "")
+        if archive and ("zip" in content_type.lower() or archive.startswith(b"PK")):
+            with zipfile.ZipFile(io.BytesIO(archive)) as zf:
+                members = [
+                    name
+                    for name in zf.namelist()
+                    if not name.endswith("/") and Path(name).name in EXPECTED_FILES
+                ]
+                by_basename = {}
+                for member in members:
+                    basename = Path(member).name
+                    if basename in by_basename:
+                        raise RuntimeError(
+                            f"duplicate Dryad file basename {basename}"
+                        )
+                    by_basename[basename] = zf.read(member)
+            if EXPECTED_FILES <= set(by_basename):
+                return by_basename, {
+                    "mode": "api_dataset_zip",
+                    "download_url": DOWNLOAD_URL,
+                    "final_url": final_url,
+                    "archive_bytes": len(archive),
+                    "archive_sha256": _sha256(archive),
+                }
+    except urllib.error.HTTPError as error:
+        if error.code not in {401, 403, 404}:
+            raise
+
+    landing_urls = (
+        "https://datadryad.org/dataset/doi%3A10.5061/dryad.7p2cv",
+        "https://datadryad.org/stash/dataset/doi:10.5061/dryad.7p2cv",
+    )
+    failures = []
+    for landing_url in landing_urls:
+        try:
+            landing_bytes, _, final_landing = _request(landing_url)
+            landing = landing_bytes.decode("utf-8", errors="replace")
+            streams = _extract_stream_urls(landing, final_landing)
+            if set(streams) != EXPECTED_FILES:
+                failures.append(
+                    {
+                        "landing_url": landing_url,
+                        "stream_files_found": sorted(streams),
+                        "landing_bytes": len(landing_bytes),
+                    }
+                )
+                continue
+            files = {}
+            stream_meta = {}
+            for filename, stream_url in sorted(streams.items()):
+                payload, headers, final_url = _request(stream_url)
+                if not payload:
+                    raise RuntimeError(f"empty Dryad stream for {filename}")
+                files[filename] = payload
+                stream_meta[filename] = {
+                    "stream_url": stream_url,
+                    "final_url": final_url,
+                    "bytes": len(payload),
+                    "sha256": _sha256(payload),
+                    "content_type": headers.get("content-type", ""),
+                }
+            return files, {
+                "mode": "landing_page_file_streams",
+                "landing_url": landing_url,
+                "final_landing_url": final_landing,
+                "streams": stream_meta,
+            }
+        except urllib.error.HTTPError as error:
+            failures.append(
+                {"landing_url": landing_url, "http_error": int(error.code)}
+            )
+
+    raise RuntimeError(
+        "unable to materialize Dryad files through package API or public file streams: "
+        + json.dumps(failures, sort_keys=True)
+    )
 
 
 def _read_csv(payload: bytes) -> tuple[list[str], list[dict[str, str]]]:
@@ -119,18 +230,7 @@ def _join_candidates(summaries: dict[str, dict]) -> list[dict]:
 
 
 def run() -> dict:
-    archive = _download()
-    with zipfile.ZipFile(io.BytesIO(archive)) as zf:
-        members = [
-            name for name in zf.namelist()
-            if not name.endswith("/") and Path(name).name in EXPECTED_FILES
-        ]
-        by_basename = {}
-        for member in members:
-            basename = Path(member).name
-            if basename in by_basename:
-                raise RuntimeError(f"duplicate Dryad file basename {basename}")
-            by_basename[basename] = zf.read(member)
+    by_basename, transport = _download_files()
 
     missing = sorted(EXPECTED_FILES - set(by_basename))
     if missing:
@@ -145,9 +245,7 @@ def run() -> dict:
         "status": "schema_materialized_before_v29_scoring_protocol",
         "source": {
             "doi": DOI,
-            "download_url": DOWNLOAD_URL,
-            "archive_bytes": len(archive),
-            "archive_sha256": _sha256(archive),
+            "transport": transport,
         },
         "files": summaries,
         "join_candidates": _join_candidates(summaries),
