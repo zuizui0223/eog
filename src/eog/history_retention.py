@@ -316,3 +316,277 @@ def permutation_partial_r2_distance(
         permutations=int(permutations),
         seed=int(seed),
     )
+
+
+def factorial_history_design(
+    context: Sequence[object],
+    history: Sequence[object],
+) -> tuple[np.ndarray, np.ndarray]:
+    """Build nested reduced/full designs for context-dependent history retention.
+
+    Reduced: 1 + context.
+    Full:    1 + context + history + context:history.
+
+    Treatment/reference coding is used only to span the model subspaces.  The retention
+    statistic depends on those subspaces, not on the arbitrary reference levels.
+    """
+
+    context_array = _array(context, name="context")
+    history_array = _array(history, name="history")
+    if context_array.size != history_array.size:
+        raise ValueError("context and history must have the same row count")
+    if len(_levels(history_array)) < 2:
+        raise ValueError("history must contain at least two levels")
+
+    c = _dummy_matrix(context_array, name="context")
+    h = _dummy_matrix(history_array, name="history")
+    intercept = np.ones((context_array.size, 1), dtype=float)
+    reduced = np.column_stack([intercept, c])
+
+    columns = [intercept]
+    if c.shape[1]:
+        columns.append(c)
+    if h.shape[1]:
+        columns.append(h)
+    if c.shape[1] and h.shape[1]:
+        interactions = np.column_stack(
+            [
+                c[:, i] * h[:, j]
+                for i in range(c.shape[1])
+                for j in range(h.shape[1])
+            ]
+        )
+        columns.append(interactions)
+    full = np.column_stack(columns)
+    return reduced, full
+
+
+def _validate_nested_designs(
+    reduced: Sequence[Sequence[float]],
+    full: Sequence[Sequence[float]],
+    *,
+    n_rows: int,
+) -> tuple[np.ndarray, np.ndarray]:
+    reduced_array = np.asarray(reduced, dtype=float)
+    full_array = np.asarray(full, dtype=float)
+    if reduced_array.ndim != 2 or full_array.ndim != 2:
+        raise ValueError("reduced and full designs must be two-dimensional")
+    if reduced_array.shape[0] != n_rows or full_array.shape[0] != n_rows:
+        raise ValueError("design row counts must match the target")
+    if reduced_array.shape[1] < 1 or full_array.shape[1] < 1:
+        raise ValueError("designs must contain at least one column")
+    if not np.all(np.isfinite(reduced_array)) or not np.all(np.isfinite(full_array)):
+        raise ValueError("designs must contain only finite values")
+
+    full_projection = _projection(full_array)
+    nesting_error = np.linalg.norm(
+        reduced_array - full_projection @ reduced_array,
+        ord="fro",
+    )
+    scale = max(1.0, np.linalg.norm(reduced_array, ord="fro"))
+    if nesting_error > 1e-9 * scale:
+        raise ValueError("reduced design is not nested in full design")
+
+    reduced_rank = int(np.linalg.matrix_rank(reduced_array))
+    full_rank = int(np.linalg.matrix_rank(full_array))
+    if full_rank <= reduced_rank:
+        raise ValueError("full design adds no identifiable history subspace")
+    return reduced_array, full_array
+
+
+def partial_r2_nested_scalar(
+    target: Sequence[float],
+    reduced: Sequence[Sequence[float]],
+    full: Sequence[Sequence[float]],
+    *,
+    history_levels: int,
+) -> HistoryRetentionResult:
+    """Return partial R2 for an arbitrary declared nested scalar model pair."""
+
+    y = _numeric(target, name="target")
+    reduced_array, full_array = _validate_nested_designs(
+        reduced,
+        full,
+        n_rows=y.size,
+    )
+    beta_reduced = np.linalg.lstsq(reduced_array, y, rcond=None)[0]
+    beta_full = np.linalg.lstsq(full_array, y, rcond=None)[0]
+    reduced_sse = float(np.sum((y - reduced_array @ beta_reduced) ** 2))
+    full_sse = float(np.sum((y - full_array @ beta_full) ** 2))
+    return _nested_partial_r2_from_sse(
+        reduced_sse,
+        full_sse,
+        n_rows=y.size,
+        history_levels=int(history_levels),
+    )
+
+
+def partial_r2_nested_distance(
+    distance: Sequence[Sequence[float]],
+    reduced: Sequence[Sequence[float]],
+    full: Sequence[Sequence[float]],
+    *,
+    history_levels: int,
+) -> HistoryRetentionResult:
+    """Return Gower-centered partial R2 for an arbitrary nested design pair."""
+
+    d = np.asarray(distance, dtype=float)
+    if d.ndim != 2 or d.shape[0] != d.shape[1] or d.shape[0] < 2:
+        raise ValueError("distance must be a square matrix with at least two rows")
+    if not np.all(np.isfinite(d)):
+        raise ValueError("distance must contain only finite values")
+    if np.any(d < -1e-12):
+        raise ValueError("distance cannot contain negative values")
+    if not np.allclose(d, d.T, atol=1e-10, rtol=0.0):
+        raise ValueError("distance must be symmetric")
+    if not np.allclose(np.diag(d), 0.0, atol=1e-10, rtol=0.0):
+        raise ValueError("distance diagonal must be zero")
+
+    reduced_array, full_array = _validate_nested_designs(
+        reduced,
+        full,
+        n_rows=d.shape[0],
+    )
+    n = d.shape[0]
+    centering = np.eye(n) - np.ones((n, n), dtype=float) / n
+    gower = -0.5 * centering @ (d ** 2) @ centering
+    h_reduced = _projection(reduced_array)
+    h_full = _projection(full_array)
+    identity = np.eye(n)
+
+    reduced_residual_ss = float(np.trace((identity - h_reduced) @ gower))
+    history_ss = float(np.trace((h_full - h_reduced) @ gower))
+    full_residual_ss = reduced_residual_ss - history_ss
+
+    tolerance = 1e-8
+    if reduced_residual_ss < -tolerance:
+        raise ValueError("distance geometry yields negative reduced residual SS")
+    if history_ss < -tolerance:
+        raise ValueError("distance geometry yields negative history SS")
+    if full_residual_ss < -tolerance:
+        raise ValueError("distance geometry yields negative full residual SS")
+
+    return _nested_partial_r2_from_sse(
+        max(0.0, reduced_residual_ss),
+        max(0.0, full_residual_ss),
+        n_rows=n,
+        history_levels=int(history_levels),
+    )
+
+
+def partial_r2_factorial_scalar(
+    target: Sequence[float],
+    history: Sequence[object],
+    context: Sequence[object],
+) -> HistoryRetentionResult:
+    """History retention from adding history and context×history to context."""
+
+    history_array = _array(history, name="history")
+    reduced, full = factorial_history_design(context, history_array)
+    return partial_r2_nested_scalar(
+        target,
+        reduced,
+        full,
+        history_levels=len(_levels(history_array)),
+    )
+
+
+def partial_r2_factorial_distance(
+    distance: Sequence[Sequence[float]],
+    history: Sequence[object],
+    context: Sequence[object],
+) -> HistoryRetentionResult:
+    """Distance analogue of :func:`partial_r2_factorial_scalar`."""
+
+    history_array = _array(history, name="history")
+    reduced, full = factorial_history_design(context, history_array)
+    return partial_r2_nested_distance(
+        distance,
+        reduced,
+        full,
+        history_levels=len(_levels(history_array)),
+    )
+
+
+def _permuted_within_strata(
+    history: np.ndarray,
+    strata: np.ndarray,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    if history.size != strata.size:
+        raise ValueError("history and strata must have the same row count")
+    result = history.copy()
+    for level in _levels(strata):
+        index = np.flatnonzero(strata == level)
+        values = result[index].copy()
+        rng.shuffle(values)
+        result[index] = values
+    return result
+
+
+def permutation_factorial_partial_r2_scalar(
+    target: Sequence[float],
+    history: Sequence[object],
+    context: Sequence[object],
+    *,
+    permutations: int = 999,
+    seed: int = 20261005,
+) -> PermutationResult:
+    """Permute history within context and refit the context×history model."""
+
+    if permutations < 1:
+        raise ValueError("permutations must be at least one")
+    y = _numeric(target, name="target")
+    h = _array(history, name="history")
+    c = _array(context, name="context")
+    if y.size != h.size or y.size != c.size:
+        raise ValueError("target, history, and context must have the same row count")
+    observed = partial_r2_factorial_scalar(y, h, c).partial_r2
+    rng = np.random.default_rng(seed)
+    exceed = 0
+    for _ in range(permutations):
+        permuted = _permuted_within_strata(h, c, rng)
+        statistic = partial_r2_factorial_scalar(y, permuted, c).partial_r2
+        if statistic >= observed - 1e-12:
+            exceed += 1
+    return PermutationResult(
+        observed_partial_r2=observed,
+        p_value=(exceed + 1) / (permutations + 1),
+        permutations=int(permutations),
+        seed=int(seed),
+    )
+
+
+def permutation_factorial_partial_r2_distance(
+    distance: Sequence[Sequence[float]],
+    history: Sequence[object],
+    context: Sequence[object],
+    *,
+    permutations: int = 999,
+    seed: int = 20261005,
+) -> PermutationResult:
+    """Distance retention diagnostic with history shuffled within context."""
+
+    if permutations < 1:
+        raise ValueError("permutations must be at least one")
+    d = np.asarray(distance, dtype=float)
+    if d.ndim != 2 or d.shape[0] != d.shape[1]:
+        raise ValueError("distance must be square")
+    h = _array(history, name="history")
+    c = _array(context, name="context")
+    if d.shape[0] != h.size or d.shape[0] != c.size:
+        raise ValueError("distance, history, and context must have the same row count")
+    observed = partial_r2_factorial_distance(d, h, c).partial_r2
+    rng = np.random.default_rng(seed)
+    exceed = 0
+    for _ in range(permutations):
+        permuted = _permuted_within_strata(h, c, rng)
+        statistic = partial_r2_factorial_distance(d, permuted, c).partial_r2
+        if statistic >= observed - 1e-12:
+            exceed += 1
+    return PermutationResult(
+        observed_partial_r2=observed,
+        p_value=(exceed + 1) / (permutations + 1),
+        permutations=int(permutations),
+        seed=int(seed),
+    )
