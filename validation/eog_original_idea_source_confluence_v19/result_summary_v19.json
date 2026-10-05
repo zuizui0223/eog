@@ -1,0 +1,86 @@
+{
+  "schema": "eog.original_idea_source_confluence.result_summary.v19",
+  "status": "completed_preregistered_source_confluence_panel",
+  "protocol": "validation/eog_original_idea_source_confluence_v19/protocol_v19.json",
+  "authoritative_run": 37252018824,
+  "authoritative_artifact_id": 11321161763,
+  "authoritative_artifact_digest": "sha256:bc4910968de071bab204ee9793a25aa4df69ce591ea8787ef8c8e6c62c7c6686",
+  "result_fingerprint": "a1a4bcf4a8e6f91888f41e9f14826c662da66b869348c14ed8592b411636fd2d",
+  "row_count": 384,
+  "eligible_row_count": 384,
+  "non_estimable_row_count": 0,
+  "predeclared_verdicts": {
+    "P1_static_distribution_loses_source_provenance": "SUPPORTED",
+    "P2_clustered_sources_create_more_static_provenance_ambiguity": "SUPPORTED",
+    "P3_first_passage_timing_recovers_source_information": "SUPPORTED",
+    "P4_first_passage_does_not_always_restore_unique_source_identity": "SUPPORTED",
+    "P5_confluence_is_downstream_biased": "SUPPORTED",
+    "P6_more_sources_never_reduce_static_ambiguous_node_count": "SUPPORTED",
+    "P7_earliest_origin_set_is_nested_inside_static_origin_set": "SUPPORTED",
+    "P8_clustered_sources_converge_earlier_upstream": "SUPPORTED"
+  },
+  "summary_by_design_and_source_count": {
+    "clustered": {
+      "2": {
+        "mean_static_ambiguous_fraction": 0.6402527720370431,
+        "mean_temporally_resolved_fraction_of_static_ambiguity": 0.8520213204733924,
+        "mean_residual_ambiguity_fraction": 0.10770393635961119,
+        "rows_with_static_confluence": 322,
+        "rows_with_irreducible_first_passage_ambiguity": 100
+      },
+      "3": {
+        "mean_static_ambiguous_fraction": 0.7114754561443757,
+        "mean_temporally_resolved_fraction_of_static_ambiguity": 0.8186577891361729,
+        "mean_residual_ambiguity_fraction": 0.14494064389881303,
+        "rows_with_static_confluence": 364,
+        "rows_with_irreducible_first_passage_ambiguity": 166
+      }
+    },
+    "dispersed": {
+      "2": {
+        "mean_static_ambiguous_fraction": 0.07785919158710324,
+        "mean_temporally_resolved_fraction_of_static_ambiguity": 0.9295570348454963,
+        "mean_residual_ambiguity_fraction": 0.0047819531200985,
+        "rows_with_static_confluence": 104,
+        "rows_with_irreducible_first_passage_ambiguity": 20
+      },
+      "3": {
+        "mean_static_ambiguous_fraction": 0.14558414269689143,
+        "mean_temporally_resolved_fraction_of_static_ambiguity": 0.9331610827876001,
+        "mean_residual_ambiguity_fraction": 0.01162933416735278,
+        "rows_with_static_confluence": 189,
+        "rows_with_irreducible_first_passage_ambiguity": 50
+      }
+    }
+  },
+  "clustered_minus_dispersed_static_ambiguity_fraction": {
+    "2": 0.5623935804499399,
+    "3": 0.5658913134474842
+  },
+  "downstream_bias": {
+    "qualifying_source_set_count": 976,
+    "mean_ambiguous_normalized_potential": 0.3231033495476292,
+    "mean_unique_normalized_potential": 0.53078034760546,
+    "ambiguous_minus_unique": -0.2076769980578308
+  },
+  "confluence_front": {
+    "rows_with_both_two_source_designs_confluent": 104,
+    "mean_clustered_minus_dispersed_front_potential": 0.508202403512364
+  },
+  "invariants": {
+    "adding_source_reduced_static_ambiguous_node_count_violations": 0,
+    "earliest_origin_outside_static_origin_set_violations": 0
+  },
+  "interpretation": [
+    "Static final distributions can lose source provenance even when the source set is known.",
+    "Clustered source placement creates dramatically more provenance ambiguity than dispersed placement at both two and three sources.",
+    "First-passage order recovers most static provenance information, but irreducible equal-earliest ambiguity remains in a nonzero subset of landscapes.",
+    "Confluence is downstream biased, and clustered source basins begin to merge much farther upstream than dispersed source basins.",
+    "Source placement therefore controls not only coverage and insurance, as in v18, but also how quickly source identity is erased along the distributional flow network."
+  ],
+  "claim_boundary": [
+    "Static origin ambiguity is structural source compatibility, not ancestry or admixture.",
+    "First-passage depth is graph order, not calibrated colonization time.",
+    "A unique earliest source in a virtual graph is not an empirical founder assignment."
+  ]
+}
