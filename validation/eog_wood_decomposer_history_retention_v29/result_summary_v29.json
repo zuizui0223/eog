@@ -1,0 +1,57 @@
+{
+  "schema": "eog.wood_decomposer_history_retention.result_summary.v29",
+  "status": "transport_stop_before_biological_scoring",
+  "biological_result": null,
+  "source": {
+    "article_doi": "10.1111/ele.12803",
+    "dryad_doi": "10.5061/dryad.7p2cv",
+    "license": "CC0",
+    "version_resource_id": 13946,
+    "files": {
+      "sample.data.csv": {
+        "file_id": 52325,
+        "size_bytes": 35448,
+        "md5": "d35287fd5f8522d8180451d42dc8969b"
+      },
+      "species.prevalence.csv": {
+        "file_id": 52326,
+        "size_bytes": 12148,
+        "md5": "1f879a53fafcaaa5d148dbe112d3b389"
+      },
+      "collembola.csv": {
+        "file_id": 52327,
+        "size_bytes": 2621,
+        "md5": "b7264f326709ab41d1fe8cac8ddc4a48"
+      }
+    }
+  },
+  "transport": {
+    "package_api": "HTTP_401_without_OAuth",
+    "public_file_stream": "Anubis_HTML_interstitial",
+    "public_metadata_api": "success",
+    "official_preview_schema": "success",
+    "exact_raw_bytes_materialized": false
+  },
+  "frozen_contract": {
+    "protocol": "validation/eog_wood_decomposer_history_retention_v29/protocol_v29.json",
+    "primary_harvest": "12 month",
+    "expected_primary_n": 80,
+    "permutations": 9999,
+    "seed": 20261005,
+    "primary_contrast": "E_community_minus_E_decomposition"
+  },
+  "implemented": [
+    "transport_probe_with_HTML_rejection",
+    "public_file_metadata_audit",
+    "schema_only_official_preview_probe",
+    "frozen_machine_readable_protocol",
+    "MD5_gated_scoring_runner",
+    "scorer_unit_tests"
+  ],
+  "claim_boundary": [
+    "no biological score was calculated",
+    "transport STOP is not evidence against history retention",
+    "do not reconstruct pseudo-data from figures or published means",
+    "resume only with exact archived bytes matching frozen MD5"
+  ]
+}
