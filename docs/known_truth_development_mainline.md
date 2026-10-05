@@ -1992,6 +1992,64 @@ Canonical assets:
 The next active virtual-world problem must return to an unresolved ecological property
 of EOG rather than extending measurement-cost uncertainty.
 
+## Original-EOG virtual-world mainline — v18 source placement
+
+v18 returned the programme from evidence-cost questions to a direct ecological property
+of multi-source distributions.
+
+Across **384 directed known-truth landscapes**, source number was held fixed while
+additional source populations were placed either near the frozen upstream anchor or
+spatially dispersed across the upstream candidate pool.
+
+All eight preregistered hypotheses were supported.
+
+At two sources:
+
+- mean reachable fraction, clustered: **0.404**;
+- dispersed: **0.445**;
+- dispersed-minus-clustered coverage: **+0.041**;
+- clustered multi-source overlap: **0.640**;
+- dispersed overlap: **0.078**;
+- clustered worst-source-loss retention: **0.693**;
+- dispersed retention: **0.264**.
+
+Thus source geometry created a direct tradeoff:
+
+> **dispersed sources expanded the reachable landscape, while clustered sources
+> supplied stronger overlap and insurance against losing one source.**
+
+The row-level pattern was strong:
+
+- changing only two-source placement changed coverage in **347/384** landscapes;
+- the coverage–insurance tradeoff occurred in **280/384**;
+- **two dispersed sources covered more landscape than three clustered sources in
+  225/384**.
+
+The qualitative direction persisted across all barrier-density, environmental
+autocorrelation and rook/queen secondary strata.
+
+The correct ecological interpretation is not that source placement itself is novel.
+Spatial source importance, connectivity, centrality and route redundancy are
+established ideas in landscape and metapopulation ecology.
+
+The EOG-specific known-truth contribution is the decomposition, inside the same latent
+landscape, of three consequences that source count alone collapses:
+
+1. reachable coverage;
+2. redundancy / source-loss insurance;
+3. source-attribution ambiguity caused by overlapping flow basins.
+
+Canonical v18 assets:
+
+- `validation/eog_original_idea_source_placement_v18/protocol_v18.json`;
+- `validation/eog_original_idea_source_placement_v18/result_summary_v18.json`;
+- `docs/eog_original_idea_source_placement_v18.md`;
+- `docs/eog_original_idea_source_placement_v18_result.md`.
+
+The active next question is v19: when multiple source basins converge, how much source
+provenance is lost in the final static distribution, and how much can first-passage
+order recover?
+
 ## Hard claim boundary
 
 Do not claim:
