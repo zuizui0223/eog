@@ -1,0 +1,1659 @@
+{
+  "schema": "eog.original_idea_leopold_history_retention.common_panel.v28",
+  "status": "frozen_before_target_scoring",
+  "source_commit": "d8082daabfccccf3bcbdd631b4438f44c04014c1",
+  "construction": {
+    "samp_type": "Experiment",
+    "timepoint": "1",
+    "treatments": [
+      "Alternaria",
+      "Aureobasidium",
+      "Cladosporium",
+      "Dioszegia",
+      "Fusarium"
+    ],
+    "exact_otu_id_required": true,
+    "exact_rust_plant_id_required": true,
+    "plant_id_rule": "remove_terminal_.TP1_only"
+  },
+  "counts": {
+    "eligible_metadata": 252,
+    "common_panel": 233,
+    "genotype_count": 12,
+    "treatment_count": 5,
+    "occupied_genotype_treatment_cells": 60
+  },
+  "plants": [
+    {
+      "sample_id": "G1.T1.R1.TP1",
+      "plant_id": "G1.T1.R1",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G1.T1.R2.TP1",
+      "plant_id": "G1.T1.R2",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G1.T1.R5.TP1",
+      "plant_id": "G1.T1.R5",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G1.T2.R1.TP1",
+      "plant_id": "G1.T2.R1",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G1.T2.R2.TP1",
+      "plant_id": "G1.T2.R2",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G1.T2.R4.TP1",
+      "plant_id": "G1.T2.R4",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G1.T2.R5.TP1",
+      "plant_id": "G1.T2.R5",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G1.T3.R1.TP1",
+      "plant_id": "G1.T3.R1",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G1.T3.R2.TP1",
+      "plant_id": "G1.T3.R2",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G1.T3.R4.TP1",
+      "plant_id": "G1.T3.R4",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G1.T3.R5.TP1",
+      "plant_id": "G1.T3.R5",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G1.T4.R4.TP1",
+      "plant_id": "G1.T4.R4",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G1.T4.R5.TP1",
+      "plant_id": "G1.T4.R5",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G1.T5.R2.TP1",
+      "plant_id": "G1.T5.R2",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G1.T5.R4.TP1",
+      "plant_id": "G1.T5.R4",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G1.T5.R5.TP1",
+      "plant_id": "G1.T5.R5",
+      "genotype": "West-7",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G2.T1.R1.TP1",
+      "plant_id": "G2.T1.R1",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G2.T1.R2.TP1",
+      "plant_id": "G2.T1.R2",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G2.T1.R4.TP1",
+      "plant_id": "G2.T1.R4",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G2.T1.R5.TP1",
+      "plant_id": "G2.T1.R5",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G2.T2.R1.TP1",
+      "plant_id": "G2.T2.R1",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G2.T2.R2.TP1",
+      "plant_id": "G2.T2.R2",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G2.T2.R4.TP1",
+      "plant_id": "G2.T2.R4",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G2.T2.R5.TP1",
+      "plant_id": "G2.T2.R5",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G2.T3.R1.TP1",
+      "plant_id": "G2.T3.R1",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G2.T3.R2.TP1",
+      "plant_id": "G2.T3.R2",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G2.T3.R4.TP1",
+      "plant_id": "G2.T3.R4",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G2.T3.R5.TP1",
+      "plant_id": "G2.T3.R5",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G2.T4.R2.TP1",
+      "plant_id": "G2.T4.R2",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G2.T4.R4.TP1",
+      "plant_id": "G2.T4.R4",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G2.T4.R5.TP1",
+      "plant_id": "G2.T4.R5",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G2.T5.R1.TP1",
+      "plant_id": "G2.T5.R1",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G2.T5.R4.TP1",
+      "plant_id": "G2.T5.R4",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G2.T5.R5.TP1",
+      "plant_id": "G2.T5.R5",
+      "genotype": "West-6",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G3.T1.R2.TP1",
+      "plant_id": "G3.T1.R2",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G3.T1.R5.TP1",
+      "plant_id": "G3.T1.R5",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G3.T2.R1.TP1",
+      "plant_id": "G3.T2.R1",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G3.T2.R2.TP1",
+      "plant_id": "G3.T2.R2",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G3.T2.R3.TP1",
+      "plant_id": "G3.T2.R3",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G3.T2.R4.TP1",
+      "plant_id": "G3.T2.R4",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G3.T2.R5.TP1",
+      "plant_id": "G3.T2.R5",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G3.T3.R1.TP1",
+      "plant_id": "G3.T3.R1",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G3.T3.R2.TP1",
+      "plant_id": "G3.T3.R2",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G3.T3.R4.TP1",
+      "plant_id": "G3.T3.R4",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G3.T3.R5.TP1",
+      "plant_id": "G3.T3.R5",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G3.T4.R1.TP1",
+      "plant_id": "G3.T4.R1",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G3.T4.R2.TP1",
+      "plant_id": "G3.T4.R2",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G3.T4.R3.TP1",
+      "plant_id": "G3.T4.R3",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G3.T4.R4.TP1",
+      "plant_id": "G3.T4.R4",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G3.T4.R5.TP1",
+      "plant_id": "G3.T4.R5",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G3.T5.R1.TP1",
+      "plant_id": "G3.T5.R1",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G3.T5.R2.TP1",
+      "plant_id": "G3.T5.R2",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G3.T5.R3.TP1",
+      "plant_id": "G3.T5.R3",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G3.T5.R4.TP1",
+      "plant_id": "G3.T5.R4",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G3.T5.R5.TP1",
+      "plant_id": "G3.T5.R5",
+      "genotype": "West-3",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G4.T1.R1.TP1",
+      "plant_id": "G4.T1.R1",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G4.T1.R2.TP1",
+      "plant_id": "G4.T1.R2",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G4.T1.R3.TP1",
+      "plant_id": "G4.T1.R3",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G4.T1.R4.TP1",
+      "plant_id": "G4.T1.R4",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G4.T1.R5.TP1",
+      "plant_id": "G4.T1.R5",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G4.T2.R1.TP1",
+      "plant_id": "G4.T2.R1",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G4.T2.R2.TP1",
+      "plant_id": "G4.T2.R2",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G4.T2.R4.TP1",
+      "plant_id": "G4.T2.R4",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G4.T2.R5.TP1",
+      "plant_id": "G4.T2.R5",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G4.T3.R1.TP1",
+      "plant_id": "G4.T3.R1",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G4.T3.R2.TP1",
+      "plant_id": "G4.T3.R2",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G4.T3.R3.TP1",
+      "plant_id": "G4.T3.R3",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G4.T3.R4.TP1",
+      "plant_id": "G4.T3.R4",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G4.T4.R1.TP1",
+      "plant_id": "G4.T4.R1",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G4.T4.R3.TP1",
+      "plant_id": "G4.T4.R3",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G4.T4.R4.TP1",
+      "plant_id": "G4.T4.R4",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G4.T4.R5.TP1",
+      "plant_id": "G4.T4.R5",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G4.T5.R1.TP1",
+      "plant_id": "G4.T5.R1",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G4.T5.R2.TP1",
+      "plant_id": "G4.T5.R2",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G4.T5.R3.TP1",
+      "plant_id": "G4.T5.R3",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G4.T5.R4.TP1",
+      "plant_id": "G4.T5.R4",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G4.T5.R5.TP1",
+      "plant_id": "G4.T5.R5",
+      "genotype": "West-4",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G5.T1.R1.TP1",
+      "plant_id": "G5.T1.R1",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G5.T1.R2.TP1",
+      "plant_id": "G5.T1.R2",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G5.T1.R3.TP1",
+      "plant_id": "G5.T1.R3",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G5.T1.R4.TP1",
+      "plant_id": "G5.T1.R4",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G5.T2.R1.TP1",
+      "plant_id": "G5.T2.R1",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G5.T2.R2.TP1",
+      "plant_id": "G5.T2.R2",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G5.T2.R3.TP1",
+      "plant_id": "G5.T2.R3",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G5.T2.R4.TP1",
+      "plant_id": "G5.T2.R4",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G5.T3.R1.TP1",
+      "plant_id": "G5.T3.R1",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G5.T3.R2.TP1",
+      "plant_id": "G5.T3.R2",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G5.T3.R3.TP1",
+      "plant_id": "G5.T3.R3",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G5.T3.R4.TP1",
+      "plant_id": "G5.T3.R4",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G5.T4.R2.TP1",
+      "plant_id": "G5.T4.R2",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G5.T4.R3.TP1",
+      "plant_id": "G5.T4.R3",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G5.T4.R4.TP1",
+      "plant_id": "G5.T4.R4",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G5.T5.R3.TP1",
+      "plant_id": "G5.T5.R3",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G5.T5.R4.TP1",
+      "plant_id": "G5.T5.R4",
+      "genotype": "East-3",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G6.T1.R1.TP1",
+      "plant_id": "G6.T1.R1",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G6.T1.R2.TP1",
+      "plant_id": "G6.T1.R2",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G6.T1.R3.TP1",
+      "plant_id": "G6.T1.R3",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G6.T1.R4.TP1",
+      "plant_id": "G6.T1.R4",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G6.T1.R5.TP1",
+      "plant_id": "G6.T1.R5",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G6.T2.R1.TP1",
+      "plant_id": "G6.T2.R1",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G6.T2.R2.TP1",
+      "plant_id": "G6.T2.R2",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G6.T2.R3.TP1",
+      "plant_id": "G6.T2.R3",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G6.T3.R1.TP1",
+      "plant_id": "G6.T3.R1",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G6.T3.R2.TP1",
+      "plant_id": "G6.T3.R2",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G6.T3.R5.TP1",
+      "plant_id": "G6.T3.R5",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G6.T4.R1.TP1",
+      "plant_id": "G6.T4.R1",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G6.T4.R2.TP1",
+      "plant_id": "G6.T4.R2",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G6.T4.R3.TP1",
+      "plant_id": "G6.T4.R3",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G6.T4.R4.TP1",
+      "plant_id": "G6.T4.R4",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G6.T4.R5.TP1",
+      "plant_id": "G6.T4.R5",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G6.T5.R1.TP1",
+      "plant_id": "G6.T5.R1",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G6.T5.R2.TP1",
+      "plant_id": "G6.T5.R2",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G6.T5.R3.TP1",
+      "plant_id": "G6.T5.R3",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G6.T5.R4.TP1",
+      "plant_id": "G6.T5.R4",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G6.T5.R5.TP1",
+      "plant_id": "G6.T5.R5",
+      "genotype": "West-2",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G7.T1.R1.TP1",
+      "plant_id": "G7.T1.R1",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G7.T1.R2.TP1",
+      "plant_id": "G7.T1.R2",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G7.T1.R3.TP1",
+      "plant_id": "G7.T1.R3",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G7.T1.R4.TP1",
+      "plant_id": "G7.T1.R4",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G7.T1.R5.TP1",
+      "plant_id": "G7.T1.R5",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G7.T2.R1.TP1",
+      "plant_id": "G7.T2.R1",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G7.T2.R2.TP1",
+      "plant_id": "G7.T2.R2",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G7.T2.R4.TP1",
+      "plant_id": "G7.T2.R4",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G7.T2.R5.TP1",
+      "plant_id": "G7.T2.R5",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G7.T3.R1.TP1",
+      "plant_id": "G7.T3.R1",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G7.T3.R2.TP1",
+      "plant_id": "G7.T3.R2",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G7.T3.R3.TP1",
+      "plant_id": "G7.T3.R3",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G7.T3.R4.TP1",
+      "plant_id": "G7.T3.R4",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G7.T3.R5.TP1",
+      "plant_id": "G7.T3.R5",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G7.T4.R3.TP1",
+      "plant_id": "G7.T4.R3",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G7.T4.R4.TP1",
+      "plant_id": "G7.T4.R4",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G7.T5.R1.TP1",
+      "plant_id": "G7.T5.R1",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G7.T5.R2.TP1",
+      "plant_id": "G7.T5.R2",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G7.T5.R4.TP1",
+      "plant_id": "G7.T5.R4",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G7.T5.R5.TP1",
+      "plant_id": "G7.T5.R5",
+      "genotype": "West-1",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G8.T1.R1.TP1",
+      "plant_id": "G8.T1.R1",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G8.T1.R2.TP1",
+      "plant_id": "G8.T1.R2",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G8.T1.R3.TP1",
+      "plant_id": "G8.T1.R3",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G8.T1.R4.TP1",
+      "plant_id": "G8.T1.R4",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G8.T1.R5.TP1",
+      "plant_id": "G8.T1.R5",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G8.T2.R1.TP1",
+      "plant_id": "G8.T2.R1",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G8.T2.R2.TP1",
+      "plant_id": "G8.T2.R2",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G8.T2.R3.TP1",
+      "plant_id": "G8.T2.R3",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G8.T2.R4.TP1",
+      "plant_id": "G8.T2.R4",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G8.T2.R5.TP1",
+      "plant_id": "G8.T2.R5",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G8.T3.R1.TP1",
+      "plant_id": "G8.T3.R1",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G8.T3.R2.TP1",
+      "plant_id": "G8.T3.R2",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G8.T3.R3.TP1",
+      "plant_id": "G8.T3.R3",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G8.T3.R4.TP1",
+      "plant_id": "G8.T3.R4",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G8.T3.R5.TP1",
+      "plant_id": "G8.T3.R5",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G8.T4.R1.TP1",
+      "plant_id": "G8.T4.R1",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G8.T4.R2.TP1",
+      "plant_id": "G8.T4.R2",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G8.T4.R3.TP1",
+      "plant_id": "G8.T4.R3",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G8.T4.R4.TP1",
+      "plant_id": "G8.T4.R4",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G8.T4.R5.TP1",
+      "plant_id": "G8.T4.R5",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G8.T5.R1.TP1",
+      "plant_id": "G8.T5.R1",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G8.T5.R2.TP1",
+      "plant_id": "G8.T5.R2",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G8.T5.R3.TP1",
+      "plant_id": "G8.T5.R3",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G8.T5.R4.TP1",
+      "plant_id": "G8.T5.R4",
+      "genotype": "East-4",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G9.T1.R1.TP1",
+      "plant_id": "G9.T1.R1",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G9.T1.R2.TP1",
+      "plant_id": "G9.T1.R2",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G9.T1.R3.TP1",
+      "plant_id": "G9.T1.R3",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G9.T1.R4.TP1",
+      "plant_id": "G9.T1.R4",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G9.T1.R5.TP1",
+      "plant_id": "G9.T1.R5",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G9.T2.R1.TP1",
+      "plant_id": "G9.T2.R1",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G9.T2.R2.TP1",
+      "plant_id": "G9.T2.R2",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G9.T2.R3.TP1",
+      "plant_id": "G9.T2.R3",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G9.T2.R4.TP1",
+      "plant_id": "G9.T2.R4",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G9.T3.R1.TP1",
+      "plant_id": "G9.T3.R1",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G9.T3.R3.TP1",
+      "plant_id": "G9.T3.R3",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G9.T3.R4.TP1",
+      "plant_id": "G9.T3.R4",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G9.T3.R5.TP1",
+      "plant_id": "G9.T3.R5",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G9.T4.R1.TP1",
+      "plant_id": "G9.T4.R1",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G9.T4.R2.TP1",
+      "plant_id": "G9.T4.R2",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G9.T4.R3.TP1",
+      "plant_id": "G9.T4.R3",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G9.T4.R4.TP1",
+      "plant_id": "G9.T4.R4",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G9.T5.R1.TP1",
+      "plant_id": "G9.T5.R1",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G9.T5.R2.TP1",
+      "plant_id": "G9.T5.R2",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G9.T5.R3.TP1",
+      "plant_id": "G9.T5.R3",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G9.T5.R4.TP1",
+      "plant_id": "G9.T5.R4",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G9.T5.R5.TP1",
+      "plant_id": "G9.T5.R5",
+      "genotype": "East-5",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G10.T1.R1.TP1",
+      "plant_id": "G10.T1.R1",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G10.T1.R2.TP1",
+      "plant_id": "G10.T1.R2",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G10.T1.R3.TP1",
+      "plant_id": "G10.T1.R3",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G10.T1.R4.TP1",
+      "plant_id": "G10.T1.R4",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G10.T2.R1.TP1",
+      "plant_id": "G10.T2.R1",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G10.T2.R2.TP1",
+      "plant_id": "G10.T2.R2",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G10.T2.R3.TP1",
+      "plant_id": "G10.T2.R3",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G10.T2.R4.TP1",
+      "plant_id": "G10.T2.R4",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G10.T3.R1.TP1",
+      "plant_id": "G10.T3.R1",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G10.T3.R2.TP1",
+      "plant_id": "G10.T3.R2",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G10.T3.R3.TP1",
+      "plant_id": "G10.T3.R3",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G10.T3.R4.TP1",
+      "plant_id": "G10.T3.R4",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G10.T4.R1.TP1",
+      "plant_id": "G10.T4.R1",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G10.T4.R2.TP1",
+      "plant_id": "G10.T4.R2",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G10.T4.R3.TP1",
+      "plant_id": "G10.T4.R3",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G10.T4.R4.TP1",
+      "plant_id": "G10.T4.R4",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G10.T5.R1.TP1",
+      "plant_id": "G10.T5.R1",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G10.T5.R2.TP1",
+      "plant_id": "G10.T5.R2",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G10.T5.R3.TP1",
+      "plant_id": "G10.T5.R3",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G10.T5.R4.TP1",
+      "plant_id": "G10.T5.R4",
+      "genotype": "East-1",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G11.T1.R1.TP1",
+      "plant_id": "G11.T1.R1",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G11.T1.R2.TP1",
+      "plant_id": "G11.T1.R2",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G11.T1.R3.TP1",
+      "plant_id": "G11.T1.R3",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G11.T2.R1.TP1",
+      "plant_id": "G11.T2.R1",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G11.T2.R2.TP1",
+      "plant_id": "G11.T2.R2",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G11.T2.R4.TP1",
+      "plant_id": "G11.T2.R4",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G11.T3.R1.TP1",
+      "plant_id": "G11.T3.R1",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G11.T3.R2.TP1",
+      "plant_id": "G11.T3.R2",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G11.T3.R3.TP1",
+      "plant_id": "G11.T3.R3",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G11.T3.R4.TP1",
+      "plant_id": "G11.T3.R4",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G11.T4.R1.TP1",
+      "plant_id": "G11.T4.R1",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G11.T4.R2.TP1",
+      "plant_id": "G11.T4.R2",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G11.T4.R3.TP1",
+      "plant_id": "G11.T4.R3",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G11.T4.R4.TP1",
+      "plant_id": "G11.T4.R4",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G11.T5.R2.TP1",
+      "plant_id": "G11.T5.R2",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G11.T5.R3.TP1",
+      "plant_id": "G11.T5.R3",
+      "genotype": "East-2",
+      "region": "East",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G12.T1.R1.TP1",
+      "plant_id": "G12.T1.R1",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G12.T1.R2.TP1",
+      "plant_id": "G12.T1.R2",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G12.T1.R3.TP1",
+      "plant_id": "G12.T1.R3",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Alternaria"
+    },
+    {
+      "sample_id": "G12.T2.R2.TP1",
+      "plant_id": "G12.T2.R2",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G12.T2.R3.TP1",
+      "plant_id": "G12.T2.R3",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G12.T2.R4.TP1",
+      "plant_id": "G12.T2.R4",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Cladosporium"
+    },
+    {
+      "sample_id": "G12.T3.R1.TP1",
+      "plant_id": "G12.T3.R1",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G12.T3.R2.TP1",
+      "plant_id": "G12.T3.R2",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G12.T3.R3.TP1",
+      "plant_id": "G12.T3.R3",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G12.T3.R4.TP1",
+      "plant_id": "G12.T3.R4",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Fusarium"
+    },
+    {
+      "sample_id": "G12.T4.R1.TP1",
+      "plant_id": "G12.T4.R1",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G12.T4.R2.TP1",
+      "plant_id": "G12.T4.R2",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G12.T4.R4.TP1",
+      "plant_id": "G12.T4.R4",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Aureobasidium"
+    },
+    {
+      "sample_id": "G12.T5.R1.TP1",
+      "plant_id": "G12.T5.R1",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G12.T5.R2.TP1",
+      "plant_id": "G12.T5.R2",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Dioszegia"
+    },
+    {
+      "sample_id": "G12.T5.R4.TP1",
+      "plant_id": "G12.T5.R4",
+      "genotype": "West-5",
+      "region": "West",
+      "treatment": "Dioszegia"
+    }
+  ]
+}
