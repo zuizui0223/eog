@@ -2050,6 +2050,109 @@ The active next question is v19: when multiple source basins converge, how much 
 provenance is lost in the final static distribution, and how much can first-passage
 order recover?
 
+## Original-EOG virtual-world mainline — v19 to v21 source history
+
+The source-geometry sequence now distinguishes three different forms of information
+that a static source count or final occupancy map collapses.
+
+### v19 — confluence erases source provenance
+
+Across 384 directed landscapes, multiple source basins were allowed to converge.
+
+All eight preregistered hypotheses were supported.
+
+With two sources, the mean fraction of union-reachable nodes compatible with at least
+two sources was:
+
+- clustered: **0.640**;
+- dispersed: **0.078**.
+
+With three sources:
+
+- clustered: **0.711**;
+- dispersed: **0.146**.
+
+First-passage order recovered most of that static ambiguity, resolving a unique earliest
+source for roughly 82–93% of statically ambiguous nodes depending on source design.
+
+But equal-earliest ambiguity remained in a nonzero subset of landscapes.
+
+Confluence was downstream biased, and clustered source basins merged much farther
+upstream than dispersed basins.
+
+### v20 — source-count restoration does not restore one function
+
+Each three-source network lost the source whose removal produced the largest coverage
+shock.  One response-independent replacement source was then added, restoring the count
+to three.
+
+All eight preregistered hypotheses were supported.
+
+Different replacement rules produced different coverage in **718/768** design rows.
+
+Across 2,304 replacement strategy cases:
+
+- **407** exceeded original coverage;
+- **352/768** design rows remained below original coverage under all three replacement
+  strategies.
+
+The v18 coverage-insurance tradeoff reappeared after turnover:
+
+- dispersed replacement tended to maximize coverage;
+- clustered-near-survivor replacement tended to maximize overlap and source-loss
+  insurance.
+
+Thus source count recovery is not functional recovery.
+
+### v21 — final occupancy can forget history while provenance remembers it
+
+The same three final source identities were given the same activation-time multiset
+{0,2,4}, but the times were permuted among sources.
+
+All eight preregistered hypotheses were supported.
+
+Across 768 source-geometry design rows:
+
+- transient occupied sets differed among activation histories in **552**;
+- equilibrium occupied-set equality violations: **0**;
+- equilibrium provenance map differed among histories in **507**.
+
+Mean pairwise transient occupancy Jaccard distance:
+
+- clustered: **0.095**;
+- dispersed: **0.221**.
+
+Mean equilibrium provenance disagreement fraction:
+
+- clustered: **0.711**;
+- dispersed: **0.106**.
+
+Timing reduced static source ambiguity from:
+
+- clustered **0.711** to earliest-origin ambiguity **0.0046**;
+- dispersed **0.146** to **0.0129**.
+
+The mainline source result is therefore now:
+
+> **source number, source placement, source turnover and source activation history are
+> distinct ecological state variables.  Two systems can have the same final source set
+> and identical equilibrium occurrence support while retaining different transient and
+> provenance histories.**
+
+Canonical assets:
+
+- `validation/eog_original_idea_source_confluence_v19/`;
+- `validation/eog_original_idea_source_turnover_v20/`;
+- `validation/eog_original_idea_source_history_memory_v21/`;
+- `docs/eog_original_idea_source_confluence_v19_result.md`;
+- `docs/eog_original_idea_source_turnover_v20_result.md`;
+- `docs/eog_original_idea_source_history_memory_v21_result.md`.
+
+The next valid source-history question is whether **source deactivation order** leaves a
+different kind of memory from activation order once local extinction / persistence is
+allowed.  That requires a separately frozen state-loss rule rather than modifying v21
+after the result.
+
 ## Hard claim boundary
 
 Do not claim:
