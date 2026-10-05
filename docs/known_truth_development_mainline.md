@@ -2237,6 +2237,76 @@ Canonical v22 assets:
 - `docs/eog_original_idea_history_observability_v22.md`;
 - `docs/eog_original_idea_history_observability_v22_result.md`.
 
+## Original-EOG virtual-world mainline — v23 provenance observability
+
+v22 left exact activation history unresolved in 189/768 source-geometry design rows
+even after all four complete post-activation occupancy snapshots.
+
+v23 added one independent history coordinate: an idealized equilibrium earliest-source
+provenance tag at each non-source node.
+
+All eight preregistered hypotheses were supported.
+
+### Occupancy and provenance are complementary
+
+Exact activation-history identification:
+
+- occupancy-only: **579/768**;
+- provenance-only: **272/768**;
+- combined: **687/768**.
+
+Evidence-class complementarity was substantial:
+
+- occupancy-only identified but provenance-only did not: **397** rows;
+- provenance-only identified but occupancy-only did not: **90** rows.
+
+Provenance-only rescued **90** of the 189 v22 occupancy-unresolved rows.
+The combined library rescued **108**.
+
+### History-sensitive provenance occurs at confluence
+
+Provenance assays at static unique-origin nodes never separated activation histories.
+
+Violation count: **0**.
+
+At least one history-informative confluence provenance assay existed in **458/768**
+design rows.
+
+Thus source-of-first-arrival information becomes history-sensitive where source basins
+overlap.
+
+### Exact history still need not be identifiable
+
+Even after the complete occupancy and provenance libraries were combined, exact
+activation history remained unresolved in **81/768** design rows.
+
+The correct next step is **not** to add another observation type automatically.
+
+First ask whether the residual history aliases differ on any declared ecological
+consequence.  If they do not, exact history identity is an unnecessarily fine target.
+
+### Target compression remains valid
+
+The equilibrium-provenance target was never harder to identify than exact activation
+history.
+
+Burden violations: **0**.
+
+Strict target-specific savings occurred **970** times across the three evidence
+libraries and 768 design rows.
+
+The source-history programme now distinguishes:
+
+> **history memory → occupancy observability → provenance observability → residual
+> target-relevant versus target-irrelevant history aliases.**
+
+Canonical v23 assets:
+
+- `validation/eog_original_idea_provenance_observability_v23/protocol_v23.json`;
+- `validation/eog_original_idea_provenance_observability_v23/result_summary_v23.json`;
+- `docs/eog_original_idea_provenance_observability_v23.md`;
+- `docs/eog_original_idea_provenance_observability_v23_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:

@@ -1,0 +1,113 @@
+{
+  "schema": "eog.original_idea_provenance_observability.protocol.v23",
+  "status": "frozen_before_provenance_observability_benchmark_implementation_and_scoring",
+  "parents": {
+    "v21_source_history_memory": {
+      "result": "validation/eog_original_idea_source_history_memory_v21/result_summary_v21.json",
+      "fingerprint": "40d349a8b134c72add0cd4aeb757b569654d45a519c2efcfe9114a1584dfdd25"
+    },
+    "v22_history_observability": {
+      "result": "validation/eog_original_idea_history_observability_v22/result_summary_v22.json",
+      "fingerprint": "3436235e0cc96b14088c27377a79b057b1018c74e71edbd48bac0a83e8a9e9dd",
+      "key_residual": "189/768 design rows remained unresolved for exact activation history even after all four occupancy snapshots"
+    }
+  },
+  "scientific_question": "Can source-provenance observations recover activation-history information that complete post-activation occupancy snapshots leave unresolved, and are occupancy and provenance evidence complementary?",
+  "latent_rows": {
+    "reuse": "the exact 384 v21/v22 three-source clustered/dispersed directed landscapes and the same three frozen activation histories",
+    "design_rows": 768
+  },
+  "observation_libraries": {
+    "occupancy": {
+      "actions": ["O_t4", "O_t5", "O_t6", "O_t8"],
+      "value": "complete non-source occupancy set at the frozen structural time",
+      "identical_to_v22": true
+    },
+    "provenance": {
+      "actions": "one action P_node for every equilibrium-reachable non-source node",
+      "value": "the exact equilibrium earliest-origin source set at that node under the activation history",
+      "source_nodes_excluded": true,
+      "interpretation": "synthetic source-tag / provenance observation; not empirical ancestry"
+    },
+    "combined": "occupancy actions union provenance actions"
+  },
+  "targets": {
+    "full_activation_history": "exact identity of H_anchor_first, H_second_first or H_third_first",
+    "equilibrium_provenance_class": "equivalence class of histories with the same complete equilibrium earliest-origin map"
+  },
+  "exact_design": {
+    "pair_separation_formulation": "for each target, every pair of histories with different target values must be separated by at least one selected action",
+    "optimization": "exact minimum-cardinality action set; ties broken lexicographically by action ID",
+    "insufficient_library": "minimum size null when the complete library cannot separate all target-discordant history pairs",
+    "zero_measurement_identification": "allowed when all histories share the same target value",
+    "costs": "unit combinatorial measurement count only; not field cost"
+  },
+  "static_origin_classes": {
+    "unique_origin_node": "node reachable from exactly one final source, ignoring activation time",
+    "confluence_node": "node reachable from two or more final sources, ignoring activation time"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "R1_provenance_rescues_some_occupancy_unresolved_histories",
+      "statement": "At least one v22 full-history-unresolved design row becomes exactly history-identifiable using provenance observations.",
+      "failure_rule": "REFUTED if provenance observations never rescue a v22 occupancy-unresolved history."
+    },
+    {
+      "id": "R2_occupancy_and_provenance_are_complementary",
+      "statement": "There is at least one design row identifiable by occupancy-only but not provenance-only, and at least one identifiable by provenance-only but not occupancy-only.",
+      "failure_rule": "REFUTED if either direction of complementarity is absent."
+    },
+    {
+      "id": "R3_combined_library_identifies_strictly_more_histories",
+      "statement": "The combined occupancy+provenance library identifies exact activation history in strictly more design rows than either occupancy-only or provenance-only alone.",
+      "failure_rule": "REFUTED if combined identifiability does not strictly exceed both single evidence classes."
+    },
+    {
+      "id": "R4_provenance_target_is_never_harder_than_full_history",
+      "statement": "For every design row and evidence library, minimum burden for equilibrium provenance class is <= minimum burden for full activation-history identity, treating insufficiency as infinity.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "R5_unique_origin_provenance_tags_have_zero_history_information",
+      "statement": "A provenance assay at a static unique-origin node never separates two activation histories.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "R6_confluence_provenance_tags_can_reveal_history",
+      "statement": "At least one design row contains a static confluence node whose provenance tag separates at least one pair of activation histories.",
+      "failure_rule": "REFUTED if no confluence provenance assay is history-informative."
+    },
+    {
+      "id": "R7_full_combined_evidence_can_still_leave_history_unresolved",
+      "statement": "At least one design row remains non-identifiable for exact activation history even after the complete occupancy and provenance libraries are combined.",
+      "failure_rule": "REFUTED if the full combined library identifies history everywhere."
+    },
+    {
+      "id": "R8_provenance_evidence_is_target_compressible",
+      "statement": "At least one design row requires fewer provenance/combined measurements for the equilibrium provenance target than for exact activation-history identity.",
+      "failure_rule": "REFUTED if target compression never reduces burden."
+    }
+  ],
+  "secondary_outputs": [
+    "identification rate by source geometry and evidence library",
+    "minimum burden distributions by target and evidence library",
+    "number of v22 unresolved rows rescued by provenance-only and by combined evidence",
+    "first-action family frequencies in exact minimum combined designs",
+    "fraction of informative provenance assays occurring at static confluence nodes",
+    "rows where complete provenance map is identical but transient occupancy distinguishes history",
+    "rows where occupancy signatures are identical but provenance differs"
+  ],
+  "claim_boundary": [
+    "A provenance tag is an idealized source-of-first-arrival observation, not genetic ancestry or admixture.",
+    "Equal unit action counts do not represent equal real sampling cost.",
+    "Exact history identity is limited to the three frozen activation schedules.",
+    "The experiment tests information complementarity under known truth, not empirical feasibility of source tagging."
+  ],
+  "stop_rules": [
+    "Do not add new occupancy times after scoring.",
+    "Do not add a different provenance variable after scoring.",
+    "Do not include source nodes after scoring.",
+    "Do not alter the target definitions after scoring.",
+    "Failed R1-R8 hypotheses remain failed."
+  ]
+}

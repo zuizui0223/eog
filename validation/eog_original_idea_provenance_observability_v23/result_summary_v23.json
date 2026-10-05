@@ -1,0 +1,73 @@
+{
+  "schema": "eog.original_idea_provenance_observability.result_summary.v23",
+  "status": "completed_preregistered_provenance_observability_panel",
+  "protocol": "validation/eog_original_idea_provenance_observability_v23/protocol_v23.json",
+  "protocol_commit": "e6885f9c1e1fb035e3f8dfbe7887b391244a6ad8",
+  "authoritative_run": 37262077873,
+  "authoritative_artifact_id": 11324893031,
+  "authoritative_artifact_digest": "sha256:a859e7b6ec5e8af47b56a67a10b89ae7ab65ca3e1a70aed9317f663f863eaae9",
+  "result_fingerprint": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244",
+  "row_count": 384,
+  "eligible_row_count": 384,
+  "design_row_count": 768,
+  "predeclared_verdicts": {
+    "R1_provenance_rescues_some_occupancy_unresolved_histories": "SUPPORTED",
+    "R2_occupancy_and_provenance_are_complementary": "SUPPORTED",
+    "R3_combined_library_identifies_strictly_more_histories": "SUPPORTED",
+    "R4_provenance_target_is_never_harder_than_full_history": "SUPPORTED",
+    "R5_unique_origin_provenance_tags_have_zero_history_information": "SUPPORTED",
+    "R6_confluence_provenance_tags_can_reveal_history": "SUPPORTED",
+    "R7_full_combined_evidence_can_still_leave_history_unresolved": "SUPPORTED",
+    "R8_provenance_evidence_is_target_compressible": "SUPPORTED"
+  },
+  "summary_by_library": {
+    "occupancy_only": {
+      "full_history_identifiable_rows": 579,
+      "full_history_unresolved_rows": 189,
+      "mean_full_history_minimum_burden_among_identifiable": 1.0,
+      "provenance_identifiable_rows": 622,
+      "mean_provenance_minimum_burden_among_identifiable": 0.5803858520900321
+    },
+    "provenance_only": {
+      "full_history_identifiable_rows": 272,
+      "full_history_unresolved_rows": 496,
+      "mean_full_history_minimum_burden_among_identifiable": 1.0698529411764706,
+      "provenance_identifiable_rows": 696,
+      "mean_provenance_minimum_burden_among_identifiable": 0.6522988505747126
+    },
+    "combined": {
+      "full_history_identifiable_rows": 687,
+      "full_history_unresolved_rows": 81,
+      "mean_full_history_minimum_burden_among_identifiable": 1.027656477438137,
+      "provenance_identifiable_rows": 738,
+      "mean_provenance_minimum_burden_among_identifiable": 0.6504065040650406
+    }
+  },
+  "complementarity": {
+    "occupancy_only_not_provenance_full_history_rows": 397,
+    "provenance_only_not_occupancy_full_history_rows": 90,
+    "provenance_rescued_v22_unresolved_rows": 90,
+    "combined_rescued_v22_unresolved_rows": 108,
+    "combined_full_history_unresolved_rows": 81
+  },
+  "structural_checks": {
+    "target_burden_violation_count": 0,
+    "unique_origin_information_violation_count": 0,
+    "design_rows_with_informative_confluence_provenance_action": 458,
+    "strict_provenance_target_saving_count": 970
+  },
+  "interpretation": [
+    "Occupancy and provenance evidence are strongly complementary: each identifies histories the other cannot.",
+    "Adding provenance to the complete v22 occupancy library increased exact history identification from 579 to 687 of 768 design rows.",
+    "Provenance-only evidence rescued 90 of the 189 v22 occupancy-unresolved design rows, and the combined library rescued 108.",
+    "Static unique-origin provenance tags never separated activation histories; history-sensitive provenance information arose only where multiple source basins could contribute.",
+    "Even the complete occupancy plus provenance libraries left 81 design rows unresolved for exact activation history.",
+    "The equilibrium-provenance target was never harder than exact history and yielded many strict target-specific measurement savings."
+  ],
+  "claim_boundary": [
+    "Provenance tags are idealized earliest-source observations, not empirical ancestry or admixture.",
+    "Equal unit measurement count is combinatorial burden rather than field cost.",
+    "The 81 unresolved rows establish non-identifiability only for the frozen three histories and observation libraries.",
+    "The next question should test whether the residual exact-history aliases differ on any declared ecological consequence before seeking a new observation type."
+  ]
+}
