@@ -10,7 +10,37 @@
       "collembola.csv"
     ],
     "reuse": "Dryad CC0",
-    "raw_values_accessed_for_v29": false
+    "raw_values_accessed_for_v29": false,
+    "version_resource_id": 13946,
+    "public_files": {
+      "sample.data.csv": {
+        "file_id": 52325,
+        "size_bytes": 35448,
+        "md5": "d35287fd5f8522d8180451d42dc8969b",
+        "mime": "text/csv",
+        "status": "created"
+      },
+      "species.prevalence.csv": {
+        "file_id": 52326,
+        "size_bytes": 12148,
+        "md5": "1f879a53fafcaaa5d148dbe112d3b389",
+        "mime": "text/csv",
+        "status": "created"
+      },
+      "collembola.csv": {
+        "file_id": 52327,
+        "size_bytes": 2621,
+        "md5": "b7264f326709ab41d1fe8cac8ddc4a48",
+        "mime": "text/csv",
+        "status": "created"
+      }
+    },
+    "transport_audit": {
+      "package_api": "HTTP 401 without OAuth",
+      "public_file_stream": "Anubis anti-bot HTML interstitial from automated runner",
+      "public_metadata_api": "success",
+      "raw_values_accessed_for_v29": false
+    }
   },
   "published_design": {
     "nitrogen_levels": 2,
@@ -40,7 +70,7 @@
     "published context interactions with nitrogen and fungivores"
   ],
   "unresolved_before_protocol": [
-    "raw_file_ids_and_checksums",
+    "raw_csv_bytes_and_schema",
     "microcosm_join_key",
     "raw_column_names",
     "primary_harvest",
