@@ -6,6 +6,12 @@ from eog.history_retention import (
     partial_r2_scalar,
     permutation_partial_r2_distance,
     permutation_partial_r2_scalar,
+    factorial_history_design,
+    partial_r2_factorial_distance,
+    partial_r2_factorial_scalar,
+    partial_r2_nested_scalar,
+    permutation_factorial_partial_r2_distance,
+    permutation_factorial_partial_r2_scalar,
 )
 
 
@@ -116,3 +122,76 @@ def test_distance_validation_rejects_asymmetry():
     distance[0, 1] = 1.0
     with pytest.raises(ValueError, match="symmetric"):
         partial_r2_distance(distance, history, year)
+
+
+
+def _factorial_panel():
+    context = np.repeat(np.array(["A", "B", "C"]), 20)
+    history = np.tile(np.repeat(np.array(["h1", "h2", "h3", "h4"]), 5), 3)
+    return context, history
+
+
+def test_factorial_design_is_nested_and_adds_history_subspace():
+    context, history = _factorial_panel()
+    reduced, full = factorial_history_design(context, history)
+    assert np.linalg.matrix_rank(full) > np.linalg.matrix_rank(reduced)
+    projection = full @ np.linalg.pinv(full)
+    assert np.linalg.norm(reduced - projection @ reduced) < 1e-10
+
+
+def test_factorial_scalar_retention_recovers_context_specific_history():
+    context, history = _factorial_panel()
+    c = np.array([{"A": 0.0, "B": 2.0, "C": -1.0}[x] for x in context])
+    h = np.array([{"h1": 0.0, "h2": 1.0, "h3": 2.0, "h4": 3.0}[x] for x in history])
+    interaction = np.array([
+        (2.0 if cx == "B" else -0.5 if cx == "C" else 1.0) * hx
+        for cx, hx in zip(context, h)
+    ])
+    target = c + interaction
+    result = partial_r2_factorial_scalar(target, history, context)
+    assert result.partial_r2 == pytest.approx(1.0, abs=1e-12)
+
+
+def test_factorial_distance_retention_recovers_history_geometry():
+    context, history = _factorial_panel()
+    h = np.array([{"h1": 0.0, "h2": 1.0, "h3": 2.0, "h4": 3.0}[x] for x in history])
+    c = np.array([{"A": 0.0, "B": 1.0, "C": 2.0}[x] for x in context])
+    state = np.column_stack([h * (1 + c), h - c])
+    distance = _euclidean_distance(state)
+    result = partial_r2_factorial_distance(distance, history, context)
+    assert result.partial_r2 == pytest.approx(1.0, abs=1e-12)
+
+
+def test_factorial_permutation_is_deterministic_within_context():
+    context, history = _factorial_panel()
+    h = np.array([{"h1": 0.0, "h2": 1.0, "h3": 2.0, "h4": 3.0}[x] for x in history])
+    target = h * np.array([1.0 if x == "A" else 2.0 if x == "B" else 3.0 for x in context])
+    a = permutation_factorial_partial_r2_scalar(
+        target, history, context, permutations=199, seed=41
+    )
+    b = permutation_factorial_partial_r2_scalar(
+        target, history, context, permutations=199, seed=41
+    )
+    assert a == b
+    assert a.observed_partial_r2 > 0.99
+    assert a.p_value <= 0.05
+
+
+def test_factorial_distance_permutation_detects_history_signal():
+    context, history = _factorial_panel()
+    h = np.array([{"h1": 0.0, "h2": 1.0, "h3": 2.0, "h4": 3.0}[x] for x in history])
+    state = np.column_stack([h, h * (np.arange(h.size) % 3 + 1)])
+    distance = _euclidean_distance(state)
+    result = permutation_factorial_partial_r2_distance(
+        distance, history, context, permutations=199, seed=43
+    )
+    assert result.observed_partial_r2 > 0.5
+    assert result.p_value <= 0.05
+
+
+def test_nested_scalar_rejects_non_nested_designs():
+    y = np.arange(8, dtype=float)
+    reduced = np.column_stack([np.ones(8), np.arange(8)])
+    full = np.column_stack([np.ones(8), np.arange(8) % 2])
+    with pytest.raises(ValueError, match="not nested"):
+        partial_r2_nested_scalar(y, reduced, full, history_levels=2)
