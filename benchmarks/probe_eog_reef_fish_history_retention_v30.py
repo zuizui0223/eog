@@ -78,6 +78,49 @@ def _resolve_metadata_source() -> tuple[str, bytes, dict]:
     }
 
 
+def _extract_api_schema(payload: bytes) -> dict:
+    data = json.loads(payload.decode("utf-8"))
+    urls = set()
+    relevant = []
+    key_names = set()
+    terms = (
+        "surviv", "aggress", "arrival", "timing", "compet",
+        "habitat", "complex", "reef", "block", "date",
+        "pocillopora", "treatment", "replicate",
+    )
+
+    def walk(value, path):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                key_names.add(str(key))
+                walk(item, path + [str(key)])
+        elif isinstance(value, list):
+            for i, item in enumerate(value):
+                walk(item, path + [str(i)])
+        elif isinstance(value, str):
+            low = value.lower()
+            if (
+                value.startswith("http://")
+                or value.startswith("https://")
+                or ".csv" in low
+            ):
+                urls.add(value)
+            if any(term in low for term in terms):
+                relevant.append(
+                    {
+                        "path": "/".join(path),
+                        "value": value[:4000],
+                    }
+                )
+
+    walk(data, [])
+    return {
+        "urls": sorted(urls),
+        "relevant_literals": relevant[:500],
+        "jsonld_predicates": sorted(key_names),
+    }
+
+
 def _parse_info(payload: bytes) -> dict:
     rows = list(csv.DictReader(io.StringIO(payload.decode("utf-8-sig"))))
     variables = []
@@ -115,12 +158,21 @@ def run() -> dict:
     dataset_id, metadata_payload, resolution = _resolve_metadata_source()
     if resolution["mode"] == "direct_erddap_info":
         parsed = _parse_info(metadata_payload)
+        api_schema = None
+    elif resolution["mode"] == "bcodmo_public_api":
+        parsed = {
+            "variables": [],
+            "global_attributes": {},
+            "variable_attributes": {},
+        }
+        api_schema = _extract_api_schema(metadata_payload)
     else:
         parsed = {
             "variables": [],
             "global_attributes": {},
             "variable_attributes": {},
         }
+        api_schema = None
     names = [item["name"] for item in parsed["variables"]]
     lowered = {name.lower(): name for name in names}
 
@@ -146,8 +198,9 @@ def run() -> dict:
         "erddap_dataset_id": dataset_id or None,
         "metadata_source_resolution": resolution,
         "metadata_payload_sha256": _sha256(metadata_payload),
-        "metadata":parsed,
-        "semantic_candidates":candidates,
+        "metadata": parsed,
+        "bcodmo_api_schema": api_schema,
+        "semantic_candidates": candidates,
         "response_rows_accessed":False,
         "scoring_performed":False,
     }
