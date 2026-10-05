@@ -2569,6 +2569,106 @@ Canonical v27 assets:
 The next real-data candidate must be screened for explicit independent-reuse permission
 and preserved experimental-unit identifiers before it is frozen.
 
+## Original-EOG empirical mainline — v28 Leopold target-specific history retention
+
+v27 stopped before scoring. v28 therefore pre-screened a second independent assembly-
+history experiment for explicit reuse permission and preserved experimental-unit identity
+before freezing the benchmark.
+
+The Leopold & Busby source passed both gates. The pinned source repository, four source
+blob identities, two primary targets, common-unit join rule, genotype-aware nested model,
+within-genotype permutation rule and sensitivities were frozen before v28 target scoring.
+
+### Common panel and model
+
+The frozen panel contained:
+
+- **233 plants**;
+- **12 host genotypes**;
+- **5 manipulated arrival-order treatments**;
+- all **60 genotype × treatment cells**.
+
+History retention was defined by adding all arrival-order terms to a genotype-only model:
+
+[
+M_0 = 1 + \mathrm{Genotype}
+]
+
+[
+M_1 = 1 + \mathrm{Genotype}
++ \mathrm{Treatment}
++ \mathrm{Genotype}:\mathrm{Treatment}.
+]
+
+The history increment had rank 48. Treatment labels were permuted only within genotype.
+
+### Community composition retained history beyond null
+
+Bias-corrected five-taxon community composition:
+
+- partial (R_H^2 = 0.3697);
+- permutation-null median = **0.2230**;
+- excess over null median = **+0.1467**;
+- 9,999-permutation value = **0.0001**.
+
+Without the taxon-bias correction:
+
+- partial (R_H^2 = 0.3104);
+- null median = **0.2215**;
+- excess = **+0.0890**;
+- permutation value = **0.0121**.
+
+The community history signal therefore survived the frozen representation sensitivity.
+
+### Aggregate host disease state was near its null baseline
+
+Plant-level rust lesion fraction:
+
+- partial (R_H^2 = 0.2300);
+- permutation-null median = **0.2147**;
+- excess over null median = **+0.0153**;
+- permutation value = **0.3893**.
+
+The raw value of 0.23 is not interpreted as strong retained history because the
+48-dimensional history expansion itself produces substantial apparent explained variance
+under randomized labels.
+
+### Updated ecological conclusion
+
+The v28 result supports, within this experiment:
+
+> **the same manipulated assembly history can remain strongly encoded in community
+> composition while being largely attenuated in a downstream host-state target.**
+
+This does not mean arrival order has no disease effect. The original study already
+reported genotype-specific disease modification and composition-function decoupling.
+
+EOG's added result is the common-unit, common-history retention profile: historical
+information is not necessarily conserved as ecological state is transformed across levels
+of organization.
+
+### Positive control and robustness
+
+The first-colonist proportional-abundance positive-control target had
+(R_H^2 = 0.9694).
+
+Removing the published model-fitting outlier left the primary pattern effectively
+unchanged. Composition-only analysis of all structurally valid TP1 samples also retained
+a strong composition history signal.
+
+Canonical v28 assets:
+
+- `validation/eog_original_idea_leopold_history_retention_v28/protocol_v28.json`;
+- `validation/eog_original_idea_leopold_history_retention_v28/common_panel_manifest_v28.json`;
+- `validation/eog_original_idea_leopold_history_retention_v28/result_summary_v28.json`;
+- `docs/eog_original_idea_leopold_history_retention_v28.md`;
+- `docs/eog_original_idea_leopold_history_retention_v28_result.md`;
+- `benchmarks/run_eog_original_idea_leopold_history_retention_v28.py`.
+
+The next ecological question is whether history attenuation from community state to
+function recurs in independently licensed assembly-history systems, or whether some
+systems retain or regain historical information at the functional level.
+
 ## Hard claim boundary
 
 Do not claim:
