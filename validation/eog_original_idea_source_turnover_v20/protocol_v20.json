@@ -1,0 +1,99 @@
+{
+  "schema": "eog.original_idea_source_turnover.protocol.v20",
+  "status": "frozen_before_source_turnover_benchmark_implementation_and_scoring",
+  "parent_v18": {
+    "result": "validation/eog_original_idea_source_placement_v18/result_summary_v18.json",
+    "fingerprint": "f039164f427f52f3d8b0ebd78705056c723689933a96cfd5740417f0f8f90089",
+    "key_result": "source placement, not count alone, determined a coverage-insurance tradeoff"
+  },
+  "scientific_question": "After one source population is lost from a three-source EOG network, does restoring source count with a replacement population restore the original distributional function, or does replacement placement create persistent differences in coverage, redundancy and provenance?",
+  "latent_landscapes": {
+    "reuse": "the exact 384 v18 directed truth graphs, A/B permissibility fields, outlet definitions and eligible source registry",
+    "starting_networks": "the frozen v18 three-source clustered and dispersed source sets"
+  },
+  "loss_event": {
+    "rule": "remove the source whose loss gives the smallest remaining union-reachable node count; ties broken by node ID",
+    "interpretation": "worst coverage shock under the frozen three-source network",
+    "post_loss_source_count": 2
+  },
+  "replacement_candidate_pool": {
+    "eligible": "all frozen v18 eligible source candidates excluding the two surviving sources and excluding the lost source itself",
+    "no_candidate_rule": "row/design is non-estimable for turnover and retained as such"
+  },
+  "replacement_strategies": {
+    "local_near_lost": "candidate minimizing Euclidean distance to the lost source; ties by node ID",
+    "clustered_near_survivors": "candidate minimizing minimum Euclidean distance to either surviving source; ties by node ID",
+    "dispersed_far_from_survivors": "candidate maximizing minimum Euclidean distance to the surviving source set; ties by node ID"
+  },
+  "metrics": {
+    "coverage": "union reachable fraction",
+    "multi_source_overlap": "fraction of union-reachable nodes reachable from at least two sources",
+    "worst_source_loss_retention": "minimum remaining-union/original-union ratio after deleting any one source from the replacement network",
+    "exclusive_source_fraction": "fraction of union-reachable nodes reachable from exactly one source",
+    "coverage_recovery_fraction": "(replacement coverage - post-loss coverage)/(original coverage - post-loss coverage), defined only when original coverage exceeds post-loss coverage",
+    "coverage_overshoot": "replacement coverage > original pre-loss coverage",
+    "insurance_recovery_fraction": "replacement worst-source-loss retention / original pre-loss worst-source-loss retention when the denominator is positive"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "T1_restoring_source_count_does_not_restore_one_unique_function",
+      "statement": "At least one eligible row/design has different union coverage among the three replacement strategies despite all returning to three sources.",
+      "failure_rule": "REFUTED if all strategies always give identical coverage after replacement."
+    },
+    {
+      "id": "T2_dispersed_replacement_maximizes_coverage_on_average",
+      "statement": "For both starting designs, pooled mean replacement coverage is strictly larger for dispersed_far_from_survivors than for clustered_near_survivors.",
+      "failure_rule": "REFUTED separately for any starting design whose contrast is <=0."
+    },
+    {
+      "id": "T3_clustered_replacement_maximizes_overlap_on_average",
+      "statement": "For both starting designs, pooled mean multi-source overlap is strictly larger for clustered_near_survivors than for dispersed_far_from_survivors.",
+      "failure_rule": "REFUTED separately for any starting design whose contrast is <=0."
+    },
+    {
+      "id": "T4_clustered_replacement_maximizes_source_loss_insurance_on_average",
+      "statement": "For both starting designs, pooled mean worst-source-loss retention is strictly larger for clustered_near_survivors than for dispersed_far_from_survivors.",
+      "failure_rule": "REFUTED separately for any starting design whose contrast is <=0."
+    },
+    {
+      "id": "T5_replacement_can_overshoot_original_coverage",
+      "statement": "At least one row/design/strategy reaches strictly more nodes after replacement than the original three-source network did.",
+      "failure_rule": "REFUTED if replacement coverage never exceeds original coverage."
+    },
+    {
+      "id": "T6_source_count_recovery_does_not_guarantee_full_coverage_recovery",
+      "statement": "At least one eligible row/design retains replacement coverage below the original three-source coverage under all three replacement strategies.",
+      "failure_rule": "REFUTED if every row/design has at least one replacement that fully restores original coverage."
+    },
+    {
+      "id": "T7_coverage_insurance_tradeoff_reappears_after_turnover",
+      "statement": "At least one row/design has dispersed replacement with higher coverage and clustered replacement with higher worst-source-loss retention.",
+      "failure_rule": "REFUTED if no post-turnover coverage-insurance tradeoff occurs."
+    },
+    {
+      "id": "T8_replacement_source_count_is_exactly_three",
+      "statement": "Every estimable replacement network contains exactly three unique sources and the replacement is never the lost source.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    }
+  ],
+  "secondary_outputs": [
+    "recovery fractions by starting placement design",
+    "fraction of rows where local replacement is best for coverage or insurance",
+    "effect modification by barrier density, autocorrelation and neighbourhood",
+    "frequency with which each replacement strategy restores or exceeds original coverage",
+    "change in exclusive-source fraction as a provenance proxy"
+  ],
+  "claim_boundary": [
+    "This is structural source-network turnover, not demographic extinction or establishment probability.",
+    "Replacement strategies are geometry rules in synthetic landscapes, not direct translocation prescriptions.",
+    "Source-loss and replacement happen on a static directed transition graph; no ecological succession is modeled.",
+    "Coverage recovery does not imply abundance or long-term persistence."
+  ],
+  "stop_rules": [
+    "Do not change the worst-source loss rule after scoring.",
+    "Do not allow the lost source itself as a replacement after scoring.",
+    "Do not add an oracle best-replacement treatment after scoring.",
+    "Do not change replacement geometry rules after scoring.",
+    "Failed directional hypotheses remain failed."
+  ]
+}
