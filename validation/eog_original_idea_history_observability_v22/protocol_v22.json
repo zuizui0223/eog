@@ -1,0 +1,99 @@
+{
+  "schema": "eog.original_idea_history_observability.protocol.v22",
+  "status": "frozen_before_history_observability_benchmark_implementation_and_scoring",
+  "parent_v21": {
+    "protocol": "validation/eog_original_idea_source_history_memory_v21/protocol_v21.json",
+    "local_exact_reproduction_fingerprint": "40d349a8b134c72add0cd4aeb757b569654d45a519c2efcfe9114a1584dfdd25",
+    "authoritative_status_at_freeze": "GitHub Actions queued; no v21 result file yet committed"
+  },
+  "scientific_question": "When identical final source sets and equilibrium occupancy can arise from different activation histories, how many post-activation occupancy snapshots are needed to identify the history or the history-relevant provenance target?",
+  "latent_rows": {
+    "reuse": "the exact 384 v21 three-source clustered/dispersed directed landscapes and the same three source-activation histories",
+    "activation_histories": [
+      "H_anchor_first",
+      "H_second_first",
+      "H_third_first"
+    ]
+  },
+  "observation_library": {
+    "snapshot_times": [4, 5, 6, 8],
+    "snapshot_content": "complete binary occupancy set over non-source nodes at the stated structural time",
+    "source_nodes_excluded": true,
+    "equilibrium_snapshot": "included as a separately audited negative-control action but not counted among transient snapshot times",
+    "reason_for_starting_at_t4": "all three source identities are active by t4, preventing trivial history identification by directly observing which source has not yet activated"
+  },
+  "targets": {
+    "full_activation_history": "exact identity of the three frozen activation schedules",
+    "equilibrium_provenance_class": "equivalence class of activation histories that induce the same equilibrium earliest-origin map",
+    "equilibrium_occupancy": "negative-control target; identical by construction across histories"
+  },
+  "exact_design": {
+    "for_each_row_and_placement": "enumerate all subsets of transient snapshot times and find the minimum subset whose joint occupancy signatures separate all target-discordant activation histories",
+    "tie_rule": "lexicographically earliest snapshot-time tuple",
+    "insufficient_library": "minimum size null if no subset of {4,5,6,8} resolves the target",
+    "zero_measurement_identification": "allowed when all three activation histories already share the same target value"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "Q1_equilibrium_occupancy_snapshot_has_zero_history_information",
+      "statement": "For every eligible row/design, the equilibrium occupancy snapshot is identical across all activation histories and cannot distinguish full history identity.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "Q2_post_activation_transients_can_identify_history",
+      "statement": "At least one eligible row/design has a finite minimum transient-snapshot set that exactly identifies all three activation histories.",
+      "failure_rule": "REFUTED if full history identity is never resolvable from the frozen transient snapshot library."
+    },
+    {
+      "id": "Q3_dispersed_sources_make_history_more_observable",
+      "statement": "Among row/design cases with finite full-history designs, pooled mean minimum snapshot count is strictly smaller for dispersed than clustered placement.",
+      "failure_rule": "REFUTED if dispersed-minus-clustered mean minimum snapshot count is >=0."
+    },
+    {
+      "id": "Q4_provenance_target_is_never_harder_than_full_history_identity",
+      "statement": "For every eligible row/design, the minimum snapshot burden for equilibrium provenance class is <= the burden for full activation-history identity, treating insufficiency as infinity.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "Q5_target_compression_saves_snapshots_somewhere",
+      "statement": "At least one eligible row/design requires fewer snapshots for equilibrium provenance class than for full activation-history identity.",
+      "failure_rule": "REFUTED if target-specific provenance never reduces snapshot burden."
+    },
+    {
+      "id": "Q6_one_post_activation_snapshot_is_sometimes_sufficient",
+      "statement": "At least one eligible row/design exactly identifies full activation history with one transient occupancy snapshot.",
+      "failure_rule": "REFUTED if every resolvable full-history case requires at least two snapshots."
+    },
+    {
+      "id": "Q7_history_can_remain_observationally_unresolved",
+      "statement": "At least one eligible row/design remains non-identifiable for full activation history even after all four transient snapshots are observed.",
+      "failure_rule": "REFUTED if the complete transient snapshot library identifies history everywhere."
+    },
+    {
+      "id": "Q8_later_snapshots_are_not_monotonically_more_informative",
+      "statement": "Across the panel, the single best one-snapshot time is not always the latest transient time t8; at least one row/design is resolved by an earlier single snapshot while t8 alone is insufficient.",
+      "failure_rule": "REFUTED if t8 weakly dominates every earlier single snapshot in every row/design."
+    }
+  ],
+  "secondary_outputs": [
+    "minimum snapshot-count distribution by placement design and target",
+    "canonical best single-snapshot time frequencies",
+    "rows where provenance is identified with zero snapshots because all histories share one provenance class",
+    "rows where full-history identity is impossible but provenance class is already identified",
+    "relationship between v21 transient Jaccard sensitivity and v22 minimum snapshot burden",
+    "relationship between v21 provenance-memory fraction and v22 provenance observability"
+  ],
+  "claim_boundary": [
+    "A snapshot is complete binary structural occupancy, not a real imperfect survey.",
+    "Snapshot time is graph-step time, not calibrated calendar time.",
+    "History identifiability is limited to the three frozen activation schedules.",
+    "A small synthetic snapshot burden is not a field sampling recommendation."
+  ],
+  "stop_rules": [
+    "Do not add pre-t4 snapshots after scoring.",
+    "Do not add more snapshot times after scoring.",
+    "Do not change target definitions after scoring.",
+    "Do not add a different observation type to rescue an unresolved history.",
+    "Failed Q2-Q8 hypotheses remain failed."
+  ]
+}
