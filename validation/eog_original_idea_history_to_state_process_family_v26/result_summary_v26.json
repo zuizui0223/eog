@@ -1,0 +1,85 @@
+{
+  "schema": "eog.original_idea_history_to_state_process_family.result_summary.v26",
+  "status": "completed_preregistered_history_to_state_process_family_panel",
+  "protocol": "validation/eog_original_idea_history_to_state_process_family_v26/protocol_v26.json",
+  "authoritative_run": 37263945496,
+  "authoritative_artifact_id": 11325488072,
+  "authoritative_artifact_digest": "sha256:6f1aa148b5ed40ca50836f7288f94b7b42eb56495ac6eedcf0b3759cffcc1ec4",
+  "result_fingerprint": "90096f149d2a3c71b4a00283cef2b1470a7501bbffc6ce39c79fac33540ce27e",
+  "row_count": 384,
+  "eligible_row_count": 384,
+  "design_row_count": 768,
+  "predeclared_verdicts": {
+    "P1_history_blind_control_erases_all_age_history": "SUPPORTED",
+    "P2_saturating_process_is_no_finer_than_exact_age": "SUPPORTED",
+    "P3_saturating_process_is_at_least_as_informative_as_both_binary_processes": "SUPPORTED",
+    "P4_transient_age_memory_exists": "SUPPORTED",
+    "P5_process_choice_changes_whether_history_is_ecologically_visible": "REFUTED",
+    "P6_a_richer_age_process_recovers_some_threshold_hidden_history": "REFUTED",
+    "P7_finite_saturation_can_still_erase_exact_age_history": "SUPPORTED",
+    "P8_present_state_memory_is_target_specific_within_v24_hidden_age_aliases": "SUPPORTED"
+  },
+  "process_specific_memory": {
+    "threshold_only_row_count": 0,
+    "transient_only_row_count": 0,
+    "threshold_hidden_exact_age_row_count": 6,
+    "cap3_hidden_exact_age_row_count": 6,
+    "threshold_hidden_rows_recovered_by_transient_or_cap3": 0,
+    "pairwise_memory_row_jaccard": {
+      "persistent_threshold_lag2__transient_window_age1_2": 1,
+      "persistent_threshold_lag2__saturating_age_class_cap3": 1,
+      "transient_window_age1_2__saturating_age_class_cap3": 1
+    }
+  },
+  "process_summary": {
+    "history_blind_occupancy": {
+      "design_rows_with_history_memory": 0,
+      "fraction_of_design_rows_with_history_memory": 0,
+      "history_dependent_node_count": 0,
+      "history_dependent_node_fraction": 0,
+      "v24_hidden_age_residual_rows_detected": 0,
+      "unique_origin_memory_rows": 0,
+      "confluence_memory_rows": 0
+    },
+    "persistent_threshold_lag2": {
+      "design_rows_with_history_memory": 726,
+      "fraction_of_design_rows_with_history_memory": 0.9453125,
+      "history_dependent_node_count": 2461,
+      "history_dependent_node_fraction": 0.2742978154257691,
+      "v24_hidden_age_residual_rows_detected": 12,
+      "unique_origin_memory_rows": 461,
+      "confluence_memory_rows": 377
+    },
+    "transient_window_age1_2": {
+      "design_rows_with_history_memory": 726,
+      "fraction_of_design_rows_with_history_memory": 0.9453125,
+      "history_dependent_node_count": 4112,
+      "history_dependent_node_fraction": 0.45831475702184576,
+      "v24_hidden_age_residual_rows_detected": 45,
+      "unique_origin_memory_rows": 480,
+      "confluence_memory_rows": 414
+    },
+    "saturating_age_class_cap3": {
+      "design_rows_with_history_memory": 726,
+      "fraction_of_design_rows_with_history_memory": 0.9453125,
+      "history_dependent_node_count": 4412,
+      "history_dependent_node_fraction": 0.4917521176995096,
+      "v24_hidden_age_residual_rows_detected": 45,
+      "unique_origin_memory_rows": 480,
+      "confluence_memory_rows": 414
+    }
+  },
+  "interpretation": [
+    "History-blind occupancy erased colonization-age history completely, whereas every age-sensitive target retained some history in the same 726 of 768 design rows.",
+    "Target choice strongly changed the amount and location of retained history even when row-level memory presence was unchanged.",
+    "Within the 45 v24 occupancy-plus-provenance aliases containing hidden age differences, the persistent lag-2 target detected 12, whereas the transient binary window and four-state saturating target each detected all 45.",
+    "A two-state transient target matching the hidden age contrasts retained as much alias-level history as the four-state saturating target, so output cardinality alone does not determine history retention.",
+    "Six design rows retained exact colonization-age differences while finite present-state mappings erased them."
+  ],
+  "claim_boundary": [
+    "The process family is synthetic and qualitative, not calibrated to a demographic or physiological mechanism.",
+    "The result does not establish empirical priority effects, succession, local adaptation, pathogen accumulation, soil legacy or any other named ecological mechanism.",
+    "P5 and P6 were refuted and must not be rewritten as supported by post hoc reinterpretation.",
+    "The boundary-alignment interpretation is a post-result hypothesis for prospective testing, not a preregistered v26 result."
+  ]
+}

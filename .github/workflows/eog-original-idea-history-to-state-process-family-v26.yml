@@ -1,0 +1,36 @@
+name: Original EOG history-to-state process family v26
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_history_to_state_process_family_v26/**"
+      - "benchmarks/run_eog_original_idea_history_to_state_process_family_v26.py"
+      - "tests/test_eog_original_idea_history_to_state_process_family_v26.py"
+      - ".github/workflows/eog-original-idea-history-to-state-process-family-v26.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: original-eog-history-to-state-v26-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test frozen process-family invariants
+        run: python -m pytest tests/test_eog_original_idea_history_to_state_process_family_v26.py -q
+      - name: Run frozen process-family benchmark
+        run: |
+          python benchmarks/run_eog_original_idea_history_to_state_process_family_v26.py \
+            --output build/eog_original_idea_history_to_state_process_family_v26/result_v26.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-original-idea-history-to-state-process-family-v26
+          path: build/eog_original_idea_history_to_state_process_family_v26/result_v26.json
+          if-no-files-found: error

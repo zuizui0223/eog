@@ -2439,6 +2439,69 @@ The next valid question is structural rather than another arbitrary consequence:
 which classes of age-dependent present-state mapping preserve versus erase hidden
 colonization-history differences?
 
+## Original-EOG virtual-world mainline — v26 history-to-state process family
+
+v25 established one frozen example in which hidden colonization age altered a present
+mature-state target.  v26 prospectively compared four qualitative mappings from age to
+present state: history-blind occupancy, persistent lag-2 threshold, transient age-1-to-2
+window and saturating 0/1/2/3+ age class.
+
+Six of eight preregistered hypotheses were supported.  P5 and P6 were refuted.
+
+### Coarse memory incidence was process-invariant
+
+All three age-sensitive process families showed some history-dependent present state in
+exactly **726/768 (94.5%)** design rows.
+
+Their row-level memory sets had pairwise Jaccard = **1.0**.
+
+So the preregistered claim that process choice would change which full design rows showed
+any ecological history memory was not supported.
+
+### But the amount of retained history was strongly target-specific
+
+History-dependent node fractions were:
+
+- persistent lag-2 threshold: **0.274**;
+- transient age-1-to-2 window: **0.458**;
+- saturating 0/1/2/3+ age class: **0.492**.
+
+Thus the same rows can all retain some history while retaining very different amounts of
+it in the present state.
+
+### The v24 hidden-age aliases separate the targets sharply
+
+Among the **45** v24 residual rows where occupancy + provenance hid colonization-age
+differences:
+
+- history-blind occupancy detected **0/45**;
+- persistent lag-2 threshold detected **12/45**;
+- transient age-1-to-2 window detected **45/45**;
+- saturating age class detected **45/45**.
+
+The two-state transient target therefore retained all hidden aliases despite being
+coarser in output cardinality than the four-state target.
+
+### Updated conclusion
+
+The mainline conclusion is now:
+
+> **present landscapes do not simply remember or forget distributional history.  They
+> retain a target-specific projection of that history, determined by which age contrasts
+> the downstream ecological state mapping preserves.**
+
+The stronger post-result hypothesis is that retention depends on the alignment between a
+process partition and the hidden colonization-age differences, not simply on monotonicity
+or number of state categories.  That hypothesis requires a new prospectively frozen
+matched-complexity partition experiment.
+
+Canonical v26 assets:
+
+- `validation/eog_original_idea_history_to_state_process_family_v26/protocol_v26.json`;
+- `validation/eog_original_idea_history_to_state_process_family_v26/result_summary_v26.json`;
+- `docs/eog_original_idea_history_to_state_process_family_v26.md`;
+- `docs/eog_original_idea_history_to_state_process_family_v26_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:

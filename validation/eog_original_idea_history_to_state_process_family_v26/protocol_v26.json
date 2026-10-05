@@ -1,0 +1,111 @@
+{
+  "schema": "eog.original_idea_history_to_state_process_family.protocol.v26",
+  "status": "frozen_before_process_family_benchmark_implementation_and_scoring",
+  "parent_v25": {
+    "result": "validation/eog_original_idea_age_dependent_present_state_v25/result_summary_v25.json",
+    "fingerprint": "998c24e22e355f703c2a787780ced11abd01280c0ca5deb3b17e8848af3f7ad0",
+    "key_result": "12/45 v24 hidden-age residual rows changed lag-2 mature state, while six design rows had age differences but mature-state invariance"
+  },
+  "scientific_question": "Which qualitative properties of an age-dependent present-state mapping determine whether hidden colonization-history differences remain ecologically visible or are erased?",
+  "latent_rows": {
+    "reuse": "the exact 384 v21-v25 directed landscapes, clustered/dispersed three-source sets, three activation histories, first-arrival maps and common present horizon T*",
+    "design_rows": 768
+  },
+  "frozen_process_family": {
+    "history_blind_occupancy": {
+      "rule": "state(node)=1 for every reached equilibrium non-source node",
+      "purpose": "negative control that deliberately erases all colonization-age information"
+    },
+    "persistent_threshold_lag2": {
+      "rule": "state(node)=1 iff colonization_age(node)>=2",
+      "purpose": "exact v25 mature-state process; monotone persistent memory"
+    },
+    "transient_window_age1_2": {
+      "rule": "state(node)=1 iff 1<=colonization_age(node)<3",
+      "purpose": "non-monotone transient memory that is present only during an intermediate age window"
+    },
+    "saturating_age_class_cap3": {
+      "rule": "state(node)=min(colonization_age(node),3), yielding classes 0,1,2,3+",
+      "purpose": "multistate monotone memory with finite saturation"
+    }
+  },
+  "information_relation": {
+    "exact_colonization_age": "finest frozen age target",
+    "saturating_age_class_cap3": "deterministic coarsening of exact age",
+    "persistent_threshold_lag2": "deterministic function of cap3 state",
+    "transient_window_age1_2": "deterministic function of cap3 state",
+    "history_blind_occupancy": "constant over all reached equilibrium non-source nodes"
+  },
+  "primary_outputs": [
+    "history-equivalence-class count under each process for every design row",
+    "rows with any history-dependent present-state difference under each process",
+    "v24 hidden-age residual rows detected by each process",
+    "v25 threshold-invariant age-different rows detected by transient or saturating process",
+    "rows where threshold and transient process disagree on whether history matters",
+    "rows where saturating cap3 still erases exact age differences",
+    "unique-origin versus confluence memory under each process",
+    "clustered/dispersed process-specific disagreement fractions"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "P1_history_blind_control_erases_all_age_history",
+      "statement": "The history-blind occupancy process has one present-state class in every design row.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "P2_saturating_process_is_no_finer_than_exact_age",
+      "statement": "For every design row, saturating-age-class class count is <= exact first-arrival/colonization-age class count.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "P3_saturating_process_is_at_least_as_informative_as_both_binary_processes",
+      "statement": "For every design row, saturating-age-class class count is >= persistent-threshold and >= transient-window class count.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "P4_transient_age_memory_exists",
+      "statement": "At least one design row has different transient-window present-state maps across activation histories.",
+      "failure_rule": "REFUTED if the transient process is history-invariant everywhere."
+    },
+    {
+      "id": "P5_process_choice_changes_whether_history_is_ecologically_visible",
+      "statement": "At least one design row is history-dependent under persistent threshold but not transient window, and at least one other row is history-dependent under transient window but not persistent threshold.",
+      "failure_rule": "REFUTED if either direction of process-specific disagreement is absent."
+    },
+    {
+      "id": "P6_a_richer_age_process_recovers_some_threshold_hidden_history",
+      "statement": "At least one age-different but persistent-threshold-invariant design row becomes history-dependent under transient window or saturating age class.",
+      "failure_rule": "REFUTED if all v25 threshold-hidden age differences remain invisible under both richer processes."
+    },
+    {
+      "id": "P7_finite_saturation_can_still_erase_exact_age_history",
+      "statement": "At least one design row has different exact age maps but identical saturating-age-class maps.",
+      "failure_rule": "REFUTED if cap3 state preserves every exact age difference."
+    },
+    {
+      "id": "P8_present_state_memory_is_target_specific_within_v24_hidden_age_aliases",
+      "statement": "Among the 45 v24 hidden-age residual rows, at least two frozen non-control processes differ in which rows they classify as present-state-history-dependent.",
+      "failure_rule": "REFUTED if all non-control processes mark exactly the same v24 hidden-age residual rows."
+    }
+  ],
+  "secondary_outputs": [
+    "pairwise Jaccard overlap among row sets showing memory under each process",
+    "process-specific mean fraction of non-source nodes with history-dependent state",
+    "process-specific memory by clustered/dispersed source geometry",
+    "process-specific unique-origin versus confluence localization",
+    "target compression relative to exact age and exact activation history"
+  ],
+  "claim_boundary": [
+    "The four processes are synthetic qualitative classes, not calibrated demographic models.",
+    "The transient window and cap3 levels are frozen experimental mappings rather than fitted biological thresholds.",
+    "A process-family difference shows target dependence of historical legacy, not empirical prevalence of any real ecological mechanism.",
+    "No abundance, extinction, density dependence, evolution or biotic feedback is introduced."
+  ],
+  "stop_rules": [
+    "Do not change lag2, transient-window bounds or cap3 after scoring.",
+    "Do not add a fifth process to rescue a failed hypothesis.",
+    "Do not tune process rules by clustered/dispersed result.",
+    "Do not change T* after scoring.",
+    "Failed P1-P8 hypotheses remain failed."
+  ]
+}
