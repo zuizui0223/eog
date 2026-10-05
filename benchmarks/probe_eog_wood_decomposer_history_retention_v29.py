@@ -137,8 +137,17 @@ def _download_files() -> tuple[dict[str, bytes], dict]:
                 if not payload:
                     raise RuntimeError(f"empty Dryad stream for {filename}")
                 files[filename] = payload
+                file_id_match = re.search(r"/file_stream/(\\d+)", stream_url)
+                file_id = int(file_id_match.group(1)) if file_id_match else None
+                file_metadata = (
+                    _public_file_metadata(file_id)
+                    if file_id is not None
+                    else None
+                )
                 stream_meta[filename] = {
                     "stream_url": stream_url,
+                    "file_id": file_id,
+                    "file_metadata": file_metadata,
                     "final_url": final_url,
                     "bytes": len(payload),
                     "sha256": _sha256(payload),
@@ -159,6 +168,20 @@ def _download_files() -> tuple[dict[str, bytes], dict]:
         "unable to materialize Dryad files through package API or public file streams: "
         + json.dumps(failures, sort_keys=True)
     )
+
+
+def _public_file_metadata(file_id: int) -> dict:
+    url = f"https://datadryad.org/api/v2/files/{file_id}"
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "EOG-v29-schema-probe/1.0",
+            "Accept": "application/json",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=60) as response:
+        payload = response.read()
+    return json.loads(payload.decode("utf-8"))
 
 
 def _read_csv(payload: bytes) -> tuple[list[str], list[dict[str, str]]]:
@@ -187,6 +210,11 @@ def _is_numeric(values: list[str]) -> bool:
 
 
 def _schema_summary(name: str, payload: bytes) -> dict:
+    prefix = payload[:512].lstrip().lower()
+    if prefix.startswith(b"<!doctype html") or b"<html" in prefix:
+        raise RuntimeError(
+            f"{name} resolved to HTML rather than CSV; Dryad anti-bot interstitial"
+        )
     columns, rows = _read_csv(payload)
     column_info = {}
     for column in columns:
