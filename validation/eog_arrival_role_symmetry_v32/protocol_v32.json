@@ -1,0 +1,55 @@
+{
+  "schema": "eog.arrival_role_symmetry.protocol.v32",
+  "status": "frozen_before_v32_scoring",
+  "systems": {
+    "v28_microbiome": {
+      "n": 233,
+      "history": "Treatment",
+      "context": "Genotype",
+      "mapping": "Treatment label exactly matches focal taxon coordinate",
+      "target": "first_arriver_coordinate_then_remaining_values_sorted_descending",
+      "distance": "bray_curtis",
+      "permutations": 9999,
+      "seed": 20261005
+    },
+    "v30_grassland": {
+      "n": 19,
+      "history": "Treatment",
+      "block": "Replicate",
+      "mapping": {
+        "F-first": "Forbs",
+        "G-first": "Grasses",
+        "L-first": "Legumes"
+      },
+      "target": "first_arriver_coordinate_then_remaining_values_sorted_descending",
+      "distance": "bray_curtis",
+      "permutations": 9999,
+      "seed": 20261005
+    }
+  },
+  "estimands": {
+    "E_role": "observed_role_partial_R2_minus_null_median",
+    "role_gain": "E_role_minus_E_rank_from_v31",
+    "role_fraction": "E_role_divided_by_E_labeled"
+  },
+  "prospective_prediction": "role_fraction_v28_greater_than_role_fraction_v30",
+  "descriptive": [
+    "mean_and_sd_first_arriver_share_by_history"
+  ],
+  "gates": [
+    "reproduce_v28_labeled_E",
+    "reproduce_v28_rank_E",
+    "reproduce_v30_labeled_E",
+    "reproduce_v30_rank_E",
+    "role_aligned_rows_preserve_exact_multiset_of_abundances"
+  ],
+  "exposure_boundary": {
+    "v28_v30_v31_known": true,
+    "v32_role_scores_seen_before_freeze": false
+  },
+  "claim_boundary": [
+    "not direct test of niche_preemption_vs_modification",
+    "not universal classification of systems as symmetric_or_asymmetric",
+    "not first demonstration of species_specific_priority_effect_strength"
+  ]
+}
