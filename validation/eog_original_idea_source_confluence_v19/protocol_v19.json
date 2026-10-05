@@ -1,0 +1,94 @@
+{
+  "schema": "eog.original_idea_source_confluence.protocol.v19",
+  "status": "frozen_before_source_confluence_benchmark_implementation_and_scoring",
+  "parent_v18": {
+    "result": "validation/eog_original_idea_source_placement_v18/result_summary_v18.json",
+    "fingerprint": "f039164f427f52f3d8b0ebd78705056c723689933a96cfd5740417f0f8f90089",
+    "key_result": "source placement created a coverage-insurance tradeoff; clustered sources had much higher basin overlap and source-attribution ambiguity than dispersed sources"
+  },
+  "scientific_question": "When multiple source basins converge in directed EOG landscapes, how much source provenance is lost in the final static distribution, how much can first-passage timing recover, and where along the flow network does confluence occur?",
+  "latent_landscapes": {
+    "reuse": "the exact 384 v18 directed truth graphs, A/B permissibility fields, outlet definitions and source-placement rules",
+    "source_counts": [2, 3],
+    "placement_designs": ["clustered", "dispersed"]
+  },
+  "node_level_definitions": {
+    "static_origin_set": "selected sources from which the node is reachable",
+    "static_unique_origin": "static origin set size = 1",
+    "static_confluence_ambiguous": "static origin set size >= 2",
+    "earliest_origin_set": "sources attaining the minimum directed BFS first-passage depth to the node",
+    "temporal_resolved_confluence": "static origin set size >=2 but earliest origin set size =1",
+    "irreducible_first_passage_ambiguity": "earliest origin set size >=2",
+    "normalized_flow_potential": "(node potential - minimum permissive-node potential)/(maximum - minimum), where larger means farther upstream from the frozen outlet"
+  },
+  "source_set_metrics": {
+    "static_ambiguous_fraction": "fraction of union-reachable nodes with >=2 static candidate sources",
+    "temporally_resolved_fraction_of_static_ambiguity": "among static ambiguous nodes, fraction with one unique earliest source",
+    "residual_ambiguity_fraction": "fraction of union-reachable nodes with >=2 earliest sources",
+    "mean_normalized_potential_static_ambiguous": "mean normalized flow potential of static ambiguous nodes",
+    "mean_normalized_potential_static_unique": "mean normalized flow potential of static unique-origin nodes",
+    "confluence_front_potential": "maximum normalized flow potential among static ambiguous nodes; larger values mean ambiguity starts farther upstream"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "P1_static_distribution_loses_source_provenance",
+      "statement": "At least one eligible row/source-set has at least one static confluence-ambiguous reachable node.",
+      "failure_rule": "REFUTED if no multi-source confluence occurs."
+    },
+    {
+      "id": "P2_clustered_sources_create_more_static_provenance_ambiguity",
+      "statement": "At both 2 and 3 sources, pooled mean static ambiguous fraction is strictly larger under clustered than dispersed placement.",
+      "failure_rule": "REFUTED separately at any source count whose clustered-minus-dispersed contrast is <=0."
+    },
+    {
+      "id": "P3_first_passage_timing_recovers_source_information",
+      "statement": "For both placement designs at both source counts, at least one row has positive temporal resolution of static ambiguity, and pooled mean residual ambiguity fraction is strictly smaller than pooled mean static ambiguous fraction.",
+      "failure_rule": "REFUTED separately for any design/source-count combination failing either condition."
+    },
+    {
+      "id": "P4_first_passage_does_not_always_restore_unique_source_identity",
+      "statement": "At least one eligible row/source-set retains at least one irreducible first-passage-ambiguous node.",
+      "failure_rule": "REFUTED if earliest-arrival information resolves every static ambiguous node in every source-set."
+    },
+    {
+      "id": "P5_confluence_is_downstream_biased",
+      "statement": "Across source-sets containing both unique and ambiguous nodes, pooled mean normalized flow potential is lower for static ambiguous nodes than for static unique-origin nodes.",
+      "failure_rule": "REFUTED if ambiguous-minus-unique mean normalized potential is >=0."
+    },
+    {
+      "id": "P6_more_sources_never_reduce_static_ambiguous_node_count",
+      "statement": "Within every eligible row and placement design, static ambiguous-node count is nondecreasing from 2 to 3 sources.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "P7_earliest_origin_set_is_nested_inside_static_origin_set",
+      "statement": "For every reachable node, the earliest-origin set is a nonempty subset of the static-origin set.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "P8_clustered_sources_converge_earlier_upstream",
+      "statement": "Among rows where both 2-source designs have static confluence, pooled mean confluence-front potential is strictly higher for clustered than dispersed placement.",
+      "failure_rule": "REFUTED if clustered-minus-dispersed mean confluence-front potential is <=0."
+    }
+  ],
+  "secondary_outputs": [
+    "same contrasts at 3 sources",
+    "fraction of static ambiguous nodes resolved by timing",
+    "fraction remaining irreducibly ambiguous after timing",
+    "effect modification by barrier density, autocorrelation and neighbourhood",
+    "relationship between v18 insurance and v19 provenance loss"
+  ],
+  "claim_boundary": [
+    "Static origin ambiguity is structural source compatibility, not ancestry or genetic admixture.",
+    "Earliest BFS depth is structural order, not calibrated colonization time.",
+    "A unique earliest source in the virtual graph is not an empirical founder assignment.",
+    "Confluence-front potential is a synthetic flow-position metric tied to the frozen outlet geometry."
+  ],
+  "stop_rules": [
+    "Do not change source sets after scoring.",
+    "Do not add weighted travel times after scoring.",
+    "Do not redefine confluence using source-attribution probabilities after scoring.",
+    "Do not add a third source-placement treatment after scoring.",
+    "Failed directional hypotheses remain failed."
+  ]
+}
