@@ -1,0 +1,38 @@
+name: Original EOG Leopold history retention v28
+
+on:
+  pull_request:
+    paths:
+      - "src/eog/history_retention.py"
+      - "tests/test_history_retention.py"
+      - "benchmarks/run_eog_original_idea_leopold_history_retention_v28.py"
+      - "docs/eog_original_idea_leopold_history_retention_v28.md"
+      - "validation/eog_original_idea_leopold_history_retention_v28/**"
+      - ".github/workflows/eog-original-idea-leopold-history-retention-v28.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: original-eog-leopold-history-retention-v28-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-and-score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test frozen history-retention engine
+        run: python -m pytest tests/test_history_retention.py -q
+      - name: Run frozen external benchmark
+        run: |
+          python benchmarks/run_eog_original_idea_leopold_history_retention_v28.py \
+            --output build/eog_original_idea_leopold_history_retention_v28/result_v28.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-original-idea-leopold-history-retention-v28
+          path: build/eog_original_idea_leopold_history_retention_v28/result_v28.json
+          if-no-files-found: error
