@@ -170,6 +170,62 @@ def _download_files() -> tuple[dict[str, bytes], dict]:
     )
 
 
+def _preview_columns(file_id: int, filename: str) -> dict:
+    url = f"https://datadryad.org/data_file/preview/{file_id}"
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 (X11; Linux x86_64) "
+                "AppleWebKit/537.36 Chrome/140 Safari/537.36"
+            ),
+            "Accept": "text/javascript, application/javascript, */*; q=0.01",
+            "X-Requested-With": "XMLHttpRequest",
+            "Referer": "https://datadryad.org/dataset/doi%3A10.5061/dryad.7p2cv",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=60) as response:
+        payload = response.read()
+        content_type = response.headers.get("Content-Type", "")
+        final_url = response.geturl()
+    text = payload.decode("utf-8", errors="replace")
+    prefix = text[:1024].lower()
+    if "<title>validating...</title>" in prefix or "anubis" in prefix:
+        return {
+            "filename": filename,
+            "file_id": file_id,
+            "status": "blocked_by_anubis",
+            "content_type": content_type,
+            "final_url": final_url,
+            "bytes": len(payload),
+        }
+    headers = [
+        html.unescape(re.sub(r"<[^>]+>", "", value)).strip()
+        for value in re.findall(r"<th>(.*?)</th>", text, flags=re.DOTALL | re.IGNORECASE)
+    ]
+    if not headers:
+        return {
+            "filename": filename,
+            "file_id": file_id,
+            "status": "preview_returned_without_csv_header",
+            "content_type": content_type,
+            "final_url": final_url,
+            "bytes": len(payload),
+            "payload_sha256": _sha256(payload),
+        }
+    return {
+        "filename": filename,
+        "file_id": file_id,
+        "status": "header_recovered_from_official_preview",
+        "columns": headers,
+        "content_type": content_type,
+        "final_url": final_url,
+        "bytes": len(payload),
+        "payload_sha256": _sha256(payload),
+        "preview_values_discarded_without_scoring": True,
+    }
+
+
 def _public_file_metadata(file_id: int) -> dict:
     url = f"https://datadryad.org/api/v2/files/{file_id}"
     request = urllib.request.Request(
@@ -319,11 +375,17 @@ def main() -> None:
         }
         metadata = {}
         metadata_errors = {}
+        preview_schema = {}
+        preview_errors = {}
         for name, file_id in known_file_ids.items():
             try:
                 metadata[name] = _public_file_metadata(file_id)
             except Exception as meta_error:
                 metadata_errors[name] = repr(meta_error)
+            try:
+                preview_schema[name] = _preview_columns(file_id, name)
+            except Exception as preview_error:
+                preview_errors[name] = repr(preview_error)
         result = {
             "schema": "eog.wood_decomposer_history_retention.transport_audit.v29",
             "status": "transport_blocked_before_v29_scoring_protocol",
@@ -333,6 +395,8 @@ def main() -> None:
                 "public_stream_ids": known_file_ids,
                 "public_file_metadata": metadata,
                 "public_file_metadata_errors": metadata_errors,
+                "official_preview_schema": preview_schema,
+                "official_preview_errors": preview_errors,
                 "public_stream_behavior": "Anubis HTML interstitial instead of CSV",
             },
             "error": str(error),
