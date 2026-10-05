@@ -260,6 +260,16 @@ def _join_candidates(summaries: dict[str, dict]) -> list[dict]:
 
 
 def run() -> dict:
+    known_file_ids = {
+        "sample.data.csv": 52325,
+        "species.prevalence.csv": 52326,
+        "collembola.csv": 52327,
+    }
+    public_file_metadata = {
+        name: _public_file_metadata(file_id)
+        for name, file_id in known_file_ids.items()
+    }
+
     by_basename, transport = _download_files()
 
     missing = sorted(EXPECTED_FILES - set(by_basename))
@@ -275,6 +285,7 @@ def run() -> dict:
         "status": "schema_materialized_before_v29_scoring_protocol",
         "source": {
             "doi": DOI,
+            "public_file_metadata": public_file_metadata,
             "transport": transport,
         },
         "files": summaries,
@@ -301,17 +312,27 @@ def main() -> None:
     try:
         result = run()
     except RuntimeError as error:
+        known_file_ids = {
+            "sample.data.csv": 52325,
+            "species.prevalence.csv": 52326,
+            "collembola.csv": 52327,
+        }
+        metadata = {}
+        metadata_errors = {}
+        for name, file_id in known_file_ids.items():
+            try:
+                metadata[name] = _public_file_metadata(file_id)
+            except Exception as meta_error:
+                metadata_errors[name] = repr(meta_error)
         result = {
             "schema": "eog.wood_decomposer_history_retention.transport_audit.v29",
             "status": "transport_blocked_before_v29_scoring_protocol",
             "source": {
                 "doi": DOI,
                 "package_api": "HTTP 401 without OAuth",
-                "public_stream_ids": {
-                    "sample.data.csv": 52325,
-                    "species.prevalence.csv": 52326,
-                    "collembola.csv": 52327,
-                },
+                "public_stream_ids": known_file_ids,
+                "public_file_metadata": metadata,
+                "public_file_metadata_errors": metadata_errors,
                 "public_stream_behavior": "Anubis HTML interstitial instead of CSV",
             },
             "error": str(error),
