@@ -1,0 +1,55 @@
+{
+  "schema": "eog.identity_storage_rank_abundance.protocol.v31",
+  "status": "frozen_before_v31_scoring",
+  "hypothesis": "identity_storage_gap_positive_in_both_systems",
+  "systems": {
+    "v28_microbiome": {
+      "panel": "frozen_v28_common_panel_233_plants",
+      "labeled_target": "bias_corrected_five_taxon_proportions",
+      "rank_target": "same_five_values_sorted_descending_within_plant",
+      "distance": "bray_curtis",
+      "context": "Genotype",
+      "history": "Treatment",
+      "reduced": "1 + Genotype",
+      "full": "1 + Genotype + Treatment + Genotype:Treatment",
+      "permutation": "Treatment within Genotype",
+      "permutations": 9999,
+      "seed": 20261005
+    },
+    "v30_grassland": {
+      "panel": "frozen_v30_common_panel_19_rhizoboxes",
+      "labeled_target": "Forbs_Grasses_Legumes_shoot_biomass",
+      "rank_target": "same_three_values_sorted_descending_within_rhizobox",
+      "distance": "bray_curtis",
+      "block": "Replicate",
+      "history": "History",
+      "reduced": "1 + Replicate",
+      "full": "1 + Replicate + History",
+      "permutation": "History within Replicate",
+      "permutations": 9999,
+      "seed": 20261005
+    }
+  },
+  "primary_estimand": {
+    "retained_history_excess": "observed_partial_R2_minus_null_median",
+    "identity_storage_gap": "E_labeled_minus_E_rank",
+    "directional_prediction": "gap_positive_in_each_system",
+    "minimum_effect_threshold": null
+  },
+  "secondary_sensitivity": {
+    "target": "Shannon_entropy_of_closed_composition",
+    "role": "label_invariant_scalar_sensitivity"
+  },
+  "paired_permutation": true,
+  "exposure_boundary": {
+    "labeled_results_seen": true,
+    "rank_scores_seen_before_freeze": false,
+    "shannon_scores_seen_before_freeze": false
+  },
+  "claim_boundary": [
+    "not first discovery of compositional contingency",
+    "not first discovery of functional convergence",
+    "no universal identity-storage law from two systems",
+    "rank abundance remains biologically meaningful even if history retention is weak"
+  ]
+}
