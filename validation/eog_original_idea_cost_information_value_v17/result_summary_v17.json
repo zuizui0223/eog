@@ -1,0 +1,119 @@
+{
+  "schema": "eog.original_idea_cost_information_value.result_summary.v17",
+  "status": "completed_preregistered_cost_information_value_closure",
+  "protocol": "validation/eog_original_idea_cost_information_value_v17/protocol_v17.json",
+  "authoritative_run": 37211149304,
+  "authoritative_job": 111462442951,
+  "authoritative_artifact_id": 11307510794,
+  "authoritative_artifact_digest": "sha256:03cf1747b2874968b67e8a3d41ce222f8f54666aaba0e73b5af92abbe015c369",
+  "result_fingerprint": "02a86be67dd2fdfa50eb3b6ac94d587269871933d218b016a9728396832248d4",
+  "row_count": 144,
+  "row_target_count": 864,
+  "predeclared_verdicts": {
+    "V1_perfect_cost_information_has_positive_value_everywhere": "SUPPORTED",
+    "V2_one_binary_cost_diagnostic_has_positive_value_somewhere": "SUPPORTED",
+    "V3_no_single_binary_cost_diagnostic_is_universally_best": "SUPPORTED",
+    "V4_partial_cost_information_can_recover_all_perfect_information_value": "SUPPORTED",
+    "V5_partial_information_is_strictly_incomplete_somewhere": "SUPPORTED",
+    "V6_cost_information_value_depends_on_ecological_target": "SUPPORTED",
+    "V7_information_never_has_negative_gross_value": "SUPPORTED",
+    "V8_cost_information_subseries_stop": "SUPPORTED"
+  },
+  "global": {
+    "zero_perfect_information_value_count": 0,
+    "negative_information_value_count": 0,
+    "row_targets_with_positive_best_binary_value": 836,
+    "row_targets_with_binary_full_perfect_value_recovery": 783,
+    "row_targets_with_all_binary_diagnostics_incomplete": 81,
+    "canonical_best_binary_diagnostic_counts": {
+      "is_FP_expensive": 834,
+      "is_KO_expensive": 16,
+      "is_REL_expensive": 14
+    },
+    "mean_perfect_information_value_across_targets": 2.017361111111111
+  },
+  "by_target": {
+    "pairwise_relation": {
+      "mean_perfect_information_value": 2.013888888888889,
+      "mean_best_binary_information_value": 1.9444444444444444,
+      "mean_best_binary_fraction_of_perfect_value": 0.9618055555555556,
+      "best_binary_full_recovery_rows": 134,
+      "all_binary_diagnostics_incomplete_rows": 10,
+      "canonical_best_binary_diagnostic_counts": {
+        "is_FP_expensive": 139,
+        "is_KO_expensive": 1,
+        "is_REL_expensive": 4
+      }
+    },
+    "first_passage": {
+      "mean_perfect_information_value": 2.013888888888889,
+      "mean_best_binary_information_value": 1.9652777777777777,
+      "mean_best_binary_fraction_of_perfect_value": 0.9722222222222222,
+      "best_binary_full_recovery_rows": 137,
+      "all_binary_diagnostics_incomplete_rows": 7,
+      "canonical_best_binary_diagnostic_counts": {
+        "is_FP_expensive": 144
+      }
+    },
+    "intervention": {
+      "mean_perfect_information_value": 2.0,
+      "mean_best_binary_information_value": 1.8819444444444444,
+      "mean_best_binary_fraction_of_perfect_value": 0.9201388888888888,
+      "best_binary_full_recovery_rows": 127,
+      "all_binary_diagnostics_incomplete_rows": 17,
+      "canonical_best_binary_diagnostic_counts": {
+        "is_FP_expensive": 137,
+        "is_KO_expensive": 7
+      }
+    },
+    "critical_node_count": {
+      "mean_perfect_information_value": 2.048611111111111,
+      "mean_best_binary_information_value": 1.8611111111111112,
+      "mean_best_binary_fraction_of_perfect_value": 0.8530092592592591,
+      "best_binary_full_recovery_rows": 117,
+      "all_binary_diagnostics_incomplete_rows": 27,
+      "canonical_best_binary_diagnostic_counts": {
+        "is_FP_expensive": 136,
+        "is_KO_expensive": 6,
+        "is_REL_expensive": 2
+      }
+    },
+    "full_topology_identity": {
+      "mean_perfect_information_value": 2.013888888888889,
+      "mean_best_binary_information_value": 1.9444444444444444,
+      "mean_best_binary_fraction_of_perfect_value": 0.9618055555555556,
+      "best_binary_full_recovery_rows": 134,
+      "all_binary_diagnostics_incomplete_rows": 10,
+      "canonical_best_binary_diagnostic_counts": {
+        "is_FP_expensive": 139,
+        "is_KO_expensive": 1,
+        "is_REL_expensive": 4
+      }
+    },
+    "joint_relational_suite": {
+      "mean_perfect_information_value": 2.013888888888889,
+      "mean_best_binary_information_value": 1.9444444444444444,
+      "mean_best_binary_fraction_of_perfect_value": 0.9618055555555556,
+      "best_binary_full_recovery_rows": 134,
+      "all_binary_diagnostics_incomplete_rows": 10,
+      "canonical_best_binary_diagnostic_counts": {
+        "is_FP_expensive": 139,
+        "is_KO_expensive": 1,
+        "is_REL_expensive": 4
+      }
+    }
+  },
+  "interpretation": [
+    "Cost-world uncertainty had strictly positive exact decision value for every one of the 864 frozen row-targets.",
+    "A single binary cost diagnostic recovered positive value in 836/864 row-targets and all perfect-information value in 783/864, but 81/864 row-targets required richer cost information.",
+    "Which cost diagnostic mattered depended on the ecological target; no single binary diagnostic was universally optimal.",
+    "Perfect cost information defines an exact break-even calibration threshold in synthetic relative-cost units rather than a real budget recommendation.",
+    "This closes the synthetic cost-world subseries: after v17 no new cost world, cost ratio or diagnostic is authorized to improve the pattern."
+  ],
+  "claim_boundary": [
+    "Information values are synthetic relative-cost units, not money, time or field effort.",
+    "Perfect cost-world information is an oracle thought experiment.",
+    "Binary cost diagnostics are abstract information channels, not field protocols.",
+    "v17 closes the synthetic cost-world subseries."
+  ]
+}
