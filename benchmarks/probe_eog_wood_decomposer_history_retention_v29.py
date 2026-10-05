@@ -24,7 +24,7 @@ EXPECTED_FILES = {
     "collembola.csv",
 }
 DESIGN_RE = re.compile(
-    r"(id|sample|microcosm|rep|nitrogen|fungiv|history|initial|arrival|harvest|month|treat)",
+    r"(id|sample|microcosm|rep|experiment|nitrogen|fungiv|history|initial|arrival|harvest|month|treat)",
     re.IGNORECASE,
 )
 
