@@ -2307,6 +2307,79 @@ Canonical v23 assets:
 - `docs/eog_original_idea_provenance_observability_v23.md`;
 - `docs/eog_original_idea_provenance_observability_v23_result.md`.
 
+## Original-EOG virtual-world mainline — v24 colonization-age memory
+
+v23 left 81/768 exact activation-history aliases after complete occupancy and
+equilibrium-provenance evidence.
+
+v24 asked whether those aliases were ecologically identical at a richer history-state
+level or whether they still differed in when nodes were first reached.
+
+No new ecological mechanism was introduced.  The experiment reused the exact v21-v23
+activation histories and derived the complete non-source first-arrival / colonization-age
+map.
+
+All eight preregistered hypotheses were supported.
+
+### v23 residual reproduced exactly
+
+The complete occupancy + provenance alias set contained **81/768** design rows, exactly
+matching v23.
+
+Of those 81:
+
+- **45** contained hidden first-arrival / colonization-age differences;
+- **36** contained no additional age information inside the v23 alias.
+
+The complete first-arrival map recovered exact activation-history identity in all 45
+hidden-age cases.
+
+### First-arrival state is still coarser than exact history
+
+Across all 768 design rows:
+
+- exact history identified by complete first-arrival map: **702**;
+- exact history unresolved: **66**.
+
+So knowing when every non-source node was first reached still does not guarantee exact
+recovery of the generating activation schedule.
+
+### Provenance and age are distinct history coordinates
+
+There were **931** history pairs with:
+
+- identical complete equilibrium provenance map;
+- different complete first-arrival map.
+
+History-dependent arrival time occurred in both:
+
+- unique-origin zones: **499/768** design rows;
+- confluence zones: **496/768**.
+
+This matters because provenance tags are only history-informative where multiple source
+basins can contribute.  Colonization-age state can remain history-sensitive even at a
+node whose source identity is structurally fixed.
+
+### Current source-history state hierarchy
+
+The known-truth programme now separates:
+
+> **final occupancy → source provenance → first-arrival / colonization-age state →
+> exact activation history.**
+
+A final occurrence map can be identical while all richer history coordinates differ.
+
+The next valid question is no longer another identifiability assay.  It is whether a
+prospectively frozen age-dependent ecological process can turn those hidden history
+differences into different present ecological states.
+
+Canonical v24 assets:
+
+- `validation/eog_original_idea_colonization_age_memory_v24/protocol_v24.json`;
+- `validation/eog_original_idea_colonization_age_memory_v24/result_summary_v24.json`;
+- `docs/eog_original_idea_colonization_age_memory_v24.md`;
+- `docs/eog_original_idea_colonization_age_memory_v24_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:
