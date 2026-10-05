@@ -1,0 +1,37 @@
+name: EOG dominance-tail storage v35 macOS fallback
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/run_eog_dominance_tail_history_storage_v35.py"
+      - "docs/eog_dominance_tail_history_storage_v35.md"
+      - "validation/eog_dominance_tail_history_storage_v35/**"
+      - "tests/test_eog_dominance_tail_history_storage_v35.py"
+      - ".github/workflows/eog-dominance-tail-v35-macos.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: eog-dominance-tail-v35-macos-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  score:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Test v35 rank decomposition
+        run: python -m pytest tests/test_eog_dominance_tail_history_storage_v35.py -q
+      - name: Run frozen v35 test
+        run: |
+          python benchmarks/run_eog_dominance_tail_history_storage_v35.py \
+            --output build/eog_dominance_tail_history_storage_v35/result_v35.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-dominance-tail-v35-macos
+          path: build/eog_dominance_tail_history_storage_v35/result_v35.json
+          if-no-files-found: error
