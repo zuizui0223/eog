@@ -1,0 +1,83 @@
+{
+  "schema": "eog.history_level_leverage.result_summary.v34",
+  "status": "completed_frozen_history_leverage_test",
+  "authoritative_run": 37304759267,
+  "authoritative_artifact_id": 11343470202,
+  "authoritative_artifact_digest": "sha256:f0f3b139af77cb6f8dc1bf696279cc51b0ff3a7057fddcbcbec3632579cf7b56",
+  "result_fingerprint": "6ddf1d089dd3885c6d12a1809629ef1dd1486fcab7a03c81bfb9b7ce81ca0325",
+  "full_rank_abundance": {
+    "n": 233,
+    "partial_r2": 0.3672184325007756,
+    "null_median": 0.21860948650631568,
+    "excess_over_null_median": 0.14860894599445995,
+    "permutation_p": 0.0001
+  },
+  "leave_one_history_out": {
+    "Alternaria": {
+      "removed_n": 48,
+      "n": 185,
+      "E_without": 0.08754390117483471,
+      "leverage_D": 0.06106504481962524,
+      "permutation_p": 0.0086
+    },
+    "Cladosporium": {
+      "removed_n": 47,
+      "n": 186,
+      "E_without": 0.1222007827423906,
+      "leverage_D": 0.02640816325206935,
+      "permutation_p": 0.0018
+    },
+    "Aureobasidium": {
+      "removed_n": 44,
+      "n": 189,
+      "E_without": 0.15745279909279908,
+      "leverage_D": -0.008843853098339127,
+      "permutation_p": 0.0001
+    },
+    "Fusarium": {
+      "removed_n": 49,
+      "n": 184,
+      "E_without": 0.1714886955255464,
+      "leverage_D": -0.022879749531086457,
+      "permutation_p": 0.0001
+    },
+    "Dioszegia": {
+      "removed_n": 45,
+      "n": 188,
+      "E_without": 0.18218546428980864,
+      "leverage_D": -0.03357651829534869,
+      "permutation_p": 0.0001
+    }
+  },
+  "leverage_order_descending": [
+    "Alternaria",
+    "Cladosporium",
+    "Aureobasidium",
+    "Fusarium",
+    "Dioszegia"
+  ],
+  "prospective_prediction": {
+    "statement": "D_Alternaria_positive_and_largest_of_five",
+    "verdict": "SUPPORTED",
+    "Alternaria_D": 0.06106504481962524
+  },
+  "secondary_Alternaria_vs_rest": {
+    "n": 233,
+    "partial_r2": 0.13317711462691126,
+    "null_median": 0.052859511381942115,
+    "excess_over_null_median": 0.08031760324496914,
+    "permutation_p": 0.0004
+  },
+  "interpretation": [
+    "Alternaria has the largest deletion leverage on identity-free abundance-architecture memory.",
+    "Architecture memory remains significant after Alternaria removal, so Alternaria is not the sole driver.",
+    "History leverage is heterogeneous: removing Aureobasidium, Fusarium, or Dioszegia increases null-calibrated retained history.",
+    "The v33 Alternaria mapping clue survives a prospective Treatment-independent response test."
+  ],
+  "claim_boundary": [
+    "no sole-driver claim",
+    "no ecological mechanism identified",
+    "no niche-preemption-versus-modification claim",
+    "no cross-system generality"
+  ]
+}
