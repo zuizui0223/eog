@@ -1,0 +1,37 @@
+name: EOG role mapping specificity v33
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/run_eog_role_mapping_specificity_v33.py"
+      - "docs/eog_role_mapping_specificity_v33.md"
+      - "validation/eog_role_mapping_specificity_v33/**"
+      - "tests/test_eog_role_mapping_specificity_v33.py"
+      - ".github/workflows/eog-role-mapping-specificity-v33.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: eog-role-mapping-specificity-v33-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test v33 mapping audit
+        run: python -m pytest tests/test_eog_role_mapping_specificity_v33.py -q
+      - name: Run frozen v33 audit
+        run: |
+          python benchmarks/run_eog_role_mapping_specificity_v33.py \
+            --output build/eog_role_mapping_specificity_v33/result_v33.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-role-mapping-specificity-v33
+          path: build/eog_role_mapping_specificity_v33/result_v33.json
+          if-no-files-found: error

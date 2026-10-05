@@ -1,0 +1,48 @@
+{
+  "schema": "eog.role_mapping_specificity.result_summary.v33",
+  "status": "completed_frozen_mapping_specificity_audit",
+  "authoritative_run": 37303768610,
+  "authoritative_artifact_id": 11342098187,
+  "authoritative_artifact_digest": "sha256:a0f38b3a3a301e842febe1fe9e6905e4c9cd78c7e8f7234b05e51e946df5f7d3",
+  "result_fingerprint": "e41b9fafdc7902a0fd6649c96d6f61b7aafa53de9abca6180179e3cb5fa335fb",
+  "primary_v28_prediction": {
+    "verdict": "REFUTED"
+  },
+  "v28_microbiome": {
+    "mapping_count": 120,
+    "correct_partial_r2": 0.9458780399251487,
+    "incorrect_mapping_median_r2": 0.9452086231363773,
+    "correct_minus_incorrect_median": 0.0006694167887714153,
+    "correct_rank_descending": 53,
+    "exact_upper_tail_mapping_probability": 0.44166666666666665,
+    "incorrect_mapping_max_r2": 0.9562888344454289,
+    "top_five_share_feature": "all_top_five_preserve_Alternaria_to_Alternaria"
+  },
+  "v30_grassland": {
+    "mapping_count": 6,
+    "correct_partial_r2": 0.33724665372868645,
+    "incorrect_mapping_median_r2": 0.8768152798655756,
+    "correct_minus_incorrect_median": -0.5395686261368892,
+    "correct_rank_descending": 6,
+    "exact_upper_tail_mapping_probability": 1,
+    "incorrect_mapping_max_r2": 0.9382230724820446
+  },
+  "gates": {
+    "v32_v28_correct_role_r2_reproduced": true,
+    "v32_v30_correct_role_r2_reproduced": true,
+    "all_abundance_multisets_preserved": true,
+    "complete_mapping_spaces_enumerated": true
+  },
+  "interpretation": [
+    "The v32 role-aligned statistic is not specific to the biologically correct history-to-identity mapping.",
+    "The v31 system-specific storage-channel result remains valid.",
+    "The v32 mechanistic interpretation linking storage channel to first-arriver role interchangeability is downgraded.",
+    "In v28, all top-five mappings preserve Alternaria-to-Alternaria, motivating a prospective single-history leverage test."
+  ],
+  "claim_boundary": [
+    "mapping tail is a finite transformation-specificity comparison, not a causal randomization p-value",
+    "do not claim v32 identified mechanism",
+    "do not claim Alternaria is proven as sole driver",
+    "do not invalidate v31"
+  ]
+}

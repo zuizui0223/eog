@@ -2921,19 +2921,12 @@ First-arriver final biomass shares were all high:
 Knowing which abundance belonged to the first-arriver role added no information beyond
 unlabeled rank abundance.
 
-### Updated biological conclusion
+### v32 provisional interpretation — superseded by v33
 
-The current mainline is:
-
-> **The present-state storage channel of assembly history tracks how interchangeable
-> identities are in the first-arriver role. Strongly identity-dependent first-arriver
-> effectiveness can write history into abundance architecture itself, whereas a more
-> interchangeable first-mover role stores history mainly in which identity occupies that
-> role.**
-
-This connects the EOG storage result to established theory on symmetric niche preemption
-and species-specific variation in priority-effect strength. It does not establish which
-mechanism (preemption versus modification) caused either empirical pattern.
+v32 suggested that the storage-channel contrast tracked first-arriver-role interchangeability.
+That interpretation is no longer retained after the prospective v33 specificity audit.
+The numerical v32 transformations remain reproducible, but the biological mapping was not
+specific relative to equally complex placebo mappings.
 
 Canonical v32 assets:
 
@@ -2941,6 +2934,52 @@ Canonical v32 assets:
 - `validation/eog_arrival_role_symmetry_v32/result_summary_v32.json`;
 - `docs/eog_arrival_role_symmetry_v32.md`;
 - `docs/eog_arrival_role_symmetry_v32_result.md`.
+
+
+## Original-EOG empirical mainline — v33 role-mapping specificity audit
+
+v33 prospectively audited the main vulnerability in v32: the role-aligned response itself
+used the observed history treatment to choose a response coordinate.
+
+Every equally complex one-to-one mapping was enumerated.
+
+### v28 microbiome
+
+The biologically correct fungal mapping had R² = **0.945878**, but the 119 incorrect
+mappings had median R² = **0.945209**.  The correct mapping ranked only **53/120** and its
+exact finite mapping-tail fraction was **0.4417**.  The strongest incorrect mapping reached
+R² = **0.956289**.
+
+All top-five mappings preserved `Alternaria -> Alternaria` while permuting the other four
+fungal identities.  This is a new clue, not yet a mechanistic result.
+
+### v30 grassland
+
+The correct first-functional-group mapping had R² = **0.337247** and ranked **6/6**.  The
+five incorrect mappings had median R² = **0.876815**, with a maximum of **0.938223**.
+
+### Corrected mainline
+
+The prospective v33 specificity prediction was **refuted**.
+
+> **The robust empirical result remains that assembly history is stored differently across
+> present-state targets and systems.  The v32 claim that first-arriver-role symmetry
+> explains that storage difference is not supported.**
+
+Treatment-indexed coordinate rearrangement can itself produce very high apparent
+separation, so a biological role mapping must be shown to outperform placebo mappings
+before receiving mechanistic interpretation.
+
+The next valid hypothesis is narrower: in the microbiome, architecture-level memory may
+be disproportionately driven by the highly distinctive Alternaria history rather than by
+a general first-arriver-role asymmetry.  That requires a separately frozen leverage test.
+
+Canonical v33 assets:
+
+- `validation/eog_role_mapping_specificity_v33/protocol_v33.json`;
+- `validation/eog_role_mapping_specificity_v33/result_summary_v33.json`;
+- `docs/eog_role_mapping_specificity_v33.md`;
+- `docs/eog_role_mapping_specificity_v33_result.md`.
 
 ## Hard claim boundary
 

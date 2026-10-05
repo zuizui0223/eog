@@ -110,3 +110,20 @@ Do claim:
 > arriving first: highly identity-dependent first-arriver effectiveness produces
 > architecture-level memory, whereas a more interchangeable first-mover role produces
 > chiefly identity-level memory.**
+
+## Post-v32 specificity audit (v33)
+
+The numerical v32 role-aligned scores remain reproducible, but the mechanistic
+interpretation above is **superseded by v33**.
+
+v33 enumerated every equally complex history-to-coordinate bijection.  In the microbiome,
+the biologically correct mapping ranked only **53/120** (mapping-tail fraction **0.4417**).
+In the grassland, the correct mapping ranked **6/6**, below every incorrect mapping.
+
+Therefore the large role-aligned score is not specific to the biological first-arriver
+mapping.  It cannot support the claim that first-arriver-role interchangeability explains
+the v31 storage-channel contrast.
+
+The descriptive first-arriver abundance shares reported in v32 remain valid.  The robust
+post-v33 conclusion is that the storage channel is system-specific, while its mechanism
+remains unresolved.
