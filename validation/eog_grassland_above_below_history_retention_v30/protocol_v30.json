@@ -1,0 +1,156 @@
+{
+  "schema": "eog.grassland_above_below_history_retention.protocol.v30",
+  "status": "frozen_before_eog_v30_scoring",
+  "source": {
+    "repository": "BenjaminDelory/PE_Rhizobox_2017_data",
+    "pinned_commit": "438f028fb2e1713a9e253be9e07df0833b491f47",
+    "license": "GPL-3.0",
+    "files": {
+      "shoot": {
+        "path": "Data/Data_shoot_biomass_RZ_PE_2017.txt",
+        "blob_sha": "4fb311a7bbe9bb14cdac77bbc889e2dcbb9cfedc"
+      },
+      "root": {
+        "path": "Data/Data_root_biomass_RZ_PE_2017.txt",
+        "blob_sha": "d7822cefa35f41b144a87c0184f6029e9726bca9"
+      },
+      "dictionary": {
+        "path": "Data/README.txt",
+        "blob_sha": "31d7398c8f5259ad48095324ab575575a6b39312"
+      }
+    }
+  },
+  "experimental_unit": {
+    "id": "Rz",
+    "block": "Replicate",
+    "exact_join": true
+  },
+  "primary_history": {
+    "variable": "Treatment",
+    "levels": [
+      "F-first",
+      "G-first",
+      "L-first"
+    ],
+    "excluded_controls": [
+      "Sync1",
+      "Sync2"
+    ]
+  },
+  "primary_common_panel": {
+    "n": 19,
+    "counts_by_history": {
+      "F-first": 6,
+      "G-first": 7,
+      "L-first": 6
+    },
+    "blocks": {
+      "1": [
+        "F-first",
+        "G-first",
+        "L-first"
+      ],
+      "2": [
+        "F-first",
+        "G-first",
+        "L-first"
+      ],
+      "3": [
+        "F-first",
+        "G-first",
+        "L-first"
+      ],
+      "4": [
+        "G-first",
+        "L-first"
+      ],
+      "5": [
+        "F-first",
+        "G-first"
+      ],
+      "6": [
+        "F-first",
+        "G-first",
+        "L-first"
+      ],
+      "7": [
+        "F-first",
+        "G-first",
+        "L-first"
+      ]
+    }
+  },
+  "targets": {
+    "shoot_composition": {
+      "columns": [
+        "Forbs",
+        "Grasses",
+        "Legumes"
+      ],
+      "distance": "bray_curtis_raw_biomass"
+    },
+    "root_vertical_distribution": {
+      "value": "RDW",
+      "layer_order": [
+        "0-10 cm",
+        "10-20 cm",
+        "20-30 cm",
+        "30-40 cm",
+        "40-50 cm",
+        "50-60 cm"
+      ],
+      "distance": "bray_curtis_raw_biomass"
+    }
+  },
+  "estimand": {
+    "reduced_model": "1 + Replicate",
+    "full_model": "1 + Replicate + History",
+    "distance_statistic": "gower_centered_nested_partial_R2",
+    "retained_history_excess": "observed_partial_R2-minus-null_median",
+    "primary_cross_target_contrast": "E_shoot_composition-minus-E_root_vertical_distribution"
+  },
+  "randomization": {
+    "shuffle": "History_within_Replicate",
+    "paired_across_targets": true,
+    "permutations": 9999,
+    "seed": 20261005
+  },
+  "scalar_sensitivities": {
+    "total_shoot_biomass": "Total",
+    "root_mean_depth": {
+      "definition": "biomass_weighted_layer_midpoint",
+      "midpoints_cm": [
+        5,
+        15,
+        25,
+        35,
+        45,
+        55
+      ]
+    }
+  },
+  "source_outlier_sensitivity": {
+    "remove_Rz": 137,
+    "primary_includes_Rz_137": true
+  },
+  "stops": [
+    "source_blob_changed",
+    "Rz_join_not_exact",
+    "joined_treatment_or_replicate_disagreement",
+    "primary_common_panel_not_19",
+    "history_counts_not_6_7_6",
+    "retained_block_fewer_than_two_histories",
+    "root_rhizobox_not_exactly_six_layers",
+    "negative_or_nonfinite_biomass",
+    "reduced_not_nested_in_full",
+    "history_increment_not_identifiable",
+    "undeclared_outcome_dependent_filter_required"
+  ],
+  "exposure_boundary": {
+    "external_benchmark": true,
+    "row_level_shoot_values_viewed_before_freeze": true,
+    "partial_r2_seen_before_freeze": false,
+    "permutation_null_seen_before_freeze": false,
+    "delta_E_seen_before_freeze": false
+  }
+}
