@@ -460,6 +460,40 @@ This is the current mechanism-facing result.
 
 It is narrower than v32 and survives a Treatment-independent response test.
 
+## v35 — architecture memory is dominance-centered, not dominance-only
+
+v35 prospectively decomposed the identity-free rank-abundance response into:
+
+1. the largest abundance share (rank-1 dominance);
+2. the normalized shape of ranks 2–5.
+
+Full five-history panel:
+
+- dominance E = **+0.1759**, p = **0.0002**;
+- lower-rank-tail E = **+0.1258**, p = **0.0005**.
+
+After removing Alternaria:
+
+- dominance E = **+0.0895**, p = **0.0241**;
+- lower-rank-tail E = **+0.0862**, p = **0.0252**.
+
+Alternaria leverage:
+
+- dominance = **+0.08647**;
+- lower-rank tail = **+0.03957**.
+
+The preregistered prediction that Alternaria leverage would be stronger in dominance was
+supported.
+
+This localizes the strongest architecture-level historical fingerprint:
+
+> **Alternaria disproportionately changes how strongly one community member dominates,
+> while a smaller but still significant history signal remains in the organization of the
+> non-dominant ranks.**
+
+This does not identify which interaction mechanism produces dominance, and the identity-
+free analysis does not infer the identity of the dominant taxon in individual plants.
+
 ## Decisive next evidence
 
 Do not add an arbitrary third case yet.
@@ -467,16 +501,17 @@ Do not add an arbitrary third case yet.
 v34 has now answered the post-v33 leverage question: architecture memory is distributed
 but strongly uneven, with Alternaria showing the largest deletion leverage.
 
-The next analysis should therefore decompose **what component of identity-free abundance
-architecture Alternaria changes**.
+v35 has now localized the largest Alternaria leverage to rank-1 dominance, while showing
+that lower-rank architecture also retains significant history.
 
-The cleanest prospective decomposition is:
+The next biological question is therefore genuinely mechanistic:
 
-1. rank-1 dominance (largest abundance share);
-2. the normalized shape of ranks 2-5 after removing rank 1.
+> **Why does the Alternaria arrival history generate unusually strong dominance?**
 
-This keeps the response identity-free and avoids Treatment-conditioned coordinate
-selection. It can determine whether the Alternaria leverage is primarily a dominance
-effect or whether history also restructures the lower-rank abundance architecture.
+The current data can still test narrower alternatives that do not require inventing a
+mechanism—for example whether the dominance shift is stable across host genotypes or is
+concentrated in particular genotype contexts.  Direct claims about niche preemption,
+niche modification, facilitation or inhibition require interaction-level evidence and
+should not be made from the present summaries alone.
 
 A third system is not yet the next priority.
