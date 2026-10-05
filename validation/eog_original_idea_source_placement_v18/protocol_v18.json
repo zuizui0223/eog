@@ -1,0 +1,93 @@
+{
+  "schema": "eog.original_idea_source_placement.protocol.v18",
+  "status": "frozen_before_source_placement_benchmark_implementation_and_scoring",
+  "scientific_question": "With source count held fixed, how does spatial arrangement of source populations alter reachable coverage, route overlap, source-attribution ambiguity and resilience to source loss in directed EOG virtual landscapes?",
+  "parent_worlds": {
+    "reuse": "the exact 384 v5 directed-flow latent rows",
+    "A_B": "unchanged response-independent permissibility fields",
+    "M": "the row's frozen directed truth graph at relative_edge_q70 and its truth barrier-density level",
+    "why_this_parent": "v5 already froze the directed landscape generator needed to study multi-source flow without adding a new dispersal process"
+  },
+  "source_candidate_pool": {
+    "anchor": "the frozen v5 truth source",
+    "eligible_additional_sources": "A/B-permissive nodes whose flow potential is at or above the median flow potential of all A/B-permissive nodes in the row, excluding the anchor",
+    "minimum_required_candidates": 2,
+    "non_estimable_rule": "rows with fewer than two eligible additional sources are retained as non-estimable"
+  },
+  "source_set_sizes": [1, 2, 3],
+  "placement_designs": {
+    "clustered": "start with the frozen anchor source; add eligible sources in increasing Euclidean distance from the anchor, ties by node ID",
+    "dispersed": "start with the frozen anchor source; greedily add the eligible source maximizing its minimum Euclidean distance to the already selected sources, ties by node ID",
+    "nested_sets": true
+  },
+  "metrics": {
+    "union_reachable_fraction": "fraction of all A/B-permissive nodes reachable from at least one selected source",
+    "multi_source_overlap_fraction": "among union-reachable nodes, fraction reachable from at least two selected sources",
+    "mean_source_multiplicity": "mean number of selected sources able to reach each union-reachable node",
+    "worst_source_loss_retention": "minimum over deletion of one selected source of remaining union-reachable-node count divided by the original union-reachable-node count",
+    "exclusive_source_fraction": "among union-reachable nodes, fraction reachable from exactly one source",
+    "source_attribution_ambiguous_fraction": "same as multi_source_overlap_fraction; retained under an ecological-history interpretation rather than a demographic one"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "S1_same_source_count_different_placement_changes_coverage",
+      "statement": "At least one eligible row has different 2-source union reachable fraction under clustered versus dispersed placement.",
+      "failure_rule": "REFUTED if source arrangement never changes coverage at fixed source count."
+    },
+    {
+      "id": "S2_dispersed_sources_expand_coverage",
+      "statement": "Across eligible rows, pooled mean 2-source union reachable fraction is strictly larger under dispersed than clustered placement.",
+      "failure_rule": "REFUTED if dispersed-minus-clustered mean coverage is <=0."
+    },
+    {
+      "id": "S3_clustered_sources_increase_route_overlap",
+      "statement": "Across eligible rows, pooled mean 2-source multi-source overlap fraction is strictly larger under clustered than dispersed placement.",
+      "failure_rule": "REFUTED if clustered-minus-dispersed mean overlap is <=0."
+    },
+    {
+      "id": "S4_clustered_sources_increase_source_loss_insurance",
+      "statement": "Across eligible rows, pooled mean 2-source worst-source-loss retention is strictly larger under clustered than dispersed placement.",
+      "failure_rule": "REFUTED if clustered-minus-dispersed mean retention is <=0."
+    },
+    {
+      "id": "S5_two_well_placed_sources_can_outperform_three_clustered_sources",
+      "statement": "At least one eligible row has larger union reachable fraction for 2 dispersed sources than for 3 clustered sources.",
+      "failure_rule": "REFUTED if 3 clustered sources always cover at least as much as 2 dispersed sources."
+    },
+    {
+      "id": "S6_more_sources_never_reduce_union_reachability",
+      "statement": "Within each eligible row and placement design, union reachable-node count is nondecreasing from 1 to 2 to 3 sources.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "S7_more_sources_never_reduce_multi_source_node_count",
+      "statement": "Within each eligible row and placement design, the count of nodes reachable from at least two selected sources is nondecreasing from 1 to 2 to 3 sources.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "S8_source_placement_creates_coverage_insurance_tradeoff",
+      "statement": "At least one eligible row has dispersed placement with greater coverage but clustered placement with greater worst-source-loss retention at the same 2-source count.",
+      "failure_rule": "REFUTED if no row exhibits the preregistered coverage-insurance tradeoff."
+    }
+  ],
+  "secondary_outputs": [
+    "fraction of rows where 2 dispersed exceeds 3 clustered coverage",
+    "mean source-attribution ambiguous fraction by source count and placement",
+    "mean exclusive-source fraction by source count and placement",
+    "effect modification by barrier density, environmental autocorrelation and neighbourhood",
+    "relationship between path branching in the directed graph and the placement effect"
+  ],
+  "claim_boundary": [
+    "Source populations are structural starting nodes, not estimates of historical founders.",
+    "Multi-source overlap is source-attribution ambiguity / structural redundancy, not genetic admixture.",
+    "Worst-source-loss retention is a topology-based insurance metric, not a demographic extinction probability.",
+    "The clustered/dispersed placement rules are synthetic experimental treatments, not field management prescriptions."
+  ],
+  "stop_rules": [
+    "Do not alter the source-candidate potential cutoff after scoring.",
+    "Do not add a third placement design after scoring.",
+    "Do not tune source count after scoring.",
+    "Do not replace Euclidean source placement with reachability-optimized placement after scoring.",
+    "Failed directional hypotheses remain failed."
+  ]
+}

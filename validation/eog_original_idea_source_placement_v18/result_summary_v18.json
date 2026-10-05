@@ -1,0 +1,141 @@
+{
+  "schema": "eog.original_idea_source_placement.result_summary.v18",
+  "status": "completed_preregistered_multi_source_placement_panel",
+  "protocol": "validation/eog_original_idea_source_placement_v18/protocol_v18.json",
+  "protocol_commit": "c6837aab9bd3a15e1a8df5040ce91fd1e55a17df",
+  "authoritative_run": 37251518108,
+  "authoritative_artifact_id": 11321111760,
+  "authoritative_artifact_digest": "sha256:82fa7504b46b94369f787888be5d6c1a5e8d3caff622a8e686b23dc57007f9d2",
+  "result_fingerprint": "f039164f427f52f3d8b0ebd78705056c723689933a96cfd5740417f0f8f90089",
+  "row_count": 384,
+  "eligible_row_count": 384,
+  "non_estimable_row_count": 0,
+  "predeclared_verdicts": {
+    "S1_same_source_count_different_placement_changes_coverage": "SUPPORTED",
+    "S2_dispersed_sources_expand_coverage": "SUPPORTED",
+    "S3_clustered_sources_increase_route_overlap": "SUPPORTED",
+    "S4_clustered_sources_increase_source_loss_insurance": "SUPPORTED",
+    "S5_two_well_placed_sources_can_outperform_three_clustered_sources": "SUPPORTED",
+    "S6_more_sources_never_reduce_union_reachability": "SUPPORTED",
+    "S7_more_sources_never_reduce_multi_source_node_count": "SUPPORTED",
+    "S8_source_placement_creates_coverage_insurance_tradeoff": "SUPPORTED"
+  },
+  "two_source_contrasts": {
+    "dispersed_minus_clustered_union_reachable_fraction": 0.04122870744605389,
+    "clustered_minus_dispersed_multi_source_overlap_fraction": 0.5623935804499399,
+    "clustered_minus_dispersed_worst_source_loss_retention": 0.4291745590567829
+  },
+  "row_level_counts": {
+    "arrangement_changes_two_source_coverage": 347,
+    "two_dispersed_sources_cover_more_than_three_clustered_sources": 225,
+    "coverage_insurance_tradeoff": 280,
+    "monotonic_union_violations": 0,
+    "monotonic_multi_source_count_violations": 0
+  },
+  "mean_profiles": {
+    "clustered": {
+      "1_source": {
+        "coverage": 0.3619557875841985,
+        "multi_source_overlap": 0.0,
+        "worst_source_loss_retention": 0.0
+      },
+      "2_sources": {
+        "coverage": 0.4041771190597578,
+        "multi_source_overlap": 0.6402527720370431,
+        "worst_source_loss_retention": 0.6933192815911929
+      },
+      "3_sources": {
+        "coverage": 0.44734300409019284,
+        "multi_source_overlap": 0.7114754561443757,
+        "worst_source_loss_retention": 0.7860990645861232
+      }
+    },
+    "dispersed": {
+      "1_source": {
+        "coverage": 0.3619557875841985,
+        "multi_source_overlap": 0.0,
+        "worst_source_loss_retention": 0.0
+      },
+      "2_sources": {
+        "coverage": 0.4454058265058117,
+        "multi_source_overlap": 0.07785919158710324,
+        "worst_source_loss_retention": 0.26414472253441
+      },
+      "3_sources": {
+        "coverage": 0.5143130902540771,
+        "multi_source_overlap": 0.14558414269689143,
+        "worst_source_loss_retention": 0.42442121667175187
+      }
+    }
+  },
+  "post_result_stratified_diagnostic": {
+    "classification": "secondary_diagnostic_not_a_retest_of_S1_S8",
+    "truth_barrier_density": {
+      "0.05": {
+        "dispersed_minus_clustered_coverage": 0.05420704816957815,
+        "clustered_minus_dispersed_overlap": 0.648673539093974,
+        "clustered_minus_dispersed_insurance": 0.535685318884956,
+        "two_dispersed_gt_three_clustered_rows": 84,
+        "tradeoff_rows": 100
+      },
+      "0.20": {
+        "dispersed_minus_clustered_coverage": 0.04329183658663246,
+        "clustered_minus_dispersed_overlap": 0.571634660573779,
+        "clustered_minus_dispersed_insurance": 0.43055347236137625,
+        "two_dispersed_gt_three_clustered_rows": 80,
+        "tradeoff_rows": 95
+      },
+      "0.35": {
+        "dispersed_minus_clustered_coverage": 0.026187237581951326,
+        "clustered_minus_dispersed_overlap": 0.46687254168206666,
+        "clustered_minus_dispersed_insurance": 0.32128488592401655,
+        "two_dispersed_gt_three_clustered_rows": 61,
+        "tradeoff_rows": 85
+      }
+    },
+    "environmental_autocorrelation": {
+      "low": {
+        "dispersed_minus_clustered_coverage": 0.04585222905676622,
+        "clustered_minus_dispersed_overlap": 0.6658048667937403,
+        "clustered_minus_dispersed_insurance": 0.49816789019940305,
+        "two_dispersed_gt_three_clustered_rows": 127,
+        "tradeoff_rows": 158
+      },
+      "high": {
+        "dispersed_minus_clustered_coverage": 0.03660518583534174,
+        "clustered_minus_dispersed_overlap": 0.45898229410613944,
+        "clustered_minus_dispersed_insurance": 0.3601812279141628,
+        "two_dispersed_gt_three_clustered_rows": 98,
+        "tradeoff_rows": 122
+      }
+    },
+    "neighbourhood": {
+      "rook": {
+        "dispersed_minus_clustered_coverage": 0.02683509283779115,
+        "clustered_minus_dispersed_overlap": 0.509577954367041,
+        "clustered_minus_dispersed_insurance": 0.3501721000465679,
+        "two_dispersed_gt_three_clustered_rows": 97,
+        "tradeoff_rows": 137
+      },
+      "queen": {
+        "dispersed_minus_clustered_coverage": 0.0556223220543168,
+        "clustered_minus_dispersed_overlap": 0.6152092065328386,
+        "clustered_minus_dispersed_insurance": 0.5081770180669979,
+        "two_dispersed_gt_three_clustered_rows": 128,
+        "tradeoff_rows": 143
+      }
+    }
+  },
+  "interpretation": [
+    "Source count alone did not determine reachable coverage: changing only the placement of two sources changed coverage in 347/384 landscapes.",
+    "Dispersed sources expanded the reachable landscape, whereas clustered sources created much stronger route overlap and insurance against losing one source.",
+    "The coverage-insurance tradeoff occurred in 280/384 landscapes and retained the same directional pattern in every barrier, autocorrelation and neighbourhood stratum.",
+    "Two dispersed sources covered more landscape than three clustered sources in 225/384 landscapes, showing that source number is not ordinal with reachable coverage when source geometry differs.",
+    "Clustered source basins also produced much greater source-attribution ambiguity downstream because many reachable nodes could be supplied by more than one source."
+  ],
+  "claim_boundary": [
+    "This is structural reachability rather than demographic population viability.",
+    "Multi-source overlap is route/source-attribution redundancy, not genetic admixture.",
+    "The placement treatments are synthetic geometry experiments, not direct conservation prescriptions."
+  ]
+}
