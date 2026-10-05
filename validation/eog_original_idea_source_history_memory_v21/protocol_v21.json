@@ -1,0 +1,122 @@
+{
+  "schema": "eog.original_idea_source_history_memory.protocol.v21",
+  "status": "frozen_before_source_history_benchmark_implementation_and_scoring",
+  "parents": {
+    "v18_source_placement": {
+      "result": "validation/eog_original_idea_source_placement_v18/result_summary_v18.json",
+      "fingerprint": "f039164f427f52f3d8b0ebd78705056c723689933a96cfd5740417f0f8f90089"
+    },
+    "v19_source_confluence": {
+      "result": "validation/eog_original_idea_source_confluence_v19/result_summary_v19.json",
+      "fingerprint": "a1a4bcf4a8e6f91888f41e9f14826c662da66b869348c14ed8592b411636fd2d"
+    },
+    "v20_source_turnover": {
+      "result": "validation/eog_original_idea_source_turnover_v20/result_summary_v20.json",
+      "fingerprint": "39d9ab48d9260f325eb802abcbf237e451e36128208148b079735237221f30ad"
+    }
+  },
+  "scientific_question": "Can two source networks with exactly the same final source identities, A/B/M landscape and equilibrium reachable union retain different distributional histories solely because the sources became active in a different order?",
+  "latent_landscapes": {
+    "reuse": "the exact 384 v18/v19 directed truth graphs, A/B permissibility fields, outlet definitions and frozen three-source clustered/dispersed source sets",
+    "source_counts": [3],
+    "placement_designs": ["clustered", "dispersed"]
+  },
+  "activation_histories": {
+    "activation_times": [0, 2, 4],
+    "histories": {
+      "H_anchor_first": "sources ordered exactly as the frozen v18 source tuple: source0 at t0, source1 at t2, source2 at t4",
+      "H_second_first": "source1 at t0, source2 at t2, source0 at t4",
+      "H_third_first": "source2 at t0, source0 at t2, source1 at t4"
+    },
+    "same_final_source_set": true,
+    "same_multiset_of_activation_times": true,
+    "source_deactivation": false
+  },
+  "propagation_semantics": {
+    "directed_graph": "the frozen v18 directed truth graph",
+    "edge_time": "one structural propagation step per directed edge",
+    "source_arrival_time": "activation_time(source) + directed BFS distance(source,node)",
+    "occupied_by_time_t": "node is occupied if at least one source arrival time <= t",
+    "equilibrium_occupancy": "union of all nodes reachable from at least one final source",
+    "earliest_origin_set": "source or sources minimizing activation_time + BFS distance at the node",
+    "static_origin_set": "all final sources from which the node is reachable regardless of activation time"
+  },
+  "checkpoints": {
+    "last_activation_time": 4,
+    "transient_checkpoint": 6,
+    "equilibrium_checkpoint": "row-specific maximum finite source arrival time across all three histories and all union-reachable nodes"
+  },
+  "primary_outputs": [
+    "transient occupied fraction by activation history",
+    "pairwise transient occupancy Jaccard distance among histories",
+    "equilibrium occupancy equality across histories",
+    "fraction of equilibrium nodes whose earliest-origin set differs among activation histories",
+    "fraction of equilibrium nodes whose unique earliest source changes among histories",
+    "static-origin ambiguity fraction",
+    "equilibrium earliest-origin ambiguity fraction",
+    "history-memory fraction after occupancy convergence",
+    "clustered versus dispersed contrasts in transient occupancy sensitivity and provenance-memory sensitivity"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "M1_activation_order_changes_transient_distribution",
+      "statement": "At least one eligible row/design has different transient occupied sets among the three activation histories at t=6.",
+      "failure_rule": "REFUTED if transient occupancy is history-invariant everywhere."
+    },
+    {
+      "id": "M2_equilibrium_occupancy_forgets_activation_order",
+      "statement": "For every eligible row/design, all three activation histories converge to exactly the same equilibrium occupied node set.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "M3_provenance_can_remember_history_after_occupancy_converges",
+      "statement": "At least one eligible row/design has identical equilibrium occupancy but different earliest-origin assignments among activation histories.",
+      "failure_rule": "REFUTED if provenance is history-invariant whenever occupancy converges."
+    },
+    {
+      "id": "M4_dispersed_sources_increase_transient_order_sensitivity",
+      "statement": "Pooled mean pairwise transient occupancy Jaccard distance is strictly larger for dispersed than clustered source placement.",
+      "failure_rule": "REFUTED if dispersed-minus-clustered contrast <=0."
+    },
+    {
+      "id": "M5_clustered_sources_increase_provenance_order_sensitivity",
+      "statement": "Pooled mean equilibrium earliest-origin disagreement fraction is strictly larger for clustered than dispersed placement.",
+      "failure_rule": "REFUTED if clustered-minus-dispersed contrast <=0."
+    },
+    {
+      "id": "M6_timing_reduces_but_does_not_eliminate_static_source_ambiguity",
+      "statement": "For both placement designs, pooled mean earliest-origin ambiguity is lower than pooled mean static-origin ambiguity, while at least one row retains nonzero earliest-origin ambiguity.",
+      "failure_rule": "REFUTED separately for any placement design without strict reduction or if no residual ambiguity remains anywhere."
+    },
+    {
+      "id": "M7_same_final_source_set_can_encode_multiple_histories",
+      "statement": "At least one eligible row/design has the same final source set and equilibrium occupancy but at least two distinct equilibrium earliest-origin maps among the three histories.",
+      "failure_rule": "REFUTED if equilibrium provenance map is unique for every final source set."
+    },
+    {
+      "id": "M8_history_memory_is_not_occupancy_memory",
+      "statement": "At least one row/design has zero equilibrium occupancy difference but positive equilibrium provenance-memory fraction.",
+      "failure_rule": "REFUTED if provenance differences occur only when occupancy still differs."
+    }
+  ],
+  "secondary_outputs": [
+    "time from last activation until occupancy convergence",
+    "time from last activation until earliest-origin assignments stabilize",
+    "relationship between v19 static confluence fraction and v21 provenance-memory fraction",
+    "relationship between v18 coverage-insurance geometry and history sensitivity",
+    "effect modification by barrier density, environmental autocorrelation and neighbourhood"
+  ],
+  "claim_boundary": [
+    "Activation times are structural ordering devices, not calibrated years or generations.",
+    "Earliest-origin identity is a graph-theoretic provenance label, not empirical ancestry.",
+    "Persistent occupancy after arrival is a synthetic colonization-memory assumption for this experiment.",
+    "The experiment does not model abundance, local extinction or demographic source strength."
+  ],
+  "stop_rules": [
+    "Do not change the activation-time multiset after scoring.",
+    "Do not add a fourth activation history after scoring.",
+    "Do not change the transient checkpoint after scoring.",
+    "Do not add extinction or decay after scoring to rescue a failed memory hypothesis.",
+    "Failed M1-M8 hypotheses remain failed."
+  ]
+}
