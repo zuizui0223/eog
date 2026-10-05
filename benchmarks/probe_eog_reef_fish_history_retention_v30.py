@@ -159,6 +159,68 @@ def _extract_api_schema(payload: bytes) -> dict:
     }
 
 
+def _parameter_metadata_from_ids(api_schema: dict | None) -> list[dict]:
+    if not api_schema:
+        return []
+    ids = []
+    for url in api_schema.get("urls", []):
+        match = re.search(r"dataset-parameter/(\\d+)", url)
+        if match:
+            ids.append(match.group(1))
+    output = []
+    for parameter_id in sorted(set(ids), key=int):
+        endpoints = (
+            f"https://www.bco-dmo.org/api/dataset-parameter/{parameter_id}",
+            f"https://lod.bco-dmo.org/id/dataset-parameter/{parameter_id}",
+        )
+        record = {"id": int(parameter_id), "attempts": []}
+        for endpoint in endpoints:
+            try:
+                payload = _get(endpoint)
+                text = payload.decode("utf-8", errors="replace")
+                attempt = {
+                    "url": endpoint,
+                    "sha256": _sha256(payload),
+                    "bytes": len(payload),
+                }
+                try:
+                    parsed = json.loads(text)
+                    literals = []
+                    def walk(value, path):
+                        if isinstance(value, dict):
+                            for key, item in value.items():
+                                walk(item, path + [str(key)])
+                        elif isinstance(value, list):
+                            for i, item in enumerate(value):
+                                walk(item, path + [str(i)])
+                        elif isinstance(value, (str, int, float, bool)):
+                            sval = str(value)
+                            if (
+                                len(sval) <= 1000
+                                and not sval.startswith("http://www.w3.org/")
+                                and not sval.startswith("http://purl.org/")
+                            ):
+                                literals.append(
+                                    {"path": "/".join(path), "value": sval}
+                                )
+                    walk(parsed, [])
+                    attempt["format"] = "json"
+                    attempt["literals"] = literals[:200]
+                except json.JSONDecodeError:
+                    attempt["format"] = "text"
+                    clean = re.sub(r"<[^>]+>", " ", text)
+                    clean = re.sub(r"\\s+", " ", clean).strip()
+                    attempt["text"] = clean[:4000]
+                record["attempts"].append(attempt)
+                break
+            except urllib.error.HTTPError as error:
+                record["attempts"].append(
+                    {"url": endpoint, "http_error": int(error.code)}
+                )
+        output.append(record)
+    return output
+
+
 def _parse_info(payload: bytes) -> dict:
     rows = list(csv.DictReader(io.StringIO(payload.decode("utf-8-sig"))))
     variables = []
@@ -229,6 +291,8 @@ def run() -> dict:
             if any(keyword in name.lower() for keyword in keywords)
         ]
 
+    parameter_metadata = _parameter_metadata_from_ids(api_schema)
+
     result = {
         "schema":"eog.reef_fish_history_retention.metadata_probe.v30",
         "status":"metadata_materialized_before_response_access",
@@ -238,6 +302,7 @@ def run() -> dict:
         "metadata_payload_sha256": _sha256(metadata_payload),
         "metadata": parsed,
         "bcodmo_api_schema": api_schema,
+        "dataset_parameter_metadata": parameter_metadata,
         "semantic_candidates": candidates,
         "response_rows_accessed":False,
         "scoring_performed":False,
