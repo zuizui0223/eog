@@ -1,0 +1,90 @@
+{
+  "schema": "eog.original_idea_empirical_history_retention.result_summary.v27",
+  "status": "stopped_before_eog_scoring",
+  "stop_class": [
+    "administrative_data_use",
+    "inferential_target_linkage"
+  ],
+  "source": {
+    "repository": "chcatano/History_BEF",
+    "zenodo_doi": "10.5281/zenodo.7120895",
+    "audited_blobs": {
+      "BEF_analysis_data_Ecology_csv": "922fc0d8573b0da87c171d44eb3fb17f75522e43",
+      "species_NMDS_data_Ecology_csv": "d7a1fa3be0551c5c5110a86b2f85b23dfdb9822b",
+      "trait_NMDS_data_Ecology_csv": "943dbf3001218a153fda5170cf4665c93eef93c0"
+    },
+    "raw_files_copied_into_eog": false
+  },
+  "scalar_structure": {
+    "rows": 144,
+    "restoration_plots": 18,
+    "establishment_year_levels": [
+      2014,
+      2015,
+      2016
+    ],
+    "observation_years": [
+      2019,
+      2020
+    ],
+    "rows_per_plot": 8,
+    "rows_per_plot_year": 4,
+    "primary_unit_reconstructable": true,
+    "declared_targets_materializable": [
+      "species_diversity",
+      "functional_dispersion",
+      "anpp",
+      "decomposition_rate",
+      "floral_resource_production"
+    ]
+  },
+  "multivariate_structure": {
+    "species_nmds": {
+      "rows": 234,
+      "columns": [
+        "NMDS1",
+        "NMDS2",
+        "plant.year",
+        "year",
+        "age"
+      ],
+      "has_site": false,
+      "has_plot": false
+    },
+    "trait_nmds": {
+      "rows": 229,
+      "columns": [
+        "NMDS1",
+        "NMDS2",
+        "plant.year",
+        "year",
+        "age"
+      ],
+      "has_site": false,
+      "has_plot": false
+    },
+    "plot_blocked_primary_estimand_materializable": false,
+    "stop_rules_triggered": [
+      "required_target_representation_not_reconstructable",
+      "ambiguous_many_to_many_target_linkage"
+    ]
+  },
+  "data_use": {
+    "source_statement": "provided to reproduce analyses in the publication; not for other purposes without written consent",
+    "written_consent_available_to_eog": false,
+    "new_eog_scoring_performed": false
+  },
+  "implemented_before_stop": [
+    "scalar_partial_R2",
+    "distance_based_partial_R2",
+    "whole_plot_permutation",
+    "plot_x_year_aggregation_contract",
+    "unit_tests"
+  ],
+  "biological_result": null,
+  "interpretation": [
+    "Public availability does not guarantee permission for independent reanalysis.",
+    "A target can be publicly deposited yet fail a preregistered inferential contract if experimental-unit identifiers were removed.",
+    "The v27 stop is not biological evidence against target-specific history retention."
+  ]
+}
