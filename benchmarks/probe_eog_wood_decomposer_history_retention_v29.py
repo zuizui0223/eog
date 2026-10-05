@@ -3,10 +3,12 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import html
 import io
 import json
 from pathlib import Path
 import re
+import urllib.error
 import urllib.request
 import zipfile
 
