@@ -2810,6 +2810,67 @@ Canonical v30 assets:
 - `docs/eog_grassland_above_below_history_retention_v30_result.md`;
 - `benchmarks/run_eog_grassland_above_below_history_retention_v30.py`.
 
+## Original-EOG empirical mainline — v31 storage medium of assembly history
+
+v28 and v30 established in two independent manipulated systems that the amount of
+assembly history visible in the present depends strongly on the ecological target.
+
+v31 prospectively tested a stronger interpretation: that persistent compositional memory
+is generally stored in the mapping between ecological identities and abundance ranks.
+
+The test held raw abundance values and response dimensionality fixed and removed only
+identity labels by sorting each composition vector within each experimental unit.
+
+That stronger hypothesis was **refuted**.
+
+### v28 microbiome
+
+- labeled fungal composition E = **+0.1467**;
+- identity-stripped rank-abundance E = **+0.1486**;
+- identity-storage gap G = **−0.0019**;
+- rank-abundance p = **0.0001**;
+- Shannon entropy E = **+0.2523**, p = **0.0001**.
+
+Removing fungal identities therefore did not erase the v28 history signal. The manipulated
+arrival history is strongly encoded in abundance architecture itself.
+
+### v30 grassland
+
+- labeled functional-group composition E = **+0.8034**;
+- identity-stripped rank-abundance E = **+0.1949**;
+- identity-storage gap G = **+0.6085**;
+- rank-abundance p = **0.0769**;
+- Shannon entropy E = **+0.3800**, p = **0.0235**.
+
+Here removing functional-group identity erased roughly three quarters of the labeled
+retained-history excess, although abundance inequality still retained some history.
+
+### Updated conclusion
+
+The mainline is therefore not:
+
+> assembly history is stored in ecological identity.
+
+It is:
+
+> **the storage medium of assembly history is itself system-specific. Historical memory
+> can reside in unlabeled abundance architecture, in identity-to-abundance mapping, or in
+> both.**
+
+This sharpens the v26 target-specific projection result. Target choice determines not only
+how much history is visible; different systems can encode that history in different
+components of community organization.
+
+The next biological problem is to identify which ecological mechanisms predict the
+storage channel, rather than to accumulate additional arbitrary examples.
+
+Canonical v31 assets:
+
+- `validation/eog_identity_storage_rank_abundance_v31/protocol_v31.json`;
+- `validation/eog_identity_storage_rank_abundance_v31/result_summary_v31.json`;
+- `docs/eog_identity_storage_rank_abundance_v31.md`;
+- `docs/eog_identity_storage_rank_abundance_v31_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:
