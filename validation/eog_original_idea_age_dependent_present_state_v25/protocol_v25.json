@@ -1,0 +1,107 @@
+{
+  "schema": "eog.original_idea_age_dependent_present_state.protocol.v25",
+  "status": "frozen_before_age_dependent_present_state_benchmark_implementation_and_scoring",
+  "parents": {
+    "v23_provenance_observability": {
+      "fingerprint": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244",
+      "key_residual": "81/768 exact histories remain unresolved after complete occupancy plus provenance evidence"
+    },
+    "v24_colonization_age_memory": {
+      "fingerprint": "300757d753225c7dc3f816f6478436ad5f68fd892d033465dec473bcad69a971",
+      "key_result": "45/81 v23 residual aliases hide different complete non-source first-arrival maps; 66/768 exact histories remain unresolved even with complete first-arrival state"
+    }
+  },
+  "scientific_question": "Can hidden colonization-age differences create different present ecological states even when final occupancy and source provenance are identical?",
+  "latent_rows": {
+    "reuse": "the exact 384 v21-v24 directed landscapes, clustered/dispersed three-source sets and three frozen activation histories",
+    "design_rows": 768
+  },
+  "frozen_age_dependent_process": {
+    "name": "two_step_maturation_delay",
+    "common_present_horizon": "the v24 row/design T* = maximum finite non-source first-arrival time across all three activation histories",
+    "maturation_lag": 2,
+    "mature_state_rule": "a non-source equilibrium node is mature at T* iff T* - first_arrival(node) >= 2",
+    "source_nodes_excluded": true,
+    "persistence": "once reached, occupancy persists exactly as in v21-v24; maturation changes state label only",
+    "no_abundance_or_extinction": true
+  },
+  "targets": {
+    "equilibrium_occupancy": "final occupied non-source node set",
+    "equilibrium_provenance": "complete earliest-source set map",
+    "first_arrival_map": "complete non-source structural first-arrival map",
+    "mature_state_map": "binary mature/not-yet-mature map over equilibrium non-source nodes at T*",
+    "exact_activation_history": "identity of the three frozen activation schedules"
+  },
+  "primary_subset": "all design rows are scored, with preregistered focus on the 45 v24 hidden-age rows inside the v23 residual set",
+  "primary_outputs": [
+    "mature-state equivalence-class count among activation histories",
+    "number of v24 hidden-age residual rows with different mature-state maps",
+    "number of v23 combined-observation aliases with different mature-state maps",
+    "number of exact-history-unresolved rows with a fully identified mature-state target",
+    "unique-origin and confluence nodes whose mature state changes across histories",
+    "mature-state disagreement fraction by clustered/dispersed source geometry",
+    "relationship between first-arrival disagreement and mature-state disagreement"
+  ],
+  "predeclared_hypotheses": [
+    {
+      "id": "F1_hidden_age_can_change_present_mature_state",
+      "statement": "At least one of the 45 v24 hidden-age residual design rows has different complete mature-state maps among its observationally aliased histories.",
+      "failure_rule": "REFUTED if all 45 hidden-age aliases remain mature-state equivalent."
+    },
+    {
+      "id": "F2_same_occupancy_and_provenance_can_hide_present_state_difference",
+      "statement": "At least one v23 combined-history-unresolved design row has identical equilibrium occupancy and provenance but different mature-state maps.",
+      "failure_rule": "REFUTED if occupancy+provenance equivalence always implies mature-state equivalence."
+    },
+    {
+      "id": "F3_mature_state_is_coarser_than_first_arrival_state",
+      "statement": "For every design row, mature-state class count is <= first-arrival-map class count.",
+      "failure_rule": "Any violation is an implementation/theory failure."
+    },
+    {
+      "id": "F4_exact_history_can_be_unresolved_while_present_mature_state_is_identified",
+      "statement": "At least one design row has more than one exact activation history compatible with the complete first-arrival target hierarchy while all histories share one mature-state map.",
+      "failure_rule": "REFUTED if mature-state identity never compresses unresolved exact history."
+    },
+    {
+      "id": "F5_unique_origin_zones_can_show_history_dependent_maturation",
+      "statement": "At least one static unique-origin non-source node changes mature/not-yet-mature state across activation histories.",
+      "failure_rule": "REFUTED if unique-origin mature state is history-invariant everywhere."
+    },
+    {
+      "id": "F6_confluence_zones_can_show_history_dependent_maturation",
+      "statement": "At least one static confluence non-source node changes mature/not-yet-mature state across activation histories.",
+      "failure_rule": "REFUTED if confluence mature state is history-invariant everywhere."
+    },
+    {
+      "id": "F7_age_memory_need_not_be_present_state_memory",
+      "statement": "At least one design row has different first-arrival maps but identical mature-state maps under the frozen lag.",
+      "failure_rule": "REFUTED if every age difference changes the mature-state target."
+    },
+    {
+      "id": "F8_final_occupancy_can_be_identical_while_present_mature_state_differs",
+      "statement": "At least one design row has identical equilibrium occupancy across histories and positive mature-state disagreement.",
+      "failure_rule": "REFUTED if mature-state disagreement never persists after occupancy convergence."
+    }
+  ],
+  "secondary_outputs": [
+    "fraction of the 45 hidden-age residual rows with mature-state consequences",
+    "fraction of all 768 design rows with mature-state history memory",
+    "clustered-minus-dispersed mature-state disagreement fraction",
+    "maturity-target compression relative to first-arrival and exact-history targets",
+    "counts of age differences that are invisible under the lag-2 mature-state target"
+  ],
+  "claim_boundary": [
+    "The two-step maturation lag is a frozen synthetic process, not a calibrated demographic parameter.",
+    "Mature/not-yet-mature is an abstract present ecological state, not abundance, reproduction or fitness.",
+    "A mature-state difference demonstrates possible history dependence of present state under the declared process; it does not establish empirical priority effects.",
+    "No new extinction, density dependence, biotic feedback or evolution is introduced."
+  ],
+  "stop_rules": [
+    "Do not change the maturation lag after scoring.",
+    "Do not add a second lag to rescue a failed hypothesis.",
+    "Do not add abundance or extinction after scoring.",
+    "Do not alter the common-present-horizon definition.",
+    "Failed F1-F8 hypotheses remain failed."
+  ]
+}

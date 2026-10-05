@@ -1,0 +1,70 @@
+{
+  "schema": "eog.original_idea_age_dependent_present_state.result_summary.v25",
+  "status": "completed_preregistered_age_dependent_present_state_panel",
+  "protocol": "validation/eog_original_idea_age_dependent_present_state_v25/protocol_v25.json",
+  "authoritative_run": 37263354553,
+  "authoritative_artifact_id": 11325074752,
+  "authoritative_artifact_digest": "sha256:16e773999f51cf765798d3373fd069cdca4679451a6d5a92ad246cfa01410fee",
+  "result_fingerprint": "998c24e22e355f703c2a787780ced11abd01280c0ca5deb3b17e8848af3f7ad0",
+  "row_count": 384,
+  "eligible_row_count": 384,
+  "design_row_count": 768,
+  "maturation_lag": 2,
+  "predeclared_verdicts": {
+    "F1_hidden_age_can_change_present_mature_state": "SUPPORTED",
+    "F2_same_occupancy_and_provenance_can_hide_present_state_difference": "SUPPORTED",
+    "F3_mature_state_is_coarser_than_first_arrival_state": "SUPPORTED",
+    "F4_exact_history_can_be_unresolved_while_present_mature_state_is_identified": "SUPPORTED",
+    "F5_unique_origin_zones_can_show_history_dependent_maturation": "SUPPORTED",
+    "F6_confluence_zones_can_show_history_dependent_maturation": "SUPPORTED",
+    "F7_age_memory_need_not_be_present_state_memory": "SUPPORTED",
+    "F8_final_occupancy_can_be_identical_while_present_mature_state_differs": "SUPPORTED"
+  },
+  "reproduced_parent_states": {
+    "v23_combined_unresolved_rows": 81,
+    "v24_hidden_age_residual_rows": 45
+  },
+  "present_state_consequences": {
+    "v24_hidden_age_rows_with_mature_state_difference": 12,
+    "fraction_of_v24_hidden_age_rows_with_mature_state_difference": 0.26666666666666666,
+    "v23_residual_rows_with_mature_state_difference": 12,
+    "design_rows_with_any_mature_state_memory": 726,
+    "fraction_of_all_design_rows_with_mature_state_memory": 0.9453125,
+    "design_rows_with_unique_origin_mature_memory": 461,
+    "design_rows_with_confluence_mature_memory": 377,
+    "design_rows_with_age_difference_but_mature_state_invariant": 6,
+    "exact_history_unresolved_but_mature_state_identified_rows": 42,
+    "mature_vs_first_arrival_class_count_violations": 0
+  },
+  "summary_by_design": {
+    "clustered": {
+      "design_rows": 384,
+      "mean_mature_disagreement_fraction": 0.33042943112162365,
+      "rows_with_any_mature_state_memory": 351,
+      "rows_with_unique_origin_mature_memory": 95,
+      "rows_with_confluence_mature_memory": 296,
+      "rows_with_age_difference_but_mature_invariance": 6
+    },
+    "dispersed": {
+      "design_rows": 384,
+      "mean_mature_disagreement_fraction": 0.3995345375612486,
+      "rows_with_any_mature_state_memory": 375,
+      "rows_with_unique_origin_mature_memory": 366,
+      "rows_with_confluence_mature_memory": 81,
+      "rows_with_age_difference_but_mature_invariance": 0
+    }
+  },
+  "interpretation": [
+    "Hidden distributional history can be causally relevant to a declared present-state target under one frozen lagged process: 12 of the 45 v24 hidden-age residual rows produced different mature-state maps.",
+    "Final occupancy and complete equilibrium source provenance can therefore be identical while present mature/not-yet-mature state differs.",
+    "History relevance remains target-specific: six design rows had different first-arrival maps but identical mature-state maps under the frozen two-step lag.",
+    "The mature-state target is strictly coarser than complete first-arrival state, and exact activation history can remain unresolved while the present mature-state target is already identified.",
+    "Age-dependent present-state memory occurs in both unique-origin and confluence zones, so history dependence is not restricted to source-overlap locations."
+  ],
+  "claim_boundary": [
+    "The two-step maturation lag is synthetic and not calibrated to any species.",
+    "Mature/not-yet-mature is an abstract present ecological state, not abundance, reproduction, fitness or extinction.",
+    "A present-state difference demonstrates possible history dependence under the declared process, not empirical priority effects.",
+    "The six age-different but mature-equivalent rows show that hidden history should not be treated as ecologically consequential without a declared target process."
+  ]
+}

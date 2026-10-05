@@ -1,0 +1,36 @@
+name: Original EOG age-dependent present state v25
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_age_dependent_present_state_v25/**"
+      - "benchmarks/run_eog_original_idea_age_dependent_present_state_v25.py"
+      - "tests/test_eog_original_idea_age_dependent_present_state_v25.py"
+      - ".github/workflows/eog-original-idea-age-dependent-present-state-v25.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: original-eog-age-present-v25-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test frozen maturation process
+        run: python -m pytest tests/test_eog_original_idea_age_dependent_present_state_v25.py -q
+      - name: Run frozen age-dependent present-state benchmark
+        run: |
+          python benchmarks/run_eog_original_idea_age_dependent_present_state_v25.py \
+            --output build/eog_original_idea_age_dependent_present_state_v25/result_v25.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-original-idea-age-dependent-present-state-v25
+          path: build/eog_original_idea_age_dependent_present_state_v25/result_v25.json
+          if-no-files-found: error

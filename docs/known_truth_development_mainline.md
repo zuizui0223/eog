@@ -2380,6 +2380,65 @@ Canonical v24 assets:
 - `docs/eog_original_idea_colonization_age_memory_v24.md`;
 - `docs/eog_original_idea_colonization_age_memory_v24_result.md`.
 
+## Original-EOG virtual-world mainline — v25 age-dependent present state
+
+v24 showed that final occupancy and source provenance can hide colonization-age state.
+v25 asked whether that hidden age memory can matter for a declared present ecological
+state under one frozen process.
+
+The process was fixed before scoring:
+
+- common present horizon = the v24 T*;
+- maturation lag = 2 structural propagation steps;
+- non-source nodes are mature when colonization age >=2;
+- occupancy persists;
+- no abundance, extinction, density dependence or fitness is added.
+
+All eight preregistered hypotheses were supported.
+
+Among the **45** v24 hidden-age residual rows:
+
+- **12/45 (26.7%)** produced different mature-state maps;
+- 33/45 remained mature-state equivalent.
+
+Across the full **81** v23 occupancy+provenance residuals, the same **12** rows therefore
+demonstrated that identical final occupancy and observationally aliased provenance can
+still hide different present mature/not-yet-mature states.
+
+Across all 768 design rows:
+
+- any mature-state history memory: **726/768 (94.5%)**;
+- unique-origin mature-state memory: **461**;
+- confluence mature-state memory: **377**;
+- age-different but mature-state-equivalent rows: **6**;
+- exact history unresolved while mature-state target already identified: **42**;
+- mature-state finer-than-first-arrival violations: **0**.
+
+Mean mature-state disagreement fraction:
+
+- clustered sources: **0.330**;
+- dispersed sources: **0.400**.
+
+The mainline conclusion is now:
+
+> **hidden distributional history can affect present state, but history relevance is
+> target-specific rather than automatic.**
+
+The six age-different / mature-equivalent rows are an explicit counterweight to
+overclaiming.  A history difference becomes ecologically consequential only through a
+declared process that maps history into the target.
+
+Canonical assets:
+
+- `validation/eog_original_idea_age_dependent_present_state_v25/protocol_v25.json`;
+- `validation/eog_original_idea_age_dependent_present_state_v25/result_summary_v25.json`;
+- `docs/eog_original_idea_age_dependent_present_state_v25.md`;
+- `docs/eog_original_idea_age_dependent_present_state_v25_result.md`.
+
+The next valid question is structural rather than another arbitrary consequence:
+which classes of age-dependent present-state mapping preserve versus erase hidden
+colonization-history differences?
+
 ## Hard claim boundary
 
 Do not claim:
