@@ -340,7 +340,6 @@ def run() -> dict:
         },
         "score": primary,
         "source_outlier_sensitivity_without_Rz137": outlier_sensitivity,
-        "claim_boundary": protocol["claim_boundary"],
     }
     payload = json.dumps(result, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
     result["fingerprint"] = hashlib.sha256(payload).hexdigest()
