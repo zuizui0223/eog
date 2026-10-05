@@ -2050,6 +2050,99 @@ The active next question is v19: when multiple source basins converge, how much 
 provenance is lost in the final static distribution, and how much can first-passage
 order recover?
 
+## Original-EOG virtual-world mainline — v22 history observability
+
+v21 showed that equilibrium occupancy can forget activation order while the provenance
+map still remembers it.
+
+v22 asked whether that hidden history is observable from post-activation occupancy
+snapshots alone.
+
+The frozen snapshot library was:
+
+- t4;
+- t5;
+- t6;
+- t8;
+
+with all three sources already active by t4 and source nodes excluded from observation.
+
+Seven of eight preregistered hypotheses were supported.
+
+### Final occupancy remains history-blind
+
+Equilibrium occupancy was identical across activation histories in every row.
+
+Violation count: **0**.
+
+Thus perfect observation of the final spatial distribution still contains zero
+activation-order information in this experiment.
+
+### Transient observation can recover history
+
+Exact activation history was identifiable from the frozen transient-snapshot library in:
+
+- clustered source systems: **231/384**;
+- dispersed systems: **348/384**.
+
+Whenever full history was identifiable, the exact minimum burden was **one snapshot**,
+canonically t4.
+
+### Q3 was refuted
+
+The preregistered hypothesis that dispersed source systems would need fewer snapshots
+than clustered systems was **REFUTED**.
+
+Conditional mean minimum burden:
+
+- clustered: **1.0**;
+- dispersed: **1.0**.
+
+The secondary diagnostic showed that source geometry changed **observability
+probability**, not conditional burden:
+
+- clustered full-history identification rate: **60.2%**;
+- dispersed: **90.6%**.
+
+### Target compression still matters
+
+The equilibrium-provenance target was never harder to identify than exact activation
+history.
+
+Exact burden violations: **0**.
+
+Strict provenance-target savings occurred in **261/768** design rows.
+
+Some provenance targets were already invariant across histories and required zero
+transient snapshots:
+
+- clustered: 20;
+- dispersed: 241.
+
+### Temporal data are not automatically informative
+
+Full activation history remained unresolved after all four snapshots in **189/768**
+design rows.
+
+And in **428/768** design rows, an earlier snapshot identified history while t8 alone
+did not.
+
+Thus later observation can lose historical information as trajectories converge.
+
+The current source-history distinction is therefore:
+
+> **history memory and history observability are different properties.  A system can
+> retain historical information in provenance while the chosen observation type cannot
+> recover the full activation history.  Observation timing is itself part of the
+> inferential design.**
+
+Canonical assets:
+
+- `validation/eog_original_idea_history_observability_v22/protocol_v22.json`;
+- `validation/eog_original_idea_history_observability_v22/result_summary_v22.json`;
+- `docs/eog_original_idea_history_observability_v22.md`;
+- `docs/eog_original_idea_history_observability_v22_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:
