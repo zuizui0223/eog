@@ -70,7 +70,15 @@
     "primary_binary_significance_gate": false,
     "report_point_estimate": true,
     "report_interval": true,
-    "report_permutation_diagnostic_when_valid": true
+    "report_permutation_diagnostic_when_valid": true,
+    "primary_analysis_unit": "plot_x_observation_year",
+    "subplot_aggregation": {
+      "scalar_targets": "mean_within_plot_year_after_declared_scale_rule",
+      "species_composition": "aggregate_source_additive_cover_or_abundance_within_plot_year_then_bray_curtis",
+      "trait_composition": "aggregate_declared_community_weighted_trait_state_within_plot_year_then_euclidean",
+      "missing_subplots": "no_imputation",
+      "missing_plot_year": "target_specific_missing_not_reassigned"
+    }
   },
   "sensitivities": [
     "2019_only",
