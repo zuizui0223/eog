@@ -1,0 +1,28 @@
+name: EOG reef-fish v30 metadata probe
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/probe_eog_reef_fish_history_retention_v30.py"
+      - "docs/eog_reef_fish_history_retention_v30_candidate.md"
+      - "validation/eog_reef_fish_history_retention_v30/**"
+      - ".github/workflows/eog-reef-fish-history-retention-v30-metadata.yml"
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Probe BCO-DMO ERDDAP metadata only
+        run: |
+          python benchmarks/probe_eog_reef_fish_history_retention_v30.py \
+            --output build/eog_reef_fish_history_retention_v30/metadata_probe_v30.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-reef-fish-v30-metadata
+          path: build/eog_reef_fish_history_retention_v30/metadata_probe_v30.json
+          if-no-files-found: error
