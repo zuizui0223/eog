@@ -1,0 +1,70 @@
+{
+  "schema": "eog.original_idea_colonization_age_memory.result_summary.v24",
+  "status": "completed_preregistered_colonization_age_memory_panel",
+  "protocol": "validation/eog_original_idea_colonization_age_memory_v24/protocol_v24.json",
+  "protocol_commit": "4d1e03ef95404a7b84a0838654ca7f7a1d6bd9e5",
+  "authoritative_run": 37262658932,
+  "authoritative_artifact_id": 11324923934,
+  "authoritative_artifact_digest": "sha256:195a1e8c8c37ddb5cb7c53d34364b6f94c7b9ee230fd1ee530f26cd05200a017",
+  "result_fingerprint": "300757d753225c7dc3f816f6478436ad5f68fd892d033465dec473bcad69a971",
+  "row_count": 384,
+  "eligible_row_count": 384,
+  "design_row_count": 768,
+  "predeclared_verdicts": {
+    "A1_occupancy_and_provenance_can_hide_colonization_age_memory": "SUPPORTED",
+    "A2_first_arrival_rescues_some_v23_residual_histories": "SUPPORTED",
+    "A3_first_arrival_does_not_always_identify_exact_history": "SUPPORTED",
+    "A4_provenance_equivalence_does_not_imply_age_equivalence": "SUPPORTED",
+    "A5_unique_origin_zones_can_retain_age_memory": "SUPPORTED",
+    "A6_confluence_zones_can_retain_age_memory": "SUPPORTED",
+    "A7_first_arrival_target_is_no_finer_than_exact_history": "SUPPORTED",
+    "A8_final_occupancy_can_forget_history_while_age_state_remembers_it": "SUPPORTED"
+  },
+  "v23_residual_audit": {
+    "reproduced_combined_unresolved_rows": 81,
+    "rows_with_hidden_first_arrival_or_age_difference": 45,
+    "rows_rescued_to_exact_history_by_complete_first_arrival_map": 45,
+    "rows_without_additional_age_information_inside_v23_alias": 36
+  },
+  "all_design_rows": {
+    "exact_history_identified_by_complete_first_arrival_map": 702,
+    "exact_history_unresolved_by_complete_first_arrival_map": 66,
+    "provenance_equivalent_but_age_different_history_pairs": 931,
+    "design_rows_with_any_age_memory_after_equilibrium_occupancy_convergence": 732,
+    "design_rows_with_unique_origin_age_memory": 499,
+    "design_rows_with_confluence_age_memory": 496,
+    "first_arrival_class_count_violations": 0
+  },
+  "summary_by_design": {
+    "clustered": {
+      "design_rows": 384,
+      "v23_combined_unresolved_rows": 46,
+      "exact_history_identified_by_first_arrival_rows": 327,
+      "mean_first_arrival_disagreement_fraction": 0.9047672167946038,
+      "rows_with_unique_origin_age_memory": 124,
+      "rows_with_confluence_age_memory": 319
+    },
+    "dispersed": {
+      "design_rows": 384,
+      "v23_combined_unresolved_rows": 35,
+      "exact_history_identified_by_first_arrival_rows": 375,
+      "mean_first_arrival_disagreement_fraction": 0.9764384920634921,
+      "rows_with_unique_origin_age_memory": 375,
+      "rows_with_confluence_age_memory": 177
+    }
+  },
+  "interpretation": [
+    "Complete equilibrium occupancy and complete equilibrium source provenance do not exhaust distributional-history state: 45 of the 81 v23 residual aliases differed in their non-source first-arrival maps.",
+    "A complete first-arrival map rescued all 45 of those hidden-age residual cases to exact activation-history identity.",
+    "First-arrival state itself is still a coarser target than exact activation history: 66/768 design rows remained exact-history unresolved.",
+    "Provenance equivalence does not imply colonization-age equivalence; 931 history pairs shared provenance but differed in first-arrival state.",
+    "Age memory is not confined to confluence zones. Unique-origin nodes can retain activation-order memory in arrival time even when source identity is structurally fixed.",
+    "The final occupied distribution forgot activation history in every row, while first-arrival state differed in 732/768 design rows."
+  ],
+  "claim_boundary": [
+    "First-arrival time is structural graph-step time rather than calibrated ecological time.",
+    "Colonization-age maps are known-truth state variables, not empirical demographic age.",
+    "The 66 residual exact-history aliases are nonidentified only relative to the frozen activation histories and first-arrival target.",
+    "No abundance, extinction, persistence or fitness consequence is inferred from age differences in v24."
+  ]
+}
