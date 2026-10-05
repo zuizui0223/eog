@@ -1,0 +1,129 @@
+{
+  "schema": "eog.wood_decomposer_history_retention.protocol.v29",
+  "status": "frozen_before_target_scoring_raw_transport_pending",
+  "source": {
+    "article_doi": "10.1111/ele.12803",
+    "dryad_doi": "10.5061/dryad.7p2cv",
+    "version_resource_id": 13946,
+    "license": "CC0",
+    "files": {
+      "sample_data": {
+        "file_id": 52325,
+        "path": "sample.data.csv",
+        "size_bytes": 35448,
+        "md5": "d35287fd5f8522d8180451d42dc8969b"
+      },
+      "species_prevalence": {
+        "file_id": 52326,
+        "path": "species.prevalence.csv",
+        "size_bytes": 12148,
+        "md5": "1f879a53fafcaaa5d148dbe112d3b389"
+      },
+      "collembola": {
+        "file_id": 52327,
+        "path": "collembola.csv",
+        "size_bytes": 2621,
+        "md5": "b7264f326709ab41d1fe8cac8ddc4a48"
+      }
+    }
+  },
+  "join": {
+    "experimental_unit": "Sample_ID",
+    "rule": "exact_one_to_one",
+    "approximate_matching": false
+  },
+  "primary": {
+    "experiment": "PriorityEffects",
+    "harvest": "12 month",
+    "history_variable": "Initial_species",
+    "history_levels": [
+      "Ascocoryne",
+      "Bisporella",
+      "Daldinia",
+      "Trametes"
+    ],
+    "context": "Nitrogen_added_x_Fungivores",
+    "expected_context_levels": 4,
+    "expected_replicates_per_context_history_cell": 5,
+    "expected_primary_n": 80
+  },
+  "targets": {
+    "community": {
+      "columns": [
+        "Trametes",
+        "Daldinia",
+        "Bisporella",
+        "Ascocoryne",
+        "Calocera",
+        "Pleurotus",
+        "Sistotrema",
+        "Artomyces",
+        "Helicogloea",
+        "Armillaria"
+      ],
+      "primary_distance": "bray_curtis_on_prevalence_counts_0_to_9",
+      "sensitivity": "jaccard_on_prevalence_greater_than_zero"
+    },
+    "decomposition": {
+      "primary": "(Disc_dry_mass_g_initial-Disc_dry_mass_g_final)/Disc_dry_mass_g_initial",
+      "sensitivity": "Disc_dry_mass_g_initial-Disc_dry_mass_g_final"
+    }
+  },
+  "estimand": {
+    "reduced_model": "1 + context",
+    "full_model": "1 + context + history + context:history",
+    "expected_incremental_history_rank": 12,
+    "community": "gower_centered_nested_partial_R2",
+    "decomposition": "nested_partial_R2",
+    "retained_history_excess": "observed_partial_R2-minus-null_median",
+    "primary_cross_target_contrast": "E_community-minus-E_decomposition"
+  },
+  "randomization": {
+    "unit": "microcosm",
+    "shuffle": "Initial_species_within_context",
+    "paired_across_targets": true,
+    "permutations": 9999,
+    "seed": 20261005,
+    "diagnostics": [
+      "null_mean",
+      "null_median",
+      "null_sd",
+      "null_q025",
+      "null_q975",
+      "permutation_p"
+    ]
+  },
+  "sensitivities": [
+    "six_month_same_contract",
+    "community_binary_incidence_jaccard",
+    "decomposition_absolute_mass_loss",
+    "descriptive_retention_by_context"
+  ],
+  "stops": [
+    "dryad_md5_mismatch",
+    "sample_id_join_not_one_to_one",
+    "required_column_absent",
+    "expected_history_level_absent",
+    "primary_common_panel_not_80",
+    "context_history_cell_not_exactly_five",
+    "community_prevalence_outside_0_9",
+    "invalid_initial_mass",
+    "history_increment_not_identifiable",
+    "undeclared_filter_or_transformation_required"
+  ],
+  "exposure_boundary": {
+    "full_raw_csv_accessed_before_freeze": false,
+    "eog_target_score_seen_before_freeze": false,
+    "official_preview_used_for_schema_only": true
+  },
+  "transport": {
+    "current_status": "raw_download_blocked_by_Dryad_Anubis_or_API_auth",
+    "biological_evidence": false
+  },
+  "claim_boundary": [
+    "external benchmark not discovery of published priority effects",
+    "no causal mediation claim",
+    "no universal attenuation law from two systems",
+    "null-calibrated excess rather than raw R2 is primary cross-target comparison"
+  ]
+}

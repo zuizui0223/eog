@@ -1,0 +1,32 @@
+name: EOG wood-decomposer v29 schema probe
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/probe_eog_wood_decomposer_history_retention_v29.py"
+      - "validation/eog_wood_decomposer_history_retention_v29/**"
+      - "docs/eog_wood_decomposer_history_retention_v29_candidate.md"
+      - ".github/workflows/eog-wood-decomposer-history-retention-v29-schema.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: eog-wood-decomposer-v29-schema-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Probe Dryad schema without scoring
+        run: |
+          python benchmarks/probe_eog_wood_decomposer_history_retention_v29.py \
+            --output build/eog_wood_decomposer_history_retention_v29/schema_probe_v29.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eog-wood-decomposer-v29-schema
+          path: build/eog_wood_decomposer_history_retention_v29/schema_probe_v29.json
+          if-no-files-found: error
