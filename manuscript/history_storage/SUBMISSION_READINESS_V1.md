@@ -6,8 +6,8 @@ Updated: 2026-10-07
 
 **Scientific analysis line: CLOSED at v38.**
 
-**Manuscript line: SUBMISSION-READY except for author-supplied metadata, final release DOI,
-and final figure artifact confirmation.**
+**Manuscript line: SUBMISSION-READY. Remaining blockers are author-supplied metadata,
+final conflict screening and the exact submission-release DOI.**
 
 Do **not** add a v39 derived endpoint before submission.
 
@@ -127,9 +127,13 @@ Manual preview after the fixes was judged readable for Figures 2–4.
 Final post-QA push artifact:
 
 - workflow run `37546022729`;
-- currently queued at this readiness snapshot.
+- status: **success**;
+- artifact: `11450079490`;
+- digest:
+  `sha256:4949c953a1b04af693431d1bb4f76e14fe000a42a169349bba0498254464f930`.
 
-The figure code uses only committed machine-readable result summaries.
+The corrected Figures 1–4 passed manual visual QA. The figure code uses only committed
+machine-readable result summaries.
 
 ---
 
@@ -161,7 +165,7 @@ Equivalent connector-side gate on the final hardening branch passed:
 Final main push integrity workflow:
 
 - run `37546159253`;
-- queued at this readiness snapshot.
+- status: **success**.
 
 ---
 
@@ -210,9 +214,9 @@ The archive lacks:
 - [ ] acknowledgements;
 - [ ] competing-interest declaration;
 - [ ] all-author approval of final manuscript;
-- [ ] reviewer suggestions;
-- [ ] opposed reviewers only for real conflicts;
-- [ ] editorial-board suggestions if portal requests them.
+- [x] reviewer/editor candidate pool prepared;
+- [ ] final reviewer/editor conflict screen after the author list is fixed;
+- [ ] opposed reviewers only for real conflicts.
 
 ### Repository/archive release
 
@@ -232,10 +236,10 @@ Do not run another biological analysis.
 
 Next execution order:
 
-1. wait for / verify final figure QA workflow artifact;
-2. wait for / verify manuscript integrity workflow;
-3. insert author metadata and declarations;
-4. mint exact submission archive DOI;
+1. insert final author metadata and declarations;
+2. run the reviewer/editor conflict screen against that author list;
+3. mint the exact submission archive DOI and immutable release;
+4. insert the archive DOI into Data Accessibility;
 5. final PDF/portal formatting;
 6. submit to Ecology Letters;
 7. if editorially rejected, move rapidly to Ecology without adding a novelty-rescue
@@ -243,7 +247,7 @@ Next execution order:
 
 ## Stop condition
 
-Once the two queued final workflows are green, all remaining blockers are external or
-author-supplied.
+Both final workflows are green.
 
-At that point the EOG history-storage paper is **analysis-complete and submission-ready**.
+All remaining blockers are external or author-supplied. The EOG history-storage paper is
+**analysis-complete and submission-ready**.
