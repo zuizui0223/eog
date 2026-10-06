@@ -234,31 +234,23 @@ which abundance position.
 
 Again, this is a description of storage, not a mechanism.
 
-## A new post-v33 clue
+## Post-v33 clue that became a prospective result
 
-The v33 placebo ensemble contains one potentially useful lead.
+The v33 placebo ensemble produced one useful lead: all five highest-scoring microbiome
+mappings preserved **Alternaria -> Alternaria** while freely reassigning the other fungal
+histories.
 
-In the microbiome, all five highest-scoring mappings preserve:
+That observation was not promoted directly.
 
-- **Alternaria -> Alternaria**
+It motivated the separately frozen v34 leave-one-history-out test, which subsequently
+confirmed that Alternaria had the largest positive leverage on identity-free
+rank-abundance memory.
 
-while freely reassigning the other four fungal histories.
+The later v35-v37 tests then localized that leverage more strongly to rank-1 dominance and
+showed that the dominance shift was broadly shared across host genotypes.
 
-This suggests that architecture-level memory may be disproportionately driven by one
-highly distinctive history state rather than by a general first-arriver-role asymmetry.
-
-This is **not yet a result**.
-
-The next valid test is a prospectively frozen history-leverage analysis:
-
-- remove each history level in turn;
-- recompute rank-abundance retained-history excess under the same genotype/block
-  contract;
-- ask whether removing Alternaria causes a uniquely large collapse in architecture
-  memory;
-- use equivalent leave-one-history-out diagnostics in the grassland as a contrast.
-
-No statement that Alternaria is the driver should appear before that test.
+Thus the Alternaria result enters the manuscript through a prospective chain rather than
+through the original post-v33 pattern.
 
 ## Relation to established theory
 
