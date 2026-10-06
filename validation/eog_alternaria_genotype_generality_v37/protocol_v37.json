@@ -1,0 +1,123 @@
+{
+  "schema": "eog.alternaria_genotype_generality.protocol.v37",
+  "status": "frozen_before_v37_genotype_response_inspection",
+  "source_system": "v28_microbiome",
+  "panel": {
+    "n": 233,
+    "alternaria_n": 48,
+    "other_n": 185,
+    "genotypes": 12,
+    "binary_counts_by_genotype": {
+      "West-7": {
+        "Alternaria": 3,
+        "Other": 13
+      },
+      "West-6": {
+        "Alternaria": 4,
+        "Other": 14
+      },
+      "West-3": {
+        "Alternaria": 2,
+        "Other": 19
+      },
+      "West-4": {
+        "Alternaria": 5,
+        "Other": 17
+      },
+      "East-3": {
+        "Alternaria": 4,
+        "Other": 13
+      },
+      "West-2": {
+        "Alternaria": 5,
+        "Other": 16
+      },
+      "West-1": {
+        "Alternaria": 5,
+        "Other": 15
+      },
+      "East-4": {
+        "Alternaria": 5,
+        "Other": 19
+      },
+      "East-5": {
+        "Alternaria": 5,
+        "Other": 17
+      },
+      "East-1": {
+        "Alternaria": 4,
+        "Other": 16
+      },
+      "East-2": {
+        "Alternaria": 3,
+        "Other": 13
+      },
+      "West-5": {
+        "Alternaria": 3,
+        "Other": 13
+      }
+    },
+    "every_genotype_contains_both_levels": true
+  },
+  "response": {
+    "target": "identity_free_rank1_dominance",
+    "construction": "largest_of_five_bias_corrected_closed_fungal_proportions"
+  },
+  "models": {
+    "M0": "1 + Genotype",
+    "M1": "1 + Genotype + BinaryHistory",
+    "M2": "1 + Genotype + BinaryHistory + Genotype:BinaryHistory",
+    "ss_common": "SSE_M0_minus_SSE_M1",
+    "ss_context": "SSE_M1_minus_SSE_M2",
+    "ss_total": "SSE_M0_minus_SSE_M2",
+    "common_fraction": "SS_common_divided_by_SS_total"
+  },
+  "genotype_contrast": {
+    "delta_g": "mean_rank1_Alternaria_minus_mean_rank1_Other_within_genotype",
+    "summaries": [
+      "positive_genotype_count",
+      "equal_weight_mean_delta",
+      "median_delta",
+      "min_delta",
+      "max_delta"
+    ]
+  },
+  "randomization": {
+    "shuffle": "BinaryHistory_within_Genotype",
+    "preserve_counts": true,
+    "permutations": 9999,
+    "seed": 20261005
+  },
+  "prospective_prediction": {
+    "statement": "Alternaria_dominance_contrast_is_broadly_genotype_shared",
+    "criteria": [
+      "common_fraction_greater_than_0.5",
+      "positive_delta_in_at_least_7_of_12_genotypes",
+      "equal_weight_mean_delta_positive"
+    ],
+    "all_required": true
+  },
+  "secondary": {
+    "region_summary": "descriptive_East_vs_West_delta_g_only"
+  },
+  "gates": [
+    "reproduce_v28_common_panel",
+    "binary_counts_48_and_185",
+    "all_12_genotypes_have_both_binary_levels",
+    "reproduce_v35_rank1_response_construction",
+    "nested_model_ranks_valid",
+    "SS_common_plus_SS_context_equals_SS_total"
+  ],
+  "exposure_boundary": {
+    "aggregate_v35_results_known": true,
+    "genotype_specific_deltas_seen_before_freeze": false,
+    "common_fraction_seen_before_freeze": false
+  },
+  "claim_boundary": [
+    "no_causal_mechanism",
+    "no_genotype_independence_claim",
+    "no_generality_beyond_12_genotypes",
+    "no_niche_mechanism_claim",
+    "no_cross_system_generality"
+  ]
+}

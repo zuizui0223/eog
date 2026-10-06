@@ -1,0 +1,99 @@
+{
+  "schema": "eog.alternaria_genotype_generality.result_summary.v37",
+  "status": "completed_frozen_genotype_generality_test",
+  "authoritative_run": 37425656169,
+  "authoritative_artifact_id": 11395371699,
+  "authoritative_artifact_digest": "sha256:e4de2d1ff1e9afa1e74200ccb3b9ef86f2c01de13466bc4c0900c1bebeebf1c7",
+  "result_fingerprint": "bfc500301fbea9672d7e167f8f33e9c491220cc951a72678f1a8327d40fcbdf6",
+  "n": 233,
+  "model_decomposition": {
+    "R2_common": 0.13529682360705003,
+    "R2_context": 0.03417385590603653,
+    "R2_total": 0.16947067951308656,
+    "common_fraction": 0.7983494489771158
+  },
+  "randomization": {
+    "common_R2": {
+      "null_median": 0.0020407540892273296,
+      "null_q025": 0.000003941281701843209,
+      "null_q975": 0.02286689191035603,
+      "p": 0.0001
+    },
+    "context_R2": {
+      "null_median": 0.04699392237623009,
+      "null_q025": 0.017052288299527946,
+      "null_q975": 0.09645168299007192,
+      "p": 0.7548
+    },
+    "total_R2": {
+      "null_median": 0.05134860852652415,
+      "p": 0.0002
+    },
+    "equal_weight_mean_delta": {
+      "null_median": 0.00011108005200999305,
+      "null_q025": -0.023772411867726953,
+      "null_q975": 0.023040072860387735,
+      "p": 0.0001
+    }
+  },
+  "genotype_delta_summary": {
+    "positive_count": 11,
+    "negative_or_zero_count": 1,
+    "equal_weight_mean_delta": 0.06098736267597361,
+    "median_delta": 0.07142328466884362,
+    "min_delta": -0.04471378210245358,
+    "max_delta": 0.09089513662183946
+  },
+  "genotype_deltas": {
+    "East-1": 0.06868079004298822,
+    "East-2": 0.08675125738358958,
+    "East-3": 0.08060349048408888,
+    "East-4": 0.05793290496148118,
+    "East-5": 0.09089513662183946,
+    "West-1": 0.07416577929469903,
+    "West-2": 0.06506939123598066,
+    "West-3": 0.022239555342448813,
+    "West-4": 0.06569556889984729,
+    "West-5": 0.08569813861239506,
+    "West-6": 0.07883012133477874,
+    "West-7": -0.04471378210245358
+  },
+  "region_descriptive": {
+    "East": {
+      "genotype_count": 5,
+      "positive_count": 5,
+      "mean_delta": 0.07697271589879746,
+      "median_delta": 0.08060349048408888
+    },
+    "West": {
+      "genotype_count": 7,
+      "positive_count": 6,
+      "mean_delta": 0.04956925323109943,
+      "median_delta": 0.06569556889984729
+    }
+  },
+  "prospective_prediction": {
+    "statement": "Alternaria_dominance_contrast_is_broadly_genotype_shared",
+    "verdict": "SUPPORTED",
+    "criteria": {
+      "common_fraction_greater_than_0_5": true,
+      "at_least_7_of_12_positive": true,
+      "equal_weight_mean_delta_positive": true
+    }
+  },
+  "gates": {
+    "v28_common_panel_reproduced": true,
+    "binary_counts_match_frozen_allocation": true,
+    "all_genotypes_have_both_levels": true,
+    "rank1_response_constructed_from_v35_rule": true,
+    "nested_model_ranks_valid": true,
+    "history_ss_decomposition_adds": true
+  },
+  "claim_boundary": [
+    "no causal mechanism",
+    "no genotype independence claim",
+    "no generality beyond 12 genotypes",
+    "no niche mechanism claim",
+    "no cross-system generality"
+  ]
+}
