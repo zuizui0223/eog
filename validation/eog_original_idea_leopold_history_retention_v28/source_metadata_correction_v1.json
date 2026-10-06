@@ -1,0 +1,18 @@
+{
+  "schema": "eog.v28.source_metadata_correction.v1",
+  "status": "metadata_correction_no_effect_on_scoring",
+  "affected_file": "validation/eog_original_idea_leopold_history_retention_v28/protocol_v28.json",
+  "affected_field": "source.dryad_doi",
+  "frozen_value": "10.5061/dryad.7p2cv",
+  "correction": {
+    "statement": "The frozen Dryad DOI field was a copy/paste metadata error and does not identify the Leopold & Busby (2020) Populus microbiome archive.",
+    "source_repository": "dleopold/Populus_priorityEffects",
+    "pinned_commit": "d8082daabfccccf3bcbdd631b4438f44c04014c1",
+    "zenodo_archive_doi": "10.5281/zenodo.3872145",
+    "zenodo_version": "v1.2",
+    "raw_reads_bioproject": "PRJNA605581"
+  },
+  "scoring_impact": "none",
+  "rationale": "All v28 scoring read the pinned GitHub repository files and verified file-level Git blob identities; the erroneous DOI field was not used to materialize or score data.",
+  "protocol_immutability": "The frozen protocol is not rewritten after scoring. This correction file supersedes only the source DOI metadata field."
+}
