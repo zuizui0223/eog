@@ -1,0 +1,39 @@
+name: History-storage manuscript checks
+
+on:
+  pull_request:
+    paths:
+      - "manuscript/history_storage/**"
+      - "tests/test_history_storage_figure_data_v1.py"
+      - "tests/test_history_storage_manuscript_v1.py"
+      - ".github/workflows/history-storage-manuscript.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: history-storage-manuscript-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .[dev]
+      - name: Test manuscript provenance and claim controls
+        run: |
+          python -m pytest tests/test_history_storage_figure_data_v1.py -q
+          python -m pytest tests/test_history_storage_manuscript_v1.py -q
+      - name: Build frozen figure data
+        run: |
+          python manuscript/history_storage/build_figure_data_v1.py \
+            --csv build/history_storage/figure_data_v1.csv \
+            --json build/history_storage/figure_data_v1.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: history-storage-manuscript-figure-data
+          path: build/history_storage/
+          if-no-files-found: error
