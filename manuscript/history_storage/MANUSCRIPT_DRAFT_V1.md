@@ -44,7 +44,7 @@ The reduced model contained Genotype. The full model contained Genotype, Treatme
 
 ### Grassland experiment
 
-We used the raw data underlying Alonso-Crespo et al. (2022). The primary panel contained 19 rhizoboxes assigned to directional arrival histories in which forbs, grasses, or legumes were sown first. Synchronous controls were excluded from the primary history contrast. Replicate was retained as the blocking factor.
+We used the raw data underlying Alonso-Crespo et al. (2023). The primary panel contained 19 rhizoboxes assigned to directional arrival histories in which forbs, grasses, or legumes were sown first. Synchronous controls were excluded from the primary history contrast. Replicate was retained as the blocking factor.
 
 The aboveground target was the three-dimensional final biomass vector of Forbs, Grasses, and Legumes. The belowground target was the six-dimensional root-biomass distribution across 10-cm soil layers from 0–60 cm. Bray–Curtis dissimilarity was used for both multivariate targets.
 
