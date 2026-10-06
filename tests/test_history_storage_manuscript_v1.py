@@ -27,6 +27,10 @@ def test_current_claim_boundary_and_source_reconciliation():
     assert "Alonso-Crespo et al. (2023)" in text
     assert "Alonso-Crespo et al. (2022)" not in text
 
+    el_text = EL.read_text(encoding="utf-8")
+    assert "Alonso-Crespo et al. (2023)" in el_text
+    assert "Alonso-Crespo et al. (2022)" not in el_text
+
     assert "10.5061/dryad.7p2cv" in text
     assert "10.5281/zenodo.5713397" in text
 
