@@ -224,16 +224,21 @@ def figure4(d):
             row["incorrect_mapping_max_r2"], yi,
             marker="^", markersize=6, fillstyle="none", linestyle="None", label=max_label,
         )
+        text_x = max(0.27, row["correct_partial_r2"] - 0.18)
         ax.text(
-            0.27, yi - 0.19,
-            f"correct rank {row['correct_rank_descending']}/{row['mapping_count']}",
+            text_x, yi - 0.19,
+            (
+                f"rank {row['correct_rank_descending']}/{row['mapping_count']}; "
+                f"p_map={row['exact_upper_tail_mapping_probability']:.3f}"
+            ),
             fontsize=8,
         )
     ax.set_yticks(y_positions, [row[0] for row in rows])
     ax.set_xlim(0.25, 1.0)
+    ax.set_ylim(-0.35, 1.25)
     ax.set_xlabel("Role-aligned partial $R^2$")
     ax.set_title("A  Correct role mapping is not specific", loc="left", fontsize=10, weight="bold")
-    ax.legend(frameon=False, fontsize=7, loc="lower right")
+    ax.legend(frameon=False, fontsize=7, loc="center", bbox_to_anchor=(0.58, 0.50))
     ax.spines[["top", "right"]].set_visible(False)
 
     # B: deletion leverage
