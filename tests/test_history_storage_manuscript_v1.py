@@ -33,6 +33,14 @@ def test_submission_strategy_uses_oikos_version_of_record_year():
     assert "Alonso-Crespo et al. (2022)" not in text
 
 
+def test_submission_uses_correct_microbiome_archive():
+    text = DRAFT.read_text(encoding="utf-8")
+    assert "10.5281/zenodo.3872145" in text
+    assert "PRJNA605581" in text
+    assert "10.5061/dryad.7p2cv" not in text
+    assert "10.5281/zenodo.5713397" in text
+
+
 def test_claim_boundaries_are_explicit():
     text = DRAFT.read_text(encoding="utf-8")
     assert (
