@@ -22,8 +22,29 @@ FILES = {
 }
 
 
+FINGERPRINTS = {
+    "v28": "60d32bf5daf49cb33f6c6989fd64ee7f0b74d544d0b3441e99d8605ba0b9b302",
+    "v30": "272dc58ef05977ce990811809b44c94889a0c68339b4a7ba93c615a239cd6a59",
+    "v31": "82a84ac84133f3a7eb45e29acb276ae64bc61f520ec5682fd56cf8c2a4a8f9ee",
+    "v33": "e41b9fafdc7902a0fd6649c96d6f61b7aafa53de9abca6180179e3cb5fa335fb",
+    "v34": "6ddf1d089dd3885c6d12a1809629ef1dd1486fcab7a03c81bfb9b7ce81ca0325",
+    "v36": "dfbe027e089089096c4a8a571396081a5531b5d57e4d00ea8a8ccab64d3ac421",
+    "v37": "bfc500301fbea9672d7e167f8f33e9c491220cc951a72678f1a8327d40fcbdf6",
+}
+
+
 def load():
-    return {key: json.loads(path.read_text()) for key, path in FILES.items()}
+    data = {}
+    for key, path in FILES.items():
+        obj = json.loads(path.read_text())
+        expected = FINGERPRINTS[key]
+        observed = obj.get("result_fingerprint")
+        if observed != expected:
+            raise RuntimeError(
+                f"{key} result fingerprint changed: expected {expected}, observed {observed}"
+            )
+        data[key] = obj
+    return data
 
 
 def save(fig, name):
