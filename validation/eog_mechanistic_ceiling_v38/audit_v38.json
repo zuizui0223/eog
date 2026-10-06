@@ -1,0 +1,43 @@
+{
+  "schema": "eog.mechanistic_ceiling.audit.v38",
+  "status": "mechanistic_ceiling_reached_for_current_microbiome_archive",
+  "source_system": "Leopold_Busby_2020_v28_microbiome",
+  "supported_structural_result": {
+    "statement": "Alternaria arrival history produces a broadly genotype-shared dominance-centered legacy in final relative community architecture",
+    "evidence_chain": [
+      "v34",
+      "v35",
+      "v36",
+      "v37"
+    ]
+  },
+  "source_reconciliation": {
+    "alternaria_high_relative_abundance_across_treatments": true,
+    "alternaria_priority_effect_magnitude_relatively_low": true,
+    "only_three_of_five_early_colonists_consistently_benefited": true,
+    "source_candidate_explanations": [
+      "intrinsic_competitive_ability",
+      "distinct_niche"
+    ],
+    "source_does_not_discriminate_candidates": true
+  },
+  "unavailable_discriminating_evidence": [
+    "absolute_fungal_abundance",
+    "pairwise_competition_or_growth_matrix",
+    "clean_multi_timepoint_pre_pathogen_community_trajectory",
+    "host_response_between_first_and_second_inoculation"
+  ],
+  "invalid_next_route": {
+    "route": "TP1_vs_TP2_temporal_persistence",
+    "reason": "source analysis states TP2 was during rust sampling and community reads were overwhelmed by rust"
+  },
+  "allowed_claim": "structural storage and history leverage",
+  "prohibited_mechanism_claims": [
+    "niche_preemption",
+    "niche_modification",
+    "intrinsic_growth_advantage",
+    "direct_antagonism",
+    "host_mediated_effect"
+  ],
+  "next_required_evidence": "interaction_level_or_absolute_abundance_process_data"
+}
