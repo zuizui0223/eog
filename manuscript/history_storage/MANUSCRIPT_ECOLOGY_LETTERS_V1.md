@@ -14,9 +14,9 @@
 
 **Keywords:** assembly history; community assembly; historical contingency; priority effects; rank abundance; dominance; microbiome; grassland; ecological memory; community structure
 
-**Abstract word count:** 145
+**Abstract word count:** 139
 
-**Main-text word count:** approximately 3,995
+**Main-text word count:** approximately 4,000
 
 **Figures:** 4
 
@@ -242,13 +242,15 @@ The main result is therefore structural rather than mechanistic:
 
 ## Data and code availability
 
-All analyses use publicly available source data from the original experiments and versioned analysis code in the EOG repository. Source files were pinned by repository commit and, where used in scoring pipelines, by file-level blob identity. The microbiome source data and code are from the repository accompanying Leopold and Busby (2020). The grassland source data are from the repository accompanying Alonso-Crespo et al. (2022).
+All analyses use publicly available source data from the original experiments and versioned analysis code in the EOG repository. Source files were pinned by repository commit and, where used in scoring pipelines, by file-level blob identity.
 
-Each derived analysis from v26 onward has an archived protocol or audit file in the repository. Derived target scores used in the manuscript are accompanied by machine-readable result summaries and CI artifacts.
+The plant-microbiome source data are archived in Dryad: **https://doi.org/10.5061/dryad.7p2cv**. The grassland source data and code are archived in Zenodo: **https://doi.org/10.5281/zenodo.5713397**.
+
+The complete EOG analysis code, frozen protocols, machine-readable result summaries and CI provenance are publicly available at **https://github.com/zuizui0223/eog**. A permanent DOI for the exact submission release should be minted before journal submission and inserted here.
 
 ## References cited in this draft
 
-Alonso-Crespo, I. M., Weidlich, E. W. A., Temperton, V. M., & Delory, B. M. (2022). Assembly history modulates vertical root distribution in a grassland experiment. *Oikos*. https://doi.org/10.1111/oik.08886
+Alonso-Crespo, I. M., Weidlich, E. W. A., Temperton, V. M., & Delory, B. M. (2023). Assembly history modulates vertical root distribution in a grassland experiment. *Oikos*. https://doi.org/10.1111/oik.08886
 
 Debray, R., Herbert, R. A., Jaffe, A. L., Crits-Christoph, A., Power, M. E., & Koskella, B. (2022). Priority effects in microbiome assembly. *Nature Reviews Microbiology*, 20, 109–121. https://doi.org/10.1038/s41579-021-00604-w
 
