@@ -1,0 +1,34 @@
+{
+  "schema": "eog.inferential_openness_audit.provenance.v1",
+  "eog": {
+    "repository": "zuizui0223/eog",
+    "commit": "775cadbe8776e2ba3799898e8355369b1f26e8c9",
+    "candidate_flow_ledger": {
+      "path": "validation/paper_ready_replication/candidate_flow_ledger.json",
+      "git_blob_sha": "88e3cea011f5c578b2a95a8777e1af57a70f2c73"
+    }
+  },
+  "b284": {
+    "repository": "zuizui0223/284b",
+    "commit": "6fa79aa89d961d53c031e24cef7cf8e558a5e3a7",
+    "sources": [
+      [
+        "legacy/pre_level_a_focus/results/product_b_level_c_source_architecture_hard_stop_v3.json",
+        "8e2994744b0289d1d4ca9a1228658ab7dac86bee"
+      ],
+      [
+        "legacy/pre_level_a_focus/results/product_b_level_c_absence_candidate_audit_v4.json",
+        "01e86e9fe611017f5bf5643250418a8482c2451a"
+      ],
+      [
+        "legacy/pre_level_a_focus/results/product_b_level_c_candidate_specific_calibration_audit_v5.json",
+        "1ea03bd1bf8c576c522f15328f6c66220de19c74"
+      ],
+      [
+        "legacy/pre_level_a_focus/results/product_b_level_c_raw_calibration_reconstruction_v6.json",
+        "d1e1b73e09bd11c8ac63240382be357d46dc37ef"
+      ]
+    ]
+  },
+  "pooling_rule": "Only EOG contributes to the 34-candidate quantitative denominator. 284b is a separate case study."
+}
