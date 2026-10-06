@@ -27,8 +27,7 @@ The manuscript must not sell any of the following as new:
 7. microbiome priority effects can affect host disease.
 
 Core examples include Fukami et al. (2010), Dickie et al. (2012), Fukami (2015), Leopold
-& Busby (2020), Weidlich et al. (2021), Debray et al. (2022), and Alonso-Crespo et al.
-(2022).
+& Busby (2020), Weidlich et al. (2021), Debray et al. (2022), and Alonso-Crespo et al. (2023).
 
 ## Strongest novelty that survives the full audit
 
