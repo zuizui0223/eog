@@ -494,6 +494,36 @@ This localizes the strongest architecture-level historical fingerprint:
 This does not identify which interaction mechanism produces dominance, and the identity-
 free analysis does not infer the identity of the dominant taxon in individual plants.
 
+## v36 — direct Alternaria-versus-rest contrast confirms dominance-centered storage
+
+v35 localized Alternaria's deletion leverage more strongly to rank-1 dominance. v36 then
+tested the corresponding **direct randomized-history contrast** on the full 233-plant
+panel rather than deleting a treatment level.
+
+The frozen v34 full-rank binary result reproduced exactly.
+
+Alternaria versus the other four histories:
+
+- rank-1 dominance:
+  - E = **+0.1181**;
+  - p = **0.0002**;
+- normalized lower-rank tail:
+  - E = **+0.0472**;
+  - p = **0.0316**;
+- frozen contrast:
+  - **Delta E = +0.0709**.
+
+Thus the dominance-centered result is not an artifact of the v35 leave-one-history-out
+design.
+
+The current microbiome result can now be stated more strongly:
+
+> **The randomized Alternaria history leaves a disproportionate identity-free signature
+> in how strongly the final community is dominated, while a weaker but detectable
+> historical signal remains among the lower abundance ranks.**
+
+This remains a structural result, not a mechanism claim.
+
 ## Decisive next evidence
 
 Do not add an arbitrary third case yet.
@@ -501,17 +531,21 @@ Do not add an arbitrary third case yet.
 v34 has now answered the post-v33 leverage question: architecture memory is distributed
 but strongly uneven, with Alternaria showing the largest deletion leverage.
 
-v35 has now localized the largest Alternaria leverage to rank-1 dominance, while showing
-that lower-rank architecture also retains significant history.
+v35 localized the largest Alternaria leverage to rank-1 dominance, and v36 independently
+confirmed the same dominance-centered structure using the direct Alternaria-versus-rest
+history contrast on the full panel.
 
-The next biological question is therefore genuinely mechanistic:
+The next biological question is:
 
-> **Why does the Alternaria arrival history generate unusually strong dominance?**
+> **Is that Alternaria-associated dominance shift broadly shared across host genotypes,
+> or generated mainly by genotype-specific interactions?**
 
-The current data can still test narrower alternatives that do not require inventing a
-mechanism—for example whether the dominance shift is stable across host genotypes or is
-concentrated in particular genotype contexts.  Direct claims about niche preemption,
-niche modification, facilitation or inhibition require interaction-level evidence and
-should not be made from the present summaries alone.
+v37 has been frozen before genotype-specific response inspection to answer exactly that
+question. Until its authoritative workflow completes, the manuscript should stop at the
+v36 result.
+
+Direct claims about niche preemption, niche modification, facilitation or inhibition
+still require interaction-level evidence and should not be made from the present
+summaries alone.
 
 A third system is not yet the next priority.
