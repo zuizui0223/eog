@@ -38,7 +38,7 @@ A harder problem is what becomes of that historical signal after assembly has pr
 
 This raises a different question: **where, within the present state of a community, is assembly history actually stored?** We use “storage” here descriptively, not in an information-theoretic or mechanistic sense. A present-day variable stores history to the extent that experimentally assigned assembly histories remain distinguishable in that variable after the relevant design structure is accounted for. Under this framing, a community does not simply “remember” or “forget” its past. The same historical perturbation may remain conspicuous in taxonomic or functional-group composition while becoming weak in an aggregate host, spatial, or ecosystem state. Even within community composition, history might reside mainly in which identities occupy abundance positions, in the unlabeled shape of the abundance distribution, or in both.
 
-We examined this problem using two independently published arrival-order experiments that provide complementary ecological settings. In a black cottonwood foliar microbiome experiment, five fungal colonists were introduced in different arrival-history treatments across 12 host genotypes, and final fungal composition and host rust disease were measured on the same plants (Leopold and Busby 2020). In an independent grassland rhizobox experiment, forbs, grasses, or legumes were sown before the other functional groups, and final aboveground biomass composition and belowground root distribution were quantified (Alonso-Crespo et al. 2022). The original studies established priority effects in their respective systems. We therefore treated them as external benchmarks rather than as fresh tests of whether arrival order matters.
+We examined this problem using two independently published arrival-order experiments that provide complementary ecological settings. In a black cottonwood foliar microbiome experiment, five fungal colonists were introduced in different arrival-history treatments across 12 host genotypes, and final fungal composition and host rust disease were measured on the same plants (Leopold and Busby 2020). In an independent grassland rhizobox experiment, forbs, grasses, or legumes were sown before the other functional groups, and final aboveground biomass composition and belowground root distribution were quantified (Alonso-Crespo et al. 2023). The original studies established priority effects in their respective systems. We therefore treated them as external benchmarks rather than as fresh tests of whether arrival order matters.
 
 Our analysis proceeded in a prospectively constrained sequence. First, we quantified how much assembly history remained in different present-state targets within each experiment. Second, we removed ecological identity from the composition vectors while preserving the same abundance values and response dimensionality, allowing us to distinguish identity-dependent storage from unlabeled abundance architecture. Third, when a biologically attractive first-arriver-role explanation emerged, we tested its specificity against all equally complex history-to-coordinate mappings rather than retaining it as a post hoc narrative. Finally, within the microbiome, we prospectively localized the strongest architecture-level historical signal to particular history levels and to specific components of rank-abundance structure, and tested whether that signal generalized across host genotypes.
 
@@ -48,15 +48,15 @@ This design leads to three distinct questions. First, is assembly-history retent
 
 ### Analytical framework
 
-For every analysis, we compared a reduced model containing the frozen experimental context or block structure with a full model that additionally contained the manipulated assembly-history factor. For scalar responses, retained history was quantified with nested-model partial (R^2). For multivariate responses, we used a Gower-centered distance-based analogue of the same nested-model decomposition.
+For every analysis, we compared a reduced model containing the frozen experimental context or block structure with a full model that additionally contained the manipulated assembly-history factor. For scalar responses, retained history was quantified with nested-model partial R². For multivariate responses, we used a Gower-centered distance-based analogue of the same nested-model decomposition.
 
-Because partial (R^2) can be inflated by model dimensionality even under randomized history labels, especially in factorial models with many genotype-by-history terms, we calibrated each observed value against a design-respecting permutation distribution. We summarize retained history as
+Because partial R² can be inflated by model dimensionality even under randomized history labels, especially in factorial models with many genotype-by-history terms, we calibrated each observed value against a design-respecting permutation distribution. We summarize retained history as
 
-[
-E = R^2_{mathrm{observed}} - operatorname{median}(R^2_{mathrm{null}}).
-]
+E = R²(observed) − median[R²(null)].
 
-We refer to (E) as retained-history excess. It is a null-calibrated effect-size diagnostic, not a universal measure of ecological importance. Permutation (p)-values are reported as diagnostics for the frozen randomization contracts.
+We refer to E as retained-history excess. It is a null-calibrated effect-size diagnostic, not a universal measure of ecological importance. Permutation p-values are reported as diagnostics for the frozen randomization contracts. Because response geometries differ among targets, cross-target differences in E are interpreted as matched descriptive contrasts under the same history assignment, not as a formal test that two target-specific partial-R² parameters are equal.
+
+For scalar responses, partial R² was (SSE_reduced − SSE_full) / SSE_reduced. For multivariate responses, the distance matrix was Gower centered and the corresponding nested projection spaces were used: history sum of squares was tr[(H_full − H_reduced)G], divided by the residual sum of squares after the reduced model, tr[(I − H_reduced)G]. Thus scalar and multivariate targets share the same nested-model interpretation while retaining target-appropriate response geometry.
 
 All derived analyses were specified in versioned protocols before the corresponding target score was calculated. Where a later interpretation depended on a transformation of the response using observed treatment labels, we added a separate placebo-transformation audit before retaining a mechanistic interpretation.
 
@@ -94,13 +94,11 @@ We therefore enumerated every equally complex one-to-one mapping between history
 
 After the placebo-mapping audit, all five highest-scoring microbiome mappings shared one feature: Alternaria history was mapped to the Alternaria coordinate. We treated this only as a clue and froze a new treatment-independent test.
 
-Using the rank-abundance response from the identity-stripping analysis, we removed each of the five fungal history levels in turn and recomputed (E) on the remaining four histories. For history (h), deletion leverage was
+Using the rank-abundance response from the identity-stripping analysis, we removed each of the five fungal history levels in turn and recomputed E on the remaining four histories. For history h, deletion leverage was
 
-[
-D_h = E_{mathrm{full}} - E_{-h}.
-]
+Dₕ = E(full) − E(without h).
 
-The prospective prediction was that Alternaria would have the largest positive (D_h). We also tested a frozen binary contrast of Alternaria versus the four other histories on the full 233-plant panel.
+The prospective prediction was that Alternaria would have the largest positive Dₕ. We also tested a frozen binary contrast of Alternaria versus the four other histories on the full 233-plant panel.
 
 ### Dominance versus lower-rank architecture
 
@@ -120,9 +118,9 @@ No new derived target was scored after the genotype-generality analysis. Instead
 
 ### Assembly history was retained unevenly across present-state targets
 
-In the plant-microbiome experiment, final fungal community composition retained a clear assembly-history signal after accounting for host genotype. Partial history (R^2) was 0.3697, compared with a permutation-null median of 0.2230, giving retained-history excess (E=+0.1467) ((p=0.0001)). In contrast, aggregate rust lesion fraction on the same plants had partial (R^2=0.2300) but a null median of 0.2147, yielding only (E=+0.0153) ((p=0.3893)).
+In the plant-microbiome experiment, final fungal community composition retained a clear assembly-history signal after accounting for host genotype. Partial history R² was 0.3697, compared with a permutation-null median of 0.2230, giving retained-history excess E = +0.1467 (p = 0.0001). In contrast, aggregate rust lesion fraction on the same plants had partial R² = 0.2300 but a null median of 0.2147, yielding only E = +0.0153 (p = 0.3893).
 
-The independent grassland experiment showed the same qualitative asymmetry. Final shoot functional-group composition had partial (R^2=0.9529), null median 0.1495, and (E=+0.8034) ((p=0.0001)). The complete six-layer root-biomass distribution retained little history beyond the blocked null ((R^2=0.1853), null median 0.1509, (E=+0.0344), (p=0.3765)). Total shoot biomass was also weak ((E=+0.0948), (p=0.2562)). Exact enumeration of all 31,104 admissible within-block history assignments reproduced the shoot-versus-root contrast.
+The independent grassland experiment showed the same qualitative asymmetry. Final shoot functional-group composition had partial R² = 0.9529, null median 0.1495, and E = +0.8034 (p = 0.0001). The complete six-layer root-biomass distribution retained little history beyond the blocked null (R² = 0.1853, null median 0.1509, E = +0.0344, p = 0.3765). Total shoot biomass was also weak (E = +0.0948, p = 0.2562). Exact enumeration of all 31,104 admissible within-block history assignments reproduced the shoot-versus-root contrast.
 
 Thus neither system was well described as simply remembering or forgetting its assembly history. The strength of historical retention depended strongly on which present ecological state was measured.
 
@@ -130,9 +128,9 @@ Thus neither system was well described as simply remembering or forgetting its a
 
 The hypothesis that compositional memory would generally depend on ecological identity was refuted.
 
-In the microbiome, labeled fungal composition retained (E=+0.1467), whereas the same five abundance values sorted within each plant retained (E=+0.1486) ((p=0.0001)). The identity-storage gap was therefore (-0.0019). Shannon entropy also retained strong history ((E=+0.2523), (p=0.0001)). Removing fungal names did not erase the assembly-history signal.
+In the microbiome, labeled fungal composition retained E = +0.1467, whereas the same five abundance values sorted within each plant retained E = +0.1486 (p = 0.0001). The identity-storage gap was therefore −0.0019. Shannon entropy also retained strong history (E = +0.2523, p = 0.0001). Removing fungal names did not erase the assembly-history signal.
 
-The grassland showed a different structure. Labeled functional-group composition retained (E=+0.8034), but sorting the same three biomass values reduced retained history to (E=+0.1949) ((p=0.0769)). Only 24.3% of the labeled retained-history excess remained in the rank-abundance target. Shannon entropy retained a smaller but detectable signal ((E=+0.3800), (p=0.0235)).
+The grassland showed a different structure. Labeled functional-group composition retained E = +0.8034, but sorting the same three biomass values reduced retained history to E = +0.1949 (p = 0.0769). Only 24.3% of the labeled retained-history excess remained in the rank-abundance target. Shannon entropy retained a smaller but detectable signal (E = +0.3800, p = 0.0235).
 
 The two systems therefore differed not only in how much history was visible across endpoints, but in the structural component of community composition carrying that history. Microbiome history was strongly encoded in unlabeled abundance architecture, whereas most grassland history depended on which functional-group identity occupied each abundance position.
 
@@ -142,9 +140,9 @@ Aligning each community by the experimentally first-arriving identity produced a
 
 The placebo-mapping audit did not support that mechanism.
 
-In the microbiome, the biologically correct history-to-fungus mapping had role-aligned (R^2=0.945878). The median among the 119 incorrect mappings was 0.945209. The correct mapping ranked only 53rd of 120, with an exact mapping-tail fraction of 0.4417. Several biologically incorrect mappings produced larger (R^2), reaching 0.956289.
+In the microbiome, the biologically correct history-to-fungus mapping had role-aligned R² = 0.945878. The median among the 119 incorrect mappings was 0.945209. The correct mapping ranked only 53rd of 120, with an exact mapping-tail fraction of 0.4417. Several biologically incorrect mappings produced larger R², reaching 0.956289.
 
-In the grassland, the biologically correct mapping ranked last among the six possible mappings. Its (R^2) was 0.337247, compared with a median incorrect-mapping value of 0.876815 and a maximum of 0.938223.
+In the grassland, the biologically correct mapping ranked last among the six possible mappings. Its R² was 0.337247, compared with a median incorrect-mapping value of 0.876815 and a maximum of 0.938223.
 
 Thus treatment-indexed coordinate transformations could generate strong separation even when the mapping between treatment and ecological identity was wrong. We retained the numerical role-alignment results as descriptive transformations but rejected the interpretation that first-arriver-role interchangeability explained the cross-system storage contrast.
 
@@ -152,25 +150,25 @@ Thus treatment-indexed coordinate transformations could generate strong separati
 
 The placebo ensemble nevertheless yielded a prospective clue: every one of its five highest-scoring microbiome mappings preserved Alternaria-to-Alternaria while reassigning the other histories. A separate treatment-independent deletion analysis supported this clue.
 
-Full five-history rank-abundance memory was (E=+0.1486). Removing Alternaria reduced it to (E=+0.0875) ((p=0.0086)), giving deletion leverage (D=+0.0611), the largest of the five histories. Removing Cladosporium produced a smaller positive leverage ((+0.0264)), whereas removing Aureobasidium, Fusarium, or Dioszegia increased null-calibrated retained history.
+Full five-history rank-abundance memory was E = +0.1486. Removing Alternaria reduced it to E = +0.0875 (p = 0.0086), giving deletion leverage D = +0.0611, the largest of the five histories. Removing Cladosporium produced a smaller positive leverage (+0.0264), whereas removing Aureobasidium, Fusarium, or Dioszegia increased null-calibrated retained history.
 
-The direct Alternaria-versus-rest contrast on all 233 plants retained (E=+0.0803) ((p=0.0004)). Alternaria therefore had disproportionate leverage on identity-free architecture, but it was not the sole source: significant rank-abundance memory remained after all Alternaria-history plants were removed.
+The direct Alternaria-versus-rest contrast on all 233 plants retained E = +0.0803 (p = 0.0004). Alternaria therefore had disproportionate leverage on identity-free architecture, but it was not the sole source: significant rank-abundance memory remained after all Alternaria-history plants were removed.
 
 ### Alternaria-associated history was concentrated more strongly in dominance than in lower-rank structure
 
-Across all five histories, rank-1 dominance retained (E=+0.1759) ((p=0.0002)), while the normalized structure of ranks 2–5 retained (E=+0.1258) ((p=0.0005)).
+Across all five histories, rank-1 dominance retained E = +0.1759 (p = 0.0002), while the normalized structure of ranks 2–5 retained E = +0.1258 (p = 0.0005).
 
-After removing Alternaria, dominance retention declined to (E=+0.0895) ((p=0.0241)) and lower-rank retention to (E=+0.0862) ((p=0.0252)). Alternaria deletion leverage was therefore (+0.0865) for dominance and (+0.0396) for the lower-rank tail.
+After removing Alternaria, dominance retention declined to E = +0.0895 (p = 0.0241) and lower-rank retention to E = +0.0862 (p = 0.0252). Alternaria deletion leverage was therefore +0.0865 for dominance and +0.0396 for the lower-rank tail.
 
-The full-panel binary history test independently showed the same structure. For Alternaria versus the other four histories, rank-1 dominance retained (E=+0.1181) ((p=0.0002)), whereas the normalized lower-rank tail retained (E=+0.0472) ((p=0.0316)). The frozen contrast was (Delta E_{mathrm{dominance-tail}}=+0.0709).
+The full-panel binary history test independently showed the same structure. For Alternaria versus the other four histories, rank-1 dominance retained E = +0.1181 (p = 0.0002), whereas the normalized lower-rank tail retained E = +0.0472 (p = 0.0316). The frozen contrast was ΔE(dominance−tail) = +0.0709.
 
 Alternaria-history plants had a mean rank-1 share of 0.778 and median 0.793, compared with 0.711 and 0.713 among the other histories. These identity-free statistics do not identify which fungal taxon occupied rank 1 in any individual plant.
 
 ### The dominance shift was broadly shared across host genotypes
 
-The Alternaria-associated dominance shift was positive in 11 of 12 host genotypes. The equal-genotype-weighted mean Alternaria-minus-Other difference in rank-1 dominance was +0.0610 ((p=0.0001)), with median +0.0714.
+The Alternaria-associated dominance shift was positive in 11 of 12 host genotypes. The equal-genotype-weighted mean Alternaria-minus-Other difference in rank-1 dominance was +0.0610 (p = 0.0001), with median +0.0714.
 
-Model decomposition showed that the genotype-shared binary-history component accounted for (R^2=0.1353) ((p=0.0001)), whereas the additional genotype-specific interaction component accounted for (R^2=0.0342) and was not unusually large relative to the frozen randomization null ((p=0.7548)). The shared component represented 79.8% of the observed total binary-history sum of squares.
+Model decomposition showed that the genotype-shared binary-history component accounted for R² = 0.1353 (p = 0.0001), whereas the additional genotype-specific interaction component accounted for R² = 0.0342 and was not unusually large relative to the frozen randomization null (p = 0.7548). The shared component represented 79.8% of the observed total binary-history sum of squares.
 
 All five East genotypes and six of seven West genotypes showed positive contrasts descriptively. Thus the dominance-centered Alternaria signature was not principally generated by one or two host backgrounds.
 
@@ -244,13 +242,15 @@ The main result is therefore structural rather than mechanistic:
 
 All analyses use publicly available source data from the original experiments and versioned analysis code in the EOG repository. Source files were pinned by repository commit and, where used in scoring pipelines, by file-level blob identity.
 
-The plant-microbiome source data are archived in Dryad: **https://doi.org/10.5061/dryad.7p2cv**. The grassland source data and code are archived in Zenodo: **https://doi.org/10.5281/zenodo.5713397**.
+For the plant microbiome, the scored source is the public `dleopold/Populus_priorityEffects` repository pinned at commit `d8082daabfccccf3bcbdd631b4438f44c04014c1`. The repository release is archived at Zenodo (DOI: 10.5281/zenodo.3872145), and raw sequencing reads are available under NCBI BioProject PRJNA605581.
 
-The complete EOG analysis code, frozen protocols, machine-readable result summaries and CI provenance are publicly available at **https://github.com/zuizui0223/eog**. A permanent DOI for the exact submission release should be minted before journal submission and inserted here.
+For the grassland experiment, the scored source is the public `BenjaminDelory/PE_Rhizobox_2017_data` repository pinned at commit `438f028fb2e1713a9e253be9e07df0833b491f47`. The source study's data archive is Zenodo DOI 10.5281/zenodo.5713397 (Alonso-Crespo et al. 2023).
+
+Each derived analysis from v26 onward has an archived protocol or audit file in the EOG repository. Derived target scores used in the manuscript are accompanied by machine-readable result summaries and CI artifacts. Exact source commits, file-level identities, and the v28 source-metadata correction are listed in `manuscript/history_storage/SOURCE_DATA_CITATIONS_V1.md`.
 
 ## References cited in this draft
 
-Alonso-Crespo, I. M., Weidlich, E. W. A., Temperton, V. M., & Delory, B. M. (2023). Assembly history modulates vertical root distribution in a grassland experiment. *Oikos*. https://doi.org/10.1111/oik.08886
+Alonso-Crespo, I. M., Weidlich, E. W. A., Temperton, V. M., & Delory, B. M. (2023). Assembly history modulates vertical root distribution in a grassland experiment. *Oikos*, 2023(1), e08886. https://doi.org/10.1111/oik.08886
 
 Debray, R., Herbert, R. A., Jaffe, A. L., Crits-Christoph, A., Power, M. E., & Koskella, B. (2022). Priority effects in microbiome assembly. *Nature Reviews Microbiology*, 20, 109–121. https://doi.org/10.1038/s41579-021-00604-w
 
@@ -263,4 +263,3 @@ Fukami, T., Dickie, I. A., Wilkie, J. P., Paulus, B. C., Park, D., Roberts, A., 
 Leopold, D. R., & Busby, P. E. (2020). Host genotype and colonist arrival order jointly govern plant microbiome composition and function. *Current Biology*, 30, 3260–3266.e5. https://doi.org/10.1016/j.cub.2020.06.011
 
 Weidlich, E. W. A., Nelson, C. R., Maron, J. L., Callaway, R. M., Delory, B. M., & Temperton, V. M. (2021). Priority effects and ecological restoration. *Restoration Ecology*, 29, e13317. https://doi.org/10.1111/rec.13317
-
