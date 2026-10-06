@@ -214,9 +214,13 @@ The main result is therefore structural rather than mechanistic:
 
 ## Data and code availability
 
-All analyses use publicly available source data from the original experiments and versioned analysis code in the EOG repository. Source files were pinned by repository commit and, where used in scoring pipelines, by file-level blob identity. The microbiome source data and code are from the repository accompanying Leopold and Busby (2020). The grassland source data are from the repository accompanying Alonso-Crespo et al. (2022).
+All analyses use publicly available source data from the original experiments and versioned analysis code in the EOG repository. Source files were pinned by repository commit and, where used in scoring pipelines, by file-level blob identity.
 
-Each derived analysis from v26 onward has an archived protocol or audit file in the repository. Derived target scores used in the manuscript are accompanied by machine-readable result summaries and CI artifacts.
+For the plant microbiome, the scored source is the public `dleopold/Populus_priorityEffects` repository pinned at commit `d8082daabfccccf3bcbdd631b4438f44c04014c1`. The repository release is archived at Zenodo (DOI: 10.5281/zenodo.3872145), and raw sequencing reads are available under NCBI BioProject PRJNA605581.
+
+For the grassland experiment, the scored source is the public `BenjaminDelory/PE_Rhizobox_2017_data` repository pinned at commit `438f028fb2e1713a9e253be9e07df0833b491f47`. The source study's data archive is Zenodo DOI 10.5281/zenodo.5713397 (Alonso-Crespo et al. 2023).
+
+Each derived analysis from v26 onward has an archived protocol or audit file in the EOG repository. Derived target scores used in the manuscript are accompanied by machine-readable result summaries and CI artifacts. Exact source commits, file-level identities, and the v28 source-metadata correction are listed in `manuscript/history_storage/SOURCE_DATA_CITATIONS_V1.md`.
 
 ## References cited in this draft
 
