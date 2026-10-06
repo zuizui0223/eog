@@ -183,6 +183,17 @@ microbiome, identity-free abundance architecture retained substantial history; p
 follow-up localized its strongest history-level contribution to an Alternaria-associated,
 host-genotype-shared increase in community dominance. In the grassland, most historical
 information instead depended on which functional-group identity occupied the abundance
-structure. A candidate first-arriver-role explanation failed a complete specificity audit,
-so these storage patterns should be treated as biological phenomena requiring explanation,
-not as evidence for a particular interaction mechanism.
+structure.
+
+Source reconciliation sharpens the microbiome interpretation. The original study reports
+that Alternaria had the greatest relative abundance across treatments but only a relatively
+small species-specific benefit from arriving early. Thus the EOG dominance result is not
+equivalent to an exceptionally strong Alternaria priority-effect log-ratio. The archived
+relative-abundance data also lack absolute fungal load, direct pairwise interaction
+measurements and a clean later pre-pathogen community time point.
+
+A candidate first-arriver-role explanation failed a complete specificity audit, and the
+remaining archive cannot distinguish intrinsic competitive ability, competitor suppression,
+niche pre-emption, niche modification or host-mediated effects. The supported contribution
+is therefore the localization of historical storage, not identification of the interaction
+mechanism that generates it.
