@@ -87,13 +87,14 @@ def interval_panel(ax, items, title):
         ax.hlines(yi, item["q025"], item["q975"], linewidth=4, alpha=0.35)
         ax.plot(item["median"], yi, marker="|", markersize=13)
         ax.plot(item["observed"], yi, marker="o", markersize=6)
+        annotation_x = min(max(item["q975"], item["observed"]) + 0.025, 1.04)
         ax.text(
-            item["q975"] + 0.025, yi,
+            annotation_x, yi,
             f"E={item['E']:+.3f}\np={item['p']:.4f}",
             va="center", fontsize=8,
         )
     ax.set_yticks(y, labels)
-    ax.set_xlim(0, 1.05)
+    ax.set_xlim(0, 1.12)
     ax.set_xlabel("Partial history $R^2$")
     ax.set_title(title, loc="left", fontsize=11, weight="bold")
     ax.spines[["top", "right"]].set_visible(False)
@@ -165,19 +166,25 @@ def figure3(d):
     labels = ["Microbiome", "Grassland"]
     fig, ax = plt.subplots(figsize=(7.4, 4.8))
 
-    x_labeled, x_rank, x_shannon = 0, 1, 1.24
-    offsets = [0.08, -0.08]
-    for sys, label, off in zip(systems, labels, offsets):
+    x_labeled, x_rank, x_shannon = 0, 1, 1.28
+    x_offsets = [-0.025, 0.025]
+    for sys, label, off in zip(systems, labels, x_offsets):
         row = s[sys]
-        ax.plot(
-            [x_labeled, x_rank],
-            [row["labeled_E"] + off, row["rank_abundance_E"] + off],
+        line, = ax.plot(
+            [x_labeled + off, x_rank + off],
+            [row["labeled_E"], row["rank_abundance_E"]],
             marker="o", linewidth=1.6, label=label,
         )
-        ax.plot(x_shannon, row["shannon_E"] + off, marker="o", fillstyle="none")
+        ax.plot(
+            x_shannon + off,
+            row["shannon_E"],
+            marker="o",
+            fillstyle="none",
+            color=line.get_color(),
+        )
         ax.text(
-            x_rank + 0.04,
-            row["rank_abundance_E"] + off,
+            x_rank + off + 0.04,
+            row["rank_abundance_E"],
             f"{row['rank_fraction_of_labeled_E']*100:.1f}% retained",
             va="center", fontsize=8,
         )
@@ -200,18 +207,38 @@ def figure4(d):
         ("Microbiome", d["v33"]["v28_microbiome"]),
         ("Grassland", d["v33"]["v30_grassland"]),
     ]
-    for i, (label, row) in enumerate(rows):
-        ax.plot([i - 0.18, i + 0.18], [row["incorrect_mapping_median_r2"]]*2, linewidth=3, alpha=0.35)
-        ax.plot(i, row["correct_partial_r2"], marker="o", markersize=7)
-        ax.plot(i + 0.12, row["incorrect_mapping_max_r2"], marker="^", markersize=6)
-        ax.text(
-            i, row["correct_partial_r2"] - 0.08,
-            f"correct rank\n{row['correct_rank_descending']}/{row['mapping_count']}",
-            ha="center", fontsize=8,
+    y_positions = [1, 0]
+    for idx, ((label, row), yi) in enumerate(zip(rows, y_positions)):
+        correct_label = "Correct mapping" if idx == 0 else None
+        median_label = "Incorrect median" if idx == 0 else None
+        max_label = "Incorrect maximum" if idx == 0 else None
+        ax.plot(
+            row["correct_partial_r2"], yi,
+            marker="o", markersize=7, linestyle="None", label=correct_label,
         )
-    ax.set_xticks([0, 1], ["Microbiome", "Grassland"])
-    ax.set_ylabel("Role-aligned partial $R^2$")
+        ax.plot(
+            row["incorrect_mapping_median_r2"], yi,
+            marker="s", markersize=6, fillstyle="none", linestyle="None", label=median_label,
+        )
+        ax.plot(
+            row["incorrect_mapping_max_r2"], yi,
+            marker="^", markersize=6, fillstyle="none", linestyle="None", label=max_label,
+        )
+        text_x = max(0.27, row["correct_partial_r2"] - 0.18)
+        ax.text(
+            text_x, yi - 0.19,
+            (
+                f"rank {row['correct_rank_descending']}/{row['mapping_count']}; "
+                f"p_map={row['exact_upper_tail_mapping_probability']:.3f}"
+            ),
+            fontsize=8,
+        )
+    ax.set_yticks(y_positions, [row[0] for row in rows])
+    ax.set_xlim(0.25, 1.0)
+    ax.set_ylim(-0.35, 1.25)
+    ax.set_xlabel("Role-aligned partial $R^2$")
     ax.set_title("A  Correct role mapping is not specific", loc="left", fontsize=10, weight="bold")
+    ax.legend(frameon=False, fontsize=7, loc="center", bbox_to_anchor=(0.58, 0.50))
     ax.spines[["top", "right"]].set_visible(False)
 
     # B: deletion leverage
