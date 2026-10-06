@@ -1,0 +1,48 @@
+name: History-storage manuscript figures
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "manuscript/history_storage/build_figures_v1.py"
+      - "manuscript/history_storage/FIGURE_PLAN_V1.md"
+      - "validation/eog_original_idea_leopold_history_retention_v28/result_summary_v28.json"
+      - "validation/eog_grassland_above_below_history_retention_v30/result_summary_v30.json"
+      - "validation/eog_identity_storage_rank_abundance_v31/result_summary_v31.json"
+      - "validation/eog_role_mapping_specificity_v33/result_summary_v33.json"
+      - "validation/eog_history_level_leverage_v34/result_summary_v34.json"
+      - "validation/eog_alternaria_binary_components_v36/result_summary_v36.json"
+      - "validation/eog_alternaria_genotype_generality_v37/result_summary_v37.json"
+      - ".github/workflows/history-storage-manuscript-figures.yml"
+  pull_request:
+    paths:
+      - "manuscript/history_storage/build_figures_v1.py"
+      - "manuscript/history_storage/FIGURE_PLAN_V1.md"
+      - "validation/eog_original_idea_leopold_history_retention_v28/result_summary_v28.json"
+      - "validation/eog_grassland_above_below_history_retention_v30/result_summary_v30.json"
+      - "validation/eog_identity_storage_rank_abundance_v31/result_summary_v31.json"
+      - "validation/eog_role_mapping_specificity_v33/result_summary_v33.json"
+      - "validation/eog_history_level_leverage_v34/result_summary_v34.json"
+      - "validation/eog_alternaria_binary_components_v36/result_summary_v36.json"
+      - "validation/eog_alternaria_genotype_generality_v37/result_summary_v37.json"
+      - ".github/workflows/history-storage-manuscript-figures.yml"
+  workflow_dispatch:
+
+jobs:
+  figures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install plotting dependency
+        run: python -m pip install matplotlib
+      - name: Build manuscript figures
+        run: python manuscript/history_storage/build_figures_v1.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: history-storage-manuscript-figures-v1
+          path: build/manuscript/history_storage/figures/
+          if-no-files-found: error
