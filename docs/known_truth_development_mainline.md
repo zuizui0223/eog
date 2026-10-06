@@ -3113,6 +3113,61 @@ Canonical v35 assets:
 - `docs/eog_dominance_tail_history_storage_v35.md`;
 - `docs/eog_dominance_tail_history_storage_v35_result.md`.
 
+## Original-EOG empirical mainline — v36 direct Alternaria component contrast
+
+v35 localized Alternaria's deletion leverage more strongly to rank-1 dominance than to
+the normalized lower-rank tail. v36 prospectively tested the corresponding direct
+Alternaria-versus-rest contrast on the full **233-plant** panel.
+
+The v34 binary full-rank result reproduced exactly before component scoring.
+
+### Rank-1 dominance
+
+- partial R² = **0.16947**;
+- null median = **0.05135**;
+- retained-history excess E = **+0.11812**;
+- p = **0.0002**.
+
+### Lower-rank shape
+
+- partial R² = **0.10044**;
+- null median = **0.05321**;
+- E = **+0.04723**;
+- p = **0.0316**.
+
+Frozen contrast:
+
+[
+Delta E_{mathrm{dominance-tail}}
+=
+mathbf{+0.07090}.
+]
+
+The prospective dominance-centered prediction was **supported**.
+
+### Updated biological conclusion
+
+v34-v36 now agree under two complementary designs:
+
+- deleting Alternaria removes more history from dominance than from the lower-rank tail;
+- directly contrasting Alternaria versus the other histories on the full panel produces
+  a substantially stronger dominance signal than lower-tail signal.
+
+The supported statement is:
+
+> **The strongest history-level contribution to identity-free microbiome architecture is
+> disproportionately expressed through community dominance, although lower-rank
+> structure also retains detectable assembly history.**
+
+This does not identify the dominant taxon or the interaction mechanism.
+
+Canonical v36 assets:
+
+- `validation/eog_alternaria_binary_components_v36/protocol_v36.json`;
+- `validation/eog_alternaria_binary_components_v36/result_summary_v36.json`;
+- `docs/eog_alternaria_binary_components_v36.md`;
+- `docs/eog_alternaria_binary_components_v36_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:

@@ -1,0 +1,66 @@
+{
+  "schema": "eog.alternaria_binary_components.result_summary.v36",
+  "status": "completed_frozen_binary_component_test",
+  "authoritative_run": 37425205017,
+  "authoritative_platform": "ubuntu-24.04-arm",
+  "authoritative_artifact_id": 11395236358,
+  "authoritative_artifact_digest": "sha256:bf4d4dc7e7fd04142d2a7d2de3e772cd16d771b00bcbd0c04615de432c16469e",
+  "result_fingerprint": "dfbe027e089089096c4a8a571396081a5531b5d57e4d00ea8a8ccab64d3ac421",
+  "panel": {
+    "n": 233,
+    "Alternaria": 48,
+    "Other": 185
+  },
+  "full_rank_gate": {
+    "partial_r2": 0.13317711462691126,
+    "null_median": 0.052859511381942115,
+    "E": 0.08031760324496914,
+    "permutation_p": 0.0004
+  },
+  "dominance": {
+    "partial_r2": 0.1694706795130864,
+    "null_median": 0.05134860852652377,
+    "E": 0.11812207098656262,
+    "null_q025": 0.019648233942421708,
+    "null_q975": 0.1033740966004067,
+    "permutation_p": 0.0002,
+    "Alternaria_mean_rank1": 0.778343533867781,
+    "Alternaria_median_rank1": 0.7928943849083362,
+    "Other_mean_rank1": 0.7111955976630531,
+    "Other_median_rank1": 0.7131447904269895
+  },
+  "lower_rank_tail": {
+    "partial_r2": 0.10044036491382079,
+    "null_median": 0.0532134161951484,
+    "E": 0.04722694871867239,
+    "null_q025": 0.025512993955186854,
+    "null_q975": 0.10304082351347434,
+    "permutation_p": 0.0316
+  },
+  "primary_contrast": {
+    "DeltaE_dominance_minus_tail": 0.07089512226789023
+  },
+  "prospective_prediction": {
+    "statement": "Alternaria_vs_rest_is_dominance_centered",
+    "verdict": "SUPPORTED"
+  },
+  "gates": {
+    "v34_binary_full_rank_E_reproduced": true,
+    "binary_counts_48_and_185": true,
+    "generic_fast_observed_statistics_match": true,
+    "tail_sums_positive": true,
+    "rank_multisets_preserved": true
+  },
+  "interpretation": [
+    "The direct Alternaria-versus-rest history contrast is stronger in identity-free rank-1 dominance than in normalized lower-rank structure.",
+    "Lower-rank structure still retains detectable history.",
+    "The direct full-panel contrast corroborates the dominance-centered deletion leverage found in v35."
+  ],
+  "claim_boundary": [
+    "no dominant taxon identity inference",
+    "no sole-driver claim",
+    "no mechanism identification",
+    "no universal dominance mechanism",
+    "no cross-system generality"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "eog.alternaria_binary_components.protocol.v36",
+  "status": "frozen_before_v36_scoring",
+  "source_system": "v28_microbiome",
+  "panel": {
+    "n": 233,
+    "alternaria_n": 48,
+    "other_n": 185,
+    "source": "frozen_v28_common_panel"
+  },
+  "binary_history": {
+    "levels": [
+      "Alternaria",
+      "Other"
+    ],
+    "other_members": [
+      "Aureobasidium",
+      "Cladosporium",
+      "Dioszegia",
+      "Fusarium"
+    ]
+  },
+  "targets": {
+    "full_rank_gate": {
+      "construction": "five_bias_corrected_proportions_sorted_descending",
+      "distance": "bray_curtis",
+      "authoritative_v34_binary_E": 0.08031760324496914,
+      "authoritative_v34_binary_p": 0.0004
+    },
+    "dominance": {
+      "construction": "rank1_share",
+      "type": "scalar"
+    },
+    "lower_rank_tail": {
+      "construction": "ranks_2_to_5_renormalized_to_sum_1",
+      "type": "distance",
+      "distance": "bray_curtis",
+      "dimensions": 4,
+      "stop_if_tail_sum_zero": true
+    }
+  },
+  "model": {
+    "context": "Genotype",
+    "reduced": "1 + Genotype",
+    "full": "1 + Genotype + BinaryHistory + Genotype:BinaryHistory",
+    "permutation": "BinaryHistory_within_Genotype",
+    "permutations": 9999,
+    "seed": 20261005,
+    "paired_across_targets": true
+  },
+  "primary_estimand": {
+    "retained_history_excess": "observed_partial_R2_minus_null_median",
+    "contrast": "DeltaE_dominance_minus_tail",
+    "prospective_prediction": [
+      "E_dominance_positive",
+      "DeltaE_dominance_minus_tail_positive"
+    ],
+    "minimum_magnitude": null,
+    "p_threshold_gate": null
+  },
+  "diagnostics": [
+    "dominance_partial_R2",
+    "dominance_null_median",
+    "dominance_null_interval",
+    "dominance_permutation_p",
+    "tail_partial_R2",
+    "tail_null_median",
+    "tail_null_interval",
+    "tail_permutation_p",
+    "Alternaria_rank1_mean_median",
+    "Other_rank1_mean_median"
+  ],
+  "gates": [
+    "reproduce_v34_binary_full_rank_E",
+    "binary_counts_48_and_185",
+    "preserve_exact_sorted_abundance_multiset",
+    "positive_tail_sum_all_rows",
+    "generic_fast_observed_statistics_match"
+  ],
+  "exposure_boundary": {
+    "v35_results_known": true,
+    "v36_component_scores_seen_before_freeze": false
+  },
+  "claim_boundary": [
+    "no_dominant_taxon_identity_inference",
+    "no_sole_driver_claim",
+    "no_mechanism_identification",
+    "no_universal_dominance_mechanism",
+    "no_cross_system_generality"
+  ]
+}
