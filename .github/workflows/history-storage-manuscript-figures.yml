@@ -23,6 +23,10 @@ on:
     paths:
       - "manuscript/history_storage/build_figures_v1.py"
       - "manuscript/history_storage/FIGURE_PLAN_V1.md"
+      - "manuscript/history_storage/MANUSCRIPT_DRAFT_V1.md"
+      - "manuscript/history_storage/LITERATURE_POSITIONING_V1.md"
+      - "manuscript/history_storage/SUBMISSION_STRATEGY_V1.md"
+      - "tests/test_history_storage_manuscript_v1.py"
       - "validation/eog_original_idea_leopold_history_retention_v28/result_summary_v28.json"
       - "validation/eog_grassland_above_below_history_retention_v30/result_summary_v30.json"
       - "validation/eog_identity_storage_rank_abundance_v31/result_summary_v31.json"
