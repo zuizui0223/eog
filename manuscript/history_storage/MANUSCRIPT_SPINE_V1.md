@@ -557,9 +557,45 @@ genotype-specific responses:
 
 This still does not identify why Alternaria creates that dominance pattern.
 
+## v38 — mechanistic ceiling of the current archive
+
+The source experiment itself places a hard boundary on the next inference.
+
+The source paper reports that Alternaria had the **greatest relative abundance across
+treatments**, yet its own early-arrival priority-effect magnitude was **relatively low**.
+Only three of the five early colonists consistently benefited from pre-emptive
+colonization.
+
+This matters for the EOG interpretation.
+
+The v34-v37 result is **not**:
+
+> Alternaria has the strongest species-specific priority effect.
+
+It is:
+
+> **Alternaria arrival history has the largest leverage on identity-free final dominance,
+> and that dominance shift is broadly shared across host genotypes.**
+
+The source authors discuss intrinsic competitive ability and distinct niche occupancy as
+alternative explanations for Alternaria's high abundance. The archived data cannot
+distinguish those possibilities.
+
+The mechanistic ceiling is concrete:
+
+- amplicon data are relative, not absolute abundance;
+- no pairwise competition/growth matrix is archived;
+- no host-response trajectory between inoculations is available;
+- TP2 is unusable as a clean temporal community state because the source analysis states
+  that it was sampled during the rust phase and sequence data were overwhelmed by rust
+  reads.
+
+Therefore do not extend the paper with further transformations of the TP1 abundance
+table.
+
 ## Stopping point and next evidence
 
-The internally testable storage chain is now complete enough for this paper:
+The internally testable storage chain is now complete:
 
 1. target-specific retention recurs in two independent systems;
 2. identity stripping reveals contrasting storage channels;
@@ -567,20 +603,22 @@ The internally testable storage chain is now complete enough for this paper:
 4. within the microbiome, history leverage is heterogeneous;
 5. the strongest leverage is dominance-centered under both deletion and direct-history
    contrasts;
-6. that dominance shift is broadly shared across 12 host genotypes.
+6. that dominance shift is broadly shared across 12 host genotypes;
+7. source reconciliation shows that this dominance legacy cannot be equated with
+   exceptional species-specific priority-effect strength.
 
-Further transformations of the same abundance table are now more likely to elaborate the
-same result than to change the paper's central conclusion.
+The next genuine biological question is:
 
-The next genuinely mechanistic question is:
+> **Does Alternaria-first history create stronger dominance because Alternaria expands
+> absolutely, because competitors are suppressed, or because the host environment is
+> modified before later colonists arrive?**
 
-> **What interaction process causes Alternaria-first communities to develop stronger
-> dominance?**
+Answering that requires new or independently archived process-level evidence:
 
-Answering that requires evidence closer to interaction mechanism—for example direct
-pairwise effects, growth or persistence dynamics, niche modification, facilitation or
-inhibition—not another derived summary of the same final abundance vector.
+- absolute taxon abundance through assembly;
+- pairwise / reduced-community competition;
+- host-response measurements between inoculation events;
+- clean pre-pathogen temporal community sampling.
 
-A third observational example is also not the immediate priority. The current manuscript
-should stop at v37 and present interaction-level mechanism and broader external
-generalization as future tests.
+The current manuscript should stop the within-dataset analysis at v37 and use v38 as the
+explicit mechanistic boundary.
