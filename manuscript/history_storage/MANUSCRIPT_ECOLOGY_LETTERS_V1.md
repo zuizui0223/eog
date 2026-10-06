@@ -1,8 +1,34 @@
 # Assembly history is stored through contrasting structural channels in ecological communities
 
+## Title-page information
+
+**Article type:** Letter
+
+**Running title:** Structural storage of assembly history
+
+**Authors:** [insert final author list]
+
+**Affiliations:** [insert final affiliations]
+
+**Corresponding author:** [insert name, full mailing address, telephone, e-mail]
+
+**Keywords:** assembly history; community assembly; historical contingency; priority effects; rank abundance; dominance; microbiome; grassland; ecological memory; community structure
+
+**Abstract word count:** 139
+
+**Main-text word count:** approximately 4,000
+
+**Figures:** 4
+
+**Tables:** 0
+
+**Text boxes:** 0
+
+**References:** 7 in current core draft; expand to final cited-reference set before submission
+
 ## Abstract
 
-Priority effects can make ecological communities depend on arrival history, yet a historical effect need not remain equally visible in every property of the resulting community. We asked where experimentally manipulated assembly history remains encoded in the present. We reanalysed two independent randomized arrival-order experiments—a plant phyllosphere microbiome and a grassland community—using matched experimental units and randomization-calibrated measures of retained history. In both systems, history was strongly retained in final community composition but was close to the randomized baseline in another present-state target: fungal composition versus host rust disease in the microbiome, and shoot functional-group composition versus belowground root distribution in the grassland. We then removed ecological identity while preserving the same abundance values and response dimensionality. Microbiome history remained fully detectable in unlabeled rank-abundance architecture, whereas most grassland history disappeared when functional-group identities were removed. A prospective attempt to explain this contrast by first-arriver role alignment failed a complete placebo-mapping audit, preventing a role-based post hoc explanation. Further prospective tests within the microbiome showed that historical storage was uneven across arrival histories: Alternaria had the largest deletion leverage, and its direct contrast with the other histories was expressed more strongly in rank-1 dominance than in lower-rank structure. This dominance shift was positive in 11 of 12 host genotypes and was driven primarily by a genotype-shared component. Source reconciliation showed that Alternaria was generally highly abundant but did not have the largest species-specific early-arrival benefit, and the archive lacks the absolute-abundance and interaction data required to identify mechanism. Thus assembly history is not stored in one universal feature of ecological communities. Different systems retain the past in different structural components of the present, and locating that storage is logically prior to assigning a mechanism.
+Priority effects can leave historical legacies, but those legacies need not remain equally visible in every property of a community. We reanalysed two randomized arrival-order experiments to ask where assembly history is retained in the present. In both a plant microbiome and a grassland, history remained strong in community composition but weak in another present-state target. Removing ecological identity while preserving the same abundance values and dimensionality revealed contrasting storage channels: microbiome history persisted in unlabeled abundance architecture, whereas most grassland history depended on functional-group identity. A prospective role-based explanation failed a complete placebo-mapping audit. Further tests localized the strongest microbiome legacy to an Alternaria-associated, host-genotype-shared increase in dominance, while source-data limitations prevented mechanistic identification. Historical contingency is therefore not stored in one universal feature of the present; identifying its structural location is logically prior to assigning a mechanism.
 
 ## Introduction
 
@@ -237,3 +263,4 @@ Fukami, T., Dickie, I. A., Wilkie, J. P., Paulus, B. C., Park, D., Roberts, A., 
 Leopold, D. R., & Busby, P. E. (2020). Host genotype and colonist arrival order jointly govern plant microbiome composition and function. *Current Biology*, 30, 3260–3266.e5. https://doi.org/10.1016/j.cub.2020.06.011
 
 Weidlich, E. W. A., Nelson, C. R., Maron, J. L., Callaway, R. M., Delory, B. M., & Temperton, V. M. (2021). Priority effects and ecological restoration. *Restoration Ecology*, 29, e13317. https://doi.org/10.1111/rec.13317
+
