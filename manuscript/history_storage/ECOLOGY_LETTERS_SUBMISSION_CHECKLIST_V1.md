@@ -46,8 +46,10 @@ Ecology Letters requires public archival repositories and DOI(s).
 
 Source data:
 
-- [x] microbiome Dryad DOI:
-  - `10.5061/dryad.7p2cv`
+- [x] microbiome analysis archive:
+  - Zenodo `10.5281/zenodo.3872145`
+  - raw reads: NCBI BioProject `PRJNA605581`
+  - pinned GitHub source: `dleopold/Populus_priorityEffects@d8082daabfccccf3bcbdd631b4438f44c04014c1`
 - [x] grassland Zenodo DOI:
   - `10.5281/zenodo.5713397`
 
