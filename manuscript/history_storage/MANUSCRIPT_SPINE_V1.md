@@ -385,7 +385,10 @@ In both systems, assembly history remained strongly visible in community composi
 much less visible in another present ecological target. Identity removal had contrasting
 effects: fungal history survived essentially intact in unlabeled abundance architecture,
 whereas most grassland history depended on functional-group identity. A subsequent
-role-alignment explanation failed a complete mapping-specificity audit.
+role-alignment explanation failed a complete mapping-specificity audit. Prospective
+follow-up within the microbiome localized the strongest history-level leverage to
+Alternaria-associated rank-1 dominance, and that dominance shift was positive in 11 of 12
+host genotypes.
 
 ### Conclusion
 
@@ -405,7 +408,7 @@ Do not claim:
 - that v32 identified assembly-role symmetry as the mechanism;
 - direct evidence for niche preemption versus niche modification;
 - causal mediation from composition to rust or root state;
-- that Alternaria is already proven to drive the microbiome result;
+- that Alternaria is the sole driver of microbiome historical memory;
 - generality beyond the two completed empirical systems.
 
 ## Current novelty assessment
@@ -524,28 +527,60 @@ The current microbiome result can now be stated more strongly:
 
 This remains a structural result, not a mechanism claim.
 
-## Decisive next evidence
+## v37 — Alternaria dominance is broadly shared across host genotypes
 
-Do not add an arbitrary third case yet.
+v37 prospectively decomposed the direct Alternaria-versus-rest dominance signal into a
+genotype-shared component and additional genotype-specific interaction.
 
-v34 has now answered the post-v33 leverage question: architecture memory is distributed
-but strongly uneven, with Alternaria showing the largest deletion leverage.
+Across the same 233 plants and 12 host genotypes:
 
-v35 localized the largest Alternaria leverage to rank-1 dominance, and v36 independently
-confirmed the same dominance-centered structure using the direct Alternaria-versus-rest
-history contrast on the full panel.
+- common history R² = **0.1353**, p = **0.0001**;
+- genotype-specific interaction R² = **0.0342**, p = **0.7548**;
+- total history R² = **0.1695**, p = **0.0002**;
+- **79.8%** of observed history SS was captured by the shared genotype-adjusted shift.
 
-The next biological question is:
+Within-genotype Alternaria-minus-Other dominance differences were positive in **11/12**
+genotypes.
 
-> **Is that Alternaria-associated dominance shift broadly shared across host genotypes,
-> or generated mainly by genotype-specific interactions?**
+The equal-genotype-weighted mean difference was:
 
-v37 has been frozen before genotype-specific response inspection to answer exactly that
-question. Until its authoritative workflow completes, the manuscript should stop at the
-v36 result.
+- **+0.0610**;
+- p = **0.0001**.
 
-Direct claims about niche preemption, niche modification, facilitation or inhibition
-still require interaction-level evidence and should not be made from the present
-summaries alone.
+Descriptively, all five East genotypes and six of seven West genotypes were positive.
 
-A third system is not yet the next priority.
+Thus the dominance-centered Alternaria signature is not mainly a small set of host-
+genotype-specific responses:
+
+> **Alternaria arrival history shifts final community dominance in a broadly shared
+> direction across the tested host-genotype panel.**
+
+This still does not identify why Alternaria creates that dominance pattern.
+
+## Stopping point and next evidence
+
+The internally testable storage chain is now complete enough for this paper:
+
+1. target-specific retention recurs in two independent systems;
+2. identity stripping reveals contrasting storage channels;
+3. a plausible role-based mechanism fails a prospective placebo-mapping audit;
+4. within the microbiome, history leverage is heterogeneous;
+5. the strongest leverage is dominance-centered under both deletion and direct-history
+   contrasts;
+6. that dominance shift is broadly shared across 12 host genotypes.
+
+Further transformations of the same abundance table are now more likely to elaborate the
+same result than to change the paper's central conclusion.
+
+The next genuinely mechanistic question is:
+
+> **What interaction process causes Alternaria-first communities to develop stronger
+> dominance?**
+
+Answering that requires evidence closer to interaction mechanism—for example direct
+pairwise effects, growth or persistence dynamics, niche modification, facilitation or
+inhibition—not another derived summary of the same final abundance vector.
+
+A third observational example is also not the immediate priority. The current manuscript
+should stop at v37 and present interaction-level mechanism and broader external
+generalization as future tests.
