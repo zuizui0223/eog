@@ -3038,6 +3038,81 @@ Canonical v34 assets:
 - `docs/eog_history_level_leverage_v34.md`;
 - `docs/eog_history_level_leverage_v34_result.md`.
 
+## Original-EOG empirical mainline — v35 dominance versus lower-rank architecture
+
+v34 showed that Alternaria has the largest prospective history-level leverage on the
+v28 microbiome's identity-free rank-abundance memory.
+
+v35 prospectively decomposed that architecture into two identity-free components:
+
+1. rank-1 dominance;
+2. the normalized relative shape of ranks 2–5.
+
+The frozen prediction was **supported**.
+
+### Full five-history panel
+
+Rank-1 dominance:
+
+- partial R² = **0.3914**;
+- null median = **0.2155**;
+- retained-history excess E = **+0.1759**;
+- p = **0.0002**.
+
+Normalized lower-rank shape:
+
+- partial R² = **0.3499**;
+- null median = **0.2241**;
+- E = **+0.1258**;
+- p = **0.0005**.
+
+Thus both components retain significant identity-free assembly history.
+
+### Alternaria deletion
+
+After removing all 48 Alternaria-history plants:
+
+- dominance E = **+0.0895**, p = **0.0241**;
+- lower-rank-tail E = **+0.0862**, p = **0.0252**.
+
+Component-specific Alternaria leverage:
+
+- dominance: **+0.08647**;
+- lower-rank tail: **+0.03957**.
+
+Therefore:
+
+> **Alternaria's disproportionate contribution to identity-free architecture memory is
+> concentrated more strongly in dominance intensity than in the relative organization of
+> the lower abundance ranks.**
+
+But the result is not dominance-exclusive.  Lower-rank structure also carries substantial
+history, and both components remain detectable without Alternaria.
+
+Median rank-1 share was highest for Alternaria-history communities (**0.793**) versus
+approximately **0.695–0.738** for the other histories.
+
+### Updated biological mainline
+
+The robust empirical chain is now:
+
+- present-state targets retain different amounts of the same assembly history;
+- the structural carrier of that history differs among systems;
+- in the v28 microbiome, architecture memory is distributed unevenly among histories;
+- Alternaria has the largest history-level leverage;
+- much of that excess leverage is expressed through **how strongly one member dominates**,
+  with additional history retained in the lower-rank abundance structure.
+
+This localizes the historical fingerprint without identifying the ecological interaction
+mechanism that generates it.
+
+Canonical v35 assets:
+
+- `validation/eog_dominance_tail_history_storage_v35/protocol_v35.json`;
+- `validation/eog_dominance_tail_history_storage_v35/result_summary_v35.json`;
+- `docs/eog_dominance_tail_history_storage_v35.md`;
+- `docs/eog_dominance_tail_history_storage_v35_result.md`.
+
 ## Hard claim boundary
 
 Do not claim:

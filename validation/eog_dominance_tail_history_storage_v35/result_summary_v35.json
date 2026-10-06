@@ -1,0 +1,92 @@
+{
+  "schema": "eog.dominance_tail_history_storage.result_summary.v35",
+  "status": "completed_frozen_dominance_tail_test",
+  "authoritative_run": 37309569097,
+  "authoritative_platform": "macos-latest_fallback_after_repo_wide_ubuntu_queue_delay",
+  "authoritative_artifact_id": 11344724499,
+  "authoritative_artifact_digest": "sha256:f775e63378a500ed096c0d817fff89e1dd7c9085aaaf1d1c0195b63e59c0f133",
+  "result_fingerprint": "185147dabd36f3890f8de9c86fb2cb46c8cb63a96c0e1fae102299bd3a9ac533",
+  "full_panel": {
+    "n": 233,
+    "rank_abundance": {
+      "partial_r2": 0.3672184325007756,
+      "null_median": 0.21860948650631568,
+      "E": 0.14860894599445995,
+      "p": 0.0001
+    },
+    "dominance_rank1": {
+      "partial_r2": 0.39142743034307004,
+      "null_median": 0.21550231737862122,
+      "E": 0.17592511296444882,
+      "p": 0.0002
+    },
+    "lower_rank_tail": {
+      "partial_r2": 0.3499300853470431,
+      "null_median": 0.2241384276475018,
+      "E": 0.12579165769954131,
+      "p": 0.0005
+    }
+  },
+  "without_Alternaria": {
+    "n": 185,
+    "rank_abundance": {
+      "partial_r2": 0.29558314937917096,
+      "null_median": 0.20803924820433625,
+      "E": 0.08754390117483471,
+      "p": 0.0086
+    },
+    "dominance_rank1": {
+      "partial_r2": 0.2953246419024918,
+      "null_median": 0.20586679111276404,
+      "E": 0.08945785078972776,
+      "p": 0.0241
+    },
+    "lower_rank_tail": {
+      "partial_r2": 0.2988204081159461,
+      "null_median": 0.21260043600566503,
+      "E": 0.0862199721102811,
+      "p": 0.0252
+    }
+  },
+  "leverage": {
+    "L_dominance": 0.08646726217472106,
+    "L_tail": 0.03957168558926022,
+    "dominance_minus_tail": 0.04689557658546084
+  },
+  "prospective_prediction": {
+    "statement": "Alternaria_leverage_is_dominance_centered",
+    "verdict": "SUPPORTED",
+    "criteria": {
+      "L_dominance_positive": true,
+      "L_dominance_greater_than_L_tail": true
+    }
+  },
+  "descriptive_median_rank1_share": {
+    "Alternaria": 0.7928943849083362,
+    "Aureobasidium": 0.6946690670188367,
+    "Cladosporium": 0.706809988362186,
+    "Dioszegia": 0.7131447904269895,
+    "Fusarium": 0.7375243035608191
+  },
+  "gates": {
+    "v31_full_rank_E_reproduced": true,
+    "v34_Alternaria_deletion_panel_reproduced": true,
+    "v34_Alternaria_deletion_rank_E_reproduced": true,
+    "generic_fast_statistics_match": true,
+    "tail_sums_positive": true,
+    "abundance_multisets_preserved": true,
+    "independent_local_numpy_reproduction": true
+  },
+  "interpretation": [
+    "Alternaria leverage on identity-free architecture is stronger through rank-1 dominance than through normalized lower-rank shape.",
+    "Both dominance and lower-rank shape retain significant history on the full panel.",
+    "Both components retain significant history after Alternaria removal, so neither Alternaria nor dominance alone accounts for all architecture memory."
+  ],
+  "claim_boundary": [
+    "no dominant taxon identity inference",
+    "no sole-driver claim",
+    "no mechanism identification",
+    "no universal dominance-storage law",
+    "no cross-system generality"
+  ]
+}

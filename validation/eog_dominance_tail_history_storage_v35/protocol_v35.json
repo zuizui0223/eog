@@ -1,0 +1,66 @@
+{
+  "schema": "eog.dominance_tail_history_storage.protocol.v35",
+  "status": "frozen_before_v35_scoring",
+  "source_system": "v28_microbiome",
+  "panel": {
+    "full_n": 233,
+    "source": "frozen_v28_common_panel",
+    "alternaria_deletion": "same_plants_removed_as_v34_Alternaria_leave_one_history_out"
+  },
+  "history_model": {
+    "context": "Genotype",
+    "history": "Treatment",
+    "reduced": "1 + Genotype",
+    "full": "1 + Genotype + Treatment + Genotype:Treatment",
+    "permutation": "Treatment_within_Genotype",
+    "permutations": 9999,
+    "seed": 20261005
+  },
+  "targets": {
+    "dominance": {
+      "construction": "largest_of_five_sorted_bias_corrected_proportions",
+      "type": "scalar"
+    },
+    "lower_rank_tail": {
+      "construction": "ranks_2_to_5_renormalized_to_sum_1",
+      "distance": "bray_curtis",
+      "dimensions": 4,
+      "stop_if_tail_sum_zero": true
+    }
+  },
+  "leverage": {
+    "definition": "L_component_equals_E_full_minus_E_without_Alternaria",
+    "prospective_prediction": [
+      "L_dominance_positive",
+      "L_dominance_greater_than_L_tail"
+    ],
+    "minimum_effect_threshold": null
+  },
+  "diagnostics": [
+    "E_dominance_full",
+    "E_tail_full",
+    "E_dominance_without_Alternaria",
+    "E_tail_without_Alternaria",
+    "L_dominance",
+    "L_tail",
+    "paired_permutation_p_values",
+    "descriptive_median_rank1_share_by_history"
+  ],
+  "gates": [
+    "reproduce_v31_full_rank_E",
+    "reproduce_v34_Alternaria_deletion_membership",
+    "preserve_exact_sorted_abundance_multiset",
+    "positive_tail_sum_all_primary_rows",
+    "generic_fast_observed_statistics_match"
+  ],
+  "exposure_boundary": {
+    "v34_results_known": true,
+    "component_scores_seen_before_freeze": false
+  },
+  "claim_boundary": [
+    "no dominant_taxon_identity_inference",
+    "no mechanism_identification",
+    "no universal_dominance_storage_claim",
+    "no_cross_system_generality"
+  ]
+}
