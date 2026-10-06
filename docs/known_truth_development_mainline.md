@@ -3217,6 +3217,78 @@ Canonical v37 assets:
 - `docs/eog_alternaria_genotype_generality_v37.md`;
 - `docs/eog_alternaria_genotype_generality_v37_result.md`.
 
+## Original-EOG empirical mainline — v38 mechanistic ceiling
+
+v34-v37 localized the strongest microbiome history signature to an Alternaria-associated,
+identity-free increase in final community dominance that is broadly shared across host
+genotypes.
+
+v38 audited whether the archived experiment can identify the interaction mechanism behind
+that structural legacy.
+
+It cannot.
+
+### Source-paper reconciliation
+
+The source paper itself reports that:
+
+- only three of five early colonists consistently benefited from pre-emptive colonization;
+- Alternaria had the greatest relative abundance across treatments;
+- Alternaria did benefit from early arrival, but its species-specific priority-effect
+  magnitude was relatively low.
+
+The authors therefore discuss intrinsic competitive ability and distinct niche occupancy
+as alternative explanations and do not distinguish them.
+
+Accordingly, the v34-v37 result is **not** evidence that Alternaria has the strongest
+species-specific priority effect.
+
+The supported statement is:
+
+> **Alternaria arrival history has the largest leverage on the identity-free dominance
+> structure of the final community.**
+
+### Why mechanism is not identifiable from the current archive
+
+The community data are relative sequence abundances rather than absolute population
+sizes.  No archived pairwise competition/growth assay or host-response trajectory exists.
+
+Timepoint 2 is also not a valid later community state: the source analysis explicitly
+excludes it because it was collected during rust sampling and the community sequence data
+were overwhelmed by rust reads.
+
+Therefore the archive cannot discriminate:
+
+- intrinsic fungal growth advantage;
+- competitor suppression;
+- niche pre-emption;
+- niche modification;
+- host-mediated facilitation or inhibition.
+
+### Program-level stopping rule
+
+Do not continue deriving finer endpoints from the same TP1 relative-abundance table.
+
+The within-dataset structural chain stops at v37.
+
+The next genuine biological evidence must be process-level, for example:
+
+- absolute taxon abundance through assembly;
+- pairwise / reduced-community arrival-order experiments;
+- host-response measurements between inoculation events;
+- clean pre-pathogen temporal sampling.
+
+The next biological question is:
+
+> **Does Alternaria-first history create stronger dominance because Alternaria expands
+> absolutely, because competitors are suppressed, or because the host environment is
+> modified before later colonists arrive?**
+
+Canonical v38 assets:
+
+- `docs/eog_mechanistic_ceiling_v38.md`;
+- `validation/eog_mechanistic_ceiling_v38/audit_v38.json`.
+
 ## Hard claim boundary
 
 Do not claim:
