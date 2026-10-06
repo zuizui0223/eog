@@ -29,13 +29,13 @@ Still requires author-supplied metadata:
 - [ ] corresponding author name
 - [ ] complete mailing address
 - [ ] telephone number
-- [ ] running title <45 characters
-  - current candidate: **Structural storage of assembly history**
+- [x] running title <45 characters
+  - **Structural storage of assembly history** (38 characters)
 - [x] up to 10 keywords drafted
 - [x] article type stated
 - [x] abstract word count stated
 - [x] main-text word count stated
-- [ ] final reference count after reference expansion
+- [x] current reference count fixed at **7** for the citations used in the present draft
 - [x] figure count stated
 - [x] table count stated
 - [x] text-box count stated
@@ -62,11 +62,14 @@ EOG analysis:
 
 - [x] four-main-figure architecture defined
 - [x] reproducible figure builder added
-- [ ] CI figure artifact passes
-- [ ] visual QA at journal-column size
-- [ ] legends drafted and inserted into submission manuscript
-- [ ] graphical abstract selected or created if requested at revision
-- [ ] graphical-abstract short text <=500 characters if requested
+- [x] CI figure artifact passes
+  - final run: `37546022729`
+  - artifact: `11450079490`
+  - digest: `sha256:4949c953a1b04af693431d1bb4f76e14fe000a42a169349bba0498254464f930`
+- [x] visual QA at journal-column size
+- [x] legends drafted and inserted into both manuscript variants
+- [x] graphical-abstract short text drafted
+- [ ] graphical image itself only if requested by journal/revision
 
 ## Cover letter / novelty
 
@@ -81,17 +84,19 @@ EOG analysis:
 
 - [x] core references checked
 - [x] Alonso-Crespo publication year corrected to **2023**
-- [ ] expand from core 7 references to all references cited in final Introduction/Discussion
-- [ ] ensure every in-text citation appears in reference list
-- [ ] apply Ecology Letters reference style at final formatting stage
+- [x] current 7-entry reference list covers all citations in the current Introduction/Discussion
+- [x] every current in-text citation has a reference-list entry
+- [ ] apply final Ecology Letters punctuation/style during portal/PDF formatting
 
 ## Submission portal items
 
 Ecology Letters currently requests:
 
-- [ ] recommended reviewers
+- [x] reviewer/editor candidate pool prepared
+  - see `REVIEWER_EDITOR_CANDIDATES_V1.md`
+- [ ] final conflict screen against the final author list
 - [ ] opposed reviewers only where genuine conflict exists
-- [ ] recommended/opposed editorial board members if appropriate
+- [ ] choose final recommended editorial-board member(s) after conflict screen
 - [ ] conflict-of-interest declaration
 - [ ] author-contribution statement
 - [ ] funding statement
@@ -113,9 +118,11 @@ Ecology Letters currently requests:
 
 Do **not** add a v39 derived endpoint before submission.
 
-The only remaining science-facing tasks are:
+No further science-facing analysis is required before submission.
 
-1. figure visual QA;
-2. permanent archive DOI for the exact EOG submission release;
-3. final reference expansion / formatting;
-4. author metadata and declarations.
+Remaining submission tasks are:
+
+1. final author metadata and declarations;
+2. final reviewer/editor conflict screen;
+3. permanent archive DOI for the exact EOG submission release;
+4. final journal-style formatting / portal entry.
