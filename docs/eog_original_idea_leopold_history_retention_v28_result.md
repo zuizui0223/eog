@@ -237,3 +237,20 @@ One system cannot establish that principle.
 The correct next move is therefore a second independently licensed assembly-history
 experiment in which community composition and a functional endpoint are measured on the
 same experimental units. The pre-screen must occur before a new benchmark is frozen.
+
+
+## Source metadata correction
+
+The frozen v28 protocol contains `source.dryad_doi = 10.5061/dryad.7p2cv`.
+That field is a copy/paste source-metadata error and was **not** used to obtain or score
+v28 data.
+
+The scored source was the pinned `dleopold/Populus_priorityEffects` repository at commit
+`d8082daabfccccf3bcbdd631b4438f44c04014c1`, with file-level blob verification. The
+corresponding archived repository release is Zenodo v1.2, DOI
+`10.5281/zenodo.3872145`; raw sequencing reads are under BioProject `PRJNA605581`.
+
+The frozen protocol is intentionally not rewritten after scoring. The correction is
+recorded in
+`validation/eog_original_idea_leopold_history_retention_v28/source_metadata_correction_v1.json`.
+There is no effect on the authoritative v28 result.
