@@ -11,7 +11,7 @@ Five-step ladder:
 
 Place FAIR/reusability as an upstream envelope, not as a competing framework.
 
-## Figure 2 — EOG prospective candidate funnel
+## Figure 2 — predictive workflow prospective candidate funnel
 
 Start: 34 scientific candidate attempts.
 
@@ -37,7 +37,7 @@ Among 31 scientific STOPs:
 Annotate:
 **30/31 STOPs occurred before any biological response row value contributed to a scored endpoint.**
 
-## Figure 4 — Later inference barrier in 284b Level C
+## Figure 4 — Later inference barrier in biological-relation audit
 
 12 candidate architectures screened
 → 2 architecture-qualified
@@ -50,7 +50,7 @@ positive channel biologically meaningful, but false-negative/detection calibrati
 
 ## Supplementary Table S1
 
-All 31 original EOG terminal labels and system names.
+All 31 original predictive workflow terminal labels and system names.
 
 ## Supplementary Figure S1
 
