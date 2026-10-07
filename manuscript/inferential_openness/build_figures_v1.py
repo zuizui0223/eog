@@ -74,8 +74,8 @@ def fig2(flow,out):
     counts={}
     for name,labels in GROUPS.items():
         counts[name]=sum(r["terminal_stage"] in labels for r in stops)
-    p=svg_start(950,510,"EOG prospective candidate funnel")
-    p.append('<text x="475" y="38" text-anchor="middle" class="big">EOG prospective candidate funnel</text>')
+    p=svg_start(950,510,"Prospective candidate funnel")
+    p.append('<text x="475" y="38" text-anchor="middle" class="big">Prospective candidate funnel</text>')
     p.append('<text x="140" y="95" text-anchor="middle" class="big">34</text>')
     p.append('<text x="140" y="120" text-anchor="middle" class="mid">scientific attempts</text>')
     p.append('<line x1="240" y1="108" x2="350" y2="108" class="line"/>')
@@ -121,7 +121,7 @@ def fig4(ledger,out):
       ("Calibration passes",ledger["level_c_284b"]["candidate_specific_calibration_passed"]),
       ("Hard endpoints opened",ledger["level_c_284b"]["focal_value_opening_authorized"]),
     ]
-    p=svg_start(1000,340,"284b Level-C calibration funnel")
+    p=svg_start(1000,340,"Biological-relation calibration funnel")
     p.append('<text x="500" y="38" text-anchor="middle" class="big">Later inferential barrier: negative-state calibration</text>')
     x=45
     for i,(label,value) in enumerate(vals):
@@ -156,13 +156,18 @@ def graphical_abstract(out):
         p.append(f'<rect x="{x}" y="100" width="{w}" height="92" rx="10" fill="{fill}" stroke="#333" stroke-width="1.5"/>')
         p.append(f'<text x="{x+w/2}" y="136" text-anchor="middle" class="mid">{esc(title)}</text>')
         if sub:
-            p.append(f'<text x="{x+w/2}" y="163" text-anchor="middle" class="small">{esc(sub)}</text>')
+            parts=sub.split("|")
+            if len(parts)==1:
+                p.append(f'<text x="{x+w/2}" y="163" text-anchor="middle" class="small">{esc(sub)}</text>')
+            else:
+                for j,line in enumerate(parts):
+                    p.append(f'<text x="{x+w/2}" y="{157+17*j}" text-anchor="middle" class="small">{esc(line)}</text>')
         if i<len(stages)-1:
             p.append(f'<line x1="{x+w}" y1="146" x2="{x+w+18}" y2="146" class="line"/>')
             p.append(f'<polygon points="{x+w+18},146 {x+w+9},140 {x+w+9},152" class="accent"/>')
         x+=w+18
 
-    p.append('<text x="265" y="250" text-anchor="middle" class="big">EOG prospective denominator</text>')
+    p.append('<text x="265" y="250" text-anchor="middle" class="big">Prospective workflow denominator</text>')
     p.append('<text x="265" y="288" text-anchor="middle" class="mid">34 attempts → 31 STOPs → 3 scored endpoints</text>')
     p.append('<text x="265" y="320" text-anchor="middle" class="small">11 source/transport · 10 registry/time · 8 linkage/schema · 2 semantics/covariates</text>')
     p.append('<text x="265" y="350" text-anchor="middle" class="small">29 no response · 1 header only · 1 full response once</text>')
@@ -171,7 +176,7 @@ def graphical_abstract(out):
     p.append('<line x1="585" y1="235" x2="585" y2="430" stroke="#aaa" stroke-width="1.5"/>')
 
     p.append('<text x="870" y="250" text-anchor="middle" class="big">Later negative-state barrier</text>')
-    p.append('<text x="870" y="292" text-anchor="middle" class="mid">284b Level C: 12 → 2 → 0 → 0</text>')
+    p.append('<text x="870" y="292" text-anchor="middle" class="mid">Biological-relation audit: 12 → 2 → 0 → 0</text>')
     p.append('<text x="870" y="324" text-anchor="middle" class="small">screened → architecture-qualified → calibrated negatives → opened endpoints</text>')
     p.append('<text x="870" y="370" text-anchor="middle" class="mid">Unresolved non-detection ≠ biological absence</text>')
 
