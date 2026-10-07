@@ -6,14 +6,14 @@
 
 ## Quantitative claims allowed
 
-### EOG
+### Predictive workflow
 - scientific candidate attempts: 34;
 - scored predictive endpoints: 3;
 - scientific/protocol STOPs: 31;
 - administrative exclusions: 3 and outside the scientific denominator;
 - grouped STOPs: 11 transport/source identity, 10 registry/geometry/time, 8 separation/linkage/schema, 2 semantic/covariate validity;
 - response access among STOPs: 29 none, 1 header-only, 1 full-response-once;
-- 30/31 stopped before response row values contributed to a scored endpoint.
+- 30/31 stopped before any biological-response row value was opened.
 
 ### Biological-relation audit
 - architecture screen: 12 candidates;
@@ -24,7 +24,7 @@
 
 ## Interpretation allowed
 
-- most EOG STOPs localized upstream of predictive modelling;
+- most predictive-workflow STOPs localized upstream of predictive modelling;
 - response-independent registries and linkages are distinct from file accessibility;
 - surveyed-negative semantics are distinct from missingness;
 - negative biological inference can require candidate-specific observation-process calibration;
@@ -39,8 +39,8 @@ Do not claim:
 - a STOP is adverse ecological evidence;
 - temporary network/transport failure means permanent source unavailability;
 - strict workflow failure implies poor data stewardship by the original authors;
-- the two Level-C dependencies are false;
-- non-detection in either Level-C system is biological absence;
+- the two retained biological dependencies are false;
+- non-detection in either retained biological system is biological absence;
 - FAIR compliance of the audited datasets was assessed;
 - inferential openness is an additional FAIR principle;
 - one scalar inferential-openness score applies to a dataset independent of the claim.
