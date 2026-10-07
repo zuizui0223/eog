@@ -148,11 +148,44 @@ def main():
     fig2(flow,a.output_dir)
     fig3(flow,a.output_dir)
     fig4(ledger,a.output_dir)
+    stops=[r for r in flow if r["classification"]=="scientific_protocol_stop"]
+    grouped_barriers={
+      name:sum(r["terminal_stage"] in labels for r in stops)
+      for name,labels in GROUPS.items()
+    }
+    response_access=Counter(r["biological_response_access"] for r in stops)
+
+    # Submission-facing supplementary table: the complete prospective STOP denominator.
+    supplement=a.output_dir/"supplementary_table_S1_terminal_stops.csv"
+    with supplement.open("w",newline="",encoding="utf-8") as fh:
+        fields=[
+          "issue","system","terminal_stage","terminal_status_or_reason",
+          "biological_response_access"
+        ]
+        writer=csv.DictWriter(fh,fieldnames=fields)
+        writer.writeheader()
+        for row in stops:
+            writer.writerow({key:row[key] for key in fields})
+
     manifest={
       "figures":[p.name for p in sorted(a.output_dir.glob("*.svg"))],
+      "supplementary_table":supplement.name,
       "scientific_attempts":sum(r["classification"] in {"predictive_result","scientific_protocol_stop"} for r in flow),
-      "scientific_stops":sum(r["classification"]=="scientific_protocol_stop" for r in flow),
+      "scientific_stops":len(stops),
       "scored_endpoints":sum(r["classification"]=="predictive_result" for r in flow),
+      "administrative_exclusions":sum(r["classification"]=="administrative_exclusion" for r in flow),
+      "grouped_barriers":grouped_barriers,
+      "response_access_among_stops":{
+        "none":response_access["none"],
+        "header_only":response_access["header_only"],
+        "full_response_once":response_access["full_response_once"],
+      },
+      "level_c_284b":{
+        "architecture_screened_candidates":ledger["level_c_284b"]["architecture_screened_candidates"],
+        "architecture_qualified_candidates":ledger["level_c_284b"]["architecture_qualified_candidates"],
+        "candidate_specific_calibration_passed":ledger["level_c_284b"]["candidate_specific_calibration_passed"],
+        "focal_value_opening_authorized":ledger["level_c_284b"]["focal_value_opening_authorized"],
+      },
     }
     (a.output_dir/"figure_manifest.json").write_text(json.dumps(manifest,indent=2)+"\n",encoding="utf-8")
     print(json.dumps(manifest,indent=2))
