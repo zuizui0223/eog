@@ -1,0 +1,85 @@
+{
+  "schema": "eog.inferential_openness.cross_project_evidence_ledger.v2",
+  "frozen_2026_10_07": true,
+  "sources": {
+    "eog": {
+      "repository": "zuizui0223/eog",
+      "main_sha": "be09e9a814ae7e9eefdc32a56a7889ec4882572d",
+      "candidate_flow_table": {
+        "path": "manuscript/paper_ready/candidate_flow_table.csv",
+        "blob_sha": "966837585d3c98bc3e488581a6061109078aa8e8"
+      },
+      "candidate_flow_ledger": {
+        "path": "validation/paper_ready_replication/candidate_flow_ledger.json",
+        "blob_sha": "88e3cea011f5c578b2a95a8777e1af57a70f2c73"
+      },
+      "funnel_summary": {
+        "path": "manuscript/paper_ready/candidate_funnel_summary.csv",
+        "blob_sha": "17f4685d097d16050c20060e562edda5848f6292"
+      }
+    },
+    "284b": {
+      "repository": "zuizui0223/284b",
+      "main_sha": "6fa79aa89d961d53c031e24cef7cf8e558a5e3a7",
+      "architecture_screen": {
+        "path": "legacy/pre_level_a_focus/results/product_b_level_c_source_architecture_hard_stop_v3.json",
+        "blob_sha": "8e2994744b0289d1d4ca9a1228658ab7dac86bee"
+      },
+      "calibration_audit": {
+        "path": "legacy/pre_level_a_focus/results/product_b_level_c_candidate_specific_calibration_audit_v5.json",
+        "blob_sha": "1ea03bd1bf8c576c522f15328f6c66220de19c74"
+      }
+    }
+  },
+  "eog": {
+    "scientific_attempts": 34,
+    "scored_predictive_endpoints": 3,
+    "scientific_protocol_stops": 31,
+    "administrative_exclusions": 3,
+    "stop_fraction_within_workflow": 0.9117647058823529,
+    "scored_fraction_within_workflow": 0.08823529411764706,
+    "response_access_among_stops": {
+      "none": 29,
+      "header_only": 1,
+      "full_response_once_before_terminal_stop": 1
+    },
+    "grouped_barriers": {
+      "transport_or_source_identity": 11,
+      "registry_geometry_or_time": 10,
+      "separation_linkage_or_schema": 8,
+      "semantic_or_covariate_validity": 2
+    },
+    "representative_sample_of_ecological_datasets": false
+  },
+  "level_c_284b": {
+    "architecture_screened_candidates": 12,
+    "architecture_qualified_candidates": 2,
+    "retained_systems": [
+      "Cremastra appendiculata var. variabilis",
+      "Belonocnema treatae / live-oak budbreak"
+    ],
+    "candidate_specific_calibration_passed": 0,
+    "hard_negative_authorized": 0,
+    "focal_value_opening_authorized": 0,
+    "terminal_reason": "Both retained candidates lacked independent known-state calibration sufficient to estimate detection performance and identify F=false.",
+    "counts_as_biological_negative": false
+  },
+  "synthesis": {
+    "claim": "Public availability and claim-specific inferential readiness are different properties.",
+    "inferential_openness_ladder": [
+      "transportable exact source",
+      "reproducible response-independent registry / geometry / time denominator",
+      "separated and linkable response architecture",
+      "semantically admissible observed state",
+      "claim-specific calibrated negative state"
+    ]
+  },
+  "prohibited": [
+    "31/34 estimates a field-wide prevalence of unusable ecological data",
+    "a STOP is adverse ecological evidence",
+    "temporary transport failure means permanent unavailability",
+    "the 284b retained biological dependencies are false",
+    "FAIR compliance was measured for the audited datasets",
+    "inferential openness is a permanent scalar property of a dataset independent of the claim"
+  ]
+}
