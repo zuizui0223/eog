@@ -15,7 +15,7 @@
 - response access among STOPs: 29 none, 1 header-only, 1 full-response-once;
 - 30/31 stopped before response row values contributed to a scored endpoint.
 
-### 284b Level C
+### Biological-relation audit
 - architecture screen: 12 candidates;
 - architecture-qualified: 2;
 - candidate-specific calibration passes: 0/2;
