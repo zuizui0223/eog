@@ -197,6 +197,20 @@ The archive lacks:
 
 ---
 
+## Final intake files
+
+Use these two files for the remaining submission work:
+
+- `AUTHOR_METADATA_INTAKE_V1.md` — one-place form for final author order, affiliations,
+  corresponding-author contact, CRediT, funding, acknowledgements, competing interests,
+  all-author approval and reviewer/editor conflict screening;
+- `SUBMISSION_PACKAGE_MANIFEST_V1.json` — machine-readable record of the exact
+  manuscript, figure artifact, integrity runs, source-data DOIs, scientific stop and
+  proposed immutable submission release.
+
+The reef-fish third-system candidate PR has been closed in accordance with the submission
+stopping rule; it is not part of the current manuscript.
+
 ## 7. Remaining tasks that require external / author input
 
 ### Required before journal submission
