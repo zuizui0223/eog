@@ -36,7 +36,7 @@ Response-access inset:
 - 29 no response
 - 1 header only
 - 1 full response once
-- 30/31 before response row values contribute to scoring
+- 30/31 before any response row value was opened
 
 Under stage 5, show the independent biological-relation audit:
 
