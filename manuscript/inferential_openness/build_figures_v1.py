@@ -136,6 +136,49 @@ def fig4(ledger,out):
     p.append('<text x="500" y="300" text-anchor="middle" class="small">Unresolved negative state ≠ biological absence.</text>')
     write_svg(out/"figure4_level_c_calibration_funnel.svg",p)
 
+def graphical_abstract(out):
+    p=svg_start(1200,560,"Graphical abstract: from public data to claim-ready inference")
+    p.append('<text x="600" y="42" text-anchor="middle" class="big">Open data become claim-ready only when the evidence chain is reproducible</text>')
+
+    stages=[
+      ("PUBLIC DATA",""),
+      ("1. Source","exact bytes / version"),
+      ("2. Registry","opportunity units"),
+      ("3. Linkage","response ↔ units"),
+      ("4. Semantics","negative vs missing"),
+      ("5. Calibration","absence vs non-detection"),
+      ("CLAIM-READY","INFERENCE"),
+    ]
+    x=30
+    widths=[145,145,145,145,145,145,160]
+    for i,((title,sub),w) in enumerate(zip(stages,widths)):
+        fill="#ffffff" if i in {0,len(stages)-1} else "#f3f4f6"
+        p.append(f'<rect x="{x}" y="100" width="{w}" height="92" rx="10" fill="{fill}" stroke="#333" stroke-width="1.5"/>')
+        p.append(f'<text x="{x+w/2}" y="136" text-anchor="middle" class="mid">{esc(title)}</text>')
+        if sub:
+            p.append(f'<text x="{x+w/2}" y="163" text-anchor="middle" class="small">{esc(sub)}</text>')
+        if i<len(stages)-1:
+            p.append(f'<line x1="{x+w}" y1="146" x2="{x+w+18}" y2="146" class="line"/>')
+            p.append(f'<polygon points="{x+w+18},146 {x+w+9},140 {x+w+9},152" class="accent"/>')
+        x+=w+18
+
+    p.append('<text x="265" y="250" text-anchor="middle" class="big">EOG prospective denominator</text>')
+    p.append('<text x="265" y="288" text-anchor="middle" class="mid">34 attempts → 31 STOPs → 3 scored endpoints</text>')
+    p.append('<text x="265" y="320" text-anchor="middle" class="small">11 source/transport · 10 registry/time · 8 linkage/schema · 2 semantics/covariates</text>')
+    p.append('<text x="265" y="350" text-anchor="middle" class="small">29 no response · 1 header only · 1 full response once</text>')
+    p.append('<text x="265" y="380" text-anchor="middle" class="mid">30/31 STOPs before response row values contributed to scoring</text>')
+
+    p.append('<line x1="585" y1="235" x2="585" y2="430" stroke="#aaa" stroke-width="1.5"/>')
+
+    p.append('<text x="870" y="250" text-anchor="middle" class="big">Later negative-state barrier</text>')
+    p.append('<text x="870" y="292" text-anchor="middle" class="mid">284b Level C: 12 → 2 → 0 → 0</text>')
+    p.append('<text x="870" y="324" text-anchor="middle" class="small">screened → architecture-qualified → calibrated negatives → opened endpoints</text>')
+    p.append('<text x="870" y="370" text-anchor="middle" class="mid">Unresolved non-detection ≠ biological absence</text>')
+
+    p.append('<text x="600" y="500" text-anchor="middle" class="mid">Prospective STOP rules make normally invisible abandoned reuse attempts measurable.</text>')
+    write_svg(out/"graphical_abstract_inferential_openness.svg",p)
+
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--candidate-flow",type=Path,required=True)
@@ -148,6 +191,7 @@ def main():
     fig2(flow,a.output_dir)
     fig3(flow,a.output_dir)
     fig4(ledger,a.output_dir)
+    graphical_abstract(a.output_dir)
     stops=[r for r in flow if r["classification"]=="scientific_protocol_stop"]
     grouped_barriers={
       name:sum(r["terminal_stage"] in labels for r in stops)
@@ -168,7 +212,8 @@ def main():
             writer.writerow({key:row[key] for key in fields})
 
     manifest={
-      "figures":[p.name for p in sorted(a.output_dir.glob("*.svg"))],
+      "figures":[p.name for p in sorted(a.output_dir.glob("figure*.svg"))],
+      "graphical_abstract":"graphical_abstract_inferential_openness.svg",
       "supplementary_table":supplement.name,
       "scientific_attempts":sum(r["classification"] in {"predictive_result","scientific_protocol_stop"} for r in flow),
       "scientific_stops":len(stops),
