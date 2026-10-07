@@ -22,9 +22,9 @@
 - [x] Highlights.
 - [x] Graphical abstract specification.
 - [x] Title-page template.
-- [ ] Render main quantitative figures.
-- [ ] Create graphical abstract artwork.
-- [ ] Prepare supplementary 31-STOP table.
+- [x] Render main quantitative figures.
+- [x] Create graphical abstract artwork.
+- [x] Prepare supplementary 31-STOP table.
 - [ ] Add line/page numbering to final manuscript file if requested by portal.
 - [ ] Final reference-style pass against current Elsevier output style.
 
