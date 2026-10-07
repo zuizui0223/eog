@@ -111,7 +111,7 @@ def fig3(flow,out):
         p.append(f'<text x="{x+65}" y="{y-12:.1f}" text-anchor="middle" class="big">{value}</text>')
         p.append(f'<text x="{x+65}" y="397" text-anchor="middle" class="small">{esc(label)}</text>')
         x+=240
-    p.append('<text x="425" y="445" text-anchor="middle" class="mid">30/31 stopped before response row values contributed to scoring.</text>')
+    p.append('<text x="425" y="445" text-anchor="middle" class="mid">30/31 STOPs occurred before any response row value was opened.</text>')
     write_svg(out/"figure3_response_access.svg",p)
 
 def fig4(ledger,out):
@@ -146,7 +146,7 @@ def graphical_abstract(out):
       ("2. Registry","opportunity units"),
       ("3. Linkage","response ↔ units"),
       ("4. Semantics","negative vs missing"),
-      ("5. Calibration","absence vs non-detection"),
+      ("5. Calibration","absence vs|non-detection"),
       ("CLAIM-READY","INFERENCE"),
     ]
     x=30
@@ -171,7 +171,7 @@ def graphical_abstract(out):
     p.append('<text x="265" y="288" text-anchor="middle" class="mid">34 attempts → 31 STOPs → 3 scored endpoints</text>')
     p.append('<text x="265" y="320" text-anchor="middle" class="small">11 source/transport · 10 registry/time · 8 linkage/schema · 2 semantics/covariates</text>')
     p.append('<text x="265" y="350" text-anchor="middle" class="small">29 no response · 1 header only · 1 full response once</text>')
-    p.append('<text x="265" y="380" text-anchor="middle" class="mid">30/31 STOPs before response row values contributed to scoring</text>')
+    p.append('<text x="265" y="380" text-anchor="middle" class="mid">30/31 STOPs before any response row value was opened</text>')
 
     p.append('<line x1="585" y1="235" x2="585" y2="430" stroke="#aaa" stroke-width="1.5"/>')
 
