@@ -1,0 +1,41 @@
+name: Inferential openness figures
+
+on:
+  push:
+    branches:
+      - paper/inferential-openness-submission-v1
+    paths:
+      - 'manuscript/inferential_openness/build_figures_v1.py'
+      - 'manuscript/inferential_openness/CROSS_PROJECT_EVIDENCE_LEDGER_V2.json'
+      - 'manuscript/paper_ready/candidate_flow_table.csv'
+      - '.github/workflows/inferential-openness-figures.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  figures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build SVG figures
+        run: |
+          python manuscript/inferential_openness/build_figures_v1.py             --candidate-flow manuscript/paper_ready/candidate_flow_table.csv             --ledger manuscript/inferential_openness/CROSS_PROJECT_EVIDENCE_LEDGER_V2.json             --output-dir build/inferential-openness-figures
+      - name: Verify frozen numbers
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('build/inferential-openness-figures/figure_manifest.json'))
+          assert p['scientific_attempts']==34
+          assert p['scientific_stops']==31
+          assert p['scored_endpoints']==3
+          assert len(p['figures'])==4
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inferential-openness-figures-v1
+          path: build/inferential-openness-figures
+          if-no-files-found: error
