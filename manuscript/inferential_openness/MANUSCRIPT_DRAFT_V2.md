@@ -6,7 +6,7 @@
 
 ## Abstract
 
-Open ecological data can be findable and reusable yet still fail to support a specific biological claim. We operationalize a narrower downstream property, **inferential openness**: whether a data–claim pairing preserves the source identity, opportunity registry, response linkage, observation semantics and calibration needed to authorize the target inference under a declared information-access order. We measured this property in two prospectively governed ecological programmes that retained terminal STOPs rather than repairing candidates after outcomes. In a prospectively governed predictive workflow, 34 scientific candidate attempts produced three scored predictive endpoints and 31 scientific/protocol STOPs. The 31 STOPs localized to transport or source identity (11), registry/geometry/time reconstruction (10), source separation/linkage/schema (8), and semantic or covariate validity (2). Twenty-nine STOPs occurred before any biological-response access, one after header-only access and one after a single full-response opening; thus 30/31 stopped before any biological response row value contributed to a scored endpoint. A separate 284b audit tested a later inferential layer. Of 12 biological systems, two had prospectively identifiable relation/event/function source architectures, but neither had independent candidate-specific calibration sufficient to distinguish a true negative function state from non-detection or missingness. Consequently zero hard dependency endpoints were opened. These denominators are workflow-specific and are not prevalence estimates for ecology. Together, the audits show that public availability and inferential readiness are distinct: claim-ready reuse requires a reproducible chain from bytes and registries to the semantics and calibration of the biological state being inferred. Prospectively retaining terminal STOPs makes these usually hidden requirements measurable.
+Open ecological data can be findable and reusable yet still fail to support a specific biological claim. We operationalize a narrower downstream property, **inferential openness**: whether a data–claim pairing preserves the source identity, opportunity registry, response linkage, observation semantics and calibration needed to authorize the target inference under a declared information-access order. We measured this property in two prospectively governed ecological programmes that retained terminal STOPs rather than repairing candidates after outcomes. In a prospectively governed predictive workflow, 34 scientific candidate attempts produced three scored predictive endpoints and 31 scientific/protocol STOPs. The 31 STOPs localized to transport or source identity (11), registry/geometry/time reconstruction (10), source separation/linkage/schema (8), and semantic or covariate validity (2). Twenty-nine STOPs occurred before any biological-response access, one after header-only access and one after a single full-response opening; thus 30/31 STOPs occurred before any biological-response row value was opened. A separate biological-relation audit tested a later inferential layer. Of 12 biological systems, two had prospectively identifiable relation/event/function source architectures, but neither had independent candidate-specific calibration sufficient to distinguish a true negative function state from non-detection or missingness. Consequently zero hard dependency endpoints were opened. These denominators are workflow-specific and are not prevalence estimates for ecology. Together, the audits show that public availability and inferential readiness are distinct: claim-ready reuse requires a reproducible chain from bytes and registries to the semantics and calibration of the biological state being inferred. Prospectively retaining terminal STOPs makes these usually hidden requirements measurable.
 
 **Keywords:** data reuse; ecological informatics; FAIR; open data; preregistration; reproducibility; observation process; data provenance
 
@@ -98,7 +98,7 @@ The latter does not count as predictive evidence because no scored endpoint was 
 
 ### 2.5 Biological-relation architecture and calibration audit
 
-The predictive-workflow funnel asks whether a public system can become a valid scored predictive endpoint. The 284b Level-C audit asks a later question: after a biological dependency and source architecture are plausible, can the negative function state required for a hard relation be identified?
+The predictive-workflow funnel asks whether a public system can become a valid scored predictive endpoint. The biological-relation audit asks a later question: after a biological dependency and source architecture are plausible, can the negative function state required for a hard relation be identified?
 
 The biological-relation audit used a directional form
 
@@ -152,7 +152,7 @@ Among the 31 STOPs:
 - **1/31** stopped after response-header access only;
 - **1/31** stopped after one full-response opening because the frozen deployment/response linkage failed.
 
-Thus **30/31 STOPs occurred before any biological response row value contributed to a scored endpoint**.
+Thus **30/31 STOPs occurred before any biological-response row value was opened**.
 
 The dominant bottleneck observed in this workflow was therefore not poor predictive performance after fitting. It was failure to reconstruct a claim-ready source, registry or response architecture before scoring became authorized.
 
@@ -260,7 +260,7 @@ The biological-relation audit contains only two retained architectures at the ca
 
 Open ecological data do not become open inference merely by being downloadable.
 
-In a finite prospective predictive workflow, 31 of 34 scientific candidate attempts stopped before a scored endpoint, and 30 of those 31 stopped before biological response row values contributed to scoring. In a separate biological-relation audit, two systems with plausible independent source architectures still could not support hard negative function states because candidate-specific detection calibration was unavailable.
+In a finite prospective predictive workflow, 31 of 34 scientific candidate attempts stopped before a scored endpoint, and 30 of those 31 stopped before any biological-response row value was opened. In a separate biological-relation audit, two systems with plausible independent source architectures still could not support hard negative function states because candidate-specific detection calibration was unavailable.
 
 The practical unit of openness for ecological inference is therefore a **reproducible evidence chain**, not a file.
 
