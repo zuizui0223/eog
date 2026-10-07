@@ -20,7 +20,7 @@ Left-to-right evidence chain:
 
 ## Quantitative annotations
 
-Under stages 1–4, show the EOG funnel:
+Under stages 1–4, show the prospective predictive-workflow funnel:
 
 34 scientific attempts
 → 31 STOPs
@@ -38,7 +38,7 @@ Response-access inset:
 - 1 full response once
 - 30/31 before response row values contribute to scoring
 
-Under stage 5, show 284b:
+Under stage 5, show the independent biological-relation audit:
 
 12 candidates
 → 2 architecture-qualified
