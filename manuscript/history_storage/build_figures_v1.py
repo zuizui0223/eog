@@ -65,10 +65,9 @@ def figure1():
     arrow(ax, (0.26, 0.51), (0.40, 0.505))
     arrow(ax, (0.26, 0.51), (0.40, 0.235))
 
-    box(ax, (0.73, 0.66), "Microbiome\ncomposition → rust", 0.21, 0.16)
-    box(ax, (0.73, 0.28), "Grassland\nshoot → roots", 0.21, 0.16)
-    arrow(ax, (0.65, 0.51), (0.73, 0.74))
-    arrow(ax, (0.65, 0.51), (0.73, 0.36))
+    ax.text(0.835, 0.90, "Empirical examples", ha="center", fontsize=10, weight="bold")
+    box(ax, (0.73, 0.62), "Microbiome\ncomposition vs rust", 0.21, 0.16)
+    box(ax, (0.73, 0.30), "Grassland\nshoot vs roots", 0.21, 0.16)
 
     ax.text(0.06, 0.91, "Where is assembly history stored in the present?", fontsize=15, weight="bold")
     ax.text(
@@ -103,7 +102,7 @@ def interval_panel(ax, items, title):
 def figure2(d):
     v28 = d["v28"]["primary"]
     v30 = d["v30"]["primary"]
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4.6), sharex=True)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 3.4), sharex=True)
 
     interval_panel(
         axes[0],
@@ -237,7 +236,7 @@ def figure4(d):
     ax.set_xlim(0.25, 1.0)
     ax.set_ylim(-0.35, 1.25)
     ax.set_xlabel("Role-aligned partial $R^2$")
-    ax.set_title("A  Correct role mapping is not specific", loc="left", fontsize=10, weight="bold")
+    ax.set_title("A  Biological role mapping is not exceptional", loc="left", fontsize=10, weight="bold")
     ax.legend(frameon=False, fontsize=7, loc="center", bbox_to_anchor=(0.58, 0.50))
     ax.spines[["top", "right"]].set_visible(False)
 
