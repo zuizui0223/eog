@@ -1,0 +1,78 @@
+name: Inferential openness figures
+
+on:
+  pull_request:
+    paths:
+      - 'manuscript/inferential_openness/build_figures_v1.py'
+      - 'manuscript/inferential_openness/CROSS_PROJECT_EVIDENCE_LEDGER_V2.json'
+      - 'manuscript/paper_ready/candidate_flow_table.csv'
+      - '.github/workflows/inferential-openness-figures.yml'
+  push:
+    branches:
+      - main
+      - paper/inferential-openness-submission-v1
+    paths:
+      - 'manuscript/inferential_openness/build_figures_v1.py'
+      - 'manuscript/inferential_openness/CROSS_PROJECT_EVIDENCE_LEDGER_V2.json'
+      - 'manuscript/paper_ready/candidate_flow_table.csv'
+      - '.github/workflows/inferential-openness-figures.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  figures:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build SVG figures and STOP supplement
+        run: |
+          python manuscript/inferential_openness/build_figures_v1.py \
+            --candidate-flow manuscript/paper_ready/candidate_flow_table.csv \
+            --ledger manuscript/inferential_openness/CROSS_PROJECT_EVIDENCE_LEDGER_V2.json \
+            --output-dir build/inferential-openness-figures
+      - name: Verify frozen denominators
+        run: |
+          python - <<'PY'
+          import csv, json
+          p=json.load(open('build/inferential-openness-figures/figure_manifest.json'))
+          assert p['scientific_attempts']==34
+          assert p['scientific_stops']==31
+          assert p['scored_endpoints']==3
+          assert p['administrative_exclusions']==3
+          assert p['grouped_barriers']=={
+            'Transport / source identity':11,
+            'Registry / geometry / time':10,
+            'Separation / linkage / schema':8,
+            'Semantic / covariate validity':2,
+          }
+          assert p['response_access_among_stops']=={
+            'none':29,
+            'header_only':1,
+            'full_response_once':1,
+          }
+          assert p['level_c_284b']=={
+            'architecture_screened_candidates':12,
+            'architecture_qualified_candidates':2,
+            'candidate_specific_calibration_passed':0,
+            'focal_value_opening_authorized':0,
+          }
+          assert len(p['figures'])==4
+          assert p['graphical_abstract']=='graphical_abstract_inferential_openness.svg'
+          assert __import__('pathlib').Path(
+            'build/inferential-openness-figures/graphical_abstract_inferential_openness.svg'
+          ).exists()
+          rows=list(csv.DictReader(open(
+            'build/inferential-openness-figures/supplementary_table_S1_terminal_stops.csv',
+            encoding='utf-8'
+          )))
+          assert len(rows)==31
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inferential-openness-submission-figures-v1
+          path: build/inferential-openness-figures
+          if-no-files-found: error
