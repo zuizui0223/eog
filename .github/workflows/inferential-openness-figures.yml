@@ -61,6 +61,10 @@ jobs:
             'focal_value_opening_authorized':0,
           }
           assert len(p['figures'])==4
+          assert p['graphical_abstract']=='graphical_abstract_inferential_openness.svg'
+          assert __import__('pathlib').Path(
+            'build/inferential-openness-figures/graphical_abstract_inferential_openness.svg'
+          ).exists()
           rows=list(csv.DictReader(open(
             'build/inferential-openness-figures/supplementary_table_S1_terminal_stops.csv',
             encoding='utf-8'
