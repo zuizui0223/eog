@@ -1,0 +1,100 @@
+name: Inferential openness Ecological Informatics submission assets
+
+on:
+  push:
+    branches:
+      - paper/inferential-openness-submission-assets-v1
+    paths:
+      - 'configs/inferential_openness_submission_assets_execute.lock'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build figures and supplementary table
+        run: |
+          mkdir -p build/inferential_openness_submission
+          python manuscript/inferential_openness/build_figures_v1.py \
+            --candidate-flow manuscript/paper_ready/candidate_flow_table.csv \
+            --ledger manuscript/inferential_openness/CROSS_PROJECT_EVIDENCE_LEDGER_V2.json \
+            --output-dir build/inferential_openness_submission
+      - name: Copy submission text components
+        run: |
+          cp manuscript/inferential_openness/MANUSCRIPT_DRAFT_V2.md build/inferential_openness_submission/
+          cp manuscript/inferential_openness/COVER_LETTER_ECOINF_V1.md build/inferential_openness_submission/
+          cp manuscript/inferential_openness/HIGHLIGHTS_ECOINF_V1.md build/inferential_openness_submission/
+          cp manuscript/inferential_openness/TITLE_PAGE_TEMPLATE_V1.md build/inferential_openness_submission/
+          cp manuscript/inferential_openness/CROSS_PROJECT_EVIDENCE_LEDGER_V2.json build/inferential_openness_submission/
+      - name: Audit submission package
+        run: |
+          python - <<'PY'
+          import hashlib, json, re
+          from pathlib import Path
+
+          root=Path('build/inferential_openness_submission')
+          paper=(root/'MANUSCRIPT_DRAFT_V2.md').read_text(encoding='utf-8')
+          highlights=(root/'HIGHLIGHTS_ECOINF_V1.md').read_text(encoding='utf-8')
+          ledger=json.loads((root/'CROSS_PROJECT_EVIDENCE_LEDGER_V2.json').read_text())
+          ga=(root/'graphical_abstract_inferential_openness.svg').read_text(encoding='utf-8')
+
+          bullets=[line[2:] for line in highlights.splitlines() if line.startswith('- ')]
+          if len(bullets)!=5 or any(len(x)>85 for x in bullets):
+              raise SystemExit(f'highlights fail 5-bullet / 85-character gate: {[(len(x),x) for x in bullets]}')
+          m=re.search(r'\*\*Keywords:\*\*\s*(.+)',paper)
+          if not m:
+              raise SystemExit('keywords missing')
+          keywords=[x.strip() for x in m.group(1).split(';') if x.strip()]
+          if len(keywords)>6:
+              raise SystemExit(f'too many keywords: {len(keywords)}')
+          if 'width="1500"' not in ga or 'height="600"' not in ga or 'viewBox="0 0 1500 600"' not in ga:
+              raise SystemExit('graphical abstract does not meet frozen 1500x600 submission geometry')
+
+          expected={
+            'scientific_attempts':34,
+            'scored_predictive_endpoints':3,
+            'scientific_protocol_stops':31,
+          }
+          for k,v in expected.items():
+              source_key={'scientific_attempts':'scientific_attempts','scored_predictive_endpoints':'scored_predictive_endpoints','scientific_protocol_stops':'scientific_protocol_stops'}[k]
+              if int(ledger['eog'][source_key])!=v:
+                  raise SystemExit(f'ledger denominator drift: {k}')
+          if ledger['eog']['grouped_barriers']!={
+              'transport_or_source_identity':11,
+              'registry_geometry_or_time':10,
+              'separation_linkage_or_schema':8,
+              'semantic_or_covariate_validity':2,
+          }:
+              raise SystemExit('grouped barrier counts changed')
+          if ledger['level_c_284b']['architecture_screened_candidates']!=12 or ledger['level_c_284b']['architecture_qualified_candidates']!=2 or ledger['level_c_284b']['candidate_specific_calibration_passed']!=0:
+              raise SystemExit('Level-C funnel changed')
+
+          files=[]
+          for p in sorted(root.iterdir()):
+              if p.is_file():
+                  files.append({'path':p.name,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})
+          audit={
+            'program':'inferential-openness-ecoinf-submission-assets-v1',
+            'highlights':[{'text':x,'characters':len(x)} for x in bullets],
+            'keywords':keywords,
+            'graphical_abstract_geometry':'1500x600',
+            'eog_denominator':expected,
+            'level_c_funnel':'12 -> 2 -> 0',
+            'files':files,
+          }
+          (root/'submission_asset_audit.json').write_text(json.dumps(audit,indent=2)+'\n')
+          print(json.dumps(audit,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inferential-openness-ecoinf-submission-assets-v1
+          path: build/inferential_openness_submission/
+          if-no-files-found: error
+          retention-days: 90
