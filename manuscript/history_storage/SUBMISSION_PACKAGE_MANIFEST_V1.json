@@ -1,0 +1,68 @@
+{
+  "schema": "eog.history_storage.submission_package_manifest.v1",
+  "status": "analysis_complete_submission_ready_external_inputs_pending",
+  "target_journal": "Ecology Letters",
+  "target_article_type": "Letter",
+  "current_main_requirements": {
+    "abstract_word_limit": 150,
+    "main_text_word_limit": 5000,
+    "display_item_limit": 6
+  },
+  "manuscript": {
+    "file": "manuscript/history_storage/MANUSCRIPT_ECOLOGY_LETTERS_V1.md",
+    "abstract_words": 139,
+    "main_text_words_approx": 4000,
+    "figures": 4,
+    "tables": 0,
+    "text_boxes": 0
+  },
+  "submission_materials": {
+    "cover_letter": "manuscript/history_storage/COVER_LETTER_ECOLOGY_LETTERS_V1.md",
+    "figure_plan": "manuscript/history_storage/FIGURE_PLAN_V1.md",
+    "figure_legends": "manuscript/history_storage/FIGURE_LEGENDS_V1.md",
+    "graphical_abstract_text": "manuscript/history_storage/GRAPHICAL_ABSTRACT_TEXT_V1.md",
+    "novelty_statement": "manuscript/history_storage/NOVELTY_STATEMENT_ECOLOGY_LETTERS_V1.md",
+    "reviewer_editor_pool": "manuscript/history_storage/REVIEWER_EDITOR_CANDIDATES_V1.md",
+    "submission_checklist": "manuscript/history_storage/ECOLOGY_LETTERS_SUBMISSION_CHECKLIST_V1.md",
+    "readiness_ledger": "manuscript/history_storage/SUBMISSION_READINESS_V1.md",
+    "author_metadata_intake": "manuscript/history_storage/AUTHOR_METADATA_INTAKE_V1.md"
+  },
+  "figure_artifact": {
+    "final_run": 37546022729,
+    "artifact_id": 11450079490,
+    "digest": "sha256:4949c953a1b04af693431d1bb4f76e14fe000a42a169349bba0498254464f930",
+    "visual_qa": "passed"
+  },
+  "integrity": {
+    "final_main_integrity_run": 37547043473,
+    "conclusion": "success",
+    "package_checks_run": 37547043524,
+    "package_checks_conclusion": "success"
+  },
+  "source_data": {
+    "microbiome_doi": "10.5061/dryad.7p2cv",
+    "grassland_doi": "10.5281/zenodo.5713397"
+  },
+  "science_status": {
+    "evidence_chain_closed_at": "v38",
+    "do_not_add_v39_before_submission": true,
+    "mechanistic_ceiling_recorded": true
+  },
+  "remaining_external_inputs": [
+    "final_author_list_and_order",
+    "affiliations_and_emails",
+    "corresponding_author_contact_details",
+    "CRediT_contributions",
+    "funding_statement",
+    "acknowledgements",
+    "competing_interest_declaration",
+    "all_author_approval",
+    "reviewer_editor_conflict_screen",
+    "exact_submission_release_Zenodo_DOI"
+  ],
+  "proposed_release": {
+    "tag": "history-storage-el-submission-v1",
+    "release_title": "History-storage Ecology Letters submission v1",
+    "create_only_after_all_author_approval": true
+  }
+}
