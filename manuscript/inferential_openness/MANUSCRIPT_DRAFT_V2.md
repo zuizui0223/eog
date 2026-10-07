@@ -6,7 +6,7 @@
 
 ## Abstract
 
-Open ecological data can be findable and reusable yet still fail to support a specific biological claim. We call the downstream property **inferential openness**: whether a data–claim pairing preserves the source identity, opportunity registry, response linkage, observation semantics and calibration needed to authorize the target inference. We measured this property in two prospectively governed ecological programmes that retained terminal STOPs rather than repairing candidates after outcomes. In an EOG predictive workflow, 34 scientific candidate attempts produced three scored predictive endpoints and 31 scientific/protocol STOPs. The 31 STOPs localized to transport or source identity (11), registry/geometry/time reconstruction (10), source separation/linkage/schema (8), and semantic or covariate validity (2). Twenty-nine STOPs occurred before any biological-response access, one after header-only access and one after a single full-response opening; thus 30/31 stopped before any biological response row value contributed to a scored endpoint. A separate 284b audit tested a later inferential layer. Of 12 biological systems, two had prospectively identifiable relation/event/function source architectures, but neither had independent candidate-specific calibration sufficient to distinguish a true negative function state from non-detection or missingness. Consequently zero hard dependency endpoints were opened. These denominators are workflow-specific and are not prevalence estimates for ecology. Together, the audits show that public availability and inferential readiness are distinct: claim-ready reuse requires a reproducible chain from bytes and registries to the semantics and calibration of the biological state being inferred. Prospectively retaining terminal STOPs makes these usually hidden requirements measurable.
+Open ecological data can be findable and reusable yet still fail to support a specific biological claim. We operationalize a narrower downstream property, **inferential openness**: whether a data–claim pairing preserves the source identity, opportunity registry, response linkage, observation semantics and calibration needed to authorize the target inference under a declared information-access order. We measured this property in two prospectively governed ecological programmes that retained terminal STOPs rather than repairing candidates after outcomes. In an EOG predictive workflow, 34 scientific candidate attempts produced three scored predictive endpoints and 31 scientific/protocol STOPs. The 31 STOPs localized to transport or source identity (11), registry/geometry/time reconstruction (10), source separation/linkage/schema (8), and semantic or covariate validity (2). Twenty-nine STOPs occurred before any biological-response access, one after header-only access and one after a single full-response opening; thus 30/31 stopped before any biological response row value contributed to a scored endpoint. A separate 284b audit tested a later inferential layer. Of 12 biological systems, two had prospectively identifiable relation/event/function source architectures, but neither had independent candidate-specific calibration sufficient to distinguish a true negative function state from non-detection or missingness. Consequently zero hard dependency endpoints were opened. These denominators are workflow-specific and are not prevalence estimates for ecology. Together, the audits show that public availability and inferential readiness are distinct: claim-ready reuse requires a reproducible chain from bytes and registries to the semantics and calibration of the biological state being inferred. Prospectively retaining terminal STOPs makes these usually hidden requirements measurable.
 
 **Keywords:** data reuse; ecological informatics; FAIR; open data; preregistration; reproducibility; observation process; data provenance
 
@@ -20,7 +20,7 @@ These are not ordinary model-performance failures. They occur before, or logical
 
 Open-science practice creates an opportunity to measure those barriers. Adaptive preregistration has recently been advocated for model-based ecology because ecological analyses often involve sequential decisions rather than a single fixed hypothesis test (Wintle & Rumpff 2026). If those decision points, information barriers and stopping rules are committed before focal outcomes are viewed, a terminal STOP becomes an observable state of the scientific workflow rather than an invisible abandoned attempt.
 
-We use that property to define **inferential openness**. We do not propose inferential openness as an additional FAIR principle or as a permanent quality score attached to a dataset. Instead it is claim-specific: a property of a data–claim pairing. It asks whether the evidence chain needed for a particular inference can be reconstructed without importing the outcome that the workflow is meant to evaluate.
+Data-quality and data-reuse scholarship already emphasizes that usefulness is context dependent: a resource may be FAIR or technically reusable without being fit for a particular scientific purpose. We therefore do not present claim-specific suitability itself as a new concept. We use **inferential openness** for a narrower, operational question: whether a data–claim pairing permits the required evidence chain to be reconstructed under a declared information-access order, without importing the outcome that the workflow is meant to evaluate. The novelty we test is prospective measurability of that boundary—whether precommitted STOP rules turn otherwise invisible abandoned reuse attempts into a finite empirical denominator. Inferential openness is not an additional FAIR principle or a permanent scalar quality score attached to a dataset.
 
 We analyze two prospectively governed programmes. The first is a predictive ecological workflow (EOG) that attempted to reconstruct structural ecological information before opening biological responses. It provides a finite denominator of candidate attempts and terminal STOP stages. The second is a biological-relation workflow (284b Level C) that begins further downstream: after relation and source architecture are plausible, can the negative biological state needed to falsify a hard dependency actually be identified?
 
@@ -183,21 +183,23 @@ A resource can be accessible but fail exact source identity. It can be transport
 
 We refer to the ability to complete this claim-specific chain as **inferential openness**.
 
-### 4.2 Relation to FAIR
+### 4.2 Relation to FAIR and fitness-for-purpose
 
 FAIR concerns digital resource stewardship: findability, accessibility, interoperability and reusability. Recent ecology-specific guidance makes those aims operational through metadata, storage, standards and structure (Jantzen & Vriend 2026).
 
-Our result is downstream rather than competitive with FAIR.
+A separate literature on data quality and reuse has long stressed **fitness for use / fitness for purpose**: data adequacy depends on the intended application rather than on a universal dataset quality score. Environmental-data studies have likewise shown that researchers judge metadata and data in relation to the specific reuse task. Recent work in *Ecological Informatics* makes this distinction concrete by evaluating whether remote-sensing crop classifications are fit for a specific downstream landscape-heterogeneity calculation (Säurich et al. 2026).
+
+Inferential openness is therefore downstream of, and narrower than, both FAIR and general fitness-for-purpose assessment.
 
 A useful conceptual sequence is:
 
-`FAIR / reusable -> workflow-ready -> inferentially ready for claim C`.
+`FAIR / reusable -> fit for intended use -> inferentially authorized for claim C`.
 
-A dataset may be FAIR and reusable for many questions while remaining insufficient for a particular inference. Conversely, a dataset need not fail FAIR principles simply because one claim requires calibration information that was never part of the original study design.
+Our added object is the **prospective terminal state of the evidence workflow**. A dataset can appear suitable in broad application terms while still lacking a response-independent opportunity registry, a stable response linkage, admissible negative-state semantics or observation-process calibration needed for one directional inference. When those requirements and information-access rules are precommitted, the point at which inference becomes unauthorized can be retained rather than silently repaired or abandoned.
 
-We therefore do not propose an “I” to add to FAIR, and we did not measure FAIR compliance of the audited datasets.
+We therefore do not propose an “I” to add to FAIR, did not measure FAIR compliance of the audited datasets, and do not claim to originate the general concept of data fitness-for-purpose.
 
-### 4.3 Why preregistered STOPs are informative
+### 4.3 The distinctive contribution is a prospective denominator of terminal states
 
 The denominator exists because stopping rules were enforced.
 
@@ -205,7 +207,9 @@ If a failed archive route were silently replaced by a different download path, i
 
 Adaptive preregistration provides a natural framework for ecology because model-based research often contains conditional decisions (Wintle & Rumpff 2026). Our audits show a complementary benefit: when information-order rules are preserved, terminal states can be studied empirically.
 
-The STOP is therefore not a failed study. It is a measurement of the point at which the requested inference ceased to be identified under the declared contract.
+This is the feature that distinguishes the present audit from a retrospective fitness-for-purpose checklist. The denominator contains not only resources that ultimately supported analysis, but also prospectively retained attempts that stopped before outcome scoring. Their terminal layer is therefore observable rather than reconstructed from memory after success or failure.
+
+The STOP is not a failed study. It is a measurement of the point at which the requested inference ceased to be identified under the declared contract.
 
 ### 4.4 A five-layer inferential-openness ladder
 
@@ -224,7 +228,7 @@ Can response records be linked to the declared units without forbidden mixed tab
 Does an observed zero or absence flag represent a surveyed negative rather than missingness, invalid metadata or an unobserved state?
 
 **5. Calibrated inferential state.**  
-When a negative observation is used to contradict a biological relation, is the observation process calibrated well enough to distinguish true absence from non-detection?
+When a negative observation is used to contradict a biological relation, is the observation process calibrated well enough to distinguish true absence from non-detection? This requirement is classical in ecological observation models: non-detection does not imply absence when detection probability is below one (MacKenzie et al. 2002).
 
 The EOG workflow measured losses primarily across Layers 1–4. The 284b audit demonstrates Layer 5.
 
@@ -264,7 +268,15 @@ By prospectively retaining STOPs rather than repairing them after outcomes, ecol
 
 ## References
 
+Bishop, B.W., Hank, C., Webster, J. & Howard, R. (2019). Scientists' data discovery and reuse behavior: (Meta)data fitness for use and the FAIR data principles. *Proceedings of the Association for Information Science and Technology*. https://doi.org/10.1002/pra2.4
+
+Bokulich, A. & Parker, W. (2021). Data models, representation and adequacy-for-purpose. *European Journal for Philosophy of Science*, 11. https://doi.org/10.1007/s13194-020-00345-2
+
 Jantzen, C.C. & Vriend, S.J.G. (2026). Putting FAIR into practice for ecologists: How to make ecological data more reusable. *Ecological Informatics*, 95, 103712. https://doi.org/10.1016/j.ecoinf.2026.103712
+
+MacKenzie, D.I., Nichols, J.D., Lachman, G.B., Droege, S., Royle, J.A. & Langtimm, C.A. (2002). Estimating site occupancy rates when detection probabilities are less than one. *Ecology*, 83, 2248–2255. https://doi.org/10.1890/0012-9658(2002)083[2248:ESORWD]2.0.CO;2
+
+Säurich, J., Schwieder, M., Preidl, S., Beyer, F. & Möller, M. (2026). Are remote sensing-based crop type classifications suitable for calculating a landscape heterogeneity metric? A data-fitness-for-purpose assessment. *Ecological Informatics*, 95, 103660. https://doi.org/10.1016/j.ecoinf.2026.103660
 
 Wilkinson, M.D. et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. *Scientific Data*, 3, 160018. https://doi.org/10.1038/sdata.2016.18
 

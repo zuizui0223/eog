@@ -49,3 +49,42 @@ Primary: **Ecological Informatics** — direct fit with ecological data manageme
 Secondary: **Methods in Ecology and Evolution** — viable if framed as a general prospective audit method rather than as a data-management paper.
 
 Avoid Scientific Data as first choice: the manuscript is not a Data Descriptor for a newly released dataset.
+
+
+## Fitness-for-purpose / fitness-for-use
+
+This literature is a **direct conceptual neighbor** and must be cited explicitly.
+
+Bishop et al. (2019) studied environmental scientists' data discovery and reuse in terms
+of metadata fitness-for-use alongside FAIR.
+
+Bokulich & Parker (2021) give a general philosophical account of data adequacy-for-purpose:
+the suitability of data is context-sensitive and depends on the purpose of reuse.
+
+FAIRagro work in 2026 explicitly states that FAIR compliance does not guarantee
+fitness-for-purpose and develops application-specific quality reasoning.
+
+Therefore do not claim:
+
+> inferential openness is the first claim-specific view of data reuse.
+
+The narrower novelty is:
+
+> **prospectively governed information-access rules convert otherwise hidden abandoned
+> reuse attempts into a finite denominator of terminal inferential states.**
+
+Fitness-for-purpose asks whether data are adequate for an intended use. The present audit
+adds an outcome-blind workflow question:
+
+> At which predeclared evidence layer did authorization of claim C become impossible,
+> and can that terminal state be retained without post-outcome repair?
+
+## Observation-process calibration
+
+MacKenzie et al. (2002) is the classical ecological anchor for Layer 5: non-detection does
+not imply absence when detection probability is below one.
+
+The Level-C contribution is not the discovery of imperfect detection. It is showing that
+even after relation, event and function source architectures are independently
+identifiable, the workflow can still STOP because the negative biological state required
+by the proposed dependency is uncalibrated.
