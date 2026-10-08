@@ -18,6 +18,16 @@ Input: exactly `Data/presence_data_1994_2022.txt` in authors' public GitHub comm
 
 The script does not use `Least_age` or `Least_hatchyear` as a historical predictor, never fills a missing island using later observations, and does not infer an island-year's unoccupied state from its absence in the occurrence table. No individual values can appear in the output.
 
+## First real aggregate-only audit (2026-10-08)
+
+Read-only GitHub Actions run **37799054142** succeeded after checking frozen Dryad v6 source byte parity and physical header. Its JSON-only artifact **11559413670** (ZIP SHA-256 `12c944e3442fe3fa9549cf3580394f35e68bc73be872097ef6046fb29b02f069`) was independently inspected.
+
+Predeclared structural QC results: **73,593 records**, **25,539 distinct IDs**, **19,063 `nest` rows**, **50,099 direct later-stage `capt/obs` rows**, **6,299 IDs** with a single nest island and *at least one* strictly later direct observation. These are **NOT 6,299 migrants** or proof of any source→destination island change. No records were exported.
+
+Quality caveats: **3,517** date-vs-`Year` differences, **914** records outside declared 1994–2022 `Year` window, **5** IDs assigned nest records on more than one island. Date parse failures, mandatory key missingness, CSV column count mismatches and exact observation duplicates were all zero. `Year` may use a biological/recruitment-year convention, so date disagreement is **not** necessarily a source data error; interpretation requires source author variable definitions.
+
+First real counts/provenance frozen at `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_structural_presence_qc_frozen_v1.json`. Repeat-CI must match every aggregate count; a change is a source or analysis drift STOP, not something to recalibrate after seeing outcomes.
+
 ## Proof and research boundary
 
 Predeclared validation occurs in synthetic-only unit tests. Dedicated GitHub Actions checks out a fixed upstream revision, revalidates source-file size/SHA-256 against Dryad and first-header SHA, then runs the QC script and exports one **aggregate-only JSON** artifact.
