@@ -64,10 +64,12 @@ jobs:
           }
           assert len(p['figures'])==4
           assert p['graphical_abstract']=='graphical_abstract_inferential_openness.svg'
+          assert p['supplementary_figure']=='supplementary_figure_S1_terminal_taxonomy.svg'
+          assert p['fine_terminal_label_count']==21
           assert __import__('pathlib').Path(
             'build/inferential-openness-figures/graphical_abstract_inferential_openness.svg'
           ).exists()
-          for svg in [*p['figures'], p['graphical_abstract']]:
+          for svg in [*p['figures'], p['graphical_abstract'], p['supplementary_figure']]:
             root = ET.parse(Path('build/inferential-openness-figures') / svg).getroot()
             assert root.tag == '{http://www.w3.org/2000/svg}svg'
           rows=list(csv.DictReader(open(
@@ -75,6 +77,7 @@ jobs:
             encoding='utf-8'
           )))
           assert len(rows)==31
+          assert len({r['terminal_stage'] for r in rows})==21
           PY
       - uses: actions/upload-artifact@v4
         with:
