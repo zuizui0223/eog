@@ -1,0 +1,44 @@
+{
+  "schema": "eog.helgeland.2026.structural_presence_qc.frozen_observed_v1",
+  "status": "STRUCTURAL_QC_ONLY__TEMPORAL_AND_ECOLOGICAL_HOLD",
+  "source": {
+    "dryad_doi": "10.5061/dryad.rr4xgxdnq",
+    "dryad_version_id": 421942,
+    "file_metadata_id": 4576411,
+    "upstream_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+  },
+  "authority": {
+    "workflow_run_id": 37799054142,
+    "artifact_id": 11559413670,
+    "artifact_name": "HELGELAND-2026-AGGREGATE-ID-DATE-STAGE-QC-NO-ROW-OUTPUT-v1",
+    "artifact_zip_sha256": "12c944e3442fe3fa9549cf3580394f35e68bc73be872097ef6046fb29b02f069"
+  },
+  "counts": {
+    "column_count_mismatch_rows": 0,
+    "date_year_disagreement_count": 3517,
+    "direct_later_stage_row_count": 50099,
+    "distinct_id_count": 25539,
+    "duplicate_exact_observation_count": 0,
+    "ids_with_one_nest_island_and_any_later_direct_observation": 6299,
+    "missing_key_count": 0,
+    "multi_nest_island_id_count": 5,
+    "nest_stage_row_count": 19063,
+    "nonempty_id_count": 73593,
+    "out_of_window_count": 914,
+    "row_count": 73593,
+    "unparseable_date_count": 0,
+    "unrecognized_stage_count": 0
+  },
+  "interpretation": {
+    "candidate_ids_are_not_migrants": true,
+    "Year_date_mismatch_is_not_automatically_an_error": true,
+    "retained_window_1994_through_2022": true,
+    "exact_case_sensitivity_preserved": true
+  },
+  "individual_ids_or_row_values_exported": false,
+  "surveyed_zero_panel_verified": false,
+  "as_of_t_predictor_availability_verified": false,
+  "directed_colonization_or_migration_scored": false,
+  "independent_heldout_benchmark_qualified": false,
+  "ecological_endpoint_authorized": false
+}
