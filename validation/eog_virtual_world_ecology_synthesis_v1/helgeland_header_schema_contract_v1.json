@@ -1,0 +1,119 @@
+{
+  "schema": "eog.helgeland.response_blind_header_contract.v1",
+  "status": "FROZEN_BEFORE_ANY_PHYSICAL_HEADER_ACCESS",
+  "base_source_inventory": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json",
+  "original_qualifier": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_directional_origin_preflight_v1.json",
+  "source_doi_pins": {
+    "fitness_2025": "10.5061/dryad.qfttdz0sx",
+    "pedigree_2024": "10.5061/dryad.80gb5mkxh"
+  },
+  "expected_source_version_ids": {
+    "fitness_2025": 354268,
+    "pedigree_2024": 278334
+  },
+  "expected_header_roles": {
+    "fitness_2025/LRS.txt": {
+      "required_exact": [
+        "ID",
+        "natal.island",
+        "adult.island",
+        "year",
+        "LRS"
+      ],
+      "role": "one-individual lifetime reproduction"
+    },
+    "fitness_2025/ARS_Survival.txt": {
+      "required_exact": [
+        "ID",
+        "obs.year",
+        "natal.island",
+        "recruits",
+        "survival"
+      ],
+      "role": "individual-year reproductive and survival record"
+    },
+    "pedigree_2024/GGAM_data_GeneticArchitecture.txt": {
+      "required_exact": [
+        "ID",
+        "natal.island",
+        "hatch.year",
+        "Dispersal.status"
+      ],
+      "role": "individual genotype-derived natal island metadata"
+    },
+    "pedigree_2024/SNPpedigree_GeneticArchitecture.txt": {
+      "required_exact": [
+        "individual",
+        "dam",
+        "sire"
+      ],
+      "role": "pedigree parental identities"
+    }
+  },
+  "header_evidence_requirements": {
+    "kind": "EXTRACTED_FIRST_HEADER_LINE_ONLY",
+    "encoding": "UTF-8",
+    "maximum_utf8_bytes_per_header": 4096,
+    "maximum_fields_per_header": 200,
+    "separator": "UNVERIFIED_MUST_BE_DECLARED_PER_FILE",
+    "independent_extraction_witness_required": true,
+    "source_file_bytes_permitted_in_repository": false,
+    "sample_values_permitted": false,
+    "no_automatic_column_alias_normalization": true,
+    "no_auto_join_of_ID_and_individual": true,
+    "no_auto_join_of_island_names_and_codes": true,
+    "no_inference_of_detection_from_missing_survey_rows": true,
+    "known_delimiters_allowed_only_with_explicit_evidence": [
+      "TAB",
+      "COMMA",
+      "SEMICOLON",
+      "WHITESPACE"
+    ],
+    "note": "No physical header has been read. The .txt extension and public README variable list do not certify a tab delimiter. Never coerce a purported header using a guessed separator."
+  },
+  "response_blind_gate_policy": {
+    "missing_attestation": "HOLD_PHYSICAL_HEADERS_NOT_ATTESTED",
+    "partial_attestation": "HOLD_INCOMPLETE_PHYSICAL_HEADER_SET",
+    "schema_mismatch": "STOP_COLUMN_SCHEMA_OR_SOURCE_IDENTITY_MISMATCH",
+    "header_set_syntactically_consistent": "HEADER_NAMES_ATTESTED_KEYS_STILL_UNJOINED",
+    "physical_byte_checksum_verification_within_this_gate": false,
+    "cross_file_bird_key_value_equality_within_this_gate": false,
+    "cross_file_island_codes_equivalent_within_this_gate": false,
+    "individual_origin_label_directness_or_error_within_this_gate": false,
+    "new_population_level_first_colonization_inferred": false,
+    "source_loss_or_recolonization_inferred": false,
+    "biological_scoring_authorized": false
+  },
+  "cross_file_join_contract": {
+    "join_spec_provisional_only": true,
+    "candidate_individual_key_links": [
+      {
+        "left": "fitness_2025/LRS.txt:ID",
+        "right": "pedigree_2024/GGAM_data_GeneticArchitecture.txt:ID",
+        "status": "UNVERIFIED_VALUE_IDENTITY"
+      },
+      {
+        "left": "fitness_2025/ARS_Survival.txt:ID",
+        "right": "pedigree_2024/SNPpedigree_GeneticArchitecture.txt:individual",
+        "status": "UNVERIFIED_VALUE_IDENTITY_AND_ALIAS"
+      }
+    ],
+    "candidate_island_origin_key_links": [
+      {
+        "left": "fitness_2025/LRS.txt:natal.island",
+        "right": "pedigree_2024/GGAM_data_GeneticArchitecture.txt:natal.island",
+        "status": "UNVERIFIED_ISLAND_CODE_SYSTEM"
+      }
+    ],
+    "source_documented_spelling_27": "Hestmannøly",
+    "do_not_auto_correct_spelling_27": true
+  },
+  "present_evidence": {
+    "exact_v2_v3_file_metadata_frozen": true,
+    "first_header_line_independently_extracted": false,
+    "raw_file_downloaded_in_this_contract": false,
+    "bird_fitness_genotype_values_opened": false,
+    "verified_cross_archive_ID_join": false,
+    "authorized_new_ecological_endpoint": false
+  }
+}
