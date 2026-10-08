@@ -144,6 +144,15 @@ The initial metadata candidate above was deliberately a HOLD, not an authorized 
 
 This is the failure of **this stringent EOG qualification contract**, not a negative ecological result or a defect attributed to the original study. The original v1 metadata HOLD entry is retained as historical state; the subsequent STOP is not backdated to it. No biological outcome has been scored.
 
+### Independent observational source-origin channels — qualifications, not confirmatory tests
+
+The synthetic v23 `P_node` first-arrival source tag must not be conflated with every form of field movement or genetic relatedness.
+
+- **Glanville (*Melitaea cinxia*) kinship:** [Fountain et al., Dryad 10.5061/dryad.d461s](https://doi.org/10.5061/dryad.d461s) identifies cross-patch full-sib families over 2007–2012, a useful **undirected** female breeding-movement observation. It cannot orient the mother's visit order or identify an island/patch's first source from the sibling relation alone. This is also the **same biological system** as EOG's already-consumed Glanville forecast; it is not an independent external confirmation. See [source-only Glanville genetic preflight](eog_glanville_genetic_provenance_preflight_v1.md).
+- **Helgeland (*Passer domesticus*) natal dispersal:** [Saatoglu et al., Dryad 10.5061/dryad.qfttdz0sx](https://doi.org/10.5061/dryad.qfttdz0sx) publicly documents individual `natal.island` and `adult.island`, plus capture-mark-recapture, survival and recruitment fields; [2024 pedigree data](https://doi.org/10.5061/dryad.80gb5mkxh) provide a related genomic source. This is a **different ecological system with direction-aware individual history**, but an individual's natal-to-adult migration does not establish the *first colonization* or *source-loss insurance* of a whole island. Immigrant fitness is already published and not novel to EOG. See [Helgeland observation preflight](eog_helgeland_directional_origin_preflight_v1.md).
+
+**Current external evidentiary boundary:** genuine individual-level natal orientation has a documented public route, but **no dataset has yet been qualified** for the joint real-world test of (i) source configuration, (ii) population-level source loss/recolonization, and (iii) independent first-arrival-source history. Neither qualifier opens any biological response, initiates an additional EOG-WF endpoint, or advances the third-paper HOLD.
+
 ## 7. Validation and non-retroactivity
 
 This is a post-result evidence synthesis, *not* a new independently randomized validation. `tests/test_eog_virtual_world_ecology_synthesis_v1.py` verifies all pinned Git source blobs, exact JSON fields, published result fingerprints, and the two preregistered **REFUTED** outcomes. It must not reopen or alter v10–v26 experimental results, the JBI BAM manuscript, the Ecology Letters history-storage manuscript, or the EOG-WF empirical 3/31/3 closure.
