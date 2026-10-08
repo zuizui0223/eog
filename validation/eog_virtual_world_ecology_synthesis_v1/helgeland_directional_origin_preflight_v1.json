@@ -90,7 +90,7 @@
         "23": "Træna",
         "24": "Selvær",
         "26": "Gjerøy",
-        "27": "Hestmannøy",
+        "27": "Hestmannøly",
         "28": "Indre Kvarøy",
         "34": "Lovund",
         "35": "Sleneset",
@@ -102,7 +102,8 @@
       "independently_unique_natal_source_assignment_for_every_individual": false,
       "raw_genotype_or_pedigree_rows_opened_in_this_audit": false,
       "physical_header_verified": false,
-      "cross_archival_individual_and_island_key_join_qualified": false
+      "cross_archival_individual_and_island_key_join_qualified": false,
+      "island_name_spelling_boundary": "The public 2024 README literally advertises code 27 as Hestmannøly. The expected place spelling Hestmannøy is not silently substituted until a source-backed crosswalk verifies the alias."
     },
     "genetic_assignment": {
       "dryad_doi": "10.5061/dryad.gqnk98sh8",
