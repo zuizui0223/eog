@@ -136,6 +136,36 @@ def fig4(ledger,out):
     p.append('<text x="500" y="300" text-anchor="middle" class="small">Unresolved negative state ≠ biological absence.</text>')
     write_svg(out/"figure4_level_c_calibration_funnel.svg",p)
 
+
+def supplementary_fig_s1(flow, out):
+    """The 21 original terminal labels, never regrouped or refitted."""
+    stops = [row for row in flow if row["classification"] == "scientific_protocol_stop"]
+    counts = Counter(row["terminal_stage"] for row in stops)
+    declared = set().union(*GROUPS.values())
+    if set(counts) != declared or sum(counts.values()) != 31 or len(counts) != 21:
+        raise ValueError("Frozen 21-label/31-STOP taxonomy has changed")
+
+    p = svg_start(1320, 1000, "Supplementary Figure S1: original terminal STOP labels")
+    p.append('<text x="660" y="42" text-anchor="middle" class="big">Original terminal STOP taxonomy</text>')
+    p.append('<text x="660" y="68" text-anchor="middle" class="mid">31 scientific/protocol STOPs across 21 unmerged labels</text>')
+    y = 90
+    max_count = max(counts.values())
+    for group, labels in GROUPS.items():
+        p.append(f'<rect x="45" y="{y}" width="1230" height="30" fill="#e9eaec"/>')
+        p.append(f'<text x="55" y="{y+21}" class="mid">{esc(group)}</text>')
+        p.append(f'<text x="1240" y="{y+21}" text-anchor="end" class="small">{sum(counts[k] for k in labels)} STOPs</text>')
+        y += 37
+        for label in sorted(labels, key=lambda k: (-counts[k], k)):
+            count = counts[label]
+            width = 460 * count / max_count
+            p.append(f'<text x="65" y="{y+17}" class="small">{esc(label)}</text>')
+            p.append(f'<rect x="665" y="{y+2}" width="{width:.1f}" height="20" class="bar"/>')
+            p.append(f'<text x="{680+width:.1f}" y="{y+18}" class="small">{count}</text>')
+            y += 29
+        y += 8
+    p.append('<text x="660" y="978" text-anchor="middle" class="small">Counts are reproduced from frozen candidate-flow terminal records; scored and administrative records are excluded.</text>')
+    write_svg(out / "supplementary_figure_S1_terminal_taxonomy.svg", p)
+
 def graphical_abstract(out):
     p=svg_start(1500,600,"Graphical abstract: from public data to claim-ready inference")
     p.append('<g transform="translate(150 20)">')
@@ -198,6 +228,7 @@ def main():
     fig2(flow,a.output_dir)
     fig3(flow,a.output_dir)
     fig4(ledger,a.output_dir)
+    supplementary_fig_s1(flow,a.output_dir)
     graphical_abstract(a.output_dir)
     stops=[r for r in flow if r["classification"]=="scientific_protocol_stop"]
     grouped_barriers={
@@ -222,6 +253,8 @@ def main():
       "figures":[p.name for p in sorted(a.output_dir.glob("figure*.svg"))],
       "graphical_abstract":"graphical_abstract_inferential_openness.svg",
       "supplementary_table":supplement.name,
+      "supplementary_figure":"supplementary_figure_S1_terminal_taxonomy.svg",
+      "fine_terminal_label_count":21,
       "scientific_attempts":sum(r["classification"] in {"predictive_result","scientific_protocol_stop"} for r in flow),
       "scientific_stops":len(stops),
       "scored_endpoints":sum(r["classification"]=="predictive_result" for r in flow),
