@@ -10,6 +10,17 @@ External supporting field protocol: **Husby et al. (2006)**, [Journal of Animal 
 
 The 2026 Dryad README [doi:10.5061/dryad.rr4xgxdnq](https://doi.org/10.5061/dryad.rr4xgxdnq) defines `Year` as the observation year and `date` as the observation date, without an explicit April 1 mapping. Biological membership in a recruitment cohort is **not** identical to the timestamp labeling of field observations.
 
+## Actual result — exact fit on all 73,593 records (after exposure)
+
+The first pinned-source GitHub Actions run **37804577337** completed successfully. Its aggregate-only artifact **11562470956**, ZIP SHA256 `3026186d8bd0d1c866e8ad7f681cf47a72e6772ac82b9e42ed45b0928f2ad11c`, was independently opened.
+
+- All **3,517** observations dated January–March have `Year = calendar_year(date) - 1`. **None** has the same calendar year or any other year offset.
+- All **70,076** observations dated April–December have `Year = calendar_year(date)`; zero exceptions.
+- Thus the deterministic April–March mapping fits **73,593 / 73,593**, without changing the underlying data.
+- The 12 monthly totals, first-run artifact identity and NO-SCORING controls are frozen in `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_april_year_mapping_frozen_v1.json`. The repeat CI requires an exact match.
+
+**What changed:** The rule is no longer merely plausible from the *discordant subset*; it is an exact **property of the observed file**. **What did not change:** Its intended semantics or whether it applies to other Helgeland datasets remain **not author-confirmed**. The 2006 post-April-1 recruitment criterion is a separate methodological precedent, not direct documentation of the source database's Year-field transformation.
+
 ## One remaining sharp diagnostic
 
 The prior audit establishes that **all *discordant* records occur in January–March**, but does not answer whether *other* January–March records instead have `Year = date.year`. A universal April–March rule requires **both**:
