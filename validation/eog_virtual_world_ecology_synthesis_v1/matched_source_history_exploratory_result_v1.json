@@ -1,0 +1,140 @@
+{
+  "schema": "eog.virtual_worlds.matched_source_geometry_history.v1",
+  "status": "POST_RESULT_EXPLORATORY_NOT_PREREGISTERED",
+  "matched_landscapes": 384,
+  "source_identity_mismatches": 0,
+  "three_sources_per_design": true,
+  "readout": "v22 full-history identification from complete post-activation occupancy snapshots, not a direct provenance assay",
+  "fingerprints": {
+    "v18": "f039164f427f52f3d8b0ebd78705056c723689933a96cfd5740417f0f8f90089",
+    "v19": "a1a4bcf4a8e6f91888f41e9f14826c662da66b869348c14ed8592b411636fd2d",
+    "v21": "40d349a8b134c72add0cd4aeb757b569654d45a519c2efcfe9114a1584dfdd25",
+    "v22": "3436235e0cc96b14088c27377a79b057b1018c74e71edbd48bac0a83e8a9e9dd"
+  },
+  "artifact_zip_sha256": {
+    "v18": "82fa7504b46b94369f787888be5d6c1a5e8d3caff622a8e686b23dc57007f9d2",
+    "v19": "bc4910968de071bab204ee9793a25aa4df69ce591ea8787ef8c8e6c62c7c6686",
+    "v21": "666ae4757128e8d3455bd8caeffee31d15c38da381db55f08215861705a3ff38",
+    "v22": "fe74470d84018941a9fe180218c281effa67cea1e0b577ccb8a86e874e776129"
+  },
+  "counts": {
+    "three_source_coverage_insurance_tradeoff": 281,
+    "dispersed_only_history_identifiable": 139,
+    "clustered_only_history_identifiable": 22,
+    "joint_tradeoff_and_dispersed_only_identifiable": 130,
+    "clustered_more_provenance_but_dispersed_only_identifiable": 131,
+    "clustered_more_overlap_but_dispersed_only_identifiable": 131
+  },
+  "history_identifiability_contingency": {
+    "neither": 14,
+    "dispersed_only": 139,
+    "clustered_only": 22,
+    "both": 209
+  },
+  "mean_paired_differences": {
+    "coverage_d_minus_c": 0.0669700861638844,
+    "insurance_c_minus_d": 0.3616778479143714,
+    "overlap_c_minus_d": 0.5658913134474842,
+    "provenance_c_minus_d": 0.6056486902955439,
+    "transient_d_minus_c": 0.12514091473117187,
+    "observability_d_minus_c": 0.3046875
+  },
+  "direction_counts": {
+    "coverage_d_minus_c": {
+      "positive": 293,
+      "tie": 17,
+      "negative": 74
+    },
+    "insurance_c_minus_d": {
+      "positive": 335,
+      "tie": 6,
+      "negative": 43
+    },
+    "overlap_c_minus_d": {
+      "positive": 357,
+      "tie": 19,
+      "negative": 8
+    },
+    "provenance_c_minus_d": {
+      "positive": 359,
+      "tie": 18,
+      "negative": 7
+    },
+    "transient_d_minus_c": {
+      "positive": 285,
+      "tie": 36,
+      "negative": 63
+    },
+    "observability_d_minus_c": {
+      "positive": 139,
+      "tie": 223,
+      "negative": 22
+    }
+  },
+  "strata": {
+    "barrier": {
+      "0.05": {
+        "n": 128,
+        "joint": 39,
+        "tradeoff": 105,
+        "dispersed_only": 41,
+        "clustered_only": 3
+      },
+      "0.2": {
+        "n": 128,
+        "joint": 46,
+        "tradeoff": 97,
+        "dispersed_only": 50,
+        "clustered_only": 7
+      },
+      "0.35": {
+        "n": 128,
+        "joint": 45,
+        "tradeoff": 79,
+        "dispersed_only": 48,
+        "clustered_only": 12
+      }
+    },
+    "autocorrelation": {
+      "high": {
+        "n": 192,
+        "joint": 55,
+        "tradeoff": 132,
+        "dispersed_only": 60,
+        "clustered_only": 14
+      },
+      "low": {
+        "n": 192,
+        "joint": 75,
+        "tradeoff": 149,
+        "dispersed_only": 79,
+        "clustered_only": 8
+      }
+    },
+    "neighbourhood": {
+      "queen": {
+        "n": 192,
+        "joint": 63,
+        "tradeoff": 139,
+        "dispersed_only": 69,
+        "clustered_only": 3
+      },
+      "rook": {
+        "n": 192,
+        "joint": 67,
+        "tradeoff": 142,
+        "dispersed_only": 70,
+        "clustered_only": 19
+      }
+    }
+  },
+  "interpretation": "Source basin overlap can retain a stronger difference in equilibrium provenance while an occupancy-only transient observation library less often distinguishes activation history. History retention and historical observability are different properties of the declared state and readout.",
+  "boundaries": [
+    "Exploratory cross-phase joining of related frozen synthetic panels, not a new randomized or preregistered joint experiment.",
+    "No model, biological response, or real ecological process was reestimated.",
+    "Worst-source-loss retention is structural reachable-set preservation, not metapopulation persistence or extinction risk.",
+    "Observed identifiability concerns three synthetic activation schedules and complete structural occupancy snapshots.",
+    "Differences in observable signal cannot be promoted to a causal mediation of source geometry through provenance.",
+    "Existing EOG-WF empirical endpoints and the JBI BAM / Ecology Letters history-storage manuscripts are unchanged."
+  ]
+}

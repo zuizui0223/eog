@@ -99,6 +99,10 @@ Consequently, **neither "a graph contains more information than a map" nor "sour
 
 That stronger joint claim is **NOT YET TESTED**. The source panels support different pieces of it, not their natural prevalence or a field-calibrated causal mechanism.
 
+**New post-result synthetic integration (2026-10-08).** We subsequently joined the exact frozen v18, v19, v21 and v22 **three-source** configurations on all 384 latent landscape keys, verifying every source ID and source-basin signature before comparing outcomes. In **281/384**, dispersed layout reached farther and clustered layout retained more reachability after a worst-source deletion; in **130/384**, that same joint contrast coincided with history being identifiable from post-activation occupancy snapshots *only under dispersed placement*. In **131/384**, clustered placement had a stronger history-dependent equilibrium provenance signature although only dispersed placement allowed occupancy-snapshot identification. Details and the exact frozen-archive rerun: [matched source/history exploratory audit](eog_matched_source_geometry_history_v1.md).
+
+This is a **non-preregistered, within-generator, joint descriptive comparison**, not confirmation of a new biological mechanism or external ecological test. The original claim about a single independently observed natural source configuration remains **NOT TESTED**.
+
 ## 6. External validation contract — do not expose responses before design freeze
 
 One target is enough; avoid a new arbitrary synthetic landscape sweep.
