@@ -1,0 +1,147 @@
+{
+  "schema": "eog.helgeland.2020_eight_vs_2021_eleven_island_names.literature_v1",
+  "status": "LITERATURE_NAME_CROSSWALK_ONLY__NUMERIC_CODES_AND_EFFORT_HOLD",
+  "sources": {
+    "eight": {
+      "citation": "Niskanen et al. (2020), Consistent scaling of inbreeding depression in space and time in a house sparrow metapopulation",
+      "doi": "10.1073/pnas.1909599117",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7322018/",
+      "evidence_section": "Materials and Methods: Samples and Genotyping",
+      "source_data_doi": "10.5061/dryad.m0cfxpp10",
+      "source_data_published_v8_id": 78498
+    },
+    "eleven": {
+      "citation": "Ranke et al. (2021), Spatial structure and dispersal dynamics in a house sparrow metapopulation",
+      "doi": "10.1111/1365-2656.13580",
+      "url": "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2656.13580",
+      "evidence_section": "2.1 Study populations",
+      "study_years": [
+        1993,
+        2014
+      ]
+    }
+  },
+  "islands": [
+    {
+      "name": "Aldra",
+      "habitat": "farm",
+      "niskanen_2020_included": true,
+      "niskanen_2020_genotyped_adult_years": [
+        1998,
+        2013
+      ]
+    },
+    {
+      "name": "Gjerøy",
+      "habitat": "farm",
+      "niskanen_2020_included": true,
+      "niskanen_2020_genotyped_adult_years": [
+        1998,
+        2013
+      ]
+    },
+    {
+      "name": "Hestmannøy",
+      "habitat": "farm",
+      "niskanen_2020_included": true,
+      "niskanen_2020_genotyped_adult_years": [
+        1998,
+        2013
+      ]
+    },
+    {
+      "name": "Indre Kvarøy",
+      "habitat": "farm",
+      "niskanen_2020_included": true,
+      "niskanen_2020_genotyped_adult_years": [
+        1998,
+        2013
+      ]
+    },
+    {
+      "name": "Nesøy",
+      "habitat": "farm",
+      "niskanen_2020_included": true,
+      "niskanen_2020_genotyped_adult_years": [
+        1998,
+        2013
+      ]
+    },
+    {
+      "name": "Myken",
+      "habitat": "nonfarm",
+      "niskanen_2020_included": true,
+      "niskanen_2020_genotyped_adult_years": [
+        2004,
+        2013
+      ]
+    },
+    {
+      "name": "Selvær",
+      "habitat": "nonfarm",
+      "niskanen_2020_included": true,
+      "niskanen_2020_genotyped_adult_years": [
+        2003,
+        2013
+      ]
+    },
+    {
+      "name": "Træna",
+      "habitat": "nonfarm",
+      "niskanen_2020_included": true,
+      "niskanen_2020_genotyped_adult_years": [
+        2003,
+        2013
+      ]
+    },
+    {
+      "name": "Lurøy-Onøy",
+      "habitat": "farm",
+      "niskanen_2020_included": false,
+      "niskanen_2020_genotyped_adult_years": null
+    },
+    {
+      "name": "Lovund",
+      "habitat": "nonfarm",
+      "niskanen_2020_included": false,
+      "niskanen_2020_genotyped_adult_years": null
+    },
+    {
+      "name": "Sleneset",
+      "habitat": "nonfarm",
+      "niskanen_2020_included": false,
+      "niskanen_2020_genotyped_adult_years": null
+    }
+  ],
+  "excluded_false_synonyms": [
+    "Ytre Kvarøy",
+    "Sundøy"
+  ],
+  "counts": {
+    "niskanen_2020_named": 8,
+    "ranke_2021_named": 11,
+    "names_shared": 8,
+    "eleven_only": 3
+  },
+  "qualifiers": {
+    "published_names_directly_confirmed": true,
+    "niskanen_year_ranges_are_genotyped_adult_sample_windows_not_survey_effort": true,
+    "source_file_2020_v8_physical_header_or_rows_verified": false,
+    "source_file_2026_v6_numeric_site_code_crosswalk_verified": false,
+    "source_file_2020_v8_island_code_crosswalk_verified": false,
+    "absence_of_rows_licensed_as_sampled_zero": false,
+    "eleven_islands_all_consistently_sampled_across_1993_2014": false,
+    "historical_ecological_input_model_fitted": false,
+    "independent_heldout_predictions_authorized": false,
+    "new_ecological_effect_claim": false
+  },
+  "existing_published_movement_precedent": {
+    "recorded_recruits_total": 2192,
+    "recorded_dispersed_natal_recruits": 376,
+    "recording_period": [
+      1993,
+      2014
+    ],
+    "scientific_note": "These are published results from Ranke et al. 2021, NOT new EOG outcomes; 2020 publication-time model inputs cannot include 2021-paper-only knowledge."
+  }
+}

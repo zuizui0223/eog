@@ -1,0 +1,46 @@
+name: Helgeland 2020 to 2021 named-island literature mapping
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2020-2021-island-literature-v1.yml'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2020_2021_island_literature_crosswalk_v1.json'
+      - 'tests/test_helgeland_2020_2021_island_literature_crosswalk_v1.py'
+      - 'docs/eog_helgeland_2020_2021_island_literature_crosswalk_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2020-2021-island-literature-v1.yml'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2020_2021_island_literature_crosswalk_v1.json'
+      - 'tests/test_helgeland_2020_2021_island_literature_crosswalk_v1.py'
+      - 'docs/eog_helgeland_2020_2021_island_literature_crosswalk_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  paper-names-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Validate named site sets and sampling windows without biological files
+        run: python -m pytest -q tests/test_helgeland_2020_2021_island_literature_crosswalk_v1.py
+      - name: Prove no biological rows or forecasts are invoked
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2020_2021_island_literature_crosswalk_v1.json')
+          x=json.loads(p.read_text(encoding='utf-8'))
+          assert x['counts']['names_shared']==8
+          assert x['counts']['eleven_only']==3
+          assert len(x['islands'])==11
+          assert x['qualifiers']['source_file_2020_v8_island_code_crosswalk_verified'] is False
+          assert x['qualifiers']['absence_of_rows_licensed_as_sampled_zero'] is False
+          assert x['qualifiers']['independent_heldout_predictions_authorized'] is False
+          PY
