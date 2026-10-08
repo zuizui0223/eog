@@ -1,0 +1,150 @@
+{
+  "schema": "eog.helgeland.dryad_2026.source_metadata_frozen_observed_v1",
+  "status": "SOURCE_DECLARED_METADATA_FROZEN__NO_BIRD_BYTES_VERIFIED",
+  "authority": {
+    "github_actions_run_id": 37793671450,
+    "github_actions_artifact_id": 11556844942,
+    "github_actions_artifact_name": "HELGELAND-2026-DRYAD-PUBLIC-JSON-NO-BIRD-DATA-v1",
+    "artifact_zip_sha256": "aa0a7f0ff034ac8d254f3633d5e7b2e2a8a32e5285520e4906d3071ca33d76d4",
+    "run_head_commit": "bf3e3a7a7250a0bb02502c8c015138fe79057606",
+    "source": "Public Dryad DOI /api/v2/datasets JSON and canonical numeric version /files JSON"
+  },
+  "source_doi": "10.5061/dryad.rr4xgxdnq",
+  "dryad_dataset_id": 177360,
+  "dryad_version_id": 421942,
+  "dryad_version_number": 6,
+  "source_reported_sha256_is_independent_file_byte_verification": false,
+  "biological_data_opened": false,
+  "physical_headers_verified": false,
+  "surveyed_zero_panel_verified": false,
+  "as_of_t_record_availability_verified": false,
+  "ecological_endpoint_authorized": false,
+  "files": [
+    {
+      "name": "Analyses_in_brms_ECY25-1341.R",
+      "file_metadata_id": 4576417,
+      "size_bytes": 7210,
+      "source_declared_sha256": "faf96e00036ecab1c310e52ebe4a00b229c6f32ec4c0c38b39165347f366fb61",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "CMR2table_adults_ECY25-1341.R",
+      "file_metadata_id": 4576421,
+      "size_bytes": 1297,
+      "source_declared_sha256": "606c2bf0a80e88b0065392e832d3affcb55a4008546decc22358580ecc839483",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "CMR2table_juveniles_ECY25-1341.R",
+      "file_metadata_id": 4576422,
+      "size_bytes": 3906,
+      "source_declared_sha256": "94065069999a1a94b35aab1473b394da172e0e4744de290ae69de73042bb5399",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "CMR_juvenile_to_adult_one_ind_per_isl_full_model_ECY25-1341.stan",
+      "file_metadata_id": 4576424,
+      "size_bytes": 9414,
+      "source_declared_sha256": "2f9fd7f7b89a58984590daa8d615a2108bc8a473d1259a5062951b69c069aaad",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "CMR_nest_to_ad_dispersers_ELASTICITY_gen_quant_block_ECY25-1341.stan",
+      "file_metadata_id": 4576425,
+      "size_bytes": 15201,
+      "source_declared_sha256": "41e899e677c55f692a1db78be58ee7caf58f48b1a8dff9bb433a9b8ed3effa62",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "Functions_to_generate_tables_and_figures_from_stan_and_brms_outputs_ECY25-1341.R",
+      "file_metadata_id": 4576423,
+      "size_bytes": 29153,
+      "source_declared_sha256": "8c6e1b13ae0748c5dd0f3bc6a8744dfac7afebe713613f80b0db8f2c42d3bdeb",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "Juvenile_mark-recapture_ECY25-1341.R",
+      "file_metadata_id": 4576418,
+      "size_bytes": 6901,
+      "source_declared_sha256": "46a15d165fdf77c386554ac3b5225ce213d59b61b9c48c70d221162ccc915db3",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "Main_model_of_metapopulation_dynamics_ECY25-1341.R",
+      "file_metadata_id": 4576419,
+      "size_bytes": 25775,
+      "source_declared_sha256": "0b82964c42f4aaf99fdaac8ae38ff5c301cfe0a8a828e1aa8a94cfbc8814bf72",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "Parameter_to_latex_ECY25-1341.csv",
+      "file_metadata_id": 4576426,
+      "size_bytes": 1989,
+      "source_declared_sha256": "176f4b10a6c54af4fe59f040de493c5e1c7d005f022ed09a6f11aa6fa0c3b109",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "README.md",
+      "file_metadata_id": 4576433,
+      "size_bytes": 9685,
+      "source_declared_sha256": "451ea7713ebcf05ec13163549d99ede3bfc5132e2f8b2091dfcddfab4a94a14e",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "Tables_and_figures_submission_2_ECY25-1341.R",
+      "file_metadata_id": 4576427,
+      "size_bytes": 59937,
+      "source_declared_sha256": "09a5dace2f08a083714e56cc95ac2b9055ea33ebabecde52bc325b213e89d437",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "brm2table_short_ECY25-1341.R",
+      "file_metadata_id": 4576420,
+      "size_bytes": 2793,
+      "source_declared_sha256": "216f1ff7fa5c7b2398cba2d7da5513dcca31530d87dac1185cf94b46c3a1e0fc",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "cleaned_density_dependence_data_ECY25-1341.txt",
+      "file_metadata_id": 4576415,
+      "size_bytes": 49457,
+      "source_declared_sha256": "287ef153fd7c50abe551ce19728de797993e15d0614f78e71070a8ff5284ef3c",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "estimated_pop_sizes_nestling_to_adult_model_with_lurøy_onøy_ECY25-1341.txt",
+      "file_metadata_id": 4576413,
+      "size_bytes": 24027,
+      "source_declared_sha256": "4ae619c27de56031e56e1829c9d3a28f39399876dce9f52c1ae270f1f11e6d27",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "juvenile_to_ad_surival_histories_long_ECY25-1341.txt",
+      "file_metadata_id": 4576414,
+      "size_bytes": 853027,
+      "source_declared_sha256": "05234219a1f89da0b865d0bcd1c59db8b7e87f8df7c20e263cf4f96dd7a115a8",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "nestling_producers_2007_2014_ECY25-1341.txt",
+      "file_metadata_id": 4576416,
+      "size_bytes": 227785,
+      "source_declared_sha256": "dbb664711f65ffbbec204ee73414182241a0079ea0958f941e02e81db350ca49",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "presence_data_1994_2022_ECY25-1341.txt",
+      "file_metadata_id": 4576411,
+      "size_bytes": 3523152,
+      "source_declared_sha256": "a0de7a471a1adebcf6d46d181112ebe0dd0888cd3b0a03f60451493136b47853",
+      "source_declared_digest_type": "sha-256"
+    },
+    {
+      "name": "sex_genetically_corrected_ECY25-1341.txt",
+      "file_metadata_id": 4576412,
+      "size_bytes": 40711,
+      "source_declared_sha256": "07aef4d38b84006f4cbc19d3d339d2b34514ffa0b9f50dedba5fbd888126a480",
+      "source_declared_digest_type": "sha-256"
+    }
+  ]
+}
