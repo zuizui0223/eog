@@ -1,0 +1,146 @@
+{
+  "schema": "eog.helgeland.same_archive_parent_recruit.source_only_contract.v1",
+  "status": "FROZEN_PUBLIC_README_ONLY__NO_PHYSICAL_HEADERS_OR_BIRD_ROWS",
+  "frozen_before_data_exposure": true,
+  "source": {
+    "dataset": "fitness_2025",
+    "doi": "10.5061/dryad.qfttdz0sx",
+    "dryad_version_id": 354268,
+    "dryad_version_number": 2,
+    "source_metadata": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json",
+    "public_readme_url": "https://datadryad.org/dataset/doi%3A10.5061/dryad.qfttdz0sx"
+  },
+  "scope": "Within-2025 parent–recruit observation-proxy feasibility, NOT first-island colonization, cause, or historical route",
+  "expected_headers": {
+    "LRS.txt": {
+      "dryad_file_id": 3972793,
+      "required_exact": [
+        "ID",
+        "natal.island",
+        "adult.island",
+        "year",
+        "LRS"
+      ],
+      "role": "individual lifetime retrospective endpoint"
+    },
+    "ARS_Survival.txt": {
+      "dryad_file_id": 3972792,
+      "required_exact": [
+        "ID",
+        "obs.year",
+        "year",
+        "fiflok",
+        "laflok",
+        "natal.island"
+      ],
+      "role": "individual-year record with first/last observed islands, not necessarily parental breeding island per year"
+    },
+    "Rectype_LRS.txt": {
+      "dryad_file_id": 3972795,
+      "required_exact": [
+        "dam",
+        "sire",
+        "recruit",
+        "lastobs.island",
+        "year"
+      ],
+      "role": "parent/recruit IDs, offspring last observation island; not natal island or first settlement proof"
+    },
+    "Rectype_ARS_Survival.txt": {
+      "dryad_file_id": 3972794,
+      "required_exact": [
+        "dam",
+        "sire",
+        "recruit",
+        "lastobs.island",
+        "obs.year",
+        "year",
+        "flok.year"
+      ],
+      "role": "recruit year-level record; flok.year refers to recruit breeding island-year per public README"
+    }
+  },
+  "candidate_links": [
+    {
+      "left": "Rectype_LRS.txt:dam",
+      "right": "LRS.txt:ID",
+      "meaning": "maternal individual join candidate",
+      "qualified": false
+    },
+    {
+      "left": "Rectype_LRS.txt:sire",
+      "right": "LRS.txt:ID",
+      "meaning": "paternal individual join candidate",
+      "qualified": false
+    },
+    {
+      "left": "Rectype_LRS.txt:recruit",
+      "right": "LRS.txt:ID",
+      "meaning": "recruit individual join candidate",
+      "qualified": false
+    },
+    {
+      "left": "Rectype_ARS_Survival.txt:dam",
+      "right": "ARS_Survival.txt:ID",
+      "meaning": "maternal individual-year join candidate",
+      "qualified": false
+    },
+    {
+      "left": "Rectype_ARS_Survival.txt:sire",
+      "right": "ARS_Survival.txt:ID",
+      "meaning": "paternal individual-year join candidate",
+      "qualified": false
+    },
+    {
+      "left": "Rectype_ARS_Survival.txt:recruit",
+      "right": "ARS_Survival.txt:ID",
+      "meaning": "recruit individual-year join candidate",
+      "qualified": false
+    }
+  ],
+  "prohibitions": {
+    "assume_identical_id_domains_from_column_names": false,
+    "infer_parent_breeding_island_from_retrospective_adult_island": false,
+    "infer_year_specific_island_from_first_or_last_observed_island": false,
+    "infer_natal_island_from_lastobs_island": false,
+    "treat_genotype_derived_or_future_info_as_prospective_predictor": false,
+    "infer_island_initial_colonist_or_source_loss": false,
+    "compute_biological_scores_before_independent_gates": false
+  },
+  "gates": [
+    {
+      "gate": "SOURCE_PIN",
+      "status": "METADATA_ONLY_PINNED",
+      "required": "Exact Dryad 2025 v2 file ID, size and source-declared digest"
+    },
+    {
+      "gate": "PHYSICAL_HEADERS",
+      "status": "HOLD",
+      "required": "Independently byte-verified first line/delimiter for all four files"
+    },
+    {
+      "gate": "ID_LINK",
+      "status": "HOLD",
+      "required": "Prove same-file parent/recruit IDs join safely; define missingness, duplicates and parentage method"
+    },
+    {
+      "gate": "TIME_ORIENTATION",
+      "status": "HOLD",
+      "required": "Verify parent breeding island and observation cutoff at offspring birth vs offspring island/time; no future leakage"
+    },
+    {
+      "gate": "OBSERVATION_PROCESS",
+      "status": "HOLD",
+      "required": "Detection/survey effort and unobserved movement/late survival qualified independently"
+    },
+    {
+      "gate": "HELDOUT",
+      "status": "HOLD",
+      "required": "Prerecorded calibration window and comparator, no retrospective outcome leakage"
+    }
+  ],
+  "original_cross_archive_2024_2025_contract_unchanged": true,
+  "original_helgeland_hold": "HOLD_DIRECTIONAL_INDIVIDUAL_PROXY_ONLY",
+  "ecological_endpoint_authorized": false,
+  "source_rows_opened": false
+}
