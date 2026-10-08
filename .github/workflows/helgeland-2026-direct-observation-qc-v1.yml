@@ -8,6 +8,7 @@ on:
       - 'tests/test_helgeland_2026_direct_observation_qc_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_direct_observation_qc_protocol_v1.json'
       - 'docs/eog_helgeland_2026_direct_observation_qc_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_structural_presence_qc_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -16,6 +17,7 @@ on:
       - 'tests/test_helgeland_2026_direct_observation_qc_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_direct_observation_qc_protocol_v1.json'
       - 'docs/eog_helgeland_2026_direct_observation_qc_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_structural_presence_qc_frozen_v1.json'
 
 permissions:
   contents: read
@@ -63,6 +65,12 @@ jobs:
           assert d['author_source_byte_and_firstline_identical_to_dryad_v6'] is True
           for k in ('surveyed_zero_panel_verified','as_of_t_predictor_availability_verified','directed_colonization_or_migration_scored','independent_heldout_benchmark_qualified','ecological_endpoint_authorized'):
               assert d[k] is False
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_structural_presence_qc_frozen_v1.json').read_text())
+          assert frozen['counts']==d['counts']
+          assert frozen['source']['dryad_version_id']==d['dryad_version_id']
+          assert frozen['status']==d['status']
+          assert frozen['source']['file_metadata_id']==d['source_file_metadata_id']
+          assert frozen['ecological_endpoint_authorized'] is False
           assert set(d['counts'])==set(json.loads(
               Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_direct_observation_qc_protocol_v1.json').read_text()
           )['allowed_output_aggregates'])
