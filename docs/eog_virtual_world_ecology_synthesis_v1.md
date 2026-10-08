@@ -119,6 +119,17 @@ One target is enough; avoid a new arbitrary synthetic landscape sweep.
 - BAM inverse and future-target partial identification → already has its own **BAM identifiability** manuscript lane.
 - **Decision: HOLD third paper.** The linked source-geometry story should not be promoted into a manuscript until an independent ecological endpoint, comparator baseline and observation contract exist.
 
+### One metadata-only candidate; not a scored empirical validation
+
+A public *Lepanthes rupestris* patch-occupancy archive is a plausible **candidate, not an approved confirmatory system**:
+
+- Dryad [10.5061/dryad.9p8cz8wc6](https://doi.org/10.5061/dryad.9p8cz8wc6) advertises one `lepa_all.csv` file (~84.83 KB).
+- The published study [Acevedo et al. (2020)](https://doi.org/10.1111/1365-2745.13361) describes **975 georeferenced phorophyte patches** monitored in **1999–2008**, with within-year repeated surveys used for a dynamic occupancy and detection model.
+- The publication already showed an association between asymmetric connectivity and colonization. **That headline result is prior art, not new EOG support.** The EOG-added question would be *source-basin redundancy and observed post-turnover/recolonization* beyond this strong existing model, under a genuinely held-out temporal split.
+- Archive metadata does **not** establish whether natural source-loss events, patchwise detection replicates and source attribution satisfy the new endpoint. Natural loss is not a randomized source-removal experiment.
+
+The **metadata-only HOLD** with all pre-response gates is recorded at `validation/eog_virtual_world_ecology_synthesis_v1/metadata_candidate_v1.json`. **No focal CSV response rows were downloaded or opened in this EOG candidate audit**, and no predictor, fit, outcome, source-loss estimate or new scientific score is reported. Only a separately frozen response-blind acquisition and detection contract can authorize further testing.
+
 ## 7. Validation and non-retroactivity
 
 This is a post-result evidence synthesis, *not* a new independently randomized validation. `tests/test_eog_virtual_world_ecology_synthesis_v1.py` verifies all pinned Git source blobs, exact JSON fields, published result fingerprints, and the two preregistered **REFUTED** outcomes. It must not reopen or alter v10–v26 experimental results, the JBI BAM manuscript, the Ecology Letters history-storage manuscript, or the EOG-WF empirical 3/31/3 closure.
