@@ -125,6 +125,20 @@ def qualification(contract:dict,inventory:dict,attestation:dict|None)->dict:
             )}
 
 
+
+def load_header_only_manifest(path: Path) -> dict:
+    """Reject source .txt/.raw paths BEFORE reading any caller-supplied bytes."""
+    if not path.name.endswith(".header-only.json") or path.is_symlink():
+        raise ValueError("Only explicit .header-only.json manifests are allowed")
+    # A response-bearing table must never be silently accepted as evidence input.
+    if path.stat().st_size > 32768:
+        raise ValueError("Header-only manifest exceeds 32 KiB safety bound")
+    raw=path.read_bytes()
+    if len(raw)>32768:
+        raise ValueError("Header-only manifest exceeded read budget")
+    return json.loads(raw.decode("utf-8"))
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--header-attestation-json",type=Path)
@@ -132,7 +146,7 @@ def main():
     args=parser.parse_args()
     contract=json.loads(CONTRACT.read_text(encoding="utf-8"))
     inventory=json.loads(FROZEN.read_text(encoding="utf-8"))
-    attest=json.loads(args.header_attestation_json.read_text(encoding="utf-8")) if args.header_attestation_json else None
+    attest=load_header_only_manifest(args.header_attestation_json) if args.header_attestation_json else None
     report=qualification(contract,inventory,attest)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n",
