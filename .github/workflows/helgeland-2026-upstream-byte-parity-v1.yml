@@ -1,0 +1,71 @@
+name: Helgeland 2026 GitHub to Dryad opaque byte parity
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2026-upstream-byte-parity-v1.yml'
+      - 'scripts/audit_helgeland_2026_upstream_byte_parity_v1.py'
+      - 'tests/test_helgeland_2026_upstream_byte_parity_v1.py'
+      - 'docs/eog_helgeland_2026_upstream_byte_parity_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2026-upstream-byte-parity-v1.yml'
+      - 'scripts/audit_helgeland_2026_upstream_byte_parity_v1.py'
+      - 'tests/test_helgeland_2026_upstream_byte_parity_v1.py'
+      - 'docs/eog_helgeland_2026_upstream_byte_parity_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json'
+
+permissions:
+  contents: read
+
+jobs:
+  two-public-file-opaque-hashes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Verify exact independent author's public commit
+        run: |
+          test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Synthetic tests only
+        run: python -m pytest -q tests/test_helgeland_2026_upstream_byte_parity_v1.py
+      - name: Stream exactly two pinned public files as opaque hash bytes
+        run: |
+          python scripts/audit_helgeland_2026_upstream_byte_parity_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-2026-upstream-parity-v1.json
+      - name: Check source identity and unchanged ecological HOLD
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('build/helgeland-2026-upstream-parity-v1.json').read_text())
+          assert d['status']=='MATCHES_TWO_FROZEN_DRYAD_V6_FILES'
+          assert len(d['files'])==2
+          assert d['dryad_version_id']==421942
+          assert d['upstream_commit']=='a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5'
+          assert all(x['size_matches_dryad_registered_metadata'] and
+                     x['upstream_sha256_matches_dryad_declared_digest'] for x in d['files'])
+          assert all(not x['biological_rows_decoded_or_scored'] for x in d['files'])
+          assert d['surveyed_zero_panel_verified'] is False
+          assert d['as_of_t_processing_verified'] is False
+          assert d['ecological_endpoint_authorized'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2026-TWO-PUBLIC-FILES-HASH-ONLY-v1
+          path: build/helgeland-2026-upstream-parity-v1.json
+          if-no-files-found: warn
