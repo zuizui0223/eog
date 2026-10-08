@@ -48,11 +48,11 @@ def read_flow(path):
 
 def fig1(out):
     stages=[
-      ("1","Exact source","bytes/version retrievable"),
-      ("2","Registry","site/geometry/time reconstructable"),
-      ("3","Linkage","response linked to opportunity units"),
-      ("4","Semantics","zero means surveyed negative"),
-      ("5","Calibration","negative state identifiable"),
+      ("1","Exact source","bytes/version|retrievable"),
+      ("2","Registry","site/geometry/time|reconstructable"),
+      ("3","Linkage","response linked to|opportunity units"),
+      ("4","Semantics","zero = surveyed|negative"),
+      ("5","Calibration","negative state|identifiable"),
     ]
     p=svg_start(1200,330,"Inferential-openness ladder")
     p.append('<text x="600" y="38" text-anchor="middle" class="big">From public data to claim-ready inference</text>')
@@ -61,7 +61,12 @@ def fig1(out):
         p.append(f'<rect x="{x}" y="105" width="190" height="105" rx="10" class="box"/>')
         p.append(f'<text x="{x+95}" y="135" text-anchor="middle" class="big">{n}</text>')
         p.append(f'<text x="{x+95}" y="162" text-anchor="middle" class="mid">{esc(title)}</text>')
-        p.append(f'<text x="{x+95}" y="188" text-anchor="middle" class="small">{esc(sub)}</text>')
+        # Two short subtitle lines must fit inside each 190px box.
+        parts=sub.split("|")
+        if len(parts)!=2 or any(len(line)>20 for line in parts):
+            raise ValueError("Figure 1 box subtitle wrapping contract violated")
+        for j,line in enumerate(parts):
+            p.append(f'<text x="{x+95}" y="{182+17*j}" text-anchor="middle" class="small">{esc(line)}</text>')
         if i<len(stages)-1:
             p.append(f'<line x1="{x+190}" y1="157" x2="{x+220}" y2="157" class="line"/>')
             p.append(f'<polygon points="{x+220},157 {x+210},151 {x+210},163" class="accent"/>')
