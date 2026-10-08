@@ -14,6 +14,18 @@ The fixed authors' GitHub repository `torhanssonfrank/DensityRegulationHouseSpar
 
 The 2020 study focused on **8 islands** while the 2026 source concerns **11 islands**. Never assume exact island IDs, survey effort, same estimand, or equivalent year labels without independent code/variable concordance.
 
+## Independently retrieved historical version IDs (2026-10-09)
+
+GitHub Actions read-only job **37856758562** returned *only* Dryad's published-version and file-list JSON metadata. Its successful artifact **11584312291** (ZIP SHA-256 `fbe9e500a023e7b45b2da2d91b8a35ac39a7488a2873b651ee62527d2b1b46b1`) was opened and inspected:
+
+- **Baalsrud**: published **24 April 2014**, Dryad **v1**, numeric version ID **5191**, **5 files**. `DemographicNe-Datafile.csv`: file metadata ID **28000**, size **75,302 bytes**; the source declares an **MD5**, not a SHA-256 digest. No independent data bytes were hashed.
+- **Niskanen**: the latest historical release by 31 December 2020 was **19 August 2020**, published **v8**, numeric version ID **78498**, **22 files**. The specific `Pop_size_1997_2012.csv` and `Pop_size_1998_2013.csv` appeared as file IDs **358961** and **358957**, with source-declared SHA-256 strings and sizes **1,234** and **1,266 bytes**.
+- The published version list also includes v2 (2020-05-21), v7 (2020-07-15), and **v10 (2023-01-19, internal 208617)**. The 2023 revision is **not** a pre-2021 model input.
+
+All published-source version IDs, the complete 5- and 22-file metadata catalog fingerprints and the five required-file IDs/sizes/digests are now frozen in `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_historical_public_vintages_frozen_v1.json`. Repeated CI must match **exactly** or STOP.
+
+**Meaning:** These *archives* were demonstrably publicly available before the proposed 2021–2022 future target. That does **not** prove the recorded variables contain a complete survey denominator, match the 2026 11-island roster, or can build a valid forecast. The script never downloaded or decoded the underlying files.
+
 ## Task of this PR — no bird data rows
 
 `scripts/audit_helgeland_historical_dryad_vintages_v1.py` uses a **strict API GET allowlist** for only the two specific historical DOIs:
@@ -22,7 +34,7 @@ The 2020 study focused on **8 islands** while the 2026 source concerns **11 isla
 
 No `/download`, raw files, headers, biological rows or genetic records may be fetched. Pagination, missing version publication timestamps, missing exact requisite files or unexpected version link formats must fail closed. Even a metadata PASS verifies **public version/file inventory only**: it does not independently verify whole-file bytes, metadata completeness for modeling, island-code alignment, negatives or ecological effects.
 
-Dedicated tests contain fabricated metadata. GitHub Actions outputs a single source-metadata-only JSON receipt. After a successful live run, manually freeze IDs/dates/source-declared digests in a separate source-evidence record before any actual biological analysis.
+Dedicated tests contain fabricated metadata. GitHub Actions outputs a single source-metadata-only JSON receipt. The successful live receipt has been inspected and frozen; the workflow re-verifies those exact identities. Any biological access and modelling remain separate, unauthorized steps.
 
 ## Which scientific question this would enable *later*
 
