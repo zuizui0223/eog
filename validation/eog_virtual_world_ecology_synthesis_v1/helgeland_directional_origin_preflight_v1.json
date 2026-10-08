@@ -1,0 +1,187 @@
+{
+  "schema": "eog.external_provenance.helgeland_metadata_gate.v1",
+  "status": "DIRECTIONAL_NATAL_DISPERSAL_FIELDS_DOCUMENTED__ECOLOGICAL_ENDPOINT_HOLD",
+  "review_scope": "Public README, paper methods and public archive inventory only; zero bird-level data values opened.",
+  "external_system": {
+    "taxon": "Passer domesticus",
+    "geography": "Helgeland archipelago, northern Norway",
+    "ecologically_independent_of_prior_EOG_Glanville": true,
+    "field_programme_start_year": 1993,
+    "published_metapopulation_islands": 18,
+    "primary_genotyped_islands": 8,
+    "observational_fact": "Natal island and adult/recruitment island can be distinct per individual; source direction is more directly represented than same-cohort Glanville maternal sibling dyads.",
+    "true_first_colonization_source_per_island_observed_from_this_metadata": false,
+    "whole_island_extirpation_and_rescue_events_verified": false,
+    "published_islands_occupied_for_most_study_years": true
+  },
+  "sources": {
+    "annual_recruitment": {
+      "dryad_doi": "10.5061/dryad.qfttdz0sx",
+      "paper_doi": "10.1111/1365-2656.70049",
+      "publication_year": 2025,
+      "publication_title": "Metapopulation-level analyses reveal positive fitness consequences of immigration in a small bird",
+      "advertised_files": [
+        "ARS_Survival.txt",
+        "LRS.txt",
+        "README.md",
+        "Rectype_ARS_Survival.txt",
+        "Rectype_LRS.txt"
+      ],
+      "advertised_archive_size_kb_approx": 439.04,
+      "source_advertised_LRS_keys": [
+        "ID",
+        "natal.island",
+        "adult.island",
+        "disc",
+        "year",
+        "sex",
+        "LRS",
+        "lifespan"
+      ],
+      "source_advertised_ARS_keys": [
+        "ID",
+        "obs.year",
+        "minadyear",
+        "maxadyear",
+        "year",
+        "fiflok",
+        "laflok",
+        "disp",
+        "natal.island",
+        "survival",
+        "recruits",
+        "gensex",
+        "age"
+      ],
+      "birth_to_adult_direction_documented_by_metadata": true,
+      "natal_label_origin": "Individual identification via field capture-mark-recapture and/or SNP-based genetic assignment/pedigree; label-specific provenance/uncertainty not yet verified from physical files.",
+      "ecological_target_prior_art": "Published analyses already compare fitness outcomes and recruitment of immigrant versus resident sparrows.",
+      "source_data_opened_in_this_audit": false,
+      "physical_header_verified": false,
+      "source_file_checksums_verified": false
+    },
+    "pedigree": {
+      "dryad_doi": "10.5061/dryad.80gb5mkxh",
+      "paper_doi": "10.1111/mec.17295",
+      "publication_year": 2024,
+      "source_advertised_files": [
+        "GGAM_data_GeneticArchitecture.txt",
+        "GWAS_data_genotype_GeneticArchitecture.raw",
+        "GWAS_data_phenotype_GeneticArchitecture.dat",
+        "README.md",
+        "SNPpedigree_GeneticArchitecture.txt"
+      ],
+      "advertised_metapopulation_pedigree_columns": [
+        "individual",
+        "dam",
+        "sire",
+        "real_or_dummy_indicator"
+      ],
+      "advertised_GGAM_columns": [
+        "ID",
+        "natal.island",
+        "Dispersal.status",
+        "hatch.year",
+        "sex"
+      ],
+      "archived_island_code_to_name_dictionary": {
+        "20": "Nesøy",
+        "22": "Myken",
+        "23": "Træna",
+        "24": "Selvær",
+        "26": "Gjerøy",
+        "27": "Hestmannøly",
+        "28": "Indre Kvarøy",
+        "34": "Lovund",
+        "35": "Sleneset",
+        "38": "Aldra",
+        "331": "Lurøy",
+        "332": "Onøy"
+      },
+      "note": "This dictionary is advertised in the 2024 README; patch-code equivalence with the 2025 fitness tables has not been physically verified.",
+      "independently_unique_natal_source_assignment_for_every_individual": false,
+      "raw_genotype_or_pedigree_rows_opened_in_this_audit": false,
+      "physical_header_verified": false,
+      "cross_archival_individual_and_island_key_join_qualified": false,
+      "island_name_spelling_boundary": "The public 2024 README literally advertises code 27 as Hestmannøly. The expected place spelling Hestmannøy is not silently substituted until a source-backed crosswalk verifies the alias."
+    },
+    "genetic_assignment": {
+      "dryad_doi": "10.5061/dryad.gqnk98sh8",
+      "role": "Previously published genetically assigned natal-source methodology, NOT a new EOG method or a ground-truth per-individual origin-error certificate.",
+      "published_2019_genotyped_individuals_after_QC": 3116,
+      "published_genotyped_island_count": 8,
+      "capture_mark_recapture_validation_described_in_publication": true
+    },
+    "field_process": {
+      "prior_paper_doi": "10.1111/1365-2656.13580",
+      "paper_role": "Prior art on spatial structure and dispersal dynamics in the same house-sparrow metapopulation.",
+      "independent_mark_recapture_of_some_natal_islands": true,
+      "gene_based_origin_inference_for_others": true,
+      "no_new_first_colonization_event_inferred_from_natal_dispersal": true
+    }
+  },
+  "observation_contract": {
+    "classification": "NATAL_ISLAND_TO_ADULT_OR_RECRUITMENT_ISLAND_OBSERVATION",
+    "comparison_with_v23": "Closer empirical analogue of direction-aware source attribution for an individual than cross-patch sibling relationships, but NOT the v23 P_node earliest-source-of-node tag under an activation history.",
+    "orientation_of_individual_natal_dispersal_possible_from_documented_fields": true,
+    "exact_first_founder_of_entire_recipient_island_identified": false,
+    "entire_island_occupancy_absence_semantics_present": false,
+    "annual_source_loss_event_pre_response_registry_present": false,
+    "birth_island_direct_or_genetically_inferred_must_be_separated": true,
+    "genetic_assignment_error_and_missingness_per_record_verified": false,
+    "natal_origin_exposure_before_breeding_outcome_verified": false,
+    "future_information_must_not_be_used_to_build_time_t_predictor": true,
+    "no_inference_that_a_breeding_island_was_unoccupied_before_immigrant_arrived": true
+  },
+  "possible_limited_follow_up": {
+    "role": "Separate explicitly RETROSPECTIVE channel-qualification analysis after response-independent physical schema/source-key verification; do not promote as confirmed EOG ecological source-loss result.",
+    "defensible_question": "Does individual natal-source information expose origin diversity of successful immigrants and recruits that aggregate island occupancy/counts cannot resolve, with island-year sampling effort and genetic assignment uncertainty explicitly modeled?",
+    "prior_art_caveat": "Immigrant vs resident fitness and dispersal success already reported by Saatoglu et al. 2025; this alone is not EOG novelty.",
+    "strong_reference_class": "Published dispersal/fecundity/survival models for this metapopulation, with count/effort, island habitat/farm status, and established distance/network connectivity baselines.",
+    "no_prospective_scoring_until": [
+      "Freeze exact Dryad source file versions and physical headers without revealing bird-level outcomes.",
+      "Fix island and bird identifier/code dictionary joins across 2024 pedigree and 2025 recruitment tables.",
+      "Identify sample opportunity, individual capture/resighting detection process and island-year coverage independent of fitness outcomes.",
+      "Distinguish natal island established by nest/capture from inferred with assignment uncertainty; require no future-year information leakage.",
+      "Choose a genuinely new target not already answered by source paper, its strong comparator and a temporally separated validation strategy.",
+      "Mark pre-exposed published result directions as PRIOR_EXPOSURE so future analysis cannot claim blind preregistration."
+    ]
+  },
+  "gates": {
+    "SOURCE_DOIS_AND_README_FIELD_ROLES_DOCUMENTED": true,
+    "DIRECTIONAL_INDIVIDUAL_NATAL_AND_ADULT_FIELDS_ADVERTISED": true,
+    "ECOLOGICAL_SYSTEM_INDEPENDENT_OF_CLOSED_GLANVILLE": true,
+    "DATA_ARCHIVE_SHA256_VERIFIED_IN_THIS_AUDIT": false,
+    "EXACT_PHYSICAL_COLUMN_NAMES_VERIFIED": false,
+    "BIRD_AND_ISLAND_UID_CONCORDANCE_VERIFIED": false,
+    "INDEPENDENT_FUTURE_NATAL_ORIGIN_LABEL_VERIFIED": false,
+    "DETECTION_AND_YEARLY_SURVEY_OPPORTUNITY_CONTRACT_VERIFIED": false,
+    "FIRST_SOURCE_OF_RECIPIENT_ISLAND_FOUNDING_VERIFIED": false,
+    "SOURCE_LOSS_RECOLONIZATION_EVENTS_REGISTERED": false,
+    "NEW_EOG_PREDICTIVE_ENDPOINT_AUTHORIZED": false,
+    "BIOLOGICAL_RESPONSE_ROWS_OPENED_IN_THIS_AUDIT": false
+  },
+  "terminal_decision": {
+    "status": "HOLD_DIRECTIONAL_INDIVIDUAL_PROXY_ONLY",
+    "source_identity_conclusion": "Public documentation supports a directional individual-level natal-dispersal variable; no original dataset byte or biological row was inspected.",
+    "empirical_readout_level": "POTENTIAL_INDIVIDUAL_ORIGIN_QUALIFICATION",
+    "excluded_claims": [
+      "The first colonizing island source was identified.",
+      "Immigrant provenance buffers source removal.",
+      "EOG has new independently confirmed metapopulation persistence or survival benefit.",
+      "The existing immigrant fitness result is original to EOG."
+    ],
+    "EOG_WF_FROZEN_3_31_3_DENOMINATOR_UNCHANGED": true,
+    "existing_EOG_virtual_world_simulation_results_unchanged": true,
+    "no_biological_model_fit": true,
+    "no_genetic_or_fitness_row_read": true
+  },
+  "public_sources": [
+    "https://datadryad.org/dataset/doi%3A10.5061/dryad.qfttdz0sx",
+    "https://datadryad.org/dataset/doi%3A10.5061/dryad.80gb5mkxh",
+    "https://datadryad.org/dataset/doi%3A10.5061/dryad.gqnk98sh8",
+    "https://doi.org/10.1111/1365-2656.70049",
+    "https://doi.org/10.1111/mec.17295",
+    "https://doi.org/10.1111/1365-2656.13580"
+  ]
+}
