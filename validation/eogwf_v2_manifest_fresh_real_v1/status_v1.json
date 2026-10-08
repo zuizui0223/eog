@@ -1,0 +1,18 @@
+{
+  "schema": "eog.eogwf_v2_manifest_fresh_real.status.v1",
+  "programme": "eogwf_v2_manifest_fresh_real_v1",
+  "protocol_git_blob_sha1": "4133680c86380e10f35bd31580f375e1bc9c7bec",
+  "current_stage": "pre_roster_protocol_locked",
+  "roster_capture_status": "not_started",
+  "fixed_catalog": "Environmental Data Initiative (EDI) Data Portal",
+  "fixed_search_string": "Peromyscus maniculatus",
+  "target_scientific_name": "Peromyscus maniculatus",
+  "pre_response_candidate_attempts_used": 0,
+  "maximum_pre_response_candidate_attempts": 3,
+  "active_candidate": null,
+  "response_payload_opened": false,
+  "response_payload_open_count": 0,
+  "model_fits": 0,
+  "outer_scoring_runs": 0,
+  "counts_as_predictive_evidence": false
+}
