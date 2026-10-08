@@ -96,3 +96,27 @@ def test_script_does_not_open_biological_table_for_analysis():
         assert forbidden not in source
     assert "sha256_opaque_bytes(source)" in source
     assert "ecological_endpoint_authorized" in source
+
+
+def test_independent_first_success_receipt_frozen_without_claim_promotion():
+    m=mod()
+    path=(ROOT/"validation/eog_virtual_world_ecology_synthesis_v1"
+          /"helgeland_2026_two_file_byte_parity_frozen_v1.json")
+    frozen=json.loads(path.read_text(encoding="utf-8"))
+    assert frozen["status"]=="TWO_PUBLIC_UPSTREAM_BYTE_HASHES_MATCH_DRYAD_V6_REGISTERED_DIGESTS"
+    assert frozen["authority"]["workflow_run_id"]==37795492702
+    assert frozen["authority"]["artifact_id"]==11558253288
+    assert frozen["authority"]["artifact_zip_sha256"]==(
+        "7b54626ccbfc00a59a977f13299f31a528b3daa5d4c7ee80197df110d26ad8a3"
+    )
+    assert frozen["dryad_version_id"]==421942
+    assert frozen["authority"]["github_upstream_commit"]==m.UPSTREAM_COMMIT
+    assert len(frozen["files"])==2
+    assert {f["github_path"]:f["dryad_name"] for f in frozen["files"]}==m.TARGETS
+    assert all(f["size_match"] and f["sha256_match"] for f in frozen["files"])
+    assert frozen["whole_github_source_bytes_hashed"] is True
+    for flag in ("biological_rows_decoded_or_scored","physical_headers_decoded",
+                 "source_files_verified_beyond_two","surveyed_zero_panel_verified",
+                 "as_of_t_processing_verified","directional_movement_event_verified",
+                 "ecological_endpoint_authorized"):
+        assert frozen[flag] is False
