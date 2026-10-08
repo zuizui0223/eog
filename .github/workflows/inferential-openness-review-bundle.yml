@@ -30,6 +30,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          # For PRs use the durable PR head, not GitHub's temporary test-merge SHA.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -45,15 +48,15 @@ jobs:
         run: |
           python manuscript/inferential_openness/build_review_bundle_v1.py \
             --output-dir build/inferential-openness-author-review \
-            --source-commit "$GITHUB_SHA"
+            --source-commit "$(git rev-parse HEAD)"
       - name: Ensure archive remains not submission-approved
         run: |
           python - <<'PY'
-          import json, os, zipfile
+          import json, subprocess, zipfile
           from pathlib import Path
           root=Path("build/inferential-openness-author-review")
           manifest=json.loads((root/"author_review_bundle_manifest.json").read_text())
-          assert manifest["source_commit"] == os.environ["GITHUB_SHA"]
+          assert manifest["source_commit"] == subprocess.check_output(["git","rev-parse","HEAD"], text=True).strip()
           assert manifest["submission_ready"] is False
           assert manifest["all_author_approved"] is False
           assert manifest["archival_doi"] is None
