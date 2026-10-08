@@ -18,6 +18,19 @@ After verifying the exact source file's complete SHA-256 against Dryad v6 (file 
 
 All row-level dates, individual IDs, island names/codes, life stages, sex and biological responses **stay out of the receipt**. No movement/colonization/absence scores or model fit is computed. The sum of all offsets must reconcile with exactly 73,593 rows, **3,517 discrepancies** and **914 consistent-year out-of-window records**, or the workflow must fail closed.
 
+## First observed result (exploratory; not independent confirmation)
+
+Dedicated GitHub Actions run **37801160828** succeeded; its aggregate-only JSON artifact ID **11560154008**, ZIP SHA256 `9a1f4ab9c511ecc7343cfd5eedcf3cf731a7336588b82310fdd9b3a89f661d02` was independently opened and verified. The observed pattern is unusually regular:
+
+- Exactly **3,517** `Year != date.year` records, all with `Year = date.year - 1`. No positive offsets or offsets of magnitude two or more.
+- Every discordance is dated **January (1,007)**, **February (1,180)** or **March (1,330)**; April–December have **zero** discordances.
+- Overall rows **73,593**; matched Year/date **70,076**; the 914 previously ineligible but Year/date-consistent out-of-window rows remain exactly 914.
+- Coarse out-of-range counts (not disjoint): `Year < 1994` is **1,268**, `date.year < 1994` is **1,070**, and neither field has rows later than 2022. All 73,593 values parse as calendar dates / integer Years.
+
+The real receipt's aggregate fields and evidence chain are frozen at `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_year_date_discordance_frozen_v1.json`, and the repeat CI asserts the exact same counts.
+
+**Possible explanation, NOT a verified source definition:** `Year` may encode an April–March field/monitoring year rather than a simple calendar year. The Dryad README still calls both columns observation dates; independent author confirmation is necessary. No date labels will be rewritten or temporal eligibility upgraded based only on this pattern.
+
 ## Interpretation limits
 
 Concentration in a particular month or a one-year shift **could** reveal a regular date-convention or preprocessing discrepancy; it would not by itself establish which variable is correct. Resolution requires author documentation or original timestamp/season protocols. Any later temporal split must be explicitly reconsidered once that independent evidence exists. Source data were already used for QC before this step; no new held-out claim.
