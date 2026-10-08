@@ -1,0 +1,156 @@
+{
+  "schema": "eog.source_provenance_external_bridge.metadata_preflight.v1",
+  "status": "METADATA_ONLY_HOLD_NOT_SOURCE_ORIGIN_QUALIFIED",
+  "scientific_target": "Whether temporal occupancy and independently dated, directional first-arrival source identity jointly distinguish colonization history at matched metapopulation patches.",
+  "study_system": {
+    "taxon": "Melitaea cinxia",
+    "region": "Åland Islands, Finland",
+    "same_biological_system_as_closed_glanville_eogwf": true,
+    "distinct_archive_does_not_create_independent_ecological_system": true
+  },
+  "source_inventory": {
+    "occupancy": {
+      "name": "Glanville annual patch occupancy and patch registry",
+      "original_dryad_doi": "10.5061/dryad.ksn02v707",
+      "transport_zenodo_record": 4987060,
+      "archive_name": "ECOG-04799.zip",
+      "verified_archive_sha256_from_prior_EOG_gate0": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+      "previously_used_and_response_consumed": true,
+      "frozen_source_file": "validation/glanville_eogwf/authoritative_outcome_provenance.json",
+      "frozen_source_git_blob_sha": "0f802f275a9dc9c68a74b5fe27e5f665a52f5936",
+      "temporal_protocol_file": "validation/glanville_eogwf/gate2_temporal_prediction_contract.json",
+      "temporal_protocol_git_blob_sha": "82d945363a8a09cee2750380cd0b6cbcff40d3a1",
+      "survey_period": [
+        1999,
+        2018
+      ],
+      "calibration_transition_first": "1999→2000",
+      "calibration_transition_last": "2011→2012",
+      "holdout_transition_first": "2012→2013",
+      "holdout_transition_last": "2017→2018",
+      "prior_external_EOG_predictions_frozen": true,
+      "no_eog_model_retraining_or_retuning_allowed": true,
+      "observational_target": "survey-recorded annual colonization, not verified latent occupancy or confirmed origin"
+    },
+    "sibship": {
+      "name": "Fountain et al. family reconstruction of effective female dispersal",
+      "public_dryad_doi": "10.5061/dryad.d461s",
+      "zenodo_record": 5010194,
+      "paper_doi": "10.1111/eva.12552",
+      "archived_period": [
+        2007,
+        2012
+      ],
+      "larval_group_sample_count_published": 3732,
+      "snp_marker_count_published": 272,
+      "archive_member_names_from_public_landing_page": [
+        "README_for_supplementary-data-COLONY2.tar.txt",
+        "supplementary-data-COLONY2.tar.gz"
+      ],
+      "source_inner_names_from_public_description": [
+        "master-input.csv",
+        "master-output.csv",
+        "colony-input-master",
+        "colony-output-master-trimmed"
+      ],
+      "zenodo_advertised_readme_md5": "a5660ca83e89689a6ee2fb3f03b175ac",
+      "zenodo_advertised_tar_gz_md5": "11e63736667e492a13f822960d48a329",
+      "physical_file_bytes_or_headers_checked_in_this_preflight": false,
+      "published_crosspatch_full_sib_finding": true,
+      "published_female_effective_dispersal_mean_km_approx": 1,
+      "link_semantics": "A reconstructed full-sib family found at two distinct patches supports that a female laid eggs in both locations; the two-patch observation does not reveal which patch she visited first.",
+      "direction_observed_from_same_year_crosspatch_full_sibs": false,
+      "directly_measures_first_arriving_source_of_newly_colonized_patch": false,
+      "exact_patch_id_namespace_crosswalk_to_EOG_registry_verified": false,
+      "genetically_independent_from_prior_genotypic_publications_not_asserted": true
+    }
+  },
+  "published_prior_art": [
+    {
+      "doi": "10.1111/eva.12552",
+      "scope": "Fountain et al. reconstructed across-patch full-sib families and effective female dispersal."
+    },
+    {
+      "doi": "10.1111/j.1600-0706.2010.18992.x",
+      "scope": "Austin et al. already examined size and genetic composition of colonizing propagules in this butterfly metapopulation."
+    },
+    {
+      "doi": "10.1038/ncomms14504",
+      "scope": "Hanski et al. already modeled long-term population persistence and genotype-related colonization/extinction."
+    },
+    {
+      "doi": "10.5061/dryad.ksn02v707",
+      "scope": "Annual patch occupancy already used by frozen EOG Glanville predictive validation."
+    }
+  ],
+  "formal_observation_equivalence": {
+    "stated_observable": "an unordered, same-maternal-family two-patch link {patch_A,patch_B} inferred from offspring sampled in the same yearly cohort",
+    "indistinguishable_histories": [
+      "mother laid eggs in A then B",
+      "mother laid eggs in B then A"
+    ],
+    "directional_first_origin_identified": false,
+    "patch_source_history_identified": false,
+    "caveat": "External dated oviposition sequences, directed tracking, or qualified founder assignments could break the ambiguity, but this specific public abstract does not establish any.",
+    "no_negative_claim": "The genetic archive is not being asserted invalid: the source paper's effective-dispersal estimate remains scientifically meaningful."
+  },
+  "longitudinal_overlap": {
+    "genetic_sample_years": [
+      2007,
+      2008,
+      2009,
+      2010,
+      2011,
+      2012
+    ],
+    "eog_calibration_years": [
+      1999,
+      2012
+    ],
+    "eog_heldout_target_years": [
+      2013,
+      2018
+    ],
+    "genetic_supports_any_of_frozen_eog_heldout_target_years": false,
+    "source_yearly_overlap_with_calibration_only": true,
+    "new-independent-eog-holdout-confirmation": false,
+    "note": "Year 2012 is the preceding source year for 2012→2013; no 2013–2018 genetic observation evidence is advertised."
+  },
+  "qualification_gates": {
+    "PUBLISHED_GENETIC_SIBSHIP_SOURCE_LOCATED": true,
+    "PUBLISHED_OCCUPANCY_SOURCE_IDENTITY_PINNED": true,
+    "SOURCE_DOCUMENTED_TEMPORAL_OVERLAP": true,
+    "GENETIC_ARCHIVE_BYTE_DIGEST_VERIFIED_FROM_FILE": false,
+    "GENETIC_FILE_HEADER_VERIFIED_RESPONSE_BLIND": false,
+    "CROSS_ARCHIVE_PATCH_UID_CROSSWALK_INDEPENDENTLY_VERIFIED": false,
+    "MATERNAL_DISPERSAL_DIRECTION_WITHIN_SEASON_IDENTIFIED": false,
+    "FIRST_ARRIVAL_SOURCE_PER_RECIPIENT_PATCH_IDENTIFIED": false,
+    "FUTURE_HOLDOUT_GENETIC_ORIGIN_OBSERVATIONS_AVAILABLE": false,
+    "INDEPENDENT_ECOLOGICAL_CONFIRMATORY_PROGRAMME": false,
+    "NEW_GENETIC_RESPONSE_REUSE_AUTHORIZED": false
+  },
+  "decision": {
+    "target_status": "HOLD_SOURCE_DIRECTION_NOT_IDENTIFIED_AND_NOT_FRESH",
+    "phylogenetic_or_genetic_negative_evidence": false,
+    "zero_genotype_rows_opened_during_this_preflight": true,
+    "zero_occupancy_rows_opened_during_this_preflight": true,
+    "zero_models_fitted": true,
+    "no_eogwf_denominator_change": true,
+    "do_not_reuse_same_EOG_Glanville_endpoint_as_fresh_validation": true,
+    "narrowly_permitted_future_role": "Possible retrospective, separately approved calibration or directional-connectivity sanity check, not first-origin identification or new independent EOG-WF predictive validation.",
+    "conditions_for_new_scoring": [
+      "Independently verify Zenodo/Dryad archive member bytes and stable physical key schema without opening genotype/result rows.",
+      "Obtain an independent patch-ID concordance with the existing Åland patch registry and mark genetic sampling years explicitly.",
+      "Freeze whether sibling relations are undirected and forbid translating a dyad into earliest-source direction without additional independent timing or ancestry information.",
+      "Freeze a separate retrospective research question, original strong metapopulation baseline, any EOG added value and all STOP conditions before response access.",
+      "Do not describe a retrospective overlapping system as independent ecological replication of EOG v23 or the previously consumed Glanville predictor."
+    ]
+  },
+  "source_links": [
+    "https://datadryad.org/dataset/doi%3A10.5061/dryad.d461s",
+    "https://zenodo.org/records/5010194",
+    "https://doi.org/10.1111/eva.12552",
+    "https://doi.org/10.1111/j.1600-0706.2010.18992.x",
+    "https://doi.org/10.1038/ncomms14504"
+  ]
+}
