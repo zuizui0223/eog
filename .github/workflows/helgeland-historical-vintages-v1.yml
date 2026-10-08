@@ -7,6 +7,7 @@ on:
       - 'scripts/audit_helgeland_historical_dryad_vintages_v1.py'
       - 'tests/test_helgeland_historical_dryad_vintages_v1.py'
       - 'docs/eog_helgeland_historical_public_vintages_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_historical_public_vintages_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -14,6 +15,7 @@ on:
       - 'scripts/audit_helgeland_historical_dryad_vintages_v1.py'
       - 'tests/test_helgeland_historical_dryad_vintages_v1.py'
       - 'docs/eog_helgeland_historical_public_vintages_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_historical_public_vintages_frozen_v1.json'
 
 permissions:
   contents: read
@@ -33,6 +35,7 @@ jobs:
       - name: Retrieve only official historic public versions and their registered file metadata
         run: |
           python scripts/audit_helgeland_historical_dryad_vintages_v1.py \
+            --verify-frozen validation/eog_virtual_world_ecology_synthesis_v1/helgeland_historical_public_vintages_frozen_v1.json \
             --output build/helgeland-historical-dryad-vintages-v1.json
       - name: Assert complete 2014/2020 metadata without opening records
         run: |
@@ -42,6 +45,12 @@ jobs:
           x=json.loads(Path('build/helgeland-historical-dryad-vintages-v1.json').read_text())
           assert x['schema']=='eog.helgeland.historical_dryad_version_metadata.v1'
           assert x['status']=='BOTH_HISTORICAL_PUBLIC_METADATA_VINTAGES_IDENTIFIED'
+          assert x['frozen_identity_check']['status']=='MATCHES_FROZEN_2014_V1_AND_2020_V8_PUBLIC_VERSION_METADATA'
+          assert x['datasets']['baalsrud_2014']['selected']['version_id']==5191
+          assert x['datasets']['niskanen_2020']['selected']['version_id']==78498
+          assert x['datasets']['niskanen_2020']['selected']['published_date']=='2020-08-19'
+          assert x['datasets']['niskanen_2020']['file_count']==22
+          assert any(v['version_id']==208617 for v in x['datasets']['niskanen_2020']['versions_after_cutoff_not_eligible'])
           assert x['individual_bird_rows_read'] is False
           assert x['actual_biological_file_bytes_read'] is False
           assert x['historically_frozen_model_or_forecast_qualified'] is False
