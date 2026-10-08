@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import importlib.util
+import math
 import json
 from pathlib import Path
 
@@ -143,6 +144,10 @@ def test_matched_rows_require_same_three_sources_and_same_equilibrium():
         script.verify_matched_record(key, bad)
 
     bad = copy.deepcopy(valid)
-    bad["v19"]["designs"]["clustered"]["static_ambiguous_fraction"] = 0.0
+    bad["v19"]["designs"]["clustered"]["3"]["static_ambiguous_fraction"] = 0.0
+    left = bad["v18"]["designs"]["clustered"]["3"]["multi_source_overlap_fraction"]
+    right = bad["v19"]["designs"]["clustered"]["3"]["static_ambiguous_fraction"]
+    assert left == 0.60 and right == 0.0
+    assert not math.isclose(left, right, abs_tol=script.EPS)
     with pytest.raises(ValueError, match="source-basin definitions"):
         script.verify_matched_record(key, bad)
