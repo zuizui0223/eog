@@ -17,6 +17,10 @@ on:
       - 'docs/eog_helgeland_dryad_inventory_gate_v1.md'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json'
 
+concurrency:
+  group: helgeland-dryad-json-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
