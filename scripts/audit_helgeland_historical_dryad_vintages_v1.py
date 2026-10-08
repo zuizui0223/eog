@@ -8,6 +8,7 @@ metadata alone cannot certify observed absence, row timestamps or predictions.
 from __future__ import annotations
 
 import argparse
+import hashlib
 from datetime import date
 import json
 import re
@@ -209,11 +210,91 @@ def audit(fetch=api_json) -> dict:
     }
 
 
+
+FROZEN_FILE = (Path(__file__).resolve().parents[1] /
+               "validation/eog_virtual_world_ecology_synthesis_v1/"
+               "helgeland_historical_public_vintages_frozen_v1.json")
+
+
+def canonical_files_sha256(records: list[dict]) -> str:
+    """Hash the complete *metadata catalog*, not any underlying bird data bytes."""
+    relevant = sorted(
+        ({k: r[k] for k in ("name", "file_id", "source_reported_bytes",
+                           "source_reported_digest_type", "source_reported_digest")}
+         for r in records),
+        key=lambda x: x["name"]
+    )
+    canonical = json.dumps(relevant, ensure_ascii=False,
+                           sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def verify_against_frozen(result: dict, frozen: dict) -> dict:
+    if result.get("status") != "BOTH_HISTORICAL_PUBLIC_METADATA_VINTAGES_IDENTIFIED":
+        raise ValueError("Cannot verify historical source drift without both public inventories")
+    if (frozen.get("schema") !=
+        "eog.helgeland.historical_public_dryad_versions.frozen_observed_v1" or
+        frozen.get("status") !=
+        "HISTORICAL_2014_2020_SOURCE_METADATA_FROZEN__NO_BIRD_BYTES_READ"):
+        raise ValueError("Historical frozen version contract missing")
+    if set(result["datasets"]) != set(frozen["archives"]) != set(SOURCES):
+        raise ValueError("Historical dataset set was altered")
+    for name in SOURCES:
+        source = result["datasets"][name]
+        baseline = frozen["archives"][name]
+        for key, source_key in (
+            ("doi", "doi"), ("cutoff", "historical_cutoff"),
+            ("version_id", "version_id"), ("version_number", "version_number"),
+            ("published_date", "published_date"),
+        ):
+            value = (source.get(source_key) if source_key in ("doi", "historical_cutoff")
+                     else source["selected"].get(source_key))
+            if value != baseline[key]:
+                raise ValueError(f"{name}: historical version changed at {key}")
+        if source["file_count"] != baseline["file_count"]:
+            raise ValueError(f"{name}: historical file count differs")
+        if canonical_files_sha256(source["files"]) != baseline["canonical_full_file_metadata_sha256"]:
+            raise ValueError(f"{name}: complete historical file catalog changed")
+        for critical in baseline["critical_files"]:
+            matches = [f for f in source["files"] if f["name"] == critical["name"]]
+            if len(matches) != 1:
+                raise ValueError(f"{name}: key historic file missing")
+            file = matches[0]
+            for ref, src in (
+                ("file_id", "file_id"), ("size_bytes", "source_reported_bytes"),
+                ("source_digest_type", "source_reported_digest_type"),
+                ("source_digest", "source_reported_digest")
+            ):
+                if critical[ref] != file[src]:
+                    raise ValueError(f"{name}: source file identity changed")
+        if source["published_version_history"] != baseline["version_history"]:
+            raise ValueError(f"{name}: historic release lineage changed")
+        if (source["actual_source_file_bytes_read"] is not False or
+            source["ecological_endpoint_authorized"] is not False or
+            source["source_files_at_cutoff_qualified_as_model_features"] is not False):
+            raise ValueError(f"{name}: biological/feature eligibility boundary violated")
+    for key in ("public_2014_2020_file_rows_read", "source_reported_digest_independently_verified",
+                "island_crosswalk_verified", "future_2021_2022_outcomes_read",
+                "prospective_EOG_model_or_heldout_score_authorized"):
+        if frozen.get(key) is not False:
+            raise ValueError(f"Frozen historical evidence boundary changed: {key}")
+    return {
+        "status": "MATCHES_FROZEN_2014_V1_AND_2020_V8_PUBLIC_VERSION_METADATA",
+        "historic_file_metadata_catalogs_matched": 2,
+        "bird_data_bytes_read": False,
+        "historical_biological_prediction_authorized": False,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--verify-frozen", type=Path, default=None)
     args = parser.parse_args()
     report = audit()
+    if args.verify_frozen is not None:
+        frozen = json.loads(args.verify_frozen.read_text(encoding="utf-8"))
+        report["frozen_identity_check"] = verify_against_frozen(report, frozen)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("x", encoding="utf-8") as stream:
         json.dump(report, stream, ensure_ascii=False, sort_keys=True, indent=2)
