@@ -50,7 +50,7 @@ def inspect(root: Path, protocol: dict, frozen: dict, headers: dict, previous: d
         raise ValueError("Year and date columns missing")
     if previous["schema"]!="eog.helgeland.2026.observation_year_date_postexposure.frozen_observed_v1":
         raise ValueError("Previous post-exposure record missing")
-    if previous["source"]["dryad_version_id"]!=421942 if "source" in previous else previous["total_rows"]!=73593:
+    if previous.get("source", {}).get("dryad_version_id") != 421942:
         raise ValueError("Previous source receipt changed")
 
     months={f"{month:02d}":0 for month in range(1,13)}
