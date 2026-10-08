@@ -7,6 +7,7 @@ on:
       - 'scripts/audit_helgeland_2026_two_file_headers_v1.py'
       - 'tests/test_helgeland_2026_two_file_headers_v1.py'
       - 'docs/eog_helgeland_2026_two_file_headers_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_two_file_physical_headers_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -14,6 +15,7 @@ on:
       - 'scripts/audit_helgeland_2026_two_file_headers_v1.py'
       - 'tests/test_helgeland_2026_two_file_headers_v1.py'
       - 'docs/eog_helgeland_2026_two_file_headers_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_two_file_physical_headers_frozen_v1.json'
 
 permissions:
   contents: read
@@ -59,6 +61,18 @@ jobs:
           assert all(x['source_whole_byte_sha256_matches_dryad_v6'] for x in d['headers'])
           assert d['only_first_physical_lines_decoded'] is True
           assert d['biological_data_rows_decoded'] is False
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_two_file_physical_headers_frozen_v1.json').read_text())
+          assert frozen['status']==d['status']
+          assert frozen['dryad_version_id']==d['dryad_version_id']
+          assert frozen['provenance']['upstream_commit']==d['upstream_commit']
+          assert len(frozen['headers'])==len(d['headers'])==2
+          for observed, pinned in zip(d['headers'], frozen['headers']):
+              assert observed['github_path']==pinned['github_path']
+              assert observed['dryad_file_id']==pinned['dryad_file_metadata_id']
+              assert observed['actual_first_line_column_names']==pinned['column_names']
+              assert observed['physical_first_line_sha256']==pinned['first_line_sha256']
+              assert observed['delimiter']==pinned['delimiter']
+          assert frozen['ecological_endpoint_authorized'] is False
           for k in ('island_year_surveyed_zero_panel_verified','same_id_first_recruit_movement_verified','observation_available_as_of_t_verified','heldout_benchmark_qualified','ecological_endpoint_authorized'):
               assert d[k] is False
           PY
