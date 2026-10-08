@@ -1,0 +1,299 @@
+{
+  "schema": "eog.lepanthes.pre_response_metadata_catalog.v1",
+  "candidate_name": "Lepanthes rupestris",
+  "candidate_programme": "EOG virtual-world source-geometry independent ecological validation",
+  "role": "METADATA_ONLY_PRE_RESPONSE_SCREEN",
+  "original_metadata_candidate": "validation/eog_virtual_world_ecology_synthesis_v1/metadata_candidate_v1.json",
+  "frozen_mainline_parent": "29a8fbc2fc9c373cff929d05b07fd3191a8a04d3",
+  "sources": {
+    "dryad": {
+      "landing_page": "https://datadryad.org/dataset/doi%3A10.5061/dryad.9p8cz8wc6",
+      "doi": "10.5061/dryad.9p8cz8wc6",
+      "landing_page_published": "2020-01-21",
+      "advertised_file": "lepa_all.csv",
+      "file_count_advertised": 1,
+      "file_size_kb_approx": 84.83,
+      "publicly_advertised_physical_sha256": null,
+      "version_id_independently_verified": null,
+      "physical_header_independently_verified": false,
+      "downloaded_in_this_audit": false,
+      "observed_biological_rows_opened_in_this_audit": false,
+      "dictionary_column_names": [
+        "UID",
+        "x.coord.",
+        "y.coord.",
+        "z.coordinate",
+        "Phorophyte",
+        "X70199",
+        "X20100",
+        "X80100",
+        "X10101",
+        "X60101",
+        "X10102",
+        "X60102",
+        "X120202",
+        "X61003",
+        "X12404",
+        "X7104",
+        "X12205",
+        "X91705",
+        "X72406",
+        "X20307",
+        "X61507",
+        "X10208",
+        "Total_Moss_area"
+      ],
+      "dictionary_statement": "Published Dryad landing-page Usage notes; descriptive schema only, not observed physical CSV header."
+    },
+    "ecodata": {
+      "dictionary_page": "https://rdrr.io/github/andrewmarx/ecodata/man/lepanthes_rupestris.html",
+      "description": "Derivative R documentation, not authoritative Dryad physical CSV header.",
+      "advertised_rows": 975,
+      "advertised_columns": 23,
+      "dictionary_column_names": [
+        "UID",
+        "x.coord",
+        "y.coord",
+        "z.coord",
+        "Phorophyte",
+        "X70199",
+        "X20100",
+        "X80100",
+        "X10101",
+        "X60101",
+        "X10102",
+        "X60102",
+        "X120202",
+        "X61003",
+        "X12404",
+        "X71704",
+        "X12205",
+        "X91705",
+        "X72406",
+        "X20307",
+        "X61507",
+        "X10208",
+        "Total_Moss_area"
+      ],
+      "response_rows_opened_in_this_audit": false
+    },
+    "primary_paper": {
+      "doi": "10.1111/1365-2745.13361",
+      "url": "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2745.13361",
+      "year": 2020,
+      "main_dataset_years": [
+        1999,
+        2008
+      ],
+      "patches_reported": 975,
+      "main_models_compared": 290,
+      "published_detection_model": "p(moss area + phorophyte type)",
+      "model_estimated_detection_range": [
+        0.85,
+        0.99
+      ],
+      "count_as_independent_detection_calibration": false,
+      "prior_comparator": "Dynamic occupancy with asymmetric wind-dependent patch connectivity, moss area, phorophyte type, temperature variability and rainfall.",
+      "source_year_wind_gaps": [
+        1999,
+        2000,
+        2005
+      ],
+      "wind_handling_in_published_analysis": "Published authors used whole-period average wind direction for unavailable years; any heldout validation must not reuse later years' wind observations as future information.",
+      "asym_connectivity_uses_patch_occupancy": true,
+      "no_future_occupancy_as_connectivity_predictor": true,
+      "patch_coordinate_reference_independently_resolved": false,
+      "dated_exogenous_source_removal_independently_documented": false
+    },
+    "previous_asymmetric_connectivity_paper": {
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/26054613/",
+      "conclusion_prior_art": "Asymmetric connectivity of the same orchid metapopulation and dynamic colonization-extinction processes have already been studied.",
+      "count_as_independent_ecological_replication": false
+    }
+  },
+  "metadata_contract": {
+    "geographic_area": "Luquillo Experimental Forest, Puerto Rico",
+    "patch_unit": "phorophyte: rock or tree",
+    "first_year": 1999,
+    "last_year": 2008,
+    "expected_descriptive_columns": 23,
+    "expected_survey_columns": 17,
+    "dryad_visit_sequence": [
+      {
+        "column": "X70199",
+        "year": 1999,
+        "within_year_order": 1
+      },
+      {
+        "column": "X20100",
+        "year": 2000,
+        "within_year_order": 1
+      },
+      {
+        "column": "X80100",
+        "year": 2000,
+        "within_year_order": 2
+      },
+      {
+        "column": "X10101",
+        "year": 2001,
+        "within_year_order": 1
+      },
+      {
+        "column": "X60101",
+        "year": 2001,
+        "within_year_order": 2
+      },
+      {
+        "column": "X10102",
+        "year": 2002,
+        "within_year_order": 1
+      },
+      {
+        "column": "X60102",
+        "year": 2002,
+        "within_year_order": 2
+      },
+      {
+        "column": "X120202",
+        "year": 2002,
+        "within_year_order": 3
+      },
+      {
+        "column": "X61003",
+        "year": 2003,
+        "within_year_order": 1
+      },
+      {
+        "column": "X12404",
+        "year": 2004,
+        "within_year_order": 1
+      },
+      {
+        "column": "X7104",
+        "year": 2004,
+        "within_year_order": 2
+      },
+      {
+        "column": "X12205",
+        "year": 2005,
+        "within_year_order": 1
+      },
+      {
+        "column": "X91705",
+        "year": 2005,
+        "within_year_order": 2
+      },
+      {
+        "column": "X72406",
+        "year": 2006,
+        "within_year_order": 1
+      },
+      {
+        "column": "X20307",
+        "year": 2007,
+        "within_year_order": 1
+      },
+      {
+        "column": "X61507",
+        "year": 2007,
+        "within_year_order": 2
+      },
+      {
+        "column": "X10208",
+        "year": 2008,
+        "within_year_order": 1
+      }
+    ],
+    "survey_count_per_year": {
+      "1999": 1,
+      "2000": 2,
+      "2001": 2,
+      "2002": 3,
+      "2003": 1,
+      "2004": 2,
+      "2005": 2,
+      "2006": 1,
+      "2007": 2,
+      "2008": 1
+    },
+    "one_visit_years": [
+      1999,
+      2003,
+      2006,
+      2008
+    ],
+    "survey_opportunity_per_patch_independently_documented": false,
+    "observation_values_and_missing_codes_independently_documented": false,
+    "gap_between_raster_cell_and_local_3d_coordinates": "Exact local-axis orientation, distance unit calibration, and CRS are not certified from the two published dictionaries alone.",
+    "dictionary_conflicts": [
+      {
+        "semantic_field": "horizontal_coordinate_x",
+        "dryad": "x.coord.",
+        "ecodata": "x.coord"
+      },
+      {
+        "semantic_field": "horizontal_coordinate_y",
+        "dryad": "y.coord.",
+        "ecodata": "y.coord"
+      },
+      {
+        "semantic_field": "vertical_coordinate",
+        "dryad": "z.coordinate",
+        "ecodata": "z.coord"
+      },
+      {
+        "semantic_field": "survey_2004_visit_2",
+        "dryad": "X7104",
+        "ecodata": "X71704"
+      }
+    ],
+    "allow_silent_alias_normalization": false,
+    "actual_csv_header_authorized_to_be_inferred_from_dictionary": false,
+    "source_registry_location": "The available Dryad landing page advertises one combined file containing patch columns and occupancy survey columns; no separately advertised patch registry was identified.",
+    "separate_response_independent_patch_registry_verified": false
+  },
+  "target_and_comparator": {
+    "intended_ecological_target": "Real post-loss/recolonization coverage; NOT simulated structural reachability.",
+    "target_identifiable_from_metadata_alone": false,
+    "new_ecological_source_loss_event_verified": false,
+    "planned_test_is_not_randomized_removal": true,
+    "prior_studies_expose_directional_connectivity_effect": true,
+    "stronger_than_prior_connectivity_required": true,
+    "comparator_must_include": [
+      "published-style dynamic occupancy with imperfect detection",
+      "asymmetric wind-dependent lagged patch connectivity",
+      "moss area and phorophyte type",
+      "meteorological covariates and their interactions as available",
+      "source count, initial occupied fraction and geographic distance",
+      "established graph-robustness / redundant-route measures"
+    ],
+    "forbid_using_holdout_occupancy_to_define_predictor": true,
+    "forbid_full_period_wind_imputation_for_holdout": true,
+    "heldout_split_frozen": false,
+    "response_row_scoring_authorized": false
+  },
+  "current_gates": {
+    "DOI_AND_ADVERTISED_FILE_IDENTIFIED": true,
+    "PHYSICAL_VERSION_DIGEST_PINNED": false,
+    "PHYSICAL_CSV_HEADER_INDEPENDENTLY_VERIFIED": false,
+    "COLUMN_DICTIONARY_CONFLICTS_RESOLVED": false,
+    "DISTINCT_RESPONSE_INDEPENDENT_PATCH_REGISTRY_VERIFIED": false,
+    "PATCH_AND_VISIT_MISSINGNESS_SEMANTICS_VERIFIED": false,
+    "DETECTION_PROCESS_INDEPENDENTLY_QUALIFIED": false,
+    "SOURCE_LOSS_OR_TURNOVER_EVENT_INDEPENDENTLY_DEFINED": false,
+    "PRIOR_PUBLICATION_COMPARATOR_SPECIFIED": true,
+    "REAL_RESPONSE_OPENING_AUTHORIZED": false
+  },
+  "decision_rules": {
+    "status": "STOP_WITHIN_DECLARED_PRE_RESPONSE_GATE",
+    "terminal_code": "STOP_REGISTRY_SCHEMA_AND_DETECTION_UNQUALIFIED",
+    "registered_reason": "Available metadata cannot certify an independent patch/opportunity registry, authoritative physical column schema, observation-state semantics or an identifiable dated source-loss target without opening the combined response file.",
+    "inferential_scope": "This is failure to qualify this source for the EOG prospective protocol, not evidence that the original dataset or published analysis is defective.",
+    "retrospective_source_repair_for_same_frozen_attempt": false,
+    "future_use": "Only under a newly frozen contract with independently verified source/version, physical header, registry extraction and observation-process semantics.",
+    "no_new_biological_result": true,
+    "no_occupancy_rows_read_in_this_metadata_audit": true,
+    "no_model_fit_in_this_metadata_audit": true
+  }
+}
