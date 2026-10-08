@@ -1,0 +1,72 @@
+name: Helgeland April Year-label boundary post-exposure QC
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2026-april-boundary-v1.yml'
+      - 'scripts/audit_helgeland_2026_april_boundary_postexposure_v1.py'
+      - 'tests/test_helgeland_2026_april_boundary_postexposure_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_april_boundary_postexposure_contract_v1.json'
+      - 'docs/eog_helgeland_2026_april_boundary_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2026-april-boundary-v1.yml'
+      - 'scripts/audit_helgeland_2026_april_boundary_postexposure_v1.py'
+      - 'tests/test_helgeland_2026_april_boundary_postexposure_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_april_boundary_postexposure_contract_v1.json'
+      - 'docs/eog_helgeland_2026_april_boundary_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  april-boundary-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Verify authors' immutable source revision
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Synthetic non-universal and universal hypothesis tests
+        run: python -m pytest -q tests/test_helgeland_2026_april_boundary_postexposure_v1.py
+      - name: Read Year and date only after source SHA256 and physical header verification
+        run: |
+          python scripts/audit_helgeland_2026_april_boundary_postexposure_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-2026-april-boundary-qc-v1.json
+      - name: Ensure prior QC reconciles and no semantics claim was upgraded
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('build/helgeland-2026-april-boundary-qc-v1.json').read_text())
+          assert x['status']=='APRIL_CANDIDATE_MONTHLY_DIAGNOSTIC__AUTHOR_SEMANTICS_HOLD'
+          assert x['total_rows']==73593
+          assert x['jan_mar_minus_one']==3517
+          assert x['jan_mar_other_delta']==0
+          assert x['apr_dec_any_mismatch']==0
+          assert sum(x['monthly_total_rows'].values())==73593
+          assert x['jan_mar_minus_one']+x['jan_mar_same_year']+x['jan_mar_other_delta']+x['apr_dec_same_year']+x['apr_dec_any_mismatch']==73593
+          assert x['overall_candidate_mapping_disagreements']==x['jan_mar_same_year']
+          for key in ('observed_year_rule_confirmed_by_authors','date_or_Year_values_recoded',
+                      'row_level_values_exported','as_of_t_predictors_qualified',
+                      'surveyed_zero_panel_verified','ecological_endpoint_authorized'):
+              assert x[key] is False,key
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2026-APRIL-YEAR-BOUNDARY-EXPLORATORY-NO-ROWS-v1
+          path: build/helgeland-2026-april-boundary-qc-v1.json
+          if-no-files-found: warn
