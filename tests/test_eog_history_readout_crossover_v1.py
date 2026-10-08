@@ -48,7 +48,7 @@ def test_frozen_v23_matches_authoritative_digest_and_fingerprint():
     assert "ideal" in x["readout_levels"]["provenance_only"]
 
 
-def test_exact_paired_outcome_counts_and_zero_false_emergent_significance():
+def test_exact_paired_outcome_counts_and_exploratory_boundaries():
     x=report()
     assert x["identification_by_readout"]=={
         "occupancy_only":{"clustered":231,"dispersed":348},
