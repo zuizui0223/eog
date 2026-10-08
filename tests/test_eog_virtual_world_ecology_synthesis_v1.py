@@ -133,3 +133,34 @@ def test_claim_boundaries_avoid_unjustified_third_manuscript():
     ):
         assert text.lower() in doc.lower(), text
     assert "preregistered_joint_test" in json.dumps(ledger)
+
+def test_empirical_candidate_is_metadata_only_and_kept_out_of_confirmatory_denominator():
+    candidate = json.loads(
+        (
+            ROOT / "validation" / "eog_virtual_world_ecology_synthesis_v1"
+            / "metadata_candidate_v1.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert candidate["schema"] == "eog.virtual_world_ecology.external_metadata_candidate.v1"
+    assert candidate["status"] == "METADATA_ONLY_NOT_RESPONSE_QUALIFIED"
+    assert candidate["source"] == "Dryad 10.5061/dryad.9p8cz8wc6"
+    assert candidate["metadata_facts"]["patches_reported"] == 975
+    assert candidate["metadata_facts"]["primary_year_start"] == 1999
+    assert candidate["metadata_facts"]["primary_year_end"] == 2008
+    assert candidate["metadata_facts"]["prior_publication_exposed_directional_connectivity_conclusion"] is True
+    assert candidate["go_no_go"] == "HOLD_FOR_RESPONSE_BLIND_SCHEMA_AND_DETECTION_AUDIT"
+    integrity = candidate["integrity"]
+    for field in (
+        "focal_csv_downloaded_in_this_audit",
+        "response_rows_opened_in_this_audit",
+        "source_registration_qualified",
+        "physical_schema_verified_from_pinned_bytes",
+        "independent_detection_calibration_verified",
+        "current_data_analysis_authorized",
+        "prospective_confirmatory_status",
+    ):
+        assert integrity[field] is False, field
+    doc = SYNTHESIS.read_text(encoding="utf-8")
+    assert "metadata-only HOLD" in doc
+    assert "prior art, not new EOG support" in doc
+    assert "No focal CSV response rows were downloaded" in doc
