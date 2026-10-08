@@ -201,7 +201,7 @@ def main() -> None:
             with path.open("x", encoding="utf-8") as stream:
                 created.append(path)
                 json.dump(data, stream, ensure_ascii=False, sort_keys=True, indent=2)
-                stream.write("\\n")
+                stream.write("\n")
     except Exception:
         for path in created:
             path.unlink(missing_ok=True)
