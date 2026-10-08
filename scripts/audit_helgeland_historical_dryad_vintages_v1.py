@@ -47,8 +47,13 @@ API_FILE = re.compile(r"^/api/v2/files/([0-9]+)$")
 
 def api_json(url: str) -> dict:
     parsed = urllib.parse.urlparse(url)
+    # Versions with >10 files need an explicit bounded per_page=100 request.
+    # Any other query argument remains forbidden (including user-controlled pages).
+    allow_page_size = bool(API_VERSION_FILES.fullmatch(parsed.path) and
+                           parsed.query == "per_page=100")
     if (parsed.scheme != "https" or parsed.netloc != "datadryad.org"
-            or parsed.query or parsed.fragment or
+            or parsed.fragment or
+            (parsed.query and not allow_page_size) or
             not (API_DOI.fullmatch(parsed.path) or
                  API_VERSION_FILES.fullmatch(parsed.path))):
         raise ValueError("Refusing endpoint other than two public JSON namespaces")
@@ -160,7 +165,7 @@ def audit(fetch=api_json) -> dict:
                        urllib.parse.quote("doi:" + spec["doi"], safe="") + "/versions")
         try:
             picked, history = choose_asof_version(spec, fetch(version_url))
-            files = fetch(API + f"/api/v2/versions/{picked['version_id']}/files")
+            files = fetch(API + f"/api/v2/versions/{picked['version_id']}/files?per_page=100")
             details = qualify_file_inventory(spec, picked, files)
             details["doi"] = spec["doi"]
             details["published_version_history"] = history
