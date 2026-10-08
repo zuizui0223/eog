@@ -1,0 +1,64 @@
+name: Helgeland 2020 published v8 small source header bytes
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2020-v8-byte-header-v1.yml'
+      - 'scripts/audit_helgeland_2020_v8_physical_sources_v1.py'
+      - 'tests/test_helgeland_2020_v8_physical_sources_v1.py'
+      - 'docs/eog_helgeland_2020_v8_source_byte_gate_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2020-v8-byte-header-v1.yml'
+      - 'scripts/audit_helgeland_2020_v8_physical_sources_v1.py'
+      - 'tests/test_helgeland_2020_v8_physical_sources_v1.py'
+      - 'docs/eog_helgeland_2020_v8_source_byte_gate_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  vintage-file-hash-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Synthetic integrity and historical-vintage exclusion tests
+        run: python -m pytest -q tests/test_helgeland_2020_v8_physical_sources_v1.py
+      - name: Download only three tiny Dryad v8 public source files, hash opaque bytes, inspect bounded first line
+        run: |
+          python scripts/audit_helgeland_2020_v8_physical_sources_v1.py \
+            --output build/helgeland-2020-v8-byte-and-firstline-v1.json
+      - name: Verify no old bird/abundance records are exported
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('build/helgeland-2020-v8-byte-and-firstline-v1.json').read_text())
+          assert d['schema']=='eog.helgeland.niskanen2020_v8.firstline_byte_attestation.v1'
+          assert d['status']=='THREE_2020_V8_SOURCE_SHA256S_MATCH__FIRSTLINE_SHAPE_ONLY'
+          assert d['source_version_id']==78498
+          assert d['historically_published_date']=='2020-08-19'
+          assert len(d['records'])==3
+          assert all(f['whole_file_sha256_verified'] and
+                     not f['physical_semantic_header_attested'] and
+                     not f['other_physical_lines_decoded'] and
+                     not f['data_records_parsed'] and
+                     not f['firstline_values_emitted'] for f in d['records'])
+          for k in ('biological_data_rows_parsed','firstline_values_emitted',
+                    'observation_model_baseline_constructed','island_name_crosswalk_verified',
+                    'surveyed_absence_coverage_verified','future_2021_2022_outcomes_read',
+                    'ecological_forecast_authorized'):
+              assert d[k] is False,k
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2020-V8-THREE-SOURCE-BYTE-HASHES-HEADER-SHAPE-v1
+          path: build/helgeland-2020-v8-byte-and-firstline-v1.json
+          if-no-files-found: warn
