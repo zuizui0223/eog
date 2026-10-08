@@ -7,6 +7,7 @@ on:
       - 'scripts/audit_helgeland_2026_dryad_metadata_v1.py'
       - 'tests/test_helgeland_2026_dryad_metadata_v1.py'
       - 'docs/eog_helgeland_2026_dryad_public_metadata_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -14,6 +15,7 @@ on:
       - 'scripts/audit_helgeland_2026_dryad_metadata_v1.py'
       - 'tests/test_helgeland_2026_dryad_metadata_v1.py'
       - 'docs/eog_helgeland_2026_dryad_public_metadata_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json'
 
 permissions:
   contents: read
@@ -33,6 +35,7 @@ jobs:
       - name: Request official Dryad DOI JSON and version-scoped file-list JSON only
         run: |
           python scripts/audit_helgeland_2026_dryad_metadata_v1.py \
+            --verify-frozen validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json \
             --output build/helgeland-2026-dryad-public-json-v1.json
       - name: Check identity without allowing biological outcomes
         run: |
@@ -42,6 +45,10 @@ jobs:
           x=json.loads(Path('build/helgeland-2026-dryad-public-json-v1.json').read_text())
           assert x['schema']=='eog.helgeland.dryad_2026.public_json_metadata.v1'
           assert x['status']=='PUBLIC_METADATA_IDENTITY_RETRIEVED_SHA256_DECLARED'
+          assert x['frozen_identity_check']['status']=='MATCHES_FROZEN_DRYAD_2026_V6_PUBLIC_JSON'
+          assert x['dryad_version_id']==421942
+          assert x['dryad_version_number']==6
+          assert x['dryad_dataset_id']==177360
           assert x['file_count']==18
           assert x['raw_bird_data_downloaded'] is False
           assert x['individual_or_population_observations_read'] is False
