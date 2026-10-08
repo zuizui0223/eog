@@ -1,0 +1,61 @@
+name: Lepanthes response-blind metadata gate
+
+on:
+  pull_request:
+    paths:
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/lepanthes_pre_response_catalog_v1.json'
+      - 'scripts/audit_lepanthes_pre_response_metadata_v1.py'
+      - 'tests/test_lepanthes_pre_response_metadata_v1.py'
+      - 'docs/eog_lepanthes_pre_response_metadata_audit_v1.md'
+      - '.github/workflows/lepanthes-pre-response-metadata-gate-v1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/lepanthes_pre_response_catalog_v1.json'
+      - 'scripts/audit_lepanthes_pre_response_metadata_v1.py'
+      - 'tests/test_lepanthes_pre_response_metadata_v1.py'
+      - 'docs/eog_lepanthes_pre_response_metadata_audit_v1.md'
+      - '.github/workflows/lepanthes-pre-response-metadata-gate-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only-stop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install isolated test dependency
+        run: python -m pip install pytest
+      - name: Test fail-closed metadata inventory and non-retroactive STOP
+        run: python -m pytest -q tests/test_lepanthes_pre_response_metadata_v1.py
+      - name: Generate a strictly metadata-only STOP receipt
+        run: |
+          python scripts/audit_lepanthes_pre_response_metadata_v1.py \
+            --output build/lepanthes_metadata_gate_v1.json
+      - name: Verify NO biological score or premature GO
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('build/lepanthes_metadata_gate_v1.json').read_text())
+          assert r['status'] == 'STOP_WITHIN_DECLARED_PRE_RESPONSE_GATE'
+          assert r['terminal_code'] == 'STOP_REGISTRY_SCHEMA_AND_DETECTION_UNQUALIFIED'
+          assert r['dictionary_columns'] == 23
+          assert r['survey_columns'] == 17
+          assert r['advertised_patches'] == 975
+          assert len(r['column_conflict_fields']) == 4
+          assert len(r['unmet_gate_ids']) == 7
+          assert r['focal_response_rows_opened_by_this_script'] is False
+          assert r['model_fits_performed_by_this_script'] == 0
+          assert r['prediction_scores_calculated_by_this_script'] == 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lepanthes-response-blind-metadata-STOP-v1
+          path: build/lepanthes_metadata_gate_v1.json
+          if-no-files-found: error
