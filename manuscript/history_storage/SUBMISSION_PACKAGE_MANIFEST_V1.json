@@ -40,8 +40,11 @@
     "package_checks_conclusion": "success"
   },
   "source_data": {
-    "microbiome_doi": "10.5061/dryad.7p2cv",
-    "grassland_doi": "10.5281/zenodo.5713397"
+    "microbiome_doi": "10.5281/zenodo.3872145",
+    "grassland_doi": "10.5281/zenodo.5713397",
+    "microbiome_archive_type": "Zenodo source repository release v1.2",
+    "microbiome_raw_reads_bioproject": "PRJNA605581",
+    "source_provenance_correction": "validation/eog_original_idea_leopold_history_retention_v28/source_provenance_correction_v1.json"
   },
   "science_status": {
     "evidence_chain_closed_at": "v38",
