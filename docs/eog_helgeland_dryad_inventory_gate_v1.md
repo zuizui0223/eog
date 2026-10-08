@@ -43,6 +43,27 @@ python scripts/audit_helgeland_dryad_api_inventory_v1.py \
 
 GitHub Actions：`.github/workflows/helgeland-dryad-metadata-only-v1.yml`。成果物 `HELGELAND-Dryad-PUBLIC-JSON-METADATA-NO-BIRD-DATA-v1` は**ファイルメタデータだけのJSON**。
 
+## 取得結果（公開JSONのみ・凍結版）
+
+最初のメタデータ取得はGitHub Actions run **37773617718**、成果物ID **11549730385** で成功した。ZIPの登録済みダイジェストは `sha256:c88e93163634701b7df4ae7aa65955d76d413f0907425c9e2d1bdfb3ad7e9ee4`。この成果物のJSONを独立に開いて、以下の情報を確認した。
+
+| ソース | Dryad dataset ID | 公開version ID | 公開版番号 | ファイル数 |
+|---|---:|---:|---:|---:|
+| 2025年出生・繁殖・生存 | 153974 | **354268** | **v2** | 5 |
+| 2024年遺伝・血統 | 125726 | **278334** | **v3** | 5 |
+
+ファイルごとの**名前・Dryad内部file ID・サイズ・ソース登録SHA-256**は `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json` に保存した。最大の遺伝子型ファイルは **362,644,229バイト**とAPIが記載しているが、**このファイルはダウンロードしていない**。
+
+この凍結版を `--verify-frozen` で指定すると、公開APIからの取得情報が当初の版番号・ファイルID・サイズ・ダイジェストとすべて一致するかを確認する。公開ソースが新しい版に更新された場合は、理由なしに最新版へ差し替えず、**版不一致として停止**する。通信障害でも、バイト検証や成果を虚偽の合格としない。
+
+```bash
+python scripts/audit_helgeland_dryad_api_inventory_v1.py \
+  --verify-frozen validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json \
+  --output build/helgeland-dryad-metadata-inventory-v1.json
+```
+
+これでも**実ファイルSHA-256の独立検証ではなく、公開元メタデータの同一性を照合しただけ**である。物理ヘッダーと、2024・2025年の個体・島IDの整合は依然未検証。
+
 ## 次の真の条件
 
 1. 出生日・移動先の変数が物理ファイルに存在することを、応答値を開かないヘッダー検査で確定する。
