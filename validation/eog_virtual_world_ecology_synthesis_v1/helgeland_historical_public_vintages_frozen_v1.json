@@ -1,0 +1,104 @@
+{
+  "schema": "eog.helgeland.historical_public_dryad_versions.frozen_observed_v1",
+  "status": "HISTORICAL_2014_2020_SOURCE_METADATA_FROZEN__NO_BIRD_BYTES_READ",
+  "authority": {
+    "github_actions_run_id": 37856758562,
+    "artifact_id": 11584312291,
+    "artifact_name": "HELGELAND-2014-2020-HISTORICAL-DRYAD-JSON-NO-BIRD-ROWS-v1",
+    "artifact_zip_sha256": "fbe9e500a023e7b45b2da2d91b8a35ac39a7488a2873b651ee62527d2b1b46b1"
+  },
+  "archives": {
+    "baalsrud_2014": {
+      "doi": "10.5061/dryad.nb260",
+      "cutoff": "2014-12-31",
+      "version_id": 5191,
+      "version_number": 1,
+      "published_date": "2014-04-24",
+      "file_count": 5,
+      "canonical_full_file_metadata_sha256": "cf9c19c6bd509285efe94f521e0e59e365c783e9687c6a3efce0c529c298cb1a",
+      "critical_files": [
+        {
+          "name": "DemographicNe-Datafile.csv",
+          "file_id": 28000,
+          "size_bytes": 75302,
+          "source_digest_type": "md5",
+          "source_digest": "4525019973ea554dabffc028fe20d386"
+        },
+        {
+          "name": "README_for_DemographicNe-Datafile.txt",
+          "file_id": 28001,
+          "size_bytes": 1074,
+          "source_digest_type": "md5",
+          "source_digest": "09ce4e13235d81356b98c8352ac4c543"
+        }
+      ],
+      "version_history": [
+        {
+          "published_date": "2014-04-24",
+          "version_id": 5191,
+          "version_number": 1
+        }
+      ]
+    },
+    "niskanen_2020": {
+      "doi": "10.5061/dryad.m0cfxpp10",
+      "cutoff": "2020-12-31",
+      "version_id": 78498,
+      "version_number": 8,
+      "published_date": "2020-08-19",
+      "file_count": 22,
+      "canonical_full_file_metadata_sha256": "4f1a3a4657940b90f7175c0422b826b6e949e3687c9304903c54b1fb2c54ef76",
+      "critical_files": [
+        {
+          "name": "Dryad_readme.txt",
+          "file_id": 358962,
+          "size_bytes": 4137,
+          "source_digest_type": "sha-256",
+          "source_digest": "277c05bb0a676ace6e84df339ac886a033f8426b6b86dc622a792b96bacd5a95"
+        },
+        {
+          "name": "Pop_size_1997_2012.csv",
+          "file_id": 358961,
+          "size_bytes": 1234,
+          "source_digest_type": "sha-256",
+          "source_digest": "0a47f69ba049b7035bc4d77e4015c0ae2cbdea968f8efbf7368ca34f5ccce638"
+        },
+        {
+          "name": "Pop_size_1998_2013.csv",
+          "file_id": 358957,
+          "size_bytes": 1266,
+          "source_digest_type": "sha-256",
+          "source_digest": "19c0e551ff754bba10f0f0b19af7ff2598e3ea91968ad2a0b0bdbb0c6ca3a51b"
+        }
+      ],
+      "version_history": [
+        {
+          "published_date": "2020-05-21",
+          "version_id": 66486,
+          "version_number": 2
+        },
+        {
+          "published_date": "2020-07-15",
+          "version_id": 73253,
+          "version_number": 7
+        },
+        {
+          "published_date": "2020-08-19",
+          "version_id": 78498,
+          "version_number": 8
+        },
+        {
+          "published_date": "2023-01-19",
+          "version_id": 208617,
+          "version_number": 10
+        }
+      ]
+    }
+  },
+  "island_crosswalk_verified": false,
+  "source_reported_digest_independently_verified": false,
+  "historical_observation_available_date_established_only_for_published_archives": true,
+  "public_2014_2020_file_rows_read": false,
+  "future_2021_2022_outcomes_read": false,
+  "prospective_EOG_model_or_heldout_score_authorized": false
+}
