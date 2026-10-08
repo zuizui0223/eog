@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import re
 
@@ -31,7 +32,10 @@ def test_current_claim_boundary_and_source_reconciliation():
     assert "Alonso-Crespo et al. (2023)" in el_text
     assert "Alonso-Crespo et al. (2022)" not in el_text
 
-    assert "10.5061/dryad.7p2cv" in text
+    assert "10.5281/zenodo.3872145" in text
+    assert "10.5061/dryad.7p2cv" not in text
+    assert "10.5281/zenodo.3872145" in el_text
+    assert "10.5061/dryad.7p2cv" not in el_text
     assert "10.5281/zenodo.5713397" in text
 
 
@@ -55,3 +59,19 @@ def test_failed_mechanism_is_not_resurrected():
 
     assert "We retained the numerical role-alignment results as descriptive transformations but rejected the interpretation" in text
     assert "does not reveal the interaction process that generates that pattern" in text
+
+def test_microbiome_source_archive_correction_is_explicit():
+    path = (
+        ROOT
+        / "validation/eog_original_idea_leopold_history_retention_v28"
+        / "source_provenance_correction_v1.json"
+    )
+    erratum = json.loads(path.read_text(encoding="utf-8"))
+    assert erratum["status"] == "CORRECTED_METADATA_ONLY_NO_ANALYSIS_CHANGE"
+    assert erratum["historic_error"]["value"] == "10.5061/dryad.7p2cv"
+    assert erratum["corrected_v28_source"]["zenodo_doi"] == "10.5281/zenodo.3872145"
+    submission = json.loads(
+        (ROOT / "manuscript/history_storage/SUBMISSION_PACKAGE_MANIFEST_V1.json")
+        .read_text(encoding="utf-8")
+    )
+    assert submission["source_data"]["microbiome_doi"] == "10.5281/zenodo.3872145"

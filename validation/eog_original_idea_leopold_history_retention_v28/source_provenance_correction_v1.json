@@ -1,0 +1,34 @@
+{
+  "schema": "eog.history_storage.source_provenance_correction.v1",
+  "status": "CORRECTED_METADATA_ONLY_NO_ANALYSIS_CHANGE",
+  "audited_on": "2026-10-08",
+  "affected_study": "Leopold and Busby (2020), Host Genotype and Colonist Arrival Order Jointly Govern Plant Microbiome Composition and Function",
+  "affected_project_version": "v28 and manuscript/history_storage",
+  "historic_error": {
+    "frozen_field": "validation/eog_original_idea_leopold_history_retention_v28/protocol_v28.json.source.dryad_doi",
+    "value": "10.5061/dryad.7p2cv",
+    "actually_refers_to": "Leopold et al. (2017), Priority effects are interactively regulated by top-down and bottom-up forces: evidence from wood decomposer communities",
+    "correct_for": "v29 wood-decomposer candidate only"
+  },
+  "corrected_v28_source": {
+    "zenodo_doi": "10.5281/zenodo.3872145",
+    "version": "v1.2",
+    "title": "dleopold/Populus_priorityEffects: Current Biology - final",
+    "repository": "https://github.com/dleopold/Populus_priorityEffects",
+    "pinned_source_commit": "d8082daabfccccf3bcbdd631b4438f44c04014c1",
+    "source_article_doi": "10.1016/j.cub.2020.06.011",
+    "original_amplicon_reads": "NCBI BioProject PRJNA605581"
+  },
+  "verification_sources": [
+    "https://zenodo.org/records/3872145",
+    "https://datadryad.org/dataset/doi%3A10.5061/dryad.7p2cv",
+    "https://pubmed.ncbi.nlm.nih.gov/32679100/"
+  ],
+  "changes": {
+    "frozen_v28_protocol_and_scored_results": "PRESERVED_UNCHANGED_AS_HISTORICAL_RECORD",
+    "submission_manuscripts_and_manifest": "CORRECTED_TO_ZENODO_3872145",
+    "explicit_erratum": "ADDED",
+    "regression_test": "ADDED"
+  },
+  "claim_boundary": "DOI attribution correction only; no numerical or scientific reclassification"
+}
