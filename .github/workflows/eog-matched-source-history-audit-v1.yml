@@ -4,17 +4,25 @@ on:
   pull_request:
     paths:
       - 'scripts/audit_matched_eog_source_history_v1.py'
+      - 'scripts/audit_eog_history_readout_crossover_v1.py'
       - 'tests/test_matched_eog_source_history_v1.py'
+      - 'tests/test_eog_history_readout_crossover_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/matched_source_history_exploratory_result_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/matched_readout_crossover_v1.json'
       - 'docs/eog_matched_source_geometry_history_v1.md'
+      - 'docs/eog_history_readout_crossover_v23.md'
       - '.github/workflows/eog-matched-source-history-audit-v1.yml'
   push:
     branches: [main]
     paths:
       - 'scripts/audit_matched_eog_source_history_v1.py'
+      - 'scripts/audit_eog_history_readout_crossover_v1.py'
       - 'tests/test_matched_eog_source_history_v1.py'
+      - 'tests/test_eog_history_readout_crossover_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/matched_source_history_exploratory_result_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/matched_readout_crossover_v1.json'
       - 'docs/eog_matched_source_geometry_history_v1.md'
+      - 'docs/eog_history_readout_crossover_v23.md'
       - '.github/workflows/eog-matched-source-history-audit-v1.yml'
 
 permissions:
@@ -33,7 +41,7 @@ jobs:
       - name: Install audit test requirement
         run: python -m pip install pytest
       - name: Test pinned frozen results and strict matched identity
-        run: python -m pytest -q tests/test_matched_eog_source_history_v1.py
+        run: python -m pytest -q tests/test_matched_eog_source_history_v1.py tests/test_eog_history_readout_crossover_v1.py
       - name: Download four immutable prior synthetic results only
         env:
           GH_TOKEN: ${{ github.token }}
@@ -43,7 +51,8 @@ jobs:
             v18:11321111760 \
             v19:11321161763 \
             v21:11322163376 \
-            v22:11324282807
+            v22:11324282807 \
+            v23:11324893031
           do
             phase="$(echo "$entry" | cut -d: -f1)"
             artifact="$(echo "$entry" | cut -d: -f2)"
@@ -65,6 +74,16 @@ jobs:
             --v22 build/frozen-eog-artifacts/v22.zip \
             --assert-frozen validation/eog_virtual_world_ecology_synthesis_v1/matched_source_history_exploratory_result_v1.json \
             --output build/eog-matched-source-history-v1.json
+      - name: Recompute readout crossover from exact v23 frozen source
+        run: |
+          python scripts/audit_eog_history_readout_crossover_v1.py \
+            --v18 build/frozen-eog-artifacts/v18.zip \
+            --v19 build/frozen-eog-artifacts/v19.zip \
+            --v21 build/frozen-eog-artifacts/v21.zip \
+            --v22 build/frozen-eog-artifacts/v22.zip \
+            --v23 build/frozen-eog-artifacts/v23.zip \
+            --assert-frozen validation/eog_virtual_world_ecology_synthesis_v1/matched_readout_crossover_v1.json \
+            --output build/eog-history-readout-crossover-v23.json
       - name: Reject accidental confirmatory language or new results
         run: |
           python - <<'PY'
@@ -79,9 +98,17 @@ jobs:
           }
           assert report["counts"]["joint_tradeoff_and_dispersed_only_identifiable"] == 130
           assert report["counts"]["clustered_more_provenance_but_dispersed_only_identifiable"] == 131
+          crossover=json.loads(Path('build/eog-history-readout-crossover-v23.json').read_text())
+          assert crossover["status"] == "POST_RESULT_EXPLORATORY_NOT_PREREGISTERED"
+          assert crossover["matched_landscapes"] == 384
+          assert crossover["readout_crossover"]["occupancy_d_only__provenance_c_only"] == 78
+          assert crossover["readout_crossover"]["occupancy_c_only__provenance_d_only"] == 0
+          assert crossover["readout_crossover"]["crossover_with_coverage_insurance_tradeoff"] == 75
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: EOG-v18-v22-MATCHED-POSTHOC-NOT-PREREGISTERED
-          path: build/eog-matched-source-history-v1.json
+          name: EOG-v18-v23-MATCHED-POSTHOC-NOT-PREREGISTERED
+          path: |
+            build/eog-matched-source-history-v1.json
+            build/eog-history-readout-crossover-v23.json
           if-no-files-found: error
