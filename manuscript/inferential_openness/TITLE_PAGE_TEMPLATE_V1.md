@@ -15,7 +15,7 @@ From open data to open inference: a prospective audit of ecological evidence pip
 [Name, email, postal address]
 
 **Keywords**  
-data reuse; ecological informatics; FAIR; open data; preregistration; reproducibility; observation process; data provenance
+data reuse; FAIR; observation process; preregistration; data provenance; detection calibration
 
 ## CRediT author statement
 
