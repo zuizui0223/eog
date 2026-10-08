@@ -47,6 +47,7 @@ def test_within_archive_path_exists_but_is_not_observed_provenance():
 
 @pytest.mark.parametrize("mutation", [
     "wrong_version", "wrong_file_id", "unregistered_source_file",
+    "invented_readme_header", "duplicate_candidate_edge",
     "invented_column", "synthetically_qualified_join", "changed_gates",
     "authorizes_endpoint", "turns_on_temporal_claim", "changes_original_hold",
 ])
@@ -62,6 +63,10 @@ def test_any_invalid_promotion_fails_closed(mutation):
         contract["expected_headers"]["new_unverified_file.txt"] = {
             "dryad_file_id": 0, "required_exact": ["guess"]
         }
+    elif mutation == "invented_readme_header":
+        contract["expected_headers"]["LRS.txt"]["required_exact"].append("parent.breeding.island")
+    elif mutation == "duplicate_candidate_edge":
+        contract["candidate_links"][1] = copy.deepcopy(contract["candidate_links"][0])
     elif mutation == "invented_column":
         contract["candidate_links"][0]["left"] = "Rectype_LRS.txt:parent_birth_island"
     elif mutation == "synthetically_qualified_join":
