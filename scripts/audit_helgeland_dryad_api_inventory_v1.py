@@ -161,11 +161,74 @@ def audit() -> dict:
     }
 
 
+
+def verify_against_frozen_source_inventory(observed: dict, frozen: dict) -> dict:
+    """Check the API returned the SAME version/file identities frozen before this run.
+
+    This never verifies content bytes and never upgrades response access.
+    A changed Dryad version is a source-identity STOP until separately reviewed.
+    """
+    if observed.get("schema") != "eog.helgeland.public_dryad_api_inventory.v1":
+        raise ValueError("Unexpected observed metadata schema")
+    if observed.get("overall_status") != "METADATA_INVENTORIES_RETRIEVED":
+        raise ValueError("Source metadata missing; cannot claim frozen inventory identity")
+    if frozen.get("schema") != "eog.helgeland.public_dryad_api_inventory.frozen_observed_v1":
+        raise ValueError("Unexpected frozen registry schema")
+    if observed.get("raw_biological_data_opened") is not False or observed.get("new_eog_endpoint_authorized") is not False:
+        raise ValueError("Biological response exposure would violate this source-only gate")
+
+    for key, expected in frozen["inventories"].items():
+        now = observed["datasets"].get(key)
+        if not isinstance(now, dict) or now.get("status") != "SOURCE_DECLARED_INVENTORY_WITH_SHA256":
+            raise ValueError(f"{key}: current file list is not fully SHA-256 documented")
+        for property_name in ("doi", "dryad_dataset_id", "dryad_version_id", "dryad_version_number"):
+            if now.get(property_name) != expected[property_name]:
+                raise ValueError(f"{key}: source version changed at {property_name}")
+        actual_files = {
+            (
+                f["name"], f["file_metadata_id"], f["size_bytes"],
+                f["source_declared_digest"],
+            )
+            for f in now["files"]
+        }
+        pinned_files = {
+            (
+                f["name"], f["file_metadata_id"], f["size_bytes"],
+                f["source_declared_sha256"],
+            )
+            for f in expected["files"]
+        }
+        if actual_files != pinned_files or len(now["files"]) != len(expected["files"]):
+            raise ValueError(f"{key}: file name/ID/size/digest changed")
+        for f in now["files"]:
+            if f["source_declared_digest_type"] != "sha-256" or not f["sha256_format_valid"]:
+                raise ValueError(f"{key}: SHA-256 not provided by Dryad")
+            for flag in ("actual_file_bytes_downloaded", "actual_file_header_read",
+                         "actual_digest_verified_against_downloaded_bytes"):
+                if f[flag] is not False:
+                    raise ValueError(f"{key}: unexpectedly consumed a data file")
+
+    if set(observed["datasets"]) != set(frozen["inventories"]):
+        raise ValueError("Source list changed")
+    if frozen["qualifier"]["independent_sha256_byte_verification"] is not False:
+        raise ValueError("A source-declared checksum cannot be promoted to byte verification")
+    return {
+        "source_version_identity": "MATCHES_FROZEN_PUBLIC_DRYAD_METADATA",
+        "actual_data_file_bytes_seen": False,
+        "source_reported_checksums_are_not_byte_verified": True,
+        "qualified_to_read_biological_response": False,
+    }
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output",type=Path,required=True)
+    parser.add_argument("--verify-frozen",type=Path,default=None)
     args=parser.parse_args()
     report=audit()
+    if args.verify_frozen:
+        frozen=json.loads(args.verify_frozen.read_text(encoding="utf-8"))
+        report["frozen_identity_check"]=verify_against_frozen_source_inventory(report,frozen)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print(json.dumps({"overall_status":report["overall_status"],
