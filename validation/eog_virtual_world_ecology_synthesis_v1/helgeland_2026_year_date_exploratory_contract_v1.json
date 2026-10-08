@@ -1,0 +1,96 @@
+{
+  "schema": "eog.helgeland.2026.observation_year_date_discordance.exploratory_contract.v1",
+  "status": "FROZEN_AFTER_STRUCTURAL_QC_RESULT_EXPOSURE__BEFORE_THIS_FOLLOWUP",
+  "prior_exposed_counts": {
+    "row_count": 73593,
+    "year_date_disagreement_count": 3517,
+    "year_date_matching_outside_1994_2022_count": 914
+  },
+  "scope": "Post-exposure explanatory source-time-axis diagnostic ONLY; no prospective scoring, inference of breeding-year convention or correction of original Year/date values.",
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "dryad_version_id": 421942,
+    "dryad_file_id": 4576411,
+    "github_repo": "torhanssonfrank/DensityRegulationHouseSparrows",
+    "github_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "file_path": "Data/presence_data_1994_2022.txt"
+  },
+  "read_only_columns": [
+    "Year",
+    "date"
+  ],
+  "published_readme_roles": {
+    "Year": "year of observation",
+    "date": "date of observation"
+  },
+  "date_parser": "ISO_DATE__YYYY_MM_DD",
+  "month_bins": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12"
+  ],
+  "year_minus_calendar_year_bins": [
+    "<=-2",
+    "-1",
+    "0",
+    "+1",
+    ">=+2"
+  ],
+  "outside_year_bins": [
+    "Year<1994",
+    "Year>2022",
+    "date.year<1994",
+    "date.year>2022"
+  ],
+  "outputs_only": [
+    "total_rows",
+    "invalid_year",
+    "invalid_date",
+    "all_year_delta_bin_counts",
+    "discordant_by_calendar_month",
+    "discordant_by_year_delta_and_calendar_month",
+    "consistent_year_outside_window",
+    "out_of_range_year_value_counts",
+    "out_of_range_date_year_counts"
+  ],
+  "prohibited": [
+    "row_level_data",
+    "ID",
+    "Island",
+    "Location",
+    "stage",
+    "scriptsex",
+    "genetic_inference",
+    "individual_history",
+    "sex",
+    "ecological_effect",
+    "dispersal_event",
+    "migration_count",
+    "per_site_counts",
+    "recomputed_primary_QC",
+    "heldout_performance"
+  ],
+  "validation": {
+    "source_sha256_and_first_header_required": true,
+    "all_bins_zero_initialized": true,
+    "discordance_total_must_equal_original_3517": true,
+    "all_rows_must_equal_original_73593": true,
+    "consistent_out_of_window_must_equal_original_914": true
+  },
+  "flags": {
+    "year_date_meaning_resolved": false,
+    "date_corrections_authorized": false,
+    "as_of_t_qualified": false,
+    "surveyed_zero_panel_verified": false,
+    "ecological_endpoint_authorized": false
+  }
+}
