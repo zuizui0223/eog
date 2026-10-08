@@ -1,0 +1,71 @@
+name: Inferential openness author review bundle
+
+on:
+  pull_request:
+    paths:
+      - 'manuscript/inferential_openness/**'
+      - 'manuscript/paper_ready/candidate_flow_table.csv'
+      - 'manuscript/paper_ready/candidate_funnel_summary.csv'
+      - 'validation/paper_ready_replication/candidate_flow_ledger.json'
+      - 'tests/test_inferential_openness_review_bundle_v1.py'
+      - '.github/workflows/inferential-openness-review-bundle.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'manuscript/inferential_openness/**'
+      - 'manuscript/paper_ready/candidate_flow_table.csv'
+      - 'manuscript/paper_ready/candidate_funnel_summary.csv'
+      - 'validation/paper_ready_replication/candidate_flow_ledger.json'
+      - 'tests/test_inferential_openness_review_bundle_v1.py'
+      - '.github/workflows/inferential-openness-review-bundle.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  review-bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Test source pins, exact figure outputs and unapproved review bundle
+        run: |
+          python -m pytest -q \
+            tests/test_inferential_openness_review_bundle_v1.py \
+            tests/test_inferential_openness_submission_assets.py \
+            tests/test_inferential_openness_manuscript_integration.py
+      - name: Create deterministic author-review ZIP and receipt
+        run: |
+          python manuscript/inferential_openness/build_review_bundle_v1.py \
+            --output-dir build/inferential-openness-author-review \
+            --source-commit "$GITHUB_SHA"
+      - name: Ensure archive remains not submission-approved
+        run: |
+          python - <<'PY'
+          import json, os, zipfile
+          from pathlib import Path
+          root=Path("build/inferential-openness-author-review")
+          manifest=json.loads((root/"author_review_bundle_manifest.json").read_text())
+          assert manifest["source_commit"] == os.environ["GITHUB_SHA"]
+          assert manifest["submission_ready"] is False
+          assert manifest["all_author_approved"] is False
+          assert manifest["archival_doi"] is None
+          path=root/"eog_inferential_openness_AUTHOR_REVIEW_v1.zip"
+          with zipfile.ZipFile(path) as z:
+              assert json.loads(z.read("BUNDLE_MANIFEST.json")) == manifest
+              assert "README_AUTHOR_REVIEW_NOT_SUBMISSION_READY.md" in z.namelist()
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inferential-openness-AUTHOR-REVIEW-NOT-SUBMISSION-v1
+          path: |
+            build/inferential-openness-author-review/eog_inferential_openness_AUTHOR_REVIEW_v1.zip
+            build/inferential-openness-author-review/author_review_bundle_manifest.json
+          if-no-files-found: error
