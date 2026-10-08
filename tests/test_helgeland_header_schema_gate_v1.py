@@ -143,3 +143,23 @@ def test_auditor_cannot_download_or_parse_original_bird_record_files():
         assert banned not in code
     assert "header-attestation-json" in code
     assert "source_loss_or_recolonization_identified" in code
+
+
+def test_manifest_reader_refuses_original_data_tables_before_read(tmp_path):
+    m=load()
+    data=tmp_path/"LRS.txt"
+    data.write_text("ID\tnatal.island\tadult.island\n123\tA\tB\n",encoding="utf-8")
+    with pytest.raises(ValueError,match="header-only.json"):
+        m.load_header_only_manifest(data)
+    raw=tmp_path/"SNPpedigree_GeneticArchitecture.raw"
+    raw.write_bytes(b"genotype\nindividual1 A A\n")
+    with pytest.raises(ValueError,match="header-only.json"):
+        m.load_header_only_manifest(raw)
+    oversized=tmp_path/"large.header-only.json"
+    oversized.write_bytes(b"x"*32769)
+    with pytest.raises(ValueError,match="32 KiB"):
+        m.load_header_only_manifest(oversized)
+    good=tmp_path/"fixture.header-only.json"
+    good.write_text('{"schema":"eog.helgeland.header_only_attestation.v1","records":[]}',encoding="utf-8")
+    parsed=m.load_header_only_manifest(good)
+    assert parsed["schema"]=="eog.helgeland.header_only_attestation.v1"
