@@ -96,17 +96,17 @@ def _fixture():
     ):
         ids = ["r0c0", "r1c0", "r2c0"] if placement == "clustered" else ["r0c0", "r6c6", "r3c5"]
         output[placement] = {
-            "v18": {"source_ids": ids, "union_reachable_node_count": 12,
+            "v18": {"source_ids": list(ids), "union_reachable_node_count": 12,
                     "union_reachable_fraction": cov, "worst_source_loss_retention": ins,
                     "multi_source_overlap_fraction": overlap},
-            "v19": {"source_ids": ids, "union_reachable_node_count": 12,
+            "v19": {"source_ids": list(ids), "union_reachable_node_count": 12,
                     "static_ambiguous_fraction": overlap},
-            "v21": {"source_ids": ids, "equilibrium_union_node_count": 12,
+            "v21": {"source_ids": list(ids), "equilibrium_union_node_count": 12,
                     "static_origin_ambiguity_fraction": overlap,
                     "equilibrium_occupancy_equal_across_histories": True,
                     "provenance_disagreement_fraction": prov,
                     "mean_pairwise_transient_occupancy_jaccard_distance": 0.1},
-            "v22": {"source_ids": ids, "equilibrium_snapshot_identical": True,
+            "v22": {"source_ids": list(ids), "equilibrium_snapshot_identical": True,
                     "full_history": {"identified": identifiable,
                                      "minimum_size": 1 if identifiable else None}},
         }
