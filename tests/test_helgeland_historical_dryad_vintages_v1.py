@@ -148,3 +148,64 @@ def test_no_2020_readers_or_biological_scores():
         assert forbidden not in source
     assert "ecological_scoring_authorized" in source
     assert "versions_after_cutoff_not_eligible" in source
+
+
+def test_full_catalog_fingerprint_rejects_historical_source_mutation():
+    m=module()
+    from json import loads
+    frozen=loads((
+        ROOT/"validation/eog_virtual_world_ecology_synthesis_v1/"
+        "helgeland_historical_public_vintages_frozen_v1.json"
+    ).read_text(encoding="utf-8"))
+    assert frozen["archives"]["baalsrud_2014"]["version_id"]==5191
+    assert frozen["archives"]["niskanen_2020"]["version_id"]==78498
+    assert frozen["archives"]["niskanen_2020"]["file_count"]==22
+    assert frozen["archives"]["niskanen_2020"]["version_history"][-1]=={
+        "published_date":"2023-01-19","version_id":208617,"version_number":10
+    }
+    assert frozen["authority"]["github_actions_run_id"]==37856758562
+    assert frozen["authority"]["artifact_id"]==11584312291
+    assert frozen["authority"]["artifact_zip_sha256"]==(
+        "fbe9e500a023e7b45b2da2d91b8a35ac39a7488a2873b651ee62527d2b1b46b1"
+    )
+    assert all(v["critical_files"] for v in frozen["archives"].values())
+    assert frozen["source_reported_digest_independently_verified"] is False
+    assert frozen["prospective_EOG_model_or_heldout_score_authorized"] is False
+
+    observed={"status":"BOTH_HISTORICAL_PUBLIC_METADATA_VINTAGES_IDENTIFIED",
+              "datasets":{}}
+    for key,base in frozen["archives"].items():
+        records=[{
+            "name":c["name"],"file_id":c["file_id"],
+            "source_reported_bytes":c["size_bytes"],
+            "source_reported_digest_type":c["source_digest_type"],
+            "source_reported_digest":c["source_digest"],
+        } for c in base["critical_files"]]
+        # This synthetic mock has only the declared key records and needs a
+        # corresponding synthetic fingerprint; it is not the actual full catalog.
+        mock_baseline=copy.deepcopy(base)
+        mock_baseline["file_count"]=len(records)
+        mock_baseline["canonical_full_file_metadata_sha256"]=m.canonical_files_sha256(records)
+        observed["datasets"][key]={
+            "doi":base["doi"],"historical_cutoff":base["cutoff"],
+            "selected":{"version_id":base["version_id"],
+                        "version_number":base["version_number"],
+                        "published_date":base["published_date"]},
+            "file_count":len(records),"files":records,
+            "published_version_history":base["version_history"],
+            "actual_source_file_bytes_read":False,
+            "ecological_endpoint_authorized":False,
+            "source_files_at_cutoff_qualified_as_model_features":False,
+        }
+        frozen["archives"][key]=mock_baseline
+    assert m.verify_against_frozen(observed,frozen)["status"]==(
+        "MATCHES_FROZEN_2014_V1_AND_2020_V8_PUBLIC_VERSION_METADATA"
+    )
+    mutated=copy.deepcopy(observed)
+    mutated["datasets"]["niskanen_2020"]["files"][1]["source_reported_bytes"]+=1
+    with pytest.raises(ValueError,match="catalog changed"):
+        m.verify_against_frozen(mutated,frozen)
+    mutated=copy.deepcopy(observed)
+    mutated["datasets"]["niskanen_2020"]["selected"]["version_id"]=208617
+    with pytest.raises(ValueError,match="historical version changed"):
+        m.verify_against_frozen(mutated,frozen)
