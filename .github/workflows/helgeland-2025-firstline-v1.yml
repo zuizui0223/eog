@@ -1,0 +1,48 @@
+name: Helgeland 2025-only physical header bridge synthetic tests
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2025-firstline-v1.yml'
+      - 'scripts/extract_helgeland_2025_parent_recruit_firstline_v1.py'
+      - 'tests/test_helgeland_2025_parent_recruit_firstline_v1.py'
+      - 'docs/eog_helgeland_2025_parent_recruit_firstline_gate_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2025-firstline-v1.yml'
+      - 'scripts/extract_helgeland_2025_parent_recruit_firstline_v1.py'
+      - 'tests/test_helgeland_2025_parent_recruit_firstline_v1.py'
+      - 'docs/eog_helgeland_2025_parent_recruit_firstline_gate_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-no-bird-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Verify four file identity and first-line contract using synthetic data
+        run: |
+          python -m pytest -q \
+            tests/test_helgeland_2025_parent_recruit_firstline_v1.py \
+            tests/test_helgeland_2025_parent_recruit_sourceonly_v1.py \
+            tests/test_helgeland_verified_firstline_v1.py
+      - name: No network, response parser or ecological score
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('scripts/extract_helgeland_2025_parent_recruit_firstline_v1.py').read_text()
+          for banned in ('urlopen(', 'import requests', 'import urllib', '/download',
+                         'read_csv(', 'import pandas', 'import numpy', 'socket.'):
+              assert banned not in s, banned
+          assert 'sha256_bytes(path)' in s
+          assert 'tokenize_header(path' in s
+          assert 'ecological_endpoint_authorized' in s
+          PY
