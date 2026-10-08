@@ -42,7 +42,7 @@ jobs:
         run: python -m pip install pytest
       - name: Test pinned frozen results and strict matched identity
         run: python -m pytest -q tests/test_matched_eog_source_history_v1.py tests/test_eog_history_readout_crossover_v1.py
-      - name: Download four immutable prior synthetic results only
+      - name: Download five immutable prior synthetic results only
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
