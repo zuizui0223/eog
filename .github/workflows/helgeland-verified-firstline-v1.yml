@@ -1,0 +1,43 @@
+name: Helgeland offline verified first-line gate
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-verified-firstline-v1.yml'
+      - 'scripts/extract_helgeland_verified_firstline_v1.py'
+      - 'tests/test_helgeland_verified_firstline_v1.py'
+      - 'docs/eog_helgeland_verified_firstline_gate_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-verified-firstline-v1.yml'
+      - 'scripts/extract_helgeland_verified_firstline_v1.py'
+      - 'tests/test_helgeland_verified_firstline_v1.py'
+      - 'docs/eog_helgeland_verified_firstline_gate_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Verify SHA256 and first-line safety on synthetic fixtures only
+        run: python -m pytest -q tests/test_helgeland_verified_firstline_v1.py tests/test_helgeland_header_schema_gate_v1.py
+      - name: Guard against network/download implementation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          source = Path('scripts/extract_helgeland_verified_firstline_v1.py').read_text()
+          for forbidden in ('import requests', 'import urllib', 'urlopen(', '/download', 'import pandas', 'read_csv(', 'import subprocess'):
+              assert forbidden not in source, forbidden
+          assert 'sha256_bytes' in source
+          assert 'readline(HEADER_LIMIT + 1)' in source
+          assert 'biological_scoring_authorized' in source
+          PY
