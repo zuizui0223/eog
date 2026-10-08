@@ -130,5 +130,6 @@ def test_readout_crosscheck_fails_if_source_or_occupancy_contract_changes():
 
     bad=copy.deepcopy(good)
     bad["v23"]["designs"]["clustered"]["plans"]["combined"]["full_history"]["identified"]=False
+    bad["v23"]["designs"]["clustered"]["plans"]["combined"]["full_history"]["minimum_size"]=None
     with pytest.raises(ValueError,match="combined observation"):
         script.paired_readout_outcomes(key,bad)
