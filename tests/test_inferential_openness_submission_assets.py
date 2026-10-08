@@ -59,6 +59,19 @@ def test_submission_figures_render_with_frozen_denominator(tmp_path):
     assert manifest["graphical_abstract"] == "graphical_abstract_inferential_openness.svg"
     assert manifest["supplementary_figure"] == "supplementary_figure_S1_terminal_taxonomy.svg"
     assert manifest["fine_terminal_label_count"] == 21
+
+    # Figure 1 subtitles must stay as two short lines inside each of five 190px boxes.
+    fig1root = ET.parse(out / "figure1_inferential_openness_ladder.svg").getroot()
+    xmlns = "{http://www.w3.org/2000/svg}"
+    subtitle_lines = [
+        el for el in fig1root.iter(xmlns + "text")
+        if el.attrib.get("class") == "small"
+    ]
+    for x in (150, 375, 600, 825, 1050):
+        lines = [el for el in subtitle_lines if el.attrib.get("x") == str(x)]
+        assert len(lines) == 2
+        assert [el.attrib.get("y") for el in lines] == ["182", "199"]
+        assert all(el.text and len(el.text) <= 20 for el in lines)
     for name in [*manifest["figures"], manifest["graphical_abstract"], manifest["supplementary_figure"]]:
         assert (out / name).exists()
         assert ET.parse(out / name).getroot().tag == "{http://www.w3.org/2000/svg}svg"
