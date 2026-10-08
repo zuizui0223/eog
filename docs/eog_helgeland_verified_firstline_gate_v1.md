@@ -53,6 +53,12 @@ python scripts/extract_helgeland_verified_firstline_v1.py \
 - 将来の観測情報を使う後ろ向き起源復元を、将来時点で利用可能な予測因子へ自動変換しません。
 - 実際のヘッダー・ハッシュの照合を完了する前に、生態学的な新結果・EOG-WFの新endpoint・論文の追加を主張しません。
 
+## 出力保護（2026-10-08追加）
+
+- `--output` と `--receipt` は必ず異なる**未作成のファイルパス**を指定する。既存のJSONへの上書きは禁止し、再実行時は別名にする。
+- 元ファイルのディレクトリと、そのsymlink aliasの下へ結果を書けない。元ファイルが置かれるディレクトリ経路のsymlinkも拒否する。
+- 検証完了後の書込みはexclusive creationで実行し、例外で作成途中の新しい出力が残らないようにする。
+
 ## CI
 
 `pytest tests/test_helgeland_verified_firstline_v1.py` では**模擬ヘッダーと模擬行データのみ**を利用し、サイズ改変・等長バイト改変・シンボリックリンク・列名欠損・区切りの誤宣言などを検証します。実際の鳥・生存・SNPレコードはGitHub Actionsへ持ち込みません。
