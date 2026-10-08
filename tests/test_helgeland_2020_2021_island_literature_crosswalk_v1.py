@@ -72,7 +72,7 @@ def test_no_false_zero_or_hindsight_endpoint_claims():
 def test_2021_dispersal_precedent_not_misrepresented_as_new_eog_result():
     x=read()
     precedent=x["existing_published_movement_precedent"]
-    assert precedent["ranked_natal_recruits_total"]==2192
+    assert precedent["recorded_recruits_total"]==2192
     assert precedent["recorded_dispersed_natal_recruits"]==376
     assert precedent["recording_period"]==[1993,2014]
     assert "NOT new EOG" in precedent["scientific_note"]
