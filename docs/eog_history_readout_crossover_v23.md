@@ -94,6 +94,31 @@ This decomposition follows solely from the original v23 exact action-selection r
 
 Audit: `scripts/audit_eog_v23_readout_synergy_v1.py`. Frozen machine record: `validation/eog_virtual_world_ecology_synthesis_v1/v23_readout_synergy_decomposition_v1.json`.
 
+## Exact witness and an important target–observation scope mismatch
+
+A direct check of all **18** previously classified strict mixed-evidence cases in the original archived v23 rows finds that:
+
+- Every exact minimal evidence set is **two actions**: the **`O_t4` transient occupancy snapshot** and exactly **one `P_node` earliest-source provenance tag**.
+- The chosen provenance action is history-informative at **a source-basin confluence node**. Across the original v23 panel, provenance tags at static unique-source-origin nodes never carried activation-order information.
+- Therefore each of the 18 cases needs the union of *two different kinds of history contrast*, rather than simply adding more occupancy snapshots or more provenance tags under the frozen action library.
+
+This identifies the **informational witness** but not a new ecological mechanism. With exactly three candidate activation histories, any two individually incomplete observations that jointly distinguish all three must separate different history pairs. The frozen output contains their exact action IDs, but not the original per-history action-value matrix; do **not** claim to know which named pair each action uniquely separated.
+
+### The inference target includes more than the provenance assays observe
+
+An additional audit found **35/768 source-layout cases** (clustered **34/384**, dispersed **1/384**) where:
+
+1. the idealized **complete equilibrium source-provenance target** had **three distinguishable classes** across the histories, but
+2. the *entire permitted provenance-only observation library* could not identify all three.
+
+This is not a contradiction. In the original v23 implementation, the target (`provenance_class_count`) is defined from provenance over **all equilibrium-reachable nodes**, including the source nodes. However, the actual `P_node` assays are defined **only for non-source nodes**. Consequently, a difference in the target may be hidden in node locations that the permitted assay library never measures. Two of the 18 strict mixed cases fall into this category.
+
+**Interpretation:** the identifiability ceiling depends not only on the ecological state variable, but also on the **spatial support of the measurements permitted for that variable**. The missing source-node observations are a declared observation-design boundary, not evidence that natural source histories were erased.
+
+This audit does **not** invent an extra measurement at a source node, relax v23's predefined source-exclusion rule, or rescore the original hypotheses. Raw per-history action signatures were not stored in the v23 result summary; establishing each exact source-node contrast would require separate access to those signatures and is **not claimed here**.
+
+Machine receipt: `validation/eog_virtual_world_ecology_synthesis_v1/v23_readout_witness_boundary_v1.json`. The standalone verifier reads the **unchanged original v23 artifact** with its SHA-256 and must exactly reproduce all 18 witnesses and 35 target–observation mismatches.
+
 ## Interpretation: history content is not measurement access
 
 High source-basin overlap can create a strong dependence of the **equilibrium provenance map** on source activation order. This need not yield highly distinguishable **transient occupancy signatures**. In more dispersed sources, source identity may have less influence on the equilibrium provenance composition, while the temporal occupation wavefront can make histories easier to tell apart.

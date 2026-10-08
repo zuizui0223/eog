@@ -1,0 +1,62 @@
+{
+  "schema": "eog.virtual_worlds.v23_readout_witness_boundary.v1",
+  "status": "POST_RESULT_FORENSIC_NO_NEW_SIMULATION",
+  "source_artifact_id": 11324893031,
+  "source_artifact_sha256": "a859e7b6ec5e8af47b56a67a10b89ae7ab65ca3e1a70aed9317f663f863eaae9",
+  "source_result_fingerprint": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244",
+  "matched_landscapes": 384,
+  "paired_layouts_per_landscape": 2,
+  "mixed_only_total_layout_cases": 18,
+  "mixed_witness_occupancy_action_counts": {
+    "O_t4": 18
+  },
+  "mixed_witnesses_all_exactly_one_snapshot_plus_one_provenance_tag": true,
+  "full_target3_but_non_source_P_library_nonidentifiable_layout_cases": 35,
+  "by_layout": {
+    "clustered": {
+      "n": 384,
+      "strict_mixed_only": 17,
+      "strict_mixed_exactly_one_occupancy_and_one_provenance": 17,
+      "strict_mixed_has_history_informative_confluence": 17,
+      "strict_mixed_full_provenance_target3_but_non_source_P_unresolved": 2,
+      "original_provenance_target_class_distribution": {
+        "1": 20,
+        "2": 102,
+        "3": 262
+      },
+      "full_provenance_target3_but_non_source_provenance_library_fails": {
+        "101": 18,
+        "000": 14,
+        "001": 2
+      },
+      "full_provenance_target3_but_non_source_provenance_library_fails_total": 34
+    },
+    "dispersed": {
+      "n": 384,
+      "strict_mixed_only": 1,
+      "strict_mixed_exactly_one_occupancy_and_one_provenance": 1,
+      "strict_mixed_has_history_informative_confluence": 1,
+      "strict_mixed_full_provenance_target3_but_non_source_P_unresolved": 0,
+      "original_provenance_target_class_distribution": {
+        "1": 241,
+        "2": 98,
+        "3": 45
+      },
+      "full_provenance_target3_but_non_source_provenance_library_fails": {
+        "101": 1
+      },
+      "full_provenance_target3_but_non_source_provenance_library_fails_total": 1
+    }
+  },
+  "reason_for_target_observation_gap": "provenance_class_count classifies complete equilibrium provenance maps including source nodes, whereas all P_node measurements exclude source nodes. A full-target three-class difference may therefore remain unresolved by the narrower non-source provenance observation library.",
+  "formal_three_history_boundary": "When neither observation family distinguishes all three histories but a two-action O+P witness does, the two actions must separate different history pairs. This is a finite partition fact, not a biological causal discovery.",
+  "source_node_exclusion_is_the_only_inferred_reason_in_some_cases": "Only the target-class versus observed-library scope mismatch is established. The frozen v23 per-row summary does not expose raw action signatures or identify the precise hidden source-node contrast for each pair.",
+  "claim_boundary": [
+    "Original v23 protocols and virtual-world outcomes are unchanged.",
+    "No novel biological dispersal, extinction, history-storage or memory mechanism is identified.",
+    "The O_t4 witness is in structural propagation steps, not a field census time.",
+    "A synthetic earliest-source tag at a confluence node is not observed ancestry or calibrated gene flow.",
+    "A post-result exact witness count is not an independent confirmatory replication.",
+    "Do not reopen the consumed EOG-WF/Glanville/NEON response programmes or the existing article claims."
+  ]
+}
