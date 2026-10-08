@@ -45,7 +45,7 @@ def test_all_claimed_numbers_and_git_blobs_match_frozen_results():
         path = ROOT / source["path"]
         raw = path.read_bytes()
         git_blob = hashlib.sha1(
-            b"blob " + str(len(raw)).encode("ascii") + b"\\0" + raw
+            b"blob " + str(len(raw)).encode("ascii") + b"\0" + raw
         ).hexdigest()
         assert git_blob == source["git_blob_sha"], source["phase"]
         result = json.loads(raw.decode("utf-8"))
