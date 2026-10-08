@@ -1,0 +1,72 @@
+{
+  "schema": "eog.helgeland.2026.direct_observation_qc_protocol.v1",
+  "status": "FROZEN_BEFORE_READING_2026_PRESENCE_RECORD_ROWS",
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "dataset_id": 177360,
+    "version_id": 421942,
+    "file_metadata_id": 4576411,
+    "github_path": "Data/presence_data_1994_2022.txt",
+    "github_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+  },
+  "required_exact_columns": [
+    "Year",
+    "date",
+    "scriptsex",
+    "Island",
+    "Location",
+    "stage",
+    "Least_age",
+    "Least_hatchyear",
+    "ID"
+  ],
+  "direct_nest_stage": "nest",
+  "direct_later_observation_stage_candidates": [
+    "capt",
+    "obs"
+  ],
+  "date_contract": "ISO_YYYY_MM_DD_ONLY__INVALID_DATES_COUNT_AS_UNQUALIFIED",
+  "retained_record_window": {
+    "first_year": 1994,
+    "last_year": 2022
+  },
+  "identity_contract": {
+    "require_ID_present": true,
+    "require_single_nest_island_per_ID": true,
+    "require_later_observation_date_strictly_after_nest_date": true,
+    "disallow_later_reconstructed_source_for_t_prediction": true,
+    "exclude_young_age_derived_from_Least_age_as_predictor": true
+  },
+  "allowed_output_aggregates": [
+    "row_count",
+    "nonempty_id_count",
+    "distinct_id_count",
+    "missing_key_count",
+    "unparseable_date_count",
+    "date_year_disagreement_count",
+    "out_of_window_count",
+    "unrecognized_stage_count",
+    "nest_stage_row_count",
+    "direct_later_stage_row_count",
+    "duplicate_exact_observation_count",
+    "multi_nest_island_id_count",
+    "ids_with_one_nest_island_and_any_later_direct_observation"
+  ],
+  "prohibited_outputs": [
+    "individual_ID_values",
+    "row_level_dates",
+    "row_level_island",
+    "biological_effect_sizes",
+    "observed_cross_island_dispersal_count",
+    "island_colonization_labels",
+    "tested_suitability_or_connectivity_accuracy",
+    "heldout_event_scores",
+    "prospective_predictor_set"
+  ],
+  "claim_boundary": {
+    "no_surveyed_zero_denominator_verified": true,
+    "no_temporal_as_of_t_input_certified": true,
+    "no_independent_heldout_event_benchmark": true,
+    "biological_scoring_authorized": false
+  }
+}
