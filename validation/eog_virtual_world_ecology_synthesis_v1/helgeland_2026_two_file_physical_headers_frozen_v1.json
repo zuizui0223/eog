@@ -1,0 +1,54 @@
+{
+  "schema": "eog.helgeland.dryad2026.two_file_physical_headers.frozen_observed_v1",
+  "status": "TWO_DRYAD_V6_PHYSICAL_HEADERS_ATTESTED__ECOLOGY_HOLD",
+  "provenance": {
+    "github_actions_run_id": 37797505583,
+    "artifact_id": 11559381569,
+    "artifact_name": "HELGELAND-2026-DryadV6-TWO-HEADERS-NO-BIRD-ROWS-v1",
+    "artifact_zip_sha256": "402c01b4ffae08b6f351d6d407e9dfbfad45f745c714e4fd8fe2ca99a6a71c82",
+    "upstream_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+  },
+  "dryad_dataset_id": 177360,
+  "dryad_version_id": 421942,
+  "headers": [
+    {
+      "github_path": "Data/presence_data_1994_2022.txt",
+      "dryad_file_metadata_id": 4576411,
+      "delimiter": "SEMICOLON",
+      "column_names": [
+        "Year",
+        "date",
+        "scriptsex",
+        "Island",
+        "Location",
+        "stage",
+        "Least_age",
+        "Least_hatchyear",
+        "ID"
+      ],
+      "first_line_sha256": "6de9dae631c91a1ce511049938e480919a8ce74b194918c335edcf64d3746227"
+    },
+    {
+      "github_path": "Data/estimated_pop_sizes_nestling_to_adult_model_with_lurøy_onøy.txt",
+      "dryad_file_metadata_id": 4576413,
+      "delimiter": "SEMICOLON",
+      "column_names": [
+        "Location",
+        "Island",
+        "Year",
+        "N_corr",
+        ".lower",
+        ".upper",
+        ".width",
+        "N_obs"
+      ],
+      "first_line_sha256": "401c9eaf0fdd50c8c572c744ff9f6d5b2a151b462f64b89fdd5c2bc37d8fdbfd"
+    }
+  ],
+  "both_file_byte_parity_revalidated": true,
+  "biological_rows_decoded": false,
+  "surveyed_zero_panel_verified": false,
+  "first_direct_recruit_destination_verified": false,
+  "as_of_t_input_eligibility_verified": false,
+  "ecological_endpoint_authorized": false
+}

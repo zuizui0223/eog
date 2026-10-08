@@ -1,0 +1,84 @@
+name: Helgeland Dryad v6 verified two physical headers only
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2026-physical-headers-v1.yml'
+      - 'scripts/audit_helgeland_2026_two_file_headers_v1.py'
+      - 'tests/test_helgeland_2026_two_file_headers_v1.py'
+      - 'docs/eog_helgeland_2026_two_file_headers_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_two_file_physical_headers_frozen_v1.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2026-physical-headers-v1.yml'
+      - 'scripts/audit_helgeland_2026_two_file_headers_v1.py'
+      - 'tests/test_helgeland_2026_two_file_headers_v1.py'
+      - 'docs/eog_helgeland_2026_two_file_headers_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_two_file_physical_headers_frozen_v1.json'
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-byte-verified-firstlines:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Verify independent author commit
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Verify fail-closed schema with synthetic rows only
+        run: |
+          python -m pytest -q tests/test_helgeland_2026_two_file_headers_v1.py \
+            tests/test_helgeland_2026_upstream_byte_parity_v1.py
+      - name: Attest only first physical line after matching entire two SHA256 streams
+        run: |
+          python scripts/audit_helgeland_2026_two_file_headers_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-2026-physical-headers-only-v1.json
+      - name: Verify structural header receipt without upgrading ecological claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('build/helgeland-2026-physical-headers-only-v1.json').read_text())
+          assert d['schema']=='eog.helgeland.dryad2026.two_file_physical_headers.v1'
+          assert d['status']=='TWO_DRYAD_V6_PHYSICAL_HEADERS_ATTESTED__ECOLOGY_HOLD'
+          assert d['dryad_version_id']==421942
+          assert d['upstream_commit']=='a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5'
+          assert d['files']==2
+          assert all(x['source_whole_byte_sha256_matches_dryad_v6'] for x in d['headers'])
+          assert d['only_first_physical_lines_decoded'] is True
+          assert d['biological_data_rows_decoded'] is False
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_two_file_physical_headers_frozen_v1.json').read_text())
+          assert frozen['status']==d['status']
+          assert frozen['dryad_version_id']==d['dryad_version_id']
+          assert frozen['provenance']['upstream_commit']==d['upstream_commit']
+          assert len(frozen['headers'])==len(d['headers'])==2
+          for observed, pinned in zip(d['headers'], frozen['headers']):
+              assert observed['github_path']==pinned['github_path']
+              assert observed['dryad_file_id']==pinned['dryad_file_metadata_id']
+              assert observed['actual_first_line_column_names']==pinned['column_names']
+              assert observed['physical_first_line_sha256']==pinned['first_line_sha256']
+              assert observed['delimiter']==pinned['delimiter']
+          assert frozen['ecological_endpoint_authorized'] is False
+          for k in ('island_year_surveyed_zero_panel_verified','same_id_first_recruit_movement_verified','observation_available_as_of_t_verified','heldout_benchmark_qualified','ecological_endpoint_authorized'):
+              assert d[k] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2026-DryadV6-TWO-HEADERS-NO-BIRD-ROWS-v1
+          path: build/helgeland-2026-physical-headers-only-v1.json
+          if-no-files-found: warn
