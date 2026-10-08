@@ -20,6 +20,19 @@ EXPECTED_FILES = {
 REQUIRED_GATES = ("SOURCE_PIN", "PHYSICAL_HEADERS", "ID_LINK",
                   "TIME_ORIENTATION", "OBSERVATION_PROCESS", "HELDOUT")
 
+EXPECTED_README_FIELDS = {
+    "LRS.txt": {"ID", "natal.island", "adult.island", "year", "LRS"},
+    "ARS_Survival.txt": {"ID", "obs.year", "year", "fiflok", "laflok", "natal.island"},
+    "Rectype_LRS.txt": {"dam", "sire", "recruit", "lastobs.island", "year"},
+    "Rectype_ARS_Survival.txt": {"dam", "sire", "recruit", "lastobs.island",
+                                "obs.year", "year", "flok.year"},
+}
+EXPECTED_LINKS = {
+    (f"Rectype_{kind}.txt:{parent}", f"{base}.txt:ID")
+    for kind, base in (("LRS", "LRS"), ("ARS_Survival", "ARS_Survival"))
+    for parent in ("dam", "sire", "recruit")
+}
+
 
 def qualify(contract: dict, inventory: dict) -> dict:
     if contract.get("schema") != "eog.helgeland.same_archive_parent_recruit.source_only_contract.v1":
@@ -46,11 +59,15 @@ def qualify(contract: dict, inventory: dict) -> dict:
         if registered[name]["size_bytes"] <= 0 or len(registered[name]["source_declared_sha256"]) != 64:
             raise ValueError("Incomplete source metadata")
         tokens = observed[name]["required_exact"]
-        if not isinstance(tokens, list) or not tokens or len(tokens) != len(set(tokens)):
-            raise ValueError("Invalid frozen README role names")
+        if (not isinstance(tokens, list) or len(tokens) != len(set(tokens))
+                or set(tokens) != EXPECTED_README_FIELDS[name]):
+            raise ValueError("Frozen README role fields changed without a new source-only contract")
     candidates = contract["candidate_links"]
     if len(candidates) != 6:
         raise ValueError("Six predeclared within-2025 candidate edges expected")
+    declared_links = [(entry["left"], entry["right"]) for entry in candidates]
+    if set(declared_links) != EXPECTED_LINKS or len(set(declared_links)) != len(declared_links):
+        raise ValueError("Frozen candidate join links changed or duplicated")
     for entry in candidates:
         if entry["qualified"] is not False:
             raise ValueError("A join candidate cannot be promoted without bird row evidence")
