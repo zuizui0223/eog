@@ -120,3 +120,65 @@ def test_script_does_not_import_response_analysis_or_download_helpers():
         assert forbidden not in s
     assert "individual_or_fitness_records_opened" in s
     assert "source_declared_digest_is_independent_byte_verification" in s
+
+
+def test_frozen_public_dryad_inventory_exactly_matches_mock_metadata_without_file_access():
+    m=module()
+    import json
+    frozen_path=ROOT/"validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json"
+    frozen=json.loads(frozen_path.read_text(encoding="utf-8"))
+    assert frozen["schema"]=="eog.helgeland.public_dryad_api_inventory.frozen_observed_v1"
+    assert frozen["status"]=="SOURCE_METADATA_RETRIEVED_AND_PINNED__NO_FILE_BYTES_VERIFIED"
+    assert frozen["authority"]["run_id"]==37773617718
+    assert frozen["authority"]["artifact_id"]==11549730385
+    assert frozen["authority"]["artifact_zip_sha256"]=="c88e93163634701b7df4ae7aa65955d76d413f0907425c9e2d1bdfb3ad7e9ee4"
+    assert frozen["inventories"]["fitness_2025"]["dryad_version_number"]==2
+    assert frozen["inventories"]["pedigree_2024"]["dryad_version_number"]==3
+    assert frozen["inventories"]["fitness_2025"]["dryad_version_id"]==354268
+    assert frozen["inventories"]["pedigree_2024"]["dryad_version_id"]==278334
+
+    observed={
+        "schema":"eog.helgeland.public_dryad_api_inventory.v1",
+        "overall_status":"METADATA_INVENTORIES_RETRIEVED",
+        "raw_biological_data_opened":False,
+        "new_eog_endpoint_authorized":False,
+        "datasets":{},
+    }
+    for key,version in frozen["inventories"].items():
+        dataset,files=mock_record(key)
+        dataset["id"]=version["dryad_dataset_id"]
+        dataset["versionNumber"]=version["dryad_version_number"]
+        dataset["_links"]["stash:version"]["href"]=f"/api/v2/versions/{version['dryad_version_id']}"
+        rows=[]
+        for row in version["files"]:
+            rows.append({
+                "path":row["name"],"size":row["size_bytes"],
+                "digest":row["source_declared_sha256"],"digestType":"sha-256",
+                "_links":{"self":{"href":f"/api/v2/files/{row['file_metadata_id']}"}},
+            })
+        files["_links"]["self"]["href"]=f"/api/v2/versions/{version['dryad_version_id']}/files"
+        files["count"]=len(rows);files["total"]=len(rows)
+        files["_embedded"]["stash:files"]=rows
+        observed["datasets"][key]=m.inventory_from_metadata(key,dataset,files)
+
+    verdict=m.verify_against_frozen_source_inventory(observed,frozen)
+    assert verdict["source_version_identity"]=="MATCHES_FROZEN_PUBLIC_DRYAD_METADATA"
+    assert verdict["qualified_to_read_biological_response"] is False
+    assert verdict["source_reported_checksums_are_not_byte_verified"] is True
+
+    bad=copy.deepcopy(observed)
+    bad["datasets"]["fitness_2025"]["dryad_version_id"]=0
+    with pytest.raises(ValueError,match="source version changed"):
+        m.verify_against_frozen_source_inventory(bad,frozen)
+    bad=copy.deepcopy(observed)
+    bad["datasets"]["pedigree_2024"]["files"][0]["source_declared_digest"]="0"*64
+    with pytest.raises(ValueError,match="file name/ID/size/digest changed"):
+        m.verify_against_frozen_source_inventory(bad,frozen)
+    bad=copy.deepcopy(observed)
+    bad["datasets"]["fitness_2025"]["files"][1]["actual_file_header_read"]=True
+    with pytest.raises(ValueError,match="consumed a data file"):
+        m.verify_against_frozen_source_inventory(bad,frozen)
+    bad=copy.deepcopy(observed)
+    bad["overall_status"]="HOLD_INCOMPLETE_METADATA_INVENTORY"
+    with pytest.raises(ValueError,match="Source metadata missing"):
+        m.verify_against_frozen_source_inventory(bad,frozen)
