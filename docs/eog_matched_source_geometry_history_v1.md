@@ -90,6 +90,20 @@ The narrower EOG finding is the **matched separation** of three declared structu
 4. **No observed natural source-loss validation**: *Lepanthes rupestris* currently has a separate, explicit pre-response qualification STOP; Glanville and NEON EOG programmes already consumed their frozen endpoints and cannot be repurposed as fresh confirmation.
 5. **No new third manuscript**: the result is an exploratory bridge between already existing BAM-identifiability and assembly-history papers. It should not create another paper lane without independent, response-qualified ecological evidence.
 
+### v23: the readout itself can reverse which source layout identifies history
+
+The v22 occupancy-only snapshot library was already carried forward unchanged into the **preregistered v23** observation libraries, which additionally include idealized equilibrium earliest-source provenance assays. We have now *post hoc* matched that frozen v23 result to the same 384 three-source landscapes.
+
+- Occupancy-only full-history identification: **clustered 231/384, dispersed 348/384**.
+- Provenance-only identification: **clustered 228/384, dispersed 44/384**.
+- Combined libraries: **clustered 338/384, dispersed 349/384**.
+- **78/384** showed the strict observation-readout crossover: dispersed-only identification from occupancy snapshots but clustered-only identification from provenance assays.
+- All 78 crossovers coincided with a greater history-dependent provenance signature under clustering; **75/78** also met the matched coverage–structural-insurance trade-off.
+
+This directly shows that **source geometry is not ranked for historical identifiability without specifying the observation channel**. It does *not* show equal field measurement costs or valid genetic source attribution; the complete identity-revealing assays are idealized.
+
+**[Full separately frozen v23 crossover audit](eog_history_readout_crossover_v23.md)** records the original artifact SHA-256, matched source identity and complete claim boundary. The original v18–v22 exploratory summary remains unchanged.
+
 ## 5. Reproduce from the exact four frozen authoritative artifacts
 
 All IDs and SHA-256 values below are verified against the original result summary files and the downloaded ZIPs; archive retention is controlled by GitHub Actions, so preserve validated copies when available.
