@@ -130,6 +130,16 @@ A public *Lepanthes rupestris* patch-occupancy archive is a plausible **candidat
 
 The **metadata-only HOLD** with all pre-response gates is recorded at `validation/eog_virtual_world_ecology_synthesis_v1/metadata_candidate_v1.json`. **No focal CSV response rows were downloaded or opened in this EOG candidate audit**, and no predictor, fit, outcome, source-loss estimate or new scientific score is reported. Only a separately frozen response-blind acquisition and detection contract can authorize further testing.
 
+### Follow-on pre-response qualification outcome (new, separately frozen audit)
+
+The initial metadata candidate above was deliberately a HOLD, not an authorized empirical analysis. A separate response-blind catalogue comparison has now reached the **v1 protocol STOP** `STOP_REGISTRY_SCHEMA_AND_DETECTION_UNQUALIFIED`: the Dryad and derivative dictionaries disagree on four physical column names (three coordinates and the 2004 second visit); the archive advertises one combined patch/occupancy CSV but no independently verified separate opportunity registry; the physical header, checksum, missingness coding and proposed source-loss event remain unverified. The 2020 published model's estimated detection is not independent calibration.
+
+- Full provenance and precise stopping conditions: [Lepanthes pre-response audit v1](eog_lepanthes_pre_response_metadata_audit_v1.md).
+- Frozen source catalog: `validation/eog_virtual_world_ecology_synthesis_v1/lepanthes_pre_response_catalog_v1.json`.
+- A versioned deterministic **metadata-only** test/CI emits a STOP receipt without opening `lepa_all.csv`.
+
+This is the failure of **this stringent EOG qualification contract**, not a negative ecological result or a defect attributed to the original study. The original v1 metadata HOLD entry is retained as historical state; the subsequent STOP is not backdated to it. No biological outcome has been scored.
+
 ## 7. Validation and non-retroactivity
 
 This is a post-result evidence synthesis, *not* a new independently randomized validation. `tests/test_eog_virtual_world_ecology_synthesis_v1.py` verifies all pinned Git source blobs, exact JSON fields, published result fingerprints, and the two preregistered **REFUTED** outcomes. It must not reopen or alter v10–v26 experimental results, the JBI BAM manuscript, the Ecology Letters history-storage manuscript, or the EOG-WF empirical 3/31/3 closure.
