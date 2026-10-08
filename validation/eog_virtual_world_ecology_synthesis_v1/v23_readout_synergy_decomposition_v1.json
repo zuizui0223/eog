@@ -1,0 +1,64 @@
+{
+  "schema": "eog.virtual_worlds.v23_readout_synergy_decomposition.v1",
+  "status": "POST_RESULT_DESCRIPTIVE_NOT_PREREGISTERED",
+  "source": "original v23 complete 384-row synthetic action audit plus frozen matched-crossover receipt",
+  "original_v23_artifact_id": 11324893031,
+  "original_v23_sha256": "a859e7b6ec5e8af47b56a67a10b89ae7ab65ca3e1a70aed9317f663f863eaae9",
+  "original_v23_fingerprint": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244",
+  "parent_receipt": "validation/eog_virtual_world_ecology_synthesis_v1/matched_readout_crossover_v1.json",
+  "panel_count": 384,
+  "design_count": 768,
+  "true_mixed_library_synergy_designs": 18,
+  "layouts": {
+    "clustered": {
+      "n": 384,
+      "identifiability_triple_order": "occupancy_only,provenance_only,combined",
+      "truth_table": {
+        "101": 93,
+        "111": 138,
+        "000": 46,
+        "001": 17,
+        "011": 90
+      },
+      "occupancy_unresolved": 153,
+      "provenance_unresolved": 156,
+      "provenance_alone_rescues_occupancy_unresolved": 90,
+      "mixed_only_rescues_occupancy_unresolved": 17,
+      "total_rescued_after_adding_provenance": 107,
+      "fraction_unresolved_rescued_by_provenance_alone": 0.5882352941176471,
+      "fraction_unresolved_rescued_by_both_only": 0.1111111111111111,
+      "fraction_unresolved_rescued_in_total": 0.6993464052287581,
+      "newly_identified_by_occupancy_alone_after_provenance": 93,
+      "newly_identified_by_mixed_information_after_provenance": 17
+    },
+    "dispersed": {
+      "n": 384,
+      "identifiability_triple_order": "occupancy_only,provenance_only,combined",
+      "truth_table": {
+        "101": 304,
+        "111": 44,
+        "000": 35,
+        "001": 1,
+        "011": 0
+      },
+      "occupancy_unresolved": 36,
+      "provenance_unresolved": 340,
+      "provenance_alone_rescues_occupancy_unresolved": 0,
+      "mixed_only_rescues_occupancy_unresolved": 1,
+      "total_rescued_after_adding_provenance": 1,
+      "fraction_unresolved_rescued_by_provenance_alone": 0,
+      "fraction_unresolved_rescued_by_both_only": 0.027777777777777776,
+      "fraction_unresolved_rescued_in_total": 0.027777777777777776,
+      "newly_identified_by_occupancy_alone_after_provenance": 304,
+      "newly_identified_by_mixed_information_after_provenance": 1
+    }
+  },
+  "interpretation": "The large raw gain from adding provenance under clustered geometry is mostly already distinguishable by provenance alone; the stricter mixed-library-only gain is smaller. Both geometries can have a rare history requiring two different observation families to distinguish all frozen activation alternatives.",
+  "boundaries": [
+    "Two idealized action families have different information payload, dimensionality and field costs.",
+    "The 768 layout cases share 384 landscapes, not 768 independent biological samples.",
+    "This is an audit of existing simulated action minima, not a prospective ecological mechanism test.",
+    "No causal history-memory pathway, optimal field budget, genetic origin inference or population persistence is established.",
+    "Frozen known-truth programmes and empirical article denominators are not reopened."
+  ]
+}

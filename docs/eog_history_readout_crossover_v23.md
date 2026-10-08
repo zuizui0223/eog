@@ -63,6 +63,37 @@ This matters for interpretation: **107 versus 1** is not comparable in isolation
 
 Machine-calculated arithmetic and the exact source-blob fingerprint: `validation/eog_virtual_world_ecology_synthesis_v1/readout_marginal_value_v1.json`. No underlying simulation, target definition, first-pass claim, or archive changed.
 
+## What produces the apparent 107-versus-1 gain?
+
+The previous comparison counted everything identified after adding the ideal provenance library to the existing ideal occupancy library. It must distinguish **a second library that can solve the target by itself** from cases that require genuinely *mixed evidence*.
+
+Exact classification of each frozen v23 three-history result gives:
+
+| Occupancy alone insufficient: method of rescue | Clustered | Dispersed |
+|---|---:|---:|
+| Provenance library itself already identifies all histories | **90** | **0** |
+| Neither full library identifies alone, but mixed observations do | **17** | **1** |
+| **Total identified after adding provenance to occupancy** | **107** | **1** |
+| Occupancy-unresolved designs | 153 | 36 |
+
+In the **18** genuine mixed-library cases (17 clustered, 1 dispersed), the frozen exact minimum combination contains **one complete occupancy snapshot and one ideal earliest-source provenance tag**. Under the declared v23 action library, neither the full set of occupancy snapshots nor the full set of provenance tags alone identifies all three activation histories.
+
+The complete five-state classification, in the order `occupancy-identifiable / provenance-identifiable / combined-identifiable`, is:
+
+| Classification | Clustered | Dispersed |
+|---|---:|---:|
+| 000 — no library suffices | 46 | 35 |
+| 001 — **mixed information required** | **17** | **1** |
+| 011 — provenance alone suffices, occupancy fails | 90 | 0 |
+| 101 — occupancy alone suffices, provenance fails | 93 | 304 |
+| 111 — either individual library suffices | 138 | 44 |
+
+**Interpretive correction:** the 69.9% versus 2.8% conditional gain should not be described as 107 versus 1 cases of emergent cross-channel synergy. The strict mixed-evidence result is **17/153 (11.1%) of occupancy-unresolved clustered layouts** versus **1/36 (2.8%) of occupancy-unresolved dispersed layouts**. Most of the clustered improvement is exclusive information already recoverable from provenance measurements alone (**90/153, 58.8%**).
+
+This decomposition follows solely from the original v23 exact action-selection results. It changes neither the preregistered v23 findings nor the exploratory 384-landscape source-geometry results, and does not imply one full-landscape occupancy scan and one pointwise provenance assay have equal field cost or biological feasibility.
+
+Audit: `scripts/audit_eog_v23_readout_synergy_v1.py`. Frozen machine record: `validation/eog_virtual_world_ecology_synthesis_v1/v23_readout_synergy_decomposition_v1.json`.
+
 ## Interpretation: history content is not measurement access
 
 High source-basin overlap can create a strong dependence of the **equilibrium provenance map** on source activation order. This need not yield highly distinguishable **transient occupancy signatures**. In more dispersed sources, source identity may have less influence on the equilibrium provenance composition, while the temporal occupation wavefront can make histories easier to tell apart.
