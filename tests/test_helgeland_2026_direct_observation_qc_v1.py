@@ -103,3 +103,30 @@ def test_preregistered_output_contract_has_no_per_bird_data_fields():
     assert "individual_ID_values" in contract["prohibited_outputs"]
     assert "column_count_mismatch_rows" in contract["allowed_output_aggregates"]
     assert contract["claim_boundary"]["biological_scoring_authorized"] is False
+
+
+def test_independently_observed_aggregate_receipt_frozen_but_not_scored():
+    p=BASE/"helgeland_2026_structural_presence_qc_frozen_v1.json"
+    doc=json.loads(p.read_text(encoding="utf-8"))
+    assert doc["schema"]=="eog.helgeland.2026.structural_presence_qc.frozen_observed_v1"
+    assert doc["authority"]["workflow_run_id"]==37799054142
+    assert doc["authority"]["artifact_id"]==11559413670
+    assert doc["authority"]["artifact_zip_sha256"]==(
+        "12c944e3442fe3fa9549cf3580394f35e68bc73be872097ef6046fb29b02f069"
+    )
+    counts=doc["counts"]
+    assert counts["row_count"]==73593
+    assert counts["distinct_id_count"]==25539
+    assert counts["ids_with_one_nest_island_and_any_later_direct_observation"]==6299
+    assert counts["date_year_disagreement_count"]==3517
+    assert counts["out_of_window_count"]==914
+    assert counts["multi_nest_island_id_count"]==5
+    assert counts["unparseable_date_count"]==0
+    assert counts["missing_key_count"]==0
+    assert doc["interpretation"]["candidate_ids_are_not_migrants"] is True
+    for flag in ("individual_ids_or_row_values_exported","surveyed_zero_panel_verified",
+                 "as_of_t_predictor_availability_verified",
+                 "directed_colonization_or_migration_scored",
+                 "independent_heldout_benchmark_qualified",
+                 "ecological_endpoint_authorized"):
+        assert doc[flag] is False
