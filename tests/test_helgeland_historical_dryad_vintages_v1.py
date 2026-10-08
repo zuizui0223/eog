@@ -109,6 +109,7 @@ def test_readonly_audit_never_follows_later_2023_update():
     assert result["status"]=="BOTH_HISTORICAL_PUBLIC_METADATA_VINTAGES_IDENTIFIED"
     assert len(urls)==4
     assert "/versions/250001/files" not in "|".join(urls)
+    assert all("per_page=100" in url for url in urls if "/files" in url)
     assert result["actual_biological_file_bytes_read"] is False
     assert result["ecological_scoring_authorized"] is False
     assert len(result["datasets"]["niskanen_2020"]["versions_after_cutoff_not_eligible"])==1
@@ -133,6 +134,8 @@ def test_network_allowlist_never_loads_biological_file_urls():
       "https://other.example/api/v2/versions/150001/files",
       "http://datadryad.org/api/v2/versions/150001/files",
       "https://datadryad.org/api/v2/versions/150001/files?page=2",
+      "https://datadryad.org/api/v2/versions/150001/files?per_page=500",
+      "https://datadryad.org/api/v2/versions/150001/files?per_page=100&page=2",
     ):
         with pytest.raises(ValueError,match="Refusing endpoint"):
             m.api_json(url)
