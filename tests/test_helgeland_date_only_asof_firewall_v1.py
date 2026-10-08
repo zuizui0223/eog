@@ -1,7 +1,6 @@
 """Synthetic controls for the as-of observation-only information barrier."""
 from __future__ import annotations
 
-import dataclasses
 import importlib.util
 from pathlib import Path
 
@@ -47,8 +46,6 @@ def test_cutoff_uses_real_date_not_april_year_label_or_derived_age():
     ]
     assert ("bird_a", "A") in m.directly_observed_single_nest_sources_as_of(historical)
     assert not any(x.island == "B" and x.individual_id == "bird_a" for x in historical)
-    assert not any(x.individual_id == "bird_c" for x in
-                   (m.ObservedAtCutoff(*x, None, "") for x in []))
 
 
 def test_post_cutoff_rows_cannot_change_predictor_history():
