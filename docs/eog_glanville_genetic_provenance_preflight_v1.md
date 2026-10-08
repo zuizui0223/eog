@@ -22,6 +22,8 @@ Machine catalog: `validation/eog_virtual_world_ecology_synthesis_v1/glanville_ge
 - Published sampling covers **2007–2012**, **3,732 larval family groups**, with genotyping using **272 SNPs**. The analysis reconstructed full-sib families found across local populations to estimate **effective female breeding dispersal** (mean scale around **1 km**), comparing against previous dispersal measurements.
 - Public source inventory advertises a separate README and a compressed `supplementary-data-COLONY2.tar.gz` package (inner names described as `master-input.csv`, `master-output.csv`, `colony-input-master`, `colony-output-master-trimmed`). The actual genetic file headers and patch identifiers **have not been inspected** here; no cross-archive patch-ID concordance is established.
 
+The original **1999–2012 calibration period** is separate from the **2013–2018 heldout target years**. **This is NOT a new independent external validation.**
+
 The genetic source's sampling window ends in **2012**, before the EOG-WF heldout target years **2013–2018**. Even perfect patch-ID concordance could **not retrospectively turn it into independently observed first-source identities for the EOG heldout years**.
 
 ## 2. Formal distinction: sibling movement does not orient source history
