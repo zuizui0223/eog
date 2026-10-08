@@ -1,0 +1,53 @@
+{
+  "schema": "eog.helgeland.2026.april_year_mapping.frozen_postexposure_observed_v1",
+  "status": "UNIVERSAL_APRIL_MARCH_LABEL_MAPPING_MATCHES_ALL_OBSERVED_ROWS__AUTHOR_SEMANTICS_HOLD",
+  "authority": {
+    "workflow_run_id": 37804577337,
+    "artifact_id": 11562470956,
+    "artifact_name": "HELGELAND-2026-APRIL-YEAR-BOUNDARY-EXPLORATORY-NO-ROWS-v1",
+    "artifact_zip_sha256": "3026186d8bd0d1c866e8ad7f681cf47a72e6772ac82b9e42ed45b0928f2ad11c",
+    "upstream_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+  },
+  "source": {
+    "dryad_doi": "10.5061/dryad.rr4xgxdnq",
+    "dryad_version_id": 421942,
+    "file_id": 4576411
+  },
+  "observed": {
+    "total_rows": 73593,
+    "monthly_total_rows": {
+      "10": 8655,
+      "11": 994,
+      "12": 251,
+      "01": 1007,
+      "02": 1180,
+      "03": 1330,
+      "04": 606,
+      "05": 11235,
+      "06": 14537,
+      "07": 17529,
+      "08": 11355,
+      "09": 4914
+    },
+    "jan_mar_minus_one": 3517,
+    "jan_mar_same_year": 0,
+    "jan_mar_other_delta": 0,
+    "apr_dec_same_year": 70076,
+    "apr_dec_any_mismatch": 0,
+    "overall_candidate_mapping_disagreements": 0,
+    "candidate_mapping_exact_on_all_rows": true
+  },
+  "interpretation": {
+    "universal_mapping": "Jan-Mar Year=calendar_year(date)-1, Apr-Dec Year=calendar_year(date)",
+    "post_exposure_exploratory": true,
+    "related_2006_recruitment_cutoff": "1 April next year (Husby et al. 2006)",
+    "year_field_definition_author_confirmed": false,
+    "year_or_date_rewritten": false
+  },
+  "biology": {
+    "row_level_values_exported": false,
+    "as_of_t_predictors_qualified": false,
+    "surveyed_zero_panel_verified": false,
+    "ecological_endpoint_authorized": false
+  }
+}
