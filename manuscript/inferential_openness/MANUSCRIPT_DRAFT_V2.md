@@ -26,6 +26,8 @@ We analyze two prospectively governed programmes. The first is a predictive ecol
 
 Our objectives are to: (1) quantify where a finite predictive workflow stopped before scoring; (2) localize those STOPs relative to biological-response access; (3) identify the later observation-process barrier exposed by the biological-relation audit; and (4) propose a practical inferential-openness ladder connecting public availability to claim-ready evidence.
 
+The five-layer evidence chain is summarized schematically in Fig. 1 before its empirical bottlenecks are examined.
+
 ## 2. Methods
 
 ### 2.1 Prospective workflow principle
@@ -278,6 +280,8 @@ Bishop, B.W., Hank, C., Webster, J. & Howard, R. (2019). Scientists' data discov
 
 Bokulich, A. & Parker, W. (2021). Data models, representation and adequacy-for-purpose. *European Journal for Philosophy of Science*, 11, 31. https://doi.org/10.1007/s13194-020-00345-2
 
+Gould, E., Jones, C.S., Yen, J.D.L., Fraser, H.S., Wootton, H.F., Good, M.K., Duncan, D.H., Hauser, C.E., Wintle, B.C. & Rumpff, L. (2026). ‘But I can't preregister my research’: Improving the reproducibility and transparency of ecology and conservation with adaptive preregistration for model-based research. *Methods in Ecology and Evolution*, 17, 1768–1787. https://doi.org/10.1111/2041-210X.70311
+
 Jantzen, C.C. & Vriend, S.J.G. (2026). Putting FAIR into practice for ecologists: How to make ecological data more reusable. *Ecological Informatics*, 95, 103712. https://doi.org/10.1016/j.ecoinf.2026.103712
 
 MacKenzie, D.I., Nichols, J.D., Lachman, G.B., Droege, S., Royle, J.A. & Langtimm, C.A. (2002). Estimating site occupancy rates when detection probabilities are less than one. *Ecology*, 83, 2248–2255. https://doi.org/10.1890/0012-9658(2002)083[2248:ESORWD]2.0.CO;2
@@ -285,5 +289,3 @@ MacKenzie, D.I., Nichols, J.D., Lachman, G.B., Droege, S., Royle, J.A. & Langtim
 Säurich, J., Schwieder, M., Preidl, S., Beyer, F. & Möller, M. (2026). Are remote sensing-based crop type classifications suitable for calculating a landscape heterogeneity metric? A data-fitness-for-purpose assessment. *Ecological Informatics*, 95, 103660. https://doi.org/10.1016/j.ecoinf.2026.103660
 
 Wilkinson, M.D. et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. *Scientific Data*, 3, 160018. https://doi.org/10.1038/sdata.2016.18
-
-Gould, E., Jones, C.S., Yen, J.D.L., Fraser, H.S., Wootton, H.F., Good, M.K., Duncan, D.H., Hauser, C.E., Wintle, B.C. & Rumpff, L. (2026). ‘But I can't preregister my research’: Improving the reproducibility and transparency of ecology and conservation with adaptive preregistration for model-based research. *Methods in Ecology and Evolution*, 17, 1768–1787. https://doi.org/10.1111/2041-210X.70311
