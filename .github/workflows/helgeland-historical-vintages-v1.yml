@@ -1,0 +1,75 @@
+name: Helgeland historic Dryad versions metadata only
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-historical-vintages-v1.yml'
+      - 'scripts/audit_helgeland_historical_dryad_vintages_v1.py'
+      - 'tests/test_helgeland_historical_dryad_vintages_v1.py'
+      - 'docs/eog_helgeland_historical_public_vintages_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_historical_public_vintages_frozen_v1.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-historical-vintages-v1.yml'
+      - 'scripts/audit_helgeland_historical_dryad_vintages_v1.py'
+      - 'tests/test_helgeland_historical_dryad_vintages_v1.py'
+      - 'docs/eog_helgeland_historical_public_vintages_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_historical_public_vintages_frozen_v1.json'
+
+permissions:
+  contents: read
+
+jobs:
+  public-json-vintage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Prove no future publication can enter historical version selection
+        run: python -m pytest -q tests/test_helgeland_historical_dryad_vintages_v1.py
+      - name: Retrieve only official historic public versions and their registered file metadata
+        run: |
+          python scripts/audit_helgeland_historical_dryad_vintages_v1.py \
+            --verify-frozen validation/eog_virtual_world_ecology_synthesis_v1/helgeland_historical_public_vintages_frozen_v1.json \
+            --output build/helgeland-historical-dryad-vintages-v1.json
+      - name: Assert complete 2014/2020 metadata without opening records
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('build/helgeland-historical-dryad-vintages-v1.json').read_text())
+          assert x['schema']=='eog.helgeland.historical_dryad_version_metadata.v1'
+          assert x['status']=='BOTH_HISTORICAL_PUBLIC_METADATA_VINTAGES_IDENTIFIED'
+          assert x['frozen_identity_check']['status']=='MATCHES_FROZEN_2014_V1_AND_2020_V8_PUBLIC_VERSION_METADATA'
+          assert x['datasets']['baalsrud_2014']['selected']['version_id']==5191
+          assert x['datasets']['niskanen_2020']['selected']['version_id']==78498
+          assert x['datasets']['niskanen_2020']['selected']['published_date']=='2020-08-19'
+          assert x['datasets']['niskanen_2020']['file_count']==22
+          assert any(v['version_id']==208617 for v in x['datasets']['niskanen_2020']['versions_after_cutoff_not_eligible'])
+          assert x['individual_bird_rows_read'] is False
+          assert x['actual_biological_file_bytes_read'] is False
+          assert x['historically_frozen_model_or_forecast_qualified'] is False
+          assert x['ecological_scoring_authorized'] is False
+          for label,maxyear in [('baalsrud_2014',2014),('niskanen_2020',2020)]:
+              d=x['datasets'][label]
+              assert d['selected']['published_date'][:4]<=str(maxyear)
+              assert d['file_count']==len(d['files'])
+              assert all(f['independently_hashed_bytes'] is False
+                         and f['biological_rows_read'] is False for f in d['files'])
+              assert d['island_code_and_calendar_crosswalk_verified'] is False
+              assert d['surveyed_zero_observation_verified'] is False
+              assert d['ecological_endpoint_authorized'] is False
+          assert any(v['published_date'][:4]>'2020'
+                     for v in x['datasets']['niskanen_2020']['versions_after_cutoff_not_eligible'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2014-2020-HISTORICAL-DRYAD-JSON-NO-BIRD-ROWS-v1
+          path: build/helgeland-historical-dryad-vintages-v1.json
+          if-no-files-found: warn
