@@ -162,3 +162,67 @@ def test_no_observation_parsing_or_download_implementation_in_auditor():
         assert forbidden not in source
     assert "raw_bird_data_downloaded" in source
     assert "ecological_endpoint_authorized" in source
+
+
+def test_frozen_2026_v6_identities_can_be_verified_without_file_bytes():
+    import json
+    m = module()
+    frozen_path = (ROOT / "validation/eog_virtual_world_ecology_synthesis_v1"
+                   / "helgeland_2026_source_metadata_frozen_v1.json")
+    frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
+    assert frozen["dryad_dataset_id"] == 177360
+    assert frozen["dryad_version_id"] == 421942
+    assert frozen["dryad_version_number"] == 6
+    assert len(frozen["files"]) == 18
+    assert frozen["authority"]["github_actions_artifact_id"] == 11556844942
+    assert frozen["authority"]["artifact_zip_sha256"] == (
+        "aa0a7f0ff034ac8d254f3633d5e7b2e2a8a32e5285520e4906d3071ca33d76d4"
+    )
+
+    observed = {
+        "schema": m.SCHEMA,
+        "status": "PUBLIC_METADATA_IDENTITY_RETRIEVED_SHA256_DECLARED",
+        "source_doi": frozen["source_doi"],
+        "dryad_dataset_id": frozen["dryad_dataset_id"],
+        "dryad_version_id": frozen["dryad_version_id"],
+        "dryad_version_number": frozen["dryad_version_number"],
+        "files": [{
+            "name": x["name"],
+            "file_metadata_id": x["file_metadata_id"],
+            "size_bytes": x["size_bytes"],
+            "source_declared_digest_type": x["source_declared_digest_type"],
+            "source_declared_digest": x["source_declared_sha256"],
+            "source_declared_sha256_well_formed": True,
+        } for x in frozen["files"]],
+        "raw_bird_data_downloaded": False,
+        "individual_or_population_observations_read": False,
+        "surveyed_zero_panel_verified": False,
+        "as_of_t_processing_verified": False,
+        "ecological_endpoint_authorized": False,
+    }
+    verdict = m.verify_against_frozen(observed, frozen)
+    assert verdict["status"] == "MATCHES_FROZEN_DRYAD_2026_V6_PUBLIC_JSON"
+    assert verdict["ecological_endpoint_authorized"] is False
+    assert verdict["source_reported_digests_are_not_independent_byte_verification"] is True
+
+    for kind in ("version", "dataset", "file_digest", "file_id", "wrong_size",
+                 "missing", "wrong_digest_type", "biological_claim"):
+        changed = copy.deepcopy(observed)
+        if kind == "version":
+            changed["dryad_version_id"] = 0
+        elif kind == "dataset":
+            changed["dryad_dataset_id"] = 0
+        elif kind == "file_digest":
+            changed["files"][0]["source_declared_digest"] = "f" * 64
+        elif kind == "file_id":
+            changed["files"][0]["file_metadata_id"] = 0
+        elif kind == "wrong_size":
+            changed["files"][0]["size_bytes"] += 1
+        elif kind == "missing":
+            changed["files"].pop()
+        elif kind == "wrong_digest_type":
+            changed["files"][0]["source_declared_digest_type"] = "md5"
+        elif kind == "biological_claim":
+            changed["ecological_endpoint_authorized"] = True
+        with pytest.raises(ValueError):
+            m.verify_against_frozen(changed, frozen)
