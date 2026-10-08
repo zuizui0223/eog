@@ -93,7 +93,7 @@ def test_wrong_version_or_delimiter_rejected(tmp_path):
     contract["source"]["dryad_version_id"] = -1
     with pytest.raises(ValueError, match="Changed source version"):
         extract_2025(root, contract, metadata, declared)
-    root, contract, metadata, declared = sources(tmp_path)
+    contract["source"]["dryad_version_id"] = 354268
     declared["LRS.txt"] = "COMMA"
     with pytest.raises(ValueError, match="Declared physical delimiter absent"):
         extract_2025(root, contract, metadata, declared)
