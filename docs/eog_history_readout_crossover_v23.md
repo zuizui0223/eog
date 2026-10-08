@@ -137,6 +137,12 @@ Historical contingency, priority effects and alternative transient histories are
 
 The specific EOG contribution remains the strict matching and explicit separation of: **geographic coverage, worst-source deletion retention, latent earliest-source historical provenance, and identification through two declared observation libraries** across already frozen comparable landscapes.
 
+### Existing real-world genetic data: a different observation class, not source-of-first-arrival truth
+
+A **public genetic-kinship source** exists for the same Åland Glanville fritillary metapopulation: [Fountain et al., Dryad 10.5061/dryad.d461s](https://doi.org/10.5061/dryad.d461s) reconstructs cross-patch maternal full-sib families from 2007–2012, while EOG's separately frozen [annual occupancy source](../validation/glanville_eogwf/README.md) covers 1999–2018. This is a genuine independent *data modality*, but **NOT a new independent external validation** and **NOT the v23 ideal directional earliest-source tag**. A cross-patch full-sib dyad is undirected without additional timing, and the genetic sampling does not cover the EOG-WF heldout target years 2013–2018.
+
+**[Response-free cross-source qualification](eog_glanville_genetic_provenance_preflight_v1.md)** documents original source identities and hard non-independence / first-arrival-direction gates. No genotype records or old Glanville response data were opened by this qualification.
+
 ## What this cannot establish
 
 - **Nature:** there are no real colonization dates, independently observed founder-source labels, demographic extinctions, field-measured detection probabilities or experimentally removed source populations.
