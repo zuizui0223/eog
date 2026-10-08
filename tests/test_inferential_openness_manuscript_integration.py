@@ -40,3 +40,12 @@ def test_original_workflow_scopes_remain_explicit():
     assert "30/31 STOPs" in text
     assert "Neither outcome is a biological negative" in text
     assert "not prevalence estimates for ecology" in text
+
+def test_reference_first_author_and_bibliography_integrity():
+    text = PAPER.read_text(encoding="utf-8")
+    assert text.count("Gould et al. 2026") == 2
+    assert "Wintle & Rumpff 2026" not in text
+    assert "Gould, E., Jones, C.S., Yen, J.D.L." in text
+    assert "Wintle, B.C. & Rumpff, L. (2026)." in text
+    assert "*Proceedings of the Association for Information Science and Technology*, 56, 21–31." in text
+    assert "*European Journal for Philosophy of Science*, 11, 31." in text
