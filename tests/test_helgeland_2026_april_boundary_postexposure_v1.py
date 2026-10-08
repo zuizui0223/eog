@@ -111,3 +111,28 @@ def test_reader_never_inspects_or_exports_individual_island_or_stage_fields():
     contract=json.loads((BASE/"helgeland_2026_april_boundary_postexposure_contract_v1.json").read_text())
     assert contract["claims"]["exposure_blind"] is False
     assert contract["claims"]["ecological_endpoint_authorized"] is False
+
+
+def test_observed_universal_month_mapping_frozen_without_author_semantics():
+    p=BASE/"helgeland_2026_april_year_mapping_frozen_v1.json"
+    receipt=json.loads(p.read_text(encoding="utf-8"))
+    assert receipt["schema"]=="eog.helgeland.2026.april_year_mapping.frozen_postexposure_observed_v1"
+    assert receipt["authority"]["workflow_run_id"]==37804577337
+    assert receipt["authority"]["artifact_id"]==11562470956
+    assert receipt["authority"]["artifact_zip_sha256"]==(
+        "3026186d8bd0d1c866e8ad7f681cf47a72e6772ac82b9e42ed45b0928f2ad11c"
+    )
+    observed=receipt["observed"]
+    assert observed["total_rows"]==73593
+    assert sum(observed["monthly_total_rows"].values())==73593
+    assert sum(observed["monthly_total_rows"][f"{i:02}"] for i in range(1,4))==3517
+    assert observed["jan_mar_minus_one"]==3517
+    assert observed["jan_mar_same_year"]==0
+    assert observed["apr_dec_same_year"]==70076
+    assert observed["apr_dec_any_mismatch"]==0
+    assert observed["overall_candidate_mapping_disagreements"]==0
+    assert observed["candidate_mapping_exact_on_all_rows"] is True
+    assert receipt["interpretation"]["year_field_definition_author_confirmed"] is False
+    assert receipt["interpretation"]["post_exposure_exploratory"] is True
+    assert receipt["interpretation"]["year_or_date_rewritten"] is False
+    assert receipt["biology"]["ecological_endpoint_authorized"] is False
