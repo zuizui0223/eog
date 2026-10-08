@@ -1,0 +1,60 @@
+{
+  "schema": "eog.helgeland.2026.observation_year_date_postexposure.frozen_observed_v1",
+  "status": "YEAR_DATE_DISCREPANCY_DESCRIBED__MEANING_UNRESOLVED",
+  "authority": {
+    "github_actions_run_id": 37801160828,
+    "artifact_id": 11560154008,
+    "artifact_name": "HELGELAND-2026-YEAR-DATE-EXPLORATORY-AGGREGATES-v1",
+    "artifact_zip_sha256": "9a1f4ab9c511ecc7343cfd5eedcf3cf731a7336588b82310fdd9b3a89f661d02",
+    "upstream_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+  },
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "dryad_version_id": 421942,
+    "file_id": 4576411
+  },
+  "total_rows": 73593,
+  "all_year_delta_bin_counts": {
+    "0": 70076,
+    "<=-2": 0,
+    "-1": 3517,
+    "+1": 0,
+    ">=+2": 0
+  },
+  "discordant_by_calendar_month": {
+    "10": 0,
+    "11": 0,
+    "12": 0,
+    "01": 1007,
+    "02": 1180,
+    "03": 1330,
+    "04": 0,
+    "05": 0,
+    "06": 0,
+    "07": 0,
+    "08": 0,
+    "09": 0
+  },
+  "consistent_year_outside_window": 914,
+  "out_of_range_year_value_counts": {
+    "before_1994": 1268,
+    "after_2022": 0
+  },
+  "out_of_range_date_year_counts": {
+    "before_1994": 1070,
+    "after_2022": 0
+  },
+  "invalid_date": 0,
+  "invalid_year": 0,
+  "interpretation": {
+    "pattern": "ALL_DISCORDANCES_ARE_YEAR_EQUALS_CALENDAR_YEAR_MINUS_ONE_IN_JAN_MAR",
+    "hypothesis": "CONSISTENT_WITH_APRIL_MARCH_OBSERVATION_YEAR_CODING__NOT_AUTHOR_CONFIRMED",
+    "source_year_date_semantics_resolved": false,
+    "correction_approved": false,
+    "post_exposure_exploratory": true
+  },
+  "row_ids_locations_or_observations_exported": false,
+  "as_of_t_predictors_verified": false,
+  "surveyed_zero_panel_verified": false,
+  "ecological_endpoint_authorized": false
+}
