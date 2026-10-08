@@ -7,6 +7,7 @@ on:
       - 'scripts/audit_helgeland_dryad_api_inventory_v1.py'
       - 'tests/test_helgeland_dryad_api_inventory_v1.py'
       - 'docs/eog_helgeland_dryad_inventory_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -14,6 +15,7 @@ on:
       - 'scripts/audit_helgeland_dryad_api_inventory_v1.py'
       - 'tests/test_helgeland_dryad_api_inventory_v1.py'
       - 'docs/eog_helgeland_dryad_inventory_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json'
 
 permissions:
   contents: read
@@ -34,6 +36,7 @@ jobs:
       - name: Query only the public JSON metadata endpoints
         run: |
           python scripts/audit_helgeland_dryad_api_inventory_v1.py \
+            --verify-frozen validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json \
             --output build/helgeland-dryad-metadata-inventory-v1.json
       - name: Confirm not one bird/genotype/fitness row was opened
         run: |
@@ -49,6 +52,8 @@ jobs:
           assert x['new_eog_endpoint_authorized'] is False
           assert x['source_declared_digest_is_independent_byte_verification'] is False
           assert x['raw_biological_data_opened'] is False
+          assert x['frozen_identity_check']['source_version_identity']=='MATCHES_FROZEN_PUBLIC_DRYAD_METADATA'
+          assert x['frozen_identity_check']['qualified_to_read_biological_response'] is False
           assert x['original_pr619_holds_unchanged'] is True
           for source in x['datasets'].values():
               assert source['status'] in (
