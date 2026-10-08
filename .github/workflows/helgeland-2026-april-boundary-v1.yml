@@ -8,6 +8,7 @@ on:
       - 'tests/test_helgeland_2026_april_boundary_postexposure_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_april_boundary_postexposure_contract_v1.json'
       - 'docs/eog_helgeland_2026_april_boundary_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_april_year_mapping_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -16,6 +17,7 @@ on:
       - 'tests/test_helgeland_2026_april_boundary_postexposure_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_april_boundary_postexposure_contract_v1.json'
       - 'docs/eog_helgeland_2026_april_boundary_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_april_year_mapping_frozen_v1.json'
 
 permissions:
   contents: read
@@ -53,6 +55,17 @@ jobs:
           x=json.loads(Path('build/helgeland-2026-april-boundary-qc-v1.json').read_text())
           assert x['status']=='APRIL_CANDIDATE_MONTHLY_DIAGNOSTIC__AUTHOR_SEMANTICS_HOLD'
           assert x['total_rows']==73593
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_april_year_mapping_frozen_v1.json').read_text())
+          assert frozen['schema']=='eog.helgeland.2026.april_year_mapping.frozen_postexposure_observed_v1'
+          for field in ('total_rows','monthly_total_rows','jan_mar_minus_one',
+                        'jan_mar_same_year','jan_mar_other_delta',
+                        'apr_dec_same_year','apr_dec_any_mismatch',
+                        'overall_candidate_mapping_disagreements',
+                        'candidate_mapping_exact_on_all_rows'):
+              assert x[field]==frozen['observed'][field],field
+          assert frozen['interpretation']['year_field_definition_author_confirmed'] is False
+          assert frozen['interpretation']['year_or_date_rewritten'] is False
+          assert frozen['biology']['ecological_endpoint_authorized'] is False
           assert x['jan_mar_minus_one']==3517
           assert x['jan_mar_other_delta']==0
           assert x['apr_dec_any_mismatch']==0
