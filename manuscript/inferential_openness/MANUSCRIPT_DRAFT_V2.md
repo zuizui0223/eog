@@ -83,7 +83,7 @@ The 31 STOPs retain their original fine-grained terminal labels. For manuscript-
 - surveyed_negative_semantics;
 - response_independent_baseline_covariate_value.
 
-Counts are computed directly from the frozen candidate-flow table.
+Counts are computed directly from the frozen candidate-flow table (Supplementary Fig. S1; Supplementary Table S1).
 
 ### 2.4 Localization relative to response access
 
@@ -129,7 +129,7 @@ Accordingly, quantities such as 31/34 describe **workflow yield under the declar
 
 ### 3.1 Most predictive-workflow candidate attempts terminated before a scored endpoint
 
-Of 34 scientific candidate attempts, **3 reached scored predictive endpoints and 31 reached scientific/protocol STOPs**.
+Of 34 scientific candidate attempts, **3 reached scored predictive endpoints and 31 reached scientific/protocol STOPs** (Fig. 2).
 
 Within this workflow, the scored-endpoint fraction was 3/34 (8.8%) and the STOP fraction was 31/34 (91.2%). These are denominator accounting quantities, not field-wide prevalence estimates.
 
@@ -152,7 +152,7 @@ Among the 31 STOPs:
 - **1/31** stopped after response-header access only;
 - **1/31** stopped after one full-response opening because the frozen deployment/response linkage failed.
 
-Thus **30/31 STOPs occurred before any biological-response row value was opened**.
+Thus **30/31 STOPs occurred before any biological-response row value was opened** (Fig. 3).
 
 The dominant bottleneck observed in this workflow was therefore not poor predictive performance after fitting. It was failure to reconstruct a claim-ready source, registry or response architecture before scoring became authorized.
 
@@ -171,7 +171,7 @@ Jointly:
 - hard negative authorized: **0/2**;
 - focal value opening authorized: **0/2**.
 
-Neither outcome is a biological negative.
+Neither outcome is a biological negative (Fig. 4).
 
 ## 4. Discussion
 
@@ -187,7 +187,7 @@ We refer to the ability to complete this claim-specific chain as **inferential o
 
 FAIR concerns digital resource stewardship: findability, accessibility, interoperability and reusability. Recent ecology-specific guidance makes those aims operational through metadata, storage, standards and structure (Jantzen & Vriend 2026).
 
-A separate literature on data quality and reuse has long stressed **fitness for use / fitness for purpose**: data adequacy depends on the intended application rather than on a universal dataset quality score. Environmental-data studies have likewise shown that researchers judge metadata and data in relation to the specific reuse task. Recent work in *Ecological Informatics* makes this distinction concrete by evaluating whether remote-sensing crop classifications are fit for a specific downstream landscape-heterogeneity calculation (Säurich et al. 2026).
+A separate literature on data quality and reuse has long stressed **fitness for use / fitness for purpose**: data adequacy depends on the intended application rather than on a universal dataset quality score (Bishop et al. 2019; Bokulich & Parker 2021). Environmental-data studies have likewise shown that researchers judge metadata and data in relation to the specific reuse task. Recent work in *Ecological Informatics* makes this distinction concrete by evaluating whether remote-sensing crop classifications are fit for a specific downstream landscape-heterogeneity calculation (Säurich et al. 2026).
 
 Inferential openness is therefore downstream of, and narrower than, both FAIR and general fitness-for-purpose assessment.
 
@@ -213,7 +213,7 @@ The STOP is not a failed study. It is a measurement of the point at which the re
 
 ### 4.4 A five-layer inferential-openness ladder
 
-The combined evidence suggests five practical layers.
+The combined evidence suggests five practical layers (Fig. 1).
 
 **1. Transportable exact source.**  
 Can the declared source/version be retrieved under a reproducible route?
@@ -265,6 +265,12 @@ In a finite prospective predictive workflow, 31 of 34 scientific candidate attem
 The practical unit of openness for ecological inference is therefore a **reproducible evidence chain**, not a file.
 
 By prospectively retaining STOPs rather than repairing them after outcomes, ecological workflows can make that chain — and its missing links — measurable.
+
+## Data and code availability
+
+The analysis in this manuscript uses frozen workflow-terminal summaries rather than refitting the original biological responses. The predictive-workflow candidate-flow table, its provenance ledger, and the reproducible figure builder are available in the public [EOG repository](https://github.com/zuizui0223/eog). The independent biological-relation source-architecture and calibration records are available in the public [284b repository](https://github.com/zuizui0223/284b). The machine-readable [cross-project evidence ledger](https://github.com/zuizui0223/eog/blob/main/manuscript/inferential_openness/CROSS_PROJECT_EVIDENCE_LEDGER_V2.json) records the exact source commit and file blob identifiers used for this audit, so the present submission is not dependent on mutable branch contents. The figure-generation workflow creates the four main SVG figures, graphical abstract, and supplementary STOP table and fine-grained taxonomy plot from those frozen summaries.
+
+A permanent archival DOI for the final author-approved submission bundle will be inserted before submission; no DOI is assigned here.
 
 ## References
 
