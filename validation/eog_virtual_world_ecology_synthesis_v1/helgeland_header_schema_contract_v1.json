@@ -55,14 +55,21 @@
     "encoding": "UTF-8",
     "maximum_utf8_bytes_per_header": 4096,
     "maximum_fields_per_header": 200,
-    "separator": "TAB",
+    "separator": "UNVERIFIED_MUST_BE_DECLARED_PER_FILE",
     "independent_extraction_witness_required": true,
     "source_file_bytes_permitted_in_repository": false,
     "sample_values_permitted": false,
     "no_automatic_column_alias_normalization": true,
     "no_auto_join_of_ID_and_individual": true,
     "no_auto_join_of_island_names_and_codes": true,
-    "no_inference_of_detection_from_missing_survey_rows": true
+    "no_inference_of_detection_from_missing_survey_rows": true,
+    "known_delimiters_allowed_only_with_explicit_evidence": [
+      "TAB",
+      "COMMA",
+      "SEMICOLON",
+      "WHITESPACE"
+    ],
+    "note": "No physical header has been read. The .txt extension and public README variable list do not certify a tab delimiter. Never coerce a purported header using a guessed separator."
   },
   "response_blind_gate_policy": {
     "missing_attestation": "HOLD_PHYSICAL_HEADERS_NOT_ATTESTED",
