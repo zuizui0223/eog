@@ -41,6 +41,7 @@
 - [ ] Acknowledgements.
 - [ ] Competing-interest statement.
 - [ ] All-author approval.
+- [ ] Human-reviewed AI assistance declaration, including figure/code assistance if applicable (template prepared; not yet approved).
 - [ ] Permanent archival DOI.
 
 ## Claim checks before upload
