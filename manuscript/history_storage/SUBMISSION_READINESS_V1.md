@@ -62,7 +62,8 @@ Ecology Letters version:
 
 Current source-data citations:
 
-- microbiome Dryad: `10.5061/dryad.7p2cv`;
+- microbiome repository archive (Zenodo v1.2): `10.5281/zenodo.3872145`;
+- original microbiome raw reads: NCBI BioProject `PRJNA605581`;
 - grassland Zenodo: `10.5281/zenodo.5713397`.
 
 Citation regression guard:
@@ -265,3 +266,12 @@ Both final workflows are green.
 
 All remaining blockers are external or author-supplied. The EOG history-storage paper is
 **analysis-complete and submission-ready**.
+
+## Source provenance correction (2026-10-08)
+
+A pre-submission DOI audit corrected an attribution error. Dryad `10.5061/dryad.7p2cv`
+refers to the separate 2017 wood-decomposer experiment (v29), not the 2020
+Populus phyllosphere experiment (v28). The v28 repository archive is Zenodo
+`10.5281/zenodo.3872145`. Frozen v28 analysis protocols/results remain unchanged;
+the separate provenance erratum records the correction. Submission files and their
+regression tests now use the correct identifier.
