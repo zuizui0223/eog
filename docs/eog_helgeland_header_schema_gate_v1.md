@@ -34,6 +34,8 @@ python scripts/qualify_helgeland_header_attestations_v1.py \
   --output build/helgeland-header-schema-hold-v1.json
 ```
 
+外部証跡の入力名は必ず `.header-only.json` で終わるファイルに限定し、32 KiBを超える入力、シンボリックリンク、元の `.txt` / `.raw` データファイルは**読み込む前に拒否**する。この保護も元ファイルの観測値やその内容を扱う許可にはならない。
+
 後に本物のヘッダー証跡を入力して4件の列名が一致したとしても、判定は `HEADER_NAMES_ATTESTED_KEYS_STILL_UNJOINED` に留める。これは**ソースの実バイトを別途ハッシュ検証したことでも、個体・島IDの値を照合したことでもない**。このスクリプトは外部が提示したヘッダー証跡の真正性を暗号学的に証明するものではない。
 
 **Dryad公開APIの版・ファイル一覧だけでは物理ヘッダーを返さない。** [公式REST API説明](https://github.com/datadryad/dryad-app/blob/main/documentation/apis/README.md)。ファイル本体の取得には別途認証が必要となる環境もあるため、観測値を不用意に取得しないよう、**この監査にはダウンロード・HTTP Range取得機能を入れていない**。
