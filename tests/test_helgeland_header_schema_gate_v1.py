@@ -163,3 +163,16 @@ def test_manifest_reader_refuses_original_data_tables_before_read(tmp_path):
     good.write_text('{"schema":"eog.helgeland.header_only_attestation.v1","records":[]}',encoding="utf-8")
     parsed=m.load_header_only_manifest(good)
     assert parsed["schema"]=="eog.helgeland.header_only_attestation.v1"
+
+
+@pytest.mark.parametrize("payload", [
+    '{"schema":"eog.helgeland.header_only_attestation.v1","schema":"overwritten","records":[]}',
+    '{"schema":"eog.helgeland.header_only_attestation.v1","records":[{"file_key":"a","file_key":"b"}]}',
+    '{"schema":"eog.helgeland.header_only_attestation.v1","records":[{"first_line_only":true,"first_line_only":false}]}',
+])
+def test_duplicate_json_keys_are_rejected_before_attestation(tmp_path, payload):
+    m=load()
+    manifest=tmp_path/"duplicate.header-only.json"
+    manifest.write_text(payload,encoding="utf-8")
+    with pytest.raises(ValueError,match="Duplicate field in header-only JSON"):
+        m.load_header_only_manifest(manifest)
