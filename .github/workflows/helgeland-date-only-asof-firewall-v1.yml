@@ -1,0 +1,49 @@
+name: Helgeland calendar-date as-of information firewall
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-date-only-asof-firewall-v1.yml'
+      - 'scripts/helgeland_date_only_asof_firewall_v1.py'
+      - 'tests/test_helgeland_date_only_asof_firewall_v1.py'
+      - 'docs/eog_helgeland_date_only_asof_firewall_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-date-only-asof-firewall-v1.yml'
+      - 'scripts/helgeland_date_only_asof_firewall_v1.py'
+      - 'tests/test_helgeland_date_only_asof_firewall_v1.py'
+      - 'docs/eog_helgeland_date_only_asof_firewall_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Verify no future source observation may leak into cutoff input
+        run: python -m pytest -q tests/test_helgeland_date_only_asof_firewall_v1.py
+      - name: Ensure historical-derived Year, age, sex and source files are not used
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import ast
+          p=Path('scripts/helgeland_date_only_asof_firewall_v1.py')
+          source=p.read_text()
+          tree=ast.parse(source)
+          assert 'Year' in source and 'Least_age' in source  # prohibited documented
+          assert "record[\"Year\"]" not in source
+          assert "record[\"Least_age\"]" not in source
+          assert "record[\"scriptsex\"]" not in source
+          assert "read_csv(" not in source
+          assert "open(" not in source
+          assert "requests" not in source
+          assert "urllib" not in source
+          PY
