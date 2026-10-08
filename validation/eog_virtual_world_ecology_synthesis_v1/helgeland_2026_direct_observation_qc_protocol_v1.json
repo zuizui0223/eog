@@ -50,7 +50,8 @@
     "direct_later_stage_row_count",
     "duplicate_exact_observation_count",
     "multi_nest_island_id_count",
-    "ids_with_one_nest_island_and_any_later_direct_observation"
+    "ids_with_one_nest_island_and_any_later_direct_observation",
+    "column_count_mismatch_rows"
   ],
   "prohibited_outputs": [
     "individual_ID_values",
