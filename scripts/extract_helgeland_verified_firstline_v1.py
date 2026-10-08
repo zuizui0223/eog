@@ -145,6 +145,37 @@ def extract(root: Path, contract: dict, inventory: dict,
     return evidence, receipt
 
 
+def prepare_write_paths(source_root: Path, evidence: Path, receipt: Path
+                        ) -> tuple[Path, Path, Path]:
+    """Reject symlink redirection, in-source outputs, and any existing output."""
+    root = source_root.absolute()
+    if any(part.is_symlink() for part in (root, *root.parents)):
+        raise ValueError("Raw source directory has a symlinked ancestor")
+    if not root.is_dir():
+        raise ValueError("Raw source root does not exist")
+    canonical_root = root.resolve()
+    repo_root = ROOT.resolve()
+    if canonical_root == repo_root or repo_root in canonical_root.parents:
+        raise ValueError("Raw Dryad source files must stay outside the Git repository")
+    if not evidence.name.endswith(".header-only.json"):
+        raise ValueError("Header evidence filename must end in .header-only.json")
+
+    outputs = (evidence.absolute(), receipt.absolute())
+    canonical_outputs = []
+    for path in outputs:
+        # Reject existing files including dangling symlinks: no source can be
+        # overwritten merely by passing an unsafe output path.
+        if path.exists() or path.is_symlink():
+            raise ValueError("Refusing to overwrite an existing output or symlink")
+        candidate = path.parent.resolve() / path.name
+        if candidate == canonical_root or canonical_root in candidate.parents:
+            raise ValueError("Output destination resolves inside raw-source directory")
+        canonical_outputs.append(candidate)
+    if canonical_outputs[0] == canonical_outputs[1]:
+        raise ValueError("Header evidence and receipt must have different destinations")
+    return root, outputs[0], outputs[1]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-root", type=Path, required=True)
@@ -152,22 +183,29 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--receipt", type=Path, required=True)
     args = parser.parse_args()
-    if not args.output.name.endswith(".header-only.json"):
-        parser.error("Output evidence must end with .header-only.json")
+    root, evidence_path, receipt_path = prepare_write_paths(
+        args.source_root, args.output, args.receipt
+    )
     contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
     inventory = json.loads(FROZEN.read_text(encoding="utf-8"))
     declared = delimiter_assignments(args.delimiter, set(contract["expected_header_roles"]))
-    root = args.source_root.absolute()
-    if ROOT == root or ROOT in root.parents:
-        parser.error("Original Dryad source data must not be stored under the Git repository")
-    if root == args.output.absolute() or root in args.output.absolute().parents:
-        parser.error("Attestation output must be outside the raw-source directory")
-    if root == args.receipt.absolute() or root in args.receipt.absolute().parents:
-        parser.error("Receipt output must be outside the raw-source directory")
     evidence, receipt = extract(root, contract, inventory, declared)
-    for path, data in ((args.output, evidence), (args.receipt, receipt)):
+    # Revalidate immediately before writes, including any paths that acquired a
+    # symlink or file after the initial preflight. Exclusive open is the last guard.
+    for path in (evidence_path, receipt_path):
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(data, ensure_ascii=False, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+    _, evidence_path, receipt_path = prepare_write_paths(root, evidence_path, receipt_path)
+    created = []
+    try:
+        for path, data in ((evidence_path, evidence), (receipt_path, receipt)):
+            with path.open("x", encoding="utf-8") as stream:
+                created.append(path)
+                json.dump(data, stream, ensure_ascii=False, sort_keys=True, indent=2)
+                stream.write("\n")
+    except Exception:
+        for path in created:
+            path.unlink(missing_ok=True)
+        raise
     print(json.dumps({"status": receipt["status"], "files": len(evidence["records"])}))
 
 

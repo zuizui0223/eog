@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / "validation/eog_virtual_world_ecology_synthesis_v1"
 sys.path.insert(0, str(ROOT / "scripts"))
 from extract_helgeland_verified_firstline_v1 import (  # noqa: E402
-    delimiter_assignments, extract, tokenize_header,
+    delimiter_assignments, extract, tokenize_header, prepare_write_paths,
 )
 
 
@@ -126,3 +126,45 @@ def test_whitespace_cannot_alias_tab_automatically(tmp_path):
     p.write_bytes(b"ID\tnatal.island\n")
     with pytest.raises(ValueError, match="ambiguous"):
         tokenize_header(p, "WHITESPACE")
+
+
+def test_destination_rejects_existing_file_or_symlink(tmp_path):
+    root, _, _, _ = fixture_sources(tmp_path)
+    evidence = tmp_path / "out" / "real.header-only.json"
+    receipt = tmp_path / "out" / "receipt.json"
+    evidence.parent.mkdir()
+    assert prepare_write_paths(root, evidence, receipt)[1:] == (evidence, receipt)
+    evidence.write_text("KEEP", encoding="utf-8")
+    with pytest.raises(ValueError, match="Refusing to overwrite"):
+        prepare_write_paths(root, evidence, receipt)
+    assert evidence.read_text() == "KEEP"
+    evidence.unlink()
+    evidence.symlink_to(root / "fitness_2025" / "LRS.txt")
+    with pytest.raises(ValueError, match="Refusing to overwrite"):
+        prepare_write_paths(root, evidence, receipt)
+
+
+def test_destination_rejects_raw_dir_redirection_and_colliding_outputs(tmp_path):
+    root, _, _, _ = fixture_sources(tmp_path)
+    evidence = tmp_path / "out" / "first.header-only.json"
+    with pytest.raises(ValueError, match="different destinations"):
+        prepare_write_paths(root, evidence, evidence)
+    with pytest.raises(ValueError, match="inside raw-source"):
+        prepare_write_paths(root, root / "nested" / "first.header-only.json", tmp_path / "receipt.json")
+    link_dir = tmp_path / "source_alias"
+    link_dir.symlink_to(root, target_is_directory=True)
+    with pytest.raises(ValueError, match="inside raw-source"):
+        prepare_write_paths(root, link_dir / "first.header-only.json", tmp_path / "receipt.json")
+
+
+def test_source_root_rejects_symlinked_ancestor(tmp_path):
+    root, _, _, _ = fixture_sources(tmp_path)
+    alias = tmp_path / "alias"
+    alias.symlink_to(root, target_is_directory=True)
+    evidence = tmp_path / "out" / "first.header-only.json"
+    receipt = tmp_path / "out" / "receipt.json"
+    with pytest.raises(ValueError, match="symlinked ancestor"):
+        prepare_write_paths(alias, evidence, receipt)
+    deep_alias = alias / "fitness_2025"
+    with pytest.raises(ValueError, match="symlinked ancestor"):
+        prepare_write_paths(deep_alias, evidence, receipt)
