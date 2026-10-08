@@ -1,0 +1,83 @@
+name: Helgeland Year date mismatch diagnostic only
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2026-year-date-discordance-v1.yml'
+      - 'scripts/audit_helgeland_2026_year_date_discordance_v1.py'
+      - 'tests/test_helgeland_2026_year_date_discordance_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_year_date_exploratory_contract_v1.json'
+      - 'docs/eog_helgeland_2026_year_date_discordance_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_year_date_discordance_frozen_v1.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2026-year-date-discordance-v1.yml'
+      - 'scripts/audit_helgeland_2026_year_date_discordance_v1.py'
+      - 'tests/test_helgeland_2026_year_date_discordance_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_year_date_exploratory_contract_v1.json'
+      - 'docs/eog_helgeland_2026_year_date_discordance_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_year_date_discordance_frozen_v1.json'
+
+permissions:
+  contents: read
+
+jobs:
+  calendar-year-discordance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Verify pinned author source SHA
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Synthetic-only source identity and bounded month-offset tests
+        run: python -m pytest -q tests/test_helgeland_2026_year_date_discordance_v1.py
+      - name: Source-byte gated exploratory Year and date diagnosis
+        run: |
+          python scripts/audit_helgeland_2026_year_date_discordance_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-2026-year-date-discordance-v1.json
+      - name: Require consistency with first-exposure QC and no ecological claim
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('build/helgeland-2026-year-date-discordance-v1.json').read_text())
+          assert x['status']=='YEAR_DATE_DISCREPANCY_DESCRIBED__MEANING_UNRESOLVED'
+          assert x['total_rows']==73593
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_year_date_discordance_frozen_v1.json').read_text())
+          assert frozen['schema']=='eog.helgeland.2026.observation_year_date_postexposure.frozen_observed_v1'
+          for k in ('status','total_rows','all_year_delta_bin_counts',
+                    'discordant_by_calendar_month','consistent_year_outside_window',
+                    'out_of_range_year_value_counts','out_of_range_date_year_counts',
+                    'invalid_date','invalid_year'):
+              assert x[k]==frozen[k],k
+          assert frozen['interpretation']['source_year_date_semantics_resolved'] is False
+          assert frozen['interpretation']['correction_approved'] is False
+          assert frozen['ecological_endpoint_authorized'] is False
+          assert x['total_rows']-x['all_year_delta_bin_counts']['0']==3517
+          assert x['consistent_year_outside_window']==914
+          assert sum(x['discordant_by_calendar_month'].values())==3517
+          assert x['row_ids_locations_or_observations_exported'] is False
+          assert x['exploratory_after_first_QC_exposure'] is True
+          for flag in ('source_year_date_semantics_resolved','date_correction_authorized',
+                       'as_of_t_predictors_verified','surveyed_zero_panel_verified',
+                       'ecological_endpoint_authorized'):
+              assert x[flag] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2026-YEAR-DATE-EXPLORATORY-AGGREGATES-v1
+          path: build/helgeland-2026-year-date-discordance-v1.json
+          if-no-files-found: warn
