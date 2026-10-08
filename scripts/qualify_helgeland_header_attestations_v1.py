@@ -126,6 +126,16 @@ def qualification(contract:dict,inventory:dict,attestation:dict|None)->dict:
 
 
 
+def _reject_duplicate_json_keys(pairs: list[tuple[str, object]]) -> dict:
+    """Disallow hidden payloads overwritten by duplicate JSON object keys."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"Duplicate field in header-only JSON: {key}")
+        result[key] = value
+    return result
+
+
 def load_header_only_manifest(path: Path) -> dict:
     """Reject source .txt/.raw paths BEFORE reading any caller-supplied bytes."""
     if not path.name.endswith(".header-only.json") or path.is_symlink():
@@ -136,7 +146,7 @@ def load_header_only_manifest(path: Path) -> dict:
     raw=path.read_bytes()
     if len(raw)>32768:
         raise ValueError("Header-only manifest exceeded read budget")
-    return json.loads(raw.decode("utf-8"))
+    return json.loads(raw.decode("utf-8"), object_pairs_hook=_reject_duplicate_json_keys)
 
 
 def main():
