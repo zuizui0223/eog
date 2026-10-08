@@ -237,7 +237,7 @@ def verify_against_frozen(result: dict, frozen: dict) -> dict:
         frozen.get("status") !=
         "HISTORICAL_2014_2020_SOURCE_METADATA_FROZEN__NO_BIRD_BYTES_READ"):
         raise ValueError("Historical frozen version contract missing")
-    if set(result["datasets"]) != set(frozen["archives"]) != set(SOURCES):
+    if not (set(result["datasets"]) == set(frozen["archives"]) == set(SOURCES)):
         raise ValueError("Historical dataset set was altered")
     for name in SOURCES:
         source = result["datasets"][name]
