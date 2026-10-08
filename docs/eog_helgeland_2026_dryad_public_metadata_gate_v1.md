@@ -1,6 +1,6 @@
 # Helgeland 2026 Dryad source-identity gate — PUBLIC JSON ONLY
 
-**Status: `HOLD_SOURCE_METADATA_UNVERIFIED` until live official Dryad JSON is returned and reviewed.** This audit **does not download any bird observations, read any physical file header, or assess a biological result**.
+**Status: `SOURCE_DECLARED_METADATA_FROZEN__NO_BIRD_BYTES_VERIFIED` following the first successful public JSON inventory.** This audit **does not download any bird observations, read any physical file header, or assess a biological result**.
 
 ## Source
 
@@ -9,6 +9,17 @@ Hansson Frank et al. (2026), Dryad [10.5061/dryad.rr4xgxdnq](https://doi.org/10.
 The public-facing page lists **18 files**, spanning observed 1994–2022 presence, capture–recapture and processed demographic data plus source code. The precise expected *filenames* (not biological row values or checksums) are declared in `scripts/audit_helgeland_2026_dryad_metadata_v1.py`.
 
 The browser-facing listing is **not** sufficient to establish an immutable Dryad internal version ID or per-file SHA-256. GitHub blobs from [the authors' repository](https://github.com/torhanssonfrank/DensityRegulationHouseSparrows) are not the same as independently verified Dryad source bytes, and filenames differ in suffixes.
+
+## Frozen public version (8 October 2026)
+
+The original read-only GitHub Actions run **37793671450** uploaded artifact **11556844942**, ZIP SHA-256 `aa0a7f0ff034ac8d254f3633d5e7b2e2a8a32e5285520e4906d3071ca33d76d4`. The artifact contains one metadata-only JSON receipt, inspected independently.
+
+- Official Dryad dataset ID: **177360**
+- Published source version: **v6**, numeric version ID **421942**
+- Exactly **18** registered file records with file IDs, source-reported sizes and syntactically valid `sha-256` digests.
+- Relevant file IDs: `presence_data_1994_2022_ECY25-1341.txt` **4576411**; `juvenile_to_ad_surival_histories_long_ECY25-1341.txt` **4576414**; `cleaned_density_dependence_data_ECY25-1341.txt` **4576415**; `estimated_pop_sizes_nestling_to_adult_model_with_lurøy_onøy_ECY25-1341.txt` **4576413**.
+
+The full file-name/ID/size/source-declared digest inventory is **frozen, not guessed**, at `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json`. Each future live audit must match the exact frozen version and all 18 file identities, or be declared HOLD. GitHub package tests use synthetic fixtures only. **No registered SHA-256 has been verified against an actual Dryad data file's bytes.**
 
 ## Execution
 
@@ -22,6 +33,7 @@ The live auditor accesses **only** the canonical public JSON endpoint `/api/v2/d
 
 ```bash
 python scripts/audit_helgeland_2026_dryad_metadata_v1.py \
+  --verify-frozen validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json \
   --output build/helgeland-2026-dryad-public-json-v1.json
 ```
 
@@ -33,7 +45,7 @@ If and only if the public API returns an exact **18-file** named inventory with 
 
 If the API is unreachable, the file set differs, the API returns paginated records, or a digest is missing, fail closed. Keep the receipt with `HOLD_SOURCE_METADATA_UNVERIFIED` or `HOLD_SOURCE_DIGEST_INCOMPLETE`. No automatic source substitution or guessed version.
 
-After a successful metadata artifact, **review the returned identities and freeze the result in a separate explicitly version-pinned record before biological file access**. This PR does not assume or fabricate version IDs, file IDs, or checksums.
+The initial public-JSON receipt has now been reviewed and frozen. This does not authorize biological file access, which requires separate physical-byte/header, observation-process and temporal eligibility gates.
 
 ### Scientific status cannot be upgraded by source metadata
 
