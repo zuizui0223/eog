@@ -25,6 +25,9 @@
 - [x] Render main quantitative figures.
 - [x] Create graphical abstract artwork.
 - [x] Prepare supplementary 31-STOP table.
+- [x] Add Fig. 1–4 / Supplementary Fig. S1 / Supplementary Table S1 callouts and publication legends (PR #608).
+- [x] Draft Data and Code Availability with pinned source-identity ledger; archival DOI remains an external blocker.
+- [x] Verify the seven core reference DOIs/metadata and correct the Gould et al. (2026) first-author attribution.
 - [ ] Add line/page numbering to final manuscript file if requested by portal.
 - [ ] Final reference-style pass against current Elsevier output style.
 
