@@ -48,6 +48,21 @@ Within those 78 landscapes:
 
 The 78 strict crossovers are distributed across all preregistered landscape-factor settings (29/128 with barrier density 0.05; 27/128 with 0.20; 22/128 with 0.35; 25/192 rook and 53/192 queen; 48/192 low and 30/192 high environmental autocorrelation).
 
+## Marginal information after accounting for baseline observability
+
+The v23 combined library never loses a history that either individual library identifies. Therefore the count rescued by **adding provenance to occupancy** is `combined identified - occupancy identified`.
+
+| Layout | Still unresolved after occupancy alone | Newly resolved by adding provenance | Fraction of unresolved rescued |
+|---|---:|---:|---:|
+| Clustered | **153/384** | **107** | **107/153 = 69.9%** |
+| Dispersed | **36/384** | **1** | **1/36 = 2.8%** |
+
+The reciprocal question **adding occupancy after provenance** gives clustered **110/156 = 70.5%** and dispersed **305/340 = 89.7%**.
+
+This matters for interpretation: **107 versus 1** is not comparable in isolation because occupancy-only information already identified **348/384** dispersed-layout histories, leaving just 36 potentially rescuable cases, versus **231/384** clustered-layout histories leaving 153. Reporting unresolved-case denominators makes the ceiling explicit. The residual conditional contrast remains large under the fixed ideal libraries, but must not be interpreted as an equally priced field assay comparison.
+
+Machine-calculated arithmetic and the exact source-blob fingerprint: `validation/eog_virtual_world_ecology_synthesis_v1/readout_marginal_value_v1.json`. No underlying simulation, target definition, first-pass claim, or archive changed.
+
 ## Interpretation: history content is not measurement access
 
 High source-basin overlap can create a strong dependence of the **equilibrium provenance map** on source activation order. This need not yield highly distinguishable **transient occupancy signatures**. In more dispersed sources, source identity may have less influence on the equilibrium provenance composition, while the temporal occupation wavefront can make histories easier to tell apart.

@@ -1,0 +1,47 @@
+{
+  "schema": "eog.virtual_worlds.readout_marginal_value.v1",
+  "status": "POST_RESULT_DESCRIPTIVE_ARITHMETIC_NOT_PREREGISTERED",
+  "source": "validation/eog_virtual_world_ecology_synthesis_v1/matched_readout_crossover_v1.json",
+  "source_git_blob_sha": "45303bece306176b8486b43aedcf0f16d84389e2",
+  "parent_pr": 614,
+  "target": "exact distinction among three frozen source activation histories under idealized observation libraries",
+  "aggregation": "384 matched landscapes per source-layout class; layouts are paired, not 768 independent landscapes",
+  "computed": {
+    "clustered": {
+      "n": 384,
+      "occupancy_identified": 231,
+      "provenance_identified": 228,
+      "combined_identified": 338,
+      "occupancy_unresolved": 153,
+      "provenance_unresolved": 156,
+      "additional_by_provenance_after_occupancy": 107,
+      "additional_by_occupancy_after_provenance": 110,
+      "remaining_unresolved_combined": 46,
+      "fraction_unresolved_occupancy_rescued_by_provenance": 0.6993464052287581,
+      "fraction_unresolved_provenance_rescued_by_occupancy": 0.7051282051282052
+    },
+    "dispersed": {
+      "n": 384,
+      "occupancy_identified": 348,
+      "provenance_identified": 44,
+      "combined_identified": 349,
+      "occupancy_unresolved": 36,
+      "provenance_unresolved": 340,
+      "additional_by_provenance_after_occupancy": 1,
+      "additional_by_occupancy_after_provenance": 305,
+      "remaining_unresolved_combined": 35,
+      "fraction_unresolved_occupancy_rescued_by_provenance": 0.027777777777777776,
+      "fraction_unresolved_provenance_rescued_by_occupancy": 0.8970588235294118
+    }
+  },
+  "computation": "New identifications from adding readout B to A = # identified by combined A+B minus # identified by A, because combined information cannot remove previously identified truths.",
+  "comparative_readout_availability": "The large 107 versus 1 raw-count difference is partly constrained by occupancy-only baselines of 231 versus 348; compare against unresolved cases as denominator.",
+  "boundaries": [
+    "No additional world, ecological data or source-history simulation was run.",
+    "The 384 landscapes are constructed as a correlated matched factorial panel, not an ecological sample.",
+    "Provenance measurements are idealized earliest-source tags with different dimensionality, cost and feasibility from occupancy snapshots.",
+    "Conditional rescue fractions quantify the frozen observation libraries' discrimination, not probability of detecting a real occupied species or population persistence.",
+    "No mediation, measurement cost optimality, causal ecological advantage or natural generality is identified.",
+    "This report does not reopen the frozen JBI BAM, ecology history-storage or EOG-WF empirical manuscripts."
+  ]
+}
