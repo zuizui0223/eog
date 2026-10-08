@@ -57,8 +57,12 @@ def test_submission_figures_render_with_frozen_denominator(tmp_path):
     }
     assert len(manifest["figures"]) == 4
     assert manifest["graphical_abstract"] == "graphical_abstract_inferential_openness.svg"
-    for name in [*manifest["figures"], manifest["graphical_abstract"]]:
+    assert manifest["supplementary_figure"] == "supplementary_figure_S1_terminal_taxonomy.svg"
+    assert manifest["fine_terminal_label_count"] == 21
+    for name in [*manifest["figures"], manifest["graphical_abstract"], manifest["supplementary_figure"]]:
         assert (out / name).exists()
         assert ET.parse(out / name).getroot().tag == "{http://www.w3.org/2000/svg}svg"
     with (out / manifest["supplementary_table"]).open(encoding="utf-8", newline="") as fh:
-        assert len(list(csv.DictReader(fh))) == 31
+        rows = list(csv.DictReader(fh))
+    assert len(rows) == 31
+    assert len({row["terminal_stage"] for row in rows}) == 21
