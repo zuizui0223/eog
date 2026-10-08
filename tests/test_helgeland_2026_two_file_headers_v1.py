@@ -100,3 +100,31 @@ def test_only_two_git_files_and_no_download_or_outcome_parser():
         assert forbidden not in text
     assert "stream.readline(HEADER_BYTES_LIMIT + 1)" in text
     assert "verify_bytes(root, frozen)" in text
+
+
+def test_header_evidence_is_frozen_without_authorizing_biological_inference():
+    frozen_path = ROOT / (
+        "validation/eog_virtual_world_ecology_synthesis_v1/"
+        "helgeland_2026_two_file_physical_headers_frozen_v1.json"
+    )
+    receipt = json.loads(frozen_path.read_text(encoding="utf-8"))
+    assert receipt["dryad_version_id"] == 421942
+    assert receipt["provenance"]["github_actions_run_id"] == 37797505583
+    assert receipt["provenance"]["artifact_id"] == 11559381569
+    assert receipt["provenance"]["artifact_zip_sha256"] == (
+        "402c01b4ffae08b6f351d6d407e9dfbfad45f745c714e4fd8fe2ca99a6a71c82"
+    )
+    assert {r["github_path"] for r in receipt["headers"]} == set(TARGETS)
+    assert receipt["both_file_byte_parity_revalidated"] is True
+    assert receipt["biological_rows_decoded"] is False
+    assert receipt["surveyed_zero_panel_verified"] is False
+    assert receipt["first_direct_recruit_destination_verified"] is False
+    assert receipt["as_of_t_input_eligibility_verified"] is False
+    assert receipt["ecological_endpoint_authorized"] is False
+    assert set(receipt["headers"][0]["column_names"]) == {
+        "Year", "date", "scriptsex", "Island", "Location",
+        "stage", "Least_age", "Least_hatchyear", "ID"
+    }
+    assert receipt["headers"][1]["column_names"] == [
+        "Location", "Island", "Year", "N_corr", ".lower", ".upper", ".width", "N_obs"
+    ]
