@@ -66,6 +66,8 @@ def test_pedigree_metadata_is_separate_and_no_file_identity_or_crosswalk_is_assu
            set(x["archived_island_code_to_name_dictionary"])
     assert "SNPpedigree_GeneticArchitecture.txt" in x["source_advertised_files"]
     assert x["archived_island_code_to_name_dictionary"]["20"]=="Nesøy"
+    assert x["archived_island_code_to_name_dictionary"]["27"]=="Hestmannøly"
+    assert "not silently substituted" in x["island_name_spelling_boundary"]
     assert x["archived_island_code_to_name_dictionary"]["38"]=="Aldra"
 
 
