@@ -32,6 +32,9 @@ def test_source_ledger_and_unminted_doi_boundary_are_explicit():
     assert "will be inserted before submission" in text
     assert "Bishop et al. 2019; Bokulich & Parker 2021" in text
 
+    first_mentions = [text.index("Fig. 1"), text.index("Fig. 2"), text.index("Fig. 3"), text.index("Fig. 4")]
+    assert first_mentions == sorted(first_mentions)
+
 
 def test_original_workflow_scopes_remain_explicit():
     text = PAPER.read_text(encoding="utf-8")
@@ -49,3 +52,5 @@ def test_reference_first_author_and_bibliography_integrity():
     assert "Wintle, B.C. & Rumpff, L. (2026)." in text
     assert "*Proceedings of the Association for Information Science and Technology*, 56, 21–31." in text
     assert "*European Journal for Philosophy of Science*, 11, 31." in text
+    ref = text.split("## References", 1)[1]
+    assert ref.index("Bokulich, A.") < ref.index("Gould, E.") < ref.index("Jantzen, C.C.")
