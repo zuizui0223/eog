@@ -108,3 +108,23 @@ def test_only_year_date_inspected_and_individual_data_never_emitted():
     assert c["status"]=="FROZEN_AFTER_STRUCTURAL_QC_RESULT_EXPOSURE__BEFORE_THIS_FOLLOWUP"
     assert c["read_only_columns"]==["Year","date"]
     assert c["flags"]["as_of_t_qualified"] is False
+
+
+def test_first_real_exploratory_month_offset_receipt_frozen_without_inference():
+    frozen=json.loads((BASE/"helgeland_2026_year_date_discordance_frozen_v1.json").read_text())
+    assert frozen["schema"]=="eog.helgeland.2026.observation_year_date_postexposure.frozen_observed_v1"
+    assert frozen["authority"]["github_actions_run_id"]==37801160828
+    assert frozen["authority"]["artifact_id"]==11560154008
+    assert frozen["authority"]["artifact_zip_sha256"]==(
+        "9a1f4ab9c511ecc7343cfd5eedcf3cf731a7336588b82310fdd9b3a89f661d02"
+    )
+    assert frozen["all_year_delta_bin_counts"]=={
+        "<=-2":0,"-1":3517,"0":70076,"+1":0,">=+2":0}
+    assert sum(frozen["discordant_by_calendar_month"].values())==3517
+    assert [frozen["discordant_by_calendar_month"][f"{i:02}"] for i in range(1,4)]==[1007,1180,1330]
+    assert all(frozen["discordant_by_calendar_month"][f"{i:02}"]==0 for i in range(4,13))
+    assert frozen["consistent_year_outside_window"]==914
+    assert frozen["interpretation"]["source_year_date_semantics_resolved"] is False
+    assert frozen["interpretation"]["correction_approved"] is False
+    assert frozen["interpretation"]["post_exposure_exploratory"] is True
+    assert frozen["ecological_endpoint_authorized"] is False
