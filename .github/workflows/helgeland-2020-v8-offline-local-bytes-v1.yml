@@ -1,0 +1,47 @@
+name: Helgeland 2020 v8 OFFLINE source byte gate synthetic tests
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2020-v8-offline-local-bytes-v1.yml'
+      - 'scripts/audit_helgeland_2020_v8_local_bytes_v1.py'
+      - 'tests/test_helgeland_2020_v8_local_bytes_v1.py'
+      - 'docs/eog_helgeland_2020_v8_offline_source_verification_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2020-v8-offline-local-bytes-v1.yml'
+      - 'scripts/audit_helgeland_2020_v8_local_bytes_v1.py'
+      - 'tests/test_helgeland_2020_v8_local_bytes_v1.py'
+      - 'docs/eog_helgeland_2020_v8_offline_source_verification_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-only-no-source-downloads:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install offline pytest
+        run: python -m pip install pytest
+      - name: Synthetic files only — immutable source IDs and complete byte hashes
+        run: |
+          python -m pytest -q tests/test_helgeland_2020_v8_local_bytes_v1.py \
+            tests/test_helgeland_historical_dryad_vintages_v1.py
+      - name: Verify no raw data, source networking or biological scoring
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('scripts/audit_helgeland_2020_v8_local_bytes_v1.py').read_text()
+          for bad in ('urllib', 'requests', 'socket.', 'urlopen(', 'read_csv(',
+                      'import pandas', 'import numpy', 'import sklearn'):
+              assert bad not in s,bad
+          assert 'opaque_sha256(source)' in s
+          assert 'prepare_write_paths(' in s
+          assert 'ecological_forecast_authorized' in s
+          PY
