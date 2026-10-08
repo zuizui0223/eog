@@ -22,7 +22,11 @@ Canonical source repository:
 - `dleopold/Populus_priorityEffects`
 - pinned repository commit: `d8082daabfccccf3bcbdd631b4438f44c04014c1`
 - GitHub license: MIT (`LICENSE.md`)
-- corresponding Dryad dataset: DOI `10.5061/dryad.7p2cv` (Dryad CC0)
+- correct archived source repository release: Zenodo DOI `10.5281/zenodo.3872145` (v1.2)
+- original sequencing reads: NCBI BioProject `PRJNA605581`
+- provenance note: the originally frozen v28 protocol's `dryad_doi` field mistakenly
+  refers to the separate wood-decomposer dataset; see
+  `validation/eog_original_idea_leopold_history_retention_v28/source_provenance_correction_v1.json`
 
 Source blobs used by the benchmark:
 
