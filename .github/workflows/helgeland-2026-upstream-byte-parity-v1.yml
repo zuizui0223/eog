@@ -7,6 +7,7 @@ on:
       - 'scripts/audit_helgeland_2026_upstream_byte_parity_v1.py'
       - 'tests/test_helgeland_2026_upstream_byte_parity_v1.py'
       - 'docs/eog_helgeland_2026_upstream_byte_parity_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_two_file_byte_parity_frozen_v1.json'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json'
   push:
     branches: [main]
@@ -15,6 +16,7 @@ on:
       - 'scripts/audit_helgeland_2026_upstream_byte_parity_v1.py'
       - 'tests/test_helgeland_2026_upstream_byte_parity_v1.py'
       - 'docs/eog_helgeland_2026_upstream_byte_parity_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_two_file_byte_parity_frozen_v1.json'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json'
 
 permissions:
@@ -62,6 +64,15 @@ jobs:
           assert d['surveyed_zero_panel_verified'] is False
           assert d['as_of_t_processing_verified'] is False
           assert d['ecological_endpoint_authorized'] is False
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_two_file_byte_parity_frozen_v1.json').read_text())
+          assert frozen['dryad_version_id']==d['dryad_version_id']
+          assert frozen['authority']['github_upstream_commit']==d['upstream_commit']
+          assert len(frozen['files'])==len(d['files'])==2
+          pairs={(x['upstream_repo_path'],x['dryad_file_name'],x['dryad_file_metadata_id'],x['upstream_byte_count']) for x in d['files']}
+          original={(x['github_path'],x['dryad_name'],x['dryad_file_id'],x['byte_count']) for x in frozen['files']}
+          assert pairs==original
+          assert all(x['sha256_match'] and x['size_match'] for x in frozen['files'])
+          assert frozen['biological_rows_decoded_or_scored'] is False
           PY
       - uses: actions/upload-artifact@v4
         if: always()
