@@ -17,7 +17,9 @@ Preferred sentence:
 
 ## Adaptive preregistration
 
-Wintle & Rumpff (2026), *Methods in Ecology and Evolution* 17:1768–1787, argue that model-based ecological research can use adaptive preregistration to preserve transparency across conditional analytical decisions.
+Gould et al. (2026), *Methods in Ecology and Evolution* 17:1768–1787, argue that model-based ecological research can use adaptive preregistration to preserve transparency across conditional analytical decisions.
+
+Citation audit: The version of record is Gould, Jones, Yen, Fraser, Wootton, Good, Duncan, Hauser, Wintle & Rumpff (2026), DOI 10.1111/2041-210X.70311; the former last-two-author citation was incorrect.
 
 Connection:
 - preregistration is the governance mechanism that makes terminal workflow states auditable;
