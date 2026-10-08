@@ -75,7 +75,7 @@ def test_tamper_with_equal_size_row_refuses_header_attestation(tmp_path):
 ])
 def test_invalid_firstline_fails_closed(tmp_path, firstline):
     p = tmp_path / "sample.txt"
-    p.write_bytes(firstline + b"synthetic_second_row\n")
+    p.write_bytes(firstline if firstline == b"ID;Year;Island" else firstline + b"synthetic_second_row\n")
     with pytest.raises((ValueError, UnicodeDecodeError)):
         read_first_physical_header(p)
 
