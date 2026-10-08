@@ -218,7 +218,7 @@ The main result is therefore structural rather than mechanistic:
 
 All analyses use publicly available source data from the original experiments and versioned analysis code in the EOG repository. Source files were pinned by repository commit and, where used in scoring pipelines, by file-level blob identity.
 
-The plant-microbiome source data are archived in Dryad: **https://doi.org/10.5061/dryad.7p2cv**. The grassland source data and code are archived in Zenodo: **https://doi.org/10.5281/zenodo.5713397**.
+The analysed plant-microbiome source data and code are archived with the source repository in Zenodo: **https://doi.org/10.5281/zenodo.3872145** (v1.2); the original amplicon reads are deposited under NCBI BioProject **PRJNA605581**. The grassland source data and code are archived in Zenodo: **https://doi.org/10.5281/zenodo.5713397**.
 
 The complete EOG analysis code, frozen protocols, machine-readable result summaries and CI provenance are publicly available at **https://github.com/zuizui0223/eog**. A permanent DOI for the exact submission release should be minted before journal submission and inserted here.
 
