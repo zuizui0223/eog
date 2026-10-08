@@ -1,0 +1,118 @@
+{
+  "schema": "eog.virtual_worlds.history_readout_crossover.v1",
+  "status": "POST_RESULT_EXPLORATORY_NOT_PREREGISTERED",
+  "matched_landscapes": 384,
+  "three_sources_per_design": true,
+  "readout_levels": {
+    "occupancy_only": "ideal full binary snapshots at t4,t5,t6,t8 after activation, source nodes excluded",
+    "provenance_only": "ideal nodewise equilibrium earliest-source labels from existing v23 provenance assays",
+    "combined": "both v23 evidence libraries; observation count not comparable to field sampling cost"
+  },
+  "original_artifact_zip_sha256": {
+    "v18": "82fa7504b46b94369f787888be5d6c1a5e8d3caff622a8e686b23dc57007f9d2",
+    "v19": "bc4910968de071bab204ee9793a25aa4df69ce591ea8787ef8c8e6c62c7c6686",
+    "v21": "666ae4757128e8d3455bd8caeffee31d15c38da381db55f08215861705a3ff38",
+    "v22": "fe74470d84018941a9fe180218c281effa67cea1e0b577ccb8a86e874e776129",
+    "v23": "a859e7b6ec5e8af47b56a67a10b89ae7ab65ca3e1a70aed9317f663f863eaae9"
+  },
+  "original_result_fingerprints": {
+    "v18": "f039164f427f52f3d8b0ebd78705056c723689933a96cfd5740417f0f8f90089",
+    "v19": "a1a4bcf4a8e6f91888f41e9f14826c662da66b869348c14ed8592b411636fd2d",
+    "v21": "40d349a8b134c72add0cd4aeb757b569654d45a519c2efcfe9114a1584dfdd25",
+    "v22": "3436235e0cc96b14088c27377a79b057b1018c74e71edbd48bac0a83e8a9e9dd",
+    "v23": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244"
+  },
+  "identification_by_readout": {
+    "occupancy_only": {
+      "clustered": 231,
+      "dispersed": 348
+    },
+    "provenance_only": {
+      "clustered": 228,
+      "dispersed": 44
+    },
+    "combined": {
+      "clustered": 338,
+      "dispersed": 349
+    }
+  },
+  "paired_identifiability": {
+    "occupancy_only": {
+      "neither": 14,
+      "dispersed_only": 139,
+      "clustered_only": 22,
+      "both": 209
+    },
+    "provenance_only": {
+      "neither": 155,
+      "dispersed_only": 1,
+      "clustered_only": 185,
+      "both": 43
+    },
+    "combined": {
+      "neither": 9,
+      "dispersed_only": 37,
+      "clustered_only": 26,
+      "both": 312
+    }
+  },
+  "readout_crossover": {
+    "occupancy_d_only__provenance_c_only": 78,
+    "occupancy_c_only__provenance_d_only": 0,
+    "crossover_with_coverage_insurance_tradeoff": 75,
+    "crossover_with_more_clustered_provenance_memory": 78,
+    "combined_resolves_both_crossover_designs": 78,
+    "coverage_insurance_tradeoff_all_landscapes": 281
+  },
+  "strata": {
+    "barrier": {
+      "0.05": {
+        "n": 128,
+        "crossovers": 29,
+        "tradeoff": 105
+      },
+      "0.2": {
+        "n": 128,
+        "crossovers": 27,
+        "tradeoff": 97
+      },
+      "0.35": {
+        "n": 128,
+        "crossovers": 22,
+        "tradeoff": 79
+      }
+    },
+    "autocorrelation": {
+      "high": {
+        "n": 192,
+        "crossovers": 30,
+        "tradeoff": 132
+      },
+      "low": {
+        "n": 192,
+        "crossovers": 48,
+        "tradeoff": 149
+      }
+    },
+    "neighbourhood": {
+      "queen": {
+        "n": 192,
+        "crossovers": 53,
+        "tradeoff": 139
+      },
+      "rook": {
+        "n": 192,
+        "crossovers": 25,
+        "tradeoff": 142
+      }
+    }
+  },
+  "interpretation": "In the same matched synthetic source network, the source layout ranking of exact activation-history identifiability can reverse when the declared observation library changes from transient occupancy to earliest-source provenance. This is an observation-dependent readout effect, not a change in the latent ecological landscape or a demographic persistence result.",
+  "boundaries": [
+    "The observation libraries and three activation histories were fixed in v23; the cross-phase layout comparison is post hoc.",
+    "A provenance assay returns ideal earliest-source identity rather than a realistic genetic ancestry, migration or demographic estimate.",
+    "Occupancy and provenance libraries have different information content and cost; rates are not equal-effort field recommendations.",
+    "No new simulation, mechanism, external ecological endpoint or causal mediation is inferred.",
+    "Original v18-v23 preregistered results, refutations, and EOG-WF empirical programme remain unchanged."
+  ]
+}
