@@ -1,0 +1,75 @@
+name: Helgeland 2026 observed encounter structural QC only
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2026-direct-observation-qc-v1.yml'
+      - 'scripts/audit_helgeland_2026_direct_observation_qc_v1.py'
+      - 'tests/test_helgeland_2026_direct_observation_qc_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_direct_observation_qc_protocol_v1.json'
+      - 'docs/eog_helgeland_2026_direct_observation_qc_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2026-direct-observation-qc-v1.yml'
+      - 'scripts/audit_helgeland_2026_direct_observation_qc_v1.py'
+      - 'tests/test_helgeland_2026_direct_observation_qc_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_direct_observation_qc_protocol_v1.json'
+      - 'docs/eog_helgeland_2026_direct_observation_qc_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  aggregate-structural-qc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Prove exact independent source revision
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Offline fail-closed tests using only synthetic observation rows
+        run: |
+          python -m pytest -q \
+            tests/test_helgeland_2026_direct_observation_qc_v1.py \
+            tests/test_helgeland_2026_two_file_headers_v1.py
+      - name: Aggregate structural QC on pinned real presence file
+        run: |
+          python scripts/audit_helgeland_2026_direct_observation_qc_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-2026-structural-encounter-qc-v1.json
+      - name: Prove receipt contains aggregate-only QC and unchanged scientific HOLD
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/helgeland-2026-structural-encounter-qc-v1.json')
+          d=json.loads(p.read_text(encoding='utf-8'))
+          assert d['status']=='STRUCTURAL_QC_ONLY__TEMPORAL_AND_ECOLOGICAL_HOLD'
+          assert d['dryad_version_id']==421942
+          assert d['source_file_metadata_id']==4576411
+          assert d['counts']['row_count']>0
+          assert d['individual_ids_or_row_values_exported'] is False
+          assert d['author_source_byte_and_firstline_identical_to_dryad_v6'] is True
+          for k in ('surveyed_zero_panel_verified','as_of_t_predictor_availability_verified','directed_colonization_or_migration_scored','independent_heldout_benchmark_qualified','ecological_endpoint_authorized'):
+              assert d[k] is False
+          assert set(d['counts'])==set(json.loads(
+              Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_direct_observation_qc_protocol_v1.json').read_text()
+          )['allowed_output_aggregates'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2026-AGGREGATE-ID-DATE-STAGE-QC-NO-ROW-OUTPUT-v1
+          path: build/helgeland-2026-structural-encounter-qc-v1.json
+          if-no-files-found: warn
