@@ -1,0 +1,41 @@
+{
+  "schema": "eog.helgeland.2026.two_file_byte_parity.frozen_observed_v1",
+  "status": "TWO_PUBLIC_UPSTREAM_BYTE_HASHES_MATCH_DRYAD_V6_REGISTERED_DIGESTS",
+  "authority": {
+    "workflow_run_id": 37795492702,
+    "artifact_id": 11558253288,
+    "artifact_name": "HELGELAND-2026-TWO-PUBLIC-FILES-HASH-ONLY-v1",
+    "artifact_zip_sha256": "7b54626ccbfc00a59a977f13299f31a528b3daa5d4c7ee80197df110d26ad8a3",
+    "run_commit": "dbbd1568cac3d9548056cc4e411426998a06a0fe",
+    "github_upstream_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+  },
+  "dryad_doi": "10.5061/dryad.rr4xgxdnq",
+  "dryad_version_id": 421942,
+  "github_upstream_repo": "torhanssonfrank/DensityRegulationHouseSparrows",
+  "files": [
+    {
+      "github_path": "Data/presence_data_1994_2022.txt",
+      "dryad_name": "presence_data_1994_2022_ECY25-1341.txt",
+      "dryad_file_id": 4576411,
+      "byte_count": 3523152,
+      "size_match": true,
+      "sha256_match": true
+    },
+    {
+      "github_path": "Data/estimated_pop_sizes_nestling_to_adult_model_with_lurøy_onøy.txt",
+      "dryad_name": "estimated_pop_sizes_nestling_to_adult_model_with_lurøy_onøy_ECY25-1341.txt",
+      "dryad_file_id": 4576413,
+      "byte_count": 24027,
+      "size_match": true,
+      "sha256_match": true
+    }
+  ],
+  "whole_github_source_bytes_hashed": true,
+  "biological_rows_decoded_or_scored": false,
+  "physical_headers_decoded": false,
+  "source_files_verified_beyond_two": false,
+  "surveyed_zero_panel_verified": false,
+  "as_of_t_processing_verified": false,
+  "directional_movement_event_verified": false,
+  "ecological_endpoint_authorized": false
+}
