@@ -1,0 +1,101 @@
+{
+  "schema": "eog.helgeland.public_dryad_api_inventory.frozen_observed_v1",
+  "status": "SOURCE_METADATA_RETRIEVED_AND_PINNED__NO_FILE_BYTES_VERIFIED",
+  "authority": {
+    "run_id": 37773617718,
+    "artifact_id": 11549730385,
+    "artifact_name": "HELGELAND-Dryad-PUBLIC-JSON-METADATA-NO-BIRD-DATA-v1",
+    "artifact_zip_sha256": "c88e93163634701b7df4ae7aa65955d76d413f0907425c9e2d1bdfb3ad7e9ee4",
+    "run_commit": "cb77caa5a4e3cca1c9f1c4797b4851ba747079ad"
+  },
+  "inventories": {
+    "fitness_2025": {
+      "doi": "10.5061/dryad.qfttdz0sx",
+      "dryad_dataset_id": 153974,
+      "dryad_version_id": 354268,
+      "dryad_version_number": 2,
+      "files": [
+        {
+          "name": "ARS_Survival.txt",
+          "file_metadata_id": 3972792,
+          "size_bytes": 220060,
+          "source_declared_sha256": "6cdc608d8e58c5ac27bd9ba2109f07d466499ee62183a35ecf5483774980a9a5"
+        },
+        {
+          "name": "LRS.txt",
+          "file_metadata_id": 3972793,
+          "size_bytes": 43026,
+          "source_declared_sha256": "fcaaad56f57ded808b7f1b8fb356c4e7d791739fd5e24b7e7918ff73d4cfff96"
+        },
+        {
+          "name": "README.md",
+          "file_metadata_id": 3972801,
+          "size_bytes": 3944,
+          "source_declared_sha256": "6bd9d0dce689f414f6373bfcc36f374c1be51c8bfdc15a401c5aa1af555db785"
+        },
+        {
+          "name": "Rectype_ARS_Survival.txt",
+          "file_metadata_id": 3972794,
+          "size_bytes": 141028,
+          "source_declared_sha256": "6cd10629ec266b50bf6964f2192e7ebc62556b9b0418c1f8e5222b09f817e7b5"
+        },
+        {
+          "name": "Rectype_LRS.txt",
+          "file_metadata_id": 3972795,
+          "size_bytes": 30984,
+          "source_declared_sha256": "869df4a14ebace30dc915cec3b0e655ddae94dd83ad0256ddc971a9126a94b4e"
+        }
+      ]
+    },
+    "pedigree_2024": {
+      "doi": "10.5061/dryad.80gb5mkxh",
+      "dryad_dataset_id": 125726,
+      "dryad_version_id": 278334,
+      "dryad_version_number": 3,
+      "files": [
+        {
+          "name": "GGAM_data_GeneticArchitecture.txt",
+          "file_metadata_id": 2914962,
+          "size_bytes": 166994,
+          "source_declared_sha256": "afe71a036a1dc056fed5fc1342ec58fbb04851b036c3c653da9ae26e9a294d18"
+        },
+        {
+          "name": "GWAS_data_genotype_GeneticArchitecture.raw",
+          "file_metadata_id": 2914961,
+          "size_bytes": 362644229,
+          "source_declared_sha256": "7cd59adafbe9d3682bcce743e1ef3d115f2a4fe85ee21ca58dcca5731d52860b"
+        },
+        {
+          "name": "GWAS_data_phenotype_GeneticArchitecture.dat",
+          "file_metadata_id": 2914963,
+          "size_bytes": 61712,
+          "source_declared_sha256": "7ed98fd29ac3b5bc672ff349c9b41e4d5f62fe7f682f676afc042153852cd10e"
+        },
+        {
+          "name": "README.md",
+          "file_metadata_id": 2914969,
+          "size_bytes": 2830,
+          "source_declared_sha256": "b1b8fd74bff1b3bc8cf94633b7bed5257a5b9775374c41ac53e68a0f0db59c8e"
+        },
+        {
+          "name": "SNPpedigree_GeneticArchitecture.txt",
+          "file_metadata_id": 2914960,
+          "size_bytes": 72475,
+          "source_declared_sha256": "32aa7cbea6afe90cda3ae5463bf27602f5d2d95532db23f49ba24f761324b5f8"
+        }
+      ]
+    }
+  },
+  "qualifier": {
+    "registered_digests_are_source_declared": true,
+    "actual_file_bytes_downloaded": false,
+    "independent_sha256_byte_verification": false,
+    "physical_headers_verified": false,
+    "individual_bird_ID_join_verified": false,
+    "bird_genotype_fitness_rows_opened": false,
+    "early_source_claim_verified": false,
+    "source_loss_recolonization_verified": false,
+    "ecology_endpoint_authorized": false
+  },
+  "interpretation": "Version 2 of Dryad 10.5061/dryad.qfttdz0sx and version 3 of 10.5061/dryad.80gb5mkxh each expose five named files and source-declared SHA-256 values. The SHA strings are API declarations only; exact physical headers, individual+island crosswalk and source-origin biological claims remain HOLD."
+}

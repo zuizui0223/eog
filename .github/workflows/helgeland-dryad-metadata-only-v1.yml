@@ -1,0 +1,81 @@
+name: Helgeland Dryad source metadata only
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-dryad-metadata-only-v1.yml'
+      - 'scripts/audit_helgeland_dryad_api_inventory_v1.py'
+      - 'tests/test_helgeland_dryad_api_inventory_v1.py'
+      - 'docs/eog_helgeland_dryad_inventory_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-dryad-metadata-only-v1.yml'
+      - 'scripts/audit_helgeland_dryad_api_inventory_v1.py'
+      - 'tests/test_helgeland_dryad_api_inventory_v1.py'
+      - 'docs/eog_helgeland_dryad_inventory_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json'
+
+concurrency:
+  group: helgeland-dryad-json-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  readonly-public-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install offline tests
+        run: python -m pip install pytest
+      - name: Prove endpoint allowlist and fail-closed metadata contract
+        run: python -m pytest -q tests/test_helgeland_dryad_api_inventory_v1.py
+      - name: Query only the public JSON metadata endpoints
+        run: |
+          python scripts/audit_helgeland_dryad_api_inventory_v1.py \
+            --verify-frozen validation/eog_virtual_world_ecology_synthesis_v1/helgeland_source_metadata_frozen_v1.json \
+            --output build/helgeland-dryad-metadata-inventory-v1.json
+      - name: Confirm not one bird/genotype/fitness row was opened
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('build/helgeland-dryad-metadata-inventory-v1.json').read_text())
+          assert x['schema']=='eog.helgeland.public_dryad_api_inventory.v1'
+          assert x['stage']=='SOURCE_METADATA_ONLY'
+          assert x['overall_status'] in (
+              'METADATA_INVENTORIES_RETRIEVED','HOLD_INCOMPLETE_METADATA_INVENTORY'
+          )
+          assert x['new_eog_endpoint_authorized'] is False
+          assert x['source_declared_digest_is_independent_byte_verification'] is False
+          assert x['raw_biological_data_opened'] is False
+          assert x['frozen_identity_check']['source_version_identity']=='MATCHES_FROZEN_PUBLIC_DRYAD_METADATA'
+          assert x['frozen_identity_check']['qualified_to_read_biological_response'] is False
+          assert x['original_pr619_holds_unchanged'] is True
+          for source in x['datasets'].values():
+              assert source['status'] in (
+                  'SOURCE_DECLARED_INVENTORY_WITH_SHA256',
+                  'SOURCE_DECLARED_INVENTORY_DIGEST_UNQUALIFIED',
+                  'METADATA_TRANSPORT_OR_SCHEMA_STOP'
+              )
+              assert source['bird_island_join_verified'] is False
+              if 'files' in source:
+                  assert source['source_archive_downloaded'] is False
+                  assert source['physical_headers_verified'] is False
+                  for f in source['files']:
+                      assert f['actual_file_bytes_downloaded'] is False
+                      assert f['actual_file_header_read'] is False
+                      assert f['actual_digest_verified_against_downloaded_bytes'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HELGELAND-Dryad-PUBLIC-JSON-METADATA-NO-BIRD-DATA-v1
+          path: build/helgeland-dryad-metadata-inventory-v1.json
+          if-no-files-found: error
