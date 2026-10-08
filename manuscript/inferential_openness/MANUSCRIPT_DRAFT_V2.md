@@ -18,7 +18,7 @@ Yet reuse is always reuse **for something**. A file can be openly downloadable, 
 
 These are not ordinary model-performance failures. They occur before, or logically upstream of, the point where predictive or biological evidence can be scored.
 
-Open-science practice creates an opportunity to measure those barriers. Adaptive preregistration has recently been advocated for model-based ecology because ecological analyses often involve sequential decisions rather than a single fixed hypothesis test (Wintle & Rumpff 2026). If those decision points, information barriers and stopping rules are committed before focal outcomes are viewed, a terminal STOP becomes an observable state of the scientific workflow rather than an invisible abandoned attempt.
+Open-science practice creates an opportunity to measure those barriers. Adaptive preregistration has recently been advocated for model-based ecology because ecological analyses often involve sequential decisions rather than a single fixed hypothesis test (Gould et al. 2026). If those decision points, information barriers and stopping rules are committed before focal outcomes are viewed, a terminal STOP becomes an observable state of the scientific workflow rather than an invisible abandoned attempt.
 
 Data-quality and data-reuse scholarship already emphasizes that usefulness is context dependent: a resource may be FAIR or technically reusable without being fit for a particular scientific purpose. We therefore do not present claim-specific suitability itself as a new concept. We use **inferential openness** for a narrower, operational question: whether a data–claim pairing permits the required evidence chain to be reconstructed under a declared information-access order, without importing the outcome that the workflow is meant to evaluate. The novelty we test is prospective measurability of that boundary—whether precommitted STOP rules turn otherwise invisible abandoned reuse attempts into a finite empirical denominator. Inferential openness is not an additional FAIR principle or a permanent scalar quality score attached to a dataset.
 
@@ -205,7 +205,7 @@ The denominator exists because stopping rules were enforced.
 
 If a failed archive route were silently replaced by a different download path, if a registry mismatch were repaired after reading the response, or if a zero were redefined after observing its consequences, those attempts would disappear from the visible scientific record.
 
-Adaptive preregistration provides a natural framework for ecology because model-based research often contains conditional decisions (Wintle & Rumpff 2026). Our audits show a complementary benefit: when information-order rules are preserved, terminal states can be studied empirically.
+Adaptive preregistration provides a natural framework for ecology because model-based research often contains conditional decisions (Gould et al. 2026). Our audits show a complementary benefit: when information-order rules are preserved, terminal states can be studied empirically.
 
 This is the feature that distinguishes the present audit from a retrospective fitness-for-purpose checklist. The denominator contains not only resources that ultimately supported analysis, but also prospectively retained attempts that stopped before outcome scoring. Their terminal layer is therefore observable rather than reconstructed from memory after success or failure.
 
@@ -274,9 +274,9 @@ A permanent archival DOI for the final author-approved submission bundle will be
 
 ## References
 
-Bishop, B.W., Hank, C., Webster, J. & Howard, R. (2019). Scientists' data discovery and reuse behavior: (Meta)data fitness for use and the FAIR data principles. *Proceedings of the Association for Information Science and Technology*. https://doi.org/10.1002/pra2.4
+Bishop, B.W., Hank, C., Webster, J. & Howard, R. (2019). Scientists' data discovery and reuse behavior: (Meta)data fitness for use and the FAIR data principles. *Proceedings of the Association for Information Science and Technology*, 56, 21–31. https://doi.org/10.1002/pra2.4
 
-Bokulich, A. & Parker, W. (2021). Data models, representation and adequacy-for-purpose. *European Journal for Philosophy of Science*, 11. https://doi.org/10.1007/s13194-020-00345-2
+Bokulich, A. & Parker, W. (2021). Data models, representation and adequacy-for-purpose. *European Journal for Philosophy of Science*, 11, 31. https://doi.org/10.1007/s13194-020-00345-2
 
 Jantzen, C.C. & Vriend, S.J.G. (2026). Putting FAIR into practice for ecologists: How to make ecological data more reusable. *Ecological Informatics*, 95, 103712. https://doi.org/10.1016/j.ecoinf.2026.103712
 
@@ -286,4 +286,4 @@ Säurich, J., Schwieder, M., Preidl, S., Beyer, F. & Möller, M. (2026). Are rem
 
 Wilkinson, M.D. et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. *Scientific Data*, 3, 160018. https://doi.org/10.1038/sdata.2016.18
 
-Wintle, B.C. & Rumpff, L. (2026). ‘But I can't preregister my research’: Improving the reproducibility and transparency of ecology and conservation with adaptive preregistration for model-based research. *Methods in Ecology and Evolution*, 17, 1768–1787. https://doi.org/10.1111/2041-210X.70311
+Gould, E., Jones, C.S., Yen, J.D.L., Fraser, H.S., Wootton, H.F., Good, M.K., Duncan, D.H., Hauser, C.E., Wintle, B.C. & Rumpff, L. (2026). ‘But I can't preregister my research’: Improving the reproducibility and transparency of ecology and conservation with adaptive preregistration for model-based research. *Methods in Ecology and Evolution*, 17, 1768–1787. https://doi.org/10.1111/2041-210X.70311
