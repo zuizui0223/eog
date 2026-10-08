@@ -182,6 +182,7 @@ def graphical_abstract(out):
     p.append('<text x="870" y="370" text-anchor="middle" class="mid">Unresolved non-detection ≠ biological absence</text>')
 
     p.append('<text x="600" y="500" text-anchor="middle" class="mid">Prospective STOP rules make normally invisible abandoned reuse attempts measurable.</text>')
+    p.append('</g>')
     write_svg(out/"graphical_abstract_inferential_openness.svg",p)
 
 
