@@ -1,0 +1,45 @@
+{
+  "schema": "eog.virtual_world_ecology.external_metadata_candidate.v1",
+  "status": "METADATA_ONLY_NOT_RESPONSE_QUALIFIED",
+  "source": "Dryad 10.5061/dryad.9p8cz8wc6",
+  "publication_doi": "10.1111/1365-2745.13361",
+  "scientific_name": "Lepanthes rupestris",
+  "metadata_sources": [
+    "https://datadryad.org/dataset/doi%3A10.5061/dryad.9p8cz8wc6",
+    "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2745.13361",
+    "https://rdrr.io/github/andrewmarx/ecodata/man/lepanthes_rupestris.html"
+  ],
+  "metadata_facts": {
+    "area": "Luquillo Experimental Forest, Puerto Rico",
+    "patches_reported": 975,
+    "primary_year_start": 1999,
+    "primary_year_end": 2008,
+    "advertised_file": "lepa_all.csv",
+    "advertised_size_kb_approx": 84.83,
+    "patch_coordinates_in_published_dictionary": true,
+    "multiple_within_year_visits_reported": true,
+    "source_observation_semantics_reviewed": false,
+    "patchwise_detection_replicates_qualified": false,
+    "prior_publication_exposed_directional_connectivity_conclusion": true
+  },
+  "integrity": {
+    "focal_csv_downloaded_in_this_audit": false,
+    "response_rows_opened_in_this_audit": false,
+    "source_registration_qualified": false,
+    "physical_schema_verified_from_pinned_bytes": false,
+    "independent_detection_calibration_verified": false,
+    "current_data_analysis_authorized": false,
+    "prospective_confirmatory_status": false
+  },
+  "proposed_response_blind_requirements": [
+    "Freeze immutable source bytes, checksum and independent physical CSV header before opening any focal biological data rows.",
+    "Recover patch register, coordinate reference, unique UID mapping and all census visit opportunities without using occupancy outcomes.",
+    "Determine whether repeated within-year visits separate survey effort from imperfect detection, and document missing visits vs confirmed nondetection.",
+    "Freeze baseline model with asymmetric distance/wind connectivity, moss area, phorophyte type, temporal/climate effects and detection.",
+    "Only after these gates freeze time split, event eligibility, source/recipient roles, source-loss definition, added EOG terms and terminal stop rules.",
+    "When outcomes open, score genuinely held-out colonization/recolonization rather than simulated graph reachability as biological success."
+  ],
+  "primary_novelty_gate": "Must beat a strong graph/dynamic-occupancy comparator already represented by the 2020 source paper; a simple connectivity effect is prior art.",
+  "caution": "This is not a randomized source-loss intervention; apparent source loss can reflect nondetection or demographic/environmental differences. Do not call it causal insurance.",
+  "go_no_go": "HOLD_FOR_RESPONSE_BLIND_SCHEMA_AND_DETECTION_AUDIT"
+}

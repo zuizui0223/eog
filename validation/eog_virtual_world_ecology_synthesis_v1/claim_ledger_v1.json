@@ -1,0 +1,640 @@
+{
+  "schema": "eog.virtual_world_source_geometry_synthesis.v1",
+  "status": "post_result_cross_phase_audit_only",
+  "scope": "Frozen virtual-world EOG panels, not a pooled independent empirical sample or new preregistered joint experiment",
+  "base_main_commit": "2fe57d26888c96e1eb38e1c97e19625d55df3587",
+  "preregistered_joint_test": false,
+  "new_simulations_run": false,
+  "paper_decision": "NO_NEW_MANUSCRIPT_LANE_without_independent_ecological_validation",
+  "panel_dependency": "Phases v18-v26 reuse related synthetic landscapes and derived source histories; do not sum denominators or treat phase comparisons as independent replications",
+  "source_summaries": [
+    {
+      "phase": "v10",
+      "path": "validation/eog_original_idea_marginal_topology_v10/result_summary_v10.json",
+      "git_blob_sha": "b36dae775a5a55fbc7c5a182115ad3d0c11c9b1f",
+      "result_fingerprint": "d6cf5404bfb8e7a4eb9efba26f3f7e19fe8b9b6c7fb2c28e6c2989e64879f669",
+      "authoritative_run": 37175455880,
+      "protocol": "validation/eog_original_idea_marginal_topology_v10/protocol_v10.json",
+      "observations": [
+        {
+          "name": "replicates",
+          "json_path": [
+            "row_count"
+          ],
+          "expected": 192
+        },
+        {
+          "name": "knockout_retained_chain_14",
+          "json_path": [
+            "by_active_node_count",
+            "14",
+            "mean_knockout_retained_fraction",
+            "chain"
+          ],
+          "expected": 0.5384615384615384
+        },
+        {
+          "name": "knockout_retained_star_14",
+          "json_path": [
+            "by_active_node_count",
+            "14",
+            "mean_knockout_retained_fraction",
+            "star"
+          ],
+          "expected": 1
+        },
+        {
+          "name": "critical_nodes_chain_14",
+          "json_path": [
+            "by_active_node_count",
+            "14",
+            "mean_critical_node_count",
+            "chain"
+          ],
+          "expected": 12
+        },
+        {
+          "name": "critical_nodes_star_14",
+          "json_path": [
+            "by_active_node_count",
+            "14",
+            "mean_critical_node_count",
+            "star"
+          ],
+          "expected": 0
+        }
+      ]
+    },
+    {
+      "phase": "v12",
+      "path": "validation/eog_original_idea_random_topology_v12/result_summary_v12.json",
+      "git_blob_sha": "f04d6f54d7c9366d93d65206c7fbbbc641df2dd7",
+      "result_fingerprint": "c46247958fa5fbd7482b9feb99b6b2e280ff06771eb1019680e91af6e5bcd4aa",
+      "authoritative_run": 37176297082,
+      "protocol": "validation/eog_original_idea_random_topology_v12/protocol_v12.json",
+      "observations": [
+        {
+          "name": "replicates",
+          "json_path": [
+            "row_count"
+          ],
+          "expected": 144
+        },
+        {
+          "name": "worlds_per_row",
+          "json_path": [
+            "worlds_per_row"
+          ],
+          "expected": 12
+        },
+        {
+          "name": "edge_robustness_spearman",
+          "json_path": [
+            "pooled_spearman",
+            "edge_count_vs_knockout_retained_fraction"
+          ],
+          "expected": 0.7499528475510406
+        },
+        {
+          "name": "edge_firstpassage_spearman",
+          "json_path": [
+            "pooled_spearman",
+            "edge_count_vs_mean_first_passage_depth"
+          ],
+          "expected": -0.4050532183364031
+        },
+        {
+          "name": "at12node_full_relation_identity_rows",
+          "json_path": [
+            "by_active_node_count",
+            "12",
+            "relation_target_classes",
+            "12"
+          ],
+          "expected": 48
+        }
+      ]
+    },
+    {
+      "phase": "v18",
+      "path": "validation/eog_original_idea_source_placement_v18/result_summary_v18.json",
+      "git_blob_sha": "b6207de6a8da6367a9ca2500d54c8b9126842d61",
+      "result_fingerprint": "f039164f427f52f3d8b0ebd78705056c723689933a96cfd5740417f0f8f90089",
+      "authoritative_run": 37251518108,
+      "protocol": "validation/eog_original_idea_source_placement_v18/protocol_v18.json",
+      "observations": [
+        {
+          "name": "landscapes",
+          "json_path": [
+            "row_count"
+          ],
+          "expected": 384
+        },
+        {
+          "name": "clustered_2_coverage",
+          "json_path": [
+            "mean_profiles",
+            "clustered",
+            "2_sources",
+            "coverage"
+          ],
+          "expected": 0.4041771190597578
+        },
+        {
+          "name": "dispersed_2_coverage",
+          "json_path": [
+            "mean_profiles",
+            "dispersed",
+            "2_sources",
+            "coverage"
+          ],
+          "expected": 0.4454058265058117
+        },
+        {
+          "name": "clustered_2_insurance",
+          "json_path": [
+            "mean_profiles",
+            "clustered",
+            "2_sources",
+            "worst_source_loss_retention"
+          ],
+          "expected": 0.6933192815911929
+        },
+        {
+          "name": "dispersed_2_insurance",
+          "json_path": [
+            "mean_profiles",
+            "dispersed",
+            "2_sources",
+            "worst_source_loss_retention"
+          ],
+          "expected": 0.26414472253441
+        },
+        {
+          "name": "clustered_2_overlap",
+          "json_path": [
+            "mean_profiles",
+            "clustered",
+            "2_sources",
+            "multi_source_overlap"
+          ],
+          "expected": 0.6402527720370431
+        },
+        {
+          "name": "dispersed_2_overlap",
+          "json_path": [
+            "mean_profiles",
+            "dispersed",
+            "2_sources",
+            "multi_source_overlap"
+          ],
+          "expected": 0.07785919158710324
+        },
+        {
+          "name": "coverage_insurance_tradeoff_rows",
+          "json_path": [
+            "row_level_counts",
+            "coverage_insurance_tradeoff"
+          ],
+          "expected": 280
+        },
+        {
+          "name": "two_dispersed_gt_three_clustered_rows",
+          "json_path": [
+            "row_level_counts",
+            "two_dispersed_sources_cover_more_than_three_clustered_sources"
+          ],
+          "expected": 225
+        }
+      ]
+    },
+    {
+      "phase": "v19",
+      "path": "validation/eog_original_idea_source_confluence_v19/result_summary_v19.json",
+      "git_blob_sha": "e49b6cb8552a23bbd9ff22c8182ef545a0c3ad94",
+      "result_fingerprint": "a1a4bcf4a8e6f91888f41e9f14826c662da66b869348c14ed8592b411636fd2d",
+      "authoritative_run": 37252018824,
+      "protocol": "validation/eog_original_idea_source_confluence_v19/protocol_v19.json",
+      "observations": [
+        {
+          "name": "landscapes",
+          "json_path": [
+            "row_count"
+          ],
+          "expected": 384
+        },
+        {
+          "name": "clustered_2_ambiguous_fraction",
+          "json_path": [
+            "summary_by_design_and_source_count",
+            "clustered",
+            "2",
+            "mean_static_ambiguous_fraction"
+          ],
+          "expected": 0.6402527720370431
+        },
+        {
+          "name": "dispersed_2_ambiguous_fraction",
+          "json_path": [
+            "summary_by_design_and_source_count",
+            "dispersed",
+            "2",
+            "mean_static_ambiguous_fraction"
+          ],
+          "expected": 0.07785919158710324
+        },
+        {
+          "name": "clustered_2_timing_resolved",
+          "json_path": [
+            "summary_by_design_and_source_count",
+            "clustered",
+            "2",
+            "mean_temporally_resolved_fraction_of_static_ambiguity"
+          ],
+          "expected": 0.8520213204733924
+        },
+        {
+          "name": "dispersed_2_timing_resolved",
+          "json_path": [
+            "summary_by_design_and_source_count",
+            "dispersed",
+            "2",
+            "mean_temporally_resolved_fraction_of_static_ambiguity"
+          ],
+          "expected": 0.9295570348454963
+        }
+      ]
+    },
+    {
+      "phase": "v20",
+      "path": "validation/eog_original_idea_source_turnover_v20/result_summary_v20.json",
+      "git_blob_sha": "c2741baca3e0d00db0b94938da9d77b50f93c090",
+      "result_fingerprint": "39d9ab48d9260f325eb802abcbf237e451e36128208148b079735237221f30ad",
+      "authoritative_run": 37252676696,
+      "protocol": "validation/eog_original_idea_source_turnover_v20/protocol_v20.json",
+      "observations": [
+        {
+          "name": "design_rows",
+          "json_path": [
+            "global_counts",
+            "design_rows"
+          ],
+          "expected": 768
+        },
+        {
+          "name": "replacement_changes_coverage",
+          "json_path": [
+            "global_counts",
+            "arrangement_difference_design_rows"
+          ],
+          "expected": 718
+        },
+        {
+          "name": "all_strategies_below_original",
+          "json_path": [
+            "global_counts",
+            "all_three_strategies_below_original_design_rows"
+          ],
+          "expected": 352
+        },
+        {
+          "name": "overshoot_cases",
+          "json_path": [
+            "global_counts",
+            "coverage_overshoot_strategy_cases"
+          ],
+          "expected": 407
+        }
+      ]
+    },
+    {
+      "phase": "v21",
+      "path": "validation/eog_original_idea_source_history_memory_v21/result_summary_v21.json",
+      "git_blob_sha": "c8340b16f660ee652bfff2f8306e28e276736a1c",
+      "result_fingerprint": "40d349a8b134c72add0cd4aeb757b569654d45a519c2efcfe9114a1584dfdd25",
+      "authoritative_run": 37253585524,
+      "protocol": "validation/eog_original_idea_source_history_memory_v21/protocol_v21.json",
+      "observations": [
+        {
+          "name": "design_rows",
+          "json_path": [
+            "design_row_count"
+          ],
+          "expected": 768
+        },
+        {
+          "name": "equilibrium_occupancy_equality_violations",
+          "json_path": [
+            "global_results",
+            "equilibrium_occupancy_equality_violations"
+          ],
+          "expected": 0
+        },
+        {
+          "name": "equilibrium_provenance_diff_rows",
+          "json_path": [
+            "global_results",
+            "design_rows_with_equilibrium_provenance_difference"
+          ],
+          "expected": 507
+        },
+        {
+          "name": "clustered_provenance_disagreement",
+          "json_path": [
+            "by_source_geometry",
+            "clustered",
+            "mean_provenance_disagreement_fraction"
+          ],
+          "expected": 0.7112274402713598
+        },
+        {
+          "name": "dispersed_provenance_disagreement",
+          "json_path": [
+            "by_source_geometry",
+            "dispersed",
+            "mean_provenance_disagreement_fraction"
+          ],
+          "expected": 0.10557874997581577
+        }
+      ]
+    },
+    {
+      "phase": "v22",
+      "path": "validation/eog_original_idea_history_observability_v22/result_summary_v22.json",
+      "git_blob_sha": "6fe9bf1857e3d93de5084a1bc6bce3a4682ad27f",
+      "result_fingerprint": "3436235e0cc96b14088c27377a79b057b1018c74e71edbd48bac0a83e8a9e9dd",
+      "authoritative_run": 37261490070,
+      "protocol": "validation/eog_original_idea_history_observability_v22/protocol_v22.json",
+      "observations": [
+        {
+          "name": "design_rows",
+          "json_path": [
+            "design_row_count"
+          ],
+          "expected": 768
+        },
+        {
+          "name": "clustered_history_identifiable",
+          "json_path": [
+            "summary_by_design",
+            "clustered",
+            "full_history_identifiable_rows"
+          ],
+          "expected": 231
+        },
+        {
+          "name": "dispersed_history_identifiable",
+          "json_path": [
+            "summary_by_design",
+            "dispersed",
+            "full_history_identifiable_rows"
+          ],
+          "expected": 348
+        },
+        {
+          "name": "clustered_min_snapshots_if_identifiable",
+          "json_path": [
+            "summary_by_design",
+            "clustered",
+            "mean_full_history_minimum_snapshots_among_identifiable"
+          ],
+          "expected": 1
+        },
+        {
+          "name": "dispersed_min_snapshots_if_identifiable",
+          "json_path": [
+            "summary_by_design",
+            "dispersed",
+            "mean_full_history_minimum_snapshots_among_identifiable"
+          ],
+          "expected": 1
+        },
+        {
+          "name": "earlier_timing_beats_t8_rows",
+          "json_path": [
+            "global_results",
+            "earlier_snapshot_resolves_while_t8_fails_design_rows"
+          ],
+          "expected": 428
+        },
+        {
+          "name": "full_history_unresolved",
+          "json_path": [
+            "global_results",
+            "full_history_unresolved_design_rows"
+          ],
+          "expected": 189
+        }
+      ]
+    },
+    {
+      "phase": "v26",
+      "path": "validation/eog_original_idea_history_to_state_process_family_v26/result_summary_v26.json",
+      "git_blob_sha": "bfcb0414c682be5ba04afa1fcc3736b0bc8fb98d",
+      "result_fingerprint": "90096f149d2a3c71b4a00283cef2b1470a7501bbffc6ce39c79fac33540ce27e",
+      "authoritative_run": 37263945496,
+      "protocol": "validation/eog_original_idea_history_to_state_process_family_v26/protocol_v26.json",
+      "observations": [
+        {
+          "name": "design_rows",
+          "json_path": [
+            "design_row_count"
+          ],
+          "expected": 768
+        },
+        {
+          "name": "blind_memory_rows",
+          "json_path": [
+            "process_summary",
+            "history_blind_occupancy",
+            "design_rows_with_history_memory"
+          ],
+          "expected": 0
+        },
+        {
+          "name": "threshold_memory_rows",
+          "json_path": [
+            "process_summary",
+            "persistent_threshold_lag2",
+            "design_rows_with_history_memory"
+          ],
+          "expected": 726
+        },
+        {
+          "name": "transient_memory_rows",
+          "json_path": [
+            "process_summary",
+            "transient_window_age1_2",
+            "design_rows_with_history_memory"
+          ],
+          "expected": 726
+        },
+        {
+          "name": "transient_affected_node_fraction",
+          "json_path": [
+            "process_summary",
+            "transient_window_age1_2",
+            "history_dependent_node_fraction"
+          ],
+          "expected": 0.45831475702184576
+        },
+        {
+          "name": "threshold_affected_node_fraction",
+          "json_path": [
+            "process_summary",
+            "persistent_threshold_lag2",
+            "history_dependent_node_fraction"
+          ],
+          "expected": 0.2742978154257691
+        },
+        {
+          "name": "threshold_hidden_age_aliases_detected",
+          "json_path": [
+            "process_summary",
+            "persistent_threshold_lag2",
+            "v24_hidden_age_residual_rows_detected"
+          ],
+          "expected": 12
+        },
+        {
+          "name": "transient_hidden_age_aliases_detected",
+          "json_path": [
+            "process_summary",
+            "transient_window_age1_2",
+            "v24_hidden_age_residual_rows_detected"
+          ],
+          "expected": 45
+        },
+        {
+          "name": "claim_process_incidence_changes",
+          "json_path": [
+            "predeclared_verdicts",
+            "P5_process_choice_changes_whether_history_is_ecologically_visible"
+          ],
+          "expected": "REFUTED"
+        },
+        {
+          "name": "claim_richer_recovers_threshold_hidden",
+          "json_path": [
+            "predeclared_verdicts",
+            "P6_a_richer_age_process_recovers_some_threshold_hidden_history"
+          ],
+          "expected": "REFUTED"
+        }
+      ]
+    }
+  ],
+  "admissible_claims": [
+    {
+      "id": "A",
+      "claim": "Within v18's fixed 384 synthetic landscapes, dispersed source placement increased union coverage while clustered placement increased overlap and worst-source-loss insurance.",
+      "status": "supported_in_frozen_generator",
+      "evidence": [
+        "v18"
+      ],
+      "not": "General law of metapopulation resilience or viability."
+    },
+    {
+      "id": "B",
+      "claim": "Restoring the original source count did not guarantee returning to original geographic coverage in v20's fixed turnover protocol.",
+      "status": "supported_in_frozen_generator",
+      "evidence": [
+        "v20"
+      ],
+      "not": "Field recolonization probability, reproductive output or population persistence."
+    },
+    {
+      "id": "C",
+      "claim": "Source basin confluence produced more ambiguous static source provenance for clustered placement; the history-identification rate was higher for dispersed placement in the v22 observation library.",
+      "status": "supported_in_related_synthetic_panels",
+      "evidence": [
+        "v19",
+        "v21",
+        "v22"
+      ],
+      "not": "One preregistered three-way coverage-insurance-observability mediation test or a universal detection phenomenon."
+    },
+    {
+      "id": "D",
+      "claim": "Identical static occupied-node maps can hide distinct directed relations and different single-node removal responses.",
+      "status": "constructive_and_randomized_known_truth",
+      "evidence": [
+        "v10",
+        "v12"
+      ],
+      "not": "A new theorem about ecological network redundancy, or empirical superiority over established connectivity models."
+    },
+    {
+      "id": "E",
+      "claim": "Final occupancy was identical across activation histories while provenance and age-sensitive ecological-state maps could differ, depending on the declared target mapping.",
+      "status": "supported_in_frozen_generator",
+      "evidence": [
+        "v21",
+        "v26"
+      ],
+      "not": "Measured adaptive fitness, causal plant/microbe mechanism or source-location effects on empirical ecological memory."
+    }
+  ],
+  "refused_or_unproven": [
+    {
+      "id": "R1",
+      "claim": "Dispersed source placement requires fewer snapshots conditional on exact-history identifiability.",
+      "status": "REFUTED_in_v22_Q3",
+      "evidence": [
+        "v22"
+      ],
+      "correct_read": "Identifiable-row frequency differed, but minimum snapshots conditional on identifiability were both one."
+    },
+    {
+      "id": "R2",
+      "claim": "Changing age-sensitive target mapping changes which design rows retain any history information.",
+      "status": "REFUTED_in_v26_P5",
+      "evidence": [
+        "v26"
+      ],
+      "correct_read": "All age-sensitive mappings had 726/768 memory-positive rows; they differed in affected node fractions and which hidden aliases the target distinguishes."
+    },
+    {
+      "id": "U1",
+      "claim": "A single preregistered empirical system validates the three-way source-placement effect on coverage, source-loss insurance and historical observability.",
+      "status": "NOT_TESTED",
+      "evidence": [],
+      "correct_read": "Do not infer the joint biological mechanism by juxtaposing distinct simulation phases."
+    },
+    {
+      "id": "U2",
+      "claim": "The original EOG source-placement trade-off exceeds established network-robustness baselines on a held-out ecological dataset.",
+      "status": "NOT_TESTED",
+      "evidence": [],
+      "correct_read": "Existing graph/connectivity ecology is direct prior art; no validated incremental ecological discovery yet."
+    }
+  ],
+  "scientific_stop": [
+    "No additional synthetic generator settings are to be selected based on the frozen outcomes.",
+    "Do not count the same landscape family in v18-v26 as independent replication.",
+    "Do not merge this synthesis as a new manuscript or override existing JBI BAM and Ecology Letters history-storage article boundaries.",
+    "A future confirmatory test requires independent source-node removal/turnover or recolonization evidence with response-independent registration and an observation process sufficient to separate nondetection and true absence."
+  ],
+  "literature_boundary": [
+    {
+      "title": "Indicators for assessing the robustness of metapopulations against habitat loss",
+      "doi": "10.1016/j.ecolind.2020.106809",
+      "point": "Network robustness to node/habitat loss and redundancy are established."
+    },
+    {
+      "title": "A comprehensive framework to assess multi-species landscape connectivity",
+      "doi": "10.1111/2041-210X.14444",
+      "point": "Graph/circuit connectivity and uncertainty are established, not EOG original algorithms."
+    },
+    {
+      "title": "Quantifying the impact of ecological memory on the dynamics of interacting communities",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9200327/",
+      "point": "Ecological memory affecting community dynamics and stability is established."
+    },
+    {
+      "title": "Community assembly: alternative stable states or alternative transient states?",
+      "doi": "10.1111/j.1461-0248.2011.01663.x",
+      "point": "Historical contingency can manifest differently in transient versus equilibrium states."
+    }
+  ]
+}
