@@ -135,11 +135,85 @@ def audit(fetch=api_json) -> dict:
         }
 
 
+
+FROZEN_PATH = Path(__file__).resolve().parents[1] / (
+    "validation/eog_virtual_world_ecology_synthesis_v1/"
+    "helgeland_2026_source_metadata_frozen_v1.json"
+)
+
+
+def verify_against_frozen(observed: dict, frozen: dict) -> dict:
+    """Check official public JSON against previously observed version/file identity.
+
+    This is source-reported metadata verification, not source-file-byte hashing.
+    """
+    if observed.get("schema") != SCHEMA or observed.get("status") != "PUBLIC_METADATA_IDENTITY_RETRIEVED_SHA256_DECLARED":
+        raise ValueError("Cannot verify frozen metadata without full official source JSON")
+    if frozen.get("schema") != "eog.helgeland.dryad_2026.source_metadata_frozen_observed_v1":
+        raise ValueError("Frozen source record schema mismatch")
+    if frozen.get("status") != "SOURCE_DECLARED_METADATA_FROZEN__NO_BIRD_BYTES_VERIFIED":
+        raise ValueError("Frozen source evidence level was modified")
+    for key in ("source_doi", "dryad_dataset_id", "dryad_version_id", "dryad_version_number"):
+        if observed.get(key) != frozen.get(key):
+            raise ValueError(f"Dryad 2026 source changed: {key}")
+    if len(observed.get("files", [])) != 18 or len(frozen.get("files", [])) != 18:
+        raise ValueError("Expected exactly 18 frozen and observed file records")
+    incoming = {
+        (x["name"], x["file_metadata_id"], x["size_bytes"],
+         x["source_declared_digest_type"], x["source_declared_digest"])
+        for x in observed["files"]
+    }
+    pinned = {
+        (x["name"], x["file_metadata_id"], x["size_bytes"],
+         x["source_declared_digest_type"], x["source_declared_sha256"])
+        for x in frozen["files"]
+    }
+    if incoming != pinned or len(incoming) != 18:
+        raise ValueError("Dryad 2026 metadata IDs, sizes or source-reported digests changed")
+    if not all(x["source_declared_sha256_well_formed"] for x in observed["files"]):
+        raise ValueError("SHA-256 source declaration incomplete")
+    if any(x["source_declared_digest_type"] != "sha-256" for x in observed["files"]):
+        raise ValueError("Unexpected source digest type")
+    for key in ("source_reported_sha256_is_independent_file_byte_verification",
+                "biological_data_opened", "physical_headers_verified",
+                "surveyed_zero_panel_verified", "as_of_t_record_availability_verified",
+                "ecological_endpoint_authorized"):
+        if frozen.get(key) is not False:
+            raise ValueError(f"Frozen claim boundary wrongly upgraded: {key}")
+    for key in ("raw_bird_data_downloaded", "individual_or_population_observations_read",
+                "surveyed_zero_panel_verified", "as_of_t_processing_verified",
+                "ecological_endpoint_authorized"):
+        if observed.get(key) is not False:
+            raise ValueError(f"Observed claim boundary wrongly upgraded: {key}")
+    return {
+        "status": "MATCHES_FROZEN_DRYAD_2026_V6_PUBLIC_JSON",
+        "file_count": 18,
+        "source_reported_digests_are_not_independent_byte_verification": True,
+        "bird_data_read": False,
+        "surveyed_zero_panel_verified": False,
+        "as_of_t_processing_verified": False,
+        "ecological_endpoint_authorized": False,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--verify-frozen", type=Path, default=None)
     args = parser.parse_args()
     result = audit()
+    if args.verify_frozen is not None:
+        frozen = json.loads(args.verify_frozen.read_text(encoding="utf-8"))
+        try:
+            result["frozen_identity_check"] = verify_against_frozen(result, frozen)
+        except ValueError as exc:
+            result["status"] = "HOLD_FROZEN_2026_METADATA_MISMATCH"
+            result["frozen_identity_check"] = {
+                "status": "HOLD_FROZEN_2026_METADATA_MISMATCH",
+                "reason": str(exc)[:160],
+                "bird_data_read": False,
+                "ecological_endpoint_authorized": False,
+            }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
                            encoding="utf-8")
