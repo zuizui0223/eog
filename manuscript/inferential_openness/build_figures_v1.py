@@ -137,7 +137,8 @@ def fig4(ledger,out):
     write_svg(out/"figure4_level_c_calibration_funnel.svg",p)
 
 def graphical_abstract(out):
-    p=svg_start(1500,600,"Graphical abstract: from public data to claim-ready inference")\n    p.append('<g transform="translate(150 20)">')
+    p=svg_start(1500,600,"Graphical abstract: from public data to claim-ready inference")
+    p.append('<g transform="translate(150 20)">')
     p.append('<text x="600" y="42" text-anchor="middle" class="big">Open data become claim-ready only when the evidence chain is reproducible</text>')
 
     stages=[
@@ -181,6 +182,7 @@ def graphical_abstract(out):
     p.append('<text x="870" y="370" text-anchor="middle" class="mid">Unresolved non-detection ≠ biological absence</text>')
 
     p.append('<text x="600" y="500" text-anchor="middle" class="mid">Prospective STOP rules make normally invisible abandoned reuse attempts measurable.</text>')
+    p.append('</g>')
     write_svg(out/"graphical_abstract_inferential_openness.svg",p)
 
 
