@@ -1,0 +1,64 @@
+{
+  "schema": "eog.helgeland.2026.april_boundary_postexposure_qc.v1",
+  "status": "POST_EXPOSURE_DIAGNOSTIC__NOT_AUTHOR_CONFIRMED__NO_ECOLOGICAL_SCORE",
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "version_id": 421942,
+    "source_file_id": 4576411,
+    "upstream_path": "Data/presence_data_1994_2022.txt",
+    "upstream_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+  },
+  "published_methods_context": {
+    "citation": "Husby et al. 2006 J Animal Ecology doi:10.1111/j.1365-2656.2006.01132.x",
+    "reported_rule": "Recruit classified after April 1 of following year",
+    "rule_applies_to_original_2026_Year_column": "NOT_CONFIRMED"
+  },
+  "prior_exposed_qc": {
+    "rows": 73593,
+    "discrepancies": 3517,
+    "january": 1007,
+    "february": 1180,
+    "march": 1330,
+    "april_december_mismatches": 0,
+    "delta_minus_one": 3517,
+    "invalid_dates": 0,
+    "invalid_years": 0
+  },
+  "candidate_rule": "observed_year=date.year-1 if date.month in {1,2,3} else date.year",
+  "input_columns_read": [
+    "date",
+    "Year"
+  ],
+  "output_aggregates_only": [
+    "total_rows",
+    "monthly_total_rows",
+    "jan_mar_minus_one",
+    "jan_mar_same_year",
+    "jan_mar_other_delta",
+    "apr_dec_same_year",
+    "apr_dec_any_mismatch",
+    "overall_candidate_mapping_disagreements",
+    "candidate_mapping_exact_on_all_rows"
+  ],
+  "prohibited": [
+    "individual_id",
+    "individual_date",
+    "island",
+    "sex",
+    "stage",
+    "genetic_estimate",
+    "migrants",
+    "dispersal_effect",
+    "model_score",
+    "corrected_Year_column",
+    "colonization_event"
+  ],
+  "claims": {
+    "exposure_blind": false,
+    "april_cutoff_semantics_author_confirmed": false,
+    "retrospective_date_recoding_authorized": false,
+    "prospective_predictors_qualified": false,
+    "surveyed_zero_panel_verified": false,
+    "ecological_endpoint_authorized": false
+  }
+}
