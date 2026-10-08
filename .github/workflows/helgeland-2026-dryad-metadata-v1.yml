@@ -1,0 +1,71 @@
+name: Helgeland 2026 Dryad PUBLIC JSON inventory
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2026-dryad-metadata-v1.yml'
+      - 'scripts/audit_helgeland_2026_dryad_metadata_v1.py'
+      - 'tests/test_helgeland_2026_dryad_metadata_v1.py'
+      - 'docs/eog_helgeland_2026_dryad_public_metadata_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2026-dryad-metadata-v1.yml'
+      - 'scripts/audit_helgeland_2026_dryad_metadata_v1.py'
+      - 'tests/test_helgeland_2026_dryad_metadata_v1.py'
+      - 'docs/eog_helgeland_2026_dryad_public_metadata_gate_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json'
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-json-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Offline synthetic metadata and forbidden URL negative controls
+        run: python -m pytest -q tests/test_helgeland_2026_dryad_metadata_v1.py
+      - name: Request official Dryad DOI JSON and version-scoped file-list JSON only
+        run: |
+          python scripts/audit_helgeland_2026_dryad_metadata_v1.py \
+            --verify-frozen validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2026_source_metadata_frozen_v1.json \
+            --output build/helgeland-2026-dryad-public-json-v1.json
+      - name: Check identity without allowing biological outcomes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          x=json.loads(Path('build/helgeland-2026-dryad-public-json-v1.json').read_text())
+          assert x['schema']=='eog.helgeland.dryad_2026.public_json_metadata.v1'
+          assert x['status']=='PUBLIC_METADATA_IDENTITY_RETRIEVED_SHA256_DECLARED'
+          assert x['frozen_identity_check']['status']=='MATCHES_FROZEN_DRYAD_2026_V6_PUBLIC_JSON'
+          assert x['dryad_version_id']==421942
+          assert x['dryad_version_number']==6
+          assert x['dryad_dataset_id']==177360
+          assert x['file_count']==18
+          assert x['raw_bird_data_downloaded'] is False
+          assert x['individual_or_population_observations_read'] is False
+          assert x['source_reported_digest_is_independent_byte_verification'] is False
+          assert x['surveyed_zero_panel_verified'] is False
+          assert x['as_of_t_processing_verified'] is False
+          assert x['ecological_endpoint_authorized'] is False
+          for f in x['files']:
+              assert f['source_declared_sha256_well_formed'] is True
+              assert f['file_bytes_downloaded'] is False
+              assert f['physical_header_read'] is False
+              assert f['biological_rows_read'] is False
+              assert f['digest_verified_against_file_bytes'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2026-DRYAD-PUBLIC-JSON-NO-BIRD-DATA-v1
+          path: build/helgeland-2026-dryad-public-json-v1.json
+          if-no-files-found: warn
