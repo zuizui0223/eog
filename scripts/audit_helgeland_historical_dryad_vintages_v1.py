@@ -107,7 +107,11 @@ def choose_asof_version(spec: dict, version_listing: dict) -> tuple[dict, list[d
 
 def qualify_file_inventory(spec: dict, chosen: dict, files: dict) -> dict:
     vid = chosen["version_id"]
-    if files.get("_links", {}).get("self", {}).get("href") != f"/api/v2/versions/{vid}/files":
+    # Dryad includes the validated per_page parameter in the self link.
+    # Never accept links to a different version or arbitrary pages.
+    self_href = files.get("_links", {}).get("self", {}).get("href")
+    if self_href not in (f"/api/v2/versions/{vid}/files",
+                         f"/api/v2/versions/{vid}/files?per_page=100"):
         raise ValueError("File inventory is not version-scoped to historical selection")
     entries = files.get("_embedded", {}).get("stash:files")
     if not isinstance(entries, list) or not entries:
