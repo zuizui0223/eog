@@ -1,0 +1,46 @@
+{
+  "schema": "eog.helgeland.niskanen2020_v8_vs_2023_v10.registered_sha256.frozen_observed_v1",
+  "status": "ALL_THREE_REGISTERED_DIGESTS_AND_SIZES_IDENTICAL__NO_FILE_BYTES_ACCESSED",
+  "source": {
+    "doi": "10.5061/dryad.m0cfxpp10",
+    "historical_v8_version_id": 78498,
+    "historical_release_date": "2020-08-19",
+    "later_v10_version_id": 208617,
+    "later_release_date": "2023-01-19"
+  },
+  "authority": {
+    "github_actions_run_id": 37862858112,
+    "artifact_id": 11587525387,
+    "artifact_zip_sha256": "3e74a16b2a514824262068ba607cc834b1ccb76b1f1d23e830418f103c3852e2"
+  },
+  "pairs": [
+    {
+      "name": "Dryad_readme.txt",
+      "v8_file_id": 358962,
+      "v10_file_id": 1952534,
+      "source_reported_sizes_equal": true,
+      "source_reported_sha256_equal": true
+    },
+    {
+      "name": "Pop_size_1997_2012.csv",
+      "v8_file_id": 358961,
+      "v10_file_id": 1952533,
+      "source_reported_sizes_equal": true,
+      "source_reported_sha256_equal": true
+    },
+    {
+      "name": "Pop_size_1998_2013.csv",
+      "v8_file_id": 358957,
+      "v10_file_id": 1952529,
+      "source_reported_sizes_equal": true,
+      "source_reported_sha256_equal": true
+    }
+  ],
+  "registered_source_digest_is_independent_byte_hash": false,
+  "actual_source_file_bytes_downloaded": false,
+  "newly_published_2023_only_file_ever_2020_input": false,
+  "conditional_statement": "A later copy can count as identical historical v8 content ONLY after independently hashing its entire real bytes against the original v8 registered SHA256.",
+  "ecological_forecast_authorized": false,
+  "surveyed_zero_verified": false,
+  "numeric_island_codes_2020_to_2026_verified": false
+}
