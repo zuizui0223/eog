@@ -1,0 +1,62 @@
+name: Helgeland 2020 v8 official public web file-stream attempt
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2020-v8-public-ui-v1.yml'
+      - 'scripts/audit_helgeland_2020_v8_public_ui_stream_v1.py'
+      - 'tests/test_helgeland_2020_v8_public_ui_stream_v1.py'
+      - 'docs/eog_helgeland_2020_v8_public_ui_gate_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-2020-v8-public-ui-v1.yml'
+      - 'scripts/audit_helgeland_2020_v8_public_ui_stream_v1.py'
+      - 'tests/test_helgeland_2020_v8_public_ui_stream_v1.py'
+      - 'docs/eog_helgeland_2020_v8_public_ui_gate_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-v8-public-file-stream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Verify independent v8 identities with mock public bytes
+        run: |
+          python -m pytest -q \
+            tests/test_helgeland_2020_v8_public_ui_stream_v1.py \
+            tests/test_helgeland_2020_v8_local_bytes_v1.py
+      - name: Try official public web UI file streams for three frozen 2020 v8 IDs
+        run: |
+          python scripts/audit_helgeland_2020_v8_public_ui_stream_v1.py \
+            --output build/helgeland-2020-v8-public-web-file-attestation-v1.json
+      - name: Assert original 2020 v8 SHA256 and no biological values
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          result=json.loads(Path('build/helgeland-2020-v8-public-web-file-attestation-v1.json').read_text())
+          assert result['schema']=='eog.helgeland.2020_v8.public_web_ui.attestation.v1'
+          assert result['receipt']['status']=='THREE_LOCALLY_PROVIDED_V8_FILES_HASH_MATCH__ECOLOGY_HOLD'
+          assert result['source']['dryad_version_id']==78498
+          assert len(result['source']['records'])==3
+          assert all(x['independent_sha256_matches_2020_v8'] and
+                     not x['biological_rows_parsed'] and
+                     not x['firstline_values_emitted'] for x in result['source']['records'])
+          assert result['source']['acquisition']['source_bytes_retained_after_job'] is False
+          assert result['receipt']['actual_public_web_ui_source_bytes_independently_verified'] is True
+          assert result['receipt']['ecological_forecast_authorized'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2020-V8-UI-BYTE-VERIFICATION-NO-SOURCE-ROWS
+          path: build/helgeland-2020-v8-public-web-file-attestation-v1.json
+          if-no-files-found: warn
