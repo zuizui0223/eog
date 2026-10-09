@@ -130,7 +130,7 @@ def count_site_code_switches(records: Iterable[Mapping[str,str]],
         counts["first_followup_changed_island_code"]+
         counts["first_followup_ambiguous_island_code"]):
         raise ValueError("First-direct-island-code counts fail to reconcile")
-    if counts["whole_file_rows_date_checked"]!=73593:
+    if counts["whole_file_rows_date_checked"]!=policy["expected_source_row_count_from_prior_qc"]:
         raise ValueError("Unexpected original 2026 v6 row count")
 
     return {
@@ -158,6 +158,8 @@ def count_site_code_switches(records: Iterable[Mapping[str,str]],
 def verified_pre2015_qc(root:Path,protocol:dict)->dict:
     frozen=json.loads(FROZEN.read_text(encoding="utf-8"))
     hdr=json.loads(HEADERS.read_text(encoding="utf-8"))
+    if protocol["expected_source_row_count_from_prior_qc"]!=73593:
+        raise ValueError("Previous 2026 source row count differs")
     if protocol["source"]["version_id"]!=421942 or protocol["source"]["file_id"]!=4576411:
         raise ValueError("Wrong original published source version")
     if protocol["source"]["github_commit"]!="a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5":
