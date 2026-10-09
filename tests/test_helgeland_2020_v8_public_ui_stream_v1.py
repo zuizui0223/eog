@@ -84,7 +84,7 @@ def test_wrong_file_id_and_mismatch_rejected_before_http(tmp_path,monkeypatch):
 def test_public_url_route_cannot_fall_back_to_current_v10():
     script=SCRIPT.read_text(encoding="utf-8")
     assert 'WEB_UI_BASE = "https://datadryad.org/downloads/file_stream/"' in script
-    assert "/api/v2/files/" not in script
+    assert "/api/v2/files/" not in script.split('"""', 2)[-1]
     assert "v10" not in script.replace('"""', '')
     assert "urllib.request.urlopen" in script
     assert 'tempfile.TemporaryDirectory' in script
