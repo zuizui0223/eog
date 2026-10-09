@@ -1,0 +1,52 @@
+name: Original 2020 v8 hashes from later publicly listed identical copies
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-2023-public-copies-v8-hash-v1.yml'
+      - 'scripts/audit_helgeland_2023_public_copies_against_v8_bytes_v1.py'
+      - 'tests/test_helgeland_2023_copies_against_2020_v8_v1.py'
+      - 'docs/eog_helgeland_2023_public_copies_against_2020_v8_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  actual-copy-hash-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Synthetic exact historical-byte identity and later-content rejection
+        run: python -m pytest -q tests/test_helgeland_2023_copies_against_2020_v8_v1.py
+      - name: Read exactly three public latest-file copies and hash only against 2020 v8 SHA256
+        run: |
+          python scripts/audit_helgeland_2023_public_copies_against_v8_bytes_v1.py \
+            --output build/helgeland-v10-copies-byte-matched-to-2020-v8.json
+      - name: Validate not a 2023-only model or biological row analysis
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('build/helgeland-v10-copies-byte-matched-to-2020-v8.json').read_text())
+          assert d['schema']=='eog.helgeland.niskanen2020_v8.later_public_copy_sha256.v1'
+          assert d['status']=='THREE_PUBLIC_COPIES_INDEPENDENTLY_HASH_MATCH_ORIGINAL_2020_V8'
+          assert d['original_v8_version_id']==78498
+          assert d['later_v10_version_id']==208617
+          assert len(d['files'])==3
+          assert all(f['independent_actual_byte_sha256_matches_historical_v8'] for f in d['files'])
+          for field in ('actual_bytes_decoded_as_biological_rows','2023_only_files_authorized_as_2020_inputs',
+                        'surveyed_zero_verified','island_code_crosswalk_verified','historical_model_fitted',
+                        'ecological_forecast_authorized'):
+              assert d[field] is False,field
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-2023-COPIES-V8-REAL-BYTE-SHA256-NO-ROWS
+          path: build/helgeland-v10-copies-byte-matched-to-2020-v8.json
+          if-no-files-found: warn
