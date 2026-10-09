@@ -128,3 +128,44 @@ def test_actual_protocol_preserves_2015_2022_as_unseen():
     for forbidden in ('row["Year"]','row["Least_age"]','row["scriptsex"]',
                       'read_csv(', "import pandas", "urllib"):
         assert forbidden not in script
+
+
+def test_first_encounter_same_site_can_hide_later_observed_site_switch():
+    rows=[
+        obs("synthetic_id","2001-05-01","A","nest"),
+        obs("synthetic_id","2001-05-05","A","capt"),
+        obs("synthetic_id","2002-05-20","B","obs"),
+    ]
+    observed=count_site_code_switches(rows,policy_for(rows))["counts"]
+    assert observed["first_followup_same_island_code"]==1
+    assert observed["first_followup_changed_island_code"]==0
+    # This deliberately demonstrates that first subsequent observation is
+    # NOT equivalent to subsequent permanent dispersal or natal recruitment.
+
+
+def test_frozen_real_pre2015_aggregate_receipt_is_exploratory_not_recruitment():
+    path=(BASE/"helgeland_pre2015_first_direct_site_code_frozen_v1.json")
+    observed=json.loads(path.read_text(encoding="utf-8"))
+    assert observed["schema"]=="eog.helgeland.pre2015.direct_code_switch.frozen_observed_v1"
+    assert observed["authority"]["github_actions_run_id"]==37888118673
+    assert observed["authority"]["artifact_id"]==11596374594
+    assert observed["authority"]["artifact_zip_sha256"]==(
+        "2f7767d193397f34d598d9c8d21609da52f5c90e073fea29354271d263f03b6e"
+    )
+    c=observed["counts"]
+    assert c["whole_file_rows_date_checked"]==73593
+    assert c["eligible_pre2015_rows"]==51162
+    assert c["post2014_rows_suppressed_by_date_only"]==21361
+    assert c["pre1994_rows_suppressed_by_date_only"]==1070
+    assert c["ids_with_any_pre2015_nest_record"]==10742
+    assert c["ids_with_unique_pre2015_nest_code"]==10737
+    assert c["ids_with_ambiguous_pre2015_nest_code"]==5
+    assert c["unique_nest_ids_with_first_later_direct_encounter"]==4164
+    assert c["first_followup_same_island_code"]==3941
+    assert c["first_followup_changed_island_code"]==223
+    assert c["first_followup_ambiguous_island_code"]==0
+    assert c["unique_nest_ids_without_later_direct_encounter"]==6573
+    assert all(k is True for k in observed["interpretation"].values()
+               if isinstance(k,bool) and k is not False)
+    assert observed["interpretation"]["independent_ecological_prediction_authorized"] is False
+    assert observed["interpretation"]["source_2015_2022_event_destinations_not_examined"] is True
