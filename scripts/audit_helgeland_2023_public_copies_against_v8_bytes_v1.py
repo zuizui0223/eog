@@ -68,7 +68,7 @@ def verify(history: dict, equivalence: dict,
         raise ValueError("Not the original 2020 v8 vs 2023 v10 source pair")
     orig = {x["name"]:x for x in original["critical_files"]}
     newer = {x["name"]:x for x in equivalence["pairs"]}
-    if set(orig)!=set(newer)!=set(IDS):
+    if not (set(orig)==set(newer)==set(IDS)):
         raise ValueError("Unfrozen source file set")
     items = []
     for name, later_id in IDS.items():
