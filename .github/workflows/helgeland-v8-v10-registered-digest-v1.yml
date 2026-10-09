@@ -1,0 +1,59 @@
+name: Helgeland v8 versus v10 exact registered SHA256 metadata
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-v8-v10-registered-digest-v1.yml'
+      - 'scripts/audit_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py'
+      - 'tests/test_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py'
+      - 'docs/eog_helgeland_niskanen_2020_v8_2023_v10_digest_comparison_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-v8-v10-registered-digest-v1.yml'
+      - 'scripts/audit_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py'
+      - 'tests/test_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py'
+      - 'docs/eog_helgeland_niskanen_2020_v8_2023_v10_digest_comparison_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only-no-bird-rows:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Synthetic exact digest and future-only-file negative controls
+        run: python -m pytest -q tests/test_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py
+      - name: Read official 2023 v10 version-scoped public JSON only
+        run: |
+          python scripts/audit_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py \
+            --output build/helgeland-v8-v10-registered-digest-comparison-v1.json
+      - name: Require digest equivalence before any later-version copy can be considered
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('build/helgeland-v8-v10-registered-digest-comparison-v1.json').read_text())
+          assert x['status']=='ALL_THREE_2020_FILES_HAVE_IDENTICAL_V10_SOURCE_DECLARATIONS'
+          assert x['2020_original_version_id']==78498
+          assert x['2023_later_version_id']==208617
+          assert len(x['files'])==3
+          assert all(f['sha256_registered_equal'] for f in x['files'])
+          for k in ('source_file_bytes_downloaded','independent_sha256_of_actual_bytes_verified',
+                    'historical_model_features_read','island_year_sampled_zero_verified',
+                    'ecological_forecast_authorized'):
+              assert x[k] is False,k
+          assert x['never_authorize_use_of_2023_only_files_as_2020_inputs'] is True
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-V8-V10-REGISTERED-SHA256-METADATA-ONLY
+          path: build/helgeland-v8-v10-registered-digest-comparison-v1.json
+          if-no-files-found: warn
