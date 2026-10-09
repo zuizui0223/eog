@@ -56,5 +56,6 @@
     "site_year_survey_effort_unverified": true,
     "recruitment_and_founding_unverified": true,
     "ecological_model_or_independent_heldout_benchmark_authorized": false
-  }
+  },
+  "expected_source_row_count_from_prior_qc": 73593
 }
