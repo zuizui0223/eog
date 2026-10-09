@@ -7,6 +7,7 @@ on:
       - 'scripts/audit_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py'
       - 'tests/test_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py'
       - 'docs/eog_helgeland_niskanen_2020_v8_2023_v10_digest_comparison_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_niskanen_v8_v10_registered_digest_match_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -14,6 +15,7 @@ on:
       - 'scripts/audit_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py'
       - 'tests/test_helgeland_niskanen_v8_v10_source_digest_equivalence_v1.py'
       - 'docs/eog_helgeland_niskanen_2020_v8_2023_v10_digest_comparison_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_niskanen_v8_v10_registered_digest_match_frozen_v1.json'
 
 permissions:
   contents: read
@@ -41,6 +43,18 @@ jobs:
           from pathlib import Path
           x=json.loads(Path('build/helgeland-v8-v10-registered-digest-comparison-v1.json').read_text())
           assert x['status']=='ALL_THREE_2020_FILES_HAVE_IDENTICAL_V10_SOURCE_DECLARATIONS'
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_niskanen_v8_v10_registered_digest_match_frozen_v1.json').read_text())
+          assert frozen['source']['historical_v8_version_id']==x['2020_original_version_id']
+          assert frozen['source']['later_v10_version_id']==x['2023_later_version_id']
+          assert frozen['status']=='ALL_THREE_REGISTERED_DIGESTS_AND_SIZES_IDENTICAL__NO_FILE_BYTES_ACCESSED'
+          for observed,expected in zip(x['files'],frozen['pairs']):
+              assert observed['name']==expected['name']
+              assert observed['v8_file_metadata_id']==expected['v8_file_id']
+              assert observed['v10_file_metadata_id']==expected['v10_file_id']
+              assert observed['sha256_registered_equal'] is True
+              assert expected['source_reported_sha256_equal'] is True
+          assert frozen['actual_source_file_bytes_downloaded'] is False
+          assert frozen['ecological_forecast_authorized'] is False
           assert x['2020_original_version_id']==78498
           assert x['2023_later_version_id']==208617
           assert len(x['files'])==3
