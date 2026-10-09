@@ -1,0 +1,47 @@
+{
+  "schema": "eog.helgeland.pre2015.direct_code_switch.frozen_observed_v1",
+  "status": "OBSERVED_PRE2015_FIRST_FOLLOWUP_SITE_CODE_QC__NO_ECOLOGICAL_INFERENCE",
+  "authority": {
+    "github_actions_run_id": 37888118673,
+    "artifact_id": 11596374594,
+    "artifact_name": "HELGELAND-PRE2015-DIRECT-FIRST-SITE-CODE-AGGREGATES-NO-IDS-v1",
+    "artifact_zip_sha256": "2f7767d193397f34d598d9c8d21609da52f5c90e073fea29354271d263f03b6e",
+    "upstream_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+  },
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "version_id": 421942,
+    "file_id": 4576411,
+    "date_min": "1994-01-01",
+    "date_max": "2014-12-31",
+    "whole_file_sha256_against_dryad_v6_and_physical_header_verified": true
+  },
+  "counts": {
+    "distinct_ids_observed_pre2015": 17857,
+    "eligible_capt_obs_encounter_rows": 37779,
+    "eligible_nest_encounter_rows": 13383,
+    "eligible_pre2015_rows": 51162,
+    "first_followup_ambiguous_island_code": 0,
+    "first_followup_changed_island_code": 223,
+    "first_followup_same_island_code": 3941,
+    "ids_with_ambiguous_pre2015_nest_code": 5,
+    "ids_with_any_pre2015_nest_record": 10742,
+    "ids_with_unique_pre2015_nest_code": 10737,
+    "post2014_rows_suppressed_by_date_only": 21361,
+    "pre1994_rows_suppressed_by_date_only": 1070,
+    "unique_nest_ids_with_first_later_direct_encounter": 4164,
+    "unique_nest_ids_without_later_direct_encounter": 6573,
+    "whole_file_rows_date_checked": 73593
+  },
+  "interpretation": {
+    "first_followup_is_not_proof_of_natal_adult_dispersal": true,
+    "different_site_code_positive_detections_are_not_movement_rate_denominator": true,
+    "not_comparable_to_published_Ranke_recruit_dispersal_376_of_2192": true,
+    "unobserved_later_recruit_displacement_not_counted_by_first_followup": true,
+    "source_2015_2022_event_destinations_not_examined": true,
+    "site_code_to_physical_island_map_not_verified": true,
+    "missing_encounters_are_not_surveyed_zero": true,
+    "prospective_2020_source_availability_unverified": true,
+    "independent_ecological_prediction_authorized": false
+  }
+}
