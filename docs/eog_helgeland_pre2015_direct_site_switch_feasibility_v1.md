@@ -24,6 +24,22 @@ For each otherwise eligible ID, look for the **first strictly later physical `st
 
 Never infer a source from a later ID's first residence, use `filled`/future `downup` states or assign a missing identity. Only **aggregate counts** may be emitted; raw individual IDs, dates and island names/codes are never serialized.
 
+## First real observed result (October 9 2026, exploratory only)
+
+GitHub Actions run **37888118673** passed both SHA256 + physical-firstline source tests, then read **only pre-2015 site-code/ID/stage fields** for first followup aggregation. Metadata-only artifact ID **11596374594**, ZIP SHA256 `2f7767d193397f34d598d9c8d21609da52f5c90e073fea29354271d263f03b6e`, was independently opened.
+
+- **73,593** original rows had their physical observation `date` read to apply the cutoff. **51,162** rows met **1994-01-01 through 2014-12-31** (13,383 `nest`, 37,779 `capt/obs`). **1,070** pre-1994 rows and **21,361** post-2014 rows were suppressed before consulting their ID, site code or stage.
+- **17,857** distinct ring IDs occurred in the eligible pre-2015 observations.
+- **10,742** IDs had a physical pre-2015 nest record. **5** were inconsistent across multiple nest-island codes; **10,737** had one recorded nest code.
+- Within those **10,737** potential source IDs, **4,164** had a first **strictly later** direct `capt/obs` encounter within the same historical window. **6,573** had no such later detected encounter.
+- At that *first later encounter date*, **3,941** matched the nest `Island` code, **223** differed, and **0** were simultaneous first-date multi-code ambiguities.
+
+The **223 / 4,164 = 5.4%** is a *selected observed first-followup code-change fraction*, **not** a natal dispersal or successful-recruitment probability. Detection strongly conditions the denominator, and early same-code resighting can occur long before a later genuine dispersal. A synthetic counterexample in the unit tests proves the key logical difference: a nest on A, early recapture on A, then later sighting on B yields **first-followup code changed = false** even though a later island-code switch was observed. Thus directly comparing this fraction with Ranke et al. 2021's existing natal-recruit dispersal proportion **376/2,192** would be misleading because both event and denominator definitions differ.
+
+The independently inspected observed counts are frozen in `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_first_direct_site_code_frozen_v1.json`. A fresh dedicated workflow must match these counts exactly before merge.
+
+**Important**: This artifact already exposes *pre-2015* site-code-switch counts and is not a previously untouched ecological outcome; it retains the 2015–2022 individual destination fields uninspected. The full source archive itself was only publicly released much later, so this is **not** a publicly reproducible genuine 2014-issued prediction even with the date firewall.
+
 ## Interpretation limits
 
 A recorded `Island` code difference is an **observed site-code change**, *not automatically* natal dispersal (an individual may move temporarily, and `Lurøy-Onøy` grouping/numeric site identity needs independent study-specific confirmation), recruitment, permanent settlement, local recolonization, fitness or an EOG win. The 2021 Ranke paper already observed interisland natal dispersal in 1993–2014; simply finding movements would not be novel.
