@@ -13,6 +13,22 @@ This PR compares public Dryad **v10 registered source SHA-256 plus file size**, 
 
 It fetches only the official **v10 `/api/v2/versions/208617/files?per_page=100` JSON**; **no data file bytes**, rows, genotype records, model results, or 2021–22 response data are read. A pass means both **source metadata assertions** identify identical digest and size for each file; it is **not independent byte computation**.
 
+## Observed official source-metadata result — 2026-10-09
+
+First dedicated read-only workflow run **37862858112** uploaded metadata-only artifact **11587525387**, ZIP SHA-256 `3e74a16b2a514824262068ba607cc834b1ccb76b1f1d23e830418f103c3852e2`. Its JSON was independently opened.
+
+**All three** original 2020 v8 files have **the same Dryad-registered SHA-256 AND file size** as their later v10 records:
+
+| 2020 source filename | v8 file ID | v10 file ID | Metadata check |
+|---|---:|---:|---|
+| Dryad_readme.txt | 358962 | 1952534 | Exact digest + size |
+| Pop_size_1997_2012.csv | 358961 | 1952533 | Exact digest + size |
+| Pop_size_1998_2013.csv | 358957 | 1952529 | Exact digest + size |
+
+All source-declared identity relationships are frozen in `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_niskanen_v8_v10_registered_digest_match_frozen_v1.json`. Repeat CI must obtain the same official v10 JSON identities and independently check against the original v8 metadata.
+
+**Still unverified:** No actual original or later copy bytes have been acquired or hashed; Dryad's source declarations are evidence of registered parity, not proof of independent SHA-256 on downloaded files. No island records or biological outcome analyses are authorized.
+
 ### Interpretation
 
 If all three registered values agree, a copy from the newer archive could be *considered for offline source verification* **only if its complete actual bytes independently hash to the frozen 2020-v8 SHA-256**. Such a matching copy would have v8-identical content but **does not license using any 2023-only variables or files as a 2020 input**.
