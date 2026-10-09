@@ -8,6 +8,7 @@ on:
       - 'tests/test_helgeland_pre2015_direct_site_code_switch_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_direct_code_switch_protocol_v1.json'
       - 'docs/eog_helgeland_pre2015_direct_site_switch_feasibility_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_first_direct_site_code_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -16,6 +17,7 @@ on:
       - 'tests/test_helgeland_pre2015_direct_site_code_switch_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_direct_code_switch_protocol_v1.json'
       - 'docs/eog_helgeland_pre2015_direct_site_switch_feasibility_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_first_direct_site_code_frozen_v1.json'
 
 permissions:
   contents: read
@@ -57,6 +59,12 @@ jobs:
           assert x['source_cutoff_date']=='2014-12-31'
           assert x['original_complete_source_sha256_and_header_verified'] is True
           c=x['counts']
+          recorded=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_first_direct_site_code_frozen_v1.json').read_text())
+          assert c==recorded['counts']
+          assert recorded['source']['version_id']==421942
+          assert recorded['source']['file_id']==4576411
+          assert recorded['interpretation']['source_2015_2022_event_destinations_not_examined'] is True
+          assert recorded['interpretation']['independent_ecological_prediction_authorized'] is False
           assert set(c)==set(json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_direct_code_switch_protocol_v1.json').read_text())['allowed_aggregate_fields'])
           assert c['whole_file_rows_date_checked']==73593
           assert c['eligible_pre2015_rows']+c['post2014_rows_suppressed_by_date_only']+c['pre1994_rows_suppressed_by_date_only']==73593
