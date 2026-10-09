@@ -81,3 +81,27 @@ def test_only_pinned_v8_files_never_2023_added_features():
     result=compare(frozen,doc)
     assert len(result["files"])==3
     assert "post_2020_hindsight.csv" not in json.dumps(result)
+
+
+def test_real_metadata_comparison_receipt_frozen_with_all_claim_holds():
+    frozen=json.loads((
+        ROOT/"validation/eog_virtual_world_ecology_synthesis_v1/"
+        "helgeland_niskanen_v8_v10_registered_digest_match_frozen_v1.json"
+    ).read_text())
+    assert frozen["status"]=="ALL_THREE_REGISTERED_DIGESTS_AND_SIZES_IDENTICAL__NO_FILE_BYTES_ACCESSED"
+    assert frozen["authority"]["github_actions_run_id"]==37862858112
+    assert frozen["authority"]["artifact_id"]==11587525387
+    assert frozen["authority"]["artifact_zip_sha256"]==(
+        "3e74a16b2a514824262068ba607cc834b1ccb76b1f1d23e830418f103c3852e2")
+    assert frozen["source"]["historical_v8_version_id"]==78498
+    assert frozen["source"]["later_v10_version_id"]==208617
+    assert [(p["name"],p["v10_file_id"]) for p in frozen["pairs"]]==[
+        ("Dryad_readme.txt",1952534),
+        ("Pop_size_1997_2012.csv",1952533),
+        ("Pop_size_1998_2013.csv",1952529)]
+    assert all(x["source_reported_sizes_equal"] and x["source_reported_sha256_equal"]
+               for x in frozen["pairs"])
+    assert frozen["registered_source_digest_is_independent_byte_hash"] is False
+    assert frozen["actual_source_file_bytes_downloaded"] is False
+    assert frozen["newly_published_2023_only_file_ever_2020_input"] is False
+    assert frozen["ecological_forecast_authorized"] is False
