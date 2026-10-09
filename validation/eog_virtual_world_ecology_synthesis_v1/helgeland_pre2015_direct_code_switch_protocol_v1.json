@@ -1,0 +1,60 @@
+{
+  "schema": "eog.helgeland.direct_site_code_switch_pre2015.exploratory_protocol.v1",
+  "status": "EXPLORATORY_AFTER_FULL_2026_STRUCTURAL_QC__BEFORE_PRE2015_SITE_SWITCH_EXPOSURE",
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "version_id": 421942,
+    "file_id": 4576411,
+    "github_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "github_path": "Data/presence_data_1994_2022.txt"
+  },
+  "window": {
+    "first_observation_date": "1994-01-01",
+    "last_observation_date_inclusive": "2014-12-31",
+    "target_2015_through_2022_encounter_sites_are_never_inspected": true
+  },
+  "input_columns": [
+    "ID",
+    "Island",
+    "Location",
+    "date",
+    "stage"
+  ],
+  "physical_direct_stages": [
+    "nest",
+    "capt",
+    "obs"
+  ],
+  "inclusion_rule": "Exact physical stage=nest with a single distinct Island code per ID across ONLY 1994-2014 observations; then first strictly later stage=capt/obs on a strictly later calendar date within <=2014.",
+  "ties": "If same earliest later direct observation date has more than one Island code, exclude from same/different classification as ambiguous.",
+  "temporal_rule": "Filter out post-2014 rows based solely on date BEFORE consulting ID, Island, Location, stage or any retrospective fields.",
+  "interpretation": "Different physical Island codes for a ringed ID are descriptive observed post-nest site-code switches, not proven natal-to-adult dispersal, founding, source/sink direction, ecological fitness or EOG predictive performance.",
+  "allowed_aggregate_fields": [
+    "whole_file_rows_date_checked",
+    "eligible_pre2015_rows",
+    "post2014_rows_suppressed_by_date_only",
+    "pre1994_rows_suppressed_by_date_only",
+    "eligible_nest_encounter_rows",
+    "eligible_capt_obs_encounter_rows",
+    "distinct_ids_observed_pre2015",
+    "ids_with_any_pre2015_nest_record",
+    "ids_with_unique_pre2015_nest_code",
+    "ids_with_ambiguous_pre2015_nest_code",
+    "unique_nest_ids_with_first_later_direct_encounter",
+    "first_followup_same_island_code",
+    "first_followup_changed_island_code",
+    "first_followup_ambiguous_island_code",
+    "unique_nest_ids_without_later_direct_encounter"
+  ],
+  "holds": {
+    "metadata_sha256_and_physical_header_required": true,
+    "all_2015_2022_encounter_outcomes_protected": true,
+    "uses_only_pre2015_rows_for_identity_state": true,
+    "does_not_use_Year_Least_age_Least_hatchyear_scriptsex_filled_genetics": true,
+    "site_code_change_is_not_verified_dispersal": true,
+    "site_codes_not_mapped_to_2020_v8": true,
+    "site_year_survey_effort_unverified": true,
+    "recruitment_and_founding_unverified": true,
+    "ecological_model_or_independent_heldout_benchmark_authorized": false
+  }
+}
