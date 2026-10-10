@@ -1,0 +1,67 @@
+{
+  "schema": "eog.helgeland.pre2015.followup_horizon_exploratory_protocol.v1",
+  "status": "FROZEN_AFTER_PR642_OUTCOME_EXPOSURE_BEFORE_ALL_LATER_SCAN",
+  "source_doi": "10.5061/dryad.rr4xgxdnq",
+  "version_id": 421942,
+  "file_id": 4576411,
+  "upstream_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+  "time_start": "1994-01-01",
+  "time_end": "2014-12-31",
+  "field_access": [
+    "date",
+    "ID",
+    "Island",
+    "Location",
+    "stage"
+  ],
+  "source_rule": "One nest site code across pre-2015 nest records per ID. Post-nest strictly later dates stage capt/obs only.",
+  "primary": "Any directly observed different site code on any later encounter before 2015; compare first-followup-only undercount.",
+  "sensitivity": "Distinct eligible 30- and 365-calendar-day full-followup cohort windows; observed direct and changed-site counts; detection still unadjusted.",
+  "horizons_days": [
+    30,
+    365
+  ],
+  "known_pr642": {
+    "whole_file_rows_date_checked": 73593,
+    "eligible_pre2015_rows": 51162,
+    "suppressed_post2014_rows": 21361,
+    "suppressed_pre1994_rows": 1070,
+    "unique_nest_site_id_count": 10737,
+    "ambiguous_nest_site_id_count": 5,
+    "first_later_direct_observed_id_count": 4164,
+    "first_followup_same_site_id_count": 3941,
+    "first_followup_different_site_id_count": 223,
+    "first_followup_ambiguous_site_id_count": 0
+  },
+  "allowed_aggregate_fields": [
+    "whole_file_rows_date_checked",
+    "eligible_pre2015_rows",
+    "suppressed_pre1994_rows",
+    "suppressed_post2014_rows",
+    "unique_nest_site_id_count",
+    "ambiguous_nest_site_id_count",
+    "first_later_direct_observed_id_count",
+    "first_followup_same_site_id_count",
+    "first_followup_different_site_id_count",
+    "first_followup_ambiguous_site_id_count",
+    "any_later_different_site_id_count",
+    "first_same_then_later_different_site_id_count",
+    "first_different_then_later_source_site_id_count",
+    "first_followup_same_never_observed_different_later_count",
+    "eligible_30d_full_window_nest_id_count",
+    "eligible_30d_direct_observed_id_count",
+    "eligible_30d_different_site_observed_id_count",
+    "eligible_365d_full_window_nest_id_count",
+    "eligible_365d_direct_observed_id_count",
+    "eligible_365d_different_site_observed_id_count"
+  ],
+  "stop_flags": {
+    "no_2015_2022_island_id_stage_inspected": true,
+    "never_use_Year_age_sex_genetic_fields": true,
+    "pr642_counts_must_reconcile": true,
+    "no_zero_survey_inference": true,
+    "no_adult_natal_dispersal_claim": true,
+    "no_settlement_or_fitness_claim": true,
+    "no_heldout_prediction_claim": true
+  }
+}
