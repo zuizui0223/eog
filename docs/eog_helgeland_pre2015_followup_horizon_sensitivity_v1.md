@@ -26,3 +26,24 @@ This follow-up also cannot be called blind external validation: the 2026 data so
 If the two observed direct-site-code metrics diverge materially, the defensible discovery is a **measurement/observation-window sensitivity** of a dispersal proxy, not an adaptive evolutionary mechanism. The observation-process interpretation must be compared against alternate event definitions and ring/census effort before ecological extrapolation. No baseline EOG-WF 3/31/3 count is changed.
 
 Evidence thread: [Issue #626](https://github.com/zuizui0223/eog/issues/626).
+
+
+## First observed data result, source SHA256 reverified
+
+GitHub Actions run **38058380422** successfully verified exact Dryad v6 source bytes, physical header, then ran this **pre-2015 only** post-exposure diagnostic. The no-IDs/no-islands aggregate artifact **11672555186**, ZIP SHA256 `98e9621289d924f17c7ba377372fb0e53b61eea904dd6cd0d0ce08c4d499e5e0`, was independently opened and inspected.
+
+The original first-followup sample of **4,164** direct reobserved IDs was reproduced exactly. Of those, **223** were first directly reobserved on a different `Island` code, but **451** had *at least one later* direct detection at a different code within 1994–2014. Therefore **228** IDs were first reobserved on their original nest code, and only subsequently detected elsewhere: **50.6% of the 451 observed-ever-different code IDs are missed by the first-followup-only definition**. Separately, **2** IDs first seen elsewhere were subsequently directly observed again on their source nest code. This is a *definition and reobservation-window sensitivity*, not a successful natal-recruitment/demographic transition rate.
+
+| Administrative horizon | Full-calendar-followup eligible nest IDs | IDs directly observed again within horizon | IDs with different site-code observation within horizon |
+|---|---:|---:|---:|
+| 30 days | 10,737 | 1,742 | 3 |
+| 365 days | 10,073 | 3,554 | 308 |
+| Any later date, by end of 2014 | 10,737 | 4,164 | 451 |
+
+The full-calendar-followup **eligible cohorts differ** across windows. The fraction with observed different-site detections **conditional on a later direct observation** is 223/4164 (5.4%) for first only and 451/4164 (10.8%) for ever-later. Conditional 30d and 365d counts are *not* directly comparable causal rates due to nonuniform effort, migration phenology and source cohort composition. Calendar opportunity for 365 days is **not evidence of any surveys during all 365 days**.
+
+Full aggregate counts and all scientific HOLDs are frozen at `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_observed_frozen_v1.json`, and a repeat GitHub Actions run is required to match each number exactly. The underlying outcomes are not independently held out: earlier PR #642 already exposed first encounters, and all these records were in the 2026 public archive.
+
+### Consequence for the EOG research question
+
+**A simple observation-first dispersal proxy can undercount later observed geographic switches by about half in this particular directly reobserved historical sample.** EOG can investigate identifiability limits and observation-aware reachability only after independent encounter effort and source-field provenance become available. Neither the larger value (451) nor the earlier one (223) may be called the biological natal dispersal rate. This methodological QC cannot be used to claim the EOG model predicts island colonization or resolves source–sink dynamics.
