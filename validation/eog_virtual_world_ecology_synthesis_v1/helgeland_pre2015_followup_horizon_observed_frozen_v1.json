@@ -1,0 +1,51 @@
+{
+  "schema": "eog.helgeland.pre2015.followup_horizon.frozen_observed_v1",
+  "status": "FOLLOWUP_WINDOW_SENSITIVITY_OBSERVED__ECOLOGICAL_HOLD",
+  "provenance": {
+    "github_actions_run_id": 38058380422,
+    "artifact_id": 11672555186,
+    "artifact_name": "HELGELAND-PRE2015-ANY-LATER-SITE-SWITCH-AGGREGATES-NO-IDS-v1",
+    "artifact_zip_sha256": "98e9621289d924f17c7ba377372fb0e53b61eea904dd6cd0d0ce08c4d499e5e0",
+    "author_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+  },
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "version_id": 421942,
+    "file_id": 4576411,
+    "source_bytes_and_firstline_independently_verified": true,
+    "calendar_cutoff": "2014-12-31"
+  },
+  "counts": {
+    "ambiguous_nest_site_id_count": 5,
+    "any_later_different_site_id_count": 451,
+    "eligible_30d_different_site_observed_id_count": 3,
+    "eligible_30d_direct_observed_id_count": 1742,
+    "eligible_30d_full_window_nest_id_count": 10737,
+    "eligible_365d_different_site_observed_id_count": 308,
+    "eligible_365d_direct_observed_id_count": 3554,
+    "eligible_365d_full_window_nest_id_count": 10073,
+    "eligible_pre2015_rows": 51162,
+    "first_different_then_later_source_site_id_count": 2,
+    "first_followup_ambiguous_site_id_count": 0,
+    "first_followup_different_site_id_count": 223,
+    "first_followup_same_never_observed_different_later_count": 3713,
+    "first_followup_same_site_id_count": 3941,
+    "first_later_direct_observed_id_count": 4164,
+    "first_same_then_later_different_site_id_count": 228,
+    "suppressed_post2014_rows": 21361,
+    "suppressed_pre1994_rows": 1070,
+    "unique_nest_site_id_count": 10737,
+    "whole_file_rows_date_checked": 73593
+  },
+  "interpretation": {
+    "observational_any_later_diff_451_vs_first_diff_223": "Two different positive encounter proxies. 228 first-same IDs subsequently observed on a different site code.",
+    "selection_caveat": "Conditional on directly observed encounter; no survey effort/detection adjustment.",
+    "window_caveat": "30d and 365d cohorts differ by full calendar followup eligibility and both lack observed survey effort.",
+    "true_natal_dispersal_verified": false,
+    "permanent_settlement_verified": false,
+    "source_sink_recruitment_verified": false,
+    "no_2015_2022_destination_fields_accessed": true,
+    "all_island_numeric_codes_verified": false,
+    "independent_heldout_or_ecological_forecast_authorized": false
+  }
+}
