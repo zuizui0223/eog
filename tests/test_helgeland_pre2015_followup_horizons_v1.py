@@ -110,7 +110,7 @@ def test_inferred_year_and_age_never_affect_site_result():
 def test_protocol_or_previous_exposed_count_change_is_rejected():
     p=policy(sample())
     p["known_pr642"]["first_followup_different_site_id_count"]+=1
-    with pytest.raises(ValueError,match="previous"):
+    with pytest.raises(ValueError,match="first-followup counts changed"):
         diagnose(sample(),p)
     p=policy(sample())
     p["horizons_days"]=[365,730]
