@@ -8,6 +8,7 @@ on:
       - 'tests/test_helgeland_pre2015_followup_horizons_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_protocol_v1.json'
       - 'docs/eog_helgeland_pre2015_followup_horizon_sensitivity_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_observed_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -16,6 +17,7 @@ on:
       - 'tests/test_helgeland_pre2015_followup_horizons_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_protocol_v1.json'
       - 'docs/eog_helgeland_pre2015_followup_horizon_sensitivity_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_observed_frozen_v1.json'
 
 permissions:
   contents: read
@@ -56,6 +58,13 @@ jobs:
           assert x['source_byte_sha256_and_firstline_reverified'] is True
           assert x['calendar_cutoff']=='2014-12-31'
           c=x['counts']
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_observed_frozen_v1.json').read_text())
+          assert frozen['source']['version_id']==421942
+          assert frozen['source']['file_id']==4576411
+          assert c==frozen['counts']
+          assert frozen['interpretation']['true_natal_dispersal_verified'] is False
+          assert frozen['interpretation']['no_2015_2022_destination_fields_accessed'] is True
+          assert frozen['interpretation']['independent_heldout_or_ecological_forecast_authorized'] is False
           assert set(c)==set(p['allowed_aggregate_fields'])
           for key,prior in p['known_pr642'].items():
               assert c[key]==prior,key
