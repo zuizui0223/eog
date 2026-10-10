@@ -1,0 +1,84 @@
+name: Helgeland pre2015 later observed site-code sensitivity
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-pre2015-followup-horizons-v1.yml'
+      - 'scripts/audit_helgeland_pre2015_followup_horizons_v1.py'
+      - 'tests/test_helgeland_pre2015_followup_horizons_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_protocol_v1.json'
+      - 'docs/eog_helgeland_pre2015_followup_horizon_sensitivity_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_observed_frozen_v1.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-pre2015-followup-horizons-v1.yml'
+      - 'scripts/audit_helgeland_pre2015_followup_horizons_v1.py'
+      - 'tests/test_helgeland_pre2015_followup_horizons_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_protocol_v1.json'
+      - 'docs/eog_helgeland_pre2015_followup_horizon_sensitivity_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_observed_frozen_v1.json'
+
+permissions:
+  contents: read
+
+jobs:
+  pre2015-source-verified-horizon-qc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Verify original authors source commit
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Synthetic controls for future date masking and incomplete followup
+        run: python -m pytest -q tests/test_helgeland_pre2015_followup_horizons_v1.py
+      - name: Verify Dryad v6 bytes then count historical observed later site-code changes
+        run: |
+          python scripts/audit_helgeland_pre2015_followup_horizons_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-pre2015-followup-horizons-aggregates.json
+      - name: Check old exposed baseline and all scientific HOLD flags
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('build/helgeland-pre2015-followup-horizons-aggregates.json').read_text())
+          p=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_protocol_v1.json').read_text())
+          assert x['status']=='FOLLOWUP_WINDOW_SENSITIVITY_OBSERVED__ECOLOGICAL_HOLD'
+          assert x['source_byte_sha256_and_firstline_reverified'] is True
+          assert x['calendar_cutoff']=='2014-12-31'
+          c=x['counts']
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_followup_horizon_observed_frozen_v1.json').read_text())
+          assert frozen['source']['version_id']==421942
+          assert frozen['source']['file_id']==4576411
+          assert c==frozen['counts']
+          assert frozen['interpretation']['true_natal_dispersal_verified'] is False
+          assert frozen['interpretation']['no_2015_2022_destination_fields_accessed'] is True
+          assert frozen['interpretation']['independent_heldout_or_ecological_forecast_authorized'] is False
+          assert set(c)==set(p['allowed_aggregate_fields'])
+          for key,prior in p['known_pr642'].items():
+              assert c[key]==prior,key
+          assert c['any_later_different_site_id_count']>=c['first_followup_different_site_id_count']
+          assert c['first_same_then_later_different_site_id_count']<=c['first_followup_same_site_id_count']
+          assert x['all_2015_2022_id_island_stage_outcomes_masked'] is True
+          assert x['observed_site_code_changes_not_proven_dispersal'] is True
+          assert x['followup_calendar_space_not_detection_effort'] is True
+          assert x['individual_ids_island_codes_or_dates_exported'] is False
+          assert x['independent_ecological_score_authorized'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-PRE2015-ANY-LATER-SITE-SWITCH-AGGREGATES-NO-IDS-v1
+          path: build/helgeland-pre2015-followup-horizons-aggregates.json
+          if-no-files-found: warn
