@@ -136,3 +136,30 @@ def test_no_overbroad_uses_or_raw_ids_in_report_source():
                       "import pandas","read_csv(","urllib.request","requests.get("):
         assert forbidden not in src
     assert src.index('if observed>cutoff:') < src.index('ident=(row["ID"] or "").strip()')
+
+
+def test_observed_pre2015_followup_result_and_provenance_frozen():
+    x=json.loads((BASE/"helgeland_pre2015_followup_horizon_observed_frozen_v1.json").read_text())
+    assert x["schema"]=="eog.helgeland.pre2015.followup_horizon.frozen_observed_v1"
+    assert x["provenance"]["github_actions_run_id"]==38058380422
+    assert x["provenance"]["artifact_id"]==11672555186
+    assert x["provenance"]["artifact_zip_sha256"]==(
+        "98e9621289d924f17c7ba377372fb0e53b61eea904dd6cd0d0ce08c4d499e5e0")
+    c=x["counts"]
+    assert c["whole_file_rows_date_checked"]==73593
+    assert c["unique_nest_site_id_count"]==10737
+    assert c["first_later_direct_observed_id_count"]==4164
+    assert c["first_followup_same_site_id_count"]==3941
+    assert c["first_followup_different_site_id_count"]==223
+    assert c["any_later_different_site_id_count"]==451
+    assert c["first_same_then_later_different_site_id_count"]==228
+    assert c["first_different_then_later_source_site_id_count"]==2
+    assert c["eligible_30d_full_window_nest_id_count"]==10737
+    assert c["eligible_30d_direct_observed_id_count"]==1742
+    assert c["eligible_30d_different_site_observed_id_count"]==3
+    assert c["eligible_365d_full_window_nest_id_count"]==10073
+    assert c["eligible_365d_direct_observed_id_count"]==3554
+    assert c["eligible_365d_different_site_observed_id_count"]==308
+    assert x["interpretation"]["true_natal_dispersal_verified"] is False
+    assert x["interpretation"]["no_2015_2022_destination_fields_accessed"] is True
+    assert x["interpretation"]["independent_heldout_or_ecological_forecast_authorized"] is False
