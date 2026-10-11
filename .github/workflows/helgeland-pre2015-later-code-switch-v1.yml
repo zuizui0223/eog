@@ -1,0 +1,76 @@
+name: Helgeland pre2015 later site-code observability
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-pre2015-later-code-switch-v1.yml'
+      - 'scripts/audit_helgeland_pre2015_later_site_switch_observability_v1.py'
+      - 'tests/test_helgeland_pre2015_later_site_switch_observability_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_protocol_v1.json'
+      - 'docs/eog_helgeland_pre2015_later_switch_observability_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-pre2015-later-code-switch-v1.yml'
+      - 'scripts/audit_helgeland_pre2015_later_site_switch_observability_v1.py'
+      - 'tests/test_helgeland_pre2015_later_site_switch_observability_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_protocol_v1.json'
+      - 'docs/eog_helgeland_pre2015_later_switch_observability_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  historical-positive-records-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Verify immutable author revision
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Validate hidden later observation and future-row quarantine on synthetic encounters
+        run: python -m pytest -q tests/test_helgeland_pre2015_later_site_switch_observability_v1.py
+      - name: Verify pinned whole-file hashes and original first-followup counts then aggregate later site changes
+        run: |
+          python scripts/audit_helgeland_pre2015_later_site_switch_observability_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-pre2015-later-site-observability-v1.json
+      - name: Require original 3941 and 223 partitions and refuse ecological claim
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          out=json.loads(Path('build/helgeland-pre2015-later-site-observability-v1.json').read_text())
+          assert out['schema']=='eog.helgeland.pre2015_later_site_switch_observability.v1'
+          assert out['status']=='EXPLORATORY_PRE2015_LATER_DIFFERENT_SITE_CODE_REOBSERVATION__NO_DISPERSAL_RATE'
+          assert out['original_first_followup_counts_reconciled'] is True
+          p=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_protocol_v1.json').read_text())
+          c=out['counts']
+          assert set(c)==set(p['allowed_output'])
+          assert c['first_same_later_different']+c['first_same_later_ambiguous_only']+c['first_same_later_no_different']==3941
+          assert c['first_changed_later_return']+c['first_changed_later_ambiguous_only']+c['first_changed_later_no_return']==223
+          assert c['first_same_with_additional_date']+c['first_same_no_additional_date']==3941
+          assert all(out[k] is False for k in (
+              'post2014_id_island_stage_inspected','individual_data_exported',
+              'site_code_changed_means_natal_adult_dispersal',
+              'later_first_detection_lag_is_true_movement_time',
+              'selection_bias_from_reobservation_corrected','surveyed_zero_verified',
+              '2020_v8_source_available','heldout_predictive_benchmark_authorized',
+              'colonization_or_fitness_claim_authorized'))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-PRE2015-LATER-SITE-CODE-DETECTION-AGGREGATES
+          path: build/helgeland-pre2015-later-site-observability-v1.json
+          if-no-files-found: warn
