@@ -1,0 +1,80 @@
+name: Helgeland pre2015 first vs any later observed site-code switch
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-pre2015-first-vs-ever-switch-v1.yml'
+      - 'scripts/audit_helgeland_pre2015_first_vs_ever_site_switch_v1.py'
+      - 'tests/test_helgeland_pre2015_first_vs_ever_site_switch_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_first_vs_any_switch_contract_v1.json'
+      - 'docs/eog_helgeland_pre2015_first_vs_any_observed_site_change_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-pre2015-first-vs-ever-switch-v1.yml'
+      - 'scripts/audit_helgeland_pre2015_first_vs_ever_site_switch_v1.py'
+      - 'tests/test_helgeland_pre2015_first_vs_ever_site_switch_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_first_vs_any_switch_contract_v1.json'
+      - 'docs/eog_helgeland_pre2015_first_vs_any_observed_site_change_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  positive-site-code-sequences-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Prove original authors source revision
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Test synthetic code-switch and future-record poison counterexamples
+        run: python -m pytest -q tests/test_helgeland_pre2015_first_vs_ever_site_switch_v1.py
+      - name: Read pre-2015 direct observations after original source SHA256 and header checks
+        run: |
+          python scripts/audit_helgeland_pre2015_first_vs_ever_site_switch_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-pre2015-first-vs-ever-site-switch-v1.json
+      - name: Assert exposed #642 denominators unchanged and all ecological claims HOLD
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('build/helgeland-pre2015-first-vs-ever-site-switch-v1.json').read_text())
+          assert x['schema']=='eog.helgeland.pre2015.first_vs_ever_site_code.exploratory_receipt.v1'
+          assert x['status']=='OBSERVED_PRE2015_FOLLOWUP_DEPTH_SENSITIVITY__ECOLOGICAL_HOLD'
+          assert x['source_whole_file_sha256_and_firstline_verified'] is True
+          c=x['counts']
+          policy=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_first_vs_any_switch_contract_v1.json').read_text())
+          assert set(c)==set(policy['preregistered_metrics'])
+          for key,v in policy['pre_exposed_expected'].items():
+              metric='whole_file_rows_date_checked' if key=='whole_source_rows' else key
+              assert c[metric]==v,(key,c[metric],v)
+          assert c['any_later_different']>=c['first_different']==223
+          assert c['ever_different_among_first_same_one_followup_day']==0
+          assert c['first_same_then_later_different']==c['ever_different_among_first_same_two_or_more_followup_days']
+          assert c['nest_ids_with_later_direct']==4164
+          for flag in ('original_historical_source_public_by_2014',
+                       'future_2015_2022_id_island_stage_inspected',
+                       'biological_natal_dispersal_rate_estimated',
+                       'new_independent_EOG_prediction_scored',
+                       'observation_effort_or_surveyed_zero_verified',
+                       'raw_ids_sites_and_dates_exported'):
+              assert x[flag] is False, flag
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-PRE2015-FIRST-VS-EVER-CODE-AGGREGATES-NO-IDS-v1
+          path: build/helgeland-pre2015-first-vs-ever-site-switch-v1.json
+          if-no-files-found: warn
