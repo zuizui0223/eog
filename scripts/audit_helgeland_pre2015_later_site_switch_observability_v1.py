@@ -63,7 +63,14 @@ def group_later(dated_sites:list[tuple[date,str]],first_date:date,
     for stamp,site in dated_sites:
         if stamp>first_date:
             later[stamp].add(site)
-    ambiguous=any(len(sites)>1 for sites in later.values())
+    # An ambiguous day is relevant only if at least one listed code
+    # would support the transition being evaluated. For an apparent return,
+    # a B/C conflict without any natal A code is not return evidence.
+    ambiguous=any(
+        len(sites)>1 and
+        (origin in sites if looking_for_origin else any(site!=origin for site in sites))
+        for sites in later.values()
+    )
     matches=[stamp for stamp,sites in later.items()
              if len(sites)==1 and ((origin in sites)==looking_for_origin)]
     if matches:
@@ -84,7 +91,9 @@ def reconcile_exposed_followup_counts(counts:dict,prior:dict)->None:
     if (prior.get("schema")!="eog.helgeland.pre2015.followup_horizon.frozen_observed_v1"
         or prior.get("status")!="FOLLOWUP_WINDOW_SENSITIVITY_OBSERVED__ECOLOGICAL_HOLD"
         or prior.get("source",{}).get("source_bytes_and_firstline_independently_verified") is not True
-        or prior.get("source",{}).get("calendar_cutoff")!="2014-12-31"):
+        or prior.get("source",{}).get("calendar_cutoff")!="2014-12-31"
+        or prior.get("source",{}).get("version_id")!=421942
+        or prior.get("source",{}).get("file_id")!=4576411):
         raise ValueError("Frozen PR643 receipt source or status invalid")
     old=prior["counts"]
     if not (
