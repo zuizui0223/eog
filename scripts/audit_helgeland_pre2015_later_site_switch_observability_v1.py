@@ -24,6 +24,7 @@ from audit_helgeland_2026_upstream_byte_parity_v1 import file_path
 PROTOCOL=BASE/"helgeland_pre2015_later_site_switch_protocol_v1.json"
 ORIGINAL_PROTOCOL=BASE/"helgeland_pre2015_direct_code_switch_protocol_v1.json"
 PRIOR_RECEIPT=BASE/"helgeland_pre2015_first_direct_site_code_frozen_v1.json"
+PRIOR_ANY_LATER_RECEIPT=BASE/"helgeland_pre2015_followup_horizon_observed_frozen_v1.json"
 UPSTREAM_SHA="a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
 OUTPUT_SCHEMA="eog.helgeland.pre2015_later_site_switch_observability.v1"
 STAGES=frozenset(("nest","capt","obs"))
@@ -70,6 +71,35 @@ def group_later(dated_sites:list[tuple[date,str]],first_date:date,
     if ambiguous:
         return "ambiguous",None,bool(later)
     return "not_observed",None,bool(later)
+
+
+def reconcile_exposed_followup_counts(counts:dict,prior:dict)->None:
+    """Require semantic agreement with already exposed PR #643 observations.
+
+    PR #643 counted any different-code record, including same-day conflicts.
+    This PR requires an unambiguous single site on a calendar day, so its
+    observed and ambiguity-only subclasses must sum to the older count.
+    Never force the stricter count alone to equal 228.
+    """
+    if (prior.get("schema")!="eog.helgeland.pre2015.followup_horizon.frozen_observed_v1"
+        or prior.get("status")!="FOLLOWUP_WINDOW_SENSITIVITY_OBSERVED__ECOLOGICAL_HOLD"
+        or prior.get("source",{}).get("source_bytes_and_firstline_independently_verified") is not True
+        or prior.get("source",{}).get("calendar_cutoff")!="2014-12-31"):
+        raise ValueError("Frozen PR643 receipt source or status invalid")
+    old=prior["counts"]
+    if not (
+        counts["first_same_later_different"]+counts["first_same_later_ambiguous_only"]
+            ==old["first_same_then_later_different_site_id_count"]
+        and counts["first_same_later_no_different"]
+            ==old["first_followup_same_never_observed_different_later_count"]
+        and counts["first_changed_later_return"]
+            <=old["first_different_then_later_source_site_id_count"]
+        and counts["first_same_later_different"]+
+            counts["first_same_later_ambiguous_only"]+
+            counts["first_same_later_no_different"]
+            ==old["first_followup_same_site_id_count"]
+    ):
+        raise ValueError("New strict-date classifications contradict exposed PR643 aggregates")
 
 
 def inspect(records:Iterable[Mapping[str,str]],policy:dict)->dict:
@@ -202,6 +232,9 @@ def main():
     with file_path(args.upstream_checkout,PATH).open("r",encoding="utf-8-sig",newline="") as handle:
         rows=csv.DictReader(handle,delimiter=";",quotechar='"',strict=True)
         report=inspect(rows,contract)
+    earlier=json.loads(PRIOR_ANY_LATER_RECEIPT.read_text(encoding="utf-8"))
+    reconcile_exposed_followup_counts(report["counts"],earlier)
+    report["previous_any_later_observation_counts_reconciled"]=True
     if set(report["counts"])!=set(contract["allowed_output"]):
         raise ValueError("Undeclared output aggregate field")
     if args.output.exists() or args.output.is_symlink():
