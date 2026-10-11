@@ -148,7 +148,7 @@ def test_frozen_claim_escalation_and_prior_count_changes_are_rejected():
         inspect(rows,policy)
     rows,policy=fixture()
     policy["known_prior_counts"]["first_same"]=999
-    with pytest.raises(ValueError,match="first-followup"):
+    with pytest.raises(ValueError,match="First-followup"):
         inspect(rows,policy)
 
 
