@@ -120,6 +120,28 @@ def test_followup_lag_categories_are_observation_delays():
     assert c["first_same_later_no_different"]==0
 
 
+
+def test_exact_observed_lag_30_31_and_365_day_boundaries():
+    for difference,bin_name in (
+        (30,"lag_1_to_30_days"),
+        (31,"lag_31_to_365_days"),
+        (365,"lag_31_to_365_days"),
+        (366,"lag_gt365_days"),
+    ):
+        from datetime import timedelta
+        rows,policy=fixture()
+        first=date(2001,5,10)
+        rows.append(rec("c",(first+timedelta(days=difference)).isoformat(),"B"))
+        policy["known_prior_counts"]["total_rows"]+=1
+        policy["known_prior_counts"]["window_rows"]+=1
+        counts=inspect(rows,policy)["counts"]
+        assert counts["first_same_later_different"]==2
+        assert counts[bin_name]==(2 if difference==30 else 1) or (
+            difference!=30 and bin_name=="lag_gt365_days" and counts[bin_name]==1)
+        assert sum(counts[name] for name in (
+            "lag_1_to_30_days","lag_31_to_365_days","lag_gt365_days"))==2
+
+
 def test_frozen_claim_escalation_and_prior_count_changes_are_rejected():
     rows,policy=fixture()
     policy["bounds"]["heldout_scoring_authorized"]=True
