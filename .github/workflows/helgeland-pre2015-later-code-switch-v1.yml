@@ -54,6 +54,7 @@ jobs:
           assert out['schema']=='eog.helgeland.pre2015_later_site_switch_observability.v1'
           assert out['status']=='EXPLORATORY_PRE2015_LATER_DIFFERENT_SITE_CODE_REOBSERVATION__NO_DISPERSAL_RATE'
           assert out['original_first_followup_counts_reconciled'] is True
+          assert out['previous_any_later_observation_counts_reconciled'] is True
           p=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_protocol_v1.json').read_text())
           c=out['counts']
           assert set(c)==set(p['allowed_output'])
