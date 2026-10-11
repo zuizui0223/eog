@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import copy
+from datetime import date
 import json
 import sys
 from pathlib import Path
@@ -11,7 +12,7 @@ import pytest
 ROOT=Path(__file__).resolve().parents[1]
 BASE=ROOT/"validation/eog_virtual_world_ecology_synthesis_v1"
 sys.path.insert(0,str(ROOT/"scripts"))
-from audit_helgeland_pre2015_later_site_switch_observability_v1 import inspect, PROTOCOL, reconcile_exposed_followup_counts
+from audit_helgeland_pre2015_later_site_switch_observability_v1 import inspect, PROTOCOL, reconcile_exposed_followup_counts, group_later
 
 
 def rec(i,when,site,stage="capt"):
@@ -131,6 +132,22 @@ def test_frozen_claim_escalation_and_prior_count_changes_are_rejected():
 
 
 
+
+def test_ambiguous_later_return_requires_original_nest_code_among_conflicting_sites():
+    first=date(2001,5,10)
+    # Conflicting later codes B and C contain no natal A:
+    # not a candidate return to A, even though the day is ambiguous.
+    other=[(date(2001,6,1),"B"),(date(2001,6,1),"C")]
+    assert group_later(other,first,"A",True)==("not_observed",None,True)
+    # Mixed A/C contains natal A but is not an unambiguous return.
+    candidate=[(date(2001,6,1),"A"),(date(2001,6,1),"C")]
+    assert group_later(candidate,first,"A",True)==("ambiguous",None,True)
+    # Once another day clearly observes natal A, it is a return-code
+    # positive encounter, not proof of movement or settlement.
+    clear=candidate+[(date(2001,6,2),"A")]
+    assert group_later(clear,first,"A",True)==("observed",23,True)
+
+
 def test_new_unique_date_categories_reconcile_with_exposed_any_code_counts():
     rows,policy=fixture()
     counts=inspect(rows,policy)["counts"]
@@ -140,7 +157,7 @@ def test_new_unique_date_categories_reconcile_with_exposed_any_code_counts():
         "schema":"eog.helgeland.pre2015.followup_horizon.frozen_observed_v1",
         "status":"FOLLOWUP_WINDOW_SENSITIVITY_OBSERVED__ECOLOGICAL_HOLD",
         "source":{"source_bytes_and_firstline_independently_verified":True,
-                  "calendar_cutoff":"2014-12-31"},
+                  "calendar_cutoff":"2014-12-31","version_id":421942,"file_id":4576411},
         "counts":{"first_same_then_later_different_site_id_count":2,
                   "first_followup_same_never_observed_different_later_count":1,
                   "first_different_then_later_source_site_id_count":1,
