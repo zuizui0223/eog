@@ -119,7 +119,8 @@ def analyze(records: Iterable[Mapping[str, str]], policy: dict) -> dict:
 
     previous = policy["pre_exposed_expected"]
     for key, expected in previous.items():
-        if counts[key] != expected:
+        metric = ("whole_file_rows_date_checked" if key == "whole_source_rows" else key)
+        if counts[metric] != expected:
             raise ValueError(f"New endpoint denominator changed from exposed #642: {key}")
     if not (counts["nest_ids_with_later_direct"] ==
             counts["first_same"] + counts["first_different"] +
