@@ -136,8 +136,7 @@ def test_exact_observed_lag_30_31_and_365_day_boundaries():
         policy["known_prior_counts"]["window_rows"]+=1
         counts=inspect(rows,policy)["counts"]
         assert counts["first_same_later_different"]==2
-        assert counts[bin_name]==(2 if difference==30 else 1) or (
-            difference!=30 and bin_name=="lag_gt365_days" and counts[bin_name]==1)
+        assert counts[bin_name]==(2 if difference==30 else 1)
         assert sum(counts[name] for name in (
             "lag_1_to_30_days","lag_31_to_365_days","lag_gt365_days"))==2
 
