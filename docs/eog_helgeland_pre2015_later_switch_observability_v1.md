@@ -26,7 +26,7 @@ Importantly, #643 counted `any` different-code positive encounter row, including
 - `first-same later no different = 3,713`;
 - `unambiguous first-different later origin return <= 2`.
 
-The last bound is an inequality because an ambiguous multi-code date need not include the origin code. These are identity and definition checks, **not new ecological findings**. The source-audit runner now fails closed if the previously frozen, independently verified PR #643 aggregate contradicts the stricter output.
+The last bound is an inequality because a same-day multi-code conflict need not include the origin code. For the return classification, only contradictory dates containing the original nest code count as ambiguous possible returns; B/C records cannot indicate return to nest code A. These are identity and definition checks, **not new ecological findings**. The source-audit runner now fails closed if the previously frozen, independently verified PR #643 aggregate contradicts the stricter output.
 
 ## Critical scientific limitations
 
