@@ -16,6 +16,18 @@ Among IDs with first followup on the nest code (3,941), classify: at least one *
 
 The categories must partition the frozen 3,941 / 223 records exactly. Any different original row count, source hash, header or first-stage count is a fatal STOP. Mock negative controls show that a first same-site encounter can hide later different-site observation, contradictory later same-date island codes remain ambiguous, and poisoned 2015+ rows cannot influence history.
 
+## Cross-check against the already exposed PR #643 outcome
+
+This PR is **not blind to all later site-code changes**: PR #643 already exposed **228** first-same-then-later-different records and **2** first-different-then-source-code return records. The genuinely new audit is limited to the single-code calendar-day classifications, re-observation opportunities, and encounter-date lag bins. This is a post-exposure refinement, not independent replication or prospective testing.
+
+Importantly, #643 counted `any` different-code positive encounter row, including potentially conflicting distinct site codes on the same date. The present stricter classification treats such later dates as **ambiguous** unless an unambiguous change appears on another date. Therefore, the valid exact reconciliation is:
+
+- `unambiguous first-same later different + ambiguous-only first-same later = 228`;
+- `first-same later no different = 3,713`;
+- `unambiguous first-different later origin return <= 2`.
+
+The last bound is an inequality because an ambiguous multi-code date need not include the origin code. These are identity and definition checks, **not new ecological findings**. The source-audit runner now fails closed if the previously frozen, independently verified PR #643 aggregate contradicts the stricter output.
+
 ## Critical scientific limitations
 
 These are **conditional positive re-detection counts**, not independent observations of whether animals were absent from other sites or what dates dispersal occurred. Detection effort, individual survival, breeding status, capture probability and uneven observation length bias every count. A later different-code sighting might reflect temporary visitation, genuine dispersal, recording or numeric-code semantics (the latter still need crosswalk). A later return to nest code does not prove a successful return migration. No suitable 2020 source-input model, true surveyed-zero denominator, EOG forecasting discrimination, colonization, founding or fitness effect is established.
