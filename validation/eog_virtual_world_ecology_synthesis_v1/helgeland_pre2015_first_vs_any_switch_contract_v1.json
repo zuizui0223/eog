@@ -1,0 +1,77 @@
+{
+  "schema": "eog.helgeland.pre2015.first_vs_any_later_site_switch.v1",
+  "status": "FROZEN_AFTER_FIRST_FOLLOWUP_223_EXPOSED__BEFORE_ANY_LATER_SWITCH_INSPECTION",
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "version_id": 421942,
+    "file_id": 4576411,
+    "github_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "path": "Data/presence_data_1994_2022.txt"
+  },
+  "cutoff": {
+    "min": "1994-01-01",
+    "max": "2014-12-31",
+    "mask_other_fields_before_date_filter": true
+  },
+  "source_columns_accessible": [
+    "date",
+    "ID",
+    "Island",
+    "Location",
+    "stage"
+  ],
+  "physical_direct_stages": [
+    "nest",
+    "capt",
+    "obs"
+  ],
+  "eligibility": "ID with exactly one nest Island code among eligible observations; direct followup stage=capt/obs with date strictly later than earliest nest record, through 2014-12-31.",
+  "first_endpoint": "Unique island code at the earliest strictly later capt/obs date; multiple codes at same earliest date are ambiguous.",
+  "ever_endpoint": "At least one strictly later capt/obs observation on a different Island code than the unique nest Island code, within cutoff; this is NOT permanent natal dispersal.",
+  "tie_handling": "First-date conflicting codes excluded from first endpoint classification; if any later code is different, ever-observed code-switch can be true but neither first-same nor first-different.",
+  "preregistered_metrics": [
+    "whole_file_rows_date_checked",
+    "eligible_pre2015_rows",
+    "pre1994_date_masked",
+    "post2014_date_masked",
+    "unique_nest_source_ids",
+    "ambiguous_nest_source_ids",
+    "nest_ids_without_later_direct",
+    "nest_ids_with_later_direct",
+    "first_same",
+    "first_different",
+    "first_ambiguous",
+    "any_later_different",
+    "first_same_then_later_different",
+    "first_different_then_later_same",
+    "any_later_different_with_only_one_followup_day",
+    "any_later_different_with_two_or_more_followup_days",
+    "one_followup_day_count",
+    "two_or_more_followup_days_count",
+    "ever_different_among_first_same_one_followup_day",
+    "ever_different_among_first_same_two_or_more_followup_days"
+  ],
+  "pre_exposed_expected": {
+    "whole_source_rows": 73593,
+    "eligible_pre2015_rows": 51162,
+    "pre1994_date_masked": 1070,
+    "post2014_date_masked": 21361,
+    "unique_nest_source_ids": 10737,
+    "ambiguous_nest_source_ids": 5,
+    "nest_ids_without_later_direct": 6573,
+    "nest_ids_with_later_direct": 4164,
+    "first_same": 3941,
+    "first_different": 223,
+    "first_ambiguous": 0
+  },
+  "scientific_bounds": {
+    "after_first_result_exposure_exploratory": true,
+    "future_2015_through_2022_record_id_site_stage_never_accessed": true,
+    "change_is_not_natal_recruitment_or_permanent_migration": true,
+    "sampling_effort_and_undetected_switches_not_measured": true,
+    "followup_number_is_detection_opportunity_not_effort_estimate": true,
+    "no_2020_historical_public_training_inputs_attested": true,
+    "no_independent_heldout_ecological_model_score": true,
+    "no_raw_individual_or_island_values_in_output": true
+  }
+}
