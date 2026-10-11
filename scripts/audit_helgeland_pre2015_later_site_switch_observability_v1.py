@@ -242,6 +242,21 @@ def main():
         rows=csv.DictReader(handle,delimiter=";",quotechar='"',strict=True)
         report=inspect(rows,contract)
     earlier=json.loads(PRIOR_ANY_LATER_RECEIPT.read_text(encoding="utf-8"))
+    expected_frozen={
+        "whole_file_rows_date_checked":73593,
+        "eligible_pre2015_rows":51162,
+        "unique_nest_site_id_count":10737,
+        "first_later_direct_observed_id_count":4164,
+        "first_followup_same_site_id_count":3941,
+        "first_followup_different_site_id_count":223,
+        "any_later_different_site_id_count":451,
+        "first_same_then_later_different_site_id_count":228,
+        "first_followup_same_never_observed_different_later_count":3713,
+        "first_different_then_later_source_site_id_count":2,
+    }
+    if any(earlier.get("counts",{}).get(name)!=value
+           for name,value in expected_frozen.items()):
+        raise ValueError("Frozen PR643 observed counts drifted from previously inspected receipt")
     reconcile_exposed_followup_counts(report["counts"],earlier)
     report["previous_any_later_observation_counts_reconciled"]=True
     if set(report["counts"])!=set(contract["allowed_output"]):
