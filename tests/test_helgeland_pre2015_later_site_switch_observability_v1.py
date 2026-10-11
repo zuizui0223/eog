@@ -11,7 +11,7 @@ import pytest
 ROOT=Path(__file__).resolve().parents[1]
 BASE=ROOT/"validation/eog_virtual_world_ecology_synthesis_v1"
 sys.path.insert(0,str(ROOT/"scripts"))
-from audit_helgeland_pre2015_later_site_switch_observability_v1 import inspect, PROTOCOL
+from audit_helgeland_pre2015_later_site_switch_observability_v1 import inspect, PROTOCOL, reconcile_exposed_followup_counts
 
 
 def rec(i,when,site,stage="capt"):
@@ -128,6 +128,47 @@ def test_frozen_claim_escalation_and_prior_count_changes_are_rejected():
     policy["known_prior_counts"]["first_same"]=999
     with pytest.raises(ValueError,match="first-followup"):
         inspect(rows,policy)
+
+
+
+def test_new_unique_date_categories_reconcile_with_exposed_any_code_counts():
+    rows,policy=fixture()
+    counts=inspect(rows,policy)["counts"]
+    # Original PR643 counted both the uniquely later B and the contradictory
+    # same-day B/C: 2 ever-different among first-same; only 1 is unambiguous.
+    exposed={
+        "schema":"eog.helgeland.pre2015.followup_horizon.frozen_observed_v1",
+        "status":"FOLLOWUP_WINDOW_SENSITIVITY_OBSERVED__ECOLOGICAL_HOLD",
+        "source":{"source_bytes_and_firstline_independently_verified":True,
+                  "calendar_cutoff":"2014-12-31"},
+        "counts":{"first_same_then_later_different_site_id_count":2,
+                  "first_followup_same_never_observed_different_later_count":1,
+                  "first_different_then_later_source_site_id_count":1,
+                  "first_followup_same_site_id_count":3}
+    }
+    reconcile_exposed_followup_counts(counts,exposed)
+    incorrect=copy.deepcopy(exposed)
+    incorrect["counts"]["first_same_then_later_different_site_id_count"]=1
+    with pytest.raises(ValueError,match="contradict exposed"):
+        reconcile_exposed_followup_counts(counts,incorrect)
+    incorrect=copy.deepcopy(exposed)
+    incorrect["counts"]["first_different_then_later_source_site_id_count"]=0
+    with pytest.raises(ValueError,match="contradict exposed"):
+        reconcile_exposed_followup_counts(counts,incorrect)
+    incorrect=copy.deepcopy(exposed)
+    incorrect["source"]["source_bytes_and_firstline_independently_verified"]=False
+    with pytest.raises(ValueError,match="receipt source"):
+        reconcile_exposed_followup_counts(counts,incorrect)
+
+
+def test_reconciliation_requires_actual_prior_frozen_numbers():
+    rows,policy=fixture()
+    counts=inspect(rows,policy)["counts"]
+    previous=json.loads((BASE/"helgeland_pre2015_followup_horizon_observed_frozen_v1.json").read_text(encoding="utf-8"))
+    assert previous["counts"]["first_same_then_later_different_site_id_count"]==228
+    assert previous["counts"]["first_followup_same_never_observed_different_later_count"]==3713
+    assert previous["counts"]["first_different_then_later_source_site_id_count"]==2
+    assert counts["first_same_later_different"]+counts["first_same_later_ambiguous_only"]==2
 
 
 def test_real_contract_is_post_exposure_and_source_first():
