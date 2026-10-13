@@ -1,0 +1,65 @@
+{
+  "schema": "eog.helgeland.pre2015_later_site_code_exposure.exploratory_v1",
+  "status": "FROZEN_AFTER_FIRST_FOLLOWUP_COUNTS_EXPOSED_BEFORE_LATER_CODE_RESULTS",
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "version_id": 421942,
+    "file_id": 4576411,
+    "upstream_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "path": "Data/presence_data_1994_2022.txt"
+  },
+  "window": [
+    "1994-01-01",
+    "2014-12-31"
+  ],
+  "shield": "Read date before consulting ID, Island, Location or stage. Once within window use only those five fields; never Year, age, filled, or any later output.",
+  "baseline_file": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_first_direct_site_code_frozen_v1.json",
+  "definitions": {
+    "source": "Only IDs with a single nest Island code from pre2015 directly recorded nest observations.",
+    "first": "Earliest direct capt/obs calendar date strictly later than earliest nest; contradictory same-date codes are ambiguous.",
+    "hidden_later": "For first-followup SAME nest code IDs, count any strictly later direct observation date with a single DIFFERENT code.",
+    "later_return": "For first-followup DIFFERENT code IDs, count any strictly later direct observation date with one code EQUAL to the nest code.",
+    "ambiguous": "With no definitive later switch/return, any contradictory later date yields ambiguous status.",
+    "opportunity": "A further observation opportunity is at least one direct capt/obs record on a date strictly later than the first followup.",
+    "lag": "Days from first direct followup to first unambiguous different-code later observation; bins 1..30,31..365,>365. This is OBSERVATION lag, not movement time."
+  },
+  "known_prior_counts": {
+    "total_rows": 73593,
+    "window_rows": 51162,
+    "nest_ids_unique": 10737,
+    "first_direct_followup_ids": 4164,
+    "first_same": 3941,
+    "first_different": 223,
+    "first_ambiguous": 0,
+    "no_followup": 6573,
+    "prewindow": 1070,
+    "postwindow": 21361
+  },
+  "allowed_output": [
+    "first_same_with_additional_date",
+    "first_same_no_additional_date",
+    "first_same_later_different",
+    "first_same_later_no_different",
+    "first_same_later_ambiguous_only",
+    "first_changed_later_return",
+    "first_changed_later_no_return",
+    "first_changed_later_ambiguous_only",
+    "lag_1_to_30_days",
+    "lag_31_to_365_days",
+    "lag_gt365_days"
+  ],
+  "bounds": {
+    "post_exposure_exploratory": true,
+    "post2014_identity_never_read": true,
+    "original_sha256_and_header_required": true,
+    "output_no_individual_or_island_values": true,
+    "code_change_not_natal_dispersal": true,
+    "denominator_selection_by_detection": true,
+    "observed_lag_not_true_movement_time": true,
+    "surveyed_zero_verified": false,
+    "2020_v8_actual_input_available": false,
+    "site_code_crosswalk_verified": false,
+    "heldout_scoring_authorized": false,
+    "colonization_or_fitness_claim_authorized": false
+  }
+}
