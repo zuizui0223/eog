@@ -249,14 +249,17 @@ def run(checkout: Path) -> dict:
         "r", encoding="utf-8-sig", newline=""
     ) as handle:
         reader = csv.DictReader(handle, delimiter=";", quotechar='"', strict=True)
-        if reader.fieldnames != json.loads(
+        physical = json.loads(
             (BASE / "helgeland_2026_two_file_physical_headers_frozen_v1.json").read_text(
                 encoding="utf-8"
             )
-        )["headers"][0].get("column_names") and not set(
-            policy["permissible_fields_after_date_mask"]
-        ).issubset(reader.fieldnames or ()):
-            raise ValueError("Frozen physical source fields missing")
+        )
+        expected_header = next(
+            h["column_names"] for h in physical["headers"]
+            if h["github_path"] == PATH
+        )
+        if list(reader.fieldnames or ()) != expected_header:
+            raise ValueError("Frozen physical source header changed")
         result = inspect(reader, policy)
     result["actual_source_sha256_and_header_reverified"] = True
     result["all_original_prior_results_reconciled"] = True
