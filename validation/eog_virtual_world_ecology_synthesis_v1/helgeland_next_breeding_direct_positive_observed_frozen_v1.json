@@ -1,0 +1,53 @@
+{
+  "schema": "eog.helgeland.pre2015.next_breeding_direct_positive.frozen_source_receipt.v1",
+  "status": "INDEPENDENTLY_INSPECTED_ACTUAL_SOURCE_AGGREGATES_FROZEN__NO_RECRUITMENT_INFERENCE",
+  "protocol_freeze_commit": "4a137bd7be47ef41ca14d73613d4a233c10c78fb",
+  "authority": {
+    "github_actions_run_id": 38421455942,
+    "github_actions_artifact_id": 11825833740,
+    "artifact_name": "HELGELAND-NEXT-BREEDING-DIRECT-POSITIVES-AGGREGATES-NO-IDS",
+    "artifact_zip_sha256": "95b64aa88cac16685f441083e73fde59e71aed7090c328afec4a7d1f6578dd55",
+    "source_author_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "original_source_sha256_and_header_verified": true
+  },
+  "receipt": {
+    "EOG_WF_3_31_3_changed": false,
+    "actual_source_sha256_and_header_reverified": true,
+    "all_original_prior_results_reconciled": true,
+    "counts": {
+      "ambiguous_nest_source_ids": 5,
+      "eligible_birth_cohort_ids": 10073,
+      "eligible_pre2015_rows": 51162,
+      "excluded_birth_outside_may_aug": 0,
+      "excluded_birth_year_2014": 664,
+      "first_raw_ambiguous__next_ambiguous": 0,
+      "first_raw_ambiguous__next_different": 0,
+      "first_raw_ambiguous__next_same": 0,
+      "first_raw_before_next_season_detection": 987,
+      "first_raw_different__next_ambiguous": 0,
+      "first_raw_different__next_different": 114,
+      "first_raw_different__next_same": 1,
+      "first_raw_same__next_ambiguous": 0,
+      "first_raw_same__next_different": 124,
+      "first_raw_same__next_same": 1074,
+      "next_season_ambiguous": 0,
+      "next_season_different": 238,
+      "next_season_direct_positive": 1313,
+      "next_season_no_direct_positive": 8760,
+      "next_season_same": 1075,
+      "post2014_rows_masked": 21361,
+      "pre1994_rows_masked": 1070,
+      "unique_nest_source_ids": 10737,
+      "whole_source_rows_date_checked": 73593
+    },
+    "independent_heldout_ecological_prediction_scored": false,
+    "next_breeding_positive_proves_recruitment": false,
+    "no_2015_2022_ID_Island_stage_read": true,
+    "observed_code_change_proves_dispersal": false,
+    "raw_individual_or_site_codes_exported": false,
+    "schema": "eog.helgeland.pre2015.next_breeding_direct_positive.exploratory_receipt.v1",
+    "source_pre2015_date_only_mask": true,
+    "status": "NEXT_CALENDAR_BREEDING_SEASON_DIRECT_POSITIVE_ONLY__BIOLOGICAL_HOLD",
+    "surveyed_zero_or_detection_effort_verified": false
+  }
+}
