@@ -54,6 +54,8 @@ Neither the **238/1,313** code difference nor the 125/1,313 discordance is an un
 
 A **next-calendar-year breeding-season re-detection is not a verified breeding event or recruitment**. Ranke et al. applied a separate recruit definition; raw detection stage is not that variable. Nor does an apparent code difference establish permanent dispersal, source-sink founding, true geographic crosswalk, equal surveillance effort or out-of-time EOG prediction. Even a large paired discrepancy would demonstrate sensitivity to the chosen *observational time window* and motivate access to an independent actual recruitment/survey-effort register, not prove a new ecological dispersal mechanism.
 
+**Original-model code-universe caution:** The pinned author's `R scripts/Main model of metapopulation dynamics.R` filters out literal `Island` codes `33` and `0` before its demographic model, whereas this frozen observation-process diagnostic preserves the previously defined unfiltered raw-code cohort for exact comparability with #642–#644. We have **not** yet quantified how many of these IDs encounter those codes or whether excluding them changes the paired matrix. No interpretation as a mapped route among the eleven named study islands is authorized until an independently validated code dictionary and a separate, explicitly post-exposure sensitivity are available.
+
 Keep Issue #626's HOLDs and the original EOG-WF 3 favorable/favorable/adverse endpoint decisions unchanged.
 
 ### Inspectable commands
