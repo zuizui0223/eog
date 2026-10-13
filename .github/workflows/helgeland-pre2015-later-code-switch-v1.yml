@@ -8,6 +8,7 @@ on:
       - 'tests/test_helgeland_pre2015_later_site_switch_observability_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_protocol_v1.json'
       - 'docs/eog_helgeland_pre2015_later_switch_observability_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_observed_frozen_v1.json'
   push:
     branches: [main]
     paths:
@@ -16,6 +17,7 @@ on:
       - 'tests/test_helgeland_pre2015_later_site_switch_observability_v1.py'
       - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_protocol_v1.json'
       - 'docs/eog_helgeland_pre2015_later_switch_observability_v1.md'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_observed_frozen_v1.json'
 
 permissions:
   contents: read
@@ -57,6 +59,9 @@ jobs:
           assert out['previous_any_later_observation_counts_reconciled'] is True
           p=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_protocol_v1.json').read_text())
           c=out['counts']
+          # Compare the full source-authenticated receipt, not only handpicked totals.
+          frozen_path=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_observed_frozen_v1.json')
+          assert out==json.loads(frozen_path.read_text()), 'Real-source aggregate receipt drifted from independently inspected CI artifact'
           assert set(c)==set(p['allowed_output'])
           assert c['first_same_later_different']+c['first_same_later_ambiguous_only']+c['first_same_later_no_different']==3941
           assert c['first_changed_later_return']+c['first_changed_later_ambiguous_only']+c['first_changed_later_no_return']==223
