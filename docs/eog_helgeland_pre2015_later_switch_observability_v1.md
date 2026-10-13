@@ -33,3 +33,25 @@ The last bound is an inequality because a same-day multi-code conflict need not 
 These are **conditional positive re-detection counts**, not independent observations of whether animals were absent from other sites or what dates dispersal occurred. Detection effort, individual survival, breeding status, capture probability and uneven observation length bias every count. A later different-code sighting might reflect temporary visitation, genuine dispersal, recording or numeric-code semantics (the latter still need crosswalk). A later return to nest code does not prove a successful return migration. No suitable 2020 source-input model, true surveyed-zero denominator, EOG forecasting discrimination, colonization, founding or fitness effect is established.
 
 **If a result is significant for study design**, it will be that first-followup proxies are demonstrably temporally incomplete, not that EOG predicts island colonization. Source, frozen counts and all HOLDs tracked at [Issue #626](https://github.com/zuizui0223/eog/issues/626).
+
+## Independently inspected original-source receipt (2026-10-13)
+
+The source-authenticated actual-data artifact in [GitHub Actions run 38108969284](https://github.com/zuizui0223/eog/actions/runs/38108969284) (artifact ID `11691227493`) was downloaded and its complete aggregate-only JSON inspected independently. The exact JSON has been frozen in `validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_later_site_switch_observed_frozen_v1.json`; the dedicated CI now fails if an authenticated rerun differs at **any** receipt field.
+
+| Directly observed, 1994–2014 | ID count |
+| --- | ---: |
+| First followup on nest code | 3,941 |
+| Of the above, with any additional observation date | 2,356 |
+| Of the above, with no additional observation date | 1,585 |
+| First same, then unambiguous different-code observation | **228** |
+| First same, later ambiguous-only different-code observation | **0** |
+| First same, no observed later different code | 3,713 |
+| First followup on different code | 223 |
+| Of the above, later unambiguous observation on nest code | **2** |
+| Of the above, no observed unambiguous return | 221 |
+
+Observed lag from first same-code followup to first unambiguous different-code observation: **3** at 1–30 days, **178** at 31–365 days, **47** beyond 365 days (sum 228). This is detection lag, **not** biological movement time.
+
+The original first-vs-ever positive-record count reconciles exactly: `223 + 228 = 451` ever directly detected on a different code among the 4,164 linkable IDs. Thus initial-followup-only tabulation captures 223/451 ≈ 49.4% of ever-observed changed-code IDs; the other 228/451 ≈ 50.6% are observed only after the first. These are **selected detectable site-code events**, not unbiased dispersal events or a 50.6% dispersal-rate error. The absence of ambiguous-only records in this source does not establish that multi-code same-day ambiguity is impossible elsewhere.
+
+**Inference remains HOLD:** same source individuals and post-exposure exploratory definitions, no independent temporal test, source-site crosswalk or verified surveyed-negative register, no detection-effort correction, and no EOG forecasting validation. The source is published in 2026 and cannot be treated as a historically available predictor in 2014.
