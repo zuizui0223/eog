@@ -1,0 +1,111 @@
+{
+  "schema": "eog.helgeland.pre2015.next_calendar_breeding_direct_positive.protocol.v1",
+  "status": "FROZEN_AFTER_223_451_228_PRIOR_RESULTS_EXPOSED__BEFORE_NEXT_BREEDING_CLASSIFICATION_READ",
+  "analysis_role": "Post-exposure exploratory season-defined direct positive detection contrast; not recruitment, movement rate or an independent EOG forecast",
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "version_id": 421942,
+    "file_id": 4576411,
+    "author_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "path": "Data/presence_data_1994_2022.txt",
+    "public_at_forecast_cutoff_2014": false
+  },
+  "date_access_contract": {
+    "physical_date_min": "1994-01-01",
+    "physical_date_max": "2014-12-31",
+    "strictly_read_date_before_ID_Island_stage": true,
+    "post2014_identity_never_read": true
+  },
+  "permissible_fields_after_date_mask": [
+    "date",
+    "ID",
+    "Island",
+    "stage"
+  ],
+  "physical_stages": {
+    "nest": "direct nest record",
+    "capt": "direct capture",
+    "obs": "direct visual observation",
+    "fledge_recruit_adult_are_NOT_physical_source_stages": true
+  },
+  "cohort": {
+    "source": "ID must have nest observations on exactly one Island code in the entire eligible 1994–2014 date window",
+    "birth_time": "earliest physically dated nest observation, not source Year or retrospective Least_age",
+    "source_birth_months": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "birth_year_last_included": 2013,
+    "excluded_2014_nests": "No complete next-calendar-year May–August 2015 outcome inside permitted 2014 cutoff; never read 2015 records",
+    "out_of_season_birth": "Exclude earliest nest dated outside May–August and report aggregate count",
+    "qualifying_followup": "literal capt/obs event strictly after earliest nest, within the next calendar year Y+1 and May–August inclusive",
+    "next_breeding_classification": "Use all Island codes on the earliest qualifying followup physical date; same, different or ambiguous if conflicting",
+    "first_raw_classification": "Among qualifying IDs, use earliest strictly later capt/obs date anywhere in 1994–2014; same, different or ambiguous",
+    "matrix": "Cross-tabulate first raw classification against next-calendar-year breeding-season classification on the SAME IDs",
+    "non_detection": "No qualifying capt/obs means no observed next-season positive; it is NOT surveyed absence"
+  },
+  "pre_exposed_expected": {
+    "whole_source_rows": 73593,
+    "eligible_pre2015_rows": 51162,
+    "pre1994_rows": 1070,
+    "post2014_rows": 21361,
+    "unique_nest_ids": 10737,
+    "ambiguous_nest_ids": 5,
+    "first_later_direct_ids": 4164,
+    "first_same": 3941,
+    "first_different": 223,
+    "first_ambiguous": 0,
+    "any_later_different": 451,
+    "first_same_later_different": 228
+  },
+  "outputs": {
+    "allowed_count_fields": [
+      "whole_source_rows_date_checked",
+      "pre1994_rows_masked",
+      "post2014_rows_masked",
+      "eligible_pre2015_rows",
+      "unique_nest_source_ids",
+      "ambiguous_nest_source_ids",
+      "excluded_birth_year_2014",
+      "excluded_birth_outside_may_aug",
+      "eligible_birth_cohort_ids",
+      "next_season_no_direct_positive",
+      "next_season_direct_positive",
+      "next_season_same",
+      "next_season_different",
+      "next_season_ambiguous",
+      "first_raw_same__next_same",
+      "first_raw_same__next_different",
+      "first_raw_same__next_ambiguous",
+      "first_raw_different__next_same",
+      "first_raw_different__next_different",
+      "first_raw_different__next_ambiguous",
+      "first_raw_ambiguous__next_same",
+      "first_raw_ambiguous__next_different",
+      "first_raw_ambiguous__next_ambiguous",
+      "first_raw_before_next_season_detection"
+    ],
+    "output_only_counts_and_boolean_gates": true,
+    "no_raw_ID_Island_Location_or_event_dates_exported": true
+  },
+  "scientific_bounds": {
+    "positive_detection_only": true,
+    "next_breeding_record_does_not_prove_breeding_or_recruitment": true,
+    "literal_Island_code_without_independent_cross_archive_dictionary": true,
+    "detection_effort_and_surveyed_zero_unverified": true,
+    "earliest_nest_date_does_not_prove_original_database_available_then": true,
+    "source_published_in_2026_not_available_in_2014": true,
+    "post_original_223_451_exposure_exploratory": true,
+    "post2014_destination_identity_read": false,
+    "biological_dispersal_rate_estimated": false,
+    "independent_heldout_ecological_model_scored": false,
+    "EOG_WF_denominator_modified": false
+  },
+  "published_methods": {
+    "study": "Ranke et al. 2021 Journal of Animal Ecology",
+    "doi": "10.1111/1365-2656.13580",
+    "interpretation": "Second-calendar-year recorded recruits defined for original study; May–August here is a broad calendar convention, NOT a verified individual breeding status or equal-effort survey window."
+  }
+}

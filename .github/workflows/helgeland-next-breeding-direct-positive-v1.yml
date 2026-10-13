@@ -1,0 +1,99 @@
+name: Helgeland next-calendar-year breeding direct positives
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-next-breeding-direct-positive-v1.yml'
+      - 'scripts/audit_helgeland_next_breeding_direct_positive_v1.py'
+      - 'tests/test_helgeland_next_breeding_direct_positive_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_next_breeding_direct_positive_protocol_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_next_breeding_direct_positive_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_next_breeding_direct_positive_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-next-breeding-direct-positive-v1.yml'
+      - 'scripts/audit_helgeland_next_breeding_direct_positive_v1.py'
+      - 'tests/test_helgeland_next_breeding_direct_positive_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_next_breeding_direct_positive_protocol_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_next_breeding_direct_positive_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_next_breeding_direct_positive_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  positive-next-breeding-code-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Confirm frozen original author revision
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Check invented seasonal counterexamples and calendar safety
+        run: python -m pytest -q tests/test_helgeland_next_breeding_direct_positive_v1.py
+      - name: Verify original source fingerprint and compute pre-2015 positive-only seasonal aggregates
+        run: |
+          python scripts/audit_helgeland_next_breeding_direct_positive_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-next-breeding-direct-positive-v1.json
+      - name: Enforce original source, coherent paired matrix and conservative claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          z=json.loads(Path('build/helgeland-next-breeding-direct-positive-v1.json').read_text())
+          p=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_next_breeding_direct_positive_protocol_v1.json').read_text())
+          frozen=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_next_breeding_direct_positive_observed_frozen_v1.json').read_text())
+          assert frozen['schema']=='eog.helgeland.pre2015.next_breeding_direct_positive.frozen_source_receipt.v1'
+          assert frozen['protocol_freeze_commit']=='4a137bd7be47ef41ca14d73613d4a233c10c78fb'
+          assert frozen['authority']['original_source_sha256_and_header_verified'] is True
+          assert z==frozen['receipt'], 'Full real-source receipt drifted from inspected and frozen CI artifact'
+          assert z['schema']=='eog.helgeland.pre2015.next_breeding_direct_positive.exploratory_receipt.v1'
+          assert z['status']=='NEXT_CALENDAR_BREEDING_SEASON_DIRECT_POSITIVE_ONLY__BIOLOGICAL_HOLD'
+          assert z['actual_source_sha256_and_header_reverified'] is True
+          assert z['all_original_prior_results_reconciled'] is True
+          assert z['source_pre2015_date_only_mask'] is True
+          assert z['no_2015_2022_ID_Island_stage_read'] is True
+          assert set(z['counts'])==set(p['outputs']['allowed_count_fields'])
+          c=z['counts']
+          for count,baseline in [
+              ('whole_source_rows_date_checked','whole_source_rows'),
+              ('eligible_pre2015_rows','eligible_pre2015_rows'),
+              ('pre1994_rows_masked','pre1994_rows'),
+              ('post2014_rows_masked','post2014_rows'),
+              ('unique_nest_source_ids','unique_nest_ids'),
+              ('ambiguous_nest_source_ids','ambiguous_nest_ids'),
+          ]:
+              assert c[count]==p['pre_exposed_expected'][baseline],(count,c[count])
+          assert c['next_season_direct_positive']==sum(
+              c[k] for k in ('next_season_same','next_season_different','next_season_ambiguous')
+          )
+          assert c['next_season_direct_positive']==sum(
+              value for name,value in c.items() if name.startswith('first_raw_') and '__next_' in name
+          )
+          assert all(z[k] is False for k in (
+              'raw_individual_or_site_codes_exported',
+              'next_breeding_positive_proves_recruitment',
+              'observed_code_change_proves_dispersal',
+              'surveyed_zero_or_detection_effort_verified',
+              'independent_heldout_ecological_prediction_scored',
+              'EOG_WF_3_31_3_changed',
+          ))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-NEXT-BREEDING-DIRECT-POSITIVES-AGGREGATES-NO-IDS
+          path: build/helgeland-next-breeding-direct-positive-v1.json
+          if-no-files-found: warn
