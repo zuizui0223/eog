@@ -1,0 +1,30 @@
+{
+  "2020_v8_source_available": false,
+  "colonization_or_fitness_claim_authorized": false,
+  "counts": {
+    "first_changed_later_ambiguous_only": 0,
+    "first_changed_later_no_return": 221,
+    "first_changed_later_return": 2,
+    "first_same_later_ambiguous_only": 0,
+    "first_same_later_different": 228,
+    "first_same_later_no_different": 3713,
+    "first_same_no_additional_date": 1585,
+    "first_same_with_additional_date": 2356,
+    "lag_1_to_30_days": 3,
+    "lag_31_to_365_days": 178,
+    "lag_gt365_days": 47
+  },
+  "heldout_predictive_benchmark_authorized": false,
+  "individual_data_exported": false,
+  "later_first_detection_lag_is_true_movement_time": false,
+  "original_first_followup_counts_reconciled": true,
+  "post2014_id_island_stage_inspected": false,
+  "previous_any_later_observation_counts_reconciled": true,
+  "schema": "eog.helgeland.pre2015_later_site_switch_observability.v1",
+  "selection_bias_from_reobservation_corrected": false,
+  "site_code_changed_means_natal_adult_dispersal": false,
+  "source_date_max": "2014-12-31",
+  "source_dryad_version_id": 421942,
+  "status": "EXPLORATORY_PRE2015_LATER_DIFFERENT_SITE_CODE_REOBSERVATION__NO_DISPERSAL_RATE",
+  "surveyed_zero_verified": false
+}
