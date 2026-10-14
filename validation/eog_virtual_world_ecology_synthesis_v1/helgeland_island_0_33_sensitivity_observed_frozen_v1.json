@@ -1,0 +1,89 @@
+{
+  "schema": "eog.helgeland.pre2015.island_0_33_sensitivity.frozen_source_receipt.v1",
+  "status": "INDEPENDENTLY_INSPECTED_ACTUAL_SOURCE_AGGREGATES_FROZEN__BIOLOGICAL_HOLD",
+  "protocol_freeze_commit": "a8b7a145e4c24f5bc026cd6981122ad990cdfffa",
+  "authority": {
+    "github_actions_run_id": 38492869822,
+    "github_actions_artifact_id": 11862785522,
+    "artifact_name": "HELGELAND-DIRECT-POSITIVE-ISLAND-0-33-AGGREGATES-NO-IDS",
+    "artifact_zip_sha256": "82b793a1a9b3956c48cfaf98560a9dabbd037318250753069010a7268928dcb4",
+    "source_author_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "prior_PR646_receipt_exactly_reverified": true,
+    "source_original_sha256_and_header_reverified": true
+  },
+  "receipt": {
+    "EOG_WF_3_31_3_modified": false,
+    "author_source_exclusion_equal_to_rederived_11_island_membership": false,
+    "breeding_recruitment_or_true_dispersal_inferred": false,
+    "counts": {
+      "ambiguous_nest_ids": 5,
+      "distinct_ids_with_excluded_codes_pre2015": 2058,
+      "eligible_birth_cohort_ids": 10073,
+      "eligible_cohort_source_code_excluded": 257,
+      "eligible_pre2015_rows": 51162,
+      "next_season_direct_positive": 1313,
+      "paired_entire_history_clean": 1256,
+      "paired_ever_excluded": 57,
+      "paired_first_raw_day_contains_excluded": 39,
+      "paired_later_only_excluded": 4,
+      "paired_next_day_contains_excluded": 45,
+      "paired_pre_target_clean": 1260,
+      "paired_pre_target_excluded": 53,
+      "paired_source_code_excluded": 35,
+      "paired_strict_entire_history_discordant": 112,
+      "paired_strict_pre_target_discordant": 112,
+      "post2014_rows_masked": 21361,
+      "pre1994_rows_masked": 1070,
+      "raw_code_0_rows_pre2015": 2613,
+      "raw_code_33_rows_pre2015": 1738,
+      "unique_nest_ids": 10737,
+      "whole_rows_date_checked": 73593
+    },
+    "full_source_SHA256_and_header_verified": true,
+    "matrices": {
+      "baseline_exact": {
+        "first_raw_ambiguous__next_ambiguous": 0,
+        "first_raw_ambiguous__next_different": 0,
+        "first_raw_ambiguous__next_same": 0,
+        "first_raw_different__next_ambiguous": 0,
+        "first_raw_different__next_different": 114,
+        "first_raw_different__next_same": 1,
+        "first_raw_same__next_ambiguous": 0,
+        "first_raw_same__next_different": 124,
+        "first_raw_same__next_same": 1074
+      },
+      "strict_entire_history": {
+        "first_raw_ambiguous__next_ambiguous": 0,
+        "first_raw_ambiguous__next_different": 0,
+        "first_raw_ambiguous__next_same": 0,
+        "first_raw_different__next_ambiguous": 0,
+        "first_raw_different__next_different": 100,
+        "first_raw_different__next_same": 1,
+        "first_raw_same__next_ambiguous": 0,
+        "first_raw_same__next_different": 111,
+        "first_raw_same__next_same": 1044
+      },
+      "strict_pre_target": {
+        "first_raw_ambiguous__next_ambiguous": 0,
+        "first_raw_ambiguous__next_different": 0,
+        "first_raw_ambiguous__next_same": 0,
+        "first_raw_different__next_ambiguous": 0,
+        "first_raw_different__next_different": 101,
+        "first_raw_different__next_same": 1,
+        "first_raw_same__next_ambiguous": 0,
+        "first_raw_same__next_different": 111,
+        "first_raw_same__next_same": 1047
+      }
+    },
+    "new_independent_EOG_forecast_scored": false,
+    "origin_0_33_rows_not_reclassified_or_removed": true,
+    "original_frozen_receipt_matched_exactly": true,
+    "post2014_ID_Island_stage_inspected": false,
+    "pre2015_date_only_identity_mask_enforced": true,
+    "raw_individual_or_island_records_exported": false,
+    "same_frozen_1313_ID_population_considered": true,
+    "schema": "eog.helgeland.pre2015.island_0_33_sensitivity.exploratory_receipt.v1",
+    "status": "PRE2015_ISLAND_CODE_0_33_EXCLUSION_SENSITIVITY__ECOLOGICAL_HOLD",
+    "surveyed_zero_and_effort_verified": false
+  }
+}

@@ -1,0 +1,95 @@
+name: Helgeland direct-positive Island 0/33 sensitivity
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-island-0-33-sensitivity-v1.yml'
+      - 'scripts/audit_helgeland_island_0_33_sensitivity_v1.py'
+      - 'tests/test_helgeland_island_0_33_sensitivity_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_island_0_33_sensitivity_protocol_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_island_0_33_sensitivity_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_island_0_33_sensitivity_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-island-0-33-sensitivity-v1.yml'
+      - 'scripts/audit_helgeland_island_0_33_sensitivity_v1.py'
+      - 'tests/test_helgeland_island_0_33_sensitivity_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_island_0_33_sensitivity_protocol_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_island_0_33_sensitivity_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_island_0_33_sensitivity_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  positive-only-0-33-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Require original author source revision
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Test fabricated code-0/33 subjects and future-identity poison
+        run: python -m pytest -q tests/test_helgeland_island_0_33_sensitivity_v1.py
+      - name: Verify exact prior 1313 paired receipt, original SHA256/header, and evaluate 0/33
+        run: |
+          python scripts/audit_helgeland_island_0_33_sensitivity_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-island-0-33-sensitivity-v1.json
+      - name: Check exact prior matrix and conservative claim contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_island_0_33_sensitivity_protocol_v1.json').read_text())
+          out=json.loads(Path('build/helgeland-island-0-33-sensitivity-v1.json').read_text())
+          assert out['schema']=='eog.helgeland.pre2015.island_0_33_sensitivity.exploratory_receipt.v1'
+          assert out['status']=='PRE2015_ISLAND_CODE_0_33_EXCLUSION_SENSITIVITY__ECOLOGICAL_HOLD'
+          assert out['full_source_SHA256_and_header_verified'] is True
+          assert out['original_frozen_receipt_matched_exactly'] is True
+          c=out['counts']; m=out['matrices']
+          assert set(c)==set(p['outputs']['scalar_counts'])
+          assert set(m)==set(p['outputs']['matrices'])
+          assert c['eligible_birth_cohort_ids']==10073
+          assert c['next_season_direct_positive']==1313
+          assert m['baseline_exact']['first_raw_same__next_same']==1074
+          assert m['baseline_exact']['first_raw_same__next_different']==124
+          assert m['baseline_exact']['first_raw_different__next_same']==1
+          assert m['baseline_exact']['first_raw_different__next_different']==114
+          assert c['paired_pre_target_clean']+c['paired_pre_target_excluded']==1313
+          assert c['paired_entire_history_clean']+c['paired_ever_excluded']==1313
+          assert c['paired_entire_history_clean']<=c['paired_pre_target_clean']
+          assert out['pre2015_date_only_identity_mask_enforced'] is True
+          assert out['same_frozen_1313_ID_population_considered'] is True
+          assert all(out[k] is False for k in (
+              'author_source_exclusion_equal_to_rederived_11_island_membership',
+              'post2014_ID_Island_stage_inspected','raw_individual_or_island_records_exported',
+              'breeding_recruitment_or_true_dispersal_inferred',
+              'surveyed_zero_and_effort_verified','new_independent_EOG_forecast_scored',
+              'EOG_WF_3_31_3_modified',
+          ))
+          frozen=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_island_0_33_sensitivity_observed_frozen_v1.json')
+          assert frozen.is_file(), 'Actual-source reviewed receipt is required'
+          receipt=json.loads(frozen.read_text())
+          assert receipt['schema']=='eog.helgeland.pre2015.island_0_33_sensitivity.frozen_source_receipt.v1'
+          assert receipt['authority']['source_original_sha256_and_header_reverified'] is True
+          assert receipt['protocol_freeze_commit']=='a8b7a145e4c24f5bc026cd6981122ad990cdfffa'
+          assert receipt['receipt']==out, 'Authenticated real source drifted against complete reviewed frozen JSON'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-DIRECT-POSITIVE-ISLAND-0-33-AGGREGATES-NO-IDS
+          path: build/helgeland-island-0-33-sensitivity-v1.json
+          if-no-files-found: warn
