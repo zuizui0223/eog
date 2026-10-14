@@ -240,3 +240,43 @@ def test_no_year_age_or_site_name_access_and_pre_exposure_contract():
         "import pandas", "read_csv(", "urllib",
     ):
         assert forbidden not in source
+
+
+def test_independently_inspected_actual_source_receipt_is_exactly_frozen():
+    audit = json.loads((
+        BASE / "helgeland_island_0_33_sensitivity_observed_frozen_v1.json"
+    ).read_text(encoding="utf-8"))
+    assert audit["schema"] == (
+        "eog.helgeland.pre2015.island_0_33_sensitivity.frozen_source_receipt.v1"
+    )
+    assert audit["protocol_freeze_commit"] == (
+        "a8b7a145e4c24f5bc026cd6981122ad990cdfffa"
+    )
+    assert audit["authority"]["github_actions_run_id"] == 38492869822
+    assert audit["authority"]["github_actions_artifact_id"] == 11862785522
+    assert audit["authority"]["artifact_zip_sha256"] == (
+        "82b793a1a9b3956c48cfaf98560a9dabbd037318250753069010a7268928dcb4"
+    )
+    actual = audit["receipt"]
+    c = actual["counts"]
+    m = actual["matrices"]
+    assert c["eligible_birth_cohort_ids"] == 10073
+    assert c["next_season_direct_positive"] == 1313
+    assert c["raw_code_0_rows_pre2015"] == 2613
+    assert c["raw_code_33_rows_pre2015"] == 1738
+    assert c["paired_pre_target_excluded"] == 53
+    assert c["paired_later_only_excluded"] == 4
+    assert c["paired_pre_target_clean"] == 1260
+    assert c["paired_entire_history_clean"] == 1256
+    assert c["paired_strict_pre_target_discordant"] == 112
+    assert c["paired_strict_entire_history_discordant"] == 112
+    assert m["baseline_exact"]["first_raw_same__next_different"] == 124
+    assert m["strict_pre_target"]["first_raw_same__next_different"] == 111
+    assert m["strict_pre_target"]["first_raw_different__next_same"] == 1
+    assert m["strict_entire_history"]["first_raw_same__next_different"] == 111
+    assert actual["full_source_SHA256_and_header_verified"] is True
+    assert actual["original_frozen_receipt_matched_exactly"] is True
+    assert actual["author_source_exclusion_equal_to_rederived_11_island_membership"] is False
+    assert actual["breeding_recruitment_or_true_dispersal_inferred"] is False
+    assert actual["post2014_ID_Island_stage_inspected"] is False
+    assert actual["new_independent_EOG_forecast_scored"] is False
