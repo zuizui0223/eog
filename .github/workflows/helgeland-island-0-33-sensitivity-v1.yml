@@ -80,9 +80,12 @@ jobs:
               'EOG_WF_3_31_3_modified',
           ))
           frozen=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_island_0_33_sensitivity_observed_frozen_v1.json')
-          if frozen.exists():
-              receipt=json.loads(frozen.read_text())
-              assert receipt['receipt']==out, 'Authenticated real source drifted against complete reviewed frozen JSON'
+          assert frozen.is_file(), 'Actual-source reviewed receipt is required'
+          receipt=json.loads(frozen.read_text())
+          assert receipt['schema']=='eog.helgeland.pre2015.island_0_33_sensitivity.frozen_source_receipt.v1'
+          assert receipt['authority']['source_original_sha256_and_header_reverified'] is True
+          assert receipt['protocol_freeze_commit']=='a8b7a145e4c24f5bc026cd6981122ad990cdfffa'
+          assert receipt['receipt']==out, 'Authenticated real source drifted against complete reviewed frozen JSON'
           PY
       - uses: actions/upload-artifact@v4
         if: always()
