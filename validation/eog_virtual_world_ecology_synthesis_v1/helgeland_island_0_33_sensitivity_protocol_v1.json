@@ -1,0 +1,100 @@
+{
+  "schema": "eog.helgeland.pre2015.island_0_33_paired_sensitivity.protocol.v1",
+  "status": "FROZEN_POST_PR646_EXPOSURE__BEFORE_0_33_REAL_SOURCE_SENSITIVITY",
+  "purpose": "Exploratory sensitivity of the frozen next-year-season paired classification to author-excluded literal Island codes, not a new ecological endpoint",
+  "prior": {
+    "main_commit": "4aee2041644ad3159ac09c0aabe99e396a642c2f",
+    "frozen_receipt_path": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_next_breeding_direct_positive_observed_frozen_v1.json",
+    "cohort_id_count": 10073,
+    "paired_direct_positive_ids": 1313,
+    "first_same_next_same": 1074,
+    "first_same_next_different": 124,
+    "first_different_next_same": 1,
+    "first_different_next_different": 114,
+    "paired_discordance": 125
+  },
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "source_version_id": 421942,
+    "source_file_id": 4576411,
+    "author_git_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "path": "Data/presence_data_1994_2022.txt",
+    "raw_date_min": "1994-01-01",
+    "raw_date_max": "2014-12-31",
+    "date_mask_before_identity": true,
+    "available_to_2014_forecasters": false
+  },
+  "author_exclusion": {
+    "file": "R scripts/Main model of metapopulation dynamics.R",
+    "source_revision": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "excluded_literal_island_codes": [
+      "0",
+      "33"
+    ],
+    "selection": "pres_stage <- pres_stage %>% filter(Island != 33) %>% filter(Island != 0)",
+    "mapping_to_named_11_island_roster_established": false
+  },
+  "methods": {
+    "target_population": "Exact same 1,313 direct-positive IDs and endpoint-classification dates as frozen PR646; exclude no other subjects",
+    "event_set": "All literal nest/capt/obs within 1994–2014, never Year/Least_age/inferred stage",
+    "primary_exclusion": "Subject flagged if any 0 or 33 literal Island code occurs in this ID's physical direct event history by and including its first eligible next-year May-Aug detection date; no after-target data used for primary filter",
+    "secondary_exclusion": "More conservative: subject flagged if any pre-2015 physical direct event at any date has code 0/33 (includes information after target); post-outcome retrospective sensitivity only",
+    "origin_exclusion": "Unique all-period raw nest Island code 0 or 33 among the 1,313 paired IDs; count separately",
+    "compared_date_exclusion": "Any of the first post-nest raw followup date codes or first eligible next-season followup date codes equals 0 or 33; count separately",
+    "event_exclusion_not_reclassification": true,
+    "repeat_paired_classes_not_refit": "Previously frozen same/different/tie classes are retained; remove flagged IDs without recomputing origin, first positive date or second-year event from remaining rows",
+    "matrix": "For unflagged paired IDs report first_raw same/different/ambiguous versus next-year same/different/ambiguous",
+    "no_recruitment_or_dispersal_inference": true,
+    "no_ratio_as_population_dispersal_rate": true
+  },
+  "outputs": {
+    "scalar_counts": [
+      "whole_rows_date_checked",
+      "pre1994_rows_masked",
+      "post2014_rows_masked",
+      "eligible_pre2015_rows",
+      "unique_nest_ids",
+      "ambiguous_nest_ids",
+      "eligible_birth_cohort_ids",
+      "next_season_direct_positive",
+      "raw_code_0_rows_pre2015",
+      "raw_code_33_rows_pre2015",
+      "distinct_ids_with_excluded_codes_pre2015",
+      "eligible_cohort_source_code_excluded",
+      "paired_source_code_excluded",
+      "paired_first_raw_day_contains_excluded",
+      "paired_next_day_contains_excluded",
+      "paired_pre_target_excluded",
+      "paired_ever_excluded",
+      "paired_later_only_excluded",
+      "paired_pre_target_clean",
+      "paired_entire_history_clean",
+      "paired_strict_pre_target_discordant",
+      "paired_strict_entire_history_discordant"
+    ],
+    "cross_tab_classes": [
+      "same",
+      "different",
+      "ambiguous"
+    ],
+    "matrices": [
+      "baseline_exact",
+      "strict_pre_target",
+      "strict_entire_history"
+    ],
+    "only_aggregates_no_identifiers": true
+  },
+  "scientific_bounds": {
+    "post_exposure_exploratory": true,
+    "original_frozen_result_unmodified": true,
+    "source_2026_not_historic_2014_predictors": true,
+    "post2014_ID_Island_stage_unread": true,
+    "no_raw_ID_Island_Location_date_output": true,
+    "island_code_crosswalk_to_physical_named_sites_verified": false,
+    "surveyed_zero_and_detection_effort_verified": false,
+    "true_breeding_recruitment_verified": false,
+    "biological_movement_rate_estimated": false,
+    "independent_heldout_EOG_forecast_scored": false,
+    "EOG_WF_3_31_3_unchanged": true
+  }
+}
