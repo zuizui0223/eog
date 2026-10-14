@@ -42,3 +42,28 @@ python scripts/audit_helgeland_island_0_33_sensitivity_v1.py \
   --upstream-checkout upstream_public \
   --output build/helgeland-island-0-33-sensitivity-v1.json
 \`\`\`
+
+## Source-verified result, independently inspected (2026-10-14)
+
+The first successful actual-source dedicated [GitHub Actions run 38492869822](https://github.com/zuizui0223/eog/actions/runs/38492869822) uploaded aggregate-only artifact ID \`11862785522\`. Its downloaded ZIP SHA256 is \`82b793a1a9b3956c48cfaf98560a9dabbd037318250753069010a7268928dcb4\`. The **entire** JSON was inspected and frozen at \`validation/eog_virtual_world_ecology_synthesis_v1/helgeland_island_0_33_sensitivity_observed_frozen_v1.json\`. Future original-source CI must reproduce every field exactly.
+
+- 51,162 eligible pre-2015 positive observation rows; literal \`Island=0\` appears in **2,613** physical rows, \`Island=33\` in **1,738**, across **2,058** distinct IDs with either code. These are pooled raw record counts across the pre-2015 file, **not** numbers of moves or effective study islands.
+- The **10,073** frozen eligible earliest-nest cohort contains **257** IDs whose unique raw nest source code itself was 0 or 33.
+- Within the **1,313** frozen paired next-season positives, **35** have source code 0/33; **39** have a first raw followup date containing one of those codes; **45** have a first next-season date containing one.
+- **53** of the paired IDs have at least one such code on/before the next-season target observation; only **4** additional IDs have an excluded code solely after that target date (so the full-period screen excludes **57**).
+
+| Fixed first-vs-next classification | Original all pairs | Clean through target date | Clean over all pre-2015 history |
+| --- | ---: | ---: | ---: |
+| Directly observed ID pairs | **1,313** | **1,260** | **1,256** |
+| First same → next same | 1,074 | 1,047 | 1,044 |
+| First same → next different | 124 | **111** | **111** |
+| First different → next same | 1 | **1** | **1** |
+| First different → next different | 114 | 101 | 100 |
+| Any paired class discrepancy | **125** | **112** | **112** |
+| Discordance within this detected subset | 9.52% | 8.89% | 8.92% |
+
+No ambiguous first/next classification was found in these paired real-source observations.
+
+**Bounded result:** The observation-time code-classification disagreement is **not entirely explained by literal source codes 0 and 33**. After the primary pre-target conservative screen, 112/1,260 IDs remain discordant, dominated by first-same→next-different (111 vs 1 in the opposite direction). The 53 flagged IDs contained 13 of the original 125 discordances. Changing to a later-information full-history screen removes four additional observations without altering the discordance numerator.
+
+These are not true recruitment, survival-corrected dispersal, or a mapped 11-island migration analysis. Because this analysis excludes an ID if an excluded code was observed at any relevant date, it is **not equivalent to the author's row-level 0/33 exclusion or complete Ranke 2021 demographic model**. A paper-ready ecological interpretation still requires source code↔physical island mapping, independent observation effort / surveyed-negative opportunities, and recruitment-stage evidence that is not reconstructed from later outcomes.
