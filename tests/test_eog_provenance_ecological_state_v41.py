@@ -121,9 +121,9 @@ def test_age_mappings_are_identical_to_predeclared_v26_processes():
         ("n1",0),("n2",1),("n3",2),("n4",3),("n5",3)
     )
     assert _process_map("history_blind_occupancy",ages)==tuple((n,True) for n,_ in ages)
-    assert _age_map((1,2),{1:3,2:4},5)==(
-        ("r1_c1",2),("r1_c2",1)
-    ) if False else True  # Node IDs differ by their official coordinate schema.
+    assert _age_map(((0,0),(0,1)),{(0,0):3,(0,1):4},5)==(
+        ("r0c0",2),("r0c1",1)
+    )
 
 
 def test_prior_v23_to_v40_source_and_five_v41_hypotheses_are_fixed():
