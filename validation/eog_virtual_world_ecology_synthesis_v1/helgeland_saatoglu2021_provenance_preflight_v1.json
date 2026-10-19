@@ -1,0 +1,162 @@
+{
+  "schema": "eog.helgeland.saatoglu2021_genetic_cmr_provenance_preflight.v1",
+  "status": "RETROSPECTIVE_AUTHOR_CODE_METHODS_READ__FROZEN_BEFORE_SOURCE_BYTE_ATTESTATION__NO_BIOLOGICAL_ROWS",
+  "aim": "Check publicly deposited 2021 source-code prerequisites for a future independent genetic-provenance versus direct-CMR comparison; do not claim empirical EOG migration or a fourth EOG-WF endpoint",
+  "official_dryad": {
+    "doi": "10.5061/dryad.xgxd254h1",
+    "dataset_id": 72603,
+    "version_id": 130231,
+    "first_publication": "2021-07-15",
+    "inventory_api": "https://datadryad.org/api/v2/versions/130231/files",
+    "source_metadata_only": true,
+    "files": [
+      {
+        "name": "Dispersaldata.txt",
+        "id": 815561,
+        "size_bytes": 59268,
+        "declared_sha256": "17e92bc572c056f55074470c93c7d09d054f768dc7f0a47f13f40ce694258367"
+      },
+      {
+        "name": "Geneticassignment_README.txt",
+        "id": 815564,
+        "size_bytes": 1687,
+        "declared_sha256": "4d4f6470cbef73190c35a358feec42ce676d2904fab4f881d63817c465968270"
+      },
+      {
+        "name": "Misassignments_givenaway.txt",
+        "id": 815563,
+        "size_bytes": 3817,
+        "declared_sha256": "17d31a7d3d81f47401869a6ca5d68f3630884b62e4ac616d2b7b067b725a7722"
+      },
+      {
+        "name": "Misassignments_received.txt",
+        "id": 815562,
+        "size_bytes": 3818,
+        "declared_sha256": "b2aafe824a22bfefc4d2c5f2f72e270db9e316d925c4139031a43e8608d67c91"
+      },
+      {
+        "name": "Pairwise_Fst.txt",
+        "id": 815560,
+        "size_bytes": 13247,
+        "declared_sha256": "00a5e36524b197ccd54c2984655d09c4832b0429abac640253fd9f0ab24da1fa"
+      }
+    ]
+  },
+  "official_zenodo": {
+    "record_id": 5095667,
+    "concept_record_id": 5095666,
+    "doi": "10.5281/zenodo.5095667",
+    "script": "Error_sources_dispersal_patterns.R",
+    "bytes": 10758,
+    "declared_md5": "80d138c79960684fa85379c09cd17727",
+    "official_file_url": "https://zenodo.org/api/records/5095667/files/Error_sources_dispersal_patterns.R/content",
+    "permission": "open; original author-provided source script only",
+    "source_script_SHA256_not_predeclared": true
+  },
+  "documented_author_script_design": {
+    "population_gene_origin": "natal.island",
+    "population_adult_record": "adult.island",
+    "year": "hatch.year",
+    "binary": "dispersal.status",
+    "genetic_method_two_estimators": [
+      "BONE",
+      "GSI_SIM"
+    ],
+    "genetic_misassignment_covariates": [
+      "pw.Fst",
+      "Ho",
+      "sample.size",
+      "Population.size",
+      "proportion.sampled"
+    ],
+    "available_published_code_scope": {
+      "all_genetic_pattern_natal_code_literals": [
+        "20",
+        "22",
+        "23",
+        "24",
+        "26",
+        "27",
+        "28",
+        "38",
+        "77",
+        "88"
+      ],
+      "habitat_matching_eight_island_raw_codes": [
+        "20",
+        "22",
+        "23",
+        "24",
+        "26",
+        "27",
+        "28",
+        "38"
+      ],
+      "habitat_excluded_birth_years": [
+        "1998",
+        "1999",
+        "2000",
+        "2001",
+        "2002",
+        "2003"
+      ],
+      "author_described_fair_habitat_window": [
+        2004,
+        2012
+      ],
+      "farm_codes_for_eight": [
+        "20",
+        "26",
+        "27",
+        "28",
+        "38"
+      ],
+      "nonfarm_codes_for_eight": [
+        "22",
+        "23",
+        "24"
+      ]
+    },
+    "source_script_method_code_not_2021_Data_file_bodies": true,
+    "latent_true_origin_must_not_be_assumed_from_genetic_assignment_probabilities": true
+  },
+  "EOG_2026_previous_11island_context": {
+    "main_commit": "d8869d6aff2f7c9121a8d26dd604778e33906fcb",
+    "published_code_location_file": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_observed_frozen_v1.json",
+    "unique_named_codes": [
+      "20",
+      "22",
+      "23",
+      "24",
+      "26",
+      "27",
+      "28",
+      "33",
+      "34",
+      "35",
+      "38"
+    ],
+    "code_33_is_valid_named_Luroy_Onoy": true,
+    "code_0_is_other_helgeland": true,
+    "source_file_published_2026_cannot_be_as_of_2014": true
+  },
+  "verification_gate": {
+    "zenodo_script_actual_bytes_md5_verified": false,
+    "dryad_2021_data_rows_accessed": false,
+    "actual_Dispersaldata_header_or_ID_namespace_verified": false,
+    "actual_cmR_genetic_joint_labels_verified": false,
+    "genetic_to_2026_ID_join_verified": false,
+    "independent_island_year_survey_effort_and_surveyed_zero_verified": false,
+    "new_retrospective_biological_outcome_scored": false,
+    "EOG_WF_3_31_3_changed": false
+  },
+  "strong_stop_rules": {
+    "user_direction_strict_match_only_if_same_raw_id_domain_and_hatchyear_verified": true,
+    "genetic_prediction_not_historical_truth_without_accuracy_and_base_population_calibration": true,
+    "sampled_fraction_is_fidelity_process_not_exogenous_ecological_dispersal_driver": true,
+    "do_not_confuse_saatoglu_sample_and_2021_ranke_recruit_pool": true,
+    "first_followup_proxies_not_equated_with_adult_island": true,
+    "no_2021_genetic_data_as_2014_public_feature": true,
+    "do_not_add_fourth_EOG_WF_endpoint": true
+  }
+}
