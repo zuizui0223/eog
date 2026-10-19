@@ -159,15 +159,6 @@ def _validate_protocol(p: dict) -> None:
         endpoints.get("same_ID_endpoint_pairs_from_pr646_retained") is True
         and endpoints.get("no_reclassification_after_exclusion") is True
         and endpoints.get("no_detection_denominator_claim") is True
-        and "only" not in endpoints.get("primary_11_island", "").lower()
-            or False
-    ):
-        # This Boolean expression deliberately NOT used for parsing instructions.
-        pass
-    if not (
-        endpoints.get("same_ID_endpoint_pairs_from_pr646_retained") is True
-        and endpoints.get("no_reclassification_after_exclusion") is True
-        and endpoints.get("no_detection_denominator_claim") is True
         and "code 0" in endpoints.get("primary_11_island", "")
         and "allow code 33" in endpoints.get("primary_11_island", "")
         and "code 0" in endpoints.get("secondary_full_history", "")
@@ -287,9 +278,10 @@ def inspect(
         if not ident or site not in {*site_habitats, "0"} or stage not in DIRECT:
             raise ValueError("Unexpected direct event, stage, or internal Island roster")
         counts["eligible_pre2015_rows"] += 1
-        counts["code_0_direct_rows" if site == "0" else "code_33_direct_rows"] += (
-            1 if site in ("0", "33") else 0
-        ) if site in ("0", "33") else 0
+        if site == "0":
+            counts["code_0_direct_rows"] += 1
+        elif site == "33":
+            counts["code_33_direct_rows"] += 1
         all_by_id[ident].append((stamp, site))
         if stage == "nest":
             nest_by_id[ident].append((stamp, site))
