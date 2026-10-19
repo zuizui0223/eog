@@ -145,7 +145,7 @@ def _quantile(xs, q):
     i = (len(v) - 1) * q
     lo = int(i)
     hi = min(lo+1, len(v)-1)
-    return v[lo] * (hi-i) + v[hi] * (i-lo)
+    return v[lo] if lo == hi else v[lo] * (hi-i) + v[hi] * (i-lo)
 
 
 def evaluate(seed_count=SEED_COUNT):
@@ -163,6 +163,7 @@ def evaluate(seed_count=SEED_COUNT):
     original_target = []
     original_random = []
     perfect_target = []
+    original_target_accuracy = []
     perfect_seed_values = [[] for _ in range(SEED_COUNT)]
     seed_information = [[] for _ in range(SEED_COUNT)]
     seed_accuracy = [[] for _ in range(SEED_COUNT)]
@@ -209,6 +210,7 @@ def evaluate(seed_count=SEED_COUNT):
                         target_info, target_accuracy = _metric(x, target_nodes)
                         previous_random_info, _ = _metric(x, random_39_nodes)
                         original_target.append(target_info)
+                        original_target_accuracy.append(target_accuracy)
                         original_random.append(previous_random_info)
                         perfect_target.append(_metric(x, target_nodes, 1.0, 0.0)[0])
                         per_seed_world_info = []
@@ -277,17 +279,9 @@ def evaluate(seed_count=SEED_COUNT):
     random_ensemble_info = _mean(seed_means)
     random_ensemble_accuracy = _mean(seed_accuracy_means)
     perfect_random = _mean(seed_perfect_means)
-    target_average_accuracy = _mean([
-        _metric_row for _metric_row in (
-            # Accuracy of the same 88 target site designs recalculated from
-            # source, rather than substituting v39's rounded aggregate.
-            )
-    ])  # filled in below from paired results, never from a new fit
-
-    # The target classifier accuracy is completely defined by the same
-    # three-source-tag measurement; retain it by direct cached replay.
-    # It is also pinned to the v39 authoritative value for error detection.
-    target_average_accuracy = v39["primary_fixed_setting"]["confluence_targeted"]["mean_accuracy_gain"]
+    # Recompute the same target Bayes accuracy from every one of the 88
+    # fixed designs, and independently reconcile the previous v39 baseline.
+    target_average_accuracy = _mean(original_target_accuracy)
     if not abs(target_average_accuracy - 0.33305599621211984) < TOL:
         raise ValueError("v39 correct-history accuracy baseline drifted")
 
