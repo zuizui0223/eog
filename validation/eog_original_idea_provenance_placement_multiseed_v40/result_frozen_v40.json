@@ -17,7 +17,8 @@
     "four_snapshot_occupancy_aliased": 189,
     "fair_equal_budget_three_site_aliased": 88,
     "v39_one_seed_confluence_information_bits": 0.6558164099798183,
-    "v39_one_seed_random_information_bits": 0.648676018353758
+    "v39_one_seed_random_information_bits": 0.648676018353758,
+    "v39_full_result_sha256": "eefbd3c2ef69e532d6efc5fef66fd7ec97def75e6dd6b74d533d042e78aaa865"
   },
   "primary": {
     "n_worlds": 88,
