@@ -77,12 +77,24 @@ jobs:
               and v['subset']=='equal_budget_aliased')
           assert abs(hist['mean_target_information_bits']-0.6558164099798183)<1e-8
           frozen=Path('validation/eog_original_idea_provenance_ecological_state_v41/result_frozen_v41.json')
-          if frozen.exists():
-              reviewed=json.loads(frozen.read_text())
-              assert reviewed['schema']=='eog.original_idea.noisy_provenance_ecological_state_value.frozen_review_v41'
-              canonical=json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode('utf-8')
-              assert reviewed['authority']['complete_canonical_json_sha256']==hashlib.sha256(canonical).hexdigest(), 'The independently reviewed full real v41 CI result has drifted'
-              assert reviewed['predeclared_verdicts']==x['predeclared_verdicts']
+          assert frozen.is_file(), 'Independently inspected full-source v41 result required'
+          reviewed=json.loads(frozen.read_text(encoding='utf-8'))
+          assert reviewed['schema']=='eog.original_idea.noisy_provenance_ecological_state_value.frozen_review_v41'
+          assert reviewed['pre_result_protocol_commit']=='a812771a2d033b634dc95aceac0dc311a842a1e0'
+          assert reviewed['authority']['github_actions_run_id']==39248967844
+          assert reviewed['authority']['github_actions_artifact_id']==12184367871
+          assert reviewed['parent_population_counts']==c
+          assert reviewed['process_target_memory_row_counts']==mem
+          assert reviewed['perfect_full_source_alias_target_disagreement_counts']==residual
+          assert reviewed['primary_assay']==x['primary_assay']
+          assert reviewed['predeclared_verdicts']==x['predeclared_verdicts']
+          assert reviewed['negative_controls']==x['control_violation_counts']
+          canonical=json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode('utf-8')
+          assert reviewed['authority']['complete_canonical_json_sha256']==hashlib.sha256(canonical).hexdigest(), 'The independently reviewed full v41 source result drifted'
+          assert x['contrast_counts_on_189_occupancy_aliases']['confluence_source_tags_improve_both_history_and_lag2_maturity_in_designs']==48
+          assert x['contrast_counts_on_189_occupancy_aliases']['confluence_source_tags_improve_history_but_not_lag2_maturity_in_designs']==72
+          assert hist['target_gain_positive_count']==88
+          assert x['predeclared_verdicts']['V2_history_information_without_maturity_information_exists']=='SUPPORTED'
           PY
       - uses: actions/upload-artifact@v4
         if: always()
