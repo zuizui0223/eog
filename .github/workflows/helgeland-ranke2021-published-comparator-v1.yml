@@ -62,9 +62,12 @@ jobs:
           assert x['claim_of_new_biological_effect'] is False
           assert x['EOG_WF_denominator_modified'] is False
           frozen=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_ranke2021_published_comparator_frozen_v1.json')
-          if frozen.is_file():
-            reviewed=json.loads(frozen.read_text())
-            assert reviewed['receipt']==x, 'Original frozen published-only comparison changed'
+          assert frozen.is_file(), 'Required independently reviewed published-only source receipt missing'
+          reviewed=json.loads(frozen.read_text())
+          assert reviewed['schema']=='eog.helgeland.ranke2021_published_recruit_comparator.frozen_reviewed_v1'
+          assert reviewed['authority']['source_2021_official_version_id']==136299
+          assert reviewed['authority']['source_2021_actual_file_bodies_verified'] is False
+          assert reviewed['receipt']==x, 'Original frozen published-only comparison changed'
           PY
       - uses: actions/upload-artifact@v4
         if: always()
