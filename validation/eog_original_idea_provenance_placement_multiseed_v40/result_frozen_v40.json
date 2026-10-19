@@ -1,0 +1,77 @@
+{
+  "schema": "eog.original_idea.noisy_provenance_placement_multiseed.frozen_review_v40",
+  "status": "INDEPENDENTLY_INSPECTED_SOURCE_VERIFIED_POST_V39_MULTISEED_RESULT__NO_EMPIRICAL_GENETICS",
+  "pre_multiseed_protocol_commit": "ce72c8a258e3c3ddd8bd8c6e8b43e103501de745",
+  "authority": {
+    "github_actions_run_id": 39240966984,
+    "github_actions_artifact_id": 12180579805,
+    "artifact_name": "EOG-V40-PROVENANCE-64-SEED-PLACEMENT-AGGREGATES",
+    "artifact_zip_sha256": "6a0ff87ba9201fb471a6c4e9cf12b476b1584deb4711e62fce68058dfd5ff27a",
+    "full_canonical_json_sha256": "e366c4945e2110bd6359c3db1ae86e4e01bb6df8741fc4370af6ae54b5792f91",
+    "canonicalization": "sha256(json.dumps(obj,sort_keys=True,separators=(',', ':'),ensure_ascii=False,allow_nan=False).encode('utf-8'))",
+    "parent_v39_full_sha256": "eefbd3c2ef69e532d6efc5fef66fd7ec97def75e6dd6b74d533d042e78aaa865"
+  },
+  "parent_reconciliation": {
+    "design_rows": 768,
+    "four_snapshot_occupancy_history_identifiable": 579,
+    "four_snapshot_occupancy_aliased": 189,
+    "fair_equal_budget_three_site_aliased": 88,
+    "v39_one_seed_confluence_information_bits": 0.6558164099798183,
+    "v39_one_seed_random_information_bits": 0.648676018353758
+  },
+  "primary": {
+    "n_worlds": 88,
+    "new_random_seed_count": 64,
+    "coverage": 0.6,
+    "miscall": 0.1,
+    "site_count_per_policy": 3,
+    "confluence_fixed_mean_information_bits": 0.6558164099798183,
+    "random_64_seed_mean_information_bits": 0.6472564224911249,
+    "target_minus_random_64_seed_information_bits": 0.008559987488693355,
+    "materiality_threshold_bits": 0.02,
+    "fixed_target_mean_bayes_accuracy_gain": 0.33305599621211984,
+    "random_64_seed_mean_bayes_accuracy_gain": 0.32958642299952534,
+    "target_minus_random_64_seed_accuracy_gain": 0.003469573212594501,
+    "mean_perfect_confluence_information_bits": 0.8364889679423445,
+    "mean_perfect_random_64_seed_information_bits": 0.8343582861241626
+  },
+  "seed_ensemble": {
+    "min_random_information_mean": 0.6403001143811549,
+    "median_random_information_mean": 0.647128469062375,
+    "max_random_information_mean": 0.6530482823995926,
+    "random_information_q10": 0.6449229293937423,
+    "random_information_q90": 0.6498901089294695,
+    "seed_count_confluence_outperforms": 64,
+    "seed_fraction_confluence_outperforms": 1,
+    "random_seeds_are_not_64_independent_ecological_replicates": true
+  },
+  "world_paired_placement": {
+    "strict_target_better_than_64_seed_mean": 34,
+    "indistinguishable_within_1e_minus_9": 54,
+    "strict_target_worse_than_64_seed_mean": 0,
+    "mean_world_level_advantage_bits": 0.008559987488693356,
+    "median_world_level_advantage_bits": 0,
+    "median_within_world_seed_information_range_bits": 0
+  },
+  "source_geometry": {
+    "clustered_n_fair": 88,
+    "dispersed_n_fair": 0,
+    "target_minus_seed_mean_clustered_bits": 0.008559987488693355,
+    "cannot_generalize_this_fair_comparison_to_dispersed_sources": true
+  },
+  "static_source_overlap_diagnostic": {
+    "selected_potential_confluence_sites": 264,
+    "history_invariant_selected_confluence_sites": 0,
+    "worlds_with_any_history_invariant_selected_confluence_site": 0,
+    "M5_refuted_only_within_selected_88_fair_designs": true
+  },
+  "predeclared_verdicts": {
+    "M1_material_targeting_advantage": "REFUTED",
+    "M2_targeting_outperforms_most_independent_random_placements": "SUPPORTED",
+    "M3_per_world_targeting_consistency": "REFUTED",
+    "M4_random_seed_effect_not_hidden": "SUPPORTED",
+    "M5_raw_source_overlap_is_imperfect_information_proxy": "REFUTED"
+  },
+  "no_empirical_genetic_or_bird_data_read": true,
+  "v39_parent_and_EOG_WF_3_31_3_unchanged": true
+}
