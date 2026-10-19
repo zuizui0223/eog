@@ -115,3 +115,30 @@ def test_2021_individual_data_and_2026_individual_id_join_still_not_verified():
     assert p["strong_stop_rules"]["do_not_confuse_saatoglu_sample_and_2021_ranke_recruit_pool"] is True
     assert p["strong_stop_rules"]["first_followup_proxies_not_equated_with_adult_island"] is True
     assert p["EOG_2026_previous_11island_context"]["source_file_published_2026_cannot_be_as_of_2014"] is True
+
+
+def test_exact_independently_attested_public_Zenodo_author_code_receipt_no_bird_rows():
+    p=protocol()
+    a=json.loads((
+        BASE/"helgeland_saatoglu2021_provenance_result_frozen_v1.json"
+    ).read_text(encoding="utf-8"))
+    assert a["schema"]=="eog.helgeland.saatoglu2021_genetic_cmr_code_audit.frozen_evidence_v1"
+    assert a["authority"]["github_actions_run_id"]==39217762475
+    assert a["authority"]["github_actions_artifact_id"]==12170526675
+    assert a["authority"]["artifact_zip_sha256"]==(
+        "124e69b6d7caeae9e48007b08b620d829f0283b399b255bcddf4eb324d9e4648"
+    )
+    assert a["authority"]["source_script_original_MD5_verified"] is True
+    assert a["authority"]["Dryad_five_data_file_bodies_read"] is False
+    x=a["receipt"]
+    assert x["status"]=="AUTHOR_ZENODO_METHOD_SCRIPT_BYTE_VERIFIED__BIOLOGICAL_DATA_HOLD"
+    assert x["source"]["source_bytes_author_md5_verified"] is True
+    assert x["source"]["five_original_source_file_bytes_verified"] is False
+    assert x["source"]["2021_record_2026_bird_ID_join_verified"] is False
+    assert len(x["eog_2026_to_2021_eight_code_name_text_bridge"])==8
+    assert [v["raw_code"] for v in x["eog_2026_to_2021_eight_code_name_text_bridge"]]==list(EIGHT)
+    assert all(v["2021_natal_and_adult_ID_domain_verified"] is False
+               for v in x["eog_2026_to_2021_eight_code_name_text_bridge"])
+    assert x["author_methods_source_code_signals"]["sampling_fraction_misassignment_models_present"] is True
+    assert x["breeding_recruitment_or_colonization_inferred"] is False
+    assert x["EOG_WF_denominator_modified"] is False
