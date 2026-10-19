@@ -1,0 +1,230 @@
+{
+  "schema": "eog.helgeland.11island_positive_habitat_paired.frozen_source_receipt.v1",
+  "status": "INDEPENDENTLY_INSPECTED_AUTHOR_SOURCE_11_ISLAND_POSITIVE_HABITAT_AGGREGATES__BIOLOGICAL_HOLD",
+  "protocol_freeze_commit": "fd18c40e521e14c982164e3b132ff81320c4b8be",
+  "authority": {
+    "github_actions_run_id": 39208937959,
+    "github_actions_artifact_id": 12166747729,
+    "artifact_name": "HELGELAND-11-NAMED-ISLANDS-POSITIVE-HABITAT-AGGREGATES",
+    "artifact_zip_sha256": "c9c6c9fcf4d11d4f007227fd9c265c7d15f06cfc1c197d30a0763302f03744f8",
+    "source_author_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "original_sha256_physical_header_and_PR646_647_receipts_reverified": true
+  },
+  "receipt": {
+    "bird_IDs_or_individual_history_exported": false,
+    "breeding_recruitment_dispersal_or_colonization_inferred": false,
+    "counts": {
+      "ambiguous_nest_source_ids": 5,
+      "code_0_direct_rows": 2613,
+      "code_33_direct_rows": 1738,
+      "eligible_birth_cohort_ids": 10073,
+      "eligible_pre2015_rows": 51162,
+      "model_0_33_primary_discordant": 112,
+      "model_0_33_primary_positive": 1260,
+      "named_11_full_history_discordant": 118,
+      "named_11_full_history_positive": 1268,
+      "named_11_primary_33_in_origin_or_target": 12,
+      "named_11_primary_33_next": 11,
+      "named_11_primary_33_origin": 6,
+      "named_11_primary_discordant": 118,
+      "named_11_primary_next_different_codes": 219,
+      "named_11_primary_next_same_codes": 1053,
+      "named_11_primary_positive": 1272,
+      "paired_0_and_33_before_or_at_target": 2,
+      "paired_0_anytime": 45,
+      "paired_0_before_or_at_target": 41,
+      "paired_0_later_only": 4,
+      "paired_33_before_or_at_target": 14,
+      "paired_next_year_positive": 1313,
+      "post2014_rows_masked": 21361,
+      "pre1994_rows_masked": 1070,
+      "unique_nest_source_ids": 10737,
+      "whole_source_rows_date_checked": 73593
+    },
+    "first_same_next_different_by_origin_habitat": {
+      "farm": 39,
+      "nonfarm": 78
+    },
+    "habitat_different_code_positive": {
+      "farm_to_farm": 62,
+      "farm_to_nonfarm": 7,
+      "nonfarm_to_farm": 21,
+      "nonfarm_to_nonfarm": 129
+    },
+    "habitat_next_positive": {
+      "farm_to_farm": 806,
+      "farm_to_nonfarm": 7,
+      "nonfarm_to_farm": 21,
+      "nonfarm_to_nonfarm": 438
+    },
+    "independent_EOG_forecast_scored": false,
+    "named_11_internal_code_dictionary_and_habitat_list_verified": true,
+    "original_PR646_and_PR647_receipts_exactly_reconciled": true,
+    "original_source_SHA256_and_header_verified": true,
+    "paired_matrices": {
+      "model_0_and_33_pretarget": {
+        "first_raw_ambiguous__next_ambiguous": 0,
+        "first_raw_ambiguous__next_different": 0,
+        "first_raw_ambiguous__next_same": 0,
+        "first_raw_different__next_ambiguous": 0,
+        "first_raw_different__next_different": 101,
+        "first_raw_different__next_same": 1,
+        "first_raw_same__next_ambiguous": 0,
+        "first_raw_same__next_different": 111,
+        "first_raw_same__next_same": 1047
+      },
+      "named_11_0_only_all_history": {
+        "first_raw_ambiguous__next_ambiguous": 0,
+        "first_raw_ambiguous__next_different": 0,
+        "first_raw_ambiguous__next_same": 0,
+        "first_raw_different__next_ambiguous": 0,
+        "first_raw_different__next_different": 101,
+        "first_raw_different__next_same": 1,
+        "first_raw_same__next_ambiguous": 0,
+        "first_raw_same__next_different": 117,
+        "first_raw_same__next_same": 1049
+      },
+      "named_11_0_only_pretarget": {
+        "first_raw_ambiguous__next_ambiguous": 0,
+        "first_raw_ambiguous__next_different": 0,
+        "first_raw_ambiguous__next_same": 0,
+        "first_raw_different__next_ambiguous": 0,
+        "first_raw_different__next_different": 102,
+        "first_raw_different__next_same": 1,
+        "first_raw_same__next_ambiguous": 0,
+        "first_raw_same__next_different": 117,
+        "first_raw_same__next_same": 1052
+      },
+      "original_all": {
+        "first_raw_ambiguous__next_ambiguous": 0,
+        "first_raw_ambiguous__next_different": 0,
+        "first_raw_ambiguous__next_same": 0,
+        "first_raw_different__next_ambiguous": 0,
+        "first_raw_different__next_different": 114,
+        "first_raw_different__next_same": 1,
+        "first_raw_same__next_ambiguous": 0,
+        "first_raw_same__next_different": 124,
+        "first_raw_same__next_same": 1074
+      }
+    },
+    "per_origin_named_island_positive_counts": [
+      {
+        "code": "20",
+        "name": "Nesøy",
+        "habitat": "farm",
+        "paired_positive": 67,
+        "next_same": 56,
+        "next_different": 11,
+        "first_same_next_different": 3
+      },
+      {
+        "code": "22",
+        "name": "Myken",
+        "habitat": "nonfarm",
+        "paired_positive": 38,
+        "next_same": 30,
+        "next_different": 8,
+        "first_same_next_different": 5
+      },
+      {
+        "code": "23",
+        "name": "Træna",
+        "habitat": "nonfarm",
+        "paired_positive": 110,
+        "next_same": 82,
+        "next_different": 28,
+        "first_same_next_different": 21
+      },
+      {
+        "code": "24",
+        "name": "Selvær",
+        "habitat": "nonfarm",
+        "paired_positive": 127,
+        "next_same": 71,
+        "next_different": 56,
+        "first_same_next_different": 28
+      },
+      {
+        "code": "26",
+        "name": "Gjerøy",
+        "habitat": "farm",
+        "paired_positive": 278,
+        "next_same": 261,
+        "next_different": 17,
+        "first_same_next_different": 10
+      },
+      {
+        "code": "27",
+        "name": "Hestmannøy",
+        "habitat": "farm",
+        "paired_positive": 294,
+        "next_same": 279,
+        "next_different": 15,
+        "first_same_next_different": 10
+      },
+      {
+        "code": "28",
+        "name": "Indre Kvarøy",
+        "habitat": "farm",
+        "paired_positive": 114,
+        "next_same": 90,
+        "next_different": 24,
+        "first_same_next_different": 14
+      },
+      {
+        "code": "33",
+        "name": "Lurøy-Onøy",
+        "habitat": "farm",
+        "paired_positive": 6,
+        "next_same": 5,
+        "next_different": 1,
+        "first_same_next_different": 1
+      },
+      {
+        "code": "34",
+        "name": "Lovund",
+        "habitat": "nonfarm",
+        "paired_positive": 69,
+        "next_same": 51,
+        "next_different": 18,
+        "first_same_next_different": 9
+      },
+      {
+        "code": "35",
+        "name": "Sleneset",
+        "habitat": "nonfarm",
+        "paired_positive": 115,
+        "next_same": 75,
+        "next_different": 40,
+        "first_same_next_different": 15
+      },
+      {
+        "code": "38",
+        "name": "Aldra",
+        "habitat": "farm",
+        "paired_positive": 54,
+        "next_same": 53,
+        "next_different": 1,
+        "first_same_next_different": 1
+      }
+    ],
+    "post2014_bird_identity_or_destination_inspected": false,
+    "schema": "eog.helgeland.11island_positive_habitat_paired.exploratory_receipt.v1",
+    "scientific_boundaries": {
+      "11_island_internal_named_roster_not_independent_2020_code_crosswalk": true,
+      "2026_source_not_contemporaneous_2014_predictors": true,
+      "EOG_WF_3_31_3_unchanged": true,
+      "farm_nonfarm_from_published_site_classification_not_proven_individual_mechanism": true,
+      "no_causal_habitat_preference_inference": true,
+      "no_dispersal_rate_or_true_recruitment": true,
+      "no_independent_heldout_EOG_score": true,
+      "no_population_founding_or_source_sink_inference": true,
+      "no_survey_effort_detection_correction": true,
+      "original_1313_and_125_receipts_unchanged": true,
+      "post2014_identity_stage_site_unread": true,
+      "post_exposure_exploratory": true
+    },
+    "status": "POSTEXPOSURE_NAMED_11_ISLAND_POSITIVE_HABITAT_DIAGNOSTIC__BIOLOGY_HOLD",
+    "survey_effort_detection_adjusted": false
+  }
+}
