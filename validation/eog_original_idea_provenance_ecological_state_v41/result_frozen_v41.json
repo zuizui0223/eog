@@ -1,0 +1,126 @@
+{
+  "schema": "eog.original_idea.noisy_provenance_ecological_state_value.frozen_review_v41",
+  "status": "INDEPENDENTLY_INSPECTED_SOURCE_VERIFIED_TARGET_SPECIFIC_SIMULATION__NO_EMPIRICAL_GENETICS",
+  "pre_result_protocol_commit": "a812771a2d033b634dc95aceac0dc311a842a1e0",
+  "authority": {
+    "github_actions_run_id": 39248967844,
+    "github_actions_artifact_id": 12184367871,
+    "artifact_name": "EOG-V41-NOISY-PROVENANCE-ECOLOGICAL-STATE-KNOWN-TRUTH",
+    "artifact_zip_sha256": "9d98a1cc1704954f9c9f8f9487f85748a1368f6422fbd3125b6ee964647f4527",
+    "complete_canonical_json_sha256": "34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d",
+    "canonicalization": "sha256(json.dumps(result,sort_keys=True,separators=(',', ':'),ensure_ascii=False,allow_nan=False).encode('utf-8'))",
+    "v23_source_fingerprint": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244",
+    "v39_complete_parent_sha256": "eefbd3c2ef69e532d6efc5fef66fd7ec97def75e6dd6b74d533d042e78aaa865"
+  },
+  "parent_population_counts": {
+    "design_rows": 768,
+    "occupancy_identified": 579,
+    "occupancy_alias": 189,
+    "equal_budget_alias": 88,
+    "perfect_combined_identified": 687,
+    "perfect_combined_alias": 81
+  },
+  "process_target_memory_row_counts": {
+    "exact_activation_history": 768,
+    "history_blind_occupancy": 0,
+    "persistent_threshold_lag2": 726,
+    "transient_window_age1_2": 726,
+    "saturating_age_class_cap3": 726
+  },
+  "perfect_full_source_alias_target_disagreement_counts": {
+    "exact_activation_history": 81,
+    "history_blind_occupancy": 0,
+    "persistent_threshold_lag2": 12,
+    "transient_window_age1_2": 45,
+    "saturating_age_class_cap3": 45
+  },
+  "primary_assay": {
+    "coverage_q": 0.6,
+    "miscall_e": 0.1,
+    "site_budget": 3,
+    "history_prior": "uniform across 3 activation schedules"
+  },
+  "confluence_mean_over_189_occupancy_alias": {
+    "exact_activation_history": {
+      "information_bits": 0.4041694132190281,
+      "bayes_accuracy_gain": 0.20409962,
+      "positive_worlds": 120
+    },
+    "history_blind_occupancy": {
+      "information_bits": 0,
+      "bayes_accuracy_gain": 0,
+      "positive_worlds": 0
+    },
+    "persistent_threshold_lag2": {
+      "information_bits": 0.14064779,
+      "bayes_accuracy_gain": 0.06229989,
+      "positive_worlds": 48
+    },
+    "transient_window_age1_2": {
+      "information_bits": 0.17751462,
+      "bayes_accuracy_gain": 0.08288511,
+      "positive_worlds": 64
+    },
+    "saturating_age_class_cap3": {
+      "information_bits": 0.20838477,
+      "bayes_accuracy_gain": 0.10164933,
+      "positive_worlds": 64
+    }
+  },
+  "confluence_mean_over_88_equal_budget_alias": {
+    "exact_activation_history": {
+      "information_bits": 0.6558164099798183,
+      "positive_worlds": 88
+    },
+    "persistent_threshold_lag2": {
+      "information_bits": 0.19724142,
+      "positive_worlds": 23
+    },
+    "transient_window_age1_2": {
+      "information_bits": 0.24457315,
+      "positive_worlds": 32
+    },
+    "saturating_age_class_cap3": {
+      "information_bits": 0.25057158,
+      "positive_worlds": 32
+    }
+  },
+  "contrast_counts_on_189_occupancy_aliases": {
+    "confluence_source_tags_improve_both_history_and_lag2_maturity_in_designs": 48,
+    "confluence_source_tags_improve_history_but_not_lag2_maturity_in_designs": 72,
+    "confluence_source_tags_improve_lag2_maturity_in_designs": 48
+  },
+  "source_geometry_occupancy_aliases": {
+    "clustered": {
+      "n": 153,
+      "history_info_bits": 0.4965314,
+      "lag2_maturity_info_bits": 0.1737414,
+      "transient_info_bits": 0.2165461
+    },
+    "dispersed": {
+      "n": 36,
+      "history_info_bits": 0.011631,
+      "lag2_maturity_info_bits": 0,
+      "transient_info_bits": 0.011631
+    }
+  },
+  "negative_controls": {
+    "history_blind_or_unique_origin_zero_information_violations": 0,
+    "target_information_data_processing_violations": 0,
+    "v39_exact_history_independent_bayes_mismatches": 0
+  },
+  "predeclared_verdicts": {
+    "V1_noisy_provenance_adds_some_maturity_information": "SUPPORTED",
+    "V2_history_information_without_maturity_information_exists": "SUPPORTED",
+    "V3_transient_state_information_exceeds_lag2_maturity": "SUPPORTED",
+    "V4_perfect_provenance_does_not_resolve_all_present_maturity": "SUPPORTED",
+    "V5_source_tag_information_must_respect_target_compression": "SUPPORTED"
+  },
+  "scientific_bounds": {
+    "known_truth_state_target_only_not_measured_maturity_fitness_or_survival": true,
+    "V4_and_V5_are_parent_integrity_and_information_theorem_not_independent_ecological_discoveries": true,
+    "target_specific_gain_not_equivalent_to_actual_colonization_prediction": true,
+    "2021_genetic_archive_raw_data_not_accessed": true,
+    "no_new_EOG_WF_empirical_endpoint": true
+  }
+}
