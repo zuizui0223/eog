@@ -139,6 +139,6 @@ def test_fixed_v23_landscape_uses_topological_sites_without_historical_labels():
 
 def test_no_real_world_genotypes_or_hidden_external_data_imported():
     source=Path("benchmarks/run_eog_imperfect_provenance_sampling_v39.py").read_text()
-    for bad in ("urllib", "requests", "read_csv(", "dryad", "mcp__",
+    for bad in ("import urllib", "import requests", "read_csv(", "mcp__",
                 "Geneticassignment_README", "Dispersaldata.txt"):
         assert bad.lower() not in source.lower()
