@@ -106,16 +106,17 @@ def test_corrupted_original_frozen_11_island_EOG_proxy_fails():
 
 def test_offline_sha256_attests_only_exact_user_legitimately_supplied_synthetic_bytes(tmp_path):
     one, two = b"fake synthetic text only", b"another invented original"
-    for name, content in [("a.txt", one), ("b.txt", two)]:
+    invented = [("a.txt", one), ("b.txt", two),
+                ("c.txt", b"third invented"), ("d.txt", b"fourth invented")]
+    for name, content in invented:
         (tmp_path / name).write_bytes(content)
     records = [
-        {"name": "a.txt", "file_id": 111, "size_bytes": len(one),
-         "declared_sha256": hashlib.sha256(one).hexdigest()},
-        {"name": "b.txt", "file_id": 222, "size_bytes": len(two),
-         "declared_sha256": hashlib.sha256(two).hexdigest()},
+        {"name": name, "file_id": 111 + index, "size_bytes": len(content),
+         "declared_sha256": hashlib.sha256(content).hexdigest()}
+        for index, (name, content) in enumerate(invented)
     ]
     x = hash_locally_authorized_files(tmp_path, {"files": records})
-    assert len(x["files"]) == 2
+    assert len(x["files"]) == 4
     assert x["all_four_authorized_source_bytes_sha256_verified"] is True
     assert x["file_rows_or_columns_read"] is False
     assert x["surveyed_zero_or_2021_2014_forecast_authorized"] is False
@@ -134,8 +135,9 @@ def test_offline_file_parser_refuses_traversal_and_symlink(tmp_path):
     parent = tmp_path / "dir"
     parent.mkdir()
     (parent / "good.txt").write_bytes(b"x")
-    r = {"files":[{"name": "../good.txt", "file_id": 1,
-                   "size_bytes": 1, "declared_sha256":hashlib.sha256(b"x").hexdigest()}]}
+    r = {"files":[{"name": n, "file_id": idx,
+                   "size_bytes": 1, "declared_sha256": hashlib.sha256(b"x").hexdigest()}
+                  for idx, n in enumerate(("../good.txt", "good.txt", "good.txt", "good.txt"))]}
     with pytest.raises(ValueError, match="source path"):
         hash_locally_authorized_files(parent, r)
     symlink = parent / "ref.txt"
