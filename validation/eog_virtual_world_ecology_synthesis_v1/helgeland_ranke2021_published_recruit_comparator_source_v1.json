@@ -1,0 +1,90 @@
+{
+  "schema": "eog.helgeland.ranke2021_external_recruit_aggregate_comparator_v1",
+  "status": "OFFICIAL_2021_DRYAD_METADATA_VERIFIED__RAW_DATA_NOT_ACCESSIBLE__PUBLISHED_RESULTS_ONLY",
+  "source": {
+    "study": "Ranke et al. 2021, Spatial structure and dispersal dynamics in a house sparrow metapopulation",
+    "study_doi": "10.1111/1365-2656.13580",
+    "publication_page": "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2656.13580",
+    "dataset_doi": "10.5061/dryad.v41ns1rx1",
+    "dataset_id": 74465,
+    "version_id": 136299,
+    "first_published": "2021-08-24",
+    "official_api": "https://datadryad.org/api/v2/versions/136299/files",
+    "inventory_source": "Official Dryad API, 4/4 file records, count=total=4; source-declared SHA-256, NOT downloaded bytes."
+  },
+  "files": [
+    {
+      "name": "description.txt",
+      "file_id": 913633,
+      "size_bytes": 3266,
+      "declared_sha256": "a8dbce0f8d9f84dbf13b0a1197143cfde83feefb2ff93518655dbcb1959aaa4f",
+      "role": "metadata_dictionary_body_not_verified"
+    },
+    {
+      "name": "emigration.txt",
+      "file_id": 913631,
+      "size_bytes": 43464,
+      "declared_sha256": "f97a7b6b776d8e4c09b4529af77722b1506177f06443b802c6ea71d07254db9b",
+      "role": "published_island_year_recruit_emigration_aggregates_body_not_verified"
+    },
+    {
+      "name": "immigration.txt",
+      "file_id": 913632,
+      "size_bytes": 43527,
+      "declared_sha256": "166364424d601955f1220b317d60b404d84675f7c5a14e498fb8de4d6a1dd2e6",
+      "role": "published_island_year_recruit_immigration_aggregates_body_not_verified"
+    },
+    {
+      "name": "island-pairs.txt",
+      "file_id": 913634,
+      "size_bytes": 527964,
+      "declared_sha256": "c5d4f44a3f3f0987ad2202d66737754238cf199a51eca07d31af46ee48e2226e",
+      "role": "published_island_pair_aggregate_body_not_verified"
+    }
+  ],
+  "published_recruit_results": {
+    "total_second_calendar_year_recruits": 2192,
+    "confirmed_interisland_dispersers": 376,
+    "recorded_in_recruitment_year": 357,
+    "recorded_later_year": 19,
+    "farm_to_farm": 99,
+    "farm_to_nonfarm": 19,
+    "nonfarm_to_farm": 31,
+    "nonfarm_to_nonfarm": 227,
+    "published_study_1993_to_2014": true,
+    "recruits_in_second_calendar_year_or_later_observed": true,
+    "historically_incomplete_nest_searches_and_detection_coverage": true
+  },
+  "EOG_frozen_proxy": {
+    "main_sha": "946f6108a72d738f976af2a4bf6f08f86c25d897",
+    "receipt": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_11island_habitat_paired_observed_frozen_v1.json",
+    "positive_detected_next_calendar_may_aug_ids": 1272,
+    "different_island_code_positive_ids": 219,
+    "farm_to_farm": 62,
+    "farm_to_nonfarm": 7,
+    "nonfarm_to_farm": 21,
+    "nonfarm_to_nonfarm": 129,
+    "first_raw_vs_next_calendar_class_discordant": 118,
+    "only_first_same_next_different": 117,
+    "original_2026_dryad_source_public_after_2014_cutoff": true
+  },
+  "access_gate": {
+    "2021_raw_file_bodies_sha256_verified": false,
+    "2021_description_physical_header_verified": false,
+    "2021_year_island_recruit_values_read": false,
+    "2021_file_body_download_requires_authorized_access_or_fails": true,
+    "earlier_official_download_http_status": 401,
+    "alternate_page_antibot_no_data": true,
+    "no_auth_bypass_permitted": true,
+    "no_file_content_committed": true
+  },
+  "scientific_bounds": {
+    "aggregate_prevalence_or_habitat_share_agreement_is_NOT_validated_measurement_equivalence": true,
+    "2021_recruit_membership_cannot_be_joined_to_2026_raw_ID_cohort_without_shared_key": true,
+    "2021_reference_is_published_overlap_not_independent_heldout_confirmation": true,
+    "2021_data_unavailable_as_2014_continuous_predictors": true,
+    "no_surveyed_zero_or_detection_effort_claim": true,
+    "no_recruitment_causal_process_or_true_colonization_fitted": true,
+    "no_extra_EOG_WF_scored_endpoint": true
+  }
+}
