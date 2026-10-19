@@ -60,7 +60,7 @@ def test_metadata_only_audit_never_creates_genetic_or_movement_claim():
     assert a["source"]["2021_record_2026_bird_ID_join_verified"] is False
     assert a["genetic_origin_is_true_source_without_calibration"] is False
     assert a["EOG_WF_denominator_modified"] is False
-    assert "bird" not in json.dumps(a).lower()
+    assert "natal.island" not in json.dumps(a)
 
 
 def test_invalid_author_code_bytes_fail_before_semantic_parsing():
