@@ -21,6 +21,75 @@ The scientific center is now:
 
 > **EOG does not need to recover one “true” process from occurrence data. It should eliminate finite declared worlds only when the available evidence contains a valid witness against them, preserve observationally equivalent worlds as unresolved, and use the remaining ambiguity to design the next discriminating observation, calibration, or intervention.**
 
+## Latest result — v39/v40 source-provenance observation uncertainty
+
+The original finite-world source-history programme has now tested whether
+`P_node` observations retain information once ideal provenance tags are
+missing or miscalled, and whether static **source-basin confluence** is a
+generally worthwhile way to choose scarce measurement sites.
+
+**v39**, preregistered and frozen at
+`validation/eog_original_idea_imperfect_provenance_v39/`, reused the exact
+v23 768 source-history design rows with 579 exact-history-identifiable from
+full occupancy alone and 687 from occupancy plus the complete perfect tag
+library. In 88 fixed occupancy-aliased designs supporting equal 3-site
+sampling, synthetic `coverage=0.6/miscall=0.1` yielded conditional history
+information of **0.655816 bit** from static confluence sites versus
+**0.648676 bit** from a single response-blind random seed. Five *v39*
+directional hypotheses were supported under the declared synthetic assay
+channel; there were no empirical genetics in this result.
+
+**v40** was a separate *post-v39-exposure robustness test*, with its
+64 SHA256-derived random placement seeds and `0.020 bit` materiality
+threshold frozen **before** scoring the new seed ensemble at commit
+`ce72c8a258e3c3ddd8bd8c6e8b43e103501de745`. All 88 original fair
+worlds were held fixed, as were the 3-site budget and noise likelihood.
+Results:
+
+| Fixed v40 statistic | Result |
+| --- | ---: |
+| Confluence fixed mean additional information | 0.655816 bit |
+| Random-placement 64-seed ensemble mean | 0.647256 bit |
+| Difference | **+0.008560 bit** |
+| Predeclared meaningful gain threshold | +0.020000 bit (**not met**) |
+| Random seed *world-means* worse than confluence | 64/64 |
+| Ecological worlds with strictly better/tied/worse confluence | **34/54/0 out of 88** |
+| Source geometry of all fair worlds | **clustered only** |
+| History-invariant ideal provenance tags among 264 selected confluence sites | 0 |
+
+Five *v40* verdicts were retained as frozen: **M1 REFUTED** (no
+materiality), **M2 SUPPORTED** (64/64 seed-level ranking), **M3 REFUTED**
+(not a majority of ecological worlds), **M4 SUPPORTED** (random-placement
+seed variability), **M5 REFUTED** (no selected history-invariant
+confluence tag in this specific cohort). A small directionally consistent
+gain is not an empirically important, general field sampling advantage.
+Seeds are not independent ecological replications and **dispersed-source
+sampling efficiency is not identified** by the eligible 88-world panel.
+
+Canonical assets:
+
+- `validation/eog_original_idea_imperfect_provenance_v39/protocol_v39.json`
+  and `result_frozen_v39.json`;
+- `validation/eog_original_idea_provenance_placement_multiseed_v40/protocol_v40.json`
+  and `result_frozen_v40.json`;
+- `docs/eog_imperfect_provenance_sampling_v39.md`;
+- `docs/eog_provenance_placement_multiseed_v40.md`.
+
+Exact v40 complete-result JSON SHA256:
+`e366c4945e2110bd6359c3db1ae86e4e01bb6df8741fc4370af6ae54b5792f91`.
+The five verdicts and the 3 refutations are covered by dedicated CI.
+v39's first-arrival source tags are an **idealized known-truth readout**,
+not genotype assignments or observed natal dispersal.
+
+**Biological access boundary:** 2021 Helgeland Saatoglu et al. public
+analysis *code* and 8-island support were independently verified, but the
+attempt to obtain its official Dryad biological README from the public
+file-stream endpoint received HTTP 403. The original 2021 genotype/individual
+data were not accessed or validated, and further automated source probes
+were stopped. A real-world provenance test cannot be claimed from v39/v40.
+The EOG-WF 3 scored / 31 scientific STOP / 3 administrative exclusion
+denominator remains frozen and is not extended.
+
 ## Active original-EOG virtual-world result
 
 The active programme now has three frozen stages.

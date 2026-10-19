@@ -35,6 +35,47 @@ Canonical closure assets:
 
 The previous state in which no fresh post-Daphnia paired endpoint had completed is historical and must not be used to reopen candidate search.
 
+## Current known-truth result (v39–v40, 2026-10-19)
+
+**Active scientific status: origin-history information can survive an imperfect
+observation channel, but the proposed static-confluence placement heuristic did
+not pass a preregistered *materiality* criterion.** These are controlled
+known-truth results, **not** field-calibrated genetic ancestry or colonisation.
+
+- [v39 imperfect provenance](eog_imperfect_provenance_sampling_v39.md) reused
+  the exact v23 **768 design worlds** (579 occupancy-identifiable; 189 occupancy-
+  ambiguous). Perfect combined occupancy + all ideal earliest-source tags
+  identifies 687. Under *assumed* tag coverage `q=0.60` / miscall `e=0.10`,
+  three confluence sites supplied **0.655816 bit** of additional history
+  information in the **88** equal-budget occupancy-aliased worlds; the single
+  frozen response-blind random placement gave **0.648676 bit**.
+- [v40 fixed 64-seed robustness](eog_provenance_placement_multiseed_v40.md)
+  compared the **same 88 designs** to 64 deterministic, source-blind three-site
+  random placements: random-ensemble mean **0.647256 bit**, fixed confluence
+  **0.655816 bit**, difference **+0.008560 bit**, **below** the
+  predeclared **+0.020-bit** materially useful threshold.
+- All **64/64** random seed *world-mean* scores were below the fixed confluence
+  score, but only **34/88** individual worlds strictly favored the targeted
+  policy, **54/88** tied within 1e-9 and none disfavored it. **All 88**
+  fair-world comparisons have **clustered**, not dispersed, source geometry.
+  A seed-level win is therefore neither 64 independent ecological replicates
+  nor broad landscape generality.
+- v40 preregistered verdicts: **M1, M3, M5 REFUTED; M2, M4 SUPPORTED**.
+  The entire independently inspected v40 result is frozen by SHA256
+  `e366c4945e2110bd6359c3db1ae86e4e01bb6df8741fc4370af6ae54b5792f91`
+  at `validation/eog_original_idea_provenance_placement_multiseed_v40/result_frozen_v40.json`.
+
+**Decision:** source/provenance measurements may distinguish histories that
+occupancy cannot, but **static confluence ranking should not be recommended as
+a materially better field sampling design** based on these results. Actual
+genetic assignment error, survey effort and location-to-source equivalence
+remain unresolved. The attempted [original Helgeland 2021 public Dryad
+README](eog_helgeland_saatoglu2021_original_data_access_gate_v1.md) returned
+HTTP 403; no 2021 individual/genetic record was analyzed. Stop additional
+same-archive proxy rescreens. This programme must **not** be appended as a
+fourth EOG-WF predictive endpoint. The frozen 3 scored / 31 STOP / 3
+administrative-exclusion denominator is unchanged.
+
 ## Post-closure active method architecture
 
 The frozen three-endpoint EOG-WF manuscript line remains closed and unchanged.
