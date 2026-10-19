@@ -1,0 +1,527 @@
+{
+  "schema": "eog.helgeland.pre2015.island_location_crosswalk.frozen_source_receipt.v1",
+  "status": "INDEPENDENTLY_INSPECTED_ORIGINAL_SOURCE_MAPPING_AGGREGATES__BIOLOGICAL_HOLD",
+  "protocol_freeze_commit": "db66fb583db890ea8c7bed251ae37e235ba8ceee",
+  "authority": {
+    "github_actions_run_id": 39202831125,
+    "github_actions_artifact_id": 12165010358,
+    "artifact_name": "HELGELAND-PRE2015-ISLAND-LOCATION-AGGREGATE-CROSSWALK",
+    "artifact_zip_sha256": "34e54b9781b8afadc823ccf3f27e6c825c1a12afc3a1bb3de9b2834ffe9fcade",
+    "source_author_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "original_dryad_v6_sha256_and_header_verified": true
+  },
+  "receipt": {
+    "schema": "eog.helgeland.pre2015.island_location_crosswalk.exploratory_receipt.v1",
+    "status": "RETROSPECTIVE_SOURCE_INTERNAL_CODE_LOCATION_DICTIONARY__ECOLOGICAL_HOLD",
+    "source": {
+      "dryad_version_id": 421942,
+      "file_id": 4576411,
+      "date_mask": "1994-01-01..2014-12-31",
+      "2026_source_not_2014_public_predictor": true
+    },
+    "counts": {
+      "total_file_rows": 73593,
+      "eligible_rows_pre2015": 51162,
+      "rows_before_1994": 1070,
+      "rows_after_2014": 21361,
+      "raw_island_code_0_eligible_rows": 2613,
+      "raw_island_code_33_eligible_rows": 1738,
+      "nest_rows": 13383,
+      "capt_rows": 17369,
+      "obs_rows": 20410,
+      "period_1994_2003_rows": 15864,
+      "period_2004_2014_rows": 35298,
+      "distinct_raw_island_codes": 12,
+      "distinct_normalized_location_labels": 12,
+      "distinct_code_location_pairs": 12,
+      "codes_with_multiple_normalized_labels": 0,
+      "normalized_labels_with_multiple_codes": 0,
+      "published_2021_named_labels_observed": 11,
+      "published_2021_named_labels_not_observed": 0
+    },
+    "code_location_pairs": [
+      {
+        "island_code_raw": "0",
+        "location_normalized": "other helgeland",
+        "location_raw_variants": [
+          "other helgeland"
+        ],
+        "pair_direct_row_count": 2613,
+        "1994_2003_direct_rows": 1332,
+        "2004_2014_direct_rows": 1281,
+        "published_2021_name_exact_text": null,
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "20",
+        "location_normalized": "nesøy",
+        "location_raw_variants": [
+          "nesøy"
+        ],
+        "pair_direct_row_count": 1839,
+        "1994_2003_direct_rows": 818,
+        "2004_2014_direct_rows": 1021,
+        "published_2021_name_exact_text": "Nesøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "22",
+        "location_normalized": "myken",
+        "location_raw_variants": [
+          "myken"
+        ],
+        "pair_direct_row_count": 1523,
+        "1994_2003_direct_rows": 535,
+        "2004_2014_direct_rows": 988,
+        "published_2021_name_exact_text": "Myken",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "23",
+        "location_normalized": "træna",
+        "location_raw_variants": [
+          "træna"
+        ],
+        "pair_direct_row_count": 5572,
+        "1994_2003_direct_rows": 924,
+        "2004_2014_direct_rows": 4648,
+        "published_2021_name_exact_text": "Træna",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "24",
+        "location_normalized": "selvær",
+        "location_raw_variants": [
+          "selvær"
+        ],
+        "pair_direct_row_count": 3986,
+        "1994_2003_direct_rows": 1119,
+        "2004_2014_direct_rows": 2867,
+        "published_2021_name_exact_text": "Selvær",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "26",
+        "location_normalized": "gjerøy",
+        "location_raw_variants": [
+          "gjerøy"
+        ],
+        "pair_direct_row_count": 8536,
+        "1994_2003_direct_rows": 2299,
+        "2004_2014_direct_rows": 6237,
+        "published_2021_name_exact_text": "Gjerøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "27",
+        "location_normalized": "hestmannøy",
+        "location_raw_variants": [
+          "hestmannøy"
+        ],
+        "pair_direct_row_count": 13514,
+        "1994_2003_direct_rows": 3975,
+        "2004_2014_direct_rows": 9539,
+        "published_2021_name_exact_text": "Hestmannøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "28",
+        "location_normalized": "indre kvarøy",
+        "location_raw_variants": [
+          "indre kvarøy"
+        ],
+        "pair_direct_row_count": 4546,
+        "1994_2003_direct_rows": 1723,
+        "2004_2014_direct_rows": 2823,
+        "published_2021_name_exact_text": "Indre Kvarøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "33",
+        "location_normalized": "lurøy-onøy",
+        "location_raw_variants": [
+          "lurøy-onøy"
+        ],
+        "pair_direct_row_count": 1738,
+        "1994_2003_direct_rows": 1155,
+        "2004_2014_direct_rows": 583,
+        "published_2021_name_exact_text": "Lurøy-Onøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "34",
+        "location_normalized": "lovund",
+        "location_raw_variants": [
+          "lovund"
+        ],
+        "pair_direct_row_count": 2453,
+        "1994_2003_direct_rows": 468,
+        "2004_2014_direct_rows": 1985,
+        "published_2021_name_exact_text": "Lovund",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "35",
+        "location_normalized": "sleneset",
+        "location_raw_variants": [
+          "sleneset"
+        ],
+        "pair_direct_row_count": 2984,
+        "1994_2003_direct_rows": 985,
+        "2004_2014_direct_rows": 1999,
+        "published_2021_name_exact_text": "Sleneset",
+        "explicit_non_synonym": false
+      },
+      {
+        "island_code_raw": "38",
+        "location_normalized": "aldra",
+        "location_raw_variants": [
+          "aldra"
+        ],
+        "pair_direct_row_count": 1858,
+        "1994_2003_direct_rows": 531,
+        "2004_2014_direct_rows": 1327,
+        "published_2021_name_exact_text": "Aldra",
+        "explicit_non_synonym": false
+      }
+    ],
+    "per_code": [
+      {
+        "island_code_raw": "0",
+        "direct_row_count": 2613,
+        "normalized_location_labels": [
+          "other helgeland"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": false
+      },
+      {
+        "island_code_raw": "20",
+        "direct_row_count": 1839,
+        "normalized_location_labels": [
+          "nesøy"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "22",
+        "direct_row_count": 1523,
+        "normalized_location_labels": [
+          "myken"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "23",
+        "direct_row_count": 5572,
+        "normalized_location_labels": [
+          "træna"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "24",
+        "direct_row_count": 3986,
+        "normalized_location_labels": [
+          "selvær"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "26",
+        "direct_row_count": 8536,
+        "normalized_location_labels": [
+          "gjerøy"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "27",
+        "direct_row_count": 13514,
+        "normalized_location_labels": [
+          "hestmannøy"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "28",
+        "direct_row_count": 4546,
+        "normalized_location_labels": [
+          "indre kvarøy"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "33",
+        "direct_row_count": 1738,
+        "normalized_location_labels": [
+          "lurøy-onøy"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "34",
+        "direct_row_count": 2453,
+        "normalized_location_labels": [
+          "lovund"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "35",
+        "direct_row_count": 2984,
+        "normalized_location_labels": [
+          "sleneset"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      },
+      {
+        "island_code_raw": "38",
+        "direct_row_count": 1858,
+        "normalized_location_labels": [
+          "aldra"
+        ],
+        "single_location_label_internal": true,
+        "observed_in_both_time_bins": true,
+        "same_label_in_both_bins": true,
+        "matches_one_2021_named_label_text_only": true
+      }
+    ],
+    "per_location": [
+      {
+        "location_normalized": "aldra",
+        "raw_location_variants": [
+          "aldra"
+        ],
+        "raw_island_codes": [
+          "38"
+        ],
+        "direct_row_count": 1858,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Aldra",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "gjerøy",
+        "raw_location_variants": [
+          "gjerøy"
+        ],
+        "raw_island_codes": [
+          "26"
+        ],
+        "direct_row_count": 8536,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Gjerøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "hestmannøy",
+        "raw_location_variants": [
+          "hestmannøy"
+        ],
+        "raw_island_codes": [
+          "27"
+        ],
+        "direct_row_count": 13514,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Hestmannøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "indre kvarøy",
+        "raw_location_variants": [
+          "indre kvarøy"
+        ],
+        "raw_island_codes": [
+          "28"
+        ],
+        "direct_row_count": 4546,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Indre Kvarøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "lovund",
+        "raw_location_variants": [
+          "lovund"
+        ],
+        "raw_island_codes": [
+          "34"
+        ],
+        "direct_row_count": 2453,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Lovund",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "lurøy-onøy",
+        "raw_location_variants": [
+          "lurøy-onøy"
+        ],
+        "raw_island_codes": [
+          "33"
+        ],
+        "direct_row_count": 1738,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Lurøy-Onøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "myken",
+        "raw_location_variants": [
+          "myken"
+        ],
+        "raw_island_codes": [
+          "22"
+        ],
+        "direct_row_count": 1523,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Myken",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "nesøy",
+        "raw_location_variants": [
+          "nesøy"
+        ],
+        "raw_island_codes": [
+          "20"
+        ],
+        "direct_row_count": 1839,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Nesøy",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "other helgeland",
+        "raw_location_variants": [
+          "other helgeland"
+        ],
+        "raw_island_codes": [
+          "0"
+        ],
+        "direct_row_count": 2613,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": null,
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "selvær",
+        "raw_location_variants": [
+          "selvær"
+        ],
+        "raw_island_codes": [
+          "24"
+        ],
+        "direct_row_count": 3986,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Selvær",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "sleneset",
+        "raw_location_variants": [
+          "sleneset"
+        ],
+        "raw_island_codes": [
+          "35"
+        ],
+        "direct_row_count": 2984,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Sleneset",
+        "explicit_non_synonym": false
+      },
+      {
+        "location_normalized": "træna",
+        "raw_location_variants": [
+          "træna"
+        ],
+        "raw_island_codes": [
+          "23"
+        ],
+        "direct_row_count": 5572,
+        "single_code_internal": true,
+        "published_2021_name_exact_text": "Træna",
+        "explicit_non_synonym": false
+      }
+    ],
+    "observed_2021_named_labels": [
+      "Aldra",
+      "Gjerøy",
+      "Hestmannøy",
+      "Indre Kvarøy",
+      "Lovund",
+      "Lurøy-Onøy",
+      "Myken",
+      "Nesøy",
+      "Selvær",
+      "Sleneset",
+      "Træna"
+    ],
+    "unobserved_2021_named_labels": [],
+    "literal_0_33_rows": {
+      "0": {
+        "row_count": 2613,
+        "normalized_location_labels": [
+          "other helgeland"
+        ]
+      },
+      "33": {
+        "row_count": 1738,
+        "normalized_location_labels": [
+          "lurøy-onøy"
+        ]
+      }
+    },
+    "strict_scope": {
+      "source_internal_2026_mapping_only": true,
+      "post_exposure_exploratory": true,
+      "no_pre2015_year_island_population_effort_certification": true,
+      "no_2020_v8_code_crosswalk_certification": true,
+      "no_external_geographic_coordinate_verification": true,
+      "no_breeding_recruitment_validation": true,
+      "no_island_colonization_or_natal_dispersal_inference": true,
+      "no_independent_heldout_EOG_predictive_endpoint": true,
+      "EOG_WF_denominator_3_31_3_unchanged": true
+    },
+    "individual_IDs_or_trajectories_exported": false,
+    "source_code_to_physical_coordinates_verified": false,
+    "external_2020_code_equivalence_verified": false,
+    "surveyed_zero_or_recruitment_verified": false,
+    "independent_EOG_forecast_scored": false,
+    "frozen_original_sha256_header_first_events_rechecked": true,
+    "frozen_0_33_row_counts_reconciled": true
+  }
+}

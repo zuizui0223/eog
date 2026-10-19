@@ -1,0 +1,109 @@
+{
+  "schema": "eog.helgeland.pre2015.code_location_crosswalk.protocol.v1",
+  "status": "FROZEN_BEFORE_DIRECT_ISLAND_LOCATION_VALUE_AGGREGATION_POST_EXPOSURE",
+  "question": "Within original pre-2015 direct positive encounter records, how uniquely and temporally consistently does literal Island code identify raw Location label, and which 2021 study-island names are represented?",
+  "analysis_design": "Retrospective source-internal label dictionary only; no inference on dispersal, detection, colonization, source-to-sink or physical geography",
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "version_id": 421942,
+    "file_id": 4576411,
+    "author_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "path": "Data/presence_data_1994_2022.txt",
+    "complete_Dryad_v6_SHA256_and_header_first_verified_in_previous_main": true,
+    "source_published_in_2026_not_available_to_2014_predictor": true
+  },
+  "window": {
+    "min_date": "1994-01-01",
+    "max_date": "2014-12-31",
+    "read_raw_date_before_any_Island_Location_stage": true,
+    "outside_date_window_read_only_date": true,
+    "pre2015_direct_stages": [
+      "nest",
+      "capt",
+      "obs"
+    ],
+    "mapping_time_bins": [
+      {
+        "name": "1994-2003",
+        "first": "1994-01-01",
+        "last": "2003-12-31"
+      },
+      {
+        "name": "2004-2014",
+        "first": "2004-01-01",
+        "last": "2014-12-31"
+      }
+    ]
+  },
+  "raw_access": {
+    "inside_window_allowed": [
+      "date",
+      "Island",
+      "Location",
+      "stage"
+    ],
+    "ID_never_accessed_by_new_mapping_pass": true,
+    "year_age_genotype_imputation_never_accessed": true,
+    "case_normalization": "Unicode NFKC, trim outer whitespace, collapse internal spaces, casefold for comparison only; original literal labels preserved separately",
+    "no_inferred_synonym_or_transliteration": true,
+    "raw_code_string_not_recoded_to_model_factor": true
+  },
+  "frozen_preexposed_checks": {
+    "total_file_rows": 73593,
+    "eligible_rows_pre2015": 51162,
+    "rows_before_1994": 1070,
+    "rows_after_2014": 21361,
+    "raw_island_code_0_eligible_rows": 2613,
+    "raw_island_code_33_eligible_rows": 1738
+  },
+  "published_2021_names": [
+    "Aldra",
+    "Gjerøy",
+    "Hestmannøy",
+    "Indre Kvarøy",
+    "Lurøy-Onøy",
+    "Lovund",
+    "Myken",
+    "Nesøy",
+    "Selvær",
+    "Sleneset",
+    "Træna"
+  ],
+  "non_synonyms": [
+    "Ytre Kvarøy",
+    "Sundøy"
+  ],
+  "strict_evidence_rules": {
+    "within_2026_file_code_unique_only_if_one_normalized_location_label": true,
+    "stable_across_time_bins_only_if_code_observed_in_both_bins_and_same_label": true,
+    "a_location_name_may_have_more_than_one_raw_code_and_must_be_reported": true,
+    "2021_named_island_label_match_is_text_only_not_geographic_authorization": true,
+    "2020_Niskanen_numeric_cross_archive_equivalence_never_inferred": true,
+    "zero_observation_in_year_not_absence_or_no_effort": true,
+    "source_code_0_33_is_not_automatically_bad_or_not_island": true
+  },
+  "output": {
+    "rows_per_code_location_pair_with_time_bins": true,
+    "observed_raw_location_variants_per_normalized_label": true,
+    "normalized_label_exact_membership_in_2021_names": true,
+    "code_to_location_and_location_to_code_cardinalities": true,
+    "both_period_mapping_stability_for_codes_observed_twice": true,
+    "0_33_location_labels_and_counts_explicit": true,
+    "maximum_category_pairs": 80,
+    "maximum_unique_raw_codes": 80,
+    "maximum_unique_normalized_labels": 80,
+    "only_aggregate_public_location_labels_and_raw_codes": true,
+    "no_bird_ID_or_individual_sequences": true
+  },
+  "claim_bounds": {
+    "source_internal_2026_mapping_only": true,
+    "post_exposure_exploratory": true,
+    "no_pre2015_year_island_population_effort_certification": true,
+    "no_2020_v8_code_crosswalk_certification": true,
+    "no_external_geographic_coordinate_verification": true,
+    "no_breeding_recruitment_validation": true,
+    "no_island_colonization_or_natal_dispersal_inference": true,
+    "no_independent_heldout_EOG_predictive_endpoint": true,
+    "EOG_WF_denominator_3_31_3_unchanged": true
+  }
+}
