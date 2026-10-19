@@ -1,0 +1,164 @@
+{
+  "schema": "eog.helgeland.11island_positive_habitat_paired.protocol.v1",
+  "status": "FROZEN_AFTER_PR646_647_648_EXPOSURE__BEFORE_NAMED_11_ISLAND_PAIRED_OUTCOME_CLASSIFICATION",
+  "analysis_role": "Retrospective post-exposure within-paired positive detection sensitivity to source-internal roster and published farm/nonfarm labels; no new EOG prediction",
+  "freeze_basis": {
+    "main_commit": "c7bd38290ddd2c47afdbdc53590985cacf48838b",
+    "pr646_first_next_paired_frozen": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_next_breeding_direct_positive_observed_frozen_v1.json",
+    "pr647_0_33_frozen": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_island_0_33_sensitivity_observed_frozen_v1.json",
+    "pr648_code_location_frozen": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_observed_frozen_v1.json",
+    "ranke_2021_11_island_habitat_literature": "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_2020_2021_island_literature_crosswalk_v1.json"
+  },
+  "source": {
+    "doi": "10.5061/dryad.rr4xgxdnq",
+    "dryad_version": 421942,
+    "file_id": 4576411,
+    "author_commit": "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5",
+    "path": "Data/presence_data_1994_2022.txt",
+    "source_public_since_2026_not_2014": true
+  },
+  "permitted_observations": {
+    "earliest": "1994-01-01",
+    "last": "2014-12-31",
+    "inspect_raw_date_before_ID_or_Island": true,
+    "read_only_date_on_2015_2022_and_pre1994_rows": true,
+    "eligible_raw_fields": [
+      "date",
+      "ID",
+      "Island",
+      "stage"
+    ],
+    "eligible_direct_stages": [
+      "nest",
+      "capt",
+      "obs"
+    ],
+    "do_not_read_Year_age_genetics_sex_or_Location": true
+  },
+  "study_roster": {
+    "allowed_codes": [
+      "20",
+      "22",
+      "23",
+      "24",
+      "26",
+      "27",
+      "28",
+      "33",
+      "34",
+      "35",
+      "38"
+    ],
+    "extra_code": "0",
+    "extra_code_location": "other helgeland",
+    "retained_code": "33",
+    "retained_code_location": "Lurøy-Onøy",
+    "farm_codes": [
+      "20",
+      "26",
+      "27",
+      "28",
+      "33",
+      "38"
+    ],
+    "nonfarm_codes": [
+      "22",
+      "23",
+      "24",
+      "34",
+      "35"
+    ],
+    "habitat_categories_from": "Ranke et al. 2021 doi:10.1111/1365-2656.13580",
+    "habitat_island_class_not_measured_bird_preference": true,
+    "derive_actual_code_name_and_habitat_from_existing_frozen_receipts": true
+  },
+  "fixed_paired_endpoint": {
+    "origin": "unique literal Island code on any original 1994–2014 nest physical events, and earliest dated nest Y in May-Aug, Y no later than 2013",
+    "first_raw": "earliest strictly later direct capt/obs physical date; same/different/ambiguous compared with unique nest code, without recoding after exclusions",
+    "next_breeding": "earliest next calendar year Y+1 May-Aug literal capt/obs date; same/different/ambiguous, no detected record = not a surveyed zero",
+    "same_ID_endpoint_pairs_from_pr646_retained": true,
+    "primary_11_island": "exclude a paired ID if any raw code 0 occurred in a directly observed nest/capt/obs event on or before its first eligible next-breeding-positive date; allow code 33",
+    "secondary_full_history": "exclude a paired ID if code 0 appeared anywhere in original pre2015 direct recorded history, including after the endpoint; post-outcome retrospective check only",
+    "comparison_10island_model_filtered": "replicate PR647's both-0-and-33 pre-target exclusion as a nested population; retain original unchanged classes",
+    "no_reclassification_after_exclusion": true,
+    "habitat_contrast": "on primary 11-island positive-only ID subset, among original source and next-year observed destination, count farm-to-farm, farm-to-nonfarm, nonfarm-to-farm, nonfarm-to-nonfarm; distinguish same-code versus different-code positives",
+    "no_detection_denominator_claim": true
+  },
+  "previous_exposed_counts": {
+    "source_raw_rows": 73593,
+    "source_pre2015_rows": 51162,
+    "pre1994_rows": 1070,
+    "post2014_rows": 21361,
+    "unique_nest_source_IDs": 10737,
+    "eligible_birth_cohort": 10073,
+    "paired_IDs": 1313,
+    "paired_original_same_same": 1074,
+    "paired_original_same_different": 124,
+    "paired_original_different_same": 1,
+    "paired_original_different_different": 114,
+    "model_0_33_pretarget_clean_n": 1260,
+    "model_0_33_pretarget_discordant": 112,
+    "model_0_33_same_same": 1047,
+    "model_0_33_same_different": 111,
+    "model_0_33_different_same": 1,
+    "model_0_33_different_different": 101
+  },
+  "outputs": {
+    "permitted_scalar_fields": [
+      "whole_source_rows_date_checked",
+      "pre1994_rows_masked",
+      "post2014_rows_masked",
+      "eligible_pre2015_rows",
+      "unique_nest_source_ids",
+      "ambiguous_nest_source_ids",
+      "eligible_birth_cohort_ids",
+      "paired_next_year_positive",
+      "code_0_direct_rows",
+      "code_33_direct_rows",
+      "paired_0_before_or_at_target",
+      "paired_33_before_or_at_target",
+      "paired_0_and_33_before_or_at_target",
+      "paired_0_anytime",
+      "paired_0_later_only",
+      "named_11_primary_positive",
+      "named_11_full_history_positive",
+      "model_0_33_primary_positive",
+      "named_11_primary_discordant",
+      "named_11_full_history_discordant",
+      "model_0_33_primary_discordant",
+      "named_11_primary_next_different_codes",
+      "named_11_primary_next_same_codes",
+      "named_11_primary_33_origin",
+      "named_11_primary_33_next",
+      "named_11_primary_33_in_origin_or_target"
+    ],
+    "classification_matrix_names": [
+      "original_all",
+      "named_11_0_only_pretarget",
+      "named_11_0_only_all_history",
+      "model_0_and_33_pretarget"
+    ],
+    "class_levels": [
+      "same",
+      "different",
+      "ambiguous"
+    ],
+    "habitat_matrix": "11-island primary: farm/nonfarm source by next detected farm/nonfarm 2x2, both all-positives and different-island-only, plus first-same-next-different by source habitat",
+    "max_public_code_counts": 11,
+    "only_aggregate_no_ID_raw_dates_or_individual_trajectories": true
+  },
+  "scientific_boundaries": {
+    "post_exposure_exploratory": true,
+    "original_1313_and_125_receipts_unchanged": true,
+    "post2014_identity_stage_site_unread": true,
+    "2026_source_not_contemporaneous_2014_predictors": true,
+    "11_island_internal_named_roster_not_independent_2020_code_crosswalk": true,
+    "farm_nonfarm_from_published_site_classification_not_proven_individual_mechanism": true,
+    "no_dispersal_rate_or_true_recruitment": true,
+    "no_survey_effort_detection_correction": true,
+    "no_population_founding_or_source_sink_inference": true,
+    "no_causal_habitat_preference_inference": true,
+    "no_independent_heldout_EOG_score": true,
+    "EOG_WF_3_31_3_unchanged": true
+  }
+}

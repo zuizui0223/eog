@@ -1,0 +1,114 @@
+name: Helgeland 11 named-island positive habitat sensitivity
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-11island-habitat-paired-v1.yml'
+      - 'scripts/audit_helgeland_11island_habitat_paired_v1.py'
+      - 'tests/test_helgeland_11island_habitat_paired_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_11island_habitat_paired_protocol_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_11island_habitat_paired_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_11island_habitat_paired_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-11island-habitat-paired-v1.yml'
+      - 'scripts/audit_helgeland_11island_habitat_paired_v1.py'
+      - 'tests/test_helgeland_11island_habitat_paired_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_11island_habitat_paired_protocol_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_11island_habitat_paired_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_11island_habitat_paired_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  named-eleven-paired-positives-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Assert immutable original biological source revision
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Challenge 11-island/farm/nonfarm mapping on invented individuals only
+        run: python -m pytest -q tests/test_helgeland_11island_habitat_paired_v1.py
+      - name: Rerun whole-file SHA256 and exact original 1313, then compute new positive-only habitat counts
+        run: |
+          python scripts/audit_helgeland_11island_habitat_paired_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-11island-habitat-paired-v1.json
+      - name: Check strict source, original paired matrices, nested named-11 counts, no ecological endpoint
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('build/helgeland-11island-habitat-paired-v1.json')
+          out=json.loads(path.read_text(encoding='utf-8'))
+          p=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_11island_habitat_paired_protocol_v1.json').read_text(encoding='utf-8'))
+          c=out['counts']; m=out['paired_matrices']
+          assert out['schema']=='eog.helgeland.11island_positive_habitat_paired.exploratory_receipt.v1'
+          assert out['status']=='POSTEXPOSURE_NAMED_11_ISLAND_POSITIVE_HABITAT_DIAGNOSTIC__BIOLOGY_HOLD'
+          assert out['original_source_SHA256_and_header_verified'] is True
+          assert out['original_PR646_and_PR647_receipts_exactly_reconciled'] is True
+          assert out['named_11_internal_code_dictionary_and_habitat_list_verified'] is True
+          assert set(c)==set(p['outputs']['permitted_scalar_fields'])
+          assert set(m)==set(p['outputs']['classification_matrix_names'])
+          assert c['whole_source_rows_date_checked']==73593
+          assert c['eligible_pre2015_rows']==51162
+          assert c['code_0_direct_rows']==2613
+          assert c['code_33_direct_rows']==1738
+          assert c['paired_next_year_positive']==1313
+          assert m['original_all']['first_raw_same__next_different']==124
+          assert m['original_all']['first_raw_different__next_same']==1
+          assert m['model_0_and_33_pretarget']['first_raw_same__next_different']==111
+          assert m['model_0_and_33_pretarget']['first_raw_different__next_same']==1
+          assert c['model_0_33_primary_positive']==1260
+          assert c['model_0_33_primary_discordant']==112
+          assert c['named_11_primary_positive']>=1260
+          assert c['named_11_primary_positive']<=1313
+          assert c['named_11_full_history_positive']<=c['named_11_primary_positive']
+          assert sum(out['habitat_next_positive'].values())==c['named_11_primary_positive']
+          assert sum(out['habitat_different_code_positive'].values())==c['named_11_primary_next_different_codes']
+          assert sum(out['first_same_next_different_by_origin_habitat'].values())==m['named_11_0_only_pretarget']['first_raw_same__next_different']
+          assert len(out['per_origin_named_island_positive_counts'])==11
+          assert {x['code'] for x in out['per_origin_named_island_positive_counts']}==set(p['study_roster']['allowed_codes'])
+          assert out['scientific_boundaries']==p['scientific_boundaries']
+          assert all(out[k] is False for k in (
+              'post2014_bird_identity_or_destination_inspected',
+              'bird_IDs_or_individual_history_exported',
+              'breeding_recruitment_dispersal_or_colonization_inferred',
+              'survey_effort_detection_adjusted',
+              'independent_EOG_forecast_scored',
+          ))
+          frozen=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_11island_habitat_paired_observed_frozen_v1.json')
+          assert frozen.is_file(), 'Original-source independently reviewed frozen receipt missing'
+          reviewed=json.loads(frozen.read_text(encoding='utf-8'))
+          assert reviewed['schema']=='eog.helgeland.11island_positive_habitat_paired.frozen_source_receipt.v1'
+          assert reviewed['protocol_freeze_commit']=='fd18c40e521e14c982164e3b132ff81320c4b8be'
+          assert reviewed['authority']['original_sha256_physical_header_and_PR646_647_receipts_reverified'] is True
+          assert reviewed['receipt']==out, 'Full original-source outcome changed from reviewed receipt'
+          assert c['named_11_primary_positive']==1272
+          assert c['named_11_primary_discordant']==118
+          assert c['paired_0_before_or_at_target']==41
+          assert c['named_11_primary_33_in_origin_or_target']==12
+          assert out['habitat_different_code_positive']=={
+              'farm_to_farm':62,'farm_to_nonfarm':7,
+              'nonfarm_to_farm':21,'nonfarm_to_nonfarm':129,
+          }
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-11-NAMED-ISLANDS-POSITIVE-HABITAT-AGGREGATES
+          path: build/helgeland-11island-habitat-paired-v1.json
+          if-no-files-found: warn
