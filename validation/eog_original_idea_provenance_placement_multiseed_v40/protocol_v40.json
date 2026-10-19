@@ -1,0 +1,93 @@
+{
+  "schema": "eog.original_idea.noisy_provenance_placement_multiseed.protocol.v40",
+  "status": "FROZEN_BEFORE_V40_RANDOM_SEED_ENSEMBLE_EVALUATION__POST_V39_EXPOSURE",
+  "scientific_question": "Does v39's ~0.00714-bit confluence-priority benefit persist across many response-blind random site placements on exactly the same source landscapes, and how much apparent superiority is simply placement-seed variation?",
+  "parent": {
+    "base_commit": "9b15962341594d9936410067706db72a705d39c3",
+    "v39_protocol": "validation/eog_original_idea_imperfect_provenance_v39/protocol_v39.json",
+    "v39_frozen": "validation/eog_original_idea_imperfect_provenance_v39/result_frozen_v39.json",
+    "full_v39_result_sha256": "eefbd3c2ef69e532d6efc5fef66fd7ec97def75e6dd6b74d533d042e78aaa865",
+    "v23_fingerprint": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244",
+    "matched_full_design_rows": 768,
+    "occupancy_ambiguous_rows": 189,
+    "equal_budget_occupancy_ambiguous_rows": 88,
+    "old_one_seed_target_bits": 0.6558164099798183,
+    "old_one_seed_random_bits": 0.648676018353758
+  },
+  "design": {
+    "site_budget": 3,
+    "comparison_stratum": "v39 fixed 88 occupancy-ambiguous designs with >=3 static confluence sites; SAME 88 scenarios for every seed and every selection policy",
+    "seed_prefix": "eog-v40-20261019-random-seed-",
+    "seed_ids": "000 through 063 inclusive (64 deterministic independent SHA256 rankings); no seed is discarded",
+    "ensemble_count": 64,
+    "original_v39_seed": "eog-v39-20261019-fixed-rank",
+    "source_worlds": "frozen v23 384 landscapes crossed with clustered/dispersed source geometries and three history schedules; no new ecological response",
+    "placement": "for each seed and design: SHA256(seed+'|'+design_key+'|'+node_id), ascending hex digest then node_id; select first 3 among ALL non-source equilibrium-reachable nodes",
+    "baseline": "v39 confluence-targeted: static graph possible-source count>=2 sorted descending count then node_id; choose first 3; never use history-specific source tags to pick sites",
+    "noninformative_coverage_control": "count selected static confluence sites that do not vary across three histories post hoc, but never select using their truth-specific provenance tags",
+    "observation_coverage": 0.6,
+    "categorical_miscall": 0.1,
+    "information_bits": "exact v39 bayes_information I(activation history; noisy provenance tags | all four snapshots), with uniform prior over histories, no Monte Carlo observational outcomes",
+    "bayes_accuracy": "v39 baseline-subtracted expected posterior correct-history probability",
+    "sensitivity_setting": {
+      "coverage": 1,
+      "miscall": 0,
+      "role": "optional separate perfect-tag upper diagnostics ONLY, not a replacement for q=.6/e=.1"
+    },
+    "no_2021_empirical_genetic_data": true,
+    "no_real_field_sampling_costs": true
+  },
+  "estimands": {
+    "PRIMARY_mean_confluence_minus_seed_ensemble": "mean over the fixed 88 ecological designs of confluence bits minus mean over 64 seed-specific random bits on SAME designs",
+    "materiality_threshold_bits": 0.02,
+    "secondary_seed_level_advantage": "for each of 64 random placement seeds, difference between fixed target 88-world mean and random 88-world mean; summarize min/median/max/q10/q90 and fraction advantage > 0 (as descriptive)",
+    "secondary_world_level_advantage": "for each world, target information minus 64-seed mean random information; report positive/tie/negative counts using numerical 1e-9 tolerance",
+    "geometry_modification": "repeat same matched comparisons by clustered vs dispersed among the fixed 88 fair worlds, if either group has observations",
+    "posthoc_structural_mechanism": "for each selected site count tags that are history-invariant even though node has 2+ potentially reaching sources; this is a DIAGNOSTIC, not a site-selection feature or causal measured trait",
+    "optional_perfect_control": "compare target and multi-seed random at q=1,e=0 on the same 88 worlds; not primary",
+    "no_new_heldout_endpoint": true
+  },
+  "falsifiable_hypotheses": [
+    {
+      "id": "M1_material_targeting_advantage",
+      "prediction": "mean confluence minus 64-seed response-blind random ensemble >+0.020000000 bits at q=.6,e=.1 on exactly 88 fair v39-aliased worlds",
+      "verdict": "SUPPORTED if >0.02+1e-9, otherwise REFUTED"
+    },
+    {
+      "id": "M2_targeting_outperforms_most_independent_random_placements",
+      "prediction": "at least 48 of 64 random seeds (>=75%) have lower 88-world mean information than fixed confluence policy",
+      "verdict": "SUPPORTED if >=48 else REFUTED"
+    },
+    {
+      "id": "M3_per_world_targeting_consistency",
+      "prediction": "strictly more than half of the 88 fair worlds have fixed confluence information exceeding their own 64-seed random mean by >1e-9",
+      "verdict": "SUPPORTED if positive-world count >44 else REFUTED"
+    },
+    {
+      "id": "M4_random_seed_effect_not_hidden",
+      "prediction": "64 random placement seeds yield at least two distinct 88-world mean-information values beyond numerical 1e-9",
+      "verdict": "SUPPORTED if max-min>1e-9 else REFUTED"
+    },
+    {
+      "id": "M5_raw_source_overlap_is_imperfect_information_proxy",
+      "prediction": "at least one selected fixed confluence site is provably history-invariant across all three v23 activation histories despite being reachable from >=2 potential graph sources",
+      "verdict": "SUPPORTED if positive count>0 else REFUTED"
+    }
+  ],
+  "negative_controls": [
+    "exact previous 768/579/687 and 189/88 parent counts remain unchanged",
+    "v39 frozen SHA256 and predeclared fixed-one-seed 0.6558164099798183,0.648676018353758 values reconcile exactly within 1e-9",
+    "no newly read biological bird/genotype data, no exact historical route claim",
+    "no random-site selection based on actual provenance-tag values of a hidden history",
+    "no manuscript EOG-WF denominator change"
+  ],
+  "scientific_boundaries": {
+    "post_v39_exposure_sensitivity_not_independent_preregistered_conformation": true,
+    "random_seeds_not_independent_ecological_replicates": true,
+    "sampling_site_budget_is_equal_but_observation_costs_not_calibrated": true,
+    "no_empirical_genetic_origin_assignment_accuracy_or_field_effort_estimated": true,
+    "no_heldout_genetic_EOG_predictive_endpoint": true,
+    "no_unique_true_colonization_history_identified": true,
+    "v39_parent_protocol_and_EOG_WF_3_31_3_unchanged": true
+  }
+}
