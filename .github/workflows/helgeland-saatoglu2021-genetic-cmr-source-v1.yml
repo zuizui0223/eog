@@ -68,9 +68,12 @@ jobs:
           assert a['breeding_recruitment_or_colonization_inferred'] is False
           assert a['EOG_WF_denominator_modified'] is False
           f=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_saatoglu2021_provenance_result_frozen_v1.json')
-          if f.is_file():
-              frozen=json.loads(f.read_text(encoding='utf-8'))
-              assert frozen['receipt']==a, 'Exact public-source-methods receipt changed'
+          assert f.is_file(), 'Actual author-code independently inspected receipt required'
+          frozen=json.loads(f.read_text(encoding='utf-8'))
+          assert frozen['schema']=='eog.helgeland.saatoglu2021_genetic_cmr_code_audit.frozen_evidence_v1'
+          assert frozen['authority']['source_script_original_MD5_verified'] is True
+          assert frozen['authority']['Dryad_five_data_file_bodies_read'] is False
+          assert frozen['receipt']==a, 'Original public Zenodo source-code receipt changed'
           PY
       - uses: actions/upload-artifact@v4
         if: always()
