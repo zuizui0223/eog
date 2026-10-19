@@ -1,0 +1,81 @@
+name: EOG v40 provenance assay random placement robustness
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_provenance_placement_multiseed_v40/**"
+      - "benchmarks/run_eog_provenance_placement_multiseed_v40.py"
+      - "tests/test_eog_provenance_placement_multiseed_v40.py"
+      - "docs/eog_provenance_placement_multiseed_v40.md"
+      - ".github/workflows/eog-provenance-placement-multiseed-v40.yml"
+  push:
+    branches: [main]
+    paths:
+      - "validation/eog_original_idea_provenance_placement_multiseed_v40/**"
+      - "benchmarks/run_eog_provenance_placement_multiseed_v40.py"
+      - "tests/test_eog_provenance_placement_multiseed_v40.py"
+      - ".github/workflows/eog-provenance-placement-multiseed-v40.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  all-64-placement-seeds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install EOG dependencies
+        run: python -m pip install -e .[dev]
+      - name: Test immutable parent, source-blind site selection, and synthetic Bayesian controls
+        run: python -m pytest -q tests/test_eog_provenance_placement_multiseed_v40.py
+      - name: Run preregistered 64 seed placements on all v23 fair worlds
+        run: |
+          python benchmarks/run_eog_provenance_placement_multiseed_v40.py \
+            --output build/eog-v40-64-seed-placement.json
+      - name: Require all worlds/seeds and every hypothesis including refutations
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, hashlib
+          p=json.loads(Path("validation/eog_original_idea_provenance_placement_multiseed_v40/protocol_v40.json").read_text())
+          z=json.loads(Path("build/eog-v40-64-seed-placement.json").read_text())
+          assert z['schema']=='eog.original_idea.noisy_provenance_placement_multiseed.result.v40'
+          assert z['status']=='POST_V39_MULTISEED_RANDOM_PLACEMENT_SENSITIVITY__NO_REAL_GENETIC_VALIDATION'
+          assert z['protocol_freeze_before_new_random_ensemble'] is True
+          assert z['parent_reconciliation']['design_rows']==768
+          assert z['parent_reconciliation']['four_snapshot_occupancy_history_identifiable']==579
+          assert z['parent_reconciliation']['four_snapshot_occupancy_aliased']==189
+          assert z['parent_reconciliation']['fair_equal_budget_three_site_aliased']==88
+          a=z['primary']; b=z['seed_ensemble']; w=z['world_paired_placement']
+          assert a['n_worlds']==88 and a['new_random_seed_count']==64
+          assert a['coverage']==0.6 and a['miscall']==0.1
+          assert a['site_count_per_policy']==3
+          assert a['materiality_threshold_bits']==0.02
+          assert abs(a['confluence_fixed_mean_information_bits']-0.6558164099798183)<1e-9
+          assert abs(z['parent_reconciliation']['v39_one_seed_random_information_bits']-0.648676018353758)<1e-9
+          assert len(b['all_64_seed_world_averages'])==64
+          assert sorted({x['seed_index'] for x in b['all_64_seed_world_averages']})==list(range(64))
+          assert w['strict_target_better_than_64_seed_mean']+w['indistinguishable_within_1e_minus_9']+w['strict_target_worse_than_64_seed_mean']==88
+          assert z['mechanism_posthoc_not_assay_selection']['selected_static_potential_confluence_site_count']==264
+          assert z['mechanism_posthoc_not_assay_selection']['history_specific_labels_used_for_site_placement'] is False
+          assert sum(g['n_equal_budget_occupancy_aliased'] for g in z['source_geometry'])==88
+          assert set(z['predeclared_verdicts'])=={h['id'] for h in p['falsifiable_hypotheses']}
+          assert all(v in ('SUPPORTED','REFUTED') for v in z['predeclared_verdicts'].values())
+          assert z['scientific_boundaries']==p['scientific_boundaries']
+          frozen=Path('validation/eog_original_idea_provenance_placement_multiseed_v40/result_frozen_v40.json')
+          if frozen.exists():
+              x=json.loads(frozen.read_text())
+              assert x['schema']=='eog.original_idea.noisy_provenance_placement_multiseed.frozen_review_v40'
+              canonical=json.dumps(z,sort_keys=True,separators=(",",":"),ensure_ascii=False,allow_nan=False).encode('utf-8')
+              assert hashlib.sha256(canonical).hexdigest()==x['authority']['full_canonical_sha256'], 'Independent full result changed'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EOG-V40-PROVENANCE-64-SEED-PLACEMENT-AGGREGATES
+          path: build/eog-v40-64-seed-placement.json
+          if-no-files-found: warn
