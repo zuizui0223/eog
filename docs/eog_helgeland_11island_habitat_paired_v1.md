@@ -71,3 +71,49 @@ python scripts/audit_helgeland_11island_habitat_paired_v1.py \
 \`\`\`
 
 The dedicated GitHub Actions runs this against the immutable upstream commit, uploads only aggregates, and must reproduce its independently reviewed frozen complete JSON before merge.
+
+
+## Authenticated real-source result — 2026-10-19
+
+The first original-source [GitHub Actions run 39208937959](https://github.com/zuizui0223/eog/actions/runs/39208937959) succeeded. Its aggregate-only artifact ID is \`12166747729\`, ZIP SHA-256 \`c9c6c9fcf4d11d4f007227fd9c265c7d15f06cfc1c197d30a0763302f03744f8\`. The ZIP and complete included JSON were independently inspected. The entire exact aggregate receipt is now fixed at \`validation/eog_virtual_world_ecology_synthesis_v1/helgeland_11island_habitat_paired_observed_frozen_v1.json\`, and all dedicated reruns must equal it field-for-field.
+
+Original Dryad-v6 SHA256/physical header, 51,162 physical pre-2015 positive rows, 10,737 unique-nest-origin IDs, and **all original PR #646/#647 paired matrices** were reproduced exactly. No bird ID or observation-date trajectory was exported.
+
+### Same original 1,313 ID pairs; different membership rules
+
+| Matched original same-ID comparison | Paired IDs with next-year direct positive | First/next classification discordant | Discordance conditional on observed target |
+| --- | ---: | ---: | ---: |
+| Original all raw codes (PR #646) | 1,313 | 125 | 9.52% |
+| **All 11 named islands**: remove only \`0=other helgeland\` through target | **1,272** | **118** | **9.28%** |
+| Named 11, even if \`0\` appears anywhere through 2014 | 1,268 | 118 | 9.31% |
+| Exclude \`0\` and \`33\` through target (PR #647 comparator) | 1,260 | 112 | 8.89% |
+
+The frozen 11-population named-source primary paired table is:
+
+| First directly observed post-nest code | Next-calendar-year May–August: same as nest | Next-calendar-year May–August: different from nest |
+| --- | ---: | ---: |
+| Same as nest | 1,052 | **117** |
+| Different from nest | **1** | 102 |
+
+Thus **117 of the 118** disagreements are first-same→next-year-different; the reverse is observed once. All are direct site-code detection changes or changes in which observation is selected, NOT proof of true migration timing or breeding recruitment.
+
+Only **41** of the original 1,313 positive-pair IDs showed raw \`0\` on/before the endpoint, while **14** showed \`33\`; **2** showed both. Keeping the named-island \`33\` instead of excluding it adds **12** matched IDs and six first-same→next-different discrepancies (117 rather than 111). Among the named-11 retained 1,272, \`33=Lurøy-Onøy\` is an origin for six ID pairs, the observed next-year positive destination for eleven ID pairs, and appears as origin and/or next destination in twelve unique pairs. These are positive-detection category counts, not source/sink flux.
+
+### Habitat-type pattern among directly reobserved named-11 positive IDs
+
+| Source named population habitat | Next observed farm | Next observed nonfarm | Original-nest-code different at next-year positive |
+| --- | ---: | ---: | ---: |
+| Farm (6 named populations; 813 positive pairs) | 806 | 7 | **69** |
+| Nonfarm (5 named populations; 459 positive pairs) | 21 | 438 | **150** |
+
+Within those **219** next-year different-*island-code* positive pairs, 62 are farm→farm, 129 nonfarm→nonfarm, seven farm→nonfarm and 21 nonfarm→farm. That is **191/219 (87.2%) within habitat type**. The selected positive-detection same-versus-different fraction is 69/813 (8.5%) among farm-origin IDs versus 150/459 (32.7%) among nonfarm-origin IDs, **not** exposure- or detection-adjusted dispersal probabilities.
+
+Among the temporal first-same→next-different discrepancies, 39 have farm origins and 78 nonfarm origins. The original Ranke 2021 paper already reports nonfarm-biased dispersal and strong within-habitat exchange using a separately defined breeding-recruit denominator. Similarity to that established pattern is not a discovery, validation of recruitment identity or an independent replication.
+
+**Numerical trap:** 219/1,272 ≈17.2% among this selected *next-year directly observed ID subset* happens to be close to the published **376/2,192 =17.2%** actual study recruits reported by Ranke et al. (2021). The two estimands and observation filters differ materially; they overlap in place, people, study years and underlying observation archive. Their agreement when rounded is NOT evidence they measure the same biological quantity, nor a confirmation of EOG.
+
+### Hard conclusion and ecological STOP
+
+It is justified to conclude the **observation-time classification disagreement survives full named-11 island inclusion**, and its recorded positives are heterogeneous by the known published habitat types. It is **not** justified to conclude causal habitat-dependent movement, an unbiased dispersal or survival probability, island colonization, true recruitment, 2014 as-of-time forecast access, or improvement from EOG model predictions.
+
+This same observational file has now passed several descriptive sensitivity checks; further repeated filtering on the same positive sample has diminishing scientific returns. A biological next experiment should require an independent **individual recruitment-at-breeding record and island-year survey opportunity/detection denominator**, or a different prospective multi-taxon data source. Do not redefine these positive detections as another held-out EOG-WF endpoint.
