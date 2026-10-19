@@ -59,3 +59,39 @@ python scripts/audit_helgeland_pre2015_island_location_crosswalk_v1.py \
 The dedicated CI authenticates source SHA256/header through the already-merged original-source checker, compares the exposed 0/33 counts, runs the new aggregate-only pass, rejects schema drift and exports one auditable JSON. On completion, independently inspect the result, freeze the full JSON and make reruns compare against the entire frozen artifact before merging.
 
 Further biological progress requires a truly independent study-island geography dictionary and an observation-effort/breeding-recruitment source, not more row-level reclassification of the same positive observations.
+
+
+## Independently inspected real-source mapping (2026-10-19)
+
+Original-source dedicated [Actions run 39202831125](https://github.com/zuizui0223/eog/actions/runs/39202831125) succeeded with source SHA256/header, the prior first-positive denominator, and the separately frozen #647 0/33 counts all matched. Its aggregate-only artifact ID **12165010358** was downloaded and independently opened (ZIP SHA-256 \`34e54b9781b8afadc823ccf3f27e6c825c1a12afc3a1bb3de9b2834ffe9fcade\`). Every field of that receipt is now frozen at [\`helgeland_pre2015_island_location_crosswalk_observed_frozen_v1.json\`](../validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_observed_frozen_v1.json) and rechecked by the dedicated CI.
+
+**Actual result:** All **51,162** directly observed pre-2015 records resolve to **12 unique literal Island-code / Location-label pairs**, with **no code associated with two normalized labels and no normalized label associated with two codes**. All 12 mappings appear in *both* the 1994–2003 (15,864 records) and 2004–2014 (35,298 records) periods without name changes.
+
+| Literal Island code | Raw Location label | Direct physical observation rows, 1994–2014 | Exact 2021 11-name text match |
+| --- | --- | ---: | --- |
+| 0 | other helgeland | 2,613 | No, extra geographic category |
+| 20 | nesøy | 1,839 | Nesøy |
+| 22 | myken | 1,523 | Myken |
+| 23 | træna | 5,572 | Træna |
+| 24 | selvær | 3,986 | Selvær |
+| 26 | gjerøy | 8,536 | Gjerøy |
+| 27 | hestmannøy | 13,514 | Hestmannøy |
+| 28 | indre kvarøy | 4,546 | Indre Kvarøy |
+| **33** | **lurøy-onøy** | **1,738** | **Lurøy-Onøy** |
+| 34 | lovund | 2,453 | Lovund |
+| 35 | sleneset | 2,984 | Sleneset |
+| 38 | aldra | 1,858 | Aldra |
+
+The names of **all eleven populations in Ranke et al. 2021 are represented** by exact normalized label matches. No unmatched 2021 study name was found in the source-internal label universe. This refines the earlier source \`stage_location_summary.txt\` table, which showed only ten names and lacked numeric \`Island\` codes.
+
+### Scientific consequence of decoding 0 and 33
+
+The two original-model-excluded codes are **not scientifically equivalent**:
+- \`0\` = \`other helgeland\`: an umbrella label outside the named eleven-study-population roster.
+- \`33\` = **\`Lurøy-Onøy\`**, **one of the named eleven study populations**. It is not an unknown island or a generic data-entry error merely because this *particular* author's demographic modeling script filtered the code.
+
+The earlier #647 sensitivity **112/1,260** excluded any ID having either code through the target date. It is valid as a conservative **model-filter-aligned** observation-subset analysis, but cannot be characterized as an *eleven-population-inclusive* analysis. A distinct hypothetical \`0\`-only screen could retain the named Lurøy-Onøy category, but would be **post-exposure exploratory** and must not be silently substituted for the frozen #647 result.
+
+### Scientific HOLDs unchanged
+
+This is a **within-one-2026-file observed category dictionary**, not an independently verified map-coordinate lookup, a pre-2021 Niskanen numeric cross-archive key, or a longitudinal complete island-year census. It does not establish surveyed-zero effort, undetected birds, correct breeding/recruit status, population founding, actual movements between named islands, or out-of-time EOG added predictive value. The 2026 data source remains retrospective with respect to 2014.
