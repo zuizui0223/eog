@@ -49,3 +49,50 @@ python benchmarks/run_eog_provenance_ecological_state_v41.py \
 \`\`\`
 
 After an independently inspected real GitHub Actions artifact is produced, freeze its **complete canonical JSON hash**, preregistered verdicts and original source evidence receipts. Dedicated and full package CI must match before merging.
+
+
+## Empirical execution of the frozen **synthetic** protocol (2026-10-19)
+
+The first complete source-independent [GitHub Actions run 39248967844](https://github.com/zuizui0223/eog/actions/runs/39248967844) passed all simulated known-truth v23–v40 parent checks, v26 state mappings, independent conditional Bayes computation, and original v39 information regression. The original aggregate-only artifact **12184367871** was independently downloaded and inspected. Artifact ZIP SHA256: \`9d98a1cc1704954f9c9f8f9487f85748a1368f6422fbd3125b6ee964647f4527\`. The full canonical result JSON SHA256 is \`34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d\`. The complete JSON exists as that Actions artifact, and its **full hash** and key numerical results are frozen in \`validation/eog_original_idea_provenance_ecological_state_v41/result_frozen_v41.json\`; all future runs must reproduce the complete digest.
+
+The first two CI tries stopped on **test/output scaffolding** issues before a valid final gate: a fabricated test supplied a partial target dictionary where the alias helper expected all targets; and a zero-valued history-blind counter was omitted from the serialized dictionary. Neither issue changed the frozen protocol, any latent landscape, Bayes likelihood, process state function or original v39 ecological conclusion. Both were repaired, and the full run completed successfully.
+
+### New result — historical information often has no marginal value for the chosen present state
+
+The primary stratum contains **189/768** original v23 design rows whose complete four-time occupancy observations did not distinguish all three activation histories. Under the unchanged assumed synthetic provenance assay (coverage q=0.60, miscall e=0.10), and at most three potential source-confluence sites:
+
+| Target inferred from the same noisy source-tag observations | Mean additional information, bits | Number of 189 designs with positive information | Mean expected correct-target accuracy gain |
+| --- | ---: | ---: | ---: |
+| **Exact activation history** | **0.404169** | **120** | **0.204100** |
+| Present state: persistent lag-2 mature/not mature | 0.140648 | 48 | 0.062300 |
+| Present state: transient age-1-to-2 state | 0.177515 | 64 | 0.082885 |
+| Present state: saturated age 0/1/2/3+ state | 0.208385 | 64 | 0.101649 |
+| History-blind current occupancy (negative control) | 0 | 0 | 0 |
+
+**The key contrast is 120 versus 48:** in **72/189** designs, provenance observations reduced uncertainty about the *exact history* while providing **zero additional information about the lag-2 mature-state map** beyond the four complete occupancy snapshots. These 72 cases make up **60%** of the 120 designs in which the observation informed exact history at all. Conversely, all 48 with maturity-target improvement also had exact-history information; this is consistent with the frozen data-processing constraint.
+
+Why does this matter? An ecologist who wants to infer a specific current state, rather than historical labels for their own sake, can obtain information about past routes without improving the state prediction they care about. More knowledge about the past is not identical to more ecologically relevant knowledge.
+
+The exact *mean* information ratio 0.140648 / 0.404169 ≈ 35% is **not** a measured biological cost-benefit ratio. It is a ratio across one frozen synthetic ensemble, with a specific age mapping and assumed observation channel.
+
+### The information loss depends on the ecological target mapping
+
+Under the same fixed 189 design worlds and same source tags, the transient target had **0.177515 bit**, exceeding persistent lag-2 maturity's **0.140648 bit**. The richer saturated age target had **0.208385 bit**. This confirmed the preregistered V3 direction **under the fixed synthetic process family**; it does not establish biological superiority of transient phenotyping or more categories in general.
+
+Among the stricter **88** designs with three available potential confluence assay sites, exact-history information was 0.655816 bit, whereas persistent maturity information was 0.197241 bit, transient 0.244573 bit, saturated age 0.250572 bit. Do not confuse the 88 matched assay-coverage stratum with the full 189 occupancy-aliased worlds.
+
+Source geometry also conditioned the target-specific result among the 189 occupancy-aliased worlds: in clustered-source designs (n=153), confluence provenance supplied **0.173741 bit** about lag-2 maturation; in dispersed-source designs (n=36), **0.000000 bit**, despite small residual exact-history information (0.011631 bit). These groups are not matched ecological treatment allocations, and synthetic source geometry is not a causal observed property of the Helgeland islands.
+
+### A harder inferential ceiling
+
+The original v23/v25/v26 **81 perfect-library exact-history aliases** reproduced exactly. In **12** of those, even full perfect earliest-source observations could not distinguish histories that implied different persistent lag-2 mature-state maps; the transient and saturating state targets each had **45** such residual designs. Thus replacing imperfect tag measurement with an arbitrarily complete set of *the same source-tag observation class* is insufficient to close those target distinctions. A new temporal/source-age measurement, or other independently discriminating evidence, is required within this known-truth world set.
+
+The 726 design rows with any age-sensitive state memory were also exactly reproduced for all three target processes, as was the history-blind memory count zero.
+
+### Verdicts and integrity
+
+All five predeclared v41 predictions V1–V5 were **SUPPORTED**, with zero discrepancies against the independent v39 exact-history information calculator, zero target-information data-processing violations, and zero negative-control violations.
+
+V4 (reproducing the original 12 historical aliases with different current mature-state targets) and V5 (information cannot increase after target compression) are **parent-consistency/theoretical invariants**, not two independent discoveries of ecological effects. The more useful v41 observation is the **existence and frequency of historical information with no incremental value for a declared ecological state target**.
+
+No real biological maturation, genetic origin, colonization, ecological fitness, sampling cost or field survey effort was estimated. A 2021 individual-level genetic/recruitment archive remains inaccessible through the official URL tested in EOG #652. There is **no fourth EOG-WF predictive endpoint** and no alteration of the Methods in Ecology and Evolution submission claim.
