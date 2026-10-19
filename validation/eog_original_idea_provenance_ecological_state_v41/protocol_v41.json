@@ -1,0 +1,130 @@
+{
+  "schema": "eog.original_idea.noisy_provenance_ecological_state_value.protocol.v41",
+  "status": "FROZEN_BEFORE_TARGET_SPECIFIC_NOISY_PROVENANCE_BENCHMARK_RESULTS__POST_V39_V40_EXPOSURE",
+  "scientific_question": "When does an imperfect earliest-source observation help predict an ecologically defined present-state mapping, rather than merely distinguishing exact synthetic activation histories?",
+  "parent_sources": {
+    "main_commit": "3865d1fa98cb2031d567e34a290162d75f6536e0",
+    "v23_result": "validation/eog_original_idea_provenance_observability_v23/result_summary_v23.json",
+    "v23_fingerprint": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244",
+    "v25_mature_state": "validation/eog_original_idea_age_dependent_present_state_v25/result_summary_v25.json",
+    "v25_fingerprint": "998c24e22e355f703c2a787780ced11abd01280c0ca5deb3b17e8848af3f7ad0",
+    "v26_process_family": "validation/eog_original_idea_history_to_state_process_family_v26/result_summary_v26.json",
+    "v26_fingerprint": "90096f149d2a3c71b4a00283cef2b1470a7501bbffc6ce39c79fac33540ce27e",
+    "v39_noisy_source_protocol": "validation/eog_original_idea_imperfect_provenance_v39/protocol_v39.json",
+    "v39_frozen": "validation/eog_original_idea_imperfect_provenance_v39/result_frozen_v39.json",
+    "v39_full_sha256": "eefbd3c2ef69e532d6efc5fef66fd7ec97def75e6dd6b74d533d042e78aaa865",
+    "v40_placement_result": "validation/eog_original_idea_provenance_placement_multiseed_v40/result_frozen_v40.json",
+    "v40_full_sha256": "e366c4945e2110bd6359c3db1ae86e4e01bb6df8741fc4370af6ae54b5792f91"
+  },
+  "fixed_design": {
+    "ecological_world_rows": 384,
+    "source_geometries": [
+      "clustered",
+      "dispersed"
+    ],
+    "total_source_history_designs": 768,
+    "three_activation_histories": 3,
+    "full_non_source_occupancy_times": [
+      4,
+      5,
+      6,
+      8
+    ],
+    "parent_occupancy_exact_history_identified": 579,
+    "parent_occupancy_alias_designs": 189,
+    "perfect_combined_full_history_identified": 687,
+    "perfect_combined_exact_history_aliased": 81,
+    "perfect_combined_aliases_with_different_lag2_mature_target": 12,
+    "perfect_combined_aliases_with_different_transient_age1_2_target": 45,
+    "parent_lag2_age_sensitive_worlds": 726,
+    "parent_transient_age_sensitive_worlds": 726,
+    "parent_saturating_age_sensitive_worlds": 726,
+    "same_world_generator_as_v23_v25_v26_v39": true,
+    "no_response_or_target_specific_new_world_selection": true
+  },
+  "present_state_targets": {
+    "history_blind_occupancy": "fixed negative control: all equilibrium non-source nodes present; never depends on activation timing",
+    "persistent_threshold_lag2": "binary mature iff T* - first_arrival(node) >= 2",
+    "transient_window_age1_2": "binary transient iff 1 <= T* - first_arrival(node) < 3",
+    "saturating_age_class_cap3": "discrete age category min(T* - first_arrival(node),3)",
+    "exact_activation_history": "the actual one of the 3 fixed activation schedules; not a measured ecological state",
+    "common_present_Tstar": "maximum first-arrival date over every equilibrium non-source node and all three activation histories, same as v25/v26",
+    "actual_biological_maturity_survival_disease_or_fitness_measured": false
+  },
+  "source_tag_assay": {
+    "ideal_tag": "at each equilibrium non-source node, exact set of synthetic earliest-arrival sources; not observed genetic ancestry",
+    "site_budget_max": 3,
+    "policies": [
+      "confluence_targeted",
+      "random_response_blind",
+      "unique_origin_negative_control"
+    ],
+    "policy_site_selection": "reuse prepare_design in v39 unchanged; static source coverage, deterministic v39 SHA ranking; no true history tag readout for placement",
+    "coverage_q": 0.6,
+    "miscall_e": 0.1,
+    "likelihood": "same as v39: independent missingness prob 1-q; if observed, right tag prob (1-e), each other tag in node-specific catalog including synthetic UNSEEN prob e/(K-1)",
+    "truth_prior": "uniform probability 1/3 over the 3 synthetic activation histories",
+    "assay_likelihood_is_known_in_simulation": true,
+    "no_real_SNP_or_sampling_coverage_calibration": true,
+    "no_site_cost_model": true
+  },
+  "analysis": {
+    "PRIMARY_denominator": "189 design rows whose full occupancy snapshots do not identify exact history, including clustered/dispersed; do not filter to v39 88 eligible only",
+    "secondary_denominators": [
+      "all 768 design rows",
+      "original v39 88 equal-budget occupancy-aliased designs",
+      "perfect occupancy+full provenance unresolved 81 design rows"
+    ],
+    "target_specific_information": "I(present target; selected q/e source-tag reports | full four-snapshot occupancy) under uniform 3-history prior; exact finite enumeration",
+    "expected_bayes_target_correctness": "posterior Bayes accuracy gain of best target-state prediction given noisy tags vs given occupancy alone; compare gain only within SAME target",
+    "target_ceiling": "perfect full-source-tag observation does not distinguish target states if same complete occupancy-and-tag signature occurs under different target values",
+    "target_decoupling": "record designs where q/e tags inform exact history but NOT a declared mature-state target; and designs where both carry positive information",
+    "data_processing_guard": "for each row and same site set, I(T;tags|occupancy) <= I(H;tags|occupancy) and Bayes target regret nonnegative",
+    "candidate_selection_response_blind": true,
+    "no_heldout_or_fourth_EOG_WF_predictive_endpoint": true
+  },
+  "falsifiable_predictions": [
+    {
+      "id": "V1_noisy_provenance_adds_some_maturity_information",
+      "prediction": "there exists at least one occupancy-aliased v23 design where q=.6/e=.1 confluence-selected tag information about lag2 maturity exceeds 1e-9 bit",
+      "verdict": "SUPPORTED if count >0 else REFUTED"
+    },
+    {
+      "id": "V2_history_information_without_maturity_information_exists",
+      "prediction": "there exists at least one occupancy-aliased design with confluence-tag history information >1e-9 bit but lag2-maturity information <=1e-9 bit under identical noisy observation",
+      "verdict": "SUPPORTED if count >0 else REFUTED"
+    },
+    {
+      "id": "V3_transient_state_information_exceeds_lag2_maturity",
+      "prediction": "in the same 189 occupancy-aliased worlds, mean confluence q=.6/e=.1 mutual information about the transient age1–2 state exceeds that about the persistent lag2 mature state by >1e-9 bit",
+      "verdict": "SUPPORTED if larger else REFUTED"
+    },
+    {
+      "id": "V4_perfect_provenance_does_not_resolve_all_present_maturity",
+      "prediction": "exactly the original 12 v25 rows contain a lag2-mature-state disagreement within histories equivalent under all full occupancy and full ideal source-tag observations",
+      "verdict": "SUPPORTED if exactly 12 else REFUTED"
+    },
+    {
+      "id": "V5_source_tag_information_must_respect_target_compression",
+      "prediction": "all synthetic design rows and policies satisfy I(T; noisy tag | occupancy) <= I(H; noisy tag | occupancy) for each age-sensitive present state target",
+      "verdict": "SUPPORTED if 0 numerical violations >1e-9 else REFUTED"
+    }
+  ],
+  "negative_controls": [
+    "history_blind_occupancy target has zero conditional information and zero target accuracy gain",
+    "unique_origin_negative_control source tags have zero information for history and all ecological targets",
+    "v39 exact history MI recomputed by independent target-specific implementation agrees to 1e-8 per design and policy",
+    "never compare Bayes accuracy of different target category counts as if numerically interchangeable",
+    "all original v23/v25/v26/v39/v40 parent fingerprints and counts unchanged"
+  ],
+  "scientific_boundaries": {
+    "post_v39_v40_exposure_synthetic_result_not_independent_novel_ecological_replication": true,
+    "lag2_and_other_age_state_processes_are_preset_abstract_not_species_calibrated": true,
+    "ideal_earliest_source_tag_is_not_natal_genetic_assignment": true,
+    "source_tag_error_coverage_rates_not_estimated_from_2021_Dryad": true,
+    "no_original_2021_genotype_bird_survey_data_read": true,
+    "no_2026_helgeland_capt_obs_endpoint_rescored": true,
+    "no_actual_colonization_origin_or_survival_probability_inferred": true,
+    "no_fourth_EOG_WF_predictive_endpoint_or_submission_change": true
+  }
+}
