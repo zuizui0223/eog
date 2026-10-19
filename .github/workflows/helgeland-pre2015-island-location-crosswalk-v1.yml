@@ -78,9 +78,18 @@ jobs:
           assert x['independent_EOG_forecast_scored'] is False
           assert x['strict_scope']==p['claim_bounds']
           frozen=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_observed_frozen_v1.json')
-          if frozen.exists():
-              reviewed=json.loads(frozen.read_text())
-              assert reviewed['receipt']==x, 'Original code-label aggregation changed from independently reviewed evidence'
+          assert frozen.is_file(), 'Independently reviewed real-source mapping receipt required'
+          reviewed=json.loads(frozen.read_text())
+          assert reviewed['schema']=='eog.helgeland.pre2015.island_location_crosswalk.frozen_source_receipt.v1'
+          assert reviewed['protocol_freeze_commit']=='db66fb583db890ea8c7bed251ae37e235ba8ceee'
+          assert reviewed['authority']['original_dryad_v6_sha256_and_header_verified'] is True
+          assert reviewed['receipt']==x, 'Original code-label aggregation changed from independently reviewed evidence'
+          assert c['distinct_raw_island_codes']==12
+          assert c['codes_with_multiple_normalized_labels']==0
+          assert c['normalized_labels_with_multiple_codes']==0
+          assert c['published_2021_named_labels_observed']==11
+          assert x['literal_0_33_rows']['0']['normalized_location_labels']==['other helgeland']
+          assert x['literal_0_33_rows']['33']['normalized_location_labels']==['lurøy-onøy']
           PY
       - uses: actions/upload-artifact@v4
         if: always()
