@@ -289,7 +289,7 @@ def run()->dict:
     occ_aliased=0
     equal_budget_aliases=0
     full_ideal_history_ident=0
-    age_memory=Counter()
+    age_memory=Counter({target:0 for target in TARGETS})
     complete_alias_target_diff=Counter()
     complete_alias_n=0
     dpi_violations=0
