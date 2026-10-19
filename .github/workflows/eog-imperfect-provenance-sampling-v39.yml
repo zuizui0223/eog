@@ -1,0 +1,81 @@
+name: EOG v39 imperfect provenance sampling known truth
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_imperfect_provenance_v39/**"
+      - "benchmarks/run_eog_imperfect_provenance_sampling_v39.py"
+      - "tests/test_eog_imperfect_provenance_sampling_v39.py"
+      - "docs/eog_imperfect_provenance_sampling_v39.md"
+      - ".github/workflows/eog-imperfect-provenance-sampling-v39.yml"
+  push:
+    branches: [main]
+    paths:
+      - "validation/eog_original_idea_imperfect_provenance_v39/**"
+      - "benchmarks/run_eog_imperfect_provenance_sampling_v39.py"
+      - "tests/test_eog_imperfect_provenance_sampling_v39.py"
+      - ".github/workflows/eog-imperfect-provenance-sampling-v39.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  noisy-provenance-known-truth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install EOG original benchmark dependencies
+        run: python -m pip install -e .[dev]
+      - name: Test posterior information and preregistered baselines
+        run: python -m pytest -q tests/test_eog_imperfect_provenance_sampling_v39.py
+      - name: Run exact all v23 landscape and history noise analyses
+        run: |
+          python benchmarks/run_eog_imperfect_provenance_sampling_v39.py \
+            --output build/eog-v39-imperfect-source-provenance.json
+      - name: Check mandatory v23 identity, no-data and hypothesis keys
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=json.loads(Path('validation/eog_original_idea_imperfect_provenance_v39/protocol_v39.json').read_text())
+          z=json.loads(Path('build/eog-v39-imperfect-source-provenance.json').read_text())
+          assert z['schema']=='eog.original_idea.imperfect_source_provenance_sampling.result.v39'
+          assert z['status']=='FROZEN_SIMULATED_NOISY_PROVENANCE_EVIDENCE__NO_REAL_GENETIC_VALIDATION'
+          assert z['parent_reconciled']['design_rows']==768
+          assert z['parent_reconciled']['occupancy_exact_identified']==579
+          assert z['parent_reconciled']['ideal_full_provenance_plus_occupancy_exact_identified']==687
+          assert z['parent_reconciled']['occupancy_alias_count']==189
+          assert len(z['summary'])==3*4*3*3
+          assert len(z['noisy_design_by_source_geometry'])==6
+          assert len(z['predeclared_hypothesis_verdicts'])==5
+          assert all(v in ('SUPPORTED','REFUTED') for v in z['predeclared_hypothesis_verdicts'].values())
+          assert z['scientific_boundaries']==p['scientific_boundaries']
+          assert z['negative_controls']['zero_coverage_violations']==0
+          assert z['negative_controls']['max_unique_origin_additional_information_bits'] <= 1e-9
+          assert z['negative_controls']['max_unique_origin_bayes_accuracy_gain'] <= 1e-9
+          frozen=Path('validation/eog_original_idea_imperfect_provenance_v39/result_frozen_v39.json')
+          assert frozen.is_file(), 'Independently reviewed full-result digest required'
+          import hashlib
+          x=json.loads(frozen.read_text(encoding='utf-8'))
+          assert x['schema']=='eog.original_idea.imperfect_source_provenance_sampling.frozen_review_v39'
+          assert x['pre_scoring_protocol_commit']=='582833e08d3f35075783ff51a845deee26dc8468'
+          canonical=json.dumps(z,sort_keys=True,separators=(',', ':'),ensure_ascii=False,allow_nan=False).encode('utf-8')
+          actual=hashlib.sha256(canonical).hexdigest()
+          assert x['authority']['canonical_full_result_sha256']==actual, 'Full independently reviewed v39 result fingerprint drifted'
+          assert z['predeclared_hypothesis_verdicts']==x['hypotheses']
+          assert z['parent_reconciled']==x['parent_reconciled']
+          target=next(y for y in z['summary'] if y['policy']=='confluence_targeted' and y['coverage']==0.6 and y['miscall']==0.1 and y['subset']=='equal_budget_aliased')
+          assert target['n_design_rows']==x['primary_fixed_setting']['n']==88
+          assert target['mean_additional_information_bits']==x['primary_fixed_setting']['confluence_targeted']['mean_information_bits']
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EOG-V39-NOISY-PROVENANCE-KNOWN-TRUTH-AGGREGATES
+          path: build/eog-v39-imperfect-source-provenance.json
+          if-no-files-found: warn

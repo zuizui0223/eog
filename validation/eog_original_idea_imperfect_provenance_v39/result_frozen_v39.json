@@ -1,0 +1,82 @@
+{
+  "schema": "eog.original_idea.imperfect_source_provenance_sampling.frozen_review_v39",
+  "status": "INDEPENDENTLY_INSPECTED_KNOWN_TRUTH_NONEMPIRICAL_COMPLETE_RESULT_DIGEST",
+  "pre_scoring_protocol_commit": "582833e08d3f35075783ff51a845deee26dc8468",
+  "authority": {
+    "original_actions_run_id": 39237967536,
+    "artifact_id": 12180415330,
+    "artifact_name": "EOG-V39-NOISY-PROVENANCE-KNOWN-TRUTH-AGGREGATES",
+    "artifact_zip_sha256": "ad41b561b4ed1255252dc094749c318320976d289bb06664239b088b4828dd75",
+    "canonical_full_result_sha256": "eefbd3c2ef69e532d6efc5fef66fd7ec97def75e6dd6b74d533d042e78aaa865",
+    "canonicalization": "sha256(json.dumps(loaded_json,sort_keys=True,separators=(',', ':'),ensure_ascii=False,allow_nan=False).encode('utf-8'))"
+  },
+  "parent_reconciled": {
+    "design_rows": 768,
+    "occupancy_exact_identified": 579,
+    "ideal_full_provenance_plus_occupancy_exact_identified": 687,
+    "occupancy_alias_count": 189,
+    "equal_budget_occupancy_aliased_designs": 88
+  },
+  "primary_fixed_setting": {
+    "coverage": 0.6,
+    "miscall": 0.1,
+    "subset": "equal_budget_aliased",
+    "n": 88,
+    "confluence_targeted": {
+      "mean_information_bits": 0.6558164099798183,
+      "mean_accuracy_gain": 0.33305599621211984,
+      "sites": 3
+    },
+    "random_response_blind": {
+      "mean_information_bits": 0.648676018353758,
+      "mean_accuracy_gain": 0.3303464015151503,
+      "sites": 3
+    },
+    "unique_origin_negative_control": {
+      "mean_information_bits": 0,
+      "mean_accuracy_gain": 0,
+      "mean_sites": 0.09090909090909091
+    }
+  },
+  "all_occ_alias_setting": {
+    "coverage": 0.6,
+    "miscall": 0.1,
+    "n": 189,
+    "confluence_targeted_bits": 0.4041694132190281,
+    "random_response_blind_bits": 0.4008447864301747,
+    "unique_origin_bits": 0
+  },
+  "by_source_geometry_occ_alias": {
+    "setting": "coverage=0.6,misclassification=0.1,all occupancy-aliased designs",
+    "clustered": {
+      "n": 153,
+      "confluence_bits": 0.4965313979792546,
+      "random_bits": 0.49242450606361204
+    },
+    "dispersed": {
+      "n": 36,
+      "confluence_bits": 0.011630977988065635,
+      "random_bits": 0.011630977988065635
+    }
+  },
+  "hypotheses": {
+    "P1_confluence_positive_information_under_perfect_assay": "SUPPORTED",
+    "P2_unique_origin_site_tags_never_resolve_history": "SUPPORTED",
+    "P3_targeted_confluence_beats_random_under_noisy_assay": "SUPPORTED",
+    "P4_noise_and_missingness_reduce_information": "SUPPORTED",
+    "P5_imperfect_genetic_analogue_retains_positive_information": "SUPPORTED"
+  },
+  "negative_controls": {
+    "max_unique_origin_additional_information_bits": 0,
+    "max_unique_origin_bayes_accuracy_gain": 0,
+    "zero_coverage_violations": 0,
+    "aggregate_noise_monotonicity_violations": 0
+  },
+  "scientific_boundaries": {
+    "source_tags_are_first_arrival_synthetic_not_empirical_genetic_ancestry": true,
+    "miscall_and_coverage_rates_are_assumed_not_estimated": true,
+    "P3_benefit_is_small_and_from_only_88_equal_budget_designs": true,
+    "cannot_infer_field_cost_efficiency_or_sample_selection_optimality": true,
+    "no_EOG_WF_endpoint_scored": true
+  }
+}

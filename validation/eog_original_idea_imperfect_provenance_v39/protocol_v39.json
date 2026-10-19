@@ -1,0 +1,127 @@
+{
+  "schema": "eog.original_idea.imperfect_source_provenance_sampling.protocol.v39",
+  "status": "FROZEN_BEFORE_IMPERFECT_SOURCE_TAG_MISSINGNESS_AND_ERROR_SCORING",
+  "scientific_question": "When provenance labels are missing or misassigned, do confluence-focused site observations retain information about activation history beyond complete occupancy snapshots, and how does their benefit change with survey coverage and classification error?",
+  "parent": {
+    "canonical_v23_protocol": "validation/eog_original_idea_provenance_observability_v23/protocol_v23.json",
+    "canonical_v23_result": "validation/eog_original_idea_provenance_observability_v23/result_summary_v23.json",
+    "v23_result_fingerprint": "ab37b83de94fce5e6d35918b9f5730a63364cebf0bb00ec662eececc5ae85244",
+    "parent_design_rows": 768,
+    "parent_occupancy_exact_identifiable": 579,
+    "parent_full_perfect_provenance_plus_occupancy_identifiable": 687,
+    "reuse_exact_base_world_generators": true,
+    "reuse_three_history_activation_schedules": true
+  },
+  "fixed_stochastic_world_design": {
+    "base_rows": 384,
+    "source_geometries": [
+      "clustered",
+      "dispersed"
+    ],
+    "ecological_autocorrelation": [
+      "low",
+      "high"
+    ],
+    "neighbourhood": [
+      "rook",
+      "queen"
+    ],
+    "barrier_densities": [
+      0.05,
+      0.2,
+      0.35
+    ],
+    "replicates_per_ecological_factor_cell": 32,
+    "exact_three_activation_histories": true,
+    "full_occupancy_snapshots": [
+      4,
+      5,
+      6,
+      8
+    ],
+    "prior_on_truth_histories": "uniform 1/3 each independently within each design; no fitting to observed real genetic outcomes"
+  },
+  "provenance_assay": {
+    "idealized_target": "exact set of earliest source IDs reaching each non-source equilibrium-reachable node under one history; NOT genetic ancestry or admixture in nature",
+    "static_site_class": "number of equilibrium-graph source nodes that can reach a non-source node, ignoring activation order",
+    "selection_budget": 3,
+    "policies": {
+      "confluence_targeted": "sort candidate nodes with >=2 potential graph sources by descending potential source-count then ascending node ID; choose first min(3,n) WITHOUT reading history-specific labels",
+      "random_response_blind": "choose first min(3,n) by deterministic SHA256 integer ranking of fixed seed, design key, node ID; NEVER use current or outcome provenance labels",
+      "unique_origin_negative_control": "sort nodes reached by exactly one potential source by node ID; choose first min(3,n)"
+    },
+    "random_selection_seed": "eog-v39-20261019-fixed-rank",
+    "coverage_probabilities": [
+      0,
+      0.25,
+      0.6,
+      1
+    ],
+    "misassignment_probabilities": [
+      0,
+      0.1,
+      0.25
+    ],
+    "noise_likelihood": "with probability 1-q report missing; otherwise report true label with (1-e), each other category with e/(K-1), where catalog is distinct true tag classes across 3 histories plus artificial UNSEEN category; independent across selected sites conditional on true history",
+    "noise_model_is_synthetic_not_saatoglu_empirically_calibrated": true,
+    "no_outcome_dependent_assay_placement": true
+  },
+  "estimands": {
+    "occupancy_only_posterior": "exact conditioning on four snapshots with uniform prior over three activation histories",
+    "noisy_provenance_posterior": "Bayes conditioning on selected noisy/missing provenance reports using the KNOWN frozen synthetic likelihood",
+    "expected_conditional_mutual_information_bits": "I(H; observed source-tag reports | exact four-snapshot occupancy) under uniform three-history truth prior",
+    "bayes_correct_history_accuracy_gain": "unconditional expected gain in Bayes-optimal exact activation-history classification after provenance reports, relative to occupancy snapshots alone",
+    "occupancy_ambiguity_subset": "design rows for which two or more of three histories have identical full occupancy snapshot signatures",
+    "equal_budget_confluence_comparison": "restrict confluence vs random comparison to designs with >=3 static confluence nodes and >=3 non-source nodes; report both all-design and equal-budget eligible",
+    "report_by": [
+      "policy",
+      "q",
+      "e",
+      "source_geometry"
+    ],
+    "outcome_simulation": "exact finite enumeration of missing/categorical measurement outcomes, NOT Monte Carlo response draws"
+  },
+  "predeclared_hypotheses": [
+    {
+      "id": "P1_confluence_positive_information_under_perfect_assay",
+      "rule": "On occupancy-ambiguous designs with >=3 confluence sites, average confluence-policy information at q=1,e=0 is >0",
+      "fail_if": "zero"
+    },
+    {
+      "id": "P2_unique_origin_site_tags_never_resolve_history",
+      "rule": "For any q and e, unique-origin negative control adds 0 conditional mutual information and 0 Bayes classification gain",
+      "fail_if": "any gain above numerical 1e-9"
+    },
+    {
+      "id": "P3_targeted_confluence_beats_random_under_noisy_assay",
+      "rule": "On equal-budget occupancy-ambiguous designs, mean conditional mutual information at q=0.60,e=0.10 is strictly higher for confluence-targeted than response-blind random site selection",
+      "fail_if": "targeted <= random"
+    },
+    {
+      "id": "P4_noise_and_missingness_reduce_information",
+      "rule": "For each observation policy, aggregate conditional information never increases when e grows from 0 to 0.10 to 0.25 at q=0.60, nor decreases when q grows 0.25 to 0.60 to 1 at e=0.10",
+      "fail_if": "any aggregate monotonicity violation >1e-9"
+    },
+    {
+      "id": "P5_imperfect_genetic_analogue_retains_positive_information",
+      "rule": "On occupancy-ambiguous designs with confluence eligibility, mean confluence policy Bayes-correct-history gain at q=0.60,e=0.10 is strictly >0",
+      "fail_if": "gain <=0"
+    }
+  ],
+  "negative_controls": [
+    "zero coverage means zero information and zero classifier gain",
+    "static one-origin-site assays are history invariant",
+    "adding correctly modeled evidence cannot decrease expected Bayes accuracy",
+    "parent v23 occupancy information baseline unchanged"
+  ],
+  "scientific_boundaries": {
+    "new_EOG_WF_endpoint_scored": false,
+    "empirical_genotype_snp_data_read": false,
+    "genetic_assignments_or_parentage_modeled_as_truth": false,
+    "real_world_survey_effort_or_2021_error_rates_estimated": false,
+    "original_v23_v38_results_changed": false,
+    "site_selection_uses_truth_origin_labels": false,
+    "inference_limited_to_fixed_declared_synthetic_worlds": true,
+    "nonzero_information_is_not_measured_actual_colonization": true
+  }
+}
