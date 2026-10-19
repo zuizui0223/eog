@@ -127,3 +127,26 @@ def test_script_source_never_uses_credentials_or_bird_value_parsers():
     for forbidden in ("Authorization:", "Bearer ", "cookiejar", "browser_profile",
                       "read_csv(", "csv.DictReader", "eval(", "BeautifulSoup"):
         assert forbidden not in s
+
+
+def test_independently_inspected_github_runner_403_receipt_is_frozen_without_source_bytes():
+    path = ROOT / "validation/eog_virtual_world_ecology_synthesis_v1/helgeland_saatoglu2021_public_byte_probe_observed_frozen_v1.json"
+    v=json.loads(path.read_text(encoding="utf-8"))
+    assert v["schema"]=="eog.helgeland.saatoglu2021.official_dryad_public_byte_probe.frozen_receipt_v1"
+    assert v["authority"]["workflow_run_id"]==39235926635
+    assert v["authority"]["artifact_id"]==12179481227
+    assert v["authority"]["artifact_zip_sha256"]==(
+        "a19baf7a32f1bf4689da7c622efb1b4ac78ba509fcddc4541351f5badc14c7ef"
+    )
+    assert v["authority"]["original_bird_file_bytes_read"] is False
+    x=v["receipt"]
+    assert x["verified_file_count"]==0
+    assert x["five_files_verified"] is False
+    assert x["files_checked"]==[{
+        "name":"Geneticassignment_README.txt","file_id":815564,
+        "byte_verified":False,"attempts":[{
+            "route":"file_stream","http_status":403,"outcome":"ACCESS_DENIED_STOP"
+        }]
+    }]
+    assert x["raw_source_file_bytes_persisted_or_exported"] is False
+    assert x["access_denial_bypassed"] is False
