@@ -142,3 +142,33 @@ def test_no_real_world_genotypes_or_hidden_external_data_imported():
     for bad in ("import urllib", "import requests", "read_csv(", "mcp__",
                 "Geneticassignment_README", "Dispersaldata.txt"):
         assert bad.lower() not in source.lower()
+
+
+def test_first_independently_inspected_768_world_noisy_source_tag_result_is_frozen():
+    f=Path("validation/eog_original_idea_imperfect_provenance_v39/result_frozen_v39.json")
+    z=json.loads(f.read_text(encoding="utf-8"))
+    assert z["schema"]=="eog.original_idea.imperfect_source_provenance_sampling.frozen_review_v39"
+    assert z["pre_scoring_protocol_commit"]=="582833e08d3f35075783ff51a845deee26dc8468"
+    assert z["authority"]["original_actions_run_id"]==39237967536
+    assert z["authority"]["artifact_id"]==12180415330
+    assert z["authority"]["artifact_zip_sha256"]==(
+        "ad41b561b4ed1255252dc094749c318320976d289bb06664239b088b4828dd75"
+    )
+    assert z["authority"]["canonical_full_result_sha256"]==(
+        "eefbd3c2ef69e532d6efc5fef66fd7ec97def75e6dd6b74d533d042e78aaa865"
+    )
+    assert z["parent_reconciled"]=={
+        "design_rows":768,"occupancy_exact_identified":579,
+        "ideal_full_provenance_plus_occupancy_exact_identified":687,
+        "occupancy_alias_count":189,"equal_budget_occupancy_aliased_designs":88
+    }
+    t=z["primary_fixed_setting"]
+    assert t["coverage"]==0.6 and t["miscall"]==0.1 and t["n"]==88
+    assert t["confluence_targeted"]["mean_information_bits"]==pytest.approx(0.6558164099798183)
+    assert t["random_response_blind"]["mean_information_bits"]==pytest.approx(0.648676018353758)
+    assert t["confluence_targeted"]["mean_accuracy_gain"]==pytest.approx(0.33305599621211984)
+    assert t["random_response_blind"]["mean_accuracy_gain"]==pytest.approx(0.3303464015151503)
+    assert all(v=="SUPPORTED" for v in z["hypotheses"].values())
+    assert z["scientific_boundaries"]["source_tags_are_first_arrival_synthetic_not_empirical_genetic_ancestry"]
+    assert z["scientific_boundaries"]["miscall_and_coverage_rates_are_assumed_not_estimated"]
+    assert z["scientific_boundaries"]["no_EOG_WF_endpoint_scored"]
