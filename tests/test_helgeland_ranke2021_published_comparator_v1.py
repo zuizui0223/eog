@@ -100,7 +100,7 @@ def test_corrupted_original_frozen_11_island_EOG_proxy_fails():
         compare(m, bad)
     bad = copy.deepcopy(f)
     bad["receipt"]["scientific_boundaries"]["no_dispersal_rate_or_true_recruitment"] = False
-    with pytest.raises(ValueError, match="original EOG"):
+    with pytest.raises(ValueError, match="Original EOG"):
         compare(m, bad)
 
 
