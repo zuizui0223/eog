@@ -6,6 +6,8 @@ on:
       - '.github/workflows/helgeland-saatoglu2021-public-byte-probe-v1.yml'
       - 'scripts/probe_helgeland_saatoglu2021_official_dryad_bytes_v1.py'
       - 'tests/test_helgeland_saatoglu2021_official_dryad_bytes_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_saatoglu2021_public_byte_probe_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_saatoglu2021_original_data_access_gate_v1.md'
   workflow_dispatch:
 
 permissions:
@@ -25,10 +27,12 @@ jobs:
           python -m pip install pytest
           python -m pytest -q tests/test_helgeland_saatoglu2021_official_dryad_bytes_v1.py
       - name: Attempt ordinary official public Dryad README first, SHA256 verify only
+        if: github.event_name == 'workflow_dispatch'
         run: |
           python scripts/probe_helgeland_saatoglu2021_official_dryad_bytes_v1.py \
             --output build/helgeland-2021-public-byte-diagnostic.json
       - name: Only permit metadata/byte receipts; no row/label/forecast claim
+        if: github.event_name == 'workflow_dispatch'
         run: |
           python - <<'PY'
           import json
@@ -50,7 +54,7 @@ jobs:
           print('PUBLIC-SOURCE-READONLY-DIAGNOSTIC',x['status'],x['verified_file_count'])
           PY
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: github.event_name == 'workflow_dispatch'
         with:
           name: HELGELAND-SAATOGLU2021-DRYAD-PUBLIC-ACCESS-DIAGNOSTIC-NO-BIRD-DATA
           path: build/helgeland-2021-public-byte-diagnostic.json
