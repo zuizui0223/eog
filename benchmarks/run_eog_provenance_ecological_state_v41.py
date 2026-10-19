@@ -117,11 +117,17 @@ def verify_sources(p:dict,source:dict)->None:
         and a.get("no_site_cost_model") is True
     ): raise ValueError("Frozen noisy source-tag observation model changed")
     target=p.get("present_state_targets",{})
-    if not (
-        target.get("actual_biological_maturity_survival_disease_or_fitness_measured") is False
-        and set(target)==set(TARGETS)|{"common_present_Tstar","actual_biological_maturity_survival_disease_or_fitness_measured"}
-        and target["common_present_Tstar"].startswith("maximum first-arrival")
-    ): raise ValueError("Predicted ecological targets or frozen horizon changed")
+    expected_target={
+        "history_blind_occupancy":"fixed negative control: all equilibrium non-source nodes present; never depends on activation timing",
+        "persistent_threshold_lag2":"binary mature iff T* - first_arrival(node) >= 2",
+        "transient_window_age1_2":"binary transient iff 1 <= T* - first_arrival(node) < 3",
+        "saturating_age_class_cap3":"discrete age category min(T* - first_arrival(node),3)",
+        "exact_activation_history":"the actual one of the 3 fixed activation schedules; not a measured ecological state",
+        "common_present_Tstar":"maximum first-arrival date over every equilibrium non-source node and all three activation histories, same as v25/v26",
+        "actual_biological_maturity_survival_disease_or_fitness_measured":False
+    }
+    if target!=expected_target:
+        raise ValueError("Predicted ecological targets or frozen horizon changed")
     if tuple(h["id"] for h in p.get("falsifiable_predictions",()))!=HYPOTHESES:
         raise ValueError("Hypothesis protocol changed")
     if p.get("scientific_boundaries")!=BOUNDARY:
