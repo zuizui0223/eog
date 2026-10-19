@@ -1,0 +1,76 @@
+{
+  "schema": "eog.helgeland.ranke2021_published_recruit_comparator.frozen_reviewed_v1",
+  "status": "INDEPENDENTLY_INSPECTED_ORIGINAL_PUBLISHED_COMPARATOR_AGGREGATE_ONLY__NO_2021_FILE_BYTES",
+  "authority": {
+    "github_actions_run_id": 39211856677,
+    "github_actions_artifact_id": 12168290733,
+    "artifact_name": "HELGELAND-RANKE2021-PUBLISHED-COMPARATOR-METADATA-ONLY",
+    "artifact_zip_sha256": "ecbe8fe0f6d4aec19a49b0cd5fa853b87f58b0b28588d2ba14e36f775f63590e",
+    "source_2021_official_version_id": 136299,
+    "source_2021_actual_file_bodies_verified": false,
+    "EOG_main_11island_source_receipt_verified": true
+  },
+  "receipt": {
+    "EOG_WF_denominator_modified": false,
+    "EOG_next_year_direct_positive": {
+      "denominator": 1272,
+      "different_island_code_proportion": 0.1721698113207547,
+      "first_followup_vs_next_year_discordant_count": 118,
+      "first_followup_vs_next_year_discordant_fraction": 0.09276729559748427,
+      "numerator": 219,
+      "within_habitat_fraction_given_different_island": 0.8721461187214612,
+      "within_habitat_positive_count": 191
+    },
+    "authenticated_2021_files": {
+      "all_four_authorized_source_bytes_sha256_verified": false,
+      "status": "2021_ORIGINAL_BYTES_NOT_PRESENT"
+    },
+    "claim_of_new_biological_effect": false,
+    "descriptive_aggregate_only": {
+      "caveat": "Same geography, largely overlapping periods, different case definitions and sampling; NOT independent replicate or individual-level validation.",
+      "difference_in_proportion_percentage_points": 0.06369646054262268,
+      "difference_in_within_habitat_percentage_points": 0.5124842125716511,
+      "habitat_transition_distribution_total_variation": 0.03325075293889049
+    },
+    "independent_recruitment_or_movement_validation": false,
+    "individual_level_concordance_evaluable": false,
+    "proxy_category_counts": {
+      "farm_to_farm": 62,
+      "farm_to_nonfarm": 7,
+      "nonfarm_to_farm": 21,
+      "nonfarm_to_nonfarm": 129
+    },
+    "published_category_counts": {
+      "farm_to_farm": 99,
+      "farm_to_nonfarm": 19,
+      "nonfarm_to_farm": 31,
+      "nonfarm_to_nonfarm": 227
+    },
+    "published_confirmed_recruit": {
+      "denominator": 2192,
+      "different_island_proportion": 0.17153284671532848,
+      "numerator": 376,
+      "recruits_recorded_after_recruitment_year": 19,
+      "within_habitat_fraction_given_different_island": 0.8670212765957447,
+      "within_habitat_positive_count": 326
+    },
+    "schema": "eog.helgeland.ranke2021_published_recruit_comparator.evidence_boundary_v1",
+    "scientific_bounds": {
+      "2021_data_unavailable_as_2014_continuous_predictors": true,
+      "2021_recruit_membership_cannot_be_joined_to_2026_raw_ID_cohort_without_shared_key": true,
+      "2021_reference_is_published_overlap_not_independent_heldout_confirmation": true,
+      "aggregate_prevalence_or_habitat_share_agreement_is_NOT_validated_measurement_equivalence": true,
+      "no_extra_EOG_WF_scored_endpoint": true,
+      "no_recruitment_causal_process_or_true_colonization_fitted": true,
+      "no_surveyed_zero_or_detection_effort_claim": true
+    },
+    "sources": {
+      "2021_source_raw_bodies_verified": false,
+      "EOG_2026_author_source_receipt_verified": true,
+      "individual_or_year_row_join_performed": false,
+      "published_dataset_doi": "10.5061/dryad.v41ns1rx1",
+      "published_recruit_2021_doi": "10.1111/1365-2656.13580"
+    },
+    "status": "PUBLISHED_RECRUIT_VS_DIRECT_POSITIVE_AGGREGATE_CONCORDANCE__ESTIMANDS_DIFFER"
+  }
+}
