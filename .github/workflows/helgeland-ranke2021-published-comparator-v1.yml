@@ -1,0 +1,77 @@
+name: Helgeland published 2021 recruit comparator and source gate
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-ranke2021-published-comparator-v1.yml'
+      - 'scripts/audit_helgeland_ranke2021_published_comparator_v1.py'
+      - 'tests/test_helgeland_ranke2021_published_comparator_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_ranke2021_published_recruit_comparator_source_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_ranke2021_published_comparator_frozen_v1.json'
+      - 'docs/eog_helgeland_ranke2021_published_recruit_comparator_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-ranke2021-published-comparator-v1.yml'
+      - 'scripts/audit_helgeland_ranke2021_published_comparator_v1.py'
+      - 'tests/test_helgeland_ranke2021_published_comparator_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_ranke2021_published_recruit_comparator_source_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_ranke2021_published_comparator_frozen_v1.json'
+      - 'docs/eog_helgeland_ranke2021_published_recruit_comparator_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  published-aggregates-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run synthetic hash-only source-gate and immutable published-data tests
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_helgeland_ranke2021_published_comparator_v1.py
+      - name: Generate published-only comparator; DO NOT fetch original 2021 file bodies
+        run: |
+          python scripts/audit_helgeland_ranke2021_published_comparator_v1.py \
+            --output build/helgeland-ranke2021-published-comparator-v1.json
+      - name: Enforce valid original 2021 metadata, mismatch flags and exact source receipt if frozen
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/helgeland-ranke2021-published-comparator-v1.json')
+          x=json.loads(p.read_text())
+          assert x['schema']=='eog.helgeland.ranke2021_published_recruit_comparator.evidence_boundary_v1'
+          assert x['status']=='PUBLISHED_RECRUIT_VS_DIRECT_POSITIVE_AGGREGATE_CONCORDANCE__ESTIMANDS_DIFFER'
+          assert x['published_confirmed_recruit']['numerator']==376
+          assert x['published_confirmed_recruit']['denominator']==2192
+          assert x['EOG_next_year_direct_positive']['numerator']==219
+          assert x['EOG_next_year_direct_positive']['denominator']==1272
+          assert x['EOG_next_year_direct_positive']['first_followup_vs_next_year_discordant_count']==118
+          assert x['authenticated_2021_files']['status']=='2021_ORIGINAL_BYTES_NOT_PRESENT'
+          assert x['authenticated_2021_files']['all_four_authorized_source_bytes_sha256_verified'] is False
+          assert x['sources']['2021_source_raw_bodies_verified'] is False
+          assert x['sources']['individual_or_year_row_join_performed'] is False
+          assert x['independent_recruitment_or_movement_validation'] is False
+          assert x['individual_level_concordance_evaluable'] is False
+          assert x['claim_of_new_biological_effect'] is False
+          assert x['EOG_WF_denominator_modified'] is False
+          frozen=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_ranke2021_published_comparator_frozen_v1.json')
+          assert frozen.is_file(), 'Required independently reviewed published-only source receipt missing'
+          reviewed=json.loads(frozen.read_text())
+          assert reviewed['schema']=='eog.helgeland.ranke2021_published_recruit_comparator.frozen_reviewed_v1'
+          assert reviewed['authority']['source_2021_official_version_id']==136299
+          assert reviewed['authority']['source_2021_actual_file_bodies_verified'] is False
+          assert reviewed['receipt']==x, 'Original frozen published-only comparison changed'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-RANKE2021-PUBLISHED-COMPARATOR-METADATA-ONLY
+          path: build/helgeland-ranke2021-published-comparator-v1.json
+          if-no-files-found: warn
