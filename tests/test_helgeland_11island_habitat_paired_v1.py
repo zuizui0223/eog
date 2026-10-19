@@ -254,3 +254,60 @@ def test_real_frozen_prior_1313_125_and_code_33_remains_named_population():
     for banned in ('row["Year"]', 'row["Location"]', 'row["Least_age"]',
                    'row["scriptsex"]', 'read_csv(', "urllib"):
         assert banned not in source
+
+
+def test_actual_source_independently_reviewed_full_receipt_guard():
+    frozen = json.loads((
+        BASE / "helgeland_11island_habitat_paired_observed_frozen_v1.json"
+    ).read_text(encoding="utf-8"))
+    assert frozen["schema"] == (
+        "eog.helgeland.11island_positive_habitat_paired.frozen_source_receipt.v1"
+    )
+    assert frozen["protocol_freeze_commit"] == (
+        "fd18c40e521e14c982164e3b132ff81320c4b8be"
+    )
+    a = frozen["authority"]
+    assert a["github_actions_run_id"] == 39208937959
+    assert a["github_actions_artifact_id"] == 12166747729
+    assert a["artifact_zip_sha256"] == (
+        "c9c6c9fcf4d11d4f007227fd9c265c7d15f06cfc1c197d30a0763302f03744f8"
+    )
+    r = frozen["receipt"]
+    c = r["counts"]
+    assert c["paired_next_year_positive"] == 1313
+    assert c["paired_0_before_or_at_target"] == 41
+    assert c["paired_33_before_or_at_target"] == 14
+    assert c["paired_0_and_33_before_or_at_target"] == 2
+    assert c["named_11_primary_positive"] == 1272
+    assert c["named_11_primary_discordant"] == 118
+    assert c["named_11_full_history_positive"] == 1268
+    assert c["named_11_full_history_discordant"] == 118
+    assert c["model_0_33_primary_positive"] == 1260
+    assert c["model_0_33_primary_discordant"] == 112
+    assert c["named_11_primary_33_in_origin_or_target"] == 12
+    assert c["named_11_primary_next_different_codes"] == 219
+    assert r["paired_matrices"]["named_11_0_only_pretarget"][
+        "first_raw_same__next_different"
+    ] == 117
+    assert r["paired_matrices"]["named_11_0_only_pretarget"][
+        "first_raw_different__next_same"
+    ] == 1
+    assert r["habitat_different_code_positive"] == {
+        "farm_to_farm": 62,
+        "farm_to_nonfarm": 7,
+        "nonfarm_to_farm": 21,
+        "nonfarm_to_nonfarm": 129,
+    }
+    assert r["habitat_next_positive"] == {
+        "farm_to_farm": 806,
+        "farm_to_nonfarm": 7,
+        "nonfarm_to_farm": 21,
+        "nonfarm_to_nonfarm": 438,
+    }
+    assert r["first_same_next_different_by_origin_habitat"] == {
+        "farm": 39, "nonfarm": 78
+    }
+    assert r["original_PR646_and_PR647_receipts_exactly_reconciled"] is True
+    assert r["original_source_SHA256_and_header_verified"] is True
+    assert r["independent_EOG_forecast_scored"] is False
+    assert r["breeding_recruitment_dispersal_or_colonization_inferred"] is False
