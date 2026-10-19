@@ -1,0 +1,90 @@
+name: Helgeland pre2015 Island code Location label crosswalk
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-pre2015-island-location-crosswalk-v1.yml'
+      - 'scripts/audit_helgeland_pre2015_island_location_crosswalk_v1.py'
+      - 'tests/test_helgeland_pre2015_island_location_crosswalk_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_protocol_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_pre2015_island_location_crosswalk_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-pre2015-island-location-crosswalk-v1.yml'
+      - 'scripts/audit_helgeland_pre2015_island_location_crosswalk_v1.py'
+      - 'tests/test_helgeland_pre2015_island_location_crosswalk_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_protocol_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_pre2015_island_location_crosswalk_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  source-internal-name-dictionary-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: torhanssonfrank/DensityRegulationHouseSparrows
+          ref: a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5
+          path: upstream_public
+          persist-credentials: false
+      - name: Confirm published author-source git revision
+        run: test "$(git -C upstream_public rev-parse HEAD)" = "a4e1c9ebc1148d7c7aca2bb5730b9d7104094fe5"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest
+      - name: Run invented-only mapping and future-ID firewall regressions
+        run: python -m pytest -q tests/test_helgeland_pre2015_island_location_crosswalk_v1.py
+      - name: Verify original Dryad-equivalent bytes and aggregate pre-2015 Island/Location
+        run: |
+          python scripts/audit_helgeland_pre2015_island_location_crosswalk_v1.py \
+            --upstream-checkout upstream_public \
+            --output build/helgeland-pre2015-island-location-crosswalk-v1.json
+      - name: Enforce original source counts, mapping completeness and no ecological claim
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=json.loads(Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_protocol_v1.json').read_text())
+          x=json.loads(Path('build/helgeland-pre2015-island-location-crosswalk-v1.json').read_text())
+          assert x['schema']=='eog.helgeland.pre2015.island_location_crosswalk.exploratory_receipt.v1'
+          assert x['status']=='RETROSPECTIVE_SOURCE_INTERNAL_CODE_LOCATION_DICTIONARY__ECOLOGICAL_HOLD'
+          assert x['frozen_original_sha256_header_first_events_rechecked'] is True
+          assert x['frozen_0_33_row_counts_reconciled'] is True
+          c=x['counts']
+          for key,v in p['frozen_preexposed_checks'].items():
+              assert c[key]==v,(key,c[key],v)
+          assert c['eligible_rows_pre2015']==sum(c[name] for name in ('nest_rows','capt_rows','obs_rows'))
+          assert c['eligible_rows_pre2015']==c['period_1994_2003_rows']+c['period_2004_2014_rows']
+          assert c['eligible_rows_pre2015']==sum(v['pair_direct_row_count'] for v in x['code_location_pairs'])
+          assert c['distinct_code_location_pairs']==len(x['code_location_pairs'])
+          assert c['distinct_raw_island_codes']==len(x['per_code'])
+          assert c['distinct_normalized_location_labels']==len(x['per_location'])
+          assert c['published_2021_named_labels_observed']+c['published_2021_named_labels_not_observed']==11
+          for code,v in x['literal_0_33_rows'].items():
+              assert code in ('0','33')
+              assert v['row_count']==c['raw_island_code_'+code+'_eligible_rows']
+          assert x['individual_IDs_or_trajectories_exported'] is False
+          assert x['source_code_to_physical_coordinates_verified'] is False
+          assert x['external_2020_code_equivalence_verified'] is False
+          assert x['surveyed_zero_or_recruitment_verified'] is False
+          assert x['independent_EOG_forecast_scored'] is False
+          assert x['strict_scope']==p['claim_bounds']
+          frozen=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_pre2015_island_location_crosswalk_observed_frozen_v1.json')
+          if frozen.exists():
+              reviewed=json.loads(frozen.read_text())
+              assert reviewed['receipt']==x, 'Original code-label aggregation changed from independently reviewed evidence'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-PRE2015-ISLAND-LOCATION-AGGREGATE-CROSSWALK
+          path: build/helgeland-pre2015-island-location-crosswalk-v1.json
+          if-no-files-found: warn
