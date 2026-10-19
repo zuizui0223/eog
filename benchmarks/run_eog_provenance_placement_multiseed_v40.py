@@ -33,7 +33,7 @@ PROTOCOL = ROOT / "validation/eog_original_idea_provenance_placement_multiseed_v
 SCHEMA = "eog.original_idea.noisy_provenance_placement_multiseed.result.v40"
 PREDECLARED_SHA = "eefbd3c2ef69e532d6efc5fef66fd7ec97def75e6dd6b74d533d042e78aaa865"
 SOURCE_SCHEMAS = (
-    "eog.original_idea.provenance_observability.result_summary.v23",
+    "eog.original_idea_provenance_observability.result_summary.v23",
     "eog.original_idea.imperfect_source_provenance_sampling.frozen_review_v39",
 )
 SEED_PREFIX = "eog-v40-20261019-random-seed-"
