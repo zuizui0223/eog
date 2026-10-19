@@ -123,14 +123,6 @@ def parse_author_code(text: str) -> dict:
         raise ValueError("Public Zenodo code does not use the frozen variables")
     if 'read.table("Dispersaldata.txt"' not in text:
         raise ValueError("Public source is not the original dispersal analysis script")
-    if not (
-        "Genpattern.data" in text
-        and "Habitat.data" in text
-        and "GSI_SIM" not in text or "BONE" not in text
-    ):
-        # The R analysis script uses tabulated genetic assignments as fixed
-        # dispersal input and does not itself implement the two SNP callers.
-        pass
     if "Genpattern.data" not in text or "Habitat.data" not in text:
         raise ValueError("Author script lacks dispersal scope analyses")
     if "2004" not in text or "2012" not in text:
