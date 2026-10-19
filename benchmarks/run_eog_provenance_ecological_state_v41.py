@@ -261,7 +261,7 @@ def _perfect_alias_status(occupancy:dict,source_tags:dict,targets:dict)->dict:
     for h,value in signatures.items():cohorts[value].append(h)
     unresolved=len(cohorts)<len(hist)
     differences={}
-    for target in TARGETS:
+    for target in targets:
         differences[target]=any(
             len(set(targets[target][h] for h in group))>1
             for group in cohorts.values() if len(group)>1
