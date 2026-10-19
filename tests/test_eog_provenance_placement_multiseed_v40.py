@@ -161,3 +161,40 @@ def test_no_genotypes_or_network_contact_and_uses_original_three_history_v39_mat
     assert "prepare_design" in script
     assert "source_cover" not in script
     assert "v39_one_seed" in script
+
+
+def test_independent_real_v40_ci_result_digest_and_three_refutations_are_immutable():
+    path = Path("validation/eog_original_idea_provenance_placement_multiseed_v40/result_frozen_v40.json")
+    z = json.loads(path.read_text(encoding="utf-8"))
+    assert z["schema"] == "eog.original_idea.noisy_provenance_placement_multiseed.frozen_review_v40"
+    assert z["pre_multiseed_protocol_commit"] == "ce72c8a258e3c3ddd8bd8c6e8b43e103501de745"
+    a = z["authority"]
+    assert a["github_actions_run_id"] == 39240966984
+    assert a["github_actions_artifact_id"] == 12180579805
+    assert a["artifact_zip_sha256"] == (
+        "6a0ff87ba9201fb471a6c4e9cf12b476b1584deb4711e62fce68058dfd5ff27a"
+    )
+    assert a["full_canonical_json_sha256"] == (
+        "e366c4945e2110bd6359c3db1ae86e4e01bb6df8741fc4370af6ae54b5792f91"
+    )
+    assert z["parent_reconciliation"]["fair_equal_budget_three_site_aliased"] == 88
+    assert z["primary"]["target_minus_random_64_seed_information_bits"] == pytest.approx(
+        0.008559987488693355
+    )
+    assert z["primary"]["materiality_threshold_bits"] == 0.02
+    assert z["seed_ensemble"]["seed_count_confluence_outperforms"] == 64
+    assert z["world_paired_placement"]["strict_target_better_than_64_seed_mean"] == 34
+    assert z["world_paired_placement"]["indistinguishable_within_1e_minus_9"] == 54
+    assert z["world_paired_placement"]["strict_target_worse_than_64_seed_mean"] == 0
+    assert z["source_geometry"]["clustered_n_fair"] == 88
+    assert z["source_geometry"]["dispersed_n_fair"] == 0
+    assert z["static_source_overlap_diagnostic"]["history_invariant_selected_confluence_sites"] == 0
+    assert z["predeclared_verdicts"] == {
+        "M1_material_targeting_advantage": "REFUTED",
+        "M2_targeting_outperforms_most_independent_random_placements": "SUPPORTED",
+        "M3_per_world_targeting_consistency": "REFUTED",
+        "M4_random_seed_effect_not_hidden": "SUPPORTED",
+        "M5_raw_source_overlap_is_imperfect_information_proxy": "REFUTED",
+    }
+    assert z["no_empirical_genetic_or_bird_data_read"] is True
+    assert z["v39_parent_and_EOG_WF_3_31_3_unchanged"] is True
