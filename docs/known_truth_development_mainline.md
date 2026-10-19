@@ -21,7 +21,7 @@ The scientific center is now:
 
 > **EOG does not need to recover one “true” process from occurrence data. It should eliminate finite declared worlds only when the available evidence contains a valid witness against them, preserve observationally equivalent worlds as unresolved, and use the remaining ambiguity to design the next discriminating observation, calibration, or intervention.**
 
-## Latest result — v39/v40 source-provenance observation uncertainty
+## Latest result — v39/v40 source-provenance observation uncertainty (retained)
 
 The original finite-world source-history programme has now tested whether
 `P_node` observations retain information once ideal provenance tags are
@@ -89,6 +89,72 @@ data were not accessed or validated, and further automated source probes
 were stopped. A real-world provenance test cannot be claimed from v39/v40.
 The EOG-WF 3 scored / 31 scientific STOP / 3 administrative exclusion
 denominator remains frozen and is not extended.
+
+## v41: source information about present ecological-state targets
+
+The original EOG v39 and v40 directly assessed identification of the three
+hidden *activation-history labels*. That is not necessarily the ecological
+decision target, as v24–v26 already showed: identical final distribution and
+complete source identity can mask different *current states* due to when a
+source arrived. The source-history programme therefore fixed a separate
+[v41 target-specific protocol](../validation/eog_original_idea_provenance_ecological_state_v41/protocol_v41.json)
+at commit `a812771a2d033b634dc95aceac0dc311a842a1e0` before scoring any
+new target-valued observations.
+
+The v41 known-truth benchmark uses the original exact **768** v23 designs,
+all **189** worlds where full occupancy does not identify the exact
+activation history, the v39 synthetic q=0.60/e=0.10 source-tag
+observation likelihood and response-blind source-confluence sites, with
+the **predeclared** v26 mappings from colonization age at T* into:
+history-blind occupancy, lag2 binary maturity, transient age1–2, and
+age class capped at 3. It calculates each target's conditional mutual
+information I(Target; source-tag reports | four occupancy snapshots) and
+incremental within-target Bayes correct-state probability.
+
+| Same selected source-tag observations, same 189 occupancy-aliased designs | Mean conditional information | Designs with positive information |
+| --- | ---: | ---: |
+| Exact activation history | 0.404169 bit | **120** |
+| Persistent lag2 mature/not mature state | 0.140648 bit | **48** |
+| Transient age1–2 state | 0.177515 bit | 64 |
+| Age class 0,1,2,3+ | 0.208385 bit | 64 |
+| History-blind final occupancy | 0 | 0 |
+
+**The key positive finding is the non-interchangeability of inference
+targets:** **72/189** design rows gained nonzero information about exact
+past history while gaining **zero incremental information about the lag2
+present maturity target**. Thus 72/120 = **60%** of designs where noisy
+source tags helped identify history did **not** gain maturity-state information.
+All **48** rows with maturity information also gained history information,
+as demanded by target compression.
+
+A perfect *complete* source-tag library plus occupancy still left
+**81 exact-history aliases**, including **12** whose lag2 maturity
+differed within the observational equivalence and **45** whose transient/
+cap3 states differed. Those maturity distinctions **cannot be recovered by
+more observations of the same ideal source-tag class alone** in the declared
+world universe. Original v25/v26 parent memory counts of 726 designs for
+each age-sensitive present-state process, and a second independently
+implemented v39 exact-history Bayes information calculation, all matched
+with zero negative-control violations.
+
+All five v41 preregistered predictions were supported, but **V4 parent
+count reproduction** and **V5 conditional information data-processing
+inequality** are logical/implementation checks, not additional independent
+empirical ecological results. The original [source-only CI run
+39248967844](https://github.com/zuizui0223/eog/actions/runs/39248967844)
+provided an independently inspected aggregate artifact ID
+`12184367871`. Whole canonical result JSON SHA256
+`34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d`,
+frozen in
+`validation/eog_original_idea_provenance_ecological_state_v41/result_frozen_v41.json`.
+
+**Inference boundary:** "maturity" is the old synthetic lag-2 arrival-age
+map, **not** a measured field demographic, physiological or reproductive
+state. Simulated first-arrival source tags are not SNP ancestry or directly
+observed natal source. No 2021 Helgeland original genetic/recruitment rows
+or additional real EOG-WF predictions were scored. The empirical submission
+remains frozen at three scored endpoints, 31 scientific STOPs and three
+administrative exclusions.
 
 ## Active original-EOG virtual-world result
 
