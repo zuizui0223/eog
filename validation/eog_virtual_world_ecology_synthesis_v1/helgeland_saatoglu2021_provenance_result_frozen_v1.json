@@ -1,0 +1,82 @@
+{
+  "schema": "eog.helgeland.saatoglu2021_genetic_cmr_code_audit.frozen_evidence_v1",
+  "status": "INDEPENDENTLY_INSPECTED_AUTHENTIC_ZENODO_AUTHOR_METHODS__NO_GENETIC_BIRD_DATA",
+  "authority": {
+    "github_actions_run_id": 39217762475,
+    "github_actions_artifact_id": 12170526675,
+    "artifact_name": "HELGELAND-SAATOGLU2021-ZENODO-AUTHOR-CODE-METHODS-NO-INDIVIDUAL-DATA",
+    "artifact_zip_sha256": "124e69b6d7caeae9e48007b08b620d829f0283b399b255bcddf4eb324d9e4648",
+    "zenodo_record": 5095667,
+    "source_script_original_MD5_verified": true,
+    "Dryad_five_data_file_bodies_read": false
+  },
+  "receipt": {
+    "EOG_WF_denominator_modified": false,
+    "actual_author_2004_2012_data_rows_accessed": false,
+    "author_methods_source_code_signals": {
+      "author_2004_to_2012_sampling_restriction_text_present": true,
+      "author_raw_R_script_source_identified": true,
+      "eight_named_code_comparable_subset_text_present": true,
+      "methods_use_natal_adult_island_year_and_recorded_status": true,
+      "sampling_fraction_misassignment_models_present": true,
+      "script_does_not_measure_new_EOG_displacement_outcomes": true
+    },
+    "breeding_recruitment_or_colonization_inferred": false,
+    "eog_2026_to_2021_eight_code_name_text_bridge": [
+      {
+        "2021_natal_and_adult_ID_domain_verified": false,
+        "raw_code": "20",
+        "source_2026_name_label": "nesøy"
+      },
+      {
+        "2021_natal_and_adult_ID_domain_verified": false,
+        "raw_code": "22",
+        "source_2026_name_label": "myken"
+      },
+      {
+        "2021_natal_and_adult_ID_domain_verified": false,
+        "raw_code": "23",
+        "source_2026_name_label": "træna"
+      },
+      {
+        "2021_natal_and_adult_ID_domain_verified": false,
+        "raw_code": "24",
+        "source_2026_name_label": "selvær"
+      },
+      {
+        "2021_natal_and_adult_ID_domain_verified": false,
+        "raw_code": "26",
+        "source_2026_name_label": "gjerøy"
+      },
+      {
+        "2021_natal_and_adult_ID_domain_verified": false,
+        "raw_code": "27",
+        "source_2026_name_label": "hestmannøy"
+      },
+      {
+        "2021_natal_and_adult_ID_domain_verified": false,
+        "raw_code": "28",
+        "source_2026_name_label": "indre kvarøy"
+      },
+      {
+        "2021_natal_and_adult_ID_domain_verified": false,
+        "raw_code": "38",
+        "source_2026_name_label": "aldra"
+      }
+    ],
+    "genetic_origin_is_true_source_without_calibration": false,
+    "island_year_survey_effort_qualified": false,
+    "schema": "eog.helgeland.saatoglu2021_genetic_cmr_code_audit.result.v1",
+    "source": {
+      "2021_Dryad_dataset_id": 72603,
+      "2021_Dryad_version_id": 130231,
+      "2021_record_2026_bird_ID_join_verified": false,
+      "actual_2021_Fst_rows_read": false,
+      "actual_2021_genetic_assignment_rows_read": false,
+      "five_original_source_file_bytes_verified": false,
+      "source_bytes_author_md5_verified": true,
+      "zenodo_record": 5095667
+    },
+    "status": "AUTHOR_ZENODO_METHOD_SCRIPT_BYTE_VERIFIED__BIOLOGICAL_DATA_HOLD"
+  }
+}
