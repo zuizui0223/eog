@@ -1,0 +1,80 @@
+name: Helgeland 2021 genetic CMR author-code provenance gate
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-saatoglu2021-genetic-cmr-source-v1.yml'
+      - 'scripts/audit_helgeland_saatoglu2021_provenance_preflight_v1.py'
+      - 'tests/test_helgeland_saatoglu2021_provenance_preflight_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_saatoglu2021_provenance_preflight_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_saatoglu2021_provenance_result_frozen_v1.json'
+      - 'docs/eog_helgeland_saatoglu2021_genetic_cmr_provenance_source_v1.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/helgeland-saatoglu2021-genetic-cmr-source-v1.yml'
+      - 'scripts/audit_helgeland_saatoglu2021_provenance_preflight_v1.py'
+      - 'tests/test_helgeland_saatoglu2021_provenance_preflight_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_saatoglu2021_provenance_preflight_v1.json'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_saatoglu2021_provenance_result_frozen_v1.json'
+      - 'docs/eog_helgeland_saatoglu2021_genetic_cmr_provenance_source_v1.md'
+
+permissions:
+  contents: read
+
+jobs:
+  author-script-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run fabricated structural and stop-claim tests
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_helgeland_saatoglu2021_provenance_preflight_v1.py
+      - name: Retrieve the original PUBLIC Zenodo methods script only, not bird data
+        run: |
+          mkdir -p build
+          curl --fail --location --silent --show-error --max-time 35 --retry 1 \
+            'https://zenodo.org/api/records/5095667/files/Error_sources_dispersal_patterns.R/content' \
+            --output build/Saatoglu2021-public-author-source.R
+      - name: Verify exact Zenodo MD5, original file size, code scope and public source dictionary
+        run: |
+          python scripts/audit_helgeland_saatoglu2021_provenance_preflight_v1.py \
+            --author-r-source build/Saatoglu2021-public-author-source.R \
+            --output build/saatoglu2021-source-only-receipt.json
+      - name: Enforce precise 2021 method-source scope and no biological source read
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('build/saatoglu2021-source-only-receipt.json')
+          a=json.loads(p.read_text(encoding='utf-8'))
+          assert a['schema']=='eog.helgeland.saatoglu2021_genetic_cmr_code_audit.result.v1'
+          assert a['status']=='AUTHOR_ZENODO_METHOD_SCRIPT_BYTE_VERIFIED__BIOLOGICAL_DATA_HOLD'
+          assert a['source']['source_bytes_author_md5_verified'] is True
+          assert a['source']['five_original_source_file_bytes_verified'] is False
+          assert a['source']['actual_2021_genetic_assignment_rows_read'] is False
+          assert a['source']['actual_2021_Fst_rows_read'] is False
+          assert a['source']['2021_record_2026_bird_ID_join_verified'] is False
+          assert len(a['eog_2026_to_2021_eight_code_name_text_bridge'])==8
+          assert [x['raw_code'] for x in a['eog_2026_to_2021_eight_code_name_text_bridge']]==['20','22','23','24','26','27','28','38']
+          assert a['author_methods_source_code_signals']['sampling_fraction_misassignment_models_present'] is True
+          assert a['actual_author_2004_2012_data_rows_accessed'] is False
+          assert a['genetic_origin_is_true_source_without_calibration'] is False
+          assert a['breeding_recruitment_or_colonization_inferred'] is False
+          assert a['EOG_WF_denominator_modified'] is False
+          f=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_saatoglu2021_provenance_result_frozen_v1.json')
+          if f.is_file():
+              frozen=json.loads(f.read_text(encoding='utf-8'))
+              assert frozen['receipt']==a, 'Exact public-source-methods receipt changed'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HELGELAND-SAATOGLU2021-ZENODO-AUTHOR-CODE-METHODS-NO-INDIVIDUAL-DATA
+          path: build/saatoglu2021-source-only-receipt.json
+          if-no-files-found: warn
