@@ -1,0 +1,92 @@
+name: EOG v41 ecological-state value of noisy provenance
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_provenance_ecological_state_v41/**"
+      - "benchmarks/run_eog_provenance_ecological_state_v41.py"
+      - "tests/test_eog_provenance_ecological_state_v41.py"
+      - "docs/eog_provenance_ecological_state_value_v41.md"
+      - ".github/workflows/eog-provenance-ecological-state-v41.yml"
+  push:
+    branches: [main]
+    paths:
+      - "validation/eog_original_idea_provenance_ecological_state_v41/**"
+      - "benchmarks/run_eog_provenance_ecological_state_v41.py"
+      - "tests/test_eog_provenance_ecological_state_v41.py"
+      - ".github/workflows/eog-provenance-ecological-state-v41.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  exact-noisy-provenance-present-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install original EOG known-truth dependencies
+        run: python -m pip install -e .[dev]
+      - name: Test synthetic Bayesian target likelihood and original source/age parent controls
+        run: python -m pytest -q tests/test_eog_provenance_ecological_state_v41.py
+      - name: Run all v23 truth worlds using frozen lag2 transient cap3 targets
+        run: |
+          python benchmarks/run_eog_provenance_ecological_state_v41.py \
+            --output build/eog-v41-provenance-state.json
+      - name: Enforce all science/parent/no-real-bird-data and frozen exact receipt
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          p=json.loads(Path('validation/eog_original_idea_provenance_ecological_state_v41/protocol_v41.json').read_text())
+          x=json.loads(Path('build/eog-v41-provenance-state.json').read_text())
+          assert x['schema']=='eog.original_idea.noisy_provenance_ecological_state_value.result.v41'
+          assert x['status']=='EXACT_TARGET_SPECIFIC_NOISY_SOURCE_READOUT_KNOWN_TRUTH__NO_GENETIC_DATA'
+          c=x['parent_population_counts']
+          assert c=={
+              'design_rows':768,'occupancy_identified':579,'occupancy_alias':189,
+              'equal_budget_alias':88,'perfect_combined_identified':687,'perfect_combined_alias':81
+          }
+          mem=x['process_target_memory_row_counts']
+          assert mem['history_blind_occupancy']==0
+          for t in ['persistent_threshold_lag2','transient_window_age1_2','saturating_age_class_cap3']:
+              assert mem[t]==726
+          residual=x['perfect_full_source_alias_target_disagreement_counts']
+          assert residual['persistent_threshold_lag2']==12
+          assert residual['transient_window_age1_2']==45
+          assert residual['saturating_age_class_cap3']==45
+          assert residual['exact_activation_history']==81
+          assert x['primary_assay']=={
+              'coverage_q':0.6,'miscall_e':0.1,'site_budget':3,
+              'history_prior':'uniform across 3 activation schedules'
+          }
+          assert len(x['summary_by_policy_target_subset'])==60
+          assert len(x['by_source_geometry_occupancy_aliased'])==10
+          assert all(v in ('SUPPORTED','REFUTED') for v in x['predeclared_verdicts'].values())
+          assert set(x['predeclared_verdicts'])=={
+              k['id'] for k in p['falsifiable_predictions']
+          }
+          assert not any(x['control_violation_counts'].values())
+          assert x['scientific_boundaries']==p['scientific_boundaries']
+          hist=next(v for v in x['summary_by_policy_target_subset']
+              if v['policy']=='confluence_targeted'
+              and v['target']=='exact_activation_history'
+              and v['subset']=='equal_budget_aliased')
+          assert abs(hist['mean_target_information_bits']-0.6558164099798183)<1e-8
+          frozen=Path('validation/eog_original_idea_provenance_ecological_state_v41/result_frozen_v41.json')
+          if frozen.exists():
+              reviewed=json.loads(frozen.read_text())
+              assert reviewed['schema']=='eog.original_idea.noisy_provenance_ecological_state_value.frozen_review_v41'
+              canonical=json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode('utf-8')
+              assert reviewed['authority']['complete_canonical_json_sha256']==hashlib.sha256(canonical).hexdigest(), 'The independently reviewed full real v41 CI result has drifted'
+              assert reviewed['predeclared_verdicts']==x['predeclared_verdicts']
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EOG-V41-NOISY-PROVENANCE-ECOLOGICAL-STATE-KNOWN-TRUTH
+          path: build/eog-v41-provenance-state.json
+          if-no-files-found: warn
