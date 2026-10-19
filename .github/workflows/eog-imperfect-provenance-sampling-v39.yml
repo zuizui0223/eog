@@ -59,9 +59,19 @@ jobs:
           assert z['negative_controls']['max_unique_origin_additional_information_bits'] <= 1e-9
           assert z['negative_controls']['max_unique_origin_bayes_accuracy_gain'] <= 1e-9
           frozen=Path('validation/eog_original_idea_imperfect_provenance_v39/result_frozen_v39.json')
-          if frozen.exists():
-              x=json.loads(frozen.read_text(encoding='utf-8'))
-              assert x['receipt']==z, 'Full independently reviewed v39 results drifted'
+          assert frozen.is_file(), 'Independently reviewed full-result digest required'
+          import hashlib
+          x=json.loads(frozen.read_text(encoding='utf-8'))
+          assert x['schema']=='eog.original_idea.imperfect_source_provenance_sampling.frozen_review_v39'
+          assert x['pre_scoring_protocol_commit']=='582833e08d3f35075783ff51a845deee26dc8468'
+          canonical=json.dumps(z,sort_keys=True,separators=(',', ':'),ensure_ascii=False,allow_nan=False).encode('utf-8')
+          actual=hashlib.sha256(canonical).hexdigest()
+          assert x['authority']['canonical_full_result_sha256']==actual, 'Full independently reviewed v39 result fingerprint drifted'
+          assert z['predeclared_hypothesis_verdicts']==x['hypotheses']
+          assert z['parent_reconciled']==x['parent_reconciled']
+          target=next(y for y in z['summary'] if y['policy']=='confluence_targeted' and y['coverage']==0.6 and y['miscall']==0.1 and y['subset']=='equal_budget_aliased')
+          assert target['n_design_rows']==x['primary_fixed_setting']['n']==88
+          assert target['mean_additional_information_bits']==x['primary_fixed_setting']['confluence_targeted']['mean_information_bits']
           PY
       - uses: actions/upload-artifact@v4
         if: always()
