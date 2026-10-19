@@ -91,9 +91,20 @@ jobs:
               'independent_EOG_forecast_scored',
           ))
           frozen=Path('validation/eog_virtual_world_ecology_synthesis_v1/helgeland_11island_habitat_paired_observed_frozen_v1.json')
-          if frozen.is_file():
-              reviewed=json.loads(frozen.read_text(encoding='utf-8'))
-              assert reviewed['receipt']==out, 'Frozen complete source-reviewed result changed'
+          assert frozen.is_file(), 'Original-source independently reviewed frozen receipt missing'
+          reviewed=json.loads(frozen.read_text(encoding='utf-8'))
+          assert reviewed['schema']=='eog.helgeland.11island_positive_habitat_paired.frozen_source_receipt.v1'
+          assert reviewed['protocol_freeze_commit']=='fd18c40e521e14c982164e3b132ff81320c4b8be'
+          assert reviewed['authority']['original_sha256_physical_header_and_PR646_647_receipts_reverified'] is True
+          assert reviewed['receipt']==out, 'Full original-source outcome changed from reviewed receipt'
+          assert c['named_11_primary_positive']==1272
+          assert c['named_11_primary_discordant']==118
+          assert c['paired_0_before_or_at_target']==41
+          assert c['named_11_primary_33_in_origin_or_target']==12
+          assert out['habitat_different_code_positive']=={
+              'farm_to_farm':62,'farm_to_nonfarm':7,
+              'nonfarm_to_farm':21,'nonfarm_to_nonfarm':129,
+          }
           PY
       - uses: actions/upload-artifact@v4
         if: always()
