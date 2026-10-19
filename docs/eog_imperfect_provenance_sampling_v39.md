@@ -68,3 +68,52 @@ python benchmarks/run_eog_imperfect_provenance_sampling_v39.py \
 \`\`\`
 
 The dedicated CI builds the result from the source simulator and compares the complete reviewed JSON after it has been independently inspected and frozen. The simulator never opens a Dryad data file or a private bird record.
+
+
+## First fully preregistered result — 2026-10-19
+
+The dedicated [GitHub Actions run 39237967536](https://github.com/zuizui0223/eog/actions/runs/39237967536) passed the original v23 parent checks and all unit tests, then executed all 768 known-truth design worlds. The complete simulation result was independently downloaded as artifact **12180415330** (\`EOG-V39-NOISY-PROVENANCE-KNOWN-TRUTH-AGGREGATES\`), ZIP SHA256 \`ad41b561b4ed1255252dc094749c318320976d289bb06664239b088b4828dd75\`. Full canonical result JSON SHA256: \`eefbd3c2ef69e532d6efc5fef66fd7ec97def75e6dd6b74d533d042e78aaa865\`. The complete JSON is stored in the Actions artifact; its **entire canonical SHA256** and key science results are frozen at \`validation/eog_original_idea_imperfect_provenance_v39/result_frozen_v39.json\`, and every subsequent CI run must match that hash.
+
+All parent truths reconciled exactly:
+- v23 design rows: **768**;
+- four-snapshot occupancy uniquely identifies exact history in **579**;
+- complete ideal occupancy plus all provenance tags uniquely identifies **687**;
+- occupancy alias residual: **189**;
+- **88/189** occupancy-aliased designs have at least three potential confluence sites and are fair equal-three-site comparisons.
+
+### Primary equal-budget comparison (88 occupancy-ambiguous worlds, exactly 3 sites)
+
+Assumed synthetic assay coverage \`q=0.60\` and categorical misassignment \`e=0.10\`:
+
+| Assay placement | Mean additional I(H; P_reports \| occupancy), bits | Mean improvement in Bayes correct-history probability |
+| --- | ---: | ---: |
+| Potential source confluence sites | **0.655816** | **0.333056** |
+| Response-blind SHA256-random sites | 0.648676 | 0.330346 |
+| Static single-origin sites (negative control; site count often zero) | 0.000000 | 0.000000 |
+
+The mean mutual-information advantage of confluence targeting over random site placement was just **0.007140 bit**, and the improvement in correct-history probability was **0.002710 (0.271 percentage points)**. P3's preregistered *directional* claim is supported, but this effect is **too small** to warrant saying that confluence-targeted genetic field sampling is generally optimal or materially superior without independent replication, sampling costs and site-selection uncertainty. The random design has one fixed source-blind SHA256 rank seed; broader placement-randomization robustness has not been preregistered/tested.
+
+The perfect, complete q=1/e=0 confluence design gave mean **0.836489 bit** and **0.393939** extra correct-history probability. Even q=0.25/e=0.10 retained **0.360665 bit** (mean accuracy gain **0.196645**). Reduced coverage and greater synthetic miscall rates reduce, but do not instantaneously abolish, conditional history information in this world universe.
+
+### What happens across all original world designs?
+
+At q=0.60/e=0.10, averaged over all **768** (including **579** worlds where occupancy already uniquely identifies history), confluence-targeted tags add only **0.099464 bit** and **0.050228** expected correct-history probability; response-blind random adds **0.098645 bit** and **0.049917**. Across all **189 occupancy-aliased worlds**, information is **0.404169 bit** versus **0.400845 bit**. These are different denominators and should not be reported as equal-budget field sampling comparisons (average selected confluence sites **1.66**, random **1.92** among aliases).
+
+Source geometry was a major modifier in this controlled universe. At q=.60/e=.10 within occupancy-aliased worlds:
+
+- **Clustered source geometry** (153 aliased designs): confluence **0.496531 bit**, random **0.492425 bit**.
+- **Dispersed source geometry** (36 aliased designs): both **0.011631 bit**.
+
+The vast difference is about how informative provenance *could be after the occupancy evidence* in these specific synthetic source configurations. It is **not** a measured field difference between farms/non-farms, a natural population estimate, or causal inference about island source geometry. Some dispersed-world occupancy signatures already resolve history, and the two alias subsets are not a matched comparison of ecological treatment groups.
+
+### Preregistration verdicts / caveat
+
+All five preregistered directional hypotheses **P1–P5 SUPPORTED** under the fixed simulation settings, with zero negative-control violations. P2 (unique-source-site invariance) and P4 (properly specified noise/coverage monotonicity) are mainly **model-integrity/structural properties**, not independently novel biological observations.
+
+The main result is more specific than "genetics helps":
+
+> **Imperfect observations of source-of-first-arrival can retain conditional information about a history even after detailed occupancy snapshots, but information yield is strongly context dependent, and merely choosing topological confluence sites yields only a small mean gain over a fixed response-blind random sample at three sites.**
+
+The original v23 source tags record **earliest source arrivals of a diffusion simulation**. Actual SNP ancestry, parentage, genomic assignment and natal origin in Helgeland are **not** equivalent measurements by definition. The 2021 Saatoglu Dryad data remained inaccessible through the verified official URL (HTTP403 in PR #652); no empirical genotyping values, actual assignment-error rates, survey-effort records or movement outcomes entered v39.
+
+The original EOG-WF 3 scored / 31 scientific STOP / 3 administrative exclusion boundary is untouched.
