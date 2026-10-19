@@ -182,3 +182,45 @@ def test_outcome_generator_contains_no_original_genetic_data_import_or_lookahead
         assert forbidden not in text
     assert "bayes_information" in text
     assert "_process_map" in text
+
+
+def test_original_v41_full_result_frozen_sha256_and_ecological_target_contrast():
+    receipt = json.loads((
+        PROTOCOL.parent / "result_frozen_v41.json"
+    ).read_text(encoding="utf-8"))
+    assert receipt["schema"] == (
+        "eog.original_idea.noisy_provenance_ecological_state_value.frozen_review_v41"
+    )
+    assert receipt["pre_result_protocol_commit"] == (
+        "a812771a2d033b634dc95aceac0dc311a842a1e0"
+    )
+    auth=receipt["authority"]
+    assert auth["github_actions_run_id"] == 39248967844
+    assert auth["github_actions_artifact_id"] == 12184367871
+    assert auth["artifact_zip_sha256"] == (
+        "9d98a1cc1704954f9c9f8f9487f85748a1368f6422fbd3125b6ee964647f4527"
+    )
+    assert auth["complete_canonical_json_sha256"] == (
+        "34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d"
+    )
+    c=receipt["contrast_counts_on_189_occupancy_aliases"]
+    assert c["confluence_source_tags_improve_both_history_and_lag2_maturity_in_designs"]==48
+    assert c["confluence_source_tags_improve_history_but_not_lag2_maturity_in_designs"]==72
+    assert c["confluence_source_tags_improve_lag2_maturity_in_designs"]==48
+    a=receipt["confluence_mean_over_189_occupancy_alias"]
+    assert a["exact_activation_history"]["positive_worlds"]==120
+    assert a["exact_activation_history"]["information_bits"]==pytest.approx(0.4041694132190281)
+    assert a["persistent_threshold_lag2"]["information_bits"]==pytest.approx(0.14064779,abs=1e-8)
+    assert a["transient_window_age1_2"]["information_bits"]==pytest.approx(0.17751462,abs=1e-8)
+    assert a["saturating_age_class_cap3"]["information_bits"]==pytest.approx(0.20838477,abs=1e-8)
+    assert receipt["perfect_full_source_alias_target_disagreement_counts"] == {
+        "exact_activation_history":81,
+        "history_blind_occupancy":0,
+        "persistent_threshold_lag2":12,
+        "transient_window_age1_2":45,
+        "saturating_age_class_cap3":45,
+    }
+    assert all(v=="SUPPORTED" for v in receipt["predeclared_verdicts"].values())
+    assert all(v==0 for v in receipt["negative_controls"].values())
+    assert receipt["scientific_bounds"]["2021_genetic_archive_raw_data_not_accessed"] is True
+    assert receipt["scientific_bounds"]["no_new_EOG_WF_empirical_endpoint"] is True
