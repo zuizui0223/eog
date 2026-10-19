@@ -59,7 +59,7 @@ def test_unauthorized_401_stops_no_credential_fallback():
     assert x["attempts"][0]["http_status"] == 401
     assert x["attempts"][0]["outcome"] == "ACCESS_DENIED_STOP"
     assert len(calls) == 1
-    assert "download" not in calls[0]
+    assert calls[0].endswith("/downloads/file_stream/99")
 
 
 def test_public_404_may_consult_only_second_fixed_official_route():
