@@ -67,11 +67,24 @@ jobs:
           assert all(v in ('SUPPORTED','REFUTED') for v in z['predeclared_verdicts'].values())
           assert z['scientific_boundaries']==p['scientific_boundaries']
           frozen=Path('validation/eog_original_idea_provenance_placement_multiseed_v40/result_frozen_v40.json')
-          if frozen.exists():
-              x=json.loads(frozen.read_text())
-              assert x['schema']=='eog.original_idea.noisy_provenance_placement_multiseed.frozen_review_v40'
-              canonical=json.dumps(z,sort_keys=True,separators=(",",":"),ensure_ascii=False,allow_nan=False).encode('utf-8')
-              assert hashlib.sha256(canonical).hexdigest()==x['authority']['full_canonical_sha256'], 'Independent full result changed'
+          assert frozen.is_file(), 'Independently reviewed complete-result hash required'
+          x=json.loads(frozen.read_text(encoding='utf-8'))
+          assert x['schema']=='eog.original_idea.noisy_provenance_placement_multiseed.frozen_review_v40'
+          assert x['pre_multiseed_protocol_commit']=='ce72c8a258e3c3ddd8bd8c6e8b43e103501de745'
+          assert x['authority']['github_actions_run_id']==39240966984
+          assert x['authority']['github_actions_artifact_id']==12180579805
+          assert x['parent_reconciliation']==z['parent_reconciliation']
+          assert x['predeclared_verdicts']==z['predeclared_verdicts']
+          assert x['primary']==a
+          canonical=json.dumps(z,sort_keys=True,separators=(",",":"),ensure_ascii=False,allow_nan=False).encode('utf-8')
+          assert hashlib.sha256(canonical).hexdigest()==x['authority']['full_canonical_json_sha256'], 'Independent complete original v40 result changed'
+          assert z['predeclared_verdicts']['M1_material_targeting_advantage']=='REFUTED'
+          assert z['predeclared_verdicts']['M2_targeting_outperforms_most_independent_random_placements']=='SUPPORTED'
+          assert z['predeclared_verdicts']['M3_per_world_targeting_consistency']=='REFUTED'
+          assert z['predeclared_verdicts']['M4_random_seed_effect_not_hidden']=='SUPPORTED'
+          assert z['predeclared_verdicts']['M5_raw_source_overlap_is_imperfect_information_proxy']=='REFUTED'
+          assert all(row['source_geometry']=='clustered' for row in z['source_geometry'])
+          assert len(z['source_geometry'])==1 and z['source_geometry'][0]['n_equal_budget_occupancy_aliased']==88
           PY
       - uses: actions/upload-artifact@v4
         if: always()
