@@ -35,7 +35,7 @@ Canonical closure assets:
 
 The previous state in which no fresh post-Daphnia paired endpoint had completed is historical and must not be used to reopen candidate search.
 
-## Current known-truth result (v39–v40, 2026-10-19)
+## Current known-truth result (v39–v41, 2026-10-19)
 
 **Active scientific status: origin-history information can survive an imperfect
 observation channel, but the proposed static-confluence placement heuristic did
@@ -64,6 +64,42 @@ known-truth results, **not** field-calibrated genetic ancestry or colonisation.
   The entire independently inspected v40 result is frozen by SHA256
   `e366c4945e2110bd6359c3db1ae86e4e01bb6df8741fc4370af6ae54b5792f91`
   at `validation/eog_original_idea_provenance_placement_multiseed_v40/result_frozen_v40.json`.
+
+### v41: value for a declared present ecological-state target
+
+The new [v41 original-EOG target-specific benchmark](eog_provenance_ecological_state_value_v41.md)
+reuses the **same 768 v23 latent histories** and the unchanged v39 synthetic
+source-tag coverage q=0.60/miscall e=0.10; it uses the previously frozen
+v25–v26 *lag2 persistent maturity*, *transient age 1–2* and *saturating age*
+present-state targets at the same common structural T*. Nothing is calibrated
+to actual animal or plant maturation.
+
+Among **189** v23 four-snapshot **occupancy-aliased** source-history design
+rows, the at-most-three-site confluence source-tag readout added information
+about **exact history in 120** (mean **0.404169 bit**) but information about
+the frozen **lag2 mature/not-yet-mature current state in only 48** (mean
+**0.140648 bit**). Exactly **72** rows gained information about past history
+while gaining **zero** about the declared maturity target. The same source-tag
+observation had **0.177515 bit** of mean information about the transient
+age-1-to-2 state and **0.208385 bit** about the saturating age class;
+history-blind occupancy as target had exactly zero additional information.
+
+Complete ideal source/occupancy observations left **81** exact-history
+equivalences, including **12** whose histories differed on lag2 maturity
+and **45** on transient/cap3 state. Even complete *perfect source identity*
+does not identify those abstract present-state differences. Original v25/v26
+counts and the v39 exact history Bayesian calculation were reproduced
+independently. Five v41 hypotheses V1–V5 were SUPPORTED, but V4 (parent
+count) and V5 (data-processing bound) are structural **integrity controls**,
+not independent biological discoveries.
+
+**Updated scientific decision:** `more information about a hidden
+history` and `more information about the current ecological target` are
+**different estimands**. Do not claim a biologically meaningful source assay
+simply because it improves exact-history information in simulation.
+The v41 entire result is frozen by canonical JSON SHA256
+`34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d`
+at `validation/eog_original_idea_provenance_ecological_state_v41/result_frozen_v41.json`.
 
 **Decision:** source/provenance measurements may distinguish histories that
 occupancy cannot, but **static confluence ranking should not be recommended as
