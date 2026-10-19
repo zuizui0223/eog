@@ -1,0 +1,40 @@
+{
+  "schema": "eog.helgeland.saatoglu2021.official_dryad_public_byte_probe.frozen_receipt_v1",
+  "status": "PUBLIC_2021_ORIGINAL_BIOLOGICAL_BYTES_ACCESS_DENIED_AND_NOT_PARSED",
+  "authority": {
+    "workflow_run_id": 39235926635,
+    "artifact_id": 12179481227,
+    "artifact_name": "HELGELAND-SAATOGLU2021-DRYAD-PUBLIC-ACCESS-DIAGNOSTIC-NO-BIRD-DATA",
+    "artifact_zip_sha256": "a19baf7a32f1bf4689da7c622efb1b4ac78ba509fcddc4541351f5badc14c7ef",
+    "attempt_date_utc": "2026-10-19",
+    "original_published_version_id": 130231,
+    "original_bird_file_bytes_read": false
+  },
+  "receipt": {
+    "access_denial_bypassed": false,
+    "dryad_version_id": 130231,
+    "files_checked": [
+      {
+        "attempts": [
+          {
+            "http_status": 403,
+            "outcome": "ACCESS_DENIED_STOP",
+            "route": "file_stream"
+          }
+        ],
+        "byte_verified": false,
+        "file_id": 815564,
+        "name": "Geneticassignment_README.txt"
+      }
+    ],
+    "five_files_verified": false,
+    "individual_ID_join_or_genetic_assignments_scored": false,
+    "new_EOG_WF_endpoint_scored": false,
+    "original_2021_record_headers_or_bird_values_read": false,
+    "raw_source_file_bytes_persisted_or_exported": false,
+    "schema": "eog.helgeland.saatoglu2021.official_dryad_public_byte_probe.v1",
+    "source_available_at_2014_forecast_cutoff": false,
+    "status": "PUBLIC_ACCESS_DIAGNOSTIC_ONLY__SOME_OR_ALL_ORIGINAL_BYTES_NOT_VERIFIED",
+    "verified_file_count": 0
+  }
+}
