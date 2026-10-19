@@ -113,8 +113,8 @@ def hash_locally_authorized_files(directory: Path, m: dict) -> dict:
     This is an attestation of exact source bytes only, not a scientific data audit.
     """
     files = m.get("files")
-    if not isinstance(files, list) or not files:
-        raise ValueError("No fixed file inventory")
+    if not isinstance(files, list) or len(files) != len(FILE_IDS):
+        raise ValueError("Exactly four fixed original files are required")
     records = []
     for f in files:
         name = f["name"]
