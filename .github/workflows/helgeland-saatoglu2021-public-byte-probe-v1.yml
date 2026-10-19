@@ -1,0 +1,61 @@
+name: Helgeland 2021 Saatoglu official public data byte access diagnostic
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/helgeland-saatoglu2021-public-byte-probe-v1.yml'
+      - 'scripts/probe_helgeland_saatoglu2021_official_dryad_bytes_v1.py'
+      - 'tests/test_helgeland_saatoglu2021_official_dryad_bytes_v1.py'
+      - 'validation/eog_virtual_world_ecology_synthesis_v1/helgeland_saatoglu2021_public_byte_probe_observed_frozen_v1.json'
+      - 'docs/eog_helgeland_saatoglu2021_original_data_access_gate_v1.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-original-source-availability-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test synthetic SHA256, source mismatch, 401/403 and public challenge STOP
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_helgeland_saatoglu2021_official_dryad_bytes_v1.py
+      - name: Attempt ordinary official public Dryad README first, SHA256 verify only
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          python scripts/probe_helgeland_saatoglu2021_official_dryad_bytes_v1.py \
+            --output build/helgeland-2021-public-byte-diagnostic.json
+      - name: Only permit metadata/byte receipts; no row/label/forecast claim
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('build/helgeland-2021-public-byte-diagnostic.json').read_text())
+          assert x['schema']=='eog.helgeland.saatoglu2021.official_dryad_public_byte_probe.v1'
+          assert x['dryad_version_id']==130231
+          assert x['verified_file_count']<=5
+          assert len(x['files_checked']) in (1,5)
+          assert x['five_files_verified'] == (x['verified_file_count']==5)
+          assert all(x[k] is False for k in [
+              'original_2021_record_headers_or_bird_values_read',
+              'individual_ID_join_or_genetic_assignments_scored',
+              'source_available_at_2014_forecast_cutoff',
+              'new_EOG_WF_endpoint_scored',
+              'raw_source_file_bytes_persisted_or_exported',
+              'access_denial_bypassed'
+          ])
+          print('PUBLIC-SOURCE-READONLY-DIAGNOSTIC',x['status'],x['verified_file_count'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: HELGELAND-SAATOGLU2021-DRYAD-PUBLIC-ACCESS-DIAGNOSTIC-NO-BIRD-DATA
+          path: build/helgeland-2021-public-byte-diagnostic.json
+          if-no-files-found: warn
