@@ -164,3 +164,27 @@ def test_actual_comparator_is_offline_only_and_no_file_bodies_claimed():
     for forbidden in ("urllib", "requests", "httpx", "boto3", "subprocess", "eval("):
         assert forbidden not in code
     assert code.index("validate_manifest(m)") < code.index("proxy_n =")
+
+
+def test_complete_2021_published_only_comparator_receipt_is_frozen_no_raw_2021_files():
+    reviewed = json.loads((
+        BASE / "helgeland_ranke2021_published_comparator_frozen_v1.json"
+    ).read_text(encoding="utf-8"))
+    assert reviewed["schema"] == (
+        "eog.helgeland.ranke2021_published_recruit_comparator.frozen_reviewed_v1"
+    )
+    a = reviewed["authority"]
+    assert a["github_actions_run_id"] == 39211856677
+    assert a["github_actions_artifact_id"] == 12168290733
+    assert a["artifact_zip_sha256"] == (
+        "ecbe8fe0f6d4aec19a49b0cd5fa853b87f58b0b28588d2ba14e36f775f63590e"
+    )
+    assert a["source_2021_actual_file_bodies_verified"] is False
+    assert a["EOG_main_11island_source_receipt_verified"] is True
+    m, eog = docs()
+    expected = compare(m, eog)
+    expected["authenticated_2021_files"] = {
+        "status": "2021_ORIGINAL_BYTES_NOT_PRESENT",
+        "all_four_authorized_source_bytes_sha256_verified": False,
+    }
+    assert reviewed["receipt"] == expected
