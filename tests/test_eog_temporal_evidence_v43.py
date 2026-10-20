@@ -134,7 +134,7 @@ def test_exact_binary_set_cover_prefers_minimal_deterministic_probes():
 
 def test_untrusted_time_node_target_changes_stop_instead_of_rescoring():
     baseline,target,arrivals,nodes=_data()
-    with pytest.raises(ValueError,match="Residual"):
+    with pytest.raises(ValueError,match="no source/occupancy-equivalent"):
         evaluate_residual(
             {h:(h,) for h in baseline},target,arrivals,nodes,13)
     with pytest.raises(ValueError,match="nodes"):
