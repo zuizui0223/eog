@@ -55,3 +55,33 @@ python benchmarks/run_eog_temporal_evidence_v43.py \
 \`\`\`
 
 The dedicated CI must execute from the full parent v41 source and compare original v41 canonical hash, original v42 world partitions, original t=4/5/6/8 zero-information controls and each predetermined prediction verdict. Independently inspect and freeze both full aggregate result JSON and twelve-scenario diagnostics by canonical SHA256 before merge.
+
+
+## First independent actual-source synthetic execution (2026-10-20), followed by chronology audit
+
+The first full dedicated [GitHub Actions run 39416079181](https://github.com/zuizui0223/eog/actions/runs/39416079181) **SUCCESS** reran and SHA-verified the exact original v41 full known-truth result and matched every v42 world denominator. The original binary/census observations were then scored from the frozen graph histories. Independently downloaded aggregate artifact ID \`12261207341\`, initial ZIP SHA256 \`03390f9a62472ab49926fcc048c15bdd2cc0ac5a371e8327c7dbd3215045ae7e\`. Its complete original result had **12/12** non-tautological single-census rescues and **12/12** single node×time binary-observation rescues, with no two-site condition; the direct maturity-defining census t=Tstar−2 was separately counted **12/12 but only as a definitional positive control**. The original four census remeasurement information gain was exactly zero.
+
+All five original v43 preregistered hypotheses were evaluated: **T1 SUPPORTED (definition), T2 SUPPORTED, T3 SUPPORTED, T4 REFUTED, T5 SUPPORTED (negative control)**. The average original source+occupancy posterior mature-target entropy in these twelve was exactly **2/3 bit per design**, all of which was removed by the best model-aided non-tautological perfect time census. This is not evidence that real detection cameras could achieve that success.
+
+### Important result limiting generality: small domains and retrospective timing
+
+Inspection of the independently produced **twelve world diagnostic table** established a much narrower interpretation than the headline \`12/12\` initially suggests:
+
+| Previously unresolved twelve designs | Number |
+| --- | ---: |
+| Present horizon \`Tstar=4\` | **10** |
+| Present horizon \`Tstar=3\` | **2** |
+| Exactly one equilibrium non-source node | **8** |
+| Exactly two equilibrium non-source nodes | **3** |
+| Four equilibrium non-source nodes | **1** |
+| All twelve source geometry and graph neighborhood | **clustered / rook** |
+
+**Every single one of the twelve target times (\`Tstar=3\` or \`4\`) precedes the original final occupancy snapshot at \`t=8\`.** This is a **retrospective state-reconstruction** (smoothing) experiment conditioning on some observations made *after* the state being reconstructed, not an as-of-time ecological prediction. A claim of real prospective forecasting would leak future relative to the target. This chronology fact was noticed during independent review **after the initial v43 results had been exposed** and added only as a labelled post-exposure audit. The original ecological worlds, target definitions, all five hypotheses, readout times and source noise settings were **not changed**.
+
+The original fixed universal calendar sensitivity shows how time applicability matters: census \`t=3\` was eligible in all twelve and resolved **10/12**; \`t=1\` was eligible in ten and resolved **3/10**, and \`t=2\` was eligible in only two (in the other ten it would be the maturity-defining time) and resolved **2/2**. One optimally selected binary time+node event resolved all twelve *given the three exact known candidate histories*. These are post-exposure mechanistic details, **not a field observation plan**.
+
+**Scientific interpretation:** for these narrowly scoped original worlds, the unidentifiable mature-target state is hidden from **perfect source-of-first-arrival labels** but can be distinguished by an additional earlier occupancy timestamp. However, the toy equilibrium non-source region has at most four nodes and the original observation baseline includes future relative to the target. Thus \`12/12\` is a **synthetic identifiability counterexample**, not a strong generalizable ecological sampling recommendation.
+
+This distinction reinforces the [v42 conclusion](./eog_provenance_uncertainty_v42.md): changing the *class* of observations can resolve an equivalence that endlessly perfecting the original source-tag class cannot—but whether it is usable for genuinely **prospective** ecological inference requires a separate as-of-time protocol, empirical detectability and a biologically justified target definition.
+
+The **final reviewed v43 evidence artifact, posthoc chronology flags and exact checksum** are fixed separately on the v43 branch, and its dedicated rerun is required before merge. Do not quietly reuse the initial pre-audit result digest for the final receipt.
