@@ -1,0 +1,77 @@
+name: EOG v42 provenance uncertainty decomposition
+
+on:
+  pull_request:
+    paths:
+      - 'benchmarks/run_eog_provenance_uncertainty_v42.py'
+      - 'tests/test_eog_provenance_uncertainty_v42.py'
+      - 'validation/eog_provenance_uncertainty_decomposition_v42/**'
+      - 'docs/eog_provenance_uncertainty_v42.md'
+      - '.github/workflows/eog-provenance-uncertainty-v42.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'benchmarks/run_eog_provenance_uncertainty_v42.py'
+      - 'tests/test_eog_provenance_uncertainty_v42.py'
+      - 'validation/eog_provenance_uncertainty_decomposition_v42/**'
+      - '.github/workflows/eog-provenance-uncertainty-v42.yml'
+permissions:
+  contents: read
+jobs:
+  nested-evidence-known-truth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e .[dev]
+      - name: Synthetic red-green risk and partition controls
+        run: python -m pytest -q tests/test_eog_provenance_uncertainty_v42.py
+      - name: Reproduce full v41 then partition all unchanged worlds
+        run: python benchmarks/run_eog_provenance_uncertainty_v42.py --output-dir build/v42
+      - name: Check complete outcomes and mandatory locked evidence
+        run: |
+          python - <<'PY'
+          import csv, hashlib, json
+          from pathlib import Path
+          p = Path('build/v42')
+          r = json.loads((p/'result_v42.json').read_text())
+          rows = list(csv.DictReader((p/'scenario_metrics.csv').open()))
+          assert r['scenario_metric_rows'] == len(rows) == 768*5*3
+          assert r['parent_counts'] == {'design_rows':768,'occupancy_alias':189,'equal_budget_alias':88,'perfect_combined_alias':81}
+          assert r['max_partition_reconstruction_error'] <= 1e-9
+          assert len(r['summary_by_policy_target_stratum']) == 90
+          assert r['full_source_target_floor_counts'] == {'exact_activation_history':81,'history_blind_occupancy':0,'persistent_threshold_lag2':12,'transient_window_age1_2':45,'saturating_age_class_cap3':45}
+          assert r['recomputed_positive_information_counts']['exact_activation_history'] == 120
+          assert r['recomputed_positive_information_counts']['persistent_threshold_lag2'] == 48
+          for s in r['summary_by_policy_target_stratum']:
+              assert sum(s['resolution_counts'].values()) == s['n_designs']
+              for scale in ('entropy','error'):
+                  c = s[scale]
+                  assert all(c[k] >= -1e-9 for k in ('recovered','measurement_loss','site_coverage_loss','source_type_floor'))
+                  assert abs(c['baseline']-sum(c[k] for k in ('recovered','measurement_loss','site_coverage_loss','source_type_floor'))) < 1e-9
+          assert r['scope']['new_EOG_WF_endpoint'] is False
+          assert r['scope']['actual_maturity_survival_or_colonization_measured'] is False
+          assert hashlib.sha256((p/'scenario_metrics.csv').read_bytes()).hexdigest() == r['scenario_csv_sha256']
+          locked = Path('validation/eog_provenance_uncertainty_decomposition_v42/result_locked_v42.json')
+          assert locked.is_file(), 'Reviewed complete result and scenario CSV are required'
+          lock = json.loads(locked.read_text())
+          assert lock['protocol_commit'] == 'e59612ac26da5239c6587c176d7179ea9f2191ef'
+          canonical = json.dumps(r,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode()
+          assert hashlib.sha256(canonical).hexdigest() == lock['canonical_result_sha256']
+          assert r['scenario_csv_sha256'] == lock['scenario_csv_sha256']
+          c = r['primary']['resolution_counts']
+          assert c['target_already_determined_by_occupancy'] == 141
+          assert c['perfect_same_site_tags_sufficient'] == 36
+          assert c['different_measurement_class_required'] == 12
+          assert c['additional_perfect_source_sites_needed'] == 0
+          assert r['primary']['source_type_floor_majority'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EOG-V42-UNCERTAINTY-DECOMPOSITION
+          path: build/v42/
+          if-no-files-found: warn

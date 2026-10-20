@@ -1,0 +1,72 @@
+{
+  "schema": "eog.provenance_uncertainty_decomposition.protocol.v42",
+  "status": "FROZEN_BEFORE_DECOMPOSITION_SCORING_POST_V41_EXPOSURE",
+  "base_commit": "4f6bcd661c6eb969a60f186707affcfab497c583",
+  "question": "How much present-state uncertainty is attributable to imperfect measurement, incomplete spatial coverage, or distinctions that complete perfect source tags cannot resolve?",
+  "parent": {
+    "v41_result": "validation/eog_original_idea_provenance_ecological_state_v41/result_frozen_v41.json",
+    "v41_canonical_sha256": "34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d",
+    "worlds": 768,
+    "occupancy_aliased_worlds": 189,
+    "equal_budget_aliased_worlds": 88,
+    "full_source_history_aliased_worlds": 81,
+    "full_source_maturity_aliased_worlds": 12,
+    "full_source_transient_aliased_worlds": 45,
+    "full_source_cap3_aliased_worlds": 45
+  },
+  "unchanged_design": {
+    "generator": "v23/v41 original generator, all 768 designs including empty non-source graphs",
+    "targets": ["exact_activation_history", "history_blind_occupancy", "persistent_threshold_lag2", "transient_window_age1_2", "saturating_age_class_cap3"],
+    "policies": ["confluence_targeted", "random_response_blind", "unique_origin_negative_control"],
+    "baseline": "exact non-source occupancy at original t=4,5,6,8",
+    "prior": "uniform over the same three activation histories",
+    "selected_sites": "unchanged v39 prepare_design selections, up to three sites; actual selected count reported",
+    "noisy_assay": {"coverage": 0.6, "miscall": 0.1, "likelihood": "unchanged v41 target_bayes_information; ideal first-arrival tags, not genetic ancestry"},
+    "state_mappings": "unchanged v26 process maps and common Tstar; no new lag or process",
+    "no_new_measurement_class_fitted": true
+  },
+  "nested_evidence": [
+    "O: original occupancy snapshots",
+    "O+Y_selected: original missing/miscalled selected tags",
+    "O+P_selected: perfect complete observations of those same selected tags",
+    "O+P_all: perfect observations of every non-source tag"
+  ],
+  "entropy_partition": {
+    "recovered": "H(T|O)-H(T|O,Y_selected)",
+    "measurement_loss": "H(T|O,Y_selected)-H(T|O,P_selected)",
+    "site_coverage_loss": "H(T|O,P_selected)-H(T|O,P_all)",
+    "source_type_floor": "H(T|O,P_all)",
+    "sum": "H(T|O)",
+    "interpretation": "expected conditional entropy under the fixed candidate-model prior, not individual outcome uncertainty or causal variance partition"
+  },
+  "bayes_error_partition": "Apply the same telescoping differences to expected optimal target misclassification error; do not compare raw accuracies of different targets as equivalent endpoints.",
+  "reporting": {
+    "primary": "confluence_targeted, persistent_threshold_lag2, same 189 occupancy-aliased designs",
+    "other_strata": ["all", "equal_budget_aliased", "full_source_history_aliased"],
+    "retain_all_policies_and_targets": true,
+    "geometry": "report clustered and dispersed separately; no treatment/causal interpretation",
+    "shares": "ratio of summed component entropies to summed residual entropy, not mean of individual ratios; null where denominator is zero",
+    "dominance_rule": "source-type-floor majority only when structural residual share > 0.5; otherwise report the largest component and do not relabel thresholds",
+    "per_design_classification": ["target already determined by occupancy", "selected noisy tags fully determine target", "perfect same-site tags sufficient", "additional perfect source sites needed", "different measurement class required"],
+    "full_scenario_csv": true,
+    "no_new_five_hypothesis_success_score": true
+  },
+  "mandatory_controls": [
+    "All four entropy and Bayes-error components nonnegative within 1e-9 and sum to baseline within 1e-9.",
+    "Reproduce v41 baseline population counts and source-class residual counts 81/12/45/45.",
+    "Reproduce confluence history-information-positive 120, maturity-positive 48, history-only 72 on original 189 designs.",
+    "History-blind target has zero entropy and error at every stage.",
+    "Perfect-all entropy cannot exceed perfect-selected or noisy-selected expected entropy.",
+    "No source rows, policies or states dropped according to newly observed results."
+  ],
+  "scope": {
+    "synthetic_known_truth_only": true,
+    "post_v41_exposure_diagnostic_not_independent_replication": true,
+    "genetic_assignment_error_or_effort_estimated": false,
+    "actual_maturity_survival_or_colonization_measured": false,
+    "original_Dryad_data_retried": false,
+    "new_EOG_WF_endpoint": false,
+    "EOG_WF_3_31_3_changed": false,
+    "different_evidence_needed_is_within_declared_model_only": true
+  }
+}
