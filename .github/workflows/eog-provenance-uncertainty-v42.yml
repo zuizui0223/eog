@@ -31,7 +31,7 @@ jobs:
         run: python -m pytest -q tests/test_eog_provenance_uncertainty_v42.py
       - name: Reproduce full v41 then partition all unchanged worlds
         run: python benchmarks/run_eog_provenance_uncertainty_v42.py --output-dir build/v42
-      - name: Check complete outcomes and frozen evidence when present
+      - name: Check complete outcomes and mandatory locked evidence
         run: |
           python - <<'PY'
           import csv, hashlib, json
@@ -56,11 +56,18 @@ jobs:
           assert r['scope']['actual_maturity_survival_or_colonization_measured'] is False
           assert hashlib.sha256((p/'scenario_metrics.csv').read_bytes()).hexdigest() == r['scenario_csv_sha256']
           locked = Path('validation/eog_provenance_uncertainty_decomposition_v42/result_locked_v42.json')
-          if locked.exists():
-              lock = json.loads(locked.read_text())
-              canonical = json.dumps(r,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode()
-              assert hashlib.sha256(canonical).hexdigest() == lock['canonical_result_sha256']
-              assert r['scenario_csv_sha256'] == lock['scenario_csv_sha256']
+          assert locked.is_file(), 'Reviewed complete result and scenario CSV are required'
+          lock = json.loads(locked.read_text())
+          assert lock['protocol_commit'] == 'e59612ac26da5239c6587c176d7179ea9f2191ef'
+          canonical = json.dumps(r,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode()
+          assert hashlib.sha256(canonical).hexdigest() == lock['canonical_result_sha256']
+          assert r['scenario_csv_sha256'] == lock['scenario_csv_sha256']
+          c = r['primary']['resolution_counts']
+          assert c['target_already_determined_by_occupancy'] == 141
+          assert c['perfect_same_site_tags_sufficient'] == 36
+          assert c['different_measurement_class_required'] == 12
+          assert c['additional_perfect_source_sites_needed'] == 0
+          assert r['primary']['source_type_floor_majority'] is False
           PY
       - uses: actions/upload-artifact@v4
         if: always()

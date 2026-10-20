@@ -1,0 +1,39 @@
+{
+  "schema": "eog.provenance_uncertainty_decomposition.locked.v42",
+  "protocol_commit": "e59612ac26da5239c6587c176d7179ea9f2191ef",
+  "authoritative_run": 39370012736,
+  "artifact_id": 12240343776,
+  "artifact_zip_sha256": "67271f397699e8b2ab472c45cf7463a4469480467c0a06acc32952bd4051be84",
+  "canonical_result_sha256": "32887217c613ea92fd20e32d60d0a7e93ef8355c628ea955f968bec98436e273",
+  "scenario_csv_sha256": "45cab09343adf58352b93eb6faeff6b6044cbfdac50129800b02d8bbb2f0e8bc",
+  "parent_complete_v41_sha256": "34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d",
+  "scenario_rows_independently_checked": 11520,
+  "primary": {
+    "n_designs": 189,
+    "target": "persistent_threshold_lag2",
+    "policy": "confluence_targeted",
+    "baseline_entropy_bits": 0.25956957685693977,
+    "recovered_information_bits": 0.14064778921763404,
+    "remaining_entropy_bits": 0.11892178763930575,
+    "measurement_loss_bits": 0.07659374531126342,
+    "site_coverage_loss_bits": 0.0,
+    "source_type_floor_bits": 0.042328042328042326,
+    "measurement_share_of_remaining_entropy": 0.6440682303193687,
+    "source_type_share_of_remaining_entropy": 0.35593176968063134,
+    "baseline_bayes_error": 0.10582010582010584,
+    "noisy_bayes_error": 0.043520213403880126,
+    "perfect_all_source_bayes_error": 0.021164021164021163,
+    "target_already_determined_by_occupancy": 141,
+    "perfect_same_site_tags_sufficient": 36,
+    "additional_perfect_source_sites_needed": 0,
+    "different_measurement_class_required": 12
+  },
+  "clarifications": {
+    "v41_history_only_72_cases_already_have_occupancy_identified_maturity": true,
+    "all_48_initially_uncertain_maturity_cases_gain_some_noisy_source_information": true,
+    "zero_perfect_site_coverage_gap_does_not_make_additional_noisy_measurements_useless": true,
+    "entropy_component_shares_are_not_accuracy_percentages": true,
+    "precision_then_coverage_order_is_part_of_the_estimand": true,
+    "synthetic_only_no_new_EOG_WF_endpoint": true
+  }
+}
