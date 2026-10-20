@@ -75,6 +75,11 @@ jobs:
                   assert abs(float(r['baseline_target_conditional_entropy_bits']))<1e-9
                   assert abs(float(r['added_source_information_bits']))<1e-9
           frozen=Path('validation/eog_original_idea_asof_time_source_v44/result_frozen_v44.json')
+          result_canonical=json.dumps(z,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode('utf-8')
+          print('V44_FULL_RESULT_CANONICAL_SHA256', hashlib.sha256(result_canonical).hexdigest())
+          print('V44_SCENARIO_CSV_SHA256', z['full_csv_sha256'])
+          print('V44_PRIMARY_MATURITY_RESULTS', json.dumps(z['primary_early_t2_to_t5_maturity'],sort_keys=True))
+          print('V44_FIXED_VERDICTS', json.dumps(z['predeclared_hypothesis_verdicts'],sort_keys=True))
           if frozen.is_file():
               x=json.loads(frozen.read_text(encoding='utf-8'))
               assert x['schema']=='eog.original_idea.asof_time_source_tag_information.frozen_review_v44'
