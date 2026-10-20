@@ -57,6 +57,14 @@ jobs:
           assert original['scientific_boundaries']==proto['scientific_boundaries']
           assert original['no_real_source_genetic_or_field_data_read'] is True
           assert original['positive_control_direct_target_identity_is_not_prediction'] is True
+          time_audit=original['post_exposure_temporal_chronology_audit']
+          assert time_audit['latest_original_occupancy_snapshot_time']==8
+          assert time_audit['target_present_T_distribution']=={'3':2,'4':10}
+          assert time_audit['non_source_equilibrium_node_count_distribution']=={'1':8,'2':3,'4':1}
+          assert time_audit['worlds_with_last_original_occupancy_snapshot_after_target_T']==12
+          assert time_audit['worlds_with_any_original_occupancy_snapshot_after_target_T']==12
+          assert time_audit['claim_of_prospective_maturity_prediction_authorized'] is False
+          assert time_audit['posthoc_chronology_reported_not_refitted'] is True
           assert set(original['frozen_v43_verdicts'])=={p['id'] for p in proto['predeclared_testable_predictions']}
           assert all(x in ('SUPPORTED','REFUTED') for x in original['frozen_v43_verdicts'].values())
           for case in cases:
