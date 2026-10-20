@@ -140,7 +140,7 @@ def test_untrusted_time_node_target_changes_stop_instead_of_rescoring():
     with pytest.raises(ValueError,match="nodes"):
         evaluate_residual(baseline,target,arrivals,nodes+((1,1),),13)
     wrong=dict(target)
-    wrong["h1"]=(("r0c0",False),("r0c1",False))
+    wrong["h1"]=(("r0c0",True),("r0c1",True))
     with pytest.raises(ValueError,match="definition"):
         evaluate_residual(baseline,wrong,arrivals,nodes,13)
 
