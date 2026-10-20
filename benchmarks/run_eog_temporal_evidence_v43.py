@@ -439,6 +439,35 @@ def run() -> tuple[dict, list[dict]]:
             v["single_best_non_tautological_full_census"]["information_bits"] if
             v["single_best_non_tautological_full_census"] else 0.0 for v in residual
         ]),
+        # Post-first-result audit, NOT an additional preregistered hypothesis:
+        # for these residual cases the original occupancy library's t=8
+        # record is already in the *future* relative to the target's Tstar.
+        # Therefore this is retrospective smoothing, not prospective forecast.
+        "post_exposure_temporal_chronology_audit":{
+            "purpose":"Clarify original target-versus-observation chronology, not score a new hypothesis",
+            "latest_original_occupancy_snapshot_time":max(CENSUSES),
+            "target_present_T_distribution":{
+                str(t):sum(row["common_present_t"]==t for row in residual)
+                for t in sorted({row["common_present_t"] for row in residual})
+            },
+            "non_source_equilibrium_node_count_distribution":{
+                str(n):sum(row["non_source_node_count"]==n for row in residual)
+                for n in sorted({row["non_source_node_count"] for row in residual})
+            },
+            "worlds_with_last_original_occupancy_snapshot_after_target_T":sum(
+                max(CENSUSES)>row["common_present_t"] for row in residual),
+            "worlds_with_any_original_occupancy_snapshot_after_target_T":sum(
+                any(t>row["common_present_t"] for t in CENSUSES) for row in residual),
+            "non_tautological_earliest_resolving_census_time_distribution":{
+                str(t):sum(row["earliest_resolving_non_tautological_full_census"]==t
+                           for row in residual)
+                for t in sorted({row["earliest_resolving_non_tautological_full_census"]
+                                 for row in residual
+                                 if row["earliest_resolving_non_tautological_full_census"] is not None})
+            },
+            "claim_of_prospective_maturity_prediction_authorized":False,
+            "posthoc_chronology_reported_not_refitted":True
+        },
         "frozen_v43_verdicts":verdict,
         "original_v41_complete_canonical_sha256":SOURCE_V41_DIGEST,
         "original_v42_frozen_sha256":SOURCE_V42_DIGEST,
