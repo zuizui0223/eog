@@ -1,0 +1,57 @@
+{
+  "schema": "eog.original_idea.non_tautological_temporal_evidence.reviewed_v43",
+  "status": "SOURCE_VERIFIED_SYNTHETIC_TIMING_RESOLUTION_WITH_EXPLICIT_RETROSPECTIVE_CHRONOLOGY_HOLD",
+  "pre_exposure_protocol_commit": "49d41d17df5495200a0e1faa0ed4ffb81e7d4eea",
+  "authority": {
+    "github_actions_run_id": 39416634712,
+    "artifact_id": 12261633054,
+    "artifact_name": "EOG-V43-TEMPORAL-EVIDENCE-TWELVE-WORLD-AGGREGATES",
+    "artifact_zip_sha256": "4fc6fcc2a47377d61bfe6d518dca4f4944398568939d1dbe9acdad887188b394",
+    "complete_result_sha256": "04f24a88911b76da4c112a827dd4df4694152ff92dd350d413056f007ef05446",
+    "twelve_world_diagnostics_sha256": "2e5c00a3a596f70a522839702345316a6d024ef23f1793e639f9f6210560f939",
+    "canonicalization": "SHA256(json.dumps(json_object, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode('utf-8'))",
+    "source_v41_complete_canonical_sha256": "34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d"
+  },
+  "predeclared_verdicts": {
+    "T1_definitionally_direct_target_census_resolves_all": "SUPPORTED",
+    "T2_non_tautological_temporal_evidence_resolves_some": "SUPPORTED",
+    "T3_one_binary_sentinel_can_replace_full_census_in_some": "SUPPORTED",
+    "T4_some_cases_require_multiple_spacetime_probes": "REFUTED",
+    "T5_original_census_remeasurement_is_not_new_information": "SUPPORTED"
+  },
+  "verified_counts": {
+    "all_worlds": 768,
+    "occupancy_history_alias": 189,
+    "maturity_known_from_occupancy": 141,
+    "maturity_uncertain": 48,
+    "maturity_resolvable_by_perfect_selected_source_tags": 36,
+    "maturity_unresolved_even_by_all_perfect_source_tags": 12,
+    "lag2_identity_census_positive_control_resolved": 12,
+    "non_tautological_one_extra_full_census_resolves": 12,
+    "non_tautological_one_binary_site_time_resolves": 12,
+    "non_tautological_two_or_three_binary_probes_required": 0,
+    "source_geometry": "clustered",
+    "adjacency": "rook",
+    "non_source_node_counts": {
+      "1": 8,
+      "2": 3,
+      "4": 1
+    },
+    "present_T_values": {
+      "3": 2,
+      "4": 10
+    },
+    "past_state_conditioned_on_later_t8_snapshot": 12
+  },
+  "scientific_caution": {
+    "post_exposure_chronology_audit_not_a_preregistered_hypothesis": true,
+    "original_target_maturation_lag2_is_abstract_synthetic": true,
+    "early_presence_direct_target_time_Tminus2_EXCLUDED_from_new_measurement_success": true,
+    "target_time_all_less_than_last_original_census": true,
+    "retrospective_smoothing_not_prospective_forecasting": true,
+    "node_domain_one_to_four_not_general_field_ecology": true,
+    "model_aided_oracle_knows_candidate_history_predictions": true,
+    "no_2021_genotype_or_bird_data_read": true,
+    "no_new_EOG_WF_endpoint": true
+  }
+}

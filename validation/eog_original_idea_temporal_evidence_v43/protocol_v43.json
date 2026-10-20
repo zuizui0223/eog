@@ -1,0 +1,143 @@
+{
+  "schema": "eog.original_idea.source_alias_temporal_observability.protocol.v43",
+  "status": "FROZEN_BEFORE_V43_SITE_TIME_PREDICTION_SCORING__POST_V42_EXPOSURE",
+  "question": "Among the 12 source+occupancy observationally equivalent worlds with differing lag2 synthetic maturity, which additional pre-present occupancy time and site observations discriminate that target, excluding tautological direct measurement of its age-threshold target?",
+  "source": {
+    "base_commit": "f3a3d3a20922af717d48bfd9bf137eefdf67d5f3",
+    "v41_source_sha256": "34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d",
+    "v42_protocol": "validation/eog_provenance_uncertainty_decomposition_v42/protocol_v42.json",
+    "v42_frozen": "validation/eog_provenance_uncertainty_decomposition_v42/result_locked_v42.json",
+    "v42_result_sha256": "32887217c613ea92fd20e32d60d0a7e93ef8355c628ea955f968bec98436e273",
+    "v42_scenario_csv_sha256": "45cab09343adf58352b93eb6faeff6b6044cbfdac50129800b02d8bbb2f0e8bc",
+    "reviewed_prior_counts": {
+      "all_worlds": 768,
+      "occupancy_history_alias": 189,
+      "maturity_known_from_occupancy": 141,
+      "maturity_uncertain": 48,
+      "maturity_resolvable_by_perfect_selected_source_tags": 36,
+      "maturity_unresolved_even_by_all_perfect_source_tags": 12
+    },
+    "already_exposed_geometry_of_12": "all clustered-source rook-neighborhood based on reviewed v42 CSV; NOT independently blinded or causal"
+  },
+  "world_design": {
+    "simulator": "same exact v23, v41 and v42 source graph, three activation histories and first-arrival times; all 768 worlds used for checks, 12 irreducible v42 mature-state worlds scored",
+    "original_occupancy_census_times": [
+      4,
+      5,
+      6,
+      8
+    ],
+    "baseline_information": "exact original four non-source occupancy snapshots plus all perfect earliest-source tags at every non-source node (optimistic upper bound)",
+    "present_horizon": "same v26 T*=max first arrival over all non-source nodes and three candidate histories",
+    "ecological_target": "same v26 binary persistent_threshold_lag2: mature iff first_arrival<=T*-2; source-site nodes excluded",
+    "time_domain": "all integer times t from 0 to T* inclusive, do not access t>T*",
+    "observation_modes": [
+      "one complete additional non-source-node occupancy census at a time t",
+      "one individual non-source-node binary presence readout at a time t",
+      "set of individual binary node-time measurements with minimal-cardinality coverage of remaining target-different candidate-history pairs"
+    ],
+    "candidate_outcome_definition": "true-history-specific binary 1[first_arrival(node)<=t] only, no noisy field detections",
+    "candidate_history_prior": "uniform over all three original histories; baseline conditioning on complete ideal source label and original occupancy signature",
+    "selection_not_truth_leakage": "candidate-history signatures and target-equivalence classes may guide an oracle design, but the actual true-history identity/observed reports are NOT used to select events",
+    "no_field_effort_or_selection_cost_estimated": true
+  },
+  "contrasts": {
+    "primary_non_tautological": {
+      "exclude_original_observed_times": true,
+      "exclude_target_identity_time_tstar_minus_two": true,
+      "why_exclude": "a full perfect occupancy census at t=T*-2 is definitionally IDENTICAL to the synthetic lag2 mature-state target at T*, hence not independent prediction evidence",
+      "exact_minimal_binary_measurement_budget_max": 3,
+      "one_optimally_selected_census": "select earliest t maximizing conditional mutual information about target given complete initial observation and uniform candidate history prior, return predicted exact resolution and max bits; use stable chronological ties",
+      "earliest_single_binary": "select earliest t then node ID among all exact one-probe target-resolving candidates; classification is model-aided oracle not a prospective field schedule",
+      "minimal_binary_set_cover": "exact deterministic bitmask shortest-set-cover over target-discordant pairs of baseline-equivalent histories; tie-break by number of measurements then time then node ID",
+      "unidentifiable": "report inability of the entire allowed perfect non-tautological observation library to distinguish current target; never guess"
+    },
+    "positive_tautology_control": {
+      "allowed_identity_time": "t=T*-2",
+      "expected": "perfect complete census at T*-2 directly encodes each mature-state bit; exact rescue of all 12 must be reported explicitly as definitional",
+      "claim_is_not_novel_biological_prediction": true
+    },
+    "fixed_calendar_census_sensitivity": {
+      "probe_times": [
+        0,
+        1,
+        2,
+        3,
+        7,
+        9,
+        10,
+        11,
+        12
+      ],
+      "ignore_if_after_present_Tstar": true,
+      "skip_if_already_observed_original_time": true,
+      "skip_if_equal_tstar_minus_two": true,
+      "report_resolved_of_12_with_applicable_denominator": true
+    },
+    "control_original_times": {
+      "times": [
+        4,
+        5,
+        6,
+        8
+      ],
+      "expected_conditional_information_about_maturity": "zero, as already part of baseline",
+      "when_after_present_horizon": "do not treat future census as existing baseline information"
+    }
+  },
+  "metrics": {
+    "main_denominator": 12,
+    "information_definition": "I(maturity target; perfect extra readout | initial 4 occupancy and complete perfect source tag library), same original uniform three-history prior; no new Bayesian parameter fitting",
+    "resolution_definition": "all target-discordant history pairs within any baseline-equivalence class distinguishable by chosen observations",
+    "exact_set_cover_only_on_target_discordant_observationally_equivalent_pairs": true,
+    "main_outputs": [
+      "per-scenario source geometry, neighborhood, mature-state alternative target counts, Tstar, non-tautological census / sentinel rescue, minimum binary events, identity-census control, fixed calendar applicability",
+      "all 12 counts and distributions",
+      "strict original 768/189/141/36/12 world population check",
+      "exact posterior information and Bayes target-error reductions, conditional on old complete source tags"
+    ],
+    "privacy": "synthetic node IDs and world scenario keys only; no individual bird/geographic data"
+  },
+  "predeclared_testable_predictions": [
+    {
+      "id": "T1_definitionally_direct_target_census_resolves_all",
+      "rule": "all 12 residual worlds are resolved by perfect full census at t=T*-2 (a mathematical positive control, not new ecology)"
+    },
+    {
+      "id": "T2_non_tautological_temporal_evidence_resolves_some",
+      "rule": "at least one of 12 is resolved by a single non-tautological extra full census time t (may be REFUTED)"
+    },
+    {
+      "id": "T3_one_binary_sentinel_can_replace_full_census_in_some",
+      "rule": "at least one of 12 is resolved by one non-tautological binary node×time presence reading (may be REFUTED)"
+    },
+    {
+      "id": "T4_some_cases_require_multiple_spacetime_probes",
+      "rule": "at least one of 12 needs at least 2 non-tautological node×time binary readings for exact maturity-target identification (may be REFUTED)"
+    },
+    {
+      "id": "T5_original_census_remeasurement_is_not_new_information",
+      "rule": "repeating any original snapshot time at or before T* contributes 0 conditional target information (structural negative control)"
+    }
+  ],
+  "mandatory_checks": [
+    "v41 complete canonical original source rerun SHA256 exact",
+    "v42 previous original CSV classification 141/36/12 reconciled without copying individual biological observations",
+    "12 residual worlds exact from 768 unchanged latent graph scenarios; all three activation histories",
+    "perfect-all source aliases not silently dropped",
+    "no t>Tstar observation",
+    "no timestamp Tstar-2 treated as non-tautological independent predictor",
+    "zero information for source+occupancy baseline re-observation",
+    "all original v42/CIs/maturity target process and EOG-WF closure unchanged",
+    "report all five original prediction verdicts including REFUTED"
+  ],
+  "scientific_boundaries": {
+    "new_field_colonization_or_genetic_result": false,
+    "perfect_binary_occupancy_or_source_label_assays_calibrated_in_nature": false,
+    "v42_12_cases_already_exposed_to_analyst": true,
+    "post_v42_analysis_not_independent_replication": true,
+    "oracle_design_candidate_histories_assumed_known": true,
+    "factual_EOG_WF_3_31_3_modified": false,
+    "existing_methods_in_ecology_and_evolution_submission_validation_reopened": false
+  }
+}

@@ -1,0 +1,106 @@
+name: EOG v43 non-tautological temporal evidence for maturity aliases
+
+on:
+  pull_request:
+    paths:
+      - "validation/eog_original_idea_temporal_evidence_v43/**"
+      - "benchmarks/run_eog_temporal_evidence_v43.py"
+      - "tests/test_eog_temporal_evidence_v43.py"
+      - "docs/eog_minimal_temporal_evidence_v43.md"
+      - ".github/workflows/eog-minimal-temporal-evidence-v43.yml"
+  push:
+    branches: [main]
+    paths:
+      - "validation/eog_original_idea_temporal_evidence_v43/**"
+      - "benchmarks/run_eog_temporal_evidence_v43.py"
+      - "tests/test_eog_temporal_evidence_v43.py"
+      - ".github/workflows/eog-minimal-temporal-evidence-v43.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  temporal-evidence-known-truth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install original v23-v42 known-truth dependencies
+        run: python -m pip install -e .[dev]
+      - name: Test synthetic three-history time/space discrimination and honest tautology exclusion
+        run: python -m pytest -q tests/test_eog_temporal_evidence_v43.py
+      - name: Reproduce full original v41 sha then all twelve v42 unresolved maturity designs
+        run: |
+          python benchmarks/run_eog_temporal_evidence_v43.py \
+            --output-dir build/v43
+      - name: Enforce original 768 worlds, exact controls, no future/target-time leakage and fixed outcomes
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          d=Path('build/v43')
+          original=json.loads((d/'result_v43.json').read_text(encoding='utf-8'))
+          cases=json.loads((d/'twelve_residual_world_diagnostics.json').read_text(encoding='utf-8'))
+          proto=json.loads(Path('validation/eog_original_idea_temporal_evidence_v43/protocol_v43.json').read_text(encoding='utf-8'))
+          assert original['schema']=='eog.original_idea.non_tautological_temporal_evidence.result.v43'
+          assert original['status']=='SOURCE_ALIASED_MATURITY_TIMING_EVIDENCE_KNOWN_TRUTH_ONLY'
+          assert original['parent_population']==proto['source']['reviewed_prior_counts']
+          assert original['original_12_worlds_scored']==len(cases)==12
+          assert original['lag2_identity_census_positive_control_resolved']==12
+          assert sum(original['fixed_12_geometry'].values())==12
+          assert set(original['fixed_12_geometry'])=={'clustered|rook'}
+          assert original['original_v41_complete_canonical_sha256']==proto['source']['v41_source_sha256']
+          assert original['original_v42_frozen_sha256']==proto['source']['v42_result_sha256']
+          assert original['scientific_boundaries']==proto['scientific_boundaries']
+          assert original['no_real_source_genetic_or_field_data_read'] is True
+          assert original['positive_control_direct_target_identity_is_not_prediction'] is True
+          time_audit=original['post_exposure_temporal_chronology_audit']
+          assert time_audit['latest_original_occupancy_snapshot_time']==8
+          assert time_audit['target_present_T_distribution']=={'3':2,'4':10}
+          assert time_audit['non_source_equilibrium_node_count_distribution']=={'1':8,'2':3,'4':1}
+          assert time_audit['worlds_with_last_original_occupancy_snapshot_after_target_T']==12
+          assert time_audit['worlds_with_any_original_occupancy_snapshot_after_target_T']==12
+          assert time_audit['claim_of_prospective_maturity_prediction_authorized'] is False
+          assert time_audit['posthoc_chronology_reported_not_refitted'] is True
+          assert set(original['frozen_v43_verdicts'])=={p['id'] for p in proto['predeclared_testable_predictions']}
+          assert all(x in ('SUPPORTED','REFUTED') for x in original['frozen_v43_verdicts'].values())
+          for case in cases:
+            assert case['definitional_full_census_resolves'] is True
+            assert case['original_observation_retest_max_information_abs_error']<=1e-9
+            assert case['identity_time_t_minus_2']==case['common_present_t']-2
+            assert case['source_geometry']=='clustered' and case['neighborhood']=='rook'
+            assert all(t<=case['common_present_t'] for t in
+              ([case['single_best_non_tautological_full_census']['time']]
+                if case['single_best_non_tautological_full_census'] else []))
+            if case['minimum_non_tautological_binary_probes']:
+              assert all(t!=case['identity_time_t_minus_2'] and t not in (4,5,6,8)
+                for t,node in case['minimum_non_tautological_binary_probes'])
+            for t,x in case['fixed_calendar_one_census'].items():
+              if x['applicable']:
+                assert int(t)<=case['common_present_t'] and int(t)!=case['identity_time_t_minus_2']
+          canonical=lambda v:json.dumps(v,sort_keys=True,separators=(',',':'),
+              ensure_ascii=False,allow_nan=False).encode('utf-8')
+          assert original['twelve_world_diagnostics_sha256']==hashlib.sha256(canonical(cases)).hexdigest()
+          frozen=Path('validation/eog_original_idea_temporal_evidence_v43/result_locked_v43.json')
+          assert frozen.is_file(), 'Independently reviewed source result is mandatory'
+          reviewed=json.loads(frozen.read_text(encoding='utf-8'))
+          assert reviewed['schema']=='eog.original_idea.non_tautological_temporal_evidence.reviewed_v43'
+          assert reviewed['pre_exposure_protocol_commit']=='49d41d17df5495200a0e1faa0ed4ffb81e7d4eea'
+          assert reviewed['authority']['github_actions_run_id']==39416634712
+          assert reviewed['authority']['artifact_id']==12261633054
+          assert reviewed['authority']['complete_result_sha256']==hashlib.sha256(canonical(original)).hexdigest(), 'Frozen full source-verified original result differs'
+          assert reviewed['authority']['twelve_world_diagnostics_sha256']==original['twelve_world_diagnostics_sha256']
+          assert reviewed['predeclared_verdicts']==original['frozen_v43_verdicts']
+          assert reviewed['verified_counts']['present_T_values']==time_audit['target_present_T_distribution']
+          assert reviewed['verified_counts']['non_source_node_counts']==time_audit['non_source_equilibrium_node_count_distribution']
+          assert reviewed['verified_counts']['past_state_conditioned_on_later_t8_snapshot']==12
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EOG-V43-TEMPORAL-EVIDENCE-TWELVE-WORLD-AGGREGATES
+          path: build/v43/
+          if-no-files-found: warn
