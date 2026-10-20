@@ -85,12 +85,18 @@ jobs:
               ensure_ascii=False,allow_nan=False).encode('utf-8')
           assert original['twelve_world_diagnostics_sha256']==hashlib.sha256(canonical(cases)).hexdigest()
           frozen=Path('validation/eog_original_idea_temporal_evidence_v43/result_locked_v43.json')
-          if frozen.is_file():
-            reviewed=json.loads(frozen.read_text(encoding='utf-8'))
-            assert reviewed['schema']=='eog.original_idea.non_tautological_temporal_evidence.reviewed_v43'
-            assert reviewed['complete_result_sha256']==hashlib.sha256(canonical(original)).hexdigest()
-            assert reviewed['twelve_world_diagnostics_sha256']==original['twelve_world_diagnostics_sha256']
-            assert reviewed['predeclared_verdicts']==original['frozen_v43_verdicts']
+          assert frozen.is_file(), 'Independently reviewed source result is mandatory'
+          reviewed=json.loads(frozen.read_text(encoding='utf-8'))
+          assert reviewed['schema']=='eog.original_idea.non_tautological_temporal_evidence.reviewed_v43'
+          assert reviewed['pre_exposure_protocol_commit']=='49d41d17df5495200a0e1faa0ed4ffb81e7d4eea'
+          assert reviewed['authority']['github_actions_run_id']==39416634712
+          assert reviewed['authority']['artifact_id']==12261633054
+          assert reviewed['authority']['complete_result_sha256']==hashlib.sha256(canonical(original)).hexdigest(), 'Frozen full source-verified original result differs'
+          assert reviewed['authority']['twelve_world_diagnostics_sha256']==original['twelve_world_diagnostics_sha256']
+          assert reviewed['predeclared_verdicts']==original['frozen_v43_verdicts']
+          assert reviewed['verified_counts']['present_T_values']==time_audit['target_present_T_distribution']
+          assert reviewed['verified_counts']['non_source_node_counts']==time_audit['non_source_equilibrium_node_count_distribution']
+          assert reviewed['verified_counts']['past_state_conditioned_on_later_t8_snapshot']==12
           PY
       - uses: actions/upload-artifact@v4
         if: always()
