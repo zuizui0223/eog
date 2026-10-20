@@ -1,0 +1,93 @@
+{
+  "schema": "eog.original_idea.asof_time_maturity_provenance.protocol.v44",
+  "status": "FROZEN_BEFORE_ASOF_TIME_RESCORING__AFTER_V43_CHRONOLOGY_EXPOSED",
+  "primary_question": "How do conditional uncertainty, source-tag added information and target identifiability change when occupancy snapshots after the frozen synthetic maturity target horizon Tstar are removed rather than used retrospectively?",
+  "parent": {
+    "base_commit": "8d9b83888be491764a51978802ccafd2fda3e3d1",
+    "v41_complete_canonical_sha256": "34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d",
+    "v42_complete_canonical_sha256": "32887217c613ea92fd20e32d60d0a7e93ef8355c628ea955f968bec98436e273",
+    "v43_complete_canonical_sha256": "04f24a88911b76da4c112a827dd4df4694152ff92dd350d413056f007ef05446",
+    "v43_reviewed": "validation/eog_original_idea_temporal_evidence_v43/result_locked_v43.json",
+    "full_source_history_aliased_maturity_targets_under_retrospective": 12,
+    "retrospective_occupancy_history_aliased": 189,
+    "retrospective_occupancy_maturity_ambiguous": 48,
+    "retrospective_full_perfect_source_maturity_ambiguous": 12,
+    "synthetic_worlds": 768
+  },
+  "design": {
+    "latent_worlds": "same full v23/v39/v41/v43 384 landscapes crossed with clustered/dispersed sources and three activation schedules; no filtering on outcome",
+    "full_occupancy_observation_times": [
+      4,
+      5,
+      6,
+      8
+    ],
+    "time_of_target": "Tstar = max first-arrival time over all original non-source nodes and all three latent histories, same v26; empty equilibrium non-source set yields no age-defined target",
+    "original_retrospective_information": "full original 4 occupancy snapshots at t4,t5,t6,t8, even if some after Tstar; this is reconstruction not a prospective forecast",
+    "asof_information": "only those original occupancy snapshots whose timestamp <= Tstar; do not impute or add new observations",
+    "asof_time_oracle_limitation": "Tstar is computed from the three candidate histories, not an independently available real-time date; this remains theoretical best-case as-of comparison",
+    "ecological_target": "unchanged v26 persistent_threshold_lag2 maturity map at Tstar; age>=2, may differ among histories; source nodes excluded",
+    "source_assay": "identical original v39 response-blind fixed confluence/random/unique-source site choices, q=.60, synthetic misclassification e=.10; and an optimistic upper bound with all perfect source labels",
+    "source_label_asof_assumption": "optimistically assume perfect or noisy first-arrival source tags for all nodes can be read at Tstar; real genomic assignments may require later samples and are NOT verified",
+    "no_real_genetic_or_survey_data": true,
+    "no_refit_of_source_graph_or_mature_target": true
+  },
+  "outcomes": {
+    "baseline_targets": [
+      "maturity_ambiguous_given_retrospective_occupancy",
+      "maturity_ambiguous_given_asof_occupancy",
+      "maturity_ambiguous_given_retrospective_occupancy_and_all_perfect_source_tags",
+      "maturity_ambiguous_given_asof_occupancy_and_all_perfect_source_tags"
+    ],
+    "report_all_policies": true,
+    "reported_for_target": "binary lag2 current state only, using same v41 Bayes posterior calculator",
+    "conditional_MI_and_expected_Bayes_accuracy": "calculate both as-of and retrospective added value of the SAME q=.6/e=.1 source-label assay relative to the appropriate occupancy baseline; do not treat differences in added MI as a paired direct forecast score",
+    "sampling_strata": [
+      "all",
+      "target_age_defined",
+      "Tstar_lt8",
+      "Tstar_ge8",
+      "retro_occupancy_history_alias",
+      "asof_occupancy_maturity_ambiguous",
+      "retrospective_12_perfect_source_aliases"
+    ],
+    "late_information": "Tstar<8 for history-bearing world; original t8 snapshot is after target; report all 0-to-4 as-of census count distribution and no-non-source worlds separately",
+    "identity_tautology": "when one original allowed snapshot occurs at Tstar-2, it directly encodes the target; report as a definitional identity control, not a successful prediction",
+    "uncertainty_metric": "exact expected target entropy and Bayes target error under uniform prior over original 3 candidate histories; no biological outcome forecasting claim",
+    "source_geometry": "clustered and dispersed counts side-by-side without causal attribution",
+    "never_leak_Tstar_future_readings": true,
+    "no_EOG_WF_fourth_endpoint": true
+  },
+  "predeclared_predictions": [
+    {
+      "id": "AS1_retrospective_occupancy_uses_later_than_target_data",
+      "rule": "at least the 12 previously identified mature-state source-alias worlds have an original t8 snapshot strictly after Tstar (parent integrity)"
+    },
+    {
+      "id": "AS2_asof_cutoff_exposes_more_uncertain_maturity_worlds",
+      "rule": "more than 48 original worlds have unknown maturity under only occupancy snapshots t<=Tstar, compared with retrospective occupancy (may be refuted)"
+    },
+    {
+      "id": "AS3_full_provenance_does_not_close_all_asof_maturity_aliases",
+      "rule": "at least 12 worlds remain mature-state ambiguous with as-of occupancy and every perfect source tag (structural lower bound)"
+    },
+    {
+      "id": "AS4_noisy_source_tags_retain_asof_target_information",
+      "rule": "some maturity-ambiguous asof worlds gain positive target information under q=.60,e=.10 confluence site measurements (may be refuted)"
+    },
+    {
+      "id": "AS5_forbidden_future_occupancy_cannot_improve_asof_result",
+      "rule": "asof target entropy and Bayes error cannot be LOWER than retrospective target risk for the same fixed world, either without source tags or with complete perfect source tags (mathematical monotonicity control)"
+    }
+  ],
+  "safety": {
+    "individual_real_genetic_recruitment_or_2026_camera_data_read": false,
+    "actual_prospective_field_validation": false,
+    "maturity_fitness_or_survival_empirically_measured": false,
+    "Tstar_predicted_independently_of_candidate_models": false,
+    "this_is_post_v43_design_sensitivity_not_independent_replication": true,
+    "original_v41_to_v43_protocols_and_12_realization_unmodified": true,
+    "no_fourth_EOG_WF_predictive_endpoint": true,
+    "EOG_WF_3_scored_31_STOP_3_administrative_unchanged": true
+  }
+}
