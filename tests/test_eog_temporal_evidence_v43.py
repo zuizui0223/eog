@@ -157,3 +157,32 @@ def test_no_external_biological_data_in_new_runner():
     text=(ROOT/"benchmarks/run_eog_temporal_evidence_v43.py").read_text()
     for forbidden in ("read_csv(","urllib","requests","Dispersaldata.txt","Geneticassignment_README.txt","mcp__"):
         assert forbidden not in text
+
+
+def test_final_source_reviewed_twelve_case_result_and_time_asof_hold_are_immutable():
+    p=PROTOCOL.parent/"result_locked_v43.json"
+    lock=json.loads(p.read_text(encoding="utf-8"))
+    assert lock["schema"]=="eog.original_idea.non_tautological_temporal_evidence.reviewed_v43"
+    assert lock["pre_exposure_protocol_commit"]=="49d41d17df5495200a0e1faa0ed4ffb81e7d4eea"
+    a=lock["authority"]
+    assert a["github_actions_run_id"]==39416634712
+    assert a["artifact_id"]==12261633054
+    assert a["artifact_zip_sha256"]==(
+        "4fc6fcc2a47377d61bfe6d518dca4f4944398568939d1dbe9acdad887188b394"
+    )
+    assert a["complete_result_sha256"]==(
+        "04f24a88911b76da4c112a827dd4df4694152ff92dd350d413056f007ef05446"
+    )
+    assert a["twelve_world_diagnostics_sha256"]==(
+        "2e5c00a3a596f70a522839702345316a6d024ef23f1793e639f9f6210560f939"
+    )
+    assert lock["verified_counts"]["non_tautological_one_binary_site_time_resolves"]==12
+    assert lock["verified_counts"]["non_tautological_two_or_three_binary_probes_required"]==0
+    assert lock["verified_counts"]["present_T_values"]=={"3":2,"4":10}
+    assert lock["verified_counts"]["non_source_node_counts"]=={"1":8,"2":3,"4":1}
+    assert lock["verified_counts"]["past_state_conditioned_on_later_t8_snapshot"]==12
+    assert lock["predeclared_verdicts"]["T4_some_cases_require_multiple_spacetime_probes"]=="REFUTED"
+    assert lock["scientific_caution"]["retrospective_smoothing_not_prospective_forecasting"] is True
+    assert lock["scientific_caution"]["early_presence_direct_target_time_Tminus2_EXCLUDED_from_new_measurement_success"] is True
+    assert lock["scientific_caution"]["post_exposure_chronology_audit_not_a_preregistered_hypothesis"] is True
+    assert lock["scientific_caution"]["no_new_EOG_WF_endpoint"] is True
