@@ -78,7 +78,7 @@ def verify_frozen(p:dict,v42:dict,v43:dict)->None:
         and design.get("no_refit_of_source_graph_or_mature_target") is True
         and "only those original occupancy snapshots whose timestamp <= Tstar"
             in design.get("asof_information","")
-        and "after target" in design.get("original_retrospective_information","")
+        and "even if some after Tstar" in design.get("original_retrospective_information","")
         and design.get("source_assay","").startswith("identical original v39")
     ):
         raise ValueError("As-of cutoff, frozen maturity target or source channel altered")
