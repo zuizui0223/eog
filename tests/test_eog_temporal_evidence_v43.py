@@ -141,7 +141,7 @@ def test_untrusted_time_node_target_changes_stop_instead_of_rescoring():
         evaluate_residual(baseline,target,arrivals,nodes+((1,1),),13)
     wrong=dict(target)
     wrong["h1"]=(("r0c0",True),("r0c1",True))
-    with pytest.raises(ValueError,match="definition"):
+    with pytest.raises(ValueError,match="declared exact maturity target"):
         evaluate_residual(baseline,wrong,arrivals,nodes,13)
 
 
