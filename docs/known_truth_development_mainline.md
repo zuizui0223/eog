@@ -156,6 +156,87 @@ or additional real EOG-WF predictions were scored. The empirical submission
 remains frozen at three scored endpoints, 31 scientific STOPs and three
 administrative exclusions.
 
+## v42–v44: from source-tag ambiguity to cutoff-only future-state information
+
+The original v41 showed idealized provenance information in **120/189**
+occupancy-history-ambiguous designs but target-specific lag2 maturity
+information in **48/189**, including 72 history-only cases. It is important
+not to treat those 72 as 72 unexplained *maturity* tasks: [v42](eog_provenance_uncertainty_v42.md)
+proved that mature status was **already determined by occupancy** in **141**
+of the 189. Of the genuinely uncertain 48, **36** are distinguishable under
+perfect observations of the same selected source-tag locations and **12**
+are not distinguishable under any complete perfect earliest-source-tag
+library. The latter are source/evidence-class observational equivalences.
+The residual *maturity-target* entropy after noisy q=.60/e=.10 tags was
+**0.118922 bit**, partitioned into synthetic measurement error/missingness
+**0.076594 bit (64.4%)**, additional *perfect* source locations **0 bit**,
+and irreducible source-tag-class residual **0.042328 bit (35.6%)**.
+This ordered information partition is neither a causal variance component
+nor a real genetic assay error estimate.
+
+[v43](eog_minimal_temporal_evidence_v43.md) evaluated a new, perfect
+time-resolved occupancy readout on the **12 original residual worlds**.
+A model-aided single non-tautological node×time presence readout can
+discriminate all 12 under the three known synthetic candidate histories
+(T2/T3 supported, T4 multiple-site requirement refuted). Crucially,
+**each maturity target was at synthetic t=3 or t=4 but the original
+information included a t=8 census**. This was **retrospective
+reconstruction with future-relative-to-target information**, NOT a
+forecast result. The positivity of a directly measured maturity-definition
+census at Tstar−2 was isolated as a tautological control. Nothing about
+the twelve original tiny clustered-source rook worlds supports general
+field surveillance conclusions.
+
+The subsequent [v44 as-of-time experiment](eog_original_idea_asof_time_provenance_v44.md)
+used four **precommitted** fixed pairs t=2→t=5, t=4→t=5,
+t=4→t=6 and t=4→t=7, always cutting *every observed datum* off at or
+before its cutoff. The initial baseline was one exact non-source-node
+occupancy census at cutoff, not the old four later snapshots. An idealized
+source-of-first-arrival tag could be measured only at a node **already
+occupied by cutoff**, under the known graph/potential-source law and assumed
+q=.60/e=.10 independent observation model. Every future target uses the
+unaltered v26 abstract lag2 or transient age-state mapping.
+
+| Original v44 cutoff/target, under the cutoff-occupied confluence policy | Cutoff maturity-target uncertain designs | Designs with positive extra source-tag information | Mean information over uncertain designs |
+| --- | ---: | ---: | ---: |
+| **Primary t=2→t=5, lag2 mature state** | **126** | **8** | **0.020563 bit** |
+| t=4→t=5, lag2 mature state | 59 | 51 | 0.409902 bit |
+| t=4→t=6, lag2 mature state (identity control) | 0 | 0 | 0 |
+| t=4→t=7, lag2 mature state | 0 | 0 | 0 |
+
+In the primary 126 uncertain worlds, the correct-target Bayes
+probability gain was **+0.012534** (about **1.25 percentage points**)
+and 8/126 had nonzero information. The same 126 worlds gave static
+confluence **0.019359 bit** and response-blind one-seed random
+**0.015121 bit** versus cutoff-occupied confluence **0.020563 bit**,
+only **+0.001204 bit** over the static confluence rule.
+Eight primary positives occur in clustered-source designs and zero
+in dispersed-source designs under this *conditional synthetic*
+evaluation; no cause or broadly useful field placement rule follows.
+
+All v44 A1–A6 directional/structural predictions were supported,
+but A3 (no future tag exposure), A4 (t+2 identity), and A6 (perfect tag
+bound) are **implementation/math controls**. The source-only dedicated
+GitHub Actions evidence at [run 39452406392](https://github.com/zuizui0223/eog/actions/runs/39452406392)
+was independently downloaded and inspected, including **18,432**
+source-world×panel×target×policy rows. Both complete integrity digests are
+frozen:
+
+- canonical full v44 result JSON SHA256
+  \`38c30f7de94574b26b8a0170bb25880d8a75f88433277de4b82bfbe7788d43ed\`;
+- complete per-world v44 CSV SHA256
+  \`5f7ca0e158f23cc9d479bdb51539458bf6ce4da3dced11a64bd310e80aee5b8e\`.
+
+See \`validation/eog_original_idea_asof_time_source_v44/result_frozen_v44.json\`
+and [merged PR #660](https://github.com/zuizui0223/eog/pull/660).
+These results show **strictly time-consistent information gain in
+some declared synthetic worlds**, not a real field model's independently
+validated forecast. Static potential source graph, source coordinates,
+simulator, error model and perfect cutoff census are optimistically known.
+No original Dryad genetics, real reproduction/maturation, detection effort,
+island founder record or novel fourth EOG-WF empirical endpoint was
+obtained. The existing EOG-WF 3/31/3 manuscript conclusion is unchanged.
+
 ## Active original-EOG virtual-world result
 
 The active programme now has three frozen stages.
