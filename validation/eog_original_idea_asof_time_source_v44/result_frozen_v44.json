@@ -1,0 +1,108 @@
+{
+  "schema": "eog.original_idea.asof_time_source_tag_information.frozen_review_v44",
+  "status": "INDEPENDENTLY_VERIFIED_CUTOFF_ONLY_SYNTHETIC_FUTURE_STATE_RESULT__NO_EMPIRICAL_SCORE",
+  "protocol_freeze_commit": "cbf852c9cd1aab7b36609ffca960da2325decadf",
+  "authority": {
+    "original_actions_run_id": 39452406392,
+    "original_head_sha": "6d9b6bb18791aac1177b63675bf0c908e38dc558",
+    "artifact_id": 12279172589,
+    "artifact_name": "EOG-V44-CUTOFF-ONLY-FUTURE-STATE-AGGREGATES",
+    "artifact_zip_sha256": "066d3d48a9ab06b6817680c447df3a416f15c8614e84bf9caf0cf9c790abbdbe",
+    "full_canonical_result_sha256": "38c30f7de94574b26b8a0170bb25880d8a75f88433277de4b82bfbe7788d43ed",
+    "full_csv_sha256": "5f7ca0e158f23cc9d479bdb51539458bf6ce4da3dced11a64bd310e80aee5b8e",
+    "canonicalization": "sha256(json.dumps(loaded_original_result, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode('utf-8'))",
+    "parent_v41_original_full_sha256": "34f6f2bd94b9b22854eb699c97607ec2b9408f0ea55bcd6d5103a4019581125d",
+    "parent_v43_retrospective_full_sha256": "04f24a88911b76da4c112a827dd4df4694152ff92dd350d413056f007ef05446"
+  },
+  "population": {
+    "base_worlds": 768,
+    "fixed_panels": 4,
+    "fixed_target_types": 2,
+    "fixed_site_policies": 3,
+    "unique_world_panel_target_policy_rows": 18432,
+    "same_t4_occupancy_equals_t6_lag2_maturity_worlds": 768,
+    "non_source_sites_over_all_worlds": 8972
+  },
+  "primary_cutoff_t2_target_t5_maturity_target_ambiguous": {
+    "n": 126,
+    "cutoff_occupied_confluence": {
+      "information_bits": 0.020563082140987607,
+      "expected_correct_target_gain": 0.012534126984126984,
+      "worlds_with_positive_information": 8,
+      "mean_actual_occupied_selected_sites": 0.06349206349206349,
+      "perfect_current_tag_information_upper_bits": 0.042328042328042326
+    },
+    "static_confluence": {
+      "information_bits": 0.01935868006035512,
+      "expected_correct_target_gain": 0.011953968253968255,
+      "worlds_with_positive_information": 8,
+      "mean_actual_occupied_selected_sites": 0.0582010582010582
+    },
+    "static_random": {
+      "information_bits": 0.015121211085582583,
+      "expected_correct_target_gain": 0.009255555555555605,
+      "worlds_with_positive_information": 6,
+      "mean_actual_occupied_selected_sites": 0.4523809523809524
+    },
+    "original_baseline_correct_target_probability": 0.6666666666666666,
+    "cutoff_aware_minus_static_confluence_information_bits": 0.0012044020806324877
+  },
+  "primary_source_geometry_descriptive": {
+    "clustered": {
+      "n_worlds": 384,
+      "maturity_target_ambiguous": 40,
+      "positive_information": 8,
+      "mean_information_bits_among_ambiguous": 0.06477370874411095
+    },
+    "dispersed": {
+      "n_worlds": 384,
+      "maturity_target_ambiguous": 86,
+      "positive_information": 0,
+      "mean_information_bits_among_ambiguous": 0
+    },
+    "causal_source_geometry_effect_identified": false
+  },
+  "other_fixed_panels_cutoff_aware_maturity": {
+    "t4_to_t5": {
+      "target_ambiguous": 59,
+      "positive_source_information": 51,
+      "mean_information_bits_among_ambiguous": 0.40990240257029525
+    },
+    "t4_to_t6": {
+      "target_ambiguous": 0,
+      "positive_source_information": 0,
+      "source_tag_information_bits": 0,
+      "structural_control": "maturity age2 at t6 is exactly occupancy at t4"
+    },
+    "t4_to_t7": {
+      "target_ambiguous": 0,
+      "positive_source_information": 0,
+      "source_tag_information_bits": 0
+    }
+  },
+  "original_predeclared_verdicts": {
+    "A1_primary_has_uncertain_future_maturity_cases": "SUPPORTED",
+    "A2_available_noisy_provenance_improves_some_future_maturity_predictions": "SUPPORTED",
+    "A3_future_unoccupied_sites_cannot_supply_current_labels": "SUPPORTED",
+    "A4_lag2_maturity_at_t6_is_already_known_from_full_t4_occupancy": "SUPPORTED",
+    "A5_cutoff_aware_site_selection_outperforms_static_confluence": "SUPPORTED",
+    "A6_perfect_cutoff_available_tags_bound_noisy_tags": "SUPPORTED"
+  },
+  "checks": {
+    "future_unoccupied_tag_read_violations": 0,
+    "perfect_cutoff_tags_bound_noisy_tags_violations": 0,
+    "full_v41_source_digest_reproduced": true,
+    "all_18432_unique_csv_rows_verified": true,
+    "all_six_original_hypotheses_retained": true,
+    "original_v43_12_retrospective_aliases_not_rescored": true
+  },
+  "hard_scientific_bounds": {
+    "asof_time_valid_controlled_simulation_only": true,
+    "perfect_cutoff_occupancy_and_known_source_graph_assumed": true,
+    "source_tag_is_idealized_first_arrival_not_genetic_ancestry": true,
+    "tag_coverage_and_miscall_rates_assumed_not_empirically_estimated": true,
+    "site_policy_benefit_small_and_not_field_cost_adjusted": true,
+    "no_independent_heldout_field_forecast_scored": true,
+    "original_EOG_WF_3_31_3_unchanged": true
+  }
+}
