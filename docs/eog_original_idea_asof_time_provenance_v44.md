@@ -79,3 +79,49 @@ python benchmarks/run_eog_asof_time_provenance_v44.py \
 \`\`\`
 
 The dedicated CI first checks the entire original v41 canonical 768-world result, then runs the strict cutoff-only report. An independently downloaded aggregate-only CSV plus full JSON will be frozen by exact SHA256 and reproduced in CI before merge.
+
+
+## Source-verified first cutoff-only result (2026-10-20)
+
+The original dedicated [Actions run 39452406392](https://github.com/zuizui0223/eog/actions/runs/39452406392) was independently inspected from its complete artifact **12279172589** (name \`EOG-V44-CUTOFF-ONLY-FUTURE-STATE-AGGREGATES\`). The 84,426-byte ZIP's SHA256 is \`066d3d48a9ab06b6817680c447df3a416f15c8614e84bf9caf0cf9c790abbdbe\`; the **complete original numerical JSON** canonical SHA256 is \`38c30f7de94574b26b8a0170bb25880d8a75f88433277de4b82bfbe7788d43ed\`, and the **entire 18,432-row per-world CSV** SHA256 is \`5f7ca0e158f23cc9d479bdb51539458bf6ce4da3dced11a64bd310e80aee5b8e\`. All three were independently verified. The fixed receipt at \`validation/eog_original_idea_asof_time_source_v44/result_frozen_v44.json\` requires future dedicated CI to match both original JSON and CSV exactly.
+
+Original source integrity and completeness checks passed: 768 initial synthetic world designs × four cutoff/forecast panels × two v26 future target states × three predeclared site policies = **18,432 unique** keyed scenario rows. The original complete v41 768-world canonical result SHA256 was independently reproduced before any new future-state scoring. There were **zero future unoccupied-site source-tag exposures**, zero noisy-vs-perfect tag information bound violations and no use of old post-target v23 snapshots as predictors.
+
+### Primary: as-of cutoff t=2 to synthetic maturity at t=5
+
+At this early clock, **126/768 designs** had different possible future lag-2 maturity maps among activation histories compatible with the *same full observed cutoff occupancy*. Thus 642 designs already had their maturity map identified at cutoff under the assumed candidate-history model and cannot gain additional target-specific information.
+
+The following refers to the **same 126 target-uncertain designs**. All site policies have **at most three nominal measurement locations**, but many are unoccupied, hence no source label can be read.
+
+| Policy | Mean conditional future-maturity information gain | Expected correct future-target accuracy gain | Number of 126 designs with positive information | Mean actually occupied assay sites |
+| --- | ---: | ---: | ---: | ---: |
+| **Cutoff-occupied confluence** | **0.020563 bit** | **+0.012534** absolute probability | **8** | **0.0635** |
+| Static confluence (v39) | 0.019359 bit | +0.011954 | 8 | 0.0582 |
+| Static SHA256 random (v39) | 0.015121 bit | +0.009256 | 6 | 0.4524 |
+
+Baseline Bayes correct-target probability across these 126 uncertain designs is **2/3** under the three equiprobable source activation orders. Under the cutoff-occupied confluence source-tag policy, the expected Bayes accuracy increases by **1.253 percentage points** to approximately **67.92%**. This is conditional on the defined synthetic world and known candidate histories, not observed holdout field accuracy.
+
+The **advantage of cutoff-occupied selection over static confluence was only +0.001204 bit**. A1, A2 and the directional A5 hypotheses were supported, but the A5 criterion required *any positive mean gain*, not a materiality threshold. It would be misleading to promote a +0.001204-bit difference to an empirically superior or cost-effective field sampling method.
+
+Using the exact per-world CSV, the 126 maturity-uncertain primary worlds comprise:
+
+| Frozen source geometry | All worlds | Cutoff maturity-uncertain | Noisy source tags provide some information |
+| --- | ---: | ---: | ---: |
+| Clustered potential sources | 384 | 40 | **8** |
+| Dispersed potential sources | 384 | 86 | **0** |
+
+The geometry-conditioned candidate sets differ and are not matched experimental treatment pairs; do not claim clustered geometry causally increases predictability. They illustrate that observation *availability* and the specific future target matter.
+
+### Horizon dependence and a target-definition negative control
+
+The predeclared **cutoff t=4, target t=5** maturity panel retains **59** designs with unknown maturity from cutoff occupancy. Cutoff-available source-tag information is positive in **51/59**, with mean information **0.409902 bit**; this is far larger than the primary t=2→t=5 panel. The other same-t4 transient-state panel has **124** uncertain designs and **91** with positive information (mean **0.391593 bit**).
+
+In the separately frozen **t=4→t=6** lag-2-maturity negative control, and across all **768** worlds, \`mature_at_6(node)\` is *definitionally identical* to \`occupied_at_4(node)\`, so source tags cannot add anything. There were **zero** ambiguous future target designs and exactly zero tag information for this target. In the t=4→t=7 panel, both original declared future state targets were already determined by cutoff occupancy within the restricted three-history world family; their uncertain-target denominators are **zero**, not 768 or 189. A result with zero ambiguity cannot validate a new predictive benefit.
+
+### Six preregistered outcomes and the hard scientific boundary
+
+All predeclared A1–A6 were **SUPPORTED** under the declared finite world ensemble. A3 (no future tags), A4 (lag-2 state identity) and A6 (perfect-current-tag upper bound) are **observation-leakage and mathematical controls**, not independent ecological discoveries. A1 confirms an eligible denominator, A2 confirms a **small, limited** positive model-world forecasting information value, and A5 confirms merely a tiny directional gain for a cutoff-aware policy.
+
+This is the first version of this particular *synthetic source-tag/value-of-information experiment* that genuinely imposes a strict historical observation cutoff. It is **not** a prospective field trial or independent biological heldout forecast: propagation, potential source coordinates, complete cutoff census and correct likelihood are assumed known, the hidden activation order comes from only three original schedules and the abstract v26 maturity mapping is not measured animal or plant reproduction.
+
+No actual Helgeland source/genetic data or island-year survey effort have been acquired. Do not add this as an EOG-WF fourth endpoint. The original Methods in Ecology and Evolution three scored /31 scientific STOP /3 administrative exclusions remain unchanged.
