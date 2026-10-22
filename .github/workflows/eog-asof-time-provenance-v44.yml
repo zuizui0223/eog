@@ -89,13 +89,27 @@ jobs:
               if s['policy']=='cutoff_occupied_confluence_top3'
               and s['subset']=='target_ambiguous']
           print('V44_CUTOFF_AWARE_FUTURE_PANEL_DIAGNOSTICS', json.dumps(panel_audit,sort_keys=True))
-          if frozen.is_file():
-              x=json.loads(frozen.read_text(encoding='utf-8'))
-              assert x['schema']=='eog.original_idea.asof_time_source_tag_information.frozen_review_v44'
-              canon=json.dumps(z,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode('utf-8')
-              assert hashlib.sha256(canon).hexdigest()==x['authority']['full_canonical_result_sha256']
-              assert x['authority']['full_csv_sha256']==z['full_csv_sha256']
-              assert x['predeclared_hypothesis_verdicts']==z['predeclared_hypothesis_verdicts']
+          assert frozen.is_file(), 'Complete independent v44 original result and scenario CSV checksum receipt required'
+          x=json.loads(frozen.read_text(encoding='utf-8'))
+          assert x['schema']=='eog.original_idea.asof_time_source_tag_information.frozen_review_v44'
+          assert x['protocol_freeze_commit']=='cbf852c9cd1aab7b36609ffca960da2325decadf'
+          assert x['authority']['original_actions_run_id']==39452406392
+          assert x['authority']['artifact_id']==12279172589
+          assert x['authority']['artifact_zip_sha256']=='066d3d48a9ab06b6817680c447df3a416f15c8614e84bf9caf0cf9c790abbdbe'
+          assert x['population']['unique_world_panel_target_policy_rows']==len(rows)==18432
+          assert x['population']['base_worlds']==z['populations']['base_worlds']
+          canon=json.dumps(z,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode('utf-8')
+          assert hashlib.sha256(canon).hexdigest()==x['authority']['full_canonical_result_sha256'], 'Entire original source-derived v44 JSON drifted'
+          assert x['authority']['full_csv_sha256']==z['full_csv_sha256'], 'Any original v44 per-world row drifted'
+          assert x['original_predeclared_verdicts']==z['predeclared_hypothesis_verdicts']
+          target=x['primary_cutoff_t2_target_t5_maturity_target_ambiguous']
+          primary=z['primary_early_t2_to_t5_maturity']
+          assert target['n']==primary['cutoff_occupied_confluence_top3']['n_world_designs']==126
+          assert target['cutoff_occupied_confluence']['information_bits']==primary['cutoff_occupied_confluence_top3']['mean_added_source_information_bits']
+          assert target['static_confluence']['information_bits']==primary['static_confluence_top3']['mean_added_source_information_bits']
+          assert target['static_random']['information_bits']==primary['static_sha256_random_top3']['mean_added_source_information_bits']
+          assert target['cutoff_occupied_confluence']['worlds_with_positive_information']==8
+          assert x['hard_scientific_bounds']['no_independent_heldout_field_forecast_scored'] is True
           PY
       - uses: actions/upload-artifact@v4
         if: always()
