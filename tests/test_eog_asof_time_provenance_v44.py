@@ -211,3 +211,32 @@ def test_asof_runner_never_fetches_genetics_or_full_future_snapshots():
     assert 'make_cutoff_inputs' in content
     assert 'present = bool(record["first"][node] <= cutoff)' in content
     assert 'if present:' in content
+
+
+def test_independent_source_verified_cutoff_result_is_locked_not_real_field_forecast():
+    lockpath=ROOT/"validation/eog_original_idea_asof_time_source_v44/result_frozen_v44.json"
+    x=json.loads(lockpath.read_text(encoding="utf-8"))
+    assert x["schema"]=="eog.original_idea.asof_time_source_tag_information.frozen_review_v44"
+    assert x["protocol_freeze_commit"]=="cbf852c9cd1aab7b36609ffca960da2325decadf"
+    a=x["authority"]
+    assert a["original_actions_run_id"]==39452406392
+    assert a["artifact_id"]==12279172589
+    assert a["artifact_zip_sha256"]=="066d3d48a9ab06b6817680c447df3a416f15c8614e84bf9caf0cf9c790abbdbe"
+    assert a["full_canonical_result_sha256"]=="38c30f7de94574b26b8a0170bb25880d8a75f88433277de4b82bfbe7788d43ed"
+    assert a["full_csv_sha256"]=="5f7ca0e158f23cc9d479bdb51539458bf6ce4da3dced11a64bd310e80aee5b8e"
+    assert x["population"]["unique_world_panel_target_policy_rows"]==768*4*2*3
+    v=x["primary_cutoff_t2_target_t5_maturity_target_ambiguous"]
+    assert v["n"]==126
+    assert v["cutoff_occupied_confluence"]["worlds_with_positive_information"]==8
+    assert v["cutoff_occupied_confluence"]["information_bits"]==pytest.approx(0.020563082140987607)
+    assert v["static_confluence"]["information_bits"]==pytest.approx(0.01935868006035512)
+    assert v["static_random"]["information_bits"]==pytest.approx(0.015121211085582583)
+    assert v["cutoff_occupied_confluence"]["expected_correct_target_gain"]==pytest.approx(0.012534126984126984)
+    assert x["primary_source_geometry_descriptive"]["clustered"]["positive_information"]==8
+    assert x["primary_source_geometry_descriptive"]["dispersed"]["positive_information"]==0
+    assert x["other_fixed_panels_cutoff_aware_maturity"]["t4_to_t5"]["target_ambiguous"]==59
+    assert x["other_fixed_panels_cutoff_aware_maturity"]["t4_to_t5"]["positive_source_information"]==51
+    assert x["other_fixed_panels_cutoff_aware_maturity"]["t4_to_t6"]["target_ambiguous"]==0
+    assert all(v=="SUPPORTED" for v in x["original_predeclared_verdicts"].values())
+    assert x["hard_scientific_bounds"]["no_independent_heldout_field_forecast_scored"] is True
+    assert x["hard_scientific_bounds"]["original_EOG_WF_3_31_3_unchanged"] is True
