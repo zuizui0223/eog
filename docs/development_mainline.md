@@ -35,7 +35,7 @@ Canonical closure assets:
 
 The previous state in which no fresh post-Daphnia paired endpoint had completed is historical and must not be used to reopen candidate search.
 
-## Current known-truth result (v39–v41, 2026-10-19)
+## Current known-truth result (v39–v44, 2026-10-22)
 
 **Active scientific status: origin-history information can survive an imperfect
 observation channel, but the proposed static-confluence placement heuristic did
@@ -111,6 +111,79 @@ HTTP 403; no 2021 individual/genetic record was analyzed. Stop additional
 same-archive proxy rescreens. This programme must **not** be appended as a
 fourth EOG-WF predictive endpoint. The frozen 3 scored / 31 STOP / 3
 administrative-exclusion denominator is unchanged.
+
+## v42–v44: target uncertainty and as-of-time source evidence (2026-10-22)
+
+The [v42 exact source-uncertainty decomposition](eog_provenance_uncertainty_v42.md)
+corrected an important v41 denominator interpretation. Of the **189** synthetic
+designs whose full historical activation schedule was not determined by the old
+occupancy observations, the v26 binary present-maturity target was **already
+known from occupancy alone in 141**. In the other **48**, perfect source
+readouts from the already selected sites can resolve the target in **36**;
+**12** remain ambiguous even with every ideal source tag. Among remaining
+noisy-assay maturity uncertainty, **64.4%** of entropy was attributed to
+synthetic missingness/miscall and **35.6%** to the remaining source-tag
+measurement-class ceiling, with **zero** added distinguishability from *extra
+perfect* source-site coverage. Zero such coverage information does **not**
+mean extra redundant noisy observations could not improve precision.
+
+[v43 exact source-aliased timing](eog_minimal_temporal_evidence_v43.md)
+showed that a model-aided single site×time binary occupancy readout can
+distinguish the target in **12/12** previously source-aliased worlds without
+simply reading the maturity definition at \`Tstar−2\`. Its essential
+post-exposure chronology audit also showed **all 12 target times are only
+t=3 or 4, while the baseline included a later t=8 census**. Thus this is
+**retrospective smoothing/reconstruction, NOT any prospective forecast**.
+The twelve worlds are already exposed and tiny (1–4 non-source nodes),
+all clustered-source/rook. This 12/12 result must not be reused as an EOG
+predictive validation.
+
+[v44 strict as-of-time source evidence](eog_original_idea_asof_time_provenance_v44.md)
+therefore fixed four new observation cutoffs and strictly later target
+times *before scoring*, with **only cutoff-time occupancy and
+source-of-earliest-arrival tags from nodes already occupied by cutoff**
+available to the latent-history forecaster. It retained the original
+768 synthetic worlds, uniform three-history prior, original v26 target maps
+and an assumed q=0.60/e=0.10 source-tag channel.
+
+- **Primary t=2→t=5 lag2 maturity:** **126/768** worlds have remaining
+  future-target uncertainty after a complete cutoff occupancy census. Tags
+  available at occupied potential confluences add nonzero conditional
+  information in **8/126**, with mean **0.020563 bit** and **+0.012534**
+  expected correct-target probability (1.25 percentage points). Static
+  confluence yields **0.019359 bit**, the one fixed response-blind random
+  seed **0.015121 bit**; the cutoff-aware minus static advantage is
+  **+0.001204 bit**, not material evidence for a better field sampling policy.
+- **Horizon matters:** t=4→t=5 maturity has **59** uncertain worlds; tags
+  provide some additional information in **51/59**, mean **0.409902 bit**.
+  At t=4→t=6 the lag2 maturity target is by definition *identical* to
+  cutoff occupancy at t=4, so **0** target-uncertain worlds and no positive
+  information can occur. The t=4→t=7 future states are similarly already
+  determined by cutoff occupancy in the fixed three-history model.
+- In the t=2→t=5 panel, all **8** positive-information worlds came from
+  clustered-source conditions (8/40 eligible clustered vs 0/86 dispersed).
+  This is conditional to candidate worlds, not a causal field inference.
+  All six preregistered v44 tests were supported, but A3/A4/A6 principally
+  enforce **time-leakage and mathematical integrity**, not independent
+  biological discoveries.
+
+The authentic v44 source-only CI result, exactly **18,432** synthetic
+world×panel×target×policy rows, is frozen by canonical JSON SHA256
+\`38c30f7de94574b26b8a0170bb25880d8a75f88433277de4b82bfbe7788d43ed\`
+and CSV SHA256
+\`5f7ca0e158f23cc9d479bdb51539458bf6ce4da3dced11a64bd310e80aee5b8e\`
+in \`validation/eog_original_idea_asof_time_source_v44/result_frozen_v44.json\`.
+
+**Current decision:** Declared future endpoints must be tested with an
+explicit information cutoff. Even when a synthetic, strictly time-valid
+source-tag readout carries additional information, the value is strongly
+cutoff-, horizon- and target-dependent. The graph, propagation law, potential
+source sites and exact cutoff occupancy were granted as known; the
+source tags are NOT measured ancestry or natal dispersal. **No real
+heldout ecological forecast or fourth EOG-WF endpoint was added**.
+The empirically frozen 3 scored /31 scientific STOP /3 administrative
+exclusions and Methods in Ecology and Evolution submission route remain
+unchanged.
 
 ## Post-closure active method architecture
 
