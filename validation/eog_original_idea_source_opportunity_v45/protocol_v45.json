@@ -1,0 +1,81 @@
+{
+  "schema": "eog.original_idea.cutoff_source_opportunity_diagnosticity.audit_protocol.v45",
+  "status": "POSTEXPOSURE_V44_SOURCE_ONLY_DIAGNOSTIC__CLASSIFICATIONS_FROZEN_BEFORE_REPLAY",
+  "question": "Disentangle failure to have any measurable source tag by forecast cutoff from availability of source tags that do not distinguish the chosen future target.",
+  "scientific_role": "A post-exposure forensic decomposition of an already evaluated 18,432-row synthetic result; NOT a new held-out validation, prospective protocol or causal ecological finding.",
+  "source": {
+    "repo_main_commit": "98d655741def5d2f4f3b0e4e86617fbc5b855ab8",
+    "v44_source_protocol": "validation/eog_original_idea_asof_time_source_v44/protocol_v44.json",
+    "v44_frozen_receipt": "validation/eog_original_idea_asof_time_source_v44/result_frozen_v44.json",
+    "v44_actions_run_id": 39452406392,
+    "original_artifact_id": 12279172589,
+    "original_artifact_name": "EOG-V44-CUTOFF-ONLY-FUTURE-STATE-AGGREGATES",
+    "original_zip_sha256": "066d3d48a9ab06b6817680c447df3a416f15c8614e84bf9caf0cf9c790abbdbe",
+    "original_canonical_result_json_sha256": "38c30f7de94574b26b8a0170bb25880d8a75f88433277de4b82bfbe7788d43ed",
+    "original_per_world_csv_sha256": "5f7ca0e158f23cc9d479bdb51539458bf6ce4da3dced11a64bd310e80aee5b8e",
+    "physical_rows": 18432,
+    "grain": "unique (design_key, panel, target, policy)",
+    "base_worlds": 768,
+    "panels": [
+      "primary_early",
+      "secondary_near",
+      "identity_control",
+      "secondary_late"
+    ],
+    "target_names": [
+      "persistent_threshold_lag2",
+      "transient_window_age1_2"
+    ],
+    "policy_names": [
+      "static_confluence_top3",
+      "static_sha256_random_top3",
+      "cutoff_occupied_confluence_top3"
+    ],
+    "source_geometries": [
+      "clustered",
+      "dispersed"
+    ]
+  },
+  "fixed_diagnostic_rules": {
+    "isolate_target_ambiguity": "Only score evidence opportunity versus target diagnosticity among rows with target_ambiguous_from_cutoff_occupancy==True; keep all 18,432 raw rows and count the target-known remainder",
+    "available_at_cutoff": "mean_cutoff_occupied_selected_sites > 1e-9; this is nonzero EXPECTED occupancy of at least one selected site over latent 3-history prior, not actual observation of a tag",
+    "informative_for_target": "added_source_information_bits > 1e-9 under original v44 q=0.60/e=0.10 noisy tag likelihood, conditional on cutoff occupancy",
+    "classes": [
+      "target_known_from_cutoff",
+      "target_uncertain_no_available_tag",
+      "target_uncertain_available_tag_not_diagnostic",
+      "target_uncertain_available_tag_diagnostic"
+    ],
+    "fail_closed_if_informative_but_no_available_tag": true,
+    "diagnostic_fraction": "count target-uncertain informative rows / count target-uncertain rows with nonzero expected available site; null if no available rows",
+    "opportunity_rate": "count target-uncertain rows with nonzero expected occupied selected site / count target-uncertain rows",
+    "gross_information_bits": "arithmetic mean original v44 conditional MI on all target-uncertain design rows; no new fit",
+    "conditional_info_on_available": "arithmetic mean original v44 conditional MI only over the target-uncertain designs with >0 expected observable sites; not per field sample",
+    "geometry_and_policy": "report every original panel×target×policy×geometry stratum, and geometry pooled with same fixed denominators",
+    "no_new_samples_likelihood_or_worlds": true
+  },
+  "required_reconciliation": {
+    "source_original_csv_18432_unique_rows": true,
+    "exact_original_sha256s": true,
+    "all_v44_original_four_panels_preserved": true,
+    "missing_or_duplicated_policy_target_geometries_fail": true,
+    "every_stratum_n_worlds_is_768_pooled_and_384_per_geometry": true,
+    "no_information_if_cutoff_target_known": true,
+    "no_information_if_no_selected_sites_currently_available": true,
+    "exact_existing_v44_primary_early_126_uncertain_and_8_cutoff_aware_informative": true,
+    "exact_existing_v44_secondary_near_59_uncertain_51_cutoff_aware_informative": true,
+    "no_frozen_v44_or_EOG_WF_endpoint_mutation": true
+  },
+  "interpretation_and_stop": {
+    "post_v44_counts_exposed_before_this_protocol": true,
+    "cannot_call_this_an_independent_preregistration": true,
+    "expected_source_tag_opportunity_is_not_an_actual_observed_genotype": true,
+    "label_availability_vs_information_is_conditional_to_target_and_assumed_simulator": true,
+    "observational_gates_do_not_identify_causal_effect_of_source_geometry": true,
+    "response_blind_one_fixed_seed_is_not_64_independent_samples": true,
+    "no_real_genetic_or_survey_effort_data_read": true,
+    "no_new_EOG_WF_scored_endpoint": true,
+    "EOG_WF_frozen_3_31_3_unchanged": true,
+    "no_future_automatic_v44_rescreens_without_distinct_biological_evidence": true
+  }
+}

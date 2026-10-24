@@ -237,6 +237,14 @@ No original Dryad genetics, real reproduction/maturation, detection effort,
 island founder record or novel fourth EOG-WF empirical endpoint was
 obtained. The existing EOG-WF 3/31/3 manuscript conclusion is unchanged.
 
+## v45: cutoff observation opportunity versus state-specific diagnosticity (post-exposure audit)
+
+The 18,432 per-world/target/panel/policy records from the already-scored original v44 known-truth run were reloaded **without rerunning any ecological generator**, after authenticating the original Actions artifact and whole CSV/JSON SHA256. The [v45 evidence audit](eog_source_opportunity_vs_target_diagnosticity_v45.md) quantifies why the same noisy first-arrival-source tag may be obtainable but unhelpful for a given future target.
+
+On the t=2→t=5 maturity target, **126** synthetic landscapes have future-state uncertainty after exact cutoff occupancy. Under the unchanged assumed q=0.60/e=0.10 observation model, the cutoff-occupied potential-confluence policy has at least one potentially occupied measurement site in **8/126**, all **8** target-informative. The original SHA256-ranked random-site policy has **105/126** potentially observable source-tag cases, but only **6** target-informative, leaving **99** cases with tag opportunity and no future-maturity information. This is NOT a genetic data coverage estimate; opportunity is **expected site occupancy under a finite three-history model**, not an actually observed label. When cutoff increases to t=4 for t=5 target, confluence opportunities rise to **51/59**, all 51 informative, but horizons and uncertainty denominators change too.
+
+This is a derived, already-exposed mechanism audit, not independent validation or proof of why the tag distributions differ in individual worlds. The archived v44 source itself does not establish which of the 99 labels are invariant versus merely uninformative about the particular target. More measurable tags alone need not convey more **target-relevant** information. Do not propose another same-source synthetic endpoint simply to find a favorable result; real acquisition, error and ecological-state evidence are required. The frozen empirical EOG-WF 3/31/3 scientific/submission boundary remains intact.
+
 ## Active original-EOG virtual-world result
 
 The active programme now has three frozen stages.

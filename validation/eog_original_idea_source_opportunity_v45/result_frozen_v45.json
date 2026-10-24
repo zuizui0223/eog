@@ -1,0 +1,100 @@
+{
+  "schema": "eog.original_idea.cutoff_opportunity_target_diagnosticity.reviewed_v45",
+  "status": "INDEPENDENTLY_REVIEWED_POSTEXPOSURE_SOURCE_ONLY_DIAGNOSTIC__NO_NEW_EMPIRICAL_OR_SIMULATION_ENDPOINT",
+  "protocol_freeze_commit": "8f4f752ac87cf2bf8c28e37f70b36ff13ef679b4",
+  "authority": {
+    "verification_actions_run_id": 40076505204,
+    "derived_artifact_id": 12552544408,
+    "derived_artifact_name": "EOG-V45-VERIFIED-ORIGINAL-V44-SOURCE-OPPORTUNITY-AUDIT",
+    "derived_artifact_zip_sha256": "4e7cbe713571614948411c0e9957b667b531ba401f40d2441b71b3434518e605",
+    "complete_canonical_audit_sha256": "fc5903dea8c187444e9c1c3e9eb721812d2b6754a4c773bf2a16293719f38152",
+    "canonicalization": "SHA256(json.dumps(loaded_derived_JSON,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode('utf-8'))",
+    "full_audit_summary_groups": 72,
+    "complete_original_source_rows": 18432,
+    "source_replayed_from_original_GitHub_actions_archive": true
+  },
+  "source_archive": {
+    "original_actions_run_id": 39452406392,
+    "original_artifact_id": 12279172589,
+    "original_artifact_zip_sha256": "066d3d48a9ab06b6817680c447df3a416f15c8614e84bf9caf0cf9c790abbdbe",
+    "original_csv_sha256": "5f7ca0e158f23cc9d479bdb51539458bf6ce4da3dced11a64bd310e80aee5b8e",
+    "original_canonical_json_sha256": "38c30f7de94574b26b8a0170bb25880d8a75f88433277de4b82bfbe7788d43ed",
+    "original_768_latent_worlds_not_refit_or_modified": true
+  },
+  "primary_cutoff_t2_future_t5_maturity": {
+    "target_uncertain_worlds": 126,
+    "target_already_known_worlds": 642,
+    "cutoff_occupied_confluence": {
+      "tag_opportunity_worlds": 8,
+      "info_positive_worlds": 8,
+      "opportunity_no_information": 0,
+      "mean_information_bits": 0.020563082140987607,
+      "conditional_fraction_informative": 1,
+      "mean_expected_occupied_selected_sites": 0.06349206349206349
+    },
+    "static_confluence": {
+      "tag_opportunity_worlds": 8,
+      "info_positive_worlds": 8,
+      "opportunity_no_information": 0,
+      "mean_information_bits": 0.01935868006035512
+    },
+    "fixed_source_blind_random": {
+      "tag_opportunity_worlds": 105,
+      "info_positive_worlds": 6,
+      "opportunity_no_information": 99,
+      "mean_information_bits": 0.015121211085582583,
+      "conditional_fraction_informative": 0.05714285714285714,
+      "mean_expected_occupied_selected_sites": 0.4523809523809524
+    },
+    "clustered": {
+      "target_uncertain": 40,
+      "cutoff_aware_tag_opportunity": 8,
+      "cutoff_aware_info_positive": 8
+    },
+    "dispersed": {
+      "target_uncertain": 86,
+      "cutoff_aware_tag_opportunity": 0,
+      "cutoff_aware_info_positive": 0
+    }
+  },
+  "secondary_cutoff_t4_future_t5_maturity": {
+    "target_uncertain_worlds": 59,
+    "target_already_known_worlds": 709,
+    "cutoff_occupied_confluence": {
+      "tag_opportunity_worlds": 51,
+      "info_positive_worlds": 51,
+      "opportunity_no_information": 0,
+      "mean_information_bits": 0.40990240257029525
+    },
+    "static_confluence": {
+      "tag_opportunity_worlds": 48,
+      "info_positive_worlds": 48,
+      "opportunity_no_information": 0,
+      "mean_information_bits": 0.382438135644616
+    },
+    "fixed_source_blind_random": {
+      "tag_opportunity_worlds": 59,
+      "info_positive_worlds": 50,
+      "opportunity_no_information": 9,
+      "mean_information_bits": 0.3792277869270126
+    }
+  },
+  "integrity": {
+    "full_original_csv_headers_unique_complete": true,
+    "all_18432_original_group_keys_unique": true,
+    "each_of_72_strata_reconciled_with_original_v44_source_aggregates": true,
+    "original_v44_cutoff_and_future_target_dates_preserved": true,
+    "no_positive_source_information_without_potential_cutoff_tag_opportunity": true,
+    "original_noise_likelihood_or_any_world_state_not_recomputed": true
+  },
+  "boundaries": {
+    "opportunity_expected_occupancy_not_actual_measured_source_genotype": true,
+    "information_target_specific_conditional_on_original_cutoff_occupancy": true,
+    "effect_size_field_and_observation_costs_unvalidated": true,
+    "postexposure_derived_counts_not_independent_prehypothesis_test": true,
+    "no_real_genetic_individual_or_demographic_records_accessed": true,
+    "no_new_EOG_WF_heldout_endpoint": true,
+    "frozen_3_scored_31_stop_3_exclusions_unchanged": true,
+    "stop_further_v44_same_source_posthoc_proxies": true
+  }
+}

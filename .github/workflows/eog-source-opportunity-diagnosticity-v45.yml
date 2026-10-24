@@ -1,0 +1,108 @@
+name: EOG v45 archived cutoff source opportunity and diagnosticity
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/audit_eog_source_opportunity_v45.py"
+      - "tests/test_eog_source_opportunity_v45.py"
+      - "docs/eog_source_opportunity_vs_target_diagnosticity_v45.md"
+      - "validation/eog_original_idea_source_opportunity_v45/**"
+      - ".github/workflows/eog-source-opportunity-diagnosticity-v45.yml"
+  push:
+    branches: [main]
+    paths:
+      - "benchmarks/audit_eog_source_opportunity_v45.py"
+      - "tests/test_eog_source_opportunity_v45.py"
+      - "validation/eog_original_idea_source_opportunity_v45/**"
+      - ".github/workflows/eog-source-opportunity-diagnosticity-v45.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify-fixed-original-v44-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test synthetic categories and fail-closed source rules
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_eog_source_opportunity_v45.py
+      - name: Read-only download of original verified v44 Actions output
+        uses: actions/download-artifact@v4
+        with:
+          name: EOG-V44-CUTOFF-ONLY-FUTURE-STATE-AGGREGATES
+          run-id: 39452406392
+          repository: zuizui0223/eog
+          github-token: ${{ github.token }}
+          path: build/original_v44
+      - name: Byte-verify original results and audit without new world simulations
+        run: |
+          python benchmarks/audit_eog_source_opportunity_v45.py \
+            --source build/original_v44 \
+            --output build/v45/opportunity_diagnosticity.json
+      - name: Enforce 18,432 complete original rows and non-overclaiming two-gate table
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path("build/v45/opportunity_diagnosticity.json")
+          a=json.loads(p.read_text(encoding="utf-8"))
+          proto=json.loads(Path("validation/eog_original_idea_source_opportunity_v45/protocol_v45.json").read_text())
+          assert a["schema"]=="eog.original_idea.cutoff_opportunity_target_diagnosticity.audit_result.v45"
+          assert a["status"]=="POST_EXPOSURE_AUTHENTICATED_18K_SOURCE_OPPORTUNITY_VS_TARGET_DIAGNOSTICITY__NO_NEW_ENDPOINT"
+          assert a["source"]["rows_exact"]==18432
+          assert a["source"]["base_worlds_exact"]==768
+          assert a["source"]["original_v44_actions_run_id"]==39452406392
+          assert a["source"]["original_artifact_id"]==12279172589
+          assert a["source"]["original_per_world_csv_sha256"]==proto["source"]["original_per_world_csv_sha256"]
+          assert a["n_summary_groups"]==72
+          primary=a["primary_early_t2_future_t5_maturity"]
+          conf=primary["cutoff_occupied_confluence_top3"]
+          rnd=primary["static_sha256_random_top3"]
+          assert conf["n_target_uncertain"]==rnd["n_target_uncertain"]==126
+          assert conf["n_tag_opportunity_given_target_uncertain"]==8
+          assert conf["n_target_uncertain_tag_opportunity_with_information"]==8
+          assert rnd["n_tag_opportunity_given_target_uncertain"]==105
+          assert rnd["n_target_uncertain_tag_opportunity_with_information"]==6
+          assert rnd["n_target_uncertain_tag_opportunity_but_no_information"]==99
+          assert a["secondary_near_t4_future_t5_maturity"]["cutoff_occupied_confluence_top3"]["n_tag_opportunity_given_target_uncertain"]==51
+          assert a["secondary_near_t4_future_t5_maturity"]["cutoff_occupied_confluence_top3"]["n_target_uncertain_tag_opportunity_with_information"]==51
+          assert a["primary_geometry_cutoff_aware"]["clustered"]["n_target_uncertain_tag_opportunity_with_information"]==8
+          assert a["primary_geometry_cutoff_aware"]["dispersed"]["n_target_uncertain_tag_opportunity_with_information"]==0
+          for row in a["summary_all_original_panel_targets_and_policies"]:
+            assert row["n_worlds"] in (384,768)
+            assert row["n_target_known"]+row["n_target_uncertain_no_tag_opportunity"]+row["n_target_uncertain_tag_opportunity_but_no_information"]+row["n_target_uncertain_tag_opportunity_with_information"]==row["n_worlds"]
+          assert a["scientific_boundaries"]==proto["interpretation_and_stop"]
+          assert a["scientific_boundaries"]["no_new_EOG_WF_scored_endpoint"]
+          digest=hashlib.sha256(json.dumps(a,sort_keys=True,separators=(",",":"),ensure_ascii=False,allow_nan=False).encode()).hexdigest()
+          print("V45_COMPLETE_CANONICAL_AUDIT_SHA256",digest)
+          print("V45_PRIMARY_OPPORTUNITY_VS_DIAGNOSTICITY",json.dumps(primary,sort_keys=True))
+          frozen=Path("validation/eog_original_idea_source_opportunity_v45/result_frozen_v45.json")
+          assert frozen.is_file(), "Source-reviewed complete audit receipt required"
+          locked=json.loads(frozen.read_text(encoding="utf-8"))
+          assert locked["schema"]=="eog.original_idea.cutoff_opportunity_target_diagnosticity.reviewed_v45"
+          assert locked["protocol_freeze_commit"]=="8f4f752ac87cf2bf8c28e37f70b36ff13ef679b4"
+          assert locked["authority"]["verification_actions_run_id"]==40076505204
+          assert locked["authority"]["derived_artifact_id"]==12552544408
+          assert locked["authority"]["derived_artifact_zip_sha256"]=="4e7cbe713571614948411c0e9957b667b531ba401f40d2441b71b3434518e605"
+          assert digest==locked["authority"]["complete_canonical_audit_sha256"], "Full source-derived audit changed"
+          assert locked["source_archive"]["original_csv_sha256"]==a["source"]["original_per_world_csv_sha256"]
+          assert locked["source_archive"]["original_canonical_json_sha256"]==a["source"]["original_complete_result_canonical_sha256"]
+          assert locked["primary_cutoff_t2_future_t5_maturity"]["cutoff_occupied_confluence"]["tag_opportunity_worlds"]==8
+          assert locked["primary_cutoff_t2_future_t5_maturity"]["fixed_source_blind_random"]["opportunity_no_information"]==99
+          assert locked["secondary_cutoff_t4_future_t5_maturity"]["cutoff_occupied_confluence"]["info_positive_worlds"]==51
+          assert locked["boundaries"]["postexposure_derived_counts_not_independent_prehypothesis_test"] is True
+          assert locked["boundaries"]["no_new_EOG_WF_heldout_endpoint"] is True
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: EOG-V45-VERIFIED-ORIGINAL-V44-SOURCE-OPPORTUNITY-AUDIT
+          path: build/v45/opportunity_diagnosticity.json
+          if-no-files-found: warn
