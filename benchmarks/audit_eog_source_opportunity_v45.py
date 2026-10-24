@@ -205,7 +205,7 @@ def audit(rows:list[dict],original:dict,p:dict)->dict:
         (x["panel"],x["target"],x["policy"],x["subset"]):x
         for x in original["summary_by_panel_target_policy"]
     }
-    if len(original_agg)!=len(original["summary_by_panel_target_policy"])!=48:
+    if (len(original_agg)!=48 or len(original["summary_by_panel_target_policy"])!=48):
         raise ValueError("Source v44 summary grain duplicates or missing")
     for row in rows:
         key=tuple(row[k] for k in ("design_key","panel","target","policy"))
