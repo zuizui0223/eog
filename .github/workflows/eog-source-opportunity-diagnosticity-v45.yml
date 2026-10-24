@@ -84,11 +84,21 @@ jobs:
           print("V45_COMPLETE_CANONICAL_AUDIT_SHA256",digest)
           print("V45_PRIMARY_OPPORTUNITY_VS_DIAGNOSTICITY",json.dumps(primary,sort_keys=True))
           frozen=Path("validation/eog_original_idea_source_opportunity_v45/result_frozen_v45.json")
-          if frozen.is_file():
-              locked=json.loads(frozen.read_text(encoding="utf-8"))
-              assert locked["schema"]=="eog.original_idea.cutoff_opportunity_target_diagnosticity.reviewed_v45"
-              assert digest==locked["authority"]["complete_canonical_audit_sha256"]
-              assert locked["source_archive"]["original_csv_sha256"]==a["source"]["original_per_world_csv_sha256"]
+          assert frozen.is_file(), "Source-reviewed complete audit receipt required"
+          locked=json.loads(frozen.read_text(encoding="utf-8"))
+          assert locked["schema"]=="eog.original_idea.cutoff_opportunity_target_diagnosticity.reviewed_v45"
+          assert locked["protocol_freeze_commit"]=="8f4f752ac87cf2bf8c28e37f70b36ff13ef679b4"
+          assert locked["authority"]["verification_actions_run_id"]==40076505204
+          assert locked["authority"]["derived_artifact_id"]==12552544408
+          assert locked["authority"]["derived_artifact_zip_sha256"]=="4e7cbe713571614948411c0e9957b667b531ba401f40d2441b71b3434518e605"
+          assert digest==locked["authority"]["complete_canonical_audit_sha256"], "Full source-derived audit changed"
+          assert locked["source_archive"]["original_csv_sha256"]==a["source"]["original_per_world_csv_sha256"]
+          assert locked["source_archive"]["original_canonical_json_sha256"]==a["source"]["original_complete_result_canonical_sha256"]
+          assert locked["primary_cutoff_t2_future_t5_maturity"]["cutoff_occupied_confluence"]["tag_opportunity_worlds"]==8
+          assert locked["primary_cutoff_t2_future_t5_maturity"]["fixed_source_blind_random"]["opportunity_no_information"]==99
+          assert locked["secondary_cutoff_t4_future_t5_maturity"]["cutoff_occupied_confluence"]["info_positive_worlds"]==51
+          assert locked["boundaries"]["postexposure_derived_counts_not_independent_prehypothesis_test"] is True
+          assert locked["boundaries"]["no_new_EOG_WF_heldout_endpoint"] is True
           PY
       - uses: actions/upload-artifact@v4
         if: always()
