@@ -35,7 +35,7 @@ Canonical closure assets:
 
 The previous state in which no fresh post-Daphnia paired endpoint had completed is historical and must not be used to reopen candidate search.
 
-## Current known-truth result (v39–v44, 2026-10-22)
+## Current known-truth result (v39–v45, 2026-10-24)
 
 **Active scientific status: origin-history information can survive an imperfect
 observation channel, but the proposed static-confluence placement heuristic did
@@ -184,6 +184,14 @@ heldout ecological forecast or fourth EOG-WF endpoint was added**.
 The empirically frozen 3 scored /31 scientific STOP /3 administrative
 exclusions and Methods in Ecology and Evolution submission route remain
 unchanged.
+
+### v45: potential availability is not target-diagnostic evidence
+
+The [v45 post-exposure original-output audit](eog_source_opportunity_vs_target_diagnosticity_v45.md) replayed the **same complete 18,432 v44 scenario rows** from the original SHA256-verified Actions archive, with no additional histories, likelihood fit or field source. It distinguishes two gates: a selected site is potentially occupied **at the observation cutoff**, and its available source label actually distinguishes the **declared future maturity target** after conditioning on cutoff occupancy.
+
+In the **126** future-maturity-uncertain designs for t=2→t=5, cutoff-occupied confluence tags have potential observation opportunity in only **8** designs, and all 8 have target information. A fixed response-blind random site policy has observation opportunity in **105/126**, but only **6** have target information; **99** have possible source-tag measurements but **zero extra target information**. For t=4→t=5, occupied confluence tags are potentially measurable and informative in **51/59** uncertain designs. The first gate controls whether evidence can exist by cutoff; the second controls whether that evidence answers this particular future-state question.
+
+These are previously exposed **synthetic** world outputs, not a new preregistered experiment, a biological source of dispersal, a causal comparison of source geometry or a field genetic sampling recommendation. The v45 audit independently verified original CSV/JSON source hashes and makes this interpretation a **STOP on further v44 same-source proxy mining**. Original three scored EOG-WF endpoints, 31 scientific STOPs, three administrative exclusions and submission route remain unchanged.
 
 ## Post-closure active method architecture
 
