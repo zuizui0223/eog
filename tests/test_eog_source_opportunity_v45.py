@@ -169,3 +169,31 @@ def test_no_real_data_or_new_field_model_fits_in_derived_audit():
     assert "load_authenticated_source" in s
     assert "added_source_information_bits" in s
     assert SCHEMA.endswith("v45")
+
+
+def test_independently_reviewed_full_v45_original_source_receipt_and_postexposure_status():
+    path=ROOT/"validation/eog_original_idea_source_opportunity_v45/result_frozen_v45.json"
+    j=json.loads(path.read_text(encoding="utf-8"))
+    assert j["schema"]=="eog.original_idea.cutoff_opportunity_target_diagnosticity.reviewed_v45"
+    assert j["protocol_freeze_commit"]=="8f4f752ac87cf2bf8c28e37f70b36ff13ef679b4"
+    auth=j["authority"]
+    assert auth["verification_actions_run_id"]==40076505204
+    assert auth["derived_artifact_id"]==12552544408
+    assert auth["derived_artifact_zip_sha256"]=="4e7cbe713571614948411c0e9957b667b531ba401f40d2441b71b3434518e605"
+    assert auth["complete_canonical_audit_sha256"]=="fc5903dea8c187444e9c1c3e9eb721812d2b6754a4c773bf2a16293719f38152"
+    assert auth["full_audit_summary_groups"]==72
+    assert auth["complete_original_source_rows"]==18432
+    x=j["primary_cutoff_t2_future_t5_maturity"]
+    assert x["target_uncertain_worlds"]==126
+    assert x["target_already_known_worlds"]==642
+    assert x["cutoff_occupied_confluence"]["tag_opportunity_worlds"]==8
+    assert x["cutoff_occupied_confluence"]["info_positive_worlds"]==8
+    assert x["fixed_source_blind_random"]["tag_opportunity_worlds"]==105
+    assert x["fixed_source_blind_random"]["info_positive_worlds"]==6
+    assert x["fixed_source_blind_random"]["opportunity_no_information"]==99
+    assert x["fixed_source_blind_random"]["conditional_fraction_informative"]==pytest.approx(6/105)
+    assert j["secondary_cutoff_t4_future_t5_maturity"]["cutoff_occupied_confluence"]["tag_opportunity_worlds"]==51
+    assert j["secondary_cutoff_t4_future_t5_maturity"]["cutoff_occupied_confluence"]["info_positive_worlds"]==51
+    assert j["boundaries"]["postexposure_derived_counts_not_independent_prehypothesis_test"] is True
+    assert j["boundaries"]["stop_further_v44_same_source_posthoc_proxies"] is True
+    assert j["boundaries"]["no_new_EOG_WF_heldout_endpoint"] is True
