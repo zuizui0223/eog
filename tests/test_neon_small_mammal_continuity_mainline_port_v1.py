@@ -75,7 +75,7 @@ def test_original_16_site_metrics_preserve_negative_primary_and_redundancy():
     z=receipt()
     assert len(rows)==16
     assert len({r["site_code"] for r in rows})==16
-    assert sorted(r["site_code"] for r in rows)==sorted(r["site_code"] for r in rows)
+    assert sorted(r["site_code"] for r in rows)==["JORN","KONA","LAJA","LENO","MLBS","MOAB","NIWO","NOGP","OAES","ONAQ","ORNL","OSBS","RMNP","SERC","SJER","SOAP"]
     assert all(float(r["max_species_survival_fraction"])==1 for r in rows)
     assert all(float(r["emergent_connectivity_gain"])<=0 for r in rows)
     assert all(float(r["null_adjusted_gain"])<=0 for r in rows)
