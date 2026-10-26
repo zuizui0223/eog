@@ -193,6 +193,59 @@ In the **126** future-maturity-uncertain designs for t=2→t=5, cutoff-occupied 
 
 These are previously exposed **synthetic** world outputs, not a new preregistered experiment, a biological source of dispersal, a causal comparison of source geometry or a field genetic sampling recommendation. The v45 audit independently verified original CSV/JSON source hashes and makes this interpretation a **STOP on further v44 same-source proxy mining**. Original three scored EOG-WF endpoints, 31 scientific STOPs, three administrative exclusions and submission route remain unchanged.
 
+## Separate closed empirical ecology paper: NEON small-mammal continuity
+
+In parallel with the frozen EOG-WF method paper, a **distinct empirical
+NEON small-mammal metacommunity programme** already completed once-only
+response access and ended with a *negative* predeclared turnover-complementarity
+test. This is **not** EOG-WF endpoint 4, nor a new v23–v45 synthetic result.
+
+The source-pinned prospective study used **16** independently selected
+NEON sites (small-mammal box trapping, DP1.10072.001,
+RELEASE-2026), a fixed 999-replicate complete-assemblage spatial-relocation
+null, and the frozen endpoint
+\`guild survival fraction − maximum constituent-species survival fraction\`.
+Original scientific authority:
+\`validation/neon_metacommunity_connectivity_v1/response_lock_v1.json\`
+and \`programme_closure_v1.json\` (result fingerprint
+\`c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860\`).
+
+- **0/16** sites showed positive emergent or null-adjusted continuity;
+  the fixed one-sided aggregate sign test gave **p=1.0**. The original
+  positive species-turnover hypothesis was **rejected**.
+- **16/16** sites had a constituent species individually continuous
+  through every declared world; **13/16** had **at least two** such
+  species. Across the sites, **32** species fulfilled this role, and
+  none did so at more than three sites. The 13/16 and 32-species
+  identity analyses were **post hoc descriptive**, not new confirmatory
+  hypotheses.
+- At **ORNL**, taxonomic pooling lowered the defined world-survival
+  fraction to **0.25** versus **1.00** for the best species. This is a
+  defined **occupancy-continuity pooling penalty**, not biological
+  proof that species richness reduces actual movement/fitness.
+
+The defensible ecological interpretation is **redundant occupancy
+continuity among constituent species**, not a general rejection of
+spatial insurance, ecological complementarity in other responses,
+true dispersal or functional redundancy.
+
+The independently source-preserved Oikos candidate is
+[the manuscript and figures](../manuscript/neon_small_mammal_continuity/MANUSCRIPT_V1.md),
+with [scientific boundary](../manuscript/neon_small_mammal_continuity/SUBMISSION_BOUNDARY_V1.json),
+[16-site results](../manuscript/neon_small_mammal_continuity/site_metrics_v1.csv)
+and [rebase reproducibility receipt](../manuscript/neon_small_mammal_continuity/MAINLINE_PORT_REPRODUCIBILITY_RECEIPT_V1.json).
+No biological response rerun, threshold changes, site replacement or
+new endpoint search is authorized. The blinded nine-page manuscript,
+four figures and 23-file anonymous reviewer pack were regenerated and
+verified independently on the current mainline.
+
+**Publication gate:** journal upload remains **unapproved** pending
+author list/title page, corresponding-author ORCID/contact, funding,
+conflicts, acknowledgements, human-reviewed AI disclosure and eventual
+permanent data/code archive. Existing author placeholders must not be
+filled from account memory or inferred. The primary EOG-WF 3 scored /
+31 scientific STOP / 3 administrative exclusion closure is unaffected.
+
 ## Post-closure active method architecture
 
 The frozen three-endpoint EOG-WF manuscript line remains closed and unchanged.
