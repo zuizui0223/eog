@@ -34,6 +34,23 @@ Canonical state:
 - Glanville independent evidence: [`validation/glanville_eogwf/README.md`](validation/glanville_eogwf/README.md)
 - STOC independent evidence: [`validation/stoc_eogwf/README.md`](validation/stoc_eogwf/README.md)
 
+## Separate ecological paper lane
+
+The independent NSF NEON 16-site small-mammal metacommunity programme
+has **completed** its prospectively fixed response analysis. Its
+turnover-generated spatial-continuity hypothesis was **not supported**
+(0/16 positive null-adjusted sites), while the frozen data show
+**multiple independently continuous species at 13/16 sites**.
+This is occupancy continuity under a declared graph-world assay, not
+measured animal movement or functional redundancy.
+
+The [scientifically fixed Oikos manuscript candidate](manuscript/neon_small_mammal_continuity/MANUSCRIPT_V1.md),
+[claim matrix](manuscript/neon_small_mammal_continuity/CLAIM_MATRIX_V1.json),
+and [source/author approval boundary](manuscript/neon_small_mammal_continuity/MAINLINE_PORT_REPRODUCIBILITY_RECEIPT_V1.json)
+are separate from the closed EOG-WF method-paper denominator.
+The paper has **not** been submitted and still needs explicit author/admin
+confirmation. No fourth EOG-WF empirical endpoint was added.
+
 ## Scientific center
 
 EOG keeps four objects distinct:
