@@ -1,0 +1,197 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.source_preserving_mainline_port.v1",
+  "status": "VERIFIED_CONTENT_EQUIVALENCE_OF_REBASED_PAPER_ASSETS__NOT_SUBMITTED",
+  "source": {
+    "neon_biological_result_lock": "validation/neon_metacommunity_connectivity_v1/response_lock_v1.json",
+    "response_lock_blob_sha1": "2805b90e6ce567d1e71f1e753ba371e2732dcfcb",
+    "response_fingerprint": "c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860",
+    "fixed_sites": 16,
+    "scored_sites": 16,
+    "positive_emergent_sites": 0,
+    "zero_null_adjusted_positive_sites": 16,
+    "sites_with_multiple_individually_continuous_species": 13,
+    "distinct_individually_continuous_species": 32,
+    "original_science_PR": 479,
+    "original_paper_PR": 482,
+    "paper_source_commit": "20814bf254359dac2ff8152fc85e8b773d065e8d",
+    "original_module_blob_sha1": "a09ecd84d965ab4d2d0161f0567a8367ec7fec21",
+    "main_base_commit": "ec96825902ba09322f2c303da04df7613b781428",
+    "initial_rebased_commit": "862963faf35eac5e186bfb46491e744b7dc669c1"
+  },
+  "old_asset": {
+    "workflow_run_id": 36301933396,
+    "artifact_id": 10925797449,
+    "outer_artifact_sha256": "36eda81b61d1407d9c5b4a5feb4f982fcbae19f4db62602e703a8359ba34ac71",
+    "pdf_sha256": "dbd28ade798f575737fb862162d66d1d50dd02408acd1422c5cc41eac796dca4",
+    "anonymous_inner_zip_sha256": "6f2c20618c1ff98b207aee98d246bc549bb4ccac61ff5c6dcdf1549c6f2f7f4e"
+  },
+  "new_asset": {
+    "workflow_run_id": 40261735987,
+    "artifact_id": 12625000500,
+    "outer_artifact_sha256": "d3942d89415d86b0783da99db474cf69943cec9f8ff714b63d086c2353ad3471",
+    "review_artifact_id": 12624449918,
+    "review_outer_artifact_sha256": "eb133ee5533a43748fb424ee2d085479ab286db8150617cfda64d8df8f6cf7f6",
+    "pdf_sha256": "6671a83d82b3ceeb96a3225b58ec364b51ee4783eb9994bb80fe8f43496460ae",
+    "pdf_pages": 9,
+    "pdf_author_field_empty": true,
+    "pdf_text_extracted_layout_sha256": "bede658b1eb597537e0fec37ada7f774e8eefe867ee560a0b8d140717ba332f2",
+    "pdf_extracted_text_identical_to_original": true,
+    "figures_png_sha256": [
+      "8fba1c4eca78842c5afef35dc6abe5c89f3e81cb19f9466a4df32ec8c015f1b0",
+      "ecb7d45b1c6b0cabdacf8ba0ed73e5f8180111a639b3e6d66a25323e89c7391d",
+      "10c7331a9fb6c3fe6c099b02c92f6035ab2c13d27503a0f8b89f54786cc866b0",
+      "141bdff36390533017c5051e80a4fbfad529180e09dfcdb5e22728ccec219365"
+    ],
+    "all_four_figures_byte_identical_to_original": true,
+    "review_zip_inner_sha256": "356498e9919e7310146dc774dfceb0087cb91f668611beb8d78e1898fb12d79d",
+    "review_member_count": 23,
+    "review_member_content_manifest_sha256": "2585d15b01d336b8a20f852da26842c39325d8ed159b8a9d0d43e51c96408db9",
+    "review_member_content_identical_to_original": true,
+    "review_zip_container_timestamp_variant": true,
+    "pdf_creation_metadata_timestamp_variant": true,
+    "no_identity_email_orcid_repo_owner_or_apikey_found_in_scanned_review_material": true
+  },
+  "original_32_imported_files": [
+    {
+      "path": ".github/workflows/neon-small-mammal-continuity-paper-assets.yml",
+      "blob_sha1": "4145e0b9a6f1a2165d566eabbc28913c8c60e19f"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/AI_USE_STATEMENT_V1.md",
+      "blob_sha1": "8a98e2712922a5e7051b504ab0a16ee21618c168"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/ANONYMOUS_REVIEW_BUNDLE_RECEIPT_V1.json",
+      "blob_sha1": "01df8092fbd2d701be252d451663312d00ca3fe5"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/ANONYMOUS_REVIEW_PACKAGE_V1.md",
+      "blob_sha1": "11cfdf3bf1556378f17ba022e216e8949cf73649"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/ASSET_RECEIPT_V1.json",
+      "blob_sha1": "717f8bbc6277d5ebe5b54b949293864e370171b7"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/CLAIM_MATRIX_V1.json",
+      "blob_sha1": "51fc3b9184c904fac586b98be29825129e6b0c44"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/COVER_LETTER_OIKOS_V1.md",
+      "blob_sha1": "e175d08fb77ac4dfcd6e7435c5f6609dd72ae791"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/DATA_CODE_AVAILABILITY_V1.md",
+      "blob_sha1": "77cd103ab7e3943c838fdb42ec97b9e897d726ab"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/FIGURE_CAPTIONS_ACCESSIBILITY_V1.md",
+      "blob_sha1": "7f2bd7f7f6ec7340b4e17b125f771fae363cdbc7"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/IDENTITY_REDUNDANCY_AUDIT_V1.json",
+      "blob_sha1": "f4a7df0b6b51e4d789e8b573c85f054266044ae7"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/JOURNAL_FIT_V1.md",
+      "blob_sha1": "2d831590d461bc1127f8849d9121863478d28754"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/LITERATURE_POSITIONING_V1.md",
+      "blob_sha1": "2cc4128e1c9102aa7e655b080212872a6f489f37"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/MANUSCRIPT_V1.md",
+      "blob_sha1": "ada5a84d3b862e122b1d6895c47ed3511de05854"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/OIKOS_BLINDED_MAIN_RECEIPT_V1.json",
+      "blob_sha1": "3ae681ddb7197260e301ca3a943af606a263582f"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/OIKOS_DECLARATIONS_PACKET_V1.md",
+      "blob_sha1": "db01a1cdc2df7e8931e5affbf34e9c10c0a8b81c"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/OIKOS_INITIAL_SUBMISSION_AUDIT_V1.json",
+      "blob_sha1": "8e7ac2eab70122cc6ca401908ef58e83def76b54"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/OIKOS_SIGNIFICANCE_STATEMENT_V1.md",
+      "blob_sha1": "f1b223d9a159de37d5ab5ebe2da69266fb3da099"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/OIKOS_TITLE_PAGE_TEMPLATE_V1.md",
+      "blob_sha1": "ddfd4b0d548f437b9f4940cf4146d65d676b4272"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/OIKOS_UPLOAD_MAP_V1.md",
+      "blob_sha1": "f80a5964f8d30f6932cc8984c424675df15d1397"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/SUBMISSION_BOUNDARY_V1.json",
+      "blob_sha1": "dbd648d2154935484cd64f4c78e319c8d4906b5c"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/SUBMISSION_CHECKLIST_V1.md",
+      "blob_sha1": "eff0833a87baee1e724a6e6a4d63a5e62feeb777"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/SUBMISSION_HANDOFF_V1.md",
+      "blob_sha1": "a1a28dd6833ba8f3aa0ffb8eb216b80022cc1310"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/VERIFIED_REFERENCES_V1.md",
+      "blob_sha1": "b756c1b8668b150eb599d9be428384fe7d1318b1"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/best_species_frequency_v1.csv",
+      "blob_sha1": "c2dd34dbd142f43b35d6f4136a94b8a95877d415"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/build_anonymous_review_bundle.py",
+      "blob_sha1": "57713c9c0125111b374d39db4823a524f6312184"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/build_oikos_blinded_pdf.py",
+      "blob_sha1": "07767f9ed6ce6f86b924dd257c3adb5ef6a03437"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/build_paper_assets.py",
+      "blob_sha1": "7b155ef8f8f5ae2954cc09c322d4d0883bb39161"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/export_oikos_figures.py",
+      "blob_sha1": "8550e6750ab9fa34eff2898624704efa4ec8e8de"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/site_metrics_v1.csv",
+      "blob_sha1": "c3a89797785aaf68e128b91272e6e58a544cde3f"
+    },
+    {
+      "path": "manuscript/neon_small_mammal_continuity/site_summary_v1.csv",
+      "blob_sha1": "a5d23fb36123d3977f30f4125e8a4d6d073fbb8e"
+    },
+    {
+      "path": "tests/test_neon_small_mammal_continuity_oikos_submission.py",
+      "blob_sha1": "26f736460236f9091a65ead5a400c3a332680819"
+    },
+    {
+      "path": "tests/test_neon_small_mammal_continuity_paper_assets.py",
+      "blob_sha1": "08d6595cbe4da88f8565b81848efe97061a52fc4"
+    }
+  ],
+  "boundaries": {
+    "no_biological_data_reopened": true,
+    "no_scientific_refit": true,
+    "no_endpoint_rescored": true,
+    "no_change_to_16_site_negative_primary": true,
+    "original_paper_files_preserved_byte_for_byte": true,
+    "this_receipt_does_not_claim_bitwise_reproduction_of_timestamped_PDF_or_ZIP": true,
+    "human_author_list_and_title_page_not_confirmed": true,
+    "funding_ethics_conflicts_and_disclosure_not_confirmed": true,
+    "paper_not_submitted": true,
+    "permanent_public_data_code_DOI_not_minted": true,
+    "EOG_WF_3_31_3_unchanged": true
+  }
+}
