@@ -193,5 +193,22 @@
     "paper_not_submitted": true,
     "permanent_public_data_code_DOI_not_minted": true,
     "EOG_WF_3_31_3_unchanged": true
+  },
+  "source_response_site_table_reconciliation": {
+    "original_response_workflow_run_id": 36120032663,
+    "original_aggregate_artifact_id": 10856684688,
+    "original_aggregate_artifact_zip_sha256": "8d7a05733f94432bc843a2502428ad455c24448bae995380f8aeffd366c4e18f",
+    "original_response_fingerprint": "c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860",
+    "source_site_count": 16,
+    "manuscript_site_count": 16,
+    "same_fixed_site_code_set": true,
+    "compared_per_site_numeric_fields": 11,
+    "total_numeric_site_values_compared": 176,
+    "compared_best_species_names_and_count_values": 32,
+    "numeric_or_species_mismatches": 0,
+    "numeric_absolute_tolerance": 1e-12,
+    "comparisons_performed_against": "Original verified response_result_v1.json from archived response artifact 10856684688 and paper figure/table_1 metrics original PDF build artifact 12625000500",
+    "all_original_neon_response_data_not_refit_or_downloaded_again": true,
+    "no_site_set_replacement_or_favorable_outcome_search": true
   }
 }
