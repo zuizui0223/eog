@@ -148,7 +148,7 @@ def test_author_submission_and_empirical_fourth_endpoint_remain_blocked():
     assert limits["human_author_list_and_title_page_not_confirmed"] is True
     assert limits["funding_ethics_conflicts_and_disclosure_not_confirmed"] is True
     assert limits["paper_not_submitted"] is True
-    assert limits["permanent_public_data_code_archive_DOI_not_minted"] is True
+    assert limits["permanent_public_data_code_DOI_not_minted"] is True
     assert limits["EOG_WF_3_31_3_unchanged"] is True
     text=(PAPER/"SUBMISSION_BOUNDARY_V1.json").read_text()
     assert '"scientific_state": "closed"' in text
