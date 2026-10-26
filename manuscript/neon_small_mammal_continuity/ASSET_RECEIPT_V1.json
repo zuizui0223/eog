@@ -1,0 +1,35 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.paper_asset_receipt.v1",
+  "workflow_run_id": 36301933396,
+  "workflow_head_sha": "41541eac9fd89cc295e30e43895a62843120124c",
+  "artifact_id": 10925797449,
+  "artifact_name": "neon-small-mammal-continuity-paper-assets-v1",
+  "artifact_digest": "sha256:36eda81b61d1407d9c5b4a5feb4f982fcbae19f4db62602e703a8359ba34ac71",
+  "asset_builder": "manuscript/neon_small_mammal_continuity/build_paper_assets.py",
+  "source_response_lock": "validation/neon_metacommunity_connectivity_v1/response_lock_v1.json",
+  "source_programme_closure": "validation/neon_metacommunity_connectivity_v1/programme_closure_v1.json",
+  "visual_qa_status": "passed for blinded PDF pages 1, 5 and 9 and high-resolution figure 3; no clipping, overlap or broken glyphs detected",
+  "frozen_values": {
+    "fixed_sites": 16,
+    "scored_sites": 16,
+    "positive_emergent_gain_sites": 0,
+    "community_survival_one_sites": 15,
+    "best_species_survival_one_sites": 16,
+    "strict_emergent_world_positive_sites": 0,
+    "ORNL_community_survival_fraction": 0.25,
+    "ORNL_best_species_survival_fraction": 1,
+    "sites_with_multiple_individually_continuous_species": 13,
+    "unique_individually_continuous_species": 32
+  },
+  "submission_files": {
+    "blinded_main_pdf": {
+      "sha256": "dbd28ade798f575737fb862162d66d1d50dd02408acd1422c5cc41eac796dca4",
+      "bytes": 21811,
+      "pages": 9
+    },
+    "figure_1_png_sha256": "8fba1c4eca78842c5afef35dc6abe5c89f3e81cb19f9466a4df32ec8c015f1b0",
+    "figure_2_png_sha256": "ecb7d45b1c6b0cabdacf8ba0ed73e5f8180111a639b3e6d66a25323e89c7391d",
+    "figure_3_png_sha256": "10c7331a9fb6c3fe6c099b02c92f6035ab2c13d27503a0f8b89f54786cc866b0",
+    "figure_4_png_sha256": "141bdff36390533017c5051e80a4fbfad529180e09dfcdb5e22728ccec219365"
+  }
+}
