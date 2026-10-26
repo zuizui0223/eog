@@ -93,6 +93,27 @@ def test_original_16_site_metrics_preserve_negative_primary_and_redundancy():
     assert float(ornl["emergent_connectivity_gain"])==-0.75
 
 
+
+def test_original_neon_response_artifact_matches_every_paper_site_metric_and_species_record():
+    witness=receipt()["source_response_site_table_reconciliation"]
+    assert witness["original_response_workflow_run_id"]==36120032663
+    assert witness["original_aggregate_artifact_id"]==10856684688
+    assert witness["original_aggregate_artifact_zip_sha256"]==(
+        "8d7a05733f94432bc843a2502428ad455c24448bae995380f8aeffd366c4e18f"
+    )
+    assert witness["original_response_fingerprint"]==json.loads(
+        RESPONSE.read_text(encoding="utf-8")
+    )["result_fingerprint"]
+    assert witness["source_site_count"]==witness["manuscript_site_count"]==16
+    assert witness["same_fixed_site_code_set"] is True
+    assert witness["compared_per_site_numeric_fields"]==11
+    assert witness["total_numeric_site_values_compared"]==16*11
+    assert witness["compared_best_species_names_and_count_values"]==16*2
+    assert witness["numeric_or_species_mismatches"]==0
+    assert witness["all_original_neon_response_data_not_refit_or_downloaded_again"] is True
+    assert witness["no_site_set_replacement_or_favorable_outcome_search"] is True
+
+
 def test_rendered_content_audit_explicitly_distinguishes_timestamp_variance():
     asset=receipt()["new_asset"]
     previous=receipt()["old_asset"]
