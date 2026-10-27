@@ -202,3 +202,32 @@ def test_no_new_neon_response_import_or_author_metadata_autofill():
     assert "MANUSCRIPT_V1.md" in script
     assert "MAINLINE_PORT_REPRODUCIBILITY_RECEIPT_V1.json" in script
     assert "submission_completed" in script
+
+
+def test_independently_inspected_real_policy_preflight_has_no_author_approval():
+    reviewed=json.loads((
+        submit.LANE/"OIKOS_POLICY_V2_PREFLIGHT_VERIFIED_2026_10_27.json"
+    ).read_text(encoding="utf-8"))
+    assert reviewed["schema"]=="eog.neon_small_mammal_continuity.oikos_policy_preflight_verified.v2"
+    assert reviewed["status"]=="REVIEWED_SOURCE_ONLY_FORM_FIELDS__HUMAN_ADMIN_PENDING__NO_AUTHOR_APPROVAL"
+    ci=reviewed["github_ci"]
+    assert ci["dedicated_source_only_successful_run_id"]==40525096917
+    assert ci["preflight_artifact_id"]==12744680353
+    assert ci["downloaded_artifact_zip_sha256"]==(
+        "fbe2a1131500af3c246b70b2eea6a6d2ecdc4c99c884b0d17b9e011dde5149af"
+    )
+    assert ci["original_data_availability_ScholarOne_field_sha256"]==(
+        "ff2c8677c0c5c6fe1918557fa6bff5be7a9d3ddb9cda89c8995c466cbe9b43e2"
+    )
+    assert ci["original_significance_ScholarOne_field_sha256"]==(
+        "4754599c0537e7bb4238defefd61511127a56bee44baffaa406a59573d76ffe2"
+    )
+    assert ci["policy_preflight_json_sha256"]==(
+        "36539a2df4d3a1e014abff69fcf5215f799b164fa4bea8312a000fb845041264"
+    )
+    assert ci["unapproved_pdf_in_artifact"] is False
+    assert reviewed["source"]["original_32_source_blob_sha1_match_count"]==32
+    assert reviewed["hard_flags"]["AI_declaration_human_approved"] is False
+    assert reviewed["hard_flags"]["final_blinded_policy_compliant_PDF_generated"] is False
+    assert reviewed["hard_flags"]["Oikos_ScholarOne_submission_completed"] is False
+    assert reviewed["science_claims"]["EOG_WF_three_scored_thirtyone_STOP_three_admin_unchanged"]
