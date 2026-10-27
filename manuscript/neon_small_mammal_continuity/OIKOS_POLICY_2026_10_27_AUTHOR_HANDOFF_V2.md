@@ -12,7 +12,7 @@ Checked **2026-10-27** against:
 
 The Oikos-specific page names Research Paper as a valid type, requires the title file, anonymous main text, reviewer data/code and relevant ScholarOne statements, and describes ScholarOne submission. The NSO Author Guidelines explicitly require:
 
-1. **Title page as a separate file** containing title, author list and affiliations; the main text must not disclose author names or affiliations. The corresponding author's ORCID must be entered in the ScholarOne user profile.
+1. **Title page as a separate file** containing title, author list and affiliations; the main text must not disclose author names or affiliations. The corresponding author's ORCID must be entered in the ScholarOne user profile. The **Introduction must begin on page two**, after the first page's title and abstract.
 2. **Data Availability Statement entered in the submission form**, not included in the anonymous main-text file. Anonymous data/code or an anonymous-accessible repository must be supplied for peer review.
 3. **Significance Statement entered in the submission form**, not the main text. The Oikos/NSO conflict, funding and acknowledgements statements are also entered in the submission system where applicable.
 4. **AI Use Statement at the end of the anonymous main text** when AI-assisted tools were used beyond minor copyediting, including for research code, manuscript content, displays, analysis or literature tasks. State the **actual tool(s), purpose and extent** and how human authors checked and accepted the work; the exact wording requires author/coauthor confirmation. AI cannot be an author.
@@ -26,8 +26,10 @@ The original source \`MANUSCRIPT_V1.md\` (Git blob SHA1
 \`ada5a84d3b862e122b1d6895c47ed3511de05854\`) contains a complete section
 \`## Data availability\` between Discussion and Figure captions, but **no**
 \`## AI use statement\`. The original PDF generator renders every source
-section, so its archived \`OIKOS_BLINDED_MAIN_V1.pdf\` does not meet those
-two current NSO placement rules.
+section. Direct extraction of **page 1 of the original 2026-10-26
+9-page PDF** further confirmed that its **Introduction starts on page 1**.
+Thus archived \`OIKOS_BLINDED_MAIN_V1.pdf\` does not meet the two
+current NSO statement-placement rules **or** the Introduction-on-page-two rule.
 
 The separate historical \`AI_USE_STATEMENT_V1.md\` is expressly a **draft**:
 the tool/model versions, actual uses and author accountability have not been
@@ -70,10 +72,16 @@ the human author(s), the builder may produce a **new**, distinctly named
 - add exactly the author-approved AI use statement after Discussion and
   before Figure captions/References, which is the end of the main scientific
   prose;
-- use the unchanged, SHA1-verified ReportLab renderer for the same blind
-  layout, line numbers and page numbering;
+- use the audited original SHA1-verified ReportLab **layout primitives**
+  for anonymous text, line numbers and page numbering, with a new
+  **forced page-two Introduction** boundary only in v2;
 - reject email, identity-bearing repository links, ORCID and unapproved
   placeholders in the **blinded** output.
+
+The test suite extracts the **first two pages of a synthetically approved
+v2 PDF** and asserts that page 1 contains Abstract and Keywords but **not**
+Introduction, which must appear on page 2; it also checks anonymous author
+metadata and that Data availability has been removed from that PDF.
 
 The output is only an **approved AI-statement/anonymous-main-file assembly**.
 It does **not** mark title page, author list/order, correspondence,
