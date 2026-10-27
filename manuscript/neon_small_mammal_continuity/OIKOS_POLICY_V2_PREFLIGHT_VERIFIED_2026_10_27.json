@@ -1,0 +1,55 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.oikos_policy_preflight_verified.v2",
+  "status": "REVIEWED_SOURCE_ONLY_FORM_FIELDS__HUMAN_ADMIN_PENDING__NO_AUTHOR_APPROVAL",
+  "checked_date": "2026-10-27",
+  "authoritative_policy_sources": [
+    "https://nso-journals.org/author-guidelines",
+    "https://nso-journals.org/oikos-for-authors",
+    "https://www.wiley.com/publishing/article/ai-guidelines"
+  ],
+  "source": {
+    "original_response_fingerprint": "c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860",
+    "original_32_source_blob_sha1_match_count": 32,
+    "manuscript_sha1": "ada5a84d3b862e122b1d6895c47ed3511de05854",
+    "original_manuscript_pdf_remains_unchanged": true,
+    "main_research_endpoints_rerun": false
+  },
+  "github_ci": {
+    "dedicated_source_only_successful_run_id": 40525096917,
+    "preflight_artifact_id": 12744680353,
+    "preflight_artifact_name": "NEON-OIKOS-POLICY-2026-PREFLIGHT-FIELDS-AUTHOR-APPROVAL-PENDING",
+    "downloaded_artifact_zip_sha256": "fbe2a1131500af3c246b70b2eea6a6d2ecdc4c99c884b0d17b9e011dde5149af",
+    "original_data_availability_ScholarOne_field_sha256": "ff2c8677c0c5c6fe1918557fa6bff5be7a9d3ddb9cda89c8995c466cbe9b43e2",
+    "original_significance_ScholarOne_field_sha256": "4754599c0537e7bb4238defefd61511127a56bee44baffaa406a59573d76ffe2",
+    "policy_preflight_json_sha256": "36539a2df4d3a1e014abff69fcf5215f799b164fa4bea8312a000fb845041264",
+    "files_observed": [
+      "OIKOS_SCHOLARONE_DATA_AVAILABILITY_V2.txt",
+      "OIKOS_SCHOLARONE_SIGNIFICANCE_V2.txt",
+      "OIKOS_SUBMISSION_POLICY_PREFLIGHT_V2.json"
+    ],
+    "unapproved_pdf_in_artifact": false
+  },
+  "science_claims": {
+    "fixed_site_denominator": 16,
+    "positive_confirmatory_turnover_gain_sites": 0,
+    "sites_with_at_least_one_continuous_species": 16,
+    "posthoc_sites_with_multiple_continuous_species": 13,
+    "EOG_WF_three_scored_thirtyone_STOP_three_admin_unchanged": true
+  },
+  "outstanding_author_only_actions": [
+    "Human authors must approve exact AI use disclosure including real tools, model versions/dates, extent and review",
+    "Confirm author list/order, affiliations and corresponding-author ORCID",
+    "Confirm ethics, funding, acknowledgements, actual conflicts of interest and CRediT roles as needed",
+    "Complete and authorize title page and required ScholarOne metadata",
+    "Upload anonymous reviewer data/code ZIP; satisfy permanent repository/DOI requirements at proper journal stage",
+    "Review ScholarOne compiled proof and submit in author-owned session"
+  ],
+  "hard_flags": {
+    "AI_declaration_human_approved": false,
+    "final_blinded_policy_compliant_PDF_generated": false,
+    "original_historical_pdf_approved_for_final_submission": false,
+    "author_title_page_confirmed": false,
+    "Oikos_ScholarOne_submission_completed": false,
+    "no_genetic_Neon_EOG_WF_new_ecological_endpoint": true
+  }
+}
