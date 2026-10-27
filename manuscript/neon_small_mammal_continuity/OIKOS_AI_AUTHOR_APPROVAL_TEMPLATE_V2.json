@@ -1,0 +1,22 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.oikos_author_ai_approval.v2",
+  "status": "PENDING_AUTHOR_REVIEW__DO_NOT_SUBMIT",
+  "approved_scope": "anonymous_main_text_AI_declaration_only",
+  "source_manuscript_git_blob_sha1": "ada5a84d3b862e122b1d6895c47ed3511de05854",
+  "author_approved_AI_statement": "",
+  "human_attestations": {
+    "actual_AI_tools_names_versions_and_dates_verified": false,
+    "AI_use_purpose_and_extent_personally_checked": false,
+    "all_coauthors_reviewed_and_approved_AI_wording": false,
+    "author_accountability_and_fact_checks_confirmed": false,
+    "no_author_identifiers_in_blinded_AI_declaration": false
+  },
+  "instructions": [
+    "This file is a public TEMPLATE only, not author approval. Keep the completed copy in a private untracked location; do not commit it or contact information.",
+    "Use approved_scope exactly; once all authors have genuinely verified the statement, change status to AUTHOR_APPROVED and all attestations to true in your private copy.",
+    "State the actual AI products, model names/versions and usage dates if known; never invent version histories.",
+    "Specify what AI assisted (e.g. code, literature, manuscript text, displays) and how human authors independently reviewed and corrected outputs.",
+    "Do not place author names, emails, ORCID, grants or identity-bearing repository URLs in the anonymous AI statement.",
+    "Approval of this statement alone does NOT complete author list, affiliations, funding, conflicts, title page, ScholarOne metadata, nor journal submission."
+  ]
+}
