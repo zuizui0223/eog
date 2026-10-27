@@ -246,6 +246,24 @@ permanent data/code archive. Existing author placeholders must not be
 filled from account memory or inferred. The primary EOG-WF 3 scored /
 31 scientific STOP / 3 administrative exclusion closure is unaffected.
 
+**October 27 Oikos journal-policy preflight:** the original 9-page,
+scientifically locked `OIKOS_BLINDED_MAIN_V1.pdf` remains a historical
+artifact and **must not be uploaded as the final anonymous main text**.
+The currently published [NSO Author Guidelines](https://nso-journals.org/author-guidelines)
+place the Data Availability Statement and Significance Statement in
+ScholarOne form fields, require approved AI-use text at the end of the
+anonymous main prose when applicable, and begin Introduction on page two.
+The historical source/PDF instead includes Data availability in its main
+text, omits approved AI wording, and starts Introduction on page one
+(confirmed by reading the original rendered PDF). The non-destructive
+[Oikos policy v2 builder and author handoff](../manuscript/neon_small_mammal_continuity/OIKOS_POLICY_2026_10_27_AUTHOR_HANDOFF_V2.md)
+separates the two form statements immediately and only creates a
+**new anonymous AI-approved PDF after explicit human author/coauthor
+confirmation**. The initial template is intentionally unapproved; no
+authorship, funding, ORCID, declarations or submission is inferred.
+The original 32 imported scientific manuscript files, older PDF and
+anonymous reviewer bundle receipts remain byte-preserved.
+
 ## Post-closure active method architecture
 
 The frozen three-endpoint EOG-WF manuscript line remains closed and unchanged.
