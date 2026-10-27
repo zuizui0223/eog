@@ -6,6 +6,7 @@ on:
       - 'manuscript/neon_small_mammal_continuity/build_oikos_initial_submission_policy_v2.py'
       - 'manuscript/neon_small_mammal_continuity/OIKOS_AI_AUTHOR_APPROVAL_TEMPLATE_V2.json'
       - 'manuscript/neon_small_mammal_continuity/OIKOS_POLICY_2026_10_27_AUTHOR_HANDOFF_V2.md'
+      - 'manuscript/neon_small_mammal_continuity/OIKOS_POLICY_V2_PREFLIGHT_VERIFIED_2026_10_27.json'
       - 'tests/test_neon_small_mammal_oikos_policy_v2.py'
       - '.github/workflows/neon-small-mammal-oikos-initial-policy-v2.yml'
   push:
@@ -14,6 +15,7 @@ on:
       - 'manuscript/neon_small_mammal_continuity/build_oikos_initial_submission_policy_v2.py'
       - 'manuscript/neon_small_mammal_continuity/OIKOS_AI_AUTHOR_APPROVAL_TEMPLATE_V2.json'
       - 'manuscript/neon_small_mammal_continuity/OIKOS_POLICY_2026_10_27_AUTHOR_HANDOFF_V2.md'
+      - 'manuscript/neon_small_mammal_continuity/OIKOS_POLICY_V2_PREFLIGHT_VERIFIED_2026_10_27.json'
       - 'tests/test_neon_small_mammal_oikos_policy_v2.py'
       - '.github/workflows/neon-small-mammal-oikos-initial-policy-v2.yml'
 
@@ -64,6 +66,14 @@ jobs:
           assert not list(folder.glob('*AUTHOR_APPROVED*'))
           assert (folder/'OIKOS_SCHOLARONE_DATA_AVAILABILITY_V2.txt').is_file()
           assert (folder/'OIKOS_SCHOLARONE_SIGNIFICANCE_V2.txt').is_file()
+          import hashlib
+          receipt=json.loads(Path('manuscript/neon_small_mammal_continuity/OIKOS_POLICY_V2_PREFLIGHT_VERIFIED_2026_10_27.json').read_text(encoding='utf-8'))
+          fixed=receipt['github_ci']
+          assert hashlib.sha256((folder/'OIKOS_SCHOLARONE_DATA_AVAILABILITY_V2.txt').read_bytes()).hexdigest()==fixed['original_data_availability_ScholarOne_field_sha256']
+          assert hashlib.sha256((folder/'OIKOS_SCHOLARONE_SIGNIFICANCE_V2.txt').read_bytes()).hexdigest()==fixed['original_significance_ScholarOne_field_sha256']
+          assert hashlib.sha256((folder/'OIKOS_SUBMISSION_POLICY_PREFLIGHT_V2.json').read_bytes()).hexdigest()==fixed['policy_preflight_json_sha256']
+          assert fixed['unapproved_pdf_in_artifact'] is False
+          assert receipt['hard_flags']['Oikos_ScholarOne_submission_completed'] is False
           PY
       - name: Upload science-grounded form fields and explicit outstanding author gates ONLY
         uses: actions/upload-artifact@v4
