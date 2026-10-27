@@ -148,3 +148,26 @@ def test_editing_site_headers_or_original_best_species_fails_before_claims(tmp_p
     # Pure symbolic guard: no inaccessible NEON original-response access.
     with pytest.raises(ValueError,match="World survival"):
         proof_for_ceiling(-.1,1)
+
+
+def test_independently_reviewed_entire_original_ceiling_audit_is_frozen():
+    path=ROOT/"validation/neon_mammal_ceiling_review_v1/result_frozen_v1.json"
+    frozen=json.loads(path.read_text(encoding="utf-8"))
+    assert frozen["schema"]=="eog.neon_small_mammal_continuity.ceiling_conditioned_null_review.reviewed_v1"
+    assert frozen["protocol_commit"]=="e947443888629c437cafcb4350badfff59aaf75d"
+    source=frozen["authority"]
+    assert source["authentic_github_actions_run_id"]==40541280189
+    assert source["github_artifact_id"]==12749724066
+    assert source["artifact_zip_sha256"]=="2d4cf555f92e1fe46e8e4f292181c5e59a90e32ec326a43ccd7e4a34a9fe69d3"
+    assert source["full_audit_canonical_sha256"]=="71dc92196f2438f66d6919c73a62527d7f02d33143e9422d8b7c1c52f2acc412"
+    assert source["original_16_site_blob_and_imported_32_files_matched"] is True
+    assert frozen["counts"]["observed_best_species_survival_equals_one"]==16
+    assert frozen["counts"]["sites_whose_permutation_null_upper_tail_p_one_is_forced_by_ceiling"]==16
+    assert frozen["counts"]["sites_with_at_least_two_independently_fully_continuous_species"]==13
+    assert frozen["counts"]["unique_continuity_provider_species_across_sites"]==32
+    assert frozen["synthetic_positive_feasibility"]["invented_alternating_AB_four_node_chain_raw_gain"]==1
+    assert frozen["synthetic_positive_feasibility"]["invented_alternating_AB_null_adjusted_positive"]
+    assert frozen["interpretation"]["existing_one_sided_p_one_is_not_a_test_proving_no_turnover_in_natural_metacommunities"] if "existing_one_sided_p_one_is_not_a_test_proving_no_turnover_in_natural_metacommunities" in frozen["interpretation"] else frozen["interpretation"]["no_proof_of_universal_ecological_absence_of_turnover"]
+    assert frozen["interpretation"]["original_locked_manuscript_paper_science_text_untouched"]
+    assert frozen["interpretation"]["Oikos_AI_approval_and_title_page_still_pending"]
+    assert frozen["interpretation"]["no_new_EOG_WF_score_or_change_to_3_31_3"]
