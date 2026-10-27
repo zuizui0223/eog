@@ -229,6 +229,22 @@ continuity among constituent species**, not a general rejection of
 spatial insurance, ecological complementarity in other responses,
 true dispersal or functional redundancy.
 
+**October 28 source-preserving reviewer audit (post-response):** the
+16/16 observed best-species survival fractions of **1.0** imply an
+**empirical maximum-ceiling condition**: a pooled-minus-best-species
+positive gain is algebraically impossible *within these saturated sites*.
+Because the original 999-permutation null keeps the guild-positive trap
+set fixed, the null site upper-tail **p=1**, nonpositive null-adjusted
+gains and zero strict guild-only worlds follow from the **same observed
+species saturation**; they are not separate independent confirmations.
+The [reviewer proof and synthetic positive counterexample]
+(eog_neon_oikos_ceiling_and_null_review_2026_10_28.md) check that the
+original method *can* detect positive turnover for different incidence
+patterns. The manuscript remains scientifically unchanged and closed;
+the proposed more precise interpretation requires human author approval
+before being inserted into the final Oikos paper. The strongly observed
+pattern remains 16/16 individually sufficient sites, with 13/16 having
+multiple sufficient species and 32 distinct providers across sites.
 The independently source-preserved Oikos candidate is
 [the manuscript and figures](../manuscript/neon_small_mammal_continuity/MANUSCRIPT_V1.md),
 with [scientific boundary](../manuscript/neon_small_mammal_continuity/SUBMISSION_BOUNDARY_V1.json),

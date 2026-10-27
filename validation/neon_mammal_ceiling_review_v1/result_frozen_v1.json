@@ -1,0 +1,44 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.ceiling_conditioned_null_review.reviewed_v1",
+  "status": "INDEPENDENTLY_INSPECTED_POST_RESPONSE_CEILING_AND_NONINDEPENDENT_NULL__NO_NEW_ECOLOGY",
+  "protocol_commit": "e947443888629c437cafcb4350badfff59aaf75d",
+  "authority": {
+    "authentic_github_actions_run_id": 40541280189,
+    "github_artifact_id": 12749724066,
+    "github_artifact_name": "NEON-OIKOS-CEILING-NONINDEPENDENT-NULL-SOURCE-AUDIT",
+    "artifact_zip_sha256": "2d4cf555f92e1fe46e8e4f292181c5e59a90e32ec326a43ccd7e4a34a9fe69d3",
+    "full_audit_canonical_sha256": "71dc92196f2438f66d6919c73a62527d7f02d33143e9422d8b7c1c52f2acc412",
+    "canonicalization": "sha256(json.dumps(original_audit,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode('utf-8'))",
+    "original_16_site_blob_and_imported_32_files_matched": true,
+    "independent_frozen_source_response_fingerprint": "c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860"
+  },
+  "counts": {
+    "fixed_scored_sites": 16,
+    "observed_best_species_survival_equals_one": 16,
+    "sites_with_any_raw_positive_emergence_possible_after_observed_saturation": 0,
+    "sites_whose_permutation_null_upper_tail_p_one_is_forced_by_ceiling": 16,
+    "sites_whose_null_adjusted_positive_is_forced_impossible": 16,
+    "sites_whose_strict_guild_only_world_is_forced_impossible": 16,
+    "observed_positive_raw_gain_sites": 0,
+    "observed_positive_null_adjusted_gain_sites": 0,
+    "observed_aggregate_one_sided_p": 1,
+    "sites_with_at_least_two_independently_fully_continuous_species": 13,
+    "unique_continuity_provider_species_across_sites": 32,
+    "largest_number_of_sites_any_provider_species_recurred": 3
+  },
+  "synthetic_positive_feasibility": {
+    "invented_alternating_AB_four_node_chain_raw_gain": 1,
+    "invented_alternating_AB_null_adjusted_positive": true,
+    "original_999_fixed_margin_null_test_reran_only_on_invented_matrix": true,
+    "no_NEON_original_response_reopened": true
+  },
+  "interpretation": {
+    "source_observed_saturation_is_not_prior_math_identity": true,
+    "negative_gain_and_p_one_follow_once_saturation_observed": true,
+    "site_null_p_one_and_aggregate_sign_p_one_not_independent_confirmation": true,
+    "no_proof_of_universal_ecological_absence_of_turnover": true,
+    "original_locked_manuscript_paper_science_text_untouched": true,
+    "Oikos_AI_approval_and_title_page_still_pending": true,
+    "no_new_EOG_WF_score_or_change_to_3_31_3": true
+  }
+}

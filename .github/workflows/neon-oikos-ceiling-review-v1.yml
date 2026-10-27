@@ -1,0 +1,94 @@
+name: NEON Oikos observed ceiling and dependent permutation-null proof
+
+on:
+  pull_request:
+    paths:
+      - "scripts/audit_neon_continuity_ceiling_v1.py"
+      - "tests/test_neon_continuity_ceiling_review_v1.py"
+      - "docs/eog_neon_oikos_ceiling_and_null_review_2026_10_28.md"
+      - "validation/neon_mammal_ceiling_review_v1/**"
+      - ".github/workflows/neon-oikos-ceiling-review-v1.yml"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/audit_neon_continuity_ceiling_v1.py"
+      - "tests/test_neon_continuity_ceiling_review_v1.py"
+      - "validation/neon_mammal_ceiling_review_v1/**"
+      - ".github/workflows/neon-oikos-ceiling-review-v1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  source-verified-site-ceiling-and-synthetic-counterexample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install source-locked EOG package and test tooling
+        run: python -m pip install -e .[dev]
+      - name: Test observed-species-saturation theorem, synthetic positive feasibility, frozen source
+        run: python -m pytest -q tests/test_neon_continuity_ceiling_review_v1.py
+      - name: Verify 32 unchanged Oikos source blobs and the original 16-site arithmetic ceiling
+        run: |
+          python scripts/audit_neon_continuity_ceiling_v1.py \
+            --output build/neon-oikos-ceiling-review-v1.json
+      - name: Preserve original data, verify dependent-null algebra and exact full receipt if frozen
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path("build/neon-oikos-ceiling-review-v1.json")
+          x=json.loads(p.read_text(encoding="utf-8"))
+          z=json.loads(Path("validation/neon_mammal_ceiling_review_v1/protocol_v1.json").read_text())
+          assert x["schema"]=="eog.neon_small_mammal_continuity.ceiling_conditioned_null_review.result.v1"
+          assert x["status"]=="POST_RESPONSE_ALGEBRAIC_CEILING_AUDIT__NO_NEW_BIOLOGICAL_ENDPOINT"
+          c=x["counts"]
+          assert c["fixed_scored_sites"]==16
+          assert c["observed_best_species_survival_equals_one"]==16
+          assert c["sites_whose_permutation_null_upper_tail_p_one_is_forced_by_ceiling"]==16
+          assert c["sites_whose_null_adjusted_positive_is_forced_impossible"]==16
+          assert c["sites_whose_strict_guild_only_world_is_forced_impossible"]==16
+          assert c["observed_aggregate_one_sided_p"]==1
+          assert c["sites_with_at_least_two_independently_fully_continuous_species"]==13
+          assert c["unique_continuity_provider_species_across_sites"]==32
+          assert len(x["all_fixed_16_site_arithmetic_witnesses"])==16
+          assert x["source_identity"]["imported_original_paper_source_blobs_verified"]==32
+          assert x["synthetic_counterexample"]["positive_emergent_gain"]==1.0
+          assert x["synthetic_counterexample"]["positive_null_adjusted_gain_possible"] is True
+          assert x["original_16_site_empirical_null_distribution_rerun"] is False
+          assert x["original_confirmatory_result_changed"] is False
+          assert x["original_32_paper_source_blobs_modified"] is False
+          assert x["Oikos_author_submission_or_AI_declaration_approved"] is False
+          assert x["EOG_WF_fourth_empirical_endpoint_added"] is False
+          assert z["interpretation"]["multiple_null_or_strict_emergence_zero_metrics_under_ceiling_not_independent_evidence"]
+          canonical=json.dumps(x,sort_keys=True,separators=(',',':'),
+            ensure_ascii=False,allow_nan=False).encode("utf-8")
+          actual=hashlib.sha256(canonical).hexdigest()
+          print("NEON_OIKOS_CEILING_AUDIT_CANONICAL_SHA256", actual)
+          print("NEON_OIKOS_SATURATION_NUMERICS",json.dumps(c,sort_keys=True))
+          frozen=Path("validation/neon_mammal_ceiling_review_v1/result_frozen_v1.json")
+          assert frozen.is_file(), "Independently source-reviewed original result hash is required"
+          reviewed=json.loads(frozen.read_text(encoding="utf-8"))
+          assert reviewed["schema"]=="eog.neon_small_mammal_continuity.ceiling_conditioned_null_review.reviewed_v1"
+          assert reviewed["protocol_commit"]=="e947443888629c437cafcb4350badfff59aaf75d"
+          assert reviewed["authority"]["authentic_github_actions_run_id"]==40541280189
+          assert reviewed["authority"]["github_artifact_id"]==12749724066
+          assert reviewed["authority"]["artifact_zip_sha256"]=="2d4cf555f92e1fe46e8e4f292181c5e59a90e32ec326a43ccd7e4a34a9fe69d3"
+          assert reviewed["authority"]["full_audit_canonical_sha256"]==actual, "Source-reviewed 16-site evidence drifted"
+          assert reviewed["authority"]["independent_frozen_source_response_fingerprint"]==x["source_identity"]["original_frozen_NEON_response_fingerprint"]
+          assert reviewed["counts"]==c
+          assert reviewed["synthetic_positive_feasibility"]["invented_alternating_AB_null_adjusted_positive"] is True
+          assert reviewed["interpretation"]["site_null_p_one_and_aggregate_sign_p_one_not_independent_confirmation"] is True
+          assert reviewed["interpretation"]["Oikos_AI_approval_and_title_page_still_pending"] is True
+          assert reviewed["interpretation"]["no_new_EOG_WF_score_or_change_to_3_31_3"] is True
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: NEON-OIKOS-CEILING-NONINDEPENDENT-NULL-SOURCE-AUDIT
+          path: build/neon-oikos-ceiling-review-v1.json
+          if-no-files-found: warn
