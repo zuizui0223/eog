@@ -71,12 +71,20 @@ jobs:
           print("NEON_OIKOS_CEILING_AUDIT_CANONICAL_SHA256", actual)
           print("NEON_OIKOS_SATURATION_NUMERICS",json.dumps(c,sort_keys=True))
           frozen=Path("validation/neon_mammal_ceiling_review_v1/result_frozen_v1.json")
-          if frozen.is_file():
-              reviewed=json.loads(frozen.read_text(encoding="utf-8"))
-              assert reviewed["schema"]=="eog.neon_small_mammal_continuity.ceiling_conditioned_null_review.reviewed_v1"
-              assert reviewed["authority"]["full_audit_canonical_sha256"]==actual
-              assert reviewed["original_source"]["source_result_fingerprint"]==x["source_identity"]["original_frozen_NEON_response_fingerprint"]
-              assert reviewed["counts"]==c
+          assert frozen.is_file(), "Independently source-reviewed original result hash is required"
+          reviewed=json.loads(frozen.read_text(encoding="utf-8"))
+          assert reviewed["schema"]=="eog.neon_small_mammal_continuity.ceiling_conditioned_null_review.reviewed_v1"
+          assert reviewed["protocol_commit"]=="e947443888629c437cafcb4350badfff59aaf75d"
+          assert reviewed["authority"]["authentic_github_actions_run_id"]==40541280189
+          assert reviewed["authority"]["github_artifact_id"]==12749724066
+          assert reviewed["authority"]["artifact_zip_sha256"]=="2d4cf555f92e1fe46e8e4f292181c5e59a90e32ec326a43ccd7e4a34a9fe69d3"
+          assert reviewed["authority"]["full_audit_canonical_sha256"]==actual, "Source-reviewed 16-site evidence drifted"
+          assert reviewed["authority"]["independent_frozen_source_response_fingerprint"]==x["source_identity"]["original_frozen_NEON_response_fingerprint"]
+          assert reviewed["counts"]==c
+          assert reviewed["synthetic_positive_feasibility"]["invented_alternating_AB_null_adjusted_positive"] is True
+          assert reviewed["interpretation"]["site_null_p_one_and_aggregate_sign_p_one_not_independent_confirmation"] is True
+          assert reviewed["interpretation"]["Oikos_AI_approval_and_title_page_still_pending"] is True
+          assert reviewed["interpretation"]["no_new_EOG_WF_score_or_change_to_3_31_3"] is True
           PY
       - uses: actions/upload-artifact@v4
         if: always()
