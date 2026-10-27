@@ -1,0 +1,59 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.ceiling_conditioned_null_review.protocol.v1",
+  "status": "EXPLICITLY_POST_RESPONSE_EXPLORATORY_REVIEW__NO_ENDPOINT_REDEFINITION",
+  "rationale": "Quantify the algebraic inferential ceiling conditional on an observed best-species survival fraction of 1 at every NEON site, distinguishing a real observed saturation pattern from independent null-model evidence.",
+  "baseline": {
+    "main_before_review": "b3a94279f626cacc4a781b8f3bc7854d54db5724",
+    "response_lock": "validation/neon_metacommunity_connectivity_v1/response_lock_v1.json",
+    "response_fingerprint": "c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860",
+    "frozen_fixed_sites": 16,
+    "all_scored": 16,
+    "response_access_prohibited": true,
+    "original_module": "src/eog/v2/metacommunity_connectivity.py",
+    "original_module_blob_sha1": "a09ecd84d965ab4d2d0161f0567a8367ec7fec21",
+    "source_files_receipt": "manuscript/neon_small_mammal_continuity/MAINLINE_PORT_REPRODUCIBILITY_RECEIPT_V1.json",
+    "imported_source_files_blob_count": 32,
+    "original_manuscript_blob_sha1": "ada5a84d3b862e122b1d6895c47ed3511de05854",
+    "original_metrics_blob_sha1": "c3a89797785aaf68e128b91272e6e58a544cde3f",
+    "original_summary_blob_sha1": "a5d23fb36123d3977f30f4125e8a4d6d073fbb8e"
+  },
+  "theorems": {
+    "assumptions": [
+      "Per-site guild world-survival C is a fraction in [0,1]",
+      "Per-site observed max individual-species world survival M_obs=1, as the original result table records for all 16 sites",
+      "The original site-null permutes complete trap assemblages only within the same fixed community-positive trap coordinates; hence C_perm=C_obs exactly",
+      "Every null-permuted best individual species survival M_perm is a fraction <=1",
+      "Every null iteration uses same fixed spatial graph/world family; no retuning"
+    ],
+    "raw_gain": "G_obs = C_obs - M_obs = C_obs - 1 <= 0; observed positive guild-minus-best-species gain cannot occur at that site",
+    "permutation": "G_perm = C_obs - M_perm >= C_obs - 1 = G_obs; original observed gain is a MINIMUM of the entire null distribution",
+    "upper_tail": "For the original >= observed one-sided site upper-tail, every permutation qualifies, so p_site=(1+999)/(999+1)=1 identically",
+    "adjusted": "G_obs - median(G_perm) <= 0 under the original fixed-community-positive-set permutation; a positive null-adjusted site effect is impossible",
+    "aggregate_sign": "If all 16 sites satisfy M_obs=1, positive null-adjusted sites=0 by algebra and the original one-sided sign test p_aggregate=1; this statistic is NOT an independent confirmation conditional on the ceiling",
+    "strict_guild_only": "M_obs=1 means a constituent species survives every graph; therefore no graph can be community-only survival and strict emergent fraction is zero",
+    "non_tautology": "The estimator CAN be positive for other incidence matrices when no constituent species survives all declared graphs; preserve the existing four-node alternating A/B chain toy as a constructive counterexample"
+  },
+  "checks": {
+    "all_16_original_metric_rows_with_original_blob_SHA1s": true,
+    "all_32_imported_source_files_byte_identity_unchanged": true,
+    "entire_original_response_lock_fingerprint_unchanged": true,
+    "all_metrics_original_16_site_summary_compared": true,
+    "original_species_redundancy_13_of_16_and_32_distinct_from_original_best_names": true,
+    "original_ORNL_pooling_penalty_preserved": true,
+    "original_null_not_recomputed": true,
+    "original_neon_raw_response_not_fetched": true,
+    "no_new_sensitivity_or_fourth_EOG_WF_endpoint": true
+  },
+  "interpretation": {
+    "saturated_best_species_is_a_source_observation_not_a_prior_mathematical_identity": true,
+    "existing_one_sided_p_one_is_not_a_test_proving_no_turnover_in_natural_metacommunities": true,
+    "multiple_null_or_strict_emergence_zero_metrics_under_ceiling_not_independent_evidence": true,
+    "hypothesis_test_evaluates_16_fixed_response_blind_NEON_sites_only": true,
+    "alternative_positive_toy_does_not_override_original_16_site_negative_result": true,
+    "repeated_individually_continuous_species_is_exploratory_occupancy_redundancy_not_ecosystem_function": true,
+    "data_product_observes_trap_occurrences_not_actual_individual_movement": true,
+    "original_paper_32_source_blobs_and_response_lock_must_not_be_modified": true,
+    "oikos_AI_titlepage_submission_author_gate_not_bypassed": true,
+    "EOG_WF_3_31_3_scientifically_frozen": true
+  }
+}
