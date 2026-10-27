@@ -109,7 +109,15 @@ def verify_original_source() -> dict:
     unique=set()
     for file in entries:
         path=file["path"]
-        if path in unique or not path.startswith("manuscript/neon_small_mammal_continuity/"):
+        allowed_other_roots = {
+            ".github/workflows/neon-small-mammal-continuity-paper-assets.yml",
+            "tests/test_neon_small_mammal_continuity_oikos_submission.py",
+            "tests/test_neon_small_mammal_continuity_paper_assets.py",
+        }
+        if path in unique or not (
+            path.startswith("manuscript/neon_small_mammal_continuity/")
+            or path in allowed_other_roots
+        ):
             raise ValueError("Duplicate or misplaced frozen original file")
         unique.add(path)
         current=ROOT/path
