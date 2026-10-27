@@ -177,7 +177,12 @@ def test_private_synthetic_author_approval_builds_a_different_anonymous_pdf(tmp_
     assert hashlib.sha256(pdf.read_bytes()).hexdigest()==ready["prepared_main_pdf_sha256"]
     assert len(PdfReader(str(pdf)).pages)>=8
     pdfreader=PdfReader(str(pdf))
-    pdftext="\n".join(page.extract_text() for page in pdfreader.pages)
+    page_texts=[page.extract_text() for page in pdfreader.pages]
+    pdftext="\n".join(page_texts)
+    assert "Abstract" in page_texts[0]
+    assert "Keywords:" in page_texts[0]
+    assert "1. Introduction" not in page_texts[0]
+    assert "1. Introduction" in page_texts[1], "NSO requires Introduction from page 2"
     assert "AI use statement" in pdftext
     assert "INVENTED SYNTHETIC TEST DECLARATION" in pdftext
     assert "Data availability" not in pdftext
