@@ -1,0 +1,73 @@
+name: NEON Oikos 2026 policy and blinded AI author-approval gate
+
+on:
+  pull_request:
+    paths:
+      - 'manuscript/neon_small_mammal_continuity/build_oikos_initial_submission_policy_v2.py'
+      - 'manuscript/neon_small_mammal_continuity/OIKOS_AI_AUTHOR_APPROVAL_TEMPLATE_V2.json'
+      - 'manuscript/neon_small_mammal_continuity/OIKOS_POLICY_2026_10_27_AUTHOR_HANDOFF_V2.md'
+      - 'tests/test_neon_small_mammal_oikos_policy_v2.py'
+      - '.github/workflows/neon-small-mammal-oikos-initial-policy-v2.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'manuscript/neon_small_mammal_continuity/build_oikos_initial_submission_policy_v2.py'
+      - 'manuscript/neon_small_mammal_continuity/OIKOS_AI_AUTHOR_APPROVAL_TEMPLATE_V2.json'
+      - 'manuscript/neon_small_mammal_continuity/OIKOS_POLICY_2026_10_27_AUTHOR_HANDOFF_V2.md'
+      - 'tests/test_neon_small_mammal_oikos_policy_v2.py'
+      - '.github/workflows/neon-small-mammal-oikos-initial-policy-v2.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  anonymous-submission-policy-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PDF test-only dependencies, not ecological response data
+        run: python -m pip install pytest reportlab pypdf
+      - name: Confirm original 32 paper Git blobs and existing Oikos submission checks
+        run: |
+          python -m pytest -q \
+            tests/test_neon_small_mammal_continuity_mainline_port_v1.py \
+            tests/test_neon_small_mammal_continuity_oikos_submission.py
+      - name: Test strict author signoff gate and fabricated-only PDF rendering
+        run: python -m pytest -q tests/test_neon_small_mammal_oikos_policy_v2.py
+      - name: Produce ONLY author-unapproved source-grounded ScholarOne fields
+        run: |
+          python manuscript/neon_small_mammal_continuity/build_oikos_initial_submission_policy_v2.py \
+            --output-dir build/oikos-policy-fields-v2
+      - name: Fail closed if private author signoff was inferred or a final anonymous PDF appeared
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          folder=Path('build/oikos-policy-fields-v2')
+          j=json.loads((folder/'OIKOS_SUBMISSION_POLICY_PREFLIGHT_V2.json').read_text(encoding='utf-8'))
+          assert j['schema']=='eog.neon_small_mammal_continuity.oikos_policy_preflight.v2'
+          assert j['status']=='SCIENCE_AND_POLICY_FIELDS_PREPARED__AUTHOR_APPROVAL_AND_ADMIN_STILL_REQUIRED'
+          assert j['historical_32_source_blob_identity']['original_imported_blobs_SHA1_verified']==32
+          assert j['source_manuscript_git_blob_sha1']=='ada5a84d3b862e122b1d6895c47ed3511de05854'
+          assert j['AI_use_disclosure_author_approved'] is False
+          assert j['blinded_policy_v2_pdf_generated'] is False
+          assert j['historical_v1_pdf_for_final_submission_approved'] is False
+          assert j['submission_completed'] is False
+          assert j['neon_16_site_response_reopened'] is False
+          assert j['EOG_WF_empirical_denominator_changed'] is False
+          assert 'Raw NEON response files are not redistributed' in j['data_availability_statement_for_ScholarOne_only']
+          assert not list(folder.glob('*.pdf'))
+          assert not list(folder.glob('*AUTHOR_APPROVED*'))
+          assert (folder/'OIKOS_SCHOLARONE_DATA_AVAILABILITY_V2.txt').is_file()
+          assert (folder/'OIKOS_SCHOLARONE_SIGNIFICANCE_V2.txt').is_file()
+          PY
+      - name: Upload science-grounded form fields and explicit outstanding author gates ONLY
+        uses: actions/upload-artifact@v4
+        with:
+          name: NEON-OIKOS-POLICY-2026-PREFLIGHT-FIELDS-AUTHOR-APPROVAL-PENDING
+          path: build/oikos-policy-fields-v2/
+          if-no-files-found: error
