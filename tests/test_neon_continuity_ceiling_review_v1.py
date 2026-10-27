@@ -167,7 +167,7 @@ def test_independently_reviewed_entire_original_ceiling_audit_is_frozen():
     assert frozen["counts"]["unique_continuity_provider_species_across_sites"]==32
     assert frozen["synthetic_positive_feasibility"]["invented_alternating_AB_four_node_chain_raw_gain"]==1
     assert frozen["synthetic_positive_feasibility"]["invented_alternating_AB_null_adjusted_positive"]
-    assert frozen["interpretation"]["existing_one_sided_p_one_is_not_a_test_proving_no_turnover_in_natural_metacommunities"] if "existing_one_sided_p_one_is_not_a_test_proving_no_turnover_in_natural_metacommunities" in frozen["interpretation"] else frozen["interpretation"]["no_proof_of_universal_ecological_absence_of_turnover"]
+    assert frozen["interpretation"]["no_proof_of_universal_ecological_absence_of_turnover"]
     assert frozen["interpretation"]["original_locked_manuscript_paper_science_text_untouched"]
     assert frozen["interpretation"]["Oikos_AI_approval_and_title_page_still_pending"]
     assert frozen["interpretation"]["no_new_EOG_WF_score_or_change_to_3_31_3"]
