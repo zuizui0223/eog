@@ -101,3 +101,16 @@ python scripts/audit_neon_continuity_ceiling_v1.py \
 The dedicated CI must produce a reviewed complete-result SHA256 lock after the original source-derived JSON is inspected and all package/author-gate regressions pass.
 
 **Submission state remains author-gated:** Current [Oikos policy/handoff](../manuscript/neon_small_mammal_continuity/OIKOS_POLICY_2026_10_27_AUTHOR_HANDOFF_V2.md) requires explicit author-approved AI statement and author metadata before a policy-compliant anonymous PDF can be generated. No AI approval, title page, private correspondence, DOI minting or ScholarOne submission is implied here. EOG-WF **3 scored endpoints /31 scientific STOPs /3 administrative exclusions** remains unchanged.
+
+
+## Original-source verification receipt — 2026-10-28
+
+The first complete source-and-synthetic-control [GitHub Actions run 40541280189](https://github.com/zuizui0223/eog/actions/runs/40541280189) succeeded after the audit correctly accepted the three original importer assets outside the manuscript directory (one workflow and two tests), while preserving exact SHA1 verification of **all 32 original paper files**. No original archived source was changed.
+
+Independently downloaded original aggregate artifact **12749724066**, ZIP SHA256 `2d4cf555f92e1fe46e8e4f292181c5e59a90e32ec326a43ccd7e4a34a9fe69d3`; **complete canonical audit JSON SHA256** `71dc92196f2438f66d6919c73a62527d7f02d33143e9422d8b7c1c52f2acc412`. All 16 original site tables reconciled and all 32 original blobs were verified. The [machine-readable reviewed receipt](../validation/neon_mammal_ceiling_review_v1/result_frozen_v1.json) now pins these hashes and counts for exact CI reruns.
+
+Verified source-derived counts: 16/16 sites with an individual species attaining continuity 1.0, 16/16 null-upper-tail p=1 necessarily under the frozen relocation null, 13/16 sites with at least two independently continuous species, 32 distinct provider species, maximum 3 sites per provider. Original ORNL guild survival 0.25 versus best species survival 1.0 remains unchanged.
+
+Positive feasibility is not only asserted: the **invented** four-node A/B-alternating arrangement yields raw emergent gain +1 and positive null-adjusted gain using the unchanged 999-replicate assemblage-permutation estimator. This establishes **data-conditional saturation**, not impossibility of emergence for any observation.
+
+**Reviewer interpretation:** all the source-site permutation p=1 values, the across-site one-sided sign p=1, null-adjusted nonpositivity and strict guild-only world zeros are *dependent on the same empirically saturated best species*. They must not be listed as independent replications of absent turnover. This review is post-response, exploratory and cannot authorize changing original paper source files, author-controlled AI statements, or actual submission.
