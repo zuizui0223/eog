@@ -197,17 +197,85 @@ def source_only_preflight()->dict:
 
 
 def render_using_existing_blinded_pdf_builder(source:Path,out:Path)->None:
-    """Reuse original ReportLab formatting in a separate process-scoped module."""
+    """Preserve historical ReportLab text styles, but obey NSO page-2 Introduction.
+
+    The original 32-file version of build_oikos_blinded_pdf.py is intentionally
+    not modified. We import its audited Markdown parser and font/wrap/layout
+    settings, while adding an initial-page boundary omitted from old v1.
+    """
     import importlib.util
     generator=LANE/"build_oikos_blinded_pdf.py"
-    spec=importlib.util.spec_from_file_location("_original_oikos_v1_pdf_renderer",generator)
+    spec=importlib.util.spec_from_file_location("_historical_oikos_v1_layout",generator)
     if spec is None or spec.loader is None:
-        raise RuntimeError("Original audited PDF renderer unavailable")
+        raise RuntimeError("Original audited ReportLab layout tools unavailable")
     old=importlib.util.module_from_spec(spec)
     spec.loader.exec_module(old)
-    old.SOURCE=source
-    old.OUT=out
-    old.main()
+    rendered_source=source.read_text(encoding="utf-8")
+    _check_blind_text(rendered_source)
+    if rendered_source.count("## 1. Introduction")!=1:
+        raise ValueError("Cannot ensure Oikos Introduction starts on page 2")
+
+    pdf=old.canvas.Canvas(str(out),pagesize=old.A4)
+    pdf.setTitle("Oikos blinded initial submission main text - human AI approval")
+    pdf.setAuthor("")
+    pdf.setSubject("Anonymous Oikos Research Paper initial submission")
+    page=1
+    y=old.PAGE_H-old.TOP
+    line_number=1
+    intro_encountered=0
+
+    def footer()->None:
+        pdf.setFont(old.FONT,9)
+        pdf.drawCentredString(old.PAGE_W/2,28,f"Page {page}")
+
+    def new_page()->None:
+        nonlocal page,y
+        footer()
+        pdf.showPage()
+        page+=1
+        y=old.PAGE_H-old.TOP
+
+    for style,logical in old.plain_markdown_lines(rendered_source):
+        if style=="heading" and logical=="1. Introduction":
+            intro_encountered+=1
+            # Journal requires first page title, abstract and keywords, and
+            # Introduction no earlier than page two. Do not add a blank page
+            # if a long abstract already overflowed to page two.
+            if page==1:
+                new_page()
+        if style=="blank":
+            y-=old.LEADING/2
+            if y<old.BOTTOM+old.LEADING:
+                new_page()
+            continue
+        if style=="title":
+            font_name,font_size=old.FONT_BOLD,old.TITLE_SIZE
+            before=old.LEADING/2
+        elif style in ("heading","subheading"):
+            font_name,font_size=old.FONT_BOLD,old.HEADING_SIZE
+            before=old.LEADING/2
+        else:
+            font_name,font_size=old.FONT,old.FONT_SIZE
+            before=0
+        y-=before
+        indent=16 if style=="bullet" else 0
+        for physical_line in old.wrap(
+            logical,font_name,font_size,old.MAX_WIDTH-indent
+        ):
+            if y<old.BOTTOM+old.LEADING:
+                new_page()
+            pdf.setFont(old.FONT,7.5)
+            pdf.drawRightString(old.LINE_NUMBER_X,y,str(line_number))
+            pdf.setFont(font_name,font_size)
+            pdf.drawString(old.LEFT+indent,y,physical_line)
+            line_number+=1
+            y-=old.LEADING
+        if style in ("title","heading"):
+            y-=old.LEADING/3
+    if intro_encountered!=1 or page<2:
+        raise RuntimeError("Oikos first-page abstract/second-page Introduction layout missing")
+    footer()
+    pdf.save()
     if not out.is_file() or out.stat().st_size<10000:
         raise RuntimeError("Author-approved blinded PDF was not rendered correctly")
 
