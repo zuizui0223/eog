@@ -1,7 +1,12 @@
 """Metadata-only source gate tests; no Dryad biological rows or remote access."""
 from io import BytesIO
 
-import openpyxl
+import pytest
+
+# XLSX parsing belongs to an isolated external-source gate, not the frozen
+# EOG core package. The dedicated Gate0 workflow installs openpyxl and
+# must run these tests; generic package CI may skip the optional fixture.
+openpyxl = pytest.importorskip("openpyxl", reason="optional source-gate dependency")
 
 from benchmarks.run_gotland_bam_schema_gate_v1 import (
     audit_workbook_header, run_gate, schema_crosswalk_status,
@@ -23,7 +28,6 @@ def test_only_first_physical_row_is_reported():
     file = _xlsx(["PatchID", "Occupancy_2018", "Occupancy_2019"])
     info = audit_workbook_header(file, "Butterfly_occurrence_data.xlsx")
     assert info["data_rows_examined"] == 0
-    assert info["physical_headers"] if "physical_headers" in info else True
     assert info["sheets"][0]["physical_headers"] == [
         "PatchID", "Occupancy_2018", "Occupancy_2019"
     ]
