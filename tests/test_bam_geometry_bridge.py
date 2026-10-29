@@ -143,22 +143,28 @@ def test_known_truth_bam_adapter_preserves_original_mask_contract():
     x = np.asarray(landscape.environment, dtype=float)
     ref, policy = _reference(x)
     report = profile_known_truth_bam_world(
-        world, x, reference=ref, declaration=policy, n_draws=8,
+        world, x, feature_node_ids=landscape.node_ids, reference=ref, declaration=policy, n_draws=8,
     )
     assert report["groups"]["ABM"]["n_nodes"] == world.occupied_mask.bit_count()
     assert report["groups"]["A"]["n_nodes"] == world.abiotic_mask.bit_count()
     assert report["source_world_fingerprint"] == world.fingerprint
     assert report["groups"]["ABM"]["n_nodes"] >= 2
 
+    with pytest.raises(ValueError, match="node ID order"):
+        profile_known_truth_bam_world(
+            world, x, feature_node_ids=tuple(reversed(landscape.node_ids)),
+            reference=ref, declaration=policy,
+        )
+
     with pytest.raises(ValueError, match="not A & B & M"):
         profile_known_truth_bam_world(
             replace(world, occupied_mask=0),
-            x, reference=ref, declaration=policy,
+            x, feature_node_ids=landscape.node_ids, reference=ref, declaration=policy,
         )
     with pytest.raises(ValueError, match="within node universe"):
         profile_known_truth_bam_world(
             replace(world, movement_mask=1 << len(world.node_ids)),
-            x, reference=ref, declaration=policy,
+            x, feature_node_ids=landscape.node_ids, reference=ref, declaration=policy,
         )
 
 def test_canonical_demo_runner_produces_valid_noncausal_receipt():
