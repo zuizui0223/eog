@@ -160,3 +160,20 @@ def test_known_truth_bam_adapter_preserves_original_mask_contract():
             replace(world, movement_mask=1 << len(world.node_ids)),
             x, reference=ref, declaration=policy,
         )
+
+def test_canonical_demo_runner_produces_valid_noncausal_receipt():
+    import json
+    from pathlib import Path
+    import subprocess
+    import sys
+
+    script = Path(__file__).resolve().parents[1] / "benchmarks/run_bam_geometry_bridge_v0.py"
+    payload = json.loads(subprocess.check_output([sys.executable, str(script)], text=True))
+    assert payload["n_synthetic_nodes"] == 21
+    assert payload["n_features"] == 2
+    worlds = payload["worlds"]
+    assert len(worlds) == 3
+    assert worlds[1]["node_counts"]["ABM"] <= worlds[0]["node_counts"]["ABM"]
+    assert worlds[2]["node_counts"]["ABM"] <= worlds[0]["node_counts"]["ABM"]
+    assert all(len(row["geometry_fingerprint"]) == 64 for row in worlds)
+    assert "no causal attribution" in payload["interpretation_limit"]
