@@ -118,3 +118,56 @@ information and an observation/detection model. One should only
 attribute constraints after those independent channels are present,
 and benchmark against PERMDISP, hypervolume and landscape connectivity
 methods without treating original EOG diagnostics as causal operators.
+
+
+## Scored descriptive result (post-protocol; source worlds previously exposed)
+
+The first scoring run **succeeded** for all 12 unchanged synthetic landscapes
+and their 768 parameter worlds. Code head: `9e29bdcaabe3fa5d44072505151f187205af8bf4`;
+[Actions run 40839251793](https://github.com/zuizui0223/eog/actions/runs/40839251793);
+full result fingerprint `8c60d83820ae9693fa528791071d371748b032df65ca9cd62eb91d3103596d0c`.
+The complete JSONs and hashes are pinned in
+`validation/bam_geometry_768_v1/result_receipt_v1.json` and the
+named Actions artifact (ID 12882430690).
+
+| Descriptive quantity | Result |
+| --- | ---: |
+| Original synthetic systems / parameter worlds | **12 / 768** |
+| G point clouds estimable (at least 2 nodes) | **768 / 768** |
+| Distinct G sets (summed within system) | **129** |
+| G families with more than one distinct A/B/M decomposition | **69 / 129** |
+| Parameter worlds in those aliased G families | **632 / 768** |
+| Same-G geometry invariance checks / violations | **639 / 0** |
+| G versus U matched span smaller / larger / unchanged | **719 / 15 / 34** |
+| G versus A matched span smaller / larger / unchanged | **666 / 17 / 85** |
+| Geographic versus environmental MST-cut component-count disagreement | **241 / 768** |
+| Geographically one component, environmentally 2+ MST-cut components | **205 / 768** |
+| Geographically two components, environmentally one MST-cut component | **36 / 768** |
+
+Median log(G/U) matched span ratio across 768 parameter rows is
+`−0.282617`; median log(G/A) is `−0.217035`. These are **descriptive
+within-generator summaries**, not ecological effect-size estimates.
+All 12 within-landscape medians of log(G/U) were negative, but the 64
+parameter worlds in a landscape are not independent samples.
+
+**Interpretation:**
+
+- Imposing a constructed set of A/B/M constraints often contracts the
+  realized environmental span relative to equally sized draws from the
+  unchanged environment. A minority of matched contrasts have the
+  opposite direction; geometric summary changes are not a deterministic
+  monotone function of set inclusion after sample-size matching.
+- The same G can arise from multiple known A/B/M decompositions.
+  A G-only geometric summary *cannot* resolve this ambiguity, so the
+  result preserves rather than reverses the published inverse-BAM limit.
+- Environmental MST cut components and geographic rook components measure
+  different objects. Their disagreement in the defined synthetic worlds
+  is a **diagnostic distinction under the fixed thresholds**, not a
+  general field claim about fragmentation or mobility.
+- Three axes are known by construction, and the reference contains the
+  candidate environments. The result is *not* independent ecological
+  identification of which factor produces a real species range.
+
+These scored results do not create a new manuscript or affect the closed
+EOG-WF predictive denominator. Any applied validation must acquire
+independent abiotic, biotic, movement and observation-process information.
