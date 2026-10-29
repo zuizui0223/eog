@@ -7,6 +7,7 @@ on:
       - 'manuscript/neon_small_mammal_continuity/build_oikos_ceiling_interpretation_review_v3.py'
       - 'manuscript/neon_small_mammal_continuity/OIKOS_CEILING_AUTHOR_INTERPRETATION_HANDOFF_V3.md'
       - 'tests/test_neon_small_mammal_oikos_ceiling_interpretation_v3.py'
+      - 'manuscript/neon_small_mammal_continuity/OIKOS_CEILING_AUTHOR_REVIEW_RECEIPT_VERIFIED_V3.json'
       - 'validation/neon_mammal_ceiling_review_v1/result_frozen_v1.json'
   push:
     branches: [main]
@@ -80,6 +81,34 @@ jobs:
               'blinded_pdf_generated':False,
               'source_files_unchanged':True
           }))
+          PY
+      - name: Require independent reviewed complete 4-file unapproved packet SHA256
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('manuscript/neon_small_mammal_continuity')
+          lock=json.loads((root/'OIKOS_CEILING_AUTHOR_REVIEW_RECEIPT_VERIFIED_V3.json').read_text(encoding='utf-8'))
+          assert lock['schema']=='eog.neon_small_mammal_continuity.ceiling_editorial_author_review.verified_receipt_v3'
+          assert lock['status']=='REVIEWED_SOURCE_LOCKED_AUTHOR_PROPOSAL__NO_HUMAN_APPROVAL_OR_SUBMISSION'
+          auth=lock['authority']
+          assert auth['successful_actions_run_id']==40831118059
+          assert auth['artifact_id']==12878971593
+          assert auth['independently_downloaded_artifact_zip_sha256']=='45d9d5a1b7b19a86967eae9a5565d2da8e0c516f68bb08369d189f56dc16994f'
+          assert auth['artifact_file_count']==4
+          assert auth['author_approved_pdf_in_artifact'] is False
+          expected=auth['complete_file_manifest']
+          actual={}
+          folder=Path('build/oikos-ceiling-author-review-v3')
+          for p in folder.iterdir():
+              assert p.is_file() and not p.is_symlink()
+              actual[p.name]=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert actual==expected, 'Reviewed author proposal wording or output hashes changed'
+          assert lock['source']['frozen_original_32_paper_files_sha1_verified']==32
+          assert lock['source']['PR666_post_response_audit_canonical_sha256']=='71dc92196f2438f66d6919c73a62527d7f02d33143e9422d8b7c1c52f2acc412'
+          assert lock['source']['permutation_site_p_one_algebraically_dependent_not_independent_negative_evidence'] is True
+          assert all(x is False for x in lock['pending'].values())
+          assert not any(p.suffix.lower()=='.pdf' for p in folder.iterdir())
           PY
       - uses: actions/upload-artifact@v4
         if: always()
