@@ -58,3 +58,33 @@ predeclared survey/temporal split. The published abundance-weighted
 connectivity index must not masquerade as independent movement M.
 Without source or observation-process qualification, return
 `B/M_UNQUALIFIED` or `STOP`, not a fitted result.
+
+## Terminal Gate1 result (2026-10-29)
+
+The exact frozen public file-stream route for `Monitoring_data.csv`
+(ID `59822`) returned **HTTP 403** before opening any payload bytes
+under a strict 512-byte Range contract. The second file was **not**
+requested. Thus:
+
+- CSV prefixes transferred: **0 bytes**.
+- Physical headers parsed: **0**.
+- Biological response rows parsed: **0**.
+- A/B/M source columns and patch-to-year join: **NOT VERIFIED**.
+- Source status: `SOURCE_STOP_HTTP_403`, not an ecological result.
+
+GitHub Actions run:
+https://github.com/zuizui0223/eog/actions/runs/40860550945
+
+Archived source receipt fingerprint:
+`fcfada2a4170bdadc259f52821f1a8162a26ca7b7de634d65e2b7a28e910a041`.
+
+The official **metadata-only** qualification remains valid and is kept
+separate from this file-access STOP. Automated PR-triggered source
+acquisition has been disabled after the terminal result.
+
+The existing Gotland HTTP 403 and this distinct Pyrgus HTTP 403 point
+to an unresolved **Dryad file-stream access problem for this execution
+environment**. They are not evidence that the datasets are unavailable
+to readers generally, and not evidence about A, B, M or butterfly
+colonization. This specific source contract is closed; do not
+substitute a mirror or retry it automatically.
