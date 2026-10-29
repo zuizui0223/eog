@@ -1,12 +1,8 @@
 name: Pyrgus BAM source metadata-only gate
 
+# The DOI/file roster is now frozen by successful run 40859758110.
+# Do not automatically re-acquire after a source receipt update.
 on:
-  pull_request:
-    paths:
-      - "validation/pyrgus_bam_metadata_gate_v1/**"
-      - "benchmarks/run_pyrgus_bam_metadata_gate_v1.py"
-      - "tests/test_pyrgus_bam_metadata_gate_v1.py"
-      - ".github/workflows/pyrgus-bam-metadata-gate.yml"
   workflow_dispatch:
 
 permissions:
