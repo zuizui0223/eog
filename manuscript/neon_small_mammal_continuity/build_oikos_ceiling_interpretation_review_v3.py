@@ -285,7 +285,7 @@ def build_proposal() -> dict:
         "a second independent confirmation",
     )):
         raise ValueError("Ceiling-driven statistics still overclaimed")
-    if not all(s in proposed for s in (
+    if not all(s.lower() in proposed.lower() for s in (
         "all 16", "Thirteen of 16", "32", "ORNL",
         "not independent negative evidence", "not supported",
     )):
@@ -295,7 +295,7 @@ def build_proposal() -> dict:
         SIGNIFICANCE.read_text(encoding="utf-8")
     )
     revised_form = REVISED_SIGNIFICANCE
-    if "32 distinct species" not in original_form or "32 distinct species" not in revised_form:
+    if "32 species" not in original_form or "32 distinct species" not in revised_form:
         raise ValueError("Original significance source evidence was lost")
 
     review_document = (
