@@ -80,3 +80,32 @@ are untouched.
 
 Next scientific action is dictated by the archive receipt, not by
 a desire to obtain a positive A/B/M result.
+
+## Terminal source result (verified 2026-10-29; post-protocol)
+
+The first and only authorized GitHub Actions source attempt terminated:
+
+- GitHub Actions run: https://github.com/zuizui0223/eog/actions/runs/40855899932
+- Artifact: `gotland-bam-source-schema-only`, artifact ID `12889541851`
+- Archive ZIP SHA256: `9a7bb75ad4ba93174fe8af90067896b87f86da5d2797b531134e6f23508e36fe`
+- Exact source-result JSON SHA256: `964b876dadbbfca7adeaa4c538665c8647ed3590b3768c3dba38cdb6f3eab195`
+- Result fingerprint: `b179a8d3d20f75406910799246ebac86ecf54711d36de8948933141807319377`
+- Status: **`SOURCE_STOP_HTTP_403`**
+- Stopped at first file: `Butterfly_occurrence_data.xlsx`, file ID `264459`
+- Verified workbooks: **0 of 2**
+- Biological response rows opened: **0**
+- Ecological model fits and endpoints scored: **0**
+
+No spreadsheet schema and no patch-level B join were verified. There is no
+ecological result or valid independent EOG/BAM empirical score in this programme.
+The GitHub Actions job itself succeeded because it correctly emitted a
+*terminal STOP receipt*; that infrastructure success is not source-admission success.
+
+This is one fixed failed source acquisition, not permission to retry,
+switch to another archive, use mirrors, or substitute different coordinates.
+The workflow was changed to **manual-only** after the terminal stop so PR
+updates cannot accidentally re-acquire source data. Do not dispatch it
+without a separately reviewed scientific source contract.
+
+Canonical committed receipt:
+`validation/gotland_bam_preflight_v1/schema_receipt_v1.json`.
