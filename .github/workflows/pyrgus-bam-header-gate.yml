@@ -1,12 +1,8 @@
 name: Pyrgus BAM strict CSV physical-header gate
 
+# Terminal source STOP: run 40860550945 returned HTTP 403 before payload.
+# This workflow no longer triggers automatically on PR or branch updates.
 on:
-  pull_request:
-    paths:
-      - "validation/pyrgus_bam_header_gate_v1/**"
-      - "benchmarks/run_pyrgus_bam_header_gate_v1.py"
-      - "tests/test_pyrgus_bam_header_gate_v1.py"
-      - ".github/workflows/pyrgus-bam-header-gate.yml"
   workflow_dispatch:
 
 permissions:
