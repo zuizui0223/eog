@@ -16,6 +16,8 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 LANE = ROOT / "manuscript/neon_small_mammal_continuity"
 SOURCE = LANE / "MANUSCRIPT_V1.md"
 SIGNIFICANCE = LANE / "OIKOS_SIGNIFICANCE_STATEMENT_V1.md"
