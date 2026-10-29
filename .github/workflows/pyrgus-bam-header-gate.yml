@@ -1,0 +1,38 @@
+name: Pyrgus BAM strict CSV physical-header gate
+
+on:
+  pull_request:
+    paths:
+      - "validation/pyrgus_bam_header_gate_v1/**"
+      - "benchmarks/run_pyrgus_bam_header_gate_v1.py"
+      - "tests/test_pyrgus_bam_header_gate_v1.py"
+      - ".github/workflows/pyrgus-bam-header-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bounded-header:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG core and tests
+        run: python -m pip install -e ".[dev]"
+      - name: Test strict bounded CSV header and source stop contracts
+        run: python -m pytest -q tests/test_pyrgus_bam_header_gate_v1.py
+      - name: One bounded 512-byte Range request per frozen CSV
+        run: |
+          python benchmarks/run_pyrgus_bam_header_gate_v1.py \
+            --receipt /tmp/eog_pyrgus_header_gate/header_receipt_v1.json
+      - name: Archive schema success or terminal source STOP
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyrgus-bam-bounded-headers
+          path: /tmp/eog_pyrgus_header_gate/header_receipt_v1.json
+          if-no-files-found: warn
