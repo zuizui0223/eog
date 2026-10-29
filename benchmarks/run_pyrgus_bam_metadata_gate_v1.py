@@ -64,7 +64,7 @@ def evaluate(protocol: dict, fetch: Callable[[str], dict]) -> dict:
     receipt = {
         "schema": "eog.pyrgus_bam_metadata_receipt.v1",
         "protocol_commit": PROTOCOL_COMMIT,
-        "protocol_sha256": sha256(json.dumps(protocol, indent=2)+"\n".encode()),
+        "protocol_sha256": sha256(protocol),
         "dataset_doi": source["doi"],
         "status": "SOURCE_GATE_NOT_YET_FINISHED",
         "response_rows_opened": 0,
