@@ -1,0 +1,56 @@
+name: BAM one-axis paired exploratory replay
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/run_bam_one_axis_paired_v1.py"
+      - "tests/test_bam_one_axis_paired_v1.py"
+      - "validation/bam_one_axis_paired_v1/**"
+      - "docs/bam_one_axis_paired_v1.md"
+      - ".github/workflows/bam-one-axis-paired.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-paired-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install core EOG
+        run: python -m pip install -e ".[dev]"
+      - name: Unit contracts
+        run: python -m pytest -q tests/test_bam_one_axis_paired_v1.py
+      - name: Reconstruct original 768 worlds and rescore all 1344 pairs
+        run: |
+          python benchmarks/run_bam_one_axis_paired_v1.py --output-dir /tmp/bam_one_axis_paired
+      - name: Compare against already-exposed local report (not preregistered)
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          observed=json.loads(Path('/tmp/bam_one_axis_paired/report.json').read_text())
+          expected=json.loads(Path('validation/bam_one_axis_paired_v1/post_exposure_expected_v1.json').read_text())
+          assert observed['pair_count'] == expected['n_pairs'] == 1344
+          assert observed['changed_G_pair_count'] == expected['n_changed_G_pairs'] == 739
+          assert observed['n_parent_worlds'] == expected['n_worlds'] == 768
+          by={s['axis_contrast']:s for s in observed['summary']}
+          for name, e in expected['by_axis'].items():
+              o=by[name]
+              for a, b in [('paired_worlds','total'),('changed_G_pairs','changed'),
+                           ('span_smaller','smaller'),('span_larger','larger'),
+                           ('span_tie','tie'),('geographic_component_count_increased','geo_component_increase')]:
+                  assert o[a] == e[b], (name, a, o[a], e[b])
+              assert len(o['systems_with_span_increase']) == e['positive_systems']
+          print('POST_EXPOSURE_REPLAY_CHECK_SUCCESS: 1344 pairs / 739 changed G')
+          PY
+      - name: Archive all pairs with source fingerprint
+        uses: actions/upload-artifact@v4
+        with:
+          name: bam-one-axis-1344-descriptive-replay
+          path: /tmp/bam_one_axis_paired/*

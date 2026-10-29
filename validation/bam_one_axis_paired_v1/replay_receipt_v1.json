@@ -1,0 +1,36 @@
+{
+  "schema": "eog.bam_one_axis_paired_replay_receipt.v1",
+  "status": "PASSED_POST_EXPOSURE_REPRODUCIBILITY_REPLAY_NOT_NEW_ECOLOGICAL_EVIDENCE",
+  "source_programme": "12 shared BAM landscapes, 768 previously exposed candidate worlds",
+  "artifact": {
+    "github_run_id": 40858777626,
+    "github_run_url": "https://github.com/zuizui0223/eog/actions/runs/40858777626",
+    "artifact_id": 12890517239,
+    "artifact_name": "bam-one-axis-1344-descriptive-replay",
+    "zip_sha256": "f20a91edb87e855781c185a56b905d45d9936f6516a81c98b7979c2280c44cd3",
+    "paired_csv_sha256": "7e6bb9a869cee139552f9d758572c05a9b9c06f0962fadeb1d8ec06127f5d417",
+    "report_json_sha256": "b4ee824f16693b68d70542b120477c7d87f11aade8d23eab876d9124519169a0",
+    "result_fingerprint": "024eb3618d0b83662ead51106c1cc19867626484ff6d1d94da813d839c4577ff"
+  },
+  "parent": {
+    "original_rows_sha256": "89c7247315f4e545ac69cc6f9bb05fc875fde3c693ad1f368a80e972c072b90d",
+    "replay_rows_sha256": "aaa9841a3d2778eccea3f82abc34aa47d7d6306661d26641f31e7c15b69f0698",
+    "raw_byte_identity": false,
+    "scientific_projection_expected_and_observed_sha256": "6cc2a8944fa627880ef8cdc5f54a49e12ae5abe3f91e909559a5283270f9b768",
+    "parent_result_fingerprint": "8c60d83820ae9693fa528791071d371748b032df65ca9cd62eb91d3103596d0c",
+    "note": "Whole JSON byte digest differs across the regenerated parent row file, but parent result fingerprint, exact A/B/M/G mask and world IDs, G geographic components, eight-decimal G span projection and all 1,344 paired CSV bytes match the prior run. Byte difference not silently suppressed."
+  },
+  "results": {
+    "n_systems": 12,
+    "n_worlds": 768,
+    "n_pairs": 1344,
+    "n_changed_G_pairs": 739,
+    "span_smaller": 638,
+    "span_larger": 74,
+    "span_tied": 27,
+    "M_barrier_closed_span_larger": 29,
+    "M_barrier_closed_increasing_systems": 2
+  },
+  "limits": "post-exposure exploratory finite-world descriptive; neither independent ecology, causal B or M evidence, nor fourth EOG-WF endpoint",
+  "source_pr": "https://github.com/zuizui0223/eog/pull/671"
+}
