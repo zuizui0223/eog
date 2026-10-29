@@ -1,0 +1,118 @@
+name: NEON Oikos ceiling-safe author scientific review draft
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/neon-oikos-ceiling-editorial-author-review-v3.yml'
+      - 'manuscript/neon_small_mammal_continuity/build_oikos_ceiling_interpretation_review_v3.py'
+      - 'manuscript/neon_small_mammal_continuity/OIKOS_CEILING_AUTHOR_INTERPRETATION_HANDOFF_V3.md'
+      - 'tests/test_neon_small_mammal_oikos_ceiling_interpretation_v3.py'
+      - 'manuscript/neon_small_mammal_continuity/OIKOS_CEILING_AUTHOR_REVIEW_RECEIPT_VERIFIED_V3.json'
+      - 'validation/neon_mammal_ceiling_review_v1/result_frozen_v1.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/neon-oikos-ceiling-editorial-author-review-v3.yml'
+      - 'manuscript/neon_small_mammal_continuity/build_oikos_ceiling_interpretation_review_v3.py'
+      - 'tests/test_neon_small_mammal_oikos_ceiling_interpretation_v3.py'
+
+permissions:
+  contents: read
+
+jobs:
+  source-locked-scientific-author-review-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original repository QA dependencies
+        run: python -m pip install -e .[dev]
+      - name: Verify 32 original source hashes and synthetic editorial controls
+        run: python -m pytest -q tests/test_neon_small_mammal_oikos_ceiling_interpretation_v3.py
+      - name: Prepare separate unapproved Markdown/diff/form proposal only
+        run: |
+          python manuscript/neon_small_mammal_continuity/build_oikos_ceiling_interpretation_review_v3.py \
+            --output-dir build/oikos-ceiling-author-review-v3
+      - name: Enforce original scientific response ceiling and NO AUTHOR APPROVAL or final PDF
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('build/oikos-ceiling-author-review-v3')
+          names={x.name for x in p.iterdir()}
+          assert names=={
+              'OIKOS_CEILING_INTERPRETATION_AUTHOR_REVIEW_UNAPPROVED_V3.md',
+              'OIKOS_CEILING_EDITORIAL_DIFF_UNAPPROVED_V3.patch',
+              'OIKOS_SIGNIFICANCE_AUTHOR_REVIEW_UNAPPROVED_V3.txt',
+              'OIKOS_CEILING_INTERPRETATION_REVIEW_PREFLIGHT_V3.json'
+          },'Unexpected final submission or personal approval artifact'
+          receipt=json.loads((p/'OIKOS_CEILING_INTERPRETATION_REVIEW_PREFLIGHT_V3.json').read_text(encoding='utf-8'))
+          assert receipt['schema']=='eog.neon_small_mammal_continuity.ceiling_editorial_author_review.v3'
+          assert receipt['status']=='CEILING_QUALIFIED_EDITORIAL_CANDIDATE__AUTHOR_APPROVAL_PENDING__NO_PDF'
+          assert receipt['source']['original_32_manuscript_blobs_verified']==32
+          assert receipt['source']['original_scientific_manuscript_git_blob_sha1']=='ada5a84d3b862e122b1d6895c47ed3511de05854'
+          assert receipt['source']['original_response_fingerprint']=='c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860'
+          assert receipt['source']['post_response_reviewer_audit_canonical_sha256']=='71dc92196f2438f66d6919c73a62527d7f02d33143e9422d8b7c1c52f2acc412'
+          assert all(receipt[k] is False for k in (
+              'author_approved_science_interpretation',
+              'author_approved_AI_statement',
+              'blinded_submission_pdf_created',
+              'title_page_or_ScholarOne_data_submitted',
+              'new_NEON_biological_response_or_scientific_score',
+              'new_EOG_WF_endpoint_or_denominator_change'
+          ))
+          for name,sha in receipt['review_only_output_sha256'].items():
+              assert hashlib.sha256((p/name).read_bytes()).hexdigest()==sha
+          manuscript=(p/'OIKOS_CEILING_INTERPRETATION_AUTHOR_REVIEW_UNAPPROVED_V3.md').read_text()
+          assert manuscript.startswith('<!-- UNAPPROVED SCIENTIFIC REVISION')
+          assert 'not independent negative evidence' in manuscript
+          assert 'The preregistered primary hypothesis was rejected completely.' not in manuscript
+          assert '## Data availability' in manuscript, 'source-only candidate not final Oikos file'
+          assert '## AI use statement' not in manuscript
+          assert not list(p.glob('*.pdf'))
+          print('REVIEW_ONLY_NOT_SUBMITTED',json.dumps({
+              'original_source_blobs_verified':32,
+              'original_site_ceiling':16,
+              'independent_null_confirmation':False,
+              'human_editorial_approval':False,
+              'blinded_pdf_generated':False,
+              'source_files_unchanged':True
+          }))
+          PY
+      - name: Require independent reviewed complete 4-file unapproved packet SHA256
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('manuscript/neon_small_mammal_continuity')
+          lock=json.loads((root/'OIKOS_CEILING_AUTHOR_REVIEW_RECEIPT_VERIFIED_V3.json').read_text(encoding='utf-8'))
+          assert lock['schema']=='eog.neon_small_mammal_continuity.ceiling_editorial_author_review.verified_receipt_v3'
+          assert lock['status']=='REVIEWED_SOURCE_LOCKED_AUTHOR_PROPOSAL__NO_HUMAN_APPROVAL_OR_SUBMISSION'
+          auth=lock['authority']
+          assert auth['successful_actions_run_id']==40831118059
+          assert auth['artifact_id']==12878971593
+          assert auth['independently_downloaded_artifact_zip_sha256']=='45d9d5a1b7b19a86967eae9a5565d2da8e0c516f68bb08369d189f56dc16994f'
+          assert auth['artifact_file_count']==4
+          assert auth['author_approved_pdf_in_artifact'] is False
+          expected=auth['complete_file_manifest']
+          actual={}
+          folder=Path('build/oikos-ceiling-author-review-v3')
+          for p in folder.iterdir():
+              assert p.is_file() and not p.is_symlink()
+              actual[p.name]=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert actual==expected, 'Reviewed author proposal wording or output hashes changed'
+          assert lock['source']['frozen_original_32_paper_files_sha1_verified']==32
+          assert lock['source']['PR666_post_response_audit_canonical_sha256']=='71dc92196f2438f66d6919c73a62527d7f02d33143e9422d8b7c1c52f2acc412'
+          assert lock['source']['permutation_site_p_one_algebraically_dependent_not_independent_negative_evidence'] is True
+          assert all(x is False for x in lock['pending'].values())
+          assert not any(p.suffix.lower()=='.pdf' for p in folder.iterdir())
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: NEON-OIKOS-UNAPPROVED-CEILING-INTERPRETATION-REVIEW-PACKET
+          path: build/oikos-ceiling-author-review-v3/
+          if-no-files-found: warn
