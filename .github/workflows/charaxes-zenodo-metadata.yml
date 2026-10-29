@@ -1,12 +1,8 @@
 name: Charaxes Zenodo one-record metadata gate
 
+# Source metadata already qualified by run 40862054463.
+# No automatic re-acquisition on receipts/PR updates.
 on:
-  pull_request:
-    paths:
-      - "benchmarks/run_charaxes_zenodo_metadata_gate_v1.py"
-      - "tests/test_charaxes_zenodo_metadata_v1.py"
-      - "validation/charaxes_zenodo_metadata_v1/**"
-      - ".github/workflows/charaxes-zenodo-metadata.yml"
   workflow_dispatch:
 
 permissions:
