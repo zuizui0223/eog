@@ -1,0 +1,35 @@
+{
+  "schema": "eog.charaxes_zenodo_metadata_receipt.archive.v1",
+  "status": "SOURCE_METADATA_QUALIFIED_NO_RESPONSE_ROWS",
+  "source": {
+    "doi": "10.5281/zenodo.20525795",
+    "record_id": 20525795,
+    "published": "2026-06-03",
+    "files": [
+      {
+        "name": "C_jasius_readme.csv",
+        "size": 1068,
+        "checksum_md5": "296db7fac71b138ec6d84f99391388e0",
+        "url": "https://zenodo.org/api/records/20525795/files/C_jasius_readme.csv/content"
+      },
+      {
+        "name": "C_jasius_reduced_dataset.csv",
+        "size": 152897,
+        "checksum_md5": "6f9f638a1c6966f567c4b7b783a5a47d",
+        "url": "https://zenodo.org/api/records/20525795/files/C_jasius_reduced_dataset.csv/content"
+      }
+    ]
+  },
+  "protocol_commit": "81f360249b48d9ebff539367911dae0331b27225",
+  "protocol_sha256": "460d1393b9c7d49021ce5edc32c72d2517d8e56b9bcedea27141023a406c1511",
+  "run_url": "https://github.com/zuizui0223/eog/actions/runs/40862054463",
+  "run_id": 40862054463,
+  "artifact_id": 12892061774,
+  "artifact_zip_sha256": "7d1a1a52743bde97050c779c5787624369c825036821d2a8f0783a224249e835",
+  "original_result_sha256": "b8d81ddbfdbf837f49115a566cfb7787393d4e15e358e1ecfb527623ad0a5aa2",
+  "original_result_fingerprint": "b500ca1c05cb4ac591619ff4aee8b4513f78ff300d2a5674d9fe3b576eb95142",
+  "api_requests": 1,
+  "data_files_opened": 0,
+  "ecological_rows_scored": 0,
+  "next_gate": "First validate full downloaded file MD5 plus README physical semantics and CSV header, keeping biological rows unparsed; no EOG scoring before next independent protocol."
+}
