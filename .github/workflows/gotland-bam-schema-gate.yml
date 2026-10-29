@@ -1,12 +1,8 @@
 name: Gotland BAM retrospective source schema gate
 
+# Source gate terminal: run 40855899932 returned SOURCE_STOP_HTTP_403.
+# No automatic re-acquisition on receipt/PR updates.
 on:
-  pull_request:
-    paths:
-      - "validation/gotland_bam_preflight_v1/**"
-      - "benchmarks/run_gotland_bam_schema_gate_v1.py"
-      - "tests/test_gotland_bam_schema_gate_v1.py"
-      - ".github/workflows/gotland-bam-schema-gate.yml"
   workflow_dispatch:
 
 permissions:
