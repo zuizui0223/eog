@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from typing import Any
+from typing import Any, Sequence
 
 import numpy as np
 
@@ -209,6 +209,7 @@ def profile_known_truth_bam_world(
     world: Any,
     node_features: np.ndarray,
     *,
+    feature_node_ids: Sequence[str],
     reference: RobustReference,
     declaration: ReferenceDeclaration,
     matched_size: int | None = None,
@@ -217,6 +218,8 @@ def profile_known_truth_bam_world(
 ) -> dict[str, Any]:
     """Adapt existing `eog.v2.known_truth_bam.BAMWorld` integer bit masks."""
     n = len(world.node_ids)
+    if tuple(feature_node_ids) != tuple(world.node_ids):
+        raise ValueError("feature node ID order does not match BAMWorld")
     if np.asarray(node_features).shape[0] != n:
         raise ValueError("node feature rows must match BAMWorld node IDs")
     integer_masks = (world.abiotic_mask, world.biotic_mask, world.movement_mask)
@@ -246,6 +249,7 @@ def profile_known_truth_bam_world(
         seed=seed,
     )
     result["world_id"] = str(world.world_id)
+    result["node_order_sha256"] = _sha256_json(tuple(feature_node_ids))
     result["source_world_fingerprint"] = str(world.fingerprint)
     result["fingerprint"] = _sha256_json(
         {k: v for k, v in result.items() if k != "fingerprint"}
