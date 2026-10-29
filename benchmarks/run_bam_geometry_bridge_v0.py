@@ -65,6 +65,7 @@ def run() -> dict:
         profile = profile_known_truth_bam_world(
             world,
             features,
+            feature_node_ids=landscape.node_ids,
             reference=reference,
             declaration=declaration,
             n_draws=32,
