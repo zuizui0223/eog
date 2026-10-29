@@ -1,0 +1,71 @@
+{
+  "schema": "eog.pyrgus_bam_metadata_gate.v1",
+  "status": "SOURCE_FROZEN_BEFORE_ANY_API_FILE_METADATA_OR_BIOLOGICAL_RESPONSE_ACCESS",
+  "date": "2026-10-29",
+  "dataset": {
+    "doi": "10.5061/dryad.b563d",
+    "landing_page": "https://datadryad.org/dataset/doi:10.5061/dryad.b563d",
+    "citation": "Fourcade Y, Ranius T, Öckinger E (2018) Dryad dataset associated with Journal of Animal Ecology 10.1111/1365-2656.12740",
+    "api_versions_url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.b563d/versions",
+    "host": "datadryad.org",
+    "required_files": [
+      "Monitoring_data.csv",
+      "Site_data.csv"
+    ],
+    "only_one_public_submitted_version_allowed": true,
+    "expected_approximate_sizes_bytes": {
+      "Monitoring_data.csv": 8380,
+      "Site_data.csv": 2760
+    },
+    "max_file_size_bytes": 1048576,
+    "file_payloads_opened_allowed": false,
+    "retrieval_retries_allowed": 0
+  },
+  "published_design": {
+    "species": "Pyrgus armoricanus",
+    "landscape": "southern Sweden",
+    "published_patch_count": 50,
+    "published_period": "2004-2016, 13 seasons (summer generation emphasized)",
+    "A": "mean and SD solar irradiance or other independent site microclimate; area/grazing recorded as patch covariates, not A by default",
+    "B": "field-measured host plant density (Filipendula vulgaris and Helianthemum nummularium), only within preselected host-plant habitat patches",
+    "M": "site coordinates and independent geographic distance/kernel; separate from published abundance-weighted Si connectivity",
+    "G": "butterfly annual summer-generation abundance/occurrence at fixed surveyed patches",
+    "M_leakage_guard": "Published Si uses observed abundance Nj; never treat contemporaneous or future-informed Si as an independent movement-only measurement.",
+    "observation_guard": "A zero count is nondetection without a calibrated observation channel, not a certified true absence",
+    "historical_results_known": true
+  },
+  "gate0": {
+    "only_requests": [
+      "exact DOI versions JSON via documented API",
+      "files JSON for that single public version ID"
+    ],
+    "checks": [
+      "one public submitted version",
+      "exact two declared CSV paths, no extras or duplicates",
+      "file sizes bounded and repository checksums present",
+      "no response rows opened"
+    ],
+    "outputs": [
+      "version fingerprint",
+      "file ID, path, byte size, digest, public metadata link",
+      "integrity status/STOP"
+    ],
+    "never_do": [
+      "download either file",
+      "parse response rows",
+      "use alternative datasets/mirrors",
+      "fit A/B/M or models",
+      "score biological endpoints"
+    ]
+  },
+  "future_gate1_not_authorized": {
+    "prerequisites": [
+      "successful metadata gate and independently approved source identity",
+      "one-to-one site key and independently measured A/B/M",
+      "time-resolved survey effort and no outcome leakage",
+      "predeclared comparator and interpretation"
+    ],
+    "goal": "read only minimal physical CSV headers/row counts in separate authorized protocol; do not infer B or M until independent measurement semantics verified"
+  },
+  "scientific_scope": "Retrospective empirical proxy-method feasibility only; not independent of published analyses and not EOG-WF endpoint 4"
+}
