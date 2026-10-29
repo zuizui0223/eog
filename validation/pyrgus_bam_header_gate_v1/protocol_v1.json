@@ -1,0 +1,57 @@
+{
+  "schema": "eog.pyrgus_bam_header_gate.v1",
+  "status": "FROZEN_BEFORE_FILE_PREFIX_TRANSFER_OR_CSV_HEADER_INTERPRETATION",
+  "parent_metadata": {
+    "doi": "10.5061/dryad.b563d",
+    "public_version_id": 17929,
+    "public_version_number": 1,
+    "metadata_run_id": 40859758110,
+    "metadata_fingerprint": "e20509d4b841aa2a2b2c04ed78f4a194bd0a1131846375e008c71a970470ffad",
+    "files": [
+      {
+        "name": "Monitoring_data.csv",
+        "file_id": 59822,
+        "size": 8380,
+        "digest_type": "md5",
+        "digest": "f7d32e5cad93f08b08efbfee4fe59ac1",
+        "url": "https://datadryad.org/stash/downloads/file_stream/59822"
+      },
+      {
+        "name": "Site_data.csv",
+        "file_id": 59823,
+        "size": 2763,
+        "digest_type": "md5",
+        "digest": "41eca42bc08eb4195b33b5fd30c2e4c3",
+        "url": "https://datadryad.org/stash/downloads/file_stream/59823"
+      }
+    ]
+  },
+  "acquisition": {
+    "method": "GET HTTP Range 0-511 (inclusive)",
+    "required_status": 206,
+    "required_content_range": "bytes 0-511/<frozen file size>",
+    "allowed_hosts": [
+      "datadryad.org"
+    ],
+    "gzip_forbidden": true,
+    "max_bytes_per_file": 512,
+    "one_attempt_per_file": true,
+    "retry_or_fallback_forbidden": true,
+    "raw_header_prefix_not_persisted": true
+  },
+  "inspection": {
+    "only_first_complete_physical_CSV_line": true,
+    "expected_encoding": "UTF-8 with optional BOM",
+    "minimum_header_fields": 2,
+    "data_rows_parsed": 0,
+    "note": "512-byte Range prefix may physically contain part of response row; these bytes must never be parsed or persisted",
+    "output_only_normalized_header_labels": true,
+    "site_to_monitoring_crosswalk": "CANDIDATE_ONLY; common header labels do not prove row key uniqueness",
+    "B_host_density": "look for explicit host density field only",
+    "A_solar": "look for explicit solar irradiance/microclimate field only",
+    "M": "look for geographic coordinates/distance fields only; reject abundance-weighted Si as independent M"
+  },
+  "endpoints_allowed": false,
+  "target_biological_data_opened": false,
+  "interpretation": "retrospective source preflight only; no ecological model fits or field claims"
+}
