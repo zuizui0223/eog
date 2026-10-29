@@ -1,0 +1,23 @@
+{
+  "schema": "eog.pyrgus_bam_header_result_receipt.v1",
+  "status": "SOURCE_STOP_HTTP_403",
+  "source_doi": "10.5061/dryad.b563d",
+  "frozen_first_file_id": 59822,
+  "source_version_id": 17929,
+  "metadata_success_run_id": 40859758110,
+  "metadata_success_fingerprint": "e20509d4b841aa2a2b2c04ed78f4a194bd0a1131846375e008c71a970470ffad",
+  "header_gate_run_id": 40860550945,
+  "header_gate_run_url": "https://github.com/zuizui0223/eog/actions/runs/40860550945",
+  "artifact_id": 12890424433,
+  "artifact_zip_sha256": "73eb76572668d0f627a00c51fd79758fb91b5f618424db7feb57be706d8181fb",
+  "original_receipt_sha256": "9e687a673f07ac0b5ecf8e31d70f43ebd5eb7e7276deda40edac6f0dd43f1b64",
+  "original_result_fingerprint": "fcfada2a4170bdadc259f52821f1a8162a26ca7b7de634d65e2b7a28e910a041",
+  "protocol_commit": "e758455eebe1d223684f50318893766dfc472875",
+  "protocol_sha256": "6ee69491c5288c8496b987bf09f7ccc31d7b49a84a0220b7c8907ed997007637",
+  "headers_parsed": 0,
+  "csv_bytes_transferred": 0,
+  "biological_rows_parsed": 0,
+  "model_fits": 0,
+  "source_restart_permitted_in_this_protocol": false,
+  "scientific_interpretation": "Transport-source STOP before CSV access. Not an adverse BAM biology result or an independent EOG field endpoint."
+}
