@@ -68,3 +68,22 @@ Next stage, only if source-qualified: separately freeze and verify exact
 README/documentation semantics, file bytes and direct measured columns;
 then decide whether an independently measured A/B/M design is possible.
 Preserve all null, negative, unidentifiable or inaccessible outcomes.
+
+## Successful fixed metadata result (2026-10-29)
+
+GitHub Actions run https://github.com/zuizui0223/eog/actions/runs/40862054463
+performed the one authorized official API request. It qualified the exact
+record and **both** files against the precommitted roster and MD5 identities.
+
+- README `C_jasius_readme.csv`: **1,068 bytes**.
+- Data `C_jasius_reduced_dataset.csv`: **152,897 bytes**.
+- API metadata result fingerprint:
+  `b500ca1c05cb4ac591619ff4aee8b4513f78ff300d2a5674d9fe3b576eb95142`.
+- Exact artifact id `12892061774`, original ZIP SHA-256
+  `7d1a1a52743bde97050c779c5787624369c825036821d2a8f0783a224249e835`.
+- **Zero biological bytes downloaded** and no ecological inference.
+
+Canonical commit-bound receipt:
+`validation/charaxes_zenodo_metadata_v1/result_receipt_v1.json`.
+The metadata gate is now **manual-only** to avoid repeated API access.
+This is source qualification, not an A/B/M science result.
