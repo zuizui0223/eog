@@ -1,0 +1,66 @@
+{
+  "schema": "eog.gotland_bam_pre_response_source_gate.v1",
+  "status": "frozen_before_public_workbook_schema_or_row_access",
+  "date": "2026-10-29",
+  "evidence_lane": "retrospective_external_candidate_not_independent_confirmatory",
+  "source": {
+    "dataset_doi": "10.5061/dryad.s1rn8pk4k",
+    "source_landing_page": "https://datadryad.org/dataset/doi:10.5061/dryad.s1rn8pk4k",
+    "published": "2020-03-13",
+    "workbooks": [
+      {
+        "file_id": 264459,
+        "file_name": "Butterfly_occurrence_data.xlsx",
+        "url": "https://datadryad.org/downloads/file_stream/264459",
+        "approx_size_bytes": 27650
+      },
+      {
+        "file_id": 264460,
+        "file_name": "Host_plant_data.xlsx",
+        "url": "https://datadryad.org/downloads/file_stream/264460",
+        "approx_size_bytes": 233150
+      }
+    ],
+    "source_switch_forbidden": true,
+    "download_retries": 0,
+    "response_rows_opened_in_this_gate": false,
+    "no_alternative_mirrors_or_unlisted_files": true
+  },
+  "published_context": {
+    "focal_species": "Euphydryas aurinia",
+    "obligate_host": "Succisa pratensis",
+    "site": "Gotland, Sweden",
+    "number_of_patches_reported": 256,
+    "temporal_contrast": "2018 to 2019 butterfly occupancy turnover",
+    "published_abstract_already_known": true,
+    "published_aggregate_outcomes_are_not_new_EOG_results": true
+  },
+  "objectives": {
+    "Gate0": "verify both exact workbook bytes as XLSX and audit sheet names plus physical header rows only; do not read data rows or compute biological statistics",
+    "Gate1": "determine whether both workbooks contain an explicit documented patch crosswalk, target occupancy years, A ground moisture feature and M independent patch connectivity; no response rows opened until an approved fixed join",
+    "Gate2": "only if Gate1 independently verified, design a strictly retrospective BAM proxy geometry illustration and compare against area/host/connectivity baselines"
+  },
+  "A": "ground moisture index or explicitly measured abiotic habitat feature at patch scale; reject if absent or inferred solely from location",
+  "B": "independent Succisa pratensis availability/abundance linked to same patch via verified key; reject B claim if only grid/sampling-plot records without patch crosswalk",
+  "M": "published independently calculated patch connectivity or geolocated resistance configuration, not inferred from held-out butterfly response",
+  "G": "occupied butterfly patches in distinct 2018 and 2019 periods; missing/nondetection cannot be zero by default",
+  "nonresponse_gate": [
+    "exact two file IDs and names retrieved once successfully",
+    "file signatures are genuine XLSX zip archives within frozen size limits 4096–5242880",
+    "workbook sheets have at least one nonblank header row, decode without password, no macros",
+    "no response rows read in Gate0",
+    "any non-200 HTTP response including 403/429, HTML impersonation, invalid Excel -> terminal SOURCE_STOP",
+    "patch crosswalk must be externally documented to treat host plants as patch-level B; absence is B_UNQUALIFIED, not causal zero"
+  ],
+  "absent_claims": [
+    "independent confirmation of unpublished outcome",
+    "causal A/B/M decomposition from observed occurrence",
+    "genuine dispersal probability from published connectivity index",
+    "proof 2018 drought caused every local turnover",
+    "result as fourth EOG-WF endpoint",
+    "column name/meaning guessing from response values"
+  ],
+  "output": "schema_receipt_v1.json in GitHub Actions artifact, not publicly redistributed biological-response rows",
+  "stop_rule": "Do not retry an HTTP/schema integrity STOP on alternate endpoint or dataset release; retain exact receipt.",
+  "no_scientific_scoring_in_this_gate": true
+}
