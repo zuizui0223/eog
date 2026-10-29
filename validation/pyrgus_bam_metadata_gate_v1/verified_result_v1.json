@@ -1,0 +1,37 @@
+{
+  "schema": "eog.pyrgus_bam_metadata_verified_result.v1",
+  "source": "GitHub Actions run 40859758110",
+  "status": "SOURCE_METADATA_QUALIFIED__BIOLOGICAL_ROWS_UNOPENED",
+  "protocol_commit": "2d8bf050b1197b9c5e387264da2941d539a1a214",
+  "protocol_sha256": "9edd19f610b487ecebeced55f3fbadc996aba5997293d7537d932030cf8030eb",
+  "source_doi": "10.5061/dryad.b563d",
+  "version_id": 17929,
+  "version_number": 1,
+  "version_fingerprint": "11e86565d1c11a1af6cccb14d78bb18b5cf08c97aaaaf5944b2b74f64c680bca",
+  "metadata": {
+    "Monitoring_data.csv": {
+      "file_id": 59822,
+      "size_bytes": 8380,
+      "digest_type": "md5",
+      "digest": "f7d32e5cad93f08b08efbfee4fe59ac1",
+      "fingerprint": "3e7f95fe0f9f8a21b848fafe188f0a021ce27a5a473a8bf4fd12346bc4773b60"
+    },
+    "Site_data.csv": {
+      "file_id": 59823,
+      "size_bytes": 2763,
+      "digest_type": "md5",
+      "digest": "41eca42bc08eb4195b33b5fd30c2e4c3",
+      "fingerprint": "d4fc900cceb15128c267d4da2f88b5afbce87f8664fa363c2cf94cab8d34f155"
+    }
+  },
+  "github_run_url": "https://github.com/zuizui0223/eog/actions/runs/40859758110",
+  "github_artifact_id": 12891141422,
+  "github_artifact_zip_sha256": "70c6fa47c80e44c4ce73f69d110f7fc1fbde8f3e6a5911ef5ecf79d40f1da6ad",
+  "original_raw_receipt_sha256": "e801f853917389d76bc7a7b7bf014f4831e2f31c4e5cf8ea0b3ad6db1a6f5f55",
+  "original_result_fingerprint": "e20509d4b841aa2a2b2c04ed78f4a194bd0a1131846375e008c71a970470ffad",
+  "requests_attempted": 2,
+  "biological_response_rows_opened": 0,
+  "data_files_downloaded": 0,
+  "ecological_endpoints_scored": 0,
+  "next_gate": "Separate frozen physical header/proxy/patch-join qualification before response scoring"
+}
