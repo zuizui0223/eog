@@ -1,0 +1,42 @@
+name: BAM geometry 768-world exploratory audit
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/run_bam_geometry_768_v1.py"
+      - "validation/bam_geometry_768_v1/**"
+      - "tests/test_bam_geometry_768_v1.py"
+      - "src/eog/bam_geometry.py"
+      - "src/eog/bam_support_topology.py"
+      - ".github/workflows/bam-geometry-768-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-world-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Verify adapter, semantic contracts and smoke replay
+        run: |
+          python -m pytest -q tests/test_bam_geometry_bridge.py tests/test_bam_support_topology_bridge.py tests/test_bam_geometry_768_v1.py
+      - name: Score full 12-system x 64-world retrospective geometry
+        run: |
+          python benchmarks/run_bam_geometry_768_v1.py --output-dir /tmp/eog_bam_geometry_768
+          test -s /tmp/eog_bam_geometry_768/result_summary_v1.json
+          test -s /tmp/eog_bam_geometry_768/world_rows_v1.json
+      - name: Archive auditable descriptive readout
+        uses: actions/upload-artifact@v4
+        with:
+          name: bam-geometry-768-known-truth-descriptive
+          path: /tmp/eog_bam_geometry_768/*.json

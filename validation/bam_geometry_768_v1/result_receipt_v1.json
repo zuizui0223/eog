@@ -1,0 +1,67 @@
+{
+  "schema": "eog.bam_geometry_768.result_receipt.v1",
+  "status": "POST_RESULT_DESCRIPTIVE_RECEIPT_OF_EXISTING_KNOWN_TRUTH",
+  "scoring_source_commit": "9e29bdcaabe3fa5d44072505151f187205af8bf4",
+  "protocol_commit": "cd7a9222bb8512713a47e26f96d4411229736329",
+  "protocol_sha256": "1a35e1468fff9493b6d147e5a1f38cbd0896bca45446fd57f2a795189e2a8dc6",
+  "run_url": "https://github.com/zuizui0223/eog/actions/runs/40839251793",
+  "run_id": 40839251793,
+  "run_attempt": 1,
+  "run_status": "SUCCESS",
+  "github_artifact_id": 12882430690,
+  "github_artifact_name": "bam-geometry-768-known-truth-descriptive",
+  "artifact_archive_sha256": "754b9e0c857f43e3385315bcd0171d3e6bade875c1cd2258834dd6c3db930d8d",
+  "result_summary_json_sha256": "1134dc3a14c9f1218b0f72b40209f54c0039103df826b0f43fa8eb5385ebc011",
+  "world_rows_json_sha256": "89c7247315f4e545ac69cc6f9bb05fc875fde3c693ad1f368a80e972c072b90d",
+  "result_fingerprint": "8c60d83820ae9693fa528791071d371748b032df65ca9cd62eb91d3103596d0c",
+  "source_universe": {
+    "systems": 12,
+    "parameter_worlds": 768,
+    "estimable_G_geometry": 768,
+    "unique_G_within_system_total": 129,
+    "note": "Not 768 independent ecological replicates. 64 candidates reuse each of 12 fixed landscapes."
+  },
+  "alias_findings": {
+    "realized_G_equivalence_families_with_distinct_A_B_M": 69,
+    "worlds_in_such_families": 632,
+    "same_G_invariance_checks": 639,
+    "invariant_G_geometry_violation_count": 0,
+    "note": "Different A/B/M masks can share the same realized G; geometry computed from G cannot distinguish those histories."
+  },
+  "matched_span_to_U": {
+    "n": 768,
+    "decrease_n": 719,
+    "increase_n": 15,
+    "equal_within_1e_12_n": 34,
+    "median_log_G_over_U": -0.28261708381593487
+  },
+  "matched_span_to_A": {
+    "n": 768,
+    "decrease_n": 666,
+    "increase_n": 17,
+    "equal_within_1e_12_n": 85,
+    "median_log_G_over_A": -0.21703524041466515
+  },
+  "spatial_vs_environmental_component_count": {
+    "n_comparable": 768,
+    "n_disagree": 241,
+    "n_geo_one_env_multiple": 205,
+    "n_geo_two_env_one": 36,
+    "n_equal": 527,
+    "note": "Geographic binary rook components at fixed threshold 0.5 versus descriptive environmental MST-cut components are different estimands. No real dispersal or ecological fragmentation inference."
+  },
+  "observations_after_protocol_freeze": [
+    "All 12 source systems qualified under the original activation contract.",
+    "All 768 world G supports had at least two nodes and were estimable.",
+    "All G-derived geometry and spatial component values were invariant across the same G masks.",
+    "The 12 system medians of matched log G/U span ratios were negative.",
+    "The comparison between original MST-cut and binary geographic connected components disagreed for 241/768 candidate worlds."
+  ],
+  "strict_limits": [
+    "This is retrospective geometry scoring over previously exposed virtual worlds, not independent confirmatory ecological evidence.",
+    "Matched-size resampling quantiles are sampling sensitivity, not confidence intervals.",
+    "G vs superset log spans are not causal A/B/M contributions.",
+    "All G points used as ideal anchors and constant-one raster are synthetic controls, not a fitted SDM.",
+    "No frozen EOG-WF, BAM identifiability, or independent ecological publication outcome was changed."
+  ]
+}
