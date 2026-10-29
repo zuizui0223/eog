@@ -1,0 +1,38 @@
+name: Charaxes Zenodo one-record metadata gate
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/run_charaxes_zenodo_metadata_gate_v1.py"
+      - "tests/test_charaxes_zenodo_metadata_v1.py"
+      - "validation/charaxes_zenodo_metadata_v1/**"
+      - ".github/workflows/charaxes-zenodo-metadata.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install EOG
+        run: python -m pip install -e ".[dev]"
+      - name: Synthetic source-identity and transport tests
+        run: python -m pytest -q tests/test_charaxes_zenodo_metadata_v1.py
+      - name: One official Zenodo API metadata GET, no data files
+        run: |
+          python benchmarks/run_charaxes_zenodo_metadata_gate_v1.py \
+            --output /tmp/eog_charaxes/metadata_receipt_v1.json
+      - name: Archive qualified metadata or terminal STOP
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: charaxes-zenodo-record-metadata-v1
+          path: /tmp/eog_charaxes/metadata_receipt_v1.json
+          if-no-files-found: warn
