@@ -175,3 +175,41 @@ def test_no_circumvented_science_submission_or_new_neon_response():
         else:
             assert name not in src
     assert "No biological response data" not in src or "never opens" in src
+
+
+def test_independent_original_source_review_packet_digest_and_human_hold():
+    locked = json.loads(
+        (review.LANE/"OIKOS_CEILING_AUTHOR_REVIEW_RECEIPT_VERIFIED_V3.json")
+        .read_text(encoding="utf-8")
+    )
+    assert locked["schema"] == (
+        "eog.neon_small_mammal_continuity.ceiling_editorial_author_review.verified_receipt_v3"
+    )
+    assert locked["status"] == (
+        "REVIEWED_SOURCE_LOCKED_AUTHOR_PROPOSAL__NO_HUMAN_APPROVAL_OR_SUBMISSION"
+    )
+    authority = locked["authority"]
+    assert authority["successful_actions_run_id"] == 40831118059
+    assert authority["artifact_id"] == 12878971593
+    assert authority["independently_downloaded_artifact_zip_sha256"] == (
+        "45d9d5a1b7b19a86967eae9a5565d2da8e0c516f68bb08369d189f56dc16994f"
+    )
+    assert authority["complete_file_manifest"] == {
+        "OIKOS_CEILING_INTERPRETATION_AUTHOR_REVIEW_UNAPPROVED_V3.md":
+            "e79e085d24e4feac723e884d56b91ca361396db5864081df82f759476fd72143",
+        "OIKOS_CEILING_EDITORIAL_DIFF_UNAPPROVED_V3.patch":
+            "c1b95392549a26fedbfd899a0e737475c7c48d8937bf428ea58219e6de29c8b2",
+        "OIKOS_SIGNIFICANCE_AUTHOR_REVIEW_UNAPPROVED_V3.txt":
+            "855165e4d97571ec0fbf1aa494da038164ebc607d72ee49471294eb87f268c7a",
+        "OIKOS_CEILING_INTERPRETATION_REVIEW_PREFLIGHT_V3.json":
+            "e53fa08d8c5c41ceaa25b426a011b0d460bda6d1e6e490f246e3b767ac767982",
+    }
+    assert authority["author_approved_pdf_in_artifact"] is False
+    assert authority["final_blinded_pdf_in_artifact"] is False
+    assert locked["source"]["original_manuscript_git_blob_sha1"] == review.ORIGINAL_BLOB
+    assert locked["source"]["original_significance_git_blob_sha1"] == review.SIGNIFICANCE_BLOB
+    assert locked["source"]["PR666_post_response_audit_canonical_sha256"] == (
+        review.REVIEW_ARTIFACT_SHA256
+    )
+    assert locked["source"]["permutation_site_p_one_algebraically_dependent_not_independent_negative_evidence"]
+    assert not any(locked["pending"].values())
