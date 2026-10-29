@@ -71,14 +71,38 @@ The runner compares an unchanged 7×3 known-truth BAM landscape with
 barrier. It prints a deterministic, descriptive JSON receipt. No new
 field observations or heldout response rows are consumed.
 
+## Experimental geographic support-topology overlay
+
+`eog.bam_support_topology.profile_bam_support_topology` adds a **separate**
+known-mask, 2-D geographic structure diagnostic. It reuses the original
+`infer_support_topology` after applying each BAM mask to one explicitly
+provided, fixed, nonnegative support raster.
+
+- Requires aligned A/B/M Boolean **grids**, a nonnegative support field,
+  a declared grid CRS and resolution, a frozen set of strictly positive
+  thresholds, a 4/8-neighbour rule and exact observation-to-cell anchors.
+- BAM-excluded cells receive **zero support** (below every threshold).
+  They are not silently treated as missing data. Actual unavailable cells
+  remain a distinct `missing_mask`.
+- Every supplied occurrence anchor must be permitted by G=A&B&M. A
+  contradictory world is rejected; no snapping or threshold repair.
+- Returns threshold-lineage class counts (anchored, persistent detached,
+  transient detached, unresolved) and fingerprints for U/A/B/M/AB/AM/BM/G.
+  These **are geographic component lineages**, unlike environmental MST
+  cut components from the point-cloud profile.
+- Even these components do not estimate realized dispersal, demography,
+  causal barriers, or a population-specific SDM.
+
+```bash
+python -m pytest -q tests/test_bam_support_topology_bridge.py
+```
+
 ## What the integration does **not** yet do
 
-- Geographical support-topology overlay: the pre-existing
-  `eog.support_topology` module takes a **frozen 2-D support field** and
-  spatial occurrence anchors; BAM mask geometries on arbitrary feature
-  matrices are not such fields. A future adapter must explicitly supply
-  CRS, grid alignment, missing-mask semantics, anchors, thresholds, and
-  neighbourhood definition before spatial components can be compared.
+- A georeferenced BAMWorld-to-grid adapter: callers must explicitly prove
+  node-to-cell alignment; bit-mask index ordering is not assumed to match
+  raster row order. The existing canonical 7x3 runner exercises the
+  environmental-point-cloud adapter only.
 - Real ecological identification of which constraint dominates: independent
   abiotic, interaction, movement and observation-process evidence is needed.
 - PERMDISP/hypervolume competitor benchmark or external macroecological
