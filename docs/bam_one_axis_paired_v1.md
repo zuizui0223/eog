@@ -46,7 +46,7 @@ This is not the effect of changing A/B/M in nature, does not estimate the full n
 | Antagonist exclusion B | 192 | 146 | 120 | 23 | 3 | 26 |
 | Partner + antagonist B | 192 | 153 | 132 | 18 | 3 | 12 |
 | Closed barrier M | 384 | 154 | 110 | 29 | 15 | 0 |
-| **Total** | **1,344** | **739** | **638** | **62** | **39** | **50** |
+| **Total** | **1,344** | **739** | **638** | **74** | **27** | **50** |
 
 The apparent 'increasing span after restriction' phenomenon is **not a universal effect**: in the fixed M barrier closure contrast it was found only in **2 of 12 landscapes** (29 pairs, 17 in S04 and 12 in S06). B antagonist increases occurred in four systems. Further statistical claims must respect the **12 shared landscape units** and the fact that some system parameter contrasts are repeated.
 
