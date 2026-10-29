@@ -1,0 +1,61 @@
+{
+  "schema": "eog.bam_one_axis_paired.post_exposure_expectations.v1",
+  "status": "post_result_regression_checks_only_not_preregistration",
+  "source": "previously generated local 2026-10-29 exploratory replay, same 768 worlds",
+  "prior_archive_sha256": "750fd70a7deccb0c3be98144dba198c0ee3704426dc864d8be51ae5cc38b899e",
+  "prior_report_sha256": "45377e3debfbcbb98dc37a8560ec337f641d78c91f71e4509cc8a88682dfc85c",
+  "prior_pairs_csv_sha256": "7e6bb9a869cee139552f9d758572c05a9b9c06f0962fadeb1d8ec06127f5d417",
+  "base_parent_world_sha256": "89c7247315f4e545ac69cc6f9bb05fc875fde3c693ad1f368a80e972c072b90d",
+  "n_systems": 12,
+  "n_worlds": 768,
+  "n_pairs": 1344,
+  "n_changed_G_pairs": 739,
+  "by_axis": {
+    "A_narrow_vs_broad": {
+      "total": 384,
+      "changed": 170,
+      "smaller": 164,
+      "larger": 0,
+      "tie": 6,
+      "geo_component_increase": 4,
+      "positive_systems": 0
+    },
+    "B_antagonist_exclusion_vs_none": {
+      "total": 192,
+      "changed": 146,
+      "smaller": 120,
+      "larger": 23,
+      "tie": 3,
+      "geo_component_increase": 26,
+      "positive_systems": 4
+    },
+    "B_obligate_partner_vs_none": {
+      "total": 192,
+      "changed": 116,
+      "smaller": 112,
+      "larger": 4,
+      "tie": 0,
+      "geo_component_increase": 8,
+      "positive_systems": 1
+    },
+    "B_partner_and_antagonist_vs_none": {
+      "total": 192,
+      "changed": 153,
+      "smaller": 132,
+      "larger": 18,
+      "tie": 3,
+      "geo_component_increase": 12,
+      "positive_systems": 3
+    },
+    "M_barrier_closed_vs_open": {
+      "total": 384,
+      "changed": 154,
+      "smaller": 110,
+      "larger": 29,
+      "tie": 15,
+      "geo_component_increase": 0,
+      "positive_systems": 2
+    }
+  },
+  "caveat": "Counts were derived after seeing the already-scored virtual landscapes; this is a reproducibility test, not independent hypothesis confirmation."
+}
