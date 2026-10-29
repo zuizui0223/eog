@@ -1,0 +1,43 @@
+{
+  "schema": "eog.neon_small_mammal_continuity.ceiling_editorial_author_review.verified_receipt_v3",
+  "status": "REVIEWED_SOURCE_LOCKED_AUTHOR_PROPOSAL__NO_HUMAN_APPROVAL_OR_SUBMISSION",
+  "authority": {
+    "original_actions_run_id": 40830996875,
+    "original_run_exploratory_failure": "Direct script import path missing; synthetic tests passed; fixed without changing scientific interpretation",
+    "successful_actions_run_id": 40831118059,
+    "artifact_id": 12878971593,
+    "artifact_name": "NEON-OIKOS-UNAPPROVED-CEILING-INTERPRETATION-REVIEW-PACKET",
+    "independently_downloaded_artifact_zip_sha256": "45d9d5a1b7b19a86967eae9a5565d2da8e0c516f68bb08369d189f56dc16994f",
+    "complete_file_manifest": {
+      "OIKOS_CEILING_INTERPRETATION_AUTHOR_REVIEW_UNAPPROVED_V3.md": "e79e085d24e4feac723e884d56b91ca361396db5864081df82f759476fd72143",
+      "OIKOS_CEILING_EDITORIAL_DIFF_UNAPPROVED_V3.patch": "c1b95392549a26fedbfd899a0e737475c7c48d8937bf428ea58219e6de29c8b2",
+      "OIKOS_SIGNIFICANCE_AUTHOR_REVIEW_UNAPPROVED_V3.txt": "855165e4d97571ec0fbf1aa494da038164ebc607d72ee49471294eb87f268c7a",
+      "OIKOS_CEILING_INTERPRETATION_REVIEW_PREFLIGHT_V3.json": "e53fa08d8c5c41ceaa25b426a011b0d460bda6d1e6e490f246e3b767ac767982"
+    },
+    "artifact_file_count": 4,
+    "author_approved_pdf_in_artifact": false,
+    "final_blinded_pdf_in_artifact": false
+  },
+  "source": {
+    "frozen_neon_response_fingerprint": "c845289d6ad8caf8e932adb90340237b01b120acce52ca2ccb4e6f1d9c10b860",
+    "frozen_original_32_paper_files_sha1_verified": 32,
+    "original_manuscript_git_blob_sha1": "ada5a84d3b862e122b1d6895c47ed3511de05854",
+    "original_significance_git_blob_sha1": "f1b223d9a159de37d5ab5ebe2da69266fb3da099",
+    "PR666_post_response_audit_canonical_sha256": "71dc92196f2438f66d6919c73a62527d7f02d33143e9422d8b7c1c52f2acc412",
+    "biological_NEON_site_count": 16,
+    "observed_best_species_upper_bound_at_all_sites": true,
+    "permutation_site_p_one_algebraically_dependent_not_independent_negative_evidence": true,
+    "empirical_13_of_16_sites_have_multiple_fully_continuous_species": true,
+    "empirical_32_distinct_provider_species": true
+  },
+  "pending": {
+    "scientific_interpretation_author_coauthor_approved": false,
+    "actual_AI_tools_use_and_disclosure_author_approved": false,
+    "final_blinded_manuscript_PDF_ready": false,
+    "title_page_and_ScholarOne_metadata_approved": false,
+    "uploaded_or_submitted": false,
+    "new_biological_result_scored": false,
+    "new_EOG_WF_predictive_endpoint_scored": false
+  },
+  "conclusion": "The exact source-locked author-review draft and form-field proposal exist and are byte verified; no science interpretation, AI statement or Oikos submission has been human approved."
+}
