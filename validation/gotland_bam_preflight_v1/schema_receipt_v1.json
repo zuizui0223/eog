@@ -1,0 +1,14 @@
+{
+  "crosswalk": null,
+  "fail_closed_no_fallback": true,
+  "file_results": [],
+  "fingerprint": "b179a8d3d20f75406910799246ebac86ecf54711d36de8948933141807319377",
+  "protocol_commit": "7d77af98d6c0ecf7fcdc9f99897c173bfb219028",
+  "protocol_sha256": "9ee02ed0ec0a1fea49befb74052fd3f4ceed9500dc1ffaa64368c3085e4047bb",
+  "response_rows_opened": 0,
+  "schema": "eog.gotland_bam_schema_receipt.v1",
+  "scored_ecological_endpoints": 0,
+  "source": "10.5061/dryad.s1rn8pk4k",
+  "status": "SOURCE_STOP_HTTP_403",
+  "stopped_at_file_id": 264459
+}
