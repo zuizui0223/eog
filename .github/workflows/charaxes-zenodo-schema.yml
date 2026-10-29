@@ -1,12 +1,8 @@
 name: Charaxes Zenodo checksum and schema-only gate
 
+# Frozen run 40862766046 ended SOURCE_STOP_HTTP_406 before data transfer.
+# No implicit retry from PR or branch updates.
 on:
-  pull_request:
-    paths:
-      - "benchmarks/run_charaxes_zenodo_schema_gate_v1.py"
-      - "tests/test_charaxes_zenodo_schema_v1.py"
-      - "validation/charaxes_zenodo_schema_v1/**"
-      - ".github/workflows/charaxes-zenodo-schema.yml"
   workflow_dispatch:
 
 permissions:
