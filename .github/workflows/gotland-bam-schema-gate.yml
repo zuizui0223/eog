@@ -1,0 +1,40 @@
+name: Gotland BAM retrospective source schema gate
+
+on:
+  pull_request:
+    paths:
+      - "validation/gotland_bam_preflight_v1/**"
+      - "benchmarks/run_gotland_bam_schema_gate_v1.py"
+      - "tests/test_gotland_bam_schema_gate_v1.py"
+      - ".github/workflows/gotland-bam-schema-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-source-schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install metadata-only dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install openpyxl pytest
+      - name: Validate synthetic header-only contracts
+        run: python -m pytest -q tests/test_gotland_bam_schema_gate_v1.py
+      - name: One-pass exact Dryad files; no ecological response inspection
+        run: |
+          python benchmarks/run_gotland_bam_schema_gate_v1.py \
+            --receipt /tmp/eog_gotland_source_gate/schema_receipt_v1.json
+      - name: Archive terminal schema success or source STOP
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gotland-bam-source-schema-only
+          path: /tmp/eog_gotland_source_gate/schema_receipt_v1.json
+          if-no-files-found: warn
