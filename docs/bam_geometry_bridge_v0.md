@@ -24,13 +24,15 @@ route, movement probability or causal effect from a geometric statistic.
 - `eog.reference_policy.ReferenceDeclaration`: externally declared
   source of the reference, prospective/retrospective boundary, leakage gate.
 - `eog.v2.known_truth_bam.BAMWorld`: original independent A, B, M
-  bit masks and G=A&B&M, plus source world fingerprint.
+  bit masks and G=A&B&M, an explicit exact feature-node ID ordering check,
+  plus source world fingerprint.
 - **New:** `eog.bam_geometry.profile_bam_geometry` and
   `profile_known_truth_bam_world` (standalone import, not root export).
 
 The eight masks are `U, A, B, M, AB, AM, BM, ABM` where `U` is the
 unchanged candidate node universe and `ABM=G`. The adapter checks mask
-shape and type, reference dimensionality/policy, and BAMWorld G equality.
+shape and type, reference dimensionality/policy, exact BAMWorld node ID order,
+and BAMWorld G equality.
 
 ## Computational/interpretive contract
 
