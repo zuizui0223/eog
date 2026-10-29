@@ -1,0 +1,57 @@
+{
+  "schema": "eog.charaxes_zenodo_metadata_gate.v1",
+  "scientific_role": "external distinct candidate, source/measurement qualification only; no post-outcome ecological scores",
+  "frozen_before": "GET https://zenodo.org/api/records/20525795",
+  "record_id": 20525795,
+  "doi": "10.5281/zenodo.20525795",
+  "official_url": "https://zenodo.org/api/records/20525795",
+  "related_study": "Torres-Vila and Korosi (2026), Charaxes jasius in southwestern Iberian fragmented landscapes, Journal of Insect Conservation",
+  "public_metadata_context": {
+    "years": "2018–2024",
+    "nominal_trap_deployments": 1666,
+    "focal": "Charaxes jasius",
+    "host_plant": "Arbutus unedo",
+    "expected_files": [
+      {
+        "name": "C_jasius_readme.csv",
+        "md5": "296db7fac71b138ec6d84f99391388e0",
+        "size_range": [
+          500,
+          2500
+        ]
+      },
+      {
+        "name": "C_jasius_reduced_dataset.csv",
+        "md5": "6f9f638a1c6966f567c4b7b783a5a47d",
+        "size_range": [
+          120000,
+          180000
+        ]
+      }
+    ],
+    "ecological_readme_not_yet_read": true
+  },
+  "request_contract": {
+    "request_count_limit": 1,
+    "method": "GET",
+    "allowed_hosts": [
+      "zenodo.org"
+    ],
+    "no_redirect_outside_host": true,
+    "max_body_bytes": 1048576,
+    "no_retries": true,
+    "source_switch": false,
+    "no_file_download": true
+  },
+  "interpretation_gate": {
+    "G": "Charaxes trap detections/abundance; no assumption that nondetection means absence",
+    "B": "host plant Arbutus cover/distance as measured external resource constraint",
+    "M": "host patches as potential source network; Hank­si connectivity may be a function of B, so B/M independence must be audited",
+    "A": "forest type as habitat class only; no physiological/abiotic interpretation absent independent climate variables",
+    "effort": "bait-trap sampling time, locality and year need explicit observation contract",
+    "models": "NO biological scoring at metadata gate",
+    "literature_prior_art": "host cover and nearest-host distance associations were reported by original authors"
+  },
+  "stop_rule": "Any unsupported API response, 403/429/redirect/schema, missing expected named file or MD5 mismatch => source STOP. Do not retry automatically.",
+  "future_data_gate": "separately commit actual file-identity and header-only contract after successful metadata receipt"
+}
