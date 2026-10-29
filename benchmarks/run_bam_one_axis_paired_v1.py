@@ -67,8 +67,33 @@ def source_rows():
     ):
         raise ValueError("parent frozen 768-world geometry fingerprint mismatch")
     raw = (json.dumps(rows, indent=2, sort_keys=True, allow_nan=False) + "\n").encode()
-    if hashlib.sha256(raw).hexdigest() != receipt["world_rows_json_sha256"]:
-        raise ValueError("reconstructed parent world_rows byte SHA256 mismatch")
+    observed_byte_sha = hashlib.sha256(raw).hexdigest()
+    # The historical byte digest binds the original artifact, but it can
+    # differ after an independently replayed NumPy/Python environment. Check
+    # the scientific row identity *separately*, never assume byte parity.
+    keys = ("system_id", "world_id", "world_fingerprint", "A_bits",
+            "B_bits", "M_bits", "G_bits", "G_geographic_component_count")
+    projected = [
+        {**{key: row[key] for key in keys},
+         "G_span_8dp": round(row["G_environmental_geometry"]["span"], 8)}
+        for row in rows
+    ]
+    scientific_digest = hashlib.sha256(json.dumps(
+        projected, sort_keys=True, separators=(",", ":"), allow_nan=False,
+    ).encode("utf-8")).hexdigest()
+    expected_scientific_digest = (
+        "6cc2a8944fa627880ef8cdc5f54a49e12ae5abe3f91e909559a5283270f9b768"
+    )
+    if scientific_digest != expected_scientific_digest:
+        raise ValueError("reconstructed BAM world masks/IDs/G geometry digest mismatch")
+    receipt["replayed_world_rows_sha256"] = observed_byte_sha
+    receipt["replayed_scientific_projection_sha256"] = scientific_digest
+    receipt["world_row_byte_parity"] = (
+        observed_byte_sha == receipt["world_rows_json_sha256"]
+    )
+    if not receipt["world_row_byte_parity"]:
+        print("SOURCE_BYTE_DIFFERENCE__SCIENTIFIC_ROWS_STABLE: "+
+              observed_byte_sha, file=sys.stderr)
     return rows, receipt
 
 
@@ -271,8 +296,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
-    rows, _ = source_rows()
+    rows, provenance = source_rows()
     report, records = compute(rows)
+    report["source_byte_parity"] = provenance["world_row_byte_parity"]
+    report["replayed_world_rows_sha256"] = provenance["replayed_world_rows_sha256"]
+    report["replayed_scientific_projection_sha256"] = provenance[
+        "replayed_scientific_projection_sha256"
+    ]
     args.output_dir.mkdir(parents=True, exist_ok=True)
     (args.output_dir / "report.json").write_text(
         json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False)+"\n",
