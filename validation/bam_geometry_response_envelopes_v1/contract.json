@@ -1,0 +1,18 @@
+{
+ "schema":"eog.bam_geometry_response_envelopes.contract.v1",
+ "status":"EXPLORATORY_REUSE_OF_PREVIOUSLY_EXPOSED_FINITE_WORLDS_NOT_INDEPENDENT_CONFIRMATION",
+ "question":"Can present G identify the direction or magnitude of original-EOG geometry change under idealised A/B/M mask release, even when the resulting spatial map is not identified?",
+ "source":{"systems":12,"worlds_per_system":64,"worlds":768,"generator":"src/eog/v2/known_truth_bam_generality.py","generator_blob_sha":"ab852b02bccdfb2f065717f89b482b7cf15778d3","parent_world_rows_sha256":"89c7247315f4e545ac69cc6f9bb05fc875fde3c693ad1f368a80e972c072b90d","parent_pr":669},
+ "evidence":"Ideal complete current presence/absence: survivors have exactly identical occupied mask G within each system. This is stronger evidence than real presence-only observations.",
+ "release":{"A":"B&M","B":"A&M","M":"A&B","implementation":"reuse eog.v2.bam_counterfactual_identifiability.axis_release_outcome in canonical CI"},
+ "reference":"Original per-landscape median/MAD feature transform on all candidate nodes. No group-specific rescaling. All12 systems/768 parent G spans checked against frozen parent output.",
+ "targets":{"primary":"change in EOG90th-percentile strictly positive pairwise distance span","secondary":["mean distance to centroid","convex-hull area as monotone extent control","geographic rook-component count as separate structural target"]},
+ "target_semantics":"All finite occupied cells, equal cell weights. This is exact full-census geometry, NOT matched-size sampled geometry. A change in number and arrangement of occupied cells is part of the target. No resampling or p values.",
+ "identification":"For every current-G fibre and each release axis, retain min/max change across ALL survivors; direction identified only if all agree (negative/zero/positive); magnitude identified if range<=1e-10*max(1,abs(values)). No probability weights assigned to worlds.",
+ "direction_tolerance":1e-10,
+ "secondary_evidence":"Known exact A, B or M masks individually: partition each G fibre by the extra observed mask, report direction identification gain. These are idealised complete direct measurements, not single field observations.",
+ "denominators":"Report129 expected G-fibres and all768 model-world memberships separately; primary descriptive counts by fibre and12 landscapes, not independent ecological repetitions. Retain eligible and unidentifiable counts, plus fibres with multiple distinct A/B/M mask triples.",
+ "integrity":["G=A&B&M","released G contains current G","same G same current geometry","hull area never decreases under release (within tolerance)","map identification implies geometry magnitude and direction identification","valid extra evidence cannot broaden any target envelope"],
+ "examples":"Choose lexicographically first exact-map-ambiguous yet direction-identified fibre, and lexicographically first opposite-sign fibre, from primary span; do not choose largest effect.",
+ "non_goals":["new natural species validation","literal corridor-restoration, climate or partner manipulation effects","full causal mechanism recovery","new EOG-WF endpoint","changes to existing manuscript claims"]
+}
