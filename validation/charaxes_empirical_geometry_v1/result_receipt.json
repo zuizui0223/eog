@@ -1,0 +1,45 @@
+{
+  "schema": "eog.charaxes.empirical_geometry.receipt.v1",
+  "status": "RETROSPECTIVE_EXPLORATORY_REAL_DATA_NUMERIC_AND_BYTE_REPLAY_VERIFIED",
+  "scoring_commit": "62a9ea0305e8578e3972b85775e2cd5646739453",
+  "analysis_contract_commit": "3ff68b0a6418917922926b63e118d53d9981d9e0",
+  "source_recovery": {
+    "run_id": 42220224476,
+    "artifact_id": 13503530806,
+    "archive_sha256": "bbbaefbf6863be73102d2295185c569ad4494de47b1830bd980a696363cdbac8",
+    "prior_v1_run": 40862766046,
+    "prior_v1_stop": "HTTP406; preserved, not overwritten",
+    "repair": "Accept wildcard on identical official source URLs; observed Content-Type text/plain",
+    "data_md5": "6f9f638a1c6966f567c4b7b783a5a47d",
+    "data_sha256": "9338e8f064079c7f9694a55d9b948afedd93b9ac74c771befcbff48218376cd8"
+  },
+  "verified_ci_replay": {
+    "run_id": 42221315140,
+    "artifact_id": 13504325330,
+    "archive_sha256": "30c1406f63194db75712dcf4f4a2124307aced6e6959df95c0a6f21ec5f2e55c",
+    "result_json_sha256": "ba72635150c62e792ec61a3477b25c37154ef6cb6ccf298138461f34e8334cb8",
+    "geometry_contrasts_csv_sha256": "40047c367d6b0b265ddaf1c3398de50ba1ec0f59baa67773966597c947c1f2f7",
+    "null_draws_csv_sha256": "fde0dcfd6ce1ee13b3e4bc0fc0d81917fd71b5571783dd0115d43d6551b99a1d",
+    "leave_one_district_out_csv_sha256": "28f515d107a088f154c71a266699886786bae9a35928d98f75c7e7c9588c1c9f",
+    "all_five_artifact_members_match_local_bytes": true,
+    "all_24_contrasts_match": true,
+    "source_redownloads_for_scientific_replay": 0,
+    "original_eog_scalar_parity_test_passed": true
+  },
+  "data_scope": {"records":1544,"positive_detections":167,"nondetections":1377,"individuals_captured":417,"districts":26,"years":[2018,2019,2020,2021]},
+  "primary_matched_results": {
+    "features":["log1p(HPC_5 percent)","log1p(dist_min km)"],
+    "matching":"district_ID x year x oak_species; 999 draws",
+    "span_ratio":0.9648758310805743,
+    "span_exploratory_mc_p":0.146,
+    "centroid_dispersion_ratio":0.8898732025054183,
+    "centroid_exploratory_mc_p":0.002,
+    "mst_compactness_ratio":0.9715703152260075,
+    "mst_compactness_exploratory_mc_p":0.332,
+    "gap_ratio":1.0186168666263222,
+    "gap_exploratory_mc_p":0.95,
+    "concentration_is_secondary_simple_comparator_not_EOG_novelty":true
+  },
+  "sensitivity": {"leave_one_district_out_span_smaller":25,"district_deletions":26,"span_ratio_min":0.943870361198084,"span_ratio_max":1.0093188413214185},
+  "limits": ["No full independent A/B/M measurement or causal identification.","No climate, coordinates or trapping-effort fields in released reduced CSV.","Nondetections not certified absences.","Conditional Monte Carlo relies on within-stratum exchangeability; residual spatial dependence remains.","Upper span difference is not clearly supported; cannot claim equivalence.","Secondary centroid result must not be relabeled the primary hypothesis.","No fourth EOG-WF endpoint or alteration of closed prior results."]
+}
