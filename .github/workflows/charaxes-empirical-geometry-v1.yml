@@ -1,0 +1,50 @@
+name: Charaxes empirical geometry offline replay
+on:
+  pull_request:
+    paths:
+      - 'benchmarks/charaxes_empirical_geometry_v1.py'
+      - 'tests/test_charaxes_empirical_geometry_v1.py'
+      - 'validation/charaxes_empirical_geometry_v1/**'
+      - '.github/workflows/charaxes-empirical-geometry-v1.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  offline-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q tests/test_charaxes_source_recovery_v2.py tests/test_charaxes_empirical_geometry_v1.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: charaxes-verified-source-v2
+          run-id: 42220224476
+          github-token: ${{ github.token }}
+          path: /tmp/charaxes_source
+      - name: Replay all panels and nulls from cached original bytes
+        run: python benchmarks/charaxes_empirical_geometry_v1.py --source /tmp/charaxes_source/C_jasius_reduced_dataset.csv --output-dir /tmp/charaxes_results
+      - name: Verify previously observed descriptive results without new hypothesis scoring
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import numpy as np
+          r=json.loads(Path('/tmp/charaxes_results/result.json').read_text())
+          assert r['data_quality']['records']==1544 and r['data_quality']['positive_records']==167
+          x={z['metric']:z for z in r['contrasts'] if z['panel']=='primary' and z['scheme']=='district_year_oak'}
+          assert np.isclose(x['span']['observed_over_null_median'],0.9648758310805743,rtol=1e-10)
+          assert np.isclose(x['centroid_mean']['observed_over_null_median'],0.8898732025054183,rtol=1e-10)
+          assert x['span']['exploratory_two_sided_mc_p']==0.146
+          assert x['centroid_mean']['exploratory_two_sided_mc_p']==0.002
+          assert sum(z['ratio']<1 for z in r['leave_one_district_out'])==25
+          print('EXPLORATORY_REPLAY_VERIFIED_NOT_NEW_CONFIRMATORY_TEST')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: charaxes-empirical-geometry-results-v1
+          path: /tmp/charaxes_results/*

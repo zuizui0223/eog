@@ -1,0 +1,21 @@
+{
+  "schema": "eog.charaxes.empirical_geometry.contract.v1",
+  "status": "EXPLORATORY_AFTER_PUBLICATION_AND_SCHEMA_QC_NOT_CONFIRMATORY",
+  "source_md5": "6f9f638a1c6966f567c4b7b783a5a47d",
+  "source_sha256": "9338e8f064079c7f9694a55d9b948afedd93b9ac74c771befcbff48218376cd8",
+  "observed_at_design": "Data dictionary, column types, missingness, IDs, years, overall detection count and feature-zero counts have been inspected. No geometry contrast has yet been calculated.",
+  "data_scope": {"records":1544,"unique_trap_ID":1544,"districts":26,"years":[2018,2019,2020,2021],"positive_detections":167,"non_detections":1377,"missing_cells":0},
+  "comparison": "Environmental/resource-feature geometry of detection-positive trap records versus uniformly drawn equal-size samples of all surveyed trap opportunities; nondetections are not certified biological absences.",
+  "primary_features": ["log1p(HPC_5 in percent)","log1p(dist_min in km)"],
+  "sensitivity_features": {"add_connectivity":["log1p(HPC_5)","log1p(dist_min/1000)","log1p(Ci)"],"add_local_cover":["log1p(HPC_05)","log1p(HPC_5)","log1p(dist_min/1000)"]},
+  "feature_rationale": "5km landscape resource scale is motivated by the already published 5-6km finding, NOT selected by the current readout. Host cover and nearest-host distance are resource/landscape proxies, not independent full A/B/M axes.",
+  "reference": "One all-survey reference per feature panel: fixed median center and population standard-deviation scale after log1p. Unlike within-group scaling, preserves comparative extent. Shared MAD is zero for zero-inflated HPC_5, so SD is deliberately specified before geometry scoring. Constant flag only if actual range is zero.",
+  "metrics": ["EOG positive-pair 90th-percentile Euclidean span (primary)","mean distance to centroid (basic comparator)","environmental MST compactness", "environmental largest/median positive MST edge (descriptive gap)"],
+  "nulls": {"unconditional":"167 distinct records from all1544", "conditional_primary":"preserve detection-positive count in each district_ID x year x oak_species stratum, sample uniformly without replacement from that stratum"},
+  "draws":999,
+  "seed":20261106,
+  "report": "Observed values, null medians, ratios, 5th/95th null sensitivity quantiles and exploratory two-sided rank probabilities (not confirmatory p values). Keep both nulls and all panels regardless of direction.",
+  "robustness": "Delete each of26 districts in turn, keep full reference fixed, recompute observed primary span and199 conditional matched draws. Report sign stability, not26 independent tests.",
+  "spatial_topology": "Not estimable: no coordinates or explicit landscape graph in released CSV. Environmental MST is not geographic connectivity.",
+  "limitations": ["Published reduced data omit122 nominal records and later years; omission mechanism unknown.","No trapping effort/detection-repeat columns: results concern observed captures conditional on placement, not true occupancy or demographic persistence.","HPC and Ci arise from the host landscape: no causal or independent BAM-axis decomposition.","No row-level pooled independence assumption or out-of-sample predictive superiority.","No reopening of EOG-WF3/31/3 and no fourth predictive endpoint."]
+}
