@@ -1,0 +1,30 @@
+{
+ "schema":"eog.bam_geometry_response_envelopes.receipt.v1",
+ "status":"VERIFIED_EXPLORATORY_KNOWN_TRUTH_REPLAY",
+ "contract_commit":"a24b73faa98888ffae5e165c3cf5d6d614e2a501",
+ "scoring_commit":"2f973dbfa83282058be62686ac1c57ba8960b0a1",
+ "run_id":42224332364,
+ "run_url":"https://github.com/zuizui0223/eog/actions/runs/42224332364",
+ "artifact_id":13504738461,
+ "artifact_sha256":"b3cbd62afdf66adb065781e5734d1aef2a31c506742418c70df7823ea79b2efa",
+ "result_fingerprint":"bea5a189435961e4ef8501d8c0ddced3ae0c7818810667c5d97d807a3c34ac14",
+ "local_and_canonical_ci_output_byte_parity":true,
+ "member_sha256":{
+  "direct_evidence.csv":"a9551e198b02a0f9685a187c93dcac5144e713615dbc552c1cb2adfae50b2cd1",
+  "manifest.json":"67fcc78276987350c2d198c160e33a3a729559a5e1033761eb1d90572fe84739",
+  "fibre_envelopes.csv":"2bc644dd3f76750bdfef320c47662c64a47e00fa3e175f3864e296d0cb1dc803",
+  "result.json":"584ad345ef2fbc6370b258e2e3d9c25a8fff98ab19dae19a55c7abdfb1bfa196",
+  "world_responses.csv":"93ce660a668d7578ce4d2106a9de0b3987dcd6128ca7273b6f7c1571e9b56c9d"
+ },
+ "denominators":{"landscapes":12,"worlds":768,"current_G_fibres":129,"mask_ambiguous_fibres":69,"world_release_rows":2304},
+ "span_response":{
+  "A":{"map_identified":110,"direction_identified":119,"direction_known_map_unknown":9},
+  "B":{"map_identified":96,"direction_identified":124,"direction_known_map_unknown":28},
+  "M":{"map_identified":95,"direction_identified":121,"direction_known_map_unknown":26,"opposite_sign_fibres":5},
+  "all_three_directions_identified_fibres":115,
+  "all_three_directions_identified_in_mask_ambiguous_fibres":55
+ },
+ "M_response_with_complete_B":{"uniform_direction_identified_fibres":126,"opposite_sign_fibres_fully_resolved":4,"opposite_sign_fibres_partially_resolved":1,"opposite_sign_fibres_total":5},
+ "checks":{"local_unit_tests":6,"parent_current_geometry_parity":768,"evidence_envelope_inclusion_checks":6168,"inclusion_violations":0},
+ "limits":["Perfect complete current G, not field presence-only evidence","Static idealised mask releases, not interventions","Full-census metrics, not sample-size-matched estimates","Known finite universe, not probabilities or independent ecological replications","No changes to frozen EOG-WF or Charaxes findings"]
+}
