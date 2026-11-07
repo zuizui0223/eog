@@ -1,0 +1,76 @@
+{
+  "schema": "eog.bam_one_missed_occupied_cell_v1.protocol",
+  "status": "PRE_SCORE_FIXED_EXPLORATORY_REUSE_OF_EXPOSED_FINITE_WORLDS",
+  "date": "2026-11-07",
+  "source": {
+    "original_generator": "src/eog/v2/known_truth_bam_generality.py",
+    "original_generator_blob": "ab852b02bccdfb2f065717f89b482b7cf15778d3",
+    "parent_analysis": "benchmarks/bam_geometry_response_envelopes_v1.py",
+    "parent_receipt": "validation/bam_geometry_response_envelopes_v1/result_receipt.json",
+    "parent_result_fingerprint": "bea5a189435961e4ef8501d8c0ddced3ae0c7818810667c5d97d807a3c34ac14",
+    "systems": 12,
+    "parameter_worlds": 768,
+    "exact_G_fibres": 129
+  },
+  "target": {
+    "primary": "sign of exact full-census EOG 90th-percentile span change under ideal M release",
+    "secondary": [
+      "sign of exact full-census EOG span under A release",
+      "under B release"
+    ],
+    "releases": "same A->B&M B->A&M M->A&B as existing parent",
+    "scaling": "same original per-system median/MAD reference, no per-group refit",
+    "tolerance": "same parent scaled numerical tolerance 1e-10"
+  },
+  "observation": {
+    "name": "at most one missed truly occupied grid cell",
+    "generation": "For each true world with occupied G, enumerate D=G and D=G without EACH single occupied cell. Other cells are treated as correctly observed nonoccupied except for the sole possible miss.",
+    "feasibility": "Candidate world G' must contain observed D, with popcount(G'\\D)<=1. No false-positive observations.",
+    "not": "This is not unconstrained presence-only data, repeated-visit occupancy, Bernoulli detection modelling or actual empirical sampling.",
+    "denominator": "all generated unique (system_id,D) observation patterns, plus exact 129 true-G classes. Report world×observation cases separately but never as independent observations."
+  },
+  "assays": {
+    "one": "one ideal noiseless local Boolean measurement of A/B/M at one row-major grid site; cannot query true G directly",
+    "budgets": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "adaptive": "select axis,node using only compatible candidate A/B/M masks and model-predicted target signs; observe hidden truth bit after selection",
+    "primary_policy": "target-aware greedy maximising pairs of distinct candidate mask triples with discordant response sign separated by query bit, tie A<B<M then ascending node",
+    "controls": [
+      "B-only greedy",
+      "A-only greedy",
+      "16 deterministic SHA-256 ranked target-blind generic policies with seeds 20261107..20261122"
+    ],
+    "weighting": "no probability weights; duplicate A/B/M mask triples collapse for selection, preserve parameter labels as descriptive counts",
+    "stop": "stop when sign unanimous or no variable informative site; record unresolved even if algorithm exhausted budget"
+  },
+  "analyses": {
+    "per_observation": "for each (system_id,D), enumerate all consistent true mask triples and simulate every possible truth branch at budgets0..3; report unanimity over all possible truth branches",
+    "per_true_G": "robustness defined as every valid D generated from that exact G leading to target-sign identification for all compatible worlds at a given budget; report how many of 129 true-G classes satisfy this",
+    "baseline": "under perfect current G and same target, verify historical M-release 121/129 zero-assay identified; do not silently replace by broader observed-D denominator",
+    "secondary": "A/B zero-assay identification under at-most-one-miss and two-assay descriptive results, keep same budget/policies",
+    "comparisons": "report all fibres, 16 baseline seeds as bounded sensitivity range; do not claim statistical uncertainty or prediction"
+  },
+  "gates": [
+    "original generator exact blob",
+    "12 source landscapes, 768 parameter worlds and 129 exact G equivalence classes",
+    "for each true G, both D=G and every one-cell deletion generated",
+    "truth G remains in candidates for every D derived from it",
+    "feasible candidate sets exactly represent <=1 miss and zero false positives",
+    "no queries of hidden true mask before site choice",
+    "posterior candidate-set nesting, no lost identification",
+    "perfect-current-G baseline sign classification matches parent",
+    "no empty or mismatched denominators"
+  ],
+  "limitations": [
+    "known finite constructed landscapes, previously exposed",
+    "assumes exact map except <=1 false-negative occupied cell, not general presence-only data",
+    "assumes perfect local A/B/M measurements despite occupancy miss",
+    "full-census geometry and static release not dynamic biological scenarios",
+    "no prior probabilities, no natural ecological frequencies, no new EOG-WF endpoint",
+    "no policy guarantees for unmodelled mechanisms or realistic survey effort"
+  ]
+}
