@@ -1,0 +1,65 @@
+{
+  "schema": "eog.bam_partial_local_assay_v1.protocol",
+  "date": "2026-11-07",
+  "status": "PRE_SCORE_FIXED_EXPLORATORY_REUSE_OF_EXPOSED_KNOWN_TRUTH_NOT_NEW_CONFIRMATION",
+  "source": {
+    "repo": "zuizui0223/eog",
+    "parent_code": "benchmarks/bam_geometry_response_envelopes_v1.py",
+    "parent_receipt": "validation/bam_geometry_response_envelopes_v1/result_receipt.json",
+    "merge_sha": "b79bd20518e413a0af9f9e3893803dab7e8bf37e",
+    "result_fingerprint": "bea5a189435961e4ef8501d8c0ddced3ae0c7818810667c5d97d807a3c34ac14",
+    "landscapes": 12,
+    "worlds": 768,
+    "G_fibres": 129,
+    "mask_ambiguous": 69
+  },
+  "targets": {
+    "primary": "sign of exact full-census shared-reference EOG span change under ideal M release (A&B)",
+    "secondary": [
+      "ideal A release (B&M)",
+      "ideal B release (A&M)"
+    ],
+    "current_evidence": "complete exact G; not presence-only",
+    "tolerance": "same scaled 1e-10 as parent fibre_summary; no tuned thresholds"
+  },
+  "assay": {
+    "unit": "one noise-free binary measurement of A, B or M at one row-major node; equal costs",
+    "budgets": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "candidate_nodes": "all row-major candidate nodes; G-occupied nodes are necessarily A=B=M=true and uninformative",
+    "adaptive": "selection uses compatible candidates and their target labels only; never knows hidden true mask before observing bit",
+    "deduplicate": "choose site and evaluate target on distinct A/B/M mask triples; preserve original world-label memberships only as bookkeeping",
+    "policies": {
+      "greedy_all": "Choose unused informative axis,node maximizing separated pairs of distinct candidate triples having different target direction; ties A<B<M then node ascending; stop when sign identified or no positive separation",
+      "greedy_B": "same target-aware greedy restricted to B nodes",
+      "greedy_A": "same target-aware greedy restricted to A nodes",
+      "generic_hash": "16 fixed seeds 20261107–20261122; fixed SHA-256 ranking of axis,node without using target labels; choose first still-variable unused site, stop if sign identified or no informative site"
+    }
+  },
+  "evaluation": {
+    "simulate_truth": "all candidate mask triples as truths; query bit from chosen truth only after selection; retain consistent candidates",
+    "uniform_resolution": "every possible truth path must end with one target sign; no weighting by parameter labels",
+    "denominators": "all 129 fibres for A/B/M and initially ambiguous M fibres (8, with 5 opposite signs) separately",
+    "compare": "greedy all, B-only, A-only, 16 generic baselines under same budgets; seed medians/ranges not biological replicates",
+    "output": [
+      "summary.json",
+      "fibre_budget.csv",
+      "paths.csv",
+      "seed_comparison.csv"
+    ]
+  },
+  "integrity": [
+    "canonical 12x64 worlds and 129 G classes",
+    "never eliminate simulated true mask",
+    "post-observation candidate sets nested",
+    "identification nondecreasing with budget",
+    "site choice independent of hidden truth",
+    "full B known ceiling reproduces 126/129 M direction-known prior result",
+    "same fixed reference and static release definitions"
+  ],
+  "inference_limit": "Finite constructed model worlds, noiseless ideal assays, no frequencies or probabilities, no independent ecological validation or new EOG-WF endpoint; never infer causal biological effect."
+}
