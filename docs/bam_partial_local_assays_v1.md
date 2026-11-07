@@ -115,3 +115,41 @@ Outputs: \`summary.json\`, \`fibre_budget.csv\`, \`paths.csv\`,
 \`summary_sha256.txt\`. A GitHub Actions receipt must be pinned
 only after canonical verification. Result expectations were inspected
 locally and are regression checks, not independent preregistration.
+
+
+## Post-result exact one-site lower-bound audit
+
+After seeing the greedy results, a separate **post-result exhaustive check**
+examined every informative one-node A/B/M Boolean measurement for each of
+the eight initially ambiguous M-release fibres. A measurement was counted
+as sufficient only if *both* possible observed-bit branches, when nonempty,
+had a unanimous target response sign.
+
+- For **5 of 8 fibres**, one ideal local query suffices in the worst case.
+- For the remaining **3 of 8**, **no one-site binary query exists** that
+  resolves all possible target-sign branches.
+- A validated adaptive greedy sequence resolves all three remaining
+  fibres with **two** measurements, giving an exact finite-family
+  minimum worst-case depth of 2 for those cases.
+
+The three requiring two measurements are:
+S00_7x3_closed / G=246145,
+S02_7x3_closed / G=1036191, and
+S07_9x5_gap / G=2138792820255.
+
+This exact *algorithmic* minimum refers to the **frozen finite
+candidate-mask family and noiseless local binary queries**, not the
+minimum number of actual field plots, observations, visits, individuals
+or independent measurements required in nature.
+
+Independent audit code:
+\`benchmarks/audit_bam_one_site_lower_bound_v1.py\`.
+Canonical run: https://github.com/zuizui0223/eog/actions/runs/42374309507.
+The first independent-audit CI attempt failed only at JSON serialization
+(\`separators\` supplied one delimiter rather than two). After the
+single syntax repair, the original parent generator and both analyses
+completed successfully. No biological assumptions, scoring criteria,
+candidate selection policy or previous numerical results were changed.
+
+Exact SHA-linked audit and science limits:
+\`validation/bam_partial_local_assay_v1/result_receipt_v1.json\`.
