@@ -1,0 +1,68 @@
+{
+  "schema": "eog.bam_assay_bit_error_v1.post_result_receipt",
+  "date": "2026-11-08",
+  "status": "VERIFIED_EXPLORATORY_FINITE_WORLD_ONE_ASSAY_READ_ERROR",
+  "source": {
+    "repository": "zuizui0223/eog",
+    "original_generator_blob": "ab852b02bccdfb2f065717f89b482b7cf15778d3",
+    "parent_one_miss_fingerprint": "168d72386b2e2077b3ce226b258b324193516927cd9d530e6ff74188a4974476",
+    "systems": 12,
+    "parameter_worlds": 768,
+    "true_G_classes": 129,
+    "unique_observed_D_patterns": 2627
+  },
+  "pre_score_protocol_commit": "31f0f391ebd2c818092dade2ef891d53dae5bc46",
+  "scoring_source_commit": "d252547f14cf01e9243332f4404862af350c7136",
+  "canonical_action": {
+    "run_id": 42389697068,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42389697068",
+    "conclusion": "SUCCESS",
+    "artifact_id": 13580603917,
+    "artifact_name": "bam-one-bit-error-correcting-assay-panels-v1",
+    "artifact_zip_sha256": "69c626f3c6b304de5ebb37e8975bb04e6df19c9bb5e1eab8ed665b69003a1e27"
+  },
+  "output_hashes": {
+    "result.json": "9c551d402f747f09a1db5ff17caef4232556798fb4887520eab829baa951cd21",
+    "observed_D_panels.csv": "cf04477dc91fb226a6bb5d6f89607d5488da8e84823a6eaaba6baaaf0d75cd1c",
+    "true_G_max_cost.csv": "f8214a72c16c1f010657e79124b5a76c7a093c7a91b4aeff67cc881618f893e8",
+    "result_fingerprint": "2f8f03b208b32a6b832bbe5d19ffd11dc77106db433faf194b69ffdcd88092a4"
+  },
+  "outcomes": {
+    "unanimous_zero_reads": 2483,
+    "initially_target_ambiguous_D": 144,
+    "zero_error_nonadaptive_min_reads_histogram": {
+      "0": 2483,
+      "1": 87,
+      "2": 53,
+      "3": 4
+    },
+    "one_individual_read_error_nonadaptive_min_reads_histogram": {
+      "0": 2483,
+      "3": 87,
+      "6": 53,
+      "9": 4
+    },
+    "robust_true_G_by_individual_read_budget": {
+      "0": 86,
+      "1": 86,
+      "2": 86,
+      "3": 117,
+      "4": 117,
+      "5": 117,
+      "6": 121,
+      "7": 121,
+      "8": 121,
+      "9": 129
+    },
+    "all_144_ambiguous_one_error_min_equals_three_times_no_error_min": true,
+    "per_candidate_error_string_enumeration": "Every panel independently verified for every compatible true A/B/M mask triple and all zero/one-flip recorded outcomes.",
+    "original_geometry_unchanged": true
+  },
+  "scope": {
+    "error_model": "At most one incorrectly read binary A/B/M bit over whole panel; repeats allowed as separate individual readings; no systematic correlated errors.",
+    "optimality": "Exact minimum total number of readings for a fixed equal-cost NONADAPTIVE multiset of A/B/M site-bit tests, not minimum spatial sites or adaptive decision tree.",
+    "observation_model": "True G with at most one occupied site missed, all other cells correctly classified and no false positive D.",
+    "statistical": "No confidence intervals, no population event rate, no independent field data, previously constructed worlds.",
+    "claim_limit": "No validated natural causal A/B/M effects, no new EOG-WF scored endpoint, and no dynamical range forecast."
+  }
+}
