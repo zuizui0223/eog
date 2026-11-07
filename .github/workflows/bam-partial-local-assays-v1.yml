@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "benchmarks/bam_partial_local_assays_v1.py"
+      - "benchmarks/audit_bam_one_site_lower_bound_v1.py"
+      - "tests/test_bam_one_site_lower_bound_v1.py"
       - "tests/test_bam_partial_local_assays_v1.py"
       - "validation/bam_partial_local_assay_v1/**"
       - ".github/workflows/bam-partial-local-assays-v1.yml"
@@ -26,12 +28,15 @@ jobs:
       - name: Verify fixed source generator and truth-blind assay contracts
         run: |
           test "$(git hash-object src/eog/v2/known_truth_bam_generality.py)" = "ab852b02bccdfb2f065717f89b482b7cf15778d3"
-          python -m pytest -q tests/test_bam_partial_local_assays_v1.py tests/test_bam_geometry_response_envelopes_v1.py
+          python -m pytest -q tests/test_bam_partial_local_assays_v1.py tests/test_bam_one_site_lower_bound_v1.py tests/test_bam_geometry_response_envelopes_v1.py
       - name: Replay canonical 12x64 finite BAM worlds and local assay branches
         run: |
           python benchmarks/bam_partial_local_assays_v1.py --output-dir /tmp/eog_partial_assays
           test -s /tmp/eog_partial_assays/fibre_budget.csv
           test -s /tmp/eog_partial_assays/paths.csv
+      - name: Exhaustive one-site lower-bound proof for M response
+        run: |
+          python benchmarks/audit_bam_one_site_lower_bound_v1.py --output /tmp/eog_partial_assays/exact_lower_bound.json
       - name: Post-exposure regression counts, not new confirmation
         run: |
           python - <<'PY'
@@ -46,6 +51,9 @@ jobs:
           assert [x['A','greedy_all',b]['uniform_all_median'] for b in range(4)]==[119,127,129,129]
           assert [x['B','greedy_all',b]['uniform_all_median'] for b in range(4)]==[124,129,129,129]
           assert x['M','hash_all',3]['n_seed_replays']==16
+          exact=json.loads(Path('/tmp/eog_partial_assays/exact_lower_bound.json').read_text())
+          assert exact['ambiguous_M_fibres']==8
+          assert exact['exact_minimum_worst_case_queries_counts']=={'1':5,'2':3}
           print('BAM_LOCAL_ASSAY_POST_RESULT_REGRESSION_MATCHED')
           PY
       - name: Archive complete candidate-world assay trajectories and summaries
