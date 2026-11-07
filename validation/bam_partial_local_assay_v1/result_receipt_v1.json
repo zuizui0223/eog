@@ -1,0 +1,108 @@
+{
+  "schema": "eog.bam_partial_local_assay_v1.result_receipt",
+  "status": "VERIFIED_EXPLORATORY_FINITE_WORLD_REPLAY_NOT_INDEPENDENT_NATURAL_TEST",
+  "date": "2026-11-07",
+  "parent_source": {
+    "merge_sha": "b79bd20518e413a0af9f9e3893803dab7e8bf37e",
+    "original_span_response_fingerprint": "bea5a189435961e4ef8501d8c0ddced3ae0c7818810667c5d97d807a3c34ac14",
+    "original_generator_blob": "ab852b02bccdfb2f065717f89b482b7cf15778d3"
+  },
+  "protocol_commit": "95cd3ca57041983f2c8037768a3f75d8dfe8438c",
+  "scoring_run": {
+    "run_id": 42374309507,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42374309507",
+    "status": "success",
+    "artifact_id": 13574892615,
+    "artifact_name": "bam-partial-local-assays-12x64-v1",
+    "artifact_zip_sha256": "3f29d1ce80f486293000881237dc1fe188c114839dba6661d84baef6e7c870fd"
+  },
+  "files_sha256": {
+    "summary.json": "c2ee5a16be5b743a250d35076c70250f75249895e79a6be9afeada8938a83b07",
+    "fibre_budget.csv": "0a7d1ad4516bef75f4d6a0b02c1033ec1de60f17f12aadc2cd1ed76602b48b9e",
+    "paths.csv": "47383946dc0d0d10f15abba66b95c54e4f3ddf6b56a6b78d83234dfa648ed961",
+    "exact_lower_bound.json": "ec44d183b3372b2d265883569b0d356a67dd57bb598f863a6ee8c7ef40360297"
+  },
+  "result_fingerprint": "4d3956121920469c3a1f9044be3028a0723f7590ffce32dd1cda68dc283b5fef",
+  "exact_lower_bound_fingerprint": "23a958b74dc2992e5cacd15b4cb30dc38246be663a4aff330546af9d0b9c75ba",
+  "source_denominators": {
+    "landscapes": 12,
+    "original_parameter_worlds": 768,
+    "current_G_fibres": 129,
+    "mask_ambiguous_fibres": 69,
+    "initially_M_direction_ambiguous": 8,
+    "initially_M_opposite_sign": 5
+  },
+  "M_span_uniform_direction_identification": {
+    "greedy_all": [
+      121,
+      126,
+      129,
+      129
+    ],
+    "greedy_B_only": [
+      121,
+      126,
+      126,
+      126
+    ],
+    "greedy_A_only": [
+      121,
+      121,
+      121,
+      121
+    ],
+    "generic_hash_16_seed_median": [
+      121,
+      122,
+      125,
+      128
+    ],
+    "generic_hash_16_seed_min_by_budget": [
+      121,
+      121,
+      124,
+      127
+    ],
+    "generic_hash_16_seed_max_by_budget": [
+      121,
+      124,
+      128,
+      129
+    ]
+  },
+  "other_release_greedy_all": {
+    "A": [
+      119,
+      127,
+      129,
+      129
+    ],
+    "B": [
+      124,
+      129,
+      129,
+      129
+    ]
+  },
+  "exact_minimum_queries_among_8_ambiguous_M_fibres": {
+    "one": 5,
+    "two": 3,
+    "method": "Exhaustive one-site binary query partitions plus verified adaptive greedy two-site upper bound; this exact statement applies only to the fixed finite synthetic family."
+  },
+  "audits": [
+    "all candidate (A,B,M) mask triples are deduplicated before site selection",
+    "true world never eliminated by its observed bit",
+    "posterior subsets and target identification monotone",
+    "same local rows and paths numerically identical to independent canonical run",
+    "exact one-site exhaustive bound of five fibres, and adaptive two-site sufficiency for all eight",
+    "all original EOG-WF closed endpoints unchanged"
+  ],
+  "limits": [
+    "perfect complete present G assumed, no detection error",
+    "ideal A/B/M masks are hypothetical assay outcomes, not observed ecological data",
+    "greedy is target-aware with finite-world predicted responses; not independent mechanism estimation",
+    "12 constructed landscapes; 129 G fibres or 16 baseline seeds are not natural/ecological replicates",
+    "no costs, site travel constraints or observation noise, so no field-operational sample-size guarantee",
+    "not an empirical causal test, natural prevalence or fourth EOG-WF endpoint"
+  ]
+}
