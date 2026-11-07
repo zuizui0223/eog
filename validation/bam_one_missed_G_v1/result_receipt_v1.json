@@ -1,0 +1,111 @@
+{
+  "schema": "eog.bam_one_missed_G_v1.post_result_receipt",
+  "status": "VERIFIED_EXPLORATORY_ONE_FALSE_NEGATIVE_KNOWN_TRUTH_REPLAY",
+  "source": {
+    "original_generator_blob_sha": "ab852b02bccdfb2f065717f89b482b7cf15778d3",
+    "parent_EOG_BAM_fingerprint": "bea5a189435961e4ef8501d8c0ddced3ae0c7818810667c5d97d807a3c34ac14",
+    "parameter_worlds": 768,
+    "landscapes": 12,
+    "exact_true_G_classes": 129
+  },
+  "protocol_commit": "cc89f3ac67cf05bd9a42a3a0d17644f10bca4f42",
+  "scoring_source_commit": "fb18f422ed1e8b48412f86685a54a8541bd877ee",
+  "action": {
+    "run_id": 42376624936,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42376624936",
+    "status": "SUCCESS",
+    "artifact_id": 13574949282,
+    "artifact_name": "eog-bam-one-missed-positive-v1",
+    "archive_sha256": "893e7ded47e622fcdcf2e53865d2e86479800800a1620dbf839380be85d33b8a"
+  },
+  "outputs": {
+    "sha256": {
+      "summary.json": "fa2621c0f235e63a305e9352f1818e893c8f65f175de6cc3b0595e58a072f1d6",
+      "observed_fibres.csv": "8b34f015c85e2359390231466cb39caf12d8bec41f1e2f265644ebd8acc4962a",
+      "original_G_robustness.csv": "58852e7a9a06fab49466539fcdbcf02d4a7b7b2845ccbeb5a2ff779a0f846bdb",
+      "system_summary.csv": "ecbfba4331e24fe673dbb4c32e052feaa91ef958952435f0bd53bafbad552346",
+      "exact_minimum.json": "5f6a4130476022a511ee1b45a7253f8912bfffde06e519665e5ac6ebcc41a4a0"
+    },
+    "result_fingerprint": "168d72386b2e2077b3ce226b258b324193516927cd9d530e6ff74188a4974476",
+    "exact_audit_fingerprint": "d149f2e06853bb5651305125b9197a1c6259cbd1694b1898799db3bc3ba136d3"
+  },
+  "observation_model": "D is G or G with one occupied cell removed, no false positives and all other negatives trusted",
+  "observed_unique_D_patterns": 2627,
+  "observed_D_with_multiple_candidate_true_G": 48,
+  "primary_M": {
+    "exact_true_G_no_miss_baseline_direction_identified": 121,
+    "robust_true_G_after_one_possible_miss_by_greedy_queries_0_1_2_3": [
+      86,
+      117,
+      121,
+      129
+    ],
+    "robust_true_G_after_one_possible_miss_by_exact_optimal_queries_0_1_2_3": [
+      86,
+      117,
+      123,
+      129
+    ],
+    "observed_D_unanimous_by_greedy_queries_0_1_2_3": [
+      2483,
+      2570,
+      2623,
+      2627
+    ],
+    "observed_D_minimax_exact_minimum_query_counts_0_1_2_3": [
+      2483,
+      87,
+      54,
+      3
+    ],
+    "target_blind_16_seed_median_robust_true_G_0_1_2_3": [
+      86,
+      102.5,
+      113,
+      122
+    ],
+    "three_query_required_observed_D": [
+      {
+        "system_id": "S00_7x3_closed",
+        "D": 115073
+      },
+      {
+        "system_id": "S00_7x3_closed",
+        "D": 246145
+      },
+      {
+        "system_id": "S02_7x3_closed",
+        "D": 1036191
+      }
+    ]
+  },
+  "secondary": {
+    "A_release_greedy_robust_true_G": [
+      64,
+      115,
+      124,
+      129
+    ],
+    "B_release_greedy_robust_true_G": [
+      81,
+      110,
+      127,
+      129
+    ]
+  },
+  "validation": {
+    "canonical_generator_replayed": true,
+    "contract_and_unit_tests": true,
+    "complete_observation_fibres": true,
+    "all_possible_true_mask_paths_evaluated": true,
+    "global_single_site_query_lower_bound_exact": true,
+    "ci_workflow_status": "SUCCESS"
+  },
+  "limits": [
+    "Retrospective constructed known truths, no independent ecological validation or frequency",
+    "At most one false-negative occupied cell in otherwise complete error-free map, not general presence-only or repeated detection model",
+    "Perfect direct A/B/M local binary assays, equal assumed costs",
+    "Static axis mask-release geometry, not observed intervention, future range forecast or physiological niche breadth",
+    "No fourth EOG-WF endpoint and no changes to original EOG/BAM result"
+  ]
+}
