@@ -1,0 +1,55 @@
+name: BAM finite-world local assay planning (exploratory)
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/bam_partial_local_assays_v1.py"
+      - "tests/test_bam_partial_local_assays_v1.py"
+      - "validation/bam_partial_local_assay_v1/**"
+      - ".github/workflows/bam-partial-local-assays-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fixed-known-truth-local-assays:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install original EOG
+        run: python -m pip install -e ".[dev]"
+      - name: Verify fixed source generator and truth-blind assay contracts
+        run: |
+          test "$(git hash-object src/eog/v2/known_truth_bam_generality.py)" = "ab852b02bccdfb2f065717f89b482b7cf15778d3"
+          python -m pytest -q tests/test_bam_partial_local_assays_v1.py tests/test_bam_geometry_response_envelopes_v1.py
+      - name: Replay canonical 12x64 finite BAM worlds and local assay branches
+        run: |
+          python benchmarks/bam_partial_local_assays_v1.py --output-dir /tmp/eog_partial_assays
+          test -s /tmp/eog_partial_assays/fibre_budget.csv
+          test -s /tmp/eog_partial_assays/paths.csv
+      - name: Post-exposure regression counts, not new confirmation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('/tmp/eog_partial_assays/summary.json').read_text())
+          assert (p['landscapes'],p['worlds'],p['G_fibres'],p['mask_ambiguous_fibres'])==(12,768,129,69)
+          assert (p['initial_M_sign_ambiguous'],p['initial_M_opposite_sign'])==(8,5)
+          x={(r['release_axis'],r['policy'],r['budget']):r for r in p['policy_by_budget']}
+          assert [x['M','greedy_all',b]['uniform_all_median'] for b in range(4)]==[121,126,129,129]
+          assert x['M','greedy_B',3]['uniform_all_median']==126
+          assert [x['A','greedy_all',b]['uniform_all_median'] for b in range(4)]==[119,127,129,129]
+          assert [x['B','greedy_all',b]['uniform_all_median'] for b in range(4)]==[124,129,129,129]
+          assert x['M','hash_all',3]['n_seed_replays']==16
+          print('BAM_LOCAL_ASSAY_POST_RESULT_REGRESSION_MATCHED')
+          PY
+      - name: Archive complete candidate-world assay trajectories and summaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: bam-partial-local-assays-12x64-v1
+          path: /tmp/eog_partial_assays/*
