@@ -1,0 +1,59 @@
+{
+  "schema": "eog.bam_one_assay_bit_error_v1.protocol",
+  "date": "2026-11-08",
+  "status": "PRE_SCORE_FIXED_POST_EXPOSURE_FINITE_WORLD_ROBUSTNESS_REANALYSIS",
+  "source": {
+    "repo": "zuizui0223/eog",
+    "parent_generator": "src/eog/v2/known_truth_bam_generality.py",
+    "generator_blob_sha": "ab852b02bccdfb2f065717f89b482b7cf15778d3",
+    "parent": "benchmarks/bam_one_missed_G_v1.py",
+    "parent_receipt": "validation/bam_one_missed_G_v1/result_receipt_v1.json",
+    "parent_fingerprint": "168d72386b2e2077b3ce226b258b324193516927cd9d530e6ff74188a4974476",
+    "landscapes": 12,
+    "parameter_worlds": 768,
+    "true_G_fibres": 129,
+    "observed_D_fibres": 2627
+  },
+  "question": "Given current G observed with <=1 missed occupied cell, can one-bit measurement error be tolerated while identifying the sign of M-release EOG span response? What is the exact minimum nonadaptive read-count under that bounded-error model?",
+  "base_evidence": "D=G or G without one occupied cell; other absences certified, no false positives. Every distinct (system_id,D) considered. Only original 12x64 masks used.",
+  "response": {
+    "primary": "sign of original EOG positive-pairwise 90th percentile span after ideal M release (A&B) vs each candidate world's exact current G",
+    "secondary": "A and B releases excluded from this one-error pilot; prior results remain frozen",
+    "sign_rule": "same parent scaled tolerance 1e-10; preserve old geometry and per-system reference, do not re-standardize"
+  },
+  "error_model": {
+    "e": 1,
+    "definition": "Among k binary local assay READINGS of one (axis,node) mask bit, at most one reported bit can be adversarially flipped over the entire panel.",
+    "truth": "True model is never excluded solely by one discordant reading; candidate models are retained if Hamming distance <=1 from measured answer sequence.",
+    "repeated_readings": "Allowed; each read costs one unit. Assumes a bound on individual reading errors, not on persistent site/axis-wide systematic errors; 3 identical readings can correct a single bad reading.",
+    "no_probabilities": "No independent Bernoulli p, confidence levels, or prior over model worlds. Bounded adversarial error, zero false certainty within finite hypothesis set."
+  },
+  "measurement_policy": {
+    "primary": "Find exact minimum NONADAPTIVE multiset of A/B/M (axis,node) readouts for each observed D so every pair of distinct-sign compatible A/B/M mask triples has predicted answer-code Hamming distance >=3.",
+    "test_space": "All axis,node bits in frozen row-major landscape. Uninformative and indistinguishable bits can be eliminated safely.",
+    "optimisation": "integer linear multicover: min sum x_j, each distinct-sign pair satisfies sum_{j:disagree} x_j>=3, integer x_j in 0..3. Solve scipy.optimize.milp with zero MIP gap and deterministic candidate sorting. Fail closed if solver not optimal, do not substitute heuristic.",
+    "comparator": "Same exact multicover with pairwise distance>=1 (nonadaptive zero-error lower-cost reference).",
+    "burden": "count raw readings, unique tested axis/node, whether any repeats, n target-discordant pairs, max distance achieved; do not confuse #readings with #unique spatial locations.",
+    "no_error_floor": "If target sign already unanimous in D, cost0 in both models, independent of measurement error.",
+    "outputs": "Per D exact zero-error and one-error minimum read counts, original true-G robust distribution at fixed budgets [0,1,2,3,4,5,6,7,8,9,12], and per-landscape totals."
+  },
+  "structural_checks": [
+    "12 original systems, 768 worlds, 129 true G classes and 2627 unique D patterns",
+    "144 initial M-direction-ambiguous D classes",
+    "duplicate A/B/M triples deduplicated before pairwise comparisons",
+    "every distinct-sign model pair has an informative assay",
+    "zero-error minimum<=one-error minimum<=3*zero-error minimum for fixed NONADAPTIVE plans (triplication upper bound)",
+    "no improvement in robust identified classes after 1 or 2 raw reads under possible single flip",
+    "for every claimed robust panel, enumerate all possible true mask triples and zero/one flipped recorded bits; resulting posterior signs unanimously correct",
+    "parent exact G and sign classifications unchanged"
+  ],
+  "limits": [
+    "same previously exposed finite artificial worlds; no independent ecological evidence",
+    "nonadaptive panel optimum, not adaptive decision tree optimum and not field sampling minimum",
+    "one erroneous READ globally, not one systematically biased site; unlimited repetitions allowed as distinct readings",
+    "survey effort remains unrealistically sufficient to establish all D except <=1 miss; real effort/detection estimation not yet performed",
+    "equal-cost error-free cell/axis availability and calibrated bounded-error channel assumed",
+    "ideal static A/B/M constraint release, not future range prediction or causal intervention",
+    "no new EOG-WF endpoint; no modification of previous frozen manuscripts/results"
+  ]
+}
