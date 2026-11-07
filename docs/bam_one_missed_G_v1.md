@@ -157,8 +157,24 @@ CI checks the canonical source-generator blob, exact 12×64 roster,
 129 original G classes, 2,627 unique observation patterns,
 source-perfect parent results, all three release axes,
 truth-blind site choice and the independent exact-query audit.
-Only after a successful canonical run should the post-result artifact
-fingerprints be pinned in a separate receipt.
+Canonical replay succeeded on the original generator in
+[GitHub Actions run 42376624936](https://github.com/zuizui0223/eog/actions/runs/42376624936).
+The action's ZIP archive (artifact 13574949282) has SHA-256
+`893e7ded47e622fcdcf2e53865d2e86479800800a1620dbf839380be85d33b8a`;
+all five member files were independently checked. The parent
+119/124/121 exact-G results and 768-world generator identities were
+retained. Canonical result fingerprint:
+`168d72386b2e2077b3ce226b258b324193516927cd9d530e6ff74188a4974476`.
+
+SHA-identified post-result record:
+`validation/bam_one_missed_G_v1/result_receipt_v1.json`.
+
+The independent exact audit found that **three D patterns** require
+three ideal adaptive queries even under an optimal strategy, while
+the fixed greedy strategy can need three for **four D patterns**.
+Thus a budget-two result must not be misrepresented as a globally
+optimal result. This audit was run *after* the initial descriptive
+results, not as a fresh confirmatory experiment.
 
 ## Limits and next scientific dependency
 
