@@ -144,3 +144,34 @@ probabilistic detection in G, systematic or time-correlated A/B/M
 measurement errors, measurement costs and observer learning, and
 unmodelled natural mechanisms. These remain separate prospective
 scientific dependencies rather than assumptions silently added here.
+
+
+## Canonical repository verification
+
+The GitHub Actions source-exact replay completed successfully on
+[run 42389697068](https://github.com/zuizui0223/eog/actions/runs/42389697068).
+It built the unchanged 12 original BAM systems, scored all 2,627 observed-D
+patterns, checked the frozen 121/129 exact-G baseline, solved both exact
+mixed-integer multi-cover problems for each ambiguous D, and independently
+verified the retained target sign under every possible one-bit-error
+recorded answer pattern.
+
+Canonical artifact ID: \`13580603917\`.
+Archive SHA-256:
+\`69c626f3c6b304de5ebb37e8975bb04e6df19c9bb5e1eab8ed665b69003a1e27\`.
+
+Output SHA-256 and source-bound result fingerprint are recorded at
+\`validation/bam_assay_bit_error_v1/result_receipt_v1.json\`.
+The original result fingerprint is:
+\`2f8f03b208b32a6b832bbe5d19ffd11dc77106db433faf194b69ffdcd88092a4\`.
+
+The earlier **zero-error adaptive** minimax decision tree for the
+one-missed-G condition required depth3 in only3 observed-D fibres.
+The present **nonadaptive** zero-error optimum requires 3 fixed
+readings in4 fibres. This difference is expected: adaptive queries
+can depend on earlier answers, whereas the fixed nonadaptive panel
+must separate every possible target-discordant pair simultaneously.
+It does not invalidate either result.
+
+No analysis endpoint was changed after the original one-error score:
+the committed SHA receipt records this same unchanged candidate panel.
