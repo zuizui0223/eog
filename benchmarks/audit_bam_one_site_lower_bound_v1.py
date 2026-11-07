@@ -116,7 +116,7 @@ def audit(systems):
         ),
     }
     report["fingerprint"] = hashlib.sha256(
-        json.dumps(report, sort_keys=True, separators=(":"),
+        json.dumps(report, sort_keys=True, separators=(",", ":"),
                    allow_nan=False).encode()
     ).hexdigest()
     return report
