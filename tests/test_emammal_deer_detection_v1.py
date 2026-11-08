@@ -5,8 +5,7 @@ from benchmarks import emammal_deer_detection_v1 as m
 def test_all_zero_likelihood_is_occupancy_mixture():
     n=np.array([4]);k=np.array([0])
     psi,p=.6,.4
-    assert np.exp(m.log_likelihood((psi,p),n,k))==np.testing.assert_allclose(
-        np.exp(m.log_likelihood((psi,p),n,k)),(1-psi)+psi*(1-p)**4,rtol=1e-12) or True
+    assert np.isclose(np.exp(m.log_likelihood((psi,p),n,k)),(1-psi)+psi*(1-p)**4)
 
 def test_positive_history_cannot_be_unoccupied():
     n=np.array([4]);k=np.array([2])
