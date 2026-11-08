@@ -68,3 +68,42 @@ python benchmarks/bam_detection_prior_calibration_v1.py --output result.json
 The dedicated CI validates the source generator and likelihood
 normalization, the original parent result, 12 sensitivity scenarios,
 and exact correct/wrong/abstain mass conservation.
+
+## Canonical sensitivity result (exploratory)
+
+GitHub Actions run
+https://github.com/zuizui0223/eog/actions/runs/42445337190
+completed successfully. Exact result fingerprint:
+`594624f13c40ae69f949f9c76cb2bccacdb3837a007ac056b5e6c1972c62d04c`.
+The original p=0.8, assumed p=0.8, uniform-mask
+correct/wrong/abstention triple reproduced PR #682 exactly.
+
+With the generating prior held uniform over distinct BAM masks:
+
+| True p | Assumed p | Assumed prior | Correct | Wrong | Abstain |
+|---|---|---|---:|---:|---:|
+|0.8|0.8|uniform mask|0.353910|0.000813|0.645277|
+|0.5|0.5|uniform mask|0.264091|0.001525|0.734384|
+|0.5|0.8|uniform mask|0.350633|0.013449|0.635918|
+|0.8|0.5|uniform mask|0.274710|0.000041|0.725249|
+|0.5|0.5|uniform G|0.243837|0.000947|0.755216|
+|0.8|0.5|uniform G|0.256081|0.000004|0.743915|
+
+Other predeclared scenarios are retained in the archived output.
+In the particular p=0.8 *assumed* model, all three tested prior
+families yielded identical decision outcomes; this is a property
+of these finite candidate landscapes, site selections and 95%
+decision threshold, **not evidence that priors never matter**.
+At assumed p=0.5, uniform-G weighting changed decisions and
+their expected risks.
+
+The largest source of sensitivity in this grid is detection
+probability misspecification. For true p=0.5, assuming p=0.8
+raises the mean wrong-decision probability from 0.001525 to
+0.013449 (about 8.8-fold), while reducing abstention.
+This is a tradeoff between selective decisions and incorrect
+confidence under the declared hypothetical generating prior.
+The worst truth-specific wrong-decision probability reaches
+0.125 in this scenario, much larger than its mean.
+
+No actual field prior or detection rate was estimated.
