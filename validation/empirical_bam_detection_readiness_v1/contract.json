@@ -1,0 +1,46 @@
+{
+  "schema": "eog.empirical_bam_detection_readiness.v1",
+  "status": "SOURCE_AUDIT_AND_PROSPECTIVE_FIELD_SCHEMA_NO_NEW_ECOLOGICAL_TEST",
+  "source": {
+    "repository": "zuizui0223/eog",
+    "charaxes_file_sha256": "9338e8f064079c7f9694a55d9b948afedd93b9ac74c771befcbff48218376cd8",
+    "charaxes_rows": 1544,
+    "positive_traps": 167,
+    "source_period": "2018-2021",
+    "districts": 26
+  },
+  "purpose": "Distinguish trap-record nondetections from independent repeated occupancy surveys and independently measured A/B/M. Create strict ingest gate for new external field data, not a synthetic positive result.",
+  "field_schema": {
+    "required": [
+      "site_id",
+      "visit_id",
+      "survey_date",
+      "detected",
+      "effort_minutes",
+      "method_id",
+      "observer_id",
+      "latitude",
+      "longitude",
+      "A_measure",
+      "B_measure",
+      "M_measure",
+      "A_method",
+      "B_method",
+      "M_method"
+    ],
+    "detected": "0/1; nondetection never equated with absence",
+    "site_id": "stable location identifier, reused across visits",
+    "visit_id": "unique within site",
+    "survey_date": "ISO YYYY-MM-DD",
+    "effort_minutes": "strictly positive finite number",
+    "latitude": "[-90,90]",
+    "longitude": "[-180,180]",
+    "A_B_M": "finite numeric proxies, independent measurement methods explicitly recorded, no automatic causal interpretation",
+    "repeats": "at least two distinct visit_id per site for minimum repeated-detection design",
+    "season": "visits per site within one prespecified closure window, here <=30 days",
+    "coverage": ">=2 sites and >=2 visits per site",
+    "effort": "do not infer equal effort from presence of records"
+  },
+  "gate": "FAIL_CLOSED for missing columns, duplicate site/visit, invalid detection, no repeats, bad effort, invalid coords, closure violation or missing A/B/M methods",
+  "interpretation": "PASS means schema/replication readiness only; no validation of independence, true closure, detection calibration, spatial sampling representativeness, biological causal A/B/M or field ecological result."
+}
