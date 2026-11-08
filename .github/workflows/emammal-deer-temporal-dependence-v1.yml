@@ -1,0 +1,45 @@
+name: Real deer temporal dependence diagnostic
+on:
+  pull_request:
+    paths:
+      - "benchmarks/emammal_deer_temporal_dependence_v1.py"
+      - "tests/test_emammal_deer_temporal_dependence_v1.py"
+      - "validation/emammal_deer_temporal_dependence_v1/**"
+      - ".github/workflows/emammal-deer-temporal-dependence-v1.yml"
+permissions:
+  contents: read
+jobs:
+  serial-dependence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q tests/test_emammal_deer_temporal_dependence_v1.py
+      - name: Get exact pinned public deer history
+        run: |
+          mkdir -p /tmp/deer_temporal
+          curl --fail --location --retry 2 --max-time 50 --silent --show-error \
+            https://raw.githubusercontent.com/BrentPease1/single-season-occupancy/f65b220d1c84240fa81cb457bf27522424fe1666/deer_detection_history.csv \
+            -o /tmp/deer_temporal/deer_detection_history.csv
+          echo "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34  /tmp/deer_temporal/deer_detection_history.csv" | sha256sum -c -
+      - name: Fixed null and odd/even occupancy fits
+        run: |
+          python benchmarks/emammal_deer_temporal_dependence_v1.py --source /tmp/deer_temporal/deer_detection_history.csv --output /tmp/deer_temporal/result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/deer_temporal/result.json').read_text())
+          assert r['draws']==1999 and r['n_sites']==87
+          assert r['observed_transitions']['pairs']>0
+          assert len(r['permutation_tests'])==4
+          assert set(r['fits'])=={'all_22','odd_days','even_days'}
+          print('REAL_DEER_TEMPORAL_AUDIT_SUCCESS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deer-temporal-dependence-v1
+          path: /tmp/deer_temporal/result.json

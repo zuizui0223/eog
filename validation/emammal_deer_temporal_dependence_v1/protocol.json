@@ -1,0 +1,33 @@
+{
+  "schema": "eog.emammal_deer_temporal_dependence_v1.protocol",
+  "status": "PRE_SCORE_EXPLORATORY_REAL_SOURCE_SENSITIVITY",
+  "source": {
+    "commit": "f65b220d1c84240fa81cb457bf27522424fe1666",
+    "sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+    "rows": 87,
+    "days": 22,
+    "parent": "benchmarks/emammal_deer_detection_v1.py"
+  },
+  "question": "Are consecutive deer detections more similar than expected under independent days, and how does thinning daily visits affect fitted p and psi?",
+  "design": {
+    "primary": "within-site consecutive valid-day agreement (11,00,10,01), compared with within-site fixed-count random permutations of observed daily detection values, preserving each site's missing-day pattern",
+    "null": "1999 fixed-seed permutations of observed 0/1 within each site, NA positions unchanged, independent across sites",
+    "seed": 20261108,
+    "statistics": [
+      "consecutive same-state agreement",
+      "consecutive 11 transitions",
+      "consecutive 00 transitions",
+      "consecutive 01+10 transitions"
+    ],
+    "inference": "two-sided exploratory Monte Carlo tail with +1 correction, not causal dependence or biological closure test",
+    "thinning": "fit same constant-p/psi model on odd-numbered and even-numbered daily occasions separately; require >=2 observed visits per retained site; compare full 22-day fit; do not select favorable split",
+    "checks": [
+      "source SHA exact",
+      "no NA converted to zero",
+      "87 sites fixed",
+      "no claim that permutation null captures closure, effort or day effects",
+      "full fit reproduces p=0.3679060046359003 psi=0.720139945903844",
+      "not new EOG-WF endpoint"
+    ]
+  }
+}
