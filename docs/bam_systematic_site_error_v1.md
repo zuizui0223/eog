@@ -126,5 +126,64 @@ python benchmarks/bam_systematic_site_error_v1.py \
 
 The GitHub Actions workflow replays all original landscapes and
 archives the per-observation panel and per-true-G worst-case
-cost. The post-scoring receipt is added only after the canonical
-run succeeds, with complete SHA-256s and interpretation limits.
+cost. The canonical GitHub Actions run
+[42430146733](https://github.com/zuizui0223/eog/actions/runs/42430146733)
+succeeded, using the original source generator with exact source fingerprint
+checks. Artifact ID \`13596369221\`, ZIP SHA-256
+\`1cd9e566606981cf7ceb660320856eca788cbba7deecfc71ccd3498c73811f0a\`.
+The full three result files and their SHA-256s are pinned at
+\`validation/bam_systematic_site_error_v1/result_receipt_v1.json\`.
+Result fingerprint:
+\`a0da85bf73684c557574a6355716c15eee5f1c30650e3d9cd088fe7bc5897101\`.
+
+## Canonical descriptive results
+
+Of the **2,627 distinct observed-D finite-world fibres**,
+**2,483** already give unanimous M-release span direction without
+any further assay, leaving **144 initially ambiguous**.
+
+| Distinct-D class | Exact minimum independent geographic sites | Count |
+|---|---:|---:|
+| Target already unanimous | 0 | 2,483 |
+| Correctable despite one arbitrary bad geographic site | 3 | **100** |
+| Structurally unidentifiable under one bad geographic site | Not finite | **44** |
+
+The **44 impossible D** arise because some opposite-sign candidate
+mask pairs differ at only **one geographic node in 25 cases**, or
+**two nodes in 19 cases**, *even across the complete candidate grid*.
+No additional replicates or A/B/M axes at those same nodes can
+create a third independent spatial separation.
+
+In the zero-site-error baseline with full three-bit profiles,
+minimum distinct site counts were **0:2,483; 1:143; 2:1**.
+With one site-wide systematic error, all 100 feasible ambiguous
+observations require **three different geographic sites**, i.e.
+nine ideal axis-bit readings in total, and the remaining 44 have
+no error-correcting panel in this frozen source universe.
+
+For each of the 129 original true-G classes, a guarantee requires
+identification for **every** possible omitted-positive observation D.
+The number of fully robust G classes is **86/129 before additional
+assays, and 113/129 once three distinct sites can be measured**.
+Further sites, up to the entire supplied grid, cannot resolve the
+remaining **16/129** true-G classes under this one-bad-site guarantee.
+
+These numbers are not empirical error rates. They are structural
+finite-model results conditional on complete current mapping except
+one occupied-cell omission, ideal full A/B/M site profiles, and an
+upper bound of one systematically corrupted geographic site.
+
+## Comparison with prior one-bad-reading result
+
+PR #680 allowed *one individual binary read* to be wrong, with
+each repeated read as a separately corruptible unit. Under that
+model up to **nine individual reads** could resolve all 129
+true-G classes in the same finite source. The current model can
+also involve nine axis-bit readings (three whole A/B/M site profiles),
+but demands **three independently located sites**.
+
+The residual 16 classes are not a contradiction of PR #680:
+their source-world pairs lack enough independent spatial differences
+to correct one geographically shared systematic error. The
+error model, unit cost and required independence have changed.
+
