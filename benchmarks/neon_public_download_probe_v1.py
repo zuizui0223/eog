@@ -1,6 +1,6 @@
 """Probe fixed NEON native CSV public access, preserving honest failure status."""
 from __future__ import annotations
-import argparse,hashlib,json,urllib.request,urllib.error
+import argparse,hashlib,json,urllib.request,urllib.error,urllib.parse
 from pathlib import Path
 
 API="https://data.neonscience.org/api/v0/data/DP1.10072.001/HARV/2023-06"
@@ -29,6 +29,10 @@ def probe(out):
             item=matching[0]
             name=item["name"]
             if "/" in name or "\\" in name:raise ValueError("unsafe file name")
+            parsed=urllib.parse.urlparse(item["url"])
+            if parsed.scheme!="https" or not parsed.hostname or not (
+                parsed.hostname=="neonscience.org" or parsed.hostname.endswith(".neonscience.org")
+            ):raise ValueError("untrusted source download host")
             request=urllib.request.Request(item["url"],headers={"User-Agent":"EOG-NEON-source-qualification/1.0"})
             with urllib.request.urlopen(request,timeout=50) as response:
                 content=response.read(LIMIT+1)
