@@ -1,0 +1,48 @@
+{
+  "schema": "eog.bam_detection_effort_v1.protocol",
+  "date": "2026-11-08",
+  "status": "PRE_SCORE_EXPLORATORY_KNOWN_TRUTH_NO_NEW_FIELD_DATA",
+  "source": {
+    "landscapes": 12,
+    "worlds": 768,
+    "original_generator_blob": "ab852b02bccdfb2f065717f89b482b7cf15778d3",
+    "parent": "benchmarks/bam_one_bit_error_v1.py",
+    "target": "M-release original EOG span sign",
+    "previous_ideal_observation_fibres": 2627
+  },
+  "question": "When current G is not certified by absence observations, what can repeated imperfect detection actually rule out and how does probabilistic decision error depend on effort?",
+  "design": {
+    "truth": "original full G=A&B&M per candidate world, unchanged",
+    "sites": "Six predeclared grid nodes per landscape selected by highest occupancy-mask variability among 64 original candidate worlds, ties by row-major node index. Selection does not inspect M-release target signs. All other nodes remain unobserved; do not assume their absence.",
+    "observation": "binary detections on k independent visits per site; detection probability p conditional on G=1, false positives fixed zero",
+    "p_grid": [
+      0.5,
+      0.8
+    ],
+    "visit_grid": [
+      1,
+      3,
+      6
+    ],
+    "sensitivity_p1": 1,
+    "non_detections": "Likelihood (1-p)^k if G=1 and no detection; 1 if G=0 and no detection; any detection has zero likelihood for G=0",
+    "replicate_generation": "Per-site probability of at least one detection across k independent visits is 1-(1-p)^k. The six-site detection pattern likelihood is product Bernoulli conditional on true G, with no false positives.",
+    "weights": "One explicitly hypothetical uniform prior per DISTINCT A/B/M mask triple within each landscape; do not weight duplicate parameter labels. Separate descriptive across-system counts, no population prevalence.",
+    "decision": "For each possible six-site detection pattern, calculate target-sign posterior under a uniform prior over DISTINCT A/B/M mask triples. Decide only if largest sign mass >=0.95, otherwise abstain. Compute exact expected correct/wrong/abstain under the same prior predictive distribution; also report worst-case truth-specific wrong decision probability.",
+    "computational": "Exact enumeration of all 2^6 detection-pattern masks for each of six sites, all distinct candidate mask triples and all true mask triples. No Monte Carlo, no state truncation.",
+    "baseline": "With 0<p<1, all candidates with G superset of detected nodes have positive likelihood, regardless of nondetections. Repeated nondetection never logically proves absence. With p=1, a nondetection excludes occupancy only at the six surveyed sites; all other nodes remain unobserved.",
+    "primary": "p=0.8,k=3, six fixed observation sites",
+    "secondary": "p=0.5,k=1,3,6; p=0.8,k=1,6; p=1,k=1 ideal",
+    "no_effect_claim": "No natural species detection probabilities or causal inference; report model assumptions."
+  },
+  "checks": [
+    "all original 768 worlds and 12 systems unchanged",
+    "same target signs as prior M-release baseline121/129",
+    "posterior normalized for each observation",
+    "zero false positives enforced",
+    "no detection with p<1 cannot logically rule out occupied G",
+    "higher visit count changes probabilistic risk but not deterministic logical impossibility",
+    "report denominators and avoid parameter-label multiplicity as prior",
+    "no new EOG-WF endpoint"
+  ]
+}

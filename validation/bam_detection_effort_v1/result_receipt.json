@@ -1,0 +1,54 @@
+{
+  "schema": "eog.bam_detection_effort_v1.receipt",
+  "status": "VERIFIED_EXPLORATORY_HYPOTHETICAL_DETECTION_MODEL",
+  "date": "2026-11-08",
+  "protocol_commit": "e415f55e0e3109d8c36e02aa91dd581a6ac98865",
+  "canonical_run": {
+    "id": 42437206225,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42437206225",
+    "conclusion": "SUCCESS",
+    "artifact_id": 13600012647,
+    "artifact_sha256": "ffc1740b72e608bc8c254a054dda66b7e2cfe82dfd7340eba3d1310847644457"
+  },
+  "result_fingerprint": "de838904d53008a944d79c4c5cab172baea4d71c5dbfb4d7b2c1384763d3c514",
+  "source": {
+    "systems": 12,
+    "worlds": 768,
+    "full_G_M_span_direction_known": 121,
+    "sites_per_landscape": 6,
+    "patterns_per_landscape": 64
+  },
+  "model": {
+    "p": [
+      0.5,
+      0.8
+    ],
+    "visits": [
+      1,
+      3,
+      6
+    ],
+    "control": "p=1,k=1",
+    "false_positive_probability": 0,
+    "prior": "uniform over distinct A/B/M masks within landscape",
+    "decision": "MAP sign if posterior>=0.95; else abstain"
+  },
+  "primary_p08_k3": {
+    "mean_correct": 0.353909726564504,
+    "mean_wrong": 0.0008133028898816199,
+    "mean_abstain": 0.6452769705456144,
+    "max_truth_wrong_across_landscapes": 0.008
+  },
+  "p08_k6": {
+    "mean_correct": 0.35416459274191864,
+    "mean_wrong": 0.000006481680595941169,
+    "mean_abstain": 0.6458289255774855,
+    "max_truth_wrong_across_landscapes": 0.000064
+  },
+  "logical": {
+    "for_all_p_less_than_one": "zero of 64 detection patterns per landscape uniquely identifies sign over finite worlds",
+    "nondetection_never_proves_absence": true
+  },
+  "scope": "Previously exposed synthetic worlds, hypothetical prior and detection rates; not empirical estimates, not full-G identified-set result, not fourth EOG-WF endpoint.",
+  "note": "During verification an artificial >1e-14 cutoff falsely marked very small positive likelihoods as logical zero at p=.8,k=6. Fixed to strict >0 before this authoritative replay. Posterior decision scores unchanged."
+}

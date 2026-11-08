@@ -1,0 +1,48 @@
+name: EOG BAM imperfect detection effort (exploratory)
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/bam_detection_effort_v1.py"
+      - "tests/test_bam_detection_effort_v1.py"
+      - "validation/bam_detection_effort_v1/**"
+      - ".github/workflows/bam-detection-effort-v1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-six-site-detection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - name: Source identity and likelihood contracts
+        run: |
+          test "$(git hash-object src/eog/v2/known_truth_bam_generality.py)" = "ab852b02bccdfb2f065717f89b482b7cf15778d3"
+          python -m pytest -q tests/test_bam_detection_effort_v1.py
+      - name: Canonical exact six-site likelihood enumeration
+        run: python benchmarks/bam_detection_effort_v1.py --output /tmp/eog_detection/result.json
+      - name: Verify normalization and scientific denominators
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('/tmp/eog_detection/result.json').read_text())
+          assert p['source']=={'systems':12,'worlds':768,'full_G_M_response_known_fibres':121}
+          assert len(p['results'])==7 and len(p['per_system'])==84
+          for r in p['results']:
+              assert abs(r['mean_correct']+r['mean_wrong']+r['mean_abstain']-1)<1e-10
+              assert r['mean_wrong']>=0 and r['mean_abstain']>=0
+              if r['p']<1: assert r['mean_logically_unanimous_patterns']==0
+          print('DETECTION_EFFORT_FINITE_WORLD_AUDIT_PASSED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bam-detection-effort-exact-v1
+          path: /tmp/eog_detection/result.json
