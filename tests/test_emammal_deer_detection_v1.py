@@ -16,7 +16,7 @@ def test_NA_does_not_become_zero():
     x=np.array([[1,0,np.nan,1],[0,0,np.nan,0],[0,1,0,0],[0,0,0,0],[1,1,1,1]],float)
     r=m.fit(x,4)
     assert r["n_valid_site_days"]==18
-    assert r["n_detected_site_days"]==8
+    assert r["n_detected_site_days"]==7
     assert r["n_sites_at_least_2_visits"]==5
     assert 0<r["p_MLE"]<1 and 0<r["psi_MLE"]<1
 
