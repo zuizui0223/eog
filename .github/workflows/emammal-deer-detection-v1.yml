@@ -1,0 +1,46 @@
+name: Real eMammal deer repeated-detection exploratory model
+on:
+  pull_request:
+    paths:
+      - "benchmarks/emammal_deer_detection_v1.py"
+      - "tests/test_emammal_deer_detection_v1.py"
+      - "validation/emammal_deer_detection_v1/**"
+      - ".github/workflows/emammal-deer-detection-v1.yml"
+permissions:
+  contents: read
+jobs:
+  source-exact-real-detection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev, currentflow]"
+      - name: Test likelihood and NA treatment
+        run: python -m pytest -q tests/test_emammal_deer_detection_v1.py
+      - name: Download original pinned public real camera-trap history
+        run: |
+          mkdir -p /tmp/emammal
+          curl --fail --location --retry 2 --max-time 50 --silent --show-error \
+            https://raw.githubusercontent.com/BrentPease1/single-season-occupancy/f65b220d1c84240fa81cb457bf27522424fe1666/deer_detection_history.csv \
+            -o /tmp/emammal/deer_detection_history.csv
+          sha256sum /tmp/emammal/deer_detection_history.csv
+      - name: Fit constant-psi/p likelihood with all missing visits retained
+        run: |
+          python benchmarks/emammal_deer_detection_v1.py --source /tmp/emammal/deer_detection_history.csv --output /tmp/emammal/result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/emammal/result.json').read_text())
+          assert r['source']['sites']==87 and r['source']['daily_columns']==22
+          assert len(r['fits'])==3
+          assert r['qc']['observed_site_days']+r['qc']['missing_site_days']==87*22
+          assert all(0<x['p_MLE']<1 and 0<x['psi_MLE']<1 for x in r['fits'])
+          print('REAL_DEER_HISTORY_MODEL_CHECKED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: emammal-deer-real-detection-v1
+          path: /tmp/emammal/result.json
