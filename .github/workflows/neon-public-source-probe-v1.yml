@@ -1,0 +1,39 @@
+name: NEON fixed public source retrieval probe
+on:
+  pull_request:
+    paths:
+      - "benchmarks/neon_public_download_probe_v1.py"
+      - "validation/neon_public_download_probe_v1/**"
+      - ".github/workflows/neon-public-source-probe-v1.yml"
+permissions:
+  contents: read
+jobs:
+  public-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fixed source access and source bytes audit
+        run: |
+          python benchmarks/neon_public_download_probe_v1.py --output-dir /tmp/neon_probe
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/neon_probe/probe_receipt.json')
+          r=json.loads(p.read_text())
+          assert r['site']=='HARV' and r['month']=='2023-06'
+          assert r['status'] in ('STOP_NOT_INGESTED','SOURCE_BYTES_RETRIEVED_PENDING_QUALITY_GATE')
+          if r['status']=='SOURCE_BYTES_RETRIEVED_PENDING_QUALITY_GATE':
+              assert len(r['files'])==2
+          else:
+              assert len(r['files'])<2
+          print('SOURCE_ACCESS_OUTCOME_RECORDED',r['status'])
+          PY
+      - name: Archive source probe receipt and any successfully retrieved source files
+        uses: actions/upload-artifact@v4
+        with:
+          name: neon-harv-2023-06-public-source-probe-v1
+          path: /tmp/neon_probe/*

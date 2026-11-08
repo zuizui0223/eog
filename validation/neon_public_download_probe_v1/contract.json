@@ -1,0 +1,17 @@
+{
+  "schema": "eog.neon_public_download_probe.v1",
+  "date": "2026-11-08",
+  "status": "PRE_PROBE_SOURCE_RETRIEVAL_NOT_DATA_ANALYSIS",
+  "product": "DP1.10072.001",
+  "site": "HARV",
+  "month": "2023-06",
+  "api": "https://data.neonscience.org/api/v0/data/DP1.10072.001/HARV/2023-06",
+  "tables": [
+    "mam_perplotnight",
+    "mam_pertrapnight"
+  ],
+  "design": "One fixed site-month, no opportunistic site or date switching. Query public API once with no credential; if denied, record HTTP status and stop without fabricating data. If successful, download exactly the two native CSVs and verify MD5 if supplied. Never publish raw unverified records to repository; CI artifact only.",
+  "max_file_bytes": 15000000,
+  "source_gate": "benchmarks/neon_mammal_source_gate_v1.py",
+  "limitation": "A public API endpoint may now require authentication; this is an access check, not an ecological model."
+}
