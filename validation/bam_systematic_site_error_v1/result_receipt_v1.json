@@ -1,0 +1,80 @@
+{
+  "schema": "eog.bam_systematic_site_error_v1.post_result_receipt",
+  "date": "2026-11-08",
+  "status": "VERIFIED_EXPLORATORY_FINITE_WORLD_SITE_SYSTEMATIC_ERROR",
+  "source": {
+    "repository": "zuizui0223/eog",
+    "original_generator_blob_sha": "ab852b02bccdfb2f065717f89b482b7cf15778d3",
+    "prior_one_individual_read_error_result_fingerprint": "2f8f03b208b32a6b832bbe5d19ffd11dc77106db433faf194b69ffdcd88092a4",
+    "landscapes": 12,
+    "parameter_worlds": 768,
+    "true_G_fibres": 129,
+    "observed_D_fibres": 2627,
+    "perfect_G_M_direction_known": 121
+  },
+  "pre_score_protocol_commit": "ea93275c5de2b86578f3eebf2d9a4123a8cf4905",
+  "source_scoring_commit": "aa8752aa2e49c8ad4e98374513ce2a6436575885",
+  "action": {
+    "run_id": 42430146733,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42430146733",
+    "conclusion": "SUCCESS",
+    "artifact_id": 13596369221,
+    "artifact_name": "bam-systematic-site-error-v1",
+    "archive_sha256": "1cd9e566606981cf7ceb660320856eca788cbba7deecfc71ccd3498c73811f0a"
+  },
+  "outputs": {
+    "member_sha256": {
+      "result.json": "81c2c2cf548dfbf6e4d9ce96bf7076e8d0e15daef8935cd3bee11375ce31fb98",
+      "observed_D_site_panels.csv": "940def7e0b231793dfc5cced08d8b6674782c148f1196e627ad9148d7e7bdd70",
+      "true_G_site_costs.csv": "23d2e030241fa7c0b1f5f9cacf7f5535c2c48503de3a0f5c991ece0d62304213"
+    },
+    "result_fingerprint": "a0da85bf73684c557574a6355716c15eee5f1c30650e3d9cd088fe7bc5897101"
+  },
+  "outcomes": {
+    "current_G_observation_patterns": 2627,
+    "prior_sign_unanimous_no_site": 2483,
+    "originally_ambiguous_D": 144,
+    "robust_possible_D_with_three_distinct_sites": 100,
+    "structurally_impossible_D": 44,
+    "impossible_pair_min_geographic_site_distance_1": 25,
+    "impossible_pair_min_geographic_site_distance_2": 19,
+    "exact_zero_site_error_minimum_distinct_site_distribution": {
+      "0": 2483,
+      "1": 143,
+      "2": 1
+    },
+    "one_site_wide_error_minimum_distinct_site_distribution": {
+      "0": 2483,
+      "3": 100,
+      "impossible": 44
+    },
+    "full_three_axis_readings_for_three_sites": 9,
+    "true_G_classes_robust_without_new_site": 86,
+    "true_G_classes_robust_at_three_or_more_independent_sites": 113,
+    "true_G_classes_not_robust_under_any_site_budget": 16,
+    "impossible_by_landscape": {
+      "S00_7x3_closed": 8,
+      "S01_7x3_gap": 1,
+      "S02_7x3_closed": 17,
+      "S04_7x3_closed": 17,
+      "S10_9x5_closed": 1
+    }
+  },
+  "method": {
+    "target": "M-release sign of original full-census shared-reference EOG positive-pairwise 90th-percentile span",
+    "measurement": "entire A/B/M triple at distinct physical grid sites",
+    "error": "at most one site-wide arbitrary corrupted triple; same-site repetition provides no independent correction",
+    "optimality": "globally optimal minimum number of distinct equal-cost sites for a nonadaptive whole-profile panel via exact binary SciPy MILP",
+    "independent_verification": "every candidate true mask and every single-site arbitrary three-bit corruption enumerated in independent decoder",
+    "structural_impossibility": "at least one opposite-sign pair differs in fewer than three distinct grid sites; cannot correct one adversarial site error using existing complete-site observations",
+    "source_original": "same 12x64 original worlds and current-D one-missed-G observation fibre equivalence classes"
+  },
+  "strict_limits": [
+    "All counts are constructed finite-world arithmetic and not natural ecological prevalence or independent experimental replicates.",
+    "One geographic site can be fully systematically wrong; does not model correlated bias affecting several sites.",
+    "All A/B/M constraint bits at each selected site are assumed directly measurable, at equal cost and jointly.",
+    "At most one occupied G cell undetected in otherwise fully known correct G; no probabilistic detection or survey effort.",
+    "Nonadaptive exact site selection; not an adaptive plan or guarantee of field visit count.",
+    "No inference of causal dispersal, climate niches, or physiological tolerance, and no fourth EOG-WF endpoint."
+  ]
+}

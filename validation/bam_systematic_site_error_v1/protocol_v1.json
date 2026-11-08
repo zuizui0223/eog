@@ -1,0 +1,79 @@
+{
+  "schema": "eog.bam_systematic_one_site_error_v1.protocol",
+  "date": "2026-11-08",
+  "status": "EXPLORATORY_KNOWN_TRUTH_PROTOCOL_FIXED_BEFORE_NEW_SITE_ERROR_SCORING",
+  "source": {
+    "repository": "zuizui0223/eog",
+    "parent_pr": 680,
+    "parent_merge_sha": "a0b2e3a114e2cd1f7c94a460d182c26617e855e9",
+    "original_generator_blob": "ab852b02bccdfb2f065717f89b482b7cf15778d3",
+    "original_parent_module": "benchmarks/bam_one_bit_error_v1.py",
+    "original_parent_result_fingerprint": "2f8f03b208b32a6b832bbe5d19ffd11dc77106db433faf194b69ffdcd88092a4",
+    "n_systems": 12,
+    "n_worlds": 768,
+    "n_true_G": 129,
+    "n_distinct_observed_D": 2627,
+    "n_initially_M_span_ambiguous_D": 144
+  },
+  "question": "How much of M-release EOG span-sign identifiability survives one entire geographic site's systematically wrong A/B/M assessment? Distinguish unique sites from repeated readings.",
+  "observation": {
+    "D": "exact current G or G minus one true occupied node (only false negative); D otherwise complete and all negatives trusted",
+    "candidate": "World G must include all D and have at most one additional true positive",
+    "no_probabilities": true
+  },
+  "response": {
+    "target": "sign of original EOG 90% positive pairwise environmental span after ideal M release Gcf=A&B",
+    "metric": "unchanged fixed landscape median/MAD reference, per-world exact current G full-census span, parent sign tolerance",
+    "no_new_eog_metrics": true
+  },
+  "assay": {
+    "observation_unit": "one independent GEOGRAPHIC grid node where all three binary A/B/M states are read as a single three-bit profile",
+    "cost": "one per DISTINCT geographic node; exactly 3 axis-bit readings at selected node, equal site costs",
+    "error": "at most one chosen node's entire three-bit profile may be arbitrary/wrong; all repeated readings at that same geographic node share this potential error and cannot count as new independent site",
+    "no_error_control": "zero wrong nodes",
+    "robust_requirement": "for every pair of distinct compatible BAM masks having different EOG target signs, the selected profiles differ at >=3 DISTINCT geographic nodes; zero-error baseline requires >=1",
+    "optimization": "SciPy MILP binary x_site in {0,1}, minimize sum x_site subject to each target-discordant pair's distinguishing site count >=1 or >=3; exact optimal only; no heuristic substitution",
+    "infeasibility": "if any target-discordant pair differs at fewer than3 grid nodes even with entire landscape observed, report IMPOSSIBLE under model (null), do not invent added sites",
+    "independent_audit": "explicitly enumerate every candidate truth and every possible single-site corrupted three-bit profile, and check no alternate target sign remains compatible",
+    "max_site_budget": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      10,
+      12,
+      15
+    ],
+    "target": "M-release EOG span direction",
+    "secondary": "site-independent individual read error result is comparator only; retain its distinct cost interpretation"
+  },
+  "denominators": {
+    "report": "all 2627 D observation fibres and nested original 129 true-G classes",
+    "worst_case_true_G": "For each true G, all D it can generate must be uniformly identified at given budget; impossible D blocks robustness for that G",
+    "pair_weight": "Deduplicate identical A/B/M triples. Never use number of parameter labels as independent weights.",
+    "no_inference": "No population frequencies, p-values or confidence intervals from the finite worlds"
+  },
+  "integrity": [
+    "original 12/768/129/2627/121 deterministic source preserved",
+    "previous one-read-error histograms unchanged and only comparator",
+    "every chosen site unique and within declared grid; each observation comprises A,B,M",
+    "every discordant target pair differing at >=3 selected sites for robust result",
+    "independent all-corruption-pattern decoder always contains truth and never contains opposite sign",
+    "infeasible defined exclusively by fewer than3 distinguishing sites for at least one target-discordant pair",
+    "no positive progress claimed in infeasible classes",
+    "robust budget counts nondecreasing and never exceed zero-error",
+    "no user private or additional field data"
+  ],
+  "limits": [
+    "One geographically shared systematic site error may corrupt all A/B/M measurements at that location, not all errors in a spatial region",
+    "Any number of repeat readings at one faulty site remains faulty; no correction through same-site replication",
+    "Assumes complete three-axis ground-truth profile at each chosen site and calibrated bounded one-site error; unrealistic in nature",
+    "Nonadaptive exact site-set optimum, not adaptive decision-tree or field survey minimum",
+    "At most one missed occupied cell outside perfect current distribution; not general effort-adjusted detection",
+    "Only original exposed artificial candidate worlds, ideal static mask release, no causal mechanism or new EOG-WF endpoint"
+  ]
+}
