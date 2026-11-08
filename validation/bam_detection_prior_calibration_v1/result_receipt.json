@@ -1,0 +1,32 @@
+{
+  "schema": "eog.bam_detection_prior_calibration_v1.receipt",
+  "status": "VERIFIED_EXPLORATORY_HYPOTHETICAL_PRIOR_AND_P_SENSITIVITY",
+  "protocol_commit": "03f995d699d1543143131781a51216e9b9312789",
+  "source": {
+    "landscapes": 12,
+    "worlds": 768,
+    "parent_fingerprint": "de838904d53008a944d79c4c5cab172baea4d71c5dbfb4d7b2c1384763d3c514"
+  },
+  "run": {
+    "id": 42445337190,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42445337190",
+    "conclusion": "success",
+    "artifact_id": 13603890304,
+    "artifact_sha256": "61b2811831eec22abd79a3fd15f2e3b57446906e08c9b1f9b42c4a4c9c7ddc62"
+  },
+  "result_fingerprint": "594624f13c40ae69f949f9c76cb2bccacdb3837a007ac056b5e6c1972c62d04c",
+  "findings": {
+    "true_p_05_assumed_05_wrong": 0.0015252409157929592,
+    "true_p_05_assumed_08_wrong": 0.01344853639602661,
+    "true_p_08_assumed_08_wrong": 0.0008133028898816008,
+    "true_p_08_assumed_05_wrong": 0.000040872071356261595,
+    "worst_truth_wrong_p05_assumed08": 0.125,
+    "prior_family_difference": "Some p=0.5 assumed scenarios change with uniform_G; all assumed p=0.8 scenarios produce same decisions in this finite test, not universal prior insensitivity."
+  },
+  "limits": [
+    "Hypothetical true generating prior fixed uniform over distinct BAM masks",
+    "No empirical detection rate or prior fitted",
+    "No independent ecological replication or EOG-WF endpoint",
+    "12 constructed landscapes and 6 fixed sites, three visits"
+  ]
+}
