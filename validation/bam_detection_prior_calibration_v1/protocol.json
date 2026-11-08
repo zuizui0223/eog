@@ -1,0 +1,44 @@
+{
+  "schema": "eog.bam_detection_prior_calibration_v1.protocol",
+  "status": "PRE_SCORE_EXPLORATORY_KNOWN_TRUTH",
+  "source": {
+    "systems": 12,
+    "worlds": 768,
+    "parent_code": "benchmarks/bam_detection_effort_v1.py",
+    "parent_fingerprint": "de838904d53008a944d79c4c5cab172baea4d71c5dbfb4d7b2c1384763d3c514",
+    "original_generator_blob": "ab852b02bccdfb2f065717f89b482b7cf15778d3"
+  },
+  "sites": "exact same six occupancy-variation-selected sites as parent",
+  "target": "M-release EOG span response sign, original fixed reference",
+  "visits": 3,
+  "true_detection_p": [
+    0.5,
+    0.8
+  ],
+  "assumed_detection_p": [
+    0.5,
+    0.8
+  ],
+  "prior_families": [
+    "uniform_mask",
+    "uniform_G",
+    "uniform_sign"
+  ],
+  "true_generating_prior": "uniform_mask only; other prior families evaluated as decision assumptions, not natural frequencies",
+  "decision": "posterior MAP sign if >=0.95 else abstain",
+  "outputs": [
+    "exact expected correct/wrong/abstain under fixed uniform-mask true distribution",
+    "worst truth-specific error",
+    "abstention and decision coverage",
+    "maximum posterior for every observation pattern"
+  ],
+  "integrity": [
+    "no parameter-world multiplicity as prior",
+    "all 12 systems 768 worlds and original signs",
+    "prior weights normalized strictly positive",
+    "exact 64 patterns per landscape",
+    "p=0.8 true and assumed uniform_mask reproduces prior 0.353909726564504/0.0008133028898816199/0.6452769705456144",
+    "no field calibration or EOG-WF new endpoint"
+  ],
+  "limits": "Hypothetical priors and true p are sensitivity scenarios on already exposed artificial worlds; not empirical probabilities."
+}
