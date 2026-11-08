@@ -6,7 +6,11 @@ priors are *assumed by decision rule only*, never treated as field estimates.
 from __future__ import annotations
 import argparse,hashlib,json
 from pathlib import Path
+import sys
 import numpy as np
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
+sys.path.insert(0,str(ROOT/'src'))
 from benchmarks import bam_detection_effort_v1 as base
 
 CONTRACT="03f995d699d1543143131781a51216e9b9312789"
