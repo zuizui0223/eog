@@ -71,3 +71,33 @@ The CI archives the exact analysis result with source SHA256,
 counts of observed/missing/detected site-days, three model
 fits and a deterministic fingerprint. No data are fabricated,
 and no fourth EOG-WF endpoint is added.
+
+## Canonical real-source results
+
+[GitHub Actions run 42457480754](https://github.com/zuizui0223/eog/actions/runs/42457480754)
+successfully downloaded the original source-pinned CSV, verified
+the 87-site schema, ran the missingness-aware model and archived
+the result. Source SHA-256:
+`bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34`.
+
+Across all 22 daily columns there are 1,699 observed site-days,
+215 missing site-days, 471 detected site-days, 62 ever-detected
+sites and 25 sites with no detections. The full source has 87 sites.
+
+| Window | Valid site-days | Sites with >=1 detection | MLE daily p | MLE ψ |
+|---|---:|---:|---:|---:|
+| Days 1–7 | 604 | 54 | 0.441326 | 0.634123 |
+| Days 1–14 | 1,188 | 58 | 0.413972 | 0.671668 |
+| Days 1–22 | 1,699 | 62 | 0.367906 | 0.720140 |
+
+These are **maximum likelihood estimates under the declared
+constant-p, constant-ψ single-season model**, not empirically
+verified truth. Changing the observation window changes both
+available detection occasions and the effective temporal closure
+assumption. The trend in p across windows must not be interpreted
+as a proven biological decline in detectability.
+
+Canonical result fingerprint:
+`17c62ce1a00dc14d366e6e98fcdca452a8495eb313c41b96c58b83087e1aff72`.
+Complete source and artifact SHA are recorded in
+`validation/emammal_deer_detection_v1/result_receipt.json`.
