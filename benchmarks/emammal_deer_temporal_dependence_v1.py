@@ -4,9 +4,12 @@ No causal proof of serial dependence: effort, season, closure and detection
 heterogeneity remain unmeasured.
 """
 from __future__ import annotations
-import argparse,hashlib,json
+import argparse,hashlib,json,sys
 from pathlib import Path
 import numpy as np
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
+sys.path.insert(0,str(ROOT/'src'))
 from benchmarks import emammal_deer_detection_v1 as parent
 
 PROTOCOL_COMMIT="6646c777305e1ee7259825b5e73d003ec852a203"
