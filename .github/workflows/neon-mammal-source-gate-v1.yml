@@ -1,0 +1,31 @@
+name: NEON mammal native source qualification
+on:
+  pull_request:
+    paths:
+      - "benchmarks/neon_mammal_source_gate_v1.py"
+      - "tests/test_neon_mammal_source_gate_v1.py"
+      - "validation/neon_mammal_source_qualification_v1/**"
+      - ".github/workflows/neon-mammal-source-gate-v1.yml"
+permissions:
+  contents: read
+jobs:
+  source-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q tests/test_neon_mammal_source_gate_v1.py
+      - name: Ensure no unverified real data claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('validation/neon_mammal_source_qualification_v1/contract.json').read_text())
+          assert c['status']=='PRE_INGEST_EXTERNAL_SOURCE_QUALIFICATION_NOT_YET_FIELD_VALIDATION'
+          assert 'mam_pertrapnight' in c['source']['tables']
+          assert 'mam_perplotnight' in c['source']['tables']
+          print('NEON_SOURCE_CANDIDATE_NOT_INGESTED')
+          PY
