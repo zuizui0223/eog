@@ -1,0 +1,22 @@
+{
+  "schema": "eog.neon_public_source_probe_v1.receipt",
+  "status": "STOP_NOT_INGESTED",
+  "pre_probe_contract_commit": "1e5a1beae5d79c0d3736e296c1a13867f75e187a",
+  "source": {
+    "product": "DP1.10072.001",
+    "site": "HARV",
+    "month": "2023-06",
+    "endpoint": "https://data.neonscience.org/api/v0/data/DP1.10072.001/HARV/2023-06"
+  },
+  "run": {
+    "id": 42456004133,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42456004133",
+    "conclusion": "success",
+    "interpretation": "Workflow successfully recorded an access STOP; it did NOT retrieve ecological data."
+  },
+  "http_status": 403,
+  "files_retrieved": 0,
+  "reason": "HTTP_403",
+  "next_dependency": "Authorized NEON data access or an independently verified public release URL. Do not supply tokens in chat or repository.",
+  "scope": "No NEON trap-night data, no occupancy model, no independent BAM validation."
+}
