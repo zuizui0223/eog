@@ -31,12 +31,13 @@ def check(plot_file,trap_file):
     if unmatched:errors.append(f"trap:unmatched_nightuid:{unmatched}")
     # Only source evidence for repeat effort. Do not synthesize
     # nondetections from missing trap rows.
+    plot_by_uid={r["nightuid"]:r for r in plots}
     per_trap=defaultdict(set)
     per_bout=defaultdict(set)
     for r in traps:
         uid=r["nightuid"]
         if uid not in pkeys or pkeys[uid]!=1:continue
-        p=next((x for x in plots if x["nightuid"]==uid),None)
+        p=plot_by_uid.get(uid)
         if p is None:continue
         key=(p["namedLocation"],p["eventID"],r["trapCoordinate"])
         per_trap[key].add(p["collectDate"])
