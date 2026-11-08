@@ -85,3 +85,40 @@ these are sensitivity assumptions, not fitted estimates. The prior
 is deliberately hypothetical. This does not establish true
 probabilities of EOG geometric change, ecological universality,
 causal M-release effects, or a fourth EOG-WF endpoint.
+
+## Verified finite-world result
+
+Canonical original-generator run:
+https://github.com/zuizui0223/eog/actions/runs/42437206225
+(artifact 13600012647, SHA-256
+`ffc1740b72e608bc8c254a054dda66b7e2cfe82dfd7340eba3d1310847644457`).
+
+At p=0.8 with three visits to each of the six fixed sites,
+the **mean across the 12 synthetic landscapes** of the hypothetical
+prior-predictive outcomes is:
+
+- Correct sign decision: **0.3539097**
+- Wrong sign decision: **0.0008133**
+- Abstention: **0.6452770**
+
+At p=0.8 and six visits, these become 0.3541646, 0.00000648,
+and 0.6458289. The abstention fraction does not have to decrease
+monotonically with effort at a fixed 95% posterior decision rule;
+the distributions of observed patterns and their conditional
+posterior confidence both change.
+
+Under all p<1 settings in this frozen panel, **zero** detection
+patterns per landscape have an exactly unanimous EOG target sign
+over the compatible finite mask triples, even though some
+posterior decisions pass 95%. Thus posterior decision confidence
+must never be mislabeled logical identification.
+
+During validation, a numeric cutoff `>1e-14` erroneously
+discarded extremely small but positive nondetection likelihoods
+in the p=0.8,k=6 case. The final code uses strictly `>0`
+to test logical support, and the final source-exact CI verifies
+zero spurious logical certificates. The posterior expected
+correct/wrong/abstention scores did not change.
+
+The full exact 12×7 scenario results, SHA and limitations are
+archived in `validation/bam_detection_effort_v1/result_receipt.json`.
