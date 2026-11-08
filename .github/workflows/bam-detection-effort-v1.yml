@@ -39,6 +39,7 @@ jobs:
           for r in p['results']:
               assert abs(r['mean_correct']+r['mean_wrong']+r['mean_abstain']-1)<1e-10
               assert r['mean_wrong']>=0 and r['mean_abstain']>=0
+              if r['p']<1: assert r['mean_logically_unanimous_patterns']==0
           print('DETECTION_EFFORT_FINITE_WORLD_AUDIT_PASSED')
           PY
       - uses: actions/upload-artifact@v4
