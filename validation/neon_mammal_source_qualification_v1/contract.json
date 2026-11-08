@@ -1,0 +1,44 @@
+{
+  "schema": "eog.neon_mammal_source_qualification.v1",
+  "status": "PRE_INGEST_EXTERNAL_SOURCE_QUALIFICATION_NOT_YET_FIELD_VALIDATION",
+  "source": {
+    "provider": "NSF NEON",
+    "product": "DP1.10072.001",
+    "product_page": "https://data.neonscience.org/data-products/DP1.10072.001",
+    "tables": [
+      "mam_perplotnight",
+      "mam_pertrapnight"
+    ],
+    "join": "nightuid",
+    "source_quality": "NEON product documentation and user guide, not yet source-file byte verified"
+  },
+  "candidate": {
+    "sites": [
+      "HARV",
+      "KONZ",
+      "SCBI"
+    ],
+    "sampling_unit": "trap-coordinate × trapping bout × trap night, or plot × night for robust effort aggregation",
+    "target": "one common species with verified capture coding, selected before fitting occupancy models",
+    "closure": "within-bout 3-night pathogen grids only; single-night diversity grids not eligible for repeated-night inference",
+    "effort": "must retain traps with valid deployment and no capture; exclude impractical sampling and invalid trap states",
+    "geography": "plot-level NEON coordinates initially; individual trap geolocation must be qualified separately due documented errors"
+  },
+  "required_quality": [
+    "download native raw perplotnight/pertrapnight files with source URL, SHA256 and version",
+    "confirm join cardinality and duplicate nightuid logic; never naively join many-to-many",
+    "confirm unique plot/bout/night/trap keys and valid effort-only records",
+    "confirm same trap surveyed on >=2 distinct nights within bout",
+    "confirm no-capture and not-deployed distinctions",
+    "confirm sampling and species identity before zero-filling",
+    "flag trap-coordinate geolocation issue before spatial modeling",
+    "fit detection model only after source passes checks"
+  ],
+  "limits": [
+    "NEON is a real repeated-night sampling candidate but no raw files were ingested yet",
+    "three-night pathogen grids only; one-night diversity grids cannot identify within-bout detection",
+    "plot center coordinates do not justify meter-scale trap geography",
+    "NEON does not directly measure independent A/B/M mechanisms, so no full-BAM causal inference",
+    "no new EOG-WF endpoint or ecological positive result"
+  ]
+}
