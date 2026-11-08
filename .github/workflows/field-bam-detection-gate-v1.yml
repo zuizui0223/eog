@@ -1,0 +1,33 @@
+name: Field BAM repeated-detection readiness gate
+on:
+  pull_request:
+    paths:
+      - "benchmarks/field_detection_bam_gate_v1.py"
+      - "tests/test_field_detection_bam_gate_v1.py"
+      - "validation/empirical_bam_detection_readiness_v1/**"
+      - ".github/workflows/field-bam-detection-gate-v1.yml"
+permissions:
+  contents: read
+jobs:
+  schema-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q tests/test_field_detection_bam_gate_v1.py
+      - name: Confirm known Charaxes source is not upgraded to occupancy data
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          c=json.loads(Path('validation/empirical_bam_detection_readiness_v1/contract.json').read_text())
+          assert c['source']['charaxes_rows']==1544
+          assert c['source']['positive_traps']==167
+          assert 'visit_id' in c['field_schema']['required']
+          assert 'effort_minutes' in c['field_schema']['required']
+          assert 'M_method' in c['field_schema']['required']
+          print('SCHEMA_ONLY_NO_FIELD_OCCUPANCY_CLAIM')
+          PY
