@@ -90,7 +90,7 @@ def evaluate_system(system):
         for i,state in enumerate(states):
             mismatch=np.array([(-1,0,1)[j]!=state["sign"] for j in choice])
             truth_wrong.append(float(L[decide&mismatch,i].sum()))
-        logical_unanimous=sum(valid&(np.count_nonzero(sign_probs>1e-14,axis=1)==1))
+        logical_unanimous=sum(valid&(np.count_nonzero(sign_probs>0.0,axis=1)==1))
         result.append({
             "system_id":sid,"p":p,"visits":k,"n_sites":SITES,
             "n_distinct_mask_triples":n,
