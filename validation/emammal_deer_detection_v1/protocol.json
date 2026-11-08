@@ -1,0 +1,39 @@
+{
+  "schema": "eog.emammal_deer_repeated_detection_v1.protocol",
+  "date": "2026-11-08",
+  "status": "PRE_SCORE_SOURCE_LOCK_AND_EMPIRICAL_DETECTION_ONLY",
+  "source": {
+    "repo": "BrentPease1/single-season-occupancy",
+    "commit": "f65b220d1c84240fa81cb457bf27522424fe1666",
+    "path": "deer_detection_history.csv",
+    "url": "https://raw.githubusercontent.com/BrentPease1/single-season-occupancy/f65b220d1c84240fa81cb457bf27522424fe1666/deer_detection_history.csv",
+    "readme": "Real camera-trap deer detection histories, 87 sites, up to 22 daily occasions, eMammal source, 2018",
+    "covariates": "detection_covariates.csv explicitly contains simulated detection covariates; exclude from empirical ecology"
+  },
+  "qc": {
+    "site_rows": 87,
+    "visits": 22,
+    "values": [
+      "0",
+      "1",
+      "NA"
+    ],
+    "missing": "NA is missing occasion not a nondetection",
+    "require": "unique site IDs, no empty all-NA sites, at least 2 observed visits per site, at least one detection and one all-zero history"
+  },
+  "model": {
+    "likelihood": "single-season occupancy detection history, independent Bernoulli detections conditional on latent occupied z; ψ site occupancy probability and p per-occasion detection probability constant across sites",
+    "zero_history": "(1-ψ)+ψ*(1-p)^n_i; positive_history ψ*p^k_i*(1-p)^(n_i-k_i)",
+    "fit": "maximize full log-likelihood with scipy.optimize.minimize bounded ψ,p in (1e-8,1-1e-8), multistart fixed seeds, report convergence and Hessian-based uncertainty only if stable",
+    "baseline": "naive occupied-site fraction = sites with >=1 detection / all sites",
+    "identification": "only if at least 2 independent daily detection occasions and closure assumption",
+    "sensitivity": "repeat fit using first 7,14,22 observed daily columns, preserve NA; no favorable subset selection"
+  },
+  "limits": [
+    "Species label 'deer' per original source; no species-level taxonomy independently verified",
+    "Daily detection intervals may not be independent, site closure and sampling effort cannot be established from CSV alone",
+    "No geographic coordinates, no independent abiotic/biotic/movement variables, no EOG geometry or full BAM causal test",
+    "Real source is public third-party illustrative example, not independent confirmatory sampling",
+    "No fourth EOG-WF endpoint"
+  ]
+}
