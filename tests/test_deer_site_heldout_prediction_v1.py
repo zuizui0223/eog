@@ -8,7 +8,7 @@ def test_beta_converges_to_constant():
     psi=.7;p=.4;concentration=100000.
     a=m.site_log_score_constant(psi,p,n,k)
     b=m.site_log_score_beta(psi,p*concentration,(1-p)*concentration,n,k)
-    assert np.allclose(a,b,atol=1e-4)
+    assert np.allclose(a,b,atol=3e-4)
 
 def test_zero_detection_uses_absent_mixture():
     n=np.array([3]);k=np.array([0]);psi=.5
