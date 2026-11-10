@@ -1,0 +1,45 @@
+{
+  "schema": "eog.deer_day_detection_heterogeneity_v1.receipt",
+  "status": "VERIFIED_EXPLORATORY_REAL_SOURCE",
+  "protocol_commit": "dedb58c851162f4c382517faeba075baf20def99",
+  "source_sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+  "run": {
+    "id": 42843250119,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42843250119",
+    "conclusion": "success",
+    "artifact_id": 13777221915,
+    "artifact_sha256": "f65246e204d408f6a9717a463c6e3f5eef162c7ad1d6bbe095618d93903927de"
+  },
+  "fingerprint": "733a027a121384d70c70adb83fb6e7f5592c54bd8abb399ea920345a38e986cb",
+  "results": [
+    {
+      "model": "constant",
+      "psi": 0.7201399904613864,
+      "p_first": 0.36790599759407694,
+      "p_last": 0.36790599759407694,
+      "AICc": 1788.3659507406858,
+      "delta_AICc": 0
+    },
+    {
+      "model": "linear",
+      "psi": 0.7191582974757663,
+      "p_first": 0.399519677262452,
+      "p_last": 0.33371562745631317,
+      "AICc": 1788.4858915993962,
+      "delta_AICc": 0.11994085871037896
+    },
+    {
+      "model": "early_late",
+      "psi": 0.7193993484947299,
+      "p_first": 0.3855659767997246,
+      "p_last": 0.34784443171304114,
+      "AICc": 1788.572250634237,
+      "delta_AICc": 0.20629989355120415
+    }
+  ],
+  "limits": [
+    "AICc differences small; no strong selection",
+    "No independently verified day-level effort, closure or calendar dates",
+    "No full A/B/M or EOG causal test"
+  ]
+}

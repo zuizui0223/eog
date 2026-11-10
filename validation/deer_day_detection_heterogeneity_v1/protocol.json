@@ -1,0 +1,21 @@
+{
+  "schema": "eog.deer_day_detection_heterogeneity_v1.protocol",
+  "status": "PRE_SCORE_EXPLORATORY_REAL_SOURCE",
+  "source": {
+    "repo": "BrentPease1/single-season-occupancy",
+    "commit": "f65b220d1c84240fa81cb457bf27522424fe1666",
+    "sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+    "sites": 87,
+    "days": 22
+  },
+  "models": {
+    "M0": "constant psi and daily p (2 free parameters)",
+    "M1": "constant psi and logistic p_j=logit^-1(alpha+beta*(j-10.5)/10.5) (3 parameters); j is 0-based observation column, NOT calendar date",
+    "M2": "constant psi and separate logistic early (days 1-11) vs late (days 12-22) detection p (3 parameters)"
+  },
+  "likelihood": "site-level mixture of never-occupied and occupied Bernoulli detection histories, NA occasions omitted; no false positives",
+  "selection": "compare AIC and AICc (N=87 sites); do not use nested LR p-values as proof of causal time effect",
+  "robustness": "all 22 days and 7/14-day constant-p reference retained; report per-day p and psi shifts; no simulated detection covariates",
+  "source_integrity": "fail if source SHA differs or full constant p and psi differ from previous result by >2e-5",
+  "interpretation": "Detection heterogeneity is indexed by column order, not verified dates; temporal closure and effort remain unverified. No full A/B/M field inference, no fourth EOG-WF endpoint."
+}
