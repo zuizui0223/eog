@@ -1,0 +1,25 @@
+{
+  "schema": "eog.deer_site_heldout_prediction_v1.protocol",
+  "status": "PRE_SCORE_EXPLORATORY_REAL_DATA_HELDOUT_SITES",
+  "source": {
+    "sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+    "sites": 87,
+    "visits": 22
+  },
+  "comparison": [
+    "constant_psi_p",
+    "beta_site_p_mixture"
+  ],
+  "holdout": "Five disjoint folds of entire site histories, fixed seed 20261111, no held-out site observations used in fitting",
+  "scoring": "Exact log probability of each held-out binary detection sequence including NA exclusion, no combinatorial coefficients; report total and per-site held-out log score difference (beta minus constant)",
+  "uncertainty": "Paired bootstrap over 87 held-out site log-score differences, 1999 draws, fixed seed 20261112; descriptive percentile interval, not independent confirmation",
+  "integrity": [
+    "original source SHA",
+    "87 sites scored once",
+    "five folds",
+    "all probabilities finite",
+    "no heldout leakage",
+    "fit both models only on training sites"
+  ],
+  "scope": "Predictive discrimination of statistical likelihoods for new sites in this example, not verified causal BAM or future external transfer; same source already explored."
+}
