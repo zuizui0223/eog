@@ -1,0 +1,36 @@
+{
+  "schema": "eog.deer_site_detection_heterogeneity_v1.receipt",
+  "status": "VERIFIED_EXPLORATORY_REAL_SOURCE_LATENT_SITE_HETEROGENEITY",
+  "protocol_commit": "534951d03ba42feb02358e245a6492317ddf9269",
+  "source_sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+  "run": {
+    "id": 42911593897,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42911593897",
+    "conclusion": "success",
+    "artifact_id": 13805969662,
+    "artifact_sha256": "9e34b88033f1fff0baaab9d31c181dedba37f7d5fd4cca54b4bc590ea13354fd"
+  },
+  "fingerprint": "9eaf36bd72707056eb43a791e95ec8917cf59e89a085e40900857c016056b1dd",
+  "models": {
+    "constant": {
+      "psi": 0.720139945903844,
+      "p": 0.3679060046359003,
+      "AICc": 1788.3659507406837
+    },
+    "beta_site": {
+      "psi": 0.840730055943465,
+      "p_mean": 0.3170047502552669,
+      "p_sd": 0.24854530774704905,
+      "alpha": 0.7940567173037929,
+      "beta": 1.7108165272276585,
+      "AICc": 1603.8356189163746
+    }
+  },
+  "delta_AICc": -184.5303318243091,
+  "delta_psi": 0.12059011003962095,
+  "limits": [
+    "Latent mixture can absorb effort, closure, autocorrelation and availability",
+    "No independently measured site p or BAM",
+    "AICc is in-sample exploratory model comparison"
+  ]
+}
