@@ -1,0 +1,31 @@
+{
+  "schema": "eog.deer_site_detection_heterogeneity_v1.protocol",
+  "status": "PRE_SCORE_EXPLORATORY",
+  "source": {
+    "repository": "BrentPease1/single-season-occupancy",
+    "commit": "f65b220d1c84240fa81cb457bf27522424fe1666",
+    "sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+    "sites": 87,
+    "days": 22
+  },
+  "models": [
+    "M0: occupancy psi and constant detection p (2 parameters)",
+    "M1: occupancy psi, site-specific latent p_i ~ Beta(alpha,beta), with independent daily Bernoulli conditional on p_i (3 parameters)"
+  ],
+  "likelihood": "for positive history psi*B(k+alpha,n-k+beta)/B(alpha,beta); for all-zero history (1-psi)+psi*B(alpha,n+beta)/B(alpha,beta); exact binary sequence likelihood without combinatorial term",
+  "optimization": "scipy L-BFGS-B multistart on logit psi and log alpha,log beta, bounds, convergence and finite checks",
+  "outputs": [
+    "AICc with 87 sites",
+    "psi shift",
+    "beta mean detection and site-level detection SD",
+    "n and k quality checks",
+    "constant model reproduction"
+  ],
+  "caveats": [
+    "Latent site heterogeneity is statistical, not measured ecological mechanism",
+    "Beta mixing also induces positive within-site temporal dependence; no independent proof of source",
+    "No daily effort or actual calendar dates, closure unverified",
+    "No A/B/M causal inference or EOG geometry",
+    "No new EOG-WF endpoint"
+  ]
+}
