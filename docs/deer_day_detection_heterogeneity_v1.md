@@ -53,3 +53,30 @@ python -m pytest -q tests/test_deer_day_detection_heterogeneity_v1.py
 python benchmarks/deer_day_detection_heterogeneity_v1.py \
   --source deer_detection_history.csv --output result.json
 ```
+
+## Verified exploratory result
+
+Canonical run: https://github.com/zuizui0223/eog/actions/runs/42843250119
+
+| Model | ψ MLE | first p | last p | AICc | ΔAICc |
+|---|---:|---:|---:|---:|---:|
+| Constant |0.720140|0.367906|0.367906|1788.366|0|
+| Linear day index |0.719158|0.399520|0.333716|1788.486|0.120|
+| Early/late split |0.719399|0.385566|0.347844|1788.572|0.206|
+
+All three models were fitted to exactly 87 sites and 1,699
+valid site-days, with 215 missing site-days and 471 detected
+site-days. The original constant-p model was reproduced
+numerically within the preregistered tolerance.
+
+The AICc differences are **tiny**, providing no decisive
+preference among these three candidate descriptions. Across
+them, ψ varies only from 0.719158 to 0.720140. This is a
+*within-model-family stability result*, not evidence of true
+occupancy, temporal closure, detection independence, or a
+biological day effect.
+
+Canonical fingerprint:
+`733a027a121384d70c70adb83fb6e7f5592c54bd8abb399ea920345a38e986cb`.
+The exact result artifact and source SHA are pinned in
+`validation/deer_day_detection_heterogeneity_v1/result_receipt.json`.
