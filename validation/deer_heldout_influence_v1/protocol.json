@@ -1,0 +1,26 @@
+{
+  "schema": "eog.deer_heldout_influence_v1.protocol",
+  "status": "PRE_SCORE_EXPLORATORY",
+  "source": {
+    "repo": "BrentPease1/single-season-occupancy",
+    "commit": "f65b220d1c84240fa81cb457bf27522424fe1666",
+    "sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+    "sites": 87
+  },
+  "upstream": {
+    "script": "benchmarks/deer_site_heldout_prediction_v1.py",
+    "protocol": "6bdd27ab9c27e1bc65ce9def9231b2a327640c5e",
+    "fingerprint": "78ce643a8418954e834300a4c6e56129839fc84de0375536d53bf296a6defe2f"
+  },
+  "metrics": [
+    "rank site-level paired heldout log score differences (beta minus constant) descending",
+    "sum of positive and negative site contributions separately",
+    "share of net gain from top 1,3,5,10 sites; shares may exceed 100% if negative offsets",
+    "remove top 1,3,5,10 positive-contribution sites and report residual total, mean and win counts",
+    "paired 5% and 10% symmetric trimmed site-delta mean",
+    "median site delta and number beta wins",
+    "fold-level gains, all five fixed folds"
+  ],
+  "interpretation": "A positive total heldout log score can be dominated by a few hard-to-predict sites even if individual-site wins are nearly balanced. Report all diagnostics without cherry-picking.",
+  "scope": "Same dataset and original CV, no new independent external validation, no measured A/B/M or EOG-WF endpoint."
+}
