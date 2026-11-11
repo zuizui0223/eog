@@ -1,0 +1,32 @@
+{
+  "schema": "eog.deer_site_heldout_prediction_v1.receipt",
+  "status": "VERIFIED_EXPLORATORY_WITHIN_DATASET_HELDOUT_SITES",
+  "protocol_commit": "6bdd27ab9c27e1bc65ce9def9231b2a327640c5e",
+  "source_sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+  "run": {
+    "id": 42912578452,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/42912578452",
+    "conclusion": "success",
+    "artifact_id": 13808630453,
+    "artifact_sha256": "d7feebc96ea35859166da58ab496572c4642a58054afa2d5c87b3fdd579ef3d1"
+  },
+  "fingerprint": "78ce643a8418954e834300a4c6e56129839fc84de0375536d53bf296a6defe2f",
+  "n_sites": 87,
+  "folds": 5,
+  "constant_log_score": -897.1652036373258,
+  "beta_log_score": -801.5947503482303,
+  "beta_minus_constant": 95.57045328909554,
+  "mean_site_delta": 1.0985109573459257,
+  "paired_site_bootstrap_interval": [
+    0.5675756767779452,
+    1.69084605552975
+  ],
+  "sites_beta_better": 44,
+  "sites_constant_better": 43,
+  "interpretation": "Heldout whole-site predictive log score favors beta mixture in this previously explored source; site-level wins nearly balanced, gains concentrated.",
+  "limits": [
+    "Not external independent replication",
+    "No spatial coordinates or site-independence validation",
+    "No field A/B/M or EOG geometry"
+  ]
+}
