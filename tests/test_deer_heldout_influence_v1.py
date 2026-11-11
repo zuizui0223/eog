@@ -6,6 +6,7 @@ from benchmarks import deer_heldout_influence_v1 as m
 def fixture():
     rows=[{"site_id":f"s{i:02d}","beta_minus_constant":float(44-i)} for i in range(87)]
     total=sum(x["beta_minus_constant"] for x in rows)
+    rows[0]["beta_minus_constant"]+=95.57045328909554-total
     # Synthetic fixture uses a self-consistent baseline score for its own site rows.
     return {"fingerprint":m.EXPECTED,"source_sha256":"bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34","per_site":rows,
             "beta_minus_constant_total_log_score":95.57045328909554,
@@ -16,7 +17,7 @@ def test_site_ranking_and_robustness():
     assert r["sites"]==87
     assert r["top_site"]["site_id"]=="s00"
     assert len(r["top_k_removal"])==4
-    assert r["top_k_removal"][0]["remaining_total_gain"]==pytest.approx(r["total_gain"]-44)
+    assert r["top_k_removal"][0]["remaining_total_gain"]==pytest.approx(r["total_gain"]-r["top_site"]["gain"])
     assert r["symmetric_trimmed"][0]["n_remaining"]==79
 
 def test_fail_on_source_change():
