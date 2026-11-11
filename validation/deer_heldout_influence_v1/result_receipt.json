@@ -1,0 +1,63 @@
+{
+  "schema": "eog.deer_heldout_influence_v1.receipt",
+  "status": "VERIFIED_EXPLORATORY_REAL_SOURCE_INFLUENCE",
+  "protocol_commit": "a1803fb0e15126732df25a3b66082e13f6651ea2",
+  "source_sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+  "run": {
+    "id": 43048080033,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43048080033",
+    "conclusion": "success",
+    "artifact_id": 13867009483,
+    "artifact_sha256": "26db91f372cf58d19eaa2da57eb470346444c7d466666810a0a71ae829143e3f"
+  },
+  "fingerprint": "52aaea81661974ec316383179cc5b54f0e02cde02660298dd7988ac335c49574",
+  "upstream_fingerprint": "78ce643a8418954e834300a4c6e56129839fc84de0375536d53bf296a6defe2f",
+  "total_gain": 95.57045328909551,
+  "median_site_gain": 0.007600992125540884,
+  "positive_site_gain_sum": 118.29328764353953,
+  "negative_site_gain_sum": -22.722834354444025,
+  "top_k": [
+    {
+      "k": 1,
+      "removed_share": 0.1375079475676256,
+      "remaining": 82.42875640920435
+    },
+    {
+      "k": 3,
+      "removed_share": 0.29648286681478514,
+      "remaining": 67.23545131515597
+    },
+    {
+      "k": 5,
+      "removed_share": 0.41511929904978884,
+      "remaining": 55.897313709855595
+    },
+    {
+      "k": 10,
+      "removed_share": 0.6932696364456336,
+      "remaining": 29.31435988241985
+    }
+  ],
+  "trimmed_mean": [
+    {
+      "tail": 0.05,
+      "value": 0.8375219856435342
+    },
+    {
+      "tail": 0.1,
+      "value": 0.6854431769381992
+    }
+  ],
+  "fold_gains": [
+    29.431238290255607,
+    13.472408541320277,
+    13.123454400669715,
+    12.70232273296071,
+    26.84102932388913
+  ],
+  "interpretation": "Gains concentrated but persist positive after removing top 10 contributors; no refit performed; median near zero.",
+  "limitations": [
+    "No independent external test",
+    "No measured A/B/M or EOG response geometry"
+  ]
+}
