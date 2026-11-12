@@ -1,0 +1,61 @@
+{
+  "schema": "eog.deer_history_predictive_drivers_v1.receipt",
+  "status": "VERIFIED_EXPLORATORY_SAME_SOURCE_HISTORY_ASSOCIATIONS",
+  "protocol_commit": "bf1c955ad27b5e10b1e5934603697d65e664799c",
+  "source_sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+  "run": {
+    "id": 43125623191,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43125623191",
+    "conclusion": "success"
+  },
+  "fingerprint": "3da1d1477c2b690c17a09303572442328624a6bb2eb7223d841783b8fc6135f8",
+  "total_delta": 95.57045664463841,
+  "median_site_delta": 0.0076016313174536165,
+  "spearman": {
+    "adjacent_switches": {
+      "rho": -0.36194057515115424,
+      "p_exploratory": 0.0005716956336935832
+    },
+    "detected_days": {
+      "rho": -0.07800946500415769,
+      "p_exploratory": 0.4726369227864682
+    },
+    "missing_days": {
+      "rho": 0.023891761568363656,
+      "p_exploratory": 0.8261393470848731
+    }
+  },
+  "detection_bins": [
+    {
+      "bin": "0",
+      "sites": 25,
+      "delta": 0.2582801534512348
+    },
+    {
+      "bin": "1-2",
+      "sites": 13,
+      "delta": 62.775145606444305
+    },
+    {
+      "bin": "3-8",
+      "sites": 24,
+      "delta": -12.499518889028813
+    },
+    {
+      "bin": "9+",
+      "sites": 25,
+      "delta": 45.03654977377167
+    }
+  ],
+  "top10": {
+    "mean_switches": 2.5,
+    "other77_mean_switches": 5.363636363636363,
+    "mean_detected_days": 6,
+    "other77_mean_detected_days": 5.337662337662338
+  },
+  "limits": [
+    "Feature and outcome derived from same binary histories",
+    "No causal environmental inference or independent replication",
+    "No A/B/M or EOG geometry"
+  ]
+}
