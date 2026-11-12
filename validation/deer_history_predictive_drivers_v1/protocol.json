@@ -1,0 +1,42 @@
+{
+  "schema": "eog.deer_history_predictive_drivers_v1.protocol",
+  "status": "PRE_SCORE_DESCRIPTIVE_EXPLORATORY",
+  "source": {
+    "sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+    "sites": 87,
+    "occasions": 22
+  },
+  "upstream": {
+    "script": "benchmarks/deer_site_heldout_prediction_v1.py",
+    "expected_total_delta": 95.57045328909554
+  },
+  "features": [
+    "observed_days",
+    "missing_days",
+    "detected_days",
+    "detection_fraction_valid",
+    "longest_consecutive_zero_run_broken_by_NA",
+    "switches_across_adjacent_observed_days",
+    "ever_detected"
+  ],
+  "methods": [
+    "Spearman rho between continuous features and heldout site delta, with ties via scipy.stats.spearmanr",
+    "grouped descriptive beta-minus-constant mean and sum for ever_detected vs never_detected",
+    "fixed observed detection-count bins 0,1-2,3-8,9+",
+    "fixed missing-day bins 0,1-4,5+",
+    "top 10 gain sites feature summary versus other 77 sites, explicitly post hoc"
+  ],
+  "integrity": [
+    "original SHA exact",
+    "site id exact one-to-one join",
+    "no NA interpreted as zero",
+    "87 sites",
+    "original heldout delta within 0.05"
+  ],
+  "limits": [
+    "Outcome and features derive from the same detection histories, so association may be partly mathematical, not causal",
+    "Post hoc analysis cannot independently validate model",
+    "No verified effort, coordinates, season, species-level identification, A/B/M or EOG causal response",
+    "No EOG-WF endpoint"
+  ]
+}
