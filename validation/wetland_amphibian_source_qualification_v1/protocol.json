@@ -3,7 +3,7 @@
   "status": "PRE_SCORE_SOURCE_QUALIFICATION_ONLY",
   "origin": {
     "repo": "zuizui0223/frogcs",
-    "ref": "main",
+    "ref": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
     "files": [
       "research/external/zenodo_15044115/wetland_amp_site_data.csv",
       "research/external/zenodo_15044115/wetland_amp_surv_data.csv"
