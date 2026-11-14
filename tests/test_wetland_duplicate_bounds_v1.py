@@ -1,6 +1,6 @@
 """Exact finite row-resolution and fail-closed tests, without field inference."""
 import pytest
-from benchmarks.wetland_duplicate_bounds_v1 import build_bounds
+from benchmarks.wetland_duplicate_bounds_v1 import build_bounds, publication_cohort_ids
 
 
 def _row(sid, site, method, day, pel=0, rana=0):
@@ -39,3 +39,16 @@ def test_invalid_collision_shape_fails_closed():
     with pytest.raises(ValueError, match="zero-versus-positive"):
         build_bounds(rows, [{"site": "A"}, {"site": "B"}],
                      ["Pelobates fuscus", "Rana dalmatina"])
+
+
+def test_published_code_cohort_selection_is_explicit():
+    sites = [
+        {"site": "kis-banyato", "ci": "artificial"},
+        {"site": "vadasz-turjan", "ci": "control"},
+        {"site": "feneketlen-turjan", "ci": "intervention"},
+        {"site": "other", "ci": "control"},
+    ]
+    assert publication_cohort_ids(sites, "published_q1") == {"feneketlen-turjan", "other"}
+    assert publication_cohort_ids(sites, "published_q2") == {"feneketlen-turjan"}
+    with pytest.raises(ValueError, match="unknown published cohort"):
+        publication_cohort_ids(sites, "unknown")
