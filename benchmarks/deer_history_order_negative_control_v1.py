@@ -39,8 +39,18 @@ def analyze(path):
         # Under both exchangeable site models, heldout log scores depend only
         # on (n,k) and the fitted training-fold parameters. No refit required.
         # The two sets of sufficient statistics above are identical.
-        score_change=0.
+        # Check predictive likelihoods directly with representative admissible
+        # parameters; both functions use the same n,k sufficient statistics.
+        n_sh=np.isfinite(shuffled).sum(axis=1)
+        k_sh=np.nansum(shuffled,axis=1)
+        baseline_before=heldout.site_log_score_constant(.72,.368,n,k)
+        baseline_after=heldout.site_log_score_constant(.72,.368,n_sh,k_sh)
+        mixture_before=heldout.site_log_score_beta(.84,.794,1.711,n,k)
+        mixture_after=heldout.site_log_score_beta(.84,.794,1.711,n_sh,k_sh)
+        score_change=float(max(np.max(np.abs(baseline_before-baseline_after)),
+                               np.max(np.abs(mixture_before-mixture_after))))
         max_score_delta=max(max_score_delta,score_change)
+        if score_change>1e-10:raise AssertionError("likelihood order dependence")
         switches=np.array([features.adjacent_switches(row) for row in shuffled])
         switched_changed+=int(np.any(switches!=observed_switch))
         null_rho.append(float(spearmanr(switches,delta).statistic))
