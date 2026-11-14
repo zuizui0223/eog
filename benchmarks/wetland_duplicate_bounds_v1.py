@@ -98,6 +98,21 @@ def build_bounds(surveys, sites, species):
     }
 
 
+def publication_cohort_ids(sites, cohort):
+    """Source-authenticated original R: Q1 drops two sites; Q2 uses intervention."""
+    if cohort == "archived_all":
+        return {row["site"] for row in sites}
+    if cohort == "published_q1":
+        removed = {"kis-banyato", "vadasz-turjan"}
+        names = {row["site"] for row in sites}
+        if not removed <= names:
+            raise ValueError("published Q1 source-exclusion roster missing")
+        return names - removed
+    if cohort == "published_q2":
+        return {row["site"] for row in sites if row["ci"] == "intervention"}
+    raise ValueError("unknown published cohort")
+
+
 def run(surveys_path, sites_path):
     native = source_gate.analyze(surveys_path, sites_path)  # source SHA, row conflicts
     if native["status"] != "BLOCKED_CONFLICTING_SURVEY_IDENTIFIERS":
@@ -131,6 +146,34 @@ def run(surveys_path, sites_path):
             "No fourth EOG-WF empirical endpoint or causal BAM claim.",
         ],
     }
+    # Cohorts are fixed from two MD5-verified 2025 published R scripts.
+    # Q1 R lines 23-27 remove these two named sites; Q2 lines 23-27
+    # include only intervention wetlands. Not a new preregistered endpoint.
+    cohort_spec = (
+        ("archived_all", 29, 381),
+        ("published_q1", 27, 351),
+        ("published_q2", 13, 188),
+    )
+    result["source_code_md5"] = {
+        "published_q1": "fcab406cd8a192a07cc97582c19011ad",
+        "published_q2": "a2b2f6a30b7243c4b9ece3b5eb75dba6",
+    }
+    result["publication_cohort_bounds"] = {}
+    for cohort, expected_nsite, expected_nrows in cohort_spec:
+        ids = publication_cohort_ids(sites, cohort)
+        subset_sites = [row for row in sites if row["site"] in ids]
+        subset_surveys = [row for row in surveys if row["site"] in ids]
+        if (len(subset_sites), len(subset_surveys)) != (expected_nsite, expected_nrows):
+            raise ValueError("original publication cohort dimensions drifted")
+        result["publication_cohort_bounds"][cohort] = {
+            "site_count": len(subset_sites),
+            "survey_rows": len(subset_surveys),
+            "sensitivity": build_bounds(subset_surveys, subset_sites, species),
+        }
+    result["limitations"][2] = (
+        "Q1 excludes kis-banyato and vadasz-turjan (27 sites), while Q2 "
+        "uses only 13 intervention sites; the native survey-ID semantics remain unresolved."
+    )
     result["fingerprint"] = hashlib.sha256(
         json.dumps(result, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
