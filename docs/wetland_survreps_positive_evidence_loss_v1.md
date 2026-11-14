@@ -10,7 +10,7 @@ Public upstream `edvardmizsei/hunviphab` at commit `25d4c64da289ffcc14679619bb3b
 - If `n > 20`, sample **20 rows without replacement**, since every row is a positive X0 row.
 - Downstream `nmixmatrix` reads the resulting resampled row order and species counts into site×repeat matrices. This creates a 20-column input per site but not 20 independent physical survey occasions.
 
-The source branch and git object are pinned and audited in CI; **the exact historical package version installed by the 2025 authors has not been verified**, and this analytical result is conditional on that source implementation. No original R analysis or `unmarked` model was executed.
+The original Q1 and Q2 R scripts each explicitly call **`set.seed(123)` on line 2** (MD5-authenticated source readback). This corrects a possible concern about an unstated script seed. The public package git object is pinned and audited in CI, but **the exact historical hunviphab installation and R version used by the authors have not been verified**, so the specific realized selection cannot yet be claimed as reproduced from the publication environment. No original R analysis or `unmarked` model was executed.
 
 ## Quantitative result with original unmodified data
 
@@ -51,7 +51,7 @@ The site×species *raw recorded presence* classification is invariant to these t
 
 **Supported source and algorithm finding:** Under the pinned public `survreps` implementation and the source-published preprocessing calls, randomly resampling uneven numbers of real records into 20 pseudo-occasions risks omitting recorded species detections. Models that interpret 20 resampled rows as 20 independent detection occasions do not automatically have the actual independent effort represented by those rows. In particular, an algorithmic zero after sampling cannot be read as a verified ecological absence.
 
-**Not established:** The actual random draws used in the authors' publication, its exact `hunviphab` installation, any original occupancy coefficients, AIC, or significance changes; whether authors modeled resampled rows as statistically independent rather than describing a bootstrap-like approximation; whether treatment/habitat results change under a faithful raw-occasion analysis; or the true biological A/B/M mechanism.
+**Not established:** The realized row selection from the authors' execution despite the declared `set.seed(123)` (R/runtime and package not independently reproduced), its exact `hunviphab` installation, any original occupancy coefficients, AIC, or significance changes; whether authors modeled resampled rows as statistically independent rather than describing a bootstrap-like approximation; whether treatment/habitat results change under a faithful raw-occasion analysis; or the true biological A/B/M mechanism.
 
 For EOG, **positive-only world compatibility** must be conditioned on the native source evidence, not exclusively on a potentially lossy normalized table. Missing positive evidence weakens elimination of false worlds; incorrectly interpreting the resulting zeros as genuine negative evidence could instead cause unjustified world elimination. These are different error modes.
 
@@ -63,6 +63,7 @@ For EOG, **positive-only world compatibility** must be conditioned on the native
 - Protocol: `validation/wetland_survreps_evidence_v1/protocol.json` (post-exposure, expressly not preregistration).
 - Executable: `benchmarks/wetland_survreps_evidence_loss_v1.py` and `tests/test_wetland_survreps_evidence_loss_v1.py`.
 - Verified GitHub Actions: [run #43585874262](https://github.com/zuizui0223/eog/actions/runs/43585874262); output fingerprint `bf2fb6753860313b80c7241812d9eaa847a1415e9a1f654d30ee07f167fdc078`; artifact ID 14110067074; ZIP SHA256 `6758b47c5ea996448dd5d077435cacd2085cd9aeb1feee882a3ac04974505033`.
+- A second [seed-audit workflow run #43586181277](https://github.com/zuizui0223/eog/actions/runs/43586181277) verified `set.seed(123)` at line 2 in **both** MD5-authenticated original scripts; artifact ID 14110482262 (ZIP SHA256 `f0d34d02c9ce0d910c77e8d22411121cfedafb4e3c3c8c92856cb13c0d21f2af`).
 - Live original published and public package source **not** used as biological independent data or fourth EOG-WF endpoint.
 
 ## Correct next inferential test
