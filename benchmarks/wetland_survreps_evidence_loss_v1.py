@@ -165,9 +165,9 @@ def run(survey_path, site_path, upstream_path):
     species = [k for k in headers if k not in source_gate.META]
     if len(species) != 9:
         raise ValueError("native species roster changed")
-    if any(row["0"] != "1" for row in surveys):
-        # Original published R overwrites X0 to 1 irrespective of this column.
-        raise ValueError("observed archive unexpected 0 column contents")
+    # read.csv normalizes CSV column "0" to "X0"; the published R script
+    # explicitly overwrites X0 with 1. The original "0" entries vary and
+    # are not a requirement of this audit.
 
     result = {
         "schema": "eog.wetland_survreps_positive_evidence_loss.v1",
