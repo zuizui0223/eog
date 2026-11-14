@@ -1,0 +1,38 @@
+{
+  "schema": "eog.wetland_amphibian_source_qualification_v1.receipt",
+  "status": "SOURCE_STRUCTURE_ONLY_NOT_OCCUPANCY_READY",
+  "source": {
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd"
+  },
+  "run": {
+    "id": 43577318683,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43577318683",
+    "conclusion": "success",
+    "artifact_id": 14107265952,
+    "artifact_sha256": "53a0249c169a01e00f2f20bc53f16089a1e5da5cde5b1af23d1963e6d83c4a71"
+  },
+  "fingerprint": "0ff9a6055e41775cd2c0e89ae6bc8a10c2e055fdb1e52c77848f0aa9f42cf299",
+  "site_rows": 29,
+  "survey_rows": 381,
+  "unique_survey_ids": 379,
+  "duplicate_survey_ids": 2,
+  "methods": {
+    "acoustic": 129,
+    "bottletrap": 64,
+    "dipnet": 59,
+    "visual": 129
+  },
+  "sites_with_multiple_dates": 29,
+  "site_method_groups_with_multiple_dates": 105,
+  "species_count": 9,
+  "environment_missing_zero": true,
+  "survey_covariates_missing_zero": true,
+  "limits": [
+    "Duplicate survey IDs need row-level diagnosis before use",
+    "Repeated dates do not establish comparable effort or closure",
+    "No occupancy model or causal EOG result"
+  ]
+}
