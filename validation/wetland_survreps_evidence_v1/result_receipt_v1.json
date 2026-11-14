@@ -12,7 +12,9 @@
     "original_q2_r_md5": "a2b2f6a30b7243c4b9ece3b5eb75dba6",
     "upstream_repo": "edvardmizsei/hunviphab",
     "upstream_commit": "25d4c64da289ffcc14679619bb3b18bd494de872",
-    "survreps_blob_sha1": "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670"
+    "survreps_blob_sha1": "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670",
+    "original_q1_explicit_rng_seed": 123,
+    "original_q2_explicit_rng_seed": 123
   },
   "scientific_assumption": "Observed publication scripts set X0=1, season=1 and reps=20; numerical source audit assumes this pinned public survreps code was the behavior of the installed historical package (unverified).",
   "quantification": {
@@ -68,6 +70,16 @@
     "No occupancy refit and no implications established for published coefficient values or p-values.",
     "Repeated normalized rows are not verified independent physical occasions.",
     "Positive evidence loss is different from direct evidence for ecological absence.",
-    "No causal A/B/M inference or change to frozen 3-endpoint EOG-WF."
-  ]
+    "No causal A/B/M inference or change to frozen 3-endpoint EOG-WF.",
+    "The original scripts both have set.seed(123); absence of script-level seed is NOT a finding. Reproducing the published realized draw requires the actual R/package runtime."
+  ],
+  "source_original_script_seed_audit": {
+    "run_id": 43586181277,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43586181277",
+    "q1_seed_line": 2,
+    "q2_seed_line": 2,
+    "artifact_id": 14110482262,
+    "artifact_sha256": "f0d34d02c9ce0d910c77e8d22411121cfedafb4e3c3c8c92856cb13c0d21f2af",
+    "historical_r_and_package_runtime_confirmed": false
+  }
 }
