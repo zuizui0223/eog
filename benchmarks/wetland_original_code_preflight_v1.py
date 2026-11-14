@@ -30,7 +30,12 @@ def bounded_evidence(content, limit=100):
     lines = content.decode("utf-8-sig", errors="replace").splitlines()
     matches = [{"line": n, "text": line.strip()[:220]} for n, line in enumerate(lines, 1)
                if PATTERN.search(line)]
+    seed_calls = [{"line": n, "text": line.strip()[:220]} for n, line in enumerate(lines, 1)
+                  if not line.lstrip().startswith("#")
+                  and re.search(r"\\b(?:set\\.seed|RNGkind|with_seed)\\s*\\(", line)]
     return {"line_count": len(lines), "keyword_hit_count": len(matches),
+            "explicit_rng_seed_calls": seed_calls,
+            "external_rng_state_unverified": True,
             "preparation_lines_8_to_42": [
                 {"line": n, "text": lines[n - 1].strip()[:220]}
                 for n in range(8, min(len(lines), 42) + 1)
@@ -106,6 +111,11 @@ if __name__ == "__main__":
         if file.get("evidence"):
             hits = file["evidence"]["selected_matches"]
             print("WETLAND_SOURCE_KEYWORDS=" + json.dumps(hits[:60]))
+            print("WETLAND_SOURCE_EXPLICIT_RNG_SEEDS=" + json.dumps({
+                "file": file["file"],
+                "explicit_calls": file["evidence"]["explicit_rng_seed_calls"],
+                "external_state_unverified": True,
+            }))
             print("WETLAND_R_PREPARATION=" + json.dumps({
                 "file": file["file"],
                 "lines": file["evidence"]["preparation_lines_8_to_42"]
