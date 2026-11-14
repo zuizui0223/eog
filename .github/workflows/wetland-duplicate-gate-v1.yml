@@ -1,0 +1,49 @@
+name: Wetland amphibian survey identity conflict gate v1
+on:
+  pull_request:
+    paths:
+      - "benchmarks/wetland_duplicate_gate_v1.py"
+      - "tests/test_wetland_duplicate_gate_v1.py"
+      - "validation/wetland_duplicate_gate_v1/**"
+      - ".github/workflows/wetland-duplicate-gate-v1.yml"
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py
+      - name: Retrieve original pinned source
+        run: |
+          mkdir -p /tmp/wetland_gate
+          curl --fail --location --retry 2 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_site_data.csv \
+            -o /tmp/wetland_gate/sites.csv
+          curl --fail --location --retry 2 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_surv_data.csv \
+            -o /tmp/wetland_gate/surveys.csv
+          echo "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319  /tmp/wetland_gate/sites.csv" | sha256sum -c -
+          echo "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd  /tmp/wetland_gate/surveys.csv" | sha256sum -c -
+      - name: Identify source conflicts, block occupancy
+        run: |
+          python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/result.json').read_text())
+          assert r['site_rows']==29 and r['survey_rows']==381
+          assert r['duplicate_survey_ids']==2 and r['conflicting_duplicate_ids']==2
+          assert r['status']=='BLOCKED_CONFLICTING_SURVEY_IDENTIFIERS'
+          assert not r['readiness']['occupancy_model_permitted']
+          print('WETLAND_CONFLICTS_DETECTED_AND_BLOCKED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wetland-duplicate-gate-v1
+          path: /tmp/wetland_gate/result.json
