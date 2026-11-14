@@ -17,3 +17,11 @@ def test_original_source_md5_is_source_only():
         "wetland_amp_q2_multispecies_occu_modelling.R",
     }
     assert all(len(md5) == 32 for md5 in pre.SOURCES.values())
+
+
+
+def test_explicit_seed_audit_excludes_comments_and_reports_calls():
+    payload = b"# set.seed(10)\nx <- 1\nset.seed(2025)\nRNGkind('Mersenne-Twister')\n"
+    ev = pre.bounded_evidence(payload)
+    assert [x["line"] for x in ev["explicit_rng_seed_calls"]] == [3, 4]
+    assert ev["external_rng_state_unverified"] is True
