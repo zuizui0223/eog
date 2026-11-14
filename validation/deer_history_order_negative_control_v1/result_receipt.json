@@ -1,0 +1,26 @@
+{
+  "schema": "eog.deer_history_order_negative_control_v1.receipt",
+  "status": "VERIFIED_STRUCTURAL_NEGATIVE_CONTROL",
+  "protocol_commit": "4a75d6a6195e1bc5b8c440a22811dbaff492897d",
+  "source_sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+  "run": {
+    "id": 43576990997,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43576990997",
+    "conclusion": "success",
+    "artifact_id": 14106566336,
+    "artifact_sha256": "5cefb2753ff022873ac1d9db4c47a902d11ddefc7f93b7d4ae57369dd22e1eda"
+  },
+  "fingerprint": "4f6a75036070821570ae7863f4ee9ce5f3f56903dd72dd1a296ea98f5710fcfc",
+  "observed_rho": -0.36194057515115424,
+  "null_mean_rho": -0.3718714494656788,
+  "null_q025": -0.4303977797963475,
+  "null_q975": -0.31332282726612337,
+  "conditional_p": 0.625,
+  "draws": 199,
+  "max_site_logscore_change": 0,
+  "interpretation": "The prior switching association is compatible with fixed n,k order randomization; models are order-exchangeable. No independent evidence for temporal switching mechanism.",
+  "limits": [
+    "Conditional negative control not causal inference",
+    "No effort, closure, A/B/M"
+  ]
+}
