@@ -6,10 +6,14 @@ detection probability, occupancy, ecological effect or A/B/M is inferred.
 import argparse
 import hashlib
 import json
+import sys
 from collections import defaultdict
 from pathlib import Path
 from itertools import product
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 from benchmarks import wetland_duplicate_gate_v1 as source_gate
 
 
