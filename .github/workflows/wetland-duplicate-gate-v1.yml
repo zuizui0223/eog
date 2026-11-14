@@ -4,6 +4,9 @@ on:
     paths:
       - "benchmarks/wetland_duplicate_gate_v1.py"
       - "tests/test_wetland_duplicate_gate_v1.py"
+      - "benchmarks/wetland_duplicate_bounds_v1.py"
+      - "tests/test_wetland_duplicate_bounds_v1.py"
+      - "docs/wetland_duplicate_sensitivity_v1.md"
       - "validation/wetland_duplicate_gate_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
@@ -18,7 +21,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -43,7 +46,22 @@ jobs:
           assert not r['readiness']['occupancy_model_permitted']
           print('WETLAND_CONFLICTS_DETECTED_AND_BLOCKED')
           PY
+      - name: Bound descriptive detection outcomes under four row identities
+        run: |
+          python benchmarks/wetland_duplicate_bounds_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/duplicate_bounds.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/duplicate_bounds.json').read_text())
+          counts={key: val['positive_in_some_resolution_only'] for key,val in r['bounds']['grains'].items()}
+          assert r['bounds']['scenarios']==4
+          assert counts == {'site_species':0,'site_method_species':1,'survey_species':5}, counts
+          assert r['readiness']['occupancy_model']=='BLOCKED'
+          print('WETLAND_DETECTION_BOUNDS_0_1_5_OCCUPANCY_BLOCKED')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: wetland-duplicate-gate-v1
-          path: /tmp/wetland_gate/result.json
+          path: |
+            /tmp/wetland_gate/result.json
+            /tmp/wetland_gate/duplicate_bounds.json
