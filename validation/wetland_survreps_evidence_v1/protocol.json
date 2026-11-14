@@ -1,0 +1,49 @@
+{
+  "schema": "eog.wetland_survreps_positive_evidence_loss_audit.v1",
+  "status": "POST_EXPOSURE_METHOD_DIAGNOSTIC_NOT_PREREGISTERED",
+  "role": "Source-code-informed risk quantification of observed positive species-site loss during 20-row site normalization; no occupancy fitting.",
+  "source": {
+    "frogcs_repo_commit": "zuizui0223/frogcs@5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "original_r_md5": {
+      "q1": "fcab406cd8a192a07cc97582c19011ad",
+      "q2": "a2b2f6a30b7243c4b9ece3b5eb75dba6"
+    },
+    "source_software": {
+      "repository": "edvardmizsei/hunviphab",
+      "commit": "25d4c64da289ffcc14679619bb3b18bd494de872",
+      "function": "R/survreps.R",
+      "blob_sha1": "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670",
+      "downstream_function": "R/nmixmatrix.R",
+      "downstream_blob_sha1": "40e0f5547cd67729e1c6d46d29a0ce2b75712a3a"
+    }
+  },
+  "verified_preconditions": {
+    "observed_original_r_calls": "df$season <- 1; df$X0 <- 1; reps <- 20; survreps(df,'X0','season','site',reps)",
+    "q1": "remove kis-banyato and vadasz-turjan",
+    "q2": "keep ci == intervention",
+    "scope_caution": "Public hunviphab source version is pinned here but publication runtime SHA was not archived/verified. Results conditional on use of this version."
+  },
+  "derived_quantities": [
+    "Observed site-species positive indicator before sampling",
+    "n native raw rows per site, k positive rows per site/species",
+    "conditional probability of all k positive rows being excluded when sampling 20 rows",
+    "sum of probabilities across site-species positive pairs (expected lost pairs, not independent units)",
+    "raw vs normalized rows and site count per Q1/Q2",
+    "min/max expected-loss across four one-row-per-conflicting-ID hypotheses"
+  ],
+  "math": {
+    "for_1_le_n_le_20": "((n-k)/n)**20, for k>=1, sampling 20 rows WITH replacement",
+    "for_n_gt_20": "product((n-k-j)/(n-j) for j=0..19) when n-k>=20, else 0; 20 rows WITHOUT replacement",
+    "correlation_note": "Species losses at the same site are dependent because one resampled row set is reused; expected total is valid by linearity of expectation."
+  },
+  "stops": [
+    "no extrapolation to original actual fitted coefficients, seed, occupancy estimates or biological effects",
+    "do not claim that source replicate records are independent field survey occasions",
+    "do not use these expected lost values as statistically independent site replications",
+    "do not reopen three frozen EOG-WF predictive endpoints",
+    "do not perform a full model refit or infer causal abiotic-biotic-movement effects",
+    "do not call conditional 2022/2026 software source the exact historical package installation without a runtime lock"
+  ]
+}
