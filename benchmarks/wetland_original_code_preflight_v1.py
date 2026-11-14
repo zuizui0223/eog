@@ -31,6 +31,10 @@ def bounded_evidence(content, limit=100):
     matches = [{"line": n, "text": line.strip()[:220]} for n, line in enumerate(lines, 1)
                if PATTERN.search(line)]
     return {"line_count": len(lines), "keyword_hit_count": len(matches),
+            "preparation_lines_8_to_42": [
+                {"line": n, "text": lines[n - 1].strip()[:220]}
+                for n in range(8, min(len(lines), 42) + 1)
+            ],
             "selected_matches": matches[:limit], "truncated": len(matches) > limit}
 
 
@@ -102,4 +106,8 @@ if __name__ == "__main__":
         if file.get("evidence"):
             hits = file["evidence"]["selected_matches"]
             print("WETLAND_SOURCE_KEYWORDS=" + json.dumps(hits[:60]))
+            print("WETLAND_R_PREPARATION=" + json.dumps({
+                "file": file["file"],
+                "lines": file["evidence"]["preparation_lines_8_to_42"]
+            }))
     print("WETLAND_PUBLISHED_CODE_FINGERPRINT=" + result["fingerprint"])
