@@ -32,7 +32,7 @@ def bounded_evidence(content, limit=100):
                if PATTERN.search(line)]
     seed_calls = [{"line": n, "text": line.strip()[:220]} for n, line in enumerate(lines, 1)
                   if not line.lstrip().startswith("#")
-                  and re.search(r"\\b(?:set\\.seed|RNGkind|with_seed)\\s*\\(", line)]
+                  and re.search(r"\b(?:set\.seed|RNGkind|with_seed)\s*\(", line)]
     return {"line_count": len(lines), "keyword_hit_count": len(matches),
             "explicit_rng_seed_calls": seed_calls,
             "external_rng_state_unverified": True,
