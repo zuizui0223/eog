@@ -59,6 +59,13 @@ jobs:
           assert r['bounds']['scenarios']==4
           assert counts == {'site_species':0,'site_method_species':1,'survey_species':5}, counts
           assert r['readiness']['occupancy_model']=='BLOCKED'
+          expected={'archived_all':(29,381),'published_q1':(27,351),'published_q2':(13,188)}
+          for name,(sites,rows) in expected.items():
+              cohort=r['publication_cohort_bounds'][name]
+              assert (cohort['site_count'],cohort['survey_rows'])==(sites,rows), (name,cohort)
+              counts={g: v['positive_in_some_resolution_only'] for g,v in cohort['sensitivity']['grains'].items()}
+              assert counts=={'site_species':0,'site_method_species':1,'survey_species':5},(name,counts)
+          print('PUBLISHED_COHORTS_Q1_27_Q2_13_BOUNDS_INVARIANT')
           print('WETLAND_DETECTION_BOUNDS_0_1_5_OCCUPANCY_BLOCKED')
           PY
       - name: Check official published R preparation scripts without executing them
