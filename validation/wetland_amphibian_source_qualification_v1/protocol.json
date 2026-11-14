@@ -1,0 +1,52 @@
+{
+  "schema": "eog.wetland_amphibian_source_qualification_v1.protocol",
+  "status": "PRE_SCORE_SOURCE_QUALIFICATION_ONLY",
+  "origin": {
+    "repo": "zuizui0223/frogcs",
+    "ref": "main",
+    "files": [
+      "research/external/zenodo_15044115/wetland_amp_site_data.csv",
+      "research/external/zenodo_15044115/wetland_amp_surv_data.csv"
+    ],
+    "zenodo_record": "15044115"
+  },
+  "observed_columns": {
+    "site": [
+      "site",
+      "ci",
+      "depth",
+      "cover_submers",
+      "cover_emerged",
+      "plant_sp",
+      "hay",
+      "mud",
+      "fish",
+      "elevmin",
+      "elevmax"
+    ],
+    "survey": [
+      "doy",
+      "surv",
+      "site",
+      "date",
+      "method",
+      "num",
+      "year",
+      "month",
+      "temp",
+      "humid",
+      "prec"
+    ]
+  },
+  "tests": [
+    "source files downloaded from repo at fixed commit (to be pinned before data scoring)",
+    "unique site IDs and valid survey-to-site join",
+    "site×method×date repeated opportunities with 0 vs positive species counts",
+    "survey identifier uniqueness",
+    "missingness by method, date, site",
+    "multiple dates per site and method",
+    "measured effort 'num' is not duration; don't equate it to standardized effort without metadata",
+    "survey data includes literal species count columns; do not infer nondetection when protocol not verified"
+  ],
+  "boundary": "Source eligibility only, no occupancy model fitting or biological result. No EOG-WF endpoint."
+}
