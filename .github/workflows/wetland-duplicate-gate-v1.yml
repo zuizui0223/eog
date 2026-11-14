@@ -7,6 +7,8 @@ on:
       - "benchmarks/wetland_duplicate_bounds_v1.py"
       - "tests/test_wetland_duplicate_bounds_v1.py"
       - "docs/wetland_duplicate_sensitivity_v1.md"
+      - "benchmarks/wetland_original_code_preflight_v1.py"
+      - "tests/test_wetland_original_code_preflight_v1.py"
       - "validation/wetland_duplicate_gate_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
@@ -21,7 +23,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -59,9 +61,24 @@ jobs:
           assert r['readiness']['occupancy_model']=='BLOCKED'
           print('WETLAND_DETECTION_BOUNDS_0_1_5_OCCUPANCY_BLOCKED')
           PY
+      - name: Check official published R preparation scripts without executing them
+        run: |
+          python benchmarks/wetland_original_code_preflight_v1.py --output /tmp/wetland_gate/published_code_preflight.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/published_code_preflight.json').read_text())
+          assert len(r['files'])==2
+          assert not r['occupancy_fitting_permitted']
+          assert not r['duplicate_identity_adjudicated']
+          assert not r['published_27_vs_archived_29_sites_adjudicated']
+          assert r['status'] in ('ORIGINAL_SOURCE_CODE_VERIFIED_NOT_INTERPRETED','ORIGINAL_SOURCE_CODE_GATE_INCOMPLETE')
+          print('WETLAND_R_PROVENANCE_ATTEMPT_AUDITED_NO_OCCUPANCY')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: wetland-duplicate-gate-v1
           path: |
             /tmp/wetland_gate/result.json
             /tmp/wetland_gate/duplicate_bounds.json
+            /tmp/wetland_gate/published_code_preflight.json
