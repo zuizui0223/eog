@@ -1,0 +1,44 @@
+name: Wetland amphibian original source qualification v1
+on:
+  pull_request:
+    paths:
+      - "benchmarks/wetland_amphibian_source_qualification_v1.py"
+      - "validation/wetland_amphibian_source_qualification_v1/**"
+      - ".github/workflows/wetland-amphibian-source-qualification-v1.yml"
+permissions:
+  contents: read
+jobs:
+  source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Download source-pinned native CSVs
+        run: |
+          mkdir -p /tmp/wetland_source
+          curl --fail --location --retry 2 --max-time 50 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_site_data.csv \
+            -o /tmp/wetland_source/sites.csv
+          curl --fail --location --retry 2 --max-time 50 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_surv_data.csv \
+            -o /tmp/wetland_source/surveys.csv
+          sha256sum /tmp/wetland_source/*.csv
+      - name: Audit source structure and repeat survey opportunities
+        run: |
+          python benchmarks/wetland_amphibian_source_qualification_v1.py --sites /tmp/wetland_source/sites.csv --surveys /tmp/wetland_source/surveys.csv --output /tmp/wetland_source/result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_source/result.json').read_text())
+          assert r['site_rows']>1 and r['survey_rows']>r['site_rows']
+          assert r['sites_with_multiple_dates']>0
+          assert r['site_method_groups_with_multiple_dates']>0
+          print('WETLAND_REAL_SOURCE_AUDITED_NOT_OCCUPANCY_READY')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wetland-amphibian-source-qualification-v1
+          path: /tmp/wetland_source/result.json
