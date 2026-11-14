@@ -1,0 +1,48 @@
+{
+  "schema": "eog.wetland_duplicate_gate_v1.receipt",
+  "status": "BLOCKED_CONFLICTING_SURVEY_IDENTIFIERS",
+  "protocol_commit": "25e040c1655a3ddbc449d3afe927e18f00079fc9",
+  "source": {
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319"
+  },
+  "run": {
+    "id": 43578553991,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43578553991",
+    "conclusion": "success",
+    "artifact_id": 14106668125,
+    "artifact_sha256": "13c692d3e2ba2c0641452b4241fd8cde8607b812759616e4096eb2900704bede"
+  },
+  "fingerprint": "33a2af8a4ee83eeee1aa18849c550bab147053ac1d30e9c73e39c3942d063a0d",
+  "site_rows": 29,
+  "survey_rows": 381,
+  "unique_survey_ids": 379,
+  "duplicate_extra_rows": 2,
+  "conflicts": [
+    {
+      "id": "feneketlen-turjan:bottletrap:89",
+      "lines": [
+        34,
+        37
+      ],
+      "difference": "all-zero vs Pelobates fuscus 1, Rana dalmatina 1, Lissotriton vulgaris 1, Bufo bufo 4"
+    },
+    {
+      "id": "tengelyut-2:bottletrap:118",
+      "lines": [
+        257,
+        265
+      ],
+      "difference": "all-zero vs Pelobates fuscus 3"
+    }
+  ],
+  "same_identity_fields": true,
+  "occupancy_model_permitted": false,
+  "limits": [
+    "Source sampling metadata required to decide whether records represent distinct traps or correction",
+    "Do not silently drop/sum/max conflicting rows",
+    "No verified effort or closure"
+  ]
+}
