@@ -1,0 +1,26 @@
+{
+  "schema": "eog.deer_history_order_negative_control_v1.protocol",
+  "status": "PRE_SCORE_STRUCTURAL_NEGATIVE_CONTROL",
+  "source": {
+    "sha256": "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34",
+    "sites": 87,
+    "occasions": 22
+  },
+  "question": "Does the heldout site log-score delta depend on chronological detection order after site n and k are fixed?",
+  "derivation": "Both fitted candidate models have exchangeable within-site daily Bernoulli observations: site score is a function of n_i and k_i only; detection ordering is not in likelihood. For any permutation of observed 0/1 within site with NA positions fixed, site log-score and CV fold training fit are exactly invariant up to numerical tolerance.",
+  "tests": [
+    "source SHA fixed",
+    "recompute fixed 5-fold original heldout site scores",
+    "199 site-wise order permutations, preserving NA and each site's n,k",
+    "verify all site log-score deltas unchanged to 1e-6 without refit, by sufficient-statistic identity",
+    "recalculate adjacent switching and its Spearman correlation to unchanged site score delta for each permutation",
+    "compare original rho to permutation distribution (two-sided empirical +1 p); do not interpret naive unconditioned rho p as biological evidence"
+  ],
+  "seed": 20261114,
+  "draws": 199,
+  "limits": [
+    "This is an internal structural negative control, not independent ecological evidence",
+    "Switching is not an explanatory input to either model",
+    "No measured A/B/M, effort or closure; no EOG-WF endpoint"
+  ]
+}

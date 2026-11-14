@@ -1,0 +1,44 @@
+name: Deer detection order structural negative control v1
+on:
+  pull_request:
+    paths:
+      - "benchmarks/deer_history_order_negative_control_v1.py"
+      - "tests/test_deer_history_order_negative_control_v1.py"
+      - "validation/deer_history_order_negative_control_v1/**"
+      - ".github/workflows/deer-history-order-negative-control-v1.yml"
+permissions:
+  contents: read
+jobs:
+  order-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q tests/test_deer_history_order_negative_control_v1.py
+      - name: Exact original real source
+        run: |
+          mkdir -p /tmp/deer_order
+          curl --fail --location --retry 2 --max-time 50 --silent --show-error \
+            https://raw.githubusercontent.com/BrentPease1/single-season-occupancy/f65b220d1c84240fa81cb457bf27522424fe1666/deer_detection_history.csv \
+            -o /tmp/deer_order/deer_detection_history.csv
+          echo "bcfeb04683e572d0ded79fd40917a546188b4e2df64c043d9e1ea8720d524e34  /tmp/deer_order/deer_detection_history.csv" | sha256sum -c -
+      - name: Run 199 source-fixed order negative controls
+        run: |
+          python benchmarks/deer_history_order_negative_control_v1.py --source /tmp/deer_order/deer_detection_history.csv --output /tmp/deer_order/result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/deer_order/result.json').read_text())
+          assert r['sites']==87 and r['permutations']==199
+          assert r['permutations_with_changed_switches']>0
+          assert r['max_site_logscore_change_under_fixed_nk']<1e-10
+          print('DEER_ORDER_CONTROL_VALIDATED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deer-history-order-negative-control-v1
+          path: /tmp/deer_order/result.json
