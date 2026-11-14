@@ -1,0 +1,118 @@
+name: Wetland amphibian survey identity conflict gate v1
+on:
+  pull_request:
+    paths:
+      - "benchmarks/wetland_duplicate_gate_v1.py"
+      - "tests/test_wetland_duplicate_gate_v1.py"
+      - "benchmarks/wetland_duplicate_bounds_v1.py"
+      - "tests/test_wetland_duplicate_bounds_v1.py"
+      - "docs/wetland_duplicate_sensitivity_v1.md"
+      - "benchmarks/wetland_original_code_preflight_v1.py"
+      - "tests/test_wetland_original_code_preflight_v1.py"
+      - "benchmarks/wetland_survreps_evidence_loss_v1.py"
+      - "tests/test_wetland_survreps_evidence_loss_v1.py"
+      - "validation/wetland_survreps_evidence_v1/**"
+      - "validation/wetland_duplicate_gate_v1/**"
+      - ".github/workflows/wetland-duplicate-gate-v1.yml"
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py
+      - name: Retrieve original pinned source
+        run: |
+          mkdir -p /tmp/wetland_gate
+          curl --fail --location --retry 2 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_site_data.csv \
+            -o /tmp/wetland_gate/sites.csv
+          curl --fail --location --retry 2 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_surv_data.csv \
+            -o /tmp/wetland_gate/surveys.csv
+          echo "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319  /tmp/wetland_gate/sites.csv" | sha256sum -c -
+          echo "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd  /tmp/wetland_gate/surveys.csv" | sha256sum -c -
+      - name: Identify source conflicts, block occupancy
+        run: |
+          python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/result.json').read_text())
+          assert r['site_rows']==29 and r['survey_rows']==381
+          assert r['duplicate_survey_ids']==2 and r['conflicting_duplicate_ids']==2
+          assert r['status']=='BLOCKED_CONFLICTING_SURVEY_IDENTIFIERS'
+          assert not r['readiness']['occupancy_model_permitted']
+          print('WETLAND_CONFLICTS_DETECTED_AND_BLOCKED')
+          PY
+      - name: Bound descriptive detection outcomes under four row identities
+        run: |
+          python benchmarks/wetland_duplicate_bounds_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/duplicate_bounds.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/duplicate_bounds.json').read_text())
+          counts={key: val['positive_in_some_resolution_only'] for key,val in r['bounds']['grains'].items()}
+          assert r['bounds']['scenarios']==4
+          assert counts == {'site_species':0,'site_method_species':1,'survey_species':5}, counts
+          assert r['readiness']['occupancy_model']=='BLOCKED'
+          expected={'archived_all':(29,381),'published_q1':(27,351),'published_q2':(13,188)}
+          for name,(sites,rows) in expected.items():
+              cohort=r['publication_cohort_bounds'][name]
+              assert (cohort['site_count'],cohort['survey_rows'])==(sites,rows), (name,cohort)
+              counts={g: v['positive_in_some_resolution_only'] for g,v in cohort['sensitivity']['grains'].items()}
+              assert counts=={'site_species':0,'site_method_species':1,'survey_species':5},(name,counts)
+          print('PUBLISHED_COHORTS_Q1_27_Q2_13_BOUNDS_INVARIANT')
+          print('WETLAND_DETECTION_BOUNDS_0_1_5_OCCUPANCY_BLOCKED')
+          PY
+      - name: Check official published R preparation scripts without executing them
+        run: |
+          python benchmarks/wetland_original_code_preflight_v1.py --output /tmp/wetland_gate/published_code_preflight.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/published_code_preflight.json').read_text())
+          assert len(r['files'])==2
+          assert not r['occupancy_fitting_permitted']
+          assert not r['duplicate_identity_adjudicated']
+          assert not r['published_27_vs_archived_29_sites_adjudicated']
+          assert r['status'] in ('ORIGINAL_SOURCE_CODE_VERIFIED_NOT_INTERPRETED','ORIGINAL_SOURCE_CODE_GATE_INCOMPLETE')
+          print('WETLAND_R_PROVENANCE_ATTEMPT_AUDITED_NO_OCCUPANCY')
+          PY
+      - name: Authenticate public hunviphab sampling code and quantify native-positive loss
+        run: |
+          curl --fail --location --retry 1 --max-time 30 --silent --show-error \
+            https://raw.githubusercontent.com/edvardmizsei/hunviphab/25d4c64da289ffcc14679619bb3b18bd494de872/R/survreps.R \
+            -o /tmp/wetland_gate/hunviphab_survreps.R
+          test "$(git hash-object /tmp/wetland_gate/hunviphab_survreps.R)" = "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670"
+          python benchmarks/wetland_survreps_evidence_loss_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --survreps-source /tmp/wetland_gate/hunviphab_survreps.R --output /tmp/wetland_gate/survreps_evidence.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/survreps_evidence.json').read_text())
+          fixed={
+              'published_q1': (27,351,540,144,9.475863116344188,26,11),
+              'published_q2': (13,188,260,77,4.871441193156649,12,9),
+          }
+          for name,(sites,rows,norm,positive,expected,repl,risk25) in fixed.items():
+              a=r['cohorts'][name]
+              assert (a['source_site_count'],a['source_survey_rows'],a['20_row_normalized_total'],a['observed_positive_site_species_pairs'])==(sites,rows,norm,positive)
+              assert (a['resample_with_replacement_sites'],a['positive_pairs_at_least_25pct_drop_risk'])==(repl,risk25)
+              assert abs(a['expected_lost_positive_site_species_pairs']-expected)<1e-9
+          assert r['upstream']['historical_package_runtime_confirmed'] is False
+          print('WETLAND_SOURCE_CODE_CONDITIONAL_POSITIVE_LOSS_CERTIFIED_Q1_Q2')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wetland-duplicate-gate-v1
+          path: |
+            /tmp/wetland_gate/result.json
+            /tmp/wetland_gate/duplicate_bounds.json
+            /tmp/wetland_gate/published_code_preflight.json
+            /tmp/wetland_gate/survreps_evidence.json

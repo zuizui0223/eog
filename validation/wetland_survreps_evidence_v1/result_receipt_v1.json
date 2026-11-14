@@ -1,0 +1,85 @@
+{
+  "schema": "eog.wetland_survreps_evidence_v1.result_receipt",
+  "status": "VERIFIED_SOURCE_CONDITIONAL_POSITIVE_EVIDENCE_LOSS",
+  "role": "POST_EXPOSURE_ALGORITHMIC_AUDIT_NOT_INDEPENDENT_BIOLOGICAL_VALIDATION",
+  "source": {
+    "first_author": "Mizsei and Wenner 2025",
+    "doi": "10.5281/zenodo.15044115",
+    "github_repo_commit": "zuizui0223/frogcs@5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_q1_r_md5": "fcab406cd8a192a07cc97582c19011ad",
+    "original_q2_r_md5": "a2b2f6a30b7243c4b9ece3b5eb75dba6",
+    "upstream_repo": "edvardmizsei/hunviphab",
+    "upstream_commit": "25d4c64da289ffcc14679619bb3b18bd494de872",
+    "survreps_blob_sha1": "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670",
+    "original_q1_explicit_rng_seed": 123,
+    "original_q2_explicit_rng_seed": 123
+  },
+  "scientific_assumption": "Observed publication scripts set X0=1, season=1 and reps=20; numerical source audit assumes this pinned public survreps code was the behavior of the installed historical package (unverified).",
+  "quantification": {
+    "archived_all": {
+      "sites": 29,
+      "raw_rows": 381,
+      "normalized_rows": 580,
+      "raw_positive_site_species": 153,
+      "expected_lost_positive_site_species": 11.125239275849436,
+      "at_least_25pct_loss": 16
+    },
+    "published_q1": {
+      "sites": 27,
+      "raw_rows": 351,
+      "normalized_rows": 540,
+      "with_replacement_sites": 26,
+      "raw_positive_site_species": 144,
+      "expected_lost_positive_site_species": 9.47586311634419,
+      "at_least_25pct_loss": 11
+    },
+    "published_q2": {
+      "sites": 13,
+      "raw_rows": 188,
+      "normalized_rows": 260,
+      "with_replacement_sites": 12,
+      "raw_positive_site_species": 77,
+      "expected_lost_positive_site_species": 4.871441193156647,
+      "at_least_25pct_loss": 9
+    },
+    "q1_4_hypothetical_row_id_resolution_expected_loss_min": 9.403519127221577,
+    "q1_4_hypothetical_row_id_resolution_expected_loss_max": 9.421495527903653,
+    "q2_4_hypothetical_row_id_resolution_expected_loss_min": 4.799097204034034,
+    "q2_4_hypothetical_row_id_resolution_expected_loss_max": 4.817073604716111,
+    "top_site_species": {
+      "site": "tengelyut-1",
+      "species": "Triturus dobrogicus",
+      "n_native_rows": 18,
+      "k_positive_rows": 1,
+      "conditional_probability_of_dropping_all_positive": 0.31880735010388184
+    }
+  },
+  "validation": {
+    "run_id": 43585874262,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43585874262",
+    "state": "success",
+    "artifact_id": 14110067074,
+    "artifact_sha256": "6758b47c5ea996448dd5d077435cacd2085cd9aeb1feee882a3ac04974505033",
+    "result_fingerprint": "bf2fb6753860313b80c7241812d9eaa847a1415e9a1f654d30ee07f167fdc078"
+  },
+  "boundaries": [
+    "Exact expectations under the declared pinned algorithm, not observed realized original model draws.",
+    "Not a verified historical R package runtime or independent biological replication.",
+    "No occupancy refit and no implications established for published coefficient values or p-values.",
+    "Repeated normalized rows are not verified independent physical occasions.",
+    "Positive evidence loss is different from direct evidence for ecological absence.",
+    "No causal A/B/M inference or change to frozen 3-endpoint EOG-WF.",
+    "The original scripts both have set.seed(123); absence of script-level seed is NOT a finding. Reproducing the published realized draw requires the actual R/package runtime."
+  ],
+  "source_original_script_seed_audit": {
+    "run_id": 43586181277,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43586181277",
+    "q1_seed_line": 2,
+    "q2_seed_line": 2,
+    "artifact_id": 14110482262,
+    "artifact_sha256": "f0d34d02c9ce0d910c77e8d22411121cfedafb4e3c3c8c92856cb13c0d21f2af",
+    "historical_r_and_package_runtime_confirmed": false
+  }
+}
