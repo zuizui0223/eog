@@ -1,0 +1,136 @@
+{
+  "schema": "eog.wetland_paired_method_core_v1.result_receipt",
+  "status": "SOURCE_VERIFIED_FULL_PAIRED_ACOUSTIC_VISUAL_RECORD_COVERAGE_WITH_TAXON_SELECTIVE_WITNESS_LOSS",
+  "analysis_type": "POST_EXPOSURE_SOURCE_METHOD_REPRESENTATION_AUDIT_NOT_BIOLOGICAL_EFFECT_OR_OCCUPANCY",
+  "source": {
+    "article": "Wenner et al. 2025, Global Ecology and Conservation 62 e03837, doi:10.1016/j.gecco.2025.e03837; CC BY 4.0",
+    "archive": "Zenodo 10.5281/zenodo.15044115",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "published_method_statement": "§2.2 states acoustic, visual and dipnet were used in regular survey visits by two observers; absent dipnet CSV record cannot be equated with method not deployed.",
+    "physical_effort_constant_or_independent": false
+  },
+  "results": {
+    "archived_all": {
+      "sites": 29,
+      "native_rows": 381,
+      "site_dates": 129,
+      "acoustic_csv_days": 129,
+      "visual_csv_days": 129,
+      "dipnet_csv_days": 59,
+      "bottletrap_csv_days": 62,
+      "full_original_positive_site_species": 153,
+      "paired_core_positive_site_species": 110,
+      "source_positive_not_seen_by_paired_core": 43,
+      "full_source_positive_site_date_species": 365,
+      "paired_core_positive_site_date_species": 249,
+      "source_positive_day_species_not_seen_by_paired_core": 116
+    },
+    "published_q1": {
+      "sites": 27,
+      "native_rows": 351,
+      "site_dates": 117,
+      "paired_method_native_rows": 234,
+      "acoustic_csv_days": 117,
+      "visual_csv_days": 117,
+      "dipnet_csv_days": 57,
+      "bottletrap_csv_days": 58,
+      "full_original_positive_site_species": 144,
+      "paired_core_positive_site_species": 104,
+      "positive_core_capture_fraction": 0.7222222222222222,
+      "source_positive_not_seen_by_paired_core": 40,
+      "full_source_positive_site_date_species": 346,
+      "paired_core_positive_site_date_species": 234,
+      "source_positive_day_species_not_seen_by_paired_core": 112,
+      "species_examples": {
+        "Lissotriton vulgaris": {
+          "full_sites": 21,
+          "core_sites": 6,
+          "core_unseen": 15
+        },
+        "Triturus dobrogicus": {
+          "full_sites": 7,
+          "core_sites": 1,
+          "core_unseen": 6
+        },
+        "Bombina bombina": {
+          "full_sites": 18,
+          "core_sites": 11,
+          "core_unseen": 7
+        },
+        "Hyla arborea": {
+          "full_sites": 24,
+          "core_sites": 22,
+          "core_unseen": 2
+        },
+        "Pelophylax ridibundus": {
+          "full_sites": 18,
+          "core_sites": 18,
+          "core_unseen": 0
+        }
+      }
+    },
+    "published_q2": {
+      "sites": 13,
+      "native_rows": 188,
+      "site_dates": 64,
+      "paired_method_native_rows": 128,
+      "acoustic_csv_days": 64,
+      "visual_csv_days": 64,
+      "dipnet_csv_days": 27,
+      "bottletrap_csv_days": 31,
+      "full_original_positive_site_species": 77,
+      "paired_core_positive_site_species": 61,
+      "positive_core_capture_fraction": 0.7922077922077922,
+      "source_positive_not_seen_by_paired_core": 16,
+      "full_source_positive_site_date_species": 207,
+      "paired_core_positive_site_date_species": 148,
+      "source_positive_day_species_not_seen_by_paired_core": 59,
+      "species_examples": {
+        "Lissotriton vulgaris": {
+          "full_sites": 9,
+          "core_sites": 3,
+          "core_unseen": 6
+        },
+        "Triturus dobrogicus": {
+          "full_sites": 4,
+          "core_sites": 1,
+          "core_unseen": 3
+        },
+        "Hyla arborea": {
+          "full_sites": 12,
+          "core_sites": 12,
+          "core_unseen": 0
+        },
+        "Pelophylax ridibundus": {
+          "full_sites": 10,
+          "core_sites": 10,
+          "core_unseen": 0
+        }
+      }
+    }
+  },
+  "verification": {
+    "fixed_protocol_commit": "3fd6da0ab1e260d974ed997818ab2b9982397b55",
+    "source_pinned_ci_run": 43695295286,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43695295286",
+    "conclusion": "SUCCESS",
+    "result_fingerprint": "88f8b55ce710cb8df06724e384390318b408902d6f66c5809ab45597fe84da62",
+    "artifact_id": 14153223973,
+    "artifact_zip_sha256": "f6761408e52f3b33281e5d8a088f911e0891de093065c5ab442a02c4ac90ec51",
+    "native_source_sha_verified": true,
+    "offline_fail_closed_tests_passed": true,
+    "all_129_site_dates_have_exactly_one_acoustic_plus_one_visual_source_record": true,
+    "long_site_date_species_csvs_and_source_positive_registry_csvs_exported": true
+  },
+  "methodological_limits": [
+    "Same recorded method presence is not a verified constant method effort or observation time; biological detectability remains unknown.",
+    "The article says dipnet was used during surveys whereas archived dipnet method-row coverage is sparse; this is a source recording versus reported field procedure discrepancy, not evidence of fraud or bad field practice.",
+    "Positive witnesses unseen by paired core are documented in original additional-method records, not species absent at those sites.",
+    "Source rows are not individually authenticated bottle traps; two repeated site-method-day keys remain distinct raw records with unresolved physical unit identities.",
+    "Surveying multiple dates across up to 91 days does not validate population closure.",
+    "No fitted occupancy, causal restoration result, A/B/M mechanism identification, independent EOG-WF endpoint, or Draft PR merge."
+  ]
+}
