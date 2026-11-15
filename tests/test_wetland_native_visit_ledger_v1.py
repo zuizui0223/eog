@@ -88,3 +88,38 @@ def test_source_row_reuse_or_negative_count_fails_closed():
 def test_missing_source_site_fails_closed():
     with pytest.raises(ValueError,match="not every source site"):
         m.build_cohort(fixture(),{"alpha","beta"},["frog","toad"],"small")
+
+
+
+def test_date_padded_history_preserves_actual_visits_not_pseudo_twenty():
+    profile,_,daily=m.build_cohort(fixture(),{"alpha"},["frog","toad"],"small")
+    padded,summary=m.make_padded_site_visit_history(profile,daily,["frog","toad"],"small")
+    assert summary["within_site_max_recorded_visit_dates"]==2
+    assert summary["padded_site_visit_species_cells"]==4
+    assert summary["recorded_site_visit_species_cells"]==4
+    assert summary["nonexistent_visit_cells_preserved_as_NA"]==0
+    assert summary["site_species_positive_union_preserved"]
+    assert all(z["visit_status"]=="RECORDED_VISIT_DATE" for z in padded)
+    assert [z["recorded_detection"] for z in padded]==["1","1","0","0"]
+
+
+def test_unvisited_site_ordinal_is_NA_not_zero():
+    profile,_,daily=m.build_cohort(fixture(),{"alpha"},["frog","toad"],"small")
+    source_day=profile["per_site"]["alpha"]["recorded_visit_dates"]
+    profile["per_site"]["beta"]={
+        "recorded_visit_dates":[source_day[0]],
+        "distinct_recorded_visit_count":1,
+        "calendar_span_days":0,
+        "native_source_row_count":1
+    }
+    for sp in ("frog","toad"):
+        daily.append({
+            "site":"beta","date":source_day[0],"species":sp,"recorded_positive":0
+        })
+    profile["recorded_positive_site_species_pairs"]=2
+    padded,summary=m.make_padded_site_visit_history(profile,daily,["frog","toad"],"small")
+    assert summary["padded_site_visit_species_cells"]==8
+    assert summary["nonexistent_visit_cells_preserved_as_NA"]==2
+    unavailable=[x for x in padded if x["site"]=="beta" and x["within_site_visit_ordinal"]==2]
+    assert len(unavailable)==2
+    assert all(x["recorded_detection"]=="" and x["visit_status"]=="NO_VISIT_RECORDED" for x in unavailable)
