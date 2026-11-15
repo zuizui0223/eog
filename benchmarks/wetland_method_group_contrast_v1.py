@@ -40,6 +40,30 @@ def sign(number):
     return (number>0)-(number<0)
 
 
+def compare_category_positive_counts(a_full,b_full,a_core,b_core,na,nb):
+    """Exact integer contrast signs; no statistical or causal effect estimate."""
+    if not all(type(v)==int for v in (a_full,b_full,a_core,b_core,na,nb)):
+        raise ValueError("category count inputs must be integers")
+    if na<=0 or nb<=0 or not 0<=a_core<=a_full<=na or not 0<=b_core<=b_full<=nb:
+        raise ValueError("invalid denominator or method-subset positive count")
+    numerator_native=a_full*nb-b_full*na
+    numerator_core=a_core*nb-b_core*na
+    den=na*nb
+    return {
+        "native_full_difference_fraction":numerator_native/den,
+        "paired_core_difference_fraction":numerator_core/den,
+        "difference_shift_core_minus_native_percentage_points":
+            100*(numerator_core-numerator_native)/den,
+        "native_full_difference_percentage_points":100*numerator_native/den,
+        "paired_core_difference_percentage_points":100*numerator_core/den,
+        "native_full_direction":sign(numerator_native),
+        "paired_core_direction":sign(numerator_core),
+        "strict_direction_reversal":numerator_native*numerator_core<0,
+        "ties_in_either_source_representation":
+            numerator_native==0 or numerator_core==0,
+    }
+
+
 def describe(surveys,sites,species):
     """Produce source-verified descriptive prevalence and signed contrasts."""
     if len(set(species))!=9 or not species:
@@ -163,26 +187,11 @@ def describe(surveys,sites,species):
             b0=category_species[(b,sp)]["native_full_positive_site_count"]
             a1=category_species[(a,sp)]["paired_core_positive_site_count"]
             b1=category_species[(b,sp)]["paired_core_positive_site_count"]
-            numerator_native=a0*nb-b0*na
-            numerator_core=a1*nb-b1*na
-            denominator=na*nb
             contrasts.append({
                 "comparison":f"{a}_minus_{b}",
                 "category_a":a,"category_b":b,
                 "species":sp,
-                "native_full_difference_fraction":numerator_native/denominator,
-                "paired_core_difference_fraction":numerator_core/denominator,
-                "difference_shift_core_minus_native_percentage_points":
-                    100*(numerator_core-numerator_native)/denominator,
-                "native_full_difference_percentage_points":
-                    100*numerator_native/denominator,
-                "paired_core_difference_percentage_points":
-                    100*numerator_core/denominator,
-                "native_full_direction":sign(numerator_native),
-                "paired_core_direction":sign(numerator_core),
-                "strict_direction_reversal":numerator_native*numerator_core<0,
-                "ties_in_either_source_representation":
-                    numerator_native==0 or numerator_core==0,
+                **compare_category_positive_counts(a0,b0,a1,b1,na,nb),
             })
     summary_of_reversals={
         "total_species_by_category_contrasts":len(contrasts),
