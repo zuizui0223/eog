@@ -69,3 +69,27 @@ def test_runtime_seed_kind_requires_verifiable_r(tmp_path):
     p.write_text("seed=321\nreps=20\nR_version=R version 4.4.3\nRNGkind=Mersenne-Twister;Inversion;Rejection\n")
     with pytest.raises(ValueError, match="seed123"):
         m.read_runtime(p)
+
+
+
+def test_cross_cohort_difference_does_not_change_native_observation():
+    q1 = {
+        "sites_detail": {
+            "A": {"raw_species_detected": 1},
+            "B": {"raw_species_detected": 1},
+        },
+        "lost_species_site_pairs": [],
+    }
+    q2 = {
+        "sites_detail": {"A": {"raw_species_detected": 1}},
+        "lost_species_site_pairs": [{"site":"A", "species":"Pelobates fuscus"}],
+    }
+    a = [{"site":"A","eog_native_row_index":"1"}] * 20
+    b = [{"site":"B","eog_native_row_index":"3"}] * 20
+    c = [{"site":"A","eog_native_row_index":"2"}] * 20
+    out = m.compare_overlapping_cohorts(q1,q2,a+b,c)
+    assert out["shared_native_source_sites"] == 1
+    assert out["same_unique_source_row_set_sites"] == 0
+    assert out["disagreeing_pseudodetection_site_species_pairs"] == 1
+    assert out["disagreeing_pairs"][0]["detected_after_Q1_replay"] is True
+    assert out["disagreeing_pairs"][0]["detected_after_Q2_replay"] is False
