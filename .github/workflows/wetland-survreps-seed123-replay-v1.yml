@@ -5,6 +5,11 @@ on:
       - "benchmarks/wetland_survreps_seed123_replay_v1.R"
       - "benchmarks/wetland_survreps_seed123_evaluate_v1.py"
       - "tests/test_wetland_survreps_seed123_evaluate_v1.py"
+      - "benchmarks/wetland_nmixmatrix_stage_v1.R"
+      - "benchmarks/wetland_nmixmatrix_stage_v1.py"
+      - "tests/test_wetland_nmixmatrix_stage_v1.py"
+      - "docs/wetland_nmixmatrix_stage_v1.md"
+      - "validation/wetland_nmixmatrix_stage_v1/**"
       - "validation/wetland_survreps_seed123_replay_v1/**"
       - ".github/workflows/wetland-survreps-seed123-replay-v1.yml"
   workflow_dispatch:
@@ -26,7 +31,7 @@ jobs:
       - name: Install Python test runner
         run: python -m pip install pytest
       - name: Verify Python replay evaluator fail-closed tests
-        run: python -m pytest -q tests/test_wetland_survreps_seed123_evaluate_v1.py
+        run: python -m pytest -q tests/test_wetland_survreps_seed123_evaluate_v1.py tests/test_wetland_nmixmatrix_stage_v1.py
       - name: Authenticate pinned native CSVs and published source sampler
         run: |
           mkdir -p /tmp/eog_wetland_rreplay
@@ -80,6 +85,37 @@ jobs:
           assert r['cohorts']['published_q2']['sampling']['seed123_lost_positive_species_site_pairs']==6
           print('PINNED_R_REPLAY_POSITIVE_EVIDENCE_CHECKS_PASSED')
           PY
+      - name: Authenticate and reconstruct original nmixmatrix stage, no occupancy fit
+        run: |
+          curl --fail --location --retry 1 --max-time 35 --silent --show-error \
+            https://raw.githubusercontent.com/edvardmizsei/hunviphab/25d4c64da289ffcc14679619bb3b18bd494de872/R/nmixmatrix.R \
+            -o /tmp/eog_wetland_rreplay/nmixmatrix.R
+          test "$(git hash-object /tmp/eog_wetland_rreplay/nmixmatrix.R)" = "40e0f5547cd67729e1c6d46d29a0ce2b75712a3a"
+          Rscript --vanilla benchmarks/wetland_nmixmatrix_stage_v1.R \
+            /tmp/eog_wetland_rreplay/surveys.csv \
+            /tmp/eog_wetland_rreplay \
+            /tmp/eog_wetland_rreplay/nmixmatrix.R \
+            /tmp/eog_wetland_rreplay
+          python benchmarks/wetland_nmixmatrix_stage_v1.py \
+            --surveys /tmp/eog_wetland_rreplay/surveys.csv \
+            --run-dir /tmp/eog_wetland_rreplay \
+            --output /tmp/eog_wetland_rreplay/nmixmatrix_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('/tmp/eog_wetland_rreplay/nmixmatrix_result.json').read_text())
+          assert not a['historical_installed_R_package_verified']
+          assert not a['original_unmarked_fitted_model_reproduced']
+          for cohort,(sites,lost) in {
+              'published_q1': (27,3),'published_q2': (13,6)
+          }.items():
+              d=a['cohorts'][cohort]['diagnostic']
+              assert d['R_nmixmatrix_cells']==sites*20*9
+              assert d['all_R_counts_match_native_selected_rows']
+              assert len(d['lost_native_positive_site_species'])==lost
+              assert 0<d['Kish_duplicate_weight_concentration_not_inferential_ESS']['fraction_of_nominal_pseudo_rows']<=1
+          print('WETLAND_NMIXMATRIX_SOURCE_COUNTS_EXACT_PARITY')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: wetland-r-seed123-native-row-replay-v1
@@ -89,3 +125,6 @@ jobs:
             /tmp/eog_wetland_rreplay/published_q2_source_row_mapping.csv
             /tmp/eog_wetland_rreplay/published_q1_runtime.txt
             /tmp/eog_wetland_rreplay/published_q2_runtime.txt
+            /tmp/eog_wetland_rreplay/published_q1_nmixmatrix_cells.csv
+            /tmp/eog_wetland_rreplay/published_q2_nmixmatrix_cells.csv
+            /tmp/eog_wetland_rreplay/nmixmatrix_result.json
