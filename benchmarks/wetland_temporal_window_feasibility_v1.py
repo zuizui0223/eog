@@ -49,7 +49,8 @@ def reconstruct(records,site_ids,species,cohort,windows=WINDOWS):
     """Compute one fixed set of sensitivity windows; never alter original data."""
     if not records or not site_ids or not species or not windows:
         raise ValueError("empty native source/window universe")
-    if sorted(set(windows))!=sorted(windows) or any(type(w)!=int or w<0 for w in windows):
+    if (any(type(w)!=int or w<0 for w in windows)
+            or tuple(sorted(set(windows)))!=tuple(windows)):
         raise ValueError("windows must be unique nonnegative sorted calendar day lengths")
     by_date=defaultdict(list)
     by_site=defaultdict(set)
