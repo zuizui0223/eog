@@ -80,3 +80,10 @@ The avoidable ambiguity is **not a count-versus-binary coding error**. It is tha
 - Negative-control tests: `tests/test_wetland_nmixmatrix_stage_v1.py`
 - Source-only nine-species binary ylist verification: `benchmarks/wetland_original_code_preflight_v1.py`
 - Success run [#43673410145](https://github.com/zuizui0223/eog/actions/runs/43673410145), artifact 14144844219, ZIP digest `sha256:65ebbb9e7127c419262c558b1ec5e7147fbed5d353ac9384745759d10c2b437d`. This run certifies the R `nmixmatrix` stage; later source code verification separately certifies the original binary ylist conversion.
+
+
+## Final source-contract certification
+
+An additional [MD5-verifying code audit run #43673767014](https://github.com/zuizui0223/eog/actions/runs/43673767014) confirmed **all nine** explicit count>1-to-1 assignments prior to `ylist` and `unmarkedFrameOccuMulti` in **both** original R scripts, not just source-stage inference. The nine conversion expressions occur at Q1 lines 65–73 and Q2 lines 68–76. Both source programs were individually matched to their official MD5 digests before this claim was made.
+
+The authoritative full `nmixmatrix`-stage output was rerun in [GitHub Actions #43673767022](https://github.com/zuizui0223/eog/actions/runs/43673767022), **SUCCESS**; result fingerprint `ab547ca04249a11b6d03bba1269a1ed5a3fc715464f2390daa09b11b54a49cf3`, artifact ID 14145358365, ZIP SHA256 `88aef1f3b7dff0123a3b82c25181b82941c690ab6f728bd3d548c92720e82ce1`. The source-code verification artifact ID was 14145144009. The machine-readable certificate is preserved at `validation/wetland_nmixmatrix_stage_v1/result_receipt.json`.
