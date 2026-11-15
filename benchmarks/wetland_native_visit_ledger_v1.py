@@ -236,6 +236,72 @@ def build_cohort(scoped_rows, site_ids, species, cohort):
     return profile,method_long,day_long
 
 
+def make_padded_site_visit_history(profile, day_long, species, cohort):
+    """Pad only absent *actual site visit dates* with NA, never fabricated zeros.
+
+    Visit index is ordinal *within site*, not a shared calendar-time index or
+    an assertion of independent/closed-season occupancy sampling units.
+    """
+    site_days={
+        site:info["recorded_visit_dates"]
+        for site,info in profile["per_site"].items()
+    }
+    if not site_days:
+        raise ValueError("empty visit roster")
+    maximum=max(len(dates) for dates in site_days.values())
+    observed={}
+    for row in day_long:
+        key=(row["site"],row["date"],row["species"])
+        if key in observed or row["recorded_positive"] not in (0,1):
+            raise ValueError("duplicate or nonbinary observed daily evidence")
+        observed[key]=row["recorded_positive"]
+    output=[]
+    reconstructed_positive=set()
+    observed_day_cells=0
+    for site,dates in sorted(site_days.items()):
+        for j in range(maximum):
+            available=j<len(dates)
+            current_date=dates[j] if available else ""
+            for sp in species:
+                if available:
+                    key=(site,current_date,sp)
+                    if key not in observed:
+                        raise ValueError("recorded native date not in day evidence")
+                    result=int(observed[key])
+                    detected=str(result)
+                    if result:
+                        reconstructed_positive.add((site,sp))
+                    status="RECORDED_VISIT_DATE"
+                    observed_day_cells+=1
+                else:
+                    detected=""
+                    status="NO_VISIT_RECORDED"
+                output.append({
+                    "cohort":cohort,
+                    "site":site,
+                    "within_site_visit_ordinal":j+1,
+                    "recorded_date":current_date,
+                    "species":sp,
+                    "recorded_detection":detected,
+                    "visit_status":status,
+                })
+    if observed_day_cells!=len(day_long):
+        raise ValueError("native day evidence not exactly represented")
+    if len(output)!=len(site_days)*maximum*len(species):
+        raise ValueError("padded visit history shape differs")
+    if len(reconstructed_positive)!=profile["recorded_positive_site_species_pairs"]:
+        raise ValueError("padded visit history lost native positive site-species")
+    missing=sum(x["visit_status"]=="NO_VISIT_RECORDED" for x in output)
+    return output,{
+        "within_site_max_recorded_visit_dates":maximum,
+        "padded_site_visit_species_cells":len(output),
+        "recorded_site_visit_species_cells":observed_day_cells,
+        "nonexistent_visit_cells_preserved_as_NA":missing,
+        "site_species_positive_union_preserved":True,
+        "ordinal_is_within_site_not_common_calendar":True,
+    }
+
+
 def run(survey_path,site_path,output_dir):
     for label,path,sha in (("survey",survey_path,SURVEY_SHA),
                            ("site",site_path,SITE_SHA)):
@@ -267,13 +333,15 @@ def run(survey_path,site_path,output_dir):
     for cohort in COHORT_EXPECTED:
         data,site_ids=select_cohort(original,sites,cohort)
         profile,method_long,day_long=build_cohort(data,site_ids,species,cohort)
+        padded_long,padded_summary=make_padded_site_visit_history(profile,day_long,species,cohort)
+        profile["padded_date_history"]=padded_summary
         counts=(profile["sites"],profile["native_csv_rows"],
                 profile["distinct_site_dates"],profile["distinct_site_date_methods"],
                 profile["recorded_positive_site_species_pairs"],
                 profile["positive_site_date_species_records"])
         if counts != COHORT_EXPECTED[cohort]:
             raise ValueError(f"source cohort fingerprint drift: {cohort} {counts}")
-        for suffix,values in (("method_status",method_long),("daily_detected",day_long)):
+        for suffix,values in (("method_status",method_long),("daily_detected",day_long),("padded_history",padded_long)):
             path=folder/f"{cohort}_{suffix}.csv"
             with path.open("w",encoding="utf-8",newline="") as fh:
                 w=csv.DictWriter(fh,fieldnames=list(values[0]))
@@ -312,6 +380,7 @@ if __name__=="__main__":
             "source_positive":c["recorded_positive_site_species_pairs"],
             "single_date_positives":c["native_site_species_positive_at_single_recorded_date"],
             "max_site_span":c["within_site_calendar_span_days"]["max"],
-            "method_missing_status_cells":c["source_method_species_status_cell_counts"]["METHOD_NOT_RECORDED"]
+            "method_missing_status_cells":c["source_method_species_status_cell_counts"]["METHOD_NOT_RECORDED"],
+            "no_visit_NA_cells":c["padded_date_history"]["nonexistent_visit_cells_preserved_as_NA"]
         } for name,c in result["cohorts"].items()}
     },sort_keys=True))
