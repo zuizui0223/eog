@@ -4,13 +4,15 @@ on:
     paths:
       - "benchmarks/wetland_duplicate_gate_v1.py"
       - "tests/test_wetland_duplicate_gate_v1.py"
+      - "benchmarks/wetland_survey_grain_v1.py"
+      - "tests/test_wetland_survey_grain_v1.py"
       - "benchmarks/wetland_duplicate_bounds_v1.py"
       - "tests/test_wetland_duplicate_bounds_v1.py"
       - "docs/wetland_duplicate_sensitivity_v1.md"
       - "benchmarks/wetland_original_code_preflight_v1.py"
       - "tests/test_wetland_original_code_preflight_v1.py"
       - "benchmarks/wetland_survreps_evidence_loss_v1.py"
-      - "tests/test_wetland_survreps_evidence_loss_v1.py"
+      - "tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py"
       - "validation/wetland_survreps_evidence_v1/**"
       - "validation/wetland_duplicate_gate_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
@@ -50,6 +52,21 @@ jobs:
           assert r['status']=='BLOCKED_CONFLICTING_SURVEY_IDENTIFIERS'
           assert not r['readiness']['occupancy_model_permitted']
           print('WETLAND_CONFLICTS_DETECTED_AND_BLOCKED')
+          PY
+      - name: Verify surv is a non-unique site-method-DOY grouping key
+        run: |
+          python benchmarks/wetland_survey_grain_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/survey_grain.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/wetland_gate/survey_grain.json').read_text())
+          p=x['profile']
+          assert x['status']=='COMPOSITE_OCCASION_KEY_NOT_PHYSICAL_ROW_ID'
+          assert p['rows_matching_site_method_doy_composite_key']==381
+          assert p['distinct_composite_occasion_keys']==379
+          assert p['repeated_occasion_keys']==2
+          assert p['by_method']['bottletrap']=={'native_rows':64,'distinct_occasion_keys':62}
+          print('WETLAND_COMPOSITE_GROUPING_KEY_VERIFIED_NOT_ROW_ID')
           PY
       - name: Bound descriptive detection outcomes under four row identities
         run: |
@@ -114,5 +131,6 @@ jobs:
           path: |
             /tmp/wetland_gate/result.json
             /tmp/wetland_gate/duplicate_bounds.json
+            /tmp/wetland_gate/survey_grain.json
             /tmp/wetland_gate/published_code_preflight.json
             /tmp/wetland_gate/survreps_evidence.json
