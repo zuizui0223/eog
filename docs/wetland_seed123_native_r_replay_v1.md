@@ -1,5 +1,7 @@
 # EOG wetland audit — native R seed-123 sampling and analyst-cohort dependence
 
+**Source-grain clarification:** The repeated native `surv` entries are compositional **site×method×day** group keys, not proved duplicated physical surveys. The published Methods report 15–50 bottle traps per site. This R stage replay deliberately retains every authentic source row, including rows sharing a group key; it neither imputes a trap-level identifier nor claims corruption of the biological source. See [source-grain audit](wetland_composite_key_grain_v1.md).
+
 ## Main result
 
 This is a **post-exposure methodological replication of the 20-row survey-preparation stage**, using original CC BY 4.0 survey/site CSVs and the pinned public `hunviphab::survreps` source. It is **not** a replication of the original `unmarked::occuMulti` fit, a field occupancy estimate, or an EOG-WF fourth endpoint.
