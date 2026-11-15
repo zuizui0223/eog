@@ -1,5 +1,9 @@
 # Wetland amphibian native survey-ID conflict: fail-closed source gate
 
+## Important source-grain correction (post-result audit)
+
+Subsequent exact raw-source checking established that **381/381 rows** have `surv == site + ':' + method + ':' + doy`: `surv` is a **site×method×day grouping key, not a verified unique physical-observation-row ID**. The original 2025 field Methods report 15–50 bottle traps per site, checked over two nights. Thus the two within-key count discrepancies **may** represent different physical trap observations; this audit did not prove input-data corruption. The original `BLOCKED_CONFLICTING_SURVEY_IDENTIFIERS` decision is scoped to a proposed **rowwise likelihood assuming one unique survey ID per independent row**, not a claim that the authors entered observations incorrectly. Never drop/sum/max these rows without original trap-level metadata. See [the composite-key audit](wetland_composite_key_grain_v1.md).
+
 ## Exact source
 
 The source is the original amphibian survey CSV in
