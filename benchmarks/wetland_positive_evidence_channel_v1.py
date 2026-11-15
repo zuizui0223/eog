@@ -78,7 +78,7 @@ def reconcile(source_sets, pair_rows, summary_rows):
         if indicator not in (0,1) or pair in pair_by_cohort_seed[(cohort,seed)]:
             raise ValueError("duplicate or invalid indicator")
         pair_by_cohort_seed[(cohort,seed)][pair]=indicator
-    if len(pair_rows)!=256*(144+77) or len(pair_by_cohort_seed)!=512:
+    if len(pair_rows)!=len(SEEDS)*sum(len(v) for v in source_sets.values()) or len(pair_by_cohort_seed)!=2*len(SEEDS):
         raise ValueError("incomplete source×seed×positive pair table")
 
     by_cohort_seed_summary=defaultdict(dict)
