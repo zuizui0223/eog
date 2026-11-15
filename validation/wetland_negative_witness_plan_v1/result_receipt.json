@@ -1,0 +1,186 @@
+{
+  "schema": "eog.wetland_negative_witness_plan_v1.result_receipt",
+  "status": "SOURCE_AUTHENTICATED_COUNTERFACTUAL_NEGATIVE_WITNESS_MINIMUM_COVER_VERIFIED",
+  "role": "POST_EXPOSURE_LOGICAL_INFORMATION_DESIGN_NO_TRUE_NEGATIVES_OBSERVED",
+  "original_source": {
+    "study": "Wenner et al. 2025, Global Ecology and Conservation 62 e03837, data DOI 10.5281/zenodo.15044115, CC BY 4.0",
+    "repository": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "original_survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "original_site_category_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "native_Q1_sites": 27,
+    "group_sizes": {
+      "intervention": 13,
+      "control": 6,
+      "artificial": 8
+    },
+    "native_Q1_positives": 144,
+    "previous_full_source_partial_id_fingerprint": "864b741974f0b8f12347825516eceab2232b3cd16291e998f18368416b2d9247"
+  },
+  "protocol": {
+    "prior_frozen_commit": "d117c3d20fbff524a45984f001eedb301f744dec",
+    "source_positive_specificity_assumed_not_independently_verified": true,
+    "static_site_species_status_over_91_day_observational_span_unverified": true,
+    "source_zeros_are_unknown_not_absences": true,
+    "new_true_negative_certificates_observed": 0,
+    "observational_wetland_treatment_not_randomized": true
+  },
+  "completed_result": {
+    "full_source_weak_one_sided_comparisons": 4,
+    "distinct_source_unconfirmed_sites": 7,
+    "source_unconfirmed_species_site_candidate_states": 9,
+    "minimum_distinct_sites_if_both_species_true_absence_could_be_certified": 2,
+    "unique_minimum_distinct_site_set": [
+      "nyarfas-turjan-laperdo",
+      "rachaz_2"
+    ],
+    "minimum_separate_site_species_true_negative_certificates": 4,
+    "alternate_four_certificate_sets_with_more_sites_exist": true,
+    "new_negative_field_results_collected": false,
+    "four_weak_comparisons": [
+      {
+        "taxon": "Lissotriton vulgaris",
+        "contrast": "intervention_minus_artificial",
+        "native_positive_sites_a": 9,
+        "sites_a": 13,
+        "native_positive_sites_b": 8,
+        "sites_b": 8,
+        "original_conditional_bound_pp": [
+          -30.76923076923077,
+          0
+        ],
+        "source_unconfirmed_candidate_group": "intervention",
+        "candidate_sites": [
+          "alsopeszer_1",
+          "hancsik-also",
+          "lato-hegy",
+          "rachaz_2"
+        ],
+        "bound_pp_after_ONE_hypothetical_independently_certified_negative_in_candidate_group": [
+          -30.76923076923077,
+          -7.6923076923076925
+        ]
+      },
+      {
+        "taxon": "Lissotriton vulgaris",
+        "contrast": "artificial_minus_control",
+        "native_positive_sites_a": 8,
+        "sites_a": 8,
+        "native_positive_sites_b": 4,
+        "sites_b": 6,
+        "original_conditional_bound_pp": [
+          0,
+          33.333333333333336
+        ],
+        "source_unconfirmed_candidate_group": "control",
+        "candidate_sites": [
+          "nyarfas-turjan-laperdo",
+          "tengelyut-3"
+        ],
+        "bound_pp_after_ONE_hypothetical_independently_certified_negative_in_candidate_group": [
+          16.666666666666668,
+          33.333333333333336
+        ]
+      },
+      {
+        "taxon": "Hyla arborea",
+        "contrast": "intervention_minus_artificial",
+        "native_positive_sites_a": 12,
+        "sites_a": 13,
+        "native_positive_sites_b": 8,
+        "sites_b": 8,
+        "original_conditional_bound_pp": [
+          -7.6923076923076925,
+          0
+        ],
+        "source_unconfirmed_candidate_group": "intervention",
+        "candidate_sites": [
+          "rachaz_2"
+        ],
+        "bound_pp_after_ONE_hypothetical_independently_certified_negative_in_candidate_group": [
+          -7.6923076923076925,
+          -7.6923076923076925
+        ]
+      },
+      {
+        "taxon": "Hyla arborea",
+        "contrast": "artificial_minus_control",
+        "native_positive_sites_a": 8,
+        "sites_a": 8,
+        "native_positive_sites_b": 4,
+        "sites_b": 6,
+        "original_conditional_bound_pp": [
+          0,
+          33.333333333333336
+        ],
+        "source_unconfirmed_candidate_group": "control",
+        "candidate_sites": [
+          "nyarfas-turjan-laperdo",
+          "ordito-kulso-turjan"
+        ],
+        "bound_pp_after_ONE_hypothetical_independently_certified_negative_in_candidate_group": [
+          16.666666666666668,
+          33.333333333333336
+        ]
+      }
+    ],
+    "two_site_shared_species_certificate_targets": [
+      {
+        "site": "rachaz_2",
+        "category": "intervention",
+        "native_recorded_site_dates": 5,
+        "species_without_source_positive": [
+          "Lissotriton vulgaris",
+          "Hyla arborea"
+        ]
+      },
+      {
+        "site": "nyarfas-turjan-laperdo",
+        "category": "control",
+        "native_recorded_site_dates": 2,
+        "species_without_source_positive": [
+          "Lissotriton vulgaris",
+          "Hyla arborea"
+        ]
+      }
+    ],
+    "min_site_cover_is_best_case_not_fieldguarantee": true,
+    "finding": "If, and only if, independent methods certified both species genuinely absent at EACH of the two unique minimum-cover sites, the corresponding four already weakly one-sided conditional rate differences would exclude zero. No such negatives have been observed."
+  },
+  "verification": {
+    "source_pinned_CI_run_id": 43714787444,
+    "CI_url": "https://github.com/zuizui0223/eog/actions/runs/43714787444",
+    "CI_conclusion": "success",
+    "result_fingerprint": "6f941a575e664115aeb636371cde23d4fb8171d03b514fe4de8219bdfad21829",
+    "artifact_id": 14161749487,
+    "artifact_zip_sha256": "faa00e58ace633c9f66b9eaf03c866a6646931124666f56a5d45dedcc82e8616",
+    "CSV": [
+      {
+        "filename": "weak_one_sided_target_list.csv",
+        "rows": 4,
+        "sha256": "1acad6028aa29fc5a270873689f8e13b0c7227ae5b4996fe480d86e9ae4e8139"
+      },
+      {
+        "filename": "source_unconfirmed_candidate_site_species.csv",
+        "rows": 9,
+        "sha256": "fb1ea930d79b93519e1ca237c7dc93679e421b2ce0e2876968f25f39a0bcb794"
+      },
+      {
+        "filename": "site_visit_joint_target_coverage.csv",
+        "rows": 7,
+        "sha256": "5605db6716f5f021fcdaa48e109ad57f63421680253c7b8cde6f0aadb0d4442d"
+      }
+    ],
+    "replay_source_authentication": "Native Q1 source SHA/roster and statuses verified before computing targets",
+    "tests": "Conditional negative-certificate source-positive exclusion; two-site shared cover; source-zero not true absence; synthetic multiple-certificate sets handled explicitly.",
+    "earlier_test_failure_correction": "Synthetic test incorrectly assumed there was only one four-certificate solution. In fact there are eight in synthetic fixture; only minimal two-site cover is unique. Repaired test expectation without changing inference algorithm."
+  },
+  "scientific_stops": [
+    "Never claim new verified biological absences or that a single nondetection establishes true absence; all observed original zeros stay unknown.",
+    "Two-site min visit count is conditional ideal case, not an actionable field protocol or guaranteed identification; four separately authenticated negative statuses would be necessary.",
+    "Perfect specificity of source recorded positives, temporal closure and biological static site status are unverified.",
+    "Site IDs are not georeferenced locations or permits; no geospatial field route is provided.",
+    "Original categories are observational, not randomized; even perfect site status direction would not establish a restoration causal effect.",
+    "No original unmarked occupancy likelihood refit, verified method effort/detection, new EOG A/B/M causal effect, real ecological worlds enumerated or fourth EOG-WF scored endpoint; retain Draft PR."
+  ]
+}
