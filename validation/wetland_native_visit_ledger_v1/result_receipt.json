@@ -1,0 +1,134 @@
+{
+  "schema": "eog.wetland_native_visit_ledger_v1.result_receipt",
+  "status": "ORIGINAL_VISIT_DATE_AND_METHOD_GRAIN_RECONSTRUCTED_NOT_OCCUPANCY",
+  "study": "Mizsei & Wenner (2025), Zenodo DOI 10.5281/zenodo.15044115, CC BY 4.0",
+  "analysis_role": "POST_EXPOSURE_SOURCE_GRAIN_EVIDENCE_RECONSTRUCTION_NOT_FIELD_OCCUPANCY_VALIDATION",
+  "source": {
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "original_survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "original_sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "author_Q1_excluded_site_names": [
+      "kis-banyato",
+      "vadasz-turjan"
+    ],
+    "author_Q2_filter": "site ci == intervention",
+    "survey_key": "surv exactly site:method:doy in 381/381 native rows",
+    "original_double_row_bottletrap_group_keys": 2,
+    "source_physical_trap_ID_available": false,
+    "site_date_is_independent_occasion_verified": false,
+    "method_effort_verified": false,
+    "ecological_season_closure_verified": false
+  },
+  "result": {
+    "archived_all": {
+      "sites": 29,
+      "raw_rows": 381,
+      "site_dates": 129,
+      "method_dates": 379,
+      "source_positive_site_species": 153,
+      "daily_positive_site_species_visits": 365,
+      "positive_site_species_one_recorded_date": 64,
+      "method_not_recorded_status_cells": 1233,
+      "min_site_span_days": 2,
+      "median_site_span_days": 34,
+      "max_site_span_days": 91,
+      "padded_site_visit_species_cells": 1827,
+      "recorded_day_species_cells": 1161,
+      "no_visit_NA_cells": 666
+    },
+    "Q1": {
+      "sites": 27,
+      "raw_rows": 351,
+      "site_dates": 117,
+      "method_dates": 349,
+      "source_positive_site_species": 144,
+      "daily_positive_site_species_visits": 346,
+      "positive_site_species_one_recorded_date": 59,
+      "positive_site_species_one_recorded_method": 57,
+      "source_group_methods_present_per_date": {
+        "2": 24,
+        "3": 71,
+        "4": 22
+      },
+      "method_status_cells": {
+        "RECORDED_POSITIVE": 493,
+        "RECORDED_NONDETECTION": 2648,
+        "METHOD_NOT_RECORDED": 1071
+      },
+      "min_dates_per_site": 2,
+      "max_dates_per_site": 7,
+      "min_site_span_days": 2,
+      "median_site_span_days": 34,
+      "max_site_span_days": 91,
+      "sites_spanning_at_least_30_days": 14,
+      "sites_spanning_at_least_60_days": 5,
+      "padded_site_visit_species_cells": 1701,
+      "recorded_day_species_cells": 1053,
+      "no_visit_NA_cells": 648,
+      "native_positive_site_species_omitted_after_calendar_date_reconstruction": 0
+    },
+    "Q2": {
+      "sites": 13,
+      "raw_rows": 188,
+      "site_dates": 64,
+      "method_dates": 186,
+      "source_positive_site_species": 77,
+      "daily_positive_site_species_visits": 207,
+      "positive_site_species_one_recorded_date": 25,
+      "positive_site_species_one_recorded_method": 22,
+      "source_group_methods_present_per_date": {
+        "2": 14,
+        "3": 42,
+        "4": 8
+      },
+      "method_status_cells": {
+        "RECORDED_POSITIVE": 301,
+        "RECORDED_NONDETECTION": 1373,
+        "METHOD_NOT_RECORDED": 630
+      },
+      "min_dates_per_site": 3,
+      "max_dates_per_site": 7,
+      "min_site_span_days": 21,
+      "median_site_span_days": 37,
+      "max_site_span_days": 91,
+      "sites_spanning_at_least_30_days": 10,
+      "sites_spanning_at_least_60_days": 4,
+      "padded_site_visit_species_cells": 819,
+      "recorded_day_species_cells": 576,
+      "no_visit_NA_cells": 243,
+      "native_positive_site_species_omitted_after_calendar_date_reconstruction": 0
+    }
+  },
+  "output": {
+    "embedded_artifact_result_json_fingerprint": "4c487bb1b00579cbff22be30ae056615708abb275f82eb5091f5df61c4c1b533",
+    "original_archive_daily_detected_csv_sha256": "d3c017fcbdac1f654beef2141cc70f7175efc8bfb178393dc762a1dbd07ffda3",
+    "Q1_daily_detected_csv_sha256": "d8f15b6171933eedd95fee8e9fc0a6404335b1663a2277eabccca136ad171237",
+    "Q1_method_status_csv_sha256": "56a800eed966cb101576829adfb0a238d9cb266a155c9d20d8a163e3a34d886f",
+    "Q1_padded_history_csv_sha256": "a707a45ca9212a08a9eb4cffb2c4579380dd9a4e5b7dbd93478ca0d89bdc7cd6",
+    "Q2_daily_detected_csv_sha256": "7cece921be3276c6652011ed59596c9e9f79f2305d2dcd9f0ae12d05661d5245",
+    "Q2_method_status_csv_sha256": "61efe449ec6be6abe78cb67f30515695592f5f52b024661ebfc554e783413336",
+    "Q2_padded_history_csv_sha256": "d3af2a6bdabc817424b3ed8ab0d4df64e2769b9c53d8a40486ef861d05f5afd1"
+  },
+  "validation": {
+    "CI_run_id": 43682196252,
+    "CI_url": "https://github.com/zuizui0223/eog/actions/runs/43682196252",
+    "CI_conclusion": "SUCCESS",
+    "artifact_id": 14148716904,
+    "artifact_name": "wetland-duplicate-gate-v1",
+    "artifact_zip_sha256": "0dc459e32d8b6773844567cd095029d4e5b0485153f5f002febaac8747a9a404",
+    "original_source_SHA_gates_passed": true,
+    "synthetic_negative_controls_passed": true,
+    "source_positive_date_union_verified_all_cohorts": true,
+    "padded_missing_visit_is_NA_not_zero": true,
+    "no_20_pseudo_resampling": true
+  },
+  "scientific_stop": [
+    "Different calendar survey dates are distinct recorded date groups, but their independence and the seasonal occupancy closure assumption are not verified.",
+    "Recorded non-detection by an observed method does not prove absence; methods not recorded in the source are explicitly missing.",
+    "No original source row is discarded or count-summed across unverified physical trap units.",
+    "The source spans up to 91 calendar days within some sites, making stage/phenology and temporal closure a live assumption to verify, not a refutation of the original model.",
+    "No true ecological occupancy coefficient, authors' treatment association, movement M, biotic B or abiotic A causal identification was estimated.",
+    "The 3 scored EOG-WF prospective endpoints remain closed; no fourth endpoint or world-count superiority claim is made."
+  ]
+}
