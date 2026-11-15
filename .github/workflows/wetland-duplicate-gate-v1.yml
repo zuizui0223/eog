@@ -102,6 +102,10 @@ jobs:
           assert not r['duplicate_identity_adjudicated']
           assert not r['published_27_vs_archived_29_sites_adjudicated']
           assert r['status'] in ('ORIGINAL_SOURCE_CODE_VERIFIED_NOT_INTERPRETED','ORIGINAL_SOURCE_CODE_GATE_INCOMPLETE')
+          assert r['status']=='ORIGINAL_SOURCE_CODE_VERIFIED_NOT_INTERPRETED'
+          for original in r['files']:
+              assert original['evidence']['original_binary_model_input_contract']['all_nine_converted_before_unmarked']
+          print('ORIGINAL_NINE_SPECIES_YLIST_BINARY_INPUT_CONFIRMED')
           print('WETLAND_R_PROVENANCE_ATTEMPT_AUDITED_NO_OCCUPANCY')
           PY
       - name: Authenticate public hunviphab sampling code and quantify native-positive loss
