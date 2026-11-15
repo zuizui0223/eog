@@ -6,6 +6,8 @@ on:
       - "tests/test_wetland_duplicate_gate_v1.py"
       - "benchmarks/wetland_survey_grain_v1.py"
       - "tests/test_wetland_survey_grain_v1.py"
+      - "docs/wetland_composite_key_grain_v1.md"
+      - "validation/wetland_survey_grain_v1/**"
       - "benchmarks/wetland_duplicate_bounds_v1.py"
       - "tests/test_wetland_duplicate_bounds_v1.py"
       - "docs/wetland_duplicate_sensitivity_v1.md"
