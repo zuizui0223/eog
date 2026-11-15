@@ -1,0 +1,138 @@
+{
+  "schema": "eog.wetland_method_site_jackknife_v1.result_receipt",
+  "status": "SOURCE_AUTHENTICATED_27_SITE_DELETION_15_METHOD_PANEL_10935_CONTRASTS_VERIFIED",
+  "analysis_role": "POST_EXPOSURE_DETERMINISTIC_OBSERVATION_SOURCE_SENSITIVITY_NOT_STATISTICAL_JACKKNIFE_SE",
+  "source": {
+    "study": "Wenner et al. 2025, Global Ecology and Conservation 62 e03837, DOI 10.1016/j.gecco.2025.e03837; original data Zenodo 10.5281/zenodo.15044115 CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "native_original_Q1_sites": 27,
+    "native_Q1_survey_rows": 351,
+    "native_Q1_site_dates": 117,
+    "Q1_categories": {
+      "intervention": 13,
+      "control": 6,
+      "artificial": 8
+    },
+    "source_positive_site_species_pairs": 144,
+    "prior_full_15_method_lattice_fingerprint": "d9ce91154c34abc1e0619feb803b0a39b7721ef18dcd01c85279d3b6c581f254",
+    "prior_lattice_CI_run": 43710742795
+  },
+  "protocol": {
+    "frozen_before_this_run_sha": "fa19742d2c8eb861642a55e85b488ebe7a6d4c99",
+    "design": "All 27 original native Q1 sites deleted one at a time, all 15 nonempty original recorded method subsets, nine species × three wetland contrasts, both baseline and subset recomputed on matched remaining 26 sites",
+    "source_positives": "Original source count>0 per site/species/method Boolean OR; no negative ecological claim",
+    "sign_check": "exact integer cross-product sign; only strictly opposite nonzero denominated fractions count as strict reversal",
+    "outcome_rows": 10935,
+    "site_panel_summaries": 405,
+    "original_AV_5_deletion_details": 135,
+    "inferential_jackknife_variance_permitted": false
+  },
+  "observations": {
+    "original_27_AV_strict_method_reversals": 5,
+    "original_five": {
+      "Lissotriton vulgaris|intervention_minus_control": {
+        "persistent_strict_reversals_27_site_deletions": 16,
+        "site_deletions_where_source_or_panel_tie": 9,
+        "site_deletions_becoming_same_nonzero_sign": 2,
+        "full_original_baseline_sign_changed_or_tied": 11
+      },
+      "Bufo bufo|intervention_minus_control": {
+        "persistent_strict_reversals_27_site_deletions": 27,
+        "site_deletions_where_source_or_panel_tie": 0,
+        "site_deletions_becoming_same_nonzero_sign": 0,
+        "full_original_baseline_sign_changed_or_tied": 0
+      },
+      "Lissotriton vulgaris|intervention_minus_artificial": {
+        "persistent_strict_reversals_27_site_deletions": 27,
+        "site_deletions_where_source_or_panel_tie": 0,
+        "site_deletions_becoming_same_nonzero_sign": 0,
+        "full_original_baseline_sign_changed_or_tied": 0
+      },
+      "Lissotriton vulgaris|artificial_minus_control": {
+        "persistent_strict_reversals_27_site_deletions": 27,
+        "site_deletions_where_source_or_panel_tie": 0,
+        "site_deletions_becoming_same_nonzero_sign": 0,
+        "full_original_baseline_sign_changed_or_tied": 0
+      },
+      "Bufotes viridis|artificial_minus_control": {
+        "persistent_strict_reversals_27_site_deletions": 23,
+        "site_deletions_where_source_or_panel_tie": 0,
+        "site_deletions_becoming_same_nonzero_sign": 4,
+        "full_original_baseline_sign_changed_or_tied": 2,
+        "site_deletions_losing_reversal": [
+          "dog-hegyi-csatorna",
+          "ordito-kulso-turjan",
+          "teknos-hati-csatorna-1",
+          "tucskosi-mocsar"
+        ]
+      }
+    },
+    "fully_persistent_original_method_reversals_out_of_five": 3,
+    "method_panel_sensitivity": {
+      "acoustic+visual": {
+        "full_27_strict_reversals": 5,
+        "min_LOO": 4,
+        "median_LOO": 5,
+        "max_LOO": 6,
+        "zero_reversal_LOO_cases": 0
+      },
+      "acoustic+visual+bottletrap": {
+        "full_27_strict_reversals": 5,
+        "min_LOO": 3,
+        "median_LOO": 5,
+        "max_LOO": 7,
+        "zero_reversal_LOO_cases": 0
+      },
+      "visual+dipnet": {
+        "full_27_strict_reversals": 0,
+        "min_LOO": 0,
+        "median_LOO": 0,
+        "max_LOO": 1,
+        "zero_reversal_LOO_cases": 23
+      },
+      "acoustic+visual+dipnet": {
+        "full_27_strict_reversals": 0,
+        "min_LOO": 0,
+        "median_LOO": 0,
+        "max_LOO": 1,
+        "zero_reversal_LOO_cases": 26
+      },
+      "acoustic+visual+dipnet+bottletrap": {
+        "full_27_strict_reversals": 0,
+        "min_LOO": 0,
+        "median_LOO": 0,
+        "max_LOO": 0,
+        "zero_reversal_LOO_cases": 27
+      }
+    }
+  },
+  "validation": {
+    "original_source_signed_Q1_run_id": 43711780299,
+    "original_source_signed_Q1_CI_url": "https://github.com/zuizui0223/eog/actions/runs/43711780299",
+    "CI_conclusion": "success",
+    "result_fingerprint": "37d68253a938f89cf8719a905883594ee90044a676a8c786c6329dac397358d3",
+    "artifact_id": 14160896616,
+    "artifact_zip_sha256": "153a51e0ff5f5e862c39bcb7d0fd502e6c492bd1c3cd8b225b7a3ba7601c8148",
+    "output_sha256": {
+      "method_panel_site_drop_summary": "7eb53e06c669a48ffeef5d93f90db901adb09bf3a4420607408ff3dfb5a32655",
+      "method_panel_site_drop_contrasts": "e6132a33b2fec614c1ffca1719cf39b345482c6e9492885b762d68120180a2ab",
+      "original_five_acoustic_visual_site_drop_details": "d7368b4fcb2868cbfd3db557973922882cdd722f1f84f4d6467662d54c05c726"
+    },
+    "negative_control_test_failure_corrected": {
+      "first_failure_reason": "Synthetic fixture contains two strict AV contrast reversals, not one, and an error message matched category not site.",
+      "resolution": "Corrected the two synthetic test expected assertions, not the source algorithm.",
+      "subsequent_CI": "source-authenticated full test success"
+    },
+    "independent_native_Source_JS_recalculation": "All five leave-one-site-out reversal persistence counts and five panel min/median/max summaries independently matched the authenticated original CSV."
+  },
+  "scope_stops": [
+    "These are 27 dependent deterministic leave-one-out site sensitivities, not an inferential jackknife standard error, p-value, confidence interval or independent field replication.",
+    "Only recorded method-row positive site×species evidence and original descriptive categories are studied, not latent occupancy, true absence or randomized restoration treatment.",
+    "Method effort/observation duration/trap independence and biological within-season closure are not verified; the original paper states dipnet in normal visits while released CSV dipnet row coverage is sparse.",
+    "Sign persistence is a robustness property for this particular sample and cannot be generalized to other wetlands without external data.",
+    "No ecological world counts, movement M, abiotic/biotic A/B causal identification, original unmarked likelihood, fourth EOG-WF predictive endpoint or Draft PR merge."
+  ]
+}
