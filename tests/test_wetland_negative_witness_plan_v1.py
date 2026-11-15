@@ -27,15 +27,15 @@ def test_one_independently_certified_intervention_absence_makes_negative_vs_full
 
 def test_true_negative_occupied_source_site_is_rejected():
     for args in [
-        (8,8,4,6,negative_a=1),
-        (8,8,4,6,negative_b=3),
-        (9,13,8,8,negative_b=1),
-        (8,8,4,6,negative_a=-1),
-        (8,8,4,6,negative_b=1.0),
+        (8,8,4,6,1,0),
+        (8,8,4,6,0,3),
+        (9,13,8,8,0,1),
+        (8,8,4,6,-1,0),
+        (8,8,4,6,0,1.0),
     ]:
         with pytest.raises(ValueError):
             m.bounds_with_certified_negatives(*args[:4],negative_a=args[4],
-                                              negative_b=args[5] if len(args)>5 else 0)
+                                              negative_b=args[5])
 
 
 def test_source_positive_only_weak_sign_needs_valid_negative_not_more_nondetections():
