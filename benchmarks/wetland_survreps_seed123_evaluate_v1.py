@@ -151,6 +151,69 @@ def evaluate_one(original_rows, original_sites, species, mapping, cohort):
     }
 
 
+
+def compare_overlapping_cohorts(q1, q2, map_q1, map_q2):
+    """Post-result diagnostic of analyst-cohort-dependent R seed stream.
+
+    The original source observations at common sites are identical, but
+    R sampling order can differ when non-focal sites are filtered out.
+    """
+    common_sites = set(q2["sites_detail"])
+    if not common_sites <= set(q1["sites_detail"]):
+        raise ValueError("published Q2 site roster not nested in Q1")
+    for site in common_sites:
+        if q1["sites_detail"][site]["raw_species_detected"] != (
+            q2["sites_detail"][site]["raw_species_detected"]
+        ):
+            raise ValueError("same-site original positive data differ across cohorts")
+    map1 = defaultdict(list)
+    map2 = defaultdict(list)
+    for item in map_q1:
+        if item["site"] in common_sites:
+            map1[item["site"]].append(int(item["eog_native_row_index"]))
+    for item in map_q2:
+        map2[item["site"]].append(int(item["eog_native_row_index"]))
+    same_sequence = sorted(
+        site for site in common_sites if map1[site] == map2[site]
+    )
+    same_set = sorted(
+        site for site in common_sites if set(map1[site]) == set(map2[site])
+    )
+    if any(len(map1[site]) != 20 or len(map2[site]) != 20 for site in common_sites):
+        raise ValueError("shared site missing 20 generated positions")
+    q1_lost = {
+        (item["site"], item["species"]) for item in q1["lost_species_site_pairs"]
+        if item["site"] in common_sites
+    }
+    q2_lost = {
+        (item["site"], item["species"]) for item in q2["lost_species_site_pairs"]
+    }
+    switch = sorted(q1_lost ^ q2_lost)
+    return {
+        "status": "POST_EXPOSURE_COHORT_DEPENDENCE_NOT_BIOLOGICAL_CHANGE",
+        "shared_native_source_sites": len(common_sites),
+        "same_20_source_row_sequence_sites": len(same_sequence),
+        "same_unique_source_row_set_sites": len(same_set),
+        "q1_lost_native_positive_in_shared_sites": len(q1_lost),
+        "q2_lost_native_positive_in_shared_sites": len(q2_lost),
+        "disagreeing_pseudodetection_site_species_pairs": len(switch),
+        "disagreeing_pairs": [
+            {
+                "site": site,
+                "species": sp,
+                "detected_after_Q1_replay": (site, sp) not in q1_lost,
+                "detected_after_Q2_replay": (site, sp) not in q2_lost,
+            }
+            for site, sp in switch
+        ],
+        "interpretation": (
+            "Same source-positive sites have a different seed-123 sampled "
+            "row history because the cohort filter changes the order/number "
+            "of RNG calls; this is analytical representation dependence, "
+            "not natural temporal turnover or new field observations."
+        ),
+    }
+
 def read_runtime(path):
     vals = {}
     for line in Path(path).read_text().splitlines():
@@ -182,10 +245,12 @@ def run(survey_path, site_path, replay_dir):
         "ecological_occupancy_fitting_permitted": False,
         "cohorts": {},
     }
+    mappings = {}
     for cohort in ("published_q1", "published_q2"):
         mapping_path = Path(replay_dir) / f"{cohort}_source_row_mapping.csv"
         runtime_path = Path(replay_dir) / f"{cohort}_runtime.txt"
         mapping, _ = rows(mapping_path)
+        mappings[cohort] = mapping
         result["cohorts"][cohort] = {
             "sampling": evaluate_one(
                 original, site_rows, species, mapping, cohort
@@ -193,6 +258,12 @@ def run(survey_path, site_path, replay_dir):
             "runtime": read_runtime(runtime_path),
             "mapping_sha256": hashlib.sha256(mapping_path.read_bytes()).hexdigest(),
         }
+    result["overlapping_cohort_diagnostic"] = compare_overlapping_cohorts(
+        result["cohorts"]["published_q1"]["sampling"],
+        result["cohorts"]["published_q2"]["sampling"],
+        mappings["published_q1"],
+        mappings["published_q2"],
+    )
     result["interpretation_boundary"] = [
         "The script reproduces one conditional seed-123 sampling stage under a fixed R and public function version, not authors' exact historical fitted occupancy likelihood.",
         "Missing from a resampled table is not field absence; duplications are pseudo-replicates, not additional sampling effort.",
@@ -217,6 +288,7 @@ if __name__ == "__main__":
     args.output.write_text(json.dumps(out, sort_keys=True, indent=2) + "\n")
     print("EOG_WETLAND_R_REPLAY=" + json.dumps({
         "fingerprint": out["fingerprint"],
+        "overlap": out["overlapping_cohort_diagnostic"],
         "cohorts": {
             k: {
                 "native_positive": v["sampling"]["native_positive_species_site_pairs"],
