@@ -1,0 +1,55 @@
+{
+  "schema": "eog.wetland_method_group_contrast_v1.protocol",
+  "status": "POST_EXPOSURE_DESCRIPTIVE_SOURCE_ANALYSIS_FROZEN_BEFORE_THIS_EXTENSION_SCORE",
+  "question": "Does restricting original native recorded site×species positives to the complete acoustic+visual method pair change the descriptive site-level prevalence/richness contrasts among intervention, control and artificial wetland categories?",
+  "source": {
+    "study": "Wenner et al. (2025), Global Ecology and Conservation 62 e03837; data Zenodo 10.5281/zenodo.15044115 CC BY 4.0",
+    "repository": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "paired_core_prior_result_fingerprint": "88f8b55ce710cb8df06724e384390318b408902d6f66c5809ab45597fe84da62"
+  },
+  "fixed_design": {
+    "analysis_cohort": "Published Q1: 27 sites; exclude kis-banyato and vadasz-turjan; 13 intervention, 6 control, 8 artificial.",
+    "analysis_grain": "site×species presence as OR of recorded native count>0 across actual rows/dates/methods, all or acoustic+visual only.",
+    "methods_full": [
+      "acoustic",
+      "visual",
+      "dipnet",
+      "bottletrap"
+    ],
+    "methods_core": [
+      "acoustic",
+      "visual"
+    ],
+    "categories": [
+      "intervention",
+      "control",
+      "artificial"
+    ],
+    "contrasts": [
+      "intervention minus control",
+      "intervention minus artificial",
+      "artificial minus control"
+    ],
+    "site_richness": "number of original nine species with observed source-positive at each site (full/core separately)",
+    "model": "no occupancy, GLM or p-values; simple descriptive proportions at fixed source sites"
+  },
+  "fixed_outputs": [
+    "for each category: sites, native source-positive site×species, retained in AV, omitted in AV, mean observed recorded site richness full/core",
+    "for 9 taxa × 3 categories: number of source-positive sites full and AV, original native recording fraction, core-only fraction and loss",
+    "for each species × category contrast: raw/native prevalence difference versus AV core difference, shifts in percentage points, strict non-zero sign reversals, contrasts involving ties separately",
+    "for each group: distinct site×date groups with dipnet/bottletrap source method rows represented, not deployment/effort",
+    "for 27 original sites: site-level full and AV source-recorded richness values with category and loss",
+    "source count, source classification/labels, no creation of positives and exact all-method 144 vs paired-core 104 row source check"
+  ],
+  "proof_boundaries": [
+    "Comparison is within unchanged source sites and method records; reduction in positives is a deterministic method-record restriction, not a causal experimental effect.",
+    "Categories are original observational categories, not randomized treatment. No causal restoration effect or ecological difference inferred.",
+    "Source method-row missing is not equivalent to a field method not performed. Article reports dipnet use in standard visits whereas many archived dipnet rows are absent.",
+    "Cross-method detection and positive source record prevalence are not occupancy estimates, true absence, comparable detection probability or species richness corrected for sampling effort.",
+    "No new A/B/M, field sampling closure, ecological world count, original unmarked fitted coefficient or EOG-WF fourth scored endpoint.",
+    "PR remains Draft/unmerged."
+  ]
+}
