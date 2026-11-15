@@ -1,0 +1,54 @@
+{
+  "schema": "eog.wetland_temporal_window_feasibility_v1.protocol",
+  "status": "POST_EXPOSURE_SOURCE_WINDOW_SENSITIVITY_FROZEN_BEFORE_THIS_COMPUTATION",
+  "intent": "Audit how much recorded site×species positive evidence and repeated site×calendar-date coverage remain under short, first- or last-anchored time windows. This does not certify occupancy closure or run an occupancy likelihood.",
+  "source": {
+    "author": "Mizsei and Wenner (2025), Zenodo 10.5281/zenodo.15044115, CC BY 4.0",
+    "frogcs_commit": "zuizui0223/frogcs@5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "prior_native_visit_ledger_fingerprint": "4c487bb1b00579cbff22be30ae056615708abb275f82eb5091f5df61c4c1b533"
+  },
+  "analysis_sets": {
+    "published_q1": "27 original Q1 sites, excluding kis-banyato and vadasz-turjan",
+    "published_q2": "13 original Q2 intervention sites",
+    "original_positive_key": "site×species if at least one native CSV row count>0",
+    "date_grain": "site×ISO calendar date; methods observed on that date unioned as recorded positive evidence; repeated methods/traps not asserted independent"
+  },
+  "predeclared_horizons_days": [
+    7,
+    14,
+    21,
+    30,
+    45,
+    60,
+    91
+  ],
+  "anchoring": [
+    "first: include all recorded site dates d such that 0<=d - min(recorded site dates)<=h days, inclusive",
+    "last: include all recorded site dates d such that 0<=max(recorded site dates)-d<=h days, inclusive"
+  ],
+  "repeated_date_eligibility": "at least TWO distinct recorded calendar dates inside the same anchored window; not a physical visit independence or ecological closure certificate",
+  "metrics": [
+    "sites with >=2 date groups in selected window and distribution of observed date counts",
+    "number of included site×date groups",
+    "source-positive site×species pairs preserved, missed and fraction preserved across ALL sites",
+    "source-positive pairs preserved vs missed restricted to sites with >=2 recorded date groups in window",
+    "first-versus-last retained positive evidence symmetric difference, first-only and last-only source-positive pairs",
+    "method-set equality across selected dates among eligible sites, not proof of equal effort",
+    "per species original-positive, first-window-positive, last-window-positive counts",
+    "no loss of original data in storage; truncated windows are observations of a subset, never established true ecological absence"
+  ],
+  "audit_outputs": [
+    "cohort×window summary JSON",
+    "cohort×window×source-positive site/species CSV with first/last capture and eligibility",
+    "SHA-256 of original inputs and generated CSV; baseline 91-day windows reconcile all source positives"
+  ],
+  "limits": [
+    "Within-site first-to-last original dates span up to 91 days. Shorter windows may improve temporal proximity, but they do not certify closure or absence of phenological change.",
+    "The recording date may mix actual methods/traps of unknown effort; a site×date is not proven to be an independent occupancy replicate.",
+    "Clipped-window missing positives are missing observations, NOT confirmed local absence; preserve source evidence separately.",
+    "Do not estimate occupancy, treatment effect, causal A/B/M, dispersal M, historical R package environment, or a fourth EOG-WF endpoint.",
+    "Do not reinterpret previous seed ensemble as independent field sampling or merge Draft PR."
+  ]
+}
