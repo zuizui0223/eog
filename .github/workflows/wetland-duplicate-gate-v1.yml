@@ -33,6 +33,10 @@ on:
       - "tests/test_wetland_method_group_contrast_v1.py"
       - "docs/wetland_method_group_contrast_v1.md"
       - "validation/wetland_method_group_contrast_v1/**"
+      - "benchmarks/wetland_method_channel_lattice_v1.py"
+      - "tests/test_wetland_method_channel_lattice_v1.py"
+      - "docs/wetland_method_channel_lattice_v1.md"
+      - "validation/wetland_method_channel_lattice_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
   contents: read
@@ -46,7 +50,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -212,6 +216,37 @@ jobs:
           assert x['source_detail_files']['source_category_species_contrasts']['rows']==27
           print('WETLAND_NATIVE_CATEGORY_METHOD_RECORD_REVERSAL_5_OF_27_SOURCE_VERIFIED_NO_CAUSAL_CLAIM')
           PY
+      - name: Enumerate all 15 original method-channel masks and 405 category contrasts
+        run: |
+          python benchmarks/wetland_method_channel_lattice_v1.py \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/method_channel_lattice.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/method_channel_lattice.json').read_text())
+          assert r['status']=='PINNED_SOURCE_EXHAUSTIVE_15_METHOD_SUBSETS_OBSERVATION_ONLY'
+          assert r['full_source_positive_site_species_pairs']==144
+          assert r['positive_evidence_monotone_over_every_nested_subset']
+          assert len(r['method_panels'])==15
+          assert len(r['subset_results'])==15
+          assert r['output_files']['method_subsets']['rows']==15
+          assert r['output_files']['method_subset_contrasts']['rows']==405
+          assert r['output_files']['native_positive_site_species_witnesses']['rows']==144
+          by={x['subset']:x for x in r['subset_results']}
+          assert by['acoustic+visual']['subset_recorded_positive_pairs']==104
+          assert by['acoustic+visual']['strict_reversals_vs_native_27_contrasts']==5
+          assert by['acoustic+visual']['site_date_groups_with_every_selected_method_record']==117
+          assert by['acoustic+visual+dipnet+bottletrap']['subset_recorded_positive_pairs']==144
+          assert by['acoustic+visual+dipnet+bottletrap']['strict_reversals_vs_native_27_contrasts']==0
+          assert r['boolean_or_witness_allocation_sum']==144 or abs(r['boolean_or_witness_allocation_sum']-144)<1e-8
+          assert len(r['leave_one_method_out'])==4
+          for method,row in r['leave_one_method_out'].items():
+              assert row['exclusive_source_positive_site_species_lost']==sum(row['exclusive_lost_by_category'].values())
+          print('WETLAND_SOURCE_ALL_15_METHOD_CHANNEL_SUBSETS_AND_405_CONTRASTS_CERTIFIED')
+          PY
       - name: Identify source conflicts, block occupancy
         run: |
           python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
@@ -312,6 +347,10 @@ jobs:
             /tmp/wetland_gate/temporal_window_result.json
             /tmp/wetland_gate/paired_method_core_result.json
             /tmp/wetland_gate/method_group_contrast.json
+            /tmp/wetland_gate/method_channel_lattice.json
+            /tmp/wetland_gate/method_subsets.csv
+            /tmp/wetland_gate/method_subset_contrasts.csv
+            /tmp/wetland_gate/native_positive_site_species_witnesses.csv
             /tmp/wetland_gate/source_site_richness.csv
             /tmp/wetland_gate/source_species_by_category.csv
             /tmp/wetland_gate/source_category_species_contrasts.csv
