@@ -20,5 +20,5 @@ def test_group_key_not_unique_row_id():
 def test_non_composite_group_key_fails_closed():
     a={"surv":"madeup","site":"alpha","method":"bottletrap",
        "doy":"89","date":"2024-03-29","num":"1"}
-    with pytest.raises(ValueError,match="composite"):
+    with pytest.raises(ValueError,match="site:method:doy"):
         m.describe_grain([a],list(a))
