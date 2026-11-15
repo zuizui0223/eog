@@ -53,8 +53,11 @@ def native_positive_keys(survey_rows, site_rows, species, cohort):
 def world_is_positive_compatible(world_positive, observed_positive):
     """Unit-testable EOG positive-only algebra; no empirical world construction.
 
-    A world is admissible when every recorded positive is in its possible
-    support. Unrecorded keys are not treated as negative evidence.
+    For a FIXED world universe with fixed source definitions, rules and
+    positive-support masks, a world is admissible when every recorded
+    positive is supported. A self-excluded-source reconstruction, in which
+    observed occurrences also redefine the sources, is NOT certified by
+    this monotonicity lemma.
     """
     return set(observed_positive).issubset(set(world_positive))
 
@@ -172,16 +175,17 @@ def reconcile(source_sets, pair_rows, summary_rows):
         "role":"POST_EXPOSURE_ANALYTICAL_OBSERVATION_CHANNEL_NOT_BIOLOGICAL_WORLD_RECONSTRUCTION",
         "cohorts":outcome,
         "finite_world_statement":{
-            "given":"Any fixed declared world universe U and source-confirmed positive O, with resampled positive S subset of O",
+            "given":"Any fixed declared world universe U with unchanged world-specific positive-support masks, source definitions and rules; source-confirmed positive O and resampled positive S subset of O",
             "positive_only_order":"W(O) subseteq W(S) for all 256 source-validated seeds",
             "reconciliation":"S union (O minus S) == O; restoring source positives returns W(O)",
-            "not_inferred":"No actual count of ecological finite compatible worlds; zeros are not proven absences",
+            "not_inferred":"No actual count of ecological finite compatible worlds; zeros are not proven absences; monotonicity is not certified for self-excluded source policies that change the world support when the observed set changes",
             "if_untrusted_zero_is_misread_as_absence":"Each omitted source-positive pair creates a direct observation contradiction, not a verified count of excluded true ecological worlds"
         },
         "boundaries":[
             "All 256 seeds are processing choices and not field/ecological repetitions.",
             "The 256-seed intersection is not guaranteed to remain positive at other untested seeds.",
             "The union of 256 pseudo-observations is not a substitute for authentic source evidence.",
+            "The world-set inclusion claim assumes fixed support masks and sources; it must not be applied when an evidence-dependent source policy changes world reachability.",
             "Original physical independent trap IDs, effort and seasonal closure are not identified.",
             "No ecological state, true absence, BAM axes, movement or EOG-WF scored endpoint was estimated.",
             "Original R/hunviphab installation at the authors' run is not certified."
