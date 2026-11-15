@@ -72,6 +72,12 @@ jobs:
               assert (s['sites'],s['native_rows'],s['native_positive_species_site_pairs'])==(sites,raw,positive)
               assert s['sampled_positions']==sites*20
               assert s['seed123_positive_species_site_pairs']+s['seed123_lost_positive_species_site_pairs']==positive
+          overlap=r['overlapping_cohort_diagnostic']
+          assert overlap['shared_native_source_sites']==13
+          assert overlap['same_unique_source_row_set_sites']==0
+          assert overlap['disagreeing_pseudodetection_site_species_pairs']==7
+          assert r['cohorts']['published_q1']['sampling']['seed123_lost_positive_species_site_pairs']==3
+          assert r['cohorts']['published_q2']['sampling']['seed123_lost_positive_species_site_pairs']==6
           print('PINNED_R_REPLAY_POSITIVE_EVIDENCE_CHECKS_PASSED')
           PY
       - uses: actions/upload-artifact@v4
