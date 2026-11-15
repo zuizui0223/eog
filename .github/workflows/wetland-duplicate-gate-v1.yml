@@ -29,6 +29,10 @@ on:
       - "tests/test_wetland_paired_method_core_v1.py"
       - "docs/wetland_paired_method_core_v1.md"
       - "validation/wetland_paired_method_core_v1/**"
+      - "benchmarks/wetland_method_group_contrast_v1.py"
+      - "tests/test_wetland_method_group_contrast_v1.py"
+      - "docs/wetland_method_group_contrast_v1.md"
+      - "validation/wetland_method_group_contrast_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
   contents: read
@@ -42,7 +46,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -164,6 +168,50 @@ jobs:
           assert q1['per_species']['Pelophylax ridibundus']['positive_sites_undetected_by_paired_core']==0
           print('PAIRED_ACOUSTIC_VISUAL_CORE_COMPLETE_ALL_DATES_EVIDENCE_BIAS_VERIFIED')
           PY
+      - name: Audit wetland category prevalence reversals caused solely by native method-record selection
+        run: |
+          python benchmarks/wetland_method_group_contrast_v1.py \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/method_group_contrast.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/wetland_gate/method_group_contrast.json').read_text())
+          assert x['status']=='OBSERVATIONAL_CATEGORY_CONTRAST_SENSITIVE_TO_RECORDED_METHOD_RESTRICTION_NOT_CAUSAL'
+          assert (x['source_q1_rows'],x['source_site_days'])==(351,117)
+          c=x['category_summary']
+          assert {
+              category:(v['site_count'],v['native_full_source_positive_site_species'],
+                        v['paired_core_positive_site_species'])
+              for category,v in c.items()
+          }=={
+              'intervention':(13,77,61),'control':(6,23,15),'artificial':(8,44,28)
+          }
+          for v in c.values():
+              assert v['site_dates_with_native_method_row']['acoustic']==v['site_date_groups']
+              assert v['site_dates_with_native_method_row']['visual']==v['site_date_groups']
+          d=x['direction_reversal_diagnostics']
+          assert d['total_species_by_category_contrasts']==27
+          assert d['strict_nonzero_direction_reversals']==5
+          assert d['strict_reversals_by_comparison']=={
+              'intervention_minus_control':2,
+              'intervention_minus_artificial':1,
+              'artificial_minus_control':2
+          }
+          assert {(z['comparison'],z['species']) for z in d['explicit_strict_reversals']}=={
+              ('intervention_minus_control','Lissotriton vulgaris'),
+              ('intervention_minus_control','Bufo bufo'),
+              ('intervention_minus_artificial','Lissotriton vulgaris'),
+              ('artificial_minus_control','Lissotriton vulgaris'),
+              ('artificial_minus_control','Bufotes viridis'),
+          }
+          assert x['source_detail_files']['source_site_richness']['rows']==27
+          assert x['source_detail_files']['source_species_by_category']['rows']==27
+          assert x['source_detail_files']['source_category_species_contrasts']['rows']==27
+          print('WETLAND_NATIVE_CATEGORY_METHOD_RECORD_REVERSAL_5_OF_27_SOURCE_VERIFIED_NO_CAUSAL_CLAIM')
+          PY
       - name: Identify source conflicts, block occupancy
         run: |
           python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
@@ -263,6 +311,10 @@ jobs:
             /tmp/wetland_gate/native_visit_ledger.json
             /tmp/wetland_gate/temporal_window_result.json
             /tmp/wetland_gate/paired_method_core_result.json
+            /tmp/wetland_gate/method_group_contrast.json
+            /tmp/wetland_gate/source_site_richness.csv
+            /tmp/wetland_gate/source_species_by_category.csv
+            /tmp/wetland_gate/source_category_species_contrasts.csv
             /tmp/wetland_gate/archived_all_paired_core_site_date_species.csv
             /tmp/wetland_gate/archived_all_paired_core_site_species_positive_registry.csv
             /tmp/wetland_gate/published_q1_paired_core_site_date_species.csv
