@@ -212,7 +212,7 @@ def profile(cohort, rows, site_ids, species):
         "daily_source_positive_unseen_by_paired_core":len(all_daily_positive-core_daily_positive),
         "native_recorded_method_rows":dict(sorted(raw_rows_by_method.items())),
         "site_date_groups_with_method_row":dict(sorted(methods_seen.items())),
-        "site_date_groups_without_method_row":dict(sorted(method_missing_by_day.items())),
+        "site_date_groups_without_method_row":{method:method_missing_by_day[method] for method in METHODS},
         "method_row_absence_is_not_field_method_absence":True,
         "two_core_methods_same_recorded_coverage_not_equal_effort":True,
         "per_species":per_species,
