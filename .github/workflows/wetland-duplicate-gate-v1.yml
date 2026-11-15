@@ -71,6 +71,17 @@ jobs:
           q1=r['cohorts']['published_q1'];q2=r['cohorts']['published_q2']
           assert q1['native_site_species_positive_at_single_recorded_date']==59
           assert q2['native_site_species_positive_at_single_recorded_date']==25
+          assert q1['native_site_species_positive_in_single_recorded_method']==57
+          assert q2['native_site_species_positive_in_single_recorded_method']==22
+          for cohort,(total,observed,na) in {
+              'archived_all':(1827,1161,666),
+              'published_q1':(1701,1053,648),
+              'published_q2':(819,576,243)
+          }.items():
+              p=r['cohorts'][cohort]['padded_date_history']
+              assert (p['padded_site_visit_species_cells'],p['recorded_site_visit_species_cells'],p['nonexistent_visit_cells_preserved_as_NA'])==(total,observed,na)
+              assert p['site_species_positive_union_preserved']
+              assert r['outputs'][cohort+'_padded_history']['row_count']==total
           assert q1['site_date_method_count_histogram']=={'1':0,'2':24,'3':71,'4':22}
           assert q2['site_date_method_count_histogram']=={'1':0,'2':14,'3':42,'4':8}
           assert len(q1['duplicated_group_keys_not_resolved'])==2
@@ -180,5 +191,8 @@ jobs:
             /tmp/wetland_gate/published_q1_daily_detected.csv
             /tmp/wetland_gate/published_q2_method_status.csv
             /tmp/wetland_gate/published_q2_daily_detected.csv
+            /tmp/wetland_gate/archived_all_padded_history.csv
+            /tmp/wetland_gate/published_q1_padded_history.csv
+            /tmp/wetland_gate/published_q2_padded_history.csv
             /tmp/wetland_gate/published_code_preflight.json
             /tmp/wetland_gate/survreps_evidence.json
