@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Install Python test runner
+        run: python -m pip install pytest
       - name: Verify Python replay evaluator fail-closed tests
         run: python -m pytest -q tests/test_wetland_survreps_seed123_evaluate_v1.py
       - name: Authenticate pinned native CSVs and published source sampler
