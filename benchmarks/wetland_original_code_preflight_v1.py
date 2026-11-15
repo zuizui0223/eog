@@ -33,7 +33,10 @@ def bounded_evidence(content, limit=100):
     seed_calls = [{"line": n, "text": line.strip()[:220]} for n, line in enumerate(lines, 1)
                   if not line.lstrip().startswith("#")
                   and re.search(r"\b(?:set\.seed|RNGkind|with_seed)\s*\(", line)]
+    stage = [{"line": n, "text": lines[n-1].strip()[:230]}
+             for n in range(43, min(len(lines), 115)+1)]
     return {"line_count": len(lines), "keyword_hit_count": len(matches),
+            "original_model_input_lines_43_to_115": stage,
             "explicit_rng_seed_calls": seed_calls,
             "external_rng_state_unverified": True,
             "preparation_lines_8_to_42": [
@@ -115,6 +118,10 @@ if __name__ == "__main__":
                 "file": file["file"],
                 "explicit_calls": file["evidence"]["explicit_rng_seed_calls"],
                 "external_state_unverified": True,
+            }))
+            print("WETLAND_ORIGINAL_MODEL_INPUT_SECTION=" + json.dumps({
+                "file": file["file"], "md5": file["md5"],
+                "lines": file["evidence"]["original_model_input_lines_43_to_115"],
             }))
             print("WETLAND_R_PREPARATION=" + json.dumps({
                 "file": file["file"],
