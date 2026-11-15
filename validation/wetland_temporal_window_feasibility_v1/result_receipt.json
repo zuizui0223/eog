@@ -1,0 +1,154 @@
+{
+  "schema": "eog.wetland_temporal_window_feasibility_v1.result_receipt",
+  "status": "SOURCE_PINNED_NATIVE_FIRST_LAST_WINDOW_SENSITIVITY_VERIFIED",
+  "role": "POST_EXPOSURE_OBSERVATION_GRAIN_ANALYSIS_NOT_CLOSURE_OR_OCCUPANCY_CERTIFICATE",
+  "scientific_source": {
+    "study": "Mizsei and Wenner 2025, Zenodo 10.5281/zenodo.15044115; CC BY 4.0",
+    "source_repo": "zuizui0223/frogcs",
+    "source_commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "prior_complete_native_visit_fingerprint": "4c487bb1b00579cbff22be30ae056615708abb275f82eb5091f5df61c4c1b533"
+  },
+  "design": {
+    "protocol_frozen_commit": "c2d4652567b5dff2080cbfb2d93638d81343f544",
+    "analysis_origin": "post-exposure source-method sensitivity",
+    "calendar_windows_days": [
+      7,
+      14,
+      21,
+      30,
+      45,
+      60,
+      91
+    ],
+    "anchors": [
+      "first_recorded_calendar_date",
+      "last_recorded_calendar_date"
+    ],
+    "date_group": "unique site×date; native methods/species positive OR within day",
+    "window_repeated_site": "has at least two distinct source-recorded calendar dates inside anchor window; not physically independent or closed occupancy evidence",
+    "positive_key": "site×species with at least one original native count >0",
+    "full_period_source_positive_registry_immutable": true
+  },
+  "observations": {
+    "Q1": {
+      "sites": 27,
+      "native_rows": 351,
+      "source_site_dates": 117,
+      "source_positive_pairs": 144,
+      "within_site_span_median_days": 34,
+      "max_days": 91,
+      "early14": {
+        "eligible_sites_with_two_dates": 20,
+        "seen_source_positive_pairs": 96,
+        "not_seen_full_period_source_positives": 48,
+        "eligible_site_source_positive_pairs": 104,
+        "seen_positive_pairs_at_eligible_sites": 83,
+        "sites_identical_recorded_method_sets_among_eligible": 2
+      },
+      "late14": {
+        "eligible_sites_with_two_dates": 6,
+        "seen_source_positive_pairs": 94,
+        "not_seen_full_period_source_positives": 50
+      },
+      "early30": {
+        "eligible_sites_with_two_dates": 24,
+        "seen_source_positive_pairs": 115,
+        "not_seen_full_period_source_positives": 29,
+        "eligible_site_source_positive_pairs": 127,
+        "seen_positive_pairs_at_eligible_sites": 111,
+        "sites_identical_recorded_method_sets_among_eligible": 1
+      },
+      "late30": {
+        "eligible_sites_with_two_dates": 22,
+        "seen_source_positive_pairs": 127,
+        "not_seen_full_period_source_positives": 17,
+        "sites_identical_recorded_method_sets_among_eligible": 1
+      },
+      "early45": {
+        "eligible_sites_with_two_dates": 26,
+        "seen_source_positive_pairs": 138,
+        "not_seen_full_period_source_positives": 6,
+        "sites_identical_recorded_method_sets_among_eligible": 0
+      },
+      "early_vs_late_14_source_positive_symmetric_difference": 70,
+      "early_vs_late_30_source_positive_symmetric_difference": 42,
+      "full91": {
+        "eligible_sites_with_two_dates": 27,
+        "seen_source_positive_pairs": 144,
+        "not_seen_source_positives": 0
+      }
+    },
+    "Q2": {
+      "sites": 13,
+      "native_rows": 188,
+      "source_site_dates": 64,
+      "source_positive_pairs": 77,
+      "within_site_span_median_days": 37,
+      "max_days": 91,
+      "early14": {
+        "eligible_sites_with_two_dates": 10,
+        "seen_source_positive_pairs": 41,
+        "not_seen_full_period_source_positives": 36,
+        "eligible_site_source_positive_pairs": 54,
+        "seen_positive_pairs_at_eligible_sites": 38,
+        "sites_identical_recorded_method_sets_among_eligible": 2
+      },
+      "late14": {
+        "eligible_sites_with_two_dates": 0,
+        "seen_source_positive_pairs": 44,
+        "not_seen_full_period_source_positives": 33
+      },
+      "early30": {
+        "eligible_sites_with_two_dates": 12,
+        "seen_source_positive_pairs": 54,
+        "not_seen_full_period_source_positives": 23,
+        "eligible_site_source_positive_pairs": 68,
+        "seen_positive_pairs_at_eligible_sites": 54,
+        "sites_identical_recorded_method_sets_among_eligible": 1
+      },
+      "late30": {
+        "eligible_sites_with_two_dates": 10,
+        "seen_source_positive_pairs": 62,
+        "not_seen_full_period_source_positives": 15,
+        "sites_identical_recorded_method_sets_among_eligible": 1
+      },
+      "early45": {
+        "eligible_sites_with_two_dates": 13,
+        "seen_source_positive_pairs": 74,
+        "not_seen_full_period_source_positives": 3,
+        "sites_identical_recorded_method_sets_among_eligible": 0
+      },
+      "early_vs_late_14_source_positive_symmetric_difference": 41,
+      "early_vs_late_30_source_positive_symmetric_difference": 34,
+      "full91": {
+        "eligible_sites_with_two_dates": 13,
+        "seen_source_positive_pairs": 77,
+        "not_seen_source_positives": 0
+      }
+    }
+  },
+  "verified_result": {
+    "ci_run_id": 43694255070,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43694255070",
+    "ci_conclusion": "success",
+    "output_fingerprint": "c53506d95ade7922f81db1aa17387cdbd317257e518392fa037d91676d6aa72e",
+    "artifact_id": 14153786370,
+    "artifact_zip_sha256": "7ebb276b91e2be76f1e315e00c42a152affe445ff5182e7f36502fa36dd99503",
+    "q1_positive_source_pair_window_csv_sha256": "f5e46254afd313ccce80e7a4ed69a6a8b33936332dd2bf05ba98ff67adba0874",
+    "q2_positive_source_pair_window_csv_sha256": "d071e6896f4d2ea55555f7fe49f33a2aa149521d5e087ac24f7b9585da47aa53",
+    "q1_detail_rows": 1008,
+    "q2_detail_rows": 539,
+    "source_sha_verified": true,
+    "offline_tests_passed": true,
+    "no_20_row_random_resampling_performed": true
+  },
+  "interpretation_stops": [
+    "Shorter temporal windows improve time proximity but do NOT demonstrate seasonal closure, independent observation occasions, equal method effort or a valid occupancy model.",
+    "Every source-positive site×species excluded by time-window truncation is absent from that subtable, not evidence of biological absence.",
+    "Fractions of positives seen use full original source-positive denominators unless explicitly restricted to window-eligible sites.",
+    "Repeated recorded method-set identity is not a substitute for physical trap effort, method availability or actual field protocol.",
+    "No occupancy coefficients, treatment associations, causal A/B/M, movement M, fourth EOG-WF prediction endpoint or merge of Draft PR."
+  ]
+}
