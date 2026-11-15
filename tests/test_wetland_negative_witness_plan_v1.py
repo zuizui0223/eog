@@ -61,10 +61,12 @@ def test_joint_site_cover_shares_site_visits_across_taxa_but_not_certificates():
     assert out["minimum_distinct_site_visit_count_in_counterfactual_ideal"]==2
     assert out["all_minimum_site_visit_sets"]==[["n","r"]]
     assert out["minimum_independent_true_negative_site_species_certificates"]==4
-    assert len(out["all_minimum_certificate_sets"])==1
-    assert {(r["site"],r["species"]) for r in out["all_minimum_certificate_sets"][0]}=={
+    # Four independent species×site certificates can be distributed
+    # over more than two sites; only the *minimum-site* visit set is unique.
+    assert len(out["all_minimum_certificate_sets"])==8
+    assert any({(r["site"],r["species"]) for r in records}=={
         ("r","L"),("r","H"),("n","L"),("n","H")
-    }
+    }for records in out["all_minimum_certificate_sets"])
 
 
 def test_empty_or_unreachable_targets_fail_closed():
