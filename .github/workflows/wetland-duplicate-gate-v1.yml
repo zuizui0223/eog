@@ -37,6 +37,10 @@ on:
       - "tests/test_wetland_method_channel_lattice_v1.py"
       - "docs/wetland_method_channel_lattice_v1.md"
       - "validation/wetland_method_channel_lattice_v1/**"
+      - "benchmarks/wetland_method_site_jackknife_v1.py"
+      - "tests/test_wetland_method_site_jackknife_v1.py"
+      - "docs/wetland_method_site_jackknife_v1.md"
+      - "validation/wetland_method_site_jackknife_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
   contents: read
@@ -50,7 +54,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -247,6 +251,39 @@ jobs:
               assert row['exclusive_source_positive_site_species_lost']==sum(row['exclusive_lost_by_category'].values())
           print('WETLAND_SOURCE_ALL_15_METHOD_CHANNEL_SUBSETS_AND_405_CONTRASTS_CERTIFIED')
           PY
+      - name: Exhaustive 27-site drop x 15 native method panels x 27 contrasts
+        run: |
+          python -m benchmarks.wetland_method_site_jackknife_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/method_site_jackknife.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/method_site_jackknife.json').read_text())
+          assert r['status']=='POST_EXPOSURE_SOURCE_SITE_DELETION_METHOD_REVERSAL_ROBUSTNESS_NOT_ECOLOGICAL_SE'
+          assert r['source_site_count']==27
+          assert r['native_full_positive_site_species']==144
+          assert r['method_panel_count']==15
+          assert r['site_deletion_cases']==27
+          assert r['contrast_count_per_panel_site_drop']==27
+          assert r['output_files']['method_panel_site_drop_summary']['rows']==405
+          assert r['output_files']['method_panel_site_drop_contrasts']['rows']==10935
+          assert r['output_files']['original_five_acoustic_visual_site_drop_details']['rows']==135
+          assert r['full_27_baseline_strict_reversals_by_panel']['acoustic+visual']==5
+          assert r['panel_summary']['acoustic+visual+dipnet+bottletrap']['max']==0
+          assert len(r['original_five_acoustic_visual_reversal_persistence'])==5
+          for item in r['original_five_acoustic_visual_reversal_persistence']:
+              assert item['leave_one_site_out_cases']==27
+              assert (item['strict_reversal_persists_count']+
+                      item['source_or_panel_tie_count']+
+                      item['becomes_same_nonzero_sign_count'])==27
+              assert sum(x['number_of_deletions'] for x in item['by_deleted_site_category'].values())==27
+          assert not r['original_occupancy_model_fitted']
+          assert not r['latent_effect_confidence_interval_estimated']
+          print('WETLAND_NATIVE_27_SITE_DELETIONS_X_15_PANELS_X_27_CONTRASTS_CERTIFIED')
+          PY
       - name: Identify source conflicts, block occupancy
         run: |
           python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
@@ -348,6 +385,10 @@ jobs:
             /tmp/wetland_gate/paired_method_core_result.json
             /tmp/wetland_gate/method_group_contrast.json
             /tmp/wetland_gate/method_channel_lattice.json
+            /tmp/wetland_gate/method_site_jackknife.json
+            /tmp/wetland_gate/method_panel_site_drop_summary.csv
+            /tmp/wetland_gate/method_panel_site_drop_contrasts.csv
+            /tmp/wetland_gate/original_five_acoustic_visual_site_drop_details.csv
             /tmp/wetland_gate/method_subsets.csv
             /tmp/wetland_gate/method_subset_contrasts.csv
             /tmp/wetland_gate/native_positive_site_species_witnesses.csv
