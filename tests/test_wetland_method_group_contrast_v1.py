@@ -20,7 +20,7 @@ def test_small_positive_shift_is_not_an_inference_of_causal_effect():
     r=m.compare_category_positive_counts(
         a_full=9,b_full=4,a_core=3,b_core=3,na=13,nb=6)
     assert r["native_full_difference_percentage_points"]==pytest.approx(100/39)
-    assert r["paired_core_difference_percentage_points"]==pytest.approx(-350/13+0.0,abs=1e-5) or r["strict_direction_reversal"]
+    assert r["paired_core_difference_percentage_points"]==pytest.approx(-350/13)
     # Signs are exact integer comparisons, not rounded percentage comparisons.
     assert r["strict_direction_reversal"]
     assert r["native_full_direction"]==1 and r["paired_core_direction"]==-1
