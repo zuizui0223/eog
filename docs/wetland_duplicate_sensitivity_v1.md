@@ -1,5 +1,7 @@
 # Wetland duplicate-ID sensitivity: source-level descriptive detection bounds
 
+**Grain clarification after source-readback:** The `surv` string is exactly `site:method:doy` in all 381 archived rows; it is a site×method×day group, not independently verified physical trap ID. Because the original article describes many bottle traps per site, the four one-row-per-key scenarios below are deliberately *hypothetical sensitivity comparisons*, not a recommended source cleaning procedure. See [composite-key verification](wetland_composite_key_grain_v1.md).
+
 ## Scientific question and evidence source
 
 This is a **post-exposure exploratory sensitivity audit**, not an independent validation or an occupancy analysis. Source: Mizsei, Edvárd & Wenner, Bálint (2025), *Effectiveness of wetland restoration on amphibians in a drying grassland habitat losing its breeding sites*, Zenodo 10.5281/zenodo.15044115 (CC BY 4.0). The immutable source is `zuizui0223/frogcs` commit `5e2f0a87c639df373fa2700b29403d2ab417a1cc`, verified by native CSV SHA256 in the existing duplicate gate.
