@@ -35,8 +35,36 @@ def bounded_evidence(content, limit=100):
                   and re.search(r"\b(?:set\.seed|RNGkind|with_seed)\s*\(", line)]
     stage = [{"line": n, "text": lines[n-1].strip()[:230]}
              for n in range(43, min(len(lines), 115)+1)]
+    binary_names = {
+        "y.bombom","y.bufbuf","y.bufvir","y.hylarb","y.pelrid",
+        "y.pelfus","y.randal","y.lisvul","y.tridob"
+    }
+    observed_binary={}
+    for n, line in enumerate(lines,1):
+        mat=re.fullmatch(r"\s*(y\.[a-z]+)\[\1\s*>\s*1\]\s*<-\s*1\s*",line)
+        if mat:
+            observed_binary.setdefault(mat.group(1),[]).append(n)
+    ylist_lines=[n for n,line in enumerate(lines,1)
+                 if re.search(r"\bylist\s*<-\s*list\s*\(",line)]
+    unmarked_lines=[n for n,line in enumerate(lines,1)
+                    if "unmarkedFrameOccuMulti(y=ylist" in line.replace(" ","")]
+    binary_verified=(set(observed_binary)==binary_names
+                     and len(ylist_lines)==1 and len(unmarked_lines)==1
+                     and all(len(x)==1 and x[0]<ylist_lines[0] for x in observed_binary.values())
+                     and ylist_lines[0]<unmarked_lines[0])
+    binary_contract={
+        "status":"ORIGINAL_SCRIPT_BINARY_YLIST_VERIFIED" if binary_verified
+                 else "ORIGINAL_SCRIPT_BINARY_YLIST_NOT_VERIFIED",
+        "converted_species_matrices":observed_binary,
+        "original_species_matrix_conversion_count":len(observed_binary),
+        "ylist_line":ylist_lines,
+        "unmarked_frame_line":unmarked_lines,
+        "all_nine_converted_before_unmarked":binary_verified,
+        "input_semantics":"counts>1 replaced by 1, zero preserved; selection prior to conversion",
+    }
     return {"line_count": len(lines), "keyword_hit_count": len(matches),
             "original_model_input_lines_43_to_115": stage,
+            "original_binary_model_input_contract": binary_contract,
             "explicit_rng_seed_calls": seed_calls,
             "external_rng_state_unverified": True,
             "preparation_lines_8_to_42": [
@@ -118,6 +146,10 @@ if __name__ == "__main__":
                 "file": file["file"],
                 "explicit_calls": file["evidence"]["explicit_rng_seed_calls"],
                 "external_state_unverified": True,
+            }))
+            print("WETLAND_ORIGINAL_BINARY_YLIST=" + json.dumps({
+                "file": file["file"],"md5":file["md5"],
+                "contract":file["evidence"]["original_binary_model_input_contract"],
             }))
             print("WETLAND_ORIGINAL_MODEL_INPUT_SECTION=" + json.dumps({
                 "file": file["file"], "md5": file["md5"],
