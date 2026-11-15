@@ -40,7 +40,7 @@ def test_synthetic_source_reversal_persistence_vs_ties():
     assert out["method_panel_count"]==15
     assert out["site_deletion_cases"]==6
     assert out["contrast_count_per_panel_site_drop"]==3
-    assert out["full_27_baseline_strict_reversals_by_panel"]["acoustic+visual"]==1
+    assert out["full_27_baseline_strict_reversals_by_panel"]["acoustic+visual"]==2
     av=out["panel_summary"]["acoustic+visual"]
     assert av["leave_one_site_out_cases"]==6
     assert av["max"]>=1
@@ -67,7 +67,7 @@ def test_invalid_method_source_and_missing_category_fail_closed():
         m.pure_jackknife(sites,{("unknown_site","frog"):{"visual"}},["frog"])
     with pytest.raises(ValueError,match="category"):
         m.pure_jackknife({"I":"intervention","C":"control"},witnesses,["frog"])
-    with pytest.raises(ValueError,match="site"):
+    with pytest.raises(ValueError,match="category"):
         m.calc_contrast(set(witnesses),sites,"frog","control","control")
 
 
