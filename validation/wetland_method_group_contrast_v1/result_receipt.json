@@ -1,6 +1,6 @@
 {
   "schema": "eog.wetland_method_group_contrast_v1.result_receipt",
-  "status": "PINNED_SOURCE_PRELIMINARILY_CROSSCHECKED_CI_PENDING",
+  "status": "PINNED_SOURCE_5_OF_27_CONTRAST_REVERSALS_CI_VERIFIED",
   "analysis_role": "POST_EXPOSURE_DESCRIPTIVE_METHOD_RECORD_RESTRICTION_NOT_ECOLOGICAL_EFFECT",
   "source": {
     "study": "Wenner et al. (2025), Global Ecology and Conservation 62 e03837; data Zenodo DOI 10.5281/zenodo.15044115, CC BY 4.0",
@@ -147,9 +147,12 @@
     "new_executable": "benchmarks/wetland_method_group_contrast_v1.py",
     "new_negative_controls": "tests/test_wetland_method_group_contrast_v1.py",
     "new_crosscheck_workflow": "wetland-duplicate-gate-v1.yml",
-    "new_workflow_status": "queued_at_receipt_creation; must not claim success until result",
-    "new_workflow_result_fingerprint": null,
-    "new_workflow_artifact_id": null
+    "new_workflow_status": "completed_success",
+    "new_workflow_result_fingerprint": "7b70fefd1dbab168db77ab7ce7f774c115619471a23419aea87daf18c43c9da2",
+    "new_workflow_artifact_id": 14154952808,
+    "new_workflow_run_id": 43697008582,
+    "new_workflow_artifact_zip_sha256": "4e2dc9da73a909c86c2ff43e578b9749bc9e4a570441fcfdd371937485129ec7",
+    "new_workflow_unit_tests_and_source_checks": "passed"
   },
   "limits": [
     "All observations and contrasts are post-exposure descriptive views, not independent ecological tests or confidence intervals.",
