@@ -16,6 +16,10 @@ on:
       - "tests/test_wetland_seed_ensemble_v1.py"
       - "docs/wetland_seed_ensemble_v1.md"
       - "validation/wetland_seed_ensemble_v1/**"
+      - "benchmarks/wetland_positive_evidence_channel_v1.py"
+      - "tests/test_wetland_positive_evidence_channel_v1.py"
+      - "docs/wetland_positive_evidence_channel_v1.md"
+      - "validation/wetland_positive_evidence_channel_v1/**"
       - ".github/workflows/wetland-survreps-seed123-replay-v1.yml"
   workflow_dispatch:
 permissions:
@@ -36,7 +40,7 @@ jobs:
       - name: Install Python test runner
         run: python -m pip install pytest
       - name: Verify Python replay evaluator fail-closed tests
-        run: python -m pytest -q tests/test_wetland_survreps_seed123_evaluate_v1.py tests/test_wetland_nmixmatrix_stage_v1.py tests/test_wetland_seed_ensemble_v1.py
+        run: python -m pytest -q tests/test_wetland_survreps_seed123_evaluate_v1.py tests/test_wetland_nmixmatrix_stage_v1.py tests/test_wetland_seed_ensemble_v1.py tests/test_wetland_positive_evidence_channel_v1.py
       - name: Authenticate pinned native CSVs and published source sampler
         run: |
           mkdir -p /tmp/eog_wetland_rreplay
@@ -147,6 +151,36 @@ jobs:
           assert abs(d['cohorts']['published_q2']['exact_expected_lost_native_positive_site_species']-4.871441193156649)<1e-9
           print('PINNED_256_R_SEEDS_PROCESSING_SENSITIVITY_CHECKED_NO_OCCUPANCY')
           PY
+      - name: Certify source-anchored positive-only world-compatibility direction
+        run: |
+          python benchmarks/wetland_positive_evidence_channel_v1.py \
+            --surveys /tmp/eog_wetland_rreplay/surveys.csv \
+            --sites /tmp/eog_wetland_rreplay/sites.csv \
+            --pairs /tmp/eog_wetland_rreplay/seed_ensemble_native_positive_pairs.csv \
+            --summary /tmp/eog_wetland_rreplay/seed_ensemble_summary.csv \
+            --output /tmp/eog_wetland_rreplay/positive_evidence_channel_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/eog_wetland_rreplay/positive_evidence_channel_result.json').read_text())
+          assert d['status']=='SOURCE_ANCHORED_POSITIVE_ONLY_MONOTONICITY_VERIFIED'
+          expected={
+              'published_q1':(144,59,85,0,256),
+              'published_q2':(77,35,42,0,254)
+          }
+          for cohort,(raw,core,variable,never,affected_seeds) in expected.items():
+              x=d['cohorts'][cohort]
+              assert (
+                  x['source_positive_site_species_pairs'],
+                  x['retained_at_every_one_of_256_seeds'],
+                  x['variable_between_256_seed_inputs'],
+                  x['omitted_at_all_256_seeds'],
+                  x['seeds_with_any_native_positive_omission']
+              )==(raw,core,variable,never,affected_seeds)
+              assert all(r['source_recovered_positive_count']==raw for r in x['per_seed'])
+          assert d['finite_world_statement']['positive_only_order']=='W(O) subseteq W(S) for all 256 source-validated seeds'
+          print('WETLAND_SOURCE_ANCHORED_POSITIVE_ONLY_EVIDENCE_RECONCILIATION_VERIFIED')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: wetland-r-seed123-native-row-replay-v1
@@ -163,3 +197,4 @@ jobs:
             /tmp/eog_wetland_rreplay/seed_ensemble_native_positive_pairs.csv
             /tmp/eog_wetland_rreplay/seed_ensemble_runtime.txt
             /tmp/eog_wetland_rreplay/seed_ensemble_result.json
+            /tmp/eog_wetland_rreplay/positive_evidence_channel_result.json
