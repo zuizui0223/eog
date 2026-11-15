@@ -1,0 +1,162 @@
+{
+  "schema": "eog.wetland_method_group_contrast_v1.result_receipt",
+  "status": "PINNED_SOURCE_PRELIMINARILY_CROSSCHECKED_CI_PENDING",
+  "analysis_role": "POST_EXPOSURE_DESCRIPTIVE_METHOD_RECORD_RESTRICTION_NOT_ECOLOGICAL_EFFECT",
+  "source": {
+    "study": "Wenner et al. (2025), Global Ecology and Conservation 62 e03837; data Zenodo DOI 10.5281/zenodo.15044115, CC BY 4.0",
+    "raw_repo": "zuizui0223/frogcs",
+    "raw_commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_q1_cohort": "exclude kis-banyato and vadasz-turjan; 27 sites; 351 rows; 117 site-date groups",
+    "existing_source_authenticated_paired_core_result_fingerprint": "88f8b55ce710cb8df06724e384390318b408902d6f66c5809ab45597fe84da62",
+    "existing_source_authenticated_ci_run": 43695295286,
+    "existing_source_authenticated_artifact_id": 14153223973,
+    "existing_source_authenticated_artifact_zip_sha256": "f6761408e52f3b33281e5d8a088f911e0891de093065c5ab442a02c4ac90ec51"
+  },
+  "design": {
+    "protocol_commit_sha": "4fe3d81c7db0e94ed0aba3430d26a94d2bf5c752",
+    "method_full": [
+      "acoustic",
+      "visual",
+      "dipnet",
+      "bottletrap"
+    ],
+    "method_core": [
+      "acoustic",
+      "visual"
+    ],
+    "groups": [
+      "intervention",
+      "control",
+      "artificial"
+    ],
+    "groups_site_denominator": {
+      "intervention": 13,
+      "control": 6,
+      "artificial": 8
+    },
+    "contrasts_per_species": [
+      "intervention_minus_control",
+      "intervention_minus_artificial",
+      "artificial_minus_control"
+    ],
+    "source_positive": "native site×species if count>0 on at least one recorded source row",
+    "is_randomized_trial": false,
+    "is_occupancy_model": false,
+    "is_causal_effect_estimate": false
+  },
+  "observations": {
+    "group_counts": {
+      "intervention": {
+        "sites": 13,
+        "native_full_positive_site_species": 77,
+        "paired_core_positive_site_species": 61,
+        "omitted": 16,
+        "mean_source_species_per_site_full": 5.923076923076923,
+        "core": 4.6923076923076925,
+        "site_dates": 64,
+        "dipnet_recorded_date_groups": 27,
+        "bottletrap_recorded_date_groups": 31
+      },
+      "control": {
+        "sites": 6,
+        "native_full_positive_site_species": 23,
+        "paired_core_positive_site_species": 15,
+        "omitted": 8,
+        "mean_source_species_per_site_full": 3.8333333333333335,
+        "core": 2.5,
+        "site_dates": 18,
+        "dipnet_recorded_date_groups": 10,
+        "bottletrap_recorded_date_groups": 12
+      },
+      "artificial": {
+        "sites": 8,
+        "native_full_positive_site_species": 44,
+        "paired_core_positive_site_species": 28,
+        "omitted": 16,
+        "mean_source_species_per_site_full": 5.5,
+        "core": 3.5,
+        "site_dates": 35,
+        "dipnet_recorded_date_groups": 20,
+        "bottletrap_recorded_date_groups": 15
+      }
+    },
+    "all_categories": {
+      "native_full_positive_site_species": 144,
+      "paired_core_positive_site_species": 104,
+      "core_unseen_native_positives": 40,
+      "original_sites": 27
+    },
+    "strict_nonzero_direction_reversals_out_of_27_species_category_contrasts": 5,
+    "tie_transition_count": 1,
+    "reversals": [
+      {
+        "comparison": "intervention_minus_control",
+        "species": "Lissotriton vulgaris",
+        "full_difference_pp": 2.564102564102566,
+        "core_difference_pp": -26.923076923076923
+      },
+      {
+        "comparison": "intervention_minus_control",
+        "species": "Bufo bufo",
+        "full_difference_pp": -12.82051282051282,
+        "core_difference_pp": 20.51282051282051
+      },
+      {
+        "comparison": "intervention_minus_artificial",
+        "species": "Lissotriton vulgaris",
+        "full_difference_pp": -30.76923076923077,
+        "core_difference_pp": 23.076923076923077
+      },
+      {
+        "comparison": "artificial_minus_control",
+        "species": "Lissotriton vulgaris",
+        "full_difference_pp": 33.333333333333336,
+        "core_difference_pp": -50
+      },
+      {
+        "comparison": "artificial_minus_control",
+        "species": "Bufotes viridis",
+        "full_difference_pp": -8.333333333333332,
+        "core_difference_pp": 8.333333333333334
+      }
+    ],
+    "lissotriton_vulgaris_site_counts": {
+      "intervention": {
+        "full": 9,
+        "core": 3,
+        "total": 13
+      },
+      "control": {
+        "full": 4,
+        "core": 3,
+        "total": 6
+      },
+      "artificial": {
+        "full": 8,
+        "core": 0,
+        "total": 8
+      }
+    },
+    "positive_detection_uses_same_source_sites_and_changes_only_recorded_method_subset": true
+  },
+  "validation": {
+    "method_only_source_previous_paired_core_CI_success": true,
+    "independent_crosscheck": "Archived original source-verified 144-row Q1 site×species positive registry was re-read from the previous CI artifact ZIP, and the 27 species×category contrast signs were independently recomputed: 5 strict sign flips, identical sites/denominators.",
+    "new_executable": "benchmarks/wetland_method_group_contrast_v1.py",
+    "new_negative_controls": "tests/test_wetland_method_group_contrast_v1.py",
+    "new_crosscheck_workflow": "wetland-duplicate-gate-v1.yml",
+    "new_workflow_status": "queued_at_receipt_creation; must not claim success until result",
+    "new_workflow_result_fingerprint": null,
+    "new_workflow_artifact_id": null
+  },
+  "limits": [
+    "All observations and contrasts are post-exposure descriptive views, not independent ecological tests or confidence intervals.",
+    "The artificial/control site sample sizes are small; near-zero category differences may have fragile signs.",
+    "Original site's treatment/category assignment is observational; neither original nor method-restricted site positivity is a causal restoration effect.",
+    "Documented acoustic+visual recording on every site date does not establish equal biological detection probability or observer effort.",
+    "Source rows for dipnet methods are absent on many recorded dates despite the paper reporting dipnet use in ordinary field visits; missing method row is not confirmed nondeployment.",
+    "No physical trap independence, closure, fitted occupancy, biotic B, movement M or abiotic A causal identification, ecological world counts, new fourth EOG-WF endpoint, or PR merge."
+  ]
+}
