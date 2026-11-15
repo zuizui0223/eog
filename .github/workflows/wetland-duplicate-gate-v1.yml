@@ -21,6 +21,10 @@ on:
       - "tests/test_wetland_native_visit_ledger_v1.py"
       - "docs/wetland_native_visit_ledger_v1.md"
       - "validation/wetland_native_visit_ledger_v1/**"
+      - "benchmarks/wetland_temporal_window_feasibility_v1.py"
+      - "tests/test_wetland_temporal_window_feasibility_v1.py"
+      - "docs/wetland_temporal_window_feasibility_v1.md"
+      - "validation/wetland_temporal_window_feasibility_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
   contents: read
@@ -34,7 +38,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -87,6 +91,37 @@ jobs:
           assert len(q1['duplicated_group_keys_not_resolved'])==2
           assert len(q2['duplicated_group_keys_not_resolved'])==2
           print('WETLAND_REAL_SITE_DATE_METHOD_LEDGER_SOURCE_OR_PRESERVED_UNKNOWN_NOT_ZERO')
+          PY
+      - name: Audit first/last anchored 7–91-day real visit coverage without occupancy fitting
+        run: |
+          python benchmarks/wetland_temporal_window_feasibility_v1.py \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/temporal_window_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/temporal_window_result.json').read_text())
+          assert r['status']=='ORIGINAL_DATE_WINDOW_REPRESENTATION_SENSITIVITY_NOT_CLOSURE_CERTIFICATE'
+          assert r['windows_days']==[7,14,21,30,45,60,91]
+          assert not r['historical_R_model_fitted']
+          assert not r['ecological_season_closure_verified']
+          for cohort,(sites,origdates,positives) in {
+              'published_q1':(27,117,144),'published_q2':(13,64,77)
+          }.items():
+              p=r['cohorts'][cohort]
+              assert (p['source_site_count'],p['source_native_date_count'],p['source_positive_site_species'])==(sites,origdates,positives)
+              assert len(p['window_summaries'])==14
+              assert r['detail_outputs'][cohort]['rows']==7*positives
+              for entry in p['window_summaries']:
+                  assert entry['source_positive_pairs_retained']+entry['source_positive_pairs_not_seen_in_window']==positives
+                  assert entry['eligible_sites_positive_pairs_retained']+entry['eligible_sites_positive_pairs_not_seen']==entry['eligible_sites_source_positive_pairs']
+                  if entry['window_calendar_days']==91:
+                      assert entry['source_positive_pairs_retained']==positives
+                      assert entry['source_positive_pairs_not_seen_in_window']==0
+                      assert entry['sites_with_two_or_more_selected_dates']==sites
+          print('REAL_DATE_WINDOW_ANCHOR_AND_COHORT_COVERAGE_SOURCE_CERTIFIED')
           PY
       - name: Identify source conflicts, block occupancy
         run: |
@@ -185,6 +220,9 @@ jobs:
             /tmp/wetland_gate/duplicate_bounds.json
             /tmp/wetland_gate/survey_grain.json
             /tmp/wetland_gate/native_visit_ledger.json
+            /tmp/wetland_gate/temporal_window_result.json
+            /tmp/wetland_gate/published_q1_window_source_positive_detail.csv
+            /tmp/wetland_gate/published_q2_window_source_positive_detail.csv
             /tmp/wetland_gate/archived_all_method_status.csv
             /tmp/wetland_gate/archived_all_daily_detected.csv
             /tmp/wetland_gate/published_q1_method_status.csv
