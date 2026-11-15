@@ -158,8 +158,8 @@ def run(surveys,run_dir):
       "original_unmarked_fitted_model_reproduced":False,
       "cohorts":{},
       "limits":[
-        "nmixmatrix returns raw counts; any additional publication y binarization is not established by this stage.",
-        "Observed count>0 is derived only to audit detected/non-detected representation, not ecological absence.",
+        "nmixmatrix returns raw counts; the MD5-verified published Q1/Q2 scripts separately clip all nine species counts >1 to binary 1 before ylist/unmarked.",
+        "Binary count>0 matches the authors\u0027 declared ylist conversion for nonnegative native counts, not a verified ecological absence.",
         "Kish is a source-row weight concentration summary, not estimated inferential effective sample size.",
         "Resampled site positions do not establish 20 independent survey occasions.",
         "No field trap IDs, effort, closure, species movement or causal A/B/M inference established.",
