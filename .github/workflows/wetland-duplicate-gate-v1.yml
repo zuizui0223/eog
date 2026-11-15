@@ -25,6 +25,10 @@ on:
       - "tests/test_wetland_temporal_window_feasibility_v1.py"
       - "docs/wetland_temporal_window_feasibility_v1.md"
       - "validation/wetland_temporal_window_feasibility_v1/**"
+      - "benchmarks/wetland_paired_method_core_v1.py"
+      - "tests/test_wetland_paired_method_core_v1.py"
+      - "docs/wetland_paired_method_core_v1.md"
+      - "validation/wetland_paired_method_core_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
   contents: read
@@ -38,7 +42,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -122,6 +126,43 @@ jobs:
                       assert entry['source_positive_pairs_not_seen_in_window']==0
                       assert entry['sites_with_two_or_more_selected_dates']==sites
           print('REAL_DATE_WINDOW_ANCHOR_AND_COHORT_COVERAGE_SOURCE_CERTIFIED')
+          PY
+      - name: Authenticate fully paired acoustic/visual date coverage and noncore taxon witnesses
+        run: |
+          python benchmarks/wetland_paired_method_core_v1.py \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/paired_method_core_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          z=json.loads(Path('/tmp/wetland_gate/paired_method_core_result.json').read_text())
+          assert not z['equal_field_effort_verified']
+          assert not z['historical_R_occupancy_model_fitted']
+          assert z['recorded_method_not_present_equals_not_deployed'] is False
+          for cohort,(days,full,core,day_full,day_core,method_dipnet) in {
+              'archived_all':(129,153,110,365,249,59),
+              'published_q1':(117,144,104,346,234,57),
+              'published_q2':(64,77,61,207,148,27)
+          }.items():
+              d=z['cohorts'][cohort]
+              assert d['source_site_dates']==days
+              assert d['paired_method_dates_with_exactly_one_row_each']==days
+              assert d['paired_method_native_rows']==2*days
+              assert (d['native_positive_site_species'],d['paired_core_positive_site_species'])==(full,core)
+              assert (d['daily_full_method_positive_site_date_species'],d['daily_paired_core_positive_site_date_species'])==(day_full,day_core)
+              assert d['site_date_groups_with_method_row']['dipnet']==method_dipnet
+              assert d['site_date_groups_without_method_row']['acoustic']==0
+              assert d['site_date_groups_without_method_row']['visual']==0
+              assert z['output_files'][cohort+'_site_date_species']['rows']==days*9
+              assert z['output_files'][cohort+'_site_species_positive_registry']['rows']==full
+          q1=z['cohorts']['published_q1']
+          assert q1['per_species']['Lissotriton vulgaris']['positive_sites_undetected_by_paired_core']==15
+          assert q1['per_species']['Triturus dobrogicus']['positive_sites_undetected_by_paired_core']==6
+          assert q1['per_species']['Hyla arborea']['positive_sites_undetected_by_paired_core']==2
+          assert q1['per_species']['Pelophylax ridibundus']['positive_sites_undetected_by_paired_core']==0
+          print('PAIRED_ACOUSTIC_VISUAL_CORE_COMPLETE_ALL_DATES_EVIDENCE_BIAS_VERIFIED')
           PY
       - name: Identify source conflicts, block occupancy
         run: |
@@ -221,6 +262,13 @@ jobs:
             /tmp/wetland_gate/survey_grain.json
             /tmp/wetland_gate/native_visit_ledger.json
             /tmp/wetland_gate/temporal_window_result.json
+            /tmp/wetland_gate/paired_method_core_result.json
+            /tmp/wetland_gate/archived_all_paired_core_site_date_species.csv
+            /tmp/wetland_gate/archived_all_paired_core_site_species_positive_registry.csv
+            /tmp/wetland_gate/published_q1_paired_core_site_date_species.csv
+            /tmp/wetland_gate/published_q1_paired_core_site_species_positive_registry.csv
+            /tmp/wetland_gate/published_q2_paired_core_site_date_species.csv
+            /tmp/wetland_gate/published_q2_paired_core_site_species_positive_registry.csv
             /tmp/wetland_gate/published_q1_window_source_positive_detail.csv
             /tmp/wetland_gate/published_q2_window_source_positive_detail.csv
             /tmp/wetland_gate/archived_all_method_status.csv
