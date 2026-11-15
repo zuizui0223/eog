@@ -1,0 +1,114 @@
+{
+  "schema": "eog.wetland_method_channel_lattice_v1.result_receipt",
+  "status": "SOURCE_AUTHENTICATED_ALL_15_METHOD_PANELS_AND_405_CONTRASTS_CI_SUCCESS",
+  "role": "POST_EXPOSURE_OBSERVATION_RECORD_CHANNEL_AUDIT_NOT_BIOLOGICAL_EFFECT",
+  "source": {
+    "study": "Wenner et al. 2025, Global Ecology and Conservation 62 e03837, doi:10.1016/j.gecco.2025.e03837; native data CC BY 4.0 Zenodo 10.5281/zenodo.15044115",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "q1_sites": 27,
+    "q1_survey_rows": 351,
+    "q1_site_dates": 117,
+    "wetland_site_categories": {
+      "intervention": 13,
+      "control": 6,
+      "artificial": 8
+    },
+    "native_species_count": 9,
+    "all_method_positive_site_species": 144
+  },
+  "design": {
+    "protocol_committed_before_new_15_panel_execution": "bb776bf12d0386a11205ba65d3f7cf7a42b8ee8c",
+    "fixed_method_order": [
+      "acoustic",
+      "visual",
+      "dipnet",
+      "bottletrap"
+    ],
+    "all_nonempty_subsets_enumerated": 15,
+    "species_by_group_contrasts_per_method_subset": 27,
+    "total_contrast_rows": 405,
+    "source_positive_pair_witness_rows": 144,
+    "method_witness_boolean_or_not_model_probability": true,
+    "method_names_in_csv_not_verified_equal_field_effort": true,
+    "no_occufit": true,
+    "post_exposure": true
+  },
+  "observations": {
+    "all_source_positive_site_species": 144,
+    "acoustic_visual_panel": {
+      "recorded_positive_site_species": 104,
+      "strict_group_sign_reversals": 5,
+      "site_dates_with_all_included_method_rows": 117
+    },
+    "leave_one_out": {
+      "acoustic": {
+        "remaining_source_positives": 132,
+        "method_exclusive_positive_pairs_lost": 12,
+        "strict_sign_reversals": 1
+      },
+      "visual": {
+        "remaining_source_positives": 128,
+        "method_exclusive_positive_pairs_lost": 16,
+        "strict_sign_reversals": 4
+      },
+      "dipnet": {
+        "remaining_source_positives": 120,
+        "method_exclusive_positive_pairs_lost": 24,
+        "strict_sign_reversals": 5
+      },
+      "bottletrap": {
+        "remaining_source_positives": 139,
+        "method_exclusive_positive_pairs_lost": 5,
+        "strict_sign_reversals": 0
+      }
+    },
+    "method_exclusive_positive_pairs_total": 57,
+    "source_positive_pairs_detected_by_two_or_more_method_families": 87,
+    "all_four_recorded_method_families_required_to_preserve_every_one_of_144_positives": true,
+    "smallest_27_sign_preserving_subset": {
+      "methods": [
+        "visual",
+        "dipnet"
+      ],
+      "source_positive_site_species": 127,
+      "source_positive_omitted": 17,
+      "sign_reversals": 0,
+      "site_dates_with_both_method_rows_present_in_csv": 57,
+      "total_site_dates": 117
+    },
+    "all_four_recorded_method_rows_on_same_date": {
+      "site_dates": 22,
+      "total_site_dates": 117
+    },
+    "all_nested_subset_positive_evidence_monotonicity_verified": true,
+    "descriptive_boolean_or_witness_allocation_total": 144
+  },
+  "verification": {
+    "ci_run_id": 43710742795,
+    "ci_url": "https://github.com/zuizui0223/eog/actions/runs/43710742795",
+    "conclusion": "success",
+    "result_fingerprint": "d9ce91154c34abc1e0619feb803b0a39b7721ef18dcd01c85279d3b6c581f254",
+    "artifact_id": 14159873171,
+    "artifact_zip_sha256": "c50ca0a51ac10edfdb7866b0796921b0a07337f4afecfcf665eac4689fdd3f7f",
+    "executable": "benchmarks/wetland_method_channel_lattice_v1.py",
+    "tests": "tests/test_wetland_method_channel_lattice_v1.py",
+    "csv_row_counts": {
+      "method_subsets": 15,
+      "method_subset_contrasts": 405,
+      "native_positive_site_species_witnesses": 144
+    },
+    "independent_native_CSV_recount_agreed": true
+  },
+  "interpretation_bounds": [
+    "Source method restricted positive records are not true ecological occupancy or biological absences.",
+    "The 15 method panels are deterministic views of a single already observed survey and are not 15 new field experiments.",
+    "Method exclusion sign reversals are not causal treatment effect changes, p-values, or statistical significance counts.",
+    "Source dipnet rows appear on only 57/117 source site-dates despite original authors describing regular dipnet usage; absence of a row does not prove no deployment.",
+    "Equal method names across recorded dates does not prove constant survey duration, effort, or detection probability.",
+    "The visual+dipnet panel sign preservation is not a recommendation to drop other methods, and it retains only 127/144 original source-positive site×species evidence.",
+    "No source independence, biological season closure, trap identity, original unmarked occupancy coefficients, EOG A/B/M causal mechanisms, real world counts, fourth EOG-WF endpoint or Draft PR merge."
+  ]
+}
