@@ -61,6 +61,10 @@ on:
       - "tests/test_wetland_observation_source_policy_bridge_v1.py"
       - "docs/wetland_observation_source_policy_bridge_v1.md"
       - "validation/wetland_observation_source_policy_bridge_v1/**"
+      - "benchmarks/exhaustive_three_node_source_policy_v1.py"
+      - "tests/test_exhaustive_three_node_source_policy_v1.py"
+      - "docs/exhaustive_three_node_source_policy_v1.md"
+      - "validation/exhaustive_three_node_source_policy_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
   contents: read
@@ -74,7 +78,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py tests/test_wetland_positive_only_partial_id_v1.py tests/test_wetland_negative_witness_plan_v1.py tests/test_wetland_chronological_discovery_v1.py tests/test_wetland_joint_method_calendar_gate_v1.py tests/test_wetland_observation_source_policy_bridge_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py tests/test_wetland_positive_only_partial_id_v1.py tests/test_wetland_negative_witness_plan_v1.py tests/test_wetland_chronological_discovery_v1.py tests/test_wetland_joint_method_calendar_gate_v1.py tests/test_wetland_observation_source_policy_bridge_v1.py tests/test_exhaustive_three_node_source_policy_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -521,6 +525,48 @@ jobs:
           assert not r['new_EOG_WF_scored_empirical_endpoint_added']
           print('NATIVE_EOG_FIXED_SOURCE_MONOTONE_SELF_EXCLUDED_NONMONOTONE_AND_REAL_WETLAND_WITNESS_CERTIFIED')
           PY
+      - name: Certify all 64 native EOG directed graph source-policy compatibilities against independent edge logic
+        run: |
+          python -m benchmarks.exhaustive_three_node_source_policy_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/exhaustive_three_node_source_policy.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/exhaustive_three_node_source_policy.json').read_text())
+          assert r['status']=='COMPLETE_64_SYNTHETIC_EOG_WORLD_SOURCE_POLICY_EXHAUSTION_NOT_REAL_ECOLOGY'
+          assert r['graph_count']==64
+          assert r['native_EOG_decisions_agree_with_independent_analytic_edge_predicates_for_all_worlds']
+          assert r['output_csv']['rows']==64
+          assert r['edge_bit_order']==['A>B','A>C','B>A','B>C','C>A','C>B']
+          assert r['native_fixed_policy']['source_policy']=='fixed'
+          f=r['native_fixed_policy']
+          assert (f['full_count'],f['gated_count'],f['shared_count'],
+                  f['lost_count'],f['gained_count'])==(16,32,16,0,16)
+          assert f['full_subset_gated'] is True
+          assert f['added_positive_eliminated_worlds']==16
+          assert f['added_positive_contraction_fraction']==0.5
+          s=r['native_self_excluded_policy']
+          assert s['source_policy']=='self_excluded'
+          assert (s['full_count'],s['gated_count'],s['shared_count'],
+                  s['lost_count'],s['gained_count'],s['neither_count'])==(27,16,12,15,4,33)
+          assert s['full_subset_gated'] is False
+          assert s['gated_subset_full'] is False
+          assert 'mask_58' in s['lost_world_ids_after_dropping_C']
+          assert 'mask_05' in s['gained_world_ids_after_dropping_C']
+          assert 'mask_63' in s['shared_world_ids']
+          assert s['NOT_eligible_for_fixed_source_compare_reconstructions']
+          o=r['authenticated_real_wetland_record_provenance']
+          assert o['site']=='orditoi-zsilip' and o['species']=='Hyla arborea'
+          assert {(z['date'],z['method'],z['native_original_CSV_line']) for z in o['source_positive_rows']}=={
+              ('2024-03-24','visual',6),('2024-05-30','dipnet',368)}
+          assert (o['Q1_last14_split_witness_pairs'],o['Q2_last14_split_witness_pairs'])==(16,9)
+          assert o['actual_wetland_nodes_are_NOT_synthetic_A_B_C']
+          assert not r['real_EOG_ecological_worlds_enumerated']
+          print('EOG_ALL_64_NATIVE_FIXED_VS_SELF_EXCLUDED_WORLD_MEMBERSHIPS_AND_SOURCE_PROVENANCE_CERTIFIED')
+          PY
       - name: Identify source conflicts, block occupancy
         run: |
           python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
@@ -628,6 +674,8 @@ jobs:
             /tmp/wetland_gate/chronological_discovery.json
             /tmp/wetland_gate/joint_method_calendar_gate.json
             /tmp/wetland_gate/observation_source_policy_bridge.json
+            /tmp/wetland_gate/exhaustive_three_node_source_policy.json
+            /tmp/wetland_gate/synthetic_64_eog_graph_source_policy_results.csv
             /tmp/wetland_gate/published_q1_window_summary.csv
             /tmp/wetland_gate/published_q1_positive_pair_window_detail.csv
             /tmp/wetland_gate/published_q2_window_summary.csv
