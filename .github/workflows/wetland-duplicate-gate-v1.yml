@@ -53,6 +53,10 @@ on:
       - "tests/test_wetland_chronological_discovery_v1.py"
       - "docs/wetland_chronological_discovery_v1.md"
       - "validation/wetland_chronological_discovery_v1/**"
+      - "benchmarks/wetland_joint_method_calendar_gate_v1.py"
+      - "tests/test_wetland_joint_method_calendar_gate_v1.py"
+      - "docs/wetland_joint_method_calendar_gate_v1.md"
+      - "validation/wetland_joint_method_calendar_gate_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
   contents: read
@@ -66,7 +70,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py tests/test_wetland_positive_only_partial_id_v1.py tests/test_wetland_negative_witness_plan_v1.py tests/test_wetland_chronological_discovery_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py tests/test_wetland_positive_only_partial_id_v1.py tests/test_wetland_negative_witness_plan_v1.py tests/test_wetland_chronological_discovery_v1.py tests/test_wetland_joint_method_calendar_gate_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -413,6 +417,64 @@ jobs:
           assert r['cohorts']['published_q2']['horizon_first_later_positive_counts']['14']['first_full_nonpositive_later_full_positive_by_horizon']==13
           print('WETLAND_NATIVE_FIRST_DATE_TO_LATER_POSITIVITY_NOT_TRUE_ABSENCE_VERIFIED')
           PY
+      - name: Audit joint method/calendar source witness support and wetland-contrast signs
+        run: |
+          python -m benchmarks.wetland_joint_method_calendar_gate_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/joint_method_calendar_gate.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/joint_method_calendar_gate.json').read_text())
+          assert r['status']=='SOURCE_PINNED_METHOD_TIME_JOINT_WITNESS_PARTITION_NOT_OCCUPANCY'
+          assert r['anchors']==['first','last']
+          assert r['horizon_days']==[7,14,21,30,45,60,91]
+          assert r['original_intervention_Q2_witnesses_identical_to_Q1_source_subset']
+          assert r['no_biological_absence_inferred'] and r['no_new_EOG_WF_scored_endpoint']
+          expected={'published_q1':(27,351,117,144,104),'published_q2':(13,188,64,77,61)}
+          for name,(sites,rows,days,full,av) in expected.items():
+              x=r['cohorts'][name]
+              assert (x['source_site_count'],x['original_csv_rows'],
+                      x['source_site_calendar_dates'],x['original_native_full_positive_pairs'],
+                      x['original_native_AV_positive_pairs'])==(sites,rows,days,full,av)
+              assert x['anchor_horizon_combinations']==14
+              assert x['source_full_91_day_positive_recovery_exact']
+              assert r['outputs'][name+'_window_summary']['rows']==14
+              assert r['outputs'][name+'_positive_pair_window_detail']['rows']==14*full
+              for w in x['windows']:
+                  assert sum(w['class_'+c] for c in [
+                      'joint_survives','method_only_marginal','time_only_marginal',
+                      'split_witness_interaction','excluded_by_either_gate_alone'
+                  ])==full
+                  assert w['class_joint_survives']==w['native_AV_window_positive_pairs']
+                  assert w['native_AV_window_positive_pairs']<=w['native_full_window_positive_pairs']
+              last91=next(w for w in x['windows'] if w['anchor']=='last' and w['horizon_calendar_days']==91)
+              assert (last91['native_full_window_positive_pairs'],
+                      last91['native_AV_window_positive_pairs'])==(full,av)
+              assert last91['method_time_split_witness_pairs']==0
+          assert r['outputs']['published_q1_category_method_calendar_contrasts']['rows']==756
+          cases={
+              ('published_q1','first',14):(96,73,1,11,10,5),
+              ('published_q1','last',14):(94,48,16,7,9,5),
+              ('published_q2','first',14):(41,34,1,None,None,None),
+              ('published_q2','last',14):(44,25,9,None,None,None),
+          }
+          for (name,anchor,h),(full,av,split,ff,aa,within) in cases.items():
+              v=next(w for w in r['cohorts'][name]['windows']
+                     if w['anchor']==anchor and w['horizon_calendar_days']==h)
+              assert (v['native_full_window_positive_pairs'],
+                      v['native_AV_window_positive_pairs'],
+                      v['method_time_split_witness_pairs'])==(full,av,split)
+              if ff is not None:
+                  assert (
+                    v['full_window_strict_reversals_vs_original_27'],
+                    v['AV_window_strict_reversals_vs_original_27'],
+                    v['AV_vs_full_matched_window_strict_reversals']
+                  )==(ff,aa,within)
+          print('WETLAND_JOINT_METHOD_CALENDAR_SOURCE_SUPPORT_PARTITION_AND_756_CONTRASTS_VERIFIED')
+          PY
       - name: Identify source conflicts, block occupancy
         run: |
           python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
@@ -518,6 +580,12 @@ jobs:
             /tmp/wetland_gate/positive_only_partial_id.json
             /tmp/wetland_gate/negative_witness_plan.json
             /tmp/wetland_gate/chronological_discovery.json
+            /tmp/wetland_gate/joint_method_calendar_gate.json
+            /tmp/wetland_gate/published_q1_window_summary.csv
+            /tmp/wetland_gate/published_q1_positive_pair_window_detail.csv
+            /tmp/wetland_gate/published_q2_window_summary.csv
+            /tmp/wetland_gate/published_q2_positive_pair_window_detail.csv
+            /tmp/wetland_gate/published_q1_category_method_calendar_contrasts.csv
             /tmp/wetland_gate/published_q1_site_species_chronology.csv
             /tmp/wetland_gate/published_q1_site_species_horizon.csv
             /tmp/wetland_gate/published_q1_candidate_site_species_chronology.csv
