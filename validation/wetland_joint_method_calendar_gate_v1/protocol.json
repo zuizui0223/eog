@@ -1,0 +1,64 @@
+{
+  "schema": "eog.wetland_joint_method_calendar_gate_v1.protocol",
+  "status": "POST_EXPOSURE_SOURCE_FACTORIAL_AUDIT_FIXED_BEFORE_FIRST_JOINT_COMPUTATION",
+  "question": "When original recorded observation methods AND actual calendar-date windows are restricted together, which source-confirmed site×taxon positives disappear, including those with a method-positive witness and a time-window-positive witness that occur on DIFFERENT raw rows? How do recorded wetland-category contrast signs depend on the joint gate?",
+  "source": {
+    "article": "Wenner et al. (2025), Global Ecology and Conservation 62 e03837; original data Zenodo 10.5281/zenodo.15044115 CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "prior_native_chronology_fingerprint": "6e9c3a23f8410e5b6ec2ad10fc77e4edc6f30422e6f1ef86707792ed883eba75",
+    "prior_lattice_fingerprint": "d9ce91154c34abc1e0619feb803b0a39b7721ef18dcd01c85279d3b6c581f254"
+  },
+  "cohorts": {
+    "original_Q1": "27 original Q1 sites excluding kis-banyato and vadasz-turjan, 351 source rows, 117 site×calendar-date groups, nine taxa, 144 full-positive site×taxon pairs, AV full-calendar positives 104",
+    "original_Q2": "13 intervention source sites, 188 rows, 64 site×date groups, nine taxa, 77 full-positive pairs, AV full-calendar positives 61; strict Q1 subset"
+  },
+  "fixed_gates": {
+    "calendar_anchors": [
+      "first",
+      "last"
+    ],
+    "inclusive_days": [
+      7,
+      14,
+      21,
+      30,
+      45,
+      60,
+      91
+    ],
+    "source_positive": "any original CSV count>0 on source rows at a given original site and taxon; repeated bottletrap keys preserved",
+    "F_all": "positive from any of four original recorded methods across any original source dates",
+    "M_all": "positive from acoustic OR visual across all dates; one source row of each method required at every site×recorded date",
+    "F_window": "positive from any four methods on site dates at most h calendar days from site's earliest or latest original recorded date inclusive",
+    "M_window": "positive from acoustic or visual rows on those SAME selected dates, not separately choosing a different window for the method panel",
+    "mathematical_support": "M_window ⊆ M_all ∩ F_window ⊆ F_all, but M_window may be a PROPER subset of M_all ∩ F_window when the witnesses occur at different times/methods",
+    "five_disjoint_source_positive_classes": [
+      "joint_survives: M_window",
+      "method_only_marginal: F_window \\ M_all (inside window extra methods only across any date)",
+      "time_only_marginal: M_all \\ F_window (AV positive only outside window, all methods zero inside)",
+      "split_witness_interaction: (F_window ∩ M_all) \\ M_window (extra method positive inside window AND AV positive outside)",
+      "excluded_by_either_gate_alone: F_all \\ (F_window ∪ M_all) (extra method positive outside window only)"
+    ],
+    "no_field_absence_inference": true
+  },
+  "metrics": [
+    "For each original Q1 and Q2 cohort, anchor and horizon, counts for all five disjoint positive-witness classes and full/AV/window/joint positive witness masks; verify class sum to 144/77.",
+    "First/last source window 7×2×two-method panels counts, full independent method gate baseline, non-decreasing first/last window positivity and 91-day all positive recovery; all paired method inclusions.",
+    "For each source-positive site×taxon, original first positive source date per method and first/last window support, witness class, and the exact split-witness timing/method path; include source row IDs and dates where useful.",
+    "For original Q1 groups intervention=13, control=6, artificial=8 and all nine taxa, calculate 27 source-positive-site-fraction contrasts for each of 14 window positions × 2 method panels = 756 rows. Compare strict sign reversals vs original F_all and within-window F_window (only for matching AV window). Count ties separately, all integer cross-product signs.",
+    "For Q2, report cohort time×method source witness changes and per-species categories, no Q2 wetland-category comparisons because all 13 Q2 sites intervention.",
+    "Report number of true ecological biological absences established = 0, original occupancy model fits = 0, new EOG-WF scored endpoints = 0.",
+    "Machine result fingerprint plus 14-window Q1/Q2 summary rows, positive site×taxon×window rows, 756 contrasts, original source CSV sha guards, synthetic CI controls."
+  ],
+  "interpretive_stops": [
+    "The five classes are a decomposition of RECORDED SOURCE POSITIVE SUPPORT only; do not attribute missingness to causal detectability vs phenology vs colonization or use terms true false negative.",
+    "Joint gates commute at the original-row filtering level; a split-witness interaction means site×species-level separately aggregated positive sets do not commute with time/method gate intersection, not that physical operations are noncommutative.",
+    "Site windows and method pairs do not establish equal effort, independence, field method deployment or biological closure (up to 91 days).",
+    "Missing original CSV method row does not prove field nondeployment; paper states dipnet in ordinary site surveys.",
+    "The 756 observed contrast signs are deterministic post-exposure repeated calculations on same source, not independent tests, restoration causal effects, p-values, occupancy estimates, A/B/M processes or actual ecological world counts.",
+    "Keep PR #697 Draft/unmerged and frozen EOG-WF 3 scored/31 scientific STOP/3 administrative exclusions unchanged."
+  ]
+}
