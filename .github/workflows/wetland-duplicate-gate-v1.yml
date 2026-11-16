@@ -49,6 +49,10 @@ on:
       - "tests/test_wetland_negative_witness_plan_v1.py"
       - "docs/wetland_negative_witness_plan_v1.md"
       - "validation/wetland_negative_witness_plan_v1/**"
+      - "benchmarks/wetland_chronological_discovery_v1.py"
+      - "tests/test_wetland_chronological_discovery_v1.py"
+      - "docs/wetland_chronological_discovery_v1.md"
+      - "validation/wetland_chronological_discovery_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
   contents: read
@@ -62,7 +66,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py tests/test_wetland_positive_only_partial_id_v1.py tests/test_wetland_negative_witness_plan_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py tests/test_wetland_positive_only_partial_id_v1.py tests/test_wetland_negative_witness_plan_v1.py tests/test_wetland_chronological_discovery_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -355,6 +359,60 @@ jobs:
           assert r['no_occupancy_likelihood_fitted'] and r['no_causal_restoration_effect_estimated']
           print('WETLAND_SOURCE_MINIMUM_COUNTERFACTUAL_CERTIFIED_NEGATIVE_WITNESS_PLAN_VERIFIED_NO_ABSENCES_OBSERVED')
           PY
+      - name: Authenticate first native recorded date versus later site species positive witnesses
+        run: |
+          python -m benchmarks.wetland_chronological_discovery_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/chronological_discovery.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/chronological_discovery.json').read_text())
+          assert r['status']=='SOURCE_PINNED_FIRST_DATE_LATER_POSITIVE_RECORDS_NOT_BIOLOGICAL_FALSE_NEGATIVES'
+          assert r['date_horizons_days']==[7,14,21,30,45,60,91]
+          assert r['original_Q2_intervention_history_exact_Q1_subset_verified']
+          expected={
+            'published_q1':(27,351,117,243,144,104,62,50,82,54,4),
+            'published_q2':(13,188,64,117,77,61,28,26,49,35,2)
+          }
+          for c,stats in expected.items():
+              v=r['cohorts'][c]
+              observed=(v['sites'],v['source_native_rows'],v['site_dates'],
+                v['site_species_slots'],v['source_full_positive_site_species'],
+                v['source_AV_positive_site_species'],
+                v['first_full_date_positive_site_species'],
+                v['first_AV_date_positive_site_species'],
+                v['first_full_nonpositive_later_full_positive_site_species'],
+                v['first_AV_nonpositive_later_AV_positive_site_species'],
+                v['counterfactual_witness_target_rows'])
+              assert observed==stats,(c,observed)
+              assert v['source_chronology_partition_reconciled']
+              assert sum(v['chronology_categories'].values())==v['site_species_slots']
+              assert v['horizon_first_later_positive_counts']['91']['first_full_nonpositive_later_full_positive_by_horizon']==stats[8]
+              assert v['first_recorded_date_zero_is_NOT_a_true_biological_absence']
+              assert r['outputs'][c+'_site_species_chronology']['rows']==stats[3]
+              assert r['outputs'][c+'_site_species_horizon']['rows']==stats[3]*7
+              assert r['outputs'][c+'_candidate_site_species_chronology']['rows']==stats[10]
+          assert r['cohorts']['published_q1']['chronology_categories']=={
+            'av_detected_first':50,
+            'same_day_extra_method_only':12,
+            'later_AV_first_discovery':54,
+            'later_additional_only_discovery':28,
+            'never_source_positive':99
+          }
+          assert r['cohorts']['published_q2']['chronology_categories']=={
+            'av_detected_first':26,
+            'same_day_extra_method_only':2,
+            'later_AV_first_discovery':35,
+            'later_additional_only_discovery':14,
+            'never_source_positive':40
+          }
+          assert r['cohorts']['published_q1']['horizon_first_later_positive_counts']['14']['first_full_nonpositive_later_full_positive_by_horizon']==34
+          assert r['cohorts']['published_q2']['horizon_first_later_positive_counts']['14']['first_full_nonpositive_later_full_positive_by_horizon']==13
+          print('WETLAND_NATIVE_FIRST_DATE_TO_LATER_POSITIVITY_NOT_TRUE_ABSENCE_VERIFIED')
+          PY
       - name: Identify source conflicts, block occupancy
         run: |
           python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
@@ -459,6 +517,13 @@ jobs:
             /tmp/wetland_gate/method_site_jackknife.json
             /tmp/wetland_gate/positive_only_partial_id.json
             /tmp/wetland_gate/negative_witness_plan.json
+            /tmp/wetland_gate/chronological_discovery.json
+            /tmp/wetland_gate/published_q1_site_species_chronology.csv
+            /tmp/wetland_gate/published_q1_site_species_horizon.csv
+            /tmp/wetland_gate/published_q1_candidate_site_species_chronology.csv
+            /tmp/wetland_gate/published_q2_site_species_chronology.csv
+            /tmp/wetland_gate/published_q2_site_species_horizon.csv
+            /tmp/wetland_gate/published_q2_candidate_site_species_chronology.csv
             /tmp/wetland_gate/weak_one_sided_target_list.csv
             /tmp/wetland_gate/source_unconfirmed_candidate_site_species.csv
             /tmp/wetland_gate/site_visit_joint_target_coverage.csv
