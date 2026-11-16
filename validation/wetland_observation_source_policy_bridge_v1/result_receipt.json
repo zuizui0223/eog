@@ -1,0 +1,162 @@
+{
+  "schema": "eog.wetland_observation_source_policy_bridge_v1.result_receipt",
+  "status": "AUTHENTICATED_WETLAND_SPLIT_WITNESS_AND_NATIVE_EOG_SYNTHETIC_POLICY_NONMONOTONICITY_CI_SUCCESS",
+  "scope": "POST_EXPOSURE_REAL_SOURCE_OBSERVATION_PROVENANCE_PLUS_UNFITTED_THREE_WORLD_EOG_THEORETICAL_COUNTEREXAMPLE",
+  "source": {
+    "study": "Wenner et al. (2025), Global Ecology and Conservation 62 e03837, data/code Zenodo 10.5281/zenodo.15044115, CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "original_surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "original_sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "earlier_authenticated_joint_gate_fingerprint": "e9214692926cd1d865d7bccdd5438c5af977d4332a3faad4321de2a3b8e783ba",
+    "pre_declared_protocol_commit": "3675a9a2dc7f71c84666786ca02fb4f521d9d699"
+  },
+  "wetland_real_observation": {
+    "site": "orditoi-zsilip",
+    "taxon": "Hyla arborea",
+    "original_positive_rows": [
+      {
+        "date": "2024-03-24",
+        "recorded_method": "visual",
+        "original_source_csv_line": 6,
+        "inside_last14": false
+      },
+      {
+        "date": "2024-05-30",
+        "recorded_method": "dipnet",
+        "original_source_csv_line": 368,
+        "inside_last14": true
+      }
+    ],
+    "original_native_site_date_count": 2,
+    "source_earliest_calendar_date": "2024-03-24",
+    "source_latest_calendar_date": "2024-05-30",
+    "last14_calendar_dates": [
+      "2024-05-30"
+    ],
+    "full_all_dates_source_positive": true,
+    "AV_all_dates_source_positive": true,
+    "full_last14_source_positive": true,
+    "AV_last14_source_positive": false,
+    "split_recorded_witness_class": "split_witness_interaction",
+    "Q1_last14_split_pairs": 16,
+    "Q2_last14_split_pairs": 9,
+    "observed_biological_absences_certified": 0,
+    "actual_environmental_or_movement_graph_fitted": false
+  },
+  "native_EOG_synthetic_counterexample": {
+    "graph_nodes": [
+      "A",
+      "B",
+      "C"
+    ],
+    "real_wetland_nodes_mapped_to_these_graph_nodes": false,
+    "three_world_IDs": [
+      "complete",
+      "hub",
+      "isolated_C"
+    ],
+    "declared_fixed_world_sources": [
+      "A"
+    ],
+    "max_steps": 1,
+    "geographic_raw_edge_support": 1,
+    "loss_support": 1,
+    "graph_world_edges": {
+      "hub": [
+        "A>C",
+        "C>A",
+        "B>C",
+        "C>B"
+      ],
+      "isolated_C": [
+        "A>B",
+        "B>A"
+      ],
+      "complete": [
+        "A>B",
+        "B>A",
+        "A>C",
+        "C>A",
+        "B>C",
+        "C>B"
+      ]
+    },
+    "occurrence_full": [
+      "A",
+      "B",
+      "C"
+    ],
+    "occurrence_gated": [
+      "A",
+      "B"
+    ],
+    "world_operator_definitions_stay_frozen_between_observations": true,
+    "fixed_policy_native_API": "eog.v2.world_reconstruction.reconstruct_compatible_worlds",
+    "fixed_policy_worlds_full": [
+      "complete"
+    ],
+    "fixed_policy_worlds_gated": [
+      "complete",
+      "isolated_C"
+    ],
+    "fixed_compatible_world_set_expands_when_positive_C_removed": true,
+    "fixed_policy_native_compare_reconstructions_API_used": true,
+    "fixed_before_gated_to_after_full_positive_addition": {
+      "retained": [
+        "complete"
+      ],
+      "eliminated": [
+        "isolated_C"
+      ],
+      "contraction_fraction": 0.5
+    },
+    "self_excluded_native_API": "eog.v2.occurrence_constraints.evaluate_occurrence_rule_compatibility",
+    "self_excluded_policy_worlds_full": [
+      "complete",
+      "hub"
+    ],
+    "self_excluded_policy_worlds_gated": [
+      "complete",
+      "isolated_C"
+    ],
+    "self_excluded_gains_compatible_rule_world_after_C_removed": [
+      "isolated_C"
+    ],
+    "self_excluded_loses_compatible_rule_world_after_C_removed": [
+      "hub"
+    ],
+    "self_excluded_sets_same_cardinality_but_not_nested": true,
+    "hub_target_A_sources_full": [
+      "B",
+      "C"
+    ],
+    "hub_target_A_sources_gated": [
+      "B"
+    ],
+    "hub_target_A_support_full_positive": true,
+    "hub_target_A_support_gated_zero": true,
+    "never_apply_EOG_fixed_source_compare_reconstructions_to_self_excluded_diagnostics": true
+  },
+  "verification": {
+    "original_source_CI_run_id": 43897745009,
+    "original_source_CI_url": "https://github.com/zuizui0223/eog/actions/runs/43897745009",
+    "original_source_CI_status": "success",
+    "result_fingerprint": "d59b26460b5ade76e96eb27d67b1c06a3743490513149d1bd9ecae9c4576e795",
+    "artifact_id": 14240455725,
+    "artifact_zip_sha256": "49db48f6ab711705ebce08c05f24339d1bbf4921e0625c12ba2e2ae70a9769d5",
+    "artifact_output_name": "observation_source_policy_bridge.json",
+    "source_sha_and_original_row_identity_authenticated": true,
+    "actual_native_EOG_APIs_executed_with_unchanged_graph_operators": true,
+    "source_sensitive_self_excluded_and_fixed_policy_regression_tests_passed": true,
+    "test_file": "tests/test_wetland_observation_source_policy_bridge_v1.py",
+    "executable": "benchmarks/wetland_observation_source_policy_bridge_v1.py"
+  },
+  "hard_stops": [
+    "Original Hungarian source split-witness evidence is real but has NO valid transport operator/source assignment; synthetic A/B/C transition worlds are NOT real Hungarian wetland movement worlds.",
+    "Fixed-source inverse compatibility monotonicity depends on unchanged source IDs, transition operators, finite world universe and support thresholds.",
+    "Self-excluded peer-source compatibility is an evidence-dependent source policy; rule membership can be nonmonotone when observed positives are removed.",
+    "Source-positive records are not validated site-level true occupancy or biological absences; method availability, equal detection effort and season closure remain unknown.",
+    "No biological A/B/M, independent field evidence, causal restoration estimate, additional EOG-WF endpoint or PR merge; frozen original EOG-WF 3 scored/31 scientific STOP/3 administrative exclusions unchanged."
+  ]
+}
