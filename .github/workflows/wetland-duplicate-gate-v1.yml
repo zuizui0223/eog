@@ -57,6 +57,10 @@ on:
       - "tests/test_wetland_joint_method_calendar_gate_v1.py"
       - "docs/wetland_joint_method_calendar_gate_v1.md"
       - "validation/wetland_joint_method_calendar_gate_v1/**"
+      - "benchmarks/wetland_observation_source_policy_bridge_v1.py"
+      - "tests/test_wetland_observation_source_policy_bridge_v1.py"
+      - "docs/wetland_observation_source_policy_bridge_v1.md"
+      - "validation/wetland_observation_source_policy_bridge_v1/**"
       - ".github/workflows/wetland-duplicate-gate-v1.yml"
 permissions:
   contents: read
@@ -70,7 +74,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
-      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py tests/test_wetland_positive_only_partial_id_v1.py tests/test_wetland_negative_witness_plan_v1.py tests/test_wetland_chronological_discovery_v1.py tests/test_wetland_joint_method_calendar_gate_v1.py
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py tests/test_wetland_positive_only_partial_id_v1.py tests/test_wetland_negative_witness_plan_v1.py tests/test_wetland_chronological_discovery_v1.py tests/test_wetland_joint_method_calendar_gate_v1.py tests/test_wetland_observation_source_policy_bridge_v1.py
       - name: Retrieve original pinned source
         run: |
           mkdir -p /tmp/wetland_gate
@@ -475,6 +479,48 @@ jobs:
                   )==(ff,aa,within)
           print('WETLAND_JOINT_METHOD_CALENDAR_SOURCE_SUPPORT_PARTITION_AND_756_CONTRASTS_VERIFIED')
           PY
+      - name: Verify authentic split witness and native EOG fixed-vs-self-excluded policy counterexample
+        run: |
+          python -m benchmarks.wetland_observation_source_policy_bridge_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --output /tmp/wetland_gate/observation_source_policy_bridge.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/observation_source_policy_bridge.json').read_text())
+          assert r['status']=='PINNED_ORIGINAL_WETLAND_WITNESS_AND_REAL_EOG_FINITE_SYNTHETIC_POLICY_CONTRAST'
+          e=r['original_wetland_positive_witness']
+          assert (e['site'],e['species'])==('orditoi-zsilip','Hyla arborea')
+          assert e['last14_site_species_witness_class']=='split_witness_interaction'
+          assert (e['original_source_full_positive'],
+                  e['original_source_AV_all_dates_positive'],
+                  e['original_source_full_last14_positive'],
+                  e['original_source_AV_last14_positive'])==(True,True,True,False)
+          assert {(x['date'],x['method'],x['native_original_CSV_line'])
+                  for x in e['source_positive_rows']}=={
+                      ('2024-03-24','visual',6),
+                      ('2024-05-30','dipnet',368)
+                  }
+          assert (e['Q1_last14_split_witness_pairs'],e['Q2_last14_split_witness_pairs'])==(16,9)
+          f=r['native_EOG_policy_counterexample']['fixed_source']
+          assert f['compatibility_before_all_occurrences']==['complete']
+          assert f['compatibility_after_dropping_C']==['complete','isolated_C']
+          assert f['positive_constraint_loss_expands_compatible_set']
+          selfx=r['native_EOG_policy_counterexample']['self_excluded']
+          assert selfx['compatible_sets']=={
+              'all_three':['complete','hub'],
+              'gated_two':['complete','isolated_C']
+          }
+          assert selfx['gained_compatible_worlds_after_dropping_C']==['isolated_C']
+          assert selfx['lost_compatible_worlds_after_dropping_C']==['hub']
+          assert selfx['NOT_eligible_for_EOG_fixed_source_compare_reconstructions']
+          assert r['native_EOG_policy_counterexample']['world_operator_fingerprints_frozen_across_both_observation_sets']
+          assert not r['observed_field_world_mapping_or_geographic_graph_constructed']
+          assert not r['real_ecological_movement_worlds_evaluated']
+          assert not r['new_EOG_WF_scored_empirical_endpoint_added']
+          print('NATIVE_EOG_FIXED_SOURCE_MONOTONE_SELF_EXCLUDED_NONMONOTONE_AND_REAL_WETLAND_WITNESS_CERTIFIED')
+          PY
       - name: Identify source conflicts, block occupancy
         run: |
           python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
@@ -581,6 +627,7 @@ jobs:
             /tmp/wetland_gate/negative_witness_plan.json
             /tmp/wetland_gate/chronological_discovery.json
             /tmp/wetland_gate/joint_method_calendar_gate.json
+            /tmp/wetland_gate/observation_source_policy_bridge.json
             /tmp/wetland_gate/published_q1_window_summary.csv
             /tmp/wetland_gate/published_q1_positive_pair_window_detail.csv
             /tmp/wetland_gate/published_q2_window_summary.csv
