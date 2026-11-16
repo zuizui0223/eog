@@ -1,0 +1,105 @@
+{
+  "schema": "eog.exhaustive_three_node_source_policy_v1.protocol",
+  "status": "POST_EXPOSURE_FINITE_GRAPH_THEOREM_AUDIT_FROZEN_BEFORE_FIRST_64_GRAPH_CI",
+  "question": "Do native EOG fixed-source and self-excluded positive-occurrence compatibility have the same set monotonicity under removal of an observed node, when ALL directed 3-node one-step transition graphs are considered rather than only three selected synthetic examples?",
+  "scope": {
+    "type": "COMPLETE_SYNTHETIC_FINITE_ENUMERATION_NOT_EMPIRICAL_WETLAND_ECOLOGICAL_WORLDS",
+    "node_ids": [
+      "A",
+      "B",
+      "C"
+    ],
+    "directed_edge_bit_order": [
+      "A>B",
+      "A>C",
+      "B>A",
+      "B>C",
+      "C>A",
+      "C>B"
+    ],
+    "graph_roster": "All integers 0..63 inclusive, each corresponding to one uniquely indexed subset of six possible directed non-self edges; 64 total.",
+    "operator_contract": "Actual eog.dynamic_island_reachability.build_dynamic_transition_operator; present edge geographic_support=1; absent edge not passed; loss_support=1; max_steps=1; support_tolerance=1e-15.",
+    "fixed_source": "Every synthetic FiniteWorld declares source A for both recorded positive occurrence sets; no changes to world operator/node order/threshold or source weights.",
+    "observation_contrast": {
+      "full": [
+        "A",
+        "B",
+        "C"
+      ],
+      "gated": [
+        "A",
+        "B"
+      ]
+    },
+    "canonical_world_ids": "mask_00 through mask_63 sorted by integer bit mask",
+    "real_original_wetland_anchor": {
+      "prior_source_bridge_fingerprint": "d59b26460b5ade76e96eb27d67b1c06a3743490513149d1bd9ecae9c4576e795",
+      "prior_source_bridge_CI_run_id": 43897745009,
+      "study": "Wenner et al. (2025), GEC 62 e03837; original CC BY 4.0 dataset DOI 10.5281/zenodo.15044115",
+      "frogcs_pinned_commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+      "source_original_surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+      "source_original_sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+      "real_observation_example": "orditoi-zsilip|Hyla arborea, visual positive 2024-03-24 original CSV line 6; dipnet positive 2024-05-30 line 368. Native actual wetland data are never mapped to A/B/C graph nodes."
+    }
+  },
+  "expected_by_combinatorial_count_not_fitted": {
+    "fixed_full_positive_ABC": {
+      "needs_edges": [
+        "A>B",
+        "A>C"
+      ],
+      "world_count": 16
+    },
+    "fixed_gated_positive_AB": {
+      "needs_edges": [
+        "A>B"
+      ],
+      "world_count": 32
+    },
+    "fixed_intersection": 16,
+    "fixed_lost_when_dropping_C": 0,
+    "fixed_gained_when_dropping_C": 16,
+    "fixed_compare_reconstructions_positive_added_contract": "Compare gated AB to full ABC; 16 of 32 eliminated, fraction 1/2.",
+    "self_excluded_full_ABC": {
+      "target_A_needs": "B>A OR C>A",
+      "target_B_needs": "A>B OR C>B",
+      "target_C_needs": "A>C OR B>C",
+      "count": "3 choices of each disjoint two-bit incoming group, hence 3^3 =27"
+    },
+    "self_excluded_gated_AB": {
+      "conditions": [
+        "A>B",
+        "B>A"
+      ],
+      "count": "2^4=16"
+    },
+    "self_excluded_intersection_count": 12,
+    "self_excluded_lost_when_dropping_C_count": 15,
+    "self_excluded_gained_when_dropping_C_count": 4,
+    "self_excluded_neither_set_count": 33,
+    "self_excluded_cardinality_full": 27,
+    "self_excluded_cardinality_gated": 16,
+    "example_hub_mask": 58,
+    "example_isolated_C_mask": 5,
+    "example_complete_mask": 63
+  },
+  "required_implementation_verification": [
+    "Compute actual native EOG reconstruct_compatible_worlds on both observed node sets with exactly the same declared 64-world universe; use compare_reconstructions ONLY for fixed source.",
+    "Compute actual native EOG evaluate_occurrence_rule_compatibility with fixed_source_ids=None for each graph/observation set, and explicitly verify result.source_policy=self_excluded and changed target-source ids.",
+    "Independently derive analytical compatibility using only the six directed-edge bits and one-step reachability, compare EVERY one of 64×2×2 native API decisions to independent graph predicates.",
+    "Assert exact fixed 16->32 compatible world-set expansion vs self-excluded 27->16 with 15 lost and 4 gained; report identity-level sets, not count alone.",
+    "Preserve graph operator and finite-world fingerprint across both observation sets, immutable node IDs/bit order, and all 64 witness graph IDs in CSV.",
+    "Source-authenticate real source-row method×calendar split positive example with original SHA256 but never interpret EOG A/B/C as real Hungarian sites, colonization routes or fitted dispersal probabilities.",
+    "Produce 64-row graph-by-source-policy CSV, single JSON with exact finite enumeration/counts, SHA256 fingerprint and CI source artifact.",
+    "No real ecological world estimates, occupancy probabilities, causal A/B/M, missing-is-absence, original unmarked refit, fourth EOG-WF scored endpoint or PR merge."
+  ],
+  "hard_stop": {
+    "no_biological_claim": true,
+    "post_exposure": true,
+    "source_method_effort_not_verified": true,
+    "natural_world_node_mapping": false,
+    "world_counts_only_synthetic": true,
+    "original_EOG_WF_closed_3_scored_31_scientific_STOP_3_admin_exclusions_unchanged": true,
+    "PR_697_remain_Draft_unmerged": true
+  }
+}
