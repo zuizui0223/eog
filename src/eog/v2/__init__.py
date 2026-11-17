@@ -56,6 +56,9 @@ _TRAVERSABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "OccurrenceRuleComparison",
     "evaluate_occurrence_rule_compatibility",
     "compare_occurrence_transition_rules",
+    "RetainedTargetSourceChange",
+    "OccurrenceEvidenceFilterAudit",
+    "audit_occurrence_evidence_filter",
 )
 
 _VALIDATION_EXPORTS: Final[tuple[str, ...]] = (
