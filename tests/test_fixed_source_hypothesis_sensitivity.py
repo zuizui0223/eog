@@ -86,6 +86,53 @@ def test_two_recorded_positive_nodes_have_different_source_possible_and_robust_c
             )
 
 
+def test_edge_density_permissiveness_prevents_overreading_source_robust_as_best():
+    # Exhaustive directed simple three-node graph stratum counts are
+    # a descriptive property of candidate *rule permissiveness*.
+    # A complete graph is universally compatible but not inferred true.
+    result=audit_fixed_source_hypotheses(
+        all_graphs(),NODES,
+        {"from_A":("A",),"from_B":("B",),"from_C":("C",)},
+        max_steps=1,
+    )
+    by_edges={}
+    for row in result.rule_status:
+        mask=int(row.rule_id.rsplit("_",1)[1])
+        edges=mask.bit_count()
+        expected_fraction=edges/6
+        assert row.operator_active_edge_fraction==pytest.approx(expected_fraction)
+        assert 0<=row.operator_mean_outgoing_mass<1
+        counts=by_edges.setdefault(edges,{
+            "all":0,"source_robust":0,"source_dependent":0,
+            "unsupported_under_all_declared_sources":0
+        })
+        counts["all"]+=1
+        counts[row.status]+=1
+    assert by_edges=={
+        0:{"all":1,"source_robust":0,"source_dependent":0,
+           "unsupported_under_all_declared_sources":1},
+        1:{"all":6,"source_robust":0,"source_dependent":0,
+           "unsupported_under_all_declared_sources":6},
+        2:{"all":15,"source_robust":0,"source_dependent":3,
+           "unsupported_under_all_declared_sources":12},
+        3:{"all":20,"source_robust":0,"source_dependent":12,
+           "unsupported_under_all_declared_sources":8},
+        4:{"all":15,"source_robust":0,"source_dependent":15,
+           "unsupported_under_all_declared_sources":0},
+        5:{"all":6,"source_robust":0,"source_dependent":6,
+           "unsupported_under_all_declared_sources":0},
+        6:{"all":1,"source_robust":1,"source_dependent":0,
+           "unsupported_under_all_declared_sources":0},
+    }
+    complete=next(x for x in result.rule_status if x.rule_id=="mask_63")
+    assert complete.status=="source_robust"
+    assert complete.operator_active_edge_fraction==1.0
+    assert complete.operator_mean_outgoing_mass==pytest.approx(2/3)
+    empty=next(x for x in result.rule_status if x.rule_id=="mask_00")
+    assert empty.operator_active_edge_fraction==0.0
+    assert empty.operator_mean_outgoing_mass==0.0
+
+
 def test_source_hypothesis_order_and_positive_node_order_do_not_change_fingerprint():
     ops=all_graphs()
     a=audit_fixed_source_hypotheses(
