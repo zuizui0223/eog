@@ -91,10 +91,14 @@ def audit_fixed_source_hypotheses(
     and union are over the DECLARED candidates only; they say nothing about
     unlisted historical sources or real ecological processes.
     """
-    if not operators:
+    if not isinstance(operators,Mapping) or not operators:
         raise ValueError("operators must declare at least one frozen rule")
-    if not source_hypotheses:
+    if not isinstance(source_hypotheses,Mapping) or not source_hypotheses:
         raise ValueError("source_hypotheses must contain at least one scenario")
+    if any(not isinstance(k,str) or not k.strip() for k in operators):
+        raise ValueError("candidate rule names must be nonblank strings")
+    if any(not isinstance(k,str) or not k.strip() for k in source_hypotheses):
+        raise ValueError("source hypothesis IDs must be nonblank strings")
     rule_items=tuple(sorted(operators.items()))
     node_ids=rule_items[0][1].node_ids
     if any(op.node_ids!=node_ids for _,op in rule_items):
@@ -102,6 +106,8 @@ def audit_fixed_source_hypotheses(
     if any(not isinstance(k,str) or not k.strip() for k,_ in rule_items):
         raise ValueError("candidate rule names must be nonblank strings")
 
+    if isinstance(positive_occurrence_ids,(str,bytes)):
+        raise ValueError("positive_occurrence_ids requires a sequence, not a string")
     positive_raw=tuple(positive_occurrence_ids)
     if (len(positive_raw)<2
         or any(not isinstance(x,str) or not x.strip() for x in positive_raw)
@@ -114,10 +120,9 @@ def audit_fixed_source_hypotheses(
     positive=tuple(x for x in node_ids if x in positive_set)
 
     declared=[]
+    seen_source_sets=set()
     for hypothesis_id,raw_sources in sorted(source_hypotheses.items()):
-        if not isinstance(hypothesis_id,str) or not hypothesis_id.strip():
-            raise ValueError("source hypothesis IDs must be nonblank strings")
-        if isinstance(raw_sources,(str,bytes)):
+        if isinstance(raw_sources,(str,bytes)) or raw_sources is None:
             raise ValueError("source hypotheses need a sequence of node IDs, not a string")
         nodes=tuple(raw_sources)
         if (not nodes
@@ -128,6 +133,9 @@ def audit_fixed_source_hypotheses(
                 "each fixed source hypothesis needs distinct source IDs in positive occurrences"
             )
         canonical=tuple(x for x in node_ids if x in set(nodes))
+        if canonical in seen_source_sets:
+            raise ValueError("distinct source hypothesis IDs must use distinct fixed source sets")
+        seen_source_sets.add(canonical)
         if len(canonical)>=len(positive):
             raise ValueError(
                 "each source hypothesis must leave a non-source occurrence target"
