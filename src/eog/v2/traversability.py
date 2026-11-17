@@ -27,11 +27,18 @@ _OCCURRENCE_EXPORTS: Final[tuple[str, ...]] = (
     "OccurrenceRuleComparison",
     "evaluate_occurrence_rule_compatibility",
     "compare_occurrence_transition_rules",
+    "RetainedTargetSourceChange",
+    "OccurrenceEvidenceFilterAudit",
+    "audit_occurrence_evidence_filter",
 )
 
 _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.ecological_traversability" for name in _TRAVERSABILITY_EXPORTS},
     **{name: "eog.v2.occurrence_constraints" for name in _OCCURRENCE_EXPORTS},
+    **{name: "eog.v2.occurrence_evidence_filter" for name in (
+        "RetainedTargetSourceChange", "OccurrenceEvidenceFilterAudit",
+        "audit_occurrence_evidence_filter",
+    )},
 }
 
 __all__ = [*_TRAVERSABILITY_EXPORTS, *_OCCURRENCE_EXPORTS]
