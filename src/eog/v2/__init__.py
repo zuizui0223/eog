@@ -65,6 +65,9 @@ _TRAVERSABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "audit_fixed_source_hypotheses",
     "FixedSourceHypothesisIdentifiability",
     "summarize_fixed_source_hypothesis_identifiability",
+    "DeclaredDirectedEdgeEvidence",
+    "DirectedNetworkEvidenceSourceProjection",
+    "audit_declared_directed_network_evidence",
 )
 
 _VALIDATION_EXPORTS: Final[tuple[str, ...]] = (
