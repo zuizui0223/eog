@@ -63,6 +63,8 @@ _TRAVERSABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "FixedSourceRuleStatus",
     "FixedSourceHypothesisSensitivity",
     "audit_fixed_source_hypotheses",
+    "FixedSourceHypothesisIdentifiability",
+    "summarize_fixed_source_hypothesis_identifiability",
 )
 
 _VALIDATION_EXPORTS: Final[tuple[str, ...]] = (
