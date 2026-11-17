@@ -30,6 +30,10 @@ _OCCURRENCE_EXPORTS: Final[tuple[str, ...]] = (
     "RetainedTargetSourceChange",
     "OccurrenceEvidenceFilterAudit",
     "audit_occurrence_evidence_filter",
+    "FixedSourceHypothesisResult",
+    "FixedSourceRuleStatus",
+    "FixedSourceHypothesisSensitivity",
+    "audit_fixed_source_hypotheses",
 )
 
 _EXPORT_MODULE: Final[dict[str, str]] = {
@@ -38,6 +42,10 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.v2.occurrence_evidence_filter" for name in (
         "RetainedTargetSourceChange", "OccurrenceEvidenceFilterAudit",
         "audit_occurrence_evidence_filter",
+    )},
+    **{name: "eog.v2.fixed_source_hypothesis_sensitivity" for name in (
+        "FixedSourceHypothesisResult", "FixedSourceRuleStatus",
+        "FixedSourceHypothesisSensitivity", "audit_fixed_source_hypotheses",
     )},
 }
 
