@@ -32,6 +32,27 @@ The proof is independent of numeric first-passage computation. For source A to r
 
 For positive nodes A/B only, the alternative single fixed sources A or B support 32 graphs each; 16 are shared, 48 are possible under either, 32 are source-dependent and 16 are unsupported under both.
 
+## Source-robust compatibility may simply reward permissive graphs
+
+The new output includes two **native EOG operator permissiveness diagnostics**, kept separate from source-hypothesis compatibility: `operator_active_edge_fraction` and `operator_mean_outgoing_mass`. The API does **not** use these to choose a winner or silently penalize/downgrade any rule.
+
+Across all 64 synthetic directed graphs with three alternative singleton sources, the exact source-hypothesis classes by **number of directed edges** are:
+
+| Directed edges (of six) | Number of graphs | All-source-compatible | Some-source-compatible | Compatible with none |
+| --- | ---: | ---: | ---: | ---: |
+| 0 | 1 | 0 | 0 | 1 |
+| 1 | 6 | 0 | 0 | 6 |
+| 2 | 15 | 0 | 3 | 12 |
+| 3 | 20 | 0 | 12 | 8 |
+| 4 | 15 | 0 | 15 | 0 |
+| 5 | 6 | 0 | 6 | 0 |
+| **6** | **1** | **1** | 0 | 0 |
+| **Total** | **64** | **1** | **36** | **27** |
+
+The **sole** compatible-under-all-sources rule is **the fully connected six-directed-edge graph** (active edge fraction **1.00**, mean outgoing transition mass **2/3** under the declared loss channel). Thus a robustness label can reflect **excessive model permissiveness**, not independent evidence that this graph best explains true ecological history. The existing EOG comparison contract already forbids treating compatibility as an automatic winner score; this new API makes that limitation inspectable per candidate rule.
+
+This edge-density table is an exact partition of the *already exposed synthetic 64-graph universe* and is not a fresh ecological hypothesis test, independent replication, or empirical model selection.
+
 **This is not self-excluded peer-source compatibility**. In the earlier exact three-node EOG study self-excluded diagnostics on all A/B/C positives supported **27** of the 64 graphs. That is NOT the same quantity as 37 graphs compatible under at least one alternative declared singleton source. The two source policies answer different questions.
 
 ## Existing EOG work not repeated
