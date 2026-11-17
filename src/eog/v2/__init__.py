@@ -59,6 +59,10 @@ _TRAVERSABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "RetainedTargetSourceChange",
     "OccurrenceEvidenceFilterAudit",
     "audit_occurrence_evidence_filter",
+    "FixedSourceHypothesisResult",
+    "FixedSourceRuleStatus",
+    "FixedSourceHypothesisSensitivity",
+    "audit_fixed_source_hypotheses",
 )
 
 _VALIDATION_EXPORTS: Final[tuple[str, ...]] = (
