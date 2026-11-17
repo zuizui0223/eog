@@ -286,3 +286,159 @@ def audit_fixed_source_hypotheses(
         coverage_certificate=cert,
         fingerprint=_digest(payload)
     )
+
+
+@dataclass(frozen=True)
+class FixedSourceHypothesisIdentifiability:
+    """Source-hypothesis projection of compatible frozen rule×source pairs.
+
+    Uniqueness conditional on one graph does NOT imply globally identifiable
+    historical origin when the frozen graph/rule itself remains uncertain.
+    This is a finite declared-rule/source hypothesis combinatorial audit only.
+    """
+
+    candidate_rule_count: int
+    declared_source_hypothesis_ids: tuple[str, ...]
+    source_support_cardinality_counts: tuple[tuple[int, int], ...]
+    uniquely_source_supported_rule_ids: tuple[str, ...]
+    source_hypotheses_unique_given_rule_counts: tuple[tuple[str, int], ...]
+    compatible_rule_source_assignments: tuple[tuple[str, str], ...]
+    compatible_rule_source_assignment_count: int
+    possible_source_hypotheses_after_marginalizing_rule: tuple[str, ...]
+    source_hypothesis_identifiability_status: str
+    historical_origin_identified: bool
+    graph_truth_or_source_prior_estimated: bool
+    source_state_scope: str
+    parent_audit_fingerprint: str
+    coverage_certificate: str
+    fingerprint: str
+
+
+def summarize_fixed_source_hypothesis_identifiability(
+    audit: FixedSourceHypothesisSensitivity,
+) -> FixedSourceHypothesisIdentifiability:
+    """Separate graph-CONDITIONAL source uniqueness from rule-MARGINAL uniqueness.
+
+    Pure post-processing of an existing complete, named EOG compatibility
+    ledger. No extra source candidates, model fits, ecological assumptions,
+    posterior weights or data sources are introduced.
+
+    The test asks whether source hypotheses remain distinguishable AFTER
+    projecting all compatible (candidate rule, source hypothesis) pairs to
+    source labels, rather than assuming one rule is true without evidence.
+    """
+    if not isinstance(audit, FixedSourceHypothesisSensitivity):
+        raise TypeError("audit must be FixedSourceHypothesisSensitivity")
+    hypothesis_ids = tuple(h.hypothesis_id for h in audit.source_hypotheses)
+    rule_ids = tuple(r.rule_id for r in audit.rule_status)
+    if not hypothesis_ids or len(set(hypothesis_ids)) != len(hypothesis_ids):
+        raise ValueError("audited source hypothesis IDs must be unique and nonempty")
+    if not rule_ids or len(set(rule_ids)) != len(rule_ids):
+        raise ValueError("audited rule IDs must be unique and nonempty")
+    if tuple(rule_id for rule_id, _ in audit.rule_operator_fingerprints) != rule_ids:
+        raise ValueError("audited candidate rule/fingerprint identities are inconsistent")
+
+    hyp_compatible: dict[str, set[str]] = {}
+    for hypothesis in audit.source_hypotheses:
+        positive = set(hypothesis.compatible_rule_ids)
+        negative = set(hypothesis.incompatible_rule_ids)
+        if (positive & negative or positive | negative != set(rule_ids)
+                or len(positive) != len(hypothesis.compatible_rule_ids)
+                or len(negative) != len(hypothesis.incompatible_rule_ids)):
+            raise ValueError("audited source hypothesis rule compatibility partition inconsistent")
+        hyp_compatible[hypothesis.hypothesis_id] = positive
+
+    cardinality_counts = [0] * (len(hypothesis_ids) + 1)
+    unique_by_hypothesis = {h: 0 for h in hypothesis_ids}
+    unique_rule_ids = []
+    compatible_pairs = []
+    robust, partial, excluded, possible = [], [], [], []
+    for row in audit.rule_status:
+        supported = tuple(
+            h for h in hypothesis_ids if row.rule_id in hyp_compatible[h]
+        )
+        unsupported = tuple(h for h in hypothesis_ids if h not in supported)
+        if (row.compatible_hypothesis_ids != supported
+                or row.incompatible_hypothesis_ids != unsupported):
+            raise ValueError("audited rule source-hypothesis support identities inconsistent")
+        n = len(supported)
+        cardinality_counts[n] += 1
+        for hypothesis_id in supported:
+            compatible_pairs.append((row.rule_id, hypothesis_id))
+        if n == 1:
+            unique_rule_ids.append(row.rule_id)
+            unique_by_hypothesis[supported[0]] += 1
+        if n == len(hypothesis_ids):
+            expected = "source_robust"
+            robust.append(row.rule_id)
+            possible.append(row.rule_id)
+        elif n:
+            expected = "source_dependent"
+            partial.append(row.rule_id)
+            possible.append(row.rule_id)
+        else:
+            expected = "unsupported_under_all_declared_sources"
+            excluded.append(row.rule_id)
+        if row.status != expected:
+            raise ValueError("audited candidate rule source-status label inconsistent")
+
+    if (
+        tuple(robust) != audit.source_robust_rule_ids
+        or tuple(partial) != audit.source_dependent_rule_ids
+        or tuple(possible) != audit.source_possible_rule_ids
+        or tuple(excluded)
+        != audit.source_impossible_under_declared_hypotheses_rule_ids
+    ):
+        raise ValueError("audited aggregate rule-source hypothesis identities inconsistent")
+
+    projected = tuple(
+        h for h in hypothesis_ids
+        if any(h == hypothesis for _, hypothesis in compatible_pairs)
+    )
+    if not projected:
+        status = "declared_rule_source_universe_falsified"
+    elif len(hypothesis_ids) == 1:
+        status = "single_candidate_declared_not_an_identification_test"
+    elif len(projected) == 1:
+        status = "one_source_supported_within_declared_rule_and_source_universe"
+    else:
+        status = "multiple_sources_possible_after_rule_marginalization"
+
+    certificate = "exhaustive_projection_of_declared_frozen_rule_source_hypothesis_pairs"
+    payload = {
+        "candidate_rule_count": len(rule_ids),
+        "declared_source_hypothesis_ids": hypothesis_ids,
+        "source_support_cardinality_counts": tuple(enumerate(cardinality_counts)),
+        "uniquely_source_supported_rule_ids": unique_rule_ids,
+        "source_hypotheses_unique_given_rule_counts": tuple(
+            (h, unique_by_hypothesis[h]) for h in hypothesis_ids
+        ),
+        "compatible_rule_source_assignments": compatible_pairs,
+        "compatible_rule_source_assignment_count": len(compatible_pairs),
+        "possible_source_hypotheses_after_marginalizing_rule": projected,
+        "source_hypothesis_identifiability_status": status,
+        "historical_origin_identified": False,
+        "graph_truth_or_source_prior_estimated": False,
+        "source_state_scope": "static_declared_graph_conditional_vs_graph_marginal_source",
+        "parent_audit_fingerprint": audit.fingerprint,
+        "coverage_certificate": certificate,
+    }
+    return FixedSourceHypothesisIdentifiability(
+        candidate_rule_count=len(rule_ids),
+        declared_source_hypothesis_ids=hypothesis_ids,
+        source_support_cardinality_counts=tuple(enumerate(cardinality_counts)),
+        uniquely_source_supported_rule_ids=tuple(unique_rule_ids),
+        source_hypotheses_unique_given_rule_counts=tuple(
+            (h, unique_by_hypothesis[h]) for h in hypothesis_ids
+        ),
+        compatible_rule_source_assignments=tuple(compatible_pairs),
+        compatible_rule_source_assignment_count=len(compatible_pairs),
+        possible_source_hypotheses_after_marginalizing_rule=projected,
+        source_hypothesis_identifiability_status=status,
+        historical_origin_identified=False,
+        graph_truth_or_source_prior_estimated=False,
+        source_state_scope="static_declared_graph_conditional_vs_graph_marginal_source",
+        parent_audit_fingerprint=audit.fingerprint,
+        coverage_certificate=certificate,
+        fingerprint=_digest(payload),
+    )
