@@ -36,6 +36,9 @@ _OCCURRENCE_EXPORTS: Final[tuple[str, ...]] = (
     "audit_fixed_source_hypotheses",
     "FixedSourceHypothesisIdentifiability",
     "summarize_fixed_source_hypothesis_identifiability",
+    "DeclaredDirectedEdgeEvidence",
+    "DirectedNetworkEvidenceSourceProjection",
+    "audit_declared_directed_network_evidence",
 )
 
 _EXPORT_MODULE: Final[dict[str, str]] = {
@@ -50,6 +53,11 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         "FixedSourceHypothesisSensitivity", "audit_fixed_source_hypotheses",
         "FixedSourceHypothesisIdentifiability",
         "summarize_fixed_source_hypothesis_identifiability",
+    )},
+    **{name: "eog.v2.declared_network_edge_evidence" for name in (
+        "DeclaredDirectedEdgeEvidence",
+        "DirectedNetworkEvidenceSourceProjection",
+        "audit_declared_directed_network_evidence",
     )},
 }
 
