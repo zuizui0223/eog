@@ -1,0 +1,65 @@
+{
+  "schema": "eog.occurrence_source_policy_guard_v1.source_semantics_review",
+  "status": "POST_REVIEW_EPISTEMIC_SCOPE_CLARIFICATION_NOT_NEW_DATA_OR_EMPIRICAL_ENDPOINT",
+  "reason": "Candidate dataset transport qualification, current-state observed source labels and independently established historical origins answer different questions; do not let API source_policy selection silently imply biological origin.",
+  "source_evidence_cases": [
+    {
+      "id": "glanville_annual_metapopulation",
+      "authority": "validation/glanville_eogwf/README.md and src/eog/v2/sequential_world_forecast.py",
+      "study": "Melitaea cinxia (Åland Islands), annual patch census, 1999–2018",
+      "source_role": "CURRENT_REALISED_OBSERVED_SOURCE_STATE_PER_TRANSITION",
+      "scientifically_defensible_scope": "Conditionally hold previous-year observed occupied patch set as current source candidates for one frozen annual rule transition; update source state next year without changing rule identity",
+      "NOT_established": [
+        "independent historical founding ancestors",
+        "perfect detection of annual biological occupancy",
+        "uniform added predictive benefit of exact world-label head"
+      ],
+      "prior_frozen_result": "Heldout exact-world-label added predictive value adverse; not an EOG-WF rescoring opportunity",
+      "appropriate_module": "eog.v2.sequential_world_forecast",
+      "static_evidence_filter_API_sufficient_for_sequential_forecast": false
+    },
+    {
+      "id": "algar_restoration_v3_preresponse",
+      "authority": "validation/algar_restoration_v3_preresponse/authoritative_result.json and preresponse_contract.json",
+      "source_role": "SOURCE_GEOMETRY_AND_OBSERVATION_DESIGN_QUALIFIED_NOT_BIOLOGICAL_ORIGIN",
+      "source_qualified_node_count": 38,
+      "deployment_count": 114,
+      "scored_candidate_units": 75,
+      "focal_species_selected": false,
+      "response_bytes_opened": 0,
+      "predictive_outcome_access_allowed": false,
+      "historical_founders_independently_identified": false,
+      "appropriate_next_stage": "REMAIN_RESPONSE_BLIND_UNTIL_FROZEN_FOCAL_ENDPOINT_AND_AUTHORISATION; existing EOG-WF candidate hunting hard stop means no new endpoint is opened here"
+    },
+    {
+      "id": "hungary_wetland_amphibian_original_survey",
+      "authority": "docs/wetland_amphibian_source_qualification_v1.md and Draft PR #697 native method/date audits",
+      "source_role": "SOURCE_RECORD_IDENTITY_AND_METHOD_DATE_POSITIVE_WITNESSES_ONLY",
+      "source_structure_status": "SOURCE_STRUCTURE_ONLY_NOT_OCCUPANCY_READY",
+      "original_method_effort_independently_calibrated": false,
+      "biological_absences_independently_verified": false,
+      "historical_founders_independently_identified": false,
+      "appropriate_source_policy": "self_excluded diagnostic only IF chosen scientific estimand supports this limited peer-source interpretation; never claim directional historical colonisation",
+      "source_absence_is_true_absence": false
+    }
+  ],
+  "new_API_contract": {
+    "path": "src/eog/v2/occurrence_evidence_filter.py",
+    "policy_required": "source_policy explicitly either fixed or self_excluded",
+    "fixed_mode": "requires explicit fixed_source_ids, unchanged across full/filtered positive evidence, no claim of historical origin",
+    "self_excluded_mode": "forbids fixed_source_ids, records changed peer sources and gained/lost identities; no monotonicity claim",
+    "time_varying_mode": "out_of_scope; use eog.v2.sequential_world_forecast",
+    "evidence_status_in_result": "historical_origin_evidence_evaluated=false; source_state_scope=single_declared_static_observation_filter_not_temporal_sequence",
+    "science_claim": "exact finite synthetic candidate-rule compatibility only"
+  },
+  "change_process": {
+    "original_protocol": "validation/occurrence_source_policy_guard_v1/protocol.json",
+    "amendment_type": "POST_IMPLEMENTATION_REVIEW_HARDENING; explicitly not a retroactive preregistration",
+    "new_EOG_WF_predictive_endpoint": false,
+    "original_frozen_EOG_WF_scored": 3,
+    "original_frozen_EOG_WF_scientific_STOP": 31,
+    "original_frozen_EOG_WF_administrative_exclusions": 3,
+    "PR_698_remains_Draft_unmerged": true,
+    "PR_697_remains_Draft_unmerged": true
+  }
+}
