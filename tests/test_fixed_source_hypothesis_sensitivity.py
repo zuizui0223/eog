@@ -127,6 +127,8 @@ def test_multi_source_alternative_is_not_equivalent_to_union_of_single_source_sc
     ({"all_three":("A","B","C")}, "non-source occurrence target"),
     ({"string_not_sequence":"A"}, "sequence of node IDs"),
     ({"":("A",)}, "nonblank strings"),
+    ({"duplicate_1":("A",),"duplicate_2":("A",)}, "distinct fixed source sets"),
+    ({"none_source":None}, "sequence of node IDs"),
 ])
 def test_unqualified_source_hypotheses_fail_closed(hypotheses,expected):
     with pytest.raises(ValueError,match=expected):
@@ -148,6 +150,10 @@ def test_unfrozen_operator_node_universe_and_invalid_positive_roster_are_rejecte
     with pytest.raises(ValueError,match="positive_occurrence_ids"):
         audit_fixed_source_hypotheses(
             all_graphs(),("A","A","B"),{"source_A":("A",)},max_steps=1,
+        )
+    with pytest.raises(ValueError,match="sequence, not a string"):
+        audit_fixed_source_hypotheses(
+            all_graphs(),"ABC",{"source_A":("A",)},max_steps=1,
         )
     with pytest.raises(ValueError,match="max_steps"):
         audit_fixed_source_hypotheses(
