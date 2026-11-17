@@ -13,7 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
-from typing import Mapping, Sequence
+from typing import Literal, Mapping, Sequence
 
 from ..dynamic_island_reachability import DynamicTransitionOperator
 from .occurrence_constraints import compare_occurrence_transition_rules
@@ -47,6 +47,8 @@ class OccurrenceEvidenceFilterAudit:
     """
 
     source_policy: str
+    source_state_scope: str
+    historical_origin_evidence_evaluated: bool
     full_occurrence_ids: tuple[str, ...]
     filtered_occurrence_ids: tuple[str, ...]
     removed_occurrence_ids: tuple[str, ...]
@@ -74,6 +76,7 @@ def audit_occurrence_evidence_filter(
     full_occurrence_ids: Sequence[str],
     filtered_occurrence_ids: Sequence[str],
     *,
+    source_policy: Literal["fixed", "self_excluded"],
     max_steps: int,
     fixed_source_ids: Sequence[str] | None = None,
     support_floor: float = 1e-12,
@@ -87,6 +90,15 @@ def audit_occurrence_evidence_filter(
     construction. Self-excluded peers must never be compared using EOG's
     fixed-source world reconstruction comparator.
     """
+    if source_policy not in ("fixed", "self_excluded"):
+        raise ValueError(
+            "source_policy must be explicitly 'fixed' or 'self_excluded'; "
+            "time-varying current sources require sequential_world_forecast"
+        )
+    if source_policy == "fixed" and fixed_source_ids is None:
+        raise ValueError("fixed source_policy requires explicit fixed_source_ids")
+    if source_policy == "self_excluded" and fixed_source_ids is not None:
+        raise ValueError("self_excluded source_policy forbids fixed_source_ids")
     if not operators:
         raise ValueError("operators must contain a frozen candidate rule universe")
     canonical_nodes = next(iter(operators.values())).node_ids
@@ -107,8 +119,7 @@ def audit_occurrence_evidence_filter(
     if not set(filtered) < set(full):
         raise ValueError("filtered_occurrence_ids must be a proper subset of the full positives")
 
-    if fixed_source_ids is None:
-        source_policy = "self_excluded"
+    if source_policy == "self_excluded":
         fixed_sources = None
     else:
         src = tuple(str(x) for x in fixed_source_ids)
@@ -119,7 +130,6 @@ def audit_occurrence_evidence_filter(
         fixed_sources = tuple(node for node in canonical_nodes if node in set(src))
         if len(filtered) <= len(fixed_sources):
             raise ValueError("fixed-source comparison needs at least one surviving non-source target")
-        source_policy = "fixed"
 
     before = compare_occurrence_transition_rules(
         operators, full, max_steps=max_steps,
@@ -196,6 +206,8 @@ def audit_occurrence_evidence_filter(
     certificate = "frozen_candidate_operators_common_source_policy_and_numeric_contract"
     payload = {
         "source_policy": source_policy,
+        "source_state_scope": "single_declared_static_observation_filter_not_temporal_sequence",
+        "historical_origin_evidence_evaluated": False,
         "full": full, "filtered": filtered,
         "removed": tuple(node for node in full if node not in filtered),
         "operator_fingerprints": fingerprints,
@@ -228,6 +240,8 @@ def audit_occurrence_evidence_filter(
     }
     return OccurrenceEvidenceFilterAudit(
         source_policy=source_policy,
+        source_state_scope="single_declared_static_observation_filter_not_temporal_sequence",
+        historical_origin_evidence_evaluated=False,
         full_occurrence_ids=full,
         filtered_occurrence_ids=filtered,
         removed_occurrence_ids=tuple(node for node in full if node not in filtered),
