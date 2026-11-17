@@ -41,12 +41,14 @@ class FixedSourceHypothesisResult:
 
 @dataclass(frozen=True)
 class FixedSourceRuleStatus:
-    """Compatibility of one unchanged candidate rule across source choices."""
+    """Support across source choices plus native operator permissiveness."""
 
     rule_id: str
     compatible_hypothesis_ids: tuple[str, ...]
     incompatible_hypothesis_ids: tuple[str, ...]
     status: str
+    operator_mean_outgoing_mass: float
+    operator_active_edge_fraction: float
 
 
 @dataclass(frozen=True)
@@ -145,6 +147,7 @@ def audit_fixed_source_hypotheses(
     outcomes=[]
     per_rule={}
     fingerprints=None
+    operator_permissiveness={}
     for hypothesis_id,source_ids in declared:
         result=compare_occurrence_transition_rules(
             operators,positive,
@@ -158,8 +161,21 @@ def audit_fixed_source_hypotheses(
         )
         if fingerprints is None:
             fingerprints=current
+            operator_permissiveness={
+                row.rule_id:(
+                    row.operator_mean_outgoing_mass,
+                    row.operator_active_edge_fraction,
+                )
+                for row in result.rule_results
+            }
         elif current!=fingerprints:
             raise RuntimeError("candidate rule identity changed across source hypotheses")
+        elif any(
+            (row.operator_mean_outgoing_mass,row.operator_active_edge_fraction)
+            !=operator_permissiveness[row.rule_id]
+            for row in result.rule_results
+        ):
+            raise RuntimeError("operator permissiveness changed across source hypotheses")
         if any(
             row.source_policy!="fixed" or row.fixed_source_ids!=source_ids
             for row in result.rule_results
@@ -211,7 +227,9 @@ def audit_fixed_source_hypotheses(
             rule_id=rule_id,
             compatible_hypothesis_ids=supported_ids,
             incompatible_hypothesis_ids=rejected_ids,
-            status=status
+            status=status,
+            operator_mean_outgoing_mass=operator_permissiveness[rule_id][0],
+            operator_active_edge_fraction=operator_permissiveness[rule_id][1],
         ))
     if len(robust)+len(contingent)+len(excluded)!=len(fingerprints):
         raise RuntimeError("candidate rule/source-hypothesis partition incomplete")
@@ -235,7 +253,9 @@ def audit_fixed_source_hypotheses(
                 "rule_id":x.rule_id,
                 "compatible_hypothesis_ids":x.compatible_hypothesis_ids,
                 "incompatible_hypothesis_ids":x.incompatible_hypothesis_ids,
-                "status":x.status
+                "status":x.status,
+                "operator_mean_outgoing_mass":x.operator_mean_outgoing_mass,
+                "operator_active_edge_fraction":x.operator_active_edge_fraction,
             }for x in rule_status
         ],
         "robust":robust,
