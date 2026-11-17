@@ -34,6 +34,8 @@ _OCCURRENCE_EXPORTS: Final[tuple[str, ...]] = (
     "FixedSourceRuleStatus",
     "FixedSourceHypothesisSensitivity",
     "audit_fixed_source_hypotheses",
+    "FixedSourceHypothesisIdentifiability",
+    "summarize_fixed_source_hypothesis_identifiability",
 )
 
 _EXPORT_MODULE: Final[dict[str, str]] = {
@@ -46,6 +48,8 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.v2.fixed_source_hypothesis_sensitivity" for name in (
         "FixedSourceHypothesisResult", "FixedSourceRuleStatus",
         "FixedSourceHypothesisSensitivity", "audit_fixed_source_hypotheses",
+        "FixedSourceHypothesisIdentifiability",
+        "summarize_fixed_source_hypothesis_identifiability",
     )},
 }
 
