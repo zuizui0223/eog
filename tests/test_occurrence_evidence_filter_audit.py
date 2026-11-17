@@ -67,11 +67,14 @@ def test_public_and_historical_lazy_exports_are_single_actual_implementation():
 
 def test_fixed_source_filter_keeps_declared_source_and_can_only_gain_rules():
     result=audit_occurrence_evidence_filter(
+            source_policy="fixed",
         selected_three(), ("C","A","B"), ("B","A"),
         fixed_source_ids=("A",), max_steps=1
     )
     assert isinstance(result,OccurrenceEvidenceFilterAudit)
     assert result.source_policy=="fixed"
+    assert result.source_state_scope=="single_declared_static_observation_filter_not_temporal_sequence"
+    assert result.historical_origin_evidence_evaluated is False
     assert result.full_occurrence_ids==("A","B","C")
     assert result.filtered_occurrence_ids==("A","B")
     assert result.removed_occurrence_ids==("C",)
@@ -88,9 +91,11 @@ def test_fixed_source_filter_keeps_declared_source_and_can_only_gain_rules():
 
 def test_self_exclusion_reports_both_lost_and_gained_rules_not_count_only():
     result=audit_occurrence_evidence_filter(
+            source_policy="self_excluded",
         selected_three(), ("A","B","C"), ("A","B"), max_steps=1
     )
     assert result.source_policy=="self_excluded"
+    assert result.historical_origin_evidence_evaluated is False
     assert result.full_compatible_rule_ids==("complete","hub")
     assert result.filtered_compatible_rule_ids==("complete","isolated_C")
     assert result.shared_compatible_rule_ids==("complete",)
@@ -111,10 +116,12 @@ def test_self_exclusion_reports_both_lost_and_gained_rules_not_count_only():
 def test_all_64_native_rules_and_both_source_policies_preserve_exact_membership():
     operators=all_64()
     fixed=audit_occurrence_evidence_filter(
+            source_policy="fixed",
         operators, ("A","B","C"), ("A","B"),
         fixed_source_ids=("A",), max_steps=1
     )
     peer=audit_occurrence_evidence_filter(
+            source_policy="self_excluded",
         operators, ("A","B","C"), ("A","B"), max_steps=1
     )
     assert (len(fixed.full_compatible_rule_ids),
@@ -141,9 +148,11 @@ def test_all_64_native_rules_and_both_source_policies_preserve_exact_membership(
 def test_fingerprints_reproducible_and_operator_mapping_order_immaterial():
     rules=selected_three()
     a=audit_occurrence_evidence_filter(
+            source_policy="self_excluded",
         rules, ("A","B","C"), ("A","B"),max_steps=1
     )
     b=audit_occurrence_evidence_filter(
+            source_policy="self_excluded",
         dict(reversed(tuple(rules.items()))),
         ("C","A","B"), ("B","A"),max_steps=1
     )
@@ -164,6 +173,7 @@ def test_fingerprints_reproducible_and_operator_mapping_order_immaterial():
 def test_illegal_occurrence_filters_fail_closed(full,filtered,match):
     with pytest.raises(ValueError,match=match):
         audit_occurrence_evidence_filter(
+            source_policy="self_excluded",
             selected_three(),full,filtered,max_steps=1
         )
 
@@ -172,11 +182,13 @@ def test_fixed_source_id_removed_or_all_remaining_nodes_sources_fails_closed():
     rules=selected_three()
     with pytest.raises(ValueError,match="may not remove fixed_source_ids"):
         audit_occurrence_evidence_filter(
+            source_policy="fixed",
             rules,("A","B","C"),("B","C"),
             fixed_source_ids=("A",),max_steps=1
         )
     with pytest.raises(ValueError,match="surviving non-source target"):
         audit_occurrence_evidence_filter(
+            source_policy="fixed",
             rules,("A","B","C"),("A","B"),
             fixed_source_ids=("A","B"),max_steps=1
         )
@@ -187,18 +199,47 @@ def test_changed_operator_node_universe_and_bad_numeric_contract_fail_closed():
     rules["changed"]=make_operator((("A","B"),),nodes=("A","B"))
     with pytest.raises(ValueError,match="same node universe"):
         audit_occurrence_evidence_filter(
+            source_policy="self_excluded",
             rules,("A","B","C"),("A","B"),max_steps=1
         )
     with pytest.raises(ValueError,match="operators"):
         audit_occurrence_evidence_filter(
+            source_policy="self_excluded",
             {},("A","B","C"),("A","B"),max_steps=1
         )
     with pytest.raises(ValueError,match="max_steps"):
         audit_occurrence_evidence_filter(
+            source_policy="self_excluded",
             selected_three(),("A","B","C"),("A","B"),max_steps=0
         )
     with pytest.raises(ValueError,match="support_floor"):
         audit_occurrence_evidence_filter(
+            source_policy="self_excluded",
             selected_three(),("A","B","C"),("A","B"),
             max_steps=1,support_floor=0.0
+        )
+
+
+
+def test_policy_must_be_explicit_even_without_fixed_sources():
+    with pytest.raises(TypeError,match="source_policy"):
+        audit_occurrence_evidence_filter(
+            selected_three(),("A","B","C"),("A","B"),max_steps=1
+        )
+
+
+@pytest.mark.parametrize("policy,fixed_ids,expected",[
+    ("fixed",None,"requires explicit fixed_source_ids"),
+    ("self_excluded",("A",),"forbids fixed_source_ids"),
+    ("current_state",None,"sequential_world_forecast"),
+    ("historical_auto_detect",("A",),"source_policy must be explicitly"),
+    ("",None,"source_policy must be explicitly"),
+])
+def test_source_policy_crosswiring_and_temporal_forecast_are_rejected(policy,fixed_ids,expected):
+    with pytest.raises(ValueError,match=expected):
+        audit_occurrence_evidence_filter(
+            selected_three(),("A","B","C"),("A","B"),
+            max_steps=1,
+            source_policy=policy,
+            fixed_source_ids=fixed_ids,
         )
