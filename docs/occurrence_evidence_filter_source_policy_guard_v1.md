@@ -25,8 +25,9 @@ result = audit_occurrence_evidence_filter(
     frozen_candidate_operators,
     ("A", "B", "C"),
     ("A", "B"),
+    source_policy="self_excluded",  # MUST be explicit; never auto-inferred
     max_steps=1,
-    fixed_source_ids=None,  # self-excluded peers; omit for default
+    fixed_source_ids=None,  # explicit self-excluded peers
 )
 print(result.source_policy)
 print(result.lost_compatible_rule_ids)
@@ -34,9 +35,19 @@ print(result.gained_compatible_rule_ids)
 print(result.changed_retained_target_sources)
 ```
 
+**Explicit source-policy declaration (pre-merge hardening):** The new API now **requires** `source_policy="fixed"` together with explicit `fixed_source_ids`, or `source_policy="self_excluded"` with **no fixed source IDs**. It refuses an omitted policy, a mismatched combination, and a mistaken `"current_state"` or `"historical_auto_detect"` selector. This prevents a caller from silently falling back to self-exclusion when a historical/fixed-source declaration was missing. These constraints are extra guards on this new opt-in API; the preexisting EOG APIs retain their original signatures.
+
+**Source evidence is NOT proven by selection:** Even `source_policy="fixed", fixed_source_ids=(...)` only declares a source condition *for the chosen comparison*. The audit does **not** inspect historical genealogy, source population existence, temporal precedence, baseline trap occupancy, or independent archival provenance. Its `historical_origin_evidence_evaluated=False` and `source_state_scope="single_declared_static_observation_filter_not_temporal_sequence"` fields make this explicit. There is no auto-detection or certification of actual historical ancestors.
+
+**Time-varying sources are an existing different API:** `eog.v2.sequential_world_forecast` allows the **realized current source state** to be updated once per transition while the candidate transition *rule* identity stays frozen. The already completed [Åland Glanville fritillary EOG-WF validation](../validation/glanville_eogwf/README.md) did exactly that for annual patch-state prediction, and returned adverse predictive added value for the exact-world-label head. That is not evidence that source patches were historical founders. A single static observation-filter audit must not be substituted for sequential, time-cutoff-locked updating.
+
+**Response-blind source qualification is also different from historical source proof:** The existing [Algar v3 pre-response result](../validation/algar_restoration_v3_preresponse/authoritative_result.json) records a qualified 38-node / 114-deployment, three-context data design, yet `focal_species_selected=false` and `predictive_outcome_access_allowed=false`. Its candidate/transport adequacy does **not** establish ancestral origins or license outcome access. The archived [wetland source qualification](../docs/wetland_amphibian_source_qualification_v1.md) is `SOURCE_STRUCTURE_ONLY_NOT_OCCUPANCY_READY` and supplies no independently authenticated historical source. No search for another fresh EOG-WF endpoint follows from these checks.
+
 The result is a frozen `OccurrenceEvidenceFilterAudit` dataclass containing **rule identity lists**, not only totals: compatible before, compatible after, retained, lost, gained, their membership-change label, rule/operator fingerprints, removed observed nodes, numeric settings, both EOG native comparison fingerprints and every retained target whose source peers changed (with source IDs and original/comparison first-passage support).
 
 The following protections fail closed:
+
+- **Source policy must be explicitly named**; fixed IDs are mandatory only with `"fixed"`, and forbidden with `"self_excluded"`. One-off fixed sources are declarations, not automatic validation of historical ancestry. Dynamic current sources belong to sequential forecasting.
 
 - The filtered set must be a **proper subset** of full positive observations; both must contain at least two distinct valid node IDs. No unknown or repeated source nodes.
 - Candidate operators must share the same complete node universe/order, and the **same mapping of operator objects** is used to compute before and after. The source policy, numerical threshold, floor and maximum steps are also reused from **one call**, not independently supplied precomputed results.
