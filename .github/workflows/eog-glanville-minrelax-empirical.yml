@@ -1,0 +1,49 @@
+name: Glanville exploratory minrelax 2007-2012
+
+on:
+  pull_request:
+    paths:
+      - "validation/glanville_minrelax_empirical_v1/**"
+      - "benchmarks/glanville_minrelax_empirical_v1.py"
+      - "tests/test_glanville_minrelax_empirical_v1.py"
+      - ".github/workflows/eog-glanville-minrelax-empirical.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exploratory-minimum-relaxation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Freeze and synthetic guard tests
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_glanville_minrelax_empirical_v1.py
+      - name: One-shot SHA-verified exploratory ecological analysis
+        run: |
+          python benchmarks/glanville_minrelax_empirical_v1.py \
+            --protocol validation/glanville_minrelax_empirical_v1/protocol_v1.json \
+            --output results/glanville_minrelax_empirical_v1/result.json
+          python - <<'PY'
+          import json
+          p="results/glanville_minrelax_empirical_v1/result.json"
+          r=json.load(open(p))
+          assert r["EOG_WF_new_endpoints"] == 0
+          assert r["models_fit"] == 0
+          print("SCIENCE_STATUS="+r["status"])
+          print("COVERED_YEAR_POLICY_PANELS="+str(len(r.get("annual_minimum_relaxation",[]))))
+          PY
+      - name: Upload aggregates only, never source archive or identifiers
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: glanville-exploratory-absolute-minrelax-v1
+          path: results/glanville_minrelax_empirical_v1/result.json
+          if-no-files-found: error
+          retention-days: 30
