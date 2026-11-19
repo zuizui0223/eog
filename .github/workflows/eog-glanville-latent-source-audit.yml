@@ -1,12 +1,7 @@
 name: EOG Glanville latent source and detection ambiguity audit
 
+# Pinned exploratory outcome receipt obtained; no automatic post-outcome reexecution.
 on:
-  pull_request:
-    paths:
-      - "benchmarks/glanville_latent_source_audit_v1.py"
-      - "tests/test_glanville_latent_source_audit_v1.py"
-      - "validation/glanville_latent_source_audit_v1/**"
-      - ".github/workflows/eog-glanville-latent-source-audit.yml"
   workflow_dispatch:
 
 permissions:

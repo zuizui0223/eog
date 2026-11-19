@@ -1,0 +1,388 @@
+{
+  "schema_version": 1,
+  "status": "post-exposure_aggregate_only_digest_bound",
+  "original_source_artifact_id": 14526041364,
+  "original_science_status": "EXPLORATORY_LATENT_SOURCE_COMPATIBILITY_AUDIT_PASSED",
+  "original_source_result_fingerprint_without_self_hash": "1329713b58fc8dc9103ae9a7b18c3d5536b7db90b8070f6d1f65f18164a8e017",
+  "original_failed_ci_wrapper_run": 44514892720,
+  "previous_scientific_stop_run": 44513808990,
+  "frozen_parent_strict_replay_cells": 48,
+  "full_matrix_panels": 96,
+  "primary_same_patch_policy": "exclude_same_patch",
+  "primary_radii_km": [
+    2,
+    5
+  ],
+  "primary_ordinal_host_tolerances": [
+    1,
+    3
+  ],
+  "budget_per_year_candidate_pools": [
+    0,
+    1,
+    5,
+    10
+  ],
+  "pool_identity_and_limitations": {
+    "all_recorded_zero": "Counterfactual source candidates among recorded zero t−1 with measured host and coordinates; not occupied by evidence",
+    "previous_positive_tminus2_zero_tminus1": "Strict subset: t−2 positive, t−1 recorded zero. No retrospective true-occupancy inference.",
+    "counts": "Greedy choices optimize already-seen target locations. Counts are target coverage, not independent movement events or model prediction."
+  },
+  "overall_by_radius_host_pool": {
+    "r2_delta3": {
+      "n": 1814,
+      "baseline": 1708,
+      "broad": {
+        "one": 1732,
+        "five": 1773,
+        "ten": 1800,
+        "union_upper": 1814
+      },
+      "history": {
+        "one": 1723,
+        "five": 1748,
+        "ten": 1756,
+        "union_upper": 1765
+      }
+    },
+    "r2_delta1": {
+      "n": 1814,
+      "baseline": 1630,
+      "broad": {
+        "one": 1650,
+        "five": 1706,
+        "ten": 1747,
+        "union_upper": 1808
+      },
+      "history": {
+        "one": 1646,
+        "five": 1677,
+        "ten": 1698,
+        "union_upper": 1723
+      }
+    },
+    "r5_delta3": {
+      "n": 1814,
+      "baseline": 1807,
+      "broad": {
+        "one": 1811,
+        "five": 1814,
+        "ten": 1814,
+        "union_upper": 1814
+      },
+      "history": {
+        "one": 1811,
+        "five": 1814,
+        "ten": 1814,
+        "union_upper": 1814
+      }
+    },
+    "r5_delta1": {
+      "n": 1814,
+      "baseline": 1777,
+      "broad": {
+        "one": 1789,
+        "five": 1806,
+        "ten": 1812,
+        "union_upper": 1813
+      },
+      "history": {
+        "one": 1785,
+        "five": 1798,
+        "ten": 1803,
+        "union_upper": 1803
+      }
+    }
+  },
+  "twelve_primary_year_and_host_rows_r2_delta1_delta3": [
+    {
+      "year": 2007,
+      "host_gap": 1,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 349,
+      "observed_positive_sources_cover_count": 309,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 2957,
+        "same_patch_positive_tminus2": 424
+      },
+      "all_zero_pool": {
+        "best_one_count": 314,
+        "greedy_up_to_five_count": 325,
+        "greedy_up_to_ten_count": 334,
+        "all_candidates_optimistic_union_count": 348
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 312,
+        "greedy_up_to_five_count": 320,
+        "greedy_up_to_ten_count": 327,
+        "all_candidates_optimistic_union_count": 338
+      }
+    },
+    {
+      "year": 2007,
+      "host_gap": 3,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 349,
+      "observed_positive_sources_cover_count": 328,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 2957,
+        "same_patch_positive_tminus2": 424
+      },
+      "all_zero_pool": {
+        "best_one_count": 333,
+        "greedy_up_to_five_count": 342,
+        "greedy_up_to_ten_count": 347,
+        "all_candidates_optimistic_union_count": 349
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 331,
+        "greedy_up_to_five_count": 339,
+        "greedy_up_to_ten_count": 342,
+        "all_candidates_optimistic_union_count": 342
+      }
+    },
+    {
+      "year": 2008,
+      "host_gap": 1,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 157,
+      "observed_positive_sources_cover_count": 149,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 2976,
+        "same_patch_positive_tminus2": 139
+      },
+      "all_zero_pool": {
+        "best_one_count": 150,
+        "greedy_up_to_five_count": 154,
+        "greedy_up_to_ten_count": 157,
+        "all_candidates_optimistic_union_count": 157
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 150,
+        "greedy_up_to_five_count": 151,
+        "greedy_up_to_ten_count": 151,
+        "all_candidates_optimistic_union_count": 151
+      }
+    },
+    {
+      "year": 2008,
+      "host_gap": 3,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 157,
+      "observed_positive_sources_cover_count": 153,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 2976,
+        "same_patch_positive_tminus2": 139
+      },
+      "all_zero_pool": {
+        "best_one_count": 155,
+        "greedy_up_to_five_count": 157,
+        "greedy_up_to_ten_count": 157,
+        "all_candidates_optimistic_union_count": 157
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 154,
+        "greedy_up_to_five_count": 154,
+        "greedy_up_to_ten_count": 154,
+        "all_candidates_optimistic_union_count": 154
+      }
+    },
+    {
+      "year": 2009,
+      "host_gap": 1,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 285,
+      "observed_positive_sources_cover_count": 255,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 3105,
+        "same_patch_positive_tminus2": 364
+      },
+      "all_zero_pool": {
+        "best_one_count": 258,
+        "greedy_up_to_five_count": 266,
+        "greedy_up_to_ten_count": 272,
+        "all_candidates_optimistic_union_count": 282
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 257,
+        "greedy_up_to_five_count": 262,
+        "greedy_up_to_ten_count": 266,
+        "all_candidates_optimistic_union_count": 266
+      }
+    },
+    {
+      "year": 2009,
+      "host_gap": 3,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 285,
+      "observed_positive_sources_cover_count": 269,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 3105,
+        "same_patch_positive_tminus2": 364
+      },
+      "all_zero_pool": {
+        "best_one_count": 272,
+        "greedy_up_to_five_count": 279,
+        "greedy_up_to_ten_count": 284,
+        "all_candidates_optimistic_union_count": 285
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 271,
+        "greedy_up_to_five_count": 275,
+        "greedy_up_to_ten_count": 275,
+        "all_candidates_optimistic_union_count": 275
+      }
+    },
+    {
+      "year": 2010,
+      "host_gap": 1,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 102,
+      "observed_positive_sources_cover_count": 94,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 3306,
+        "same_patch_positive_tminus2": 221
+      },
+      "all_zero_pool": {
+        "best_one_count": 96,
+        "greedy_up_to_five_count": 101,
+        "greedy_up_to_ten_count": 102,
+        "all_candidates_optimistic_union_count": 102
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 96,
+        "greedy_up_to_five_count": 97,
+        "greedy_up_to_ten_count": 97,
+        "all_candidates_optimistic_union_count": 97
+      }
+    },
+    {
+      "year": 2010,
+      "host_gap": 3,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 102,
+      "observed_positive_sources_cover_count": 101,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 3306,
+        "same_patch_positive_tminus2": 221
+      },
+      "all_zero_pool": {
+        "best_one_count": 102,
+        "greedy_up_to_five_count": 102,
+        "greedy_up_to_ten_count": 102,
+        "all_candidates_optimistic_union_count": 102
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 101,
+        "greedy_up_to_five_count": 101,
+        "greedy_up_to_ten_count": 101,
+        "all_candidates_optimistic_union_count": 101
+      }
+    },
+    {
+      "year": 2011,
+      "host_gap": 1,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 521,
+      "observed_positive_sources_cover_count": 459,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 3285,
+        "same_patch_positive_tminus2": 383
+      },
+      "all_zero_pool": {
+        "best_one_count": 464,
+        "greedy_up_to_five_count": 480,
+        "greedy_up_to_ten_count": 493,
+        "all_candidates_optimistic_union_count": 520
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 463,
+        "greedy_up_to_five_count": 476,
+        "greedy_up_to_ten_count": 486,
+        "all_candidates_optimistic_union_count": 500
+      }
+    },
+    {
+      "year": 2011,
+      "host_gap": 3,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 521,
+      "observed_positive_sources_cover_count": 483,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 3285,
+        "same_patch_positive_tminus2": 383
+      },
+      "all_zero_pool": {
+        "best_one_count": 490,
+        "greedy_up_to_five_count": 500,
+        "greedy_up_to_ten_count": 510,
+        "all_candidates_optimistic_union_count": 521
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 487,
+        "greedy_up_to_five_count": 496,
+        "greedy_up_to_ten_count": 501,
+        "all_candidates_optimistic_union_count": 510
+      }
+    },
+    {
+      "year": 2012,
+      "host_gap": 1,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 400,
+      "observed_positive_sources_cover_count": 364,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 3008,
+        "same_patch_positive_tminus2": 78
+      },
+      "all_zero_pool": {
+        "best_one_count": 368,
+        "greedy_up_to_five_count": 380,
+        "greedy_up_to_ten_count": 389,
+        "all_candidates_optimistic_union_count": 399
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 368,
+        "greedy_up_to_five_count": 371,
+        "greedy_up_to_ten_count": 371,
+        "all_candidates_optimistic_union_count": 371
+      }
+    },
+    {
+      "year": 2012,
+      "host_gap": 3,
+      "max_onehop_km": 2,
+      "same_patch": "excluded",
+      "recorded_positive_target_count": 400,
+      "observed_positive_sources_cover_count": 374,
+      "candidate_zero_counts": {
+        "all_recorded_zero": 3008,
+        "same_patch_positive_tminus2": 78
+      },
+      "all_zero_pool": {
+        "best_one_count": 380,
+        "greedy_up_to_five_count": 393,
+        "greedy_up_to_ten_count": 400,
+        "all_candidates_optimistic_union_count": 400
+      },
+      "previous_positive_tminus2_zero_tminus1_pool": {
+        "best_one_count": 379,
+        "greedy_up_to_five_count": 383,
+        "greedy_up_to_ten_count": 383,
+        "all_candidates_optimistic_union_count": 383
+      }
+    }
+  ],
+  "scientific_boundary": "This is an upper-bound/greedy feasibility analysis over HYPOTHETICAL missed sources selected retrospectively, not a patch false-negative posterior, history or actual dispersal estimate; EOG-WF 3 scored/31 science STOPs/3 administrative exclusions unchanged"
+}
