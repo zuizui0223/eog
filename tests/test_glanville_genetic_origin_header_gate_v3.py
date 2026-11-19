@@ -53,7 +53,7 @@ def test_valid_sha_and_header_only_semantics_never_expose_event_rows(monkeypatch
     def fake_json(url,cap):
         return manifest,"a"*64
     def fake_download(url,cap):
-        number=int(url.split("/")[5])
+        number=int(url.rsplit("/",2)[1])
         name=p["files"][number-1000]["name"]
         headers.append(name)
         return payloads[name]
