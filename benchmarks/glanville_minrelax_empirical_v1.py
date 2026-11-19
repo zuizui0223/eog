@@ -247,7 +247,7 @@ def _radius_for_year(year, policy, network, survey, delta_values):
             excluded["target_missing_xy"] += 1
             continue
         targets.append((patch, host, network[patch]))
-    sy = (year - 1,) if policy == "previous_year_recorded_positive" else (year - 2, year - 1)
+    sy = (year - 1,) if policy == "previous_year_recorded_positive" else (year - 1, year - 2)
     for yy in sy:
         for (cy, patch), row in survey.items():
             if cy != yy or row[0] is None or row[0] <= 0:
