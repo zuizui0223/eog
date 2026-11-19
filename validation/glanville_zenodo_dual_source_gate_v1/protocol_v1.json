@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "pre-transport_source_only_frozen",
+  "purpose": "One-shot independently checksum-verified Glanville occupancy+family archive access gate after separate Dryad 2024 HTTP403 STOP",
+  "sources": [
+    {
+      "tag": "schulz2019_occupancy",
+      "record_id": 4987060,
+      "record_url": "https://zenodo.org/records/4987060",
+      "doi": "10.5061/dryad.ksn02v707",
+      "filename": "ECOG-04799.zip",
+      "type": "zip",
+      "url": "https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1",
+      "expected_md5": "69122a1d82b1fb970fb6638b02da3db4",
+      "max_bytes": 5000000,
+      "max_uncompressed_bytes": 100000000,
+      "max_members": 2000
+    },
+    {
+      "tag": "fountain2017_families",
+      "record_id": 5010194,
+      "record_url": "https://zenodo.org/records/5010194",
+      "doi": "10.5061/dryad.d461s",
+      "filename": "supplementary-data-COLONY2.tar.gz",
+      "type": "tar.gz",
+      "url": "https://zenodo.org/records/5010194/files/supplementary-data-COLONY2.tar.gz?download=1",
+      "expected_md5": "11e63736667e492a13f822960d48a329",
+      "max_bytes": 30000000,
+      "max_uncompressed_bytes": 400000000,
+      "max_members": 20000
+    }
+  ],
+  "one_shot_order": [
+    "schulz2019_occupancy",
+    "fountain2017_families"
+  ],
+  "expected_discovery": "Archive member paths and CSV file headers where readable; no row values, species responses, genetic relatedness or source labels are scored.",
+  "guardrails": [
+    "exactly one GET per source; if the first source fails, stop before trying the second",
+    "verify publisher MD5 before inspecting archive contents; also publish SHA256",
+    "no arbitrary fallback mirror / version change after a transport STOP",
+    "do not publish raw archives or original individual-level files in GitHub artifacts",
+    "only records of content paths/sizes and first-line headers are saved",
+    "hard max bytes/members/uncompressed budget and safe member path checks",
+    "no historical founder claim from full sibs or occupancy alone",
+    "no addition to closed EOG-WF empirical 3 scored / 31 STOP / 3 exclusions"
+  ],
+  "source_join_readiness": "UNKNOWN until exact patch-year + genetic ID schema and provenance can be independently verified",
+  "max_header_files": 25,
+  "max_header_preview_bytes": 4096,
+  "next_gate": "Use a new frozen join/chronology contract only if both sources return checksum-matched archives and stable cross-source site IDs."
+}
