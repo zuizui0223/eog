@@ -1,11 +1,7 @@
 name: Glanville dual-Zenodo source manifest qualification
 
+# Source gate already executed once with archived receipt; no automatic repeat on PR updates.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_zenodo_dual_source_gate_v1/**"
-      - "scripts/glanville_zenodo_dual_source_gate_v1.py"
-      - ".github/workflows/eog-glanville-dual-zenodo-gate.yml"
   workflow_dispatch:
 
 permissions:
