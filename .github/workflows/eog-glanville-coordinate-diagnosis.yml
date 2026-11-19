@@ -1,0 +1,52 @@
+name: Diagnose Glanville original coordinate representations
+
+on:
+  pull_request:
+    paths:
+      - "validation/glanville_coordinate_diagnosis_v1/**"
+      - "benchmarks/glanville_coordinate_diagnosis_v1.py"
+      - ".github/workflows/eog-glanville-coordinate-diagnosis.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  coordinate-source-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Confirm this is diagnostic only, no ecological rescore
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open("validation/glanville_coordinate_diagnosis_v1/protocol_v1.json"))
+          assert p["status"]=="frozen_before_coordinate_diagnostic"
+          assert p["parent_failed_run_id"]==44482618167
+          PY
+      - name: Audit patch centroid representation using original publisher SHA
+        run: |
+          python benchmarks/glanville_coordinate_diagnosis_v1.py \
+            --source-protocol validation/glanville_minrelax_empirical_v1/protocol_v1.json \
+            --diagnostic-protocol validation/glanville_coordinate_diagnosis_v1/protocol_v1.json \
+            --output results/glanville_coordinate_diagnosis_v1/receipt.json
+          python - <<'PY'
+          import json
+          r=json.load(open("results/glanville_coordinate_diagnosis_v1/receipt.json"))
+          assert r["ecological_minrelax_results_scored"]==0
+          assert r["ecological_response_rows_read"]==0
+          assert r["EOG_WF_new_endpoints"]==0
+          print("COORDINATE_DIAGNOSIS_STATUS="+r["status"])
+          PY
+      - name: Publish source-coordinate aggregate diagnosis only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-crs-source-diagnosis
+          path: results/glanville_coordinate_diagnosis_v1/receipt.json
+          retention-days: 30
+          if-no-files-found: error
