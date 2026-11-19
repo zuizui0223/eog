@@ -1,0 +1,30 @@
+name: NutNet Hodapp source-only metadata gate v1
+on:
+  pull_request:
+    paths:
+      - 'validation/nutnet_hodapp_source_only_gate_v1/**'
+      - 'benchmarks/nutnet_hodapp_source_gate_v1.py'
+      - 'tests/test_nutnet_hodapp_source_gate_v1.py'
+      - 'docs/nutnet_hodapp_source_gate_v1.md'
+      - '.github/workflows/nutnet-hodapp-source-gate-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline fail-closed manifest tests
+        run: python -m pytest -q tests/test_nutnet_hodapp_source_gate_v1.py
+      - name: Attempt exact public source metadata only (no outcome CSV requests)
+        run: python benchmarks/nutnet_hodapp_source_gate_v1.py --output /tmp/nutnet_hodapp_source_gate_v1.json
+      - name: Archive metadata and access STOPs, not biological results
+        uses: actions/upload-artifact@v4
+        with:
+          name: nutnet-hodapp-source-metadata-only-v1
+          path: /tmp/nutnet_hodapp_source_gate_v1.json
