@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.1",
+  "kind": "arithmetic_matrix_cardinality_erratum_only",
+  "original_protocol_path": "validation/glanville_latent_source_audit_v1/protocol_v1.json",
+  "original_protocol_first_commit": "e50a89e1ad8afded3e1bed83b0d350019a4182e2",
+  "failed_run_id": 44513808990,
+  "failed_status": "STOP_MATRIX_COUNT",
+  "failure_point": "After verifying source SHA, original 48 parent strict cells, and computing all new panel combinations but before returning any new ecological aggregate rows",
+  "arithmetic_factors": {
+    "years": 6,
+    "host_tolerances": 2,
+    "radii": 2,
+    "latent_candidate_pools": 2,
+    "same_patch_policies": 2
+  },
+  "original_declared_max_matrix_rows": 48,
+  "corrected_max_matrix_rows": 96,
+  "scientific_choices_changed": false,
+  "exact_allowed_mutation": "computational_maxima.max_matrix_rows integer 48 to 96; original protocol retained unchanged; no data, source, target, radius, host, same-site, budget, test cutoff or response definition changed",
+  "interpretation": "Validation guard repair after a scientific STOP, not an independent new experiment, no new EOG-WF endpoint",
+  "must_fail_if": [
+    "base max_matrix_rows not 48",
+    "factor product not 96",
+    "any unexpected second override",
+    "parent source fingerprints changed",
+    "original failed run not documented"
+  ],
+  "tracking": "Original failed run 44513808990 stays visible; next CI run is an acknowledged correction/reexecution of same exploratory sensitivity."
+}
