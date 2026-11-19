@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_METADATA_PREFLIGHT_COMPLETED_EVENT_JOIN_NOT_VERIFIED",
+  "original_run": 44523855367,
+  "original_artifact_id": 14530050525,
+  "original_result_fingerprint_without_self_hash": "8a32b9efeed085af7bb108f6cd655af5c0e84d16efa818f3a69a515001c9c931",
+  "zenodo": {
+    "record_id": 6610910,
+    "metadata_sha256": "3ea9b8df60e796c6a78d5385839adbb7ea33e1ffb8e0fd04189d61dc0745bfa4",
+    "title": "Patch quality and genotype-by-environment interactions shape dispersal and post-settlement survival in a butterfly metapopulation",
+    "source_status": "METADATA_OK",
+    "files": [
+      {
+        "name": "mainAnalysis.R",
+        "bytes": 26693,
+        "md5": "f75ce54da557c221ee0a09f9fb1aaee2"
+      }
+    ],
+    "event_data_present": "NOT_ESTABLISHED"
+  },
+  "dryad": {
+    "doi": "10.5061/dryad.7h44j0zws",
+    "title": "Patch quality and genotype-by-environment interactions shape dispersal and post-settlement survival in a butterfly metapopulation",
+    "source_status": "METADATA_OK",
+    "metadata_sha256": "702431ab596b702d5aa90187307a47d4e2324add91a426e14bbd301449284b8e",
+    "file_manifest": "NOT_CHECKED_IN_STAGE1"
+  },
+  "qualitative_limit": "The software-only Zenodo listing cannot establish event-level source/destination/year joinability. The Dryad metadata does not by itself certify access to genetic event data or comparable patch IDs.",
+  "ecological_event_rows_opened": 0,
+  "EOG_WF_new_endpoints": 0
+}
