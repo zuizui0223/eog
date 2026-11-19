@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "status": "CROSSWALK_PASSED_AGGREGATE_ONLY_POST_UPLOAD_EXPLORATORY",
+  "upload": {
+    "filename": "fullsibfamLevelData.csv",
+    "bytes": 137353,
+    "dryad_version_id": 181375,
+    "sha256": "140e5361f9bced20a434bfee01bae6ce7c925e028718cdb9c6fd8aa635cc912a"
+  },
+  "reference_2019": {
+    "zenodo_record": 4987060,
+    "archive_sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+    "selected_years": [
+      2007,
+      2008,
+      2009,
+      2010,
+      2011,
+      2012
+    ],
+    "survey_patch_year_rows": 22406,
+    "network_patches": 4656,
+    "encrypted_runner_artifact_id": 14543155122,
+    "encrypted_snapshot_sha256": "e81e570d83e5f933108b144cc9fc3e8a36f033c55313ad19d64e015b1d01976b"
+  },
+  "local_audit": {
+    "full_result_json_fingerprint_without_self_hash": "d8e70dc87e3ce6728827823bc28106757b6fcae3327727e72f92ed30e2d7be2e",
+    "full_json_sha256": "79d61462336e6a5ccccc6c958fcf5c415f2fc790d44d224caf4895ff6c807fce",
+    "local_script_sha256": "1ecb59ee513ac0beafb2c10e956f4a67a9b85690dacfa120fe0ae2c63fd1ce61",
+    "secondary_verification": "Independent pandas left joins reproduce 783 full triplet survey records, 475 source-positive movement assignments, 172 target-EOG eligible rows, 163 joint eligible rows, 103 unique target patch-years and all 498 geometry checks."
+  },
+  "input_grain": {
+    "assignment_rows": 799,
+    "unique_families": 760,
+    "split_families_2_destination_rows": 39,
+    "moved_assignment_rows": 498,
+    "same_patch_rows": 301,
+    "year_pairs": 5,
+    "exact_temporal_source_plus_one": true,
+    "dispersalBin_and_distance_labels_match_patches": true
+  },
+  "yearly_EOG_frozen_parent_source_target_roster_replayed": {
+    "2008": {
+      "targets": 157,
+      "sources": 695
+    },
+    "2009": {
+      "targets": 285,
+      "sources": 508
+    },
+    "2010": {
+      "targets": 102,
+      "sources": 587
+    },
+    "2011": {
+      "targets": 521,
+      "sources": 298
+    },
+    "2012": {
+      "targets": 400,
+      "sources": 764
+    }
+  },
+  "source_survey_join": {
+    "all_3_patch_year_keys": 783,
+    "source_year_patch": 793,
+    "previous_year_destination_patch": 791,
+    "arrival_year_destination_patch": 797
+  },
+  "mover_source_prior_status": {
+    "recorded_positive": 475,
+    "recorded_zero": 17,
+    "no_survey_row": 6
+  },
+  "mover_destination_prior_status": {
+    "recorded_positive": 315,
+    "recorded_zero": 175,
+    "no_survey_row": 8
+  },
+  "mover_destination_arrival_status": {
+    "recorded_positive": 490,
+    "recorded_zero": 7,
+    "no_survey_row": 1
+  },
+  "mover_overlap_EOG_recorded_zero_to_positive": {
+    "assignment_rows": 172,
+    "distinct_target_patch_years": 103,
+    "joint_source_candidate_and_target_assignment_rows": 163,
+    "joint_distinct_target_patch_years": 100,
+    "full_EOG_target_patch_year_denominator_2008_2012": 1465
+  },
+  "geometry_498_moved_assignments": {
+    "checkable": 498,
+    "absolute_residual_km_median": 0.00003778421597067094,
+    "q95": 0.0012590977173516545,
+    "max": 0.04336878699529717
+  },
+  "jointly_eligible_163_movement_rows": {
+    "assigned_distance_km_median": 1.177336,
+    "nearest_previous_year_EOG_recorded_positive_source_km_median": 0.28397327198190414,
+    "assigned_exceeds_nearest_by_gt_1km": 66,
+    "interpretation": "Different estimands on same selected rows: model-assigned source distance vs minimum across all allowed recorded-positive sources; cannot equate nor claim causal distinction."
+  },
+  "per_arrival_year": [
+    {
+      "year": 2008,
+      "assigned_rows": 24,
+      "moved_rows": 18,
+      "same_patch_rows": 6,
+      "all_three_survey_rows_matched": 22,
+      "movers_source_in_EOG_positive_roster": 18,
+      "movers_target_EOG_eligible_rows": 6,
+      "movers_target_distinct_EOG_patch_years": 5,
+      "movers_both_source_and_target_eligible_rows": 6,
+      "movers_both_eligible_distinct_target_patch_years": 5
+    },
+    {
+      "year": 2009,
+      "assigned_rows": 60,
+      "moved_rows": 43,
+      "same_patch_rows": 17,
+      "all_three_survey_rows_matched": 60,
+      "movers_source_in_EOG_positive_roster": 43,
+      "movers_target_EOG_eligible_rows": 24,
+      "movers_target_distinct_EOG_patch_years": 16,
+      "movers_both_source_and_target_eligible_rows": 24,
+      "movers_both_eligible_distinct_target_patch_years": 16
+    },
+    {
+      "year": 2010,
+      "assigned_rows": 85,
+      "moved_rows": 46,
+      "same_patch_rows": 39,
+      "all_three_survey_rows_matched": 85,
+      "movers_source_in_EOG_positive_roster": 46,
+      "movers_target_EOG_eligible_rows": 9,
+      "movers_target_distinct_EOG_patch_years": 9,
+      "movers_both_source_and_target_eligible_rows": 9,
+      "movers_both_eligible_distinct_target_patch_years": 9
+    },
+    {
+      "year": 2011,
+      "assigned_rows": 244,
+      "moved_rows": 190,
+      "same_patch_rows": 54,
+      "all_three_survey_rows_matched": 242,
+      "movers_source_in_EOG_positive_roster": 175,
+      "movers_target_EOG_eligible_rows": 91,
+      "movers_target_distinct_EOG_patch_years": 50,
+      "movers_both_source_and_target_eligible_rows": 83,
+      "movers_both_eligible_distinct_target_patch_years": 48
+    },
+    {
+      "year": 2012,
+      "assigned_rows": 386,
+      "moved_rows": 201,
+      "same_patch_rows": 185,
+      "all_three_survey_rows_matched": 374,
+      "movers_source_in_EOG_positive_roster": 193,
+      "movers_target_EOG_eligible_rows": 42,
+      "movers_target_distinct_EOG_patch_years": 23,
+      "movers_both_source_and_target_eligible_rows": 41,
+      "movers_both_eligible_distinct_target_patch_years": 22
+    }
+  ],
+  "scientific_boundary": [
+    "Genetic origin assignment is constrained to previous-year sampled reference patches and model-selection criteria; not observed flight, verified natal source or ground truth.",
+    "Uploaded CSV omits per-row assignment confidence score despite source paper reporting score=100 filter.",
+    "Observed-zero at origin in 17 genetic assignment rows is a cross-study record discrepancy, not proof of false negatives or historical origin.",
+    "103 distinct EOG target patch-years are a selected subset of 1465; not independent prospective validation.",
+    "Original EOG r* is nearest potential-source bound, while genetic assignment is model-implied one assigned source; they need not coincide.",
+    "No site, family, individual, spatial coordinates or original record rows are committed; no fourth EOG-WF endpoint; 3/31/3 unchanged."
+  ],
+  "distinct_EOG_target_equal_weighting": {
+    "distinct_patches_by_arrival_year": 100,
+    "assigned_genetic_family_patch_rows": 163,
+    "median_of_each_target_median_assigned_source_distance_km": 1.210975,
+    "median_nearest_EOG_observed_positive_source_distance_km": 0.284377,
+    "median_of_targetwise_assigned_minus_nearest_distance_km": 0.75777,
+    "distinct_targets_with_median_assigned_distance_exceeding_nearest_by_gt_1km": 42,
+    "share_of_full_2008_2012_EOG_target_patch_years": 0.06825938566552901,
+    "interpretation": "Each target patch-year weighted once; assigned-source distances for multiple families within a target aggregated by the within-target median, contrasted with the same target's single EOG nearest-positive-source distance. Both descriptive; assignment is model-based."
+  }
+}
