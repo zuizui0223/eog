@@ -1,0 +1,61 @@
+name: Glanville Dryad genetic-assignment file manifest
+
+on:
+  pull_request:
+    paths:
+      - "validation/glanville_genetic_origin_dryad_manifest_v2/**"
+      - "scripts/glanville_genetic_origin_dryad_manifest_v2.py"
+      - "tests/test_glanville_genetic_origin_dryad_manifest_v2.py"
+      - ".github/workflows/eog-glanville-dryad-manifest-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-published-dryad-manifest:
+    name: Dryad version and file list (zero event rows)
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate original source-only state
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open("validation/glanville_genetic_origin_dryad_manifest_v2/protocol_v2.json"))
+          assert p["status"]=="frozen_before_dryad_version_file_listing"
+          assert p["parent_source_gate_run"]==44523855367
+          assert p["parent_source_result_sha256_without_self_hash"]=="8a32b9efeed085af7bb108f6cd655af5c0e84d16efa818f3a69a515001c9c931"
+          PY
+      - name: Test bound and fail-closed Dryad version selection
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_glanville_genetic_origin_dryad_manifest_v2.py
+      - name: Read exactly publisher version and version-pinned file metadata, no file bytes
+        run: |
+          python scripts/glanville_genetic_origin_dryad_manifest_v2.py \
+            --protocol validation/glanville_genetic_origin_dryad_manifest_v2/protocol_v2.json \
+            --output results/glanville_genetic_origin_dryad_manifest_v2/receipt.json
+          python - <<'PY'
+          import json
+          r=json.load(open("results/glanville_genetic_origin_dryad_manifest_v2/receipt.json"))
+          assert r["biological_event_rows_read"]==0
+          assert r["file_bytes_opened"]==0
+          assert r["new_EOG_WF_endpoints"]==0 and r["models_fit"]==0
+          assert r["genetically_inferred_source_direction_verified"] is False
+          print("DRYAD_MANIFEST_SCIENCE_STATUS="+r["status"])
+          print("PINNED_DRYAD_VERSION_ID="+str(r.get("version_id")))
+          print("FILE_COUNT="+str(r.get("file_count",0)))
+          PY
+      - name: Preserve source receipt with zero biological records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-genetic-origin-dryad-manifest-v2
+          path: results/glanville_genetic_origin_dryad_manifest_v2/receipt.json
+          retention-days: 30
+          if-no-files-found: error
