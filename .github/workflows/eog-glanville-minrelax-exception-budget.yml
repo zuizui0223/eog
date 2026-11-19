@@ -1,0 +1,54 @@
+name: Glanville strict-minrelax exception-budget sensitivity
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/glanville_minrelax_exception_budget_v1.py"
+      - "tests/test_glanville_minrelax_exception_budget_v1.py"
+      - "validation/glanville_minrelax_exception_budget_v1/**"
+      - ".github/workflows/eog-glanville-minrelax-exception-budget.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay-parent-and-audit-tail:
+    name: Strict-parent replay and k-exception sensitivity
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install frozen EOG package and test dependency
+        run: python -m pip install -e ".[dev]"
+      - name: Run independent synthetic guard tests
+        run: python -m pytest -q tests/test_glanville_minrelax_exception_budget_v1.py
+      - name: One source-locked post-exposure audit (NOT a fresh EOG-WF endpoint)
+        run: |
+          python benchmarks/glanville_minrelax_exception_budget_v1.py \
+            --protocol validation/glanville_minrelax_exception_budget_v1/protocol_v1.json \
+            --parent validation/glanville_minrelax_empirical_unitfix_v2/frozen_aggregate_summary_v2.json \
+            --output results/glanville_minrelax_exception_budget_v1/result.json
+          python - <<'PY'
+          import json,sys
+          p="results/glanville_minrelax_exception_budget_v1/result.json"
+          r=json.load(open(p))
+          print("MINRELAX_K_EXCEPTION_STATUS="+r["status"])
+          print("PANELS="+str(len(r.get("panels",[]))))
+          assert r["models_fit"]==0 and r["new_EOG_WF_endpoints"]==0
+          if r["status"]!="EXPLORATORY_K_EXCEPTION_AUDIT_PASSED":
+              sys.exit("scientific STOP: do not promote failed parent replay or source")
+          assert r["parent_replay_exact_metrics_verified"]
+          assert r["summary"]["total_year_source_panels"]==12
+          PY
+      - name: Preserve aggregate-only diagnostic or STOP receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-minrelax-exception-budget-v1
+          path: results/glanville_minrelax_exception_budget_v1/result.json
+          if-no-files-found: warn
+          retention-days: 30
