@@ -45,7 +45,8 @@ jobs:
           if r["status"]!="EXPLORATORY_LATENT_SOURCE_COMPATIBILITY_AUDIT_PASSED":
               raise SystemExit("scientific STOP; no source-relaxation claim")
           assert r["parent_strict_48_cells_reproduced"]
-          assert r["summary"]["matrix_panels"]==48
+          assert r["summary"]["matrix_panels"]==96
+          assert r["validated_post_stop_arithmetic_erratum"]["original_protocol_retained"] is True
           PY
       - name: Preserve aggregated result / scientific STOP receipt, not source rows
         if: always()
