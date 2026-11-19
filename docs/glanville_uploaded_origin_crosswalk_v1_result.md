@@ -60,6 +60,14 @@ These different measures should not be substituted for each other:
 - The genetically assigned origin is **one inferred source** selected from previous-year sampled reference patches; it can be farther away than the nearest potentially compatible source, **without contradicting EOG**.
 - We did NOT reconstruct a new movement kernel, fit a false-negative model, estimate true natal origins or certify barrier crossings.
 
+### Equal weighting of destination patch-years
+
+Because 163 assignment rows map to only 100 distinct EOG target patch-years, weighting each assignment row gives repeated targets disproportionate influence. We therefore grouped by target `(YearTo, PatchTo)`, took the **within-target median inferred assigned-source distance** across its families and compared it to the unique target's EOG nearest eligible previous-year source distance.
+
+Across the **100 distinct** jointly eligible target patch-years: target-equal-weighted median assigned-source distance **1.211 km**; median EOG nearest-source distance **0.284 km**; median of **paired within-target distance differences +0.758 km**. For 42/100 target patch-years the within-target median assigned-source distance exceeds the nearest-source distance by **more than 1 km**. The original 163-row descriptive median (1.177 km vs 0.284 km) is retained strictly as a row-weighted diagnostic.
+
+This controls one pseudoreplication issue but does not make the selected genetic sample random or its source assignments observed truth. It also illustrates that an existential nearest-source constraint can be much smaller than the distance to a genetically model-assigned specific origin without contradiction.
+
 ## Source ascertainment / observation limits
 
 DiLeo et al. (2022; DOI `10.1098/rspb.2022.0322`) used a GENECLASS2 assignment test conditioned on prior-year reference sampling and reported only treating score-100 assignments as true. The uploaded CSV does **not** contain an assignment-score column, so that confidence filter cannot be independently evaluated per row. Assigned families were not an unbiased random sample of all EOG patch transitions, and 39 family IDs occur in two destination-patch rows.
