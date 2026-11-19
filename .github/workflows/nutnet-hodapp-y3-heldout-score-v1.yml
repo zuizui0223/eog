@@ -1,0 +1,49 @@
+name: NutNet Hodapp Y3 frozen holdout score v1
+on:
+  pull_request:
+    paths:
+      - 'validation/nutnet_hodapp_y3_target_v1/**'
+      - 'benchmarks/nutnet_hodapp_source_byte_gate_v1.py'
+      - 'benchmarks/nutnet_hodapp_y3_score_v1.py'
+      - 'tests/test_nutnet_hodapp_y3_score_v1.py'
+      - '.github/workflows/nutnet-hodapp-y3-heldout-score-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-source-and-frozen-heldout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install declared analysis packages
+        run: python -m pip install pytest numpy pandas scikit-learn
+      - name: Pure offline model and eligibility tests
+        run: python -m pytest -q tests/test_nutnet_hodapp_y3_score_v1.py tests/test_nutnet_hodapp_source_byte_gate_v1.py
+      - name: Fetch and verify original external source by known MD5
+        run: python benchmarks/nutnet_hodapp_source_byte_gate_v1.py --output-dir /tmp/nutnet_hodapp_y3
+      - name: Fail closed on source bytes or missing schema
+        run: |
+          python - <<'PY'
+          import json
+          p='/tmp/nutnet_hodapp_y3/source_gate_result.json'
+          d=json.load(open(p))
+          assert d['status']=='BYTES_VERIFIED_SCHEMA_NOT_SCORED', d['status']
+          assert all(v['accepted'] is not None for v in d['source_files'].values())
+          print('source exact, proceed to frozen scoring')
+          PY
+      - name: Run pre-frozen Y0 to Y3 independent site holdout without tuning
+        run: |
+          python benchmarks/nutnet_hodapp_y3_score_v1.py --source-dir /tmp/nutnet_hodapp_y3 --output /tmp/nutnet_hodapp_y3/y3_site_holdout_result.json
+      - name: Save all results including negative outcomes and abstentions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nutnet-hodapp-y3-frozen-site-holdout-v1
+          path: |
+            /tmp/nutnet_hodapp_y3/source_gate_result.json
+            /tmp/nutnet_hodapp_y3/y3_site_holdout_result.json
+          if-no-files-found: warn
