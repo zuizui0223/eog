@@ -36,7 +36,12 @@
   ],
   "distance_measure": "Euclidean projected patch centroids converted from meters to km only after independent genotype-patch centroid concordance",
   "geographic_source": "2019 data/patch_network.tsv x/y",
-  "genetic_coordinate_verification": "2017 master-input.csv Patch Centroid_X/Y (ETRS-TM35FIN) for shared patch; report median and 95th percentile residual metres. Gate if <100 paired patches or median>1000m or q95>5000m; this is numerical coordinate-consistency evidence, not standalone CRS documentation.",
+  "genetic_coordinate_verification": {
+    "minimum_paired_patches": 100,
+    "median_max_m": 1000,
+    "q95_max_m": 5000,
+    "description": "Compare matched genotype patch ETRS-TM35FIN centroids to survey patch_network x,y; numeric alignment prerequisite for geographic km"
+  },
   "within_source_access": "2019 74,065 patch/year survey rows, 2017 8,322 master input/output rows; genome family uses (ID,Year) join",
   "family_measure": "Number of independently reconstructed within-Year+Region+FamilyID groups appearing in >=2 patches and their undirected patch-pair Euclidean distance distribution. Family ID does not specify mother or movement direction.",
   "family_id_gate": "At least 95% input ID/year pairs must match master-output ID/year pairs; keep all original outputs without repair.",
@@ -67,5 +72,7 @@
     "if any year has zero eligible targets or candidate sources, report non-estimable rather than drop silently"
   ],
   "source_transport": "One verified source acquisition per frozen pair in this exploratory analysis; previous transport checks do not license outcome-based file substitution.",
-  "reporting": "aggregate-only JSON with code/data fingerprints, no individual row output"
+  "reporting": "aggregate-only JSON with code/data fingerprints, no individual row output",
+  "family_id_minimum_match_fraction": 0.95,
+  "source_lookback_priority": "For prior-two-year sources, use the most recent eligible source observation first"
 }
