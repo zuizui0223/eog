@@ -67,3 +67,20 @@ def test_reject_unverified_digest_and_external_file_link():
         return json.dumps(payload).encode(),"HTTP_200"
     files,_=mod.file_manifest(fake,manifest_fetch)
     assert files["sowing_experiment.csv"]["status"]=="STOP_INVALID_DIGEST_OR_SIZE"
+
+
+def test_filename_overrides_directory_path_in_authoritative_manifest():
+    meta={"_links":{"stash:version":{"href":"/api/v2/versions/77"}}}
+    datum=b"site,species,treatment,year,germ\\ns,sp,protected,2023,1\\n"
+    def fetch(url,limit):
+        assert url.endswith("/api/v2/versions/77/files")
+        obj={"_embedded":{"stash:files":[
+            {"filename":"sowing_experiment.csv","path":"data/",
+             "id":18,"size":len(datum),
+             "digest":hashlib.sha256(datum).hexdigest(),"digestType":"SHA-256"}
+        ]}}
+        return json.dumps(obj).encode(),"HTTP_200"
+    files,events=mod.file_manifest(meta,fetch)
+    assert files["sowing_experiment.csv"]["status"]=="MANIFEST_OK"
+    assert files["sowing_experiment.csv"]["id"]==18
+    assert events[0]["status"]=="HTTP_200"
