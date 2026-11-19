@@ -1,0 +1,35 @@
+{
+  "schema": "eog.nutnet_hodapp_source_only_gate.protocol.v1",
+  "status": "FROZEN_BEFORE_READING_EXPERIMENTAL_CSV_VALUES",
+  "target_repo": "zuizui0223/eog",
+  "source": {
+    "doi": "10.5061/dryad.8vs569h",
+    "citation": "Hodapp et al. 2019. Spatial heterogeneity in species composition constrains plant community responses to herbivory and fertilization. Dryad.",
+    "expected_files": [
+      "composition-data.csv",
+      "env-param-Y0.csv"
+    ],
+    "zenodo_mirror_candidate_record": "5023851",
+    "reference_article_doi": "10.1111/ele.13102"
+  },
+  "source_only_permissions": [
+    "Read public repository metadata and external dataset manifests",
+    "Check exact filenames, size, version and declared checksums",
+    "Record access statuses and provenance",
+    "Run synthetic unit tests for manifest logic"
+  ],
+  "prohibited_before_new_freeze": [
+    "Do not read, download, inspect, summarize, fit, or plot post-treatment species cover values",
+    "Do not score treatment-associated EOG span or prediction sign",
+    "Do not use outcome-driven sample thresholds, exclude sites, or choose horizons",
+    "Do not call the existing EOG-WF result a fourth endpoint"
+  ],
+  "scientific_boundary": "NPK manipulates an abiotic treatment and Fence excludes large herbivores. Neither is exact deletion of binary A or B mask. M is not measured. This is a prospective independent experimental analogue, not a full BAM causal validation.",
+  "necessary_next_gate": [
+    "Obtain the exact public CSV bytes and verify repository checksum/metadata",
+    "Check site/block/plot/treatment identity and baseline Y0 against the original analysis",
+    "Choose independent site-level heldout design, the specific response estimand, model-family universe, target sign tolerance and abstention rules before opening treatment response values",
+    "Report design stop if needed variables or independently replicated sites are missing"
+  ],
+  "provenance": "Created after identifying the published dataset and study-level treatment categories, without inspecting original experiment CSV values."
+}
