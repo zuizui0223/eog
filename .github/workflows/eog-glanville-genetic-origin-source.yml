@@ -1,12 +1,7 @@
 name: Glanville genetic-origin independent-evidence source preflight
 
+# Completed source-only receipt is immutable; avoid repeated network GETs on PR edits.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_genetic_origin_source_preflight_v1/**"
-      - "scripts/glanville_genetic_origin_source_preflight_v1.py"
-      - "tests/test_glanville_genetic_origin_source_preflight_v1.py"
-      - ".github/workflows/eog-glanville-genetic-origin-source.yml"
   workflow_dispatch:
 
 permissions:
