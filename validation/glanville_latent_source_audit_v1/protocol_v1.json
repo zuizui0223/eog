@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_latent_source_sensitivity_scoring",
+  "parent_main_sha": "afbffecf44c1d5fd6e55a1d48cc5dd5a1b7d9d7f",
+  "prior_results": {
+    "strict": "validation/glanville_minrelax_empirical_unitfix_v2/frozen_aggregate_summary_v2.json",
+    "exception": "validation/glanville_minrelax_exception_budget_v1/frozen_primary_aggregate_summary_v1.json",
+    "strict_result_sha256": "e5e4da4088aef5ca9337f913e644d324190a230934ac0dcf2bbc360fb09dd68a",
+    "exception_result_sha256": "f332758bd5510801e626c631281e6c090b61abb267639cb48685637410a9f07e"
+  },
+  "external_observation_process_evidence": {
+    "source": "Ojanen et al. 2013 Ecology and Evolution, Long-term metapopulation study, doi:10.1002/ece3.733",
+    "controls": "2008 resurveyed 67 meadows, 2009 180 meadows, 2011 80 meadows; typical individual larval group detection 0.5-0.6. Among meadows deemed empty by initial survey in specific 2009/2011 control re-search, 28 percent later contained nests.",
+    "separation": "Nest detection rate 0.5-0.6 is not patch-level false-negative probability; 28 percent in controls cannot be transferred as probability of hidden positive in every historical zero patch",
+    "independent_calibration": "No per-patch posterior source probability permitted from these literature summaries alone"
+  },
+  "sources": {
+    "occurrence": {
+      "url": "https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1",
+      "sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+      "size_limit_bytes": 5000000
+    },
+    "genetic": {
+      "url": "https://zenodo.org/records/5010194/files/supplementary-data-COLONY2.tar.gz?download=1",
+      "sha256": "90df549e41ae2c069758d3d6872fdc144cef5fcd32fb868af3d2e8cd408a8459",
+      "size_limit_bytes": 30000000
+    }
+  },
+  "target_years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+  ],
+  "fixed_target_rule": "t positive, t-1 recorded zero, valid t-1 host plant scores, mapped patch centroid; no inference of true colonization",
+  "fixed_sources": "t-1 recorded positives with valid source-year host scores and coordinates",
+  "latent_candidate_pool": "t-1 recorded zeros (not missing visits) with valid host scores and coordinate; may be false-negative occupied patches OR genuinely empty; never assign their true state",
+  "latent_candidate_subsets": [
+    {
+      "id": "all_recorded_zero",
+      "rule": "any t-1 measured zero with host+coordinate"
+    },
+    {
+      "id": "supported_tminus2",
+      "rule": "t-1 measured zero AND same patch measured positive at t-2"
+    }
+  ],
+  "same_patch_cases": [
+    {
+      "id": "allow_same_patch",
+      "rule": "latent at target itself admissible, represents persistence/no movement rather than immigration"
+    },
+    {
+      "id": "exclude_same_patch",
+      "rule": "latent at target itself excluded, represents a conservative different-patch source hypothesis"
+    }
+  ],
+  "fixed_host_tolerances": [
+    1,
+    3
+  ],
+  "fixed_radius_km": [
+    2,
+    5
+  ],
+  "latent_source_addition_budgets": [
+    0,
+    1,
+    5,
+    10
+  ],
+  "interpretation": "source augmentation is a different assumption axis than distance relaxation and a post-exposure optimization over target geometry, not empirical evidence of undetected occupancy",
+  "estimands": {
+    "baseline_coverage": "eligible target count reached by at least one t-1 positive source within declared r and host tolerance",
+    "max_coverage_all_candidates": "upper bound if every zero-observed eligible candidate were actually an occupied source",
+    "best_single_hidden_source": "EXACT maximum number of currently uncovered targets rescued by one latent candidate chosen retrospectively",
+    "greedy_5_or_10": "FEASIBLE, not globally optimal set-cover coverage from sequential max uncovered gain; no claim of globally minimal required number",
+    "unrescued": "targets not locally covered at radius even after declared selected candidates; retained as true positive records",
+    "witness": "counts only; no candidate source IDs, coordinates, target IDs or biological movement paths exported"
+  },
+  "test_gates": [
+    "sha256-verified original two archives; same 2019 km-to-m correction and 2017 coordinate gate; no change to source data",
+    "reproduce 12 original t-1/t-2 panel target/source counts, 48 strict radii and unsupported counts against main; fail closed on mismatch",
+    "coverage monotone in source budget and radius and host-gap tolerance and eligible candidate set",
+    "best-one coverage independently verified by exhaustive candidate enumeration, greedy is explicitly a heuristic beyond one",
+    "newly eligible latent candidate cannot be an observed positive t-1, must be an actual recorded zero with measurable habitat",
+    "own-patch latent source always labelled persistence-compatible and never interpreted as immigrant",
+    "no inferred probabilities from 2013 published detectability values",
+    "no p-values, ecological mechanism classification or new EOG-WF endpoint",
+    "frozen 3 scored/31 scientific STOP/3 administrative exclusion denominator unchanged"
+  ],
+  "computational_maxima": {
+    "max_year_panels": 6,
+    "max_matrix_rows": 48,
+    "max_patch_universe": 10000,
+    "timeout_s": 50
+  },
+  "stop_states": [
+    "STOP_TRANSPORT",
+    "STOP_SHA",
+    "STOP_PARENT_REPLAY",
+    "STOP_SOURCE_ROSTER",
+    "STOP_MONOTONICITY",
+    "STOP_COORDINATE_CONTRACT",
+    "STOP_SCHEMA"
+  ],
+  "prior_responses_opened": true,
+  "analysis_status": "post-exposure sensitivity; not independent ecological validation"
+}
