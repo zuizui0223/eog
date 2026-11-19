@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "status": "pre-score_frozen_post_exposure_sensitivity",
+  "parent_main_sha": "a2658ebba8ce385e46ff98909a7a94794342f20e",
+  "parent_result": "validation/glanville_minrelax_empirical_unitfix_v2/frozen_aggregate_summary_v2.json",
+  "parent_full_precision_sha256_without_self_hash": "e5e4da4088aef5ca9337f913e644d324190a230934ac0dcf2bbc360fb09dd68a",
+  "scientific_question": "Is the maximum nearest-compatible-source requirement across observed positive transitions driven by exceptional target patches, or does a large requirement persist when a predeclared small number of positive records are allowed as externally-unexplained?",
+  "data_source": {
+    "schulz2019": {
+      "url": "https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1",
+      "sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+      "max_bytes": 5000000
+    },
+    "fountain2017": {
+      "url": "https://zenodo.org/records/5010194/files/supplementary-data-COLONY2.tar.gz?download=1",
+      "sha256": "90df549e41ae2c069758d3d6872fdc144cef5fcd32fb868af3d2e8cd408a8459",
+      "max_bytes": 30000000
+    }
+  },
+  "original_scientific_contract_unchanged": {
+    "years": [
+      2007,
+      2008,
+      2009,
+      2010,
+      2011,
+      2012
+    ],
+    "source_policies": [
+      "previous_year_recorded_positive",
+      "previous_two_years_recorded_positive"
+    ],
+    "host_gap_thresholds": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "coordinate_correction": "multiply 2019 patch_network x,y by 1000 to meters; Euclidean distances then /1000 to km",
+    "target_rule": "recorded population>0 at t and exactly 0 at t-1, valid t-1 host scores and mapped coordinates",
+    "source_rule": "recorded population>0 at eligible source year, valid source-year host scores and mapped coordinates",
+    "delta_metric": "max absolute difference of Plantago and Veronica ordinal habitat scores",
+    "one_hop_fixed_source": "only descriptive, not colonization or dispersal inference"
+  },
+  "new_primary_estimand": {
+    "name": "k-exception minimum one-hop radius",
+    "definition": "For n eligible observed positive transitions and declared delta, let d_i(delta)=minimum distance to any eligible source (Infinity if no source). Define r_k(delta) as the (n-k)th order statistic of the n distances; equivalently minimum radius that locally explains >=n-k positives, explicitly retaining k unresolved/external-explanation slots.",
+    "exception_budgets": [
+      {
+        "id": "strict",
+        "type": "fixed",
+        "value": 0
+      },
+      {
+        "id": "one",
+        "type": "fixed",
+        "value": 1
+      },
+      {
+        "id": "one_percent",
+        "type": "floor_fraction",
+        "value": 0.01
+      },
+      {
+        "id": "five_percent",
+        "type": "floor_fraction",
+        "value": 0.05
+      }
+    ],
+    "never_drop_positives_from_underlying_evidence": true,
+    "unsupported_target_distance": "Infinity; radius remains non-estimable unless budget accommodates every unsupported target",
+    "quantile_descriptives": [
+      0.5,
+      0.9,
+      0.95,
+      0.99
+    ],
+    "primary_environment_panels": [
+      1,
+      3
+    ],
+    "secondary_environment_panels": [
+      0,
+      2
+    ]
+  },
+  "predeclared_falsification_checks": [
+    "for k=0, recomputed counts and r must match frozen parent 12 panels x 4 host thresholds within 1e-5 km; no parent mismatch may be repaired silently",
+    "in any fixed year/source/host panel, r_k must weakly decrease with a larger exception allowance",
+    "in any fixed year/source/k, r_k must weakly decrease as host tolerance increases",
+    "in any fixed year/host/k, adding two-year sources must weakly decrease r_k when target rosters are equal",
+    "if k< number of targets with no eligible source, r_k is non-estimable, not zero",
+    "no finite r_k=0 may be interpreted as actual zero dispersal; same-site recurrence is an allowed source hypothesis",
+    "no statistical p-value, significance, biological prevalence, site-level record or inferred source/movement route is produced"
+  ],
+  "reporting": [
+    "12 year/source panels, each 4 host thresholds and all exception budgets with per-panel n targets, n impossible, k, r_k, delta-r from strict when strict is finite",
+    "within each panel, empirical median, q90, q95, q99 of finite target-to-source distances and fraction q95/max when strict finite",
+    "count of primary panels whose strict radius is reduced >=25% by one exception (predeclared descriptive criterion, not hypothesis test)",
+    "count of primary panels that remain undefined at k=0 but become finite with 1% or 5% exception allowance",
+    "source-policy and environment-tolerance effects separated; no pooling of individual patches as independent biological replicates",
+    "all outputs aggregate-only plus exact source hashes and frozen-parent fingerprint"
+  ],
+  "limits": {
+    "timeout_seconds": 50,
+    "max_attempts_per_archive": 1,
+    "max_year_panels": 12
+  },
+  "scientific_stop_rules": [
+    "STOP_SOURCE_SHA or STOP_TRANSPORT or STOP_PARENT_REPRODUCTION_MISMATCH: do not score/relabel",
+    "STOP_INVARIANT_FAILURE: do not publish stronger claim",
+    "if no exception-free local explanation, report unresolved explanation requirement",
+    "this is post-exposure exploratory sensitivity reusing the same data; no independent EOG-WF endpoint or prospectively confirmed ecological claim"
+  ]
+}
