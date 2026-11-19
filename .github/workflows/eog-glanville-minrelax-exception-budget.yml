@@ -1,12 +1,7 @@
 name: Glanville strict-minrelax exception-budget sensitivity
 
+# Exploratory source outcome run 44499784063 is frozen. No automated post-outcome replay on PR edits.
 on:
-  pull_request:
-    paths:
-      - "benchmarks/glanville_minrelax_exception_budget_v1.py"
-      - "tests/test_glanville_minrelax_exception_budget_v1.py"
-      - "validation/glanville_minrelax_exception_budget_v1/**"
-      - ".github/workflows/eog-glanville-minrelax-exception-budget.yml"
   workflow_dispatch:
 
 permissions:
