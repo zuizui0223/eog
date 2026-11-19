@@ -87,8 +87,16 @@ def file_manifest(meta,fetch=get_bytes):
         })
         for f in ents:
             if not isinstance(f,dict):continue
-            name=f.get("path",f.get("filename","")).split("/")[-1]
-            if name not in REQUIRED:continue
+            candidates=set()
+            for name_key in ("filename","path","name","key"):
+                field=f.get(name_key)
+                if isinstance(field,str):
+                    leaf=field.rstrip("/").rsplit("/",1)[-1]
+                    if leaf in REQUIRED:candidates.add(leaf)
+            # A provider's path may hold a directory while filename holds the
+            # actual leaf. Accept only a single unambiguous whitelisted name.
+            if len(candidates)!=1:continue
+            name=next(iter(candidates))
             id_=f.get("id")
             digest=f.get("digest")
             algo=f.get("digestType","")
