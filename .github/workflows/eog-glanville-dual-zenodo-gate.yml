@@ -1,0 +1,51 @@
+name: Glanville dual-Zenodo source manifest qualification
+
+on:
+  pull_request:
+    paths:
+      - "validation/glanville_zenodo_dual_source_gate_v1/**"
+      - "scripts/glanville_zenodo_dual_source_gate_v1.py"
+      - ".github/workflows/eog-glanville-dual-zenodo-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-only:
+    name: Checksum and archive paths only, no ecological response
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check pre-transport freeze
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open("validation/glanville_zenodo_dual_source_gate_v1/protocol_v1.json"))
+          assert p["status"]=="pre-transport_source_only_frozen"
+          assert [x["record_id"] for x in p["sources"]] == [4987060, 5010194]
+          PY
+      - name: Verify pinned publisher MD5 and archive paths
+        run: |
+          python scripts/glanville_zenodo_dual_source_gate_v1.py \
+            --protocol validation/glanville_zenodo_dual_source_gate_v1/protocol_v1.json \
+            --output results/glanville_zenodo_dual_source_gate_v1/receipt.json
+          python - <<'PY'
+          import json
+          r=json.load(open("results/glanville_zenodo_dual_source_gate_v1/receipt.json"))
+          assert r["models_fit"]==0 and r["response_values_opened"]==0
+          assert r["new_eogwf_endpoints"]==0
+          print("SOURCE_GATE_STATUS="+r["status"])
+          PY
+      - name: Archive receipt only (source bytes stay on runner)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: glanville-zenodo-two-source-metadata
+          path: results/glanville_zenodo_dual_source_gate_v1/receipt.json
+          retention-days: 30
+          if-no-files-found: error
