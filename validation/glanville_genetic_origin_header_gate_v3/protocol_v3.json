@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "status": "pre_download_exact_header_only_frozen",
+  "lineage": {
+    "first_run": 44523855367,
+    "first_fingerprint": "8a32b9efeed085af7bb108f6cd655af5c0e84d16efa818f3a69a515001c9c931",
+    "manifest_run": 44540284586,
+    "manifest_fingerprint": "a003bde0841d5647cd628b0a2a4143d9f0fd91c8c064d5dbbac9c6551c175c64"
+  },
+  "target_version_id": 181375,
+  "target_version_number": 2,
+  "publication_date": "2022-06-04",
+  "doi": "10.5061/dryad.7h44j0zws",
+  "file_metadata_api": "https://datadryad.org/api/v2/versions/181375/files",
+  "files": [
+    {
+      "name": "README",
+      "size_bytes": 2402,
+      "sha256": "d05293418efc656ab6243ed59e2d6d49b62137c703cc328c5e83615dd1066b7c",
+      "role": "metadata definitions only"
+    },
+    {
+      "name": "fullsibfamLevelData.csv",
+      "size_bytes": 137353,
+      "sha256": "140e5361f9bced20a434bfee01bae6ce7c925e028718cdb9c6fd8aa635cc912a",
+      "role": "first header/columns only"
+    },
+    {
+      "name": "nestLevelData.csv",
+      "size_bytes": 200816,
+      "sha256": "e494b8c225dda7a948d3715c5b5134125f679e6bd231178419fe0716904ea726",
+      "role": "first header/columns only"
+    }
+  ],
+  "file_downloads_max": 3,
+  "data_transfer_byte_cap_each": 400000,
+  "api_metadata_byte_cap": 2000000,
+  "transport_timeout_s": 35,
+  "original_kinship_matrix_rds_bytes": 49781508,
+  "explicitly_excluded": [
+    "kinship_AGH.rds",
+    "any other version or file",
+    "all biological records except first CSV header row"
+  ],
+  "safe_access": "Parse the version-pinned file listing for exact Dryad-issued per-file download API paths; do not invent or search a new URL. One GET per declared file, no retries. Publisher SHA256 must match before inspecting even headers.",
+  "report": {
+    "csv": "exact header column names only, number of header fields; no event rows or row counts",
+    "readme": "string terms and presence flags only; if useful, bounded sentence-level descriptions not full copyrighted README",
+    "classification": "presence of column *names* consistent with source patch/destination patch/year/assignment; cannot establish values, agreement with old study, provenance or direction",
+    "output": "aggregate-only JSON with raw file SHA-256 and receipt digest; zero data rows, movement estimates or gene IDs"
+  },
+  "stop_rules": [
+    "STOP_MANIFEST_VERSION_CHANGED",
+    "STOP_FILE_METADATA_MISMATCH",
+    "STOP_HTTP_SOURCE",
+    "STOP_FILE_CHECKSUM_MISMATCH",
+    "STOP_UNAVAILABLE_DRYAD_FILE",
+    "STOP_CSV_SCHEMA",
+    "No silent file version selection, URI substitution or post-outcome threshold changes"
+  ],
+  "frozen_validation_boundary": {
+    "models_fit": 0,
+    "event_rows_read": 0,
+    "migration_reconstructions": 0,
+    "independent_EOG_WF_fresh_endpoints_added": 0
+  }
+}

@@ -1,0 +1,57 @@
+name: Glanville Zenodo software static schema preflight
+
+# Source audit completed at run 44541968460; no automatic post-access R-file retrieval on PR changes.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  one-software-file:
+    name: Verify Zenodo R script and extract static variable-name hints only
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate frozen software source identity
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open("validation/glanville_zenodo_software_schema_v4/protocol_v4.json"))
+          assert p["status"]=="pre_fetch_single_publisher_software_frozen"
+          assert p["zenodo_record_id"]==6610910
+          assert p["source_filename"]=="mainAnalysis.R"
+          assert p["source_md5"]=="f75ce54da557c221ee0a09f9fb1aaee2"
+          assert p["dryad_stop_run"]==44541096661
+          PY
+      - name: Verify source-only tests
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_glanville_zenodo_software_schema_v4.py
+      - name: Access exactly one publisher R file, never execute it
+        run: |
+          python scripts/glanville_zenodo_software_schema_v4.py \
+            --protocol validation/glanville_zenodo_software_schema_v4/protocol_v4.json \
+            --output results/glanville_zenodo_software_schema_v4/receipt.json
+          python - <<'PY'
+          import json
+          r=json.load(open("results/glanville_zenodo_software_schema_v4/receipt.json"))
+          assert r["script_executed"] is False
+          assert r["genetic_event_data_rows_read"]==0
+          assert r["new_EOG_WF_endpoints"]==0 and r["ecological_models_fit"]==0
+          assert r["source_destination_year_events_verified"] is False
+          print("STATIC_SOFTWARE_SCHEMA_STATUS="+r["status"])
+          print("IDENTIFIER_COUNT="+str(r.get("static_token_metadata",{}).get("identifier_total_matches_before_cap",0)))
+          PY
+      - name: Keep aggregate source receipt only, not script/data
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: glanville-zenodo-software-schema-v4
+          path: results/glanville_zenodo_software_schema_v4/receipt.json
+          if-no-files-found: error
+          retention-days: 30

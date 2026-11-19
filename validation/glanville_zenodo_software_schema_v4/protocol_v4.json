@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "status": "pre_fetch_single_publisher_software_frozen",
+  "source_title": "Patch quality and genotype-by-environment interactions shape dispersal and post-settlement survival in a butterfly metapopulation",
+  "zenodo_record_id": 6610910,
+  "zenodo_api": "https://zenodo.org/api/records/6610910",
+  "source_filename": "mainAnalysis.R",
+  "source_file_bytes": 26693,
+  "source_md5": "f75ce54da557c221ee0a09f9fb1aaee2",
+  "parent_stage1_run": 44523855367,
+  "parent_metadata_fingerprint": "8a32b9efeed085af7bb108f6cd655af5c0e84d16efa818f3a69a515001c9c931",
+  "dryad_source_stop": "STOP_HTTP_SOURCE_401",
+  "dryad_stop_run": 44541096661,
+  "network": {
+    "api_max_bytes": 1500000,
+    "source_max_bytes": 30000,
+    "timeout_seconds": 35,
+    "max_downloads": 1,
+    "source_links": "Use exact authorized Zenodo file link from metadata; require filename, size and MD5 and redirect HTTPS; no alternate mirror or file guessing"
+  },
+  "static_only": {
+    "allowed_observation": "R code text used to extract input filename literals and identifier/column-name symbols; no execution or interpretation of external biological records",
+    "file_extensions": [
+      ".csv",
+      ".tsv",
+      ".rds",
+      ".rdata",
+      ".txt",
+      ".xlsx"
+    ],
+    "identifier_tokens": [
+      "source",
+      "origin",
+      "natal",
+      "birth",
+      "dest",
+      "arrival",
+      "settle",
+      "patch",
+      "year",
+      "assign",
+      "geneclass",
+      "dispers",
+      "sample",
+      "family",
+      "migration"
+    ],
+    "out_max_input_names": 60,
+    "out_max_identifiers": 100,
+    "no_raw_code_excerpts": true,
+    "no_data_frame_records": true,
+    "no_biological_scores": true
+  },
+  "stop_if": [
+    "source checksum MD5 mismatch",
+    "size mismatches original verified metadata",
+    "unapproved source hostname",
+    "source code availability blocked",
+    "source file URL missing"
+  ],
+  "scientific_boundary": "software method variable names might guide later data acquisition but cannot validate source-to-destination assignments or actual natal dispersal; EOG-WF historical 3/31/3 unchanged"
+}

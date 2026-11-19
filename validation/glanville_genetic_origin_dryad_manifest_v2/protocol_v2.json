@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_dryad_version_file_listing",
+  "parent_source_gate_run": 44523855367,
+  "parent_source_result_sha256_without_self_hash": "8a32b9efeed085af7bb108f6cd655af5c0e84d16efa818f3a69a515001c9c931",
+  "parent_dryad_metadata_sha256": "702431ab596b702d5aa90187307a47d4e2324add91a426e14bbd301449284b8e",
+  "title_as_publisher_metadata": "Patch quality and genotype-by-environment interactions shape dispersal and post-settlement survival in a butterfly metapopulation",
+  "base_doi": "10.5061/dryad.7h44j0zws",
+  "version_list_url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.7h44j0zws/versions",
+  "version_selection": "Use last public published version ordered by publication date and version number; require exact _links.self path /api/v2/versions/{positive int}, no guessed id, pin chosen version in receipt",
+  "file_manifest_selection": "Use _links['stash:files'].href from selected version; require path /api/v2/versions/{same_id}/files; list pagination at most two pages; never open any file bytes",
+  "max_version_list_pages": 1,
+  "max_file_manifest_pages": 2,
+  "max_api_response_bytes": 2000000,
+  "max_file_entries": 250,
+  "output_only": [
+    "version ID, number, publication date",
+    "public file paths",
+    "file sizes",
+    "declared SHA-256 digests",
+    "source metadata SHA256",
+    "request status",
+    "filename-level possible event/assignment table candidate names; no rows or headers"
+  ],
+  "source_only_stop": [
+    "STOP_HTTP_TRANSPORT",
+    "STOP_VERSION_DATA_SCHEMA",
+    "STOP_FILE_MANIFEST_SCHEMA",
+    "STOP_TOO_MANY_FILES",
+    "STOP_VERSION_MISMATCH",
+    "STOP_SOURCE_UNAVAILABLE",
+    "STOP_NO_FILES"
+  ],
+  "constraints": [
+    "No raw data download or header inspection at this stage",
+    "Source DOI derived from published article reference, not newly inferred movement events",
+    "Do not treat assignment source labels as observed true natal origins",
+    "No changes to previously closed EOG-WF 3 scored/31 science STOP/3 admin exclusions"
+  ],
+  "original_metadata_only_result": "Zenodo archive metadata shows mainAnalysis.R only; not genetic-event data",
+  "next_gate": "Only if manifest names give a plausible source/destination table should a later predeclared version-pinned header-only gate be considered."
+}

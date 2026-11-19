@@ -1,0 +1,57 @@
+name: Glanville genetic-origin Dryad README and CSV headers
+
+# Dryad file-content scientific STOP (401) is recorded, do not retry on PR edits.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pin-three-publisher-file-headers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify frozen public version and three publisher file digests
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open("validation/glanville_genetic_origin_header_gate_v3/protocol_v3.json"))
+          assert p["status"]=="pre_download_exact_header_only_frozen"
+          assert p["target_version_id"]==181375
+          assert p["lineage"]["manifest_fingerprint"]=="a003bde0841d5647cd628b0a2a4143d9f0fd91c8c064d5dbbac9c6551c175c64"
+          assert [x["name"] for x in p["files"]]==[
+              "README","fullsibfamLevelData.csv","nestLevelData.csv"]
+          PY
+      - name: Test checksum and header-only contracts with synthetic fixtures
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_glanville_genetic_origin_header_gate_v3.py
+      - name: Exactly publisher SHA-pinned README and two CSV first headers
+        run: |
+          python scripts/glanville_genetic_origin_header_gate_v3.py \
+            --protocol validation/glanville_genetic_origin_header_gate_v3/protocol_v3.json \
+            --output results/glanville_genetic_origin_header_gate_v3/receipt.json
+          python - <<'PY'
+          import json
+          r=json.load(open("results/glanville_genetic_origin_header_gate_v3/receipt.json"))
+          assert r["biological_event_rows_read"]==0
+          assert r["genetic_events_scored"]==0
+          assert r["models_fit"]==0 and r["new_EOG_WF_endpoints"]==0
+          assert r["true_movement_direction_identified"] is False
+          assert r["source_patch_join_verified"] is False
+          print("DRYAD_HEADER_SCIENCE_STATUS="+r["status"])
+          print("SHA_VERIFIED_FILES="+str(len(r["files"])))
+          PY
+      - name: Save only headers and digest receipt, never genetic data rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-genetic-origin-dryad-headers-v3
+          path: results/glanville_genetic_origin_header_gate_v3/receipt.json
+          retention-days: 30
+          if-no-files-found: error
