@@ -162,7 +162,10 @@ def analyse(records):
 def run(source_dir:Path,output:Path):
     receipt=json.loads((source_dir/"source_gate.json").read_text())
     if receipt.get("status")!="SOURCE_BYTES_VERIFIED_NOT_SCORED":
-        return {"status":"SOURCE_STOP_NO_SCORE","reason":receipt.get("status")}
+        result={"schema":"eog.mediterranean_sowing_witness.result.v1","status":"SOURCE_STOP_NO_SCORE","reason":receipt.get("status"),"number_response_effects_scored":0}
+        output.parent.mkdir(parents=True,exist_ok=True)
+        output.write_text(json.dumps(result,sort_keys=True,indent=2)+"\n")
+        return result
     s=receipt.get("source_files",{}).get(EXPECTED_FILE,{})
     raw=(source_dir/EXPECTED_FILE).read_bytes()
     if s.get("status")!="VERIFIED" or hashlib.sha256(raw).hexdigest()!=s.get("sha256"):
