@@ -1,11 +1,7 @@
 name: Glanville EOG-minrelax source-only qualification
 
+# Source gate already executed once with archived receipt; no automatic repeat on PR updates.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_minrelax_source_gate_v1/**"
-      - "scripts/glanville_minrelax_source_gate_v1.py"
-      - ".github/workflows/eog-minrelax-glanville-source.yml"
   workflow_dispatch:
 
 permissions:
