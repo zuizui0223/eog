@@ -72,8 +72,19 @@ def file_manifest(meta,fetch=get_bytes):
         data,status=get_json(page_url,fetch)
         events.append({"endpoint":"files_page_"+str(i+1),"status":status})
         if data is None:return files,events
-        ents=data.get("_embedded",{}).get("stash:files",[])
+        embedded=data.get("_embedded",{})
+        ents=embedded.get("stash:files",[])
         if not isinstance(ents,list):return files,events+[{"endpoint":"files","status":"STOP_BAD_FILE_LIST"}]
+        # Diagnostic metadata only: never inspect CSV rows. Archive provider field
+        # keys/names so a SOURCE_STOP can be traced to schema or filename drift.
+        events.append({
+            "endpoint":"files_manifest_shape_"+str(i+1),
+            "count":len(ents),
+            "embedded_keys":sorted(embedded.keys()),
+            "sample_keys":sorted(ents[0].keys()) if ents and isinstance(ents[0],dict) else [],
+            "candidate_names":[{k:str(f.get(k,""))[:180] for k in ("path","filename","name","basename") if k in f}
+                               for f in ents[:30] if isinstance(f,dict)],
+        })
         for f in ents:
             if not isinstance(f,dict):continue
             name=f.get("path",f.get("filename","")).split("/")[-1]
