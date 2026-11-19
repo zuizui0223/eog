@@ -1,0 +1,53 @@
+name: EOG Glanville latent source and detection ambiguity audit
+
+# Pinned exploratory outcome receipt obtained; no automatic post-outcome reexecution.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-latent-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package / tests
+        run: python -m pip install -e ".[dev]"
+      - name: Check protocol / synthetic ambiguity witnesses
+        run: |
+          python -m pytest -q tests/test_glanville_latent_source_audit_v1.py
+      - name: Exact frozen-parent reproduction BEFORE latent-source audit
+        run: |
+          python benchmarks/glanville_latent_source_audit_v1.py \
+            --protocol validation/glanville_latent_source_audit_v1/protocol_v1.json \
+            --parent validation/glanville_minrelax_empirical_unitfix_v2/frozen_aggregate_summary_v2.json \
+            --exception-parent validation/glanville_minrelax_exception_budget_v1/frozen_primary_aggregate_summary_v1.json \
+            --output results/glanville_latent_source_audit_v1/result.json
+          python - <<'PY'
+          import json
+          p="results/glanville_latent_source_audit_v1/result.json"
+          r=json.load(open(p))
+          print("LATENT_SOURCE_AUDIT_STATUS="+r["status"])
+          print("LATENT_SOURCE_MATRIX_PANELS="+str(len(r.get("matrix",[]))))
+          assert r["new_EOG_WF_endpoints"]==0 and r["model_fits"]==0
+          assert r["real_detection_posterior_estimated"] is False
+          assert r["mechanism_identified"] is False
+          if r["status"]!="EXPLORATORY_LATENT_SOURCE_COMPATIBILITY_AUDIT_PASSED":
+              raise SystemExit("scientific STOP; no source-relaxation claim")
+          assert r["parent_strict_48_cells_reproduced"]
+          assert r["summary"]["matrix_panels"]==96
+          assert r["validated_post_stop_arithmetic_erratum"]["original_protocol_retained"] is True
+          PY
+      - name: Preserve aggregated result / scientific STOP receipt, not source rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-latent-source-compatibility-v1
+          path: results/glanville_latent_source_audit_v1/result.json
+          retention-days: 30
+          if-no-files-found: warn
