@@ -1,12 +1,7 @@
 name: EOG Glanville encrypted public-survey bridge for uploaded genetic assignments
 
+# Source authenticated and encrypted at run 44547980619; do not automatically redownload on PR updates.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_uploaded_origin_crosswalk_v1/**"
-      - "scripts/glanville_encrypt_survey_source_v1.py"
-      - "tests/test_glanville_encrypt_survey_source_v1.py"
-      - ".github/workflows/eog-glanville-encrypted-survey-bridge.yml"
   workflow_dispatch:
 
 permissions:
