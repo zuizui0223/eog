@@ -1,0 +1,44 @@
+name: Glanville documented unit-corrected exploratory minrelax
+
+# Unit-corrected original-source exploratory result frozen at run 44483614057;
+# no automatic repeat on PR updates or post-outcome retuning.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  km-to-m-repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test frozen scientific interface and unit correction
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_glanville_minrelax_empirical_unitfix_v2.py
+      - name: Run SHA-verified original-source exploratory analysis with only km-to-m repair
+        run: |
+          python benchmarks/glanville_minrelax_empirical_unitfix_v2.py \
+            --parent-protocol validation/glanville_minrelax_empirical_v1/protocol_v1.json \
+            --unit-protocol validation/glanville_minrelax_empirical_unitfix_v2/protocol_v2.json \
+            --output results/glanville_minrelax_empirical_unitfix_v2/result.json
+          python - <<'PY'
+          import json
+          r=json.load(open("results/glanville_minrelax_empirical_unitfix_v2/result.json"))
+          assert r["EOG_WF_new_endpoints"] == 0 and r["models_fit"] == 0
+          print("SCIENCE_STATUS="+r["status"])
+          print("YEAR_POLICY_PANELS="+str(len(r.get("annual_minimum_relaxation",[]))))
+          PY
+      - name: Archive only aggregate results and exact source proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-unit-corrected-minrelax-v2
+          path: results/glanville_minrelax_empirical_unitfix_v2/result.json
+          retention-days: 30
+          if-no-files-found: error

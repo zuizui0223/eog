@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "status": "pre-transport_source_only_frozen",
+  "created_for": "EOG PR #699 minimum required relaxation exploratory real-source gate",
+  "source": {
+    "doi": "10.5061/dryad.905qfttrg",
+    "title": "Demography and environment modulate the effects of genetic diversity on extinction risk in a butterfly metapopulation",
+    "authors": "DiLeo et al. (2024)",
+    "version_date": "2024-07-25",
+    "record_url": "https://datadryad.org/dataset/doi:10.5061/dryad.905qfttrg",
+    "pinned_archive_name": "DiLeo_et_al_DRYAD_ver3.zip",
+    "file_stream_id": 3349312,
+    "download_url": "https://datadryad.org/downloads/file_stream/3349312",
+    "declared_size_approx_mb": 9.89,
+    "license": "CC0 1.0 (as declared by record README)"
+  },
+  "expected_tables": {
+    "fall_survey_2004_2013.csv": {
+      "expected_rows_publisher_readme": 36704,
+      "year_range": [
+        2004,
+        2013
+      ],
+      "required_columns": [
+        "Patch",
+        "Year",
+        "Network",
+        "Area",
+        "Centroid_X",
+        "Centroid_Y",
+        "Occupancy",
+        "Nest_count",
+        "Vs",
+        "Pl"
+      ]
+    },
+    "raw.snps.csv": {
+      "expected_rows_publisher_readme": 8322,
+      "year_range": [
+        2007,
+        2012
+      ],
+      "required_columns": [
+        "DNA",
+        "Year",
+        "Patch",
+        "Centroid_X",
+        "Centroid_Y"
+      ]
+    },
+    "colonyFamilies.csv": {
+      "expected_rows_publisher_readme": 8322,
+      "year_range": [
+        2007,
+        2012
+      ],
+      "required_columns": [
+        "ID",
+        "Year",
+        "Region",
+        "COLONY2 Family ID"
+      ]
+    }
+  },
+  "source_gate_scope": [
+    "download one pinned version file exactly once with capped bytes",
+    "validate exact ZIP signatures and safe member paths; never extract",
+    "report archive SHA256 and selected member SHA256",
+    "report exact columns and data row count, year coverage, duplicated patch-year and DNA identities",
+    "check whether Patch x Year and DNA/ID are present and joinable across published source tables, report counts only",
+    "write deterministic machine-readable gate receipt and SHA256"
+  ],
+  "forbidden": [
+    "fit ecological, genetic, dispersal or prediction model",
+    "change EOG-WF closed 3/31/3 denominator",
+    "infer source or movement from non-detections or family ID alone",
+    "select favorable endpoint or tune thresholds from response",
+    "publish individual-level records or source archive in PR artifacts"
+  ],
+  "limits": {
+    "archive_bytes_max": 25000000,
+    "uncompressed_bytes_max": 160000000,
+    "archive_members_max": 3000,
+    "table_rows_max": 100000,
+    "timeout_seconds": 40,
+    "attempts": 1
+  },
+  "field_bio_sufficiency": "NOT_TESTED_PENDING_SOURCE_SCHEMA; origin, independent dispersal calibration and held-out chronology not established",
+  "transport_stop_rule": "If HTTP access denied or ZIP/schema fails, archive STOP receipt and do not automatically retry or substitute another version.",
+  "existing_evidence_boundary": "Entire exercise exploratory; 2019 and 2017 Glanville archives need not be fetched for this same-archive qualification."
+}

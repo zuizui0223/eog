@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_ecological_response_scoring",
+  "study": "Glanville fritillary exploratory annual positive-transition minimum single-step relaxation",
+  "source_evidence": {
+    "2019_occupancy_sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+    "2017_family_sha256": "90df549e41ae2c069758d3d6872fdc144cef5fcd32fb868af3d2e8cd408a8459",
+    "schema_join_receipt_sha256_without_self_hash": "6a74062f2633f986298b5c30c0d98f01c2f873b0f57a10bd2e11472acb70e287",
+    "prior_joins": {
+      "survey_rows": 74065,
+      "spatial_patches_matched": 4485,
+      "genetic_patch_year_matched": 749,
+      "genetic_patch_year_total": 757
+    }
+  },
+  "scientific_estimand": "For each year t in 2007..2012, among survey-comparable patches newly recorded positive at t following recorded zero at t-1, and a declared set of prior positive candidate sources, compute for each host-disparity threshold delta the smallest maximum single-step geographic distance r such that EACH newly recorded-positive target has at least one candidate source reachable in one hop with host-disparity <= delta. It is conditional model consistency, not observed dispersal.",
+  "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+  ],
+  "primary_source_policy": "previous_year_recorded_positive",
+  "sensitivity_source_policy": "previous_two_years_recorded_positive",
+  "primary_target_rule": "positive numerical population at t, recorded numerical population ==0 at t-1, with complete t-1 host features and valid patch coordinates",
+  "source_rule": "positive numerical population at source observation year; both host columns present at that year",
+  "environmental_transition": "max(abs(plantago_source - plantago_target_t_minus_1),abs(veronica_source - veronica_target_t_minus_1))",
+  "environmental_units": "published ordinal host-plant score 0..3 (descriptive analyst convention)",
+  "environmental_threshold_grid": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "distance_measure": "Euclidean projected patch centroids converted from meters to km only after independent genotype-patch centroid concordance",
+  "geographic_source": "2019 data/patch_network.tsv x/y",
+  "genetic_coordinate_verification": {
+    "minimum_paired_patches": 100,
+    "median_max_m": 1000,
+    "q95_max_m": 5000,
+    "description": "Compare matched genotype patch ETRS-TM35FIN centroids to survey patch_network x,y; numeric alignment prerequisite for geographic km"
+  },
+  "within_source_access": "2019 74,065 patch/year survey rows, 2017 8,322 master input/output rows; genome family uses (ID,Year) join",
+  "family_measure": "Number of independently reconstructed within-Year+Region+FamilyID groups appearing in >=2 patches and their undirected patch-pair Euclidean distance distribution. Family ID does not specify mother or movement direction.",
+  "family_id_gate": "At least 95% input ID/year pairs must match master-output ID/year pairs; keep all original outputs without repair.",
+  "reported_exploratory_quantities": [
+    "annual source and newly-recorded-positive target counts for both source policies",
+    "per-year minimum required max geographic step for each ordinal delta",
+    "Pareto-minimal geographic-distance/host-disparity candidates per year",
+    "source-policy sensitivity of the minimal radius at fixed delta",
+    "undirected reconstructed family multi-patch separation summary for 2007-2012",
+    "effect of omitting missing-coordinate or missing-host rows, reported as data audit"
+  ],
+  "baseline_comparator": "nearest previous-year occupied patch without host constraint (delta=3) from same frozen source roster",
+  "claim_restrictions": [
+    "positive transition after observed zero is NOT proven colonization due imperfect detection",
+    "no historical source identification, parental origin, barrier crossing, unobserved long-distance immigration or true maximum dispersal",
+    "2019 and 2017 archives involve the same long-term research system; never count this as fully independent biological replication",
+    "host-score disparity is not independently validated physiological tolerance",
+    "no strong model superiority or causal selection result from this exploratory source",
+    "no retroactive changes to EOG-WF 3/31/3",
+    "do not publish individual patch IDs, genotype rows, or family identifiers in output artifacts"
+  ],
+  "stop_rules": [
+    "fail closed if archive SHA mismatch or key/coordinate gate fails",
+    "do not infer geographic km if coordinate consistency not demonstrated",
+    "do not invent missing values, source labels or barriers",
+    "report no feasible source for a target as unresolved, not biological impossibility",
+    "no post-scoring threshold/feature/source-policy changes",
+    "if any year has zero eligible targets or candidate sources, report non-estimable rather than drop silently"
+  ],
+  "source_transport": "One verified source acquisition per frozen pair in this exploratory analysis; previous transport checks do not license outcome-based file substitution.",
+  "reporting": "aggregate-only JSON with code/data fingerprints, no individual row output",
+  "family_id_minimum_match_fraction": 0.95,
+  "source_lookback_priority": "For prior-two-year sources, use the most recent eligible source observation first"
+}

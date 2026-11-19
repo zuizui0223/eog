@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "status": "pre-score finite-graph contract",
+  "base_commit": "677e05773aec266659d955092ae5b8e3baf359d6",
+  "scope": "new standalone known-truth benchmark; no EOG-WF endpoint, no public API change",
+  "question": "For a frozen fixed source, observed positive target set, finite candidate edges and propagation horizon, which Pareto-minimal increases in geographic step limit, environmental transition tolerance, and declared barrier permission make every observed positive source-reachable?",
+  "input_contract": {
+    "source_ids": [
+      "A"
+    ],
+    "positive_occurrence_ids": [
+      "A",
+      "B"
+    ],
+    "baseline_limits": {
+      "geographic_km": 10,
+      "environmental_units": 1,
+      "barrier_permission": 0
+    },
+    "max_steps": 3,
+    "candidate_directed_edges": [
+      {
+        "source": "A",
+        "target": "X",
+        "geographic_km": 8,
+        "environmental_units": 2,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "X",
+        "target": "B",
+        "geographic_km": 8,
+        "environmental_units": 2,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "A",
+        "target": "B",
+        "geographic_km": 30,
+        "environmental_units": 0,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "A",
+        "target": "Y",
+        "geographic_km": 7,
+        "environmental_units": 0,
+        "barrier_permission": 1,
+        "hard_unavailable": false
+      },
+      {
+        "source": "Y",
+        "target": "B",
+        "geographic_km": 7,
+        "environmental_units": 0,
+        "barrier_permission": 1,
+        "hard_unavailable": false
+      }
+    ]
+  },
+  "hypotheses": [
+    {
+      "id": "H1",
+      "expected": "exact fixed-edge finite breakpoints identify 3 non-dominated incomparable rescue mechanisms: +20 km geo, +1 env unit, or permission +1; no zero-relaxation solution"
+    },
+    {
+      "id": "H2",
+      "expected": "joint 3-axis minimum cannot be inferred by separately taking coordinatewise minima"
+    },
+    {
+      "id": "H3",
+      "expected": "additional positive C with A->C geo15 env1 forces at least +5 km geo on every compatible world; Pareto set is +20 geo, (+5 geo,+1 env), (+5 geo,+1 barrier)"
+    },
+    {
+      "id": "H4",
+      "expected": "hard unavailable edges remain unavailable under every admitted relaxation; no feasible candidate world returns an explicit STOP, not natural biological impossibility"
+    },
+    {
+      "id": "H5",
+      "expected": "candidate edge ordering does not alter world fingerprints, compatible-world set or Pareto frontier"
+    },
+    {
+      "id": "H6",
+      "expected": "independent bounded directed-graph reachability reproduces every EOG finite-world compatibility decision"
+    }
+  ],
+  "gates": [
+    "source set predeclared and included in observed positive set",
+    "at least one non-source positive target",
+    "all numeric axes finite nonnegative; no scalar weighted composite",
+    "hard_unavailable never reopened by barrier permission",
+    "same fixed candidate graph and observed set across variants",
+    "enumerate all finite edge-derived breakpoints at or above baseline up to 512 worlds; fail closed beyond budget",
+    "no absence inference, no fitted dispersal kernel, no causal path claim",
+    "no promotion to independent field validation"
+  ],
+  "comparators": [
+    "baseline-only rule",
+    "coordinatewise axis minima (known potentially infeasible)",
+    "independent bounded graph reachability"
+  ],
+  "claim_limit": "Exact necessity within the declared fixed-source, fixed-candidate-edge, bounded-step, finite-breakpoint worlds only, not historical route or global ecological impossibility."
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_coordinate_diagnostic",
+  "reason": "Real minrelax attempted under predeclared protocol returned STOP_CRS_NUMERICAL_CONCORDANCE_FAILED. Diagnose representation; do not rerun outcome or silently change threshold.",
+  "parent_failed_run_id": 44482618167,
+  "source_shas": {
+    "occupancy": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+    "family": "90df549e41ae2c069758d3d6872fdc144cef5fcd32fb868af3d2e8cd408a8459"
+  },
+  "data_scope": [
+    "2019 data/patch_network.tsv patch,x,y",
+    "2019 README.rst metadata text",
+    "2017 master-input.csv Patch,Patch Centroid_X (ETRS-TM35FIN),Patch Centroid_Y (ETRS-TM35FIN)"
+  ],
+  "diagnostics": [
+    "number matched patch IDs",
+    "medians/ranges of x and y by source",
+    "untransformed paired coordinate difference distribution median/q95",
+    "pairwise x and y Pearson correlations",
+    "paired coordinate offset quantiles",
+    "exactly three predeclared synthetic representation candidates: identity, swap, scale divide/multiply 1000; no selection for scientific result",
+    "README text lines containing epsg/coordinate/ETRS/UTM/projection/CRS"
+  ],
+  "strict_boundary": "diagnostic of source-coordinate semantics only; no occupancy outcome, host values, family labels or ecological minimum-relaxation calculation",
+  "stop": "No automatic threshold repair or source file version replacement; if metadata does not establish valid coordinate interpretation, keep main empirical endpoint STOP and report uncertainty.",
+  "transport": "one new SHA-checked GET per source as distinct source-metadata diagnostic; no retry; aggregate-only receipts",
+  "original_crs_gate": {
+    "minimum_paired_patches": 100,
+    "median_max_m": 1000,
+    "q95_max_m": 5000
+  },
+  "no_publish": [
+    "individual patch ids",
+    "site coordinates",
+    "genotypes",
+    "source archive"
+  ],
+  "result_status": "COORDINATE_DIAGNOSTIC_ONLY_NOT_REANALYSIS"
+}

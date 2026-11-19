@@ -1,0 +1,45 @@
+name: Glanville EOG-minrelax source-only qualification
+
+# Source gate already executed once with archived receipt; no automatic repeat on PR updates.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify-source-once:
+    name: Dryad pinned-source structure gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check frozen source protocol exists
+        run: |
+          python -c 'import json; p=json.load(open("validation/glanville_minrelax_source_gate_v1/protocol_v1.json")); assert p["status"]=="pre-transport_source_only_frozen"; assert p["source"]["file_stream_id"]==3349312'
+      - name: One-shot source-only qualification (scientific STOP is recorded, not retried)
+        run: |
+          python scripts/glanville_minrelax_source_gate_v1.py \
+            --protocol validation/glanville_minrelax_source_gate_v1/protocol_v1.json \
+            --output results/glanville_minrelax_source_gate_v1/receipt.json
+          python - <<'PY'
+          import json
+          p="results/glanville_minrelax_source_gate_v1/receipt.json"
+          r=json.load(open(p))
+          assert r["scored_ecological_outcomes"] == 0
+          assert r["new_eogwf_predictive_endpoints"] == 0
+          assert r["model_fits"] == 0
+          print("SCIENCE_GATE_STATUS="+r["status"])
+          PY
+      - name: Save receipt only (NO raw archive or row data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-minrelax-source-schema-receipt
+          path: results/glanville_minrelax_source_gate_v1/receipt.json
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "status": "pre-score frozen synthetic sensitivity protocol",
+  "parent_pr": 699,
+  "parent_protocol": "validation/occurrence_conditioned_minrelax_v1/protocol_v1.json",
+  "scope": "known-truth synthetic alternative-source x analytic-graph audit, not prospective empirical evidence",
+  "fixed_nodes": [
+    "A",
+    "B",
+    "X",
+    "Y"
+  ],
+  "observed_positives": [
+    "A",
+    "B"
+  ],
+  "alternative_fixed_singleton_sources": [
+    [
+      "A"
+    ],
+    [
+      "B"
+    ]
+  ],
+  "analyst_graph_variants": [
+    "soft_crossing",
+    "hard_sea_mask"
+  ],
+  "common_baseline": {
+    "geographic_km": 10,
+    "environmental_units": 1,
+    "barrier_permission": 0
+  },
+  "max_steps": 3,
+  "max_worlds": 128,
+  "candidate_edges": [
+    {
+      "source": "A",
+      "target": "X",
+      "geographic_km": 8,
+      "environmental_units": 2,
+      "barrier_permission": 0
+    },
+    {
+      "source": "X",
+      "target": "B",
+      "geographic_km": 8,
+      "environmental_units": 2,
+      "barrier_permission": 0
+    },
+    {
+      "source": "A",
+      "target": "B",
+      "geographic_km": 30,
+      "environmental_units": 0,
+      "barrier_permission": 0
+    },
+    {
+      "source": "A",
+      "target": "Y",
+      "geographic_km": 7,
+      "environmental_units": 0,
+      "barrier_permission": 1
+    },
+    {
+      "source": "Y",
+      "target": "B",
+      "geographic_km": 7,
+      "environmental_units": 0,
+      "barrier_permission": 1
+    },
+    {
+      "source": "B",
+      "target": "A",
+      "geographic_km": 25,
+      "environmental_units": 0,
+      "barrier_permission": 0
+    }
+  ],
+  "graph_variants": [
+    {
+      "id": "soft_crossing",
+      "hard_unavailable_edges": []
+    },
+    {
+      "id": "hard_sea_mask",
+      "hard_unavailable_edges": [
+        [
+          "A",
+          "Y"
+        ],
+        [
+          "Y",
+          "B"
+        ]
+      ]
+    }
+  ],
+  "expected_finite_threshold_axes": {
+    "geographic_km": [
+      10,
+      25,
+      30
+    ],
+    "environmental_units": [
+      1,
+      2
+    ],
+    "barrier_permission": [
+      0,
+      1
+    ]
+  },
+  "predictions": [
+    {
+      "id": "A1",
+      "expected": "source A, soft crossing has three minimal rescue vectors (20,0,0),(0,1,0),(0,0,1)"
+    },
+    {
+      "id": "A2",
+      "expected": "source B, either graph has only direct B->A rescue (15,0,0)"
+    },
+    {
+      "id": "A3",
+      "expected": "existential across any source and any analytic graph has (15,0,0),(0,1,0),(0,0,1)"
+    },
+    {
+      "id": "A4",
+      "expected": "universal across both sources and both graphs has (20,0,0),(15,1,0)"
+    },
+    {
+      "id": "A5",
+      "expected": "soft graph universal across both sources has additionally (15,0,1); strict graph cannot reopen hard sea route"
+    },
+    {
+      "id": "A6",
+      "expected": "source/analytic identity matters; hard sea mask cannot produce barrier-only rescue; all 12 per hypothesis EOG compatibilities match independent bounded BFS"
+    },
+    {
+      "id": "A7",
+      "expected": "global feasible status and both frontiers invariant to edge ordering, source order and variant order"
+    }
+  ],
+  "limitations": [
+    "No source founding proof",
+    "No real dispersal or barrier field data",
+    "Hard sea closure is a declared analytical variant, not measured absence",
+    "No inference outside shared finite breakpoint grid",
+    "Do not use as EOG-WF fourth independent endpoint"
+  ]
+}
