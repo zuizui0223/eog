@@ -223,6 +223,7 @@ def run_audit(protocol,parent,prior_exception,out_path):
         "model_fits":0,
         "new_EOG_WF_endpoints":0,
         "parent_strict_source_sha256":protocol["prior_results"]["strict_result_sha256"],
+        "validated_post_stop_arithmetic_erratum":protocol.get("_validated_arithmetic_erratum"),
         "parent_exception_source_sha256":protocol["prior_results"]["exception_result_sha256"],
     }
     try:
@@ -343,15 +344,50 @@ def run_audit(protocol,parent,prior_exception,out_path):
     return result
 
 
+def apply_arithmetic_erratum(protocol, erratum):
+    """Correct only the multiplication guard, preserving the frozen science."""
+    if (erratum.get("kind") != "arithmetic_matrix_cardinality_erratum_only"
+        or erratum.get("failed_run_id") != 44513808990
+        or erratum.get("failed_status") != "STOP_MATRIX_COUNT"
+        or erratum.get("original_declared_max_matrix_rows") != 48
+        or erratum.get("corrected_max_matrix_rows") != 96
+        or erratum.get("scientific_choices_changed") is not False
+        or protocol["computational_maxima"]["max_matrix_rows"] != 48):
+        raise GateStop("STOP_INVALID_OR_OUT_OF_SCOPE_ERRATUM")
+    factors={
+        "years":len(protocol["target_years"]),
+        "host_tolerances":len(protocol["fixed_host_tolerances"]),
+        "radii":len(protocol["fixed_radius_km"]),
+        "latent_candidate_pools":len(protocol["latent_candidate_subsets"]),
+        "same_patch_policies":len(protocol["same_patch_cases"]),
+    }
+    if factors!=erratum["arithmetic_factors"] or math.prod(factors.values())!=96:
+        raise GateStop("STOP_ERRATUM_FACTORS_MISMATCH")
+    changed=dict(protocol)
+    changed["computational_maxima"]=dict(protocol["computational_maxima"])
+    changed["computational_maxima"]["max_matrix_rows"]=96
+    changed["_validated_arithmetic_erratum"]={
+        "failed_run_id":44513808990,
+        "change":"bookkeeping guard only: 48 to 96 expected matrices",
+        "original_protocol_retained":True,
+        "biological_contract_unchanged":True,
+    }
+    return changed
+
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--protocol",type=Path,default=Path("validation/glanville_latent_source_audit_v1/protocol_v1.json"))
     p.add_argument("--parent",type=Path,default=Path("validation/glanville_minrelax_empirical_unitfix_v2/frozen_aggregate_summary_v2.json"))
     p.add_argument("--exception-parent",type=Path,default=Path("validation/glanville_minrelax_exception_budget_v1/frozen_primary_aggregate_summary_v1.json"))
     p.add_argument("--output",type=Path,default=Path("results/glanville_latent_source_audit_v1/result.json"))
+    p.add_argument("--erratum",type=Path,default=Path("validation/glanville_latent_source_audit_v1/protocol_erratum_v1_1.json"))
     args=p.parse_args()
     run_audit(
-        json.loads(args.protocol.read_text()),
+        apply_arithmetic_erratum(
+            json.loads(args.protocol.read_text()),
+            json.loads(args.erratum.read_text()),
+        ),
         json.loads(args.parent.read_text()),
         json.loads(args.exception_parent.read_text()),
         args.output,
