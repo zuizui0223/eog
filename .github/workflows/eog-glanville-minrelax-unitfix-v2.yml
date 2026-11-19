@@ -1,12 +1,8 @@
 name: Glanville documented unit-corrected exploratory minrelax
 
+# Unit-corrected original-source exploratory result frozen at run 44483614057;
+# no automatic repeat on PR updates or post-outcome retuning.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_minrelax_empirical_unitfix_v2/**"
-      - "benchmarks/glanville_minrelax_empirical_unitfix_v2.py"
-      - "tests/test_glanville_minrelax_empirical_unitfix_v2.py"
-      - ".github/workflows/eog-glanville-minrelax-unitfix-v2.yml"
   workflow_dispatch:
 
 permissions:
