@@ -1,0 +1,118 @@
+{
+  "schema": "eog.nutnet_hodapp_frozen_y3_target.protocol.v1",
+  "status": "FROZEN_PRE_RESPONSE_BYTES",
+  "frozen_context_utc": "2026-11-19",
+  "evidence_history": "Study-level published directional findings and treatment labels are public and already known. No experiment CSV row-level response values have been read in this target protocol. A held-out test within the published dataset is a retrospective independent-site validation, not a genuinely prospective independent ecological intervention study.",
+  "parent": "EOG PR #704 source-only gate; EOG PR #702 exploratory synthetic BAM span audit; neither is modified.",
+  "source": {
+    "repository": "Dryad",
+    "doi": "10.5061/dryad.8vs569h",
+    "article_doi": "10.1111/ele.13102",
+    "dataset_md5_and_bytes": {
+      "composition-data.csv": {
+        "md5": "5d9455e9ec281ca351db250340f3a1e5",
+        "bytes": 1510812
+      },
+      "env-param-Y0.csv": {
+        "md5": "663fe1ce5ce18ffb27462e99c0e3d2a6",
+        "bytes": 47604
+      }
+    },
+    "mirror": "Zenodo record 5023851 is not accepted until byte equivalence for both files and source attribution are verified.",
+    "credit": "Hodapp D., Borer E.T., Harpole W.S. et al. (2019) Dataset doi:10.5061/dryad.8vs569h"
+  },
+  "target": {
+    "name": "site-level difference-in-differences of spatial community-state upper-span after herbivore exclusion",
+    "unit": "independent experimental site (site_code); matched treatment blocks not independent sites",
+    "pre_treatment_year": 0,
+    "post_treatment_year": 3,
+    "primary_treatments": [
+      "Control",
+      "Fence"
+    ],
+    "secondary_treatments": [
+      "NPK",
+      "NPK+Fence"
+    ],
+    "features": "For each site, create one complete taxon identity axis using only its observed taxon IDs across candidate plot-years, with absent taxa 0 only when complete vegetation census is documented. For every plot×year, Hellinger-transform percent cover: sqrt(cover/sum_cover). If true total cover is 0 and sample is certified, use the zero vector; exclude no sample silently.",
+    "span": "90th percentile of strictly positive Euclidean pairwise distances among Hellinger plot composition vectors, return 0 if no strictly positive pairs; equal plot/arm/year matched blocks throughout. No separate treatment-specific scaling.",
+    "response": "D_site = [span(Fence,Y3)-span(Fence,Y0)] - [span(Control,Y3)-span(Control,Y0)]",
+    "direction_tolerance_absolute": 0.02,
+    "direction": "+ if D_site > +0.02; - if D_site < -0.02; 0 otherwise",
+    "secondary": "Site-block matched Jaccard turnover Y0→Y3: median block[(Jaccard_Fence)-(Jaccard_Control)]; report separately and never substitute as primary",
+    "non_goals": [
+      "Do not call this environmental niche span",
+      "Do not call Fence a deletion of all biotic B constraints",
+      "Do not call NPK a deletion of all abiotic A constraints",
+      "M movement axis not measured"
+    ]
+  },
+  "eligibility": {
+    "require_same_plot_year0_year3": true,
+    "require_one_Control_one_Fence_per_block": true,
+    "require_at_least_matched_blocks_per_site": 3,
+    "require_same_matched_blocks_across_years": true,
+    "use_taxa_as_unique_strings_not_numeric_ids": true,
+    "duplicate_sample_or_conflicting_coverage": "SCIENTIFIC_STOP; do not sum, average, or silently drop",
+    "missing_year0_or_year3": "SCIENTIFIC_STOP at affected site, retain flow record",
+    "cover_type": "numeric finite percent cover >=0; values >100 need documented original meaning or STOP",
+    "group_rule": "blocks matched by site_code and block; plots by site_code,block,plot; one arm sample per block",
+    "minimum_sites_for_training_and_test": 20,
+    "minimum_holdout_sites": 5,
+    "holdout_fraction": 0.25,
+    "holdout_rule": "Sort eligible site_code by SHA256(utf8('EOG_NUTNET_Y3_20261119_V1|'+site_code)); first ceil(0.25*n) are held out, remainder train; group site wholly across blocks and years",
+    "source_access_stop": "Any archive MD5, size, raw download, licence or file-identity mismatch blocks scoring"
+  },
+  "predictors": {
+    "time_cutoff": "Y0 only; no Y1-Y3 information or site-level responses in predictor construction",
+    "biotic": [
+      "Y0 mean plot richness over matched plots",
+      "Y0 90th-percentile Hellinger span",
+      "Y0 mean Jaccard dissimilarity among matched plots"
+    ],
+    "abiotic": "All numeric non-ID/non-treatment covariates in env-param-Y0 with provenance explicitly labelled PRETREATMENT, summarized to site medians. No post-treatment covariates.",
+    "standardization": "Training-site means/standard deviations only; missing-value imputation by training-site medians with missing indicators; no holdout-derived scale or variable selection."
+  },
+  "model_universe": {
+    "family": [
+      "intercept-only site mean",
+      "ridge abiotic-Y0",
+      "ridge biotic-Y0",
+      "ridge joint abiotic+biotic-Y0"
+    ],
+    "penalty": "Fixed ridge alpha=10; non-intercept predictors standardized on train only; no model tuning based on holdout",
+    "prediction": "For each heldout site, compute D_hat under each of the four models; issue signed prediction only if every model strictly >+0.02 or every model strictly <-0.02. Otherwise abstain.",
+    "restrictions": "Candidate predictive representations are not independently established causal BAM mechanisms; agreement across models is conditional on this limited predeclared family.",
+    "uncertainty_sensitivity": "Optional predetermined 200 site-level bootstrap repetitions of train sites per model, deterministic seed 20261119; report 5th and 95th percentiles but never use them to change primary decision",
+    "baseline": "Training intercept-only mean sign at the same 0.02 tolerance (without unanimity). Also evaluate majority nonzero sign as descriptive comparator.",
+    "abstention_is_valid": true
+  },
+  "evaluation": {
+    "endpoints": [
+      "n source sites",
+      "n eligible sites",
+      "heldout site count",
+      "fraction signed predictions (coverage)",
+      "wrong-sign count over all signed holdout sites (including true zero as wrong)",
+      "correct-sign count",
+      "abstention count",
+      "heldout baseline sign agreement",
+      "source and exclusion flow"
+    ],
+    "never_report_as": [
+      "new 4th EOG-WF endpoint",
+      "original synthetic BAM validation",
+      "proof of predicting true ecological mechanism",
+      "new independent replication of published treatment effect"
+    ],
+    "prospective_after_score": "No result-specific changes to target, unit, universe or threshold. Any amendment needs a new protocol and prominent post-exposure flag."
+  },
+  "workflow": [
+    "freeze this contract",
+    "verify official/mirror file MD5, bytes",
+    "header/schema and duplicate integrity gate",
+    "if all gates pass, run predeclared site split and full training/holdout score",
+    "archive raw provenance, all positive and negative findings, failures"
+  ],
+  "analysis_source_access_at_creation": "No original individual treatment response entries opened."
+}

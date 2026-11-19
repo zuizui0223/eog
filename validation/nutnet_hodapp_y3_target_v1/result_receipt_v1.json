@@ -1,0 +1,60 @@
+{
+  "schema": "eog.nutnet_hodapp_y3_target.result_receipt.v1",
+  "status": "SOURCE_EXACT_HOLDOUT_SCORED_MIXED_NO_SUPERIORITY",
+  "source": {
+    "doi": "10.5061/dryad.8vs569h",
+    "storage": "Zenodo mirrored bytes verified against Dryad official MD5/size",
+    "files": {
+      "composition-data.csv": {
+        "size": 1510812,
+        "md5": "5d9455e9ec281ca351db250340f3a1e5",
+        "sha256": "12ea1d3f3d5f8e1ddce70367b3ff04f07e86b7a4caefbdb8084d2a1f3ed870b3"
+      },
+      "env-param-Y0.csv": {
+        "size": 47604,
+        "md5": "663fe1ce5ce18ffb27462e99c0e3d2a6",
+        "sha256": "9881be7db9d57230c62eac4f8ab332b80f1e5317600d42854426a16ee24cb161"
+      }
+    }
+  },
+  "pre_score_protocol_commit": "b5ae8afd45de101504539b87482114a731ff247d",
+  "code_scored_under_pr": 705,
+  "run": {
+    "id": 44542335891,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44542335891",
+    "artifact_id": 14538643500,
+    "archive_sha256": "88a430587245f02c93020279d6e3daa29f88d313d45c2741d7a523ac25b4bfc7"
+  },
+  "sample": {
+    "composition_sites": 42,
+    "environment_sites": 41,
+    "source_taxa": 1303,
+    "source_cover_rows": 29829,
+    "matched_one_arm_blocks": 104,
+    "eligible_sites": 30,
+    "train_sites": 22,
+    "heldout_sites": 8
+  },
+  "target": "Y0 to Y3 Fence-minus-Control difference in change of 90th-percentile positive pairwise Hellinger plot-community span; sign tolerance 0.02",
+  "result": {
+    "all_eligible_signs": {
+      "positive": 14,
+      "negative": 12,
+      "near_zero": 4
+    },
+    "heldout": 8,
+    "issued": 3,
+    "issued_correct": 2,
+    "issued_wrong": 1,
+    "abstained": 5,
+    "issued_negative": 0,
+    "baseline_mean_correct": 4
+  },
+  "evidence_status": "Retrospective cross-site holdout from a published study, not independently sampled new treatment trial. Correctness not calibrated and generality not established.",
+  "parity": "Local vs CI effect numerical agreement <=1.2e-16; model-prediction numerical agreement <=8.7e-16, no byte-identical claim",
+  "restrictions": [
+    "Do not change frozen target/holdout/model universe after score",
+    "Do not call this true ecological mechanism identification",
+    "Not a new EOG-WF endpoint"
+  ]
+}
