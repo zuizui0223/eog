@@ -1,12 +1,7 @@
 name: Glanville exploratory minrelax 2007-2012
 
+# Exploratory run stopped under frozen CRS guard; do not rescore on PR pushes.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_minrelax_empirical_v1/**"
-      - "benchmarks/glanville_minrelax_empirical_v1.py"
-      - "tests/test_glanville_minrelax_empirical_v1.py"
-      - ".github/workflows/eog-glanville-minrelax-empirical.yml"
   workflow_dispatch:
 
 permissions:
