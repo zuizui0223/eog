@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "status": "pre_transport_metadata_only_frozen",
+  "base_main_sha": "899dc7be7ea5ffc5a475551316484a12a2d2dd55",
+  "purpose": "qualify whether published five-year genetic assignment study supplies source/destination/year evidence to discriminate EOG minrelax history interpretations; NO outcome or ecological score",
+  "literature": [
+    {
+      "doi": "10.1098/rspb.2022.0322",
+      "article": "DiLeo et al. (2022) Effects of environment and genotype on dispersal differ across departure, transfer and settlement in a butterfly metapopulation",
+      "reported_system": "Melitaea cinxia; 5 years; 232 habitat patches; genetic assignment inferred origin and transfer; mean dispersal 1.60 km; observed maximum 10.3 km in paper"
+    },
+    {
+      "doi": "10.5061/dryad.7h44j0zws",
+      "role": "original published empirical data from article, presently unqualified bytes/version"
+    },
+    {
+      "doi": "10.5281/zenodo.6610910",
+      "role": "publisher-linked openly labeled software by DiLeo, Nonaka, Husby, Saastamoinen; may or may not include event-level data"
+    }
+  ],
+  "source_contract": {
+    "zenodo_api": "https://zenodo.org/api/records/6610910",
+    "record_id": 6610910,
+    "dryad_api": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.7h44j0zws",
+    "zenodo_max_metadata_bytes": 2000000,
+    "dryad_max_metadata_bytes": 2000000,
+    "files_max": 120,
+    "allowed_small_file_categories": [
+      ".csv",
+      ".tsv",
+      ".txt",
+      ".md",
+      ".r",
+      ".rmd",
+      ".zip",
+      ".tar.gz"
+    ],
+    "max_candidate_bytes": 15000000,
+    "max_uncompressed_archive_bytes": 60000000,
+    "max_members": 2000,
+    "max_header_preview_bytes": 2048,
+    "candidate_downloads_max": 1,
+    "candidate_download_selection": "choose lexicographically first recognized text file with name containing source/destination/origin/dispersal/data, else smallest archive eligible, else no download; deterministic from Zenodo metadata; never guess alternate URL"
+  },
+  "checkable_fields_only": [
+    "version id",
+    "publication date",
+    "file names",
+    "file sizes",
+    "publisher checksums",
+    "archive paths if one eligible",
+    "CSV/TSV header names only (no individual data)",
+    "whether possible source/destination/year join keys are even named",
+    "licensing"
+  ],
+  "required_for_followup_real_crosswalk": [
+    "source_patch_identifier distinct from arrival_patch_identifier",
+    "event collection/reconstruction year",
+    "direction inferred from genetic assignment rather than geographic proximity or contemporaneous nest positions",
+    "an audit of source-label uncertainty/ambiguous assignments, explicit filters",
+    "join to frozen 2019 survey patch network by exact patch IDs or independently published crosswalk; no guessed mapping",
+    "independent model of observation process or documented repeated visits for a detection estimate"
+  ],
+  "stop_statuses": [
+    "STOP_HTTP_TRANSPORT",
+    "STOP_API_SCHEMA",
+    "STOP_INSUFFICIENT_PUBLIC_FILE_METADATA",
+    "STOP_NO_SOURCE_DESTINATION_YEAR_CANDIDATE",
+    "STOP_SOURCE_CHECKSUM_MISMATCH",
+    "STOP_SOURCE_SIZE_BUDGET"
+  ],
+  "scientific_separation": [
+    "Genetic assignment direction is a model-based proxy, not direct observation of movement",
+    "Even same-species same-archipelago studies may share source observations and periods; not a fresh independent EOG-WF endpoint",
+    "No source labels, rows, genetic IDs, coordinates, or reconstructed event magnitudes opened in this gate",
+    "Never interpret unavailable data as negative evidence of dispersal",
+    "No alteration of frozen prior EOG-WF 3 scored /31 scientific STOP /3 admin exclusions"
+  ]
+}
