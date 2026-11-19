@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "status": "frozen_after_user_file_inspection_before_crosswalk",
+  "source_published_dataset": {
+    "doi": "10.5061/dryad.7h44j0zws",
+    "dryad_version_id": 181375,
+    "source_filename": "fullsibfamLevelData.csv",
+    "source_sha256": "140e5361f9bced20a434bfee01bae6ce7c925e028718cdb9c6fd8aa635cc912a",
+    "size_bytes": 137353,
+    "source_rows": 799,
+    "notes": "User-provided byte-identical published Dryad file; do not store original data rows in GitHub"
+  },
+  "prior_source_repository": {
+    "doi": "10.5061/dryad.ksn02v707",
+    "zenodo_record": 4987060,
+    "archive_url": "https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1",
+    "archive_sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+    "max_bytes": 5000000,
+    "expected_tables": [
+      "data/survey_data.tsv",
+      "data/patch_network.tsv"
+    ]
+  },
+  "public_key_sha256": "511d98bd6457e26e462cbf2ca484778a97825182ebcb02dd92b95a56dc15937a",
+  "ephemeral_encryption_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEA02/rHxuDJekhtV0Iumoy\nDezlgzKdHAmUdD3d15ZrMwQeoRSwFE6yopyXGvZRwhrscfBXDdL0dsclGY/PTTsL\nYVNHGxCU7D9xRhZEiKFhhSvHQj38ivoP1kacvdjMLDwXq5HZkY3j2CGhoAnW0wyd\nYldT8hS8Rg0267DpsFNCPJ8yE+BVVcdyVwBDW7mI+uqkGJqVyYBHiVbxamSeY53t\n4TFQ7b5xJ0ivGikxjdwzHe1yTlfscgm53ZmWm8vOFAnq9Rv3g5KOM/6UPr4u78E2\nIKfN5kWzmrAa/862PBXh5dKZO379V198wWkKkbMzmcLS7z9vnrlZhRPUl+iCsoXj\nCtKvqryihlp2jSM2uWsyX6FMJE2Hx/867htFnwP4Oe+462DzldIPqhn94QKwFFWh\n66R+vXLvaD303I2bgDRD6JIaff40xiJ0tL4SR9HT47L2tAjKXSqPfW4J9+zJTbds\n5m2ngV6K+F026STpl4CVP5J9AHTKZ/LwfLYaFm0abLpTAgMBAAE=\n-----END PUBLIC KEY-----\n",
+  "encryption": "RSA-OAEP-SHA256 wraps 256bit random AES-GCM key; random nonce; compressed derived patch/year survey + network rows as ciphertext only; decrypted only in user's present ChatGPT sandbox; plaintext and ephemeral private key NEVER stored in GitHub",
+  "workflow_one_shot": true,
+  "artifact_retention_days": 1,
+  "max_public_years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+  ],
+  "raw_source_bytes_in_artifact": false,
+  "raw_user_uploaded_file_in_repo": false,
+  "analysis_contract": {
+    "key": "exact integer patch ID plus calendar year, no fuzzy matching",
+    "event_years": "YearFrom=2007..2011 and YearTo=2008..2012 for uploaded 799 family-patch assignment rows",
+    "primary_scope": "498 PatchFrom != PatchTo genetically inferred changes (families may have multiple destination rows); 301 same-patch resident assignments retained as separate category",
+    "parent_survey_recorded_status": "Schulz 2019 patch/year population >0 observed positive, ==0 recorded zero, missing/non-numeric unresolved",
+    "join_questions": [
+      "For 799 assignments, how many (YearFrom,PatchFrom), (YearFrom,PatchTo), and (YearTo,PatchTo) actually have matched survey patch/year records?",
+      "How often was a genetically assigned source recorded positive, zero, or missing at YearFrom?",
+      "For off-patch assignments: number with recorded-zero target in YearFrom and positive target in YearTo (EOG eligible transitions); number resident/persistent/unknown",
+      "Distance consistency: compare published dispersalDistance (km) with Euclidean site-centroid km where both patched centroid coordinates are verified",
+      "Among matched EOG eligible transitions, evaluate whether the assigned source is in frozen previous-year observed-positive candidate set; no backward source inference from nearest alternative",
+      "Summarize source restriction and detection ambiguity by arrival year, not as causal effect or predictive superiority"
+    ],
+    "exclude_raw_identifiers": true,
+    "assumptions": [
+      "Genetic assignment originates from GENECLASS2 reference sampled source patches with score=100 per publication; uploaded data do not include score column so per-record confidence cannot be verified",
+      "Same fullsibfam ID may appear in two destination rows; use family-cluster counts not iid dispersal units",
+      "2019 source patch IDs presumed same system until exact identifier concordance shown",
+      "Genetically assigned movement between sampled patches not a direct observed flight or exact natal origin",
+      "This is historical same-archipelago, overlapping years exploratory evidence, not a fresh EOG-WF endpoint"
+    ],
+    "stop_if": [
+      "2019 archive checksum fails",
+      "network/survey table schema unexpected",
+      "file original SHA incorrect",
+      "within-year survey duplicate patch/year",
+      "year/patch type unparseable",
+      "decrypted survey artifact authentication fails",
+      "matching patch-year sample too small (<10)",
+      "no temporal match for genetic movement assignments"
+    ],
+    "output": "aggregate-only diagnostic JSON and no individual patch IDs, family IDs, coordinates or event rows"
+  },
+  "original_eogwf_state": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3,
+    "unchanged": true
+  },
+  "precision": "do not compute p-values or claim validation of historical sources until independently corroborated and modeled assignment error",
+  "base_sha": "ff60ffe3b4994d795dc4bd9da392bc4e99e1c623"
+}
