@@ -1,12 +1,7 @@
 name: Glanville Zenodo software static schema preflight
 
+# Source audit completed at run 44541968460; no automatic post-access R-file retrieval on PR changes.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_zenodo_software_schema_v4/**"
-      - "scripts/glanville_zenodo_software_schema_v4.py"
-      - "tests/test_glanville_zenodo_software_schema_v4.py"
-      - ".github/workflows/eog-glanville-zenodo-software-v4.yml"
   workflow_dispatch:
 
 permissions:
