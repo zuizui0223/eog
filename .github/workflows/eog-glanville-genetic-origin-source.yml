@@ -1,0 +1,64 @@
+name: Glanville genetic-origin independent-evidence source preflight
+
+on:
+  pull_request:
+    paths:
+      - "validation/glanville_genetic_origin_source_preflight_v1/**"
+      - "scripts/glanville_genetic_origin_source_preflight_v1.py"
+      - "tests/test_glanville_genetic_origin_source_preflight_v1.py"
+      - ".github/workflows/eog-glanville-genetic-origin-source.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-only:
+    name: Publisher metadata, hashes and headers only
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Confirm frozen source-only contract
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open("validation/glanville_genetic_origin_source_preflight_v1/protocol_v1.json"))
+          assert p["status"]=="pre_transport_metadata_only_frozen"
+          assert p["base_main_sha"]=="899dc7be7ea5ffc5a475551316484a12a2d2dd55"
+          assert p["source_contract"]["record_id"]==6610910
+          assert p["source_contract"]["candidate_downloads_max"]==1
+          PY
+      - name: Run source-only unit tests
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_glanville_genetic_origin_source_preflight_v1.py
+      - name: One-shot publisher metadata/manifest qualification
+        run: |
+          python scripts/glanville_genetic_origin_source_preflight_v1.py \
+            --protocol validation/glanville_genetic_origin_source_preflight_v1/protocol_v1.json \
+            --output results/glanville_genetic_origin_source_preflight_v1/receipt.json
+          python - <<'PY'
+          import json
+          p="results/glanville_genetic_origin_source_preflight_v1/receipt.json"
+          r=json.load(open(p))
+          assert r["source_results_opened"]==0
+          assert r["biological_event_rows_read"]==0
+          assert r["models_fit"]==0
+          assert r["new_EOG_WF_endpoints"]==0
+          assert r["join_to_Glanville_patch_table_verified"] is False or r["status"].startswith("STOP")
+          print("SOURCE_PREFLIGHT_STATUS="+r["status"])
+          print("ZENODO_METADATA_STATUS="+r["zenodo"]["status"])
+          print("DRYAD_METADATA_STATUS="+r["dryad"]["status"])
+          PY
+      - name: Save metadata receipt only, never research sample rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-genetic-origin-source-preflight
+          path: results/glanville_genetic_origin_source_preflight_v1/receipt.json
+          if-no-files-found: error
+          retention-days: 30
