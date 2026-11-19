@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "status": "pre_join_header_and_key_audit_frozen",
+  "parent_gate": "validation/glanville_zenodo_dual_source_gate_v1/protocol_v1.json",
+  "parent_receipt_sha256_without_self_hash": "b597d64fcd03ea5979a2f9b5b7faa84b1a222c53f1e2d807b3fa20a1bd5783a3",
+  "study": "Glanville M. cinxia exploratory minimum relaxation source grain / key readiness; this is not an EOG-WF endpoint",
+  "sources": [
+    {
+      "tag": "schulz2019_occupancy",
+      "archive_url": "https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1",
+      "filename": "ECOG-04799.zip",
+      "format": "zip",
+      "sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+      "max_bytes": 5000000
+    },
+    {
+      "tag": "fountain2017_families",
+      "archive_url": "https://zenodo.org/records/5010194/files/supplementary-data-COLONY2.tar.gz?download=1",
+      "filename": "supplementary-data-COLONY2.tar.gz",
+      "format": "tar.gz",
+      "sha256": "90df549e41ae2c069758d3d6872fdc144cef5fcd32fb868af3d2e8cd408a8459",
+      "max_bytes": 30000000
+    }
+  ],
+  "source_2019_tables": {
+    "survey": "data/survey_data.tsv",
+    "patch_network": "data/patch_network.tsv",
+    "patch_area": "data/patch_area.tsv"
+  },
+  "source_2019_required_survey_columns": [
+    "year",
+    "patch",
+    "population",
+    "plantago",
+    "veronica"
+  ],
+  "source_2019_required_network_columns": [
+    "patch",
+    "x",
+    "y",
+    "area"
+  ],
+  "source_2017_files": [
+    "master-input.csv",
+    "master-output.csv",
+    "readme.txt"
+  ],
+  "source_2017_special_parser": "skip literal Excel first-line 'sep=,' (metadata, not CSV header), then interpret next row using CSV reader",
+  "family_candidate_key_aliases": {
+    "patch": [
+      "patch",
+      "patchid",
+      "patch_id"
+    ],
+    "year": [
+      "year",
+      "surveyyear",
+      "collectionyear"
+    ]
+  },
+  "predeclared_evidence": {
+    "2017": "Only CSV fieldnames and row/key counts; where fields exist, patch/year overlap with 2019. Do NOT infer unique mother, gene flow direction, or source.",
+    "2019": "Only patch/year identity, row and key duplication, finite x/y coverage, source file schema and patch-to-network join. Do NOT score population presence, plants or spatial differences.",
+    "join": "Cross-study patch/year tokens compared as literal trimmed strings; if identifiers use different conventions, return unmatched/unresolved, not a guessed mapping."
+  },
+  "stop_rules": [
+    "require exact archive sha256 from previous source qualification before any row parsing",
+    "single new GET per frozen SHA for this distinct join audit, no retry or hidden alternate URL",
+    "no raw rows or identifiers in results",
+    "no model fit, sampling optimization, environmental/geo distance scoring or response contrasts",
+    "no experimental outcome opened or altered EOG-WF closure",
+    "unknown coordinate CRS cannot be inferred from x/y magnitude"
+  ],
+  "limits": {
+    "timeout_seconds": 50,
+    "max_csv_rows_each": 1000000,
+    "max_csv_fields": 500,
+    "max_manifest_files": 20000
+  },
+  "acceptable_states": [
+    "SOURCE_SPATIAL_KEYS_VERIFIED_FAMILY_LINK_UNRESOLVED",
+    "SOURCE_SPATIAL_AND_FAMILY_KEYS_JOINABLE_UNVERIFIED_PROVENANCE",
+    "STOP_TRANSPORT",
+    "STOP_SOURCE_SHA_MISMATCH",
+    "STOP_SOURCE_SCHEMA",
+    "STOP_SPATIAL_JOIN"
+  ],
+  "next_step": "Only if source patch/year join is nonzero and coordinate CRS documented, freeze an exploratory target-specific minimum-relaxation analysis with source uncertainty and same-data temporal split; no external superiority claim."
+}
