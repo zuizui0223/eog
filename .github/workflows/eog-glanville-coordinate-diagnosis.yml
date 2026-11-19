@@ -1,11 +1,7 @@
 name: Diagnose Glanville original coordinate representations
 
+# Root-cause diagnosis is complete with SHA-pinned receipt; do not rerun on PR updates.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_coordinate_diagnosis_v1/**"
-      - "benchmarks/glanville_coordinate_diagnosis_v1.py"
-      - ".github/workflows/eog-glanville-coordinate-diagnosis.yml"
   workflow_dispatch:
 
 permissions:
