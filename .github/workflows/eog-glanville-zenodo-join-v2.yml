@@ -1,0 +1,54 @@
+name: Glanville verified-source patch and family key qualification
+
+on:
+  pull_request:
+    paths:
+      - "validation/glanville_zenodo_join_gate_v2/**"
+      - "scripts/glanville_zenodo_join_gate_v2.py"
+      - ".github/workflows/eog-glanville-zenodo-join-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-join:
+    name: Source-only patch/year and family header validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify frozen prior source SHA identifiers
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open("validation/glanville_zenodo_join_gate_v2/protocol_v2.json"))
+          assert p["status"] == "pre_join_header_and_key_audit_frozen"
+          assert [x["sha256"] for x in p["sources"]] == [
+            "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+            "90df549e41ae2c069758d3d6872fdc144cef5fcd32fb868af3d2e8cd408a8459"
+          ]
+          PY
+      - name: Audit aggregate source keys only
+        run: |
+          python scripts/glanville_zenodo_join_gate_v2.py \
+            --protocol validation/glanville_zenodo_join_gate_v2/protocol_v2.json \
+            --output results/glanville_zenodo_join_gate_v2/receipt.json
+          python - <<'PY'
+          import json
+          r=json.load(open("results/glanville_zenodo_join_gate_v2/receipt.json"))
+          assert r["models_fit"] == 0 and r["ecological_responses_scored"] == 0
+          assert r["EOG_WF_new_endpoints"] == 0
+          print("SCIENTIFIC_JOIN_GATE_STATUS="+r["status"])
+          PY
+      - name: Publish metadata receipt only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-zenodo-join-v2-receipt
+          path: results/glanville_zenodo_join_gate_v2/receipt.json
+          if-no-files-found: error
+          retention-days: 30
