@@ -1,12 +1,7 @@
 name: Glanville Dryad genetic-assignment file manifest
 
+# Completed source-only receipt is immutable; avoid repeated network GETs on PR edits.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_genetic_origin_dryad_manifest_v2/**"
-      - "scripts/glanville_genetic_origin_dryad_manifest_v2.py"
-      - "tests/test_glanville_genetic_origin_dryad_manifest_v2.py"
-      - ".github/workflows/eog-glanville-dryad-manifest-v2.yml"
   workflow_dispatch:
 
 permissions:
