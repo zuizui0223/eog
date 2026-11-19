@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "STOP_HTTP_SOURCE_401",
+  "source_run": 44541096661,
+  "artifact_id": 14538871569,
+  "receipt_digest": "113966853b382a8649ab9045043692abdb5e9ec0f545dead0f82097873699e64",
+  "parent_version_manifest_run": 44540284586,
+  "parent_version_manifest_receipt_digest": "a003bde0841d5647cd628b0a2a4143d9f0fd91c8c064d5dbbac9c6551c175c64",
+  "version_id": 181375,
+  "version_number": 2,
+  "publication_date": "2022-06-04",
+  "available_publisher_metadata": [
+    {
+      "file": "README",
+      "size": 2402,
+      "sha256": "d05293418efc656ab6243ed59e2d6d49b62137c703cc328c5e83615dd1066b7c"
+    },
+    {
+      "file": "fullsibfamLevelData.csv",
+      "size": 137353,
+      "sha256": "140e5361f9bced20a434bfee01bae6ce7c925e028718cdb9c6fd8aa635cc912a"
+    },
+    {
+      "file": "nestLevelData.csv",
+      "size": 200816,
+      "sha256": "e494b8c225dda7a948d3715c5b5134125f679e6bd231178419fe0716904ea726"
+    },
+    {
+      "file": "kinship_AGH.rds",
+      "size": 49781508,
+      "sha256": "e6c848b6ca74a67ab880beaf30c31e6f40a73346aea5a13f4992b27d35d5a4bf"
+    }
+  ],
+  "transport_stop_detail": "GET of first publisher-provided download API path for README returned 401. Did not inspect CSV headers, no movement rows, no fallback version/source URL.",
+  "headers_read": 0,
+  "biological_data_rows_read": 0,
+  "source_destination_year_join_verified": false,
+  "claim_boundary": "source access blocker only; no genetic assignment or migration validation, no EOG-WF fourth scored endpoint"
+}
