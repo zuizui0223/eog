@@ -1,0 +1,46 @@
+{
+  "schema_version": 2,
+  "status": "frozen_source_unit_repair_before_first_ecological_score",
+  "parent_protocol": "validation/glanville_minrelax_empirical_v1/protocol_v1.json",
+  "parent_scientific_stop_run": 44482618167,
+  "source_only_diagnostic_run": 44483096052,
+  "source_only_diagnostic_fingerprint_without_self_hash": "51cc52d25f998d956a5fd5e754faac54e5b42912238d6c219ef1812f4cea45ad",
+  "metadata_evidence": {
+    "2019_readme": "Area (in hectares) and centroid coordinates (in kilometers; coordinate reference system EPSG:3067) of habitat patches.",
+    "2017_genetic_header": "Patch Centroid_X (ETRS-TM35FIN); Patch Centroid_Y (ETRS-TM35FIN), meter units",
+    "matched_coordinate_patches": 308,
+    "predeclared_identity_2019_to_2017_scale_1000_median_residual_m": 0.002848754234971555,
+    "predeclared_identity_2019_to_2017_scale_1000_p95_residual_m": 3.6231214013475883
+  },
+  "only_authorized_change": {
+    "source": "Schulz2019 data/patch_network.tsv",
+    "columns": [
+      "x",
+      "y"
+    ],
+    "multiply_by": 1000,
+    "unit_before": "kilometer (2019 publisher README)",
+    "unit_after": "meter",
+    "other_source_2017_genetic_centroids": "remain unchanged",
+    "distance_output": "divide Euclidean meter distance by 1000 for km",
+    "no_analytical_threshold_changes": true
+  },
+  "all_scientific_choices": "Inherit every year, target, source policy, host gap grid, family grouping, qualification rule and comparator unchanged from parent v1.",
+  "strict_checks": [
+    "source SHA exact unchanged",
+    "same 2019 and 2017 archive URLs",
+    "before any km output require parent v1 numeric CRS gate after conversion",
+    "at least 95% genotype ID-year joins",
+    "at least 100 matched cross-archive coordinates; median<=1000m and q95<=5000m",
+    "same 12 year-policy panels; no new years or response-dependent exclusions",
+    "two-year source set can only weakly decrease minimum required r at fixed host gap; if not, stop",
+    "source k-m and family distances are descriptive assumptions not empirical dispersal ceilings"
+  ],
+  "result_claim": "Exploratory observation-conditional critical transition distance and ordinal host-gap trade-off, not historical migration, true colonization or generic EOG predictive advantage.",
+  "existing_eogwf_denominator": {
+    "scored": 3,
+    "science_STOP": 31,
+    "admin_exclusions": 3,
+    "unchanged": true
+  }
+}
