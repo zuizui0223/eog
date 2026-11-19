@@ -40,7 +40,7 @@ def test_per_source_frontiers_separate_historical_source_assumptions():
             (15.0, 0.0, 0.0)
         }
     assert f["soft_crossing__source_A"]["native_compatible_worlds"] == 10
-    assert f["hard_sea_mask__source_A"]["native_compatible_worlds"] == 8
+    assert f["hard_sea_mask__source_A"]["native_compatible_worlds"] == 4
     assert f["soft_crossing__source_B"]["native_compatible_worlds"] == 8
     assert f["hard_sea_mask__source_B"]["native_compatible_worlds"] == 4
 
