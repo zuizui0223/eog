@@ -83,3 +83,14 @@ def test_geometric_matching_and_estimand_difference_not_overinterpreted():
     assert selected["assigned_exceeds_nearest_by_gt_1km"]<=163
     assert selected["assigned_distance_km_median"] > selected["nearest_previous_year_EOG_recorded_positive_source_km_median"]
     assert any("not" in x.lower() for x in d["scientific_boundary"])
+
+
+def test_target_year_equal_weighting_does_not_count_repeated_families_as_independent_sites():
+    d=_data()
+    g=d["distinct_EOG_target_equal_weighting"]
+    overlap=d["mover_overlap_EOG_recorded_zero_to_positive"]
+    assert g["distinct_patches_by_arrival_year"]==overlap["joint_distinct_target_patch_years"]==100
+    assert g["assigned_genetic_family_patch_rows"]==overlap["joint_source_candidate_and_target_assignment_rows"]==163
+    assert g["distinct_targets_with_median_assigned_distance_exceeding_nearest_by_gt_1km"]==42
+    assert g["median_of_targetwise_assigned_minus_nearest_distance_km"]>0
+    assert g["share_of_full_2008_2012_EOG_target_patch_years"]==100/1465
