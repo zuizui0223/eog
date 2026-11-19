@@ -170,5 +170,15 @@
     "103 distinct EOG target patch-years are a selected subset of 1465; not independent prospective validation.",
     "Original EOG r* is nearest potential-source bound, while genetic assignment is model-implied one assigned source; they need not coincide.",
     "No site, family, individual, spatial coordinates or original record rows are committed; no fourth EOG-WF endpoint; 3/31/3 unchanged."
-  ]
+  ],
+  "distinct_EOG_target_equal_weighting": {
+    "distinct_patches_by_arrival_year": 100,
+    "assigned_genetic_family_patch_rows": 163,
+    "median_of_each_target_median_assigned_source_distance_km": 1.210975,
+    "median_nearest_EOG_observed_positive_source_distance_km": 0.284377,
+    "median_of_targetwise_assigned_minus_nearest_distance_km": 0.75777,
+    "distinct_targets_with_median_assigned_distance_exceeding_nearest_by_gt_1km": 42,
+    "share_of_full_2008_2012_EOG_target_patch_years": 0.06825938566552901,
+    "interpretation": "Each target patch-year weighted once; assigned-source distances for multiple families within a target aggregated by the within-target median, contrasted with the same target's single EOG nearest-positive-source distance. Both descriptive; assignment is model-based."
+  }
 }
