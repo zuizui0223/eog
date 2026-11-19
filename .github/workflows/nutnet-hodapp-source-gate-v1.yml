@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install test runner
+        run: python -m pip install pytest
       - name: Offline fail-closed manifest tests
         run: python -m pytest -q tests/test_nutnet_hodapp_source_gate_v1.py
       - name: Attempt exact public source metadata only (no outcome CSV requests)
