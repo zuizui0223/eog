@@ -115,3 +115,22 @@ def test_bounded_cover_and_no_posterior_probability_in_new_measures():
     assert not any("probability" in k for k in out)
     assert out["optimistic_coverage_if_all_zero_candidates_are_occupied"]<=len(targets)
     assert all(row["still_unexplained_target_count"]>=0 for row in out["hypothetical_source_budget_results"])
+
+
+def test_post_stop_erratum_is_explicit_and_repairs_only_matrix_cardinality():
+    m=_m()
+    proto=_proto()
+    erratum=json.load(open("validation/glanville_latent_source_audit_v1/protocol_erratum_v1_1.json"))
+    assert proto["computational_maxima"]["max_matrix_rows"]==48
+    assert erratum["failed_run_id"]==44513808990
+    amended=m["apply_arithmetic_erratum"](proto,erratum)
+    assert amended["computational_maxima"]["max_matrix_rows"]==96
+    assert proto["computational_maxima"]["max_matrix_rows"]==48
+    assert amended["fixed_radius_km"]==proto["fixed_radius_km"]
+    assert amended["fixed_host_tolerances"]==proto["fixed_host_tolerances"]
+    assert amended["target_years"]==proto["target_years"]
+    assert amended["latent_source_addition_budgets"]==proto["latent_source_addition_budgets"]
+    assert amended["_validated_arithmetic_erratum"]["biological_contract_unchanged"]
+    bad=dict(erratum,corrected_max_matrix_rows=48)
+    with pytest.raises(m["GateStop"],match="STOP_INVALID_OR_OUT_OF_SCOPE_ERRATUM"):
+        m["apply_arithmetic_erratum"](proto,bad)
