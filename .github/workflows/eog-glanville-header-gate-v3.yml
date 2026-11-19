@@ -1,12 +1,7 @@
 name: Glanville genetic-origin Dryad README and CSV headers
 
+# Dryad file-content scientific STOP (401) is recorded, do not retry on PR edits.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_genetic_origin_header_gate_v3/**"
-      - "scripts/glanville_genetic_origin_header_gate_v3.py"
-      - "tests/test_glanville_genetic_origin_header_gate_v3.py"
-      - ".github/workflows/eog-glanville-header-gate-v3.yml"
   workflow_dispatch:
 
 permissions:
