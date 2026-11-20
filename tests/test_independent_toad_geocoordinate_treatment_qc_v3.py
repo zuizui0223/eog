@@ -92,10 +92,14 @@ def test_grouped_residual_quantiles_only_when_five_or_more():
 
 
 def test_numeric_bad_treatment_fails_closed_not_silently_binned():
-    for raw in ("unexpected","nan","infinity"):
+    for raw in ("unexpected","infinity"):
         rows=[case("x",raw)]
         with pytest.raises(ValueError, match="STOP_NOMINAL_TREATMENT_FORMAT"):
             m.stratified_coordinate_quality(rows,P,OLD)
+    # The original frozen missing-value contract explicitly includes "nan";
+    # it is NOT an invalid numeric and must remain in "other_or_missing".
+    missing=m.stratified_coordinate_quality([case("x","nan")],P,OLD)
+    assert bygroup(missing,"other_or_missing")["all_original_deduplicated_rows"]==1
 
 
 def test_other_numeric_value_not_rounded_to_nominal_group():
