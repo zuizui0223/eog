@@ -1,0 +1,71 @@
+name: EOG independent toad source-anchor geographic diagnostic (one-shot)
+
+# First response-bearing analysis on publisher-SHA-pinned historical experiment.
+# Geographical individual movement only, NO EOG-WF predictive endpoint.
+on:
+  pull_request:
+    paths:
+      - 'validation/independent_toad_source_anchor_geography_v1/protocol_v1.json'
+      - 'benchmarks/independent_toad_source_anchor_geography_v1.py'
+      - 'tests/test_independent_toad_source_anchor_geography_v1.py'
+      - '.github/workflows/eog-independent-toad-source-anchor-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checksum-locked-external-source-anchor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local EOG and offline test runner
+        run: python -m pip install -e . pytest
+      - name: Execute source-neutral frozen tests, no real data
+        run: |
+          python -m pytest -q \
+            tests/test_eog_independent_movement_source_gate_v1.py \
+            tests/test_eog_independent_movement_source_gate_v2.py \
+            tests/test_independent_toad_source_anchor_geography_v1.py
+      - name: One checked source access + predeclared capture-versus-release analysis
+        run: |
+          python -m benchmarks.independent_toad_source_anchor_geography_v1 \
+            --protocol validation/independent_toad_source_anchor_geography_v1/protocol_v1.json \
+            --output results/independent_toad_source_anchor_geography_v1/result.json
+      - name: Preserve all source, sample, data-quality and result gates
+        run: |
+          python - <<'PY'
+          import json
+          src='results/independent_toad_source_anchor_geography_v1/result.json'
+          x=json.load(open(src))
+          assert x["new_EOG_WF_endpoints"]==0
+          assert x["original_raw_data_persisted"] is False
+          if x["status"].startswith("STOP_"):
+              assert x.get("primary_verdict")=="NOT_SCORED_SOURCE_QUALITY_STOP"
+              print("EOG_TOAD_SOURCE_ANCHOR_SCIENTIFIC_STOP="+x["status"])
+          else:
+              assert x["status"]=="EXPLORATORY_EXTERNAL_RECAPTURE_SOURCE_ANCHOR_GEOGRAPHY_SCORED"
+              assert x["primary"]["n_individuals"]>=20
+              assert x["three_axis_abiotic_biotic_barrier_MRR_tested"] is False
+              assert x["historical_founder_or_natural_dispersal_inferred"] is False
+              assert sum(x["category_counts"]["relocated"][k] for k in
+                         ("positive_delta_individuals","zero_delta_individuals",
+                          "negative_delta_individuals"))==x["primary"]["n_individuals"]
+              print("EOG_TOAD_PRIMARY_VERDICT="+x["primary_verdict"])
+              print("DISTINCT_RELOCATED_IDS="+str(x["primary"]["n_individuals"]))
+              print("MEAN_ANCHOR_DELTA_M="+str(x["primary"]["mean_delta_m"]))
+              print("RADIUS_GATE_AGGREGATES="+str(x["radius_thresholds_by_individual_mean_event_distance"]))
+          print("TOAD_SOURCE_AGGREGATE_SHA256="+x["sha256_without_self_field"])
+          PY
+      - name: Store only aggregate diagnostics, never publisher CSV or individual data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-independent-toad-source-anchor-v1-aggregates-only
+          path: results/independent_toad_source_anchor_geography_v1/result.json
+          if-no-files-found: warn
+          retention-days: 30
