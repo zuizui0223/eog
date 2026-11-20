@@ -84,3 +84,16 @@ def test_filename_overrides_directory_path_in_authoritative_manifest():
     assert files["sowing_experiment.csv"]["status"]=="MANIFEST_OK"
     assert files["sowing_experiment.csv"]["id"]==18
     assert events[0]["status"]=="HTTP_200"
+
+
+def test_dryad_v2_embedded_file_identity_from_self_link():
+    payload={"_links":{"stash:version":{"href":"/api/v2/versions/42"}}}
+    def fetch(url,limit):
+        assert url=="https://datadryad.org/api/v2/versions/42/files"
+        rows=[{"path":"sowing_experiment.csv","size":47,"digest":"a"*32,"digestType":"md5",
+               "_links":{"self":{"href":"/api/v2/files/189450"}}}]
+        return json.dumps({"_embedded":{"stash:files":rows}}).encode(),"HTTP_200"
+    files,events=mod.file_manifest(payload,fetch)
+    assert files["sowing_experiment.csv"]["status"]=="MANIFEST_OK"
+    assert files["sowing_experiment.csv"]["download_url"]=="https://datadryad.org/api/v2/files/189450/download"
+    assert events[0]["status"]=="HTTP_200"
