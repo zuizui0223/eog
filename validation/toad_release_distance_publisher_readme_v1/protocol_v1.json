@@ -1,0 +1,63 @@
+{
+  "schema": "eog.toad_publisher_readme_definitions_v1",
+  "status": "FROZEN_BEFORE_README_CONTENT_RETRIEVAL",
+  "base_main_sha": "e987b9bc6be548e9b8b8938b481a76b7372c4eeb",
+  "question": "Does publisher original README define Distance release-final differently from Euclidean distance from Released Easting/Northing to Final Easting/Northing, and can any source-attested definition explain frozen 77/163 numeric concordance?",
+  "source": {
+    "doi": "10.5061/dryad.x3ffbg7ms",
+    "version_id": 198534,
+    "official_download_url": "https://datadryad.org/api/v2/versions/198534/download",
+    "verified_transport_contract": "validation/independent_movement_source_gate_v2/protocol_v2.json",
+    "files": [
+      {
+        "name": "Jreidini_and_Green_homing_toads_2021.csv",
+        "bytes": 18702,
+        "sha256": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+        "permission": "sha_size_only_no_decode_no_rows"
+      },
+      {
+        "name": "README_file.rtf",
+        "bytes": 2102,
+        "sha256": "3d7b240bf323bb19fe32e57d99b8029e212d1da15d85c02b457a1d74053b3c5c",
+        "permission": "extract_document_plaintext_only"
+      }
+    ],
+    "original_article_doi": "10.1655/Herpetologica-D-21-00031"
+  },
+  "parent_stop": {
+    "status": "STOP_GEO_UNIT_CONCORDANCE",
+    "original_primary": "NOT_SCORED_SOURCE_QUALITY_STOP",
+    "original_h1_run_id": 44756566395,
+    "source_qc_run_id": 44759696421,
+    "source_qc_sha256": "63390e24002e76f73cc5be6fe188b6e7794c89ddfd1a8b5dfc25b9d9ae7b1a4c",
+    "original_qc_release_final_matches": 77,
+    "original_qc_capture_final_matches": 163,
+    "eligible_rows": 163
+  },
+  "questions": [
+    "Explicit definitions and/or formulas for initial capture, experimentally released, and final recapture coordinates",
+    "Exact release-final and capture-final distance column definitions, units and rounding",
+    "Controls/untranslocated versus translocated special cases, signed direction or any preprocessing",
+    "Whether source README actually explains the observed release-final mismatch versus simply uses equivalent labels",
+    "What remains unknown after original article Methods and README are compared"
+  ],
+  "execution_limits": {
+    "official_host_and_pinned_redirect_only": true,
+    "original_zip_checksum_and_member_identity_required": true,
+    "read_csv_rows": false,
+    "model_fits": 0,
+    "field_outcomes_scored": 0,
+    "no_original_CSV_uploaded": true,
+    "plain_RTF_text_only": true,
+    "source_wording_not_substituted_by_paper": true,
+    "source_documentation_verdict_options": [
+      "EXPLICITLY_DOCUMENTED",
+      "NOT_DOCUMENTED",
+      "AMBIGUOUS",
+      "SOURCE_ACCESS_STOP"
+    ],
+    "may_modify_original_STOP": false,
+    "new_EOG_WF_endpoints": 0
+  },
+  "claim_boundary": "post-exposure published metadata/source documentation audit only; no recalibration or scoring of original biological outcome, no true founder inference"
+}
