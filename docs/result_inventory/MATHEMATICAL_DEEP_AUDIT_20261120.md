@@ -1,5 +1,8 @@
 # EOG数理・既知真値成果の再監査（2026-11-20）
 
+> **補遺：** [最小制約緩和（Minimum Required Relaxation）の詳細監査](MINIMUM_REQUIRED_RELAXATION_AUDIT_20261120.md)。前版では構成的Pareto代替、Glanvilleの条件付き必要半径、k例外・source不確実性・genetic inferred originの境界を十分に取り上げていなかったため、別の推定対象として追加した。
+
+
 **基準main:** `a56d582d5960af4c11fd8714e391a20b547919c2`。**成果物:** 数理結果の根拠・強さ・条件・反証の再分類であり、新しい生態学的得点・新規endpoint・再調整を含まない。  
 **元台帳:** [数理一覧](MATHEMATICAL_AND_KNOWN_TRUTH.md)、[数理/実証の区分](README.md)。この文書は既存の凍結プロトコル・結果・投稿主線を置換しない。
 

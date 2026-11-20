@@ -1,5 +1,8 @@
 # EOG empirical positive results and frozen boundaries
 
+> **Glanville最小制約緩和の条件付き実測結果:** [専用監査](MINIMUM_REQUIRED_RELAXATION_AUDIT_20261120.md)を参照。前年recorded positive起源・ordinal寄主ゲートで求めた地理的必要半径`r0`、最大5%未説明を許す`r5%`、潜在源の探索上限、遺伝的**推定**起源の比較は別の推定対象。移動率・真の起源・宿主選択の実証ではない。
+
+
 **Read with:** [evidence split index](README.md) and [mathematical/known-truth ledger](MATHEMATICAL_AND_KNOWN_TRUTH.md).  
 **Snapshot:** main `f8028c50a28fb74faa4766347f05cd830655e075`, 2026-11-20.  
 **Rule:** A positive result is kept with its *full comparator*, unit, source and adverse/STOP control. Do not combine unrelated study units or turn a descriptive contrast into a confirmatory prediction.
