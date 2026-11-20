@@ -1,5 +1,8 @@
 # Independent toad translocation: capture-versus-release source-anchor geography (v1)
 
+> **結果状態（2026-11-20）：`STOP_GEO_UNIT_CONCORDANCE`、事前H1は未評価。** 原データ165行の検査で `release-final` 距離列が幾何学的座標と一致せず、試験は科学的STOPで終了。後続の[事後source-QC v2](independent_toad_geocoordinate_diagnostic_v2.md)でも `capture-final` 163/163一致に対し `release-final` は77/163一致のみ。18種の事前明示的比較は元STOPの再解釈・結果修理・独立field confirmationではない。 [凍結した診断集計](../validation/independent_toad_geocoordinate_diagnostic_v2/frozen_aggregate_summary_v2.json)。
+
+
 **Status at protocol freeze: research-only, one external experimental movement dataset; event response not yet opened.** [Pre-outcome frozen protocol](../validation/independent_toad_source_anchor_geography_v1/protocol_v1.json) was committed as the first branch commit (`d6e67a56d85bc6cf05b784d2f52b4914508c19f0`) before the toad individual's displacement/re-encounter values were read. This test is **not** natural founder/colonization, not geographical×environment×barrier Pareto mechanism identification, and not a new EOG-WF scored endpoint.
 
 ## Why this is an independent data source
