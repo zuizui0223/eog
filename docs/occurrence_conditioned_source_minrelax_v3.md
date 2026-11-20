@@ -42,6 +42,35 @@ Predeclared G1 directional hypothesis: under matched optional edges and n_source
 
 The directional magnitude is a result of the *chosen generator*, not of theorems G2–G4. All outcomes, including negative and no-possible worlds, remain in the denominator.
 
+## Frozen result — hypothesis G1 supported **within generator**, not ecological generality
+
+Dedicated [GitHub Actions run 44743842920](https://github.com/zuizui0223/eog/actions/runs/44743842920) completed successfully. Full 1,152-panel JSON is preserved as artifact `14632595326` (ZIP SHA256 `2a0adab26a0ad3eea7bec3f084475584d34dd284f24f6df945ae391b1bfa9f54`; complete result self-excluded SHA256 `2d6008fcaf959fcf22d029eaf6a344ca1a21e8eb2ee0b6f390f4a1bdcc728611`). [Frozen aggregate receipt](../validation/occurrence_conditioned_source_minrelax_v3/frozen_aggregate_summary_v3.json).
+
+**Preregistered primary result** (3 or 4 possible sources; critical H=n_sources−1; same optional graph/thresholds within each of 96 paired comparisons):
+
+- Mean cycle-minus-complete uncertainty gap `g_cycle-g_complete`: **+0.2573784722** (**+25.74 percentage points of finite threshold worlds**, not percent change or biological probability).
+- Per-pair directions: cycle larger **92/96**, tied **4/96**, complete larger **0/96**.
+- Hence predeclared G1 **SUPPORTED within this synthetic graph generator**. No permutation p or ecological replication claim is attached.
+
+| Source candidates | Optional source-target edge probability | Cycle mean `g` | Complete mean `g` | Cycle larger, out of 24 matched seeds |
+| --- | ---: | ---: | ---: | ---: |
+| 3 | 0.25 | 0.2587 | 0.0990 | 22 |
+| 3 | 0.65 | 0.2674 | 0.0208 | 22 |
+| 4 | 0.25 | 0.3090 | 0.0069 | 24 |
+| 4 | 0.65 | 0.3212 | 0.0000 | 24 |
+
+**Theorem/implementation controls** (distinct from G1's nontrivial generator-specific contrast):
+
+- **0/864** horizon-set monotonicity violations across adjacent H levels.
+- **0/288** full-terminal-source-SCC mismatch panels: at H=n_nodes−1, possible and universal sets coincide.
+- **0/192** two-source complete-versus-cycle negative-control mismatches.
+- **0/24** native EOG-v2 versus independent shortest-path/threshold/Pareto mismatches in prespecified seed-0 graphs.
+- Breakpoint worlds among rows: **296 panels with 8 worlds**, **856 panels with 12 worlds**.
+
+**Failure diagnosis retained:** first CI [run 44743714561](https://github.com/zuizui0223/eog/actions/runs/44743714561) stopped because the JavaScript xorshift32 reference value was compared to a Python float by literal string-rounding equality, differing only in the last IEEE754 bit of the *test literal*. Changed only the assertion to bounded tolerance; **no generator, protocol, threshold, outcome or observed G1 score was altered**. The second, successful run is authoritative.
+
+**Interpretation:** On these matched finite synthetic graphs, a directed origin cycle creates a larger region where *some* origin hypothesis suffices but not *all* origin hypotheses suffice. Fully connected baseline source cores make sources more interchangeable under a finite hop budget. The vanishing gap at H=n_nodes−1 is a deterministic SCC reachability consequence, **not** independently observed dispersal homogenization.
+
 ## Results and reproducibility
 
 The result is computed by the research-only [v3 benchmark](../benchmarks/occurrence_conditioned_source_minrelax_v3.py), with deterministic generator [regression tests](../tests/test_occurrence_conditioned_source_minrelax_v3.py), and synthetic-only [workflow](../.github/workflows/eog-source-minrelax-random-generality-v3.yml). CI must verify the frozen source-native crosschecks and denominators before the aggregate can be promoted from an independently computed estimate to a **CI-backed result**.
