@@ -1,5 +1,7 @@
 # Environmental Occupancy Geometry (EOG)
 
+> **Evidence inventory (2026-11-20):** [Mathematical / known-truth results vs empirical results](docs/result_inventory/README.md). This is an index of confirmed findings and adverse/STOP boundaries, **not** a new scored endpoint or a change to the frozen EOG-WF claim.
+
 EOG is an auditable biogeographic inference and forecasting framework for asking a broader question than local suitability alone:
 
 > **Given an observed distribution and a declared set of ecological and analytical worlds, which worlds remain compatible, what future/unsampled states do they support, and which predictions survive disagreement among those worlds?**
