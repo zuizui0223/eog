@@ -1,0 +1,264 @@
+{
+  "schema": "eog.occurrence_conditioned_source_minrelax_v2.protocol",
+  "version": 2,
+  "status": "frozen_pre_implementation_pre_score_synthetic_contract",
+  "base_main_sha": "87177b05a0a0a8a92778a5d6e29aeaedc5284309",
+  "parent_protocol": "validation/occurrence_conditioned_minrelax_v1/protocol_v1.json",
+  "science_question": "For a common fixed positive occurrence set and common ordered threshold grid, how do source-existential versus source-universal Pareto minimal required relaxations differ when declared alternative singleton sources are held fixed across runs?",
+  "scope": "synthetic finite graph only; no empirical source identity, no new EOG-WF endpoint, no public production API change",
+  "universe": {
+    "node_ids": [
+      "A",
+      "B",
+      "C",
+      "T"
+    ],
+    "positive_occurrence_ids": [
+      "A",
+      "B",
+      "C",
+      "T"
+    ],
+    "alternative_singleton_sources": [
+      {
+        "id": "from_A",
+        "source_ids": [
+          "A"
+        ]
+      },
+      {
+        "id": "from_B",
+        "source_ids": [
+          "B"
+        ]
+      },
+      {
+        "id": "from_C",
+        "source_ids": [
+          "C"
+        ]
+      }
+    ],
+    "baseline": {
+      "geographic_km": 10,
+      "environmental_units": 1,
+      "barrier_permission": 0
+    },
+    "horizons": [
+      1,
+      2
+    ],
+    "max_breakpoint_worlds": 512,
+    "candidate_directed_edges": [
+      {
+        "source": "A",
+        "target": "B",
+        "geographic_km": 1,
+        "environmental_units": 0,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "A",
+        "target": "C",
+        "geographic_km": 1,
+        "environmental_units": 0,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "B",
+        "target": "A",
+        "geographic_km": 1,
+        "environmental_units": 0,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "B",
+        "target": "C",
+        "geographic_km": 1,
+        "environmental_units": 0,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "C",
+        "target": "A",
+        "geographic_km": 1,
+        "environmental_units": 0,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "C",
+        "target": "B",
+        "geographic_km": 1,
+        "environmental_units": 0,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "A",
+        "target": "T",
+        "geographic_km": 4,
+        "environmental_units": 2,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "B",
+        "target": "T",
+        "geographic_km": 15,
+        "environmental_units": 0,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "C",
+        "target": "T",
+        "geographic_km": 4,
+        "environmental_units": 0,
+        "barrier_permission": 1,
+        "hard_unavailable": false
+      }
+    ]
+  },
+  "theory_contract": {
+    "individual_feasible": "F_s={theta>=theta0: all positives reachable from fixed s within H directed hops}",
+    "possible": "F_exists=union_{s in alternatives} F_s",
+    "source_robust": "F_all=intersection_{s in alternatives} F_s",
+    "minimal_frontiers": "P_exists=ParetoMin(union_s P_s); P_all=ParetoMin({coordinatewise_max(p_s for s) : p_s in P_s for each s})",
+    "proof_scope": "finite complete breakpoint grid with axiswise monotone edge permissions; same units, graph, positive set and horizon; source candidates are not conditioned on observed outcomes",
+    "note": "ParetoMin(intersection P_s) is not P_all in general. Empty F_all is not absolute biological impossibility.",
+    "source_uncertainty": "SOURCE variants are alternate hypothetical singleton origins, not independent verified actual founders"
+  },
+  "prespecified_fixture_checks": {
+    "H1": {
+      "breakpoint_worlds": 8,
+      "source_world_pairs": 24,
+      "per_source_compatible": 4,
+      "possible_compatible": 7,
+      "source_robust_compatible": 1,
+      "source_frontiers": {
+        "from_A": [
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "from_B": [
+          [
+            5,
+            0,
+            0
+          ]
+        ],
+        "from_C": [
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "possible_frontier": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source_robust_frontier": [
+        [
+          5,
+          1,
+          1
+        ]
+      ],
+      "naive_intersection_of_individual_frontiers": []
+    },
+    "H2": {
+      "breakpoint_worlds": 8,
+      "source_world_pairs": 24,
+      "per_source_compatible": 7,
+      "possible_compatible": 7,
+      "source_robust_compatible": 7,
+      "possible_frontier": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "source_robust_frontier": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    "hard_edge_boundary": {
+      "action": "mark C->T hard_unavailable, evaluate H=1",
+      "compatible_from_C": 0,
+      "source_robust_compatible": 0,
+      "possible_frontier": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          5,
+          0,
+          0
+        ]
+      ],
+      "source_robust_frontier": []
+    }
+  },
+  "required_gates": [
+    "native v1 per-source EOG reconstruction and frontier performed without changing production APIs",
+    "independently written bounded BFS for every breakpoint by every source matches native per-source compatibility counts",
+    "independently enumerated possible/universal feasibility matches derived antichain union/join theorem",
+    "source order and edge order changes cannot affect canonical science output",
+    "hard_unavailable cannot be rescued by edge threshold relaxation",
+    "no declared source or graph may change in a compared observation set",
+    "failure/empty source-robust frontier means only no feasible shared explanation among declared sources",
+    "no inference of natural source identity, actual dispersal, origin probability or physical barrier",
+    "do not treat 8 worlds, 24 source-world pairs or two horizons as independent ecological replicates",
+    "do not add any EOG-WF empirical endpoint or retune frozen Glanville"
+  ]
+}
