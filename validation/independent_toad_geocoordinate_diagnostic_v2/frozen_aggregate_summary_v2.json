@@ -1,0 +1,264 @@
+{
+  "schema": "eog.independent_toad_geocoordinate_diagnostic_v2.frozen_aggregate_summary",
+  "status": "POST_EXPOSURE_SOURCE_QC_ONLY_RETAINS_ORIGINAL_SCIENTIFIC_STOP",
+  "science_status": "ORIGINAL_H1_NOT_SCORED_GEO_UNIT_CONCORDANCE_STOP_REMAINS",
+  "protocol_path": "validation/independent_toad_geocoordinate_diagnostic_v2/protocol_v2.json",
+  "protocol_preexecution_first_commit": "a2de63fa3f4dc4e33d33f15ec5905dd5c8413627",
+  "protocol_preexecution_privacy_amendment": "25d165a4dc4885e67fa47e197815bda51ceeb6a3",
+  "parent_original_science_run_id": 44756566395,
+  "parent_original_science_stop": "STOP_GEO_UNIT_CONCORDANCE",
+  "parent_original_science_receipt_sha256": "e86dece9edf999716a7514c9f174642cee8cd6025ecceec0598b82c85dda5bb6",
+  "source": {
+    "doi": "10.5061/dryad.x3ffbg7ms",
+    "version_id": 198534,
+    "csv_sha256": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+    "csv_bytes": 18702,
+    "published_rows": 165
+  },
+  "diagnostic_ci": {
+    "run_id": 44759696421,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44759696421",
+    "conclusion": "success",
+    "artifact_id": 14640751969,
+    "artifact_name": "eog-toad-geocoordinate-qc-v2-aggregate-only",
+    "artifact_zip_sha256": "d9fb468cee38178f14363fd3b517605311b068d8e49b6397959c837d6bacc2e2",
+    "full_receipt_sha256_without_self": "63390e24002e76f73cc5be6fe188b6e7794c89ddfd1a8b5dfc25b9d9ae7b1a4c"
+  },
+  "frozen_source_counts": {
+    "both_published_distance_columns_missing_on_complete_geometry": 0,
+    "date_and_six_coordinate_values_present": 163,
+    "distinct_identity_count": 82,
+    "nonmissing_reencounter_date": 163,
+    "present_numeric_distance_by_column": {
+      "Distance capture-final (m)": 163,
+      "Distance release-final (m)": 163
+    },
+    "source_unique_rows": 163,
+    "with_nonmissing_identity": 163
+  },
+  "original_qc_comparison_results": {
+    "Distance capture-final (m)": {
+      "below_original_95pct_quality_gate": false,
+      "geometric_match_fraction_under_original_tolerance": 1,
+      "numeric_compared_rows": 163
+    },
+    "Distance release-final (m)": {
+      "below_original_95pct_quality_gate": true,
+      "geometric_match_fraction_under_original_tolerance": 0.4723926380368098,
+      "numeric_compared_rows": 163
+    }
+  },
+  "all_18_predeclared_diagnostic_cells": [
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 0.001,
+      "geometric_pair": "RF",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 110.77911266979497,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 389.42018690838347,
+      "reported_column": "Distance release-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1,
+      "geometric_pair": "RF",
+      "match_fraction": 0.4723926380368098,
+      "matched_rows": 77,
+      "median_absolute_residual_m": 22,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 470.5682359273115,
+      "reported_column": "Distance release-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1000,
+      "geometric_pair": "RF",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 110776.4402050329,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 389423.28161679057,
+      "reported_column": "Distance release-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 0.001,
+      "geometric_pair": "IF",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 110.88292893218814,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 389.4704381373551,
+      "reported_column": "Distance release-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1,
+      "geometric_pair": "IF",
+      "match_fraction": 0.17791411042944785,
+      "matched_rows": 29,
+      "median_absolute_residual_m": 108.4353408071038,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 479.47589116787594,
+      "reported_column": "Distance release-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1000,
+      "geometric_pair": "IF",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 48175.12176750625,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 256181.88215499555,
+      "reported_column": "Distance release-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 0.001,
+      "geometric_pair": "IR",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 110.78618285305403,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 389.75964565559985,
+      "reported_column": "Distance release-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1,
+      "geometric_pair": "IR",
+      "match_fraction": 0.04294478527607362,
+      "matched_rows": 7,
+      "median_absolute_residual_m": 102.59,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 497.7226523292413,
+      "reported_column": "Distance release-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1000,
+      "geometric_pair": "IR",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 101067.15037373168,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 500794.0687633959,
+      "reported_column": "Distance release-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 0.001,
+      "geometric_pair": "RF",
+      "match_fraction": 0.006134969325153374,
+      "matched_rows": 1,
+      "median_absolute_residual_m": 47.738940205274766,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 255.77293267235086,
+      "reported_column": "Distance capture-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1,
+      "geometric_pair": "RF",
+      "match_fraction": 0.3803680981595092,
+      "matched_rows": 62,
+      "median_absolute_residual_m": 67.2627572313763,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 266.53532075139736,
+      "reported_column": "Distance capture-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1000,
+      "geometric_pair": "RF",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 110880.26020503289,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 389473.53361679055,
+      "reported_column": "Distance capture-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 0.001,
+      "geometric_pair": "IF",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 47.99195835140214,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 255.77197400784507,
+      "reported_column": "Distance capture-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1,
+      "geometric_pair": "IF",
+      "match_fraction": 1,
+      "matched_rows": 163,
+      "median_absolute_residual_m": 0.002377754542649768,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 0.004653331202456457,
+      "reported_column": "Distance capture-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1000,
+      "geometric_pair": "IF",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 47993.60859785725,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 255769.96415499557,
+      "reported_column": "Distance capture-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 0.001,
+      "geometric_pair": "IR",
+      "match_fraction": 0.006134969325153374,
+      "matched_rows": 1,
+      "median_absolute_residual_m": 47.7869683814224,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 255.92786249453883,
+      "reported_column": "Distance capture-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1,
+      "geometric_pair": "IR",
+      "match_fraction": 0.006134969325153374,
+      "matched_rows": 1,
+      "median_absolute_residual_m": 73.17,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 327.6400291187012,
+      "reported_column": "Distance capture-final (m)"
+    },
+    {
+      "comparison_type": "DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
+      "coordinate_multiplier": 1000,
+      "geometric_pair": "IR",
+      "match_fraction": 0,
+      "matched_rows": 0,
+      "median_absolute_residual_m": 101003.52003939822,
+      "numeric_compared_rows": 163,
+      "q90_absolute_residual_m": 500750.74694655224,
+      "reported_column": "Distance capture-final (m)"
+    }
+  ],
+  "scientific_interpretation": {
+    "stable_channel": "Reported capture-final distance agrees with initial-to-final coordinate Euclidean distance in all 163 eligible rows under original frozen tolerance.",
+    "failed_channel": "Reported release-final distance agrees with release-to-final coordinate Euclidean distance in only 77/163 eligible rows, far below frozen 95% quality threshold.",
+    "alternative_simple_conventions": "Predeclared 0.001x, 1x, 1000x coordinate scaling and the other two available location pairs do not restore 95% match to release-final field.",
+    "unknown_remaining": "Why the reported release-final column differs for 86/163 rows cannot be determined from this finite diagnostic matrix; published data dictionary or source semantics require independent clarification without moving H1.",
+    "no_rescue": "A diagnostic alternative, even if excellent, cannot retroactively overturn the source gate or upgrade the preregistered H1."
+  },
+  "original_stop_retained": true,
+  "source_robust_external_geographic_MRR_confirmed": false,
+  "three_axis_minrelax_confirmed": false,
+  "new_eog_wf_scored_endpoints": 0,
+  "independent_scored_biological_outcomes": 0,
+  "raw_coordinates_dates_ids_or_rows_committed": false
+}
