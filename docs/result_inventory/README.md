@@ -1,5 +1,8 @@
 # EOG evidence split — mathematical/known-truth vs empirical
 
+> **最小制約緩和（2026-11-20追加監査）:** [数理Pareto前線・Glanville実測制約・潜在起源／遺伝推定の限界を分離](MINIMUM_REQUIRED_RELAXATION_AUDIT_20261120.md)。既知真値の検証成功と、実際の移動・起源推定成功は異なる。
+
+
 > **精査版（2026-11-20）:** [数理・既知真値の詳細監査](MATHEMATICAL_DEEP_AUDIT_20261120.md) — T=集合・アルゴリズム上の必然、K=既知真値で非自明な効果量、X=構成的反例、D=事後診断、F=反証を分離。特に世界拡張境界・latent parameter・源policyの非単調性・EOG spanの非単調性を追加。
 
 **Audit date:** 2026-11-20 (JST)  
