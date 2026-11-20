@@ -1,0 +1,90 @@
+{
+  "schema": "eog.source_mrr_horizon_identifiability_v4.protocol",
+  "status": "FROZEN_PRE_IMPLEMENTATION_AND_PRE_SCORE",
+  "base_main_sha": "fa946f46e8467785be92fbb25799059237f9814d",
+  "parent": "validation/occurrence_conditioned_source_minrelax_v3/protocol_v3.json",
+  "frozen_scientific_question": "Can source-specific finite threshold frontiers be decomposed exactly into shortest-hop ambiguity intervals, bounded by directed source-core diameter, and do new independent synthetic topologies produce nonzero source uncertainty budget beyond the fully connected case?",
+  "inference_contract": {
+    "positive_roster": "all declared source nodes plus all targets, identical for each source",
+    "required_hops_per_source": "h_s(theta)=max_{positive p} directed shortest-path-step distance from singleton s to p; infinity if unreachable",
+    "possible_horizon": "h_possible=min_s h_s",
+    "universal_horizon": "h_robust=max_s h_s",
+    "gap_indicator": "I(h_possible<=H<h_robust)",
+    "gap_width": "h_robust-h_possible when h_possible and h_robust finite",
+    "core_diameter": "D_C=max_{u,v in source nodes} shortest directed source-core distance; infinity if core not strongly connected",
+    "proven_bound_if_core_SCC": "h_robust-h_possible<=D_C for every theta with finite h_possible",
+    "mean_gap_area": "sum_{H=0}^{n_nodes-2} g(H)=mean_over_theta(h_robust-h_possible) when core remains SCC and all h finite",
+    "status": "Finite declared graph/threshold constraints only. Steps are directed graph hops, not generations or years"
+  },
+  "newly_frozen_generator": {
+    "parent_graph_generator": "benchmarks/occurrence_conditioned_source_minrelax_v3.py::generate_graph",
+    "n_sources": [
+      3,
+      4
+    ],
+    "n_targets": 3,
+    "density_indices": [
+      0,
+      1
+    ],
+    "source_core_regimes": [
+      "complete_bidirectional_baseline",
+      "bidirectional_star_center_S0",
+      "unidirectional_cycle_baseline"
+    ],
+    "seed_index_start_inclusive": 24,
+    "seed_index_end_exclusive": 40,
+    "generation_method": "Copy parent v3 generator configuration exactly except random_seeds=40 to admit only fresh indices 24..39. Invoke parent generate_graph for complete/cycle; derive bidirectional star by replacing only source-source core edges from complete while holding optional and S0 target anchors unchanged. All baseline source core arcs are non-hard with geography 8/env 0/barrier 0.",
+    "paired_graph_draws": 64,
+    "total_topology_graphs": 192,
+    "primary_response": "A_g=(1/|Theta|) sum_theta(h_robust(theta)-h_possible(theta)), directed hops (no probability)",
+    "priority_hypothesis": "G5: cycle-minus-star mean A_g >0 across 64 paired new-source graph draws; hypothesis falsified/not supported if <=0. Do not change seed generator/metric after scoring.",
+    "secondary": "complete/star/cycle area profiles, equality/strict sign counts, tightness fraction K(theta)=D_C, nonmonotone g(H) curves, value of independent source edge observations (not attempted)"
+  },
+  "prespecified_claims": [
+    {
+      "id": "G1",
+      "type": "EXACT",
+      "test": "For each fixed graph/threshold and source, h_s equals independently computed BFS maximal positive directed distance. For every H=0..n_nodes-1, possible and robust indicators equal min/max hop thresholds."
+    },
+    {
+      "id": "G2",
+      "type": "EXACT",
+      "test": "When source core is strongly connected under baseline and every node is a required positive, K(theta)=h_robust-h_possible is finite, nonnegative and <=D_C; count all 0 violations."
+    },
+    {
+      "id": "G3",
+      "type": "EXACT",
+      "test": "Sum_H g(H) over H=0..n_nodes-2 equals mean_theta K(theta), within machine numerical tolerance; independently compute g(H) from native EOG-v2 source-MRR for predeclared seed24, all source counts/densities/topologies, H1 and Hcritical and Hterminal (3*2*2*3=36 native crosschecks)."
+    },
+    {
+      "id": "G4",
+      "type": "NEGATIVE_CONTROL",
+      "test": "Break one cycle core edge S0->S1 without introducing a return edge from target to source. Some theta has h_possible finite but h_robust infinite and no finite D_core; must not falsely assert terminal convergence."
+    },
+    {
+      "id": "G5",
+      "type": "NONTRIVIAL_GENERATOR_HYPOTHESIS",
+      "test": "Mean over 64 paired new-seed graphs of A_cycle−A_bidirectional_star is strictly positive; classify result without repairing if not positive."
+    },
+    {
+      "id": "G6",
+      "type": "DESCRIPTIVE",
+      "test": "Count number of independent new panels where g(H) rises at least once before later falling; retain zero if none. Do not treat a monotone g prediction as a theorem."
+    },
+    {
+      "id": "G7",
+      "type": "INPUT_INTEGRITY",
+      "test": "Same optional-edge digest/threshold world grid across all three topology regimes for paired graph draw, all 64 draws accounted; 0 native mismatches and no EOG-WF endpoint."
+    }
+  ],
+  "stop_rules": [
+    "Do not score historical Glanville source assignments or site-level responses.",
+    "Keep graph-hop horizon distinct from elapsed generations/years; source S only hypothetical.",
+    "Do not interpret threshold-world fraction as probability without calibrated prior.",
+    "A numerical bound check is theorem verification, not empirical biological replication.",
+    "If native EOG mismatch, stop and diagnose rather than change numerator or seed family.",
+    "Preserve all 64 paired graphs including zero/negative G5 contrasts and hard disconnection control.",
+    "No ecological causal effect, species-specific dispersal estimate or EOG-WF fourth scored endpoint."
+  ]
+}
