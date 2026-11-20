@@ -1,0 +1,72 @@
+{
+  "schema": "eog.independent_toad_coordinate_concordance_diagnosis.v1",
+  "status": "FROZEN_PRE_QUALITY_DIAGNOSIS_POST_PRIMARY_STOP",
+  "base_main_sha": "1bcec8b6a06a02cfff650a77830b691a41439ecc",
+  "parent_primary_protocol": "validation/independent_toad_source_anchor_geography_v1/protocol_v1.json",
+  "parent_primary_pr": 721,
+  "parent_primary_first_outcome_run": 44756566395,
+  "parent_primary_result_fingerprint": "e86dece9edf999716a7514c9f174642cee8cd6025ecceec0598b82c85dda5bb6",
+  "parent_primary_scientific_stop": "STOP_GEO_UNIT_CONCORDANCE",
+  "source": {
+    "doi": "10.5061/dryad.x3ffbg7ms",
+    "version_id": 198534,
+    "csv_name": "Jreidini_and_Green_homing_toads_2021.csv",
+    "csv_sha256": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+    "csv_size_bytes": 18702,
+    "expected_raw_rows": 165,
+    "published_zip_transport": "Reuse exact pinned v2 publisher/redirect contract; no alternate DOI or version"
+  },
+  "audit_scope": {
+    "unit": "source CSV row for data-quality only, not independent toad replicate",
+    "required_fields": [
+      "Initial Easting",
+      "Initial Northing",
+      "Released Easting",
+      "Released Northing",
+      "Final Easting",
+      "Final Northing",
+      "Distance release-final (m)",
+      "Distance capture-final (m)"
+    ],
+    "count_and_report": [
+      "total rows, byte-identical duplicates, rows missing any coordinate, complete six-coordinate rows",
+      "per-coordinate column missing/nonfinite/non-numeric counts",
+      "per published distance field nonmissing numeric count, rows with complete coordinates and published value, original-match count and mismatch count",
+      "for each distance field compare published distance against each coordinate pair d_RF, d_IF and d_IR at fixed scales [0.001,1,1000]; count matches and report median and quartiles of unsigned published/computed ratio where computed >0",
+      "published distance missingness and concordance among coordinate-complete rows, and coordinate precision expressed by decimal count aggregated"
+    ],
+    "frozen_original_quality_gate": "Original 95%-matching at max(2m,0.05*computed) on BOTH published RF and IF comparisons; report the original gate outcome unchanged.",
+    "alternative_quality_hypotheses_are_diagnostic_only": true,
+    "coordinate_unit_interpretation": "A match under another fixed scale is a possible unit explanation, not permission to change the frozen original estimand after observed outcomes",
+    "allowed_scales_for_exploratory_quality": [
+      0.001,
+      1,
+      1000
+    ],
+    "coordinate_pair_definitions": [
+      "d_RF=norm(released-final)",
+      "d_IF=norm(initial-final)",
+      "d_IR=norm(initial-released)"
+    ],
+    "tolerance_meters": "max(2, 0.05*comparison_distance)",
+    "ratio_percentiles": [
+      25,
+      50,
+      75
+    ],
+    "strict_predeclared_stops": [
+      "Never compute or export per-individual movement/dispersal outcomes, signed Delta, H1/H2 score, actual Toad ID, coordinates or dates.",
+      "No changing the original 95% unit concordance threshold or source SHA.",
+      "If the original source row identity, version, file size or SHA differs, stop before inspecting fields.",
+      "If malformed numeric unexpected string encountered, report its count only, no raw value; do not coerce.",
+      "No external biological inference, fourth EOG-WF scored endpoint, or claim that coordinate-quality alternatives validate original H1.",
+      "A source quality diagnosis may explain the prior STOP but cannot retrospectively turn it into a scored trial."
+    ]
+  },
+  "output": {
+    "metadata_quality_counts_only": true,
+    "raw_source_rows_saved": false,
+    "new_EOG_WF_endpoints": 0,
+    "primary_H1_rescored": false
+  }
+}
