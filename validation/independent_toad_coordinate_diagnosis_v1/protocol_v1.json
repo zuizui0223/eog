@@ -61,12 +61,15 @@
       "If malformed numeric unexpected string encountered, report its count only, no raw value; do not coerce.",
       "No external biological inference, fourth EOG-WF scored endpoint, or claim that coordinate-quality alternatives validate original H1.",
       "A source quality diagnosis may explain the prior STOP but cannot retrospectively turn it into a scored trial."
-    ]
+    ],
+    "original_H1_quality_grain": "Report both all-coordinate-complete and the precise frozen H1 QC grain (nonmissing ID, nonmissing Date of re-encounter, all six coordinates valid, after byte-exact duplicate removal). The latter alone determines original 95% concordance; no H1 distances or effects calculated.",
+    "report_ratio_guard": "Unsigned ratio published/computed only where computed pair distance>1e-12 and both numeric; quantiles fixed 25/50/75; zero denominators reported as counts."
   },
   "output": {
     "metadata_quality_counts_only": true,
     "raw_source_rows_saved": false,
     "new_EOG_WF_endpoints": 0,
     "primary_H1_rescored": false
-  }
+  },
+  "pre_score_amendment": "Before rerunning the source, clarify exact parent H1 QC grain and ratio handling; no new biological effect or threshold."
 }
