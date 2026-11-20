@@ -1,0 +1,94 @@
+{
+  "schema": "eog.independent_movement_dryad_exact_host_transfer.v2",
+  "status": "PRE_BIOLOGICAL_SOURCE_ONLY_TRANSPORT_FROZEN",
+  "ancestor_source_protocol": "validation/independent_movement_source_gate_v1/protocol_v1.json",
+  "ancestor_metadata_gate": {
+    "run_id": 44751841678,
+    "artifact_id": 14636106078,
+    "receipt_sha256_without_self_field": "7082ab3fc7811f248d371d9ddca2c2a754a7ccd0d9f86005328bbc9b2d36e266",
+    "original_status": "SOURCE_SCHEMA_HAS_SCIENTIFIC_STOP",
+    "original_reason": "STOP_UNEXPECTED_SOURCE_REDIRECT for both datasets"
+  },
+  "previous_no_body_host_diagnostic": {
+    "protocol_pre_probe_commit": "6820f9f92ec05ef87ec4e7ba117e252730a81069",
+    "amended_before_probe": "faa6af2ac57c4e96ae8ff7aa2fb5c6220a3da56c",
+    "successful_head_only_run": 44752968197,
+    "host_hostname_exact": "w27i4vubmmwkssdf6xpszafmhq0rffog.lambda-url.us-west-2.on.aws",
+    "http_status": 302,
+    "no_body_downloaded": true
+  },
+  "exact_trusted_redirect_contract": {
+    "original_https_host": "datadryad.org",
+    "first_redirect_must_be_exact_host": "w27i4vubmmwkssdf6xpszafmhq0rffog.lambda-url.us-west-2.on.aws",
+    "first_redirect_exact_no_wildcard": true,
+    "later_redirect_allowlist_suffixes": [
+      ".amazonaws.com",
+      ".cloudfront.net"
+    ],
+    "only_after_exact_lambda_redirect": true,
+    "max_http_redirects": 5,
+    "cap_archive_bytes": 300000,
+    "final_allowed": "exact lambda, datadryad.org, AWS S3 or CloudFront only after mandatory exact Lambda gateway",
+    "host_provenance": "Exact hostname disclosed by official Dryad version API HEAD redirect for both predeclared fixed versions; does not authorize any other Lambda URL.",
+    "cap_timeout_sec": 28,
+    "no_log_of_signed_urls": true
+  },
+  "sources": [
+    {
+      "id": "heliconius_moura_2021",
+      "doi": "10.5061/dryad.34tmpg4m6",
+      "version_id": 148124,
+      "expected_date": "2021-11-14",
+      "expected": [
+        {
+          "name": "README.txt",
+          "size": 4635,
+          "sha256": "54ae5d50b144ccac05052269ee4ff3164c5c9342068468d3d9348004c203709c"
+        },
+        {
+          "name": "data_site_fidelity.csv",
+          "size": 8099,
+          "sha256": "e2ba8406fc4afd3695f998cfb98315802a8dcadf4f7633fd16a7e8d2a25e9e09"
+        },
+        {
+          "name": "turning_data.csv",
+          "size": 4459,
+          "sha256": "229b31bba2733ab1edb383446a7ce16d7fd8918349b10f9edb7f25bfcdda72d2"
+        }
+      ]
+    },
+    {
+      "id": "toad_jreidini_green_2022",
+      "doi": "10.5061/dryad.x3ffbg7ms",
+      "version_id": 198534,
+      "expected_date": "2022-09-27",
+      "expected": [
+        {
+          "name": "Jreidini_and_Green_homing_toads_2021.csv",
+          "size": 18702,
+          "sha256": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17"
+        },
+        {
+          "name": "README_file.rtf",
+          "size": 2102,
+          "sha256": "3d7b240bf323bb19fe32e57d99b8029e212d1da15d85c02b457a1d74053b3c5c"
+        }
+      ]
+    }
+  ],
+  "verification_rules": [
+    "Exactly one source attempt per DOI in the gate; all SHA256s from first publisher metadata must match actual downloaded bytes.",
+    "Never change DOI, version ID, original publisher file names, bytes, or digest after inspecting row contents.",
+    "No per-individual/event values retained, shown, joined, summarized, compared, fitted or published; CSV header + row count only.",
+    "If signed redirect goes to unlisted storage endpoint, STOP; do not add wildcard on.aws authorization.",
+    "If raw content does not decode as expected ZIP or publisher SHA mismatches, STOP.",
+    "No ecological response or reference publication effect reused as fresh EOG-WF score.",
+    "Even source schema PASS requires a separate, later pre-response protocol before any direct movement test."
+  ],
+  "output": {
+    "metadata_headers_rows_sha_only": true,
+    "new_eogwf_endpoints": 0,
+    "raw_individual_rows_exported": 0,
+    "ecological_models_fit": 0
+  }
+}
