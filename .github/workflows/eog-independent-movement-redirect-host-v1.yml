@@ -1,0 +1,56 @@
+name: EOG independent movement Dryad redirect HOST only diagnostic
+
+# Only HEAD/no-body requests to two frozen official publisher URLs.
+on:
+  pull_request:
+    paths:
+      - 'validation/independent_movement_redirect_host_v1/protocol_v1.json'
+      - 'scripts/eog_independent_movement_redirect_host_v1.py'
+      - 'tests/test_eog_independent_movement_redirect_host_v1.py'
+      - '.github/workflows/eog-independent-movement-redirect-host-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  official-publisher-host-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install offline test runner
+        run: python -m pip install 'pytest>=8,<10'
+      - name: Verify signed URLs cannot leak and redirects never followed
+        run: python -m pytest -q tests/test_eog_independent_movement_redirect_host_v1.py
+      - name: Run one diagnostic of officially pinned version download headers only
+        run: |
+          python scripts/eog_independent_movement_redirect_host_v1.py \
+            --protocol validation/independent_movement_redirect_host_v1/protocol_v1.json \
+            --output results/independent_movement_redirect_host_v1/receipt.json
+      - name: Keep source retrieval disallowed
+        run: |
+          python - <<'PY'
+          import json
+          f='results/independent_movement_redirect_host_v1/receipt.json'
+          r=json.load(open(f))
+          assert r["biological_rows_read"]==0
+          assert r["source_qualified"] is False
+          assert r["source_file_body_read"] is False
+          assert r["new_eogwf_endpoints"]==0
+          assert len(r["source_results"])==2
+          print("PUBLISHER_REDIRECT_SOURCE_DIAGNOSTIC="+r["status"])
+          for s in r["source_results"]:
+              print(s["source_id"],s["status"],s.get("last_redirect_hostname"),s.get("hop_status_codes"))
+          PY
+      - name: Save hostname-only receipt, not source content
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-independent-movement-dryad-redirect-host-only
+          path: results/independent_movement_redirect_host_v1/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
