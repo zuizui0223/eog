@@ -98,6 +98,20 @@ def file_manifest(meta,fetch=get_bytes):
             if len(candidates)!=1:continue
             name=next(iter(candidates))
             id_=f.get("id")
+            if not isinstance(id_,int) or id_<=0:
+                # Dryad v2 embedded file rows often expose the file identity
+                # in _links.self.href rather than as a top-level numeric id.
+                # Only accept an exact official /api/v2/files/N identity.
+                links=f.get("_links",{})
+                if isinstance(links,dict):
+                    for node in links.values():
+                        href=node.get("href","") if isinstance(node,dict) else ""
+                        official=allowed_meta_url(href)
+                        if official:
+                            match=re.fullmatch(r"/api/v2/files/(\\d+)(?:/download)?",urlparse(official).path)
+                            if match:
+                                id_=int(match.group(1))
+                                break
             digest=f.get("digest")
             algo=f.get("digestType","")
             size=f.get("size")
