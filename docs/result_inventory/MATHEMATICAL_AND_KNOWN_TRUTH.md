@@ -1,5 +1,7 @@
 # EOG confirmed mathematical and known-truth results
 
+> **数理成果を引用・投稿に使う際は先に[詳細監査版](MATHEMATICAL_DEEP_AUDIT_20261120.md)を確認すること。** 旧一覧は発見のナビゲーション用。全ての `SUPPORTED` が新しい定理・非自明な生態学的主張ではない。特に `25/174/636` は有限候補64世界のconditional identifiability、世界拡張下の各release二値判断は `A:652→646→34 / B:705→693→34 / M:732→691→34`、peer-source policyはfixed-sourceの単調性条件と異なる（未マージPR #697/#698）。
+
 **Read with:** [evidence split index](README.md) and [empirical ledger](EMPIRICAL_RESULTS.md).  
 **Snapshot:** main `f8028c50a28fb74faa4766347f05cd830655e075`, 2026-11-20.  
 These are **finite-universe logical contracts and controlled synthetic known-truth results**. Their numerators/denominators are not natural populations or species.
