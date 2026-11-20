@@ -1,0 +1,103 @@
+{
+  "schema": "eog.independent_movement_source_gate.v1",
+  "status": "PRE_TRANSPORT_SOURCE_ONLY_FROZEN",
+  "frozen_main_sha": "1fcbcfbc219058f2e83659c7440581464b87545c",
+  "purpose": "Determine whether independent published marked-individual movement/recapture/translocation records can support future external EOG minimum-constraint-relaxation tests without post-outcome source or target selection.",
+  "source_references": [
+    {
+      "id": "heliconius_moura_2021",
+      "priority": "PRIMARY_DECLARED_BEFORE_TRANSPORT",
+      "doi": "10.5061/dryad.34tmpg4m6",
+      "official_url": "https://datadryad.org/dataset/doi:10.5061/dryad.34tmpg4m6",
+      "expected_publication_year": 2021,
+      "publisher_landing_file_names": [
+        "data_site_fidelity.csv",
+        "turning_data.csv",
+        "README.txt"
+      ],
+      "publication": "Moura et al. (2021) Movement, translocation and MRR data for Heliconius butterflies",
+      "declared_research_unit": "individual mark-release-recapture, experimental translocation and site fidelity; not population colonization",
+      "mandatory_evidence_for_geo_only_followup": [
+        "explicit captured or released source location",
+        "explicit later observed destination or recapture location",
+        "joinable identity/time or treatment unit",
+        "metric geographic distance or independently recoverable spatial coordinates"
+      ],
+      "mandatory_evidence_for_full_MRR": [
+        "externally defined candidate habitat graph",
+        "independently measured environment transitions",
+        "verified barrier data",
+        "same observational clock and source hypotheses",
+        "held-out origin/destination transitions"
+      ],
+      "source_only_read_permissions": "file metadata (publisher file digest, byte size, version), CSV header, total number of rows and README first heading only; NO individual observations or outcome values read"
+    },
+    {
+      "id": "toad_jreidini_green_2022",
+      "priority": "SECONDARY_PREDECLARED_NO_OUTCOME_BASED_SUBSTITUTION",
+      "doi": "10.5061/dryad.x3ffbg7ms",
+      "official_url": "https://datadryad.org/dataset/doi:10.5061/dryad.x3ffbg7ms",
+      "expected_publication_year": 2022,
+      "publisher_landing_file_names": [
+        "Jreidini_and_Green_homing_toads_2021.csv",
+        "README_file.rtf"
+      ],
+      "publication": "Jreidini and Green (2022) Artificial displacement alters movement behavior of a terrestrial amphibian",
+      "declared_research_unit": "translocated marked toads from original site to release and recapture, not natural origin-to-colonization migration",
+      "mandatory_evidence_for_geo_only_followup": [
+        "explicit capture/release/recapture spatial variables",
+        "individual join keys and timing",
+        "metric distance or independent coordinates"
+      ],
+      "mandatory_evidence_for_full_MRR": [
+        "ecological habitat candidate graph",
+        "environment edge measurement",
+        "independent barrier constraints",
+        "forward-prediction design"
+      ],
+      "source_only_read_permissions": "file metadata, CSV header, row count, RTF header preview only, no event-level values"
+    }
+  ],
+  "source_endpoints": {
+    "provider": "Dryad anonymous public REST API 2.1.0",
+    "dataset_metadata_pattern": "https://datadryad.org/api/v2/datasets/{doi_with_colon_and_slash_urlencoded}",
+    "published_version_policy": "Most recent published version whose year agrees with frozen publication year; if versions ambiguous, STOP_VERSION_AMBIGUOUS instead of choosing based on rows",
+    "version_file_metadata_pattern": "https://datadryad.org/api/v2/versions/{version_id}/files",
+    "version_download_pattern": "https://datadryad.org/api/v2/versions/{version_id}/download",
+    "approved_network_hosts": [
+      "datadryad.org",
+      "www.datadryad.org"
+    ],
+    "allow_trusted_public_cloud_storage_redirect": "S3/CloudFront only when redirect originates from official Dryad public API URL; record final host, never output signed URL or secret query",
+    "use_one_attempt_per_source": true
+  },
+  "schema_only_gates": [
+    "official DOI and version identity from REST API; source title check, no generic search fallback",
+    "exact expected filename multiset from publisher landing page, verified against file metadata and actual version ZIP contents",
+    "SHA256 for metadata JSON, downloaded ZIP, and each expected file; verify publisher digest where published",
+    "CSV header names and total row counts only; no row-level release/recapture or response values computed",
+    "three-axis MRR cannot proceed if geographic/environment/barrier source covariates are absent; geographic-only may proceed separately only under new pre-score protocol",
+    "translocation site is an experimentally assigned release, not natural founder",
+    "the Dryad file archive is not committed, shared or uploaded to Github artifacts; only aggregate metadata receipt",
+    "NO predictive EOG-WF endpoint (3 scored /31 scientific STOP/3 admin excluded); no historical Glanville overwrite"
+  ],
+  "resource_limits": {
+    "max_metadata_bytes": 300000,
+    "max_version_files": 25,
+    "max_archive_bytes": 300000,
+    "max_uncompressed_bytes": 1000000,
+    "max_csv_rows": 50000,
+    "max_header_columns": 150,
+    "request_timeout_seconds": 28,
+    "total_attempts_per_source": 1,
+    "archive_members_max": 25
+  },
+  "output_contract": {
+    "metadata_only_receipt": true,
+    "explicit_stop_if_transport_or_checksum_failure": true,
+    "models_fit": 0,
+    "biological_results_read": 0,
+    "feature_or_target_scored": 0,
+    "new_EOG_WF_endpoints": 0
+  }
+}

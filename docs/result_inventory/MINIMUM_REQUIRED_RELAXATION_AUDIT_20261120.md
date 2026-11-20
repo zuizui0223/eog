@@ -1,5 +1,8 @@
 # EOG最小制約緩和（Minimum Required Relaxation）成果監査 — 2026-11-20
 
+> **次段：独立実証のソース適格性監査** — [Heliconius標識再捕獲・ヒキガエル移送実験の公開Dryad元データを、転送・CSV見出し・チェックサムだけで検査](../independent_movement_source_gate_v1.md)。元データの個体別移動結果や新たなEOG-WF予測endpointは、この段階では採点しない。
+
+
 > **v4で数理境界を確立：** [possibleとsource-robustの最短hop識別区間、SCC直径上限、192合成グラフ監査](../occurrence_conditioned_source_minrelax_v4.md)。`min_s h_s≤H<max_s h_s`の時だけsource ambiguityが存在。基準source coreが強連結なら追加hop幅は有向直径以下（実装0違反）。一方、平均曖昧性の「循環 > スター」事前予測は**反証**（循環0.29492、スター0.33398、完全接続0.17318）。同じ所与の世界でも、possible／robustの差はHに対して単調減少とは限らない（120/192合成graph）。生態学的一般率ではない。
 
 > **拡張の既知真値成果：** [源間接続構造の一般性ストレステスト v3](../occurrence_conditioned_source_minrelax_v3.md)（事前凍結24シード×2密度×2源構造×3源数×4 hop、計1,152合成条件）。相互直接接続に対し一方向源サイクルの不確実性gap平均差は+0.257378（主検定96組中92正・4同・0逆）。有限グラフのみ。既存EOG-WF endpointは増やさない。
