@@ -1,0 +1,66 @@
+# Source-uncertain minimum relaxation: frozen paired random-graph generality v3
+
+## Status
+
+Research-only **synthetic generality stress test**. The protocol was committed *before running the paired generator* at [v3 protocol](../validation/occurrence_conditioned_source_minrelax_v3/protocol_v3.json), commit `32626e5a5726d8f33083163c2e2dfc31b7eb2f46`. This successor to the [v2 three-source known-graph demonstration](occurrence_conditioned_source_minrelax_v2.md) holds EOG-WF's 3 scored / 31 scientific STOP / 3 administrative exclusion empirical closure unchanged.
+
+This test checks a substantive concern: v2's convergence after two hops could be a property of its fully interconnected source triangle, not a generic property of origin uncertainty.
+
+## Frozen design: graph pairing, not ecological replication
+
+- **Source candidates:** 2, 3, or 4 frozen hypothetical singleton source nodes, all positive.
+- **Positive targets:** 3 additional nodes, shared by every source hypothesis in the panel.
+- **Source-core topology:** fully bidirectional baseline source core or a one-direction baseline source cycle. Both are **strongly connected** but may have different shortest-path lengths. For two sources the two regimes are exactly identical (frozen negative control).
+- **Other edges:** Same random *optional* source-to-target / target-to-target edges under each paired source-core comparison. Optional source→target inclusion 0.25 or 0.65, target→target inclusion 0.30; hard-unavailable fraction and geographic/environment/barrier tiers were frozen, not fit.
+- **Guaranteed anchor opportunities:** source S0 has three direct candidate edges to the targets, each requiring a different potential relaxation axis. They ensure possible high-threshold pathways and prevent every difficult cell from being a trivial unconnected graph.
+- **Steps:** H=1, 2, 3, and H=n_nodes−1. H is **graph-hop budget**, not years or generations.
+- **Pseudorandom coverage:** 24 deterministic seed indices, paired exactly between source-core treatments. Total **3 source counts × 2 densities × 24 seeds × 2 source cores × 4 horizons = 1,152 graph×horizon panels**. The primary directed source-core comparison is at H=n_sources−1 for source counts 3 or 4 (**96 matched graph pairs**).
+
+The source-core manipulation is a *constructed graph property*. A matched source graph comparison is not a real population replication, nor a statistical p-value for natural systems.
+
+## Quantified target
+
+For each finite shared geographic/environment/barrier threshold grid `Θ`, compute the complete set `F_s(H)` of threshold vectors for which every positive node is reachable from singleton source s within H hops. Define
+
+```text
+F_possible(H) = union_s F_s(H)
+F_source_robust(H) = intersection_s F_s(H)
+g(H) = ( |F_possible(H)| - |F_source_robust(H)| ) / |Θ|
+```
+
+`g` is a **fraction of possible threshold worlds** for which a source-existential explanation exists but not every declared origin hypothesis works. It is *not* a probability of occurrence, failure, origin, migration, or biological reality.
+
+Predeclared G1 directional hypothesis: under matched optional edges and n_sources in 3/4, the one-direction source cycle has a larger **mean g** at H=n_sources−1 than a fully bidirectional source core. The correct denominator is 96 matched graph draws. A nonpositive mean must be retained as a **refutation or unsupported directional prediction** without changing seed rosters.
+
+## Necessary formal controls
+
+- **G2, horizon monotonicity:** For fixed sources/graph and identical threshold grid, both `F_possible(H)` and `F_source_robust(H)` are nested upward as H grows. This **does not imply** that their *difference* `g(H)` is monotone.
+- **G3, finite SCC terminal:** At H=n_nodes−1, baseline source-core connectivity ensures that if one declared source reaches every positive, then every declared source does (possibly along a different route). Possible and source-robust thus coincide at this declared horizon. A theorem/implementation-control, **not** a new discovery.
+- **G4, identical two-source control:** A complete 2-node source core and a directed 2-cycle are exactly the same graph, so their outputs must match under identical optional edges.
+- **G5, independent native-core bridge:** For seed index 0, all source counts, both densities, both source-core regimes and both critical/terminal horizons (**24 checks**), compare direct independent bounded BFS and finite threshold Pareto frontiers against existing production EOG v2 reconstruction. Original v2 code is **reused rather than modified**.
+- **G6, roster fidelity:** No source is claimed as historical or genetically validated; all source hypotheses are held fixed across threshold worlds and compared graph regimes.
+
+The directional magnitude is a result of the *chosen generator*, not of theorems G2–G4. All outcomes, including negative and no-possible worlds, remain in the denominator.
+
+## Results and reproducibility
+
+The result is computed by the research-only [v3 benchmark](../benchmarks/occurrence_conditioned_source_minrelax_v3.py), with deterministic generator [regression tests](../tests/test_occurrence_conditioned_source_minrelax_v3.py), and synthetic-only [workflow](../.github/workflows/eog-source-minrelax-random-generality-v3.yml). CI must verify the frozen source-native crosschecks and denominators before the aggregate can be promoted from an independently computed estimate to a **CI-backed result**.
+
+Run:
+
+```bash
+python -m pip install -e . pytest
+python -m pytest -q \
+  tests/test_occurrence_conditioned_minrelax_v1.py \
+  tests/test_occurrence_conditioned_source_minrelax_v2.py \
+  tests/test_occurrence_conditioned_source_minrelax_v3.py
+python -m benchmarks.occurrence_conditioned_source_minrelax_v3 \
+  --protocol validation/occurrence_conditioned_source_minrelax_v3/protocol_v3.json \
+  --output results/source_minrelax_v3/result.json
+```
+
+## Claim boundaries and next biological stage
+
+These are finite candidate graph diagrams of directional source access and threshold requirements. They do not estimate actual founding source(s), observed dispersal paths, colonization kernels, biological barriers, real elapsed time, nor a new predictive SDM endpoint.
+
+Next ecological test cannot score already-exposed Åland/Glanville observations as an independent holdout. The current [Glanville audit](result_inventory/MINIMUM_REQUIRED_RELAXATION_AUDIT_20261120.md) and [genetic source assignment comparison](glanville_genetic_host_world_v2_result.md) can motivate source-roster eligibility criteria, but genetic *model-inferred* origin is not a guaranteed natal label. Future sampling and source evidence must be frozen independently before any new target predictions are inspected.
