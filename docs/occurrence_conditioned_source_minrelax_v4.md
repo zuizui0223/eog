@@ -95,7 +95,33 @@ The benchmark uses one independent directed BFS over all candidate sources for e
 - **Interpretive use:** The v3 result can be decomposed into a measurable *source-hop ambiguity duration* for each declared threshold world, rather than attributing a large mean gap simply to “more isolated sources.”
 - **Prior art boundary:** Directed graph diameter, shortest path, strong connectedness, Pareto minimality, and counting indicators are standard results. Novelty—if established externally—would lie in source-uncertain **occurrence-conditioned biogeographic inference** and calibrated biological predictions.
 
-## 5. Sources and reproduction
+## 5. Frozen result (dedicated CI successful; directional hypothesis refuted)
+
+[Dedicated GitHub Actions run #44749011366](https://github.com/zuizui0223/eog/actions/runs/44749011366) **passed** all scientific controls and executed the originally frozen new seed panel. It reproduced the same frozen result fingerprint as the prior successful run #44748764485. Artifact ID `14633688692`, ZIP SHA256 `ca1c2f123b2c47c4259dbe7b3358433510ea6182531aa2714603621f4ec2cb91`, full-result SHA256 without self field `54ec5f1624b5cac3cd4666b36f487efc62808fbdfbc987828c5356459ca6800c`. The aggregate is permanently recorded in [v4 frozen result](../validation/occurrence_conditioned_source_minrelax_v4/frozen_aggregate_summary_v4.json).
+
+**G1–G4 exact contracts/negative control:** For **192** graph panels and **2,172** finite threshold worlds, interval classification and area identity passed with **zero** diameter-bound and integrated-identity violations, including **36** predeclared native EOG v2 reconstructions matching independently computed hop count and both Pareto frontiers. Disconnecting one baseline source-core edge left a finite some-source explanation but no finite all-source explanation, demonstrating the SCC precondition is necessary for the uniform finite bound.
+
+**Primary preregistered G5 was REFUTED / NOT SUPPORTED.** The prediction that a directed cycle must have a larger **mean ambiguity area** than a bidirectional star under this frozen generator did *not* hold:
+
+| Source core | Mean source-hop ambiguity area (hops) | Baseline directed source-core diameter |
+| --- | ---: | --- |
+| Complete bidirectional | **0.17318** | 1 |
+| Bidirectional star (S0 center) | **0.33398** | 2 |
+| Unidirectional cycle | **0.29492** | 2 for 3 sources; 3 for 4 sources |
+
+For the 64 paired cycle-versus-star comparisons: **cycle larger 13, tie 20, star larger 31**, and mean cycle-minus-star `−0.0390625` directed hops. A larger *upper bound* `D_C` does not force a larger *realized mean* `K(theta)`. This falsifies a naive diameter-only **ranking rule**, not the exact `K<=D_C` theorem.
+
+**Additional descriptive results (not separately predeclared directional tests):**
+
+- **545 / 2,172** synthetic threshold worlds have a strictly positive finite hop-ambiguity width.
+- **146 / 2,172** reach their source-core diameter upper bound (among all counted worlds).
+- **120 / 192** graph panels exhibit an **interior horizon** `H>=1` where the possible-minus-robust gap fraction **increases** with another allowed hop. Adding permissible hops therefore does not necessarily make the gap decrease monotonically, even though the possible and universal sets each expand.
+
+**Why this is compatible with v3:** v3 asked whether the directed cycle exceeds a *complete bidirectional source core* at one predeclared horizon and used the number of compatible threshold worlds. v4 asks whether the cycle exceeds a *star source core* in an **integrated area over all horizons**. Comparator and target differ. Indeed the complete core has smaller mean integrated area than either non-complete core in this v4 panel, but the star exceeds the cycle. The result is conditional on this predeclared S0-anchored generator; neither topological ranking is universal.
+
+**Boundaries retained:** The numeric area is **directed hop steps averaged over declared synthetic threshold worlds**. It is not elapsed time, natural probability, true source location, field dispersal behavior, a general causal effect of star vs cycle connectivity, or a new mathematical discovery about directed graphs. Retain the adverse preregistered G5 result rather than optimizing the graph distribution to reverse its sign.
+
+## 6. Sources and reproduction
 
 - [Frozen v4 protocol](../validation/occurrence_conditioned_source_minrelax_v4/protocol_v4.json)
 - [v4 source-hop and topology benchmark](../benchmarks/occurrence_conditioned_source_minrelax_v4.py)
