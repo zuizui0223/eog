@@ -62,6 +62,10 @@ jobs:
           print('G5',v['verdicts']['G5_cycle_area_greater_than_star'])
           print('CYCLE_MINUS_STAR_MEAN_AREA_HOPS',s['mean_cycle_minus_star_ambiguity_area_hops'])
           print('PAIRED_SIGNS',s['cycle_minus_star_sign_counts'])
+          print('MEAN_AREA_COMPLETE_STAR_CYCLE',s['mean_complete_area_hops'],s['mean_star_area_hops'],s['mean_cycle_area_hops'])
+          print('INTERIOR_RISING_GAP_GRAPHS',s['interior_rising_gap_graph_count'])
+          print('TIGHT_BOUND_WORLDS',s['tightness_worlds'],'OF',s['total_threshold_worlds'])
+          print('POSITIVE_WIDTH_WORLDS',s['worlds_with_positive_hop_ambiguity'])
           print('SHASUM',v['sha256_without_self_hash'])
           PY
       - name: Preserve result and failure diagnosis
