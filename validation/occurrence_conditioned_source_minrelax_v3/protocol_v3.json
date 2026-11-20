@@ -1,0 +1,123 @@
+{
+  "schema": "eog.source_uncertain_minrelax_random_generality_v3.protocol",
+  "status": "pre_score_protocol_frozen_before_generator_execution",
+  "main_base_sha": "85f484c4346983681e9610145f0f0806bec4d333",
+  "parent_source_mrr_v2": "validation/occurrence_conditioned_source_minrelax_v2/protocol_v2.json",
+  "experiment_scope": "finite synthetic directed graphs only; source/core structures generated without biological outcome data",
+  "generator": {
+    "source_counts": [
+      2,
+      3,
+      4
+    ],
+    "target_count": 3,
+    "source_core_regimes": [
+      "complete_bidirectional_baseline",
+      "unidirectional_cycle_baseline"
+    ],
+    "source_to_target_optional_probabilities": [
+      0.25,
+      0.65
+    ],
+    "target_to_target_optional_probability": 0.3,
+    "random_seeds": 24,
+    "seed_integer_formula": "unsigned32(20261120 + 10000 * n_sources + 1000 * density_index + 37 * seed_index), seed_index=0..23",
+    "random_generator": "xorshift32 deterministic int32: x^=(x<<13)&0xffffffff; x^=x>>17; x^=(x<<5)&0xffffffff; return (x&0xffffffff)/4294967296",
+    "initial_random_draws": "generate optional non-core source-to-target edges, then optional directed non-source-to-non-source edges, sorted by source ID then target ID; consume a selection draw for every optional edge; if selected consume geographic tier draw, environmental tier draw, barrier draw, hard-unavailable draw",
+    "optional_edge_requirement_distributions": {
+      "geographic_km": [
+        8,
+        15,
+        20
+      ],
+      "environmental_units": [
+        0,
+        2
+      ],
+      "barrier_probability": 0.2,
+      "hard_unavailable_probability": 0.1
+    },
+    "baseline": {
+      "geographic_km": 10,
+      "environmental_units": 1,
+      "barrier_permission": 0
+    },
+    "guaranteed_anchor_outgoing_edges": [
+      {
+        "source": "S0",
+        "target": "T0",
+        "geographic_km": 20,
+        "environmental_units": 0,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "S0",
+        "target": "T1",
+        "geographic_km": 8,
+        "environmental_units": 2,
+        "barrier_permission": 0,
+        "hard_unavailable": false
+      },
+      {
+        "source": "S0",
+        "target": "T2",
+        "geographic_km": 8,
+        "environmental_units": 0,
+        "barrier_permission": 1,
+        "hard_unavailable": false
+      }
+    ],
+    "source_core_edges": "complete regime: every S_i->S_j (i!=j); cycle regime: only S_i->S_(i+1 mod n_sources); baseline geography=8km, env=0, barrier=0, hard=false",
+    "other_candidate_edges": "optional S_i->T_j for i>0; optional T_i->T_j (i!=j); no T->S edges; never add duplicate",
+    "observation_roster": "all n_sources source nodes and all 3 non-source targets are positive, held fixed across source hypotheses; one alternative singleton source hypothesis for each S_i",
+    "horizons": "ordered [1,2,3,n_nodes-1], where n_nodes=n_sources+3; number of steps means graph hops, not years",
+    "baseline_node_worlds_max": 512,
+    "paired_design": "same optional random edges and requirements for complete/cycle source-core regimes at identical source_count, density_index, seed_index",
+    "always_connected_sources": "each regime has a baseline strongly connected source core; for n_sources=2 complete and cycle are exactly the same"
+  },
+  "primary_hypothesis": {
+    "id": "G1",
+    "target": "The mean fraction (F_possible minus F_source_robust)/|Theta| at H=n_sources-1 is greater for cycle than complete source core, pooled over all n_sources in {3,4}, two optional densities and 24 paired seeds.",
+    "expected": "cycle_minus_complete_pooled_mean > 0",
+    "denominator": "96 paired graph draws (2 source counts×2 density cells×24 seeds); not 96 biological independent populations",
+    "negative_or_equal": "REFUTED_OR_NOT_SUPPORTED without replacing metrics/generator"
+  },
+  "formal_and_control_checks": [
+    {
+      "id": "G2",
+      "test": "For every identical graph and threshold, F_possible(H) and F_source_robust(H) each monotonically expand with H (no violations). This is a theorem/implementation check, not empirical novelty."
+    },
+    {
+      "id": "G3",
+      "test": "At H=n_nodes-1, F_possible=F_source_robust for both source-core regimes in every panel, because baseline source nodes are strongly connected, and reachability in finite directed graphs has simple paths <=n_nodes-1."
+    },
+    {
+      "id": "G4",
+      "test": "n_sources=2 cycle graph equals complete graph for each matched seed/density and all horizons, including identical feasible sets and Pareto frontiers."
+    },
+    {
+      "id": "G5",
+      "test": "Native EOG v2 source-uncertain minrelax is applied to predeclared audit subset seed_index=0, all n_sources,densities,regimes at critical H and terminal H, to check independent direct bitset BFS counts/frontiers."
+    },
+    {
+      "id": "G6",
+      "test": "No feasibility from a missing candidate source is imputed; source universe same across modes; changing source roster is a different question."
+    }
+  ],
+  "secondary_descriptives": [
+    "G1 per n_sources and optional-edge density; strict positive-gap counts and mean gap values",
+    "contrast dense vs sparse within cycle (not predeclared causal effect)",
+    "H1, H2, H3, Hterminal possible, robust, and gap rates with exact denominators",
+    "source-robust Pareto antichain size conditional on at least one feasible source"
+  ],
+  "stop_rules": [
+    "Use all 24 seed indices without selection by outcome or exclusion of empty possible-set designs",
+    "Do not retune edge requirements/probabilities after seeing results",
+    "The source-core regime comparison is a controlled synthetic manipulation, not observed connectivity",
+    "No random permutation p-value interpreted as independent biological replication",
+    "If a native EOG check disagrees with independent BFS, STOP and diagnose before scientific result",
+    "Do not add new EOG-WF scored endpoint, true source identification, real dispersal rate or causal ecological claim",
+    "Do not merge scientific outcomes if dedicated CI fails; preserve negative/refuted results"
+  ]
+}
