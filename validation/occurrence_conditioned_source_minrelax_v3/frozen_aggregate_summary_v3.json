@@ -1,0 +1,113 @@
+{
+  "schema": "eog.source_uncertain_minrelax_random_generality_v3.frozen_aggregate_summary",
+  "status": "CI_VERIFIED_FROZEN_SYNTHETIC_GENERALITY_NO_FIELD_INFERENCE",
+  "source": "validation/occurrence_conditioned_source_minrelax_v3/protocol_v3.json",
+  "pre_score_protocol_commit": "32626e5a5726d8f33083163c2e2dfc31b7eb2f46",
+  "executed_head_sha": "49b89f70c343a2458cfc7c61e77079f384c0e240",
+  "github_actions": {
+    "run_id": 44743842920,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44743842920",
+    "conclusion": "success",
+    "artifact_id": 14632595326,
+    "artifact_name": "eog-source-minrelax-generality-v3-synthetic",
+    "artifact_zip_sha256": "2a0adab26a0ad3eea7bec3f084475584d34dd284f24f6df945ae391b1bfa9f54",
+    "full_canonical_result_sha256_without_self_hash": "2d6008fcaf959fcf22d029eaf6a344ca1a21e8eb2ee0b6f390f4a1bdcc728611"
+  },
+  "design": {
+    "source_counts": [
+      2,
+      3,
+      4
+    ],
+    "target_nodes_per_graph": 3,
+    "source_core_regimes": [
+      "complete_bidirectional_baseline",
+      "unidirectional_cycle_baseline"
+    ],
+    "source_to_target_optional_probabilities": [
+      0.25,
+      0.65
+    ],
+    "pseudorandom_seeds": 24,
+    "horizon_steps_per_graph": 4,
+    "graph_horizon_panels": 1152,
+    "paired_primary_comparisons": 96,
+    "independent_biological_populations": 0,
+    "world_count_distribution_in_panels": {
+      "8": 296,
+      "12": 856
+    }
+  },
+  "primary": {
+    "hypothesis": "At horizon n_sources-1 for n_sources 3 and 4, unidirectional source cycle has larger mean gap (possible world fraction minus source-robust world fraction) than complete bidirectional source core, with matching non-core edges.",
+    "verdict": "SUPPORTED_WITHIN_FROZEN_SYNTHETIC_GENERATOR",
+    "cycle_minus_complete_mean_gap_fraction": 0.2573784722222222,
+    "direction_counts": {
+      "cycle_larger": 92,
+      "equal": 4,
+      "complete_larger": 0
+    },
+    "details_by_source_count_and_density": [
+      {
+        "n_sources": 3,
+        "optional_edge_density": 0.25,
+        "paired_graphs": 24,
+        "cycle_mean_gap_fraction": 0.2586805555555555,
+        "complete_mean_gap_fraction": 0.09895833333333333,
+        "cycle_larger": 22,
+        "complete_larger": 0
+      },
+      {
+        "n_sources": 3,
+        "optional_edge_density": 0.65,
+        "paired_graphs": 24,
+        "cycle_mean_gap_fraction": 0.26736111111111116,
+        "complete_mean_gap_fraction": 0.020833333333333332,
+        "cycle_larger": 22,
+        "complete_larger": 0
+      },
+      {
+        "n_sources": 4,
+        "optional_edge_density": 0.25,
+        "paired_graphs": 24,
+        "cycle_mean_gap_fraction": 0.3090277777777778,
+        "complete_mean_gap_fraction": 0.006944444444444444,
+        "cycle_larger": 24,
+        "complete_larger": 0
+      },
+      {
+        "n_sources": 4,
+        "optional_edge_density": 0.65,
+        "paired_graphs": 24,
+        "cycle_mean_gap_fraction": 0.3211805555555555,
+        "complete_mean_gap_fraction": 0,
+        "cycle_larger": 24,
+        "complete_larger": 0
+      }
+    ]
+  },
+  "tests_and_mathematical_controls": {
+    "horizon_monotonicity_consecutive_pair_checks": 864,
+    "horizon_monotonicity_violations": 0,
+    "terminal_scc_convergence_panels": 288,
+    "terminal_scc_convergence_violations": 0,
+    "two_source_cycle_equals_complete_pair_checks": 192,
+    "two_source_mismatch_count": 0,
+    "audited_native_EOG_v2_vs_independent_BFS_panels": 24,
+    "native_mismatches": 0,
+    "all_graph_horizon_panels_included": true,
+    "no_outcome_tuning_of_generator": true,
+    "prior_failed_ci_issue": "First workflow failed only cross-language floating-point display equality in xorshift reference unit test. Corrected numerical comparator only, not generator, source graph, protocol or G1 metric; subsequent run succeeded.",
+    "prior_failed_run_id": 44743714561
+  },
+  "interpretation": {
+    "result_is": "exact finite breakpoint world fractions for paired random graphs with predetermined source-core topology; shows generator-dependent source sensitivity of minimum relaxation under bounded hop budget",
+    "result_is_not": "ecological probability, independent evidence of source choice, new mathematics of SCC/Pareto, measured dispersal, natal source, ecological frequency of effects, field prediction or causal response"
+  },
+  "frozen_empirical_EOG_WF_denominator_unchanged": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  },
+  "next_gate": "Independent real source hypotheses, movement/detection records, and held-out target transitions must be frozen before testing whether source-core structure has ecological predictive value."
+}
