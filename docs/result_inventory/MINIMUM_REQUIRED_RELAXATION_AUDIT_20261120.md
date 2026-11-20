@@ -1,5 +1,8 @@
 # EOG最小制約緩和（Minimum Required Relaxation）成果監査 — 2026-11-20
 
+> **追加の理論・既知真値実験（源不確実性 v2）:** [固定された代替起源ごとの possible/全起源共通 Pareto必要緩和](../occurrence_conditioned_source_minrelax_v2.md)。先に凍結した3つの仮想起源・1/2-hopパネルから、独立全列挙で `H1=7 possible / 1 source-robust`、`H2=7/7` を確認。あくまで有限グラフ、真の起源は同定しない。原典CIは別途判定。
+
+
 **監査基準main:** `d61b9887804d01ef78f020475a8ed127948c6db1`。この文書は[数理監査](MATHEMATICAL_DEEP_AUDIT_20261120.md)の補遺。**新規解析・再得点・観測endpoint追加なし**。従来のEOG-WF閉鎖済み分母 **3 scored / 31 scientific STOP / 3 administrative exclusion** は不変。
 
 ## 結論：どこまで肯定的か
