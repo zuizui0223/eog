@@ -1,0 +1,69 @@
+{
+  "schema": "eog.independent_toad_geocoordinate_stop_diagnostic_v2",
+  "status": "PRE_DIAGNOSTIC_FROZEN_AFTER_ORIGINAL_SCIENTIFIC_STOP",
+  "base_main_sha": "1bcec8b6a06a02cfff650a77830b691a41439ecc",
+  "parent": "validation/independent_toad_source_anchor_geography_v1/protocol_v1.json",
+  "parent_result": {
+    "workflow_run_id": 44756566395,
+    "source_artifact_id": 14637422878,
+    "original_aggregate_sha256_without_self": "e86dece9edf999716a7514c9f174642cee8cd6025ecceec0598b82c85dda5bb6",
+    "outcome": "STOP_GEO_UNIT_CONCORDANCE",
+    "primary_verdict": "NOT_SCORED_SOURCE_QUALITY_STOP"
+  },
+  "source": {
+    "doi": "10.5061/dryad.x3ffbg7ms",
+    "version_id": 198534,
+    "expected_sha256": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+    "expected_bytes": 18702,
+    "expected_data_rows": 165,
+    "approved_retrieval": "use unchanged v2 exact-host official Dryad transfer + member verified source in archived EOG code; no new host, no source version switch"
+  },
+  "audit_goal": "Explain numerical source-coordinate/georeference disagreement with reported distances; do not score animal movement, retune original radius, choose best posthoc mapping, or repair original scientific STOP",
+  "eligibility": {
+    "unit": "original CSV row (QC only, not independent animals)",
+    "include": "nonempty Toad ID and Date of re-encounter, complete six original coordinate columns, at least one numeric reported distance column",
+    "delete": "byte-identical CSV duplicate rows only, exact existing v1 source grain contract",
+    "missing_policy": "same exact tokens as frozen v1, no imputation or outcome-based filtering",
+    "cap": "165 publisher rows; fail closed if more",
+    "no_identity_export": true
+  },
+  "frozen_pair_definitions": {
+    "IR": "Initial Easting/Northing minus Released Easting/Northing Euclidean norm",
+    "RF": "Released Easting/Northing minus Final Easting/Northing Euclidean norm",
+    "IF": "Initial Easting/Northing minus Final Easting/Northing Euclidean norm"
+  },
+  "comparison_grid": {
+    "two_published_columns": [
+      "Distance release-final (m)",
+      "Distance capture-final (m)"
+    ],
+    "candidate_geometric_pairs": [
+      "RF",
+      "IF",
+      "IR"
+    ],
+    "coordinate_multipliers": [
+      0.001,
+      1,
+      1000
+    ],
+    "compare_as": "reported distance versus multiplier * Euclidean(candidate pair), original coordinates and candidate distance columns not edited",
+    "match_tolerance": "max(2 m, 0.05*computed scaled candidate distance); same frozen original numeric concordance threshold",
+    "report": "per-column×pair×multiplier: eligible numeric rows, matched rows, share, median absolute residual (m), q90 absolute residual (m), min and max reported positive values if allowable aggregated; no individual values/labels",
+    "zero_division": "if no valid values, status NOT_ESTIMABLE, never PASS",
+    "note": "All 18 options predeclared as *diagnostic alternatives only*. Highest matching cell cannot retrospectively replace the original comparison or release v1 STOP"
+  },
+  "quality_controls": [
+    "Do not modify original v1 toad analysis/test/receipt, even if alternative diagnostic maps seem better.",
+    "Do not infer directional homing, sign, biological effect, dispersal or origin from these diagnostics.",
+    "Retain entire denominator and per-column missingness; do not delete mismatch rows or improve threshold.",
+    "Require original SHA256/byte count and pinned official version before processing.",
+    "All coordinate values and reported distances read transiently only within runner; never commit/export row coordinates, Toad IDs, full source ZIP/CSV or per-event scores.",
+    "Use source analytic STOP if not enough complete quality rows, no numeric distance, or no credible mapping; output partial diagnostics but no ecological verdict.",
+    "An apparent match under nonidentity pair/scale is an annotation hypothesis only; not corrected scientific source by itself.",
+    "No fresh EOG-WF endpoint, frozen denominator 3 scored /31 scientific STOP/3 administrative exclusions."
+  ],
+  "expected_scientific_status": "SOURCE_QUALITY_DIAGNOSTIC_ONLY_RETAINS_ORIGINAL_STOP",
+  "output_model_fits": 0,
+  "output_new_eogwf_endpoints": 0
+}
