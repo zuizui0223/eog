@@ -1,12 +1,8 @@
 name: Glanville v3 conditional pairing public survey ciphertext
 
+# One-shot source run 44679961668 succeeded and was decrypted/audited locally.
+# Explicit manual dispatch only; do not rerun original source on subsequent PR edits.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_conditional_pairing_null_v3/protocol_v3.json"
-      - "scripts/glanville_conditional_pairing_ciphertext_v3.py"
-      - "tests/test_glanville_conditional_pairing_ciphertext_v3.py"
-      - ".github/workflows/eog-glanville-conditional-pairing-bridge-v3.yml"
   workflow_dispatch:
 
 permissions:
