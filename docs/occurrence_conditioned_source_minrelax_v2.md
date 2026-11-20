@@ -68,6 +68,12 @@ With H=1 and C→T physically marked unavailable, no threshold opens that edge. 
 
 The exact expected class counts and hypotheses are declared in the frozen protocol. A separate **JavaScript graph enumeration** of every source×threshold combination reproduced the 8-world / 24 source-world-pair counts, `H1=7 possible/1 robust`, `H2=7/7`, hard-edge `3 possible/0 robust` under its four remaining non-hard breakpoints. The new Python benchmark reproduces these using the original `infer_required_relaxations` (which itself uses original EOG `reconstruct_compatible_worlds` and `minimum_relaxation_frontier`) and separately computes per-world feasibility with an independent set-BFS and checks the antichain composition identity. The distinct runtime statuses must be read from CI (do not equate any successful workflow with empirical science).
 
+## Verification receipt (GitHub Actions)
+
+The dedicated synthetic-only workflow [run #44729976721](https://github.com/zuizui0223/eog/actions/runs/44729976721) **completed successfully**, with native EOG regression, this v2 test suite, relaxation-family and temporal-relaxation regression, independent bounded BFS and frozen-frontier checks passing. Archive artifact ID `14626066741`, ZIP SHA-256 `351b9778c4c1faf508dc7231c0977acb81de16eeea758f8c35902e464299debb`.
+
+The independently archived [synthetic result receipt](../validation/occurrence_conditioned_source_minrelax_v2/result_receipt_v2.json) binds the protocol-first commit, run, artifact and the **H1=7 possible/1 robust; H2=7/7; hard-edge=3/0** finite-world counts. It is **not** an external or heldout biological confirmation.
+
 ## Method and exactness boundary
 
 - **Exactness:** all explicitly declared finite edge-breakpoint worlds on one fixed source/graph/positive/horizon contract. The effect of a source alternative is not inferred from real survey data.
