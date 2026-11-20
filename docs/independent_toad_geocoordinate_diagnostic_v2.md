@@ -1,5 +1,15 @@
 # Independent toad coordinate-source quality diagnostic v2
 
+> **実行済み（2026-11-20、事後QC）:** [専用Actions #44759696421](https://github.com/zuizui0223/eog/actions/runs/44759696421) は成功し、[18セルの凍結集計・ソースSHA・STOP証跡](../validation/independent_toad_geocoordinate_diagnostic_v2/frozen_aggregate_summary_v2.json) を保存した。**元の `STOP_GEO_UNIT_CONCORDANCE` とH1未評価は不変。** 原CSV165行、完全重複除去後163行、82個体ID（個体情報は保存していない）。
+ 
+| 元の報告距離 | 凍結した座標ペア | 原95%閾値での一致 | 残差中央値 / q90 |
+| --- | --- | ---: | ---: |
+| `Distance capture-final (m)` | initial→final | **163/163 (100%)** | 0.0024m / 0.0047m |
+| `Distance release-final (m)` | release→final | **77/163 (47.24%)** | 22.00m / 470.57m |
+
+どの事前列挙済みの代替ペア・倍率も、release→final報告列で95%以上の一致を回復しない。**単純な全体単位倍率・距離列入れ替えだけではない**。元データのrelease地点と報告距離の関係は不明であり、最も適合した設定を結果に合わせて選び直すことはしない。専用CIのoriginal-source算術STOPを再現しているが、生態学的結果ではない。
+
+
 **Status: Post-exposure source-only diagnosis, original scientific STOP retained.** This is *not* a second attempt to obtain a favorable ecological result. The [original independently frozen toad analysis](independent_toad_source_anchor_geography_v1.md) ended as `STOP_GEO_UNIT_CONCORDANCE` ([Actions #44756566395](https://github.com/zuizui0223/eog/actions/runs/44756566395)), so its preregistered directional H1 was **not scored**. The prior scientific STOP remains authoritative.
 
 ## Why this step is needed
