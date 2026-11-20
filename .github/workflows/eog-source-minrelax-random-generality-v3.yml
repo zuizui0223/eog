@@ -1,0 +1,70 @@
+name: EOG source-uncertain MRR random graph generality v3 (synthetic)
+
+# Frozen protocol-first; synthetic reachability only. No ecological data.
+on:
+  pull_request:
+    paths:
+      - 'validation/occurrence_conditioned_source_minrelax_v3/**'
+      - 'benchmarks/occurrence_conditioned_source_minrelax_v3.py'
+      - 'tests/test_occurrence_conditioned_source_minrelax_v3.py'
+      - 'docs/occurrence_conditioned_source_minrelax_v3.md'
+      - '.github/workflows/eog-source-minrelax-random-generality-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-generality-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local scientific package
+        run: python -m pip install -e . pytest
+      - name: Run source-MRR v1/v2 and preregistered v3 regression
+        run: |
+          python -m pytest -q \
+            tests/test_occurrence_conditioned_minrelax_v1.py \
+            tests/test_occurrence_conditioned_source_minrelax_v2.py \
+            tests/test_occurrence_conditioned_source_minrelax_v3.py
+      - name: Run all 1152 frozen synthetic graph panels
+        run: |
+          python -m benchmarks.occurrence_conditioned_source_minrelax_v3 \
+            --protocol validation/occurrence_conditioned_source_minrelax_v3/protocol_v3.json \
+            --output results/source_minrelax_v3/result.json
+      - name: Verify denominator, exact negative controls and leave G1 verdict unchanged
+        run: |
+          python - <<'PY'
+          import json
+          v=json.load(open('results/source_minrelax_v3/result.json'))
+          s=v['summary']
+          assert v['new_EOG_WF_empirical_endpoints']==0
+          assert v['independent_ecological_replications']==0
+          assert s['rows']==1152 and s['primary_paired_graphs']==96
+          assert s['terminal_source_core_checks']==288
+          assert s['horizon_monotonicity_pair_checks']==864
+          assert s['two_source_equivalent_regime_checks']==192
+          assert s['native_EOG_v2_cross_checks']==24
+          assert sum(s['primary_direction_counts'].values())==96
+          assert s['primary_direction_counts']['cycle_larger'] >= 0
+          assert len(v['all_synthetic_panels'])==1152
+          assert v['outcomes']['G1_cycle_gap_strictly_larger_mean_than_complete'] in {
+            'SUPPORTED_WITHIN_FROZEN_SYNTHETIC_GENERATOR','REFUTED_OR_NOT_SUPPORTED'}
+          print('SOURCE_MRR_V3_FROZEN_SYNTHETIC_VALID')
+          print('G1',v['outcomes']['G1_cycle_gap_strictly_larger_mean_than_complete'])
+          print('DELTA',s['primary_cycle_minus_complete_mean_gap_fraction'])
+          print('DIRECTIONS',s['primary_direction_counts'])
+          print('FINGERPRINT',v['sha256_without_self_hash'])
+          PY
+      - name: Preserve all synthetic panels and frozen negative controls
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-source-minrelax-generality-v3-synthetic
+          path: results/source_minrelax_v3/result.json
+          if-no-files-found: warn
+          retention-days: 30
