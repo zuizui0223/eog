@@ -1,5 +1,8 @@
 # Independent marked-movement records: exact Dryad publisher transfer and schema gate v2
 
+> **後続の生物学的適格性（2026-11-20）:** publisher SHA/CSV headerが適格でも動物移動効果が採点できたわけではない。ヒキガエルの[独立source-anchor試験](independent_toad_source_anchor_geography_v1.md)は `STOP_GEO_UNIT_CONCORDANCE` で未評価。診断結果は[事後source-QC](independent_toad_geocoordinate_diagnostic_v2.md)であり、元のSTOPを解除しない。
+
+
 **Status:** source transport and CSV-header qualification only, **zero biological outcomes read or modeled**. No new scored EOG-WF endpoint, no reinterpretation of historical Glanville. This is a follow-up to the explicit transport STOP in [v1](independent_movement_source_gate_v1.md) and no-payload [HEAD redirect audit](independent_movement_redirect_host_v1.md).
 
 ## Why the first gate stopped, and what v2 changes
