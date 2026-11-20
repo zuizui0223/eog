@@ -1,0 +1,56 @@
+name: Mediterranean sowing versus transplant stage-witness audit v1
+on:
+  pull_request:
+    paths:
+      - 'validation/mediterranean_sowing_planting_witness_v1/**'
+      - 'benchmarks/mediterranean_sowing_planting_stage_witness_v1.py'
+      - 'tests/test_mediterranean_sowing_planting_stage_witness_v1.py'
+      - 'docs/mediterranean_sowing_planting_stage_witness_v1.md'
+      - '.github/workflows/mediterranean-sowing-planting-stage-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  strict-unit-tests-and-archived-receipt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install only test requirements
+        run: python -m pip install pytest pandas numpy
+      - name: Run source-free independent synthetic integrity tests
+        run: python -m pytest -q tests/test_mediterranean_sowing_planting_stage_witness_v1.py
+      - name: Audit previously source-verified derived receipt, not biological re-download
+        run: |
+          python - <<'PY'
+          import csv,hashlib,json
+          from pathlib import Path
+          root=Path('validation/mediterranean_sowing_planting_witness_v1')
+          d=json.loads((root/'result_receipt.json').read_text())
+          protocol=json.loads((root/'protocol.json').read_text())
+          parent=json.loads(Path('validation/mediterranean_sowing_uploaded_archive_v1/result_receipt.json').read_text())
+          rows=list(csv.DictReader((root/'cross_stage_40_species_patch.csv').open()))
+          assert len(rows)==40 and len({(x['species'],x['site']) for x in rows})==40
+          assert d['provenance']['original_zip_sha256']==protocol['source']['source_zip_sha256']
+          assert d['provenance']['original_zip_sha256']==parent['provenance']['uploaded_zip_sha256']
+          assert d['provenance']['planting_file_sha256']==parent['provenance']['original_member_hashes']['planting_experiment.csv']['sha256']
+          assert d['source_quality']['sowing_duplicate_seed_key_groups']==5
+          assert d['source_quality']['sowing_quarantined_rows_both_treatments']==50
+          assert d['n_planting_rows']==299
+          assert d['n_distinct_forest_patches']==10
+          assert d['status_summary']['absent']['n_sown_species_patch_combinations']==20
+          assert d['status_summary']['absent']['n_planted_species_patch_combinations']==8
+          assert d['status_summary']['absent']['n_planted_first_summer_witnesses']==8
+          assert d['status_summary']['absent']['cross_stage_counts']['planting_only_witnessed']==1
+          assert d['status_summary']['absent']['cross_stage_counts']['both_witnessed']==7
+          for group in ('absent','present'):
+              matches=[r for r in rows if r['site_type']==group]
+              summary=d['status_summary'][group]
+              assert len(matches)==summary['n_sown_species_patch_combinations']
+              assert sum(r['planting_sampled']=='True' for r in matches)==summary['n_planted_species_patch_combinations']
+              assert sum(r['planted_first_summer']=='True' for r in matches)==summary['n_planted_first_summer_witnesses']
+          print('Derived source receipt internally consistent; no original seed data read by CI.')
+          PY

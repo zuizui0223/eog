@@ -1,0 +1,60 @@
+{
+  "schema": "eog.mediterranean_sowing_planting_stage_witness_v1.protocol",
+  "status": "POST_SOWING_EXPOSURE_PRE_PLANTING_OUTCOME_INSPECTION",
+  "date": "2026-11-20",
+  "mainline_parent": {
+    "repository": "zuizui0223/eog",
+    "merged_pr": 709,
+    "commit": "f8028c50a28fb74faa4766347f05cd830655e075",
+    "primary_stop": "5 repeated seed-identity keys in one anomalous Rhamnus station; strict primary sowing analysis still STOP"
+  },
+  "source": {
+    "original_dryad_doi": "10.5061/dryad.t1g1jwtg3",
+    "source_zip_sha256": "e05646c628caed63c7f169a53c52e3977f5c11dff3f5d1b1d7e7e32bcd871e26",
+    "official_manifest_path": "validation/mediterranean_sowing_uploaded_archive_v1/official_manifest.json",
+    "required_files": [
+      "sowing_experiment.csv",
+      "planting_experiment.csv",
+      "README.md"
+    ]
+  },
+  "evidence_exposure": "Sowing outcomes and published paper are already exposed; germination and one/two-summer witness counts in PR #709 are known. This cross-stage planting analysis is post hoc and MUST NOT be advertised as independent blinded confirmation. Planting survival individual rows have not been examined in this protocol-writing step.",
+  "focal_units": {
+    "unit": "species × patch; forest patch geographic clustering unit (n=10); planted sapling is a nested individual not an independent landscape",
+    "natural_status": "site_type as original source classification; not a detection-corrected current distribution",
+    "denominator": "all distinct species × site combinations with site_type='absent' (and 'present' as descriptive comparator) in sowing CSV, with full source-specific missing flow; no outcome-based filtering",
+    "stages": [
+      "unprotected_sown_germinated (germ==1)",
+      "unprotected_sown_first_summer_seedling_survived (seedling_surv==1)",
+      "unprotected_sown_second_summer_sapling_survived (sapling_surv_sd==1)",
+      "separately_planted_sapling_survived_first_summer (planting_experiment.survival==1)"
+    ],
+    "observed_witness": "one or more unambiguously identified confirmed positives in source rows; no positive means 'not witnessed', NEVER a viability impossibility conclusion",
+    "planting_structure": "299 expected planting records; require nonempty species/site/site_type, numeric individual id and station; duplicate (species,site,station,id) is SCIENTIFIC_STOP unless original author code identifies a different explicit key; survival code is 0/1/NA, NA not interpreted as death",
+    "naturally_absent_bypass_witness": "If a seed in unprotected station survives first/second summer at naturally absent patch, or independently transplanted sapling survives first summer, this falsifies strict zero early-stage survival possibility in that planted microsite, not historical dispersal, full life-cycle establishment, or population viability.",
+    "full_source_quality": "Keep all five repeated seed keys and 50 anomaly-arm seed rows quarantined for sowing witnesses; no reconstruction, inferred treatment relabeling, or complete-panel directional conclusion"
+  },
+  "preregistered_descriptive_tables": [
+    "All naturally absent species × patch units: germ-only; first-/second-summer unprotected sown witnesses; planted first-summer witnesses; intersections and unmatched source coverage",
+    "Natural-present units the same table; no pooled independence claim",
+    "Forest-patch distribution of unique naturally absent species × patch positive witnesses at each life stage",
+    "Number of sown-first-summer-unwitnessed units with a positive independent planted-sapling witness, plus the converse; absence of witness never interpreted as zero survival",
+    "Concordance between preexisting unaffected 51 unit robust protection sign classes and direct unprotected early-survival witnesses: purely post-exposure, no new inference hypothesis test."
+  ],
+  "forbidden_changes": [
+    "Do not modify PR #709 source SHA, quality STOP, 51 unaffected unit ±0.025 germination effect classifier, or frozen EOG-WF endpoint count",
+    "Do not interpret planting as a protected/unprotected treatment; it has no such field.",
+    "Do not equate sapling transplant survival with sown-seed survival or compare rates directly across stages.",
+    "Do not select denominator or taxa after looking at planting survival results.",
+    "Do not claim source processes A/B/M separately identified or natural seed dispersal actually observed.",
+    "Do not use seed counts as independent geographic replication or post hoc p values."
+  ],
+  "validation": [
+    "Refetch original user-supplied ZIP and compare all 12 SHA256 and sizes against frozen official manifest before reading outcomes.",
+    "Require README declared planting file columns and reject duplicate specimen identifiers and inconsistent site_type across source tables.",
+    "Independent recomputation of marginal witness presence using strict boolean any() and site-species keys.",
+    "Exact status SOURCE_QUALITY_STOP maintained for anomalous sowing arm.",
+    "Store all groups including missing planting matches as explicit categories; audit sums to the source roster."
+  ],
+  "interpretation": "Separate stages of realized viability can be identified without recovering the historical mechanism of natural absence; this is an ecological observation under human propagule introduction, not a new theorem, an independent outcome-blinded test, or proof of dispersal-limited causality."
+}
