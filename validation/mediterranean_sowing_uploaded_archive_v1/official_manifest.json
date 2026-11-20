@@ -1,0 +1,74 @@
+[
+  {
+    "digest": "1cef47425032c40c4366d826521c54b6cfee9b3d88143f6a4362238036d325ef",
+    "digest_type": "sha-256",
+    "name": "code_1_sowing_demographic_analysis.R",
+    "size": 89818
+  },
+  {
+    "digest": "0c8d5dcaa6a55744976a4a36487be2a32800b930819197f2753e35c4ea8eb9ac",
+    "digest_type": "sha-256",
+    "name": "code_2_temporal_trends.R",
+    "size": 19097
+  },
+  {
+    "digest": "a20f4190be0de53ddab1cb8b3a4783a41a4e2a498ac5ada74b647c8c253cc126",
+    "digest_type": "sha-256",
+    "name": "code_3_planting.R",
+    "size": 9120
+  },
+  {
+    "digest": "77de1b6bcd8ad8241a6f550ac0ebb76af0a617d9e20a7ac339b2f7ebc414dab0",
+    "digest_type": "sha-256",
+    "name": "code_4_soil_analyses.R",
+    "size": 19134
+  },
+  {
+    "digest": "06ef06b714163c8894fa06e7ad26eb6aba1c96e7566e91ede9098f0bac503aea",
+    "digest_type": "sha-256",
+    "name": "code_5_soil_moisture_analyses.R",
+    "size": 19333
+  },
+  {
+    "digest": "0ab48b05e316ecd0f04805c47014b59f5a7815b36a4a12aa003e256f70023e8c",
+    "digest_type": "sha-256",
+    "name": "code_6_vegetation_cover.R",
+    "size": 15029
+  },
+  {
+    "digest": "4816b73c7606146ef548ffd009a949430061d8823187a08ecf5912510774eca1",
+    "digest_type": "sha-256",
+    "name": "planting_experiment.csv",
+    "size": 19771
+  },
+  {
+    "digest": "ac44cc6dbb5bea6dc6ca6ccd82a02ce21932dc4a7d7077b18ac5593bfc39f0a0",
+    "digest_type": "sha-256",
+    "name": "README.md",
+    "size": 8957
+  },
+  {
+    "digest": "c7af65e944eed222b5b3733e5a62a754cc4bf2190a341ce30a3ea3e79759febb",
+    "digest_type": "sha-256",
+    "name": "soil_moisture_vwc_values.csv",
+    "size": 211455
+  },
+  {
+    "digest": "69f9b2932b652bd9b1d2b1b6633619b6473627c1c4fb21ef5bf91fbb561f438f",
+    "digest_type": "sha-256",
+    "name": "soil_physicochemical.csv",
+    "size": 6942
+  },
+  {
+    "digest": "cf90d95d06e223130348ebe3c0fb24d66d6f9f8b3185a8abdb5462dbc0445f3b",
+    "digest_type": "sha-256",
+    "name": "sowing_experiment.csv",
+    "size": 9337199
+  },
+  {
+    "digest": "0bf4fb881325a8f08334d7f26a8107182161d5d82546107767035839ec79b76c",
+    "digest_type": "sha-256",
+    "name": "vegetation_cover.csv",
+    "size": 9039
+  }
+]
