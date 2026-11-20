@@ -1,0 +1,96 @@
+{
+  "schema_version": 2,
+  "status": "pre_crosswalk_source_reacquisition_frozen",
+  "base_main_sha": "c527df538ad11c6ab41afac3afaa4e9753992221",
+  "scientific_question": "Among inferred genetic source→destination assignments on EOG observed-positive transitions, how often is the assigned source compatible with the *same two-host ordinal environment gate* and geographic radius used by EOG? Distinguish family-row, source→destination pair, and target-year grain and the existential-vs-assigned source inequality.",
+  "source_identifiers": {
+    "uploaded_original_DiLeo2022_CSV_SHA256": "140e5361f9bced20a434bfee01bae6ce7c925e028718cdb9c6fd8aa635cc912a",
+    "uploaded_original_DiLeo2022_CSV_bytes": 137353,
+    "publisher_zip_Schulz2019_Zenodo_4987060_SHA256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+    "parent_crosswalk_aggregate_sha256_without_self_hash": "d8e70dc87e3ce6728827823bc28106757b6fcae3327727e72f92ed30e2d7be2e"
+  },
+  "encrypted_bridge": {
+    "external_public_source_archive_url": "https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1",
+    "scripts_ref": "scripts/glanville_encrypt_survey_source_v1.py",
+    "ciphertext_only": true,
+    "rsa_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAszPEyb0wm/IfERAKz3GO\nin9uo/M7mx+roATfuDPHIc2oSPVBXC34K3Rlh+0gDOvpHGYKL5ePAF/tioid+J0E\nLEgS91xgpF6/ORaKUPNtpWQatgNAIXEzF1Y3NwnJVSI9GSIlSzfg3M9MDTXAgNKt\n10bdTd/eg918yNqVxwEswYfwnl6COvSA/Z19pELjM++8bLWc1Fj055Bd5cAFy54a\nvXC7gNYJofb2aYc0CDAamP5r3flfQmbJuLsvmM1Exq14kTcPSAKuvylrM3sM8I5H\nMS1/8OSkiG9la7WoKGDj2g6cRh44EnPmH8JZHwgaAiMjBvXHmzZtYq6Pxlr40LVa\nP2mqBRU9xv9lZSxtz6Si2rRC335yewvFssoNCvRRfJf4Im8D9aZsvz6il3yhDYRI\nks4dXzjD6mPjeRn6NjRhu1elPCTVO4obNtrNR8xiY3D8+xj67hc8S6CH5/6AuNwS\nTuEwan99Q/1ZJBGCWC2KdrUCkdktTy2p3JeOwQt7IqUPAgMBAAE=\n-----END PUBLIC KEY-----\n",
+    "public_key_sha256": "304b9848ebeb97ec2852667f5307744540c4321ee57739ccc14bc9abd31364a5",
+    "encryption": "same authenticated RSA-OAEP+AES-GCM as prior v1, new ephemeral key only in local current runtime",
+    "archive_retention_days": 1,
+    "raw_patch_year_site_data_to_GitHub": false
+  },
+  "source_provider_contract": {
+    "source_evidence_tag": "schulz2019",
+    "prior_source_repository": {
+      "archive_url": "https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1",
+      "archive_sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+      "max_bytes": 5000000,
+      "expected_tables": [
+        "data/survey_data.tsv",
+        "data/patch_network.tsv"
+      ]
+    },
+    "max_public_years": [
+      2007,
+      2008,
+      2009,
+      2010,
+      2011,
+      2012
+    ]
+  },
+  "predeclared_derived_metrics": {
+    "family_group_key": [
+      "YearFrom",
+      "fullsibfam"
+    ],
+    "genetics_movement": "PatchFrom != PatchTo (two destinations not independent family units)",
+    "genetic_source_eligible": "YearFrom patch has recorded population>0 and complete original Plantago+Veronica score in 0-3 and mapped centroid",
+    "genetic_target_eligible": "YearFrom destination patch recorded population==0 and YearTo destination population>0, YearFrom destination has valid two-host scores and mapped centroid",
+    "host_delta": "max absolute difference of both original survey Plantago and Veronica 0..3 scores at YearFrom, source vs destination",
+    "thresholds": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "radius_km": [
+      2,
+      5
+    ],
+    "group_weights": [
+      "assignment_rows",
+      "directed_patch_year_pairs",
+      "target_patch_years",
+      "fullsib_family_key"
+    ],
+    "primary_scope": "off-patch assignments with both EOG target and source eligible; expected 163 rows and 100 targets from frozen v1; do not quietly retune",
+    "universe": "EOG prior-year recorded-positive source roster as previous crosswalk; all source candidates use original same-year host values",
+    "statuses_for_each_tolerance": [
+      "assigned source host-compatible with delta (where source eligibility holds)",
+      "nearest permitted observed-positive source radius for delta",
+      "existential EOG coverage at each r, even if assigned source is incompatible with delta",
+      "assigned origin r/host compatible at same r and delta",
+      "EOG existential yes but assigned source unavailable/out-of-bounds: interpretation difference, not predictive false-positive"
+    ],
+    "controls": [
+      "Strictly nested host thresholds and geographic radii preserve EOG existential coverage monotonicity",
+      "On eligible sources/targets at any declared delta, EOG minimum radius <= assigned-source distance for an allowed assigned source within 1e-4km tolerance",
+      "Require parent 2008..2012 EOG full eligible target/source counts match v1",
+      "If source recorded zero or missing, do NOT call assigned route a candidate under EOG t-1 positive-only policy",
+      "Reproduce 799/760/39/498/301 and 163/100 parent counts",
+      "No alternative source selected using genetic assignment/target outcome"
+    ]
+  },
+  "separate_genetic_assignment_quality": {
+    "published_GENECLASS2": "Assignments confined to sampled prior-year reference patches; family parts at different arrival patches were assigned separately (DiLeo et al. 2022, doi:10.1098/rspb.2022.0322). Reported score=100 threshold; NOT independently audited per row because score missing.",
+    "split_760_families": 39,
+    "mixed_stay_and_move_within_split": 21,
+    "two_move_destinations_within_split": 18,
+    "split_family_inconsistent_inferred_source_labels": 1,
+    "no_genetic_assignment_score_column": true,
+    "unobserved_sources_not_truth": true
+  },
+  "output_contract": "Aggregate only, year x gap/r summaries and family/target-year equal weights, no source site IDs, destination site IDs, family IDs, coordinates or raw genetic rows.",
+  "scope_limits": "Exploratory post-outcome same-archipelago comparison, NOT independent prediction/causal environmental filtering/dispersal kernel; no new EOG-WF endpoint 3 scored/31 scientific STOP/3 administrative exclusions unchanged."
+}
