@@ -108,7 +108,7 @@ def file_manifest(meta,fetch=get_bytes):
                         href=node.get("href","") if isinstance(node,dict) else ""
                         official=allowed_meta_url(href)
                         if official:
-                            match=re.fullmatch(r"/api/v2/files/(\\d+)(?:/download)?",urlparse(official).path)
+                            match=re.fullmatch(r"/api/v2/files/(\d+)(?:/download)?",urlparse(official).path)
                             if match:
                                 id_=int(match.group(1))
                                 break
