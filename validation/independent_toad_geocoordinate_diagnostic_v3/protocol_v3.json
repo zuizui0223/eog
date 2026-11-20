@@ -1,0 +1,79 @@
+{
+  "schema": "eog.toad_geographic_source_qc_by_nominal_translocation.v3",
+  "status": "FROZEN_AFTER_EXTERNAL_QC_STOP_BEFORE_GROUP_SCORING",
+  "base_main_sha": "e987b9bc6be548e9b8b8938b481a76b7372c4eeb",
+  "objective": "Determine whether originally source-locked release→final reported distance discordance is concentrated in predeclared nominal translocation classes or also in untranslocated controls; preserve original ecological STOP.",
+  "data_source": {
+    "doi": "10.5061/dryad.x3ffbg7ms",
+    "version_id": 198534,
+    "csv_name": "Jreidini_and_Green_homing_toads_2021.csv",
+    "csv_size_bytes": 18702,
+    "csv_sha256": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+    "readme_sha256": "3d7b240bf323bb19fe32e57d99b8029e212d1da15d85c02b457a1d74053b3c5c",
+    "official_get": "https://datadryad.org/api/v2/versions/198534/download",
+    "verified_existing_transport": "scripts.eog_independent_movement_source_gate_v2._version_zip",
+    "verified_existing_member": "benchmarks.independent_toad_source_anchor_geography_v1._verified_member",
+    "verified_existing_row_grain": "benchmarks.independent_toad_source_anchor_geography_v1._as_rows",
+    "parent_stop": "STOP_GEO_UNIT_CONCORDANCE",
+    "prior_unstratified_rows_eligible": 163,
+    "prior_unstratified_release_match": 77,
+    "prior_unstratified_capture_match": 163
+  },
+  "user_defined_treatment": {
+    "source_field": "Translocated distance",
+    "reading": "Numeric distance in meters rounded to 0, 100, 250 or 500 (per publisher README). Not a measured realized displacement for inferential scoring.",
+    "categories": [
+      "0",
+      "100",
+      "250",
+      "500",
+      "other_or_missing"
+    ],
+    "zero_definition": "numeric exactly equal 0, no tolerance",
+    "direct_numeric_membership": "numeric exactly equal 100,250,500; do not bin other values by nearest class",
+    "parse_nonfinite_as": "STOP",
+    "no_posthoc_relabeling": true
+  },
+  "eligible_source_rows": {
+    "original_165_source_rows": "Read all original rows only after full original version/SHA/README checkpoint",
+    "dedup": "remove byte-identical duplicate rows exactly, retain repeated individual IDs",
+    "rows_with_valid_id_and_reencounter_date_and_6_coords": "same eligibility as prior v2 QC; report all excluded rows without outcome selection",
+    "reported_columns": [
+      "Distance release-final (m)",
+      "Distance capture-final (m)"
+    ],
+    "distances_from_coords": [
+      "release→final RF",
+      "capture→final IF",
+      "capture→release IR"
+    ],
+    "tolerance": "original max(2m,5% computed), do not retune",
+    "original_qualified_QC_denominator": "163, and each published channel compared on all 163 unless original missingness differs; preserve count"
+  },
+  "predeclared_outputs": [
+    "For each of the five nominal categories: original/eligible rows, unique IDs, release-final and capture-final comparable count, matched count and fraction under frozen tolerance",
+    "Within nominal zero group: number with initial and release coordinates agreeing to within <=5 m (preexisting sham geometric threshold from original protocol) and number with capture-final and release-final reported fields agreeing under original frozen tolerance",
+    "Within nominal >0 classes: number with initial-release coordinate distance exceeding 5m; this is a metadata consistency diagnostic, not behavior",
+    "Per class: median and q90 absolute distance-column residual, only when n>=5 to prevent single-record leakage",
+    "Summation over classes must reproduce full existing 163-row baseline QC 77/163 release-final and 163/163 capture-final; if mismatch STOP",
+    "No source or destination coordinates, individual identifiers, dates, signed movement/homing values or per-row flags to output"
+  ],
+  "statuses": [
+    "POST_EXPOSURE_TREATMENT_STRATIFIED_COORDINATE_QC_ONLY",
+    "STOP_SOURCE_IDENTITY",
+    "STOP_PARENT_QC_INVARIANT",
+    "STOP_NOMINAL_TREATMENT_FORMAT",
+    "STOP_SOURCE_ACCESS"
+  ],
+  "forbidden": [
+    "Do not repeat/override prior biological H1 or perform a source-anchor effect test",
+    "Do not use publication 104/61 counts to delete unmatched events",
+    "Do not correct the release-final distance column, choose a new coordinate pair or alter prior quality tolerance",
+    "Do not substitute nominal displacement for continuous release-final distance",
+    "Do not label a mismatched row biological migration, a founder error or wrong source",
+    "No additional EOG-WF scored endpoint; original 3/31/3 closure remains"
+  ],
+  "threshold_worlds_or_ecological_network": false,
+  "data_heldout_prospective": false,
+  "result_scientific_type": "post-exposure provenance diagnostic only"
+}
