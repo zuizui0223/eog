@@ -1,0 +1,98 @@
+{
+  "schema": "eog.independent_toad_source_anchor_geography.v1",
+  "status": "FROZEN_BEFORE_TOAD_EVENT_VALUES_READ",
+  "base_main_sha": "f818c170b3f69c32db4234e13fab9c6b8747067a",
+  "intended_role": "Independent externally published experimental movement/recapture geometry of a marked terrestrial amphibian, to examine source-anchor ambiguity in a geographic-only MRR test. NOT natural colonization, not 3-axis EOG-Pareto, not prospective EOG-WF endpoint.",
+  "parent_source_gate": {
+    "run_id": 44754429533,
+    "artifact_id": 14636693245,
+    "receipt_sha256_without_self_field": "7ed6d8236dfa4f529a1af556f80ea88820d18fb22ed325a3a8b7e76fe0ce0908",
+    "verified_source_status": "OFFICIAL_SOURCE_SCHEMA_AND_PINNED_SHA256_QUALIFIED_NO_BIOLOGICAL_SCORING"
+  },
+  "source": {
+    "doi": "10.5061/dryad.x3ffbg7ms",
+    "version_id": 198534,
+    "official_download_url": "https://datadryad.org/api/v2/versions/198534/download",
+    "csv_name": "Jreidini_and_Green_homing_toads_2021.csv",
+    "csv_sha256": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+    "csv_size_bytes": 18702,
+    "entire_csv_source_only_rows": 165,
+    "measured_original_unit": "UTM-style Easting/Northing coordinate values interpreted in meters ONLY if archived distance columns numerically corroborate those coordinate computations.",
+    "required_columns": [
+      "Toad ID",
+      "Date of capture",
+      "Date of re-encounter",
+      "Initial Easting",
+      "Initial Northing",
+      "Released Easting",
+      "Released Northing",
+      "Final Easting",
+      "Final Northing",
+      "Distance release-final (m)",
+      "Distance capture-final (m)"
+    ],
+    "source_download_guard": "Re-use exactly pinned host/url and read limits from validation/independent_movement_source_gate_v2/protocol_v2.json, no unrestricted redirect allowed."
+  },
+  "data_contract": {
+    "sample_unit": "individual Toad ID (not raw row); equal weights across distinct IDs. All eligible fully coordinate-resolved events within each ID contribute equally to that ID mean.",
+    "selection": "all original 165 rows; report count with complete numeric initial, released, final coordinate pairs; requiring nonempty Date of re-encounter; reject duplicate rows only if byte-identical, otherwise retain and cluster by ID.",
+    "missing_values": [
+      "",
+      "na",
+      "n/a",
+      "nan",
+      "none",
+      "null",
+      ".",
+      "-"
+    ],
+    "geometry": "Euclidean planar distances in stored Easting/Northing units: d_IR=||initial-release||; d_RF=||release-final||; d_IF=||initial-final||.",
+    "relocated": "d_IR >=90 meters (below smallest nominal 100-meter treatment, predeclared before reading values)",
+    "sham_undisplaced": "d_IR <=5 meters; descriptive control only (absence acceptable)",
+    "intermediate": "5<d_IR<90 meters, report separately, never silently assign",
+    "min_eligible_individuals_for_directional_summary": 20,
+    "numeric_consistency_tol": "max(2 meters, 0.05*computed Euclidean distance) for each supplied distance column, and at least 95% of rows with nonmissing published distances must match; otherwise STOP_GEO_UNIT_CONCORDANCE.",
+    "triangle_tolerance_meters": 0.000001,
+    "no_imputation": true,
+    "cap_csv_source_rows": 165,
+    "date_policy": "Date of re-encounter must be nonempty for eligible target. No elapsed-time model or posthoc date parsing required; do not equate observation-date precision with true movement onset."
+  },
+  "inferential_targets": {
+    "true_post_manipulation_source": "the experimentally measured release position R",
+    "counterfactual_wrong_source": "the earlier capture position I (historical location, not most recent release)",
+    "observed_target": "final re-encounter position F",
+    "individual_geographic_one_step_minimum": "r_R=d_RF; r_I=d_IF; r_possible=min(r_R,r_I), r_source_robust=max(r_R,r_I), source_anchor_width=abs(r_R-r_I)",
+    "signed_directional_contrast": "Delta=d_RF-d_IF, positive if known release-to-recapture distance exceeds historical capture-to-recapture distance.",
+    "normalized_signed_contrast": "Delta/max(d_IR,1 meter), by triangle inequality within [-1,1] for positive displacement",
+    "thresholds_meters": [
+      100,
+      250,
+      500
+    ],
+    "threshold_table": "For relocated eligible events, report count release_valid=(d_RF<=r), historical_source_valid=(d_IF<=r), possible=(min<=r), robust=(max<=r), false_assurance_under_historical_source=(d_IF<=r<d_RF), converse=(d_RF<=r<d_IF), all grouped by ID.",
+    "primary_prediction": {
+      "id": "H1",
+      "direction": "For eligible relocated individuals, equal-individual-weighted mean Delta >0, consistent with published toad homing descriptions. If <=0, retain refuted result.",
+      "scientific_scope": "post-publication cross-system source-definition diagnostic, NOT a novel discovery of toad homing and NOT a causal EOG model comparison."
+    },
+    "secondary": {
+      "id": "H2",
+      "readout": "proportions of relocated individuals with Delta positive/zero/negative; median signed Delta; exact geometric source-ambiguity width; counts across fixed 100/250/500m gates",
+      "claim": "descriptive; source-robust >= source-possible and triangle inequality are tautologies, not new biological findings."
+    },
+    "negative_control": {
+      "id": "H3",
+      "readout": "for sham non-translocated <=5m source-choice gap should <=5m by triangle inequality; check only if sham present."
+    }
+  },
+  "strict_stop_rules": [
+    "If CSV SHA256, size or 165 original row count differs, STOP before analysis; do not update frozen source identity.",
+    "If fewer than 20 eligible relocated individuals or too much coordinate/distance mismatch, report STOP not a favorable/negative ecological result.",
+    "Use every eligible re-encounter row; do not select toads by displacement direction or sign.",
+    "When multiple rows share ID, equal-weight individual mean; do not count events as independent individuals.",
+    "Report missingness, retention, duplicates and independent IDs before any sign conclusion.",
+    "Do not fit a dispersal kernel, infer historical founding, causally attribute environment/barrier mechanism, or treat animal recapture as population colonization.",
+    "Do not change existing EOG-WF 3/31/3 closed denominator or previously frozen Glanville outcomes.",
+    "No raw Toad ID, coordinates, dates, original CSV or per-individual movement values committed/uploaded; output only population aggregates."
+  ]
+}
