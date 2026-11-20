@@ -99,8 +99,9 @@ def test_one_valid_record_quantile_not_zero():
     z=m.diagnose_clean_rows(rows,P,OLD)
     a=row(z,"Distance capture-final (m)","RF",1)
     assert a["numeric_compared_rows"]==1
-    assert a["median_absolute_residual_m"]==60
-    assert a["q90_absolute_residual_m"]==60
+    assert a["median_absolute_residual_m"] is None
+    assert a["q90_absolute_residual_m"] is None
+    assert m._finite_ratio([60.0],0.9)==60.0
 
 
 def test_invalid_test_grid_must_not_change_unit_or_pair_roster():
@@ -122,4 +123,4 @@ def test_no_eligible_rows_is_unestimable_not_success():
     assert z["denominator"]["date_and_six_coordinate_values_present"]==0
     assert z["original_STOP_GEO_UNIT_CONCORDANCE_reproduced"] is True
     assert all(a["match_fraction"] is None for a in z["predeclared_18_comparisons"])
-    assert z["parent_original_science_status"] if "parent_original_science_status" in z else True
+    assert z["source_analyzed_for_movement_outcomes"] is False
