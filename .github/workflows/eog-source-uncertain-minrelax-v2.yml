@@ -1,0 +1,73 @@
+name: EOG source-uncertain minimum relaxation v2 (synthetic only)
+
+# This is a finite known-truth benchmark. No field-response access or new EOG-WF endpoint.
+on:
+  pull_request:
+    paths:
+      - 'validation/occurrence_conditioned_source_minrelax_v2/**'
+      - 'benchmarks/occurrence_conditioned_source_minrelax_v2.py'
+      - 'tests/test_occurrence_conditioned_source_minrelax_v2.py'
+      - 'docs/occurrence_conditioned_source_minrelax_v2.md'
+      - '.github/workflows/eog-source-uncertain-minrelax-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-source-universe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install production EOG and pytest (no field-data libraries)
+        run: python -m pip install -e . pytest
+      - name: Check parent and source-alternative contracts
+        run: |
+          python -m pytest -q \
+            tests/test_occurrence_conditioned_minrelax_v1.py \
+            tests/test_occurrence_conditioned_source_minrelax_v2.py \
+            tests/test_relaxation_family.py \
+            tests/test_temporal_relaxation.py
+      - name: Run only the preregistered finite source-world experiment
+        run: |
+          python -m benchmarks.occurrence_conditioned_source_minrelax_v2 \
+            --protocol validation/occurrence_conditioned_source_minrelax_v2/protocol_v2.json \
+            --output results/occurrence_conditioned_source_minrelax_v2/result.json
+      - name: Validate frozen expected counts, frontier and strict STOP semantics
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('validation/occurrence_conditioned_source_minrelax_v2/protocol_v2.json'))
+          r=json.load(open('results/occurrence_conditioned_source_minrelax_v2/result.json'))
+          fixed=p['prespecified_fixture_checks']
+          assert r['new_eog_wf_endpoints']==0
+          for panel in ('H1','H2'):
+              check=fixed[panel]
+              out=r[panel]
+              assert out['worlds_per_source']==check['breakpoint_worlds']
+              assert out['source_world_pairs']==check['source_world_pairs']
+              assert out['possible_compatible_world_count']==check['possible_compatible']
+              assert out['source_robust_compatible_world_count']==check['source_robust_compatible']
+              for key in ('possible_frontier','source_robust_frontier'):
+                  assert {tuple(v) for v in out[key]}=={tuple(v) for v in check[key]}
+              assert out['independent_bfs_and_antichain_join_both_verified']
+          h=r['hard_edge_boundary']
+          assert h['source_robust_compatible_world_count']==0
+          assert h['compatible_world_counts_by_source']['from_C']==0
+          assert h['status']=='no_source_robust_world_within_declared_source_and_graph_universe'
+          print('SOURCE_UNCERTAIN_MRR_V2_SYNTHETIC_PASS')
+          print('H1 possible/robust',r['H1']['possible_compatible_world_count'],r['H1']['source_robust_compatible_world_count'])
+          print('H2 possible/robust',r['H2']['possible_compatible_world_count'],r['H2']['source_robust_compatible_world_count'])
+          PY
+      - name: Preserve synthetic result or diagnosis (no biological data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: occurrence-conditioned-source-minrelax-v2-synthetic
+          path: results/occurrence_conditioned_source_minrelax_v2/result.json
+          if-no-files-found: warn
+          retention-days: 30

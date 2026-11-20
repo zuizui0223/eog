@@ -1,0 +1,87 @@
+{
+  "schema": "eog.occurrence_conditioned_source_minrelax_v2.result_receipt",
+  "audit_date_jst": "2026-11-20",
+  "evidence_type": "finite_known_truth_synthetic_not_field_ecology",
+  "preimplementation_protocol_commit": "5309cea6fba093241b7da2f66291612bb556d9a0",
+  "preimplementation_protocol_path": "validation/occurrence_conditioned_source_minrelax_v2/protocol_v2.json",
+  "actions": {
+    "run_id": 44729976721,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44729976721",
+    "head_sha": "a1abf3b75fe9d07d9f955e2461531ece8e42a1e4",
+    "status": "completed",
+    "conclusion": "success",
+    "artifact_id": 14626066741,
+    "artifact_name": "occurrence-conditioned-source-minrelax-v2-synthetic",
+    "artifact_zip_sha256": "351b9778c4c1faf508dc7231c0977acb81de16eeea758f8c35902e464299debb"
+  },
+  "tested_items": [
+    "parent known-truth minimum relaxation regression",
+    "source-uncertain MRR v2 full tests",
+    "relaxation_family regression",
+    "temporal_relaxation regression",
+    "native per-source finite compatibility and Pareto frontier",
+    "separate per-threshold source bounded directed set BFS",
+    "Pareto antichain union and join equality",
+    "frozen H1/H2/hard barrier exact expectations",
+    "no new EOG-WF endpoint contract"
+  ],
+  "frozen_results": {
+    "H1": {
+      "worlds_per_source": 8,
+      "source_world_pairs": 24,
+      "source_compatibility_counts": [
+        4,
+        4,
+        4
+      ],
+      "possible_count": 7,
+      "source_robust_count": 1,
+      "source_robust_frontier": [
+        [
+          5,
+          1,
+          1
+        ]
+      ]
+    },
+    "H2": {
+      "worlds_per_source": 8,
+      "source_world_pairs": 24,
+      "source_compatibility_counts": [
+        7,
+        7,
+        7
+      ],
+      "possible_count": 7,
+      "source_robust_count": 7,
+      "source_robust_frontier": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          5,
+          0,
+          0
+        ]
+      ]
+    },
+    "H1_C_to_T_hard_unavailable": {
+      "worlds_per_source": 4,
+      "source_C_compatible_count": 0,
+      "possible_count": 3,
+      "source_robust_count": 0,
+      "source_robust_frontier": []
+    }
+  },
+  "additional_independent_check": "Separate fresh JavaScript explicit graph-edge threshold enumeration after protocol freeze matched all frozen H1/H2/hard-edge results before PR CI.",
+  "claim_scope": "exact only within declared finite graph/horizon/source universe; observed positive points do not certify natural source roles or historical routes",
+  "new_real_ecological_responses_scored": 0,
+  "eog_wf_endpoint_denominator_unchanged": true
+}
