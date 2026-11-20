@@ -1,0 +1,686 @@
+{
+  "observations": {
+    "distinct_station_ids": 1108,
+    "forest_patches": 10,
+    "germination_known_positives": 16580,
+    "germination_missing": 4959,
+    "natural_absent_species_site_combinations": 20,
+    "seed_rows": 61000,
+    "species": 10,
+    "unaffected_species_site_year_units": 51,
+    "usable_clean_matched_station_pairs": 553
+  },
+  "primary_protocol": "EOG PR #706 pre-outcome protocol; +/-0.025 rule retained",
+  "provenance": {
+    "README_sha256": "ac44cc6dbb5bea6dc6ca6ccd82a02ce21932dc4a7d7077b18ac5593bfc39f0a0",
+    "official_manifest_comparison": {
+      "status": "ALL_12_FILES_MATCH_OFFICIAL_DIGEST_AND_SIZE"
+    },
+    "original_member_hashes": {
+      "README.md": {
+        "md5": "9ec99a89e3cc592138b4e9fb8c5269f8",
+        "sha256": "ac44cc6dbb5bea6dc6ca6ccd82a02ce21932dc4a7d7077b18ac5593bfc39f0a0",
+        "size": 8957
+      },
+      "code_1_sowing_demographic_analysis.R": {
+        "md5": "82cc1f6a79fe3f0b66ff017da402721a",
+        "sha256": "1cef47425032c40c4366d826521c54b6cfee9b3d88143f6a4362238036d325ef",
+        "size": 89818
+      },
+      "code_2_temporal_trends.R": {
+        "md5": "b83d06396d52b053bed702637a9a02af",
+        "sha256": "0c8d5dcaa6a55744976a4a36487be2a32800b930819197f2753e35c4ea8eb9ac",
+        "size": 19097
+      },
+      "code_3_planting.R": {
+        "md5": "c2d7d65467f47ba9c67545ecf5e8b208",
+        "sha256": "a20f4190be0de53ddab1cb8b3a4783a41a4e2a498ac5ada74b647c8c253cc126",
+        "size": 9120
+      },
+      "code_4_soil_analyses.R": {
+        "md5": "d0b5f9c843badaa50086319700b7b0dd",
+        "sha256": "77de1b6bcd8ad8241a6f550ac0ebb76af0a617d9e20a7ac339b2f7ebc414dab0",
+        "size": 19134
+      },
+      "code_5_soil_moisture_analyses.R": {
+        "md5": "db0b54b262a13730ce09dd0027ec77d5",
+        "sha256": "06ef06b714163c8894fa06e7ad26eb6aba1c96e7566e91ede9098f0bac503aea",
+        "size": 19333
+      },
+      "code_6_vegetation_cover.R": {
+        "md5": "622fa6b5f6264efb3de0aa038ee90a7a",
+        "sha256": "0ab48b05e316ecd0f04805c47014b59f5a7815b36a4a12aa003e256f70023e8c",
+        "size": 15029
+      },
+      "planting_experiment.csv": {
+        "md5": "faad1c13beb1b7fac8ffb47c0f53d9a2",
+        "sha256": "4816b73c7606146ef548ffd009a949430061d8823187a08ecf5912510774eca1",
+        "size": 19771
+      },
+      "soil_moisture_vwc_values.csv": {
+        "md5": "2a5e2c04c7b66f8e1d3fe02534df305b",
+        "sha256": "c7af65e944eed222b5b3733e5a62a754cc4bf2190a341ce30a3ea3e79759febb",
+        "size": 211455
+      },
+      "soil_physicochemical.csv": {
+        "md5": "d0f3059e7e55c3b1512bb2ca48727f3e",
+        "sha256": "69f9b2932b652bd9b1d2b1b6633619b6473627c1c4fb21ef5bf91fbb561f438f",
+        "size": 6942
+      },
+      "sowing_experiment.csv": {
+        "md5": "348d758f7b6e78da18c7ff3de9edd2f4",
+        "sha256": "cf90d95d06e223130348ebe3c0fb24d66d6f9f8b3185a8abdb5462dbc0445f3b",
+        "size": 9337199
+      },
+      "vegetation_cover.csv": {
+        "md5": "c34f4222e451bb16dbebd421169f46df",
+        "sha256": "0bf4fb881325a8f08334d7f26a8107182161d5d82546107767035839ec79b76c",
+        "size": 9039
+      }
+    },
+    "upload_basename": "doi_10_5061_dryad_t1g1jwtg3__v20251016.zip",
+    "uploaded_zip_sha256": "e05646c628caed63c7f169a53c52e3977f5c11dff3f5d1b1d7e7e32bcd871e26"
+  },
+  "schema": "eog.mediterranean_seed_uploaded_archive_audit.v1",
+  "scientific_status": "PRIMARY_SOURCE_QUALITY_STOP_DUPLICATE_SEED_KEY; UNAFFECTED_EXPLORATORY_RESULTS_ONLY",
+  "source_doi": "10.5061/dryad.t1g1jwtg3",
+  "strict_source_stop": {
+    "affected_original_seed_rows": 50,
+    "affected_species_site_year_units": [
+      {
+        "site": "dehesa_yeguas",
+        "site_type": "absent",
+        "species": "rhamnus_alaternus",
+        "year": 2021
+      }
+    ],
+    "affected_station_pairs": [
+      {
+        "microhabitat": "shrub",
+        "site": "dehesa_yeguas",
+        "site_type": "absent",
+        "species": "rhamnus_alaternus",
+        "station": 5,
+        "year": 2021
+      }
+    ],
+    "duplicate_seed_key_groups": 5,
+    "duplicate_seed_key_rows": 10,
+    "status": "BLOCK_PRIMARY_GLOBAL_INFERENCE"
+  },
+  "target_semantics": {
+    "artifact_type": "Post-source-exposure diagnostic and partial logical certificate, not independent model-predictive validation",
+    "claim_limit": "Direct established seedlings in introduced-seed conditions demonstrate nonzero early-stage viability despite natural absence. They do NOT identify causal historical M, A/B/M worlds, whole-population occupancy or generalize beyond 10 patches.",
+    "direction": "Species × patch × sowing-year equal-station mean germination-fraction protected-minus-unprotected; missing germinations bounded [0,1] at seed level; +/-0.025 decision tolerance",
+    "inference_unit": "10 forest patches, not 61,000 independent trials",
+    "witness": "Confirmed individual survivals in original seed rows at naturally absent patches, excluding the entire anomalous station-pair; not survival probability or population persistence"
+  },
+  "unaffected_natural_absence_witnesses": {
+    "first_summer_witnesses_with_missing_germination_field": 29,
+    "protected_survived_first_summer": {
+      "independent_patches": 7,
+      "individual_seed_records": 791,
+      "unique_species": 10,
+      "unique_species_site_combinations": 20
+    },
+    "protected_survived_second_summer": {
+      "independent_patches": 7,
+      "individual_seed_records": 338,
+      "unique_species": 10,
+      "unique_species_site_combinations": 17
+    },
+    "unprotected_first_summer_witnesses_with_missing_germination_field": 7,
+    "unprotected_germination": {
+      "independent_patches": 7,
+      "individual_seed_records": 3765,
+      "unique_species": 10,
+      "unique_species_site_combinations": 20
+    },
+    "unprotected_survived_first_summer": {
+      "independent_patches": 7,
+      "individual_seed_records": 241,
+      "unique_species": 10,
+      "unique_species_site_combinations": 17
+    },
+    "unprotected_survived_second_summer": {
+      "independent_patches": 6,
+      "individual_seed_records": 83,
+      "unique_species": 8,
+      "unique_species_site_combinations": 11
+    }
+  },
+  "unaffected_robust_germination_direction": {
+    "absent": {
+      "patches": 7,
+      "signs": {
+        "decrease": 2,
+        "increase": 13,
+        "operational_zero": 2,
+        "unresolved": 8
+      },
+      "site_species_year_units": 25
+    },
+    "present": {
+      "patches": 9,
+      "signs": {
+        "decrease": 0,
+        "increase": 16,
+        "operational_zero": 1,
+        "unresolved": 9
+      },
+      "site_species_year_units": 26
+    }
+  },
+  "unaffected_unit_results": [
+    {
+      "direction": "increase",
+      "lower": 0.19000000000000003,
+      "n_station_pairs": 12,
+      "site": "brena",
+      "site_type": "present",
+      "species": "calicotome_villosa",
+      "upper": 0.3566666666666667,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.11666666666666665,
+      "n_station_pairs": 12,
+      "site": "dehesa_yeguas",
+      "site_type": "absent",
+      "species": "calicotome_villosa",
+      "upper": 0.11666666666666665,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.236,
+      "n_station_pairs": 10,
+      "site": "las_abiertas",
+      "site_type": "absent",
+      "species": "calicotome_villosa",
+      "upper": 0.272,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.21,
+      "n_station_pairs": 12,
+      "site": "roche",
+      "site_type": "present",
+      "species": "calicotome_villosa",
+      "upper": 0.21,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.07916666666666668,
+      "n_station_pairs": 12,
+      "site": "algaida",
+      "site_type": "absent",
+      "species": "cistus_halimifolius",
+      "upper": 0.08749999999999998,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.14416666666666667,
+      "n_station_pairs": 12,
+      "site": "algaida",
+      "site_type": "absent",
+      "species": "cistus_halimifolius",
+      "upper": 0.18916666666666668,
+      "year": 2022
+    },
+    {
+      "direction": "increase",
+      "lower": 0.06416666666666666,
+      "n_station_pairs": 12,
+      "site": "brena",
+      "site_type": "present",
+      "species": "cistus_halimifolius",
+      "upper": 0.1475,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.036666666666666674,
+      "n_station_pairs": 12,
+      "site": "brena",
+      "site_type": "present",
+      "species": "cistus_halimifolius",
+      "upper": 0.12999999999999998,
+      "year": 2022
+    },
+    {
+      "direction": "increase",
+      "lower": 0.07699999999999999,
+      "n_station_pairs": 10,
+      "site": "garrapilos",
+      "site_type": "absent",
+      "species": "cistus_halimifolius",
+      "upper": 0.07699999999999999,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.039,
+      "n_station_pairs": 10,
+      "site": "garrapilos",
+      "site_type": "absent",
+      "species": "cistus_halimifolius",
+      "upper": 0.16099999999999998,
+      "year": 2022
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.32999999999999996,
+      "n_station_pairs": 10,
+      "site": "m_bascos",
+      "site_type": "present",
+      "species": "cistus_halimifolius",
+      "upper": 0.37,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.10699999999999998,
+      "n_station_pairs": 10,
+      "site": "m_bascos",
+      "site_type": "present",
+      "species": "cistus_halimifolius",
+      "upper": 0.29300000000000004,
+      "year": 2022
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.14583333333333334,
+      "n_station_pairs": 12,
+      "site": "algaida",
+      "site_type": "absent",
+      "species": "cistus_libanotis",
+      "upper": 0.10416666666666667,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.06583333333333333,
+      "n_station_pairs": 12,
+      "site": "dehesa_yeguas",
+      "site_type": "present",
+      "species": "cistus_libanotis",
+      "upper": 0.0175,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.387,
+      "n_station_pairs": 10,
+      "site": "m_bascos",
+      "site_type": "absent",
+      "species": "cistus_libanotis",
+      "upper": 0.46299999999999997,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.10666666666666665,
+      "n_station_pairs": 12,
+      "site": "roche",
+      "site_type": "present",
+      "species": "cistus_libanotis",
+      "upper": 0.06,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.15333333333333332,
+      "n_station_pairs": 12,
+      "site": "dehesa_yeguas",
+      "site_type": "absent",
+      "species": "cistus_monspeliensis",
+      "upper": 0.15333333333333332,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.201,
+      "n_station_pairs": 10,
+      "site": "las_abiertas",
+      "site_type": "absent",
+      "species": "cistus_monspeliensis",
+      "upper": 0.201,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.134,
+      "n_station_pairs": 10,
+      "site": "malas_noches",
+      "site_type": "present",
+      "species": "cistus_monspeliensis",
+      "upper": 0.134,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": 0.015000000000000005,
+      "n_station_pairs": 12,
+      "site": "suara",
+      "site_type": "present",
+      "species": "cistus_monspeliensis",
+      "upper": 0.18166666666666667,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.24666666666666667,
+      "n_station_pairs": 12,
+      "site": "algaida",
+      "site_type": "present",
+      "species": "juniperus_phoenicea",
+      "upper": 0.33,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.17666666666666667,
+      "n_station_pairs": 12,
+      "site": "brena",
+      "site_type": "present",
+      "species": "juniperus_phoenicea",
+      "upper": 0.17666666666666667,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.08999999999999998,
+      "n_station_pairs": 12,
+      "site": "dehesa_yeguas",
+      "site_type": "absent",
+      "species": "juniperus_phoenicea",
+      "upper": 0.08999999999999998,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.068,
+      "n_station_pairs": 10,
+      "site": "m_bascos",
+      "site_type": "absent",
+      "species": "juniperus_phoenicea",
+      "upper": 0.33199999999999996,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.13416666666666666,
+      "n_station_pairs": 12,
+      "site": "brena",
+      "site_type": "present",
+      "species": "lavandula_stoechas",
+      "upper": 0.03250000000000001,
+      "year": 2021
+    },
+    {
+      "direction": "operational_zero",
+      "lower": 0.024999999999999994,
+      "n_station_pairs": 10,
+      "site": "chaparra",
+      "site_type": "absent",
+      "species": "lavandula_stoechas",
+      "upper": 0.024999999999999994,
+      "year": 2021
+    },
+    {
+      "direction": "decrease",
+      "lower": -0.14800000000000002,
+      "n_station_pairs": 10,
+      "site": "malas_noches",
+      "site_type": "absent",
+      "species": "lavandula_stoechas",
+      "upper": -0.14800000000000002,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.06083333333333334,
+      "n_station_pairs": 12,
+      "site": "roche",
+      "site_type": "present",
+      "species": "lavandula_stoechas",
+      "upper": 0.18916666666666668,
+      "year": 2021
+    },
+    {
+      "direction": "operational_zero",
+      "lower": 0.023999999999999997,
+      "n_station_pairs": 10,
+      "site": "algaida",
+      "site_type": "absent",
+      "species": "myrtus_communis",
+      "upper": 0.023999999999999997,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.039999999999999994,
+      "n_station_pairs": 10,
+      "site": "algaida",
+      "site_type": "absent",
+      "species": "myrtus_communis",
+      "upper": 0.039999999999999994,
+      "year": 2022
+    },
+    {
+      "direction": "operational_zero",
+      "lower": -0.023999999999999994,
+      "n_station_pairs": 10,
+      "site": "dehesa_yeguas",
+      "site_type": "present",
+      "species": "myrtus_communis",
+      "upper": -0.023999999999999994,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.144,
+      "n_station_pairs": 10,
+      "site": "dehesa_yeguas",
+      "site_type": "present",
+      "species": "myrtus_communis",
+      "upper": 0.144,
+      "year": 2022
+    },
+    {
+      "direction": "unresolved",
+      "lower": -1.1102230246251566e-17,
+      "n_station_pairs": 10,
+      "site": "garrapilos",
+      "site_type": "absent",
+      "species": "myrtus_communis",
+      "upper": 0.09999999999999998,
+      "year": 2021
+    },
+    {
+      "direction": "unresolved",
+      "lower": 0.0040000000000000036,
+      "n_station_pairs": 10,
+      "site": "garrapilos",
+      "site_type": "absent",
+      "species": "myrtus_communis",
+      "upper": 0.304,
+      "year": 2022
+    },
+    {
+      "direction": "increase",
+      "lower": 0.028000000000000004,
+      "n_station_pairs": 10,
+      "site": "suara",
+      "site_type": "present",
+      "species": "myrtus_communis",
+      "upper": 0.028000000000000004,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.10400000000000001,
+      "n_station_pairs": 10,
+      "site": "suara",
+      "site_type": "present",
+      "species": "myrtus_communis",
+      "upper": 0.10400000000000001,
+      "year": 2022
+    },
+    {
+      "direction": "increase",
+      "lower": 0.156,
+      "n_station_pairs": 10,
+      "site": "algaida",
+      "site_type": "absent",
+      "species": "osyris_lanceolata",
+      "upper": 0.156,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.10800000000000001,
+      "n_station_pairs": 10,
+      "site": "algaida",
+      "site_type": "absent",
+      "species": "osyris_lanceolata",
+      "upper": 0.10800000000000001,
+      "year": 2022
+    },
+    {
+      "direction": "increase",
+      "lower": 0.708,
+      "n_station_pairs": 10,
+      "site": "brena",
+      "site_type": "present",
+      "species": "osyris_lanceolata",
+      "upper": 0.708,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.492,
+      "n_station_pairs": 10,
+      "site": "brena",
+      "site_type": "present",
+      "species": "osyris_lanceolata",
+      "upper": 0.492,
+      "year": 2022
+    },
+    {
+      "direction": "increase",
+      "lower": 0.312,
+      "n_station_pairs": 10,
+      "site": "chaparra",
+      "site_type": "absent",
+      "species": "osyris_lanceolata",
+      "upper": 0.312,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.22400000000000003,
+      "n_station_pairs": 10,
+      "site": "chaparra",
+      "site_type": "absent",
+      "species": "osyris_lanceolata",
+      "upper": 0.22400000000000003,
+      "year": 2022
+    },
+    {
+      "direction": "unresolved",
+      "lower": -0.264,
+      "n_station_pairs": 10,
+      "site": "m_bascos",
+      "site_type": "present",
+      "species": "osyris_lanceolata",
+      "upper": 0.5359999999999999,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.36,
+      "n_station_pairs": 10,
+      "site": "m_bascos",
+      "site_type": "present",
+      "species": "osyris_lanceolata",
+      "upper": 0.36,
+      "year": 2022
+    },
+    {
+      "direction": "increase",
+      "lower": 0.052000000000000005,
+      "n_station_pairs": 10,
+      "site": "algaida",
+      "site_type": "present",
+      "species": "phillyrea_angustifolia",
+      "upper": 0.052000000000000005,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.14400000000000004,
+      "n_station_pairs": 10,
+      "site": "chaparra",
+      "site_type": "present",
+      "species": "phillyrea_angustifolia",
+      "upper": 0.14400000000000004,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.06399999999999999,
+      "n_station_pairs": 10,
+      "site": "garrapilos",
+      "site_type": "absent",
+      "species": "phillyrea_angustifolia",
+      "upper": 0.26399999999999996,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.21600000000000003,
+      "n_station_pairs": 10,
+      "site": "las_abiertas",
+      "site_type": "absent",
+      "species": "phillyrea_angustifolia",
+      "upper": 0.21600000000000003,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.07200000000000001,
+      "n_station_pairs": 10,
+      "site": "garrapilos",
+      "site_type": "present",
+      "species": "rhamnus_alaternus",
+      "upper": 0.372,
+      "year": 2021
+    },
+    {
+      "direction": "decrease",
+      "lower": -0.032,
+      "n_station_pairs": 10,
+      "site": "m_bascos",
+      "site_type": "absent",
+      "species": "rhamnus_alaternus",
+      "upper": -0.032,
+      "year": 2021
+    },
+    {
+      "direction": "increase",
+      "lower": 0.348,
+      "n_station_pairs": 10,
+      "site": "malas_noches",
+      "site_type": "present",
+      "species": "rhamnus_alaternus",
+      "upper": 0.348,
+      "year": 2021
+    }
+  ]
+}

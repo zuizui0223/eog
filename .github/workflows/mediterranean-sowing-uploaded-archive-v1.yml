@@ -1,0 +1,48 @@
+name: Mediterranean uploaded Dryad archive audit - offline integrity tests
+on:
+  pull_request:
+    paths:
+      - 'benchmarks/mediterranean_sowing_uploaded_archive_audit_v1.py'
+      - 'tests/test_mediterranean_sowing_uploaded_archive_audit_v1.py'
+      - 'docs/mediterranean_sowing_uploaded_archive_audit_v1.md'
+      - 'validation/mediterranean_sowing_uploaded_archive_v1/**'
+      - '.github/workflows/mediterranean-sowing-uploaded-archive-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-tests-and-frozen-receipt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install explicit test dependencies
+        run: python -m pip install pytest pandas numpy
+      - name: Test source checksums, strict duplicate STOP, and exact threshold
+        run: python -m pytest -q tests/test_mediterranean_sowing_uploaded_archive_audit_v1.py
+      - name: Validate checked-in receipt against source metadata and scientific STOP
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('validation/mediterranean_sowing_uploaded_archive_v1')
+          manifest=json.loads((root/'official_manifest.json').read_text())
+          r=json.loads((root/'result_receipt.json').read_text())
+          assert len(manifest)==12 and {x['name'] for x in manifest} == set(r['provenance']['original_member_hashes'])
+          assert r['provenance']['official_manifest_comparison']['status']=='ALL_12_FILES_MATCH_OFFICIAL_DIGEST_AND_SIZE'
+          for x in manifest:
+              original=r['provenance']['original_member_hashes'][x['name']]
+              assert x['size']==original['size']
+              assert x['digest']==original['sha256']
+          assert r['strict_source_stop']['duplicate_seed_key_groups']==5
+          assert r['strict_source_stop']['status']=='BLOCK_PRIMARY_GLOBAL_INFERENCE'
+          assert r['observations']['unaffected_species_site_year_units']==51
+          assert r['unaffected_natural_absence_witnesses']['unprotected_survived_first_summer']['unique_species_site_combinations']==17
+          assert r['unaffected_natural_absence_witnesses']['unprotected_survived_second_summer']['unique_species_site_combinations']==11
+          assert r['scientific_status'].startswith('PRIMARY_SOURCE_QUALITY_STOP')
+          print('Offline receipt and original Dryad metadata are self-consistent.')
+          print('NO RAW SOURCE ROWS REPLAYED IN CI: original 2025-10-16 Dryad ZIP is not stored in this repository.')
+          PY
