@@ -1,0 +1,159 @@
+{
+  "schema_version": 3,
+  "scientific_status": "EXPLORATORY_CONDITIONAL_GENETIC_SOURCE_PAIRING_ANALYZED",
+  "analysis_date": "2026-11-20",
+  "claim_boundary": "Post-exposure conditional pairing of GENECLASS2 inferred sources among sampled reference populations; not observed natal dispersal, true dispersal preference, a causal habitat filter, or independent EOG predictive validation",
+  "source_evidence": {
+    "dryad_DiLeo2022_csv_sha256": "140e5361f9bced20a434bfee01bae6ce7c925e028718cdb9c6fd8aa635cc912a",
+    "zenodo_Schulz2019_archive_sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+    "source_only_github_actions_run_id": 44679961668,
+    "source_only_github_artifact_id": 14603368669,
+    "ciphertext_zip_sha256": "5e65b9e25fe375e5acb5aa43e532ab00beebc8f9486ba74d05aaf3926b2d87d5",
+    "original_8_host_worlds_and_eligible_grain_verified": true,
+    "full_local_result_sha256_without_self_hash": "15101996c38e6831715ae07370642335bd157a0df99faf2bf06dacca18e1385b",
+    "independent_pandas_join_and_699_permutation_replication": {
+      "n_assignment_rows": 163,
+      "n_target_years": 100,
+      "observed_mean_median_log1p_distance": 0.8552246986539244,
+      "observed_mean_median_host_gap": 1.32,
+      "alternate_seed_null_mean_log_distance": 1.581534344624795,
+      "alternate_seed_null_mean_host_gap": 1.4535693848354814
+    }
+  },
+  "units": {
+    "genetic_rows_all": 799,
+    "genetic_moved_offpatch_rows_all": 498,
+    "eligible_assignment_rows": 163,
+    "eligible_target_patch_years": 100,
+    "distinct_genetic_families_within_selected_rows": 157,
+    "eligible_EOG_target_patch_years_2008_to_2012": 1465,
+    "source_years": [
+      2007,
+      2008,
+      2009,
+      2010,
+      2011
+    ]
+  },
+  "null_definition": {
+    "inference": "Within each source year, random recombination of the exact marginal distribution of genetically assigned source labels over the same observed destination rows; target-year count and repeated row multiplicity fixed; no same-patch pseudo-route",
+    "replicates": 1999,
+    "seed": 20261120,
+    "proposal_draws": 9995,
+    "proposals_rejected_due_to_same_patch": 0,
+    "parent_result_already_explored": true,
+    "yearwise_samples_not_independent_population_replicates": true,
+    "tail_p_is_conditional_randomization_only": true
+  },
+  "primary_statistics": {
+    "distance": {
+      "name": "Mean across target patch-years of within-target median log(1+assigned source-to-target km)",
+      "observed": 0.8552246986539244,
+      "null_mean": 1.580571980023058,
+      "observed_minus_null_mean": -0.7253472813691336,
+      "null_quantiles_2p5_50_97p5": [
+        1.4914444427392608,
+        1.582370291212532,
+        1.6661687061536405
+      ],
+      "one_sided_conditional_permutation_p": 0.0005,
+      "per_year_direction": "5/5 source years smaller than conditional null mean"
+    },
+    "ordinal_host_gap": {
+      "name": "Mean across target patch-years of within-target median max absolute 2019 t-1 Plantago/Veronica ordinal source-target difference",
+      "observed": 1.32,
+      "null_mean": 1.4592096048024013,
+      "observed_minus_null_mean": -0.1392096048024012,
+      "null_quantiles_2p5_50_97p5": [
+        1.31975,
+        1.46,
+        1.5952499999999998
+      ],
+      "one_sided_conditional_permutation_p": 0.03,
+      "per_year_direction": "3/5 years smaller, 2/5 years larger than conditional null mean",
+      "note": "Nominal whole-archipelago host alignment does NOT persist within narrow distance-matched source opportunities, so independent host filtering is not supported."
+    }
+  },
+  "per_source_year": [
+    {
+      "source_year": 2007,
+      "assignments": 6,
+      "targets": 5,
+      "observed_log_distance": 0.4499,
+      "conditional_null_log_distance": 1.6611,
+      "observed_host_gap": 1.4,
+      "conditional_null_host_gap": 1.3606
+    },
+    {
+      "source_year": 2008,
+      "assignments": 24,
+      "targets": 16,
+      "observed_log_distance": 0.7281,
+      "conditional_null_log_distance": 1.5892,
+      "observed_host_gap": 1.625,
+      "conditional_null_host_gap": 1.5669
+    },
+    {
+      "source_year": 2009,
+      "assignments": 9,
+      "targets": 9,
+      "observed_log_distance": 0.785,
+      "conditional_null_log_distance": 1.6929,
+      "observed_host_gap": 0.7778,
+      "conditional_null_host_gap": 1.2792
+    },
+    {
+      "source_year": 2010,
+      "assignments": 83,
+      "targets": 48,
+      "observed_log_distance": 0.9566,
+      "conditional_null_log_distance": 1.4953,
+      "observed_host_gap": 1.4167,
+      "conditional_null_host_gap": 1.5416
+    },
+    {
+      "source_year": 2011,
+      "assignments": 41,
+      "targets": 22,
+      "observed_log_distance": 0.8473,
+      "conditional_null_log_distance": 1.696,
+      "observed_host_gap": 1.0909,
+      "conditional_null_host_gap": 1.2971
+    }
+  ],
+  "distance_matched_host_opportunity": {
+    "caliper": "absolute source-target distance difference <=max(0.5 km, 0.25*original assigned distance)",
+    "minimum_distinct_candidate_sites": 3,
+    "assigned_origins_observed_anywhere_in_all_799_rows_same_source_year": {
+      "eligible_rows": 127,
+      "eligible_target_patch_years": 76,
+      "median_candidate_sites_per_row": 6,
+      "mean_assigned_minus_uniform_gap": 0.0556,
+      "mean_assigned_minus_90pct_capped_survey_population_weighted_gap": 0.0286,
+      "note": "Conditioning on an *assigned-origin-label roster* is not identical to a complete GENECLASS2 sampled-reference roster."
+    },
+    "all_prior_year_positive_EOG_source_sensitivity": {
+      "eligible_rows": 141,
+      "eligible_target_patch_years": 85,
+      "median_candidate_sites_per_row": 7,
+      "mean_assigned_minus_uniform_gap": 0.0681,
+      "mean_assigned_minus_90pct_capped_survey_population_weighted_gap": 0.0459
+    },
+    "interpretation": "All four descriptive differences are positive; a lower ordinal gap for the observed assigned origin relative to geographically matched alternatives is not observed. No p-value or causal selection claim is attached."
+  },
+  "scientific_limits": [
+    "Genetic source assignment used GENECLASS2 and sampled previous-year reference populations; genetic similarity, spatial IBD, source/reference sampling and filtering can favor local assignment even without behavioral preference.",
+    "1999 null permutations condition on successful/selected genetically assigned origin labels and their frequencies, not complete source opportunity or origin assignment probabilities.",
+    "The 163 family/destination rows include repeat families and are sampled from only 100 of 1465 EOG-eligible destination patch-years; target-equal weighting does not solve selection.",
+    "Host scores (Plantago/Veronica) spatially covary with distance; naive global host permutation is confounded.",
+    "Distance-matched opportunity pools are proxies, not verified GENECLASS2 actual reference-panel membership, and the caliper is a sensitivity design.",
+    "No per-assignment quality score in uploaded data, no independent direct movement tracking, and no patch-specific detection histories."
+  ],
+  "raw_patch_family_genotype_ids_exported": 0,
+  "EOG_WF_new_fresh_endpoints": 0,
+  "EOG_WF_closed_denominator": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  }
+}

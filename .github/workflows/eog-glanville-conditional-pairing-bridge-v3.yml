@@ -1,0 +1,48 @@
+name: Glanville v3 conditional pairing public survey ciphertext
+
+# One-shot source run 44679961668 succeeded and was decrypted/audited locally.
+# Explicit manual dispatch only; do not rerun original source on subsequent PR edits.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-only-encrypted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install source-only crypto test dependencies
+        run: python -m pip install -q pytest cryptography
+      - name: Frozen source signature and local-only private key checks
+        run: |
+          python -m pytest -q tests/test_glanville_conditional_pairing_ciphertext_v3.py tests/test_glanville_encrypt_survey_source_v1.py
+      - name: Single SHA-pinned 2019 survey archive, ciphertext only
+        run: |
+          python scripts/glanville_conditional_pairing_ciphertext_v3.py \
+            --protocol validation/glanville_conditional_pairing_null_v3/protocol_v3.json \
+            --output results/glanville_conditional_pairing_null_v3/encrypted_survey.json
+          python - <<'PY'
+          import json
+          path="results/glanville_conditional_pairing_null_v3/encrypted_survey.json"
+          r=json.load(open(path))
+          assert r["status"]=="ENCRYPTED_SURVEY_SOURCE_ONLY_NO_PUBLIC_ROW_RECORDS"
+          assert r["public_source_archive_sha256"]=="c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9"
+          assert r["rows_or_site_identifiers_logged"]==0
+          assert "survey" not in r and "network" not in r
+          print("ENCRYPTED_ONLY="+r["status"])
+          print("ENCRYPTED_SURVEY_ROWS="+str(r["survey_row_count"]))
+          PY
+      - name: Upload only authenticated ciphertext, one-day retention
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glanville-conditional-pairing-v3-encrypted-survey
+          path: results/glanville_conditional_pairing_null_v3/encrypted_survey.json
+          if-no-files-found: error
+          retention-days: 1

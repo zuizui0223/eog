@@ -1,0 +1,107 @@
+{
+  "schema_version": 3,
+  "status": "frozen_before_opportunity_null_scoring_and_2019_source_reacquisition",
+  "base_main_sha": "f8028c50a28fb74faa4766347f05cd830655e075",
+  "question": "Among genetically inferred origins of 163 EOG-eligible Glanville family/destination assignments (100 target patch-years), are origin-target pairs geographically closer and more host similar than expected from recombining year-specific source-label frequencies? Is host matching still apparent among geographically distance-matched *assigned-source-roster* opportunities?",
+  "true_target": "conditional nonrandom genetic assignment pairing, not selection, occupancy, true natal dispersal, or independent predictive gain",
+  "sources": {
+    "genetics": {
+      "file_name": "fullsibfamLevelData.csv",
+      "dryad_doi": "10.5061/dryad.7h44j0zws",
+      "sha256": "140e5361f9bced20a434bfee01bae6ce7c925e028718cdb9c6fd8aa635cc912a",
+      "n_rows": 799
+    },
+    "survey": {
+      "url": "https://zenodo.org/records/4987060/files/ECOG-04799.zip?download=1",
+      "sha256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+      "max_bytes": 5000000
+    },
+    "parent_crosswalk": "d8e70dc87e3ce6728827823bc28106757b6fcae3327727e72f92ed30e2d7be2e",
+    "parent_genetic_host_world": "94ebcf0582361901a8aa847affad52beb42d68cb03ffeca9509e3891395d5f3a"
+  },
+  "source_transport": {
+    "same_locked_archive_as_parent": true,
+    "new_local_ephemeral_rsa_public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAryweWgx1lq3xlujTkEKP\ny32ZMnio15aay1p90mnGOIZ9NyMNk9TJ50yYD4UckOGY0b4SluhZLt0wbpMOh9vq\nFSDZHMNfcduVR9erCFkpC9Ga8butExwRZ8iheVW3ew9DlrNw8ZrLQyT0zRn0m+H1\nrLeDFRFmfVDx8/acB/91cfn0gBWKOr1wZUIfBowYNsU8NQj+OH0WcnmaWvqdeO1q\nGLvXgeuAEeDNtP3fDgJRTBG7WOIyAFZvg2QSCY9AS34CoYAzbl59hqBimxayhchU\nVScWUN5X1FgCxq8Lvh5Tx+A2bwns469n+ObmmsRTPidVmhdFVC0NWBxjfMVbBwtN\nC9RICBIXmCLTSEyDEMP+c12mflUxZFnBVotLIVR/m759cCZzKK0KAzp0KSrmNUeQ\nI2OdH+QXcYtkwL6GAcn6b7lslEUaD0/QvWWvO9hyH/8D8dVmWCPQ1lkrYeEWUEkZ\nVgdIUIfscAiZ4qgpsyLT1jdkuMHIv9enrPDJSpFCqMp5AgMBAAE=\n-----END PUBLIC KEY-----\n",
+    "new_local_ephemeral_rsa_public_key_sha256": "a66e5b18e7ecc6e01022f1577580786bd08c31ec3594cd61fb7b941c71d5875d",
+    "encrypt_RSA_OAEP_AES_GCM": true,
+    "ephemeral_private_key_only_local": true,
+    "ciphertext_only_GitHub_artifact": true,
+    "artifact_retention_days": 1,
+    "single_download_no_retry": true
+  },
+  "eligibility": {
+    "source_years": [
+      2007,
+      2008,
+      2009,
+      2010,
+      2011
+    ],
+    "arrival_years": [
+      2008,
+      2009,
+      2010,
+      2011,
+      2012
+    ],
+    "qualifying_assignments": "PatchFrom != PatchTo, YearTo=YearFrom+1, t-1 PatchFrom recorded positive and host-complete, t-1 PatchTo recorded zero and host-complete, t PatchTo recorded positive, both source and target mapped",
+    "frozen_n_assignment_rows": 163,
+    "frozen_n_target_years": 100,
+    "frozen_n_distinct_families": 157,
+    "multiple_sources_per_target": "preserve original number of assignment rows per target; treat each target/year equally when computing primary statistic",
+    "genetic_source_assignment": "GENECLASS2 previous-year sampled-reference inference (published score 100 filter), score absent in the uploaded CSV; no independent confirmation"
+  },
+  "predeclared_primary_conditional_recombination_null": {
+    "rule": "Within each YearFrom, uniformly permute the complete multiset of genetically assigned source PatchFrom labels across the 163 eligible family/destination rows; keep destination rows, within-year source-label frequencies, year-specific roster size, number of rows per target, and target host scores fixed.",
+    "reject_if": "any pseudo-assignment has same PatchFrom as destination PatchTo (observed primary scope off-patch only), resample the within-year permutation; never allow self-zero routes",
+    "monte_carlo_replicates": 1999,
+    "seed": 20261120,
+    "max_rejection_attempts_per_year_rep": 500,
+    "statistic_distance": "Across 100 target patch-years: mean of within-target median log1p(projected assigned-origin distance in km)",
+    "statistic_host": "Across 100 target patch-years: mean of within-target median maximum ordinal Plantago/Veronica source-target host gap, both measured at YearFrom",
+    "null_interval_percentiles": [
+      0.025,
+      0.5,
+      0.975
+    ],
+    "p_tail_direction": "smaller mean log-distance or host gap than permuted origin assignment roster",
+    "primary_significance_readout": "conditional permutation tail probability and difference in statistic; NOT biological sampling p-value, because assignment probability and reference availability are not known",
+    "report_by_year": true,
+    "family_clustering_caveat": "Six of 163 are repeated full-sib family-destination row units; preserve rows and target aggregation but do not count iid family samples",
+    "source_frequency_control": "Exact empirical count of genetically assigned origin labels among the selected 163 within each source year, NOT all possible population sources"
+  },
+  "predeclared_secondary_distance_matched_reference": {
+    "construction": "For each eligible genetic assignment row, compare its assigned-origin host gap with original-year eligible, distinct source sites that appeared as a genetically assigned origin anywhere in all 799 rows in the same YearFrom and were recorded positive in survey. Exclude target itself. Include original assigned source.",
+    "spatial_caliper_km": "max(0.5 km, 25% of that row's assigned-source Euclidean distance)",
+    "min_distinct_candidate_sites": 3,
+    "weighting": [
+      "uniform_over_distinct_candidate_sites",
+      "survey_recorded_population_positive_weight_capped_at_yearly_90th_percentile"
+    ],
+    "metric": "Across target-years that have at least one row with >=3 distance-matched source sites, target-equal mean of within-target mean (assigned host gap minus opportunity-weighted mean compatible source gap).",
+    "alternative_scope": "All t-1 recorded-positive EOG sources used as a source-universe sensitivity, still distance-matched; not an independently sampled GENECLASS2 reference set",
+    "inferential_status": "descriptive matching only, no p-value or causal selection claim",
+    "no_fallback_to_wider_caliper": true
+  },
+  "reproduction_and_checks": [
+    "SHA256 of uploaded genetic source and 2019 archive match frozen publishers; no coordinate unit changes",
+    "799 total, 498 offpatch, 760 distinct family IDs, 39 split, 163 target-source eligible assignment rows, 100 targets, 157 distinct families",
+    "reproduce original five year EOG source/target counts and archived 8 host/radius world counts before null scoring",
+    "within-year pseudo-origin labels preserve EXACT yearwise origin frequency, no same-patch selected, no year crossover",
+    "permutation results deterministic from seed and ordered canonical source/target keys",
+    "assigned source from previous-year positive recorded candidates, same 2019 t-1 host scores as EOG",
+    "secondary candidate sources are only previous-year positive, do not include targets as source; no inferred source directions from nearest-patch geometry",
+    "all calculations local; only 5-year aggregate and diagnostic counts exported; no patch IDs, family IDs, original rows or individual coordinate pairs",
+    "missing source support or inability to obtain 1999 valid permutations results in science STOP, not threshold tuning"
+  ],
+  "claim_boundary": {
+    "original_EOG_WF_scored": 3,
+    "scientific_STOP": 31,
+    "admin_exclusions": 3,
+    "unchanged": true,
+    "study_design": "retrospective, genetically model-assigned origin roster conditioned on previously sampled populations; reference sampling is a source-selection confounder",
+    "not_independent_origin_validation": true,
+    "not_true_colonisation_or_dispersal_estimator": true,
+    "no_new_EOG_WF_endpoint": true
+  }
+}
