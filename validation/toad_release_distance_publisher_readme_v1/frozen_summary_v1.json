@@ -1,0 +1,63 @@
+{
+  "schema": "eog.toad_publisher_readme_definition_audit_v1.frozen_summary",
+  "status": "PUBLISHER_README_AUTHENTICATED_SEMANTIC_AUDIT_COMPLETED",
+  "scope": "README/documentation only; no CSV rows analyzed and no biological response rescored",
+  "protocol_first_commit": "430b91f982522c69925c165d4ab40bc25bf8cf0b",
+  "publisher": {
+    "doi": "10.5061/dryad.x3ffbg7ms",
+    "version_id": 198534,
+    "readme_name": "README_file.rtf",
+    "readme_bytes": 2102,
+    "readme_sha256": "3d7b240bf323bb19fe32e57d99b8029e212d1da15d85c02b457a1d74053b3c5c",
+    "readme_plaintext_sha256": "15a1ef1166ed876c368d87ea15c6c0f0ad9063a63f47ea693b3cc907a73fac52",
+    "companion_csv_sha256_verified_without_decoding": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+    "original_article_doi": "10.1655/Herpetologica-D-21-00031",
+    "dataset_url": "https://datadryad.org/dataset/doi:10.5061/dryad.x3ffbg7ms"
+  },
+  "execution": {
+    "github_actions_run_id": 44837654149,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44837654149",
+    "conclusion": "success",
+    "artifact_id": 14678418773,
+    "artifact_name": "eog-toad-public-readme-v1-not-biology",
+    "artifact_zip_sha256": "b847d43f7991387296c0dae64300b372105f2e50a9ee91902328825772e72718",
+    "source_only_receipt_sha256": "e00e51749e00aa820246787ff35382a5180cf9c3b0c615fcedf661f5ff477dfe"
+  },
+  "publisher_readme_findings": {
+    "initial_easting_northing": "UTM geographic coordinates at initial encounter before human translocation",
+    "released_easting_northing": "UTM geographic coordinates at experimentally released location after translocation",
+    "final_easting_northing": "UTM geographic coordinates at final encounter after translocation/homing",
+    "translocated_distance": "Derived from initial and release UTM positions, rounded into four listed nominal classes (0m, 100m, 250m, 500m); this is a separate variable from post-release movement distance",
+    "distance_release_final_or_capture_final": "Readme groups the two reported distance columns under one description: distances in meters calculated from appropriate UTM coordinates; does not provide a distinct algebraic formula, control-specific replacement rule or alternative coordinate reference",
+    "reencounter_timing": "Usually the day after first capture",
+    "angle_units_in_readme": "angles stated in degrees; not used for current geographic source audit",
+    "source_provides_explicit_exception_that_resolves_release_final_disagreement": false,
+    "source_distinguishes_nominal_translocation_distance_from_continuous_reencounter_distance": true
+  },
+  "original_article_context": {
+    "method": "Original Herpetologica methods describes initial, post-translocation release and next-night final UTM positions, and Euclidean release-to-final distance in meters",
+    "official_doi": "https://doi.org/10.1655/Herpetologica-D-21-00031",
+    "context_source": "Publicly indexed full-text article extraction and original Dryad landing summary, not the README itself",
+    "interpretation": "Article method and authenticated README are consistent on expected source coordinate roles. Neither documents a rule explaining the earlier numerical discordance."
+  },
+  "unchanged_original_stop": {
+    "status": "STOP_GEO_UNIT_CONCORDANCE",
+    "release_final_geometry_matching_rows": 77,
+    "release_final_total_rows": 163,
+    "capture_final_geometry_matching_rows": 163,
+    "capture_final_total_rows": 163,
+    "original_primary_biological_H1": "NOT_SCORED_SOURCE_QUALITY_STOP",
+    "mismatch_mechanism": "UNKNOWN_AFTER_README_REVIEW",
+    "original_stop_overridden": false
+  },
+  "next_data_quality_question": "Check whether mismatch is restricted to translocated versus zero-distance controls using a predeclared post-STOP QA stratum, without changing original H1 or treating any alternate reconstruction as validated",
+  "biological_event_rows_decoded": 0,
+  "models_fit": 0,
+  "ecological_field_outcomes_scored": 0,
+  "new_eog_wf_scored_endpoints": 0,
+  "EOG_WF_frozen_denominator": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  }
+}

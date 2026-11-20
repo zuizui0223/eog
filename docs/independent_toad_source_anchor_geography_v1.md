@@ -1,5 +1,7 @@
 # Independent toad translocation: capture-versus-release source-anchor geography (v1)
 
+> **publisher documentation QA:** [元のREADME文書のSHA照合とフィールド定義](toad_release_distance_publisher_readme_v1.md)。放逐→最終距離について修正計算式は記載されず、既知のsource-quality STOPは残る。生物学的H1は未採点。
+
 > **結果状態（2026-11-20）：`STOP_GEO_UNIT_CONCORDANCE`、事前H1は未評価。** 原データ165行の検査で `release-final` 距離列が幾何学的座標と一致せず、試験は科学的STOPで終了。後続の[事後source-QC v2](independent_toad_geocoordinate_diagnostic_v2.md)でも `capture-final` 163/163一致に対し `release-final` は77/163一致のみ。18種の事前明示的比較は元STOPの再解釈・結果修理・独立field confirmationではない。 [凍結した診断集計](../validation/independent_toad_geocoordinate_diagnostic_v2/frozen_aggregate_summary_v2.json)。
 
 

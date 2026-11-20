@@ -1,0 +1,65 @@
+name: EOG toad original publisher README definitions audit (no movement scoring)
+
+# Post-STOP source documentation only; raw toad CSV is verified by SHA,
+# never opened as records or modeled. SCIENTIFIC STOP remains unchanged.
+on:
+  pull_request:
+    paths:
+      - 'validation/toad_release_distance_publisher_readme_v1/**'
+      - 'scripts/toad_publisher_readme_definition_audit_v1.py'
+      - 'tests/test_toad_publisher_readme_definition_audit_v1.py'
+      - '.github/workflows/eog-toad-publisher-readme-audit-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sha-pinned-original-readme:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install isolated regression tester
+        run: python -m pip install 'pytest>=8,<10'
+      - name: Synthetic RTF parser and publisher-byte-identity tests only
+        run: |
+          python -m pytest -q \
+            tests/test_toad_publisher_readme_definition_audit_v1.py \
+            tests/test_eog_independent_movement_source_gate_v2.py
+      - name: Fetch only original public README using frozen host/version/SHA
+        run: |
+          python -m scripts.toad_publisher_readme_definition_audit_v1 \
+            --protocol validation/toad_release_distance_publisher_readme_v1/protocol_v1.json \
+            --output results/toad_publisher_readme_definitions_v1/receipt.json
+      - name: Validate author documentation audit is not biological rescoring
+        run: |
+          python - <<'PY'
+          import json
+          path = "results/toad_publisher_readme_definitions_v1/receipt.json"
+          v = json.load(open(path, encoding="utf-8"))
+          assert v["new_EOG_WF_endpoints"] == 0
+          assert v["field_outcomes_scored"] == 0
+          assert v["biological_data_rows_decoded"] == 0
+          assert v["parent_original_scientific_stop"] == "STOP_GEO_UNIT_CONCORDANCE"
+          assert v["original_STOP_overridden"] is False
+          print("TOAD_PUBLISHER_DOCUMENT_GATE="+v["status"])
+          if v["status"].startswith("STOP_"):
+              raise SystemExit("SOURCE_DOCUMENTATION_STOP: do not interpret source text or repair original H1")
+          assert v["readme_sha256"] == "3d7b240bf323bb19fe32e57d99b8029e212d1da15d85c02b457a1d74053b3c5c"
+          assert v["readme_bytes"] == 2102
+          assert len(v["document_plaintext"]) > 0
+          print("TOAD_PUBLISHER_README_TEXT_SHA256="+v["document_plaintext_sha256"])
+          print("TOAD_README_ONLY_SOURCE_PASS")
+          PY
+      - name: Store public README documentation receipt only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-toad-public-readme-v1-not-biology
+          path: results/toad_publisher_readme_definitions_v1/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
