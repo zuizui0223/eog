@@ -1,0 +1,60 @@
+{
+  "schema": "eog.independent_movement_dryad_redirect_host.v1",
+  "status": "PRE_HEADER_PROBE_FROZEN_NO_BIOLOGICAL_PAYLOAD",
+  "base_main_sha": "f13e2b2e7355543471c952a247ea2d8545ee964a",
+  "first_receipt": {
+    "prior_source_gate_actions_run_id": 44751841678,
+    "artifact_id": 14636106078,
+    "receipt_sha256_without_self_hash": "7082ab3fc7811f248d371d9ddca2c2a754a7ccd0d9f86005328bbc9b2d36e266",
+    "scientific_stop": "STOP_UNEXPECTED_SOURCE_REDIRECT_BOTH_DOIS"
+  },
+  "frozen_endpoint_roster": [
+    {
+      "source_id": "heliconius_moura_2021",
+      "doi": "10.5061/dryad.34tmpg4m6",
+      "version_id": 148124,
+      "version_publication_date": "2021-11-14",
+      "official_zip_endpoint": "https://datadryad.org/api/v2/versions/148124/download",
+      "publisher_files_sha256": [
+        "54ae5d50b144ccac05052269ee4ff3164c5c9342068468d3d9348004c203709c",
+        "e2ba8406fc4afd3695f998cfb98315802a8dcadf4f7633fd16a7e8d2a25e9e09",
+        "229b31bba2733ab1edb383446a7ce16d7fd8918349b10f9edb7f25bfcdda72d2"
+      ]
+    },
+    {
+      "source_id": "toad_jreidini_green_2022",
+      "doi": "10.5061/dryad.x3ffbg7ms",
+      "version_id": 198534,
+      "version_publication_date": "2022-09-27",
+      "official_zip_endpoint": "https://datadryad.org/api/v2/versions/198534/download",
+      "publisher_files_sha256": [
+        "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+        "3d7b240bf323bb19fe32e57d99b8029e212d1da15d85c02b457a1d74053b3c5c"
+      ]
+    }
+  ],
+  "methods": {
+    "request": "Up to three no-follow HEAD requests per source, following ONLY HTTPS redirects on the SAME official datadryad.org host, stopping before any different host; fallback to one no-follow GET on an official same-host URL only when HEAD responds 405 or 501. Never read response-body bytes.",
+    "redirect_capture": "record HTTP status and Location hostname only; strip query, signed URL and user info; do not follow external locations",
+    "permitted_initial_host": "datadryad.org",
+    "max_host_length": 255,
+    "request_timeout_sec": 25,
+    "attempts_per_source": "max three same-host HEAD hops and one method-fallback GET, no retries of failed requests; no external redirection followed",
+    "no_download_in_this_stage": true,
+    "max_same_host_head_hops": 3
+  },
+  "scientific_stop_rules": [
+    "redirect destination host is diagnostic only; NEVER classify source schema qualified on redirect alone",
+    "do not fetch or follow redirect target and do not log signed URL or query string",
+    "if redirect target host is new, STOP_UNVERIFIED_REDIRECT_HOST; require independent provider identity verification before adding to any allowlist",
+    "if initial endpoint returns HTTP200, do not read a single payload byte; report STOP_UNEXPECTED_DIRECT_ZIP_200_UNREAD",
+    "do not substitute another dataset or independently search for a favorable source after source transport stop",
+    "do not access any biological event values, fit model, score EOG-WF endpoint, or alter Glanville record"
+  ],
+  "output": {
+    "only_source_ids_status_http_codes_hostname_no_query": true,
+    "biological_rows_read": 0,
+    "new_eogwf_endpoints": 0
+  },
+  "pre_score_amendment": "Add a maximum of three official SAME-host HEAD-only hops so internal Dryad redirect chains cannot hide the true external CDN host. Made before first diagnostic request; does not open any biological content."
+}
