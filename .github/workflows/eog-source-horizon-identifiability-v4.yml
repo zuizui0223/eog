@@ -1,0 +1,74 @@
+name: EOG source-hop MRR identifiability v4 (synthetic)
+
+# Fixed graph-hop inference and source-core theorem; no ecological observations.
+on:
+  pull_request:
+    paths:
+      - 'validation/occurrence_conditioned_source_minrelax_v4/**'
+      - 'benchmarks/occurrence_conditioned_source_minrelax_v4.py'
+      - 'tests/test_occurrence_conditioned_source_minrelax_v4.py'
+      - 'docs/occurrence_conditioned_source_minrelax_v4.md'
+      - '.github/workflows/eog-source-horizon-identifiability-v4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  directed-hop-bound:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install reference EOG + tests (no biological data)
+        run: python -m pip install -e . pytest
+      - name: Test v1 through v4 and exact source-hop controls
+        run: |
+          python -m pytest -q \
+            tests/test_occurrence_conditioned_minrelax_v1.py \
+            tests/test_occurrence_conditioned_source_minrelax_v2.py \
+            tests/test_occurrence_conditioned_source_minrelax_v3.py \
+            tests/test_occurrence_conditioned_source_minrelax_v4.py
+      - name: Produce all preregistered new-seed synthetic graph results
+        run: |
+          python -m benchmarks.occurrence_conditioned_source_minrelax_v4 \
+            --protocol validation/occurrence_conditioned_source_minrelax_v4/protocol_v4.json \
+            --output results/source_minrelax_v4/result.json
+      - name: Validate theorem checks, native EOG audit and retain G5 outcome
+        run: |
+          python - <<'PY'
+          import json
+          v=json.load(open('results/source_minrelax_v4/result.json'))
+          s=v['summary']
+          assert s['graphs']==192 and s['paired_graph_triples']==64
+          assert s['native_v2_horizon_checks']==36
+          assert s['diameter_bound_violations']==0
+          assert s['integrated_gap_identity_violations']==0
+          assert sum(s['cycle_minus_star_sign_counts'].values())==64
+          assert v['new_EOG_WF_empirical_endpoints']==0
+          assert v['independent_ecological_replications']==0
+          assert v['broken_source_core_negative_control']=={
+             'source_core_strongly_connected':False,
+             'at_full_relaxation_possible_finite':True,
+             'at_full_relaxation_robust_infinite':True,
+             'terminal_robust_but_possible':True,
+          }
+          assert v['verdicts']['G5_cycle_area_greater_than_star'] in {
+             'SUPPORTED_WITHIN_PREDECLARED_NEW_SEEDS','REFUTED_OR_NOT_SUPPORTED'}
+          print('SOURCE_MRR_V4_THEOREM_AND_BENCHMARK_PASS')
+          print('G5',v['verdicts']['G5_cycle_area_greater_than_star'])
+          print('CYCLE_MINUS_STAR_MEAN_AREA_HOPS',s['mean_cycle_minus_star_ambiguity_area_hops'])
+          print('PAIRED_SIGNS',s['cycle_minus_star_sign_counts'])
+          print('SHASUM',v['sha256_without_self_hash'])
+          PY
+      - name: Preserve result and failure diagnosis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-source-horizon-identifiability-v4-synthetic
+          path: results/source_minrelax_v4/result.json
+          if-no-files-found: warn
+          retention-days: 30
