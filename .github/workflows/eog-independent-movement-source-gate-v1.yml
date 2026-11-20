@@ -1,0 +1,56 @@
+name: EOG independent marked movement source schema preflight (NO scoring)
+
+# One predeclared first-run gate. Never call this a movement-model fit.
+on:
+  pull_request:
+    paths:
+      - 'validation/independent_movement_source_gate_v1/protocol_v1.json'
+      - 'scripts/eog_independent_movement_source_gate_v1.py'
+      - 'tests/test_eog_independent_movement_source_gate_v1.py'
+      - '.github/workflows/eog-independent-movement-source-gate-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dryad-source-schema-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Enforce offline transport, checksum and STOP regression
+        run: python -m pytest -q tests/test_eog_independent_movement_source_gate_v1.py
+      - name: One source-only publisher API/files header audit, no event outcomes
+        run: |
+          python scripts/eog_independent_movement_source_gate_v1.py \
+            --protocol validation/independent_movement_source_gate_v1/protocol_v1.json \
+            --output results/independent_movement_source_gate_v1/receipt.json
+      - name: Fail CLOSED if any attempted biological output is emitted
+        run: |
+          python - <<'PY'
+          import json
+          path="results/independent_movement_source_gate_v1/receipt.json"
+          r=json.load(open(path))
+          assert r["biological_event_rows_exported"]==0
+          assert r["biological_outcomes_analyzed"]==0
+          assert r["ecological_models_fit"]==0
+          assert r["new_eog_wf_endpoints"]==0
+          assert len(r["source_results"])==2
+          print("SOURCE_GATE_STATUS="+r["status"])
+          for x in r["source_results"]:
+              print("DOI="+x["doi"]+" SOURCE_ONLY="+x["status"])
+              print("VERSION_ID="+str(x.get("publisher_version_id")))
+              print("HEADERS="+str([(f["name"],f.get("csv_header"),f.get("data_row_count")) for f in x.get("file_checks",[])]))
+          PY
+      - name: Retain only aggregate metadata/scientific STOP receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-independent-marked-movement-source-gate-v1
+          path: results/independent_movement_source_gate_v1/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
