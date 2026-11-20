@@ -38,6 +38,8 @@ def _finite_ratio(values: list[float], quantile: float) -> float | None:
     position = (len(ordered) - 1) * quantile
     lo = math.floor(position)
     hi = math.ceil(position)
+    if lo == hi:
+        return ordered[lo]
     return ordered[lo] * (hi-position) + ordered[hi] * (position-lo)
 
 
