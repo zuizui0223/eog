@@ -1,5 +1,8 @@
 # EOG confirmed mathematical and known-truth results
 
+> **最小制約緩和の肯定成果:** [専用監査](MINIMUM_REQUIRED_RELAXATION_AUDIT_20261120.md)を参照。固定source・有向候補グラフ・有限stepに条件付けた3軸Pareto必要条件は実装・独立有限列挙で確認済み。自然の実際の分散経路・分散距離・機構は同定していない。
+
+
 > **数理成果を引用・投稿に使う際は先に[詳細監査版](MATHEMATICAL_DEEP_AUDIT_20261120.md)を確認すること。** 旧一覧は発見のナビゲーション用。全ての `SUPPORTED` が新しい定理・非自明な生態学的主張ではない。特に `25/174/636` は有限候補64世界のconditional identifiability、世界拡張下の各release二値判断は `A:652→646→34 / B:705→693→34 / M:732→691→34`、peer-source policyはfixed-sourceの単調性条件と異なる（未マージPR #697/#698）。
 
 **Read with:** [evidence split index](README.md) and [empirical ledger](EMPIRICAL_RESULTS.md).  
