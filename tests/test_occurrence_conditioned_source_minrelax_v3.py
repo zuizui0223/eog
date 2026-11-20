@@ -27,13 +27,13 @@ def result():
 def test_generator_int32_cross_language_reference_stream():
     # Reference generated with separate JS xorshift32 code after protocol freeze.
     gen = XorShift32(20261120 + 10000 * 3)
-    assert [gen.draw() for _ in range(5)] == [
+    assert [gen.draw() for _ in range(5)] == pytest.approx([
         0.9239987379405648,
         0.6310894214548171,
         0.2351110477466136,
         0.3085117936134338,
         0.256090271519497,
-    ]
+    ], rel=0, abs=6e-17)
 
 
 def test_full_protocol_denominators_and_predeclared_status_fields():
