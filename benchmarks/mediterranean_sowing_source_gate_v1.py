@@ -10,6 +10,7 @@ import csv
 import hashlib
 import io
 import json
+import os
 import re
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -31,8 +32,16 @@ def get_bytes(url: str, limit: int) -> tuple[bytes | None, str]:
     u=urlparse(url)
     if u.scheme!="https" or u.hostname!="datadryad.org":
         return None,"STOP_UNAPPROVED_URL"
+    # Dryad may require a bearer token for file-body downloads although
+    # public dataset/file metadata remain readable. The token is never logged.
+    # add_unredirected_header ensures urllib does NOT forward this credential
+    # to any redirected external object-storage host.
+    request=Request(url,headers=UA)
+    token=os.environ.get("DRYAD_TOKEN","").strip()
+    if token and re.fullmatch(r"/api/v2/files/\d+/download",u.path):
+        request.add_unredirected_header("Authorization","Bearer "+token)
     try:
-        with urlopen(Request(url, headers=UA), timeout=40) as f:
+        with urlopen(request, timeout=40) as f:
             # Final location may be an HTTPS signed object-store URL.
             final=urlparse(f.geturl())
             if final.scheme!="https":return None,"STOP_INSECURE_REDIRECT"
