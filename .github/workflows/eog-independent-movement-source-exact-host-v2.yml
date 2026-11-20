@@ -1,0 +1,66 @@
+name: EOG independent movement exact-source Dryad archive / schema v2
+
+# First source-only transfer after separately frozen publisher HEAD redirect identity.
+# No individual movement/event outcomes used, no model scoring.
+on:
+  pull_request:
+    paths:
+      - 'validation/independent_movement_source_gate_v2/**'
+      - 'scripts/eog_independent_movement_source_gate_v2.py'
+      - 'tests/test_eog_independent_movement_source_gate_v2.py'
+      - '.github/workflows/eog-independent-movement-source-exact-host-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  official-dryad-sha256-and-headers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install offline regression runner
+        run: python -m pip install 'pytest>=8,<10'
+      - name: Test source safety, pinned Lambda hostname and signed-url protections
+        run: |
+          python -m pytest -q \
+            tests/test_eog_independent_movement_source_gate_v1.py \
+            tests/test_eog_independent_movement_source_gate_v2.py \
+            tests/test_eog_independent_movement_redirect_host_v1.py
+      - name: One source-only publisher ZIP download, exact host + pinned SHA256
+        run: |
+          python -m scripts.eog_independent_movement_source_gate_v2 \
+            --protocol validation/independent_movement_source_gate_v2/protocol_v2.json \
+            --output results/independent_movement_source_gate_v2/receipt.json
+      - name: Enforce non-scoring, publish headers only and retain scientific STOP
+        run: |
+          python - <<'PY'
+          import json
+          p="results/independent_movement_source_gate_v2/receipt.json"
+          r=json.load(open(p))
+          assert r["biological_values_analyzed"]==0
+          assert r["individual_records_exported"]==0
+          assert r["new_model_fits"]==0
+          assert r["new_eog_wf_endpoints"]==0
+          assert r["origin_to_destination_inference_authorized"] is False
+          assert r["full_three_axis_MRR_authorized"] is False
+          print("OFFICIAL_DRYAD_V2_SOURCE_GATE="+r["status"])
+          for x in r["source_results"]:
+              print("SOURCE=",x["source_id"],"STATUS=",x["status"],
+                    "VERSION=",x.get("publisher_version_id"))
+              for f in x.get("file_checks",[]):
+                  print("FILE=",f["name"],"CSV_HEADER=",f.get("csv_header"),
+                        "ROW_COUNT=",f.get("data_row_count"),"SHA256=",f["sha256"])
+          PY
+      - name: Preserve source-only aggregate receipt (never original rows or ZIP)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-independent-movement-source-gate-v2-schema-only
+          path: results/independent_movement_source_gate_v2/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
