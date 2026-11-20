@@ -121,9 +121,15 @@ def diagnose_clean_rows(
                     "matched_rows":v["match_count"],
                     "match_fraction":(v["match_count"]/n if n else None),
                     "median_absolute_residual_m":(
-                        median(v["absolute_errors"]) if n else None
+                        median(v["absolute_errors"])
+                        if n >= wanted["minimum_numeric_rows_to_release_residual_quantiles"]
+                        else None
                     ),
-                    "q90_absolute_residual_m":_finite_ratio(v["absolute_errors"],0.9),
+                    "q90_absolute_residual_m":(
+                        _finite_ratio(v["absolute_errors"],0.9)
+                        if n >= wanted["minimum_numeric_rows_to_release_residual_quantiles"]
+                        else None
+                    ),
                     "comparison_type":"DIAGNOSTIC_ONLY_NOT_AN_AUTHORIZED_REMAP",
                 })
     channel_rules={
