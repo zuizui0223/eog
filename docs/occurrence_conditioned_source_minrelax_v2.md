@@ -1,5 +1,7 @@
 # Alternative-source minimum required relaxation — known-truth v2
 
+> **後続の合成ネットワーク一般性検証：** [v3：1,152条件・96組の起源ネットワーク比較](occurrence_conditioned_source_minrelax_v3.md)。主結果は一方向循環起源コアの方が完全相互接続コアより、source-robustとpossibleの許容閾値集合に大きな差を残す（平均+0.257378、92/96組）。凍結シミュレーションの結果で、実環境の頻度推定ではない。
+
 **Scientific status:** frozen *synthetic* finite-world experiment. This is **not** a new EOG-WF predictive endpoint or empirical source-identification result. The pre-implementation hypothesis/STOP contract was committed first at `validation/occurrence_conditioned_source_minrelax_v2/protocol_v2.json`.
 
 ## Question
