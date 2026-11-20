@@ -13,8 +13,9 @@
     "gap_width": "h_robust-h_possible when h_possible and h_robust finite",
     "core_diameter": "D_C=max_{u,v in source nodes} shortest directed source-core distance; infinity if core not strongly connected",
     "proven_bound_if_core_SCC": "h_robust-h_possible<=D_C for every theta with finite h_possible",
-    "mean_gap_area": "sum_{H=0}^{n_nodes-2} g(H)=mean_over_theta(h_robust-h_possible) when core remains SCC and all h finite",
-    "status": "Finite declared graph/threshold constraints only. Steps are directed graph hops, not generations or years"
+    "mean_gap_area": "sum_{H=0}^{n_nodes-2} g(H) = mean_over_theta K(theta), where K=0 for wholly infeasible threshold worlds and K=h_robust-h_possible otherwise.",
+    "status": "Finite declared graph/threshold constraints only. Steps are directed graph hops, not generations or years",
+    "empty_threshold_world": "If no source can reach all positives at any finite horizon (h_possible=infinity), set the gap-width contribution K(theta)=0, because the possible-but-not-robust interval is empty. Under a baseline strongly connected source core, h_possible finite iff every h_s finite. Do not attempt infinity-infinity."
   },
   "newly_frozen_generator": {
     "parent_graph_generator": "benchmarks/occurrence_conditioned_source_minrelax_v3.py::generate_graph",
@@ -55,7 +56,7 @@
     {
       "id": "G3",
       "type": "EXACT",
-      "test": "Sum_H g(H) over H=0..n_nodes-2 equals mean_theta K(theta), within machine numerical tolerance; independently compute g(H) from native EOG-v2 source-MRR for predeclared seed24, all source counts/densities/topologies, H1 and Hcritical and Hterminal (3*2*2*3=36 native crosschecks)."
+      "test": "Sum_H g(H) over H=0..n_nodes-2 equals mean_theta K(theta), with K=0 for threshold worlds where no source reaches all positives at any finite H. Check within 1e-12. Independently compare native EOG-v2 source-MRR for predeclared seed24, all source counts/densities/topologies, H=1, critical n_sources-1 and terminal n_nodes-1 (3*2*2*3=36 native crosschecks)."
     },
     {
       "id": "G4",
@@ -86,5 +87,6 @@
     "If native EOG mismatch, stop and diagnose rather than change numerator or seed family.",
     "Preserve all 64 paired graphs including zero/negative G5 contrasts and hard disconnection control.",
     "No ecological causal effect, species-specific dispersal estimate or EOG-WF fourth scored endpoint."
-  ]
+  ],
+  "pre_score_amendment": "Clarify the exact zero contribution for wholly infeasible threshold worlds to avoid undefined infinity-minus-infinity; this is prior to first generator execution, preserves sample roster/graph/metric without altering outcomes."
 }
