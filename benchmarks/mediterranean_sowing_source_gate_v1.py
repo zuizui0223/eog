@@ -93,6 +93,15 @@ def file_manifest(meta,fetch=get_bytes):
             "sample_keys":sorted(ents[0].keys()) if ents and isinstance(ents[0],dict) else [],
             "candidate_names":[{k:str(f.get(k,""))[:180] for k in ("path","filename","name","basename") if k in f}
                                for f in ents[:30] if isinstance(f,dict)],
+            # Provider-authored checksums are public file metadata; persist for
+            # comparison against a user-supplied official ZIP without credential.
+            "official_file_integrity":[
+                {"name":str(f.get("path",f.get("filename","")))[:180],
+                 "size":f.get("size"),
+                 "digest":f.get("digest"),
+                 "digest_type":f.get("digestType")}
+                for f in ents[:30] if isinstance(f,dict)
+            ],
         })
         for f in ents:
             if not isinstance(f,dict):continue
