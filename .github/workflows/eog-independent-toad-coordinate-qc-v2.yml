@@ -1,0 +1,70 @@
+name: EOG toad coordinate concordance post-STOP diagnostic v2
+
+# Only rechecks source geometry; preserves the earlier scientific STOP.
+# No ecological outcome, response score, or origin inference may be produced.
+on:
+  pull_request:
+    paths:
+      - 'validation/independent_toad_geocoordinate_diagnostic_v2/**'
+      - 'benchmarks/independent_toad_geo_source_quality_diagnostic_v2.py'
+      - 'tests/test_independent_toad_geo_source_quality_diagnostic_v2.py'
+      - '.github/workflows/eog-independent-toad-coordinate-qc-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-source-aggregate-qc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install only test dependencies
+        run: python -m pip install -e . pytest
+      - name: Run original v1 and new QC unit tests using synthetic records
+        run: |
+          python -m pytest -q \
+            tests/test_eog_independent_movement_source_gate_v2.py \
+            tests/test_independent_toad_source_anchor_geography_v1.py \
+            tests/test_independent_toad_geo_source_quality_diagnostic_v2.py
+      - name: Use original exact-host publisher transfer and frozen SHA only
+        run: |
+          python -m benchmarks.independent_toad_geo_source_quality_diagnostic_v2 \
+            --protocol validation/independent_toad_geocoordinate_diagnostic_v2/protocol_v2.json \
+            --output results/independent_toad_geocoordinate_diagnostic_v2/receipt.json
+      - name: Audit denominator and absolute non-promotion; preserve STOP
+        run: |
+          python - <<'PY'
+          import json
+          p="results/independent_toad_geocoordinate_diagnostic_v2/receipt.json"
+          v=json.load(open(p))
+          assert v["parent_original_science_status"]=="STOP_GEO_UNIT_CONCORDANCE"
+          assert v["parent_status_may_be_promoted"] is False
+          assert v["new_eog_wf_endpoints"] == 0
+          assert v["model_fits"] == 0
+          assert v["raw_source_records_exported"] == 0
+          if v["status"]=="POST_EXPOSURE_SOURCE_QC_ONLY_RETAINS_ORIGINAL_SCIENTIFIC_STOP":
+              assert v["original_STOP_GEO_UNIT_CONCORDANCE_reproduced"] is True
+              assert v["n_diagnostic_comparisons"]==18
+              assert v["original_row_grain"]["published_rows"]==165
+              print("COORD_QC_RESULT=POST_EXPOSURE_QC_COMPLETED_ORIGINAL_STOP_RETAINED")
+              print("QC_SOURCE_ROWS",v["original_row_grain"]["published_rows"])
+              print("QC_SOURCE_GATE_COUNTS",v["denominator"])
+              print("QC_ORIGINAL_PAIR_CONCORDANCE",v["original_gate_reconstruction"])
+              print("QC_DIAGNOSTIC_MATRIX",v["predeclared_18_comparisons"])
+          else:
+              print("COORD_QC_RESULT="+v["status"])
+          print("QC_RECEIPT_SHA256",v["sha256_without_self"])
+          PY
+      - name: Upload aggregate QC only, never published individual records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-toad-geocoordinate-qc-v2-aggregate-only
+          path: results/independent_toad_geocoordinate_diagnostic_v2/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
