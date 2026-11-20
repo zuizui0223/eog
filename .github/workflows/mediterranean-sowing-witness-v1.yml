@@ -27,6 +27,8 @@ jobs:
       - name: Get original experiment source with official Dryad digest
         run: |
           python benchmarks/mediterranean_sowing_source_gate_v1.py --output-dir /tmp/mediterranean_sowing_v1
+        env:
+          DRYAD_TOKEN: ${{ secrets.DRYAD_TOKEN }}
       - name: Run source-gated experimental germination witness scoring
         run: |
           python benchmarks/mediterranean_sowing_witness_score_v1.py --source-dir /tmp/mediterranean_sowing_v1 --output /tmp/mediterranean_sowing_v1/witness_result.json
@@ -39,3 +41,14 @@ jobs:
             /tmp/mediterranean_sowing_v1/source_gate.json
             /tmp/mediterranean_sowing_v1/witness_result.json
           if-no-files-found: warn
+
+      - name: Fail closed on unverified source or unscored experiment
+        run: |
+          python - <<'PY'
+          import json
+          root='/tmp/mediterranean_sowing_v1/'
+          source=json.load(open(root+'source_gate.json'))
+          result=json.load(open(root+'witness_result.json'))
+          assert source['status']=='SOURCE_BYTES_VERIFIED_NOT_SCORED', source['status']
+          assert result['status']!='SOURCE_STOP_NO_SCORE', result['status']
+          PY
