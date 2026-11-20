@@ -1,12 +1,8 @@
 name: EOG Glanville v2 source-locked encrypted host world bridge
 
+# One-source-archive audited and ciphertext retrieved in successful run 44655571491.
+# Future reruns require an explicit workflow_dispatch; never silently reacquire on PR updates.
 on:
-  pull_request:
-    paths:
-      - "validation/glanville_genetic_host_world_v2/protocol_v2.json"
-      - "scripts/glanville_encrypt_survey_source_v2.py"
-      - "tests/test_glanville_encrypt_survey_source_v2.py"
-      - ".github/workflows/eog-glanville-host-world-bridge-v2.yml"
   workflow_dispatch:
 
 permissions:
