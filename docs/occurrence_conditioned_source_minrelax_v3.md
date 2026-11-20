@@ -1,5 +1,7 @@
 # Source-uncertain minimum relaxation: frozen paired random-graph generality v3
 
+> **後続v4の確定結果：** [候補起源ごとの必要hop幅とsource-core有向直径による上限](occurrence_conditioned_source_minrelax_v4.md)。v3の1 horizon比較（循環 vs 完全相互接続）とは別に、v4で全horizon積分値（循環 vs 双方向スター）を独立新seed検証し、事前予測G5は**不支持**（平均循環−スター = −0.0390625 hops、13正・20同・31逆/64組）。上限定理は成立、直径による平均効果量の順位づけは不可。
+
 ## Status
 
 Research-only **synthetic generality stress test**. The protocol was committed *before running the paired generator* at [v3 protocol](../validation/occurrence_conditioned_source_minrelax_v3/protocol_v3.json), commit `32626e5a5726d8f33083163c2e2dfc31b7eb2f46`. This successor to the [v2 three-source known-graph demonstration](occurrence_conditioned_source_minrelax_v2.md) holds EOG-WF's 3 scored / 31 scientific STOP / 3 administrative exclusion empirical closure unchanged.

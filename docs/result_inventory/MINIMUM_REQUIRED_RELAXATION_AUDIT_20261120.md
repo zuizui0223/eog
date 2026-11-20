@@ -1,5 +1,7 @@
 # EOG最小制約緩和（Minimum Required Relaxation）成果監査 — 2026-11-20
 
+> **v4で数理境界を確立：** [possibleとsource-robustの最短hop識別区間、SCC直径上限、192合成グラフ監査](../occurrence_conditioned_source_minrelax_v4.md)。`min_s h_s≤H<max_s h_s`の時だけsource ambiguityが存在。基準source coreが強連結なら追加hop幅は有向直径以下（実装0違反）。一方、平均曖昧性の「循環 > スター」事前予測は**反証**（循環0.29492、スター0.33398、完全接続0.17318）。同じ所与の世界でも、possible／robustの差はHに対して単調減少とは限らない（120/192合成graph）。生態学的一般率ではない。
+
 > **拡張の既知真値成果：** [源間接続構造の一般性ストレステスト v3](../occurrence_conditioned_source_minrelax_v3.md)（事前凍結24シード×2密度×2源構造×3源数×4 hop、計1,152合成条件）。相互直接接続に対し一方向源サイクルの不確実性gap平均差は+0.257378（主検定96組中92正・4同・0逆）。有限グラフのみ。既存EOG-WF endpointは増やさない。
 
 > **追加の理論・既知真値実験（源不確実性 v2）:** [固定された代替起源ごとの possible/全起源共通 Pareto必要緩和](../occurrence_conditioned_source_minrelax_v2.md)。先に凍結した3つの仮想起源・1/2-hopパネルから、独立全列挙で `H1=7 possible / 1 source-robust`、`H2=7/7` を確認。あくまで有限グラフ、真の起源は同定しない。原典CIは別途判定。

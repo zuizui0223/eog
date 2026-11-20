@@ -1,0 +1,92 @@
+{
+  "schema": "eog.source_mrr_horizon_identifiability_v4.frozen_aggregate",
+  "status": "PRE_SCORE_FROZEN_SYNTHETIC_FINITE_HOP_TEST_COMPLETED__G5_REFUTED",
+  "protocol": {
+    "first_commit": "2828c38d1db8ef9f69b25e5fe5d69ac39983a0be",
+    "clarification_before_scoring_commit": "0dca8a6f01c5ec060bbe30cf52edb8bc1b5cbf6e",
+    "path": "validation/occurrence_conditioned_source_minrelax_v4/protocol_v4.json",
+    "base_main_sha": "fa946f46e8467785be92fbb25799059237f9814d"
+  },
+  "authoritative_execution": {
+    "first_successful_run_id": 44748764485,
+    "printed_extended_audit_run_id": 44749011366,
+    "original_result_fingerprint_without_self_hash": "54ec5f1624b5cac3cd4666b36f487efc62808fbdfbc987828c5356459ca6800c",
+    "extended_run_result_fingerprint_without_self_hash": "54ec5f1624b5cac3cd4666b36f487efc62808fbdfbc987828c5356459ca6800c",
+    "artifact_name": "eog-source-horizon-identifiability-v4-synthetic",
+    "artifact_id": 14633688692,
+    "artifact_zip_sha256": "ca1c2f123b2c47c4259dbe7b3358433510ea6182531aa2714603621f4ec2cb91",
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44749011366",
+    "conclusion": "success"
+  },
+  "finite_design": {
+    "source_counts": [
+      3,
+      4
+    ],
+    "non_source_positive_targets": 3,
+    "paired_topologies": [
+      "complete_bidirectional_baseline",
+      "bidirectional_star_center_S0",
+      "unidirectional_cycle_baseline"
+    ],
+    "optional_density_levels": [
+      0.25,
+      0.65
+    ],
+    "seed_indices": "24..39, new relative to v3",
+    "paired_triples": 64,
+    "graph_panels": 192,
+    "all_threshold_worlds_count": 2172,
+    "independent_field_populations": 0
+  },
+  "exact_theorem_checks": {
+    "h_possible": "min of source-specific max directed positive shortest hop distances",
+    "h_robust": "max of source-specific max directed positive shortest hop distances",
+    "source_ambiguity_interval": "h_possible<=H<h_robust",
+    "source_core_diameter_upper_bound": "K=h_robust-h_possible<=D_core if baseline source-core is strongly connected and some source is feasible",
+    "sum_horizon_gap_equals_mean_hop_width": true,
+    "diameter_bound_violations": 0,
+    "integrated_ambiguity_area_violations": 0,
+    "native_eog_v2_shortest_hop_pareto_checks": 36,
+    "native_mismatches": 0,
+    "negative_control_broken_source_core": {
+      "strong_source_core": false,
+      "possible_finite_at_full_threshold": true,
+      "source_robust_infinite": true,
+      "no_universal_finite_bound": true
+    }
+  },
+  "nontrivial_frozen_generator_result": {
+    "preregistered_G5_cycle_vs_star_mean_ambiguity_area_hops": "REFUTED_OR_NOT_SUPPORTED",
+    "cycle_minus_star_mean_hops": -0.0390625,
+    "paired_count": 64,
+    "cycle_greater": 13,
+    "tie": 20,
+    "star_greater": 31,
+    "mean_ambiguity_hops": {
+      "complete": 0.17317708333333334,
+      "star": 0.333984375,
+      "directed_cycle": 0.294921875
+    },
+    "worlds_with_nonzero_ambiguity_width": 545,
+    "worlds_attaining_core_diameter_bound": 146,
+    "graphs_with_gap_increase_at_some_interior_horizon": 120,
+    "denominators": {
+      "graph_panels": 192,
+      "threshold_worlds": 2172
+    },
+    "G6_interior_rise_is": "predeclared descriptive count; not independently predicted sign or general law",
+    "interpretation": "Directed diameter bounds the largest per-world source-hop ambiguity window but does not rank its expectation across source-core topologies. Both possible and robust feasibility expand with H; their difference can rise before vanishing."
+  },
+  "scientific_boundaries": [
+    "Graph hops are not years, generations or actual dispersal events.",
+    "Counted threshold worlds are not calibrated probabilities.",
+    "Topology categories and optional edges are synthetic, not observed ecological networks.",
+    "The predeclared G5 directional hypothesis was refuted and retained; no parameter retuning.",
+    "These 192 panels are paired synthetic graph fixtures, not independent biological populations.",
+    "No current Glanville source tables re-scored and no EOG-WF fourth endpoint added."
+  ],
+  "eog_wf_frozen_scored": 3,
+  "eog_wf_scientific_stops": 31,
+  "eog_wf_administrative_exclusions": 3
+}
