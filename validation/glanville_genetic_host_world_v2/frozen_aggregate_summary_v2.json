@@ -1,0 +1,242 @@
+{
+  "schema_version": 2,
+  "science_status": "POST_EXPOSURE_GENETIC_HOST_WORLD_AUDITED",
+  "from_GitHub_PR": 708,
+  "evidence_provenance": {
+    "uploaded_genetic_Dryad_SHA256": "140e5361f9bced20a434bfee01bae6ce7c925e028718cdb9c6fd8aa635cc912a",
+    "original_2019_survey_Zenodo_archive_SHA256": "c70f43544f61e7273afebfa42ed1d488c3b945efe4d5c68e6557030087ee7fd9",
+    "source_ciphertext_SHA256": "5d3982dc125f1c0d318137aaad4afd6b766eb1bf8d98fa4f6c828fbb8fafdeab",
+    "cipher_public_key_SHA256": "304b9848ebeb97ec2852667f5307744540c4321ee57739ccc14bc9abd31364a5",
+    "archived_full_local_aggregate_SHA256_without_self_hash": "94ebcf0582361901a8aa847affad52beb42d68cb03ffeca9509e3891395d5f3a",
+    "reference_parent_crosswalk_fingerprint": "d8e70dc87e3ce6728827823bc28106757b6fcae3327727e72f92ed30e2d7be2e",
+    "original_sha_reverified_independently": true,
+    "original_2019_year_2008_2012_target_rosters_reproduced": true,
+    "independently_recomputed_with_separate_raw_data_implementation": true,
+    "second_impl_mismatch_count": 0
+  },
+  "scope": {
+    "n_selected_assignment_rows": 163,
+    "n_distinct_target_patch_years": 100,
+    "n_distinct_families_in_selected_rows": 157,
+    "n_distinct_directed_patch_year_pairs": 137,
+    "original_2022_genetic_all_family_assignment_rows": 799,
+    "original_2022_genetic_all_families": 760,
+    "original_2022_genetic_offpatch_rows": 498,
+    "original_EOG_2008_2012_target_patch_years": 1465,
+    "ascertainment": "GENECLASS2 genetically inferred origin against sampled prior-year reference patches; no original per-row assignment score exposed in input.",
+    "experiment_status": "post-outcome exploratory comparison, not new independent EOG-WF endpoint"
+  },
+  "n_selected_assignment_rows": 163,
+  "n_distinct_target_patch_years": 100,
+  "n_distinct_families_in_selected_rows": 157,
+  "two_host_delta_definition": "max(|Plantago_tminus1_source-Plantago_tminus1_target|,|Veronica_tminus1_source-Veronica_tminus1_target|) 0..3, based on Schulz 2019 survey not separate CSV host.x/host.y",
+  "genetic_selected_host_gap_counts": {
+    "0": 29,
+    "1": 67,
+    "2": 52,
+    "3": 15
+  },
+  "compatible_assigned_source_rows_by_delta": {
+    "0": 29,
+    "1": 96,
+    "2": 148,
+    "3": 163
+  },
+  "family_quality": {
+    "original_fullsib_families": 760,
+    "two_destinations": 39,
+    "one_stay_one_move": 21,
+    "both_move_to_other_destinations": 18,
+    "different_inferred_origin_label_between_split_family_parts": 1,
+    "interpretation": "DiLeo et al. (2022) assigned family portions sampled in different destination patches separately. This one discordance does not imply a true dual natal origin or a bad ID."
+  },
+  "target_equal_weighted_medians_km": {
+    "genetically_assigned_origin": 1.2111759609212878,
+    "nearest_EOG_source_without_host_restriction": 0.28437735285858057,
+    "paired_distance_difference_median": 0.7577241546814211
+  },
+  "measure_definition": {
+    "EOG_any_source_target_years": "Count of genetically selected distinct target patch-years whose closest (ANY) previous-year recorded-positive source has both two-host gap<=delta and Euclidean distance<=r",
+    "assigned_source_any_target_years": "Count of same selected target patch-years with AT LEAST ONE genetically inferred, EOG-eligible assigned source satisfying BOTH the same environment and radius",
+    "assigned_source_all_target_years": "Count where every genetically inferred assigned origin for that destination matches BOTH gates; multiple sampled family portions may differ",
+    "assignment_row_counts": "Family-destination assignment rows, not independent butterfly movements or independently sampled families",
+    "environmental_monotonicity": "Any-source coverage is structurally nested as delta and r increase; a gap between EOG existential and assigned specific source is not validation of individual origin"
+  },
+  "worlds": [
+    {
+      "delta": 0,
+      "r_km": 2,
+      "EOG_any_source_assignment_rows": 115,
+      "assigned_source_qualifying_assignment_rows": 22,
+      "EOG_any_source_target_years": 68,
+      "assigned_source_any_target_years": 17,
+      "assigned_source_all_target_years": 11,
+      "assigned_host_compatible_rows": 29,
+      "EOG_yes_but_assigned_no_assignment_rows": 93
+    },
+    {
+      "delta": 0,
+      "r_km": 5,
+      "EOG_any_source_assignment_rows": 142,
+      "assigned_source_qualifying_assignment_rows": 27,
+      "EOG_any_source_target_years": 83,
+      "assigned_source_any_target_years": 21,
+      "assigned_source_all_target_years": 15,
+      "assigned_host_compatible_rows": 29,
+      "EOG_yes_but_assigned_no_assignment_rows": 115
+    },
+    {
+      "delta": 1,
+      "r_km": 2,
+      "EOG_any_source_assignment_rows": 152,
+      "assigned_source_qualifying_assignment_rows": 75,
+      "EOG_any_source_target_years": 91,
+      "assigned_source_any_target_years": 50,
+      "assigned_source_all_target_years": 37,
+      "assigned_host_compatible_rows": 96,
+      "EOG_yes_but_assigned_no_assignment_rows": 77
+    },
+    {
+      "delta": 1,
+      "r_km": 5,
+      "EOG_any_source_assignment_rows": 161,
+      "assigned_source_qualifying_assignment_rows": 91,
+      "EOG_any_source_target_years": 98,
+      "assigned_source_any_target_years": 65,
+      "assigned_source_all_target_years": 46,
+      "assigned_host_compatible_rows": 96,
+      "EOG_yes_but_assigned_no_assignment_rows": 70
+    },
+    {
+      "delta": 2,
+      "r_km": 2,
+      "EOG_any_source_assignment_rows": 155,
+      "assigned_source_qualifying_assignment_rows": 106,
+      "EOG_any_source_target_years": 94,
+      "assigned_source_any_target_years": 69,
+      "assigned_source_all_target_years": 53,
+      "assigned_host_compatible_rows": 148,
+      "EOG_yes_but_assigned_no_assignment_rows": 49
+    },
+    {
+      "delta": 2,
+      "r_km": 5,
+      "EOG_any_source_assignment_rows": 163,
+      "assigned_source_qualifying_assignment_rows": 135,
+      "EOG_any_source_target_years": 100,
+      "assigned_source_any_target_years": 87,
+      "assigned_source_all_target_years": 77,
+      "assigned_host_compatible_rows": 148,
+      "EOG_yes_but_assigned_no_assignment_rows": 28
+    },
+    {
+      "delta": 3,
+      "r_km": 2,
+      "EOG_any_source_assignment_rows": 159,
+      "assigned_source_qualifying_assignment_rows": 112,
+      "EOG_any_source_target_years": 97,
+      "assigned_source_any_target_years": 72,
+      "assigned_source_all_target_years": 56,
+      "assigned_host_compatible_rows": 163,
+      "EOG_yes_but_assigned_no_assignment_rows": 47
+    },
+    {
+      "delta": 3,
+      "r_km": 5,
+      "EOG_any_source_assignment_rows": 163,
+      "assigned_source_qualifying_assignment_rows": 147,
+      "EOG_any_source_target_years": 100,
+      "assigned_source_any_target_years": 93,
+      "assigned_source_all_target_years": 86,
+      "assigned_host_compatible_rows": 163,
+      "EOG_yes_but_assigned_no_assignment_rows": 16
+    }
+  ],
+  "arrival_year_count_for_primary_2km": {
+    "delta1": [
+      {
+        "year": 2008,
+        "assignments": 6,
+        "targets": 5,
+        "EOG_any": 4,
+        "genetic_any": 3
+      },
+      {
+        "year": 2009,
+        "assignments": 24,
+        "targets": 16,
+        "EOG_any": 12,
+        "genetic_any": 5
+      },
+      {
+        "year": 2010,
+        "assignments": 9,
+        "targets": 9,
+        "EOG_any": 9,
+        "genetic_any": 6
+      },
+      {
+        "year": 2011,
+        "assignments": 83,
+        "targets": 48,
+        "EOG_any": 45,
+        "genetic_any": 24
+      },
+      {
+        "year": 2012,
+        "assignments": 41,
+        "targets": 22,
+        "EOG_any": 21,
+        "genetic_any": 12
+      }
+    ],
+    "delta3": [
+      {
+        "year": 2008,
+        "assignments": 6,
+        "targets": 5,
+        "EOG_any": 5,
+        "genetic_any": 5
+      },
+      {
+        "year": 2009,
+        "assignments": 24,
+        "targets": 16,
+        "EOG_any": 13,
+        "genetic_any": 11
+      },
+      {
+        "year": 2010,
+        "assignments": 9,
+        "targets": 9,
+        "EOG_any": 9,
+        "genetic_any": 6
+      },
+      {
+        "year": 2011,
+        "assignments": 83,
+        "targets": 48,
+        "EOG_any": 48,
+        "genetic_any": 35
+      },
+      {
+        "year": 2012,
+        "assignments": 41,
+        "targets": 22,
+        "EOG_any": 22,
+        "genetic_any": 15
+      }
+    ]
+  },
+  "no_site_ids_or_original_records_written": true,
+  "scientific_limitations": [
+    "Both EOG and genetic source restrictions condition on observed/sampled t-1 records, with imperfect detection and assignment selection.",
+    "An existential source witness is a lower-bound compatibility criterion, not a movement origin prediction.",
+    "Specific assigned origin is not guaranteed true birthplace; family subsets from different destinations were assigned independently.",
+    "A GENECLASS2 score=100 cutoff cited in the study cannot be independently audited from uploaded CSV, which lacks the score.",
+    "The 100 targets/157 families are nonrandom subset of 1465 EOG target patch-years.",
+    "The comparison is a post-exposure source-conditional description without independent predictive skill or environmental causal effect.",
+    "EOG-WF closed denominator remains 3 scored/31 scientific STOPs/3 administrative exclusions."
+  ],
+  "EOG_WF_new_endpoints": 0
+}
