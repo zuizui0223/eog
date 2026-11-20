@@ -1,0 +1,75 @@
+name: EOG toad release distance QC by nominal treatment arm (post-STOP v3)
+
+# Diagnostics after original scientific STOP; zero movement outcomes scored.
+on:
+  pull_request:
+    paths:
+      - 'validation/independent_toad_geocoordinate_diagnostic_v3/**'
+      - 'benchmarks/independent_toad_geocoordinate_treatment_qc_v3.py'
+      - 'tests/test_independent_toad_geocoordinate_treatment_qc_v3.py'
+      - '.github/workflows/eog-toad-nominal-treatment-qc-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-source-group-QC:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source QA dependencies
+        run: python -m pip install -e . pytest
+      - name: Test source locks, original STOP and synthetic treatment groups
+        run: |
+          python -m pytest -q \
+            tests/test_eog_independent_movement_source_gate_v2.py \
+            tests/test_independent_toad_source_anchor_geography_v1.py \
+            tests/test_independent_toad_geo_source_quality_diagnostic_v2.py \
+            tests/test_independent_toad_geocoordinate_treatment_qc_v3.py
+      - name: One source-locked treatment category QA (no biological score)
+        run: |
+          python -m benchmarks.independent_toad_geocoordinate_treatment_qc_v3 \
+            --protocol validation/independent_toad_geocoordinate_diagnostic_v3/protocol_v3.json \
+            --output results/independent_toad_geocoordinate_diagnostic_v3/receipt.json
+      - name: Preserve all treatment classes and original stop
+        run: |
+          python - <<'PY'
+          import json
+          p="results/independent_toad_geocoordinate_diagnostic_v3/receipt.json"
+          z=json.load(open(p,encoding="utf-8"))
+          assert z["original_scientific_stop"]=="STOP_GEO_UNIT_CONCORDANCE"
+          assert z["original_stop_overridden"] is False
+          assert z["new_eog_wf_endpoints"]==0
+          assert z["no_row_level_data_exported"] is True
+          assert z["biological_movement_scored"] is False
+          if z["status"]=="POST_EXPOSURE_TREATMENT_STRATIFIED_COORDINATE_QC_ONLY":
+              assert z["source_unique_rows"]==163
+              assert z["original_165_rows"]==165
+              assert z["grand_totals"]=={
+                  "release_final_numeric_rows":163,
+                  "release_final_matches":77,
+                  "capture_final_numeric_rows":163,
+                  "capture_final_matches":163,
+              }
+              assert [x["nominal_translocated_distance_m"] for x in z["categories"]]==[
+                  "0","100","250","500","other_or_missing"]
+              assert sum(x["all_original_deduplicated_rows"] for x in z["categories"])==163
+              print("SOURCE_ONLY_STRATIFIED_QC_COMPLETED_STOP_IMMUTABLE")
+          else:
+              print("SCIENTIFIC_SOURCE_QC_STOP="+z["status"])
+              raise SystemExit("original source QC gate remains STOP; do not repair")
+          print("SOURCE_QC_RECEIPT_SHA256="+z["sha256_without_self"])
+          PY
+      - name: Preserve aggregate-only diagnostic (no original individual data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-toad-nominal-treatment-qc-v3-aggregate
+          path: results/independent_toad_geocoordinate_diagnostic_v3/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
