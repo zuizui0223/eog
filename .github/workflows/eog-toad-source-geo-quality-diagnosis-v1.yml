@@ -1,0 +1,59 @@
+name: EOG toad original distance-coordinate QC STOP diagnosis (NO H1 rescoring)
+
+# Original H1 is irreversibly STOP_GEO_UNIT_CONCORDANCE from run 44756566395.
+# Do not derive or score biological toad movement effects here.
+on:
+  pull_request:
+    paths:
+      - 'validation/independent_toad_coordinate_diagnosis_v1/protocol_v1.json'
+      - 'scripts/eog_toad_source_coordinate_quality_diagnosis_v1.py'
+      - 'tests/test_eog_toad_source_coordinate_quality_diagnosis_v1.py'
+      - '.github/workflows/eog-toad-source-geo-quality-diagnosis-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-coordinate-quality-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source-quality test runner only
+        run: python -m pip install -e . pytest
+      - name: Recheck offline quality STOP and value-redaction unit tests
+        run: |
+          python -m pytest -q \
+            tests/test_eog_toad_source_coordinate_quality_diagnosis_v1.py \
+            tests/test_independent_toad_source_anchor_geography_v1.py
+      - name: One SHA-locked publisher file read for quality fields only
+        run: |
+          python -m scripts.eog_toad_source_coordinate_quality_diagnosis_v1 \
+            --protocol validation/independent_toad_coordinate_diagnosis_v1/protocol_v1.json \
+            --output results/independent_toad_coordinate_diagnosis_v1/receipt.json
+      - name: Preserve immutable original H1 non-score and audit only aggregate counts
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('results/independent_toad_coordinate_diagnosis_v1/receipt.json'))
+          assert r['primary_H1_rescored'] is False
+          assert r['biological_effect_computed'] is False
+          assert r['new_EOG_WF_endpoints']==0
+          assert r['parent_H1_status']=='NOT_SCORED_GEO_UNIT_CONCORDANCE_STOP'
+          print('GEO_SOURCE_QUALITY_DIAGNOSTIC='+r['status'])
+          print('ROW_QC_COUNTS='+str(r.get('row_quality_denominators')))
+          print('FROZEN_ORIGINAL_CONCORDANCE='+str(r.get('frozen_original_distance_concordance')))
+          print('QC_DIAGNOSTIC_SHA256='+r['sha256_without_self_field'])
+          PY
+      - name: Save only aggregate source-quality receipt, no raw rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-toad-source-geo-quality-diagnostic-only
+          path: results/independent_toad_coordinate_diagnosis_v1/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
