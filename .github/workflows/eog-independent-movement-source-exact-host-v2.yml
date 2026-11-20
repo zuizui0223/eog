@@ -33,7 +33,7 @@ jobs:
             tests/test_eog_independent_movement_redirect_host_v1.py
       - name: One source-only publisher ZIP download, exact host + pinned SHA256
         run: |
-          python scripts/eog_independent_movement_source_gate_v2.py \
+          python -m scripts.eog_independent_movement_source_gate_v2 \
             --protocol validation/independent_movement_source_gate_v2/protocol_v2.json \
             --output results/independent_movement_source_gate_v2/receipt.json
       - name: Enforce non-scoring, publish headers only and retain scientific STOP
