@@ -1,0 +1,235 @@
+{
+  "schema": "eog.toad_reported_release_distance_signed_encoding_v4.frozen_aggregate",
+  "status": "POST_EXPOSURE_DATA_ENCODING_QC_CONFIRMED_SIGNED_EUCLIDEAN_WITHIN_FROZEN_TOLERANCE",
+  "original_scientific_stop": "STOP_GEO_UNIT_CONCORDANCE",
+  "original_H1_result": "NOT_SCORED_SOURCE_QUALITY_STOP",
+  "original_STOP_retained": true,
+  "protocol_first_commit": "f6c7004378d59646f28e69e60b20edeb106e31c1",
+  "source": {
+    "doi": "10.5061/dryad.x3ffbg7ms",
+    "version_id": 198534,
+    "csv_sha256": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+    "original_published_rows": 165,
+    "deduplicated_eligible_rows": 163,
+    "readme_sha256": "3d7b240bf323bb19fe32e57d99b8029e212d1da15d85c02b457a1d74053b3c5c"
+  },
+  "execution": {
+    "run_id": 44838880057,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44838880057",
+    "conclusion": "success",
+    "artifact_id": 14680295214,
+    "artifact_name": "eog-toad-release-distance-signed-qc-v4",
+    "artifact_zip_sha256": "13a9fc0db07cb13631fa4fc0787b53710159acbeb4a1df3329b6e09987c5e5d3",
+    "receipt_sha256": "fc983905b8ac1d5a49b062966d713239fbe19939aadd612a4776d97cb8207353"
+  },
+  "original_frozen_geometry": {
+    "published_unsigned_release_final_matching_rows": 77,
+    "published_capture_final_matching_rows": 163,
+    "denominator": 163
+  },
+  "signed_source_encoding": {
+    "formula": "sign(Final_Easting - Released_Easting) * hypot(Final_Easting - Released_Easting, Final_Northing - Released_Northing)",
+    "tolerance": "original max(2m,5% radial Euclidean distance), NOT tightened or tuned",
+    "signed_easting_radial_matches": 163,
+    "signed_easting_radial_total": 163,
+    "signed_by_original_direction_moved_matches": 163,
+    "signed_easting_component_matches": 151,
+    "reversed_signed_distance_matches": 0,
+    "original_unsigned_distance_matches": 77,
+    "movement_direction_easting_sign_counts": {
+      "E|positive": 77,
+      "W|negative": 86
+    },
+    "candidate_formula_full_audit": {
+      "reverse_signed_easting_component": {
+        "eligible_formula_rows": 163,
+        "match_fraction": 0,
+        "matched": 0
+      },
+      "signed_by_direction_moved_E_positive": {
+        "eligible_formula_rows": 163,
+        "match_fraction": 1,
+        "matched": 163
+      },
+      "signed_by_direction_moved_W_positive": {
+        "eligible_formula_rows": 163,
+        "match_fraction": 0,
+        "matched": 0
+      },
+      "signed_easting_component": {
+        "eligible_formula_rows": 163,
+        "match_fraction": 0.9263803680981595,
+        "matched": 151
+      },
+      "signed_easting_east_positive": {
+        "eligible_formula_rows": 163,
+        "match_fraction": 1,
+        "matched": 163
+      },
+      "signed_easting_west_positive": {
+        "eligible_formula_rows": 163,
+        "match_fraction": 0,
+        "matched": 0
+      },
+      "unsigned_euclidean_reference": {
+        "eligible_formula_rows": 163,
+        "match_fraction": 0.4723926380368098,
+        "matched": 77
+      }
+    },
+    "nominal_signed_class_results": [
+      {
+        "nominal_class": "-500",
+        "source_rows": 15,
+        "translocation_direction_codes": {
+          "W": 15
+        },
+        "movement_direction_codes": {
+          "E": 13,
+          "W": 2
+        },
+        "published_release_signed_counts": {
+          "negative": 2,
+          "positive": 13
+        },
+        "original_unsigned_RF_matched": 13,
+        "signed_easting_radial_matched": 15,
+        "signed_direction_label_radial_matched": 15
+      },
+      {
+        "nominal_class": "-250",
+        "source_rows": 13,
+        "translocation_direction_codes": {
+          "W": 13
+        },
+        "movement_direction_codes": {
+          "E": 10,
+          "W": 3
+        },
+        "published_release_signed_counts": {
+          "negative": 3,
+          "positive": 10
+        },
+        "original_unsigned_RF_matched": 10,
+        "signed_easting_radial_matched": 13,
+        "signed_direction_label_radial_matched": 13
+      },
+      {
+        "nominal_class": "-100",
+        "source_rows": 24,
+        "translocation_direction_codes": {
+          "W": 24
+        },
+        "movement_direction_codes": {
+          "E": 22,
+          "W": 2
+        },
+        "published_release_signed_counts": {
+          "negative": 2,
+          "positive": 22
+        },
+        "original_unsigned_RF_matched": 22,
+        "signed_easting_radial_matched": 24,
+        "signed_direction_label_radial_matched": 24
+      },
+      {
+        "nominal_class": "0",
+        "source_rows": 61,
+        "translocation_direction_codes": {
+          "E": 28,
+          "W": 33
+        },
+        "movement_direction_codes": {
+          "E": 28,
+          "W": 33
+        },
+        "published_release_signed_counts": {
+          "negative": 33,
+          "positive": 28
+        },
+        "original_unsigned_RF_matched": 28,
+        "signed_easting_radial_matched": 61,
+        "signed_direction_label_radial_matched": 61
+      },
+      {
+        "nominal_class": "100",
+        "source_rows": 26,
+        "translocation_direction_codes": {
+          "E": 26
+        },
+        "movement_direction_codes": {
+          "E": 3,
+          "W": 23
+        },
+        "published_release_signed_counts": {
+          "negative": 23,
+          "positive": 3
+        },
+        "original_unsigned_RF_matched": 3,
+        "signed_easting_radial_matched": 26,
+        "signed_direction_label_radial_matched": 26
+      },
+      {
+        "nominal_class": "250",
+        "source_rows": 13,
+        "translocation_direction_codes": {
+          "E": 13
+        },
+        "movement_direction_codes": {
+          "E": 1,
+          "W": 12
+        },
+        "published_release_signed_counts": {
+          "negative": 12,
+          "positive": 1
+        },
+        "original_unsigned_RF_matched": 1,
+        "signed_easting_radial_matched": 13,
+        "signed_direction_label_radial_matched": 13
+      },
+      {
+        "nominal_class": "500",
+        "source_rows": 11,
+        "translocation_direction_codes": {
+          "E": 11
+        },
+        "movement_direction_codes": {
+          "W": 11
+        },
+        "published_release_signed_counts": {
+          "negative": 11
+        },
+        "original_unsigned_RF_matched": 0,
+        "signed_easting_radial_matched": 11,
+        "signed_direction_label_radial_matched": 11
+      },
+      {
+        "nominal_class": "other_or_missing",
+        "source_rows": 0,
+        "translocation_direction_codes": {},
+        "movement_direction_codes": {},
+        "published_release_signed_counts": {},
+        "original_unsigned_RF_matched": 0,
+        "signed_easting_radial_matched": 0,
+        "signed_direction_label_radial_matched": 0
+      }
+    ],
+    "negative_nominal_movement_classes": "-100,-250,-500 observed, each with original Translocated direction=W",
+    "positive_nominal_movement_classes": "100,250,500 observed, each with original Translocated direction=E",
+    "control_zero_nominal_class": "61 rows; Direction moved/Translocated direction E28 W33",
+    "source_readme_explicitly_documents_signed_release_final": false,
+    "source_encoding_diagnosis": "The published release-final field is sign-coded by east/west movement direction. The previous 86/163 numerical mismatches arise when that signed field is tested as nonnegative Euclidean magnitude.",
+    "independent_field_revalidation": false
+  },
+  "scientific_boundaries": [
+    "This v4 was designed after v2/v3 source-QC mismatch pattern was inspected; its 163/163 match cannot constitute prospective ecological validation.",
+    "Published README defines location roles and metric UTM distances but does not explicitly document the sign convention; the convention is empirically inferred from the source rows and corresponding E/W labels under original tolerance.",
+    "A release-final field signed by movement direction is a data encoding property, not a movement ecology causal effect or ancestral founder record.",
+    "Original H1 was not scored; never rewrite original STOP as success or fit homing with these already-opened events.",
+    "Full source CSV, individual identifiers, coordinates, exact dates, per-animal movements and source reprocessed scores never leave the ephemeral runner.",
+    "EOG-WF initial closed 3 scored /31 scientific STOP/3 administrative exclusion denominator unchanged."
+  ],
+  "field_responses_scored": 0,
+  "new_EOG_WF_endpoints": 0,
+  "original_stop_overridden": false
+}

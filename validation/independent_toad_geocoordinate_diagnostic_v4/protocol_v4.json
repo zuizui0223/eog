@@ -1,0 +1,109 @@
+{
+  "schema": "eog.toad_published_release_distance_signed_encoding_v4.protocol",
+  "status": "PRE_SIGNED_FORMULA_TEST_FROZEN_POST_QC_EXPOSURE",
+  "base_main_sha": "a51ed6b52172a3d517ea99f4d70b6c4ad9f1b094",
+  "rationale": "The earlier original STOP is 77/163 release-final versus 163/163 capture-final geometry. Post-exposure nominal group QC found only 4/50 matches among positive nominal translocation rows but 45/52 among uncategorized numeric/missing rows; release distance may be signed by geographic movement direction. Test that explanation only as source-provenance QC, not a prospective biological hypothesis.",
+  "parent_source": {
+    "doi": "10.5061/dryad.x3ffbg7ms",
+    "version_id": 198534,
+    "csv_name": "Jreidini_and_Green_homing_toads_2021.csv",
+    "csv_sha256": "c8ee049eb807af31660ffa28e11f6a66b07a85a5dda4e756bb1b06610edb3f17",
+    "bytes": 18702,
+    "rows": 165,
+    "source_transfer": "scripts.eog_independent_movement_source_gate_v2._version_zip",
+    "source_member": "benchmarks.independent_toad_source_anchor_geography_v1._verified_member",
+    "source_rows": "benchmarks.independent_toad_source_anchor_geography_v1._as_rows"
+  },
+  "immutable_previous_evidence": {
+    "original_scientific_stop": "STOP_GEO_UNIT_CONCORDANCE",
+    "original_H1": "NOT_SCORED_SOURCE_QUALITY_STOP",
+    "eligible_rows_after_dedup": 163,
+    "release_final_abs_match": 77,
+    "capture_final_abs_match": 163,
+    "category_aggregate_fingerprint": "74cb98c081a05f54c4780c87042c20e273aa4f0fad8765a6d35b5fc4ffe2fa43",
+    "category_summary_source": "validation/independent_toad_geocoordinate_diagnostic_v3/frozen_aggregate_summary_v3.json",
+    "publisher_readme_sha256": "3d7b240bf323bb19fe32e57d99b8029e212d1da15d85c02b457a1d74053b3c5c",
+    "readme_note": "README describes UTM distance in meters; it does NOT explicitly document a signed release-final formula."
+  },
+  "signed_formulas": {
+    "for_each_eligible_row": "ΔE=Final Easting−Released Easting, ΔN=Final Northing−Released Northing, r=sqrt(ΔE²+ΔN²), direction field=Direction moved",
+    "candidates": [
+      {
+        "id": "unsigned_euclidean_reference",
+        "definition": "r (original frozen expected source interpretation)"
+      },
+      {
+        "id": "signed_easting_east_positive",
+        "definition": "sign(ΔE) * r (0 if ΔE=0)"
+      },
+      {
+        "id": "signed_easting_west_positive",
+        "definition": "-sign(ΔE) * r"
+      },
+      {
+        "id": "signed_easting_component",
+        "definition": "ΔE"
+      },
+      {
+        "id": "reverse_signed_easting_component",
+        "definition": "-ΔE"
+      },
+      {
+        "id": "signed_by_direction_moved_E_positive",
+        "definition": "r when Direction moved=E, -r when W; N/A/other is ineligible for THIS formula only and remains in master denominator"
+      },
+      {
+        "id": "signed_by_direction_moved_W_positive",
+        "definition": "-r when Direction moved=E, r when W; N/A/other is ineligible for THIS formula only"
+      }
+    ],
+    "tolerance": "Keep original max(2 meters, 0.05*r); identical denominator for all formulas with geographic direction; per-source reported distance cannot be rescored after selection",
+    "sign_method": "If ΔE>0 then +1, if ΔE<0 then -1, if ΔE=0 then 0; no outcome-based tolerance adjustment",
+    "release_final_reported_column": "Distance release-final (m)",
+    "capture_final_reference_column": "Distance capture-final (m)",
+    "all_candidate_formulas_must_be_reported": true,
+    "no_choose_best_formula_to_update_original_H1": true
+  },
+  "metadata_partitions": {
+    "signed_original_nominal_distance": [
+      "-500",
+      "-250",
+      "-100",
+      "0",
+      "100",
+      "250",
+      "500",
+      "other_or_missing"
+    ],
+    "translocated_direction_codes": [
+      "E",
+      "W",
+      "missing_or_other"
+    ],
+    "movement_direction_codes": [
+      "E",
+      "W",
+      "missing_or_other"
+    ],
+    "summary_for_each": "source group count, original unsigned release-final match, each signed formula match count/denominator, sign agreement with reported distance by movement direction",
+    "controls": "All 0m rows retained; do not infer movement or homing from sign",
+    "sign_of_published_distance": "Count values negative/zero/positive by original published Translocated distance and Direction moved only as source encoding; no per-row exports"
+  },
+  "outputs": [
+    "all 163 original qualifying records retained, regardless of sign/direction",
+    "counts and match fractions per frozen formula on all eligible source rows",
+    "cross-tabs of signed nominal distance and translocation E/W codes",
+    "source fidelity and discrepancy summary at original 95% limit",
+    "aggregate-only, suppress residual quantiles below n=5",
+    "even near-perfect signed formula is interpretive source-quality evidence, not retrospective permission to score H1"
+  ],
+  "failure_rules": [
+    "original CSV SHA/bytes/165-row check must pass",
+    "exact parent 77/163 and 163/163 geometric baseline must pass",
+    "unknown nonmissing direction codes retained as missing_or_other, not removed",
+    "nonfinite numeric values STOP except original missing tokens",
+    "if signed formula fails to explain all rows, report failure without adding new candidates",
+    "no EOG-WF new endpoint, no author claim of published migration effect, original H1 unchanged"
+  ],
+  "test_type": "Post-exposure diagnostic on same already inspected published source; no independent biological replication"
+}
