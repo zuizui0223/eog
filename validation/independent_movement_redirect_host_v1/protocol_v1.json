@@ -34,13 +34,14 @@
     }
   ],
   "methods": {
-    "request": "one no-follow HEAD request to each frozen official Dryad download URL, with fallback to a single no-follow GET on the same endpoint ONLY if HEAD returns 405 or 501; never read payload bytes",
+    "request": "Up to three no-follow HEAD requests per source, following ONLY HTTPS redirects on the SAME official datadryad.org host, stopping before any different host; fallback to one no-follow GET on an official same-host URL only when HEAD responds 405 or 501. Never read response-body bytes.",
     "redirect_capture": "record HTTP status and Location hostname only; strip query, signed URL and user info; do not follow external locations",
     "permitted_initial_host": "datadryad.org",
     "max_host_length": 255,
     "request_timeout_sec": 25,
-    "attempts_per_source": "one HEAD and at most one GET fallback for method-only HTTP 405/501",
-    "no_download_in_this_stage": true
+    "attempts_per_source": "max three same-host HEAD hops and one method-fallback GET, no retries of failed requests; no external redirection followed",
+    "no_download_in_this_stage": true,
+    "max_same_host_head_hops": 3
   },
   "scientific_stop_rules": [
     "redirect destination host is diagnostic only; NEVER classify source schema qualified on redirect alone",
@@ -54,5 +55,6 @@
     "only_source_ids_status_http_codes_hostname_no_query": true,
     "biological_rows_read": 0,
     "new_eogwf_endpoints": 0
-  }
+  },
+  "pre_score_amendment": "Add a maximum of three official SAME-host HEAD-only hops so internal Dryad redirect chains cannot hide the true external CDN host. Made before first diagnostic request; does not open any biological content."
 }
