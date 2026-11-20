@@ -97,3 +97,21 @@ def test_dryad_v2_embedded_file_identity_from_self_link():
     assert files["sowing_experiment.csv"]["status"]=="MANIFEST_OK"
     assert files["sowing_experiment.csv"]["download_url"]=="https://datadryad.org/api/v2/files/189450/download"
     assert events[0]["status"]=="HTTP_200"
+
+
+def test_dryad_bearer_is_unredirected_and_not_used_for_metadata(monkeypatch):
+    from urllib.error import HTTPError
+    monkeypatch.setenv("DRYAD_TOKEN", "testing_only_not_real")
+    calls=[]
+    def fake_urlopen(request, timeout):
+        calls.append(request)
+        raise HTTPError(request.full_url,401,"Unauthorized",{},None)
+    monkeypatch.setattr(mod,"urlopen",fake_urlopen)
+    raw,status=mod.get_bytes("https://datadryad.org/api/v2/files/123/download",300)
+    assert raw is None and status=="HTTP_401"
+    assert calls[-1].unredirected_hdrs.get("Authorization")=="Bearer testing_only_not_real"
+    assert calls[-1].headers.get("Authorization") is None
+    _,status=mod.get_bytes(mod.API,300)
+    assert status=="HTTP_401"
+    assert "Authorization" not in calls[-1].unredirected_hdrs
+    monkeypatch.delenv("DRYAD_TOKEN",raising=False)
