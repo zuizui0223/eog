@@ -1,5 +1,7 @@
 # Independent toad coordinate-source quality diagnostic v2
 
+> **原典ドキュメント監査（2026-11-21）:** [公式Dryad README (SHA確認)と原著の比較](toad_release_distance_publisher_readme_v1.md)で、初回・放逐・最終座標はいずれもUTMで、距離列はUTM由来のメートル単位と確認。READMEにrelease-final不一致86件を説明する特別処理は記されておらず、元のSTOPを維持する。
+
 > **実行済み（2026-11-20、事後QC）:** [専用Actions #44759696421](https://github.com/zuizui0223/eog/actions/runs/44759696421) は成功し、[18セルの凍結集計・ソースSHA・STOP証跡](../validation/independent_toad_geocoordinate_diagnostic_v2/frozen_aggregate_summary_v2.json) を保存した。**元の `STOP_GEO_UNIT_CONCORDANCE` とH1未評価は不変。** 原CSV165行、完全重複除去後163行、82個体ID（個体情報は保存していない）。
  
 | 元の報告距離 | 凍結した座標ペア | 原95%閾値での一致 | 残差中央値 / q90 |
