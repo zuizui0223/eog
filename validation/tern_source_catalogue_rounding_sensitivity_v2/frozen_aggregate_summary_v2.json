@@ -1,0 +1,182 @@
+{
+  "schema": "eog.tern_source_catalogue_rounding_sensitivity_v2.frozen_aggregate",
+  "status": "SOURCE_SHA_VERIFIED_POST_EXPOSURE_SOURCE_CATALOGUE_QC_COMPLETED",
+  "science_scope": "One already analyzed 2026 published Arctic tern ringing-derived event archive, source-provenance and coordinate catalogue sensitivity only; NOT independent prospective ecological replication.",
+  "protocol": {
+    "first_branch_commit": "9962015ca4539fdfe2d1cdf06a487cf131b345f0",
+    "parent_protocol": "validation/tern_known_origin_geographic_minrelax_v1/protocol_v1.json",
+    "original_parent_receipt_without_self": "feaad217d8b105af4fddae81d50055a30a3e259f2716bbdc0100b1a7d878b68f",
+    "amendment": "No protocol, numerical metric, source, cutoff, or scenario was changed after opening v2 responses.",
+    "fixed_pre_v2_baseline": {
+      "adult_R20_false_assurance": 10,
+      "natal_R20_false_assurance": 188,
+      "combined_R20_false_assurance": 198,
+      "combined_R20_rounding_conservative": 180,
+      "actual_source_R20_infeasible_events": 224,
+      "adult_event_rows": 87,
+      "natal_event_rows": 491,
+      "prior_catalog_sites": 115
+    }
+  },
+  "original_source": {
+    "doi": "10.5061/dryad.x69p8czxh",
+    "published_version_id": 466530,
+    "adult_publisher_original_rows": 200,
+    "natal_publisher_original_rows": 890,
+    "original_publication_data_SHA_verified": true,
+    "all_original_publisher_distance_QC_rows_verified": 1090,
+    "publisher_original_source_data_individual_ID_known": false,
+    "coordinate_precision": "0.01 degree WGS84",
+    "original_catalogue": "only original published departure coords from event year <=1975"
+  },
+  "source_QC_execution": {
+    "first_failed_ci_run_id": 44849704301,
+    "first_failed_ci_cause": "Synthetic test stopped because new code tried to read Earth radius key from v2 frozen_metrics, whereas the exact 6371.0088 km value is frozen in parent v1 protocol.",
+    "repair": "Read constant source v1 Earth radius only after checking the parent value is unchanged; no source/result/sample cutoff/alternative scenario edited.",
+    "successful_ci_run_id": 44849822470,
+    "successful_ci_url": "https://github.com/zuizui0223/eog/actions/runs/44849822470",
+    "conclusion": "success",
+    "artifact_id": 14684279084,
+    "artifact_name": "eog-tern-catalogue-coincident-geometry-v2-aggregate",
+    "artifact_zip_sha256": "bdc62d122d91fe1ab245390a844422fe7abe7b49bee231958d180ae1cd8d8ff6",
+    "canonical_result_SHA256_without_self": "c4a46092c9f5bbffc4fe37a4a6d0c53c2cd2d874fbcf0fbc591eb245b9768579"
+  },
+  "primary_fixed_R20_results": [
+    {
+      "adult_R20_false_assurance": 10,
+      "adult_earlier_source_sites": 115,
+      "combined_R20_false_assurance": 198,
+      "combined_R20_rounding_conservative": 180,
+      "natal_R20_false_assurance": 188,
+      "natal_earlier_source_sites": 115,
+      "number_of_possible_zero_radius_events": 475,
+      "relative_to_parent_baseline_removed": 0,
+      "scenario": "v1_exact_baseline"
+    },
+    {
+      "adult_R20_false_assurance": 8,
+      "adult_earlier_source_sites": 115,
+      "combined_R20_false_assurance": 171,
+      "combined_R20_rounding_conservative": 154,
+      "natal_R20_false_assurance": 163,
+      "natal_earlier_source_sites": 115,
+      "number_of_possible_zero_radius_events": 0,
+      "relative_to_parent_baseline_removed": 27,
+      "scenario": "exclude_exact_destination_coordinate"
+    },
+    {
+      "adult_R20_false_assurance": 8,
+      "adult_earlier_source_sites": 115,
+      "combined_R20_false_assurance": 170,
+      "combined_R20_rounding_conservative": 153,
+      "natal_R20_false_assurance": 162,
+      "natal_earlier_source_sites": 115,
+      "number_of_possible_zero_radius_events": 0,
+      "relative_to_parent_baseline_removed": 28,
+      "scenario": "source_nonlocal_2km"
+    },
+    {
+      "adult_R20_false_assurance": 8,
+      "adult_earlier_source_sites": 115,
+      "combined_R20_false_assurance": 159,
+      "combined_R20_rounding_conservative": 142,
+      "natal_R20_false_assurance": 151,
+      "natal_earlier_source_sites": 115,
+      "number_of_possible_zero_radius_events": 0,
+      "relative_to_parent_baseline_removed": 39,
+      "scenario": "source_nonlocal_5km"
+    },
+    {
+      "adult_R20_false_assurance": 7,
+      "adult_earlier_source_sites": 115,
+      "combined_R20_false_assurance": 131,
+      "combined_R20_rounding_conservative": 113,
+      "natal_R20_false_assurance": 124,
+      "natal_earlier_source_sites": 115,
+      "number_of_possible_zero_radius_events": 0,
+      "relative_to_parent_baseline_removed": 67,
+      "scenario": "source_nonlocal_10km"
+    },
+    {
+      "adult_R20_false_assurance": 6,
+      "adult_earlier_source_sites": 31,
+      "combined_R20_false_assurance": 131,
+      "combined_R20_rounding_conservative": 123,
+      "natal_R20_false_assurance": 125,
+      "natal_earlier_source_sites": 31,
+      "number_of_possible_zero_radius_events": 145,
+      "relative_to_parent_baseline_removed": 67,
+      "scenario": "older_departures_through_1970"
+    },
+    {
+      "adult_R20_false_assurance": 3,
+      "adult_earlier_source_sites": 6,
+      "combined_R20_false_assurance": 78,
+      "combined_R20_rounding_conservative": 71,
+      "natal_R20_false_assurance": 75,
+      "natal_earlier_source_sites": 6,
+      "number_of_possible_zero_radius_events": 43,
+      "relative_to_parent_baseline_removed": 120,
+      "scenario": "older_departures_through_1965"
+    },
+    {
+      "adult_R20_false_assurance": 7,
+      "adult_earlier_source_sites": 61,
+      "combined_R20_false_assurance": 164,
+      "combined_R20_rounding_conservative": 154,
+      "natal_R20_false_assurance": 157,
+      "natal_earlier_source_sites": 61,
+      "number_of_possible_zero_radius_events": 360,
+      "relative_to_parent_baseline_removed": 34,
+      "scenario": "source_site_with_two_earlier_departure_events"
+    },
+    {
+      "adult_R20_false_assurance": 6,
+      "adult_earlier_source_sites": 49,
+      "combined_R20_false_assurance": 185,
+      "combined_R20_rounding_conservative": 173,
+      "natal_R20_false_assurance": 179,
+      "natal_earlier_source_sites": 93,
+      "number_of_possible_zero_radius_events": 312,
+      "relative_to_parent_baseline_removed": 13,
+      "scenario": "same_published_event_table_source_only"
+    },
+    {
+      "adult_R20_false_assurance": 0,
+      "adult_earlier_source_sites": 0,
+      "combined_R20_false_assurance": 0,
+      "combined_R20_rounding_conservative": 0,
+      "natal_R20_false_assurance": 0,
+      "natal_earlier_source_sites": 0,
+      "number_of_possible_zero_radius_events": 0,
+      "relative_to_parent_baseline_removed": 198,
+      "scenario": "no_alternative_source_negative_control"
+    }
+  ],
+  "quantified_artefact": {
+    "zero_radius_possible_events_baseline": 475,
+    "zero_radius_possible_events_after_exact_exclusion": 0,
+    "original_false_assurance_events": 198,
+    "false_assurance_remaining_without_rounded_coincidence": 171,
+    "false_assurance_removed_by_rounded_coincidence_only": 27,
+    "proportion_of_original_R20_false_assurance_remaining_without_coincident_sources": 0.8636363636363636,
+    "proportion_of_known_source_R20_infeasible_remaining": 0.7633928571428571
+  },
+  "fixed_R20_interpretation": {
+    "source_agnostic_optimism_is_not_exclusively_a_coordinate_coincidence_artefact": "171 of the 198 baseline false assurances remain when exact rounded-coincident source points are excluded (154 survive 2km margin).",
+    "source_roster_size_matters": "Under the older 1965-only 6-point index, the 20km false-assurance count is 78, not 198. This is retrospectively selected departure source catalogue opportunity, not verified source occupancy.",
+    "nonlocal_10km": "131 out of 224 originally known-departure R20-infeasible movements still have an eligible alternative source between >=10km and <=20km of arrival under this artificial spatial exclusion (113 survive margin).",
+    "important_negative_control": "An empty alternative catalogue yields zero source ambiguity, by set definition, not independent ecological evidence.",
+    "special_warning": "Removing an exact/coincident candidate only removes the subset for which no other eligible near source explains the same target. The 27 difference must not be interpreted as count of all event rows with coincident catalogues.",
+    "asof_1975_caveat": "The source catalogue is derived from published movement event years, not verified contemporaneous prior knowledge or colony occupancy. Earlier cutoff does not fix that provenance uncertainty."
+  },
+  "original_stop_or_response_retuned": false,
+  "no_new_eog_wf_endpoint": true,
+  "no_new_eog_wf_scored_endpoints": 0,
+  "EOG_WF_closed": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  },
+  "raw_original_event_rows_exported": 0
+}

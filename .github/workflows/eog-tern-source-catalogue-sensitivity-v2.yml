@@ -1,0 +1,77 @@
+name: EOG Arctic tern post-exposure source catalogue co-location audit v2
+
+# Does NOT change baseline source-locked geographic MRR or frozen predictive EOG-WF.
+# Full original Dryad publisher file SHA roster checked before one archive read.
+on:
+  pull_request:
+    paths:
+      - 'validation/tern_source_catalogue_rounding_sensitivity_v2/**'
+      - 'benchmarks/tern_source_catalogue_rounding_sensitivity_v2.py'
+      - 'tests/test_tern_source_catalogue_rounding_sensitivity_v2.py'
+      - '.github/workflows/eog-tern-source-catalogue-sensitivity-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-catalogue-artifact-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local package and pytest
+        run: python -m pip install -e . pytest
+      - name: Verify original source and new frozen source-catalogue controls
+        run: |
+          python -m pytest -q \
+            tests/test_eog_tern_published_source_metadata_gate_v1.py \
+            tests/test_tern_known_origin_geographic_minrelax_v1.py \
+            tests/test_tern_source_catalogue_rounding_sensitivity_v2.py
+      - name: Source SHA-pinned public event read and all 10 prespecified sensitivity cases
+        run: |
+          python -m benchmarks.tern_source_catalogue_rounding_sensitivity_v2 \
+            --protocol validation/tern_source_catalogue_rounding_sensitivity_v2/protocol_v2.json \
+            --output results/tern_source_catalogue_rounding_sensitivity_v2/aggregate.json
+      - name: Fail closed on original result mismatch; preserve unfavourable sensitivity
+        run: |
+          python - <<'PY'
+          import json
+          p="results/tern_source_catalogue_rounding_sensitivity_v2/aggregate.json"
+          result=json.load(open(p,encoding="utf-8"))
+          if result["status"].startswith("STOP_"):
+              print("TERN_SOURCE_SENSITIVITY_SCIENTIFIC_STOP",result["status"])
+              print("NO_NEW_PREDICTIVE_ENDPOINT")
+              raise SystemExit("Source-sensitive robustness diagnostic failed: preserve STOP and diagnose")
+          assert result["status"]=="POST_EXPOSURE_SOURCE_CATALOGUE_SENSITIVITY_COMPLETED_NOT_NEW_ECOLOGY"
+          assert result["new_EOG_WF_endpoints"]==0
+          assert result["source_asof_verified"] is False
+          assert result["exact_parent_replication_pass"] is True
+          assert result["no_alt_source_negative_control_pass"] is True
+          assert result["source_roster_and_floor_monotonicity_pass"] is True
+          assert result["frozen_scenario_count"]==10
+          assert result["group_holdout_denominators"]=={"breeding_adult":87,"natal_chick":491}
+          vals=result["primary_R20_scenario_comparison"]
+          assert len(vals)==10
+          assert vals[0]["scenario"]=="v1_exact_baseline"
+          assert vals[0]["adult_R20_false_assurance"]==10
+          assert vals[0]["natal_R20_false_assurance"]==188
+          assert vals[0]["combined_R20_false_assurance"]==198
+          assert vals[0]["combined_R20_rounding_conservative"]==180
+          assert vals[-1]["combined_R20_false_assurance"]==0
+          assert result["raw_published_event_rows_exported"]==0
+          print("TERN_SOURCE_CATALOGUE_QC_VALID")
+          print("PRIMARY_R20_ALL_SCENARIOS",vals)
+          print("RECEIPT_SHA256",result["sha256_without_self"])
+          PY
+      - name: Preserve aggregate only; never original event rows, identifiers or coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-tern-catalogue-coincident-geometry-v2-aggregate
+          path: results/tern_source_catalogue_rounding_sensitivity_v2/aggregate.json
+          if-no-files-found: warn
+          retention-days: 30

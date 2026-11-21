@@ -1,5 +1,7 @@
 # Source-locked geographic minimum required relaxation from Arctic tern banding-derived events (v1)
 
+> **2026-11-21 source-候補頑健性追試（元v1は変更しない）:** [10通りの丸め座標・離隔距離・候補年・記録種別制約による事後感度分析](tern_source_catalogue_rounding_sensitivity_v2.md)。同一丸め座標の候補を全除去しても20kmの「他の起源なら説明可能」は**198→171件**、±2km余裕でも154件。これは別源の実在・同時期の在否を検証した値ではなく、候補集合に条件付けた幾何学的結果。
+
 **Status:** pre-event protocol frozen; independent published external event-level **geographic** diagnostic. This work is not three-axis A/B/M EOG, not prospective independent ecological confirmation, and cannot estimate dispersal probability.
 
 ## Grounded source and distinct scope
