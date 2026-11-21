@@ -1,0 +1,83 @@
+{
+  "schema": "eog.arctic_tern_known_departure_source_gate_v1",
+  "status": "PRE_METADATA_SOURCE_ONLY_FROZEN",
+  "base_main_sha": "a2958c9ae2948259f1db4889db836631f18524cf",
+  "objective": "Qualify an external published individual-banding-derived source→destination colony movement event dataset for future source-specific geographic MRR, WITHOUT reading any 200/890 event rows or optimizing a biological prediction after exposure",
+  "declared_source": {
+    "priority": "PRIMARY_SOURCE_PREDECLARED",
+    "dataset_doi": "10.5061/dryad.x69p8czxh",
+    "dataset_title_must_contain": "natal versus breeding dispersal in arctic terns",
+    "species": "Sterna paradisaea",
+    "publisher": "Dryad",
+    "publisher_dataset_url": "https://datadryad.org/dataset/doi:10.5061/dryad.x69p8czxh",
+    "expected_first_publication_date": "2026-09-30",
+    "prelisted_files": [
+      "Ad_DaD.csv",
+      "U_DaD.csv",
+      "BasicInfoplot.Rmd",
+      "README.md",
+      "revision.R"
+    ],
+    "declared_official_data_grain": {
+      "Ad_DaD.csv": "200 breeding dispersal events (adults ringed as breeders)",
+      "U_DaD.csv": "890 natal dispersal events (ringed as nestlings)",
+      "missing_stayers": "all sites with zero relocation not in the published 2 CSV tables",
+      "individual_ids": "UID is a sequential event ID; original ring IDs missing, some adult re-dispersal events may not be independent"
+    },
+    "declared_candidate_columns": [
+      "UID",
+      "depart_lat",
+      "depart_lon",
+      "arrive_lat",
+      "arrive_lon",
+      "year",
+      "distance_km",
+      "direction_deg"
+    ],
+    "declared_coordinate_rounding": "WGS84 coordinates rounded to 0.01 degree in published event tables; displacement near small km scales uncertain",
+    "publication_article_doi": "10.1002/ece3.74372",
+    "citation_year": 2026,
+    "source_status": "published event-derived departure colony, not guaranteed primary original raw banding source identity",
+    "original_source_records_present": false
+  },
+  "stage0_transport": {
+    "allowed_endpoints": [
+      "https://datadryad.org/api/v2/datasets/",
+      "https://datadryad.org/api/v2/versions/"
+    ],
+    "metadata_only": true,
+    "no_archives_or_CSV_rows": true,
+    "dataset_metadata_max_bytes": 250000,
+    "version_metadata_max_bytes": 250000,
+    "files_metadata_max_bytes": 250000,
+    "file_count_max": 25,
+    "max_source_http_attempts_per_endpoint": 1,
+    "timeout_seconds": 32,
+    "host_allowlist": [
+      "datadryad.org",
+      "www.datadryad.org"
+    ],
+    "expected_file_roster_must_match_exactly": true,
+    "output": [
+      "dataset DOI/version/title, publication date, file manifest names/sizes/official digests, metadata SHA256 only"
+    ],
+    "refuse_additional_files_or_updated_version_after_first_manifest": true,
+    "raw_event_rows_read": 0,
+    "biological_metrics_computed": 0
+  },
+  "stage1_future_gate_requirements": [
+    "Freeze exact publisher version ID, published individual file size and digest from this source-only metadata receipt BEFORE opening event rows.",
+    "Verify original CSV SHA/row/header identities; separate true paired endpoints from published derived distances and rounded 0.01 degree coordinates.",
+    "Predeclare geographic feasibility radii, source roster that uses only earlier information, temporal cutoff and nonindependent unit before first outcome row.",
+    "Do not infer true natal origin through unobserved intermediate migration: ringed natal colony and first recorded breeding colony only, not complete trajectory.",
+    "Cannot use this dataset to infer movements that stayed at source, dispersal incidence, survival, detection probability or EOG's environmental/barrier axes.",
+    "Do not count adult repeat events as independent individuals without original ring IDs; event-level descriptive unit only.",
+    "Never score this as EOG-WF a fourth endpoint or claim independent prospective novel ecological discovery from already published data."
+  ],
+  "stop": "Version/file identity, metadata byte caps or official producer provenance mismatch mean source STOP; do not select alternative versions after looking at content.",
+  "original_eog_wf_closed_denominator": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  }
+}
