@@ -34,6 +34,24 @@ The first commit in this branch [froze the official GBIF source count protocol](
 
 Reproducibility: [metadata/count script](../scripts/eog_tern_independent_dofbasen_source_count_gate_v1.py), [offline scientific STOP regression tests](../tests/test_eog_tern_independent_dofbasen_source_count_gate_v1.py), [source-only Actions workflow](../.github/workflows/eog-tern-external-dofbasen-source-gate-v1.yml).
 
+## Stage 0 official source verification complete — counts only
+
+[GitHub Actions run #44853699117](https://github.com/zuizui0223/eog/actions/runs/44853699117) successfully checked the original DOI `10.15468/tww7cj`, GBIF dataset UUID `95db4db8-f762-11e1-a439-00145eb45e9a`, accepted **Sterna paradisaea** GBIF speciesKey `5229230`, and all five frozen count-only queries (`datasetKey`, `taxonKey`, `country=DK`, `hasCoordinate=true`, original 5 year windows, `limit=0`). **No occurrence/coordinate or tern dispersal event row was read.**
+
+| Independent DOF archival observation year | Coordinate-bearing species occurrence records |
+| --- | ---: |
+| 1960–1975 | **4,203** |
+| 1976–1985 | **3,432** |
+| 1986–1995 | **6,099** |
+| 1996–2005 | **8,925** |
+| 2006–2012 | **16,765** |
+
+**18,456** coordinate-bearing target-species records exist in the original event target period **1976–2005**, and **4,203** exist in the 1960–1975 candidate-index period. This is an opportunity to seek independent breeding evidence; these counts do not establish **even one** matching breeding colony, because the API queries did not check reproduction, sampling design or positional uncertainty.
+
+Source-only fingerprint `40e1a0798aa01dc69106a2ec29d5c276a2032d8940bfbe2ea67b7d7fc4ca4e30`; archived CI result artifact ID `14686761062`, ZIP SHA256 `5ed8e2040953c3179939074927e99c47d03ee6ec3969516dd53f56d5446bd75f`. Durable [source-only frozen count receipt](../validation/tern_independent_dofbasen_breeding_gate_v1/frozen_count_receipt_v1.json).
+
+**Gate outcome:** `GBIF_DOF_SOURCE_COUNT_VERIFIED_NO_BREEDING_VALIDATION`. A source-count gate can pass while the actual independent breeding-source claim remains **unverified**. It would be scientifically incorrect to change the baseline tern false-assurance 198/224 count, or assert 115/115 colonies supported, from these new 18,456 observation records.
+
 ## Stage 1/2 eligibility (not yet authorized)
 
 If stage0 shows that the correct species has coordinate-bearing observations in relevant years, **separately freeze** a bounded field-schema sample and test whether the *publisher* explicitly exposes `behavior`, `reproductiveCondition`, `occurrenceRemarks` or other appropriate evidence of `Ynglepar`/nest/chicks, and `coordinateUncertaintyInMeters`. Don't infer breeding from `occurrenceStatus=PRESENT` or `eventDate` alone. Restrict to same-year or declared previous-year breeding-positive, not five-year interpolated presence. Reject spatial uncertainty exceeding the target threshold, especially DOF's 25-km-generalized points.
