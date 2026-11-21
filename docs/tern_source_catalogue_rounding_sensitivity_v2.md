@@ -34,6 +34,39 @@ We answer this by recomputing the **same** source-locked v1 estimand on all orig
 
 The v2 interpretation cannot turn the arbitrary exclusions into proof of a physically unavailable colony. If a 0-km candidate is removed but another earlier source is 1km away, false assurance may still remain. **The count remaining after exclusion, rather than the count of all events with a coincident candidate, is the answer to the proposed artefact question.**
 
+## Frozen v2 result: co-located source coordinates are not the sole driver
+
+The exact original v1 source result was reproduced, with **1,090/1,090** original publisher distances passing the immutable source check, the original **115 historical rounded departure coordinates**, and the same **87 adult and 491 natal** post-1975 derived movement event rows. The fixed original R=20 km false-assurance baseline was **adult 10 + natal 188 =198**, with 180 surviving the original ±2 km rounding guard.
+
+The **ten prespecified alternative-source rosters all passed** scientific input, set-nesting and no-alternatives controls under [dedicated Actions run #44849822470](https://github.com/zuizui0223/eog/actions/runs/44849822470). The complete aggregate result, precommitted scenario definitions and original source-run SHA are pinned in [frozen v2 receipt](../validation/tern_source_catalogue_rounding_sensitivity_v2/frozen_aggregate_summary_v2.json); full per-radius/age-group results remain in the CI artifact (ID `14684279084`, ZIP SHA256 `bdc62d122d91fe1ab245390a844422fe7abe7b49bee231958d180ae1cd8d8ff6`; result JSON self-excluded SHA256 `c4a46092c9f5bbffc4fe37a4a6d0c53c2cd2d874fbcf0fbc591eb245b9768579`).
+
+**Primary descriptive output — R=20 km, same 224 known-marked-source-infeasible event rows in every comparison:**
+
+| Candidate catalogue restriction | Adult false assurance | Natal false assurance | Combined / 224 | With ±2 km rounding margin | Events with computed `r_any=0` /578 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 1975年以前・115地点（元の条件） | 10 | 188 | **198** | 180 | 475 |
+| 到着地と同じ丸め座標を除く | 8 | 163 | **171** | 154 | 0 |
+| 代替起源と到着地が2 km以上離れる | 8 | 162 | **170** | 153 | 0 |
+| 代替起源と到着地が5 km以上離れる | 8 | 151 | **159** | 142 | 0 |
+| 代替起源と到着地が10 km以上離れる | 7 | 124 | **131** | 113 | 0 |
+| 1970年以前の31候補地点 | 6 | 125 | **131** | 123 | 145 |
+| 1965年以前の6候補地点 | 3 | 75 | **78** | 71 | 43 |
+| 同じ場所に過去の出発記録が2件以上 | 7 | 157 | **164** | 154 | 360 |
+| 同じイベント種別だけで候補地構築 | 6 | 179 | **185** | 173 | 312 |
+| 代替起源なし（負の対照） | 0 | 0 | **0** | 0 | 0 |
+
+**Interpretation A: the 0-km coincidence artefact is extensive but insufficient.** In the parent, **475/578** events have a computed `r_any=0` because an earlier indexed departure coordinate equals the published rounded arrival coordinate. Excluding **every** exactly coincident alternative removes all these artificial zeros, yet reduces R=20 km false assurance only from **198 to 171**, a drop of 27 (13.6%). **171/198 (86.4%)** of originally reported source-specific conflict survives this one important coordinate-rounding artefact; **154** still survive the original conservative ±2 km criterion. This says *another nearby candidate* can still undercut a marked origin, not that the candidate truly supplied the individual.
+
+**Interpretation B: source roster density matters profoundly.** Requiring candidate origins ≥5 km from the arrival leaves **159**, and ≥10 km leaves **131**. Restricting the historical index to event-year ≤1970 leaves **31** departure coordinates and 131 false assurances, while through ≤1965 leaves only **6** sites and **78** false assurances. These changes are not competing biological "effects"; they demonstrate how the analyst's *candidate-source universe* changes a lower bound. No source-availability or demographic process was independently measured in these historical slices.
+
+**Interpretation C: additional source evidence type changes results.** Requiring at least two pre-1976 departure event records at one coordinate leaves **164** false assurances; using only the same adult/natal published event table for the comparison leaves **185**. A repeated published event is not an independently verified occupied/actively exporting colony or a distinct individual, so neither restriction provides independent founder confirmation.
+
+**Negative control:** no alternative catalogue source yields exactly **zero** false assurances by set construction. It validates the implementation, not a causal hypothesis.
+
+**Initial CI failure and correction:** first run [#44849704301](https://github.com/zuizui0223/eog/actions/runs/44849704301) failed source-neutral synthetic tests because the new code referenced `earth_radius_km` under v2 metadata instead of the **existing frozen parent v1** constant 6371.0088 km. The only scientific-code repair used this predeclared parent constant and asserted it remained unchanged. No source, sample selection, cutoff, catalogues, thresholds or event results were changed. The later source-locked run passed.
+
+**Critical boundary:** The outcome **does not show that 171 birds actually had an alternative source nearby**; alternative catalogue sites came from old *published movement-event departures*, not verified contemporaneous source availability or original ringing-database snapshots. It does show a numerical source-identity limitation that survives an obvious coordinate artefact in this specific external dataset.
+
 ## Analysis and failure gates
 
 For every scenario and every later event `i`, calculate:
