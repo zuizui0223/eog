@@ -48,7 +48,7 @@ jobs:
           else:
               assert v['status']=='EXTERNAL_POST_PUBLICATION_SOURCE_GEOGRAPHY_DESCRIPTIVE_ONLY'
               assert v['publisher_published_rows']=={'breeding_adult':200,'natal_chick':890}
-              assert v['published_distance_total_rows']==1090
+              assert v['publisher_distance_total_rows']==1090
               assert v['published_distance_match_within_2km_rows']>=0.95*1090
               assert v['retrospectively_indexed_distinct_earlier_departure_locations']>=5
               assert v['is_asof_prospective'] is False
