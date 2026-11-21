@@ -1,0 +1,98 @@
+{
+  "schema": "eog.mediterranean_sowing_constraint_witness.v1",
+  "status": "PRE_OUTCOME_SOURCE_PROTOCOL_FROZEN",
+  "date_utc": "2026-11-19",
+  "publication": {
+    "article_doi": "10.1111/1365-2664.70207",
+    "dataset_doi": "10.5061/dryad.t1g1jwtg3",
+    "source": "Acevedo-Limón et al. 2026, Journal of Applied Ecology; Dryad archived 2025-10-16",
+    "permissions": "Source citation and licence from official record required before any output redistribution"
+  },
+  "provenance": "Prepared using published study methods and public file descriptions, without reading original study CSV outcome rows. Published aggregate conclusions were already known and are NOT newly predicted.",
+  "prior_eog": "Synthetic EOG BAM sign certificates PR #702; independent NutNet study PR #705 with 2 correct / 1 wrong / 5 abstain on 8 heldout sites. Both immutable and neither is a fourth EOG-WF endpoint.",
+  "required_source_files": [
+    "sowing_experiment.csv",
+    "soil_physicochemical.csv",
+    "soil_moisture_vwc_values.csv",
+    "planting_experiment.csv",
+    "README.md"
+  ],
+  "source_gate": {
+    "provider": "Dryad official API only",
+    "dataset_api": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.t1g1jwtg3",
+    "files_api": "Version-specific /api/v2/versions/{versionId}/files; paginate if needed",
+    "required": "Exact filenames, positive file sizes and 32-hexdigit MD5 checksums from authoritative file manifests, each downloaded file independently matches advertised size and MD5",
+    "max_file_bytes": 12000000,
+    "if_unavailable": "SOURCE_STOP; no mirror accepted without original byte parity",
+    "no_data_leak": "Only filenames, metadata, hashes and CSV column headers are published by source-gate. No outcome values, counts or model scores before source verification."
+  },
+  "treatment_analogue": {
+    "sowing": "Artificial seed introduction bypasses natural propagule-arrival limitation for the planted seeds; natural dispersal M is NOT measured.",
+    "protection": "Protected stations exclude vertebrate granivores/herbivores; not complete deletion of all biotic B constraints; cage microclimate effects possible.",
+    "abiotic": "Measured soil/moisture may proxy A; neither abiotic mask nor species physiological niche is directly identified.",
+    "natural_status": "Species natural presence/absence at each forest patch (site_type), not a complete occurrence census with imperfect detection corrected."
+  },
+  "response": {
+    "primary": "Per-station germination fraction: confirmed germinations / original sown seeds; compare paired protected vs unprotected stations within same species×site×year×microhabitat×station.",
+    "paired_effect": "For each species×site×year, equally weight complete matched stations and compute mean(germ_fraction_protected - germ_fraction_unprotected); no seed-level pseudoreplication.",
+    "class": "positive iff effect > +0.025; negative iff < -0.025; operational-zero otherwise, not a statistical CI",
+    "prior_group": "Primary natural site_type=='absent'; site_type=='present' predeclared contrast (not pooled).",
+    "first_summer_secondary": "If the seedling_monitoring and seedling_surv coding can be validated against the authors' instructions, calculate station germination probability times conditional survival rate among monitored germinants; if stage coding is ambiguous, STOP only this secondary target.",
+    "long_term": "No multi-year persistence or natural colonization claim."
+  },
+  "truth_witness": {
+    "at_least_one_success_in_natural_absence_unprotected": "Counterexample to strict stage-specific abiotic establishment impossibility in the experimentally sampled microsite, conditional on true establishment endpoint. Natural arrival limitation remains possible, not proven.",
+    "protected_only_success": "Positive protected success contradicts strict abiotic impossibility; protected-only vs unprotected-zero is suggestive of vertebrate pressure but not logically proof of a population-level protection effect.",
+    "both_zero": "No exclusion certificate; germination failure cannot identify A versus B versus seeds/storage/other mechanisms.",
+    "never_infer": "Source dispersal routes, historical M, complete physiological niche, population persistence, or actual causal effect of B removal from zero observations."
+  },
+  "units": {
+    "primary_recording_unit": "station (paired physical plot), not individual seed",
+    "inference": "Ten forest-patch sites are geographic replication units; sites×species and seeds are nested/partially crossed, not independent landscapes.",
+    "key": "species, site, year, microhabitat, station, treatment",
+    "require_pairing": true,
+    "duplicate_key": "STOP on discordant combination; never silently combine or delete",
+    "required_treatment_values": [
+      "protected",
+      "unprotected"
+    ],
+    "germination": "Binary 0/1 or documented explicit NA; no arbitrary recoding",
+    "min_paired_stations_per_site_species_year": 3,
+    "zero_pair_rule": "Report as ineligible; preserve complete flow",
+    "temporal_replication": "Two sowing years only for predeclared subset; do not count as independent patch replication",
+    "cover_of_moisture": "Soil and moisture measured site×microhabitat and station; never use as proof of M.",
+    "significant_fraction": "Do not claim statistical significance from sign unanimity or 61,000 seed count."
+  },
+  "predictive_stress": {
+    "phase": "Secondary; only after source gate and exact unit qualification; distinct from truth-witness primary.",
+    "holdout": "Hash sorted site names by SHA256('EOG_SEED_WITNESS_20261119|'+site). Take first ceil(0.20*n) eligible sites as holdout; remainder training.",
+    "target": "Mean paired protection-minus-unprotected germination-fraction sign for naturally absent species×site×year units",
+    "model_worlds": [
+      "training site-type grouped mean",
+      "ridge pre-experiment measured soil/moisture",
+      "ridge species and fruit-type main effects",
+      "ridge joint soil/species"
+    ],
+    "caveat": "Models are alternative prediction representations, NOT identified ecological mechanisms; no model agreement alone is a proof of true direction.",
+    "sign_guard": "Do not report verified sign without uncertainty intervals excluding zero across all admitted models; otherwise abstain. Fixed 0.025 operational tolerance.",
+    "evaluation": "Holdout site-level false sign count, abstention and coverage, baseline, site-clustered uncertainty; no new EOG-WF score.",
+    "no_silent_tuning": true
+  },
+  "hard_stops": [
+    "No official source bytes + verified metadata MD5",
+    "Missing or unverified treatment/seed/response coding",
+    "Unmatched protected/unprotected physical stations",
+    "Unknown true natural-absence classification semantics",
+    "Too few geographically independent sites to claim broad generality",
+    "No site-level replication for 95%-interval sign test",
+    "Outcome-specific target changes forbidden after response access"
+  ],
+  "deliverables": [
+    "Source-gate manifest and metadata provenance",
+    "Complete eligible/missing/ambiguous station flow",
+    "Positive-witness and noncertifiable classes",
+    "Single-measurement protection contrasts with explicit absences/uncertainty",
+    "Independent-site out-of-source limits",
+    "No natural-universality claim"
+  ]
+}
