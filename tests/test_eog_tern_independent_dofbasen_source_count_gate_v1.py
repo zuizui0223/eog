@@ -63,7 +63,8 @@ def test_source_protocol_is_count_only_with_five_immutable_windows():
     assert len(P["stage0_count_only"]["windows"])==5
     assert P["stage0_count_only"]["strict_unverified_limits"]["maximum_total_requests"]==7
     assert P["stage0_count_only"]["not_read"][0]=="species occurrence IDs"
-    assert P["new_scored_endpoints"] if "new_scored_endpoints" in P else P["new_scored_endpoints"] if False else P["new_scored_endpoints"] if "new_scored_endpoints" in P else P["new_scored_endpoints"] if False else P["new_scored_endpoints"] if False else True
+    assert P["stage1_requires_separate_premodel_freeze"]["annual_year_and_spatial_joins_disallowed_until_all_evidence_tiers_defined"] is True
+    assert P["EOG_WF_frozen_denominator"] == {"scored":3,"scientific_STOP":31,"administrative_exclusions":3}
 
 
 def test_exact_publisher_and_species_five_annual_windows_no_breeding_claim():
