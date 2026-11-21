@@ -1,0 +1,175 @@
+{
+  "schema": "eog.tern_source_catalogue_and_coordinate_rounding_sensitivity_v2.protocol",
+  "status": "POST_EXPOSURE_SENSITIVITY_FROZEN_BEFORE_V2_RAW_REOPEN",
+  "base_main_sha": "30663cbe2fabcc3563ecc0efde5326daf533e7a4",
+  "parent_protocol": "validation/tern_known_origin_geographic_minrelax_v1/protocol_v1.json",
+  "parent_result": "validation/tern_known_origin_geographic_minrelax_v1/frozen_aggregate_summary_v1.json",
+  "frozen_original_result_sha256_without_self": "feaad217d8b105af4fddae81d50055a30a3e259f2716bbdc0100b1a7d878b68f",
+  "question": "How much of the earlier 198/224 at R=20km reported source-agnostic false assurance is dependent on a retroactively indexed earlier source sharing the 0.01-degree-rounded arrival coordinate, and how much survives stricter nonlocal sources and historical roster controls?",
+  "inference_status": "POST_EXPOSURE_DATASET_SPECIFIC_GEOMETRY_SENSITIVITY_NOT_INDEPENDENT_FIELD_CONFIRMATION",
+  "immutable_source": {
+    "doi": "10.5061/dryad.x69p8czxh",
+    "version": 466530,
+    "required_csvs": {
+      "Ad_DaD.csv": {
+        "bytes": 11458,
+        "sha256": "b8ea7283cc0aae1324d4f52bdd484807ba4e5f15629dec6981617a09039dec36",
+        "expected_rows": 200
+      },
+      "U_DaD.csv": {
+        "bytes": 51061,
+        "sha256": "97fe26e28d80f05c9ea3ec645ff2cdc60a50c6d732554f32365accce8082d288",
+        "expected_rows": 890
+      }
+    },
+    "official_readme_and_source_manifest": "validation/tern_published_departure_source_gate_v1/frozen_metadata_summary_v1.json",
+    "source_zip_SHA_member_verification": "reuse benchmarks.tern_known_origin_geographic_minrelax_v1._read_source_zip",
+    "official_transport": "reuse scripts.eog_independent_movement_source_gate_v2._version_zip, source original exact first redirect without new hosts",
+    "original_tolerance": "publisher distance matches haversine rounded original coordinates within ±2km in >=95%/1090",
+    "original_benchmark_reuse": "Must call parent analyze_events on the same parsed tables and verify 1090/1090 published distance agreement, 115 historic sites, adult 87 and natal 491 after 1975, R20 false assurance adult 10 natal 188 and conservative adult 9 natal 171 before sensitivity scoring."
+  },
+  "frozen_sample": {
+    "evaluation_event_year_min": 1976,
+    "source_event_year_cutoff_default": 1975,
+    "event_tables": "published dispersal events only (not stayers); adult vs natal event-level groups, not independent birds",
+    "source_catalogue_construction": "Only unique rounded departure coordinates of eligible events in relevant source year range; NEVER destination coordinates or year>catalogue_cutoff.",
+    "individual_ID": "UID unique table event identifier not physical ring ID",
+    "rounding": "WGS84 lat/lon original 0.01°; no smoothing/jittering or invented colony IDs"
+  },
+  "candidate_catalogue_scenarios": [
+    {
+      "id": "v1_exact_baseline",
+      "eligible_source_year_end": 1975,
+      "source_table_mode": "both",
+      "minimum_departure_event_count_per_rounded_site": 1,
+      "per_arrival_minimum_alternative_distance_km": 0,
+      "exclude_exact_rounded_arrival_coordinate": false
+    },
+    {
+      "id": "exclude_exact_destination_coordinate",
+      "eligible_source_year_end": 1975,
+      "source_table_mode": "both",
+      "minimum_departure_event_count_per_rounded_site": 1,
+      "per_arrival_minimum_alternative_distance_km": 0,
+      "exclude_exact_rounded_arrival_coordinate": true
+    },
+    {
+      "id": "source_nonlocal_2km",
+      "eligible_source_year_end": 1975,
+      "source_table_mode": "both",
+      "minimum_departure_event_count_per_rounded_site": 1,
+      "per_arrival_minimum_alternative_distance_km": 2,
+      "exclude_exact_rounded_arrival_coordinate": false
+    },
+    {
+      "id": "source_nonlocal_5km",
+      "eligible_source_year_end": 1975,
+      "source_table_mode": "both",
+      "minimum_departure_event_count_per_rounded_site": 1,
+      "per_arrival_minimum_alternative_distance_km": 5,
+      "exclude_exact_rounded_arrival_coordinate": false
+    },
+    {
+      "id": "source_nonlocal_10km",
+      "eligible_source_year_end": 1975,
+      "source_table_mode": "both",
+      "minimum_departure_event_count_per_rounded_site": 1,
+      "per_arrival_minimum_alternative_distance_km": 10,
+      "exclude_exact_rounded_arrival_coordinate": false
+    },
+    {
+      "id": "older_departures_through_1970",
+      "eligible_source_year_end": 1970,
+      "source_table_mode": "both",
+      "minimum_departure_event_count_per_rounded_site": 1,
+      "per_arrival_minimum_alternative_distance_km": 0,
+      "exclude_exact_rounded_arrival_coordinate": false
+    },
+    {
+      "id": "older_departures_through_1965",
+      "eligible_source_year_end": 1965,
+      "source_table_mode": "both",
+      "minimum_departure_event_count_per_rounded_site": 1,
+      "per_arrival_minimum_alternative_distance_km": 0,
+      "exclude_exact_rounded_arrival_coordinate": false
+    },
+    {
+      "id": "source_site_with_two_earlier_departure_events",
+      "eligible_source_year_end": 1975,
+      "source_table_mode": "both",
+      "minimum_departure_event_count_per_rounded_site": 2,
+      "per_arrival_minimum_alternative_distance_km": 0,
+      "exclude_exact_rounded_arrival_coordinate": false
+    },
+    {
+      "id": "same_published_event_table_source_only",
+      "eligible_source_year_end": 1975,
+      "source_table_mode": "same_group",
+      "minimum_departure_event_count_per_rounded_site": 1,
+      "per_arrival_minimum_alternative_distance_km": 0,
+      "exclude_exact_rounded_arrival_coordinate": false
+    },
+    {
+      "id": "no_alternative_source_negative_control",
+      "eligible_source_year_end": 1975,
+      "source_table_mode": "none",
+      "minimum_departure_event_count_per_rounded_site": 1,
+      "per_arrival_minimum_alternative_distance_km": 0,
+      "exclude_exact_rounded_arrival_coordinate": false
+    }
+  ],
+  "frozen_metrics": {
+    "geographic_distance": "same parent WGS84 great-circle haversine, Earth radius=6371.0088 km",
+    "actual_known_marked_source": "always original published banding-derived origin d(s_i,t_i), unchanged across all scenarios",
+    "possible": "minimum of known marked source distance and eligible alternative source distances after scenario filter; if empty, known source only",
+    "R_km": [
+      5,
+      20,
+      50,
+      100
+    ],
+    "primary_R_km": 20,
+    "default_historical_source_denominator": "115 unique rounded departure positions from either event table year <=1975",
+    "false_assurance": "count events where actual > R but possible <= R (never interpret alternate source as realized history)",
+    "coordinate_rounding_conservative": "count events where actual > R+2 and possible < R-2",
+    "exactly_coincident_candidate": "any historical eligible alternative coordinate equals target published coordinate pair; count among known source >R separately",
+    "per_group_reporting": [
+      "number published events after 1975",
+      "number alternative unique earlier departure positions",
+      "source-infeasible denominator at each R",
+      "false assurance count and conservative count for all R",
+      "number of events with actual source >R and exact historical candidate at arrival in baseline",
+      "median and mean possible radius in km, count of possible=0 to document rounding zero",
+      "number of events whose fixed baseline false-assurance indicator is removed by each more restrictive filter"
+    ],
+    "paired_reference": "Report all groups adult + natal and combined sum; compare to original 10/188 and conservative 9/171 without post-selection",
+    "no_p_values_or_CIs": "event rows are not independent birds; no inferential p-values or individual-level bootstrap"
+  },
+  "numeric_gates": [
+    "All source ZIP file hashes/bytes must be identical to immutable Dryad 466530",
+    "Re-run original v1 on the same rows and get exact source-specific 20km, 1090 total and all original 20km false-assurance counts 10 and 188",
+    "All historical candidate sites from departure and only allowed <=year, exclude arrival labels from catalog",
+    "All 578 post-1975 event rows included in every scenario and type, no event-based exclusions",
+    "For fixed cutoff/site-count and increasing candidate target distance floor, possible radii cannot become smaller and false assurance counts cannot become larger",
+    "For <=1965 <=1970 <=1975 widening same source table roster, false assurance cannot decrease; earlier site counts nondecreasing",
+    "For 2-earlier-observation site filtering, and same-group filtering, the alternative source set must be a subset of both-table baseline",
+    "Original exact baseline scenario must reproduce parent output (if not STOP_PARENT_RESULT_DISAGREEMENT)",
+    "At R20 no alternative source negative control returns 0 false assurance by definition",
+    "Conservative false-assurance is subset of apparent false-assurance at each R in every scenario",
+    "Do not compute ecological movement rate, source probabilities, population occupancy, or EOG-WF endpoint."
+  ],
+  "stop_rules": {
+    "retain_historical_catalogue": "Year of published event is not verified as known in historical database at the year; even stricter <=1965 or earlier does NOT make as-of claim true.",
+    "reference_for_negative_cases": "A spatially excluded catalog source is not necessarily an infeasible dispersal source. This is sensitivity to candidate construction, NOT a test of ecology.",
+    "single_repeated_site": "Two event rows at a coordinate are not necessarily two distinct individuals or same-year occupied population.",
+    "forced_source": "Actual marked origin always permitted, but data do not give trajectory or probability of movement.",
+    "no_source_retrofit": "No alternative-source restrictions were prespecified before parent v1 source events were read; this is explicitly a postexposure sensitivity, not an independent holdout.",
+    "source_data_privacy": "Do not commit, log, store or print exact original source/destination coordinates, year+UID pairs, individuals, raw CSV or event-level calculated values.",
+    "closed_eogwf": {
+      "scored": 3,
+      "scientific_STOP": 31,
+      "administrative_exclusions": 3
+    },
+    "new_eog_wf_endpoints": 0
+  }
+}
