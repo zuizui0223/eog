@@ -2,6 +2,20 @@
 
 **Status:** source metadata and declared future biological target only. No individual event rows, publication-level movement responses, distances or geographic source-robust contrast scored in this gate.
 
+## Official publisher metadata gate: PASS without opening events
+
+Dedicated source-only [GitHub Actions run #44847496946](https://github.com/zuizui0223/eog/actions/runs/44847496946) completed successfully with original Dryad **published version 466530**, dated **2026-09-30**. It retrieved the exact frozen five-filename roster, publisher SHA-256 digests, byte lengths and official metadata fingerprints. **No archive, CSV, location, individual movement, or ecological response was read.** [Frozen version-and-file manifest](../validation/tern_published_departure_source_gate_v1/frozen_metadata_summary_v1.json); artifact ID `14683741438`, ZIP SHA256 `0f308fa315da36f2d03620f500241799c0e9b9afa78a6e210474c89918bf5461`, source receipt SHA256 `dd916c287d7fbc3676e07febd996531f3e781d6a15ea8f694b2ebfdbf750869c`.
+
+| Original file | Bytes | Publisher SHA-256 (prefix) |
+| --- | ---: | --- |
+| `Ad_DaD.csv` | 11,458 | `b8ea7283cc0aae13` |
+| `U_DaD.csv` | 51,061 | `97fe26e28d80f05c` |
+| `README.md` | 9,745 | `6ecefe5394e8eb27` |
+| `BasicInfoplot.Rmd` | 89,833 | `7f99031109b044a9` |
+| `revision.R` | 79,888 | `75ca47b0cd8f82a2` |
+
+The publisher's digest type is spelled `sha-256` in its metadata. Stage 1 must accept this **exact pinned digest** and compare with locally computed SHA256, not silently skip checksum validation due to the hyphen in its algorithm label.
+
 ## Rationale
 
 Existing [source-uncertain EOG MRR](occurrence_conditioned_source_minrelax_v4.md) quantifies which geographic/environmental/barrier relaxations suffice if **at least one** declared source exists vs **every** candidate source works, and their exact graph-hop ambiguity intervals. The previous actual-toad experimental-source attempt remains a **scientific STOP** despite resolving its source-distance signed encoding after exposure. A different independent real bird banding study is required before claiming real movements support EOG source-specific necessity.
