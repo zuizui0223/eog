@@ -1,0 +1,51 @@
+{
+  "schema": "eog.charaxes_zenodo_content_schema_gate.v1",
+  "status": "SOURCE_BYTES_AND_HEADER_ONLY__FROZEN_BEFORE_FULL_FILE_TRANSFER",
+  "date": "2026-10-29",
+  "parent": {
+    "metadata_protocol_commit": "81f360249b48d9ebff539367911dae0331b27225",
+    "metadata_run_id": 40862054463,
+    "metadata_result_fingerprint": "b500ca1c05cb4ac591619ff4aee8b4513f78ff300d2a5674d9fe3b576eb95142",
+    "source_doi": "10.5281/zenodo.20525795",
+    "record_id": 20525795,
+    "files": [
+      {
+        "name": "C_jasius_readme.csv",
+        "size": 1068,
+        "md5": "296db7fac71b138ec6d84f99391388e0",
+        "url": "https://zenodo.org/api/records/20525795/files/C_jasius_readme.csv/content",
+        "role": "metadata_dictionary"
+      },
+      {
+        "name": "C_jasius_reduced_dataset.csv",
+        "size": 152897,
+        "md5": "6f9f638a1c6966f567c4b7b783a5a47d",
+        "url": "https://zenodo.org/api/records/20525795/files/C_jasius_reduced_dataset.csv/content",
+        "role": "biological_data"
+      }
+    ]
+  },
+  "transport": {
+    "approved_method": "GET one full file once each, no redirects beyond https://zenodo.org",
+    "retry_count": 0,
+    "strict_size_and_md5_required": true,
+    "max_total_bytes": 160000,
+    "content_encoding": "identity",
+    "response_rows_transferred": "Full biological data file physically transferred into ephemeral RAM for checksum; cannot claim zero bytes opened.",
+    "data_rows_parsed": 0,
+    "raw_file_bytes_archived": false,
+    "only_header_and_column_semantics_retained": true,
+    "headers_only_gate": true
+  },
+  "interpretation": {
+    "G": "trap capture count or recorded occurrence, not certified occupancy without effort/detection audit",
+    "B": "host-plant spatial cover at stated spatial scale",
+    "M": "host-patch connectivity may depend on host geometry; a separate movement-only M must be justified",
+    "A": "forest-type habitat proxy, not abiotic tolerance",
+    "join": "site/trap and year identifiers, uniqueness and crosswalk unverified until subsequent row-qualification",
+    "preexisting_associations": "published author ecological effects are prior art",
+    "claim": "no new ecological response score from source/schema gate"
+  },
+  "fail_closed": "403/429/redirect/size/MD5/parse failure is a terminal STOP. No alternate host or undocumented file.",
+  "next": "If complete verified schema then separately freeze outcome mapping, matched occurrence/effort and held-out comparator before first row-level ecological scoring"
+}
