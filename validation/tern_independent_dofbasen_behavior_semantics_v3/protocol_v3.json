@@ -160,10 +160,6 @@
       {
         "code": "YNGLENDE",
         "tier": "BREEDING_LABELED_NOT_CERTIFIED_SITE"
-      },
-      {
-        "code": "DØD",
-        "tier": "NONBREEDING_BEHAVIOR"
       }
     ],
     "additional_free_text_behavior_whitelist": [],
@@ -200,5 +196,6 @@
     "Do not overclaim independent colony occupancy from any YF code; site-year spatial join needs independent stage4.",
     "No new EOG-WF endpoint: 3 scored/31 scientific STOP/3 admin exclusions frozen."
   ],
-  "scientific_status": "POST_EXPOSURE_PUBLISHER_BEHAVIOR_CODE_SEMANTICS_ONLY_NOT_INDEPENDENT_BREEDING_COLONY_CONFIRMED"
+  "scientific_status": "POST_EXPOSURE_PUBLISHER_BEHAVIOR_CODE_SEMANTICS_ONLY_NOT_INDEPENDENT_BREEDING_COLONY_CONFIRMED",
+  "pre_read_amendment": "Removed duplicate identical DØD NONBREEDING code from the public codebook list before any external behavior value was read. No observed data, substantive category, science threshold or target altered."
 }
