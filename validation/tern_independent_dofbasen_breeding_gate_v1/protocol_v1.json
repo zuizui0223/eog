@@ -1,0 +1,135 @@
+{
+  "schema": "eog.tern_independent_dofbasen_breeding_evidence_gate_v1",
+  "status": "PROTOCOL_FIRST_BEFORE_GBIF_QUERY",
+  "project_goal": "Find independent dated Arctic Tern breeding observations from Denmark before / during 1976–2005 target years; determine whether a source-neighbor can be treated as contemporaneously documented, without inventing colony availability or making a new predictive claim.",
+  "frozen_main_sha": "303365b760897f3fb3b55f6054e51b354e4ac237",
+  "original_tern": {
+    "source": "10.5061/dryad.x69p8czxh",
+    "version_id": 466530,
+    "original_v1_aggregate_sha": "feaad217d8b105af4fddae81d50055a30a3e259f2716bbdc0100b1a7d878b68f",
+    "original_v2_aggregate_sha": "c4a46092c9f5bbffc4fe37a4a6d0c53c2cd2d874fbcf0fbc591eb245b9768579",
+    "sources_year_pre1976": 115,
+    "post1975_event_rows": 578,
+    "source_agnostic_20km_assurance_baseline": 198,
+    "no_exact_coordinate_20km_assurance": 171,
+    "raw_individual_tern_event_rows_reopened_in_this_stage": 0
+  },
+  "external_dataset": {
+    "name": "DOF/BirdLife Denmark - Observations from DOFbasen",
+    "dataset_doi": "10.15468/tww7cj",
+    "gbif_dataset_uuid": "95db4db8-f762-11e1-a439-00145eb45e9a",
+    "owner": "Danish Ornithological Society, DOF/BirdLife Denmark",
+    "official_gbif_dataset_page": "https://www.gbif.org/dataset/95db4db8-f762-11e1-a439-00145eb45e9a",
+    "archive_source": "https://dofbasen.dk/dwc/dwcarchive.zip",
+    "license": "CC BY-NC 4.0",
+    "scientific_name": "Sterna paradisaea",
+    "matching_rule": "exact accepted Sterna paradisaea GBIF matched species; no other tern species or broad family names",
+    "sample_independent_breeding_evidence": "https://dofbasen.dk/ypobs.php?obsid=17701",
+    "sample_details": "1992-07-04 Mandø (Ribe Kommune): 48–52 breeding pairs, independent site/year support example only, not linked to a tern v1 catalogue site.",
+    "source_bias": "Mostly opportunistic sightings; region/year digitization coverage uneven; breeding records only a subset; vulnerable breeding records may have coordinates blurred with 25 km uncertainty",
+    "temporal_asof": "The current 2026 GBIF/DOF database may contain retrospective entries, so an observation year is NOT a record-publication or database-ingest time."
+  },
+  "stage0_count_only": {
+    "official_hosts": [
+      "api.gbif.org"
+    ],
+    "endpoints": {
+      "dataset": "https://api.gbif.org/v1/dataset/95db4db8-f762-11e1-a439-00145eb45e9a",
+      "taxon": "https://api.gbif.org/v1/species/match?name=Sterna%20paradisaea",
+      "count": "https://api.gbif.org/v1/occurrence/search"
+    },
+    "windows": [
+      {
+        "id": "pre_candidate_1960_1975",
+        "year_min": 1960,
+        "year_max": 1975
+      },
+      {
+        "id": "movement_period_1976_1985",
+        "year_min": 1976,
+        "year_max": 1985
+      },
+      {
+        "id": "movement_period_1986_1995",
+        "year_min": 1986,
+        "year_max": 1995
+      },
+      {
+        "id": "movement_period_1996_2005",
+        "year_min": 1996,
+        "year_max": 2005
+      },
+      {
+        "id": "postmovement_monitoring_2006_2012",
+        "year_min": 2006,
+        "year_max": 2012
+      }
+    ],
+    "mandatory_predicates": [
+      "datasetKey == declared DOFbasen UUID",
+      "taxonKey == GBIF species match Sterna paradisaea",
+      "country == DK",
+      "hasCoordinate == true",
+      "year within declared window",
+      "limit == 0"
+    ],
+    "strict_unverified_limits": {
+      "maximum_http_response_bytes": 200000,
+      "maximum_total_requests": 7,
+      "maximum_seconds_each": 25
+    },
+    "outputs": [
+      "official dataset UUID/title/DOI/license metadata and SHA",
+      "matched exact taxon accepted scientific name, rank and ID",
+      "five coordinate-bearing Sterna paradisaea count summaries without individual records",
+      "official GBIF API response SHA256 and request URL sans secret"
+    ],
+    "not_read": [
+      "species occurrence IDs",
+      "individual observer identifiers",
+      "coordinates",
+      "breeding site names",
+      "behavior/reproductiveCondition field values",
+      "term records",
+      "ringed tern departure/arrival pairs"
+    ],
+    "no_claims": [
+      "species count equals breeding site-years",
+      "GBIF presence implies breeding or export potential",
+      "GBIF observation year implies information already available by that year",
+      "negative historical count implies ecological absence"
+    ],
+    "stop_if": [
+      "unexpected dataset/taxon/law/host",
+      "GBIF API access failure",
+      "one of the required window count requests fails",
+      "matched taxon not exact species",
+      "metadata cannot be pinned"
+    ]
+  },
+  "stage1_requires_separate_premodel_freeze": {
+    "purpose": "If pre-2005 coordinate-bearing occurrences exist, inspect fixed capped samples for explicit breeding evidence code and uncertainty; then seek original DOF Ynglepar site/year evidence and crosswalk to tern source coords only in a NEW stage2 protocol.",
+    "evidence_tiers": [
+      "T0: occurrence of target species, no reproduction field",
+      "T1: source independently reports breeding pairs/nest/chicks, dated and species-specific",
+      "T2: T1 plus precise GPS or site centroid + uncertainty bound <=2 km, with source independence and non-use of destination/outcome",
+      "T3: T2 plus same target-year/specified immediately prior-year evidence and independently verifiable data recorded before target event; only this could plausibly support strict as-of claim"
+    ],
+    "annual_year_and_spatial_joins_disallowed_until_all_evidence_tiers_defined": true,
+    "other_taxa_or_national_counts_cannot_qualify": true,
+    "no_crosswalk_with_tern_578_event_coords_this_stage": true
+  },
+  "source_specific_limitations": {
+    "official_NOVANA_monitoring_start": "2006 (after original 1976–2005 movements); recent site-level counts cannot directly prove former source colony-year occupancy",
+    "DOF_Atlas_I": "1971–1974 presence grid is too coarse to prove site-year source at a 2-km positional tolerance",
+    "original_Danish_Tern_Group": "15,015 raw ringing/return records from 242 breeding colonies reportedly held privately; not present in published Dryad 1,090 derived event tables; from same provenance, not independent.",
+    "no_ebird": true,
+    "no_tinyfish": true
+  },
+  "EOG_WF_frozen_denominator": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  },
+  "new_scored_endpoints": 0
+}
