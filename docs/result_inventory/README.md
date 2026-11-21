@@ -1,5 +1,7 @@
 # EOG evidence split — mathematical/known-truth vs empirical
 
+> **2026-11-21：外部標識個体の起源を用いた地理的MRR** — [キョクアジサシ繁殖地の出発・到着イベントによるsource-specific／any-source比較](../tern_known_origin_geographic_minrelax_v1.md)。実測由来の移動イベントではあるが、事後・source候補ロスター条件付きであり、EOG-WFの前向き採点結果ではない。
+
 > **最小制約緩和（2026-11-20追加監査）:** [数理Pareto前線・Glanville実測制約・潜在起源／遺伝推定の限界を分離](MINIMUM_REQUIRED_RELAXATION_AUDIT_20261120.md)。既知真値の検証成功と、実際の移動・起源推定成功は異なる。
 
 

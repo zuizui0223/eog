@@ -1,0 +1,135 @@
+{
+  "schema": "eog.tern_origin_locked_geographic_minrelax_v1",
+  "status": "FROZEN_PRE_RAW_EVENT_OPEN_AFTER_PUBLISHER_SHA_MANIFEST",
+  "base_main_sha": "5817b703f7129075e3dfaed8e7fcd050a98f3b60",
+  "source_frozen": {
+    "publisher_doi": "10.5061/dryad.x69p8czxh",
+    "published_version_id": 466530,
+    "published_date": "2026-09-30",
+    "stage0_protocol_first_commit": "4e5f53845d4adbdb361b8b631df6a743e09f3bf7",
+    "source_metadata_receipt_sha256": "dd916c287d7fbc3676e07febd996531f3e781d6a15ea8f694b2ebfdbf750869c",
+    "source_metadata_manifest_sha256": "e160776bb9e72aaa08292ec33102710b88dfc5e480ab3f4fc254293744882dd9",
+    "metadata_summary_path": "validation/tern_published_departure_source_gate_v1/frozen_metadata_summary_v1.json",
+    "official_version_download_url": "https://datadryad.org/api/v2/versions/466530/download",
+    "exact_files": [
+      {
+        "name": "Ad_DaD.csv",
+        "size_bytes": 11458,
+        "sha256": "b8ea7283cc0aae1324d4f52bdd484807ba4e5f15629dec6981617a09039dec36"
+      },
+      {
+        "name": "BasicInfoplot.Rmd",
+        "size_bytes": 89833,
+        "sha256": "7f99031109b044a906c0a1000eaa9570f93ebf9416a7615c580e0b39f72b81dc"
+      },
+      {
+        "name": "README.md",
+        "size_bytes": 9745,
+        "sha256": "6ecefe5394e8eb27ef1317cb35f65ab1ebf3776b19f007ff9514ab780eb4f11c"
+      },
+      {
+        "name": "U_DaD.csv",
+        "size_bytes": 51061,
+        "sha256": "97fe26e28d80f05c9ea3ec645ff2cdc60a50c6d732554f32365accce8082d288"
+      },
+      {
+        "name": "revision.R",
+        "size_bytes": 79888,
+        "sha256": "75ca47b0cd8f82a229901c054ac85e1cf7c517e344e83aad26173935866ecf24"
+      }
+    ],
+    "official_first_redirect_policy": "Use preverified Dryad exact first Lambda host contract from validation/independent_movement_source_gate_v2/protocol_v2.json. If host differs, STOP; do not widen allowlist after outcome.",
+    "archive_max_bytes": 300000,
+    "max_uncompressed_bytes": 500000,
+    "max_members": 5,
+    "expected_csvs": [
+      {
+        "name": "Ad_DaD.csv",
+        "type": "breeding_adult",
+        "rows": 200,
+        "expected_year_min": 1967,
+        "expected_year_max": 1986
+      },
+      {
+        "name": "U_DaD.csv",
+        "type": "natal_chick",
+        "rows": 890,
+        "expected_year_min": 1946,
+        "expected_year_max": 2005
+      }
+    ],
+    "required_csv_header": [
+      "UID",
+      "depart_lat",
+      "depart_lon",
+      "arrive_lat",
+      "arrive_lon",
+      "year",
+      "distance_km",
+      "direction_deg"
+    ]
+  },
+  "source_inference": {
+    "actual_source": "Published depart_lat/depart_lon colony derived from original banding, not continuous flight route or full source truth",
+    "target": "Published arrive_lat/arrive_lon colony of later breeding; date/year is publication's event year, NOT guaranteed provenance as-of availability",
+    "historical_alternative_catalogue": "All distinct rounded departure colony coordinates from original two published event tables with event year <=1975 only. Do not use arrival locations or any event year >=1976 to build catalogue.",
+    "group_holdout": "Analyze all event rows with year >=1976 from both original files as separate natal and breeding event-grain groups; historical roster fixed once.",
+    "comparison_catalogue_for_each_event": "Earlier-year catalogue ∪ {this event's banding-derived own departure coordinate}; union ensures source-specific original hypothesis is always contained, so r_possible<=r_actual by tautology.",
+    "time_information_boundary": "The historical year partition is a retrospective index partition. Because raw ring numbers and actual database-entry timestamps are unavailable, do NOT call candidate catalogue prospectively known as of 1975.",
+    "biological_event_unit": "One published dispersal event row; UID is sequential event ID rather than individual ring identifier. No independent individual-based confidence interval, significance test, or incidence estimate.",
+    "published_scope": "Published archive only includes selected dispersal events, not zero/dispersal stayers or surveyed non-detections, so movement probability and occupancy absent.",
+    "coordinate_uncertainty": "Lat/lon rounded to 0.01 degree by original README, so geographic radius in km cannot be treated as metre-precise true movement."
+  },
+  "frozen_estimands": {
+    "earth_radius_km": 6371.0088,
+    "geographic_distance": "Haversine great circle from rounded WGS84 departure/arrival colony latitude-longitude; publisher distance_km independently quality checked within 2.0 km",
+    "actual_origin_required_radius_km": "r_actual_i = d(published departure_i, published later breeding arrival_i)",
+    "weak_existence_required_radius_km": "r_any_i = min{r_actual_i, min_{c in original <=1975 catalog}d(c, arrival_i)}",
+    "geometric_optimism_gap_km": "g_i=r_actual_i-r_any_i>=0 by construction; never call positive gap a mathematical discovery.",
+    "counterfactual_false_assurance": "I(r_actual_i>R AND r_any_i<=R), among published relocation event rows.",
+    "robust_false_assurance_to_coordinate_rounding": "I(r_actual_i>R+2km AND r_any_i<R-2km), conservative 2km margin per endpoint distance; ambiguous cases retained in total.",
+    "prespecified_thresholds_km": [
+      5,
+      20,
+      50,
+      100
+    ],
+    "primary_threshold_km": 20,
+    "primary_descriptive_readout": "For each of natal and adult event groups, count number/denominator of source-specific-infeasible but source-agnostic-feasible events at R=20km; report same for coordinate-uncertain robust margin. No preregistered biological sign difference between groups.",
+    "secondary": "For all 4 thresholds give actual_source_feasible, any_source_feasible, false_assurance, robust_margin_false_assurance; source catalogue size, group eligible event counts, medians/means of original and any-source distances and gaps, and fractions with optimism gap>2 km. No p-values.",
+    "no_new_ecological_effect_claim": "The original Li et al 2026 paper already reports longer natal than adult movements. Do not relabel their observed distance contrast as an EOG discovery."
+  },
+  "no_leakage_and_QA": {
+    "source_identity": "Exact 5 file SHA and byte lengths match source manifest before CSV decode; ZIP member basename and safe path checks.",
+    "row_counts": "Exactly 200+890 original data rows and all 8 original columns in both files; avoid posthoc filtering for sign or geographic distance.",
+    "uid": "UID nonempty, unique within each table; no assumption this identifies unique individuals across events.",
+    "numeric": "All finite valid WGS84 coordinates and nonnegative publisher distance_km; no missing tokens in public events as declared by publisher. If missing, STOP not quiet exclusions.",
+    "no_actual_flight_events": "Arrival location not a single unbroken dispersal flight path, no elapsed-time movement rate.",
+    "published_distance_check": "At least 95% of 1090 derived distance_km agree with haversine from published 0.01° rounded endpoints within ±2.0 km. If below, STOP; do not tune tolerance.",
+    "min_retrospective_reference_source_sites": 5,
+    "min_holdout_events_per_group": 20,
+    "arithmetic": "Validate r_any<=r_actual for all events, nonnegative gap within 1e-9, robust false assurance subset of apparent false assurance, group counts sum to original 1090.",
+    "identical_coordinates": "Allow coordinate duplicates because original locations rounded to 0.01°, do not fabricate extra colony IDs.",
+    "source_catalogue_metadata_export": "Only number of distinct coordinates, not locations or row-level movements.",
+    "original_csv_or_record_export": false,
+    "field_movement_scoring_not_prospective": true
+  },
+  "claim_boundary": {
+    "positive_result_interpretation": "Can quantify ecological event-grain false assurance of source-agnostic explanations when marked departure colony has been recorded, conditional on a retrospectively assembled source catalogue. The monotone inequality is not new mathematics.",
+    "not_inferable": [
+      "True natal colonization path",
+      "event detection probability",
+      "individual-based dispersal propensity",
+      "year-asof availability",
+      "effects of environmental tolerance, species interactions or hard barriers",
+      "EOG-WF added predictive superiority"
+    ],
+    "no_eog_wf_new_endpoint": 0,
+    "existing_EOG_WF_closure": {
+      "scored": 3,
+      "scientific_STOP": 31,
+      "administrative_exclusions": 3
+    },
+    "preserve_negative_and_STOP_results": true
+  }
+}

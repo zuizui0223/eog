@@ -1,0 +1,81 @@
+name: EOG known marked Arctic tern departure geographic MRR (post-publication)
+
+# Source verified SHA256 manifest; this is NOT a prospective EOG-WF endpoint.
+on:
+  pull_request:
+    paths:
+      - 'validation/tern_known_origin_geographic_minrelax_v1/**'
+      - 'benchmarks/tern_known_origin_geographic_minrelax_v1.py'
+      - 'tests/test_tern_known_origin_geographic_minrelax_v1.py'
+      - '.github/workflows/eog-tern-known-origin-geography-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  historic-indexed-source-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test environment, no field GIS dependencies
+        run: python -m pip install -e . pytest
+      - name: Guard source SHA, event rows, cutoff and mathematical false assurance with synthetic cases
+        run: |
+          python -m pytest -q \
+            tests/test_eog_independent_movement_source_gate_v2.py \
+            tests/test_eog_tern_published_source_metadata_gate_v1.py \
+            tests/test_tern_known_origin_geographic_minrelax_v1.py
+      - name: One original-version/source-SHA verified event-level geometry audit
+        run: |
+          python -m benchmarks.tern_known_origin_geographic_minrelax_v1 \
+            --protocol validation/tern_known_origin_geographic_minrelax_v1/protocol_v1.json \
+            --output results/tern_known_origin_geography_v1/aggregate.json
+      - name: Respect science STOPs; no source-asof or ecological superiority
+        run: |
+          python - <<'PY'
+          import json
+          p="results/tern_known_origin_geography_v1/aggregate.json"
+          v=json.load(open(p))
+          assert v['new_EOG_WF_endpoints']==0
+          if v['status'].startswith('STOP_'):
+              print('TERN_GEOGRAPHIC_EXTERNAL_SCIENTIFIC_STOP=',v['status'])
+              print('NO_NEW_EMPIRICAL_ENDPOINT_OR_BIOLOGICAL_CLAIM')
+          else:
+              assert v['status']=='EXTERNAL_POST_PUBLICATION_SOURCE_GEOGRAPHY_DESCRIPTIVE_ONLY'
+              assert v['publisher_published_rows']=={'breeding_adult':200,'natal_chick':890}
+              assert v['publisher_distance_total_rows']==1090
+              assert v['published_distance_match_within_2km_rows']>=0.95*1090
+              assert v['retrospectively_indexed_distinct_earlier_departure_locations']>=5
+              assert v['is_asof_prospective'] is False
+              assert v['prior_year_catalogue_is_verified_available_at_time'] is False
+              assert v['environment_or_barrier_MRR_evaluated'] is False
+              assert v['individual_ring_ids_present'] is False
+              assert v['event_records_exported']==0
+              for name,g in v['outcomes'].items():
+                  assert g['event_rows']>=20
+                  assert len(g['radii'])==4
+                  assert [x['radius_km'] for x in g['radii']]==[5,20,50,100]
+                  for rad in g['radii']:
+                      assert rad['some_retrospective_source_feasible']>=rad['actual_marked_source_feasible']
+                      assert rad['source_agnostic_false_assurance_events']>=rad['conservative_rounding_margin_false_assurance_events']
+                  print('TERN_MARKED_SOURCE_GEOGRAPHY_EVENT_GROUP=',name,
+                       'TOTAL=',g['event_rows'],
+                       'RADIUS20KM=',next(x for x in g['radii'] if x['radius_km']==20),
+                       'MEDIAN_KNOWN_KM=',g['actual_source_radius_km']['median'],
+                       'MEDIAN_ANY_KM=',g['retrospective_any_source_radius_km']['median'])
+              print('TERN_MARKED_SOURCE_EVENT_AUDIT_COMPLETE_POSTPUBLICATION_ONLY')
+          print('RESULT_RECEIPT_SHA256=',v['sha256_without_self'])
+          PY
+      - name: Preserve only aggregate source distances and original evidence fingerprint
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-tern-source-specific-geographic-mrr-v1-aggregate-only
+          path: results/tern_known_origin_geography_v1/aggregate.json
+          if-no-files-found: warn
+          retention-days: 30

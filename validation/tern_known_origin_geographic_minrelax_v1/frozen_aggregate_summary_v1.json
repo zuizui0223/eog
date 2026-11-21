@@ -1,0 +1,171 @@
+{
+  "schema": "eog.tern_known_origin_geographic_minrelax_v1.frozen_aggregate",
+  "status": "EXTERNAL_POST_PUBLICATION_SOURCE_GEOGRAPHY_DESCRIPTIVE_ONLY",
+  "science_status": "SOURCE_SPECIFIC_VS_RETROSPECTIVE_ANY_SOURCE_GEOMETRIC_SENSITIVITY_NOT_PROSPECTIVE_OR_CAUSAL",
+  "protocol_first_commit": "44912cef511b0b4f981db28f2d076ae49ab9ebe8",
+  "source": {
+    "doi": "10.5061/dryad.x69p8czxh",
+    "version_id": 466530,
+    "stage0_manifest_sha256": "e160776bb9e72aaa08292ec33102710b88dfc5e480ab3f4fc254293744882dd9",
+    "Ad_DaD_sha256": "b8ea7283cc0aae1324d4f52bdd484807ba4e5f15629dec6981617a09039dec36",
+    "U_DaD_sha256": "97fe26e28d80f05c9ea3ec645ff2cdc60a50c6d732554f32365accce8082d288",
+    "event_source": "ringing-derived departure colony linked to later breeding colony; NOT continuously tracked path",
+    "coordinate_precision": "WGS84 rounded 0.01 degree"
+  },
+  "original_source_QA": {
+    "original_adult_rows": 200,
+    "original_natal_rows": 890,
+    "publisher_km_distance_concordant_with_rounded_geo_tolerance_2km": 1090,
+    "distance_checks_total": 1090,
+    "source_catalogue_distinct_rounded_departure_coordinates_from_event_year_le1975": 115,
+    "source_year_cutoff": 1975
+  },
+  "analysis": {
+    "status": "EXTERNAL_POST_PUBLICATION_SOURCE_GEOGRAPHY_DESCRIPTIVE_ONLY",
+    "adult_breeding": {
+      "actual_source_radius_km": {
+        "mean": 10.211237289008382,
+        "median": 3.409827847727346
+      },
+      "event_rows": 87,
+      "original_event_year_max": 1986,
+      "original_event_year_min": 1976,
+      "radii": [
+        {
+          "actual_marked_source_feasible": 51,
+          "conditional_false_assurance_fraction_among_source_infeasible": 0.9444444444444444,
+          "conservative_rounding_margin_false_assurance_events": 24,
+          "radius_km": 5,
+          "some_retrospective_source_feasible": 85,
+          "source_agnostic_false_assurance_events": 34,
+          "source_specific_original_infeasible_events": 36
+        },
+        {
+          "actual_marked_source_feasible": 77,
+          "conditional_false_assurance_fraction_among_source_infeasible": 1,
+          "conservative_rounding_margin_false_assurance_events": 9,
+          "radius_km": 20,
+          "some_retrospective_source_feasible": 87,
+          "source_agnostic_false_assurance_events": 10,
+          "source_specific_original_infeasible_events": 10
+        },
+        {
+          "actual_marked_source_feasible": 84,
+          "conditional_false_assurance_fraction_among_source_infeasible": 1,
+          "conservative_rounding_margin_false_assurance_events": 2,
+          "radius_km": 50,
+          "some_retrospective_source_feasible": 87,
+          "source_agnostic_false_assurance_events": 3,
+          "source_specific_original_infeasible_events": 3
+        },
+        {
+          "actual_marked_source_feasible": 86,
+          "conditional_false_assurance_fraction_among_source_infeasible": 1,
+          "conservative_rounding_margin_false_assurance_events": 1,
+          "radius_km": 100,
+          "some_retrospective_source_feasible": 87,
+          "source_agnostic_false_assurance_events": 1,
+          "source_specific_original_infeasible_events": 1
+        }
+      ],
+      "retrospective_any_source_radius_km": {
+        "mean": 0.35863345195872204,
+        "median": 0
+      },
+      "source_optimism_gap_gt_2km_events": 61,
+      "source_optimism_gap_km": {
+        "mean": 9.85260383704966,
+        "median": 3.409827847727346
+      }
+    },
+    "natal": {
+      "actual_source_radius_km": {
+        "mean": 46.77902848681335,
+        "median": 15.204234543110209
+      },
+      "event_rows": 491,
+      "original_event_year_max": 2005,
+      "original_event_year_min": 1976,
+      "radii": [
+        {
+          "actual_marked_source_feasible": 87,
+          "conditional_false_assurance_fraction_among_source_infeasible": 0.8787128712871287,
+          "conservative_rounding_margin_false_assurance_events": 313,
+          "radius_km": 5,
+          "some_retrospective_source_feasible": 442,
+          "source_agnostic_false_assurance_events": 355,
+          "source_specific_original_infeasible_events": 404
+        },
+        {
+          "actual_marked_source_feasible": 277,
+          "conditional_false_assurance_fraction_among_source_infeasible": 0.8785046728971962,
+          "conservative_rounding_margin_false_assurance_events": 171,
+          "radius_km": 20,
+          "some_retrospective_source_feasible": 465,
+          "source_agnostic_false_assurance_events": 188,
+          "source_specific_original_infeasible_events": 214
+        },
+        {
+          "actual_marked_source_feasible": 336,
+          "conditional_false_assurance_fraction_among_source_infeasible": 0.8774193548387097,
+          "conservative_rounding_margin_false_assurance_events": 134,
+          "radius_km": 50,
+          "some_retrospective_source_feasible": 472,
+          "source_agnostic_false_assurance_events": 136,
+          "source_specific_original_infeasible_events": 155
+        },
+        {
+          "actual_marked_source_feasible": 415,
+          "conditional_false_assurance_fraction_among_source_infeasible": 0.9605263157894737,
+          "conservative_rounding_margin_false_assurance_events": 69,
+          "radius_km": 100,
+          "some_retrospective_source_feasible": 488,
+          "source_agnostic_false_assurance_events": 73,
+          "source_specific_original_infeasible_events": 76
+        }
+      ],
+      "retrospective_any_source_radius_km": {
+        "mean": 4.295843280301237,
+        "median": 0
+      },
+      "source_optimism_gap_gt_2km_events": 455,
+      "source_optimism_gap_km": {
+        "mean": 42.48318520651212,
+        "median": 14.838090751530828
+      }
+    },
+    "primary_radius_km": 20,
+    "original_source_threshold_outside_events": 224,
+    "source_agnostic_false_assurance_events": 198,
+    "coordinate_conservative_false_assurance_events": 180,
+    "original_20km_source_agnostic_overacceptance_conditional_fraction": 0.8839285714285714,
+    "rounding_margin_meters": 2000,
+    "null_or_status": "The per-event inequality r_any <= r_known is tautological by adding candidate sources, not an inferential discovery."
+  },
+  "execution": {
+    "successful_run_id": 44848269676,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44848269676",
+    "artifact_id": 14684570611,
+    "artifact_zip_sha256": "b1062c806cff299a268787f3456f67cea5b663291753ad0fb701d6438fb40733",
+    "source_analysis_sha256_without_self": "feaad217d8b105af4fddae81d50055a30a3e259f2716bbdc0100b1a7d878b68f",
+    "prior_failed_run_id": 44848183666,
+    "prior_failure_reason": "The event analysis and source verification completed but CI post-run asserted absent result-key 'published_distance_total_rows' rather than code's actual 'publisher_distance_total_rows'. Fixed CI key only; source/result/hypothesis unchanged. This second successful run produced the same source analysis SHA."
+  },
+  "interpretation": {
+    "can_claim": "Within this historically indexed, selected-mover event universe, a nearest-any-previously-listed colony explains many marked known-origin movements under a 20-km geographic cutoff even though the documented departure colony is >20 km away.",
+    "warning": "The source-catalogue is retrospective and constructed from published movement-event departures; records were not necessarily available at cutoff, and nearest catalogue source is not independently verified as actual source.",
+    "median_any_source_km_zero": "Many destinations exactly coincide at the publication's 0.01-degree coordinate precision with some historical indexed departure, yielding r_any=0; this does NOT imply observed zero-distance movement or that an earlier colony was an active contemporary source.",
+    "excluded": "No non-disperse events, raw ring IDs, observational detection process, causal biotic/environment/barrier constraints, precise paths, as-of evidence, or source-verified future holdout.",
+    "novelty": "The magnitude of retrospective source-discard optimism is a dataset-specific diagnostic. It is not the first discovery of long natal vs short adult dispersal, and cannot be called a new general ecological law."
+  },
+  "actual_individual_ring_ids_present": false,
+  "independent_ecological_populations": 1,
+  "independent_biological_event_replicates_not_verified": true,
+  "original_EOG_WF_denominator_unchanged": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  },
+  "new_EOG_WF_scored_endpoints": 0,
+  "raw_event_location_or_ID_records_exported": 0
+}
