@@ -1,0 +1,77 @@
+{
+  "schema": "eog.tern_independent_dofbasen_breeding_field_gate_v2.frozen_schema_receipt",
+  "status": "GBIF_DOF_BREEDING_FIELD_SCHEMA_INSPECTED_NOT_SITE_YEAR_VALIDATED",
+  "source_pre_record_protocol_first_commit": "f55fa36dceeece385491aaa40c0f2e9b2b54fc8e",
+  "source_clean_protocol_commit": "13af485b7cd11a6876b7ba73ddba5e72b237cb91",
+  "parent_doF_source_count_receipt": "40e1a0798aa01dc69106a2ec29d5c276a2032d8940bfbe2ea67b7d7fc4ca4e30",
+  "original_gbif_source": {
+    "uuid": "95db4db8-f762-11e1-a439-00145eb45e9a",
+    "doi": "10.15468/tww7cj",
+    "scientificName": "Sterna paradisaea",
+    "acceptedSpeciesKey": 5229230,
+    "license": "CC BY-NC 4.0"
+  },
+  "frozen_sample": {
+    "year_windows": 5,
+    "pages_per_window": 3,
+    "rows_per_page": 100,
+    "original_records_ephemerally_read": 1500,
+    "pages": 15,
+    "representative": false,
+    "selection": "first/middle/last 100 at counts frozen in stage0, GBIF search ordering not guaranteed",
+    "source_event_rows_saved": 0
+  },
+  "field_presence": {
+    "behavior": 1500,
+    "reproductiveCondition": 0,
+    "occurrenceRemarks": 0,
+    "lifeStage": 403,
+    "eventDate": 1500,
+    "year": 1500,
+    "decimalLatitude": 1500,
+    "decimalLongitude": 1500,
+    "coordinateUncertaintyInMeters": 1500,
+    "datasetKey": 1500,
+    "speciesKey": 1500
+  },
+  "coordinateUncertaintyInMeters_bins": {
+    "LE_1000": 304,
+    "GT_1000_LE_2000": 697,
+    "GT_2000_LE_5000": 487,
+    "GT_5000_LE_20000": 12,
+    "GT_20000": 0,
+    "MISSING": 0,
+    "NONFINITE_OR_INVALID": 0
+  },
+  "source_quality": {
+    "incorrect_dataset_sample_rows": 0,
+    "incorrect_species_sample_rows": 0,
+    "within_2km_sample_count": 1001,
+    "within_2km_sample_fraction": 0.6673333333333333,
+    "reported_coordinates_alone_do_not_certify_nests": true
+  },
+  "execution": {
+    "run_id": 44854262032,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44854262032",
+    "conclusion": "success",
+    "artifact_id": 14686538833,
+    "artifact_zip_sha256": "ad412e7af09bf951b5e4637d98c5239ab7026ca3d140e64801c0b790438e409a",
+    "original_result_receipt_sha256_without_self": "dcbc86fadf6b2bdd3a27e605f906f118a079af1f57e3bcde7df1df703894ca3e"
+  },
+  "interpretation": {
+    "dataset_supports_publisher_behavior_code_readout": true,
+    "behavior_semantics_checked": false,
+    "secure_breeding_site_years_confirmed": 0,
+    "tern_source_catalogue_candidates_with_external_breeding_confirmation": 0,
+    "source_asof_1975_verified": false,
+    "sample_is_nonrepresentative": true,
+    "no_record_level_values_ids_or_coordinates_persisted": true,
+    "next_gate": "Freeze and inspect only safe bounded categorical behavior code labels/counts on the same pinned GBIF sample pages, compare DOF official breeding-code definitions. No colony-time matching until categorical meaning and geographic quality validated."
+  },
+  "new_eog_wf_scored_endpoints": 0,
+  "original_EOG_WF_frozen_denominator": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  }
+}
