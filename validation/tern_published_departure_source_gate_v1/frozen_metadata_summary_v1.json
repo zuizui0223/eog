@@ -1,0 +1,58 @@
+{
+  "schema": "eog.tern_published_departure_source_gate_v1.frozen_metadata_receipt",
+  "status": "SOURCE_METADATA_AND_FILE_MANIFEST_QUALIFIED_NO_EVENTS",
+  "pretransport_protocol_commit": "4e5f53845d4adbdb361b8b631df6a743e09f3bf7",
+  "official_doi": "10.5061/dryad.x69p8czxh",
+  "published_version_id": 466530,
+  "publication_date": "2026-09-30",
+  "publisher_file_manifest": [
+    {
+      "name": "Ad_DaD.csv",
+      "publisher_digest": "b8ea7283cc0aae1324d4f52bdd484807ba4e5f15629dec6981617a09039dec36",
+      "publisher_digest_type": "sha-256",
+      "size_bytes": 11458
+    },
+    {
+      "name": "BasicInfoplot.Rmd",
+      "publisher_digest": "7f99031109b044a906c0a1000eaa9570f93ebf9416a7615c580e0b39f72b81dc",
+      "publisher_digest_type": "sha-256",
+      "size_bytes": 89833
+    },
+    {
+      "name": "README.md",
+      "publisher_digest": "6ecefe5394e8eb27ef1317cb35f65ab1ebf3776b19f007ff9514ab780eb4f11c",
+      "publisher_digest_type": "sha-256",
+      "size_bytes": 9745
+    },
+    {
+      "name": "U_DaD.csv",
+      "publisher_digest": "97fe26e28d80f05c9ea3ec645ff2cdc60a50c6d732554f32365accce8082d288",
+      "publisher_digest_type": "sha-256",
+      "size_bytes": 51061
+    },
+    {
+      "name": "revision.R",
+      "publisher_digest": "75ca47b0cd8f82a229901c054ac85e1cf7c517e344e83aad26173935866ecf24",
+      "publisher_digest_type": "sha-256",
+      "size_bytes": 79888
+    }
+  ],
+  "manifest_sha256": "e160776bb9e72aaa08292ec33102710b88dfc5e480ab3f4fc254293744882dd9",
+  "source_only_ci": {
+    "run_id": 44847496946,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44847496946",
+    "conclusion": "success",
+    "artifact_id": 14683741438,
+    "artifact_zip_sha256": "0f308fa315da36f2d03620f500241799c0e9b9afa78a6e210474c89918bf5461",
+    "receipt_sha256": "dd916c287d7fbc3676e07febd996531f3e781d6a15ea8f694b2ebfdbf750869c"
+  },
+  "publisher_event_counts_expected_from_original_readme": {
+    "adult_breeding": 200,
+    "natal": 890
+  },
+  "event_rows_read": 0,
+  "source_data_archive_downloaded": false,
+  "new_EOG_WF_endpoints": 0,
+  "source_scope": "An archived ringed departure to later breeding location is not necessarily a known continuous physical movement route. UID event ID is not individual ring ID; coordinates round to 0.01 degrees.",
+  "future_authorization": "NEW separate pre-event freeze required. No ecological result inferred from this metadata receipt."
+}
