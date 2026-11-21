@@ -22,6 +22,27 @@ The [source-field gate](../scripts/eog_tern_independent_dofbasen_breeding_field_
 
 The sample counts presence of `reproductiveCondition`, `behavior`, `occurrenceRemarks`, `eventDate`, species/country identity, `coordinateUncertaintyInMeters` and spatial quality flags. Uncertainty is grouped into `MISSING`, ≤1 km, (1,2] km, (2,5] km, (5,20] km, >20 km, or invalid. **No text keywords are used to promote breeding claims at this stage.**
 
+## Stage2 source-field result: original publisher sample actually supports behavior and positional QC
+
+Source-only GitHub Actions [run #44854262032](https://github.com/zuizui0223/eog/actions/runs/44854262032) succeeded. On the **1,500 frozen, nonrandom historical DOF/GBIF records**, all **1,500/1,500** contain a nonempty `behavior` value and a numeric `coordinateUncertaintyInMeters`; none contain a nonempty `reproductiveCondition` or `occurrenceRemarks` in this sample, while `lifeStage` is present in **403**. GBIF dataset/taxon identity checks passed on every sample record. Source-only [frozen aggregate receipt](../validation/tern_independent_dofbasen_breeding_field_gate_v2/frozen_field_receipt_v2.json).
+
+| Source GBIF positional uncertainty class | Records in the fixed 1,500 sample |
+| --- | ---: |
+| ≤1 km | **304** |
+| >1 to 2 km | **697** |
+| >2 to 5 km | **487** |
+| >5 to 20 km | **12** |
+| >20 km | **0** |
+| Missing/invalid | **0** |
+
+Thus **1,001/1,500** in this **not-random sample** have publisher reported coordinate uncertainty ≤2 km, but this percentage **cannot be extrapolated** to the full 18,456 older records, and a precise location is not a breeding colony without appropriate behavior evidence.
+
+The semantic result is **not** `1,500 breeding events`. It is **`1,500 records with a behavior field`**, with the actual source-coded behavior values not yet interpreted. The original DOF [observations input guide](https://dofbasen.dk/help.php) specifically warns that some tern mating behavior can occur far from nesting locations; a generic breeding behavior label is not automatically proof of a local colony. Only a subsequent frozen categorical-value audit, coupled with source-described evidence levels, can distinguish secure breeding from ordinary presence or suggestive behavior.
+
+No site/year crosswalk to the originally estimated **115** tern alternative sources was performed; **0 breeding-confirmed matching colonies** are claimed. The public source's historical year is also **not** guaranteed to be the time the observation entered the database, so historic as-of availability remains unknown.
+
+Full original aggregate result fingerprint `dcbc86fadf6b2bdd3a27e605f906f118a079af1f57e3bcde7df1df703894ca3e`; CI artifact `14686538833`, ZIP SHA256 `ad412e7af09bf951b5e4637d98c5239ab7026ca3d140e64801c0b790438e409a`.
+
 ## What a v2 PASS would *not* establish
 
 A pass means that an independent *candidate data source* retains fields potentially needed to verify breeding evidence and spatial accuracy. A nonempty `behavior` or `reproductiveCondition` field is **not** automatically a confirmed breeding pair, because source-coded values and negations require separate interpretation. Similarly, any source record with 25-km-generalized coordinates does not support source matching within 20 km.
