@@ -1,0 +1,156 @@
+{
+  "schema": "eog.tern_independent_dofbasen_breeding_field_gate_v2",
+  "status": "FROZEN_BEFORE_ANY_GBIF_OCCURRENCE_RECORD_READ",
+  "purpose": "Determine whether independently published historical DOF/BirdLife Sterna paradisaea GBIF occurrences carry explicit breeding/nesting evidence and spatial uncertainty sufficient for eventual source-site/year matching; do not yet crosswalk original tern movements.",
+  "parent_source_gate": {
+    "source_protocol_first_commit": "ea04c125735b42c38ede956d5544df3961039228",
+    "source_receipt": "validation/tern_independent_dofbasen_breeding_gate_v1/frozen_count_receipt_v1.json",
+    "source_receipt_sha256": "40e1a0798aa01dc69106a2ec29d5c276a2032d8940bfbe2ea67b7d7fc4ca4e30",
+    "gbif_dataset_uuid": "95db4db8-f762-11e1-a439-00145eb45e9a",
+    "dataset_doi": "10.15468/tww7cj",
+    "species": "Sterna paradisaea",
+    "species_key": 5229230,
+    "license": "CC BY-NC 4.0",
+    "no_tern_original_movement_rows_reopened": true
+  },
+  "source_sample_design": {
+    "method": "Deterministic fixed pages only, NOT random or representative, 100 records at offsets 0, floor(count/2), count-100 for each verified window",
+    "windows": [
+      {
+        "id": "pre_candidate_1960_1975",
+        "from": 1960,
+        "to": 1975,
+        "count": 4203,
+        "limit": 100,
+        "offsets": [
+          0,
+          2101,
+          4103
+        ]
+      },
+      {
+        "id": "movement_period_1976_1985",
+        "from": 1976,
+        "to": 1985,
+        "count": 3432,
+        "limit": 100,
+        "offsets": [
+          0,
+          1716,
+          3332
+        ]
+      },
+      {
+        "id": "movement_period_1986_1995",
+        "from": 1986,
+        "to": 1995,
+        "count": 6099,
+        "limit": 100,
+        "offsets": [
+          0,
+          3049,
+          5999
+        ]
+      },
+      {
+        "id": "movement_period_1996_2005",
+        "from": 1996,
+        "to": 2005,
+        "count": 8925,
+        "limit": 100,
+        "offsets": [
+          0,
+          4462,
+          8825
+        ]
+      },
+      {
+        "id": "postmovement_monitoring_2006_2012",
+        "from": 2006,
+        "to": 2012,
+        "count": 16765,
+        "limit": 100,
+        "offsets": [
+          0,
+          8382,
+          16665
+        ]
+      }
+    ],
+    "expected_sample_records": 1500,
+    "expected_requests": 15,
+    "official_host": "api.gbif.org",
+    "request_base": "https://api.gbif.org/v1/occurrence/search",
+    "fixed_filters": [
+      "datasetKey=95db4db8-f762-11e1-a439-00145eb45e9a",
+      "taxonKey=5229230",
+      "country=DK",
+      "hasCoordinate=true",
+      "year within frozen source period",
+      "limit=100",
+      "offset exactly frozen"
+    ],
+    "response_count_must_equal_stage0_snapshot": true,
+    "GBIF_search_order_is_not_explicitly_fixed": true,
+    "reproducibility": "Do not interpret 15 first/middle/last pages as a statistical sample or stable historic snapshot; raw query response hashes and page count saved.",
+    "max_response_bytes_per_request": 2500000,
+    "request_timeout_sec": 32,
+    "max_total_requests": 15,
+    "max_original_DOFBasen_rows_persisted": 0,
+    "raw_ID_location_or_remarks_output": false
+  },
+  "field_presence_counts": [
+    "gbifID",
+    "datasetKey",
+    "speciesKey",
+    "taxonKey",
+    "scientificName",
+    "eventDate",
+    "year",
+    "decimalLatitude",
+    "decimalLongitude",
+    "coordinateUncertaintyInMeters",
+    "coordinatePrecision",
+    "hasGeospatialIssues",
+    "behavior",
+    "reproductiveCondition",
+    "occurrenceRemarks",
+    "lifeStage",
+    "basisOfRecord",
+    "occurrenceStatus"
+  ],
+  "field_quality_bins": {
+    "coordinate_uncertainty_meters": [
+      "MISSING",
+      "LE_1000",
+      "GT_1000_LE_2000",
+      "GT_2000_LE_5000",
+      "GT_5000_LE_20000",
+      "GT_20000",
+      "NONFINITE_OR_INVALID"
+    ],
+    "breeding_semantics": "NO BREEDING CLAIM based on nonempty behavior/reproductiveCondition/remarks fields at this stage. These fields must be inspected and their codes independently defined in new protocol.",
+    "protect_remarks": "Only count nonempty occurrences, never output raw text or tokens, values could include names/locations.",
+    "site_year_date": "Count year/eventDate presence but do not treat as evidence of historical database availability.",
+    "sensitive_sites": "If uncertainty >=20000m, refuse direct km-scale source matching in later stages. Missing uncertainty is UNKNOWN, not precise.",
+    "record_identity": "Count nonempty IDs and duplicate occurrence IDs across frozen pages; never output IDs."
+  },
+  "gates": [
+    "GBIF results from source UUID only, speciesKey must match exactly 5229230 (or STOP for ambiguous subspecies), countryCode == DK, hasCoordinate true",
+    "All 15 response.count values must equal source count receipt's five predeclared totals",
+    "Exactly 100 original result entries in each frozen page (expected counts all >=100)",
+    "Original observation fields may be missing; report counts and STOP_BEHAVIOR_SCHEMA_ABSENT if no fields permit breeding evidence, but do not retry nonfrozen samples",
+    "Do not make any source-colony crosswalk, no source/current-year occupation verification or EOG-WF new scored endpoint",
+    "No eBird, no TinyFish, no different provider data substituted."
+  ],
+  "next_stage_requires": "Explicit independently auditable breeding/nesting semantic code and coordinate-uncertainty quality plus year. Need a separate stage3 protocol for actual location crosswalk, even if these schema fields are present.",
+  "frozen_baseline_results_unmodified": {
+    "tern_known_20km_false_assurance": 198,
+    "tern_no_exact_candidate_20km_false_assurance": 171
+  },
+  "EOG_WF": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  }
+}
