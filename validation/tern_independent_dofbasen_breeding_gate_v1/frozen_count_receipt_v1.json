@@ -1,0 +1,77 @@
+{
+  "schema": "eog.tern_independent_dofbasen_breeding_gate_v1.frozen_source_count_receipt",
+  "status": "GBIF_DOF_SOURCE_COUNT_VERIFIED_NO_BREEDING_VALIDATION",
+  "source_protocol_first_commit": "ea04c125735b42c38ede956d5544df3961039228",
+  "doi": "10.15468/tww7cj",
+  "dataset_uuid": "95db4db8-f762-11e1-a439-00145eb45e9a",
+  "publisher_title": "DOF/BirdLife Denmark - Observations from DOFbasen",
+  "publisher": "Danish Ornithological Society / DOF BirdLife Denmark",
+  "publisher_license": "http://creativecommons.org/licenses/by-nc/4.0/legalcode",
+  "species": "Sterna paradisaea",
+  "gbif_accepted_species_key": 5229230,
+  "source_metadata_query_filters": {
+    "datasetKey": "95db4db8-f762-11e1-a439-00145eb45e9a",
+    "taxonKey": 5229230,
+    "country": "DK",
+    "hasCoordinate": true,
+    "limit": 0
+  },
+  "source_count_windows": [
+    {
+      "id": "pre_candidate_1960_1975",
+      "from": 1960,
+      "to": 1975,
+      "n": 4203,
+      "raw_sha256": "997507270580749d850bfd752e66ff647677fd1cdb18d346d8a582866fe3d0b0"
+    },
+    {
+      "id": "movement_period_1976_1985",
+      "from": 1976,
+      "to": 1985,
+      "n": 3432,
+      "raw_sha256": "d4f5752b67dac74c8f9f4bdf078b25502a5cc716cb7f64079e11c8ba6bc9cad6"
+    },
+    {
+      "id": "movement_period_1986_1995",
+      "from": 1986,
+      "to": 1995,
+      "n": 6099,
+      "raw_sha256": "6fcb5c39603ad3951580b12e20dec38137fe268ca482e41c75af7fef53da3ded"
+    },
+    {
+      "id": "movement_period_1996_2005",
+      "from": 1996,
+      "to": 2005,
+      "n": 8925,
+      "raw_sha256": "5b0ca9624c026cd8e80fee5cbeb7355f0d01e407afd4c463675a2ec028d72c91"
+    },
+    {
+      "id": "postmovement_monitoring_2006_2012",
+      "from": 2006,
+      "to": 2012,
+      "n": 16765,
+      "raw_sha256": "44dd5bc4fd6324891a39d220040a1dfad0ec2e2cb43de1ae1233b0b1c19d529d"
+    }
+  ],
+  "original_1976_through_2005_count": 18456,
+  "source_ci": {
+    "run_id": 44853699117,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44853699117",
+    "conclusion": "success",
+    "artifact_id": 14686761062,
+    "artifact_name": "eog-dofbasen-historical-tern-source-counts-v1",
+    "artifact_zip_sha256": "5ed8e2040953c3179939074927e99c47d03ee6ec3969516dd53f56d5446bd75f",
+    "canonical_result_sha256_without_self": "40e1a0798aa01dc69106a2ec29d5c276a2032d8940bfbe2ea67b7d7fc4ca4e30"
+  },
+  "interpretation": {
+    "counted_unit": "GBIF target species occurrences with coordinates in a date window; not breeding-positive site-years or unique colonies",
+    "evidence_independence": "Observations published by DOF/BirdLife Denmark rather than the Danish Tern Group ringing derived 1090 event tables; record-level independence not yet audited",
+    "site_year_breeding_verified": 0,
+    "actual_ern_original_115_sources_crossmatched": 0,
+    "coordinate_uncertainty_verified": false,
+    "source_publication_asof_historic_year_verified": false,
+    "original_EOG_WF_current_scored_endpoints": 3,
+    "new_EOG_WF_scored_endpoints": 0,
+    "next_gate": "Freeze a species/dataset/year-bounded schema-only sample with independent breeding evidence fields and coordinateUncertaintyInMeters, before crosswalking any original bird movements."
+  }
+}
