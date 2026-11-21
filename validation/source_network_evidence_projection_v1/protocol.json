@@ -1,0 +1,129 @@
+{
+  "schema": "eog.independent_directed_edge_evidence_source_projection_v1.protocol",
+  "status": "POST_EXPOSURE_DECLARED_SYNTHETIC_NETWORK_EVIDENCE_GATE_FROZEN_BEFORE_NATIVE_EOG_EXECUTION",
+  "goal": "Given frozen native EOG candidate graph rules and separately DECLARED directed-edge observations, calculate how filtering graph rules narrows or fails to narrow possible fixed-source origins without conflating true structural nonedges with field species nondetections or assuming a graph true.",
+  "distinct_from_prior": [
+    "Existing v6-v8 prior world expansion/threat count work is frozen; not rescored",
+    "Existing v7 target-aware evidence planning is a separate frozen, target-conditional adaptive action experiment and not rerun",
+    "Existing PR #698 source-hypothesis projection gave 48 graph/source pairs with three possible sources; this gate adds an explicit external edge measurement condition only."
+  ],
+  "graph_universe": {
+    "nodes": [
+      "A",
+      "B",
+      "C"
+    ],
+    "six_edge_order": [
+      "A>B",
+      "A>C",
+      "B>A",
+      "B>C",
+      "C>A",
+      "C>B"
+    ],
+    "all_directed_three_node_simple_graphs": 64,
+    "all_positive_nodes": [
+      "A",
+      "B",
+      "C"
+    ],
+    "assumed_fixed_singleton_source_hypotheses": {
+      "from_A": [
+        "A"
+      ],
+      "from_B": [
+        "B"
+      ],
+      "from_C": [
+        "C"
+      ]
+    },
+    "EOG_operator": "build_dynamic_transition_operator (geographic_support=1 for active edges, loss_support=1) and max_steps=1",
+    "unchanged_operators": true,
+    "evidence_statuses": [
+      "present",
+      "structurally_unavailable"
+    ],
+    "provenance_requirement": "Every edge observation has non-empty evidence_ref and evidence_basis exactly synthetic_known_truth or declared_external_structural_assessment. The latter is an UNVERIFIED CALLER ASSERTION, not authenticated field evidence.",
+    "forbid_bad_basis": [
+      "species_nondetection",
+      "model_prediction",
+      "unsurveyed",
+      "missing_record",
+      "unknown"
+    ],
+    "source_rule_projections": "Use existing audit_fixed_source_hypotheses plus summarize_fixed_source_hypothesis_identifiability on same graphs before and retained graphs after declarations; no new graph/rule fits",
+    "fail_closed": [
+      "unsupported node IDs",
+      "self edges",
+      "duplicate/conflicting edge assertions",
+      "nonempty status with blank reference",
+      "unapproved basis",
+      "changed source rule graph fingerprints",
+      "empty rule universe should be STOP not source identified"
+    ]
+  },
+  "exact_predictions": {
+    "source_positive_only_no_additional_edge_information": {
+      "candidate_graph_rules": 64,
+      "compatible_graphs": 37,
+      "compatible_pairs": 48,
+      "possible_sources": [
+        "from_A",
+        "from_B",
+        "from_C"
+      ]
+    },
+    "one_structurally_unavailable_A_to_B": {
+      "candidate_graph_rules": 32,
+      "compatible_graphs": 14,
+      "compatible_pairs": 16,
+      "possible_sources": [
+        "from_B",
+        "from_C"
+      ]
+    },
+    "two_structurally_unavailable_A_to_B_and_B_to_A": {
+      "candidate_graph_rules": 16,
+      "compatible_graphs": 4,
+      "compatible_pairs": 4,
+      "possible_sources": [
+        "from_C"
+      ],
+      "globally_identifies_C_only_within_declared_64_graph_scope": true
+    },
+    "two_present_A_to_B_and_B_to_A": {
+      "candidate_graph_rules": 16,
+      "compatible_graphs": 13,
+      "compatible_pairs": 20,
+      "possible_sources": [
+        "from_A",
+        "from_B",
+        "from_C"
+      ]
+    },
+    "two_structurally_unavailable_from_same_tail_A_to_B_and_A_to_C": {
+      "candidate_graph_rules": 16,
+      "compatible_graphs": 7,
+      "compatible_pairs": 8,
+      "possible_sources": [
+        "from_B",
+        "from_C"
+      ]
+    },
+    "all_pairs_two_unavailable_edges_out_of_C6_2": {
+      "possible_pairs": 15,
+      "globally_singleton_source_pairs": 12,
+      "ambiguous_source_pairs": 3
+    },
+    "minimum_sufficient_structurally_unavailable_edge_count_to_leave_one_source": 2,
+    "positive_edge_only_constraints_never_resolve_source_if_complete_graph_remains_admitted": true
+  },
+  "scientific_limits": [
+    "A field non-detection is never an independently established unavailable dispersal edge.",
+    "The API can only audit edge evidence declarations and provenance strings; it cannot verify ecological impossibility, physical barrier closure, ancestral status or the source provenance itself.",
+    "All posterior/likelihood, EOG-WF predictive fit and actual finite ecological movement-world claims STOP.",
+    "A unique source under declared graphs and asserted structural edge evidence is not a demonstrated biological founder.",
+    "No newly opened responses, no fourth EOG-WF scored endpoint; keep 3 scored/31 scientific STOP/3 admin exclusions, PRs #697/#698 Draft and unmerged."
+  ]
+}

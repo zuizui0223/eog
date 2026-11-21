@@ -1,0 +1,200 @@
+{
+  "schema": "eog.source_network_evidence_projection_v1.result_receipt",
+  "status": "SYNTHETIC_64_GRAPH_DECLARED_DIRECTED_EDGE_SOURCE_IDENTIFICATION_GUARD_NATIVE_EOG_TESTED",
+  "role": "POST_EXPOSURE_EXACT_FINITE_COMBINATORIAL_SOFTWARE_VALIDATION_NOT_EMPIRICAL_SOURCE_DISCOVERY",
+  "predeclared_protocol": {
+    "path": "validation/source_network_evidence_projection_v1/protocol.json",
+    "commit": "ed38dcb689eb909e263cc1c0d9cc8f71ca4455ba",
+    "status": "POST_EXPOSURE fixed before native EOG edge-evidence implementation"
+  },
+  "universe": {
+    "nodes": [
+      "A",
+      "B",
+      "C"
+    ],
+    "directed_edges": [
+      "A>B",
+      "A>C",
+      "B>A",
+      "B>C",
+      "C>A",
+      "C>B"
+    ],
+    "candidate_graphs": 64,
+    "positive_observed_node_names": [
+      "A",
+      "B",
+      "C"
+    ],
+    "candidate_fixed_singleton_sources": [
+      "from_A",
+      "from_B",
+      "from_C"
+    ],
+    "max_EOG_propagation_steps": 1,
+    "loss_support": 1,
+    "present_raw_edge_geographic_support": 1,
+    "hypothesis_probability_prior_fitted": false,
+    "natural_wetland_graph_fitted": false
+  },
+  "results": [
+    {
+      "scenario": "no_extra_network_evidence",
+      "declared_edge_statuses": [],
+      "admitted_graph_rules": 64,
+      "graph_rules_with_at_least_one_compatible_source": 37,
+      "compatible_rule_source_pairs": 48,
+      "source_hypotheses_remaining": [
+        "from_A",
+        "from_B",
+        "from_C"
+      ]
+    },
+    {
+      "scenario": "one_declared_nonedge",
+      "declared_edge_statuses": [
+        {
+          "source": "A",
+          "target": "B",
+          "status": "structurally_unavailable"
+        }
+      ],
+      "admitted_graph_rules": 32,
+      "graph_rules_with_at_least_one_compatible_source": 14,
+      "compatible_rule_source_pairs": 16,
+      "source_hypotheses_remaining": [
+        "from_B",
+        "from_C"
+      ]
+    },
+    {
+      "scenario": "two_declared_nonedges_different_tails",
+      "declared_edge_statuses": [
+        {
+          "source": "A",
+          "target": "B",
+          "status": "structurally_unavailable"
+        },
+        {
+          "source": "B",
+          "target": "A",
+          "status": "structurally_unavailable"
+        }
+      ],
+      "admitted_graph_rules": 16,
+      "graph_rules_with_at_least_one_compatible_source": 4,
+      "compatible_rule_source_pairs": 4,
+      "source_hypotheses_remaining": [
+        "from_C"
+      ],
+      "one_source_conditionally_unique_without_full_graph_identification": true
+    },
+    {
+      "scenario": "two_declared_present_edges",
+      "declared_edge_statuses": [
+        {
+          "source": "A",
+          "target": "B",
+          "status": "present"
+        },
+        {
+          "source": "B",
+          "target": "A",
+          "status": "present"
+        }
+      ],
+      "admitted_graph_rules": 16,
+      "graph_rules_with_at_least_one_compatible_source": 13,
+      "compatible_rule_source_pairs": 20,
+      "source_hypotheses_remaining": [
+        "from_A",
+        "from_B",
+        "from_C"
+      ]
+    },
+    {
+      "scenario": "two_declared_nonedges_same_tail",
+      "declared_edge_statuses": [
+        {
+          "source": "A",
+          "target": "B",
+          "status": "structurally_unavailable"
+        },
+        {
+          "source": "A",
+          "target": "C",
+          "status": "structurally_unavailable"
+        }
+      ],
+      "admitted_graph_rules": 16,
+      "graph_rules_with_at_least_one_compatible_source": 7,
+      "compatible_rule_source_pairs": 8,
+      "source_hypotheses_remaining": [
+        "from_B",
+        "from_C"
+      ]
+    },
+    {
+      "scenario": "all_six_directed_edges_declared_present",
+      "declared_edge_statuses": "all six",
+      "admitted_graph_rules": 1,
+      "graph_rules_with_at_least_one_compatible_source": 1,
+      "compatible_rule_source_pairs": 3,
+      "source_hypotheses_remaining": [
+        "from_A",
+        "from_B",
+        "from_C"
+      ]
+    }
+  ],
+  "exhaustive_two_directed_nonedge_pairs": {
+    "possible_unordered_pairs": 15,
+    "minimum_structural_nonedge_statements_to_leave_one_source": 2,
+    "pairs_with_distinct_tails_and_one_source_remaining": 12,
+    "pairs_with_same_tail_and_two_sources_remaining": 3,
+    "proof": "Each singleton-source one-step compatibility requires two outgoing edges. A proven missing edge of one source eliminates that source. Two distinct-tail forbidden directed edges eliminate two sources, retaining four graph rules compatible with the last source. Two same-tail forbidden edges eliminate only one source. The graph-complete rule survives every combination of positive-only edge observations."
+  },
+  "guarded_API": {
+    "function": "eog.v2.traversability.audit_declared_directed_network_evidence",
+    "module": "src/eog/v2/declared_network_edge_evidence.py",
+    "tests": "tests/test_declared_network_edge_evidence.py",
+    "documentation": "docs/source_network_evidence_projection_v1.md",
+    "evidence_types": [
+      "present",
+      "structurally_unavailable"
+    ],
+    "allowed_evidence_basis": [
+      "synthetic_known_truth",
+      "declared_external_structural_assessment"
+    ],
+    "source_provenance_requirements": "nonblank evidence_ref; evidence_basis states an assertion and is NOT field-authenticated by API",
+    "source_method": "reuses frozen native EOG audit_fixed_source_hypotheses and summarize_fixed_source_hypothesis_identifiability",
+    "no_new_network_operator_fitting": true,
+    "no_new_source_estimation": true,
+    "input_structural_edge_truth_independently_verified": false,
+    "historical_origin_identified": false,
+    "rejects_species_nondetection_as_structural_nonedge": true,
+    "retains_original_frozen_operator_fingerprints": true
+  },
+  "first_implementation_checks": {
+    "latest_implementation_CI_run_id": 44035457513,
+    "latest_implementation_CI_url": "https://github.com/zuizui0223/eog/actions/runs/44035457513",
+    "conclusion": "success",
+    "verified_jobs": [
+      "Python 3.10 test+wheel",
+      "Python 3.11 test+wheel",
+      "Python 3.12 test+wheel",
+      "topology benchmark"
+    ],
+    "EOG_WF_package_run_id": 44035457544,
+    "EOG_WF_package_conclusion": "success"
+  },
+  "hard_stops": [
+    "These data are entirely synthetic graph edge statuses, not field-confirmed movement structures or wetland graphs.",
+    "User-declared external structural assessment is not independently verified by the software; a missing species observation can never prove structurally forbidden movement.",
+    "Identifying one source under explicitly asserted directed-edge rules does not identify a historical founder or select the true graph.",
+    "No physical migration barrier, source ancestry, EOG A/B/M causal mechanism, occupancy, fitted posterior probability or fresh EOG-WF scored endpoint.",
+    "Original EOG-WF 3 scored /31 scientific STOP /3 administrative exclusions unchanged; PRs 697 and 698 Draft/unmerged."
+  ]
+}

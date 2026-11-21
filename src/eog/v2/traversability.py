@@ -27,11 +27,38 @@ _OCCURRENCE_EXPORTS: Final[tuple[str, ...]] = (
     "OccurrenceRuleComparison",
     "evaluate_occurrence_rule_compatibility",
     "compare_occurrence_transition_rules",
+    "RetainedTargetSourceChange",
+    "OccurrenceEvidenceFilterAudit",
+    "audit_occurrence_evidence_filter",
+    "FixedSourceHypothesisResult",
+    "FixedSourceRuleStatus",
+    "FixedSourceHypothesisSensitivity",
+    "audit_fixed_source_hypotheses",
+    "FixedSourceHypothesisIdentifiability",
+    "summarize_fixed_source_hypothesis_identifiability",
+    "DeclaredDirectedEdgeEvidence",
+    "DirectedNetworkEvidenceSourceProjection",
+    "audit_declared_directed_network_evidence",
 )
 
 _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.ecological_traversability" for name in _TRAVERSABILITY_EXPORTS},
     **{name: "eog.v2.occurrence_constraints" for name in _OCCURRENCE_EXPORTS},
+    **{name: "eog.v2.occurrence_evidence_filter" for name in (
+        "RetainedTargetSourceChange", "OccurrenceEvidenceFilterAudit",
+        "audit_occurrence_evidence_filter",
+    )},
+    **{name: "eog.v2.fixed_source_hypothesis_sensitivity" for name in (
+        "FixedSourceHypothesisResult", "FixedSourceRuleStatus",
+        "FixedSourceHypothesisSensitivity", "audit_fixed_source_hypotheses",
+        "FixedSourceHypothesisIdentifiability",
+        "summarize_fixed_source_hypothesis_identifiability",
+    )},
+    **{name: "eog.v2.declared_network_edge_evidence" for name in (
+        "DeclaredDirectedEdgeEvidence",
+        "DirectedNetworkEvidenceSourceProjection",
+        "audit_declared_directed_network_evidence",
+    )},
 }
 
 __all__ = [*_TRAVERSABILITY_EXPORTS, *_OCCURRENCE_EXPORTS]
