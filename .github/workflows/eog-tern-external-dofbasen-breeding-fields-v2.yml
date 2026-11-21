@@ -1,0 +1,71 @@
+name: EOG independent DOF tern historical breeding-field and coordinate QA v2
+
+# Capped original observation-field read: 15 fixed GBIF search pages,
+# 100 rows/page ephemeral; no coordinates, record IDs or term text uploaded.
+on:
+  pull_request:
+    paths:
+      - 'validation/tern_independent_dofbasen_breeding_field_gate_v2/**'
+      - 'scripts/eog_tern_independent_dofbasen_breeding_field_gate_v2.py'
+      - 'tests/test_eog_tern_independent_dofbasen_breeding_field_gate_v2.py'
+      - '.github/workflows/eog-tern-external-dofbasen-breeding-fields-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sample-original-DOF-source-field-presence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline source sample, privacy, taxon and count STOP tests
+        run: |
+          python -m pip install 'pytest>=8,<10'
+          python -m pytest -q \
+            tests/test_eog_tern_independent_dofbasen_source_count_gate_v1.py \
+            tests/test_eog_tern_independent_dofbasen_breeding_field_gate_v2.py
+      - name: Frozen first/middle/last historical DOF field sample (never publish raw records)
+        run: |
+          python -m scripts.eog_tern_independent_dofbasen_breeding_field_gate_v2 \
+            --protocol validation/tern_independent_dofbasen_breeding_field_gate_v2/protocol_v2.json \
+            --output results/tern_independent_dofbasen_breeding_field_gate_v2/receipt.json
+      - name: Enforce aggregate-only and distinguish field presence from breeding
+        run: |
+          python - <<'PY'
+          import json
+          path='results/tern_independent_dofbasen_breeding_field_gate_v2/receipt.json'
+          x=json.load(open(path,encoding='utf-8'))
+          assert x['original_tern_dispersal_event_rows_reopened']==0
+          assert x['individual_occurrence_records_exported']==0
+          assert x['new_EOG_WF_scored_endpoints']==0
+          assert x['independent_breeding_colonies_matched_to_original_tern']==0
+          assert x['source_site_years_verified']==0
+          assert x['historical_asof_source_data_verified'] is False
+          print('DOF_HISTORICAL_SOURCE_FIELD_GATE=',x['status'])
+          if x['status']=='GBIF_DOF_BREEDING_FIELD_SCHEMA_INSPECTED_NOT_SITE_YEAR_VALIDATED':
+              assert x['actual_observed_records_read_ephemerally']==1500
+              assert x['page_count']==15
+              assert sum(x['total_uncertainty_bins'].values())==1500
+              assert x['datasetKey_mismatches_in_sample']==0
+              assert x['speciesKey_mismatches_in_sample']==0
+              assert x['can_directly_crosswalk_115_sites'] is False
+              print('NONEMPTY_FIELDS=',x['total_nonempty_field_counts'])
+              print('UNCERTAINTY_BINS=',x['total_uncertainty_bins'])
+              print('NO_BREEDING_OR_ASOF_COLONY_SOURCE_CONFIRMED')
+          else:
+              print('SOURCE_SCHEMA_SCIENTIFIC_STOP_NO_SITE_YEAR_CROSSWALK')
+          print('RECEIPT_SHA256=',x['sha256_without_self'])
+          PY
+      - name: Preserve public source schema counts only; never raw observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-dofbasen-tern-historical-breeding-schema-v2
+          path: results/tern_independent_dofbasen_breeding_field_gate_v2/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
