@@ -1,0 +1,72 @@
+name: EOG independent DOF tern official behavior code semantics v3 (not breeding-site confirmation)
+
+# Reuse the 15 pre-frozen GBIF historical pages; count only explicitly
+# allowlisted public code names and spatial uncertainty, no original row data.
+on:
+  pull_request:
+    paths:
+      - 'validation/tern_independent_dofbasen_behavior_semantics_v3/**'
+      - 'scripts/eog_tern_dof_official_behavior_code_gate_v3.py'
+      - 'tests/test_eog_tern_dof_official_behavior_code_gate_v3.py'
+      - '.github/workflows/eog-tern-dof-official-behavior-codes-v3.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-publisher-behavior-vocabulary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic official-source and privacy/STOP controls
+        run: |
+          python -m pip install 'pytest>=8,<10'
+          python -m pytest -q \
+            tests/test_eog_tern_independent_dofbasen_source_count_gate_v1.py \
+            tests/test_eog_tern_independent_dofbasen_breeding_field_gate_v2.py \
+            tests/test_eog_tern_dof_official_behavior_code_gate_v3.py
+      - name: Match publisher-coded behavior values to frozen official DOF codebook
+        run: |
+          python -m scripts.eog_tern_dof_official_behavior_code_gate_v3 \
+            --protocol validation/tern_independent_dofbasen_behavior_semantics_v3/protocol_v3.json \
+            --output results/tern_dof_official_behavior_codes_v3/receipt.json
+      - name: Preserve all no-breeding-source conclusions even if codes match
+        run: |
+          python - <<'PY'
+          import json
+          p="results/tern_dof_official_behavior_codes_v3/receipt.json"
+          x=json.load(open(p,encoding="utf-8"))
+          assert x["original_tern_movement_rows_reopened"]==0
+          assert x["source_site_years_verified"]==0
+          assert x["source_breeding_colonies_verified"]==0
+          assert x["new_EOG_WF_endpoints"]==0
+          assert x["historical_asof_availability_verified"] is False
+          assert x["raw_DOF_observation_rows_exported"]==0
+          print("DOF_PUBLISHER_CODE_GATE",x["status"])
+          if x["status"]=="DOF_OFFICIAL_BEHAVIOR_CODE_MATCHES_NOT_YET_SITE_YEAR_VALIDATION":
+              assert x["original_records_read_ephemerally"]==1500
+              assert x["fixed_pages_rechecked"]==15
+              assert sum(x["tier_count_all_fixed_pages"].values())==1500
+              assert x["unrecognized_behavior_count"]+x["missing_behavior_count"]+x["original_allowed_behavior_code_matches"]==1500
+              assert sum(x["reproduced_parent_coordinate_uncertainty_bins"].values())==1500
+              print("KNOWN_PUBLIC_CODE_COUNTS",x["known_public_DOFBasen_code_histogram"])
+              print("SOURCE_CODE_TIERS",x["tier_count_all_fixed_pages"])
+              print("TIER_AND_LE2KM",x["tier_with_coordinate_uncertainty_LE_2km"])
+              print("NO_INDEPENDENT_NESTING_COLONY_MATCHED")
+          else:
+              print("STOP_DOFBASEN_SOURCE_BEHAVIOR_CODEBOOK_OR_SAMPLE")
+          print("RECEIPT_SHA256",x["sha256_without_self"])
+          PY
+      - name: Keep only aggregate official-code frequencies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-dofbasen-tern-publisher-behavior-codes-v3
+          path: results/tern_dof_official_behavior_codes_v3/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
