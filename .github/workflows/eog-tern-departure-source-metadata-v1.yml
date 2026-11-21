@@ -1,0 +1,64 @@
+name: EOG Arctic tern documented departure-source metadata gate (NO outcomes)
+
+# External actual ringed departure/arrival colony event data qualification.
+# Only original publisher metadata. No event, distance, or movement rows read.
+on:
+  pull_request:
+    paths:
+      - 'validation/tern_published_departure_source_gate_v1/**'
+      - 'scripts/eog_tern_published_source_metadata_gate_v1.py'
+      - 'tests/test_eog_tern_published_source_metadata_gate_v1.py'
+      - '.github/workflows/eog-tern-departure-source-metadata-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dryad-tern-manifest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install offline source gate tests only
+        run: python -m pip install 'pytest>=8,<10'
+      - name: Source identity/version/roster adversarial tests
+        run: |
+          python -m pytest -q \
+            tests/test_eog_independent_movement_source_gate_v1.py \
+            tests/test_eog_tern_published_source_metadata_gate_v1.py
+      - name: Fetch official Dryad metadata only, one attempt per endpoint
+        run: |
+          python -m scripts.eog_tern_published_source_metadata_gate_v1 \
+            --protocol validation/tern_published_departure_source_gate_v1/protocol_v1.json \
+            --output results/tern_departure_source_gate_v1/receipt.json
+      - name: Distinguish CI execution from scientific source qualification
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('results/tern_departure_source_gate_v1/receipt.json'))
+          assert r['event_rows_read']==0 and r['movement_events_scored']==0
+          assert r['predictions_scored']==0 and r['new_eog_wf_endpoints']==0
+          assert r['models_fit']==0 and r['source_holdout_authorized'] is False
+          print('TERN_SOURCE_ONLY_GATE=',r['status'])
+          if r['status']=='SOURCE_METADATA_AND_FILE_MANIFEST_QUALIFIED_NO_EVENTS':
+              assert r['published_date']=='2026-09-30'
+              assert len(r['file_manifest'])==5
+              print('PUBLISHER_VERSION=',r['publisher_version_id'])
+              print('FILE_MANIFEST=',r['file_manifest'])
+              print('MANIFEST_SHA256=',r['file_manifest_sha256'])
+          else:
+              print('SOURCE_STOP_CANNOT_SCORE_EVENTS')
+          print('SOURCE_RECEIPT_SHA256=',r['receipt_sha256_without_self'])
+          PY
+      - name: Preserve metadata receipt only, never original event data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eog-tern-original-departure-metadata-v1
+          path: results/tern_departure_source_gate_v1/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
