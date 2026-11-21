@@ -42,6 +42,30 @@ Both age groups use the **same early departure-colony catalogue**. Post-1975 eve
 - Source catalogue itself includes only earlier **observed departures among derived movement records**, not a census of all potential occupied colonies, environmental suitability, or hard barriers. Other colonies may be available and unknown; hence numbers are **catalogue-conditional**.
 - The original paper already reported longer natal than adult breeding dispersal: repeating that is not an original discovery. A new source-aware/any-source contrast cannot be equated with improved SDM predictive skill unless a separate outcome-hidden, source-independent design exists.
 
+## Source-authenticated result: 20 km false assurance is frequent under the retrospective catalogue
+
+Publisher SHA and event checks passed in dedicated [Actions run #44848269676](https://github.com/zuizui0223/eog/actions/runs/44848269676). All **200 adult + 890 natal original event rows** were admitted, and **1,090/1,090** published distances agreed with great-circle calculations from 0.01°-rounded locations within the frozen ±2 km tolerance. The year≤1975 catalogue contained **115 distinct rounded departure coordinates**. It was held fixed when evaluating the year≥1976 rows: **87 adult breeding** and **491 natal** derived movement events.
+
+| Predeclared primary threshold **R=20 km** | Adult breeding events | Natal events |
+| --- | ---: | ---: |
+| Events in published-year post-1975 partition | **87** | **491** |
+| Known marked-departure `r_actual≤20` | **77** | **277** |
+| Optimistic some-source `r_any≤20` | **87** | **465** |
+| **False assurance:** known origin `>20` but any source `≤20` | **10** | **188** |
+| **Conservative ±2 km margin false assurance** | **9** | **171** |
+| All known-source `>20` events (denominator for conditional gap fraction) | 10 | 214 |
+| Conditional false-assurance share of actual `>20` events | **100%** | **87.85%** |
+
+Across the **578 post-1975 derived events**, *198* actual marked-source transitions require more than 20 km while some earlier-indexed alternative colony appears within 20 km of the destination. *180* remain classified this way when requiring 2-km separation around both distance boundaries. This is a quantified **conditional event-level source-identity loss**, not an estimate of movement probability or independent populations.
+
+The mean/median known-source geographic lower bound is **10.21/3.41 km** among the 87 adult events and **46.78/15.20 km** among the 491 natal events. The corresponding *nearest hypothetical source* median is **0.0 km for both groups**. **This zero is a warning, not evidence of zero bird movement:** a destination colony can coincide exactly at the archive's 0.01° rounding resolution with one of the earlier source-catalogue coordinates, even though the bird's documented departure colony was somewhere else. Such a candidate is **not verified to be an active contemporary source**. The hypothetical source catalogue may include colonies only retrospectively known from later banding records. The resulting "optimism" cannot be interpreted as an actual dispersal explanation.
+
+All four originally frozen radii (5, 20, 50, 100 km) and all QA denominators are retained in the [source-SHA-bound frozen numeric receipt](../validation/tern_known_origin_geographic_minrelax_v1/frozen_aggregate_summary_v1.json). Original full source result fingerprint without self field: `feaad217d8b105af4fddae81d50055a30a3e259f2716bbdc0100b1a7d878b68f`. Publisher-verified artifact ID `14684570611`, ZIP SHA256 `b1062c806cff299a268787f3456f67cea5b663291753ad0fb701d6438fb40733`.
+
+**Failure/repair trace:** the first source-analysis CI `44848183666` completed the data analysis and exported the same fingerprint, but its *post-run wrapper* failed because it asserted a nonexistent key `published_distance_total_rows` instead of the actual `publisher_distance_total_rows`. The code/protocol/numeric values were not changed; a wrapper-only fix followed, and `44848269676` passed. This is a CI-key error, not a science-quality failure.
+
+**What was positively verified:** on a third-party bird ringing-derived event archive with known departure and arrival *colony endpoints*, the EOG distinction between source-specific required geographic separation and weaker existence of any source has a large realized **retrospective catalogue-conditional** difference. The direction `r_any≤r_actual` is mathematical; the 10/87 and 188/491 counts are data dependent. None of this identifies full routes, validates source occupancy at the year, improves predictive loss, or supports universal ecological claims.
+
 ## Verification and output
 
 The [research-only benchmark](../benchmarks/tern_known_origin_geographic_minrelax_v1.py) opens the one official original source ZIP only after checking all five publisher file SHA256 values/bytes and provenance, validates the precise original 200+890 event rows, UID uniqueness within source tables, year/coordinate format, nonnegative published distance, matched original derived distances, and original protocol eligibility. The [synthetic regressions](../tests/test_tern_known_origin_geographic_minrelax_v1.py) test full source/archive SHA checks, a real-source distant movement missed by near "any" source, future-index leakage protection, radius-order invariants, and source quality STOPs. The [GitHub Actions](../.github/workflows/eog-tern-known-origin-geography-v1.yml) produces only aggregate counts and median/mean distances; no original ID, location, date or event row is uploaded.
